@@ -255,6 +255,24 @@
   "@contactsSourceLocal": {},
   "contacts_Text_blingTransferInitiated": "Performing blind transfer",
   "@contacts_Text_blingTransferInitiated": {},
+  "contacts_DialogsInfoView_title": "Calls information (BLF):",
+  "@contacts_DialogsInfoView_title": {},
+  "contacts_ContactTile_inCall": "In call: {destination}",
+  "@contacts_ContactTile_inCall": {
+    "placeholders": {
+      "destination": {}
+    }
+  },
+  "contacts_ContactScreen_options": "Options:",
+  "@contacts_ContactScreen_options": {},
+  "contacts_ContactScreen_presenceViaSip": "Subscribe to user status via SIP (Presence)",
+  "@contacts_ContactScreen_presenceViaSip": {},
+  "contacts_ContactScreen_presenceViaSip_tooltip": "In addition to direct(app to app) data exchange, subscribe via SIP-Presence feature allows gathering presence information from other user agents (desktop phones, standalone softphones, etc.). Recommended to enable only if your contact prefers to use legacy user agents and you want to see their presence status across all devices.",
+  "@contacts_ContactScreen_presenceViaSip_tooltip": {},
+  "contacts_ContactScreen_dialogsViaSipBlf": "Subscribe to active calls via SIP (BLF/Dialogs)",
+  "@contacts_ContactScreen_dialogsViaSipBlf": {},
+  "contacts_ContactScreen_dialogsViaSipBlf_tooltip": "In addition to direct(app to app) data exchange, subscribe via SIP-Dialogs feature allows gathering call state information from other user agents (desktop phones, standalone softphones, etc.). Recommended to enable only if your contact prefers to use legacy user agents and you want to see their call status across all devices.",
+  "@contacts_ContactScreen_dialogsViaSipBlf_tooltip": {},
   "copyToClipboard_floatingSnackBar": "Text copied",
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Copy to clipboard",
@@ -1197,6 +1215,18 @@
   "@presence_infoView_title": {},
   "presence_infoView_updated": "Updated:",
   "@presence_infoView_updated": {},
+  "presence_infoView_source": "Source: {source}",
+  "@presence_infoView_source": {
+    "placeholders": {
+      "source": {}
+    }
+  },
+  "presence_infoView_source_direct": "direct",
+  "@presence_infoView_source_direct": {},
+  "presence_infoView_source_sip": "sip",
+  "@presence_infoView_source_sip": {},
+  "presence_infoView_source_sipAndDirect": "sip and direct",
+  "@presence_infoView_source_sipAndDirect": {},
   "presence_preset_absent_name": "Absent",
   "@presence_preset_absent_name": {},
   "presence_preset_absent_note": "Absent",
@@ -1261,6 +1291,8 @@
   "@presence_settings_note_tooltip": {},
   "presence_settings_presets_label": "Choose preset",
   "@presence_settings_presets_label": {},
+  "presence_settings_presets_label_custom": "Custom",
+  "@presence_settings_presets_label_custom": {},
   "presence_settings_presets_title": "Presets:",
   "@presence_settings_presets_title": {},
   "presence_settings_statusIcon_none": "None",

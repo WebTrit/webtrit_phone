@@ -16,6 +16,7 @@ export 'external_page_access_token.dart';
 export 'favorites.dart';
 export 'otp_notification_type.dart';
 export 'self_config.dart';
+export 'sip_subscriptions.dart';
 export 'session_autoprovision_credential.dart';
 export 'session_login_credential.dart';
 export 'session_otp_credential.dart';

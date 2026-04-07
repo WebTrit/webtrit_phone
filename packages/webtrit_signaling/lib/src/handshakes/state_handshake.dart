@@ -77,8 +77,8 @@ class StateHandshake extends Handshake {
     required this.timestamp,
     required this.registration,
     required this.lines,
-    required this.userActiveCalls,
-    required this.contactsPresenceInfo,
+    required this.presenceInfos,
+    required this.dialogInfos,
     required this.guestLine,
   }) : super();
 
@@ -86,20 +86,12 @@ class StateHandshake extends Handshake {
   final int timestamp;
   final Registration registration;
   final List<Line?> lines;
-  final List<UserActiveCall> userActiveCalls;
-  final Map<String, List<SignalingPresenceInfo>> contactsPresenceInfo;
+  final List<SignalingPresenceInfo> presenceInfos;
+  final List<SignalingDialogInfo> dialogInfos;
   final Line? guestLine;
 
   @override
-  List<Object?> get props => [
-    keepaliveInterval,
-    timestamp,
-    registration,
-    lines,
-    userActiveCalls,
-    contactsPresenceInfo,
-    guestLine,
-  ];
+  List<Object?> get props => [keepaliveInterval, timestamp, registration, lines, presenceInfos, dialogInfos, guestLine];
 
   static const typeValue = 'state';
 
@@ -171,16 +163,11 @@ class StateHandshake extends Handshake {
         })
         .toList(growable: false);
 
-    final userActiveCallsJson = json['user_active_calls'] as List<dynamic>? ?? <dynamic>[];
-    final userActiveCalls = userActiveCallsJson.map((e) => UserActiveCall.fromJson(e)).toList();
+    final dialogInfosJson = json['dialog_infos'] as List<dynamic>? ?? [];
+    final dialogInfos = dialogInfosJson.map((e) => SignalingDialogInfo.fromJson(e)).toList();
 
-    final contactsPresenceInfoJson = json['presence_contacts_info'] as Map<String, dynamic>?;
-    final contactsPresenceInfo =
-        contactsPresenceInfoJson?.map((key, value) {
-          final presenceInfoList = (value as List<dynamic>).map((e) => SignalingPresenceInfo.fromJson(e)).toList();
-          return MapEntry(key, presenceInfoList);
-        }) ??
-        <String, List<SignalingPresenceInfo>>{};
+    final presenceInfosJson = json['presence_infos'] as List<dynamic>? ?? [];
+    final presenceInfos = presenceInfosJson.map((e) => SignalingPresenceInfo.fromJson(e)).toList();
 
     final guestLineJson = json['guest_line'];
     Line? guestLine;
@@ -221,8 +208,8 @@ class StateHandshake extends Handshake {
       timestamp: timestamp,
       registration: registration,
       lines: lines,
-      userActiveCalls: userActiveCalls,
-      contactsPresenceInfo: contactsPresenceInfo,
+      presenceInfos: presenceInfos,
+      dialogInfos: dialogInfos,
       guestLine: guestLine,
     );
   }

@@ -31,8 +31,8 @@ SupportedFeature _$SupportedFeatureFromJson(
           return SupportedSystemNotifications.fromJson(
             json
           );
-                case 'sipPresence':
-          return SupportedSipPresence.fromJson(
+                case 'hybridPresence':
+          return SupportedHybridPresence.fromJson(
             json
           );
         
@@ -93,15 +93,15 @@ extension SupportedFeaturePatterns on SupportedFeature {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SupportedThemeMode value)?  themeMode,TResult Function( SupportedVideoCall value)?  videoCall,TResult Function( SupportedLoggingConfig value)?  loggingConfig,TResult Function( SupportedSystemNotifications value)?  systemNotifications,TResult Function( SupportedSipPresence value)?  sipPresence,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SupportedThemeMode value)?  themeMode,TResult Function( SupportedVideoCall value)?  videoCall,TResult Function( SupportedLoggingConfig value)?  loggingConfig,TResult Function( SupportedSystemNotifications value)?  systemNotifications,TResult Function( SupportedHybridPresence value)?  hybridPresence,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that);case SupportedVideoCall() when videoCall != null:
 return videoCall(_that);case SupportedLoggingConfig() when loggingConfig != null:
 return loggingConfig(_that);case SupportedSystemNotifications() when systemNotifications != null:
-return systemNotifications(_that);case SupportedSipPresence() when sipPresence != null:
-return sipPresence(_that);case _:
+return systemNotifications(_that);case SupportedHybridPresence() when hybridPresence != null:
+return hybridPresence(_that);case _:
   return orElse();
 
 }
@@ -119,15 +119,15 @@ return sipPresence(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SupportedThemeMode value)  themeMode,required TResult Function( SupportedVideoCall value)  videoCall,required TResult Function( SupportedLoggingConfig value)  loggingConfig,required TResult Function( SupportedSystemNotifications value)  systemNotifications,required TResult Function( SupportedSipPresence value)  sipPresence,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SupportedThemeMode value)  themeMode,required TResult Function( SupportedVideoCall value)  videoCall,required TResult Function( SupportedLoggingConfig value)  loggingConfig,required TResult Function( SupportedSystemNotifications value)  systemNotifications,required TResult Function( SupportedHybridPresence value)  hybridPresence,}){
 final _that = this;
 switch (_that) {
 case SupportedThemeMode():
 return themeMode(_that);case SupportedVideoCall():
 return videoCall(_that);case SupportedLoggingConfig():
 return loggingConfig(_that);case SupportedSystemNotifications():
-return systemNotifications(_that);case SupportedSipPresence():
-return sipPresence(_that);}
+return systemNotifications(_that);case SupportedHybridPresence():
+return hybridPresence(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -141,15 +141,15 @@ return sipPresence(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SupportedThemeMode value)?  themeMode,TResult? Function( SupportedVideoCall value)?  videoCall,TResult? Function( SupportedLoggingConfig value)?  loggingConfig,TResult? Function( SupportedSystemNotifications value)?  systemNotifications,TResult? Function( SupportedSipPresence value)?  sipPresence,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SupportedThemeMode value)?  themeMode,TResult? Function( SupportedVideoCall value)?  videoCall,TResult? Function( SupportedLoggingConfig value)?  loggingConfig,TResult? Function( SupportedSystemNotifications value)?  systemNotifications,TResult? Function( SupportedHybridPresence value)?  hybridPresence,}){
 final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that);case SupportedVideoCall() when videoCall != null:
 return videoCall(_that);case SupportedLoggingConfig() when loggingConfig != null:
 return loggingConfig(_that);case SupportedSystemNotifications() when systemNotifications != null:
-return systemNotifications(_that);case SupportedSipPresence() when sipPresence != null:
-return sipPresence(_that);case _:
+return systemNotifications(_that);case SupportedHybridPresence() when hybridPresence != null:
+return hybridPresence(_that);case _:
   return null;
 
 }
@@ -166,14 +166,14 @@ return sipPresence(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)?  loggingConfig,TResult Function( bool enabled)?  systemNotifications,TResult Function( bool enabled)?  sipPresence,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)?  loggingConfig,TResult Function( bool enabled)?  systemNotifications,TResult Function( bool enabled)?  hybridPresence,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
 return videoCall(_that.enabled);case SupportedLoggingConfig() when loggingConfig != null:
 return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled);case SupportedSystemNotifications() when systemNotifications != null:
-return systemNotifications(_that.enabled);case SupportedSipPresence() when sipPresence != null:
-return sipPresence(_that.enabled);case _:
+return systemNotifications(_that.enabled);case SupportedHybridPresence() when hybridPresence != null:
+return hybridPresence(_that.enabled);case _:
   return orElse();
 
 }
@@ -191,14 +191,14 @@ return sipPresence(_that.enabled);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,required TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)  loggingConfig,required TResult Function( bool enabled)  systemNotifications,required TResult Function( bool enabled)  sipPresence,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,required TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)  loggingConfig,required TResult Function( bool enabled)  systemNotifications,required TResult Function( bool enabled)  hybridPresence,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode():
 return themeMode(_that.mode);case SupportedVideoCall():
 return videoCall(_that.enabled);case SupportedLoggingConfig():
 return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled);case SupportedSystemNotifications():
-return systemNotifications(_that.enabled);case SupportedSipPresence():
-return sipPresence(_that.enabled);}
+return systemNotifications(_that.enabled);case SupportedHybridPresence():
+return hybridPresence(_that.enabled);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -212,14 +212,14 @@ return sipPresence(_that.enabled);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,TResult? Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)?  loggingConfig,TResult? Function( bool enabled)?  systemNotifications,TResult? Function( bool enabled)?  sipPresence,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,TResult? Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)?  loggingConfig,TResult? Function( bool enabled)?  systemNotifications,TResult? Function( bool enabled)?  hybridPresence,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
 return videoCall(_that.enabled);case SupportedLoggingConfig() when loggingConfig != null:
 return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled);case SupportedSystemNotifications() when systemNotifications != null:
-return systemNotifications(_that.enabled);case SupportedSipPresence() when sipPresence != null:
-return sipPresence(_that.enabled);case _:
+return systemNotifications(_that.enabled);case SupportedHybridPresence() when hybridPresence != null:
+return hybridPresence(_that.enabled);case _:
   return null;
 
 }
@@ -526,9 +526,9 @@ as bool,
 /// @nodoc
 @JsonSerializable()
 
-class SupportedSipPresence implements SupportedFeature {
-  const SupportedSipPresence({this.enabled = false, final  String? $type}): $type = $type ?? 'sipPresence';
-  factory SupportedSipPresence.fromJson(Map<String, dynamic> json) => _$SupportedSipPresenceFromJson(json);
+class SupportedHybridPresence implements SupportedFeature {
+  const SupportedHybridPresence({this.enabled = true, final  String? $type}): $type = $type ?? 'hybridPresence';
+  factory SupportedHybridPresence.fromJson(Map<String, dynamic> json) => _$SupportedHybridPresenceFromJson(json);
 
 @JsonKey() final  bool enabled;
 
@@ -540,16 +540,16 @@ final String $type;
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$SupportedSipPresenceCopyWith<SupportedSipPresence> get copyWith => _$SupportedSipPresenceCopyWithImpl<SupportedSipPresence>(this, _$identity);
+$SupportedHybridPresenceCopyWith<SupportedHybridPresence> get copyWith => _$SupportedHybridPresenceCopyWithImpl<SupportedHybridPresence>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$SupportedSipPresenceToJson(this, );
+  return _$SupportedHybridPresenceToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedSipPresence&&(identical(other.enabled, enabled) || other.enabled == enabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedHybridPresence&&(identical(other.enabled, enabled) || other.enabled == enabled));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -558,15 +558,15 @@ int get hashCode => Object.hash(runtimeType,enabled);
 
 @override
 String toString() {
-  return 'SupportedFeature.sipPresence(enabled: $enabled)';
+  return 'SupportedFeature.hybridPresence(enabled: $enabled)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $SupportedSipPresenceCopyWith<$Res> implements $SupportedFeatureCopyWith<$Res> {
-  factory $SupportedSipPresenceCopyWith(SupportedSipPresence value, $Res Function(SupportedSipPresence) _then) = _$SupportedSipPresenceCopyWithImpl;
+abstract mixin class $SupportedHybridPresenceCopyWith<$Res> implements $SupportedFeatureCopyWith<$Res> {
+  factory $SupportedHybridPresenceCopyWith(SupportedHybridPresence value, $Res Function(SupportedHybridPresence) _then) = _$SupportedHybridPresenceCopyWithImpl;
 @useResult
 $Res call({
  bool enabled
@@ -577,17 +577,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$SupportedSipPresenceCopyWithImpl<$Res>
-    implements $SupportedSipPresenceCopyWith<$Res> {
-  _$SupportedSipPresenceCopyWithImpl(this._self, this._then);
+class _$SupportedHybridPresenceCopyWithImpl<$Res>
+    implements $SupportedHybridPresenceCopyWith<$Res> {
+  _$SupportedHybridPresenceCopyWithImpl(this._self, this._then);
 
-  final SupportedSipPresence _self;
-  final $Res Function(SupportedSipPresence) _then;
+  final SupportedHybridPresence _self;
+  final $Res Function(SupportedHybridPresence) _then;
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? enabled = null,}) {
-  return _then(SupportedSipPresence(
+  return _then(SupportedHybridPresence(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,
   ));

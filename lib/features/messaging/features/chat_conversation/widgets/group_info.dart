@@ -11,15 +11,15 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/view_params/view_params.dart';
 import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 
-class GroupInfo extends StatefulWidget {
-  const GroupInfo(this.userId, {super.key});
+class GroupChatInfo extends StatefulWidget {
+  const GroupChatInfo(this.userId, {super.key});
 
   final String userId;
   @override
-  State<GroupInfo> createState() => _GroupInfoState();
+  State<GroupChatInfo> createState() => _GroupChatInfoState();
 }
 
-class _GroupInfoState extends State<GroupInfo> {
+class _GroupChatInfoState extends State<GroupChatInfo> {
   late final conversationCubit = context.read<ConversationCubit>();
   late final contactsRepository = context.read<ContactsRepository>();
 
@@ -51,7 +51,9 @@ class _GroupInfoState extends State<GroupInfo> {
     final result = await showDialog<Contact>(
       context: context,
       builder: (_) => PresenceViewParams(
-        viewSource: PresenceViewParams.of(context).viewSource,
+        hybridPresenceSupport: PresenceViewParams.of(context).hybridPresenceSupport,
+        blfViaSipSupport: PresenceViewParams.of(context).blfViaSipSupport,
+        presenceViaSipSupport: PresenceViewParams.of(context).presenceViaSipSupport,
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
           child: Dialog(

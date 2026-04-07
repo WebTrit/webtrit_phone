@@ -17,6 +17,14 @@ class PresenceInfoView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
+    // Original presences ids
+    final ids = this.presenceInfo.map((e) => e.id);
+
+    // If user receives both SIP and direct presence for the same number
+    // show one entry from direct but with source text "sip and direct".
+    final presenceInfo = List<PresenceInfo>.from(this.presenceInfo)
+      ..removeWhere((info) => ids.where((id) => id == info.id).length > 1 && info.source == PresenceInfoSource.sip);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
@@ -25,14 +33,18 @@ class PresenceInfoView extends StatelessWidget {
             l10n.presence_infoView_title,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
+          const SizedBox(height: 8),
           for (final info in presenceInfo)
             Builder(
               builder: (context) {
-                final maybeActivityText = info.activities.isNotEmpty
-                    ? info.activities.first.l10n(l10n)
+                final activitiesTexts = info.activities.map((activity) => activity.l10n(l10n)).toList();
+                final maybeActivityText = activitiesTexts.isNotEmpty
+                    ? activitiesTexts.join(', ')
                     : (info.available ? l10n.presence_infoView_available_true : l10n.presence_infoView_available_false);
 
-                final shouldDisplayNote = info.note.isNotEmpty && info.note.trim() != maybeActivityText;
+                // Not show note if it is the same as activity
+                // usually setted by preset for compatibility with more old clients that doesn't support activities
+                final shouldDisplayNote = info.note.isNotEmpty && activitiesTexts.contains(info.note.trim()) == false;
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -49,7 +61,8 @@ class PresenceInfoView extends StatelessWidget {
                           width: 16,
                           height: 16,
                           child: SipPresenceIndicator(
-                            presenceInfo: presenceInfo,
+                            presenceInfo: [info],
+                            dialogInfo: [],
                             presenceRect: Rect.fromLTWH(0, 0, 16, 16),
                           ),
                         ),
@@ -100,11 +113,26 @@ class PresenceInfoView extends StatelessWidget {
                           ),
                         ],
                       ),
+                    if (ids.where((id) => id == info.id).length == 1)
+                      Text(
+                        l10n.presence_infoView_source(
+                          info.source == PresenceInfoSource.sip
+                              ? l10n.presence_infoView_source_sip
+                              : l10n.presence_infoView_source_direct,
+                        ),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    if (ids.where((id) => id == info.id).length > 1)
+                      Text(
+                        l10n.presence_infoView_source(l10n.presence_infoView_source_sipAndDirect),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     if (info.device != null && info.device!.isNotEmpty)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [Text(info.device!, style: Theme.of(context).textTheme.bodySmall)],
                       ),
+
                     // const Divider(),
                   ],
                 );

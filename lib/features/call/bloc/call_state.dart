@@ -51,12 +51,19 @@ class CallState with _$CallState {
   /// (no main lines), so a real [LinesState] is computed to allow guest-line calls.
   LinesState toLinesState() {
     if (linesCount == 0 && !isHandshakeEstablished) return LinesState.blank();
-    final mainLines = List.generate(linesCount, (i) {
-      final inUse = activeCalls.any((e) => e.line == i);
-      return inUse ? LineState.inUse : LineState.idle;
-    });
-    final guestLineInUse = activeCalls.any((e) => e.line == null);
-    return LinesState(mainLines: mainLines, guestLine: guestLineInUse ? LineState.inUse : LineState.idle);
+
+    final List<LineState> mainLinesState = [];
+    for (var i = 0; i < linesCount; i++) {
+      final lineCall = activeCalls.firstWhereOrNull((e) => e.line == i);
+      if (lineCall != null) {
+        mainLinesState.add(LineState.inUse(callId: lineCall.callId));
+      } else {
+        mainLinesState.add(LineState.idle());
+      }
+    }
+    final guestLineCall = activeCalls.firstWhereOrNull((e) => e.line == null);
+    final guestLineState = guestLineCall != null ? LineState.inUse(callId: guestLineCall.callId) : LineState.idle();
+    return LinesState(mainLines: mainLinesState, guestLine: guestLineState);
   }
 
   int? retrieveIdleLine() {

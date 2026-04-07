@@ -39,7 +39,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
           value: conversationCubit,
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: DialogInfo(
+            child: DialogChatInfo(
               userId,
               state.credentials.participantId!,
               isAudioCallEnabled: true,
@@ -59,7 +59,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
           value: conversationCubit,
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: GroupInfo(userId),
+            child: GroupChatInfo(userId),
           ),
         ),
       );
@@ -161,18 +161,18 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
       source: ContactSourceId(ContactSourceType.external, participant),
       builder: (context, contact) {
         final colorScheme = Theme.of(context).colorScheme;
-        final presenceSource = PresenceViewParams.of(context).viewSource;
+        final hybridPresenceSupport = PresenceViewParams.of(context).hybridPresenceSupport;
         const nameTextStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.bold);
         const noteTextStyle = TextStyle(fontSize: 10);
 
-        return switch ((presenceSource, contact)) {
+        return switch ((hybridPresenceSupport, contact)) {
           (_, null) => Text(
             context.l10n.messaging_ParticipantName_unknown,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: nameTextStyle,
           ),
-          (PresenceViewSource.contactInfo, Contact contact) => Row(
+          (false, Contact contact) => Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (contact.thumbnail != null || contact.thumbnailUrl != null) ...[
@@ -201,7 +201,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
               ),
             ],
           ),
-          (PresenceViewSource.sipPresence, Contact contact) => Row(
+          (true, Contact contact) => Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               LeadingAvatar(
@@ -209,6 +209,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                 thumbnail: contact.thumbnail,
                 thumbnailUrl: contact.thumbnailUrl,
                 presenceInfo: contact.presenceInfo,
+                dialogInfo: contact.dialogInfo,
               ),
               const SizedBox(width: 8),
               Flexible(

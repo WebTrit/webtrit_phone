@@ -96,6 +96,7 @@ class FeatureAccess extends Equatable {
     AppConfig appConfig,
     List<EmbeddedResource> embeddedResources,
     CoreSupport coreSupport,
+    WebtritSystemInfo? systemInfo,
     FeatureOverrides featureOverrides,
   ) {
     try {
@@ -113,7 +114,7 @@ class FeatureAccess extends Equatable {
       final messagingConfig = MessagingMapper.map(appConfig, coreSupport);
       final contactsConfig = ContactsMapper.map(appConfig);
       final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupport, appConfig, featureOverrides);
-      final sipPresenceConfig = SipPresenceMapper.map(coreSupport, appConfig, featureOverrides);
+      final sipPresenceConfig = SipPresenceMapper.map(systemInfo, appConfig, featureOverrides);
       final loggingConfig = LoggingMapper.map(appConfig, featureOverrides);
 
       final supportedConfig = SupportedMapper.map(appConfig.supported);
@@ -505,20 +506,21 @@ abstract final class SystemNotificationsMapper {
 /// Mapper responsible for evaluating SIP presence support based on config and core capabilities.
 abstract final class SipPresenceMapper {
   /// Maps [CoreSupport] and [AppConfig] to [SipPresenceConfig].
-  static SipPresenceConfig map(CoreSupport coreSupport, AppConfig appConfig, FeatureOverrides featureOverrides) {
-    final supportedFeature = appConfig.supported.whereType<SupportedSipPresence>().firstOrNull;
+  static SipPresenceConfig map(WebtritSystemInfo? systemInfo, AppConfig appConfig, FeatureOverrides featureOverrides) {
+    final appSupportsBase = appConfig.supported.whereType<SupportedHybridPresence>().isNotEmpty;
+    final appSupports = featureOverrides.hybridPresenceSupport ?? appSupportsBase;
 
-    // TODO: Migrate client configurations first before fully removing this property.
-    // ignore: deprecated_member_use_from_same_package, deprecated_member_use
-    final baseAppSupport = supportedFeature?.enabled ?? appConfig.mainConfig.sipPresenceEnabled;
-    // Apply remote overrides
-    final appSupport = featureOverrides.isSipPresenceEnabled ?? baseAppSupport;
-    // Check if the backend supports SIP presence
-    final backendSupport = coreSupport.supportsSipPresence;
+    final backendSupports = systemInfo?.core.hybridPresenceAware ?? false;
 
-    final isEnabled = appSupport && backendSupport;
+    final isSupported = appSupports && backendSupports;
+    final withBlfViaSip = isSupported && (systemInfo?.adapter?.supportsSipDialogs ?? false);
+    final withpresenceViaSip = isSupported && (systemInfo?.adapter?.supportsSipPresence ?? false);
 
-    return SipPresenceConfig(sipPresenceSupport: isEnabled);
+    return SipPresenceConfig(
+      hybridPresenceSupport: isSupported,
+      dialogsViaSipBlfSupport: withBlfViaSip,
+      presenceViaSipSupport: withpresenceViaSip,
+    );
   }
 }
 

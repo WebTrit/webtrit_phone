@@ -7,6 +7,7 @@ mixin PresenceInfoDriftMapper {
   PresenceInfo presenceInfoFromDrift(PresenceInfoData data) {
     return PresenceInfo(
       id: data.idKey,
+      number: data.number,
       available: data.available,
       note: data.note,
       statusIcon: data.statusIcon,
@@ -16,13 +17,15 @@ mixin PresenceInfoDriftMapper {
       activities: (jsonDecode(data.activitiesJson) as List<dynamic>)
           .map((e) => PresenceActivity.values.byName(e))
           .toList(),
+      arrivalTime: DateTime.fromMicrosecondsSinceEpoch(data.arrivalTimeUsec),
+      source: PresenceInfoSource.values.byName(data.source),
     );
   }
 
-  PresenceInfoData presenceInfoToDrift(String number, PresenceInfo info) {
+  PresenceInfoData presenceInfoToDrift(PresenceInfo info) {
     return PresenceInfoData(
       idKey: info.id,
-      number: number,
+      number: info.number,
       available: info.available,
       note: info.note,
       statusIcon: info.statusIcon,
@@ -30,6 +33,8 @@ mixin PresenceInfoDriftMapper {
       timeOffsetMin: info.timeOffsetMin,
       timestampUsec: info.timestamp?.microsecondsSinceEpoch,
       activitiesJson: jsonEncode(info.activities.map((e) => e.name).toList()),
+      arrivalTimeUsec: info.arrivalTime.microsecondsSinceEpoch,
+      source: info.source.name,
     );
   }
 }

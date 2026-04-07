@@ -4,10 +4,15 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
 class SipPresenceIndicator extends StatelessWidget {
-  const SipPresenceIndicator({super.key, required this.presenceInfo, required Rect presenceRect})
-    : _presenceRect = presenceRect;
+  const SipPresenceIndicator({
+    super.key,
+    required this.presenceInfo,
+    required this.dialogInfo,
+    required Rect presenceRect,
+  }) : _presenceRect = presenceRect;
 
   final List<PresenceInfo> presenceInfo;
+  final List<DialogInfo> dialogInfo;
   final Rect _presenceRect;
 
   @override
@@ -20,7 +25,8 @@ class SipPresenceIndicator extends StatelessWidget {
         ? (style.presenceBadge?.availableColor ?? colorScheme.tertiary)
         : (style.presenceBadge?.unavailableColor ?? colorScheme.onSurfaceVariant);
 
-    final primaryActivity = presenceInfo.primaryActivity;
+    final activityIcon = _activityIcon(presenceInfo, dialogInfo);
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -31,7 +37,7 @@ class SipPresenceIndicator extends StatelessWidget {
             border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 2),
           ),
         ),
-        if (primaryActivity != null)
+        if (activityIcon != null)
           Positioned(
             top: -_presenceRect.width * 0.2,
             right: 0,
@@ -39,27 +45,36 @@ class SipPresenceIndicator extends StatelessWidget {
               decoration: IconDecoration(
                 border: IconBorder(color: Theme.of(context).scaffoldBackgroundColor, width: 2.5),
               ),
-              icon: Icon(
-                switch (primaryActivity) {
-                  PresenceActivity.busy => Icons.event_busy,
-                  PresenceActivity.doNotDisturb => Icons.phone_disabled_rounded,
-                  PresenceActivity.sleeping => Icons.nights_stay_rounded,
-                  PresenceActivity.permanentAbsence => Icons.person_off_rounded,
-                  PresenceActivity.onThePhone => Icons.phone_in_talk_rounded,
-                  PresenceActivity.meal => Icons.restaurant,
-                  PresenceActivity.meeting => Icons.calendar_month,
-                  PresenceActivity.appointment => Icons.diversity_3_sharp,
-                  PresenceActivity.vacation => Icons.beach_access,
-                  PresenceActivity.travel => Icons.flight,
-                  PresenceActivity.inTransit => Icons.drive_eta,
-                  PresenceActivity.away => Icons.directions_walk,
-                },
-                color: color,
-                size: _presenceRect.width * 0.6,
-              ),
+              icon: Icon(activityIcon, color: color, size: _presenceRect.width * 0.6),
             ),
           ),
       ],
     );
+  }
+
+  IconData? _activityIcon(List<PresenceInfo> presenceInfo, List<DialogInfo> dialogInfo) {
+    if (dialogInfo.isNotEmpty) {
+      return Icons.phone_in_talk_rounded;
+    }
+
+    final activity = presenceInfo.primaryActivity;
+    if (activity != null) {
+      return switch (activity) {
+        PresenceActivity.busy => Icons.event_busy,
+        PresenceActivity.doNotDisturb => Icons.phone_disabled_rounded,
+        PresenceActivity.sleeping => Icons.nights_stay_rounded,
+        PresenceActivity.permanentAbsence => Icons.person_off_rounded,
+        PresenceActivity.onThePhone => Icons.phone_in_talk_rounded,
+        PresenceActivity.meal => Icons.restaurant,
+        PresenceActivity.meeting => Icons.calendar_month,
+        PresenceActivity.appointment => Icons.diversity_3_sharp,
+        PresenceActivity.vacation => Icons.beach_access,
+        PresenceActivity.travel => Icons.flight,
+        PresenceActivity.inTransit => Icons.drive_eta,
+        PresenceActivity.away => Icons.directions_walk,
+      };
+    }
+
+    return null;
   }
 }

@@ -3,19 +3,24 @@ import 'package:app_database/app_database.dart';
 import 'package:webtrit_phone/models/contact.dart';
 import 'package:webtrit_phone/models/contact_email.dart';
 import 'package:webtrit_phone/models/contact_phone.dart';
+import 'package:webtrit_phone/models/dialog_info.dart';
 import 'package:webtrit_phone/models/presence/presence_info.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/models/sip_subscriptions/sip_subscription.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
+import 'dialog_info_drift_mapper.dart';
 import 'presence_info_drift_mapper.dart';
 
-mixin ContactsDriftMapper on PresenceInfoDriftMapper {
+mixin ContactsDriftMapper on PresenceInfoDriftMapper, DialogInfoDriftMapper {
   Contact contactFromDrift(
     ContactData contactData, {
     List<ContactPhoneData> phones = const [],
     List<ContactEmailData> emails = const [],
     List<FavoriteV2Data> favorites = const [],
     List<PresenceInfoData> presenceInfo = const [],
+    List<DialogInfoData> dialogInfo = const [],
+    List<SipSubscriptionData> sipSubscriptions = const [],
   }) {
     final email = emails.firstOrNull?.address;
     final gravatarUrl = gravatarThumbnailUrl(email);
@@ -36,6 +41,8 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper {
       phones: contactPhonesFromDrift(phones, favorites, contactData.sourceType).toList(),
       emails: contactEmailsFromDrift(emails).toList(),
       presenceInfo: contactPresenceInfosFromDrift(presenceInfo).toList(),
+      dialogInfo: contactDialogInfosFromDrift(dialogInfo).toList(),
+      sipSubscriptions: contactSipSubscriptionsFromDrift(sipSubscriptions).toList(),
     );
   }
 
@@ -58,11 +65,28 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper {
     return presenceInfo.map(presenceInfoFromDrift);
   }
 
+  Iterable<DialogInfo> contactDialogInfosFromDrift(List<DialogInfoData> dialogInfo) {
+    return dialogInfo.map(dialogInfoFromDrift);
+  }
+
   ContactPhone contactPhoneFromDrift(ContactPhoneData data, {bool favorite = false}) {
     return ContactPhone(id: data.id, number: data.number, label: data.label, favorite: favorite);
   }
 
   ContactEmail contactEmailFromDrift(ContactEmailData data) {
     return ContactEmail(id: data.id, address: data.address, label: data.label);
+  }
+
+  Iterable<SipSubscription> contactSipSubscriptionsFromDrift(List<SipSubscriptionData> sipSubscriptions) {
+    return sipSubscriptions.map(sipSubscriptionFromDrift);
+  }
+
+  SipSubscription sipSubscriptionFromDrift(SipSubscriptionData data) {
+    return SipSubscription(
+      type: SipSubscriptionType.values.byName(data.type.name),
+      number: data.number,
+      contactUserId: data.contactUserId,
+      subscribedAt: DateTime.fromMicrosecondsSinceEpoch(data.subscribedAtUsec),
+    );
   }
 }

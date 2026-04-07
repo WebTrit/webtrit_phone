@@ -363,6 +363,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get contacts_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
+  String get contacts_DialogsInfoView_title => 'Інформація про дзвінки (BLF):';
+
+  @override
+  String contacts_ContactTile_inCall(Object destination) {
+    return 'На дроті з: $destination';
+  }
+
+  @override
+  String get contacts_ContactScreen_options => 'Параметри:';
+
+  @override
+  String get contacts_ContactScreen_presenceViaSip => 'Підписатись на статус юзера через SIP (Presence)';
+
+  @override
+  String get contacts_ContactScreen_presenceViaSip_tooltip =>
+      'Окрім прямого обміну даними (додаток-до-додатку), підписка через функцію SIP-Presence дозволяє отримувати інформацію про статус від інших користувацьких агентів (настільні телефони, окремі софтфони тощо). Рекомендується вмикати лише якщо контакт використовує застарілі клієнти і ви хочете бачити його статус на всіх пристроях.';
+
+  @override
+  String get contacts_ContactScreen_dialogsViaSipBlf => 'Підписатись на статус викликів через SIP (BLF/Dialogs)';
+
+  @override
+  String get contacts_ContactScreen_dialogsViaSipBlf_tooltip =>
+      'Окрім прямого обміну даними (додаток-до-додатку), підписка через функцію SIP-Dialogs дозволяє отримувати інформацію про стан викликів від інших користувацьких агентів (настільні телефони, окремі софтфони тощо). Рекомендується вмикати лише якщо контакт використовує застарілі клієнти і ви хочете бачити стан його викликів на всіх пристроях.';
+
+  @override
   String get copyToClipboard_floatingSnackBar => 'Текст скопійовано';
 
   @override
@@ -1434,6 +1459,20 @@ class AppLocalizationsUk extends AppLocalizations {
   String get presence_infoView_updated => 'Оновлено:';
 
   @override
+  String presence_infoView_source(Object source) {
+    return 'Джерело: $source';
+  }
+
+  @override
+  String get presence_infoView_source_direct => 'напряму';
+
+  @override
+  String get presence_infoView_source_sip => 'sip';
+
+  @override
+  String get presence_infoView_source_sipAndDirect => 'sip і напряму';
+
+  @override
   String get presence_preset_absent_name => 'Відсутній';
 
   @override
@@ -1532,6 +1571,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get presence_settings_presets_label => 'Виберіть пресет';
+
+  @override
+  String get presence_settings_presets_label_custom => 'Ручна конфігурація';
 
   @override
   String get presence_settings_presets_title => 'Пресети:';

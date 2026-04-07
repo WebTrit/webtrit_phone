@@ -1,6 +1,32 @@
 import 'package:equatable/equatable.dart';
 
-enum LineState { idle, inUse }
+sealed class LineState extends Equatable {
+  const LineState();
+
+  @override
+  List<Object?> get props => [];
+
+  factory LineState.idle() => const IdleLineState();
+  factory LineState.inUse({required String callId}) => InUseLineState(callId: callId);
+}
+
+final class IdleLineState extends LineState {
+  const IdleLineState();
+
+  @override
+  String toString() => 'IdleLineState';
+}
+
+final class InUseLineState extends LineState {
+  const InUseLineState({required this.callId});
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+
+  @override
+  String toString() => 'InUseLineState{callId: $callId}';
+}
 
 class LinesState extends Equatable {
   const LinesState({required this.mainLines, required this.guestLine});

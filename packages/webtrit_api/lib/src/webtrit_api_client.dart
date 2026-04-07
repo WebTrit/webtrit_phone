@@ -816,4 +816,55 @@ class WebtritApiClient {
       etag: response.headers['etag'] ?? '0',
     );
   }
+
+  Future<SipSubscriptionsGetResult> getSipSubscriptions(
+    String token, {
+    String? ifNoneMatch,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final response =
+        await _httpClientExecuteGet(
+              [..._apiBasePathSegmentsV1, 'user', 'sip_subscriptions'],
+              ifNoneMatch != null ? {'If-None-Match': ifNoneMatch} : null,
+              token,
+              requestOptions: options,
+              responseOptions: ResponseOptions(responseType: ResponseType.raw),
+            )
+            as http.Response;
+
+    if (response.statusCode == 304) {
+      return SipSubscriptionsGetResult(notModified: true, etag: response.headers['etag'] ?? '0');
+    }
+
+    final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
+    return SipSubscriptionsGetResult(
+      notModified: false,
+      etag: response.headers['etag'] ?? '0',
+      data: SipSubscriptionsListResponse.fromJson(responseJson),
+    );
+  }
+
+  Future<SipSubscriptionBatchSyncResult> batchSyncSipSubscriptions(
+    String token,
+    List<SipSubscriptionBatchAction> actions, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final response =
+        await _httpClientExecutePost(
+              [..._apiBasePathSegmentsV1, 'user', 'sip_subscriptions', 'batch_sync'],
+              null,
+              token,
+              {'actions': actions.map((a) => a.toJson()).toList()},
+              requestOptions: options,
+              responseOptions: ResponseOptions(responseType: ResponseType.raw),
+            )
+            as http.Response;
+
+    final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
+
+    return SipSubscriptionBatchSyncResult(
+      data: SipSubscriptionBatchSyncResponse.fromJson(responseJson),
+      etag: response.headers['etag'] ?? '0',
+    );
+  }
 }

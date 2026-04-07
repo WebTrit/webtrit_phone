@@ -196,14 +196,6 @@ sealed class _CallSignalingEvent extends CallEvent {
   const factory _CallSignalingEvent.transferring({required int? line, required String callId}) =
       _CallSignalingEventTransferring;
 
-  const factory _CallSignalingEvent.notifyDialog({
-    required int? line,
-    required String callId,
-    required String? notify,
-    required SubscriptionState? subscriptionState,
-    required List<UserActiveCall> userActiveCalls,
-  }) = _CallSignalingEventNotifyDialog;
-
   const factory _CallSignalingEvent.notifyRefer({
     required int? line,
     required String callId,
@@ -211,15 +203,6 @@ sealed class _CallSignalingEvent extends CallEvent {
     required SubscriptionState? subscriptionState,
     required ReferNotifyState state,
   }) = _CallSignalingEventNotifyRefer;
-
-  const factory _CallSignalingEvent.notifyPresence({
-    required int? line,
-    required String callId,
-    required String? notify,
-    required SubscriptionState? subscriptionState,
-    required String number,
-    required List<SignalingPresenceInfo> presenceInfo,
-  }) = _CallSignalingEventNotifyPresence;
 
   const factory _CallSignalingEvent.notifyUnknown({
     required int? line,
@@ -232,6 +215,23 @@ sealed class _CallSignalingEvent extends CallEvent {
 
   const factory _CallSignalingEvent.registration(RegistrationStatus status, {int? code, String? reason}) =
       _CallSignalingEventRegistration;
+}
+
+sealed class _GlobalEvent extends CallEvent {
+  const _GlobalEvent();
+
+  @override
+  List<Object?> get props => [];
+
+  const factory _GlobalEvent.numberPresenceUpdate({
+    required String number,
+    required List<SignalingPresenceInfo> presenceInfo,
+  }) = _GlobalEventNumberPresenceUpdate;
+
+  const factory _GlobalEvent.numberDialogsUpdate({
+    required String number,
+    required List<SignalingDialogInfo> dialogInfos,
+  }) = _GlobalEventNumberDialogsUpdate;
 }
 
 class _CallSignalingEventIncoming extends _CallSignalingEvent {
@@ -432,29 +432,6 @@ class _CallSignalingEventTransferring extends _CallSignalingEvent {
   List<Object?> get props => [line, callId];
 }
 
-class _CallSignalingEventNotifyDialog extends _CallSignalingEvent {
-  const _CallSignalingEventNotifyDialog({
-    required this.line,
-    required this.callId,
-    required this.notify,
-    required this.subscriptionState,
-    required this.userActiveCalls,
-  });
-
-  final int? line;
-
-  final String callId;
-
-  final String? notify;
-
-  final SubscriptionState? subscriptionState;
-
-  final List<UserActiveCall> userActiveCalls;
-
-  @override
-  List<Object?> get props => [line, callId, notify, subscriptionState, userActiveCalls];
-}
-
 class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
   const _CallSignalingEventNotifyRefer({
     required this.line,
@@ -476,32 +453,6 @@ class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
 
   @override
   List<Object?> get props => [line, callId, notify, subscriptionState, state];
-}
-
-class _CallSignalingEventNotifyPresence extends _CallSignalingEvent {
-  const _CallSignalingEventNotifyPresence({
-    required this.line,
-    required this.callId,
-    required this.notify,
-    required this.subscriptionState,
-    required this.number,
-    required this.presenceInfo,
-  });
-
-  final int? line;
-
-  final String callId;
-
-  final String? notify;
-
-  final SubscriptionState? subscriptionState;
-
-  final String number;
-
-  final List<SignalingPresenceInfo> presenceInfo;
-
-  @override
-  List<Object?> get props => [line, callId, notify, subscriptionState, number, presenceInfo];
 }
 
 class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
@@ -528,6 +479,28 @@ class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
 
   @override
   List<Object?> get props => [line, callId, notify, subscriptionState, contentType, content];
+}
+
+class _GlobalEventNumberPresenceUpdate extends _GlobalEvent {
+  const _GlobalEventNumberPresenceUpdate({required this.number, required this.presenceInfo});
+
+  final String number;
+
+  final List<SignalingPresenceInfo> presenceInfo;
+
+  @override
+  List<Object?> get props => [number, presenceInfo];
+}
+
+class _GlobalEventNumberDialogsUpdate extends _GlobalEvent {
+  const _GlobalEventNumberDialogsUpdate({required this.number, required this.dialogInfos});
+
+  final String number;
+
+  final List<SignalingDialogInfo> dialogInfos;
+
+  @override
+  List<Object?> get props => [number, dialogInfos];
 }
 
 class _CallSignalingEventRegistration extends _CallSignalingEvent {

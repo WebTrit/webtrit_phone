@@ -102,7 +102,7 @@ class _FavoriteTileState extends State<FavoriteTile> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
-    final presenceSource = PresenceViewParams.of(context).viewSource;
+    final presenceParams = PresenceViewParams.of(context);
 
     final contact = widget.contact;
     final name = widget.contact?.maybeName ?? widget.favorite.number;
@@ -133,10 +133,11 @@ class _FavoriteTileState extends State<FavoriteTile> {
                 thumbnailUrl: contact?.thumbnailUrl,
                 registered: contact?.registered,
                 presenceInfo: contact?.presenceInfo,
+                dialogInfo: contact?.dialogInfo,
               ),
-              title: switch (presenceSource) {
-                PresenceViewSource.sipPresence => Text('$name ${contact?.presenceInfo.primaryStatusIcon ?? ''}'),
-                PresenceViewSource.contactInfo => Text(name),
+              title: switch (presenceParams.hybridPresenceSupport) {
+                true => Text('$name ${contact?.presenceInfo.primaryStatusIcon ?? ''}'),
+                false => Text(name),
               },
               subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),
               onTap: widget.gesturesEnabled ? widget.onTap : null,

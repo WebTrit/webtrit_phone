@@ -1,12 +1,20 @@
 import 'package:equatable/equatable.dart';
 
-/// Configuration for the SIP presence feature.
 class SipPresenceConfig extends Equatable {
-  const SipPresenceConfig({required this.sipPresenceSupport});
+  const SipPresenceConfig({
+    required this.hybridPresenceSupport,
+    required this.dialogsViaSipBlfSupport,
+    required this.presenceViaSipSupport,
+  });
 
-  /// Whether the SIP presence feature is enabled and supported by the remote system.
-  final bool sipPresenceSupport;
+  final bool hybridPresenceSupport;
+
+  final bool dialogsViaSipBlfSupport;
+
+  final bool presenceViaSipSupport;
+
+  bool get subsSyncEnabled => hybridPresenceSupport && (dialogsViaSipBlfSupport || presenceViaSipSupport);
 
   @override
-  List<Object?> get props => [sipPresenceSupport];
+  List<Object?> get props => [hybridPresenceSupport, dialogsViaSipBlfSupport, presenceViaSipSupport];
 }

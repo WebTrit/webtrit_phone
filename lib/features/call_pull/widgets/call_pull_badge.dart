@@ -10,9 +10,9 @@ import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_pull/call_pull.dart';
 
 class CallPullBadge extends StatefulWidget {
-  const CallPullBadge({required this.pullableCalls, super.key});
+  const CallPullBadge({required this.pullableCallDialogs, super.key});
 
-  final List<PullableCall> pullableCalls;
+  final List<DialogInfo> pullableCallDialogs;
 
   @override
   State<CallPullBadge> createState() => _CallPullBadgeState();
@@ -47,16 +47,20 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
     );
 
     if (!mounted) return;
-    if (result is PullableCall) onPickUp(result);
+    if (result is DialogInfo) onPickUp(result);
   }
 
-  void onPickUp(PullableCall pullableCall) {
+  void onPickUp(DialogInfo dialog) {
+    final DialogInfo(:callId, :localTag, :remoteTag, :remoteNumber, :remoteDisplayName) = dialog;
+    if (remoteNumber == null || callId == null) return;
+    if (localTag == null || remoteTag == null) return;
+
     callBloc.add(
       CallControlEvent.started(
-        number: pullableCall.remoteNumber,
+        number: remoteNumber,
         video: false,
-        replaces: '${pullableCall.callId};from-tag=${pullableCall.localTag};to-tag=${pullableCall.remoteTag}',
-        displayName: pullableCall.remoteDisplayName,
+        replaces: '$callId;from-tag=$localTag;to-tag=$remoteTag',
+        displayName: remoteDisplayName,
       ),
     );
   }
@@ -87,12 +91,12 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
                     child: Stack(
                       children: [
                         Icon(Icons.call_outlined, size: 16, color: contentColor),
-                        if (widget.pullableCalls.length > 1)
+                        if (widget.pullableCallDialogs.length > 1)
                           Positioned(
                             right: 1,
                             top: 0,
                             child: Text(
-                              widget.pullableCalls.length.toString(),
+                              widget.pullableCallDialogs.length.toString(),
                               style: TextStyle(
                                 fontSize: 8,
                                 color: contentColor,
@@ -105,31 +109,28 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
                           Positioned(
                             right: 1,
                             top: 1,
-                            child: switch (widget.pullableCalls.first.direction) {
-                              PullableCallDirection.initiator => Icon(Icons.call_made, size: 8, color: contentColor),
-                              PullableCallDirection.recipient => Icon(
-                                Icons.call_received,
-                                size: 8,
-                                color: contentColor,
-                              ),
+                            child: switch (widget.pullableCallDialogs.first.direction) {
+                              DialogDirection.initiator => Icon(Icons.call_made, size: 8, color: contentColor),
+                              DialogDirection.recipient => Icon(Icons.call_received, size: 8, color: contentColor),
+                              _ => SizedBox.shrink(),
                             },
                           ),
                       ],
                     ),
                   ),
                   const SizedBox(width: 4),
-                  if (widget.pullableCalls.length > 1)
+                  if (widget.pullableCallDialogs.length > 1)
                     LimitedBox(
                       maxWidth: 100,
                       child: Text(
-                        widget.pullableCalls.map((e) => e.displayName.split(' ').first).join(', '),
+                        widget.pullableCallDialogs.map((e) => e.displayName?.split(' ').first ?? 'N/A').join(', '),
                         style: TextStyle(fontSize: 12, color: contentColor),
                         overflow: TextOverflow.ellipsis,
                       ),
                     )
                   else
                     Text(
-                      widget.pullableCalls.first.displayName,
+                      widget.pullableCallDialogs.first.displayName ?? 'N/A',
                       style: TextStyle(fontSize: 12, color: contentColor),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -156,11 +157,11 @@ class PullableCallsDialog extends StatefulWidget {
 class _PullableCallsDialogState extends State<PullableCallsDialog> {
   bool closing = false;
 
-  void onPickUp(PullableCall pullableCall) {
-    maybeClose(result: pullableCall);
+  void onPickUp(DialogInfo dialog) {
+    maybeClose(result: dialog);
   }
 
-  void maybeClose({PullableCall? result}) {
+  void maybeClose({DialogInfo? result}) {
     if (!mounted || closing) return;
 
     closing = true;
@@ -175,15 +176,15 @@ class _PullableCallsDialogState extends State<PullableCallsDialog> {
         listenWhen: (previous, current) {
           return previous.activeCalls.length != current.activeCalls.length;
         },
-        listener: (context, state) {
+        listener: (context, callBlocState) {
           maybeClose();
         },
-        child: BlocConsumer<CallPullCubit, List<PullableCall>>(
+        child: BlocConsumer<CallPullCubit, List<DialogInfo>>(
           bloc: widget.callPullCubit,
-          listener: (context, state) {
-            if (state.isEmpty) maybeClose();
+          listener: (context, pullableCallDialogs) {
+            if (pullableCallDialogs.isEmpty) maybeClose();
           },
-          builder: (context, state) {
+          builder: (context, pullableCallDialogs) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
@@ -194,7 +195,7 @@ class _PullableCallsDialogState extends State<PullableCallsDialog> {
                     context.l10n.callPullBadge_dialogTitle,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  for (final pullableCall in state) ...[callTile(pullableCall)],
+                  for (final dialog in pullableCallDialogs) ...[callTile(dialog)],
                 ],
               ),
             );
@@ -204,31 +205,35 @@ class _PullableCallsDialogState extends State<PullableCallsDialog> {
     );
   }
 
-  Widget callTile(PullableCall pullableCall) {
+  Widget callTile(DialogInfo dialog) {
     final colorScheme = Theme.of(context).colorScheme;
-    final canPickUp = pullableCall.state == PullableCallState.confirmed;
 
     return Row(
       children: [
-        switch (pullableCall.state) {
-          PullableCallState.proceeding || PullableCallState.early => switch (pullableCall.direction) {
-            PullableCallDirection.initiator => const Icon(Icons.phone_forwarded, size: 16),
-            PullableCallDirection.recipient => const Icon(Icons.phone_callback, size: 16),
+        switch (dialog.state) {
+          DialogState.proceeding || DialogState.early => switch (dialog.direction) {
+            DialogDirection.initiator => const Icon(Icons.phone_forwarded, size: 16),
+            DialogDirection.recipient => const Icon(Icons.phone_callback, size: 16),
+            _ => const Icon(Icons.phone, size: 16),
           },
-          PullableCallState.confirmed => const Icon(Icons.phone_in_talk, size: 16),
-          _ => const Icon(Icons.phone_locked, size: 16),
+          DialogState.confirmed => const Icon(Icons.phone_in_talk, size: 16),
+          _ => const Icon(Icons.phone, size: 16),
         },
         const SizedBox(width: 8),
         Expanded(
-          child: Text(pullableCall.displayName, style: const TextStyle(fontSize: 14), overflow: TextOverflow.ellipsis),
+          child: Text(
+            dialog.displayName ?? 'N/A',
+            style: const TextStyle(fontSize: 14),
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
         Material(
-          color: colorScheme.tertiary.withAlpha(canPickUp ? 255 : 128),
+          color: colorScheme.tertiary.withAlpha(dialog.pullable ? 255 : 128),
           clipBehavior: Clip.antiAlias,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: InkWell(
             onTap: () {
-              if (canPickUp) onPickUp(pullableCall);
+              if (dialog.pullable) onPickUp(dialog);
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),

@@ -126,7 +126,7 @@ class SettingsScreen extends StatelessWidget {
                             },
                           )
                         else if (item.flavor == SettingsFlavor.presence) ...[
-                          if (PresenceViewParams.of(context).viewSource == PresenceViewSource.sipPresence)
+                          if (PresenceViewParams.of(context).hybridPresenceSupport)
                             SettingsTile(
                               title: context.parseL10n(item.titleL10n),
                               icon: item.icon,

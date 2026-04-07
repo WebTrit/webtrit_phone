@@ -8,7 +8,8 @@ import 'package:webtrit_phone/models/models.dart';
 
 final _logger = Logger('RecentsRepository');
 
-class RecentsRepository with PresenceInfoDriftMapper, CallLogsDriftMapper, ContactsDriftMapper, RecentsDriftMapper {
+class RecentsRepository
+    with DialogInfoDriftMapper, PresenceInfoDriftMapper, CallLogsDriftMapper, ContactsDriftMapper, RecentsDriftMapper {
   RecentsRepository({required AppDatabase appDatabase}) : _appDatabase = appDatabase;
 
   final AppDatabase _appDatabase;

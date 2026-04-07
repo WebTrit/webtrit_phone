@@ -49,7 +49,12 @@ void main() {
 
       final wrappedWidget = MultiProvider(
         providers: appContext.providers,
-        child: PresenceViewParams(viewSource: PresenceViewSource.contactInfo, child: innerWidget),
+        child: PresenceViewParams(
+          hybridPresenceSupport: true,
+          blfViaSipSupport: true,
+          presenceViaSipSupport: true,
+          child: innerWidget,
+        ),
       );
 
       await tester.pumpWidget(wrappedWidget);

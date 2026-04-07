@@ -354,6 +354,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contacts_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
+  String get contacts_DialogsInfoView_title => 'Calls information (BLF):';
+
+  @override
+  String contacts_ContactTile_inCall(Object destination) {
+    return 'In call: $destination';
+  }
+
+  @override
+  String get contacts_ContactScreen_options => 'Options:';
+
+  @override
+  String get contacts_ContactScreen_presenceViaSip => 'Subscribe to user status via SIP (Presence)';
+
+  @override
+  String get contacts_ContactScreen_presenceViaSip_tooltip =>
+      'In addition to direct(app to app) data exchange, subscribe via SIP-Presence feature allows gathering presence information from other user agents (desktop phones, standalone softphones, etc.). Recommended to enable only if your contact prefers to use legacy user agents and you want to see their presence status across all devices.';
+
+  @override
+  String get contacts_ContactScreen_dialogsViaSipBlf => 'Subscribe to active calls via SIP (BLF/Dialogs)';
+
+  @override
+  String get contacts_ContactScreen_dialogsViaSipBlf_tooltip =>
+      'In addition to direct(app to app) data exchange, subscribe via SIP-Dialogs feature allows gathering call state information from other user agents (desktop phones, standalone softphones, etc.). Recommended to enable only if your contact prefers to use legacy user agents and you want to see their call status across all devices.';
+
+  @override
   String get copyToClipboard_floatingSnackBar => 'Text copied';
 
   @override
@@ -1413,6 +1438,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get presence_infoView_updated => 'Updated:';
 
   @override
+  String presence_infoView_source(Object source) {
+    return 'Source: $source';
+  }
+
+  @override
+  String get presence_infoView_source_direct => 'direct';
+
+  @override
+  String get presence_infoView_source_sip => 'sip';
+
+  @override
+  String get presence_infoView_source_sipAndDirect => 'sip and direct';
+
+  @override
   String get presence_preset_absent_name => 'Absent';
 
   @override
@@ -1511,6 +1550,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get presence_settings_presets_label => 'Choose preset';
+
+  @override
+  String get presence_settings_presets_label_custom => 'Custom';
 
   @override
   String get presence_settings_presets_title => 'Presets:';

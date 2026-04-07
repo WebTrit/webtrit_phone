@@ -36,7 +36,9 @@ class ScreenshotsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PresenceViewParams(
-      viewSource: PresenceViewSource.contactInfo,
+      hybridPresenceSupport: true,
+      blfViaSipSupport: true,
+      presenceViaSipSupport: true,
       child: BlocProvider.value(value: appBloc, child: const AppPairingContent()),
     );
   }

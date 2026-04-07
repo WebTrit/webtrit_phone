@@ -242,6 +242,18 @@ class AppLocalizationsMapper {
       'contactsSourceLocal': localizations.contactsSourceLocal,
       'contacts_Text_blingTransferInitiated':
           localizations.contacts_Text_blingTransferInitiated,
+      'contacts_DialogsInfoView_title':
+          localizations.contacts_DialogsInfoView_title,
+      'contacts_ContactScreen_options':
+          localizations.contacts_ContactScreen_options,
+      'contacts_ContactScreen_presenceViaSip':
+          localizations.contacts_ContactScreen_presenceViaSip,
+      'contacts_ContactScreen_presenceViaSip_tooltip':
+          localizations.contacts_ContactScreen_presenceViaSip_tooltip,
+      'contacts_ContactScreen_dialogsViaSipBlf':
+          localizations.contacts_ContactScreen_dialogsViaSipBlf,
+      'contacts_ContactScreen_dialogsViaSipBlf_tooltip':
+          localizations.contacts_ContactScreen_dialogsViaSipBlf_tooltip,
       'copyToClipboard_floatingSnackBar':
           localizations.copyToClipboard_floatingSnackBar,
       'copyToClipboard_popupMenuItem':
@@ -497,6 +509,12 @@ class AppLocalizationsMapper {
           localizations.logRecordsConsole_Button_failureRefresh,
       'logRecordsConsole_Text_failure':
           localizations.logRecordsConsole_Text_failure,
+      'logRecordsConsole_Button_infoClose':
+          localizations.logRecordsConsole_Button_infoClose,
+      'logRecordsConsole_PopupMenuItem_info':
+          localizations.logRecordsConsole_PopupMenuItem_info,
+      'logRecordsConsole_PopupMenuItem_clear':
+          localizations.logRecordsConsole_PopupMenuItem_clear,
       'main_BottomNavigationBarItemLabel_chats':
           localizations.main_BottomNavigationBarItemLabel_chats,
       'main_BottomNavigationBarItemLabel_contacts':
@@ -799,6 +817,12 @@ class AppLocalizationsMapper {
       'presence_infoView_timeZone': localizations.presence_infoView_timeZone,
       'presence_infoView_title': localizations.presence_infoView_title,
       'presence_infoView_updated': localizations.presence_infoView_updated,
+      'presence_infoView_source_direct':
+          localizations.presence_infoView_source_direct,
+      'presence_infoView_source_sip':
+          localizations.presence_infoView_source_sip,
+      'presence_infoView_source_sipAndDirect':
+          localizations.presence_infoView_source_sipAndDirect,
       'presence_preset_absent_name': localizations.presence_preset_absent_name,
       'presence_preset_absent_note': localizations.presence_preset_absent_note,
       'presence_preset_appointment_name':
@@ -852,6 +876,8 @@ class AppLocalizationsMapper {
           localizations.presence_settings_note_tooltip,
       'presence_settings_presets_label':
           localizations.presence_settings_presets_label,
+      'presence_settings_presets_label_custom':
+          localizations.presence_settings_presets_label_custom,
       'presence_settings_presets_title':
           localizations.presence_settings_presets_title,
       'presence_settings_statusIcon_none':
@@ -1569,6 +1595,8 @@ class AppLocalizationsMapper {
           localizations.agoTicker_minutesAgo(minutes),
       'agoTicker_secondsAgo': (seconds) =>
           localizations.agoTicker_secondsAgo(seconds),
+      'contacts_ContactTile_inCall': (destination) =>
+          localizations.contacts_ContactTile_inCall(destination),
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
       'favorites_SnackBar_deleted': (name) =>
@@ -1599,6 +1627,8 @@ class AppLocalizationsMapper {
           localizations.login_Text_signupVerifyPostDescriptionFromEmail(email),
       'login_Text_signupVerifyPreDescriptionEmail': (email) =>
           localizations.login_Text_signupVerifyPreDescriptionEmail(email),
+      'logRecordsConsole_Text_recordsCountHint': (count) =>
+          localizations.logRecordsConsole_Text_recordsCountHint(count),
       'main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError':
           (actual, supportedConstraint) => localizations
               .main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
@@ -1626,6 +1656,8 @@ class AppLocalizationsMapper {
               ),
       'numberActions_callFrom': (number) =>
           localizations.numberActions_callFrom(number),
+      'presence_infoView_source': (source) =>
+          localizations.presence_infoView_source(source),
       'recents_BodyCenter_empty': (filter) =>
           localizations.recents_BodyCenter_empty(filter),
       'recents_snackBar_deleted': (name) =>
