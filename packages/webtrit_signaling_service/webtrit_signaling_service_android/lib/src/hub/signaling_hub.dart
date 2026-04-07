@@ -19,14 +19,8 @@ final _logger = Logger('SignalingHub');
 /// Any isolate (e.g. push notification isolate) can subscribe by looking up
 /// [kSignalingHubPortName] via [IsolateNameServer].
 ///
-/// Protocol -- subscriber -> hub (Map):
-///   {cmd:'sub',  id:consumerId, port:SendPort}
-///   {cmd:'unsub', id:consumerId}
-///   {cmd:'exec',  id:consumerId, corr:correlationId, req:Map}
-///
-/// Protocol -- hub -> subscriber (List):
-///   See [encodeHubEvent] / [decodeHubEvent] in signaling_hub_codec.dart.
-///   Execute results use [encodeExecuteResult].
+/// Protocol -- subscriber -> hub: [SignalingHubCommand] subtypes.
+/// Protocol -- hub -> subscriber (List): see [encodeHubEvent] / [decodeHubEvent].
 class SignalingHub {
   SignalingHub(this._signalingModule);
 
@@ -73,10 +67,6 @@ class SignalingHub {
     _logger.fine('Hub disposed');
   }
 
-  // ---------------------------------------------------------------------------
-  // Module event forwarding
-  // ---------------------------------------------------------------------------
-
   void _onModuleEvent(SignalingModuleEvent event) {
     if (event is SignalingConnecting) _sessionBuffer.clear();
     final encoded = encodeHubEvent(event);
@@ -90,10 +80,6 @@ class SignalingHub {
       port.send(encoded);
     }
   }
-
-  // ---------------------------------------------------------------------------
-  // Command handling
-  // ---------------------------------------------------------------------------
 
   void _onCommand(dynamic msg) {
     if (msg is! SignalingHubCommand) return;

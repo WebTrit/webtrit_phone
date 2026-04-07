@@ -106,10 +106,6 @@ class SignalingHubClient {
     _logger.fine('Hub client $consumerId disposed');
   }
 
-  // ---------------------------------------------------------------------------
-  // Internal
-  // ---------------------------------------------------------------------------
-
   void _onMessage(dynamic msg) {
     if (msg is! List || msg.isEmpty) return;
     if (isSubAck(msg)) {
