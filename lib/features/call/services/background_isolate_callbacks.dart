@@ -68,18 +68,23 @@ Future<void> _disposeContext() async {
 /// serialize its handle.
 /// Registered via [AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback].
 @pragma('vm:entry-point')
-Future<void> onPushNotificationSyncCallback(
-  CallkeepPushNotificationSyncStatus status,
-  CallkeepIncomingCallMetadata? metadata,
-) async {
-  _logger.info('onPushNotificationCallback: $status');
+Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metadata) async {
+  _logger.info('onPushNotificationSyncCallback: callId=${metadata?.callId}');
 
-  switch (status) {
-    case CallkeepPushNotificationSyncStatus.synchronizeCallStatus:
-      final (_, manager) = await _getOrInit();
-      await manager.launchSignaling(metadata);
-    case CallkeepPushNotificationSyncStatus.releaseResources:
-      await _disposeContext();
+  final (_, manager) = await _getOrInit();
+  try {
+    await manager
+        .run(metadata)
+        .timeout(
+          const Duration(seconds: 20),
+          onTimeout: () {
+            _logger.warning('onPushNotificationSyncCallback: timed out callId=${metadata?.callId}');
+          },
+        );
+  } catch (e) {
+    _logger.severe('onPushNotificationSyncCallback: error=$e');
+  } finally {
+    await _disposeContext();
   }
 }
 
