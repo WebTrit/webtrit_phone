@@ -10,7 +10,8 @@ final _logger = Logger('SignalingEntryPoint');
 /// background engine first starts.
 ///
 /// Initialises Flutter bindings and registers the [PSignalingServiceFlutterApi]
-/// handler so Kotlin can send [onSignalingServiceSync] calls into this isolate.
+/// handler so Kotlin can send [onSynchronize] calls into this isolate, which
+/// are then queued to [onSignalingServiceSync] internally.
 ///
 /// The raw handle for this function is stored in [StorageDelegate] and obtained
 /// in the main isolate via [PluginUtilities.getCallbackHandle] before calling
@@ -19,7 +20,7 @@ final _logger = Logger('SignalingEntryPoint');
 void signalingServiceCallbackDispatcher() {
   _logger.info('signalingServiceCallbackDispatcher: background isolate starting');
   WidgetsFlutterBinding.ensureInitialized();
-  PSignalingServiceFlutterApi.setUp(_SignalingFlutterApiHandler());
+  PSignalingServiceFlutterApi.setUp(SignalingFlutterApiHandler());
   // Notify Kotlin that the Dart isolate has registered its handler and is ready
   // to receive onSynchronize calls. This resolves the race where Kotlin calls
   // synchronizeIsolate() before the Dart handler is registered
@@ -27,18 +28,4 @@ void signalingServiceCallbackDispatcher() {
   // already tried to call onSynchronize).
   PSignalingServiceHostApi().notifyIsolateReady();
   _logger.info('signalingServiceCallbackDispatcher: notifyIsolateReady sent, waiting for onSynchronize');
-}
-
-/// Kotlin -> Dart Pigeon bridge for the signaling foreground service.
-///
-/// Receives [onSynchronize] calls from Kotlin and serialises them through
-/// [pendingSync] so that rapid stop+start sequences never interleave.
-class _SignalingFlutterApiHandler extends PSignalingServiceFlutterApi {
-  @override
-  void onSynchronize(PSignalingServiceStatus status) {
-    _logger.fine('onSynchronize received from Kotlin, queuing sync');
-    pendingSync = pendingSync.then((_) => onSignalingServiceSync(status)).catchError((Object e, StackTrace s) {
-      _logger.severe('onSignalingServiceSync failed - sync chain kept alive', e, s);
-    });
-  }
 }

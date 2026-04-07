@@ -9,7 +9,21 @@ SignalingForegroundIsolateManager? _manager;
 
 /// Serialises concurrent [onSignalingServiceSync] calls so that a rapid
 /// stop+start sequence cannot interleave stop and start operations.
-Future<void> pendingSync = Future.value();
+Future<void> _pendingSync = Future.value();
+
+/// Kotlin -> Dart Pigeon bridge for the signaling foreground service.
+///
+/// Receives [onSynchronize] calls from Kotlin and serialises them through
+/// [_pendingSync] so that rapid stop+start sequences never interleave.
+class SignalingFlutterApiHandler extends PSignalingServiceFlutterApi {
+  @override
+  void onSynchronize(PSignalingServiceStatus status) {
+    _logger.fine('onSynchronize received from Kotlin, queuing sync');
+    _pendingSync = _pendingSync.then((_) => onSignalingServiceSync(status)).catchError((Object e, StackTrace s) {
+      _logger.severe('onSignalingServiceSync failed - sync chain kept alive', e, s);
+    });
+  }
+}
 
 /// Called by the [PSignalingServiceFlutterApi] handler whenever Kotlin sends a
 /// status update (service enabled/disabled, config changed).
