@@ -17,7 +17,7 @@ final _kHandshake = StateHandshake(
 T _roundtrip<T extends SignalingModuleEvent>(T event) {
   final encoded = encodeHubEvent(event);
   expect(encoded, isNotNull);
-  final decoded = decodeHubEvent(encoded!);
+  final decoded = decodeHubEvent(encoded);
   expect(decoded, isA<T>());
   return decoded as T;
 }
@@ -60,7 +60,7 @@ void main() {
         isRepeated: false,
         recommendedReconnectDelay: const Duration(seconds: 3),
       );
-      final encoded = encodeHubEvent(event)!;
+      final encoded = encodeHubEvent(event);
       expect(encoded[0], 'connection_failed');
       expect(encoded[1], event.error.toString());
       expect(encoded[2], false);
@@ -118,7 +118,7 @@ void main() {
           knownCode: SignalingDisconnectCode.normalClosure,
           recommendedReconnectDelay: const Duration(seconds: 3),
         ),
-      )!;
+      );
       expect(encoded[3], 'normalClosure');
     });
 
@@ -205,27 +205,27 @@ void main() {
       final event = SignalingHandshakeReceived(handshake: _kHandshake);
       final encoded = encodeHubEvent(event);
       expect(encoded, isNotNull);
-      final decoded = decodeHubEvent(encoded!);
+      final decoded = decodeHubEvent(encoded);
       expect(decoded, isA<SignalingHandshakeReceived>());
     });
 
     test('roundtrip preserves keepaliveInterval', () {
       final event = SignalingHandshakeReceived(handshake: _kHandshake);
-      final encoded = encodeHubEvent(event)!;
+      final encoded = encodeHubEvent(event);
       final decoded = decodeHubEvent(encoded) as SignalingHandshakeReceived;
       expect(decoded.handshake.keepaliveInterval, _kHandshake.keepaliveInterval);
     });
 
     test('roundtrip preserves timestamp', () {
       final event = SignalingHandshakeReceived(handshake: _kHandshake);
-      final encoded = encodeHubEvent(event)!;
+      final encoded = encodeHubEvent(event);
       final decoded = decodeHubEvent(encoded) as SignalingHandshakeReceived;
       expect(decoded.handshake.timestamp, _kHandshake.timestamp);
     });
 
     test('roundtrip preserves registration status', () {
       final event = SignalingHandshakeReceived(handshake: _kHandshake);
-      final encoded = encodeHubEvent(event)!;
+      final encoded = encodeHubEvent(event);
       final decoded = decodeHubEvent(encoded) as SignalingHandshakeReceived;
       expect(decoded.handshake.registration.status, RegistrationStatus.registered);
     });
@@ -329,7 +329,7 @@ void main() {
       for (final event in stateless) {
         final encoded = encodeHubEvent(event);
         expect(encoded, isNotNull);
-        expect(decodeHubEvent(encoded!), isNotNull);
+        expect(decodeHubEvent(encoded), isNotNull);
       }
     });
   });
