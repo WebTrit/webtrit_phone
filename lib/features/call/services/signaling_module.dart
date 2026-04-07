@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:logging/logging.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
@@ -8,6 +9,8 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('SignalingModule');
+
+const _queuedRequestTimeout = Duration(seconds: 30);
 
 // ---------------------------------------------------------------------------
 // Events
@@ -150,7 +153,9 @@ abstract class SignalingModule implements SignalingReconnectable {
 
   /// Sends [request] via the active connection.
   ///
-  /// Returns `null` when not connected; callers must handle this case.
+  /// When connected, the request is sent immediately.
+  /// When not connected, the request is queued and sent on the next successful
+  /// connection, or fails with [NotConnectedException] after 30 seconds.
   /// Returns a [Future] that completes when the request has been written to
   /// the transport.
   Future<void>? execute(Request request);
@@ -201,6 +206,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
   /// Events buffered since the last [connect] call. Cleared on every [connect]
   /// so that late subscribers receive only the current session's events.
   final List<SignalingModuleEvent> _sessionBuffer = [];
+  final Queue<_QueuedRequest> _queuedRequests = Queue<_QueuedRequest>();
 
   WebtritSignalingClient? _client;
   bool _disposed = false;
@@ -287,7 +293,11 @@ class SignalingModuleIsolateImpl implements SignalingModule {
   bool get isConnected => _client != null;
 
   @override
-  Future<void>? execute(Request request) => _client?.execute(request);
+  Future<void>? execute(Request request) {
+    final client = _client;
+    if (client != null) return client.execute(request);
+    return _enqueueRequest(request);
+  }
 
   /// Initiates a connection. Fire-and-forget - returns immediately.
   /// The result arrives via [events] as [SignalingConnected] or
@@ -330,6 +340,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
   Future<void> dispose() async {
     if (_disposed) return;
     _disposed = true;
+    _failAllQueuedRequests(NotConnectedException('Signaling module is disposed'));
     _sessionBuffer.clear();
     await disconnect();
     // Wait for _onDisconnect to fire so SignalingDisconnected is emitted before
@@ -392,6 +403,7 @@ class SignalingModuleIsolateImpl implements SignalingModule {
 
         _client = client;
         _emit(SignalingConnected());
+        unawaited(_flushQueuedRequests(client));
       } catch (e, s) {
         if (_disposed) return;
         _logger.warning('_connectAsync failed', e, s);
@@ -464,6 +476,51 @@ class SignalingModuleIsolateImpl implements SignalingModule {
     ack?.complete();
   }
 
+  Future<void> _enqueueRequest(Request request) {
+    final completer = Completer<void>();
+    late final _QueuedRequest queuedRequest;
+    final timer = Timer(_queuedRequestTimeout, () => _onQueuedRequestTimeout(queuedRequest));
+    queuedRequest = _QueuedRequest(request: request, completer: completer, timer: timer);
+    _queuedRequests.add(queuedRequest);
+    return completer.future;
+  }
+
+  Future<void> _flushQueuedRequests(WebtritSignalingClient client) async {
+    while (_queuedRequests.isNotEmpty && identical(_client, client)) {
+      final queuedRequest = _queuedRequests.first;
+      try {
+        await client.execute(queuedRequest.request);
+        _queuedRequests.removeFirst();
+        queuedRequest.timer.cancel();
+        if (!queuedRequest.completer.isCompleted) queuedRequest.completer.complete();
+      } catch (error, stackTrace) {
+        if (!identical(_client, client)) return;
+        _queuedRequests.removeFirst();
+        queuedRequest.timer.cancel();
+        if (!queuedRequest.completer.isCompleted) {
+          queuedRequest.completer.completeError(error, stackTrace);
+        }
+      }
+    }
+  }
+
+  void _onQueuedRequestTimeout(_QueuedRequest queuedRequest) {
+    if (!_queuedRequests.remove(queuedRequest)) return;
+    if (!queuedRequest.completer.isCompleted) {
+      queuedRequest.completer.completeError(
+        NotConnectedException('Timeout waiting for signaling connection to send request: ${queuedRequest.request}'),
+      );
+    }
+  }
+
+  void _failAllQueuedRequests(Object error) {
+    while (_queuedRequests.isNotEmpty) {
+      final queuedRequest = _queuedRequests.removeFirst();
+      queuedRequest.timer.cancel();
+      if (!queuedRequest.completer.isCompleted) queuedRequest.completer.completeError(error);
+    }
+  }
+
   /// Maps a disconnect code to the recommended reconnect delay.
   ///
   /// - [Duration.zero] - reconnect immediately (server evicted a duplicate session)
@@ -490,4 +547,21 @@ class SignalingModuleIsolateImpl implements SignalingModule {
     }
     _controller.add(event);
   }
+}
+
+class NotConnectedException implements Exception {
+  NotConnectedException([this.message = 'Signaling client is not connected']);
+
+  final String message;
+
+  @override
+  String toString() => 'NotConnectedException: $message';
+}
+
+class _QueuedRequest {
+  _QueuedRequest({required this.request, required this.completer, required this.timer});
+
+  final Request request;
+  final Completer<void> completer;
+  final Timer timer;
 }
