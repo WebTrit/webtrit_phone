@@ -46,6 +46,10 @@ class HubConnectionManager {
   int _generation = 0;
   Future<void>? _initTask;
 
+  // Set by tearDown() to prevent the whenComplete restart from calling begin()
+  // while teardown is in progress. Reset by begin() so the cycle can restart.
+  bool _tearingDown = false;
+
   bool get isConnected => _module?.isConnected ?? false;
 
   Future<void>? execute(Request request) => _module?.execute(request);
@@ -56,12 +60,13 @@ class HubConnectionManager {
   /// any concurrent in-progress loop exits on its next iteration.
   void begin() {
     if (_module != null) return;
+    _tearingDown = false;
     _generation++;
     final generation = _generation;
     _logger.fine('begin generation=$generation taskRunning=${_initTask != null}');
     _initTask ??= _initLoop(generation).whenComplete(() {
       _initTask = null;
-      if (_module == null && _isActive()) {
+      if (!_tearingDown && _module == null && _isActive()) {
         _logger.fine('begin restarting loop after gen-mismatch exit (gen=$_generation)');
         begin();
       }
@@ -69,8 +74,13 @@ class HubConnectionManager {
   }
 
   /// Cancels any in-progress init loop and tears down the current module.
+  ///
+  /// Sets [_tearingDown] before bumping the generation so the [whenComplete]
+  /// restart guard in [begin] sees the flag and does not start a new polling
+  /// loop while teardown is still running.
   Future<void> tearDown() async {
     _logger.fine('tearDown generation=$_generation');
+    _tearingDown = true;
     _generation++;
     await _initTask;
     _initTask = null;

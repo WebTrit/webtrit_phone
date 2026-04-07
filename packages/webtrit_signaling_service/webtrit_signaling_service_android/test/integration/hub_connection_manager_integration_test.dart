@@ -298,6 +298,28 @@ void main() {
       expect(connectedEvents.length, equals(1));
     });
 
+    test('tearDown() does not allow whenComplete to restart polling', () async {
+      // Regression: whenComplete inside begin() could call begin() again while
+      // tearDown() was still running, creating an untracked polling loop.
+      // This test verifies that tearDown() fully stops the manager and no
+      // reconnection happens unless begin() is explicitly called again.
+      _module = _FakeSignalingModule();
+      _hub = _startHub(_module!);
+
+      final (:manager, :received) = _buildManager();
+
+      manager.begin();
+      await _waitFor(() => manager.isConnected);
+
+      await manager.tearDown();
+      expect(manager.isConnected, isFalse);
+
+      // Give the event loop time to run any unexpected restarted polling loops.
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+
+      expect(manager.isConnected, isFalse);
+    });
+
     test('reconnects after tearDown() and begin() cycle', () async {
       _module = _FakeSignalingModule();
       _hub = _startHub(_module!);
