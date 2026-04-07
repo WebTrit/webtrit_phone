@@ -6,6 +6,8 @@ import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_s
 
 import 'package:webtrit_signaling_service_android/src/hub/signaling_hub_client.dart';
 import 'package:webtrit_signaling_service_android/src/hub/signaling_hub_module.dart';
+import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart'
+    show SignalingEventBuffer;
 
 // ---------------------------------------------------------------------------
 // Fake hub client
@@ -13,6 +15,7 @@ import 'package:webtrit_signaling_service_android/src/hub/signaling_hub_module.d
 
 class _FakeHubClient extends Fake implements SignalingHubClient {
   final _controller = StreamController<SignalingModuleEvent>.broadcast();
+  final _buffer = SignalingEventBuffer();
 
   bool started = false;
   bool disposed = false;
@@ -25,6 +28,9 @@ class _FakeHubClient extends Fake implements SignalingHubClient {
   Stream<SignalingModuleEvent> get events => _controller.stream;
 
   @override
+  List<SignalingModuleEvent> get snapshot => _buffer.snapshot;
+
+  @override
   void start() => started = true;
 
   @override
@@ -34,11 +40,15 @@ class _FakeHubClient extends Fake implements SignalingHubClient {
 
   @override
   Future<void> dispose() async {
+    _buffer.clear();
     await _controller.close();
     disposed = true;
   }
 
-  void inject(SignalingModuleEvent event) => _controller.add(event);
+  void inject(SignalingModuleEvent event) {
+    _buffer.onEvent(event);
+    _controller.add(event);
+  }
 }
 
 // ---------------------------------------------------------------------------

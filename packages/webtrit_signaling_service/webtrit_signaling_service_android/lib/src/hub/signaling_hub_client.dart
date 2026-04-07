@@ -44,11 +44,20 @@ class SignalingHubClient {
   final SendPort _hubPort;
   final ReceivePort _receivePort = ReceivePort();
   final _controller = StreamController<SignalingModuleEvent>.broadcast();
+  final _eventBuffer = SignalingEventBuffer();
   final Map<String, Completer<void>> _pendingExecutions = {};
 
   StreamSubscription<Object?>? _subscription;
   bool _started = false;
   Completer<bool>? _subAckCompleter;
+
+  /// Snapshot of buffered events from the current session.
+  ///
+  /// Applies the same rules as [SignalingHub]'s session buffer: cleared on
+  /// [SignalingConnecting], [SignalingProtocolEvent] items are never included.
+  /// Consumers such as [SignalingHubModule] use this to replay state to
+  /// late subscribers of their own event streams.
+  List<SignalingModuleEvent> get snapshot => _eventBuffer.snapshot;
 
   /// Sends the subscribe command and begins forwarding hub events to [events].
   /// Safe to call more than once -- subsequent calls are no-ops.
@@ -104,6 +113,7 @@ class SignalingHubClient {
       if (!c.isCompleted) c.completeError(StateError('Hub client disposed'));
     }
     _pendingExecutions.clear();
+    _eventBuffer.clear();
     await _controller.close();
     _logger.fine('Hub client $consumerId disposed');
   }
@@ -129,6 +139,7 @@ class SignalingHubClient {
     }
     final event = decodeHubEvent(msg);
     if (event != null && !_controller.isClosed) {
+      _eventBuffer.onEvent(event);
       _controller.add(event);
     }
   }

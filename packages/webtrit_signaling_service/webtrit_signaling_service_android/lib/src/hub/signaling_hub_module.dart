@@ -16,6 +16,10 @@ final _logger = Logger('SignalingHubModule');
 ///
 /// [connect] and [disconnect] are no-ops -- the hub owns the connection
 /// lifecycle. [dispose] unsubscribes from the hub and releases resources.
+///
+/// Late subscribers to [events] receive the current session state via
+/// [SignalingHubClient.snapshot], which accumulates events as the hub
+/// replays and broadcasts them through the client.
 class SignalingHubModule implements SignalingModule {
   SignalingHubModule(this._hubClient) {
     _sub = _hubClient.events.listen(_onHubEvent);
@@ -28,7 +32,6 @@ class SignalingHubModule implements SignalingModule {
   bool _connected = false;
   StreamSubscription<SignalingModuleEvent>? _sub;
 
-  final _eventBuffer = SignalingEventBuffer();
   final _controller = StreamController<SignalingModuleEvent>.broadcast();
 
   @override
@@ -36,7 +39,7 @@ class SignalingHubModule implements SignalingModule {
     return Stream.multi((sink) {
       final sub = _controller.stream.listen(sink.add, onError: sink.addError, onDone: sink.close);
       sink.onCancel = sub.cancel;
-      for (final event in _eventBuffer.snapshot) {
+      for (final event in _hubClient.snapshot) {
         sink.add(event);
       }
     }, isBroadcast: true);
@@ -64,13 +67,8 @@ class SignalingHubModule implements SignalingModule {
     await _sub?.cancel();
     await _hubClient.dispose();
     await _controller.close();
-    _eventBuffer.clear();
     _logger.fine('SignalingHubModule disposed');
   }
-
-  // ---------------------------------------------------------------------------
-  // Internal
-  // ---------------------------------------------------------------------------
 
   void _onHubEvent(SignalingModuleEvent event) {
     switch (event) {
@@ -92,7 +90,6 @@ class SignalingHubModule implements SignalingModule {
     }
 
     if (_controller.isClosed) return;
-    _eventBuffer.onEvent(event);
     _controller.add(event);
   }
 }
