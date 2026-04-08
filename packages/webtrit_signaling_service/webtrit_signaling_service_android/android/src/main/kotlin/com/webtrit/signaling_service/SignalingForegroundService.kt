@@ -113,7 +113,7 @@ class SignalingForegroundService : Service() {
         Log.d(TAG, "onTaskRemoved")
         if (StorageDelegate.isPushBound(applicationContext)) {
             Log.d(TAG, "pushBound mode -- stopping service on task removal")
-            stopSelf()
+            gracefulStop { stopSelf() }
         }
     }
 
