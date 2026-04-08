@@ -27,7 +27,11 @@ class _TeardownScreenState extends State<TeardownScreen> {
     // Stop the native signaling service before session cleanup begins so it
     // stops reconnecting with the stale token immediately. TeardownScreen is
     // only rendered during explicit logout, so no status check is needed here.
-    unawaited(WebtritSignalingService.stopService());
+    unawaited(
+      WebtritSignalingService.stopService().catchError((Object e, StackTrace st) {
+        _logger.warning('stopService failed', e, st);
+      }),
+    );
 
     // Schedule the cleanup event after the widget is mounted.
     // Using addPostFrameCallback ensures the navigation transition
