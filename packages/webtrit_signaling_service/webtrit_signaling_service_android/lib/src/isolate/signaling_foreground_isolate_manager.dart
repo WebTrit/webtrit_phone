@@ -12,6 +12,12 @@ import '../hub/signaling_hub.dart';
 
 final _logger = Logger('SignalingForegroundIsolateManager');
 
+/// Factory that wraps a [SignalingModule] in a [SignalingHub].
+///
+/// The default implementation is [SignalingHub.new]. Overridable in tests
+/// to avoid [IsolateNameServer] usage.
+typedef SignalingHubFactory = SignalingHub Function(SignalingModule module);
+
 /// Manages the [SignalingModule] + [SignalingHub] lifecycle inside the
 /// foreground-service background isolate.
 ///
@@ -37,7 +43,7 @@ class SignalingForegroundIsolateManager {
     this.incomingCallHandlerHandle = 0,
     this.moduleFactoryHandle = 0,
     @visibleForTesting SignalingModuleFactory? moduleFactory,
-    @visibleForTesting SignalingHub Function(SignalingModule)? hubFactory,
+    @visibleForTesting SignalingHubFactory? hubFactory,
   }) : _testModuleFactory = moduleFactory,
        _testHubFactory = hubFactory;
 
@@ -67,7 +73,7 @@ class SignalingForegroundIsolateManager {
   final SignalingModuleFactory? _testModuleFactory;
 
   /// Overrides [SignalingHub] construction in tests to avoid [IsolateNameServer].
-  final SignalingHub Function(SignalingModule)? _testHubFactory;
+  final SignalingHubFactory? _testHubFactory;
 
   SignalingModule? _signalingModule;
   SignalingHub? _hub;
