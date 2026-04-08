@@ -77,7 +77,16 @@ class SignalingForegroundIsolateManager {
   }
 
   Future<void> _start() async {
-    if (_started) return;
+    if (_started) {
+      // Hub and module are already initialized. If the module lost its
+      // connection (e.g. a code-1002 close that does not auto-reconnect),
+      // reconnect it now so the external start() call is not silently ignored.
+      if (!(_signalingModule?.isConnected ?? false)) {
+        _logger.info('SignalingForegroundIsolateManager already started but not connected, reconnecting');
+        _signalingModule?.connect();
+      }
+      return;
+    }
 
     _logger.info('SignalingForegroundIsolateManager starting (incomingCallHandler=${incomingCallHandlerHandle != 0})');
 
