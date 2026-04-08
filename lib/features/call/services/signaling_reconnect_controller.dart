@@ -123,7 +123,7 @@ class SignalingReconnectController {
   /// WebSocket ready as fast as possible; any delay here directly adds latency
   /// before the SDP offer reaches the server.
   ///
-  /// Note: spurious "connection failed" toast suppression (WT-1221) is handled
+  /// Spurious "connection failed" toasts on transient failures are suppressed
   /// by the consecutive-failure threshold, not by this delay, so reducing the
   /// delay here is safe.
   void notifyForceReconnect() {
