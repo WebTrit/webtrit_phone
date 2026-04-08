@@ -341,6 +341,20 @@ class SDPModBuilder {
     final media = _getMedia(kind);
     if (media == null) return;
 
+    if (kind == RTPCodecKind.video) {
+      final mid = media['mid'];
+      final payloads = media['payloads'];
+      final port = media['port'];
+      final direction = media['direction'];
+      if (mid == 1 || payloads == 0 || port == 0 || direction == 'inactive') {
+        // Special condition for janus video stub.
+        // If for example user call by video to voicemail service that does not support video, janus creates video m-line with mid=1, payloads=0, port=0 and direction=inactive;
+        //
+        // TODO: if it happens again maybe will be enough to check only payloads=0 and direction=inactive without checking mid and port
+        return;
+      }
+    }
+
     final originalPayloads = [];
     final originalRtpMaps = [];
     final originalFmtps = [];
