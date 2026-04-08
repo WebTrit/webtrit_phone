@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'dart:ui' show PluginUtilities;
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/services.dart' show BinaryMessenger;
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart' show visibleForTesting;
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';

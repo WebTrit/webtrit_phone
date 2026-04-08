@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,6 +28,8 @@ import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
+
+final _logger = Logger('MainShell');
 
 @RoutePage()
 class MainShell extends StatefulWidget {
@@ -136,9 +139,18 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     // TODO(testability): extract this conditional into a SignalingCleanupCoordinator
     // class that takes a SignalingModule and an AppBloc so the logout vs. OS-kill
     // distinction can be unit-tested without building a full widget tree.
-    await _signalingModule.dispose();
-    if (_appBloc.state.status == AppLifecycleStatus.teardown) {
-      await WebtritSignalingService.stopService();
+    try {
+      await _signalingModule.dispose();
+    } catch (e, st) {
+      _logger.warning('_tearDownSignaling: signalingModule.dispose() failed', e, st);
+    } finally {
+      if (_appBloc.state.status == AppLifecycleStatus.teardown) {
+        try {
+          await WebtritSignalingService.stopService();
+        } catch (e, st) {
+          _logger.warning('_tearDownSignaling: stopService() failed', e, st);
+        }
+      }
     }
   }
 
