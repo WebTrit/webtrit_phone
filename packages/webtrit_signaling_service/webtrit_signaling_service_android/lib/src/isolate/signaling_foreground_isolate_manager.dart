@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'dart:ui' show CallbackHandle, PluginUtilities;
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
@@ -10,6 +11,12 @@ import 'package:ssl_certificates/ssl_certificates.dart';
 import '../hub/signaling_hub.dart';
 
 final _logger = Logger('SignalingForegroundIsolateManager');
+
+/// Factory that wraps a [SignalingModule] in a [SignalingHub].
+///
+/// The default implementation is [SignalingHub.new]. Overridable in tests
+/// to avoid [IsolateNameServer] usage.
+typedef SignalingHubFactory = SignalingHub Function(SignalingModule module);
 
 /// Manages the [SignalingModule] + [SignalingHub] lifecycle inside the
 /// foreground-service background isolate.
@@ -35,7 +42,10 @@ class SignalingForegroundIsolateManager {
     this.trustedCertificatesJson,
     this.incomingCallHandlerHandle = 0,
     this.moduleFactoryHandle = 0,
-  });
+    @visibleForTesting SignalingModuleFactory? moduleFactory,
+    @visibleForTesting SignalingHubFactory? hubFactory,
+  }) : _testModuleFactory = moduleFactory,
+       _testHubFactory = hubFactory;
 
   final String coreUrl;
   final String tenantId;
@@ -59,6 +69,12 @@ class SignalingForegroundIsolateManager {
   /// 0 means no factory is registered -- the isolate will log an error and skip start.
   final int moduleFactoryHandle;
 
+  /// Overrides handle-based [SignalingModule] creation in tests.
+  final SignalingModuleFactory? _testModuleFactory;
+
+  /// Overrides [SignalingHub] construction in tests to avoid [IsolateNameServer].
+  final SignalingHubFactory? _testHubFactory;
+
   SignalingModule? _signalingModule;
   SignalingHub? _hub;
 
@@ -77,24 +93,25 @@ class SignalingForegroundIsolateManager {
   }
 
   Future<void> _start() async {
-    if (_started) return;
+    if (_started) {
+      // Hub and module are already initialized. If the module lost its
+      // connection (e.g. a code-1002 close that does not auto-reconnect),
+      // reconnect it now so the external start() call is not silently ignored.
+      if (!(_signalingModule?.isConnected ?? false)) {
+        _logger.info('SignalingForegroundIsolateManager already started but not connected, reconnecting');
+        _reconnectTimer?.cancel();
+        _reconnectTimer = null;
+        _signalingModule?.connect();
+      }
+      return;
+    }
 
     _logger.info('SignalingForegroundIsolateManager starting (incomingCallHandler=${incomingCallHandlerHandle != 0})');
 
-    final rawHandle = moduleFactoryHandle;
-    if (rawHandle == 0) {
-      _logger.severe('No module factory registered -- call setModuleFactory() before start()');
-      return;
-    }
-
-    final factoryCallback = PluginUtilities.getCallbackFromHandle(CallbackHandle.fromRawHandle(rawHandle));
-    if (factoryCallback == null) {
-      _logger.severe('Could not resolve module factory from handle $rawHandle');
-      return;
-    }
+    final factory = _testModuleFactory ?? _resolveModuleFactory();
+    if (factory == null) return;
 
     _started = true;
-    final factory = factoryCallback as SignalingModuleFactory;
     final config = SignalingServiceConfig(
       coreUrl: coreUrl,
       tenantId: tenantId,
@@ -104,7 +121,7 @@ class SignalingForegroundIsolateManager {
 
     _signalingModule = factory(config);
 
-    _hub = SignalingHub(_signalingModule!);
+    _hub = (_testHubFactory ?? SignalingHub.new)(_signalingModule!);
     _hub!.start();
 
     _eventsSubscription = _signalingModule!.events.listen(_onEvent);
@@ -131,6 +148,22 @@ class SignalingForegroundIsolateManager {
     _signalingModule = null;
 
     _logger.info('SignalingForegroundIsolateManager stopped');
+  }
+
+  /// Resolves the [SignalingModuleFactory] from the raw [moduleFactoryHandle].
+  ///
+  /// Returns null and logs an error when the handle is 0 or cannot be resolved.
+  SignalingModuleFactory? _resolveModuleFactory() {
+    if (moduleFactoryHandle == 0) {
+      _logger.severe('No module factory registered -- call setModuleFactory() before start()');
+      return null;
+    }
+    final callback = PluginUtilities.getCallbackFromHandle(CallbackHandle.fromRawHandle(moduleFactoryHandle));
+    if (callback == null) {
+      _logger.severe('Could not resolve module factory from handle $moduleFactoryHandle');
+      return null;
+    }
+    return callback as SignalingModuleFactory;
   }
 
   void _onEvent(SignalingModuleEvent event) {
