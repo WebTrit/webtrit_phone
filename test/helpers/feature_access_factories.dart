@@ -1,4 +1,5 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:webtrit_appearance_theme/models/models.dart';
 
 import 'package:webtrit_phone/models/models.dart';
@@ -8,9 +9,11 @@ import '../mocks/feature_access_mocks.dart';
 WebtritSystemInfo createMockSystemInfo() {
   final systemInfo = MockWebtritSystemInfo();
   final adapterInfo = MockAdapterInfo();
+  final coreInfo = CoreInfo(version: Version(0, 1, 0));
 
   when(() => adapterInfo.supported).thenReturn([]);
   when(() => systemInfo.adapter).thenReturn(adapterInfo);
+  when(() => systemInfo.core).thenReturn(coreInfo);
 
   return systemInfo;
 }

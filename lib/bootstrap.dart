@@ -13,6 +13,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -25,13 +26,18 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/features/system_notifications/services/services.dart';
 
-import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSyncCallback, onSignalingSyncCallback;
+import 'package:webtrit_phone/features/call/call.dart'
+    show onPushNotificationSyncCallback, onSignalingBackgroundIncomingCall;
 
 import 'package:drift/isolate.dart';
 
 import 'app/session/session.dart';
 import 'firebase_options.dart';
 import 'services/services.dart';
+
+// Lazily initialised once per Firebase background isolate lifetime.
+// Dart isolates do not share memory -- each background isolate gets its own instance.
+IsolateContext? _isolateContext;
 
 Future<InstanceRegistry> bootstrap() async {
   final registry = InstanceRegistry();
@@ -197,21 +203,57 @@ Future<AppPermissions> _createAppPermissions(
   );
 }
 
+/// Registers all background callbacks required by the CallKeep and signaling subsystems.
+///
+/// Must be called once at app startup before any background isolates are spawned.
+/// Each registration is awaited so that handles are persisted to SharedPreferences
+/// before the service starts and reads them in the background isolate.
 Future<void> _initCallkeep(FeatureAccess featureAccess) async {
+  final logger = Logger('bootstrap');
+
+  // Registers the factory used by the signaling service to create a [SignalingModule]
+  // instance. Must be a top-level function annotated @pragma('vm:entry-point').
+  // iOS: stored in memory, called directly in start(). Android: also persisted to
+  // SharedPreferences for deserialization in the background isolate.
+  try {
+    await WebtritSignalingService.setModuleFactory(createSignalingModule);
+  } catch (e, s) {
+    logger.severe('setModuleFactory failed -- signaling may not work in background isolate', e, s);
+  }
+
   if (!Platform.isAndroid) return;
 
-  AndroidCallkeepServices.backgroundSignalingBootstrapService.initializeCallback(onSignalingSyncCallback);
-  AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(onPushNotificationSyncCallback);
-
-  // If the fallback incoming call trigger via SMS is enabled in the feature access config
-  if (featureAccess.callConfig.triggerConfig.smsFallback.enabled) {
-    // Configure Android CallKeep to process incoming SMS messages
-    // - prefix: filters SMS messages by required prefix
-    // - regexPattern: extracts callId, handle, displayName, and hasVideo from the SMS body
-    await AndroidCallkeepUtils.smsReceptionConfig.configureReceivedSms(
-      prefix: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS_PREFIX,
-      regexPattern: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN,
+  // Registers the top-level callback that the native Android side invokes when a push
+  // notification arrives in the background. Bootstraps the push isolate and delegates
+  // to [onPushNotificationSyncCallback]. Must be annotated @pragma('vm:entry-point').
+  try {
+    await AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(
+      onPushNotificationSyncCallback,
     );
+  } catch (e, s) {
+    logger.severe('initializeCallback failed -- push notifications may not work in background', e, s);
+  }
+
+  // Registers the top-level callback invoked by the signaling background isolate when an
+  // incoming call arrives in persistent mode (app closed or backgrounded). Must be
+  // annotated @pragma('vm:entry-point').
+  try {
+    await WebtritSignalingService.setIncomingCallHandler(onSignalingBackgroundIncomingCall);
+  } catch (e, s) {
+    logger.severe('setIncomingCallHandler failed -- incoming calls in persistent mode may not work', e, s);
+  }
+
+  // Configures Android CallKeep to process incoming SMS messages as call triggers
+  // when the SMS fallback mechanism is enabled in the feature access config.
+  if (featureAccess.callConfig.triggerConfig.smsFallback.enabled) {
+    try {
+      await AndroidCallkeepUtils.smsReceptionConfig.configureReceivedSms(
+        prefix: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS_PREFIX,
+        regexPattern: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN,
+      );
+    } catch (e, s) {
+      logger.severe('configureReceivedSms failed -- SMS call trigger may not work', e, s);
+    }
   }
 }
 
@@ -287,23 +329,8 @@ Future<void> _recordBackgroundError(Object error, StackTrace stack, Logger logge
 
 /// Core logic for processing background messages.
 Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) async {
-  // Cache remote configuration
-  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
-
-  // Initialize the logger for handling Firebase Cloud Messaging (FCM) in the background isolate.
-  final appInfo = await AppInfo.init(const SharedPreferencesAppIdProvider());
-  final deviceInfo = await DeviceInfoFactory.init();
-  final packageInfo = await PackageInfoFactory.init();
-  final secureStorage = await SecureStorageImpl.init();
-  final appLabelsProvider = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
-
-  final overrides = FeatureOverridesFactory.create(remoteCacheConfigService.snapshot);
-  final loggingConfig = LoggingMapper.mapFromOverridesOnly(overrides);
-  await AppLogger.init(
-    loggingConfig,
-    LogzioLoggingService.fromEnvironment(loggingConfig.remoteLoggingEnabled),
-    () => appLabelsProvider.logLabels,
-  );
+  // Initialise shared isolate dependencies once per isolate lifetime.
+  _isolateContext ??= await IsolateContext.init();
 
   final appPush = AppRemotePush.fromFCM(message);
 

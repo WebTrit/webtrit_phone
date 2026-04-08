@@ -142,8 +142,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           add(const _SignalingClientEvent.connected());
         case SignalingConnectionFailed(:final error):
           add(_SignalingClientEvent.failed(error));
-        case SignalingConnectionLost(:final error):
-          add(_SignalingClientEvent.failed(error));
         case SignalingDisconnecting():
           add(const _SignalingClientEvent.disconnecting());
         case SignalingDisconnected(:final code, :final reason):
@@ -227,11 +225,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   @override
   void onChange(Change<CallState> change) {
     super.onChange(change);
-
-    // Update the signaling status in Callkeep to ensure proper call handling when the app is minimized or in the background
-    callkeepConnections.updateActivitySignalingStatus(
-      change.nextState.callServiceState.signalingClientStatus.toCallkeepSignalingStatus(),
-    );
 
     // TODO: add detailed explanation of the following code and why it is necessary to initialize signaling client in background
     if (change.currentState.isActive != change.nextState.isActive) {
@@ -2019,6 +2012,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _ => false,
     };
 
+    _logger.info(
+      '__onCallPerformEventAnswered: callId=${event.callId} status=${call.processingStatus} '
+      'hasOffer=${call.incomingOffer != null} signalingConnected=${_signalingModule.isConnected} '
+      'appLifecycle=${state.currentAppLifecycleState}',
+    );
+
     if (canPerformAnswer == false) {
       _logger.info('__onCallPerformEventAnswered: skipping due to stale status: ${call.processingStatus}');
       return;
@@ -2039,6 +2038,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (call.incomingOffer == null) {
         _logger.info('__onCallPerformEventAnswered: wait for offer');
 
+        // Signaling may still be disconnected when answering from push while the app was in background.
+        // Trigger reconnect immediately so the offer can arrive — don't wait for AppLifecycleState.resumed.
+        if (!_signalingModule.isConnected) {
+          _logger.info('__onCallPerformEventAnswered: signaling not connected, forcing reconnect');
+          _reconnectController.notifyForceReconnect();
+        }
+
+        final offerWaitStart = DateTime.now();
         await stream
             .firstWhere((s) {
               final activeCall = s.retrieveActiveCall(event.callId);
@@ -2051,9 +2058,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
               },
             );
 
+        final offerWaitMs = DateTime.now().difference(offerWaitStart).inMilliseconds;
+        _logger.info('__onCallPerformEventAnswered: offer received after ${offerWaitMs}ms');
+
         call = state.retrieveActiveCall(event.callId)!;
       }
       final offer = call.incomingOffer!;
+
+      _logger.info('__onCallPerformEventAnswered: processing offer, hasVideo=${offer.hasVideo}');
 
       emit(
         state.copyWithMappedActiveCall(event.callId, (call) {
@@ -2082,12 +2094,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final remoteDescription = offer.toDescription();
       sdpSanitizer?.apply(remoteDescription);
       await peerConnection.setRemoteDescription(remoteDescription);
+      _logger.info('__onCallPerformEventAnswered: remoteDescription set');
       final localDescription = await peerConnection.createAnswer({});
       sdpMunger?.apply(localDescription);
 
       // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
       // localDescription should be set before sending the answer to transition into stable state.
       await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
+      _logger.info('__onCallPerformEventAnswered: localDescription set, sending AcceptRequest');
 
       await _signalingModule.execute(
         AcceptRequest(
@@ -2098,8 +2112,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ),
       );
 
+      _logger.info('__onCallPerformEventAnswered: AcceptRequest sent, completing peer connection');
       _peerConnectionManager.complete(event.callId, peerConnection);
     } catch (e, stackTrace) {
+      _logger.warning('__onCallPerformEventAnswered: failed callId=${event.callId} error=$e');
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
       add(_ResetStateEvent.completeCall(event.callId));
 

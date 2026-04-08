@@ -1,0 +1,38 @@
+name: webtrit_signaling_service
+description: >
+  Standalone signaling service plugin for WebTrit Phone.
+  Manages the WebSocket connection lifecycle in a background foreground service
+  on Android; runs directly in the main isolate on iOS.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.8.0
+  flutter: '>=3.32.0'
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        default_package: webtrit_signaling_service_android
+      ios:
+        default_package: webtrit_signaling_service_ios
+
+dependencies:
+  flutter:
+    sdk: flutter
+  logging: ^1.3.0
+  webtrit_signaling:
+    path: ../../webtrit_signaling
+  webtrit_signaling_service_platform_interface:
+    path: ../webtrit_signaling_service_platform_interface
+  webtrit_signaling_service_android:
+    path: ../webtrit_signaling_service_android
+  webtrit_signaling_service_ios:
+    path: ../webtrit_signaling_service_ios
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  plugin_platform_interface: ^2.1.8

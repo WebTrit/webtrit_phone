@@ -118,6 +118,8 @@ dependencies:
     path: ./packages/webtrit_phone_number
   webtrit_signaling:
     path: ./packages/webtrit_signaling
+  webtrit_signaling_service:
+    path: ./packages/webtrit_signaling_service/webtrit_signaling_service
   webtrit_callkeep:
     path: ../webtrit_callkeep/webtrit_callkeep
   store_info_extractor:

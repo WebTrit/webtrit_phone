@@ -52,6 +52,12 @@ void main() {
     when(() => userRepository.getAndListen()).thenAnswer((_) => Stream.value(_testUser));
     when(() => externalContactsRepository.load()).thenAnswer((_) async {});
     when(() => contactsRepository.syncExternalContacts(any())).thenAnswer((_) async {});
+
+    bloc = ExternalContactsSyncBloc(
+      userRepository: userRepository,
+      externalContactsRepository: externalContactsRepository,
+      contactsRepository: contactsRepository,
+    );
   });
 
   tearDown(() {

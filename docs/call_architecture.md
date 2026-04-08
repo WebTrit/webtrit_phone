@@ -25,17 +25,19 @@ that bridges signaling, native call UI, WebRTC media, and the Flutter UI layer.
 | Native perform | `_CallPerformEvent` | `CallkeepDelegate` callbacks |
 | WebRTC | `_PeerConnectionEvent` | `RTCPeerConnection` observer |
 | UI screen | `CallScreenEvent` | Call screen widget |
+| Global | `_GlobalEvent` | Internal — presence and dialog-info updates from signaling |
 
 ## State Structure
 
 ```dart
 // CallState (immutable, @freezed)
-CallServiceState callServiceState   // signaling + registration + network status
-List<ActiveCall> activeCalls        // all current calls
-int linesCount                      // SIP lines from handshake
-bool? minimized                     // overlay vs full-screen
+CallServiceState callServiceState         // signaling + registration + network status
+List<ActiveCall> activeCalls              // all current calls
+int linesCount                            // SIP lines from handshake
+bool? minimized                           // overlay vs full-screen
 CallAudioDevice? audioDevice
 List<CallAudioDevice> availableAudioDevices
+AppLifecycleState? currentAppLifecycleState  // last known Flutter lifecycle state
 ```
 
 ## ActiveCall Processing Status (state machine)
@@ -43,15 +45,20 @@ List<CallAudioDevice> availableAudioDevices
 ```
 incomingFromPush          push arrived, no signaling offer yet
 incomingFromOffer         offer received from signaling
+incomingSubmittedAnswer   answer submitted to Callkeep, awaiting performAnswerCall
 incomingPerformingStarted native answer started
 incomingInitializingMedia getting mic/camera
+incomingRestoringMedia    call restored after reconnect; re-establishing ICE via renegotiation
 incomingAnswering         AcceptRequest sent, waiting for confirmation
 ─────────────────────────────────────────────────────────────
 outgoingCreated           startCall reported to Callkeep
+outgoingCreatedFromRefer  outgoing call initiated by a SIP REFER (blind transfer target)
 outgoingConnectingToSignaling waiting for signaling session
 outgoingInitializingMedia getting mic/camera
+outgoingRestoringMedia    call restored after reconnect; re-establishing ICE via renegotiation
 outgoingOfferPreparing    creating RTCPeerConnection + offer
 outgoingOfferSent         OutgoingCallRequest sent
+outgoingRinging           remote side ringing (RingingEvent received, no early media)
 ─────────────────────────────────────────────────────────────
 connected                 media flowing (both directions)
 disconnecting             hangup sent, cleanup in progress
@@ -63,7 +70,7 @@ disconnecting             hangup sent, cleanup in progress
 Signaling: IncomingCallEvent (JSEP offer)
   → BLoC: reportNewIncomingCall → Callkeep → system UI / Flutter screen
   → User taps Answer
-  → CallControlEvent.answered → _CallPerformEvent.answered
+  → CallControlEvent.answered → incomingSubmittedAnswer → _CallPerformEvent.answered
   → get user media → RTCPeerConnection → setRemoteDescription(offer)
   → createAnswer → AcceptRequest to signaling
   → Signaling: AcceptedEvent → setRemoteDescription(answer) → connected
@@ -86,6 +93,7 @@ UI: CallController.createCall(number, video)
   → _CallPerformEvent.started
   → wait signaling ready → get user media → RTCPeerConnection
   → createOffer → OutgoingCallRequest to signaling
+  → Signaling: RingingEvent → outgoingRinging (ringback played)
   → Signaling: AcceptedEvent (remote answer) → setRemoteDescription → connected
 ```
 
@@ -119,8 +127,23 @@ offer into it when `IncomingCallEvent` arrives, instead of creating a duplicate 
 resource races on rapid call sequences.
 
 **Connectivity-aware reconnection** — the BLoC monitors both `AppLifecycleState` and network
-connectivity. Reconnection is suppressed when the app is backgrounded with no active calls.
-Fast reconnect (0 s delay) is used on manual trigger; slow (6 s) on unexpected disconnect.
+connectivity. The signaling socket is kept alive when the app is backgrounded so incoming calls
+can arrive via WebSocket without relying on push. Reconnect is triggered on
+`AppLifecycleState.resumed` (in case the OS dropped the connection) and on network restore.
+A forced fast reconnect (0 s delay, force=true) is also triggered inside
+`__onCallPerformEventAnswered` when the user answers from a push notification and signaling is
+not yet connected, reducing the risk of timing out while waiting for the SDP offer.
+Disconnect is only initiated on connectivity loss (`ConnectivityResult.none`).
+
+**Call restoration** — when the signaling session reconnects mid-call, the BLoC restores active
+calls from the server's accepted-call list (`_RestoreAcceptedCall`). Restored calls skip the
+normal answer/start flow and enter `incomingRestoringMedia` or `outgoingRestoringMedia` directly.
+Media is re-established via ICE restart (renegotiationNeeded → `UpdateRequest`), not by
+replaying the original offer/answer exchange.
+
+**Blind transfer** — `CallControlEvent.blindTransferInitiated` creates a new outgoing
+`ActiveCall` with status `outgoingCreatedFromRefer`, linked to the original call via `fromReferId`.
+The transfer target follows the normal outgoing flow from that status onward.
 
 **iOS audio reset** — on the first and last call, the BLoC forces audio to earpiece via
 `AppleNativeAudioManagement` to work around a platform bug where speaker stays active across

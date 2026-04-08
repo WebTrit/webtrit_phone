@@ -5,9 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
+
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/features/call/services/signaling_module.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 // ---------------------------------------------------------------------------
 // Fakes / Mocks
@@ -149,12 +149,14 @@ final _kHandshake = StateHandshake(
 // Module builder
 // ---------------------------------------------------------------------------
 
-SignalingModuleIsolateImpl _buildModule(SignalingClientFactory factory) => SignalingModuleIsolateImpl(
+SignalingModuleImpl _buildModule(SignalingClientFactory factory) => SignalingModuleImpl(
   coreUrl: 'https://example.com',
   tenantId: 'test-tenant',
   token: 'test-token',
   trustedCertificates: TrustedCertificates.empty,
-  signalingClientFactory: factory,
+  connectionTimeout: kSignalingClientConnectionTimeout,
+  reconnectDelay: kSignalingClientReconnectDelay,
+  clientFactory: factory,
 );
 
 Request _buildRequest() => HangupRequest(transaction: 'tx-1', line: 0, callId: 'call-1');
@@ -461,7 +463,7 @@ void main() {
       expect(received?.event, same(event));
     });
 
-    test('_onError emits SignalingConnectionLost and clears signalingClient', () async {
+    test('_onError emits SignalingConnectionFailed and clears signalingClient', () async {
       final client = _FakeSignalingClient();
       final module = _buildModule(_successFactory(client));
       addTearDown(module.dispose);
@@ -469,9 +471,9 @@ void main() {
       module.connect();
       await pumpEventQueue();
 
-      SignalingConnectionLost? failed;
+      SignalingConnectionFailed? failed;
       module.events.listen((e) {
-        if (e is SignalingConnectionLost) failed = e;
+        if (e is SignalingConnectionFailed) failed = e;
       });
 
       final error = Exception('keepalive timeout');
@@ -913,8 +915,8 @@ void main() {
       client.injectDisconnect(null, null);
       await pumpEventQueue();
 
-      // Only SignalingConnectionLost - no SignalingDisconnected.
-      expect(events.whereType<SignalingConnectionLost>(), hasLength(1));
+      // Only SignalingConnectionFailed - no SignalingDisconnected.
+      expect(events.whereType<SignalingConnectionFailed>(), hasLength(1));
       expect(events.whereType<SignalingDisconnected>(), isEmpty);
     });
   });
@@ -1078,7 +1080,7 @@ void main() {
       client.injectDisconnect(null, null);
       await pumpEventQueue();
 
-      expect(events.whereType<SignalingConnectionLost>(), hasLength(1));
+      expect(events.whereType<SignalingConnectionFailed>(), hasLength(1));
       expect(
         events.whereType<SignalingDisconnected>(),
         isEmpty,
@@ -1135,7 +1137,7 @@ void main() {
       expect(late.whereType<SignalingConnecting>(), hasLength(1));
       expect(late.whereType<SignalingConnected>(), hasLength(1));
       expect(late.whereType<SignalingHandshakeReceived>(), hasLength(1));
-      expect(late.whereType<SignalingConnectionLost>(), hasLength(1));
+      expect(late.whereType<SignalingConnectionFailed>(), hasLength(1));
     });
   });
 
@@ -1213,7 +1215,7 @@ void main() {
       await pumpEventQueue();
 
       expect(late.whereType<SignalingHandshakeReceived>(), isEmpty);
-      expect(late.whereType<SignalingConnectionLost>(), hasLength(1));
+      expect(late.whereType<SignalingConnectionFailed>(), hasLength(1));
     });
 
     test('reconnect after no-handshake failure delivers fresh Connecting+Connected+Handshake', () async {
