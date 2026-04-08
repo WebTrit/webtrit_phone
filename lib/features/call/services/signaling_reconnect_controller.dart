@@ -117,9 +117,18 @@ class SignalingReconnectController {
   /// Call when the app needs an immediate reconnect regardless of lifecycle
   /// state - e.g. when a new active call appears while the app is in the
   /// background and the signaling client is not connected.
+  ///
+  /// Uses [Duration.zero] so the reconnect fires in the next event-loop tick.
+  /// Callers (outgoing call start, incoming call answer from push) need the
+  /// WebSocket ready as fast as possible; any delay here directly adds latency
+  /// before the SDP offer reaches the server.
+  ///
+  /// Note: spurious "connection failed" toast suppression (WT-1221) is handled
+  /// by the consecutive-failure threshold, not by this delay, so reducing the
+  /// delay here is safe.
   void notifyForceReconnect() {
     _logger.fine('notifyForceReconnect');
-    _scheduleReconnect(kSignalingClientFastReconnectDelay, force: true);
+    _scheduleReconnect(Duration.zero, force: true);
   }
 
   /// Call when active-call presence changes while the app may be in the
