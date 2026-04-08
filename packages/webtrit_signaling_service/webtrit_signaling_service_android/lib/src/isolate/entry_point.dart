@@ -1,7 +1,6 @@
-import 'dart:developer' as developer;
-
 import 'package:flutter/widgets.dart' show WidgetsFlutterBinding;
 import 'package:logging/logging.dart';
+import 'package:logging_appenders/logging_appenders.dart';
 
 import '../messages.g.dart';
 import 'signaling_sync_handler.dart';
@@ -19,16 +18,9 @@ final _logger = Logger('SignalingEntryPoint');
 /// [PSignalingServiceHostApi.initializeServiceCallback].
 @pragma('vm:entry-point')
 void signalingServiceCallbackDispatcher() {
+  hierarchicalLoggingEnabled = true;
   Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((record) {
-    developer.log(
-      record.message,
-      name: record.loggerName,
-      level: record.level.value,
-      error: record.error,
-      stackTrace: record.stackTrace,
-    );
-  });
+  PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);
 
   _logger.info('signalingServiceCallbackDispatcher: background isolate starting');
   WidgetsFlutterBinding.ensureInitialized();
