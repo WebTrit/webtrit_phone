@@ -475,19 +475,16 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // Force reconnect — timing (WT-1239)
+  // Force reconnect — timing
   //
   // notifyForceReconnect is called when an active call needs signaling urgently
   // (outgoing call start, incoming call answer from push). A 1-second delay
   // before reconnect makes calls placed immediately after screen unlock appear
   // to hang for ~2 s before the server receives the SDP offer.
   //
-  // Expected fix: notifyForceReconnect uses Duration.zero so connect() fires
-  // in the next event-loop tick, not after kSignalingClientFastReconnectDelay.
   // -------------------------------------------------------------------------
 
-  group('SignalingReconnectController - notifyForceReconnect timing (WT-1239)', () {
-    // Regression test — currently FAILS, passes after the fix.
+  group('SignalingReconnectController - notifyForceReconnect timing', () {
     test('reconnects immediately (Duration.zero), not after kSignalingClientFastReconnectDelay', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
@@ -498,15 +495,15 @@ void main() {
 
         controller.notifyForceReconnect();
 
-        // connect() must fire in the current event-loop tick (Duration.zero timer),
-        // not after the full kSignalingClientFastReconnectDelay = 1 s.
+        // connect() must be scheduled for the next event-loop iteration via a
+        // Duration.zero timer, not after the full kSignalingClientFastReconnectDelay = 1 s.
         expect(module.connectCalls, 0, reason: 'timer not yet fired synchronously');
         async.elapse(Duration.zero);
         expect(module.connectCalls, 1);
       });
     });
 
-    // Full screen-unlock → immediate-call scenario (WT-1239).
+    // Full screen-unlock → immediate-call scenario.
     //
     // Reproduces the sequence from the bug log:
     //   screen lock  → signaling intentionally disconnected
@@ -547,11 +544,11 @@ void main() {
     });
 
     // Verifies that reducing the delay to Duration.zero does NOT re-introduce
-    // the spurious "Connecting to the core failed" toast fixed in WT-1221.
+    // spurious "connection failed" toasts on transient failures.
     //
-    // The toast is suppressed by the consecutive-failure threshold (≥ 2),
+    // Toasts are suppressed by the consecutive-failure threshold (≥ 2),
     // which is independent of the reconnect delay.
-    test('first connect failure after immediate reconnect does not trigger toast (WT-1221 guard)', () {
+    test('first connect failure after immediate reconnect does not trigger toast', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
         addTearDown(module.dispose);
@@ -575,7 +572,7 @@ void main() {
         module.emit(_failed());
 
         // Toast must NOT appear — only 1 failure, threshold is 2.
-        expect(notifyCount, 0, reason: 'WT-1221: spurious toast must be suppressed on first failure');
+        expect(notifyCount, 0, reason: 'spurious toast must be suppressed on first failure');
       });
     });
   });
