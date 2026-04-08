@@ -18,6 +18,7 @@ export 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_s
         SignalingServiceConfig,
         SignalingServiceMode,
         SignalingEventBuffer,
+        SignalingRequestQueue,
         createSignalingModule,
         NotConnectedException;
 

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:logging/logging.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
@@ -9,11 +8,9 @@ import 'models/signaling_module.dart';
 import 'models/signaling_module_event.dart';
 import 'models/signaling_service_config.dart';
 import 'signaling_event_buffer.dart';
+import 'signaling_request_queue.dart';
 
 final _logger = Logger('SignalingModuleImpl');
-
-const _queuedRequestTimeout = Duration(seconds: 30);
-const _executeTimeoutRetryCount = 3;
 
 /// Factory function signature for creating a [WebtritSignalingClient].
 ///
@@ -110,7 +107,7 @@ class SignalingModuleImpl implements SignalingModule {
   final _controller = StreamController<SignalingModuleEvent>.broadcast(sync: true);
 
   final _eventBuffer = SignalingEventBuffer();
-  final Queue<_QueuedRequest> _queuedRequests = Queue<_QueuedRequest>();
+  final _requestQueue = SignalingRequestQueue();
 
   WebtritSignalingClient? _client;
   bool _disposed = false;
@@ -170,8 +167,14 @@ class SignalingModuleImpl implements SignalingModule {
   @override
   Future<void>? execute(Request request) {
     final client = _client;
-    if (client != null) return _executeWithRetry(client, request);
-    return _enqueueRequest(request);
+    if (client != null) {
+      return _requestQueue.executeNow(
+        execute: client.execute,
+        request: request,
+        isActive: () => identical(_client, client),
+      );
+    }
+    return _requestQueue.enqueue(request);
   }
 
   /// Initiates a connection. Fire-and-forget -- result arrives via [events].
@@ -206,7 +209,7 @@ class SignalingModuleImpl implements SignalingModule {
   Future<void> dispose() async {
     if (_disposed) return;
     _disposed = true;
-    _failAllQueuedRequests(NotConnectedException('Signaling module is disposed'));
+    _requestQueue.failAll(NotConnectedException('Signaling module is disposed'));
     _eventBuffer.clear();
     await disconnect();
     await _disconnectAck?.future.timeout(const Duration(seconds: 3), onTimeout: () {});
@@ -265,7 +268,7 @@ class SignalingModuleImpl implements SignalingModule {
         _client = client;
         _lastConnectErrorString = null;
         _emit(SignalingConnected());
-        unawaited(_flushQueuedRequests(client));
+        unawaited(_requestQueue.flush(execute: client.execute, isActive: () => identical(_client, client)));
       } catch (e, s) {
         if (_disposed) return;
         _logger.warning('_connectAsync failed', e, s);
@@ -354,78 +357,4 @@ class SignalingModuleImpl implements SignalingModule {
     _eventBuffer.onEvent(event);
     _controller.add(event);
   }
-
-  Future<void> _enqueueRequest(Request request) {
-    final completer = Completer<void>();
-    late final _QueuedRequest queuedRequest;
-    final timer = Timer(_queuedRequestTimeout, () => _onQueuedRequestTimeout(queuedRequest));
-    queuedRequest = _QueuedRequest(request: request, completer: completer, timer: timer);
-    _queuedRequests.add(queuedRequest);
-    return completer.future;
-  }
-
-  Future<void> _flushQueuedRequests(WebtritSignalingClient client) async {
-    while (_queuedRequests.isNotEmpty && identical(_client, client)) {
-      final queuedRequest = _queuedRequests.first;
-      try {
-        await _executeWithRetry(client, queuedRequest.request);
-        _queuedRequests.removeFirst();
-        queuedRequest.timer.cancel();
-        if (!queuedRequest.completer.isCompleted) queuedRequest.completer.complete();
-      } catch (error, stackTrace) {
-        if (!identical(_client, client)) return;
-        _queuedRequests.removeFirst();
-        queuedRequest.timer.cancel();
-        if (!queuedRequest.completer.isCompleted) {
-          queuedRequest.completer.completeError(error, stackTrace);
-        }
-      }
-    }
-  }
-
-  Future<void> _executeWithRetry(WebtritSignalingClient client, Request request, [int timeoutRetry = 0]) async {
-    try {
-      await client.execute(request);
-    } on WebtritSignalingTransactionTimeoutException catch (error, stackTrace) {
-      if (!identical(_client, client) || timeoutRetry >= _executeTimeoutRetryCount) {
-        Error.throwWithStackTrace(error, stackTrace);
-      }
-      _logger.warning('_executeWithRetry timeout, retrying... (retry #$timeoutRetry)', error, stackTrace);
-      return _executeWithRetry(client, request, timeoutRetry + 1);
-    }
-  }
-
-  void _onQueuedRequestTimeout(_QueuedRequest queuedRequest) {
-    if (!_queuedRequests.remove(queuedRequest)) return;
-    if (!queuedRequest.completer.isCompleted) {
-      queuedRequest.completer.completeError(
-        NotConnectedException('Timeout waiting for signaling connection to send request: ${queuedRequest.request}'),
-      );
-    }
-  }
-
-  void _failAllQueuedRequests(Object error) {
-    while (_queuedRequests.isNotEmpty) {
-      final queuedRequest = _queuedRequests.removeFirst();
-      queuedRequest.timer.cancel();
-      if (!queuedRequest.completer.isCompleted) queuedRequest.completer.completeError(error);
-    }
-  }
-}
-
-class NotConnectedException implements Exception {
-  NotConnectedException([this.message = 'Signaling client is not connected']);
-
-  final String message;
-
-  @override
-  String toString() => 'NotConnectedException: $message';
-}
-
-class _QueuedRequest {
-  _QueuedRequest({required this.request, required this.completer, required this.timer});
-
-  final Request request;
-  final Completer<void> completer;
-  final Timer timer;
 }

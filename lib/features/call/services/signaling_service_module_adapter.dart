@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
@@ -21,18 +20,16 @@ import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 ///     while the app is backgrounded. Honouring a disconnect would defeat the
 ///     purpose of the persistent service.
 ///   - [execute] -- when connected, sends the request immediately with up to
-///     [_executeTimeoutRetryCount] retries on timeout. When not connected,
-///     queues the request and sends it on the next successful connection, or
-///     fails with [NotConnectedException] after [_queuedRequestTimeout].
+///     [SignalingRequestQueue.maxRetryCount] retries on timeout. When not
+///     connected, queues the request and sends it on the next successful
+///     connection, or fails with [NotConnectedException] after
+///     [SignalingRequestQueue.requestTimeout].
 ///   - [dispose] -- cancels the service events subscription, closes the local
 ///     events controller, fails all queued requests, and calls
 ///     [WebtritSignalingService.dispose] to release Dart-side hub resources.
 ///     On Android the foreground service itself is NOT stopped -- its lifecycle
 ///     is managed by Kotlin.
 final _logger = Logger('SignalingServiceModuleAdapter');
-
-const _queuedRequestTimeout = Duration(seconds: 30);
-const _executeTimeoutRetryCount = 3;
 
 class SignalingServiceModuleAdapter implements SignalingModule {
   SignalingServiceModuleAdapter({
@@ -50,7 +47,7 @@ class SignalingServiceModuleAdapter implements SignalingModule {
   final _eventsController = StreamController<SignalingModuleEvent>.broadcast();
   StreamSubscription<SignalingModuleEvent>? _serviceEventsSub;
   final _eventBuffer = SignalingEventBuffer();
-  final Queue<_QueuedRequest> _queuedRequests = Queue<_QueuedRequest>();
+  final _requestQueue = SignalingRequestQueue();
 
   bool _isConnected = false;
 
@@ -88,7 +85,7 @@ class SignalingServiceModuleAdapter implements SignalingModule {
         case SignalingConnected():
           _isConnected = true;
           _startPending = false;
-          unawaited(_flushQueuedRequests());
+          unawaited(_requestQueue.flush(execute: _service.execute, isActive: () => _isConnected));
         case SignalingDisconnected():
         case SignalingConnectionFailed():
           _isConnected = false;
@@ -118,13 +115,15 @@ class SignalingServiceModuleAdapter implements SignalingModule {
 
   @override
   Future<void>? execute(Request request) {
-    if (_isConnected) return _executeWithRetry(request);
-    return _enqueueRequest(request);
+    if (_isConnected) {
+      return _requestQueue.executeNow(execute: _service.execute, request: request, isActive: () => _isConnected);
+    }
+    return _requestQueue.enqueue(request);
   }
 
   @override
   Future<void> dispose() async {
-    _failAllQueuedRequests(NotConnectedException('Signaling service module adapter is disposed'));
+    _requestQueue.failAll(NotConnectedException('Signaling service module adapter is disposed'));
     await _serviceEventsSub?.cancel();
     _serviceEventsSub = null;
     _isConnected = false;
@@ -133,69 +132,4 @@ class SignalingServiceModuleAdapter implements SignalingModule {
     await _eventsController.close();
     await _service.dispose();
   }
-
-  Future<void> _enqueueRequest(Request request) {
-    final completer = Completer<void>();
-    late final _QueuedRequest queuedRequest;
-    final timer = Timer(_queuedRequestTimeout, () => _onQueuedRequestTimeout(queuedRequest));
-    queuedRequest = _QueuedRequest(request: request, completer: completer, timer: timer);
-    _queuedRequests.add(queuedRequest);
-    return completer.future;
-  }
-
-  Future<void> _flushQueuedRequests() async {
-    while (_queuedRequests.isNotEmpty && _isConnected) {
-      final queuedRequest = _queuedRequests.first;
-      try {
-        await _executeWithRetry(queuedRequest.request);
-        _queuedRequests.removeFirst();
-        queuedRequest.timer.cancel();
-        if (!queuedRequest.completer.isCompleted) queuedRequest.completer.complete();
-      } catch (error, stackTrace) {
-        if (!_isConnected) return;
-        _queuedRequests.removeFirst();
-        queuedRequest.timer.cancel();
-        if (!queuedRequest.completer.isCompleted) {
-          queuedRequest.completer.completeError(error, stackTrace);
-        }
-      }
-    }
-  }
-
-  Future<void> _executeWithRetry(Request request, [int timeoutRetry = 0]) async {
-    try {
-      await _service.execute(request);
-    } on WebtritSignalingTransactionTimeoutException catch (error, stackTrace) {
-      if (!_isConnected || timeoutRetry >= _executeTimeoutRetryCount) {
-        Error.throwWithStackTrace(error, stackTrace);
-      }
-      _logger.warning('_executeWithRetry timeout, retrying... (retry #$timeoutRetry)', error, stackTrace);
-      return _executeWithRetry(request, timeoutRetry + 1);
-    }
-  }
-
-  void _onQueuedRequestTimeout(_QueuedRequest queuedRequest) {
-    if (!_queuedRequests.remove(queuedRequest)) return;
-    if (!queuedRequest.completer.isCompleted) {
-      queuedRequest.completer.completeError(
-        NotConnectedException('Timeout waiting for signaling connection to send request: ${queuedRequest.request}'),
-      );
-    }
-  }
-
-  void _failAllQueuedRequests(Object error) {
-    while (_queuedRequests.isNotEmpty) {
-      final queuedRequest = _queuedRequests.removeFirst();
-      queuedRequest.timer.cancel();
-      if (!queuedRequest.completer.isCompleted) queuedRequest.completer.completeError(error);
-    }
-  }
-}
-
-class _QueuedRequest {
-  _QueuedRequest({required this.request, required this.completer, required this.timer});
-
-  final Request request;
-  final Completer<void> completer;
-  final Timer timer;
 }

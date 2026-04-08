@@ -5,4 +5,5 @@ export 'src/models/signaling_service_config.dart';
 export 'src/models/signaling_service_mode.dart';
 export 'src/signaling_event_buffer.dart';
 export 'src/signaling_module_impl.dart';
+export 'src/signaling_request_queue.dart';
 export 'src/signaling_service_platform.dart';
