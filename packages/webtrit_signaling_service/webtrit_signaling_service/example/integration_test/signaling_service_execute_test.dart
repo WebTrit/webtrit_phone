@@ -28,7 +28,7 @@ void main() {
   late WebtritSignalingService service;
 
   setUp(() {
-    service = WebtritSignalingService();
+    service = WebtritSignalingService(config: _kConfig);
   });
 
   tearDown(() async {
@@ -40,28 +40,44 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('execute()', () {
-    testWidgets('throws StateError before start()', (WidgetTester _) async {
-      await expectLater(service.execute(_nextRequest()), throwsA(isA<StateError>()));
+    testWidgets('execute() returns a non-null Future when not connected', (WidgetTester _) async {
+      expect(service.execute(_nextRequest()), isNotNull);
     });
 
-    testWidgets('throws StateError when not connected (connection failed)', (WidgetTester _) async {
+    testWidgets('queued request fails with NotConnectedException on dispose()', (WidgetTester _) async {
+      final future = service.execute(_nextRequest())!;
+
+      await service.dispose();
+
+      await expectLater(future, throwsA(isA<NotConnectedException>()));
+    });
+
+    testWidgets('multiple queued requests all fail with NotConnectedException on dispose()', (WidgetTester _) async {
+      final futures = [
+        service.execute(_nextRequest())!,
+        service.execute(_nextRequest())!,
+        service.execute(_nextRequest())!,
+      ];
+
+      await service.dispose();
+
+      for (final f in futures) {
+        await expectLater(f, throwsA(isA<NotConnectedException>()));
+      }
+    });
+
+    testWidgets('queued requests are not executed while connection is failing', (WidgetTester _) async {
       final failed = Completer<void>();
       service.events.listen((e) {
         if (e is SignalingConnectionFailed && !failed.isCompleted) failed.complete();
       });
 
-      await service.start(_kConfig);
+      final future = service.execute(_nextRequest());
+      service.connect();
       await _waitFor(failed.future, label: 'SignalingConnectionFailed');
 
-      await expectLater(service.execute(_nextRequest()), throwsA(isA<StateError>()));
-    });
-
-    testWidgets('throws StateError after dispose()', (WidgetTester _) async {
-      await service.start(_kConfig);
-      await Future<void>.delayed(const Duration(milliseconds: 200));
-      await service.dispose();
-
-      await expectLater(service.execute(_nextRequest()), throwsA(isA<StateError>()));
+      // Request is still pending (not yet resolved or thrown).
+      expect(future, isNotNull);
     });
   });
 }

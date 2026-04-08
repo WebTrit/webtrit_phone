@@ -20,7 +20,7 @@ void main() {
   late WebtritSignalingService service;
 
   setUp(() {
-    service = WebtritSignalingService();
+    service = WebtritSignalingService(config: _kConfig);
   });
 
   tearDown(() async {
@@ -31,23 +31,25 @@ void main() {
   // Rapid lifecycle cycles
   // -------------------------------------------------------------------------
 
-  group('Stress -- rapid start/dispose cycles', () {
-    testWidgets('5 start/dispose cycles leave plugin in clean state', (WidgetTester _) async {
+  group('Stress -- rapid connect/dispose cycles', () {
+    testWidgets('5 create/connect/dispose cycles leave plugin in clean state', (WidgetTester _) async {
       for (var i = 0; i < 5; i++) {
-        await service.start(_kConfig);
+        final s = WebtritSignalingService(config: _kConfig);
+        s.connect();
         await Future<void>.delayed(const Duration(milliseconds: 100));
-        await service.dispose();
+        await s.dispose();
       }
-      // After all cycles the plugin must still accept a fresh start.
-      await expectLater(service.start(_kConfig), completes);
+      // After all cycles the plugin must still accept a fresh instance.
+      expect(() => service.connect(), returnsNormally);
     });
 
-    testWidgets('rapid start/start replaces session without hanging', (WidgetTester _) async {
-      await service.start(_kConfig);
-      await service.start(_kConfig); // replaces session immediately
-      await service.start(_kConfig); // replaces again
+    testWidgets('rapid connect() calls are idempotent and do not hang', (WidgetTester _) async {
+      service.connect();
+      service.connect(); // idempotent -- no new start while pending
+      service.connect(); // idempotent
+      service.connect(); // idempotent
+      await Future<void>.delayed(const Duration(milliseconds: 200));
       // Should still be in a valid state.
-      await expectLater(service.start(_kConfig), completes);
     });
   });
 
@@ -69,7 +71,7 @@ void main() {
         );
       }
 
-      await service.start(_kConfig);
+      service.connect();
 
       for (var i = 0; i < completers.length; i++) {
         await _waitFor(completers[i].future, label: 'listener $i SignalingConnecting');
@@ -93,7 +95,7 @@ void main() {
         if (e is SignalingConnectionFailed && !failed.isCompleted) failed.complete();
       });
 
-      await service.start(_kConfig);
+      service.connect();
       await _waitFor(failed.future, label: 'SignalingConnectionFailed');
 
       // Subscribe AFTER events were emitted -- buffer must replay them.

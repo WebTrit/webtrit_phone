@@ -89,8 +89,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     context.read<AppLogger>().updateRemoteLabels();
 
     final session = context.read<AppBloc>().state.session;
-    _signalingModule = SignalingServiceModuleAdapter(
-      service: WebtritSignalingService(),
+    _signalingModule = WebtritSignalingService(
       config: SignalingServiceConfig(
         coreUrl: session.coreUrl!,
         tenantId: session.tenantId,

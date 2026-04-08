@@ -216,7 +216,7 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   // iOS: stored in memory, called directly in start(). Android: also persisted to
   // SharedPreferences for deserialization in the background isolate.
   try {
-    await WebtritSignalingService().setModuleFactory(createSignalingModule);
+    await WebtritSignalingService.setModuleFactory(createSignalingModule);
   } catch (e, s) {
     logger.severe('setModuleFactory failed -- signaling may not work in background isolate', e, s);
   }
@@ -238,7 +238,7 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   // incoming call arrives in persistent mode (app closed or backgrounded). Must be
   // annotated @pragma('vm:entry-point').
   try {
-    await WebtritSignalingService().setIncomingCallHandler(onSignalingBackgroundIncomingCall);
+    await WebtritSignalingService.setIncomingCallHandler(onSignalingBackgroundIncomingCall);
   } catch (e, s) {
     logger.severe('setIncomingCallHandler failed -- incoming calls in persistent mode may not work', e, s);
   }

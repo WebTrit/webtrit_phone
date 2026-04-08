@@ -21,7 +21,7 @@ void main() {
   late WebtritSignalingService service;
 
   setUp(() {
-    service = WebtritSignalingService();
+    service = WebtritSignalingService(config: _kConfig);
   });
 
   tearDown(() async {
@@ -29,25 +29,31 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // start()
+  // connect()
   // -------------------------------------------------------------------------
 
-  group('Lifecycle -- start()', () {
-    testWidgets('completes without error', (WidgetTester _) async {
-      await expectLater(service.start(_kConfig), completes);
+  group('Lifecycle -- connect()', () {
+    testWidgets('connect() does not throw', (WidgetTester _) async {
+      expect(() => service.connect(), returnsNormally);
     });
 
-    testWidgets('accepts persistent mode', (WidgetTester _) async {
-      await expectLater(service.start(_kConfig, mode: SignalingServiceMode.persistent), completes);
+    testWidgets('persistent mode does not throw', (WidgetTester _) async {
+      final s = WebtritSignalingService(config: _kConfig, mode: SignalingServiceMode.persistent);
+      addTearDown(() => s.dispose());
+      expect(() => s.connect(), returnsNormally);
     });
 
-    testWidgets('accepts pushBound mode', (WidgetTester _) async {
-      await expectLater(service.start(_kConfig, mode: SignalingServiceMode.pushBound), completes);
+    testWidgets('pushBound mode does not throw', (WidgetTester _) async {
+      final s = WebtritSignalingService(config: _kConfig, mode: SignalingServiceMode.pushBound);
+      addTearDown(() => s.dispose());
+      expect(() => s.connect(), returnsNormally);
     });
 
-    testWidgets('calling start() twice replaces the session', (WidgetTester _) async {
-      await service.start(_kConfig);
-      await expectLater(service.start(_kConfig), completes);
+    testWidgets('calling connect() multiple times is idempotent', (WidgetTester _) async {
+      service.connect();
+      service.connect();
+      service.connect();
+      // No throw, no hang.
     });
   });
 
@@ -56,14 +62,14 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('Lifecycle -- attach()', () {
-    testWidgets('completes without error before start()', (WidgetTester _) async {
-      await expectLater(service.attach(), completes);
+    testWidgets('attach() completes without error before connect()', (WidgetTester _) async {
+      await expectLater(WebtritSignalingService.attach(), completes);
     });
 
-    testWidgets('completes without error after start()', (WidgetTester _) async {
-      await service.start(_kConfig);
+    testWidgets('attach() completes without error after connect()', (WidgetTester _) async {
+      service.connect();
       await Future<void>.delayed(const Duration(milliseconds: 300));
-      await expectLater(service.attach(), completes);
+      await expectLater(WebtritSignalingService.attach(), completes);
     });
   });
 
@@ -72,17 +78,17 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('Lifecycle -- dispose()', () {
-    testWidgets('dispose() before start completes without error', (WidgetTester _) async {
+    testWidgets('dispose() before connect() completes without error', (WidgetTester _) async {
       await expectLater(service.dispose(), completes);
     });
 
-    testWidgets('dispose() after start completes without error', (WidgetTester _) async {
-      await service.start(_kConfig);
+    testWidgets('dispose() after connect() completes without error', (WidgetTester _) async {
+      service.connect();
       await Future<void>.delayed(const Duration(milliseconds: 300));
       await expectLater(service.dispose(), completes);
     });
 
-    testWidgets('second dispose() is a no-op', (WidgetTester _) async {
+    testWidgets('second dispose() completes without error', (WidgetTester _) async {
       await service.dispose();
       await expectLater(service.dispose(), completes);
     });
@@ -93,23 +99,24 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('Lifecycle -- restart cycle', () {
-    testWidgets('start -> dispose -> start works without error', (WidgetTester _) async {
-      await service.start(_kConfig);
+    testWidgets('fresh instance after dispose() works without error', (WidgetTester _) async {
+      service.connect();
       await Future<void>.delayed(const Duration(milliseconds: 300));
       await service.dispose();
 
-      // Second start must work -- this verifies C3 fix (_eventsController resurrection).
-      await expectLater(service.start(_kConfig), completes);
+      // Replace with a fresh instance; tearDown will dispose it.
+      service = WebtritSignalingService(config: _kConfig);
+      expect(() => service.connect(), returnsNormally);
     });
 
-    testWidgets('two full restart cycles complete without error', (WidgetTester _) async {
+    testWidgets('two full create/connect/dispose cycles complete without error', (WidgetTester _) async {
       for (var i = 0; i < 2; i++) {
-        await service.start(_kConfig);
+        final s = WebtritSignalingService(config: _kConfig);
+        s.connect();
         await Future<void>.delayed(const Duration(milliseconds: 200));
-        await service.dispose();
+        await s.dispose();
       }
-      // Final start so tearDown can dispose normally.
-      await service.start(_kConfig);
+      // setUp-created service is still alive for tearDown.
     });
   });
 }

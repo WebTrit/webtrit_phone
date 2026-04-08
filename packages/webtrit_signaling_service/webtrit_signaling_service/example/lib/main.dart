@@ -32,7 +32,7 @@ class SignalingDemoPage extends StatefulWidget {
 }
 
 class _SignalingDemoPageState extends State<SignalingDemoPage> {
-  final _service = WebtritSignalingService();
+  WebtritSignalingService? _service;
 
   final _coreUrlCtrl = TextEditingController(text: 'wss://demo.webtrit.com');
   final _tenantIdCtrl = TextEditingController(text: 'default');
@@ -48,7 +48,7 @@ class _SignalingDemoPageState extends State<SignalingDemoPage> {
   @override
   void dispose() {
     _sub?.cancel();
-    _service.dispose();
+    _service?.dispose();
     _coreUrlCtrl.dispose();
     _tenantIdCtrl.dispose();
     _tokenCtrl.dispose();
@@ -66,9 +66,10 @@ class _SignalingDemoPageState extends State<SignalingDemoPage> {
       token: _tokenCtrl.text.trim(),
     );
 
-    _sub = _service.events.listen(_onEvent, onError: (Object err) => _appendLog('ERROR: $err'));
-
-    await _service.start(config);
+    final service = WebtritSignalingService(config: config);
+    _service = service;
+    _sub = service.events.listen(_onEvent, onError: (Object err) => _appendLog('ERROR: $err'));
+    service.connect();
 
     if (mounted) setState(() => _serviceRunning = true);
   }
@@ -76,7 +77,8 @@ class _SignalingDemoPageState extends State<SignalingDemoPage> {
   Future<void> _stopService() async {
     await _sub?.cancel();
     _sub = null;
-    await _service.dispose();
+    await _service?.dispose();
+    _service = null;
 
     if (mounted) {
       setState(() {

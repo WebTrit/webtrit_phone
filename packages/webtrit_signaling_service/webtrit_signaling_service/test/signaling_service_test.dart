@@ -20,6 +20,7 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   final List<Request> executedRequests = [];
   final List<SignalingServiceMode> updatedModes = [];
   final List<Function> incomingCallHandles = [];
+  final List<SignalingModuleFactory> moduleFactories = [];
   int disposeCount = 0;
 
   void inject(SignalingModuleEvent event) => _eventsController.add(event);
@@ -49,13 +50,15 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   Future<void> setIncomingCallHandler(Function callback) async => incomingCallHandles.add(callback);
 
   @override
+  Future<void> setModuleFactory(SignalingModuleFactory factory) async => moduleFactories.add(factory);
+
+  @override
   Future<void> dispose() async {
     disposeCount++;
     await _eventsController.close();
   }
 }
 
-// Platform needs a real token for verifyToken to accept it.
 class _VerifiedFakePlatform extends _FakePlatform with MockPlatformInterfaceMixin {}
 
 // ---------------------------------------------------------------------------
@@ -64,8 +67,9 @@ class _VerifiedFakePlatform extends _FakePlatform with MockPlatformInterfaceMixi
 
 const _kConfig = SignalingServiceConfig(coreUrl: 'wss://example.com', tenantId: 'tenant', token: 'tok');
 
-Future<void> _dummyIncomingCallHandler(IncomingCallEvent event) async {}
-Future<void> _anotherDummyHandler(IncomingCallEvent event) async {}
+Future<void> _dummyHandler(IncomingCallEvent event) async {}
+Future<void> _anotherHandler(IncomingCallEvent event) async {}
+SignalingModule _dummyFactory(SignalingServiceConfig _) => throw UnimplementedError();
 
 // ---------------------------------------------------------------------------
 // Tests
@@ -73,24 +77,24 @@ Future<void> _anotherDummyHandler(IncomingCallEvent event) async {}
 
 void main() {
   late _VerifiedFakePlatform platform;
-  late WebtritSignalingService service;
 
   setUp(() {
     platform = _VerifiedFakePlatform();
     SignalingServicePlatform.instance = platform;
-    service = WebtritSignalingService();
   });
 
   // -------------------------------------------------------------------------
-  // events delegation
+  // events
   // -------------------------------------------------------------------------
 
   group('WebtritSignalingService -- events', () {
-    test('events stream is a broadcast stream', () {
+    test('stream is broadcast', () {
+      final service = WebtritSignalingService(config: _kConfig);
       expect(service.events.isBroadcast, isTrue);
     });
 
-    test('events stream receives events injected into platform', () async {
+    test('forwards events from the platform', () async {
+      final service = WebtritSignalingService(config: _kConfig);
       final received = <SignalingModuleEvent>[];
       service.events.listen(received.add);
 
@@ -100,112 +104,204 @@ void main() {
 
       expect(received.whereType<SignalingConnecting>(), hasLength(1));
       expect(received.whereType<SignalingConnected>(), hasLength(1));
+
+      await service.dispose();
     });
   });
 
   // -------------------------------------------------------------------------
-  // start() delegation
+  // connect() / isConnected
   // -------------------------------------------------------------------------
 
-  group('WebtritSignalingService -- start()', () {
-    test('delegates to platform.start with given config', () async {
-      await service.start(_kConfig);
+  group('WebtritSignalingService -- connect()', () {
+    test('calls platform.start with the config from the constructor', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      service.connect();
+      await Future<void>.delayed(Duration.zero);
+
+      expect(platform.startedConfigs, [_kConfig]);
+      await service.dispose();
+    });
+
+    test('uses persistent mode by default', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      service.connect();
+      await Future<void>.delayed(Duration.zero);
+
+      expect(platform.startedModes, [SignalingServiceMode.persistent]);
+      await service.dispose();
+    });
+
+    test('uses the mode passed to the constructor', () async {
+      final service = WebtritSignalingService(config: _kConfig, mode: SignalingServiceMode.pushBound);
+      service.connect();
+      await Future<void>.delayed(Duration.zero);
+
+      expect(platform.startedModes, [SignalingServiceMode.pushBound]);
+      await service.dispose();
+    });
+
+    test('is idempotent while start is pending', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      service.connect();
+      service.connect();
+      service.connect();
+      await Future<void>.delayed(Duration.zero);
 
       expect(platform.startedConfigs, hasLength(1));
-      expect(platform.startedConfigs[0], same(_kConfig));
+      await service.dispose();
     });
 
-    test('delegates default mode persistent to platform', () async {
-      await service.start(_kConfig);
+    test('is idempotent while already connected', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      service.connect();
+      await Future<void>.delayed(Duration.zero);
+      platform.inject(SignalingConnected());
+      await Future<void>.delayed(Duration.zero);
 
-      expect(platform.startedModes[0], SignalingServiceMode.persistent);
+      service.connect();
+      await Future<void>.delayed(Duration.zero);
+
+      expect(platform.startedConfigs, hasLength(1));
+      await service.dispose();
     });
 
-    test('delegates explicit pushBound mode to platform', () async {
-      await service.start(_kConfig, mode: SignalingServiceMode.pushBound);
+    test('isConnected becomes true after SignalingConnected event', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      expect(service.isConnected, isFalse);
 
-      expect(platform.startedModes[0], SignalingServiceMode.pushBound);
+      platform.inject(SignalingConnected());
+      await Future<void>.delayed(Duration.zero);
+
+      expect(service.isConnected, isTrue);
+      await service.dispose();
+    });
+
+    test('isConnected becomes false after SignalingDisconnected', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      platform.inject(SignalingConnected());
+      await Future<void>.delayed(Duration.zero);
+      expect(service.isConnected, isTrue);
+
+      platform.inject(
+        SignalingDisconnected(
+          code: null,
+          reason: null,
+          knownCode: SignalingDisconnectCode.normalClosure,
+          recommendedReconnectDelay: null,
+        ),
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      expect(service.isConnected, isFalse);
+      await service.dispose();
     });
   });
 
   // -------------------------------------------------------------------------
-  // attach() delegation
+  // disconnect() — no-op
   // -------------------------------------------------------------------------
 
-  group('WebtritSignalingService -- attach()', () {
-    test('delegates to platform.attach', () async {
-      await service.attach();
+  group('WebtritSignalingService -- disconnect()', () {
+    test('is a no-op and does not call platform.dispose', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      await service.disconnect();
 
-      expect(platform.attachCount, 1);
-    });
-
-    test('calling attach twice increments counter', () async {
-      await service.attach();
-      await service.attach();
-
-      expect(platform.attachCount, 2);
+      expect(platform.disposeCount, 0);
+      await service.dispose();
     });
   });
 
   // -------------------------------------------------------------------------
-  // execute() delegation
+  // execute()
   // -------------------------------------------------------------------------
 
   group('WebtritSignalingService -- execute()', () {
-    test('delegates request to platform.execute', () async {
+    test('queues requests when not connected and flushes on connect', () async {
+      final service = WebtritSignalingService(config: _kConfig);
       final request = HangupRequest(transaction: 'tx-1', line: 1, callId: 'call-1');
-      await service.execute(request);
 
-      expect(platform.executedRequests, hasLength(1));
-      expect(platform.executedRequests[0], same(request));
+      unawaited(service.execute(request)!);
+      expect(platform.executedRequests, isEmpty);
+
+      platform.inject(SignalingConnected());
+      await Future<void>.delayed(Duration.zero);
+
+      expect(platform.executedRequests, [request]);
+      await service.dispose();
+    });
+
+    test('executes immediately when connected', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      platform.inject(SignalingConnected());
+      await Future<void>.delayed(Duration.zero);
+
+      final request = HangupRequest(transaction: 'tx-1', line: 1, callId: 'call-1');
+      await service.execute(request)!;
+
+      expect(platform.executedRequests, [request]);
+      await service.dispose();
     });
   });
 
   // -------------------------------------------------------------------------
-  // updateMode() delegation
-  // -------------------------------------------------------------------------
-
-  group('WebtritSignalingService -- updateMode()', () {
-    test('delegates persistent mode to platform', () async {
-      await service.updateMode(SignalingServiceMode.persistent);
-
-      expect(platform.updatedModes, [SignalingServiceMode.persistent]);
-    });
-
-    test('delegates pushBound mode to platform', () async {
-      await service.updateMode(SignalingServiceMode.pushBound);
-
-      expect(platform.updatedModes, [SignalingServiceMode.pushBound]);
-    });
-  });
-
-  // -------------------------------------------------------------------------
-  // setIncomingCallHandler() delegation
-  // -------------------------------------------------------------------------
-
-  group('WebtritSignalingService -- setIncomingCallHandler()', () {
-    test('delegates callback to platform', () async {
-      await service.setIncomingCallHandler(_dummyIncomingCallHandler);
-
-      expect(platform.incomingCallHandles, [_dummyIncomingCallHandler]);
-    });
-
-    test('delegates a different callback to platform', () async {
-      await service.setIncomingCallHandler(_anotherDummyHandler);
-
-      expect(platform.incomingCallHandles, [_anotherDummyHandler]);
-    });
-  });
-
-  // -------------------------------------------------------------------------
-  // dispose() delegation
+  // dispose()
   // -------------------------------------------------------------------------
 
   group('WebtritSignalingService -- dispose()', () {
-    test('delegates to platform.dispose', () async {
+    test('calls platform.dispose', () async {
+      final service = WebtritSignalingService(config: _kConfig);
       await service.dispose();
 
       expect(platform.disposeCount, 1);
+    });
+
+    test('fails queued requests on dispose', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      final request = HangupRequest(transaction: 'tx-1', line: 1, callId: 'call-1');
+      final future = service.execute(request)!;
+      // Register the error handler before dispose() calls failAll so the
+      // future error is not treated as unhandled.
+      final expectation = expectLater(future, throwsA(isA<NotConnectedException>()));
+
+      await service.dispose();
+      await expectation;
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Static methods
+  // -------------------------------------------------------------------------
+
+  group('WebtritSignalingService -- static setup', () {
+    test('setModuleFactory delegates to platform', () async {
+      await WebtritSignalingService.setModuleFactory(_dummyFactory);
+      expect(platform.moduleFactories, [_dummyFactory]);
+    });
+
+    test('setIncomingCallHandler delegates to platform', () async {
+      await WebtritSignalingService.setIncomingCallHandler(_dummyHandler);
+      expect(platform.incomingCallHandles, [_dummyHandler]);
+    });
+
+    test('setIncomingCallHandler with different callback', () async {
+      await WebtritSignalingService.setIncomingCallHandler(_anotherHandler);
+      expect(platform.incomingCallHandles, [_anotherHandler]);
+    });
+
+    test('attach delegates to platform', () async {
+      await WebtritSignalingService.attach();
+      expect(platform.attachCount, 1);
+    });
+
+    test('updateMode persistent delegates to platform', () async {
+      await WebtritSignalingService.updateMode(SignalingServiceMode.persistent);
+      expect(platform.updatedModes, [SignalingServiceMode.persistent]);
+    });
+
+    test('updateMode pushBound delegates to platform', () async {
+      await WebtritSignalingService.updateMode(SignalingServiceMode.pushBound);
+      expect(platform.updatedModes, [SignalingServiceMode.pushBound]);
     });
   });
 }

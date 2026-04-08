@@ -21,7 +21,7 @@ void main() {
   late WebtritSignalingService service;
 
   setUp(() {
-    service = WebtritSignalingService();
+    service = WebtritSignalingService(config: _kConfig);
   });
 
   tearDown(() async {
@@ -33,7 +33,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('Events -- stream contract', () {
-    testWidgets('events stream accessible before start()', (WidgetTester _) async {
+    testWidgets('events stream accessible before connect()', (WidgetTester _) async {
       expect(service.events, isA<Stream<SignalingModuleEvent>>());
     });
 
@@ -49,7 +49,7 @@ void main() {
       addTearDown(sub1.cancel);
       addTearDown(sub2.cancel);
 
-      await service.start(_kConfig);
+      service.connect();
 
       final connecting1 = Completer<void>();
       final connecting2 = Completer<void>();
@@ -79,13 +79,13 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('Events -- connection failure path', () {
-    testWidgets('start() emits SignalingConnecting', (WidgetTester _) async {
+    testWidgets('connect() emits SignalingConnecting', (WidgetTester _) async {
       final connecting = Completer<void>();
       service.events.listen((event) {
         if (event is SignalingConnecting && !connecting.isCompleted) connecting.complete();
       });
 
-      await service.start(_kConfig);
+      service.connect();
       await _waitFor(connecting.future, label: 'SignalingConnecting');
     });
 
@@ -95,7 +95,7 @@ void main() {
         if (event is SignalingConnectionFailed && !failed.isCompleted) failed.complete(event);
       });
 
-      await service.start(_kConfig);
+      service.connect();
       final event = await _waitFor(failed.future, label: 'SignalingConnectionFailed');
 
       expect(event.error, isNotNull);
@@ -107,7 +107,7 @@ void main() {
         if (event is SignalingConnectionFailed && !failed.isCompleted) failed.complete(event);
       });
 
-      await service.start(_kConfig);
+      service.connect();
       final event = await _waitFor(failed.future, label: 'SignalingConnectionFailed');
 
       expect(event.recommendedReconnectDelay, isNotNull);
@@ -122,7 +122,7 @@ void main() {
         if (event is SignalingConnectionFailed && !failed.isCompleted) failed.complete();
       });
 
-      await service.start(_kConfig);
+      service.connect();
       await _waitFor(failed.future, label: 'SignalingConnectionFailed');
 
       expect(events.first, isA<SignalingConnecting>());
@@ -135,26 +135,27 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('Events -- restart cycle', () {
-    testWidgets('second start() after dispose() delivers events again', (WidgetTester _) async {
+    testWidgets('fresh instance after dispose() delivers events again', (WidgetTester _) async {
       // First session.
       final firstConnecting = Completer<void>();
       final sub = service.events.listen((e) {
         if (e is SignalingConnecting && !firstConnecting.isCompleted) firstConnecting.complete();
       });
 
-      await service.start(_kConfig);
+      service.connect();
       await _waitFor(firstConnecting.future, label: 'first SignalingConnecting');
       sub.cancel();
       await service.dispose();
 
-      // Second session -- C3 fix: _eventsController must be resurrected.
+      // Fresh instance for the second session; tearDown will dispose it.
+      service = WebtritSignalingService(config: _kConfig);
       final secondConnecting = Completer<void>();
       service.events.listen((e) {
         if (e is SignalingConnecting && !secondConnecting.isCompleted) secondConnecting.complete();
       });
 
-      await service.start(_kConfig);
-      await _waitFor(secondConnecting.future, label: 'second SignalingConnecting after re-start');
+      service.connect();
+      await _waitFor(secondConnecting.future, label: 'second SignalingConnecting from fresh instance');
     });
 
     testWidgets('session buffer replayed to late subscriber', (WidgetTester _) async {
@@ -164,7 +165,7 @@ void main() {
         if (e is SignalingConnectionFailed && !failed.isCompleted) failed.complete();
       });
 
-      await service.start(_kConfig);
+      service.connect();
       await _waitFor(failed.future, label: 'SignalingConnectionFailed');
       earlyListener.cancel();
 

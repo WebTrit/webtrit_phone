@@ -29,7 +29,7 @@ class NetworkScreenPage extends StatelessWidget {
             context.read<DeviceInfo>(),
             context.read<IncomingCallTypeRepository>(),
             (type) async {
-              await WebtritSignalingService().updateMode(type.toSignalingServiceMode());
+              await WebtritSignalingService.updateMode(type.toSignalingServiceMode());
             },
           ),
         ),
