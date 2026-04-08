@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'dart:ui' show PluginUtilities;
+import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:flutter/services.dart' show BinaryMessenger;
 import 'package:logging/logging.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
@@ -46,7 +48,12 @@ final _logger = Logger('WebtritSignalingServiceAndroid');
 ///        - pushBound: onTaskRemoved -> stopSelf()
 ///        - persistent: service keeps running; BootReceiver restarts after reboot.
 class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
-  WebtritSignalingServiceAndroid._();
+  WebtritSignalingServiceAndroid._({BinaryMessenger? binaryMessenger})
+    : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger);
+
+  @visibleForTesting
+  WebtritSignalingServiceAndroid.forTesting({BinaryMessenger? binaryMessenger})
+    : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger);
 
   static WebtritSignalingServiceAndroid? _instance;
 
@@ -56,7 +63,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     SignalingServicePlatform.instance = _instance!;
   }
 
-  final _hostApi = PSignalingServiceHostApi();
+  final PSignalingServiceHostApi _hostApi;
 
   StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
 
@@ -202,11 +209,9 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     await _hostApi.saveModuleFactory(handle.toRawHandle());
   }
 
-  /// Stops the foreground service and clears stored credentials.
-  ///
-  /// Call this on explicit user logout so the service does not keep
-  /// reconnecting with stale tokens after the session ends.
+  @override
   Future<void> stopService() async {
+    _logger.info('stopService');
     await _hostApi.stopService();
   }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -28,6 +29,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
+final _logger = Logger('MainShell');
+
 @RoutePage()
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -42,6 +45,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
   /// The [SessionGuard] instance that handles session expiration and logout.
   late final SessionGuard _sessionGuard;
+
+  /// Stored in [initState] so it remains accessible during [dispose] without
+  /// reading from a potentially deactivated [BuildContext].
+  late final AppBloc _appBloc;
 
   /// Created and connected in [initState] so that the WebSocket handshake
   /// runs in parallel while the widget tree and [CallBloc] are being built.
@@ -88,7 +95,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     // After authentication, regenerate the labels to include core URL and tenant ID in remote logging labels
     context.read<AppLogger>().updateRemoteLabels();
 
-    final session = context.read<AppBloc>().state.session;
+    _appBloc = context.read<AppBloc>();
+    final session = _appBloc.state.session;
     _signalingModule = WebtritSignalingService(
       config: SignalingServiceConfig(
         coreUrl: session.coreUrl!,
@@ -99,12 +107,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       mode: context.read<IncomingCallTypeRepository>().getIncomingCallType().toSignalingServiceMode(),
     )..connect();
 
-    final appBloc = context.read<AppBloc>();
     final notificationsBloc = context.read<NotificationsBloc>();
 
     _sessionGuard = RouterLogoutSessionGuard(
       performLogout: () {
-        appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.serverRejection));
+        _appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.serverRejection));
       },
       onPreLogout: () {
         final notification = ErrorMessageNotification(_sessionExpiredMessage);
@@ -123,9 +130,17 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   void dispose() {
     _disposeSessionGuard();
     _callkeep.tearDown();
-    unawaited(_signalingModule.dispose());
+    unawaited(_tearDownSignaling());
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  Future<void> _tearDownSignaling() async {
+    try {
+      await _signalingModule.dispose();
+    } catch (e, st) {
+      _logger.warning('_tearDownSignaling: signalingModule.dispose() failed', e, st);
+    }
   }
 
   @override

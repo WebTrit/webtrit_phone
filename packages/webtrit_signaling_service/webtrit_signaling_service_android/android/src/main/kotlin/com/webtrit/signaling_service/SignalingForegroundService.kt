@@ -113,7 +113,7 @@ class SignalingForegroundService : Service() {
         Log.d(TAG, "onTaskRemoved")
         if (StorageDelegate.isPushBound(applicationContext)) {
             Log.d(TAG, "pushBound mode -- stopping service on task removal")
-            stopSelf()
+            gracefulStop { stopSelf() }
         }
     }
 
@@ -157,6 +157,61 @@ class SignalingForegroundService : Service() {
             manager.createNotificationChannel(channel)
         }
         return channelId
+    }
+
+    // ---------------------------------------------------------------------------
+    // Graceful stop
+    // ---------------------------------------------------------------------------
+
+    /// Sends [PSignalingServiceStatus] with [enabled]=false to the background
+    /// isolate so it can disconnect the WebSocket cleanly before the service
+    /// is destroyed. [onComplete] is invoked once the isolate ACKs the signal
+    /// or after [_gracefulStopTimeoutMs] if no ACK arrives.
+    ///
+    /// If no isolate API is wired up (service not yet started or already torn
+    /// down) [onComplete] is called immediately.
+    internal fun gracefulStop(onComplete: () -> Unit) {
+        val api = _isolateFlutterApi
+        if (api == null) {
+            Log.d(TAG, "gracefulStop: no isolate API, stopping immediately")
+            onComplete()
+            return
+        }
+
+        Log.d(TAG, "gracefulStop: signalling isolate to stop")
+
+        var settled = false
+        val mainHandler = Handler(Looper.getMainLooper())
+
+        fun settle(reason: String) {
+            if (settled) return
+            settled = true
+            Log.d(TAG, "gracefulStop: $reason")
+            onComplete()
+        }
+
+        mainHandler.postDelayed(
+            { settle("timeout after ${_gracefulStopTimeoutMs}ms -- forcing stop") },
+            _gracefulStopTimeoutMs,
+        )
+
+        api.onSynchronize(
+            PSignalingServiceStatus(
+                enabled = false,
+                coreUrl = "",
+                tenantId = "",
+                token = "",
+                trustedCertificatesJson = null,
+                incomingCallHandlerHandle = 0L,
+                moduleFactoryHandle = 0L,
+            ),
+        ) { result ->
+            result.onSuccess { settle("isolate ACKed stop signal") }
+            result.onFailure { e ->
+                Log.w(TAG, "gracefulStop: stop signal failed: $e")
+                settle("isolate stop signal failed")
+            }
+        }
     }
 
     // ---------------------------------------------------------------------------
@@ -221,6 +276,9 @@ class SignalingForegroundService : Service() {
         /// Base delay between retries (ms). Actual delay = base * (retryCount + 1).
         /// Attempts fire at ~500ms, ~1000ms, ~1500ms, ~2000ms, ~2500ms.
         private const val _syncRetryBaseDelayMs = 500L
+
+        /// How long [gracefulStop] waits for an isolate ACK before forcing the stop.
+        private const val _gracefulStopTimeoutMs = 3000L
 
         var isRunning = false
 

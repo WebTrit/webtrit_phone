@@ -78,4 +78,11 @@ abstract class SignalingServicePlatform extends PlatformInterface {
 
   /// Stops the service and releases all resources.
   Future<void> dispose();
+
+  /// Stops the native signaling service and clears stored credentials.
+  ///
+  /// Call on explicit user logout to prevent the service from reconnecting
+  /// with a stale token after the session ends. No-op on platforms that
+  /// do not run a persistent background service (e.g. iOS).
+  Future<void> stopService() async {}
 }
