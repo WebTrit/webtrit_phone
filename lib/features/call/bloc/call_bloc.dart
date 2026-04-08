@@ -25,6 +25,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';
