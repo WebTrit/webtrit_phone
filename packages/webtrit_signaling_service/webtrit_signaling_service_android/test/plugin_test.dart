@@ -6,7 +6,7 @@ import 'package:webtrit_signaling_service_android/src/plugin.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  const _stopServiceChannel =
+  const stopServiceChannel =
       'dev.flutter.pigeon.webtrit_signaling_service_android'
       '.PSignalingServiceHostApi.stopService';
 
@@ -18,15 +18,12 @@ void main() {
     });
 
     tearDown(() {
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
-        _stopServiceChannel,
-        null,
-      );
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(stopServiceChannel, null);
     });
 
     test('calls the host API stopService channel', () async {
       var called = false;
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(_stopServiceChannel, (
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(stopServiceChannel, (
         message,
       ) async {
         called = true;
@@ -40,7 +37,7 @@ void main() {
 
     test('does not call stopService channel on dispose', () async {
       var stopCalled = false;
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(_stopServiceChannel, (
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(stopServiceChannel, (
         message,
       ) async {
         stopCalled = true;
