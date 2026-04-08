@@ -99,6 +99,8 @@ class SignalingForegroundIsolateManager {
       // reconnect it now so the external start() call is not silently ignored.
       if (!(_signalingModule?.isConnected ?? false)) {
         _logger.info('SignalingForegroundIsolateManager already started but not connected, reconnecting');
+        _reconnectTimer?.cancel();
+        _reconnectTimer = null;
         _signalingModule?.connect();
       }
       return;

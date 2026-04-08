@@ -198,6 +198,35 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
+  // Manual reconnect cancels pending timer
+  // -------------------------------------------------------------------------
+
+  group('SignalingForegroundIsolateManager -- manual reconnect cancels pending timer', () {
+    test('pending auto-reconnect timer does not fire after manual reconnect via handleStatus(enabled: true)', () async {
+      final module = _FakeSignalingModule();
+      final manager = _makeManager(module);
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      await manager.handleStatus(enabled: true);
+      await Future<void>.delayed(Duration.zero);
+
+      // Disconnect with a delay hint — schedules a 100 ms auto-reconnect timer.
+      module.simulateDisconnectWithDelay(const Duration(milliseconds: 100));
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 1);
+
+      // Before the timer fires, the main isolate triggers a manual reconnect.
+      await manager.handleStatus(enabled: true);
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 2); // reconnected once manually
+
+      // Wait past the timer deadline — it must have been cancelled.
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+      expect(module.connectCount, 2); // still 2, timer did not fire
+    });
+  });
+
+  // -------------------------------------------------------------------------
   // Auto-reconnect via delay hint
   // -------------------------------------------------------------------------
 
