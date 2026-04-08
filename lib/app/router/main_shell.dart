@@ -133,6 +133,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   }
 
   Future<void> _tearDownSignaling() async {
+    // TODO(testability): extract this conditional into a SignalingCleanupCoordinator
+    // class that takes a SignalingModule and an AppBloc so the logout vs. OS-kill
+    // distinction can be unit-tested without building a full widget tree.
     await _signalingModule.dispose();
     if (_appBloc.state.status == AppLifecycleStatus.teardown) {
       await WebtritSignalingService.stopService();
