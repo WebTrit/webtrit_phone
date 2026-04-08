@@ -65,7 +65,7 @@ class ContactTile extends StatelessWidget {
           context.l10n.contacts_ContactTile_inCall(destination),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: contentColor.withOpacity(0.7)),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: contentColor.withValues(alpha: 0.7)),
         );
       }
     }

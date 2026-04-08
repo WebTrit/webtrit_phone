@@ -6,25 +6,34 @@ import 'package:logging/logging.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 import '../models/jsep_value.dart';
-import 'signaling_module.dart';
-import 'signaling_reconnect_controller.dart';
 
-abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
-  IsolateManager({
+/// Manages the signaling session for the CallKeep push-notification background isolate.
+///
+/// Opened once per incoming push notification, connects to the signaling server
+/// to retrieve call state, handles missed-call logging and notifications, and
+/// releases the incoming call service when all work is done.
+/// Never reconnects — the isolate is short-lived by design.
+class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegate {
+  PushNotificationIsolateManager({
     required this.callLogsRepository,
     required this.localPushRepository,
+    required BackgroundPushNotificationService callkeep,
     required this.storage,
     required this.certificates,
     required this.logger,
-  });
+  }) : _pushService = callkeep {
+    _initSignaling();
+    _pushService.setBackgroundServiceDelegate(this);
+  }
 
   final Logger logger;
   final CallLogsRepository callLogsRepository;
@@ -32,13 +41,14 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
   final SecureStorage storage;
   final TrustedCertificates certificates;
 
+  final BackgroundPushNotificationService _pushService;
+
   late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
-  late final SignalingReconnectController _reconnectController;
 
-  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
-  Timer? _connectivityTimeout;
-  bool _networkNone = false;
+  /// Metadata from the incoming push notification.
+  /// Used as a fallback for missed-call display name and call logging.
+  CallkeepIncomingCallMetadata? _metadata;
 
   /// callId -> line index (populated from StateHandshake)
   final Map<String, int> _lines = {};
@@ -46,113 +56,109 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
   /// callId -> IncomingCallEvent (populated from StateHandshake and protocol events)
   final Map<String, IncomingCallEvent> _incomingCallEvents = {};
 
-  /// Requests queued while module is not yet connected.
+  /// Requests queued while the signaling module is not yet connected.
   final List<_PendingRequest> _pendingRequests = [];
+
+  /// Completer resolved when all isolate work is done and [releaseCall] has been called.
+  Completer<void>? _completer;
 
   // Workaround: captures init time as fallback timestamp for call logs.
   final DateTime _initialConnectionTime = DateTime.now();
 
-  /// Abstract methods to abstract the difference between services
-  Future<void> endCallOnService(String callId);
+  // ---------------------------------------------------------------------------
+  // Public API
+  // ---------------------------------------------------------------------------
 
-  Future<void> endCallsOnService();
-
-  /// Initialises the [SignalingModuleIsolateImpl] and starts connectivity monitoring.
-  /// Must be called in the constructor body of the child class.
-  void initSignaling({required bool enableReconnect}) {
-    _signalingModule = SignalingModuleIsolateImpl(
-      coreUrl: storage.readCoreUrl() ?? '',
-      tenantId: storage.readTenantId() ?? '',
-      token: storage.readToken() ?? '',
-      trustedCertificates: certificates,
-      signalingClientFactory: defaultSignalingClientFactory,
-    );
-
-    _reconnectController = SignalingReconnectController(
-      signalingModule: _signalingModule,
-      onConnectionFailed: () => logger.warning('signaling connection failed'),
-      onConnectionPresenceChanged: (isAvailable) => logger.info('signaling presence changed: isAvailable=$isAvailable'),
-      reconnectEnabled: enableReconnect,
-    );
-
-    // Translates SignalingModule events into IsolateManager callbacks.
-    // Reconnect scheduling is fully handled by [_reconnectController].
-    _signalingSubscription = _signalingModule.events.listen((event) {
-      switch (event) {
-        case SignalingHandshakeReceived(:final handshake):
-          _onHandshake(handshake);
-        case SignalingProtocolEvent(:final event):
-          _onProtocolEvent(event);
-        case SignalingConnectionFailed(:final error):
-          _onSignalingError(error);
-        case SignalingConnectionLost(:final error):
-          _onSignalingError(error);
-        default:
-          break;
-      }
-    });
-
-    _monitorConnectivity(enableReconnect: enableReconnect);
+  /// Connects to the signaling server, processes call state for the given push
+  /// notification [metadata], and returns a [Future] that completes after all
+  /// work is done (notifications shown, logs written, native service released).
+  Future<void> run(CallkeepIncomingCallMetadata? metadata) {
+    _metadata = metadata;
+    _completer = Completer<void>();
+    logger.info('run: callId=${metadata?.callId}');
+    _signalingModule.connect();
+    return _completer!.future;
   }
 
+  /// Cancels all timers and pending requests, then disposes the signaling module.
   Future<void> close() async {
-    _connectivityTimeout?.cancel();
-    _reconnectController.dispose();
     for (final pending in _pendingRequests) {
       pending.timeoutTimer.cancel();
       if (!pending.completer.isCompleted) {
-        pending.completer.completeError(StateError('IsolateManager closed'));
+        pending.completer.completeError(StateError('PushNotificationIsolateManager closed'));
       }
     }
     _pendingRequests.clear();
     await _signalingSubscription.cancel();
-    await _connectivitySubscription?.cancel();
     await _signalingModule.dispose();
+    await _releaseCall(_metadata?.callId);
+    _completeWithError(StateError('PushNotificationIsolateManager closed'));
   }
 
-  void _monitorConnectivity({required bool enableReconnect}) {
-    logger.info('Monitoring connectivity...');
+  // ---------------------------------------------------------------------------
+  // CallkeepBackgroundServiceDelegate
+  // ---------------------------------------------------------------------------
 
-    int connectivityNoneCounter = 0;
-    const int maxConnectivityNoneRepeats = 3;
+  @override
+  void performEndCall(String callId) async {
+    try {
+      await _sendRequest(callId, (line, id, tx) => DeclineRequest(transaction: tx, line: line, callId: id));
+    } catch (e) {
+      logger.severe(e);
+    }
+  }
 
-    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((results) async {
-      logger.info('Connectivity changed: $results');
+  @override
+  void performAnswerCall(String callId) async {
+    final hasNetwork = await Connectivity().checkConnectivity().then(
+      (r) => r.isNotEmpty && !r.contains(ConnectivityResult.none),
+    );
+    if (!hasNetwork) {
+      throw Exception('performAnswerCall: no network for callId=$callId');
+    }
+  }
 
-      _connectivityTimeout?.cancel();
+  // ---------------------------------------------------------------------------
+  // Signaling init
+  // ---------------------------------------------------------------------------
 
-      if (results.isEmpty || results.any((r) => r == ConnectivityResult.none)) {
-        _networkNone = true;
-        _reconnectController.notifyNetworkUnavailable();
-        connectivityNoneCounter++;
-        logger.warning('No internet connection detected ($connectivityNoneCounter/$maxConnectivityNoneRepeats)');
+  void _initSignaling() {
+    _signalingModule = SignalingModuleImpl(
+      coreUrl: storage.readCoreUrl() ?? '',
+      tenantId: storage.readTenantId() ?? '',
+      token: storage.readToken() ?? '',
+      trustedCertificates: certificates,
+      connectionTimeout: kSignalingClientConnectionTimeout,
+      reconnectDelay: kSignalingClientReconnectDelay,
+    );
 
-        if (connectivityNoneCounter >= maxConnectivityNoneRepeats) {
-          if (connectivityNoneCounter == maxConnectivityNoneRepeats) {
-            logger.severe('Max connectivity loss reached');
-            _onSignalingError('Max connectivity loss reached');
-          }
-          return;
-        }
-
-        _connectivityTimeout = Timer(const Duration(seconds: 5), () {
-          // Use the current _networkNone state rather than the stale `results`
-          // snapshot captured at the time the timer was created.
-          if (_networkNone) {
-            logger.severe('Internet connection not restored within timeout');
-            _onSignalingError('No internet connection');
-          }
-        });
-      } else {
-        _networkNone = false;
-        connectivityNoneCounter = 0;
-        _reconnectController.notifyNetworkAvailable();
+    _signalingSubscription = _signalingModule.events.listen((event) {
+      switch (event) {
+        case SignalingConnecting():
+          logger.info('Signaling: connecting');
+        case SignalingConnected():
+          logger.info('Signaling: connected');
+        case SignalingHandshakeReceived(:final handshake):
+          _onHandshake(handshake);
+        case SignalingProtocolEvent(:final event):
+          _onProtocolEvent(event);
+        case SignalingDisconnecting():
+          logger.info('Signaling: disconnecting');
+        case SignalingDisconnected(:final code, :final reason, :final knownCode):
+          logger.info('Signaling: disconnected code=$code reason=$reason knownCode=$knownCode');
+        case SignalingConnectionFailed(:final error):
+          _onSignalingError(error);
       }
     });
   }
 
+  // ---------------------------------------------------------------------------
+  // Signaling event handlers
+  // ---------------------------------------------------------------------------
+
   void _onHandshake(StateHandshake handshake) {
     final lines = handshake.lines.whereType<Line>().toList();
+    logger.info('Handshake received: ${lines.length} active line(s)');
 
     _lines.clear();
     _incomingCallEvents.clear();
@@ -161,6 +167,7 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     }
 
     if (_lines.isEmpty) {
+      logger.info('Handshake: no active lines - ending calls');
       _onNoActiveLines();
       return;
     }
@@ -169,15 +176,15 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
       final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
 
       if (callEvent is IncomingCallEvent) {
+        logger.info('Handshake: incoming call found callId=${callEvent.callId}');
         _incomingCallEvents[callEvent.callId] = callEvent;
-        _onIncomingCall(callEvent);
         _executePendingRequests();
         return;
       }
     }
 
+    logger.info('Handshake: active lines present but no IncomingCallEvent found - lines=${_lines.keys}');
     _executePendingRequests();
-    logger.info('Handshake completed: ${_lines.keys}');
   }
 
   void _onProtocolEvent(Event event) {
@@ -185,9 +192,8 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     switch (event) {
       case IncomingCallEvent():
         _incomingCallEvents[event.callId] = event;
-        _onIncomingCall(event);
       case HangupEvent():
-        final incomingEventLog = _findIncomingEventLog(event.callId);
+        final incomingEventLog = _incomingCallEvents[event.callId];
         _onHangupCall(event, (
           direction: CallDirection.incoming,
           number: incomingEventLog?.caller ?? 'unknown',
@@ -204,7 +210,73 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     }
   }
 
-  IncomingCallEvent? _findIncomingEventLog(String callId) => _incomingCallEvents[callId];
+  void _onNoActiveLines() async {
+    logger.info('No active lines: releasing call');
+    if (_metadata == null) {
+      logger.severe('_onNoActiveLines: metadata is null, cannot release call');
+      _complete();
+      return;
+    }
+    final event = HangupEvent(callId: _metadata!.callId, line: -1, reason: 'Missed', code: -1);
+    final call = (
+      direction: CallDirection.incoming,
+      number: _metadata!.handle!.value,
+      video: _metadata!.hasVideo,
+      username: _metadata!.displayName,
+      createdTime: DateTime.now(),
+      acceptedTime: null,
+      hungUpTime: DateTime.now(),
+    );
+    await _showMissedCallNotification(event, call);
+    await _logCall(call);
+    await _releaseCall(_metadata!.callId);
+    _complete();
+  }
+
+  void _onUnregistered(UnregisteredEvent event) async {
+    try {
+      final callId = _metadata?.callId;
+      if (callId == null) {
+        logger.severe('_onUnregistered: metadata is null, cannot release call');
+        _complete();
+        return;
+      }
+      await _releaseCall(callId);
+    } catch (e) {
+      logger.severe(e);
+    } finally {
+      _complete();
+    }
+  }
+
+  void _onSignalingError(Object error) async {
+    logger.severe('Signaling connection failed: $error - releasing call');
+    try {
+      final callId = _metadata?.callId;
+      if (callId == null) {
+        logger.severe('_onSignalingError: metadata is null, cannot release call');
+        _complete();
+        return;
+      }
+      await _releaseCall(callId);
+    } catch (e) {
+      logger.severe(e);
+    } finally {
+      _complete();
+    }
+  }
+
+  void _onHangupCall(HangupEvent event, NewCall call) async {
+    logger.info('Hangup event: callId=${event.callId} reason=${event.reason}');
+    await _showMissedCallNotification(event, call);
+    await _logCall(call);
+    await _releaseCall(event.callId);
+    _complete();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Pending request queue
+  // ---------------------------------------------------------------------------
 
   void _executePendingRequests() {
     logger.info('Executing ${_pendingRequests.length} pending requests...');
@@ -273,36 +345,34 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     await future;
   }
 
-  // Callbacks - may be overridden by subclasses.
+  // ---------------------------------------------------------------------------
+  // Native release
+  // ---------------------------------------------------------------------------
 
-  void _onIncomingCall(IncomingCallEvent event) {}
-
-  void _onNoActiveLines() async {
-    await endCallsOnService();
-  }
-
-  void _onUnregistered(UnregisteredEvent event) async {
+  Future<void> _releaseCall(String? callId) async {
+    if (callId == null) return;
     try {
-      await endCallsOnService();
+      await _pushService.releaseCall(callId);
     } catch (e) {
-      logger.severe(e);
+      logger.severe('_releaseCall failed: $e');
     }
   }
 
-  void _onSignalingError(Object error) async {
-    try {
-      await endCallsOnService();
-    } catch (e) {
-      logger.severe(e);
+  void _complete() {
+    if (_completer != null && !_completer!.isCompleted) {
+      _completer!.complete();
     }
   }
 
-  void _onHangupCall(HangupEvent event, NewCall call) async {
-    logger.info('Hangup event: $event');
-    await _showMissedCallNotification(event, call);
-    await _logCall(call);
-    await endCallOnService(event.callId);
+  void _completeWithError(Object error) {
+    if (_completer != null && !_completer!.isCompleted) {
+      _completer!.completeError(error);
+    }
   }
+
+  // ---------------------------------------------------------------------------
+  // Notifications and logging
+  // ---------------------------------------------------------------------------
 
   Future<void> _logCall(NewCall call) async {
     try {
@@ -328,172 +398,19 @@ abstract class IsolateManager implements CallkeepBackgroundServiceDelegate {
     }
   }
 
+  /// Returns the best available display name for the missed-call notification.
+  ///
+  /// Prefers the signaling caller name; falls back to push metadata display
+  /// name if signaling did not provide one.
   String? _getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
-    return call.username;
-  }
+    final signalingName = call.username;
+    if (signalingName?.isNotEmpty == true) return signalingName;
 
-  @override
-  void performEndCall(String callId) async {
-    try {
-      // Do not early-return when _lines is empty - _sendRequest queues the
-      // request so it is executed once the handshake arrives (e.g. user declines
-      // from the lock screen before the signaling handshake completes).
-      await _sendRequest(callId, (line, id, tx) => DeclineRequest(transaction: tx, line: line, callId: id));
-    } catch (e) {
-      logger.severe(e);
-    }
-  }
-}
-
-class PushNotificationIsolateManager extends IsolateManager {
-  PushNotificationIsolateManager({
-    required super.callLogsRepository,
-    required super.localPushRepository,
-    required BackgroundPushNotificationService callkeep,
-    required super.storage,
-    required super.certificates,
-    required super.logger,
-  }) : _pushService = callkeep {
-    initSignaling(enableReconnect: false);
-    _pushService.setBackgroundServiceDelegate(this);
-  }
-
-  /// The service for interacting with the isolate that was launched by an incoming push notification.
-  final BackgroundPushNotificationService _pushService;
-
-  /// The metadata of the incoming call.
-  /// This is used to display the caller's name in the missed call notification.
-  CallkeepIncomingCallMetadata? _metadata;
-
-  Future<void> launchSignaling(CallkeepIncomingCallMetadata? metadata) async {
-    _metadata = metadata;
-    logger.info('Starting background call event service: $metadata');
-    _signalingModule.connect();
-  }
-
-  @override
-  Future<void> endCallOnService(String callId) {
-    return _pushService.endCall(callId);
-  }
-
-  @override
-  Future<void> endCallsOnService() {
-    return _pushService.endCalls();
-  }
-
-  @override
-  void performAnswerCall(String callId) async {
-    final hasNetwork = await Connectivity().checkConnectivity().then(
-      (r) => r.isNotEmpty && !r.contains(ConnectivityResult.none),
-    );
-    if (!hasNetwork) {
-      throw Exception('Not connected');
-    }
-  }
-
-  @override
-  void _onNoActiveLines() async {
-    if (_metadata != null) {
-      final event = HangupEvent(callId: _metadata!.callId, line: -1, reason: 'Missed', code: -1);
-      final call = (
-        direction: CallDirection.incoming,
-        number: _metadata!.handle!.value,
-        video: _metadata!.hasVideo,
-        username: _metadata!.displayName,
-        createdTime: DateTime.now(),
-        acceptedTime: null,
-        hungUpTime: DateTime.now(),
-      );
-      await _showMissedCallNotification(event, call);
-      await _logCall(call);
-    }
-    await endCallsOnService();
-  }
-
-  @override
-  String? _getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
-    final signalingName = super._getDisplayNameForMissedCall(event, call);
-    if (signalingName?.isNotEmpty == true) {
-      return signalingName;
-    }
-
-    if (_metadata?.callId == event.callId && _metadata!.displayName?.isNotEmpty == true) {
+    if (_metadata?.callId == event.callId && (_metadata!.displayName?.isNotEmpty ?? false)) {
       return _metadata!.displayName;
     }
 
     return signalingName;
-  }
-}
-
-class SignalingForegroundIsolateManager extends IsolateManager {
-  SignalingForegroundIsolateManager({
-    required super.callLogsRepository,
-    required super.localPushRepository,
-    required BackgroundSignalingService callkeep,
-    required super.storage,
-    required super.certificates,
-    required super.logger,
-  }) : _signalingService = callkeep {
-    initSignaling(enableReconnect: true);
-    _signalingService.setBackgroundServiceDelegate(this);
-  }
-
-  final BackgroundSignalingService _signalingService;
-
-  Future<void> handleLifecycleStatus(CallkeepServiceStatus status) async {
-    logger.info('onStart: $status');
-
-    final mainSignalingStatus =
-        (status.mainSignalingStatus == CallkeepSignalingStatus.connecting ||
-        status.mainSignalingStatus == CallkeepSignalingStatus.connect);
-
-    final isAppInBackground =
-        (status.lifecycleEvent == CallkeepLifecycleEvent.onStop ||
-        status.lifecycleEvent == CallkeepLifecycleEvent.onDestroy);
-
-    if (isAppInBackground && !mainSignalingStatus) {
-      _signalingModule.connect();
-    } else {
-      await _signalingModule.disconnect();
-    }
-  }
-
-  @override
-  Future<void> endCallOnService(String callId) {
-    return _signalingService.endCall(callId);
-  }
-
-  @override
-  Future<void> endCallsOnService() {
-    return _signalingService.endCalls();
-  }
-
-  @override
-  void _onSignalingError(Object error) async {
-    try {
-      logger.info('Signaling error: $error');
-    } catch (e) {
-      logger.severe(e);
-    }
-  }
-
-  @override
-  void _onIncomingCall(IncomingCallEvent event) {
-    try {
-      _signalingService.incomingCall(
-        event.callId,
-        CallkeepHandle.number(event.caller),
-        displayName: event.callerDisplayName,
-        hasVideo: JsepValue.fromOptional(event.jsep)?.hasVideo ?? false,
-      );
-    } catch (e) {
-      logger.severe(e);
-    }
-  }
-
-  @override
-  void performAnswerCall(String callId) {
-    logger.info('Answering call: $callId');
   }
 }
 

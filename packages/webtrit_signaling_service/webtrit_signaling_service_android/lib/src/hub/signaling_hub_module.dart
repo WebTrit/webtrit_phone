@@ -1,0 +1,111 @@
+import 'dart:async';
+
+import 'package:logging/logging.dart';
+import 'package:webtrit_signaling/webtrit_signaling.dart';
+import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
+
+import 'signaling_hub_client.dart';
+
+final _logger = Logger('SignalingHubModule');
+
+/// [SignalingModule] implementation backed by a [SignalingHubClient].
+///
+/// Used by the main isolate when [SignalingHub] is already running in the
+/// foreground-service isolate. Routes all execute calls through the hub's
+/// WebSocket rather than opening an additional connection.
+///
+/// [connect] and [disconnect] are no-ops -- the hub owns the connection
+/// lifecycle. [dispose] unsubscribes from the hub and releases resources.
+///
+/// ## Two-level buffering
+///
+/// [SignalingHub] holds a session buffer and replays it to each new
+/// [SignalingHubClient] on subscribe (isolate-boundary replay). This module
+/// holds a second [SignalingEventBuffer] for same-isolate consumers of
+/// [events]: a caller may subscribe to [events] after the hub's replay has
+/// already been forwarded through [_hubClient], so the local buffer is
+/// needed to serve those late subscribers.
+///
+/// Both buffers apply identical rules (cleared on [SignalingConnecting],
+/// [SignalingProtocolEvent] items never included) and receive events in the
+/// same order, so they cannot diverge.
+class SignalingHubModule implements SignalingModule {
+  SignalingHubModule(this._hubClient) {
+    _sub = _hubClient.events.listen(_onHubEvent);
+    _hubClient.start();
+    _logger.fine('SignalingHubModule created, consumerId=${_hubClient.consumerId}');
+  }
+
+  final SignalingHubClient _hubClient;
+
+  bool _connected = false;
+  StreamSubscription<SignalingModuleEvent>? _sub;
+
+  final _eventBuffer = SignalingEventBuffer();
+  final _controller = StreamController<SignalingModuleEvent>.broadcast();
+
+  @override
+  Stream<SignalingModuleEvent> get events {
+    return Stream.multi((sink) {
+      final sub = _controller.stream.listen(sink.add, onError: sink.addError, onDone: sink.close);
+      sink.onCancel = sub.cancel;
+      for (final event in _eventBuffer.snapshot) {
+        sink.add(event);
+      }
+    }, isBroadcast: true);
+  }
+
+  @override
+  bool get isConnected => _connected;
+
+  @override
+  Future<void>? execute(Request request) {
+    if (!_connected) return null;
+    return _hubClient.execute(request);
+  }
+
+  /// No-op -- the hub owns the WebSocket connection lifecycle.
+  @override
+  void connect() {}
+
+  /// No-op -- the hub owns the WebSocket connection lifecycle.
+  @override
+  Future<void> disconnect() async {}
+
+  @override
+  Future<void> dispose() async {
+    await _sub?.cancel();
+    await _hubClient.dispose();
+    await _controller.close();
+    _eventBuffer.clear();
+    _logger.fine('SignalingHubModule disposed');
+  }
+
+  // ---------------------------------------------------------------------------
+  // Internal
+  // ---------------------------------------------------------------------------
+
+  void _onHubEvent(SignalingModuleEvent event) {
+    switch (event) {
+      case SignalingConnected():
+        _connected = true;
+        _logger.info('hub event: connected');
+      case SignalingDisconnected(:final code, :final reason):
+        _connected = false;
+        _logger.info('hub event: disconnected code=$code reason=$reason');
+      case SignalingConnectionFailed(:final error, :final isRepeated):
+        _connected = false;
+        _logger.warning('hub event: connection failed isRepeated=$isRepeated -- $error');
+      case SignalingHandshakeReceived(:final handshake):
+        _logger.info('hub event: handshake lines=${handshake.lines}');
+      case SignalingProtocolEvent(:final event):
+        _logger.fine('hub event: protocol ${event.runtimeType}');
+      default:
+        _logger.fine('hub event: ${event.runtimeType}');
+    }
+
+    if (_controller.isClosed) return;
+    _eventBuffer.onEvent(event);
+    _controller.add(event);
+  }
+}
