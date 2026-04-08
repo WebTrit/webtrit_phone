@@ -190,37 +190,79 @@ Module knows:                     Consumer knows:
 Which disconnect code arrived  →  Whether the app is in the foreground
 What it means for the protocol →  Whether a network connection is available
 How long to wait (delay hint)  →  Whether there are active calls
-                                  Whether the BLoC is still alive
+                                  Whether the controller is still alive
 ```
 
-**CallBloc** — full guard chain:
+**`CallBloc`** delegates all reconnect scheduling and failure-notification to
+`SignalingReconnectController`. The subscription only maps events to state — no reconnect
+logic inline.
+
+**`SignalingForegroundIsolateManager`** manages its own lightweight timer directly:
+
+```dart
+case SignalingConnectionFailed(:final error, :final recommendedReconnectDelay):
+  _scheduleReconnect(recommendedReconnectDelay);
+case SignalingDisconnected(:final recommendedReconnectDelay):
+  if (recommendedReconnectDelay != null) _scheduleReconnect(recommendedReconnectDelay);
+```
+
+**`PushNotificationIsolateManager`** never reconnects — the isolate is short-lived by design.
+On `SignalingConnectionFailed` it calls `_onSignalingError(error)` which releases the call and
+completes the run future with an error.
+
+---
+
+## SignalingReconnectController
+
+Centralises all reconnect logic and connection-failure notification decisions for `CallBloc`.
+Lives in `lib/features/call/services/signaling_reconnect_controller.dart`.
+
+**Constructor:**
+
+```dart
+SignalingReconnectController({
+  required SignalingModule signalingModule,
+  void Function()? onConnectionFailed,
+  void Function(bool isAvailable)? onConnectionPresenceChanged,
+  int notifyAfterConsecutiveFailures = 2,  // notify after this many consecutive failures
+  bool reconnectEnabled = true,
+})
+```
+
+**Lifecycle / connectivity notification API:**
+
+| Method | Effect |
+|--------|--------|
+| `notifyAppResumed()` | `_appActive = true`, schedule fast reconnect |
+| `notifyAppPaused({hasActiveCalls})` | if no active calls: `_appActive = false`, disconnect |
+| `notifyForceReconnect()` | schedule fast reconnect with `force = true` |
+| `notifyHasActiveCalls({hasActiveCalls})` | update `_hasActiveCalls`; disconnect if empty + backgrounded |
+| `notifyNetworkAvailable()` | `_networkActive = true`, schedule fast reconnect |
+| `notifyNetworkUnavailable()` | `_networkActive = false`, disconnect, emit `presence = false` |
+| `dispose()` | cancel timer + cancel subscription |
+
+**Guard chain in `_scheduleReconnect`:**
 
 ```dart
 void _scheduleReconnect(Duration delay, {bool force = false}) {
-  _signalingClientReconnectTimer?.cancel();
-  _signalingClientReconnectTimer = Timer(delay, () {
-    if (isClosed)                     return; // BLoC was closed during delay
-    if (!appActive && !force)         return; // app is backgrounded
-    if (!connectionActive && !force)  return; // no network
-    if (signalingRemains && !force)   return; // already connected (wifi→mobile)
-    _signalingModule.connect();
+  if (!_reconnectEnabled) return;
+  _reconnectTimer = Timer(delay, () {
+    if (_disposed)                                 return;
+    if (!force && !_appActive && !_hasActiveCalls) return; // backgrounded and no active calls
+    if (!force && !_networkActive)                 return; // no network
+    if (!force && _module.isConnected)             return; // already connected (e.g. wifi→mobile)
+    _module.connect();
   });
 }
 ```
 
-**IsolateManager** — simpler:
+**Failure notification logic (`_onEvent`):**
 
-```dart
-case SignalingDisconnected(:final recommendedReconnectDelay):
-  if (enableReconnect && recommendedReconnectDelay != null && !_networkNone) {
-    _signalingReconnectTimer?.cancel();
-    _signalingReconnectTimer = Timer(recommendedReconnectDelay, () {
-      if (!_signalingModule.isConnected) _signalingModule.connect();
-    });
-  }
-```
-
-`PushNotificationIsolateManager` uses `enableReconnect: false` — never reconnects.
+- `SignalingConnected` → reset `_consecutiveFailures`, `_wasConnected = true`, emit `presence = true`
+- `SignalingConnectionFailed` when `_wasConnected` was true → notify immediately (established session dropped), schedule reconnect
+- `SignalingConnectionFailed` otherwise → increment counter; notify only when counter reaches `_notifyThreshold` (default 2), schedule reconnect
+- `SignalingDisconnected` with `recommendedReconnectDelay != null` → notify immediately (unexpected drop), schedule reconnect
+- `SignalingDisconnected` with `recommendedReconnectDelay == null` (intentional) → no action
 
 ---
 
@@ -228,24 +270,33 @@ case SignalingDisconnected(:final recommendedReconnectDelay):
 
 ### CallBloc (main isolate)
 
-Subscribes in constructor. Maps `SignalingModuleEvent` to internal BLoC events:
+Creates `SignalingReconnectController` in the constructor and subscribes separately to map
+`SignalingModuleEvent` to internal BLoC events. Reconnect scheduling and failure notifications
+are fully handled by `_reconnectController`.
 
 ```dart
+_reconnectController = SignalingReconnectController(
+  signalingModule: signalingModule,
+  onConnectionFailed: () => submitNotification(const SignalingConnectFailedNotification()),
+  onConnectionPresenceChanged: (isAvailable) =>
+      _logger.info('signaling presence changed: isAvailable=$isAvailable'),
+);
+
+// Translates SignalingModule events into BLoC state-transition events.
+// Reconnect scheduling and notification decisions are fully handled by
+// [_reconnectController] — this listener only drives [CallState] changes.
 _signalingSubscription = _signalingModule.events.listen((event) {
   switch (event) {
     case SignalingConnecting():
       add(const _SignalingClientEvent.connecting());
     case SignalingConnected():
       add(const _SignalingClientEvent.connected());
-    case SignalingConnectionFailed(:final error, :final isRepeated, :final recommendedReconnectDelay):
-      if (!isRepeated) submitNotification(const SignalingConnectFailedNotification());
+    case SignalingConnectionFailed(:final error):
       add(_SignalingClientEvent.failed(error));
-      _scheduleReconnect(recommendedReconnectDelay);
     case SignalingDisconnecting():
       add(const _SignalingClientEvent.disconnecting());
-    case SignalingDisconnected(:final code, :final reason, :final recommendedReconnectDelay):
+    case SignalingDisconnected(:final code, :final reason):
       add(_SignalingClientEvent.disconnected(code, reason));
-      if (recommendedReconnectDelay != null) _scheduleReconnect(recommendedReconnectDelay);
     case SignalingHandshakeReceived(:final handshake):
       _handleHandshakeReceived(handshake);
     case SignalingProtocolEvent(:final event):
@@ -256,23 +307,33 @@ _signalingSubscription = _signalingModule.events.listen((event) {
 
 ### IsolateManager (background isolates)
 
-Subscribes in `initSignaling()`. Handles only what background isolates need:
+**`PushNotificationIsolateManager`** — never reconnects. Opened once per incoming push
+notification, connects to signaling, handles the call, then releases.
+
+Public API: `run(CallkeepIncomingCallMetadata? metadata) → Future<void>` / `close() → Future<void>`.
 
 ```dart
 _signalingSubscription = _signalingModule.events.listen((event) {
   switch (event) {
+    case SignalingConnecting():
+      logger.info('Signaling: connecting');
+    case SignalingConnected():
+      logger.info('Signaling: connected');
     case SignalingHandshakeReceived(:final handshake):
       _onHandshake(handshake);       // populates _lines, _incomingCallEvents
     case SignalingProtocolEvent(:final event):
       _onProtocolEvent(event);       // IncomingCallEvent, HangupEvent, UnregisteredEvent
-    case SignalingConnectionFailed(:final error, :final recommendedReconnectDelay):
-      _onSignalingError(error);
-      // reconnect if enabled and network is available
-    case SignalingDisconnected(:final recommendedReconnectDelay):
-      // reconnect if enabled, delay != null, and network is available
+    case SignalingConnectionFailed(:final error):
+      _onSignalingError(error);      // logs and releases call — never reconnects
+    case SignalingDisconnected():
+      logger.info('Signaling: disconnected');
   }
 });
 ```
+
+**`SignalingForegroundIsolateManager`** (Android background service) — manages its own
+lightweight reconnect timer. Reconnects after `SignalingConnectionFailed` and unexpected
+`SignalingDisconnected` while `_started == true`.
 
 ---
 
@@ -290,11 +351,18 @@ MainShellState.initState()
          │
          │  Stream<SignalingModuleEvent>  (replay buffer → live events)
          │
+         ├──► SignalingReconnectController  (owns reconnect timer + failure notifications)
+         │      fed by: CallBloc lifecycle/network event handlers
+         │      drives: onConnectionFailed → submitNotification(SignalingConnectFailedNotification)
+         │               onConnectionPresenceChanged → persistent UI indicator
+         │
          ├──► CallBloc                  (main isolate)
-         │      subscribes in constructor
+         │      subscribes in constructor — pure state mapping, no reconnect logic
          │      commands: connect() / disconnect() / module.execute(request)
          │
          └──► background isolates (via plugin foreground service on Android)
+               PushNotificationIsolateManager — no reconnect, run()/close() API
+               SignalingForegroundIsolateManager — own timer, reconnects while started
 
 
 WebtritSignalingClient  ←  owned by SignalingModuleImpl  (1 instance at a time)
@@ -315,6 +383,8 @@ WebtritSignalingClient  ←  owned by SignalingModuleImpl  (1 instance at a time
 | `SignalingManager` | `lib/common/signaling_manager.dart` |
 | `export 'signaling_manager.dart'` | `lib/common/common.dart` |
 | `coreUrl`, `tenantId`, `token`, `trustedCertificates` fields | `CallBloc` |
+| `_scheduleReconnect(Duration, {bool force})` inline method | `CallBloc` — extracted to `SignalingReconnectController` |
+| `_signalingClientReconnectTimer` field | `CallBloc` — moved to `SignalingReconnectController` |
 
 ---
 
@@ -327,3 +397,4 @@ WebtritSignalingClient  ←  owned by SignalingModuleImpl  (1 instance at a time
 | `recommendedReconnectDelay` in `SignalingConnectionFailed` | **Yes.** Consistent with `SignalingDisconnected`. Consumer never hardcodes delays. |
 | Replay buffer | **Manual `List` + `connect()` clear.** `rxdart` is in the project but `ReplaySubject` has no `clear()` in v0.28. A manual buffer gives full control with no external dependency. |
 | Early connect (before CallBloc) | **`initState()` in `MainShellState`.** Module connects while the widget tree is built. Late subscribers get the full session history via the replay buffer. |
+| Reconnect extraction | **`SignalingReconnectController`.** All reconnect scheduling, failure counting, and connection-presence tracking extracted from `CallBloc` into a dedicated class. `CallBloc` subscription is pure state mapping with no reconnect logic inline. |
