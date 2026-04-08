@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'dart:ui' show PluginUtilities;
+import 'package:flutter/services.dart' show BinaryMessenger;
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart' show visibleForTesting;
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
@@ -46,7 +48,12 @@ final _logger = Logger('WebtritSignalingServiceAndroid');
 ///        - pushBound: onTaskRemoved -> stopSelf()
 ///        - persistent: service keeps running; BootReceiver restarts after reboot.
 class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
-  WebtritSignalingServiceAndroid._();
+  WebtritSignalingServiceAndroid._({BinaryMessenger? binaryMessenger})
+    : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger);
+
+  @visibleForTesting
+  WebtritSignalingServiceAndroid.forTesting({BinaryMessenger? binaryMessenger})
+    : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger);
 
   static WebtritSignalingServiceAndroid? _instance;
 
@@ -56,7 +63,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     SignalingServicePlatform.instance = _instance!;
   }
 
-  final _hostApi = PSignalingServiceHostApi();
+  final PSignalingServiceHostApi _hostApi;
 
   StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
 
