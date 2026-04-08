@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter/widgets.dart' show WidgetsFlutterBinding;
 import 'package:logging/logging.dart';
 
@@ -17,6 +19,17 @@ final _logger = Logger('SignalingEntryPoint');
 /// [PSignalingServiceHostApi.initializeServiceCallback].
 @pragma('vm:entry-point')
 void signalingServiceCallbackDispatcher() {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    developer.log(
+      record.message,
+      name: record.loggerName,
+      level: record.level.value,
+      error: record.error,
+      stackTrace: record.stackTrace,
+    );
+  });
+
   _logger.info('signalingServiceCallbackDispatcher: background isolate starting');
   WidgetsFlutterBinding.ensureInitialized();
   PSignalingServiceFlutterApi.setUp(_SignalingFlutterApiHandler());
