@@ -211,6 +211,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   @override
   Future<void> stopService() async {
+    _logger.info('stopService');
     await _hostApi.stopService();
   }
 

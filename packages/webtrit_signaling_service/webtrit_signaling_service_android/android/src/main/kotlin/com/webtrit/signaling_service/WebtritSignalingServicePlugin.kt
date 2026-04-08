@@ -84,7 +84,12 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
     override fun stopService() {
         Log.d(TAG, "stopService")
         StorageDelegate.clearConnectionConfig(context)
-        SignalingForegroundService.stop(context)
+        val service = SignalingForegroundService.instance
+        if (service != null) {
+            service.gracefulStop { SignalingForegroundService.stop(context) }
+        } else {
+            SignalingForegroundService.stop(context)
+        }
     }
 
     override fun notifyIsolateReady() {
