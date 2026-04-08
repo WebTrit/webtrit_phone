@@ -86,11 +86,10 @@ class SignalingRequestQueue {
   ]) async {
     try {
       await execute(request);
-    } on WebtritSignalingTransactionTimeoutException catch (error, stackTrace) {
-      if (!isActive() || retryCount >= maxRetryCount) {
-        Error.throwWithStackTrace(error, stackTrace);
-      }
-      _logger.warning('_executeWithRetry timeout, retrying... (retry #$retryCount)', error, stackTrace);
+    } on WebtritSignalingTransactionTimeoutException catch (error) {
+      if (!isActive() || retryCount >= maxRetryCount) rethrow;
+
+      _logger.warning('_executeWithRetry retrying ${error.transactionId}, (retry #$retryCount)/$maxRetryCount');
       return _executeWithRetry(execute, request, isActive, retryCount + 1);
     }
   }
