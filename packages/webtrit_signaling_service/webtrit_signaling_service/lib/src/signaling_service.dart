@@ -161,4 +161,10 @@ class WebtritSignalingService implements SignalingModule {
 
   /// Switches the service lifecycle mode without restarting the connection.
   static Future<void> updateMode(SignalingServiceMode mode) => SignalingServicePlatform.instance.updateMode(mode);
+
+  /// Stops the native signaling service and clears stored credentials.
+  ///
+  /// Call on explicit user logout to prevent the service from reconnecting
+  /// with a stale token after the session ends. No-op on iOS.
+  static Future<void> stopService() => SignalingServicePlatform.instance.stopService();
 }

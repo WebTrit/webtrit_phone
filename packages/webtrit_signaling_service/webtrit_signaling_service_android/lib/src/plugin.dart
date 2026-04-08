@@ -202,10 +202,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     await _hostApi.saveModuleFactory(handle.toRawHandle());
   }
 
-  /// Stops the foreground service and clears stored credentials.
-  ///
-  /// Call this on explicit user logout so the service does not keep
-  /// reconnecting with stale tokens after the session ends.
+  @override
   Future<void> stopService() async {
     await _hostApi.stopService();
   }
