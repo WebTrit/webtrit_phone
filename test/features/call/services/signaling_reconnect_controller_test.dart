@@ -450,7 +450,8 @@ void main() {
         controller.notifyAppPaused(hasActiveCalls: false);
         controller.notifyForceReconnect();
 
-        async.elapse(kSignalingClientFastReconnectDelay);
+        // Must fire immediately, not after kSignalingClientFastReconnectDelay.
+        async.elapse(Duration.zero);
         expect(module.connectCalls, 1);
       });
     });
@@ -466,8 +467,112 @@ void main() {
         controller.notifyNetworkUnavailable();
         controller.notifyForceReconnect();
 
-        async.elapse(kSignalingClientFastReconnectDelay);
+        // Must fire immediately, not after kSignalingClientFastReconnectDelay.
+        async.elapse(Duration.zero);
         expect(module.connectCalls, 1);
+      });
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Force reconnect — timing
+  //
+  // notifyForceReconnect is called when an active call needs signaling urgently
+  // (outgoing call start, incoming call answer from push). A 1-second delay
+  // before reconnect makes calls placed immediately after screen unlock appear
+  // to hang for ~2 s before the server receives the SDP offer.
+  //
+  // -------------------------------------------------------------------------
+
+  group('SignalingReconnectController - notifyForceReconnect timing', () {
+    test('reconnects immediately (Duration.zero), not after kSignalingClientFastReconnectDelay', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        module.isConnected = false;
+        final controller = SignalingReconnectController(signalingModule: module);
+        addTearDown(controller.dispose);
+
+        controller.notifyForceReconnect();
+
+        // connect() must be scheduled for the next event-loop iteration via a
+        // Duration.zero timer, not after the full kSignalingClientFastReconnectDelay = 1 s.
+        expect(module.connectCalls, 0, reason: 'timer not yet fired synchronously');
+        async.elapse(Duration.zero);
+        expect(module.connectCalls, 1);
+      });
+    });
+
+    // Full screen-unlock → immediate-call scenario.
+    //
+    // Reproduces the sequence from the bug log:
+    //   screen lock  → signaling intentionally disconnected
+    //   screen unlock → notifyAppResumed schedules 1 s reconnect timer
+    //   user taps    → notifyForceReconnect must NOT reset the timer to another
+    //                   full second; it must connect NOW.
+    test('screen unlock → immediate call: connect fires before kSignalingClientFastReconnectDelay', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        module.isConnected = false;
+        final controller = SignalingReconnectController(signalingModule: module);
+        addTearDown(controller.dispose);
+
+        // Screen locked — signaling disconnects intentionally (code 1000, no reconnect).
+        controller.notifyAppPaused(hasActiveCalls: false);
+
+        // Screen unlocked — schedules fast reconnect in kSignalingClientFastReconnectDelay.
+        controller.notifyAppResumed();
+
+        // User taps a recent call ~200 ms after unlock,
+        // well before the notifyAppResumed timer would fire.
+        async.elapse(const Duration(milliseconds: 200));
+        expect(module.connectCalls, 0, reason: 'notifyAppResumed 1 s timer not yet elapsed');
+
+        // Outgoing call started — signaling needed urgently.
+        controller.notifyForceReconnect();
+
+        // connect() must fire immediately, not after another full second.
+        async.elapse(Duration.zero);
+        expect(module.connectCalls, 1, reason: 'force reconnect for an outgoing call must be immediate');
+
+        // The notifyAppResumed timer was cancelled by notifyForceReconnect;
+        // no second connect() call should happen when that duration elapses.
+        async.elapse(kSignalingClientFastReconnectDelay);
+        expect(module.connectCalls, 1, reason: 'cancelled notifyAppResumed timer must not fire separately');
+      });
+    });
+
+    // Verifies that reducing the delay to Duration.zero does NOT re-introduce
+    // spurious "connection failed" toasts on transient failures.
+    //
+    // Toasts are suppressed by the consecutive-failure threshold (≥ 2),
+    // which is independent of the reconnect delay.
+    test('first connect failure after immediate reconnect does not trigger toast', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        module.isConnected = false;
+        int notifyCount = 0;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: () => notifyCount++,
+          notifyAfterConsecutiveFailures: 2,
+        );
+        addTearDown(controller.dispose);
+
+        // Screen unlock + immediate outgoing call.
+        controller.notifyAppPaused(hasActiveCalls: false);
+        controller.notifyAppResumed();
+        controller.notifyForceReconnect();
+        async.elapse(Duration.zero);
+        expect(module.connectCalls, 1);
+
+        // Transient DNS failure on the first attempt (e.g. post-unlock glitch).
+        module.emit(_failed());
+
+        // Toast must NOT appear — only 1 failure, threshold is 2.
+        expect(notifyCount, 0, reason: 'spurious toast must be suppressed on first failure');
       });
     });
   });
