@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:webtrit_phone/app/keys.dart';
+import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -11,6 +12,8 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 export 'call_actions_style.dart';
 export 'call_actions_styles.dart';
+
+final _logger = Logger('CallActions');
 
 class CallActions extends StatefulWidget {
   const CallActions({
@@ -377,9 +380,17 @@ class _CallActionsState extends State<CallActions> {
                   final speakerDevice = widget.availableAudioDevices.getSpeaker;
                   final earpieceDevice = widget.availableAudioDevices.getEarpiece;
                   if (speakerOn == true) {
-                    if (earpieceDevice != null) onAudioDeviceChanged?.call(earpieceDevice);
+                    if (earpieceDevice != null) {
+                      onAudioDeviceChanged?.call(earpieceDevice);
+                    } else {
+                      _logger.warning('Earpiece device not found while trying to disable speakerphone');
+                    }
                   } else {
-                    if (speakerDevice != null) onAudioDeviceChanged?.call(speakerDevice);
+                    if (speakerDevice != null) {
+                      onAudioDeviceChanged?.call(speakerDevice);
+                    } else {
+                      _logger.warning('Speaker device not found while trying to enable speakerphone');
+                    }
                   }
                 },
                 statesController: _speakerStatesController..update(WidgetState.selected, speakerOn ?? false),

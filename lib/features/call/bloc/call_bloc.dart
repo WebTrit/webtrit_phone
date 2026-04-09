@@ -1679,6 +1679,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         final speakerDevice = state.availableAudioDevices.getSpeaker;
         if (speakerDevice != null) {
           add(CallControlEvent.audioDeviceSet(callId, speakerDevice));
+        } else {
+          _logger.warning(
+            '_onCallControlEventBlindTransferSubmitted: speaker was on before minimize but its not available now',
+          );
         }
       }
 
@@ -2508,6 +2512,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         final speakerDevice = state.availableAudioDevices.getSpeaker;
         if (speakerDevice != null) {
           add(CallControlEvent.audioDeviceSet(currentCall.callId, speakerDevice));
+        } else {
+          _logger.warning(
+            '_onCallControlEventBlindTransferSubmitted: speaker was on before minimize but its not available now',
+          );
         }
       }
     } else {
