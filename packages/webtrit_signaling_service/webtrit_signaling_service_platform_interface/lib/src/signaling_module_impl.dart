@@ -113,6 +113,13 @@ class SignalingModuleImpl implements SignalingModule {
   bool _disposed = false;
   bool _connecting = false;
 
+  /// Monotonically increasing counter incremented by every [connect] and
+  /// [disconnect] call. [_connectAsync] captures the current value at the
+  /// moment it starts and checks it after every suspension point: if the
+  /// counter has changed the connect attempt is stale and exits without
+  /// emitting events or setting [_client].
+  int _generation = 0;
+
   /// Completer resolved by [_onDisconnect] after a graceful [disconnect] call.
   Completer<void>? _disconnectAck;
 
@@ -182,12 +189,16 @@ class SignalingModuleImpl implements SignalingModule {
   @override
   void connect() {
     if (_disposed || _connecting) return;
+    final gen = ++_generation;
     _eventBuffer.clear();
-    unawaited(_connectAsync());
+    unawaited(_connectAsync(gen));
   }
 
   @override
   Future<void> disconnect() async {
+    ++_generation; // invalidate any in-flight _connectAsync
+    _connecting = false; // allow subsequent connect() to proceed
+
     final client = _client;
     if (client == null) return;
     _client = null;
@@ -220,7 +231,7 @@ class SignalingModuleImpl implements SignalingModule {
   // Internal
   // ---------------------------------------------------------------------------
 
-  Future<void> _connectAsync() async {
+  Future<void> _connectAsync(int gen) async {
     if (_connecting) return;
     _connecting = true;
     try {
@@ -234,7 +245,7 @@ class SignalingModuleImpl implements SignalingModule {
         }
       }
 
-      if (_disposed) return;
+      if (gen != _generation || _disposed) return;
 
       _emit(SignalingConnecting());
 
@@ -249,11 +260,13 @@ class SignalingModuleImpl implements SignalingModule {
           force: true,
         );
 
-        if (_disposed) {
+        if (gen != _generation || _disposed) {
+          // This connect was superseded by disconnect() or a newer connect() —
+          // clean up the client without emitting events.
           try {
             await client.disconnect(SignalingDisconnectCode.normalClosure.code);
           } catch (e, s) {
-            _logger.warning('_connectAsync dispose-disconnect error', e, s);
+            _logger.warning('_connectAsync stale-disconnect error', e, s);
           }
           return;
         }
@@ -270,7 +283,7 @@ class SignalingModuleImpl implements SignalingModule {
         _emit(SignalingConnected());
         unawaited(_requestQueue.flush(execute: client.execute, isActive: () => identical(_client, client)));
       } catch (e, s) {
-        if (_disposed) return;
+        if (gen != _generation || _disposed) return;
         _logger.warning('_connectAsync failed', e, s);
 
         final errorString = e.toString();
@@ -280,7 +293,9 @@ class SignalingModuleImpl implements SignalingModule {
         _emit(SignalingConnectionFailed(error: e, isRepeated: isRepeated, recommendedReconnectDelay: reconnectDelay));
       }
     } finally {
-      _connecting = false;
+      // Only reset _connecting for the current generation — a superseded
+      // _connectAsync must not clear the flag owned by the active one.
+      if (gen == _generation) _connecting = false;
     }
   }
 
