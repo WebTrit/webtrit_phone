@@ -1,6 +1,6 @@
 import 'dart:ui' show RootIsolateToken;
 
-import 'package:flutter/services.dart' show BackgroundIsolateBinaryMessenger;
+import 'package:flutter/services.dart' show BackgroundIsolateBinaryMessenger, BinaryMessenger;
 import 'package:flutter/widgets.dart' show WidgetsFlutterBinding;
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
@@ -27,34 +27,39 @@ void signalingServiceCallbackDispatcher() {
   PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);
 
   _logger.info('signalingServiceCallbackDispatcher: background isolate starting');
-  _ensureBindingInitialized();
-  PSignalingServiceFlutterApi.setUp(_SignalingFlutterApiHandler());
+  final messenger = _ensureBinaryMessengerInitialized();
+  PSignalingServiceFlutterApi.setUp(_SignalingFlutterApiHandler(), binaryMessenger: messenger);
   // Notify Kotlin that the Dart isolate has registered its handler and is ready
   // to receive onSynchronize calls. This resolves the race where Kotlin calls
   // synchronizeIsolate() before the Dart handler is registered
   // (executeDartCallback is async -- the Dart isolate starts after Kotlin has
   // already tried to call onSynchronize).
-  PSignalingServiceHostApi().notifyIsolateReady();
+  PSignalingServiceHostApi(binaryMessenger: messenger).notifyIsolateReady();
   _logger.info('signalingServiceCallbackDispatcher: notifyIsolateReady sent, waiting for onSynchronize');
 }
 
 /// Initialises a [BinaryMessenger] for platform channels in this background
 /// isolate without touching the full Flutter rendering stack.
 ///
-/// Uses [BackgroundIsolateBinaryMessenger] when [RootIsolateToken.instance] is
-/// available (background engine root isolate) to avoid initialising
-/// RendererBinding / Impeller / Vulkan. The full [WidgetsFlutterBinding] is
-/// kept as a fallback for environments where the token is unexpectedly absent.
-void _ensureBindingInitialized() {
+/// Returns [BackgroundIsolateBinaryMessenger.instance] when
+/// [RootIsolateToken.instance] is available (background engine root isolate),
+/// avoiding RendererBinding / Impeller / Vulkan initialisation. Falls back to
+/// [WidgetsFlutterBinding] and returns `null` (Pigeon uses the binding's
+/// default messenger) when the token is unexpectedly absent.
+BinaryMessenger? _ensureBinaryMessengerInitialized() {
   final token = RootIsolateToken.instance;
   if (token != null) {
     BackgroundIsolateBinaryMessenger.ensureInitialized(token);
-    _logger.info('_ensureBindingInitialized: BackgroundIsolateBinaryMessenger initialised');
+    _logger.info('_ensureBinaryMessengerInitialized: BackgroundIsolateBinaryMessenger initialised');
+    return BackgroundIsolateBinaryMessenger.instance;
   } else {
     // Fallback: token is unexpectedly absent. Full binding initialization
     // includes Vulkan/Impeller and may be slow after device inactivity.
-    _logger.warning('_ensureBindingInitialized: RootIsolateToken unavailable, falling back to WidgetsFlutterBinding');
+    _logger.warning(
+      '_ensureBinaryMessengerInitialized: RootIsolateToken unavailable, falling back to WidgetsFlutterBinding',
+    );
     WidgetsFlutterBinding.ensureInitialized();
+    return null;
   }
 }
 
