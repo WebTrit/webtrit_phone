@@ -1676,7 +1676,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final callBeingTransferred = state.retrieveActiveCall(callId);
 
       if (callBeingTransferred?.speakerOnBeforeMinimize == true) {
-        add(CallControlEvent.audioDeviceSet(callId, state.availableAudioDevices.getSpeaker));
+        final speakerDevice = state.availableAudioDevices.getSpeaker;
+        if (speakerDevice != null) {
+          add(CallControlEvent.audioDeviceSet(callId, speakerDevice));
+        }
       }
 
       // After request succesfully submitted, transfer flow will continue
@@ -2502,7 +2505,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await callkeep.reportUpdateCall(currentCall.callId, proximityEnabled: state.shouldListenToProximity);
 
       if (currentCall.speakerOnBeforeMinimize == true) {
-        add(CallControlEvent.audioDeviceSet(currentCall.callId, state.availableAudioDevices.getSpeaker));
+        final speakerDevice = state.availableAudioDevices.getSpeaker;
+        if (speakerDevice != null) {
+          add(CallControlEvent.audioDeviceSet(currentCall.callId, speakerDevice));
+        }
       }
     } else {
       _logger.warning('__onCallScreenEventDidPush: activeCalls is empty');

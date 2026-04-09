@@ -373,11 +373,15 @@ class _CallActionsState extends State<CallActions> {
                   ? context.l10n.call_CallActionsTooltip_disableSpeaker
                   : context.l10n.call_CallActionsTooltip_enableSpeaker,
               child: TextButton(
-                onPressed: () => onAudioDeviceChanged?.call(
-                  (speakerOn ?? false)
-                      ? widget.availableAudioDevices.getEarpiece
-                      : widget.availableAudioDevices.getSpeaker,
-                ),
+                onPressed: () {
+                  final speakerDevice = widget.availableAudioDevices.getSpeaker;
+                  final earpieceDevice = widget.availableAudioDevices.getEarpiece;
+                  if (speakerOn == true) {
+                    if (earpieceDevice != null) onAudioDeviceChanged?.call(earpieceDevice);
+                  } else {
+                    if (speakerDevice != null) onAudioDeviceChanged?.call(speakerDevice);
+                  }
+                },
                 statesController: _speakerStatesController..update(WidgetState.selected, speakerOn ?? false),
                 style: widget.style?.speaker,
                 child: Icon((speakerOn ?? false) ? Icons.volume_up : Icons.phone_in_talk, size: actionPadIconSize),
