@@ -345,7 +345,7 @@ extension CallAudioDeviceIterableExtension<T extends CallAudioDevice> on Iterabl
   bool get onlyBuiltIn =>
       every((device) => device.type == CallAudioDeviceType.earpiece || device.type == CallAudioDeviceType.speaker);
 
-  T get getSpeaker => firstWhere((device) => device.type == CallAudioDeviceType.speaker);
+  T? get getSpeaker => firstWhereOrNull((device) => device.type == CallAudioDeviceType.speaker);
 
-  T get getEarpiece => firstWhere((device) => device.type == CallAudioDeviceType.earpiece);
+  T? get getEarpiece => firstWhereOrNull((device) => device.type == CallAudioDeviceType.earpiece);
 }
