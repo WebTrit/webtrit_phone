@@ -17,12 +17,6 @@ final _logger = Logger('SignalingEntryPoint');
 /// registers the [PSignalingServiceFlutterApi] handler so Kotlin can send
 /// [onSynchronize] calls into this isolate.
 ///
-/// Uses [BackgroundIsolateBinaryMessenger] when [RootIsolateToken.instance] is
-/// available (background engine root isolate) to avoid initialising the full
-/// Flutter rendering stack (Vulkan / Impeller). The full
-/// [WidgetsFlutterBinding] is kept as a fallback for environments where the
-/// token is unexpectedly absent.
-///
 /// The raw handle for this function is stored in [StorageDelegate] and obtained
 /// in the main isolate via [PluginUtilities.getCallbackHandle] before calling
 /// [PSignalingServiceHostApi.initializeServiceCallback].
@@ -33,22 +27,7 @@ void signalingServiceCallbackDispatcher() {
   PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);
 
   _logger.info('signalingServiceCallbackDispatcher: background isolate starting');
-
-  final token = RootIsolateToken.instance;
-  if (token != null) {
-    // Lightweight path: sets up a BinaryMessenger for platform channels
-    // without initialising RendererBinding / Impeller / Vulkan.
-    BackgroundIsolateBinaryMessenger.ensureInitialized(token);
-    _logger.info('signalingServiceCallbackDispatcher: BackgroundIsolateBinaryMessenger initialised');
-  } else {
-    // Fallback: token is unexpectedly absent. Full binding initialization
-    // includes Vulkan/Impeller and may be slow after device inactivity.
-    _logger.warning(
-      'signalingServiceCallbackDispatcher: RootIsolateToken unavailable, falling back to WidgetsFlutterBinding',
-    );
-    WidgetsFlutterBinding.ensureInitialized();
-  }
-
+  _ensureBindingInitialized();
   PSignalingServiceFlutterApi.setUp(_SignalingFlutterApiHandler());
   // Notify Kotlin that the Dart isolate has registered its handler and is ready
   // to receive onSynchronize calls. This resolves the race where Kotlin calls
@@ -57,6 +36,26 @@ void signalingServiceCallbackDispatcher() {
   // already tried to call onSynchronize).
   PSignalingServiceHostApi().notifyIsolateReady();
   _logger.info('signalingServiceCallbackDispatcher: notifyIsolateReady sent, waiting for onSynchronize');
+}
+
+/// Initialises a [BinaryMessenger] for platform channels in this background
+/// isolate without touching the full Flutter rendering stack.
+///
+/// Uses [BackgroundIsolateBinaryMessenger] when [RootIsolateToken.instance] is
+/// available (background engine root isolate) to avoid initialising
+/// RendererBinding / Impeller / Vulkan. The full [WidgetsFlutterBinding] is
+/// kept as a fallback for environments where the token is unexpectedly absent.
+void _ensureBindingInitialized() {
+  final token = RootIsolateToken.instance;
+  if (token != null) {
+    BackgroundIsolateBinaryMessenger.ensureInitialized(token);
+    _logger.info('_ensureBindingInitialized: BackgroundIsolateBinaryMessenger initialised');
+  } else {
+    // Fallback: token is unexpectedly absent. Full binding initialization
+    // includes Vulkan/Impeller and may be slow after device inactivity.
+    _logger.warning('_ensureBindingInitialized: RootIsolateToken unavailable, falling back to WidgetsFlutterBinding');
+    WidgetsFlutterBinding.ensureInitialized();
+  }
 }
 
 /// Kotlin -> Dart Pigeon bridge for the signaling foreground service.
