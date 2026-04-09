@@ -200,7 +200,10 @@ class SignalingModuleImpl implements SignalingModule {
     _connecting = false; // allow subsequent connect() to proceed
 
     final client = _client;
-    if (client == null) return;
+    if (client == null) {
+      _logger.fine('disconnect: no active client, in-flight connect cancelled (gen=$_generation)');
+      return;
+    }
     _client = null;
     _intentionalDisconnect = true;
     _disconnectAck = Completer<void>();
@@ -263,6 +266,7 @@ class SignalingModuleImpl implements SignalingModule {
         if (gen != _generation || _disposed) {
           // This connect was superseded by disconnect() or a newer connect() —
           // clean up the client without emitting events.
+          _logger.fine('_connectAsync: stale connect discarded (gen=$gen, current=$_generation)');
           try {
             await client.disconnect(SignalingDisconnectCode.normalClosure.code);
           } catch (e, s) {
