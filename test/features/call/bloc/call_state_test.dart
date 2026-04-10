@@ -1270,7 +1270,7 @@ void main() {
     test('terminates call absent from handshake lines', () {
       final call = _makeCall(callId: 'c1', processingStatus: CallProcessingStatus.connected);
       final state = CallState(activeCalls: [call]);
-      expect(state.callsToTerminate({}), ['c1']);
+      expect(state.callsToTerminate({}), [call]);
     });
 
     test('keeps call that is present in handshake lines', () {
@@ -1300,7 +1300,7 @@ void main() {
         processingStatus: CallProcessingStatus.outgoingOfferSent,
       );
       final state = CallState(activeCalls: [call]);
-      expect(state.callsToTerminate({}), ['c1']);
+      expect(state.callsToTerminate({}), [call]);
     });
 
     test('terminates outgoing call at outgoingRinging absent from handshake', () {
@@ -1310,7 +1310,7 @@ void main() {
         processingStatus: CallProcessingStatus.outgoingRinging,
       );
       final state = CallState(activeCalls: [call]);
-      expect(state.callsToTerminate({}), ['c1']);
+      expect(state.callsToTerminate({}), [call]);
     });
 
     test('keeps outgoing isPreOfferSent call even if other calls are terminated', () {
@@ -1321,7 +1321,7 @@ void main() {
       );
       final dead = _makeCall(callId: 'dead', processingStatus: CallProcessingStatus.connected);
       final state = CallState(activeCalls: [inFlight, dead]);
-      expect(state.callsToTerminate({}), ['dead']);
+      expect(state.callsToTerminate({}), [dead]);
     });
 
     test('returns empty when all calls are in handshake lines', () {

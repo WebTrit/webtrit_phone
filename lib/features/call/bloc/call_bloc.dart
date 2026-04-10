@@ -2581,11 +2581,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       stateHandshake.guestLine,
     ].whereType<Line>().map((line) => line.callId).toSet();
 
-    for (final callId in state.callsToTerminate(activeLineCallIds)) {
-      final activeCall = state.retrieveActiveCall(callId);
-      if (activeCall == null) continue;
-      _peerConnectionManager.conditionalCompleteError(callId, 'Active call Request Terminated');
-      add(_CallSignalingEvent.hangup(line: activeCall.line, callId: callId, code: 487, reason: 'Request Terminated'));
+    for (final activeCall in state.callsToTerminate(activeLineCallIds)) {
+      _peerConnectionManager.conditionalCompleteError(activeCall.callId, 'Active call Request Terminated');
+      add(
+        _CallSignalingEvent.hangup(
+          line: activeCall.line,
+          callId: activeCall.callId,
+          code: 487,
+          reason: 'Request Terminated',
+        ),
+      );
     }
 
     final actions = await _handshakeProcessor.process(
