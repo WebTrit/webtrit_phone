@@ -120,6 +120,11 @@ class SignalingReconnectController {
     _logger.fine('notifyAppPaused hasActiveCalls=$hasActiveCalls');
     if (!hasActiveCalls) {
       _appActive = false;
+      // Intentional disconnect on app pause — treat the next reconnect as a
+      // fresh attempt, not a "session lost" event. Without this reset the
+      // first post-unlock connect failure would bypass the consecutive-failure
+      // threshold and immediately fire onConnectionFailed (WT-1221).
+      _wasConnected = false;
       _disconnect();
     }
   }

@@ -462,6 +462,45 @@ void main() {
         expect(module.connectCalls, 1);
       });
     });
+
+    // WT-1221: "Connecting to the core failed" toast on screen unlock.
+    //
+    // Scenario: user had an active session (_wasConnected = true), locked the
+    // screen, then unlocked. The first post-unlock connect failure must go
+    // through the consecutive-failure threshold — not fire onConnectionFailed
+    // immediately as if an established session was lost.
+    test('notifyAppPaused resets _wasConnected — post-unlock failure respects threshold (WT-1221)', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        int notifyCount = 0;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (_) => notifyCount++,
+          notifyAfterConsecutiveFailures: 2,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        // Establish a session so _wasConnected = true.
+        module.emit(SignalingConnected());
+        expect(notifyCount, 0);
+
+        // Screen lock — intentional disconnect.
+        controller.notifyAppPaused(hasActiveCalls: false);
+
+        // Screen unlock — first post-unlock connect failure.
+        controller.notifyAppResumed();
+        module.emit(_failed());
+
+        // Must NOT fire immediately (would be wrong: no session was lost).
+        expect(notifyCount, 0, reason: 'first post-unlock failure must not trigger toast immediately');
+
+        // Second failure reaches threshold — now it is appropriate to notify.
+        module.emit(_failed());
+        expect(notifyCount, 1);
+      });
+    });
   });
 
   // -------------------------------------------------------------------------
