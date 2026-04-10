@@ -225,15 +225,11 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       );
     }
 
-    // All four writes go through the same BinaryMessenger, so they are
-    // delivered to the Kotlin main-thread Looper in FIFO order regardless
-    // of parallelism. startService() is therefore always processed after
-    // the credential writes, so the background isolate receives correct
-    // data on the first synchronizeIsolate() attempt.
-    // Running them concurrently removes three sequential Binder round-trips
-    // (~300–900 ms under memory pressure) before startForegroundService()
-    // is called, giving the OS more time to run onCreate() within the
-    // vendor-specific FGS promotion window.
+    // Persist all credentials concurrently — they write to independent
+    // SharedPreferences keys and have no ordering dependency between them.
+    // Running them in parallel removes two sequential Binder round-trips
+    // (~200–600 ms under memory pressure) before startForegroundService()
+    // is called.
     await Future.wait([
       _hostApi.initializeServiceCallback(
         dispatcherHandle.toRawHandle(),
@@ -244,8 +240,11 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       ),
       _hostApi.saveConnectionConfig(config.coreUrl, config.tenantId, config.token),
       _hostApi.saveTrustedCertificates(_encodeTrustedCertificates(config.trustedCertificates)),
-      _hostApi.startService(signalingModeToNative(mode)),
     ]);
+
+    // Start the service only after all credentials are persisted so that
+    // synchronizeIsolate() reads correct data on the first attempt.
+    await _hostApi.startService(signalingModeToNative(mode));
 
     // Do NOT clear the hub port here.
     //
