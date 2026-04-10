@@ -132,8 +132,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         switch (knownCode) {
           case SignalingDisconnectCode.signalingKeepaliveTimeoutError:
           case SignalingDisconnectCode.controllerForceAttachClose:
-            // Silent reconnect — these codes are expected during background/lock-screen
-            // scenarios or duplicate-session cleanup. Don't disturb the user.
+            _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
             return;
           case SignalingDisconnectCode.sessionMissedError:
             notification = const SignalingSessionMissedNotification();
