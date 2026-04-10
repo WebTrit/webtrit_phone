@@ -135,6 +135,16 @@ class SignalingForegroundService : Service() {
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
 
+        // FOREGROUND_SERVICE_TYPE_REMOTE_MESSAGING is the correct type for this service.
+        // It maintains a persistent WebSocket to the WebTrit signaling server and never
+        // accesses microphone, camera, or location.
+        //
+        // phoneCall type is not appropriate here: call management via the Telecom API
+        // (audio focus, in-call UI) is handled by webtrit_callkeep in the callkeep_core
+        // process. This service is the transport layer below the call.
+        //
+        // Type is only declared on API 34+ (Android 14 / UPSIDE_DOWN_CAKE); on older
+        // versions the OS does not enforce a type so 0 is passed.
         ServiceCompat.startForeground(
             this,
             NOTIFICATION_ID,

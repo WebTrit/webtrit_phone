@@ -8,6 +8,40 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application>
+        <!--
+            foregroundServiceType="remoteMessaging" is the correct type for SignalingForegroundService.
+
+            This service maintains a persistent WebSocket connection to the WebTrit signaling server
+            to send and receive call-signaling messages (SDP offers/answers, ICE candidates, call
+            state events). It never accesses the microphone, camera, or location — it is purely a
+            messaging transport layer that runs before, during, and after a call.
+
+            Why NOT phoneCall:
+              The phoneCall type is reserved for services that actively manage a call via the Android
+              Telecom API (audio focus, in-call UI, connection state). That responsibility belongs to
+              webtrit_callkeep running in the callkeep_core process via PhoneConnectionService.
+              SignalingForegroundService sits below that layer: it delivers the signaling payloads
+              that allow the Telecom layer to set up and tear down calls, but it does not manage
+              calls itself. Using phoneCall here would require MANAGE_OWN_CALLS or default-dialer
+              privileges and would be semantically incorrect.
+
+            Why NOT microphone / camera:
+              This service does not capture any media. WebRTC media is handled by a separate
+              component (flutter-webrtc) that runs in the main app process.
+
+            Why NOT dataSync:
+              dataSync is for periodic background sync tasks. This service holds a continuous
+              real-time connection — not a periodic one.
+
+            Android documentation for remoteMessaging:
+              "Use this type if the app needs to be kept running on-device so that a remote
+              service can send messages to the device."
+            This matches exactly: the WebSocket is kept alive so the signaling server can push
+            call events to the device at any time, without relying solely on FCM.
+
+            Required permission: FOREGROUND_SERVICE_REMOTE_MESSAGING (declared above).
+            Applies on Android 14+ (API 34, UPSIDE_DOWN_CAKE); older versions use type=0.
+        -->
         <service
             android:name=".SignalingForegroundService"
             android:foregroundServiceType="remoteMessaging"
