@@ -95,6 +95,12 @@ class SignalingHub {
         _handleUnsubscribe(cmd);
       case SignalingHubExecuteCommand():
         _handleExecute(cmd);
+      case SignalingHubConnectCommand():
+        _logger.fine('Hub received connect command from ${cmd.consumerId}');
+        _signalingModule.connect();
+      case SignalingHubDisconnectCommand():
+        _logger.fine('Hub received disconnect command from ${cmd.consumerId}');
+        unawaited(_signalingModule.disconnect());
     }
   }
 

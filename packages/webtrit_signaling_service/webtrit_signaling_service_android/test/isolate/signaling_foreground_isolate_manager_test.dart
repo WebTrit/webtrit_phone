@@ -198,69 +198,46 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // Manual reconnect cancels pending timer
+  // No auto-reconnect — delegated to main isolate
   // -------------------------------------------------------------------------
 
-  group('SignalingForegroundIsolateManager -- manual reconnect cancels pending timer', () {
-    test('pending auto-reconnect timer does not fire after manual reconnect via handleStatus(enabled: true)', () async {
+  // Reconnect decisions belong exclusively to SignalingReconnectController in
+  // the main isolate. It sends SignalingHubConnectCommand via the hub when it
+  // decides to reconnect. The foreground-service isolate must NOT reconnect on
+  // its own — doing so would bypass lifecycle guards (e.g. app paused, no
+  // active calls) and cause spurious 4502 reconnect loops.
+
+  group('SignalingForegroundIsolateManager -- no auto-reconnect on disconnect', () {
+    test('does NOT reconnect when disconnect carries a non-null delay hint', () async {
       final module = _FakeSignalingModule();
       final manager = _makeManager(module);
       addTearDown(() => manager.handleStatus(enabled: false));
 
       await manager.handleStatus(enabled: true);
-      await Future<void>.delayed(Duration.zero);
-
-      // Disconnect with a delay hint — schedules a 100 ms auto-reconnect timer.
-      module.simulateDisconnectWithDelay(const Duration(milliseconds: 100));
       await Future<void>.delayed(Duration.zero);
       expect(module.connectCount, 1);
-
-      // Before the timer fires, the main isolate triggers a manual reconnect.
-      await manager.handleStatus(enabled: true);
-      await Future<void>.delayed(Duration.zero);
-      expect(module.connectCount, 2); // reconnected once manually
-
-      // Wait past the timer deadline — it must have been cancelled.
-      await Future<void>.delayed(const Duration(milliseconds: 150));
-      expect(module.connectCount, 2); // still 2, timer did not fire
-    });
-  });
-
-  // -------------------------------------------------------------------------
-  // Auto-reconnect via delay hint
-  // -------------------------------------------------------------------------
-
-  group('SignalingForegroundIsolateManager -- auto-reconnect via delay hint', () {
-    test('schedules reconnect when disconnect carries a non-null delay', () async {
-      final module = _FakeSignalingModule();
-      final manager = _makeManager(module);
-      addTearDown(() => manager.handleStatus(enabled: false));
-
-      await manager.handleStatus(enabled: true);
-      await Future<void>.delayed(Duration.zero);
 
       module.simulateDisconnectWithDelay(const Duration(milliseconds: 50));
       await Future<void>.delayed(Duration.zero);
-      expect(module.connectCount, 1); // not yet
 
-      await Future<void>.delayed(const Duration(milliseconds: 100));
-      expect(module.connectCount, 2); // reconnected via timer
+      // Wait well past the old reconnect deadline — no reconnect must fire.
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+      expect(module.connectCount, 1, reason: 'isolate must not auto-reconnect; only main isolate may reconnect');
     });
 
-    test('schedules reconnect when connection fails with a delay hint', () async {
+    test('does NOT reconnect when connection fails with a delay hint', () async {
       final module = _FakeSignalingModule();
       final manager = _makeManager(module);
       addTearDown(() => manager.handleStatus(enabled: false));
 
       await manager.handleStatus(enabled: true);
       await Future<void>.delayed(Duration.zero);
-
-      module.simulateConnectionFailed(const Duration(milliseconds: 50));
-      await Future<void>.delayed(Duration.zero);
       expect(module.connectCount, 1);
 
-      await Future<void>.delayed(const Duration(milliseconds: 100));
-      expect(module.connectCount, 2);
+      module.simulateConnectionFailed(const Duration(milliseconds: 50));
+
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+      expect(module.connectCount, 1, reason: 'isolate must not auto-reconnect; only main isolate may reconnect');
     });
   });
 

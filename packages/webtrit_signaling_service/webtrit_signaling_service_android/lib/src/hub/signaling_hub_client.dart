@@ -95,6 +95,24 @@ class SignalingHubClient {
     );
   }
 
+  /// Asks the hub to connect the background WebSocket.
+  ///
+  /// Fire-and-forget: the hub will call [SignalingModule.connect] in the
+  /// background isolate. The resulting [SignalingConnected] event will arrive
+  /// on [events] once the connection is established.
+  void sendConnect() {
+    _hubPort.send(SignalingHubConnectCommand(consumerId: consumerId).encode());
+  }
+
+  /// Asks the hub to disconnect the background WebSocket.
+  ///
+  /// Fire-and-forget: the hub will call [SignalingModule.disconnect] in the
+  /// background isolate. The resulting [SignalingDisconnected] event will arrive
+  /// on [events] once the connection is closed.
+  void sendDisconnect() {
+    _hubPort.send(SignalingHubDisconnectCommand(consumerId: consumerId).encode());
+  }
+
   /// Sends the unsubscribe command and closes all resources.
   Future<void> dispose() async {
     _hubPort.send(SignalingHubUnsubscribeCommand(consumerId: consumerId).encode());

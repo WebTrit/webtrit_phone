@@ -64,13 +64,22 @@ class SignalingHubModule implements SignalingModule {
     return _hubClient.execute(request);
   }
 
-  /// No-op -- the hub owns the WebSocket connection lifecycle.
+  /// Asks the hub to connect the background WebSocket.
+  ///
+  /// Sends a [SignalingHubConnectCommand] to the foreground-service isolate,
+  /// which calls [SignalingModule.connect] on the real WebSocket module.
+  /// The resulting [SignalingConnected] event arrives on [events] once the
+  /// connection is established.
   @override
-  void connect() {}
+  void connect() => _hubClient.sendConnect();
 
-  /// No-op -- the hub owns the WebSocket connection lifecycle.
+  /// Asks the hub to disconnect the background WebSocket.
+  ///
+  /// Sends a [SignalingHubDisconnectCommand] to the foreground-service isolate,
+  /// which calls [SignalingModule.disconnect] on the real WebSocket module.
+  /// The resulting [SignalingDisconnected] event arrives on [events].
   @override
-  Future<void> disconnect() async {}
+  Future<void> disconnect() async => _hubClient.sendDisconnect();
 
   @override
   Future<void> dispose() async {

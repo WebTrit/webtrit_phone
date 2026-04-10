@@ -79,7 +79,6 @@ class SignalingForegroundIsolateManager {
   SignalingHub? _hub;
 
   StreamSubscription<SignalingModuleEvent>? _eventsSubscription;
-  Timer? _reconnectTimer;
 
   bool _started = false;
 
@@ -99,8 +98,6 @@ class SignalingForegroundIsolateManager {
       // reconnect it now so the external start() call is not silently ignored.
       if (!(_signalingModule?.isConnected ?? false)) {
         _logger.info('SignalingForegroundIsolateManager already started but not connected, reconnecting');
-        _reconnectTimer?.cancel();
-        _reconnectTimer = null;
         _signalingModule?.connect();
       }
       return;
@@ -136,9 +133,6 @@ class SignalingForegroundIsolateManager {
 
     _logger.info('SignalingForegroundIsolateManager stopping');
 
-    _reconnectTimer?.cancel();
-    _reconnectTimer = null;
-
     await _eventsSubscription?.cancel();
     await _hub?.dispose();
     await _signalingModule?.dispose();
@@ -173,9 +167,11 @@ class SignalingForegroundIsolateManager {
         _logger.info('IsolateManager: connecting...');
       case SignalingConnected():
         _logger.info('IsolateManager: connected');
-      case SignalingConnectionFailed(:final error, :final recommendedReconnectDelay):
-        _logger.warning('IsolateManager: connection failed -- $error, reconnect in $recommendedReconnectDelay');
-        _scheduleReconnect(recommendedReconnectDelay);
+      case SignalingConnectionFailed(:final error):
+        // Reconnect decisions are delegated to SignalingReconnectController in
+        // the main isolate, which sends a SignalingHubConnectCommand via the hub
+        // when appropriate. This isolate only logs.
+        _logger.warning('IsolateManager: connection failed -- $error');
       case SignalingHandshakeReceived(:final handshake):
         _logger.info('IsolateManager: handshake lines=${handshake.lines}');
       case SignalingProtocolEvent(:final event):
@@ -183,11 +179,10 @@ class SignalingForegroundIsolateManager {
         if (event is IncomingCallEvent) {
           _dispatchIncomingCall(event);
         }
-      case SignalingDisconnected(:final code, :final reason, :final recommendedReconnectDelay):
+      case SignalingDisconnected(:final code, :final reason):
+        // Reconnect decisions are delegated to SignalingReconnectController in
+        // the main isolate. This isolate only logs.
         _logger.info('IsolateManager: disconnected code=$code reason=$reason');
-        if (recommendedReconnectDelay != null) {
-          _scheduleReconnect(recommendedReconnectDelay);
-        }
       default:
         break;
     }
@@ -225,17 +220,6 @@ class SignalingForegroundIsolateManager {
     } catch (e, st) {
       _logger.severe('IsolateManager: incoming call handler threw', e, st);
     }
-  }
-
-  void _scheduleReconnect(Duration? delay) {
-    if (delay == null) return;
-    _reconnectTimer?.cancel();
-    _reconnectTimer = Timer(delay, () {
-      if (_started) {
-        _logger.info('SignalingForegroundIsolateManager reconnecting after $delay');
-        _signalingModule?.connect();
-      }
-    });
   }
 }
 

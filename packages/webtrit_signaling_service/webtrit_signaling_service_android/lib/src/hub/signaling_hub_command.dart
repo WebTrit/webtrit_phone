@@ -41,6 +41,12 @@ sealed class SignalingHubCommand {
             correlationId: wire[2] as String,
             request: Map<String, dynamic>.from(wire[3] as Map),
           );
+        case _tagConnect:
+          if (wire.length < 2) return null;
+          return SignalingHubConnectCommand(consumerId: wire[1] as String);
+        case _tagDisconnect:
+          if (wire.length < 2) return null;
+          return SignalingHubDisconnectCommand(consumerId: wire[1] as String);
         default:
           return null;
       }
@@ -58,6 +64,12 @@ const _tagUnsubscribe = 'unsub';
 
 /// Wire tag placed at index 0 of the encoded [List] to identify a [SignalingHubExecuteCommand].
 const _tagExecute = 'exec';
+
+/// Wire tag placed at index 0 of the encoded [List] to identify a [SignalingHubConnectCommand].
+const _tagConnect = 'connect';
+
+/// Wire tag placed at index 0 of the encoded [List] to identify a [SignalingHubDisconnectCommand].
+const _tagDisconnect = 'disconnect';
 
 /// Registers [replyPort] as a subscriber in the hub.
 ///
@@ -102,4 +114,28 @@ class SignalingHubExecuteCommand extends SignalingHubCommand {
 
   @override
   List<Object?> encode() => [_tagExecute, consumerId, correlationId, request];
+}
+
+/// Asks the hub to call [SignalingModule.connect] on the background WebSocket.
+///
+/// Sent by [SignalingHubModule.connect] so the main isolate can trigger a
+/// connection attempt without owning the WebSocket directly.
+class SignalingHubConnectCommand extends SignalingHubCommand {
+  const SignalingHubConnectCommand({required String consumerId}) : super(consumerId);
+
+  @override
+  List<Object?> encode() => [_tagConnect, consumerId];
+}
+
+/// Asks the hub to call [SignalingModule.disconnect] on the background WebSocket.
+///
+/// Sent by [SignalingHubModule.disconnect] so the main isolate can close the
+/// connection. The background isolate will no longer schedule an auto-reconnect
+/// after this — reconnect decisions belong to [SignalingReconnectController] in
+/// the main isolate.
+class SignalingHubDisconnectCommand extends SignalingHubCommand {
+  const SignalingHubDisconnectCommand({required String consumerId}) : super(consumerId);
+
+  @override
+  List<Object?> encode() => [_tagDisconnect, consumerId];
 }
