@@ -16,10 +16,12 @@ final _logger = Logger('SessionStatusCubit');
 class SessionStatusCubit extends Cubit<SessionStatusState> {
   SessionStatusCubit({required PushTokensBloc pushTokensBloc, required CallBloc callBloc})
     : super(const SessionStatusState()) {
+    _lastPushTokensState = pushTokensBloc.state;
+    _lastCallState = callBloc.state;
     _pushTokensSubscription = pushTokensBloc.stream.listen(_onPushTokensChanged);
     _callSubscription = callBloc.stream.listen(_onCallChanged);
 
-    _emitCombinedStatus(pushTokensBloc.state, callBloc.state);
+    _emitCombinedStatus();
   }
 
   late final StreamSubscription<PushTokensState> _pushTokensSubscription;
