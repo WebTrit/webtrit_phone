@@ -16,10 +16,12 @@ final _logger = Logger('SessionStatusCubit');
 class SessionStatusCubit extends Cubit<SessionStatusState> {
   SessionStatusCubit({required PushTokensBloc pushTokensBloc, required CallBloc callBloc})
     : super(const SessionStatusState()) {
+    _lastPushTokensState = pushTokensBloc.state;
+    _lastCallState = callBloc.state;
     _pushTokensSubscription = pushTokensBloc.stream.listen(_onPushTokensChanged);
     _callSubscription = callBloc.stream.listen(_onCallChanged);
 
-    _emitCombinedStatus(pushTokensBloc.state, callBloc.state);
+    _emitCombinedStatus();
   }
 
   late final StreamSubscription<PushTokensState> _pushTokensSubscription;
@@ -38,11 +40,11 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     _emitCombinedStatus();
   }
 
-  void _emitCombinedStatus([PushTokensState? initialPushTokens, CallState? initialCall]) {
+  void _emitCombinedStatus() {
     _logger.finest('emitCombinedStatus: $_lastPushTokensState, $_lastCallState');
 
-    final pushTokens = initialPushTokens ?? _lastPushTokensState;
-    final call = initialCall ?? _lastCallState;
+    final pushTokens = _lastPushTokensState;
+    final call = _lastCallState;
 
     if (pushTokens != null && call != null) {
       emit(state.copyWith(status: _mapCallStatusToSessionStatus(call.status, pushTokens)));
