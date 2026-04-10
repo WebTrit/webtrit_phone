@@ -627,7 +627,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       state.copyWith(
         callServiceState: state.callServiceState.copyWith(
           signalingClientStatus: SignalingClientStatus.connecting,
+          lastSignalingClientConnectError: null,
           lastSignalingClientDisconnectError: null,
+          lastSignalingDisconnectCode: null,
         ),
       ),
     );
