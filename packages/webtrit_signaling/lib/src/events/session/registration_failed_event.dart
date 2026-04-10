@@ -11,6 +11,9 @@ class RegistrationFailedEvent extends SessionEvent {
 
   static const typeValue = 'registration_failed';
 
+  @override
+  Map<String, dynamic> toJson() => {...sessionBaseJson(typeValue), 'code': code, 'reason': reason};
+
   factory RegistrationFailedEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

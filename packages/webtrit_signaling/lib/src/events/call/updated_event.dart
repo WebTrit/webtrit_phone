@@ -5,6 +5,9 @@ class UpdatedEvent extends CallEvent {
 
   static const typeValue = 'updated';
 
+  @override
+  Map<String, dynamic> toJson() => callBaseJson(typeValue);
+
   factory UpdatedEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

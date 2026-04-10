@@ -1,6 +1,27 @@
 {
   "login": {
     "modeSelect": {
+      "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+      "_themeOverride": {
+        "mode": "dark",
+        "applyToAppBar": false
+      },
+      "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+      "background": {
+        "type": "gradient",
+        "colors": [
+          "#5CACE3",
+          "#123752"
+        ],
+        "stops": [
+          0.0,
+          1.0
+        ],
+        "beginX": 0.0,
+        "beginY": 0.0,
+        "endX": 0.0,
+        "endY": 1.0
+      },
       "systemUiOverlayStyle": {
         "statusBarIconBrightness": "dark",
         "statusBarBrightness": "light",
@@ -11,6 +32,7 @@
         "uri": "asset://assets/images/primary_onboarding_logo.svg",
         "render": {
           "scale": 0.42,
+          "alignment": "center",
           "padding": {
             "left": 0.0,
             "top": 0.0,
@@ -23,6 +45,27 @@
       "buttonSignupStyleType": "neutralOnDark"
     },
     "switchPage": {
+      "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+      "_themeOverride": {
+        "mode": "dark",
+        "applyToAppBar": false
+      },
+      "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+      "_background": {
+        "type": "gradient",
+        "colors": [
+          "#162533",
+          "#000000"
+        ],
+        "stops": [
+          0.0,
+          1.0
+        ],
+        "beginX": 0.0,
+        "beginY": 0.0,
+        "endX": 0.0,
+        "endY": 1.0
+      },
       "mainLogo": {
         "uri": "asset://assets/images/secondary_onboarding_logo.svg",
         "render": {
@@ -33,6 +76,12 @@
             "right": 0,
             "bottom": 24
           }
+        }
+      },
+      "segmentButtonStyle": {
+        "shape": {
+          "type": "rounded",
+          "borderRadius": 4.0
         }
       }
     },
@@ -90,6 +139,21 @@
     }
   },
   "dialing": {
+    "background": {
+      "type": "gradient",
+      "colors": [
+        "#5CACE3",
+        "#123752"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    },
     "systemUiOverlayStyle": {
       "statusBarIconBrightness": "dark",
       "statusBarBrightness": "light",
@@ -121,10 +185,7 @@
         "fontWeight": {
           "weight": 400
         },
-        "color": "#EEF3F6",
-        "fontFeatures": [
-          "tabularFigures"
-        ]
+        "color": "#EEF3F6"
       },
       "processingStatusTextStyle": {
         "fontSize": 14,
@@ -219,6 +280,11 @@
     }
   },
   "about": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "mainLogo": {
       "uri": "asset://assets/images/secondary_onboarding_logo.svg",
       "render": {
@@ -230,6 +296,212 @@
           "bottom": 0.0
         }
       }
+    },
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "settings": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "keypad": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "contacts": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "favorites": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "conversations": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "recents": {
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "embedded": {
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "light",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
     }
   }
 }

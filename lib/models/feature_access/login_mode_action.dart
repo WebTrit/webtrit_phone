@@ -1,12 +1,17 @@
+import 'package:equatable/equatable.dart';
+
 import '../embedded/embedded.dart';
 import '../login_flavor.dart';
 
-sealed class LoginModeAction {
+sealed class LoginModeAction extends Equatable {
   const LoginModeAction();
 
   String get titleL10n;
 
   LoginFlavor get flavor;
+
+  @override
+  List<Object?> get props => [titleL10n, flavor];
 }
 
 final class LoginDefaultModeAction extends LoginModeAction {
@@ -29,4 +34,7 @@ final class LoginEmbeddedModeButton extends LoginModeAction {
   final LoginFlavor flavor;
 
   final EmbeddedData customLoginFeature;
+
+  @override
+  List<Object?> get props => [...super.props, customLoginFeature];
 }

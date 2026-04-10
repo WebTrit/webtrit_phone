@@ -1,5 +1,6 @@
 import 'package:webtrit_phone/repositories/contacts/contacts_repository.dart';
 
+// TODO: Migrate to a shared ContactResolver that returns the full Contact model.
 abstract class ContactNameResolver {
   Future<String?> resolveWithNumber(String? number);
 }

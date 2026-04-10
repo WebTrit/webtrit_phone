@@ -102,9 +102,7 @@ class LogRecordsFileRepositoryImpl implements LogRecordsRepository, Disposable {
 
   @override
   @mustCallSuper
-  Future<void> dispose() async {
-    appender.dispose();
-  }
+  Future<void> dispose() => appender.dispose();
 
   @override
   Future<void> cancelSubscriptions() async {}
@@ -127,17 +125,20 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
   Future<List<String>> readAllLogs({int? limit}) async {
     final records = <String>[];
 
-    // ignore: invalid_use_of_visible_for_testing_member
-    await forceFlush();
-
-    // Get all log files and iterate in reverse to read newest logs first
-    final files = await _getAllLogFilesWithRetry();
-
-    for (final file in files.reversed) {
-      if (!await file.exists()) {
-        continue;
+    try {
+      // ignore: invalid_use_of_visible_for_testing_member
+      await forceFlush();
+    } catch (e, st) {
+      if (kDebugMode) {
+        debugPrint('Error during forceFlush before reading logs: $e\n$st');
       }
+    }
 
+    // _getAllLogFilesAsync returns files ordered rotation-0 first (newest write target),
+    // so iterating in order reads the newest file first.
+    final files = await _getAllLogFilesAsync();
+
+    for (final file in files) {
       try {
         // Use readAsLines for simplicity, which is fine for moderately sized logs.
         // For extremely large logs, a streaming approach (using file.openRead)
@@ -170,30 +171,41 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
     return records;
   }
 
-  /// Tries to get the list of log files.
-  /// If the list is empty, it waits and retries a few times.
-  /// This fixes issues where existsSync() returns false immediately after a flush.
-  Future<List<File>> _getAllLogFilesWithRetry({
-    int maxRetries = 5,
-    Duration retryDelay = const Duration(seconds: 2),
-  }) async {
-    for (int i = 0; i < maxRetries; i++) {
-      final files = getAllLogFiles();
-      if (files.isNotEmpty) {
-        return files;
+  /// Returns all existing log files using async [File.exists] checks.
+  ///
+  /// [getAllLogFiles] from the parent class uses [File.existsSync] which may
+  /// return stale results immediately after [forceFlush] due to OS filesystem
+  /// cache. Using async [File.exists] forces a fresh stat() call per file.
+  ///
+  /// Covers the full rotation range (0..keepRotateCount inclusive) because
+  /// [RotatingFileAppender._maybeRotate] renames file[keepRotateCount-1] to
+  /// file[keepRotateCount], so the base file may be absent right after rotation
+  /// while file[keepRotateCount] still holds recent logs.
+  Future<List<File>> _getAllLogFilesAsync() async {
+    final result = <File>[];
+    for (int rotation = 0; rotation <= keepRotateCount; rotation++) {
+      final path = rotation == 0 ? baseFilePath : '$baseFilePath.$rotation';
+      final file = File(path);
+      if (await file.exists()) {
+        result.add(file);
       }
-      await Future.delayed(retryDelay);
     }
-    return getAllLogFiles();
+    return result;
   }
 
   /// Deletes all log files (base file and rotated files).
   Future<void> cleanLogs() async {
-    // ignore: invalid_use_of_visible_for_testing_member
-    await forceFlush();
+    try {
+      // ignore: invalid_use_of_visible_for_testing_member
+      await forceFlush();
+    } catch (e, st) {
+      if (kDebugMode) {
+        debugPrint('Error during forceFlush before cleaning logs: $e\n$st');
+      }
+    }
 
     // Get all rotated files (e.g. app.log, app.log.1, app.log.2)
-    final files = getAllLogFiles();
+    final files = await _getAllLogFilesAsync();
 
     for (final file in files) {
       try {

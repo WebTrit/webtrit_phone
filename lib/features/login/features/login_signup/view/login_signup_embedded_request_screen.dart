@@ -129,7 +129,14 @@ class _LoginSignupEmbeddedRequestScreenState extends State<LoginSignupEmbeddedRe
 
   /// Handles the embedded error state by checking if an error is present
   void _handleEmbeddedErrorState(BuildContext context, LoginState state) {
-    if (state.embeddedRequestError == null || _errorDialogShown) return;
+    // Reset the guard when the error is cleared (e.g. before a new loginCustomSignupRequest attempt).
+    // This ensures the dialog is shown again if the system back button dismissed the previous one
+    // without going through the explicit Retry or Back buttons (which reset _errorDialogShown themselves).
+    if (state.embeddedRequestError == null) {
+      _errorDialogShown = false;
+      return;
+    }
+    if (_errorDialogShown) return;
 
     _errorDialogShown = true;
 

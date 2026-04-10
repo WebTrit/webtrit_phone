@@ -12,15 +12,25 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../../call/call.dart';
 import '../contacts.dart';
 
+export 'contacts_screen_styles.dart';
+export 'contacts_screen_style.dart';
+
 typedef ContactSourceTypeWidgetBuilder = Widget Function(BuildContext context, ContactSourceType sourceType);
 
 class ContactsScreen extends StatefulWidget {
-  const ContactsScreen({super.key, required this.sourceTypes, required this.sourceTypeWidgetBuilder, this.title});
+  const ContactsScreen({
+    super.key,
+    required this.sourceTypes,
+    required this.sourceTypeWidgetBuilder,
+    this.title,
+    this.style,
+  });
 
   final List<ContactSourceType> sourceTypes;
   final ContactSourceTypeWidgetBuilder sourceTypeWidgetBuilder;
 
   final Widget? title;
+  final ContactsScreenStyle? style;
 
   @override
   State<ContactsScreen> createState() => _ContactsScreenState();
@@ -60,6 +70,8 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final effectiveStyle = widget.style ?? themeData.extension<ContactsScreenStyles>()?.primary;
     final mediaQueryData = MediaQuery.of(context);
 
     final tabBar = widget.sourceTypes.length <= 1
@@ -107,20 +119,38 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
       ),
     );
     return Unfocuser(
-      child: Scaffold(
+      child: ThemedScaffold(
+        background: effectiveStyle?.background,
+        contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
+        applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+        extendBodyBehindAppBar: true,
         appBar: MainAppBar(
           title: widget.title,
+          context: context,
+          flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
             ),
             child: Column(children: [if (tabBar != null) tabBar, search]),
           ),
-          context: context,
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: [for (final sourceType in widget.sourceTypes) widget.sourceTypeWidgetBuilder(context, sourceType)],
+        body: MediaQuery(
+          data: mediaQueryData.copyWith(
+            padding: mediaQueryData.padding.copyWith(
+              top:
+                  mediaQueryData.padding.top +
+                  kToolbarHeight +
+                  (tabBar != null ? kMainAppBarBottomTabHeight : 0) +
+                  kMainAppBarBottomSearchHeight,
+            ),
+          ),
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              for (final sourceType in widget.sourceTypes) widget.sourceTypeWidgetBuilder(context, sourceType),
+            ],
+          ),
         ),
         bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
           buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,

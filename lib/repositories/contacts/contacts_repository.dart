@@ -158,7 +158,7 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
 
     try {
       final contact = await contactsRemoteDataSource.getContact(sourceId);
-      await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact), ContactKind.service);
+      await _contactsLocalDataSource?.upsertContact(externalContactFromApi(contact), ContactKindTypeEnum.service);
       // No need to return data here; the database watcher will automatically emit the updated contact.
       externalContactFetchCompleter.complete();
     } catch (e, s) {
@@ -197,7 +197,13 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
   Stream<Contact?> watchContactByPhoneNumber(String number) {
     return _appDatabase.contactsDao.watchContactByPhoneNumber(number).map((data) {
       if (data == null) return null;
-      return contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites);
+      return contactFromDrift(
+        data.contact,
+        phones: data.phones,
+        emails: data.emails,
+        favorites: data.favorites,
+        presenceInfo: data.presenceInfo,
+      );
     });
   }
 
@@ -216,15 +222,32 @@ class ContactsRepository with PresenceInfoDriftMapper, ContactsDriftMapper, Exte
     final nationalNumber = number.nationalPhoneIfValid;
     return _appDatabase.contactsDao.watchContactByPhoneMatchedEnding(nationalNumber ?? number).map((data) {
       if (data == null) return null;
-      return contactFromDrift(data.contact, phones: data.phones, emails: data.emails, favorites: data.favorites);
+      return contactFromDrift(
+        data.contact,
+        phones: data.phones,
+        emails: data.emails,
+        favorites: data.favorites,
+        presenceInfo: data.presenceInfo,
+      );
     });
   }
 
-  Future<int> addContactPhoneToFavorites(ContactPhone contactPhone) {
-    return _appDatabase.favoritesDao.insertFavoriteByContactPhoneId(contactPhone.id);
+  /// Synchronizes a list of external contacts.
+  /// Handles deletion of missing contacts and batch upsert of new/updated ones.
+  Future<void> syncExternalContacts(List<ExternalContact> contacts) async {
+    if (_contactsLocalDataSource == null) {
+      throw StateError('ContactsLocalDataSource is not initialized for external contacts sync');
+    }
+
+    return _contactsLocalDataSource.syncExternalContacts(contacts);
   }
 
-  Future<int> removeContactPhoneFromFavorites(ContactPhone contactPhone) {
-    return _appDatabase.favoritesDao.deleteByContactPhoneId(contactPhone.id);
+  /// Synchronizes a list of local device contacts.
+  Future<void> syncLocalContacts(List<LocalContact> contacts) async {
+    if (_contactsLocalDataSource == null) {
+      throw StateError('ContactsLocalDataSource is not initialized for local contacts sync');
+    }
+
+    return _contactsLocalDataSource.syncLocalContacts(contacts);
   }
 }

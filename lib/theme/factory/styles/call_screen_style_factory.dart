@@ -15,10 +15,11 @@ const double kDisabledOpacity = 0.40;
 final _logger = Logger('CallScreenStyleFactory');
 
 class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
-  CallScreenStyleFactory(this.colors, this.pageConfig, this.legacyCallActionsConfig);
+  CallScreenStyleFactory(this.colors, this.pageConfig, this.legacyCallActionsConfig, this.defaultFontFamily);
 
   final ColorScheme colors;
   final CallPageConfig? pageConfig;
+  final String? defaultFontFamily;
 
   // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
   // ignore: deprecated_member_use
@@ -28,9 +29,11 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
   CallScreenStyles create() {
     final appBarCfg = pageConfig?.appBarStyle;
     final infoCfg = pageConfig?.callInfo;
+    final backgroundStyle = pageConfig?.background?.toStyle();
 
     return CallScreenStyles(
       primary: CallScreenStyle(
+        background: backgroundStyle,
         systemUiOverlayStyle: pageConfig?.systemUiOverlayStyle?.toSystemUiOverlayStyle(),
         appBar: _mapAppBarStyle(appBarCfg),
         callInfo: _mapCallInfoStyle(infoCfg),
@@ -39,12 +42,12 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
     );
   }
 
-  AppBarStyle _mapAppBarStyle(AppBarStyleConfig? cfg) {
+  AppBarStyle _mapAppBarStyle(AppBarConfig? cfg) {
     return AppBarStyle(
       backgroundColor: cfg?.backgroundColor?.toColor() ?? Colors.transparent,
       foregroundColor: cfg?.foregroundColor?.toColor() ?? colors.surface,
-      primary: false,
-      showBackButton: true,
+      primary: cfg?.primary ?? false,
+      showBackButton: cfg?.showBackButton ?? true,
     );
   }
 
@@ -54,10 +57,10 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
       return null;
     }
 
-    final userInfoTextStyle = cfg.usernameTextStyle?.toTextStyle();
-    final numberTextStyle = cfg.numberTextStyle?.toTextStyle();
-    final callStatusTextStyle = cfg.callStatusTextStyle?.toTextStyle();
-    final processingStatusTextStyle = cfg.processingStatusTextStyle?.toTextStyle();
+    final userInfoTextStyle = cfg.usernameTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily);
+    final numberTextStyle = cfg.numberTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily);
+    final callStatusTextStyle = cfg.callStatusTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily);
+    final processingStatusTextStyle = cfg.processingStatusTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily);
 
     return CallInfoStyle(
       userInfo: _mergeWithDefaultTextStyle(

@@ -30,6 +30,8 @@ abstract class LineEvent extends SessionEvent {
         LineErrorEvent.tryFromJson(json);
   }
 
+  Map<String, dynamic> lineBaseJson(String typeValue) => {...sessionBaseJson(typeValue), 'line': line};
+
   static final Map<String, LineEvent Function(Map<String, dynamic>)> _lineEventFromJsonDecoders = {
     IceHangupEvent.typeValue: IceHangupEvent.fromJson,
     IceMediaEvent.typeValue: IceMediaEvent.fromJson,

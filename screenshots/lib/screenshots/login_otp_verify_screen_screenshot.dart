@@ -15,30 +15,22 @@ class LoginOtpVerifyInScreenshot extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    final LoginSwitchScreenStyles? loginPageStyles =
-        themeData.extension<LoginSwitchScreenStyles>();
+    final LoginSwitchScreenStyles? loginPageStyles = themeData.extension<LoginSwitchScreenStyles>();
     final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
 
     return BlocProvider<LoginCubit>(
       create: (context) => MockLoginCubit.loginSwitchScreen(),
       child: LoginSwitchScreen(
-        appBar: AppBar(
-          leading: const ExtBackButton(disabled: false),
-          backgroundColor: Colors.transparent,
-        ),
+        appBar: AppBar(leading: const ExtBackButton(disabled: false), backgroundColor: Colors.transparent),
         header: Column(
           children: [
-            OnboardingLogo(style: localStyle?.onboardingLogoStyle),
-            SizedBox(height: kInset),
+            ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
+            const SizedBox(height: kInset),
           ],
         ),
-        body: LoginOtpSigninVerifyScreen(),
+        body: const LoginOtpSigninVerifyScreen(),
         currentLoginType: LoginType.otpSignin,
-        supportedLoginTypes: [
-          LoginType.otpSignin,
-          LoginType.passwordSignin,
-          LoginType.signup,
-        ],
+        supportedLoginTypes: const [LoginType.otpSignin, LoginType.passwordSignin, LoginType.signup],
       ),
     );
   }

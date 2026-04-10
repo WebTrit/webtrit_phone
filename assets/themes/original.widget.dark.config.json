@@ -2,20 +2,87 @@
   "fonts": {
     "fontFamily": "Montserrat"
   },
+  "button": {
+    "__primaryElevatedButton": "Styling for the primary elevated button used across the app. Supports textStyle, colors, shape, elevation, padding, and more.",
+    "primaryElevatedButton": {
+      "backgroundColor": "#A5C6E4",
+      "foregroundColor": "#092D4A",
+      "disabledBackgroundColor": "#333537",
+      "disabledForegroundColor": "#8E918F",
+      "textStyle": {
+        "fontSize": 14,
+        "fontWeight": {
+          "weight": 500
+        }
+      },
+      "shape": {
+        "type": "rounded",
+        "borderRadius": 8.0
+      }
+    }
+  },
+  "group": {
+    "__groupTitleListTile": "Styling for group title tiles in list views (e.g., section headers in contacts or settings).",
+    "groupTitleListTile": {
+      "backgroundColor": "#1D2022",
+      "textStyle": {
+        "fontSize": 12,
+        "fontWeight": {
+          "weight": 600
+        },
+        "color": "#A5C6E4"
+      }
+    }
+  },
+  "bar": {
+    "__bottomNavigationBar": "Bottom navigation bar styling.",
+    "bottomNavigationBar": {
+      "backgroundColor": "#111315",
+      "selectedItemColor": "#A5C6E4",
+      "unSelectedItemColor": "#8E918F"
+    },
+    "__appBarConfig": "Top app bar configuration. Supports colors, elevation, title styling, icon themes, and system overlay style.",
+    "appBarConfig": {
+      "primary": true,
+      "showBackButton": true,
+      "backgroundColor": "#00000000",
+      "foregroundColor": "#E2E2E2",
+      "surfaceTintColor": "#00000000",
+      "centerTitle": true,
+      "elevation": 0,
+      "scrolledUnderElevation": 0,
+      "titleTextStyle": {
+        "fontSize": 18,
+        "fontWeight": {
+          "weight": 600
+        },
+        "color": "#E2E2E2"
+      }
+    },
+    "__tabBarConfig": "Tab bar styling including indicator, labels, alignment, and animation.",
+    "tabBarConfig": {
+      "indicatorColor": "#A5C6E4",
+      "labelColor": "#092D4A",
+      "unselectedLabelColor": "#8E918F",
+      "dividerColor": "#00000000",
+      "indicatorSize": "tab",
+      "tabAlignment": "fill"
+    }
+  },
   "imageAssets": {
     "defaultPlaceholderImage": {
       "uri": "asset://assets/images/secondary_onboarding_logo.svg"
     },
     "leadingAvatarStyle": {
-      "backgroundColor": "#EEF3F6",
+      "backgroundColor": "#3C4750",
       "radius": 20.0,
       "initialsTextStyle": {
         "fontFamily": "Montserrat",
-        "fontSize": null,
+        "fontSize": 16,
         "fontWeight": {
           "weight": 700
         },
-        "color": "#1F618F"
+        "color": "#D1E4F5"
       },
       "placeholderIcon": {
         "codePoint": "0xe497",
@@ -33,7 +100,7 @@
         "strokeWidth": 1.0
       },
       "smartIndicator": {
-        "backgroundColor": "#F8FBFD",
+        "backgroundColor": "#1D2022",
         "icon": {
           "codePoint": "0xe491",
           "fontFamily": "MaterialIcons",
@@ -49,44 +116,68 @@
       "presenceBadge": {
         "availableColor": null,
         "unavailableColor": null,
-        "sizeFactor": 0.325 
+        "sizeFactor": 0.325
       }
     }
   },
+  "input": {
+    "__primary": "Primary text form field styling. Controls label color and border colors for different states (disabled, focused, default).",
+    "primary": {
+      "labelColor": "#A5C6E4",
+      "border": {
+        "disabled": {
+          "typicalColor": "#444749",
+          "errorColor": "#FF897D"
+        },
+        "focused": {
+          "typicalColor": "#A5C6E4",
+          "errorColor": "#FF897D"
+        },
+        "any": {
+          "typicalColor": "#8E918F",
+          "errorColor": "#FF897D"
+        }
+      }
+    }
+  },
+  "text": {
+    "__selection": "Text selection styling: cursor, selection highlight, and drag handles.",
+    "selection": {
+      "cursorColor": "#A5C6E4",
+      "selectionColor": "#1F618F",
+      "selectionHandleColor": "#A5C6E4"
+    },
+    "__linkify": "Linkify text styling for detected links in messages.",
+    "linkify": {
+      "styleColor": "#E2E2E2",
+      "linkifyStyleColor": "#A5C6E4"
+    }
+  },
   "dialog": {
+    "_confirmDialog": {
+      "activeButtonColor1": "#A5C6E4",
+      "activeButtonColor2": "#FF897D",
+      "defaultButtonColor": "#8E918F"
+    },
     "snackBar": {
-      "successBackgroundColor": "#75B943",
-      "errorBackgroundColor": "#E74C3C",
-      "infoBackgroundColor": "#494949",
-      "warningBackgroundColor": "#F95A14"
+      "successBackgroundColor": "#B8E078",
+      "errorBackgroundColor": "#FF897D",
+      "infoBackgroundColor": "#8E918F",
+      "warningBackgroundColor": "#FFB59D"
     }
   },
   "statuses": {
     "registrationStatuses": {
-      "online": "#75B943",
-      "offline": "#EEF3F6"
+      "online": "#B8E078",
+      "offline": "#37393B"
     },
-    "calStatuses": {
-      "connectivityNone": "#E74C3C",
-      "connectError": "#E74C3C",
-      "appUnregistered": "#494949",
-      "connectIssue": "#E74C3C",
-      "inProgress": "#123752",
-      "ready": "#75B943"
-    }
-  },
-  "decorationConfig": {
-    "primaryGradientColorsConfig": {
-      "colors": [
-        {
-          "color": "#5CACE3",
-          "blend": true
-        },
-        {
-          "color": "#123752",
-          "blend": true
-        }
-      ]
+    "callStatuses": {
+      "connectivityNone": "#FF897D",
+      "connectError": "#FF897D",
+      "appUnregistered": "#8E918F",
+      "connectIssue": "#FF897D",
+      "inProgress": "#A5C6E4",
+      "ready": "#B8E078"
     }
   }
 }

@@ -4,30 +4,25 @@ import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 import '../theme_style_factory.dart';
+import 'theme_image_style.dart';
 
 class LoginSwitchScreenStyleFactory implements ThemeStyleFactory<LoginSwitchScreenStyles> {
-  LoginSwitchScreenStyleFactory(this.config, this.colors);
+  LoginSwitchScreenStyleFactory(this.config, this.colors, this.defaultFontFamily);
 
   final LoginSwitchPageConfig? config;
   final ColorScheme colors;
+  final String? defaultFontFamily;
 
   @override
   LoginSwitchScreenStyles create() {
-    final textStyleColor = colors.onPrimary;
-
-    final loginPageConfigUri = config?.mainLogo?.uri;
-    final widthFactor = config?.mainLogo?.render?.scale ?? 0.25;
-
-    final textStyle = TextStyle(color: textStyleColor, fontWeight: FontWeight.w600);
+    final pictureLogoStyle = ThemeImageStyleFactory(source: config?.mainLogo).create();
 
     return LoginSwitchScreenStyles(
       primary: LoginSwitchScreenStyle(
-        onboardingLogoStyle: OnboardingLogoStyle(
-          picture: loginPageConfigUri?.toThemeSvgAsset(),
-          widthFactor: widthFactor,
-          textStyle: textStyle,
-          padding: config?.mainLogo?.render?.padding?.toEdgeInsets(),
-        ),
+        contentThemeOverride: config?.themeOverride.mode.toThemeMode(),
+        applyToAppBar: config?.themeOverride.applyToAppBar,
+        pictureLogoStyle: pictureLogoStyle,
+        segmentButtonStyle: config?.segmentButtonStyle?.toButtonStyle(defaultFontFamily: defaultFontFamily),
       ),
     );
   }

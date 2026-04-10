@@ -20,12 +20,18 @@ class KeypadScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-
-    final style = this.style ?? themeData.extension<KeypadScreenStyles>()?.primary;
-
-    return Scaffold(
-      appBar: MainAppBar(title: title, context: context),
-      body: KeypadView(videoEnabled: videoEnabled, transferEnabled: transferEnabled, style: style),
+    final effectiveStyle = style ?? themeData.extension<KeypadScreenStyles>()?.primary;
+    return ThemedScaffold(
+      background: effectiveStyle?.background,
+      contentThemeOverride: effectiveStyle?.contentThemeOverride,
+      applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+      extendBodyBehindAppBar: true,
+      appBar: MainAppBar(
+        title: title,
+        context: context,
+        flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
+      ),
+      body: KeypadView(videoEnabled: videoEnabled, transferEnabled: transferEnabled, style: effectiveStyle),
     );
   }
 }

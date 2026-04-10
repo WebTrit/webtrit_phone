@@ -81,8 +81,9 @@ class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
           fallback: context.l10n.login_TextFieldLabelText_passwordSigninUserRef,
         );
 
-        return Padding(
+        return Container(
           padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
+          color: themeData.scaffoldBackgroundColor,
           child: AutofillGroup(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,

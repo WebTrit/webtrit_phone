@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 
 part 'favorites_dao.g.dart';
 
+@Deprecated('Use FavoritesV2Dao instead with the new favorites implementation')
 class FavoriteWithContactData {
   FavoriteWithContactData(
     this.favoriteData,
@@ -21,9 +22,21 @@ class FavoriteWithContactData {
   final Set<PresenceInfoData> contactPresenceInfo;
 }
 
+@Deprecated('Use FavoritesV2Dao instead with the new favorites implementation')
 @DriftAccessor(tables: [FavoritesTable, ContactsTable, ContactPhonesTable, ContactEmailsTable, PresenceInfoTable])
 class FavoritesDao extends DatabaseAccessor<AppDatabase> with _$FavoritesDaoMixin {
   FavoritesDao(super.db);
+
+  Future<List<FavoriteWithContactData>> getFavoritesWithContactData() {
+    final q = (select(favoritesTable)..orderBy([(t) => OrderingTerm.asc(t.position)])).join([
+      leftOuterJoin(_sourcePhone, favoritesTable.contactPhoneId.equalsExp(_sourcePhone.id)),
+      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(_sourcePhone.contactId)),
+      leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(_contactPhones, _contactPhones.contactId.equalsExp(contactsTable.id)),
+      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(_contactPhones.number)),
+    ]);
+    return q.get().then(_rowsToData);
+  }
 
   Stream<List<FavoriteWithContactData>> watchFavoritesExt() {
     final q = (select(favoritesTable)..orderBy([(t) => OrderingTerm.asc(t.position)])).join([

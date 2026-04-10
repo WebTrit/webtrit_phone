@@ -28,6 +28,8 @@ abstract class CallEvent extends LineEvent {
     return _callEventFromJsonDecoders[eventTypeValue]?.call(json) ?? CallErrorEvent.tryFromJson(json);
   }
 
+  Map<String, dynamic> callBaseJson(String typeValue) => {...lineBaseJson(typeValue), 'call_id': callId};
+
   static final Map<String, CallEvent Function(Map<String, dynamic>)> _callEventFromJsonDecoders = {
     AcceptedEvent.typeValue: AcceptedEvent.fromJson,
     AcceptingEvent.typeValue: AcceptingEvent.fromJson,

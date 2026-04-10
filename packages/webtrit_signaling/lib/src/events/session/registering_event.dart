@@ -5,6 +5,9 @@ class RegisteringEvent extends SessionEvent {
 
   static const typeValue = 'registering';
 
+  @override
+  Map<String, dynamic> toJson() => sessionBaseJson(typeValue);
+
   factory RegisteringEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

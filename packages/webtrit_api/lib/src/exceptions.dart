@@ -35,6 +35,16 @@ class EndpointNotSupportedException extends RequestFailure {
   }) : super();
 }
 
+class VoicemailNotConfiguredException extends RequestFailure {
+  VoicemailNotConfiguredException({
+    required super.url,
+    required super.requestId,
+    required super.statusCode,
+    super.token,
+    super.error,
+  }) : super();
+}
+
 class UserNotFoundException extends RequestFailure {
   UserNotFoundException({required super.url, required super.requestId, required super.statusCode});
 
@@ -57,4 +67,17 @@ class UnauthorizedException extends RequestFailure {
     return 'UnauthorizedException(statusCode: $statusCode, requestId: $requestId, url: $url'
         '${code != null ? ', code: $code' : ''})';
   }
+}
+
+class SessionMissingException extends RequestFailure {
+  SessionMissingException({
+    required super.url,
+    required super.requestId,
+    required super.statusCode,
+    super.token,
+    super.error,
+  });
+
+  @override
+  String toString() => 'SessionMissingException(statusCode: $statusCode, requestId: $requestId, url: $url)';
 }

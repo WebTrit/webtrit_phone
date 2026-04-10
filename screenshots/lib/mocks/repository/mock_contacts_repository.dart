@@ -20,6 +20,11 @@ class MockContactsRepository extends Mock implements ContactsRepository {
     return _contactStreamController.stream;
   }
 
+  @override
+  Stream<Contact?> watchContactByPhoneNumberMatch(String number) {
+    return _contactStreamController.stream;
+  }
+
   void addContactUpdate(Contact? contact) {
     _contactStreamController.add(contact);
   }

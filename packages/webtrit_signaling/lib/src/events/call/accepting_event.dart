@@ -5,6 +5,9 @@ class AcceptingEvent extends CallEvent {
 
   static const typeValue = 'accepting';
 
+  @override
+  Map<String, dynamic> toJson() => callBaseJson(typeValue);
+
   factory AcceptingEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

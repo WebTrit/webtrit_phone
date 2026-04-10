@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class LogRecordsConsoleScreen extends StatelessWidget {
   const LogRecordsConsoleScreen({super.key});
@@ -21,7 +22,7 @@ class LogRecordsConsoleScreen extends StatelessWidget {
                 icon: const Icon(Icons.delete_outline),
                 style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
                 onPressed: switch (state) {
-                  LogRecordsConsoleStateSuccess() => () {
+                  LogRecordsConsoleStateSuccess(isSharing: false) => () {
                     context.read<LogRecordsConsoleCubit>().clear();
                   },
                   _ => null,
@@ -31,11 +32,19 @@ class LogRecordsConsoleScreen extends StatelessWidget {
           ),
           BlocBuilder<LogRecordsConsoleCubit, LogRecordsConsoleState>(
             builder: (context, state) {
+              final isSharing = state is LogRecordsConsoleStateSuccess && state.isSharing;
               return IconButton(
-                icon: const Icon(Icons.share),
+                icon: isSharing
+                    ? SizedCircularProgressIndicator(
+                        size: 20,
+                        outerSize: 24,
+                        color: colorScheme.onSurface,
+                        strokeWidth: 2,
+                      )
+                    : const Icon(Icons.share),
                 style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
                 onPressed: switch (state) {
-                  LogRecordsConsoleStateSuccess(:final logRecords) when logRecords.isNotEmpty => () {
+                  LogRecordsConsoleStateSuccess(:final logRecords, isSharing: false) when logRecords.isNotEmpty => () {
                     context.read<LogRecordsConsoleCubit>().share();
                   },
                   _ => null,

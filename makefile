@@ -13,7 +13,7 @@ include $(TOOLS_MAKEFILE)
 # Variables
 DART_DEFINE_FILE = --dart-define-from-file=dart_define.json
 CONFIGURATOR = dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart
-KEYSTORES_PATH = --keystores-path=../webtrit_phone_keystores
+KEYSTORES_PATH = --keystores-path=../webtrit_phone_keystores/applications
 
 # ===========================
 #  Paths to Configuration Files
@@ -73,16 +73,17 @@ FLUTTER_NATIVE_SPLASH_CONFIG = $(CONFIGS_PATH)/flutter_native_splash.yaml
 # - Use `SPLASH_COLOR` for a solid background color.
 # - Use `SPLASH_IMAGE` for a custom background image (useful for gradients).
 # - Only one of them should be set at a time.
-SPLASH_COLOR ?= "#123752"
+SPLASH_COLOR ?= \#123752
 
 # Android 12+ splash screen configuration
 #
 # - From Android 12 onwards, splash screens are handled differently.
 # - Visit: https://developer.android.com/guide/topics/ui/splash-screen
-ANDROID_12_SPLASH_COLOR ?= "#123752"
+ANDROID_12_SPLASH_COLOR ?= \#123752
+ANDROID_12_SPLASH_IMAGE ?= tool/assets/native_splash/image.png
 
 # Path to splash screen background image (if used)
-SPLASH_IMAGE ?= "tool/assets/native_splash/image.png"
+SPLASH_IMAGE ?= tool/assets/native_splash/image.png
 
 # ===========================
 #  Localizely Configuration
@@ -152,51 +153,89 @@ generate-launcher-icons-config:
 	@echo "    theme_color: \"$${THEME_COLOR:-$(THEME_COLOR)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 
 ## Generate launcher icons using external config
+# DEPRECATED: use `melos run icons:generate`
 generate-launcher-icons:
 	flutter pub add flutter_launcher_icons --dev
 	dart run flutter_launcher_icons  -f $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 
 ## Generate flutter_native_splash.yaml with custom parameters
 generate-native-splash-config:
-	@echo "flutter_native_splash:" > $(FLUTTER_NATIVE_SPLASH_CONFIG)
-	@echo "  color: \"$${SPLASH_COLOR:-$(SPLASH_COLOR)}\"" >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
-	@echo "  image: \"$${SPLASH_IMAGE:-$(SPLASH_IMAGE)}\"" >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
-	@echo "  android_12:" >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
-	@echo "    color: \"$${ANDROID_12_SPLASH_COLOR:-$(ANDROID_12_SPLASH_COLOR)}\"" >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo 'flutter_native_splash:' > $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo '  color: "$(SPLASH_COLOR)"' >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo '  image: "$(SPLASH_IMAGE)"' >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo '  android_12:' >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo '    color: "$(ANDROID_12_SPLASH_COLOR)"' >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
+	@echo '    image: "$(ANDROID_12_SPLASH_IMAGE)"' >> $(FLUTTER_NATIVE_SPLASH_CONFIG)
 
 ## Generate native splash screen using external config
+# DEPRECATED: use `melos run splash:generate`
 generate-native-splash:
 	flutter pub add flutter_native_splash --dev
 	dart run flutter_native_splash:create --path=$(FLUTTER_NATIVE_SPLASH_CONFIG)
 
 ## Generate both launcher icons and splash screen
+# DEPRECATED: use `melos run assets:generate`
 generate-assets: generate-launcher-icons generate-native-splash
 
 ## Push localization keys to Localizely
+# DEPRECATED: use `melos run l10n:push`
 push-l10n:
 	$(call ensure_localizely_token)
 	localizely-cli --api-token=$(localizely_token) push
 
 ## Pull localization keys from Localizely
+# DEPRECATED: use `melos run l10n:pull`
 pull-l10n:
 	$(call ensure_localizely_token)
 	localizely-cli --api-token=$(localizely_token) pull
 
 ## Generate Flutter localization files
+# DEPRECATED: use `melos run l10n:generate`
 gen-l10n:
 	flutter gen-l10n
 
 ## Fetch localization keys from Localizely, pull them and generate localization files
+# DEPRECATED: use `melos run l10n:fetch`
 fetch-l10n: pull-l10n gen-l10n
 
 ## Clean git files
+# DEPRECATED: use `melos run clean:git`
 clean-git:
 	git reset --hard HEAD
 	git clean -df
 
+# DEPRECATED: use `melos run ide:sync`
 sync-run-configs:
 	mkdir -p .idea/runConfigurations
 	cp tool/run/*.xml .idea/runConfigurations/
 
+# DEPRECATED: use `melos run start`
 run-core:
 	$(MAKE) -f makefile.shared run
+
+# ===========================
+#  Copilot Workspace Helpers
+# ===========================
+
+# Branch names used for fixing Copilot automated branches
+OLD_BRANCH ?=
+NEW_BRANCH ?=
+
+.PHONY: rename-copilot-branch fix-copilot-api
+
+## Rename branch locally and remotely (useful for fixing Copilot branches)
+rename-copilot-branch:
+	@if [ -z "$(OLD_BRANCH)" ] || [ -z "$(NEW_BRANCH)" ]; then \
+		echo "Error: OLD_BRANCH and NEW_BRANCH variables are required."; \
+		echo "Example: make rename-copilot-branch OLD_BRANCH=copilot/fix NEW_BRANCH=fix/api"; \
+		exit 1; \
+	fi
+	@echo "Fetching origin..."
+	git fetch origin
+	@echo "Creating and checking out $(NEW_BRANCH) from origin/$(OLD_BRANCH)..."
+	git checkout -b $(NEW_BRANCH) origin/$(OLD_BRANCH)
+	@echo "Pushing $(NEW_BRANCH) to origin..."
+	git push origin -u $(NEW_BRANCH)
+	@echo "Removing $(OLD_BRANCH) from origin..."
+	git push origin --delete $(OLD_BRANCH)
+	@echo "Branch successfully renamed and linked!"

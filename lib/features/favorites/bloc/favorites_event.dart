@@ -11,24 +11,6 @@ class FavoritesStarted extends FavoritesEvent {
   const FavoritesStarted();
 }
 
-class FavoritesAddedByContactPhoneId extends FavoritesEvent {
-  const FavoritesAddedByContactPhoneId({required this.contactPhoneId});
-
-  final int contactPhoneId;
-
-  @override
-  List<Object?> get props => [contactPhoneId];
-}
-
-class FavoritesRemovedByContactPhoneId extends FavoritesEvent {
-  const FavoritesRemovedByContactPhoneId({required this.contactPhoneId});
-
-  final int contactPhoneId;
-
-  @override
-  List<Object?> get props => [contactPhoneId];
-}
-
 class FavoritesRemoved extends FavoritesEvent {
   const FavoritesRemoved({required this.favorite});
 
@@ -36,4 +18,14 @@ class FavoritesRemoved extends FavoritesEvent {
 
   @override
   List<Object?> get props => [favorite];
+}
+
+class FavoritesShifted extends FavoritesEvent {
+  const FavoritesShifted({required this.favorite, required this.position});
+
+  final Favorite favorite;
+  final int position;
+
+  @override
+  List<Object?> get props => [favorite, position];
 }

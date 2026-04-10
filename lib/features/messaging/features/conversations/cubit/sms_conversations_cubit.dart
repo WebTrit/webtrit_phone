@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
@@ -14,34 +16,77 @@ part 'sms_conversations_state.dart';
 final _logger = Logger('SmsConversationsCubit');
 
 class SmsConversationsCubit extends Cubit<SmsConversationsState> {
-  SmsConversationsCubit(this._client, this._repository) : super(SmsConversationsState.initial()) {
-    init();
-  }
+  SmsConversationsCubit(
+    this._client,
+    this._repository, {
+    Duration searchDebounceDuration = const Duration(milliseconds: 100),
+  }) : _searchDebounceDuration = searchDebounceDuration,
+       super(SmsConversationsState.initial());
 
   final PhoenixSocket _client;
   final SmsRepository _repository;
-  late final StreamSubscription _conversationsSub;
+  final Duration _searchDebounceDuration;
+
+  StreamSubscription? _conversationsSub;
+  String _searchString = '';
+  Timer? _searchDebounceTimer;
 
   void init() async {
-    _logger.info('Initialising');
+    _conversationsSub?.cancel();
+    _conversationsSub = _actionsStream
+        .asyncMap((event) async {
+          if (event is List<(SmsConversation, SmsMessage?)>) {
+            final (raw, toShow) = await compute((data) {
+              final (conversations, search) = data;
+              final sorted = List<(SmsConversation, SmsMessage?)>.from(conversations);
+              sorted.sort(_comparator);
+              final filtered = _filterBySearch(search, sorted);
+              return (sorted, filtered);
+            }, (event, _searchString));
 
-    final conversations = await _repository.getConversationsWithLastMessages();
-    conversations.sort(_comparator);
+            return SmsConversationsState(raw, toShow, false);
+          }
+          if (event is SmsConversationUpdate) {
+            final (raw, toShow) = await compute((data) {
+              final (conversation, conversations, search) = data;
+              final newList = _mergeWithChatUpdate(conversation, conversations);
+              final filtered = _filterBySearch(search, newList);
+              return (newList, filtered);
+            }, (event.conversation, state.conversations, _searchString));
 
-    emit(SmsConversationsState(conversations, false));
-    _logger.info('Initialised: ${conversations.length} conversations');
+            return SmsConversationsState(raw, toShow, false);
+          }
+          if (event is SmsConversationRemove) {
+            final (raw, toShow) = await compute((data) {
+              final (conversationId, conversations, search) = data;
+              final newList = _removeChat(conversationId, conversations);
+              final filtered = _filterBySearch(search, newList);
+              return (newList, filtered);
+            }, (event.conversationId, state.conversations, _searchString));
 
-    _conversationsSub = _repository.eventBus.listen((event) {
-      if (event is SmsConversationUpdate) {
-        emit(state.copyWith(conversations: _mergeWithChatUpdate(event.conversation)));
-      }
-      if (event is SmsConversationRemove) {
-        emit(state.copyWith(conversations: _removeChat(event.conversationId)));
-      }
-      if (event is SmsMessageUpdate) {
-        emit(state.copyWith(conversations: _mergeWithMessageUpdate(event.message)));
-      }
-    });
+            return SmsConversationsState(raw, toShow, false);
+          }
+          if (event is SmsMessageUpdate) {
+            final (raw, toShow) = await compute((data) {
+              final (message, conversations, search) = data;
+              final newList = _mergeWithMessageUpdate(message, conversations);
+              final filtered = _filterBySearch(search, newList);
+              return (newList, filtered);
+            }, (event.message, state.conversations, _searchString));
+
+            return SmsConversationsState(raw, toShow, false);
+          }
+          _logger.info('list recomputed ${state.conversationsToShow.length} / ${state.conversations.length}');
+        })
+        .listen((newState) {
+          if (!isClosed && newState != null) emit(newState);
+        });
+  }
+
+  Future<void> updateSearch(String value) async {
+    _searchString = value;
+    _searchDebounceTimer?.cancel();
+    _searchDebounceTimer = Timer(_searchDebounceDuration, () => _doUpdateSearch());
   }
 
   Future<bool> deleteConversation(int id) async {
@@ -50,47 +95,82 @@ class SmsConversationsCubit extends Cubit<SmsConversationsState> {
     return channel.deleteSmsConversation();
   }
 
+  Stream get _actionsStream async* {
+    yield await _repository.getConversationsWithLastMessages();
+    yield* _repository.eventBus;
+  }
+
+  Future<void> _doUpdateSearch() async {
+    final conversationsToShow = await compute((data) {
+      final (search, conversations) = data;
+      return _filterBySearch(search, conversations);
+    }, (_searchString, state.conversations));
+    if (isClosed) return;
+    emit(state.copyWith(conversationsToShow: conversationsToShow));
+  }
+
   /// Sort conversations list by last message if available, otherwise by conversations update time
-  int _comparator((SmsConversation, SmsMessage?) a, (SmsConversation, SmsMessage?) b) {
+  static int _comparator((SmsConversation, SmsMessage?) a, (SmsConversation, SmsMessage?) b) {
     final aLastActivity = a.$2?.createdAt ?? a.$1.updatedAt;
     final bLastActivity = b.$2?.createdAt ?? b.$1.updatedAt;
     return bLastActivity.compareTo(aLastActivity);
   }
 
-  List<(SmsConversation, SmsMessage?)> _mergeWithChatUpdate(SmsConversation conversation) {
+  static List<(SmsConversation, SmsMessage?)> _mergeWithChatUpdate(
+    SmsConversation conversation,
+    List<(SmsConversation, SmsMessage?)> conversations,
+  ) {
     List<(SmsConversation, SmsMessage?)> newList;
-    final index = state.conversations.indexWhere((e) => e.$1.id == conversation.id);
+    final index = conversations.indexWhere((e) => e.$1.id == conversation.id);
     if (index == -1) {
-      newList = state.conversations + [(conversation, null)];
+      newList = conversations + [(conversation, null)];
     } else {
-      newList = List.of(state.conversations);
+      newList = List.of(conversations);
       newList[index] = (conversation, newList[index].$2);
     }
     newList.sort(_comparator);
     return newList;
   }
 
-  List<(SmsConversation, SmsMessage?)> _mergeWithMessageUpdate(SmsMessage message) {
-    final index = state.conversations.indexWhere((e) => e.$1.id == message.conversationId);
-    final oldMessage = state.conversations[index].$2;
+  static List<(SmsConversation, SmsMessage?)> _mergeWithMessageUpdate(
+    SmsMessage message,
+    List<(SmsConversation, SmsMessage?)> conversations,
+  ) {
+    final index = conversations.indexWhere((e) => e.$1.id == message.conversationId);
+    final oldMessage = conversations[index].$2;
     final isOldMessageNewer = oldMessage != null && oldMessage.createdAt.isAfter(message.createdAt);
 
     if (index != -1 && !isOldMessageNewer) {
-      final newList = List.of(state.conversations);
+      final newList = List.of(conversations);
       newList[index] = (newList[index].$1, message);
       return newList;
     }
 
-    return state.conversations;
+    return conversations;
   }
 
-  List<(SmsConversation, SmsMessage?)> _removeChat(int id) {
-    return state.conversations.where((e) => e.$1.id != id).toList();
+  static List<(SmsConversation, SmsMessage?)> _removeChat(int id, List<(SmsConversation, SmsMessage?)> conversations) {
+    return conversations.where((e) => e.$1.id != id).toList();
+  }
+
+  static List<(SmsConversation, SmsMessage?)> _filterBySearch(
+    String search,
+    List<(SmsConversation, SmsMessage?)> conversations,
+  ) {
+    if (search.isEmpty) return conversations;
+
+    return conversations.where((e) {
+      final (conversation, lastMessage) = e;
+      final phones = conversation.firstPhoneNumber.toLowerCase() + conversation.secondPhoneNumber.toLowerCase();
+      final lastMessageText = lastMessage?.content ?? '';
+
+      return phones.contains(search) || lastMessageText.contains(search);
+    }).toList();
   }
 
   @override
   Future<void> close() {
-    _conversationsSub.cancel();
+    _conversationsSub?.cancel();
     return super.close();
   }
 }

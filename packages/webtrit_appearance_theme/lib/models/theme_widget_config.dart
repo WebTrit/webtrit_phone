@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'common/leading_avatar_style_config.dart';
-import 'custom_color.dart';
+import 'common/common.dart';
 import 'features_config/metadata.dart';
 import 'resources/image_source.dart';
 
@@ -21,9 +20,7 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
     this.input = const InputWidgetConfig(),
     this.text = const TextWidgetConfig(),
     this.dialog = const DialogWidgetConfig(),
-    this.actionPad = const ActionPadWidgetConfig(),
     this.statuses = const StatusesWidgetConfig(),
-    this.decorationConfig = const DecorationConfig(),
   });
 
   @override
@@ -51,13 +48,7 @@ class ThemeWidgetConfig with _$ThemeWidgetConfig {
   final DialogWidgetConfig dialog;
 
   @override
-  final ActionPadWidgetConfig actionPad;
-
-  @override
   final StatusesWidgetConfig statuses;
-
-  @override
-  final DecorationConfig decorationConfig;
 
   factory ThemeWidgetConfig.fromJson(Map<String, Object?> json) => _$ThemeWidgetConfigFromJson(json);
 
@@ -80,10 +71,10 @@ class FontsConfig with _$FontsConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ButtonWidgetConfig with _$ButtonWidgetConfig {
-  const ButtonWidgetConfig({this.primaryElevatedButton = const ElevatedButtonWidgetConfig()});
+  const ButtonWidgetConfig({this.primaryElevatedButton});
 
   @override
-  final ElevatedButtonWidgetConfig primaryElevatedButton;
+  final ButtonStyleConfig? primaryElevatedButton;
 
   factory ButtonWidgetConfig.fromJson(Map<String, Object?> json) => _$ButtonWidgetConfigFromJson(json);
 
@@ -156,14 +147,18 @@ class GroupWidgetConfig with _$GroupWidgetConfig {
 class BarWidgetConfig with _$BarWidgetConfig {
   const BarWidgetConfig({
     this.bottomNavigationBar = const BottomNavigationBarWidgetConfig(),
-    this.extTabBar = const ExtTabBarWidgetConfig(),
+    this.appBarConfig = const AppBarConfig(),
+    this.tabBarConfig = const TabBarConfig(),
   });
 
   @override
   final BottomNavigationBarWidgetConfig bottomNavigationBar;
 
   @override
-  final ExtTabBarWidgetConfig extTabBar;
+  final AppBarConfig appBarConfig;
+
+  @override
+  final TabBarConfig tabBarConfig;
 
   factory BarWidgetConfig.fromJson(Map<String, Object?> json) => _$BarWidgetConfigFromJson(json);
 
@@ -220,13 +215,19 @@ class ExtTabBarWidgetConfig with _$ExtTabBarWidgetConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class GroupTitleListTileWidgetConfig with _$GroupTitleListTileWidgetConfig {
-  const GroupTitleListTileWidgetConfig({this.backgroundColor, this.textColor});
+  const GroupTitleListTileWidgetConfig({
+    /// Background color in hex format.
+    this.backgroundColor,
+
+    /// Full text style configuration (font, size, color, etc.).
+    this.textStyle,
+  });
 
   @override
   final String? backgroundColor;
 
   @override
-  final String? textColor;
+  final TextStyleConfig? textStyle;
 
   factory GroupTitleListTileWidgetConfig.fromJson(Map<String, Object?> json) =>
       _$GroupTitleListTileWidgetConfigFromJson(json);
@@ -567,29 +568,6 @@ class SnackBarWidgetConfig with _$SnackBarWidgetConfig {
 
 @freezed
 @JsonSerializable(explicitToJson: true)
-class ActionPadWidgetConfig with _$ActionPadWidgetConfig {
-  const ActionPadWidgetConfig({
-    this.callStart = const ElevatedButtonWidgetConfig(),
-    this.callTransfer = const ElevatedButtonWidgetConfig(),
-    this.backspacePressed = const ElevatedButtonWidgetConfig(),
-  });
-
-  @override
-  final ElevatedButtonWidgetConfig callStart;
-
-  @override
-  final ElevatedButtonWidgetConfig callTransfer;
-
-  @override
-  final ElevatedButtonWidgetConfig backspacePressed;
-
-  factory ActionPadWidgetConfig.fromJson(Map<String, Object?> json) => _$ActionPadWidgetConfigFromJson(json);
-
-  Map<String, Object?> toJson() => _$ActionPadWidgetConfigToJson(this);
-}
-
-@freezed
-@JsonSerializable(explicitToJson: true)
 class StatusesWidgetConfig with _$StatusesWidgetConfig {
   const StatusesWidgetConfig({
     this.registrationStatuses = const RegistrationStatusesWidgetConfig(),
@@ -659,28 +637,108 @@ class CallStatusesWidgetConfig with _$CallStatusesWidgetConfig {
   Map<String, Object?> toJson() => _$CallStatusesWidgetConfigToJson(this);
 }
 
+/// Defines default property values for descendant [TabBar] widgets.
+///
+/// This configuration maps to [TabBarThemeData] and is typically used to
+/// describe the overall [ThemeData.tabBarTheme]. Properties are null by default,
+/// allowing the widget to fall back to parent theme values.
 @freezed
 @JsonSerializable(explicitToJson: true)
-class DecorationConfig with _$DecorationConfig {
-  const DecorationConfig({this.primaryGradientColorsConfig = const GradientColorsConfig()});
+class TabBarConfig with _$TabBarConfig {
+  const TabBarConfig({
+    this.indicatorColor,
+    this.dividerColor,
+    this.labelColor,
+    this.unselectedLabelColor,
+    this.overlayColor,
+    this.dividerHeight,
+    this.labelPadding,
+    this.labelStyle,
+    this.unselectedLabelStyle,
+    this.indicatorSize,
+    this.tabAlignment,
+    this.indicatorAnimation,
+    this.splashFactory,
+    this.indicatorBorder,
+  });
 
   @override
-  final GradientColorsConfig primaryGradientColorsConfig;
+  final String? indicatorColor;
 
-  factory DecorationConfig.fromJson(Map<String, Object?> json) => _$DecorationConfigFromJson(json);
+  @override
+  final String? dividerColor;
 
-  Map<String, Object?> toJson() => _$DecorationConfigToJson(this);
+  @override
+  final String? labelColor;
+
+  @override
+  final String? unselectedLabelColor;
+
+  @override
+  final String? overlayColor;
+
+  @override
+  final double? dividerHeight;
+
+  @override
+  final PaddingConfig? labelPadding;
+
+  @override
+  final TextStyleConfig? labelStyle;
+
+  @override
+  final TextStyleConfig? unselectedLabelStyle;
+
+  @override
+  @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
+  final TabBarIndicatorSizeConfig? indicatorSize;
+
+  @override
+  @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
+  final TabAlignmentConfig? tabAlignment;
+
+  @override
+  @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
+  final TabIndicatorAnimationConfig? indicatorAnimation;
+
+  @override
+  @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
+  final TabSplashFactoryConfig? splashFactory;
+
+  @override
+  final BorderConfig? indicatorBorder;
+
+  factory TabBarConfig.fromJson(Map<String, Object?> json) => _$TabBarConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$TabBarConfigToJson(this);
 }
 
+/// Defines default property values for descendant [AppBar] widgets.
+///
+/// This configuration maps to [AppBarThemeData] and is typically used to
+/// describe the overall [ThemeData.appBarTheme]. Properties are null by default,
+/// allowing the [AppBar] constructor to provide its own defaults.
 @freezed
-@JsonSerializable(explicitToJson: true)
-class GradientColorsConfig with _$GradientColorsConfig {
-  const GradientColorsConfig({this.colors = const []});
+abstract class AppBarConfig with _$AppBarConfig {
+  const factory AppBarConfig({
+    @Default(true) bool primary,
+    @Default(true) bool showBackButton,
+    String? backgroundColor,
+    String? foregroundColor,
+    String? shadowColor,
+    String? surfaceTintColor,
+    double? elevation,
+    double? scrolledUnderElevation,
+    double? titleSpacing,
+    double? leadingWidth,
+    double? toolbarHeight,
+    bool? centerTitle,
+    IconThemeDataConfig? iconTheme,
+    IconThemeDataConfig? actionsIconTheme,
+    TextStyleConfig? titleTextStyle,
+    TextStyleConfig? toolbarTextStyle,
+    OverlayStyleModel? systemOverlayStyle,
+  }) = _AppBarConfig;
 
-  @override
-  final List<CustomColor> colors;
-
-  factory GradientColorsConfig.fromJson(Map<String, Object?> json) => _$GradientColorsConfigFromJson(json);
-
-  Map<String, Object?> toJson() => _$GradientColorsConfigToJson(this);
+  factory AppBarConfig.fromJson(Map<String, Object?> json) => _$AppBarConfigFromJson(json);
 }

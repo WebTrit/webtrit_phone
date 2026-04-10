@@ -43,7 +43,7 @@ class SlidableSection<T> extends StatelessWidget {
           },
           min: 0,
           max: options.length.toDouble(),
-          divisions: options.length + 1,
+          divisions: options.length,
           label: buildOptionLabel(selected),
         ),
         Row(

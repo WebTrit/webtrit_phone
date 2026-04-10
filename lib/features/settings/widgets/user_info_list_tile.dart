@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_api/webtrit_api.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/utils/utils.dart';

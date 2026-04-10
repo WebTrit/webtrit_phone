@@ -53,7 +53,18 @@ abstract class MessagePush extends AppRemotePush {
 }
 
 final class ChatsMessagePush extends MessagePush {
-  ChatsMessagePush(super.id, super.messageId, super.conversationId, {super.title, super.body});
+  ChatsMessagePush(
+    super.id,
+    super.messageId,
+    super.conversationId, {
+    super.title,
+    super.body,
+    this.chatType,
+    this.senderId,
+  });
+
+  final String? chatType;
+  final String? senderId;
 
   factory ChatsMessagePush.fromFCM(RemoteMessage message) {
     return ChatsMessagePush(
@@ -62,31 +73,49 @@ final class ChatsMessagePush extends MessagePush {
       int.parse(message.data['chat_id']),
       title: message.notification?.title,
       body: message.notification?.body,
+      chatType: message.data['chat_type'],
+      senderId: message.data['chat_message_sender_id'],
     );
   }
 
   @override
   String toString() {
-    return 'ChatsPush{id: $id, title: $title, body: $body}';
+    return 'ChatsPush{id: $id, title: $title, body: $body chatType: $chatType, senderId: $senderId}';
   }
 }
 
 final class SmsMessagePush extends MessagePush {
-  SmsMessagePush(super.id, super.messageId, super.conversationId, {super.title, super.body});
+  SmsMessagePush(
+    super.id,
+    super.messageId,
+    super.conversationId, {
+    super.title,
+    super.body,
+    this.from,
+    this.to,
+    this.externalId,
+  });
+
+  final String? from;
+  final String? to;
+  final String? externalId;
 
   factory SmsMessagePush.fromFCM(RemoteMessage message) {
     return SmsMessagePush(
       message.messageId!,
-      int.parse(message.data['chat_message_id']),
+      int.parse(message.data['sms_message_id']),
       int.parse(message.data['sms_conversation_id']),
       title: message.notification?.title,
       body: message.notification?.body,
+      from: message.data['sms_message_from_phone_number'],
+      to: message.data['sms_message_to_phone_number'],
+      externalId: message.data['sms_message_external_id'],
     );
   }
 
   @override
   String toString() {
-    return 'SmsPush{id: $id, title: $title, body: $body}';
+    return 'SmsPush{id: $id, title: $title, body: $body from: $from, to: $to, externalId: $externalId}';
   }
 }
 

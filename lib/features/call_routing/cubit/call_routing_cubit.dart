@@ -11,8 +11,12 @@ import 'package:webtrit_phone/services/services.dart';
 part 'call_routing_state.dart';
 
 class CallRoutingCubit extends Cubit<CallRoutingState?> {
-  CallRoutingCubit(this._userRepository, this._linesStateRepository, this._callerIdSettingsRepository, this._connectivityService)
-    : super(null) {
+  CallRoutingCubit(
+    this._userRepository,
+    this._linesStateRepository,
+    this._callerIdSettingsRepository,
+    this._connectivityService,
+  ) : super(null) {
     _init();
   }
 
@@ -38,7 +42,7 @@ class CallRoutingCubit extends Cubit<CallRoutingState?> {
 
   void _startInfoSubscription() {
     _infoSub = _userRepository
-        .getInfoAndListen()
+        .getAndListen()
         .combineLatest(_linesStateRepository.getStateAndListen(), _combineInfo)
         .listen(emit);
   }

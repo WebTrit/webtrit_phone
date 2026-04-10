@@ -90,7 +90,7 @@ class ImageSource with _$ImageSource {
 }
 
 /// Describes rendering options for an image resource.
-/// Includes [scale] and [padding], but can be extended in the future.
+/// Includes [scale], [padding], [alignment] and [fit].
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ImageRenderSpec with _$ImageRenderSpec {
@@ -98,8 +98,17 @@ class ImageRenderSpec with _$ImageRenderSpec {
     /// The scale factor applied during rendering.
     this.scale,
 
-    /// Optional padding around the image.
+    /// Padding around the image inside its container (e.g., top, right, bottom, left insets).
     this.padding,
+
+    /// Alignment within the container (e.g., "center", "left", "topRight").
+    this.alignment,
+
+    /// How the image should be inscribed into the available space.
+    /// Corresponds to the `BoxFit` enum (e.g. `contain`, `cover`, `fill`,
+    /// `fitWidth`, `fitHeight`, `none`, `scaleDown`). Factories parse and
+    /// serialize this value to/from strings when converting JSON.
+    this.fit,
   });
 
   @override
@@ -107,6 +116,14 @@ class ImageRenderSpec with _$ImageRenderSpec {
 
   @override
   final PaddingConfig? padding;
+
+  @override
+  @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
+  final AlignmentConfig? alignment;
+
+  @override
+  @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
+  final BoxFitConfig? fit;
 
   factory ImageRenderSpec.fromJson(Map<String, Object?> json) => _$ImageRenderSpecFromJson(json);
 

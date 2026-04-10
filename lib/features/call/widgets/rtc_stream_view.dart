@@ -3,10 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 class RTCStreamView extends StatefulWidget {
-  const RTCStreamView({required this.stream, this.mirror = false, this.placeholderBuilder, super.key});
+  const RTCStreamView({
+    required this.stream,
+    this.mirror = false,
+    this.placeholderBuilder,
+    this.fit = RTCVideoViewObjectFit.RTCVideoViewObjectFitContain,
+    super.key,
+  });
 
   final MediaStream? stream;
   final bool mirror;
+  final RTCVideoViewObjectFit fit;
   final Widget Function(BuildContext)? placeholderBuilder;
 
   @override
@@ -15,33 +22,50 @@ class RTCStreamView extends StatefulWidget {
 
 class _RTCStreamViewState extends State<RTCStreamView> {
   late final RTCVideoRenderer renderer = RTCVideoRenderer();
+  bool _initialized = false;
 
   @override
   initState() {
     super.initState();
-    renderer.initialize().then((value) {
+    renderer.initialize().then((_) {
       if (!mounted) return;
-      renderer.srcObject = widget.stream;
+      setState(() {
+        _initialized = true;
+        renderer.srcObject = widget.stream;
+      });
     });
   }
 
   @override
   dispose() {
-    super.dispose();
-    renderer.srcObject = null;
+    if (_initialized) {
+      renderer.srcObject = null;
+    }
     renderer.dispose();
+    super.dispose();
   }
 
   @override
   didUpdateWidget(RTCStreamView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.stream != widget.stream) {
-      renderer.srcObject = widget.stream;
-    }
+    if (!_initialized) return;
+    // Always refresh srcObject to handle the case where the stream reference
+    // is the same object but its video tracks were replaced by renegotiation.
+    // The native videoRendererSetSrcObject re-scans the stream's current tracks
+    // and re-subscribes the renderer, ensuring the new track receives frames.
+    renderer.srcObject = widget.stream;
   }
 
   @override
   Widget build(BuildContext context) {
-    return RTCVideoView(renderer, mirror: widget.mirror, placeholderBuilder: widget.placeholderBuilder);
+    if (!_initialized) {
+      return widget.placeholderBuilder?.call(context) ?? const SizedBox.shrink();
+    }
+    return RTCVideoView(
+      renderer,
+      mirror: widget.mirror,
+      placeholderBuilder: widget.placeholderBuilder,
+      objectFit: widget.fit,
+    );
   }
 }

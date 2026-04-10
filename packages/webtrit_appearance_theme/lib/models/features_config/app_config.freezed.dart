@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AppConfig {
 
- AppConfigLogin get loginConfig; AppConfigMain get mainConfig; AppConfigSettings get settingsConfig; AppConfigCall get callConfig; AppConfigContacts get contacts; AppConfigMessaging get messaging;
+ AppConfigLogin get loginConfig; AppConfigMain get mainConfig; AppConfigSettings get settingsConfig; AppConfigCall get callConfig; AppConfigContacts get contacts; AppConfigMessaging get messaging; List<SupportedFeature> get supported;
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $AppConfigCopyWith<AppConfig> get copyWith => _$AppConfigCopyWithImpl<AppConfig>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfig&&(identical(other.loginConfig, loginConfig) || other.loginConfig == loginConfig)&&(identical(other.mainConfig, mainConfig) || other.mainConfig == mainConfig)&&(identical(other.settingsConfig, settingsConfig) || other.settingsConfig == settingsConfig)&&(identical(other.callConfig, callConfig) || other.callConfig == callConfig)&&(identical(other.contacts, contacts) || other.contacts == contacts)&&(identical(other.messaging, messaging) || other.messaging == messaging));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfig&&(identical(other.loginConfig, loginConfig) || other.loginConfig == loginConfig)&&(identical(other.mainConfig, mainConfig) || other.mainConfig == mainConfig)&&(identical(other.settingsConfig, settingsConfig) || other.settingsConfig == settingsConfig)&&(identical(other.callConfig, callConfig) || other.callConfig == callConfig)&&(identical(other.contacts, contacts) || other.contacts == contacts)&&(identical(other.messaging, messaging) || other.messaging == messaging)&&const DeepCollectionEquality().equals(other.supported, supported));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,loginConfig,mainConfig,settingsConfig,callConfig,contacts,messaging);
+int get hashCode => Object.hash(runtimeType,loginConfig,mainConfig,settingsConfig,callConfig,contacts,messaging,const DeepCollectionEquality().hash(supported));
 
 @override
 String toString() {
-  return 'AppConfig(loginConfig: $loginConfig, mainConfig: $mainConfig, settingsConfig: $settingsConfig, callConfig: $callConfig, contacts: $contacts, messaging: $messaging)';
+  return 'AppConfig(loginConfig: $loginConfig, mainConfig: $mainConfig, settingsConfig: $settingsConfig, callConfig: $callConfig, contacts: $contacts, messaging: $messaging, supported: $supported)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $AppConfigCopyWith<$Res>  {
   factory $AppConfigCopyWith(AppConfig value, $Res Function(AppConfig) _then) = _$AppConfigCopyWithImpl;
 @useResult
 $Res call({
- AppConfigLogin loginConfig, AppConfigMain mainConfig, AppConfigSettings settingsConfig, AppConfigCall callConfig, AppConfigContacts contacts, AppConfigMessaging messaging
+ AppConfigLogin loginConfig, AppConfigMain mainConfig, AppConfigSettings settingsConfig, AppConfigCall callConfig, AppConfigContacts contacts, AppConfigMessaging messaging, List<SupportedFeature> supported
 });
 
 
@@ -63,7 +63,7 @@ class _$AppConfigCopyWithImpl<$Res>
 
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? loginConfig = null,Object? mainConfig = null,Object? settingsConfig = null,Object? callConfig = null,Object? contacts = null,Object? messaging = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? loginConfig = null,Object? mainConfig = null,Object? settingsConfig = null,Object? callConfig = null,Object? contacts = null,Object? messaging = null,Object? supported = null,}) {
   return _then(AppConfig(
 loginConfig: null == loginConfig ? _self.loginConfig : loginConfig // ignore: cast_nullable_to_non_nullable
 as AppConfigLogin,mainConfig: null == mainConfig ? _self.mainConfig : mainConfig // ignore: cast_nullable_to_non_nullable
@@ -71,7 +71,8 @@ as AppConfigMain,settingsConfig: null == settingsConfig ? _self.settingsConfig :
 as AppConfigSettings,callConfig: null == callConfig ? _self.callConfig : callConfig // ignore: cast_nullable_to_non_nullable
 as AppConfigCall,contacts: null == contacts ? _self.contacts : contacts // ignore: cast_nullable_to_non_nullable
 as AppConfigContacts,messaging: null == messaging ? _self.messaging : messaging // ignore: cast_nullable_to_non_nullable
-as AppConfigMessaging,
+as AppConfigMessaging,supported: null == supported ? _self.supported : supported // ignore: cast_nullable_to_non_nullable
+as List<SupportedFeature>,
   ));
 }
 
@@ -3581,7 +3582,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigSettingsItem {
 
- bool get enabled; String get titleL10n; String get type; String get icon; String? get embeddedResourceId;
+ bool get enabled; String get titleL10n; String get type; String get icon; String? get iconColor; String? get embeddedResourceId;
 /// Create a copy of AppConfigSettingsItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -3592,16 +3593,16 @@ $AppConfigSettingsItemCopyWith<AppConfigSettingsItem> get copyWith => _$AppConfi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigSettingsItem&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.type, type) || other.type == type)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.embeddedResourceId, embeddedResourceId) || other.embeddedResourceId == embeddedResourceId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigSettingsItem&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.type, type) || other.type == type)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.iconColor, iconColor) || other.iconColor == iconColor)&&(identical(other.embeddedResourceId, embeddedResourceId) || other.embeddedResourceId == embeddedResourceId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,titleL10n,type,icon,embeddedResourceId);
+int get hashCode => Object.hash(runtimeType,enabled,titleL10n,type,icon,iconColor,embeddedResourceId);
 
 @override
 String toString() {
-  return 'AppConfigSettingsItem(enabled: $enabled, titleL10n: $titleL10n, type: $type, icon: $icon, embeddedResourceId: $embeddedResourceId)';
+  return 'AppConfigSettingsItem(enabled: $enabled, titleL10n: $titleL10n, type: $type, icon: $icon, iconColor: $iconColor, embeddedResourceId: $embeddedResourceId)';
 }
 
 
@@ -3612,7 +3613,7 @@ abstract mixin class $AppConfigSettingsItemCopyWith<$Res>  {
   factory $AppConfigSettingsItemCopyWith(AppConfigSettingsItem value, $Res Function(AppConfigSettingsItem) _then) = _$AppConfigSettingsItemCopyWithImpl;
 @useResult
 $Res call({
- bool enabled, String titleL10n, String type, String icon,@IntToStringOptionalConverter() String? embeddedResourceId
+ bool enabled, String titleL10n, String type, String icon, String? iconColor,@IntToStringOptionalConverter() String? embeddedResourceId
 });
 
 
@@ -3629,13 +3630,14 @@ class _$AppConfigSettingsItemCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigSettingsItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? titleL10n = null,Object? type = null,Object? icon = null,Object? embeddedResourceId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? titleL10n = null,Object? type = null,Object? icon = null,Object? iconColor = freezed,Object? embeddedResourceId = freezed,}) {
   return _then(AppConfigSettingsItem(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String,embeddedResourceId: freezed == embeddedResourceId ? _self.embeddedResourceId : embeddedResourceId // ignore: cast_nullable_to_non_nullable
+as String,iconColor: freezed == iconColor ? _self.iconColor : iconColor // ignore: cast_nullable_to_non_nullable
+as String?,embeddedResourceId: freezed == embeddedResourceId ? _self.embeddedResourceId : embeddedResourceId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -4829,7 +4831,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigChats {
 
- bool get groupChatButtonEnabled;
+ bool get groupChatButtonEnabled; ChatContactInfo get contactInfo;
 /// Create a copy of AppConfigChats
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -4840,16 +4842,16 @@ $AppConfigChatsCopyWith<AppConfigChats> get copyWith => _$AppConfigChatsCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigChats&&(identical(other.groupChatButtonEnabled, groupChatButtonEnabled) || other.groupChatButtonEnabled == groupChatButtonEnabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigChats&&(identical(other.groupChatButtonEnabled, groupChatButtonEnabled) || other.groupChatButtonEnabled == groupChatButtonEnabled)&&(identical(other.contactInfo, contactInfo) || other.contactInfo == contactInfo));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,groupChatButtonEnabled);
+int get hashCode => Object.hash(runtimeType,groupChatButtonEnabled,contactInfo);
 
 @override
 String toString() {
-  return 'AppConfigChats(groupChatButtonEnabled: $groupChatButtonEnabled)';
+  return 'AppConfigChats(groupChatButtonEnabled: $groupChatButtonEnabled, contactInfo: $contactInfo)';
 }
 
 
@@ -4860,7 +4862,7 @@ abstract mixin class $AppConfigChatsCopyWith<$Res>  {
   factory $AppConfigChatsCopyWith(AppConfigChats value, $Res Function(AppConfigChats) _then) = _$AppConfigChatsCopyWithImpl;
 @useResult
 $Res call({
- bool groupChatButtonEnabled
+ bool groupChatButtonEnabled, ChatContactInfo contactInfo
 });
 
 
@@ -4877,10 +4879,11 @@ class _$AppConfigChatsCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigChats
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? groupChatButtonEnabled = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? groupChatButtonEnabled = null,Object? contactInfo = null,}) {
   return _then(AppConfigChats(
 groupChatButtonEnabled: null == groupChatButtonEnabled ? _self.groupChatButtonEnabled : groupChatButtonEnabled // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,contactInfo: null == contactInfo ? _self.contactInfo : contactInfo // ignore: cast_nullable_to_non_nullable
+as ChatContactInfo,
   ));
 }
 
@@ -4889,6 +4892,192 @@ as bool,
 
 /// Adds pattern-matching-related methods to [AppConfigChats].
 extension AppConfigChatsPatterns on AppConfigChats {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
+
+/// @nodoc
+mixin _$ChatContactInfo {
+
+ bool get showVideoButtonAction;
+/// Create a copy of ChatContactInfo
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ChatContactInfoCopyWith<ChatContactInfo> get copyWith => _$ChatContactInfoCopyWithImpl<ChatContactInfo>(this as ChatContactInfo, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatContactInfo&&(identical(other.showVideoButtonAction, showVideoButtonAction) || other.showVideoButtonAction == showVideoButtonAction));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,showVideoButtonAction);
+
+@override
+String toString() {
+  return 'ChatContactInfo(showVideoButtonAction: $showVideoButtonAction)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ChatContactInfoCopyWith<$Res>  {
+  factory $ChatContactInfoCopyWith(ChatContactInfo value, $Res Function(ChatContactInfo) _then) = _$ChatContactInfoCopyWithImpl;
+@useResult
+$Res call({
+ bool showVideoButtonAction
+});
+
+
+
+
+}
+/// @nodoc
+class _$ChatContactInfoCopyWithImpl<$Res>
+    implements $ChatContactInfoCopyWith<$Res> {
+  _$ChatContactInfoCopyWithImpl(this._self, this._then);
+
+  final ChatContactInfo _self;
+  final $Res Function(ChatContactInfo) _then;
+
+/// Create a copy of ChatContactInfo
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? showVideoButtonAction = null,}) {
+  return _then(ChatContactInfo(
+showVideoButtonAction: null == showVideoButtonAction ? _self.showVideoButtonAction : showVideoButtonAction // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [ChatContactInfo].
+extension ChatContactInfoPatterns on ChatContactInfo {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

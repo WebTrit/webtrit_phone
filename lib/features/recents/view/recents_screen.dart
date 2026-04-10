@@ -5,11 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
-import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/features/recents/view/recents_screen_style.dart';
+import 'package:webtrit_phone/features/recents/view/recents_screen_styles.dart';
 import 'package:webtrit_phone/features/user_info/cubit/user_info_cubit.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -27,6 +28,7 @@ class RecentsScreen extends StatefulWidget {
     required this.videoEnabled,
     required this.chatsEnabled,
     required this.smssEnabled,
+    this.style,
   });
 
   final List<RecentsVisibilityFilter> recentsFilters;
@@ -36,18 +38,14 @@ class RecentsScreen extends StatefulWidget {
   final bool smssEnabled;
 
   final Widget? title;
+  final RecentsScreenStyle? style;
 
   @override
   State<RecentsScreen> createState() => _RecentsScreenState();
 }
 
 class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProviderStateMixin {
-  // TODO(Serdun): Think about moving this to a controller or bloc.
-  late final CallController _callController = CallController(
-    callBloc: context.read<CallBloc>(),
-    callRoutingCubit: context.read<CallRoutingCubit>(),
-    notificationsBloc: context.read<NotificationsBloc>(),
-  );
+  late final _callController = CallControllerScope.of(context);
   late TabController _tabController;
 
   @override
@@ -118,11 +116,21 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryData = MediaQuery.of(context);
+    final themeData = Theme.of(context);
+    final effectiveStyle = widget.style ?? themeData.extension<RecentsScreenStyles>()?.primary;
 
-    return Scaffold(
+    final mediaQueryData = MediaQuery.of(context);
+    final topPadding = kToolbarHeight + mediaQueryData.padding.top + kMainAppBarBottomTabHeight;
+
+    return ThemedScaffold(
+      background: effectiveStyle?.background,
+      contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
+      applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+      extendBodyBehindAppBar: true,
       appBar: MainAppBar(
         title: widget.title,
+        context: context,
+        flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(
@@ -135,7 +143,6 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
             ),
           ),
         ),
-        context: context,
       ),
       body: BlocBuilder<RecentsBloc, RecentsState>(
         builder: (context, state) {
@@ -168,6 +175,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                       return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                         builder: (context, callRoutingState) {
                           return ListView.builder(
+                            padding: EdgeInsets.only(top: topPadding),
                             itemCount: recentsFiltered.length,
                             itemBuilder: (context, index) {
                               final recent = recentsFiltered[index];

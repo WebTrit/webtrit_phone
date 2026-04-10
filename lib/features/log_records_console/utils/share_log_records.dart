@@ -20,6 +20,8 @@ Future<ShareResult> shareLogRecords(List<String> logRecords, {required String na
   try {
     return await SharePlus.instance.share(ShareParams(files: [logRecordsXFile]));
   } finally {
-    await logRecordsFile.delete();
+    if (await logRecordsFile.exists()) {
+      await logRecordsFile.delete();
+    }
   }
 }

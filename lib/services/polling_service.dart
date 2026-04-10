@@ -246,11 +246,11 @@ class PollingService implements Disposable {
           _logger.finest('PollingService: refresh() succeeded for $listener');
           config.consecutiveErrors = 0;
           config.lastSuccessAt = clock.now();
-        } catch (e, st) {
+        } catch (e) {
           config.consecutiveErrors++;
           config.lastError = e;
           config.lastErrorAt = clock.now();
-          _logger.warning('PollingService: refresh() failed for $listener', e, st);
+          _logger.warning('PollingService: refresh() failed for $listener', e);
         } finally {
           config.isRefreshing = false;
         }
@@ -281,11 +281,11 @@ class PollingService implements Disposable {
           config.consecutiveErrors = 0;
           config.lastSuccessAt = clock.now();
         }
-      } catch (e, st) {
+      } catch (e) {
         config.consecutiveErrors++;
         config.lastError = e;
         config.lastErrorAt = clock.now();
-        _logger.warning('PollingService: leading refresh failed for $listener', e, st);
+        _logger.warning('PollingService: leading refresh failed for $listener', e);
       } finally {
         config.isRefreshing = false;
 

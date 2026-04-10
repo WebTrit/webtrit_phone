@@ -81,7 +81,7 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
 
       // Logout if the session exists
       if (appBloc.state.session.isLoggedIn) {
-        await sessionRepository.logout();
+        appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.userRequest));
         await appBloc.stream.firstWhere((element) => !element.session.isLoggedIn);
       }
 
@@ -91,11 +91,11 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
       }
 
       // Login with the new session
-      await sessionRepository.save(session);
+      appBloc.add(AppLoggedIn(session: session, systemInfo: state.systemInfo));
       await appBloc.stream.firstWhere((element) => element.session.token == token);
     } else {
       // For the case when the app is launched with the autoprovision screen as initial route.
-      await sessionRepository.save(session);
+      appBloc.add(AppLoggedIn(session: session, systemInfo: state.systemInfo));
       await appBloc.stream.firstWhere((element) => element.session.token == token);
       // Then will be redirected by router reevaluation and redirect inside [onAutoprovisionScreenPageRouteGuardNavigation]
     }

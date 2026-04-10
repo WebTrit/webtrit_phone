@@ -7,6 +7,7 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../login.dart';
 
@@ -24,10 +25,14 @@ class LoginModeSelectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final Gradients? gradients = themeData.extension<Gradients>();
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
     final LoginModeSelectScreenStyles? loginPageStyles = themeData.extension<LoginModeSelectScreenStyles>();
-    final LoginModeSelectScreenStyle? localStyle = style ?? loginPageStyles?.primary;
+
+    final localStyle = style ?? loginPageStyles?.primary;
+
+    final onboardingStyle = localStyle?.onboardingTextStyle;
+    final titleStyle = themeData.textTheme.displayMedium?.merge(onboardingStyle?.textStyle);
+    final dividerHeight = (titleStyle?.fontSize ?? 0) / 3;
 
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.processing != current.processing,
@@ -35,7 +40,10 @@ class LoginModeSelectScreen extends StatelessWidget {
         // TODO(Serdun): Looks like we can move logic with enabling demo mode to the app config
         final isDemoModeEnabled = context.read<LoginCubit>().isDemoModeEnabled;
 
-        return Scaffold(
+        return ThemedScaffold(
+          background: localStyle?.background,
+          contentThemeOverride: localStyle?.contentThemeOverride,
+          applyToAppBar: localStyle?.applyToAppBar ?? true,
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -57,16 +65,25 @@ class LoginModeSelectScreen extends StatelessWidget {
           ),
           body: Container(
             padding: const EdgeInsets.fromLTRB(kInset, 0, kInset, kInset),
-            decoration: BoxDecoration(gradient: gradients?.tab),
             child: SafeArea(
               top: false,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Spacer(),
-                  OnboardingPictureLogo(
-                    text: appGreetingL10n != null ? context.parseL10n(appGreetingL10n!) : null,
-                    style: localStyle?.onboardingPictureLogoStyle,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
+                      if (appGreetingL10n != null) ...[
+                        SizedBox(height: dividerHeight),
+                        ExtendedText(
+                          context.parseL10n(appGreetingL10n!),
+                          extendedStyle: onboardingStyle?.copyWith(textStyle: titleStyle),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ],
                   ),
                   const Spacer(),
                   const Spacer(),

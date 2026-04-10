@@ -13,6 +13,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/resolvers/resolvers.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -37,14 +38,62 @@ class _AppState extends State<App> {
       themeModeRepository: context.read<ThemeModeRepository>(),
       appThemes: context.read<AppThemes>(),
       sessionRepository: context.read<SessionRepository>(),
+      systemInfoRepository: context.read<SystemInfoRepository>(),
       appInfo: context.read<AppInfo>(),
+      userSessionCleanupResolver: RepositoryUserSessionCleanupResolver(
+        systemInfoRepository: context.read<SystemInfoRepository>(),
+        registerStatusRepository: context.read<RegisterStatusRepository>(),
+        presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
+        activeMainFlavorRepository: context.read<ActiveMainFlavorRepository>(),
+        activeRecentsVisibilityFilterRepository: context.read<ActiveRecentsVisibilityFilterRepository>(),
+        activeContactSourceTypeRepository: context.read<ActiveContactSourceTypeRepository>(),
+        audioProcessingSettingsRepository: context.read<AudioProcessingSettingsRepository>(),
+        encodingPresetRepository: context.read<EncodingPresetRepository>(),
+        iceSettingsRepository: context.read<IceSettingsRepository>(),
+        incomingCallTypeRepository: context.read<IncomingCallTypeRepository>(),
+        peerConnectionSettingsRepository: context.read<PeerConnectionSettingsRepository>(),
+        videoCapturingSettingsRepository: context.read<VideoCapturingSettingsRepository>(),
+        encodingSettingsRepository: context.read<EncodingSettingsRepository>(),
+        localeRepository: context.read<LocaleRepository>(),
+        themeModeRepository: context.read<ThemeModeRepository>(),
+        userLocalDatasource: context.read<UserLocalDatasource>(),
+        appDatabase: context.read<AppDatabase>(),
+      ),
     );
+
+    final initialTabResolver = BottomMenuInitialTabResolver(
+      config: featureAccess.bottomMenuConfig,
+      repository: context.read<ActiveMainFlavorRepository>(),
+    );
+
     appRouter = AppRouter(
       appBloc,
       context.read<AppPermissions>(),
-      featureAccess.loginFeature.launchLoginPage,
-      featureAccess.bottomMenuFeature,
-      featureAccess.toChecker(),
+      featureAccess.loginConfig.launchLoginPage,
+      featureAccess.bottomMenuConfig,
+      initialTabResolver,
+      featureAccess.checker,
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final featureAccess = context.watch<FeatureAccess>();
+
+    context.read<AppLogger>().applyConfig(featureAccess.loggingConfig);
+
+    final initialTabResolver = BottomMenuInitialTabResolver(
+      config: featureAccess.bottomMenuConfig,
+      repository: context.read<ActiveMainFlavorRepository>(),
+    );
+
+    appRouter.updateConfiguration(
+      featureAccess.loginConfig.launchLoginPage,
+      featureAccess.bottomMenuConfig,
+      initialTabResolver,
+      featureAccess.checker,
     );
   }
 
@@ -57,6 +106,8 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     final isDeepLinkEnabled = EnvironmentConfig.APP_LINK_DOMAIN.isNotEmpty;
+
+    final featureAccess = context.watch<FeatureAccess>();
 
     final materialApp = BlocBuilder<AppBloc, AppState>(
       buildWhen: (previous, current) => previous.themeSettings != current.themeSettings,
@@ -71,13 +122,16 @@ class _AppState extends State<App> {
                 previous.effectiveThemeMode != current.effectiveThemeMode,
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
+              final forcedMode = featureAccess.supportedConfig.themeMode;
+              final finalThemeMode = forcedMode == ThemeMode.system ? state.effectiveThemeMode : forcedMode;
+
               return MaterialApp.router(
                 locale: state.effectiveLocale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 // restorationScopeId: 'App', // TODO: temporary comment to prevent AppShell's AutoRouter placeholder blink - additional investigation necessary
                 title: EnvironmentConfig.APP_NAME,
-                themeMode: state.effectiveThemeMode,
+                themeMode: finalThemeMode,
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
                 routerConfig: appRouter.config(
@@ -87,7 +141,9 @@ class _AppState extends State<App> {
                     context.read<AppAnalyticsRepository>().createObserver(),
                     AutoRouteObserver(),
                   ],
-                  reevaluateListenable: ReevaluateListenable.stream(appBloc.stream),
+                  reevaluateListenable: ReevaluateListenable.stream(
+                    appBloc.stream.distinct((p, n) => p.compareToReevaluate(n)),
+                  ),
                 ),
               );
             },
@@ -100,7 +156,9 @@ class _AppState extends State<App> {
       providers: [
         BlocProvider<OrientationsBloc>(
           lazy: false,
-          create: (context) => OrientationsBloc()..add(const OrientationsChanged(PreferredOrientation.regular)),
+          create: (context) =>
+              OrientationsBloc(deviceRotationUtil: const DeviceRotationUtil())
+                ..add(const OrientationsChanged(PreferredOrientation.portrait)),
         ),
         BlocProvider<NotificationsBloc>(create: (context) => NotificationsBloc()),
         BlocProvider<AppBloc>.value(value: appBloc),

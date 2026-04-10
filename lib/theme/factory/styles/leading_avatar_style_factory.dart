@@ -7,10 +7,11 @@ import 'package:webtrit_phone/theme/styles/styles.dart';
 import '../theme_style_factory.dart';
 
 class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles> {
-  LeadingAvatarStyleFactory(this.colors, this.config);
+  LeadingAvatarStyleFactory(this.colors, this.config, this.defaultFontFamily);
 
   final ColorScheme colors;
   final LeadingAvatarStyleConfig? config;
+  final String? defaultFontFamily;
 
   @override
   LeadingAvatarStyles create() {
@@ -18,7 +19,7 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
       primary: LeadingAvatarStyle(
         backgroundColor: _bgColor(),
         radius: config?.radius,
-        initialsTextStyle: config?.initialsTextStyle?.toTextStyle().copyWith(color: colors.onSecondaryContainer),
+        initialsTextStyle: _mapInitialsTextStyle(config?.initialsTextStyle),
         placeholderIcon: null,
         loadingOverlay: _mapLoading(config?.loading),
         smartIndicator: _mapSmart(config?.smartIndicator),
@@ -26,6 +27,14 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
         presenceBadge: _mapPresence(config?.presenceBadge),
       ),
     );
+  }
+
+  TextStyle? _mapInitialsTextStyle(TextStyleConfig? config) {
+    if (config == null) return null;
+
+    return config
+        .toTextStyle(defaultFontFamily: defaultFontFamily)
+        .copyWith(color: config.color?.toColor() ?? colors.onSecondaryContainer);
   }
 
   Color _bgColor() => config?.backgroundColor?.toColor() ?? colors.secondaryContainer;

@@ -5,6 +5,9 @@ class UnregisteringEvent extends SessionEvent {
 
   static const typeValue = 'unregistering';
 
+  @override
+  Map<String, dynamic> toJson() => sessionBaseJson(typeValue);
+
   factory UnregisteringEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

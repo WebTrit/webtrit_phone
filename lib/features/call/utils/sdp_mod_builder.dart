@@ -117,6 +117,7 @@ class SDPModBuilder {
     final originalFmtps = [];
     final originalRtcpFbs = [];
 
+    if (media['payloads'] is int) originalPayloads.add(media['payloads'].toString());
     if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
     if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
     if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
@@ -148,6 +149,7 @@ class SDPModBuilder {
       final originalFmtps = [];
       final originalRtcpFbs = [];
 
+      if (media['payloads'] is int) originalPayloads.add(media['payloads'].toString());
       if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
       if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
       if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
@@ -230,13 +232,16 @@ class SDPModBuilder {
     final originalFmtps = [];
     final originalRtcpFbs = [];
 
+    if (media['payloads'] is int) originalPayloads.add(media['payloads'].toString());
     if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
     if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
     if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
     if (media['rtcpFb'] is List<dynamic>) originalRtcpFbs.addAll(media['rtcpFb'] as List<dynamic>);
 
-    // PCMU(0), PCMA(8), G722(9), CN(13) are static payload types that supports by our WebRTC stack.
-    final staticPayloads = ['0', '8', '9', '13'];
+    final staticPayloads = RTPCodecProfile.values
+        .where((p) => p.staticPayload != null)
+        .map((p) => p.staticPayload.toString())
+        .toSet();
 
     final modedRtpMaps = originalRtpMaps.where((r) => !staticPayloads.contains(r['payload'].toString()));
     final modedFmtps = originalFmtps.where((f) => !staticPayloads.contains(f['payload'].toString()));
@@ -257,6 +262,7 @@ class SDPModBuilder {
     final originalFmtps = [];
     final originalRtcpFbs = [];
 
+    if (media['payloads'] is int) originalPayloads.add(media['payloads'].toString());
     if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
     if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
     if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
@@ -298,14 +304,14 @@ class SDPModBuilder {
     media['rtcpFb'] = originalRtcpFbs;
   }
 
-  /// Removes incompatible declaration of G729a codec from the SDP.
-  /// that causes Webrtc crash when setting it as remote description.
+  /// Removes unknown rtp profiles declarations from the SDP
+  /// because some of them causes Webrtc crash when setting it as remote description.
   ///
-  /// example sdp from Linksys942 that causes crash on Webrtc 0.12.11:
-  /// v=0
-  /// o=- 74097 74097 IN IP4 194.9.14.108
+  /// For example sdp's from Linksys942 that causes crash on Webrtc 0.12.11:
+  /// ```v=0
+  /// o=- 74097 74097 IN IP4 1.2.3.4
   /// s=-
-  /// c=IN IP4 194.9.14.108
+  /// c=IN IP4 1.2.3.4
   /// t=0 0
   /// m=audio 16442 RTP/AVP 0 8 18 101
   /// a=rtpmap:0 PCMU/8000
@@ -315,8 +321,24 @@ class SDPModBuilder {
   /// a=fmtp:101 0-15
   /// a=ptime:20
   /// a=sendrecv
-  void removeG729a() {
-    final media = _getMedia(RTPCodecKind.audio);
+  /// ```
+  /// or
+  /// ```v=0
+  /// o=- 84645 84645 IN IP4 1.2.3.4
+  /// s=-
+  /// c=IN IP4 1.2.3.4
+  /// t=0 0
+  /// m=audio 16444 RTP/AVP 0 8 2 101
+  /// a=rtpmap:0 PCMU/8000
+  /// a=rtpmap:8 PCMA/8000
+  /// a=rtpmap:2 G726-32/8000
+  /// a=rtpmap:101 telephone-event/8000
+  /// a=fmtp:101 0-15
+  /// a=ptime:20
+  /// a=sendrecv
+  /// ```
+  void removeUnknownProfiles(RTPCodecKind kind) {
+    final media = _getMedia(kind);
     if (media == null) return;
 
     final originalPayloads = [];
@@ -324,20 +346,23 @@ class SDPModBuilder {
     final originalFmtps = [];
     final originalRtcpFbs = [];
 
+    if (media['payloads'] is int) originalPayloads.add(media['payloads'].toString());
     if (media['payloads'] is String) originalPayloads.addAll((media['payloads'] as String).split(' '));
     if (media['rtp'] is List<dynamic>) originalRtpMaps.addAll(media['rtp'] as List<dynamic>);
     if (media['fmtp'] is List<dynamic>) originalFmtps.addAll(media['fmtp'] as List<dynamic>);
     if (media['rtcpFb'] is List<dynamic>) originalRtcpFbs.addAll(media['rtcpFb'] as List<dynamic>);
 
-    final g729aRtp = originalRtpMaps.firstWhereOrNull((r) => r['codec'].toString().toUpperCase() == 'G729A');
-    if (g729aRtp == null) return;
+    final knownProfilePayloads = RTPCodecProfile.values
+        .where((p) => p.kind == kind)
+        .map((p) => _getProfileId(p))
+        .whereType<int>()
+        .map((id) => id.toString())
+        .toSet();
 
-    final g729aPayload = g729aRtp['payload'];
-
-    final modedPayloads = originalPayloads.where((p) => p != g729aPayload.toString());
-    final modedRtpMaps = originalRtpMaps.where((r) => r['payload'] != g729aPayload);
-    final modedFmtps = originalFmtps.where((f) => f['payload'] != g729aPayload);
-    final modedRtcpFbs = originalRtcpFbs.where((f) => f['payload'] != g729aPayload);
+    final modedPayloads = originalPayloads.where((p) => knownProfilePayloads.contains(p));
+    final modedRtpMaps = originalRtpMaps.where((r) => knownProfilePayloads.contains(r['payload'].toString()));
+    final modedFmtps = originalFmtps.where((f) => knownProfilePayloads.contains(f['payload'].toString()));
+    final modedRtcpFbs = originalRtcpFbs.where((f) => knownProfilePayloads.contains(f['payload'].toString()));
 
     media['payloads'] = modedPayloads.join(' ');
     media['rtp'] = modedRtpMaps.toList();
@@ -348,13 +373,22 @@ class SDPModBuilder {
   /// Get the codec profile payload id.
   /// Return codec by specific profile using fmtp records for multiprofile codecs
   /// e.g. H264 with profile 42e01f, 42e034, 640c34 etc.
-  /// Elsewhere return codec finded by rtp records.
+  /// Elsewhere return codec finded by rtp records or by static payloads if they are defined.
   dynamic _getProfileId(RTPCodecProfile profile) {
     final media = _getMedia(profile.kind);
     if (media == null) return null;
 
-    final rtps = media['rtp'] as List<dynamic>;
-    final fmtps = media['fmtp'] as List<dynamic>;
+    final payloads = switch (media['payloads']) {
+      String p => p.split(' '),
+      int p => [p.toString()],
+      _ => const [],
+    };
+    if (profile.staticPayload != null && payloads.contains(profile.staticPayload.toString())) {
+      return profile.staticPayload;
+    }
+
+    final rtps = media['rtp'] is List<dynamic> ? media['rtp'] as List<dynamic> : const [];
+    final fmtps = media['fmtp'] is List<dynamic> ? media['fmtp'] as List<dynamic> : const [];
 
     final rtp = rtps.firstWhereOrNull((r) {
       final sameCodec = r['codec'] == profile.codec.sdpKey;
@@ -404,12 +438,6 @@ class SDPModBuilder {
       {'type': 'AS', 'limit': as},
       {'type': 'TIAS', 'limit': tias},
     ];
-  }
-
-  int parseBandwidthLimit(dynamic value, [int defaultValue = 0]) {
-    if (value is int) return value;
-    if (value is String) return int.tryParse(value) ?? defaultValue;
-    return defaultValue;
   }
 }
 

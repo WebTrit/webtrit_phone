@@ -1,5 +1,7 @@
+import 'package:equatable/equatable.dart';
+
 /// Configuration that defines how incoming calls can be triggered.
-class CallTriggerConfig {
+class CallTriggerConfig extends Equatable {
   const CallTriggerConfig({
     this.primaryTrigger = IncomingCallTriggerType.pushNotification,
     this.availableTriggers = IncomingCallTriggerType.values,
@@ -14,6 +16,9 @@ class CallTriggerConfig {
 
   /// Configuration for SMS-based fallback triggering.
   final SmsFallbackTriggerConfig smsFallback;
+
+  @override
+  List<Object?> get props => [primaryTrigger, availableTriggers, smsFallback];
 }
 
 /// Represents different mechanisms for receiving incoming calls.
@@ -26,7 +31,7 @@ enum IncomingCallTriggerType {
 }
 
 /// Configuration related to SMS-based fallback triggering.
-class SmsFallbackTriggerConfig {
+class SmsFallbackTriggerConfig extends Equatable {
   const SmsFallbackTriggerConfig({this.enabled = false, this.available = false});
 
   /// Whether the SMS fallback mechanism is currently enabled by the user or system.
@@ -34,4 +39,7 @@ class SmsFallbackTriggerConfig {
 
   /// Whether the SMS fallback option should be available to the user in the UI.
   final bool available;
+
+  @override
+  List<Object?> get props => [enabled, available];
 }

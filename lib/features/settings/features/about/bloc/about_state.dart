@@ -9,6 +9,8 @@ class AboutState with _$AboutState {
     required this.appIdentifier,
     required this.coreUrl,
     required this.userAgent,
+    required this.appInfo,
+    required this.deviceInfo,
     this.fcmPushToken,
     this.coreVersion,
   });
@@ -30,6 +32,12 @@ class AboutState with _$AboutState {
 
   @override
   final String userAgent;
+
+  @override
+  final String appInfo;
+
+  @override
+  final String deviceInfo;
 
   @override
   final String? fcmPushToken;

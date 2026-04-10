@@ -6,6 +6,8 @@ import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/app_permissions.dart';
@@ -45,7 +47,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   late final StreamSubscription<int> _unreadVoicemailsSub;
 
   void _initializeVoicemailCountBadge() {
-    voicemailRepository.fetchVoicemails();
+    voicemailRepository.fetchVoicemails().catchError(
+      (Object e) {},
+      test: (e) => e is VoicemailNotConfiguredException || e is EndpointNotSupportedException,
+    );
     _unreadVoicemailsSub = voicemailRepository.watchUnreadVoicemailsCount().listen((count) {
       add(SettingsUnreadVoicemailCountChanged(count));
     });
@@ -57,7 +62,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   FutureOr<void> _onLogouted(SettingsLogouted event, Emitter<SettingsState> emit) async {
-    await sessionRepository.logout();
+    appBloc.add(const AppLogoutRequested());
   }
 
   FutureOr<void> _onAccountDeleted(SettingsAccountDeleted event, Emitter<SettingsState> emit) async {
@@ -65,10 +70,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
     emit(state.copyWith(progress: true));
     try {
-      await userRepository.delete();
+      await userRepository.deleteRemote();
 
-      await sessionRepository.logout();
-
+      appBloc.add(const AppLogoutRequested());
       if (emit.isDone) return;
 
       emit(state.copyWith(progress: false));

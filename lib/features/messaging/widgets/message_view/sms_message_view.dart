@@ -9,6 +9,10 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'message_body.dart';
 
+enum NameViewMode { none, show }
+
+enum AvatarViewMode { none, space, show }
+
 class SmsMessageView extends StatefulWidget {
   const SmsMessageView({
     super.key,
@@ -18,6 +22,8 @@ class SmsMessageView extends StatefulWidget {
     this.outboxDeleteEntry,
     this.userReadedUntil,
     this.membersReadedUntil,
+    this.avatarViewMode = AvatarViewMode.none,
+    this.nameViewMode = NameViewMode.none,
     required this.handleDelete,
     this.onRendered,
   });
@@ -34,6 +40,12 @@ class SmsMessageView extends StatefulWidget {
   /// Timestamp of the last message read by the members
   /// Used to display the read status of the message sent by the user
   final DateTime? membersReadedUntil;
+
+  /// Controls the visibility of the sender's avatar in the message view
+  final AvatarViewMode avatarViewMode;
+
+  /// Controls the visibility of the sender's name in the message view
+  final NameViewMode nameViewMode;
 
   /// Callback function on popup menu delete item selected
   final Function(SmsMessage refMessage) handleDelete;
@@ -144,8 +156,11 @@ class _SmsMessageViewState extends State<SmsMessageView> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             if (!isMine) ...[
-              LeadingAvatar(username: senderNumber?.substring(senderNumber.length - 2) ?? '', radius: 20),
-              const SizedBox(width: 8),
+              if (widget.avatarViewMode == AvatarViewMode.show) ...[
+                LeadingAvatar(username: senderNumber?.substring(senderNumber.length - 2) ?? '', radius: 20),
+                const SizedBox(width: 8),
+              ],
+              if (widget.avatarViewMode == AvatarViewMode.space) const SizedBox(width: 48),
             ],
             Flexible(
               child: Container(
@@ -156,8 +171,10 @@ class _SmsMessageViewState extends State<SmsMessageView> {
                     key: bodyKey,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(senderNumber ?? '', style: theme.userNameStyle),
-                      const SizedBox(height: 4),
+                      if (widget.nameViewMode == NameViewMode.show) ...[
+                        Text(senderNumber ?? '', style: theme.userNameStyle),
+                        const SizedBox(height: 4),
+                      ],
                       if (!isDeleted) ...[MessageBody(text: content, isMine: isMine, style: theme.contentStyle)],
                       if (isDeleted) ...[
                         Text(context.l10n.messaging_MessageView_deleted, style: theme.subContentStyle),

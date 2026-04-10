@@ -1,16 +1,38 @@
 {
   "login": {
     "modeSelect": {
+      "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+      "_themeOverride": {
+        "mode": "dark",
+        "applyToAppBar": false
+      },
+      "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+      "background": {
+        "type": "gradient",
+        "colors": [
+          "#0A1929",
+          "#1F618F"
+        ],
+        "stops": [
+          0.0,
+          1.0
+        ],
+        "beginX": 0.0,
+        "beginY": 0.0,
+        "endX": 0.0,
+        "endY": 1.0
+      },
       "systemUiOverlayStyle": {
-        "statusBarIconBrightness": "dark",
-        "statusBarBrightness": "light",
-        "systemNavigationBarColor": "#000000",
+        "statusBarIconBrightness": "light",
+        "statusBarBrightness": "dark",
+        "systemNavigationBarColor": "#0A1219",
         "systemNavigationBarIconBrightness": "light"
       },
       "mainLogo": {
         "uri": "asset://assets/images/primary_onboarding_logo.svg",
         "render": {
           "scale": 0.42,
+          "alignment": "center",
           "padding": {
             "left": 0.0,
             "top": 0.0,
@@ -19,10 +41,37 @@
           }
         }
       },
+      "greetingTextStyle": {
+        "color": "#E2E2E2",
+        "fontWeight": {
+          "weight": 600
+        }
+      },
       "buttonLoginStyleType": "neutralOnDark",
       "buttonSignupStyleType": "neutralOnDark"
     },
     "switchPage": {
+      "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+      "_themeOverride": {
+        "mode": "dark",
+        "applyToAppBar": false
+      },
+      "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+      "_background": {
+        "type": "gradient",
+        "colors": [
+          "#162533",
+          "#000000"
+        ],
+        "stops": [
+          0.0,
+          1.0
+        ],
+        "beginX": 0.0,
+        "beginY": 0.0,
+        "endX": 0.0,
+        "endY": 1.0
+      },
       "mainLogo": {
         "uri": "asset://assets/images/secondary_onboarding_logo.svg",
         "render": {
@@ -33,6 +82,12 @@
             "right": 0,
             "bottom": 24
           }
+        }
+      },
+      "segmentButtonStyle": {
+        "shape": {
+          "type": "rounded",
+          "borderRadius": 4.0
         }
       }
     },
@@ -90,9 +145,24 @@
     }
   },
   "dialing": {
+    "background": {
+      "type": "gradient",
+      "colors": [
+        "#1F618F",
+        "#000000"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    },
     "systemUiOverlayStyle": {
-      "statusBarIconBrightness": "dark",
-      "statusBarBrightness": "light",
+      "statusBarIconBrightness": "light",
+      "statusBarBrightness": "dark",
       "systemNavigationBarColor": "#000000",
       "systemNavigationBarIconBrightness": "light"
     },
@@ -107,118 +177,120 @@
         "fontWeight": {
           "weight": 400
         },
-        "color": "#FFFFFF"
+        "color": "#E2E2E2"
       },
       "numberTextStyle": {
         "fontSize": 20,
         "fontWeight": {
           "weight": 400
         },
-        "color": "#EEF3F6"
+        "color": "#C0C2BE"
       },
       "callStatusTextStyle": {
         "fontSize": 16,
         "fontWeight": {
           "weight": 400
         },
-        "color": "#EEF3F6",
-        "fontFeatures": [
-          "tabularFigures"
-        ]
+        "color": "#C0C2BE"
       },
       "processingStatusTextStyle": {
         "fontSize": 14,
         "fontWeight": {
           "weight": 500
         },
-        "color": "#EEF3F6"
+        "color": "#C0C2BE"
       }
     },
     "actions": {
       "callStart": {
-        "backgroundColor": "#75B943",
-        "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#66DDE0E3",
-        "disabledForegroundColor": "#848581",
-        "disabledIconColor": "#848581"
+        "backgroundColor": "#B8E078",
+        "foregroundColor": "#000000",
+        "textColor": "#000000",
+        "iconColor": "#000000",
+        "disabledBackgroundColor": "#1F1F1F",
+        "disabledForegroundColor": "#8E918F",
+        "disabledIconColor": "#8E918F"
       },
       "hangup": {
-        "backgroundColor": "#E74C3C",
-        "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#66DDE0E3",
-        "disabledForegroundColor": "#848581",
-        "disabledIconColor": "#848581"
+        "backgroundColor": "#FF897D",
+        "foregroundColor": "#690005",
+        "textColor": "#690005",
+        "iconColor": "#690005",
+        "disabledBackgroundColor": "#1F1F1F",
+        "disabledForegroundColor": "#8E918F",
+        "disabledIconColor": "#8E918F"
       },
       "transfer": {
-        "backgroundColor": "#123752",
-        "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#66DDE0E3",
-        "disabledForegroundColor": "#848581",
-        "disabledIconColor": "#848581"
+        "backgroundColor": "#A5C6E4",
+        "foregroundColor": "#092D4A",
+        "textColor": "#092D4A",
+        "iconColor": "#092D4A",
+        "disabledBackgroundColor": "#1F1F1F",
+        "disabledForegroundColor": "#8E918F",
+        "disabledIconColor": "#8E918F"
       },
       "camera": {
-        "backgroundColor": "#66FFFFFF",
+        "backgroundColor": "#33FFFFFF",
         "foregroundColor": "#FFFFFFFF",
         "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledBackgroundColor": "#1AFFFFFF",
         "disabledForegroundColor": "#848581",
         "disabledIconColor": "#848581"
       },
       "muted": {
-        "backgroundColor": "#66FFFFFF",
+        "backgroundColor": "#33FFFFFF",
         "foregroundColor": "#FFFFFFFF",
         "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledBackgroundColor": "#1AFFFFFF",
         "disabledForegroundColor": "#848581",
         "disabledIconColor": "#848581"
       },
       "speaker": {
-        "backgroundColor": "#66FFFFFF",
+        "backgroundColor": "#33FFFFFF",
         "foregroundColor": "#FFFFFFFF",
         "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledBackgroundColor": "#1AFFFFFF",
         "disabledForegroundColor": "#848581",
         "disabledIconColor": "#848581"
       },
       "held": {
-        "backgroundColor": "#66FFFFFF",
+        "backgroundColor": "#33FFFFFF",
         "foregroundColor": "#FFFFFFFF",
         "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledBackgroundColor": "#1AFFFFFF",
         "disabledForegroundColor": "#848581",
         "disabledIconColor": "#848581"
       },
       "swap": {
-        "backgroundColor": "#66FFFFFF",
+        "backgroundColor": "#33FFFFFF",
         "foregroundColor": "#FFFFFFFF",
         "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledBackgroundColor": "#1AFFFFFF",
         "disabledForegroundColor": "#848581",
         "disabledIconColor": "#848581"
       },
       "key": {
-        "backgroundColor": "#66FFFFFF",
+        "backgroundColor": "#33FFFFFF",
         "foregroundColor": "#FFFFFFFF",
         "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledBackgroundColor": "#1AFFFFFF",
         "disabledForegroundColor": "#848581",
         "disabledIconColor": "#848581"
       }
     }
   },
   "about": {
+    "appBarBlurredSurface": {
+      "color": "#96111315",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "mainLogo": {
       "uri": "asset://assets/images/secondary_onboarding_logo.svg",
       "render": {
@@ -230,6 +302,212 @@
           "bottom": 0.0
         }
       }
+    },
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#162533",
+        "#000000"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "settings": {
+    "appBarBlurredSurface": {
+      "color": "#96111315",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "dark",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#162533",
+        "#000000"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "keypad": {
+    "appBarBlurredSurface": {
+      "color": "#96111315",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "dark",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "background": {
+      "type": "gradient",
+      "colors": [
+        "#162533",
+        "#000000"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "contacts": {
+    "appBarBlurredSurface": {
+      "color": "#96111315",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "dark",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#162533",
+        "#000000"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "favorites": {
+    "appBarBlurredSurface": {
+      "color": "#96111315",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "dark",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#162533",
+        "#000000"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "conversations": {
+    "appBarBlurredSurface": {
+      "color": "#96111315",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "dark",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#162533",
+        "#000000"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "recents": {
+    "appBarBlurredSurface": {
+      "color": "#96111315",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "dark",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#162533",
+        "#000000"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
+    }
+  },
+  "embedded": {
+    "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
+    "_themeOverride": {
+      "mode": "dark",
+      "applyToAppBar": false
+    },
+    "__background": "Defines the visual background of the screen. Supports 'solid', 'gradient', or 'image' types. Controls the underlying container decoration.",
+    "_background": {
+      "type": "gradient",
+      "colors": [
+        "#162533",
+        "#000000"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0
     }
   }
 }

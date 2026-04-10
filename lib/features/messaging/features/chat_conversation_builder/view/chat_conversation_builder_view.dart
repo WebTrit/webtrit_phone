@@ -68,7 +68,6 @@ class _ChatConversationBuilderViewState extends State<ChatConversationBuilderVie
                     }
 
                     return const Center(child: CircularProgressIndicator());
-                    // return widget;
                   },
                 ),
               ),
@@ -88,11 +87,17 @@ class _ChatConversationBuilderViewState extends State<ChatConversationBuilderVie
   }
 
   AppBar buildAppBar(ChatCBState state) {
+    final theme = Theme.of(context);
+    final actionButtonStyle = TextButton.styleFrom(
+      foregroundColor: theme.appBarTheme.foregroundColor ?? theme.colorScheme.primary,
+    );
+
     if (state is ChatCBGroupContactsSelection || state is ChatCBGroupFillInfo) {
       return AppBar(
         title: Text(context.l10n.messaging_ConversationBuilders_title_group),
         leading: TextButton(
           onPressed: builderCubit.onBackToPrevStage,
+          style: actionButtonStyle,
           child: Text(context.l10n.messaging_ConversationBuilders_back),
         ),
         leadingWidth: 100,
@@ -100,11 +105,14 @@ class _ChatConversationBuilderViewState extends State<ChatConversationBuilderVie
           if (state is ChatCBGroupContactsSelection && state.selectedContacts.isNotEmpty)
             TextButton(
               onPressed: builderCubit.onGroupFillInfoStageChoosen,
+              style: actionButtonStyle,
+
               child: Text(context.l10n.messaging_ConversationBuilders_next_action),
             ),
           if (state is ChatCBGroupFillInfo && state.name.length >= 3)
             TextButton(
               onPressed: builderCubit.onGroupCreateConfirm,
+              style: actionButtonStyle,
               child: Text(context.l10n.messaging_ConversationBuilders_create),
             ),
         ],

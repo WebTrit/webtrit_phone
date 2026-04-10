@@ -4,6 +4,43 @@
   "@account_selfCarePasswordExpired_message": {
     "description": "Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted."
   },
+  "agoTicker_daysAgo": "{days, plural, zero{} one{{days} day ago} other{{days} days ago}}",
+  "@agoTicker_daysAgo": {
+    "description": "Elapsed time relative to now, shown in days.",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_hoursAgo": "{hours, plural, zero{} one{{hours} hour ago} other{{hours} hours ago}}",
+  "@agoTicker_hoursAgo": {
+    "description": "Elapsed time relative to now, shown in hours.",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_minutesAgo": "{minutes, plural, zero{} one{{minutes} minute ago} other{{minutes} minutes ago}}",
+  "@agoTicker_minutesAgo": {
+    "description": "Elapsed time relative to now, shown in minutes.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_secondsAgo": "{seconds, plural, zero{Just now} one{{seconds} second ago} other{{seconds} seconds ago}}",
+  "@agoTicker_secondsAgo": {
+    "description": "Elapsed time relative to now, shown in seconds.",
+    "placeholders": {
+      "seconds": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
   "alertDialogActions_no": "No",
   "@alertDialogActions_no": {},
   "alertDialogActions_ok": "Ok",
@@ -140,8 +177,32 @@
   "@callStatus_inProgress": {},
   "callStatus_ready": "Connection established",
   "@callStatus_ready": {},
+  "call_SystemErrorDialog_description": "To resume making calls, a phone restart is required. This will resolve a temporary system error.",
+  "@call_SystemErrorDialog_description": {},
+  "call_SystemErrorDialog_title": "System Error",
+  "@call_SystemErrorDialog_title": {},
   "call_ThumbnailAvatar_currentlyNoActiveCall": "Currently, there is no active call",
   "@call_ThumbnailAvatar_currentlyNoActiveCall": {},
+  "call_videoBackground_actionLabel_disableBlur": "Disable Blur",
+  "@call_videoBackground_actionLabel_disableBlur": {
+    "description": "Button label shown when the video background is currently blurred. Clicking this will turn off the blur effect."
+  },
+  "call_videoBackground_actionLabel_enableBlur": "Enable Blur",
+  "@call_videoBackground_actionLabel_enableBlur": {
+    "description": "Button label shown when the video background is normal (no blur). Clicking this will turn on the blur effect."
+  },
+  "call_videoView_actionLabel_cover": "Cover",
+  "@call_videoView_actionLabel_cover": {
+    "description": "Button label to switch the video view mode to 'Cover' (fills the entire area, potentially cropping edges). Shown when the video is currently in 'Fit' mode."
+  },
+  "call_videoView_actionLabel_fit": "Fit",
+  "@call_videoView_actionLabel_fit": {
+    "description": "Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode."
+  },
+  "cdrs_noMissedCalls_message": "No missed calls",
+  "@cdrs_noMissedCalls_message": {},
+  "cdrs_noRecentCalls_message": "No recent calls",
+  "@cdrs_noRecentCalls_message": {},
   "common_noInternetConnection_message": "It seems you are not connected to the internet. Please check your connection and try again.",
   "@common_noInternetConnection_message": {},
   "common_noInternetConnection_retryButton": "Try Again",
@@ -387,6 +448,38 @@
   "@diagnostic_pushTokenStatusType_progress": {},
   "diagnostic_pushTokenStatusType_success": "Service successfully configured",
   "@diagnostic_pushTokenStatusType_success": {},
+  "diagnosticReportDialogAddNoteExpansionTileTitle": "Add a note (Optional)",
+  "@diagnosticReportDialogAddNoteExpansionTileTitle": {
+    "description": "Title for the expandable section where users can add manual comments."
+  },
+  "diagnosticReportDialogCancelButtonLabel": "Cancel",
+  "@diagnosticReportDialogCancelButtonLabel": {
+    "description": "Label for the button that closes the dialog without action."
+  },
+  "diagnosticReportDialogCommentTextFieldHintText": "Describe what happened...",
+  "@diagnosticReportDialogCommentTextFieldHintText": {
+    "description": "Placeholder hint text displayed inside the comment text field."
+  },
+  "diagnosticReportDialogContent": "This report contains technical details to help us identify connection issues.",
+  "@diagnosticReportDialogContent": {
+    "description": "The main body text explaining what the diagnostic report is for."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": "Requires extra permissions.",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": {
+    "description": "Subtitle text under the system logs switch indicating permission requirements."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": "Include System Logs",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": {
+    "description": "The label for the switch toggle that allows the user to attach system logs."
+  },
+  "diagnosticReportDialogSendReportButtonLabel": "Send Report",
+  "@diagnosticReportDialogSendReportButtonLabel": {
+    "description": "Label for the button that submits the diagnostic report."
+  },
+  "diagnosticReportDialogTitle": "Send Diagnostic Report",
+  "@diagnosticReportDialogTitle": {
+    "description": "The title shown at the top of the diagnostic report dialog."
+  },
   "diagnosticScreen_contacts_agreement_description": "Allow the app to access my contacts to enhance my user experience.",
   "@diagnosticScreen_contacts_agreement_description": {},
   "diagnosticScreen_contacts_agreement_group_title": "Agreement",
@@ -397,38 +490,6 @@
   "@diagnosticScreen_permissionsGroup_title": {},
   "diagnosticScreen_pushNotificationService_title": "Push notification service",
   "@diagnosticScreen_pushNotificationService_title": {},
-  "diagnosticReportDialogTitle": "Send Diagnostic Report",
-  "@diagnosticReportDialogTitle": {
-    "description": "The title shown at the top of the diagnostic report dialog."
-  },
-  "diagnosticReportDialogContent": "This report contains technical details to help us identify connection issues.",
-  "@diagnosticReportDialogContent": {
-    "description": "The main body text explaining what the diagnostic report is for."
-  },
-  "diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": "Include System Logs",
-  "@diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": {
-    "description": "The label for the switch toggle that allows the user to attach system logs."
-  },
-  "diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": "Requires extra permissions.",
-  "@diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": {
-    "description": "Subtitle text under the system logs switch indicating permission requirements."
-  },
-  "diagnosticReportDialogAddNoteExpansionTileTitle": "Add a note (Optional)",
-  "@diagnosticReportDialogAddNoteExpansionTileTitle": {
-    "description": "Title for the expandable section where users can add manual comments."
-  },
-  "diagnosticReportDialogCommentTextFieldHintText": "Describe what happened...",
-  "@diagnosticReportDialogCommentTextFieldHintText": {
-    "description": "Placeholder hint text displayed inside the comment text field."
-  },
-  "diagnosticReportDialogCancelButtonLabel": "Cancel",
-  "@diagnosticReportDialogCancelButtonLabel": {
-    "description": "Label for the button that closes the dialog without action."
-  },
-  "diagnosticReportDialogSendReportButtonLabel": "Send Report",
-  "@diagnosticReportDialogSendReportButtonLabel": {
-    "description": "Label for the button that submits the diagnostic report."
-  },
   "favorites_BodyCenter_empty": "Currently, you have no favorite numbers.\nAdd favorites from Contacts using the star icon",
   "@favorites_BodyCenter_empty": {},
   "favorites_DeleteConfirmDialog_content": "Are you sure you want to delete the current favorite number?",
@@ -867,6 +928,10 @@
   "@messaging_MessageView_reply": {},
   "messaging_MessageView_textcopy": "Copy to clipboard",
   "@messaging_MessageView_textcopy": {},
+  "messaging_MessageView_today": "Today",
+  "@messaging_MessageView_today": {},
+  "messaging_MessageView_yesterday": "Yesterday",
+  "@messaging_MessageView_yesterday": {},
   "messaging_ParticipantName_unknown": "Unknown user",
   "@messaging_ParticipantName_unknown": {
     "description": "Shown when a participant in a conversation does not have a known or available name. Condition: the user's name is missing or cannot be retrieved."
@@ -1097,14 +1162,16 @@
   "@presence_infoView_activity": {},
   "presence_infoView_available": "Available:",
   "@presence_infoView_available": {},
-  "presence_infoView_available_false": "No",
+  "presence_infoView_available_false": "Unreachable",
   "@presence_infoView_available_false": {},
-  "presence_infoView_available_true": "Yes",
+  "presence_infoView_available_true": "Available",
   "@presence_infoView_available_true": {},
   "presence_infoView_client": "Client:",
   "@presence_infoView_client": {},
   "presence_infoView_device": "Device:",
   "@presence_infoView_device": {},
+  "presence_infoView_localTime": "Local Time:",
+  "@presence_infoView_localTime": {},
   "presence_infoView_note": "Note:",
   "@presence_infoView_note": {},
   "presence_infoView_statusIcon": "Status Icon:",
@@ -1245,12 +1312,18 @@
   "@request_StatusName": {},
   "sessionStatus_pushNotificationServiceProblem": "Problem with configuration push notification service",
   "@sessionStatus_pushNotificationServiceProblem": {},
+  "session_Teardown_progressText": "Signing out...",
+  "@session_Teardown_progressText": {
+    "description": "Status message displayed while the application is performing cleanup during the logout process."
+  },
   "settings_AboutText_ApplicationEmbeddedLinks": "Application embedded links",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AboutText_AppSessionIdentifier": "Application session identifier",
   "@settings_AboutText_AppSessionIdentifier": {},
   "settings_AboutText_AppVersion": "App Version",
   "@settings_AboutText_AppVersion": {},
+  "settings_AboutText_CoreVersion": "WebTrit Cloud Backend version",
+  "@settings_AboutText_CoreVersion": {},
   "settings_AboutText_CoreVersionUndefined": "?.?.?",
   "@settings_AboutText_CoreVersionUndefined": {},
   "settings_AboutText_FCMPushNotificationToken": "FCM Push Notification Token",
@@ -1365,20 +1438,32 @@
   "@settings_encoding_Section_packetization_tooltip": {},
   "settings_encoding_Section_preset": "Preset",
   "@settings_encoding_Section_preset": {},
-  "settings_encoding_Section_preset_balance": "Balance",
+  "settings_encoding_Section_preset_balance": "Balanced",
   "@settings_encoding_Section_preset_balance": {},
-  "settings_encoding_Section_preset_bypass": "Bypass",
-  "@settings_encoding_Section_preset_bypass": {},
+  "settings_encoding_Section_preset_balance_tooltip": "Balances call quality with data usage.",
+  "@settings_encoding_Section_preset_balance_tooltip": {},
+  "settings_encoding_Section_preset_eco": "Low bandwidth",
+  "@settings_encoding_Section_preset_eco": {},
+  "settings_encoding_Section_preset_eco_tooltip": "Uses less internet data and works better on slow or unstable connections.",
+  "@settings_encoding_Section_preset_eco_tooltip": {},
   "settings_encoding_Section_preset_custom": "Custom",
   "@settings_encoding_Section_preset_custom": {},
-  "settings_encoding_Section_preset_default": "Default",
+  "settings_encoding_Section_preset_custom_tooltip": "Manually adjust call quality settings.",
+  "@settings_encoding_Section_preset_custom_tooltip": {},
+  "settings_encoding_Section_preset_default": "Recommended",
   "@settings_encoding_Section_preset_default": {},
-  "settings_encoding_Section_preset_eco": "Eco",
-  "@settings_encoding_Section_preset_eco": {},
+  "settings_encoding_Section_preset_default_tooltip": "The default media quality settings chosen for this application. Works well for most calls",
+  "@settings_encoding_Section_preset_default_tooltip": {},
+  "settings_encoding_Section_preset_bypass": "Compatibility mode",
+  "@settings_encoding_Section_preset_bypass": {},
+  "settings_encoding_Section_preset_bypass_tooltip": "Skips applying media quality settings and uses an unmodified call setup. Helps resolve compatibility issues.",
+  "@settings_encoding_Section_preset_bypass_tooltip": {},
   "settings_encoding_Section_preset_full_flex": "Full Flex",
   "@settings_encoding_Section_preset_full_flex": {},
-  "settings_encoding_Section_preset_quality": "Quality",
+  "settings_encoding_Section_preset_quality": "Best quality",
   "@settings_encoding_Section_preset_quality": {},
+  "settings_encoding_Section_preset_quality_tooltip": "Provides the best audio and video quality. Requires a fast and stable internet connection.",
+  "@settings_encoding_Section_preset_quality_tooltip": {},
   "settings_encoding_Section_preset_title": "Media encoding configs",
   "@settings_encoding_Section_preset_title": {},
   "settings_encoding_Section_preset_tooltip": "Adjustment presets for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage. Default preset is recommended settings provided by your vendor according to it evnironment preferences.",
@@ -1423,9 +1508,9 @@
   "@settings_iceSettings_Section_netfilter_title": {},
   "settings_iceSettings_Section_noskip": "No filtering",
   "@settings_iceSettings_Section_noskip": {},
-  "settings_iceSettings_Section_title": "Ice candidates filtering",
+  "settings_iceSettings_Section_title": "ICE candidates filtering",
   "@settings_iceSettings_Section_title": {},
-  "settings_iceSettings_Section_tooltip": "Filter ice candidates based on the network preferences may help to avoid network issues",
+  "settings_iceSettings_Section_tooltip": "Filter ICE candidates based on the network preferences may help to avoid network issues",
   "@settings_iceSettings_Section_tooltip": {},
   "settings_iceSettings_Section_trfilter_skipTcp": "Skip TCP candidates",
   "@settings_iceSettings_Section_trfilter_skipTcp": {},
@@ -1479,7 +1564,7 @@
   "@settings_LogoutConfirmDialog_title": {},
   "settings_missingMicrophoneIndicator_title": "Missing microphone permission. Unable to make calls.",
   "@settings_missingMicrophoneIndicator_title": {},
-  "settings_network_fallbackCalls_description": "Enable fallback incoming call triggering via specially formatted SMS",
+  "settings_network_fallbackCalls_description": "If push notifications about calls are not received, the app will receive a special SMS and display the incoming call screen.",
   "@settings_network_fallbackCalls_description": {
     "description": "Tooltip description for fallback SMS-based call trigger"
   },
@@ -1495,9 +1580,9 @@
   "@settings_network_incomingCallType_socket_description": {},
   "settings_network_incomingCallType_socket_title": "Persistent Connection to the Server",
   "@settings_network_incomingCallType_socket_title": {},
-  "settings_network_incomingCallType_title": "Incoming Call Type",
+  "settings_network_incomingCallType_title": "Incoming Call Delivery",
   "@settings_network_incomingCallType_title": {},
-  "settings_network_smsFallback_toggle": "SMS Fallback",
+  "settings_network_smsFallback_toggle": "SMS as a backup channel",
   "@settings_network_smsFallback_toggle": {
     "description": "Toggle label for enabling SMS fallback"
   },
@@ -1813,6 +1898,10 @@
   "@validationBlankError": {},
   "voicemail_Description_notSupported": "Voicemail feature are not supported in your core. Please contact your administrator for more information.",
   "@voicemail_Description_notSupported": {},
+  "voicemail_Dialog_deleteSelectedContent": "Selected voicemails will be permanently deleted. Do you want to continue?",
+  "@voicemail_Dialog_deleteSelectedContent": {},
+  "voicemail_Dialog_deleteSelectedTitle": "Delete selected voicemails?",
+  "@voicemail_Dialog_deleteSelectedTitle": {},
   "voicemail_Dialog_deleteSingleContent": "This voicemail will be permanently deleted. Do you want to continue?",
   "@voicemail_Dialog_deleteSingleContent": {},
   "voicemail_Dialog_deleteSingleTitle": "Delete voicemail?",
@@ -1831,8 +1920,12 @@
   "@voicemail_Label_markAsHeard": {},
   "voicemail_Label_markAsNew": "Mark as new",
   "@voicemail_Label_markAsNew": {},
+  "voicemail_Label_playbackError": "Playback failed",
+  "@voicemail_Label_playbackError": {},
   "voicemail_Label_retry": "Try again",
   "@voicemail_Label_retry": {},
+  "voicemail_Snackbar_notConfigured": "Contact your administrator to activate voicemail",
+  "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Feature not supported",
   "@voicemail_Title_notSupported": {},
   "voicemail_Widget_screenTitle": "Voicemail",
@@ -1894,5 +1987,97 @@
   "webview_sslError_tryAgain": "Try again",
   "@webview_sslError_tryAgain": {
     "description": "Primary action button label on SSL error screen."
-  }
+  },
+  "cdr_disconnectReason_unknown": "Unknown",
+  "cdr_disconnectReason_validCauseCodeNotYetReceived": "Valid cause code not yet received",
+  "cdr_disconnectReason_unallocatedNumber": "Unallocated (unassigned) number",
+  "cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan": "No route to specified transit network (WAN)",
+  "cdr_disconnectReason_noRouteToDestination": "No route to destination",
+  "cdr_disconnectReason_sendSpecialInformationTone": "send special information tone",
+  "cdr_disconnectReason_misdialledTrunkPrefix": "misdialled trunk prefix.",
+  "cdr_disconnectReason_channelUnacceptable": "Channel unacceptable",
+  "cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel": "Call awarded and being delivered in an established channel",
+  "cdr_disconnectReason_prefix0DialedButNotAllowedPreemption": "Prefix 0 dialed but not allowed (Preemption)",
+  "cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved": "Prefix 1 dialed but not allowed (Preemption reserved)",
+  "cdr_disconnectReason_prefix1DialedButNotRequired": "Prefix 1 dialed but not required",
+  "cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding": "More digits received than allowed, call is proceeding",
+  "cdr_disconnectReason_normalCallClearing": "Normal call clearing",
+  "cdr_disconnectReason_userBusy": "User busy",
+  "cdr_disconnectReason_noUserResponding": "No user responding",
+  "cdr_disconnectReason_noAnswerFromUser": "No answer from user",
+  "cdr_disconnectReason_subscriberIsAbsent": "Subscriber is absent",
+  "cdr_disconnectReason_callRejected": "Call rejected",
+  "cdr_disconnectReason_numberChanged": "Number changed",
+  "cdr_disconnectReason_reverseChargingRejected": "Reverse charging rejected",
+  "cdr_disconnectReason_callSuspended": "Call suspended",
+  "cdr_disconnectReason_callResumed": "Call resumed",
+  "cdr_disconnectReason_nonSelectedUserClearing": "Non-selected user clearing",
+  "cdr_disconnectReason_destinationOutOfOrder": "Destination out of order",
+  "cdr_disconnectReason_invalidNumberFormatIncompleteNumber": "Invalid number format (incomplete number)",
+  "cdr_disconnectReason_facilityRejected": "Facility rejected",
+  "cdr_disconnectReason_responseToStatusEnquiry": "Response to STATUS ENQUIRY",
+  "cdr_disconnectReason_normalUnspecified": "Normal, unspecified",
+  "cdr_disconnectReason_circuitOutOfOrder": "Circuit out of order",
+  "cdr_disconnectReason_noCircuitChannelAvailable": "No circuit/channel available",
+  "cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable": "Destination unattainable (Require VPCI VCI is not available)",
+  "cdr_disconnectReason_vpciVciAssignmentFailure": "VPCI VCI assignment failure",
+  "cdr_disconnectReason_degradedServiceCallRateIsnNotValid": "Degraded service (call rate isn not valid)",
+  "cdr_disconnectReason_networkWanOutOfOrder": "Network (WAN) out of order",
+  "cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService": "Transit delay range cannot be achieved(Permanent frame mode is out of service)",
+  "cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational": "Throughput range cannot be achieved (Permanent frame mode is operational)",
+  "cdr_disconnectReason_temporaryFailure": "Temporary failure",
+  "cdr_disconnectReason_switchingEquipmentCongestion": "Switching equipment congestion",
+  "cdr_disconnectReason_accessInformationDiscarded": "Access information discarded",
+  "cdr_disconnectReason_requestedCircuitChannelNotAvailable": "Requested circuit channel not available",
+  "cdr_disconnectReason_preEmptedNoVpciVciIsAvailable": "Pre-empted (No VPCI VCI is available)",
+  "cdr_disconnectReason_precedenceCallBlocked": "Precedence call blocked",
+  "cdr_disconnectReason_resourceUnavailableUnspecified": "Resource unavailable - unspecified",
+  "cdr_disconnectReason_dspError": "DSP error",
+  "cdr_disconnectReason_qualityOfServiceUnavailable": "Quality of service unavailable",
+  "cdr_disconnectReason_requestedFacilityNotSubscribed": "Requested facility not subscribed",
+  "cdr_disconnectReason_reverseChargingNotAllowed": "Reverse charging not allowed",
+  "cdr_disconnectReason_outgoingCallsBarred": "Outgoing calls barred",
+  "cdr_disconnectReason_outgoingCallsBarredWithinCug": "Outgoing calls barred within CUG",
+  "cdr_disconnectReason_incomingCallsBarred": "Incoming calls barred",
+  "cdr_disconnectReason_incomingCallsBarredWithinCug": "Incoming calls barred within CUG",
+  "cdr_disconnectReason_callWaitingNotSubscribed": "Call waiting not subscribed",
+  "cdr_disconnectReason_bearerCapabilityNotAuthorized": "Bearer capability not authorized",
+  "cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable": "Bearer capability not presently available",
+  "cdr_disconnectReason_inconsistancyInTheInformationAndClass": "Inconsistancy in the information and class",
+  "cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified": "Service or option not available, unspecified",
+  "cdr_disconnectReason_bearerServiceNotImplemented": "Bearer service not implemented",
+  "cdr_disconnectReason_channelTypeNotImplemented": "Channel type not implemented",
+  "cdr_disconnectReason_transitNetworkSelectionNotImplemented": "Transit network selection not implemented",
+  "cdr_disconnectReason_messageNotImplemented": "Message not implemented",
+  "cdr_disconnectReason_requestedFacilityNotImplemented": "Requested facility not implemented",
+  "cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable": "Only restricted digital information bearer capability is available",
+  "cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified": "Service or option not implemented, unspecified",
+  "cdr_disconnectReason_invalidCallReferenceValue": "Invalid call reference value",
+  "cdr_disconnectReason_identifiedChannelDoesNotExist": "Identified channel does not exist",
+  "cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot": "A suspended call exists, but this call identity does not",
+  "cdr_disconnectReason_callIdentityInUse": "Call identity in use",
+  "cdr_disconnectReason_noCallSuspended": "No call suspended",
+  "cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared": "Call having the requested call identity has been cleared",
+  "cdr_disconnectReason_calledUserNotMemberOfCug": "Called user not member of CUG",
+  "cdr_disconnectReason_incompatibleDestination": "Incompatible destination",
+  "cdr_disconnectReason_nonExistentAbbreviatedAddressEntry": "Non-existent abbreviated address entry",
+  "cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed": "Destination address missing, and direct call not subscribed",
+  "cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse": "Invalid transit network selection (national use)",
+  "cdr_disconnectReason_invalidFacilityParameter": "Invalid facility parameter",
+  "cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported": "Mandatory information element is missing(AAL parameter is not supported)",
+  "cdr_disconnectReason_invalidMessageUnspecified": "Invalid message, unspecified",
+  "cdr_disconnectReason_mandatoryInformationElementIsMissing": "Mandatory information element is missing",
+  "cdr_disconnectReason_messageTypeNonExistentOrNotImplemented": "Message type non-existent or not implemented",
+  "cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented": "Message not compatible with call state or message type non-existent or not implemented",
+  "cdr_disconnectReason_informationElementNonexistantOrNotImplemented": "information element nonexistant or not implemented",
+  "cdr_disconnectReason_invalidInformationElementContents": "Invalid information element contents",
+  "cdr_disconnectReason_messageNotCompatibleWithCallState": "Message not compatible with call state",
+  "cdr_disconnectReason_recoveryOnTimerExpiry": "Recovery on timer expiry",
+  "cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn": "parameter non-existent or not implemented - passed on",
+  "cdr_disconnectReason_urecognizedParameterMessageDiscarded": "Urecognized parameter message discarded",
+  "cdr_disconnectReason_protocolErrorUnspecified": "Protocol error unspecified",
+  "cdr_disconnectReason_internetworkingUnspecified": "Internetworking, unspecified",
+  "cdr_disconnectReason_nextNodeIsUnreachable": "Next node is unreachable",
+  "cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService": "Holst Telephony Service Provider Module (HTSPM) is out of service",
+  "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL transit is not my node ID"
 }

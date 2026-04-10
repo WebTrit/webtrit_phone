@@ -5,23 +5,29 @@ import 'package:webtrit_phone/theme/theme.dart';
 import '../theme_style_factory.dart';
 
 class AppBarThemeDataFactory implements ThemeStyleFactory<AppBarTheme> {
-  AppBarThemeDataFactory(this.colors, this.config);
+  const AppBarThemeDataFactory(this.config, this.defaultFontFamily);
 
-  final ColorScheme colors;
-  final ExtTabBarWidgetConfig config;
+  final AppBarConfig config;
+  final String? defaultFontFamily;
 
   @override
   AppBarTheme create() {
-    final backgroundColor = config.backgroundColor?.toColor();
-    final foregroundColor = config.foregroundColor?.toColor();
-    const surfaceTintColor = Colors.white;
-
     return AppBarTheme(
-      backgroundColor: backgroundColor,
-      foregroundColor: foregroundColor,
-      surfaceTintColor: surfaceTintColor,
-      scrolledUnderElevation: 0.0,
-      centerTitle: true,
+      backgroundColor: config.backgroundColor?.toColor(),
+      foregroundColor: config.foregroundColor?.toColor(),
+      shadowColor: config.shadowColor?.toColor(),
+      surfaceTintColor: config.surfaceTintColor?.toColor(),
+      elevation: config.elevation,
+      scrolledUnderElevation: config.scrolledUnderElevation,
+      titleSpacing: config.titleSpacing,
+      leadingWidth: config.leadingWidth,
+      toolbarHeight: config.toolbarHeight,
+      centerTitle: config.centerTitle,
+      iconTheme: config.iconTheme?.toIconThemeData(),
+      actionsIconTheme: config.actionsIconTheme?.toIconThemeData(),
+      titleTextStyle: config.titleTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily),
+      toolbarTextStyle: config.toolbarTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily),
+      systemOverlayStyle: config.systemOverlayStyle?.toSystemUiOverlayStyle(),
     );
   }
 }

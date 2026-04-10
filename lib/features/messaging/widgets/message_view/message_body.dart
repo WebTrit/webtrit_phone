@@ -7,12 +7,11 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 class MessageBody extends StatefulWidget {
-  const MessageBody({required this.text, required this.isMine, this.style, this.previewDecoration, super.key});
+  const MessageBody({required this.text, required this.isMine, this.style, super.key});
 
   final String text;
   final bool isMine;
   final TextStyle? style;
-  final BoxDecoration? previewDecoration;
 
   @override
   State<MessageBody> createState() => _MessageBodyState();
@@ -57,7 +56,8 @@ class _MessageBodyState extends State<MessageBody> {
     final theme = Theme.of(context);
 
     final style = widget.style ?? theme.contentStyle;
-    final previewDecoration = widget.previewDecoration ?? theme.quoteDecoration(widget.isMine);
+    final previewDecoration = theme.roundQuoteDecoration(widget.isMine);
+    final quoteDecoration = theme.strongQuoteDecoration(widget.isMine);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +88,7 @@ class _MessageBodyState extends State<MessageBody> {
           crossFadeState: preview != null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
         ),
         ParsedText(
-          parse: TextMatchers.matchers(style),
+          parse: TextMatchers.matchers(style, quoteDecoration),
           regexOptions: const RegexOptions(multiLine: true, dotAll: true),
           style: style.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
           text: widget.text,

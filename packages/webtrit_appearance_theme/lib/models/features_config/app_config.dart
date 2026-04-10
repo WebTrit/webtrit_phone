@@ -1,5 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'package:webtrit_appearance_theme/converters/converters.dart';
+
+import 'supported_feature.dart';
 
 part 'app_config.freezed.dart';
 
@@ -15,6 +18,9 @@ class AppConfig with _$AppConfig {
     this.callConfig = const AppConfigCall(),
     this.contacts = const AppConfigContacts(),
     this.messaging = const AppConfigMessaging(),
+
+    /// List of enabled features and global app configurations.
+    this.supported = const [],
   });
 
   @override
@@ -34,6 +40,9 @@ class AppConfig with _$AppConfig {
 
   @override
   final AppConfigMessaging messaging;
+
+  @override
+  final List<SupportedFeature> supported;
 
   factory AppConfig.fromJson(Map<String, Object?> json) => _$AppConfigFromJson(json);
 
@@ -169,9 +178,11 @@ class AppConfigMain with _$AppConfigMain {
   final AppConfigBottomMenu bottomMenu;
 
   @override
+  @Deprecated('Use SupportedFeature.systemNotifications instead')
   final bool systemNotificationsEnabled;
 
   @override
+  @Deprecated('Use SupportedFeature.sipPresence instead')
   final bool sipPresenceEnabled;
 
   factory AppConfigMain.fromJson(Map<String, Object?> json) => _$AppConfigMainFromJson(json);
@@ -489,7 +500,11 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
     this.enabled = true,
     required this.titleL10n,
     required this.type,
+    // TODO: Separate UI configuration from logical configuration.
+    // Move UI-only fields (e.g., `icon`, `iconColor`) into a dedicated UI/widget config so core config remains behavior/data focused.
     required this.icon,
+    // Optional hex color string for the icon (e.g., '#RRGGBB'). Consider moving to UI config.
+    this.iconColor,
 
     /// TODO: Migration workaround - accepts both int and string IDs.
     /// Remove [IntToStringConverter] once all JSONs use string IDs only.
@@ -507,6 +522,9 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
 
   @override
   final String icon;
+
+  @override
+  final String? iconColor;
 
   @override
   @IntToStringOptionalConverter()
@@ -605,12 +623,28 @@ class AppConfigSms with _$AppConfigSms {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigChats with _$AppConfigChats {
-  const AppConfigChats({this.groupChatButtonEnabled = true});
+  const AppConfigChats({this.groupChatButtonEnabled = true, this.contactInfo = const ChatContactInfo()});
 
   @override
   final bool groupChatButtonEnabled;
 
+  @override
+  final ChatContactInfo contactInfo;
+
   factory AppConfigChats.fromJson(Map<String, Object?> json) => _$AppConfigChatsFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigChatsToJson(this);
+}
+
+@freezed
+@JsonSerializable(explicitToJson: true)
+class ChatContactInfo with _$ChatContactInfo {
+  const ChatContactInfo({this.showVideoButtonAction = true});
+
+  @override
+  final bool showVideoButtonAction;
+
+  factory ChatContactInfo.fromJson(Map<String, Object?> json) => _$ChatContactInfoFromJson(json);
+
+  Map<String, Object?> toJson() => _$ChatContactInfoToJson(this);
 }

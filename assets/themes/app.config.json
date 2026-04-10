@@ -1,4 +1,14 @@
 {
+  "supported": [
+    {
+      "type": "themeMode",
+      "mode": "system"
+    },
+    {
+      "type": "loggingConfig",
+      "checkIntervalSec": 15
+    }
+  ],
   "loginConfig": {
     "common": {
       "fullScreenLaunchEmbeddedResourceId": null
@@ -140,6 +150,12 @@
             "icon": "0xe366"
           },
           {
+            "enabled": true,
+            "type": "themeMode",
+            "titleL10n": "settings_ListViewTileTitle_themeMode",
+            "icon": "0xe518"
+          },
+          {
             "enabled": false,
             "type": "help",
             "titleL10n": "settings_ListViewTileTitle_help",
@@ -265,7 +281,10 @@
   "messaging": {
     "sms": {},
     "chats": {
-      "groupChatButtonEnabled": true
+      "groupChatButtonEnabled": true,
+      "contactInfo": {
+        "showVideoButtonAction": true
+      }
     }
   }
 }

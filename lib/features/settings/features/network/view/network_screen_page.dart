@@ -26,7 +26,7 @@ class NetworkScreenPage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => NetworkCubit(
-            featureAccess.callFeature.callTriggerConfig,
+            featureAccess.callConfig.triggerConfig,
             context.read<DeviceInfo>(),
             context.read<IncomingCallTypeRepository>(),
             BackgroundSignalingBootstrapService(),

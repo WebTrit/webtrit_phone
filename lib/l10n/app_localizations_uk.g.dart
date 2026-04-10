@@ -13,6 +13,65 @@ class AppLocalizationsUk extends AppLocalizations {
       'Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.';
 
   @override
+  String agoTicker_daysAgo(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days днів тому',
+      many: '$days днів тому',
+      few: '$days дні тому',
+      one: '$days день тому',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_hoursAgo(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: '$hours годин тому',
+      many: '$hours годин тому',
+      few: '$hours години тому',
+      one: '$hours годину тому',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_minutesAgo(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes хвилин тому',
+      many: '$minutes хвилин тому',
+      few: '$minutes хвилини тому',
+      one: '$minutes хвилину тому',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_secondsAgo(num seconds) {
+    final intl.NumberFormat secondsNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String secondsString = secondsNumberFormat.format(seconds);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      seconds,
+      locale: localeName,
+      other: '$secondsString секунд тому',
+      many: '$secondsString секунд тому',
+      few: '$secondsString секунди тому',
+      one: '$secondsString секунду тому',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get alertDialogActions_no => 'Ні';
 
   @override
@@ -40,7 +99,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get autoprovision_successSnackBar_used =>
-      'Ваші налаштування було успішно отримано, додаток готовий до використання';
+      'Ваші налаштування було успішно отримано, застосунок готовий до використання';
 
   @override
   String get call_CallActionsTooltip_accept => 'Прийняти';
@@ -203,7 +262,32 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callStatus_ready => 'Підключення встановлено';
 
   @override
+  String get call_SystemErrorDialog_description =>
+      'Щоб відновити можливість здійснювати дзвінки, необхідно перезавантажити телефон. Це виправить тимчасову системну помилку.';
+
+  @override
+  String get call_SystemErrorDialog_title => 'Системна помилка';
+
+  @override
   String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Зараз немає активних дзвінків';
+
+  @override
+  String get call_videoBackground_actionLabel_disableBlur => 'Вимкнути розмиття';
+
+  @override
+  String get call_videoBackground_actionLabel_enableBlur => 'Увімкнути розмиття';
+
+  @override
+  String get call_videoView_actionLabel_cover => 'Заповнити';
+
+  @override
+  String get call_videoView_actionLabel_fit => 'Вмістити';
+
+  @override
+  String get cdrs_noMissedCalls_message => 'Немає пропущених дзвінків';
+
+  @override
+  String get cdrs_noRecentCalls_message => 'Немає останніх дзвінків';
 
   @override
   String get common_noInternetConnection_message =>
@@ -223,11 +307,11 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get contacts_agreement_checkbox_text =>
-      'Я погоджуюсь дозволити додатку доступ до моїх контактів для покращення користувацького досвіду.';
+      'Я погоджуюсь дозволити застосунку доступ до моїх контактів для покращення досвіду користувача.';
 
   @override
   String get contacts_agreement_description =>
-      'Цей додаток потребує доступу до вашого списку контактів, щоб відображати їх у вкладці «Контакти» додатку. \n\nДані контактів тимчасово зберігаються локально на вашому пристрої для забезпечення функцій, таких як здійснення дзвінків прямо з додатку. \n\nЦі дані не збираються, не передаються та не поширюються за межами додатку.';
+      'Цей застосунок потребує доступу до вашого списку контактів, щоб відображати їх у вкладці «Контакти» застосунку. \n\nДані контактів тимчасово зберігаються локально на вашому пристрої для забезпечення функцій, таких як здійснення дзвінків прямо зі застосунку. \n\nЦі дані не збираються, не передаються та не поширюються за межами застосунку.';
 
   @override
   String get contacts_agreement_title => 'Збір даних';
@@ -372,28 +456,28 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get diagnostic_batteryMode_optimized_description =>
-      'Фонова активність додатка керується системою для економії батареї. Може працювати некоректно для вхідних дзвінків, що активуються через push-сповіщення.';
+      'Фонова активність застосунку керується системою для економії батареї. Може працювати некоректно для вхідних дзвінків, що активуються через push-сповіщення.';
 
   @override
   String get diagnostic_batteryMode_optimized_title => 'Оптимізовано';
 
   @override
   String get diagnostic_batteryMode_restricted_description =>
-      'Фонова активність додатка обмежена для економії заряду батареї. Вхідні дзвінки можуть бути пропущені. ';
+      'Фонова активність застосунку обмежена для економії заряду батареї. Вхідні дзвінки можуть бути пропущені. ';
 
   @override
   String get diagnostic_batteryMode_restricted_title => 'Обмежено';
 
   @override
   String get diagnostic_batteryMode_unknown_description =>
-      'Статус режиму батареї невідомий. Додаток може поводитися непередбачувано.';
+      'Статус режиму батареї невідомий. Застосунок може поводитися непередбачувано.';
 
   @override
   String get diagnostic_batteryMode_unknown_title => 'Невідомо';
 
   @override
   String get diagnostic_batteryMode_unrestricted_description =>
-      'Додаток має повний доступ для роботи у фоновому режимі без обмежень.';
+      'Застосунок має повний доступ для роботи у фоновому режимі без обмежень.';
 
   @override
   String get diagnostic_batteryMode_unrestricted_title => 'Без обмежень';
@@ -406,14 +490,14 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get diagnostic_permission_camera_description =>
-      'Цей додаток потребує дозволу на доступ до камери для здійснення відеодзвінків.';
+      'Цей застосунок потребує дозволу на доступ до камери для здійснення відеодзвінків.';
 
   @override
   String get diagnostic_permission_camera_title => 'Камера';
 
   @override
   String get diagnostic_permission_contacts_description =>
-      'Цей додаток потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.';
+      'Цей застосунок потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.';
 
   @override
   String get diagnostic_permission_contacts_title => 'Контакти';
@@ -429,13 +513,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get diagnostic_permission_microphone_description =>
-      'Цей додаток потребує дозволу на доступ до мікрофона для здійснення аудіодзвінків.';
+      'Цей застосунок потребує дозволу на доступ до мікрофона для здійснення аудіодзвінків.';
 
   @override
   String get diagnostic_permission_microphone_title => 'Мікрофон';
 
   @override
-  String get diagnostic_permission_notification_description => 'Дозволяє додатку активувати вхідні дзвінки.';
+  String get diagnostic_permission_notification_description => 'Дозволяє застосунку активувати вхідні дзвінки.';
 
   @override
   String get diagnostic_permission_notification_title => 'Сповіщення';
@@ -494,8 +578,33 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnostic_pushTokenStatusType_success => 'Службу успішно налаштовано';
 
   @override
+  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Додати примітку (необов’язково)';
+
+  @override
+  String get diagnosticReportDialogCancelButtonLabel => 'Скасувати';
+
+  @override
+  String get diagnosticReportDialogCommentTextFieldHintText => 'Опишіть, що трапилося...';
+
+  @override
+  String get diagnosticReportDialogContent =>
+      'Цей звіт містить технічні дані, які допоможуть нам виявити проблеми з підключенням.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Потрібні додаткові дозволи.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Додати системні логи';
+
+  @override
+  String get diagnosticReportDialogSendReportButtonLabel => 'Надіслати звіт';
+
+  @override
+  String get diagnosticReportDialogTitle => 'Надіслати звіт про діагностику';
+
+  @override
   String get diagnosticScreen_contacts_agreement_description =>
-      'Дозвольте додатку отримати доступ до ваших контактів для покращення користувацького досвіду.';
+      'Дозвольте застосунку отримати доступ до ваших контактів для покращення досвіду користувача.';
 
   @override
   String get diagnosticScreen_contacts_agreement_group_title => 'Угода';
@@ -508,31 +617,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get diagnosticScreen_pushNotificationService_title => 'Служба push-сповіщень';
-
-  @override
-  String get diagnosticReportDialogTitle => 'Надіслати звіт про діагностику';
-
-  @override
-  String get diagnosticReportDialogContent =>
-      'Цей звіт містить технічні дані, які допоможуть нам виявити проблеми з підключенням.';
-
-  @override
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Додати системні логи';
-
-  @override
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Потрібні додаткові дозволи.';
-
-  @override
-  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Додати примітку (необов’язково)';
-
-  @override
-  String get diagnosticReportDialogCommentTextFieldHintText => 'Опишіть, що трапилося...';
-
-  @override
-  String get diagnosticReportDialogCancelButtonLabel => 'Скасувати';
-
-  @override
-  String get diagnosticReportDialogSendReportButtonLabel => 'Надіслати звіт';
 
   @override
   String get favorites_BodyCenter_empty =>
@@ -653,11 +737,11 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get login_RequestFailureUnconfiguredBundleIdError =>
-      'Помилка конфігурації сервера додатка - сповістіть свого постачальника послуг';
+      'Помилка конфігурації сервера застосунку - сповістіть свого постачальника послуг';
 
   @override
   String get login_SupportedLoginTypeMissedExceptionError =>
-      'Поточний WebTrit Cloud Backend не підтримує жодного типу входу, сумісного з цим додатком';
+      'Поточний WebTrit Cloud Backend не підтримує жодного типу входу, сумісного з цим застосунком';
 
   @override
   String login_Text_coreUrlAssignPostDescription(Object email) {
@@ -1039,6 +1123,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_MessageView_textcopy => 'Копіювати в буфер обміну';
 
   @override
+  String get messaging_MessageView_today => 'Сьогодні';
+
+  @override
+  String get messaging_MessageView_yesterday => 'Вчора';
+
+  @override
   String get messaging_ParticipantName_unknown => 'Невідомий користувач';
 
   @override
@@ -1076,14 +1166,14 @@ class AppLocalizationsUk extends AppLocalizations {
       'Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ';
 
   @override
-  String get notifications_errorSnackBar_appOffline => 'Ваш додаток зараз офлайн.';
+  String get notifications_errorSnackBar_appOffline => 'Ваш застосунок зараз офлайн.';
 
   @override
-  String get notifications_errorSnackBar_appOnline => 'Ваш додаток онлайн.';
+  String get notifications_errorSnackBar_appOnline => 'Ваш застосунок онлайн.';
 
   @override
   String get notifications_errorSnackBar_appUnregistered =>
-      'Вибачте, ваш додаток наразі відключений від серверів WebTrit і не може здійснювати дзвінки. Будь ласка, перейдіть на сторінку налаштувань і перемкніть вимикач стану онлайн у вимкнуте та знову в увімкнуте положення, щоб відновити з\'єднання.';
+      'Вибачте, ваш застосунок наразі відключений від серверів WebTrit і не може здійснювати дзвінки. Будь ласка, перейдіть на сторінку налаштувань і перемкніть вимикач стану онлайн у вимкнуте та знову в увімкнуте положення, щоб відновити з\'єднання.';
 
   @override
   String get notifications_errorSnackBar_callConnect => 'Підключення до ядра не вдалося, спроба з\'єднання';
@@ -1104,7 +1194,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBar_callUserMedia =>
-      'Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми';
+      'Немає доступу до медіа-входу, будь ласка, перевірте дозволи застосунку';
 
   @override
   String get notifications_errorSnackBar_callWhileOffline =>
@@ -1151,10 +1241,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_sipServiceUnavailable => 'Помилка аутентифікації з віддаленою VoIP системою';
 
   @override
-  String get notifications_messageSnackBar_appOffline => 'Ваш додаток зараз офлайн.';
+  String get notifications_messageSnackBar_appOffline => 'Ваш застосунок зараз офлайн.';
 
   @override
-  String get notifications_successSnackBar_appOnline => 'Ваш додаток онлайн.';
+  String get notifications_successSnackBar_appOnline => 'Ваш застосунок онлайн.';
 
   @override
   String get numberActions_audioCall => 'Aудіо дзвінок';
@@ -1207,11 +1297,11 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get permission_manageFullScreenNotificationInstructions_step4 =>
-      'Виберіть додаток, для якого потрібно керувати повноекранними сповіщеннями.';
+      'Виберіть застосунок, для якого потрібно керувати повноекранними сповіщеннями.';
 
   @override
   String get permission_manageFullScreenNotificationInstructions_step5 =>
-      'Увімкніть або вимкніть дозвіл для повноекранних сповіщень цього додатка.';
+      'Увімкніть або вимкніть дозвіл для повноекранних сповіщень цього застосунку.';
 
   @override
   String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
@@ -1220,11 +1310,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_manufacturer_Button_gotIt => 'Зрозуміло';
 
   @override
-  String get permission_manufacturer_Button_toSettings => 'Відкрийте налаштування програми';
+  String get permission_manufacturer_Button_toSettings => 'Відкрийте налаштування застосунку';
 
   @override
   String get permission_manufacturer_Text_heading =>
-      'Щоб забезпечити найкращу взаємодію з користувачем, програмі потрібно вручну надати такі дозволи:';
+      'Щоб забезпечити найкращу взаємодію з користувачем, застосунку потрібно вручну надати такі дозволи:';
 
   @override
   String get permission_manufacturer_Text_trailing => 'Дозволи можуть бути змінені в будь-який час у майбутньому.';
@@ -1237,7 +1327,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get permission_Text_description =>
-      'Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.';
+      'Для забезпечення найкращого досвіду користувача застосунок потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в застосунку.\n\nДозволи можуть бути змінені у майбутньому.';
 
   @override
   String get persistentConnectionReminderContent =>
@@ -1292,16 +1382,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get presence_infoView_available => 'Доступний:';
 
   @override
-  String get presence_infoView_available_false => 'Ні';
+  String get presence_infoView_available_false => 'Недоступний';
 
   @override
-  String get presence_infoView_available_true => 'Так';
+  String get presence_infoView_available_true => 'Доступний';
 
   @override
   String get presence_infoView_client => 'Клієнт:';
 
   @override
   String get presence_infoView_device => 'Пристрій:';
+
+  @override
+  String get presence_infoView_localTime => 'Місцевий час:';
 
   @override
   String get presence_infoView_note => 'Примітка:';
@@ -1502,13 +1595,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
 
   @override
+  String get session_Teardown_progressText => 'Вихід із системи...';
+
+  @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Вбудовані посилання застосунку';
 
   @override
   String get settings_AboutText_AppSessionIdentifier => 'Ідентифікатор сесії застосунку';
 
   @override
-  String get settings_AboutText_AppVersion => 'Версія додатка';
+  String get settings_AboutText_AppVersion => 'Версія застосунку';
+
+  @override
+  String get settings_AboutText_CoreVersion => 'Версія WebTrit Cloud Backend';
 
   @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
@@ -1548,7 +1647,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_audioProcessing_Section_tooltip =>
-      'Можна використовувати для налаштування якості аудіо для певних потреб або умов. Як-от студійний запис або зовнішній мікрофон. \n\nОбійти обробку голосу — повідомляє системі не застосовувати апаратну обробку голосу (потрібно перезапустити програму).';
+      'Можна використовувати для налаштування якості аудіо для певних потреб або умов. Як-от студійний запис або зовнішній мікрофон. \n\nОбійти обробку голосу — повідомляє системі не застосовувати апаратну обробку голосу (потрібно перезапустити застосунок).';
 
   @override
   String get settings_audioProcessing_Section_VP_title => 'Обхід обробки голосу';
@@ -1693,25 +1792,47 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_encoding_Section_preset => 'Налаштування';
 
   @override
-  String get settings_encoding_Section_preset_balance => 'Баланс';
+  String get settings_encoding_Section_preset_balance => 'Збалансований';
 
   @override
-  String get settings_encoding_Section_preset_bypass => 'Без втручання';
+  String get settings_encoding_Section_preset_balance_tooltip => 'Збалансовує якість дзвінків і використання даних.';
+
+  @override
+  String get settings_encoding_Section_preset_eco => 'Низька пропускна здатність';
+
+  @override
+  String get settings_encoding_Section_preset_eco_tooltip =>
+      'Використовує менше інтернет-даних і краще працює при повільному або нестабільному з\'єднанні.';
 
   @override
   String get settings_encoding_Section_preset_custom => 'Ручна конфігурація';
 
   @override
-  String get settings_encoding_Section_preset_default => 'Стандарт';
+  String get settings_encoding_Section_preset_custom_tooltip => 'Вручну налаштовуйте параметри якості дзвінка.';
 
   @override
-  String get settings_encoding_Section_preset_eco => 'Єко';
+  String get settings_encoding_Section_preset_default => 'Рекомендовано';
+
+  @override
+  String get settings_encoding_Section_preset_default_tooltip =>
+      'Стандартні налаштування якості медіа, обрані для цієї програми. Підходить для більшості дзвінків.';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Режим сумісності';
+
+  @override
+  String get settings_encoding_Section_preset_bypass_tooltip =>
+      'Пропускає застосування налаштувань якості медіа та використовує незмінену конфігурацію дзвінка. Допомагає вирішити проблеми сумісності.';
 
   @override
   String get settings_encoding_Section_preset_full_flex => 'Максимум';
 
   @override
-  String get settings_encoding_Section_preset_quality => 'Якість';
+  String get settings_encoding_Section_preset_quality => 'Найкраща якість';
+
+  @override
+  String get settings_encoding_Section_preset_quality_tooltip =>
+      'Забезпечує найкращу якість аудіо та відео. Вимагає швидкого та стабільного інтернет-з\'єднання.';
 
   @override
   String get settings_encoding_Section_preset_title => 'Конфігурації кодування медіа';
@@ -1783,11 +1904,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_iceSettings_Section_noskip => 'Без фільтрації';
 
   @override
-  String get settings_iceSettings_Section_title => 'Фільтрація ice-кандидатів';
+  String get settings_iceSettings_Section_title => 'Фільтрація ICE-кандидатів';
 
   @override
   String get settings_iceSettings_Section_tooltip =>
-      'Фільтр ice-кандидатів на основі параметрів мережі може допомогти уникнути проблем з мережею';
+      'Фільтр ICE-кандидатів на основі параметрів мережі може допомогти уникнути проблем з мережею';
 
   @override
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Пропустити TCP-кандидатів';
@@ -1799,7 +1920,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_iceSettings_Section_trfilter_title => 'Транспортний протокол';
 
   @override
-  String get settings_ListViewTileTitle_about => 'Про програму';
+  String get settings_ListViewTileTitle_about => 'Про застосунок';
 
   @override
   String get settings_ListViewTileTitle_accountDelete => 'Видалити обліковий запис';
@@ -1870,30 +1991,30 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_network_fallbackCalls_description =>
-      'Увімкніть резервний виклик через спеціально сформатоване SMS';
+      'Якщо push-сповіщення про виклик не доходять, застосунок отримає спеціальне SMS та покаже екран вхідного дзвінка.';
 
   @override
   String get settings_network_fallbackCalls_title => 'Резервні вхідні дзвінки';
 
   @override
   String get settings_network_incomingCallType_pushNotification_description =>
-      'Коли додаток не використовується, він зупиняється і споживає мінімальну кількість ресурсів, що допомагає заощаджувати заряд батареї. Під час вхідного дзвінка сервер <brand> надсилає push-сповіщення на телефон, після чого мобільна операційна система запускає додаток для обробки дзвінка. Однак цей метод не гарантує отримання всіх дзвінків, оскільки, якщо телефон довго не використовується, деякі версії Android можуть обмежувати отримання push-сповіщень, що може призвести до пропущеного дзвінка.';
+      'Коли застосунок не використовується, він зупиняється і споживає мінімальну кількість ресурсів, що допомагає заощаджувати заряд батареї. Під час вхідного дзвінка сервер надсилає push-сповіщення на телефон, після чого мобільна операційна система запускає застосунок для обробки дзвінка. Однак цей метод не гарантує отримання всіх дзвінків, оскільки, якщо телефон довго не використовується, деякі версії Android можуть обмежувати отримання push-сповіщень, що може призвести до пропущеного дзвінка.';
 
   @override
   String get settings_network_incomingCallType_pushNotification_title => 'Push-сповіщення';
 
   @override
   String get settings_network_incomingCallType_socket_description =>
-      'Додаток продовжує працювати у фоновому режимі та завжди підтримує активне підключення до сервера. Це збільшує шанси отримати вхідний дзвінок, але може швидше розряджати батарею.';
+      'Застосунок продовжує працювати у фоновому режимі та завжди підтримує активне підключення до сервера. Це збільшує шанси отримати вхідний дзвінок, але може швидше розряджати батарею.';
 
   @override
   String get settings_network_incomingCallType_socket_title => 'Постійне підключення до сервера';
 
   @override
-  String get settings_network_incomingCallType_title => 'Тип вхідного дзвінка';
+  String get settings_network_incomingCallType_title => 'Отримання вхідних дзвінків';
 
   @override
-  String get settings_network_smsFallback_toggle => 'Резерв через SMS';
+  String get settings_network_smsFallback_toggle => 'SMS як резервний канал';
 
   @override
   String get settings_videoCapturing_Section_framerate_prefix => 'кадрів: ';
@@ -1902,13 +2023,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_videoCapturing_Section_framerate_title => 'Частота кадрів зображення';
 
   @override
-  String get settings_videoCapturing_Section_resolution_prefix => 'вертикальних точйок: ';
+  String get settings_videoCapturing_Section_resolution_prefix => 'вертикальних точок: ';
 
   @override
   String get settings_videoCapturing_Section_resolution_title => 'Роздільна здатність зображення';
 
   @override
-  String get settings_videoCapturing_Section_title => 'Захват відео';
+  String get settings_videoCapturing_Section_title => 'Захоплення відео';
 
   @override
   String get settings_videoCapturing_Section_tooltip =>
@@ -1920,7 +2041,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_videoOffer_option_includeInactive =>
-      'Включити неактивний відеотрек\nЗабезпечує сумісність із відеопропозиціями для майбутньої активації.';
+      'Увімкнути неактивний відеотрек\nЗабезпечує сумісність із відеопропозиціями для майбутньої активації.';
 
   @override
   String get settings_videoOffer_title => 'Визначте, як цей пристрій реагує на пропозицію, що містить відео.';
@@ -2012,7 +2133,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get signalingResponseCode_pluginNotFound =>
-      'Не знайдено необхідного компонента. Спробуйте перезапустити додаток.';
+      'Не знайдено необхідного компонента. Спробуйте перезапустити застосунок.';
 
   @override
   String get signalingResponseCode_rejected => 'Ваш запит було відхилено. Будь ласка, спробуйте ще раз.';
@@ -2039,14 +2160,14 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signalingResponseCodeType_callHangup => 'Ваш дзвінок було завершено.';
 
   @override
-  String get signalingResponseCodeType_plugin => 'Не працює необхідна функція. Спробуйте перезапустити додаток.';
+  String get signalingResponseCodeType_plugin => 'Не працює необхідна функція. Спробуйте перезапустити застосунок.';
 
   @override
   String get signalingResponseCodeType_request => 'Сталася помилка у вашому запиті. Будь ласка, спробуйте ще раз.';
 
   @override
   String get signalingResponseCodeType_session =>
-      'Виникла проблема з вашою сесією. Будь ласка, увійдіть у систему знову або перезапустіть додаток.';
+      'Виникла проблема з вашою сесією. Будь ласка, увійдіть у систему знову або перезапустіть застосунок.';
 
   @override
   String get signalingResponseCodeType_token => 'Ваш токен доступу недійсний. Будь ласка, увійдіть у систему знову.';
@@ -2195,6 +2316,13 @@ class AppLocalizationsUk extends AppLocalizations {
       'Функція голосової пошти не підтримується у вашій системі. Зверніться до адміністратора для отримання додаткової інформації.';
 
   @override
+  String get voicemail_Dialog_deleteSelectedContent =>
+      'Обрані голосові повідомлення будуть остаточно видалені. Чи хочете ви продовжити?';
+
+  @override
+  String get voicemail_Dialog_deleteSelectedTitle => 'Видалити обрані голосові повідомлення?';
+
+  @override
   String get voicemail_Dialog_deleteSingleContent =>
       'Це голосове повідомлення буде остаточно видалено. Бажаєте продовжити?';
 
@@ -2224,7 +2352,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get voicemail_Label_markAsNew => 'Позначити як нове';
 
   @override
+  String get voicemail_Label_playbackError => 'Помилка відтворення';
+
+  @override
   String get voicemail_Label_retry => 'Спробувати ще раз';
+
+  @override
+  String get voicemail_Snackbar_notConfigured => 'Зверніться до адміністратора, щоб активувати голосову пошту.';
 
   @override
   String get voicemail_Title_notSupported => 'Функція не підтримується';
@@ -2269,4 +2403,303 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Спробувати ще раз';
+
+  @override
+  String get cdr_disconnectReason_unknown => 'Невідомо';
+
+  @override
+  String get cdr_disconnectReason_validCauseCodeNotYetReceived => 'Коректний код причини ще не отримано';
+
+  @override
+  String get cdr_disconnectReason_unallocatedNumber => 'Непризначений номер';
+
+  @override
+  String get cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan =>
+      'Немає маршруту до вказаної транзитної мережі (WAN)';
+
+  @override
+  String get cdr_disconnectReason_noRouteToDestination => 'Немає маршруту до пункту призначення';
+
+  @override
+  String get cdr_disconnectReason_sendSpecialInformationTone => 'Надіслати спеціальний інформаційний тон';
+
+  @override
+  String get cdr_disconnectReason_misdialledTrunkPrefix => 'Неправильно набраний префікс транку';
+
+  @override
+  String get cdr_disconnectReason_channelUnacceptable => 'Неприйнятний канал';
+
+  @override
+  String get cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel =>
+      'Виклик призначено та доставляється встановленим каналом';
+
+  @override
+  String get cdr_disconnectReason_prefix0DialedButNotAllowedPreemption =>
+      'Набрано префікс 0, але це не дозволено (пріоритетне витіснення)';
+
+  @override
+  String get cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved =>
+      'Набрано префікс 1, але це не дозволено (резерв пріоритету)';
+
+  @override
+  String get cdr_disconnectReason_prefix1DialedButNotRequired => 'Набрано префікс 1, але він не потрібен';
+
+  @override
+  String get cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding =>
+      'Отримано більше цифр, ніж дозволено; виклик продовжується';
+
+  @override
+  String get cdr_disconnectReason_normalCallClearing => 'Нормальне завершення виклику';
+
+  @override
+  String get cdr_disconnectReason_userBusy => 'Абонент зайнятий';
+
+  @override
+  String get cdr_disconnectReason_noUserResponding => 'Абонент не відповідає';
+
+  @override
+  String get cdr_disconnectReason_noAnswerFromUser => 'Немає відповіді від абонента';
+
+  @override
+  String get cdr_disconnectReason_subscriberIsAbsent => 'Абонент відсутній';
+
+  @override
+  String get cdr_disconnectReason_callRejected => 'Виклик відхилено';
+
+  @override
+  String get cdr_disconnectReason_numberChanged => 'Номер змінено';
+
+  @override
+  String get cdr_disconnectReason_reverseChargingRejected => 'Зворотна тарифікація відхилена';
+
+  @override
+  String get cdr_disconnectReason_callSuspended => 'Виклик призупинено';
+
+  @override
+  String get cdr_disconnectReason_callResumed => 'Виклик відновлено';
+
+  @override
+  String get cdr_disconnectReason_nonSelectedUserClearing => 'Завершення виклику не вибраним абонентом';
+
+  @override
+  String get cdr_disconnectReason_destinationOutOfOrder => 'Напрямок поза сервісом';
+
+  @override
+  String get cdr_disconnectReason_invalidNumberFormatIncompleteNumber => 'Неправильний формат номера (неповний номер)';
+
+  @override
+  String get cdr_disconnectReason_facilityRejected => 'Послугу/функцію відхилено';
+
+  @override
+  String get cdr_disconnectReason_responseToStatusEnquiry => 'Відповідь на STATUS ENQUIRY';
+
+  @override
+  String get cdr_disconnectReason_normalUnspecified => 'Нормально, не уточнено';
+
+  @override
+  String get cdr_disconnectReason_circuitOutOfOrder => 'Канал (circuit) поза сервісом';
+
+  @override
+  String get cdr_disconnectReason_noCircuitChannelAvailable => 'Немає доступного каналу/лінії';
+
+  @override
+  String get cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable =>
+      'Напрямок недосяжний (потрібний VPCI/VCI недоступний)';
+
+  @override
+  String get cdr_disconnectReason_vpciVciAssignmentFailure => 'Помилка призначення VPCI/VCI';
+
+  @override
+  String get cdr_disconnectReason_degradedServiceCallRateIsnNotValid =>
+      'Погіршення сервісу (швидкість викликів недійсна)';
+
+  @override
+  String get cdr_disconnectReason_networkWanOutOfOrder => 'Мережа (WAN) поза сервісом';
+
+  @override
+  String get cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService =>
+      'Неможливо досягти діапазону транзитної затримки (режим постійного кадру поза сервісом)';
+
+  @override
+  String get cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational =>
+      'Неможливо досягти діапазону пропускної здатності (режим постійного кадру працює)';
+
+  @override
+  String get cdr_disconnectReason_temporaryFailure => 'Тимчасовий збій';
+
+  @override
+  String get cdr_disconnectReason_switchingEquipmentCongestion => 'Перевантаження комутаційного обладнання';
+
+  @override
+  String get cdr_disconnectReason_accessInformationDiscarded => 'Інформацію доступу відкинуто';
+
+  @override
+  String get cdr_disconnectReason_requestedCircuitChannelNotAvailable => 'Запитаний канал/лінія недоступний(а)';
+
+  @override
+  String get cdr_disconnectReason_preEmptedNoVpciVciIsAvailable => 'Витіснено за пріоритетом (VPCI/VCI недоступний)';
+
+  @override
+  String get cdr_disconnectReason_precedenceCallBlocked => 'Пріоритетний виклик заблоковано';
+
+  @override
+  String get cdr_disconnectReason_resourceUnavailableUnspecified => 'Ресурс недоступний - не уточнено';
+
+  @override
+  String get cdr_disconnectReason_dspError => 'Помилка DSP';
+
+  @override
+  String get cdr_disconnectReason_qualityOfServiceUnavailable => 'Якість обслуговування недоступна';
+
+  @override
+  String get cdr_disconnectReason_requestedFacilityNotSubscribed => 'Запитана послуга/функція не підключена';
+
+  @override
+  String get cdr_disconnectReason_reverseChargingNotAllowed => 'Зворотна тарифікація не дозволена';
+
+  @override
+  String get cdr_disconnectReason_outgoingCallsBarred => 'Вихідні виклики заборонені';
+
+  @override
+  String get cdr_disconnectReason_outgoingCallsBarredWithinCug => 'Вихідні виклики заборонені в межах CUG';
+
+  @override
+  String get cdr_disconnectReason_incomingCallsBarred => 'Вхідні виклики заборонені';
+
+  @override
+  String get cdr_disconnectReason_incomingCallsBarredWithinCug => 'Вхідні виклики заборонені в межах CUG';
+
+  @override
+  String get cdr_disconnectReason_callWaitingNotSubscribed => 'Очікування виклику не підключено';
+
+  @override
+  String get cdr_disconnectReason_bearerCapabilityNotAuthorized => 'Несуча здатність не авторизована';
+
+  @override
+  String get cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable => 'Несуча здатність наразі недоступна';
+
+  @override
+  String get cdr_disconnectReason_inconsistancyInTheInformationAndClass => 'Невідповідність між інформацією та класом';
+
+  @override
+  String get cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified => 'Послуга або опція недоступна, не уточнено';
+
+  @override
+  String get cdr_disconnectReason_bearerServiceNotImplemented => 'Bearer-послуга не реалізована';
+
+  @override
+  String get cdr_disconnectReason_channelTypeNotImplemented => 'Тип каналу не реалізовано';
+
+  @override
+  String get cdr_disconnectReason_transitNetworkSelectionNotImplemented => 'Вибір транзитної мережі не реалізовано';
+
+  @override
+  String get cdr_disconnectReason_messageNotImplemented => 'Повідомлення не реалізовано';
+
+  @override
+  String get cdr_disconnectReason_requestedFacilityNotImplemented => 'Запитану послугу/функцію не реалізовано';
+
+  @override
+  String get cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable =>
+      'Доступна лише обмежена цифрова bearer-здатність';
+
+  @override
+  String get cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified =>
+      'Послуга або опція не реалізована, не уточнено';
+
+  @override
+  String get cdr_disconnectReason_invalidCallReferenceValue => 'Недійсне значення посилання виклику';
+
+  @override
+  String get cdr_disconnectReason_identifiedChannelDoesNotExist => 'Ідентифікований канал не існує';
+
+  @override
+  String get cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot =>
+      'Існує призупинений виклик, але такого ідентифікатора виклику немає';
+
+  @override
+  String get cdr_disconnectReason_callIdentityInUse => 'Ідентифікатор виклику вже використовується';
+
+  @override
+  String get cdr_disconnectReason_noCallSuspended => 'Немає призупиненого виклику';
+
+  @override
+  String get cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared =>
+      'Виклик із запитаним ідентифікатором уже завершено';
+
+  @override
+  String get cdr_disconnectReason_calledUserNotMemberOfCug => 'Викликаний абонент не є учасником CUG';
+
+  @override
+  String get cdr_disconnectReason_incompatibleDestination => 'Несумісний напрямок';
+
+  @override
+  String get cdr_disconnectReason_nonExistentAbbreviatedAddressEntry => 'Неіснуючий запис скороченої адреси';
+
+  @override
+  String get cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed =>
+      'Адреса призначення відсутня, і прямий виклик не підключено';
+
+  @override
+  String get cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse =>
+      'Недійсний вибір транзитної мережі (національне використання)';
+
+  @override
+  String get cdr_disconnectReason_invalidFacilityParameter => 'Недійсний параметр послуги/функції';
+
+  @override
+  String get cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported =>
+      'Обов\'язковий інформаційний елемент відсутній (параметр AAL не підтримується)';
+
+  @override
+  String get cdr_disconnectReason_invalidMessageUnspecified => 'Недійсне повідомлення, не уточнено';
+
+  @override
+  String get cdr_disconnectReason_mandatoryInformationElementIsMissing =>
+      'Обов\'язковий інформаційний елемент відсутній';
+
+  @override
+  String get cdr_disconnectReason_messageTypeNonExistentOrNotImplemented =>
+      'Тип повідомлення не існує або не реалізований';
+
+  @override
+  String get cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented =>
+      'Повідомлення несумісне зі станом виклику або тип повідомлення не існує/не реалізований';
+
+  @override
+  String get cdr_disconnectReason_informationElementNonexistantOrNotImplemented =>
+      'Інформаційний елемент не існує або не реалізований';
+
+  @override
+  String get cdr_disconnectReason_invalidInformationElementContents => 'Недійсний вміст інформаційного елемента';
+
+  @override
+  String get cdr_disconnectReason_messageNotCompatibleWithCallState => 'Повідомлення несумісне зі станом виклику';
+
+  @override
+  String get cdr_disconnectReason_recoveryOnTimerExpiry => 'Відновлення після спливу таймера';
+
+  @override
+  String get cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn =>
+      'Параметр не існує або не реалізований - передано далі';
+
+  @override
+  String get cdr_disconnectReason_urecognizedParameterMessageDiscarded =>
+      'Нерозпізнаний параметр, повідомлення відкинуто';
+
+  @override
+  String get cdr_disconnectReason_protocolErrorUnspecified => 'Помилка протоколу, не уточнено';
+
+  @override
+  String get cdr_disconnectReason_internetworkingUnspecified => 'Взаємодія мереж (internetworking), не уточнено';
+
+  @override
+  String get cdr_disconnectReason_nextNodeIsUnreachable => 'Наступний вузол недосяжний';
+
+  @override
+  String get cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService =>
+      'Модуль постачальника телефонних послуг Holst (HTSPM) поза сервісом';
+
+  @override
+  String get cdr_disconnectReason_dtlTransitIsNotMyNodeId => 'DTL-транзит не відповідає моєму ID вузла';
 }

@@ -10,7 +10,7 @@ import 'package:webtrit_phone/models/rtp_codec_profile.dart';
 /// for now only opus level bitrate will be used, and ilbc as second priority for traffic reduction
 /// uncomment this when issue is fixed
 
-enum EncodingPreset { bypass, eco, balance, quality, fullFlex, custom }
+enum EncodingPreset { eco, balance, quality, bypass, custom }
 
 class EncodingSettings extends Equatable {
   EncodingSettings({
@@ -84,24 +84,13 @@ class EncodingSettings extends Equatable {
   factory EncodingSettings.quality() {
     return EncodingSettings(
       // audioBitrate: 64,
-      videoBitrate: 1024,
-      opusSamplingRate: 32000,
-      opusBitrate: 24,
-      opusStereo: false,
-      opusDtx: true,
-      audioProfiles: defaultAudioProfilesOrder,
-      videoProfiles: defaultVideoProfilesOrder,
-    );
-  }
-
-  factory EncodingSettings.fullFlex() {
-    return EncodingSettings(
-      // audioBitrate: 128,
       videoBitrate: 4096,
       opusSamplingRate: 48000,
-      opusBitrate: 128,
-      opusStereo: true,
+      opusBitrate: 64,
+      opusStereo: false,
       opusDtx: false,
+      audioProfiles: defaultAudioProfilesOrder,
+      videoProfiles: defaultVideoProfilesOrder,
     );
   }
 

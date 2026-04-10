@@ -49,6 +49,13 @@ abstract class VoicemailRepository implements Refreshable {
   /// Emits updates whenever the voicemail list changes.
   /// If the repository is disabled, an empty stream is returned.
   Stream<List<Voicemail>> watchVoicemails();
+
+  Future<void> removeMultipleVoicemails(List<String> messagesIds);
+
+  /// Returns `false` once the server has responded with [VoicemailNotConfiguredException]
+  /// or [EndpointNotSupportedException], indicating that voicemail is permanently
+  /// unavailable for this session.
+  bool get isFeatureSupported;
 }
 
 final _logger = Logger('VoicemailRepository');
@@ -89,11 +96,20 @@ class VoicemailRepositoryImpl
   ///
   /// This mechanism helps to enforce sequential consistency across local/remote voicemail state updates.
   Completer<void>? _fetchingCompleter;
+  bool _featureSupported = true;
+
+  @override
+  bool get isFeatureSupported => _featureSupported;
 
   void _initialize() {
     _updatesController = StreamController<List<Voicemail>>.broadcast(onListen: _onListen, onCancel: _onCancel);
 
-    unawaited(fetchVoicemails());
+    unawaited(
+      fetchVoicemails().catchError(
+        (Object e) {},
+        test: (e) => e is VoicemailNotConfiguredException || e is EndpointNotSupportedException,
+      ),
+    );
   }
 
   void _onListen() {
@@ -127,20 +143,18 @@ class VoicemailRepositoryImpl
   /// Throws an exception if the remote request fails.
   @override
   Future<void> fetchVoicemails({String? localeCode}) async {
+    if (!_featureSupported) return;
+
     if (_fetchingCompleter?.isCompleted == false) {
       return _fetchingCompleter!.future;
     }
 
     _fetchingCompleter = Completer<void>();
+    _fetchingCompleter!.future.ignore();
 
     try {
-      final cachedVoicemails = await _appDatabase.voicemailDao.getVoicemailsWithContacts().then((dataList) {
-        return dataList.map(_voicemailFromDriftWithContact).toList();
-      });
-
-      if (cachedVoicemails.isNotEmpty) {
-        _updatesController?.add(cachedVoicemails);
-      }
+      /// Emit unknown status to indicate sync in progress
+      await _emitCachedVoicemails(status: ReadStatus.unknown);
 
       final remoteItems = await _webtritApiClient.getUserVoicemailList(_token, locale: localeCode);
 
@@ -157,11 +171,30 @@ class VoicemailRepositoryImpl
       _sessionGuard.onUnauthorized(e);
       rethrow;
     } catch (e, st) {
-      _logger.warning('Failed to fetch voicemails', e, st);
+      final isExpected = e is VoicemailNotConfiguredException || e is EndpointNotSupportedException;
+      _logger.warning('Failed to fetch voicemails', e, isExpected ? null : st);
+      if (isExpected) _featureSupported = false;
+
+      /// Revert to the actual cached status from database on failure
+      await _emitCachedVoicemails();
+
       _fetchingCompleter?.completeError(e, st);
       rethrow;
     } finally {
       _fetchingCompleter = null;
+    }
+  }
+
+  /// Retrieves local voicemails and pushes them to the stream controller.
+  ///
+  /// If [status] is provided, it overrides the items' actual status.
+  /// Otherwise, uses the status stored in the database.
+  Future<void> _emitCachedVoicemails({ReadStatus? status}) async {
+    final dataList = await _appDatabase.voicemailDao.getVoicemailsWithContacts();
+    final items = dataList.map((it) => _voicemailFromDriftWithContact(it, readStatus: status)).toList();
+
+    if (items.isNotEmpty) {
+      _updatesController?.add(items);
     }
   }
 
@@ -257,7 +290,7 @@ class VoicemailRepositoryImpl
     await _appDatabase.voicemailDao.updateVoicemail(previousVoicemail);
 
     try {
-      await _webtritApiClient.updateUserVoicemail(_token, messageId, seen: seen, locale: localeCode);
+      unawaited(_webtritApiClient.updateUserVoicemail(_token, messageId, seen: seen, locale: localeCode));
     } on UnauthorizedException catch (e) {
       _sessionGuard.onUnauthorized(e);
       rethrow;
@@ -270,15 +303,15 @@ class VoicemailRepositoryImpl
   /// Watches the number of voicemails that are currently marked as unread.
   ///
   /// This stream emits a new integer value every time the underlying voicemail list changes,
-  /// including changes to the `seen` status of individual voicemails.
+  /// including changes to the `status` of individual voicemails.
   ///
   /// It internally depends on [watchVoicemails], and transforms the emitted list into a count
-  /// of voicemails where `seen == false`.
+  /// of voicemails where `status` is not [ReadStatus.read].
   ///
   /// Returns a broadcast [Stream<int>] that can be safely listened to by multiple subscribers.
   @override
   Stream<int> watchUnreadVoicemailsCount() {
-    return watchVoicemails().map((list) => list.where((v) => !v.seen).length);
+    return watchVoicemails().map((list) => list.where((v) => !v.status.isRead).length);
   }
 
   /// Watches the list of voicemails currently stored in the local database.
@@ -296,15 +329,32 @@ class VoicemailRepositoryImpl
     return _updatesController?.stream ?? const Stream.empty();
   }
 
-  Voicemail _voicemailFromDriftWithContact(VoicemailWithContact data) {
+  Voicemail _voicemailFromDriftWithContact(VoicemailWithContact data, {ReadStatus? readStatus}) {
     final displayName = data.contact != null ? contactFromDrift(data.contact!).maybeName : null;
 
-    return voicemailFromDrift(data.voicemail, displayName ?? data.voicemail.sender);
+    return voicemailFromDrift(data.voicemail, displayName ?? data.voicemail.sender, readStatus: readStatus);
   }
 
   @override
   Future<void> refresh() {
     return fetchVoicemails();
+  }
+
+  @override
+  Future<void> removeMultipleVoicemails(List<String> messagesIds) async {
+    if (_fetchingCompleter != null) {
+      await _fetchingCompleter!.future;
+    }
+
+    for (final messageId in messagesIds) {
+      try {
+        await removeVoicemail(messageId);
+        await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
+      } catch (e, st) {
+        _logger.warning('Failed to remove voicemail with id $messageId', e, st);
+        rethrow;
+      }
+    }
   }
 }
 
@@ -341,4 +391,10 @@ class EmptyVoicemailRepository implements VoicemailRepository {
 
   @override
   Future<void> refresh() => Future.value();
+
+  @override
+  Future<void> removeMultipleVoicemails(List<String> messagesIds) => Future.value();
+
+  @override
+  bool get isFeatureSupported => false;
 }

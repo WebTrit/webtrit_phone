@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TextStyleConfig {
 
- String? get fontFamily; double? get fontSize; FontWeightConfig? get fontWeight; FontStyleConfig? get fontStyle; String? get color; double? get letterSpacing; double? get wordSpacing; double? get height; TextDecorationConfig? get decoration; String? get backgroundColor;
+ String? get fontFamily; double? get fontSize; FontWeightConfig? get fontWeight; FontStyleConfig? get fontStyle; String? get color; double? get letterSpacing; double? get wordSpacing; double? get height; TextDecorationConfig? get decoration; String? get backgroundColor; double? get backgroundBorderRadius; PaddingConfig? get backgroundPadding;
 /// Create a copy of TextStyleConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $TextStyleConfigCopyWith<TextStyleConfig> get copyWith => _$TextStyleConfigCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TextStyleConfig&&(identical(other.fontFamily, fontFamily) || other.fontFamily == fontFamily)&&(identical(other.fontSize, fontSize) || other.fontSize == fontSize)&&(identical(other.fontWeight, fontWeight) || other.fontWeight == fontWeight)&&(identical(other.fontStyle, fontStyle) || other.fontStyle == fontStyle)&&(identical(other.color, color) || other.color == color)&&(identical(other.letterSpacing, letterSpacing) || other.letterSpacing == letterSpacing)&&(identical(other.wordSpacing, wordSpacing) || other.wordSpacing == wordSpacing)&&(identical(other.height, height) || other.height == height)&&(identical(other.decoration, decoration) || other.decoration == decoration)&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TextStyleConfig&&(identical(other.fontFamily, fontFamily) || other.fontFamily == fontFamily)&&(identical(other.fontSize, fontSize) || other.fontSize == fontSize)&&(identical(other.fontWeight, fontWeight) || other.fontWeight == fontWeight)&&(identical(other.fontStyle, fontStyle) || other.fontStyle == fontStyle)&&(identical(other.color, color) || other.color == color)&&(identical(other.letterSpacing, letterSpacing) || other.letterSpacing == letterSpacing)&&(identical(other.wordSpacing, wordSpacing) || other.wordSpacing == wordSpacing)&&(identical(other.height, height) || other.height == height)&&(identical(other.decoration, decoration) || other.decoration == decoration)&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.backgroundBorderRadius, backgroundBorderRadius) || other.backgroundBorderRadius == backgroundBorderRadius)&&(identical(other.backgroundPadding, backgroundPadding) || other.backgroundPadding == backgroundPadding));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,fontFamily,fontSize,fontWeight,fontStyle,color,letterSpacing,wordSpacing,height,decoration,backgroundColor);
+int get hashCode => Object.hash(runtimeType,fontFamily,fontSize,fontWeight,fontStyle,color,letterSpacing,wordSpacing,height,decoration,backgroundColor,backgroundBorderRadius,backgroundPadding);
 
 @override
 String toString() {
-  return 'TextStyleConfig(fontFamily: $fontFamily, fontSize: $fontSize, fontWeight: $fontWeight, fontStyle: $fontStyle, color: $color, letterSpacing: $letterSpacing, wordSpacing: $wordSpacing, height: $height, decoration: $decoration, backgroundColor: $backgroundColor)';
+  return 'TextStyleConfig(fontFamily: $fontFamily, fontSize: $fontSize, fontWeight: $fontWeight, fontStyle: $fontStyle, color: $color, letterSpacing: $letterSpacing, wordSpacing: $wordSpacing, height: $height, decoration: $decoration, backgroundColor: $backgroundColor, backgroundBorderRadius: $backgroundBorderRadius, backgroundPadding: $backgroundPadding)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $TextStyleConfigCopyWith<$Res>  {
   factory $TextStyleConfigCopyWith(TextStyleConfig value, $Res Function(TextStyleConfig) _then) = _$TextStyleConfigCopyWithImpl;
 @useResult
 $Res call({
- String? fontFamily, double? fontSize, FontWeightConfig? fontWeight, FontStyleConfig? fontStyle, String? color, double? letterSpacing, double? wordSpacing, double? height, TextDecorationConfig? decoration, String? backgroundColor
+ String? fontFamily, double? fontSize, FontWeightConfig? fontWeight, FontStyleConfig? fontStyle, String? color, double? letterSpacing, double? wordSpacing, double? height, TextDecorationConfig? decoration, String? backgroundColor, double? backgroundBorderRadius, PaddingConfig? backgroundPadding
 });
 
 
@@ -63,7 +63,7 @@ class _$TextStyleConfigCopyWithImpl<$Res>
 
 /// Create a copy of TextStyleConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? fontFamily = freezed,Object? fontSize = freezed,Object? fontWeight = freezed,Object? fontStyle = freezed,Object? color = freezed,Object? letterSpacing = freezed,Object? wordSpacing = freezed,Object? height = freezed,Object? decoration = freezed,Object? backgroundColor = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? fontFamily = freezed,Object? fontSize = freezed,Object? fontWeight = freezed,Object? fontStyle = freezed,Object? color = freezed,Object? letterSpacing = freezed,Object? wordSpacing = freezed,Object? height = freezed,Object? decoration = freezed,Object? backgroundColor = freezed,Object? backgroundBorderRadius = freezed,Object? backgroundPadding = freezed,}) {
   return _then(TextStyleConfig(
 fontFamily: freezed == fontFamily ? _self.fontFamily : fontFamily // ignore: cast_nullable_to_non_nullable
 as String?,fontSize: freezed == fontSize ? _self.fontSize : fontSize // ignore: cast_nullable_to_non_nullable
@@ -75,7 +75,9 @@ as double?,wordSpacing: freezed == wordSpacing ? _self.wordSpacing : wordSpacing
 as double?,height: freezed == height ? _self.height : height // ignore: cast_nullable_to_non_nullable
 as double?,decoration: freezed == decoration ? _self.decoration : decoration // ignore: cast_nullable_to_non_nullable
 as TextDecorationConfig?,backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,backgroundBorderRadius: freezed == backgroundBorderRadius ? _self.backgroundBorderRadius : backgroundBorderRadius // ignore: cast_nullable_to_non_nullable
+as double?,backgroundPadding: freezed == backgroundPadding ? _self.backgroundPadding : backgroundPadding // ignore: cast_nullable_to_non_nullable
+as PaddingConfig?,
   ));
 }
 

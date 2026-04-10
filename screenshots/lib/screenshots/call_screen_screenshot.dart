@@ -11,10 +11,8 @@ class CallScreenScreenshot extends StatefulWidget {
   const CallScreenScreenshot(
     this.video, {
     super.key,
-    this.localePlaceholderImageUrl =
-        'https://dummyimage.com/600x800/00e326/fff.jpg&text=locale',
-    this.remotePlaceholderImageUrl =
-        'https://dummyimage.com/600x800/0048e3/fff.jpg&text=remote',
+    this.localePlaceholderImageUrl = 'https://dummyimage.com/600x800/00e326/fff.jpg&text=locale',
+    this.remotePlaceholderImageUrl = 'https://dummyimage.com/600x800/0048e3/fff.jpg&text=remote',
   });
 
   final bool video;
@@ -38,22 +36,14 @@ class _CallScreenScreenshotState extends State<CallScreenScreenshot> {
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, _, __) {
+          pageBuilder: (context, _, _) {
             return MultiBlocProvider(
-              providers: [
-                BlocProvider<CallBloc>(
-                  create: (context) => MockCallBloc.callScreen(widget.video),
-                ),
-              ],
+              providers: [BlocProvider<CallBloc>(create: (context) => MockCallBloc.callScreen(widget.video))],
               child: CallScreen(
-                localePlaceholderBuilder: (context) => Image.network(
-                  widget.localePlaceholderImageUrl,
-                  fit: BoxFit.fitHeight,
-                ),
-                remotePlaceholderBuilder: (context) => Image.network(
-                  widget.remotePlaceholderImageUrl,
-                  fit: BoxFit.cover,
-                ),
+                localePlaceholderBuilder: (context) =>
+                    Image.network(widget.localePlaceholderImageUrl, fit: BoxFit.fitHeight),
+                remotePlaceholderBuilder: (context) =>
+                    Image.network(widget.remotePlaceholderImageUrl, fit: BoxFit.cover),
               ),
             );
           },

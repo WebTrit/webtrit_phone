@@ -1,13 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
-
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -23,8 +21,8 @@ typedef AsyncCallback = Future<bool> Function();
 class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSyncState> {
   LocalContactsSyncBloc({
     required this.localContactsRepository,
-    required this.appDatabase,
     required this.contactsAgreementStatusRepository,
+    required this.contactsRepository,
     required this.isFeatureEnabled,
     required this.isAgreementAccepted,
     required this.isContactsPermissionGranted,
@@ -36,7 +34,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   }
 
   final LocalContactsRepository localContactsRepository;
-  final AppDatabase appDatabase;
+  final ContactsRepository contactsRepository;
   final ContactsAgreementStatusRepository contactsAgreementStatusRepository;
   final AsyncCallback isFeatureEnabled;
   final AsyncCallback isAgreementAccepted;
@@ -48,17 +46,23 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   void _onStarted(LocalContactsSyncStarted event, Emitter<LocalContactsSyncState> emit) async {
     _logger.finer('_onStarted');
 
-    if (!(await isFeatureEnabled())) {
+    final featureEnabled = await isFeatureEnabled();
+    if (isClosed) return;
+    if (!featureEnabled) {
       emit(const ContactsFeatureDisabledException());
       return;
     }
 
-    if (!(await isAgreementAccepted())) {
+    final agreementAccepted = await isAgreementAccepted();
+    if (isClosed) return;
+    if (!agreementAccepted) {
       emit(const ContactsAgreementMissingException());
       return;
     }
 
-    if (!await requestContactPermission()) {
+    final permissionGranted = await requestContactPermission();
+    if (isClosed) return;
+    if (!permissionGranted) {
       emit(const LocalContactsSyncPermissionFailure());
       return;
     }
@@ -71,17 +75,23 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
   void _onRefreshed(LocalContactsSyncRefreshed event, Emitter<LocalContactsSyncState> emit) async {
     _logger.finer('_onRefreshed');
 
-    if (!(await isFeatureEnabled())) {
+    final featureEnabled = await isFeatureEnabled();
+    if (isClosed) return;
+    if (!featureEnabled) {
       emit(const ContactsFeatureDisabledException());
       return;
     }
 
-    if (!(await isAgreementAccepted())) {
+    final agreementAccepted = await isAgreementAccepted();
+    if (isClosed) return;
+    if (!agreementAccepted) {
       emit(const ContactsAgreementMissingException());
       return;
     }
 
-    if (!await isContactsPermissionGranted()) {
+    final permissionGranted = await isContactsPermissionGranted();
+    if (isClosed) return;
+    if (!permissionGranted) {
       emit(const LocalContactsSyncPermissionFailure());
       return;
     }
@@ -93,71 +103,20 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
       await localContactsRepository.load();
     } catch (error) {
       _logger.warning('_onRefreshed error: ', error);
-      emit(const LocalContactsSyncRefreshFailure());
+      if (!isClosed) emit(const LocalContactsSyncRefreshFailure());
     }
   }
 
-  Future _onUpdated(_LocalContactsSyncUpdated event, Emitter<LocalContactsSyncState> emit, {int retryCount = 0}) async {
+  Future<void> _onUpdated(
+    _LocalContactsSyncUpdated event,
+    Emitter<LocalContactsSyncState> emit, {
+    int retryCount = 0,
+  }) async {
     _logger.finer('_onUpdated contacts count:${event.contacts.length}');
 
     try {
-      await appDatabase.transaction(() async {
-        final localContacts = event.contacts;
-
-        final syncedLocalContactsIds = await appDatabase.contactsDao.getContactsSourceIds(ContactSourceTypeEnum.local);
-        final updatedLocalContactsIds = localContacts.map((localContact) => localContact.id).toSet();
-        final delLocalContactsIds = syncedLocalContactsIds.difference(updatedLocalContactsIds);
-
-        // to del
-        for (final localContactsId in delLocalContactsIds) {
-          await appDatabase.contactsDao.deleteContactBySource(ContactSourceTypeEnum.local, localContactsId);
-        }
-
-        // to add or update
-        for (final localContact in localContacts) {
-          final insertOrUpdateContactData = await appDatabase.contactsDao.insertOnUniqueConflictUpdateContact(
-            ContactDataCompanion(
-              sourceType: const Value(ContactSourceTypeEnum.local),
-              sourceId: Value(localContact.id),
-              firstName: Value(localContact.firstName),
-              lastName: Value(localContact.lastName),
-              aliasName: Value(localContact.displayName),
-              thumbnail: Value(localContact.thumbnail),
-            ),
-          );
-
-          await appDatabase.contactPhonesDao.deleteOtherContactPhonesOfContactId(
-            insertOrUpdateContactData.id,
-            localContact.phones.map((phone) => phone.number),
-          );
-
-          for (final localContactPhone in localContact.phones) {
-            await appDatabase.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-              ContactPhoneDataCompanion(
-                number: Value(localContactPhone.number),
-                label: Value(localContactPhone.label),
-                contactId: Value(insertOrUpdateContactData.id),
-              ),
-            );
-          }
-
-          await appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(
-            insertOrUpdateContactData.id,
-            localContact.emails.map((email) => email.address),
-          );
-
-          for (final localContactEmail in localContact.emails) {
-            await appDatabase.contactEmailsDao.insertOnUniqueConflictUpdateContactEmail(
-              ContactEmailDataCompanion(
-                address: Value(localContactEmail.address),
-                label: Value(localContactEmail.label),
-                contactId: Value(insertOrUpdateContactData.id),
-              ),
-            );
-          }
-        }
-      });
-      emit(const LocalContactsSyncSuccess());
+      await contactsRepository.syncLocalContacts(event.contacts);
+      if (!isClosed) emit(const LocalContactsSyncSuccess());
     } on Exception catch (e) {
       _logger.warning('_onUpdated retry: $retryCount, error: ', e);
 
@@ -166,7 +125,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
         if (isClosed) return;
         await _onUpdated(event, emit, retryCount: retryCount + 1);
       } else {
-        emit(const LocalContactsSyncUpdateFailure());
+        if (!isClosed) emit(const LocalContactsSyncUpdateFailure());
       }
     }
   }
@@ -175,10 +134,9 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
     if (_contactsSubscription != null) return;
 
     _logger.info('_initContactsSubscription: subscribing to contacts stream');
-    _contactsSubscription = localContactsRepository.contacts().listen(
-      (contacts) => add(_LocalContactsSyncUpdated(contacts: contacts)),
-      onError: (error, stackTrace) => _logger.warning('Contacts stream error', error, stackTrace),
-    );
+    _contactsSubscription = localContactsRepository.contacts().listen((contacts) {
+      if (!isClosed) add(_LocalContactsSyncUpdated(contacts: contacts));
+    }, onError: (error, stackTrace) => _logger.warning('Contacts stream error', error, stackTrace));
   }
 
   @override

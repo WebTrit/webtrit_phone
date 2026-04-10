@@ -12,7 +12,6 @@ export 'gravatar.dart';
 export 'jitter.dart';
 export 'multi_tap_trigger.dart';
 export 'og_preview.dart';
-export 'orientations.dart';
 export 'path_provider/path_provider.dart';
 export 'performance_timer.dart';
 export 'platform_info.dart';

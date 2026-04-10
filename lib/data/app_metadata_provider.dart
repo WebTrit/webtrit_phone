@@ -14,6 +14,12 @@ abstract class AppMetadataProvider {
   /// Format: `AppName/AppVersion (Model; OSName: OSVersion)`
   String get userAgent;
 
+  /// Provides a summary of the application name, version, and build details.
+  String get appInfo;
+
+  /// Returns a concise description of the hardware model and operating system environment.
+  String get deviceInfo;
+
   /// Generates a standardized prefix for filenames used in data exports or file sharing.
   ///
   /// Typically includes the app name, version, and device details to facilitate
@@ -54,7 +60,7 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
     final token = _secureStorage.readToken();
     final coreUrl = _secureStorage.readCoreUrl();
     final tenantId = _secureStorage.readTenantId();
-    final urls = _featureAccess?.embeddedFeature.embeddedResources.map((e) => e.uri.toString()).toList();
+    final urls = _featureAccess?.embeddedConfig.embeddedResources.map((e) => e.uri.toString()).toList();
 
     return <String, String>{
       'app': _packageInfo.appName,
@@ -77,6 +83,16 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
   @override
   String get userAgent {
     return '${_packageInfo.appName}/${_appInfo.version} (${_deviceInfo.model}; ${_deviceInfo.systemName}: ${_deviceInfo.systemVersion})';
+  }
+
+  @override
+  String get appInfo {
+    return '${_packageInfo.appName}/${_appInfo.version}(${_packageInfo.version}+${_packageInfo.buildNumber})';
+  }
+
+  @override
+  String get deviceInfo {
+    return '${_deviceInfo.model}; ${_deviceInfo.systemName}: ${_deviceInfo.systemVersion}';
   }
 
   @override

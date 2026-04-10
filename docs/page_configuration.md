@@ -18,9 +18,8 @@ back to sensible in-app defaults.
 - [Call page (Dialing)](#call-page-dialing)
     - [App bar](#app-bar)
     - [Call info](#call-info)
-    - [Call actions](#call-actions)
-    - [Light & dark action presets](#light--dark-action-presets)
 - [Keypad page](#keypad-page)
+- [Common page fields](#common-page-fields)
 - [Common object formats](#common-object-formats)
 
 ---
@@ -86,6 +85,14 @@ Top-level keys inside `login`:
       "mainLogo": {
         "asset": "assets/branding/logo.png"
       },
+      "greetingTextStyle": {
+        "color": "#FFFFFFFF",
+        "fontSize": 24,
+        "fontWeight": { "weight": 600 },
+        "backgroundColor": "#CC123752",
+        "backgroundBorderRadius": 8.0,
+        "backgroundPadding": { "left": 16, "top": 8, "right": 16, "bottom": 8 }
+      },
       "buttonLoginStyleType": "primary",
       "buttonSignupStyleType": "primary"
     }
@@ -97,6 +104,7 @@ Top-level keys inside `login`:
 
 - `systemUiOverlayStyle` — status/navigation bar colors & icon brightness
 - `mainLogo` — image descriptor for the primary logo
+- `greetingTextStyle` — text style for the greeting/onboarding text (see [TextStyleConfig](#text-style-textstyleconfig-shape)); when `backgroundColor` is combined with `backgroundBorderRadius` or `backgroundPadding`, a rounded decorated background is rendered behind the text
 - `buttonLoginStyleType`, `buttonSignupStyleType` — enum style presets
 
 ---
@@ -221,7 +229,6 @@ Top-level keys inside `"dialing"`:
 | `systemUiOverlayStyle` | object | Status/navigation bars styling.                              |
 | `appBarStyle`          | object | App bar styling (background/foreground/primary/back button). |
 | `callInfo`             | object | Text styles for username/number/status.                      |
-| `actions`              | object | Button styles for call controls.                             |
 
 **Compact example:**
 
@@ -271,8 +278,7 @@ Top-level keys inside `"dialing"`:
         },
         "color": "#EEF3F6"
       }
-    },
-    "actions": {}
+    }
   }
 }
 ```
@@ -323,206 +329,9 @@ Top-level keys inside `"dialing"`:
 }
 ```
 
-### Call actions
-
-`dialing.actions` groups all action button styles. Each field accepts an **ElevatedButton** style
-config (see **ElevatedButtonWidgetConfig**).
-
-Available action keys:
-
-- `callStart`, `hangup`, `transfer`, `camera`, `muted`, `speaker`, `held`, `swap`, `key`
-
-**Correct nesting:**
-
-```json
-{
-  "dialing": {
-    "actions": {
-      "callStart": {},
-      "hangup": {},
-      "transfer": {},
-      "camera": {},
-      "muted": {},
-      "speaker": {},
-      "held": {},
-      "swap": {},
-      "key": {}
-    }
-  }
-}
-```
-
-**Alpha (“glassy”) recommendation:**  
-Use semi-transparent backgrounds like `"#66FFFFFF"` for normal and `"#26FFFFFF"` for disabled to
-blend over gradients.
-
-#### Light & dark action presets
-
-**Light:**
-
-```json
-{
-  "dialing": {
-    "actions": {
-      "callStart": {
-        "backgroundColor": "#75B943",
-        "foregroundColor": "#FFFFFF",
-        "iconColor": "#FFFFFF",
-        "disabledBackgroundColor": "#DDE0E3",
-        "disabledForegroundColor": "#848581",
-        "disabledIconColor": "#848581"
-      },
-      "hangup": {
-        "backgroundColor": "#E74C3C",
-        "foregroundColor": "#FFFFFF",
-        "iconColor": "#FFFFFF",
-        "disabledBackgroundColor": "#DDE0E3",
-        "disabledForegroundColor": "#848581",
-        "disabledIconColor": "#848581"
-      },
-      "transfer": {
-        "backgroundColor": "#123752",
-        "foregroundColor": "#FFFFFF",
-        "iconColor": "#FFFFFF",
-        "disabledBackgroundColor": "#DDE0E3",
-        "disabledForegroundColor": "#848581",
-        "disabledIconColor": "#848581"
-      },
-      "camera": {
-        "backgroundColor": "#66FFFFFF",
-        "foregroundColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#26FFFFFF",
-        "disabledForegroundColor": "#FF848581",
-        "disabledIconColor": "#FF848581"
-      },
-      "muted": {
-        "backgroundColor": "#66FFFFFF",
-        "foregroundColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#26FFFFFF",
-        "disabledForegroundColor": "#FF848581",
-        "disabledIconColor": "#FF848581"
-      },
-      "speaker": {
-        "backgroundColor": "#66FFFFFF",
-        "foregroundColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#26FFFFFF",
-        "disabledForegroundColor": "#FF848581",
-        "disabledIconColor": "#FF848581"
-      },
-      "held": {
-        "backgroundColor": "#66FFFFFF",
-        "foregroundColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#26FFFFFF",
-        "disabledForegroundColor": "#FF848581",
-        "disabledIconColor": "#FF848581"
-      },
-      "swap": {
-        "backgroundColor": "#66FFFFFF",
-        "foregroundColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#26FFFFFF",
-        "disabledForegroundColor": "#FF848581",
-        "disabledIconColor": "#FF848581"
-      },
-      "key": {
-        "backgroundColor": "#66FFFFFF",
-        "foregroundColor": "#FFFFFFFF",
-        "iconColor": "#FFFFFFFF",
-        "disabledBackgroundColor": "#26FFFFFF",
-        "disabledForegroundColor": "#FF848581",
-        "disabledIconColor": "#FF848581"
-      }
-    }
-  }
-}
-```
-
-**Dark:**
-
-```json
-{
-  "dialing": {
-    "actions": {
-      "callStart": {
-        "backgroundColor": "#34C759",
-        "foregroundColor": "#FFFFFF",
-        "iconColor": "#FFFFFF",
-        "disabledBackgroundColor": "#3A3A3A",
-        "disabledForegroundColor": "#9E9E9E",
-        "disabledIconColor": "#9E9E9E"
-      },
-      "hangup": {
-        "backgroundColor": "#FF3B30",
-        "foregroundColor": "#FFFFFF",
-        "iconColor": "#FFFFFF",
-        "disabledBackgroundColor": "#3A3A3A",
-        "disabledForegroundColor": "#9E9E9E",
-        "disabledIconColor": "#9E9E9E"
-      },
-      "transfer": {
-        "backgroundColor": "#2E7D32",
-        "foregroundColor": "#FFFFFF",
-        "iconColor": "#FFFFFF",
-        "disabledBackgroundColor": "#3A3A3A",
-        "disabledForegroundColor": "#9E9E9E",
-        "disabledIconColor": "#9E9E9E"
-      },
-      "camera": {
-        "backgroundColor": "#2A2A2A",
-        "foregroundColor": "#FFFFFF",
-        "iconColor": "#FFFFFF",
-        "disabledBackgroundColor": "#1F1F1F",
-        "disabledForegroundColor": "#6D6D6D",
-        "disabledIconColor": "#9E9E9E"
-      },
-      "muted": {
-        "backgroundColor": "#2A2A2A",
-        "foregroundColor": "#FFFFFF",
-        "iconColor": "#FFFFFF",
-        "disabledBackgroundColor": "#1F1F1F",
-        "disabledForegroundColor": "#6D6D6D",
-        "disabledIconColor": "#9E9E9E"
-      },
-      "speaker": {
-        "backgroundColor": "#2A2A2A",
-        "foregroundColor": "#FFFFFF",
-        "iconColor": "#FFFFFF",
-        "disabledBackgroundColor": "#1F1F1F",
-        "disabledForegroundColor": "#6D6D6D",
-        "disabledIconColor": "#9E9E9E"
-      },
-      "held": {
-        "backgroundColor": "#2A2A2A",
-        "foregroundColor": "#FFFFFF",
-        "iconColor": "#FFFFFF",
-        "disabledBackgroundColor": "#1F1F1F",
-        "disabledForegroundColor": "#6D6D6D",
-        "disabledIconColor": "#9E9E9E"
-      },
-      "swap": {
-        "backgroundColor": "#2A2A2A",
-        "foregroundColor": "#FFFFFF",
-        "iconColor": "#FFFFFF",
-        "disabledBackgroundColor": "#1F1F1F",
-        "disabledForegroundColor": "#6D6D6D",
-        "disabledIconColor": "#9E9E9E"
-      },
-      "key": {
-        "backgroundColor": "#2A2A2A",
-        "foregroundColor": "#FFFFFF",
-        "iconColor": "#FFFFFF",
-        "disabledBackgroundColor": "#1F1F1F",
-        "disabledForegroundColor": "#6D6D6D",
-        "disabledIconColor": "#9E9E9E"
-      }
-    }
-  }
-}
-```
+The styles for call action buttons are defined globally in the `Action Pad Configuration` section of
+the `widgets_configuration.md` document. This allows for a consistent look and feel across the
+application, including the main call screen and the keypad.
 
 ---
 
@@ -530,19 +339,25 @@ blend over gradients.
 
 Top-level keys inside `"keypad"`:
 
-| Key                    | Type   | Description                                       |
-|------------------------|--------|---------------------------------------------------|
-| `systemUiOverlayStyle` | object | Status/navigation bars styling.                   |
-| `textField`            | object | Number input field style (top of page).           |
-| `contactName`          | object | Resolved contact name style (under input).        |
-| `keypad`               | object | Numeric keypad layout (digits, spacing, padding). |
-| `actionpad`            | object | Action buttons (call, backspace, etc.).           |
+| Key                      | Type   | Description                                                                                                            |
+|--------------------------|--------|------------------------------------------------------------------------------------------------------------------------|
+| `appBarBlurredSurface`   | object | Blurred surface config. See [Common page fields](#common-page-fields).                                                 |
+| `systemUiOverlayStyle`   | object | Status/navigation bars styling.                                                                                        |
+| `textField`              | object | Number input field style (top of page).                                                                                |
+| `contactName`            | object | Resolved contact name style (under input).                                                                             |
+| `keypad`                 | object | Numeric keypad layout (digits, spacing, padding).                                                                      |
+| `actionpad`              | object | Layout for action buttons (call, backspace, etc.). Button styles are taken from the global `Action Pad Configuration`. |
 
 **Minimal example:**
 
 ```json
 {
   "keypad": {
+    "appBarBlurredSurface": {
+      "color": "#66000000",
+      "sigmaX": 10,
+      "sigmaY": 10
+    },
     "systemUiOverlayStyle": {
       "statusBarIconBrightness": "dark"
     },
@@ -565,6 +380,38 @@ Top-level keys inside `"keypad"`:
   }
 }
 ```
+
+---
+
+## Common page fields
+
+Every page config that has an app bar supports these optional fields:
+
+| Key                     | Type   | Description                                                        |
+|-------------------------|--------|--------------------------------------------------------------------|
+| `appBarBlurredSurface`  | object | Blurred surface overlay config (frosted-glass effect in app bar).  |
+
+### `appBarBlurredSurface`
+
+```json
+{
+  "appBarBlurredSurface": {
+    "color": "#66000000",
+    "sigmaX": 10,
+    "sigmaY": 10
+  }
+}
+```
+
+| Key      | Type   | Default | Description                       |
+|----------|--------|---------|-----------------------------------|
+| `color`  | string | `null`  | Overlay color (hex).              |
+| `sigmaX` | double | `null`  | Horizontal gaussian blur sigma. Defaults to 10 when omitted. |
+| `sigmaY` | double | `null`  | Vertical gaussian blur sigma. Defaults to 10 when omitted.   |
+
+When `appBarBlurredSurface` is present (even `{}`), the app bar applies a frosted-glass blur. `sigmaX`/`sigmaY` default to 10 when omitted. When `appBarBlurredSurface` is absent (`null`), no blur is applied and the app bar uses the standard theme background.
+
+Applies to: **Keypad**, **Contacts**, **Favorites**, **Recents**, **Conversations**, **Settings**, **About**.
 
 ---
 
@@ -623,9 +470,21 @@ or
   "letterSpacing": 0.0,
   "fontFeatures": [
     "tabularFigures"
-  ]
+  ],
+  "backgroundColor": "#33000000",
+  "backgroundBorderRadius": 4.0,
+  "backgroundPadding": {
+    "left": 4,
+    "top": 2,
+    "right": 4,
+    "bottom": 2
+  }
 }
 ```
+
+- `backgroundColor` — background fill behind the text (hex).
+- `backgroundBorderRadius` — corner radius for the background decoration.
+- `backgroundPadding` — padding around text when background is applied (`left`, `top`, `right`, `bottom`).
 
 ### Text field (`TextFieldConfig` shape)
 
@@ -671,6 +530,12 @@ or
 
 ### Action pad (`ActionPadWidgetConfig` shape)
 
+This object configures the layout (spacing and padding) for the action buttons at the bottom of the
+keypad, such as the call and backspace buttons. The styles for these buttons are not defined here;
+instead, they are sourced from the global `Action Pad Configuration` defined in
+`widgets_configuration.md`. For example, the call button on this screen uses the `callStart` style,
+and the backspace button uses the `backspace` style.
+
 ```json
 {
   "spacing": 12,
@@ -679,29 +544,7 @@ or
     "top": 8,
     "right": 16,
     "bottom": 24
-  },
-  "callButton": {
-    /* ElevatedButtonWidgetConfig */
-  },
-  "backspaceButton": {
-    /* ElevatedButtonWidgetConfig */
   }
-}
-```
-
-### Elevated button widget (`ElevatedButtonWidgetConfig` shape)
-
-```json
-{
-  "backgroundColor": "#AARRGGBB",
-  "foregroundColor": "#AARRGGBB",
-  "textColor": "#AARRGGBB",
-  "iconColor": "#AARRGGBB",
-  "disabledBackgroundColor": "#AARRGGBB",
-  "disabledForegroundColor": "#AARRGGBB",
-  "disabledIconColor": "#AARRGGBB",
-  "shape": "circle|stadium|rounded",
-  "elevation": 2
 }
 ```
 
@@ -709,7 +552,6 @@ or
 
 ### Notes & tips
 
-- `dialing.actions` must live **inside** `"dialing"`, not at root.
 - If a section is omitted, in-app defaults apply.
 - For toggleable call actions (`muted`, `speaker`, `camera`, `held`), the UI can switch visuals when
   the control is selected—ensure the widget sets the selected state so your

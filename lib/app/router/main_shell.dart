@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -39,8 +41,20 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// The [SessionGuard] instance that handles session expiration and logout.
   late final SessionGuard _sessionGuard;
 
+  /// Created and connected in [initState] so that the WebSocket handshake
+  /// runs in parallel while the widget tree and [CallBloc] are being built.
+  /// Late subscribers (including [CallBloc]) receive all buffered session
+  /// events via the replay stream.
+  late final SignalingModule _signalingModule;
+
   /// The [PollingService] instance that handles periodic polling of repositories.
   late PollingService? _polling;
+
+  /// Lazily initialised on first [build] once [CallBloc], [CallRoutingCubit],
+  /// and [NotificationsBloc] are available in the widget tree. The `??=`
+  /// assignment guarantees a single instance for the lifetime of this [State],
+  /// preventing consumers from holding stale references across rebuilds.
+  CallController? _callController;
 
   @override
   void initState() {
@@ -65,11 +79,21 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     );
 
     // After authentication, regenerate the labels to include core URL and tenant ID in remote logging labels
-    context.read<AppLogger>().regenerateRemoteLabels();
+    context.read<AppLogger>().updateRemoteLabels();
+
+    final session = context.read<AppBloc>().state.session;
+    _signalingModule = SignalingModule(
+      coreUrl: session.coreUrl!,
+      tenantId: session.tenantId,
+      token: session.token!,
+      trustedCertificates: context.read<AppCertificates>().trustedCertificates,
+      signalingClientFactory: defaultSignalingClientFactory,
+    );
+    _signalingModule.connect();
 
     _sessionGuard = RouterLogoutSessionGuard(
       performLogout: () {
-        context.read<SessionRepository>().logout();
+        context.read<AppBloc>().add(const AppLogoutRequested(reason: AppLogoutReason.serverRejection));
       },
       onPreLogout: () {
         final notification = ErrorMessageNotification(context.l10n.notifications_errorSnackBar_sessionExpired);
@@ -83,6 +107,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   void dispose() {
     _disposeSessionGuard();
     _callkeep.tearDown();
+    unawaited(_signalingModule.dispose());
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -113,7 +138,22 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           },
         ),
         RepositoryProvider<FavoritesRepository>(
-          create: (context) => FavoritesRepository(appDatabase: context.read<AppDatabase>()),
+          create: (context) {
+            final appDatabase = context.read<AppDatabase>();
+            final apiClient = context.read<WebtritApiClient>();
+            final apiToken = context.read<AppBloc>().state.session.token!;
+            final core = context.read<SystemInfoRepository>().getLocalSystemInfo().core;
+
+            final localDataSource = FavoritesLocalDataSourceDriftImpl(appDatabase);
+            final remoteDataSource = FavoritesRemoteDataSourceApiImpl(apiClient: apiClient, apiToken: apiToken);
+
+            return FavoritesRepositorySyncableImpl(
+              localDataSource: localDataSource,
+              remoteDataSource: remoteDataSource,
+              connectivityService: context.read<ConnectivityService>(),
+              remoteSyncEnabled: core.supportsRemoteFavorites,
+            );
+          },
         ),
         RepositoryProvider<RecentsRepository>(
           create: (context) => RecentsRepository(appDatabase: context.read<AppDatabase>()),
@@ -156,10 +196,28 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         ),
         RepositoryProvider<UserRepository>(
           create: (context) => UserRepository(
-            context.read<WebtritApiClient>(),
-            context.read<AppBloc>().state.session.token!,
-            sessionGuard: _sessionGuard,
+            remoteDatasource: UserRemoteDatasourceApiImpl(
+              context.read<WebtritApiClient>(),
+              context.read<AppBloc>().state.session.token!,
+              sessionGuard: _sessionGuard,
+            ),
+            localDatasource: context.read<UserLocalDatasource>(),
           ),
+        ),
+        RepositoryProvider<CallerIdSettingsRepository>(
+          create: (context) {
+            final core = context.read<SystemInfoRepository>().getLocalSystemInfo().core;
+            final remoteSettingsSupport = core.supportsRemoteCallerIdSettings;
+            if (remoteSettingsSupport) {
+              return CallerIdSettingsRepositoryRemoteImpl(
+                context.read<WebtritApiClient>(),
+                context.read<AppBloc>().state.session.token!,
+              );
+            } else {
+              return CallerIdSettingsRepositoryPrefsImpl(context.read<AppPreferences>());
+            }
+          },
+          dispose: (repo) => repo.clear(),
         ),
         RepositoryProvider<PrivateGatewayRepository>(
           create: (context) => CustomPrivateGatewayRepository(
@@ -172,7 +230,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
-            final isVoicemailsEnabled = featureAccess.settingsFeature.isVoicemailsEnabled;
+            final isVoicemailsEnabled = featureAccess.settingsConfig.voicemailsEnabled;
 
             if (isVoicemailsEnabled) {
               return VoicemailRepositoryImpl(
@@ -266,7 +324,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               dispose: (context, service) => service.dispose(),
               lazy: false,
             ),
-            if (featureAccess.bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
+            if (featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
               Provider<CdrsSyncWorker>(
                 create: (context) =>
                     CdrsSyncWorker(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
@@ -325,12 +383,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     lazy: false,
                     create: (context) {
                       final localContactsRepository = context.read<LocalContactsRepository>();
-                      final appDatabase = context.read<AppDatabase>();
                       final contactsAgreementStatusRepository = context.read<ContactsAgreementStatusRepository>();
                       final appPermissions = context.read<AppPermissions>();
 
                       Future<bool> isFutureEnabled() async {
-                        final contactTab = featureAccess.bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>();
+                        final contactTab = featureAccess.bottomMenuConfig.getTabEnabled<ContactsBottomMenuTab>();
                         final contactSourceTypes = contactTab?.contactSourceTypes ?? [];
                         return contactSourceTypes.contains(ContactSourceType.local);
                       }
@@ -342,8 +399,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
                       final bloc = LocalContactsSyncBloc(
                         localContactsRepository: localContactsRepository,
-                        appDatabase: appDatabase,
                         contactsAgreementStatusRepository: contactsAgreementStatusRepository,
+                        contactsRepository: context.read<ContactsRepository>(),
                         isFeatureEnabled: isFutureEnabled,
                         isAgreementAccepted: isAgreementAccepted,
                         isContactsPermissionGranted: () => appPermissions.isContactPermissionGranted(),
@@ -360,7 +417,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       return ExternalContactsSyncBloc(
                         userRepository: context.read<UserRepository>(),
                         externalContactsRepository: context.read<ExternalContactsRepository>(),
-                        appDatabase: context.read<AppDatabase>(),
+                        contactsRepository: context.read<ContactsRepository>(),
                       )..add(const ExternalContactsSyncStarted());
                     },
                   ),
@@ -376,8 +433,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final encodingSettingsRepository = context.read<EncodingSettingsRepository>();
                       final diagnosticService = context.read<DiagnosticService>();
 
-                      final encodingConfig = featureAccess.callFeature.encoding;
-                      final peerConnectionConfig = featureAccess.callFeature.peerConnection;
+                      final encodingConfig = featureAccess.callConfig.encoding;
+                      final peerConnectionConfig = featureAccess.callConfig.peerConnection;
+                      final monitorInterval = featureAccess.loggingConfig.monitorCheckInterval;
 
                       // Initialize media builder with app-configured audio/video constraints
                       // Used to capture synchronized MediaStream (audio+video) for WebRTC track addition.
@@ -405,17 +463,18 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       // If CDRs feature is disabled, the worker will be null and no sync will be performed
                       final cdrsSyncWorker = context.readOrNull<CdrsSyncWorker>();
 
+                      final peerConnectionManager = PeerConnectionManager(
+                        retrieveTimeout: kPeerConnectionRetrieveTimeout,
+                        monitorCheckInterval: monitorInterval,
+                        monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],
+                      );
+
                       return CallBloc(
-                        coreUrl: appBloc.state.session.coreUrl!,
-                        tenantId: appBloc.state.session.tenantId,
-                        token: appBloc.state.session.token!,
-                        trustedCertificates: appCertificates.trustedCertificates,
                         callLogsRepository: context.read<CallLogsRepository>(),
                         callPullRepository: context.read<CallPullRepository>(),
                         linesStateRepository: context.read<LinesStateRepository>(),
                         presenceInfoRepository: context.read<PresenceInfoRepository>(),
                         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
-                        sessionRepository: context.read<SessionRepository>(),
                         userRepository: context.read<UserRepository>(),
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         callkeep: _callkeep,
@@ -434,12 +493,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         ),
                         iceFilter: FilterWithAppSettings(iceSettingsRepository),
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
-                        sipPresenceEnabled: featureAccess.sipPresenceFeature.sipPresenceSupport,
+                        sipPresenceEnabled: featureAccess.sipPresenceConfig.sipPresenceSupport,
                         onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
                         onDiagnosticReportRequested: (id, error) => diagnosticService.request(
                           DiagnosticType.androidCallkeepOnly,
                           extras: {'callId': id, 'error': error.name},
                         ),
+                        signalingModule: _signalingModule,
+                        peerConnectionManager: peerConnectionManager,
+                        onSessionInvalidated: () =>
+                            appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.sessionMissed)),
                       )..add(const CallStarted());
                     },
                   ),
@@ -449,13 +512,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       final session = context.read<AppBloc>().state.session;
 
                       return MessagingBloc(
-                        session.userId,
                         createMessagingSocket(session.coreUrl!, session.token!, session.tenantId),
-                        featureAccess.messagingFeature,
+                        featureAccess.messagingConfig,
                         context.read<ChatsRepository>(),
                         context.read<ChatsOutboxRepository>(),
                         context.read<SmsRepository>(),
                         context.read<SmsOutboxRepository>(),
+                        context.read<SessionRepository>(),
                         (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
                       );
                     },
@@ -463,9 +526,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                   BlocProvider<UnreadCountCubit>(
                     create: (context) {
                       return UnreadCountCubit(
-                        userId: context.read<AppBloc>().state.session.userId,
                         chatsRepository: context.read<ChatsRepository>(),
                         smsRepository: context.read<SmsRepository>(),
+                        sessionRepository: context.read<SessionRepository>(),
                       )..init();
                     },
                   ),
@@ -521,20 +584,29 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       ],
                       child: Builder(
                         builder: (context) {
-                          final sipPresenceFeature = featureAccess.sipPresenceFeature;
+                          final sipPresenceFeature = featureAccess.sipPresenceConfig;
 
-                          return PresenceViewParams(
-                            viewSource: switch (sipPresenceFeature.sipPresenceSupport) {
-                              true => PresenceViewSource.sipPresence,
-                              false => PresenceViewSource.contactInfo,
-                            },
-                            child: CallShell(
-                              child: MessagingShell(
-                                child: SystemNotificationsShell(
-                                  child: AutoRouter(
-                                    navigatorObservers: () => [
-                                      MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                                    ],
+                          return CallControllerScope(
+                            controller: _callController ??= CallController(
+                              callBloc: context.read<CallBloc>(),
+                              callRoutingCubit: context.read<CallRoutingCubit>(),
+                              notificationsBloc: context.read<NotificationsBloc>(),
+                            ),
+                            child: PresenceViewParams(
+                              viewSource: switch (sipPresenceFeature.sipPresenceSupport) {
+                                true => PresenceViewSource.sipPresence,
+                                false => PresenceViewSource.contactInfo,
+                              },
+                              child: CallConfigSynchronizer(
+                                child: CallShell(
+                                  child: MessagingShell(
+                                    child: SystemNotificationsShell(
+                                      child: AutoRouter(
+                                        navigatorObservers: () => [
+                                          MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -563,12 +635,14 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// - [UserRepository]: polled every 10 seconds to keep user data up to date.
   /// - [SystemInfoRepository]: polled every 5 minutes to refresh system information.
   /// - [VoicemailRepository]: polled every 5 minutes, but only if the voicemail feature is enabled
-  ///   in [FeatureAccess.settingsFeature].
+  ///   in [FeatureAccess.settingsConfig].
   ///
   /// This method centralizes the polling configuration, so changes in polling logic or intervals
   /// can be made here without touching the [Provider] or [PollingService] setup.
   List<PollingRegistration> _pollingRegistrations(BuildContext context) {
-    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsFeature.isVoicemailsEnabled;
+    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.voicemailsEnabled;
+    final cliSettingsRepository = context.read<CallerIdSettingsRepository>();
+    final favoritesRepository = context.read<FavoritesRepository>();
 
     return [
       PollingRegistration(
@@ -588,6 +662,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           listener: context.read<VoicemailRepository>(),
           interval: const Duration(seconds: EnvironmentConfig.VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
+      if (cliSettingsRepository is CallerIdSettingsRepositoryRemoteImpl)
+        PollingRegistration(
+          listener: cliSettingsRepository,
+          interval: const Duration(seconds: EnvironmentConfig.CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS),
+        ),
+      if (favoritesRepository is FavoritesRepositorySyncableImpl)
+        PollingRegistration(
+          listener: favoritesRepository,
+          interval: const Duration(seconds: EnvironmentConfig.FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS),
+        ),
     ];
   }
 
@@ -599,12 +683,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   ///
   /// Current registrations:
   /// - [VoicemailRepository]: refreshed when going online, but only if the voicemail feature
-  ///   is enabled in [FeatureAccess.settingsFeature].
+  ///   is enabled in [FeatureAccess.settingsConfig].
   ///
   /// This method centralizes the connectivity recovery configuration, so changes in
   /// registration logic can be made here without touching the [Provider] or service setup.
   List<ConnectivityRecoveryRegistration> _connectivityRecoveryRegistrations(BuildContext context) {
-    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsFeature.isVoicemailsEnabled;
+    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.voicemailsEnabled;
 
     return [if (isVoicemailsEnabled) ConnectivityRecoveryRegistration.refreshable(context.read<VoicemailRepository>())];
   }

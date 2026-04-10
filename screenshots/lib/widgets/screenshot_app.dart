@@ -12,14 +12,11 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 class ScreenshotApp extends StatelessWidget {
-  const ScreenshotApp({
-    super.key,
-    required this.appBloc,
-    required this.child,
-  });
+  const ScreenshotApp({super.key, required this.appBloc, required this.child, this.ignorePointer = true});
 
   final AppBloc appBloc;
   final Widget child;
+  final bool ignorePointer;
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +34,26 @@ class ScreenshotApp extends StatelessWidget {
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
 
+              final effectiveThemeMode = state.effectiveThemeMode;
+              final ThemeData themeData;
+
+              if (effectiveThemeMode == ThemeMode.dark) {
+                themeData = themeProvider.dark();
+              } else {
+                themeData = themeProvider.light();
+              }
+
               return WidgetsApp.router(
                 locale: state.effectiveLocale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 title: EnvironmentConfig.APP_NAME,
-                color: themeProvider.light().primaryColor,
+                color: themeData.primaryColor,
                 debugShowCheckedModeBanner: false,
                 routerDelegate: ScreenshotRouterDelegate(child),
                 routeInformationParser: const _NoOpRouteInformationParser(),
                 builder: (context, child) {
-                  // Ensure themes are applied to the app
-                  return Theme(
-                    data: themeProvider.light(),
-                    child: child!,
-                  );
+                  return Theme(data: themeData, child: child!);
                 },
               );
             },
@@ -60,16 +62,12 @@ class ScreenshotApp extends StatelessWidget {
       },
     );
 
-    widgetsApp = IgnorePointer(
-      child: widgetsApp,
-    );
+    if (ignorePointer) {
+      widgetsApp = IgnorePointer(child: widgetsApp);
+    }
 
     final provider = MultiBlocProvider(
-      providers: [
-        BlocProvider<AppBloc>.value(
-          value: appBloc,
-        ),
-      ],
+      providers: [BlocProvider<AppBloc>.value(value: appBloc)],
       child: _autoStackRouterWrap(widgetsApp),
     );
 
@@ -85,11 +83,7 @@ class ScreenshotRouterDelegate extends RouterDelegate<Object> with ChangeNotifie
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      pages: [
-        MaterialPage(
-          child: child,
-        ),
-      ],
+      pages: [MaterialPage(child: child)],
       // ignore: deprecated_member_use
       onPopPage: (route, result) {
         if (!route.didPop(result)) {

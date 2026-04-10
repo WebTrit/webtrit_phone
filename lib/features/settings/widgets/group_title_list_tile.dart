@@ -11,19 +11,17 @@ class GroupTitleListTile extends StatelessWidget {
 
   final String titleData;
 
-  final GroutTitleListStyle? style;
+  final GroupTitleListStyle? style;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final localStyle = style ?? themeData.extension<GroupTitleListStyles>()?.primary;
 
-    return Container(
-      color: localStyle?.background ?? Colors.transparent,
-      child: ListTile(
-        title: Text(titleData, style: themeData.textTheme.bodyMedium?.merge(localStyle?.textStyle)),
-        tileColor: themeData.colorScheme.surface,
-      ),
+    return ListTile(
+      tileColor: localStyle?.background,
+      dense: true,
+      title: Text(titleData, style: themeData.textTheme.bodyMedium?.merge(localStyle?.textStyle)),
     );
   }
 }

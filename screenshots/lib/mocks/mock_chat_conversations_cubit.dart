@@ -4,18 +4,13 @@ import 'package:webtrit_phone/features/features.dart';
 
 import '../data/messaging.dart';
 
-class MockChatConversationsCubit extends MockCubit<ChatConversationsState>
-    implements ChatConversationsCubit {
+class MockChatConversationsCubit extends MockCubit<ChatConversationsState> implements ChatConversationsCubit {
   MockChatConversationsCubit();
 
   factory MockChatConversationsCubit.initial() {
     final mock = MockChatConversationsCubit();
 
-    whenListen(
-      mock,
-      const Stream<ChatConversationsState>.empty(),
-      initialState: ChatConversationsState.initial(),
-    );
+    whenListen(mock, const Stream<ChatConversationsState>.empty(), initialState: ChatConversationsState.initial());
 
     return mock;
   }
@@ -29,16 +24,12 @@ class MockChatConversationsCubit extends MockCubit<ChatConversationsState>
         ChatConversationsState.initial(),
         ChatConversationsState(
           [
-            (
-              chat: dChatsMockChatsRepository[0],
-              message: dMessagesMockChatsRepository[0],
-              contacts: []
-            ),
-            (
-              chat: dChatsMockChatsRepository[1],
-              message: dMessagesMockChatsRepository[1],
-              contacts: []
-            ),
+            (chat: dChatsMockChatsRepository[0], message: dMessagesMockChatsRepository[0], contacts: []),
+            (chat: dChatsMockChatsRepository[1], message: dMessagesMockChatsRepository[1], contacts: []),
+          ],
+          [
+            (chat: dChatsMockChatsRepository[0], message: dMessagesMockChatsRepository[0], contacts: []),
+            (chat: dChatsMockChatsRepository[1], message: dMessagesMockChatsRepository[1], contacts: []),
           ],
           false,
         ),
@@ -54,10 +45,7 @@ class MockChatConversationsCubit extends MockCubit<ChatConversationsState>
 
     whenListen(
       mock,
-      Stream.fromIterable([
-        ChatConversationsState.initial(),
-        ChatConversationsState([], false),
-      ]),
+      Stream.fromIterable([ChatConversationsState.initial(), ChatConversationsState([], [], false)]),
       initialState: ChatConversationsState.initial(),
     );
 

@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -20,7 +19,7 @@ class MessagingShell extends StatefulWidget {
 
 class _MessagingShellState extends State<MessagingShell> {
   late final messagingBloc = context.read<MessagingBloc>();
-  late final messagingFeature = context.read<FeatureAccess>().messagingFeature;
+  late final messagingFeature = context.read<FeatureAccess>().messagingConfig;
 
   MessagingPushService? pushService;
 
@@ -48,7 +47,7 @@ class _MessagingShellState extends State<MessagingShell> {
       if (connectionStatus == ConnectionStatus.initial) messagingBloc.add(const Connect());
 
       pushService ??= MessagingPushService(
-        context.read<AppBloc>().state.session.userId,
+        messagingBloc.state.userId,
         context.read<ChatsRepository>(),
         context.read<SmsRepository>(),
         context.read<ContactsRepository>(),

@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
@@ -11,10 +10,18 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 
 class DialogInfo extends StatefulWidget {
-  const DialogInfo(this.userId, this.participantId, {super.key});
+  const DialogInfo(
+    this.userId,
+    this.participantId, {
+    required this.isAudioCallEnabled,
+    required this.isVideoCallEnabled,
+    super.key,
+  });
 
   final String userId;
   final String participantId;
+  final bool isAudioCallEnabled;
+  final bool isVideoCallEnabled;
 
   @override
   State<DialogInfo> createState() => _DialogInfoState();
@@ -22,6 +29,7 @@ class DialogInfo extends StatefulWidget {
 
 class _DialogInfoState extends State<DialogInfo> {
   late final conversationCubit = context.read<ConversationCubit>();
+  late final _callController = CallControllerScope.of(context);
 
   Future<void> onDeleteDialog() async {
     final askResult = await showDialog<bool>(
@@ -33,6 +41,10 @@ class _DialogInfoState extends State<DialogInfo> {
     if (askResult != true) return;
 
     await conversationCubit.deleteChat();
+  }
+
+  void _onCall(ContactPhone phone, Contact contact, bool video) {
+    _callController.createCall(destination: phone.number, displayName: contact.maybeName, video: video);
   }
 
   @override
@@ -49,6 +61,7 @@ class _DialogInfoState extends State<DialogInfo> {
               Scaffold(
                 appBar: AppBar(
                   title: Text(context.l10n.messaging_DialogInfo_title),
+                  centerTitle: true,
                   actions: [
                     if (state.chat != null)
                       PopupMenuButton(
@@ -78,6 +91,7 @@ class _DialogInfoState extends State<DialogInfo> {
                             thumbnail: contact?.thumbnail,
                             thumbnailUrl: contact?.thumbnailUrl,
                             registered: contact?.registered,
+                            presenceInfo: contact?.presenceInfo,
                             radius: 50,
                           ),
                           const SizedBox(height: 8),
@@ -98,61 +112,36 @@ class _DialogInfoState extends State<DialogInfo> {
                             ),
                           ),
                           const SizedBox(height: 24),
-                          Expanded(
-                            child: ListView(
-                              children: [
-                                for (ContactPhone contactPhone in contact?.phones ?? [])
-                                  ListTile(
-                                    title: Text(contactPhone.number),
-                                    trailing: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        IconButton(
-                                          splashRadius: 24,
-                                          icon: const Icon(Icons.call),
-                                          onPressed: () {
-                                            final callBloc = context.read<CallBloc>();
-                                            callBloc.add(
-                                              CallControlEvent.started(
-                                                number: contactPhone.number,
-                                                displayName: contact?.maybeName,
-                                                video: false,
-                                              ),
-                                            );
-                                            context.router.maybePop();
-                                          },
-                                        ),
-                                        IconButton(
-                                          splashRadius: 24,
-                                          icon: const Icon(Icons.videocam),
-                                          onPressed: () {
-                                            final callBloc = context.read<CallBloc>();
-                                            callBloc.add(
-                                              CallControlEvent.started(
-                                                number: contactPhone.number,
-                                                displayName: contact?.maybeName,
-                                                video: true,
-                                              ),
-                                            );
-                                            context.router.maybePop();
-                                          },
-                                        ),
-                                      ],
+                          if (contact != null && contact.kind == ContactKind.visible) ...[
+                            const Divider(),
+                            Expanded(
+                              child: ListView(
+                                children: [
+                                  for (ContactPhone contactPhone in contact.phones)
+                                    ListTile(
+                                      contentPadding: EdgeInsets.zero,
+                                      title: Text(contactPhone.number),
+                                      trailing: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: _buildCallActions(contactPhone, contact),
+                                      ),
                                     ),
-                                  ),
-                                for (ContactEmail contactEmail in contact?.emails ?? [])
-                                  ListTile(
-                                    title: Text(contactEmail.address),
-                                    trailing: IconButton(
-                                      splashRadius: 24,
-                                      icon: const Icon(Icons.email),
-                                      onPressed: () {},
+                                  for (ContactEmail contactEmail in contact.emails)
+                                    ListTile(
+                                      contentPadding: EdgeInsets.zero,
+                                      title: Text(contactEmail.address),
+                                      trailing: IconButton(
+                                        splashRadius: 24,
+                                        icon: const Icon(Icons.email),
+                                        onPressed: () {},
+                                      ),
                                     ),
-                                  ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
+                            const SizedBox(height: 8),
+                          ] else
+                            const Spacer(),
                         ],
                       ),
                     );
@@ -174,5 +163,23 @@ class _DialogInfoState extends State<DialogInfo> {
         return const Center(child: CircularProgressIndicator());
       },
     );
+  }
+
+  /// Returns a list of call action buttons based on provided configuration.
+  List<Widget> _buildCallActions(ContactPhone contactPhone, Contact contact) {
+    return [
+      if (widget.isAudioCallEnabled)
+        IconButton(
+          splashRadius: 24,
+          icon: const Icon(Icons.call),
+          onPressed: () => _onCall(contactPhone, contact, false),
+        ),
+      if (widget.isVideoCallEnabled)
+        IconButton(
+          splashRadius: 24,
+          icon: const Icon(Icons.videocam),
+          onPressed: () => _onCall(contactPhone, contact, true),
+        ),
+    ];
   }
 }

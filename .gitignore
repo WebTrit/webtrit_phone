@@ -30,6 +30,7 @@
 .pub-cache/
 .pub/
 /build/
+**/build/
 
 # Web related
 
@@ -48,3 +49,13 @@ app.*.map.json
 /tool/configs/localizely_token.txt
 makefile.shared
 .env
+
+# Melos
+.melos_tool/
+**/pubspec_overrides.yaml
+
+# Agents
+.aider*
+.claude/settings.local.json
+CLAUDE.local.md
+**/.claude/

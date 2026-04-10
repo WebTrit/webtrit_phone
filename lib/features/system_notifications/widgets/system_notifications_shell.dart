@@ -24,7 +24,7 @@ class _SystemNotificationsShellState extends State<SystemNotificationsShell> {
   late final localPushRepository = context.read<LocalPushRepository>();
 
   late final featureAccess = context.read<FeatureAccess>();
-  late final feature = featureAccess.systemNotificationsFeature;
+  late final feature = featureAccess.systemNotificationsConfig;
 
   SystemNotificationsPushService? pushService;
   SystemNotificationsSyncWorker? syncWorker;

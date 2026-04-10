@@ -5,7 +5,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
@@ -51,11 +50,7 @@ class ContactScreen extends StatefulWidget {
 }
 
 class _ContactScreenState extends State<ContactScreen> {
-  late final CallController _callController = CallController(
-    callBloc: context.read<CallBloc>(),
-    callRoutingCubit: context.read<CallRoutingCubit>(),
-    notificationsBloc: context.read<NotificationsBloc>(),
-  );
+  late final _callController = CallControllerScope.of(context);
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +69,6 @@ class _ContactScreenState extends State<ContactScreen> {
 
             final contactSourceId = contact.sourceId;
             final contactSmsNumbers = contact.smsNumbers;
-
-            final displayPhones = contact.displayPhones;
 
             return BlocBuilder<CallBloc, CallState>(
               buildWhen: (previous, current) =>
@@ -116,31 +109,29 @@ class _ContactScreenState extends State<ContactScreen> {
                             textAlign: TextAlign.center,
                           ),
                           const Divider(height: 16),
-                          for (final contactPhone in displayPhones)
+                          for (final entry in contact.displayPhoneEntries)
                             ContactPhoneTileAdapter(
-                              contactPhone: contactPhone,
-                              contact: contact,
+                              number: entry.phone.number,
+                              displayLabel: entry.displayLabel,
+                              favorite: entry.displayFavorite,
+                              callNumbers: callRoutingState?.allNumbers ?? [],
+                              isSmsEnabled: widget.enableTileSms && contactSmsNumbers.contains(entry.phone.number),
+                              isMessageEnabled: widget.enableTileChat && contact.canMessage,
                               enableTileFavorite: widget.enableTileFavorite,
                               enableTileVoiceCall: widget.enableTileVoiceCall,
                               enableTileVideoCall: widget.enableTileVideoCall,
-                              enableTileSms: widget.enableTileSms,
-                              enableTileChat: widget.enableTileChat,
                               enableTileTransfer: widget.enableTileTransfer,
                               enableTileCallLog: widget.enableTileCallLog,
-                              contactSmsNumbers: contactSmsNumbers,
-                              contactSourceId: contactSourceId,
-                              userSmsNumbers: userSmsNumbers,
                               hasActiveCall: hasActiveCall,
                               isBlingTransferInitiated: isBlingTransferInitiated,
-                              callRoutingState: callRoutingState,
-                              onFavoriteChanged: _onFavoriteChanged,
-                              onAudioPressed: _onAudioPressed,
-                              onVideoPressed: _onVideoPressed,
-                              onTransferPressed: _onTransferPressed,
-                              onSendSmsPressed: _onSendSmsPressed,
-                              onCallLogPressed: _onCallLogPressed,
-                              onNavigateToChatConversation: _navigateToChatConversation,
-                              onCallFromPressed: _onCallFromPressed,
+                              onFavoriteChanged: (isFavorite) => _onFavoriteChanged(isFavorite, entry.phone, contact),
+                              onAudioPressed: () => _onAudioPressed(entry.phone, contact),
+                              onVideoPressed: () => _onVideoPressed(entry.phone, contact),
+                              onTransferPressed: () => _onTransferPressed(entry.phone),
+                              onSmsPressed: () => _onSendSmsPressed(entry.phone, contactSourceId, userSmsNumbers),
+                              onCallLogPressed: () => _onCallLogPressed(entry.phone.number),
+                              onMessagePressed: () => _navigateToChatConversation(contact),
+                              onCallFromPressed: (fromNumber) => _onCallFromPressed(entry.phone, contact, fromNumber),
                             ),
                           for (final contactEmail in contact.emails)
                             ContactEmailTile(
@@ -169,11 +160,11 @@ class _ContactScreenState extends State<ContactScreen> {
     );
   }
 
-  void _onFavoriteChanged(bool isFavorite, ContactPhone contactPhone) {
+  void _onFavoriteChanged(bool isFavorite, ContactPhone contactPhone, Contact contact) {
     if (isFavorite) {
-      context.read<ContactBloc>().add(ContactAddedToFavorites(contactPhone));
+      context.read<ContactBloc>().add(ContactAddedToFavorites(contactPhone, contact));
     } else {
-      context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone));
+      context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone, contact));
     }
   }
 

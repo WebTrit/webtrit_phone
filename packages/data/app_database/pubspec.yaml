@@ -1,4 +1,5 @@
 name: app_database
+resolution: workspace
 description: Internal data package of WebTrit Phone application.
 version: 1.0.0
 

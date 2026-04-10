@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:logging/logging.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,14 +27,17 @@ import 'package:webtrit_phone/features/system_notifications/services/services.da
 
 import 'package:webtrit_phone/features/call/call.dart' show onPushNotificationSyncCallback, onSignalingSyncCallback;
 
+import 'package:drift/isolate.dart';
+
 import 'app/session/session.dart';
 import 'firebase_options.dart';
+import 'services/services.dart';
 
 Future<InstanceRegistry> bootstrap() async {
   final registry = InstanceRegistry();
 
   // External SDKs (Side effects only, don't need registration)
-  await _initFirebase();
+  await _initFirebaseApp();
   await _initFirebaseMessaging();
   await _initLocalPushs();
 
@@ -56,6 +62,9 @@ Future<InstanceRegistry> bootstrap() async {
         Uri.parse(secureStorage.readCoreUrl() ?? EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL),
   );
 
+  // Background workers (assuming SessionCleanupWorker is still a side-effect init)
+  final sessionCleanupWorker = SessionCleanupWorker.init(apiClientFactory);
+
   // Core infrastructure
   final appThemes = await AppThemes.init();
 
@@ -68,6 +77,7 @@ Future<InstanceRegistry> bootstrap() async {
     localDatasource: systemInfoLocalDatasource,
     remoteDatasource: systemInfoRemoteDatasource,
   );
+
   final authRepository = AuthRepositoryImpl(
     apiClientFactory: apiClientFactory,
     systemInfoRemoteDatasource: systemInfoRemoteDatasource,
@@ -75,18 +85,36 @@ Future<InstanceRegistry> bootstrap() async {
     appBundleId: packageInfo.packageName,
   );
 
-  // Logic / Features
-  final coreSupport = CoreSupportImpl(() => systemInfoLocalDatasource.getSystemInfo());
-  final featureAccess = FeatureAccess.init(
-    appThemes.appConfig,
-    appThemes.embeddedResources,
-    activeMainFlavorRepository,
-    coreSupport,
+  final sessionRepository = SessionRepositoryImpl(
+    secureStorage: secureStorage,
+    sessionCleanupWorker: sessionCleanupWorker,
+    apiClientFactory: apiClientFactory,
   );
+
+  // Remote configuration
+  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
+  final cachedRemoteConfigService = await CachedRemoteConfigService.init(remoteCacheConfigService);
+
+  final featureAccessStreamFactory = FeatureAccessStreamFactory(
+    appThemes: appThemes,
+    systemInfoRepository: systemInfoRepository,
+    remoteConfigService: cachedRemoteConfigService,
+  );
+  // Initialize the immutable feature configuration snapshot.
+  // This instance serves as the `initialData` for the `StreamProvider`, ensuring the UI
+  // has valid feature flags immediately during the first frame.
+  final featureAccess = await featureAccessStreamFactory.getInitialSnapshot();
 
   // Utilities - Capturing instances that were previously just `await Class.init()`
   final pushEnvironment = await PushEnvironment.init();
   final appPath = await AppPath.init();
+
+  // Spawn the shared DriftIsolate database server. All isolates (FCM background,
+  // WorkManager) connect to this single server via IsolateNameServer, eliminating
+  // write-write SQLite contention.
+  final driftIsolate = await IsolateDatabase.spawnServer(directoryPath: appPath.applicationDocumentsPath);
+  registry.register<DriftIsolate>(driftIsolate);
+
   final appPermissions = await _createAppPermissions(featureAccess, contactsAgreementStatusRepository);
   final appTime = await AppTime.init();
   final appLabels = await DefaultAppMetadataProvider.init(
@@ -97,13 +125,12 @@ Future<InstanceRegistry> bootstrap() async {
     featureAccess,
   );
 
-  // Background workers (assuming SessionCleanupWorker is still a side-effect init)
-  final sessionCleanupWorker = SessionCleanupWorker.init(apiClientFactory);
-
-  // Remote configuration
-  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
-  final remoteFirebaseConfigService = await FirebaseRemoteConfigService.init(remoteCacheConfigService);
-  final appLogger = await AppLogger.init(remoteFirebaseConfigService, appLabels);
+  // Logger
+  final appLogger = await AppLogger.init(
+    featureAccess.loggingConfig,
+    LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled),
+    () => appLabels.logLabels,
+  );
   final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
     ..attachToLogger(Logger.root);
 
@@ -128,10 +155,12 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<ActiveMainFlavorRepository>(activeMainFlavorRepository);
   registry.register<AuthRepository>(authRepository);
   registry.register<ContactsAgreementStatusRepository>(contactsAgreementStatusRepository);
+  registry.register<SessionRepository>(sessionRepository);
+  registry.register<UserLocalDatasource>(UserLocalDatasourcePrefsImpl(appPreferences));
 
   // Logic & Features
-  registry.register<CoreSupport>(coreSupport);
   registry.register<FeatureAccess>(featureAccess);
+  registry.register<FeatureAccessStreamFactory>(featureAccessStreamFactory);
   registry.register<AppMetadataProvider>(appLabels);
   registry.register<AppPermissions>(appPermissions);
   registry.register<AppCertificates>(appCertificates);
@@ -142,6 +171,7 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Network clients
   registry.register<WebtritApiClientFactory>(apiClientFactory);
+  registry.register<RemoteConfigService>(cachedRemoteConfigService);
 
   // Final side-effect initializations that rely on registered components
   await _initCallkeep(featureAccess);
@@ -174,7 +204,7 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback(onPushNotificationSyncCallback);
 
   // If the fallback incoming call trigger via SMS is enabled in the feature access config
-  if (featureAccess.callFeature.callTriggerConfig.smsFallback.enabled) {
+  if (featureAccess.callConfig.triggerConfig.smsFallback.enabled) {
     // Configure Android CallKeep to process incoming SMS messages
     // - prefix: filters SMS messages by required prefix
     // - regexPattern: extracts callId, handle, displayName, and hasVideo from the SMS body
@@ -188,7 +218,7 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
 /// Initializes Firebase for background services. This initialization must be called in an isolate
 /// when Firebase components are used. For more details, refer to the Firebase documentation:
 /// https://firebase.google.com/docs/cloud-messaging/flutter/receive
-Future<void> _initFirebase() async {
+Future<void> _initFirebaseApp() async {
   try {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } catch (e) {
@@ -216,7 +246,10 @@ Future<void> _initFirebaseMessaging() async {
     final appPush = AppRemotePush.fromFCM(message);
     RemotePushBroker.handleOpenedPush(appPush);
   });
-  final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+  final initialMessage = await FirebaseMessaging.instance.getInitialMessage().timeout(
+    const Duration(seconds: 5),
+    onTimeout: () => null,
+  );
   if (initialMessage != null) {
     logger.info('initialMessage: ${initialMessage.toMap()}');
     final appPush = AppRemotePush.fromFCM(initialMessage);
@@ -230,6 +263,30 @@ Future<void> _initFirebaseMessaging() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final logger = Logger('_firebaseMessagingBackgroundHandler');
 
+  // Ensure Firebase services are initialized before configuring Crashlytics.
+  await _initFirebaseApp();
+
+  await runZonedGuarded(
+    () => _handleBackgroundMessage(message, logger),
+    (error, stack) => _recordBackgroundError(error, stack, logger),
+  );
+}
+
+/// Records background isolate errors to both the local logger and Firebase Crashlytics.
+Future<void> _recordBackgroundError(Object error, StackTrace stack, Logger logger) async {
+  logger.severe('Unhandled background error', error, stack);
+
+  await FirebaseCrashlytics.instance.recordFlutterFatalError(
+    FlutterErrorDetails(
+      exception: error,
+      stack: stack,
+      context: ErrorDescription('Firebase background handler logic failure'),
+    ),
+  );
+}
+
+/// Core logic for processing background messages.
+Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) async {
   // Cache remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
 
@@ -240,7 +297,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final secureStorage = await SecureStorageImpl.init();
   final appLabelsProvider = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
 
-  await AppLogger.init(remoteCacheConfigService, appLabelsProvider);
+  final overrides = FeatureOverridesFactory.create(remoteCacheConfigService.snapshot);
+  final loggingConfig = LoggingMapper.mapFromOverridesOnly(overrides);
+  await AppLogger.init(
+    loggingConfig,
+    LogzioLoggingService.fromEnvironment(loggingConfig.remoteLoggingEnabled),
+    () => appLabelsProvider.logLabels,
+  );
 
   final appPush = AppRemotePush.fromFCM(message);
 
@@ -250,27 +313,22 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   _dHandleInspectPush(message.data, true);
 
   if (appPush is PendingCallPush && Platform.isAndroid) {
-    final appDatabase = await IsolateDatabase.create();
-    final contactsRepository = ContactsRepository(
-      appDatabase: appDatabase,
-      contactsRemoteDataSource: null,
-      contactsLocalDataSource: null,
-    );
+    // Known issue: [SqliteException] with code 5 (database is locked) may occur
+    // due to concurrent database access from multiple isolates.
+    final displayName = await _resolveContactDisplayNameWithFallback(appPush, logger);
 
-    final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
-    final displayName = contact?.maybeName ?? appPush.call.displayName;
-
-    AndroidCallkeepServices.backgroundPushNotificationBootstrapService.reportNewIncomingCall(
-      appPush.call.id,
-      CallkeepHandle.number(appPush.call.handle),
-      displayName: displayName,
-      hasVideo: appPush.call.hasVideo,
-    );
+    await AndroidCallkeepServices.backgroundPushNotificationBootstrapService
+        .reportNewIncomingCall(
+          appPush.call.id,
+          CallkeepHandle.number(appPush.call.handle),
+          displayName: displayName,
+          hasVideo: appPush.call.hasVideo,
+        )
+        .timeout(const Duration(seconds: 10), onTimeout: () => _onReportIncomingCallTimeout(logger));
   }
 
   if (appPush is MessagePush) {
-    final appDatabase = await IsolateDatabase.create();
-    final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: appDatabase);
+    final appPath = await AppPath.init();
 
     final activeMessagePush = ActiveMessagePush(
       notificationId: appPush.id,
@@ -280,8 +338,53 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       body: appPush.body ?? '',
       time: DateTime.now(),
     );
-    await repo.set(activeMessagePush);
+
+    await AppDatabaseScope.useOrNull(
+      directoryPath: appPath.applicationDocumentsPath,
+      action: (db) async {
+        final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: db);
+        await repo.set(activeMessagePush);
+      },
+      onError: (e, st) => logger.warning('MessagePush DB write failed: $e'),
+    );
   }
+}
+
+/// Attempts to resolve the contact name from the database, falling back to push data on error.
+///
+/// This process is susceptible to [SqliteException] with code 5 (database is locked)
+/// when multiple isolates (e.g., background FCM and main app) access the database
+/// concurrently. If any error occurs, the display name from the push payload is returned.
+Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, Logger logger) async {
+  final appPath = await AppPath.init();
+
+  return await AppDatabaseScope.useOrNull(
+        directoryPath: appPath.applicationDocumentsPath,
+        onError: (e, st) {
+          logger.severe(
+            'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
+            'Fallback to push display name will be used.',
+            e,
+            st,
+          );
+        },
+        action: (db) async {
+          final contactsRepository = ContactsRepository(
+            appDatabase: db,
+            contactsRemoteDataSource: null,
+            contactsLocalDataSource: null,
+          );
+
+          final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
+          return contact?.maybeName ?? appPush.call.displayName;
+        },
+      ) ??
+      appPush.call.displayName;
+}
+
+CallkeepIncomingCallError? _onReportIncomingCallTimeout(Logger logger) {
+  logger.warning('reportNewIncomingCall timed out — Telecom may be overloaded');
+  return null;
 }
 
 Future _initLocalPushs() async {
@@ -343,30 +446,47 @@ void workManagerDispatcher() {
   Workmanager().executeTask((task, _) async {
     logger.info('Task execution started: $task');
 
-    if (task == kSystemNotificationsTask || task == kSystemNotificationsTaskId) {
-      // Skip execution if the app is in the foreground
-      final appLifecycle = await AppLifecycle.initSlave();
-      final currentState = appLifecycle.getLifecycleState();
-      if (currentState == AppLifecycleState.resumed) return Future.value(true);
+    if (task != kSystemNotificationsTask && task != kSystemNotificationsTaskId) {
+      return true;
+    }
 
+    // Skip execution if the app is in the foreground
+    final appLifecycle = await AppLifecycle.initSlave();
+    if (appLifecycle.getLifecycleState() == AppLifecycleState.resumed) return true;
+
+    try {
       // Init api and remote repository
       final storage = await SecureStorageImpl.init();
-      final (coreUrl, tenantId, token) = (storage.readCoreUrl(), storage.readTenantId(), storage.readToken());
-      if (coreUrl == null || tenantId == null || token == null) return Future.value(true);
+      final coreUrl = storage.readCoreUrl();
+      final tenantId = storage.readTenantId();
+      final token = storage.readToken();
+      if (coreUrl == null || tenantId == null || token == null) return true;
+
       final api = WebtritApiClient(Uri.parse(coreUrl), tenantId);
       final remoteRepo = SystemNotificationsRemoteRepositoryApiImpl(api, token, const EmptySessionGuard());
 
-      // Init local database and repository
-      final appDatabase = await IsolateDatabase.create();
-      final localRepo = SystemNotificationsLocalRepositoryDriftImpl(appDatabase);
+      final appPath = await AppPath.init();
       final localPushRepo = LocalPushRepositoryFLNImpl();
 
-      // Initialize the background worker and execute task
-      final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
-      final result = await worker.execute();
+      final result =
+          await AppDatabaseScope.useOrNull<bool>(
+            directoryPath: appPath.applicationDocumentsPath,
+            onError: (e, st) => logger.severe('System notifications task failed', e, st),
+            action: (db) async {
+              final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
+              final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
+              return worker.execute();
+            },
+          ) ??
+          false; // return false so WorkManager can retry on DB/worker failure
+
       logger.info('Task result: $result');
       return result;
+    } catch (e, st) {
+      logger.severe('Unhandled WorkManager task error', e, st);
+      // Return `false` so WorkManager can retry according to its backoff policy.
+      // Returning `true` would mark the run as successful and may prevent retries.
+      return false;
     }
-    return true;
   });
 }

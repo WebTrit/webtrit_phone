@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -89,9 +90,9 @@ class LoginRouterPage extends StatelessWidget {
 
     final login = LoginCubit(
       notificationsBloc: context.read<NotificationsBloc>(),
-      sessionRepository: context.read<SessionRepository>(),
       authRepository: context.read<AuthRepository>(),
-      systemInfoRepository: context.read<SystemInfoRepository>(),
+      onLoginSuccess: (session, systemInfo) =>
+          context.read<AppBloc>().add(AppLoggedIn(session: session, systemInfo: systemInfo)),
     );
     if (_launchEmbeddedData != null) {
       login.setEmbedded(_launchEmbeddedData);

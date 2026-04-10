@@ -36,6 +36,18 @@ class UpdatingCallEvent extends CallEvent {
 
   static const typeValue = 'updating_call';
 
+  @override
+  Map<String, dynamic> toJson() => {
+    ...callBaseJson(typeValue),
+    'callee': callee,
+    'caller': caller,
+    if (callerDisplayName != null) 'caller_display_name': callerDisplayName,
+    if (referredBy != null) 'referred_by': referredBy,
+    if (replaceCallId != null) 'replace_call_id': replaceCallId,
+    if (isFocus != null) 'is_focus': isFocus,
+    if (jsep != null) 'jsep': jsep,
+  };
+
   factory UpdatingCallEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

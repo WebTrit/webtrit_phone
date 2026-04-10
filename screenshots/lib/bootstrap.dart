@@ -9,7 +9,9 @@ import 'package:provider/single_child_widget.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
@@ -21,25 +23,29 @@ Future<AppContext> bootstrap() async {
   final packageInfo = await PackageInfoFactory.init();
   final deviceInfo = await DeviceInfoFactory.init();
   final secureStorage = await SecureStorageImpl.init();
-  final appPreferences = await AppPreferencesImpl.init();
   final appInfo = await AppInfo.init(SharedPreferencesAppIdProvider());
 
-  final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
   final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
-  final coreSupport = CoreSupportImpl(() => systemInfoLocalRepository.getSystemInfo());
+
+  final mockSnapshot = RemoteConfigSnapshot(const {}, MockCacheConfigService());
+  final systemInfo = systemInfoLocalRepository.getSystemInfo();
+
+  final featureOverrides = FeatureOverridesFactory.create(mockSnapshot);
+  final coreSupport = CoreSupportFactory.create(systemInfo);
+
+  final featureAccess = FeatureAccess.create(
+    appThemes.appConfig,
+    appThemes.embeddedResources,
+    coreSupport,
+    featureOverrides,
+  );
 
   final mockAppMetadataProvider = await DefaultAppMetadataProvider.init(
     packageInfo,
     deviceInfo,
     appInfo,
     secureStorage,
-  );
-
-  final featureAccess = FeatureAccess.init(
-    appThemes.appConfig,
-    appThemes.embeddedResources,
-    activeMainFlavorRepository,
-    coreSupport,
+    featureAccess,
   );
 
   final appBloc = MockAppBloc.allScreen(

@@ -6,10 +6,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -21,9 +21,9 @@ class ChatConversationScreen extends StatefulWidget {
 }
 
 class _ChatConversationScreenState extends State<ChatConversationScreen> {
-  late final userId = context.read<AppBloc>().state.session.userId;
   late final messagingBloc = context.read<MessagingBloc>();
   late final conversationCubit = context.read<ConversationCubit>();
+  late final userId = messagingBloc.state.userId;
 
   void onMenuTap() {
     final state = conversationCubit.state;
@@ -39,7 +39,12 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
           value: conversationCubit,
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: DialogInfo(userId, state.credentials.participantId!),
+            child: DialogInfo(
+              userId,
+              state.credentials.participantId!,
+              isAudioCallEnabled: true,
+              isVideoCallEnabled: messagingBloc.state.messagingConfig.contactInfoVideoCallSupport,
+            ),
           ),
         ),
       );
@@ -87,17 +92,18 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                   child: Container(color: theme.canvasColor.withAlpha(150)),
                 ),
               ),
+              centerTitle: true,
               title: FadeIn(
                 child: Builder(
                   builder: (context) {
                     if (state is CVSReady) {
                       final chatName = state.chat?.name;
-                      if (chatName != null) return nameTitle(chatName);
+                      if (chatName != null) return textTitle(chatName);
 
                       final (:chatId, :participantId) = state.credentials;
                       if (participantId != null) return dialogTitle(participantId);
 
-                      return unknownTitle(chatId.toString());
+                      return textTitle(chatId.toString());
                     }
 
                     return const SizedBox();
@@ -111,6 +117,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                 if (state is CVSReady) {
                   return ChatMessageListView(
                     userId: userId,
+                    isGroup: state.chat?.type == ChatType.group,
                     messages: state.messages,
                     outboxMessages: state.outboxMessages,
                     outboxMessageEdits: state.outboxMessageEdits,
@@ -153,8 +160,10 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
     return ContactInfoBuilder(
       source: ContactSourceId(ContactSourceType.external, participant),
       builder: (context, contact) {
+        final colorScheme = Theme.of(context).colorScheme;
         final presenceSource = PresenceViewParams.of(context).viewSource;
-        const nameTextStyle = TextStyle(fontSize: 20);
+        const nameTextStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.bold);
+        const noteTextStyle = TextStyle(fontSize: 10);
 
         return switch ((presenceSource, contact)) {
           (_, null) => Text(
@@ -163,23 +172,64 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
             overflow: TextOverflow.ellipsis,
             style: nameTextStyle,
           ),
-          (PresenceViewSource.contactInfo, Contact contact) => Column(
+          (PresenceViewSource.contactInfo, Contact contact) => Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(contact.displayTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: nameTextStyle),
-              if (contact.registered == true)
-                Text(context.l10n.messaging_ConversationScreen_titleAvailable, style: const TextStyle(fontSize: 12)),
+              if (contact.thumbnail != null || contact.thumbnailUrl != null) ...[
+                LeadingAvatar(
+                  username: contact.displayTitle,
+                  thumbnail: contact.thumbnail,
+                  thumbnailUrl: contact.thumbnailUrl,
+                  style: LeadingAvatarStyle(
+                    backgroundColor: colorScheme.primaryFixedDim,
+                    initialsTextStyle: TextStyle(color: colorScheme.onPrimary),
+                  ),
+                ),
+                const SizedBox(width: 8),
+              ],
+              Flexible(
+                child: Column(
+                  children: [
+                    Text(contact.displayTitle, maxLines: 1, overflow: TextOverflow.fade, style: nameTextStyle),
+                    if (contact.registered == true)
+                      Text(
+                        context.l10n.messaging_ConversationScreen_titleAvailable,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                  ],
+                ),
+              ),
             ],
           ),
-          (PresenceViewSource.sipPresence, Contact contact) => Column(
+          (PresenceViewSource.sipPresence, Contact contact) => Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: nameTextStyle,
+              LeadingAvatar(
+                username: contact.displayTitle,
+                thumbnail: contact.thumbnail,
+                thumbnailUrl: contact.thumbnailUrl,
+                presenceInfo: contact.presenceInfo,
               ),
-              if (contact.presenceInfo.anyAvailable == true)
-                Text(context.l10n.messaging_ConversationScreen_titleAvailable, style: const TextStyle(fontSize: 12)),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Column(
+                  children: [
+                    Text(
+                      '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      style: nameTextStyle,
+                    ),
+                    if (contact.presenceInfo.primaryNote?.isNotEmpty ?? false)
+                      Text(
+                        '${contact.presenceInfo.primaryNote}',
+                        style: noteTextStyle,
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                      ),
+                  ],
+                ),
+              ),
             ],
           ),
         };
@@ -187,11 +237,12 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
     );
   }
 
-  Widget nameTitle(String name) {
-    return Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 20));
-  }
-
-  Widget unknownTitle(String chatId) {
-    return Text(chatId, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 20));
+  Widget textTitle(String name) {
+    return Text(
+      name,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    );
   }
 }

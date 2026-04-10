@@ -57,12 +57,10 @@ class WebtritSignalingClient {
   static int _createCounter = 0;
 
   @visibleForTesting
-  WebtritSignalingClient.inner(this._wsc)
-    : _id = _createCounter,
-      _logger = Logger('WebtritSignalingClient-$_createCounter') {
+  WebtritSignalingClient.inner(this._wsc) : _id = _createCounter, _logger = Logger('WebtritSignalingClient') {
     _createCounter++;
 
-    _logger.fine('connected');
+    _logger.fine('$_id connected');
   }
 
   final int _id;
@@ -116,7 +114,7 @@ class WebtritSignalingClient {
     if (_wscStreamSubscription != null) {
       throw StateError('$WebtritSignalingClient with id: $_id has already been listened to');
     }
-    _logger.fine('listen');
+    _logger.fine('$_id listen');
 
     _onStateHandshake = onStateHandshake;
     _onEvent = onEvent;
@@ -129,9 +127,9 @@ class WebtritSignalingClient {
   Future<void> disconnect([int? code, String? reason]) async {
     final wscStreamSubscription = _wscStreamSubscription;
     if (wscStreamSubscription == null) {
-      _logger.fine('already disconnected with code: ${_wsc.closeCode} reason: ${_wsc.closeReason}');
+      _logger.fine('$_id already disconnected with code: ${_wsc.closeCode} reason: ${_wsc.closeReason}');
     } else {
-      _logger.fine('disconnect code: $code reason: $reason');
+      _logger.fine('$_id disconnect code: $code reason: $reason');
 
       _stopKeepaliveTimer();
 
@@ -148,14 +146,14 @@ class WebtritSignalingClient {
   //
 
   void _wscStreamOnData(dynamic data) {
-    _logger.fine('_wsOnData: $data');
+    _logger.fine('$_id _wsOnData: $data');
 
     final Map<String, dynamic> messageJson = jsonDecode(data);
     _onMessage(messageJson);
   }
 
   void _wscStreamOnError(dynamic error, StackTrace stackTrace) {
-    _logger.warning('_wsOnError', error, stackTrace);
+    _logger.warning('$_id _wsOnError', error, stackTrace);
 
     _onError(error, stackTrace);
   }
@@ -164,7 +162,7 @@ class WebtritSignalingClient {
     final closeCode = _wsc.closeCode;
     final closeReason = _wsc.closeReason;
 
-    _logger.fine('_wsOnDone code: $closeCode reason: $closeReason');
+    _logger.fine('$_id _wsOnDone code: $closeCode reason: $closeReason');
 
     _stopKeepaliveTimer();
 
@@ -248,9 +246,9 @@ class WebtritSignalingClient {
       requestJson['transaction'] = transaction.id;
     }
 
-    _addMessage(requestJson);
-
     try {
+      _addMessage(requestJson);
+
       final responseJson = await transaction.future;
       if (transaction.isIdGenerate) {
         responseJson.remove('transaction');
@@ -269,9 +267,17 @@ class WebtritSignalingClient {
   }
 
   void _addData(dynamic data) {
-    _logger.fine(() => '_addData add: $data');
+    _logger.fine(() => '$_id _addData add: $data');
 
-    _wsc.sink.add(data);
+    try {
+      if (_wsc.closeCode != null) {
+        throw StateError('Cannot add event after closing (detected via closeCode)');
+      }
+
+      _wsc.sink.add(data);
+    } on StateError catch (e) {
+      throw WebtritSignalingBadStateException(_id, e);
+    }
   }
 
   void _cleanupTransactions(int? code, String? reason) {
@@ -299,11 +305,26 @@ class WebtritSignalingClient {
   void _onKeepalive() async {
     try {
       final elapsed = await _executeKeepaliveTransaction(defaultExecuteTransactionTimeoutDuration);
-      _logger.finest('handshake keepalive latency: $elapsed');
+      _logger.finest('$_id handshake keepalive latency: $elapsed');
 
-      _startKeepaliveTimer();
+      // Stop the keepalive loop if the socket was closed between send and response.
+      if (_wsc.closeCode == null) {
+        _startKeepaliveTimer();
+      }
     } on WebtritSignalingTransactionTimeoutException catch (e, stackTrace) {
       _onError(WebtritSignalingKeepaliveTransactionTimeoutException(e.id, e.transactionId), stackTrace);
+    } on WebtritSignalingBadStateException {
+      _logger.fine('$_id keepalive stopped gracefully due to closed socket.');
+      // Catches the specific exception thrown when attempting to write to a closed socket.
+      // This indicates a race condition where the Keepalive timer triggered shortly after
+      // the socket was closed but before the timer could be cancelled.
+      //
+      // Since the socket is already in a terminal state, the standard disconnection
+      // handlers (onDone/onDisconnect) are responsible for the lifecycle management.
+      // Reporting this as an error would be redundant and potentially misleading.
+      //
+      // Gracefully terminate the recursive Keepalive loop here.
+      return;
     } catch (error, stackTrace) {
       _onError(error, stackTrace);
     }

@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import 'settings_sync_metadata.dart';
+
 class CallerIdSettings extends Equatable {
   const CallerIdSettings({this.defaultNumber, this.matchers = const []});
 
@@ -56,3 +58,5 @@ final class PrefixMatcher extends NumberMatcher with EquatableMixin {
     return PrefixMatcher(prefix ?? this.prefix, number ?? this.number);
   }
 }
+
+typedef SyncableCallerIdSettings = (CallerIdSettings settings, SettingsSyncMetadata metadata);

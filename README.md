@@ -35,7 +35,7 @@ The application offers extensive customization options:
 ## Development & Build
  - **Build and run**: See the [Build and Run](docs/build.md) documentation for details on how to build and run the application.
  - **Flavors**: See the [Build Flavors](docs/flavors.md) documentation for details on how to configure and use build flavors.
- - **Make Commands**: See the  [Make Commands](docs/make_file.md) for available build and automation commands.
+ - **Melos Commands**: See the [Melos Commands](docs/make_file.md) for all available build, run, and automation commands.
  - **Development Workflow and Git Hooks**: See the [Development Guide](docs/development.md) for details on commit conventions, hook setup, and workflow tools.
 
 # Testing
@@ -55,7 +55,7 @@ The application offers extensive customization options:
   ```
 * To specify a test file, use the `-t` option:
   ```bash
-  patrol build -t integration_test/call_and_recent_test.dart ...
+  patrol build -t patrol_test/call_and_recent_test.dart ...
   ```
 * For build and deploy to Firebase Test Lab, use the following command from the `tool/scripts` directory:
   ```bash

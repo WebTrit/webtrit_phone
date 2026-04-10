@@ -5,70 +5,51 @@ import 'package:logging_appenders/logging_appenders.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/common/common.dart';
-import 'package:webtrit_phone/environment_config.dart';
-
-import 'app_metadata_provider.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 final _logger = Logger('AppLogger');
 
 class AppLogger {
-  static Future<AppLogger> init(RemoteConfigService remoteConfigService, AppMetadataProvider labelsProvider) async {
+  static Future<AppLogger> init(
+    LoggingConfig config,
+    RemoteLoggingService? remoteLoggingService,
+    Map<String, String> Function() getLabels,
+  ) async {
     hierarchicalLoggingEnabled = true;
 
-    final localLogLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.DEBUG_LEVEL);
-    final logzioLogLevel = Level.LEVELS.firstWhere((level) => level.name == EnvironmentConfig.REMOTE_LOGZIO_LOG_LEVEL);
-
     Logger.root.clearListeners();
-    Logger.root.level = localLogLevel;
 
-    EquatableConfig.stringify = localLogLevel <= Level.FINE || logzioLogLevel <= Level.FINE;
-
-    // Set up local logs printing with a color formatter
+    // Anonymization is intentionally applied only to remote logs (Logzio).
+    // Console output is not anonymized to preserve full detail for local debugging.
     PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);
 
-    // Add log listener for Callkeep integration
     WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 
-    // Configure remote logging for Logz.io with an anonymizing formatter.
-    // If additional logging services are added in the future, consider extracting these settings
-    // into a dedicated logging configuration module to improve maintainability and separation of concerns.
-    final remoteLoggingServices = _createRemoteLoggingServices(remoteConfigService, logzioLogLevel);
+    final instance = AppLogger._(remoteLoggingService, getLabels);
+    instance.updateRemoteLabels();
+    instance.applyConfig(config);
 
-    for (var it in remoteLoggingServices) {
-      it.initialize(labelsProvider.logLabels);
-    }
-
-    _logger.info('Initializing AppLogger with local log level: $localLogLevel, remote log level: $logzioLogLevel');
-
-    return AppLogger._(remoteLoggingServices, labelsProvider);
+    return instance;
   }
 
-  static List<RemoteLoggingService> _createRemoteLoggingServices(RemoteConfigService configService, Level minLevel) {
-    final isEnabled = configService.getBool('firebaseRemoteLogging') ?? false;
+  AppLogger._(this._remoteLoggingService, this._getLabels);
 
-    const logzioUrl = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_URL;
-    const logzioToken = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_TOKEN;
-    final logzioBufferSize = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_BUFFER_SIZE;
+  final RemoteLoggingService? _remoteLoggingService;
+  final Map<String, String> Function() _getLabels;
 
-    if (logzioUrl != null && logzioToken != null && isEnabled) {
-      return [
-        LogzioLoggingService(url: logzioUrl, token: logzioToken, bufferSize: logzioBufferSize, minLevel: minLevel),
-      ];
-    }
-
-    return [];
+  void applyConfig(LoggingConfig config) {
+    Logger.root.level = config.logLevel;
+    _remoteLoggingService?.setAnonymizationEnabled(config.anonymizationEnabled);
+    EquatableConfig.stringify =
+        config.logLevel <= Level.FINE || (_remoteLoggingService?.minLevel ?? Level.OFF) <= Level.FINE;
+    _logger.info('AppLogger log level applied: ${config.logLevel}');
   }
 
-  AppLogger._(this._remoteLoggingServices, this._labelsProvider);
-
-  final List<RemoteLoggingService> _remoteLoggingServices;
-  final AppMetadataProvider _labelsProvider;
-
-  /// Allows regenerating labels when coreUrl and tenantId are available.
-  void regenerateRemoteLabels() {
-    final labels = _labelsProvider.logLabels;
-    for (var it in _remoteLoggingServices) {
-      it.initialize(labels);
-    }
+  /// Updates remote logging labels and re-attaches the remote appender.
+  ///
+  /// Call this after authentication when coreUrl and tenantId become available.
+  void updateRemoteLabels() {
+    _remoteLoggingService?.dispose();
+    _remoteLoggingService?.initialize(_getLabels());
   }
 }

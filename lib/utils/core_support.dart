@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 import 'package:webtrit_phone/app/constants.dart';
 
 import 'package:webtrit_phone/models/system_info/system_info.dart';
@@ -23,13 +25,10 @@ abstract class CoreSupport {
   bool get supportsSipPresence;
 }
 
-class CoreSupportImpl implements CoreSupport {
-  CoreSupportImpl(this.webtritSystemInfo);
+class CoreSupportImpl extends Equatable implements CoreSupport {
+  CoreSupportImpl(List<String>? supported) : _flags = {...?supported};
 
-  final WebtritSystemInfo? Function()? webtritSystemInfo;
-
-  /// Warning: do not refactor this into a value; it must remain a getter that is evaluated on each call.
-  Set<String> get _flags => {...?webtritSystemInfo?.call()?.adapter?.supported};
+  final Set<String> _flags;
 
   bool _has(String flag) => _flags.contains(flag);
 
@@ -50,4 +49,16 @@ class CoreSupportImpl implements CoreSupport {
 
   @override
   bool get supportsSipPresence => _has(kSipPresenceFeatureFlag);
+
+  @override
+  List<Object?> get props {
+    final sortedFlags = _flags.toList()..sort();
+    return [List.unmodifiable(sortedFlags)];
+  }
+}
+
+class CoreSupportFactory {
+  static CoreSupport create(WebtritSystemInfo? systemInfo) {
+    return CoreSupportImpl(systemInfo?.adapter?.supported);
+  }
 }

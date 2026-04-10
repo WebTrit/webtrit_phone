@@ -31,7 +31,7 @@ class EmbeddedTabPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottomMenuManager = context.read<FeatureAccess>().bottomMenuFeature;
+    final bottomMenuManager = context.read<FeatureAccess>().bottomMenuConfig;
     final data = bottomMenuManager.getEmbeddedTabById(id);
 
     final customPrivateGatewayRepository = context.read<PrivateGatewayRepository>();
@@ -124,16 +124,22 @@ class EmbeddedTabPage extends StatelessWidget {
   }
 
   ConnectivityRecoveryStrategy _createConnectivityRecoveryStrategy(BuildContext context, EmbeddedData data) {
-    final executor = context.read<WebtritApiClientFactory>().createHttpRequestExecutor();
+    final customUrl = EnvironmentConfig.CONNECTIVITY_CHECK_URL;
+    final apiFactory = context.read<WebtritApiClientFactory>();
+
+    final connectivityChecker = switch (customUrl) {
+      String url => CustomConnectivityChecker(
+        connectivityCheckUrl: url,
+        createHttpRequestExecutor: apiFactory.createHttpRequestExecutor(),
+      ),
+      null => DefaultConnectivityChecker(apiClient: apiFactory.createWebtritApiClient()),
+    };
 
     return ConnectivityRecoveryStrategy.create(
       initialUri: data.uri,
       type: data.reconnectStrategy,
       connectivityStream: Connectivity().onConnectivityChanged,
-      connectivityCheckerBuilder: () => DefaultConnectivityChecker(
-        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
-        createHttpRequestExecutor: executor,
-      ),
+      connectivityCheckerBuilder: () => connectivityChecker,
     );
   }
 }

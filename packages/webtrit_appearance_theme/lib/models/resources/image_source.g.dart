@@ -33,10 +33,44 @@ ImageRenderSpec _$ImageRenderSpecFromJson(Map<String, dynamic> json) =>
       padding: json['padding'] == null
           ? null
           : PaddingConfig.fromJson(json['padding'] as Map<String, dynamic>),
+      alignment: $enumDecodeNullable(
+        _$AlignmentConfigEnumMap,
+        json['alignment'],
+        unknownValue: JsonKey.nullForUndefinedEnumValue,
+      ),
+      fit: $enumDecodeNullable(
+        _$BoxFitConfigEnumMap,
+        json['fit'],
+        unknownValue: JsonKey.nullForUndefinedEnumValue,
+      ),
     );
 
 Map<String, dynamic> _$ImageRenderSpecToJson(ImageRenderSpec instance) =>
     <String, dynamic>{
       'scale': instance.scale,
       'padding': instance.padding?.toJson(),
+      'alignment': _$AlignmentConfigEnumMap[instance.alignment],
+      'fit': _$BoxFitConfigEnumMap[instance.fit],
     };
+
+const _$AlignmentConfigEnumMap = {
+  AlignmentConfig.topLeft: 'topLeft',
+  AlignmentConfig.topCenter: 'topCenter',
+  AlignmentConfig.topRight: 'topRight',
+  AlignmentConfig.centerLeft: 'centerLeft',
+  AlignmentConfig.center: 'center',
+  AlignmentConfig.centerRight: 'centerRight',
+  AlignmentConfig.bottomLeft: 'bottomLeft',
+  AlignmentConfig.bottomCenter: 'bottomCenter',
+  AlignmentConfig.bottomRight: 'bottomRight',
+};
+
+const _$BoxFitConfigEnumMap = {
+  BoxFitConfig.fill: 'fill',
+  BoxFitConfig.contain: 'contain',
+  BoxFitConfig.cover: 'cover',
+  BoxFitConfig.fitWidth: 'fitWidth',
+  BoxFitConfig.fitHeight: 'fitHeight',
+  BoxFitConfig.none: 'none',
+  BoxFitConfig.scaleDown: 'scaleDown',
+};

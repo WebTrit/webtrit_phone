@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 const kApiClientConnectionTimeout = Duration(seconds: 5);
 
 const kSignalingClientConnectionTimeout = Duration(seconds: 10);
+const kCallRoutingStateTimeout = Duration(seconds: 10);
 const kSignalingClientReconnectDelay = Duration(seconds: 3);
 const kSignalingClientFastReconnectDelay = Duration(seconds: 1);
 
@@ -20,7 +21,24 @@ const kMainAppBarBottomTabHeight = 42.0;
 const kMainAppBarBottomSearchHeight = kMinInteractiveDimension;
 const kMainAppBarBottomPaddingGap = 6.0;
 
+/// Standard vertical padding (in logical pixels) used around Material list items.
+///
+/// Prefer this value when constructing edge insets to keep list spacing consistent
+/// across the app (e.g., `EdgeInsets.symmetric(vertical: kMaterialListPadding)`).
+const double kMaterialListPadding = 8.0;
+
 const kAllPadding16 = EdgeInsets.all(16.0);
+
+/// Universal padding for floating overlays (e.g., overlay or sticky widgets).
+///
+/// Uses `kToolbarHeight` for the top inset to avoid overlapping the AppBar, and
+/// applies `kMaterialListPadding` on the left, right, and bottom for spacing.
+const kStickyOverlayPadding = EdgeInsets.only(
+  left: kMaterialListPadding,
+  right: kMaterialListPadding,
+  bottom: kMaterialListPadding,
+  top: kToolbarHeight,
+);
 
 const kBlankUri = 'about:blank';
 

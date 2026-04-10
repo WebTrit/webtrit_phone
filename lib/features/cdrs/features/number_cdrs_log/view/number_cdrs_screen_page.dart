@@ -20,7 +20,7 @@ class NumberCdrsScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
-    final videoVisible = featureAccess.callFeature.callConfig.isVideoCallEnabled;
+    final videoVisible = featureAccess.callConfig.capabilities.isVideoCallEnabled;
     return BlocProvider(
       create: (context) => NumberCdrsLogCubit(
         number,

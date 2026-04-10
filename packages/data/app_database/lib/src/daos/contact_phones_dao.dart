@@ -24,14 +24,48 @@ class ContactPhonesDao extends DatabaseAccessor<AppDatabase> with _$ContactPhone
   Future<int> insertOnUniqueConflictUpdateContactPhone(Insertable<ContactPhoneData> contactPhone) {
     return into(contactPhonesTable).insert(
       contactPhone,
-      onConflict: DoUpdate((_) => contactPhone, target: [contactPhonesTable.number, contactPhonesTable.contactId]),
+      onConflict: DoUpdate(
+        (_) => contactPhone,
+        target: [contactPhonesTable.number, contactPhonesTable.label, contactPhonesTable.contactId],
+      ),
     );
   }
 
-  Future<int> deleteOtherContactPhonesOfContactId(int id, Iterable<String> numbers) {
-    return (delete(contactPhonesTable)
-          ..where((t) => t.contactId.equals(id))
-          ..where((t) => t.number.isNotIn(numbers)))
-        .go();
+  /// Deletes all phone rows for [contactId] that are NOT present in [pairs].
+  ///
+  /// Each pair is a `(number, label)` tuple that identifies a row to keep.
+  /// If [pairs] is empty, all phones for the contact are deleted.
+  Future<void> deleteOtherContactPhonesOfContactId(int contactId, List<({String number, String label})> pairs) async {
+    // No phones to keep - wipe all rows for this contact.
+    if (pairs.isEmpty) {
+      await (delete(contactPhonesTable)..where((t) => t.contactId.equals(contactId))).go();
+      return;
+    }
+
+    // Build a keep-expression: rows whose (number, label) is in [pairs] are retained;
+    // everything else for this contact is deleted.
+    final keepExpr = pairs
+        .map<Expression<bool>>(
+          (p) => contactPhonesTable.number.equals(p.number) & contactPhonesTable.label.equals(p.label),
+        )
+        .reduce((a, b) => a | b);
+
+    await (delete(contactPhonesTable)..where((t) => t.contactId.equals(contactId) & keepExpr.not())).go();
+  }
+
+  Future<void> insertContactPhonesBatch(List<ContactPhoneDataCompanion> phones) {
+    if (phones.isEmpty) return Future.value();
+    return batch((batch) {
+      for (final phone in phones) {
+        batch.insert(
+          contactPhonesTable,
+          phone,
+          onConflict: DoUpdate(
+            (old) => phone,
+            target: [contactPhonesTable.number, contactPhonesTable.label, contactPhonesTable.contactId],
+          ),
+        );
+      }
+    });
   }
 }

@@ -13,11 +13,7 @@ class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {
 
   factory MockLoginCubit.loginModeSelectScreen() {
     final mock = MockLoginCubit();
-    whenListen(
-      mock,
-      const Stream<LoginState>.empty(),
-      initialState: const LoginState(),
-    );
+    whenListen(mock, const Stream<LoginState>.empty(), initialState: const LoginState());
     when(() => mock.isDemoModeEnabled).thenReturn(false);
     when(() => mock.isCredentialsRequestUrlEnabled).thenReturn(false);
     return mock;
@@ -25,11 +21,7 @@ class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {
 
   factory MockLoginCubit.loginCoreUrlAssignScreen() {
     final mock = MockLoginCubit();
-    whenListen(
-      mock,
-      const Stream<LoginState>.empty(),
-      initialState: const LoginState(),
-    );
+    whenListen(mock, const Stream<LoginState>.empty(), initialState: const LoginState());
     return mock;
   }
 
@@ -46,20 +38,14 @@ class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {
         tenantId: '_',
         token: '_',
         otpSigninSessionOtpProvisionalWithDateTime: (
-          const SessionResult.otpProvisional(otpId: '_')
-              as SessionOtpProvisional,
+          const SessionResult.otpProvisional(otpId: '_') as SessionOtpProvisional,
           DateTime.now(),
         ),
         signupSessionOtpProvisionalWithDateTime: (
-          const SessionResult.otpProvisional(otpId: '_')
-              as SessionOtpProvisional,
+          const SessionResult.otpProvisional(otpId: '_') as SessionOtpProvisional,
           DateTime.now(),
         ),
-        supportedLoginTypes: [
-          LoginType.otpSignin,
-          LoginType.passwordSignin,
-          LoginType.signup,
-        ],
+        supportedLoginTypes: [LoginType.otpSignin, LoginType.passwordSignin, LoginType.signup],
       ),
     );
     when(() => mock.isDemoModeEnabled).thenReturn(false);

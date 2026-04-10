@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:drift/drift.dart';
+import 'package:drift/isolate.dart';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -10,7 +13,6 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/app/app.dart';
-import 'package:webtrit_phone/app/app_bloc_observer.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -42,13 +44,7 @@ void main() {
 
       Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
 
-      Bloc.observer = AppBlocObserver();
-
-      final appDocDir = await getApplicationDocumentsPath();
-      final String baseLogDirectoryPath = '$appDocDir/logs';
-      final String baseLogFilePath = '$baseLogDirectoryPath/app_logs.log';
-
-      runApp(RootApp(instanceRegistry: instanceRegistry, baseLogFilePath: baseLogFilePath));
+      runApp(RootApp(instanceRegistry: instanceRegistry));
     },
     (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
@@ -60,10 +56,9 @@ void main() {
 }
 
 class RootApp extends StatelessWidget {
-  const RootApp({super.key, required this.instanceRegistry, required this.baseLogFilePath});
+  const RootApp({super.key, required this.instanceRegistry});
 
   final InstanceRegistry instanceRegistry;
-  final String baseLogFilePath;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +69,14 @@ class RootApp extends StatelessWidget {
         Provider<PackageInfo>(create: (_) => instanceRegistry.get()),
         Provider<DeviceInfo>(create: (_) => instanceRegistry.get()),
         Provider<AppPreferences>(create: (_) => instanceRegistry.get()),
-        Provider<FeatureAccess>(create: (_) => instanceRegistry.get()),
+        // Provides reactive [FeatureAccess] configuration synchronized with [SystemInfoRepository] and [RemoteConfigService].
+        //
+        // Initializes with bootstrap data and updates whenever system information or remote configuration changes.
+        StreamProvider<FeatureAccess>(
+          initialData: instanceRegistry.get<FeatureAccess>(),
+          create: (_) => instanceRegistry.get<FeatureAccessStreamFactory>().create(),
+          updateShouldNotify: (previous, next) => previous != next,
+        ),
         Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
         Provider<AppPermissions>(create: (_) => instanceRegistry.get()),
         Provider<AppLogger>(create: (_) => instanceRegistry.get()),
@@ -84,25 +86,26 @@ class RootApp extends StatelessWidget {
         Provider<AppMetadataProvider>(create: (_) => instanceRegistry.get()),
         Provider<WebtritApiClientFactory>(create: (_) => instanceRegistry.get()),
         Provider<PushEnvironment>(create: (_) => instanceRegistry.get()),
-
-        // Services
-        Provider<AppDatabase>(create: _createAppDatabase, dispose: _disposeAppDatabase),
+        // Provides a lifecycle-aware holder that attaches a WidgetsBindingObserver and owns the DB instance.
+        // This provider may stay lazy; it will be created when `AppDatabase` is first requested.
+        Provider<AppDatabaseLifecycleHolder>(
+          create: _createAppDatabaseLifecycleHolder,
+          dispose: _disposeAppDatabaseLifecycleHolder,
+        ),
+        // Provides `AppDatabase` by reading it from `AppDatabaseLifecycleHolder`.
+        // When this provider is read, it triggers creation of the holder first (provider is lazy).
+        Provider<AppDatabase>(create: (context) => context.read<AppDatabaseLifecycleHolder>().db),
         Provider<ConnectivityService>(create: _createConnectivityService, dispose: _disposeConnectivityService),
       ],
       child: Builder(
         builder: (context) {
           final prefs = context.read<AppPreferences>();
-          final database = context.read<AppDatabase>();
-          final webtritApiClientFactory = context.read<WebtritApiClientFactory>();
           final appMetadataProvider = context.read<AppMetadataProvider>();
           final presenceDeviceName = appMetadataProvider.userAgent;
-
-          final systemInfoRepository = instanceRegistry.get<SystemInfoRepository>();
 
           final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(prefs);
           final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(prefs, presenceDeviceName);
           final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(prefs);
-          final callerIdSettingsRepository = CallerIdSettingsRepositoryPrefsImpl(prefs);
           final userAgreementStatusRepository = UserAgreementStatusRepositoryPrefsImpl(prefs);
           final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(prefs);
           final activeContactSourceTypeRepository = ActiveContactSourceTypeRepositoryPrefsImpl(prefs);
@@ -117,33 +120,6 @@ class RootApp extends StatelessWidget {
           final themeModeRepository = ThemeModeRepositoryPrefsImpl(prefs);
           final autocompleteHistoryRepository = AutocompleteHistoryRepositoryPrefsImpl(prefs);
 
-          final sessionRepository = SessionRepositoryImpl(
-            secureStorage: context.read<SecureStorage>(),
-            sessionCleanupWorker: instanceRegistry.get<SessionCleanupWorker>(),
-            apiClientFactory: webtritApiClientFactory,
-
-            /// TODO(Vlad): maybe consider refactoring this code to use some kind of higher-level "LogoutController" instead of hooking repositories here
-            onLogout: () async {
-              await database.deleteEverything(); // TODO: clear using repos instead of direct access
-              await systemInfoRepository.clear();
-              await registerStatusRepository.clear();
-              await presenceSettingsRepository.clear();
-              await activeMainFlavorRepository.clear();
-              await callerIdSettingsRepository.clear();
-              await activeRecentsVisibilityFilterRepository.clear();
-              await activeContactSourceTypeRepository.clear();
-              await audioProcessingSettingsRepository.clear();
-              await encodingPresetRepository.clear();
-              await iceSettingsRepository.clear();
-              await incomingCallTypeRepository.clear();
-              await peerConnectionSettingsRepository.clear();
-              await videoCapturingSettingsRepository.clear();
-              await encodingSettingsRepository.clear();
-              await localeRepository.clear();
-              await themeModeRepository.clear();
-            },
-          );
-
           return MultiRepositoryProvider(
             providers: [
               RepositoryProvider<LogRecordsRepository>(
@@ -154,8 +130,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
               RepositoryProvider<ActiveMainFlavorRepository>.value(value: activeMainFlavorRepository),
-              RepositoryProvider<SessionRepository>.value(value: sessionRepository),
-              RepositoryProvider<CallerIdSettingsRepository>.value(value: callerIdSettingsRepository),
+              RepositoryProvider<SessionRepository>.value(value: instanceRegistry.get<SessionRepository>()),
               RepositoryProvider<UserAgreementStatusRepository>.value(value: userAgreementStatusRepository),
               RepositoryProvider<ActiveRecentsVisibilityFilterRepository>.value(
                 value: activeRecentsVisibilityFilterRepository,
@@ -176,7 +151,8 @@ class RootApp extends StatelessWidget {
                 create: (_) => instanceRegistry.get(),
                 dispose: disposeIfDisposable,
               ),
-              RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get(), dispose: disposeIfDisposable),
+              RepositoryProvider<UserLocalDatasource>(create: (_) => instanceRegistry.get()),
+              RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get()),
             ],
             child: const App(),
           );
@@ -185,33 +161,30 @@ class RootApp extends StatelessWidget {
     );
   }
 
-  AppDatabase _createAppDatabase(BuildContext _) {
-    final appDatabase = _AppDatabaseWithAppLifecycleStateObserver(
-      createAppDatabaseConnection(
-        instanceRegistry.get<AppPath>().applicationDocumentsPath,
-        'db.sqlite',
-        logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
-      ),
-    );
-    WidgetsBinding.instance.addObserver(appDatabase);
-    return appDatabase;
+  AppDatabaseLifecycleHolder _createAppDatabaseLifecycleHolder(BuildContext context) {
+    final driftIsolate = instanceRegistry.get<DriftIsolate>();
+    // Establish the connection; the IPC handshake to the server isolate starts when this Future is created.
+    final db = AppDatabase(DatabaseConnection.delayed(driftIsolate.connect()));
+    return AppDatabaseLifecycleHolder(db, driftIsolate)..attach();
   }
 
-  void _disposeAppDatabase(BuildContext _, AppDatabase value) {
-    final appDatabase = value as _AppDatabaseWithAppLifecycleStateObserver;
-    WidgetsBinding.instance.removeObserver(appDatabase);
-    appDatabase.close();
+  Future<void> _disposeAppDatabaseLifecycleHolder(BuildContext _, AppDatabaseLifecycleHolder holder) async {
+    await holder.dispose();
   }
 
   ConnectivityService _createConnectivityService(BuildContext context) {
-    final executor = context.read<WebtritApiClientFactory>().createHttpRequestExecutor();
+    final customUrl = EnvironmentConfig.CONNECTIVITY_CHECK_URL;
+    final apiFactory = context.read<WebtritApiClientFactory>();
 
-    return ConnectivityServiceImpl(
-      connectivityChecker: DefaultConnectivityChecker(
-        connectivityCheckUrl: EnvironmentConfig.CONNECTIVITY_CHECK_URL,
-        createHttpRequestExecutor: executor,
+    final connectivityChecker = switch (customUrl) {
+      String url => CustomConnectivityChecker(
+        connectivityCheckUrl: url,
+        createHttpRequestExecutor: apiFactory.createHttpRequestExecutor(),
       ),
-    );
+      null => DefaultConnectivityChecker(apiClient: apiFactory.createWebtritApiClient()),
+    };
+
+    return ConnectivityServiceImpl(connectivityChecker: connectivityChecker);
   }
 
   void _disposeConnectivityService(BuildContext _, ConnectivityService value) {
@@ -219,13 +192,29 @@ class RootApp extends StatelessWidget {
   }
 }
 
-class _AppDatabaseWithAppLifecycleStateObserver extends AppDatabase with WidgetsBindingObserver {
-  _AppDatabaseWithAppLifecycleStateObserver(super.e);
+class AppDatabaseLifecycleHolder with WidgetsBindingObserver {
+  AppDatabaseLifecycleHolder(this.db, this._driftIsolate);
+
+  final AppDatabase db;
+  final DriftIsolate _driftIsolate;
+
+  void attach() => WidgetsBinding.instance.addObserver(this);
+
+  void detach() => WidgetsBinding.instance.removeObserver(this);
+
+  Future<void> dispose() async {
+    detach();
+    await db.close();
+    IsolateNameServer.removePortNameMapping(IsolateDatabase.kDbPortName);
+    _driftIsolate.shutdownAll();
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.detached) {
-      close();
+      // Close the main-isolate client connection. The server isolate stays alive
+      // until dispose() is called or all clients disconnect.
+      unawaited(db.close());
     }
   }
 }

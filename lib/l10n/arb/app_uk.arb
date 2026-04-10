@@ -4,6 +4,43 @@
   "@account_selfCarePasswordExpired_message": {
     "description": "Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted."
   },
+  "agoTicker_daysAgo": "{days, plural, zero{} one{{days} день тому} few{{days} дні тому} many{{days} днів тому} other{{days} днів тому}}",
+  "@agoTicker_daysAgo": {
+    "description": "Elapsed time relative to now, shown in days.",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_hoursAgo": "{hours, plural, zero{} one{{hours} годину тому} few{{hours} години тому} many{{hours} годин тому} other{{hours} годин тому}}",
+  "@agoTicker_hoursAgo": {
+    "description": "Elapsed time relative to now, shown in hours.",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_minutesAgo": "{minutes, plural, zero{} one{{minutes} хвилину тому} few{{minutes} хвилини тому} many{{minutes} хвилин тому} other{{minutes} хвилин тому}}",
+  "@agoTicker_minutesAgo": {
+    "description": "Elapsed time relative to now, shown in minutes.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_secondsAgo": "{seconds, plural, zero{} one{{seconds} секунду тому} few{{seconds} секунди тому} many{{seconds} секунд тому} other{{seconds} секунд тому}}",
+  "@agoTicker_secondsAgo": {
+    "description": "Elapsed time relative to now, shown in seconds.",
+    "placeholders": {
+      "seconds": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
   "alertDialogActions_no": "Ні",
   "@alertDialogActions_no": {},
   "alertDialogActions_ok": "Ок",
@@ -22,7 +59,7 @@
   "@autoprovision_ReloginDialog_text": {},
   "autoprovision_ReloginDialog_title": "Підтвердження повторного входу",
   "@autoprovision_ReloginDialog_title": {},
-  "autoprovision_successSnackBar_used": "Ваші налаштування було успішно отримано, додаток готовий до використання",
+  "autoprovision_successSnackBar_used": "Ваші налаштування було успішно отримано, застосунок готовий до використання",
   "@autoprovision_successSnackBar_used": {},
   "call_CallActionsTooltip_accept": "Прийняти",
   "@call_CallActionsTooltip_accept": {},
@@ -140,8 +177,32 @@
   "@callStatus_inProgress": {},
   "callStatus_ready": "Підключення встановлено",
   "@callStatus_ready": {},
+  "call_SystemErrorDialog_description": "Щоб відновити можливість здійснювати дзвінки, необхідно перезавантажити телефон. Це виправить тимчасову системну помилку.",
+  "@call_SystemErrorDialog_description": {},
+  "call_SystemErrorDialog_title": "Системна помилка",
+  "@call_SystemErrorDialog_title": {},
   "call_ThumbnailAvatar_currentlyNoActiveCall": "Зараз немає активних дзвінків",
   "@call_ThumbnailAvatar_currentlyNoActiveCall": {},
+  "call_videoBackground_actionLabel_disableBlur": "Вимкнути розмиття",
+  "@call_videoBackground_actionLabel_disableBlur": {
+    "description": "Button label shown when the video background is currently blurred. Clicking this will turn off the blur effect."
+  },
+  "call_videoBackground_actionLabel_enableBlur": "Увімкнути розмиття",
+  "@call_videoBackground_actionLabel_enableBlur": {
+    "description": "Button label shown when the video background is normal (no blur). Clicking this will turn on the blur effect."
+  },
+  "call_videoView_actionLabel_cover": "Заповнити",
+  "@call_videoView_actionLabel_cover": {
+    "description": "Button label to switch the video view mode to 'Cover' (fills the entire area, potentially cropping edges). Shown when the video is currently in 'Fit' mode."
+  },
+  "call_videoView_actionLabel_fit": "Вмістити",
+  "@call_videoView_actionLabel_fit": {
+    "description": "Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode."
+  },
+  "cdrs_noMissedCalls_message": "Немає пропущених дзвінків",
+  "@cdrs_noMissedCalls_message": {},
+  "cdrs_noRecentCalls_message": "Немає останніх дзвінків",
+  "@cdrs_noRecentCalls_message": {},
   "common_noInternetConnection_message": "Схоже, ви не підключені до Інтернету. Перевірте своє підключення і спробуйте ще раз.",
   "@common_noInternetConnection_message": {},
   "common_noInternetConnection_retryButton": "Спробуйте ще раз",
@@ -152,9 +213,9 @@
   "@common_problemWithLoadingPage": {},
   "contacts_agreement_button_text": "Продовжити",
   "@contacts_agreement_button_text": {},
-  "contacts_agreement_checkbox_text": "Я погоджуюсь дозволити додатку доступ до моїх контактів для покращення користувацького досвіду.",
+  "contacts_agreement_checkbox_text": "Я погоджуюсь дозволити застосунку доступ до моїх контактів для покращення досвіду користувача.",
   "@contacts_agreement_checkbox_text": {},
-  "contacts_agreement_description": "Цей додаток потребує доступу до вашого списку контактів, щоб відображати їх у вкладці «Контакти» додатку. \n\nДані контактів тимчасово зберігаються локально на вашому пристрої для забезпечення функцій, таких як здійснення дзвінків прямо з додатку. \n\nЦі дані не збираються, не передаються та не поширюються за межами додатку.",
+  "contacts_agreement_description": "Цей застосунок потребує доступу до вашого списку контактів, щоб відображати їх у вкладці «Контакти» застосунку. \n\nДані контактів тимчасово зберігаються локально на вашому пристрої для забезпечення функцій, таких як здійснення дзвінків прямо зі застосунку. \n\nЦі дані не збираються, не передаються та не поширюються за межами застосунку.",
   "@contacts_agreement_description": {},
   "contacts_agreement_title": "Збір даних",
   "@contacts_agreement_title": {},
@@ -311,21 +372,21 @@
   "@diagnostic_AppBar_title": {},
   "diagnostic_battery_groupTitle": "Батарея",
   "@diagnostic_battery_groupTitle": {},
-  "diagnostic_batteryMode_optimized_description": "Фонова активність додатка керується системою для економії батареї. Може працювати некоректно для вхідних дзвінків, що активуються через push-сповіщення.",
+  "diagnostic_batteryMode_optimized_description": "Фонова активність застосунку керується системою для економії батареї. Може працювати некоректно для вхідних дзвінків, що активуються через push-сповіщення.",
   "@diagnostic_batteryMode_optimized_description": {},
   "diagnostic_batteryMode_optimized_title": "Оптимізовано",
   "@diagnostic_batteryMode_optimized_title": {},
-  "diagnostic_batteryMode_restricted_description": "Фонова активність додатка обмежена для економії заряду батареї. Вхідні дзвінки можуть бути пропущені. ",
+  "diagnostic_batteryMode_restricted_description": "Фонова активність застосунку обмежена для економії заряду батареї. Вхідні дзвінки можуть бути пропущені. ",
   "@diagnostic_batteryMode_restricted_description": {},
   "diagnostic_batteryMode_restricted_title": "Обмежено",
   "@diagnostic_batteryMode_restricted_title": {},
-  "diagnostic_batteryMode_unknown_description": "Статус режиму батареї невідомий. Додаток може поводитися непередбачувано.",
+  "diagnostic_batteryMode_unknown_description": "Статус режиму батареї невідомий. Застосунок може поводитися непередбачувано.",
   "@diagnostic_batteryMode_unknown_description": {
     "description": "Shown in the Diagnostics > Battery section when the app cannot determine the current battery mode. Condition: system does not provide battery mode info, which may lead to unpredictable app behavior."
   },
   "diagnostic_batteryMode_unknown_title": "Невідомо",
   "@diagnostic_batteryMode_unknown_title": {},
-  "diagnostic_batteryMode_unrestricted_description": "Додаток має повний доступ для роботи у фоновому режимі без обмежень.",
+  "diagnostic_batteryMode_unrestricted_description": "Застосунок має повний доступ для роботи у фоновому режимі без обмежень.",
   "@diagnostic_batteryMode_unrestricted_description": {},
   "diagnostic_batteryMode_unrestricted_title": "Без обмежень",
   "@diagnostic_batteryMode_unrestricted_title": {},
@@ -333,11 +394,11 @@
   "@diagnostic_battery_navigate_section": {},
   "diagnostic_battery_tile_title": "Режим батареї",
   "@diagnostic_battery_tile_title": {},
-  "diagnostic_permission_camera_description": "Цей додаток потребує дозволу на доступ до камери для здійснення відеодзвінків.",
+  "diagnostic_permission_camera_description": "Цей застосунок потребує дозволу на доступ до камери для здійснення відеодзвінків.",
   "@diagnostic_permission_camera_description": {},
   "diagnostic_permission_camera_title": "Камера",
   "@diagnostic_permission_camera_title": {},
-  "diagnostic_permission_contacts_description": "Цей додаток потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.",
+  "diagnostic_permission_contacts_description": "Цей застосунок потребує дозволу на доступ до контактів для здійснення дзвінків із вашої телефонної книги.",
   "@diagnostic_permission_contacts_description": {},
   "diagnostic_permission_contacts_title": "Контакти",
   "@diagnostic_permission_contacts_title": {},
@@ -347,11 +408,11 @@
   "@diagnosticPermissionDetails_button_requestPermission": {},
   "diagnosticPermissionDetails_title_statusPermission": "Статус дозволу",
   "@diagnosticPermissionDetails_title_statusPermission": {},
-  "diagnostic_permission_microphone_description": "Цей додаток потребує дозволу на доступ до мікрофона для здійснення аудіодзвінків.",
+  "diagnostic_permission_microphone_description": "Цей застосунок потребує дозволу на доступ до мікрофона для здійснення аудіодзвінків.",
   "@diagnostic_permission_microphone_description": {},
   "diagnostic_permission_microphone_title": "Мікрофон",
   "@diagnostic_permission_microphone_title": {},
-  "diagnostic_permission_notification_description": "Дозволяє додатку активувати вхідні дзвінки.",
+  "diagnostic_permission_notification_description": "Дозволяє застосунку активувати вхідні дзвінки.",
   "@diagnostic_permission_notification_description": {},
   "diagnostic_permission_notification_title": "Сповіщення",
   "@diagnostic_permission_notification_title": {},
@@ -387,7 +448,39 @@
   "@diagnostic_pushTokenStatusType_progress": {},
   "diagnostic_pushTokenStatusType_success": "Службу успішно налаштовано",
   "@diagnostic_pushTokenStatusType_success": {},
-  "diagnosticScreen_contacts_agreement_description": "Дозвольте додатку отримати доступ до ваших контактів для покращення користувацького досвіду.",
+  "diagnosticReportDialogAddNoteExpansionTileTitle": "Додати примітку (необов’язково)",
+  "@diagnosticReportDialogAddNoteExpansionTileTitle": {
+    "description": "Title for the expandable section where users can add manual comments."
+  },
+  "diagnosticReportDialogCancelButtonLabel": "Скасувати",
+  "@diagnosticReportDialogCancelButtonLabel": {
+    "description": "Label for the button that closes the dialog without action."
+  },
+  "diagnosticReportDialogCommentTextFieldHintText": "Опишіть, що трапилося...",
+  "@diagnosticReportDialogCommentTextFieldHintText": {
+    "description": "Placeholder hint text displayed inside the comment text field."
+  },
+  "diagnosticReportDialogContent": "Цей звіт містить технічні дані, які допоможуть нам виявити проблеми з підключенням.",
+  "@diagnosticReportDialogContent": {
+    "description": "The main body text explaining what the diagnostic report is for."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": "Потрібні додаткові дозволи.",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": {
+    "description": "Subtitle text under the system logs switch indicating permission requirements."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": "Додати системні логи",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": {
+    "description": "The label for the switch toggle that allows the user to attach system logs."
+  },
+  "diagnosticReportDialogSendReportButtonLabel": "Надіслати звіт",
+  "@diagnosticReportDialogSendReportButtonLabel": {
+    "description": "Label for the button that submits the diagnostic report."
+  },
+  "diagnosticReportDialogTitle": "Надіслати звіт про діагностику",
+  "@diagnosticReportDialogTitle": {
+    "description": "The title shown at the top of the diagnostic report dialog."
+  },
+  "diagnosticScreen_contacts_agreement_description": "Дозвольте застосунку отримати доступ до ваших контактів для покращення досвіду користувача.",
   "@diagnosticScreen_contacts_agreement_description": {},
   "diagnosticScreen_contacts_agreement_group_title": "Угода",
   "@diagnosticScreen_contacts_agreement_group_title": {},
@@ -397,38 +490,6 @@
   "@diagnosticScreen_permissionsGroup_title": {},
   "diagnosticScreen_pushNotificationService_title": "Служба push-сповіщень",
   "@diagnosticScreen_pushNotificationService_title": {},
-  "diagnosticReportDialogTitle": "Надіслати звіт про діагностику",
-  "@diagnosticReportDialogTitle": {
-    "description": "The title shown at the top of the diagnostic report dialog."
-  },
-  "diagnosticReportDialogContent": "Цей звіт містить технічні дані, які допоможуть нам виявити проблеми з підключенням.",
-  "@diagnosticReportDialogContent": {
-    "description": "The main body text explaining what the diagnostic report is for."
-  },
-  "diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": "Додати системні логи",
-  "@diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": {
-    "description": "The label for the switch toggle that allows the user to attach system logs."
-  },
-  "diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": "Потрібні додаткові дозволи.",
-  "@diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": {
-    "description": "Subtitle text under the system logs switch indicating permission requirements."
-  },
-  "diagnosticReportDialogAddNoteExpansionTileTitle": "Додати примітку (необов’язково)",
-  "@diagnosticReportDialogAddNoteExpansionTileTitle": {
-    "description": "Title for the expandable section where users can add manual comments."
-  },
-  "diagnosticReportDialogCommentTextFieldHintText": "Опишіть, що трапилося...",
-  "@diagnosticReportDialogCommentTextFieldHintText": {
-    "description": "Placeholder hint text displayed inside the comment text field."
-  },
-  "diagnosticReportDialogCancelButtonLabel": "Скасувати",
-  "@diagnosticReportDialogCancelButtonLabel": {
-    "description": "Label for the button that closes the dialog without action."
-  },
-  "diagnosticReportDialogSendReportButtonLabel": "Надіслати звіт",
-  "@diagnosticReportDialogSendReportButtonLabel": {
-    "description": "Label for the button that submits the diagnostic report."
-  },
   "favorites_BodyCenter_empty": "Наразі у вас немає обраних номерів.\nДодайте обрані номери з Контактів, використовуючи іконку \"зірочка\"",
   "@favorites_BodyCenter_empty": {},
   "favorites_DeleteConfirmDialog_content": "Ви впевнені, що хочете видалити поточний обраний номер?",
@@ -559,11 +620,11 @@
   "@login_RequestFailurePhoneNotFoundError": {
     "description": "Shown during login or signup when the user provides a phone number that cannot be found in the system. Condition: the entered phone number does not exist or is not recognized by the backend."
   },
-  "login_RequestFailureUnconfiguredBundleIdError": "Помилка конфігурації сервера додатка - сповістіть свого постачальника послуг",
+  "login_RequestFailureUnconfiguredBundleIdError": "Помилка конфігурації сервера застосунку - сповістіть свого постачальника послуг",
   "@login_RequestFailureUnconfiguredBundleIdError": {
     "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."
   },
-  "login_SupportedLoginTypeMissedExceptionError": "Поточний WebTrit Cloud Backend не підтримує жодного типу входу, сумісного з цим додатком",
+  "login_SupportedLoginTypeMissedExceptionError": "Поточний WebTrit Cloud Backend не підтримує жодного типу входу, сумісного з цим застосунком",
   "@login_SupportedLoginTypeMissedExceptionError": {
     "description": "Shown during login or signup when the WebTrit Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods."
   },
@@ -867,6 +928,10 @@
   "@messaging_MessageView_reply": {},
   "messaging_MessageView_textcopy": "Копіювати в буфер обміну",
   "@messaging_MessageView_textcopy": {},
+  "messaging_MessageView_today": "Сьогодні",
+  "@messaging_MessageView_today": {},
+  "messaging_MessageView_yesterday": "Вчора",
+  "@messaging_MessageView_yesterday": {},
   "messaging_ParticipantName_unknown": "Невідомий користувач",
   "@messaging_ParticipantName_unknown": {
     "description": "Shown when a participant in a conversation does not have a known or available name. Condition: the user's name is missing or cannot be retrieved."
@@ -901,15 +966,15 @@
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {
     "description": "Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target."
   },
-  "notifications_errorSnackBar_appOffline": "Ваш додаток зараз офлайн.",
+  "notifications_errorSnackBar_appOffline": "Ваш застосунок зараз офлайн.",
   "@notifications_errorSnackBar_appOffline": {
     "description": "Shown in a notification or snackbar when the application is offline. Condition: the app loses connection to the server or network and cannot perform online actions."
   },
-  "notifications_errorSnackBar_appOnline": "Ваш додаток онлайн.",
+  "notifications_errorSnackBar_appOnline": "Ваш застосунок онлайн.",
   "@notifications_errorSnackBar_appOnline": {
     "description": "Shown in a notification or snackbar when the application successfully reconnects and is online. Condition: the app transitions from offline/disconnected to an online state."
   },
-  "notifications_errorSnackBar_appUnregistered": "Вибачте, ваш додаток наразі відключений від серверів WebTrit і не може здійснювати дзвінки. Будь ласка, перейдіть на сторінку налаштувань і перемкніть вимикач стану онлайн у вимкнуте та знову в увімкнуте положення, щоб відновити з'єднання.",
+  "notifications_errorSnackBar_appUnregistered": "Вибачте, ваш застосунок наразі відключений від серверів WebTrit і не може здійснювати дзвінки. Будь ласка, перейдіть на сторінку налаштувань і перемкніть вимикач стану онлайн у вимкнуте та знову в увімкнуте положення, щоб відновити з'єднання.",
   "@notifications_errorSnackBar_appUnregistered": {
     "description": "Shown in a notification or snackbar (call screen or global) when the app is disconnected from the WebTrit core servers and cannot place calls. Condition: registration with the core is lost due to network/connectivity issues, authentication failure (e.g. SIP 401 Unauthorized), signaling timeout (e.g. SIP 408 Request Timeout) or server-side errors (e.g. SIP 503 Service Unavailable); user may need to reauthenticate or toggle the online status in settings."
   },
@@ -933,7 +998,7 @@
   "@notifications_errorSnackBar_callUndefinedLine": {
     "description": "Shown in a snackbar when the user attempts to start a call but there is no outbound line available. Context: occurs at call initiation when no SIP/VoIP line is assigned or registered, all lines are disabled or busy, or the line was removed/disabled by an administrator; typical causes: unassigned or unregistered SIP line, account/line disabled, or concurrent channel limits."
   },
-  "notifications_errorSnackBar_callUserMedia": "Немає доступу до медіа-входу, будь ласка, перевірте дозволи програми",
+  "notifications_errorSnackBar_callUserMedia": "Немає доступу до медіа-входу, будь ласка, перевірте дозволи застосунку",
   "@notifications_errorSnackBar_callUserMedia": {
     "description": "Shown in a notification or snackbar when the app cannot access camera or microphone required for a call. Context: occurs when getUserMedia or platform permission check fails; typical causes include the user denying camera/microphone permission, OS-level restriction or revoked permission, missing runtime permission (Android), or the device hardware being busy or unavailable."
   },
@@ -995,11 +1060,11 @@
   "@notifications_errorSnackBar_sipServiceUnavailable": {
     "description": "Shown in a notification or snackbar when authentication with the remote VoIP/SIP system fails or the service is unavailable. Typical causes: authentication rejection (invalid/expired credentials), remote service maintenance or outage, or transient network/TLS issues. Advise the user to verify account credentials, retry later, and contact their administrator or support if the problem persists."
   },
-  "notifications_messageSnackBar_appOffline": "Ваш додаток зараз офлайн.",
+  "notifications_messageSnackBar_appOffline": "Ваш застосунок зараз офлайн.",
   "@notifications_messageSnackBar_appOffline": {
     "description": "Shown in a non-error informational snackbar when the app transitions to offline. Typical causes: loss of network connectivity (airplane mode, Wi‑Fi or cellular drop), captive portal, or temporary carrier/Wi‑Fi outage. Suggest the user check their connection and retry."
   },
-  "notifications_successSnackBar_appOnline": "Ваш додаток онлайн.",
+  "notifications_successSnackBar_appOnline": "Ваш застосунок онлайн.",
   "@notifications_successSnackBar_appOnline": {},
   "numberActions_audioCall": "Aудіо дзвінок",
   "@numberActions_audioCall": {},
@@ -1037,17 +1102,17 @@
   "@permission_manageFullScreenNotificationInstructions_step2": {},
   "permission_manageFullScreenNotificationInstructions_step3": "Знайдіть і натисніть «Керування повноекранними намірами».\n",
   "@permission_manageFullScreenNotificationInstructions_step3": {},
-  "permission_manageFullScreenNotificationInstructions_step4": "Виберіть додаток, для якого потрібно керувати повноекранними сповіщеннями.",
+  "permission_manageFullScreenNotificationInstructions_step4": "Виберіть застосунок, для якого потрібно керувати повноекранними сповіщеннями.",
   "@permission_manageFullScreenNotificationInstructions_step4": {},
-  "permission_manageFullScreenNotificationInstructions_step5": "Увімкніть або вимкніть дозвіл для повноекранних сповіщень цього додатка.",
+  "permission_manageFullScreenNotificationInstructions_step5": "Увімкніть або вимкніть дозвіл для повноекранних сповіщень цього застосунку.",
   "@permission_manageFullScreenNotificationInstructions_step5": {},
   "permission_manageFullScreenNotificationPermissions": "Manage Full-Screen Notification Permissions",
   "@permission_manageFullScreenNotificationPermissions": {},
   "permission_manufacturer_Button_gotIt": "Зрозуміло",
   "@permission_manufacturer_Button_gotIt": {},
-  "permission_manufacturer_Button_toSettings": "Відкрийте налаштування програми",
+  "permission_manufacturer_Button_toSettings": "Відкрийте налаштування застосунку",
   "@permission_manufacturer_Button_toSettings": {},
-  "permission_manufacturer_Text_heading": "Щоб забезпечити найкращу взаємодію з користувачем, програмі потрібно вручну надати такі дозволи:",
+  "permission_manufacturer_Text_heading": "Щоб забезпечити найкращу взаємодію з користувачем, застосунку потрібно вручну надати такі дозволи:",
   "@permission_manufacturer_Text_heading": {},
   "permission_manufacturer_Text_trailing": "Дозволи можуть бути змінені в будь-який час у майбутньому.",
   "@permission_manufacturer_Text_trailing": {},
@@ -1055,7 +1120,7 @@
   "@permission_manufacturer_Text_xiaomi_tip1": {},
   "permission_manufacturer_Text_xiaomi_tip2": "Знайдіть і ввімкніть «Сповіщення на екрані блокування».",
   "@permission_manufacturer_Text_xiaomi_tip2": {},
-  "permission_Text_description": "Для забезпечення найкращого досвіду користувача програма потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в програмі.\n\nДозволи можуть бути змінені у майбутньому.",
+  "permission_Text_description": "Для забезпечення найкращого досвіду користувача застосунок потребує наступні дозволи: мікрофон для аудіодзвінків, камера для відеодзвінків та доступ до контактів для спрощення їх використання в застосунку.\n\nДозволи можуть бути змінені у майбутньому.",
   "@permission_Text_description": {},
   "persistentConnectionReminderContent": "Потрібно вручну запустити застосунок щонайменше один раз після перезавантаження телефону, щоб відновити постійне з'єднання й отримувати вхідні дзвінки.",
   "@persistentConnectionReminderContent": {
@@ -1097,14 +1162,16 @@
   "@presence_infoView_activity": {},
   "presence_infoView_available": "Доступний:",
   "@presence_infoView_available": {},
-  "presence_infoView_available_false": "Ні",
+  "presence_infoView_available_false": "Недоступний",
   "@presence_infoView_available_false": {},
-  "presence_infoView_available_true": "Так",
+  "presence_infoView_available_true": "Доступний",
   "@presence_infoView_available_true": {},
   "presence_infoView_client": "Клієнт:",
   "@presence_infoView_client": {},
   "presence_infoView_device": "Пристрій:",
   "@presence_infoView_device": {},
+  "presence_infoView_localTime": "Місцевий час:",
+  "@presence_infoView_localTime": {},
   "presence_infoView_note": "Примітка:",
   "@presence_infoView_note": {},
   "presence_infoView_statusIcon": "Іконка статусу:",
@@ -1245,12 +1312,18 @@
   "@request_StatusName": {},
   "sessionStatus_pushNotificationServiceProblem": "Проблема з налаштуванням служби пуш-сповіщень",
   "@sessionStatus_pushNotificationServiceProblem": {},
+  "session_Teardown_progressText": "Вихід із системи...",
+  "@session_Teardown_progressText": {
+    "description": "Status message displayed while the application is performing cleanup during the logout process."
+  },
   "settings_AboutText_ApplicationEmbeddedLinks": "Вбудовані посилання застосунку",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AboutText_AppSessionIdentifier": "Ідентифікатор сесії застосунку",
   "@settings_AboutText_AppSessionIdentifier": {},
-  "settings_AboutText_AppVersion": "Версія додатка",
+  "settings_AboutText_AppVersion": "Версія застосунку",
   "@settings_AboutText_AppVersion": {},
+  "settings_AboutText_CoreVersion": "Версія WebTrit Cloud Backend",
+  "@settings_AboutText_CoreVersion": {},
   "settings_AboutText_CoreVersionUndefined": "?.?.?",
   "@settings_AboutText_CoreVersionUndefined": {},
   "settings_AboutText_FCMPushNotificationToken": "Токен для Push-повідомлень FCM",
@@ -1275,7 +1348,7 @@
   "@settings_audioProcessing_Section_NS_title": {},
   "settings_audioProcessing_Section_title": "Пре-обробка аудіо",
   "@settings_audioProcessing_Section_title": {},
-  "settings_audioProcessing_Section_tooltip": "Можна використовувати для налаштування якості аудіо для певних потреб або умов. Як-от студійний запис або зовнішній мікрофон. \n\nОбійти обробку голосу — повідомляє системі не застосовувати апаратну обробку голосу (потрібно перезапустити програму).",
+  "settings_audioProcessing_Section_tooltip": "Можна використовувати для налаштування якості аудіо для певних потреб або умов. Як-от студійний запис або зовнішній мікрофон. \n\nОбійти обробку голосу — повідомляє системі не застосовувати апаратну обробку голосу (потрібно перезапустити застосунок).",
   "@settings_audioProcessing_Section_tooltip": {},
   "settings_audioProcessing_Section_VP_title": "Обхід обробки голосу",
   "@settings_audioProcessing_Section_VP_title": {},
@@ -1365,20 +1438,32 @@
   "@settings_encoding_Section_packetization_tooltip": {},
   "settings_encoding_Section_preset": "Налаштування",
   "@settings_encoding_Section_preset": {},
-  "settings_encoding_Section_preset_balance": "Баланс",
+  "settings_encoding_Section_preset_balance": "Збалансований",
   "@settings_encoding_Section_preset_balance": {},
-  "settings_encoding_Section_preset_bypass": "Без втручання",
-  "@settings_encoding_Section_preset_bypass": {},
+  "settings_encoding_Section_preset_balance_tooltip": "Збалансовує якість дзвінків і використання даних.",
+  "@settings_encoding_Section_preset_balance_tooltip": {},
+  "settings_encoding_Section_preset_eco": "Низька пропускна здатність",
+  "@settings_encoding_Section_preset_eco": {},
+  "settings_encoding_Section_preset_eco_tooltip": "Використовує менше інтернет-даних і краще працює при повільному або нестабільному з'єднанні.",
+  "@settings_encoding_Section_preset_eco_tooltip": {},
   "settings_encoding_Section_preset_custom": "Ручна конфігурація",
   "@settings_encoding_Section_preset_custom": {},
-  "settings_encoding_Section_preset_default": "Стандарт",
+  "settings_encoding_Section_preset_custom_tooltip": "Вручну налаштовуйте параметри якості дзвінка.",
+  "@settings_encoding_Section_preset_custom_tooltip": {},
+  "settings_encoding_Section_preset_default": "Рекомендовано",
   "@settings_encoding_Section_preset_default": {},
-  "settings_encoding_Section_preset_eco": "Єко",
-  "@settings_encoding_Section_preset_eco": {},
+  "settings_encoding_Section_preset_default_tooltip": "Стандартні налаштування якості медіа, обрані для цієї програми. Підходить для більшості дзвінків.",
+  "@settings_encoding_Section_preset_default_tooltip": {},
+  "settings_encoding_Section_preset_bypass": "Режим сумісності",
+  "@settings_encoding_Section_preset_bypass": {},
+  "settings_encoding_Section_preset_bypass_tooltip": "Пропускає застосування налаштувань якості медіа та використовує незмінену конфігурацію дзвінка. Допомагає вирішити проблеми сумісності.",
+  "@settings_encoding_Section_preset_bypass_tooltip": {},
   "settings_encoding_Section_preset_full_flex": "Максимум",
   "@settings_encoding_Section_preset_full_flex": {},
-  "settings_encoding_Section_preset_quality": "Якість",
+  "settings_encoding_Section_preset_quality": "Найкраща якість",
   "@settings_encoding_Section_preset_quality": {},
+  "settings_encoding_Section_preset_quality_tooltip": "Забезпечує найкращу якість аудіо та відео. Вимагає швидкого та стабільного інтернет-з'єднання.",
+  "@settings_encoding_Section_preset_quality_tooltip": {},
   "settings_encoding_Section_preset_title": "Конфігурації кодування медіа",
   "@settings_encoding_Section_preset_title": {},
   "settings_encoding_Section_preset_tooltip": "Попередні налаштування для аудіо- та відеокодеків, нижчі значення зменшать використання смуги пропускання, але вплинуть на якість, вищі значення підвищать якість, а також використання смуги пропускання. Стандартне налаштування — це рекомендовані налаштування, надані вашим постачальником відповідно до його вподобань середовища.",
@@ -1423,9 +1508,9 @@
   "@settings_iceSettings_Section_netfilter_title": {},
   "settings_iceSettings_Section_noskip": "Без фільтрації",
   "@settings_iceSettings_Section_noskip": {},
-  "settings_iceSettings_Section_title": "Фільтрація ice-кандидатів",
+  "settings_iceSettings_Section_title": "Фільтрація ICE-кандидатів",
   "@settings_iceSettings_Section_title": {},
-  "settings_iceSettings_Section_tooltip": "Фільтр ice-кандидатів на основі параметрів мережі може допомогти уникнути проблем з мережею",
+  "settings_iceSettings_Section_tooltip": "Фільтр ICE-кандидатів на основі параметрів мережі може допомогти уникнути проблем з мережею",
   "@settings_iceSettings_Section_tooltip": {},
   "settings_iceSettings_Section_trfilter_skipTcp": "Пропустити TCP-кандидатів",
   "@settings_iceSettings_Section_trfilter_skipTcp": {},
@@ -1433,7 +1518,7 @@
   "@settings_iceSettings_Section_trfilter_skipUdp": {},
   "settings_iceSettings_Section_trfilter_title": "Транспортний протокол",
   "@settings_iceSettings_Section_trfilter_title": {},
-  "settings_ListViewTileTitle_about": "Про програму",
+  "settings_ListViewTileTitle_about": "Про застосунок",
   "@settings_ListViewTileTitle_about": {},
   "settings_ListViewTileTitle_accountDelete": "Видалити обліковий запис",
   "@settings_ListViewTileTitle_accountDelete": {},
@@ -1479,7 +1564,7 @@
   "@settings_LogoutConfirmDialog_title": {},
   "settings_missingMicrophoneIndicator_title": "Відсутній дозвіл на використання мікрофона. Неможливо здійснювати дзвінки.",
   "@settings_missingMicrophoneIndicator_title": {},
-  "settings_network_fallbackCalls_description": "Увімкніть резервний виклик через спеціально сформатоване SMS",
+  "settings_network_fallbackCalls_description": "Якщо push-сповіщення про виклик не доходять, застосунок отримає спеціальне SMS та покаже екран вхідного дзвінка.",
   "@settings_network_fallbackCalls_description": {
     "description": "Tooltip description for fallback SMS-based call trigger"
   },
@@ -1487,17 +1572,17 @@
   "@settings_network_fallbackCalls_title": {
     "description": "Title for fallback incoming calls section"
   },
-  "settings_network_incomingCallType_pushNotification_description": "Коли додаток не використовується, він зупиняється і споживає мінімальну кількість ресурсів, що допомагає заощаджувати заряд батареї. Під час вхідного дзвінка сервер <brand> надсилає push-сповіщення на телефон, після чого мобільна операційна система запускає додаток для обробки дзвінка. Однак цей метод не гарантує отримання всіх дзвінків, оскільки, якщо телефон довго не використовується, деякі версії Android можуть обмежувати отримання push-сповіщень, що може призвести до пропущеного дзвінка.",
+  "settings_network_incomingCallType_pushNotification_description": "Коли застосунок не використовується, він зупиняється і споживає мінімальну кількість ресурсів, що допомагає заощаджувати заряд батареї. Під час вхідного дзвінка сервер надсилає push-сповіщення на телефон, після чого мобільна операційна система запускає застосунок для обробки дзвінка. Однак цей метод не гарантує отримання всіх дзвінків, оскільки, якщо телефон довго не використовується, деякі версії Android можуть обмежувати отримання push-сповіщень, що може призвести до пропущеного дзвінка.",
   "@settings_network_incomingCallType_pushNotification_description": {},
   "settings_network_incomingCallType_pushNotification_title": "Push-сповіщення",
   "@settings_network_incomingCallType_pushNotification_title": {},
-  "settings_network_incomingCallType_socket_description": "Додаток продовжує працювати у фоновому режимі та завжди підтримує активне підключення до сервера. Це збільшує шанси отримати вхідний дзвінок, але може швидше розряджати батарею.",
+  "settings_network_incomingCallType_socket_description": "Застосунок продовжує працювати у фоновому режимі та завжди підтримує активне підключення до сервера. Це збільшує шанси отримати вхідний дзвінок, але може швидше розряджати батарею.",
   "@settings_network_incomingCallType_socket_description": {},
   "settings_network_incomingCallType_socket_title": "Постійне підключення до сервера",
   "@settings_network_incomingCallType_socket_title": {},
-  "settings_network_incomingCallType_title": "Тип вхідного дзвінка",
+  "settings_network_incomingCallType_title": "Отримання вхідних дзвінків",
   "@settings_network_incomingCallType_title": {},
-  "settings_network_smsFallback_toggle": "Резерв через SMS",
+  "settings_network_smsFallback_toggle": "SMS як резервний канал",
   "@settings_network_smsFallback_toggle": {
     "description": "Toggle label for enabling SMS fallback"
   },
@@ -1505,17 +1590,17 @@
   "@settings_videoCapturing_Section_framerate_prefix": {},
   "settings_videoCapturing_Section_framerate_title": "Частота кадрів зображення",
   "@settings_videoCapturing_Section_framerate_title": {},
-  "settings_videoCapturing_Section_resolution_prefix": "вертикальних точйок: ",
+  "settings_videoCapturing_Section_resolution_prefix": "вертикальних точок: ",
   "@settings_videoCapturing_Section_resolution_prefix": {},
   "settings_videoCapturing_Section_resolution_title": "Роздільна здатність зображення",
   "@settings_videoCapturing_Section_resolution_title": {},
-  "settings_videoCapturing_Section_title": "Захват відео",
+  "settings_videoCapturing_Section_title": "Захоплення відео",
   "@settings_videoCapturing_Section_title": {},
   "settings_videoCapturing_Section_tooltip": "Можна використовувати для налаштування якості відео для певних потреб або умов.",
   "@settings_videoCapturing_Section_tooltip": {},
   "settings_videoOffer_option_ignore": "Відповідати без відео\nТрек не буде додано, якщо це не буде узгоджено пізніше.",
   "@settings_videoOffer_option_ignore": {},
-  "settings_videoOffer_option_includeInactive": "Включити неактивний відеотрек\nЗабезпечує сумісність із відеопропозиціями для майбутньої активації.",
+  "settings_videoOffer_option_includeInactive": "Увімкнути неактивний відеотрек\nЗабезпечує сумісність із відеопропозиціями для майбутньої активації.",
   "@settings_videoOffer_option_includeInactive": {},
   "settings_videoOffer_title": "Визначте, як цей пристрій реагує на пропозицію, що містить відео.",
   "@settings_videoOffer_title": {},
@@ -1615,7 +1700,7 @@
   "@signalingResponseCode_notFoundRoutesInReplyFromBE": {
     "description": "Shown when the backend does not return any routing information for the request. Condition: misconfigured routing tables or no available trunks."
   },
-  "signalingResponseCode_pluginNotFound": "Не знайдено необхідного компонента. Спробуйте перезапустити додаток.",
+  "signalingResponseCode_pluginNotFound": "Не знайдено необхідного компонента. Спробуйте перезапустити застосунок.",
   "@signalingResponseCode_pluginNotFound": {
     "description": "Shown when the requested Janus plugin is not found or unavailable. Cause: wrong plugin name, not loaded on server, or removed."
   },
@@ -1647,7 +1732,7 @@
   "@signalingResponseCodeType_callHangup": {
     "description": "Category for errors where the call is terminated. Causes include normal hangup, busy, declined, or signaling errors."
   },
-  "signalingResponseCodeType_plugin": "Не працює необхідна функція. Спробуйте перезапустити додаток.",
+  "signalingResponseCodeType_plugin": "Не працює необхідна функція. Спробуйте перезапустити застосунок.",
   "@signalingResponseCodeType_plugin": {
     "description": "Category for errors related to Janus plugins (attach, detach, plugin not found)."
   },
@@ -1655,7 +1740,7 @@
   "@signalingResponseCodeType_request": {
     "description": "Category for errors caused by malformed or unsupported requests in signaling."
   },
-  "signalingResponseCodeType_session": "Виникла проблема з вашою сесією. Будь ласка, увійдіть у систему знову або перезапустіть додаток.",
+  "signalingResponseCodeType_session": "Виникла проблема з вашою сесією. Будь ласка, увійдіть у систему знову або перезапустіть застосунок.",
   "@signalingResponseCodeType_session": {
     "description": "Category for errors related to sessions (session not found, session ID in use)."
   },
@@ -1813,6 +1898,10 @@
   "@validationBlankError": {},
   "voicemail_Description_notSupported": "Функція голосової пошти не підтримується у вашій системі. Зверніться до адміністратора для отримання додаткової інформації.",
   "@voicemail_Description_notSupported": {},
+  "voicemail_Dialog_deleteSelectedContent": "Обрані голосові повідомлення будуть остаточно видалені. Чи хочете ви продовжити?",
+  "@voicemail_Dialog_deleteSelectedContent": {},
+  "voicemail_Dialog_deleteSelectedTitle": "Видалити обрані голосові повідомлення?",
+  "@voicemail_Dialog_deleteSelectedTitle": {},
   "voicemail_Dialog_deleteSingleContent": "Це голосове повідомлення буде остаточно видалено. Бажаєте продовжити?",
   "@voicemail_Dialog_deleteSingleContent": {},
   "voicemail_Dialog_deleteSingleTitle": "Видалити голосове повідомлення?",
@@ -1831,8 +1920,12 @@
   "@voicemail_Label_markAsHeard": {},
   "voicemail_Label_markAsNew": "Позначити як нове",
   "@voicemail_Label_markAsNew": {},
+  "voicemail_Label_playbackError": "Помилка відтворення",
+  "@voicemail_Label_playbackError": {},
   "voicemail_Label_retry": "Спробувати ще раз",
   "@voicemail_Label_retry": {},
+  "voicemail_Snackbar_notConfigured": "Зверніться до адміністратора, щоб активувати голосову пошту.",
+  "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Функція не підтримується",
   "@voicemail_Title_notSupported": {},
   "voicemail_Widget_screenTitle": "Голосова пошта",
@@ -1894,5 +1987,97 @@
   "webview_sslError_tryAgain": "Спробувати ще раз",
   "@webview_sslError_tryAgain": {
     "description": "Primary action button label on SSL error screen."
-  }
+  },
+  "cdr_disconnectReason_unknown": "Невідомо",
+  "cdr_disconnectReason_validCauseCodeNotYetReceived": "Коректний код причини ще не отримано",
+  "cdr_disconnectReason_unallocatedNumber": "Непризначений номер",
+  "cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan": "Немає маршруту до вказаної транзитної мережі (WAN)",
+  "cdr_disconnectReason_noRouteToDestination": "Немає маршруту до пункту призначення",
+  "cdr_disconnectReason_sendSpecialInformationTone": "Надіслати спеціальний інформаційний тон",
+  "cdr_disconnectReason_misdialledTrunkPrefix": "Неправильно набраний префікс транку",
+  "cdr_disconnectReason_channelUnacceptable": "Неприйнятний канал",
+  "cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel": "Виклик призначено та доставляється встановленим каналом",
+  "cdr_disconnectReason_prefix0DialedButNotAllowedPreemption": "Набрано префікс 0, але це не дозволено (пріоритетне витіснення)",
+  "cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved": "Набрано префікс 1, але це не дозволено (резерв пріоритету)",
+  "cdr_disconnectReason_prefix1DialedButNotRequired": "Набрано префікс 1, але він не потрібен",
+  "cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding": "Отримано більше цифр, ніж дозволено; виклик продовжується",
+  "cdr_disconnectReason_normalCallClearing": "Нормальне завершення виклику",
+  "cdr_disconnectReason_userBusy": "Абонент зайнятий",
+  "cdr_disconnectReason_noUserResponding": "Абонент не відповідає",
+  "cdr_disconnectReason_noAnswerFromUser": "Немає відповіді від абонента",
+  "cdr_disconnectReason_subscriberIsAbsent": "Абонент відсутній",
+  "cdr_disconnectReason_callRejected": "Виклик відхилено",
+  "cdr_disconnectReason_numberChanged": "Номер змінено",
+  "cdr_disconnectReason_reverseChargingRejected": "Зворотна тарифікація відхилена",
+  "cdr_disconnectReason_callSuspended": "Виклик призупинено",
+  "cdr_disconnectReason_callResumed": "Виклик відновлено",
+  "cdr_disconnectReason_nonSelectedUserClearing": "Завершення виклику не вибраним абонентом",
+  "cdr_disconnectReason_destinationOutOfOrder": "Напрямок поза сервісом",
+  "cdr_disconnectReason_invalidNumberFormatIncompleteNumber": "Неправильний формат номера (неповний номер)",
+  "cdr_disconnectReason_facilityRejected": "Послугу/функцію відхилено",
+  "cdr_disconnectReason_responseToStatusEnquiry": "Відповідь на STATUS ENQUIRY",
+  "cdr_disconnectReason_normalUnspecified": "Нормально, не уточнено",
+  "cdr_disconnectReason_circuitOutOfOrder": "Канал (circuit) поза сервісом",
+  "cdr_disconnectReason_noCircuitChannelAvailable": "Немає доступного каналу/лінії",
+  "cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable": "Напрямок недосяжний (потрібний VPCI/VCI недоступний)",
+  "cdr_disconnectReason_vpciVciAssignmentFailure": "Помилка призначення VPCI/VCI",
+  "cdr_disconnectReason_degradedServiceCallRateIsnNotValid": "Погіршення сервісу (швидкість викликів недійсна)",
+  "cdr_disconnectReason_networkWanOutOfOrder": "Мережа (WAN) поза сервісом",
+  "cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService": "Неможливо досягти діапазону транзитної затримки (режим постійного кадру поза сервісом)",
+  "cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational": "Неможливо досягти діапазону пропускної здатності (режим постійного кадру працює)",
+  "cdr_disconnectReason_temporaryFailure": "Тимчасовий збій",
+  "cdr_disconnectReason_switchingEquipmentCongestion": "Перевантаження комутаційного обладнання",
+  "cdr_disconnectReason_accessInformationDiscarded": "Інформацію доступу відкинуто",
+  "cdr_disconnectReason_requestedCircuitChannelNotAvailable": "Запитаний канал/лінія недоступний(а)",
+  "cdr_disconnectReason_preEmptedNoVpciVciIsAvailable": "Витіснено за пріоритетом (VPCI/VCI недоступний)",
+  "cdr_disconnectReason_precedenceCallBlocked": "Пріоритетний виклик заблоковано",
+  "cdr_disconnectReason_resourceUnavailableUnspecified": "Ресурс недоступний - не уточнено",
+  "cdr_disconnectReason_dspError": "Помилка DSP",
+  "cdr_disconnectReason_qualityOfServiceUnavailable": "Якість обслуговування недоступна",
+  "cdr_disconnectReason_requestedFacilityNotSubscribed": "Запитана послуга/функція не підключена",
+  "cdr_disconnectReason_reverseChargingNotAllowed": "Зворотна тарифікація не дозволена",
+  "cdr_disconnectReason_outgoingCallsBarred": "Вихідні виклики заборонені",
+  "cdr_disconnectReason_outgoingCallsBarredWithinCug": "Вихідні виклики заборонені в межах CUG",
+  "cdr_disconnectReason_incomingCallsBarred": "Вхідні виклики заборонені",
+  "cdr_disconnectReason_incomingCallsBarredWithinCug": "Вхідні виклики заборонені в межах CUG",
+  "cdr_disconnectReason_callWaitingNotSubscribed": "Очікування виклику не підключено",
+  "cdr_disconnectReason_bearerCapabilityNotAuthorized": "Несуча здатність не авторизована",
+  "cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable": "Несуча здатність наразі недоступна",
+  "cdr_disconnectReason_inconsistancyInTheInformationAndClass": "Невідповідність між інформацією та класом",
+  "cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified": "Послуга або опція недоступна, не уточнено",
+  "cdr_disconnectReason_bearerServiceNotImplemented": "Bearer-послуга не реалізована",
+  "cdr_disconnectReason_channelTypeNotImplemented": "Тип каналу не реалізовано",
+  "cdr_disconnectReason_transitNetworkSelectionNotImplemented": "Вибір транзитної мережі не реалізовано",
+  "cdr_disconnectReason_messageNotImplemented": "Повідомлення не реалізовано",
+  "cdr_disconnectReason_requestedFacilityNotImplemented": "Запитану послугу/функцію не реалізовано",
+  "cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable": "Доступна лише обмежена цифрова bearer-здатність",
+  "cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified": "Послуга або опція не реалізована, не уточнено",
+  "cdr_disconnectReason_invalidCallReferenceValue": "Недійсне значення посилання виклику",
+  "cdr_disconnectReason_identifiedChannelDoesNotExist": "Ідентифікований канал не існує",
+  "cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot": "Існує призупинений виклик, але такого ідентифікатора виклику немає",
+  "cdr_disconnectReason_callIdentityInUse": "Ідентифікатор виклику вже використовується",
+  "cdr_disconnectReason_noCallSuspended": "Немає призупиненого виклику",
+  "cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared": "Виклик із запитаним ідентифікатором уже завершено",
+  "cdr_disconnectReason_calledUserNotMemberOfCug": "Викликаний абонент не є учасником CUG",
+  "cdr_disconnectReason_incompatibleDestination": "Несумісний напрямок",
+  "cdr_disconnectReason_nonExistentAbbreviatedAddressEntry": "Неіснуючий запис скороченої адреси",
+  "cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed": "Адреса призначення відсутня, і прямий виклик не підключено",
+  "cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse": "Недійсний вибір транзитної мережі (національне використання)",
+  "cdr_disconnectReason_invalidFacilityParameter": "Недійсний параметр послуги/функції",
+  "cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported": "Обов'язковий інформаційний елемент відсутній (параметр AAL не підтримується)",
+  "cdr_disconnectReason_invalidMessageUnspecified": "Недійсне повідомлення, не уточнено",
+  "cdr_disconnectReason_mandatoryInformationElementIsMissing": "Обов'язковий інформаційний елемент відсутній",
+  "cdr_disconnectReason_messageTypeNonExistentOrNotImplemented": "Тип повідомлення не існує або не реалізований",
+  "cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented": "Повідомлення несумісне зі станом виклику або тип повідомлення не існує/не реалізований",
+  "cdr_disconnectReason_informationElementNonexistantOrNotImplemented": "Інформаційний елемент не існує або не реалізований",
+  "cdr_disconnectReason_invalidInformationElementContents": "Недійсний вміст інформаційного елемента",
+  "cdr_disconnectReason_messageNotCompatibleWithCallState": "Повідомлення несумісне зі станом виклику",
+  "cdr_disconnectReason_recoveryOnTimerExpiry": "Відновлення після спливу таймера",
+  "cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn": "Параметр не існує або не реалізований - передано далі",
+  "cdr_disconnectReason_urecognizedParameterMessageDiscarded": "Нерозпізнаний параметр, повідомлення відкинуто",
+  "cdr_disconnectReason_protocolErrorUnspecified": "Помилка протоколу, не уточнено",
+  "cdr_disconnectReason_internetworkingUnspecified": "Взаємодія мереж (internetworking), не уточнено",
+  "cdr_disconnectReason_nextNodeIsUnreachable": "Наступний вузол недосяжний",
+  "cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService": "Модуль постачальника телефонних послуг Holst (HTSPM) поза сервісом",
+  "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL-транзит не відповідає моєму ID вузла"
 }

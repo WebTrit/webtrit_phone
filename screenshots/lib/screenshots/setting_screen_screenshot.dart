@@ -10,13 +10,10 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:screenshots/mocks/mocks.dart';
 
 class SettingScreenScreenshot extends StatefulWidget {
-  const SettingScreenScreenshot({
-    super.key,
-  });
+  const SettingScreenScreenshot({super.key});
 
   @override
-  State<SettingScreenScreenshot> createState() =>
-      _SettingScreenScreenshotState();
+  State<SettingScreenScreenshot> createState() => _SettingScreenScreenshotState();
 }
 
 class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
@@ -24,54 +21,38 @@ class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
   void initState() {
     super.initState();
 
-    SchedulerBinding.instance.addPostFrameCallback(
-      (Duration timeStamp) {
-        if (!mounted) {
-          return;
-        }
+    SchedulerBinding.instance.addPostFrameCallback((Duration timeStamp) {
+      if (!mounted) {
+        return;
+      }
 
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, _, __) {
-              // Fetch sections for the settings screen using FeatureAccess, specifically used in the configurator project.
-              // Fallback to default sections if FeatureAccess is not available.
-              final sections =
-                  context.read<FeatureAccess?>()?.settingsFeature.sections ??
-                      _defaultSections();
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, _, _) {
+            // Fetch sections for the settings screen using FeatureAccess, specifically used in the configurator project.
+            // Fallback to default sections if FeatureAccess is not available.
+            final sections = context.read<FeatureAccess?>()?.settingsConfig.sections ?? _defaultSections();
 
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider<CallBloc>(
-                    create: (context) => MockCallBloc.settingsScreen(),
-                  ),
-                  BlocProvider<CallRoutingCubit>(
-                      create: (_) => MockCallRoutingCubit.initial()),
-                  BlocProvider<SettingsBloc>(
-                    create: (context) => MockSettingsBloc.settingsScreen(),
-                  ),
-                  BlocProvider<RegisterStatusCubit>(
-                    create: (context) => MockRegisterStatusCubit.initial(false),
-                  ),
-                  BlocProvider<SessionStatusCubit>(
-                    create: (context) => MockSessionStatusCubit.initial(),
-                  ),
-                  BlocProvider<UserInfoCubit>(
-                    create: (context) => MockUserInfoCubit.initial(),
-                  ),
-                ],
-                child: SettingsScreen(
-                  sections: sections,
-                ),
-              );
-            },
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-            fullscreenDialog: true,
-          ),
-        );
-      },
-    );
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<MicrophoneStatusBloc>(create: (_) => MockMicrophoneStatusBloc.initial(isGranted: true)),
+                BlocProvider<CallBloc>(create: (context) => MockCallBloc.settingsScreen()),
+                BlocProvider<CallRoutingCubit>(create: (_) => MockCallRoutingCubit.initial()),
+                BlocProvider<SettingsBloc>(create: (context) => MockSettingsBloc.settingsScreen()),
+                BlocProvider<RegisterStatusCubit>(create: (context) => MockRegisterStatusCubit.initial(false)),
+                BlocProvider<SessionStatusCubit>(create: (context) => MockSessionStatusCubit.initial()),
+                BlocProvider<UserInfoCubit>(create: (context) => MockUserInfoCubit.initial()),
+              ],
+              child: SettingsScreen(sections: sections),
+            );
+          },
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+          fullscreenDialog: true,
+        ),
+      );
+    });
   }
 
   List<SettingsSection> _defaultSections() {

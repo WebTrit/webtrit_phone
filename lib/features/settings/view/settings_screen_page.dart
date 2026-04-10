@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,11 +16,9 @@ class SettingsScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settingsFeature = context.read<FeatureAccess>().settingsFeature;
+    final settingsFeature = context.read<FeatureAccess>().settingsConfig;
 
-    final widget = SettingsScreen(sections: settingsFeature.sections);
-
-    final provider = BlocProvider(
+    return BlocProvider(
       create: (context) {
         return SettingsBloc(
           notificationsBloc: context.read<NotificationsBloc>(),
@@ -28,11 +26,10 @@ class SettingsScreenPage extends StatelessWidget {
           userRepository: context.read<UserRepository>(),
           voicemailRepository: context.read<VoicemailRepository>(),
           sessionRepository: context.read(),
-          appPermissions: context.read<AppPermissions>() 
+          appPermissions: context.read<AppPermissions>(),
         );
       },
-      child: widget,
+      child: SettingsScreen(sections: settingsFeature.sections),
     );
-    return provider;
   }
 }

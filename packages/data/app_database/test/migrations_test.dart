@@ -8,6 +8,9 @@ import 'package:app_database/src/migrations/migrations.dart';
 
 // Import the generated schema helper to instantiate databases at old versions.
 import 'package:app_database/src/migrations/generated/schema.dart';
+import 'package:app_database/src/migrations/generated/schema_v18.dart' as v18;
+import 'package:app_database/src/migrations/generated/schema_v19.dart' as v19;
+import 'package:app_database/src/migrations/generated/schema_v20.dart' as v20;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -38,5 +41,203 @@ void main() {
         }
       });
     }
+  });
+
+  group('migration v19 data integrity', () {
+    test('migrates old favorites and creates outbox entries', () async {
+      final schema = await verifier.schemaAt(18);
+      try {
+        final oldDb = v18.DatabaseAtV18(schema.newConnection());
+
+        await oldDb.customStatement(
+          "INSERT INTO contacts (id, source_type, source_id, kind) VALUES (1, 0, 'device_source_1', 0)",
+        );
+        await oldDb.customStatement(
+          "INSERT INTO contacts (id, source_type, source_id, kind) VALUES (2, 1, 'pbx_source_1', 0)",
+        );
+
+        await oldDb.customStatement(
+          "INSERT INTO contact_phones (id, number, label, contact_id) VALUES (1, '1001', 'Mobile', 1)",
+        );
+        await oldDb.customStatement(
+          "INSERT INTO contact_phones (id, number, label, contact_id) VALUES (2, '2001', 'Desk', 2)",
+        );
+
+        await oldDb.customStatement('INSERT INTO favorites (id, contact_phone_id, position) VALUES (1, 1, 0)');
+        await oldDb.customStatement('INSERT INTO favorites (id, contact_phone_id, position) VALUES (2, 2, 1)');
+        await oldDb.close();
+
+        final appDatabase = AppDatabase(schema.newConnection());
+        await verifier.migrateAndValidate(appDatabase, 19);
+        await appDatabase.close();
+
+        final checkDb = v19.DatabaseAtV19(schema.newConnection());
+
+        final favoritesV2Rows = await checkDb.customSelect('''
+          SELECT number, source_type, source_id, label, position
+          FROM favorites_v2
+          ORDER BY position ASC
+          ''').get();
+
+        expect(favoritesV2Rows.length, 2);
+        expect(favoritesV2Rows[0].read<String>('number'), '1001');
+        expect(favoritesV2Rows[0].read<String>('source_type'), 'device');
+        expect(favoritesV2Rows[0].read<String>('source_id'), 'device_source_1');
+        expect(favoritesV2Rows[0].read<String>('label'), 'Mobile');
+        expect(favoritesV2Rows[0].read<int>('position'), 0);
+
+        expect(favoritesV2Rows[1].read<String>('number'), '2001');
+        expect(favoritesV2Rows[1].read<String>('source_type'), 'pbx');
+        expect(favoritesV2Rows[1].read<String>('source_id'), 'pbx_source_1');
+        expect(favoritesV2Rows[1].read<String>('label'), 'Desk');
+        expect(favoritesV2Rows[1].read<int>('position'), 1);
+
+        final outboxRows = await checkDb.customSelect('''
+          SELECT number, source_type, action, source_id, label, position, send_attempts, timestamp_usec
+          FROM favorites_outbox
+          ORDER BY position ASC
+          ''').get();
+
+        expect(outboxRows.length, 2);
+
+        expect(outboxRows[0].read<String>('number'), '1001');
+        expect(outboxRows[0].read<String>('source_type'), 'device');
+        expect(outboxRows[0].read<String>('action'), 'upsert');
+        expect(outboxRows[0].read<String>('source_id'), 'device_source_1');
+        expect(outboxRows[0].read<String>('label'), 'Mobile');
+        expect(outboxRows[0].read<int>('position'), 0);
+        expect(outboxRows[0].read<int>('send_attempts'), 0);
+        expect(outboxRows[0].read<int>('timestamp_usec') > 0, isTrue);
+
+        expect(outboxRows[1].read<String>('number'), '2001');
+        expect(outboxRows[1].read<String>('source_type'), 'pbx');
+        expect(outboxRows[1].read<String>('action'), 'upsert');
+        expect(outboxRows[1].read<String>('source_id'), 'pbx_source_1');
+        expect(outboxRows[1].read<String>('label'), 'Desk');
+        expect(outboxRows[1].read<int>('position'), 1);
+        expect(outboxRows[1].read<int>('send_attempts'), 0);
+        expect(outboxRows[1].read<int>('timestamp_usec') > 0, isTrue);
+        await checkDb.close();
+      } finally {
+        schema.close();
+      }
+    });
+  });
+
+  group('migration v20 data integrity', () {
+    test('preserves existing contact_phones rows after constraint change', () async {
+      final schema = await verifier.schemaAt(19);
+      try {
+        final oldDb = v19.DatabaseAtV19(schema.newConnection());
+
+        await oldDb.customStatement(
+          "INSERT INTO contacts (id, source_type, source_id, kind) VALUES (1, 1, 'ext_source_1', 0)",
+        );
+
+        // Insert two phone rows with different numbers (valid in v19: UNIQUE(number, contact_id))
+        await oldDb.customStatement(
+          "INSERT INTO contact_phones (id, number, label, contact_id) VALUES (1, '16042000001', 'number', 1)",
+        );
+        await oldDb.customStatement(
+          "INSERT INTO contact_phones (id, number, label, contact_id) VALUES (2, '1601', 'ext', 1)",
+        );
+
+        await oldDb.close();
+
+        final appDatabase = AppDatabase(schema.newConnection());
+        await verifier.migrateAndValidate(appDatabase, 20);
+        await appDatabase.close();
+
+        final checkDb = v20.DatabaseAtV20(schema.newConnection());
+
+        final rows = await checkDb
+            .customSelect('SELECT number, label FROM contact_phones WHERE contact_id = 1 ORDER BY id ASC')
+            .get();
+
+        expect(rows.length, 2);
+        expect(rows[0].read<String>('number'), '16042000001');
+        expect(rows[0].read<String>('label'), 'number');
+        expect(rows[1].read<String>('number'), '1601');
+        expect(rows[1].read<String>('label'), 'ext');
+
+        await checkDb.close();
+      } finally {
+        schema.close();
+      }
+    });
+
+    test('favorites FK to contact_phones remains valid after migration', () async {
+      final schema = await verifier.schemaAt(19);
+      try {
+        final oldDb = v19.DatabaseAtV19(schema.newConnection());
+
+        await oldDb.customStatement(
+          "INSERT INTO contacts (id, source_type, source_id, kind) VALUES (1, 1, 'ext_source_1', 0)",
+        );
+        await oldDb.customStatement(
+          "INSERT INTO contact_phones (id, number, label, contact_id) VALUES (1, '16042000001', 'number', 1)",
+        );
+        await oldDb.customStatement('INSERT INTO favorites (id, contact_phone_id, position) VALUES (1, 1, 0)');
+        await oldDb.close();
+
+        final appDatabase = AppDatabase(schema.newConnection());
+        await verifier.migrateAndValidate(appDatabase, 20);
+        await appDatabase.close();
+
+        final checkDb = v20.DatabaseAtV20(schema.newConnection());
+
+        await checkDb.customStatement('PRAGMA foreign_keys = ON');
+
+        // PRAGMA foreign_key_check returns rows only for violations; empty means all FKs are valid.
+        final violations = await checkDb.customSelect('PRAGMA foreign_key_check(favorites)').get();
+        expect(violations, isEmpty);
+
+        final favoriteRows = await checkDb.customSelect('SELECT id, contact_phone_id FROM favorites').get();
+        expect(favoriteRows.length, 1);
+        expect(favoriteRows[0].read<int>('contact_phone_id'), 1);
+
+        await checkDb.close();
+      } finally {
+        schema.close();
+      }
+    });
+
+    test('new schema allows same number with different labels for same contact', () async {
+      final schema = await verifier.schemaAt(19);
+      try {
+        final oldDb = v19.DatabaseAtV19(schema.newConnection());
+
+        await oldDb.customStatement(
+          "INSERT INTO contacts (id, source_type, source_id, kind) VALUES (1, 1, 'ext_source_1', 0)",
+        );
+        await oldDb.customStatement(
+          "INSERT INTO contact_phones (id, number, label, contact_id) VALUES (1, '16042000002', 'number', 1)",
+        );
+        await oldDb.close();
+
+        final appDatabase = AppDatabase(schema.newConnection());
+        await verifier.migrateAndValidate(appDatabase, 20);
+        await appDatabase.close();
+
+        final checkDb = v20.DatabaseAtV20(schema.newConnection());
+
+        // In v20, same number with different label is allowed (UNIQUE(number, label, contact_id))
+        await checkDb.customStatement(
+          "INSERT INTO contact_phones (id, number, label, contact_id) VALUES (2, '16042000002', 'sms', 1)",
+        );
+
+        final rows = await checkDb
+            .customSelect('SELECT number, label FROM contact_phones WHERE contact_id = 1 ORDER BY id ASC')
+            .get();
+
+        expect(rows.length, 2);
+        expect(rows.any((r) => r.read<String>('label') == 'number'), isTrue);
+        expect(rows.any((r) => r.read<String>('label') == 'sms'), isTrue);
+
+        await checkDb.close();
+      } finally {
+        schema.close();
+      }
+    });
   });
 }

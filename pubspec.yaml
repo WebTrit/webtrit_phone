@@ -1,6 +1,21 @@
 name: webtrit_phone
 description: WebTrit Phone application.
 publish_to: 'none'
+
+# Dart pub workspace - used by Melos v7 for package discovery
+workspace:
+  - packages/webtrit_api
+  - packages/webtrit_phone_number
+  - packages/webtrit_signaling
+  - packages/ssl_certificates
+  - packages/store_info_extractor
+  - packages/webtrit_appearance_theme
+  - packages/device_auto_rotate
+  - packages/data/app_database
+  - packages/_http_client
+  - packages/_web_socket_channel
+  - packages/_tcp_proxy
+  - screenshots
 # Version format: <Major>.<Minor>.<Patch>[-<Pre-release>]+<Build>
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
@@ -8,17 +23,17 @@ publish_to: 'none'
 #   - <Build>: non-negative integer computed as follows:
 #       <Major> * 1000000 + <Minor> * 10000 + <Patch> * 100 + <published build iteration for Major.Minor.Patch combination>
 # Note: <Minor>, <Patch>, and <Build> should be within the range of 0 to 99.
-version: 0.0.0+000000000
+version: 0.0.0+0000000
 
 # Version format for app_version: <Major>.<Minor>.<Patch>
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
 # app_version represents tasks and fixed bugs, which is different from the build version that is specific to each client
-app_version: 1.12.0
+app_version: 1.14.0+1
 
 environment:
   sdk: ^3.8.0
-  flutter: ^3.19.0
+  flutter: ^3.41.2
 
 dependencies:
   flutter:
@@ -34,6 +49,7 @@ dependencies:
   connectivity_plus: ^7.0.0
   cross_file: ^0.3.5
   device_info_plus: ^12.2.0
+  drift: ^2.29.0
   equatable: ^2.0.7
   firebase_analytics: ^12.0.4
   firebase_app_installations: ^0.4.0+4
@@ -93,6 +109,8 @@ dependencies:
   icon_decoration: ^2.1.0
   emoji_picker_flutter: ^4.3.0
   mask_text_input_formatter: ^2.9.0
+  async: ^2.13.0
+  rxdart: ^0.28.0
 
   webtrit_api:
     path: ./packages/webtrit_api
@@ -110,6 +128,8 @@ dependencies:
     path: ./packages/data/app_database
   webtrit_appearance_theme:
     path: ./packages/webtrit_appearance_theme
+  device_auto_rotate:
+    path: ./packages/device_auto_rotate
 
 dev_dependencies:
   integration_test:
@@ -128,8 +148,10 @@ dev_dependencies:
   flutter_native_splash: ^2.4.7
   freezed: ^3.2.3
   json_serializable: ^6.11.1
-  patrol: ^3.19.0
+  patrol: ^4.5.0
   mocktail: ^1.0.4
+  fake_async: ^1.3.3
+  melos: ^7.0.0
 
 flutter:
   generate: true
@@ -155,3 +177,244 @@ patrol:
     package_name: com.webtrit.app
   ios:
     bundle_id: com.webtrit.app
+
+melos:
+  useRootAsPackage: true
+
+  command:
+    bootstrap:
+      usePubspecOverrides: true
+
+  scripts:
+    # ===========================
+    # Formatting - melos run fmt
+    # ===========================
+
+    fmt:
+      description: Format all Dart code across the workspace (excludes generated files).
+      # NOTE: `formatter.exclude` in analysis_options.yaml is NOT supported by the current
+      # Dart version. Shell-level filtering via find+grep is used instead to skip
+      # *.g.dart, *.freezed.dart, *.gr.dart files.
+      exec: >-
+        find . -name "*.dart"
+        -not -path "*/build/*"
+        -not -path "*/.dart_tool/*"
+        -not -name "*.g.dart"
+        -not -name "*.freezed.dart"
+        -not -name "*.gr.dart"
+        | xargs dart format --line-length 120
+      packageFilters:
+        dirExists: lib
+
+    fmt:check:
+      description: Check formatting without making changes (exit 1 if unformatted).
+      exec: >-
+        find . -name "*.dart"
+        -not -path "*/build/*"
+        -not -path "*/.dart_tool/*"
+        -not -name "*.g.dart"
+        -not -name "*.freezed.dart"
+        -not -name "*.gr.dart"
+        | xargs dart format --line-length 120 --set-exit-if-changed
+      packageFilters:
+        dirExists: lib
+
+    # ===========================
+    # Code Generation - melos run generate
+    # ===========================
+
+    generate:
+      description: Run build_runner for packages that use code generation.
+      exec: dart run build_runner build --delete-conflicting-outputs
+      packageFilters:
+        dependsOn:
+          - build_runner
+
+    generate:watch:
+      description: Watch and rebuild generated files on change.
+      exec: dart run build_runner watch --delete-conflicting-outputs
+      packageFilters:
+        dependsOn:
+          - build_runner
+
+    generate:clean:
+      description: Clean and rebuild generated files.
+      exec: dart run build_runner clean
+      packageFilters:
+        dependsOn:
+          - build_runner
+
+    # ===========================
+    # Testing - melos run test
+    # ===========================
+
+    test:
+      description: Run all tests across the workspace.
+      exec: flutter test
+      packageFilters:
+        dirExists: test
+
+    test:unit:
+      description: Run unit tests only.
+      exec: flutter test test/
+      packageFilters:
+        dirExists: test
+
+    test:coverage:
+      description: Run tests with coverage report.
+      exec: flutter test --coverage
+      packageFilters:
+        dirExists: test
+
+    # ===========================
+    # Dependencies - melos run get
+    # ===========================
+
+    get:
+      description: Run pub get at workspace root.
+      run: flutter pub get
+
+    upgrade:
+      description: Upgrade dependencies to latest compatible versions.
+      run: flutter pub upgrade
+
+    upgrade:major:
+      description: Upgrade dependencies including major versions.
+      run: flutter pub upgrade --major-versions
+
+    outdated:
+      description: Show outdated dependencies for all packages.
+      run: flutter pub outdated
+
+    # ===========================
+    # Analysis - melos run analyze
+    # ===========================
+
+    analyze:
+      description: Run Dart analysis across the workspace.
+      exec: flutter analyze
+      packageFilters:
+        dirExists: lib
+
+    # ===========================
+    # Combined - melos run check | melos run ci
+    # ===========================
+
+    check:
+      description: Run formatting check and analysis.
+      steps:
+        - fmt:check
+        - analyze
+
+    ci:
+      description: Full CI pipeline - get, generate, check format, analyze, test.
+      steps:
+        - get
+        - generate
+        - fmt:check
+        - analyze
+        - test
+
+    # ===========================
+    # Run - melos run start:android | start:ios
+    # ===========================
+
+    start:android:
+      description: Run on Android with dart_define.json. Set FLUTTER_FLAGS for extra flags.
+      run: flutter run --dart-define-from-file=dart_define.json ${FLUTTER_FLAGS:-}
+
+    start:ios:
+      description: Run on iOS device/simulator. Set FLUTTER_FLAGS for extra flags.
+      run: flutter run -d iPhone --dart-define-from-file=dart_define.json ${FLUTTER_FLAGS:-}
+
+    # ===========================
+    # Build - melos run build:apk | build:appbundle | build:ios
+    # ===========================
+
+    build:apk:
+      description: Build Android APK. Set FLUTTER_FLAGS for extra flags (e.g. --release).
+      run: flutter build apk --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
+
+    build:appbundle:
+      description: Build Android App Bundle. Set FLUTTER_FLAGS for extra flags.
+      run: flutter build appbundle --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
+
+    build:ios:
+      description: Build iOS app. Set FLUTTER_FLAGS for extra flags (e.g. --release --no-codesign).
+      run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
+
+    build:ios:config:
+      description: Configure Xcode project without building.
+      run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons --config-only
+
+    # ===========================
+    # Clean - melos run clean | clean:git
+    # ===========================
+
+    clean:
+      description: Run flutter clean in all packages.
+      exec: flutter clean
+
+    clean:git:
+      description: Hard-reset repo and remove untracked files (DESTRUCTIVE).
+      run: |
+        git reset --hard HEAD
+        git clean -df
+
+    # ===========================
+    # Assets - melos run icons:generate | splash:generate | assets:generate
+    # ===========================
+
+    icons:generate:
+      description: Generate launcher icons from tool/configs/flutter_launcher_icons.yaml.
+      run: dart run flutter_launcher_icons -f tool/configs/flutter_launcher_icons.yaml
+
+    splash:generate:
+      description: Generate native splash screen from tool/configs/flutter_native_splash.yaml.
+      run: dart run flutter_native_splash:create --path=tool/configs/flutter_native_splash.yaml
+
+    assets:generate:
+      description: Generate launcher icons and native splash screen.
+      steps:
+        - icons:generate
+        - splash:generate
+
+    # ===========================
+    # Localization - melos run l10n:push | l10n:pull | l10n:generate | l10n:fetch
+    # ===========================
+
+    l10n:push:
+      description: Push localization keys to Localizely (reads LOCALIZELY_TOKEN from .env).
+      run: |
+        token=$(grep -E '^(export[[:space:]]+)?LOCALIZELY_TOKEN=' .env | cut -d '=' -f2)
+        localizely-cli --api-token="$token" push
+
+    l10n:pull:
+      description: Pull localization keys from Localizely (reads LOCALIZELY_TOKEN from .env).
+      run: |
+        token=$(grep -E '^(export[[:space:]]+)?LOCALIZELY_TOKEN=' .env | cut -d '=' -f2)
+        localizely-cli --api-token="$token" pull
+
+    l10n:generate:
+      description: Generate Flutter localization files from ARB files.
+      run: flutter gen-l10n
+
+    l10n:fetch:
+      description: Pull l10n from Localizely and regenerate Flutter localization files.
+      steps:
+        - l10n:pull
+        - l10n:generate
+
+    # ===========================
+    # IDE - melos run ide:sync
+    # ===========================
+
+    ide:sync:
+      description: Sync IDE run configurations from tool/run/ to .idea/runConfigurations/.
+      run: |
+        mkdir -p .idea/runConfigurations
+        cp tool/run/*.xml .idea/runConfigurations/
+
+    # ===========================
+    # Help - melos run --list
+    # ===========================

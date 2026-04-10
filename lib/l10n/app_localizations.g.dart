@@ -99,6 +99,30 @@ abstract class AppLocalizations {
   /// **'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.'**
   String get account_selfCarePasswordExpired_message;
 
+  /// Elapsed time relative to now, shown in days.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, zero{} one{{days} day ago} other{{days} days ago}}'**
+  String agoTicker_daysAgo(int days);
+
+  /// Elapsed time relative to now, shown in hours.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours, plural, zero{} one{{hours} hour ago} other{{hours} hours ago}}'**
+  String agoTicker_hoursAgo(int hours);
+
+  /// Elapsed time relative to now, shown in minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes, plural, zero{} one{{minutes} minute ago} other{{minutes} minutes ago}}'**
+  String agoTicker_minutesAgo(int minutes);
+
+  /// Elapsed time relative to now, shown in seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds, plural, zero{Just now} one{{seconds} second ago} other{{seconds} seconds ago}}'**
+  String agoTicker_secondsAgo(num seconds);
+
   /// No description provided for @alertDialogActions_no.
   ///
   /// In en, this message translates to:
@@ -471,11 +495,59 @@ abstract class AppLocalizations {
   /// **'Connection established'**
   String get callStatus_ready;
 
+  /// No description provided for @call_SystemErrorDialog_description.
+  ///
+  /// In en, this message translates to:
+  /// **'To resume making calls, a phone restart is required. This will resolve a temporary system error.'**
+  String get call_SystemErrorDialog_description;
+
+  /// No description provided for @call_SystemErrorDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'System Error'**
+  String get call_SystemErrorDialog_title;
+
   /// No description provided for @call_ThumbnailAvatar_currentlyNoActiveCall.
   ///
   /// In en, this message translates to:
   /// **'Currently, there is no active call'**
   String get call_ThumbnailAvatar_currentlyNoActiveCall;
+
+  /// Button label shown when the video background is currently blurred. Clicking this will turn off the blur effect.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Blur'**
+  String get call_videoBackground_actionLabel_disableBlur;
+
+  /// Button label shown when the video background is normal (no blur). Clicking this will turn on the blur effect.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Blur'**
+  String get call_videoBackground_actionLabel_enableBlur;
+
+  /// Button label to switch the video view mode to 'Cover' (fills the entire area, potentially cropping edges). Shown when the video is currently in 'Fit' mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Cover'**
+  String get call_videoView_actionLabel_cover;
+
+  /// Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit'**
+  String get call_videoView_actionLabel_fit;
+
+  /// No description provided for @cdrs_noMissedCalls_message.
+  ///
+  /// In en, this message translates to:
+  /// **'No missed calls'**
+  String get cdrs_noMissedCalls_message;
+
+  /// No description provided for @cdrs_noRecentCalls_message.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent calls'**
+  String get cdrs_noRecentCalls_message;
 
   /// No description provided for @common_noInternetConnection_message.
   ///
@@ -1017,6 +1089,54 @@ abstract class AppLocalizations {
   /// **'Service successfully configured'**
   String get diagnostic_pushTokenStatusType_success;
 
+  /// Title for the expandable section where users can add manual comments.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a note (Optional)'**
+  String get diagnosticReportDialogAddNoteExpansionTileTitle;
+
+  /// Label for the button that closes the dialog without action.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get diagnosticReportDialogCancelButtonLabel;
+
+  /// Placeholder hint text displayed inside the comment text field.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe what happened...'**
+  String get diagnosticReportDialogCommentTextFieldHintText;
+
+  /// The main body text explaining what the diagnostic report is for.
+  ///
+  /// In en, this message translates to:
+  /// **'This report contains technical details to help us identify connection issues.'**
+  String get diagnosticReportDialogContent;
+
+  /// Subtitle text under the system logs switch indicating permission requirements.
+  ///
+  /// In en, this message translates to:
+  /// **'Requires extra permissions.'**
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle;
+
+  /// The label for the switch toggle that allows the user to attach system logs.
+  ///
+  /// In en, this message translates to:
+  /// **'Include System Logs'**
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle;
+
+  /// Label for the button that submits the diagnostic report.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Report'**
+  String get diagnosticReportDialogSendReportButtonLabel;
+
+  /// The title shown at the top of the diagnostic report dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Diagnostic Report'**
+  String get diagnosticReportDialogTitle;
+
   /// No description provided for @diagnosticScreen_contacts_agreement_description.
   ///
   /// In en, this message translates to:
@@ -1046,54 +1166,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Push notification service'**
   String get diagnosticScreen_pushNotificationService_title;
-
-  /// The title shown at the top of the diagnostic report dialog.
-  ///
-  /// In en, this message translates to:
-  /// **'Send Diagnostic Report'**
-  String get diagnosticReportDialogTitle;
-
-  /// The main body text explaining what the diagnostic report is for.
-  ///
-  /// In en, this message translates to:
-  /// **'This report contains technical details to help us identify connection issues.'**
-  String get diagnosticReportDialogContent;
-
-  /// The label for the switch toggle that allows the user to attach system logs.
-  ///
-  /// In en, this message translates to:
-  /// **'Include System Logs'**
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle;
-
-  /// Subtitle text under the system logs switch indicating permission requirements.
-  ///
-  /// In en, this message translates to:
-  /// **'Requires extra permissions.'**
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle;
-
-  /// Title for the expandable section where users can add manual comments.
-  ///
-  /// In en, this message translates to:
-  /// **'Add a note (Optional)'**
-  String get diagnosticReportDialogAddNoteExpansionTileTitle;
-
-  /// Placeholder hint text displayed inside the comment text field.
-  ///
-  /// In en, this message translates to:
-  /// **'Describe what happened...'**
-  String get diagnosticReportDialogCommentTextFieldHintText;
-
-  /// Label for the button that closes the dialog without action.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get diagnosticReportDialogCancelButtonLabel;
-
-  /// Label for the button that submits the diagnostic report.
-  ///
-  /// In en, this message translates to:
-  /// **'Send Report'**
-  String get diagnosticReportDialogSendReportButtonLabel;
 
   /// No description provided for @favorites_BodyCenter_empty.
   ///
@@ -2010,6 +2082,18 @@ abstract class AppLocalizations {
   /// **'Copy to clipboard'**
   String get messaging_MessageView_textcopy;
 
+  /// No description provided for @messaging_MessageView_today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get messaging_MessageView_today;
+
+  /// No description provided for @messaging_MessageView_yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get messaging_MessageView_yesterday;
+
   /// Shown when a participant in a conversation does not have a known or available name. Condition: the user's name is missing or cannot be retrieved.
   ///
   /// In en, this message translates to:
@@ -2469,13 +2553,13 @@ abstract class AppLocalizations {
   /// No description provided for @presence_infoView_available_false.
   ///
   /// In en, this message translates to:
-  /// **'No'**
+  /// **'Unreachable'**
   String get presence_infoView_available_false;
 
   /// No description provided for @presence_infoView_available_true.
   ///
   /// In en, this message translates to:
-  /// **'Yes'**
+  /// **'Available'**
   String get presence_infoView_available_true;
 
   /// No description provided for @presence_infoView_client.
@@ -2489,6 +2573,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Device:'**
   String get presence_infoView_device;
+
+  /// No description provided for @presence_infoView_localTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Time:'**
+  String get presence_infoView_localTime;
 
   /// No description provided for @presence_infoView_note.
   ///
@@ -2850,6 +2940,12 @@ abstract class AppLocalizations {
   /// **'Problem with configuration push notification service'**
   String get sessionStatus_pushNotificationServiceProblem;
 
+  /// Status message displayed while the application is performing cleanup during the logout process.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing out...'**
+  String get session_Teardown_progressText;
+
   /// No description provided for @settings_AboutText_ApplicationEmbeddedLinks.
   ///
   /// In en, this message translates to:
@@ -2867,6 +2963,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'App Version'**
   String get settings_AboutText_AppVersion;
+
+  /// No description provided for @settings_AboutText_CoreVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'WebTrit Cloud Backend version'**
+  String get settings_AboutText_CoreVersion;
 
   /// No description provided for @settings_AboutText_CoreVersionUndefined.
   ///
@@ -3213,14 +3315,26 @@ abstract class AppLocalizations {
   /// No description provided for @settings_encoding_Section_preset_balance.
   ///
   /// In en, this message translates to:
-  /// **'Balance'**
+  /// **'Balanced'**
   String get settings_encoding_Section_preset_balance;
 
-  /// No description provided for @settings_encoding_Section_preset_bypass.
+  /// No description provided for @settings_encoding_Section_preset_balance_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Bypass'**
-  String get settings_encoding_Section_preset_bypass;
+  /// **'Balances call quality with data usage.'**
+  String get settings_encoding_Section_preset_balance_tooltip;
+
+  /// No description provided for @settings_encoding_Section_preset_eco.
+  ///
+  /// In en, this message translates to:
+  /// **'Low bandwidth'**
+  String get settings_encoding_Section_preset_eco;
+
+  /// No description provided for @settings_encoding_Section_preset_eco_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses less internet data and works better on slow or unstable connections.'**
+  String get settings_encoding_Section_preset_eco_tooltip;
 
   /// No description provided for @settings_encoding_Section_preset_custom.
   ///
@@ -3228,17 +3342,35 @@ abstract class AppLocalizations {
   /// **'Custom'**
   String get settings_encoding_Section_preset_custom;
 
+  /// No description provided for @settings_encoding_Section_preset_custom_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Manually adjust call quality settings.'**
+  String get settings_encoding_Section_preset_custom_tooltip;
+
   /// No description provided for @settings_encoding_Section_preset_default.
   ///
   /// In en, this message translates to:
-  /// **'Default'**
+  /// **'Recommended'**
   String get settings_encoding_Section_preset_default;
 
-  /// No description provided for @settings_encoding_Section_preset_eco.
+  /// No description provided for @settings_encoding_Section_preset_default_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Eco'**
-  String get settings_encoding_Section_preset_eco;
+  /// **'The default media quality settings chosen for this application. Works well for most calls'**
+  String get settings_encoding_Section_preset_default_tooltip;
+
+  /// No description provided for @settings_encoding_Section_preset_bypass.
+  ///
+  /// In en, this message translates to:
+  /// **'Compatibility mode'**
+  String get settings_encoding_Section_preset_bypass;
+
+  /// No description provided for @settings_encoding_Section_preset_bypass_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skips applying media quality settings and uses an unmodified call setup. Helps resolve compatibility issues.'**
+  String get settings_encoding_Section_preset_bypass_tooltip;
 
   /// No description provided for @settings_encoding_Section_preset_full_flex.
   ///
@@ -3249,8 +3381,14 @@ abstract class AppLocalizations {
   /// No description provided for @settings_encoding_Section_preset_quality.
   ///
   /// In en, this message translates to:
-  /// **'Quality'**
+  /// **'Best quality'**
   String get settings_encoding_Section_preset_quality;
+
+  /// No description provided for @settings_encoding_Section_preset_quality_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Provides the best audio and video quality. Requires a fast and stable internet connection.'**
+  String get settings_encoding_Section_preset_quality_tooltip;
 
   /// No description provided for @settings_encoding_Section_preset_title.
   ///
@@ -3387,13 +3525,13 @@ abstract class AppLocalizations {
   /// No description provided for @settings_iceSettings_Section_title.
   ///
   /// In en, this message translates to:
-  /// **'Ice candidates filtering'**
+  /// **'ICE candidates filtering'**
   String get settings_iceSettings_Section_title;
 
   /// No description provided for @settings_iceSettings_Section_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Filter ice candidates based on the network preferences may help to avoid network issues'**
+  /// **'Filter ICE candidates based on the network preferences may help to avoid network issues'**
   String get settings_iceSettings_Section_tooltip;
 
   /// No description provided for @settings_iceSettings_Section_trfilter_skipTcp.
@@ -3555,7 +3693,7 @@ abstract class AppLocalizations {
   /// Tooltip description for fallback SMS-based call trigger
   ///
   /// In en, this message translates to:
-  /// **'Enable fallback incoming call triggering via specially formatted SMS'**
+  /// **'If push notifications about calls are not received, the app will receive a special SMS and display the incoming call screen.'**
   String get settings_network_fallbackCalls_description;
 
   /// Title for fallback incoming calls section
@@ -3591,13 +3729,13 @@ abstract class AppLocalizations {
   /// No description provided for @settings_network_incomingCallType_title.
   ///
   /// In en, this message translates to:
-  /// **'Incoming Call Type'**
+  /// **'Incoming Call Delivery'**
   String get settings_network_incomingCallType_title;
 
   /// Toggle label for enabling SMS fallback
   ///
   /// In en, this message translates to:
-  /// **'SMS Fallback'**
+  /// **'SMS as a backup channel'**
   String get settings_network_smsFallback_toggle;
 
   /// No description provided for @settings_videoCapturing_Section_framerate_prefix.
@@ -4116,6 +4254,18 @@ abstract class AppLocalizations {
   /// **'Voicemail feature are not supported in your core. Please contact your administrator for more information.'**
   String get voicemail_Description_notSupported;
 
+  /// No description provided for @voicemail_Dialog_deleteSelectedContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected voicemails will be permanently deleted. Do you want to continue?'**
+  String get voicemail_Dialog_deleteSelectedContent;
+
+  /// No description provided for @voicemail_Dialog_deleteSelectedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete selected voicemails?'**
+  String get voicemail_Dialog_deleteSelectedTitle;
+
   /// No description provided for @voicemail_Dialog_deleteSingleContent.
   ///
   /// In en, this message translates to:
@@ -4170,11 +4320,23 @@ abstract class AppLocalizations {
   /// **'Mark as new'**
   String get voicemail_Label_markAsNew;
 
+  /// No description provided for @voicemail_Label_playbackError.
+  ///
+  /// In en, this message translates to:
+  /// **'Playback failed'**
+  String get voicemail_Label_playbackError;
+
   /// No description provided for @voicemail_Label_retry.
   ///
   /// In en, this message translates to:
   /// **'Try again'**
   String get voicemail_Label_retry;
+
+  /// No description provided for @voicemail_Snackbar_notConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact your administrator to activate voicemail'**
+  String get voicemail_Snackbar_notConfigured;
 
   /// No description provided for @voicemail_Title_notSupported.
   ///
@@ -4259,6 +4421,558 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get webview_sslError_tryAgain;
+
+  /// No description provided for @cdr_disconnectReason_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get cdr_disconnectReason_unknown;
+
+  /// No description provided for @cdr_disconnectReason_validCauseCodeNotYetReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid cause code not yet received'**
+  String get cdr_disconnectReason_validCauseCodeNotYetReceived;
+
+  /// No description provided for @cdr_disconnectReason_unallocatedNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Unallocated (unassigned) number'**
+  String get cdr_disconnectReason_unallocatedNumber;
+
+  /// No description provided for @cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan.
+  ///
+  /// In en, this message translates to:
+  /// **'No route to specified transit network (WAN)'**
+  String get cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan;
+
+  /// No description provided for @cdr_disconnectReason_noRouteToDestination.
+  ///
+  /// In en, this message translates to:
+  /// **'No route to destination'**
+  String get cdr_disconnectReason_noRouteToDestination;
+
+  /// No description provided for @cdr_disconnectReason_sendSpecialInformationTone.
+  ///
+  /// In en, this message translates to:
+  /// **'send special information tone'**
+  String get cdr_disconnectReason_sendSpecialInformationTone;
+
+  /// No description provided for @cdr_disconnectReason_misdialledTrunkPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'misdialled trunk prefix.'**
+  String get cdr_disconnectReason_misdialledTrunkPrefix;
+
+  /// No description provided for @cdr_disconnectReason_channelUnacceptable.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel unacceptable'**
+  String get cdr_disconnectReason_channelUnacceptable;
+
+  /// No description provided for @cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Call awarded and being delivered in an established channel'**
+  String get cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel;
+
+  /// No description provided for @cdr_disconnectReason_prefix0DialedButNotAllowedPreemption.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefix 0 dialed but not allowed (Preemption)'**
+  String get cdr_disconnectReason_prefix0DialedButNotAllowedPreemption;
+
+  /// No description provided for @cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefix 1 dialed but not allowed (Preemption reserved)'**
+  String get cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved;
+
+  /// No description provided for @cdr_disconnectReason_prefix1DialedButNotRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefix 1 dialed but not required'**
+  String get cdr_disconnectReason_prefix1DialedButNotRequired;
+
+  /// No description provided for @cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding.
+  ///
+  /// In en, this message translates to:
+  /// **'More digits received than allowed, call is proceeding'**
+  String get cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding;
+
+  /// No description provided for @cdr_disconnectReason_normalCallClearing.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal call clearing'**
+  String get cdr_disconnectReason_normalCallClearing;
+
+  /// No description provided for @cdr_disconnectReason_userBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'User busy'**
+  String get cdr_disconnectReason_userBusy;
+
+  /// No description provided for @cdr_disconnectReason_noUserResponding.
+  ///
+  /// In en, this message translates to:
+  /// **'No user responding'**
+  String get cdr_disconnectReason_noUserResponding;
+
+  /// No description provided for @cdr_disconnectReason_noAnswerFromUser.
+  ///
+  /// In en, this message translates to:
+  /// **'No answer from user'**
+  String get cdr_disconnectReason_noAnswerFromUser;
+
+  /// No description provided for @cdr_disconnectReason_subscriberIsAbsent.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriber is absent'**
+  String get cdr_disconnectReason_subscriberIsAbsent;
+
+  /// No description provided for @cdr_disconnectReason_callRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Call rejected'**
+  String get cdr_disconnectReason_callRejected;
+
+  /// No description provided for @cdr_disconnectReason_numberChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Number changed'**
+  String get cdr_disconnectReason_numberChanged;
+
+  /// No description provided for @cdr_disconnectReason_reverseChargingRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Reverse charging rejected'**
+  String get cdr_disconnectReason_reverseChargingRejected;
+
+  /// No description provided for @cdr_disconnectReason_callSuspended.
+  ///
+  /// In en, this message translates to:
+  /// **'Call suspended'**
+  String get cdr_disconnectReason_callSuspended;
+
+  /// No description provided for @cdr_disconnectReason_callResumed.
+  ///
+  /// In en, this message translates to:
+  /// **'Call resumed'**
+  String get cdr_disconnectReason_callResumed;
+
+  /// No description provided for @cdr_disconnectReason_nonSelectedUserClearing.
+  ///
+  /// In en, this message translates to:
+  /// **'Non-selected user clearing'**
+  String get cdr_disconnectReason_nonSelectedUserClearing;
+
+  /// No description provided for @cdr_disconnectReason_destinationOutOfOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Destination out of order'**
+  String get cdr_disconnectReason_destinationOutOfOrder;
+
+  /// No description provided for @cdr_disconnectReason_invalidNumberFormatIncompleteNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid number format (incomplete number)'**
+  String get cdr_disconnectReason_invalidNumberFormatIncompleteNumber;
+
+  /// No description provided for @cdr_disconnectReason_facilityRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Facility rejected'**
+  String get cdr_disconnectReason_facilityRejected;
+
+  /// No description provided for @cdr_disconnectReason_responseToStatusEnquiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Response to STATUS ENQUIRY'**
+  String get cdr_disconnectReason_responseToStatusEnquiry;
+
+  /// No description provided for @cdr_disconnectReason_normalUnspecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal, unspecified'**
+  String get cdr_disconnectReason_normalUnspecified;
+
+  /// No description provided for @cdr_disconnectReason_circuitOutOfOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Circuit out of order'**
+  String get cdr_disconnectReason_circuitOutOfOrder;
+
+  /// No description provided for @cdr_disconnectReason_noCircuitChannelAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No circuit/channel available'**
+  String get cdr_disconnectReason_noCircuitChannelAvailable;
+
+  /// No description provided for @cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Destination unattainable (Require VPCI VCI is not available)'**
+  String get cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable;
+
+  /// No description provided for @cdr_disconnectReason_vpciVciAssignmentFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'VPCI VCI assignment failure'**
+  String get cdr_disconnectReason_vpciVciAssignmentFailure;
+
+  /// No description provided for @cdr_disconnectReason_degradedServiceCallRateIsnNotValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Degraded service (call rate isn not valid)'**
+  String get cdr_disconnectReason_degradedServiceCallRateIsnNotValid;
+
+  /// No description provided for @cdr_disconnectReason_networkWanOutOfOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Network (WAN) out of order'**
+  String get cdr_disconnectReason_networkWanOutOfOrder;
+
+  /// No description provided for @cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService.
+  ///
+  /// In en, this message translates to:
+  /// **'Transit delay range cannot be achieved(Permanent frame mode is out of service)'**
+  String get cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService;
+
+  /// No description provided for @cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational.
+  ///
+  /// In en, this message translates to:
+  /// **'Throughput range cannot be achieved (Permanent frame mode is operational)'**
+  String get cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational;
+
+  /// No description provided for @cdr_disconnectReason_temporaryFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Temporary failure'**
+  String get cdr_disconnectReason_temporaryFailure;
+
+  /// No description provided for @cdr_disconnectReason_switchingEquipmentCongestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Switching equipment congestion'**
+  String get cdr_disconnectReason_switchingEquipmentCongestion;
+
+  /// No description provided for @cdr_disconnectReason_accessInformationDiscarded.
+  ///
+  /// In en, this message translates to:
+  /// **'Access information discarded'**
+  String get cdr_disconnectReason_accessInformationDiscarded;
+
+  /// No description provided for @cdr_disconnectReason_requestedCircuitChannelNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested circuit channel not available'**
+  String get cdr_disconnectReason_requestedCircuitChannelNotAvailable;
+
+  /// No description provided for @cdr_disconnectReason_preEmptedNoVpciVciIsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Pre-empted (No VPCI VCI is available)'**
+  String get cdr_disconnectReason_preEmptedNoVpciVciIsAvailable;
+
+  /// No description provided for @cdr_disconnectReason_precedenceCallBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Precedence call blocked'**
+  String get cdr_disconnectReason_precedenceCallBlocked;
+
+  /// No description provided for @cdr_disconnectReason_resourceUnavailableUnspecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Resource unavailable - unspecified'**
+  String get cdr_disconnectReason_resourceUnavailableUnspecified;
+
+  /// No description provided for @cdr_disconnectReason_dspError.
+  ///
+  /// In en, this message translates to:
+  /// **'DSP error'**
+  String get cdr_disconnectReason_dspError;
+
+  /// No description provided for @cdr_disconnectReason_qualityOfServiceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality of service unavailable'**
+  String get cdr_disconnectReason_qualityOfServiceUnavailable;
+
+  /// No description provided for @cdr_disconnectReason_requestedFacilityNotSubscribed.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested facility not subscribed'**
+  String get cdr_disconnectReason_requestedFacilityNotSubscribed;
+
+  /// No description provided for @cdr_disconnectReason_reverseChargingNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Reverse charging not allowed'**
+  String get cdr_disconnectReason_reverseChargingNotAllowed;
+
+  /// No description provided for @cdr_disconnectReason_outgoingCallsBarred.
+  ///
+  /// In en, this message translates to:
+  /// **'Outgoing calls barred'**
+  String get cdr_disconnectReason_outgoingCallsBarred;
+
+  /// No description provided for @cdr_disconnectReason_outgoingCallsBarredWithinCug.
+  ///
+  /// In en, this message translates to:
+  /// **'Outgoing calls barred within CUG'**
+  String get cdr_disconnectReason_outgoingCallsBarredWithinCug;
+
+  /// No description provided for @cdr_disconnectReason_incomingCallsBarred.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming calls barred'**
+  String get cdr_disconnectReason_incomingCallsBarred;
+
+  /// No description provided for @cdr_disconnectReason_incomingCallsBarredWithinCug.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming calls barred within CUG'**
+  String get cdr_disconnectReason_incomingCallsBarredWithinCug;
+
+  /// No description provided for @cdr_disconnectReason_callWaitingNotSubscribed.
+  ///
+  /// In en, this message translates to:
+  /// **'Call waiting not subscribed'**
+  String get cdr_disconnectReason_callWaitingNotSubscribed;
+
+  /// No description provided for @cdr_disconnectReason_bearerCapabilityNotAuthorized.
+  ///
+  /// In en, this message translates to:
+  /// **'Bearer capability not authorized'**
+  String get cdr_disconnectReason_bearerCapabilityNotAuthorized;
+
+  /// No description provided for @cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Bearer capability not presently available'**
+  String get cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable;
+
+  /// No description provided for @cdr_disconnectReason_inconsistancyInTheInformationAndClass.
+  ///
+  /// In en, this message translates to:
+  /// **'Inconsistancy in the information and class'**
+  String get cdr_disconnectReason_inconsistancyInTheInformationAndClass;
+
+  /// No description provided for @cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Service or option not available, unspecified'**
+  String get cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified;
+
+  /// No description provided for @cdr_disconnectReason_bearerServiceNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Bearer service not implemented'**
+  String get cdr_disconnectReason_bearerServiceNotImplemented;
+
+  /// No description provided for @cdr_disconnectReason_channelTypeNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel type not implemented'**
+  String get cdr_disconnectReason_channelTypeNotImplemented;
+
+  /// No description provided for @cdr_disconnectReason_transitNetworkSelectionNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Transit network selection not implemented'**
+  String get cdr_disconnectReason_transitNetworkSelectionNotImplemented;
+
+  /// No description provided for @cdr_disconnectReason_messageNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Message not implemented'**
+  String get cdr_disconnectReason_messageNotImplemented;
+
+  /// No description provided for @cdr_disconnectReason_requestedFacilityNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested facility not implemented'**
+  String get cdr_disconnectReason_requestedFacilityNotImplemented;
+
+  /// No description provided for @cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Only restricted digital information bearer capability is available'**
+  String get cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable;
+
+  /// No description provided for @cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Service or option not implemented, unspecified'**
+  String get cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified;
+
+  /// No description provided for @cdr_disconnectReason_invalidCallReferenceValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid call reference value'**
+  String get cdr_disconnectReason_invalidCallReferenceValue;
+
+  /// No description provided for @cdr_disconnectReason_identifiedChannelDoesNotExist.
+  ///
+  /// In en, this message translates to:
+  /// **'Identified channel does not exist'**
+  String get cdr_disconnectReason_identifiedChannelDoesNotExist;
+
+  /// No description provided for @cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot.
+  ///
+  /// In en, this message translates to:
+  /// **'A suspended call exists, but this call identity does not'**
+  String get cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot;
+
+  /// No description provided for @cdr_disconnectReason_callIdentityInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Call identity in use'**
+  String get cdr_disconnectReason_callIdentityInUse;
+
+  /// No description provided for @cdr_disconnectReason_noCallSuspended.
+  ///
+  /// In en, this message translates to:
+  /// **'No call suspended'**
+  String get cdr_disconnectReason_noCallSuspended;
+
+  /// No description provided for @cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Call having the requested call identity has been cleared'**
+  String get cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared;
+
+  /// No description provided for @cdr_disconnectReason_calledUserNotMemberOfCug.
+  ///
+  /// In en, this message translates to:
+  /// **'Called user not member of CUG'**
+  String get cdr_disconnectReason_calledUserNotMemberOfCug;
+
+  /// No description provided for @cdr_disconnectReason_incompatibleDestination.
+  ///
+  /// In en, this message translates to:
+  /// **'Incompatible destination'**
+  String get cdr_disconnectReason_incompatibleDestination;
+
+  /// No description provided for @cdr_disconnectReason_nonExistentAbbreviatedAddressEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Non-existent abbreviated address entry'**
+  String get cdr_disconnectReason_nonExistentAbbreviatedAddressEntry;
+
+  /// No description provided for @cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed.
+  ///
+  /// In en, this message translates to:
+  /// **'Destination address missing, and direct call not subscribed'**
+  String get cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed;
+
+  /// No description provided for @cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid transit network selection (national use)'**
+  String get cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse;
+
+  /// No description provided for @cdr_disconnectReason_invalidFacilityParameter.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid facility parameter'**
+  String get cdr_disconnectReason_invalidFacilityParameter;
+
+  /// No description provided for @cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Mandatory information element is missing(AAL parameter is not supported)'**
+  String get cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported;
+
+  /// No description provided for @cdr_disconnectReason_invalidMessageUnspecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid message, unspecified'**
+  String get cdr_disconnectReason_invalidMessageUnspecified;
+
+  /// No description provided for @cdr_disconnectReason_mandatoryInformationElementIsMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Mandatory information element is missing'**
+  String get cdr_disconnectReason_mandatoryInformationElementIsMissing;
+
+  /// No description provided for @cdr_disconnectReason_messageTypeNonExistentOrNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Message type non-existent or not implemented'**
+  String get cdr_disconnectReason_messageTypeNonExistentOrNotImplemented;
+
+  /// No description provided for @cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Message not compatible with call state or message type non-existent or not implemented'**
+  String get cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented;
+
+  /// No description provided for @cdr_disconnectReason_informationElementNonexistantOrNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'information element nonexistant or not implemented'**
+  String get cdr_disconnectReason_informationElementNonexistantOrNotImplemented;
+
+  /// No description provided for @cdr_disconnectReason_invalidInformationElementContents.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid information element contents'**
+  String get cdr_disconnectReason_invalidInformationElementContents;
+
+  /// No description provided for @cdr_disconnectReason_messageNotCompatibleWithCallState.
+  ///
+  /// In en, this message translates to:
+  /// **'Message not compatible with call state'**
+  String get cdr_disconnectReason_messageNotCompatibleWithCallState;
+
+  /// No description provided for @cdr_disconnectReason_recoveryOnTimerExpiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery on timer expiry'**
+  String get cdr_disconnectReason_recoveryOnTimerExpiry;
+
+  /// No description provided for @cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'parameter non-existent or not implemented - passed on'**
+  String get cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn;
+
+  /// No description provided for @cdr_disconnectReason_urecognizedParameterMessageDiscarded.
+  ///
+  /// In en, this message translates to:
+  /// **'Urecognized parameter message discarded'**
+  String get cdr_disconnectReason_urecognizedParameterMessageDiscarded;
+
+  /// No description provided for @cdr_disconnectReason_protocolErrorUnspecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Protocol error unspecified'**
+  String get cdr_disconnectReason_protocolErrorUnspecified;
+
+  /// No description provided for @cdr_disconnectReason_internetworkingUnspecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Internetworking, unspecified'**
+  String get cdr_disconnectReason_internetworkingUnspecified;
+
+  /// No description provided for @cdr_disconnectReason_nextNodeIsUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Next node is unreachable'**
+  String get cdr_disconnectReason_nextNodeIsUnreachable;
+
+  /// No description provided for @cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService.
+  ///
+  /// In en, this message translates to:
+  /// **'Holst Telephony Service Provider Module (HTSPM) is out of service'**
+  String get cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService;
+
+  /// No description provided for @cdr_disconnectReason_dtlTransitIsNotMyNodeId.
+  ///
+  /// In en, this message translates to:
+  /// **'DTL transit is not my node ID'**
+  String get cdr_disconnectReason_dtlTransitIsNotMyNodeId;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

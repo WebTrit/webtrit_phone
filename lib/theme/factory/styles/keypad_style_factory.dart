@@ -25,47 +25,40 @@ import '../theme_style_factory.dart';
 /// inside widgets (e.g. `merge(theme.textTheme.headlineLarge)`),
 /// so that the final computed sizes are always respected.
 class KeypadStyleFactory implements ThemeStyleFactory<KeypadStyles> {
-  KeypadStyleFactory(this.colors, {required this.config, required this.textTheme});
+  KeypadStyleFactory(this.colors, this.defaultFontFamily, {required this.config, required this.textTheme});
 
   final ColorScheme colors;
   final KeypadStyleConfig? config;
   final TextTheme textTheme;
+  final String? defaultFontFamily;
 
   @override
   KeypadStyles create() {
     // Number defaults (headlineLarge)
     final defaultNumberFontSize = textTheme.headlineLarge?.fontSize ?? 32.0;
     final defaultNumberFontWeight = textTheme.headlineLarge?.fontWeight ?? FontWeight.w400;
-    final defaultNumberColor = textTheme.headlineLarge?.color ?? colors.onSurface;
 
     // Subtext defaults(bodyMedium)
     final defaultSubFontSize = textTheme.bodyMedium?.fontSize ?? 14.0;
     final defaultSubFontWeight = textTheme.bodyMedium?.fontWeight ?? FontWeight.w400;
-    final defaultSubColor = (textTheme.bodyMedium?.color ?? colors.onSurface).withValues(alpha: 0.6);
 
     return KeypadStyles(
       primary: KeypadStyle(
         keyStyle: KeypadKeyStyle(
           textStyle:
-              config?.textStyle
-                  ?.toTextStyle(defaultFontSize: defaultNumberFontSize, defaultFontWeight: defaultNumberFontWeight)
-                  .copyWith(color: defaultNumberColor) ??
-              TextStyle(
-                fontSize: defaultNumberFontSize,
-                fontWeight: defaultNumberFontWeight,
-                color: defaultNumberColor,
-                height: 1.125,
-              ),
+              config?.textStyle?.toTextStyle(
+                defaultFontFamily: defaultFontFamily,
+                defaultFontSize: defaultNumberFontSize,
+                defaultFontWeight: defaultNumberFontWeight,
+              ) ??
+              TextStyle(fontSize: defaultNumberFontSize, fontWeight: defaultNumberFontWeight, height: 1.125),
           subtextStyle:
-              config?.subtextStyle
-                  ?.toTextStyle(defaultFontSize: defaultSubFontSize, defaultFontWeight: defaultSubFontWeight)
-                  .copyWith(color: defaultSubColor) ??
-              TextStyle(
-                fontSize: defaultSubFontSize,
-                fontWeight: defaultSubFontWeight,
-                color: defaultSubColor,
-                height: 1.428,
-              ),
+              config?.subtextStyle?.toTextStyle(
+                defaultFontFamily: defaultFontFamily,
+                defaultFontSize: defaultSubFontSize,
+                defaultFontWeight: defaultSubFontWeight,
+              ) ??
+              TextStyle(fontSize: defaultSubFontSize, fontWeight: defaultSubFontWeight, height: 1.428),
         ),
       ),
     );

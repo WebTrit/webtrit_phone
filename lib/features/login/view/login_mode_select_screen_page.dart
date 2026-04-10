@@ -14,10 +14,10 @@ class LoginModeSelectScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginFeature = context.read<FeatureAccess>().loginFeature;
+    final loginFeature = context.read<FeatureAccess>().loginConfig;
 
     final widget = LoginModeSelectScreen(
-      appGreetingL10n: context.read<FeatureAccess>().loginFeature.titleL10n,
+      appGreetingL10n: context.read<FeatureAccess>().loginConfig.titleL10n,
       launchButtons: loginFeature.launchButtons,
     );
     return widget;

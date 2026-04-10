@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/models/caller_id_settings.dart';
 
-import 'package:webtrit_phone/repositories/account/user_repository.dart';
+import 'package:webtrit_phone/repositories/user_info/user_repository.dart';
 import 'package:webtrit_phone/repositories/caller_id_settings/caller_id_settings_repository.dart';
 
 class CallerIdSettingsState extends Equatable {
@@ -35,14 +37,16 @@ class CallerIdSettingsCubit extends Cubit<CallerIdSettingsState?> {
 
   final UserRepository _userRepository;
   final CallerIdSettingsRepository _callerIdSettingsRepository;
+  StreamSubscription? _userInfoSub;
 
   void init() async {
-    final settings = _callerIdSettingsRepository.getCallerIdSettings();
-    final userInfo = (await _userRepository.getInfo())!;
-    final mainNumber = userInfo.numbers.main;
-    final additionalNumbers = userInfo.numbers.additional?.nonNulls.toList() ?? <String>[];
+    _userInfoSub = _userRepository.getAndListen().listen((userInfo) {
+      final settings = _callerIdSettingsRepository.getCallerIdSettings();
+      final mainNumber = userInfo.numbers.main;
+      final additionalNumbers = userInfo.numbers.additional?.nonNulls.toList() ?? <String>[];
 
-    emit(CallerIdSettingsState(settings: settings, mainNumber: mainNumber, additionalNumbers: additionalNumbers));
+      emit(CallerIdSettingsState(settings: settings, mainNumber: mainNumber, additionalNumbers: additionalNumbers));
+    });
   }
 
   void setDefaultNumber(String? number) {
@@ -72,5 +76,11 @@ class CallerIdSettingsCubit extends Cubit<CallerIdSettingsState?> {
     final settings = state.settings.copyWithMatchers(matchers);
     _callerIdSettingsRepository.setCallerIdSettings(settings);
     emit(state.copyWith(settings: settings));
+  }
+
+  @override
+  Future<void> close() {
+    _userInfoSub?.cancel();
+    return super.close();
   }
 }

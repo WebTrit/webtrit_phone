@@ -10,6 +10,12 @@ class IceTrickleEvent extends LineEvent {
 
   static const typeValue = 'ice_trickle';
 
+  @override
+  Map<String, dynamic> toJson() => {
+    ...lineBaseJson(typeValue),
+    'candidate': candidate ?? {'completed': true},
+  };
+
   factory IceTrickleEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

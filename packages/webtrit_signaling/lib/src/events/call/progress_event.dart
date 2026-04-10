@@ -19,6 +19,14 @@ class ProgressEvent extends CallEvent {
 
   static const typeValue = 'progress';
 
+  @override
+  Map<String, dynamic> toJson() => {
+    ...callBaseJson(typeValue),
+    'callee': callee,
+    if (isFocus != null) 'is_focus': isFocus,
+    'jsep': jsep,
+  };
+
   factory ProgressEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

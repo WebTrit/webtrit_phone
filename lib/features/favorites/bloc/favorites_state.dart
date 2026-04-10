@@ -1,9 +1,10 @@
 part of 'favorites_bloc.dart';
 
-@freezed
-class FavoritesState with _$FavoritesState {
+class FavoritesState extends Equatable {
   const FavoritesState({this.favorites});
 
+  final List<FavoriteWithContact>? favorites;
+
   @override
-  final List<Favorite>? favorites;
+  List<Object?> get props => [favorites];
 }

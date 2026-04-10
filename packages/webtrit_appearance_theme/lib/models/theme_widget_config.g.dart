@@ -33,19 +33,9 @@ ThemeWidgetConfig _$ThemeWidgetConfigFromJson(
   dialog: json['dialog'] == null
       ? const DialogWidgetConfig()
       : DialogWidgetConfig.fromJson(json['dialog'] as Map<String, dynamic>),
-  actionPad: json['actionPad'] == null
-      ? const ActionPadWidgetConfig()
-      : ActionPadWidgetConfig.fromJson(
-          json['actionPad'] as Map<String, dynamic>,
-        ),
   statuses: json['statuses'] == null
       ? const StatusesWidgetConfig()
       : StatusesWidgetConfig.fromJson(json['statuses'] as Map<String, dynamic>),
-  decorationConfig: json['decorationConfig'] == null
-      ? const DecorationConfig()
-      : DecorationConfig.fromJson(
-          json['decorationConfig'] as Map<String, dynamic>,
-        ),
 );
 
 Map<String, dynamic> _$ThemeWidgetConfigToJson(ThemeWidgetConfig instance) =>
@@ -58,9 +48,7 @@ Map<String, dynamic> _$ThemeWidgetConfigToJson(ThemeWidgetConfig instance) =>
       'input': instance.input.toJson(),
       'text': instance.text.toJson(),
       'dialog': instance.dialog.toJson(),
-      'actionPad': instance.actionPad.toJson(),
       'statuses': instance.statuses.toJson(),
-      'decorationConfig': instance.decorationConfig.toJson(),
     };
 
 FontsConfig _$FontsConfigFromJson(Map<String, dynamic> json) =>
@@ -72,15 +60,15 @@ Map<String, dynamic> _$FontsConfigToJson(FontsConfig instance) =>
 ButtonWidgetConfig _$ButtonWidgetConfigFromJson(Map<String, dynamic> json) =>
     ButtonWidgetConfig(
       primaryElevatedButton: json['primaryElevatedButton'] == null
-          ? const ElevatedButtonWidgetConfig()
-          : ElevatedButtonWidgetConfig.fromJson(
+          ? null
+          : ButtonStyleConfig.fromJson(
               json['primaryElevatedButton'] as Map<String, dynamic>,
             ),
     );
 
 Map<String, dynamic> _$ButtonWidgetConfigToJson(ButtonWidgetConfig instance) =>
     <String, dynamic>{
-      'primaryElevatedButton': instance.primaryElevatedButton.toJson(),
+      'primaryElevatedButton': instance.primaryElevatedButton?.toJson(),
     };
 
 ElevatedButtonWidgetConfig _$ElevatedButtonWidgetConfigFromJson(
@@ -134,17 +122,19 @@ BarWidgetConfig _$BarWidgetConfigFromJson(Map<String, dynamic> json) =>
           : BottomNavigationBarWidgetConfig.fromJson(
               json['bottomNavigationBar'] as Map<String, dynamic>,
             ),
-      extTabBar: json['extTabBar'] == null
-          ? const ExtTabBarWidgetConfig()
-          : ExtTabBarWidgetConfig.fromJson(
-              json['extTabBar'] as Map<String, dynamic>,
-            ),
+      appBarConfig: json['appBarConfig'] == null
+          ? const AppBarConfig()
+          : AppBarConfig.fromJson(json['appBarConfig'] as Map<String, dynamic>),
+      tabBarConfig: json['tabBarConfig'] == null
+          ? const TabBarConfig()
+          : TabBarConfig.fromJson(json['tabBarConfig'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$BarWidgetConfigToJson(BarWidgetConfig instance) =>
     <String, dynamic>{
       'bottomNavigationBar': instance.bottomNavigationBar.toJson(),
-      'extTabBar': instance.extTabBar.toJson(),
+      'appBarConfig': instance.appBarConfig.toJson(),
+      'tabBarConfig': instance.tabBarConfig.toJson(),
     };
 
 BottomNavigationBarWidgetConfig _$BottomNavigationBarWidgetConfigFromJson(
@@ -185,14 +175,16 @@ GroupTitleListTileWidgetConfig _$GroupTitleListTileWidgetConfigFromJson(
   Map<String, dynamic> json,
 ) => GroupTitleListTileWidgetConfig(
   backgroundColor: json['backgroundColor'] as String?,
-  textColor: json['textColor'] as String?,
+  textStyle: json['textStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(json['textStyle'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$GroupTitleListTileWidgetConfigToJson(
   GroupTitleListTileWidgetConfig instance,
 ) => <String, dynamic>{
   'backgroundColor': instance.backgroundColor,
-  'textColor': instance.textColor,
+  'textStyle': instance.textStyle?.toJson(),
 };
 
 CallActionsWidgetConfig _$CallActionsWidgetConfigFromJson(
@@ -459,34 +451,6 @@ Map<String, dynamic> _$SnackBarWidgetConfigToJson(
   'warningBackgroundColor': instance.warningBackgroundColor,
 };
 
-ActionPadWidgetConfig _$ActionPadWidgetConfigFromJson(
-  Map<String, dynamic> json,
-) => ActionPadWidgetConfig(
-  callStart: json['callStart'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['callStart'] as Map<String, dynamic>,
-        ),
-  callTransfer: json['callTransfer'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['callTransfer'] as Map<String, dynamic>,
-        ),
-  backspacePressed: json['backspacePressed'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['backspacePressed'] as Map<String, dynamic>,
-        ),
-);
-
-Map<String, dynamic> _$ActionPadWidgetConfigToJson(
-  ActionPadWidgetConfig instance,
-) => <String, dynamic>{
-  'callStart': instance.callStart.toJson(),
-  'callTransfer': instance.callTransfer.toJson(),
-  'backspacePressed': instance.backspacePressed.toJson(),
-};
-
 StatusesWidgetConfig _$StatusesWidgetConfigFromJson(
   Map<String, dynamic> json,
 ) => StatusesWidgetConfig(
@@ -542,33 +506,149 @@ Map<String, dynamic> _$CallStatusesWidgetConfigToJson(
   'ready': instance.ready,
 };
 
-DecorationConfig _$DecorationConfigFromJson(Map<String, dynamic> json) =>
-    DecorationConfig(
-      primaryGradientColorsConfig: json['primaryGradientColorsConfig'] == null
-          ? const GradientColorsConfig()
-          : GradientColorsConfig.fromJson(
-              json['primaryGradientColorsConfig'] as Map<String, dynamic>,
-            ),
-    );
-
-Map<String, dynamic> _$DecorationConfigToJson(
-  DecorationConfig instance,
-) => <String, dynamic>{
-  'primaryGradientColorsConfig': instance.primaryGradientColorsConfig.toJson(),
-};
-
-GradientColorsConfig _$GradientColorsConfigFromJson(
-  Map<String, dynamic> json,
-) => GradientColorsConfig(
-  colors:
-      (json['colors'] as List<dynamic>?)
-          ?.map((e) => CustomColor.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      const [],
+TabBarConfig _$TabBarConfigFromJson(Map<String, dynamic> json) => TabBarConfig(
+  indicatorColor: json['indicatorColor'] as String?,
+  dividerColor: json['dividerColor'] as String?,
+  labelColor: json['labelColor'] as String?,
+  unselectedLabelColor: json['unselectedLabelColor'] as String?,
+  overlayColor: json['overlayColor'] as String?,
+  dividerHeight: (json['dividerHeight'] as num?)?.toDouble(),
+  labelPadding: json['labelPadding'] == null
+      ? null
+      : PaddingConfig.fromJson(json['labelPadding'] as Map<String, dynamic>),
+  labelStyle: json['labelStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(json['labelStyle'] as Map<String, dynamic>),
+  unselectedLabelStyle: json['unselectedLabelStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(
+          json['unselectedLabelStyle'] as Map<String, dynamic>,
+        ),
+  indicatorSize: $enumDecodeNullable(
+    _$TabBarIndicatorSizeConfigEnumMap,
+    json['indicatorSize'],
+    unknownValue: JsonKey.nullForUndefinedEnumValue,
+  ),
+  tabAlignment: $enumDecodeNullable(
+    _$TabAlignmentConfigEnumMap,
+    json['tabAlignment'],
+    unknownValue: JsonKey.nullForUndefinedEnumValue,
+  ),
+  indicatorAnimation: $enumDecodeNullable(
+    _$TabIndicatorAnimationConfigEnumMap,
+    json['indicatorAnimation'],
+    unknownValue: JsonKey.nullForUndefinedEnumValue,
+  ),
+  splashFactory: $enumDecodeNullable(
+    _$TabSplashFactoryConfigEnumMap,
+    json['splashFactory'],
+    unknownValue: JsonKey.nullForUndefinedEnumValue,
+  ),
+  indicatorBorder: json['indicatorBorder'] == null
+      ? null
+      : BorderConfig.fromJson(json['indicatorBorder'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$GradientColorsConfigToJson(
-  GradientColorsConfig instance,
+Map<String, dynamic> _$TabBarConfigToJson(
+  TabBarConfig instance,
 ) => <String, dynamic>{
-  'colors': instance.colors.map((e) => e.toJson()).toList(),
+  'indicatorColor': instance.indicatorColor,
+  'dividerColor': instance.dividerColor,
+  'labelColor': instance.labelColor,
+  'unselectedLabelColor': instance.unselectedLabelColor,
+  'overlayColor': instance.overlayColor,
+  'dividerHeight': instance.dividerHeight,
+  'labelPadding': instance.labelPadding?.toJson(),
+  'labelStyle': instance.labelStyle?.toJson(),
+  'unselectedLabelStyle': instance.unselectedLabelStyle?.toJson(),
+  'indicatorSize': _$TabBarIndicatorSizeConfigEnumMap[instance.indicatorSize],
+  'tabAlignment': _$TabAlignmentConfigEnumMap[instance.tabAlignment],
+  'indicatorAnimation':
+      _$TabIndicatorAnimationConfigEnumMap[instance.indicatorAnimation],
+  'splashFactory': _$TabSplashFactoryConfigEnumMap[instance.splashFactory],
+  'indicatorBorder': instance.indicatorBorder?.toJson(),
 };
+
+const _$TabBarIndicatorSizeConfigEnumMap = {
+  TabBarIndicatorSizeConfig.tab: 'tab',
+  TabBarIndicatorSizeConfig.label: 'label',
+};
+
+const _$TabAlignmentConfigEnumMap = {
+  TabAlignmentConfig.start: 'start',
+  TabAlignmentConfig.startOffset: 'startOffset',
+  TabAlignmentConfig.fill: 'fill',
+  TabAlignmentConfig.center: 'center',
+};
+
+const _$TabIndicatorAnimationConfigEnumMap = {
+  TabIndicatorAnimationConfig.linear: 'linear',
+  TabIndicatorAnimationConfig.elastic: 'elastic',
+};
+
+const _$TabSplashFactoryConfigEnumMap = {
+  TabSplashFactoryConfig.noSplash: 'noSplash',
+  TabSplashFactoryConfig.inkRipple: 'inkRipple',
+  TabSplashFactoryConfig.inkSparkle: 'inkSparkle',
+};
+
+_AppBarConfig _$AppBarConfigFromJson(
+  Map<String, dynamic> json,
+) => _AppBarConfig(
+  primary: json['primary'] as bool? ?? true,
+  showBackButton: json['showBackButton'] as bool? ?? true,
+  backgroundColor: json['backgroundColor'] as String?,
+  foregroundColor: json['foregroundColor'] as String?,
+  shadowColor: json['shadowColor'] as String?,
+  surfaceTintColor: json['surfaceTintColor'] as String?,
+  elevation: (json['elevation'] as num?)?.toDouble(),
+  scrolledUnderElevation: (json['scrolledUnderElevation'] as num?)?.toDouble(),
+  titleSpacing: (json['titleSpacing'] as num?)?.toDouble(),
+  leadingWidth: (json['leadingWidth'] as num?)?.toDouble(),
+  toolbarHeight: (json['toolbarHeight'] as num?)?.toDouble(),
+  centerTitle: json['centerTitle'] as bool?,
+  iconTheme: json['iconTheme'] == null
+      ? null
+      : IconThemeDataConfig.fromJson(json['iconTheme'] as Map<String, dynamic>),
+  actionsIconTheme: json['actionsIconTheme'] == null
+      ? null
+      : IconThemeDataConfig.fromJson(
+          json['actionsIconTheme'] as Map<String, dynamic>,
+        ),
+  titleTextStyle: json['titleTextStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(
+          json['titleTextStyle'] as Map<String, dynamic>,
+        ),
+  toolbarTextStyle: json['toolbarTextStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(
+          json['toolbarTextStyle'] as Map<String, dynamic>,
+        ),
+  systemOverlayStyle: json['systemOverlayStyle'] == null
+      ? null
+      : OverlayStyleModel.fromJson(
+          json['systemOverlayStyle'] as Map<String, dynamic>,
+        ),
+);
+
+Map<String, dynamic> _$AppBarConfigToJson(_AppBarConfig instance) =>
+    <String, dynamic>{
+      'primary': instance.primary,
+      'showBackButton': instance.showBackButton,
+      'backgroundColor': instance.backgroundColor,
+      'foregroundColor': instance.foregroundColor,
+      'shadowColor': instance.shadowColor,
+      'surfaceTintColor': instance.surfaceTintColor,
+      'elevation': instance.elevation,
+      'scrolledUnderElevation': instance.scrolledUnderElevation,
+      'titleSpacing': instance.titleSpacing,
+      'leadingWidth': instance.leadingWidth,
+      'toolbarHeight': instance.toolbarHeight,
+      'centerTitle': instance.centerTitle,
+      'iconTheme': instance.iconTheme,
+      'actionsIconTheme': instance.actionsIconTheme,
+      'titleTextStyle': instance.titleTextStyle,
+      'toolbarTextStyle': instance.toolbarTextStyle,
+      'systemOverlayStyle': instance.systemOverlayStyle,
+    };

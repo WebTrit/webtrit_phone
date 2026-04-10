@@ -45,17 +45,11 @@ void main() {
     testWidgets(name, (tester) async {
       final screenshotName = '$screenshotNamePrefix/$name';
 
-      final innerWidget = await withClock(
-        Clock.fixed(dFixedTime),
-        buildWidget,
-      );
+      final innerWidget = await withClock(Clock.fixed(dFixedTime), buildWidget);
 
       final wrappedWidget = MultiProvider(
         providers: appContext.providers,
-        child: PresenceViewParams(
-          viewSource: PresenceViewSource.contactInfo,
-          child: innerWidget,
-        ),
+        child: PresenceViewParams(viewSource: PresenceViewSource.contactInfo, child: innerWidget),
       );
 
       await tester.pumpWidget(wrappedWidget);
@@ -80,10 +74,7 @@ void main() {
 
   group('take login screen screenshots', () {
     takeScreenshotTestWidgets('login_screen__modeSelect', () {
-      return ScreenshotApp(
-        appBloc: appContext.appBloc,
-        child: const LoginModeSelectScreenScreenshot(),
-      );
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const LoginModeSelectScreenScreenshot());
     });
   });
 
@@ -91,53 +82,110 @@ void main() {
     takeScreenshotTestWidgets('main_screen__favorites', () {
       return ScreenshotApp(
         appBloc: appContext.appBloc,
-        child: const MainScreenScreenshot(
-          MainFlavor.favorites,
-          Text(EnvironmentConfig.APP_NAME),
-        ),
+        child: const MainScreenScreenshot(MainFlavor.favorites, Text(EnvironmentConfig.APP_NAME)),
       );
     });
     takeScreenshotTestWidgets('main_screen__recents', () {
       return ScreenshotApp(
         appBloc: appContext.appBloc,
-        child: const MainScreenScreenshot(
-          MainFlavor.recents,
-          Text(EnvironmentConfig.APP_NAME),
-        ),
+        child: const MainScreenScreenshot(MainFlavor.recents, Text(EnvironmentConfig.APP_NAME)),
       );
     });
     takeScreenshotTestWidgets('main_screen__keypad', () {
       return ScreenshotApp(
         appBloc: appContext.appBloc,
-        child: const MainScreenScreenshot(
-          MainFlavor.keypad,
-          Text(EnvironmentConfig.APP_NAME),
-        ),
+        child: const MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME)),
       );
     });
   });
 
   group('take call screen screenshots', () {
     takeScreenshotTestWidgets('settings_screen', () {
-      return ScreenshotApp(
-        appBloc: appContext.appBloc,
-        child: const SettingScreenScreenshot(),
-      );
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const SettingScreenScreenshot());
     });
   });
 
   group('take call screen screenshots', () {
     takeScreenshotTestWidgets('call_screen__audio', () {
-      return ScreenshotApp(
-        appBloc: appContext.appBloc,
-        child: const CallScreenScreenshot(false),
-      );
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const CallScreenScreenshot(false));
     });
     takeScreenshotTestWidgets('call_screen__video', () {
-      return ScreenshotApp(
-        appBloc: appContext.appBloc,
-        child: const CallScreenScreenshot(true),
-      );
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const CallScreenScreenshot(true));
+    });
+  });
+
+  group('take contact & messaging screenshots', () {
+    takeScreenshotTestWidgets('contact_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const ContactScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('chat_conversation_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const ChatConversationScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('sms_conversation_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const SmsConversationScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('system_notifications_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const SystemNotificationsScreenScreenshot());
+    });
+  });
+
+  group('take CDR & call log screenshots', () {
+    takeScreenshotTestWidgets('recent_cdrs_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const RecentCdrsScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('number_cdrs_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const NumberCdrsScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('call_log_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const CallLogScreenScreenshot());
+    });
+  });
+
+  group('take settings sub-screen screenshots', () {
+    takeScreenshotTestWidgets('network_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const NetworkScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('language_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const LanguageScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('diagnostic_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const DiagnosticScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('caller_id_settings_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const CallerIdSettingsScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('presence_settings_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const PresenceSettingsScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('theme_mode_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const ThemeModeScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('voicemail_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const VoicemailScreenScreenshot());
+    });
+  });
+
+  group('take login variant screenshots', () {
+    takeScreenshotTestWidgets('login_switch_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const LoginSwitchScreenScreenshot());
+    });
+  });
+
+  group('take utility screen screenshots', () {
+    takeScreenshotTestWidgets('log_records_console_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const LogRecordsConsoleScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('contacts_agreement_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const ContactsAgreementScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('teardown_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const TeardownScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('permissions_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const PermissionsScreenScreenshot());
+    });
+    takeScreenshotTestWidgets('user_agreement_screen', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const UserAgreementScreenScreenshot());
     });
   });
 }

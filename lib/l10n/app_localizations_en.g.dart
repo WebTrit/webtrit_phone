@@ -13,6 +13,57 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.';
 
   @override
+  String agoTicker_daysAgo(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days ago',
+      one: '$days day ago',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_hoursAgo(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: '$hours hours ago',
+      one: '$hours hour ago',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_minutesAgo(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes minutes ago',
+      one: '$minutes minute ago',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_secondsAgo(num seconds) {
+    final intl.NumberFormat secondsNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String secondsString = secondsNumberFormat.format(seconds);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      seconds,
+      locale: localeName,
+      other: '$secondsString seconds ago',
+      one: '$secondsString second ago',
+      zero: 'Just now',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get alertDialogActions_no => 'No';
 
   @override
@@ -202,7 +253,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callStatus_ready => 'Connection established';
 
   @override
+  String get call_SystemErrorDialog_description =>
+      'To resume making calls, a phone restart is required. This will resolve a temporary system error.';
+
+  @override
+  String get call_SystemErrorDialog_title => 'System Error';
+
+  @override
   String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Currently, there is no active call';
+
+  @override
+  String get call_videoBackground_actionLabel_disableBlur => 'Disable Blur';
+
+  @override
+  String get call_videoBackground_actionLabel_enableBlur => 'Enable Blur';
+
+  @override
+  String get call_videoView_actionLabel_cover => 'Cover';
+
+  @override
+  String get call_videoView_actionLabel_fit => 'Fit';
+
+  @override
+  String get cdrs_noMissedCalls_message => 'No missed calls';
+
+  @override
+  String get cdrs_noRecentCalls_message => 'No recent calls';
 
   @override
   String get common_noInternetConnection_message =>
@@ -494,6 +570,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnostic_pushTokenStatusType_success => 'Service successfully configured';
 
   @override
+  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Add a note (Optional)';
+
+  @override
+  String get diagnosticReportDialogCancelButtonLabel => 'Cancel';
+
+  @override
+  String get diagnosticReportDialogCommentTextFieldHintText => 'Describe what happened...';
+
+  @override
+  String get diagnosticReportDialogContent =>
+      'This report contains technical details to help us identify connection issues.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Requires extra permissions.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Include System Logs';
+
+  @override
+  String get diagnosticReportDialogSendReportButtonLabel => 'Send Report';
+
+  @override
+  String get diagnosticReportDialogTitle => 'Send Diagnostic Report';
+
+  @override
   String get diagnosticScreen_contacts_agreement_description =>
       'Allow the app to access my contacts to enhance my user experience.';
 
@@ -508,31 +609,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagnosticScreen_pushNotificationService_title => 'Push notification service';
-
-  @override
-  String get diagnosticReportDialogTitle => 'Send Diagnostic Report';
-
-  @override
-  String get diagnosticReportDialogContent =>
-      'This report contains technical details to help us identify connection issues.';
-
-  @override
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Include System Logs';
-
-  @override
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Requires extra permissions.';
-
-  @override
-  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Add a note (Optional)';
-
-  @override
-  String get diagnosticReportDialogCommentTextFieldHintText => 'Describe what happened...';
-
-  @override
-  String get diagnosticReportDialogCancelButtonLabel => 'Cancel';
-
-  @override
-  String get diagnosticReportDialogSendReportButtonLabel => 'Send Report';
 
   @override
   String get favorites_BodyCenter_empty =>
@@ -1036,6 +1112,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_MessageView_textcopy => 'Copy to clipboard';
 
   @override
+  String get messaging_MessageView_today => 'Today';
+
+  @override
+  String get messaging_MessageView_yesterday => 'Yesterday';
+
+  @override
   String get messaging_ParticipantName_unknown => 'Unknown user';
 
   @override
@@ -1286,16 +1368,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get presence_infoView_available => 'Available:';
 
   @override
-  String get presence_infoView_available_false => 'No';
+  String get presence_infoView_available_false => 'Unreachable';
 
   @override
-  String get presence_infoView_available_true => 'Yes';
+  String get presence_infoView_available_true => 'Available';
 
   @override
   String get presence_infoView_client => 'Client:';
 
   @override
   String get presence_infoView_device => 'Device:';
+
+  @override
+  String get presence_infoView_localTime => 'Local Time:';
 
   @override
   String get presence_infoView_note => 'Note:';
@@ -1496,6 +1581,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sessionStatus_pushNotificationServiceProblem => 'Problem with configuration push notification service';
 
   @override
+  String get session_Teardown_progressText => 'Signing out...';
+
+  @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Application embedded links';
 
   @override
@@ -1503,6 +1591,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_AboutText_AppVersion => 'App Version';
+
+  @override
+  String get settings_AboutText_CoreVersion => 'WebTrit Cloud Backend version';
 
   @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
@@ -1687,25 +1778,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_encoding_Section_preset => 'Preset';
 
   @override
-  String get settings_encoding_Section_preset_balance => 'Balance';
+  String get settings_encoding_Section_preset_balance => 'Balanced';
 
   @override
-  String get settings_encoding_Section_preset_bypass => 'Bypass';
+  String get settings_encoding_Section_preset_balance_tooltip => 'Balances call quality with data usage.';
+
+  @override
+  String get settings_encoding_Section_preset_eco => 'Low bandwidth';
+
+  @override
+  String get settings_encoding_Section_preset_eco_tooltip =>
+      'Uses less internet data and works better on slow or unstable connections.';
 
   @override
   String get settings_encoding_Section_preset_custom => 'Custom';
 
   @override
-  String get settings_encoding_Section_preset_default => 'Default';
+  String get settings_encoding_Section_preset_custom_tooltip => 'Manually adjust call quality settings.';
 
   @override
-  String get settings_encoding_Section_preset_eco => 'Eco';
+  String get settings_encoding_Section_preset_default => 'Recommended';
+
+  @override
+  String get settings_encoding_Section_preset_default_tooltip =>
+      'The default media quality settings chosen for this application. Works well for most calls';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Compatibility mode';
+
+  @override
+  String get settings_encoding_Section_preset_bypass_tooltip =>
+      'Skips applying media quality settings and uses an unmodified call setup. Helps resolve compatibility issues.';
 
   @override
   String get settings_encoding_Section_preset_full_flex => 'Full Flex';
 
   @override
-  String get settings_encoding_Section_preset_quality => 'Quality';
+  String get settings_encoding_Section_preset_quality => 'Best quality';
+
+  @override
+  String get settings_encoding_Section_preset_quality_tooltip =>
+      'Provides the best audio and video quality. Requires a fast and stable internet connection.';
 
   @override
   String get settings_encoding_Section_preset_title => 'Media encoding configs';
@@ -1777,11 +1890,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_iceSettings_Section_noskip => 'No filtering';
 
   @override
-  String get settings_iceSettings_Section_title => 'Ice candidates filtering';
+  String get settings_iceSettings_Section_title => 'ICE candidates filtering';
 
   @override
   String get settings_iceSettings_Section_tooltip =>
-      'Filter ice candidates based on the network preferences may help to avoid network issues';
+      'Filter ICE candidates based on the network preferences may help to avoid network issues';
 
   @override
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Skip TCP candidates';
@@ -1863,7 +1976,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_network_fallbackCalls_description =>
-      'Enable fallback incoming call triggering via specially formatted SMS';
+      'If push notifications about calls are not received, the app will receive a special SMS and display the incoming call screen.';
 
   @override
   String get settings_network_fallbackCalls_title => 'Fallback Incoming Calls';
@@ -1883,10 +1996,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_network_incomingCallType_socket_title => 'Persistent Connection to the Server';
 
   @override
-  String get settings_network_incomingCallType_title => 'Incoming Call Type';
+  String get settings_network_incomingCallType_title => 'Incoming Call Delivery';
 
   @override
-  String get settings_network_smsFallback_toggle => 'SMS Fallback';
+  String get settings_network_smsFallback_toggle => 'SMS as a backup channel';
 
   @override
   String get settings_videoCapturing_Section_framerate_prefix => 'frames: ';
@@ -2183,6 +2296,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Voicemail feature are not supported in your core. Please contact your administrator for more information.';
 
   @override
+  String get voicemail_Dialog_deleteSelectedContent =>
+      'Selected voicemails will be permanently deleted. Do you want to continue?';
+
+  @override
+  String get voicemail_Dialog_deleteSelectedTitle => 'Delete selected voicemails?';
+
+  @override
   String get voicemail_Dialog_deleteSingleContent =>
       'This voicemail will be permanently deleted. Do you want to continue?';
 
@@ -2212,7 +2332,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voicemail_Label_markAsNew => 'Mark as new';
 
   @override
+  String get voicemail_Label_playbackError => 'Playback failed';
+
+  @override
   String get voicemail_Label_retry => 'Try again';
+
+  @override
+  String get voicemail_Snackbar_notConfigured => 'Contact your administrator to activate voicemail';
 
   @override
   String get voicemail_Title_notSupported => 'Feature not supported';
@@ -2257,4 +2383,300 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Try again';
+
+  @override
+  String get cdr_disconnectReason_unknown => 'Unknown';
+
+  @override
+  String get cdr_disconnectReason_validCauseCodeNotYetReceived => 'Valid cause code not yet received';
+
+  @override
+  String get cdr_disconnectReason_unallocatedNumber => 'Unallocated (unassigned) number';
+
+  @override
+  String get cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan => 'No route to specified transit network (WAN)';
+
+  @override
+  String get cdr_disconnectReason_noRouteToDestination => 'No route to destination';
+
+  @override
+  String get cdr_disconnectReason_sendSpecialInformationTone => 'send special information tone';
+
+  @override
+  String get cdr_disconnectReason_misdialledTrunkPrefix => 'misdialled trunk prefix.';
+
+  @override
+  String get cdr_disconnectReason_channelUnacceptable => 'Channel unacceptable';
+
+  @override
+  String get cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel =>
+      'Call awarded and being delivered in an established channel';
+
+  @override
+  String get cdr_disconnectReason_prefix0DialedButNotAllowedPreemption =>
+      'Prefix 0 dialed but not allowed (Preemption)';
+
+  @override
+  String get cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved =>
+      'Prefix 1 dialed but not allowed (Preemption reserved)';
+
+  @override
+  String get cdr_disconnectReason_prefix1DialedButNotRequired => 'Prefix 1 dialed but not required';
+
+  @override
+  String get cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding =>
+      'More digits received than allowed, call is proceeding';
+
+  @override
+  String get cdr_disconnectReason_normalCallClearing => 'Normal call clearing';
+
+  @override
+  String get cdr_disconnectReason_userBusy => 'User busy';
+
+  @override
+  String get cdr_disconnectReason_noUserResponding => 'No user responding';
+
+  @override
+  String get cdr_disconnectReason_noAnswerFromUser => 'No answer from user';
+
+  @override
+  String get cdr_disconnectReason_subscriberIsAbsent => 'Subscriber is absent';
+
+  @override
+  String get cdr_disconnectReason_callRejected => 'Call rejected';
+
+  @override
+  String get cdr_disconnectReason_numberChanged => 'Number changed';
+
+  @override
+  String get cdr_disconnectReason_reverseChargingRejected => 'Reverse charging rejected';
+
+  @override
+  String get cdr_disconnectReason_callSuspended => 'Call suspended';
+
+  @override
+  String get cdr_disconnectReason_callResumed => 'Call resumed';
+
+  @override
+  String get cdr_disconnectReason_nonSelectedUserClearing => 'Non-selected user clearing';
+
+  @override
+  String get cdr_disconnectReason_destinationOutOfOrder => 'Destination out of order';
+
+  @override
+  String get cdr_disconnectReason_invalidNumberFormatIncompleteNumber => 'Invalid number format (incomplete number)';
+
+  @override
+  String get cdr_disconnectReason_facilityRejected => 'Facility rejected';
+
+  @override
+  String get cdr_disconnectReason_responseToStatusEnquiry => 'Response to STATUS ENQUIRY';
+
+  @override
+  String get cdr_disconnectReason_normalUnspecified => 'Normal, unspecified';
+
+  @override
+  String get cdr_disconnectReason_circuitOutOfOrder => 'Circuit out of order';
+
+  @override
+  String get cdr_disconnectReason_noCircuitChannelAvailable => 'No circuit/channel available';
+
+  @override
+  String get cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable =>
+      'Destination unattainable (Require VPCI VCI is not available)';
+
+  @override
+  String get cdr_disconnectReason_vpciVciAssignmentFailure => 'VPCI VCI assignment failure';
+
+  @override
+  String get cdr_disconnectReason_degradedServiceCallRateIsnNotValid => 'Degraded service (call rate isn not valid)';
+
+  @override
+  String get cdr_disconnectReason_networkWanOutOfOrder => 'Network (WAN) out of order';
+
+  @override
+  String get cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService =>
+      'Transit delay range cannot be achieved(Permanent frame mode is out of service)';
+
+  @override
+  String get cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational =>
+      'Throughput range cannot be achieved (Permanent frame mode is operational)';
+
+  @override
+  String get cdr_disconnectReason_temporaryFailure => 'Temporary failure';
+
+  @override
+  String get cdr_disconnectReason_switchingEquipmentCongestion => 'Switching equipment congestion';
+
+  @override
+  String get cdr_disconnectReason_accessInformationDiscarded => 'Access information discarded';
+
+  @override
+  String get cdr_disconnectReason_requestedCircuitChannelNotAvailable => 'Requested circuit channel not available';
+
+  @override
+  String get cdr_disconnectReason_preEmptedNoVpciVciIsAvailable => 'Pre-empted (No VPCI VCI is available)';
+
+  @override
+  String get cdr_disconnectReason_precedenceCallBlocked => 'Precedence call blocked';
+
+  @override
+  String get cdr_disconnectReason_resourceUnavailableUnspecified => 'Resource unavailable - unspecified';
+
+  @override
+  String get cdr_disconnectReason_dspError => 'DSP error';
+
+  @override
+  String get cdr_disconnectReason_qualityOfServiceUnavailable => 'Quality of service unavailable';
+
+  @override
+  String get cdr_disconnectReason_requestedFacilityNotSubscribed => 'Requested facility not subscribed';
+
+  @override
+  String get cdr_disconnectReason_reverseChargingNotAllowed => 'Reverse charging not allowed';
+
+  @override
+  String get cdr_disconnectReason_outgoingCallsBarred => 'Outgoing calls barred';
+
+  @override
+  String get cdr_disconnectReason_outgoingCallsBarredWithinCug => 'Outgoing calls barred within CUG';
+
+  @override
+  String get cdr_disconnectReason_incomingCallsBarred => 'Incoming calls barred';
+
+  @override
+  String get cdr_disconnectReason_incomingCallsBarredWithinCug => 'Incoming calls barred within CUG';
+
+  @override
+  String get cdr_disconnectReason_callWaitingNotSubscribed => 'Call waiting not subscribed';
+
+  @override
+  String get cdr_disconnectReason_bearerCapabilityNotAuthorized => 'Bearer capability not authorized';
+
+  @override
+  String get cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable => 'Bearer capability not presently available';
+
+  @override
+  String get cdr_disconnectReason_inconsistancyInTheInformationAndClass => 'Inconsistancy in the information and class';
+
+  @override
+  String get cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified =>
+      'Service or option not available, unspecified';
+
+  @override
+  String get cdr_disconnectReason_bearerServiceNotImplemented => 'Bearer service not implemented';
+
+  @override
+  String get cdr_disconnectReason_channelTypeNotImplemented => 'Channel type not implemented';
+
+  @override
+  String get cdr_disconnectReason_transitNetworkSelectionNotImplemented => 'Transit network selection not implemented';
+
+  @override
+  String get cdr_disconnectReason_messageNotImplemented => 'Message not implemented';
+
+  @override
+  String get cdr_disconnectReason_requestedFacilityNotImplemented => 'Requested facility not implemented';
+
+  @override
+  String get cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable =>
+      'Only restricted digital information bearer capability is available';
+
+  @override
+  String get cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified =>
+      'Service or option not implemented, unspecified';
+
+  @override
+  String get cdr_disconnectReason_invalidCallReferenceValue => 'Invalid call reference value';
+
+  @override
+  String get cdr_disconnectReason_identifiedChannelDoesNotExist => 'Identified channel does not exist';
+
+  @override
+  String get cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot =>
+      'A suspended call exists, but this call identity does not';
+
+  @override
+  String get cdr_disconnectReason_callIdentityInUse => 'Call identity in use';
+
+  @override
+  String get cdr_disconnectReason_noCallSuspended => 'No call suspended';
+
+  @override
+  String get cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared =>
+      'Call having the requested call identity has been cleared';
+
+  @override
+  String get cdr_disconnectReason_calledUserNotMemberOfCug => 'Called user not member of CUG';
+
+  @override
+  String get cdr_disconnectReason_incompatibleDestination => 'Incompatible destination';
+
+  @override
+  String get cdr_disconnectReason_nonExistentAbbreviatedAddressEntry => 'Non-existent abbreviated address entry';
+
+  @override
+  String get cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed =>
+      'Destination address missing, and direct call not subscribed';
+
+  @override
+  String get cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse =>
+      'Invalid transit network selection (national use)';
+
+  @override
+  String get cdr_disconnectReason_invalidFacilityParameter => 'Invalid facility parameter';
+
+  @override
+  String get cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported =>
+      'Mandatory information element is missing(AAL parameter is not supported)';
+
+  @override
+  String get cdr_disconnectReason_invalidMessageUnspecified => 'Invalid message, unspecified';
+
+  @override
+  String get cdr_disconnectReason_mandatoryInformationElementIsMissing => 'Mandatory information element is missing';
+
+  @override
+  String get cdr_disconnectReason_messageTypeNonExistentOrNotImplemented =>
+      'Message type non-existent or not implemented';
+
+  @override
+  String get cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented =>
+      'Message not compatible with call state or message type non-existent or not implemented';
+
+  @override
+  String get cdr_disconnectReason_informationElementNonexistantOrNotImplemented =>
+      'information element nonexistant or not implemented';
+
+  @override
+  String get cdr_disconnectReason_invalidInformationElementContents => 'Invalid information element contents';
+
+  @override
+  String get cdr_disconnectReason_messageNotCompatibleWithCallState => 'Message not compatible with call state';
+
+  @override
+  String get cdr_disconnectReason_recoveryOnTimerExpiry => 'Recovery on timer expiry';
+
+  @override
+  String get cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn =>
+      'parameter non-existent or not implemented - passed on';
+
+  @override
+  String get cdr_disconnectReason_urecognizedParameterMessageDiscarded => 'Urecognized parameter message discarded';
+
+  @override
+  String get cdr_disconnectReason_protocolErrorUnspecified => 'Protocol error unspecified';
+
+  @override
+  String get cdr_disconnectReason_internetworkingUnspecified => 'Internetworking, unspecified';
+
+  @override
+  String get cdr_disconnectReason_nextNodeIsUnreachable => 'Next node is unreachable';
+
+  @override
+  String get cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService =>
+      'Holst Telephony Service Provider Module (HTSPM) is out of service';
+
+  @override
+  String get cdr_disconnectReason_dtlTransitIsNotMyNodeId => 'DTL transit is not my node ID';
 }

@@ -5,6 +5,9 @@ class ResumingEvent extends CallEvent {
 
   static const typeValue = 'resuming';
 
+  @override
+  Map<String, dynamic> toJson() => callBaseJson(typeValue);
+
   factory ResumingEvent.fromJson(Map<String, dynamic> json) {
     final eventTypeValue = json[Event.typeKey];
     if (eventTypeValue != typeValue) {

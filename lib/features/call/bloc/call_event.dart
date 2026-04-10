@@ -72,19 +72,36 @@ class _ResetStateEventCompleteCall extends _ResetStateEvent {
 sealed class _SignalingClientEvent extends CallEvent {
   const _SignalingClientEvent();
 
-  const factory _SignalingClientEvent.connectInitiated() = _SignalingClientEventConnectInitiated;
+  const factory _SignalingClientEvent.connecting() = _SignalingClientEventConnecting;
 
-  const factory _SignalingClientEvent.disconnectInitiated() = _SignalingClientEventDisconnectInitiated;
+  const factory _SignalingClientEvent.connected() = _SignalingClientEventConnected;
+
+  const factory _SignalingClientEvent.failed(Object error) = _SignalingClientEventFailed;
+
+  const factory _SignalingClientEvent.disconnecting() = _SignalingClientEventDisconnecting;
 
   const factory _SignalingClientEvent.disconnected(int? code, String? reason) = _SignalingClientEventDisconnected;
 }
 
-class _SignalingClientEventConnectInitiated extends _SignalingClientEvent {
-  const _SignalingClientEventConnectInitiated();
+class _SignalingClientEventConnecting extends _SignalingClientEvent {
+  const _SignalingClientEventConnecting();
 }
 
-class _SignalingClientEventDisconnectInitiated extends _SignalingClientEvent {
-  const _SignalingClientEventDisconnectInitiated();
+class _SignalingClientEventConnected extends _SignalingClientEvent {
+  const _SignalingClientEventConnected();
+}
+
+class _SignalingClientEventFailed extends _SignalingClientEvent {
+  const _SignalingClientEventFailed(this.error);
+
+  final Object error;
+
+  @override
+  List<Object?> get props => [error];
+}
+
+class _SignalingClientEventDisconnecting extends _SignalingClientEvent {
+  const _SignalingClientEventDisconnecting();
 }
 
 class _SignalingClientEventDisconnected extends _SignalingClientEvent {
@@ -1038,4 +1055,21 @@ class _CallScreenEventDidPush extends CallScreenEvent {
 
 class _CallScreenEventDidPop extends CallScreenEvent {
   const _CallScreenEventDidPop();
+}
+
+// call configuration events
+
+sealed class CallConfigEvent extends CallEvent {
+  const CallConfigEvent();
+
+  const factory CallConfigEvent.updated({required Duration monitorCheckInterval}) = _CallConfigEventUpdated;
+}
+
+class _CallConfigEventUpdated extends CallConfigEvent {
+  const _CallConfigEventUpdated({required this.monitorCheckInterval});
+
+  final Duration monitorCheckInterval;
+
+  @override
+  List<Object?> get props => [monitorCheckInterval];
 }

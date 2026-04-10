@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 
@@ -12,36 +11,20 @@ final _logger = Logger('UserInfoCubit');
 /// A simple cubit that gets and listen user information used to store data during the user's session.
 class UserInfoCubit extends Cubit<UserInfoState> {
   UserInfoCubit(this._userRepository) : super(const UserInfoState()) {
-    fetchUserInfo();
-    _userInfoSub = _userRepository.infoUpdates().listen(_handleUserInfo);
-    _connectivitySub = Connectivity().onConnectivityChanged.listen(_handleConnectivity);
+    _userInfoSub = _userRepository.getAndListen().listen(_handleUserInfo);
   }
 
   final UserRepository _userRepository;
-  late final StreamSubscription _userInfoSub;
-  late final StreamSubscription _connectivitySub;
+  StreamSubscription? _userInfoSub;
 
   void _handleUserInfo(UserInfo? userInfo) async {
+    _logger.finer('_handleUserInfo: $userInfo');
     emit(UserInfoState(userInfo: userInfo));
-  }
-
-  void _handleConnectivity(List<ConnectivityResult> results) {
-    if (results.any((result) => result != ConnectivityResult.none)) fetchUserInfo();
-  }
-
-  void fetchUserInfo() async {
-    try {
-      final info = await _userRepository.getInfo();
-      _handleUserInfo(info);
-    } catch (e, s) {
-      _logger.warning('Failed to get user info', e, s);
-    }
   }
 
   @override
   Future<void> close() {
-    _userInfoSub.cancel();
-    _connectivitySub.cancel();
+    _userInfoSub?.cancel();
     return super.close();
   }
 }

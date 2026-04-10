@@ -33,8 +33,14 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void _initialize() async {
     _subscription = _repository.watchVoicemails().listen((items) {
+      if (state.isFeatureNotSupported) return;
       _safeEmit(state.copyWith(items: items, error: null, status: VoicemailStatus.loaded));
     });
+
+    if (!_repository.isFeatureSupported) {
+      _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported));
+      return;
+    }
 
     fetchVoicemails();
   }
@@ -45,6 +51,9 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       await _repository.fetchVoicemails();
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     } on EndpointNotSupportedException catch (e) {
+      final error = DefaultErrorNotification(e);
+      _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: error));
+    } on VoicemailNotConfiguredException catch (e) {
       final error = DefaultErrorNotification(e);
       _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: error));
     } catch (e) {
@@ -61,7 +70,18 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
       onSubmitNotification(DefaultErrorNotification(e));
-      emit(state.copyWith(status: VoicemailStatus.loaded));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
+    }
+  }
+
+  void removeSelectedVoicemails() async {
+    try {
+      _safeEmit(state.copyWith(status: VoicemailStatus.loading));
+      await _repository.removeMultipleVoicemails(state.selectedVoicemailsIds);
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
+    } catch (e) {
+      onSubmitNotification(DefaultErrorNotification(e));
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     }
   }
 
@@ -79,7 +99,8 @@ class VoicemailCubit extends Cubit<VoicemailState> {
   void toggleSeenStatus(Voicemail voicemail) async {
     try {
       _safeEmit(state.copyWith(status: VoicemailStatus.loading));
-      await _repository.updateVoicemailSeenStatus(voicemail.id.toString(), !voicemail.seen);
+      final markAsSeen = !voicemail.status.isRead;
+      await _repository.updateVoicemailSeenStatus(voicemail.id, markAsSeen);
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     } catch (e) {
       onSubmitNotification(DefaultErrorNotification(e));
@@ -89,6 +110,18 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
   void startCall(Voicemail voicemail) {
     onCallStarted(voicemail.sender);
+  }
+
+  void saveSelectedVoicemail(Voicemail voicemail) {
+    final selectedVoicemailsIds = List.of(state.selectedVoicemailsIds);
+
+    if (selectedVoicemailsIds.contains(voicemail.id)) {
+      selectedVoicemailsIds.remove(voicemail.id);
+    } else {
+      selectedVoicemailsIds.add(voicemail.id);
+    }
+
+    _safeEmit(state.copyWith(selectedVoicemailsIds: selectedVoicemailsIds));
   }
 
   /// Safely emits a new state if the cubit is not closed.

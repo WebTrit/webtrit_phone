@@ -9,18 +9,15 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:screenshots/mocks/mocks.dart';
 
 class LoginModeSelectScreenScreenshot extends StatelessWidget {
-  const LoginModeSelectScreenScreenshot({
-    super.key,
-  });
+  const LoginModeSelectScreenScreenshot({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginCubit>(
       create: (context) => MockLoginCubit.loginModeSelectScreen(),
       child: LoginModeSelectScreen(
-        appGreetingL10n: context.read<FeatureAccess?>()?.loginFeature.titleL10n,
-        launchButtons:
-            context.read<FeatureAccess?>()?.loginFeature.launchButtons ?? [],
+        appGreetingL10n: context.read<FeatureAccess?>()?.loginConfig.titleL10n,
+        launchButtons: context.read<FeatureAccess?>()?.loginConfig.launchButtons ?? [],
       ),
     );
   }

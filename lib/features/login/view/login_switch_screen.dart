@@ -24,13 +24,20 @@ class LoginSwitchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final LoginSwitchScreenStyles? loginStyles = themeData.extension<LoginSwitchScreenStyles>();
+    final localStyle = loginStyles?.primary;
+
     return LoginScaffold(
+      contentThemeOverride: localStyle?.contentThemeOverride,
+      applyToAppBar: localStyle?.applyToAppBar,
+      systemUiOverlayStyle: localStyle?.systemUiOverlayStyle,
       appBar: appBar,
       body: Column(
         children: [
           if (header != null) header!,
           if (supportedLoginTypes.length > 1) ...[
             SegmentedButton<LoginType>(
+              style: localStyle?.segmentButtonStyle,
               segments: supportedLoginTypes
                   .map(
                     (loginType) => ButtonSegment(

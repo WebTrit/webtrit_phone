@@ -8,7 +8,6 @@ class CallState with _$CallState {
     this.linesCount = 0,
     this.activeCalls = const [],
     this.minimized,
-    this.speakerOnBeforeMinimize,
     this.audioDevice,
     this.availableAudioDevices = const [],
   });
@@ -27,9 +26,6 @@ class CallState with _$CallState {
 
   @override
   final bool? minimized;
-
-  @override
-  final bool? speakerOnBeforeMinimize;
 
   @override
   final CallAudioDevice? audioDevice;
@@ -149,6 +145,7 @@ class ActiveCall with _$ActiveCall implements CallEntry {
     this.failure,
     this.localStream,
     this.remoteStream,
+    this.speakerOnBeforeMinimize,
   });
 
   @override
@@ -218,6 +215,9 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   final MediaStream? remoteStream;
 
   @override
+  final bool? speakerOnBeforeMinimize;
+
+  @override
   bool get isIncoming => direction == CallDirection.incoming;
 
   @override
@@ -229,11 +229,30 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   @override
   bool get wasHungUp => hungUpTime != null;
 
-  bool get remoteVideo => remoteStream?.getVideoTracks().isNotEmpty ?? video;
+  /// Whether the remote peer is expected to send (or is already sending) video.
+  ///
+  /// Returns `true` when the remote stream contains at least one video track
+  /// (confirmed by WebRTC). Falls back to the logical [video] flag when the
+  /// stream is absent or audio-only — this covers the window between the SDP
+  /// negotiation completing and the first video frame arriving, which is
+  /// especially common after a glare-resolution rollback where [onAddStream]
+  /// does not re-fire for the updated stream and only [onAddTrack] signals the
+  /// new video track.
+  bool get remoteVideo => (remoteStream?.getVideoTracks().isNotEmpty ?? false) || video;
 
-  bool get localVideo => localStream?.getVideoTracks().isNotEmpty ?? false;
+  /// Indicates whether the [localStream] contains at least one video track.
+  ///
+  /// This checks for the physical existence of a track in the stream, ignoring its
+  /// current [MediaStreamTrack.enabled] state. This distinction is crucial for
+  /// correct state comparison, as tracks are mutable objects.
+  bool get hasLocalVideoTrack => localStream?.getVideoTracks().isNotEmpty ?? false;
 
-  bool get cameraEnabled => localStream?.getVideoTracks().firstOrNull?.enabled == true;
+  /// Determines whether the local camera is effectively active and should be displayed.
+  ///
+  /// This is the primary flag for UI visibility. It evaluates to `true` only if:
+  /// 1. The user has explicitly enabled video (logical state [video] is `true`).
+  /// 2. A valid video track exists in the [localStream] (technical state [hasLocalVideoTrack] is `true`).
+  bool get isCameraActive => video && hasLocalVideoTrack;
 }
 
 extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {

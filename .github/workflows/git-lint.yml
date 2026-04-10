@@ -1,0 +1,45 @@
+name: Git Lint
+
+on:
+  pull_request:
+    branches: [ main, dev, develop ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate Branch Name
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          REGEX="^(feat|feature|refactor|fix|chore|build|style|docs|release)/.+$"
+          
+          if [[ ! "$BRANCH" =~ $REGEX ]]; then
+            echo "Invalid branch name: '$BRANCH'"
+            exit 1
+          fi
+
+      - name: Validate Commit Messages
+        run: |
+          COMMITS_FULL=$(git log --no-merges --format=%B origin/${{ github.base_ref }}..HEAD)
+          COMMITS_SUBJECTS=$(git log --no-merges --format=%s origin/${{ github.base_ref }}..HEAD)
+          
+          if echo "$COMMITS_FULL" | grep -qP '\p{Cyrillic}'; then
+            echo "Cyrillic characters detected in commits."
+            exit 1
+          fi
+
+          REGEX="^(feat|fix|chore|refactor|test|docs|style|ci|perf|build|revert)(\([^)]+\))?: [^A-Z].+$"
+
+          while IFS= read -r SUBJECT; do
+            if [ -z "$SUBJECT" ]; then continue; fi
+          
+            if [[ ! "$SUBJECT" =~ $REGEX ]]; then
+              echo "Invalid format or capitalized description: '$SUBJECT'"
+              exit 1
+            fi
+          done <<< "$COMMITS_SUBJECTS"

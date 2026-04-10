@@ -11,6 +11,7 @@
 - [Text Configuration](#text-configuration)
 - [Dialog Configuration](#dialog-configuration)
 - [Action Pad Configuration](#action-pad-configuration)
+- [Keypad Configuration](#keypad-configuration)
 - [Statuses Configuration](#statuses-configuration)
 - [Decoration Configuration](#decoration-configuration)
 
@@ -66,46 +67,6 @@ Defines the structure of grouped widgets, including:
 
 - Background color (optional)
 - Text color (optional)
-
-#### Call action buttons and their colors
-
-**Example:**
-
-```json
-{
-  "callStartBackgroundColor": "#ff6bbc2b",
-  "hangupBackgroundColor": "#ffffff",
-  "transferBackgroundColor": "#66009cfa",
-  "cameraBackgroundColor": "#660371b3",
-  "cameraActiveBackgroundColor": "#ff4baecc",
-  "mutedBackgroundColor": "#6613a7fe",
-  "mutedActiveBackgroundColor": "#ff14a3f8",
-  "speakerBackgroundColor": "#660a95e5",
-  "speakerActiveBackgroundColor": "#ff009cff",
-  "heldBackgroundColor": "#660195ed",
-  "heldActiveBackgroundColor": "#ff018ada",
-  "swapBackgroundColor": "#66009fff",
-  "keyBackgroundColor": "#661d92dc",
-  "keypadBackgroundColor": "#6603a5fc",
-  "keypadActiveBackgroundColor": "#ff0d99ee"
-}
-```
-
-- Background color call start
-- Background color keypad
-- Background color keypad active
-- Background color camera
-- Background color camera active
-- Background color muted
-- Background color muted active
-- Background color speaker
-- Background color speaker active
-- Background color transfer
-- Background color held
-- Background color held active
-- Background color swap
-- Background color hangup
-- Background color key
 
 ### Bar Configuration
 
@@ -353,39 +314,94 @@ Defines dialog settings, including:
 
 ### Action Pad Configuration
 
-Defines call action pad settings, including:
+Defines the styles for various action buttons, primarily used on the call screen and dial pad. Each
+key in this object
+corresponds to a specific button, and its value is a button style configuration (see [Button
+Configuration](#button-configuration)).
+
+This allows for customizing buttons like `callStart`, `hangup`, `camera`, `muted`, `digit` (for
+keypad numbers), `backspace`, etc.
+For toggleable buttons like `camera` or `muted`, you can define separate styles for their active
+states (e.g., `cameraActive`).
 
 **Example:**
 
 ```json
 {
   "callStart": {
-    "backgroundColor": "#ffffff",
+    "backgroundColor": "#75B943",
     "foregroundColor": "#ffffff",
-    "textColor": "#ffffff",
-    "iconColor": "#ffffff",
-    "disabledIconColor": "#ffffff"
+    "iconColor": "#ffffff"
   },
-  "callTransfer": {
-    "backgroundColor": "#ffffff",
+  "hangup": {
+    "backgroundColor": "#E74C3C",
     "foregroundColor": "#ffffff",
-    "textColor": "#ffffff",
-    "iconColor": "#ffffff",
-    "disabledIconColor": "#ffffff"
+    "iconColor": "#ffffff"
   },
-  "backspacePressed": {
-    "backgroundColor": "#ffffff",
-    "foregroundColor": "#ffffff",
-    "textColor": "#ffffff",
-    "iconColor": "#ffffff",
-    "disabledIconColor": "#ffffff"
+  "camera": {
+    "backgroundColor": "#660371b3"
+  },
+  "cameraActive": {
+    "backgroundColor": "#ff4baecc"
+  },
+  "muted": {
+    "backgroundColor": "#6613a7fe"
+  },
+  "mutedActive": {
+    "backgroundColor": "#ff14a3f8"
+  },
+  "digit": {
+    "backgroundColor": "#EEF3F6",
+    "foregroundColor": "#494949",
+    "textColor": "#494949"
+  },
+  "backspace": {
+    "backgroundColor": "transparent",
+    "iconColor": "#494949"
   }
 }
 ```
 
-- Call start buttons
-- Transfer buttons
-- Keypad buttons
+- `callStart`: Style for the call initiation button.
+- `hangup`: Style for the call termination button.
+- `camera`, `cameraActive`: Styles for the camera toggle button in its inactive and active states.
+- `muted`, `mutedActive`: Styles for the mute toggle button.
+- `digit`: Style for the numeric (0-9, *, #) buttons on the dial pad.
+- `backspace`: Style for the backspace button on the dial pad.
+  ... and other action buttons can be configured similarly.
+
+### Keypad Configuration
+
+Defines settings for the keypad (dial pad) view itself, distinct from the buttons on it.
+
+**Example:**
+
+```json
+{
+  "backgroundColor": "#ffffff",
+  "digitsTextStyle": {
+    "fontFamily": "Montserrat",
+    "fontSize": 36.0,
+    "fontWeight": {
+      "weight": 400
+    },
+    "color": "#494949"
+  },
+  "lettersTextStyle": {
+    "fontFamily": "Montserrat",
+    "fontSize": 12.0,
+    "fontWeight": {
+      "weight": 500
+    },
+    "color": "#494949"
+  }
+}
+```
+
+- `backgroundColor`: Background color of the entire keypad view.
+- `digitsTextStyle`: Text style for the main digits (e.g., "1", "2") on the keypad buttons.
+- `lettersTextStyle`: Text style for the secondary letters (e.g., "ABC", "DEF") on the keypad
+  buttons.
 
 ### Statuses Configuration
 

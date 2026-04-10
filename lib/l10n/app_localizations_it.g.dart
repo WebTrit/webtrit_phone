@@ -13,6 +13,57 @@ class AppLocalizationsIt extends AppLocalizations {
       'La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l\'accesso al servizio sarà limitato.';
 
   @override
+  String agoTicker_daysAgo(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days giorni fa',
+      one: '$days giorno fa',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_hoursAgo(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: '$hours ore fa',
+      one: '$hours ora fa',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_minutesAgo(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes minuti fa',
+      one: '$minutes minuto fa',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String agoTicker_secondsAgo(num seconds) {
+    final intl.NumberFormat secondsNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final String secondsString = secondsNumberFormat.format(seconds);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      seconds,
+      locale: localeName,
+      other: '$secondsString secondi fa',
+      one: '$secondsString secondo fa',
+      zero: '',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get alertDialogActions_no => 'No';
 
   @override
@@ -204,7 +255,32 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callStatus_ready => 'Connessione stabilita';
 
   @override
+  String get call_SystemErrorDialog_description =>
+      'Per riprendere a effettuare chiamate, è necessario riavviare il telefono. Questo risolverà un errore temporaneo di sistema.';
+
+  @override
+  String get call_SystemErrorDialog_title => 'Errore di sistema';
+
+  @override
   String get call_ThumbnailAvatar_currentlyNoActiveCall => 'Actualmente, no hay ninguna llamada activa';
+
+  @override
+  String get call_videoBackground_actionLabel_disableBlur => 'Disabilita sfocatura';
+
+  @override
+  String get call_videoBackground_actionLabel_enableBlur => 'Abilita sfocatura';
+
+  @override
+  String get call_videoView_actionLabel_cover => 'Riempi';
+
+  @override
+  String get call_videoView_actionLabel_fit => 'Adatta';
+
+  @override
+  String get cdrs_noMissedCalls_message => 'Nessuna chiamata persa';
+
+  @override
+  String get cdrs_noRecentCalls_message => 'Nessuna chiamata recente';
 
   @override
   String get common_noInternetConnection_message =>
@@ -498,6 +574,31 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnostic_pushTokenStatusType_success => 'Servizio configurato con successo';
 
   @override
+  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Aggiungi una nota (opzionale)';
+
+  @override
+  String get diagnosticReportDialogCancelButtonLabel => 'Annulla';
+
+  @override
+  String get diagnosticReportDialogCommentTextFieldHintText => 'Descrivi cosa è successo...';
+
+  @override
+  String get diagnosticReportDialogContent =>
+      'Questo rapporto contiene dettagli tecnici per aiutarci a identificare i problemi di connessione.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Richiede autorizzazioni extra.';
+
+  @override
+  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Includi log di sistema';
+
+  @override
+  String get diagnosticReportDialogSendReportButtonLabel => 'Invia rapporto';
+
+  @override
+  String get diagnosticReportDialogTitle => 'Invia rapporto diagnostico';
+
+  @override
   String get diagnosticScreen_contacts_agreement_description =>
       'Consenti all\'app di accedere ai miei contatti per migliorare la mia esperienza utente.';
 
@@ -512,31 +613,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get diagnosticScreen_pushNotificationService_title => 'Servizio di notifiche push';
-
-  @override
-  String get diagnosticReportDialogTitle => 'Invia rapporto diagnostico';
-
-  @override
-  String get diagnosticReportDialogContent =>
-      'Questo rapporto contiene dettagli tecnici per aiutarci a identificare i problemi di connessione.';
-
-  @override
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileTitle => 'Includi log di sistema';
-
-  @override
-  String get diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle => 'Richiede autorizzazioni extra.';
-
-  @override
-  String get diagnosticReportDialogAddNoteExpansionTileTitle => 'Aggiungi una nota (opzionale)';
-
-  @override
-  String get diagnosticReportDialogCommentTextFieldHintText => 'Descrivi cosa è successo...';
-
-  @override
-  String get diagnosticReportDialogCancelButtonLabel => 'Annulla';
-
-  @override
-  String get diagnosticReportDialogSendReportButtonLabel => 'Invia rapporto';
 
   @override
   String get favorites_BodyCenter_empty =>
@@ -1043,6 +1119,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_MessageView_textcopy => 'Copia negli appunti';
 
   @override
+  String get messaging_MessageView_today => 'Oggi';
+
+  @override
+  String get messaging_MessageView_yesterday => 'Ieri';
+
+  @override
   String get messaging_ParticipantName_unknown => 'Utente sconosciuto';
 
   @override
@@ -1300,16 +1382,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get presence_infoView_available => 'Disponibile:';
 
   @override
-  String get presence_infoView_available_false => 'No';
+  String get presence_infoView_available_false => 'Non raggiungibile';
 
   @override
-  String get presence_infoView_available_true => 'Sì';
+  String get presence_infoView_available_true => 'Disponibile';
 
   @override
   String get presence_infoView_client => 'Client:';
 
   @override
   String get presence_infoView_device => 'Dispositivo:';
+
+  @override
+  String get presence_infoView_localTime => 'Ora locale:';
 
   @override
   String get presence_infoView_note => 'Nota:';
@@ -1511,6 +1596,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'Problema con la configurazione del servizio di notifiche push';
 
   @override
+  String get session_Teardown_progressText => 'Disconnessione in corso...';
+
+  @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Collegamenti incorporati dell\'applicazione';
 
   @override
@@ -1518,6 +1606,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_AboutText_AppVersion => 'Versione dell\'app';
+
+  @override
+  String get settings_AboutText_CoreVersion => 'Versione WebTrit Cloud Backend';
 
   @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
@@ -1702,25 +1793,49 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_encoding_Section_preset => 'Preimpostato';
 
   @override
-  String get settings_encoding_Section_preset_balance => 'Bilancia';
+  String get settings_encoding_Section_preset_balance => 'Bilanciato';
 
   @override
-  String get settings_encoding_Section_preset_bypass => 'Bypass';
+  String get settings_encoding_Section_preset_balance_tooltip =>
+      'Bilancia la qualità delle chiamate con l\'utilizzo dei dati.';
+
+  @override
+  String get settings_encoding_Section_preset_eco => 'Banda larga ridotta';
+
+  @override
+  String get settings_encoding_Section_preset_eco_tooltip =>
+      'Utilizza meno dati Internet e funziona meglio con connessioni lente o instabili.';
 
   @override
   String get settings_encoding_Section_preset_custom => 'Costume';
 
   @override
-  String get settings_encoding_Section_preset_default => 'Predefinito';
+  String get settings_encoding_Section_preset_custom_tooltip =>
+      'Regola manualmente le impostazioni di qualità delle chiamate.';
 
   @override
-  String get settings_encoding_Section_preset_eco => 'Eco';
+  String get settings_encoding_Section_preset_default => 'Consigliato';
+
+  @override
+  String get settings_encoding_Section_preset_default_tooltip =>
+      'Impostazioni predefinite della qualità multimediale scelte per questa applicazione. Funziona bene per la maggior parte delle chiamate';
+
+  @override
+  String get settings_encoding_Section_preset_bypass => 'Modalità compatibilità';
+
+  @override
+  String get settings_encoding_Section_preset_bypass_tooltip =>
+      'Ignora l\'applicazione delle impostazioni di qualità multimediale e utilizza una configurazione di chiamata non modificata. Aiuta a risolvere i problemi di compatibilità.';
 
   @override
   String get settings_encoding_Section_preset_full_flex => 'Alta fedeltà';
 
   @override
-  String get settings_encoding_Section_preset_quality => 'Qualità';
+  String get settings_encoding_Section_preset_quality => 'Migliore qualità';
+
+  @override
+  String get settings_encoding_Section_preset_quality_tooltip =>
+      'Fornisce la migliore qualità audio e video. Richiede una connessione Internet veloce e stabile.';
 
   @override
   String get settings_encoding_Section_preset_title => 'Configurazioni di codifica multimediale';
@@ -1792,11 +1907,11 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_iceSettings_Section_noskip => 'Nessun filtro';
 
   @override
-  String get settings_iceSettings_Section_title => 'Filtraggio dei candidati al ghiaccio';
+  String get settings_iceSettings_Section_title => 'Filtraggio dei candidati ICE';
 
   @override
   String get settings_iceSettings_Section_tooltip =>
-      'Filtrare i candidati al ghiaccio in base alle preferenze di rete può aiutare a evitare problemi di rete';
+      'Filtrare i candidati ICE in base alle preferenze di rete può aiutare a evitare problemi di rete.';
 
   @override
   String get settings_iceSettings_Section_trfilter_skipTcp => 'Salta i candidati TCP';
@@ -1879,7 +1994,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_network_fallbackCalls_description =>
-      'Abilita l\'attivazione delle chiamate in entrata di riserva tramite SMS formattati appositamente';
+      'Se le notifiche push relative alle chiamate non arrivano, l\'applicazione riceverà un SMS speciale e mostrerà la schermata delle chiamate in arrivo.';
 
   @override
   String get settings_network_fallbackCalls_title => 'Chiamate in entrata di riserva';
@@ -1899,10 +2014,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_network_incomingCallType_socket_title => 'Connessione Persistente al Server';
 
   @override
-  String get settings_network_incomingCallType_title => 'Tipo di chiamata in entrata';
+  String get settings_network_incomingCallType_title => 'Ricezione delle chiamate in entrata';
 
   @override
-  String get settings_network_smsFallback_toggle => 'Riserva tramite SMS';
+  String get settings_network_smsFallback_toggle => 'SMS come canale di riserva';
 
   @override
   String get settings_videoCapturing_Section_framerate_prefix => 'cornici: ';
@@ -2204,6 +2319,13 @@ class AppLocalizationsIt extends AppLocalizations {
       'La funzione di segreteria telefonica non è supportata nel tuo sistema. Contatta l\'amministratore per maggiori informazioni.';
 
   @override
+  String get voicemail_Dialog_deleteSelectedContent =>
+      'I messaggi vocali selezionati verranno eliminati definitivamente. Vuoi continuare?';
+
+  @override
+  String get voicemail_Dialog_deleteSelectedTitle => 'Eliminare i messaggi vocali selezionati?';
+
+  @override
   String get voicemail_Dialog_deleteSingleContent =>
       'Questo messaggio vocale verrà eliminato definitivamente. Vuoi continuare?';
 
@@ -2233,7 +2355,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get voicemail_Label_markAsNew => 'Segna come nuovo';
 
   @override
+  String get voicemail_Label_playbackError => 'Riproduzione non riuscita';
+
+  @override
   String get voicemail_Label_retry => 'Riprova';
+
+  @override
+  String get voicemail_Snackbar_notConfigured =>
+      'Contatta il tuo amministratore per attivare la segreteria telefonica.';
 
   @override
   String get voicemail_Title_notSupported => 'Funzionalità non supportata';
@@ -2279,4 +2408,308 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get webview_sslError_tryAgain => 'Riprova';
+
+  @override
+  String get cdr_disconnectReason_unknown => 'Sconosciuto';
+
+  @override
+  String get cdr_disconnectReason_validCauseCodeNotYetReceived => 'Codice causa valido non ancora ricevuto';
+
+  @override
+  String get cdr_disconnectReason_unallocatedNumber => 'Numero non assegnato (non attribuito)';
+
+  @override
+  String get cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan =>
+      'Nessuna rotta verso la rete di transito specificata (WAN)';
+
+  @override
+  String get cdr_disconnectReason_noRouteToDestination => 'Nessuna rotta verso la destinazione';
+
+  @override
+  String get cdr_disconnectReason_sendSpecialInformationTone => 'Invia tono informativo speciale';
+
+  @override
+  String get cdr_disconnectReason_misdialledTrunkPrefix => 'Prefisso di linea composto in modo errato';
+
+  @override
+  String get cdr_disconnectReason_channelUnacceptable => 'Canale non accettabile';
+
+  @override
+  String get cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel =>
+      'Chiamata assegnata e in consegna su un canale stabilito';
+
+  @override
+  String get cdr_disconnectReason_prefix0DialedButNotAllowedPreemption =>
+      'Prefisso 0 composto ma non consentito (prelazione)';
+
+  @override
+  String get cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved =>
+      'Prefisso 1 composto ma non consentito (prelazione riservata)';
+
+  @override
+  String get cdr_disconnectReason_prefix1DialedButNotRequired => 'Prefisso 1 composto ma non richiesto';
+
+  @override
+  String get cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding =>
+      'Ricevute più cifre del consentito, la chiamata prosegue';
+
+  @override
+  String get cdr_disconnectReason_normalCallClearing => 'Chiusura normale della chiamata';
+
+  @override
+  String get cdr_disconnectReason_userBusy => 'Utente occupato';
+
+  @override
+  String get cdr_disconnectReason_noUserResponding => 'Nessuna risposta dell\'utente';
+
+  @override
+  String get cdr_disconnectReason_noAnswerFromUser => 'Nessuna risposta dall\'utente';
+
+  @override
+  String get cdr_disconnectReason_subscriberIsAbsent => 'Abbonato assente';
+
+  @override
+  String get cdr_disconnectReason_callRejected => 'Chiamata rifiutata';
+
+  @override
+  String get cdr_disconnectReason_numberChanged => 'Numero cambiato';
+
+  @override
+  String get cdr_disconnectReason_reverseChargingRejected => 'Addebito a carico del destinatario rifiutato';
+
+  @override
+  String get cdr_disconnectReason_callSuspended => 'Chiamata sospesa';
+
+  @override
+  String get cdr_disconnectReason_callResumed => 'Chiamata ripresa';
+
+  @override
+  String get cdr_disconnectReason_nonSelectedUserClearing => 'Chiusura da utente non selezionato';
+
+  @override
+  String get cdr_disconnectReason_destinationOutOfOrder => 'Destinazione fuori servizio';
+
+  @override
+  String get cdr_disconnectReason_invalidNumberFormatIncompleteNumber =>
+      'Formato numero non valido (numero incompleto)';
+
+  @override
+  String get cdr_disconnectReason_facilityRejected => 'Servizio/facilità rifiutato';
+
+  @override
+  String get cdr_disconnectReason_responseToStatusEnquiry => 'Risposta a STATUS ENQUIRY';
+
+  @override
+  String get cdr_disconnectReason_normalUnspecified => 'Normale, non specificato';
+
+  @override
+  String get cdr_disconnectReason_circuitOutOfOrder => 'Circuito fuori servizio';
+
+  @override
+  String get cdr_disconnectReason_noCircuitChannelAvailable => 'Nessun circuito/canale disponibile';
+
+  @override
+  String get cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable =>
+      'Destinazione irraggiungibile (VPCI/VCI richiesto non disponibile)';
+
+  @override
+  String get cdr_disconnectReason_vpciVciAssignmentFailure => 'Errore di assegnazione VPCI/VCI';
+
+  @override
+  String get cdr_disconnectReason_degradedServiceCallRateIsnNotValid =>
+      'Servizio degradato (tasso di chiamata non valido)';
+
+  @override
+  String get cdr_disconnectReason_networkWanOutOfOrder => 'Rete (WAN) fuori servizio';
+
+  @override
+  String get cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService =>
+      'Intervallo di ritardo di transito non raggiungibile (modalità frame permanente fuori servizio)';
+
+  @override
+  String get cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational =>
+      'Intervallo di throughput non raggiungibile (modalità frame permanente operativa)';
+
+  @override
+  String get cdr_disconnectReason_temporaryFailure => 'Guasto temporaneo';
+
+  @override
+  String get cdr_disconnectReason_switchingEquipmentCongestion => 'Congestione dell\'apparato di commutazione';
+
+  @override
+  String get cdr_disconnectReason_accessInformationDiscarded => 'Informazioni di accesso scartate';
+
+  @override
+  String get cdr_disconnectReason_requestedCircuitChannelNotAvailable => 'Circuito/canale richiesto non disponibile';
+
+  @override
+  String get cdr_disconnectReason_preEmptedNoVpciVciIsAvailable =>
+      'Prelazione effettuata (nessun VPCI/VCI disponibile)';
+
+  @override
+  String get cdr_disconnectReason_precedenceCallBlocked => 'Chiamata con precedenza bloccata';
+
+  @override
+  String get cdr_disconnectReason_resourceUnavailableUnspecified => 'Risorsa non disponibile - non specificato';
+
+  @override
+  String get cdr_disconnectReason_dspError => 'Errore DSP';
+
+  @override
+  String get cdr_disconnectReason_qualityOfServiceUnavailable => 'Qualità del servizio non disponibile';
+
+  @override
+  String get cdr_disconnectReason_requestedFacilityNotSubscribed => 'Servizio/facilità richiesto non sottoscritto';
+
+  @override
+  String get cdr_disconnectReason_reverseChargingNotAllowed => 'Addebito a carico del destinatario non consentito';
+
+  @override
+  String get cdr_disconnectReason_outgoingCallsBarred => 'Chiamate uscenti bloccate';
+
+  @override
+  String get cdr_disconnectReason_outgoingCallsBarredWithinCug => 'Chiamate uscenti bloccate all\'interno del CUG';
+
+  @override
+  String get cdr_disconnectReason_incomingCallsBarred => 'Chiamate entranti bloccate';
+
+  @override
+  String get cdr_disconnectReason_incomingCallsBarredWithinCug => 'Chiamate entranti bloccate all\'interno del CUG';
+
+  @override
+  String get cdr_disconnectReason_callWaitingNotSubscribed => 'Avviso di chiamata non sottoscritto';
+
+  @override
+  String get cdr_disconnectReason_bearerCapabilityNotAuthorized => 'Capacità portante non autorizzata';
+
+  @override
+  String get cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable =>
+      'Capacità portante attualmente non disponibile';
+
+  @override
+  String get cdr_disconnectReason_inconsistancyInTheInformationAndClass => 'Incoerenza tra informazione e classe';
+
+  @override
+  String get cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified =>
+      'Servizio o opzione non disponibile, non specificato';
+
+  @override
+  String get cdr_disconnectReason_bearerServiceNotImplemented => 'Servizio bearer non implementato';
+
+  @override
+  String get cdr_disconnectReason_channelTypeNotImplemented => 'Tipo di canale non implementato';
+
+  @override
+  String get cdr_disconnectReason_transitNetworkSelectionNotImplemented =>
+      'Selezione rete di transito non implementata';
+
+  @override
+  String get cdr_disconnectReason_messageNotImplemented => 'Messaggio non implementato';
+
+  @override
+  String get cdr_disconnectReason_requestedFacilityNotImplemented => 'Servizio/facilità richiesto non implementato';
+
+  @override
+  String get cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable =>
+      'Disponibile solo capacità bearer digitale limitata';
+
+  @override
+  String get cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified =>
+      'Servizio o opzione non implementato, non specificato';
+
+  @override
+  String get cdr_disconnectReason_invalidCallReferenceValue => 'Valore di riferimento chiamata non valido';
+
+  @override
+  String get cdr_disconnectReason_identifiedChannelDoesNotExist => 'Il canale identificato non esiste';
+
+  @override
+  String get cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot =>
+      'Esiste una chiamata sospesa, ma questa identità chiamata non esiste';
+
+  @override
+  String get cdr_disconnectReason_callIdentityInUse => 'Identità chiamata già in uso';
+
+  @override
+  String get cdr_disconnectReason_noCallSuspended => 'Nessuna chiamata sospesa';
+
+  @override
+  String get cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared =>
+      'La chiamata con l\'identità richiesta è stata chiusa';
+
+  @override
+  String get cdr_disconnectReason_calledUserNotMemberOfCug => 'L\'utente chiamato non è membro del CUG';
+
+  @override
+  String get cdr_disconnectReason_incompatibleDestination => 'Destinazione incompatibile';
+
+  @override
+  String get cdr_disconnectReason_nonExistentAbbreviatedAddressEntry => 'Voce di indirizzo abbreviato inesistente';
+
+  @override
+  String get cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed =>
+      'Indirizzo di destinazione mancante e chiamata diretta non sottoscritta';
+
+  @override
+  String get cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse =>
+      'Selezione rete di transito non valida (uso nazionale)';
+
+  @override
+  String get cdr_disconnectReason_invalidFacilityParameter => 'Parametro servizio/facilità non valido';
+
+  @override
+  String get cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported =>
+      'Elemento informativo obbligatorio mancante (parametro AAL non supportato)';
+
+  @override
+  String get cdr_disconnectReason_invalidMessageUnspecified => 'Messaggio non valido, non specificato';
+
+  @override
+  String get cdr_disconnectReason_mandatoryInformationElementIsMissing => 'Elemento informativo obbligatorio mancante';
+
+  @override
+  String get cdr_disconnectReason_messageTypeNonExistentOrNotImplemented =>
+      'Tipo di messaggio inesistente o non implementato';
+
+  @override
+  String get cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented =>
+      'Messaggio non compatibile con lo stato chiamata o tipo di messaggio inesistente/non implementato';
+
+  @override
+  String get cdr_disconnectReason_informationElementNonexistantOrNotImplemented =>
+      'Elemento informativo inesistente o non implementato';
+
+  @override
+  String get cdr_disconnectReason_invalidInformationElementContents => 'Contenuto elemento informativo non valido';
+
+  @override
+  String get cdr_disconnectReason_messageNotCompatibleWithCallState =>
+      'Messaggio non compatibile con lo stato della chiamata';
+
+  @override
+  String get cdr_disconnectReason_recoveryOnTimerExpiry => 'Ripristino alla scadenza del timer';
+
+  @override
+  String get cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn =>
+      'Parametro inesistente o non implementato - inoltrato';
+
+  @override
+  String get cdr_disconnectReason_urecognizedParameterMessageDiscarded =>
+      'Parametro non riconosciuto, messaggio scartato';
+
+  @override
+  String get cdr_disconnectReason_protocolErrorUnspecified => 'Errore di protocollo non specificato';
+
+  @override
+  String get cdr_disconnectReason_internetworkingUnspecified => 'Interworking, non specificato';
+
+  @override
+  String get cdr_disconnectReason_nextNodeIsUnreachable => 'Nodo successivo irraggiungibile';
+
+  @override
+  String get cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService =>
+      'Modulo fornitore servizio telefonico Holst (HTSPM) fuori servizio';
+
+  @override
+  String get cdr_disconnectReason_dtlTransitIsNotMyNodeId => 'Il transito DTL non corrisponde al mio ID nodo';
 }

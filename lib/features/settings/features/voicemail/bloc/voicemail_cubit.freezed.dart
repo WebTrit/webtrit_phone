@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$VoicemailState {
 
- VoicemailStatus get status; List<Voicemail> get items; DefaultErrorNotification? get error;
+ VoicemailStatus get status; List<Voicemail> get items; List<String> get selectedVoicemailsIds; DefaultErrorNotification? get error;
 /// Create a copy of VoicemailState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,12 +25,12 @@ $VoicemailStateCopyWith<VoicemailState> get copyWith => _$VoicemailStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoicemailState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoicemailState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.items, items)&&const DeepCollectionEquality().equals(other.selectedVoicemailsIds, selectedVoicemailsIds)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(items),error);
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(items),const DeepCollectionEquality().hash(selectedVoicemailsIds),error);
 
 
 
@@ -41,7 +41,7 @@ abstract mixin class $VoicemailStateCopyWith<$Res>  {
   factory $VoicemailStateCopyWith(VoicemailState value, $Res Function(VoicemailState) _then) = _$VoicemailStateCopyWithImpl;
 @useResult
 $Res call({
- VoicemailStatus status, List<Voicemail> items, DefaultErrorNotification? error
+ VoicemailStatus status, List<Voicemail> items, List<String> selectedVoicemailsIds, DefaultErrorNotification? error
 });
 
 
@@ -58,11 +58,12 @@ class _$VoicemailStateCopyWithImpl<$Res>
 
 /// Create a copy of VoicemailState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? items = null,Object? error = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? items = null,Object? selectedVoicemailsIds = null,Object? error = freezed,}) {
   return _then(VoicemailState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as VoicemailStatus,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
-as List<Voicemail>,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as List<Voicemail>,selectedVoicemailsIds: null == selectedVoicemailsIds ? _self.selectedVoicemailsIds : selectedVoicemailsIds // ignore: cast_nullable_to_non_nullable
+as List<String>,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as DefaultErrorNotification?,
   ));
 }

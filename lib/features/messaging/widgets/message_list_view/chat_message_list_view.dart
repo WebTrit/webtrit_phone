@@ -7,6 +7,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -18,6 +19,7 @@ import '../message_view/chat_message_view.dart';
 class ChatMessageListView extends StatefulWidget {
   const ChatMessageListView({
     required this.userId,
+    required this.isGroup,
     required this.messages,
     required this.fetchingHistory,
     required this.outboxMessages,
@@ -36,6 +38,7 @@ class ChatMessageListView extends StatefulWidget {
   });
 
   final String userId;
+  final bool isGroup;
   final List<ChatMessage> messages;
   final List<ChatOutboxMessageEntry> outboxMessages;
   final List<ChatOutboxMessageEditEntry> outboxMessageEdits;
@@ -165,6 +168,20 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
     widget.onDelete(message);
   }
 
+  String formatChatMessageDate(DateTime messageDate) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final date = DateTime(messageDate.year, messageDate.month, messageDate.day);
+
+    final difference = today.difference(date).inDays;
+
+    if (difference == 0) return context.l10n.messaging_MessageView_today;
+    if (difference == 1) return context.l10n.messaging_MessageView_yesterday;
+    if (difference < 7) return messageDate.toWeekday;
+
+    return messageDate.toWeekDayOfMonth;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -216,6 +233,14 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                   outboxDeleteEntry: entry.outboxDeleteEntry,
                   userReadedUntil: entry.userReadedUntil,
                   membersReadedUntil: entry.membersReadedUntil,
+                  avatarViewMode: widget.isGroup
+                      ? (entry.lastInSequence == true)
+                            ? AvatarViewMode.show
+                            : AvatarViewMode.space
+                      : AvatarViewMode.none,
+                  nameViewMode: (widget.isGroup && entry.firstInSequence == true)
+                      ? NameViewMode.show
+                      : NameViewMode.none,
                   handleSetForReply: handleSetForReply,
                   handleSetForForward: handleSetForForward,
                   handleSetForEdit: handleSetForEdit,
@@ -239,7 +264,10 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Center(
-                  child: Text(entry.date.toDayOfMonth, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                  child: Text(
+                    formatChatMessageDate(entry.date),
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
                 ),
               );
             }
@@ -329,6 +357,8 @@ final class _MessageViewEntry extends _ChatMessageListViewEntry {
   final ChatOutboxMessageDeleteEntry? outboxDeleteEntry;
   final DateTime? userReadedUntil;
   final DateTime? membersReadedUntil;
+  final bool? lastInSequence;
+  final bool? firstInSequence;
 
   _MessageViewEntry({
     this.message,
@@ -337,6 +367,8 @@ final class _MessageViewEntry extends _ChatMessageListViewEntry {
     this.outboxDeleteEntry,
     this.userReadedUntil,
     this.membersReadedUntil,
+    this.lastInSequence,
+    this.firstInSequence,
   });
 }
 
@@ -388,16 +420,27 @@ _ComputeResult _computeList(_ComputeParams params) {
     final nextMessage = isLast ? null : messages[i - 1];
 
     var lastMsgOfTheDay = false;
+    var firstMsgOfTheDay = false;
 
     if (nextMessage != null) {
       final nextMsgDate = nextMessage.createdAt;
       final msgDate = message.createdAt;
-      lastMsgOfTheDay = nextMsgDate.day != msgDate.day;
+      lastMsgOfTheDay = !nextMsgDate.isSameDay(msgDate);
     }
 
-    if (lastMsgOfTheDay) {
-      entries.add(_DateViewEntry(message.createdAt));
+    if (i == messages.length - 1) {
+      firstMsgOfTheDay = true;
+    } else {
+      final prevMessage = messages[i + 1];
+      final prevMsgDate = prevMessage.createdAt;
+      final msgDate = message.createdAt;
+      firstMsgOfTheDay = !prevMsgDate.isSameDay(msgDate);
     }
+
+    final lastInSequence = isLast || nextMessage!.senderId != message.senderId || lastMsgOfTheDay;
+
+    final firstInSequence =
+        i == messages.length - 1 || messages[i + 1].senderId != message.senderId || firstMsgOfTheDay;
 
     entries.add(
       _MessageViewEntry(
@@ -406,8 +449,14 @@ _ComputeResult _computeList(_ComputeParams params) {
         outboxDeleteEntry: deleteEntry,
         userReadedUntil: userReadedUntil,
         membersReadedUntil: membersReadedUntil,
+        lastInSequence: lastInSequence,
+        firstInSequence: firstInSequence,
       ),
     );
+
+    if (firstMsgOfTheDay) {
+      entries.add(_DateViewEntry(message.createdAt));
+    }
   }
 
   return (entries: entries, dueTime: dueTime);

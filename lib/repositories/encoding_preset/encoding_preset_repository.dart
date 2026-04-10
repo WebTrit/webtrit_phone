@@ -1,4 +1,5 @@
 import 'package:webtrit_phone/data/app_preferences.dart';
+import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/models/encoding_settings.dart';
 
 abstract interface class EncodingPresetRepository {
@@ -18,11 +19,12 @@ class EncodingPresetRepositoryPrefsImpl implements EncodingPresetRepository {
   @override
   EncodingPreset? getEncodingPreset({EncodingPreset? defaultValue}) {
     final encodingPresetString = _appPreferences.getString(_prefsKey);
+
+    EncodingPreset? preset;
     if (encodingPresetString != null) {
-      return EncodingPreset.values.byName(encodingPresetString);
-    } else {
-      return defaultValue;
+      preset = EncodingPreset.values.firstWhereOrNull((preset) => preset.name == encodingPresetString);
     }
+    return preset ?? defaultValue;
   }
 
   @override

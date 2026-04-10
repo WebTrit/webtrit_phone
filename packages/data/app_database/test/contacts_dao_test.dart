@@ -441,8 +441,8 @@ void main() {
     });
   });
 
-  group('ContactKind Tests', () {
-    test('Contact defaults to ContactKind.visible when kind is not provided', () async {
+  group('ContactKindTypeEnum Tests', () {
+    test('Contact defaults to ContactKindTypeEnum.visible when kind is not provided', () async {
       final initialVisibleContacts = await database.contactsDao.getAllContacts(null);
       final initialVisibleCount = initialVisibleContacts.length;
 
@@ -459,7 +459,7 @@ void main() {
       expect(currentContacts.length, initialVisibleCount + 1);
 
       final newContact = currentContacts.firstWhere((c) => c.contact.firstName == 'Abi');
-      expect(newContact.contact.kind, ContactKind.visible);
+      expect(newContact.contact.kind, ContactKindTypeEnum.visible);
     });
 
     test('getAllContacts filters based on kind', () async {
@@ -471,7 +471,7 @@ void main() {
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Abi'),
           lastName: Value('Gail'),
-          kind: Value(ContactKind.visible),
+          kind: Value(ContactKindTypeEnum.visible),
         ),
       );
 
@@ -480,19 +480,19 @@ void main() {
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Davis'),
           lastName: Value('Charles'),
-          kind: Value(ContactKind.service),
+          kind: Value(ContactKindTypeEnum.service),
         ),
       );
 
       final visibleContacts = await database.contactsDao.getAllContacts(null);
       expect(visibleContacts.length, initialVisibleCount + 1);
-      expect(visibleContacts.first.contact.firstName, 'Abi');
-      expect(visibleContacts.first.contact.kind, ContactKind.visible);
+      final abiContact = visibleContacts.firstWhere((c) => c.contact.firstName == 'Abi');
+      expect(abiContact.contact.kind, ContactKindTypeEnum.visible);
 
-      final serviceContacts = await database.contactsDao.getAllContacts(null, kind: ContactKind.service);
+      final serviceContacts = await database.contactsDao.getAllContacts(null, kind: ContactKindTypeEnum.service);
       expect(serviceContacts.length, 1);
       expect(serviceContacts.first.contact.firstName, 'Davis');
-      expect(serviceContacts.first.contact.kind, ContactKind.service);
+      expect(serviceContacts.first.contact.kind, ContactKindTypeEnum.service);
     });
 
     test('getServiceContacts returns only service contacts', () async {
@@ -500,7 +500,7 @@ void main() {
         ContactDataCompanion(
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Abi'),
-          kind: Value(ContactKind.visible),
+          kind: Value(ContactKindTypeEnum.visible),
         ),
       );
 
@@ -508,7 +508,7 @@ void main() {
         ContactDataCompanion(
           sourceType: Value(ContactSourceTypeEnum.external),
           firstName: Value('Davis'),
-          kind: Value(ContactKind.service),
+          kind: Value(ContactKindTypeEnum.service),
         ),
       );
 
@@ -517,11 +517,11 @@ void main() {
       expect(result.length, 1);
 
       expect(result.first.contact.firstName, 'Davis');
-      expect(result.first.contact.kind, ContactKind.service);
+      expect(result.first.contact.kind, ContactKindTypeEnum.service);
     });
 
     test('getServiceContacts returns only visible contacts', () async {
-      final initialVisibleContacts = await database.contactsDao.getAllContacts(null, kind: ContactKind.visible);
+      final initialVisibleContacts = await database.contactsDao.getAllContacts(null, kind: ContactKindTypeEnum.visible);
       final initialVisibleCount = initialVisibleContacts.length;
 
       await database.contactsDao.insertOnUniqueConflictUpdateContact(
@@ -529,7 +529,7 @@ void main() {
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Abi'),
           lastName: Value('Gail'),
-          kind: Value(ContactKind.visible),
+          kind: Value(ContactKindTypeEnum.visible),
         ),
       );
 
@@ -538,11 +538,11 @@ void main() {
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Davis'),
           lastName: Value('Charles'),
-          kind: Value(ContactKind.service),
+          kind: Value(ContactKindTypeEnum.service),
         ),
       );
 
-      final result = await database.contactsDao.getAllContacts(null, kind: ContactKind.visible);
+      final result = await database.contactsDao.getAllContacts(null, kind: ContactKindTypeEnum.visible);
 
       expect(result.length, initialVisibleCount + 1);
 
@@ -551,14 +551,14 @@ void main() {
     });
 
     test('watchAllContacts respects kind parameter', () async {
-      final initialVisibleContacts = await database.contactsDao.getAllContacts(null, kind: ContactKind.visible);
+      final initialVisibleContacts = await database.contactsDao.getAllContacts(null, kind: ContactKindTypeEnum.visible);
       final initialVisibleCount = initialVisibleContacts.length;
 
       await database.contactsDao.insertOnUniqueConflictUpdateContact(
         ContactDataCompanion(
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Wilson'),
-          kind: Value(ContactKind.visible),
+          kind: Value(ContactKindTypeEnum.visible),
         ),
       );
 
@@ -566,7 +566,7 @@ void main() {
         ContactDataCompanion(
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Moore'),
-          kind: Value(ContactKind.service),
+          kind: Value(ContactKindTypeEnum.service),
         ),
       );
 
@@ -576,7 +576,7 @@ void main() {
       expect(visibleList.length, initialVisibleCount + 1);
       expect(visibleList.first.contact.firstName, 'Wilson');
 
-      final serviceStream = database.contactsDao.watchAllContacts(null, null, ContactKind.service);
+      final serviceStream = database.contactsDao.watchAllContacts(null, null, ContactKindTypeEnum.service);
       final serviceList = await serviceStream.first;
 
       expect(serviceList.length, 1);
@@ -590,7 +590,7 @@ void main() {
         ContactDataCompanion(
           sourceType: Value(ContactSourceTypeEnum.local),
           firstName: Value('Harris'),
-          kind: Value(ContactKind.service),
+          kind: Value(ContactKindTypeEnum.service),
         ),
       );
 
@@ -603,6 +603,96 @@ void main() {
       expect(fetched.length, 1);
       expect(fetched.first.phones.length, 1);
       expect(fetched.first.phones.first.number, '911');
+    });
+  });
+
+  group('ContactPhonesDao', () {
+    late int contactId;
+
+    setUp(() async {
+      final contact = await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value('did_test'),
+          firstName: Value('Alice'),
+        ),
+      );
+      contactId = contact.id;
+    });
+
+    test('allows same number with different labels (DID-only scenario)', () async {
+      final dao = database.contactPhonesDao;
+
+      await dao.insertContactPhonesBatch([
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000002'), label: Value('number')),
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000002'), label: Value('sms')),
+      ]);
+
+      final phones = await dao.getContactPhonesByContactId(contactId);
+
+      expect(phones.length, 2);
+      expect(phones.any((p) => p.label == 'number'), isTrue);
+      expect(phones.any((p) => p.label == 'sms'), isTrue);
+    });
+
+    test('upsert same (number, label, contact_id) updates in place — no duplicate', () async {
+      final dao = database.contactPhonesDao;
+
+      await dao.insertOnUniqueConflictUpdateContactPhone(
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000002'), label: Value('number')),
+      );
+      await dao.insertOnUniqueConflictUpdateContactPhone(
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000002'), label: Value('number')),
+      );
+
+      final phones = await dao.getContactPhonesByContactId(contactId);
+
+      expect(phones.length, 1);
+      expect(phones.first.number, '16042000002');
+      expect(phones.first.label, 'number');
+    });
+
+    test('deleteOtherContactPhonesOfContactId with empty list removes all phones', () async {
+      final dao = database.contactPhonesDao;
+
+      await dao.insertContactPhonesBatch([
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('1601'), label: Value('ext')),
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000001'), label: Value('number')),
+      ]);
+
+      await dao.deleteOtherContactPhonesOfContactId(contactId, []);
+
+      final phones = await dao.getContactPhonesByContactId(contactId);
+      expect(phones, isEmpty);
+    });
+
+    test('deleteOtherContactPhonesOfContactId keeps only matching (number, label) pairs', () async {
+      final dao = database.contactPhonesDao;
+
+      await dao.insertContactPhonesBatch([
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('1601'), label: Value('ext')),
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000001'), label: Value('number')),
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('16042000001'), label: Value('sms')),
+        ContactPhoneDataCompanion(
+          contactId: Value(contactId),
+          number: Value('99900099907'),
+          label: Value('additional'),
+        ),
+        ContactPhoneDataCompanion(contactId: Value(contactId), number: Value('99900099907'), label: Value('sms')),
+      ]);
+
+      // Simulate role change: additional is removed, sms for 99900099907 stays
+      await dao.deleteOtherContactPhonesOfContactId(contactId, [
+        (number: '1601', label: 'ext'),
+        (number: '16042000001', label: 'number'),
+        (number: '16042000001', label: 'sms'),
+        (number: '99900099907', label: 'sms'),
+      ]);
+
+      final phones = await dao.getContactPhonesByContactId(contactId);
+      expect(phones.length, 4);
+      expect(phones.any((p) => p.number == '99900099907' && p.label == 'additional'), isFalse);
+      expect(phones.any((p) => p.number == '99900099907' && p.label == 'sms'), isTrue);
     });
   });
 }

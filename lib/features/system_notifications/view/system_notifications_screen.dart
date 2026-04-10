@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -59,12 +57,7 @@ class _SystemNotificationsScreenState extends State<SystemNotificationsScreen> {
       appBar: AppBar(
         title: Text(context.l10n.system_notifications_screen_title),
         backgroundColor: theme.canvasColor.withAlpha(150),
-        flexibleSpace: ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(color: theme.canvasColor.withAlpha(150)),
-          ),
-        ),
+        flexibleSpace: const BlurredSurface(sigmaX: 10, sigmaY: 10),
       ),
       body: BlocBuilder<SystemNotificationsScreenCubit, SystemNotificationScreenState>(
         builder: (context, state) {
