@@ -14,8 +14,10 @@ final _logger = Logger('SignalingHubModule');
 /// foreground-service isolate. Routes all execute calls through the hub's
 /// WebSocket rather than opening an additional connection.
 ///
-/// [connect] and [disconnect] are no-ops -- the hub owns the connection
-/// lifecycle. [dispose] unsubscribes from the hub and releases resources.
+/// [connect] sends a [SignalingHubConnectCommand] to the foreground-service
+/// isolate, which calls [SignalingModule.connect] on the real WebSocket module.
+/// [disconnect] sends a [SignalingHubDisconnectCommand] similarly.
+/// [dispose] unsubscribes from the hub and releases resources.
 ///
 /// ## Two-level buffering
 ///
