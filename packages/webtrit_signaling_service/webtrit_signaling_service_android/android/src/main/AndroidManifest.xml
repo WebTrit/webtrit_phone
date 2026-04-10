@@ -8,6 +8,18 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application>
+        <!--
+            SignalingForegroundService uses foregroundServiceType="remoteMessaging".
+
+            This service maintains a persistent WebSocket connection to the WebTrit signaling
+            server to exchange call-signaling messages (SDP, ICE candidates, call state events).
+            The remoteMessaging type is defined by Android as the appropriate type for services
+            that keep a long-running connection alive so a remote server can deliver messages to
+            the device at any time — which is exactly what this service does.
+
+            Required permission: FOREGROUND_SERVICE_REMOTE_MESSAGING (declared above).
+            Applies on Android 14+ (API 34+); older versions pass type=0.
+        -->
         <service
             android:name=".SignalingForegroundService"
             android:foregroundServiceType="remoteMessaging"
