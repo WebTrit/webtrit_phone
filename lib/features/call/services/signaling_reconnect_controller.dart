@@ -9,6 +9,15 @@ import 'package:webtrit_phone/app/constants.dart';
 
 final _logger = Logger('SignalingReconnectController');
 
+/// Carries the full context of a connection failure passed to
+/// [SignalingReconnectController.onConnectionFailed].
+///
+/// - [knownCode] is `null` for initial-connect failures ([SignalingConnectionFailed]),
+///   or the decoded [SignalingDisconnectCode] for unexpected disconnects.
+/// - [systemCode] and [systemReason] are the raw WebSocket close code and reason
+///   from the server, useful for detailed error display.
+typedef SignalingFailureInfo = ({SignalingDisconnectCode? knownCode, int? systemCode, String? systemReason});
+
 /// Centralizes all signaling reconnect logic and connection-failure notification
 /// decisions for both the foreground [CallBloc] and background [IsolateManager].
 ///
@@ -38,7 +47,7 @@ final _logger = Logger('SignalingReconnectController');
 /// ```dart
 /// final controller = SignalingReconnectController(
 ///   signalingModule: module,
-///   onConnectionFailed: () => submitNotification(SignalingConnectFailedNotification()),
+///   onConnectionFailed: (failure) => submitNotification(SignalingConnectFailedNotification()),
 ///   onConnectionPresenceChanged: (isAvailable) => add(_SignalingPresenceChanged(isAvailable)),
 /// );
 ///
@@ -53,7 +62,7 @@ final _logger = Logger('SignalingReconnectController');
 class SignalingReconnectController {
   SignalingReconnectController({
     required SignalingModule signalingModule,
-    void Function(SignalingDisconnectCode? knownCode)? onConnectionFailed,
+    void Function(SignalingFailureInfo)? onConnectionFailed,
     void Function(bool isAvailable)? onConnectionPresenceChanged,
     int notifyAfterConsecutiveFailures = 2,
     bool reconnectEnabled = true,
@@ -67,7 +76,7 @@ class SignalingReconnectController {
   }
 
   final SignalingModule _module;
-  final void Function(SignalingDisconnectCode? knownCode)? _onConnectionFailed;
+  final void Function(SignalingFailureInfo)? _onConnectionFailed;
   final void Function(bool isAvailable)? _onConnectionPresenceChanged;
   final int _notifyThreshold;
   final bool _reconnectEnabled;
@@ -187,14 +196,14 @@ class SignalingReconnectController {
           _logger.fine('_onEvent: connection lost after established session - notifying immediately');
           _wasConnected = false;
           _consecutiveFailures = 0;
-          _onConnectionFailed?.call(null);
+          _onConnectionFailed?.call((knownCode: null, systemCode: null, systemReason: null));
           _emitPresence(false);
         } else {
           _consecutiveFailures++;
           _logger.fine('_onEvent: connection failed (consecutive=$_consecutiveFailures)');
           if (_consecutiveFailures == _notifyThreshold) {
             _logger.info('_onEvent: notifying - consecutive failures reached threshold ($_notifyThreshold)');
-            _onConnectionFailed?.call(null);
+            _onConnectionFailed?.call((knownCode: null, systemCode: null, systemReason: null));
             _emitPresence(false);
           }
         }
@@ -202,12 +211,12 @@ class SignalingReconnectController {
 
       // Unexpected TCP-level close without a preceding error event.
       // Notify immediately - an established session was lost.
-      case SignalingDisconnected(:final recommendedReconnectDelay, :final knownCode)
+      case SignalingDisconnected(:final recommendedReconnectDelay, :final knownCode, :final code, :final reason)
           when recommendedReconnectDelay != null:
         _logger.fine('_onEvent: unexpected disconnect - notifying immediately');
         _wasConnected = false;
         _consecutiveFailures = 0;
-        _onConnectionFailed?.call(knownCode);
+        _onConnectionFailed?.call((knownCode: knownCode, systemCode: code, systemReason: reason));
         _emitPresence(false);
         _scheduleReconnect(recommendedReconnectDelay);
 

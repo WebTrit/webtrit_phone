@@ -127,21 +127,26 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _reconnectController = SignalingReconnectController(
       signalingModule: signalingModule,
-      onConnectionFailed: (knownCode) {
-        final Notification notification;
+      onConnectionFailed: (failure) {
+        final (:knownCode, :systemCode, :systemReason) = failure;
         switch (knownCode) {
           case SignalingDisconnectCode.signalingKeepaliveTimeoutError:
           case SignalingDisconnectCode.controllerForceAttachClose:
             // Expected silent reconnect: keepalive timeout on lock-screen or duplicate-session cleanup.
             _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
             return;
-          case SignalingDisconnectCode.sessionMissedError:
-            notification = const SignalingSessionMissedNotification();
-          case null:
-            notification = const SignalingConnectFailedNotification();
           default:
-            notification = SignalingDisconnectNotification(knownCode: knownCode);
+            break;
         }
+        final notification = switch (knownCode) {
+          SignalingDisconnectCode.sessionMissedError => const SignalingSessionMissedNotification(),
+          null => const SignalingConnectFailedNotification(),
+          _ => SignalingDisconnectNotification(
+            knownCode: knownCode,
+            systemCode: systemCode,
+            systemReason: systemReason,
+          ),
+        };
         submitNotification(notification);
       },
       onConnectionPresenceChanged: (isAvailable) =>
@@ -682,8 +687,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     final code = SignalingDisconnectCode.values.byCode(event.code ?? -1);
 
-    // Notification decisions are handled by [_reconnectController.onConnectionFailed].
-    // This method only updates [CallState].
+    // Notification decisions are handled by SignalingReconnectController via its
+    // onConnectionFailed callback. This method only updates [CallState].
 
     CallState newState = state.copyWith(
       callServiceState: state.callServiceState.copyWith(
@@ -698,6 +703,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       state.activeCalls.where((e) => e.wasHungUp).forEach((e) => add(_ResetStateEvent.completeCall(e.callId)));
     } else if (code == SignalingDisconnectCode.controllerExitError) {
       _logger.info('__onSignalingClientEventDisconnected: skipping expected system unregistration notification');
+    } else if (code == SignalingDisconnectCode.signalingKeepaliveTimeoutError) {
+      // Keepalive timeout while backgrounded (Android network restrictions).
+      // Keep lastSignalingDisconnectCode null so connectIssue is never shown.
+      newState = state.copyWith(
+        callServiceState: state.callServiceState.copyWith(
+          signalingClientStatus: SignalingClientStatus.disconnect,
+          lastSignalingDisconnectCode: null,
+        ),
+      );
     } else if (code == SignalingDisconnectCode.controllerForceAttachClose) {
       // Server closed the connection because a duplicate signaling session was detected
       // (e.g. background push isolate still connected when main engine reconnects).

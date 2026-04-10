@@ -214,7 +214,7 @@ void main() {
         SignalingDisconnectCode? receivedCode = SignalingDisconnectCode.unmappedCode; // sentinel
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: (knownCode) => receivedCode = knownCode,
+          onConnectionFailed: (failure) => receivedCode = failure.knownCode,
           notifyAfterConsecutiveFailures: 1,
           reconnectEnabled: false,
         );
@@ -233,7 +233,7 @@ void main() {
         SignalingDisconnectCode? receivedCode;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: (knownCode) => receivedCode = knownCode,
+          onConnectionFailed: (failure) => receivedCode = failure.knownCode,
           reconnectEnabled: false,
         );
         addTearDown(controller.dispose);
@@ -251,7 +251,7 @@ void main() {
         SignalingDisconnectCode? receivedCode;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: (knownCode) => receivedCode = knownCode,
+          onConnectionFailed: (failure) => receivedCode = failure.knownCode,
           reconnectEnabled: false,
         );
         addTearDown(controller.dispose);
