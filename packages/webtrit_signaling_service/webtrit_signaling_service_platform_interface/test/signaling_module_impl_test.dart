@@ -10,6 +10,7 @@
 ///
 /// Tests labelled "BUG:" reproduce the broken behavior on the unfixed code.
 /// Tests labelled "after fix:" verify the correct behavior.
+library;
 
 import 'dart:async';
 
