@@ -225,17 +225,27 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       );
     }
 
-    await _hostApi.initializeServiceCallback(
-      dispatcherHandle.toRawHandle(),
-      // onSync handle is not used directly by Kotlin -- the background isolate
-      // calls onSignalingServiceSync via PSignalingServiceFlutterApi.setUp.
-      // Pass 0 as a placeholder.
-      0,
-    );
-
-    await _hostApi.saveConnectionConfig(config.coreUrl, config.tenantId, config.token);
-    await _hostApi.saveTrustedCertificates(_encodeTrustedCertificates(config.trustedCertificates));
-    await _hostApi.startService(signalingModeToNative(mode));
+    // All four writes go through the same BinaryMessenger, so they are
+    // delivered to the Kotlin main-thread Looper in FIFO order regardless
+    // of parallelism. startService() is therefore always processed after
+    // the credential writes, so the background isolate receives correct
+    // data on the first synchronizeIsolate() attempt.
+    // Running them concurrently removes three sequential Binder round-trips
+    // (~300–900 ms under memory pressure) before startForegroundService()
+    // is called, giving the OS more time to run onCreate() within the
+    // vendor-specific FGS promotion window.
+    await Future.wait([
+      _hostApi.initializeServiceCallback(
+        dispatcherHandle.toRawHandle(),
+        // onSync handle is not used directly by Kotlin -- the background isolate
+        // calls onSignalingServiceSync via PSignalingServiceFlutterApi.setUp.
+        // Pass 0 as a placeholder.
+        0,
+      ),
+      _hostApi.saveConnectionConfig(config.coreUrl, config.tenantId, config.token),
+      _hostApi.saveTrustedCertificates(_encodeTrustedCertificates(config.trustedCertificates)),
+      _hostApi.startService(signalingModeToNative(mode)),
+    ]);
 
     // Do NOT clear the hub port here.
     //
