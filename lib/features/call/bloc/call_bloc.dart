@@ -2586,14 +2586,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }
       }
 
-      // Handles an outgoing active call that has not yet started, typically initiated
-      // by the `continueStartCallIntent` callback of `CallkeepDelegate`.
-      //
-      // TODO: Implement a dedicated flag to confirm successful execution of
-      // OutgoingCallRequest, ensuring reliable outgoing active call state tracking.
+      // Skips outgoing calls that are still in-flight (OutgoingCallRequest not yet sent).
+      // If the request was already sent but the server has no record of the call, treat it as dead.
       if (activeCall.direction == CallDirection.outgoing &&
           activeCall.acceptedTime == null &&
-          activeCall.hungUpTime == null) {
+          activeCall.hungUpTime == null &&
+          activeCall.processingStatus.isPreOfferSent) {
         continue activeCallsLoop;
       }
 
