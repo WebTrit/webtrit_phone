@@ -114,7 +114,7 @@ class SignalingModuleImpl implements SignalingModule {
 
   /// Identity token for the active connect attempt.
   ///
-  /// Non-null while a [_connectAsync] is in progress (acts as [_connecting]).
+  /// Non-null while a [_connectAsync] is in progress; null when idle.
   /// [connect] creates a fresh [Object] and passes it to [_connectAsync].
   /// [disconnect] sets it to null, which [_connectAsync] detects after each
   /// suspension point — the "latest wins" pattern for non-cancellable Futures.
@@ -196,11 +196,12 @@ class SignalingModuleImpl implements SignalingModule {
 
   @override
   Future<void> disconnect() async {
+    final hadInFlightConnect = _connectToken != null;
     _connectToken = null; // invalidate any in-flight _connectAsync
 
     final client = _client;
     if (client == null) {
-      _logger.fine('disconnect: no active client, in-flight connect cancelled');
+      if (hadInFlightConnect) _logger.fine('disconnect: in-flight connect cancelled');
       return;
     }
     _client = null;

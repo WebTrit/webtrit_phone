@@ -3,12 +3,13 @@
 /// Reproduces the disconnect-during-connect race condition:
 ///
 /// When [SignalingModuleImpl.disconnect] is called while [_connectAsync] is
-/// still awaiting the client factory (_client == null, _connecting == true),
-/// disconnect() returns early without resetting _connecting. The next
-/// connect() call is then silently dropped because _connecting is still true.
+/// still awaiting the client factory (_client == null, _connectToken != null),
+/// disconnect() must cancel the in-flight attempt by clearing _connectToken.
+/// The next connect() call must then be allowed to start a fresh attempt
+/// instead of being blocked by the stale in-flight operation.
 ///
-/// These tests FAIL on the current implementation and PASS after the fix.
-library;
+/// Tests labelled "BUG:" reproduce the broken behavior on the unfixed code.
+/// Tests labelled "after fix:" verify the correct behavior.
 
 import 'dart:async';
 
