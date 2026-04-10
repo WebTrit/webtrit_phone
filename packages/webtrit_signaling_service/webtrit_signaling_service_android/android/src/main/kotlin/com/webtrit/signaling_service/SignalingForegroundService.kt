@@ -59,14 +59,12 @@ class SignalingForegroundService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        startForeground()
+
         Log.d(TAG, "SignalingForegroundService onCreate")
-
         instance = this
-
         val callbackHandle = StorageDelegate.getCallbackDispatcher(applicationContext)
         flutterEngineHelper = FlutterEngineHelper(applicationContext, callbackHandle, this)
-
-        startForeground()
         isRunning = true
     }
 
