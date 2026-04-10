@@ -127,7 +127,28 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _reconnectController = SignalingReconnectController(
       signalingModule: signalingModule,
-      onConnectionFailed: () => submitNotification(const SignalingConnectFailedNotification()),
+      onConnectionFailed: (failure) {
+        final (:knownCode, :systemCode, :systemReason) = failure;
+        switch (knownCode) {
+          case SignalingDisconnectCode.signalingKeepaliveTimeoutError:
+          case SignalingDisconnectCode.controllerForceAttachClose:
+            // Expected silent reconnect: keepalive timeout on lock-screen or duplicate-session cleanup.
+            _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
+            return;
+          default:
+            break;
+        }
+        final notification = switch (knownCode) {
+          SignalingDisconnectCode.sessionMissedError => const SignalingSessionMissedNotification(),
+          null => const SignalingConnectFailedNotification(),
+          _ => SignalingDisconnectNotification(
+            knownCode: knownCode,
+            systemCode: systemCode,
+            systemReason: systemReason,
+          ),
+        };
+        submitNotification(notification);
+      },
       onConnectionPresenceChanged: (isAvailable) =>
           _logger.info('signaling presence changed: isAvailable=$isAvailable'),
     );
@@ -665,7 +686,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final code = SignalingDisconnectCode.values.byCode(event.code ?? -1);
-    final repeated = event.code == state.callServiceState.lastSignalingDisconnectCode;
+
+    // Notification decisions are handled by SignalingReconnectController via its
+    // onConnectionFailed callback. This method only updates [CallState].
 
     CallState newState = state.copyWith(
       callServiceState: state.callServiceState.copyWith(
@@ -673,29 +696,29 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         lastSignalingDisconnectCode: event.code,
       ),
     );
-    Notification? notificationToShow;
 
     if (code == SignalingDisconnectCode.appUnregisteredError) {
       add(const _CallSignalingEvent.registration(RegistrationStatus.unregistered));
-
-      newState = state.copyWith(
-        callServiceState: state.callServiceState.copyWith(
-          signalingClientStatus: SignalingClientStatus.disconnect,
-          lastSignalingDisconnectCode: event.code,
-        ),
-      );
     } else if (code == SignalingDisconnectCode.requestCallIdError) {
       state.activeCalls.where((e) => e.wasHungUp).forEach((e) => add(_ResetStateEvent.completeCall(e.callId)));
     } else if (code == SignalingDisconnectCode.controllerExitError) {
       _logger.info('__onSignalingClientEventDisconnected: skipping expected system unregistration notification');
+    } else if (code == SignalingDisconnectCode.signalingKeepaliveTimeoutError) {
+      // Keepalive timeout while backgrounded (Android network restrictions).
+      // Keep lastSignalingDisconnectCode null so connectIssue is never shown.
+      newState = state.copyWith(
+        callServiceState: state.callServiceState.copyWith(
+          signalingClientStatus: SignalingClientStatus.disconnect,
+          lastSignalingDisconnectCode: null,
+        ),
+      );
     } else if (code == SignalingDisconnectCode.controllerForceAttachClose) {
       // Server closed the connection because a duplicate signaling session was detected
       // (e.g. background push isolate still connected when main engine reconnects).
-      // Reconnect silently: don't set lastSignalingDisconnectCode so connectIssue is never shown.
+      // Keep lastSignalingDisconnectCode null so connectIssue is never shown.
       _logger.warning(
         '__onSignalingClientEventDisconnected: signaling race detected - '
-        'server force-closed duplicate session (code=${event.code}, reason="${event.reason}"). '
-        'Reconnecting silently without showing connectIssue.',
+        'server force-closed duplicate session (code=${event.code}, reason="${event.reason}").',
       );
       newState = state.copyWith(
         callServiceState: state.callServiceState.copyWith(
@@ -703,31 +726,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           lastSignalingDisconnectCode: null,
         ),
       );
-    } else if (code == SignalingDisconnectCode.sessionMissedError) {
-      notificationToShow = const SignalingSessionMissedNotification();
     } else if (code.type == SignalingDisconnectCodeType.auxiliary) {
-      _logger.info('__onSignalingClientEventDisconnected: socket goes down');
-
       /// Fun facts
       /// - in case of network disconnection on android this section is evaluating faster than [_onConnectivityResultChanged].
       /// - also in case of network disconnection error code is protocolError instead of normalClosure by unknown reason
       /// so we need to handle it here as regular disconnection
-      if (code != SignalingDisconnectCode.protocolError) {
-        notificationToShow = SignalingDisconnectNotification(
-          knownCode: code,
-          systemCode: event.code,
-          systemReason: event.reason,
-        );
-      }
-    } else {
-      notificationToShow = SignalingDisconnectNotification(
-        knownCode: code,
-        systemCode: event.code,
-        systemReason: event.reason,
-      );
+      _logger.info('__onSignalingClientEventDisconnected: socket goes down');
     }
+
     emit(newState);
-    if (notificationToShow != null && !repeated) submitNotification(notificationToShow);
   }
 
   // processing call push events

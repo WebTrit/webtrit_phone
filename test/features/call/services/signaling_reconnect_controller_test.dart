@@ -57,6 +57,14 @@ SignalingDisconnected _lost() => SignalingDisconnected(
   recommendedReconnectDelay: kSignalingClientReconnectDelay,
 );
 
+// Simulates a server-side keepalive timeout (backgrounded app, Android network restrictions).
+SignalingDisconnected _keepaliveTimeout() => SignalingDisconnected(
+  code: 4502,
+  reason: 'signaling keepalive timeout error',
+  knownCode: SignalingDisconnectCode.signalingKeepaliveTimeoutError,
+  recommendedReconnectDelay: kSignalingClientReconnectDelay,
+);
+
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
@@ -110,7 +118,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 3,
           reconnectEnabled: false,
         );
@@ -130,7 +138,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 2,
           reconnectEnabled: false,
         );
@@ -150,7 +158,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 2,
           reconnectEnabled: false,
         );
@@ -172,7 +180,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 2,
           reconnectEnabled: false,
         );
@@ -195,6 +203,67 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
+  // onConnectionFailed — knownCode forwarding
+  // -------------------------------------------------------------------------
+
+  group('SignalingReconnectController - onConnectionFailed knownCode', () {
+    test('passes null knownCode on SignalingConnectionFailed', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        SignalingDisconnectCode? receivedCode = SignalingDisconnectCode.unmappedCode; // sentinel
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (failure) => receivedCode = failure.knownCode,
+          notifyAfterConsecutiveFailures: 1,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(_failed());
+
+        expect(receivedCode, isNull);
+      });
+    });
+
+    test('passes knownCode on SignalingDisconnected (unexpected)', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        SignalingDisconnectCode? receivedCode;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (failure) => receivedCode = failure.knownCode,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(_lost());
+
+        expect(receivedCode, SignalingDisconnectCode.unmappedCode);
+      });
+    });
+
+    test('passes signalingKeepaliveTimeoutError knownCode on keepalive disconnect', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        SignalingDisconnectCode? receivedCode;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (failure) => receivedCode = failure.knownCode,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(_keepaliveTimeout());
+
+        expect(receivedCode, SignalingDisconnectCode.signalingKeepaliveTimeoutError);
+      });
+    });
+  });
+
+  // -------------------------------------------------------------------------
   // SignalingDisconnected (unexpected) — immediate notification
   // -------------------------------------------------------------------------
 
@@ -206,7 +275,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 5,
           reconnectEnabled: false,
         );
@@ -225,7 +294,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 2,
           reconnectEnabled: false,
         );
@@ -393,6 +462,151 @@ void main() {
         expect(module.connectCalls, 1);
       });
     });
+
+    // WT-1221: "Connecting to the core failed" toast on screen unlock.
+    //
+    // Scenario: user had an active session (_wasConnected = true), locked the
+    // screen, then unlocked. The first post-unlock connect failure must go
+    // through the consecutive-failure threshold — not fire onConnectionFailed
+    // immediately as if an established session was lost.
+    test('notifyAppPaused resets _wasConnected — post-unlock failure respects threshold (WT-1221)', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        int notifyCount = 0;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (_) => notifyCount++,
+          notifyAfterConsecutiveFailures: 2,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        // Establish a session so _wasConnected = true.
+        module.emit(SignalingConnected());
+        expect(notifyCount, 0);
+
+        // Screen lock — intentional disconnect.
+        controller.notifyAppPaused(hasActiveCalls: false);
+
+        // Screen unlock — first post-unlock connect failure.
+        controller.notifyAppResumed();
+        module.emit(_failed());
+
+        // Must NOT fire immediately (would be wrong: no session was lost).
+        expect(notifyCount, 0, reason: 'first post-unlock failure must not trigger toast immediately');
+
+        // Second failure reaches threshold — now it is appropriate to notify.
+        module.emit(_failed());
+        expect(notifyCount, 1);
+      });
+    });
+
+    // Copilot review: notifyAppResumed must NOT reset _wasConnected when there
+    // is an active call. If it did, a subsequent SignalingConnectionFailed would
+    // be misclassified as an initial connect attempt (going through the
+    // consecutive-failure threshold) instead of an established-session drop
+    // that notifies immediately.
+    test('notifyAppResumed during active call preserves _wasConnected — failure notifies immediately', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        int notifyCount = 0;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (_) => notifyCount++,
+          notifyAfterConsecutiveFailures: 3,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        // Session established — _wasConnected = true.
+        module.emit(SignalingConnected());
+
+        // Brief background while a call is active (e.g. user swipes away and back).
+        controller.notifyAppPaused(hasActiveCalls: true);
+        controller.notifyHasActiveCalls(hasActiveCalls: true);
+
+        // App comes back to foreground during the call.
+        controller.notifyAppResumed();
+
+        // Connection drops — must notify immediately because _wasConnected is still true.
+        module.emit(_failed());
+        expect(
+          notifyCount,
+          1,
+          reason: 'established-session drop during active call must notify immediately, not wait for threshold',
+        );
+      });
+    });
+
+    // Background reconnect race: on Android the hub module's connect/disconnect
+    // are no-ops, so the background isolate can reconnect while the app is
+    // paused and set _wasConnected = true. A subsequent failure must NOT queue
+    // a notification (it would appear incorrectly when the app resumes).
+    test('background reconnect while paused — failure does not fire onConnectionFailed', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        int notifyCount = 0;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (_) => notifyCount++,
+          notifyAfterConsecutiveFailures: 2,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        // App goes background.
+        controller.notifyAppPaused(hasActiveCalls: false);
+
+        // Background isolate reconnects independently (hub broadcasts SignalingConnected).
+        module.emit(SignalingConnected());
+
+        // Connection fails while still paused (e.g. 4502 or generic error).
+        module.emit(_failed());
+        module.emit(_keepaliveTimeout());
+
+        // No notifications must have been queued — user is not watching.
+        expect(notifyCount, 0, reason: 'backgrounded without calls — no toast must be queued');
+      });
+    });
+
+    // notifyAppResumed resets _consecutiveFailures so that many background
+    // failures do not push the counter past the threshold, preventing
+    // notifications from appearing on the first post-unlock failures.
+    test('notifyAppResumed resets consecutiveFailures — threshold works correctly after unlock', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        int notifyCount = 0;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (_) => notifyCount++,
+          notifyAfterConsecutiveFailures: 2,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        // App goes background and accumulates many failures (counter climbs past threshold).
+        controller.notifyAppPaused(hasActiveCalls: false);
+        for (var i = 0; i < 10; i++) {
+          module.emit(_failed());
+        }
+        expect(notifyCount, 0, reason: 'no notifications while backgrounded');
+
+        // Unlock — state is reset.
+        controller.notifyAppResumed();
+
+        // First post-unlock failure: counter is 1, below threshold — no toast.
+        module.emit(_failed());
+        expect(notifyCount, 0, reason: 'first post-unlock failure must not notify');
+
+        // Second post-unlock failure: counter reaches threshold — toast is correct here.
+        module.emit(_failed());
+        expect(notifyCount, 1);
+      });
+    });
   });
 
   // -------------------------------------------------------------------------
@@ -556,7 +770,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 2,
         );
         addTearDown(controller.dispose);
@@ -604,7 +818,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 1,
           reconnectEnabled: false,
         );

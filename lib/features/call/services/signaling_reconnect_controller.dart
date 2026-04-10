@@ -2,11 +2,21 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 
 final _logger = Logger('SignalingReconnectController');
+
+/// Carries the full context of a connection failure passed to
+/// [SignalingReconnectController.onConnectionFailed].
+///
+/// - [knownCode] is `null` for initial-connect failures ([SignalingConnectionFailed]),
+///   or the decoded [SignalingDisconnectCode] for unexpected disconnects.
+/// - [systemCode] and [systemReason] are the raw WebSocket close code and reason
+///   from the server, useful for detailed error display.
+typedef SignalingFailureInfo = ({SignalingDisconnectCode? knownCode, int? systemCode, String? systemReason});
 
 /// Centralizes all signaling reconnect logic and connection-failure notification
 /// decisions for both the foreground [CallBloc] and background [IsolateManager].
@@ -37,7 +47,7 @@ final _logger = Logger('SignalingReconnectController');
 /// ```dart
 /// final controller = SignalingReconnectController(
 ///   signalingModule: module,
-///   onConnectionFailed: () => submitNotification(SignalingConnectFailedNotification()),
+///   onConnectionFailed: (failure) => submitNotification(SignalingConnectFailedNotification()),
 ///   onConnectionPresenceChanged: (isAvailable) => add(_SignalingPresenceChanged(isAvailable)),
 /// );
 ///
@@ -52,7 +62,7 @@ final _logger = Logger('SignalingReconnectController');
 class SignalingReconnectController {
   SignalingReconnectController({
     required SignalingModule signalingModule,
-    void Function()? onConnectionFailed,
+    void Function(SignalingFailureInfo)? onConnectionFailed,
     void Function(bool isAvailable)? onConnectionPresenceChanged,
     int notifyAfterConsecutiveFailures = 2,
     bool reconnectEnabled = true,
@@ -66,7 +76,7 @@ class SignalingReconnectController {
   }
 
   final SignalingModule _module;
-  final void Function()? _onConnectionFailed;
+  final void Function(SignalingFailureInfo)? _onConnectionFailed;
   final void Function(bool isAvailable)? _onConnectionPresenceChanged;
   final int _notifyThreshold;
   final bool _reconnectEnabled;
@@ -94,9 +104,27 @@ class SignalingReconnectController {
   // ---------------------------------------------------------------------------
 
   /// Call when [AppLifecycleState.resumed] fires.
+  ///
+  /// Resets [_wasConnected] and [_consecutiveFailures] to treat the first
+  /// post-resume attempt as a fresh session. In persistent-service mode the
+  /// background isolate may have reconnected while the app was closed; when
+  /// the app reopens the hub replays [SignalingConnected] from its session
+  /// buffer, setting [_wasConnected] to true. Without the reset here the
+  /// first post-resume connection failure would bypass the
+  /// consecutive-failure threshold and fire [onConnectionFailed] immediately.
   void notifyAppResumed() {
     _logger.fine('notifyAppResumed');
     _appActive = true;
+    // Reset only when there are no active calls. During an active call
+    // _wasConnected must stay true so a subsequent SignalingConnectionFailed
+    // is treated as an established-session drop and notifies immediately.
+    // Without active calls this reset prevents a persistent-mode background
+    // reconnect (replayed via hub session buffer) from skipping the
+    // consecutive-failure threshold on the first post-resume failure.
+    if (!_hasActiveCalls) {
+      _wasConnected = false;
+    }
+    _consecutiveFailures = 0;
     _scheduleReconnect(kSignalingClientFastReconnectDelay);
   }
 
@@ -110,6 +138,11 @@ class SignalingReconnectController {
     _logger.fine('notifyAppPaused hasActiveCalls=$hasActiveCalls');
     if (!hasActiveCalls) {
       _appActive = false;
+      // Intentional disconnect on app pause — treat the next reconnect as a
+      // fresh attempt, not a "session lost" event. Without this reset the
+      // first post-unlock connect failure would bypass the consecutive-failure
+      // threshold and immediately fire onConnectionFailed (WT-1221).
+      _wasConnected = false;
       _disconnect();
     }
   }
@@ -181,19 +214,32 @@ class SignalingReconnectController {
       //    may be transient, notify only after [_notifyThreshold] consecutive failures.
       // 2. An error fired on an already-established WebSocket connection -
       //    always notify immediately because the user-visible session was lost.
+      //
+      // Notifications are suppressed when the app is inactive and there are no
+      // active calls: in persistent-service mode the background isolate can
+      // reconnect while the app is closed, and notifying at that point would
+      // queue a toast that surfaces incorrectly when the app resumes.
       case SignalingConnectionFailed(:final recommendedReconnectDelay):
         if (_wasConnected) {
           _logger.fine('_onEvent: connection lost after established session - notifying immediately');
           _wasConnected = false;
           _consecutiveFailures = 0;
-          _onConnectionFailed?.call();
+          if (_appActive || _hasActiveCalls) {
+            _onConnectionFailed?.call((knownCode: null, systemCode: null, systemReason: null));
+          } else {
+            _logger.info('_onEvent: suppressing notification - app inactive, no active calls');
+          }
           _emitPresence(false);
         } else {
           _consecutiveFailures++;
           _logger.fine('_onEvent: connection failed (consecutive=$_consecutiveFailures)');
           if (_consecutiveFailures == _notifyThreshold) {
             _logger.info('_onEvent: notifying - consecutive failures reached threshold ($_notifyThreshold)');
-            _onConnectionFailed?.call();
+            if (_appActive || _hasActiveCalls) {
+              _onConnectionFailed?.call((knownCode: null, systemCode: null, systemReason: null));
+            } else {
+              _logger.info('_onEvent: suppressing notification - app inactive, no active calls');
+            }
             _emitPresence(false);
           }
         }
@@ -201,11 +247,16 @@ class SignalingReconnectController {
 
       // Unexpected TCP-level close without a preceding error event.
       // Notify immediately - an established session was lost.
-      case SignalingDisconnected(:final recommendedReconnectDelay) when recommendedReconnectDelay != null:
+      case SignalingDisconnected(:final recommendedReconnectDelay, :final knownCode, :final code, :final reason)
+          when recommendedReconnectDelay != null:
         _logger.fine('_onEvent: unexpected disconnect - notifying immediately');
         _wasConnected = false;
         _consecutiveFailures = 0;
-        _onConnectionFailed?.call();
+        if (_appActive || _hasActiveCalls) {
+          _onConnectionFailed?.call((knownCode: knownCode, systemCode: code, systemReason: reason));
+        } else {
+          _logger.info('_onEvent: suppressing notification - app inactive, no active calls');
+        }
         _emitPresence(false);
         _scheduleReconnect(recommendedReconnectDelay);
 
