@@ -746,7 +746,7 @@
   "@logRecordsConsole_Text_failure": {
     "description": "Shown in the Log Console screen when an unexpected error occurs while loading or displaying log records."
   },
-  "logRecordsConsole_Text_recordsCountHint": "{count, plural, one{Visualizzazione dell''ultimo {count} record. Usa Condividi per esportare il log completo.} other{Visualizzazione degli ultimi {count} record. Usa Condividi per esportare il log completo.}}",
+  "logRecordsConsole_Text_recordsCountHint": "{count, plural, one{Visualizzazione dell\u2019ultimo {count} record. Usa Condividi per esportare il log completo.} other{Visualizzazione degli ultimi {count} record. Usa Condividi per esportare il log completo.}}",
   "@logRecordsConsole_Text_recordsCountHint": {
     "description": "Shown in the info dialog to inform the user that only the most recent records are displayed and the share button exports the complete log.",
     "placeholders": {
