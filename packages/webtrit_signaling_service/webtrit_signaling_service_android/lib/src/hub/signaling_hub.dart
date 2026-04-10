@@ -30,6 +30,14 @@ class SignalingHub {
   /// consumerId -> subscriber SendPort
   final Map<String, SendPort> _subscribers = {};
 
+  /// True when at least one main-isolate subscriber is connected.
+  ///
+  /// Used by [SignalingForegroundIsolateManager] to decide whether reconnect
+  /// decisions should be delegated to [SignalingReconnectController] in the
+  /// main isolate (subscribers present) or handled locally in the background
+  /// isolate (no subscribers — app is closed, persistent-service mode).
+  bool get hasSubscribers => _subscribers.isNotEmpty;
+
   /// Encoded events since the last [SignalingConnecting] event.
   /// Replayed to late subscribers so they receive the current session state.
   final List<List<dynamic>> _sessionBuffer = [];

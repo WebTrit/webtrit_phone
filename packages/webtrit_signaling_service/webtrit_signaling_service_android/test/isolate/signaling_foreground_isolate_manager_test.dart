@@ -90,6 +90,14 @@ class _FakeSignalingHub extends Fake implements SignalingHub {
   // ignore: avoid_unused_constructor_parameters
   _FakeSignalingHub(SignalingModule _);
 
+  /// Controls whether the hub reports active subscribers.
+  ///
+  /// Default [true] simulates the normal case where the app is open and the
+  /// main isolate is subscribed. Set to [false] to simulate persistent-service
+  /// mode where the app is closed and there are no subscribers.
+  @override
+  bool hasSubscribers = true;
+
   @override
   void start() {}
 
@@ -101,6 +109,10 @@ class _FakeSignalingHub extends Fake implements SignalingHub {
 // Helper
 // ---------------------------------------------------------------------------
 
+/// Creates a manager where the hub reports active subscribers (app is open).
+///
+/// Reconnect decisions are delegated to the main isolate; the background
+/// isolate must not auto-reconnect in this configuration.
 SignalingForegroundIsolateManager _makeManager(_FakeSignalingModule module) {
   return SignalingForegroundIsolateManager(
     coreUrl: 'wss://example.com',
@@ -109,7 +121,20 @@ SignalingForegroundIsolateManager _makeManager(_FakeSignalingModule module) {
     // moduleFactoryHandle is 0 by default, but _testModuleFactory overrides
     // the handle-resolution path, so 0 does not trigger the "no factory" guard.
     moduleFactory: (_) => module,
-    hubFactory: _FakeSignalingHub.new,
+    hubFactory: _FakeSignalingHub.new, // hasSubscribers defaults to true
+  );
+}
+
+/// Creates a manager where the hub reports NO subscribers (app is closed —
+/// persistent-service mode). The background isolate must auto-reconnect
+/// independently in this configuration.
+SignalingForegroundIsolateManager _makeManagerPersistentMode(_FakeSignalingModule module) {
+  return SignalingForegroundIsolateManager(
+    coreUrl: 'wss://example.com',
+    tenantId: 'tenant',
+    token: 'tok',
+    moduleFactory: (_) => module,
+    hubFactory: (m) => _FakeSignalingHub(m)..hasSubscribers = false,
   );
 }
 
@@ -198,16 +223,17 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // No auto-reconnect — delegated to main isolate
+  // No auto-reconnect when subscribers present — delegated to main isolate
   // -------------------------------------------------------------------------
 
-  // Reconnect decisions belong exclusively to SignalingReconnectController in
-  // the main isolate. It sends SignalingHubConnectCommand via the hub when it
-  // decides to reconnect. The foreground-service isolate must NOT reconnect on
-  // its own — doing so would bypass lifecycle guards (e.g. app paused, no
-  // active calls) and cause spurious 4502 reconnect loops.
+  // When the main isolate is subscribed to the hub (app is open), reconnect
+  // decisions belong exclusively to SignalingReconnectController. It sends
+  // SignalingHubConnectCommand via the hub when it decides to reconnect.
+  // The foreground-service isolate must NOT reconnect on its own — doing so
+  // would bypass lifecycle guards (e.g. app paused, no active calls) and
+  // cause spurious 4502 reconnect loops.
 
-  group('SignalingForegroundIsolateManager -- no auto-reconnect on disconnect', () {
+  group('SignalingForegroundIsolateManager -- no auto-reconnect when main isolate is subscribed', () {
     test('does NOT reconnect when disconnect carries a non-null delay hint', () async {
       final module = _FakeSignalingModule();
       final manager = _makeManager(module);
@@ -238,6 +264,81 @@ void main() {
 
       await Future<void>.delayed(const Duration(milliseconds: 150));
       expect(module.connectCount, 1, reason: 'isolate must not auto-reconnect; only main isolate may reconnect');
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Persistent-service mode — auto-reconnect when no subscribers (app closed)
+  // -------------------------------------------------------------------------
+
+  // In persistent signaling mode the foreground service outlives the app.
+  // When the app is closed there are no hub subscribers, so
+  // SignalingReconnectController is not running. The background isolate must
+  // therefore manage reconnects locally until the app reopens and the main
+  // isolate subscribes again.
+
+  group('SignalingForegroundIsolateManager -- persistent mode auto-reconnect (no subscribers)', () {
+    test('reconnects after disconnect when no subscribers and delay is provided', () async {
+      final module = _FakeSignalingModule();
+      final manager = _makeManagerPersistentMode(module);
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      await manager.handleStatus(enabled: true);
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 1);
+
+      module.simulateDisconnectWithDelay(const Duration(milliseconds: 50));
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+
+      expect(module.connectCount, 2, reason: 'isolate must auto-reconnect in persistent mode when no subscribers');
+    });
+
+    test('reconnects after connection failed when no subscribers and delay is provided', () async {
+      final module = _FakeSignalingModule();
+      final manager = _makeManagerPersistentMode(module);
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      await manager.handleStatus(enabled: true);
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 1);
+
+      module.simulateConnectionFailed(const Duration(milliseconds: 50));
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+
+      expect(module.connectCount, 2, reason: 'isolate must auto-reconnect in persistent mode when no subscribers');
+    });
+
+    test('does NOT reconnect when delay is null (e.g. code 1002) even with no subscribers', () async {
+      final module = _FakeSignalingModule();
+      final manager = _makeManagerPersistentMode(module);
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      await manager.handleStatus(enabled: true);
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 1);
+
+      // code 1002 → recommendedReconnectDelay == null → no reconnect
+      module.simulateDisconnect1002();
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+
+      expect(module.connectCount, 1, reason: 'null delay means server rejected reconnect');
+    });
+
+    test('stop() cancels a pending persistent-mode reconnect timer', () async {
+      final module = _FakeSignalingModule();
+      final manager = _makeManagerPersistentMode(module);
+
+      await manager.handleStatus(enabled: true);
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 1);
+
+      module.simulateDisconnectWithDelay(const Duration(milliseconds: 50));
+
+      // Stop before the timer fires.
+      await manager.handleStatus(enabled: false);
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+
+      expect(module.connectCount, 1, reason: 'timer cancelled by stop() — no reconnect after dispose');
     });
   });
 
