@@ -502,6 +502,44 @@ void main() {
       });
     });
 
+    // Copilot review: notifyAppResumed must NOT reset _wasConnected when there
+    // is an active call. If it did, a subsequent SignalingConnectionFailed would
+    // be misclassified as an initial connect attempt (going through the
+    // consecutive-failure threshold) instead of an established-session drop
+    // that notifies immediately.
+    test('notifyAppResumed during active call preserves _wasConnected — failure notifies immediately', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        int notifyCount = 0;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (_) => notifyCount++,
+          notifyAfterConsecutiveFailures: 3,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        // Session established — _wasConnected = true.
+        module.emit(SignalingConnected());
+
+        // Brief background while a call is active (e.g. user swipes away and back).
+        controller.notifyAppPaused(hasActiveCalls: true);
+        controller.notifyHasActiveCalls(hasActiveCalls: true);
+
+        // App comes back to foreground during the call.
+        controller.notifyAppResumed();
+
+        // Connection drops — must notify immediately because _wasConnected is still true.
+        module.emit(_failed());
+        expect(
+          notifyCount,
+          1,
+          reason: 'established-session drop during active call must notify immediately, not wait for threshold',
+        );
+      });
+    });
+
     // Background reconnect race: on Android the hub module's connect/disconnect
     // are no-ops, so the background isolate can reconnect while the app is
     // paused and set _wasConnected = true. A subsequent failure must NOT queue
