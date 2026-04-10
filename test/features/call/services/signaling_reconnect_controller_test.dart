@@ -501,6 +501,74 @@ void main() {
         expect(notifyCount, 1);
       });
     });
+
+    // Background reconnect race: on Android the hub module's connect/disconnect
+    // are no-ops, so the background isolate can reconnect while the app is
+    // paused and set _wasConnected = true. A subsequent failure must NOT queue
+    // a notification (it would appear incorrectly when the app resumes).
+    test('background reconnect while paused — failure does not fire onConnectionFailed', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        int notifyCount = 0;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (_) => notifyCount++,
+          notifyAfterConsecutiveFailures: 2,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        // App goes background.
+        controller.notifyAppPaused(hasActiveCalls: false);
+
+        // Background isolate reconnects independently (hub broadcasts SignalingConnected).
+        module.emit(SignalingConnected());
+
+        // Connection fails while still paused (e.g. 4502 or generic error).
+        module.emit(_failed());
+        module.emit(_keepaliveTimeout());
+
+        // No notifications must have been queued — user is not watching.
+        expect(notifyCount, 0, reason: 'backgrounded without calls — no toast must be queued');
+      });
+    });
+
+    // notifyAppResumed resets _consecutiveFailures so that many background
+    // failures do not push the counter past the threshold, preventing
+    // notifications from appearing on the first post-unlock failures.
+    test('notifyAppResumed resets consecutiveFailures — threshold works correctly after unlock', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        int notifyCount = 0;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (_) => notifyCount++,
+          notifyAfterConsecutiveFailures: 2,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        // App goes background and accumulates many failures (counter climbs past threshold).
+        controller.notifyAppPaused(hasActiveCalls: false);
+        for (var i = 0; i < 10; i++) {
+          module.emit(_failed());
+        }
+        expect(notifyCount, 0, reason: 'no notifications while backgrounded');
+
+        // Unlock — state is reset.
+        controller.notifyAppResumed();
+
+        // First post-unlock failure: counter is 1, below threshold — no toast.
+        module.emit(_failed());
+        expect(notifyCount, 0, reason: 'first post-unlock failure must not notify');
+
+        // Second post-unlock failure: counter reaches threshold — toast is correct here.
+        module.emit(_failed());
+        expect(notifyCount, 1);
+      });
+    });
   });
 
   // -------------------------------------------------------------------------

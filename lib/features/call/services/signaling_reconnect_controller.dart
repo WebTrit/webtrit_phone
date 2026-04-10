@@ -104,9 +104,16 @@ class SignalingReconnectController {
   // ---------------------------------------------------------------------------
 
   /// Call when [AppLifecycleState.resumed] fires.
+  ///
+  /// Resets [_wasConnected] and [_consecutiveFailures] so that background
+  /// reconnects (which the hub module handles independently via the foreground
+  /// service isolate) do not leave stale state that skips the
+  /// consecutive-failure threshold on the first post-unlock attempt.
   void notifyAppResumed() {
     _logger.fine('notifyAppResumed');
     _appActive = true;
+    _wasConnected = false;
+    _consecutiveFailures = 0;
     _scheduleReconnect(kSignalingClientFastReconnectDelay);
   }
 
@@ -196,19 +203,33 @@ class SignalingReconnectController {
       //    may be transient, notify only after [_notifyThreshold] consecutive failures.
       // 2. An error fired on an already-established WebSocket connection -
       //    always notify immediately because the user-visible session was lost.
+      //
+      // On Android the hub module's connect()/disconnect() are no-ops — the
+      // foreground-service isolate owns the WebSocket lifecycle and reconnects
+      // independently. Its reconnects can set [_wasConnected] = true while the
+      // app is backgrounded. Notifying while backgrounded (no active calls)
+      // would queue a toast that surfaces incorrectly when the app resumes.
       case SignalingConnectionFailed(:final recommendedReconnectDelay):
         if (_wasConnected) {
           _logger.fine('_onEvent: connection lost after established session - notifying immediately');
           _wasConnected = false;
           _consecutiveFailures = 0;
-          _onConnectionFailed?.call((knownCode: null, systemCode: null, systemReason: null));
+          if (_appActive || _hasActiveCalls) {
+            _onConnectionFailed?.call((knownCode: null, systemCode: null, systemReason: null));
+          } else {
+            _logger.info('_onEvent: suppressing notification - app inactive, no active calls');
+          }
           _emitPresence(false);
         } else {
           _consecutiveFailures++;
           _logger.fine('_onEvent: connection failed (consecutive=$_consecutiveFailures)');
           if (_consecutiveFailures == _notifyThreshold) {
             _logger.info('_onEvent: notifying - consecutive failures reached threshold ($_notifyThreshold)');
-            _onConnectionFailed?.call((knownCode: null, systemCode: null, systemReason: null));
+            if (_appActive || _hasActiveCalls) {
+              _onConnectionFailed?.call((knownCode: null, systemCode: null, systemReason: null));
+            } else {
+              _logger.info('_onEvent: suppressing notification - app inactive, no active calls');
+            }
             _emitPresence(false);
           }
         }
@@ -221,7 +242,11 @@ class SignalingReconnectController {
         _logger.fine('_onEvent: unexpected disconnect - notifying immediately');
         _wasConnected = false;
         _consecutiveFailures = 0;
-        _onConnectionFailed?.call((knownCode: knownCode, systemCode: code, systemReason: reason));
+        if (_appActive || _hasActiveCalls) {
+          _onConnectionFailed?.call((knownCode: knownCode, systemCode: code, systemReason: reason));
+        } else {
+          _logger.info('_onEvent: suppressing notification - app inactive, no active calls');
+        }
         _emitPresence(false);
         _scheduleReconnect(recommendedReconnectDelay);
 
