@@ -111,7 +111,14 @@ class SignalingModuleImpl implements SignalingModule {
 
   WebtritSignalingClient? _client;
   bool _disposed = false;
-  bool _connecting = false;
+
+  /// Identity token for the active connect attempt.
+  ///
+  /// Non-null while a [_connectAsync] is in progress; null when idle.
+  /// [connect] creates a fresh [Object] and passes it to [_connectAsync].
+  /// [disconnect] sets it to null, which [_connectAsync] detects after each
+  /// suspension point — the "latest wins" pattern for non-cancellable Futures.
+  Object? _connectToken;
 
   /// Completer resolved by [_onDisconnect] after a graceful [disconnect] call.
   Completer<void>? _disconnectAck;
@@ -181,15 +188,22 @@ class SignalingModuleImpl implements SignalingModule {
   /// Clears the session buffer on each call.
   @override
   void connect() {
-    if (_disposed || _connecting) return;
+    if (_disposed || _connectToken != null) return;
+    final token = _connectToken = Object();
     _eventBuffer.clear();
-    unawaited(_connectAsync());
+    unawaited(_connectAsync(token));
   }
 
   @override
   Future<void> disconnect() async {
+    final hadInFlightConnect = _connectToken != null;
+    _connectToken = null; // invalidate any in-flight _connectAsync
+
     final client = _client;
-    if (client == null) return;
+    if (client == null) {
+      if (hadInFlightConnect) _logger.fine('disconnect: in-flight connect cancelled');
+      return;
+    }
     _client = null;
     _intentionalDisconnect = true;
     _disconnectAck = Completer<void>();
@@ -220,9 +234,7 @@ class SignalingModuleImpl implements SignalingModule {
   // Internal
   // ---------------------------------------------------------------------------
 
-  Future<void> _connectAsync() async {
-    if (_connecting) return;
-    _connecting = true;
+  Future<void> _connectAsync(Object connectToken) async {
     try {
       final existing = _client;
       if (existing != null) {
@@ -234,7 +246,7 @@ class SignalingModuleImpl implements SignalingModule {
         }
       }
 
-      if (_disposed) return;
+      if (_connectToken != connectToken || _disposed) return;
 
       _emit(SignalingConnecting());
 
@@ -249,11 +261,14 @@ class SignalingModuleImpl implements SignalingModule {
           force: true,
         );
 
-        if (_disposed) {
+        if (_connectToken != connectToken || _disposed) {
+          // This connect was superseded by disconnect() or a newer connect() —
+          // clean up the client without emitting events.
+          _logger.fine('_connectAsync: stale connect discarded');
           try {
             await client.disconnect(SignalingDisconnectCode.normalClosure.code);
           } catch (e, s) {
-            _logger.warning('_connectAsync dispose-disconnect error', e, s);
+            _logger.warning('_connectAsync stale-disconnect error', e, s);
           }
           return;
         }
@@ -270,7 +285,7 @@ class SignalingModuleImpl implements SignalingModule {
         _emit(SignalingConnected());
         unawaited(_requestQueue.flush(execute: client.execute, isActive: () => identical(_client, client)));
       } catch (e, s) {
-        if (_disposed) return;
+        if (_connectToken != connectToken || _disposed) return;
         _logger.warning('_connectAsync failed', e, s);
 
         final errorString = e.toString();
@@ -280,7 +295,9 @@ class SignalingModuleImpl implements SignalingModule {
         _emit(SignalingConnectionFailed(error: e, isRepeated: isRepeated, recommendedReconnectDelay: reconnectDelay));
       }
     } finally {
-      _connecting = false;
+      // Only clear the token if this is still the active connect — a superseded
+      // _connectAsync must not remove the token owned by the active one.
+      if (_connectToken == connectToken) _connectToken = null;
     }
   }
 
