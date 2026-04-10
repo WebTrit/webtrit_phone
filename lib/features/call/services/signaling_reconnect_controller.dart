@@ -105,10 +105,13 @@ class SignalingReconnectController {
 
   /// Call when [AppLifecycleState.resumed] fires.
   ///
-  /// Resets [_wasConnected] and [_consecutiveFailures] so that background
-  /// reconnects (which the hub module handles independently via the foreground
-  /// service isolate) do not leave stale state that skips the
-  /// consecutive-failure threshold on the first post-unlock attempt.
+  /// Resets [_wasConnected] and [_consecutiveFailures] to treat the first
+  /// post-resume attempt as a fresh session. In persistent-service mode the
+  /// background isolate may have reconnected while the app was closed; when
+  /// the app reopens the hub replays [SignalingConnected] from its session
+  /// buffer, setting [_wasConnected] to true. Without the reset here the
+  /// first post-resume connection failure would bypass the
+  /// consecutive-failure threshold and fire [onConnectionFailed] immediately.
   void notifyAppResumed() {
     _logger.fine('notifyAppResumed');
     _appActive = true;
@@ -204,11 +207,10 @@ class SignalingReconnectController {
       // 2. An error fired on an already-established WebSocket connection -
       //    always notify immediately because the user-visible session was lost.
       //
-      // On Android the hub module's connect()/disconnect() are no-ops — the
-      // foreground-service isolate owns the WebSocket lifecycle and reconnects
-      // independently. Its reconnects can set [_wasConnected] = true while the
-      // app is backgrounded. Notifying while backgrounded (no active calls)
-      // would queue a toast that surfaces incorrectly when the app resumes.
+      // Notifications are suppressed when the app is inactive and there are no
+      // active calls: in persistent-service mode the background isolate can
+      // reconnect while the app is closed, and notifying at that point would
+      // queue a toast that surfaces incorrectly when the app resumes.
       case SignalingConnectionFailed(:final recommendedReconnectDelay):
         if (_wasConnected) {
           _logger.fine('_onEvent: connection lost after established session - notifying immediately');
