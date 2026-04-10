@@ -115,7 +115,15 @@ class SignalingReconnectController {
   void notifyAppResumed() {
     _logger.fine('notifyAppResumed');
     _appActive = true;
-    _wasConnected = false;
+    // Reset only when there are no active calls. During an active call
+    // _wasConnected must stay true so a subsequent SignalingConnectionFailed
+    // is treated as an established-session drop and notifies immediately.
+    // Without active calls this reset prevents a persistent-mode background
+    // reconnect (replayed via hub session buffer) from skipping the
+    // consecutive-failure threshold on the first post-resume failure.
+    if (!_hasActiveCalls) {
+      _wasConnected = false;
+    }
     _consecutiveFailures = 0;
     _scheduleReconnect(kSignalingClientFastReconnectDelay);
   }
