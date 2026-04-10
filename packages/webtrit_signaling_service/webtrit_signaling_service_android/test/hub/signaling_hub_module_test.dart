@@ -16,6 +16,8 @@ class _FakeHubClient extends Fake implements SignalingHubClient {
 
   bool started = false;
   bool disposed = false;
+  bool connectSent = false;
+  bool disconnectSent = false;
   final List<Request> executedRequests = [];
 
   @override
@@ -26,6 +28,12 @@ class _FakeHubClient extends Fake implements SignalingHubClient {
 
   @override
   void start() => started = true;
+
+  @override
+  void sendConnect() => connectSent = true;
+
+  @override
+  void sendDisconnect() => disconnectSent = true;
 
   @override
   Future<void> execute(Request request) async {
@@ -245,40 +253,28 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // connect / disconnect are no-ops
+  // connect / disconnect forward commands to hub client
   // -------------------------------------------------------------------------
 
-  group('SignalingHubModule -- connect/disconnect are no-ops', () {
-    test('connect() does not throw or emit events', () async {
+  group('SignalingHubModule -- connect/disconnect forward to hub client', () {
+    test('connect() sends connect command to hub client', () {
       final hub = _FakeHubClient();
       final module = SignalingHubModule(hub);
       addTearDown(module.dispose);
-
-      final events = <SignalingModuleEvent>[];
-      module.events.listen(events.add);
 
       module.connect();
-      await Future<void>.delayed(Duration.zero);
 
-      expect(events, isEmpty);
+      expect(hub.connectSent, isTrue);
     });
 
-    test('disconnect() does not throw or emit events', () async {
+    test('disconnect() sends disconnect command to hub client', () async {
       final hub = _FakeHubClient();
       final module = SignalingHubModule(hub);
       addTearDown(module.dispose);
 
-      hub.inject(SignalingConnected());
-      await Future<void>.delayed(Duration.zero);
-
-      final events = <SignalingModuleEvent>[];
-      module.events.listen(events.add);
-
       await module.disconnect();
-      await Future<void>.delayed(Duration.zero);
 
-      expect(events.whereType<SignalingDisconnecting>(), isEmpty);
-      expect(events.whereType<SignalingDisconnected>(), isEmpty);
+      expect(hub.disconnectSent, isTrue);
     });
   });
 

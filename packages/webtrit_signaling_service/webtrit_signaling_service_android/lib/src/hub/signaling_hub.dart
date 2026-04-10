@@ -30,6 +30,14 @@ class SignalingHub {
   /// consumerId -> subscriber SendPort
   final Map<String, SendPort> _subscribers = {};
 
+  /// True when at least one subscriber (from any isolate) is connected.
+  ///
+  /// Used by [SignalingForegroundIsolateManager] to decide whether reconnect
+  /// decisions should be delegated (subscribers present — at least one isolate
+  /// can drive reconnects) or handled locally in the background isolate
+  /// (no subscribers — app is closed, persistent-service mode).
+  bool get hasSubscribers => _subscribers.isNotEmpty;
+
   /// Encoded events since the last [SignalingConnecting] event.
   /// Replayed to late subscribers so they receive the current session state.
   final List<List<dynamic>> _sessionBuffer = [];
@@ -95,6 +103,20 @@ class SignalingHub {
         _handleUnsubscribe(cmd);
       case SignalingHubExecuteCommand():
         _handleExecute(cmd);
+      case SignalingHubConnectCommand():
+        if (!_subscribers.containsKey(cmd.consumerId)) {
+          _logger.warning('Hub connect: unknown subscriber ${cmd.consumerId}');
+          return;
+        }
+        _logger.fine('Hub received connect command from ${cmd.consumerId}');
+        _signalingModule.connect();
+      case SignalingHubDisconnectCommand():
+        if (!_subscribers.containsKey(cmd.consumerId)) {
+          _logger.warning('Hub disconnect: unknown subscriber ${cmd.consumerId}');
+          return;
+        }
+        _logger.fine('Hub received disconnect command from ${cmd.consumerId}');
+        unawaited(_signalingModule.disconnect());
     }
   }
 

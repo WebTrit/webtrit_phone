@@ -94,13 +94,13 @@ class SignalingForegroundIsolateManager {
 
   Future<void> _start() async {
     if (_started) {
-      // Hub and module are already initialized. If the module lost its
-      // connection (e.g. a code-1002 close that does not auto-reconnect),
-      // reconnect it now so the external start() call is not silently ignored.
+      // Hub and module are already initialized. Cancel any pending
+      // persistent-mode auto-reconnect timer — the caller (main isolate or
+      // network-restore handler) takes responsibility for the connection now.
+      _reconnectTimer?.cancel();
+      _reconnectTimer = null;
       if (!(_signalingModule?.isConnected ?? false)) {
         _logger.info('SignalingForegroundIsolateManager already started but not connected, reconnecting');
-        _reconnectTimer?.cancel();
-        _reconnectTimer = null;
         _signalingModule?.connect();
       }
       return;
@@ -138,7 +138,6 @@ class SignalingForegroundIsolateManager {
 
     _reconnectTimer?.cancel();
     _reconnectTimer = null;
-
     await _eventsSubscription?.cancel();
     await _hub?.dispose();
     await _signalingModule?.dispose();
@@ -174,8 +173,14 @@ class SignalingForegroundIsolateManager {
       case SignalingConnected():
         _logger.info('IsolateManager: connected');
       case SignalingConnectionFailed(:final error, :final recommendedReconnectDelay):
-        _logger.warning('IsolateManager: connection failed -- $error, reconnect in $recommendedReconnectDelay');
-        _scheduleReconnect(recommendedReconnectDelay);
+        _logger.warning('IsolateManager: connection failed -- $error');
+        if (!(_hub?.hasSubscribers ?? false)) {
+          // No main-isolate subscriber — app is closed (persistent-service mode).
+          // Reconnect locally; when the app opens and subscribes, the main isolate
+          // takes over reconnect decisions via SignalingReconnectController.
+          _scheduleReconnect(recommendedReconnectDelay);
+        }
+      // else: delegated to SignalingReconnectController in the main isolate.
       case SignalingHandshakeReceived(:final handshake):
         _logger.info('IsolateManager: handshake lines=${handshake.lines}');
       case SignalingProtocolEvent(:final event):
@@ -185,12 +190,35 @@ class SignalingForegroundIsolateManager {
         }
       case SignalingDisconnected(:final code, :final reason, :final recommendedReconnectDelay):
         _logger.info('IsolateManager: disconnected code=$code reason=$reason');
-        if (recommendedReconnectDelay != null) {
+        if (!(_hub?.hasSubscribers ?? false)) {
+          // No main-isolate subscriber — app is closed (persistent-service mode).
           _scheduleReconnect(recommendedReconnectDelay);
         }
+      // else: delegated to SignalingReconnectController in the main isolate.
       default:
         break;
     }
+  }
+
+  /// Schedules an auto-reconnect for persistent-service mode (no hub subscribers).
+  ///
+  /// Called only when [SignalingHub.hasSubscribers] is false — i.e. the app is
+  /// closed and there is no [SignalingReconnectController] in the main isolate
+  /// to drive reconnect decisions. When [delay] is null the server signalled
+  /// that reconnecting is not appropriate (e.g. code 1002 protocol error), so
+  /// no timer is scheduled.
+  void _scheduleReconnect(Duration? delay) {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = null;
+    if (delay == null) return;
+    _logger.info('IsolateManager: scheduling reconnect in ${delay.inMilliseconds} ms (persistent mode)');
+    _reconnectTimer = Timer(delay, () {
+      _reconnectTimer = null;
+      if (_started && !(_signalingModule?.isConnected ?? false)) {
+        _logger.info('IsolateManager: auto-reconnecting (persistent mode)');
+        _signalingModule?.connect();
+      }
+    });
   }
 
   /// Invokes the app-registered incoming call callback in this background isolate.
@@ -225,17 +253,6 @@ class SignalingForegroundIsolateManager {
     } catch (e, st) {
       _logger.severe('IsolateManager: incoming call handler threw', e, st);
     }
-  }
-
-  void _scheduleReconnect(Duration? delay) {
-    if (delay == null) return;
-    _reconnectTimer?.cancel();
-    _reconnectTimer = Timer(delay, () {
-      if (_started) {
-        _logger.info('SignalingForegroundIsolateManager reconnecting after $delay');
-        _signalingModule?.connect();
-      }
-    });
   }
 }
 
