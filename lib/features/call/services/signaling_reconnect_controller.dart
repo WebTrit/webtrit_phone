@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
@@ -52,7 +53,7 @@ final _logger = Logger('SignalingReconnectController');
 class SignalingReconnectController {
   SignalingReconnectController({
     required SignalingModule signalingModule,
-    void Function()? onConnectionFailed,
+    void Function(SignalingDisconnectCode? knownCode)? onConnectionFailed,
     void Function(bool isAvailable)? onConnectionPresenceChanged,
     int notifyAfterConsecutiveFailures = 2,
     bool reconnectEnabled = true,
@@ -66,7 +67,7 @@ class SignalingReconnectController {
   }
 
   final SignalingModule _module;
-  final void Function()? _onConnectionFailed;
+  final void Function(SignalingDisconnectCode? knownCode)? _onConnectionFailed;
   final void Function(bool isAvailable)? _onConnectionPresenceChanged;
   final int _notifyThreshold;
   final bool _reconnectEnabled;
@@ -186,14 +187,14 @@ class SignalingReconnectController {
           _logger.fine('_onEvent: connection lost after established session - notifying immediately');
           _wasConnected = false;
           _consecutiveFailures = 0;
-          _onConnectionFailed?.call();
+          _onConnectionFailed?.call(null);
           _emitPresence(false);
         } else {
           _consecutiveFailures++;
           _logger.fine('_onEvent: connection failed (consecutive=$_consecutiveFailures)');
           if (_consecutiveFailures == _notifyThreshold) {
             _logger.info('_onEvent: notifying - consecutive failures reached threshold ($_notifyThreshold)');
-            _onConnectionFailed?.call();
+            _onConnectionFailed?.call(null);
             _emitPresence(false);
           }
         }
@@ -201,11 +202,12 @@ class SignalingReconnectController {
 
       // Unexpected TCP-level close without a preceding error event.
       // Notify immediately - an established session was lost.
-      case SignalingDisconnected(:final recommendedReconnectDelay) when recommendedReconnectDelay != null:
+      case SignalingDisconnected(:final recommendedReconnectDelay, :final knownCode)
+          when recommendedReconnectDelay != null:
         _logger.fine('_onEvent: unexpected disconnect - notifying immediately');
         _wasConnected = false;
         _consecutiveFailures = 0;
-        _onConnectionFailed?.call();
+        _onConnectionFailed?.call(knownCode);
         _emitPresence(false);
         _scheduleReconnect(recommendedReconnectDelay);
 

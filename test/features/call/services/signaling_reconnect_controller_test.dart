@@ -57,6 +57,14 @@ SignalingDisconnected _lost() => SignalingDisconnected(
   recommendedReconnectDelay: kSignalingClientReconnectDelay,
 );
 
+// Simulates a server-side keepalive timeout (backgrounded app, Android network restrictions).
+SignalingDisconnected _keepaliveTimeout() => SignalingDisconnected(
+  code: 4502,
+  reason: 'signaling keepalive timeout error',
+  knownCode: SignalingDisconnectCode.signalingKeepaliveTimeoutError,
+  recommendedReconnectDelay: kSignalingClientReconnectDelay,
+);
+
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
@@ -110,7 +118,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 3,
           reconnectEnabled: false,
         );
@@ -130,7 +138,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 2,
           reconnectEnabled: false,
         );
@@ -150,7 +158,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 2,
           reconnectEnabled: false,
         );
@@ -172,7 +180,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 2,
           reconnectEnabled: false,
         );
@@ -195,6 +203,67 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
+  // onConnectionFailed — knownCode forwarding
+  // -------------------------------------------------------------------------
+
+  group('SignalingReconnectController - onConnectionFailed knownCode', () {
+    test('passes null knownCode on SignalingConnectionFailed', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        SignalingDisconnectCode? receivedCode = SignalingDisconnectCode.unmappedCode; // sentinel
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (knownCode) => receivedCode = knownCode,
+          notifyAfterConsecutiveFailures: 1,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(_failed());
+
+        expect(receivedCode, isNull);
+      });
+    });
+
+    test('passes knownCode on SignalingDisconnected (unexpected)', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        SignalingDisconnectCode? receivedCode;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (knownCode) => receivedCode = knownCode,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(_lost());
+
+        expect(receivedCode, SignalingDisconnectCode.unmappedCode);
+      });
+    });
+
+    test('passes signalingKeepaliveTimeoutError knownCode on keepalive disconnect', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        SignalingDisconnectCode? receivedCode;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (knownCode) => receivedCode = knownCode,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(_keepaliveTimeout());
+
+        expect(receivedCode, SignalingDisconnectCode.signalingKeepaliveTimeoutError);
+      });
+    });
+  });
+
+  // -------------------------------------------------------------------------
   // SignalingDisconnected (unexpected) — immediate notification
   // -------------------------------------------------------------------------
 
@@ -206,7 +275,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 5,
           reconnectEnabled: false,
         );
@@ -225,7 +294,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 2,
           reconnectEnabled: false,
         );
@@ -556,7 +625,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 2,
         );
         addTearDown(controller.dispose);
@@ -604,7 +673,7 @@ void main() {
         int notifyCount = 0;
         final controller = SignalingReconnectController(
           signalingModule: module,
-          onConnectionFailed: () => notifyCount++,
+          onConnectionFailed: (_) => notifyCount++,
           notifyAfterConsecutiveFailures: 1,
           reconnectEnabled: false,
         );
