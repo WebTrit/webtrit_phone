@@ -3,11 +3,12 @@ package com.webtrit.app
 import io.flutter.embedding.android.FlutterActivity
 
 class MainActivity : FlutterActivity() {
-    // Move the app to background instead of destroying the Activity when
-    // the user presses Back on the root screen. This prevents the Flutter
-    // engine (and any active WebRTC call) from being torn down on back press.
-    @Suppress("DEPRECATION")
-    override fun onBackPressed() {
+    // Called by Flutter only after its own navigation stack is fully exhausted.
+    // Returning true prevents the default finish() call and moves the app to
+    // background instead, keeping the Flutter engine (and any active WebRTC
+    // call) alive.
+    override fun popSystemNavigator(): Boolean {
         moveTaskToBack(true)
+        return true
     }
 }
