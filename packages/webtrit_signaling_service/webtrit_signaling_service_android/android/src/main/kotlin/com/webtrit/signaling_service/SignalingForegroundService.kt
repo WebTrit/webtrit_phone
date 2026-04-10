@@ -139,7 +139,8 @@ class SignalingForegroundService : Service() {
         // WebSocket to the WebTrit signaling server so it can receive call-signaling
         // messages (SDP, ICE candidates, call events) at any time. The remoteMessaging
         // type is the Android-defined category for exactly this use case.
-        // Declared on API 34+ only; older versions do not enforce a type.
+        // Passed to startForeground() on API 34+ only; older versions pass 0 and do
+        // not enforce a foreground service type here.
         ServiceCompat.startForeground(
             this,
             NOTIFICATION_ID,
