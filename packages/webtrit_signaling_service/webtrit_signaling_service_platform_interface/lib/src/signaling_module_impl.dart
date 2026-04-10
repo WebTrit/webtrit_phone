@@ -111,14 +111,14 @@ class SignalingModuleImpl implements SignalingModule {
 
   WebtritSignalingClient? _client;
   bool _disposed = false;
-  bool _connecting = false;
 
-  /// Monotonically increasing counter incremented by every [connect] and
-  /// [disconnect] call. [_connectAsync] captures the current value at the
-  /// moment it starts and checks it after every suspension point: if the
-  /// counter has changed the connect attempt is stale and exits without
-  /// emitting events or setting [_client].
-  int _generation = 0;
+  /// Identity token for the active connect attempt.
+  ///
+  /// Non-null while a [_connectAsync] is in progress (acts as [_connecting]).
+  /// [connect] creates a fresh [Object] and passes it to [_connectAsync].
+  /// [disconnect] sets it to null, which [_connectAsync] detects after each
+  /// suspension point — the "latest wins" pattern for non-cancellable Futures.
+  Object? _connectToken;
 
   /// Completer resolved by [_onDisconnect] after a graceful [disconnect] call.
   Completer<void>? _disconnectAck;
@@ -188,20 +188,19 @@ class SignalingModuleImpl implements SignalingModule {
   /// Clears the session buffer on each call.
   @override
   void connect() {
-    if (_disposed || _connecting) return;
-    final gen = ++_generation;
+    if (_disposed || _connectToken != null) return;
+    final token = _connectToken = Object();
     _eventBuffer.clear();
-    unawaited(_connectAsync(gen));
+    unawaited(_connectAsync(token));
   }
 
   @override
   Future<void> disconnect() async {
-    ++_generation; // invalidate any in-flight _connectAsync
-    _connecting = false; // allow subsequent connect() to proceed
+    _connectToken = null; // invalidate any in-flight _connectAsync
 
     final client = _client;
     if (client == null) {
-      _logger.fine('disconnect: no active client, in-flight connect cancelled (gen=$_generation)');
+      _logger.fine('disconnect: no active client, in-flight connect cancelled');
       return;
     }
     _client = null;
@@ -234,9 +233,7 @@ class SignalingModuleImpl implements SignalingModule {
   // Internal
   // ---------------------------------------------------------------------------
 
-  Future<void> _connectAsync(int gen) async {
-    if (_connecting) return;
-    _connecting = true;
+  Future<void> _connectAsync(Object connectToken) async {
     try {
       final existing = _client;
       if (existing != null) {
@@ -248,7 +245,7 @@ class SignalingModuleImpl implements SignalingModule {
         }
       }
 
-      if (gen != _generation || _disposed) return;
+      if (_connectToken != connectToken || _disposed) return;
 
       _emit(SignalingConnecting());
 
@@ -263,10 +260,10 @@ class SignalingModuleImpl implements SignalingModule {
           force: true,
         );
 
-        if (gen != _generation || _disposed) {
+        if (_connectToken != connectToken || _disposed) {
           // This connect was superseded by disconnect() or a newer connect() —
           // clean up the client without emitting events.
-          _logger.fine('_connectAsync: stale connect discarded (gen=$gen, current=$_generation)');
+          _logger.fine('_connectAsync: stale connect discarded');
           try {
             await client.disconnect(SignalingDisconnectCode.normalClosure.code);
           } catch (e, s) {
@@ -287,7 +284,7 @@ class SignalingModuleImpl implements SignalingModule {
         _emit(SignalingConnected());
         unawaited(_requestQueue.flush(execute: client.execute, isActive: () => identical(_client, client)));
       } catch (e, s) {
-        if (gen != _generation || _disposed) return;
+        if (_connectToken != connectToken || _disposed) return;
         _logger.warning('_connectAsync failed', e, s);
 
         final errorString = e.toString();
@@ -297,9 +294,9 @@ class SignalingModuleImpl implements SignalingModule {
         _emit(SignalingConnectionFailed(error: e, isRepeated: isRepeated, recommendedReconnectDelay: reconnectDelay));
       }
     } finally {
-      // Only reset _connecting for the current generation — a superseded
-      // _connectAsync must not clear the flag owned by the active one.
-      if (gen == _generation) _connecting = false;
+      // Only clear the token if this is still the active connect — a superseded
+      // _connectAsync must not remove the token owned by the active one.
+      if (_connectToken == connectToken) _connectToken = null;
     }
   }
 
