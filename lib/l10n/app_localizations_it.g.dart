@@ -883,7 +883,7 @@ class AppLocalizationsIt extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Visualizzazione degli ultimi $count record. Usa Condividi per esportare il log completo.',
-      one: 'Visualizzazione dell\'ultimo $count record. Usa Condividi per esportare il log completo.',
+      one: 'Visualizzazione dell’ultimo $count record. Usa Condividi per esportare il log completo.',
     );
     return '$_temp0';
   }
