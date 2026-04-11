@@ -87,14 +87,17 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   /// notification [metadata], and returns a [Future] that completes after all
   /// work is done (notifications shown, logs written, native service released).
   Future<void> run(CallkeepIncomingCallMetadata? metadata) {
+    if (_signalingModule == null) {
+      throw StateError('PushNotificationIsolateManager.run() called before init()');
+    }
     _metadata = metadata;
     _completer = Completer<void>();
-    final module = _signalingModule;
-    logger.info('run: callId=${metadata?.callId} hubConnected=${module?.isConnected}');
+    final module = _signalingModule!;
+    logger.info('run: callId=${metadata?.callId} hubConnected=${module.isConnected}');
     // If the module is already connected (hub reuse path), do not call connect()
     // to avoid triggering a reconnect on a live session. The hub replay buffer
     // delivers the current state via events.
-    if (module != null && !module.isConnected) {
+    if (!module.isConnected) {
       module.connect();
     }
     return _completer!.future;

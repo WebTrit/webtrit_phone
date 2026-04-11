@@ -291,10 +291,19 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     final ackFuture = client.awaitAck();
     final module = SignalingHubModule(client);
     final ackReceived = await ackFuture;
-    if (ackReceived) return module;
-    _logger.fine('_tryConnectHub: ack timeout for consumerId=$consumerId, disposing stale module');
-    await module.dispose();
-    return null;
+    if (!ackReceived) {
+      _logger.fine('_tryConnectHub: ack timeout for consumerId=$consumerId, disposing stale module');
+      await module.dispose();
+      return null;
+    }
+    // Yield to the event loop so the hub's replay events (including
+    // SignalingConnected) are delivered to SignalingHubModule._onHubEvent
+    // before this method returns. The hub sends replay events immediately
+    // after the subscription ack; without this yield module.isConnected
+    // can still be false when the caller checks it, causing an unintended
+    // connect() call that forwards to the FGS WebSocket.
+    await Future<void>.delayed(Duration.zero);
+    return module;
   }
 
   /// Persists credentials and requests a native FGS start without wiring up
