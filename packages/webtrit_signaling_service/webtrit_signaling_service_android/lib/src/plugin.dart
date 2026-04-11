@@ -9,6 +9,9 @@ import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
+import 'constants.dart';
+import 'hub/signaling_hub_client.dart';
+import 'hub/signaling_hub_module.dart';
 import 'hub_connection_manager.dart';
 import 'isolate/entry_point.dart' show signalingServiceCallbackDispatcher;
 import 'messages.g.dart';
@@ -219,6 +222,40 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   Future<void> restoreService() async {
     _logger.info('restoreService');
     await _hostApi.connect();
+  }
+
+  /// Returns a [SignalingModule] for the push notification isolate.
+  ///
+  /// Tries [SignalingHubClient.tryConnect] first. If the FGS hub is running
+  /// and acknowledges the subscription within 500 ms, returns a
+  /// [SignalingHubModule] that routes through the existing WebSocket — no new
+  /// connection is opened. Falls back to a direct [SignalingModuleImpl] when
+  /// no hub is active (app was killed, hub port absent or stale).
+  @override
+  Future<SignalingModule> createPushIsolateModule(SignalingServiceConfig config, String consumerId) async {
+    final client = SignalingHubClient.tryConnect(consumerId);
+    if (client != null) {
+      // awaitAck MUST be called before SignalingHubModule is constructed so the
+      // internal Completer is in place before the hub's sub-ack can arrive.
+      final ackFuture = client.awaitAck();
+      final module = SignalingHubModule(client);
+      final ackReceived = await ackFuture;
+      if (ackReceived) {
+        _logger.info('createPushIsolateModule: hub available, reusing existing WebSocket (consumerId=$consumerId)');
+        return module;
+      }
+      _logger.info('createPushIsolateModule: hub port stale, disposing and falling back to direct module');
+      await module.dispose();
+    }
+    _logger.info('createPushIsolateModule: no hub active, creating direct SignalingModuleImpl');
+    return SignalingModuleImpl(
+      coreUrl: config.coreUrl,
+      tenantId: config.tenantId,
+      token: config.token,
+      trustedCertificates: config.trustedCertificates,
+      connectionTimeout: kSignalingClientConnectionTimeout,
+      reconnectDelay: kSignalingClientReconnectDelay,
+    );
   }
 
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {

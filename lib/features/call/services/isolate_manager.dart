@@ -8,7 +8,6 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -22,6 +21,10 @@ import '../models/jsep_value.dart';
 /// to retrieve call state, handles missed-call logging and notifications, and
 /// releases the incoming call service when all work is done.
 /// Never reconnects — the isolate is short-lived by design.
+///
+/// All signaling goes through the FGS hub when it is already running, so there
+/// is never more than one WebSocket open at the same time. Call [init] after
+/// construction and before [run].
 class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegate {
   PushNotificationIsolateManager({
     required this.callLogsRepository,
@@ -31,7 +34,9 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     required this.certificates,
     required this.logger,
   }) : _pushService = callkeep {
-    _initSignaling();
+    // Signaling is initialised asynchronously in [init] to allow hub discovery.
+    // setBackgroundServiceDelegate is called here so callkeep can route
+    // performAnswerCall / performEndCall as soon as the object exists.
     _pushService.setBackgroundServiceDelegate(this);
   }
 
@@ -43,8 +48,9 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
 
   final BackgroundPushNotificationService _pushService;
 
-  late final SignalingModule _signalingModule;
-  late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
+  // Nullable until [init] completes. Accessed only after [init] in [run]/[close].
+  SignalingModule? _signalingModule;
+  StreamSubscription<SignalingModuleEvent>? _signalingSubscription;
 
   /// Metadata from the incoming push notification.
   /// Used as a fallback for missed-call display name and call logging.
@@ -69,14 +75,28 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   // Public API
   // ---------------------------------------------------------------------------
 
+  /// Initialises the signaling module.
+  ///
+  /// Must be called once after construction and before [run]. Separated from
+  /// the constructor because hub discovery is asynchronous — on Android the
+  /// method checks whether the FGS hub is already running and reuses its
+  /// WebSocket, avoiding a second connection.
+  Future<void> init() => _initSignaling();
+
   /// Connects to the signaling server, processes call state for the given push
   /// notification [metadata], and returns a [Future] that completes after all
   /// work is done (notifications shown, logs written, native service released).
   Future<void> run(CallkeepIncomingCallMetadata? metadata) {
     _metadata = metadata;
     _completer = Completer<void>();
-    logger.info('run: callId=${metadata?.callId}');
-    _signalingModule.connect();
+    final module = _signalingModule;
+    logger.info('run: callId=${metadata?.callId} hubConnected=${module?.isConnected}');
+    // If the module is already connected (hub reuse path), do not call connect()
+    // to avoid triggering a reconnect on a live session. The hub replay buffer
+    // delivers the current state via events.
+    if (module != null && !module.isConnected) {
+      module.connect();
+    }
     return _completer!.future;
   }
 
@@ -89,8 +109,8 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       }
     }
     _pendingRequests.clear();
-    await _signalingSubscription.cancel();
-    await _signalingModule.dispose();
+    await _signalingSubscription?.cancel();
+    await _signalingModule?.dispose();
     await _releaseCall(_metadata?.callId);
     _completeWithError(StateError('PushNotificationIsolateManager closed'));
   }
@@ -122,17 +142,25 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   // Signaling init
   // ---------------------------------------------------------------------------
 
-  void _initSignaling() {
-    _signalingModule = SignalingModuleImpl(
-      coreUrl: storage.readCoreUrl() ?? '',
-      tenantId: storage.readTenantId() ?? '',
-      token: storage.readToken() ?? '',
-      trustedCertificates: certificates,
-      connectionTimeout: kSignalingClientConnectionTimeout,
-      reconnectDelay: kSignalingClientReconnectDelay,
+  /// Resolves the correct [SignalingModule] for this isolate.
+  ///
+  /// On Android, [WebtritSignalingService.createPushIsolateModule] checks
+  /// [IsolateNameServer] for a live FGS hub. When the hub is available and
+  /// acknowledges the subscription, a [SignalingHubModule] is returned and no
+  /// new WebSocket is opened. When no hub is active (app was killed), a direct
+  /// [SignalingModuleImpl] is returned as a fallback.
+  Future<void> _initSignaling() async {
+    _signalingModule = await WebtritSignalingService.createPushIsolateModule(
+      SignalingServiceConfig(
+        coreUrl: storage.readCoreUrl() ?? '',
+        tenantId: storage.readTenantId() ?? '',
+        token: storage.readToken() ?? '',
+        trustedCertificates: certificates,
+      ),
+      'push_isolate_$hashCode',
     );
 
-    _signalingSubscription = _signalingModule.events.listen((event) {
+    _signalingSubscription = _signalingModule!.events.listen((event) {
       switch (event) {
         case SignalingConnecting():
           logger.info('Signaling: connecting');
@@ -289,7 +317,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
         continue;
       }
 
-      final future = _signalingModule.execute(
+      final future = _signalingModule?.execute(
         pending.requestBuilder(lineIndex, pending.callId, WebtritSignalingClient.generateTransactionId()),
       );
       if (future == null) {
@@ -309,7 +337,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   }
 
   Future<void> _sendRequest(String callId, Request Function(int line, String callId, String tx) requestBuilder) async {
-    if (!_signalingModule.isConnected) {
+    if (!(_signalingModule?.isConnected ?? false)) {
       logger.warning('Not connected. Queueing request for $callId');
 
       final completer = Completer<void>();
@@ -335,7 +363,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     final lineIndex = _lines[callId];
     if (lineIndex == null) return;
 
-    final future = _signalingModule.execute(
+    final future = _signalingModule?.execute(
       requestBuilder(lineIndex, callId, WebtritSignalingClient.generateTransactionId()),
     );
     if (future == null) {

@@ -47,6 +47,10 @@ Future<PushNotificationIsolateManager> _getOrInit() async {
     certificates: _context!.appCertificates.trustedCertificates,
     logger: Logger('PushNotificationIsolateManager'),
   );
+  // init() resolves the signaling module asynchronously: on Android it checks
+  // IsolateNameServer for a live FGS hub and reuses its WebSocket when found,
+  // so only one connection is ever open at a time.
+  await _manager!.init();
 
   return _manager!;
 }
