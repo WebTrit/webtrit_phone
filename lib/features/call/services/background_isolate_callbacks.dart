@@ -50,7 +50,7 @@ Future<PushNotificationIsolateManager> _getOrInit() async {
   // init() constructs WebtritSignalingService and wires up the event subscription.
   // Hub discovery and FGS start happen in connect(), which is called from run().
   _logger.info('_getOrInit: initialising signaling module...');
-  await _manager!.init();
+  _manager!.init();
   _logger.info('_getOrInit: init complete');
 
   return _manager!;
