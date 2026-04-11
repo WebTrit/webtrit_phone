@@ -8,7 +8,6 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -22,6 +21,10 @@ import '../models/jsep_value.dart';
 /// to retrieve call state, handles missed-call logging and notifications, and
 /// releases the incoming call service when all work is done.
 /// Never reconnects — the isolate is short-lived by design.
+///
+/// On Android, signaling runs through the FGS hub so push isolate and Activity
+/// share a single WebSocket connection. On iOS the connection runs directly in
+/// the main isolate. Call [init] after construction and before [run].
 class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegate {
   PushNotificationIsolateManager({
     required this.callLogsRepository,
@@ -31,7 +34,9 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     required this.certificates,
     required this.logger,
   }) : _pushService = callkeep {
-    _initSignaling();
+    // setBackgroundServiceDelegate is called in the constructor so callkeep can
+    // route performAnswerCall / performEndCall as soon as the object exists,
+    // before [init] is called.
     _pushService.setBackgroundServiceDelegate(this);
   }
 
@@ -43,8 +48,10 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
 
   final BackgroundPushNotificationService _pushService;
 
-  late final SignalingModule _signalingModule;
-  late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
+  // Assigned exactly once in [init], before any call to [run] or [close].
+  late SignalingModule _signalingModule;
+  late StreamSubscription<SignalingModuleEvent> _signalingSubscription;
+  bool _initialized = false;
 
   /// Metadata from the incoming push notification.
   /// Used as a fallback for missed-call display name and call logging.
@@ -69,19 +76,40 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   // Public API
   // ---------------------------------------------------------------------------
 
+  /// Initialises the signaling module.
+  ///
+  /// Must be called once after construction and before [run]. Constructs
+  /// [WebtritSignalingService] and wires up the event subscription. Hub
+  /// discovery and FGS start happen later when [connect] is called from
+  /// [run] via the Android plugin's [HubConnectionManager].
+  void init() {
+    _initSignaling();
+    _initialized = true;
+  }
+
   /// Connects to the signaling server, processes call state for the given push
   /// notification [metadata], and returns a [Future] that completes after all
   /// work is done (notifications shown, logs written, native service released).
   Future<void> run(CallkeepIncomingCallMetadata? metadata) {
+    if (!_initialized) {
+      throw StateError('PushNotificationIsolateManager.run() called before init()');
+    }
     _metadata = metadata;
     _completer = Completer<void>();
-    logger.info('run: callId=${metadata?.callId}');
+    logger.info('run: callId=${metadata?.callId} isConnected=${_signalingModule.isConnected}');
+    // WebtritSignalingService.connect() is idempotent: the internal
+    // _startPending / _isConnected guard makes repeated calls safe.
+    // Always call it so HubConnectionManager starts FGS discovery on the
+    // first run() and is a no-op on any subsequent call.
     _signalingModule.connect();
     return _completer!.future;
   }
 
   /// Cancels all timers and pending requests, then disposes the signaling module.
   Future<void> close() async {
+    logger.info(
+      'close: disposing module=${_initialized ? _signalingModule.runtimeType : "not initialized"} pendingRequests=${_pendingRequests.length}',
+    );
     for (final pending in _pendingRequests) {
       pending.timeoutTimer.cancel();
       if (!pending.completer.isCompleted) {
@@ -89,8 +117,10 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       }
     }
     _pendingRequests.clear();
-    await _signalingSubscription.cancel();
-    await _signalingModule.dispose();
+    if (_initialized) {
+      await _signalingSubscription.cancel();
+      await _signalingModule.dispose();
+    }
     await _releaseCall(_metadata?.callId);
     _completeWithError(StateError('PushNotificationIsolateManager closed'));
   }
@@ -122,14 +152,22 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   // Signaling init
   // ---------------------------------------------------------------------------
 
+  /// Sets up [WebtritSignalingService] for this isolate in
+  /// [SignalingServiceMode.pushBound] mode — the same mechanism the Activity
+  /// uses, so push isolate and Activity share exactly one FGS WebSocket on
+  /// Android. [HubConnectionManager] inside the service handles FGS start and
+  /// hub discovery. [connect] is called from [run], not here, so the
+  /// connection starts only when processing begins.
   void _initSignaling() {
-    _signalingModule = SignalingModuleImpl(
-      coreUrl: storage.readCoreUrl() ?? '',
-      tenantId: storage.readTenantId() ?? '',
-      token: storage.readToken() ?? '',
-      trustedCertificates: certificates,
-      connectionTimeout: kSignalingClientConnectionTimeout,
-      reconnectDelay: kSignalingClientReconnectDelay,
+    logger.info('_initSignaling: creating WebtritSignalingService (pushBound)');
+    _signalingModule = WebtritSignalingService(
+      config: SignalingServiceConfig(
+        coreUrl: storage.readCoreUrl() ?? '',
+        tenantId: storage.readTenantId() ?? '',
+        token: storage.readToken() ?? '',
+        trustedCertificates: certificates,
+      ),
+      mode: SignalingServiceMode.pushBound,
     );
 
     _signalingSubscription = _signalingModule.events.listen((event) {

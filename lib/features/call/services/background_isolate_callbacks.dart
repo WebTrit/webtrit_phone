@@ -47,6 +47,11 @@ Future<PushNotificationIsolateManager> _getOrInit() async {
     certificates: _context!.appCertificates.trustedCertificates,
     logger: Logger('PushNotificationIsolateManager'),
   );
+  // init() constructs WebtritSignalingService and wires up the event subscription.
+  // Hub discovery and FGS start happen in connect(), which is called from run().
+  _logger.info('_getOrInit: initialising signaling module...');
+  _manager!.init();
+  _logger.info('_getOrInit: init complete');
 
   return _manager!;
 }
