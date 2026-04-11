@@ -59,14 +59,12 @@ class SignalingForegroundService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        startForeground()
+
         Log.d(TAG, "SignalingForegroundService onCreate")
-
         instance = this
-
         val callbackHandle = StorageDelegate.getCallbackDispatcher(applicationContext)
         flutterEngineHelper = FlutterEngineHelper(applicationContext, callbackHandle, this)
-
-        startForeground()
         isRunning = true
     }
 
@@ -97,6 +95,17 @@ class SignalingForegroundService : Service() {
     }
 
     override fun onDestroy() {
+        // Enqueue restart before any teardown so the job is queued while the process is still valid.
+        // Credentials guard: stopService() calls clearConnectionConfig() before stopping the service,
+        // so after explicit logout coreUrl is already empty here and no job is scheduled.
+        if (!StorageDelegate.isPushBound(applicationContext) &&
+            StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
+            StorageDelegate.getTenantId(applicationContext).isNotEmpty() &&
+            StorageDelegate.getToken(applicationContext).isNotEmpty() &&
+            StorageDelegate.getCallbackDispatcher(applicationContext) != 0L
+        ) {
+            SignalingRestartWorker.enqueue(applicationContext, delayMillis = 15_000)
+        }
         Log.d(TAG, "SignalingForegroundService onDestroy")
         instance = null
         wakeLock?.let { if (it.isHeld) it.release() }
@@ -114,6 +123,12 @@ class SignalingForegroundService : Service() {
         if (StorageDelegate.isPushBound(applicationContext)) {
             Log.d(TAG, "pushBound mode -- stopping service on task removal")
             gracefulStop { stopSelf() }
+        } else if (StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
+                   StorageDelegate.getTenantId(applicationContext).isNotEmpty() &&
+                   StorageDelegate.getToken(applicationContext).isNotEmpty() &&
+                   StorageDelegate.getCallbackDispatcher(applicationContext) != 0L) {
+            // persistent mode -- enqueue a fast restart in case the OS doesn't honour START_STICKY
+            SignalingRestartWorker.enqueue(applicationContext, delayMillis = 1_000)
         }
     }
 
@@ -286,7 +301,7 @@ class SignalingForegroundService : Service() {
         /// How long [gracefulStop] waits for an isolate ACK before forcing the stop.
         private const val _gracefulStopTimeoutMs = 3000L
 
-        var isRunning = false
+        @Volatile var isRunning = false
 
         /// The currently running service instance, set in [onCreate] and cleared in [onDestroy].
         /// Used by [WebtritSignalingServicePlugin.notifyIsolateReady] so the plugin can trigger

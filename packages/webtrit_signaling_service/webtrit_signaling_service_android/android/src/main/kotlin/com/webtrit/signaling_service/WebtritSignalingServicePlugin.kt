@@ -1,6 +1,7 @@
 package com.webtrit.signaling_service
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import androidx.annotation.Keep
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -83,12 +84,33 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
 
     override fun stopService() {
         Log.d(TAG, "stopService")
+        SignalingRestartWorker.remove(context)  // cancel any pending restart before logout clears credentials
         StorageDelegate.clearConnectionConfig(context)
         val service = SignalingForegroundService.instance
         if (service != null) {
             service.gracefulStop { SignalingForegroundService.stop(context) }
         } else {
             SignalingForegroundService.stop(context)
+        }
+    }
+
+    override fun connect() {
+        Log.d(TAG, "connect")
+        if (StorageDelegate.isPushBound(context)) return
+        if (SignalingForegroundService.isRunning) return
+        if (StorageDelegate.getCoreUrl(context).isEmpty()) return
+        if (StorageDelegate.getTenantId(context).isEmpty()) return
+        if (StorageDelegate.getToken(context).isEmpty()) return
+        if (StorageDelegate.getCallbackDispatcher(context) == 0L) return
+        try {
+            SignalingForegroundService.start(context)
+        } catch (e: Exception) {
+            if (isForegroundServiceStartNotAllowed(e)) {
+                Log.w(TAG, "connect: process not in BFGS state, scheduling WorkManager restart", e)
+                SignalingRestartWorker.enqueue(context, delayMillis = 15_000)
+            } else {
+                Log.e(TAG, "connect: unexpected error starting FGS", e)
+            }
         }
     }
 
@@ -99,5 +121,18 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
 
     companion object {
         private const val TAG = "WebtritSignalingServicePlugin"
+
+        /// Returns true when [e] is [ForegroundServiceStartNotAllowedException] (API 31+).
+        ///
+        /// Isolated into an @RequiresApi helper so the class reference is only
+        /// loaded on devices that actually have the class, satisfying Lint while
+        /// keeping the check type-safe and idiomatic.
+        @Suppress("NewApi")
+        @androidx.annotation.RequiresApi(Build.VERSION_CODES.S)
+        private fun isFgsNotAllowed(e: Exception) =
+            e is android.app.ForegroundServiceStartNotAllowedException
+
+        private fun isForegroundServiceStartNotAllowed(e: Exception) =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isFgsNotAllowed(e)
     }
 }

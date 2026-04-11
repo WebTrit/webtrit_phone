@@ -10,6 +10,10 @@ void main() {
       'dev.flutter.pigeon.webtrit_signaling_service_android'
       '.PSignalingServiceHostApi.stopService';
 
+  const connectChannel =
+      'dev.flutter.pigeon.webtrit_signaling_service_android'
+      '.PSignalingServiceHostApi.connect';
+
   group('WebtritSignalingServiceAndroid -- stopService()', () {
     late WebtritSignalingServiceAndroid plugin;
 
@@ -47,6 +51,32 @@ void main() {
       await plugin.dispose();
 
       expect(stopCalled, isFalse);
+    });
+  });
+
+  group('WebtritSignalingServiceAndroid -- restoreService()', () {
+    late WebtritSignalingServiceAndroid plugin;
+
+    setUp(() {
+      plugin = WebtritSignalingServiceAndroid.forTesting();
+    });
+
+    tearDown(() {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(connectChannel, null);
+    });
+
+    test('calls the host API connect channel', () async {
+      var called = false;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(connectChannel, (
+        message,
+      ) async {
+        called = true;
+        return const StandardMessageCodec().encodeMessage(<Object?>[null]);
+      });
+
+      await plugin.restoreService();
+
+      expect(called, isTrue);
     });
   });
 }

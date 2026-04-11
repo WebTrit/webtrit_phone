@@ -215,6 +215,12 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     await _hostApi.stopService();
   }
 
+  @override
+  Future<void> restoreService() async {
+    _logger.info('restoreService');
+    await _hostApi.connect();
+  }
+
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {
     _logger.fine('_startService mode=$mode');
     final dispatcherHandle = PluginUtilities.getCallbackHandle(signalingServiceCallbackDispatcher);
@@ -225,16 +231,25 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       );
     }
 
-    await _hostApi.initializeServiceCallback(
-      dispatcherHandle.toRawHandle(),
-      // onSync handle is not used directly by Kotlin -- the background isolate
-      // calls onSignalingServiceSync via PSignalingServiceFlutterApi.setUp.
-      // Pass 0 as a placeholder.
-      0,
-    );
+    // Persist all credentials concurrently — they write to independent
+    // SharedPreferences keys and have no ordering dependency between them.
+    // Running them in parallel removes two sequential Binder round-trips
+    // (~200–600 ms under memory pressure) before startForegroundService()
+    // is called.
+    await Future.wait([
+      _hostApi.initializeServiceCallback(
+        dispatcherHandle.toRawHandle(),
+        // onSync handle is not used directly by Kotlin -- the background isolate
+        // calls onSignalingServiceSync via PSignalingServiceFlutterApi.setUp.
+        // Pass 0 as a placeholder.
+        0,
+      ),
+      _hostApi.saveConnectionConfig(config.coreUrl, config.tenantId, config.token),
+      _hostApi.saveTrustedCertificates(_encodeTrustedCertificates(config.trustedCertificates)),
+    ]);
 
-    await _hostApi.saveConnectionConfig(config.coreUrl, config.tenantId, config.token);
-    await _hostApi.saveTrustedCertificates(_encodeTrustedCertificates(config.trustedCertificates));
+    // Start the service only after all credentials are persisted so that
+    // synchronizeIsolate() reads correct data on the first attempt.
     await _hostApi.startService(signalingModeToNative(mode));
 
     // Do NOT clear the hub port here.

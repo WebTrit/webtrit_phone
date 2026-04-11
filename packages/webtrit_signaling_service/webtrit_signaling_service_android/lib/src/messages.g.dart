@@ -435,6 +435,28 @@ class PSignalingServiceHostApi {
     )
     ;
   }
+
+  /// Restores the persistent foreground service if it was killed by the OS.
+  ///
+  /// No-op when push mode is active, the service is already running, credentials
+  /// are missing (post-logout), or the callback dispatcher is not registered.
+  Future<void> connect() async {
+    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.connect$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
+    final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
+
+    _extractReplyValueOrThrow(
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: true,
+    )
+    ;
+  }
 }
 
 abstract class PSignalingServiceFlutterApi {

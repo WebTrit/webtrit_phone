@@ -15,7 +15,7 @@ pre-commit:
 commit-msg:
   commands:
     commit-msg-check:
-      run: bash tool/scripts/commit-msg-check.sh
+      run: bash tool/scripts/commit-msg-check.sh {1}
 
 pre-push:
   parallel: true
