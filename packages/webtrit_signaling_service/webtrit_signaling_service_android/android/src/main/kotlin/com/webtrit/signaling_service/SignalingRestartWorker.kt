@@ -1,6 +1,7 @@
 package com.webtrit.signaling_service
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
@@ -43,7 +44,7 @@ class SignalingRestartWorker(
         // ForegroundServiceStartNotAllowedException is expected on Android 12+ when the process
         // has left the BFGS window. Log at warning level (transient) and schedule a retry.
         // All other exceptions are permanent failures -- log at error level and stop retrying.
-        if (e.javaClass.name == "android.app.ForegroundServiceStartNotAllowedException") {
+        if (isForegroundServiceStartNotAllowed(e)) {
             Log.w(TAG, "Cannot restart FGS: process not in BFGS state, will retry", e)
             Result.retry()
         } else {
@@ -68,5 +69,13 @@ class SignalingRestartWorker(
         fun remove(context: Context) {
             WorkManager.getInstance(context).cancelUniqueWork(WORK_TAG)
         }
+
+        @Suppress("NewApi")
+        @androidx.annotation.RequiresApi(Build.VERSION_CODES.S)
+        private fun isFgsNotAllowed(e: Exception) =
+            e is android.app.ForegroundServiceStartNotAllowedException
+
+        private fun isForegroundServiceStartNotAllowed(e: Exception) =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isFgsNotAllowed(e)
     }
 }

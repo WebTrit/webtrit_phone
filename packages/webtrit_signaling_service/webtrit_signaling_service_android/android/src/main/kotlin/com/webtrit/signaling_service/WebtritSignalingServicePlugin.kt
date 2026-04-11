@@ -1,6 +1,7 @@
 package com.webtrit.signaling_service
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import androidx.annotation.Keep
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -104,7 +105,7 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
         try {
             SignalingForegroundService.start(context)
         } catch (e: Exception) {
-            if (e.javaClass.name == "android.app.ForegroundServiceStartNotAllowedException") {
+            if (isForegroundServiceStartNotAllowed(e)) {
                 Log.w(TAG, "connect: process not in BFGS state, scheduling WorkManager restart", e)
                 SignalingRestartWorker.enqueue(context, delayMillis = 15_000)
             } else {
@@ -120,5 +121,18 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
 
     companion object {
         private const val TAG = "WebtritSignalingServicePlugin"
+
+        /// Returns true when [e] is [ForegroundServiceStartNotAllowedException] (API 31+).
+        ///
+        /// Isolated into an @RequiresApi helper so the class reference is only
+        /// loaded on devices that actually have the class, satisfying Lint while
+        /// keeping the check type-safe and idiomatic.
+        @Suppress("NewApi")
+        @androidx.annotation.RequiresApi(Build.VERSION_CODES.S)
+        private fun isFgsNotAllowed(e: Exception) =
+            e is android.app.ForegroundServiceStartNotAllowedException
+
+        private fun isForegroundServiceStartNotAllowed(e: Exception) =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isFgsNotAllowed(e)
     }
 }
