@@ -83,6 +83,11 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
     _logger.severe('onPushNotificationSyncCallback: error=$e');
   } finally {
     await _disposeContext();
+    try {
+      await WebtritSignalingService.restoreService();
+    } catch (e, st) {
+      _logger.warning('restoreService() after push failed', e, st);
+    }
   }
 }
 

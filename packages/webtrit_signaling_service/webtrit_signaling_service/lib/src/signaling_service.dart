@@ -167,4 +167,11 @@ class WebtritSignalingService implements SignalingModule {
   /// Call on explicit user logout to prevent the service from reconnecting
   /// with a stale token after the session ends. No-op on iOS.
   static Future<void> stopService() => SignalingServicePlatform.instance.stopService();
+
+  /// Restores the persistent foreground service if it was killed by the OS.
+  ///
+  /// Call from the push-notification callback after the temporary push WebSocket
+  /// is disposed to bring back the persistent connection for future calls.
+  /// No-op on iOS and when push mode is active or the service is already running.
+  static Future<void> restoreService() => SignalingServicePlatform.instance.restoreService();
 }

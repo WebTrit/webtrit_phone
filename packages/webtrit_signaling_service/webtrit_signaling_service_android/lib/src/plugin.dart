@@ -215,6 +215,12 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     await _hostApi.stopService();
   }
 
+  @override
+  Future<void> restoreService() async {
+    _logger.info('restoreService');
+    await _hostApi.connect();
+  }
+
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {
     _logger.fine('_startService mode=$mode');
     final dispatcherHandle = PluginUtilities.getCallbackHandle(signalingServiceCallbackDispatcher);
