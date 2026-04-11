@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 if [[ -z "$1" || ! -f "$1" ]]; then
   echo "❌ Usage: commit-msg-check.sh <commit-msg-file>"

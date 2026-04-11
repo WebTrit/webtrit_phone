@@ -77,10 +77,10 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
 
   /// Initialises the signaling module.
   ///
-  /// Must be called once after construction and before [run]. Separated from
-  /// the constructor because hub discovery is asynchronous — on Android the
-  /// method checks whether the FGS hub is already running and reuses its
-  /// WebSocket, avoiding a second connection.
+  /// Must be called once after construction and before [run]. Constructs
+  /// [WebtritSignalingService] and wires up the event subscription. Hub
+  /// discovery and FGS start happen later when [connect] is called from
+  /// [run] via the Android plugin's [HubConnectionManager].
   Future<void> init() async => _initSignaling();
 
   /// Connects to the signaling server, processes call state for the given push
