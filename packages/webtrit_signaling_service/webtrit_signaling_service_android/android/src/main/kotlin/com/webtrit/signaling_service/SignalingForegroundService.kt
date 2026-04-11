@@ -100,6 +100,8 @@ class SignalingForegroundService : Service() {
         // so after explicit logout coreUrl is already empty here and no job is scheduled.
         if (!StorageDelegate.isPushBound(applicationContext) &&
             StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
+            StorageDelegate.getTenantId(applicationContext).isNotEmpty() &&
+            StorageDelegate.getToken(applicationContext).isNotEmpty() &&
             StorageDelegate.getCallbackDispatcher(applicationContext) != 0L
         ) {
             SignalingRestartWorker.enqueue(applicationContext, delayMillis = 15_000)
@@ -122,6 +124,8 @@ class SignalingForegroundService : Service() {
             Log.d(TAG, "pushBound mode -- stopping service on task removal")
             gracefulStop { stopSelf() }
         } else if (StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
+                   StorageDelegate.getTenantId(applicationContext).isNotEmpty() &&
+                   StorageDelegate.getToken(applicationContext).isNotEmpty() &&
                    StorageDelegate.getCallbackDispatcher(applicationContext) != 0L) {
             // persistent mode -- enqueue a fast restart in case the OS doesn't honour START_STICKY
             SignalingRestartWorker.enqueue(applicationContext, delayMillis = 1_000)

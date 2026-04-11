@@ -18,11 +18,12 @@ import java.util.concurrent.TimeUnit
 /// The [ExistingWorkPolicy.REPLACE] policy resets the timer if both triggers fire
 /// close together, preventing duplicate restarts.
 ///
-/// [Result.retry] is returned on [Exception] so WorkManager retries with
-/// exponential back-off. On Android 12+ this handles the case where
-/// [startForegroundService] throws [ForegroundServiceStartNotAllowedException]
-/// because the process has left the BFGS window — the next retry happens when the
-/// user opens the app or another foreground service becomes active.
+/// On Android 12+ (API 31+), [startForegroundService] can throw
+/// [ForegroundServiceStartNotAllowedException] when the process has left the BFGS
+/// window. This is a transient condition — [Result.retry] is returned so WorkManager
+/// retries with exponential back-off until the process re-enters foreground.
+/// All other exceptions indicate permanent failures and return [Result.failure]
+/// to avoid unbounded retry loops.
 class SignalingRestartWorker(
     context: Context,
     workerParams: WorkerParameters,
@@ -41,12 +42,14 @@ class SignalingRestartWorker(
         }
         Result.success()
     } catch (e: Exception) {
-        Log.e(TAG, "Failed to restart FGS", e)
-        // Only ForegroundServiceStartNotAllowedException is transient (process left BFGS window).
-        // All other failures are permanent -- returning failure avoids infinite retry backoff.
+        // ForegroundServiceStartNotAllowedException is expected on Android 12+ when the process
+        // has left the BFGS window. Log at warning level (transient) and schedule a retry.
+        // All other exceptions are permanent failures -- log at error level and stop retrying.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && e is ForegroundServiceStartNotAllowedException) {
+            Log.w(TAG, "Cannot restart FGS: process not in BFGS state, will retry", e)
             Result.retry()
         } else {
+            Log.e(TAG, "Failed to restart FGS (permanent)", e)
             Result.failure()
         }
     }
