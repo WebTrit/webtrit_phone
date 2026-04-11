@@ -11,6 +11,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/resolvers/resolvers.dart';
 
 import 'deeplinks.dart';
@@ -27,6 +28,7 @@ class AppRouter extends RootStackRouter {
   AppRouter(
     this._appBloc,
     this._appPermissions,
+    this._systemInfoRepository,
     EmbeddedData? launchEmbeddedData,
     BottomMenuConfig bottomMenuFeature,
     InitialTabResolver initialTabResolver,
@@ -40,6 +42,7 @@ class AppRouter extends RootStackRouter {
 
   final AppBloc _appBloc;
   final AppPermissions _appPermissions;
+  final SystemInfoRepository _systemInfoRepository;
 
   late EmbeddedData? _launchEmbeddedData;
   late BottomMenuConfig _bottomMenuFeature;
@@ -334,6 +337,25 @@ class AppRouter extends RootStackRouter {
 
     // Redirect to authentication flow if the user is not logged in.
     if (state.status != AppLifecycleStatus.authenticated) {
+      resolver.next(false);
+      router.replaceAll([LoginRouterPageRoute(launchEmbeddedData: _launchEmbeddedData)]);
+      return;
+    }
+
+    // Ensure system info is in cache before MainShell builds.
+    // Several provider create: callbacks call getLocalSystemInfo() synchronously;
+    // without this guard the app crashes if system info was cleared (e.g. during
+    // session cleanup after an FGS failure) or was never fetched in this session.
+    try {
+      final systemInfo = await _systemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheFirst);
+      if (systemInfo == null) {
+        _logger.warning('onMainShellRouteGuardNavigation: system info unavailable, redirecting to login');
+        resolver.next(false);
+        router.replaceAll([LoginRouterPageRoute(launchEmbeddedData: _launchEmbeddedData)]);
+        return;
+      }
+    } catch (e, s) {
+      _logger.severe('onMainShellRouteGuardNavigation: failed to load system info', e, s);
       resolver.next(false);
       router.replaceAll([LoginRouterPageRoute(launchEmbeddedData: _launchEmbeddedData)]);
       return;
