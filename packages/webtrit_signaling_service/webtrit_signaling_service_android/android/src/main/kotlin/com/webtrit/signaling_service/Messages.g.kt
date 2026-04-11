@@ -371,6 +371,13 @@ interface PSignalingServiceHostApi {
    * the service delivers the current status to the freshly-initialised isolate.
    */
   fun notifyIsolateReady()
+  /**
+   * Restores the persistent foreground service if it was killed by the OS.
+   *
+   * No-op when push mode is active, the service is already running, credentials
+   * are missing (post-logout), or the callback dispatcher is not registered.
+   */
+  fun connect()
 
   companion object {
     /** The codec used by PSignalingServiceHostApi. */
@@ -533,6 +540,22 @@ interface PSignalingServiceHostApi {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
               api.notifyIsolateReady()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.connect$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              api.connect()
               listOf(null)
             } catch (exception: Throwable) {
               MessagesPigeonUtils.wrapError(exception)

@@ -83,6 +83,7 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
 
     override fun stopService() {
         Log.d(TAG, "stopService")
+        SignalingRestartWorker.remove(context)  // cancel any pending restart before logout clears credentials
         StorageDelegate.clearConnectionConfig(context)
         val service = SignalingForegroundService.instance
         if (service != null) {
@@ -90,6 +91,15 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
         } else {
             SignalingForegroundService.stop(context)
         }
+    }
+
+    override fun connect() {
+        Log.d(TAG, "connect")
+        if (StorageDelegate.isPushBound(context)) return
+        if (SignalingForegroundService.isRunning) return
+        if (StorageDelegate.getCoreUrl(context).isEmpty()) return
+        if (StorageDelegate.getCallbackDispatcher(context) == 0L) return
+        SignalingForegroundService.start(context)
     }
 
     override fun notifyIsolateReady() {

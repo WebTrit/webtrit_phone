@@ -85,4 +85,12 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   /// with a stale token after the session ends. No-op on platforms that
   /// do not run a persistent background service (e.g. iOS).
   Future<void> stopService() async {}
+
+  /// Restores the persistent foreground service if it was killed by the OS.
+  ///
+  /// Called from the push-notification callback after the temporary push
+  /// WebSocket is disposed. No-op on platforms without a persistent background
+  /// service (e.g. iOS) and when push mode is active or the service is already
+  /// running.
+  Future<void> restoreService() async {}
 }

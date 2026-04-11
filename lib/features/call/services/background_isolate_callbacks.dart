@@ -83,6 +83,13 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
     _logger.severe('onPushNotificationSyncCallback: error=$e');
   } finally {
     await _disposeContext();
+    try {
+      await WebtritSignalingService.restoreService();
+    } catch (e) {
+      // Android 12+: ForegroundServiceStartNotAllowedException if the BFGS window
+      // closed before this point. Log and swallow -- the WorkManager job will retry.
+      _logger.warning('restoreService() after push failed: $e');
+    }
   }
 }
 

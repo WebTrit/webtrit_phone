@@ -112,6 +112,12 @@ abstract class PSignalingServiceHostApi {
   /// Kotlin responds by calling [SignalingForegroundService.synchronizeIsolate] so
   /// the service delivers the current status to the freshly-initialised isolate.
   void notifyIsolateReady();
+
+  /// Restores the persistent foreground service if it was killed by the OS.
+  ///
+  /// No-op when push mode is active, the service is already running, credentials
+  /// are missing (post-logout), or the callback dispatcher is not registered.
+  void connect();
 }
 
 // ---------------------------------------------------------------------------
