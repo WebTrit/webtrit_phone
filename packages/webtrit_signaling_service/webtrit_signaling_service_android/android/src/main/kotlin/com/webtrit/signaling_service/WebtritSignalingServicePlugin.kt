@@ -1,8 +1,6 @@
 package com.webtrit.signaling_service
 
-import android.app.ForegroundServiceStartNotAllowedException
 import android.content.Context
-import android.os.Build
 import android.util.Log
 import androidx.annotation.Keep
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -106,9 +104,7 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
         try {
             SignalingForegroundService.start(context)
         } catch (e: Exception) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && e is ForegroundServiceStartNotAllowedException) {
-                // Process left the BFGS window before connect() completed.
-                // Schedule a WorkManager job to retry when the process re-enters foreground.
+            if (e.javaClass.name == "android.app.ForegroundServiceStartNotAllowedException") {
                 Log.w(TAG, "connect: process not in BFGS state, scheduling WorkManager restart", e)
                 SignalingRestartWorker.enqueue(context, delayMillis = 15_000)
             } else {

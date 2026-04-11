@@ -86,9 +86,6 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
     try {
       await WebtritSignalingService.restoreService();
     } catch (e, st) {
-      // Unexpected Pigeon or platform error. ForegroundServiceStartNotAllowedException
-      // is handled natively (Kotlin schedules a WorkManager retry) and does not reach here.
-      // Log with stack trace for actionable diagnostics.
       _logger.warning('restoreService() after push failed', e, st);
     }
   }
