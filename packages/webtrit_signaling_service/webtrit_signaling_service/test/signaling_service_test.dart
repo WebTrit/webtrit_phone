@@ -23,6 +23,7 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   final List<SignalingModuleFactory> moduleFactories = [];
   int disposeCount = 0;
   int stopServiceCount = 0;
+  int restoreServiceCount = 0;
 
   void inject(SignalingModuleEvent event) => _eventsController.add(event);
 
@@ -61,6 +62,9 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
 
   @override
   Future<void> stopService() async => stopServiceCount++;
+
+  @override
+  Future<void> restoreService() async => restoreServiceCount++;
 }
 
 class _VerifiedFakePlatform extends _FakePlatform with MockPlatformInterfaceMixin {}
@@ -311,6 +315,11 @@ void main() {
     test('stopService delegates to platform', () async {
       await WebtritSignalingService.stopService();
       expect(platform.stopServiceCount, 1);
+    });
+
+    test('restoreService delegates to platform', () async {
+      await WebtritSignalingService.restoreService();
+      expect(platform.restoreServiceCount, 1);
     });
   });
 }

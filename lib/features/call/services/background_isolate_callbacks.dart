@@ -85,10 +85,11 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
     await _disposeContext();
     try {
       await WebtritSignalingService.restoreService();
-    } catch (e) {
-      // Android 12+: ForegroundServiceStartNotAllowedException if the BFGS window
-      // closed before this point. Log and swallow -- the WorkManager job will retry.
-      _logger.warning('restoreService() after push failed: $e');
+    } catch (e, st) {
+      // Unexpected Pigeon or platform error. ForegroundServiceStartNotAllowedException
+      // is handled natively (Kotlin schedules a WorkManager retry) and does not reach here.
+      // Log with stack trace for actionable diagnostics.
+      _logger.warning('restoreService() after push failed', e, st);
     }
   }
 }

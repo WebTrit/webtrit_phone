@@ -1,6 +1,8 @@
 package com.webtrit.signaling_service
 
+import android.app.ForegroundServiceStartNotAllowedException
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
@@ -30,6 +32,8 @@ class SignalingRestartWorker(
         if (!SignalingForegroundService.isRunning &&
             !StorageDelegate.isPushBound(applicationContext) &&
             StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
+            StorageDelegate.getTenantId(applicationContext).isNotEmpty() &&
+            StorageDelegate.getToken(applicationContext).isNotEmpty() &&
             StorageDelegate.getCallbackDispatcher(applicationContext) != 0L
         ) {
             Log.w(TAG, "SignalingRestartWorker: restarting persistent FGS")
@@ -37,8 +41,14 @@ class SignalingRestartWorker(
         }
         Result.success()
     } catch (e: Exception) {
-        Log.e(TAG, "Failed to restart FGS: $e")
-        Result.retry()
+        Log.e(TAG, "Failed to restart FGS", e)
+        // Only ForegroundServiceStartNotAllowedException is transient (process left BFGS window).
+        // All other failures are permanent -- returning failure avoids infinite retry backoff.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && e is ForegroundServiceStartNotAllowedException) {
+            Result.retry()
+        } else {
+            Result.failure()
+        }
     }
 
     companion object {
@@ -55,7 +65,7 @@ class SignalingRestartWorker(
         }
 
         fun remove(context: Context) {
-            WorkManager.getInstance(context).cancelAllWorkByTag(WORK_TAG)
+            WorkManager.getInstance(context).cancelUniqueWork(WORK_TAG)
         }
     }
 }
