@@ -50,7 +50,9 @@ Future<PushNotificationIsolateManager> _getOrInit() async {
   // init() resolves the signaling module asynchronously: on Android it checks
   // IsolateNameServer for a live FGS hub and reuses its WebSocket when found,
   // so only one connection is ever open at a time.
+  _logger.info('_getOrInit: initialising signaling module...');
   await _manager!.init();
+  _logger.info('_getOrInit: init complete');
 
   return _manager!;
 }

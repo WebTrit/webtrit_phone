@@ -102,6 +102,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
 
   /// Cancels all timers and pending requests, then disposes the signaling module.
   Future<void> close() async {
+    logger.info('close: disposing module=${_signalingModule?.runtimeType} pendingRequests=${_pendingRequests.length}');
     for (final pending in _pendingRequests) {
       pending.timeoutTimer.cancel();
       if (!pending.completer.isCompleted) {
@@ -150,6 +151,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   /// new WebSocket is opened. When no hub is active (app was killed), a direct
   /// [SignalingModuleImpl] is returned as a fallback.
   Future<void> _initSignaling() async {
+    logger.info('_initSignaling: resolving signaling module...');
     _signalingModule = await WebtritSignalingService.createPushIsolateModule(
       SignalingServiceConfig(
         coreUrl: storage.readCoreUrl() ?? '',
@@ -158,6 +160,11 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
         trustedCertificates: certificates,
       ),
       'push_isolate_$hashCode',
+    );
+    logger.info(
+      '_initSignaling: module resolved '
+      'type=${_signalingModule.runtimeType} '
+      'isConnected=${_signalingModule!.isConnected}',
     );
 
     _signalingSubscription = _signalingModule!.events.listen((event) {
