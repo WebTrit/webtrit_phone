@@ -9,9 +9,6 @@ import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import 'constants.dart';
-import 'hub/signaling_hub_client.dart';
-import 'hub/signaling_hub_module.dart';
 import 'hub_connection_manager.dart';
 import 'isolate/entry_point.dart' show signalingServiceCallbackDispatcher;
 import 'messages.g.dart';
@@ -223,117 +220,6 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     _logger.info('restoreService');
     await _hostApi.connect();
   }
-
-  /// Returns a [SignalingModule] for the push notification isolate.
-  ///
-  /// Lifecycle for the push notification isolate:
-  ///
-  /// 1. **Hub already running** (persistent mode, or previous push started it):
-  ///    returns a [SignalingHubModule] that routes through the existing
-  ///    WebSocket — no new connection is opened.
-  ///
-  /// 2. **Hub not running** (app was killed, pushBound mode, first push):
-  ///    starts the FGS via [_startFgsOnly] (pushBound), then polls
-  ///    [IsolateNameServer] until the hub registers and acknowledges the
-  ///    subscription. Returns a [SignalingHubModule] once the hub is ready.
-  ///    This preserves the 1-WebSocket invariant: push isolate and Activity
-  ///    both share the same FGS connection.
-  ///
-  /// 3. **Emergency fallback**: if the hub does not become available within
-  ///    [_kPushHubWaitTimeout], falls back to a direct [SignalingModuleImpl]
-  ///    so the incoming call is not silently dropped.
-  @override
-  Future<SignalingModule> createPushIsolateModule(SignalingServiceConfig config, String consumerId) async {
-    // --- fast path: hub already running ---
-    final existing = await _tryConnectHub(consumerId);
-    if (existing != null) {
-      _logger.info('createPushIsolateModule: hub available, reusing existing WebSocket (consumerId=$consumerId)');
-      return existing;
-    }
-
-    // --- hub not running: start FGS and wait for hub ---
-    _logger.info('createPushIsolateModule: no hub active, starting FGS and waiting for hub (consumerId=$consumerId)');
-    await _startFgsOnly(config, SignalingServiceMode.pushBound);
-
-    final deadline = DateTime.now().add(_kPushHubWaitTimeout);
-    while (DateTime.now().isBefore(deadline)) {
-      await Future<void>.delayed(_kPushHubPollInterval);
-      final module = await _tryConnectHub(consumerId);
-      if (module != null) {
-        _logger.info('createPushIsolateModule: hub ready after FGS start (consumerId=$consumerId)');
-        return module;
-      }
-    }
-
-    // --- emergency fallback ---
-    _logger.warning(
-      'createPushIsolateModule: hub not available after ${_kPushHubWaitTimeout.inSeconds}s, '
-      'falling back to direct SignalingModuleImpl (consumerId=$consumerId)',
-    );
-    return SignalingModuleImpl(
-      coreUrl: config.coreUrl,
-      tenantId: config.tenantId,
-      token: config.token,
-      trustedCertificates: config.trustedCertificates,
-      connectionTimeout: kSignalingClientConnectionTimeout,
-      reconnectDelay: kSignalingClientReconnectDelay,
-    );
-  }
-
-  /// Tries to subscribe to the hub and returns a [SignalingHubModule] if the
-  /// hub acknowledges within the ack timeout. Returns null if no hub port is
-  /// registered or the ack times out (stale port).
-  Future<SignalingModule?> _tryConnectHub(String consumerId) async {
-    final client = SignalingHubClient.tryConnect(consumerId);
-    if (client == null) return null;
-    // awaitAck MUST be called before SignalingHubModule is constructed so the
-    // internal Completer is in place before the hub's sub-ack can arrive.
-    final ackFuture = client.awaitAck();
-    final module = SignalingHubModule(client);
-    final ackReceived = await ackFuture;
-    if (!ackReceived) {
-      _logger.fine('_tryConnectHub: ack timeout for consumerId=$consumerId, disposing stale module');
-      await module.dispose();
-      return null;
-    }
-    // Yield to the event loop so the hub's replay events (including
-    // SignalingConnected) are delivered to SignalingHubModule._onHubEvent
-    // before this method returns. The hub sends replay events immediately
-    // after the subscription ack; without this yield module.isConnected
-    // can still be false when the caller checks it, causing an unintended
-    // connect() call that forwards to the FGS WebSocket.
-    await Future<void>.delayed(Duration.zero);
-    return module;
-  }
-
-  /// Persists credentials and requests a native FGS start without wiring up
-  /// [HubConnectionManager]. Used by [createPushIsolateModule] so the push
-  /// isolate controls its own hub-discovery loop.
-  Future<void> _startFgsOnly(SignalingServiceConfig config, SignalingServiceMode mode) async {
-    _logger.fine('_startFgsOnly mode=$mode');
-    final dispatcherHandle = PluginUtilities.getCallbackHandle(signalingServiceCallbackDispatcher);
-    if (dispatcherHandle == null) {
-      throw StateError(
-        'Could not obtain callback handle for signalingServiceCallbackDispatcher. '
-        'Ensure it is annotated with @pragma(\'vm:entry-point\').',
-      );
-    }
-    await Future.wait([
-      _hostApi.initializeServiceCallback(dispatcherHandle.toRawHandle(), 0),
-      _hostApi.saveConnectionConfig(config.coreUrl, config.tenantId, config.token),
-      _hostApi.saveTrustedCertificates(_encodeTrustedCertificates(config.trustedCertificates)),
-    ]);
-    await _hostApi.startService(signalingModeToNative(mode));
-    _logger.info('_startFgsOnly: FGS start requested mode=$mode');
-  }
-
-  // Maximum time to wait for the FGS hub to become available after [_startFgsOnly].
-  // Based on observed startup times (~4 s on Xiaomi under load), 10 s provides
-  // enough headroom without risking the push-notification processing window.
-  static const _kPushHubWaitTimeout = Duration(seconds: 10);
-
-  // Poll interval between hub-discovery attempts while waiting for the FGS to start.
-  static const _kPushHubPollInterval = Duration(milliseconds: 200);
 
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {
     _logger.fine('_startService mode=$mode');

@@ -146,28 +146,24 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   // Signaling init
   // ---------------------------------------------------------------------------
 
-  /// Resolves the correct [SignalingModule] for this isolate.
+  /// Sets up [WebtritSignalingService] for this isolate in
+  /// [SignalingServiceMode.pushBound] mode — the same mechanism the Activity
+  /// uses, so push isolate and Activity share exactly one FGS WebSocket.
   ///
-  /// On Android, [WebtritSignalingService.createPushIsolateModule] checks
-  /// [IsolateNameServer] for a live FGS hub. When the hub is available and
-  /// acknowledges the subscription, a [SignalingHubModule] is returned and no
-  /// new WebSocket is opened. When no hub is active (app was killed), a direct
-  /// [SignalingModuleImpl] is returned as a fallback.
+  /// [HubConnectionManager] inside the service handles FGS start, hub
+  /// discovery, and auto-reconnect if the hub is killed between push arrival
+  /// and Activity open. [connect] is called from [run], not here, so the
+  /// connection starts only when processing begins.
   Future<void> _initSignaling() async {
-    logger.info('_initSignaling: resolving signaling module...');
-    _signalingModule = await WebtritSignalingService.createPushIsolateModule(
-      SignalingServiceConfig(
+    logger.info('_initSignaling: creating WebtritSignalingService (pushBound)');
+    _signalingModule = WebtritSignalingService(
+      config: SignalingServiceConfig(
         coreUrl: storage.readCoreUrl() ?? '',
         tenantId: storage.readTenantId() ?? '',
         token: storage.readToken() ?? '',
         trustedCertificates: certificates,
       ),
-      'push_isolate_$hashCode',
-    );
-    logger.info(
-      '_initSignaling: module resolved '
-      'type=${_signalingModule.runtimeType} '
-      'isConnected=${_signalingModule!.isConnected}',
+      mode: SignalingServiceMode.pushBound,
     );
 
     _signalingSubscription = _signalingModule!.events.listen((event) {

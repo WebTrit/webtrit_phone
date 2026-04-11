@@ -1,12 +1,10 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
-import 'models/signaling_module.dart';
 import 'models/signaling_module_event.dart';
 import 'models/signaling_module_factory.dart';
 import 'models/signaling_service_config.dart';
 import 'models/signaling_service_mode.dart';
-import 'signaling_module_impl.dart';
 
 /// Platform interface for [WebtritSignalingService].
 ///
@@ -95,18 +93,4 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   /// service (e.g. iOS) and when push mode is active or the service is already
   /// running.
   Future<void> restoreService() async {}
-
-  /// Creates a [SignalingModule] for the push notification isolate.
-  ///
-  /// On Android: if the FGS hub is already running, returns a [SignalingHubModule]
-  /// so all subscribers share the same WebSocket. Falls back to a direct
-  /// [SignalingModuleImpl] when no hub is active (app was killed).
-  /// On iOS and other platforms: always returns a direct [SignalingModuleImpl].
-  Future<SignalingModule> createPushIsolateModule(SignalingServiceConfig config, String consumerId) async =>
-      SignalingModuleImpl(
-        coreUrl: config.coreUrl,
-        tenantId: config.tenantId,
-        token: config.token,
-        trustedCertificates: config.trustedCertificates,
-      );
 }

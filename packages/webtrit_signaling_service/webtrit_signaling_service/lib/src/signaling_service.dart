@@ -174,15 +174,4 @@ class WebtritSignalingService implements SignalingModule {
   /// is disposed to bring back the persistent connection for future calls.
   /// No-op on iOS and when push mode is active or the service is already running.
   static Future<void> restoreService() => SignalingServicePlatform.instance.restoreService();
-
-  /// Creates a [SignalingModule] for use in the push notification isolate.
-  ///
-  /// On Android, reuses the FGS hub WebSocket when the hub is already running,
-  /// so all subscribers share exactly one connection. Falls back to a direct
-  /// [SignalingModuleImpl] when no hub is active (app was killed).
-  /// On iOS and other platforms, always creates a direct connection.
-  ///
-  /// Call [dispose] on the returned module when done.
-  static Future<SignalingModule> createPushIsolateModule(SignalingServiceConfig config, String consumerId) =>
-      SignalingServicePlatform.instance.createPushIsolateModule(config, consumerId);
 }
