@@ -2090,11 +2090,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }),
       );
 
-      final localStream = await userMediaBuilder.build(
-        video: offer.hasVideo,
-        frontCamera: call.frontCamera,
-        allowAudioFallback: true,
-      );
+      final localStream = await userMediaBuilder
+          .build(video: offer.hasVideo, frontCamera: call.frontCamera, allowAudioFallback: true)
+          .timeout(
+            const Duration(seconds: 8),
+            onTimeout: () {
+              _logger.warning(
+                '__onCallPerformEventAnswered: getUserMedia blocked for 8s — aborting to stay within PushKit deadline',
+              );
+              throw TimeoutException('getUserMedia timeout', const Duration(seconds: 8));
+            },
+          );
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
