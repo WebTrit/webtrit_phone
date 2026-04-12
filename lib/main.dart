@@ -27,20 +27,23 @@ void main() {
   runZonedGuarded(
     () async {
       final binding = WidgetsFlutterBinding.ensureInitialized();
-      // Defer the first frame until after async initialization completes.
-      // This reduces the risk of a one-frame splash freeze on devices with
-      // non-standard Gralloc HALs (e.g. Xiaomi/MediaTek) where the Impeller
-      // Vulkan capability probe fails and falls back — a process that competes
-      // with the first vsync signal. Holding the first frame gives the raster
-      // thread time to finish the probe and swapchain fallback before any
+      // Defer the first frame on Android only. On Android, the Impeller Vulkan
+      // backend probes pixel format 0x38 during engine startup; on devices with
+      // non-standard Gralloc HALs (e.g. Xiaomi/MediaTek) the probe fails and
+      // Impeller falls back to a compatible format on the raster thread. That
+      // fallback races with the first vsync signal and can cause a one-frame
+      // freeze on the splash screen. Holding the first frame until async
+      // bootstrap completes gives the raster thread time to finish before any
       // frame is submitted for rasterization.
-      binding.deferFirstFrame();
+      // iOS/web/desktop are not affected by this probe issue.
+      final deferFrame = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+      if (deferFrame) binding.deferFirstFrame();
 
       try {
         final instanceRegistry = await bootstrap();
 
         if (!kIsWeb && kDebugMode) {
-          FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+          await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
           await FirebaseCrashlytics.instance.deleteUnsentReports();
         }
 
@@ -55,7 +58,7 @@ void main() {
 
         runApp(RootApp(instanceRegistry: instanceRegistry));
       } finally {
-        binding.allowFirstFrame();
+        if (deferFrame) binding.allowFirstFrame();
       }
     },
     (error, stackTrace) {
