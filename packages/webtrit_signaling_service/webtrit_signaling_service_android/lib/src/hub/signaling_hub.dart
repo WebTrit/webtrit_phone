@@ -117,6 +117,13 @@ class SignalingHub {
         }
         _logger.fine('Hub received disconnect command from ${cmd.consumerId}');
         unawaited(_signalingModule.disconnect());
+      case SignalingHubPingCommand():
+        final port = _subscribers[cmd.consumerId];
+        if (port == null) {
+          _logger.warning('Hub ping: unknown subscriber ${cmd.consumerId}');
+          return;
+        }
+        port.send(encodePong());
     }
   }
 

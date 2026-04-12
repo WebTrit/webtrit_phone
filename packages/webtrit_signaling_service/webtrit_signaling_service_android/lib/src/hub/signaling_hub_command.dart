@@ -47,6 +47,9 @@ sealed class SignalingHubCommand {
         case _tagDisconnect:
           if (wire.length < 2) return null;
           return SignalingHubDisconnectCommand(consumerId: wire[1] as String);
+        case _tagPing:
+          if (wire.length < 2) return null;
+          return SignalingHubPingCommand(consumerId: wire[1] as String);
         default:
           return null;
       }
@@ -70,6 +73,9 @@ const _tagConnect = 'connect';
 
 /// Wire tag placed at index 0 of the encoded [List] to identify a [SignalingHubDisconnectCommand].
 const _tagDisconnect = 'disconnect';
+
+/// Wire tag placed at index 0 of the encoded [List] to identify a [SignalingHubPingCommand].
+const _tagPing = 'ping';
 
 /// Registers [replyPort] as a subscriber in the hub.
 ///
@@ -138,4 +144,17 @@ class SignalingHubDisconnectCommand extends SignalingHubCommand {
 
   @override
   List<Object?> encode() => [_tagDisconnect, consumerId];
+}
+
+/// Hub liveness probe sent by [SignalingHubClient] on a periodic timer.
+///
+/// The hub responds with a pong message ([encodePong] / [isPong]). When no
+/// pong arrives within [SignalingHubClient._pongTimeout] the client treats the
+/// hub as dead and closes its event stream, triggering hub-death recovery in
+/// [HubConnectionManager].
+class SignalingHubPingCommand extends SignalingHubCommand {
+  const SignalingHubPingCommand({required String consumerId}) : super(consumerId);
+
+  @override
+  List<Object?> encode() => [_tagPing, consumerId];
 }

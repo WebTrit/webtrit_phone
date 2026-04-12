@@ -30,18 +30,36 @@ final _logger = Logger('SignalingHubClient');
 /// }
 /// ```
 class SignalingHubClient {
-  SignalingHubClient._({required this.consumerId, required SendPort hubPort}) : _hubPort = hubPort;
+  SignalingHubClient._({
+    required this.consumerId,
+    required SendPort hubPort,
+    required Duration pingInterval,
+    required Duration pongTimeout,
+  }) : _hubPort = hubPort,
+       _pingInterval = pingInterval,
+       _pongTimeout = pongTimeout;
 
   /// Returns a [SignalingHubClient] connected to the hub, or null when no
   /// hub is currently registered in [IsolateNameServer].
-  static SignalingHubClient? tryConnect(String consumerId) {
+  static SignalingHubClient? tryConnect(
+    String consumerId, {
+    Duration pingInterval = const Duration(seconds: 15),
+    Duration pongTimeout = const Duration(seconds: 2),
+  }) {
     final port = IsolateNameServer.lookupPortByName(kSignalingHubPortName);
     if (port == null) return null;
-    return SignalingHubClient._(consumerId: consumerId, hubPort: port);
+    return SignalingHubClient._(
+      consumerId: consumerId,
+      hubPort: port,
+      pingInterval: pingInterval,
+      pongTimeout: pongTimeout,
+    );
   }
 
   final String consumerId;
   final SendPort _hubPort;
+  final Duration _pingInterval;
+  final Duration _pongTimeout;
   final ReceivePort _receivePort = ReceivePort();
   final _controller = StreamController<SignalingModuleEvent>.broadcast();
   final Map<String, Completer<void>> _pendingExecutions = {};
@@ -49,15 +67,46 @@ class SignalingHubClient {
   StreamSubscription<Object?>? _subscription;
   bool _started = false;
   Completer<bool>? _subAckCompleter;
+  Timer? _pingTimer;
+  Completer<void>? _pendingPong;
 
   /// Sends the subscribe command and begins forwarding hub events to [events].
   /// Safe to call more than once -- subsequent calls are no-ops.
+  ///
+  /// Also starts a periodic liveness ping. If the hub does not reply within
+  /// [_pongTimeout] the client closes [events], signalling hub death to
+  /// [HubConnectionManager] via its [onDone] handler.
   void start() {
     if (_started) return;
     _started = true;
     _subscription = _receivePort.listen((msg) => _onMessage(msg as List<Object?>));
     _hubPort.send(SignalingHubSubscribeCommand(consumerId: consumerId, replyPort: _receivePort.sendPort).encode());
     _logger.fine('Hub client $consumerId subscribed');
+    _schedulePing();
+  }
+
+  void _schedulePing() {
+    _pingTimer?.cancel();
+    _pingTimer = Timer(_pingInterval, _sendPing);
+  }
+
+  void _sendPing() {
+    if (_controller.isClosed) return;
+    _logger.fine('Hub client $consumerId sending ping (interval=$_pingInterval pongTimeout=$_pongTimeout)');
+    _pendingPong = Completer<void>();
+    _hubPort.send(SignalingHubPingCommand(consumerId: consumerId).encode());
+    _pendingPong!.future
+        .timeout(_pongTimeout)
+        .then((_) {
+          _logger.fine('Hub client $consumerId pong received — hub alive');
+          _schedulePing();
+        })
+        .catchError((_) {
+          _logger.warning('Hub client $consumerId pong timeout after $_pongTimeout — hub unreachable, closing stream');
+          _pingTimer?.cancel();
+          _pendingPong = null;
+          if (!_controller.isClosed) _controller.close();
+        });
   }
 
   /// Returns [true] when the hub confirms subscription within [timeout],
@@ -115,6 +164,9 @@ class SignalingHubClient {
 
   /// Sends the unsubscribe command and closes all resources.
   Future<void> dispose() async {
+    _pingTimer?.cancel();
+    _pingTimer = null;
+    _pendingPong = null;
     _hubPort.send(SignalingHubUnsubscribeCommand(consumerId: consumerId).encode());
     await _subscription?.cancel();
     _receivePort.close();
@@ -122,7 +174,7 @@ class SignalingHubClient {
       if (!c.isCompleted) c.completeError(StateError('Hub client disposed'));
     }
     _pendingExecutions.clear();
-    await _controller.close();
+    if (!_controller.isClosed) await _controller.close();
     _logger.fine('Hub client $consumerId disposed');
   }
 
@@ -132,6 +184,12 @@ class SignalingHubClient {
       final completer = _subAckCompleter;
       _subAckCompleter = null;
       if (completer != null && !completer.isCompleted) completer.complete(true);
+      return;
+    }
+    if (isPong(msg)) {
+      final completer = _pendingPong;
+      _pendingPong = null;
+      if (completer != null && !completer.isCompleted) completer.complete();
       return;
     }
     if (isExecuteResult(msg)) {
