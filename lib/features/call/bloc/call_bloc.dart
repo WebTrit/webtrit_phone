@@ -132,7 +132,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         switch (knownCode) {
           case SignalingDisconnectCode.signalingKeepaliveTimeoutError:
           case SignalingDisconnectCode.controllerForceAttachClose:
-            // Expected silent reconnect: keepalive timeout on lock-screen or duplicate-session cleanup.
+          case SignalingDisconnectCode.controllerUnknownError:
+            // Expected silent reconnect: keepalive timeout on lock-screen, duplicate-session cleanup,
+            // or transient server-side state after long inactivity / multi-device reconnect.
             _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
             return;
           default:
@@ -721,6 +723,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.warning(
         '__onSignalingClientEventDisconnected: signaling race detected - '
         'server force-closed duplicate session (code=${event.code}, reason="${event.reason}").',
+      );
+      newState = state.copyWith(
+        callServiceState: state.callServiceState.copyWith(
+          signalingClientStatus: SignalingClientStatus.disconnect,
+          lastSignalingDisconnectCode: null,
+        ),
+      );
+    } else if (code == SignalingDisconnectCode.controllerUnknownError) {
+      // Server-side transient state after long inactivity or multi-device reconnect.
+      // The subsequent reconnect resolves it; keep lastSignalingDisconnectCode null
+      // so connectIssue status is never shown to the user.
+      _logger.warning(
+        '__onSignalingClientEventDisconnected: transient controllerUnknownError - '
+        'silent reconnect (code=${event.code})',
       );
       newState = state.copyWith(
         callServiceState: state.callServiceState.copyWith(
