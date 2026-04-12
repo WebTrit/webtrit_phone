@@ -26,7 +26,15 @@ void main() {
 
   runZonedGuarded(
     () async {
-      WidgetsFlutterBinding.ensureInitialized();
+      final binding = WidgetsFlutterBinding.ensureInitialized();
+      // Defer the first frame until after async initialization completes.
+      // This reduces the risk of a one-frame splash freeze on devices with
+      // non-standard Gralloc HALs (e.g. Xiaomi/MediaTek) where the Impeller
+      // Vulkan capability probe fails and falls back — a process that competes
+      // with the first vsync signal. Holding the first frame gives the raster
+      // thread time to finish the probe and swapchain fallback before any
+      // frame is submitted for rasterization.
+      binding.deferFirstFrame();
 
       final instanceRegistry = await bootstrap();
 
@@ -44,6 +52,7 @@ void main() {
 
       Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
 
+      binding.allowFirstFrame();
       runApp(RootApp(instanceRegistry: instanceRegistry));
     },
     (error, stackTrace) {
