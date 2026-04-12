@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fake_async/fake_async.dart';
 import 'package:test/test.dart';
 
@@ -11,7 +13,7 @@ void main() {
   // Helper to suppress unhandled future errors inside fakeAsync blocks.
   // catchError must return the same type as the future.
   void suppressError(Transaction tx) {
-    tx.future.catchError((_) => <String, dynamic>{});
+    unawaited(tx.future.catchError((_) => <String, dynamic>{}));
   }
 
   group('Transaction.handleResponse', () {
@@ -27,10 +29,12 @@ void main() {
         tx.handleResponse({'response': 'ack'});
 
         Object? error;
-        tx.future.catchError((e) {
-          error = e;
-          return <String, dynamic>{};
-        });
+        unawaited(
+          tx.future.catchError((e) {
+            error = e;
+            return <String, dynamic>{};
+          }),
+        );
         async.elapse(timeout * 2);
 
         expect(error, isNull);
@@ -47,7 +51,7 @@ void main() {
     test('late call after timeout does not throw StateError', () {
       fakeAsync((async) {
         final tx = Transaction(signalingClientId: clientId, timeoutDuration: timeout);
-        suppressError(tx); // prevent unhandled error when timeout fires
+        suppressError(tx);
         async.elapse(timeout);
         expect(() => tx.handleResponse({'late': 'response'}), returnsNormally);
       });
@@ -66,10 +70,12 @@ void main() {
         final tx = Transaction(signalingClientId: clientId, timeoutDuration: timeout);
 
         Object? capturedError;
-        tx.future.catchError((e) {
-          capturedError = e;
-          return <String, dynamic>{};
-        });
+        unawaited(
+          tx.future.catchError((e) {
+            capturedError = e;
+            return <String, dynamic>{};
+          }),
+        );
 
         tx.terminateByDisconnect();
         async.flushMicrotasks();
@@ -82,7 +88,7 @@ void main() {
     test('late call after timeout does not throw StateError', () {
       fakeAsync((async) {
         final tx = Transaction(signalingClientId: clientId, timeoutDuration: timeout);
-        suppressError(tx); // prevent unhandled error when timeout fires
+        suppressError(tx);
         async.elapse(timeout);
         expect(() => tx.terminateByDisconnect(1001, 'going away'), returnsNormally);
       });
@@ -95,10 +101,12 @@ void main() {
         final tx = Transaction(signalingClientId: clientId, timeoutDuration: timeout);
 
         Object? capturedError;
-        tx.future.catchError((e) {
-          capturedError = e;
-          return <String, dynamic>{};
-        });
+        unawaited(
+          tx.future.catchError((e) {
+            capturedError = e;
+            return <String, dynamic>{};
+          }),
+        );
 
         expect(capturedError, isNull);
         async.elapse(timeout);
@@ -112,10 +120,12 @@ void main() {
         tx.handleResponse({'ok': true});
 
         Object? error;
-        tx.future.catchError((e) {
-          error = e;
-          return <String, dynamic>{};
-        });
+        unawaited(
+          tx.future.catchError((e) {
+            error = e;
+            return <String, dynamic>{};
+          }),
+        );
         async.elapse(timeout * 2);
 
         expect(error, isNull);

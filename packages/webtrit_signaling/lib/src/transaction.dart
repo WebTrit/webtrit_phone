@@ -16,9 +16,10 @@ final _logger = Logger('Transaction');
 /// - The internal timeout timer fires (after [timeoutDuration]).
 ///
 /// Only the **first** terminal event takes effect. Subsequent calls to any of
-/// the three completion paths are silently ignored via the [_isDone] guard,
-/// preventing a `StateError: Future already completed` if, for example, a
-/// late server response arrives after the timeout has already fired.
+/// the three completion paths are logged at [Level.WARNING] and ignored via
+/// the [_isDone] guard, preventing a `StateError: Future already completed`
+/// if, for example, a late server response arrives after the timeout has
+/// already fired.
 class Transaction {
   static int _createCounter = 0;
 
