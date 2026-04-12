@@ -133,8 +133,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           case SignalingDisconnectCode.signalingKeepaliveTimeoutError:
           case SignalingDisconnectCode.controllerForceAttachClose:
           case SignalingDisconnectCode.controllerUnknownError:
-            // Expected silent reconnect: keepalive timeout on lock-screen, duplicate-session cleanup,
-            // or transient server-side state after long inactivity / multi-device reconnect.
+            // controllerUnknownError (4400): the server-side Controller process died because
+            // the Janus connection went down. The new WebSocket timed out (GenServer.call,
+            // 5s default) waiting for the Controller to finish re-initializing (new Janus
+            // session + SIP registration). The Controller continues initializing in the
+            // background — the next reconnect attempt will succeed once it is ready.
+            //
+            // Silent reconnect: no user-visible notification needed.
             _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
             return;
           default:
