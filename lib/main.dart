@@ -36,24 +36,27 @@ void main() {
       // frame is submitted for rasterization.
       binding.deferFirstFrame();
 
-      final instanceRegistry = await bootstrap();
+      try {
+        final instanceRegistry = await bootstrap();
 
-      if (!kIsWeb && kDebugMode) {
-        FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-        await FirebaseCrashlytics.instance.deleteUnsentReports();
-      }
-
-      FlutterError.onError = (details) {
-        logger.severe('FlutterError', details.exception, details.stack);
-        if (!kIsWeb && !kDebugMode) {
-          FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+        if (!kIsWeb && kDebugMode) {
+          FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+          await FirebaseCrashlytics.instance.deleteUnsentReports();
         }
-      };
 
-      Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
+        FlutterError.onError = (details) {
+          logger.severe('FlutterError', details.exception, details.stack);
+          if (!kIsWeb && !kDebugMode) {
+            FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+          }
+        };
 
-      binding.allowFirstFrame();
-      runApp(RootApp(instanceRegistry: instanceRegistry));
+        Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
+
+        runApp(RootApp(instanceRegistry: instanceRegistry));
+      } finally {
+        binding.allowFirstFrame();
+      }
     },
     (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
