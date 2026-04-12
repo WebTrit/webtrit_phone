@@ -1,6 +1,10 @@
 import 'dart:async';
 
+import 'package:logging/logging.dart';
+
 import 'exceptions.dart';
+
+final _logger = Logger('Transaction');
 
 /// Represents a single in-flight signaling request and its expected response.
 ///
@@ -50,7 +54,12 @@ class Transaction {
   /// Completes [future] with [responseMessage]. No-op if the transaction has
   /// already been resolved by a timeout or disconnect.
   void handleResponse(Map<String, dynamic> responseMessage) {
-    if (_isDone) return;
+    if (_isDone) {
+      _logger.warning(
+        '$signalingClientId handleResponse called on already-completed transaction $id — ignoring late response',
+      );
+      return;
+    }
     _finish();
     _completer.complete(responseMessage);
   }
@@ -61,7 +70,12 @@ class Transaction {
   /// [WebtritSignalingTransactionTerminateByDisconnectException]. No-op if the
   /// transaction has already been resolved.
   void terminateByDisconnect([int? closeCode, String? closeReason]) {
-    if (_isDone) return;
+    if (_isDone) {
+      _logger.warning(
+        '$signalingClientId terminateByDisconnect called on already-completed transaction $id — ignoring (code: $closeCode reason: $closeReason)',
+      );
+      return;
+    }
     _finish();
     _completer.completeError(
       WebtritSignalingTransactionTerminateByDisconnectException(signalingClientId, id, closeCode, closeReason),
@@ -69,7 +83,12 @@ class Transaction {
   }
 
   void _onTimeout() {
-    if (_isDone) return;
+    if (_isDone) {
+      _logger.warning(
+        '$signalingClientId _onTimeout fired on already-completed transaction $id — ignoring late timeout',
+      );
+      return;
+    }
     _finish();
     _completer.completeError(WebtritSignalingTransactionTimeoutException(signalingClientId, id), StackTrace.current);
   }
