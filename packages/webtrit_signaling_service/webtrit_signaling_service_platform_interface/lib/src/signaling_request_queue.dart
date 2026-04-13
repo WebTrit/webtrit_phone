@@ -23,11 +23,13 @@ class SignalingRequestQueue {
   ///
   /// Any subsequent [enqueue] for a matching callId is rejected immediately
   /// with [NotConnectedException] instead of being queued. This handles the
-  /// case where [cancelByCallId] is called before the request is created (e.g.
-  /// a [HangupRequest] built inside [performEndCall] after [cancelByCallId]
-  /// was already called in [performControlEnd]).
+  /// case where [cancelByCallId] is called before the termination request is
+  /// even created — for example when the hangup flow cancels the queue before
+  /// the [HangupRequest] is constructed in the call-end handler.
   ///
-  /// Cleared by [failAll] so that a fresh session can re-use the same callId.
+  /// Entries are removed individually by [removeTerminatingMark] once the
+  /// caller confirms the call is fully torn down, and the entire set is
+  /// cleared by [failAll] on session end.
   final _terminatingCallIds = <String>{};
 
   bool get isEmpty => _queue.isEmpty;
@@ -97,6 +99,13 @@ class SignalingRequestQueue {
       if (!entry.completer.isCompleted) entry.completer.completeError(error);
     }
   }
+
+  /// Removes the terminating mark for [callId] set by [cancelByCallId].
+  ///
+  /// Call this once the call teardown is fully complete so the guard entry
+  /// does not accumulate for the lifetime of the queue. Safe to call even if
+  /// [cancelByCallId] was never called for [callId].
+  void removeTerminatingMark(String callId) => _terminatingCallIds.remove(callId);
 
   /// Cancels all queued requests whose [callId] matches [callId] and prevents
   /// any future [enqueue] for the same [callId] from being accepted.

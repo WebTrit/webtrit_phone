@@ -222,6 +222,11 @@ class SignalingModuleImpl implements SignalingModule {
     _requestQueue.cancelByCallId(callId);
   }
 
+  @override
+  void clearTerminatingMark(String callId) {
+    _requestQueue.removeTerminatingMark(callId);
+  }
+
   /// Disconnects and closes the event stream. After [dispose], the instance
   /// must not be used.
   @override

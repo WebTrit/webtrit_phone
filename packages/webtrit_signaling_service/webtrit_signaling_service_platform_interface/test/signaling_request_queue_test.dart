@@ -185,6 +185,26 @@ void main() {
       expect((sent.first as HangupRequest).callId, 'call-B');
     });
 
+    test('removeTerminatingMark lifts the guard — enqueue succeeds again for same callId', () async {
+      final queue = SignalingRequestQueue();
+      queue.cancelByCallId('call-1');
+
+      // Guard is active — must reject.
+      await expectLater(queue.enqueue(_hangup('call-1')), throwsA(isA<NotConnectedException>()));
+
+      // Lift the guard explicitly (simulates call teardown complete).
+      queue.removeTerminatingMark('call-1');
+
+      // Now must accept again.
+      final future = queue.enqueue(_hangup('call-1'));
+      expect(queue.isNotEmpty, isTrue);
+
+      final sent = <Request>[];
+      await queue.flush(execute: _recordingExecute(sent), isActive: () => true);
+      await expectLater(future, completes);
+      expect((sent.first as HangupRequest).callId, 'call-1');
+    });
+
     test('failAll clears the terminating set — same callId can be enqueued in next session', () async {
       final queue = SignalingRequestQueue();
       queue.cancelByCallId('call-1');

@@ -46,4 +46,13 @@ abstract interface class SignalingModule {
   ///
   /// No-op if there are no matching requests in the queue.
   void cancelRequestsByCallId(String callId);
+
+  /// Removes the post-cancel enqueue guard set by [cancelRequestsByCallId].
+  ///
+  /// Call this once the call teardown is fully complete to prevent guard
+  /// entries from accumulating for the lifetime of the module. Safe to call
+  /// even if [cancelRequestsByCallId] was never called for [callId].
+  ///
+  /// No-op on implementations that do not use a local request queue.
+  void clearTerminatingMark(String callId);
 }
