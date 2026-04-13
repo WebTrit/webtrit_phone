@@ -150,6 +150,57 @@ void main() {
     });
   });
 
+  group('SignalingRequestQueue.cancelByCallId — post-cancel guard —', () {
+    test('enqueue after cancelByCallId rejects immediately for same callId', () async {
+      final queue = SignalingRequestQueue();
+
+      // Cancel before the request is created — simulates the hangup flow where
+      // cancelByCallId runs in __onCallControlEventEnded before HangupRequest
+      // is built inside __onCallPerformEventEnded.
+      queue.cancelByCallId('call-1');
+
+      final future = queue.enqueue(_hangup('call-1'));
+
+      await expectLater(
+        future,
+        throwsA(isA<NotConnectedException>().having((e) => e.message, 'message', contains('call-1'))),
+      );
+      expect(queue.isEmpty, isTrue, reason: 'rejected request must not enter the queue');
+    });
+
+    test('post-cancel guard is per-callId — other calls still enqueue normally', () async {
+      final queue = SignalingRequestQueue();
+
+      queue.cancelByCallId('call-A');
+
+      await expectLater(queue.enqueue(_hangup('call-A')), throwsA(isA<NotConnectedException>()));
+
+      // call-B must still be accepted.
+      final futureB = queue.enqueue(_hangup('call-B'));
+      expect(queue.isNotEmpty, isTrue);
+
+      final sent = <Request>[];
+      await queue.flush(execute: _recordingExecute(sent), isActive: () => true);
+      await expectLater(futureB, completes);
+      expect((sent.first as HangupRequest).callId, 'call-B');
+    });
+
+    test('failAll clears the terminating set — same callId can be enqueued in next session', () async {
+      final queue = SignalingRequestQueue();
+      queue.cancelByCallId('call-1');
+      queue.failAll(Exception('dispose'));
+
+      // After failAll the guard must be lifted so a new session can reuse the callId.
+      final future = queue.enqueue(_hangup('call-1'));
+      expect(queue.isNotEmpty, isTrue);
+
+      final sent = <Request>[];
+      await queue.flush(execute: _recordingExecute(sent), isActive: () => true);
+      await expectLater(future, completes);
+      expect((sent.first as HangupRequest).callId, 'call-1');
+    });
+  });
+
   group('SignalingRequestQueue.failAll —', () {
     test('fails all pending entries and clears the queue', () async {
       final queue = SignalingRequestQueue();
