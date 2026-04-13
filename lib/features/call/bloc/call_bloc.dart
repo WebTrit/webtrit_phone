@@ -138,6 +138,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           default:
             break;
         }
+        // During an active call the call screen already shows the connection
+        // status ("No internet connection / Connecting to the remote server"),
+        // so a redundant snackbar would clutter the UI.
+        if (state.isActive) return;
         final notification = switch (knownCode) {
           SignalingDisconnectCode.sessionMissedError => const SignalingSessionMissedNotification(),
           null => const SignalingConnectFailedNotification(),
