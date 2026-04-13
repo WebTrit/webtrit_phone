@@ -76,6 +76,25 @@ class SignalingRequestQueue {
     }
   }
 
+  /// Cancels all queued requests whose [callId] matches [callId].
+  ///
+  /// Each matching entry is removed from the queue, its timeout timer is
+  /// cancelled, and its future is completed with [NotConnectedException].
+  /// This unblocks any caller awaiting [enqueue] for that call without
+  /// waiting for the 30-second timeout.
+  void cancelByCallId(String callId) {
+    final toCancel = _queue
+        .where((e) => e.request is CallRequest && (e.request as CallRequest).callId == callId)
+        .toList();
+    for (final entry in toCancel) {
+      if (!_queue.remove(entry)) continue;
+      entry.timer.cancel();
+      if (!entry.completer.isCompleted) {
+        entry.completer.completeError(NotConnectedException('Request cancelled: call $callId is ending'));
+      }
+    }
+  }
+
   // ---------------------------------------------------------------------------
 
   Future<void> _executeWithRetry(

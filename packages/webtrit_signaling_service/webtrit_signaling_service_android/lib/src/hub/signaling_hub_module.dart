@@ -83,6 +83,11 @@ class SignalingHubModule implements SignalingModule {
   @override
   Future<void> disconnect() async => _hubClient.sendDisconnect();
 
+  /// No-op: [SignalingHubModule] routes requests directly through the hub
+  /// WebSocket without a local queue, so there is nothing to cancel.
+  @override
+  void cancelRequestsByCallId(String callId) {}
+
   @override
   Future<void> dispose() async {
     await _sub?.cancel();
