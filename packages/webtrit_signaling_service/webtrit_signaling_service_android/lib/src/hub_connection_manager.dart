@@ -31,6 +31,8 @@ class HubConnectionManager {
     required void Function(Object, StackTrace) onError,
     required bool Function() isActive,
     required String consumerId,
+    this.pingInterval = const Duration(seconds: 15),
+    this.pongTimeout = const Duration(seconds: 2),
   }) : _onEvent = onEvent,
        _onError = onError,
        _isActive = isActive,
@@ -40,6 +42,12 @@ class HubConnectionManager {
   final void Function(Object, StackTrace) _onError;
   final bool Function() _isActive;
   final String _consumerId;
+
+  /// How often the hub liveness ping is sent.
+  final Duration pingInterval;
+
+  /// How long to wait for a pong before treating the hub as dead.
+  final Duration pongTimeout;
 
   SignalingHubModule? _module;
   StreamSubscription<SignalingModuleEvent>? _moduleSub;
@@ -107,7 +115,7 @@ class HubConnectionManager {
         return;
       }
 
-      final client = SignalingHubClient.tryConnect(_consumerId);
+      final client = SignalingHubClient.tryConnect(_consumerId, pingInterval: pingInterval, pongTimeout: pongTimeout);
       if (client != null) {
         _logger.fine('_initLoop gen=$generation hub port found after $attempts attempts, awaiting ack');
         // awaitAck MUST be called before SignalingHubModule is constructed so the
@@ -124,7 +132,17 @@ class HubConnectionManager {
           }
           _module = module;
           _logger.info('_initLoop gen=$generation hub connected (consumerId=${client.consumerId})');
-          _moduleSub = _module!.events.listen(_onEvent, onError: _onError);
+          _moduleSub = _module!.events.listen(
+            _onEvent,
+            onError: _onError,
+            onDone: () {
+              if (_tearingDown) return;
+              _logger.warning('HubConnectionManager: hub module stream closed — hub died, restarting discovery');
+              _module = null;
+              _moduleSub = null;
+              if (_isActive()) begin();
+            },
+          );
           return;
         }
 
