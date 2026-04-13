@@ -79,6 +79,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       if (!_eventsController.isClosed) _eventsController.addError(e, st);
     },
     isActive: () => !_eventsController.isClosed,
+    onServiceDead: () => unawaited(_onHubServiceDead()),
   );
 
   /// Last config passed to [start] -- reused when switching modes via [updateMode].
@@ -137,7 +138,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       return;
     }
     _logger.warning('execute called but not connected (${request.runtimeType})');
-    throw StateError('SignalingServiceAndroid: not connected');
+    throw NotConnectedException('SignalingServiceAndroid: not connected');
   }
 
   /// Switches the service lifecycle mode.
@@ -219,6 +220,27 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   Future<void> restoreService() async {
     _logger.info('restoreService');
     await _hostApi.connect();
+  }
+
+  @override
+  Future<void> simulateKill() async {
+    _logger.info('simulateKill');
+    await _hostApi.simulateKill();
+  }
+
+  Future<void> _onHubServiceDead() async {
+    _logger.warning('_onHubServiceDead: hub service dead, restarting');
+    final config = _currentConfig;
+    final mode = _currentMode;
+    if (config == null || mode == null) {
+      _logger.warning('_onHubServiceDead: no config/mode available, cannot restart');
+      return;
+    }
+    try {
+      await _startService(config, mode);
+    } catch (e, st) {
+      _logger.severe('_onHubServiceDead: failed to restart service', e, st);
+    }
   }
 
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {

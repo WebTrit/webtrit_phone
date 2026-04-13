@@ -2130,5 +2130,20 @@
   "cdr_disconnectReason_internetworkingUnspecified": "Internetworking, unspecified",
   "cdr_disconnectReason_nextNodeIsUnreachable": "Next node is unreachable",
   "cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService": "Holst Telephony Service Provider Module (HTSPM) is out of service",
-  "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL transit is not my node ID"
+  "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL transit is not my node ID",
+
+  "devTools_AppBarTitle": "Dev Tools",
+  "@devTools_AppBarTitle": {},
+  "devTools_signalingService_groupTitle": "Signaling Service",
+  "@devTools_signalingService_groupTitle": {},
+  "devTools_signalingService_simulateKill_title": "Simulate service kill",
+  "@devTools_signalingService_simulateKill_title": {},
+  "devTools_signalingService_simulateKill_subtitle": "Stops the foreground service without graceful disconnect",
+  "@devTools_signalingService_simulateKill_subtitle": {},
+  "devTools_signalingService_simulateKill_confirmMessage": "The signaling service will stop immediately. It will restart automatically if credentials are valid.",
+  "@devTools_signalingService_simulateKill_confirmMessage": {},
+  "devTools_signalingService_simulateKill_confirm": "Kill",
+  "@devTools_signalingService_simulateKill_confirm": {},
+  "devTools_signalingService_simulateKill_cancel": "Cancel",
+  "@devTools_signalingService_simulateKill_cancel": {}
 }

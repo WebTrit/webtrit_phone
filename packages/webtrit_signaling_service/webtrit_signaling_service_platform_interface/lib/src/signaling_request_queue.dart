@@ -81,11 +81,20 @@ class SignalingRequestQueue {
   /// Executes [request] immediately via [execute] with up to [maxRetryCount] retries.
   ///
   /// Stops retrying if [isActive] returns false (e.g. the connection was replaced).
+  /// A [NotConnectedException] during an inactive period is dropped silently so
+  /// callers are not burdened with transient reconnect-window errors.
   Future<void> executeNow({
     required Future<void> Function(Request) execute,
     required Request request,
     required bool Function() isActive,
-  }) => _executeWithRetry(execute, request, isActive);
+  }) async {
+    try {
+      await _executeWithRetry(execute, request, isActive);
+    } on NotConnectedException {
+      if (!isActive()) return;
+      rethrow;
+    }
+  }
 
   /// Fails every pending request with [error] and clears the queue.
   ///
@@ -140,6 +149,7 @@ class SignalingRequestQueue {
     Request request,
     bool Function() isActive, [
     int retryCount = 0,
+    int notConnectedRetryCount = 0,
   ]) async {
     try {
       await execute(request);
@@ -147,7 +157,17 @@ class SignalingRequestQueue {
       if (!isActive() || retryCount >= maxRetryCount) rethrow;
 
       _logger.warning('_executeWithRetry retrying ${error.transactionId}, (retry #$retryCount)/$maxRetryCount');
-      return _executeWithRetry(execute, request, isActive, retryCount + 1);
+      return _executeWithRetry(execute, request, isActive, retryCount + 1, notConnectedRetryCount);
+    } on NotConnectedException {
+      if (!isActive()) rethrow;
+      if (notConnectedRetryCount >= maxRetryCount) rethrow;
+
+      _logger.fine(
+        '_executeWithRetry: not connected (attempt $notConnectedRetryCount/$maxRetryCount), backing off 2 s',
+      );
+      await Future<void>.delayed(const Duration(seconds: 2));
+      if (!isActive()) rethrow;
+      return _executeWithRetry(execute, request, isActive, retryCount, notConnectedRetryCount + 1);
     }
   }
 

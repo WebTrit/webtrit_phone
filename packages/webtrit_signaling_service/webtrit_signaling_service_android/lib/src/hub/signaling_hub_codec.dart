@@ -10,6 +10,7 @@ const _tagHandshakeReceived = 'handshake_received';
 const _tagProtocolEvent = 'protocol_event';
 const _tagExecuteResult = 'execute_result';
 const _tagSubAck = 'sub_ack';
+const _tagPong = 'pong';
 
 /// Encodes a [SignalingModuleEvent] into an isolate-safe [List] for transport
 /// over a [SendPort].
@@ -99,6 +100,11 @@ bool isExecuteResult(List<dynamic> msg) => msg.isNotEmpty && msg[0] == _tagExecu
 List<dynamic> encodeSubAck() => [_tagSubAck];
 
 bool isSubAck(List<dynamic> msg) => msg.isNotEmpty && msg[0] == _tagSubAck;
+
+/// Encodes a pong reply sent by the hub in response to a [SignalingHubPingCommand].
+List<dynamic> encodePong() => [_tagPong];
+
+bool isPong(List<dynamic> msg) => msg.isNotEmpty && msg[0] == _tagPong;
 
 Map<String, dynamic> _encodeHandshake(StateHandshake h) {
   return {

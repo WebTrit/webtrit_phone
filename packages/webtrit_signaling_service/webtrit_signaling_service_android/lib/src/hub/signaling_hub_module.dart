@@ -33,7 +33,7 @@ final _logger = Logger('SignalingHubModule');
 /// same order, so they cannot diverge.
 class SignalingHubModule implements SignalingModule {
   SignalingHubModule(this._hubClient) {
-    _sub = _hubClient.events.listen(_onHubEvent);
+    _sub = _hubClient.events.listen(_onHubEvent, onDone: _onHubDone);
     _hubClient.start();
     _logger.fine('SignalingHubModule created, consumerId=${_hubClient.consumerId}');
   }
@@ -97,9 +97,14 @@ class SignalingHubModule implements SignalingModule {
   Future<void> dispose() async {
     await _sub?.cancel();
     await _hubClient.dispose();
-    await _controller.close();
+    if (!_controller.isClosed) await _controller.close();
     _eventBuffer.clear();
     _logger.fine('SignalingHubModule disposed');
+  }
+
+  void _onHubDone() {
+    _logger.warning('SignalingHubModule: hub client stream closed — hub unreachable');
+    if (!_controller.isClosed) _controller.close();
   }
 
   // ---------------------------------------------------------------------------

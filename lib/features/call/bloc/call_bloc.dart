@@ -54,6 +54,8 @@ typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallR
 /// application-level logout to resolve the state.
 typedef SignalingSessionInvalidatedCallback = void Function();
 
+const _getUserMediaPushKitTimeout = Duration(seconds: 8);
+
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final CallLogsRepository callLogsRepository;
   final UserRepository userRepository;
@@ -393,6 +395,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         // Expected silent reconnect: keepalive timeout on lock-screen or duplicate-session cleanup.
         _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
         return;
+      case SignalingDisconnectCode.controllerUnknownError:
+        // controllerUnknownError (4400): the server-side Controller process died because
+        // the Janus connection went down. The new WebSocket timed out (GenServer.call,
+        // 5s default) waiting for the Controller to finish re-initializing (new Janus
+        // session + SIP registration). The Controller continues initializing in the
+        // background — the next reconnect attempt will succeed once it is ready.
+        //
+        // Silent reconnect: no user-visible notification needed.
+        _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
+        return;
       default:
         break;
     }
@@ -730,6 +742,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           lastSignalingDisconnectCode: null,
         ),
       );
+    } else if (code == SignalingDisconnectCode.controllerUnknownError) {
+      // Server-side transient state after long inactivity or multi-device reconnect.
+      // The subsequent reconnect resolves it; keep lastSignalingDisconnectCode null
+      // so connectIssue status is never shown to the user.
+      _logger.warning(
+        '__onSignalingClientEventDisconnected: transient controllerUnknownError - '
+        'silent reconnect (code=${event.code}, reason="${event.reason}").',
+      );
+      newState = state.copyWith(
+        callServiceState: state.callServiceState.copyWith(
+          signalingClientStatus: SignalingClientStatus.disconnect,
+          lastSignalingDisconnectCode: null,
+        ),
+      );
     } else if (code.type == SignalingDisconnectCodeType.auxiliary) {
       /// Fun facts
       /// - in case of network disconnection on android this section is evaluating faster than [_onConnectivityResultChanged].
@@ -746,8 +772,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> _onCallPushEventIncoming(_CallPushEventIncoming event, Emitter<CallState> emit) async {
     final eventError = event.error;
     if (eventError != null) {
-      _logger.warning('_onCallPushEventIncoming event.error: $eventError');
-      // TODO: implement correct incoming call hangup (take into account that _signalingClient is disconnected)
+      // iOS only: CXProvider rejected the incoming call registration before it was
+      // ever presented to the user (e.g. DND / Focus active, Call Directory blocklist,
+      // missing VoIP entitlement, or unexpected CXProvider failure).
+      //
+      // Consequences:
+      // - performEndCall will NOT fire (CallKit never registered the call).
+      // - _signalingModule is very likely disconnected: VoIP push wakes the app
+      //   before the WebSocket is established, so the CXProvider completion fires
+      //   before signaling reconnects.
+      //
+      // Recovery path: when signaling reconnects the server replays the incoming
+      // call event via the handshake. HandshakeProcessor generates a
+      // HandleIncomingCallAction for the unknown callId, which re-enters
+      // __onCallSignalingEventIncoming. At that point we have the SIP line and
+      // can send a DeclineRequest immediately (see that method below).
+      _logger.warning(
+        '_onCallPushEventIncoming: OS rejected call registration '
+        '(callId: ${event.callId}, error: $eventError) — server will be notified on next handshake',
+      );
       return;
     }
 
@@ -922,8 +965,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final callAlreadyTerminated = error == CallkeepIncomingCallError.callIdAlreadyTerminated;
 
     if (error != null && !callAlreadyExists && !callAlreadyAnswered && !callAlreadyTerminated) {
-      _logger.warning('__onCallSignalingEventIncoming reportNewIncomingCall error: $error');
-      // TODO: implement correct incoming call hangup (take into account that _signalingClient could be disconnected)
+      // reportNewIncomingCall rejected the call with an unexpected error:
+      //   - Android: callRejectedBySystem — Telecom already has a call in RINGING state
+      //     (AOSP behaviour, Android 11+), or the 5 s Telecom confirmation timeout elapsed.
+      //   - iOS: unknown / unentitled / internal — rare CXProvider failure on the
+      //     signaling-path reportNewIncomingCall (not the VoIP-push path).
+      //
+      // The call was never presented to the user, so performEndCall will NOT fire.
+      // Notify the server immediately so the remote party is not left ringing.
+      // _signalingModule.execute returns null when disconnected — the ?. handles that safely.
+      _logger.warning(
+        '__onCallSignalingEventIncoming: reportNewIncomingCall error=$error '
+        '(callId: ${event.callId}, line: ${event.line}) — sending decline',
+      );
+      await _signalingModule
+          .execute(
+            DeclineRequest(
+              transaction: WebtritSignalingClient.generateTransactionId(),
+              line: event.line,
+              callId: event.callId,
+            ),
+          )
+          ?.catchError((e, s) {
+            callErrorReporter.handle(e, s, '__onCallSignalingEventIncoming declineRequest error');
+          });
       return;
     }
 
@@ -2114,11 +2179,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }),
       );
 
-      final localStream = await userMediaBuilder.build(
-        video: offer.hasVideo,
-        frontCamera: call.frontCamera,
-        allowAudioFallback: true,
-      );
+      final localStream = await userMediaBuilder
+          .build(video: offer.hasVideo, frontCamera: call.frontCamera, allowAudioFallback: true)
+          .timeout(_getUserMediaPushKitTimeout, onTimeout: _onGetUserMediaPushKitTimeout);
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
@@ -3345,5 +3408,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       jsep: jsep.toMap(),
     );
     await _signalingModule.execute(updateRequest);
+  }
+
+  Never _onGetUserMediaPushKitTimeout() {
+    _logger.warning(
+      'getUserMedia blocked for ${_getUserMediaPushKitTimeout.inSeconds}s — aborting to stay within PushKit deadline',
+    );
+    throw TimeoutException('getUserMedia timeout', _getUserMediaPushKitTimeout);
   }
 }
