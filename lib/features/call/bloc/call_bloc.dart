@@ -1884,14 +1884,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       currentState = await stream
-          .firstWhere((next) => next.isHandshakeEstablished && next.isSignalingEstablished, orElse: () => state)
+          .firstWhere((next) {
+            if (next.isHandshakeEstablished && next.isSignalingEstablished) return true;
+            // Exit early if the call left outgoingConnectingToSignaling — either the user
+            // pressed hangup (-> disconnecting) or another code path removed the call.
+            final call = next.retrieveActiveCall(event.callId);
+            return call == null || call.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling;
+          }, orElse: () => state)
           .timeout(kOutgoingCallSignalingWaitTimeout, onTimeout: () => state);
       if (isClosed) return;
     }
 
-    // If the signaling client is not connected, hung up the call and notify user
+    // If the signaling client is not connected, decide how to clean up.
     if (!currentState.isSignalingEstablished) {
       event.fail();
+
+      // If the call is no longer in outgoingConnectingToSignaling the hangup flow
+      // has already taken over — avoid double-ending or showing a wrong notification.
+      final waitingCall = state.retrieveActiveCall(event.callId);
+      if (waitingCall?.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling) {
+        return;
+      }
 
       // Notice that the tube was already hung up to avoid sending an extra event to the server
       emit(
