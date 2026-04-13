@@ -119,6 +119,11 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
         SignalingForegroundService.instance?.synchronizeIsolate()
     }
 
+    override fun simulateKill() {
+        Log.d(TAG, "simulateKill -- stopping service without graceful disconnect")
+        SignalingForegroundService.instance?.simulateKill()
+    }
+
     companion object {
         private const val TAG = "WebtritSignalingServicePlugin"
 

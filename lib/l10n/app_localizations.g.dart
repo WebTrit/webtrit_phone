@@ -5081,6 +5081,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'DTL transit is not my node ID'**
   String get cdr_disconnectReason_dtlTransitIsNotMyNodeId;
+
+  /// No description provided for @devTools_AppBarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dev Tools'**
+  String get devTools_AppBarTitle;
+
+  /// No description provided for @devTools_signalingService_groupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Signaling Service'**
+  String get devTools_signalingService_groupTitle;
+
+  /// No description provided for @devTools_signalingService_simulateKill_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulate service kill'**
+  String get devTools_signalingService_simulateKill_title;
+
+  /// No description provided for @devTools_signalingService_simulateKill_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stops the foreground service without graceful disconnect'**
+  String get devTools_signalingService_simulateKill_subtitle;
+
+  /// No description provided for @devTools_signalingService_simulateKill_confirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The signaling service will stop immediately. It will restart automatically if credentials are valid.'**
+  String get devTools_signalingService_simulateKill_confirmMessage;
+
+  /// No description provided for @devTools_signalingService_simulateKill_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Kill'**
+  String get devTools_signalingService_simulateKill_confirm;
+
+  /// No description provided for @devTools_signalingService_simulateKill_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get devTools_signalingService_simulateKill_cancel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -114,6 +114,12 @@ class WebtritSignalingServiceIos extends SignalingServicePlatform {
     _logger.info('WebtritSignalingServiceIos.setIncomingCallHandler -- no-op on iOS');
   }
 
+  /// No-op on iOS -- there is no persistent background service to kill.
+  @override
+  Future<void> simulateKill() async {
+    _logger.info('WebtritSignalingServiceIos.simulateKill -- no-op on iOS');
+  }
+
   @override
   Future<void> dispose() async {
     _logger.info('WebtritSignalingServiceIos.dispose');

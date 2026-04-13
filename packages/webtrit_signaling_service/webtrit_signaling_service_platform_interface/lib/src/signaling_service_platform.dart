@@ -93,4 +93,15 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   /// service (e.g. iOS) and when push mode is active or the service is already
   /// running.
   Future<void> restoreService() async {}
+
+  /// Stops the foreground service immediately without a graceful WebSocket
+  /// disconnect, simulating an abrupt OS kill.
+  ///
+  /// Credentials in SharedPreferences are preserved so that WorkManager and
+  /// START_STICKY can restart the service automatically — the same recovery
+  /// path that fires after a real OS kill.
+  ///
+  /// No-op on platforms without a persistent background service (e.g. iOS).
+  /// Intended for debug/QA use only to verify service-restart behaviour.
+  Future<void> simulateKill() async {}
 }
