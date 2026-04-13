@@ -116,7 +116,16 @@ class HandshakeProcessor {
     final localConnections = await callkeepConnections.getConnections();
 
     for (final activeLine in allLines) {
-      final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
+      // callLogs is newest-first: firstOrNull = latest, lastOrNull = earliest.
+      // Materialise once and reuse for both the connection guards below and the
+      // restoration logic further down to avoid redundant traversals.
+      final callEventLogEntries = activeLine.callLogs.whereType<CallEventLog>().toList();
+      final callEvent = callEventLogEntries.firstOrNull?.callEvent; // latest event
+      final earliestCallEvent = callEventLogEntries.lastOrNull?.callEvent;
+
+      // AcceptedEvent may not be the latest entry after a re-INVITE or transfer -
+      // search the full log list rather than checking only the newest entry.
+      final acceptedLogEntry = callEventLogEntries.where((log) => log.callEvent is AcceptedEvent).firstOrNull;
 
       CallkeepConnection? connection;
       if (callEvent != null) {
@@ -133,13 +142,13 @@ class HandshakeProcessor {
             callEvent is! IncomingCallEvent &&
             callEvent is! HangupEvent &&
             callEvent is! MissedCallEvent &&
-            activeLine.callLogs.whereType<CallEventLog>().every((l) => l.callEvent is! AcceptedEvent)) {
+            acceptedLogEntry == null) {
           // Orphaned outgoing call: the server still has the call but both
           // CallKeep and BLoC have no record of it. This happens when the user
           // hangs up while offline — performEndCall removed the local state but
           // the HangupRequest never reached the server.
           //
-          // The AcceptedEvent guard ensures we never hang up a call that should
+          // acceptedLogEntry == null ensures we never hang up a call that should
           // be restored (app-restart case where connection is null but the call
           // was previously accepted).
           //
@@ -149,17 +158,8 @@ class HandshakeProcessor {
         }
       }
 
-      // callLogs is newest-first: firstOrNull = latest, lastOrNull = earliest.
-      final callEventLogEntries = activeLine.callLogs.whereType<CallEventLog>().toList();
-      final latestCallEvent = callEventLogEntries.firstOrNull?.callEvent;
-      final earliestCallEvent = callEventLogEntries.lastOrNull?.callEvent;
-
-      // AcceptedEvent may not be the latest entry after a re-INVITE or transfer -
-      // search the full log list rather than checking only the newest entry.
-      final acceptedLogEntry = callEventLogEntries.where((log) => log.callEvent is AcceptedEvent).firstOrNull;
-
       // A call is server-terminated when the latest event is a final hangup or missed.
-      final isTerminated = latestCallEvent is HangupEvent || latestCallEvent is MissedCallEvent;
+      final isTerminated = callEvent is HangupEvent || callEvent is MissedCallEvent;
 
       if (!isTerminated &&
           acceptedLogEntry != null &&
