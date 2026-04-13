@@ -188,9 +188,6 @@ class HandshakeProcessor {
 
     final lineCallIds = allLines.map((l) => l.callId).toSet();
     for (final connection in localConnections) {
-      // Skip calls that the BLoC is actively managing — they are not yet on the
-      // server (e.g. OutgoingCallRequest not sent yet) but the BLoC controls their
-      // lifecycle and will clean them up when appropriate.
       if (!lineCallIds.contains(connection.callId) && !activeCallIds.contains(connection.callId)) {
         actions.add(EndLocalCallAction(callId: connection.callId));
       }

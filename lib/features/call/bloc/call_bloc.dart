@@ -127,32 +127,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _reconnectController = SignalingReconnectController(
       signalingModule: signalingModule,
-      onConnectionFailed: (failure) {
-        final (:knownCode, :systemCode, :systemReason) = failure;
-        switch (knownCode) {
-          case SignalingDisconnectCode.signalingKeepaliveTimeoutError:
-          case SignalingDisconnectCode.controllerForceAttachClose:
-            // Expected silent reconnect: keepalive timeout on lock-screen or duplicate-session cleanup.
-            _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
-            return;
-          default:
-            break;
-        }
-        // During an active call the call screen already shows the connection
-        // status ("No internet connection / Connecting to the remote server"),
-        // so a redundant snackbar would clutter the UI.
-        if (state.isActive) return;
-        final notification = switch (knownCode) {
-          SignalingDisconnectCode.sessionMissedError => const SignalingSessionMissedNotification(),
-          null => const SignalingConnectFailedNotification(),
-          _ => SignalingDisconnectNotification(
-            knownCode: knownCode,
-            systemCode: systemCode,
-            systemReason: systemReason,
-          ),
-        };
-        submitNotification(notification);
-      },
+      onConnectionFailed: _handleConnectionFailed,
       onConnectionPresenceChanged: (isAvailable) =>
           _logger.info('signaling presence changed: isAvailable=$isAvailable'),
     );
@@ -408,6 +383,26 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.info(() => 'Lifecycle: Last call ended');
     if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
     if (Platform.isAndroid) Helper.clearAndroidCommunicationDevice();
+  }
+
+  void _handleConnectionFailed(SignalingFailureInfo failure) {
+    final (:knownCode, :systemCode, :systemReason) = failure;
+    switch (knownCode) {
+      case SignalingDisconnectCode.signalingKeepaliveTimeoutError:
+      case SignalingDisconnectCode.controllerForceAttachClose:
+        // Expected silent reconnect: keepalive timeout on lock-screen or duplicate-session cleanup.
+        _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
+        return;
+      default:
+        break;
+    }
+    if (state.isActive) return;
+    final notification = switch (knownCode) {
+      SignalingDisconnectCode.sessionMissedError => const SignalingSessionMissedNotification(),
+      null => const SignalingConnectFailedNotification(),
+      _ => SignalingDisconnectNotification(knownCode: knownCode, systemCode: systemCode, systemReason: systemReason),
+    };
+    submitNotification(notification);
   }
 
   void _handleSignalingSessionError({required CallServiceState previous, required CallServiceState current}) {
@@ -1876,7 +1871,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     var currentState = state;
 
-    // Attempt to wait for the desired signaling client status within the signaling client connection timeout period
+    // Attempt to wait for signaling+handshake readiness within kOutgoingCallSignalingWaitTimeout.
     if (!currentState.isHandshakeEstablished || !currentState.isSignalingEstablished) {
       // Trigger reconnect so that an outgoing call recovers signaling even when the previous
       // disconnect was intentional (e.g. post-transfer cleanup) and no reconnect was scheduled.
