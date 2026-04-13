@@ -46,12 +46,15 @@ class SignalingRequestQueue {
       final entry = _queue.first;
       try {
         await _executeWithRetry(execute, entry.request, isActive);
-        _queue.removeFirst();
+        // Use remove(entry) instead of removeFirst() to guard against concurrent
+        // cancelByCallId calls that may have already removed this entry while
+        // flush() was suspended at the await above.
+        _queue.remove(entry);
         entry.timer.cancel();
         if (!entry.completer.isCompleted) entry.completer.complete();
       } catch (error, stackTrace) {
         if (!isActive()) return;
-        _queue.removeFirst();
+        _queue.remove(entry);
         entry.timer.cancel();
         if (!entry.completer.isCompleted) entry.completer.completeError(error, stackTrace);
       }
@@ -73,6 +76,25 @@ class SignalingRequestQueue {
       final entry = _queue.removeFirst();
       entry.timer.cancel();
       if (!entry.completer.isCompleted) entry.completer.completeError(error);
+    }
+  }
+
+  /// Cancels all queued requests whose [callId] matches [callId].
+  ///
+  /// Each matching entry is removed from the queue, its timeout timer is
+  /// cancelled, and its future is completed with [NotConnectedException].
+  /// This unblocks any caller awaiting [enqueue] for that call without
+  /// waiting for the 30-second timeout.
+  void cancelByCallId(String callId) {
+    final toCancel = _queue
+        .where((e) => e.request is CallRequest && (e.request as CallRequest).callId == callId)
+        .toList();
+    for (final entry in toCancel) {
+      if (!_queue.remove(entry)) continue;
+      entry.timer.cancel();
+      if (!entry.completer.isCompleted) {
+        entry.completer.completeError(NotConnectedException('Request cancelled: call $callId is ending'));
+      }
     }
   }
 

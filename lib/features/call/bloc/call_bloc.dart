@@ -1437,6 +1437,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallControlEventEnded(_CallControlEventEnded event, Emitter<CallState> emit) async {
+    // Cancel any queued signaling requests for this call immediately.
+    // Handles the case where OutgoingCallRequest is still waiting in the queue
+    // (no connection yet) — without this, it would be sent on reconnect,
+    // causing the callee to see a phantom incoming call, and local cleanup
+    // (ringback stop, PeerConnection disposal) would be delayed by the
+    // 30-second queue timeout.
+    _signalingModule.cancelRequestsByCallId(event.callId);
+
     emit(
       state.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(processingStatus: CallProcessingStatus.disconnecting);
