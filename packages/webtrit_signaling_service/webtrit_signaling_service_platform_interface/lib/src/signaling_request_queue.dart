@@ -46,12 +46,15 @@ class SignalingRequestQueue {
       final entry = _queue.first;
       try {
         await _executeWithRetry(execute, entry.request, isActive);
-        _queue.removeFirst();
+        // Use remove(entry) instead of removeFirst() to guard against concurrent
+        // cancelByCallId calls that may have already removed this entry while
+        // flush() was suspended at the await above.
+        _queue.remove(entry);
         entry.timer.cancel();
         if (!entry.completer.isCompleted) entry.completer.complete();
       } catch (error, stackTrace) {
         if (!isActive()) return;
-        _queue.removeFirst();
+        _queue.remove(entry);
         entry.timer.cancel();
         if (!entry.completer.isCompleted) entry.completer.completeError(error, stackTrace);
       }
