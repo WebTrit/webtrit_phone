@@ -139,7 +139,7 @@ class HandshakeProcessor {
           }
         } else if (connection == null &&
             !activeCallIds.contains(activeLine.callId) &&
-            callEvent is! IncomingCallEvent &&
+            earliestCallEvent is! IncomingCallEvent &&
             callEvent is! HangupEvent &&
             callEvent is! MissedCallEvent &&
             acceptedLogEntry == null) {
@@ -147,6 +147,11 @@ class HandshakeProcessor {
           // CallKeep and BLoC have no record of it. This happens when the user
           // hangs up while offline — performEndCall removed the local state but
           // the HangupRequest never reached the server.
+          //
+          // earliestCallEvent (not callEvent/latest) is used to identify the
+          // call direction: after a ProceedingEvent or RingingEvent the latest
+          // entry is no longer IncomingCallEvent, so using callEvent here would
+          // incorrectly trigger HangupSignalingAction for unanswered incoming calls.
           //
           // acceptedLogEntry == null ensures we never hang up a call that should
           // be restored (app-restart case where connection is null but the call

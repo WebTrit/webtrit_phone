@@ -62,8 +62,6 @@ class SignalingHubModule implements SignalingModule {
 
   @override
   Future<void>? execute(Request request) {
-    // DEBUG: log state at the moment execute is called on the main-isolate side
-    _logger.info('SignalingHubModule execute: request=${request.runtimeType} _connected=$_connected');
     if (!_connected) return null;
     return _hubClient.execute(request);
   }
