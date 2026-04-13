@@ -642,6 +642,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // user turn off all network interfaces >> __onPeerConnectionEventIceConnectionStateChanged >> RTCIceConnectionStateFailed >> peerConnection.restartIce() >> onRenegotiationNeeded >> _safeRenegotiate >> if(!signalingConnected) return;
     // user turn on network interfaces >> _onSignalingClientEventConnected >> safeRenegotiate
     for (final call in state.activeCalls) {
+      // Skip calls that are being torn down — sending UpdateRequest for a
+      // disconnecting call would keep the server-side leg alive unnecessarily.
+      if (call.processingStatus == CallProcessingStatus.disconnecting) continue;
       _logger.warning('__onSignalingClientEventConnected: triggering safe renegotiation for call ${call.callId}');
       _safeRenegotiate(call.callId, call.line);
     }
@@ -2599,6 +2602,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           reason: 'Request Terminated',
         ),
       );
+    }
+
+    // Retry HangupRequest for calls that were being terminated when signaling dropped.
+    // If a call is locally disconnecting AND the server still lists it in activeLineCallIds,
+    // the hangup was lost mid-flight — resend it now so the server-side leg is torn down.
+    for (final activeCall in state.activeCalls) {
+      if (activeCall.processingStatus != CallProcessingStatus.disconnecting) continue;
+      if (!activeLineCallIds.contains(activeCall.callId)) continue;
+      _signalingModule
+          .execute(
+            HangupRequest(
+              transaction: WebtritSignalingClient.generateTransactionId(),
+              line: activeCall.line,
+              callId: activeCall.callId,
+            ),
+          )
+          ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived pendingHangup retry error'))
+          .ignore();
     }
 
     final actions = await _handshakeProcessor.process(
