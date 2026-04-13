@@ -131,8 +131,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         final (:knownCode, :systemCode, :systemReason) = failure;
         switch (knownCode) {
           case SignalingDisconnectCode.signalingKeepaliveTimeoutError:
+            // Keepalive timeout: the server did not receive a ping in time.
+            // The connection is recoverable via silent reconnect.
+            _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
+            return;
           case SignalingDisconnectCode.controllerForceAttachClose:
-            // Expected silent reconnect: keepalive timeout on lock-screen or duplicate-session cleanup.
+            // Force-attach close: a duplicate signaling session replaced this one
+            // (e.g. background push isolate still connected when main engine reconnects).
+            // Silent reconnect: no user-visible notification needed.
+            _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
+            return;
+          case SignalingDisconnectCode.controllerUnknownError:
+            // controllerUnknownError (4400): the server-side Controller process died because
+            // the Janus connection went down. The new WebSocket timed out (GenServer.call,
+            // 5s default) waiting for the Controller to finish re-initializing (new Janus
+            // session + SIP registration). The Controller continues initializing in the
+            // background — the next reconnect attempt will succeed once it is ready.
+            //
+            // Silent reconnect: no user-visible notification needed.
             _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
             return;
           default:
@@ -721,6 +737,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.warning(
         '__onSignalingClientEventDisconnected: signaling race detected - '
         'server force-closed duplicate session (code=${event.code}, reason="${event.reason}").',
+      );
+      newState = state.copyWith(
+        callServiceState: state.callServiceState.copyWith(
+          signalingClientStatus: SignalingClientStatus.disconnect,
+          lastSignalingDisconnectCode: null,
+        ),
+      );
+    } else if (code == SignalingDisconnectCode.controllerUnknownError) {
+      // Server-side transient state after long inactivity or multi-device reconnect.
+      // The subsequent reconnect resolves it; keep lastSignalingDisconnectCode null
+      // so connectIssue status is never shown to the user.
+      _logger.warning(
+        '__onSignalingClientEventDisconnected: transient controllerUnknownError - '
+        'silent reconnect (code=${event.code}, reason="${event.reason}").',
       );
       newState = state.copyWith(
         callServiceState: state.callServiceState.copyWith(
