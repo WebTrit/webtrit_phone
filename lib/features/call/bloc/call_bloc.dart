@@ -54,6 +54,8 @@ typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallR
 /// application-level logout to resolve the state.
 typedef SignalingSessionInvalidatedCallback = void Function();
 
+const _getUserMediaPushKitTimeout = Duration(seconds: 8);
+
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final CallLogsRepository callLogsRepository;
   final UserRepository userRepository;
@@ -2159,11 +2161,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }),
       );
 
-      final localStream = await userMediaBuilder.build(
-        video: offer.hasVideo,
-        frontCamera: call.frontCamera,
-        allowAudioFallback: true,
-      );
+      final localStream = await userMediaBuilder
+          .build(video: offer.hasVideo, frontCamera: call.frontCamera, allowAudioFallback: true)
+          .timeout(_getUserMediaPushKitTimeout, onTimeout: _onGetUserMediaPushKitTimeout);
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
@@ -3378,5 +3378,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       jsep: jsep.toMap(),
     );
     await _signalingModule.execute(updateRequest);
+  }
+
+  Never _onGetUserMediaPushKitTimeout() {
+    _logger.warning(
+      'getUserMedia blocked for ${_getUserMediaPushKitTimeout.inSeconds}s — aborting to stay within PushKit deadline',
+    );
+    throw TimeoutException('getUserMedia timeout', _getUserMediaPushKitTimeout);
   }
 }
