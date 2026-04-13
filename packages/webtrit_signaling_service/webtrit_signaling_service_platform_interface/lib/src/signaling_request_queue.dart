@@ -83,6 +83,7 @@ class SignalingRequestQueue {
     Request request,
     bool Function() isActive, [
     int retryCount = 0,
+    int notConnectedRetryCount = 0,
   ]) async {
     try {
       await execute(request);
@@ -90,7 +91,17 @@ class SignalingRequestQueue {
       if (!isActive() || retryCount >= maxRetryCount) rethrow;
 
       _logger.warning('_executeWithRetry retrying ${error.transactionId}, (retry #$retryCount)/$maxRetryCount');
-      return _executeWithRetry(execute, request, isActive, retryCount + 1);
+      return _executeWithRetry(execute, request, isActive, retryCount + 1, notConnectedRetryCount);
+    } on NotConnectedException {
+      if (!isActive()) return;
+      if (notConnectedRetryCount >= maxRetryCount) rethrow;
+
+      _logger.fine(
+        '_executeWithRetry: not connected (attempt $notConnectedRetryCount/$maxRetryCount), backing off 2 s',
+      );
+      await Future<void>.delayed(const Duration(seconds: 2));
+      if (!isActive()) return;
+      return _executeWithRetry(execute, request, isActive, retryCount, notConnectedRetryCount + 1);
     }
   }
 

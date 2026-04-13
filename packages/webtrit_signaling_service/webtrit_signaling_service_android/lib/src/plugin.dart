@@ -138,7 +138,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       return;
     }
     _logger.warning('execute called but not connected (${request.runtimeType})');
-    throw StateError('SignalingServiceAndroid: not connected');
+    throw NotConnectedException('SignalingServiceAndroid: not connected');
   }
 
   /// Switches the service lifecycle mode.
