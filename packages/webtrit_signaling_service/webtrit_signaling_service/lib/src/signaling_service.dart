@@ -174,4 +174,14 @@ class WebtritSignalingService implements SignalingModule {
   /// is disposed to bring back the persistent connection for future calls.
   /// No-op on iOS and when push mode is active or the service is already running.
   static Future<void> restoreService() => SignalingServicePlatform.instance.restoreService();
+
+  /// Stops the foreground service immediately without a graceful WebSocket
+  /// disconnect, simulating an abrupt OS kill.
+  ///
+  /// Credentials in SharedPreferences are preserved so that WorkManager and
+  /// START_STICKY can restart the service automatically — the same recovery
+  /// path that fires after a real OS kill.
+  ///
+  /// No-op on iOS. Intended for debug/QA use only to verify service-restart behaviour.
+  static Future<void> simulateKill() => SignalingServicePlatform.instance.simulateKill();
 }

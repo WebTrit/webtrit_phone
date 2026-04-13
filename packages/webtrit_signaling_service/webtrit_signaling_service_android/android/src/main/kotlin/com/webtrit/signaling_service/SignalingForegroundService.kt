@@ -137,6 +137,18 @@ class SignalingForegroundService : Service() {
         notificationDescription = description
     }
 
+    /// Stops the service immediately without signalling the background isolate,
+    /// simulating an abrupt OS kill.
+    ///
+    /// Unlike [gracefulStop], this does not send a disconnect signal to the
+    /// Dart isolate first. Credentials in SharedPreferences are preserved so
+    /// that [SignalingRestartWorker] and START_STICKY can restart the service —
+    /// the same recovery path that fires after a real OS kill.
+    fun simulateKill() {
+        Log.d(TAG, "simulateKill -- calling stopSelf() without graceful disconnect")
+        stopSelf()
+    }
+
     // ---------------------------------------------------------------------------
     // Internal
     // ---------------------------------------------------------------------------
