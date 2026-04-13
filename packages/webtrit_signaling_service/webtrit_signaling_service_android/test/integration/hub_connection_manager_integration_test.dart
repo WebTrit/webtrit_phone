@@ -67,6 +67,9 @@ class _FakeSignalingModule implements SignalingModule {
   Future<void>? execute(Request request) => Future<void>.value();
 
   @override
+  void cancelRequestsByCallId(String callId) {}
+
+  @override
   Future<void> dispose() async {
     if (_disposed) return;
     _disposed = true;
