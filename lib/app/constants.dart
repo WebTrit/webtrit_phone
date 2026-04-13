@@ -3,6 +3,14 @@ import 'package:flutter/material.dart';
 const kApiClientConnectionTimeout = Duration(seconds: 5);
 
 const kSignalingClientConnectionTimeout = Duration(seconds: 10);
+
+/// How long to wait for signaling to reconnect after an outgoing call is
+/// already registered with the Telecom framework (DIALING state).
+///
+/// Longer than [kSignalingClientConnectionTimeout] because the user is
+/// looking at the call screen and expects the call to survive a brief
+/// network interruption (e.g. switching from Wi-Fi to LTE).
+const kOutgoingCallSignalingWaitTimeout = Duration(seconds: 30);
 const kCallRoutingStateTimeout = Duration(seconds: 10);
 const kSignalingClientReconnectDelay = Duration(seconds: 3);
 const kSignalingClientFastReconnectDelay = Duration(seconds: 1);
