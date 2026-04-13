@@ -79,7 +79,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       if (!_eventsController.isClosed) _eventsController.addError(e, st);
     },
     isActive: () => !_eventsController.isClosed,
-    onServiceDead: _onHubServiceDead,
+    onServiceDead: () => unawaited(_onHubServiceDead()),
   );
 
   /// Last config passed to [start] -- reused when switching modes via [updateMode].
@@ -236,7 +236,11 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       _logger.warning('_onHubServiceDead: no config/mode available, cannot restart');
       return;
     }
-    await _startService(config, mode);
+    try {
+      await _startService(config, mode);
+    } catch (e, st) {
+      _logger.severe('_onHubServiceDead: failed to restart service', e, st);
+    }
   }
 
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {

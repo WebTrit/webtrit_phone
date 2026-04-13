@@ -171,6 +171,7 @@ class HubConnectionManager {
 
         if (consecutiveStaleAcks >= stalePortThreshold) {
           consecutiveStaleAcks = 0;
+          if (_generation != generation || !_isActive() || _tearingDown) return;
           _logger.warning(
             '_initLoop gen=$generation stale port threshold reached -- hub service presumed dead, clearing port',
           );
@@ -179,7 +180,7 @@ class HubConnectionManager {
             SignalingConnectionFailed(
               error: StateError('Signaling hub service died'),
               isRepeated: false,
-              recommendedReconnectDelay: const Duration(seconds: 3),
+              recommendedReconnectDelay: kSignalingClientReconnectDelay,
             ),
           );
           onServiceDead?.call();
