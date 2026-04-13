@@ -2705,7 +2705,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             ),
           )
           ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived pendingHangup retry error'))
-          ?.ignore();
+          .ignore();
     }
 
     final actions = await _handshakeProcessor.process(
