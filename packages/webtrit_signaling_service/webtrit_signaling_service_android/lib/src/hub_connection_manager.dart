@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:ui' show IsolateNameServer;
 
 import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
+import 'constants.dart';
 import 'hub/signaling_hub_client.dart';
 import 'hub/signaling_hub_module.dart';
 
@@ -33,6 +35,8 @@ class HubConnectionManager {
     required String consumerId,
     this.pingInterval = const Duration(seconds: 15),
     this.pongTimeout = const Duration(seconds: 2),
+    this.stalePortThreshold = 3,
+    this.onServiceDead,
   }) : _onEvent = onEvent,
        _onError = onError,
        _isActive = isActive,
@@ -48,6 +52,17 @@ class HubConnectionManager {
 
   /// How long to wait for a pong before treating the hub as dead.
   final Duration pongTimeout;
+
+  /// Number of consecutive stale ack timeouts before the hub service is
+  /// declared dead: the stale port is removed from [IsolateNameServer], a
+  /// [SignalingConnectionFailed] event is emitted, and [onServiceDead] is
+  /// called so the caller can restart the foreground service.
+  final int stalePortThreshold;
+
+  /// Called when [stalePortThreshold] consecutive ack timeouts indicate the
+  /// hub service is no longer running. Use this to restart the foreground
+  /// service so the hub is re-registered.
+  final void Function()? onServiceDead;
 
   SignalingHubModule? _module;
   StreamSubscription<SignalingModuleEvent>? _moduleSub;
@@ -106,6 +121,7 @@ class HubConnectionManager {
 
     _logger.fine('_initLoop started gen=$generation');
     var attempts = 0;
+    var consecutiveStaleAcks = 0;
 
     while (true) {
       if (_generation != generation || !_isActive()) {
@@ -125,6 +141,7 @@ class HubConnectionManager {
         final ackReceived = await ackFuture;
 
         if (ackReceived) {
+          consecutiveStaleAcks = 0;
           if (_generation != generation || !_isActive()) {
             _logger.fine('_initLoop gen=$generation ack received but generation changed, disposing stale module');
             await module.dispose();
@@ -146,8 +163,29 @@ class HubConnectionManager {
           return;
         }
 
-        _logger.fine('_initLoop gen=$generation ack timeout -- stale port, retrying');
+        consecutiveStaleAcks++;
+        _logger.fine(
+          '_initLoop gen=$generation ack timeout -- stale port ($consecutiveStaleAcks/$stalePortThreshold), retrying',
+        );
         await module.dispose();
+
+        if (consecutiveStaleAcks >= stalePortThreshold) {
+          consecutiveStaleAcks = 0;
+          _logger.warning(
+            '_initLoop gen=$generation stale port threshold reached -- hub service presumed dead, clearing port',
+          );
+          IsolateNameServer.removePortNameMapping(kSignalingHubPortName);
+          _onEvent(
+            SignalingConnectionFailed(
+              error: StateError('Signaling hub service died'),
+              isRepeated: false,
+              recommendedReconnectDelay: const Duration(seconds: 3),
+            ),
+          );
+          onServiceDead?.call();
+        }
+      } else {
+        consecutiveStaleAcks = 0;
       }
 
       attempts++;
