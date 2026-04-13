@@ -28,12 +28,21 @@ class AboutScreen extends StatefulWidget {
 
 class _AboutScreenState extends State<AboutScreen> {
   late final MultiTapTrigger _multiTapLoggingTrigger;
+  late final MultiTapTrigger _devToolsTrigger;
 
   @override
   void initState() {
     super.initState();
     // TODO(Serdun): Add environment config to the disable multi-tap logging trigger
     _multiTapLoggingTrigger = MultiTapTrigger(onTriggered: _onMultiTapTriggered);
+    _devToolsTrigger = MultiTapTrigger(requiredTapCount: 15, onTriggered: _onDevToolsTriggered);
+  }
+
+  @override
+  void dispose() {
+    _devToolsTrigger.dispose();
+    _multiTapLoggingTrigger.dispose();
+    super.dispose();
   }
 
   @override
@@ -66,7 +75,11 @@ class _AboutScreenState extends State<AboutScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            ConfigurableThemeImage(style: localStyle?.pictureLogoStyle, defaultScale: 0.25),
+                            GestureDetector(
+                              onTap: _devToolsTrigger.tap,
+                              behavior: HitTestBehavior.translucent,
+                              child: ConfigurableThemeImage(style: localStyle?.pictureLogoStyle, defaultScale: 0.25),
+                            ),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16),
                               child: Column(
@@ -157,6 +170,10 @@ class _AboutScreenState extends State<AboutScreen> {
 
   void _onMultiTapTriggered() {
     context.router.navigate(const LogRecordsConsoleScreenPageRoute());
+  }
+
+  void _onDevToolsTriggered() {
+    context.router.navigate(const DevToolsScreenPageRoute());
   }
 
   void _onEmbeddedLinksDialogDismiss(BuildContext context) {

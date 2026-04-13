@@ -449,6 +449,22 @@ class ConversationsScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [DevToolsScreenPage]
+class DevToolsScreenPageRoute extends PageRouteInfo<void> {
+  const DevToolsScreenPageRoute({List<PageRouteInfo>? children})
+    : super(DevToolsScreenPageRoute.name, initialChildren: children);
+
+  static const String name = 'DevToolsScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return DevToolsScreenPage();
+    },
+  );
+}
+
+/// generated route for
 /// [DiagnosticScreenPage]
 class DiagnosticScreenPageRoute extends PageRouteInfo<void> {
   const DiagnosticScreenPageRoute({List<PageRouteInfo>? children})

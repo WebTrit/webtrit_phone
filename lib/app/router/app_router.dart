@@ -240,6 +240,7 @@ class AppRouter extends RootStackRouter {
                 AutoRoute(page: MediaSettingsScreenPageRoute.page, path: 'media-settings'),
                 AutoRoute(page: SelfConfigScreenPageRoute.page, path: 'self_config'),
                 AutoRoute(page: ThemeModeScreenPageRoute.page, path: 'theme-mode'),
+                AutoRoute(page: DevToolsScreenPageRoute.page, path: 'dev-tools'),
                 AutoRoute(page: DiagnosticScreenPageRoute.page, path: 'diagnostic'),
                 AutoRoute(
                   page: VoicemailScreenPageRoute.page,
