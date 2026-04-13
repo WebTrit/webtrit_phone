@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -28,6 +30,11 @@ class DevToolsScreen extends StatelessWidget {
     );
   }
 
+  void _onSimulateKillConfirmed(BuildContext ctx) {
+    Navigator.of(ctx).pop();
+    unawaited(WebtritSignalingService.simulateKill());
+  }
+
   void _confirmSimulateKill(BuildContext context) {
     showDialog<void>(
       context: context,
@@ -40,10 +47,7 @@ class DevToolsScreen extends StatelessWidget {
             child: Text(context.l10n.devTools_signalingService_simulateKill_cancel),
           ),
           TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop();
-              WebtritSignalingService.simulateKill();
-            },
+            onPressed: () => _onSimulateKillConfirmed(ctx),
             child: Text(context.l10n.devTools_signalingService_simulateKill_confirm),
           ),
         ],
