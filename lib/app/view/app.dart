@@ -69,6 +69,7 @@ class _AppState extends State<App> {
     appRouter = AppRouter(
       appBloc,
       context.read<AppPermissions>(),
+      context.read<SystemInfoRepository>(),
       featureAccess.loginConfig.launchLoginPage,
       featureAccess.bottomMenuConfig,
       initialTabResolver,
