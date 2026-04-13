@@ -188,7 +188,7 @@ class HandshakeProcessor {
 
     final lineCallIds = allLines.map((l) => l.callId).toSet();
     for (final connection in localConnections) {
-      if (!lineCallIds.contains(connection.callId)) {
+      if (!lineCallIds.contains(connection.callId) && !activeCallIds.contains(connection.callId)) {
         actions.add(EndLocalCallAction(callId: connection.callId));
       }
     }
