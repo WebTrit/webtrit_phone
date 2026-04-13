@@ -9,9 +9,14 @@ sealed class HandshakeAction {
 
 /// Send a [HangupRequest] to the signaling server and stop processing.
 ///
-/// Emitted when the Callkeep connection for the line is [CallkeepConnectionState.stateDisconnected]
-/// and the latest call event is neither [HangupEvent] nor [MissedCallEvent]
-/// (i.e. the call was live — accepted, proceeding, ringing, etc. — when the connection dropped).
+/// Emitted in two cases:
+/// 1. The Callkeep connection is [CallkeepConnectionState.stateDisconnected] and
+///    the latest call event is neither [HangupEvent] nor [MissedCallEvent]
+///    (i.e. the call was live when the connection dropped).
+/// 2. The Callkeep connection is null (removed or iOS), the call is not tracked
+///    in BLoC state, has no [AcceptedEvent] in its log, and the latest event is
+///    not a terminal or incoming event — i.e. an orphaned outgoing call whose
+///    [HangupRequest] was lost while the device was offline.
 final class HangupSignalingAction extends HandshakeAction {
   const HangupSignalingAction({required this.line, required this.callId});
 
@@ -123,6 +128,24 @@ class HandshakeProcessor {
           } else if (callEvent is! HangupEvent && callEvent is! MissedCallEvent) {
             return [HangupSignalingAction(line: callEvent.line, callId: callEvent.callId)];
           }
+        } else if (connection == null &&
+            !activeCallIds.contains(activeLine.callId) &&
+            callEvent is! IncomingCallEvent &&
+            callEvent is! HangupEvent &&
+            callEvent is! MissedCallEvent &&
+            activeLine.callLogs.whereType<CallEventLog>().every((l) => l.callEvent is! AcceptedEvent)) {
+          // Orphaned outgoing call: the server still has the call but both
+          // CallKeep and BLoC have no record of it. This happens when the user
+          // hangs up while offline — performEndCall removed the local state but
+          // the HangupRequest never reached the server.
+          //
+          // The AcceptedEvent guard ensures we never hang up a call that should
+          // be restored (app-restart case where connection is null but the call
+          // was previously accepted).
+          //
+          // On iOS getConnection() always returns null, so activeCallIds is the
+          // decisive guard: calls that are still active in BLoC are not affected.
+          return [HangupSignalingAction(line: callEvent.line, callId: callEvent.callId)];
         }
       }
 
