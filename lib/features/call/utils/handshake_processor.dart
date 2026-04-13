@@ -9,9 +9,14 @@ sealed class HandshakeAction {
 
 /// Send a [HangupRequest] to the signaling server and stop processing.
 ///
-/// Emitted when the Callkeep connection for the line is [CallkeepConnectionState.stateDisconnected]
-/// and the latest call event is neither [HangupEvent] nor [MissedCallEvent]
-/// (i.e. the call was live — accepted, proceeding, ringing, etc. — when the connection dropped).
+/// Emitted in two cases:
+/// 1. The Callkeep connection is [CallkeepConnectionState.stateDisconnected] and
+///    the latest call event is neither [HangupEvent] nor [MissedCallEvent]
+///    (i.e. the call was live when the connection dropped).
+/// 2. The Callkeep connection is null (removed or iOS), the call is not tracked
+///    in BLoC state, has no [AcceptedEvent] in its log, and the latest event is
+///    not a terminal or incoming event — i.e. an orphaned outgoing call whose
+///    [HangupRequest] was lost while the device was offline.
 final class HangupSignalingAction extends HandshakeAction {
   const HangupSignalingAction({required this.line, required this.callId});
 
@@ -111,7 +116,16 @@ class HandshakeProcessor {
     final localConnections = await callkeepConnections.getConnections();
 
     for (final activeLine in allLines) {
-      final callEvent = activeLine.callLogs.whereType<CallEventLog>().map((log) => log.callEvent).firstOrNull;
+      // callLogs is newest-first: firstOrNull = latest, lastOrNull = earliest.
+      // Materialise once and reuse for both the connection guards below and the
+      // restoration logic further down to avoid redundant traversals.
+      final callEventLogEntries = activeLine.callLogs.whereType<CallEventLog>().toList();
+      final callEvent = callEventLogEntries.firstOrNull?.callEvent; // latest event
+      final earliestCallEvent = callEventLogEntries.lastOrNull?.callEvent;
+
+      // AcceptedEvent may not be the latest entry after a re-INVITE or transfer -
+      // search the full log list rather than checking only the newest entry.
+      final acceptedLogEntry = callEventLogEntries.where((log) => log.callEvent is AcceptedEvent).firstOrNull;
 
       CallkeepConnection? connection;
       if (callEvent != null) {
@@ -123,20 +137,29 @@ class HandshakeProcessor {
           } else if (callEvent is! HangupEvent && callEvent is! MissedCallEvent) {
             return [HangupSignalingAction(line: callEvent.line, callId: callEvent.callId)];
           }
+        } else if (connection == null &&
+            !activeCallIds.contains(activeLine.callId) &&
+            callEvent is! IncomingCallEvent &&
+            callEvent is! HangupEvent &&
+            callEvent is! MissedCallEvent &&
+            acceptedLogEntry == null) {
+          // Orphaned outgoing call: the server still has the call but both
+          // CallKeep and BLoC have no record of it. This happens when the user
+          // hangs up while offline — performEndCall removed the local state but
+          // the HangupRequest never reached the server.
+          //
+          // acceptedLogEntry == null ensures we never hang up a call that should
+          // be restored (app-restart case where connection is null but the call
+          // was previously accepted).
+          //
+          // On iOS getConnection() always returns null, so activeCallIds is the
+          // decisive guard: calls that are still active in BLoC are not affected.
+          return [HangupSignalingAction(line: callEvent.line, callId: callEvent.callId)];
         }
       }
 
-      // callLogs is newest-first: firstOrNull = latest, lastOrNull = earliest.
-      final callEventLogEntries = activeLine.callLogs.whereType<CallEventLog>().toList();
-      final latestCallEvent = callEventLogEntries.firstOrNull?.callEvent;
-      final earliestCallEvent = callEventLogEntries.lastOrNull?.callEvent;
-
-      // AcceptedEvent may not be the latest entry after a re-INVITE or transfer -
-      // search the full log list rather than checking only the newest entry.
-      final acceptedLogEntry = callEventLogEntries.where((log) => log.callEvent is AcceptedEvent).firstOrNull;
-
       // A call is server-terminated when the latest event is a final hangup or missed.
-      final isTerminated = latestCallEvent is HangupEvent || latestCallEvent is MissedCallEvent;
+      final isTerminated = callEvent is HangupEvent || callEvent is MissedCallEvent;
 
       if (!isTerminated &&
           acceptedLogEntry != null &&
