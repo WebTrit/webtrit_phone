@@ -100,6 +100,12 @@ class _SignalingModule implements SignalingModule {
   Future<void>? execute(Request request) => _client?.execute(request);
 
   @override
+  void cancelRequestsByCallId(String callId) {}
+
+  @override
+  void clearTerminatingMark(String callId) {}
+
+  @override
   Future<void> dispose() async {
     if (_disposed) return;
     _disposed = true;

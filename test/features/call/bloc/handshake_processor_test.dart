@@ -355,6 +355,78 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
+  // Orphaned outgoing call (connection == null, not in BLoC, no AcceptedEvent)
+  // -------------------------------------------------------------------------
+
+  group('orphaned outgoing call — null connection, absent from BLoC', () {
+    test('returns HangupSignalingAction for unanswered outgoing call (ProceedingEvent)', () async {
+      // connection is null (CallKeep entry was removed by performEndCall)
+      // call is not in activeCallIds (BLoC also removed it)
+      // server still has it with ProceedingEvent → HangupRequest must be sent
+      final line = _makeLine(callLogs: [CallEventLog(timestamp: 1000, callEvent: _makeProceedingEvent())]);
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+
+      expect(actions, hasLength(1));
+      expect(actions.first, isA<HangupSignalingAction>());
+      final a = actions.first as HangupSignalingAction;
+      expect(a.callId, _kCallId);
+      expect(a.line, _kLine);
+    });
+
+    test('does NOT return HangupSignalingAction when call is still in BLoC activeCallIds (iOS guard)', () async {
+      // On iOS getConnection() always returns null.
+      // If the call IS in activeCalls the user is still in the call — must not hang up.
+      final line = _makeLine(callLogs: [CallEventLog(timestamp: 1000, callEvent: _makeProceedingEvent())]);
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {_kCallId});
+
+      expect(actions.whereType<HangupSignalingAction>(), isEmpty);
+    });
+
+    test('does NOT interfere with restoration: accepted call with null connection returns RestoreCallAction', () async {
+      // App-restart case: connection is null but AcceptedEvent is in logs.
+      // Must produce RestoreCallAction, not HangupSignalingAction.
+      final line = _makeLine(
+        callLogs: [
+          CallEventLog(timestamp: 2000, callEvent: _makeAcceptedEvent()),
+          CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
+        ],
+      );
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+
+      expect(actions.whereType<HangupSignalingAction>(), isEmpty);
+      expect(actions.whereType<RestoreCallAction>(), hasLength(1));
+    });
+
+    test('does NOT return HangupSignalingAction for IncomingCallEvent with null connection', () async {
+      // Unanswered incoming call with no connection — HandleIncomingCallAction path, not hangup.
+      final line = _makeLine(callLogs: [CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent())]);
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+
+      expect(actions.whereType<HangupSignalingAction>(), isEmpty);
+    });
+
+    test('does NOT return HangupSignalingAction when server latest event is HangupEvent', () async {
+      final line = _makeLine(
+        callLogs: [
+          CallEventLog(
+            timestamp: 2000,
+            callEvent: HangupEvent(line: _kLine, callId: _kCallId, code: 487, reason: 'Request Terminated'),
+          ),
+          CallEventLog(timestamp: 1000, callEvent: _makeProceedingEvent()),
+        ],
+      );
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+
+      expect(actions.whereType<HangupSignalingAction>(), isEmpty);
+    });
+  });
+
+  // -------------------------------------------------------------------------
   // guestLine is treated like a regular line
   // -------------------------------------------------------------------------
 

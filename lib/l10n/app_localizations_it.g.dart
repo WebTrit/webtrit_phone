@@ -2781,4 +2781,27 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get cdr_disconnectReason_dtlTransitIsNotMyNodeId => 'Il transito DTL non corrisponde al mio ID nodo';
+
+  @override
+  String get devTools_AppBarTitle => 'Dev Tools';
+
+  @override
+  String get devTools_signalingService_groupTitle => 'Signaling Service';
+
+  @override
+  String get devTools_signalingService_simulateKill_title => 'Simulate service kill';
+
+  @override
+  String get devTools_signalingService_simulateKill_subtitle =>
+      'Stops the foreground service without graceful disconnect';
+
+  @override
+  String get devTools_signalingService_simulateKill_confirmMessage =>
+      'The signaling service will stop immediately. It will restart automatically if credentials are valid.';
+
+  @override
+  String get devTools_signalingService_simulateKill_confirm => 'Kill';
+
+  @override
+  String get devTools_signalingService_simulateKill_cancel => 'Cancel';
 }

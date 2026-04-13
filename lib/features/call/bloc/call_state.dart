@@ -99,6 +99,21 @@ class CallState with _$CallState {
 
   bool get shouldListenToProximity => isActive && isVoiceChat && minimized != true;
 
+  List<ActiveCall> callsToTerminate(Set<String> activeLineCallIds) {
+    final result = <ActiveCall>[];
+    for (final activeCall in activeCalls) {
+      if (activeLineCallIds.contains(activeCall.callId)) continue;
+      if (activeCall.direction == CallDirection.outgoing &&
+          activeCall.acceptedTime == null &&
+          activeCall.hungUpTime == null &&
+          activeCall.processingStatus.isPreOfferSent) {
+        continue;
+      }
+      result.add(activeCall);
+    }
+    return result;
+  }
+
   ActiveCall? retrieveActiveCall(String callId) {
     for (var activeCall in activeCalls) {
       if (activeCall.callId == callId) {

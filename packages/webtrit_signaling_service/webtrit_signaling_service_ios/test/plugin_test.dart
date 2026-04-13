@@ -131,6 +131,12 @@ class _FakeSignalingModule implements SignalingModule {
   }
 
   @override
+  void cancelRequestsByCallId(String callId) {}
+
+  @override
+  void clearTerminatingMark(String callId) {}
+
+  @override
   Future<void> dispose() async {
     if (_disposed) return;
     _disposed = true;
@@ -204,6 +210,12 @@ class _FailingSignalingModule implements SignalingModule {
 
   @override
   Future<void>? execute(Request request) => null;
+
+  @override
+  void cancelRequestsByCallId(String callId) {}
+
+  @override
+  void clearTerminatingMark(String callId) {}
 
   @override
   Future<void> dispose() async {

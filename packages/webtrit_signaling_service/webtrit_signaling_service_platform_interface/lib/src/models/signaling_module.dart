@@ -36,4 +36,23 @@ abstract interface class SignalingModule {
 
   /// Releases all resources. After [dispose] the instance must not be used.
   Future<void> dispose();
+
+  /// Cancels all pending queued requests for [callId].
+  ///
+  /// Useful when a call is being terminated before the signaling connection
+  /// is established — prevents a queued [OutgoingCallRequest] from being
+  /// sent on reconnect and immediately unblocks any [execute] future
+  /// awaiting that request.
+  ///
+  /// No-op if there are no matching requests in the queue.
+  void cancelRequestsByCallId(String callId);
+
+  /// Removes the post-cancel enqueue guard set by [cancelRequestsByCallId].
+  ///
+  /// Call this once the call teardown is fully complete to prevent guard
+  /// entries from accumulating for the lifetime of the module. Safe to call
+  /// even if [cancelRequestsByCallId] was never called for [callId].
+  ///
+  /// No-op on implementations that do not use a local request queue.
+  void clearTerminatingMark(String callId);
 }

@@ -121,6 +121,16 @@ class WebtritSignalingService implements SignalingModule {
   }
 
   @override
+  void cancelRequestsByCallId(String callId) {
+    _requestQueue.cancelByCallId(callId);
+  }
+
+  @override
+  void clearTerminatingMark(String callId) {
+    _requestQueue.removeTerminatingMark(callId);
+  }
+
+  @override
   Future<void> dispose() async {
     _requestQueue.failAll(NotConnectedException('WebtritSignalingService is disposed'));
     await _serviceEventsSub?.cancel();

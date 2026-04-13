@@ -129,44 +129,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _reconnectController = SignalingReconnectController(
       signalingModule: signalingModule,
-      onConnectionFailed: (failure) {
-        final (:knownCode, :systemCode, :systemReason) = failure;
-        switch (knownCode) {
-          case SignalingDisconnectCode.signalingKeepaliveTimeoutError:
-            // Keepalive timeout: the server did not receive a ping in time.
-            // The connection is recoverable via silent reconnect.
-            _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
-            return;
-          case SignalingDisconnectCode.controllerForceAttachClose:
-            // Force-attach close: a duplicate signaling session replaced this one
-            // (e.g. background push isolate still connected when main engine reconnects).
-            // Silent reconnect: no user-visible notification needed.
-            _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
-            return;
-          case SignalingDisconnectCode.controllerUnknownError:
-            // controllerUnknownError (4400): the server-side Controller process died because
-            // the Janus connection went down. The new WebSocket timed out (GenServer.call,
-            // 5s default) waiting for the Controller to finish re-initializing (new Janus
-            // session + SIP registration). The Controller continues initializing in the
-            // background — the next reconnect attempt will succeed once it is ready.
-            //
-            // Silent reconnect: no user-visible notification needed.
-            _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
-            return;
-          default:
-            break;
-        }
-        final notification = switch (knownCode) {
-          SignalingDisconnectCode.sessionMissedError => const SignalingSessionMissedNotification(),
-          null => const SignalingConnectFailedNotification(),
-          _ => SignalingDisconnectNotification(
-            knownCode: knownCode,
-            systemCode: systemCode,
-            systemReason: systemReason,
-          ),
-        };
-        submitNotification(notification);
-      },
+      onConnectionFailed: _handleConnectionFailed,
       onConnectionPresenceChanged: (isAvailable) =>
           _logger.info('signaling presence changed: isAvailable=$isAvailable'),
     );
@@ -424,6 +387,36 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (Platform.isAndroid) Helper.clearAndroidCommunicationDevice();
   }
 
+  void _handleConnectionFailed(SignalingFailureInfo failure) {
+    final (:knownCode, :systemCode, :systemReason) = failure;
+    switch (knownCode) {
+      case SignalingDisconnectCode.signalingKeepaliveTimeoutError:
+      case SignalingDisconnectCode.controllerForceAttachClose:
+        // Expected silent reconnect: keepalive timeout on lock-screen or duplicate-session cleanup.
+        _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
+        return;
+      case SignalingDisconnectCode.controllerUnknownError:
+        // controllerUnknownError (4400): the server-side Controller process died because
+        // the Janus connection went down. The new WebSocket timed out (GenServer.call,
+        // 5s default) waiting for the Controller to finish re-initializing (new Janus
+        // session + SIP registration). The Controller continues initializing in the
+        // background — the next reconnect attempt will succeed once it is ready.
+        //
+        // Silent reconnect: no user-visible notification needed.
+        _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
+        return;
+      default:
+        break;
+    }
+    if (state.isActive) return;
+    final notification = switch (knownCode) {
+      SignalingDisconnectCode.sessionMissedError => const SignalingSessionMissedNotification(),
+      null => const SignalingConnectFailedNotification(),
+      _ => SignalingDisconnectNotification(knownCode: knownCode, systemCode: systemCode, systemReason: systemReason),
+    };
+    submitNotification(notification);
+  }
+
   void _handleSignalingSessionError({required CallServiceState previous, required CallServiceState current}) {
     final signalingChanged =
         previous.signalingClientStatus != current.signalingClientStatus ||
@@ -660,6 +653,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // user turn off all network interfaces >> __onPeerConnectionEventIceConnectionStateChanged >> RTCIceConnectionStateFailed >> peerConnection.restartIce() >> onRenegotiationNeeded >> _safeRenegotiate >> if(!signalingConnected) return;
     // user turn on network interfaces >> _onSignalingClientEventConnected >> safeRenegotiate
     for (final call in state.activeCalls) {
+      // Skip calls that are being torn down — sending UpdateRequest for a
+      // disconnecting call would keep the server-side leg alive unnecessarily.
+      if (call.processingStatus == CallProcessingStatus.disconnecting) continue;
       _logger.warning('__onSignalingClientEventConnected: triggering safe renegotiation for call ${call.callId}');
       _safeRenegotiate(call.callId, call.line);
     }
@@ -1508,6 +1504,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallControlEventEnded(_CallControlEventEnded event, Emitter<CallState> emit) async {
+    // Cancel any queued signaling requests for this call immediately.
+    // Handles the case where OutgoingCallRequest is still waiting in the queue
+    // (no connection yet) — without this, it would be sent on reconnect,
+    // causing the callee to see a phantom incoming call, and local cleanup
+    // (ringback stop, PeerConnection disposal) would be delayed by the
+    // 30-second queue timeout.
+    _signalingModule.cancelRequestsByCallId(event.callId);
+
     emit(
       state.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(processingStatus: CallProcessingStatus.disconnecting);
@@ -1884,6 +1888,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // processing call perform events
 
+  /// Returns true when [__onCallPerformEventStarted] should stop waiting for
+  /// signaling readiness.
+  ///
+  /// Exits as soon as both the handshake and signaling are established, or when
+  /// the call leaves [CallProcessingStatus.outgoingConnectingToSignaling] — for
+  /// example because the user pressed hangup (status → disconnecting) or
+  /// another code path removed the call entirely.
+  bool _shouldExitOutgoingSignalingWait(CallState next, String callId) {
+    if (next.isHandshakeEstablished && next.isSignalingEstablished) return true;
+    final call = next.retrieveActiveCall(callId);
+    return call == null || call.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling;
+  }
+
   Future<void> _onCallPerformEvent(_CallPerformEvent event, Emitter<CallState> emit) {
     return switch (event) {
       _CallPerformEventStarted() => __onCallPerformEventStarted(event, emit),
@@ -1932,7 +1949,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     var currentState = state;
 
-    // Attempt to wait for the desired signaling client status within the signaling client connection timeout period
+    // Attempt to wait for signaling+handshake readiness within kOutgoingCallSignalingWaitTimeout.
     if (!currentState.isHandshakeEstablished || !currentState.isSignalingEstablished) {
       // Trigger reconnect so that an outgoing call recovers signaling even when the previous
       // disconnect was intentional (e.g. post-transfer cleanup) and no reconnect was scheduled.
@@ -1945,20 +1962,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       currentState = await stream
-          .firstWhere((next) {
-            // Stop waiting as soon as signaling is fully ready or has failed;
-            // avoids blocking for the full timeout on a definitive failure.
-            final signalingReady = next.isHandshakeEstablished && next.isSignalingEstablished;
-            final signalingFailed = next.callServiceState.signalingClientStatus.isFailure;
-            return signalingReady || signalingFailed;
-          }, orElse: () => state)
-          .timeout(kSignalingClientConnectionTimeout, onTimeout: () => state);
+          .firstWhere((next) => _shouldExitOutgoingSignalingWait(next, event.callId), orElse: () => state)
+          .timeout(kOutgoingCallSignalingWaitTimeout, onTimeout: () => state);
       if (isClosed) return;
     }
 
-    // If the signaling client is not connected, hung up the call and notify user
+    // If the signaling client is not connected, decide how to clean up.
     if (!currentState.isSignalingEstablished) {
       event.fail();
+
+      // If the call is no longer in outgoingConnectingToSignaling the hangup flow
+      // has already taken over — avoid double-ending or showing a wrong notification.
+      final waitingCall = state.retrieveActiveCall(event.callId);
+      if (waitingCall?.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling) {
+        return;
+      }
 
       // Notice that the tube was already hung up to avoid sending an extra event to the server
       emit(
@@ -2216,6 +2234,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallPerformEventEnded(_CallPerformEventEnded event, Emitter<CallState> emit) async {
+    try {
+      await _onCallPerformEventEndedImpl(event, emit);
+    } finally {
+      // Release the post-cancel enqueue guard so the entry does not accumulate
+      // for the lifetime of the signaling module.
+      _signalingModule.clearTerminatingMark(event.callId);
+    }
+  }
+
+  Future<void> _onCallPerformEventEndedImpl(_CallPerformEventEnded event, Emitter<CallState> emit) async {
     // Condition occur when the user interacts with a push notification before signaling is properly initialized.
     // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyTerminated.
     if (state.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) {
@@ -2642,32 +2670,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // Hang up all active calls that are not associated with any line
     // or guest line, indicating that they are no longer valid.
     //
-    // This is needed to drop or retain calls after reconnecting to the signaling server
-    activeCallsLoop:
-    for (final activeCall in state.activeCalls) {
-      // Ignore active calls that are already associated with a line or guest line
-      //
-      // If you have troubles with line position mismatch replace this with
-      // following code that deal with it: https://gist.github.com/digiboridev/f7f1020731e8f247b5891983433bd159
-      for (final line in [...stateHandshake.lines, stateHandshake.guestLine]) {
-        if (line != null && line.callId == activeCall.callId) {
-          continue activeCallsLoop;
-        }
-      }
+    // This is needed to drop or retain calls after reconnecting to the signaling server.
+    // If you have troubles with line position mismatch replace the activeLineCallIds
+    // computation with: https://gist.github.com/digiboridev/f7f1020731e8f247b5891983433bd159
+    final activeLineCallIds = [
+      ...stateHandshake.lines,
+      stateHandshake.guestLine,
+    ].whereType<Line>().map((line) => line.callId).toSet();
 
-      // Handles an outgoing active call that has not yet started, typically initiated
-      // by the `continueStartCallIntent` callback of `CallkeepDelegate`.
-      //
-      // TODO: Implement a dedicated flag to confirm successful execution of
-      // OutgoingCallRequest, ensuring reliable outgoing active call state tracking.
-      if (activeCall.direction == CallDirection.outgoing &&
-          activeCall.acceptedTime == null &&
-          activeCall.hungUpTime == null) {
-        continue activeCallsLoop;
-      }
-
+    for (final activeCall in state.callsToTerminate(activeLineCallIds)) {
       _peerConnectionManager.conditionalCompleteError(activeCall.callId, 'Active call Request Terminated');
-
       add(
         _CallSignalingEvent.hangup(
           line: activeCall.line,
@@ -2676,6 +2688,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           reason: 'Request Terminated',
         ),
       );
+    }
+
+    // Retry HangupRequest for calls that were being terminated when signaling dropped.
+    // If a call is locally disconnecting AND the server still lists it in activeLineCallIds,
+    // the hangup was lost mid-flight — resend it now so the server-side leg is torn down.
+    for (final activeCall in state.activeCalls) {
+      if (activeCall.processingStatus != CallProcessingStatus.disconnecting) continue;
+      if (!activeLineCallIds.contains(activeCall.callId)) continue;
+      _signalingModule
+          .execute(
+            HangupRequest(
+              transaction: WebtritSignalingClient.generateTransactionId(),
+              line: activeCall.line,
+              callId: activeCall.callId,
+            ),
+          )
+          ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived pendingHangup retry error'))
+          ?.ignore();
     }
 
     final actions = await _handshakeProcessor.process(
