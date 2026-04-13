@@ -1823,6 +1823,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // processing call perform events
 
+  /// Returns true when [__onCallPerformEventStarted] should stop waiting for
+  /// signaling readiness.
+  ///
+  /// Exits as soon as both the handshake and signaling are established, or when
+  /// the call leaves [CallProcessingStatus.outgoingConnectingToSignaling] — for
+  /// example because the user pressed hangup (status → disconnecting) or
+  /// another code path removed the call entirely.
+  bool _shouldExitOutgoingSignalingWait(CallState next, String callId) {
+    if (next.isHandshakeEstablished && next.isSignalingEstablished) return true;
+    final call = next.retrieveActiveCall(callId);
+    return call == null || call.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling;
+  }
+
   Future<void> _onCallPerformEvent(_CallPerformEvent event, Emitter<CallState> emit) {
     return switch (event) {
       _CallPerformEventStarted() => __onCallPerformEventStarted(event, emit),
@@ -1884,14 +1897,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       currentState = await stream
-          .firstWhere((next) => next.isHandshakeEstablished && next.isSignalingEstablished, orElse: () => state)
+          .firstWhere((next) => _shouldExitOutgoingSignalingWait(next, event.callId), orElse: () => state)
           .timeout(kOutgoingCallSignalingWaitTimeout, onTimeout: () => state);
       if (isClosed) return;
     }
 
-    // If the signaling client is not connected, hung up the call and notify user
+    // If the signaling client is not connected, decide how to clean up.
     if (!currentState.isSignalingEstablished) {
       event.fail();
+
+      // If the call is no longer in outgoingConnectingToSignaling the hangup flow
+      // has already taken over — avoid double-ending or showing a wrong notification.
+      final waitingCall = state.retrieveActiveCall(event.callId);
+      if (waitingCall?.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling) {
+        return;
+      }
 
       // Notice that the tube was already hung up to avoid sending an extra event to the server
       emit(
@@ -2151,6 +2171,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallPerformEventEnded(_CallPerformEventEnded event, Emitter<CallState> emit) async {
+    try {
+      await _onCallPerformEventEndedImpl(event, emit);
+    } finally {
+      // Release the post-cancel enqueue guard so the entry does not accumulate
+      // for the lifetime of the signaling module.
+      _signalingModule.clearTerminatingMark(event.callId);
+    }
+  }
+
+  Future<void> _onCallPerformEventEndedImpl(_CallPerformEventEnded event, Emitter<CallState> emit) async {
     // Condition occur when the user interacts with a push notification before signaling is properly initialized.
     // In this case, the CallKeep method "reportNewIncomingCall" may return callIdAlreadyTerminated.
     if (state.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) {

@@ -39,6 +39,9 @@ class _FakeSignalingModule implements SignalingModule {
   void cancelRequestsByCallId(String callId) {}
 
   @override
+  void clearTerminatingMark(String callId) {}
+
+  @override
   Future<void> dispose() async => _controller.close();
 }
 

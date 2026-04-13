@@ -62,6 +62,8 @@ class SignalingHubModule implements SignalingModule {
 
   @override
   Future<void>? execute(Request request) {
+    // DEBUG: log state at the moment execute is called on the main-isolate side
+    _logger.info('SignalingHubModule execute: request=${request.runtimeType} _connected=$_connected');
     if (!_connected) return null;
     return _hubClient.execute(request);
   }
@@ -87,6 +89,11 @@ class SignalingHubModule implements SignalingModule {
   /// WebSocket without a local queue, so there is nothing to cancel.
   @override
   void cancelRequestsByCallId(String callId) {}
+
+  /// No-op: [SignalingHubModule] has no local request queue and therefore no
+  /// terminating marks to clear.
+  @override
+  void clearTerminatingMark(String callId) {}
 
   @override
   Future<void> dispose() async {

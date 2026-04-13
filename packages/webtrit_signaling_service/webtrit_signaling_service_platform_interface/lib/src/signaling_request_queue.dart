@@ -19,6 +19,19 @@ class SignalingRequestQueue {
 
   final Queue<_QueuedRequest> _queue = Queue();
 
+  /// Call IDs for which [cancelByCallId] has been called.
+  ///
+  /// Any subsequent [enqueue] for a matching callId is rejected immediately
+  /// with [NotConnectedException] instead of being queued. This handles the
+  /// case where [cancelByCallId] is called before the termination request is
+  /// even created — for example when the hangup flow cancels the queue before
+  /// the [HangupRequest] is constructed in the call-end handler.
+  ///
+  /// Entries are removed individually by [removeTerminatingMark] once the
+  /// caller confirms the call is fully torn down, and the entire set is
+  /// cleared by [failAll] on session end.
+  final _terminatingCallIds = <String>{};
+
   bool get isEmpty => _queue.isEmpty;
 
   bool get isNotEmpty => _queue.isNotEmpty;
@@ -26,8 +39,12 @@ class SignalingRequestQueue {
   /// Adds [request] to the queue.
   ///
   /// The returned future completes when the request is sent, or fails with
-  /// [NotConnectedException] if [requestTimeout] elapses before a flush.
+  /// [NotConnectedException] if [requestTimeout] elapses before a flush,
+  /// or immediately if [cancelByCallId] was already called for this callId.
   Future<void> enqueue(Request request) {
+    if (request is CallRequest && _terminatingCallIds.contains(request.callId)) {
+      return Future.error(NotConnectedException('Request cancelled: call ${request.callId} is ending'));
+    }
     final completer = Completer<void>();
     late final _QueuedRequest entry;
     final timer = Timer(requestTimeout, () => _onTimeout(entry));
@@ -71,7 +88,11 @@ class SignalingRequestQueue {
   }) => _executeWithRetry(execute, request, isActive);
 
   /// Fails every pending request with [error] and clears the queue.
+  ///
+  /// Also clears [_terminatingCallIds] so that a fresh signaling session can
+  /// re-use the same callId without being immediately rejected.
   void failAll(Object error) {
+    _terminatingCallIds.clear();
     while (_queue.isNotEmpty) {
       final entry = _queue.removeFirst();
       entry.timer.cancel();
@@ -79,13 +100,27 @@ class SignalingRequestQueue {
     }
   }
 
-  /// Cancels all queued requests whose [callId] matches [callId].
+  /// Removes the terminating mark for [callId] set by [cancelByCallId].
+  ///
+  /// Call this once the call teardown is fully complete so the guard entry
+  /// does not accumulate for the lifetime of the queue. Safe to call even if
+  /// [cancelByCallId] was never called for [callId].
+  void removeTerminatingMark(String callId) => _terminatingCallIds.remove(callId);
+
+  /// Cancels all queued requests whose [callId] matches [callId] and prevents
+  /// any future [enqueue] for the same [callId] from being accepted.
   ///
   /// Each matching entry is removed from the queue, its timeout timer is
   /// cancelled, and its future is completed with [NotConnectedException].
   /// This unblocks any caller awaiting [enqueue] for that call without
   /// waiting for the 30-second timeout.
+  ///
+  /// After this call, any subsequent [enqueue] for [callId] is also rejected
+  /// immediately — this handles the case where [cancelByCallId] is called
+  /// before the termination request (e.g. [HangupRequest]) is even created.
+  /// The guard is cleared by [failAll].
   void cancelByCallId(String callId) {
+    _terminatingCallIds.add(callId);
     final toCancel = _queue
         .where((e) => e.request is CallRequest && (e.request as CallRequest).callId == callId)
         .toList();
