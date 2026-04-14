@@ -1019,6 +1019,10 @@
   "@notifications_errorSnackBar_callNegotiationTimeout": {
     "description": "Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server."
   },
+  "notifications_errorSnackBar_callServiceBusyLine": "Impossibile effettuare la chiamata in questo momento perché la linea è occupata. Riprova più tardi.",
+  "@notifications_errorSnackBar_callServiceBusyLine": {
+    "description": "Shown in a notification or snackbar when the user tries to start a call but the selected line is already busy. Context: occurs at call initiation when no free channel is available on the current line or account; advise the user to wait and retry."
+  },
   "notifications_errorSnackBar_callSignalingClientNotConnect": "Impossibile eseguire la chiamata, verificare lo stato della connessione",
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {
     "description": "Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the WebTrit core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability."

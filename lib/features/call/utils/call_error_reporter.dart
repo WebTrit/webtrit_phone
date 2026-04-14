@@ -52,6 +52,11 @@ class DefaultCallErrorReporter implements CallErrorReporter {
       return;
     }
 
+    if (error is WebtritSignalingErrorException && error.code == 503 && error.reason.contains('busy line')) {
+      submitNotification(const CallServiceBusyLineNotification());
+      return;
+    }
+
     if (error is UserMediaError) {
       submitNotification(const CallUserMediaErrorNotification());
     } else if (error is SDPConfigurationError) {

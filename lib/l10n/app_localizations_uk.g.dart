@@ -1229,6 +1229,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callNegotiationTimeout => 'Не вдається здійснити виклик, спробуйте пізніше';
 
   @override
+  String get notifications_errorSnackBar_callServiceBusyLine =>
+      'Неможливо здійснити дзвінок зараз, оскільки лінія зайнята. Спробуйте пізніше.';
+
+  @override
   String get notifications_errorSnackBar_callSignalingClientNotConnect =>
       'Не вдається ініціювати дзвінок, перевірте статус з\'єднання';
 

@@ -2220,6 +2220,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _peerConnectionManager.complete(event.callId, peerConnection);
     } catch (e, stackTrace) {
       _logger.warning('__onCallPerformEventAnswered: failed callId=${event.callId} error=$e');
+
+      // If call gone right before answer
+      if (e is WebtritSignalingErrorException && e.code == 410) {
+        _peerConnectionManager.completeError(event.callId, e, stackTrace);
+        add(_ResetStateEvent.completeCall(event.callId));
+        _addToRecents(call!);
+        return;
+      }
+
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
       add(_ResetStateEvent.completeCall(event.callId));
 

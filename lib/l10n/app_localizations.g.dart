@@ -2262,6 +2262,12 @@ abstract class AppLocalizations {
   /// **'Cannot establish the call, please try again later'**
   String get notifications_errorSnackBar_callNegotiationTimeout;
 
+  /// Shown in a notification or snackbar when the user tries to start a call but the selected line is already busy. Context: occurs at call initiation when no free channel is available on the current line or account; advise the user to wait and retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot make the call right now because the line is busy. Please try again later.'**
+  String get notifications_errorSnackBar_callServiceBusyLine;
+
   /// Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the WebTrit core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability.
   ///
   /// In en, this message translates to:
