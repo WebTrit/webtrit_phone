@@ -137,7 +137,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     );
 
     if (fcmToken != null) {
-      add(PushTokensEventInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
+      if (!isClosed) add(PushTokensEventInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
     } else {
       _logger.severe('_retrieveAndStoreFcmToken failed after max attempts');
     }
@@ -153,7 +153,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     );
 
     if (apnsToken != null) {
-      add(PushTokensEventInsertedOrUpdated(AppPushTokenType.apns, apnsToken));
+      if (!isClosed) add(PushTokensEventInsertedOrUpdated(AppPushTokenType.apns, apnsToken));
     } else {
       _logger.severe('_retrieveAndStoreApnsToken failed after max attempts');
     }
