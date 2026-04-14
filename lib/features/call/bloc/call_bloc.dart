@@ -2221,7 +2221,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } catch (e, stackTrace) {
       _logger.warning('__onCallPerformEventAnswered: failed callId=${event.callId} error=$e');
 
-      // If call gone right before answer
+      // If call gone right before answer, consider it as normal flow and avoid showing error notification
+      // TODO: implement signaling request response mechanism and handle request specific result instead of catching global errors
       if (e is WebtritSignalingErrorException && e.code == 410) {
         _peerConnectionManager.completeError(event.callId, e, stackTrace);
         add(_ResetStateEvent.completeCall(event.callId));
