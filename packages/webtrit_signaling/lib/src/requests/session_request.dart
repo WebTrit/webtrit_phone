@@ -1,3 +1,5 @@
+import 'package:webtrit_signaling/src/requests/session/session_requests.dart';
+
 import 'abstract_requests.dart';
 
 abstract class SessionRequest extends Request {
@@ -23,5 +25,7 @@ abstract class SessionRequest extends Request {
     return _sessionRequestFromJsonDecoders[requestTypeValue]?.call(json) ?? LineRequest.tryFromJson(json);
   }
 
-  static final Map<String, SessionRequest Function(Map<String, dynamic>)> _sessionRequestFromJsonDecoders = {};
+  static final Map<String, SessionRequest Function(Map<String, dynamic>)> _sessionRequestFromJsonDecoders = {
+    PresenceSettingsUpdateRequest.typeValue: PresenceSettingsUpdateRequest.fromJson,
+  };
 }
