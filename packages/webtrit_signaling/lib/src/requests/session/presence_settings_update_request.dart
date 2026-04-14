@@ -16,6 +16,13 @@ class PresenceSettingsUpdateRequest extends SessionRequest {
   Map<String, dynamic> toJson() {
     return {Request.typeKey: typeValue, 'transaction': transaction, 'settings': settings.toJson()};
   }
+
+  factory PresenceSettingsUpdateRequest.fromJson(Map<String, dynamic> json) {
+    final transaction = json['transaction'] as String;
+    final settingsJson = json['settings'] as Map<String, dynamic>;
+    final settings = SignalingPresenceSettings.fromJson(settingsJson);
+    return PresenceSettingsUpdateRequest(transaction: transaction, settings: settings);
+  }
 }
 
 class SignalingPresenceSettings extends Equatable {
@@ -50,6 +57,19 @@ class SignalingPresenceSettings extends Equatable {
       'activity': activity,
       'dnd_mode': dndMode,
     };
+  }
+
+  factory SignalingPresenceSettings.fromJson(Map<String, dynamic> json) {
+    return SignalingPresenceSettings(
+      available: json['available'] as bool,
+      note: json['note'] as String,
+      statusIcon: json['status_icon'] as String?,
+      device: json['device'] as String,
+      timeOffsetMin: json['time_offset_min'] as int,
+      timestamp: json['timestamp'] as String,
+      activity: json['activity'] as String?,
+      dndMode: json['dnd_mode'] as bool,
+    );
   }
 
   @override
