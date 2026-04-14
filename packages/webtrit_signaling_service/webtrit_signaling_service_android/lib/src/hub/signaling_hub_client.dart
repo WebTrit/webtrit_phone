@@ -197,7 +197,7 @@ class SignalingHubClient {
       final completer = _pendingExecutions.remove(correlationId);
       if (completer == null) return;
       if (error != null) {
-        completer.completeError(Exception(error));
+        completer.completeError(error);
       } else {
         completer.complete();
       }

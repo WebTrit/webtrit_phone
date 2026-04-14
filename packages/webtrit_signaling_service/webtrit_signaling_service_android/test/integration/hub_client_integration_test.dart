@@ -217,6 +217,7 @@ class _FakeSignalingClient extends Fake implements WebtritSignalingClient {
 
   bool disconnected = false;
   final List<Request> executed = [];
+  Object? executeError;
 
   @override
   void listen({
@@ -234,7 +235,10 @@ class _FakeSignalingClient extends Fake implements WebtritSignalingClient {
   Future<void> disconnect([int? code, String? reason]) async => disconnected = true;
 
   @override
-  Future<void> execute(Request request, [Duration? timeout]) async => executed.add(request);
+  Future<void> execute(Request request, [Duration? timeout]) async {
+    if (executeError != null) throw executeError!;
+    executed.add(request);
+  }
 
   void injectHandshake(StateHandshake h) => _onStateHandshake?.call(h);
   void injectEvent(Event e) => _onEvent?.call(e);
@@ -291,6 +295,48 @@ Future<SignalingHubClient> _subscribeClient(String consumerId) async {
   final acked = await ackFuture;
   expect(acked, isTrue, reason: 'Sub-ack must arrive from hub within timeout');
   return client;
+}
+
+Matcher _matchesSignalingException(WebtritSignalingException expected) {
+  return predicate<Object>((error) {
+    if (error is! WebtritSignalingException) return false;
+    if (error.runtimeType != expected.runtimeType) return false;
+    if (error.id != expected.id) return false;
+
+    switch ((expected, error)) {
+      case (WebtritSignalingErrorException source, WebtritSignalingErrorException target):
+        return target.code == source.code && target.reason == source.reason;
+      case (WebtritSignalingUnknownMessageException source, WebtritSignalingUnknownMessageException target):
+        return target.message.toString() == source.message.toString();
+      case (WebtritSignalingUnknownResponseException source, WebtritSignalingUnknownResponseException target):
+        return target.response.toString() == source.response.toString();
+      case (
+        WebtritSignalingKeepaliveTransactionTimeoutException source,
+        WebtritSignalingKeepaliveTransactionTimeoutException target,
+      ):
+        return target.transactionId == source.transactionId;
+      case (WebtritSignalingTransactionTimeoutException source, WebtritSignalingTransactionTimeoutException target):
+        return target.transactionId == source.transactionId;
+      case (WebtritSignalingBadStateException source, WebtritSignalingBadStateException target):
+        return target.error.message.toString() == source.error.message.toString();
+      case (
+        WebtritSignalingTransactionUnavailableException source,
+        WebtritSignalingTransactionUnavailableException target,
+      ):
+        return target.transactionId == source.transactionId;
+      case (
+        WebtritSignalingTransactionTerminateByDisconnectException source,
+        WebtritSignalingTransactionTerminateByDisconnectException target,
+      ):
+        return target.transactionId == source.transactionId &&
+            target.closeCode == source.closeCode &&
+            target.closeReason == source.closeReason;
+      case (WebtritSignalingDisconnectedException _, WebtritSignalingDisconnectedException _):
+        return true;
+      case (WebtritSignalingException _, WebtritSignalingException _):
+        return false;
+    }
+  }, 'matches ${expected.runtimeType} with the same payload');
 }
 
 // ---------------------------------------------------------------------------
@@ -623,6 +669,52 @@ void main() {
             .timeout(const Duration(seconds: 2)),
         throwsA(anything),
       );
+    });
+
+    test('execute keeps WebtritSignalingErrorException type and fields', () async {
+      fakeClient.executeError = const WebtritSignalingErrorException(0, 503, 'call request on busy line error');
+
+      final client = await _subscribeClient('exec-typed');
+      addTearDown(client.dispose);
+
+      await expectLater(
+        client.execute(HangupRequest(transaction: 'tx-exec-typed', line: 1, callId: 'call-e')),
+        throwsA(
+          isA<WebtritSignalingErrorException>()
+              .having((error) => error.id, 'id', 0)
+              .having((error) => error.code, 'code', 503)
+              .having((error) => error.reason, 'reason', 'call request on busy line error'),
+        ),
+      );
+    });
+
+    test('execute keeps all Webtrit signaling exception subtypes', () async {
+      final errors = <WebtritSignalingException>[
+        const WebtritSignalingErrorException(1, 503, 'busy'),
+        const WebtritSignalingDisconnectedException(2),
+        const WebtritSignalingUnknownMessageException(3, {'kind': 'unknown', 'tx': 'a1'}),
+        const WebtritSignalingUnknownResponseException(4, {'result': 'unknown', 'tx': 'a2'}),
+        const WebtritSignalingTransactionTimeoutException(5, 'tx-timeout'),
+        WebtritSignalingBadStateException(6, StateError('invalid state')),
+        const WebtritSignalingKeepaliveTransactionTimeoutException(7, 'tx-keepalive'),
+        const WebtritSignalingTransactionUnavailableException(8, 'tx-unavailable'),
+        const WebtritSignalingTransactionTerminateByDisconnectException(9, 'tx-disconnect', 1001, 'closed'),
+      ];
+
+      final client = await _subscribeClient('exec-typed-all');
+      addTearDown(client.dispose);
+
+      for (var index = 0; index < errors.length; index++) {
+        final error = errors[index];
+        fakeClient.executeError = error;
+
+        await expectLater(
+          client.execute(HangupRequest(transaction: 'tx-exec-typed-$index', line: 1, callId: 'call-$index')),
+          throwsA(_matchesSignalingException(error)),
+        );
+      }
+
+      fakeClient.executeError = null;
     });
 
     test('pending execute completes with error on client dispose', () async {
