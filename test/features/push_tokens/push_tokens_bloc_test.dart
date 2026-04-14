@@ -6,7 +6,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/extensions/push_environment.dart';
 import 'package:webtrit_phone/features/push_tokens/bloc/push_tokens_bloc.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
