@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
@@ -101,16 +102,17 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
 
   void _onStarted(PushTokensEvent event, Emitter<PushTokensState> emit) async {
     if (Platform.isAndroid || Platform.isIOS) {
-      unawaited(_retrieveAndStoreFcmToken());
+      unawaited(retrieveAndStoreFcmToken());
     }
     if (Platform.isIOS) {
-      unawaited(_retrieveAndStoreApnsToken());
+      unawaited(retrieveAndStoreApnsToken());
     }
   }
 
   // If PushSystemAvailability status is unknown then it will retry in case if google_api_availability package could not get status because of vendor.
   // In other statuses except of updating an success it will stop retrying.
-  Future<void> _retrieveAndStoreFcmToken() async {
+  @visibleForTesting
+  Future<void> retrieveAndStoreFcmToken() async {
     const vapidKey = EnvironmentConfig.FCM_VAPID_KEY;
 
     final initialStatus = await pushEnvironment.getAvailability();
@@ -139,15 +141,16 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     if (fcmToken != null) {
       if (!isClosed) add(PushTokensEventInsertedOrUpdated(AppPushTokenType.fcm, fcmToken));
     } else {
-      _logger.severe('_retrieveAndStoreFcmToken failed after max attempts');
+      _logger.warning('FCM token retrieval completed without a token');
     }
   }
 
-  Future<void> _retrieveAndStoreApnsToken() async {
+  @visibleForTesting
+  Future<void> retrieveAndStoreApnsToken() async {
     final apnsToken = await _backoffRetries.execute<String?>(
       (attempt) => firebaseMessaging.getAPNSToken(),
       shouldRetry: (e, attempt) {
-        add(PushTokensEventError('Failed to retrieve APNS token: $e at attempt $attempt'));
+        if (!isClosed) add(PushTokensEventError('Failed to retrieve APNS token: $e at attempt $attempt'));
         return true;
       },
     );
@@ -155,7 +158,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
     if (apnsToken != null) {
       if (!isClosed) add(PushTokensEventInsertedOrUpdated(AppPushTokenType.apns, apnsToken));
     } else {
-      _logger.severe('_retrieveAndStoreApnsToken failed after max attempts');
+      _logger.warning('APNS token retrieval completed without a token');
     }
   }
 
