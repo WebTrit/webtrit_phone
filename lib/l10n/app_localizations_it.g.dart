@@ -1225,6 +1225,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Impossibile stabilire la chiamata, riprovare più tardi';
 
   @override
+  String get notifications_errorSnackBar_callServiceBusyLine =>
+      'Impossibile effettuare la chiamata in questo momento perché la linea è occupata. Riprova più tardi.';
+
+  @override
   String get notifications_errorSnackBar_callSignalingClientNotConnect =>
       'Impossibile eseguire la chiamata, verificare lo stato della connessione';
 

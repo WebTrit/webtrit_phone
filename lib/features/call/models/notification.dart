@@ -97,6 +97,15 @@ final class CallUndefinedLineNotification extends ErrorNotification {
   }
 }
 
+final class CallServiceBusyLineNotification extends ErrorNotification {
+  const CallServiceBusyLineNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_callServiceBusyLine;
+  }
+}
+
 final class CallWhileOfflineNotification extends ErrorNotification {
   const CallWhileOfflineNotification();
 

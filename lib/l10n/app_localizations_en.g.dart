@@ -1211,6 +1211,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callNegotiationTimeout => 'Cannot establish the call, please try again later';
 
   @override
+  String get notifications_errorSnackBar_callServiceBusyLine =>
+      'Cannot make the call right now because the line is busy. Please try again later.';
+
+  @override
   String get notifications_errorSnackBar_callSignalingClientNotConnect =>
       'Cannot initiate the call, please check the connection status';
 
