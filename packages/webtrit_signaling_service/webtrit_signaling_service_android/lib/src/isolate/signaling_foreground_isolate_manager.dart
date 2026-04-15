@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'dart:ui' show CallbackHandle, PluginUtilities;
-import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:flutter/foundation.dart' show VoidCallback, visibleForTesting;
 import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
@@ -47,8 +47,10 @@ class SignalingForegroundIsolateManager {
     this.pushBoundNoSubscriberGrace = const Duration(seconds: 10),
     @visibleForTesting SignalingModuleFactory? moduleFactory,
     @visibleForTesting SignalingHubFactory? hubFactory,
+    @visibleForTesting VoidCallback? stopServiceOverride,
   }) : _testModuleFactory = moduleFactory,
-       _testHubFactory = hubFactory;
+       _testHubFactory = hubFactory,
+       _testStopService = stopServiceOverride;
 
   final String coreUrl;
   final String tenantId;
@@ -94,6 +96,10 @@ class SignalingForegroundIsolateManager {
 
   /// Overrides [SignalingHub] construction in tests to avoid [IsolateNameServer].
   final SignalingHubFactory? _testHubFactory;
+
+  /// Overrides [PSignalingServiceHostApi().stopService()] in tests to avoid
+  /// binary-messenger dependency.
+  final VoidCallback? _testStopService;
 
   SignalingModule? _signalingModule;
   SignalingHub? _hub;
@@ -151,6 +157,12 @@ class SignalingForegroundIsolateManager {
       _hub!.onHasSubscribersChanged = _onHubHasSubscribersChanged;
     }
     _hub!.start();
+    if (isPushBound && !_hub!.hasSubscribers) {
+      // No subscriber at start time (typical push-started service where the
+      // Activity has not connected yet). Schedule the cleanup timer now so
+      // the service stops if the Activity never launches.
+      _onHubHasSubscribersChanged(false);
+    }
 
     _eventsSubscription = _signalingModule!.events.listen(_onEvent);
     _signalingModule!.connect();
@@ -255,7 +267,11 @@ class SignalingForegroundIsolateManager {
   /// [START_NOT_STICKY], so after [stopService] the OS will not restart the service.
   void _requestServiceStop() {
     _logger.info('pushBound: grace period elapsed with no subscribers — requesting service stop');
-    PSignalingServiceHostApi().stopService();
+    if (_testStopService != null) {
+      _testStopService!();
+    } else {
+      PSignalingServiceHostApi().stopService();
+    }
   }
 
   /// Schedules an auto-reconnect for persistent-service mode (no hub subscribers).
