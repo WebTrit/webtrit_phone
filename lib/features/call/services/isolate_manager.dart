@@ -216,8 +216,22 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     }
 
     if (_lines.isEmpty) {
-      logger.info('Handshake: no active lines - ending calls');
-      _onNoActiveLines();
+      // The hub sends StateHandshake first, then replays IncomingCallEvent entries
+      // from _callEventHistory. When a call arrived as a protocol event (not in
+      // StateHandshake lines), the push isolate would see 0 lines and immediately
+      // call _onNoActiveLines() before the IncomingCallEvent from _callEventHistory
+      // replay is processed. Defer to the next event-loop turn so any pending
+      // port messages (including replayed protocol events) are handled first.
+      logger.info('Handshake: no active lines, deferring check for protocol-event calls');
+      Future(() {
+        if (_incomingCallEvents.containsKey(_metadata?.callId)) {
+          logger.info('Handshake deferred: found incoming call from history callId=${_metadata?.callId}, proceeding');
+          _executePendingRequests();
+        } else {
+          logger.info('Handshake deferred: no incoming call found - ending calls');
+          _onNoActiveLines();
+        }
+      });
       return;
     }
 
@@ -241,6 +255,13 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     switch (event) {
       case IncomingCallEvent():
         _incomingCallEvents[event.callId] = event;
+        // Populate _lines so _sendRequest can resolve the line index for this call.
+        // Calls that arrive as protocol events (not in StateHandshake) are not
+        // present in _lines after _onHandshake; add them here so pending requests
+        // can be executed once the deferred handshake check runs.
+        if (event.line != null) {
+          _lines[event.callId] = event.line!;
+        }
       case HangupEvent():
         final incomingEventLog = _incomingCallEvents[event.callId];
         _onHangupCall(event, (
