@@ -147,9 +147,10 @@ class SignalingHub {
   }
 
   void _handleUnsubscribe(SignalingHubUnsubscribeCommand cmd) {
+    final wasNotEmpty = _subscribers.isNotEmpty;
     _subscribers.remove(cmd.consumerId);
     _logger.fine('Hub subscriber removed: ${cmd.consumerId} (total: ${_subscribers.length})');
-    if (_subscribers.isEmpty) onHasSubscribersChanged?.call(false);
+    if (wasNotEmpty && _subscribers.isEmpty) onHasSubscribersChanged?.call(false);
   }
 
   void _handleExecute(SignalingHubExecuteCommand cmd) {

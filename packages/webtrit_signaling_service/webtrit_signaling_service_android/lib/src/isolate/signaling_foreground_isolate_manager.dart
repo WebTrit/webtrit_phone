@@ -108,7 +108,7 @@ class SignalingForegroundIsolateManager {
   Timer? _reconnectTimer;
 
   /// Scheduled in pushBound mode when [SignalingHub.hasSubscribers] drops to
-  /// false. Fires [_requestServiceStop] after [_pushBoundNoSubscriberGrace] if
+  /// false. Fires [_requestServiceStop] after [pushBoundNoSubscriberGrace] if
   /// no new subscriber arrives. Cancelled when a subscriber connects.
   Timer? _pushBoundCleanupTimer;
 
@@ -271,7 +271,12 @@ class SignalingForegroundIsolateManager {
     if (stopOverride != null) {
       stopOverride();
     } else {
-      PSignalingServiceHostApi().stopService();
+      unawaited(
+        PSignalingServiceHostApi().stopService().catchError(
+          (Object error, StackTrace stackTrace) =>
+              _logger.warning('pushBound: failed to request foreground service stop', error, stackTrace),
+        ),
+      );
     }
   }
 

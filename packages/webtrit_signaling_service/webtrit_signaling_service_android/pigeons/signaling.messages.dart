@@ -29,6 +29,7 @@ class PSignalingServiceStatus {
     required this.token,
     required this.incomingCallHandlerHandle,
     required this.moduleFactoryHandle,
+    required this.mode,
     this.trustedCertificatesJson,
   });
 
