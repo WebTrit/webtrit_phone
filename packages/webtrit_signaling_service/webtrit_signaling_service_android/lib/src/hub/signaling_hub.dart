@@ -44,8 +44,16 @@ class SignalingHub {
   /// when no subscriber remains and schedule a cleanup timer.
   void Function(bool hasSubscribers)? onHasSubscribersChanged;
 
-  /// Encoded events since the last [SignalingConnecting] event.
-  /// Replayed to late subscribers so they receive the current session state.
+  /// Encoded non-protocol events since the last [SignalingConnecting] event.
+  ///
+  /// Replayed to late subscribers so they receive the current connection state
+  /// ([SignalingConnecting], [SignalingConnected], [SignalingHandshakeReceived]).
+  ///
+  /// Protocol events ([SignalingProtocolEvent]) are intentionally excluded:
+  /// call-level events are tracked separately in [_callEventHistory] so that
+  /// ended calls can be evicted in O(1) without scanning this list. Storing
+  /// all protocol events here would require decoding each entry on eviction
+  /// and would cause the buffer to grow unboundedly over a long session.
   final List<List<dynamic>> _sessionBuffer = [];
 
   /// callId → ordered list of encoded [SignalingProtocolEvent]s for that call.
