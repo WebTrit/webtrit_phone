@@ -10,6 +10,9 @@ import 'rtp_traffic_monitor.dart';
 
 const _logNamespace = 'PeerConnectionManager';
 final _logger = Logger('$_logNamespace.Manager');
+final _invalidLoggerSegmentChars = RegExp(r'[^A-Za-z0-9_-]+');
+final _duplicateUnderscores = RegExp(r'_+');
+final _edgeUnderscores = RegExp(r'^_+|_+$');
 
 /// Alias for the call unique identifier to make signatures clearer.
 typedef CallId = String;
@@ -87,6 +90,16 @@ final class PeerConnectionManager {
   /// to ensure hardware resources are released before creating a new connection.
   final _pendingDisposals = <CallId, Future<void>>{};
 
+  String _sanitizeLoggerSegment(String value) {
+    final sanitized = value
+        .trim()
+        .replaceAll(_invalidLoggerSegmentChars, '_')
+        .replaceAll(_duplicateUnderscores, '_')
+        .replaceAll(_edgeUnderscores, '');
+
+    return sanitized.isEmpty ? 'unknown' : sanitized;
+  }
+
   /// Updates configuration parameters for future connections.
   void updateConfig({Duration? retrieveTimeout, Duration? monitorCheckInterval, Duration? disposalTimeout}) {
     if (retrieveTimeout != null) {
@@ -143,7 +156,8 @@ final class PeerConnectionManager {
 
     // Create a scoped logger for the PeerConnection itself
     // Structure: WebRTC.PC.<CallId>
-    final pcLogger = Logger('$_logNamespace.PC.$callId');
+    final sanitizedCallId = _sanitizeLoggerSegment(callId);
+    final pcLogger = Logger('$_logNamespace.PC.$sanitizedCallId');
 
     return peerConnection
       ..onSignalingState = ((signalingState) => _onSignalingState(signalingState, observer, pcLogger))
@@ -285,7 +299,8 @@ final class PeerConnectionManager {
 
       if (monitorDelegatesFactory == null) return;
 
-      final monitorLogger = Logger('$_logNamespace.Monitor.$callId');
+      final sanitizedCallId = _sanitizeLoggerSegment(callId);
+      final monitorLogger = Logger('$_logNamespace.Monitor.$sanitizedCallId');
 
       final delegates = monitorDelegatesFactory!(callId, monitorLogger);
 
@@ -388,7 +403,7 @@ final class PeerConnectionManager {
   }
 
   void _onDataChannel(RTCDataChannel dataChannel, PeerConnectionObserver observer, Logger logger) {
-    logger.fine(() => 'onDataChannel channel: $observer');
+    logger.fine(() => 'onDataChannel channel: $dataChannel');
     observer.onDataChannel?.call(dataChannel);
   }
 
