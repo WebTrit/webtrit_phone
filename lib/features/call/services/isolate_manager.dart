@@ -69,6 +69,12 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   /// Completer resolved when all isolate work is done and [releaseCall] has been called.
   Completer<void>? _completer;
 
+  /// Set to true when [performAnswerCall] is received from the native side,
+  /// indicating the user answered via the push notification. Used in [close]
+  /// to call [handoffCall] instead of [releaseCall] so the PhoneConnection
+  /// is not terminated before the Activity can adopt it.
+  bool _callAnswered = false;
+
   // Workaround: captures init time as fallback timestamp for call logs.
   final DateTime _initialConnectionTime = DateTime.now();
 
@@ -121,7 +127,11 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       await _signalingSubscription.cancel();
       await _signalingModule.dispose();
     }
-    await _releaseCall(_metadata?.callId);
+    if (_callAnswered) {
+      await _handoffCall(_metadata?.callId);
+    } else {
+      await _releaseCall(_metadata?.callId);
+    }
     _completeWithError(StateError('PushNotificationIsolateManager closed'));
   }
 
@@ -140,6 +150,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
 
   @override
   void performAnswerCall(String callId) async {
+    _callAnswered = true;
     final hasNetwork = await Connectivity().checkConnectivity().then(
       (r) => r.isNotEmpty && !r.contains(ConnectivityResult.none),
     );
@@ -393,6 +404,15 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       await _pushService.releaseCall(callId);
     } catch (e) {
       logger.severe('_releaseCall failed: $e');
+    }
+  }
+
+  Future<void> _handoffCall(String? callId) async {
+    if (callId == null) return;
+    try {
+      await _pushService.handoffCall(callId);
+    } catch (e) {
+      logger.severe('_handoffCall failed: $e');
     }
   }
 
