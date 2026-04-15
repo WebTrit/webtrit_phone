@@ -2448,7 +2448,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventRenegotiationNeeded event,
     Emitter<CallState> emit,
   ) async {
-    _logger.severe('ABS __onPeerConnectionEventRenegotiationNeeded: ${event.callId}');
+    _logger.info('__onPeerConnectionEventRenegotiationNeeded: ${event.callId}');
     final _PeerConnectionEventRenegotiationNeeded(callId: callId, lineId: lineId) = event;
     await _safeRenegotiate(callId, lineId);
   }
@@ -3372,6 +3372,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
+    if (activeCall.line == null || activeCall.line == _kUndefinedLine) {
+      _logger.info('_safeRenegotiate: activeCall line is ${activeCall.line}, skipping renegotiation');
+      return;
+    }
+
     final pc = await _peerConnectionManager.retrieve(callId);
     if (pc == null) {
       _logger.info('_safeRenegotiate: pc disposed, skipping renegotiation');
@@ -3402,20 +3407,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     final renegotiationHandler = _getOrCreateRenegotiationHandler(callId);
-    await renegotiationHandler.handle(callId, lineId, pc, _sendRenegotiationUpdate);
+    await renegotiationHandler.handle(callId, pc, _sendRenegotiationUpdate);
   }
 
   /// Sends a renegotiation [UpdateRequest] to the signaling server with the given [jsep] offer.
   ///
   /// Used as a [RenegotiationExecutor] callback by [RenegotiationHandler].
-  Future<void> _sendRenegotiationUpdate(String callId, int? lineId, RTCSessionDescription jsep) async {
-    final updateRequest = UpdateRequest(
-      transaction: WebtritSignalingClient.generateTransactionId(),
-      line: lineId,
-      callId: callId,
-      jsep: jsep.toMap(),
-    );
-    await _signalingModule.execute(updateRequest);
+  Future<void> _sendRenegotiationUpdate(String callId, RTCSessionDescription jsep) async {
+    state.performOnActiveCall(callId, (call) async {
+      if (call.line == null || call.line == _kUndefinedLine) {
+        _logger.severe('_sendRenegotiationUpdate: activeCall line is ${call.line}, its should never happen!!');
+        return;
+      }
+
+      final updateRequest = UpdateRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: call.line,
+        callId: callId,
+        jsep: jsep.toMap(),
+      );
+      await _signalingModule.execute(updateRequest);
+    });
   }
 
   Never _onGetUserMediaPushKitTimeout() {
