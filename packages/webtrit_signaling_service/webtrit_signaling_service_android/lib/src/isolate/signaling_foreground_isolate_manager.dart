@@ -44,6 +44,7 @@ class SignalingForegroundIsolateManager {
     this.incomingCallHandlerHandle = 0,
     this.moduleFactoryHandle = 0,
     this.isPushBound = false,
+    this.pushBoundNoSubscriberGrace = const Duration(seconds: 10),
     @visibleForTesting SignalingModuleFactory? moduleFactory,
     @visibleForTesting SignalingHubFactory? hubFactory,
   }) : _testModuleFactory = moduleFactory,
@@ -78,6 +79,15 @@ class SignalingForegroundIsolateManager {
   /// remains connected after a short grace period. Without this guard the service
   /// becomes orphaned when a call is declined before the Activity connects.
   final bool isPushBound;
+
+  /// How long to wait after the last subscriber disconnects before stopping
+  /// the service in pushBound mode.
+  ///
+  /// Allows time for the Activity to start and subscribe after a normal incoming
+  /// call. If a subscriber arrives within this window the timer is cancelled and
+  /// the service continues normally. Exposed as a constructor parameter so it
+  /// can be overridden in tests without sleeping.
+  final Duration pushBoundNoSubscriberGrace;
 
   /// Overrides handle-based [SignalingModule] creation in tests.
   final SignalingModuleFactory? _testModuleFactory;
@@ -220,12 +230,6 @@ class SignalingForegroundIsolateManager {
     }
   }
 
-  /// Grace period before stopping the service in pushBound mode when no
-  /// subscriber is present. Long enough for the Activity to start and subscribe
-  /// after a normal incoming call, but short enough to reclaim resources when
-  /// the call is declined before the Activity connects.
-  static const _pushBoundNoSubscriberGrace = Duration(seconds: 30);
-
   /// Called by [SignalingHub] when [hasSubscribers] transitions.
   ///
   /// In pushBound mode: schedules a cleanup timer when the last subscriber
@@ -239,8 +243,8 @@ class SignalingForegroundIsolateManager {
       _logger.info('pushBound: subscriber arrived — cleanup timer cancelled');
     } else {
       _pushBoundCleanupTimer?.cancel();
-      _pushBoundCleanupTimer = Timer(_pushBoundNoSubscriberGrace, _requestServiceStop);
-      _logger.info('pushBound: no subscribers — scheduling stop in ${_pushBoundNoSubscriberGrace.inSeconds}s');
+      _pushBoundCleanupTimer = Timer(pushBoundNoSubscriberGrace, _requestServiceStop);
+      _logger.info('pushBound: no subscribers — scheduling stop in ${pushBoundNoSubscriberGrace.inSeconds}s');
     }
   }
 
