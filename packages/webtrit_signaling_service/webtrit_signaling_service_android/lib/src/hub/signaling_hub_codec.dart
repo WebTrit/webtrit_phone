@@ -296,7 +296,7 @@ Map<String, dynamic> _encodeHandshake(StateHandshake h) {
           .toList();
       return {'call_id': line.callId, 'call_logs': encodedLogs};
     }).toList(),
-    'user_active_calls': <dynamic>[],
-    'presence_contacts_info': <String, dynamic>{},
+    'presence_infos': h.presenceInfos.map((info) => info.toJson()).toList(),
+    'dialog_infos': h.dialogInfos.map((info) => info.toJson()).toList(),
   };
 }
