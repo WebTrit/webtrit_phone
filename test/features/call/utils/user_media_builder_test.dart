@@ -6,43 +6,159 @@ import 'package:webtrit_phone/features/call/utils/user_media_builder.dart';
 
 class MockMediaStream extends Mock implements MediaStream {}
 
+class MockMediaStreamTrack extends Mock implements MediaStreamTrack {}
+
+class FakeMediaStreamTrack extends Fake implements MediaStreamTrack {}
+
+class _TestMediaStreamFactory {
+  int _counter = 0;
+
+  final streams = <MockMediaStream>[];
+
+  MockMediaStream create() {
+    _counter++;
+    final stream = MockMediaStream();
+
+    final audioTracks = <MediaStreamTrack>[];
+    final videoTracks = <MediaStreamTrack>[];
+
+    when(() => stream.id).thenReturn('local-stream-$_counter');
+    when(() => stream.getAudioTracks()).thenAnswer((_) => audioTracks);
+    when(() => stream.getVideoTracks()).thenAnswer((_) => videoTracks);
+    when(() => stream.addTrack(any())).thenAnswer((invocation) async {
+      final track = invocation.positionalArguments.first as MediaStreamTrack;
+      if (track.kind == 'audio') {
+        audioTracks.add(track);
+      } else if (track.kind == 'video') {
+        videoTracks.add(track);
+      }
+    });
+    when(() => stream.dispose()).thenAnswer((_) async {});
+
+    streams.add(stream);
+    return stream;
+  }
+}
+
 void main() {
-  late MockMediaStream mockStream;
-  late Map<String, dynamic> capturedConstraints;
+  setUpAll(() {
+    registerFallbackValue(FakeMediaStreamTrack());
+  });
+
+  late _TestMediaStreamFactory localStreamFactory;
+  late MockMediaStream audioSourceStream;
+  late MockMediaStream videoSourceStream;
+  late MockMediaStreamTrack audioTrack;
+  late MockMediaStreamTrack videoTrack;
+  late List<Map<String, dynamic>> capturedConstraints;
   late Future<MediaStream> Function(Map<String, dynamic>) fakeGetUserMedia;
+  late Future<MediaStream> Function(String label) fakeCreateLocalStream;
 
   setUp(() {
-    mockStream = MockMediaStream();
-    capturedConstraints = {};
+    localStreamFactory = _TestMediaStreamFactory();
+    audioSourceStream = MockMediaStream();
+    videoSourceStream = MockMediaStream();
+    audioTrack = MockMediaStreamTrack();
+    videoTrack = MockMediaStreamTrack();
+    capturedConstraints = [];
+
+    when(() => audioTrack.id).thenReturn('audio-track-1');
+    when(() => audioTrack.kind).thenReturn('audio');
+    when(() => audioTrack.stop()).thenAnswer((_) async {});
+
+    when(() => videoTrack.id).thenReturn('video-track-1');
+    when(() => videoTrack.kind).thenReturn('video');
+    when(() => videoTrack.stop()).thenAnswer((_) async {});
+
+    when(() => audioSourceStream.getAudioTracks()).thenReturn([audioTrack]);
+    when(() => audioSourceStream.getVideoTracks()).thenReturn([]);
+    when(() => audioSourceStream.dispose()).thenAnswer((_) async {});
+
+    when(() => videoSourceStream.getAudioTracks()).thenReturn([]);
+    when(() => videoSourceStream.getVideoTracks()).thenReturn([videoTrack]);
+    when(() => videoSourceStream.dispose()).thenAnswer((_) async {});
 
     fakeGetUserMedia = (constraints) async {
-      capturedConstraints = constraints;
-      return mockStream;
+      capturedConstraints.add(Map<String, dynamic>.from(constraints));
+      final hasAudio = constraints['audio'] != false;
+      final hasVideo = constraints['video'] != false;
+
+      if (hasAudio && !hasVideo) return audioSourceStream;
+      if (!hasAudio && hasVideo) return videoSourceStream;
+
+      throw Exception('Unsupported constraints in test: $constraints');
     };
+
+    fakeCreateLocalStream = (_) async => localStreamFactory.create();
   });
 
-  DefaultUserMediaBuilder builder({Future<bool> Function()? isCameraPermissionGranted}) =>
-      DefaultUserMediaBuilder(isCameraPermissionGranted: isCameraPermissionGranted, getUserMedia: fakeGetUserMedia);
+  DefaultUserMediaBuilder builder({Future<bool> Function()? isCameraPermissionGranted}) => DefaultUserMediaBuilder(
+    isCameraPermissionGranted: isCameraPermissionGranted,
+    getUserMedia: fakeGetUserMedia,
+    createLocalStream: fakeCreateLocalStream,
+  );
 
-  group('DefaultUserMediaBuilder — audio/video constraints', () {
-    test('passes video: false to getUserMedia when video is false', () async {
-      await builder().build(video: false);
-      expect(capturedConstraints['video'], isFalse);
+  group('DefaultUserMediaBuilder — pooling', () {
+    test('reuses pooled audio track for multiple streams', () async {
+      final subject = builder();
+      await subject.build(video: false);
+      await subject.build(video: false);
+
+      final audioRequests = capturedConstraints.where((it) => it['audio'] != false && it['video'] == false).length;
+      expect(audioRequests, 1);
     });
 
-    test('passes video map to getUserMedia when video is true', () async {
-      await builder().build(video: true);
-      expect(capturedConstraints['video'], isA<Map>());
+    test('reuses pooled video track for multiple streams', () async {
+      final subject = builder();
+      await subject.build(video: true);
+      await subject.build(video: true);
+
+      final videoRequests = capturedConstraints.where((it) => it['audio'] == false && it['video'] != false).length;
+      expect(videoRequests, 1);
     });
 
-    test('passes audio constraints to getUserMedia', () async {
-      await builder().build(video: false);
-      expect(capturedConstraints['audio'], isNotNull);
+    test('disposes pooled source tracks only after releasing the last borrower', () async {
+      final subject = builder();
+      final stream1 = await subject.build(video: true);
+      final stream2 = await subject.build(video: true);
+
+      await subject.release(stream1);
+
+      verifyNever(() => audioTrack.stop());
+      verifyNever(() => videoTrack.stop());
+      verifyNever(() => audioSourceStream.dispose());
+      verifyNever(() => videoSourceStream.dispose());
+
+      await subject.release(stream2);
+
+      verify(() => audioTrack.stop()).called(1);
+      verify(() => videoTrack.stop()).called(1);
+      verify(() => audioSourceStream.dispose()).called(1);
+      verify(() => videoSourceStream.dispose()).called(1);
     });
   });
 
-  group('DefaultUserMediaBuilder — allowAudioFallback: false (default)', () {
-    test('does not call isCameraPermissionGranted when allowAudioFallback is false', () async {
+  group('DefaultUserMediaBuilder — dynamic video acquisition', () {
+    test('ensureVideoTrack acquires only missing video track', () async {
+      final subject = builder();
+      final localStream = await subject.build(video: false);
+
+      expect(localStream.getVideoTracks(), isEmpty);
+
+      final ensuredTrack = await subject.ensureVideoTrack(localStream, frontCamera: true);
+      expect(ensuredTrack, isNotNull);
+      expect(localStream.getVideoTracks(), hasLength(1));
+
+      final audioRequests = capturedConstraints.where((it) => it['audio'] != false && it['video'] == false).length;
+      final videoRequests = capturedConstraints.where((it) => it['audio'] == false && it['video'] != false).length;
+
+      expect(audioRequests, 1);
+      expect(videoRequests, 1);
+    });
+  });
+
+  group('DefaultUserMediaBuilder — allowAudioFallback', () {
+    test('does not call camera permission check when allowAudioFallback is false', () async {
       var permissionCalled = false;
       await builder(
         isCameraPermissionGranted: () async {
@@ -52,40 +168,9 @@ void main() {
       ).build(video: true);
 
       expect(permissionCalled, isFalse);
-      expect(capturedConstraints['video'], isA<Map>());
     });
 
-    test('passes video: true regardless of camera permission when allowAudioFallback is false', () async {
-      await builder(isCameraPermissionGranted: () async => false).build(video: true);
-      expect(capturedConstraints['video'], isA<Map>());
-    });
-  });
-
-  group('DefaultUserMediaBuilder — allowAudioFallback: true', () {
-    test('passes video: true when camera permission is granted', () async {
-      await builder(isCameraPermissionGranted: () async => true).build(video: true, allowAudioFallback: true);
-
-      expect(capturedConstraints['video'], isA<Map>());
-    });
-
-    test('passes video: false when camera permission is denied', () async {
-      await builder(isCameraPermissionGranted: () async => false).build(video: true, allowAudioFallback: true);
-
-      expect(capturedConstraints['video'], isFalse);
-    });
-
-    test('passes video: false when video is false regardless of camera permission', () async {
-      await builder(isCameraPermissionGranted: () async => true).build(video: false, allowAudioFallback: true);
-
-      expect(capturedConstraints['video'], isFalse);
-    });
-
-    test('passes video: true when isCameraPermissionGranted is null', () async {
-      await builder().build(video: true, allowAudioFallback: true);
-      expect(capturedConstraints['video'], isA<Map>());
-    });
-
-    test('calls isCameraPermissionGranted exactly once per build call', () async {
+    test('calls isCameraPermissionGranted exactly once when fallback enabled', () async {
       var callCount = 0;
       await builder(
         isCameraPermissionGranted: () async {
@@ -96,30 +181,43 @@ void main() {
 
       expect(callCount, 1);
     });
-  });
 
-  group('DefaultUserMediaBuilder — allowAudioFallback: true, getUserMedia retry', () {
-    test('retries with video: false when getUserMedia fails on first video attempt', () async {
-      final capturedAttempts = <bool>[];
+    test('falls back to audio-only when camera permission is denied', () async {
+      await builder(isCameraPermissionGranted: () async => false).build(video: true, allowAudioFallback: true);
+
+      final videoRequests = capturedConstraints.where((it) => it['audio'] == false && it['video'] != false).length;
+      expect(videoRequests, 0);
+    });
+
+    test('retries in audio-only mode when video acquisition fails', () async {
+      final attempts = <String>[];
       final subject = DefaultUserMediaBuilder(
         isCameraPermissionGranted: () async => true,
+        createLocalStream: fakeCreateLocalStream,
         getUserMedia: (constraints) async {
+          final hasAudio = constraints['audio'] != false;
           final hasVideo = constraints['video'] != false;
-          capturedAttempts.add(hasVideo);
-          if (hasVideo) throw Exception('NotAllowedError');
-          return mockStream;
+          attempts.add('audio:$hasAudio,video:$hasVideo');
+
+          if (hasAudio && !hasVideo) return audioSourceStream;
+          if (!hasAudio && hasVideo) throw Exception('NotAllowedError');
+
+          throw Exception('Unsupported constraints in test: $constraints');
         },
       );
 
       final result = await subject.build(video: true, allowAudioFallback: true);
 
-      expect(capturedAttempts, [true, false]);
-      expect(result, mockStream);
+      expect(result, isA<MediaStream>());
+      expect(attempts, ['audio:true,video:false', 'audio:false,video:true', 'audio:true,video:false']);
     });
+  });
 
+  group('DefaultUserMediaBuilder — error handling', () {
     test('does not retry when allowAudioFallback is false', () async {
       var callCount = 0;
       final subject = DefaultUserMediaBuilder(
+        createLocalStream: fakeCreateLocalStream,
         getUserMedia: (_) async {
           callCount++;
           throw Exception('NotAllowedError');
@@ -133,6 +231,7 @@ void main() {
     test('does not retry when video was already false', () async {
       var callCount = 0;
       final subject = DefaultUserMediaBuilder(
+        createLocalStream: fakeCreateLocalStream,
         getUserMedia: (_) async {
           callCount++;
           throw Exception('device error');
@@ -146,27 +245,32 @@ void main() {
     test('throws UserMediaError when retry also fails', () async {
       final subject = DefaultUserMediaBuilder(
         isCameraPermissionGranted: () async => true,
+        createLocalStream: fakeCreateLocalStream,
         getUserMedia: (_) async => throw Exception('no mic'),
       );
 
       await expectLater(subject.build(video: true, allowAudioFallback: true), throwsA(isA<UserMediaError>()));
     });
-  });
 
-  group('DefaultUserMediaBuilder — error handling', () {
     test('wraps getUserMedia exception in UserMediaError', () async {
-      final subject = DefaultUserMediaBuilder(getUserMedia: (_) async => throw Exception('device not found'));
+      final subject = DefaultUserMediaBuilder(
+        createLocalStream: fakeCreateLocalStream,
+        getUserMedia: (_) async => throw Exception('device not found'),
+      );
 
       await expectLater(subject.build(video: false), throwsA(isA<UserMediaError>()));
     });
 
     test('UserMediaError message contains original error', () async {
-      final subject = DefaultUserMediaBuilder(getUserMedia: (_) async => throw Exception('device not found'));
+      final subject = DefaultUserMediaBuilder(
+        createLocalStream: fakeCreateLocalStream,
+        getUserMedia: (_) async => throw Exception('device not found'),
+      );
 
       UserMediaError? captured;
       await subject.build(video: false).catchError((Object e) {
         captured = e as UserMediaError;
-        return mockStream as MediaStream;
+        return localStreamFactory.create();
       });
       expect(captured?.message, contains('device not found'));
     });

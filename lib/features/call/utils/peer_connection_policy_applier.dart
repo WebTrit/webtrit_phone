@@ -15,7 +15,12 @@ abstract class PeerConnectionPolicyApplier {
   ///
   /// The [hasRemoteVideo] parameter indicates whether the remote SDP includes a video m-line.
   /// This allows conditional policy application based on call capabilities.
-  Future<void> apply(RTCPeerConnection peerConnection, {required bool hasRemoteVideo});
+  Future<void> apply(
+    RTCPeerConnection peerConnection, {
+    required bool hasRemoteVideo,
+    required MediaStream localStream,
+    bool? frontCamera,
+  });
 }
 
 /// Applies peer connection policies based on the provided [PeerConnectionSettings].
@@ -51,7 +56,12 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
       .negotiationSettings;
 
   @override
-  Future<void> apply(RTCPeerConnection peerConnection, {required bool hasRemoteVideo}) async {
+  Future<void> apply(
+    RTCPeerConnection peerConnection, {
+    required bool hasRemoteVideo,
+    required MediaStream localStream,
+    bool? frontCamera,
+  }) async {
     _logger.fine('Applying peer connection policies with settings: $_negotiationSettings');
     // Check if the policy requires inserting an inactive video track for negotiation purposes
     if (_negotiationSettings.includeInactiveVideoInOfferAnswer && hasRemoteVideo) {
@@ -64,9 +74,7 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
         return;
       }
 
-      // Acquire a local stream with video
-      final localStream = await _userMediaBuilder.build(video: true);
-      final localVideoTrack = localStream.getVideoTracks().firstOrNull;
+      final localVideoTrack = await _userMediaBuilder.ensureVideoTrack(localStream, frontCamera: frontCamera);
 
       // Add the video track to the peer connection, disabled initially
       if (localVideoTrack != null) {
