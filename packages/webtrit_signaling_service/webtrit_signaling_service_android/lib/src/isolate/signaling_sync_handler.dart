@@ -36,7 +36,8 @@ Future<void> onSignalingServiceSync(PSignalingServiceStatus status) async {
           existing.token != status.token ||
           existing.trustedCertificatesJson != status.trustedCertificatesJson ||
           existing.incomingCallHandlerHandle != status.incomingCallHandlerHandle ||
-          existing.moduleFactoryHandle != status.moduleFactoryHandle;
+          existing.moduleFactoryHandle != status.moduleFactoryHandle ||
+          existing.isPushBound != (status.mode == PSignalingServiceMode.pushBound);
       if (configChanged) {
         _logger.info('onSignalingServiceSync config changed, recreating manager');
         await existing.handleStatus(enabled: false);
@@ -53,6 +54,7 @@ Future<void> onSignalingServiceSync(PSignalingServiceStatus status) async {
       trustedCertificatesJson: status.trustedCertificatesJson,
       incomingCallHandlerHandle: status.incomingCallHandlerHandle,
       moduleFactoryHandle: status.moduleFactoryHandle,
+      isPushBound: status.mode == PSignalingServiceMode.pushBound,
     );
   }
   await _manager?.handleStatus(enabled: status.enabled);

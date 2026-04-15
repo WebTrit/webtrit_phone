@@ -122,6 +122,7 @@ class PSignalingServiceStatus {
     this.trustedCertificatesJson,
     required this.incomingCallHandlerHandle,
     required this.moduleFactoryHandle,
+    required this.mode,
   });
 
   bool enabled;
@@ -153,6 +154,14 @@ class PSignalingServiceStatus {
   /// [PSignalingServiceHostApi.saveModuleFactory]. 0 means no factory registered.
   int moduleFactoryHandle;
 
+  /// The mode the service was started with.
+  ///
+  /// Included in every [onSynchronize] call so the background Dart isolate can
+  /// adapt its behaviour without reading Kotlin SharedPreferences directly.
+  /// When [enabled] is false this field carries [PSignalingServiceMode.persistent]
+  /// as a placeholder; consumers must not act on it in that case.
+  PSignalingServiceMode mode;
+
   List<Object?> _toList() {
     return <Object?>[
       enabled,
@@ -162,6 +171,7 @@ class PSignalingServiceStatus {
       trustedCertificatesJson,
       incomingCallHandlerHandle,
       moduleFactoryHandle,
+      mode.index,
     ];
   }
 
@@ -178,6 +188,7 @@ class PSignalingServiceStatus {
       trustedCertificatesJson: result[4] as String?,
       incomingCallHandlerHandle: result[5]! as int,
       moduleFactoryHandle: result[6]! as int,
+      mode: PSignalingServiceMode.values[result[7]! as int],
     );
   }
 
@@ -190,7 +201,7 @@ class PSignalingServiceStatus {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(enabled, other.enabled) && _deepEquals(coreUrl, other.coreUrl) && _deepEquals(tenantId, other.tenantId) && _deepEquals(token, other.token) && _deepEquals(trustedCertificatesJson, other.trustedCertificatesJson) && _deepEquals(incomingCallHandlerHandle, other.incomingCallHandlerHandle) && _deepEquals(moduleFactoryHandle, other.moduleFactoryHandle);
+    return _deepEquals(enabled, other.enabled) && _deepEquals(coreUrl, other.coreUrl) && _deepEquals(tenantId, other.tenantId) && _deepEquals(token, other.token) && _deepEquals(trustedCertificatesJson, other.trustedCertificatesJson) && _deepEquals(incomingCallHandlerHandle, other.incomingCallHandlerHandle) && _deepEquals(moduleFactoryHandle, other.moduleFactoryHandle) && _deepEquals(mode, other.mode);
   }
 
   @override
