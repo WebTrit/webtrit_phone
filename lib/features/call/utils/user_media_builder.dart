@@ -7,14 +7,19 @@ import 'video_constraints_builder.dart';
 
 abstract class UserMediaBuilder {
   Future<MediaStream> build({required bool video, bool? frontCamera, bool allowAudioFallback = false});
+
+  Future<MediaStreamTrack?> ensureVideoTrack(MediaStream stream, {bool? frontCamera});
+
+  Future<void> release(MediaStream stream);
 }
 
 class DefaultUserMediaBuilder implements UserMediaBuilder {
-  const DefaultUserMediaBuilder({
+  DefaultUserMediaBuilder({
     this.audioConstraintsBuilder,
     this.videoConstraintsBuilder,
     this.isCameraPermissionGranted,
     this.getUserMedia,
+    this.createLocalStream,
   });
 
   final AudioConstraintsBuilder? audioConstraintsBuilder;
@@ -32,6 +37,16 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
   /// Intended for use in tests only.
   @visibleForTesting
   final Future<MediaStream> Function(Map<String, dynamic>)? getUserMedia;
+
+  /// Injectable override for [createLocalMediaStream].
+  ///
+  /// Defaults to the real platform API when [null].
+  @visibleForTesting
+  final Future<MediaStream> Function(String label)? createLocalStream;
+
+  final Map<String, _BorrowedStreamLease> _borrowedStreams = {};
+  _PooledTrack? _audioTrack;
+  _PooledTrack? _videoTrack;
 
   /// Requests access to the user's media input devices (camera and/or microphone).
   ///
@@ -54,29 +69,151 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
     final resolvedVideo = video && (!allowAudioFallback || await _isCameraAvailable());
 
     try {
-      return await _acquireStream(resolvedVideo: resolvedVideo, frontCamera: frontCamera);
+      return await _acquirePooledStream(resolvedVideo: resolvedVideo, frontCamera: frontCamera);
     } catch (_) {
       if (!allowAudioFallback || !resolvedVideo) rethrow;
-      return _acquireStream(resolvedVideo: false, frontCamera: frontCamera);
+      return _acquirePooledStream(resolvedVideo: false, frontCamera: frontCamera);
     }
   }
 
-  Future<MediaStream> _acquireStream({required bool resolvedVideo, bool? frontCamera}) async {
+  @override
+  Future<MediaStreamTrack?> ensureVideoTrack(MediaStream stream, {bool? frontCamera}) async {
+    final existingTrack = stream.getVideoTracks().firstOrNull;
+    if (existingTrack != null) return existingTrack;
+
+    final videoTrack = await _acquireVideoTrack(frontCamera: frontCamera);
+
+    try {
+      await stream.addTrack(videoTrack);
+      _borrowedStreams.update(
+        stream.id,
+        (lease) => lease.copyWith(videoTrackId: videoTrack.id),
+        ifAbsent: () => _BorrowedStreamLease(videoTrackId: videoTrack.id),
+      );
+
+      await _configureAppleAudio(hasVideo: true);
+      return videoTrack;
+    } catch (e) {
+      await _releaseVideoTrack(videoTrack.id);
+      throw UserMediaError(e.toString());
+    }
+  }
+
+  @override
+  Future<void> release(MediaStream stream) async {
+    final lease = _borrowedStreams.remove(stream.id);
+
+    if (lease != null) {
+      await _releaseAudioTrack(lease.audioTrackId);
+      await _releaseVideoTrack(lease.videoTrackId);
+    }
+
+    await stream.dispose();
+  }
+
+  Future<MediaStream> _acquirePooledStream({required bool resolvedVideo, bool? frontCamera}) async {
+    MediaStream? stream;
+    MediaStreamTrack? audioTrack;
+    MediaStreamTrack? videoTrack;
+
+    try {
+      stream = await (createLocalStream ?? createLocalMediaStream)(_nextStreamLabel());
+      final lease = _BorrowedStreamLease();
+
+      audioTrack = await _acquireAudioTrack();
+      await stream.addTrack(audioTrack);
+      lease.audioTrackId = audioTrack.id;
+
+      if (resolvedVideo) {
+        videoTrack = await _acquireVideoTrack(frontCamera: frontCamera);
+        await stream.addTrack(videoTrack);
+        lease.videoTrackId = videoTrack.id;
+      }
+
+      _borrowedStreams[stream.id] = lease;
+      await _configureAppleAudio(hasVideo: resolvedVideo);
+
+      return stream;
+    } catch (e) {
+      await _releaseVideoTrack(videoTrack?.id);
+      await _releaseAudioTrack(audioTrack?.id);
+      await stream?.dispose();
+
+      if (e is UserMediaError) rethrow;
+      throw UserMediaError(e.toString());
+    }
+  }
+
+  Future<MediaStreamTrack> _acquireAudioTrack() async {
+    final pooledTrack = _audioTrack;
+    if (pooledTrack != null) {
+      pooledTrack.references++;
+      return pooledTrack.track;
+    }
+
+    final sourceStream = await _requestStream(audio: true, video: false);
+    final track = sourceStream.getAudioTracks().firstOrNull;
+    if (track == null) {
+      await sourceStream.dispose();
+      throw UserMediaError('Unable to acquire local audio track');
+    }
+
+    _audioTrack = _PooledTrack(track: track, sourceStream: sourceStream)..references = 1;
+    return track;
+  }
+
+  Future<MediaStreamTrack> _acquireVideoTrack({bool? frontCamera}) async {
+    final pooledTrack = _videoTrack;
+    if (pooledTrack != null) {
+      pooledTrack.references++;
+      return pooledTrack.track;
+    }
+
+    final sourceStream = await _requestStream(audio: false, video: true, frontCamera: frontCamera);
+    final track = sourceStream.getVideoTracks().firstOrNull;
+    if (track == null) {
+      await sourceStream.dispose();
+      throw UserMediaError('Unable to acquire local video track');
+    }
+
+    _videoTrack = _PooledTrack(track: track, sourceStream: sourceStream)..references = 1;
+    return track;
+  }
+
+  Future<void> _releaseAudioTrack(String? trackId) async {
+    final pooledTrack = _audioTrack;
+    if (pooledTrack == null || trackId == null || pooledTrack.track.id != trackId) return;
+
+    if (pooledTrack.references == 0) return;
+    pooledTrack.references--;
+    if (pooledTrack.references > 0) return;
+
+    await pooledTrack.track.stop();
+    await pooledTrack.sourceStream.dispose();
+    _audioTrack = null;
+  }
+
+  Future<void> _releaseVideoTrack(String? trackId) async {
+    final pooledTrack = _videoTrack;
+    if (pooledTrack == null || trackId == null || pooledTrack.track.id != trackId) return;
+
+    if (pooledTrack.references == 0) return;
+    pooledTrack.references--;
+    if (pooledTrack.references > 0) return;
+
+    await pooledTrack.track.stop();
+    await pooledTrack.sourceStream.dispose();
+    _videoTrack = null;
+  }
+
+  Future<MediaStream> _requestStream({required bool audio, required bool video, bool? frontCamera}) async {
     final Map<String, dynamic> mediaConstraints = {
-      'audio': _buildAudioConstraints(),
-      'video': resolvedVideo ? _buildVideoConstraintsMap(frontCamera: frontCamera) : false,
+      'audio': audio ? _buildAudioConstraints() : false,
+      'video': video ? _buildVideoConstraintsMap(frontCamera: frontCamera) : false,
     };
 
     try {
-      final localStream = await (getUserMedia ?? navigator.mediaDevices.getUserMedia)(mediaConstraints);
-
-      if (!kIsWeb) {
-        await Helper.setAppleAudioConfiguration(
-          AppleAudioConfiguration(appleAudioMode: resolvedVideo ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat),
-        );
-      }
-
-      return localStream;
+      return await (getUserMedia ?? navigator.mediaDevices.getUserMedia)(mediaConstraints);
     } catch (e) {
       throw UserMediaError(e.toString());
     }
@@ -86,6 +223,16 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
     if (kIsWeb || isCameraPermissionGranted == null) return true;
     return isCameraPermissionGranted!();
   }
+
+  Future<void> _configureAppleAudio({required bool hasVideo}) async {
+    if (kIsWeb) return;
+
+    await Helper.setAppleAudioConfiguration(
+      AppleAudioConfiguration(appleAudioMode: hasVideo ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat),
+    );
+  }
+
+  String _nextStreamLabel() => 'user_media_${DateTime.now().microsecondsSinceEpoch}';
 
   /// Constructs the map structure for audio constraints.
   Map<String, dynamic> _buildAudioConstraints() {
@@ -112,4 +259,26 @@ class UserMediaError implements Exception {
 
   @override
   String toString() => 'UserMediaError: $message';
+}
+
+class _PooledTrack {
+  _PooledTrack({required this.track, required this.sourceStream});
+
+  final MediaStreamTrack track;
+  final MediaStream sourceStream;
+  int references = 0;
+}
+
+class _BorrowedStreamLease {
+  _BorrowedStreamLease({this.audioTrackId, this.videoTrackId});
+
+  String? audioTrackId;
+  String? videoTrackId;
+
+  _BorrowedStreamLease copyWith({String? audioTrackId, String? videoTrackId}) {
+    return _BorrowedStreamLease(
+      audioTrackId: audioTrackId ?? this.audioTrackId,
+      videoTrackId: videoTrackId ?? this.videoTrackId,
+    );
+  }
 }

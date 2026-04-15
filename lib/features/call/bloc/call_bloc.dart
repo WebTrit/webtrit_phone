@@ -211,6 +211,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await _stopRingbackSound();
 
+    for (final activeCall in state.activeCalls) {
+      await _releaseLocalStream(activeCall.localStream);
+    }
+
     await _peerConnectionManager.dispose();
 
     _clearRenegotiationHandlers();
@@ -610,7 +614,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           activeCall.displayName ?? activeCall.handle.value,
           CallkeepEndCallReason.remoteEnded,
         );
-        await activeCall.localStream?.dispose();
+        await _releaseLocalStream(activeCall.localStream);
       });
       emit(state.copyWithPopActiveCall(event.callId));
     } catch (e) {
@@ -1177,7 +1181,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         // This handles closing the connection and removing the completer.
         await _peerConnectionManager.disposePeerConnection(event.callId);
 
-        await call.localStream?.dispose();
+        await _releaseLocalStream(call.localStream);
 
         emit(state.copyWithPopActiveCall(event.callId));
 
@@ -1229,7 +1233,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
               '__onCallSignalingEventCallUpdating: peerConnection is null - most likely some state issue',
             );
           } else {
-            await peerConnectionPolicyApplier?.apply(peerConnection, hasRemoteVideo: jsep.hasVideo);
+            final localStream = activeCall.localStream;
+            if (localStream != null) {
+              await peerConnectionPolicyApplier?.apply(
+                peerConnection,
+                hasRemoteVideo: jsep.hasVideo,
+                localStream: localStream,
+                frontCamera: activeCall.frontCamera,
+              );
+            }
 
             // Optimistic pre-check for glare condition. May be stale because
             // flutter_webrtc caches signalingState and updates it only when the
@@ -1607,42 +1619,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (peerConnection == null) return;
 
     try {
-      // Capture new audio and video pair together to avoid time sync issues
-      // and avoid storing separate audio and video tracks to control them on mute, camera switch etc
-      final newLocalStream = await userMediaBuilder.build(video: true, frontCamera: activeCall.frontCamera);
-
-      final newAudioTrack = newLocalStream.getAudioTracks().firstOrNull;
-      final newVideoTrack = newLocalStream.getVideoTracks().firstOrNull;
-
-      final senders = await peerConnection.getSenders();
-      final audioSender = senders.firstWhereOrNull((s) => s.track?.kind == 'audio');
-      final videoSender = senders.firstWhereOrNull((s) => s.track?.kind == 'video');
-
-      /// Replace audio/video tracks using existing senders to avoid adding new m= lines
-      ///
-      /// Alternatively, you can use (remove || stop) + add tracks flow
-      /// but it has weak support on infrastructure level:
-      /// - second audio m= line causes problems with call recordings and music on hold
-      /// - second video m= line causes empty video stream
-      ///
-      /// So for best compatibility, use existing senders and control them via .enabled or .replaceTrack
-      if (audioSender != null && newAudioTrack != null) {
-        await audioSender.replaceTrack(newAudioTrack);
-      } else if (newAudioTrack != null) {
-        final audioSenderResult = await peerConnection.safeAddTrack(newAudioTrack, newLocalStream);
-        _checkSenderResult(audioSenderResult, 'audio');
+      final newVideoTrack = await userMediaBuilder.ensureVideoTrack(localStream, frontCamera: activeCall.frontCamera);
+      if (newVideoTrack == null) {
+        submitNotification(const CallUserMediaErrorNotification());
+        return;
       }
 
-      if (videoSender != null && newVideoTrack != null) {
+      final senders = await peerConnection.getSenders();
+      final videoSender = senders.firstWhereOrNull((s) => s.track?.kind == 'video');
+
+      if (videoSender != null) {
         await videoSender.replaceTrack(newVideoTrack);
-      } else if (newVideoTrack != null) {
-        final videoSenderResult = await peerConnection.safeAddTrack(newVideoTrack, newLocalStream);
+      } else {
+        final videoSenderResult = await peerConnection.safeAddTrack(newVideoTrack, localStream);
         _checkSenderResult(videoSenderResult, 'video');
       }
 
-      emit(
-        state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(localStream: newLocalStream, video: true)),
-      );
+      emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: true)));
 
       await callkeep.reportUpdateCall(event.callId, hasVideo: true);
     } on UserMediaError catch (e) {
@@ -2316,7 +2309,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // or after skipping it for blind transfer, to prevent "Simulate a 'hangup' coming from the
       // application" triggered by "No WebRTC media anymore".
       await _peerConnectionManager.disposePeerConnection(activeCall.callId);
-      await activeCall.localStream?.dispose();
+      await _releaseLocalStream(activeCall.localStream);
     });
 
     emit(state.copyWithPopActiveCall(event.callId));
@@ -2893,7 +2886,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(_PeerConnectionEvent.renegotiationNeeded(event.callId, event.line));
     } catch (e, stackTrace) {
       localStream?.getTracks().forEach((t) => t.stop());
-      await localStream?.dispose();
+      await _releaseLocalStream(localStream);
       await peerConnection?.dispose();
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
       add(_ResetStateEvent.completeCall(event.callId));
@@ -3274,6 +3267,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> _playRingbackSound() => _callkeepSound.playRingbackSound();
 
   Future<void> _stopRingbackSound() => _callkeepSound.stopRingbackSound();
+
+  Future<void> _releaseLocalStream(MediaStream? stream) async {
+    if (stream == null) return;
+    await userMediaBuilder.release(stream);
+  }
 
   Future<void> _assignInitialPresence(List<SignalingPresenceInfo> data) async {
     _logger.info('Received initial presence info: ${data.length} entries');
