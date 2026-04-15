@@ -42,6 +42,14 @@ class SignalingHub {
   /// Replayed to late subscribers so they receive the current session state.
   final List<List<dynamic>> _sessionBuffer = [];
 
+  /// callId -> encoded [IncomingCallEvent] for calls that are currently ringing.
+  ///
+  /// Replayed to late subscribers so they do not miss an in-flight incoming
+  /// call that arrived before they subscribed. Entries are removed when a
+  /// [HangupEvent] with the same callId is received, or when [SignalingConnecting]
+  /// resets the session.
+  final Map<String, List<dynamic>> _inflightIncomingCalls = {};
+
   StreamSubscription<SignalingModuleEvent>? _moduleSubscription;
   bool _started = false;
 
@@ -79,13 +87,23 @@ class SignalingHub {
     _receivePort.close();
     _subscribers.clear();
     _sessionBuffer.clear();
+    _inflightIncomingCalls.clear();
     _logger.fine('Hub disposed');
   }
 
   void _onModuleEvent(SignalingModuleEvent event) {
-    if (event is SignalingConnecting) _sessionBuffer.clear();
+    if (event is SignalingConnecting) {
+      _sessionBuffer.clear();
+      _inflightIncomingCalls.clear();
+    }
     final encoded = encodeHubEvent(event);
-    if (event is! SignalingProtocolEvent) _sessionBuffer.add(encoded);
+    if (event is! SignalingProtocolEvent) {
+      _sessionBuffer.add(encoded);
+    } else if (event.event is IncomingCallEvent) {
+      _inflightIncomingCalls[(event.event as IncomingCallEvent).callId] = encoded;
+    } else if (event.event is HangupEvent) {
+      _inflightIncomingCalls.remove((event.event as HangupEvent).callId);
+    }
     _broadcast(encoded);
   }
 
@@ -134,6 +152,12 @@ class SignalingHub {
     cmd.replyPort.send(encodeSubAck());
     // Replay current session buffer so the new subscriber gets the full state.
     for (final event in List<List<dynamic>>.from(_sessionBuffer)) {
+      cmd.replyPort.send(event);
+    }
+    // Replay any in-flight incoming calls that arrived before this subscriber.
+    // Without this, the push-notification isolate would receive a handshake
+    // with no active lines and incorrectly release a ringing Telecom call.
+    for (final event in _inflightIncomingCalls.values) {
       cmd.replyPort.send(event);
     }
   }

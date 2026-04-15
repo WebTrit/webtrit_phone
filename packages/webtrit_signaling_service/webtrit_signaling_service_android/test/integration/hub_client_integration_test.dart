@@ -611,6 +611,86 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
+  // In-flight incoming call replay for late subscribers
+  // -------------------------------------------------------------------------
+
+  group('In-flight incoming call replay', () {
+    late _FakeSignalingClient fakeClient;
+    late _SignalingModule module;
+    late SignalingHub hub;
+
+    setUp(() async {
+      fakeClient = _FakeSignalingClient();
+      module = _buildModule(fakeClient);
+      hub = SignalingHub(module);
+      hub.start();
+      module.connect();
+      await Future<void>.delayed(Duration.zero);
+    });
+
+    tearDown(() async {
+      await hub.dispose();
+      await module.dispose();
+    });
+
+    test('late subscriber receives IncomingCallEvent that arrived before subscription', () async {
+      fakeClient.injectHandshake(_kHandshake);
+      fakeClient.injectEvent(IncomingCallEvent(line: 0, callId: 'call-replay-1', callee: 'bob', caller: 'alice'));
+      await Future<void>.delayed(Duration.zero);
+
+      // Subscribe after IncomingCallEvent was already broadcast.
+      final client = await _subscribeClient('inflight-1');
+      addTearDown(client.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      client.events.listen(events.add);
+      await Future<void>.delayed(Duration.zero);
+
+      final incoming = events.whereType<SignalingProtocolEvent>().where((e) => e.event is IncomingCallEvent).toList();
+      expect(incoming, hasLength(1), reason: 'Late subscriber must receive buffered IncomingCallEvent');
+      expect((incoming.first.event as IncomingCallEvent).callId, 'call-replay-1');
+    });
+
+    test('IncomingCallEvent is removed from replay buffer after HangupEvent', () async {
+      fakeClient.injectHandshake(_kHandshake);
+      fakeClient.injectEvent(IncomingCallEvent(line: 0, callId: 'call-replay-2', callee: 'bob', caller: 'alice'));
+      fakeClient.injectEvent(HangupEvent(line: 0, callId: 'call-replay-2', code: 487, reason: 'Request Terminated'));
+      await Future<void>.delayed(Duration.zero);
+
+      final client = await _subscribeClient('inflight-2');
+      addTearDown(client.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      client.events.listen(events.add);
+      await Future<void>.delayed(Duration.zero);
+
+      final incoming = events.whereType<SignalingProtocolEvent>().where((e) => e.event is IncomingCallEvent).toList();
+      expect(incoming, isEmpty, reason: 'IncomingCallEvent must be evicted after HangupEvent');
+    });
+
+    test('SignalingConnecting clears in-flight incoming calls', () async {
+      fakeClient.injectHandshake(_kHandshake);
+      fakeClient.injectEvent(IncomingCallEvent(line: 0, callId: 'call-replay-3', callee: 'bob', caller: 'alice'));
+      await Future<void>.delayed(Duration.zero);
+
+      // Disconnect triggers a new SignalingConnecting which clears the buffer.
+      fakeClient.injectDisconnect(1000, 'done');
+      module.connect();
+      await Future<void>.delayed(Duration.zero);
+
+      final client = await _subscribeClient('inflight-3');
+      addTearDown(client.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      client.events.listen(events.add);
+      await Future<void>.delayed(Duration.zero);
+
+      final incoming = events.whereType<SignalingProtocolEvent>().where((e) => e.event is IncomingCallEvent).toList();
+      expect(incoming, isEmpty, reason: 'IncomingCallEvent from previous session must not be replayed');
+    });
+  });
+
+  // -------------------------------------------------------------------------
   // Execute routing through hub
   // -------------------------------------------------------------------------
 
