@@ -267,8 +267,9 @@ class SignalingForegroundIsolateManager {
   /// [START_NOT_STICKY], so after [stopService] the OS will not restart the service.
   void _requestServiceStop() {
     _logger.info('pushBound: grace period elapsed with no subscribers — requesting service stop');
-    if (_testStopService != null) {
-      _testStopService!();
+    final stopOverride = _testStopService;
+    if (stopOverride != null) {
+      stopOverride();
     } else {
       PSignalingServiceHostApi().stopService();
     }
