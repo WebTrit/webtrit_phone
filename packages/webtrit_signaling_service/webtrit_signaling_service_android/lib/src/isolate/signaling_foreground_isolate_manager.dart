@@ -157,12 +157,6 @@ class SignalingForegroundIsolateManager {
       _hub!.onHasSubscribersChanged = _onHubHasSubscribersChanged;
     }
     _hub!.start();
-    if (isPushBound && !_hub!.hasSubscribers) {
-      // No subscriber at start time (typical push-started service where the
-      // Activity has not connected yet). Schedule the cleanup timer now so
-      // the service stops if the Activity never launches.
-      _onHubHasSubscribersChanged(false);
-    }
 
     _eventsSubscription = _signalingModule!.events.listen(_onEvent);
     _signalingModule!.connect();
