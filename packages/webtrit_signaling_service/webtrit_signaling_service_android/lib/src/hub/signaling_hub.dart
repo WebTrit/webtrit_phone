@@ -48,6 +48,25 @@ class SignalingHub {
   /// Replayed to late subscribers so they receive the current session state.
   final List<List<dynamic>> _sessionBuffer = [];
 
+  /// callId → ordered list of encoded [SignalingProtocolEvent]s for that call.
+  ///
+  /// Tracks the lifecycle of each incoming call that arrived during the current
+  /// WebSocket session so that late subscribers (e.g. the Activity opening
+  /// after a push-notification isolate has already processed the call) receive
+  /// the full event sequence and can reconstruct the correct current state.
+  ///
+  /// Without this map a subscriber that opens after [AcceptedEvent] would only
+  /// receive [IncomingCallEvent] from [_inflightIncomingCalls] and incorrectly
+  /// treat an already-answered call as still ringing.
+  ///
+  /// Lifecycle:
+  /// - [IncomingCallEvent] → new entry created for callId.
+  /// - Subsequent [CallEvent]s (e.g. [AcceptedEvent], [RingingEvent]) → appended.
+  /// - Terminal events ([HangupEvent], [MissedCallEvent]) → entry removed;
+  ///   the dead call's line is also evicted from the buffered handshake.
+  /// - [SignalingConnecting] → entire map cleared (new session).
+  final Map<String, List<List<dynamic>>> _callEventHistory = {};
+
   StreamSubscription<SignalingModuleEvent>? _moduleSubscription;
   bool _started = false;
 
@@ -85,14 +104,81 @@ class SignalingHub {
     _receivePort.close();
     _subscribers.clear();
     _sessionBuffer.clear();
+    _callEventHistory.clear();
     _logger.fine('Hub disposed');
   }
 
   void _onModuleEvent(SignalingModuleEvent event) {
-    if (event is SignalingConnecting) _sessionBuffer.clear();
+    if (event is SignalingConnecting) {
+      _sessionBuffer.clear();
+      _callEventHistory.clear();
+    }
     final encoded = encodeHubEvent(event);
-    if (event is! SignalingProtocolEvent) _sessionBuffer.add(encoded);
+    if (event is! SignalingProtocolEvent) {
+      _sessionBuffer.add(encoded);
+    } else {
+      _updateCallHistory(event.event, encoded);
+    }
     _broadcast(encoded);
+  }
+
+  /// Updates [_callEventHistory] based on a protocol event.
+  ///
+  /// - [IncomingCallEvent]: starts a new history entry for that callId.
+  /// - Subsequent [CallEvent]s: appended to the existing history so that late
+  ///   subscribers replay the full sequence (e.g. [IncomingCallEvent] →
+  ///   [AcceptedEvent]) and reach the correct current state.
+  /// - Terminal events ([HangupEvent], [MissedCallEvent]): remove the history
+  ///   entry and evict the dead call's line from the buffered handshake.
+  /// - Non-[CallEvent] protocol events: no call history affected.
+  void _updateCallHistory(Event event, List<dynamic> encoded) {
+    if (event is IncomingCallEvent) {
+      _callEventHistory[event.callId] = [encoded];
+      return;
+    }
+    if (event is! CallEvent) return;
+
+    if (event is HangupEvent || event is MissedCallEvent) {
+      // Always evict the dead call's line from the handshake — regardless of
+      // whether this call was tracked in [_callEventHistory]. Calls that arrived
+      // in the initial [StateHandshake] (before the hub started) are never added
+      // to [_callEventHistory], but their stale handshake line must still be
+      // removed so late subscribers don't see an ended call in handshake.lines.
+      _evictHandshakeLine(event.callId);
+      _callEventHistory.remove(event.callId);
+      _logger.fine('Hub: call history removed (terminal) callId=${event.callId}');
+      return;
+    }
+
+    // Non-terminal event: append to history if this call is being tracked
+    // (i.e. it arrived via IncomingCallEvent during this session).
+    final history = _callEventHistory[event.callId];
+    if (history != null) {
+      history.add(encoded);
+      _logger.fine('Hub: call history appended ${event.runtimeType} callId=${event.callId}');
+    }
+  }
+
+  /// Removes the [callId] entry from the [lines] list inside the buffered
+  /// [SignalingHandshakeReceived] entry (if present).
+  ///
+  /// Mutates the encoded map in-place: no re-encoding required because
+  /// [_sessionBuffer] holds a direct reference to the same [Map] object that
+  /// [encodeHubEvent] produced for the handshake.
+  void _evictHandshakeLine(String callId) {
+    for (final entry in _sessionBuffer) {
+      if (!isHubEventHandshakeReceived(entry) || entry.length < 2) continue;
+      final map = entry[1];
+      if (map is! Map) continue;
+      final lines = map['lines'];
+      if (lines is! List) continue;
+      final before = lines.length;
+      lines.removeWhere((l) => l is Map && l['call_id'] == callId);
+      if (lines.length != before) {
+        _logger.fine('Hub: evicted handshake line callId=$callId');
+      }
+      return;
+    }
   }
 
   void _broadcast(List<dynamic> encoded) {
@@ -140,9 +226,19 @@ class SignalingHub {
     if (wasEmpty) onHasSubscribersChanged?.call(true);
     // Ack first so the subscriber knows the hub port is alive (not stale).
     cmd.replyPort.send(encodeSubAck());
-    // Replay current session buffer so the new subscriber gets the full state.
+    // Replay current session buffer so the new subscriber gets the full connection state.
     for (final event in List<List<dynamic>>.from(_sessionBuffer)) {
       cmd.replyPort.send(event);
+    }
+    // Replay the full event history for each active in-session call.
+    // Protocol events are not stored in [_sessionBuffer], so without this
+    // replay a late subscriber would miss events that arrived after the initial
+    // handshake — e.g. an [AcceptedEvent] that already moved the call out of
+    // the ringing state before the Activity opened.
+    for (final history in List<List<List<dynamic>>>.from(_callEventHistory.values)) {
+      for (final encoded in history) {
+        cmd.replyPort.send(encoded);
+      }
     }
   }
 

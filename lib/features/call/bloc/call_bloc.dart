@@ -2096,6 +2096,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     event.fulfill();
 
     ActiveCall? call = state.retrieveActiveCall(event.callId);
+    _logger.info(
+      '__onCallPerformEventAnswered: retrieveActiveCall=${call != null ? "found" : "NULL"} callId=${event.callId}',
+    );
     if (call == null) return;
 
     // Prevent performing double answer and race conditions
