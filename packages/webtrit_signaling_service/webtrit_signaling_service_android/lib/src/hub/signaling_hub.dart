@@ -56,7 +56,7 @@ class SignalingHub {
   /// the full event sequence and can reconstruct the correct current state.
   ///
   /// Without this map a subscriber that opens after [AcceptedEvent] would only
-  /// receive [IncomingCallEvent] from [_inflightIncomingCalls] and incorrectly
+  /// receive [IncomingCallEvent] replayed from [_sessionBuffer] and incorrectly
   /// treat an already-answered call as still ringing.
   ///
   /// Lifecycle:

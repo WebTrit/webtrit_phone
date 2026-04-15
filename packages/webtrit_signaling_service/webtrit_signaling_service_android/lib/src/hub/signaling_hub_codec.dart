@@ -131,7 +131,8 @@ bool isPong(List<dynamic> msg) => msg.isNotEmpty && msg[0] == _tagPong;
 /// Returns true when [entry] is an encoded [SignalingHandshakeReceived] event.
 ///
 /// Used by [SignalingHub] to evict stale handshake entries from the session
-/// buffer when a [HangupEvent] arrives — avoids exposing the private tag.
+/// buffer when a terminal call event ([HangupEvent] or [MissedCallEvent])
+/// arrives — avoids exposing the private tag.
 bool isHubEventHandshakeReceived(List<dynamic> entry) => entry.isNotEmpty && entry[0] == _tagHandshakeReceived;
 
 Object? _encodeExecuteError(Object? error) {

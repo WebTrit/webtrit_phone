@@ -66,14 +66,17 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   /// Requests queued while the signaling module is not yet connected.
   final List<_PendingRequest> _pendingRequests = [];
 
-  /// Completer resolved when all isolate work is done and [releaseCall] has been called.
+  /// Completer resolved when all isolate work is done and [_releaseCall] or
+  /// [_handoffCall] has been called (depending on whether the call was answered).
   Completer<void>? _completer;
 
-  /// Set to true when [performAnswerCall] is received from the native side,
-  /// indicating the user answered via the push notification. Used in [close]
-  /// to call [handoffCall] instead of [releaseCall] so the PhoneConnection
-  /// is not terminated before the Activity can adopt it.
-  bool _callAnswered = false;
+  /// The callId of the call answered via the push notification.
+  ///
+  /// Set in [performAnswerCall] only when a network connection is confirmed.
+  /// Used in [close] to call [_handoffCall] instead of [_releaseCall] so the
+  /// PhoneConnection is not terminated before the Activity can adopt it.
+  /// Null means the call was not answered (missed, declined, or no network).
+  String? _answeredCallId;
 
   // Workaround: captures init time as fallback timestamp for call logs.
   final DateTime _initialConnectionTime = DateTime.now();
@@ -101,6 +104,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       throw StateError('PushNotificationIsolateManager.run() called before init()');
     }
     _metadata = metadata;
+    _answeredCallId = null;
     _completer = Completer<void>();
     logger.info('run: callId=${metadata?.callId} isConnected=${_signalingModule.isConnected}');
     // WebtritSignalingService.connect() is idempotent: the internal
@@ -127,8 +131,8 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       await _signalingSubscription.cancel();
       await _signalingModule.dispose();
     }
-    if (_callAnswered) {
-      await _handoffCall(_metadata?.callId);
+    if (_answeredCallId != null) {
+      await _handoffCall(_answeredCallId);
     } else {
       await _releaseCall(_metadata?.callId);
     }
@@ -149,14 +153,19 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   }
 
   @override
-  void performAnswerCall(String callId) async {
-    _callAnswered = true;
+  void performAnswerCall(String callId) {
+    _handlePerformAnswerCall(callId);
+  }
+
+  Future<void> _handlePerformAnswerCall(String callId) async {
     final hasNetwork = await Connectivity().checkConnectivity().then(
       (r) => r.isNotEmpty && !r.contains(ConnectivityResult.none),
     );
     if (!hasNetwork) {
-      throw Exception('performAnswerCall: no network for callId=$callId');
+      logger.warning('performAnswerCall: no network for callId=$callId, skipping handoff');
+      return;
     }
+    _answeredCallId = callId;
   }
 
   // ---------------------------------------------------------------------------
@@ -432,8 +441,8 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     if (callId == null) return;
     try {
       await _pushService.handoffCall(callId);
-    } catch (e) {
-      logger.severe('_handoffCall failed: $e');
+    } catch (e, st) {
+      logger.severe('_handoffCall failed: $e', e, st);
     }
   }
 
