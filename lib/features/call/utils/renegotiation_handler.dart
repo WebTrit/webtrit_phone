@@ -12,7 +12,7 @@ final _logger = Logger('RenegotiationHandler');
 /// Callback responsible for sending the renegotiation offer to the remote peer
 /// via the signaling channel. The caller constructs the transport-specific
 /// request; this handler stays decoupled from the signaling layer.
-typedef RenegotiationExecutor = Future<void> Function(String callId, int? lineId, RTCSessionDescription jsep);
+typedef RenegotiationExecutor = Future<void> Function(String callId, RTCSessionDescription jsep);
 
 /// Handles WebRTC renegotiation triggered by [RTCPeerConnection.onRenegotiationNeeded].
 ///
@@ -77,12 +77,7 @@ class RenegotiationHandler {
   /// Transient wrong-state errors from [RTCPeerConnection.setLocalDescription]
   /// are logged at WARNING and do not escalate to [callErrorReporter].
   /// All other errors are forwarded to [callErrorReporter].
-  Future<void> handle(
-    String callId,
-    int? lineId,
-    RTCPeerConnection peerConnection,
-    RenegotiationExecutor execute,
-  ) async {
+  Future<void> handle(String callId, RTCPeerConnection peerConnection, RenegotiationExecutor execute) async {
     if (_isHandling) {
       _logger.fine(() => 'onRenegotiationNeeded: queued retry — already handling a renegotiation cycle for $callId');
       _pendingRetry = true;
@@ -124,15 +119,13 @@ class RenegotiationHandler {
         // localDescription should be set before sending the offer to transition into have-local-offer state.
         await peerConnection.setLocalDescription(localDescription);
 
-        await execute(callId, lineId, localDescription);
+        await execute(callId, localDescription);
       } on String catch (e) {
         throw RtcJsepErrorParser.parse(e);
       }
     } on WebtritSignalingErrorException catch (e) {
-      _logger.warning(
-        () => 'onRenegotiationNeeded: UpdateRequest rejected by server (callId=$callId, lineId=$lineId): $e',
-      );
-      callErrorReporter.handle(e, null, 'RenegotiationHandler.handle error (callId=$callId, lineId=$lineId)');
+      _logger.warning(() => 'onRenegotiationNeeded: UpdateRequest rejected by server (callId=$callId): $e');
+      callErrorReporter.handle(e, null, 'RenegotiationHandler.handle error (callId=$callId)');
     } on PCWrongSignalingState catch (e) {
       // flutter_webrtc surfaces native errors as plain strings. A "wrong state" failure
       // on setLocalDescription means a concurrent setRemoteDescription (e.g. from an
@@ -146,13 +139,13 @@ class RenegotiationHandler {
             '— libwebrtc will re-fire onRenegotiationNeeded when stable',
       );
     } catch (e, s) {
-      callErrorReporter.handle(e, s, 'RenegotiationHandler.handle error (callId=$callId, lineId=$lineId)');
+      callErrorReporter.handle(e, s, 'RenegotiationHandler.handle error (callId=$callId)');
     } finally {
       _isHandling = false;
       if (_pendingRetry) {
         _pendingRetry = false;
         _logger.fine(() => 'onRenegotiationNeeded: running pending retry for $callId');
-        unawaited(handle(callId, lineId, peerConnection, execute));
+        unawaited(handle(callId, peerConnection, execute));
       }
     }
   }
