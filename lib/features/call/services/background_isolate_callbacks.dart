@@ -71,8 +71,27 @@ Future<void> _disposeContext() async {
 /// Entry point for the CallKeep push-notification background isolate.
 ///
 /// Runs the full incoming-call lifecycle (signaling, missed-call notification,
-/// call log, native release) with a 20 s timeout, then disposes all resources.
+/// call log, native release) with a [_kPushNotificationSyncTimeout] timeout,
+/// then disposes all resources.
 /// Registered via [AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback].
+///
+/// ## SignalingForegroundService lifetime after this callback
+///
+/// This callback completes (and the push isolate unsubscribes from the
+/// [SignalingHub]) only after the call is resolved — a [HangupEvent] or
+/// [_kPushNotificationSyncTimeout] timeout, not when the notification is shown.
+///
+/// When the push isolate unsubscribes and no other subscriber (Activity) is
+/// connected, [SignalingForegroundIsolateManager] starts a grace timer
+/// (`pushBoundNoSubscriberGrace`, default 10 s). During this window:
+/// - If the Activity subscribes within the grace period (normal answer flow),
+///   the timer is cancelled and the service keeps running.
+/// - If no subscriber arrives (call was declined before the Activity launched),
+///   the service stops itself after the grace period expires.
+///
+/// This means the [SignalingForegroundService] may stay alive for up to
+/// [_kPushNotificationSyncTimeout] + `pushBoundNoSubscriberGrace` after a push
+/// arrives before self-terminating in the worst case (timeout + no Activity).
 @pragma('vm:entry-point')
 Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metadata) async {
   try {

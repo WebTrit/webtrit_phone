@@ -29,6 +29,7 @@ class PSignalingServiceStatus {
     required this.token,
     required this.incomingCallHandlerHandle,
     required this.moduleFactoryHandle,
+    required this.mode,
     this.trustedCertificatesJson,
   });
 
@@ -57,6 +58,14 @@ class PSignalingServiceStatus {
   /// Obtained via [PluginUtilities.getCallbackHandle] and persisted via
   /// [PSignalingServiceHostApi.saveModuleFactory]. 0 means no factory registered.
   final int moduleFactoryHandle;
+
+  /// The mode the service was started with.
+  ///
+  /// Included in every [onSynchronize] call so the background Dart isolate can
+  /// adapt its behaviour without reading Kotlin SharedPreferences directly.
+  /// When [enabled] is false this field carries [PSignalingServiceMode.persistent]
+  /// as a placeholder; consumers must not act on it in that case.
+  final PSignalingServiceMode mode;
 }
 
 // ---------------------------------------------------------------------------

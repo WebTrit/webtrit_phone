@@ -38,6 +38,12 @@ class SignalingHub {
   /// (no subscribers — app is closed, persistent-service mode).
   bool get hasSubscribers => _subscribers.isNotEmpty;
 
+  /// Called when [hasSubscribers] transitions (false → true or true → false).
+  ///
+  /// Used by [SignalingForegroundIsolateManager] in pushBound mode to detect
+  /// when no subscriber remains and schedule a cleanup timer.
+  void Function(bool hasSubscribers)? onHasSubscribersChanged;
+
   /// Encoded events since the last [SignalingConnecting] event.
   /// Replayed to late subscribers so they receive the current session state.
   final List<List<dynamic>> _sessionBuffer = [];
@@ -128,8 +134,10 @@ class SignalingHub {
   }
 
   void _handleSubscribe(SignalingHubSubscribeCommand cmd) {
+    final wasEmpty = _subscribers.isEmpty;
     _subscribers[cmd.consumerId] = cmd.replyPort;
     _logger.fine('Hub subscriber added: ${cmd.consumerId} (total: ${_subscribers.length})');
+    if (wasEmpty) onHasSubscribersChanged?.call(true);
     // Ack first so the subscriber knows the hub port is alive (not stale).
     cmd.replyPort.send(encodeSubAck());
     // Replay current session buffer so the new subscriber gets the full state.
@@ -139,8 +147,10 @@ class SignalingHub {
   }
 
   void _handleUnsubscribe(SignalingHubUnsubscribeCommand cmd) {
+    final wasNotEmpty = _subscribers.isNotEmpty;
     _subscribers.remove(cmd.consumerId);
     _logger.fine('Hub subscriber removed: ${cmd.consumerId} (total: ${_subscribers.length})');
+    if (wasNotEmpty && _subscribers.isEmpty) onHasSubscribersChanged?.call(false);
   }
 
   void _handleExecute(SignalingHubExecuteCommand cmd) {

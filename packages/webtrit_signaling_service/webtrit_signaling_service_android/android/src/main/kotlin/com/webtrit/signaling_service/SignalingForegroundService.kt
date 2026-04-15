@@ -237,6 +237,7 @@ class SignalingForegroundService : Service() {
                 trustedCertificatesJson = null,
                 incomingCallHandlerHandle = 0L,
                 moduleFactoryHandle = 0L,
+                mode = PSignalingServiceMode.PERSISTENT,
             ),
         ) { result ->
             result.onSuccess { settle("isolate ACKed stop signal") }
@@ -278,6 +279,7 @@ class SignalingForegroundService : Service() {
                 trustedCertificatesJson = StorageDelegate.getTrustedCertificatesJson(applicationContext),
                 incomingCallHandlerHandle = StorageDelegate.getIncomingCallHandler(applicationContext),
                 moduleFactoryHandle = StorageDelegate.getModuleFactoryHandle(applicationContext),
+                mode = if (StorageDelegate.isPushBound(applicationContext)) PSignalingServiceMode.PUSH_BOUND else PSignalingServiceMode.PERSISTENT,
             ),
         ) { result ->
             result.onSuccess {

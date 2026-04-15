@@ -236,7 +236,15 @@ data class PSignalingServiceStatus (
    * Obtained via [PluginUtilities.getCallbackHandle] and persisted via
    * [PSignalingServiceHostApi.saveModuleFactory]. 0 means no factory registered.
    */
-  val moduleFactoryHandle: Long
+  val moduleFactoryHandle: Long,
+  /**
+   * The mode the service was started with.
+   *
+   * Included in every onSynchronize call so the background Dart isolate can
+   * adapt its behaviour without reading Kotlin SharedPreferences directly.
+   * When [enabled] is false this field carries PERSISTENT as a placeholder.
+   */
+  val mode: PSignalingServiceMode
 )
  {
   companion object {
@@ -248,7 +256,8 @@ data class PSignalingServiceStatus (
       val trustedCertificatesJson = pigeonVar_list[4] as String?
       val incomingCallHandlerHandle = pigeonVar_list[5] as Long
       val moduleFactoryHandle = pigeonVar_list[6] as Long
-      return PSignalingServiceStatus(enabled, coreUrl, tenantId, token, trustedCertificatesJson, incomingCallHandlerHandle, moduleFactoryHandle)
+      val mode = PSignalingServiceMode.ofRaw((pigeonVar_list[7] as Long).toInt())!!
+      return PSignalingServiceStatus(enabled, coreUrl, tenantId, token, trustedCertificatesJson, incomingCallHandlerHandle, moduleFactoryHandle, mode)
     }
   }
   fun toList(): List<Any?> {
@@ -260,6 +269,7 @@ data class PSignalingServiceStatus (
       trustedCertificatesJson,
       incomingCallHandlerHandle,
       moduleFactoryHandle,
+      mode.raw.toLong(),
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -270,7 +280,7 @@ data class PSignalingServiceStatus (
       return true
     }
     val other = other as PSignalingServiceStatus
-    return MessagesPigeonUtils.deepEquals(this.enabled, other.enabled) && MessagesPigeonUtils.deepEquals(this.coreUrl, other.coreUrl) && MessagesPigeonUtils.deepEquals(this.tenantId, other.tenantId) && MessagesPigeonUtils.deepEquals(this.token, other.token) && MessagesPigeonUtils.deepEquals(this.trustedCertificatesJson, other.trustedCertificatesJson) && MessagesPigeonUtils.deepEquals(this.incomingCallHandlerHandle, other.incomingCallHandlerHandle) && MessagesPigeonUtils.deepEquals(this.moduleFactoryHandle, other.moduleFactoryHandle)
+    return MessagesPigeonUtils.deepEquals(this.enabled, other.enabled) && MessagesPigeonUtils.deepEquals(this.coreUrl, other.coreUrl) && MessagesPigeonUtils.deepEquals(this.tenantId, other.tenantId) && MessagesPigeonUtils.deepEquals(this.token, other.token) && MessagesPigeonUtils.deepEquals(this.trustedCertificatesJson, other.trustedCertificatesJson) && MessagesPigeonUtils.deepEquals(this.incomingCallHandlerHandle, other.incomingCallHandlerHandle) && MessagesPigeonUtils.deepEquals(this.moduleFactoryHandle, other.moduleFactoryHandle) && MessagesPigeonUtils.deepEquals(this.mode, other.mode)
   }
 
   override fun hashCode(): Int {
@@ -282,6 +292,7 @@ data class PSignalingServiceStatus (
     result = 31 * result + MessagesPigeonUtils.deepHash(this.trustedCertificatesJson)
     result = 31 * result + MessagesPigeonUtils.deepHash(this.incomingCallHandlerHandle)
     result = 31 * result + MessagesPigeonUtils.deepHash(this.moduleFactoryHandle)
+    result = 31 * result + MessagesPigeonUtils.deepHash(this.mode)
     return result
   }
 }
