@@ -709,6 +709,8 @@ class AppLocalizationsMapper {
           localizations.notifications_errorSnackBar_callConnect,
       'notifications_errorSnackBar_callNegotiationTimeout':
           localizations.notifications_errorSnackBar_callNegotiationTimeout,
+      'notifications_errorSnackBar_callServiceBusyLine':
+          localizations.notifications_errorSnackBar_callServiceBusyLine,
       'notifications_errorSnackBar_callSignalingClientNotConnect': localizations
           .notifications_errorSnackBar_callSignalingClientNotConnect,
       'notifications_errorSnackBar_callSignalingClientSessionMissed':
@@ -1589,6 +1591,19 @@ class AppLocalizationsMapper {
               .cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService,
       'cdr_disconnectReason_dtlTransitIsNotMyNodeId':
           localizations.cdr_disconnectReason_dtlTransitIsNotMyNodeId,
+      'devTools_AppBarTitle': localizations.devTools_AppBarTitle,
+      'devTools_signalingService_groupTitle':
+          localizations.devTools_signalingService_groupTitle,
+      'devTools_signalingService_simulateKill_title':
+          localizations.devTools_signalingService_simulateKill_title,
+      'devTools_signalingService_simulateKill_subtitle':
+          localizations.devTools_signalingService_simulateKill_subtitle,
+      'devTools_signalingService_simulateKill_confirmMessage':
+          localizations.devTools_signalingService_simulateKill_confirmMessage,
+      'devTools_signalingService_simulateKill_confirm':
+          localizations.devTools_signalingService_simulateKill_confirm,
+      'devTools_signalingService_simulateKill_cancel':
+          localizations.devTools_signalingService_simulateKill_cancel,
       'agoTicker_daysAgo': (days) => localizations.agoTicker_daysAgo(days),
       'agoTicker_hoursAgo': (hours) => localizations.agoTicker_hoursAgo(hours),
       'agoTicker_minutesAgo': (minutes) =>
