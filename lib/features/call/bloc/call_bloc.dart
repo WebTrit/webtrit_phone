@@ -2218,6 +2218,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           Exception('call terminated during SDP setup'),
           StackTrace.current,
         );
+        // __onCallSignalingEventHangup emits copyWithPopActiveCall before awaiting
+        // callkeep.reportEndCall, so the native side may not have been notified yet.
+        // Call it explicitly here to avoid leaving the Telecom connection in ACTIVE state.
+        // Callkeep handles double calls gracefully (already-disconnected is a no-op).
+        await callkeep.reportEndCall(
+          event.callId,
+          call!.displayName ?? call.handle.value,
+          CallkeepEndCallReason.unanswered,
+        );
         return;
       }
 
@@ -2251,8 +2260,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (e is WebtritSignalingTransactionTerminateByDisconnectException &&
           e.closeCode == SignalingDisconnectCode.requestCallIdError.code) {
         _peerConnectionManager.completeError(event.callId, e, stackTrace);
-        add(_ResetStateEvent.completeCall(event.callId));
         _addToRecents(call!);
+        // _ResetStateEvent.completeCall calls callkeep.reportEndCall inside performOnActiveCall,
+        // which is wrapped in a try/catch. If disposePeerConnection throws (PC already completed
+        // with error), reportEndCall is silently skipped and the Telecom connection stays ACTIVE.
+        // Notify the native side directly to avoid zombie TC connections.
+        final activeCall = state.retrieveActiveCall(event.callId);
+        if (activeCall != null) {
+          emit(state.copyWithPopActiveCall(event.callId));
+          await callkeep.reportEndCall(
+            event.callId,
+            activeCall.displayName ?? activeCall.handle.value,
+            CallkeepEndCallReason.unanswered,
+          );
+        }
         return;
       }
 
