@@ -2,27 +2,27 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 
+final _kCreatedTime = DateTime(2024, 1, 1);
+
+CallLogEntry _makeEntry({String number = '555024', String? username}) => CallLogEntry(
+  id: 1,
+  direction: CallDirection.incoming,
+  number: number,
+  video: false,
+  createdTime: _kCreatedTime,
+  username: username,
+);
+
+Contact _makeContact({String? aliasName, String? firstName, String? lastName}) => Contact(
+  id: 1,
+  sourceType: ContactSourceType.local,
+  kind: ContactKind.visible,
+  aliasName: aliasName,
+  firstName: firstName,
+  lastName: lastName,
+);
+
 void main() {
-  final _kCreatedTime = DateTime(2024, 1, 1);
-
-  CallLogEntry _makeEntry({String number = '555024', String? username}) => CallLogEntry(
-    id: 1,
-    direction: CallDirection.incoming,
-    number: number,
-    video: false,
-    createdTime: _kCreatedTime,
-    username: username,
-  );
-
-  Contact _makeContact({String? aliasName, String? firstName, String? lastName}) => Contact(
-    id: 1,
-    sourceType: ContactSourceType.local,
-    kind: ContactKind.visible,
-    aliasName: aliasName,
-    firstName: firstName,
-    lastName: lastName,
-  );
-
   group('Recent.name — no contact', () {
     test('username null → falls back to number', () {
       final recent = Recent(callLogEntry: _makeEntry(username: null), contact: null);
