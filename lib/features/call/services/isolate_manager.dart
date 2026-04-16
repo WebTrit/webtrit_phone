@@ -133,6 +133,11 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     }
     if (_answeredCallId != null) {
       await _handoffCall(_answeredCallId);
+    } else if (_incomingCallEvents.containsKey(_metadata?.callId)) {
+      // The call is still active server-side (no HangupEvent received) — the
+      // Activity has likely taken over via a full-screen intent. Hand off
+      // instead of releasing so the ringing call is not terminated prematurely.
+      await _handoffCall(_metadata?.callId);
     } else {
       await _releaseCall(_metadata?.callId);
     }
@@ -272,7 +277,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
           _lines[event.callId] = event.line!;
         }
       case HangupEvent():
-        final incomingEventLog = _incomingCallEvents[event.callId];
+        final incomingEventLog = _incomingCallEvents.remove(event.callId);
         _onHangupCall(event, (
           direction: CallDirection.incoming,
           number: incomingEventLog?.caller ?? 'unknown',
