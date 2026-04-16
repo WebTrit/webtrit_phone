@@ -2299,8 +2299,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       } catch (declineError, _) {
         if (declineError is WebtritSignalingTransactionTerminateByDisconnectException &&
             declineError.closeCode == SignalingDisconnectCode.requestCallIdError.code) {
-          // Server closed WS with 4610 — the call was already terminated on the server side.
-          // WS will reconnect automatically; no error to report.
+          _logger.warning(
+            '__onCallPerformEventAnswered: DeclineRequest rejected with 4610 callId=${event.callId} — call already terminated server-side, ignoring',
+          );
           return;
         }
         callErrorReporter.handle(e, stackTrace, '__onCallPerformEventAnswered error:');
