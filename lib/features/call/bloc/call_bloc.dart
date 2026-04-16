@@ -2230,6 +2230,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return;
       }
 
+      // If the server closed the connection because the line no longer exists (4610 "call request on wrong line"),
+      // the call is already gone on the server side — clean up locally without sending a decline request.
+      // Sending decline here would cause a reconnect loop: each reconnect attempt would send decline again,
+      // receive 4610 again, disconnect again, and reconnect indefinitely.
+      if (e is WebtritSignalingTransactionTerminateByDisconnectException &&
+          e.closeCode == SignalingDisconnectCode.requestCallIdError.code) {
+        _peerConnectionManager.completeError(event.callId, e, stackTrace);
+        add(_ResetStateEvent.completeCall(event.callId));
+        _addToRecents(call!);
+        return;
+      }
+
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
       add(_ResetStateEvent.completeCall(event.callId));
 
