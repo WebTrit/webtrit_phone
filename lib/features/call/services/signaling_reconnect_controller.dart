@@ -125,7 +125,7 @@ class SignalingReconnectController {
       _wasConnected = false;
     }
     _consecutiveFailures = 0;
-    _scheduleReconnect(kSignalingClientFastReconnectDelay);
+    _scheduleReconnect(kSignalingClientFastReconnectDelay, force: true);
   }
 
   /// Call when [AppLifecycleState.paused] or [AppLifecycleState.detached] fires.
