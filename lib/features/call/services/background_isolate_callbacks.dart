@@ -75,11 +75,22 @@ Future<void> _disposeContext() async {
 /// then disposes all resources.
 /// Registered via [AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback].
 ///
-/// ## SignalingForegroundService lifetime after this callback
+/// ## Lifecycle and handoff
 ///
-/// This callback completes (and the push isolate unsubscribes from the
-/// [SignalingHub]) only after the call is resolved — a [HangupEvent] or
-/// [_kPushNotificationSyncTimeout] timeout, not when the notification is shown.
+/// The push isolate runs until one of three outcomes:
+/// - **Missed call**: [HangupEvent] received before the user answers →
+///   `releaseCall()` terminates the [PhoneConnection] and stops [IncomingCallService].
+/// - **Answered via push UI**: `performAnswerCall` fires before the timeout →
+///   `handoffCall()` stops [IncomingCallService] without terminating the connection,
+///   leaving the Activity to adopt the live call.
+/// - **Activity took over via full-screen intent**: the Activity subscribes to the
+///   [SignalingHub] and shows the incoming-call UI before the push isolate finishes.
+///   When the timeout fires the call is still active server-side (no [HangupEvent]
+///   received), so `handoffCall()` is used here too — the push isolate only
+///   unsubscribes from the hub and stops [IncomingCallService]; the [PhoneConnection]
+///   stays alive and the Activity continues handling the call normally.
+///
+/// ## SignalingForegroundService lifetime after this callback
 ///
 /// When the push isolate unsubscribes and no other subscriber (Activity) is
 /// connected, [SignalingForegroundIsolateManager] starts a grace timer
