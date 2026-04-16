@@ -66,8 +66,17 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   /// Requests queued while the signaling module is not yet connected.
   final List<_PendingRequest> _pendingRequests = [];
 
-  /// Completer resolved when all isolate work is done and [releaseCall] has been called.
+  /// Completer resolved when all isolate work is done and [_releaseCall] or
+  /// [_handoffCall] has been called (depending on whether the call was answered).
   Completer<void>? _completer;
+
+  /// The callId of the call answered via the push notification.
+  ///
+  /// Set in [performAnswerCall] only when a network connection is confirmed.
+  /// Used in [close] to call [_handoffCall] instead of [_releaseCall] so the
+  /// PhoneConnection is not terminated before the Activity can adopt it.
+  /// Null means the call was not answered (missed, declined, or no network).
+  String? _answeredCallId;
 
   // Workaround: captures init time as fallback timestamp for call logs.
   final DateTime _initialConnectionTime = DateTime.now();
@@ -95,6 +104,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       throw StateError('PushNotificationIsolateManager.run() called before init()');
     }
     _metadata = metadata;
+    _answeredCallId = null;
     _completer = Completer<void>();
     logger.info('run: callId=${metadata?.callId} isConnected=${_signalingModule.isConnected}');
     // WebtritSignalingService.connect() is idempotent: the internal
@@ -121,7 +131,11 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       await _signalingSubscription.cancel();
       await _signalingModule.dispose();
     }
-    await _releaseCall(_metadata?.callId);
+    if (_answeredCallId != null) {
+      await _handoffCall(_answeredCallId);
+    } else {
+      await _releaseCall(_metadata?.callId);
+    }
     _completeWithError(StateError('PushNotificationIsolateManager closed'));
   }
 
@@ -139,13 +153,19 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   }
 
   @override
-  void performAnswerCall(String callId) async {
+  void performAnswerCall(String callId) {
+    _handlePerformAnswerCall(callId);
+  }
+
+  Future<void> _handlePerformAnswerCall(String callId) async {
     final hasNetwork = await Connectivity().checkConnectivity().then(
       (r) => r.isNotEmpty && !r.contains(ConnectivityResult.none),
     );
     if (!hasNetwork) {
-      throw Exception('performAnswerCall: no network for callId=$callId');
+      logger.warning('performAnswerCall: no network for callId=$callId, skipping handoff');
+      return;
     }
+    _answeredCallId = callId;
   }
 
   // ---------------------------------------------------------------------------
@@ -205,8 +225,22 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     }
 
     if (_lines.isEmpty) {
-      logger.info('Handshake: no active lines - ending calls');
-      _onNoActiveLines();
+      // The hub sends StateHandshake first, then replays IncomingCallEvent entries
+      // from _callEventHistory. When a call arrived as a protocol event (not in
+      // StateHandshake lines), the push isolate would see 0 lines and immediately
+      // call _onNoActiveLines() before the IncomingCallEvent from _callEventHistory
+      // replay is processed. Defer to the next event-loop turn so any pending
+      // port messages (including replayed protocol events) are handled first.
+      logger.info('Handshake: no active lines, deferring check for protocol-event calls');
+      Future(() {
+        if (_incomingCallEvents.containsKey(_metadata?.callId)) {
+          logger.info('Handshake deferred: found incoming call from history callId=${_metadata?.callId}, proceeding');
+          _executePendingRequests();
+        } else {
+          logger.info('Handshake deferred: no incoming call found - ending calls');
+          _onNoActiveLines();
+        }
+      });
       return;
     }
 
@@ -230,6 +264,13 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     switch (event) {
       case IncomingCallEvent():
         _incomingCallEvents[event.callId] = event;
+        // Populate _lines so _sendRequest can resolve the line index for this call.
+        // Calls that arrive as protocol events (not in StateHandshake) are not
+        // present in _lines after _onHandshake; add them here so pending requests
+        // can be executed once the deferred handshake check runs.
+        if (event.line != null) {
+          _lines[event.callId] = event.line!;
+        }
       case HangupEvent():
         final incomingEventLog = _incomingCallEvents[event.callId];
         _onHangupCall(event, (
@@ -393,6 +434,15 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       await _pushService.releaseCall(callId);
     } catch (e) {
       logger.severe('_releaseCall failed: $e');
+    }
+  }
+
+  Future<void> _handoffCall(String? callId) async {
+    if (callId == null) return;
+    try {
+      await _pushService.handoffCall(callId);
+    } catch (e, st) {
+      logger.severe('_handoffCall failed: $e', e, st);
     }
   }
 

@@ -451,6 +451,131 @@ void main() {
       expect(events.whereType<SignalingHandshakeReceived>(), isEmpty);
       expect(events.whereType<SignalingConnecting>(), hasLength(1));
     });
+
+    test('stale call line is evicted from handshake after HangupEvent', () async {
+      // Scenario: push isolate handles first call; first call ends (HangupEvent).
+      // The handshake must still be replayed to late subscribers but without the
+      // dead call's line in handshake.lines.
+      final kHandshakeWithLine = StateHandshake(
+        keepaliveInterval: const Duration(seconds: 30),
+        timestamp: 1705322000000,
+        registration: const Registration(status: RegistrationStatus.registered),
+        lines: [Line(callId: 'first-call-id', callLogs: const [])],
+        presenceInfos: const [],
+        dialogInfos: const [],
+        guestLine: null,
+      );
+
+      final (:manager, :fakeClient) = await _startServiceSide();
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      // Inject handshake that contains the first call's line.
+      fakeClient.injectHandshake(kHandshakeWithLine);
+      await Future<void>.delayed(Duration.zero);
+
+      // First call ends — hub evicts its line from the buffered handshake.
+      fakeClient.injectEvent(HangupEvent(line: 1, callId: 'first-call-id', code: 200, reason: 'OK'));
+      await Future<void>.delayed(Duration.zero);
+
+      // Activity opens and attaches as a late subscriber.
+      final (:hubClient, :hubModule) = await _attachMainSide('attach-stale-line-1');
+      addTearDown(hubModule.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      hubModule.events.listen(events.add);
+      await Future<void>.delayed(Duration.zero);
+
+      // Handshake is still replayed (registration status etc. still useful).
+      final handshakes = events.whereType<SignalingHandshakeReceived>().toList();
+      expect(handshakes, hasLength(1), reason: 'Handshake itself must still be replayed');
+      // But the dead call's line must have been removed.
+      expect(
+        handshakes.first.handshake.lines,
+        isEmpty,
+        reason: 'Dead call line must be evicted from handshake.lines on HangupEvent',
+      );
+    });
+
+    test('call history is replayed to late subscriber — ringing state', () async {
+      // Scenario: call arrives via IncomingCallEvent; Activity opens while still ringing.
+      // Late subscriber must receive IncomingCallEvent so CallBloc reaches incomingFromOffer.
+      final (:manager, :fakeClient) = await _startServiceSide();
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      fakeClient.injectHandshake(_kHandshake);
+      fakeClient.injectEvent(HangupEvent(line: 1, callId: 'first-call-id', code: 200, reason: 'OK'));
+      fakeClient.injectEvent(IncomingCallEvent(line: 1, callId: 'second-call-id', callee: 'bob', caller: 'alice'));
+      await Future<void>.delayed(Duration.zero);
+
+      final (:hubClient, :hubModule) = await _attachMainSide('history-ringing-1');
+      addTearDown(hubModule.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      hubModule.events.listen(events.add);
+      await Future<void>.delayed(Duration.zero);
+
+      final protocolEvents = events.whereType<SignalingProtocolEvent>().toList();
+      expect(
+        protocolEvents.where((e) => e.event is IncomingCallEvent).length,
+        1,
+        reason: 'Ringing call: IncomingCallEvent must be replayed',
+      );
+      expect(
+        protocolEvents.where((e) => e.event is AcceptedEvent).length,
+        0,
+        reason: 'Ringing call: no AcceptedEvent yet',
+      );
+    });
+
+    test('call history is replayed to late subscriber — answered state', () async {
+      // Scenario: call arrived and was answered (AcceptedEvent) before Activity opened.
+      // Late subscriber must receive both IncomingCallEvent AND AcceptedEvent so that
+      // CallBloc reaches the active/accepted state rather than staying in incomingFromOffer.
+      final (:manager, :fakeClient) = await _startServiceSide();
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      fakeClient.injectEvent(IncomingCallEvent(line: 1, callId: 'call-id', callee: 'bob', caller: 'alice'));
+      fakeClient.injectEvent(AcceptedEvent(line: 1, callId: 'call-id'));
+      await Future<void>.delayed(Duration.zero);
+
+      final (:hubClient, :hubModule) = await _attachMainSide('history-answered-1');
+      addTearDown(hubModule.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      hubModule.events.listen(events.add);
+      await Future<void>.delayed(Duration.zero);
+
+      final protocolEvents = events.whereType<SignalingProtocolEvent>().toList();
+      // Both events must be replayed in order.
+      expect(protocolEvents.where((e) => e.event is IncomingCallEvent).length, 1);
+      expect(protocolEvents.where((e) => e.event is AcceptedEvent).length, 1);
+      final incoming = protocolEvents.indexWhere((e) => e.event is IncomingCallEvent);
+      final accepted = protocolEvents.indexWhere((e) => e.event is AcceptedEvent);
+      expect(incoming < accepted, isTrue, reason: 'IncomingCallEvent must come before AcceptedEvent');
+    });
+
+    test('call history is NOT replayed after HangupEvent', () async {
+      // After the call ends, no events should be replayed to late subscribers.
+      final (:manager, :fakeClient) = await _startServiceSide();
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      fakeClient.injectEvent(IncomingCallEvent(line: 1, callId: 'call-id', callee: 'bob', caller: 'alice'));
+      fakeClient.injectEvent(HangupEvent(line: 1, callId: 'call-id', code: 200, reason: 'OK'));
+      await Future<void>.delayed(Duration.zero);
+
+      final (:hubClient, :hubModule) = await _attachMainSide('history-hangup-1');
+      addTearDown(hubModule.dispose);
+
+      final events = <SignalingModuleEvent>[];
+      hubModule.events.listen(events.add);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(
+        events.whereType<SignalingProtocolEvent>(),
+        isEmpty,
+        reason: 'Ended call: no protocol events must be replayed',
+      );
+    });
   });
 
   // -------------------------------------------------------------------------
