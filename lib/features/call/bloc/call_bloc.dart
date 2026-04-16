@@ -2287,6 +2287,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return;
       }
 
+      // If the call was already removed from state (e.g. __onCallSignalingEventHangup
+      // ran concurrently while we were building media or preparing SDP), the server
+      // already terminated the call — no need to decline.
+      if (state.retrieveActiveCall(event.callId) == null) {
+        callErrorReporter.handle(e, stackTrace, '__onCallPerformEventAnswered error:');
+        return;
+      }
+
       // For non-disconnect errors (e.g. UserMediaError, SDP errors) the server line
       // may still be alive. Send DeclineRequest to clean it up, and handle 4610 in
       // the inner catch — that means the caller already hung up server-side.
