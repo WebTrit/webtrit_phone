@@ -1190,9 +1190,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           if (code == SignalingResponseCode.requestTerminated) endReason = CallkeepEndCallReason.unanswered;
         }
 
-        // Updated: Delegate disposal to manager.
-        // This handles closing the connection and removing the completer.
-        await _peerConnectionManager.disposePeerConnection(event.callId);
+        try {
+          await _peerConnectionManager.disposePeerConnection(event.callId);
+        } catch (e) {
+          _logger.warning('__onCallSignalingEventHangup: disposePeerConnection error $e');
+        }
 
         await _releaseLocalStream(call.localStream);
 
@@ -2036,8 +2038,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       event.fail();
 
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
-
-      emit(state.copyWithPopActiveCall(event.callId));
+      add(_ResetStateEvent.completeCall(event.callId, endReason: CallkeepEndCallReason.failed));
 
       submitNotification(const CallUserMediaErrorNotification());
       return;
