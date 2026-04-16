@@ -613,13 +613,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
 
       await state.performOnActiveCall(event.callId, (activeCall) async {
-        // Retrieve PC via manager and close it
-        await _peerConnectionManager.disposePeerConnection(activeCall.callId);
+        // Dispose the peer connection first. If it was already completed with an error
+        // (e.g. UserMediaError in the answer path), disposePeerConnection may throw.
+        // Wrap it so that callkeep notification and stream release always run.
+        try {
+          await _peerConnectionManager.disposePeerConnection(activeCall.callId);
+        } catch (e) {
+          _logger.warning('__onResetStateEventCompleteCall: disposePeerConnection error $e');
+        }
 
         await callkeep.reportEndCall(
           activeCall.callId,
           activeCall.displayName ?? activeCall.handle.value,
-          CallkeepEndCallReason.remoteEnded,
+          event.endReason,
         );
         await _releaseLocalStream(activeCall.localStream);
       });
@@ -2261,32 +2267,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           e.closeCode == SignalingDisconnectCode.requestCallIdError.code) {
         _peerConnectionManager.completeError(event.callId, e, stackTrace);
         _addToRecents(call!);
-        // Use 'call' captured at the start of the handler — local state may already be cleared
-        // by the concurrent hangup handler (which emits copyWithPopActiveCall before awaiting
-        // reportEndCall). Checking state here would be unreliable; always notify the native side.
-        // Callkeep handles already-disconnected calls gracefully (no-op).
-        if (state.retrieveActiveCall(event.callId) != null) {
-          emit(state.copyWithPopActiveCall(event.callId));
-        }
-        await callkeep.reportEndCall(
-          event.callId,
-          call.displayName ?? call.handle.value,
-          CallkeepEndCallReason.unanswered,
-        );
+        add(_ResetStateEvent.completeCall(event.callId, endReason: CallkeepEndCallReason.unanswered));
         return;
       }
 
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
       _addToRecents(call!);
-
-      if (state.retrieveActiveCall(event.callId) != null) {
-        emit(state.copyWithPopActiveCall(event.callId));
-      }
-      await callkeep.reportEndCall(
-        event.callId,
-        call.displayName ?? call.handle.value,
-        CallkeepEndCallReason.unanswered,
-      );
+      add(_ResetStateEvent.completeCall(event.callId, endReason: CallkeepEndCallReason.unanswered));
 
       // When a local error (e.g. UserMediaError) occurs before any signaling exchange,
       // we don't know whether the server line is still alive. Always send DeclineRequest

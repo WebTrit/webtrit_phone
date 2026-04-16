@@ -51,7 +51,8 @@ sealed class _ResetStateEvent extends CallEvent {
 
   const factory _ResetStateEvent.completeCalls() = _ResetStateEventCompleteCalls;
 
-  const factory _ResetStateEvent.completeCall(String callId) = _ResetStateEventCompleteCall;
+  const factory _ResetStateEvent.completeCall(String callId, {CallkeepEndCallReason endReason}) =
+      _ResetStateEventCompleteCall;
 }
 
 class _ResetStateEventCompleteCalls extends _ResetStateEvent {
@@ -59,12 +60,13 @@ class _ResetStateEventCompleteCalls extends _ResetStateEvent {
 }
 
 class _ResetStateEventCompleteCall extends _ResetStateEvent {
-  const _ResetStateEventCompleteCall(this.callId);
+  const _ResetStateEventCompleteCall(this.callId, {this.endReason = CallkeepEndCallReason.remoteEnded});
 
   final String callId;
+  final CallkeepEndCallReason endReason;
 
   @override
-  List<Object?> get props => [callId];
+  List<Object?> get props => [callId, endReason];
 }
 
 // signaling client events
