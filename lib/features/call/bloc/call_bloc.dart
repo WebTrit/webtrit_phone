@@ -2248,7 +2248,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.info('__onCallPerformEventAnswered: AcceptRequest sent, completing peer connection');
       _peerConnectionManager.complete(event.callId, peerConnection);
     } catch (e, stackTrace) {
-      _logger.warning('__onCallPerformEventAnswered: failed callId=${event.callId} error=$e');
+      _logger.warning(
+        '__onCallPerformEventAnswered: failed callId=${event.callId} error=$e code:${e is WebtritSignalingErrorException ? e.code : 'N/A'}, reason=${e is WebtritSignalingErrorException ? e.reason : 'N/A'}',
+        stackTrace,
+      );
 
       // If call gone right before answer, consider it as normal flow and avoid showing error notification
       // TODO: implement signaling request response mechanism and handle request specific result instead of catching global errors
@@ -2275,10 +2278,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _addToRecents(call!);
       add(_ResetStateEvent.completeCall(event.callId, endReason: CallkeepEndCallReason.unanswered));
 
-      // When a local error (e.g. UserMediaError) occurs before any signaling exchange,
-      // we don't know whether the server line is still alive. Always send DeclineRequest
-      // and handle the server's 4610 response in the inner catch — that exception means
-      // the call was already gone server-side (caller hung up just as we were answering).
+      // If the WS was already closed when the answer flow failed, the server-side
+      // call session is gone — sending DeclineRequest on the reconnected WS would
+      // target a stale call and trigger another 4610 close.
+      if (e is WebtritSignalingTransactionTerminateByDisconnectException) {
+        callErrorReporter.handle(e, stackTrace, '__onCallPerformEventAnswered error:');
+        return;
+      }
+
+      // For non-disconnect errors (e.g. UserMediaError, SDP errors) the server line
+      // may still be alive. Send DeclineRequest to clean it up, and handle 4610 in
+      // the inner catch — that means the caller already hung up server-side.
       try {
         final declineId = WebtritSignalingClient.generateTransactionId();
         await _signalingModule.execute(DeclineRequest(transaction: declineId, line: call.line, callId: call.callId));
