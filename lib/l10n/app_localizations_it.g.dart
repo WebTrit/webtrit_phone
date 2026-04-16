@@ -1386,6 +1386,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get persistentConnectionReminderTitle => 'Promemoria importante';
 
   @override
+  String get batteryOptimizationWarningTitle => 'Ottimizzazione batteria attiva';
+
+  @override
+  String get batteryOptimizationWarningContent =>
+      'L\'ottimizzazione della batteria è attiva su questo dispositivo. Ciò potrebbe causare la perdita di chiamate quando lo schermo è spento. Disabilitala per mantenere attiva la connessione persistente.';
+
+  @override
+  String get batteryOptimizationWarningOpenSettings => 'Apri impostazioni';
+
+  @override
   String get presence_activity_appointment_name => 'In appuntamento';
 
   @override

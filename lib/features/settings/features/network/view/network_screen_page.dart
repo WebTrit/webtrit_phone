@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'package:webtrit_phone/data/data.dart';
@@ -31,6 +32,7 @@ class NetworkScreenPage extends StatelessWidget {
             (type) async {
               await WebtritSignalingService.updateMode(type.toSignalingServiceMode());
             },
+            WebtritCallkeepPermissions(),
           ),
         ),
       ],

@@ -1169,6 +1169,21 @@
     "type": "text",
     "description": "Title of a dialog shown when the user selects persistent connection on Android 14+"
   },
+  "batteryOptimizationWarningTitle": "Оптимізацію батареї активовано",
+  "@batteryOptimizationWarningTitle": {
+    "type": "text",
+    "description": "Title of dialog warning the user about battery optimization being active when persistent connection is selected"
+  },
+  "batteryOptimizationWarningContent": "На цьому пристрої активна оптимізація батареї. Це може призвести до пропущених дзвінків, коли екран вимкнено. Вимкніть її, щоб підтримувати постійне з'єднання.",
+  "@batteryOptimizationWarningContent": {
+    "type": "text",
+    "description": "Content of dialog warning the user about battery optimization when persistent connection is selected"
+  },
+  "batteryOptimizationWarningOpenSettings": "Відкрити налаштування",
+  "@batteryOptimizationWarningOpenSettings": {
+    "type": "text",
+    "description": "Button label to open battery settings from the battery optimization warning dialog"
+  },
   "presence_activity_appointment_name": "На зустрічі",
   "@presence_activity_appointment_name": {},
   "presence_activity_away_name": "Відійшов",

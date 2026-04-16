@@ -1388,6 +1388,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get persistentConnectionReminderTitle => 'Важливе нагадування';
 
   @override
+  String get batteryOptimizationWarningTitle => 'Оптимізацію батареї активовано';
+
+  @override
+  String get batteryOptimizationWarningContent =>
+      'На цьому пристрої активна оптимізація батареї. Це може призвести до пропущених дзвінків, коли екран вимкнено. Вимкніть її, щоб підтримувати постійне з\'єднання.';
+
+  @override
+  String get batteryOptimizationWarningOpenSettings => 'Відкрити налаштування';
+
+  @override
   String get presence_activity_appointment_name => 'На зустрічі';
 
   @override
