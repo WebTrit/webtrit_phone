@@ -323,6 +323,15 @@ class SignalingModuleImpl implements SignalingModule {
 
   void _onError(Object error, [StackTrace? stackTrace]) {
     if (_disposed) return;
+    if (_client == null) {
+      // Secondary error from an already-failed connection (e.g. a late server
+      // response arriving after the keepalive timeout cleaned up its transaction).
+      // The first _onError already emitted SignalingConnectionFailed and cleared
+      // _client — re-emitting here would double-count the failure and push
+      // consecutive failures past the notification threshold incorrectly.
+      _logger.fine('_onError: secondary error after connection already failed — ignoring: $error');
+      return;
+    }
     _logger.severe('_onError', error, stackTrace);
     _client = null;
     _errorHandled = true;
