@@ -522,6 +522,13 @@ void main() {
       expect(disc.recommendedReconnectDelay, isNull);
     });
 
+    test('appUnregisteredError (4302) -> recommendedReconnectDelay is null', () async {
+      final disc = await disconnectWith(SignalingDisconnectCode.appUnregisteredError.code);
+
+      expect(disc.knownCode, SignalingDisconnectCode.appUnregisteredError);
+      expect(disc.recommendedReconnectDelay, isNull);
+    });
+
     test('normalClosure (1000) -> recommendedReconnectDelay is kSignalingClientReconnectDelay', () async {
       final disc = await disconnectWith(SignalingDisconnectCode.normalClosure.code);
 

@@ -376,6 +376,7 @@ class SignalingModuleImpl implements SignalingModule {
   Duration? _reconnectDelay(SignalingDisconnectCode code) {
     if (code == SignalingDisconnectCode.controllerForceAttachClose) return Duration.zero;
     if (code == SignalingDisconnectCode.protocolError) return null;
+    if (code == SignalingDisconnectCode.appUnregisteredError) return null;
     return reconnectDelay;
   }
 
