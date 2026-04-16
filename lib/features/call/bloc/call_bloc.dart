@@ -814,7 +814,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     final contactName = await contactNameResolver.resolveWithNumber(event.handle.value);
-    final displayName = contactName ?? event.displayName;
+    final displayName = contactName ?? (event.displayName?.isEmpty == true ? null : event.displayName);
 
     // Re-check after the async gap: the signaling path may have created an entry
     // for this callId while contact resolution was in progress.
@@ -909,7 +909,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final video = event.jsep?.hasVideo ?? false;
     final handle = CallkeepHandle.number(event.caller);
     final contactName = await contactNameResolver.resolveWithNumber(handle.value);
-    final displayName = contactName ?? event.callerDisplayName;
+    final displayName = contactName ?? (event.callerDisplayName?.isEmpty == true ? null : event.callerDisplayName);
 
     final activeCallWithSameId = state.retrieveActiveCall(event.callId);
     // Skip the "call to myself" check when the existing call was registered via push

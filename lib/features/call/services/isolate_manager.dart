@@ -282,7 +282,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
           direction: CallDirection.incoming,
           number: incomingEventLog?.caller ?? 'unknown',
           video: JsepValue.fromOptional(incomingEventLog?.jsep)?.hasVideo ?? false,
-          username: incomingEventLog?.callerDisplayName ?? 'Unknown',
+          username: incomingEventLog?.callerDisplayName,
           createdTime: _initialConnectionTime,
           acceptedTime: null,
           hungUpTime: DateTime.now(),
