@@ -277,7 +277,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
           _lines[event.callId] = event.line!;
         }
       case HangupEvent():
-        final incomingEventLog = _incomingCallEvents[event.callId];
+        final incomingEventLog = _incomingCallEvents.remove(event.callId);
         _onHangupCall(event, (
           direction: CallDirection.incoming,
           number: incomingEventLog?.caller ?? 'unknown',
