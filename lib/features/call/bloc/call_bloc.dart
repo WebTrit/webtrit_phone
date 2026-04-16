@@ -2224,7 +2224,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         // Callkeep handles double calls gracefully (already-disconnected is a no-op).
         await callkeep.reportEndCall(
           event.callId,
-          call!.displayName ?? call.handle.value,
+          call.displayName ?? call.handle.value,
           CallkeepEndCallReason.unanswered,
         );
         return;
