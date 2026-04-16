@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/incoming_call_type/incoming_call_type_repository.dart';
 
@@ -64,13 +64,17 @@ class NetworkCubit extends Cubit<NetworkState> {
     if (state.incomingCallType != IncomingCallType.socket) return false;
     try {
       final mode = await _callkeepPermissions.getBatteryMode();
+      if (state.incomingCallType != IncomingCallType.socket) return false;
       return mode != CallkeepAndroidBatteryMode.unrestricted;
     } catch (_) {
       return false;
     }
   }
 
-  Future<void> openBatterySettings() {
-    return _callkeepPermissions.openSettings();
+  Future<void> openBatterySettings() async {
+    if (!Platform.isAndroid) return;
+    try {
+      await _callkeepPermissions.openSettings();
+    } catch (_) {}
   }
 }

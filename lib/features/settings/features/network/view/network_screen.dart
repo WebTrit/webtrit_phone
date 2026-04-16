@@ -30,10 +30,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
         listenWhen: (previous, current) {
           return previous.incomingCallType != current.incomingCallType;
         },
-        listener: (context, state) async {
-          if (state.isSelectedTypeInRemainder) await _showTypeReminder(state.incomingCallType);
-          if (state.incomingCallType == IncomingCallType.socket) await _checkAndShowBatteryWarning();
-        },
+        listener: (context, state) => _onIncomingTypeChanged(state),
         builder: (context, state) {
           return SingleChildScrollView(
             child: Column(
@@ -92,6 +89,11 @@ class _NetworkScreenState extends State<NetworkScreen> {
         },
       ),
     );
+  }
+
+  Future<void> _onIncomingTypeChanged(NetworkState state) async {
+    if (state.isSelectedTypeInRemainder) await _showTypeReminder(state.incomingCallType);
+    if (state.incomingCallType == IncomingCallType.socket) await _checkAndShowBatteryWarning();
   }
 
   Future<void> _showTypeReminder(IncomingCallType type) async {
