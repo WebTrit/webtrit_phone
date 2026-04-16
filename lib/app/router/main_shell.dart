@@ -27,6 +27,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
+import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('MainShell');
@@ -555,6 +556,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         peerConnectionManager: peerConnectionManager,
                         onSessionInvalidated: () =>
                             appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.sessionMissed)),
+                        foregroundCallPushSignal: RemotePushBroker.pendingCallForegroundPushs,
                       )..add(const CallStarted());
                     },
                   ),

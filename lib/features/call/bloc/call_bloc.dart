@@ -86,6 +86,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final OnDiagnosticReportRequested onDiagnosticReportRequested;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
+  StreamSubscription<void>? _foregroundCallPushSubscription;
 
   late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
@@ -122,6 +123,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required SignalingModule signalingModule,
     required PeerConnectionManager peerConnectionManager,
     this.onCallEnded,
+    Stream<void>? foregroundCallPushSignal,
   }) : super(const CallState()) {
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
@@ -133,6 +135,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       onConnectionPresenceChanged: (isAvailable) =>
           _logger.info('signaling presence changed: isAvailable=$isAvailable'),
     );
+
+    _foregroundCallPushSubscription = foregroundCallPushSignal?.listen((_) {
+      _reconnectController.notifyForceReconnect();
+    });
 
     // Translates SignalingModule events into BLoC state-transition events.
     // Reconnect scheduling and notification decisions are fully handled by
@@ -202,6 +208,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     navigator.mediaDevices.ondevicechange = null;
 
     await _connectivityChangedSubscription?.cancel();
+    await _foregroundCallPushSubscription?.cancel();
 
     _reconnectController.dispose();
 

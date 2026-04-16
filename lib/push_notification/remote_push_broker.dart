@@ -22,6 +22,9 @@ class RemotePushBroker {
   static final _snForegroundController = StreamController<SystemNotificationPush>();
   static final _snForegroundBroadcastStream = _snForegroundController.stream.asBroadcastStream();
 
+  // Pending call push that received while the app was in foreground
+  static final _pendingCallForegroundController = StreamController<PendingCallPush>.broadcast();
+
   /// Stream of messaging remote push that opens app
   /// while the app was in terminated state when the notification is tapped
   ///
@@ -46,6 +49,13 @@ class RemotePushBroker {
   /// The stream is broadcasted so it can be listened by multiple components
   static Stream<SystemNotificationPush> get systemNotificationsForegroundPushs => _snForegroundBroadcastStream;
 
+  /// Stream of pending call push that received while the app was in foreground.
+  ///
+  /// Signals that there is an incoming call waiting on the server.
+  /// Consumers should use this only as a hint to trigger a signaling reconnect —
+  /// the actual call arrives via the WebSocket handshake once signaling is up.
+  static Stream<PendingCallPush> get pendingCallForegroundPushs => _pendingCallForegroundController.stream;
+
   /// Handles the remote notification that opens the app
   /// and routes it to the apropriate stream
   static void handleOpenedPush(AppRemotePush notification) {
@@ -58,5 +68,6 @@ class RemotePushBroker {
   static void handleForegroundPush(AppRemotePush notification) {
     if (notification is MessagePush) _msgForegroundController.add(notification);
     if (notification is SystemNotificationPush) _snForegroundController.add(notification);
+    if (notification is PendingCallPush) _pendingCallForegroundController.add(notification);
   }
 }
