@@ -406,6 +406,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         // Expected silent reconnect: keepalive timeout on lock-screen or duplicate-session cleanup.
         _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
         return;
+      case SignalingDisconnectCode.appUnregisteredError:
+        // Server closes the WebSocket with 4302 after SIP unregistration (user toggled Online off).
+        // Reconnect silently so that going back Online re-establishes the session without
+        // showing a spurious "Disconnected from core" toast to the user.
+        _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
+        return;
       case SignalingDisconnectCode.controllerUnknownError:
         // controllerUnknownError (4400): the server-side Controller process died because
         // the Janus connection went down. The new WebSocket timed out (GenServer.call,

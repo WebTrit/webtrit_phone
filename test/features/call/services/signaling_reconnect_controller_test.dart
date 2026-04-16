@@ -71,6 +71,14 @@ SignalingDisconnected _keepaliveTimeout() => SignalingDisconnected(
   recommendedReconnectDelay: kSignalingClientReconnectDelay,
 );
 
+// Simulates server closing WS after SIP unregistration (user toggled Online off).
+SignalingDisconnected _appUnregistered() => SignalingDisconnected(
+  code: 4302,
+  reason: 'app unregister processed',
+  knownCode: SignalingDisconnectCode.appUnregisteredError,
+  recommendedReconnectDelay: kSignalingClientReconnectDelay,
+);
+
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
@@ -265,6 +273,24 @@ void main() {
         module.emit(_keepaliveTimeout());
 
         expect(receivedCode, SignalingDisconnectCode.signalingKeepaliveTimeoutError);
+      });
+    });
+
+    test('passes appUnregisteredError knownCode on SIP unregister disconnect', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        SignalingDisconnectCode? receivedCode;
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          onConnectionFailed: (failure) => receivedCode = failure.knownCode,
+          reconnectEnabled: false,
+        );
+        addTearDown(controller.dispose);
+
+        module.emit(_appUnregistered());
+
+        expect(receivedCode, SignalingDisconnectCode.appUnregisteredError);
       });
     });
   });
