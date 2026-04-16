@@ -403,14 +403,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     switch (knownCode) {
       case SignalingDisconnectCode.signalingKeepaliveTimeoutError:
       case SignalingDisconnectCode.controllerForceAttachClose:
-        // Expected silent reconnect: keepalive timeout on lock-screen or duplicate-session cleanup.
-        _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
-        return;
       case SignalingDisconnectCode.appUnregisteredError:
-        // Server closes the WebSocket with 4302 after SIP unregistration (user toggled Online off).
-        // Reconnect silently so that going back Online re-establishes the session without
-        // showing a spurious "Disconnected from core" toast to the user.
-        _logger.warning('onConnectionFailed: silent reconnect for code=$knownCode');
+        // Expected silent reconnect: keepalive timeout on lock-screen, duplicate-session
+        // cleanup, or SIP unregistration after the user toggles Online off.
+        _logger.fine('onConnectionFailed: silent reconnect for code=$knownCode');
         return;
       case SignalingDisconnectCode.controllerUnknownError:
         // controllerUnknownError (4400): the server-side Controller process died because
