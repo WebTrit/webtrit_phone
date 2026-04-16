@@ -2207,6 +2207,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
       _logger.info('__onCallPerformEventAnswered: localDescription set, sending AcceptRequest');
 
+      // Re-check that the call still exists before sending AcceptRequest.
+      // __onCallSignalingEventHangup may have run concurrently (e.g. 487 "Request Terminated"
+      // from the server while SDP was being prepared), removing the call from state.
+      // Sending accept on an already-terminated line results in a 4610 disconnect.
+      if (state.retrieveActiveCall(event.callId) == null) {
+        _logger.info('__onCallPerformEventAnswered: call terminated during SDP setup, skipping AcceptRequest');
+        _peerConnectionManager.completeError(
+          event.callId,
+          Exception('call terminated during SDP setup'),
+          StackTrace.current,
+        );
+        return;
+      }
+
       await _signalingModule.execute(
         AcceptRequest(
           transaction: WebtritSignalingClient.generateTransactionId(),
