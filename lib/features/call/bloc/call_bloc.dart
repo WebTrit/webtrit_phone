@@ -2207,6 +2207,29 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await peerConnection.setLocalDescription(localDescription).catchError((e) => throw SDPConfigurationError(e));
       _logger.info('__onCallPerformEventAnswered: localDescription set, sending AcceptRequest');
 
+      // Re-check that the call still exists before sending AcceptRequest.
+      // __onCallSignalingEventHangup may have run concurrently (e.g. 487 "Request Terminated"
+      // from the server while SDP was being prepared), removing the call from state.
+      // Sending accept on an already-terminated line results in a 4610 disconnect.
+      if (state.retrieveActiveCall(event.callId) == null) {
+        _logger.info('__onCallPerformEventAnswered: call terminated during SDP setup, skipping AcceptRequest');
+        _peerConnectionManager.completeError(
+          event.callId,
+          Exception('call terminated during SDP setup'),
+          StackTrace.current,
+        );
+        // __onCallSignalingEventHangup emits copyWithPopActiveCall before awaiting
+        // callkeep.reportEndCall, so the native side may not have been notified yet.
+        // Call it explicitly here to avoid leaving the Telecom connection in ACTIVE state.
+        // Callkeep handles double calls gracefully (already-disconnected is a no-op).
+        await callkeep.reportEndCall(
+          event.callId,
+          call.displayName ?? call.handle.value,
+          CallkeepEndCallReason.unanswered,
+        );
+        return;
+      }
+
       await _signalingModule.execute(
         AcceptRequest(
           transaction: WebtritSignalingClient.generateTransactionId(),
@@ -2230,16 +2253,58 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return;
       }
 
-      _peerConnectionManager.completeError(event.callId, e, stackTrace);
-      add(_ResetStateEvent.completeCall(event.callId));
+      // If the server closed the connection because the line no longer exists (4610 "call request on wrong line"),
+      // the call is already gone on the server side — clean up locally without sending a decline request.
+      // Sending decline here would cause a reconnect loop: each reconnect attempt would send decline again,
+      // receive 4610 again, disconnect again, and reconnect indefinitely.
+      if (e is WebtritSignalingTransactionTerminateByDisconnectException &&
+          e.closeCode == SignalingDisconnectCode.requestCallIdError.code) {
+        _peerConnectionManager.completeError(event.callId, e, stackTrace);
+        _addToRecents(call!);
+        // Use 'call' captured at the start of the handler — local state may already be cleared
+        // by the concurrent hangup handler (which emits copyWithPopActiveCall before awaiting
+        // reportEndCall). Checking state here would be unreliable; always notify the native side.
+        // Callkeep handles already-disconnected calls gracefully (no-op).
+        if (state.retrieveActiveCall(event.callId) != null) {
+          emit(state.copyWithPopActiveCall(event.callId));
+        }
+        await callkeep.reportEndCall(
+          event.callId,
+          call.displayName ?? call.handle.value,
+          CallkeepEndCallReason.unanswered,
+        );
+        return;
+      }
 
+      _peerConnectionManager.completeError(event.callId, e, stackTrace);
       _addToRecents(call!);
 
-      final declineId = WebtritSignalingClient.generateTransactionId();
-      final declineRequest = DeclineRequest(transaction: declineId, line: call.line, callId: call.callId);
-      _signalingModule.execute(declineRequest)?.ignore();
+      if (state.retrieveActiveCall(event.callId) != null) {
+        emit(state.copyWithPopActiveCall(event.callId));
+      }
+      await callkeep.reportEndCall(
+        event.callId,
+        call.displayName ?? call.handle.value,
+        CallkeepEndCallReason.unanswered,
+      );
 
-      callErrorReporter.handle(e, stackTrace, '__onCallPerformEventAnswered error:');
+      // When a local error (e.g. UserMediaError) occurs before any signaling exchange,
+      // we don't know whether the server line is still alive. Always send DeclineRequest
+      // and handle the server's 4610 response in the inner catch — that exception means
+      // the call was already gone server-side (caller hung up just as we were answering).
+      try {
+        final declineId = WebtritSignalingClient.generateTransactionId();
+        await _signalingModule.execute(DeclineRequest(transaction: declineId, line: call.line, callId: call.callId));
+        callErrorReporter.handle(e, stackTrace, '__onCallPerformEventAnswered error:');
+      } catch (declineError, _) {
+        if (declineError is WebtritSignalingTransactionTerminateByDisconnectException &&
+            declineError.closeCode == SignalingDisconnectCode.requestCallIdError.code) {
+          // Server closed WS with 4610 — the call was already terminated on the server side.
+          // WS will reconnect automatically; no error to report.
+          return;
+        }
+        callErrorReporter.handle(e, stackTrace, '__onCallPerformEventAnswered error:');
+      }
     }
   }
 
