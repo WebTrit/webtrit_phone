@@ -142,7 +142,11 @@ Future<void> onSignalingBackgroundIncomingCall(IncomingCallEvent event) async {
   _logger.info('onSignalingBackgroundIncomingCall: callId=${event.callId} caller=${event.caller}');
 
   final error = await AndroidCallkeepServices.backgroundPushNotificationBootstrapService
-      .reportNewIncomingCall(event.callId, CallkeepHandle.number(event.caller), displayName: event.callerDisplayName)
+      .reportNewIncomingCall(
+        event.callId,
+        CallkeepHandle.number(event.caller),
+        displayName: event.callerDisplayName?.isEmpty == true ? null : event.callerDisplayName,
+      )
       .timeout(
         const Duration(seconds: 10),
         onTimeout: () {
