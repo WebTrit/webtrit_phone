@@ -188,14 +188,9 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
     pooledTrack.references--;
     if (pooledTrack.references > 0) return;
 
-    // Null the pool slot before awaiting stop/dispose so that a concurrent
-    // _acquireAudioTrack call cannot grab the track while it is being torn down.
-    // If it ran after the await, the concurrent caller would increment references
-    // on a track that Java has already removed from localTracks, causing the next
-    // addTrack call to fail with "track is null".
-    _audioTrack = null;
     await pooledTrack.track.stop();
     await pooledTrack.sourceStream.dispose();
+    _audioTrack = null;
   }
 
   Future<void> _releaseVideoTrack(String? trackId) async {
@@ -206,10 +201,9 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
     pooledTrack.references--;
     if (pooledTrack.references > 0) return;
 
-    // Same rationale as _releaseAudioTrack: null before await to close the race.
-    _videoTrack = null;
     await pooledTrack.track.stop();
     await pooledTrack.sourceStream.dispose();
+    _videoTrack = null;
   }
 
   Future<MediaStream> _requestStream({required bool audio, required bool video, bool? frontCamera}) async {
