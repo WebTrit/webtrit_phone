@@ -136,9 +136,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           _logger.info('signaling presence changed: isAvailable=$isAvailable'),
     );
 
-    _foregroundCallPushSubscription = foregroundCallPushSignal?.listen((_) {
-      _reconnectController.notifyForceReconnect();
-    });
+    _foregroundCallPushSubscription = foregroundCallPushSignal?.listen(
+      (_) => _reconnectController.notifyForceReconnect(),
+    );
 
     // Translates SignalingModule events into BLoC state-transition events.
     // Reconnect scheduling and notification decisions are fully handled by

@@ -25,9 +25,9 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/common/common.dart';
+import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
-import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('MainShell');
