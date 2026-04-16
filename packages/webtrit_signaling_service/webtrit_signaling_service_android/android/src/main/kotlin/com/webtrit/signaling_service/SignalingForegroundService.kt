@@ -42,16 +42,23 @@ class SignalingForegroundService : Service() {
 
     private var _isolateFlutterApi: PSignalingServiceFlutterApi? = null
 
+    /// Tracks whether the most recent [synchronizeIsolate] cycle succeeded.
+    /// Reset to false at the start of each new cycle (new engine or [notifyIsolateReady]).
+    /// Prevents timer-based retries from firing after Dart has already confirmed receipt.
+    private var _syncSucceeded = false
+
     /// Setting this property immediately triggers [synchronizeIsolate].
     /// For a re-attached engine the Dart side is already running, so the call
-    /// succeeds. For a new engine the first call fails; [synchronizeIsolate] retries
-    /// automatically with linear backoff. [WebtritSignalingServicePlugin.notifyIsolateReady]
-    /// also triggers [synchronizeIsolate] once the Dart handler is registered.
+    /// succeeds. For a new engine the first call may be dropped by Flutter when
+    /// the Dart handler is not yet registered; timer-based retries handle the race.
+    /// [notifyIsolateReady] resets the cycle and triggers a fresh [synchronizeIsolate]
+    /// once the Dart isolate confirms its handler is ready.
     private var isolateFlutterApi: PSignalingServiceFlutterApi?
         get() = _isolateFlutterApi
         set(value) {
             _isolateFlutterApi = value
             if (value != null) {
+                _syncSucceeded = false
                 Log.d(TAG, "isolateFlutterApi set -- triggering immediate synchronize")
                 synchronizeIsolate()
             }
@@ -74,20 +81,31 @@ class SignalingForegroundService : Service() {
 
         flutterEngineHelper.startOrAttachEngine()
 
-        // Wire up the Pigeon FlutterApi on the background engine's messenger so that
-        // synchronizeIsolate() can send onSynchronize() to the Dart side.
+        // Wire up Pigeon channels on the background engine's messenger:
         //
-        // For a NEW engine: executeDartCallback is async -- the Dart callbackDispatcher has
-        // not run yet. The setter calls synchronizeIsolate() immediately, which will fail;
-        // synchronizeIsolate() retries with linear backoff until success or max retries.
-        // In parallel, the Dart isolate calls PSignalingServiceHostApi.notifyIsolateReady()
-        // once PSignalingServiceFlutterApi.setUp() completes; WebtritSignalingServicePlugin
-        // then calls synchronizeIsolate() again -- whichever succeeds first is fine.
+        // HostApi (FgsHostApiHandler): Dart -> Kotlin direction. Registered here so
+        // the FGS Dart isolate can call notifyIsolateReady(). WebtritSignalingServicePlugin
+        // only attaches to the main engine (via GeneratedPluginRegistrant), so without
+        // FgsHostApiHandler the FGS messenger has no HostApi handler and notifyIsolateReady()
+        // from the background isolate is silently dropped.
+        //
+        // FlutterApi (PSignalingServiceFlutterApi): Kotlin -> Dart direction. Setting
+        // isolateFlutterApi triggers an immediate synchronizeIsolate(). For a new engine,
+        // the Dart callbackDispatcher has not run yet and Flutter may drop the message;
+        // timer-based retries in synchronizeIsolate() handle that race. Once the Dart
+        // isolate registers its handler and calls notifyIsolateReady(), FgsHostApiHandler
+        // resets the sync cycle and a fresh synchronizeIsolate() succeeds.
         //
         // For a RE-ATTACHED engine: the Dart side is already running, so the immediate
-        // synchronizeIsolate() call from the setter succeeds.
+        // synchronizeIsolate() call from the setter succeeds without needing retries.
         val engine = flutterEngineHelper.backgroundEngine
         if (engine != null && flutterEngineHelper.isEngineAttached) {
+            // Register HostApi on the FGS engine's messenger so the background Dart
+            // isolate can call notifyIsolateReady() back into Kotlin.
+            // WebtritSignalingServicePlugin only registers on the main engine (via
+            // GeneratedPluginRegistrant), so without this the FGS Dart -> Kotlin
+            // Pigeon channel has no handler and notifyIsolateReady() is silently dropped.
+            PSignalingServiceHostApi.setUp(engine.dartExecutor.binaryMessenger, FgsHostApiHandler())
             isolateFlutterApi = PSignalingServiceFlutterApi(engine.dartExecutor.binaryMessenger)
         }
 
@@ -252,16 +270,26 @@ class SignalingForegroundService : Service() {
     // Synchronize isolate with retry
     // ---------------------------------------------------------------------------
 
+    /// Called by [FgsHostApiHandler.notifyIsolateReady] when the background Dart
+    /// isolate confirms its Pigeon handler is registered and ready to receive
+    /// [onSynchronize] calls. Resets the sync cycle and triggers a fresh attempt.
+    internal fun notifyIsolateReady() {
+        Log.d(TAG, "notifyIsolateReady -- background isolate ready, triggering synchronize")
+        _syncSucceeded = false
+        synchronizeIsolate()
+    }
+
     /// Sends [PSignalingServiceStatus] to the background Dart isolate via Pigeon.
     ///
-    /// The call may fail when the isolate Dart handler has not yet been registered
-    /// (new engine race). On failure it reschedules itself with exponential backoff
-    /// up to [_syncMaxRetries] attempts so that the isolate eventually receives the
-    /// status even if the first few attempts arrive before
-    /// [PSignalingServiceFlutterApi.setUp] completes in the Dart side.
+    /// Retry is scheduled with a timer that fires independently of whether the
+    /// Pigeon callback executes. When the Dart isolate has not yet registered its
+    /// handler ([PSignalingServiceFlutterApi.setUp] not called yet), Flutter drops
+    /// the message silently and the callback lambda never runs — callback-driven
+    /// retry would never fire. The timer below handles that race.
     ///
-    /// Each retry checks [_isolateFlutterApi] again so the loop stops automatically
-    /// when [onDestroy] clears the reference.
+    /// Once [_syncSucceeded] is set to true (callback confirmed delivery), all
+    /// pending timer retries become no-ops. [notifyIsolateReady] resets [_syncSucceeded]
+    /// and starts a fresh cycle when the Dart isolate signals it is ready.
     internal fun synchronizeIsolate(retryCount: Int = 0) {
         val api = _isolateFlutterApi ?: return
         val coreUrl = StorageDelegate.getCoreUrl(applicationContext)
@@ -284,20 +312,48 @@ class SignalingForegroundService : Service() {
         ) { result ->
             result.onSuccess {
                 Log.d(TAG, "synchronizeIsolate succeeded on attempt ${retryCount + 1}")
+                _syncSucceeded = true
             }
             result.onFailure { e ->
-                Log.e(TAG, "synchronizeIsolate attempt ${retryCount + 1} failed: $e")
-                if (retryCount < _syncMaxRetries - 1 && _isolateFlutterApi != null) {
-                    val delayMs = _syncRetryBaseDelayMs * (retryCount + 1)
-                    Log.d(TAG, "synchronizeIsolate scheduling retry ${retryCount + 2} in ${delayMs}ms")
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        if (_isolateFlutterApi != null) synchronizeIsolate(retryCount + 1)
-                    }, delayMs)
-                } else {
-                    Log.e(TAG, "synchronizeIsolate: all $_syncMaxRetries attempts failed, giving up")
-                }
+                Log.e(TAG, "synchronizeIsolate attempt ${retryCount + 1} failed (callback): $e")
             }
         }
+
+        // Timer-based retry: fires regardless of whether the Pigeon callback ran.
+        if (retryCount < _syncMaxRetries - 1) {
+            val delayMs = _syncRetryBaseDelayMs * (retryCount + 1)
+            Log.d(TAG, "synchronizeIsolate scheduling safety retry ${retryCount + 2} in ${delayMs}ms")
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (!_syncSucceeded && _isolateFlutterApi != null) synchronizeIsolate(retryCount + 1)
+            }, delayMs)
+        } else if (!_syncSucceeded) {
+            Log.e(TAG, "synchronizeIsolate: all $_syncMaxRetries attempts exhausted")
+        }
+    }
+
+    // ---------------------------------------------------------------------------
+    // FGS HostApi handler (Dart -> Kotlin via background engine's messenger)
+    // ---------------------------------------------------------------------------
+
+    /// Minimal [PSignalingServiceHostApi] registered on the FGS background engine's
+    /// binary messenger so the FGS Dart isolate can call [notifyIsolateReady].
+    ///
+    /// [WebtritSignalingServicePlugin] registers the same interface on the main
+    /// engine (via GeneratedPluginRegistrant), handling all lifecycle calls from
+    /// the main Dart isolate. This inner class handles only [notifyIsolateReady],
+    /// which is the sole call originating from the FGS Dart isolate.
+    private inner class FgsHostApiHandler : PSignalingServiceHostApi {
+        override fun notifyIsolateReady() = this@SignalingForegroundService.notifyIsolateReady()
+        override fun initializeServiceCallback(callbackDispatcher: Long, onSync: Long) {}
+        override fun saveConnectionConfig(coreUrl: String, tenantId: String, token: String) {}
+        override fun saveTrustedCertificates(certificatesJson: String?) {}
+        override fun saveIncomingCallHandler(callbackHandle: Long) {}
+        override fun saveModuleFactory(callbackHandle: Long) {}
+        override fun configureService(notificationTitle: String, notificationDescription: String) {}
+        override fun startService(mode: PSignalingServiceMode) {}
+        override fun stopService() {}
+        override fun connect() {}
+        override fun simulateKill() {}
     }
 
     companion object {

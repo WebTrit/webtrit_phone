@@ -115,8 +115,8 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
     }
 
     override fun notifyIsolateReady() {
-        Log.d(TAG, "notifyIsolateReady -- background isolate ready, triggering synchronize")
-        SignalingForegroundService.instance?.synchronizeIsolate()
+        Log.d(TAG, "notifyIsolateReady -- forwarding to service (main engine path)")
+        SignalingForegroundService.instance?.notifyIsolateReady()
     }
 
     override fun simulateKill() {
