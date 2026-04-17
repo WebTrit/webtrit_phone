@@ -25,6 +25,17 @@ class Transaction {
 
   static const _counterWidth = 5;
 
+  /// Generates a transaction ID unique across Dart isolate restarts.
+  ///
+  /// Format: `transaction-{millisecondsSinceEpoch}{counter:05}`
+  ///
+  /// The millisecond timestamp acts as a per-isolate-run prefix: each time the
+  /// push-notification isolate (re)starts its counter from 0, the timestamp
+  /// differs, so the server cannot match IDs against a previous session.
+  /// The zero-padded counter ensures uniqueness within a single isolate run.
+  ///
+  /// The ID contains only digits after the `transaction-` prefix — empirically
+  /// required by the server; non-digit separators cause audio dropout.
   static String generateId() =>
       'transaction-${DateTime.now().millisecondsSinceEpoch}${(_createCounter++).toString().padLeft(_counterWidth, '0')}';
 
