@@ -3120,6 +3120,12 @@ abstract class AppLocalizations {
   /// **'Confirm delete account'**
   String get settings_AccountDeleteConfirmDialog_title;
 
+  /// No description provided for @settings_AccountDeleteNotSupported_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Unfortunately, your product does not support account deletion.'**
+  String get settings_AccountDeleteNotSupported_message;
+
   /// No description provided for @settings_AppBarTitle_myAccount.
   ///
   /// In en, this message translates to:

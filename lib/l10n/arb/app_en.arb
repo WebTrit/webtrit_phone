@@ -1400,6 +1400,8 @@
   "@settings_AccountDeleteConfirmDialog_content": {},
   "settings_AccountDeleteConfirmDialog_title": "Confirm delete account",
   "@settings_AccountDeleteConfirmDialog_title": {},
+  "settings_AccountDeleteNotSupported_message": "Unfortunately, your product does not support account deletion.",
+  "@settings_AccountDeleteNotSupported_message": {},
   "settings_AppBarTitle_myAccount": "My account",
   "@settings_AppBarTitle_myAccount": {},
   "settings_audioProcessing_Section_AGC_title": "Auto gain control",
