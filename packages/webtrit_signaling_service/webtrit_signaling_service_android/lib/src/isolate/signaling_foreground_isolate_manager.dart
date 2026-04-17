@@ -66,13 +66,16 @@ class SignalingForegroundIsolateManager {
   /// Registered by the app via [WebtritSignalingService.setIncomingCallHandler].
   /// 0 means no handler is registered -- incoming calls are only forwarded to
   /// the hub (main isolate) and silently ignored in the background.
-  final int incomingCallHandlerHandle;
+  /// Mutable so it can be updated in-place when the Activity re-registers the
+  /// handler without requiring a WebSocket restart.
+  int incomingCallHandlerHandle;
 
   /// Raw handle for the app-side [SignalingModuleFactory] callback.
   ///
   /// Registered by the app via [WebtritSignalingService.setModuleFactory].
   /// 0 means no factory is registered -- the isolate will log an error and skip start.
-  final int moduleFactoryHandle;
+  /// Mutable so it can be updated in-place without requiring a WebSocket restart.
+  int moduleFactoryHandle;
 
   /// Whether the service was started in pushBound mode.
   ///
@@ -113,6 +116,27 @@ class SignalingForegroundIsolateManager {
   Timer? _pushBoundCleanupTimer;
 
   bool _started = false;
+
+  /// True when the hub is tracking at least one active call.
+  ///
+  /// Delegated to [SignalingHub.hasActiveCalls] so that [SignalingSyncHandler]
+  /// can skip manager recreation while a call is in progress.
+  bool get hasActiveCalls => _hub?.hasActiveCalls ?? false;
+
+  /// Updates runtime handles in-place without restarting the WebSocket connection.
+  ///
+  /// Called by [SignalingSyncHandler] when only [incomingCallHandlerHandle] or
+  /// [moduleFactoryHandle] changed — e.g. when the Activity re-registers them
+  /// after opening from a push notification. Neither handle affects the live
+  /// WebSocket session, so no reconnect is needed.
+  void updateHandles({required int incomingCallHandlerHandle, required int moduleFactoryHandle}) {
+    this.incomingCallHandlerHandle = incomingCallHandlerHandle;
+    this.moduleFactoryHandle = moduleFactoryHandle;
+    _logger.info(
+      'SignalingForegroundIsolateManager handles updated in-place '
+      'incomingCallHandlerHandle=$incomingCallHandlerHandle moduleFactoryHandle=$moduleFactoryHandle',
+    );
+  }
 
   /// Called by the entry point when the service status changes.
   Future<void> handleStatus({required bool enabled}) async {

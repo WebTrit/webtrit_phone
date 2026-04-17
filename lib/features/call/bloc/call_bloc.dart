@@ -2247,6 +2247,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return;
       }
 
+      _logger.info(
+        '__onCallPerformEventAnswered: AcceptRequest callId=${call.callId} line=${call.line} eventCallId=${event.callId}',
+      );
       await _signalingModule.execute(
         AcceptRequest(
           transaction: WebtritSignalingClient.generateTransactionId(),
