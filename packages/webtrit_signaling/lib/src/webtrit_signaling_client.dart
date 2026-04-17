@@ -235,25 +235,30 @@ class WebtritSignalingClient {
   }
 
   Future<Map<String, dynamic>> _executeTransaction(Map<String, dynamic> requestJson, Duration timeoutDuration) async {
-    final transaction = Transaction(
-      signalingClientId: _id,
-      id: requestJson['transaction'],
-      timeoutDuration: timeoutDuration,
-    );
+    // Always generate the transaction ID here, in the isolate that owns the
+    // WebSocket, so IDs are monotonically increasing within the session.
+    // Caller-provided IDs are discarded: each Dart isolate has its own static
+    // counter starting from 0, so a push-notification isolate and the main
+    // isolate can both produce "transaction-0" for separate calls on the same
+    // open WebSocket — causing the server to map the second request to the
+    // first call's session.
+    final transaction = Transaction(signalingClientId: _id, timeoutDuration: timeoutDuration);
 
     _transactions[transaction.id] = transaction;
-    if (transaction.isIdGenerate) {
-      requestJson['transaction'] = transaction.id;
-    }
+    requestJson['transaction'] = transaction.id;
+
+    _logger.info('$_id → ${requestJson['type']} transaction=${transaction.id} callId=${requestJson['call_id']}');
 
     try {
       _addMessage(requestJson);
 
       final responseJson = await transaction.future;
-      if (transaction.isIdGenerate) {
-        responseJson.remove('transaction');
-      }
+      _logger.info(
+        '$_id ← response transaction=${transaction.id} '
+        'callId=${responseJson['call_id']} response=${responseJson['response']}',
+      );
 
+      responseJson.remove('transaction');
       return responseJson;
     } catch (e) {
       _transactions.remove(transaction.id);

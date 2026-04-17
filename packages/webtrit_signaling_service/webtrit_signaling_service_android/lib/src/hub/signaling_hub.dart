@@ -38,6 +38,13 @@ class SignalingHub {
   /// (no subscribers — app is closed, persistent-service mode).
   bool get hasSubscribers => _subscribers.isNotEmpty;
 
+  /// True when at least one call is currently active (tracked via [_callEventHistory]).
+  ///
+  /// Used by [SignalingSyncHandler] to skip manager recreation when a config-change
+  /// sync arrives mid-call, preventing the WebSocket from being torn down while
+  /// the user is on a call.
+  bool get hasActiveCalls => _callEventHistory.isNotEmpty;
+
   /// Called when [hasSubscribers] transitions (false → true or true → false).
   ///
   /// Used by [SignalingForegroundIsolateManager] in pushBound mode to detect
