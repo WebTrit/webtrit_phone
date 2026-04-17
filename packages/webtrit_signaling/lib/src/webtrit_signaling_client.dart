@@ -237,26 +237,23 @@ class WebtritSignalingClient {
   Future<Map<String, dynamic>> _executeTransaction(Map<String, dynamic> requestJson, Duration timeoutDuration) async {
     final transaction = Transaction(
       signalingClientId: _id,
-      id: requestJson['transaction'] as String?,
+      id: requestJson['transaction'],
       timeoutDuration: timeoutDuration,
     );
 
     _transactions[transaction.id] = transaction;
-
-    _logger.fine(
-      '$_id → ${requestJson[Request.typeKey]} transaction=${transaction.id} callId=${requestJson['call_id']}',
-    );
+    if (transaction.isIdGenerate) {
+      requestJson['transaction'] = transaction.id;
+    }
 
     try {
       _addMessage(requestJson);
 
       final responseJson = await transaction.future;
-      _logger.fine(
-        '$_id ← response transaction=${transaction.id} '
-        'callId=${responseJson['call_id']} response=${responseJson['response']}',
-      );
+      if (transaction.isIdGenerate) {
+        responseJson.remove('transaction');
+      }
 
-      responseJson.remove('transaction');
       return responseJson;
     } catch (e) {
       _transactions.remove(transaction.id);
