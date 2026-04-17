@@ -63,8 +63,13 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
     bool? frontCamera,
   }) async {
     _logger.fine('Applying peer connection policies with settings: $_negotiationSettings');
-    // Check if the policy requires inserting an inactive video track for negotiation purposes
-    if (_negotiationSettings.includeInactiveVideoInOfferAnswer && hasRemoteVideo) {
+
+    // // Check if the policy requires inserting an inactive video track for negotiation purposes
+    // if (_negotiationSettings.includeInactiveVideoInOfferAnswer && hasRemoteVideo) {
+    //
+    // Enabled by default for test purposes
+    // TODO: if everything works well remove all related settings
+    if (hasRemoteVideo) {
       // Check if a video track is already added to the peer connection
       final senders = await peerConnection.getSenders();
       final alreadyHasVideo = senders.any((sender) => sender.track != null && sender.track!.kind == 'video');
