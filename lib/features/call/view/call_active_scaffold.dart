@@ -1,3 +1,8 @@
+import 'dart:async';
+import 'dart:math' as math;
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +38,11 @@ class CallActiveScaffold extends StatefulWidget {
 }
 
 class CallActiveScaffoldState extends State<CallActiveScaffold> {
+  static const Duration _remoteFrameProbeInterval = Duration(seconds: 2);
+  static const int _remoteFrameMaxSamples = 1200;
+  static const int _blackLumaThreshold = 16;
+  static const double _blackFrameRatioThreshold = 0.98;
+
   /// Cached `CallBloc` obtained in `initState`.
   /// Avoids unsafe `context.read` during widget deactivation (e.g., navigation pop).
   late final CallBloc _callBloc;
@@ -51,6 +61,11 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   /// Consider moving this to a global state (e.g., BLoC or Some config provider).
   VideoBackgroundMode _backgroundMode = VideoBackgroundMode.blur;
 
+  Timer? _remoteFrameWatcher;
+  bool _remoteFrameProbeInProgress = false;
+  bool _hasRenderableRemoteFrame = true;
+  String? _watchedRemoteTrackId;
+
   @override
   void initState() {
     super.initState();
@@ -59,6 +74,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
     // Synchronize the auto-hide logic with the initial call list configuration.
     _compactController = CompactAutoResetController(initiallyActive: widget.activeCalls.shouldAutoCompact);
+    _syncRemoteFrameWatcher();
   }
 
   @override
@@ -66,6 +82,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     super.didUpdateWidget(oldWidget);
     // Synchronize the auto-hide logic with the latest call list configuration.
     _compactController.setActive(widget.activeCalls.shouldAutoCompact, reason: 'didUpdateWidget');
+    _syncRemoteFrameWatcher();
   }
 
   @override
@@ -80,6 +97,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
 
     final style = themeData.extension<CallScreenStyles>()?.primary;
+
+    // activeCall.remoteStream.getVideoTracks().first.captureFrame
 
     return ThemedScaffold(
       background: style?.background,
@@ -96,6 +115,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                   onTap: _compactController.toggle,
                   remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
                   backgroundMode: _backgroundMode,
+                  hasRenderableRemoteFrame: _hasRenderableRemoteFrame,
                   // Its important to hide video if held to avoid showing frozen/last frames when held,
                   // and especially for case when both sides turn on hold and after one side unholds video started to show for another 'holded' side.
                   hideVideo: activeCall.held,
@@ -171,7 +191,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                               widget.callStatus == CallStatus.ready &&
                                               activeCalls.any((call) => call.updating) == false,
                                           isIncoming: activeCall.isIncoming,
-                                          remoteVideo: activeCall.remoteVideo,
+                                          remoteVideo:
+                                              activeCall.remoteVideo &&
+                                              _hasRenderableRemoteFrame &&
+                                              activeCall.held == false,
                                           wasAccepted: activeCall.wasAccepted,
                                           wasHungUp: activeCall.wasHungUp,
                                           cameraValue: activeCall.isCameraActive,
@@ -344,8 +367,153 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     setState(() => _backgroundMode = _backgroundMode.toggled);
   }
 
+  void _syncRemoteFrameWatcher() {
+    final track = _currentRemoteVideoTrack;
+    final trackId = track?.id;
+
+    if (trackId == null) {
+      _disposeRemoteFrameWatcher();
+      _remoteFrameProbeInProgress = false;
+      _watchedRemoteTrackId = null;
+      _setHasRenderableRemoteFrame(true);
+      return;
+    }
+
+    if (_watchedRemoteTrackId == trackId && _remoteFrameWatcher != null) {
+      return;
+    }
+
+    _disposeRemoteFrameWatcher();
+    _watchedRemoteTrackId = trackId;
+    _setHasRenderableRemoteFrame(true);
+    _probeRemoteFrame();
+    _remoteFrameWatcher = Timer.periodic(_remoteFrameProbeInterval, (_) => _probeRemoteFrame());
+  }
+
+  MediaStreamTrack? get _currentRemoteVideoTrack {
+    final stream = widget.activeCalls.current.remoteStream;
+    final tracks = stream?.getVideoTracks();
+
+    if (tracks == null || tracks.isEmpty) {
+      return null;
+    }
+
+    return tracks.first;
+  }
+
+  Future<void> _probeRemoteFrame() async {
+    if (_remoteFrameProbeInProgress || mounted == false) {
+      return;
+    }
+
+    final track = _currentRemoteVideoTrack;
+
+    if (track == null) {
+      _setHasRenderableRemoteFrame(true);
+      return;
+    }
+
+    _remoteFrameProbeInProgress = true;
+    try {
+      final isBlackOrEmpty = await _isTrackFrameBlackOrEmpty(track);
+      if (mounted) {
+        _setHasRenderableRemoteFrame(!isBlackOrEmpty);
+      }
+    } catch (_) {
+      if (mounted) {
+        _setHasRenderableRemoteFrame(true);
+      }
+    } finally {
+      _remoteFrameProbeInProgress = false;
+    }
+  }
+
+  Future<bool> _isTrackFrameBlackOrEmpty(MediaStreamTrack track) async {
+    final capturedFrame = await track.captureFrame();
+    final framePngBytes = capturedFrame.asUint8List();
+
+    if (framePngBytes.isEmpty) {
+      return true;
+    }
+
+    final codec = await ui.instantiateImageCodec(framePngBytes);
+    try {
+      final nextFrame = await codec.getNextFrame();
+      final image = nextFrame.image;
+      try {
+        final frameRgbaBytes = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+
+        if (frameRgbaBytes == null || frameRgbaBytes.lengthInBytes == 0) {
+          return true;
+        }
+
+        final rgbaBytes = frameRgbaBytes.buffer.asUint8List(frameRgbaBytes.offsetInBytes, frameRgbaBytes.lengthInBytes);
+
+        return _isMostlyBlackRgbaFrame(rgbaBytes);
+      } finally {
+        image.dispose();
+      }
+    } finally {
+      codec.dispose();
+    }
+  }
+
+  bool _isMostlyBlackRgbaFrame(Uint8List rgbaBytes) {
+    final totalPixels = rgbaBytes.length ~/ 4;
+
+    if (totalPixels == 0) {
+      return true;
+    }
+
+    final step = math.max(1, totalPixels ~/ _remoteFrameMaxSamples);
+    var sampledPixels = 0;
+    var opaquePixels = 0;
+    var blackPixels = 0;
+
+    for (var pixelIndex = 0; pixelIndex < totalPixels; pixelIndex += step) {
+      final offset = pixelIndex * 4;
+      final red = rgbaBytes[offset];
+      final green = rgbaBytes[offset + 1];
+      final blue = rgbaBytes[offset + 2];
+      final alpha = rgbaBytes[offset + 3];
+
+      sampledPixels++;
+
+      if (alpha == 0) {
+        continue;
+      }
+
+      opaquePixels++;
+
+      final luma = ((red * 299) + (green * 587) + (blue * 114)) ~/ 1000;
+      if (luma <= _blackLumaThreshold) {
+        blackPixels++;
+      }
+    }
+
+    if (sampledPixels == 0 || opaquePixels == 0) {
+      return true;
+    }
+
+    return blackPixels / opaquePixels >= _blackFrameRatioThreshold;
+  }
+
+  void _setHasRenderableRemoteFrame(bool value) {
+    if (_hasRenderableRemoteFrame == value || mounted == false) {
+      return;
+    }
+
+    setState(() => _hasRenderableRemoteFrame = value);
+  }
+
+  void _disposeRemoteFrameWatcher() {
+    _remoteFrameWatcher?.cancel();
+    _remoteFrameWatcher = null;
+  }
+
   @override
   void dispose() {
+    _disposeRemoteFrameWatcher();
     _compactController.dispose();
     super.dispose();
   }
