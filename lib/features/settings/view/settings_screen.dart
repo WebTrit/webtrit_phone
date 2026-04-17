@@ -63,7 +63,7 @@ class SettingsScreen extends StatelessWidget {
                 bottom: false,
                 child: ListView(
                   padding: (effectiveStyle?.listViewPadding ?? const EdgeInsets.only(top: 16)).add(
-                    EdgeInsets.only(top: topPadding),
+                    EdgeInsets.only(top: topPadding, bottom: mediaQuery.padding.bottom),
                   ),
                   children: [
                     BlocBuilder<UserInfoCubit, UserInfoState>(
