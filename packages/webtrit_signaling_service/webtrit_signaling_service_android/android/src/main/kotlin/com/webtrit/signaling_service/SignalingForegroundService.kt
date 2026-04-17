@@ -54,11 +54,17 @@ class SignalingForegroundService : Service() {
     /// the startup watchdog decision.
     private var _syncSucceeded = false
 
-    /// Watchdog handler and pending runnable. Fired [_startupWatchdogTimeoutMs] after the
-    /// sync cycle starts. If [_syncSucceeded] is still false at that point, the service
-    /// stops so WorkManager can retry — mirroring Drift's completer.future.timeout(30s).
-    private val _watchdogHandler = Handler(Looper.getMainLooper())
+    /// Shared main-thread handler for both the startup watchdog and sync retries.
+    /// Reusing one Handler avoids per-retry allocations and allows all pending callbacks
+    /// to be cancelled together on teardown.
+    private val _mainHandler = Handler(Looper.getMainLooper())
+
+    /// Pending watchdog runnable — cancelled when sync succeeds or on teardown.
     private var _watchdogRunnable: Runnable? = null
+
+    /// Pending sync-retry runnables — tracked so they can be cancelled when a new sync
+    /// cycle starts ([notifyIsolateReady], new [isolateFlutterApi]) or on teardown.
+    private val _syncRetryRunnables = mutableListOf<Runnable>()
 
     /// Setting this property resets the sync cycle, arms the startup watchdog, and fires
     /// an immediate [synchronizeIsolate].
@@ -68,10 +74,12 @@ class SignalingForegroundService : Service() {
             _isolateFlutterApi = value
             if (value != null) {
                 _syncSucceeded = false
+                cancelSyncRetries()
                 Log.d(TAG, "isolateFlutterApi set -- arming watchdog and triggering synchronize")
                 startStartupWatchdog()
                 synchronizeIsolate()
             } else {
+                cancelSyncRetries()
                 cancelStartupWatchdog()
             }
         }
@@ -110,8 +118,10 @@ class SignalingForegroundService : Service() {
         val engine = flutterEngineHelper.backgroundEngine
         if (engine == null) {
             // Engine creation failed for an unexpected reason (exception during init).
-            // Stop without clearing the handle so START_STICKY / WorkManager can retry.
-            Log.w(TAG, "onStartCommand: engine not created — stopping, will retry")
+            // Stop without clearing the handle so onDestroy / WorkManager can retry.
+            // START_STICKY does not apply here: the service stops itself and returns
+            // START_NOT_STICKY in this failure path.
+            Log.w(TAG, "onStartCommand: engine not created — stopping, onDestroy/WorkManager may retry")
             stopSelf()
             return START_NOT_STICKY
         }
@@ -145,6 +155,7 @@ class SignalingForegroundService : Service() {
             SignalingRestartWorker.enqueue(applicationContext, delayMillis = 15_000)
         }
         Log.d(TAG, "SignalingForegroundService onDestroy")
+        cancelSyncRetries()
         cancelStartupWatchdog()
         instance = null
         wakeLock?.let { if (it.isHeld) it.release() }
@@ -244,13 +255,18 @@ class SignalingForegroundService : Service() {
             }
         }
         _watchdogRunnable = r
-        _watchdogHandler.postDelayed(r, _startupWatchdogTimeoutMs)
+        _mainHandler.postDelayed(r, _startupWatchdogTimeoutMs)
         Log.d(TAG, "Startup watchdog armed (${_startupWatchdogTimeoutMs}ms)")
     }
 
     private fun cancelStartupWatchdog() {
-        _watchdogRunnable?.let { _watchdogHandler.removeCallbacks(it) }
+        _watchdogRunnable?.let { _mainHandler.removeCallbacks(it) }
         _watchdogRunnable = null
+    }
+
+    private fun cancelSyncRetries() {
+        _syncRetryRunnables.forEach { _mainHandler.removeCallbacks(it) }
+        _syncRetryRunnables.clear()
     }
 
     // ---------------------------------------------------------------------------
@@ -320,6 +336,7 @@ class SignalingForegroundService : Service() {
     internal fun notifyIsolateReady() {
         Log.d(TAG, "notifyIsolateReady -- FGS Dart handler ready, triggering synchronize")
         _syncSucceeded = false
+        cancelSyncRetries()
         synchronizeIsolate()
     }
 
@@ -384,6 +401,7 @@ class SignalingForegroundService : Service() {
             result.onSuccess {
                 Log.d(TAG, "synchronizeIsolate succeeded on attempt ${retryCount + 1}")
                 _syncSucceeded = true
+                cancelSyncRetries()
                 cancelStartupWatchdog()
             }
             result.onFailure { e ->
@@ -392,12 +410,16 @@ class SignalingForegroundService : Service() {
         }
 
         // Timer-based retry: fires regardless of whether the Pigeon callback ran.
+        // Reuses _mainHandler to avoid per-retry allocations; the Runnable is tracked
+        // in _syncRetryRunnables so it can be cancelled on teardown or new sync cycle.
         if (retryCount < _syncMaxRetries - 1) {
             val delayMs = _syncRetryBaseDelayMs * (retryCount + 1)
             Log.d(TAG, "synchronizeIsolate scheduling safety retry ${retryCount + 2} in ${delayMs}ms")
-            Handler(Looper.getMainLooper()).postDelayed({
+            val r = Runnable {
                 if (!_syncSucceeded && _isolateFlutterApi != null) synchronizeIsolate(retryCount + 1)
-            }, delayMs)
+            }
+            _syncRetryRunnables += r
+            _mainHandler.postDelayed(r, delayMs)
         } else if (!_syncSucceeded) {
             Log.e(TAG, "synchronizeIsolate: all $_syncMaxRetries attempts exhausted")
         }
