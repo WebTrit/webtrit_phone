@@ -23,7 +23,10 @@ final _logger = Logger('Transaction');
 class Transaction {
   static int _createCounter = 0;
 
-  static String generateId() => 'transaction-${DateTime.now().millisecondsSinceEpoch}-${_createCounter++}';
+  static const _counterWidth = 5;
+
+  static String generateId() =>
+      'transaction-${DateTime.now().millisecondsSinceEpoch}${(_createCounter++).toString().padLeft(_counterWidth, '0')}';
 
   final int signalingClientId;
   late final String id;
