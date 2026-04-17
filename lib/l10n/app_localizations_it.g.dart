@@ -1703,7 +1703,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_AccountDeleteNotSupported_message =>
-      'Unfortunately, your product does not support account deletion.';
+      'Sfortunatamente, il tuo prodotto non supporta l\'eliminazione dell\'account.';
 
   @override
   String get settings_AppBarTitle_myAccount => 'Il mio account';
