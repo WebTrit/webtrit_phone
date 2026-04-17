@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:logging/logging.dart';
 
@@ -22,14 +21,12 @@ final _logger = Logger('Transaction');
 /// if, for example, a late server response arrives after the timeout has
 /// already fired.
 class Transaction {
-  // Random 4-byte hex prefix unique per isolate run. Prevents transaction ID
-  // collisions when a new isolate restarts with _createCounter = 0 while the
-  // server still has a cached mapping from the previous session.
-  static final String _sessionPrefix = Random().nextInt(0xFFFFFFFF).toRadixString(16).padLeft(8, '0');
+  static const _counterDivider = '00000';
 
   static int _createCounter = 0;
 
-  static String generateId() => '$_sessionPrefix-${_createCounter++}';
+  static String generateId() =>
+      'transaction-${DateTime.now().millisecondsSinceEpoch}${_counterDivider}${_createCounter++}';
 
   final int signalingClientId;
   late final String id;
