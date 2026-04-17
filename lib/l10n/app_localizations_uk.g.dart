@@ -1703,6 +1703,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_AccountDeleteConfirmDialog_title => 'Підтвердіть видалення облікового запису';
 
   @override
+  String get settings_AccountDeleteNotSupported_message =>
+      'На жаль, ваш продукт не підтримує видалення облікового запису.';
+
+  @override
   String get settings_AppBarTitle_myAccount => 'Мій обліковий запис';
 
   @override

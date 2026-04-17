@@ -1682,6 +1682,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_AccountDeleteConfirmDialog_title => 'Confirm delete account';
 
   @override
+  String get settings_AccountDeleteNotSupported_message =>
+      'Unfortunately, your product does not support account deletion.';
+
+  @override
   String get settings_AppBarTitle_myAccount => 'My account';
 
   @override

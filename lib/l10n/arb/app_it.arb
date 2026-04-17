@@ -1400,6 +1400,8 @@
   "@settings_AccountDeleteConfirmDialog_content": {},
   "settings_AccountDeleteConfirmDialog_title": "Conferma eliminazione account",
   "@settings_AccountDeleteConfirmDialog_title": {},
+  "settings_AccountDeleteNotSupported_message": "Sfortunatamente, il tuo prodotto non supporta l'eliminazione dell'account.",
+  "@settings_AccountDeleteNotSupported_message": {},
   "settings_AppBarTitle_myAccount": "Il mio account",
   "@settings_AppBarTitle_myAccount": {},
   "settings_audioProcessing_Section_AGC_title": "Controllo automatico del guadagno",

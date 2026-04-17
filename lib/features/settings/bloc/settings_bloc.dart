@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
+
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
@@ -11,6 +13,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/app_permissions.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'settings_event.dart';
@@ -76,6 +79,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (emit.isDone) return;
 
       emit(state.copyWith(progress: false));
+    } on EndpointNotSupportedException catch (e, stackTrace) {
+      _logger.warning('_onAccountDeleted: endpoint not supported', e, stackTrace);
+
+      notificationsBloc.add(NotificationsSubmitted(const _DeleteAccountNotSupportedNotification()));
+
+      if (emit.isDone) return;
+
+      emit(state.copyWith(progress: false));
     } catch (e, stackTrace) {
       _logger.warning('_onAccountDeleted', e, stackTrace);
 
@@ -93,4 +104,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     _unreadVoicemailsSub.cancel();
     return super.close();
   }
+}
+
+class _DeleteAccountNotSupportedNotification extends ErrorNotification {
+  const _DeleteAccountNotSupportedNotification();
+
+  @override
+  String l10n(BuildContext context) => context.l10n.settings_AccountDeleteNotSupported_message;
 }
