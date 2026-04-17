@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
@@ -14,6 +16,8 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/resolvers/resolvers.dart';
+
+final _logger = Logger('AppWidget');
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -143,7 +147,22 @@ class _AppState extends State<App> {
                     AutoRouteObserver(),
                   ],
                   reevaluateListenable: ReevaluateListenable.stream(
-                    appBloc.stream.distinct((p, n) => p.compareToReevaluate(n)),
+                    // Insert and skip the initial state to ensure the distinct buffer if filled
+                    // and ensure the next state change is emitted only if it differ from the initial state.
+                    //
+                    // Please verify next caases if you change this logic:
+                    // - Call drop after theme change or locale change:
+                    appBloc.stream
+                        .mergeAll([
+                          Stream.fromIterable([appBloc.state]),
+                        ])
+                        .distinct((p, n) {
+                          final same = p.compareToReevaluate(n);
+                          _logger.fine('AppState compareToReevaluate: $same');
+                          if (!same) _logger.fine('AppState compareToReevaluate: previous: $p\n  next: $n');
+                          return same;
+                        })
+                        .skip(1),
                   ),
                 ),
               );
