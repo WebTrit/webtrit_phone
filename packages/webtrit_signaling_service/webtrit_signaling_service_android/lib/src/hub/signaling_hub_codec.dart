@@ -1,5 +1,8 @@
+import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
+
+final _logger = Logger('SignalingHubCodec');
 
 const _tagConnecting = 'connecting';
 const _tagConnected = 'connected';
@@ -101,7 +104,8 @@ SignalingModuleEvent? decodeHubEvent(List<dynamic> msg) {
       default:
         return null;
     }
-  } catch (_) {
+  } catch (e, s) {
+    _logger.warning('decodeHubEvent: failed to decode tag=$tag msg=$msg', e, s);
     return null;
   }
 }
