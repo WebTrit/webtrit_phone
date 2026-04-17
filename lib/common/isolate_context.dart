@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -89,7 +90,9 @@ class PushIsolateContext extends IsolateContext {
     final base = await IsolateContext.init();
     final appPath = await AppPath.init();
     final appCertificates = await AppCertificates.init();
-    final appDatabase = IsolateDatabase.create(directoryPath: appPath.applicationDocumentsPath);
+
+    Logger.root.info('IsolateDatabase.connectOrCreate call from PushIsolateContext.init');
+    final appDatabase = await IsolateDatabase.connectOrCreate(directoryPath: appPath.applicationDocumentsPath);
     final localPushRepository = LocalPushRepositoryFLNImpl();
     final callLogsRepository = CallLogsRepository(appDatabase: appDatabase);
 

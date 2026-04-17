@@ -4,6 +4,8 @@ import 'dart:ui';
 
 import 'package:drift/drift.dart';
 import 'package:drift/isolate.dart';
+import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
@@ -44,6 +46,28 @@ abstract final class IsolateDatabase {
   /// Call this once from the main isolate (e.g. in [bootstrap]) before [runApp].
   /// All other isolates should use [connectOrCreate] to obtain a client connection.
   static Future<DriftIsolate> spawnServer({required String directoryPath, String dbName = 'db.sqlite'}) async {
+    final existingPort = IsolateNameServer.lookupPortByName(kDbPortName);
+    if (existingPort != null) {
+      Logger.root.warning('IsolateDatabase.spawnServer - warning: existing for "$kDbPortName" during server startup');
+      final isolate = DriftIsolate.fromConnectPort(existingPort);
+      // Attempt to shutdown the existing isolate gracefully in case it's a stale instance
+      // Note: Already dead in debug mode restart
+      if (!kDebugMode) {
+        await isolate
+            .shutdownAll()
+            .timeout(const Duration(seconds: 5))
+            .catchError((e, s) {
+              Logger.root.warning('IsolateDatabase.spawnServer - failed to shutdown existing isolate', e, s);
+            })
+            .then((_) {
+              Logger.root.info('IsolateDatabase.spawnServer - shutdown of existing isolate completed');
+            });
+      }
+
+      final removed = IsolateNameServer.removePortNameMapping(kDbPortName);
+      Logger.root.info('IsolateDatabase.spawnServer - removed existing port mapping: $removed');
+    }
+
     final receivePort = ReceivePort();
     final errorPort = ReceivePort();
     final exitPort = ReceivePort();
@@ -95,9 +119,8 @@ abstract final class IsolateDatabase {
       exitPort.close();
     }
 
-    // Remove any stale mapping (e.g. from hot restart) before registering.
-    IsolateNameServer.removePortNameMapping(kDbPortName);
     final registered = IsolateNameServer.registerPortWithName(connectPort, kDbPortName);
+    Logger.root.info('IsolateDatabase.spawnServer - registered port with name "$kDbPortName": $registered');
     if (!registered) {
       throw DatabaseInitializationException(
         'Failed to register DriftIsolate SendPort under "$kDbPortName"',
@@ -115,10 +138,16 @@ abstract final class IsolateDatabase {
   static Future<AppDatabase> connectOrCreate({required String directoryPath, String dbName = 'db.sqlite'}) async {
     final sendPort = IsolateNameServer.lookupPortByName(kDbPortName);
     if (sendPort != null) {
+      Logger.root.info('IsolateDatabase.connectOrCreate: sendPort found, connecting to DriftIsolate server');
       try {
         final driftIsolate = DriftIsolate.fromConnectPort(sendPort);
         return AppDatabase(await driftIsolate.connect());
-      } catch (_) {
+      } catch (e, s) {
+        Logger.root.severe(
+          'IsolateDatabase.connectOrCreate: failed to connect, falling back to direct connection',
+          e,
+          s,
+        );
         // Stale port (e.g. after hot reload or app restart) — remove mapping and fall through to direct connection.
         IsolateNameServer.removePortNameMapping(kDbPortName);
       }
@@ -140,8 +169,10 @@ abstract final class IsolateDatabase {
         dbName,
         logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
       );
+      Logger.root.info('IsolateDatabase.create - created direct database connection');
       return AppDatabase(executor);
     } catch (e, stackTrace) {
+      Logger.root.severe('IsolateDatabase.create - failed to initialize database', e, stackTrace);
       throw DatabaseInitializationException('Failed to initialize database: $e', stackTrace);
     }
   }
