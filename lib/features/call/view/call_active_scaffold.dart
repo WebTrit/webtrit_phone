@@ -7,11 +7,14 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../call.dart';
+
+final _logger = Logger('CallActiveScaffold');
 
 class CallActiveScaffold extends StatefulWidget {
   const CallActiveScaffold({
@@ -38,7 +41,7 @@ class CallActiveScaffold extends StatefulWidget {
 }
 
 class CallActiveScaffoldState extends State<CallActiveScaffold> {
-  static const Duration _remoteFrameProbeInterval = Duration(seconds: 2);
+  static const Duration _remoteFrameProbeInterval = Duration(seconds: 1);
   static const int _remoteFrameMaxSamples = 1200;
   static const int _blackLumaThreshold = 16;
   static const double _blackFrameRatioThreshold = 0.98;
@@ -63,8 +66,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
   Timer? _remoteFrameWatcher;
   bool _remoteFrameProbeInProgress = false;
-  bool _hasRenderableRemoteFrame = true;
-  String? _watchedRemoteTrackId;
+  bool _hasRenderableRemoteFrame = false;
 
   @override
   void initState() {
@@ -74,7 +76,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
     // Synchronize the auto-hide logic with the initial call list configuration.
     _compactController = CompactAutoResetController(initiallyActive: widget.activeCalls.shouldAutoCompact);
-    _syncRemoteFrameWatcher();
+    _remoteFrameWatcher = Timer.periodic(_remoteFrameProbeInterval, (_) => _probeRemoteFrame());
   }
 
   @override
@@ -82,7 +84,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     super.didUpdateWidget(oldWidget);
     // Synchronize the auto-hide logic with the latest call list configuration.
     _compactController.setActive(widget.activeCalls.shouldAutoCompact, reason: 'didUpdateWidget');
-    _syncRemoteFrameWatcher();
   }
 
   @override
@@ -379,29 +380,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     setState(() => _backgroundMode = _backgroundMode.toggled);
   }
 
-  void _syncRemoteFrameWatcher() {
-    final track = _currentRemoteVideoTrack;
-    final trackId = track?.id;
-
-    if (trackId == null) {
-      _disposeRemoteFrameWatcher();
-      _remoteFrameProbeInProgress = false;
-      _watchedRemoteTrackId = null;
-      _setHasRenderableRemoteFrame(true);
-      return;
-    }
-
-    if (_watchedRemoteTrackId == trackId && _remoteFrameWatcher != null) {
-      return;
-    }
-
-    _disposeRemoteFrameWatcher();
-    _watchedRemoteTrackId = trackId;
-    _setHasRenderableRemoteFrame(true);
-    _probeRemoteFrame();
-    _remoteFrameWatcher = Timer.periodic(_remoteFrameProbeInterval, (_) => _probeRemoteFrame());
-  }
-
   MediaStreamTrack? get _currentRemoteVideoTrack {
     final stream = widget.activeCalls.current.remoteStream;
     final tracks = stream?.getVideoTracks();
@@ -414,29 +392,23 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   }
 
   Future<void> _probeRemoteFrame() async {
-    if (_remoteFrameProbeInProgress || mounted == false) {
-      return;
-    }
+    if (_remoteFrameProbeInProgress || mounted == false) return;
 
     final track = _currentRemoteVideoTrack;
-
-    if (track == null) {
-      _setHasRenderableRemoteFrame(true);
-      return;
-    }
+    if (track == null) return;
 
     _remoteFrameProbeInProgress = true;
+    final startTime = DateTime.now();
     try {
-      final isBlackOrEmpty = await _isTrackFrameBlackOrEmpty(track);
-      if (mounted) {
-        _setHasRenderableRemoteFrame(!isBlackOrEmpty);
-      }
+      final isBlackOrEmpty = await _isTrackFrameBlackOrEmpty(track).timeout(const Duration(seconds: 5));
+      _setHasRenderableRemoteFrame(!isBlackOrEmpty);
     } catch (_) {
-      if (mounted) {
-        _setHasRenderableRemoteFrame(true);
-      }
+      // In case of any errors during frame capture or analysis, we optimistically assume that the remote frame is renderable.
+      _setHasRenderableRemoteFrame(true);
     } finally {
       _remoteFrameProbeInProgress = false;
+      final elapsed = DateTime.now().difference(startTime);
+      _logger.fine('Remote frame probe completed in ${elapsed.inMilliseconds}ms, $_hasRenderableRemoteFrame');
     }
   }
 
