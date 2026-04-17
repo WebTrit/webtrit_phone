@@ -21,12 +21,9 @@ final _logger = Logger('Transaction');
 /// if, for example, a late server response arrives after the timeout has
 /// already fired.
 class Transaction {
-  static const _counterDivider = '00000';
-
   static int _createCounter = 0;
 
-  static String generateId() =>
-      'transaction-${DateTime.now().millisecondsSinceEpoch}${_counterDivider}${_createCounter++}';
+  static String generateId() => 'transaction-${DateTime.now().millisecondsSinceEpoch}-${_createCounter++}';
 
   final int signalingClientId;
   late final String id;
