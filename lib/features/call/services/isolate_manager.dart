@@ -417,7 +417,10 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     }
 
     final lineIndex = _lines[callId];
-    if (lineIndex == null) return;
+    if (lineIndex == null) {
+      logger.warning('_sendRequest: callId=$callId not in active lines — dropping request');
+      return;
+    }
 
     final future = _signalingModule.execute(
       requestBuilder(lineIndex, callId, WebtritSignalingClient.generateTransactionId()),
