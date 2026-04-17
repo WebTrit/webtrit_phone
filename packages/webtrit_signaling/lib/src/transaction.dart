@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:logging/logging.dart';
 
@@ -21,20 +22,27 @@ final _logger = Logger('Transaction');
 /// if, for example, a late server response arrives after the timeout has
 /// already fired.
 class Transaction {
+  /// Cryptographically random session prefix, initialized once per isolate run.
+  ///
+  /// Each push-notification isolate gets a different value so the server
+  /// cannot match IDs from a previous session against the current one.
+  /// [Random.secure] draws from OS entropy, reducing the risk of two isolates
+  /// receiving the same prefix compared to [Random].
+  static final _sessionId = Random.secure().nextInt(1000000000);
+
   static int _createCounter = 0;
 
   /// Generates a transaction ID unique across Dart isolate restarts.
   ///
-  /// Format: `transaction-{millisecondsSinceEpoch}{counter}`
+  /// Format: `transaction-{sessionId}{counter}`
   ///
-  /// The millisecond timestamp acts as a per-isolate-run prefix: each time the
-  /// push-notification isolate (re)starts its counter from 0, the timestamp
-  /// differs, so the server cannot match IDs against a previous session.
-  /// The counter ensures uniqueness within a single isolate run.
+  /// [_sessionId] is a random 9-digit number fixed for the lifetime of this
+  /// isolate. [_createCounter] increments with each call, ensuring uniqueness
+  /// within a single isolate run.
   ///
   /// The ID contains only digits after the `transaction-` prefix — empirically
   /// required by the server; non-digit separators cause audio dropout.
-  static String generateId() => 'transaction-${DateTime.now().millisecondsSinceEpoch}${_createCounter++}';
+  static String generateId() => 'transaction-$_sessionId${_createCounter++}';
 
   final int signalingClientId;
   late final String id;
