@@ -68,6 +68,11 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   bool _remoteFrameProbeInProgress = false;
   bool _hasRenderableRemoteFrame = false;
 
+  static const Duration _debounceDuration = Duration(seconds: 2);
+  DateTime? _debounceReleaseTime;
+  Timer? _debounceTimer;
+  StreamSubscription? _debounceByStateSubscription;
+
   @override
   void initState() {
     super.initState();
@@ -77,6 +82,14 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     // Synchronize the auto-hide logic with the initial call list configuration.
     _compactController = CompactAutoResetController(initiallyActive: widget.activeCalls.shouldAutoCompact);
     _remoteFrameWatcher = Timer.periodic(_remoteFrameProbeInterval, (_) => _probeRemoteFrame());
+
+    // Dispatch interaction debounce whenever any call is in updating state
+    // to prevent user race conditions e.g hold or upgrade to video when the call is updating from remote side.
+    _debounceByStateSubscription = _callBloc.stream.listen((state) {
+      if (state.activeCalls.any((call) => call.updating)) {
+        dispatchInteractionDebounce();
+      }
+    });
   }
 
   @override
@@ -84,6 +97,14 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     super.didUpdateWidget(oldWidget);
     // Synchronize the auto-hide logic with the latest call list configuration.
     _compactController.setActive(widget.activeCalls.shouldAutoCompact, reason: 'didUpdateWidget');
+  }
+
+  @override
+  void dispose() {
+    _disposeRemoteFrameWatcher();
+    _compactController.dispose();
+    _debounceByStateSubscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -193,6 +214,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                             CallActions(
                                               style: style?.actions,
                                               enableInteractions:
+                                                  interactionsDebounceActive == false &&
                                                   widget.callStatus == CallStatus.ready &&
                                                   activeCalls.any((call) => call.updating) == false,
                                               isIncoming: activeCall.isIncoming,
@@ -205,13 +227,17 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                               cameraValue: activeCall.isCameraActive,
                                               inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
                                               onCameraChanged: widget.callConfig.isVideoCallEnabled
-                                                  ? (bool value) => _callBloc.add(
-                                                      CallControlEvent.cameraEnabled(activeCall.callId, value),
-                                                    )
+                                                  ? (bool value) {
+                                                      _callBloc.add(
+                                                        CallControlEvent.cameraEnabled(activeCall.callId, value),
+                                                      );
+                                                      dispatchInteractionDebounce();
+                                                    }
                                                   : null,
                                               mutedValue: activeCall.muted,
-                                              onMutedChanged: (bool value) =>
-                                                  _callBloc.add(CallControlEvent.setMuted(activeCall.callId, value)),
+                                              onMutedChanged: (bool value) {
+                                                _callBloc.add(CallControlEvent.setMuted(activeCall.callId, value));
+                                              },
                                               audioDevice: widget.audioDevice,
                                               availableAudioDevices: widget.availableAudioDevices,
                                               onAudioDeviceChanged: (CallAudioDevice device) {
@@ -259,6 +285,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                               heldValue: activeCall.held,
                                               onHeldChanged: (bool value) {
                                                 _callBloc.add(CallControlEvent.setHeld(activeCall.callId, value));
+                                                dispatchInteractionDebounce();
                                               },
                                               onSwapPressed: activeCalls.length == 2
                                                   ? () {
@@ -270,10 +297,12 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                           );
                                                         }
                                                       }
+                                                      dispatchInteractionDebounce();
                                                     }
                                                   : null,
                                               onHangupPressed: () {
                                                 _callBloc.add(CallControlEvent.ended(activeCall.callId));
+                                                dispatchInteractionDebounce();
                                               },
                                               onHangupAndAcceptPressed: activeCalls.length > 1
                                                   ? () {
@@ -283,6 +312,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                         }
                                                       }
                                                       _callBloc.add(CallControlEvent.answered(activeCall.callId));
+                                                      dispatchInteractionDebounce();
                                                     }
                                                   : null,
                                               onHoldAndAcceptPressed: activeCalls.length > 1
@@ -295,6 +325,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                         }
                                                       }
                                                       _callBloc.add(CallControlEvent.answered(activeCall.callId));
+                                                      dispatchInteractionDebounce();
                                                     }
                                                   : null,
                                               onAcceptPressed: () {
@@ -495,10 +526,16 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     _remoteFrameWatcher = null;
   }
 
-  @override
-  void dispose() {
-    _disposeRemoteFrameWatcher();
-    _compactController.dispose();
-    super.dispose();
+  bool get interactionsDebounceActive {
+    if (_debounceReleaseTime == null) return false;
+    return DateTime.now().isBefore(_debounceReleaseTime!);
+  }
+
+  void dispatchInteractionDebounce({Duration? duration}) {
+    _debounceReleaseTime = DateTime.now().add(duration ?? _debounceDuration);
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(duration ?? _debounceDuration, () {
+      if (mounted) setState(() {});
+    });
   }
 }
