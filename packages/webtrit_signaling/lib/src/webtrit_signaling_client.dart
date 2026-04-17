@@ -247,13 +247,15 @@ class WebtritSignalingClient {
     _transactions[transaction.id] = transaction;
     requestJson['transaction'] = transaction.id;
 
-    _logger.info('$_id → ${requestJson['type']} transaction=${transaction.id} callId=${requestJson['call_id']}');
+    _logger.fine(
+      '$_id → ${requestJson[Request.typeKey]} transaction=${transaction.id} callId=${requestJson['call_id']}',
+    );
 
     try {
       _addMessage(requestJson);
 
       final responseJson = await transaction.future;
-      _logger.info(
+      _logger.fine(
         '$_id ← response transaction=${transaction.id} '
         'callId=${responseJson['call_id']} response=${responseJson['response']}',
       );
