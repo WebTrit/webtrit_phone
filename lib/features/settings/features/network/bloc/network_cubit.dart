@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
-import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/incoming_call_type/incoming_call_type_repository.dart';
 
@@ -18,6 +21,7 @@ class NetworkCubit extends Cubit<NetworkState> {
     this._deviceInfo,
     this._incomingCallTypeRepository,
     this._onIncomingCallTypeChanged,
+    this._callkeepPermissions,
   ) : super(NetworkState(smsFallbackEnabled: _callTriggerConfig.smsFallback.enabled)) {
     _initializeActiveIncomingType();
   }
@@ -26,6 +30,7 @@ class NetworkCubit extends Cubit<NetworkState> {
   final DeviceInfo _deviceInfo;
   final IncomingCallTypeRepository _incomingCallTypeRepository;
   final Future<void> Function(IncomingCallType) _onIncomingCallTypeChanged;
+  final WebtritCallkeepPermissions _callkeepPermissions;
 
   bool get smsFallbackAvailable => _callTriggerConfig.smsFallback.available;
 
@@ -52,5 +57,24 @@ class NetworkCubit extends Cubit<NetworkState> {
     await _incomingCallTypeRepository.setIncomingCallType(selectedTypeModel.incomingCallType);
     await _onIncomingCallTypeChanged(selectedTypeModel.incomingCallType);
     _initializeActiveIncomingType();
+  }
+
+  Future<bool> isSocketMissingBatteryExemption() async {
+    if (!Platform.isAndroid) return false;
+    if (state.incomingCallType != IncomingCallType.socket) return false;
+    try {
+      final mode = await _callkeepPermissions.getBatteryMode();
+      if (state.incomingCallType != IncomingCallType.socket) return false;
+      return mode != CallkeepAndroidBatteryMode.unrestricted;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> openBatterySettings() async {
+    if (!Platform.isAndroid) return;
+    try {
+      await _callkeepPermissions.openSettings();
+    } catch (_) {}
   }
 }

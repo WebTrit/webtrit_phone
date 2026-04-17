@@ -1169,6 +1169,21 @@
     "type": "text",
     "description": "Title of a dialog shown when the user selects persistent connection on Android 14+"
   },
+  "batteryOptimizationWarningTitle": "Ottimizzazione batteria attiva",
+  "@batteryOptimizationWarningTitle": {
+    "type": "text",
+    "description": "Title of dialog warning the user about battery optimization being active when persistent connection is selected"
+  },
+  "batteryOptimizationWarningContent": "L'ottimizzazione della batteria è attiva su questo dispositivo. Ciò potrebbe causare la perdita di chiamate quando lo schermo è spento. Disabilitala per mantenere attiva la connessione persistente.",
+  "@batteryOptimizationWarningContent": {
+    "type": "text",
+    "description": "Content of dialog warning the user about battery optimization when persistent connection is selected"
+  },
+  "batteryOptimizationWarningOpenSettings": "Apri impostazioni",
+  "@batteryOptimizationWarningOpenSettings": {
+    "type": "text",
+    "description": "Button label to open battery settings from the battery optimization warning dialog"
+  },
   "presence_activity_appointment_name": "In appuntamento",
   "@presence_activity_appointment_name": {},
   "presence_activity_away_name": "Assente",

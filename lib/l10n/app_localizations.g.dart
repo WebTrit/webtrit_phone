@@ -2532,6 +2532,24 @@ abstract class AppLocalizations {
   /// **'Important Reminder'**
   String get persistentConnectionReminderTitle;
 
+  /// Title of dialog warning the user about battery optimization being active when persistent connection is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Battery Optimization Active'**
+  String get batteryOptimizationWarningTitle;
+
+  /// Content of dialog warning the user about battery optimization when persistent connection is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Battery optimization is active on this device. This may cause missed calls when the screen turns off. Disable it to keep the persistent connection alive.'**
+  String get batteryOptimizationWarningContent;
+
+  /// Button label to open battery settings from the battery optimization warning dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get batteryOptimizationWarningOpenSettings;
+
   /// No description provided for @presence_activity_appointment_name.
   ///
   /// In en, this message translates to:
