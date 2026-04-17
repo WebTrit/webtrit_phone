@@ -2630,9 +2630,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventStreamAdded event,
     Emitter<CallState> emit,
   ) async {
-    // Skip stub stream created by Janus on unidirectional video
-    if (event.stream.id == 'janus') return;
-
     final currentStream = state.retrieveActiveCall(event.callId)?.remoteStream;
     final sameRef = identical(currentStream, event.stream);
     _logger.info(
@@ -3318,6 +3315,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         // state is updated with the latest stream reference when video is added
         // mid-call (e.g. after a glare-resolution rollback).
         onAddTrack: (stream, track) => add(_PeerConnectionEvent.streamAdded(callId, stream)),
+        onTrack: (event) {
+          // Typically fired on upgrade to video, without firing onAddStream.
+          // The event may contain multiple streams but in practice we only handle the first one since our use case is limited to a single audio/video stream per call.
+          final stream = event.streams.isNotEmpty ? event.streams.first : null;
+          if (stream != null) {
+            add(_PeerConnectionEvent.streamAdded(callId, stream));
+          } else {
+            _logger.warning('PeerConnectionObserver.onTrack fired with empty streams for callId=$callId');
+          }
+        },
         onRenegotiationNeeded: (pc) {
           // Skips initial triggering that happens during peer connection setup
           if (pc.signalingState != null) add(_PeerConnectionEvent.renegotiationNeeded(callId, lineId));
