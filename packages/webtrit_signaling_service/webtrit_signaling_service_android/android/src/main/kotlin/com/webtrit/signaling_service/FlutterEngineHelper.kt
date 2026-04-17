@@ -18,6 +18,13 @@ class FlutterEngineHelper(
     var isEngineAttached: Boolean = false
         private set
 
+    /// True when [initializeFlutterEngine] was called but the stored callback handle
+    /// resolved to null — the handle is stale (e.g. after an APK update).
+    /// The caller should stop the service and clear the stored handle so the main app
+    /// can write a fresh handle before restarting.
+    var hasInvalidHandle: Boolean = false
+        private set
+
     fun startOrAttachEngine() {
         when {
             backgroundEngine == null -> {
@@ -40,21 +47,28 @@ class FlutterEngineHelper(
             }
             flutterLoader.ensureInitializationComplete(context.applicationContext, null)
 
+            // Resolve the callback handle BEFORE creating the engine so we never leave
+            // a FlutterEngine with no Dart entry point. A null result means the handle
+            // in SharedPreferences is from a previous APK build (stale after an update).
+            // Inspired by Drift's pattern: validate config before spawning the worker.
+            val callbackInformation = FlutterCallbackInformation.lookupCallbackInformation(callbackHandle)
+            if (callbackInformation == null) {
+                Log.e(TAG, "Invalid callback handle $callbackHandle — skipping engine creation")
+                hasInvalidHandle = true
+                return
+            }
+
+            hasInvalidHandle = false
             backgroundEngine = FlutterEngine(context.applicationContext).also { engine ->
-                val callbackInformation = FlutterCallbackInformation.lookupCallbackInformation(callbackHandle)
-                if (callbackInformation != null) {
-                    val dartCallback = DartCallback(
-                        context.assets,
-                        flutterLoader.findAppBundlePath(),
-                        callbackInformation,
-                    )
-                    engine.dartExecutor.executeDartCallback(dartCallback)
-                    engine.serviceControlSurface.attachToService(service, null, true)
-                    isEngineAttached = true
-                    Log.d(TAG, "FlutterEngine initialized and attached successfully")
-                } else {
-                    Log.e(TAG, "Invalid callback handle: $callbackHandle")
-                }
+                val dartCallback = DartCallback(
+                    context.assets,
+                    flutterLoader.findAppBundlePath(),
+                    callbackInformation,
+                )
+                engine.dartExecutor.executeDartCallback(dartCallback)
+                engine.serviceControlSurface.attachToService(service, null, true)
+                isEngineAttached = true
+                Log.d(TAG, "FlutterEngine initialized and attached successfully")
             }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize FlutterEngine", e)
