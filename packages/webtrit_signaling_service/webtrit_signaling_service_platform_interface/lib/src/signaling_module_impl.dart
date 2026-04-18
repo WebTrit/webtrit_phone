@@ -283,11 +283,39 @@ class SignalingModuleImpl implements SignalingModule {
           return;
         }
 
+        // Wrap onError and onDisconnect in closures that capture [client] and
+        // guard against stale callbacks from a superseded connection.
+        //
+        // Race: a zombie client[n-1] whose server-side close (code 4441) or
+        // late network error arrives after client[n] is already assigned would
+        // unconditionally clear _client and emit a spurious disconnect/failure,
+        // corrupting the active session with no auto-recovery.
+        //
+        // Guard condition: skip only when _client is a *different* non-null
+        // client (new connection replaced us). If _client is null — cleared by
+        // disconnect() or _onError — we are still the responsible client and
+        // must forward the callback.
+        //
+        // The same identity pattern is already used for _requestQueue.flush
+        // (isActive: () => identical(_client, client)) — this extends it to
+        // the error and disconnect paths.
         client.listen(
           onStateHandshake: _onHandshake,
           onEvent: _onEvent,
-          onError: _onError,
-          onDisconnect: _onDisconnect,
+          onError: (error, [stackTrace]) {
+            if (_client != null && !identical(_client, client)) {
+              _logger.fine('_onError: ignoring stale error from superseded client: $error');
+              return;
+            }
+            _onError(error, stackTrace);
+          },
+          onDisconnect: (code, reason) {
+            if (_client != null && !identical(_client, client)) {
+              _logger.fine('_onDisconnect: ignoring stale close code=$code from superseded client');
+              return;
+            }
+            _onDisconnect(code, reason);
+          },
         );
 
         _client = client;
