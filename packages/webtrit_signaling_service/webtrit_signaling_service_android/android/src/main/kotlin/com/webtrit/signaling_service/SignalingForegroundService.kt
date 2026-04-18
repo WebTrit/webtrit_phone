@@ -19,11 +19,18 @@ import androidx.core.app.ServiceCompat
 /// Foreground service that manages the background Flutter engine for signaling.
 ///
 /// Lifecycle:
-///   1. [onStartCommand] calls [FlutterEngineHelper.startOrAttachEngine].
+///   1. [onStartCommand] checks [FlutterEngineHelper.attachExistingIfNeeded].
+///      - If an engine already exists it is (re-)attached and Pigeon channels are wired
+///        immediately on the calling thread; [onStartCommand] returns normally.
+///      - If no engine exists yet, [FlutterEngineHelper.initializeFlutterEngine] is
+///        dispatched to a background thread ("fgs-engine-init") so the FlutterEngine
+///        constructor (≈1-2 s of JNI/AOT work) does not block the main thread.
+///        [onStartCommand] returns before the engine is ready; Pigeon wiring happens
+///        on the main thread via [_mainHandler.post] once the background thread finishes.
 ///      If the stored callback handle is stale (APK update), [FlutterEngineHelper.hasInvalidHandle]
 ///      is set; the service clears the handle and stops so the main app can refresh it.
 ///   2. [FlutterEngineHelper] executes the Dart [callbackDispatcher] asynchronously.
-///   3. After [startOrAttachEngine] returns, Pigeon channels are wired on the FGS engine:
+///   3. Once Pigeon channels are wired on the FGS engine ([wireUpPigeon]):
 ///      - [FgsHostApiHandler] registers [PSignalingServiceHostApi] so FGS Dart can call
 ///        [notifyIsolateReady] back into Kotlin (dropped silently without this on Android 16).
 ///      - [isolateFlutterApi] is set, which arms the [_startupWatchdogTimeoutMs] watchdog and
@@ -46,6 +53,11 @@ class SignalingForegroundService : Service() {
     private var notificationDescription: String = "Maintaining connection"
 
     private var _isolateFlutterApi: PSignalingServiceFlutterApi? = null
+
+    /// Guards against spawning a second background init thread if [onStartCommand]
+    /// is called again before the first thread finishes.
+    /// Accessed only on the main thread.
+    private var _engineInitPending = false
 
     /// Tracks whether the current sync cycle has delivered status to the Dart isolate.
     /// Set to true when [synchronizeIsolate] receives a success callback; reset to false
@@ -99,47 +111,66 @@ class SignalingForegroundService : Service() {
         Log.d(TAG, "SignalingForegroundService onStartCommand")
         getLock(applicationContext).acquire(10 * 60 * 1000L)
 
-        flutterEngineHelper.startOrAttachEngine()
-
-        // Guard: stale callback handle after APK update.
-        // START_STICKY can restart the FGS before the main app runs, so the handle in
-        // SharedPreferences may belong to a previous build (lookupCallbackInformation → null).
-        // Clear the handle so onDestroy does not loop via WorkManager, then stop.
-        // The main app will write a fresh handle via initializeServiceCallback() and restart.
-        // Inspired by Drift's pattern: abort early on invalid config rather than leaving a
-        // broken worker running.
-        if (flutterEngineHelper.hasInvalidHandle) {
-            Log.w(TAG, "onStartCommand: stale callback handle — clearing and stopping")
-            StorageDelegate.saveCallbackDispatcher(applicationContext, 0L)
-            stopSelf()
-            return START_NOT_STICKY
+        // Fast path: engine already exists — attach if needed and wire Pigeon immediately.
+        if (flutterEngineHelper.attachExistingIfNeeded()) {
+            wireUpPigeon()
+            return if (StorageDelegate.isPushBound(applicationContext)) START_NOT_STICKY else START_STICKY
         }
 
-        val engine = flutterEngineHelper.backgroundEngine
-        if (engine == null) {
-            // Engine creation failed for an unexpected reason (exception during init).
-            // Stop without clearing the handle so onDestroy / WorkManager can retry.
-            // START_STICKY does not apply here: the service stops itself and returns
-            // START_NOT_STICKY in this failure path.
-            Log.w(TAG, "onStartCommand: engine not created — stopping, onDestroy/WorkManager may retry")
-            stopSelf()
-            return START_NOT_STICKY
+        // Slow path: engine must be created. Dispatch to a background thread so the
+        // FlutterEngine constructor (≈1-2 s of JNI/AOT work) does not block the main
+        // thread and starve the Dart VM worker thread.
+        if (_engineInitPending) {
+            Log.d(TAG, "onStartCommand: engine init already in progress — skipping duplicate")
+            return if (StorageDelegate.isPushBound(applicationContext)) START_NOT_STICKY else START_STICKY
         }
 
-        // HostApi (Dart → Kotlin): register on the FGS engine's messenger so the FGS Dart
-        // isolate can call notifyIsolateReady(). WebtritSignalingServicePlugin only registers
-        // on the main engine (via GeneratedPluginRegistrant); without FgsHostApiHandler the
-        // FGS binary messenger has no handler and the call is silently dropped on Android 16.
-        //
-        // FlutterApi (Kotlin → Dart): setting isolateFlutterApi arms the startup watchdog and
-        // fires an immediate synchronizeIsolate(). For a new engine, the Dart handler may not be
-        // ready yet; timer-based retries handle the race. Once Dart calls notifyIsolateReady(),
-        // FgsHostApiHandler resets the cycle and a fresh synchronizeIsolate() succeeds,
-        // cancelling the watchdog. For a re-attached engine, the immediate call succeeds directly.
-        PSignalingServiceHostApi.setUp(engine.dartExecutor.binaryMessenger, FgsHostApiHandler())
-        isolateFlutterApi = PSignalingServiceFlutterApi(engine.dartExecutor.binaryMessenger)
+        _engineInitPending = true
+        Log.d(TAG, "onStartCommand: launching FlutterEngine init on background thread")
+        Thread({
+            flutterEngineHelper.initializeFlutterEngine()
+            _mainHandler.post {
+                _engineInitPending = false
+                // Guard: stale callback handle after APK update.
+                // START_STICKY can restart the FGS before the main app runs, so the handle in
+                // SharedPreferences may belong to a previous build (lookupCallbackInformation → null).
+                // Clear the handle so onDestroy does not loop via WorkManager, then stop.
+                // The main app will write a fresh handle via initializeServiceCallback() and restart.
+                if (flutterEngineHelper.hasInvalidHandle) {
+                    Log.w(TAG, "engine init: stale callback handle — clearing and stopping")
+                    StorageDelegate.saveCallbackDispatcher(applicationContext, 0L)
+                    stopSelf()
+                    return@post
+                }
+                if (flutterEngineHelper.backgroundEngine == null) {
+                    // Engine creation failed for an unexpected reason (exception during init).
+                    // Stop without clearing the handle so onDestroy / WorkManager can retry.
+                    Log.w(TAG, "engine init: engine not created — stopping, onDestroy/WorkManager may retry")
+                    stopSelf()
+                    return@post
+                }
+                wireUpPigeon()
+            }
+        }, "fgs-engine-init").start()
 
         return if (StorageDelegate.isPushBound(applicationContext)) START_NOT_STICKY else START_STICKY
+    }
+
+    /// Registers Pigeon channels on the FGS engine's binary messenger.
+    ///
+    /// Must be called on the main thread once [FlutterEngineHelper.backgroundEngine] is non-null.
+    ///
+    /// - [FgsHostApiHandler] registers [PSignalingServiceHostApi] so the FGS Dart isolate can
+    ///   call [notifyIsolateReady] back into Kotlin (silently dropped without this on Android 16).
+    /// - Setting [isolateFlutterApi] arms the startup watchdog and fires [synchronizeIsolate].
+    private fun wireUpPigeon() {
+        val engine = flutterEngineHelper.backgroundEngine ?: run {
+            Log.w(TAG, "wireUpPigeon: engine is null — skipping")
+            return
+        }
+        Log.d(TAG, "wireUpPigeon: registering Pigeon channels on FGS engine")
+        PSignalingServiceHostApi.setUp(engine.dartExecutor.binaryMessenger, FgsHostApiHandler())
+        isolateFlutterApi = PSignalingServiceFlutterApi(engine.dartExecutor.binaryMessenger)
     }
 
     override fun onDestroy() {
