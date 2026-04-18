@@ -12,17 +12,17 @@ class FlutterEngineHelper(
     private val callbackHandle: Long,
     private val service: android.app.Service,
 ) {
-    @Volatile var backgroundEngine: FlutterEngine? = null
+    var backgroundEngine: FlutterEngine? = null
         private set
 
-    @Volatile var isEngineAttached: Boolean = false
+    var isEngineAttached: Boolean = false
         private set
 
     /// True when [initializeFlutterEngine] was called but the stored callback handle
     /// resolved to null — the handle is stale (e.g. after an APK update).
     /// The caller should stop the service and clear the stored handle so the main app
     /// can write a fresh handle before restarting.
-    @Volatile var hasInvalidHandle: Boolean = false
+    var hasInvalidHandle: Boolean = false
         private set
 
     /// Attaches an existing engine to the service if one already exists.

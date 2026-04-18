@@ -23,10 +23,9 @@ import androidx.core.app.ServiceCompat
 ///      - If an engine already exists it is (re-)attached and Pigeon channels are wired
 ///        immediately on the calling thread; [onStartCommand] returns normally.
 ///      - If no engine exists yet, [FlutterEngineHelper.initializeFlutterEngine] is
-///        dispatched to a background thread ("fgs-engine-init") so the FlutterEngine
-///        constructor (≈1-2 s of JNI/AOT work) does not block the main thread.
-///        [onStartCommand] returns before the engine is ready; Pigeon wiring happens
-///        on the main thread via [_mainHandler.post] once the background thread finishes.
+///        posted to the main-thread [Handler] so [onStartCommand] returns immediately
+///        without blocking. The FlutterEngine constructor (≈1-2 s of JNI/AOT work)
+///        runs in the next main-thread iteration; Pigeon wiring follows in the same post.
 ///      If the stored callback handle is stale (APK update), [FlutterEngineHelper.hasInvalidHandle]
 ///      is set; the service clears the handle and stops so the main app can refresh it.
 ///   2. [FlutterEngineHelper] executes the Dart [callbackDispatcher] asynchronously.
@@ -54,14 +53,14 @@ class SignalingForegroundService : Service() {
 
     private var _isolateFlutterApi: PSignalingServiceFlutterApi? = null
 
-    /// Guards against spawning a second background init thread if [onStartCommand]
-    /// is called again before the first thread finishes.
+    /// Guards against posting a second engine-init block if [onStartCommand] is called
+    /// again before the already-posted block runs.
     /// Accessed only on the main thread.
     private var _engineInitPending = false
 
     /// Set to true by the startup watchdog Runnable (after [stopSelf] is called).
     /// Prevents [startStartupWatchdog] from re-arming in the brief window between
-    /// [stopSelf] and [onDestroy], and prevents the background-thread post from
+    /// [stopSelf] and [onDestroy], and prevents the deferred engine-init post from
     /// calling [wireUpPigeon] on an already-dying service.
     /// Accessed only on the main thread.
     private var _stopPending = false
@@ -124,46 +123,48 @@ class SignalingForegroundService : Service() {
             return if (StorageDelegate.isPushBound(applicationContext)) START_NOT_STICKY else START_STICKY
         }
 
-        // Slow path: engine must be created. Dispatch to a background thread so the
-        // FlutterEngine constructor (≈1-2 s of JNI/AOT work) does not block the main
-        // thread and starve the Dart VM worker thread.
+        // Slow path: engine must be created. FlutterEngine() requires @UiThread, so it must
+        // run on the main thread. Post it to the next main-thread iteration so onStartCommand
+        // returns immediately — avoids blocking the calling thread for the full ≈1-2 s of
+        // JNI/AOT initialisation (the source of MIUI / One UI start-command timeouts).
         if (_engineInitPending) {
-            Log.d(TAG, "onStartCommand: engine init already in progress — skipping duplicate")
+            Log.d(TAG, "onStartCommand: engine init already pending — skipping duplicate")
             return if (StorageDelegate.isPushBound(applicationContext)) START_NOT_STICKY else START_STICKY
         }
 
         _engineInitPending = true
-        Log.d(TAG, "onStartCommand: launching FlutterEngine init on background thread")
-        Thread({
-            flutterEngineHelper.initializeFlutterEngine()
-            _mainHandler.post {
+        Log.d(TAG, "onStartCommand: posting FlutterEngine init to main thread (deferred)")
+        _mainHandler.post {
+            try {
+                flutterEngineHelper.initializeFlutterEngine()
+            } finally {
                 _engineInitPending = false
-                if (!isRunning) {
-                    Log.w(TAG, "engine init: service already destroyed — cleaning up engine")
-                    flutterEngineHelper.detachAndDestroyEngine()
-                    return@post
-                }
-                // Guard: stale callback handle after APK update.
-                // START_STICKY can restart the FGS before the main app runs, so the handle in
-                // SharedPreferences may belong to a previous build (lookupCallbackInformation → null).
-                // Clear the handle so onDestroy does not loop via WorkManager, then stop.
-                // The main app will write a fresh handle via initializeServiceCallback() and restart.
-                if (flutterEngineHelper.hasInvalidHandle) {
-                    Log.w(TAG, "engine init: stale callback handle — clearing and stopping")
-                    StorageDelegate.saveCallbackDispatcher(applicationContext, 0L)
-                    stopSelf()
-                    return@post
-                }
-                if (flutterEngineHelper.backgroundEngine == null) {
-                    // Engine creation failed for an unexpected reason (exception during init).
-                    // Stop without clearing the handle so onDestroy / WorkManager can retry.
-                    Log.w(TAG, "engine init: engine not created — stopping, onDestroy/WorkManager may retry")
-                    stopSelf()
-                    return@post
-                }
-                wireUpPigeon()
             }
-        }, "fgs-engine-init").start()
+            if (!isRunning) {
+                Log.w(TAG, "engine init: service already destroyed — cleaning up engine")
+                flutterEngineHelper.detachAndDestroyEngine()
+                return@post
+            }
+            // Guard: stale callback handle after APK update.
+            // START_STICKY can restart the FGS before the main app runs, so the handle in
+            // SharedPreferences may belong to a previous build (lookupCallbackInformation → null).
+            // Clear the handle so onDestroy does not loop via WorkManager, then stop.
+            // The main app will write a fresh handle via initializeServiceCallback() and restart.
+            if (flutterEngineHelper.hasInvalidHandle) {
+                Log.w(TAG, "engine init: stale callback handle — clearing and stopping")
+                StorageDelegate.saveCallbackDispatcher(applicationContext, 0L)
+                stopSelf()
+                return@post
+            }
+            if (flutterEngineHelper.backgroundEngine == null) {
+                // Engine creation failed for an unexpected reason (exception during init).
+                // Stop without clearing the handle so onDestroy / WorkManager can retry.
+                Log.w(TAG, "engine init: engine not created — stopping, onDestroy/WorkManager may retry")
+                stopSelf()
+                return@post
+            }
+            wireUpPigeon()
+        }
 
         return if (StorageDelegate.isPushBound(applicationContext)) START_NOT_STICKY else START_STICKY
     }
