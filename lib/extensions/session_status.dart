@@ -41,7 +41,7 @@ extension SessionStatusColor on SessionStatus {
       case SessionStatus.connectIssue:
         return callStatusStyles?.connectIssue ?? colorScheme.error;
       case SessionStatus.inProgress:
-        return callStatusStyles?.ready ?? colorScheme.secondary;
+        return callStatusStyles?.inProgress ?? colorScheme.secondary;
       case SessionStatus.ready:
         return callStatusStyles?.ready ?? colorScheme.tertiary;
       case SessionStatus.pushTokenError:
