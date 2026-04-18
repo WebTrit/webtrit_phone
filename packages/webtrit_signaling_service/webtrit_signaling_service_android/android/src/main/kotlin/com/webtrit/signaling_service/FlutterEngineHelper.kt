@@ -59,7 +59,7 @@ class FlutterEngineHelper(
             }
 
             hasInvalidHandle = false
-            backgroundEngine = FlutterEngine(context.applicationContext).also { engine ->
+            backgroundEngine = FlutterEngine(context.applicationContext, null, null, null, false).also { engine ->
                 val dartCallback = DartCallback(
                     context.assets,
                     flutterLoader.findAppBundlePath(),
