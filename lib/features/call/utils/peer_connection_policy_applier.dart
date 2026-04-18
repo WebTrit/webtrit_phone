@@ -79,12 +79,22 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
         return;
       }
 
+      // The video sender may be absent (e.g. after a glare-rollback or error recovery)
+      // while the caller's active camera track is still in localStream. Re-add it as-is
+      // to preserve the active video — never disable a track the caller already enabled.
+      final activeTrack = localStream.getVideoTracks().where((t) => t.enabled).firstOrNull;
+      if (activeTrack != null) {
+        _logger.fine('Active local video track found in stream, re-adding to peer connection');
+        await peerConnection.addTrack(activeTrack, localStream);
+        return;
+      }
+
       final localVideoTrack = await _userMediaBuilder.ensureVideoTrack(localStream, frontCamera: frontCamera);
 
       // Add the video track to the peer connection, disabled initially
       if (localVideoTrack != null) {
         localVideoTrack.enabled = false;
-        peerConnection.addTrack(localVideoTrack, localStream);
+        await peerConnection.addTrack(localVideoTrack, localStream);
         _logger.fine('Added inactive local video track to peer connection');
       }
     }

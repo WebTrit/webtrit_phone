@@ -1251,6 +1251,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             );
           } else {
             final localStream = activeCall.localStream;
+            // Capture before policy applier runs — policy applier may add a disabled
+            // video track to satisfy the m=video line, which would otherwise look like
+            // the caller had video. hadLocalVideo=true means the caller already enabled
+            // their camera and we must NOT reset the video flag after renegotiation.
+            final hadLocalVideo = localStream?.getVideoTracks().any((t) => t.enabled) ?? false;
             if (localStream != null) {
               await peerConnectionPolicyApplier?.apply(
                 peerConnection,
@@ -1304,7 +1309,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
               ),
             );
 
-            if (localStream?.getVideoTracks().firstOrNull?.enabled == false) {
+            if (!hadLocalVideo && localStream?.getVideoTracks().firstOrNull?.enabled == false) {
               emit(
                 state.copyWithMappedActiveCall(event.callId, (activeCall) {
                   return activeCall.copyWith(localStream: localStream, video: false);
