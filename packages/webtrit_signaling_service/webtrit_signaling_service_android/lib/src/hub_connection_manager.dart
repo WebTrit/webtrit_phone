@@ -36,6 +36,7 @@ class HubConnectionManager {
     this.pingInterval = const Duration(seconds: 15),
     this.pongTimeout = const Duration(seconds: 2),
     this.stalePortThreshold = 3,
+    this.noPortTimeout = const Duration(seconds: 15),
     this.onServiceDead,
   }) : _onEvent = onEvent,
        _onError = onError,
@@ -58,6 +59,12 @@ class HubConnectionManager {
   /// [SignalingConnectionFailed] event is emitted, and [onServiceDead] is
   /// called so the caller can restart the foreground service.
   final int stalePortThreshold;
+
+  /// How long [_initLoop] waits for a hub port to appear before treating the
+  /// service as dead. When no port is found for this duration, a
+  /// [SignalingConnectionFailed] event is emitted and [onServiceDead] is
+  /// called so the caller can attempt to restart the foreground service.
+  final Duration noPortTimeout;
 
   /// Called when [stalePortThreshold] consecutive ack timeouts indicate the
   /// hub service is no longer running. Use this to restart the foreground
@@ -118,10 +125,14 @@ class HubConnectionManager {
   Future<void> _initLoop(int generation) async {
     const retryDelay = Duration(milliseconds: 100);
     const ackTimeout = Duration(milliseconds: 500);
+    // Clamp to 1 so a noPortTimeout shorter than retryDelay (e.g. in tests)
+    // never fires the watchdog on the very first poll before any waiting occurs.
+    final noPortDeadThreshold = (noPortTimeout.inMilliseconds ~/ retryDelay.inMilliseconds).clamp(1, 1 << 31);
 
     _logger.fine('_initLoop started gen=$generation');
     var attempts = 0;
     var consecutiveStaleAcks = 0;
+    var emptyPortPolls = 0;
 
     while (true) {
       if (_generation != generation || !_isActive()) {
@@ -133,6 +144,7 @@ class HubConnectionManager {
 
       final client = SignalingHubClient.tryConnect(_consumerId, pingInterval: pingInterval, pongTimeout: pongTimeout);
       if (client != null) {
+        emptyPortPolls = 0;
         _logger.fine('_initLoop gen=$generation hub port found after $attempts attempts, awaiting ack');
         // awaitAck MUST be called before SignalingHubModule is constructed so the
         // internal Completer is in place before the hub's sub-ack can arrive.
@@ -187,6 +199,30 @@ class HubConnectionManager {
         }
       } else {
         consecutiveStaleAcks = 0;
+        // No-port watchdog: hub port absent for noPortTimeout → FGS likely failed
+        // to start or was killed before registering. Emit a failure event so
+        // SignalingReconnectController can schedule a reconnect, then call
+        // onServiceDead to trigger a FGS restart attempt.
+        // Return immediately after onServiceDead — it increments the generation
+        // so the generation guard at the top of begin() stops this loop cleanly,
+        // preventing repeated watchdog firing before the new loop takes over.
+        emptyPortPolls++;
+        if (emptyPortPolls >= noPortDeadThreshold) {
+          emptyPortPolls = 0;
+          if (_generation != generation || !_isActive() || _tearingDown) return;
+          _logger.warning(
+            '_initLoop gen=$generation no hub port for ${noPortTimeout.inSeconds}s — service likely dead, triggering recovery',
+          );
+          _onEvent(
+            SignalingConnectionFailed(
+              error: StateError('Signaling hub service not found'),
+              isRepeated: false,
+              recommendedReconnectDelay: kSignalingClientReconnectDelay,
+            ),
+          );
+          onServiceDead?.call();
+          return;
+        }
       }
 
       attempts++;
