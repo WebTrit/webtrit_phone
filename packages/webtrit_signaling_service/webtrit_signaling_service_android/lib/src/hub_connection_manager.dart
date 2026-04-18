@@ -125,7 +125,9 @@ class HubConnectionManager {
   Future<void> _initLoop(int generation) async {
     const retryDelay = Duration(milliseconds: 100);
     const ackTimeout = Duration(milliseconds: 500);
-    final noPortDeadThreshold = noPortTimeout.inMilliseconds ~/ retryDelay.inMilliseconds;
+    // Clamp to 1 so a noPortTimeout shorter than retryDelay (e.g. in tests)
+    // never fires the watchdog on the very first poll before any waiting occurs.
+    final noPortDeadThreshold = (noPortTimeout.inMilliseconds ~/ retryDelay.inMilliseconds).clamp(1, 1 << 31);
 
     _logger.fine('_initLoop started gen=$generation');
     var attempts = 0;
@@ -197,6 +199,13 @@ class HubConnectionManager {
         }
       } else {
         consecutiveStaleAcks = 0;
+        // No-port watchdog: hub port absent for noPortTimeout → FGS likely failed
+        // to start or was killed before registering. Emit a failure event so
+        // SignalingReconnectController can schedule a reconnect, then call
+        // onServiceDead to trigger a FGS restart attempt.
+        // Return immediately after onServiceDead — it increments the generation
+        // so the generation guard at the top of begin() stops this loop cleanly,
+        // preventing repeated watchdog firing before the new loop takes over.
         emptyPortPolls++;
         if (emptyPortPolls >= noPortDeadThreshold) {
           emptyPortPolls = 0;
@@ -212,6 +221,7 @@ class HubConnectionManager {
             ),
           );
           onServiceDead?.call();
+          return;
         }
       }
 
