@@ -59,6 +59,13 @@ class SignalingForegroundService : Service() {
     /// Accessed only on the main thread.
     private var _engineInitPending = false
 
+    /// Set to true by the startup watchdog Runnable (after [stopSelf] is called).
+    /// Prevents [startStartupWatchdog] from re-arming in the brief window between
+    /// [stopSelf] and [onDestroy], and prevents the background-thread post from
+    /// calling [wireUpPigeon] on an already-dying service.
+    /// Accessed only on the main thread.
+    private var _stopPending = false
+
     /// Tracks whether the current sync cycle has delivered status to the Dart isolate.
     /// Set to true when [synchronizeIsolate] receives a success callback; reset to false
     /// at the start of each new cycle (new engine or [notifyIsolateReady]).
@@ -131,6 +138,11 @@ class SignalingForegroundService : Service() {
             flutterEngineHelper.initializeFlutterEngine()
             _mainHandler.post {
                 _engineInitPending = false
+                if (!isRunning) {
+                    Log.w(TAG, "engine init: service already destroyed — cleaning up engine")
+                    flutterEngineHelper.detachAndDestroyEngine()
+                    return@post
+                }
                 // Guard: stale callback handle after APK update.
                 // START_STICKY can restart the FGS before the main app runs, so the handle in
                 // SharedPreferences may belong to a previous build (lookupCallbackInformation → null).
@@ -164,6 +176,10 @@ class SignalingForegroundService : Service() {
     ///   call [notifyIsolateReady] back into Kotlin (silently dropped without this on Android 16).
     /// - Setting [isolateFlutterApi] arms the startup watchdog and fires [synchronizeIsolate].
     private fun wireUpPigeon() {
+        if (_isolateFlutterApi != null) {
+            Log.d(TAG, "wireUpPigeon: already wired — skipping duplicate")
+            return
+        }
         val engine = flutterEngineHelper.backgroundEngine ?: run {
             Log.w(TAG, "wireUpPigeon: engine is null — skipping")
             return
@@ -286,8 +302,8 @@ class SignalingForegroundService : Service() {
         // (isolate confirmed alive → give the fresh sync a full 30 s window) and in
         // the reconnect path (watchdog was cancelled by a prior successful sync, so
         // _watchdogRunnable is null and arming here is correct).
-        if (_watchdogRunnable != null) {
-            Log.d(TAG, "Startup watchdog already armed — not resetting")
+        if (_watchdogRunnable != null || _stopPending) {
+            Log.d(TAG, "Startup watchdog already armed or stop pending — not resetting")
             return
         }
         val r = object : Runnable {
@@ -295,6 +311,7 @@ class SignalingForegroundService : Service() {
                 _watchdogRunnable = null
                 if (!_syncSucceeded) {
                     Log.e(TAG, "Startup watchdog: no successful sync in ${_startupWatchdogTimeoutMs}ms — stopping")
+                    _stopPending = true
                     stopSelf()
                 }
             }
@@ -381,6 +398,10 @@ class SignalingForegroundService : Service() {
     /// [synchronizeIsolate] — this one succeeds because Dart just completed
     /// [PSignalingServiceFlutterApi.setUp].
     internal fun notifyIsolateReady() {
+        if (_syncSucceeded) {
+            Log.d(TAG, "notifyIsolateReady: sync already succeeded — ignoring")
+            return
+        }
         Log.d(TAG, "notifyIsolateReady -- FGS Dart handler ready, triggering synchronize")
         _syncSucceeded = false
         cancelSyncRetries()
