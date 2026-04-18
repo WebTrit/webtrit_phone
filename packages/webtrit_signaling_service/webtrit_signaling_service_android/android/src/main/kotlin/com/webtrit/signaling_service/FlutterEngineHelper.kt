@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import io.flutter.FlutterInjector
 import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.embedding.engine.FlutterJNI
 import io.flutter.embedding.engine.dart.DartExecutor.DartCallback
 import io.flutter.view.FlutterCallbackInformation
 
@@ -63,12 +62,12 @@ class FlutterEngineHelper(
             // automaticallyRegisterPlugins=false: prevents GeneratedPluginRegistrant from
             // registering all app plugins (AudioSessionPlugin, FlutterWebRTCPlugin, etc.)
             // on this background FGS engine. On Android 16 REMOTE_MESSAGING services,
-            // audio/hardware init in onAttachedToEngine blocks the Dart VM from running
+            // audio/hardware init in onAttachedToEngine can block the Dart VM from running
             // the background entry point. Only the two Pigeon channels set up manually
             // in onStartCommand are needed here.
-            // FlutterJNI() is passed explicitly — the parameter is @NonNull in the Flutter
-            // Java API; relying on null handling would bypass the annotation contract.
-            backgroundEngine = FlutterEngine(context.applicationContext, null, FlutterJNI(), null, false).also { engine ->
+            // FlutterJNI is obtained via FlutterInjector so DI overrides are respected,
+            // matching the internal behaviour of the 1-arg FlutterEngine constructor.
+            backgroundEngine = FlutterEngine(context.applicationContext, null, FlutterInjector.instance().flutterJNIFactory.provideFlutterJNI(), null, false).also { engine ->
                 val dartCallback = DartCallback(
                     context.assets,
                     flutterLoader.findAppBundlePath(),
