@@ -15,6 +15,7 @@ import android.util.Log
 import androidx.annotation.Keep
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
+import io.flutter.plugin.common.BinaryMessenger
 
 /// Foreground service that manages the background Flutter engine for signaling.
 ///
@@ -194,6 +195,7 @@ class SignalingForegroundService : Service() {
             return
         }
         Log.d(TAG, "wireUpPigeon: registering Pigeon channels on FGS engine")
+        onFgsEngineReady?.invoke(applicationContext, engine.dartExecutor.binaryMessenger)
         PSignalingServiceHostApi.setUp(engine.dartExecutor.binaryMessenger, FgsHostApiHandler())
         isolateFlutterApi = PSignalingServiceFlutterApi(engine.dartExecutor.binaryMessenger)
     }
@@ -551,5 +553,20 @@ class SignalingForegroundService : Service() {
         fun stop(context: Context) {
             context.stopService(Intent(context, SignalingForegroundService::class.java))
         }
+
+        /// Optional callback invoked on the main thread inside [wireUpPigeon], immediately
+        /// before the two built-in Pigeon channels are registered on the FGS engine.
+        ///
+        /// Use this to register additional Pigeon HOST APIs on the FGS engine without
+        /// coupling [SignalingForegroundService] to other plugins.
+        ///
+        /// Example — registering webtrit_callkeep's bootstrap API (set in Application.onCreate):
+        /// ```kotlin
+        /// SignalingForegroundService.onFgsEngineReady = { context, messenger ->
+        ///     PHostBackgroundPushNotificationIsolateBootstrapApi.setUp(
+        ///         messenger, BackgroundPushNotificationIsolateBootstrapApi(context))
+        /// }
+        /// ```
+        var onFgsEngineReady: ((Context, BinaryMessenger) -> Unit)? = null
     }
 }
