@@ -246,14 +246,19 @@ class SignalingReconnectController {
         _scheduleReconnect(recommendedReconnectDelay);
 
       // Unexpected TCP-level close without a preceding error event.
-      // Notify immediately - an established session was lost.
+      // Notify only when a session was actually established (_wasConnected) to
+      // avoid a spurious toast when _connectAsync closes a stale socket during
+      // the post-Doze forced reconnect on app resume (WT-1337).
       case SignalingDisconnected(:final recommendedReconnectDelay, :final knownCode, :final code, :final reason)
           when recommendedReconnectDelay != null:
-        _logger.fine('_onEvent: unexpected disconnect - notifying immediately');
+        final wasEstablished = _wasConnected;
         _wasConnected = false;
         _consecutiveFailures = 0;
-        if (_appActive || _hasActiveCalls) {
+        if (wasEstablished && (_appActive || _hasActiveCalls)) {
+          _logger.fine('_onEvent: unexpected disconnect - notifying immediately');
           _onConnectionFailed?.call((knownCode: knownCode, systemCode: code, systemReason: reason));
+        } else if (!wasEstablished) {
+          _logger.info('_onEvent: suppressing disconnect notification - no established session');
         } else {
           _logger.info('_onEvent: suppressing notification - app inactive, no active calls');
         }

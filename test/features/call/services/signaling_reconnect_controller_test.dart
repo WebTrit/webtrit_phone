@@ -252,6 +252,7 @@ void main() {
         );
         addTearDown(controller.dispose);
 
+        module.emit(SignalingConnected());
         module.emit(_lost());
 
         expect(receivedCode, SignalingDisconnectCode.unmappedCode);
@@ -270,6 +271,7 @@ void main() {
         );
         addTearDown(controller.dispose);
 
+        module.emit(SignalingConnected());
         module.emit(_keepaliveTimeout());
 
         expect(receivedCode, SignalingDisconnectCode.signalingKeepaliveTimeoutError);
@@ -288,6 +290,7 @@ void main() {
         );
         addTearDown(controller.dispose);
 
+        module.emit(SignalingConnected());
         module.emit(_appUnregistered());
 
         expect(receivedCode, SignalingDisconnectCode.appUnregisteredError);
@@ -313,11 +316,35 @@ void main() {
         );
         addTearDown(controller.dispose);
 
+        module.emit(SignalingConnected());
         module.emit(_lost());
 
         expect(notifyCount, 1);
       });
     });
+
+    test(
+      'does not notify when disconnect arrives without established session (WT-1337: stale socket close on resume)',
+      () {
+        fakeAsync((async) {
+          final module = _FakeSignalingModule();
+          addTearDown(module.dispose);
+          int notifyCount = 0;
+          final controller = SignalingReconnectController(
+            signalingModule: module,
+            onConnectionFailed: (_) => notifyCount++,
+            reconnectEnabled: false,
+          );
+          addTearDown(controller.dispose);
+
+          // Simulates _connectAsync closing a stale socket after notifyAppResumed()
+          // resets _wasConnected to false. No prior SignalingConnected in this cycle.
+          module.emit(_lost());
+
+          expect(notifyCount, 0);
+        });
+      },
+    );
 
     test('resets consecutive failure counter on SignalingDisconnected (unexpected)', () {
       fakeAsync((async) {
@@ -336,7 +363,8 @@ void main() {
         module.emit(_failed());
         expect(notifyCount, 0);
 
-        // Session lost — resets counter and notifies immediately.
+        // Session established, then lost — resets counter and notifies immediately.
+        module.emit(SignalingConnected());
         module.emit(_lost());
         expect(notifyCount, 1);
 
