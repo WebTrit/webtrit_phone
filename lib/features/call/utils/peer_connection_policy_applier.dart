@@ -79,12 +79,12 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
         return;
       }
 
-      // After a glare-rollback the video sender is removed from the peer connection,
-      // but the user's active camera track remains in localStream. Re-add it as-is
-      // (enabled=true) so the call continues with video — never disable it.
+      // The video sender may be absent (e.g. after a glare-rollback or error recovery)
+      // while the caller's active camera track is still in localStream. Re-add it as-is
+      // to preserve the active video — never disable a track the caller already enabled.
       final activeTrack = localStream.getVideoTracks().where((t) => t.enabled).firstOrNull;
       if (activeTrack != null) {
-        _logger.fine('Active local video track found in stream after rollback, re-adding to peer connection');
+        _logger.fine('Active local video track found in stream, re-adding to peer connection');
         await peerConnection.addTrack(activeTrack, localStream);
         return;
       }
