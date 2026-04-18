@@ -12,6 +12,7 @@ permissions:
   contents: read
   pull-requests: write
   issues: write
+  id-token: write
 
 jobs:
   claude:
@@ -28,5 +29,3 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.WEBTRIT_ANTHROPIC_API_KEY }}
-          use_bedrock: false
-          use_vertex: false
