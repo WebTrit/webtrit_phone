@@ -1305,11 +1305,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             );
 
             if (localStream?.getVideoTracks().firstOrNull?.enabled == false) {
-              emit(
-                state.copyWithMappedActiveCall(event.callId, (activeCall) {
-                  return activeCall.copyWith(localStream: localStream, video: false);
-                }),
-              );
+              final currentCall = state.retrieveActiveCall(event.callId);
+              if (currentCall != null && !currentCall.video) {
+                emit(
+                  state.copyWithMappedActiveCall(event.callId, (activeCall) {
+                    return activeCall.copyWith(localStream: localStream, video: false);
+                  }),
+                );
+              }
             }
           }
         });
