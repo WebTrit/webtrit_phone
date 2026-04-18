@@ -25,21 +25,26 @@ class FlutterEngineHelper(
     var hasInvalidHandle: Boolean = false
         private set
 
-    fun startOrAttachEngine() {
-        when {
-            backgroundEngine == null -> {
-                Log.d(TAG, "Initializing new FlutterEngine")
-                initializeFlutterEngine()
-            }
+    /// Attaches an existing engine to the service if one already exists.
+    ///
+    /// Returns true if an engine was already present (attached or re-attached),
+    /// false if no engine exists yet and [initializeFlutterEngine] must be called.
+    fun attachExistingIfNeeded(): Boolean {
+        return when {
+            backgroundEngine == null -> false
             !isEngineAttached -> {
                 Log.d(TAG, "Reattaching existing FlutterEngine")
                 attachEngine()
+                true
             }
-            else -> Log.d(TAG, "FlutterEngine already initialized and attached")
+            else -> {
+                Log.d(TAG, "FlutterEngine already initialized and attached")
+                true
+            }
         }
     }
 
-    private fun initializeFlutterEngine() {
+    internal fun initializeFlutterEngine() {
         try {
             val flutterLoader = FlutterInjector.instance().flutterLoader()
             if (!flutterLoader.initialized()) {
