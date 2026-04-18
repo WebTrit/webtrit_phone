@@ -278,11 +278,25 @@ class SignalingForegroundService : Service() {
     // ---------------------------------------------------------------------------
 
     private fun startStartupWatchdog() {
-        cancelStartupWatchdog()
-        val r = Runnable {
-            if (!_syncSucceeded) {
-                Log.e(TAG, "Startup watchdog: no successful sync in ${_startupWatchdogTimeoutMs}ms — stopping")
-                stopSelf()
+        // Idempotent: if a watchdog is already ticking, do not reset it.
+        // Resetting on every onStartCommand would prevent the watchdog from ever firing
+        // when the Dart isolate fails to start — onServiceDead calls startService every
+        // ~15 s, which would continuously push the deadline out.
+        // The watchdog is only explicitly cancelled + re-armed in notifyIsolateReady()
+        // (isolate confirmed alive → give the fresh sync a full 30 s window) and in
+        // the reconnect path (watchdog was cancelled by a prior successful sync, so
+        // _watchdogRunnable is null and arming here is correct).
+        if (_watchdogRunnable != null) {
+            Log.d(TAG, "Startup watchdog already armed — not resetting")
+            return
+        }
+        val r = object : Runnable {
+            override fun run() {
+                _watchdogRunnable = null
+                if (!_syncSucceeded) {
+                    Log.e(TAG, "Startup watchdog: no successful sync in ${_startupWatchdogTimeoutMs}ms — stopping")
+                    stopSelf()
+                }
             }
         }
         _watchdogRunnable = r
@@ -362,12 +376,18 @@ class SignalingForegroundService : Service() {
 
     /// Called by [FgsHostApiHandler] when the FGS Dart isolate confirms its Pigeon
     /// handler is registered and ready to receive [onSynchronize] calls.
-    /// Resets [_syncSucceeded] and triggers a fresh [synchronizeIsolate] — this one
-    /// succeeds because Dart just completed [PSignalingServiceFlutterApi.setUp].
+    /// Resets [_syncSucceeded], gives the fresh sync cycle a full [_startupWatchdogTimeoutMs]
+    /// window by explicitly cancelling and re-arming the watchdog, then triggers
+    /// [synchronizeIsolate] — this one succeeds because Dart just completed
+    /// [PSignalingServiceFlutterApi.setUp].
     internal fun notifyIsolateReady() {
         Log.d(TAG, "notifyIsolateReady -- FGS Dart handler ready, triggering synchronize")
         _syncSucceeded = false
         cancelSyncRetries()
+        // Explicitly reset the watchdog so the sync triggered below has a full 30 s
+        // window regardless of how much time elapsed since engine creation.
+        cancelStartupWatchdog()
+        startStartupWatchdog()
         synchronizeIsolate()
     }
 
