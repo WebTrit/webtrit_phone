@@ -61,8 +61,9 @@ final class RestoreCallAction extends HandshakeAction {
 
 /// Deliver an unanswered [IncomingCallEvent] to the BLoC signaling handler.
 ///
-/// Emitted when the line's [callLogs] contains a single [CallEventLog] carrying
-/// an [IncomingCallEvent] -the call has not been answered yet.
+/// Emitted when the line has not been terminated, has no [AcceptedEvent], the
+/// earliest call log entry is an [IncomingCallEvent], and the call is not yet
+/// tracked in BLoC state.
 final class HandleIncomingCallAction extends HandshakeAction {
   const HandleIncomingCallAction({required this.event});
 
@@ -93,7 +94,7 @@ final class EndLocalCallAction extends HandshakeAction {
 ///   the latest event is not [HangupEvent]/[MissedCallEvent] -> [HangupSignalingAction].
 /// - If the log contains an [AcceptedEvent] (non-terminated call, not yet in BLoC) -> [RestoreCallAction]
 ///   (covers both incoming and outgoing calls; [AcceptedEvent] may not be the newest entry after re-INVITE).
-/// - If only a single unanswered [IncomingCallEvent] is present -> [HandleIncomingCallAction].
+/// - If the earliest log is an unanswered [IncomingCallEvent] (not terminated, not accepted, not in BLoC) -> [HandleIncomingCallAction].
 ///
 /// **Loop C -orphaned local connections:**
 /// - For each local Callkeep connection whose call ID is absent from the handshake
@@ -183,11 +184,11 @@ class HandshakeProcessor {
         continue;
       }
 
-      if (activeLine.callLogs.length == 1) {
-        final singleCallLog = activeLine.callLogs.first;
-        if (singleCallLog is CallEventLog && singleCallLog.callEvent is IncomingCallEvent) {
-          actions.add(HandleIncomingCallAction(event: singleCallLog.callEvent as IncomingCallEvent));
-        }
+      if (!isTerminated &&
+          acceptedLogEntry == null &&
+          earliestCallEvent is IncomingCallEvent &&
+          !activeCallIds.contains(activeLine.callId)) {
+        actions.add(HandleIncomingCallAction(event: earliestCallEvent));
       }
     }
 
