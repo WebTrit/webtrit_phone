@@ -127,6 +127,10 @@ class SignalingHub {
   /// Removes the hub from [IsolateNameServer], cancels all subscriptions,
   /// and closes the receive port. After [dispose] the hub must not be used.
   Future<void> dispose() async {
+    _logger.warning(
+      'Hub disposing — cancelling event forwarding to ${_subscribers.length} subscriber(s); '
+      'pending calls in history: ${_callEventHistory.length}',
+    );
     IsolateNameServer.removePortNameMapping(kSignalingHubPortName);
     await _moduleSubscription?.cancel();
     _receivePort.close();
