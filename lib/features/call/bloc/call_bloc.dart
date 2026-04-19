@@ -2897,6 +2897,57 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           await callkeep.endCall(action.callId);
       }
     }
+
+    // ---------------------------------------------------------------------------
+    // Pre-answer offer replay
+    //
+    // Race condition: the user can tap "Answer" on the native call UI (lock-screen
+    // notification or Telecom/CallKit overlay) *before* the WebSocket reconnects.
+    // When that happens the following sequence occurs:
+    //
+    //   1. Native callkeep marks the connection as answered and the BLoC call
+    //      advances to [incomingSubmittedAnswer] / [incomingPerformingStarted].
+    //   2. The WebSocket reconnects and the server replays the call state via a
+    //      [StateHandshake] that contains an [IncomingCallEvent] with the SDP offer.
+    //   3. [HandshakeProcessor] sees the call already in [activeCallIds] and emits
+    //      no action for it (deduplication guard) — the offer is discarded.
+    //   4. [__onCallPerformEventAnswered] waits up to 10 s for [incomingOffer] to
+    //      become non-null, then throws [TimeoutException: Timed out waiting for offer].
+    //
+    // Fix: after HandshakeProcessor runs, scan the handshake lines for any
+    // [IncomingCallEvent] whose call is locally waiting for an offer. If found,
+    // route the event through [_handleSignalingEvent] so that the existing
+    // [__onCallSignalingEventIncoming] handler stores the SDP offer and unblocks
+    // the wait loop. The subsequent [callIdAlreadyExistsAndAnswered] branch in
+    // [__onCallSignalingEventIncoming] handles the duplicate callkeep report
+    // gracefully — the second [CallControlEvent.answered] it dispatches is dropped
+    // by the [canPerformAnswer] guard (status is already [incomingPerformingStarted]).
+    // ---------------------------------------------------------------------------
+    for (final line in stateHandshake.lines) {
+      if (line == null) continue;
+
+      for (final log in line.callLogs) {
+        if (log is! CallEventLog) continue;
+        final callEvent = log.callEvent;
+        if (callEvent is! IncomingCallEvent) continue;
+        if (callEvent.jsep == null) continue;
+
+        final call = state.retrieveActiveCall(line.callId);
+        if (call == null) continue;
+        if (call.incomingOffer != null) continue;
+
+        final isWaitingForOffer =
+            call.processingStatus == CallProcessingStatus.incomingSubmittedAnswer ||
+            call.processingStatus == CallProcessingStatus.incomingPerformingStarted;
+        if (!isWaitingForOffer) continue;
+
+        _logger.warning(
+          '_handleHandshakeReceived: replaying offer for pre-answered call — '
+          'callId=${line.callId} status=${call.processingStatus}',
+        );
+        _handleSignalingEvent(callEvent);
+      }
+    }
   }
 
   Future<void> _onRestoreAcceptedCall(_RestoreAcceptedCall event, Emitter<CallState> emit) async {
