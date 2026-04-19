@@ -2899,32 +2899,36 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     // ---------------------------------------------------------------------------
-    // Handshake offer delivery for calls answered before WebSocket was ready
+    // Handshake offer delivery for push-registered calls without an SDP offer
     //
-    // When the user answers from a lock-screen notification, native callkeep
-    // marks the connection as answered immediately — before the WebSocket has
-    // reconnected. The BLoC call therefore reaches [incomingSubmittedAnswer] or
-    // [incomingPerformingStarted] without ever receiving an [IncomingCallEvent],
-    // so [ActiveCall.incomingOffer] stays null.
+    // A push notification creates an [ActiveCall] with status [incomingFromPush]
+    // before the WebSocket is available. The SDP offer normally arrives via a
+    // live [IncomingCallEvent] on the WebSocket. When the WebSocket is down at
+    // push arrival time (e.g. wifi reconnect), that live event is never received
+    // and [ActiveCall.incomingOffer] stays null.
     //
-    // Once the WebSocket connects, the server includes the original
+    // Once the WebSocket reconnects, the server includes the original
     // [IncomingCallEvent] (with the SDP offer) inside the [StateHandshake].
     // [HandshakeProcessor] intentionally skips it — the call is already in
     // [activeCallIds], so no action is emitted (deduplication guard).
     //
+    // This leaves the call without an offer regardless of when the user answers:
+    //   - Handshake before answer: call is [incomingFromPush], offer never stored,
+    //     answer then enters wait loop and times out.
+    //   - Answer before handshake: call reaches [incomingSubmittedAnswer] /
+    //     [incomingPerformingStarted], handshake arrives but guard still skips it.
+    //
     // [__onCallPerformEventAnswered] needs [incomingOffer] to build the peer
-    // connection. Without it the code waits on a stream that never emits and
-    // times out after 10 s. To cover this gap, the handshake lines are scanned
-    // here: any [IncomingCallEvent] that carries a jsep offer for a call that
-    // is still waiting for one is routed through [_handleSignalingEvent].
-    // [__onCallSignalingEventIncoming] then stores the offer in [ActiveCall]
-    // and the answer path proceeds normally.
+    // connection and times out after 10 s without it. To cover this gap the
+    // handshake lines are scanned here: any [IncomingCallEvent] that carries a
+    // jsep offer for a call that is still waiting for one is routed through
+    // [_handleSignalingEvent]. [__onCallSignalingEventIncoming] then stores the
+    // offer in [ActiveCall] and the answer path proceeds normally.
     //
     // [__onCallSignalingEventIncoming] reports the call to callkeep a second
     // time and receives [callIdAlreadyExistsAndAnswered], which it handles
-    // gracefully. The second [CallControlEvent.answered] it dispatches is
-    // dropped by the [canPerformAnswer] guard because the status is already
-    // [incomingPerformingStarted].
+    // gracefully. Any second [CallControlEvent.answered] it dispatches is
+    // dropped by the [canPerformAnswer] guard.
     // ---------------------------------------------------------------------------
     for (final line in stateHandshake.lines) {
       if (line == null) continue;
@@ -2940,6 +2944,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         if (call.incomingOffer != null) continue;
 
         final isWaitingForOffer =
+            call.processingStatus == CallProcessingStatus.incomingFromPush ||
             call.processingStatus == CallProcessingStatus.incomingSubmittedAnswer ||
             call.processingStatus == CallProcessingStatus.incomingPerformingStarted;
         if (!isWaitingForOffer) continue;
