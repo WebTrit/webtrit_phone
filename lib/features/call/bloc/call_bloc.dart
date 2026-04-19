@@ -2917,6 +2917,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     }
 
+    // TODO(WT-1369): Both HandshakeProcessor and this block iterate
+    // stateHandshake.lines and inspect IncomingCallEvent entries. The overlap
+    // exists because HandshakeProcessor receives only activeCallIds (a Set of
+    // strings) and cannot inspect ActiveCall.incomingOffer. A cleaner design
+    // would pass richer call state into HandshakeProcessor (or introduce a
+    // dedicated ReplayOfferAction) so this second pass can be removed.
+    // For now the separation is intentional: HandshakeProcessor stays stateless
+    // and easy to unit-test; this block handles the BLoC-state-dependent part.
+
     // ---------------------------------------------------------------------------
     // Handshake offer delivery for push-registered calls without an SDP offer
     //
