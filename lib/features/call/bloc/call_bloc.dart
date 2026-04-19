@@ -2405,9 +2405,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           line: activeCall.line,
           callId: activeCall.callId,
         );
-        await _signalingModule.execute(declineRequest)?.catchError((e, s) {
-          callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
-        });
+        final declineFuture = _signalingModule.execute(declineRequest);
+        if (state.callServiceState.networkStatus != NetworkStatus.none) {
+          await declineFuture?.catchError((e, s) {
+            callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
+          });
+        } else {
+          declineFuture?.catchError((e, s) {
+            callErrorReporter.handle(e, s, '__onCallPerformEventEnded declineRequest error');
+          }).ignore();
+        }
       } else {
         // Skip hangup when a blind transfer is in Transfering state (server started to process it).
         // In this state the SIP dialog may already be closed server-side via REFER; sending hangup
