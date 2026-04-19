@@ -520,6 +520,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.fine('_onConnectivityResultChanged: $connectivityResult');
     if (connectivityResult == ConnectivityResult.none) {
       _reconnectController.notifyNetworkUnavailable();
+
+      // Force-terminate calls stuck in disconnecting when network goes down.
+      // The queued hangup request cannot complete without connectivity; terminating
+      // locally prevents the UI from freezing in disconnecting state until reconnect.
+      final disconnectingCalls = state.activeCalls
+          .where((c) => c.processingStatus == CallProcessingStatus.disconnecting)
+          .toList();
+      for (final call in disconnectingCalls) {
+        _logger.info('_onConnectivityResultChanged: force-terminating disconnecting call ${call.callId}');
+        await _peerConnectionManager.disposePeerConnection(call.callId);
+        await _releaseLocalStream(call.localStream);
+        emit(state.copyWithPopActiveCall(call.callId));
+      }
     } else {
       _reconnectController.notifyNetworkAvailable();
 
