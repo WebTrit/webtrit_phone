@@ -1018,6 +1018,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     ActiveCall? activeCall = state.retrieveActiveCall(event.callId);
 
     if (activeCall != null) {
+      if (event.jsep == null && activeCall.incomingOffer != null) {
+        _logger.warning(
+          '__onCallSignalingEventIncoming: incoming event has jsep=null but call already has offer — '
+          'overwriting with null! callId=${event.callId} status=${activeCall.processingStatus}',
+        );
+      }
+      if (event.jsep != null && activeCall.incomingOffer != null) {
+        _logger.info(
+          '__onCallSignalingEventIncoming: replacing existing offer with new one '
+          'callId=${event.callId} status=${activeCall.processingStatus}',
+        );
+      }
       activeCall = activeCall.copyWith(
         line: event.line,
         handle: handle,
@@ -1047,6 +1059,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // typically happens on android from terminated or background state,
     // on ios it produce second call of [__onCallPerformEventAnswered] or [__onCallPerformEventEnded]
     // so make sure to guard it from race conditions
+    _logger.warning(
+      '__onCallSignalingEventIncoming: callId=${event.callId} '
+      'callAlreadyExists=$callAlreadyExists '
+      'callAlreadyAnswered=$callAlreadyAnswered '
+      'callAlreadyTerminated=$callAlreadyTerminated '
+      'hasOffer=${event.jsep != null} '
+      'status=${state.retrieveActiveCall(event.callId)?.processingStatus}',
+    );
+
     await Future.delayed(Duration.zero); // Defer execution to avoid exceptions like CallkeepCallRequestError.internal.
     if (callAlreadyAnswered) add(CallControlEvent.answered(event.callId));
     if (callAlreadyTerminated) add(CallControlEvent.ended(event.callId));
@@ -2827,6 +2848,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       activeCallIds: state.activeCalls.map((c) => c.callId).toSet(),
     );
 
+    _logger.warning(
+      '_handleHandshakeReceived: HandshakeProcessor actions=${actions.map((a) => a.runtimeType).toList()} '
+      'activeCalls=${state.activeCalls.map((c) => '${c.callId}:${c.processingStatus}').toList()}',
+    );
+
     for (final action in actions) {
       switch (action) {
         case HangupSignalingAction():
@@ -2942,6 +2968,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         CallkeepIncomingCallError.callIdAlreadyExists,
         CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered,
       };
+
+      _logger.warning(
+        '_onRestoreAcceptedCall: reportNewIncomingCall result=$reportError '
+        'callId=${event.callId} hasOffer=${incomingOffer != null} '
+        'alreadyAnswered=${reportError == CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered}',
+      );
+
       if (!acceptableReportErrors.contains(reportError)) {
         _logger.warning('_onRestoreAcceptedCall: reportNewIncomingCall returned $reportError, aborting');
         add(_ResetStateEvent.completeCall(event.callId));
