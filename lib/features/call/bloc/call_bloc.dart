@@ -2876,6 +2876,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           // Early return is intentional: HangupSignalingAction means the
           // entire session is being torn down. Offer-replay for other calls
           // is deferred to the next handshake cycle after the hang-up settles.
+          _logger.info(
+            '_handleHandshakeReceived: HangupSignalingAction — skipping offer-replay, callId=${action.callId}',
+          );
           return;
 
         case DeclineSignalingAction():
@@ -2890,6 +2893,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
               ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived declineRequest error'));
           // Early return mirrors HangupSignalingAction: the incoming call is
           // being declined server-side, so offer-replay is not applicable.
+          _logger.info(
+            '_handleHandshakeReceived: DeclineSignalingAction — skipping offer-replay, callId=${action.callId}',
+          );
           return;
 
         case RestoreCallAction():
