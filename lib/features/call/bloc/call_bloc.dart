@@ -2425,9 +2425,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             line: activeCall.line,
             callId: activeCall.callId,
           );
-          await _signalingModule.execute(hangupRequest)?.catchError((e, s) {
-            callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
-          });
+          final hangupFuture = _signalingModule.execute(hangupRequest);
+          if (state.callServiceState.networkStatus != NetworkStatus.none) {
+            await hangupFuture?.catchError((e, s) {
+              callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
+            });
+          } else {
+            // Network is unavailable — the queued hangup will retry and eventually fail.
+            // Skip the await to prevent blocking UI in disconnecting state for ~30s.
+            hangupFuture?.catchError((e, s) {
+              callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
+            }).ignore();
+          }
         }
       }
 
