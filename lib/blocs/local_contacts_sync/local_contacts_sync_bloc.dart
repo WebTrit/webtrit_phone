@@ -60,7 +60,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
       return;
     }
 
-    final permissionGranted = await requestContactPermission();
+    final permissionGranted = await isContactsPermissionGranted();
     if (isClosed) return;
     if (!permissionGranted) {
       emit(const LocalContactsSyncPermissionFailure());
