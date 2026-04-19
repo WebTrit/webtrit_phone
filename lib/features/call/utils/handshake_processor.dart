@@ -184,6 +184,22 @@ class HandshakeProcessor {
         continue;
       }
 
+      // Unanswered incoming call: deliver the IncomingCallEvent to the BLoC so
+      // it can set up the call state and surface the ringing UI.
+      //
+      // earliestCallEvent (not callEvent/latest) identifies the call direction
+      // because SIP UAs — notably iOS CallKit — append RingingEvent or
+      // ProceedingEvent almost immediately after the call is placed. By the time
+      // a WebSocket reconnect completes and a new StateHandshake arrives, the
+      // server log already contains multiple entries (e.g. [RingingEvent,
+      // IncomingCallEvent]). Using the latest entry would misidentify those calls.
+      //
+      // Guard rationale:
+      // - !isTerminated           : skip calls the server already ended.
+      // - acceptedLogEntry == null: accepted calls are handled by RestoreCallAction above.
+      // - earliestCallEvent is IncomingCallEvent: confirms the call is incoming, not outgoing.
+      // - !activeCallIds.contains : skip calls already tracked in BLoC state to avoid
+      //   re-triggering the incoming-call flow for an already-ringing call.
       if (!isTerminated &&
           acceptedLogEntry == null &&
           earliestCallEvent is IncomingCallEvent &&
