@@ -97,6 +97,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final Map<String, RenegotiationHandler> _renegotiationHandlers = {};
   late final HandshakeProcessor _handshakeProcessor;
 
+  bool _userSelectedSpeaker = false;
+
   final _callkeepSound = WebtritCallkeepSound();
 
   CallBloc({
@@ -382,6 +384,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ///   retains the speaker route from a previous, unrelated session.
   void _onFirstCallStarted() {
     _logger.info(() => 'Lifecycle: First call started');
+    _userSelectedSpeaker = false;
     if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
   }
 
@@ -394,6 +397,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ///   back to A2DP (media profile), fixing degraded audio in YouTube/music after calls.
   void _onLastCallEnded() {
     _logger.info(() => 'Lifecycle: Last call ended');
+    _userSelectedSpeaker = false;
     if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
     if (Platform.isAndroid) Helper.clearAndroidCommunicationDevice();
   }
@@ -1650,7 +1654,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         // override. Explicitly resetting the singleton to VoiceChat first
         // means setSpeakerphoneOn(false) applies the correct mode and clears
         // the port override, routing audio back to the earpiece.
-        if (Platform.isIOS) {
+        // The reset is skipped when the user explicitly chose the speaker so
+        // their preference is preserved after turning the camera off.
+        if (Platform.isIOS && !_userSelectedSpeaker) {
           await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(appleAudioMode: AppleAudioMode.voiceChat));
           await Helper.setSpeakerphoneOn(false);
         }
@@ -1696,8 +1702,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         callkeep.setAudioDevice(event.callId, event.device.toCallkeep());
       } else if (Platform.isIOS) {
         if (event.device.type == CallAudioDeviceType.speaker) {
+          _userSelectedSpeaker = true;
           Helper.setSpeakerphoneOn(true);
         } else {
+          _userSelectedSpeaker = false;
           Helper.setSpeakerphoneOn(false);
           final deviceId = event.device.id;
           if (deviceId != null) Helper.selectAudioInput(deviceId);
