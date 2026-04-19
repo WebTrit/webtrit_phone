@@ -234,9 +234,10 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
   Future<void> _configureAppleAudio({required bool hasVideo}) async {
     if (kIsWeb) return;
 
-    await Helper.setAppleAudioConfiguration(
-      AppleAudioConfiguration(appleAudioMode: hasVideo ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat),
-    );
+    // Always use VoiceChat so enabling video does not automatically switch
+    // the audio output to the speaker. The user can turn on the speaker
+    // manually if needed.
+    await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(appleAudioMode: AppleAudioMode.voiceChat));
   }
 
   String _nextStreamLabel() => 'user_media_${DateTime.now().microsecondsSinceEpoch}';

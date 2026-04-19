@@ -1640,6 +1640,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (currentVideoTrack != null) {
       currentVideoTrack.enabled = event.enabled;
       emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: event.enabled)));
+      if (!event.enabled) {
+        // When video was enabled, user_media_builder called
+        // _configureAppleAudio(hasVideo: true), which set the shared
+        // RTCAudioSessionConfiguration.webRTCConfiguration.mode singleton to
+        // AVAudioSessionModeVideoChat. That value persists: a subsequent
+        // setSpeakerphoneOn(false) reads the same singleton and re-applies
+        // VideoChat mode, which forces speaker routing regardless of the port
+        // override. Explicitly resetting the singleton to VoiceChat first
+        // means setSpeakerphoneOn(false) applies the correct mode and clears
+        // the port override, routing audio back to the earpiece.
+        // The reset is skipped when the user explicitly chose the speaker so
+        // their preference is preserved after turning the camera off.
+        if (Platform.isIOS && state.audioDevice?.type != CallAudioDeviceType.speaker) {
+          await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(appleAudioMode: AppleAudioMode.voiceChat));
+          await Helper.setSpeakerphoneOn(false);
+        }
+        await callkeep.reportUpdateCall(event.callId, hasVideo: false);
+      }
       return;
     }
 
