@@ -119,7 +119,15 @@ class SignalingForegroundService : Service() {
 
         // Fast path: engine already exists — attach if needed and wire Pigeon immediately.
         if (flutterEngineHelper.attachExistingIfNeeded()) {
+            val alreadyWired = _isolateFlutterApi != null
             wireUpPigeon()
+            if (alreadyWired) {
+                // Service was already running when startService() was called again.
+                // Send a sync so the FGS Dart isolate can reconnect the WebSocket if it
+                // dropped while the app was backgrounded (e.g. screen unlock in PUSH_BOUND).
+                // The watchdog is not re-armed: the isolate is already initialised.
+                synchronizeIsolate()
+            }
             return if (StorageDelegate.isPushBound(applicationContext)) START_NOT_STICKY else START_STICKY
         }
 
