@@ -188,7 +188,14 @@ class SignalingModuleImpl implements SignalingModule {
   /// Clears the session buffer on each call.
   @override
   void connect() {
-    if (_disposed || _connectToken != null) return;
+    if (_disposed) {
+      _logger.fine('connect: skipped — disposed');
+      return;
+    }
+    if (_connectToken != null) {
+      _logger.fine('connect: skipped — already connecting or connected');
+      return;
+    }
     final token = _connectToken = Object();
     _eventBuffer.clear();
     unawaited(_connectAsync(token));

@@ -2164,7 +2164,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       /// and main [IncomingEvent] with offer wasnt received yet
       ///
       if (call.incomingOffer == null) {
-        _logger.info('__onCallPerformEventAnswered: wait for offer');
+        _logger.info(
+          '__onCallPerformEventAnswered: wait for offer '
+          'signalingConnected=${_signalingModule.isConnected}',
+        );
 
         // Signaling may still be disconnected when answering from push while the app was in background.
         // Trigger reconnect immediately so the offer can arrive — don't wait for AppLifecycleState.resumed.
@@ -2177,11 +2180,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         await stream
             .firstWhere((s) {
               final activeCall = s.retrieveActiveCall(event.callId);
+              if (activeCall?.incomingOffer == null) {
+                _logger.fine(
+                  '__onCallPerformEventAnswered: offer still pending '
+                  'status=${activeCall?.processingStatus} '
+                  'signalingConnected=${_signalingModule.isConnected} '
+                  'elapsed=${DateTime.now().difference(offerWaitStart).inMilliseconds}ms',
+                );
+              }
               return activeCall?.incomingOffer != null;
             })
             .timeout(
               const Duration(seconds: 10),
               onTimeout: () {
+                _logger.warning(
+                  '__onCallPerformEventAnswered: offer wait timed out — '
+                  'signalingConnected=${_signalingModule.isConnected} '
+                  'elapsed=${DateTime.now().difference(offerWaitStart).inMilliseconds}ms',
+                );
                 throw TimeoutException('Timed out waiting for offer');
               },
             );
