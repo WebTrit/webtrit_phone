@@ -529,9 +529,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           .toList();
       for (final call in disconnectingCalls) {
         _logger.info('_onConnectivityResultChanged: force-terminating disconnecting call ${call.callId}');
-        await _peerConnectionManager.disposePeerConnection(call.callId);
-        await _releaseLocalStream(call.localStream);
-        emit(state.copyWithPopActiveCall(call.callId));
+        add(_ResetStateEvent.completeCall(call.callId));
       }
     } else {
       _reconnectController.notifyNetworkAvailable();
