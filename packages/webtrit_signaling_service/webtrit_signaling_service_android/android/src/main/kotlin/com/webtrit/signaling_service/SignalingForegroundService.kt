@@ -195,7 +195,11 @@ class SignalingForegroundService : Service() {
             return
         }
         Log.d(TAG, "wireUpPigeon: registering Pigeon channels on FGS engine")
-        onFgsEngineReady?.invoke(applicationContext, engine.dartExecutor.binaryMessenger)
+        try {
+            onFgsEngineReady?.invoke(applicationContext, engine.dartExecutor.binaryMessenger)
+        } catch (e: Exception) {
+            Log.e(TAG, "wireUpPigeon: onFgsEngineReady hook threw — continuing without it", e)
+        }
         PSignalingServiceHostApi.setUp(engine.dartExecutor.binaryMessenger, FgsHostApiHandler())
         isolateFlutterApi = PSignalingServiceFlutterApi(engine.dartExecutor.binaryMessenger)
     }
@@ -567,6 +571,7 @@ class SignalingForegroundService : Service() {
         ///         messenger, BackgroundPushNotificationIsolateBootstrapApi(context))
         /// }
         /// ```
+        @Volatile
         var onFgsEngineReady: ((Context, BinaryMessenger) -> Unit)? = null
     }
 }
