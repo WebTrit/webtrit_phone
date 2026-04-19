@@ -2899,29 +2899,32 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     // ---------------------------------------------------------------------------
-    // Pre-answer offer replay
+    // Handshake offer delivery for calls answered before WebSocket was ready
     //
-    // Race condition: the user can tap "Answer" on the native call UI (lock-screen
-    // notification or Telecom/CallKit overlay) *before* the WebSocket reconnects.
-    // When that happens the following sequence occurs:
+    // When the user answers from a lock-screen notification, native callkeep
+    // marks the connection as answered immediately — before the WebSocket has
+    // reconnected. The BLoC call therefore reaches [incomingSubmittedAnswer] or
+    // [incomingPerformingStarted] without ever receiving an [IncomingCallEvent],
+    // so [ActiveCall.incomingOffer] stays null.
     //
-    //   1. Native callkeep marks the connection as answered and the BLoC call
-    //      advances to [incomingSubmittedAnswer] / [incomingPerformingStarted].
-    //   2. The WebSocket reconnects and the server replays the call state via a
-    //      [StateHandshake] that contains an [IncomingCallEvent] with the SDP offer.
-    //   3. [HandshakeProcessor] sees the call already in [activeCallIds] and emits
-    //      no action for it (deduplication guard) — the offer is discarded.
-    //   4. [__onCallPerformEventAnswered] waits up to 10 s for [incomingOffer] to
-    //      become non-null, then throws [TimeoutException: Timed out waiting for offer].
+    // Once the WebSocket connects, the server includes the original
+    // [IncomingCallEvent] (with the SDP offer) inside the [StateHandshake].
+    // [HandshakeProcessor] intentionally skips it — the call is already in
+    // [activeCallIds], so no action is emitted (deduplication guard).
     //
-    // Fix: after HandshakeProcessor runs, scan the handshake lines for any
-    // [IncomingCallEvent] whose call is locally waiting for an offer. If found,
-    // route the event through [_handleSignalingEvent] so that the existing
-    // [__onCallSignalingEventIncoming] handler stores the SDP offer and unblocks
-    // the wait loop. The subsequent [callIdAlreadyExistsAndAnswered] branch in
-    // [__onCallSignalingEventIncoming] handles the duplicate callkeep report
-    // gracefully — the second [CallControlEvent.answered] it dispatches is dropped
-    // by the [canPerformAnswer] guard (status is already [incomingPerformingStarted]).
+    // [__onCallPerformEventAnswered] needs [incomingOffer] to build the peer
+    // connection. Without it the code waits on a stream that never emits and
+    // times out after 10 s. To cover this gap, the handshake lines are scanned
+    // here: any [IncomingCallEvent] that carries a jsep offer for a call that
+    // is still waiting for one is routed through [_handleSignalingEvent].
+    // [__onCallSignalingEventIncoming] then stores the offer in [ActiveCall]
+    // and the answer path proceeds normally.
+    //
+    // [__onCallSignalingEventIncoming] reports the call to callkeep a second
+    // time and receives [callIdAlreadyExistsAndAnswered], which it handles
+    // gracefully. The second [CallControlEvent.answered] it dispatches is
+    // dropped by the [canPerformAnswer] guard because the status is already
+    // [incomingPerformingStarted].
     // ---------------------------------------------------------------------------
     for (final line in stateHandshake.lines) {
       if (line == null) continue;
