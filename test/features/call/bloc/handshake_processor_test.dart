@@ -30,6 +30,10 @@ ProceedingEvent _makeProceedingEvent({int? line = _kLine, String callId = _kCall
   return ProceedingEvent(line: line, callId: callId, code: 180);
 }
 
+RingingEvent _makeRingingEvent({int? line = _kLine, String callId = _kCallId}) {
+  return RingingEvent(line: line, callId: callId);
+}
+
 Line _makeLine({String callId = _kCallId, required List<CallLog> callLogs}) {
   return Line(callId: callId, callLogs: callLogs);
 }
@@ -78,8 +82,8 @@ void main() {
   // Unanswered incoming call (single CallEventLog)
   // -------------------------------------------------------------------------
 
-  group('single unanswered IncomingCallEvent', () {
-    test('returns HandleIncomingCallAction', () async {
+  group('unanswered incoming call', () {
+    test('returns HandleIncomingCallAction for single IncomingCallEvent', () async {
       final line = _makeLine(callLogs: [CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent())]);
 
       final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
@@ -88,6 +92,47 @@ void main() {
       expect(actions.first, isA<HandleIncomingCallAction>());
       final a = actions.first as HandleIncomingCallAction;
       expect(a.event.callId, _kCallId);
+    });
+
+    // Regression: WT-1369 — iOS CallKit sends 180 Ringing almost immediately,
+    // so by the time a WebSocket reconnect completes the server log already has
+    // [RingingEvent (latest), IncomingCallEvent (earliest)] (length=2).
+    // The old callLogs.length == 1 guard silently skipped this case.
+    test('returns HandleIncomingCallAction when RingingEvent prepended (iPhone 180-Ringing)', () async {
+      final line = _makeLine(callLogs: [
+        CallEventLog(timestamp: 2000, callEvent: _makeRingingEvent()),
+        CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
+      ]);
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+
+      expect(actions, hasLength(1));
+      expect(actions.first, isA<HandleIncomingCallAction>());
+      final a = actions.first as HandleIncomingCallAction;
+      expect(a.event.callId, _kCallId);
+    });
+
+    test('returns HandleIncomingCallAction when ProceedingEvent prepended', () async {
+      final line = _makeLine(callLogs: [
+        CallEventLog(timestamp: 2000, callEvent: _makeProceedingEvent()),
+        CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
+      ]);
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+
+      expect(actions, hasLength(1));
+      expect(actions.first, isA<HandleIncomingCallAction>());
+    });
+
+    test('skips HandleIncomingCallAction when callId already in activeCallIds', () async {
+      final line = _makeLine(callLogs: [
+        CallEventLog(timestamp: 2000, callEvent: _makeRingingEvent()),
+        CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
+      ]);
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {_kCallId});
+
+      expect(actions.whereType<HandleIncomingCallAction>(), isEmpty);
     });
   });
 
