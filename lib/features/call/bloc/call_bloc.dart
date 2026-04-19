@@ -1018,13 +1018,33 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     ActiveCall? activeCall = state.retrieveActiveCall(event.callId);
 
     if (activeCall != null) {
+      // Preserve an already-stored offer when the server re-delivers the
+      // IncomingCallEvent without a jsep (e.g. a state-sync message after
+      // reconnect that omits the SDP). Overwriting with null here would
+      // silently clear the offer and cause __onCallPerformEventAnswered to
+      // time out waiting for it.
+      final resolvedOffer = event.jsep ?? activeCall.incomingOffer;
+
+      if (event.jsep == null && activeCall.incomingOffer != null) {
+        _logger.info(
+          '__onCallSignalingEventIncoming: keeping existing offer — '
+          'incoming event has no jsep '
+          'callId=${event.callId} status=${activeCall.processingStatus}',
+        );
+      }
+      if (event.jsep != null && activeCall.incomingOffer != null) {
+        _logger.info(
+          '__onCallSignalingEventIncoming: replacing existing offer with new one '
+          'callId=${event.callId} status=${activeCall.processingStatus}',
+        );
+      }
       activeCall = activeCall.copyWith(
         line: event.line,
         handle: handle,
         displayName: displayName,
         video: video,
         transfer: transfer,
-        incomingOffer: event.jsep,
+        incomingOffer: resolvedOffer,
       );
       emit(state.copyWithMappedActiveCall(event.callId, (_) => activeCall!));
     } else {
@@ -1047,6 +1067,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // typically happens on android from terminated or background state,
     // on ios it produce second call of [__onCallPerformEventAnswered] or [__onCallPerformEventEnded]
     // so make sure to guard it from race conditions
+    _logger.warning(
+      '__onCallSignalingEventIncoming: callId=${event.callId} '
+      'callAlreadyExists=$callAlreadyExists '
+      'callAlreadyAnswered=$callAlreadyAnswered '
+      'callAlreadyTerminated=$callAlreadyTerminated '
+      'hasOffer=${event.jsep != null} '
+      'status=${state.retrieveActiveCall(event.callId)?.processingStatus}',
+    );
+
     await Future.delayed(Duration.zero); // Defer execution to avoid exceptions like CallkeepCallRequestError.internal.
     if (callAlreadyAnswered) add(CallControlEvent.answered(event.callId));
     if (callAlreadyTerminated) add(CallControlEvent.ended(event.callId));
@@ -2845,6 +2874,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       activeCallIds: state.activeCalls.map((c) => c.callId).toSet(),
     );
 
+    _logger.warning(
+      '_handleHandshakeReceived: HandshakeProcessor actions=${actions.map((a) => a.runtimeType).toList()} '
+      'activeCalls=${state.activeCalls.map((c) => '${c.callId}:${c.processingStatus}').toList()}',
+    );
+
     for (final action in actions) {
       switch (action) {
         case HangupSignalingAction():
@@ -2857,6 +2891,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
                 ),
               )
               ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived hangupRequest error'));
+          // Early return is intentional: HangupSignalingAction means the
+          // entire session is being torn down. Offer-replay for other calls
+          // is deferred to the next handshake cycle after the hang-up settles.
+          _logger.info(
+            '_handleHandshakeReceived: HangupSignalingAction — skipping offer-replay, callId=${action.callId}',
+          );
           return;
 
         case DeclineSignalingAction():
@@ -2869,6 +2909,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
                 ),
               )
               ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived declineRequest error'));
+          // Early return mirrors HangupSignalingAction: the incoming call is
+          // being declined server-side, so offer-replay is not applicable.
+          _logger.info(
+            '_handleHandshakeReceived: DeclineSignalingAction — skipping offer-replay, callId=${action.callId}',
+          );
           return;
 
         case RestoreCallAction():
@@ -2887,6 +2932,83 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
         case EndLocalCallAction():
           await callkeep.endCall(action.callId);
+      }
+    }
+
+    // TODO(WT-1369): Both HandshakeProcessor and this block iterate
+    // stateHandshake.lines and inspect IncomingCallEvent entries. The overlap
+    // exists because HandshakeProcessor receives only activeCallIds (a Set of
+    // strings) and cannot inspect ActiveCall.incomingOffer. A cleaner design
+    // would pass richer call state into HandshakeProcessor (or introduce a
+    // dedicated ReplayOfferAction) so this second pass can be removed.
+    // For now the separation is intentional: HandshakeProcessor stays stateless
+    // and easy to unit-test; this block handles the BLoC-state-dependent part.
+
+    // ---------------------------------------------------------------------------
+    // Handshake offer delivery for push-registered calls without an SDP offer
+    //
+    // A push notification creates an [ActiveCall] with status [incomingFromPush]
+    // before the WebSocket is available. The SDP offer normally arrives via a
+    // live [IncomingCallEvent] on the WebSocket. When the WebSocket is down at
+    // push arrival time (e.g. wifi reconnect), that live event is never received
+    // and [ActiveCall.incomingOffer] stays null.
+    //
+    // Once the WebSocket reconnects, the server includes the original
+    // [IncomingCallEvent] (with the SDP offer) inside the [StateHandshake].
+    // [HandshakeProcessor] intentionally skips it — the call is already in
+    // [activeCallIds], so no action is emitted (deduplication guard).
+    //
+    // This leaves the call without an offer regardless of when the user answers:
+    //   - Handshake before answer: call is [incomingFromPush], offer never stored,
+    //     answer then enters wait loop and times out.
+    //   - Answer before handshake: call reaches [incomingSubmittedAnswer] /
+    //     [incomingPerformingStarted], handshake arrives but guard still skips it.
+    //
+    // [__onCallPerformEventAnswered] needs [incomingOffer] to build the peer
+    // connection and times out after 10 s without it. To cover this gap, all
+    // handshake lines (including [guestLine]) are scanned: any [IncomingCallEvent]
+    // that carries a jsep offer for a call that is still waiting for one is routed
+    // through [_handleSignalingEvent]. [__onCallSignalingEventIncoming] then stores
+    // the offer in [ActiveCall] and the answer path proceeds normally.
+    //
+    // [__onCallSignalingEventIncoming] reports the call to callkeep a second
+    // time and receives [callIdAlreadyExistsAndAnswered], which it handles
+    // gracefully. Any second [CallControlEvent.answered] it dispatches is
+    // dropped by the [canPerformAnswer] guard.
+    //
+    // Only the first [IncomingCallEvent] with a jsep per line is replayed
+    // (break after match) to avoid dispatching the same offer more than once
+    // in the unlikely case a call log contains duplicate entries.
+    //
+    // Note: this block is unreachable when [HangupSignalingAction] or
+    // [DeclineSignalingAction] triggers an early return above. Those cases
+    // tear down the session entirely, making offer-replay irrelevant.
+    // ---------------------------------------------------------------------------
+    final linesToScan = [...stateHandshake.lines, stateHandshake.guestLine].whereType<Line>();
+
+    for (final line in linesToScan) {
+      for (final log in line.callLogs) {
+        if (log is! CallEventLog) continue;
+        final callEvent = log.callEvent;
+        if (callEvent is! IncomingCallEvent) continue;
+        if (callEvent.jsep == null) continue;
+
+        final call = state.retrieveActiveCall(line.callId);
+        if (call == null) continue;
+        if (call.incomingOffer != null) continue;
+
+        final isWaitingForOffer =
+            call.processingStatus == CallProcessingStatus.incomingFromPush ||
+            call.processingStatus == CallProcessingStatus.incomingSubmittedAnswer ||
+            call.processingStatus == CallProcessingStatus.incomingPerformingStarted;
+        if (!isWaitingForOffer) continue;
+
+        _logger.info(
+          '_handleHandshakeReceived: replaying offer for push-registered call — '
+          'callId=${line.callId} status=${call.processingStatus}',
+        );
+        _handleSignalingEvent(callEvent);
+        break; // one offer per line is sufficient; avoid duplicate dispatches
       }
     }
   }
@@ -2960,6 +3082,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         CallkeepIncomingCallError.callIdAlreadyExists,
         CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered,
       };
+
+      _logger.warning(
+        '_onRestoreAcceptedCall: reportNewIncomingCall result=$reportError '
+        'callId=${event.callId} hasOffer=${incomingOffer != null} '
+        'alreadyAnswered=${reportError == CallkeepIncomingCallError.callIdAlreadyExistsAndAnswered}',
+      );
+
       if (!acceptableReportErrors.contains(reportError)) {
         _logger.warning('_onRestoreAcceptedCall: reportNewIncomingCall returned $reportError, aborting');
         add(_ResetStateEvent.completeCall(event.callId));
