@@ -63,6 +63,19 @@ class SignalingHub {
   /// and would cause the buffer to grow unboundedly over a long session.
   final List<List<dynamic>> _sessionBuffer = [];
 
+  /// Last encoded registration-state protocol event in the current session.
+  ///
+  /// The initial [StateHandshake] always carries [RegistrationStatus.unregistered]
+  /// because SIP REGISTER hasn't completed yet. The server then sends a
+  /// [RegisteredEvent] (or similar) as a protocol event, which is normally
+  /// excluded from [_sessionBuffer]. Without this field, a late subscriber
+  /// (e.g. the main app opening after the FGS has been running) would only see
+  /// the initial unregistered handshake and get stuck at "Unregistered".
+  ///
+  /// Cleared on each [SignalingConnecting] (new WebSocket session).
+  /// Replaced on each registration state transition event.
+  List<dynamic>? _lastRegistrationEvent;
+
   /// callId → ordered list of encoded [SignalingProtocolEvent]s for that call.
   ///
   /// Tracks the lifecycle of each incoming call that arrived during the current
@@ -120,6 +133,7 @@ class SignalingHub {
     _subscribers.clear();
     _sessionBuffer.clear();
     _callEventHistory.clear();
+    _lastRegistrationEvent = null;
     _logger.fine('Hub disposed');
   }
 
@@ -127,15 +141,26 @@ class SignalingHub {
     if (event is SignalingConnecting) {
       _sessionBuffer.clear();
       _callEventHistory.clear();
+      _lastRegistrationEvent = null;
     }
     final encoded = encodeHubEvent(event);
     if (event is! SignalingProtocolEvent) {
       _sessionBuffer.add(encoded);
     } else {
       _updateCallHistory(event.event, encoded);
+      if (_isRegistrationEvent(event.event)) {
+        _lastRegistrationEvent = encoded;
+      }
     }
     _broadcast(encoded);
   }
+
+  bool _isRegistrationEvent(Event event) =>
+      event is RegisteredEvent ||
+      event is UnregisteredEvent ||
+      event is RegisteringEvent ||
+      event is RegistrationFailedEvent ||
+      event is UnregisteringEvent;
 
   /// Updates [_callEventHistory] based on a protocol event.
   ///
@@ -244,6 +269,15 @@ class SignalingHub {
     // Replay current session buffer so the new subscriber gets the full connection state.
     for (final event in List<List<dynamic>>.from(_sessionBuffer)) {
       cmd.replyPort.send(event);
+    }
+    // Replay the last registration state transition so the subscriber doesn't
+    // get stuck at the initial "unregistered" status from the StateHandshake.
+    // The initial handshake always carries unregistered because SIP REGISTER
+    // hasn't completed yet; the subsequent RegisteredEvent (a protocol event)
+    // is not in [_sessionBuffer], so late subscribers would miss it without this.
+    final regEvent = _lastRegistrationEvent;
+    if (regEvent != null) {
+      cmd.replyPort.send(regEvent);
     }
     // Replay the full event history for each active in-session call.
     // Protocol events are not stored in [_sessionBuffer], so without this
