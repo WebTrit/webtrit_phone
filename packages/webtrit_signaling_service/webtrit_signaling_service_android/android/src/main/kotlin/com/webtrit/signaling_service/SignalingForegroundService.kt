@@ -116,6 +116,18 @@ class SignalingForegroundService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "SignalingForegroundService onStartCommand")
+
+        // Path 4 guard: stopService() arrived in the Pigeon FIFO queue before this
+        // service's H.CREATE_SERVICE ran (main thread was overloaded). The plugin
+        // deferred the stop because calling context.stopService() at that point would
+        // crash — the service had not yet called startForeground(). onCreate() already
+        // called startForeground() so we can stop safely now without a crash.
+        if (WebtritSignalingServicePlugin.consumeStopRequested()) {
+            Log.w(TAG, "onStartCommand: deferred stop detected — stopping after startForeground()")
+            gracefulStop { stopSelf() }
+            return START_NOT_STICKY
+        }
+
         getLock(applicationContext).acquire(10 * 60 * 1000L)
 
         // Fast path: engine already exists — attach if needed and wire Pigeon immediately.

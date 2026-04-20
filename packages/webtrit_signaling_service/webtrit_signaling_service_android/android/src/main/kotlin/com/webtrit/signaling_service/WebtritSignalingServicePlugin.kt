@@ -77,9 +77,12 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
     }
 
     override fun startService(mode: PSignalingServiceMode) {
-        Log.d(TAG, "startService mode=$mode")
+        Log.d(TAG, "startService mode=$mode isRunning=${SignalingForegroundService.isRunning} instance=${SignalingForegroundService.instance != null} _stopRequested=$_stopRequested")
+        _stopRequested = false
         StorageDelegate.saveMode(context, mode)
+        Log.d(TAG, "startService: calling startForegroundService()")
         SignalingForegroundService.start(context)
+        Log.d(TAG, "startService: startForegroundService() returned")
     }
 
     override fun stopService() {
@@ -89,8 +92,17 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
         val service = SignalingForegroundService.instance
         if (service != null) {
             service.gracefulStop { SignalingForegroundService.stop(context) }
-        } else {
+        } else if (SignalingForegroundService.isRunning) {
             SignalingForegroundService.stop(context)
+        } else {
+            // startForegroundService() was called but onCreate() hasn't run yet.
+            // The Pigeon queue delivered stopService() before H.CREATE_SERVICE ran on the
+            // main thread (e.g. main thread was overloaded). Calling stop() here would
+            // bring down a service that never called startForeground() →
+            // ForegroundServiceDidNotStartInTimeException. Set the flag instead;
+            // onStartCommand checks it and stops cleanly after startForeground() has run.
+            Log.w(TAG, "stopService: service not yet started — deferring stop via _stopRequested")
+            _stopRequested = true
         }
     }
 
@@ -126,6 +138,22 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
 
     companion object {
         private const val TAG = "WebtritSignalingServicePlugin"
+
+        /// True when [stopService] was called while [SignalingForegroundService.onCreate]
+        /// had not yet run. In that window, calling [SignalingForegroundService.stop]
+        /// directly would crash with ForegroundServiceDidNotStartInTimeException because
+        /// the service never got to call startForeground(). The deferred stop is picked
+        /// up by [SignalingForegroundService.onStartCommand] after startForeground() runs.
+        @Volatile
+        private var _stopRequested = false
+
+        /// Reads and clears [_stopRequested] atomically.
+        /// Called by [SignalingForegroundService.onStartCommand].
+        internal fun consumeStopRequested(): Boolean {
+            val was = _stopRequested
+            _stopRequested = false
+            return was
+        }
 
         /// Returns true when [e] is [ForegroundServiceStartNotAllowedException] (API 31+).
         ///
