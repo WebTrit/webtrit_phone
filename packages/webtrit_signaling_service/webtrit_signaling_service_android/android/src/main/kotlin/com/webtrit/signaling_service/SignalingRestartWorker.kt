@@ -29,37 +29,39 @@ class SignalingRestartWorker(
     workerParams: WorkerParameters,
 ) : Worker(context, workerParams) {
 
-    override fun doWork(): Result = try {
+    override fun doWork(): Result {
         if (SignalingForegroundService.isRunning) {
             Log.d(TAG, "SignalingRestartWorker: FGS already running — nothing to do")
             return Result.success()
         }
-        if (!StorageDelegate.isPushBound(applicationContext) &&
-            StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
-            StorageDelegate.getTenantId(applicationContext).isNotEmpty() &&
-            StorageDelegate.getToken(applicationContext).isNotEmpty() &&
-            StorageDelegate.getCallbackDispatcher(applicationContext) != 0L
-        ) {
-            Log.w(TAG, "SignalingRestartWorker: restarting persistent FGS (attempt ${runAttemptCount + 1})")
-            SignalingForegroundService.start(applicationContext)
-            // Return retry so WorkManager applies exponential backoff for the next check.
-            // If the FGS stays up, the next run finds isRunning==true and returns success.
-            // If it dies again (core still unreachable), the delay grows: 15s→30s→60s→...→5h,
-            // preventing the overnight restart churn that leads to OS-level throttling on Xiaomi.
-            Result.retry()
-        } else {
-            Result.success()
-        }
-    } catch (e: Exception) {
-        // ForegroundServiceStartNotAllowedException is expected on Android 12+ when the process
-        // has left the BFGS window. Log at warning level (transient) and schedule a retry.
-        // All other exceptions are permanent failures -- log at error level and stop retrying.
-        if (isForegroundServiceStartNotAllowed(e)) {
-            Log.w(TAG, "Cannot restart FGS: process not in BFGS state, will retry", e)
-            Result.retry()
-        } else {
-            Log.e(TAG, "Failed to restart FGS (permanent)", e)
-            Result.failure()
+        return try {
+            if (!StorageDelegate.isPushBound(applicationContext) &&
+                StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
+                StorageDelegate.getTenantId(applicationContext).isNotEmpty() &&
+                StorageDelegate.getToken(applicationContext).isNotEmpty() &&
+                StorageDelegate.getCallbackDispatcher(applicationContext) != 0L
+            ) {
+                Log.w(TAG, "SignalingRestartWorker: restarting persistent FGS (attempt ${runAttemptCount + 1})")
+                SignalingForegroundService.start(applicationContext)
+                // Return retry so WorkManager applies exponential backoff for the next check.
+                // If the FGS stays up, the next run finds isRunning==true and returns success.
+                // If it dies again (core still unreachable), the delay grows: 15s→30s→60s→...→5h,
+                // preventing the overnight restart churn that leads to OS-level throttling on Xiaomi.
+                Result.retry()
+            } else {
+                Result.success()
+            }
+        } catch (e: Exception) {
+            // ForegroundServiceStartNotAllowedException is expected on Android 12+ when the process
+            // has left the BFGS window. Log at warning level (transient) and schedule a retry.
+            // All other exceptions are permanent failures -- log at error level and stop retrying.
+            if (isForegroundServiceStartNotAllowed(e)) {
+                Log.w(TAG, "Cannot restart FGS: process not in BFGS state, will retry", e)
+                Result.retry()
+            } else {
+                Log.e(TAG, "Failed to restart FGS (permanent)", e)
+                Result.failure()
+            }
         }
     }
 
