@@ -92,6 +92,20 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   /// chosen mode is used instead of reverting to the stale parameter.
   SignalingServiceMode? _currentMode;
 
+  /// Set to `true` by [stopService] and [dispose] to prevent [_onHubServiceDead]
+  /// from restarting the foreground service after an intentional stop.
+  ///
+  /// Without this guard, stopping the FGS during logout causes the hub to lose
+  /// its port in [IsolateNameServer], which triggers [_onHubServiceDead]. That
+  /// callback calls [_startService] directly — bypassing [WebtritSignalingService]
+  /// and its own [_isDisposed] check — and starts a new FGS. If the logout
+  /// teardown then calls [stopService] on the new FGS before it reaches
+  /// [startForeground], the OS throws [ForegroundServiceDidNotStartInTimeException].
+  ///
+  /// Reset to `false` in [start] so the service can be restarted after a new
+  /// login session.
+  bool _isStopped = false;
+
   @override
   Stream<SignalingModuleEvent> get events {
     return Stream.multi((sink) {
@@ -108,6 +122,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     SignalingServiceConfig config, {
     SignalingServiceMode mode = SignalingServiceMode.persistent,
   }) async {
+    _isStopped = false;
     _currentConfig = config;
     // Use the mode from the last explicit start/updateMode call so that
     // reconnect calls (which always pass the initial mode) do not revert
@@ -164,6 +179,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   @override
   Future<void> dispose() async {
+    _isStopped = true;
     _logger.info('dispose');
     await _hubManager.tearDown();
 
@@ -212,6 +228,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   @override
   Future<void> stopService() async {
+    _isStopped = true;
     _logger.info('stopService');
     await _hostApi.stopService();
   }
@@ -229,6 +246,10 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   }
 
   Future<void> _onHubServiceDead() async {
+    if (_isStopped) {
+      _logger.info('_onHubServiceDead: service intentionally stopped, skipping restart');
+      return;
+    }
     _logger.warning('_onHubServiceDead: hub service dead, restarting');
     final config = _currentConfig;
     final mode = _currentMode;
