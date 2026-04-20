@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 enum SignalingDialogDirection { initiator, recipient }
 
-enum SignalingDialogState { proceeding, early, confirmed, terminated, unknown }
+enum SignalingDialogState { trying, proceeding, early, confirmed, terminated, unknown }
 
 class SignalingDialogInfo extends Equatable {
   const SignalingDialogInfo({
@@ -39,9 +39,11 @@ class SignalingDialogInfo extends Equatable {
     return SignalingDialogInfo(
       id: json['id'],
       entityNumber: json['entity_number'],
-      state: SignalingDialogState.values.byName(json['state']),
+      state: SignalingDialogState.values.asNameMap()[json['state'] as String?] ?? SignalingDialogState.unknown,
       callId: json['call_id'],
-      direction: json['direction'] != null ? SignalingDialogDirection.values.byName(json['direction']) : null,
+      direction: json['direction'] != null
+          ? SignalingDialogDirection.values.asNameMap()[json['direction'] as String]
+          : null,
       localTag: json['local_tag'],
       localNumber: json['local_number'],
       localDisplayName: json['local_display_name'],
