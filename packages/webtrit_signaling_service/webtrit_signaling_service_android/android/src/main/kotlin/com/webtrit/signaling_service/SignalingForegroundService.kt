@@ -251,8 +251,14 @@ class SignalingForegroundService : Service() {
                    StorageDelegate.getTenantId(applicationContext).isNotEmpty() &&
                    StorageDelegate.getToken(applicationContext).isNotEmpty() &&
                    StorageDelegate.getCallbackDispatcher(applicationContext) != 0L) {
-            // persistent mode -- enqueue a fast restart in case the OS doesn't honour START_STICKY
-            SignalingRestartWorker.enqueue(applicationContext, delayMillis = 1_000)
+            // persistent mode -- enqueue a fast restart in case the OS doesn't honour START_STICKY.
+            // REPLACE resets any accumulated backoff: task removal is a UI action, not a
+            // connection failure, so an immediate retry is appropriate.
+            SignalingRestartWorker.enqueue(
+                applicationContext,
+                delayMillis = 1_000,
+                policy = androidx.work.ExistingWorkPolicy.REPLACE,
+            )
         }
     }
 
