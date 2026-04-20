@@ -55,6 +55,15 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   WebtritSignalingServiceAndroid.forTesting({BinaryMessenger? binaryMessenger})
     : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger);
 
+  @visibleForTesting
+  void initStateForTesting({required SignalingServiceConfig config, required SignalingServiceMode mode}) {
+    _currentConfig = config;
+    _currentMode = mode;
+  }
+
+  @visibleForTesting
+  Future<void> triggerOnServiceDeadForTesting() => _onHubServiceDead();
+
   static WebtritSignalingServiceAndroid? _instance;
 
   /// Registers this class as the default [SignalingServicePlatform] instance.
