@@ -4,12 +4,16 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/features/call/utils/handshake_processor.dart';
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 // ---------------------------------------------------------------------------
 // Mocks
 // ---------------------------------------------------------------------------
 
 class MockCallkeepConnections extends Mock implements CallkeepConnections {}
+
+class MockQueuedTerminationRequestsRepository extends Mock implements QueuedTerminationRequestsRepository {}
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -45,21 +49,39 @@ CallkeepConnection _makeConnection({
   return CallkeepConnection(callId: callId, state: state, disconnectCause: null);
 }
 
+QueuedTerminationRequest _makeQueuedTerminationRequest({
+  QueuedTerminationRequestType type = QueuedTerminationRequestType.decline,
+  String callId = _kCallId,
+  int? line = _kLine,
+}) {
+  return QueuedTerminationRequest(type: type, callId: callId, line: line);
+}
+
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
 
 void main() {
   late MockCallkeepConnections mockConnections;
+  late MockQueuedTerminationRequestsRepository mockQueuedTerminationRequestsRepository;
   late HandshakeProcessor processor;
+
+  setUpAll(() {
+    registerFallbackValue(_makeQueuedTerminationRequest());
+  });
 
   setUp(() {
     mockConnections = MockCallkeepConnections();
-    processor = HandshakeProcessor(callkeepConnections: mockConnections);
+    mockQueuedTerminationRequestsRepository = MockQueuedTerminationRequestsRepository();
+    processor = HandshakeProcessor(
+      callkeepConnections: mockConnections,
+      queuedTerminationRequestsRepository: mockQueuedTerminationRequestsRepository,
+    );
 
     // Default: no local connections, no connection for any callId.
     when(() => mockConnections.getConnections()).thenAnswer((_) async => []);
     when(() => mockConnections.getConnection(any())).thenAnswer((_) async => null);
+    when(() => mockQueuedTerminationRequestsRepository.getAll).thenReturn(<String, QueuedTerminationRequest>{});
   });
 
   // -------------------------------------------------------------------------
@@ -99,10 +121,12 @@ void main() {
     // [RingingEvent (latest), IncomingCallEvent (earliest)] (length=2).
     // The old callLogs.length == 1 guard silently skipped this case.
     test('returns HandleIncomingCallAction when RingingEvent prepended (iPhone 180-Ringing)', () async {
-      final line = _makeLine(callLogs: [
-        CallEventLog(timestamp: 2000, callEvent: _makeRingingEvent()),
-        CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
-      ]);
+      final line = _makeLine(
+        callLogs: [
+          CallEventLog(timestamp: 2000, callEvent: _makeRingingEvent()),
+          CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
+        ],
+      );
 
       final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
 
@@ -113,10 +137,12 @@ void main() {
     });
 
     test('returns HandleIncomingCallAction when ProceedingEvent prepended', () async {
-      final line = _makeLine(callLogs: [
-        CallEventLog(timestamp: 2000, callEvent: _makeProceedingEvent()),
-        CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
-      ]);
+      final line = _makeLine(
+        callLogs: [
+          CallEventLog(timestamp: 2000, callEvent: _makeProceedingEvent()),
+          CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
+        ],
+      );
 
       final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
 
@@ -125,10 +151,12 @@ void main() {
     });
 
     test('skips HandleIncomingCallAction when callId already in activeCallIds', () async {
-      final line = _makeLine(callLogs: [
-        CallEventLog(timestamp: 2000, callEvent: _makeRingingEvent()),
-        CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
-      ]);
+      final line = _makeLine(
+        callLogs: [
+          CallEventLog(timestamp: 2000, callEvent: _makeRingingEvent()),
+          CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent()),
+        ],
+      );
 
       final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {_kCallId});
 
@@ -483,6 +511,39 @@ void main() {
 
       expect(actions, hasLength(1));
       expect(actions.first, isA<HandleIncomingCallAction>());
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // queued termination requests
+  // -------------------------------------------------------------------------
+
+  group('queued termination requests', () {
+    test('returns regular signaling actions for queued requests', () async {
+      final queued = {
+        'decline:call-1': _makeQueuedTerminationRequest(callId: 'call-1', type: QueuedTerminationRequestType.decline),
+        'hangup:call-2': _makeQueuedTerminationRequest(callId: 'call-2', type: QueuedTerminationRequestType.hangup),
+      };
+      when(() => mockQueuedTerminationRequestsRepository.getAll).thenReturn(queued);
+
+      final actions = await processor.process(lines: [], guestLine: null, activeCallIds: {});
+
+      expect(actions.whereType<DeclineSignalingAction>().map((a) => a.callId).toSet(), {'call-1'});
+      expect(actions.whereType<HangupSignalingAction>().map((a) => a.callId).toSet(), {'call-2'});
+      verify(() => mockQueuedTerminationRequestsRepository.remove(any())).called(2);
+    });
+
+    test('filters queued callIds from handshake line processing', () async {
+      final line = _makeLine(callLogs: [CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent())]);
+      when(() => mockQueuedTerminationRequestsRepository.getAll).thenReturn(<String, QueuedTerminationRequest>{
+        'decline:${line.callId}': _makeQueuedTerminationRequest(callId: line.callId),
+      });
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
+
+      expect(actions.whereType<DeclineSignalingAction>(), hasLength(1));
+      expect(actions.whereType<HandleIncomingCallAction>(), isEmpty);
+      verify(() => mockQueuedTerminationRequestsRepository.remove(any())).called(1);
     });
   });
 }

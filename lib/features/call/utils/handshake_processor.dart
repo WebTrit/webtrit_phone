@@ -1,6 +1,9 @@
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
+
 /// Actions returned by [HandshakeProcessor.process] describing what the BLoC
 /// should do after processing the signaling [StateHandshake].
 sealed class HandshakeAction {
@@ -100,12 +103,19 @@ final class EndLocalCallAction extends HandshakeAction {
 /// - For each local Callkeep connection whose call ID is absent from the handshake
 ///   lines -> [EndLocalCallAction].
 ///
-/// [HangupSignalingAction] and [DeclineSignalingAction] are always returned as the
-/// sole action -the processor exits early to match the original `return` semantics.
+/// When queued terminations exist in the repository, they are emitted first as
+/// regular [HangupSignalingAction]/[DeclineSignalingAction] entries, removed
+/// from the repository immediately, and excluded from subsequent handshake-line
+/// processing.
+///
+/// If a terminal disconnected-state action is produced during line traversal,
+/// the processor exits early to match the original `return` semantics, while
+/// preserving any already-collected queued actions.
 class HandshakeProcessor {
-  HandshakeProcessor({required this.callkeepConnections});
+  HandshakeProcessor({required this.callkeepConnections, required this.queuedTerminationRequestsRepository});
 
   final CallkeepConnections callkeepConnections;
+  final QueuedTerminationRequestsRepository queuedTerminationRequestsRepository;
 
   Future<List<HandshakeAction>> process({
     required List<Line?> lines,
@@ -113,7 +123,27 @@ class HandshakeProcessor {
     required Set<String> activeCallIds,
   }) async {
     final actions = <HandshakeAction>[];
-    final allLines = [...lines, guestLine].whereType<Line>().toList();
+
+    /// Prepare termination queue actions
+    final queuedTerminationCallIds = <String>{};
+    final queuedTerminationRequests = queuedTerminationRequestsRepository.getAll;
+
+    for (final request in queuedTerminationRequests.values) {
+      switch (request.type) {
+        case QueuedTerminationRequestType.hangup:
+          actions.add(HangupSignalingAction(line: request.line, callId: request.callId));
+        case QueuedTerminationRequestType.decline:
+          actions.add(DeclineSignalingAction(line: request.line, callId: request.callId));
+      }
+      queuedTerminationRequestsRepository.remove(request);
+      queuedTerminationCallIds.add(request.callId);
+    }
+
+    /// Prepare callkeep connections actions
+    final allLines = [
+      ...lines,
+      guestLine,
+    ].whereType<Line>().where((line) => !queuedTerminationCallIds.contains(line.callId)).toList();
     final localConnections = await callkeepConnections.getConnections();
 
     for (final activeLine in allLines) {
@@ -134,9 +164,9 @@ class HandshakeProcessor {
 
         if (connection?.state == CallkeepConnectionState.stateDisconnected) {
           if (callEvent is IncomingCallEvent) {
-            return [DeclineSignalingAction(line: callEvent.line, callId: callEvent.callId)];
+            return [...actions, DeclineSignalingAction(line: callEvent.line, callId: callEvent.callId)];
           } else if (callEvent is! HangupEvent && callEvent is! MissedCallEvent) {
-            return [HangupSignalingAction(line: callEvent.line, callId: callEvent.callId)];
+            return [...actions, HangupSignalingAction(line: callEvent.line, callId: callEvent.callId)];
           }
         } else if (connection == null &&
             !activeCallIds.contains(activeLine.callId) &&
@@ -160,7 +190,7 @@ class HandshakeProcessor {
           //
           // On iOS getConnection() always returns null, so activeCallIds is the
           // decisive guard: calls that are still active in BLoC are not affected.
-          return [HangupSignalingAction(line: callEvent.line, callId: callEvent.callId)];
+          return [...actions, HangupSignalingAction(line: callEvent.line, callId: callEvent.callId)];
         }
       }
 

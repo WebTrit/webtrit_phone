@@ -129,7 +129,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }) : super(const CallState()) {
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
-    _handshakeProcessor = HandshakeProcessor(callkeepConnections: callkeepConnections);
+    _handshakeProcessor = HandshakeProcessor(
+      callkeepConnections: callkeepConnections,
+      queuedTerminationRequestsRepository: queuedTerminationRequestsRepository,
+    );
 
     _reconnectController = SignalingReconnectController(
       signalingModule: signalingModule,
@@ -2816,9 +2819,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   // SignalingModule event handlers (called from stream subscription in constructor)
 
   void _handleHandshakeReceived(StateHandshake stateHandshake) async {
-    List<Line?> mainLines = stateHandshake.lines;
-    Line? guestLine = stateHandshake.guestLine;
-
     add(
       _HandshakeSignalingEventState(registration: stateHandshake.registration, linesCount: stateHandshake.lines.length),
     );
@@ -2826,29 +2826,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _assignInitialPresence(stateHandshake.presenceInfos);
     _assignInitialDialogs(stateHandshake.dialogInfos);
 
-    // Send enqueued termination requests that was made when socket was disconnected
-    // and remove their callIds from active lines to prevent recovery attempts
-    final queuedTerminationRequests = queuedTerminationRequestsRepository.getAll;
-    for (final trq in queuedTerminationRequests.entries) {
-      try {
-        await _executeTerminationRequest(trq.value);
-      } catch (e, s) {
-        _logger.warning('_handleHandshakeReceived - _executeTerminationRequest failed', e, s);
-      } finally {
-        var mainIndex = mainLines.indexWhere((line) => line?.callId == trq.value.callId);
-        if (mainIndex != -1) mainLines[mainIndex] = null;
-        if (guestLine?.callId == trq.value.callId) guestLine = null;
-      }
-    }
-    queuedTerminationRequestsRepository.clear();
-
     // Hang up all active calls that are not associated with any line
     // or guest line, indicating that they are no longer valid.
     //
     // This is needed to drop or retain calls after reconnecting to the signaling server.
     // If you have troubles with line position mismatch replace the activeLineCallIds
     // computation with: https://gist.github.com/digiboridev/f7f1020731e8f247b5891983433bd159
-    Set<String> activeLineCallIds = [...mainLines, guestLine].whereType<Line>().map((line) => line.callId).toSet();
+    Set<String> activeLineCallIds = [
+      ...stateHandshake.lines,
+      stateHandshake.guestLine,
+    ].whereType<Line>().map((line) => line.callId).toSet();
     _logger.info('_handleHandshakeReceived: activeLineCallIds=$activeLineCallIds');
 
     for (final activeCall in state.callsToTerminate(activeLineCallIds)) {
@@ -2864,8 +2851,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     final actions = await _handshakeProcessor.process(
-      lines: mainLines,
-      guestLine: guestLine,
+      lines: stateHandshake.lines,
+      guestLine: stateHandshake.guestLine,
       activeCallIds: state.activeCalls.map((c) => c.callId).toSet(),
     );
 
