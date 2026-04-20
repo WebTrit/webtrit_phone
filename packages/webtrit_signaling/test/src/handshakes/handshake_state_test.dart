@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:test/test.dart';
 
 import 'package:webtrit_signaling/src/events/events.dart';
-import 'package:webtrit_signaling/src/events/global/dialog_info.dart';
 import 'package:webtrit_signaling/src/handshakes/handshakes.dart';
 
 void main() {
