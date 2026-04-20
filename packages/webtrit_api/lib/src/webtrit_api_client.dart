@@ -156,6 +156,18 @@ class WebtritApiClient {
             );
           }
 
+          // Map 401 token_invalid to UnauthorizedException so the existing SessionGuard
+          // chain triggers logout when the server invalidates all tokens (e.g. after restart).
+          if (httpResponse.statusCode == 401 && error?.code == 'token_invalid') {
+            throw UnauthorizedException(
+              url: tenantUrl,
+              requestId: xRequestId,
+              statusCode: httpResponse.statusCode,
+              token: token,
+              error: error,
+            );
+          }
+
           // Map 422 with code="refresh_token_invalid" to UnauthorizedException.
           // This ensures higher layers can handle expired/invalid sessions in a unified way
           // (e.g., trigger global logout or token refresh).
