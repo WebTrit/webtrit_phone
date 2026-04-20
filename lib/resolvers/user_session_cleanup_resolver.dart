@@ -19,6 +19,7 @@ class RepositoryUserSessionCleanupResolver implements UserSessionCleanupResolver
     required this.systemInfoRepository,
     required this.registerStatusRepository,
     required this.presenceSettingsRepository,
+    required this.queuedTerminationRequestsRepository,
     required this.activeMainFlavorRepository,
     required this.activeRecentsVisibilityFilterRepository,
     required this.activeContactSourceTypeRepository,
@@ -38,6 +39,7 @@ class RepositoryUserSessionCleanupResolver implements UserSessionCleanupResolver
   final SystemInfoRepository systemInfoRepository;
   final RegisterStatusRepository registerStatusRepository;
   final PresenceSettingsRepository presenceSettingsRepository;
+  final QueuedTerminationRequestsRepository queuedTerminationRequestsRepository;
   final ActiveMainFlavorRepository activeMainFlavorRepository;
   final ActiveRecentsVisibilityFilterRepository activeRecentsVisibilityFilterRepository;
   final ActiveContactSourceTypeRepository activeContactSourceTypeRepository;
@@ -63,6 +65,7 @@ class RepositoryUserSessionCleanupResolver implements UserSessionCleanupResolver
       systemInfoRepository.clear().suppressError('systemInfoRepository'),
       registerStatusRepository.clear().suppressError('registerStatusRepository'),
       presenceSettingsRepository.clear().suppressError('presenceSettingsRepository'),
+      queuedTerminationRequestsRepository.clear().suppressError('queuedTerminationRequestsRepository'),
       activeMainFlavorRepository.clear().suppressError('activeMainFlavorRepository'),
       activeRecentsVisibilityFilterRepository.clear().suppressError('activeRecentsVisibilityFilterRepository'),
       activeContactSourceTypeRepository.clear().suppressError('activeContactSourceTypeRepository'),

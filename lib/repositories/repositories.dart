@@ -30,6 +30,7 @@ export 'private_gateway_repository/private_gateway_repository.dart';
 export 'push_notifications/local_push_repository.dart';
 export 'push_notifications/remote_push_repository.dart';
 export 'push_tokens/push_tokens_repository.dart';
+export 'queued_termination_requests/queued_termination_requests_repository.dart';
 export 'recents/recents_repository.dart';
 export 'register_status/register_status_repository.dart';
 export 'route_state/route_state.dart';

@@ -56,20 +56,6 @@ typedef SignalingSessionInvalidatedCallback = void Function();
 
 const _getUserMediaPushKitTimeout = Duration(seconds: 8);
 
-enum _QueuedTerminationRequestType { hangup, decline }
-
-class _QueuedTerminationRequest {
-  const _QueuedTerminationRequest.hangup({required this.line, required this.callId})
-    : type = _QueuedTerminationRequestType.hangup;
-
-  const _QueuedTerminationRequest.decline({required this.line, required this.callId})
-    : type = _QueuedTerminationRequestType.decline;
-
-  final _QueuedTerminationRequestType type;
-  final int? line;
-  final String callId;
-}
-
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final CallLogsRepository callLogsRepository;
   final UserRepository userRepository;
@@ -77,6 +63,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final PresenceInfoRepository presenceInfoRepository;
   final DialogInfoRepository dialogInfoRepository;
   final PresenceSettingsRepository presenceSettingsRepository;
+  final QueuedTerminationRequestsRepository queuedTerminationRequestsRepository;
   final Function(Notification) submitNotification;
 
   /// Callback invoked when the signaling client reports a critical session error
@@ -109,7 +96,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   late final PeerConnectionManager _peerConnectionManager;
   final Map<String, RenegotiationHandler> _renegotiationHandlers = {};
-  final Map<String, _QueuedTerminationRequest> _queuedTerminationRequests = {};
   late final HandshakeProcessor _handshakeProcessor;
 
   final _callkeepSound = WebtritCallkeepSound();
@@ -120,6 +106,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.presenceInfoRepository,
     required this.dialogInfoRepository,
     required this.presenceSettingsRepository,
+    required this.queuedTerminationRequestsRepository,
     required this.onSessionInvalidated,
     required this.userRepository,
     required this.submitNotification,
@@ -219,7 +206,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     callkeep.setDelegate(null);
 
     WidgetsBinding.instance.removeObserver(this);
-
     navigator.mediaDevices.ondevicechange = null;
 
     await _connectivityChangedSubscription?.cancel();
@@ -240,7 +226,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await _peerConnectionManager.dispose();
 
     _clearRenegotiationHandlers();
-    _queuedTerminationRequests.clear();
 
     await super.close();
   }
@@ -936,7 +921,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
       try {
         await _dispatchTerminationRequest(
-          request: _QueuedTerminationRequest.decline(line: event.line, callId: event.callId),
+          request: QueuedTerminationRequest(
+            type: QueuedTerminationRequestType.decline,
+            line: event.line,
+            callId: event.callId,
+          ),
           source: '__onCallSignalingEventIncoming',
         );
       } catch (e, s) {
@@ -1010,7 +999,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
       try {
         await _dispatchTerminationRequest(
-          request: _QueuedTerminationRequest.decline(line: event.line, callId: event.callId),
+          request: QueuedTerminationRequest(
+            type: QueuedTerminationRequestType.decline,
+            line: event.line,
+            callId: event.callId,
+          ),
           source: '__onCallSignalingEventIncoming',
         );
       } catch (e, s) {
@@ -2389,7 +2382,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // the inner catch — that means the caller already hung up server-side.
 
       _dispatchTerminationRequest(
-        request: _QueuedTerminationRequest.decline(line: call.line, callId: call.callId),
+        request: QueuedTerminationRequest(
+          type: QueuedTerminationRequestType.decline,
+          line: call.line,
+          callId: call.callId,
+        ),
         source: '__onCallPerformEventAnswered',
       );
     }
@@ -2436,7 +2433,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     await state.performOnActiveCall(event.callId, (activeCall) async {
       if (activeCall.isIncoming && !activeCall.wasAccepted) {
         await _dispatchTerminationRequest(
-          request: _QueuedTerminationRequest.decline(line: activeCall.line, callId: activeCall.callId),
+          request: QueuedTerminationRequest(
+            type: QueuedTerminationRequestType.decline,
+            line: activeCall.line,
+            callId: activeCall.callId,
+          ),
           source: '_onCallPerformEventEndedImpl',
         ).timeout(Duration(seconds: 1), onTimeout: () {});
       } else {
@@ -2450,7 +2451,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
         if (!isBlindTransferInTransferingState) {
           await _dispatchTerminationRequest(
-            request: _QueuedTerminationRequest.hangup(line: activeCall.line, callId: activeCall.callId),
+            request: QueuedTerminationRequest(
+              type: QueuedTerminationRequestType.hangup,
+              line: activeCall.line,
+              callId: activeCall.callId,
+            ),
             source: '_onCallPerformEventEndedImpl',
           ).timeout(Duration(seconds: 1), onTimeout: () {});
         }
@@ -2811,6 +2816,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   // SignalingModule event handlers (called from stream subscription in constructor)
 
   void _handleHandshakeReceived(StateHandshake stateHandshake) async {
+    List<Line?> mainLines = stateHandshake.lines;
+    Line? guestLine = stateHandshake.guestLine;
+
     add(
       _HandshakeSignalingEventState(registration: stateHandshake.registration, linesCount: stateHandshake.lines.length),
     );
@@ -2818,31 +2826,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _assignInitialPresence(stateHandshake.presenceInfos);
     _assignInitialDialogs(stateHandshake.dialogInfos);
 
+    // Send enqueued termination requests that was made when socket was disconnected
+    // and remove their callIds from active lines to prevent recovery attempts
+    final queuedTerminationRequests = queuedTerminationRequestsRepository.getAll;
+    for (final trq in queuedTerminationRequests.entries) {
+      try {
+        await _executeTerminationRequest(trq.value);
+      } catch (e, s) {
+        _logger.warning('_handleHandshakeReceived - _executeTerminationRequest failed', e, s);
+      } finally {
+        var mainIndex = mainLines.indexWhere((line) => line?.callId == trq.value.callId);
+        if (mainIndex != -1) mainLines[mainIndex] = null;
+        if (guestLine?.callId == trq.value.callId) guestLine = null;
+      }
+    }
+    queuedTerminationRequestsRepository.clear();
+
     // Hang up all active calls that are not associated with any line
     // or guest line, indicating that they are no longer valid.
     //
     // This is needed to drop or retain calls after reconnecting to the signaling server.
     // If you have troubles with line position mismatch replace the activeLineCallIds
     // computation with: https://gist.github.com/digiboridev/f7f1020731e8f247b5891983433bd159
-    Set<String> activeLineCallIds = [
-      ...stateHandshake.lines,
-      stateHandshake.guestLine,
-    ].whereType<Line>().map((line) => line.callId).toSet();
+    Set<String> activeLineCallIds = [...mainLines, guestLine].whereType<Line>().map((line) => line.callId).toSet();
     _logger.info('_handleHandshakeReceived: activeLineCallIds=$activeLineCallIds');
-
-    // Send enqueued termination requests that was made when socket was disconnected
-    // and remove their callIds from activeLineCallIds to prevent recovery attempts
-    for (final trq in _queuedTerminationRequests.entries) {
-      try {
-        await _executeTerminationRequest(trq.value);
-      } catch (e, s) {
-        _queuedTerminationRequests.remove(trq.key);
-        callErrorReporter.handle(e, s, '_handleHandshakeReceived queued termination error');
-      } finally {
-        _queuedTerminationRequests.remove(trq.key);
-        activeLineCallIds.remove(trq.value.callId);
-      }
-    }
 
     for (final activeCall in state.callsToTerminate(activeLineCallIds)) {
       _peerConnectionManager.conditionalCompleteError(activeCall.callId, 'Active call Request Terminated');
@@ -2857,8 +2864,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
 
     final actions = await _handshakeProcessor.process(
-      lines: stateHandshake.lines,
-      guestLine: stateHandshake.guestLine,
+      lines: mainLines,
+      guestLine: guestLine,
       activeCallIds: state.activeCalls.map((c) => c.callId).toSet(),
     );
 
@@ -3492,32 +3499,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
   }
 
-  String _terminationRequestQueueKey(_QueuedTerminationRequest request) {
-    return '${request.type.name}:${request.callId}';
-  }
-
-  void _queueTerminationRequest(_QueuedTerminationRequest request, String source) {
-    _queuedTerminationRequests[_terminationRequestQueueKey(request)] = request;
-    _logger.warning('$source: queued ${request.type.name} request callId=${request.callId} line=${request.line}');
-  }
-
-  Future<void> _dispatchTerminationRequest({required _QueuedTerminationRequest request, required String source}) async {
+  /// Attempts to execute a termination request immediately.
+  /// If it fails due to connectivity issues, the request is queued for later retry.
+  ///
+  /// The [source] parameter is used for logging to indicate where the request originated.
+  Future<void> _dispatchTerminationRequest({required QueuedTerminationRequest request, required String source}) async {
+    /// Put upfront in the repository to ensure it's recorded even if the app is killed before the async operation completes.
+    queuedTerminationRequestsRepository.put(request);
     try {
       await _executeTerminationRequest(request);
-    } on NotConnectedException {
-      _queueTerminationRequest(request, source);
-    } on WebtritSignalingTransactionTimeoutException {
-      _queueTerminationRequest(request, source);
-    } on WebtritSignalingTransactionTerminateByDisconnectException {
-      _queueTerminationRequest(request, source);
+      queuedTerminationRequestsRepository.remove(request);
     } catch (e, s) {
-      callErrorReporter.handle(e, s, '__onCallPerformEventEnded hangupRequest error');
+      _logger.warning('_dispatchTerminationRequest failed, request queued for retry. source=$source', e, s);
     }
   }
 
-  Future<void> _executeTerminationRequest(_QueuedTerminationRequest request) async {
+  Future<void> _executeTerminationRequest(QueuedTerminationRequest request) async {
     switch (request.type) {
-      case _QueuedTerminationRequestType.hangup:
+      case QueuedTerminationRequestType.hangup:
         await _signalingModule.execute(
           HangupRequest(
             transaction: WebtritSignalingClient.generateTransactionId(),
@@ -3525,7 +3524,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             callId: request.callId,
           ),
         );
-      case _QueuedTerminationRequestType.decline:
+      case QueuedTerminationRequestType.decline:
         await _signalingModule.execute(
           DeclineRequest(
             transaction: WebtritSignalingClient.generateTransactionId(),
