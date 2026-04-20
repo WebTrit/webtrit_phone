@@ -250,13 +250,17 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       _logger.info('_onHubServiceDead: service intentionally stopped, skipping restart');
       return;
     }
-    _logger.warning('_onHubServiceDead: hub service dead, restarting');
     final config = _currentConfig;
     final mode = _currentMode;
     if (config == null || mode == null) {
       _logger.warning('_onHubServiceDead: no config/mode available, cannot restart');
       return;
     }
+    if (mode == SignalingServiceMode.pushBound) {
+      _logger.info('_onHubServiceDead: pushBound mode — FCM push will trigger restart');
+      return;
+    }
+    _logger.warning('_onHubServiceDead: hub service dead, restarting');
     try {
       await _startService(config, mode);
     } catch (e, st) {
