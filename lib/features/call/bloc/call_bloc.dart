@@ -671,10 +671,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // Important to do in case if there was connection loss for a while and then webrtc detects network loss and restarts ice e.g
     // user turn off all network interfaces >> __onPeerConnectionEventIceConnectionStateChanged >> RTCIceConnectionStateFailed >> peerConnection.restartIce() >> onRenegotiationNeeded >> _safeRenegotiate >> if(!signalingConnected) return;
     // user turn on network interfaces >> _onSignalingClientEventConnected >> safeRenegotiate
-    for (final call in state.activeCalls) {
-      // Skip calls that are being torn down — sending UpdateRequest for a
-      // disconnecting call would keep the server-side leg alive unnecessarily.
-      if (call.processingStatus == CallProcessingStatus.disconnecting) continue;
+    for (final call in state.activeCalls.where((c) => c.processingStatus == CallProcessingStatus.connected)) {
       _logger.warning('__onSignalingClientEventConnected: triggering safe renegotiation for call ${call.callId}');
       _safeRenegotiate(call.callId, call.line);
     }
