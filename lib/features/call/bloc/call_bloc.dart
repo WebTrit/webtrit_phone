@@ -672,9 +672,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // user turn off all network interfaces >> __onPeerConnectionEventIceConnectionStateChanged >> RTCIceConnectionStateFailed >> peerConnection.restartIce() >> onRenegotiationNeeded >> _safeRenegotiate >> if(!signalingConnected) return;
     // user turn on network interfaces >> _onSignalingClientEventConnected >> safeRenegotiate
     for (final call in state.activeCalls.where((c) => c.processingStatus == CallProcessingStatus.connected)) {
-      // Skip calls that are being torn down — sending UpdateRequest for a
-      // disconnecting call would keep the server-side leg alive unnecessarily.
-      if (call.processingStatus == CallProcessingStatus.disconnecting) continue;
       _logger.warning('__onSignalingClientEventConnected: triggering safe renegotiation for call ${call.callId}');
       _safeRenegotiate(call.callId, call.line);
     }
