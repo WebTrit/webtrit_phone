@@ -55,6 +55,15 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   WebtritSignalingServiceAndroid.forTesting({BinaryMessenger? binaryMessenger})
     : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger);
 
+  @visibleForTesting
+  void initStateForTesting({required SignalingServiceConfig config, required SignalingServiceMode mode}) {
+    _currentConfig = config;
+    _currentMode = mode;
+  }
+
+  @visibleForTesting
+  Future<void> triggerOnServiceDeadForTesting() => _onHubServiceDead();
+
   static WebtritSignalingServiceAndroid? _instance;
 
   /// Registers this class as the default [SignalingServicePlatform] instance.
@@ -250,13 +259,17 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       _logger.info('_onHubServiceDead: service intentionally stopped, skipping restart');
       return;
     }
-    _logger.warning('_onHubServiceDead: hub service dead, restarting');
     final config = _currentConfig;
     final mode = _currentMode;
     if (config == null || mode == null) {
       _logger.warning('_onHubServiceDead: no config/mode available, cannot restart');
       return;
     }
+    if (mode == SignalingServiceMode.pushBound) {
+      _logger.info('_onHubServiceDead: pushBound mode — FCM push will trigger restart');
+      return;
+    }
+    _logger.warning('_onHubServiceDead: hub service dead, restarting');
     try {
       await _startService(config, mode);
     } catch (e, st) {

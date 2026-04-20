@@ -1,5 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ssl_certificates/ssl_certificates.dart';
+import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
 import 'package:webtrit_signaling_service_android/src/plugin.dart';
 
@@ -51,6 +53,89 @@ void main() {
       await plugin.dispose();
 
       expect(stopCalled, isFalse);
+    });
+  });
+
+  group('WebtritSignalingServiceAndroid -- _onHubServiceDead()', () {
+    const startServiceChannel =
+        'dev.flutter.pigeon.webtrit_signaling_service_android'
+        '.PSignalingServiceHostApi.startService';
+
+    const testConfig = SignalingServiceConfig(
+      coreUrl: 'https://example.com',
+      tenantId: 'tenant',
+      token: 'token',
+      trustedCertificates: TrustedCertificates.empty,
+    );
+
+    late WebtritSignalingServiceAndroid plugin;
+
+    setUp(() {
+      plugin = WebtritSignalingServiceAndroid.forTesting();
+    });
+
+    tearDown(() {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
+        startServiceChannel,
+        null,
+      );
+    });
+
+    test('does not call startService in pushBound mode', () async {
+      plugin.initStateForTesting(config: testConfig, mode: SignalingServiceMode.pushBound);
+
+      var startCalled = false;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(startServiceChannel, (
+        message,
+      ) async {
+        startCalled = true;
+        return const StandardMessageCodec().encodeMessage(<Object?>[null]);
+      });
+
+      await plugin.triggerOnServiceDeadForTesting();
+
+      expect(startCalled, isFalse);
+    });
+
+    test('does not call startService when _isStopped is true', () async {
+      const stopServiceChannel =
+          'dev.flutter.pigeon.webtrit_signaling_service_android'
+          '.PSignalingServiceHostApi.stopService';
+
+      plugin.initStateForTesting(config: testConfig, mode: SignalingServiceMode.persistent);
+
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
+        stopServiceChannel,
+        (message) async => const StandardMessageCodec().encodeMessage(<Object?>[null]),
+      );
+      await plugin.stopService();
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(stopServiceChannel, null);
+
+      var startCalled = false;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(startServiceChannel, (
+        message,
+      ) async {
+        startCalled = true;
+        return const StandardMessageCodec().encodeMessage(<Object?>[null]);
+      });
+
+      await plugin.triggerOnServiceDeadForTesting();
+
+      expect(startCalled, isFalse);
+    });
+
+    test('does not call startService when config is null', () async {
+      var startCalled = false;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(startServiceChannel, (
+        message,
+      ) async {
+        startCalled = true;
+        return const StandardMessageCodec().encodeMessage(<Object?>[null]);
+      });
+
+      await plugin.triggerOnServiceDeadForTesting();
+
+      expect(startCalled, isFalse);
     });
   });
 
