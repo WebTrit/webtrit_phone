@@ -266,6 +266,10 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {
     _logger.fine('_startService mode=$mode');
+    if (_isStopped) {
+      _logger.warning('_startService: aborted — service already stopped');
+      return;
+    }
     final dispatcherHandle = PluginUtilities.getCallbackHandle(signalingServiceCallbackDispatcher);
     if (dispatcherHandle == null) {
       throw StateError(

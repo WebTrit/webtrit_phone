@@ -5,6 +5,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.Keep
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import java.util.concurrent.atomic.AtomicBoolean
 
 // NOTE: PSignalingServiceHostApi and PSignalingServiceFlutterApi are generated
 // by running:  dart run pigeon --input pigeons/signaling.messages.dart
@@ -77,8 +78,8 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
     }
 
     override fun startService(mode: PSignalingServiceMode) {
-        Log.d(TAG, "startService mode=$mode isRunning=${SignalingForegroundService.isRunning} instance=${SignalingForegroundService.instance != null} _stopRequested=$_stopRequested")
-        _stopRequested = false
+        Log.d(TAG, "startService mode=$mode isRunning=${SignalingForegroundService.isRunning} instance=${SignalingForegroundService.instance != null} _stopRequested=${_stopRequested.get()}")
+        _stopRequested.set(false)
         StorageDelegate.saveMode(context, mode)
         Log.d(TAG, "startService: calling startForegroundService()")
         SignalingForegroundService.start(context)
@@ -102,7 +103,7 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
             // ForegroundServiceDidNotStartInTimeException. Set the flag instead;
             // onStartCommand checks it and stops cleanly after startForeground() has run.
             Log.w(TAG, "stopService: service not yet started — deferring stop via _stopRequested")
-            _stopRequested = true
+            _stopRequested.set(true)
         }
     }
 
@@ -144,16 +145,15 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
         /// directly would crash with ForegroundServiceDidNotStartInTimeException because
         /// the service never got to call startForeground(). The deferred stop is picked
         /// up by [SignalingForegroundService.onStartCommand] after startForeground() runs.
-        @Volatile
-        private var _stopRequested = false
+        ///
+        /// AtomicBoolean used for atomic getAndSet — both writer (stopService via Pigeon)
+        /// and reader (onStartCommand) run on the main thread, but AtomicBoolean makes
+        /// the intent explicit and avoids relying on @Volatile for the read-modify-write.
+        private val _stopRequested = AtomicBoolean(false)
 
-        /// Reads and clears [_stopRequested] atomically.
+        /// Atomically reads and clears [_stopRequested].
         /// Called by [SignalingForegroundService.onStartCommand].
-        internal fun consumeStopRequested(): Boolean {
-            val was = _stopRequested
-            _stopRequested = false
-            return was
-        }
+        internal fun consumeStopRequested(): Boolean = _stopRequested.getAndSet(false)
 
         /// Returns true when [e] is [ForegroundServiceStartNotAllowedException] (API 31+).
         ///
