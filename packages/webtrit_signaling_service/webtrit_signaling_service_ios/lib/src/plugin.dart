@@ -98,7 +98,7 @@ class WebtritSignalingServiceIos extends SignalingServicePlatform {
   Future<void> execute(Request request) async {
     final module = _module;
     if (module == null || !module.isConnected) {
-      throw StateError('SignalingModule not ready -- call start() first');
+      throw NotConnectedException('SignalingServiceIos: not connected');
     }
     await module.execute(request)!;
   }

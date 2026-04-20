@@ -4,6 +4,7 @@ export 'encoding_settings_mapper.dart';
 export 'ice_settings_mapper.dart';
 export 'negotiation_settings_mapper.dart';
 export 'presence_settings_mapper.dart';
+export 'queued_termination_request_mapper.dart';
 export 'system_info_mapper.dart';
 export 'user_info_mapper.dart';
 export 'video_capturing_settings_mapper.dart';

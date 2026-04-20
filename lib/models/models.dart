@@ -36,6 +36,7 @@ export 'metrics/metrics.dart';
 export 'negotiation_settings.dart';
 export 'peer_connection_settings.dart';
 export 'presence/presence.dart';
+export 'queued_termination_request.dart';
 export 'recent.dart';
 export 'recents_visibility_filter.dart';
 export 'rtp_codec_profile.dart';
