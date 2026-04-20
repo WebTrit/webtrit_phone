@@ -291,6 +291,16 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       _hostApi.saveTrustedCertificates(_encodeTrustedCertificates(config.trustedCertificates)),
     ]);
 
+    // Guard: stopService() or dispose() may have been called while the
+    // credential saves above were in flight (the await yields the event loop,
+    // allowing concurrent teardown to set _isStopped). Abort before calling
+    // startForegroundService() to avoid ForegroundServiceDidNotStartInTimeException —
+    // the crash that fires when the service is stopped before it calls startForeground().
+    if (_isStopped) {
+      _logger.warning('_startService: aborted — service stopped during credential save');
+      return;
+    }
+
     // Start the service only after all credentials are persisted so that
     // synchronizeIsolate() reads correct data on the first attempt.
     await _hostApi.startService(signalingModeToNative(mode));
