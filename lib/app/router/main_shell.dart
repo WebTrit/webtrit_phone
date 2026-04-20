@@ -106,6 +106,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         trustedCertificates: context.read<AppCertificates>().trustedCertificates,
       ),
       mode: context.read<IncomingCallTypeRepository>().getIncomingCallType().toSignalingServiceMode(),
+      startPendingTimeout: kSignalingStartPendingTimeout,
     )..connect();
 
     final notificationsBloc = context.read<NotificationsBloc>();
