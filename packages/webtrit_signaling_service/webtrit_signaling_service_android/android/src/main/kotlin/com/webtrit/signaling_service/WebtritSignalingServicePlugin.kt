@@ -5,6 +5,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.Keep
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import java.util.concurrent.atomic.AtomicBoolean
 
 // NOTE: PSignalingServiceHostApi and PSignalingServiceFlutterApi are generated
 // by running:  dart run pigeon --input pigeons/signaling.messages.dart
@@ -77,9 +78,12 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
     }
 
     override fun startService(mode: PSignalingServiceMode) {
-        Log.d(TAG, "startService mode=$mode")
+        Log.d(TAG, "startService mode=$mode isRunning=${SignalingForegroundService.isRunning} instance=${SignalingForegroundService.instance != null} _stopRequested=${_stopRequested.get()}")
+        _stopRequested.set(false)
         StorageDelegate.saveMode(context, mode)
+        Log.d(TAG, "startService: calling startForegroundService()")
         SignalingForegroundService.start(context)
+        Log.d(TAG, "startService: startForegroundService() returned")
     }
 
     override fun stopService() {
@@ -89,8 +93,17 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
         val service = SignalingForegroundService.instance
         if (service != null) {
             service.gracefulStop { SignalingForegroundService.stop(context) }
-        } else {
+        } else if (SignalingForegroundService.isRunning) {
             SignalingForegroundService.stop(context)
+        } else {
+            // startForegroundService() was called but onCreate() hasn't run yet.
+            // The Pigeon queue delivered stopService() before H.CREATE_SERVICE ran on the
+            // main thread (e.g. main thread was overloaded). Calling stop() here would
+            // bring down a service that never called startForeground() →
+            // ForegroundServiceDidNotStartInTimeException. Set the flag instead;
+            // onStartCommand checks it and stops cleanly after startForeground() has run.
+            Log.w(TAG, "stopService: service not yet started — deferring stop via _stopRequested")
+            _stopRequested.set(true)
         }
     }
 
@@ -126,6 +139,21 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
 
     companion object {
         private const val TAG = "WebtritSignalingServicePlugin"
+
+        /// True when [stopService] was called while [SignalingForegroundService.onCreate]
+        /// had not yet run. In that window, calling [SignalingForegroundService.stop]
+        /// directly would crash with ForegroundServiceDidNotStartInTimeException because
+        /// the service never got to call startForeground(). The deferred stop is picked
+        /// up by [SignalingForegroundService.onStartCommand] after startForeground() runs.
+        ///
+        /// AtomicBoolean used for atomic getAndSet — both writer (stopService via Pigeon)
+        /// and reader (onStartCommand) run on the main thread, but AtomicBoolean makes
+        /// the intent explicit and avoids relying on @Volatile for the read-modify-write.
+        private val _stopRequested = AtomicBoolean(false)
+
+        /// Atomically reads and clears [_stopRequested].
+        /// Called by [SignalingForegroundService.onStartCommand].
+        internal fun consumeStopRequested(): Boolean = _stopRequested.getAndSet(false)
 
         /// Returns true when [e] is [ForegroundServiceStartNotAllowedException] (API 31+).
         ///

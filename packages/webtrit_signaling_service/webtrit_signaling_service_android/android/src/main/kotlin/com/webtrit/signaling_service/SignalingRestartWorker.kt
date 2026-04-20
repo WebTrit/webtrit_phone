@@ -3,6 +3,7 @@ package com.webtrit.signaling_service
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -29,17 +30,26 @@ class SignalingRestartWorker(
 ) : Worker(context, workerParams) {
 
     override fun doWork(): Result = try {
-        if (!SignalingForegroundService.isRunning &&
-            !StorageDelegate.isPushBound(applicationContext) &&
+        if (SignalingForegroundService.isRunning) {
+            Log.d(TAG, "SignalingRestartWorker: FGS already running — nothing to do")
+            return Result.success()
+        }
+        if (!StorageDelegate.isPushBound(applicationContext) &&
             StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
             StorageDelegate.getTenantId(applicationContext).isNotEmpty() &&
             StorageDelegate.getToken(applicationContext).isNotEmpty() &&
             StorageDelegate.getCallbackDispatcher(applicationContext) != 0L
         ) {
-            Log.w(TAG, "SignalingRestartWorker: restarting persistent FGS")
+            Log.w(TAG, "SignalingRestartWorker: restarting persistent FGS (attempt ${runAttemptCount + 1})")
             SignalingForegroundService.start(applicationContext)
+            // Return retry so WorkManager applies exponential backoff for the next check.
+            // If the FGS stays up, the next run finds isRunning==true and returns success.
+            // If it dies again (core still unreachable), the delay grows: 15s→30s→60s→...→5h,
+            // preventing the overnight restart churn that leads to OS-level throttling on Xiaomi.
+            Result.retry()
+        } else {
+            Result.success()
         }
-        Result.success()
     } catch (e: Exception) {
         // ForegroundServiceStartNotAllowedException is expected on Android 12+ when the process
         // has left the BFGS window. Log at warning level (transient) and schedule a retry.
@@ -57,13 +67,18 @@ class SignalingRestartWorker(
         private const val TAG = "SignalingRestartWorker"
         private const val WORK_TAG = "signaling_fgs_restart"
 
-        fun enqueue(context: Context, delayMillis: Long = 15_000) {
+        fun enqueue(
+            context: Context,
+            delayMillis: Long = 15_000,
+            policy: ExistingWorkPolicy = ExistingWorkPolicy.KEEP,
+        ) {
             val request = OneTimeWorkRequestBuilder<SignalingRestartWorker>()
                 .addTag(WORK_TAG)
                 .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
                 .build()
             WorkManager.getInstance(context)
-                .enqueueUniqueWork(WORK_TAG, ExistingWorkPolicy.REPLACE, request)
+                .enqueueUniqueWork(WORK_TAG, policy, request)
         }
 
         fun remove(context: Context) {
