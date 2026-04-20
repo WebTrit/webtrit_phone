@@ -80,6 +80,7 @@ class WebtritSignalingService implements SignalingModule {
 
   StreamSubscription<SignalingModuleEvent>? _serviceEventsSub;
   bool _isConnected = false;
+  bool _isDisposed = false;
 
   /// True while [connect] has been called but a terminal event
   /// ([SignalingConnected], [SignalingDisconnected], [SignalingConnectionFailed])
@@ -104,8 +105,9 @@ class WebtritSignalingService implements SignalingModule {
 
   /// Starts the signaling service and initiates a WebSocket connection.
   ///
-  /// Idempotent: no-op when a start is already in progress ([_startPending])
-  /// or the hub is already connected ([_isConnected]).
+  /// No-op when the service has been disposed ([_isDisposed]), a start is
+  /// already in progress ([_startPending]), or the hub is already connected
+  /// ([_isConnected]).
   ///
   /// ## Self-healing on stuck start
   ///
@@ -135,7 +137,7 @@ class WebtritSignalingService implements SignalingModule {
   /// has no effect during normal operation.
   @override
   void connect() {
-    if (_startPending || _isConnected) return;
+    if (_isDisposed || _startPending || _isConnected) return;
     _startPending = true;
     _startPendingTimer?.cancel();
     _startPendingTimer = Timer(_startPendingTimeout, () {
@@ -185,6 +187,7 @@ class WebtritSignalingService implements SignalingModule {
 
   @override
   Future<void> dispose() async {
+    _isDisposed = true;
     _requestQueue.failAll(NotConnectedException('WebtritSignalingService is disposed'));
     await _serviceEventsSub?.cancel();
     _serviceEventsSub = null;
