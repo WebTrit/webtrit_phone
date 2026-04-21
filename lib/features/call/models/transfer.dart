@@ -21,8 +21,11 @@ class Transfer with _$Transfer {
       AttendedTransferTransferSubmitted;
 
   /// Represents state when server has started to process the transfer
-  const factory Transfer.transfering({required bool fromAttendedTransfer, required bool fromBlindTransfer}) =
-      Transfering;
+  const factory Transfer.transfering({
+    required bool fromAttendedTransfer,
+    required bool fromBlindTransfer,
+    String? toNumber,
+  }) = Transfering;
 
   /// Represents state when server has successfully processed
   /// attended transfer with full flow e.g `refer` or accept request

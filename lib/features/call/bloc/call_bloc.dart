@@ -1447,6 +1447,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final transfer = Transfer.transfering(
       fromAttendedTransfer: prev is AttendedTransferTransferSubmitted,
       fromBlindTransfer: prev is BlindTransferTransferSubmitted,
+      toNumber: prev is BlindTransferTransferSubmitted ? prev.toNumber : null,
     );
 
     final callUpdate = call.copyWith(transfer: transfer);
@@ -1477,6 +1478,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       case ReferAccepted():
         if (state.activeCalls.any((it) => it.callId == event.callId)) {
           add(CallControlEvent.ended(event.callId));
+        } else {
+          _logger.fine('__onCallSignalingEventNotifyRefer: ReferAccepted for unknown call ${event.callId}, ignoring');
         }
       case ReferFailed():
         final callId = event.callId;
