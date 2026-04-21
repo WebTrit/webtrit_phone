@@ -1447,6 +1447,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final transfer = Transfer.transfering(
       fromAttendedTransfer: prev is AttendedTransferTransferSubmitted,
       fromBlindTransfer: prev is BlindTransferTransferSubmitted,
+      toNumber: prev is BlindTransferTransferSubmitted ? prev.toNumber : null,
     );
 
     final callUpdate = call.copyWith(transfer: transfer);
@@ -1472,10 +1473,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> __onCallSignalingEventNotifyRefer(_CallSignalingEventNotifyRefer event, Emitter<CallState> emit) async {
     _logger.fine('_CallSignalingEventNotifyRefer: $event');
     if (event.subscriptionState != SubscriptionState.terminated) return;
-    if (event.state != ReferNotifyState.ok) return;
 
-    // Verifies if the original call line is currently active in the state
-    if (state.activeCalls.any((it) => it.callId == event.callId)) add(CallControlEvent.ended(event.callId));
+    switch (event.state) {
+      case ReferAccepted():
+        if (state.activeCalls.any((it) => it.callId == event.callId)) {
+          add(CallControlEvent.ended(event.callId));
+        } else {
+          _logger.fine('__onCallSignalingEventNotifyRefer: ReferAccepted for unknown call ${event.callId}, ignoring');
+        }
+      case ReferFailed():
+        final callId = event.callId;
+        if (state.activeCalls.any((it) => it.callId == callId)) {
+          _logger.warning(
+            '__onCallSignalingEventNotifyRefer: transfer failed (${event.state}), restoring call $callId',
+          );
+          emit(state.copyWithMappedActiveCall(callId, (activeCall) => activeCall.copyWith(transfer: null)));
+          await callkeep.setHeld(callId, onHold: false);
+          submitNotification(BlindTransferFailedNotification());
+        }
+      case ReferProvisional():
+        break;
+    }
   }
 
   Future<void> __onCallSignalingEventNotifyUnknown(

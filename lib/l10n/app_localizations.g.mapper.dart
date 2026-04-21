@@ -699,6 +699,8 @@ class AppLocalizationsMapper {
       'notifications_errorSnackBar_activeLineBlindTransferWarning':
           localizations
               .notifications_errorSnackBar_activeLineBlindTransferWarning,
+      'notifications_errorSnackBar_blindTransferFailed':
+          localizations.notifications_errorSnackBar_blindTransferFailed,
       'notifications_errorSnackBar_appOffline':
           localizations.notifications_errorSnackBar_appOffline,
       'notifications_errorSnackBar_appOnline':
