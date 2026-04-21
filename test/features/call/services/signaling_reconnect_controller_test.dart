@@ -888,6 +888,29 @@ void main() {
     // the _networkJustRestored flag, subsequent failure-driven timers must
     // respect the background-skip guard as normal. Without this guarantee the
     // fix would silently turn into persistent-mode reconnection.
+    test('no duplicate connect when module is already connected at timer fire time', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        module.isConnected = true;
+        final controller = SignalingReconnectController(signalingModule: module);
+        addTearDown(controller.dispose);
+
+        controller.notifyAppPaused(hasActiveCalls: false);
+        controller.notifyNetworkUnavailable();
+        controller.notifyNetworkAvailable();
+
+        // Timer fires: networkJustRestored=true bypasses the appActive guard,
+        // but isConnected guard applies — no duplicate connect() call.
+        async.elapse(kSignalingClientFastReconnectDelay);
+        expect(
+          module.connectCalls,
+          0,
+          reason: 'already connected — opportunistic reconnect must not call connect() again',
+        );
+      });
+    });
+
     test('opportunistic reconnect is one-shot — subsequent failures skip in background', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
