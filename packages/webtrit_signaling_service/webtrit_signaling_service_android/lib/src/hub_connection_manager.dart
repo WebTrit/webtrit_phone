@@ -36,7 +36,7 @@ class HubConnectionManager {
     this.pingInterval = const Duration(seconds: 15),
     this.pongTimeout = const Duration(seconds: 2),
     this.stalePortThreshold = 3,
-    this.noPortTimeout = const Duration(seconds: 15),
+    this.noPortTimeout = const Duration(seconds: 8),
     this.onServiceDead,
   }) : _onEvent = onEvent,
        _onError = onError,
