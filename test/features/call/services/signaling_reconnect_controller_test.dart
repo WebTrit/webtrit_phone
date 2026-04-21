@@ -852,6 +852,69 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
+  // WT-1373: opportunistic reconnect on network restore in background
+  // -------------------------------------------------------------------------
+
+  group('SignalingReconnectController - WT-1373 network-restore opportunistic reconnect', () {
+    // Core scenario from the bug: app is backgrounded with no active calls,
+    // network drops and restores while a call is pending on the server.
+    // FCM push (TTL=0) was discarded during the offline window, so no
+    // notifyForceReconnect arrives. The controller must still reconnect once
+    // to read Core's handshake state and surface the pending call.
+    test('reconnects once when network is restored in background with no active calls (WT-1373)', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        module.isConnected = false;
+        final controller = SignalingReconnectController(signalingModule: module);
+        addTearDown(controller.dispose);
+
+        // App goes to background, signaling disconnects intentionally.
+        controller.notifyAppPaused(hasActiveCalls: false);
+        expect(module.disconnectCalls, 1);
+
+        // Network drops and restores while offline (e.g. WiFi toggle).
+        controller.notifyNetworkUnavailable();
+        controller.notifyNetworkAvailable();
+
+        // Must connect after the fast-reconnect delay.
+        expect(module.connectCalls, 0);
+        async.elapse(kSignalingClientFastReconnectDelay);
+        expect(module.connectCalls, 1);
+      });
+    });
+
+    // The opportunistic reconnect is one-shot: after the first timer consumes
+    // the _networkJustRestored flag, subsequent failure-driven timers must
+    // respect the background-skip guard as normal. Without this guarantee the
+    // fix would silently turn into persistent-mode reconnection.
+    test('opportunistic reconnect is one-shot — subsequent failures skip in background (WT-1373)', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        module.isConnected = false;
+        final controller = SignalingReconnectController(signalingModule: module);
+        addTearDown(controller.dispose);
+
+        controller.notifyAppPaused(hasActiveCalls: false);
+        controller.notifyNetworkUnavailable();
+        controller.notifyNetworkAvailable();
+
+        // First timer: opportunistic reconnect fires.
+        async.elapse(kSignalingClientFastReconnectDelay);
+        expect(module.connectCalls, 1);
+
+        // Connection attempt fails — schedules the next reconnect timer.
+        module.emit(_failed(delay: kSignalingClientReconnectDelay));
+
+        // Second timer: flag already consumed, background skip applies again.
+        async.elapse(kSignalingClientReconnectDelay);
+        expect(module.connectCalls, 1, reason: 'background skip must apply after opportunistic flag is consumed');
+      });
+    });
+  });
+
+  // -------------------------------------------------------------------------
   // dispose() safety
   // -------------------------------------------------------------------------
 
