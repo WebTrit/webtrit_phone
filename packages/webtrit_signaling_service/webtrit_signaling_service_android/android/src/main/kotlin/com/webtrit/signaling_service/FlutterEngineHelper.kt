@@ -81,6 +81,7 @@ class FlutterEngineHelper(
             // blocking the Dart VM on Android 16+ REMOTE_MESSAGING services.
             val dartEntrypoint = DartEntrypoint(
                 flutterLoader.findAppBundlePath(),
+                callbackInformation.callbackLibraryPath,
                 callbackInformation.callbackName,
             )
             val options = FlutterEngineGroup.Options(context.applicationContext)
