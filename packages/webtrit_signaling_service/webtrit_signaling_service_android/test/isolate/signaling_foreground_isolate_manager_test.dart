@@ -139,6 +139,22 @@ SignalingForegroundIsolateManager _makeManager(_FakeSignalingModule module) {
   );
 }
 
+/// Creates a manager (with subscribers) where [safetyReconnectGrace] is small
+/// enough to test the safety fallback without real-time sleeping.
+SignalingForegroundIsolateManager _makeManagerWithSafetyGrace(
+  _FakeSignalingModule module, {
+  Duration grace = const Duration(milliseconds: 20),
+}) {
+  return SignalingForegroundIsolateManager(
+    coreUrl: 'wss://example.com',
+    tenantId: 'tenant',
+    token: 'tok',
+    safetyReconnectGrace: grace,
+    moduleFactory: (_) => module,
+    hubFactory: _FakeSignalingHub.new, // hasSubscribers defaults to true
+  );
+}
+
 /// Creates a manager where the hub reports NO subscribers (app is closed —
 /// persistent-service mode). The background isolate must auto-reconnect
 /// independently in this configuration.
@@ -503,6 +519,113 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 150));
 
       expect(stopCalls, isEmpty, reason: 'persistent mode must not schedule cleanup timer');
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Safety reconnect — fallback when main isolate sync does not arrive
+  // -------------------------------------------------------------------------
+
+  // When hasSubscribers is true (app open), reconnect decisions normally belong
+  // to SignalingReconnectController. If the sync round-trip (startService →
+  // onStartCommand → synchronizeIsolate → Pigeon → handleStatus) fails silently
+  // (e.g. Pigeon dropped on MIUI), the safety timer fires after
+  // recommendedReconnectDelay + safetyReconnectGrace and reconnects directly.
+
+  group('SignalingForegroundIsolateManager -- safety reconnect (main isolate fallback)', () {
+    test('safety timer fires and reconnects when main isolate sync never arrives (disconnect)', () async {
+      final module = _FakeSignalingModule();
+      // Use a tiny grace so the test completes quickly.
+      final manager = _makeManagerWithSafetyGrace(module, grace: const Duration(milliseconds: 20));
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      await manager.handleStatus(enabled: true);
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 1);
+
+      // WebSocket drops — reconnect delay 50ms, safety fires at 50+20=70ms.
+      module.simulateDisconnectWithDelay(const Duration(milliseconds: 50));
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 1); // no immediate reconnect
+
+      // Wait past safety window — safety timer fires.
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      expect(module.connectCount, 2, reason: 'safety timer must fire and reconnect');
+    });
+
+    test('safety timer fires and reconnects when main isolate sync never arrives (connection failed)', () async {
+      final module = _FakeSignalingModule();
+      final manager = _makeManagerWithSafetyGrace(module, grace: const Duration(milliseconds: 20));
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      await manager.handleStatus(enabled: true);
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 1);
+
+      module.simulateConnectionFailed(const Duration(milliseconds: 50));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      expect(module.connectCount, 2, reason: 'safety timer must fire after connection failed');
+    });
+
+    test('safety timer is cancelled when _start() arrives via main isolate sync', () async {
+      final module = _FakeSignalingModule();
+      final manager = _makeManagerWithSafetyGrace(module, grace: const Duration(milliseconds: 50));
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      await manager.handleStatus(enabled: true);
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 1);
+
+      module.simulateDisconnectWithDelay(const Duration(milliseconds: 20));
+      await Future<void>.delayed(Duration.zero);
+
+      // Main isolate sync arrives before safety window — cancels timer and reconnects.
+      await manager.handleStatus(enabled: true);
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 2);
+
+      // Wait past safety deadline — must not fire a second reconnect.
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      expect(module.connectCount, 2, reason: 'safety timer must be cancelled by _start()');
+    });
+
+    test('safety timer is cancelled on SignalingConnected (connection restored by other means)', () async {
+      final module = _FakeSignalingModule();
+      final manager = _makeManagerWithSafetyGrace(module, grace: const Duration(milliseconds: 50));
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      await manager.handleStatus(enabled: true);
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 1);
+
+      module.simulateDisconnectWithDelay(const Duration(milliseconds: 20));
+      await Future<void>.delayed(Duration.zero);
+
+      // Simulate the main isolate reconnecting via hub command (not handleStatus),
+      // which causes _FakeSignalingModule.connect() to emit SignalingConnected.
+      module.connect(); // emits SignalingConnected internally
+      await Future<void>.delayed(Duration.zero);
+
+      final countAfterReconnect = module.connectCount;
+
+      // Safety timer must have been cancelled by the SignalingConnected event.
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      expect(module.connectCount, countAfterReconnect, reason: 'safety timer must be cancelled on SignalingConnected');
+    });
+
+    test('safety timer does NOT fire when delay is null (server says do not reconnect)', () async {
+      final module = _FakeSignalingModule();
+      final manager = _makeManagerWithSafetyGrace(module, grace: const Duration(milliseconds: 20));
+      addTearDown(() => manager.handleStatus(enabled: false));
+
+      await manager.handleStatus(enabled: true);
+      await Future<void>.delayed(Duration.zero);
+      expect(module.connectCount, 1);
+
+      // code 1002 → recommendedReconnectDelay == null → no safety timer.
+      module.simulateDisconnect1002();
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      expect(module.connectCount, 1, reason: 'null delay must suppress the safety timer too');
     });
   });
 
