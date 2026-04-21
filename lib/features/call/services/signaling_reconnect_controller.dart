@@ -97,9 +97,9 @@ class SignalingReconnectController {
   // Set to true by notifyNetworkAvailable and consumed by the first timer that
   // fires after it. Allows a one-shot opportunistic reconnect when the network
   // is restored while the app is backgrounded with no known active calls —
-  // the case where FCM TTL=0 push was dropped during the offline window and
+  // the case where an FCM push was dropped during the offline window and
   // the only way to discover a pending incoming call is to reconnect and read
-  // the handshake state from Core (WT-1373).
+  // the handshake state from Core.
   bool _networkJustRestored = false;
 
   /// Last value passed to [_onConnectionPresenceChanged].
@@ -308,7 +308,7 @@ class SignalingReconnectController {
           _logger.info('_scheduleReconnect: skipped - app not active and no active calls');
           return;
         }
-        _logger.info('_scheduleReconnect: network-restore opportunistic reconnect (WT-1373)');
+        _logger.info('_scheduleReconnect: network-restore opportunistic reconnect');
       }
       if (!force && !_networkActive) {
         _logger.info('_scheduleReconnect: skipped - network unavailable');
