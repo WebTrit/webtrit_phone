@@ -28,8 +28,15 @@ sealed class Notification {
   List<NotificationScope> scopes() => NotificationScope.values;
 }
 
+@Deprecated.subclass(
+  'Use custom inplementations of MessageNotification for concrete cases instead of throwing all garbage in one class and then decide show it or not'
+  'If case is not clear to user, or user action need\'nt, just log it and record to crashalitycs(if needed) as non-fatal error without showing notification to user'
+  'note that this class, will be removed after migrating all notifications to MessageNotification or ErrorNotification',
+)
 abstract class ErrorNotification extends Notification {
-  const ErrorNotification();
+  ErrorNotification() {
+    throw UnsupportedError('Dont use it, code remains for migration purposes');
+  }
 }
 
 abstract class MessageNotification extends Notification {
@@ -40,33 +47,9 @@ abstract class SuccessNotification extends Notification {
   const SuccessNotification();
 }
 
-// Default notification implementations
-
-/// Default notification for unknown or unlocalizable error messages
-class ErrorMessageNotification extends ErrorNotification {
-  const ErrorMessageNotification(this.message);
-
-  final String message;
-
-  @override
-  String l10n(BuildContext context) => message;
-}
-
-/// Default notification for account-related errors
-class AccountErrorNotification extends ErrorNotification {
-  const AccountErrorNotification(this.accountErrorCode);
-
-  final AccountErrorCode accountErrorCode;
-
-  @override
-  String l10n(BuildContext context) => accountErrorCode.l10n(context);
-}
-
-/// Default notification for handled exceptions
-/// Uses for showing common exceptions from HTTP and WS API's with localized error messages and details
-/// Can be extended with additional error handling logic for specific features and call super for default handling
+@Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 class DefaultErrorNotification extends ErrorNotification {
-  const DefaultErrorNotification(this.error);
+  DefaultErrorNotification(this.error);
 
   final Object error;
 
@@ -133,11 +116,36 @@ class DefaultErrorNotification extends ErrorNotification {
   }
 }
 
-class NoInternetConnectionNotification extends ErrorNotification {
+class NoInternetConnectionNotification extends MessageNotification {
   const NoInternetConnectionNotification();
 
   @override
   String l10n(BuildContext context) {
     return context.l10n.common_noInternetConnection_message;
   }
+}
+
+class SelfCarePasswordExpiredNotification extends MessageNotification {
+  const SelfCarePasswordExpiredNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.account_selfCarePasswordExpired_message;
+  }
+}
+
+class SessionExpiredNotification extends MessageNotification {
+  const SessionExpiredNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_sessionExpired;
+  }
+}
+
+class DeleteAccountNotSupportedNotification extends MessageNotification {
+  const DeleteAccountNotSupportedNotification();
+
+  @override
+  String l10n(BuildContext context) => context.l10n.settings_AccountDeleteNotSupported_message;
 }

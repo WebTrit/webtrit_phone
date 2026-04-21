@@ -6,6 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 
 final _logger = Logger('RegisterStatusCubit');
 
@@ -22,7 +23,7 @@ class RegisterStatus {
 class RegisterStatusCubit extends Cubit<RegisterStatus> {
   RegisterStatusCubit(this.appRepository, this.registerStatusRepository, {this.handleError})
     : super(RegisterStatus(value: registerStatusRepository.getRegisterStatus())) {
-    _fetchStatusSilently();
+    fetchStatus(silently: true);
     _connectivitySub = Connectivity().onConnectivityChanged.listen(_handleConnectivity);
   }
 
@@ -33,21 +34,10 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
   late final StreamSubscription _connectivitySub;
 
   void _handleConnectivity(List<ConnectivityResult> results) {
-    if (results.any((result) => result != ConnectivityResult.none)) _fetchStatusSilently();
+    if (results.any((result) => result != ConnectivityResult.none)) fetchStatus(silently: true);
   }
 
-  Future<void> _fetchStatusSilently() async {
-    try {
-      final status = await appRepository.getRegisterStatus();
-      registerStatusRepository.setRegisterStatus(status);
-      emit(RegisterStatus(value: status));
-    } catch (e, s) {
-      _logger.warning('Failed to get register status', e, s);
-      if (!_isTransientNetworkError(e)) handleError?.call(e, s);
-    }
-  }
-
-  Future<void> fetchStatus() async {
+  Future<void> fetchStatus({bool silently = false}) async {
     try {
       final status = await appRepository.getRegisterStatus();
       registerStatusRepository.setRegisterStatus(status);
@@ -55,6 +45,11 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
     } catch (e, s) {
       _logger.warning('Failed to get register status', e, s);
       handleError?.call(e, s);
+
+      if (!_isTransientNetworkError(e)) {
+        if (!silently) handleError?.call(e, s);
+        CrashlyticsUtils.recordError(e, stack: s, reason: 'RegisterStatusCubit.fetchStatus');
+      }
     }
   }
 
@@ -71,6 +66,9 @@ class RegisterStatusCubit extends Cubit<RegisterStatus> {
       _logger.warning('_onRegisterStatusChanged', e, stackTrace);
       emit(RegisterStatus(value: !value, isUpdating: false));
       handleError?.call(e, stackTrace);
+      if (!_isTransientNetworkError(e)) {
+        CrashlyticsUtils.recordError(e, stack: stackTrace, reason: 'RegisterStatusCubit.setStatus');
+      }
     }
   }
 

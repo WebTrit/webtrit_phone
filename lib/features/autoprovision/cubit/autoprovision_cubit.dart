@@ -91,6 +91,7 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMap
     } catch (e) {
       _logger.warning('processToken error: $e');
       emit(AutoprovisionState.error(e));
+      CrashlyticsUtils.recordError(e, reason: 'AutoprovisionCubit._processToken');
     }
   }
 

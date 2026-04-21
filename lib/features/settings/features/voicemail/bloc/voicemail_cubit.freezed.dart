@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$VoicemailState {
 
- VoicemailStatus get status; List<Voicemail> get items; List<String> get selectedVoicemailsIds; DefaultErrorNotification? get error;
+ VoicemailStatus get status; List<Voicemail> get items; List<String> get selectedVoicemailsIds; Object? get error;
 /// Create a copy of VoicemailState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,12 +25,12 @@ $VoicemailStateCopyWith<VoicemailState> get copyWith => _$VoicemailStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoicemailState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.items, items)&&const DeepCollectionEquality().equals(other.selectedVoicemailsIds, selectedVoicemailsIds)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoicemailState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.items, items)&&const DeepCollectionEquality().equals(other.selectedVoicemailsIds, selectedVoicemailsIds)&&const DeepCollectionEquality().equals(other.error, error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(items),const DeepCollectionEquality().hash(selectedVoicemailsIds),error);
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(items),const DeepCollectionEquality().hash(selectedVoicemailsIds),const DeepCollectionEquality().hash(error));
 
 
 
@@ -41,7 +41,7 @@ abstract mixin class $VoicemailStateCopyWith<$Res>  {
   factory $VoicemailStateCopyWith(VoicemailState value, $Res Function(VoicemailState) _then) = _$VoicemailStateCopyWithImpl;
 @useResult
 $Res call({
- VoicemailStatus status, List<Voicemail> items, List<String> selectedVoicemailsIds, DefaultErrorNotification? error
+ VoicemailStatus status, List<Voicemail> items, List<String> selectedVoicemailsIds, Object? error
 });
 
 
@@ -63,8 +63,7 @@ class _$VoicemailStateCopyWithImpl<$Res>
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as VoicemailStatus,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
 as List<Voicemail>,selectedVoicemailsIds: null == selectedVoicemailsIds ? _self.selectedVoicemailsIds : selectedVoicemailsIds // ignore: cast_nullable_to_non_nullable
-as List<String>,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
-as DefaultErrorNotification?,
+as List<String>,error: freezed == error ? _self.error : error ,
   ));
 }
 

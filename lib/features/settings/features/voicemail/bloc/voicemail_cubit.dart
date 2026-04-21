@@ -4,16 +4,20 @@ import 'package:flutter/foundation.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 
 part 'voicemail_state.dart';
 
 part 'voicemail_cubit.freezed.dart';
+
+final _logger = Logger('VoicemailCubit');
 
 class VoicemailCubit extends Cubit<VoicemailState> {
   VoicemailCubit({
@@ -51,15 +55,13 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       await _repository.fetchVoicemails();
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
     } on EndpointNotSupportedException catch (e) {
-      final error = DefaultErrorNotification(e);
-      _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: error));
+      _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: e));
     } on VoicemailNotConfiguredException catch (e) {
-      final error = DefaultErrorNotification(e);
-      _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: error));
-    } catch (e) {
-      final error = DefaultErrorNotification(e);
-      _safeEmit(state.copyWith(status: VoicemailStatus.loaded, error: error));
-      onSubmitNotification(error);
+      _safeEmit(state.copyWith(status: VoicemailStatus.featureNotSupported, error: e));
+    } catch (e, s) {
+      _safeEmit(state.copyWith(status: VoicemailStatus.loaded, error: e));
+      _logger.severe('Error fetching voicemails: $e', e, s);
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'VoicemailCubit.fetchVoicemails');
     }
   }
 
@@ -68,9 +70,10 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       _safeEmit(state.copyWith(status: VoicemailStatus.loading));
       await _repository.removeAllVoicemails();
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
-    } catch (e) {
-      onSubmitNotification(DefaultErrorNotification(e));
+    } catch (e, s) {
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
+      _logger.severe('Error removing all voicemails: $e', e, s);
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'VoicemailCubit.removeAllVoicemails');
     }
   }
 
@@ -79,9 +82,10 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       _safeEmit(state.copyWith(status: VoicemailStatus.loading));
       await _repository.removeMultipleVoicemails(state.selectedVoicemailsIds);
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
-    } catch (e) {
-      onSubmitNotification(DefaultErrorNotification(e));
+    } catch (e, s) {
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
+      _logger.severe('Error removing selected voicemails: $e', e, s);
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'VoicemailCubit.removeSelectedVoicemails');
     }
   }
 
@@ -90,9 +94,10 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       _safeEmit(state.copyWith(status: VoicemailStatus.loading));
       await _repository.removeVoicemail(messageId);
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
-    } catch (e) {
-      onSubmitNotification(DefaultErrorNotification(e));
+    } catch (e, s) {
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
+      _logger.severe('Error removing voicemail with id $messageId: $e', e, s);
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'VoicemailCubit.removeVoicemail');
     }
   }
 
@@ -102,9 +107,10 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       final markAsSeen = !voicemail.status.isRead;
       await _repository.updateVoicemailSeenStatus(voicemail.id, markAsSeen);
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
-    } catch (e) {
-      onSubmitNotification(DefaultErrorNotification(e));
+    } catch (e, s) {
       _safeEmit(state.copyWith(status: VoicemailStatus.loaded));
+      _logger.severe('Error toggling seen status for voicemail with id ${voicemail.id}: $e', e, s);
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'VoicemailCubit.toggleSeenStatus');
     }
   }
 

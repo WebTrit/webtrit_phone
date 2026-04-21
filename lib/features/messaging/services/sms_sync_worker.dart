@@ -28,8 +28,7 @@ final _logger = Logger('SmsSyncWorker');
 class SmsSyncWorker {
   SmsSyncWorker(
     this.client,
-    this.smsRepository,
-    this.onError, {
+    this.smsRepository, {
     this.pageSize = 50,
     this.listThrottle = const Duration(seconds: 1),
     this.roomThrottle = const Duration(seconds: 5),
@@ -37,7 +36,6 @@ class SmsSyncWorker {
 
   final PhoenixSocket client;
   final SmsRepository smsRepository;
-  final Function(Object) onError;
   final int pageSize;
   final Duration listThrottle;
   final Duration roomThrottle;
@@ -51,8 +49,7 @@ class SmsSyncWorker {
     _conversationsSyncSub = _conversationsSyncStream().listen((e) {
       if (e is (Object, StackTrace)) {
         final (error, stackTrace) = e;
-        _logger.warning('conversations sync error:', error, stackTrace);
-        onError(error);
+        _handleError(error, stackTrace, '_conversationsSyncStream');
       } else {
         _logger.info('conversations sync event: $e');
       }
@@ -72,8 +69,7 @@ class SmsSyncWorker {
     if (channel == null) {
       channel = client.createSmsConversationChannel(id);
       await channel.connect().catchError((e, s) {
-        _logger.warning('Failed to connect to sms conversation $id', e, s);
-        onError(e);
+        _handleError(e, s, '_conversationSubscribe.connect.$id');
       });
     }
 
@@ -82,8 +78,7 @@ class SmsSyncWorker {
       () => _conversationSyncStream(id, channel!).listen((e) {
         if (e is (Object, StackTrace)) {
           final (error, stackTrace) = e;
-          _logger.warning('conversation sync error: $id', error, stackTrace);
-          onError(error);
+          _handleError(error, stackTrace, '_conversationSyncStream.$id');
         } else {
           _logger.info('conversation sync event: $id $e');
         }
@@ -272,6 +267,21 @@ class SmsSyncWorker {
   void _closeConversationSubs() {
     _conversationSyncSubs.forEach((key, value) => value.cancel());
     _conversationSyncSubs.clear();
+  }
+
+  void _handleError(Object error, StackTrace stack, String context) {
+    if (error is MessagingSocketException) {
+      switch (error.code) {
+        case kPhxSocketClosedCode:
+          _logger.warning('Socket closed, likely due to connectivity issues', error, stack);
+          return;
+        case kPhxChannelClosedCode:
+          _logger.warning('Channel closed, likely due to connectivity issues', error, stack);
+          return;
+      }
+    }
+    _logger.severe('[$context] An error occurred: $error', error, stack);
+    CrashlyticsUtils.recordError(error, stack: stack, reason: 'SmsSyncWorker: $context');
   }
 }
 

@@ -22,7 +22,6 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
@@ -65,11 +64,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// assignment guarantees a single instance for the lifetime of this [State],
   /// preventing consumers from holding stale references across rebuilds.
   CallController? _callController;
-
-  /// Cached localized string for the session-expired notification.
-  /// Populated in [didChangeDependencies] to avoid calling Localizations
-  /// inside [initState], which is not allowed.
-  late String _sessionExpiredMessage;
 
   @override
   void initState() {
@@ -116,16 +110,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         _appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.serverRejection));
       },
       onPreLogout: () {
-        final notification = ErrorMessageNotification(_sessionExpiredMessage);
-        notificationsBloc.add(NotificationsSubmitted(notification));
+        notificationsBloc.add(NotificationsSubmitted(SessionExpiredNotification()));
       },
     );
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _sessionExpiredMessage = context.l10n.notifications_errorSnackBar_sessionExpired;
   }
 
   @override
@@ -575,7 +562,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         context.read<SmsRepository>(),
                         context.read<SmsOutboxRepository>(),
                         context.read<SessionRepository>(),
-                        (n) => context.read<NotificationsBloc>().add(NotificationsSubmitted(n)),
                       );
                     },
                   ),
@@ -608,9 +594,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                             context.read<AppRepository>(),
                             context.read<RegisterStatusRepository>(),
                             handleError: (error, stackTrace) {
-                              context.read<NotificationsBloc>().add(
-                                NotificationsSubmitted(DefaultErrorNotification(error)),
-                              );
                               context.read<AppBloc>().maybeHandleError(error);
                             },
                           ),

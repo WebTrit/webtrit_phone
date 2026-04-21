@@ -82,7 +82,7 @@ class CallController {
 
     if (noIdleMain || noIdleGuest) {
       _logger.warning('Cannot create call: no idle lines available.');
-      notificationsBloc.add(const NotificationsSubmitted(CallUndefinedLineNotification()));
+      notificationsBloc.add(const NotificationsSubmitted(GeneralUnableToCallNotification()));
       return;
     }
 

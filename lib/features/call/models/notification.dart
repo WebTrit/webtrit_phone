@@ -10,8 +10,9 @@ import 'package:webtrit_phone/app/notifications/models/error_field.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
+@Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 final class SignalingSessionMissedNotification extends ErrorNotification {
-  const SignalingSessionMissedNotification();
+  SignalingSessionMissedNotification();
 
   @override
   String l10n(BuildContext context) {
@@ -19,8 +20,9 @@ final class SignalingSessionMissedNotification extends ErrorNotification {
   }
 }
 
+@Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 final class SignalingConnectFailedNotification extends ErrorNotification {
-  const SignalingConnectFailedNotification();
+  SignalingConnectFailedNotification();
 
   @override
   String l10n(BuildContext context) {
@@ -28,8 +30,9 @@ final class SignalingConnectFailedNotification extends ErrorNotification {
   }
 }
 
+@Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 final class SignalingDisconnectNotification extends ErrorNotification {
-  const SignalingDisconnectNotification({required this.knownCode, this.systemCode, this.systemReason});
+  SignalingDisconnectNotification({required this.knownCode, this.systemCode, this.systemReason});
 
   final SignalingDisconnectCode knownCode;
   final int? systemCode;
@@ -62,7 +65,7 @@ final class SignalingDisconnectNotification extends ErrorNotification {
   }
 }
 
-final class CallUserMediaErrorNotification extends ErrorNotification {
+final class CallUserMediaErrorNotification extends MessageNotification {
   const CallUserMediaErrorNotification();
 
   @override
@@ -79,8 +82,9 @@ final class CallUserMediaErrorNotification extends ErrorNotification {
   }
 }
 
+@Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 final class CallSdpConfigurationErrorNotification extends ErrorNotification {
-  const CallSdpConfigurationErrorNotification();
+  CallSdpConfigurationErrorNotification();
 
   @override
   String l10n(BuildContext context) {
@@ -88,8 +92,9 @@ final class CallSdpConfigurationErrorNotification extends ErrorNotification {
   }
 }
 
+@Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 final class CallUndefinedLineNotification extends ErrorNotification {
-  const CallUndefinedLineNotification();
+  CallUndefinedLineNotification();
 
   @override
   String l10n(BuildContext context) {
@@ -97,7 +102,7 @@ final class CallUndefinedLineNotification extends ErrorNotification {
   }
 }
 
-final class CallServiceBusyLineNotification extends ErrorNotification {
+final class CallServiceBusyLineNotification extends MessageNotification {
   const CallServiceBusyLineNotification();
 
   @override
@@ -106,7 +111,7 @@ final class CallServiceBusyLineNotification extends ErrorNotification {
   }
 }
 
-final class CallWhileOfflineNotification extends ErrorNotification {
+final class CallWhileOfflineNotification extends MessageNotification {
   const CallWhileOfflineNotification();
 
   @override
@@ -131,8 +136,53 @@ final class CallNegotiationTimeoutNotification extends MessageNotification {
   }
 }
 
+final class GeneralUnableToCallNotification extends MessageNotification {
+  const GeneralUnableToCallNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_generalUnableToCall;
+  }
+}
+
+final class CallRejectedNotification extends MessageNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.signalingResponseCode_rejected;
+  }
+}
+
+final class CallUnwantedNotification extends MessageNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.signalingResponseCode_unwanted;
+  }
+}
+
+final class CallUserNotExistNotification extends MessageNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.signalingResponseCode_userNotExist;
+  }
+}
+
+final class CallBusyNotification extends MessageNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.signalingResponseCode_userBusy;
+  }
+}
+
+final class CallInvalidNumberNotification extends MessageNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.signalingResponseCode_invalidNumberFormat;
+  }
+}
+
+@Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 final class SipRegistrationFailedNotification extends ErrorNotification {
-  const SipRegistrationFailedNotification({required this.knownCode, this.systemCode, this.systemReason});
+  SipRegistrationFailedNotification({required this.knownCode, this.systemCode, this.systemReason});
 
   final SignalingRegistrationFailedCode knownCode;
   final int? systemCode;
@@ -171,25 +221,25 @@ final class SipRegistrationFailedNotification extends ErrorNotification {
   }
 }
 
-final class AppOfflineNotification extends MessageNotification {
-  @override
-  String l10n(BuildContext context) {
-    return context.l10n.notifications_messageSnackBar_appOffline;
-  }
+// final class AppOfflineNotification extends MessageNotification {
+//   @override
+//   String l10n(BuildContext context) {
+//     return context.l10n.notifications_messageSnackBar_appOffline;
+//   }
 
-  @override
-  List<NotificationScope> scopes() => [NotificationScope.main];
-}
+//   @override
+//   List<NotificationScope> scopes() => [NotificationScope.main];
+// }
 
-final class AppOnlineNotification extends SuccessNotification {
-  @override
-  String l10n(BuildContext context) {
-    return context.l10n.notifications_successSnackBar_appOnline;
-  }
+// final class AppOnlineNotification extends SuccessNotification {
+//   @override
+//   String l10n(BuildContext context) {
+//     return context.l10n.notifications_successSnackBar_appOnline;
+//   }
 
-  @override
-  List<NotificationScope> scopes() => [NotificationScope.main];
-}
+//   @override
+//   List<NotificationScope> scopes() => [NotificationScope.main];
+// }
 
 final class ActiveLineBlindTransferWarningNotification extends MessageNotification {
   @override
@@ -198,8 +248,9 @@ final class ActiveLineBlindTransferWarningNotification extends MessageNotificati
   }
 }
 
+@Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 final class CallErrorRegisteringSelfManagedPhoneAccountNotification extends ErrorNotification {
-  const CallErrorRegisteringSelfManagedPhoneAccountNotification();
+  CallErrorRegisteringSelfManagedPhoneAccountNotification();
 
   @override
   String l10n(BuildContext context) {

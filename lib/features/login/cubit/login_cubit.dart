@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:linkify/linkify.dart';
+import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -11,6 +12,7 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 
 import '../login.dart';
 
@@ -19,6 +21,8 @@ part 'login_cubit.freezed.dart';
 part 'login_state.dart';
 
 typedef LoginSuccessCallback = void Function(Session session, WebtritSystemInfo systemInfo);
+
+final _logger = Logger('LoginCubit');
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit({required this.authRepository, required this.notificationsBloc, required this.onLoginSuccess})
@@ -110,8 +114,8 @@ class LoginCubit extends Cubit<LoginState> {
           systemInfo: systemInfo,
         ),
       );
-    } catch (e) {
-      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+    } catch (e, s) {
+      handleError(e, s, 'LoginOtpSigninRequestSubmitted');
       emit(state.copyWith(processing: false));
     }
   }
@@ -231,10 +235,10 @@ class LoginCubit extends Cubit<LoginState> {
           otpSigninSessionOtpProvisionalWithDateTime: (sessionOtpProvisional, DateTime.now()),
         ),
       );
-    } catch (e) {
+    } catch (e, s) {
       emit(state.copyWith(processing: false));
 
-      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+      handleError(e, s, 'LoginOtpSigninRequestSubmitted');
     }
   }
 
@@ -267,10 +271,10 @@ class LoginCubit extends Cubit<LoginState> {
           userId: sessionToken.userId ?? '',
         ),
       );
-    } catch (e) {
+    } catch (e, s) {
       emit(state.copyWith(processing: false));
 
-      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+      handleError(e, s, 'LoginSignupVerifySubmitted');
     }
   }
 
@@ -313,10 +317,10 @@ class LoginCubit extends Cubit<LoginState> {
 
       // does not set processing to false to hold processing widgets state during navigation
       loginSigninSubmitted(sessionToken);
-    } catch (e) {
+    } catch (e, s) {
       emit(state.copyWith(processing: false));
 
-      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
+      handleError(e, s, 'LoginSignupVerifySubmitted');
     }
   }
 
@@ -390,9 +394,8 @@ class LoginCubit extends Cubit<LoginState> {
 
       // Applies login result and ensures tenant consistency.
       _applyLoginResult(result, propagatedTenantId: tenantId);
-    } catch (e) {
-      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
-
+    } catch (e, s) {
+      handleError(e, s, 'LoginSignupVerifySubmitted');
       emit(state.copyWith(processing: false, embeddedRequestError: e));
     }
   }
@@ -424,9 +427,8 @@ class LoginCubit extends Cubit<LoginState> {
       );
 
       _applyLoginResult(result, propagatedTenantId: state.tenantId);
-    } catch (e) {
-      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
-
+    } catch (e, s) {
+      handleError(e, s, 'LoginSignupVerifySubmitted');
       emit(state.copyWith(processing: false));
     }
   }
@@ -499,9 +501,8 @@ class LoginCubit extends Cubit<LoginState> {
           userId: sessionToken.userId ?? '',
         ),
       );
-    } catch (e) {
-      notificationsBloc.add(NotificationsSubmitted(LoginErrorNotification(e)));
-
+    } catch (e, s) {
+      handleError(e, s, 'LoginSignupVerifySubmitted');
       emit(state.copyWith(processing: false));
     }
   }
@@ -512,5 +513,28 @@ class LoginCubit extends Cubit<LoginState> {
 
   void loginSignupVerifyRepeat() {
     loginSignupRequestSubmitted();
+  }
+
+  void handleError(Object error, StackTrace stackTrace, String context) {
+    if (error is RequestFailure) {
+      final code = error.error?.code;
+      final readableNotification = switch (code) {
+        'otp_not_found' => const LoginOtpNotFoundNotification(),
+        'incorrect_otp_code' => const LoginIncorrectOtpCodeNotification(),
+        'otp_expired' => const LoginOtpExpiredNotification(),
+        'otp_verification_attempts_exceeded' => const LoginOtpVerificationAttemptsExceededNotification(),
+        'otp_already_verified' => const LoginOtpAlreadyVerifiedNotification(),
+        'phone_not_found' => const LoginPhoneNotFoundNotification(),
+        _ => null, // Maybe better show general error, like 'Something went wrong. Please try again.'
+      };
+      if (readableNotification != null) {
+        _logger.warning('Known login error occurred: ${error.error}', error);
+        notificationsBloc.add(NotificationsSubmitted(readableNotification));
+        return;
+      }
+    }
+
+    _logger.severe('Unexpected error during login process', error, stackTrace);
+    CrashlyticsUtils.recordError(error, stack: stackTrace, reason: context);
   }
 }

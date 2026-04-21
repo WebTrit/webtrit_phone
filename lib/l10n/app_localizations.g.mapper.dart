@@ -709,6 +709,8 @@ class AppLocalizationsMapper {
           localizations.notifications_errorSnackBar_callConnect,
       'notifications_errorSnackBar_callNegotiationTimeout':
           localizations.notifications_errorSnackBar_callNegotiationTimeout,
+      'notifications_errorSnackBar_generalUnableToCall':
+          localizations.notifications_errorSnackBar_generalUnableToCall,
       'notifications_errorSnackBar_callServiceBusyLine':
           localizations.notifications_errorSnackBar_callServiceBusyLine,
       'notifications_errorSnackBar_callSignalingClientNotConnect': localizations
@@ -782,6 +784,12 @@ class AppLocalizationsMapper {
           localizations.persistentConnectionReminderContent,
       'persistentConnectionReminderTitle':
           localizations.persistentConnectionReminderTitle,
+      'batteryOptimizationWarningTitle':
+          localizations.batteryOptimizationWarningTitle,
+      'batteryOptimizationWarningContent':
+          localizations.batteryOptimizationWarningContent,
+      'batteryOptimizationWarningOpenSettings':
+          localizations.batteryOptimizationWarningOpenSettings,
       'presence_activity_appointment_name':
           localizations.presence_activity_appointment_name,
       'presence_activity_away_name': localizations.presence_activity_away_name,
@@ -934,6 +942,8 @@ class AppLocalizationsMapper {
           localizations.settings_AccountDeleteConfirmDialog_content,
       'settings_AccountDeleteConfirmDialog_title':
           localizations.settings_AccountDeleteConfirmDialog_title,
+      'settings_AccountDeleteNotSupported_message':
+          localizations.settings_AccountDeleteNotSupported_message,
       'settings_AppBarTitle_myAccount':
           localizations.settings_AppBarTitle_myAccount,
       'settings_audioProcessing_Section_AGC_title':

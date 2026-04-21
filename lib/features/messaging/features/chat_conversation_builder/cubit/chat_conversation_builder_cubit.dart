@@ -11,6 +11,7 @@ import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
 import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 
 part 'chat_conversation_builder_state.dart';
 
@@ -192,8 +193,9 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
       await chatsRepository.upsertChat(group);
       openGroup(group.id);
     } catch (e, s) {
-      submitNotification(DefaultErrorNotification(e));
-      _logger.warning('onGroupCreateConfirm failed', e, s);
+      // submitNotification(DefaultErrorNotification(e));
+      _logger.severe('onGroupCreateConfirm failed', e, s);
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'ChatConversationBuilderCubit.onGroupCreateConfirm');
     } finally {
       emit(state.copyWith(processing: false));
     }

@@ -313,11 +313,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       if (previousRegistrationStatus?.isRegistered == false && newRegistrationStatus.isRegistered == true) {
         presenceSettingsRepository.resetLastSettingsSync();
-        submitNotification(AppOnlineNotification());
+        // submitNotification(AppOnlineNotification());
       }
 
       if (previousRegistrationStatus?.isRegistered == true && newRegistrationStatus.isRegistered == false) {
-        submitNotification(AppOfflineNotification());
+        // submitNotification(AppOfflineNotification());
       }
 
       if (newRegistrationStatus.isFailed == true || newRegistrationStatus.isUnregistered == true) {
@@ -325,13 +325,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
 
       if (newRegistrationStatus.isFailed == true) {
-        submitNotification(
-          SipRegistrationFailedNotification(
-            knownCode: SignalingRegistrationFailedCode.values.byCode(newRegistration.code),
-            systemCode: newRegistration.code,
-            systemReason: newRegistration.reason,
-          ),
-        );
+        _logger.severe('Registration failed - code: ${newRegistration.code}, reason: ${newRegistration.reason}');
+
+        final knownCode = SignalingRegistrationFailedCode.values.byCode(newRegistration.code);
+        if (knownCode != SignalingRegistrationFailedCode.sipServerUnavailable) {
+          // TODO?: maybe not skip serviceUnavaliable error recodring,
+          // skipping for maintance windows is ok, but if this error happens in the wild it can be a sign of a bigger issue that we want to be aware
+          CrashlyticsUtils.recordError(
+            'CallBloc.Registration failed - code: ${newRegistration.code}, reason: ${newRegistration.reason}',
+            information: [
+              'newRegistration.code: ${newRegistration.code}',
+              'newRegistration.reason: ${newRegistration.reason}',
+              'newRegistration.status: ${newRegistration.status}',
+              'previousRegistration?.code: ${previousRegistration?.code}',
+              'previousRegistration?.reason: ${previousRegistration?.reason}',
+              'previousRegistration?.status: ${previousRegistration?.status}',
+            ],
+          );
+        }
       }
     }
 
@@ -404,6 +415,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   void _handleConnectionFailed(SignalingFailureInfo failure) {
     final (:knownCode, :systemCode, :systemReason) = failure;
+
+    // Skip logging and notification for expected disconnect scenarios that trigger automatic reconnects without user impact.
     switch (knownCode) {
       case SignalingDisconnectCode.signalingKeepaliveTimeoutError:
       case SignalingDisconnectCode.controllerForceAttachClose:
@@ -425,13 +438,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       default:
         break;
     }
-    if (state.isActive) return;
-    final notification = switch (knownCode) {
-      SignalingDisconnectCode.sessionMissedError => const SignalingSessionMissedNotification(),
-      null => const SignalingConnectFailedNotification(),
-      _ => SignalingDisconnectNotification(knownCode: knownCode, systemCode: systemCode, systemReason: systemReason),
-    };
-    submitNotification(notification);
+
+    // Record unexpected disconnects with as much detail as possible to facilitate debugging and resolution.
+    //
+    // If you encounter a new disconnect code in the wild, add it to the above switch statement
+    // and monitor its frequency and impact before deciding whether to log it as a warning or fine level.
+    _logger.severe('onConnectionFailed: $failure');
+    CrashlyticsUtils.recordError(
+      'CallBloc - onConnectionFailed ${knownCode?.name ?? 'unknown code'}',
+      information: ['knownCode: $knownCode', 'systemCode: $systemCode', 'systemReason: $systemReason'],
+    );
   }
 
   void _handleSignalingSessionError({required CallServiceState previous, required CallServiceState current}) {
@@ -460,12 +476,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await userRepository.getRemoteInfo();
     } on RequestFailure catch (e) {
       final errorCode = AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code);
-      _logger.warning('Account error code: $errorCode');
 
-      if (errorCode != null) {
-        submitNotification(AccountErrorNotification(errorCode));
-      } else {
-        _logger.fine('Account error code not mapped: ${e.error?.code}', e);
+      switch (errorCode) {
+        case AccountErrorCode.passwordChangeRequired:
+          _logger.info('Account session revoked');
+          submitNotification(const SelfCarePasswordExpiredNotification());
+          break;
+        default:
+          _logger.warning('Account error code: $errorCode');
+          break;
       }
     } catch (e, st) {
       _logger.warning('Unexpected error during account info refresh', e, st);
@@ -1185,7 +1204,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> __onCallSignalingEventHangup(_CallSignalingEventHangup event, Emitter<CallState> emit) async {
     final code = SignalingResponseCode.values.byCode(event.code);
     final call = state.retrieveActiveCall(event.callId);
-    _logger.warning(
+    _logger.info(
       '__onCallSignalingEventHangup callId=${event.callId} '
       'code=${event.code}(${code?.name}) reason="${event.reason}" '
       'direction=${call?.direction.name} status=${call?.processingStatus.name}',
@@ -1202,10 +1221,31 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         break;
       case SignalingResponseCode.unauthorizedRequest:
         submitNotification(CallWhileUnregisteredNotification());
+      case SignalingResponseCode.rejected:
+        submitNotification(CallRejectedNotification());
+      case SignalingResponseCode.unwanted:
+        submitNotification(CallUnwantedNotification());
+      case SignalingResponseCode.userNotExist:
+        submitNotification(CallUserNotExistNotification());
+      case SignalingResponseCode.busyEverywhere || SignalingResponseCode.userBusy:
+        submitNotification(CallBusyNotification());
+      case SignalingResponseCode.invalidNumberFormat:
+        submitNotification(CallInvalidNumberNotification());
       default:
-        final signalingHangupException = SignalingHangupFailure(code);
-        final defaultErrorNotification = DefaultErrorNotification(signalingHangupException);
-        submitNotification(defaultErrorNotification);
+        // Record unexpected hangups with as much detail as possible to facilitate debugging and resolution.
+        //
+        // If you encounter a new hangup code in the wild, add it to the above switch statement
+        // and monitor its frequency and impact before deciding whether to log it as a warning or fine level.
+        _logger.severe('onCallSignalingEventHangup: $code');
+        CrashlyticsUtils.recordError(
+          'CallBloc - onCallSignalingEventHangup ${code.name}}',
+          information: [
+            'callId: ${event.callId}',
+            'reason: ${event.reason}',
+            if (call != null) 'callDirection: ${call.direction.name}',
+            if (call != null) 'callStatus: ${call.processingStatus.name}',
+          ],
+        );
     }
 
     try {
@@ -1490,7 +1530,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       line = state.retrieveIdleLine();
       if (line == null) {
         _logger.info('__onCallControlEventStarted no idle line');
-        submitNotification(const CallUndefinedLineNotification());
+        submitNotification(const GeneralUnableToCallNotification());
         return;
       }
     }
@@ -1535,7 +1575,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         launchUrl(telLaunchUri);
       } else if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
         _logger.warning('__onCallControlEventStarted selfManagedPhoneAccountNotRegistered');
-        submitNotification(const CallErrorRegisteringSelfManagedPhoneAccountNotification());
+        CrashlyticsUtils.recordError(
+          'CallBloc - __onCallControlEventStarted selfManagedPhoneAccountNotRegistered',
+          information: ['callId: $callId', 'handle: ${event.handle.value}'],
+        );
       } else {
         _logger.warning('__onCallControlEventStarted callkeepError: $callkeepError');
         onDiagnosticReportRequested(callId, callkeepError);
@@ -1912,7 +1955,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     if (error != null) {
       _logger.warning('__onCallControlEventStarted error: $error');
-      submitNotification(ErrorMessageNotification(error.toString()));
       return;
     }
 
@@ -1994,7 +2036,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWithPopActiveCall(event.callId));
 
-      submitNotification(const CallUndefinedLineNotification());
+      submitNotification(const GeneralUnableToCallNotification());
       return;
     }
 
@@ -3326,7 +3368,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           ..write(' isSignalingActive: ${state.isSignalingEstablished}'),
       );
 
-      submitNotification(const SignalingConnectFailedNotification());
+      submitNotification(const GeneralUnableToCallNotification());
     } catch (e, s) {
       if (isClosed) return;
 
@@ -3334,8 +3376,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         ..write('_continueStartCallIntent - An unexpected error occurred while waiting for signaling')
         ..write(' handle: $handle');
       _logger.severe(() => severeMessage, e, s);
-
-      submitNotification(ErrorMessageNotification(e.toString()));
+      CrashlyticsUtils.recordError(e, stack: s, reason: severeMessage.toString());
     }
   }
 
