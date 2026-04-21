@@ -64,6 +64,10 @@ class FlutterEngineHelper(
             }
 
             hasInvalidHandle = false
+            Log.d(TAG, "executeDartCallback: handle=$callbackHandle " +
+                "library=${callbackInformation.callbackLibraryPath} " +
+                "function=${callbackInformation.callbackEntrypointFunctionName} " +
+                "class=${callbackInformation.callbackEntrypointFunctionClass}")
             // automaticallyRegisterPlugins=false: prevents GeneratedPluginRegistrant from
             // registering all app plugins (AudioSessionPlugin, FlutterWebRTCPlugin, etc.)
             // on this background FGS engine. On Android 16 REMOTE_MESSAGING services,
