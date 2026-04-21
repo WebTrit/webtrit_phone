@@ -299,7 +299,8 @@ class SignalingReconnectController {
       _logger.info(
         '_scheduleReconnect timer fired after $delay - '
         'appActive=$_appActive networkActive=$_networkActive '
-        'force=$force connected=${_module.isConnected}',
+        'force=$force connected=${_module.isConnected} '
+        'networkJustRestored=$networkJustRestored',
       );
 
       if (!force && !_appActive && !_hasActiveCalls) {
