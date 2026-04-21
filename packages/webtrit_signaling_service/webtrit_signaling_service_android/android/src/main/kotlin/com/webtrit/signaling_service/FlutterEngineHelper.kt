@@ -94,15 +94,16 @@ class FlutterEngineHelper(
             // FlutterEngine.spawn() is package-private; reflection is used to reach it
             // from outside io.flutter.embedding.engine.
             val mainEngine = mainEngineProvider()
-            backgroundEngine = if (mainEngine != null && mainEngine.dartExecutor.isExecutingDart) {
+            val engine = if (mainEngine != null && mainEngine.dartExecutor.isExecutingDart) {
                 try {
                     Log.d(TAG, "Spawning background engine from main engine (sibling isolate)")
                     spawnFromEngine(mainEngine, dartEntrypoint)
-                } catch (e: ReflectiveOperationException) {
-                    // spawn() is package-private and its signature may change across Flutter
-                    // upgrades. Fall back to FlutterEngineGroup so the service does not enter
-                    // a WorkManager restart loop on a signature mismatch.
-                    Log.e(TAG, "spawn() reflection failed — falling back to FlutterEngineGroup", e)
+                } catch (e: Exception) {
+                    // Catches ReflectiveOperationException (signature mismatch after Flutter
+                    // upgrade) and IllegalStateException (spawn() returned null). Both are
+                    // non-fatal: fall back to FlutterEngineGroup so the service does not enter
+                    // a WorkManager restart loop.
+                    Log.e(TAG, "spawn() failed — falling back to FlutterEngineGroup", e)
                     getOrCreateEngineGroup(context).createAndRunEngine(
                         FlutterEngineGroup.Options(context.applicationContext)
                             .setDartEntrypoint(dartEntrypoint)
@@ -116,11 +117,15 @@ class FlutterEngineHelper(
                         .setDartEntrypoint(dartEntrypoint)
                         .setAutomaticallyRegisterPlugins(false)
                 )
-            }.also { engine ->
-                engine.serviceControlSurface.attachToService(service, null, true)
-                isEngineAttached = true
-                Log.d(TAG, "FlutterEngine initialized and attached successfully")
             }
+            // Assign backgroundEngine only after a successful attach so that
+            // detachAndDestroyEngine() always has a reference to clean up. If
+            // attachToService() throws, the engine is not stored and the outer
+            // catch handles cleanup — no leak.
+            engine.serviceControlSurface.attachToService(service, null, true)
+            isEngineAttached = true
+            backgroundEngine = engine
+            Log.d(TAG, "FlutterEngine initialized and attached successfully")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize FlutterEngine", e)
         }
@@ -167,7 +172,7 @@ class FlutterEngineHelper(
             false,                       // automaticallyRegisterPlugins
             false,                       // waitForRestorationData
         ) as? FlutterEngine
-            ?: throw IllegalStateException("FlutterEngine.spawn() returned null")
+            ?: throw IllegalStateException("FlutterEngine.spawn() returned null — caught by caller fallback")
     }
 
     companion object {
@@ -178,6 +183,8 @@ class FlutterEngineHelper(
         // (crashes, WorkManager retries) share the same group, which is correct — each
         // call creates a new engine/isolate inside the existing group rather than
         // re-initialising the Dart VM from scratch.
+        // Note: if the group itself enters a bad internal state the only recovery path
+        // is a process restart — there is no mechanism to replace it mid-process.
         @Volatile
         private var engineGroup: FlutterEngineGroup? = null
 
