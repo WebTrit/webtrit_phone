@@ -143,11 +143,11 @@ class FlutterEngineHelper(
             parent,
             context,
             entrypoint,
-            null,  // initialRoute
-            null,  // dartEntrypointArgs
-            null,  // platformViewsController
-            false, // automaticallyRegisterPlugins
-            false, // waitForRestorationData
+            null,                        // initialRoute
+            null,                        // dartEntrypointArgs
+            PlatformViewsController(),   // must be non-null — FlutterEngine constructor dereferences it
+            false,                       // automaticallyRegisterPlugins
+            false,                       // waitForRestorationData
         ) as FlutterEngine
     }
 
