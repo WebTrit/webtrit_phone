@@ -8,6 +8,8 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "build/**"
+  errors:
+    deprecated_subclass: ignore
     
 formatter:
   page_width: 120
