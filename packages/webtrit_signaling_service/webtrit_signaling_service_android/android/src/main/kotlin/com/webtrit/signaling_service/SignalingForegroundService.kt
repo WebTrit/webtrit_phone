@@ -110,7 +110,10 @@ class SignalingForegroundService : Service() {
         Log.d(TAG, "SignalingForegroundService onCreate")
         instance = this
         val callbackHandle = StorageDelegate.getCallbackDispatcher(applicationContext)
-        flutterEngineHelper = FlutterEngineHelper(applicationContext, callbackHandle, this)
+        flutterEngineHelper = FlutterEngineHelper(
+            applicationContext, callbackHandle, this,
+            mainEngineProvider = { FlutterEngineHolder.runningEngine },
+        )
         isRunning = true
     }
 

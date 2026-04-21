@@ -13,6 +13,7 @@ class FlutterEngineHelper(
     private val context: Context,
     private val callbackHandle: Long,
     private val service: android.app.Service,
+    private val mainEngineProvider: () -> FlutterEngine?,
 ) {
     var backgroundEngine: FlutterEngine? = null
         private set
@@ -92,7 +93,7 @@ class FlutterEngineHelper(
             //
             // FlutterEngine.spawn() is package-private; reflection is used to reach it
             // from outside io.flutter.embedding.engine.
-            val mainEngine = WebtritSignalingServicePlugin.mainFlutterEngine
+            val mainEngine = mainEngineProvider()
             backgroundEngine = if (mainEngine != null && mainEngine.dartExecutor.isExecutingDart) {
                 Log.d(TAG, "Spawning background engine from main engine (sibling isolate)")
                 spawnFromEngine(mainEngine, dartEntrypoint)
