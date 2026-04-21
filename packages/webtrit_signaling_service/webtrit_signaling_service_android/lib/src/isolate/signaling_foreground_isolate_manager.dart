@@ -45,6 +45,7 @@ class SignalingForegroundIsolateManager {
     this.moduleFactoryHandle = 0,
     this.isPushBound = false,
     this.pushBoundNoSubscriberGrace = const Duration(seconds: 10),
+    this.safetyReconnectGrace = const Duration(seconds: 2),
     @visibleForTesting SignalingModuleFactory? moduleFactory,
     @visibleForTesting SignalingHubFactory? hubFactory,
     @visibleForTesting VoidCallback? stopServiceOverride,
@@ -93,6 +94,15 @@ class SignalingForegroundIsolateManager {
   /// the service continues normally. Exposed as a constructor parameter so it
   /// can be overridden in tests without sleeping.
   final Duration pushBoundNoSubscriberGrace;
+
+  /// Extra time added on top of [recommendedReconnectDelay] before the safety
+  /// reconnect fires when the main isolate's sync does not arrive.
+  ///
+  /// Defaults to 2 s, which gives the main isolate's round-trip path
+  /// (startService → onStartCommand → synchronizeIsolate → Pigeon → handleStatus)
+  /// enough headroom to cancel the timer before it fires. Exposed as a
+  /// constructor parameter so tests can use small values without sleeping.
+  final Duration safetyReconnectGrace;
 
   /// Overrides handle-based [SignalingModule] creation in tests.
   final SignalingModuleFactory? _testModuleFactory;
@@ -232,6 +242,8 @@ class SignalingForegroundIsolateManager {
         _logger.info('IsolateManager: connecting...');
       case SignalingConnected():
         _logger.info('IsolateManager: connected');
+        _reconnectTimer?.cancel();
+        _reconnectTimer = null;
       case SignalingConnectionFailed(:final error, :final recommendedReconnectDelay):
         _logger.warning('IsolateManager: connection failed -- $error');
         if (!(_hub?.hasSubscribers ?? false)) {
@@ -239,8 +251,13 @@ class SignalingForegroundIsolateManager {
           // Reconnect locally; when the app opens and subscribes, the main isolate
           // takes over reconnect decisions via SignalingReconnectController.
           _scheduleReconnect(recommendedReconnectDelay);
+        } else {
+          // Main isolate handles reconnect via SignalingReconnectController.
+          // Schedule a safety fallback in case the sync round-trip (startService →
+          // onStartCommand → synchronizeIsolate → Pigeon → handleStatus) fails to
+          // reach this isolate. Cancelled by _start() when the sync arrives normally.
+          _scheduleSafetyReconnect(recommendedReconnectDelay);
         }
-      // else: delegated to SignalingReconnectController in the main isolate.
       case SignalingHandshakeReceived(:final handshake):
         _logger.info('IsolateManager: handshake lines=${handshake.lines}');
       case SignalingProtocolEvent(:final event):
@@ -253,8 +270,13 @@ class SignalingForegroundIsolateManager {
         if (!(_hub?.hasSubscribers ?? false)) {
           // No main-isolate subscriber — app is closed (persistent-service mode).
           _scheduleReconnect(recommendedReconnectDelay);
+        } else {
+          // Main isolate handles reconnect via SignalingReconnectController.
+          // Schedule a safety fallback in case the sync round-trip (startService →
+          // onStartCommand → synchronizeIsolate → Pigeon → handleStatus) fails to
+          // reach this isolate. Cancelled by _start() when the sync arrives normally.
+          _scheduleSafetyReconnect(recommendedReconnectDelay);
         }
-      // else: delegated to SignalingReconnectController in the main isolate.
       default:
         break;
     }
@@ -314,6 +336,34 @@ class SignalingForegroundIsolateManager {
       _reconnectTimer = null;
       if (_started && !(_signalingModule?.isConnected ?? false)) {
         _logger.info('IsolateManager: auto-reconnecting (persistent mode)');
+        _signalingModule?.connect();
+      }
+    });
+  }
+
+  /// Schedules a safety fallback reconnect for use when [SignalingHub.hasSubscribers]
+  /// is true (app foreground).
+  ///
+  /// The main isolate's [SignalingReconnectController] drives reconnect via a
+  /// round-trip: startService → onStartCommand → synchronizeIsolate (Pigeon) →
+  /// handleStatus → _start. If any step in that chain fails (e.g. Pigeon message
+  /// dropped on MIUI, pendingSync queue stuck), no reconnect ever fires.
+  ///
+  /// This timer fires [baseDelay] + [safetyReconnectGrace] after the disconnect,
+  /// giving the main isolate's path priority. When the normal path works, [_start]
+  /// cancels [_reconnectTimer] before this window expires. A redundant [connect]
+  /// call while the module is already connected is prevented by the
+  /// [!isConnected] guard in the timer callback.
+  void _scheduleSafetyReconnect(Duration? baseDelay) {
+    if (baseDelay == null) return;
+    final safetyDelay = baseDelay + safetyReconnectGrace;
+    _reconnectTimer?.cancel();
+    _reconnectTimer = null;
+    _logger.info('IsolateManager: scheduling safety reconnect in ${safetyDelay.inMilliseconds} ms');
+    _reconnectTimer = Timer(safetyDelay, () {
+      _reconnectTimer = null;
+      if (_started && !(_signalingModule?.isConnected ?? false)) {
+        _logger.warning('IsolateManager: safety reconnect triggered — main isolate sync did not arrive');
         _signalingModule?.connect();
       }
     });
