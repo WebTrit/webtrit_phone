@@ -32,11 +32,13 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         context = binding.applicationContext
+        mainFlutterEngine = binding.flutterEngine
         PSignalingServiceHostApi.setUp(binding.binaryMessenger, this)
         Log.d(TAG, "WebtritSignalingServicePlugin attached")
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        if (mainFlutterEngine === binding.flutterEngine) mainFlutterEngine = null
         PSignalingServiceHostApi.setUp(binding.binaryMessenger, null)
         Log.d(TAG, "WebtritSignalingServicePlugin detached")
     }
@@ -139,6 +141,12 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
 
     companion object {
         private const val TAG = "WebtritSignalingServicePlugin"
+
+        /// The main app [FlutterEngine], set in [onAttachedToEngine] and cleared in
+        /// [onDetachedFromEngine]. Used by [FlutterEngineHelper] to spawn the background
+        /// engine as a child isolate instead of creating a new root isolate.
+        @Volatile
+        internal var mainFlutterEngine: io.flutter.embedding.engine.FlutterEngine? = null
 
         /// True when [stopService] was called while [SignalingForegroundService.onCreate]
         /// had not yet run. In that window, calling [SignalingForegroundService.stop]

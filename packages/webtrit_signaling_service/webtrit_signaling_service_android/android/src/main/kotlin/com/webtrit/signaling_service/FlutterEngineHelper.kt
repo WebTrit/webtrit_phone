@@ -6,6 +6,7 @@ import io.flutter.FlutterInjector
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineGroup
 import io.flutter.embedding.engine.dart.DartExecutor.DartEntrypoint
+import io.flutter.plugin.platform.PlatformViewsController
 import io.flutter.view.FlutterCallbackInformation
 
 class FlutterEngineHelper(
@@ -69,31 +70,44 @@ class FlutterEngineHelper(
                 "library=${callbackInformation.callbackLibraryPath} " +
                 "function=${callbackInformation.callbackName}")
 
-            // Use FlutterEngineGroup so the background isolate shares the process-wide Dart
-            // VM rather than attempting to spawn an independent root isolate via
-            // executeDartCallback. On some Samsung Android 13 devices, executeDartCallback
-            // silently fails to start the Dart isolate when the main FlutterEngine is already
-            // running in the same process (multi-engine conflict at the Dart VM level).
-            // FlutterEngineGroup.createAndRunEngine uses FlutterJNI.spawn() for all but the
-            // first engine, which creates a proper child isolate that reliably starts alongside
-            // the main engine's isolate.
-            // Options.setAutomaticallyRegisterPlugins(false) keeps audio/hardware plugins from
-            // blocking the Dart VM on Android 16+ REMOTE_MESSAGING services.
             val dartEntrypoint = DartEntrypoint(
                 flutterLoader.findAppBundlePath(),
                 callbackInformation.callbackLibraryPath,
                 callbackInformation.callbackName,
             )
-            val options = FlutterEngineGroup.Options(context.applicationContext)
-                .setDartEntrypoint(dartEntrypoint)
-                .setAutomaticallyRegisterPlugins(false)
-            backgroundEngine = getOrCreateEngineGroup(context)
-                .createAndRunEngine(options)
-                .also { engine ->
-                    engine.serviceControlSurface.attachToService(service, null, true)
-                    isEngineAttached = true
-                    Log.d(TAG, "FlutterEngine initialized and attached successfully")
-                }
+
+            // If the main engine is running, spawn a child isolate from it.
+            //
+            // FlutterEngineGroup.createAndRunEngine uses FlutterJNI.spawn() only for
+            // non-first engines. For the first engine it falls back to
+            // executeDartEntrypoint, which calls Dart_LookupLibrary("package:...") on a
+            // fresh isolate group — this lookup fails in AOT mode because package URIs are
+            // not registered in a newly created group. Spawn from the main engine bypasses
+            // that lookup: it creates a sibling isolate in the existing Dart VM where the
+            // library table is already populated.
+            //
+            // When no main engine is present (e.g. push-notification cold start), the
+            // FlutterEngineGroup fallback is safe: there is no existing root isolate so
+            // executeDartEntrypoint can create one without conflict.
+            //
+            // FlutterEngine.spawn() is package-private; reflection is used to reach it
+            // from outside io.flutter.embedding.engine.
+            val mainEngine = WebtritSignalingServicePlugin.mainFlutterEngine
+            backgroundEngine = if (mainEngine != null && mainEngine.dartExecutor.isExecutingDart) {
+                Log.d(TAG, "Spawning background engine from main engine (sibling isolate)")
+                spawnFromEngine(mainEngine, dartEntrypoint)
+            } else {
+                Log.d(TAG, "No active main engine — creating via FlutterEngineGroup (root isolate)")
+                getOrCreateEngineGroup(context).createAndRunEngine(
+                    FlutterEngineGroup.Options(context.applicationContext)
+                        .setDartEntrypoint(dartEntrypoint)
+                        .setAutomaticallyRegisterPlugins(false)
+                )
+            }.also { engine ->
+                engine.serviceControlSurface.attachToService(service, null, true)
+                isEngineAttached = true
+                Log.d(TAG, "FlutterEngine initialized and attached successfully")
+            }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize FlutterEngine", e)
         }
@@ -111,6 +125,30 @@ class FlutterEngineHelper(
         backgroundEngine = null
         isEngineAttached = false
         Log.d(TAG, "FlutterEngine detached and destroyed")
+    }
+
+    private fun spawnFromEngine(parent: FlutterEngine, entrypoint: DartEntrypoint): FlutterEngine {
+        val spawnMethod = FlutterEngine::class.java.getDeclaredMethod(
+            "spawn",
+            Context::class.java,
+            DartEntrypoint::class.java,
+            String::class.java,
+            List::class.java,
+            PlatformViewsController::class.java,
+            Boolean::class.javaPrimitiveType,
+            Boolean::class.javaPrimitiveType,
+        )
+        spawnMethod.isAccessible = true
+        return spawnMethod.invoke(
+            parent,
+            context,
+            entrypoint,
+            null,  // initialRoute
+            null,  // dartEntrypointArgs
+            null,  // platformViewsController
+            false, // automaticallyRegisterPlugins
+            false, // waitForRestorationData
+        ) as FlutterEngine
     }
 
     companion object {
