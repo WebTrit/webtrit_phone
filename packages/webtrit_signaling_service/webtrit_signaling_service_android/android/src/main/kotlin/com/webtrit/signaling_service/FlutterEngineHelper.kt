@@ -4,7 +4,8 @@ import android.content.Context
 import android.util.Log
 import io.flutter.FlutterInjector
 import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.embedding.engine.dart.DartExecutor.DartCallback
+import io.flutter.embedding.engine.FlutterEngineGroup
+import io.flutter.embedding.engine.dart.DartExecutor.DartEntrypoint
 import io.flutter.view.FlutterCallbackInformation
 
 class FlutterEngineHelper(
@@ -64,28 +65,34 @@ class FlutterEngineHelper(
             }
 
             hasInvalidHandle = false
-            Log.d(TAG, "executeDartCallback: handle=$callbackHandle " +
+            Log.d(TAG, "makeEngine: handle=$callbackHandle " +
                 "library=${callbackInformation.callbackLibraryPath} " +
                 "function=${callbackInformation.callbackName}")
-            // automaticallyRegisterPlugins=false: prevents GeneratedPluginRegistrant from
-            // registering all app plugins (AudioSessionPlugin, FlutterWebRTCPlugin, etc.)
-            // on this background FGS engine. On Android 16 REMOTE_MESSAGING services,
-            // audio/hardware init in onAttachedToEngine can block the Dart VM from running
-            // the background entry point. Only the two Pigeon channels set up manually
-            // in onStartCommand are needed here.
-            // FlutterJNI is obtained via FlutterInjector so DI overrides are respected,
-            // matching the internal behaviour of the 1-arg FlutterEngine constructor.
-            backgroundEngine = FlutterEngine(context.applicationContext, null, FlutterInjector.instance().flutterJNIFactory.provideFlutterJNI(), null, false).also { engine ->
-                val dartCallback = DartCallback(
-                    context.assets,
-                    flutterLoader.findAppBundlePath(),
-                    callbackInformation,
-                )
-                engine.dartExecutor.executeDartCallback(dartCallback)
-                engine.serviceControlSurface.attachToService(service, null, true)
-                isEngineAttached = true
-                Log.d(TAG, "FlutterEngine initialized and attached successfully")
-            }
+
+            // Use FlutterEngineGroup so the background isolate shares the process-wide Dart
+            // VM rather than attempting to spawn an independent root isolate via
+            // executeDartCallback. On some Samsung Android 13 devices, executeDartCallback
+            // silently fails to start the Dart isolate when the main FlutterEngine is already
+            // running in the same process (multi-engine conflict at the Dart VM level).
+            // FlutterEngineGroup.createAndRunEngine uses FlutterJNI.spawn() for all but the
+            // first engine, which creates a proper child isolate that reliably starts alongside
+            // the main engine's isolate.
+            // Options.setAutomaticallyRegisterPlugins(false) keeps audio/hardware plugins from
+            // blocking the Dart VM on Android 16+ REMOTE_MESSAGING services.
+            val dartEntrypoint = DartEntrypoint(
+                flutterLoader.findAppBundlePath(),
+                callbackInformation.callbackName,
+            )
+            val options = FlutterEngineGroup.Options(context.applicationContext)
+                .setDartEntrypoint(dartEntrypoint)
+                .setAutomaticallyRegisterPlugins(false)
+            backgroundEngine = getOrCreateEngineGroup(context)
+                .createAndRunEngine(options)
+                .also { engine ->
+                    engine.serviceControlSurface.attachToService(service, null, true)
+                    isEngineAttached = true
+                    Log.d(TAG, "FlutterEngine initialized and attached successfully")
+                }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize FlutterEngine", e)
         }
@@ -107,5 +114,15 @@ class FlutterEngineHelper(
 
     companion object {
         private const val TAG = "FlutterEngineHelper"
+
+        @Volatile
+        private var engineGroup: FlutterEngineGroup? = null
+
+        // Double-checked locking: engineGroup is written once and only read afterwards,
+        // so the volatile + synchronized pair is safe without a full lock on every read.
+        private fun getOrCreateEngineGroup(context: Context): FlutterEngineGroup =
+            engineGroup ?: synchronized(this) {
+                engineGroup ?: FlutterEngineGroup(context.applicationContext).also { engineGroup = it }
+            }
     }
 }
