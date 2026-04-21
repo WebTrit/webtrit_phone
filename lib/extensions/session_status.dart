@@ -23,6 +23,21 @@ extension SessionStatusL10n on SessionStatus {
         return context.l10n.sessionStatus_pushNotificationServiceProblem;
     }
   }
+
+  String appBarl10n(BuildContext context) {
+    switch (this) {
+      case SessionStatus.connectivityNone:
+        return context.l10n.sessionStatus_AppBar_waitingForNetwork;
+      case SessionStatus.connectError || SessionStatus.connectIssue:
+        return context.l10n.sessionStatus_AppBar_waitingForConnection;
+      case SessionStatus.appUnregistered || SessionStatus.pushTokenError:
+        return context.l10n.sessionStatus_AppBar_disconnected;
+      case SessionStatus.inProgress:
+        return context.l10n.sessionStatus_AppBar_connecting;
+      case SessionStatus.ready:
+        return '_';
+    }
+  }
 }
 
 extension SessionStatusColor on SessionStatus {

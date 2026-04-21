@@ -1380,6 +1380,22 @@
   "@request_StatusCode": {},
   "request_StatusName": "Nome dello stato",
   "@request_StatusName": {},
+  "sessionStatus_AppBar_waitingForNetwork": "In attesa della rete...",
+  "@sessionStatus_AppBar_waitingForNetwork": {
+    "description": "Shown in the main app bar when the device has no internet connectivity and the app is waiting for network access."
+  },
+  "sessionStatus_AppBar_waitingForConnection": "In attesa della connessione...",
+  "@sessionStatus_AppBar_waitingForConnection": {
+    "description": "Shown in the main app bar when the app is trying to establish or restore a connection to backend services."
+  },
+  "sessionStatus_AppBar_disconnected": "Disconnesso",
+  "@sessionStatus_AppBar_disconnected": {
+    "description": "Shown in the main app bar when the app is disconnected from backend services."
+  },
+  "sessionStatus_AppBar_connecting": "Connessione in corso...",
+  "@sessionStatus_AppBar_connecting": {
+    "description": "Shown in the main app bar while the app is actively connecting to backend services."
+  },
   "sessionStatus_pushNotificationServiceProblem": "Problema con la configurazione del servizio di notifiche push",
   "@sessionStatus_pushNotificationServiceProblem": {},
   "session_Teardown_progressText": "Disconnessione in corso...",

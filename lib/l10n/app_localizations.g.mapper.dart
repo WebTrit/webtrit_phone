@@ -920,6 +920,14 @@ class AppLocalizationsMapper {
       'request_Id': localizations.request_Id,
       'request_StatusCode': localizations.request_StatusCode,
       'request_StatusName': localizations.request_StatusName,
+      'sessionStatus_AppBar_waitingForNetwork':
+          localizations.sessionStatus_AppBar_waitingForNetwork,
+      'sessionStatus_AppBar_waitingForConnection':
+          localizations.sessionStatus_AppBar_waitingForConnection,
+      'sessionStatus_AppBar_disconnected':
+          localizations.sessionStatus_AppBar_disconnected,
+      'sessionStatus_AppBar_connecting':
+          localizations.sessionStatus_AppBar_connecting,
       'sessionStatus_pushNotificationServiceProblem':
           localizations.sessionStatus_pushNotificationServiceProblem,
       'session_Teardown_progressText':
