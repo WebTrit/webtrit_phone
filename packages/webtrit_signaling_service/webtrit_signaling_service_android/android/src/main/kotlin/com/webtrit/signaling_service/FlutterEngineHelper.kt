@@ -95,8 +95,20 @@ class FlutterEngineHelper(
             // from outside io.flutter.embedding.engine.
             val mainEngine = mainEngineProvider()
             backgroundEngine = if (mainEngine != null && mainEngine.dartExecutor.isExecutingDart) {
-                Log.d(TAG, "Spawning background engine from main engine (sibling isolate)")
-                spawnFromEngine(mainEngine, dartEntrypoint)
+                try {
+                    Log.d(TAG, "Spawning background engine from main engine (sibling isolate)")
+                    spawnFromEngine(mainEngine, dartEntrypoint)
+                } catch (e: ReflectiveOperationException) {
+                    // spawn() is package-private and its signature may change across Flutter
+                    // upgrades. Fall back to FlutterEngineGroup so the service does not enter
+                    // a WorkManager restart loop on a signature mismatch.
+                    Log.e(TAG, "spawn() reflection failed — falling back to FlutterEngineGroup", e)
+                    getOrCreateEngineGroup(context).createAndRunEngine(
+                        FlutterEngineGroup.Options(context.applicationContext)
+                            .setDartEntrypoint(dartEntrypoint)
+                            .setAutomaticallyRegisterPlugins(false)
+                    )
+                }
             } else {
                 Log.d(TAG, "No active main engine — creating via FlutterEngineGroup (root isolate)")
                 getOrCreateEngineGroup(context).createAndRunEngine(
@@ -128,6 +140,8 @@ class FlutterEngineHelper(
         Log.d(TAG, "FlutterEngine detached and destroyed")
     }
 
+    // Verified against flutter_embedding 3.32.4 (FlutterEngine.java).
+    // Re-verify after any Flutter SDK upgrade: search for 'fun spawn' in FlutterEngine.java.
     private fun spawnFromEngine(parent: FlutterEngine, entrypoint: DartEntrypoint): FlutterEngine {
         val spawnMethod = FlutterEngine::class.java.getDeclaredMethod(
             "spawn",
@@ -146,15 +160,24 @@ class FlutterEngineHelper(
             entrypoint,
             null,                        // initialRoute
             null,                        // dartEntrypointArgs
-            PlatformViewsController(),   // must be non-null — FlutterEngine constructor dereferences it
+            // Must be non-null: FlutterEngine constructor calls getRegistry() on this at
+            // line 392 without a null check. This instance is intentionally not attached
+            // to any surface — the background engine runs headless inside a Service.
+            PlatformViewsController(),
             false,                       // automaticallyRegisterPlugins
             false,                       // waitForRestorationData
-        ) as FlutterEngine
+        ) as? FlutterEngine
+            ?: throw IllegalStateException("FlutterEngine.spawn() returned null")
     }
 
     companion object {
         private const val TAG = "FlutterEngineHelper"
 
+        // Process-lifetime singleton: FlutterEngineGroup is designed to be reused across
+        // multiple createAndRunEngine calls. Persisting it means repeated FGS restarts
+        // (crashes, WorkManager retries) share the same group, which is correct — each
+        // call creates a new engine/isolate inside the existing group rather than
+        // re-initialising the Dart VM from scratch.
         @Volatile
         private var engineGroup: FlutterEngineGroup? = null
 

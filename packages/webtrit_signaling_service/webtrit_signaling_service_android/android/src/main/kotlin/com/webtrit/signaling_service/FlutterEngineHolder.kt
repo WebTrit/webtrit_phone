@@ -10,6 +10,13 @@ import io.flutter.embedding.engine.FlutterEngine
 /// Any engine — main UI engine, push-notification handler engine, or any other —
 /// that registers the plugin qualifies. The only requirement at spawn time is
 /// that [FlutterEngine.dartExecutor.isExecutingDart] returns true.
+///
+/// Thread safety: [runningEngine] is read and written only from
+/// [WebtritSignalingServicePlugin.onAttachedToEngine] /
+/// [WebtritSignalingServicePlugin.onDetachedFromEngine], both of which run on
+/// the main thread. [FlutterEngineHelper.initializeFlutterEngine] also reads it
+/// on the main thread (posted via Handler). @Volatile covers the rare case
+/// where another thread reads before the main-thread write is visible.
 internal object FlutterEngineHolder {
     @Volatile
     var runningEngine: FlutterEngine? = null
