@@ -139,6 +139,15 @@ class SignalingForegroundService : Service() {
                 // Send a sync so the FGS Dart isolate can reconnect the WebSocket if it
                 // dropped while the app was backgrounded (e.g. screen unlock in PUSH_BOUND).
                 // The watchdog is not re-armed: the isolate is already initialised.
+                //
+                // Reset _syncSucceeded so timer-based retries work correctly.
+                // After a successful initial sync _syncSucceeded == true, which causes
+                // every retry runnable to evaluate !_syncSucceeded == false and return
+                // immediately — leaving a single Pigeon message as the only attempt.
+                // If that message is dropped (e.g. under memory pressure on MIUI) no
+                // reconnect fires. Resetting here restores the full retry cycle.
+                _syncSucceeded = false
+                cancelSyncRetries()
                 synchronizeIsolate()
             }
             return if (StorageDelegate.isPushBound(applicationContext)) START_NOT_STICKY else START_STICKY
