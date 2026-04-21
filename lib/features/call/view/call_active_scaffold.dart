@@ -187,6 +187,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                           children: [
                                             for (final activeCall in activeCalls)
                                               CallInfo(
+                                                key: ValueKey(activeCall.callId),
                                                 transfering: activeTransfer is Transfering,
                                                 requestToAttendedTransfer: false,
                                                 inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
