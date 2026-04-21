@@ -35,7 +35,82 @@ sealed class NotifyEvent extends CallEvent {
   }
 }
 
-enum ReferNotifyState { trying, ok, unknown }
+// ---------------------------------------------------------------------------
+// ReferNotifyState — sealed class preserving the SIP response code
+// ---------------------------------------------------------------------------
+
+sealed class ReferNotifyState {
+  const ReferNotifyState();
+
+  factory ReferNotifyState.fromContent(String content) {
+    final match = RegExp(r'SIP/2\.0\s+(\d{3})\s*(.*)').firstMatch(content.trim());
+    if (match == null) return const ReferFailed(sipCode: null, reason: null);
+
+    final code = int.parse(match.group(1)!);
+    final reason = match.group(2)!.trim();
+
+    return switch (code) {
+      >= 100 && < 200 => ReferProvisional(sipCode: code, reason: reason),
+      >= 200 && < 300 => const ReferAccepted(),
+      _ => ReferFailed(sipCode: code, reason: reason),
+    };
+  }
+}
+
+/// Transfer is in progress — target is ringing (1xx provisional).
+final class ReferProvisional extends ReferNotifyState {
+  const ReferProvisional({required this.sipCode, required this.reason});
+
+  final int sipCode;
+  final String reason;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is ReferProvisional && sipCode == other.sipCode && reason == other.reason;
+
+  @override
+  int get hashCode => Object.hash(sipCode, reason);
+
+  @override
+  String toString() => 'ReferProvisional($sipCode $reason)';
+}
+
+/// Transfer succeeded — target accepted (2xx).
+final class ReferAccepted extends ReferNotifyState {
+  const ReferAccepted();
+
+  @override
+  bool operator ==(Object other) => other is ReferAccepted;
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() => 'ReferAccepted()';
+}
+
+/// Transfer failed — target rejected (3xx–6xx) or content was malformed.
+/// [sipCode] is null only when the NOTIFY body could not be parsed.
+final class ReferFailed extends ReferNotifyState {
+  const ReferFailed({required this.sipCode, required this.reason});
+
+  final int? sipCode;
+  final String? reason;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is ReferFailed && sipCode == other.sipCode && reason == other.reason;
+
+  @override
+  int get hashCode => Object.hash(sipCode, reason);
+
+  @override
+  String toString() => sipCode != null ? 'ReferFailed($sipCode $reason)' : 'ReferFailed(malformed)';
+}
+
+// ---------------------------------------------------------------------------
+// ReferNotifyEvent
+// ---------------------------------------------------------------------------
 
 class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
   const ReferNotifyEvent({
@@ -55,20 +130,16 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
     'notify': notifyValue,
     if (subscriptionState != null) 'subscription_state': subscriptionState!.name,
     'content': switch (state) {
-      ReferNotifyState.trying => 'SIP/2.0 100 Trying',
-      ReferNotifyState.ok => 'SIP/2.0 200 OK',
-      ReferNotifyState.unknown => '',
+      ReferProvisional(:final sipCode, :final reason) => 'SIP/2.0 $sipCode $reason',
+      ReferAccepted() => 'SIP/2.0 200 OK',
+      ReferFailed(:final sipCode?, :final reason?) => 'SIP/2.0 $sipCode $reason',
+      ReferFailed() => '',
     },
   };
 
   @override
   factory ReferNotifyEvent.fromJson(Map<String, dynamic> json) {
     final contentStr = json['content'] as String;
-    final state = switch (contentStr) {
-      String s when s.startsWith('SIP/2.0 100') => ReferNotifyState.trying,
-      String s when s.contains('200 OK') => ReferNotifyState.ok,
-      _ => ReferNotifyState.unknown,
-    };
 
     return ReferNotifyEvent(
       transaction: json['transaction'],
@@ -77,7 +148,7 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
       subscriptionState: json['subscription_state'] != null
           ? SubscriptionState.values.byName(json['subscription_state'])
           : null,
-      state: state,
+      state: ReferNotifyState.fromContent(contentStr),
     );
   }
 
@@ -90,6 +161,10 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
         'subscriptionState: $subscriptionState, state: $state}';
   }
 }
+
+// ---------------------------------------------------------------------------
+// UnknownNotifyEvent
+// ---------------------------------------------------------------------------
 
 class UnknownNotifyEvent extends NotifyEvent with EquatableMixin {
   const UnknownNotifyEvent({

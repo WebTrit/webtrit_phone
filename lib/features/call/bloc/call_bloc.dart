@@ -1433,20 +1433,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.fine('_CallSignalingEventNotifyRefer: $event');
     if (event.subscriptionState != SubscriptionState.terminated) return;
 
-    if (event.state == ReferNotifyState.ok) {
-      // Transfer succeeded — end the original call (A is now connected via C)
-      if (state.activeCalls.any((it) => it.callId == event.callId)) add(CallControlEvent.ended(event.callId));
-    } else {
-      // Transfer failed (e.g. C declined) — restore the original call
-      final callId = event.callId;
-      if (state.activeCalls.any((it) => it.callId == callId)) {
-        _logger.warning(
-          '__onCallSignalingEventNotifyRefer: transfer failed (state=${event.state}), restoring call $callId',
-        );
-        emit(state.copyWithMappedActiveCall(callId, (activeCall) => activeCall.copyWith(transfer: null)));
-        await callkeep.setHeld(callId, onHold: false);
-        submitNotification(BlindTransferFailedNotification());
-      }
+    switch (event.state) {
+      case ReferAccepted():
+        if (state.activeCalls.any((it) => it.callId == event.callId)) {
+          add(CallControlEvent.ended(event.callId));
+        }
+      case ReferFailed():
+        final callId = event.callId;
+        if (state.activeCalls.any((it) => it.callId == callId)) {
+          _logger.warning(
+            '__onCallSignalingEventNotifyRefer: transfer failed (${event.state}), restoring call $callId',
+          );
+          emit(state.copyWithMappedActiveCall(callId, (activeCall) => activeCall.copyWith(transfer: null)));
+          await callkeep.setHeld(callId, onHold: false);
+          submitNotification(BlindTransferFailedNotification());
+        }
+      case ReferProvisional():
+        break;
     }
   }
 
