@@ -1213,6 +1213,10 @@ class AppLocalizationsUk extends AppLocalizations {
       'Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ';
 
   @override
+  String get notifications_errorSnackBar_blindTransferFailed =>
+      'Переадресація не вдалась, повертаємо до активного дзвінка';
+
+  @override
   String get notifications_errorSnackBar_appOffline => 'Ваш застосунок зараз офлайн.';
 
   @override

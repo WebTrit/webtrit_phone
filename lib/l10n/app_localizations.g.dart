@@ -2232,6 +2232,12 @@ abstract class AppLocalizations {
   /// **'You are already on the line with the recipient you are trying to blind transfer to'**
   String get notifications_errorSnackBar_activeLineBlindTransferWarning;
 
+  /// Shown when a blind transfer fails because the transfer target declined. The original call is restored and the user is returned to the active call screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer failed, returning to active call'**
+  String get notifications_errorSnackBar_blindTransferFailed;
+
   /// Shown in a notification or snackbar when the application is offline. Condition: the app loses connection to the server or network and cannot perform online actions.
   ///
   /// In en, this message translates to:

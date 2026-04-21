@@ -1195,6 +1195,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'You are already on the line with the recipient you are trying to blind transfer to';
 
   @override
+  String get notifications_errorSnackBar_blindTransferFailed => 'Transfer failed, returning to active call';
+
+  @override
   String get notifications_errorSnackBar_appOffline => 'Your application is currently offline';
 
   @override
