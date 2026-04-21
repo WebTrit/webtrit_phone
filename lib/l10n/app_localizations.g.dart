@@ -2262,6 +2262,12 @@ abstract class AppLocalizations {
   /// **'Cannot establish the call, please try again later'**
   String get notifications_errorSnackBar_callNegotiationTimeout;
 
+  /// Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot establish the call, please try again later'**
+  String get notifications_errorSnackBar_generalUnableToCall;
+
   /// Shown in a notification or snackbar when the user tries to start a call but the selected line is already busy. Context: occurs at call initiation when no free channel is available on the current line or account; advise the user to wait and retry.
   ///
   /// In en, this message translates to:
@@ -3053,6 +3059,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Status name'**
   String get request_StatusName;
+
+  /// Shown in the main app bar when the device has no internet connectivity and the app is waiting for network access.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for network...'**
+  String get sessionStatus_AppBar_waitingForNetwork;
+
+  /// Shown in the main app bar when the app is trying to establish or restore a connection to backend services.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for connection...'**
+  String get sessionStatus_AppBar_waitingForConnection;
+
+  /// Shown in the main app bar when the app is disconnected from backend services.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get sessionStatus_AppBar_disconnected;
+
+  /// Shown in the main app bar while the app is actively connecting to backend services.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting...'**
+  String get sessionStatus_AppBar_connecting;
 
   /// No description provided for @sessionStatus_pushNotificationServiceProblem.
   ///

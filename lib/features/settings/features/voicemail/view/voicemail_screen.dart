@@ -56,7 +56,7 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
               }
               // Check if the user is loading the list of voicemails and there is an error
               if (state.isLoadedWithError) {
-                return FailureRetryView(errorNotification: state.error!, onRetry: _onRetryFetch);
+                return FailureRetryView(onRetry: _onRetryFetch);
               }
               // Check if the user is loading the list of voicemails and there are items available
               return Stack(

@@ -24,7 +24,7 @@ class VoicemailState with _$VoicemailState, DiagnosticableTreeMixin {
   final List<String> selectedVoicemailsIds;
 
   @override
-  final DefaultErrorNotification? error;
+  final Object? error;
 
   /// Status to show when the user is refreshing or updating the list of voicemails.
   bool get isRefreshing => status == VoicemailStatus.loading && items.isNotEmpty;

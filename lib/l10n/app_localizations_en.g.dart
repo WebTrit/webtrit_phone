@@ -1211,6 +1211,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callNegotiationTimeout => 'Cannot establish the call, please try again later';
 
   @override
+  String get notifications_errorSnackBar_generalUnableToCall => 'Cannot establish the call, please try again later';
+
+  @override
   String get notifications_errorSnackBar_callServiceBusyLine =>
       'Cannot make the call right now because the line is busy. Please try again later.';
 
@@ -1647,6 +1650,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get request_StatusName => 'Status name';
+
+  @override
+  String get sessionStatus_AppBar_waitingForNetwork => 'Waiting for network...';
+
+  @override
+  String get sessionStatus_AppBar_waitingForConnection => 'Waiting for connection...';
+
+  @override
+  String get sessionStatus_AppBar_disconnected => 'Disconnected';
+
+  @override
+  String get sessionStatus_AppBar_connecting => 'Connecting...';
 
   @override
   String get sessionStatus_pushNotificationServiceProblem => 'Problem with configuration push notification service';

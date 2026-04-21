@@ -1019,6 +1019,10 @@
   "@notifications_errorSnackBar_callNegotiationTimeout": {
     "description": "Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server."
   },
+  "notifications_errorSnackBar_generalUnableToCall": "Cannot establish the call, please try again later",
+  "@notifications_errorSnackBar_generalUnableToCall": {
+    "description": "Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server."
+  },
   "notifications_errorSnackBar_callServiceBusyLine": "Cannot make the call right now because the line is busy. Please try again later.",
   "@notifications_errorSnackBar_callServiceBusyLine": {
     "description": "Shown in a notification or snackbar when the user tries to start a call but the selected line is already busy. Context: occurs at call initiation when no free channel is available on the current line or account; advise the user to wait and retry."
@@ -1376,6 +1380,22 @@
   "@request_StatusCode": {},
   "request_StatusName": "Status name",
   "@request_StatusName": {},
+  "sessionStatus_AppBar_waitingForNetwork": "Waiting for network...",
+  "@sessionStatus_AppBar_waitingForNetwork": {
+    "description": "Shown in the main app bar when the device has no internet connectivity and the app is waiting for network access."
+  },
+  "sessionStatus_AppBar_waitingForConnection": "Waiting for connection...",
+  "@sessionStatus_AppBar_waitingForConnection": {
+    "description": "Shown in the main app bar when the app is trying to establish or restore a connection to backend services."
+  },
+  "sessionStatus_AppBar_disconnected": "Disconnected",
+  "@sessionStatus_AppBar_disconnected": {
+    "description": "Shown in the main app bar when the app is disconnected from backend services."
+  },
+  "sessionStatus_AppBar_connecting": "Connecting...",
+  "@sessionStatus_AppBar_connecting": {
+    "description": "Shown in the main app bar while the app is actively connecting to backend services."
+  },
   "sessionStatus_pushNotificationServiceProblem": "Problem with configuration push notification service",
   "@sessionStatus_pushNotificationServiceProblem": {},
   "session_Teardown_progressText": "Signing out...",

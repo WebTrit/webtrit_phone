@@ -63,7 +63,6 @@ class AppShell extends StatelessWidget {
   void _showNotificationSnackBar(BuildContext context, Notification notification) {
     switch (notification) {
       case ErrorNotification():
-        context.showErrorSnackBar(notification.l10n(context), action: notification.action(context));
       case MessageNotification():
         context.showSnackBar(notification.l10n(context), action: notification.action(context));
       case SuccessNotification():

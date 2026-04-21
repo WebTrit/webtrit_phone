@@ -1225,6 +1225,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Impossibile stabilire la chiamata, riprovare più tardi';
 
   @override
+  String get notifications_errorSnackBar_generalUnableToCall =>
+      'Impossibile stabilire la chiamata, riprovare più tardi';
+
+  @override
   String get notifications_errorSnackBar_callServiceBusyLine =>
       'Impossibile effettuare la chiamata in questo momento perché la linea è occupata. Riprova più tardi.';
 
@@ -1666,6 +1670,18 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get request_StatusName => 'Nome dello stato';
+
+  @override
+  String get sessionStatus_AppBar_waitingForNetwork => 'In attesa della rete...';
+
+  @override
+  String get sessionStatus_AppBar_waitingForConnection => 'In attesa della connessione...';
+
+  @override
+  String get sessionStatus_AppBar_disconnected => 'Disconnesso';
+
+  @override
+  String get sessionStatus_AppBar_connecting => 'Connessione in corso...';
 
   @override
   String get sessionStatus_pushNotificationServiceProblem =>

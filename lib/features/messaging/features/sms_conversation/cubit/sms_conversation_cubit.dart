@@ -8,17 +8,17 @@ import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 
 part 'sms_conversation_state.dart';
 
 final _logger = Logger('SmsConversationCubit');
 
 class SmsConversationCubit extends Cubit<SmsConversationState> {
-  SmsConversationCubit(this._creds, this._client, this._repository, this._outboxRepository, this._submitNotification)
+  SmsConversationCubit(this._creds, this._client, this._repository, this._outboxRepository)
     : super(SmsConversationState.init(_creds)) {
     _init();
   }
@@ -28,7 +28,6 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
   final PhoenixSocket _client;
   final SmsRepository _repository;
   final SmsOutboxRepository _outboxRepository;
-  final Function(Notification) _submitNotification;
 
   StreamSubscription? _chatUpdateSub;
   StreamSubscription? _chatRemoveSub;
@@ -104,7 +103,8 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
       emit(SmsConversationState.left(_creds));
     } catch (e, s) {
       _logger.warning('deleteConversation failed', e, s);
-      _submitNotification(DefaultErrorNotification(e));
+      // _submitNotification(DefaultErrorNotification(e));
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'SmsConversationCubit.deleteConversation');
       _releaseBusy();
     }
   }
@@ -148,7 +148,8 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     } on Exception catch (e, s) {
       _releaseHistoryFetching();
       _logger.warning('fetchHistory failed', e, s);
-      _submitNotification(DefaultErrorNotification(e));
+      // _submitNotification(DefaultErrorNotification(e));
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'SmsConversationCubit.fetchHistory');
     }
   }
 

@@ -7,28 +7,22 @@ import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 
 part 'conversation_state.dart';
 
 final _logger = Logger('ConversationCubit');
 
 class ConversationCubit extends Cubit<ConversationState> {
-  ConversationCubit(
-    ChatCredentials credentials,
-    this._client,
-    this._chatsRepository,
-    this._outboxRepository,
-    this._submitNotification,
-  ) : super(ConversationState.init(credentials));
+  ConversationCubit(ChatCredentials credentials, this._client, this._chatsRepository, this._outboxRepository)
+    : super(ConversationState.init(credentials));
 
   final PhoenixSocket _client;
   final ChatsRepository _chatsRepository;
   final ChatsOutboxRepository _outboxRepository;
-  final Function(Notification) _submitNotification;
 
   StreamSubscription? _chatUpdateSub;
   StreamSubscription? _chatRemoveSub;
@@ -118,7 +112,8 @@ class ConversationCubit extends Cubit<ConversationState> {
       emit(ConversationState.left(state.credentials));
     } catch (e, s) {
       _logger.warning('deleteChat failed', e, s);
-      _submitNotification(DefaultErrorNotification(e));
+      // _submitNotification(DefaultErrorNotification(e));
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.deleteChat');
       _releaseBusy();
     }
   }
@@ -135,7 +130,8 @@ class ConversationCubit extends Cubit<ConversationState> {
       emit(ConversationState.left(state.credentials));
     } catch (e, s) {
       _logger.warning('leaveGroup failed', e, s);
-      _submitNotification(DefaultErrorNotification(e));
+      // _submitNotification(DefaultErrorNotification(e));
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.leaveGroup');
       _releaseBusy();
     }
   }
@@ -151,7 +147,8 @@ class ConversationCubit extends Cubit<ConversationState> {
       await channel.addGroupMember(userId);
     } catch (e, s) {
       _logger.warning('addGroupMember failed', e, s);
-      _submitNotification(DefaultErrorNotification(e));
+      // _submitNotification(DefaultErrorNotification(e));
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.addGroupMember');
     } finally {
       _releaseBusy();
     }
@@ -168,7 +165,8 @@ class ConversationCubit extends Cubit<ConversationState> {
       await channel.removeGroupMember(userId);
     } catch (e, s) {
       _logger.warning('removeGroupMember failed', e, s);
-      _submitNotification(DefaultErrorNotification(e));
+      // _submitNotification(DefaultErrorNotification(e));
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.removeGroupMember');
     } finally {
       _releaseBusy();
     }
@@ -185,7 +183,8 @@ class ConversationCubit extends Cubit<ConversationState> {
       await channel.setGroupModerator(userId, isModerator);
     } catch (e, s) {
       _logger.warning('setGroupModerator failed', e, s);
-      _submitNotification(DefaultErrorNotification(e));
+      // _submitNotification(DefaultErrorNotification(e));
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.setGroupModerator');
     } finally {
       _releaseBusy();
     }
@@ -202,7 +201,8 @@ class ConversationCubit extends Cubit<ConversationState> {
       await channel.setGroupName(name);
     } catch (e, s) {
       _logger.warning('setGroupName failed', e, s);
-      _submitNotification(DefaultErrorNotification(e));
+      // _submitNotification(DefaultErrorNotification(e));
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.setGroupName');
     } finally {
       _releaseBusy();
     }
@@ -247,7 +247,8 @@ class ConversationCubit extends Cubit<ConversationState> {
     } on Exception catch (e, s) {
       _releaseHistoryFetching();
       _logger.warning('fetchHistory failed', e, s);
-      _submitNotification(DefaultErrorNotification(e));
+      // _submitNotification(DefaultErrorNotification(e));
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.fetchHistory');
     }
   }
 

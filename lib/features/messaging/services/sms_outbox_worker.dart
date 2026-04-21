@@ -6,6 +6,7 @@ import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 
 final _logger = Logger('SmsOutboxWorker');
 
@@ -15,12 +16,11 @@ final _logger = Logger('SmsOutboxWorker');
 /// ensuring that they are delivered to their intended recipients. It handles
 /// retries and error management to ensure reliable message delivery.
 class SmsOutboxWorker {
-  SmsOutboxWorker(this._client, this._smsRepository, this._outboxRepository, this._onError);
+  SmsOutboxWorker(this._client, this._smsRepository, this._outboxRepository);
 
   final PhoenixSocket _client;
   final SmsRepository _smsRepository;
   final SmsOutboxRepository _outboxRepository;
-  final Function(Object) _onError;
 
   bool _disposed = false;
 
@@ -80,11 +80,10 @@ class SmsOutboxWorker {
       await _outboxRepository.deleteOutboxMessage(entry.idKey);
       _logger.info('Processed new message: ${message.id}');
     } catch (e, s) {
-      _logger.severe('Error processing new dialog message, attempt: ${entry.sendAttempts}', e, s);
+      _logger.warning('Error processing new dialog message, attempt: ${entry.sendAttempts}', e, s);
       if (entry.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxMessage(entry.idKey);
-        _logger.warning('Send attempts exceeded for dialog message: ${entry.idKey}');
-        _onError(e);
+        _handleError(e, s, '_processNewMessage.afterAttemptsExceeded');
       } else {
         await _outboxRepository.upsertOutboxMessage(entry.incAttempt());
       }
@@ -98,24 +97,23 @@ class SmsOutboxWorker {
   /// [messageDelete] The entry containing the details of the message to be deleted.
   ///
   /// Returns a [Future] that completes when the message deletion process is finished.
-  Future _processMessageDelete(SmsOutboxMessageDeleteEntry messageDelete) async {
+  Future _processMessageDelete(SmsOutboxMessageDeleteEntry entry) async {
     try {
-      final channel = _client.getSmsConversationChannel(messageDelete.conversationId);
+      final channel = _client.getSmsConversationChannel(entry.conversationId);
       if (channel == null) return;
       if (channel.state != PhoenixChannelState.joined) return;
 
-      final message = await channel.deleteSmsMessage(messageDelete);
+      final message = await channel.deleteSmsMessage(entry);
       await _smsRepository.upsertMessage(message);
-      await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
+      await _outboxRepository.deleteOutboxMessageDelete(entry.id);
       _logger.info('Processed delete message: ${message.id}');
     } catch (e, s) {
-      _logger.severe('Error processing message delete, attempt: ${messageDelete.sendAttempts}', e, s);
-      if (messageDelete.sendAttempts > 5) {
-        await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
-        _logger.warning('Send attempts exceeded for delete message: ${messageDelete.idKey}');
-        _onError(e);
+      _logger.warning('Error processing message delete, attempt: ${entry.sendAttempts}', e, s);
+      if (entry.sendAttempts > 5) {
+        await _outboxRepository.deleteOutboxMessageDelete(entry.id);
+        _handleError(e, s, '_processMessageDelete.afterAttemptsExceeded');
       } else {
-        await _outboxRepository.upsertOutboxMessageDelete(messageDelete.incAttempts());
+        await _outboxRepository.upsertOutboxMessageDelete(entry.incAttempts());
       }
     }
   }
@@ -140,14 +138,18 @@ class SmsOutboxWorker {
       await _outboxRepository.deleteOutboxReadCursor(readCursor.conversationId);
       _logger.info('Processed read cursor: ${cursor.conversationId}');
     } catch (e, s) {
-      _logger.severe('Error processing read cursor, attempt: ${readCursor.sendAttempts}', e, s);
+      _logger.warning('Error processing read cursor, attempt: ${readCursor.sendAttempts}', e, s);
       if (readCursor.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxReadCursor(readCursor.conversationId);
-        _logger.warning('Send attempts exceeded for read cursor: ${readCursor.conversationId}');
-        _onError(e);
+        _handleError(e, s, '_processReadCursor.afterAttemptsExceeded');
       } else {
         await _outboxRepository.upsertOutboxReadCursor(readCursor.incAttempts());
       }
     }
+  }
+
+  void _handleError(Object error, StackTrace stack, String context) {
+    _logger.severe('[$context] An error occurred: $error', error, stack);
+    CrashlyticsUtils.recordError(error, stack: stack, reason: 'SmsOutboxWorker: $context');
   }
 }

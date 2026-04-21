@@ -5,8 +5,9 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
+@Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 final class LoginErrorNotification extends DefaultErrorNotification {
-  const LoginErrorNotification(super.error);
+  LoginErrorNotification(super.error);
 
   @override
   String l10n(BuildContext context) {
@@ -41,7 +42,61 @@ final class LoginErrorNotification extends DefaultErrorNotification {
   }
 }
 
-final class SupportedLoginTypeMissedErrorNotification extends ErrorNotification {
+final class LoginOtpNotFoundNotification extends MessageNotification {
+  const LoginOtpNotFoundNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailureOtpNotFoundError;
+  }
+}
+
+final class LoginIncorrectOtpCodeNotification extends MessageNotification {
+  const LoginIncorrectOtpCodeNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailureIncorrectOtpCodeError;
+  }
+}
+
+final class LoginOtpExpiredNotification extends MessageNotification {
+  const LoginOtpExpiredNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailureOtpExpiredError;
+  }
+}
+
+final class LoginOtpVerificationAttemptsExceededNotification extends MessageNotification {
+  const LoginOtpVerificationAttemptsExceededNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailureOtpVerificationAttemptsExceededError;
+  }
+}
+
+final class LoginOtpAlreadyVerifiedNotification extends MessageNotification {
+  const LoginOtpAlreadyVerifiedNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailureOtpAlreadyVerifiedError;
+  }
+}
+
+final class LoginPhoneNotFoundNotification extends MessageNotification {
+  const LoginPhoneNotFoundNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailurePhoneNotFoundError;
+  }
+}
+
+final class SupportedLoginTypeMissedErrorNotification extends MessageNotification {
   const SupportedLoginTypeMissedErrorNotification();
 
   @override
@@ -50,7 +105,7 @@ final class SupportedLoginTypeMissedErrorNotification extends ErrorNotification 
   }
 }
 
-final class CoreVersionUnsupportedErrorNotification extends ErrorNotification {
+final class CoreVersionUnsupportedErrorNotification extends MessageNotification {
   const CoreVersionUnsupportedErrorNotification(this.actual, this.supportedConstraint);
 
   final String actual;

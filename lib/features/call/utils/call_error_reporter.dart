@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
+import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
 
 import '../models/notification.dart';
-import 'pc_exceptions.dart';
 import 'user_media_builder.dart';
 
 final _logger = Logger('CallBloc:SignalingErrorReporter');
@@ -40,47 +38,22 @@ class DefaultCallErrorReporter implements CallErrorReporter {
   final void Function(Notification) submitNotification;
 
   @override
-  void handle(Object error, StackTrace? stack, String context) {
-    // Always log the error with context and stack trace
-    _logger.warning('[$context] $error', error, stack);
-
-    if (error is WebtritSignalingTransactionTerminateByDisconnectException) {
-      final code = SignalingDisconnectCode.values.byCode(error.closeCode ?? SignalingDisconnectCode.unmappedCode.code);
-      if (_shouldNotifyOnDisconnect(code)) {
-        submitNotification(DefaultErrorNotification(error));
-      }
-      return;
-    }
-
+  void handle(Object error, StackTrace? stack, String context, {bool recordError = true}) {
     // TODO: implement signaling request response mechanism and handle request specific result instead of catching global errors
     // In such case it will be just result of OutgoingCallRequest
     if (error is WebtritSignalingErrorException && error.code == 503 && error.reason.contains('busy line')) {
       submitNotification(const CallServiceBusyLineNotification());
       return;
     }
-
     if (error is UserMediaError) {
       submitNotification(const CallUserMediaErrorNotification());
-    } else if (error is SDPConfigurationError) {
-      submitNotification(const CallSdpConfigurationErrorNotification());
-    } else if (error is TimeoutException) {
-      submitNotification(const CallNegotiationTimeoutNotification());
-    } else {
-      submitNotification(DefaultErrorNotification(error));
+      return;
     }
-  }
 
-  /// Determines whether a disconnect code should trigger user notification.
-  ///
-  /// Only specific disconnect reasons are considered important enough to notify the user.
-  bool _shouldNotifyOnDisconnect(SignalingDisconnectCode code) {
-    return switch (code) {
-      SignalingDisconnectCode.requestExecuteError => true,
-      SignalingDisconnectCode.controllerBillingError => true,
-      SignalingDisconnectCode.controllerBillingAccountMissedError => true,
-      SignalingDisconnectCode.controllerBillingAccountCredentialsMissedError => true,
-      SignalingDisconnectCode.signalingMessageError => true,
-      _ => false,
-    };
+    _logger.severe('[$context] An error occurred: $error', error, stack);
+    if (recordError) {
+      // Record the error in Crashlytics or any other error tracking service
+      CrashlyticsUtils.recordError(error, stack: stack, reason: 'CallErrorReporter: $context');
+    }
   }
 }

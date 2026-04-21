@@ -7,11 +7,11 @@ import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:phoenix_socket/phoenix_socket.dart';
 
-import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/features/messaging/extensions/phoenix_socket.dart';
 import 'package:webtrit_phone/features/messaging/services/services.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 
 // TODO:
 // -  maybe rename to "messaging connection bloc" and place /cubits and /bloc together
@@ -35,7 +35,6 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     this._smsRepository,
     this._smsOutboxRepository,
     this._sessionRepository,
-    this._submitNotification,
   ) : super(MessagingState.initial(_sessionRepository.getCurrent().userId, _client, _messagingConfig)) {
     on<Connect>(_connect);
     on<Refresh>(_refresh);
@@ -56,7 +55,6 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
   final SmsRepository _smsRepository;
   final SmsOutboxRepository _smsOutboxRepository;
   final SessionRepository _sessionRepository;
-  final Function(Notification) _submitNotification;
   final List<StreamSubscription> _subs = [];
 
   ChatsSyncWorker? _chatsSyncWorker;
@@ -110,21 +108,21 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
       // Init workers
       if (_messagingConfig.coreChatsSupport) {
-        _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository, _onEventError)..init();
-        _chatsOutboxWorker ??= ChatsOutboxWorker(_client, _chatsRepository, _chatsOutboxRepository, _onEventError)
-          ..init();
+        _chatsSyncWorker ??= ChatsSyncWorker(_client, _chatsRepository)..init();
+        _chatsOutboxWorker ??= ChatsOutboxWorker(_client, _chatsRepository, _chatsOutboxRepository)..init();
       }
       if (_messagingConfig.coreSmsSupport) {
-        _smsSyncWorker ??= SmsSyncWorker(_client, _smsRepository, _onEventError)..init();
-        _smsOutboxWorker ??= SmsOutboxWorker(_client, _smsRepository, _smsOutboxRepository, _onEventError)..init();
+        _smsSyncWorker ??= SmsSyncWorker(_client, _smsRepository)..init();
+        _smsOutboxWorker ??= SmsOutboxWorker(_client, _smsRepository, _smsOutboxRepository)..init();
       }
 
       emit(state.copyWith(status: ConnectionStatus.connected));
     } on Exception catch (e, s) {
       _client.dispose();
       emit(state.copyWith(status: ConnectionStatus.error, error: e));
-      _logger.warning('_onClientConnected', e, s);
-      _submitNotification(DefaultErrorNotification(e));
+      _logger.severe('_onClientConnected', e, s);
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'MessagingBloc._onClientConnected');
+      // _submitNotification(DefaultErrorNotification(e));
     }
   }
 
@@ -142,14 +140,6 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     _disposeWorkers();
     _client.dispose();
     emit(state.copyWith(status: ConnectionStatus.initial));
-  }
-
-  void _onEventError(Object error) {
-    if (_errorNotificationFilter(error)) {
-      _submitNotification(DefaultErrorNotification(error));
-    } else {
-      _logger.info('Event error notification filtered out');
-    }
   }
 
   Future<void> wipeData() async {
@@ -186,14 +176,14 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
 
 /// Filters out specific error notifications based on their type and code.
 /// To skip notification displaying
-bool _errorNotificationFilter(Object error) {
-  if (error is MessagingSocketException) {
-    switch (error.code) {
-      case kPhxSocketClosedCode:
-        return false;
-      case kPhxChannelClosedCode:
-        return false;
-    }
-  }
-  return true;
-}
+// bool _errorNotificationFilter(Object error) {
+//   if (error is MessagingSocketException) {
+//     switch (error.code) {
+//       case kPhxSocketClosedCode:
+//         return false;
+//       case kPhxChannelClosedCode:
+//         return false;
+//     }
+//   }
+//   return true;
+// }

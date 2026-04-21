@@ -57,8 +57,6 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
     } catch (e, stackTrace) {
       _logger.warning('_onStarted', e, stackTrace);
 
-      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
-
       if (emit.isDone) return;
 
       emit(state.copyWith(progress: false));

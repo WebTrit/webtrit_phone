@@ -54,7 +54,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(const CallControlEvent.started(video: false));
-    registerFallbackValue(const NotificationsSubmitted(CallUndefinedLineNotification()));
+    registerFallbackValue(const NotificationsSubmitted(GeneralUnableToCallNotification()));
   });
 
   setUp(() {
@@ -92,7 +92,7 @@ void main() {
 
         final captured = verify(() => notificationsBloc.add(captureAny())).captured.single;
         expect(captured, isA<NotificationsSubmitted>());
-        expect((captured as NotificationsSubmitted).notification, isA<CallUndefinedLineNotification>());
+        expect((captured as NotificationsSubmitted).notification, isA<GeneralUnableToCallNotification>());
         verifyNever(() => callBloc.add(any()));
       });
 

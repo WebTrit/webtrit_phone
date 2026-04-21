@@ -1229,6 +1229,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callNegotiationTimeout => 'Не вдається здійснити виклик, спробуйте пізніше';
 
   @override
+  String get notifications_errorSnackBar_generalUnableToCall => 'Не вдається здійснити виклик, спробуйте пізніше';
+
+  @override
   String get notifications_errorSnackBar_callServiceBusyLine =>
       'Неможливо здійснити дзвінок зараз, оскільки лінія зайнята. Спробуйте пізніше.';
 
@@ -1668,6 +1671,18 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get request_StatusName => 'Назва статусу запиту';
+
+  @override
+  String get sessionStatus_AppBar_waitingForNetwork => 'Очікування мережі...';
+
+  @override
+  String get sessionStatus_AppBar_waitingForConnection => 'Очікування підключення...';
+
+  @override
+  String get sessionStatus_AppBar_disconnected => 'Відключено';
+
+  @override
+  String get sessionStatus_AppBar_connecting => 'Підключення...';
 
   @override
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
