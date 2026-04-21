@@ -1207,6 +1207,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'Sei già in linea con il destinatario a cui stai cercando di trasferire alla cieca';
 
   @override
+  String get notifications_errorSnackBar_blindTransferFailed => 'Trasferimento fallito, ritorno alla chiamata attiva';
+
+  @override
   String get notifications_errorSnackBar_appOffline => 'La tua apllicazione è offline';
 
   @override

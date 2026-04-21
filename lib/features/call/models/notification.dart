@@ -248,6 +248,13 @@ final class ActiveLineBlindTransferWarningNotification extends MessageNotificati
   }
 }
 
+final class BlindTransferFailedNotification extends MessageNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_blindTransferFailed;
+  }
+}
+
 @Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 final class CallErrorRegisteringSelfManagedPhoneAccountNotification extends ErrorNotification {
   CallErrorRegisteringSelfManagedPhoneAccountNotification();

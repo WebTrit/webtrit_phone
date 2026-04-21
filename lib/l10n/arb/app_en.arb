@@ -999,6 +999,10 @@
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {
     "description": "Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target."
   },
+  "notifications_errorSnackBar_blindTransferFailed": "Transfer failed, returning to active call",
+  "@notifications_errorSnackBar_blindTransferFailed": {
+    "description": "Shown when a blind transfer fails because the transfer target declined. The original call is restored and the user is returned to the active call screen."
+  },
   "notifications_errorSnackBar_appOffline": "Your application is currently offline",
   "@notifications_errorSnackBar_appOffline": {
     "description": "Shown in a notification or snackbar when the application is offline. Condition: the app loses connection to the server or network and cannot perform online actions."
