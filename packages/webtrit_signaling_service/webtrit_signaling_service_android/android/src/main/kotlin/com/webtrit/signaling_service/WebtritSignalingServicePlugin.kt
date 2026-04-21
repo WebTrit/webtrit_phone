@@ -32,11 +32,13 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         context = binding.applicationContext
+        FlutterEngineHolder.runningEngine = binding.flutterEngine
         PSignalingServiceHostApi.setUp(binding.binaryMessenger, this)
         Log.d(TAG, "WebtritSignalingServicePlugin attached")
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        if (FlutterEngineHolder.runningEngine === binding.flutterEngine) FlutterEngineHolder.runningEngine = null
         PSignalingServiceHostApi.setUp(binding.binaryMessenger, null)
         Log.d(TAG, "WebtritSignalingServicePlugin detached")
     }

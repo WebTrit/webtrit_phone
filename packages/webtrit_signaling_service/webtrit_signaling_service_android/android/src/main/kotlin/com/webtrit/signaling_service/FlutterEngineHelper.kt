@@ -4,13 +4,16 @@ import android.content.Context
 import android.util.Log
 import io.flutter.FlutterInjector
 import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.embedding.engine.dart.DartExecutor.DartCallback
+import io.flutter.embedding.engine.FlutterEngineGroup
+import io.flutter.embedding.engine.dart.DartExecutor.DartEntrypoint
+import io.flutter.plugin.platform.PlatformViewsController
 import io.flutter.view.FlutterCallbackInformation
 
 class FlutterEngineHelper(
     private val context: Context,
     private val callbackHandle: Long,
     private val service: android.app.Service,
+    private val mainEngineProvider: () -> FlutterEngine?,
 ) {
     var backgroundEngine: FlutterEngine? = null
         private set
@@ -64,28 +67,65 @@ class FlutterEngineHelper(
             }
 
             hasInvalidHandle = false
-            Log.d(TAG, "executeDartCallback: handle=$callbackHandle " +
+            Log.d(TAG, "makeEngine: handle=$callbackHandle " +
                 "library=${callbackInformation.callbackLibraryPath} " +
                 "function=${callbackInformation.callbackName}")
-            // automaticallyRegisterPlugins=false: prevents GeneratedPluginRegistrant from
-            // registering all app plugins (AudioSessionPlugin, FlutterWebRTCPlugin, etc.)
-            // on this background FGS engine. On Android 16 REMOTE_MESSAGING services,
-            // audio/hardware init in onAttachedToEngine can block the Dart VM from running
-            // the background entry point. Only the two Pigeon channels set up manually
-            // in onStartCommand are needed here.
-            // FlutterJNI is obtained via FlutterInjector so DI overrides are respected,
-            // matching the internal behaviour of the 1-arg FlutterEngine constructor.
-            backgroundEngine = FlutterEngine(context.applicationContext, null, FlutterInjector.instance().flutterJNIFactory.provideFlutterJNI(), null, false).also { engine ->
-                val dartCallback = DartCallback(
-                    context.assets,
-                    flutterLoader.findAppBundlePath(),
-                    callbackInformation,
+
+            val dartEntrypoint = DartEntrypoint(
+                flutterLoader.findAppBundlePath(),
+                callbackInformation.callbackLibraryPath,
+                callbackInformation.callbackName,
+            )
+
+            // If the main engine is running, spawn a child isolate from it.
+            //
+            // FlutterEngineGroup.createAndRunEngine uses FlutterJNI.spawn() only for
+            // non-first engines. For the first engine it falls back to
+            // executeDartEntrypoint, which calls Dart_LookupLibrary("package:...") on a
+            // fresh isolate group — this lookup fails in AOT mode because package URIs are
+            // not registered in a newly created group. Spawn from the main engine bypasses
+            // that lookup: it creates a sibling isolate in the existing Dart VM where the
+            // library table is already populated.
+            //
+            // When no main engine is present (e.g. push-notification cold start), the
+            // FlutterEngineGroup fallback is safe: there is no existing root isolate so
+            // executeDartEntrypoint can create one without conflict.
+            //
+            // FlutterEngine.spawn() is package-private; reflection is used to reach it
+            // from outside io.flutter.embedding.engine.
+            val mainEngine = mainEngineProvider()
+            val engine = if (mainEngine != null && mainEngine.dartExecutor.isExecutingDart) {
+                try {
+                    Log.d(TAG, "Spawning background engine from main engine (sibling isolate)")
+                    spawnFromEngine(mainEngine, dartEntrypoint)
+                } catch (e: Exception) {
+                    // Catches ReflectiveOperationException (signature mismatch after Flutter
+                    // upgrade) and IllegalStateException (spawn() returned null). Both are
+                    // non-fatal: fall back to FlutterEngineGroup so the service does not enter
+                    // a WorkManager restart loop.
+                    Log.e(TAG, "spawn() failed — falling back to FlutterEngineGroup", e)
+                    getOrCreateEngineGroup(context).createAndRunEngine(
+                        FlutterEngineGroup.Options(context.applicationContext)
+                            .setDartEntrypoint(dartEntrypoint)
+                            .setAutomaticallyRegisterPlugins(false)
+                    )
+                }
+            } else {
+                Log.d(TAG, "No active main engine — creating via FlutterEngineGroup (root isolate)")
+                getOrCreateEngineGroup(context).createAndRunEngine(
+                    FlutterEngineGroup.Options(context.applicationContext)
+                        .setDartEntrypoint(dartEntrypoint)
+                        .setAutomaticallyRegisterPlugins(false)
                 )
-                engine.dartExecutor.executeDartCallback(dartCallback)
-                engine.serviceControlSurface.attachToService(service, null, true)
-                isEngineAttached = true
-                Log.d(TAG, "FlutterEngine initialized and attached successfully")
             }
+            // Assign backgroundEngine only after a successful attach so that
+            // detachAndDestroyEngine() always has a reference to clean up. If
+            // attachToService() throws, the engine is not stored and the outer
+            // catch handles cleanup — no leak.
+            engine.serviceControlSurface.attachToService(service, null, true)
+            isEngineAttached = true
+            backgroundEngine = engine
+            Log.d(TAG, "FlutterEngine initialized and attached successfully")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize FlutterEngine", e)
         }
@@ -105,7 +145,54 @@ class FlutterEngineHelper(
         Log.d(TAG, "FlutterEngine detached and destroyed")
     }
 
+    // Verified against flutter_embedding 3.32.4 (FlutterEngine.java).
+    // Re-verify after any Flutter SDK upgrade: search for 'fun spawn' in FlutterEngine.java.
+    private fun spawnFromEngine(parent: FlutterEngine, entrypoint: DartEntrypoint): FlutterEngine {
+        val spawnMethod = FlutterEngine::class.java.getDeclaredMethod(
+            "spawn",
+            Context::class.java,
+            DartEntrypoint::class.java,
+            String::class.java,
+            List::class.java,
+            PlatformViewsController::class.java,
+            Boolean::class.javaPrimitiveType,
+            Boolean::class.javaPrimitiveType,
+        )
+        spawnMethod.isAccessible = true
+        return spawnMethod.invoke(
+            parent,
+            context,
+            entrypoint,
+            null,                        // initialRoute
+            null,                        // dartEntrypointArgs
+            // Must be non-null: FlutterEngine constructor calls getRegistry() on this at
+            // line 392 without a null check. This instance is intentionally not attached
+            // to any surface — the background engine runs headless inside a Service.
+            PlatformViewsController(),
+            false,                       // automaticallyRegisterPlugins
+            false,                       // waitForRestorationData
+        ) as? FlutterEngine
+            ?: throw IllegalStateException("FlutterEngine.spawn() returned null — caught by caller fallback")
+    }
+
     companion object {
         private const val TAG = "FlutterEngineHelper"
+
+        // Process-lifetime singleton: FlutterEngineGroup is designed to be reused across
+        // multiple createAndRunEngine calls. Persisting it means repeated FGS restarts
+        // (crashes, WorkManager retries) share the same group, which is correct — each
+        // call creates a new engine/isolate inside the existing group rather than
+        // re-initialising the Dart VM from scratch.
+        // Note: if the group itself enters a bad internal state the only recovery path
+        // is a process restart — there is no mechanism to replace it mid-process.
+        @Volatile
+        private var engineGroup: FlutterEngineGroup? = null
+
+        // Double-checked locking: engineGroup is written once and only read afterwards,
+        // so the volatile + synchronized pair is safe without a full lock on every read.
+        private fun getOrCreateEngineGroup(context: Context): FlutterEngineGroup =
+            engineGroup ?: synchronized(this) {
+                engineGroup ?: FlutterEngineGroup(context.applicationContext).also { engineGroup = it }
+            }
     }
 }

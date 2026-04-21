@@ -110,7 +110,10 @@ class SignalingForegroundService : Service() {
         Log.d(TAG, "SignalingForegroundService onCreate")
         instance = this
         val callbackHandle = StorageDelegate.getCallbackDispatcher(applicationContext)
-        flutterEngineHelper = FlutterEngineHelper(applicationContext, callbackHandle, this)
+        flutterEngineHelper = FlutterEngineHelper(
+            applicationContext, callbackHandle, this,
+            mainEngineProvider = { FlutterEngineHolder.runningEngine },
+        )
         isRunning = true
     }
 
@@ -554,9 +557,11 @@ class SignalingForegroundService : Service() {
         /// How long [gracefulStop] waits for an isolate ACK before forcing the stop.
         private const val _gracefulStopTimeoutMs = 3000L
 
-        /// Mirrors Drift's completer.future.timeout(30s): if no successful sync is
-        /// received within this window, the service stops so WorkManager can retry.
-        private const val _startupWatchdogTimeoutMs = 30_000L
+        /// If no successful sync is received within this window, the service stops
+        /// so WorkManager / HubConnectionManager can retry. With the spawn-from-main-engine
+        /// path, the isolate starts in 1-3s; 10s gives enough margin for loaded devices
+        /// while reducing user-visible wait time from ~30s to ~10s on failure.
+        private const val _startupWatchdogTimeoutMs = 10_000L
 
         @Volatile var isRunning = false
 
