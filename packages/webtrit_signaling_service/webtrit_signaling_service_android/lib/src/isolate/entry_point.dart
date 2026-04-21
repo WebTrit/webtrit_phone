@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter/widgets.dart' show WidgetsFlutterBinding;
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
@@ -18,6 +19,7 @@ final _logger = Logger('SignalingEntryPoint');
 /// [PSignalingServiceHostApi.initializeServiceCallback].
 @pragma('vm:entry-point')
 void signalingServiceCallbackDispatcher() {
+  debugPrint('[FGS-ISOLATE] signalingServiceCallbackDispatcher: entry');
   hierarchicalLoggingEnabled = true;
   Logger.root.level = Level.ALL;
   PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);
