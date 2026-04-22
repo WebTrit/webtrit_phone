@@ -66,13 +66,23 @@ class CallState with _$CallState {
     return LinesState(mainLines: mainLinesState, guestLine: guestLineState);
   }
 
+  static int? lastUsedLine;
+
+  /// Retrieves an idle line number with rotation
   int? retrieveIdleLine() {
-    for (var line = 0; line < linesCount; line++) {
-      if (!activeCalls.any((activeCall) => activeCall.line == line)) {
-        return line;
-      }
+    final linesList = List.generate(linesCount, (index) => index)
+      ..sort((a, b) {
+        if (a == lastUsedLine) return 1;
+        if (b == lastUsedLine) return -1;
+        return 0;
+      });
+
+    final idleLines = linesList.where((line) => !activeCalls.any((activeCall) => activeCall.line == line));
+    final choosenLine = idleLines.firstOrNull;
+    if (choosenLine != null) {
+      lastUsedLine = choosenLine;
     }
-    return null;
+    return choosenLine;
   }
 
   CallDisplay get display {
