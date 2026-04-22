@@ -280,7 +280,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
         final incomingEventLog = _incomingCallEvents.remove(event.callId);
         _onHangupCall(event, (
           direction: CallDirection.incoming,
-          number: incomingEventLog?.caller ?? 'unknown',
+          number: incomingEventLog?.caller ?? _metadata?.handle?.value ?? '',
           video: JsepValue.fromOptional(incomingEventLog?.jsep)?.hasVideo ?? false,
           username: incomingEventLog?.callerDisplayName,
           createdTime: _initialConnectionTime,
@@ -496,17 +496,10 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
 
   /// Returns the best available display name for the missed-call notification.
   ///
-  /// Prefers the signaling caller name; falls back to push metadata display
-  /// name if signaling did not provide one.
+  /// Priority: signaling caller name → push metadata display name → phone number.
   String? _getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
-    final signalingName = call.username;
-    if (signalingName?.isNotEmpty == true) return signalingName;
-
-    if (_metadata?.callId == event.callId && (_metadata!.displayName?.isNotEmpty ?? false)) {
-      return _metadata!.displayName;
-    }
-
-    return signalingName;
+    final metadataName = _metadata?.callId == event.callId ? _metadata?.displayName : null;
+    return [call.username, metadataName, call.number].firstWhere((s) => s != null && s.isNotEmpty, orElse: () => null);
   }
 }
 
