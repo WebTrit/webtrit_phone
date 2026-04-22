@@ -29,6 +29,7 @@ class CallController {
   final Logger _logger;
   StreamSubscription? _connectivitySubscription;
   bool? _netConnected;
+  DateTime? _createCallDebounceReleaseTime;
 
   /// Checks network connectivity status.
   ///
@@ -125,9 +126,18 @@ class CallController {
       return;
     }
 
+    if (_isCreateCallDebounceActive) return;
+    _createCallDebounceReleaseTime = DateTime.now().add(kDebounceDuration);
+
     callBloc.add(
       CallControlEvent.started(number: destination, video: video, displayName: displayName, fromNumber: fromNumber),
     );
+  }
+
+  /// Returns true if the create call debounce is currently active, preventing new calls from being initiated.
+  bool get _isCreateCallDebounceActive {
+    if (_createCallDebounceReleaseTime == null) return false;
+    return DateTime.now().isBefore(_createCallDebounceReleaseTime!);
   }
 
   /// Waits for the first non-null [CallRoutingState] from the cubit stream.
