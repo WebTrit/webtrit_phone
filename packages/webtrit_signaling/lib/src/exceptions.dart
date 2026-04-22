@@ -65,10 +65,6 @@ class WebtritSignalingKeepaliveTransactionTimeoutException extends WebtritSignal
   const WebtritSignalingKeepaliveTransactionTimeoutException(super.id, super.transactionId);
 }
 
-class WebtritSignalingTransactionUnavailableException extends WebtritSignalingTransactionException {
-  const WebtritSignalingTransactionUnavailableException(super.id, super.transactionId);
-}
-
 abstract class WebtritSignalingTransactionTerminateException extends WebtritSignalingTransactionException {
   const WebtritSignalingTransactionTerminateException(super.id, super.transactionId);
 }

@@ -320,11 +320,6 @@ Matcher _matchesSignalingException(WebtritSignalingException expected) {
       case (WebtritSignalingBadStateException source, WebtritSignalingBadStateException target):
         return target.error.message.toString() == source.error.message.toString();
       case (
-        WebtritSignalingTransactionUnavailableException source,
-        WebtritSignalingTransactionUnavailableException target,
-      ):
-        return target.transactionId == source.transactionId;
-      case (
         WebtritSignalingTransactionTerminateByDisconnectException source,
         WebtritSignalingTransactionTerminateByDisconnectException target,
       ):
@@ -697,7 +692,6 @@ void main() {
         const WebtritSignalingTransactionTimeoutException(5, 'tx-timeout'),
         WebtritSignalingBadStateException(6, StateError('invalid state')),
         const WebtritSignalingKeepaliveTransactionTimeoutException(7, 'tx-keepalive'),
-        const WebtritSignalingTransactionUnavailableException(8, 'tx-unavailable'),
         const WebtritSignalingTransactionTerminateByDisconnectException(9, 'tx-disconnect', 1001, 'closed'),
       ];
 

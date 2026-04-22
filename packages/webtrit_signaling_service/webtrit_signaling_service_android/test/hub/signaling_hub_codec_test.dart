@@ -335,7 +335,6 @@ void main() {
         const WebtritSignalingTransactionTimeoutException(5, 'tx-timeout'),
         WebtritSignalingBadStateException(6, StateError('invalid state')),
         const WebtritSignalingKeepaliveTransactionTimeoutException(7, 'tx-keepalive'),
-        const WebtritSignalingTransactionUnavailableException(8, 'tx-unavailable'),
         const WebtritSignalingTransactionTerminateByDisconnectException(9, 'tx-disconnect', 1001, 'closed'),
       ];
 
@@ -368,9 +367,6 @@ void main() {
           case WebtritSignalingBadStateException source:
             final target = reconstructed as WebtritSignalingBadStateException;
             expect(target.error.message, source.error.message);
-          case WebtritSignalingTransactionUnavailableException source:
-            final target = reconstructed as WebtritSignalingTransactionUnavailableException;
-            expect(target.transactionId, source.transactionId);
           case WebtritSignalingTransactionTerminateByDisconnectException source:
             final target = reconstructed as WebtritSignalingTransactionTerminateByDisconnectException;
             expect(target.transactionId, source.transactionId);
