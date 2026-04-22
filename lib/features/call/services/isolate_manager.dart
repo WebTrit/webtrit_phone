@@ -498,17 +498,8 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   ///
   /// Priority: signaling caller name → push metadata display name → phone number.
   String? _getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
-    final signalingName = call.username;
-    if (signalingName?.isNotEmpty == true) return signalingName;
-
-    if (_metadata?.callId == event.callId && (_metadata!.displayName?.isNotEmpty ?? false)) {
-      return _metadata!.displayName;
-    }
-
-    final number = call.number;
-    if (number.isNotEmpty) return number;
-
-    return null;
+    final metadataName = _metadata?.callId == event.callId ? _metadata?.displayName : null;
+    return [call.username, metadataName, call.number].firstWhere((s) => s != null && s.isNotEmpty, orElse: () => null);
   }
 }
 
