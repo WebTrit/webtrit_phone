@@ -24,8 +24,8 @@ class DefaultConnectivityChecker implements ConnectivityChecker {
       await apiClient.healthCheck();
       _logger.finest('API connectivity check successful.');
       return true;
-    } catch (_) {
-      _logger.finest('API connectivity check failed.');
+    } catch (e) {
+      _logger.finest('API connectivity check failed: $e');
       return false;
     }
   }
@@ -57,8 +57,8 @@ class CustomConnectivityChecker implements ConnectivityChecker {
       await createHttpRequestExecutor.execute(method: 'GET', url: connectivityCheckUrl);
       _logger.finest('Connectivity check successful with URL: $connectivityCheckUrl');
       return true;
-    } catch (_) {
-      _logger.finest('Connectivity check failed with URL: $connectivityCheckUrl');
+    } catch (e) {
+      _logger.finest('Connectivity check failed with URL: $connectivityCheckUrl: $e');
       return false;
     }
   }
