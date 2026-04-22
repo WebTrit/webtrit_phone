@@ -121,6 +121,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     _callkeep.tearDown();
     unawaited(_tearDownSignaling());
     WidgetsBinding.instance.removeObserver(this);
+    _callController?.dispose();
     super.dispose();
   }
 
@@ -636,6 +637,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                               callBloc: context.read<CallBloc>(),
                               callRoutingCubit: context.read<CallRoutingCubit>(),
                               notificationsBloc: context.read<NotificationsBloc>(),
+                              connectivityService: context.read<ConnectivityService>(),
                             ),
                             child: PresenceViewParams(
                               hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,

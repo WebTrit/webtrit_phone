@@ -7,19 +7,49 @@ import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
+import 'package:webtrit_phone/services/connectivity_service.dart';
 
 class CallController {
   CallController({
     required this.callBloc,
     required this.callRoutingCubit,
     required this.notificationsBloc,
+    required this.connectivityService,
     Logger? logger,
-  }) : _logger = logger ?? Logger('CallController');
+  }) : _logger = logger ?? Logger('CallController') {
+    _connectivitySubscription = connectivityService.connectionStream.listen((connected) {
+      _netConnected = connected;
+    });
+  }
 
   final CallBloc callBloc;
   final CallRoutingCubit callRoutingCubit;
   final NotificationsBloc notificationsBloc;
+  final ConnectivityService connectivityService;
   final Logger _logger;
+  StreamSubscription? _connectivitySubscription;
+  bool? _netConnected;
+
+  /// Checks network connectivity status.
+  ///
+  /// don't get confused with signaling connectivity (SIP registration)
+  /// this is needed to determine what notification to show
+  Future<bool> get isNetworkConnected async {
+    // If we already have a connectivity status from the stream, return it immediately.
+    // For cases if app was initialized and we know our connectivity status, we can avoid the overhead of an additional checkConnection call.
+    if (_netConnected != null) return _netConnected!;
+
+    // But if its null its means app was just launched and we haven't received any connectivity updates yet,
+    // so we should perform an active check to determine our connectivity status before proceeding with the call.
+    _netConnected = await connectivityService.checkConnection().timeout(
+      const Duration(seconds: 5),
+      onTimeout: () {
+        return false;
+      },
+    );
+
+    return _netConnected!;
+  }
 
   /// Creates a new call using the current call routing state.
   ///
@@ -44,6 +74,15 @@ class CallController {
     bool video = false,
     String? fromNumber,
   }) async {
+    // Check network connectivity independently before attempting to get routing state,
+    // to provide more accurate notifications to the user.
+    final netConnected = await isNetworkConnected;
+    if (!netConnected) {
+      _logger.warning('Cannot create call: no network connectivity.');
+      notificationsBloc.add(const NotificationsSubmitted(NoInternetConnectionNotification()));
+      return;
+    }
+
     // Use current state if available, otherwise wait for the first non-null emission.
     // Timeout guards against indefinite wait when there is no network on startup.
     // orElse returns null only if the cubit is closed while waiting (e.g. logout).
@@ -54,7 +93,7 @@ class CallController {
       _logger.warning(
         'createCall: routing state not available after ${kCallRoutingStateTimeout.inSeconds}s, no network',
       );
-      notificationsBloc.add(const NotificationsSubmitted(NoInternetConnectionNotification()));
+      notificationsBloc.add(const NotificationsSubmitted(GeneralUnableToCallNotification()));
       return;
     }
 
@@ -104,5 +143,9 @@ class CallController {
   void submitTransfer(String destination) {
     _logger.info('Submitting blind transfer to $destination');
     callBloc.add(CallControlEvent.blindTransferSubmitted(number: destination));
+  }
+
+  void dispose() {
+    _connectivitySubscription?.cancel();
   }
 }
