@@ -1043,6 +1043,10 @@
   "@notifications_errorSnackBar_callUndefinedLine": {
     "description": "Shown in a snackbar when the user attempts to start a call but there is no outbound line available. Context: occurs at call initiation when no SIP/VoIP line is assigned or registered, all lines are disabled or busy, or the line was removed/disabled by an administrator; typical causes: unassigned or unregistered SIP line, account/line disabled, or concurrent channel limits."
   },
+  "notifications_errorSnackBar_callMediaTrackSetup": "Configurazione chiamata fallita, riprova",
+  "@notifications_errorSnackBar_callMediaTrackSetup": {
+    "description": "Shown when a call fails due to an internal media track error, not a permission denial. Typical cause: a native audio/video track reference was invalidated after a previous call was cleaned up. No action to open Settings."
+  },
   "notifications_errorSnackBar_callUserMedia": "Nessun accesso al server multimediale, controlla le autorizzazioni dell'app",
   "@notifications_errorSnackBar_callUserMedia": {
     "description": "Shown in a notification or snackbar when the app cannot access camera or microphone required for a call. Context: occurs when getUserMedia or platform permission check fails; typical causes include the user denying camera/microphone permission, OS-level restriction or revoked permission, missing runtime permission (Android), or the device hardware being busy or unavailable."

@@ -2298,6 +2298,12 @@ abstract class AppLocalizations {
   /// **'No idle lines to initiate the call'**
   String get notifications_errorSnackBar_callUndefinedLine;
 
+  /// Shown when a call fails due to an internal media track error, not a permission denial. Typical cause: a native audio/video track reference was invalidated after a previous call was cleaned up. No action to open Settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Call setup failed, please try again'**
+  String get notifications_errorSnackBar_callMediaTrackSetup;
+
   /// Shown in a notification or snackbar when the app cannot access camera or microphone required for a call. Context: occurs when getUserMedia or platform permission check fails; typical causes include the user denying camera/microphone permission, OS-level restriction or revoked permission, missing runtime permission (Android), or the device hardware being busy or unavailable.
   ///
   /// In en, this message translates to:

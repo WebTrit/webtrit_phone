@@ -45,6 +45,11 @@ class DefaultCallErrorReporter implements CallErrorReporter {
       submitNotification(const CallServiceBusyLineNotification());
       return;
     }
+    if (error is UserMediaTrackSetupError) {
+      _logger.warning('[$context] MediaStreamAddTrack failed (stale track): $error', error, stack);
+      submitNotification(const CallMediaTrackSetupErrorNotification());
+      return;
+    }
     if (error is UserMediaError) {
       submitNotification(const CallUserMediaErrorNotification());
       return;
