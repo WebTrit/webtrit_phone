@@ -859,9 +859,12 @@ void main() {
     });
 
     test('incorrect timeout (old behaviour) fires mid-retry when background takes full cycle', () async {
-      // Reproduces the original bug: executeTimeout was only slightly above
-      // transactionTimeout, so it fired between the first attempt timing out
-      // and the first retry completing.
+      // Simulates the observable effect of the original bug: the hub timeout
+      // fires because the background takes as long as the full retry cycle.
+      // The fake client delays execution directly rather than throwing
+      // WebtritSignalingTransactionTimeoutException, so no real retry happens
+      // here — but the proportional invariant (hubTimeout < fullRetryCycle)
+      // that caused the bug is preserved.
       fakeClient.executeDelay = fullRetryCycle;
 
       final client = await _subscribeClient('exec-align-3', executeTimeout: incorrectHubTimeout);

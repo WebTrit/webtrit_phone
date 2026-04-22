@@ -12,7 +12,7 @@ final _logger = Logger('SignalingRequestQueue');
 /// Handles per-request timeouts, execution retries on
 /// [WebtritSignalingTransactionTimeoutException], and bulk failure on dispose.
 class SignalingRequestQueue {
-  static const defaultMaxRetryCount = 3;
+  static const int defaultMaxRetryCount = 3;
 
   SignalingRequestQueue({this.requestTimeout = const Duration(seconds: 30), this.maxRetryCount = defaultMaxRetryCount});
 
