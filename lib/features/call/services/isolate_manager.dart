@@ -280,7 +280,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
         final incomingEventLog = _incomingCallEvents.remove(event.callId);
         _onHangupCall(event, (
           direction: CallDirection.incoming,
-          number: incomingEventLog?.caller ?? _metadata?.handle?.value ?? 'unknown',
+          number: incomingEventLog?.caller ?? _metadata?.handle?.value ?? '',
           video: JsepValue.fromOptional(incomingEventLog?.jsep)?.hasVideo ?? false,
           username: incomingEventLog?.callerDisplayName,
           createdTime: _initialConnectionTime,
@@ -506,7 +506,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     }
 
     final number = call.number;
-    if (number.isNotEmpty && number != 'unknown') return number;
+    if (number.isNotEmpty) return number;
 
     return null;
   }
