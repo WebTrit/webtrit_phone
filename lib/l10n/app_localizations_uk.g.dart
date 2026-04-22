@@ -1251,6 +1251,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callUndefinedLine => 'Немає вільних ліній для ініціювання дзвінка';
 
   @override
+  String get notifications_errorSnackBar_callMediaTrackSetup => 'Не вдалося налаштувати дзвінок, спробуйте ще раз';
+
+  @override
   String get notifications_errorSnackBar_callUserMedia =>
       'Немає доступу до медіа-входу, будь ласка, перевірте дозволи застосунку';
 

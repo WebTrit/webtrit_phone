@@ -2166,7 +2166,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
       add(_ResetStateEvent.completeCall(event.callId, endReason: CallkeepEndCallReason.failed));
 
-      submitNotification(const CallUserMediaErrorNotification());
+      if (e is UserMediaTrackSetupError) {
+        submitNotification(const CallMediaTrackSetupErrorNotification());
+      } else {
+        submitNotification(const CallUserMediaErrorNotification());
+      }
       return;
     }
 

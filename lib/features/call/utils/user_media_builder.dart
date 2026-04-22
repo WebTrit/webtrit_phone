@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
@@ -140,6 +141,9 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
       await stream?.dispose();
 
       if (e is UserMediaError) rethrow;
+      if (e is PlatformException && e.code == 'mediaStreamAddTrack') {
+        throw UserMediaTrackSetupError(e.toString());
+      }
       throw UserMediaError(e.toString());
     }
   }
@@ -267,6 +271,15 @@ class UserMediaError implements Exception {
 
   @override
   String toString() => 'UserMediaError: $message';
+}
+
+/// Thrown when a native media track cannot be added to a local stream.
+///
+/// Distinct from [UserMediaError]: the cause is a stale or invalidated native
+/// track reference, not a permission denial. Does not warrant showing
+/// "check permissions" to the user.
+final class UserMediaTrackSetupError extends UserMediaError {
+  UserMediaTrackSetupError(super.message);
 }
 
 class _PooledTrack {

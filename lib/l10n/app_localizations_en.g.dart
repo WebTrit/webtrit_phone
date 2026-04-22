@@ -1231,6 +1231,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_callUndefinedLine => 'No idle lines to initiate the call';
 
   @override
+  String get notifications_errorSnackBar_callMediaTrackSetup => 'Call setup failed, please try again';
+
+  @override
   String get notifications_errorSnackBar_callUserMedia => 'No access to media input, please check app permissions';
 
   @override

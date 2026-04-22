@@ -82,6 +82,18 @@ final class CallUserMediaErrorNotification extends MessageNotification {
   }
 }
 
+final class CallMediaTrackSetupErrorNotification extends MessageNotification {
+  const CallMediaTrackSetupErrorNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_callMediaTrackSetup;
+  }
+
+  @override
+  SnackBarAction? action(BuildContext context) => null;
+}
+
 @Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 final class CallSdpConfigurationErrorNotification extends ErrorNotification {
   CallSdpConfigurationErrorNotification();

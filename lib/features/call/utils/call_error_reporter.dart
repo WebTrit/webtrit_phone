@@ -45,6 +45,10 @@ class DefaultCallErrorReporter implements CallErrorReporter {
       submitNotification(const CallServiceBusyLineNotification());
       return;
     }
+    if (error is UserMediaTrackSetupError) {
+      submitNotification(const CallMediaTrackSetupErrorNotification());
+      return;
+    }
     if (error is UserMediaError) {
       submitNotification(const CallUserMediaErrorNotification());
       return;

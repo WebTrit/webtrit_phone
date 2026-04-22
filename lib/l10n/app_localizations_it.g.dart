@@ -1247,6 +1247,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notifications_errorSnackBar_callUndefinedLine => 'Nessuna linea disponibile per avviare una chiamata';
 
   @override
+  String get notifications_errorSnackBar_callMediaTrackSetup => 'Configurazione chiamata fallita, riprova';
+
+  @override
   String get notifications_errorSnackBar_callUserMedia =>
       'Nessun accesso al server multimediale, controlla le autorizzazioni dell\'app';
 
