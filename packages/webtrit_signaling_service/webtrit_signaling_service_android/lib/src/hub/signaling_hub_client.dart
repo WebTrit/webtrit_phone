@@ -124,7 +124,7 @@ class SignalingHubClient {
 
   /// Routes a [Request] through the hub's WebSocket connection.
   ///
-  /// Throws [TimeoutException] if no reply arrives within [_executeTimeout].
+  /// Throws [WebtritSignalingTransactionTimeoutException] if no reply arrives within [_executeTimeout].
   /// This handles the edge case where the subscriber unsubscribes between
   /// sending the exec command and the hub sending a reply -- without a timeout
   /// the completer would hang indefinitely.
@@ -139,7 +139,11 @@ class SignalingHubClient {
       _executeTimeout,
       onTimeout: () {
         _pendingExecutions.remove(corrId);
-        throw TimeoutException('Hub execute timed out for corr=$corrId', _executeTimeout);
+        // Throw WebtritSignalingTransactionTimeoutException so callers (e.g.
+        // __onCallPerformEventAnswered) can treat this the same as a signaling-
+        // layer timeout: the server may have received the request but the
+        // response was lost — sending a decline would kill an active call.
+        throw const WebtritSignalingTransactionTimeoutException(0, 'hub-execute-timeout');
       },
     );
   }
