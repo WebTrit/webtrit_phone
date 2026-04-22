@@ -122,7 +122,6 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       emit(state.copyWith(status: ConnectionStatus.error, error: e));
       _logger.severe('_onClientConnected', e, s);
       CrashlyticsUtils.recordError(e, stack: s, reason: 'MessagingBloc._onClientConnected');
-      // _submitNotification(DefaultErrorNotification(e));
     }
   }
 

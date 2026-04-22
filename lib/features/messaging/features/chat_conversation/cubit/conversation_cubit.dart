@@ -112,7 +112,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       emit(ConversationState.left(state.credentials));
     } catch (e, s) {
       _logger.warning('deleteChat failed', e, s);
-      // _submitNotification(DefaultErrorNotification(e));
+
       CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.deleteChat');
       _releaseBusy();
     }
@@ -130,7 +130,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       emit(ConversationState.left(state.credentials));
     } catch (e, s) {
       _logger.warning('leaveGroup failed', e, s);
-      // _submitNotification(DefaultErrorNotification(e));
+
       CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.leaveGroup');
       _releaseBusy();
     }
@@ -147,7 +147,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       await channel.addGroupMember(userId);
     } catch (e, s) {
       _logger.warning('addGroupMember failed', e, s);
-      // _submitNotification(DefaultErrorNotification(e));
+
       CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.addGroupMember');
     } finally {
       _releaseBusy();
@@ -165,7 +165,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       await channel.removeGroupMember(userId);
     } catch (e, s) {
       _logger.warning('removeGroupMember failed', e, s);
-      // _submitNotification(DefaultErrorNotification(e));
+
       CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.removeGroupMember');
     } finally {
       _releaseBusy();
@@ -183,7 +183,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       await channel.setGroupModerator(userId, isModerator);
     } catch (e, s) {
       _logger.warning('setGroupModerator failed', e, s);
-      // _submitNotification(DefaultErrorNotification(e));
+
       CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.setGroupModerator');
     } finally {
       _releaseBusy();
@@ -201,7 +201,7 @@ class ConversationCubit extends Cubit<ConversationState> {
       await channel.setGroupName(name);
     } catch (e, s) {
       _logger.warning('setGroupName failed', e, s);
-      // _submitNotification(DefaultErrorNotification(e));
+
       CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.setGroupName');
     } finally {
       _releaseBusy();
@@ -247,7 +247,7 @@ class ConversationCubit extends Cubit<ConversationState> {
     } on Exception catch (e, s) {
       _releaseHistoryFetching();
       _logger.warning('fetchHistory failed', e, s);
-      // _submitNotification(DefaultErrorNotification(e));
+
       CrashlyticsUtils.recordError(e, stack: s, reason: 'ConversationCubit.fetchHistory');
     }
   }
