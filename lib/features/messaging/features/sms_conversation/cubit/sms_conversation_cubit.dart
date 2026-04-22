@@ -103,7 +103,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
       emit(SmsConversationState.left(_creds));
     } catch (e, s) {
       _logger.warning('deleteConversation failed', e, s);
-      // _submitNotification(DefaultErrorNotification(e));
+
       CrashlyticsUtils.recordError(e, stack: s, reason: 'SmsConversationCubit.deleteConversation');
       _releaseBusy();
     }
@@ -148,7 +148,7 @@ class SmsConversationCubit extends Cubit<SmsConversationState> {
     } on Exception catch (e, s) {
       _releaseHistoryFetching();
       _logger.warning('fetchHistory failed', e, s);
-      // _submitNotification(DefaultErrorNotification(e));
+
       CrashlyticsUtils.recordError(e, stack: s, reason: 'SmsConversationCubit.fetchHistory');
     }
   }

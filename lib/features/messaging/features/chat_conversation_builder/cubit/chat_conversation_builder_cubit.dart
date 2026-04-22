@@ -193,7 +193,6 @@ class ChatConversationBuilderCubit extends Cubit<ChatCBState> {
       await chatsRepository.upsertChat(group);
       openGroup(group.id);
     } catch (e, s) {
-      // submitNotification(DefaultErrorNotification(e));
       _logger.severe('onGroupCreateConfirm failed', e, s);
       CrashlyticsUtils.recordError(e, stack: s, reason: 'ChatConversationBuilderCubit.onGroupCreateConfirm');
     } finally {
