@@ -206,7 +206,14 @@ class WebtritSignalingClient {
       if (transaction != null) {
         transaction.handleResponse(responseJson);
       } else {
-        _onError(WebtritSignalingTransactionUnavailableException(_id, transactionId), StackTrace.current);
+        // Late server response for a transaction that already timed out and was
+        // removed from the map. This can happen under network congestion when
+        // the server ACK arrives after the client's timeout has fired.
+        // Treating this as a connection error would cause a false-positive
+        // SignalingConnectionFailed and an unnecessary reconnect — ignore it.
+        _logger.warning(
+          '$_id _onMessage: received response for unknown transactionId=$transactionId — ignoring late response',
+        );
       }
     } else if (messageJson.containsKey(Event.typeKey)) {
       final eventJson = messageJson;
