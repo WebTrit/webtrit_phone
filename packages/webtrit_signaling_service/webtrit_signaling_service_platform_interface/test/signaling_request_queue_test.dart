@@ -235,4 +235,20 @@ void main() {
       expect(queue.isEmpty, isTrue);
     });
   });
+
+  group('SignalingRequestQueue.defaultMaxRetryCount —', () {
+    test('defaultMaxRetryCount equals 3', () {
+      expect(SignalingRequestQueue.defaultMaxRetryCount, 3);
+    });
+
+    test('default constructor uses defaultMaxRetryCount', () {
+      final queue = SignalingRequestQueue();
+      expect(queue.maxRetryCount, SignalingRequestQueue.defaultMaxRetryCount);
+    });
+
+    test('custom maxRetryCount is respected', () {
+      final queue = SignalingRequestQueue(maxRetryCount: 1);
+      expect(queue.maxRetryCount, 1);
+    });
+  });
 }

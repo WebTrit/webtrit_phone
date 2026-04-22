@@ -218,6 +218,7 @@ class _FakeSignalingClient extends Fake implements WebtritSignalingClient {
   bool disconnected = false;
   final List<Request> executed = [];
   Object? executeError;
+  Duration? executeDelay;
 
   @override
   void listen({
@@ -236,6 +237,7 @@ class _FakeSignalingClient extends Fake implements WebtritSignalingClient {
 
   @override
   Future<void> execute(Request request, [Duration? timeout]) async {
+    if (executeDelay != null) await Future<void>.delayed(executeDelay!);
     if (executeError != null) throw executeError!;
     executed.add(request);
   }
@@ -287,8 +289,8 @@ Future<T> _waitFor<T extends SignalingModuleEvent>(Stream<SignalingModuleEvent> 
 
 /// Creates a [SignalingHubClient], awaits the sub-ack, and returns it ready
 /// for use.
-Future<SignalingHubClient> _subscribeClient(String consumerId) async {
-  final client = SignalingHubClient.tryConnect(consumerId);
+Future<SignalingHubClient> _subscribeClient(String consumerId, {Duration? executeTimeout}) async {
+  final client = SignalingHubClient.tryConnect(consumerId, executeTimeout: executeTimeout);
   expect(client, isNotNull, reason: 'Hub must be registered before subscribing');
   final ackFuture = client!.awaitAck(timeout: const Duration(seconds: 2));
   client.start();
@@ -784,6 +786,99 @@ void main() {
       fakeClient.injectDisconnect(1000, 'done');
       await _waitFor<SignalingDisconnected>(hubModule.events);
       expect(hubModule.isConnected, isFalse);
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Hub execute timeout alignment
+  //
+  // Uses scaled-down durations so tests run fast while preserving the
+  // proportional invariant:
+  //   hubExecuteTimeout >= transactionTimeout × (maxRetryCount + 1)
+  //
+  // transactionTimeout = 50 ms, maxRetryCount = 2
+  // full retry cycle   = 50 ms × 3 = 150 ms
+  // correct timeout    = 150 ms + 20 ms buffer = 170 ms
+  // old (wrong) timeout = 55 ms — just above transactionTimeout, fires mid-retry
+  // -------------------------------------------------------------------------
+
+  group('execute timeout alignment —', () {
+    // Scaled-down durations for fast execution.
+    const transactionTimeout = Duration(milliseconds: 50);
+    const maxRetryCount = 2;
+    final fullRetryCycle = transactionTimeout * (maxRetryCount + 1); // 150 ms
+    final correctHubTimeout = fullRetryCycle + const Duration(milliseconds: 20); // 170 ms
+    final incorrectHubTimeout = transactionTimeout + const Duration(milliseconds: 5); // 55 ms
+
+    late _FakeSignalingClient fakeClient;
+    late _SignalingModule module;
+    late SignalingHub hub;
+
+    setUp(() async {
+      fakeClient = _FakeSignalingClient();
+      module = _buildModule(fakeClient);
+      hub = SignalingHub(module);
+      hub.start();
+      module.connect();
+      await Future<void>.delayed(Duration.zero);
+    });
+
+    tearDown(() async {
+      fakeClient.executeDelay = null;
+      await hub.dispose();
+      await module.dispose();
+    });
+
+    test('hub timeout fires when background takes longer than executeTimeout', () async {
+      fakeClient.executeDelay = incorrectHubTimeout + const Duration(milliseconds: 50);
+
+      final client = await _subscribeClient('exec-align-1', executeTimeout: incorrectHubTimeout);
+      addTearDown(client.dispose);
+
+      fakeClient.injectHandshake(_kHandshake);
+
+      await expectLater(
+        client.execute(HangupRequest(transaction: 'tx-align-1', line: 0, callId: 'align-1')),
+        throwsA(isA<TimeoutException>()),
+      );
+    });
+
+    test('hub timeout does not fire when executeTimeout covers full retry cycle', () async {
+      // Background responds within the full retry cycle duration.
+      fakeClient.executeDelay = fullRetryCycle - const Duration(milliseconds: 10);
+
+      final client = await _subscribeClient('exec-align-2', executeTimeout: correctHubTimeout);
+      addTearDown(client.dispose);
+
+      fakeClient.injectHandshake(_kHandshake);
+
+      await expectLater(
+        client.execute(HangupRequest(transaction: 'tx-align-2', line: 0, callId: 'align-2')),
+        completes,
+      );
+    });
+
+    test('incorrect timeout (old behaviour) fires mid-retry when background takes full cycle', () async {
+      // Reproduces the original bug: executeTimeout was only slightly above
+      // transactionTimeout, so it fired between the first attempt timing out
+      // and the first retry completing.
+      fakeClient.executeDelay = fullRetryCycle;
+
+      final client = await _subscribeClient('exec-align-3', executeTimeout: incorrectHubTimeout);
+      addTearDown(client.dispose);
+
+      fakeClient.injectHandshake(_kHandshake);
+
+      await expectLater(
+        client.execute(HangupRequest(transaction: 'tx-align-3', line: 0, callId: 'align-3')),
+        throwsA(isA<TimeoutException>()),
+      );
+    });
+
+    test('tryConnect accepts custom executeTimeout', () async {
+      final client = SignalingHubClient.tryConnect('exec-align-4', executeTimeout: const Duration(seconds: 60));
+      expect(client, isNotNull);
+      addTearDown(() => client!.dispose());
     });
   });
 }
