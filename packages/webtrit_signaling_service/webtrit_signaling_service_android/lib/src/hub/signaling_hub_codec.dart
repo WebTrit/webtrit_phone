@@ -24,7 +24,6 @@ const _executeErrorTypeWebtritSignalingUnknownResponse = 'webtrit_signaling_unkn
 const _executeErrorTypeWebtritSignalingTransactionTimeout = 'webtrit_signaling_transaction_timeout';
 const _executeErrorTypeWebtritSignalingBadState = 'webtrit_signaling_bad_state';
 const _executeErrorTypeWebtritSignalingKeepaliveTransactionTimeout = 'webtrit_signaling_keepalive_transaction_timeout';
-const _executeErrorTypeWebtritSignalingTransactionUnavailable = 'webtrit_signaling_transaction_unavailable';
 const _executeErrorTypeWebtritSignalingTransactionTerminateByDisconnect =
     'webtrit_signaling_transaction_terminate_by_disconnect';
 const _executeErrorIdKey = 'id';
@@ -187,13 +186,6 @@ Object? _encodeExecuteError(Object? error) {
       _executeErrorStateErrorMessageKey: error.error.message.toString(),
     };
   }
-  if (error is WebtritSignalingTransactionUnavailableException) {
-    return {
-      _executeErrorTypeKey: _executeErrorTypeWebtritSignalingTransactionUnavailable,
-      _executeErrorIdKey: error.id,
-      _executeErrorTransactionIdKey: error.transactionId,
-    };
-  }
   if (error is WebtritSignalingTransactionTerminateByDisconnectException) {
     return {
       _executeErrorTypeKey: _executeErrorTypeWebtritSignalingTransactionTerminateByDisconnect,
@@ -265,13 +257,6 @@ Object? _decodeExecuteError(Object? encodedError) {
         return Exception('Malformed webtrit_signaling_bad_state execute payload: $map');
       }
       return WebtritSignalingBadStateException(id, StateError(stateErrorMessage));
-    case _executeErrorTypeWebtritSignalingTransactionUnavailable:
-      final id = map[_executeErrorIdKey] as int?;
-      final transactionId = map[_executeErrorTransactionIdKey] as String?;
-      if (id == null || transactionId == null) {
-        return Exception('Malformed webtrit_signaling_transaction_unavailable execute payload: $map');
-      }
-      return WebtritSignalingTransactionUnavailableException(id, transactionId);
     case _executeErrorTypeWebtritSignalingTransactionTerminateByDisconnect:
       final id = map[_executeErrorIdKey] as int?;
       final transactionId = map[_executeErrorTransactionIdKey] as String?;

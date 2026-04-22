@@ -73,7 +73,6 @@ All extend `WebtritSignalingException`:
 - `WebtritSignalingTransactionException` ← abstract base for transaction errors
   - `WebtritSignalingTransactionTimeoutException` — no response within 10 s timeout
     - `WebtritSignalingKeepaliveTransactionTimeoutException` — keepalive timed out
-  - `WebtritSignalingTransactionUnavailableException` — transaction slot unavailable
   - `WebtritSignalingTransactionTerminateException` ← abstract base for terminations
     - `WebtritSignalingTransactionTerminateByDisconnectException` — in-flight transaction cancelled because socket closed
 
