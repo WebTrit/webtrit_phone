@@ -206,6 +206,25 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
+  // CallProcessingStatus.hasPeerConnectionReady
+  // ---------------------------------------------------------------------------
+
+  group('CallProcessingStatus.hasPeerConnectionReady', () {
+    const readyStates = {
+      CallProcessingStatus.outgoingOfferSent,
+      CallProcessingStatus.outgoingRinging,
+      CallProcessingStatus.connected,
+      CallProcessingStatus.disconnecting,
+    };
+
+    for (final status in CallProcessingStatus.values) {
+      test('$status → ${readyStates.contains(status)}', () {
+        expect(status.hasPeerConnectionReady, readyStates.contains(status));
+      });
+    }
+  });
+
+  // ---------------------------------------------------------------------------
   // Transfer state machine
   // ---------------------------------------------------------------------------
 
