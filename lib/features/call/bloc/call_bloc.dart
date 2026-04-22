@@ -558,7 +558,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           );
           continue;
         }
-        _logger.info('_onConnectivityResultChanged: restarting ICE for call ${activeCall.callId} ');
+        _logger.info(
+          '_onConnectivityResultChanged: restarting ICE for call ${activeCall.callId} (status: ${activeCall.processingStatus})',
+        );
         final pc = await _peerConnectionManager.retrieve(activeCall.callId);
         pc?.restartIce();
       }

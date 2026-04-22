@@ -214,7 +214,6 @@ void main() {
       CallProcessingStatus.outgoingOfferSent,
       CallProcessingStatus.outgoingRinging,
       CallProcessingStatus.connected,
-      CallProcessingStatus.disconnecting,
     };
 
     for (final status in CallProcessingStatus.values) {

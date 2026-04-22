@@ -31,6 +31,5 @@ enum CallProcessingStatus {
     CallProcessingStatus.outgoingOfferSent,
     CallProcessingStatus.outgoingRinging,
     CallProcessingStatus.connected,
-    CallProcessingStatus.disconnecting,
   }.contains(this);
 }
