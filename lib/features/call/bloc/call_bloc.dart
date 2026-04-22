@@ -552,7 +552,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       //  - in double network scenario (e.g already has mobile network, but also connected to wifi)
       //    it helps to switch to better network instead of staying on old until rtp breaks.
       for (var activeCall in state.activeCalls) {
-        _logger.info('_onConnectivityResultChanged: restarting ICE for call ${activeCall.callId} ');
+        if (!activeCall.processingStatus.hasPeerConnectionReady) {
+          _logger.info(
+            '_onConnectivityResultChanged: skipping ICE restart for call ${activeCall.callId} — PC not ready (status: ${activeCall.processingStatus})',
+          );
+          continue;
+        }
+        _logger.info(
+          '_onConnectivityResultChanged: restarting ICE for call ${activeCall.callId} (status: ${activeCall.processingStatus})',
+        );
         final pc = await _peerConnectionManager.retrieve(activeCall.callId);
         pc?.restartIce();
       }

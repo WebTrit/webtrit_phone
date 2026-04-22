@@ -26,4 +26,10 @@ enum CallProcessingStatus {
     CallProcessingStatus.outgoingInitializingMedia,
     CallProcessingStatus.outgoingOfferPreparing,
   }.contains(this);
+
+  bool get hasPeerConnectionReady => const {
+    CallProcessingStatus.outgoingOfferSent,
+    CallProcessingStatus.outgoingRinging,
+    CallProcessingStatus.connected,
+  }.contains(this);
 }
