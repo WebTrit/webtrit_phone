@@ -105,11 +105,29 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
     final lease = _borrowedStreams.remove(stream.id);
 
     if (lease != null) {
+      // Detach pooled tracks from the stream before disposing it.
+      // On iOS and Android, streamDispose iterates stream.audioTracks /
+      // stream.videoTracks and removes each from the native localTracks
+      // registry. If a track is still referenced by another active call
+      // (references > 1), removing it from the stream first prevents
+      // streamDispose from evicting it — mediaStreamRemoveTrack does not
+      // touch localTracks, only the stream's own track list.
+      await _detachIfStillPooled(stream, lease.audioTrackId, _audioTrack);
+      await _detachIfStillPooled(stream, lease.videoTrackId, _videoTrack);
       await _releaseAudioTrack(lease.audioTrackId);
       await _releaseVideoTrack(lease.videoTrackId);
     }
 
     await stream.dispose();
+  }
+
+  Future<void> _detachIfStillPooled(MediaStream stream, String? trackId, _PooledTrack? pooled) async {
+    if (trackId == null || pooled == null || pooled.track.id != trackId) return;
+    // references <= 1 means this is the last holder — _releaseAudioTrack /
+    // _releaseVideoTrack will stop and dispose the track anyway, so there
+    // is no need to detach it from the stream beforehand.
+    if (pooled.references <= 1) return;
+    await stream.removeTrack(pooled.track);
   }
 
   Future<MediaStream> _acquirePooledStream({required bool resolvedVideo, bool? frontCamera}) async {

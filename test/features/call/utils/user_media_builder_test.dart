@@ -33,6 +33,7 @@ class _TestMediaStreamFactory {
         videoTracks.add(track);
       }
     });
+    when(() => stream.removeTrack(any())).thenAnswer((_) async {});
     when(() => stream.dispose()).thenAnswer((_) async {});
 
     streams.add(stream);
@@ -135,6 +136,27 @@ void main() {
       verify(() => videoTrack.stop()).called(1);
       verify(() => audioSourceStream.dispose()).called(1);
       verify(() => videoSourceStream.dispose()).called(1);
+    });
+
+    test('detaches pooled tracks from stream before dispose when another borrower exists', () async {
+      final subject = builder();
+      final stream1 = await subject.build(video: true);
+      final stream2 = await subject.build(video: true);
+
+      // Releasing stream1 while stream2 still holds refs — tracks must be
+      // detached from stream1 so streamDispose does not evict them from the
+      // native localTracks registry.
+      await subject.release(stream1);
+
+      final localStream1 = localStreamFactory.streams[0];
+      verify(() => localStream1.removeTrack(audioTrack)).called(1);
+      verify(() => localStream1.removeTrack(videoTrack)).called(1);
+
+      // Releasing the last borrower — detach is skipped (tracks are stopped anyway).
+      await subject.release(stream2);
+
+      final localStream2 = localStreamFactory.streams[1];
+      verifyNever(() => localStream2.removeTrack(any()));
     });
   });
 
