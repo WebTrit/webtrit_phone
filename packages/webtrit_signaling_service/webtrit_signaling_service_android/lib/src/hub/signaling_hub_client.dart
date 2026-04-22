@@ -10,6 +10,15 @@ import '../constants.dart';
 import 'signaling_hub_codec.dart';
 import 'signaling_hub_command.dart';
 
+// The hub execute timeout must cover the full _executeWithRetry budget:
+// transactionTimeout × (maxRetryCount + 1) + a small overhead buffer.
+// This ensures the hub timeout only fires when the background isolate stops
+// responding entirely (hub death), not during a normal retry cycle.
+Duration _defaultHubExecuteTimeout({
+  Duration transactionTimeout = WebtritSignalingClient.defaultExecuteTransactionTimeoutDuration,
+  int maxRetryCount = SignalingRequestQueue.defaultMaxRetryCount,
+}) => transactionTimeout * (maxRetryCount + 1) + const Duration(seconds: 5);
+
 final _logger = Logger('SignalingHubClient');
 
 /// Client-side counterpart of [SignalingHub].
@@ -35,9 +44,11 @@ class SignalingHubClient {
     required SendPort hubPort,
     required Duration pingInterval,
     required Duration pongTimeout,
+    required Duration executeTimeout,
   }) : _hubPort = hubPort,
        _pingInterval = pingInterval,
-       _pongTimeout = pongTimeout;
+       _pongTimeout = pongTimeout,
+       _executeTimeout = executeTimeout;
 
   /// Returns a [SignalingHubClient] connected to the hub, or null when no
   /// hub is currently registered in [IsolateNameServer].
@@ -45,6 +56,7 @@ class SignalingHubClient {
     String consumerId, {
     Duration pingInterval = const Duration(seconds: 15),
     Duration pongTimeout = const Duration(seconds: 2),
+    Duration? executeTimeout,
   }) {
     final port = IsolateNameServer.lookupPortByName(kSignalingHubPortName);
     if (port == null) return null;
@@ -53,6 +65,7 @@ class SignalingHubClient {
       hubPort: port,
       pingInterval: pingInterval,
       pongTimeout: pongTimeout,
+      executeTimeout: executeTimeout ?? _defaultHubExecuteTimeout(),
     );
   }
 
@@ -60,6 +73,7 @@ class SignalingHubClient {
   final SendPort _hubPort;
   final Duration _pingInterval;
   final Duration _pongTimeout;
+  final Duration _executeTimeout;
   final ReceivePort _receivePort = ReceivePort();
   final _controller = StreamController<SignalingModuleEvent>.broadcast();
   final Map<String, Completer<void>> _pendingExecutions = {};
@@ -208,10 +222,6 @@ class SignalingHubClient {
       _controller.add(event);
     }
   }
-
-  // Slightly longer than WebtritSignalingClient's internal 10 s transaction timeout
-  // so the signaling layer reports the error before this fires.
-  static const _executeTimeout = Duration(seconds: 15);
 
   static int _counter = 0;
 
