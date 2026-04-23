@@ -1274,7 +1274,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         if (call.direction == CallDirection.incoming && !call.wasAccepted) {
           if (code == SignalingResponseCode.declineCall) endReason = CallkeepEndCallReason.declinedElsewhere;
           if (code == SignalingResponseCode.requestTerminated) endReason = CallkeepEndCallReason.unanswered;
-          if (Platform.isAndroid) {
+          if (Platform.isAndroid && code != SignalingResponseCode.declineCall) {
             _showMissedCallNotification(event.callId, call.displayName ?? call.handle.value);
           }
         }
