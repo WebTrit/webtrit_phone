@@ -1344,6 +1344,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (jsep != null) {
         final remoteDescription = jsep.toDescription();
         sdpSanitizer?.apply(remoteDescription);
+        _logger.infoPretty(remoteDescription.sdp, tag: '__onCallSignalingEventCallUpdating received new offer SDP');
         await state.performOnActiveCall(event.callId, (activeCall) async {
           final peerConnection = await _peerConnectionManager.retrieve(event.callId);
           if (peerConnection == null) {
@@ -1396,6 +1397,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             }
             final localDescription = await peerConnection.createAnswer({});
             sdpMunger?.apply(localDescription);
+            _logger.infoPretty(localDescription.sdp, tag: '__onCallSignalingEventCallUpdating created answer SDP');
 
             // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
             // localDescription should be set before sending the answer to transition into stable state.
