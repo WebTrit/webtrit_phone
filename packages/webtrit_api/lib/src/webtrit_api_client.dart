@@ -345,15 +345,22 @@ class WebtritApiClient {
   }) async {
     final requestJson = sessionOtpCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(
-      [..._apiBasePathSegmentsV1, 'session', 'otp-create'],
-      null,
-      null,
-      requestJson,
-      requestOptions: options,
-    );
+    try {
+      final responseJson = await _httpClientExecutePost(
+        [..._apiBasePathSegmentsV1, 'session', 'otp-create'],
+        null,
+        null,
+        requestJson,
+        requestOptions: options,
+      );
 
-    return SessionOtpProvisional.fromJson(responseJson);
+      return SessionOtpProvisional.fromJson(responseJson);
+    } on RequestFailure catch (e) {
+      if (e.statusCode == 404) {
+        throw UserNotFoundException(url: e.url, requestId: e.requestId, statusCode: e.statusCode!);
+      }
+      rethrow;
+    }
   }
 
   Future<SessionToken> verifySessionOtp(
