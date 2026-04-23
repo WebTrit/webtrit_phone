@@ -518,7 +518,7 @@ class LoginCubit extends Cubit<LoginState> {
   void handleError(Object error, StackTrace stackTrace, String context) {
     if (error is RequestFailure) {
       if (error is UserNotFoundException) {
-        _logger.warning('Known login error occurred: user not found', error);
+        _logger.warning('Known login error occurred: $error', error);
         notificationsBloc.add(NotificationsSubmitted(const LoginUserNotFoundNotification()));
         return;
       }
