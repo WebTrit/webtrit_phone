@@ -1,4 +1,5 @@
 export 'backoff_retries.dart';
+export 'debounce_map.dart';
 export 'badge_layout.dart';
 export 'bloc_concurrency.dart';
 export 'buffer_transformer.dart';

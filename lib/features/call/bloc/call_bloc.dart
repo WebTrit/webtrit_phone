@@ -90,7 +90,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<void>? _foregroundCallPushSubscription;
-  final Map<String, Timer> _iceRestartTimers = {};
+  final _iceRestartDebounce = DebounceMap<String>(const Duration(seconds: 2));
 
   late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
@@ -222,10 +222,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _presenceInfoSyncTimer?.cancel();
 
-    for (final timer in _iceRestartTimers.values) {
-      timer.cancel();
-    }
-    _iceRestartTimers.clear();
+    _iceRestartDebounce.dispose();
 
     await _signalingSubscription.cancel();
 
@@ -3735,12 +3732,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// network interface (e.g. VPN tunnel) to finish initializing before ICE probing starts.
   /// Any pending restart for the same call is cancelled and rescheduled on each call, so
   /// rapid consecutive connectivity events result in a single restart.
-  static const _iceRestartDebounce = Duration(seconds: 2);
-
   void _scheduleIceRestart(String callId) {
-    _iceRestartTimers[callId]?.cancel();
-    _iceRestartTimers[callId] = Timer(_iceRestartDebounce, () async {
-      _iceRestartTimers.remove(callId);
+    _iceRestartDebounce.schedule(callId, () async {
       final pc = await _peerConnectionManager.retrieve(callId);
       if (pc == null) return;
       _logger.info('_scheduleIceRestart: restarting ICE for call $callId');
