@@ -23,6 +23,7 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
@@ -58,6 +59,7 @@ const _getUserMediaPushKitTimeout = Duration(seconds: 8);
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final CallLogsRepository callLogsRepository;
+  final LocalPushRepository localPushRepository;
   final UserRepository userRepository;
   final LinesStateRepository linesStateRepository;
   final PresenceInfoRepository presenceInfoRepository;
@@ -102,6 +104,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   CallBloc({
     required this.callLogsRepository,
+    required this.localPushRepository,
     required this.linesStateRepository,
     required this.presenceInfoRepository,
     required this.dialogInfoRepository,
@@ -1271,6 +1274,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         if (call.direction == CallDirection.incoming && !call.wasAccepted) {
           if (code == SignalingResponseCode.declineCall) endReason = CallkeepEndCallReason.declinedElsewhere;
           if (code == SignalingResponseCode.requestTerminated) endReason = CallkeepEndCallReason.unanswered;
+          if (Platform.isAndroid && code != SignalingResponseCode.declineCall) {
+            _showMissedCallNotification(event.callId, call.displayName ?? call.handle.value);
+          }
         }
 
         try {
@@ -1288,6 +1294,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } catch (e) {
       _logger.warning('__onCallSignalingEventHangup: $e');
     }
+  }
+
+  void _showMissedCallNotification(String callId, String callerName) {
+    localPushRepository
+        .displayPush(AppLocalPush.missedCall(callId, callerName))
+        .catchError((e) => _logger.warning('_showMissedCallNotification: $e'));
   }
 
   Future<void> __onCallSignalingEventCallUpdating(
