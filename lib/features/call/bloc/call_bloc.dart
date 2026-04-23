@@ -1298,15 +1298,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   void _showMissedCallNotification(String callId, String callerName) {
     localPushRepository
-        .displayPush(
-          AppLocalPush(
-            callId.hashCode,
-            // TODO: Add localization
-            'Missed Call',
-            callerName,
-            payload: {'callId': callId, 'type': 'missed_call'},
-          ),
-        )
+        .displayPush(AppLocalPush.missedCall(callId, callerName))
         .catchError((e) => _logger.warning('_showMissedCallNotification: $e'));
   }
 

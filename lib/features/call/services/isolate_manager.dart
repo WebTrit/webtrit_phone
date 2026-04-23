@@ -481,13 +481,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   Future<void> _showMissedCallNotification(HangupEvent event, NewCall call) async {
     try {
       await localPushRepository.displayPush(
-        AppLocalPush(
-          event.callId.hashCode,
-          // TODO: Add localization
-          'Missed Call',
-          _getDisplayNameForMissedCall(event, call) ?? 'Unknown',
-          payload: {'callId': event.callId, 'type': 'missed_call'},
-        ),
+        AppLocalPush.missedCall(event.callId, _getDisplayNameForMissedCall(event, call) ?? 'Unknown'),
       );
     } catch (e) {
       logger.severe('Failed to show missed call notification', e);
