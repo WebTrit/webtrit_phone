@@ -262,7 +262,7 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('SignalingModuleImpl — _errorHandled not reset on reconnect (WT-1403)', () {
-    SignalingModuleImpl _buildModuleWith(List<WebtritSignalingClient> clients) {
+    SignalingModuleImpl buildModuleWith(List<WebtritSignalingClient> clients) {
       var index = 0;
       return SignalingModuleImpl(
         coreUrl: 'https://example.com',
@@ -284,7 +284,7 @@ void main() {
     test('BUG: SignalingDisconnected suppressed when _errorHandled left true after prior clientA error', () async {
       final clientA = _ControllableClient();
       final clientB = _ControllableClient();
-      final module = _buildModuleWith([clientA, clientB]);
+      final module = buildModuleWith([clientA, clientB]);
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 
@@ -328,7 +328,7 @@ void main() {
       // just clientA error → clientB connects → clientB disconnects.
       final clientA = _ControllableClient();
       final clientB = _ControllableClient();
-      final module = _buildModuleWith([clientA, clientB]);
+      final module = buildModuleWith([clientA, clientB]);
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 
@@ -355,7 +355,7 @@ void main() {
     test('after fix: SignalingDisconnected emitted for clientB with correct code and reconnect delay', () async {
       final clientA = _ControllableClient();
       final clientB = _ControllableClient();
-      final module = _buildModuleWith([clientA, clientB]);
+      final module = buildModuleWith([clientA, clientB]);
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 
@@ -383,7 +383,7 @@ void main() {
       // only the stale disconnect fires (no clientB disconnect) → no event.
       final clientA = _ControllableClient();
       final clientB = _ControllableClient();
-      final module = _buildModuleWith([clientA, clientB]);
+      final module = buildModuleWith([clientA, clientB]);
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 
@@ -428,7 +428,7 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('SignalingModuleImpl — stale guard hole when _client == null', () {
-    SignalingModuleImpl _buildModuleWith2(List<WebtritSignalingClient> clients) {
+    SignalingModuleImpl buildModuleWith2(List<WebtritSignalingClient> clients) {
       var index = 0;
       return SignalingModuleImpl(
         coreUrl: 'https://example.com',
@@ -455,7 +455,7 @@ void main() {
         //   → clientA late 1002 fires → guard passes (null) → second SignalingDisconnected emitted
         final clientA = _ControllableClient();
         final clientB = _ControllableClient();
-        final module = _buildModuleWith2([clientA, clientB]);
+        final module = buildModuleWith2([clientA, clientB]);
         final events = <SignalingModuleEvent>[];
         module.events.listen(events.add);
 
@@ -495,7 +495,7 @@ void main() {
         //   clientA late stale callback fires → _client==null → guard passes
         //   → wasIntentional already reset → SignalingDisconnected(delay=3s) ← SPURIOUS
         final clientA = _ControllableClient();
-        final module = _buildModuleWith2([clientA]);
+        final module = buildModuleWith2([clientA]);
         final events = <SignalingModuleEvent>[];
         module.events.listen(events.add);
 
@@ -531,7 +531,7 @@ void main() {
       () async {
         final clientA = _ControllableClient();
         final clientB = _ControllableClient();
-        final module = _buildModuleWith2([clientA, clientB]);
+        final module = buildModuleWith2([clientA, clientB]);
         final events = <SignalingModuleEvent>[];
         module.events.listen(events.add);
 
@@ -553,7 +553,7 @@ void main() {
 
     test('after fix: stale callback after intentional disconnect is filtered — no spurious reconnect', () async {
       final clientA = _ControllableClient();
-      final module = _buildModuleWith2([clientA]);
+      final module = buildModuleWith2([clientA]);
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 

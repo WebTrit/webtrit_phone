@@ -172,7 +172,7 @@ class WebtritSignalingService implements SignalingModule {
             request: request,
             isActive: () => _isConnected,
           )
-          ?.catchError((Object e, StackTrace s) {
+          .catchError((Object e, StackTrace s) {
             if (e is NotConnectedException) {
               _logger.warning('execute: ghost state detected — forcing reconnect', e, s);
               _isConnected = false;
