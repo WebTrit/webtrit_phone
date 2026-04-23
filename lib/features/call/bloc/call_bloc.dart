@@ -90,6 +90,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
   StreamSubscription<void>? _foregroundCallPushSubscription;
+  final _iceRestartDebounce = DebounceMap<String>(const Duration(seconds: 2));
 
   late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
@@ -174,6 +175,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_AppLifecycleStateChanged>(_onAppLifecycleStateChanged, transformer: sequential());
     on<_ConnectivityResultChanged>(_onConnectivityResultChanged, transformer: sequential());
     on<_NavigatorMediaDevicesChange>(_onNavigatorMediaDevicesChange, transformer: debounce());
+    on<_IceRestartTriggered>(_onIceRestartTriggered, transformer: sequential());
     on<_RegistrationChange>(_onRegistrationChange, transformer: droppable());
     on<_ResetStateEvent>(_onResetStateEvent, transformer: droppable());
     on<_SignalingClientEvent>(_onSignalingClientEvent, transformer: restartable());
@@ -220,6 +222,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _reconnectController.dispose();
 
     _presenceInfoSyncTimer?.cancel();
+
+    _iceRestartDebounce.dispose();
 
     await _signalingSubscription.cancel();
 
@@ -554,6 +558,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       //  - in network loss scenario restarts RTP from almost imediately compating to built-in WebRTC connectivity checks which can take around 10-20 seconds
       //  - in double network scenario (e.g already has mobile network, but also connected to wifi)
       //    it helps to switch to better network instead of staying on old until rtp breaks.
+      //
+      // ICE restart is debounced to allow the new network interface (e.g. VPN tunnel) to fully
+      // initialize before probing starts. Calling restartIce() immediately after onConnectivityChanged
+      // can cause ICE failure because the interface is registered but not yet ready to carry traffic.
       for (var activeCall in state.activeCalls) {
         if (!activeCall.processingStatus.hasPeerConnectionReady) {
           _logger.info(
@@ -562,10 +570,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           continue;
         }
         _logger.info(
-          '_onConnectivityResultChanged: restarting ICE for call ${activeCall.callId} (status: ${activeCall.processingStatus})',
+          '_onConnectivityResultChanged: scheduling ICE restart for call ${activeCall.callId} (status: ${activeCall.processingStatus})',
         );
-        final pc = await _peerConnectionManager.retrieve(activeCall.callId);
-        pc?.restartIce();
+        _scheduleIceRestart(activeCall.callId);
       }
     }
 
@@ -639,6 +646,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> __onResetStateEventCompleteCall(_ResetStateEventCompleteCall event, Emitter<CallState> emit) async {
     _logger.warning('__onResetStateEventCompleteCall: ${event.callId}');
 
+    _iceRestartDebounce.cancel(event.callId);
     await _stopRingbackSound();
 
     try {
@@ -3720,6 +3728,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       callId,
       () => RenegotiationHandler(callErrorReporter: callErrorReporter, sdpMunger: sdpMunger),
     );
+  }
+
+  /// Schedules an ICE restart for [callId] after a short delay to allow a newly created
+  /// network interface (e.g. VPN tunnel) to finish initializing before ICE probing starts.
+  /// Any pending restart for the same call is cancelled and rescheduled on each call, so
+  /// rapid consecutive connectivity events result in a single restart.
+  void _scheduleIceRestart(String callId) {
+    _iceRestartDebounce.schedule(callId, () => add(_IceRestartTriggered(callId)));
+  }
+
+  Future<void> _onIceRestartTriggered(_IceRestartTriggered event, Emitter<CallState> emit) async {
+    final pc = await _peerConnectionManager.retrieve(event.callId);
+    if (pc == null) return;
+    _logger.info('_onIceRestartTriggered: restarting ICE for call ${event.callId}');
+    pc.restartIce();
   }
 
   /// Performs a safe renegotiation by first checking if the active call and peer connection still exist before proceeding and no "updating" state is detected on the call.

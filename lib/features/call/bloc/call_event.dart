@@ -33,6 +33,15 @@ class _NavigatorMediaDevicesChange extends CallEvent {
   const _NavigatorMediaDevicesChange();
 }
 
+class _IceRestartTriggered extends CallEvent {
+  const _IceRestartTriggered(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
 // registration event change
 
 class _RegistrationChange extends CallEvent {
