@@ -314,7 +314,7 @@ class SignalingHub {
   Future<void> _executeAndReply(SendPort replyPort, String correlationId, Map<String, dynamic> reqMap) async {
     try {
       final request = Request.fromJson(reqMap);
-      if (!_signalingModule.isConnected) throw StateError('Signaling not connected');
+      if (!_signalingModule.isConnected) throw NotConnectedException('ghost state: hub isConnected=false');
       await _signalingModule.execute(request)!;
       replyPort.send(encodeExecuteResult(correlationId, null));
     } catch (e) {

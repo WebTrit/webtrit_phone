@@ -26,6 +26,7 @@ const _executeErrorTypeWebtritSignalingBadState = 'webtrit_signaling_bad_state';
 const _executeErrorTypeWebtritSignalingKeepaliveTransactionTimeout = 'webtrit_signaling_keepalive_transaction_timeout';
 const _executeErrorTypeWebtritSignalingTransactionTerminateByDisconnect =
     'webtrit_signaling_transaction_terminate_by_disconnect';
+const _executeErrorTypeNotConnected = 'not_connected';
 const _executeErrorIdKey = 'id';
 const _executeErrorCodeKey = 'code';
 const _executeErrorReasonKey = 'reason';
@@ -195,6 +196,9 @@ Object? _encodeExecuteError(Object? error) {
       _executeErrorCloseReasonKey: error.closeReason,
     };
   }
+  if (error is NotConnectedException) {
+    return {_executeErrorTypeKey: _executeErrorTypeNotConnected};
+  }
   return {_executeErrorTypeKey: _executeErrorTypeMessage, _executeErrorReasonKey: error.toString()};
 }
 
@@ -266,6 +270,8 @@ Object? _decodeExecuteError(Object? encodedError) {
         return Exception('Malformed webtrit_signaling_transaction_terminate_by_disconnect execute payload: $map');
       }
       return WebtritSignalingTransactionTerminateByDisconnectException(id, transactionId, closeCode, closeReason);
+    case _executeErrorTypeNotConnected:
+      return NotConnectedException('ghost state: hub not connected');
     case _executeErrorTypeMessage:
       final message = map[_executeErrorReasonKey] as String?;
       return Exception(message ?? 'Unknown execute error');

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
@@ -18,6 +19,7 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   final List<SignalingServiceMode> startedModes = [];
   int attachCount = 0;
   final List<Request> executedRequests = [];
+  Object? executeError;
   final List<SignalingServiceMode> updatedModes = [];
   final List<Function> incomingCallHandles = [];
   final List<SignalingModuleFactory> moduleFactories = [];
@@ -43,7 +45,10 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   Future<void> attach() async => attachCount++;
 
   @override
-  Future<void> execute(Request request) async => executedRequests.add(request);
+  Future<void> execute(Request request) async {
+    if (executeError != null) throw executeError!;
+    executedRequests.add(request);
+  }
 
   @override
   Future<void> updateMode(SignalingServiceMode mode) async => updatedModes.add(mode);
@@ -320,6 +325,126 @@ void main() {
     test('restoreService delegates to platform', () async {
       await WebtritSignalingService.restoreService();
       expect(platform.restoreServiceCount, 1);
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // execute() — ghost state detection (Bug #3 / WT-1403 3rd protection layer)
+  //
+  // "Ghost state": main-isolate _isConnected=true while the FGS SignalingModule
+  // has _client=null. The FGS hub throws NotConnectedException across the
+  // isolate boundary; WebtritSignalingService.execute() detects it, resets
+  // _isConnected, and calls connect() to recover.
+  // -------------------------------------------------------------------------
+
+  group('WebtritSignalingService -- execute() ghost state detection', () {
+    // _executeWithRetry retries NotConnectedException up to maxRetryCount (3)
+    // times with a 2-second backoff. We use fakeAsync to skip those delays.
+    // Total timer budget: 3 retries × 2 s = 6 s → elapse 7 s to be safe.
+
+    test('NotConnectedException resets isConnected to false', () {
+      fakeAsync((async) {
+        final service = WebtritSignalingService(config: _kConfig);
+        service.connect();
+        async.flushMicrotasks();
+        platform.inject(SignalingConnected());
+        async.flushMicrotasks();
+        expect(service.isConnected, isTrue);
+
+        platform.executeError = NotConnectedException('ghost state');
+        final request = HangupRequest(transaction: 'tx-ghost', line: 1, callId: 'call-ghost');
+        service.execute(request)!.ignore();
+
+        async.elapse(const Duration(seconds: 7));
+
+        expect(service.isConnected, isFalse);
+
+        service.dispose();
+        async.flushMicrotasks();
+      });
+    });
+
+    test('NotConnectedException triggers connect() to recover', () {
+      fakeAsync((async) {
+        final service = WebtritSignalingService(config: _kConfig);
+        service.connect();
+        async.flushMicrotasks();
+        expect(platform.startedConfigs, hasLength(1));
+
+        platform.inject(SignalingConnected());
+        async.flushMicrotasks();
+
+        platform.executeError = NotConnectedException('ghost state');
+        final request = HangupRequest(transaction: 'tx-ghost', line: 1, callId: 'call-ghost');
+        service.execute(request)!.ignore();
+
+        async.elapse(const Duration(seconds: 7));
+
+        // connect() was called again after ghost state detected
+        expect(platform.startedConfigs, hasLength(2));
+
+        service.dispose();
+        async.flushMicrotasks();
+      });
+    });
+
+    test('NotConnectedException is rethrown to the caller', () {
+      fakeAsync((async) {
+        final service = WebtritSignalingService(config: _kConfig);
+        platform.inject(SignalingConnected());
+        async.flushMicrotasks();
+
+        platform.executeError = NotConnectedException('ghost state');
+        final request = HangupRequest(transaction: 'tx-ghost', line: 1, callId: 'call-ghost');
+
+        Object? caught;
+        service
+            .execute(request)!
+            .then(
+              (_) {},
+              onError: (Object e, StackTrace _) {
+                caught = e;
+              },
+            );
+
+        async.elapse(const Duration(seconds: 7));
+
+        expect(caught, isA<NotConnectedException>());
+
+        service.dispose();
+        async.flushMicrotasks();
+      });
+    });
+
+    test('successful execute does not trigger reconnect', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      service.connect();
+      await Future<void>.delayed(Duration.zero);
+      platform.inject(SignalingConnected());
+      await Future<void>.delayed(Duration.zero);
+
+      final request = HangupRequest(transaction: 'tx-1', line: 1, callId: 'call-1');
+      await service.execute(request)!;
+
+      expect(platform.startedConfigs, hasLength(1));
+      await service.dispose();
+    });
+
+    test('non-NotConnectedException is rethrown without triggering reconnect', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      service.connect();
+      await Future<void>.delayed(Duration.zero);
+      platform.inject(SignalingConnected());
+      await Future<void>.delayed(Duration.zero);
+
+      platform.executeError = Exception('transport error');
+      final request = HangupRequest(transaction: 'tx-1', line: 1, callId: 'call-1');
+
+      await expectLater(service.execute(request)!, throwsA(isA<Exception>()));
+
+      expect(service.isConnected, isTrue);
+      expect(platform.startedConfigs, hasLength(1));
+      await service.dispose();
     });
   });
 }

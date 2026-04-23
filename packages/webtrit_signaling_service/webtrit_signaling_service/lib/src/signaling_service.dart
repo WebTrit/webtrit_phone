@@ -166,11 +166,20 @@ class WebtritSignalingService implements SignalingModule {
   @override
   Future<void>? execute(Request request) {
     if (_isConnected) {
-      return _requestQueue.executeNow(
-        execute: SignalingServicePlatform.instance.execute,
-        request: request,
-        isActive: () => _isConnected,
-      );
+      return _requestQueue
+          .executeNow(
+            execute: SignalingServicePlatform.instance.execute,
+            request: request,
+            isActive: () => _isConnected,
+          )
+          .catchError((Object e, StackTrace s) {
+            if (e is NotConnectedException) {
+              _logger.warning('execute: ghost state detected — forcing reconnect', e, s);
+              _isConnected = false;
+              connect();
+            }
+            Error.throwWithStackTrace(e, s);
+          });
     }
     return _requestQueue.enqueue(request);
   }
