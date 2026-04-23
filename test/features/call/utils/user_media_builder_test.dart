@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:mocktail/mocktail.dart';
@@ -157,6 +159,83 @@ void main() {
 
       final localStream2 = localStreamFactory.streams[1];
       verifyNever(() => localStream2.removeTrack(any()));
+    });
+
+    test('serializes release and subsequent build pool mutations', () async {
+      final disposeGate = Completer<void>();
+      final events = <String>[];
+      var streamIndex = 0;
+      var getUserMediaCalls = 0;
+
+      Future<MediaStream> createBlockingLocalStream(String _) async {
+        streamIndex++;
+        final currentIndex = streamIndex;
+        final stream = MockMediaStream();
+        final audioTracks = <MediaStreamTrack>[];
+        final videoTracks = <MediaStreamTrack>[];
+
+        when(() => stream.id).thenReturn('local-stream-$currentIndex');
+        when(() => stream.getAudioTracks()).thenAnswer((_) => audioTracks);
+        when(() => stream.getVideoTracks()).thenAnswer((_) => videoTracks);
+        when(() => stream.addTrack(any())).thenAnswer((invocation) async {
+          final track = invocation.positionalArguments.first as MediaStreamTrack;
+          if (track.kind == 'audio') {
+            audioTracks.add(track);
+          } else if (track.kind == 'video') {
+            videoTracks.add(track);
+          }
+        });
+        when(() => stream.removeTrack(any())).thenAnswer((_) async {});
+        when(() => stream.dispose()).thenAnswer((_) async {
+          if (currentIndex != 1) return;
+          events.add('release_dispose_start');
+          await disposeGate.future;
+          events.add('release_dispose_end');
+        });
+
+        return stream;
+      }
+
+      final subject = DefaultUserMediaBuilder(
+        getUserMedia: (constraints) async {
+          getUserMediaCalls++;
+          events.add('gum_$getUserMediaCalls');
+
+          final hasAudio = constraints['audio'] != false;
+          final hasVideo = constraints['video'] != false;
+
+          if (hasAudio && !hasVideo) return audioSourceStream;
+          if (!hasAudio && hasVideo) return videoSourceStream;
+
+          throw Exception('Unsupported constraints in test: $constraints');
+        },
+        createLocalStream: createBlockingLocalStream,
+      );
+
+      final firstStream = await subject.build(video: false);
+      expect(getUserMediaCalls, 1);
+
+      final releaseFuture = subject.release(firstStream);
+      await Future<void>.delayed(Duration.zero);
+      expect(events, contains('release_dispose_start'));
+
+      final secondBuildFuture = subject.build(video: false);
+      await Future<void>.delayed(Duration.zero);
+      expect(getUserMediaCalls, 1);
+
+      disposeGate.complete();
+
+      final secondStream = await secondBuildFuture;
+      await releaseFuture;
+
+      expect(secondStream, isA<MediaStream>());
+      expect(getUserMediaCalls, 2);
+
+      final releaseDisposeEndIndex = events.indexOf('release_dispose_end');
+      final secondGetUserMediaIndex = events.indexOf('gum_2');
+
+      expect(releaseDisposeEndIndex, greaterThan(-1));
+      expect(secondGetUserMediaIndex, greaterThan(releaseDisposeEndIndex));
     });
   });
 

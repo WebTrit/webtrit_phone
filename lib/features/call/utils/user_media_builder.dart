@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -48,6 +50,13 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
   final Map<String, _BorrowedStreamLease> _borrowedStreams = {};
   _PooledTrack? _audioTrack;
   _PooledTrack? _videoTrack;
+  Future<void> _poolMutationQueue = Future<void>.value();
+
+  Future<T> _runPoolMutation<T>(Future<T> Function() action) {
+    final result = _poolMutationQueue.then((_) => action());
+    _poolMutationQueue = result.then((_) {}, onError: (_, __) {});
+    return result;
+  }
 
   /// Requests access to the user's media input devices (camera and/or microphone).
   ///
@@ -67,58 +76,57 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
   /// https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
   @override
   Future<MediaStream> build({required bool video, bool? frontCamera, bool allowAudioFallback = false}) async {
-    final resolvedVideo = video && (!allowAudioFallback || await _isCameraAvailable());
+    return _runPoolMutation(() async {
+      final resolvedVideo = video && (!allowAudioFallback || await _isCameraAvailable());
 
-    try {
-      return await _acquirePooledStream(resolvedVideo: resolvedVideo, frontCamera: frontCamera);
-    } catch (_) {
-      if (!allowAudioFallback || !resolvedVideo) rethrow;
-      return _acquirePooledStream(resolvedVideo: false, frontCamera: frontCamera);
-    }
+      try {
+        return await _acquirePooledStream(resolvedVideo: resolvedVideo, frontCamera: frontCamera);
+      } catch (_) {
+        if (!allowAudioFallback || !resolvedVideo) rethrow;
+        return _acquirePooledStream(resolvedVideo: false, frontCamera: frontCamera);
+      }
+    });
   }
 
   @override
   Future<MediaStreamTrack?> ensureVideoTrack(MediaStream stream, {bool? frontCamera}) async {
-    final existingTrack = stream.getVideoTracks().firstOrNull;
-    if (existingTrack != null) return existingTrack;
+    return _runPoolMutation(() async {
+      final existingTrack = stream.getVideoTracks().firstOrNull;
+      if (existingTrack != null) return existingTrack;
 
-    final videoTrack = await _acquireVideoTrack(frontCamera: frontCamera);
+      final videoTrack = await _acquireVideoTrack(frontCamera: frontCamera);
 
-    try {
-      await stream.addTrack(videoTrack);
-      _borrowedStreams.update(
-        stream.id,
-        (lease) => lease.copyWith(videoTrackId: videoTrack.id),
-        ifAbsent: () => _BorrowedStreamLease(videoTrackId: videoTrack.id),
-      );
+      try {
+        await stream.addTrack(videoTrack);
+        _borrowedStreams.update(
+          stream.id,
+          (lease) => lease.copyWith(videoTrackId: videoTrack.id),
+          ifAbsent: () => _BorrowedStreamLease(videoTrackId: videoTrack.id),
+        );
 
-      await _configureAppleAudio(hasVideo: true);
-      return videoTrack;
-    } catch (e) {
-      await _releaseVideoTrack(videoTrack.id);
-      throw UserMediaError(e.toString());
-    }
+        await _configureAppleAudio(hasVideo: true);
+        return videoTrack;
+      } catch (e) {
+        await _releaseVideoTrack(videoTrack.id);
+        throw UserMediaError(e.toString());
+      }
+    });
   }
 
   @override
   Future<void> release(MediaStream stream) async {
-    final lease = _borrowedStreams.remove(stream.id);
+    await _runPoolMutation(() async {
+      final lease = _borrowedStreams.remove(stream.id);
 
-    if (lease != null) {
-      // Detach pooled tracks from the stream before disposing it.
-      // On iOS and Android, streamDispose iterates stream.audioTracks /
-      // stream.videoTracks and removes each from the native localTracks
-      // registry. If a track is still referenced by another active call
-      // (references > 1), removing it from the stream first prevents
-      // streamDispose from evicting it — mediaStreamRemoveTrack does not
-      // touch localTracks, only the stream's own track list.
-      await _detachIfStillPooled(stream, lease.audioTrackId, _audioTrack);
-      await _detachIfStillPooled(stream, lease.videoTrackId, _videoTrack);
-      await _releaseAudioTrack(lease.audioTrackId);
-      await _releaseVideoTrack(lease.videoTrackId);
-    }
+      if (lease != null) {
+        await _detachIfStillPooled(stream, lease.audioTrackId, _audioTrack);
+        await _detachIfStillPooled(stream, lease.videoTrackId, _videoTrack);
+        await _releaseAudioTrack(lease.audioTrackId);
+        await _releaseVideoTrack(lease.videoTrackId);
+      }
 
-    await stream.dispose();
+      await stream.dispose();
+    });
   }
 
   Future<void> _detachIfStillPooled(MediaStream stream, String? trackId, _PooledTrack? pooled) async {
