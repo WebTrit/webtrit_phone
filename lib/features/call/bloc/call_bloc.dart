@@ -175,6 +175,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     on<_AppLifecycleStateChanged>(_onAppLifecycleStateChanged, transformer: sequential());
     on<_ConnectivityResultChanged>(_onConnectivityResultChanged, transformer: sequential());
     on<_NavigatorMediaDevicesChange>(_onNavigatorMediaDevicesChange, transformer: debounce());
+    on<_IceRestartTriggered>(_onIceRestartTriggered, transformer: sequential());
     on<_RegistrationChange>(_onRegistrationChange, transformer: droppable());
     on<_ResetStateEvent>(_onResetStateEvent, transformer: droppable());
     on<_SignalingClientEvent>(_onSignalingClientEvent, transformer: restartable());
@@ -645,6 +646,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> __onResetStateEventCompleteCall(_ResetStateEventCompleteCall event, Emitter<CallState> emit) async {
     _logger.warning('__onResetStateEventCompleteCall: ${event.callId}');
 
+    _iceRestartDebounce.cancel(event.callId);
     await _stopRingbackSound();
 
     try {
@@ -3733,12 +3735,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// Any pending restart for the same call is cancelled and rescheduled on each call, so
   /// rapid consecutive connectivity events result in a single restart.
   void _scheduleIceRestart(String callId) {
-    _iceRestartDebounce.schedule(callId, () async {
-      final pc = await _peerConnectionManager.retrieve(callId);
-      if (pc == null) return;
-      _logger.info('_scheduleIceRestart: restarting ICE for call $callId');
-      pc.restartIce();
-    });
+    _iceRestartDebounce.schedule(callId, () => add(_IceRestartTriggered(callId)));
+  }
+
+  Future<void> _onIceRestartTriggered(_IceRestartTriggered event, Emitter<CallState> emit) async {
+    final pc = await _peerConnectionManager.retrieve(event.callId);
+    if (pc == null) return;
+    _logger.info('_onIceRestartTriggered: restarting ICE for call ${event.callId}');
+    pc.restartIce();
   }
 
   /// Performs a safe renegotiation by first checking if the active call and peer connection still exist before proceeding and no "updating" state is detected on the call.
