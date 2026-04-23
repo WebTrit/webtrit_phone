@@ -326,6 +326,7 @@ class SignalingModuleImpl implements SignalingModule {
         );
 
         _client = client;
+        _errorHandled = false;
         _lastConnectErrorString = null;
         _emit(SignalingConnected());
         unawaited(_requestQueue.flush(execute: client.execute, isActive: () => identical(_client, client)));
