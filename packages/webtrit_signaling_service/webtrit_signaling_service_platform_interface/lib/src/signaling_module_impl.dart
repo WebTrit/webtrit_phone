@@ -134,6 +134,19 @@ class SignalingModuleImpl implements SignalingModule {
   /// consumers would otherwise receive two separate reconnect triggers.
   bool _errorHandled = false;
 
+  /// Identity token for the currently active [WebtritSignalingClient].
+  ///
+  /// A fresh [Object] is created in [_connectAsync] for each new client and
+  /// captured in the [onError]/[onDisconnect] closures. Callbacks whose token
+  /// does not match the current [_activeClientId] are discarded as stale.
+  ///
+  /// [_onError] and [_onDisconnect] both set [_activeClientId] to null after
+  /// handling the event, so any late-arriving callback from the same client
+  /// (e.g. a `_wsOnDone` that fires after `_onError`) is also filtered even
+  /// when [_client] is already null — closing the hole in the previous guard
+  /// `_client != null && !identical(_client, client)`.
+  Object? _activeClientId;
+
   /// Last connect error as string for deduplication.
   String? _lastConnectErrorString;
 
@@ -290,34 +303,24 @@ class SignalingModuleImpl implements SignalingModule {
           return;
         }
 
-        // Wrap onError and onDisconnect in closures that capture [client] and
-        // guard against stale callbacks from a superseded connection.
-        //
-        // Race: a zombie client[n-1] whose server-side close (code 4441) or
-        // late network error arrives after client[n] is already assigned would
-        // unconditionally clear _client and emit a spurious disconnect/failure,
-        // corrupting the active session with no auto-recovery.
-        //
-        // Guard condition: skip only when _client is a *different* non-null
-        // client (new connection replaced us). If _client is null — cleared by
-        // disconnect() or _onError — we are still the responsible client and
-        // must forward the callback.
-        //
-        // The same identity pattern is already used for _requestQueue.flush
-        // (isActive: () => identical(_client, client)) — this extends it to
-        // the error and disconnect paths.
+        // Assign a unique identity token before registering callbacks.
+        // Each client gets its own token; _onError and _onDisconnect clear it
+        // when they run, so any late-arriving callback (e.g. _wsOnDone after
+        // _onError) is discarded even when _client is already null.
+        final myId = _activeClientId = Object();
+
         client.listen(
           onStateHandshake: _onHandshake,
           onEvent: _onEvent,
           onError: (error, [stackTrace]) {
-            if (_client != null && !identical(_client, client)) {
+            if (!identical(_activeClientId, myId)) {
               _logger.fine('_onError: ignoring stale error from superseded client: $error');
               return;
             }
             _onError(error, stackTrace);
           },
           onDisconnect: (code, reason) {
-            if (_client != null && !identical(_client, client)) {
+            if (!identical(_activeClientId, myId)) {
               _logger.fine('_onDisconnect: ignoring stale close code=$code from superseded client');
               return;
             }
@@ -370,6 +373,7 @@ class SignalingModuleImpl implements SignalingModule {
     }
     _logger.severe('_onError', error, stackTrace);
     _client = null;
+    _activeClientId = null; // invalidate so any late _wsOnDone from this client is filtered
     _errorHandled = true;
 
     final errorString = error.toString();
@@ -381,6 +385,7 @@ class SignalingModuleImpl implements SignalingModule {
 
   void _onDisconnect(int? code, String? reason) {
     _client = null;
+    _activeClientId = null; // invalidate so further stale callbacks from this client are filtered
     final ack = _disconnectAck;
     _disconnectAck = null;
     final wasIntentional = _intentionalDisconnect;

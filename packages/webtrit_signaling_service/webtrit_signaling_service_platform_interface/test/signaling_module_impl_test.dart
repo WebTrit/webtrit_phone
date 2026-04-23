@@ -400,4 +400,172 @@ void main() {
       expect(events.whereType<SignalingDisconnected>(), isEmpty);
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // Stale guard hole: _client == null
+  //
+  // The existing guard `_client != null && !identical(_client, client)` is
+  // bypassed whenever _client is null — the AND short-circuits to false.
+  //
+  // Scenario A (WT-1403 secondary):
+  //   clientA error → _client=null
+  //   clientB connects → _client=clientB
+  //   clientB disconnect(4502) → _client=null   ← clears _client
+  //   clientA late _wsOnDone(1002) fires:
+  //     guard: _client==null → passes! → _onDisconnect(1002)
+  //     → SignalingDisconnected(delay=null) emitted ← duplicate event
+  //
+  // Scenario B (intentional disconnect + stale callback):
+  //   clientA connected
+  //   module.disconnect() → intentional → SignalingDisconnected(delay=null)
+  //   clientA late stale callback fires:
+  //     guard: _client==null → passes! → _onDisconnect
+  //     → wasIntentional already reset → SignalingDisconnected(delay=3s) ← spurious reconnect
+  //
+  // Fix: replace the guard with an explicit `_activeClientId` token that is
+  // set when a client connects and cleared in _onError / _onDisconnect.
+  // Guard becomes `!identical(_activeClientId, myId)` — works even when null.
+  // ---------------------------------------------------------------------------
+
+  group('SignalingModuleImpl — stale guard hole when _client == null', () {
+    SignalingModuleImpl _buildModuleWith2(List<WebtritSignalingClient> clients) {
+      var index = 0;
+      return SignalingModuleImpl(
+        coreUrl: 'https://example.com',
+        tenantId: 'tenant',
+        token: 'token',
+        trustedCertificates: TrustedCertificates.empty,
+        clientFactory:
+            ({
+              required Uri url,
+              required String tenantId,
+              required String token,
+              required Duration connectionTimeout,
+              required TrustedCertificates certs,
+              required bool force,
+            }) async => clients[index++],
+      );
+    }
+
+    test(
+      'BUG: stale clientA _wsOnDone(1002) fires after clientB disconnect clears _client — emits duplicate SignalingDisconnected',
+      () async {
+        // Scenario A:
+        //   clientA error → clientB connects → clientB disconnect(4502) clears _client=null
+        //   → clientA late 1002 fires → guard passes (null) → second SignalingDisconnected emitted
+        final clientA = _ControllableClient();
+        final clientB = _ControllableClient();
+        final module = _buildModuleWith2([clientA, clientB]);
+        final events = <SignalingModuleEvent>[];
+        module.events.listen(events.add);
+
+        // Step 1–3: clientA error → clientB connected
+        module.connect();
+        await Future<void>.delayed(Duration.zero);
+        clientA.triggerError(Exception('keepalive timeout'));
+        module.connect();
+        await Future<void>.delayed(Duration.zero);
+
+        // Step 4: clientB legitimate disconnect → _client=null, SignalingDisconnected(4502) emitted
+        clientB.triggerDisconnect(4502);
+
+        // Step 5: clientA's late _wsOnDone(1002) fires AFTER _client was cleared
+        // BUG: _client==null → guard does not filter → _onDisconnect(1002) called
+        // → SignalingDisconnected(code:1002, delay:null) emitted as second event
+        clientA.triggerDisconnect(1002);
+
+        // Expect only the single legitimate disconnect from clientB
+        final disconnects = events.whereType<SignalingDisconnected>().toList();
+        expect(
+          disconnects,
+          hasLength(1),
+          reason:
+              'BUG: stale clientA _wsOnDone(1002) passed through guard when _client==null — '
+              'emitted duplicate SignalingDisconnected that could cancel scheduled reconnect',
+        );
+        expect(disconnects.first.code, 4502, reason: 'only the clientB disconnect should be visible');
+      },
+    );
+
+    test(
+      'BUG: stale callback after intentional disconnect emits spurious SignalingDisconnected with delay — triggers unexpected reconnect',
+      () async {
+        // Scenario B:
+        //   module.disconnect() → intentional → SignalingDisconnected(delay=null) ← correct
+        //   clientA late stale callback fires → _client==null → guard passes
+        //   → wasIntentional already reset → SignalingDisconnected(delay=3s) ← SPURIOUS
+        final clientA = _ControllableClient();
+        final module = _buildModuleWith2([clientA]);
+        final events = <SignalingModuleEvent>[];
+        module.events.listen(events.add);
+
+        module.connect();
+        await Future<void>.delayed(Duration.zero);
+        expect(module.isConnected, isTrue);
+
+        // Intentional disconnect — fires onDisconnect once through client.disconnect()
+        await module.disconnect();
+
+        // Late stale callback from the same client (e.g. server close frame arriving late)
+        // BUG: _client==null → guard passes → wasIntentional already false → delay=3s
+        clientA.triggerDisconnect(1000);
+
+        final disconnects = events.whereType<SignalingDisconnected>().toList();
+        expect(
+          disconnects,
+          hasLength(1),
+          reason:
+              'BUG: second stale callback after intentional disconnect emitted spurious '
+              'SignalingDisconnected that could trigger an unexpected reconnect',
+        );
+        expect(
+          disconnects.first.recommendedReconnectDelay,
+          isNull,
+          reason: 'the only disconnect event must be the intentional one with delay=null',
+        );
+      },
+    );
+
+    test(
+      'after fix: stale clientA _wsOnDone(1002) filtered when _client==null — only clientB event survives',
+      () async {
+        final clientA = _ControllableClient();
+        final clientB = _ControllableClient();
+        final module = _buildModuleWith2([clientA, clientB]);
+        final events = <SignalingModuleEvent>[];
+        module.events.listen(events.add);
+
+        module.connect();
+        await Future<void>.delayed(Duration.zero);
+        clientA.triggerError(Exception('keepalive timeout'));
+        module.connect();
+        await Future<void>.delayed(Duration.zero);
+
+        clientB.triggerDisconnect(4502);
+        clientA.triggerDisconnect(1002); // late stale — must be filtered
+
+        final disconnects = events.whereType<SignalingDisconnected>().toList();
+        expect(disconnects, hasLength(1));
+        expect(disconnects.first.code, 4502);
+        expect(disconnects.first.recommendedReconnectDelay, isNotNull);
+      },
+    );
+
+    test('after fix: stale callback after intentional disconnect is filtered — no spurious reconnect', () async {
+      final clientA = _ControllableClient();
+      final module = _buildModuleWith2([clientA]);
+      final events = <SignalingModuleEvent>[];
+      module.events.listen(events.add);
+
+      module.connect();
+      await Future<void>.delayed(Duration.zero);
+
+      await module.disconnect();
+      clientA.triggerDisconnect(1000); // stale — must be filtered
+
+      final disconnects = events.whereType<SignalingDisconnected>().toList();
+      expect(disconnects, hasLength(1));
+      expect(disconnects.first.recommendedReconnectDelay, isNull, reason: 'only intentional disconnect, no reconnect');
+    });
+  });
 }
