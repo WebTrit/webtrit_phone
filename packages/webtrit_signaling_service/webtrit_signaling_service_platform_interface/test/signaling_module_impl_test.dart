@@ -12,8 +12,8 @@
 ///    connects, _errorHandled must be reset. If not, clientB's legitimate
 ///    disconnect is silently suppressed and no reconnect is triggered.
 ///
-/// Tests labelled "BUG:" assert correct behavior — they fail on the unfixed code.
-/// Tests labelled "after fix:" verify the same behavior stays correct.
+/// Tests labelled "regression:" reproduce the bug scenario and fail on unfixed code.
+/// Tests labelled "after fix:" verify correct behavior on fixed code.
 library;
 
 import 'dart:async';
@@ -122,6 +122,25 @@ SignalingModuleImpl _buildModule(SignalingClientFactory factory) => SignalingMod
   clientFactory: factory,
 );
 
+SignalingModuleImpl _buildModuleFromClients(List<WebtritSignalingClient> clients) {
+  var index = 0;
+  return SignalingModuleImpl(
+    coreUrl: 'https://example.com',
+    tenantId: 'tenant',
+    token: 'token',
+    trustedCertificates: TrustedCertificates.empty,
+    clientFactory:
+        ({
+          required Uri url,
+          required String tenantId,
+          required String token,
+          required Duration connectionTimeout,
+          required TrustedCertificates certs,
+          required bool force,
+        }) async => clients[index++],
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
@@ -132,36 +151,39 @@ void main() {
     // Core bug: disconnect while _client==null leaves _connecting=true
     // -----------------------------------------------------------------------
 
-    test('BUG: second connect() is silently dropped because _connecting stays true after disconnect()', () async {
-      // Arrange
-      final factory = _ControlledFactory();
-      final module = _buildModule(factory.factory);
+    test(
+      'regression: second connect() is silently dropped because _connecting stays true after disconnect()',
+      () async {
+        // Arrange
+        final factory = _ControlledFactory();
+        final module = _buildModule(factory.factory);
 
-      // Act: connect #1 → factory called, hangs
-      module.connect();
-      await Future<void>.delayed(Duration.zero);
-      expect(factory.callCount, 1, reason: 'first connect() must call the factory');
+        // Act: connect #1 → factory called, hangs
+        module.connect();
+        await Future<void>.delayed(Duration.zero);
+        expect(factory.callCount, 1, reason: 'first connect() must call the factory');
 
-      // disconnect() while _client==null — the bug: does not reset _connecting
-      await module.disconnect();
+        // disconnect() while _client==null — the bug: does not reset _connecting
+        await module.disconnect();
 
-      // connect #2 — must call the factory again; currently it is silently dropped
-      module.connect();
-      await Future<void>.delayed(Duration.zero);
+        // connect #2 — must call the factory again; currently it is silently dropped
+        module.connect();
+        await Future<void>.delayed(Duration.zero);
 
-      // BUG: factory was not called a second time — second connect() was dropped
-      expect(
-        factory.callCount,
-        2,
-        reason: 'second connect() was silently dropped: factory call count did not increase',
-      );
-    });
+        // BUG: factory was not called a second time — second connect() was dropped
+        expect(
+          factory.callCount,
+          2,
+          reason: 'second connect() was silently dropped: factory call count did not increase',
+        );
+      },
+    );
 
     // -----------------------------------------------------------------------
     // Consequence: stale connect completes and leaves module in wrong state
     // -----------------------------------------------------------------------
 
-    test('BUG: stale in-flight connect completes after disconnect() and leaves module connected', () async {
+    test('regression: stale in-flight connect completes after disconnect() and leaves module connected', () async {
       // Arrange
       final factory = _ControlledFactory();
       final module = _buildModule(factory.factory);
@@ -262,73 +284,57 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('SignalingModuleImpl — _errorHandled not reset on reconnect (WT-1403)', () {
-    SignalingModuleImpl buildModuleWith(List<WebtritSignalingClient> clients) {
-      var index = 0;
-      return SignalingModuleImpl(
-        coreUrl: 'https://example.com',
-        tenantId: 'tenant',
-        token: 'token',
-        trustedCertificates: TrustedCertificates.empty,
-        clientFactory:
-            ({
-              required Uri url,
-              required String tenantId,
-              required String token,
-              required Duration connectionTimeout,
-              required TrustedCertificates certs,
-              required bool force,
-            }) async => clients[index++],
-      );
-    }
+    test(
+      'regression: SignalingDisconnected suppressed when _errorHandled left true after prior clientA error',
+      () async {
+        final clientA = _ControllableClient();
+        final clientB = _ControllableClient();
+        final module = _buildModuleFromClients([clientA, clientB]);
+        final events = <SignalingModuleEvent>[];
+        module.events.listen(events.add);
 
-    test('BUG: SignalingDisconnected suppressed when _errorHandled left true after prior clientA error', () async {
-      final clientA = _ControllableClient();
-      final clientB = _ControllableClient();
-      final module = buildModuleWith([clientA, clientB]);
-      final events = <SignalingModuleEvent>[];
-      module.events.listen(events.add);
+        // Step 1: connect → clientA established
+        module.connect();
+        await Future<void>.delayed(Duration.zero);
+        expect(events.whereType<SignalingConnected>(), hasLength(1));
 
-      // Step 1: connect → clientA established
-      module.connect();
-      await Future<void>.delayed(Duration.zero);
-      expect(events.whereType<SignalingConnected>(), hasLength(1));
+        // Step 2: clientA error → _errorHandled=true, _client=null
+        clientA.triggerError(Exception('keepalive timeout'));
+        expect(events.whereType<SignalingConnectionFailed>(), hasLength(1));
+        expect(module.isConnected, isFalse);
 
-      // Step 2: clientA error → _errorHandled=true, _client=null
-      clientA.triggerError(Exception('keepalive timeout'));
-      expect(events.whereType<SignalingConnectionFailed>(), hasLength(1));
-      expect(module.isConnected, isFalse);
+        // Step 3: reconnect → clientB established
+        // BUG: _errorHandled is NOT reset to false at _client=clientB
+        module.connect();
+        await Future<void>.delayed(Duration.zero);
+        expect(events.whereType<SignalingConnected>(), hasLength(2));
+        expect(module.isConnected, isTrue);
 
-      // Step 3: reconnect → clientB established
-      // BUG: _errorHandled is NOT reset to false at _client=clientB
-      module.connect();
-      await Future<void>.delayed(Duration.zero);
-      expect(events.whereType<SignalingConnected>(), hasLength(2));
-      expect(module.isConnected, isTrue);
+        // Step 4: stale clientA _onDisconnect fires (e.g. force-attach-close 4441)
+        // Guard returns early — _errorHandled stays true on buggy code
+        clientA.triggerDisconnect(4441, 'force attach close');
 
-      // Step 4: stale clientA _onDisconnect fires (e.g. force-attach-close 4441)
-      // Guard returns early — _errorHandled stays true on buggy code
-      clientA.triggerDisconnect(4441, 'force attach close');
+        // Step 5: clientB legitimate disconnect (server keepalive timeout 4502)
+        clientB.triggerDisconnect(4502, 'keepalive timeout');
 
-      // Step 5: clientB legitimate disconnect (server keepalive timeout 4502)
-      clientB.triggerDisconnect(4502, 'keepalive timeout');
+        // On buggy code: _errorHandled=true causes _onDisconnect to return early
+        // without emitting SignalingDisconnected → this assertion FAILS on current code
+        expect(
+          events.whereType<SignalingDisconnected>(),
+          hasLength(1),
+          reason:
+              'BUG: _errorHandled was not reset on reconnect — '
+              'clientB disconnect silently suppressed, no reconnect triggered',
+        );
+      },
+    );
 
-      // On buggy code: _errorHandled=true causes _onDisconnect to return early
-      // without emitting SignalingDisconnected → this assertion FAILS on current code
-      expect(
-        events.whereType<SignalingDisconnected>(),
-        hasLength(1),
-        reason:
-            'BUG: _errorHandled was not reset on reconnect — '
-            'clientB disconnect silently suppressed, no reconnect triggered',
-      );
-    });
-
-    test('BUG: SignalingDisconnected suppressed even without stale intermediate disconnect', () async {
+    test('regression: SignalingDisconnected suppressed even without stale intermediate disconnect', () async {
       // Same bug manifests without the stale clientA disconnect in step 4:
       // just clientA error → clientB connects → clientB disconnects.
       final clientA = _ControllableClient();
       final clientB = _ControllableClient();
-      final module = buildModuleWith([clientA, clientB]);
+      final module = _buildModuleFromClients([clientA, clientB]);
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 
@@ -355,7 +361,7 @@ void main() {
     test('after fix: SignalingDisconnected emitted for clientB with correct code and reconnect delay', () async {
       final clientA = _ControllableClient();
       final clientB = _ControllableClient();
-      final module = buildModuleWith([clientA, clientB]);
+      final module = _buildModuleFromClients([clientA, clientB]);
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 
@@ -383,7 +389,7 @@ void main() {
       // only the stale disconnect fires (no clientB disconnect) → no event.
       final clientA = _ControllableClient();
       final clientB = _ControllableClient();
-      final module = buildModuleWith([clientA, clientB]);
+      final module = _buildModuleFromClients([clientA, clientB]);
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 
@@ -428,34 +434,15 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('SignalingModuleImpl — stale guard hole when _client == null', () {
-    SignalingModuleImpl buildModuleWith2(List<WebtritSignalingClient> clients) {
-      var index = 0;
-      return SignalingModuleImpl(
-        coreUrl: 'https://example.com',
-        tenantId: 'tenant',
-        token: 'token',
-        trustedCertificates: TrustedCertificates.empty,
-        clientFactory:
-            ({
-              required Uri url,
-              required String tenantId,
-              required String token,
-              required Duration connectionTimeout,
-              required TrustedCertificates certs,
-              required bool force,
-            }) async => clients[index++],
-      );
-    }
-
     test(
-      'BUG: stale clientA _wsOnDone(1002) fires after clientB disconnect clears _client — emits duplicate SignalingDisconnected',
+      'regression: stale clientA _wsOnDone(1002) fires after clientB disconnect clears _client — emits duplicate SignalingDisconnected',
       () async {
         // Scenario A:
         //   clientA error → clientB connects → clientB disconnect(4502) clears _client=null
         //   → clientA late 1002 fires → guard passes (null) → second SignalingDisconnected emitted
         final clientA = _ControllableClient();
         final clientB = _ControllableClient();
-        final module = buildModuleWith2([clientA, clientB]);
+        final module = _buildModuleFromClients([clientA, clientB]);
         final events = <SignalingModuleEvent>[];
         module.events.listen(events.add);
 
@@ -488,14 +475,14 @@ void main() {
     );
 
     test(
-      'BUG: stale callback after intentional disconnect emits spurious SignalingDisconnected with delay — triggers unexpected reconnect',
+      'regression: stale callback after intentional disconnect emits spurious SignalingDisconnected with delay — triggers unexpected reconnect',
       () async {
         // Scenario B:
         //   module.disconnect() → intentional → SignalingDisconnected(delay=null) ← correct
         //   clientA late stale callback fires → _client==null → guard passes
         //   → wasIntentional already reset → SignalingDisconnected(delay=3s) ← SPURIOUS
         final clientA = _ControllableClient();
-        final module = buildModuleWith2([clientA]);
+        final module = _buildModuleFromClients([clientA]);
         final events = <SignalingModuleEvent>[];
         module.events.listen(events.add);
 
@@ -531,7 +518,7 @@ void main() {
       () async {
         final clientA = _ControllableClient();
         final clientB = _ControllableClient();
-        final module = buildModuleWith2([clientA, clientB]);
+        final module = _buildModuleFromClients([clientA, clientB]);
         final events = <SignalingModuleEvent>[];
         module.events.listen(events.add);
 
@@ -553,7 +540,7 @@ void main() {
 
     test('after fix: stale callback after intentional disconnect is filtered — no spurious reconnect', () async {
       final clientA = _ControllableClient();
-      final module = buildModuleWith2([clientA]);
+      final module = _buildModuleFromClients([clientA]);
       final events = <SignalingModuleEvent>[];
       module.events.listen(events.add);
 
