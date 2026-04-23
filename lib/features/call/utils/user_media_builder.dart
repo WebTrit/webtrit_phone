@@ -54,7 +54,7 @@ class DefaultUserMediaBuilder implements UserMediaBuilder {
 
   Future<T> _runPoolMutation<T>(Future<T> Function() action) {
     final result = _poolMutationQueue.then((_) => action());
-    _poolMutationQueue = result.then((_) {}, onError: (_, __) {});
+    _poolMutationQueue = result.then((_) {}, onError: (_, _) {});
     return result;
   }
 
