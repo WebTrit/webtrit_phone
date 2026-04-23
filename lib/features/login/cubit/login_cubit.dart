@@ -525,7 +525,13 @@ class LoginCubit extends Cubit<LoginState> {
         'otp_verification_attempts_exceeded' => const LoginOtpVerificationAttemptsExceededNotification(),
         'otp_already_verified' => const LoginOtpAlreadyVerifiedNotification(),
         'phone_not_found' => const LoginPhoneNotFoundNotification(),
-        _ => null, // Maybe better show general error, like 'Something went wrong. Please try again.'
+        'incorrect_credentials' => const LoginIncorrectCredentialsNotification(),
+        'user_not_found' => const LoginUserNotFoundNotification(),
+        'unconfigured_bundle_id' => const LoginUnconfiguredBundleIdNotification(),
+        'validation_error' => const LoginValidationErrorNotification(),
+        'parameters_apply_issue' => const LoginParametersApplyIssueNotification(),
+        'empty_email' => const LoginEmptyEmailNotification(),
+        _ => null,
       };
       if (readableNotification != null) {
         _logger.warning('Known login error occurred: ${error.error}', error);

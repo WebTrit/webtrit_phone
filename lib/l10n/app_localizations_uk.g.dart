@@ -761,6 +761,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_RequestFailurePhoneNotFoundError => 'Номер телефону не знайдено';
 
   @override
+  String get login_RequestFailureIncorrectCredentialsError => 'Невірне ім\'я користувача або пароль';
+
+  @override
+  String get login_RequestFailureUserNotFoundError => 'Користувача не знайдено';
+
+  @override
   String get login_RequestFailureUnconfiguredBundleIdError =>
       'Помилка конфігурації сервера застосунку - сповістіть свого постачальника послуг';
 

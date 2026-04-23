@@ -1407,6 +1407,18 @@ abstract class AppLocalizations {
   /// **'Phone number not found'**
   String get login_RequestFailurePhoneNotFoundError;
 
+  /// Shown during password login when the provided username or password is incorrect. Condition: the backend returns incorrect_credentials in response to POST /session.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect username or password'**
+  String get login_RequestFailureIncorrectCredentialsError;
+
+  /// Shown during password login when the provided user reference does not exist. Condition: the backend returns user_not_found in response to POST /session.
+  ///
+  /// In en, this message translates to:
+  /// **'User not found'**
+  String get login_RequestFailureUserNotFoundError;
+
   /// Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup.
   ///
   /// In en, this message translates to:

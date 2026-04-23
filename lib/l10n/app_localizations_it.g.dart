@@ -757,6 +757,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get login_RequestFailurePhoneNotFoundError => 'Numero di telefono non trovato';
 
   @override
+  String get login_RequestFailureIncorrectCredentialsError => 'Nome utente o password non corretti';
+
+  @override
+  String get login_RequestFailureUserNotFoundError => 'Utente non trovato';
+
+  @override
   String get login_RequestFailureUnconfiguredBundleIdError =>
       'Errore di configurazione del backend dell\'app - avvisare il proprio fornitore di servizi';
 
