@@ -638,6 +638,14 @@
   "@login_RequestFailurePhoneNotFoundError": {
     "description": "Shown during login or signup when the user provides a phone number that cannot be found in the system. Condition: the entered phone number does not exist or is not recognized by the backend."
   },
+  "login_RequestFailureIncorrectCredentialsError": "Невірне ім'я користувача або пароль",
+  "@login_RequestFailureIncorrectCredentialsError": {
+    "description": "Shown during password login when the provided username or password is incorrect. Condition: the backend returns incorrect_credentials in response to POST /session."
+  },
+  "login_RequestFailureUserNotFoundError": "Користувача не знайдено",
+  "@login_RequestFailureUserNotFoundError": {
+    "description": "Shown during password login when the provided user reference does not exist. Condition: the backend returns user_not_found in response to POST /session."
+  },
   "login_RequestFailureUnconfiguredBundleIdError": "Помилка конфігурації сервера застосунку - сповістіть свого постачальника послуг",
   "@login_RequestFailureUnconfiguredBundleIdError": {
     "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."

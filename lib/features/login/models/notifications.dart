@@ -96,6 +96,60 @@ final class LoginPhoneNotFoundNotification extends MessageNotification {
   }
 }
 
+final class LoginIncorrectCredentialsNotification extends MessageNotification {
+  const LoginIncorrectCredentialsNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailureIncorrectCredentialsError;
+  }
+}
+
+final class LoginUserNotFoundNotification extends MessageNotification {
+  const LoginUserNotFoundNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailureUserNotFoundError;
+  }
+}
+
+final class LoginUnconfiguredBundleIdNotification extends MessageNotification {
+  const LoginUnconfiguredBundleIdNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailureUnconfiguredBundleIdError;
+  }
+}
+
+final class LoginValidationErrorNotification extends MessageNotification {
+  const LoginValidationErrorNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailureIdentifierIsNotValid;
+  }
+}
+
+final class LoginParametersApplyIssueNotification extends MessageNotification {
+  const LoginParametersApplyIssueNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailureParametersApplyIssueError;
+  }
+}
+
+final class LoginEmptyEmailNotification extends MessageNotification {
+  const LoginEmptyEmailNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailureEmptyEmailError;
+  }
+}
+
 final class SupportedLoginTypeMissedErrorNotification extends MessageNotification {
   const SupportedLoginTypeMissedErrorNotification();
 
