@@ -513,6 +513,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
                       return CallBloc(
                         callLogsRepository: context.read<CallLogsRepository>(),
+                        localPushRepository: context.read<LocalPushRepository>(),
                         linesStateRepository: context.read<LinesStateRepository>(),
                         presenceInfoRepository: context.read<PresenceInfoRepository>(),
                         dialogInfoRepository: context.read<DialogInfoRepository>(),
