@@ -391,11 +391,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final isEmpty = currentCalls.isEmpty;
 
     // First call started (0 → 1).
-    if (wasEmpty && !isEmpty) mediaManager.disableSpeaker();
+    if (wasEmpty && !isEmpty) mediaManager.setSpeaker(null, enabled: false);
 
     // Last call ended (N → 0).
     if (!wasEmpty && isEmpty) {
-      mediaManager.disableSpeaker();
+      mediaManager.setSpeaker(null, enabled: false);
       mediaManager.clearCommunicationDevice();
     }
   }

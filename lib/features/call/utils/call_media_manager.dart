@@ -101,16 +101,16 @@ class CallMediaManager {
     _logger.info('setDevice: ${device.type} (id=${device.id}) for call $callId');
     if (Platform.isAndroid) {
       if (device.type == CallAudioDeviceType.speaker) {
-        enableSpeaker(callId);
+        setSpeaker(callId, enabled: true);
       } else {
         Helper.setSpeakerphoneOn(false);
         _callkeep.setAudioDevice(callId, device.toCallkeep());
       }
     } else if (Platform.isIOS) {
       if (device.type == CallAudioDeviceType.speaker) {
-        enableSpeaker(callId);
+        setSpeaker(callId, enabled: true);
       } else {
-        disableSpeaker(callId);
+        setSpeaker(callId, enabled: false);
         final deviceId = device.id;
         if (deviceId != null) Helper.selectAudioInput(deviceId);
       }
@@ -128,17 +128,13 @@ class CallMediaManager {
   //   AudioManager calls and only respond to Telecom routing.
   // On iOS Helper.setSpeakerphoneOn is sufficient — no Telecom layer involved.
 
-  void enableSpeaker(String callId) {
-    Helper.setSpeakerphoneOn(true);
-    if (Platform.isAndroid) {
-      _callkeep.setAudioDevice(callId, const CallAudioDevice(type: CallAudioDeviceType.speaker).toCallkeep());
-    }
-  }
-
-  void disableSpeaker([String? callId]) {
-    Helper.setSpeakerphoneOn(false);
+  void setSpeaker(String? callId, {required bool enabled}) {
+    Helper.setSpeakerphoneOn(enabled);
     if (Platform.isAndroid && callId != null) {
-      _callkeep.setAudioDevice(callId, const CallAudioDevice(type: CallAudioDeviceType.earpiece).toCallkeep());
+      _callkeep.setAudioDevice(
+        callId,
+        CallAudioDevice(type: enabled ? CallAudioDeviceType.speaker : CallAudioDeviceType.earpiece).toCallkeep(),
+      );
     }
   }
 
@@ -154,7 +150,7 @@ class CallMediaManager {
   /// iOS: no-op — the mode switch is handled by WebRTC internally.
   Future<void> onVideoEnabled(String callId) async {
     _logger.info('onVideoEnabled: $callId');
-    if (Platform.isAndroid) enableSpeaker(callId);
+    if (Platform.isAndroid) setSpeaker(callId, enabled: true);
     // iOS: WebRTC sets AVAudioSessionModeVideoChat automatically when a video
     // track is added, which routes audio to the speaker.
   }
@@ -178,6 +174,6 @@ class CallMediaManager {
       await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(appleAudioMode: AppleAudioMode.voiceChat));
       await Helper.setSpeakerphoneOn(false);
     }
-    disableSpeaker(callId);
+    setSpeaker(callId, enabled: false);
   }
 }
