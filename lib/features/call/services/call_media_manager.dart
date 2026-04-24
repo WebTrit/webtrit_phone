@@ -124,6 +124,11 @@ class CallMediaManager {
   Future<void> setDevice(String callId, CallAudioDevice device) async {
     _logger.info('setDevice: ${device.type} (id=${device.id}) for call $callId');
     if (Platform.isAndroid) {
+      // AudioSwitch owns hardware routing — must be called first.
+      // callkeep's setAudioDevice uses directRouteAudioDevice (setSpeakerphoneOn/setCommunicationDevice)
+      // which bypasses AudioSwitch and can be overridden by it. Calling AudioSwitch directly
+      // ensures the hardware route sticks.
+      Helper.setSpeakerphoneOn(device.type == CallAudioDeviceType.speaker);
       _callkeep.setAudioDevice(callId, device.toCallkeep());
     } else if (Platform.isIOS) {
       if (device.type == CallAudioDeviceType.speaker) {
@@ -149,10 +154,6 @@ class CallMediaManager {
   Future<void> onVideoEnabled(String callId) async {
     _logger.info('onVideoEnabled: $callId');
     if (Platform.isAndroid) {
-      // Route hardware to speaker via AudioSwitch (owns audio routing).
-      // setDevice alone uses directRouteAudioDevice which bypasses AudioSwitch
-      // and can be overridden when AudioSwitch reapplies its preferred device list.
-      Helper.setSpeakerphoneOn(true);
       await setDevice(callId, const CallAudioDevice(type: CallAudioDeviceType.speaker));
     }
     // iOS: WebRTC sets AVAudioSessionModeVideoChat automatically when a video
@@ -179,7 +180,6 @@ class CallMediaManager {
       await Helper.setSpeakerphoneOn(false);
     }
     if (Platform.isAndroid) {
-      Helper.setSpeakerphoneOn(false);
       await setDevice(callId, const CallAudioDevice(type: CallAudioDeviceType.earpiece));
     }
   }
