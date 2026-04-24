@@ -390,15 +390,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final wasEmpty = previousCalls.isEmpty;
     final isEmpty = currentCalls.isEmpty;
 
-    if (wasEmpty && !isEmpty) {
-      _logger.info(() => 'Lifecycle: First call started');
-      mediaManager.onFirstCallStarted();
-    }
-
-    if (!wasEmpty && isEmpty) {
-      _logger.info(() => 'Lifecycle: Last call ended');
-      mediaManager.onLastCallEnded();
-    }
+    if (wasEmpty && !isEmpty) mediaManager.onFirstCallStarted();
+    if (!wasEmpty && isEmpty) mediaManager.onLastCallEnded();
   }
 
   /// Reacts to mid-call video state transitions and adjusts audio routing.
