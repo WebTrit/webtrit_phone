@@ -3768,6 +3768,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
+    if (activeCall.processingStatus.hasPeerConnectionReady == false) {
+      _logger.info(
+        '_safeRenegotiate: activeCall processingStatus is ${activeCall.processingStatus}, skipping renegotiation',
+      );
+      return;
+    }
+
     final pc = await _peerConnectionManager.retrieve(callId);
     if (pc == null) {
       _logger.info('_safeRenegotiate: pc disposed, skipping renegotiation');
