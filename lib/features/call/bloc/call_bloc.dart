@@ -374,8 +374,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       previousCalls: change.currentState.activeCalls,
       currentCalls: change.nextState.activeCalls,
     );
-
-    _handleVideoStateTransitions(previousState: change.currentState, nextState: change.nextState);
   }
 
   /// Analyzes changes in the active call list to trigger specific lifecycle hooks.
@@ -404,26 +402,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// Reacts to mid-call video state transitions and adjusts audio routing.
   ///
   /// Only handles transitions for EXISTING calls (prevCall != null).
-  /// Initial video call routing is handled by [_onVideoStreamReady] after
-  /// getUserMedia completes — at that point the Telecom connection and
-  /// AudioSwitch are both active. Reacting here would fire before the
-  /// PhoneConnection exists, causing SetAudioDevice → ConnectionNotFound.
-  void _handleVideoStateTransitions({required CallState previousState, required CallState nextState}) {
-    for (final nextCall in nextState.activeCalls) {
-      final prevCall = previousState.retrieveActiveCall(nextCall.callId);
-      if (prevCall == null) continue; // skip initial call creation
-
-      if (!prevCall.video && nextCall.video) {
-        mediaManager.onVideoEnabled(nextCall.callId);
-      } else if (prevCall.video && !nextCall.video) {
-        mediaManager.onVideoDisabled(
-          nextCall.callId,
-          speakerActive: nextState.audioDevice?.type == CallAudioDeviceType.speaker,
-        );
-      }
-    }
-  }
-
   /// Called once after getUserMedia completes for a video call.
   ///
   /// At this point AudioSwitch has been activated (getUserMedia triggers
@@ -1807,8 +1785,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (currentVideoTrack != null) {
       currentVideoTrack.enabled = event.enabled;
       emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: event.enabled)));
-      // Audio routing is handled reactively in _handleVideoStateTransitions via onChange.
-      if (!event.enabled) {
+      if (event.enabled) {
+        await mediaManager.onVideoEnabled(event.callId);
+      } else {
+        final speakerActive = state.audioDevice?.type == CallAudioDeviceType.speaker;
+        await mediaManager.onVideoDisabled(event.callId, speakerActive: speakerActive);
         await callkeep.reportUpdateCall(event.callId, hasVideo: false);
       }
       return;
@@ -1838,6 +1819,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: true)));
 
+      await mediaManager.onVideoEnabled(event.callId);
       await callkeep.reportUpdateCall(event.callId, hasVideo: true);
     } on UserMediaError catch (e) {
       _logger.warning('_onCallControlEventCameraEnabled cant enable: $e');
