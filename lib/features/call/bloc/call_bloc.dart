@@ -391,11 +391,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final isEmpty = currentCalls.isEmpty;
 
     if (wasEmpty && !isEmpty) {
-      _onFirstCallStarted();
+      _logger.info(() => 'Lifecycle: First call started');
+      mediaManager.onFirstCallStarted();
     }
 
     if (!wasEmpty && isEmpty) {
-      _onLastCallEnded();
+      _logger.info(() => 'Lifecycle: Last call ended');
+      mediaManager.onLastCallEnded();
     }
   }
 
@@ -410,28 +412,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> _onVideoStreamReady(String callId) async {
     final call = state.retrieveActiveCall(callId);
     if (call?.video == true) await mediaManager.onVideoEnabled(callId);
-  }
-
-  /// Triggered when the first active call is established (0 -> 1 active calls).
-  ///
-  /// * **iOS:** Forces the audio output to the Receiver (Earpiece) via [CallMediaManager.onFirstCallStarted].
-  ///   This is a critical hard-reset to fix the "sticky speaker" issue where iOS
-  ///   retains the speaker route from a previous, unrelated session.
-  void _onFirstCallStarted() {
-    _logger.info(() => 'Lifecycle: First call started');
-    mediaManager.onFirstCallStarted();
-  }
-
-  /// Triggered when the last remaining active call ends (N -> 0 active calls).
-  ///
-  /// Resets platform audio routing to media profile:
-  /// * **iOS:** Disables speakerphone to release AVAudioSession from voice chat mode,
-  ///   preventing state bleeding between sessions.
-  /// * **Android:** Clears communication device to switch from SCO (call profile)
-  ///   back to A2DP (media profile), fixing degraded audio in YouTube/music after calls.
-  void _onLastCallEnded() {
-    _logger.info(() => 'Lifecycle: Last call ended');
-    mediaManager.onLastCallEnded();
   }
 
   void _handleConnectionFailed(SignalingFailureInfo failure) {
