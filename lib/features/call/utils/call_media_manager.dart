@@ -57,16 +57,9 @@ class CallMediaManager {
     AppleNativeAudioManagement.setUseManualAudio(true);
   }
 
-  void onFirstCallStarted() {
-    _logger.info('onFirstCallStarted');
-    Helper.setSpeakerphoneOn(false);
-  }
+  void resetSpeaker() => Helper.setSpeakerphoneOn(false);
 
-  void onLastCallEnded() {
-    _logger.info('onLastCallEnded');
-    Helper.setSpeakerphoneOn(false);
-    Helper.clearAndroidCommunicationDevice();
-  }
+  void clearCommunicationDevice() => Helper.clearAndroidCommunicationDevice();
 
   // ---------------------------------------------------------------------------
   // iOS audio session (WebtritCallkeepDelegate callbacks)
