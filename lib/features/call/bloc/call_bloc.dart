@@ -1318,6 +1318,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final contactName = await contactNameResolver.resolveWithNumber(handle.value);
     final displayName = contactName ?? event.callerDisplayName;
 
+    final activeCall = state.retrieveActiveCall(event.callId)!;
+
+    if (activeCall.processingStatus == CallProcessingStatus.disconnecting) {
+      _logger.warning(
+        '__onCallSignalingEventCallUpdating: ignoring call update for callId ${event.callId} because call is disconnecting',
+      );
+      return;
+    }
+
     emit(
       state.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(
@@ -1329,13 +1338,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }),
     );
 
-    final activeCall = state.retrieveActiveCall(event.callId)!;
-
     await callkeep.reportUpdateCall(
       event.callId,
       handle: handle,
-      displayName: activeCall.displayName,
-      hasVideo: activeCall.video,
+      displayName: displayName ?? activeCall.displayName,
+      hasVideo: event.jsep?.hasVideo ?? activeCall.video,
       proximityEnabled: state.shouldListenToProximity,
     );
 
@@ -3759,6 +3766,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ///   (of something unexpected happens with RTP stream, will be good to try to recorer it with renegotiation)
   /// - you name it..
   Future<void> _safeRenegotiate(String callId, int? lineId, {int retryCount = 0}) async {
+    final pc = await _peerConnectionManager.retrieve(callId);
+    if (pc == null) {
+      _logger.info('_safeRenegotiate: pc disposed, skipping renegotiation');
+      return;
+    }
+
     final activeCall = state.retrieveActiveCall(callId);
     if (activeCall == null) {
       _logger.info('_safeRenegotiate: activeCall disposed, skipping renegotiation');
@@ -3770,9 +3783,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    final pc = await _peerConnectionManager.retrieve(callId);
-    if (pc == null) {
-      _logger.info('_safeRenegotiate: pc disposed, skipping renegotiation');
+    if (activeCall.processingStatus.hasPeerConnectionReady == false) {
+      _logger.info(
+        '_safeRenegotiate: activeCall processingStatus is ${activeCall.processingStatus}, skipping renegotiation',
+      );
       return;
     }
 
