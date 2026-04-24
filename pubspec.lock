@@ -823,7 +823,7 @@ packages:
     description:
       path: "."
       ref: "main_ext_rebase_10.07.25"
-      resolved-ref: c42c573ff46bd6dd057116f04d883f0be1d2c840
+      resolved-ref: "7d9c4f55f30a354df62737bcb5760cf754163e1d"
       url: "https://github.com/WebTrit/flutter-webrtc.git"
     source: git
     version: "0.14.3"
