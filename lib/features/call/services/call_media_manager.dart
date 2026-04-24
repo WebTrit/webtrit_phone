@@ -145,13 +145,6 @@ class CallMediaManager {
   // Speaker helpers
   // ---------------------------------------------------------------------------
 
-  // On Android both plugins are called for cross-OEM compatibility:
-  // - Helper.setSpeakerphoneOn (AudioSwitch/flutter-webrtc): required on AOSP
-  //   and devices where AudioSwitch owns hardware routing and overrides direct
-  //   AudioManager calls.
-  // - callkeep.setAudioDevice (Telecom): required on MIUI and other OEMs that
-  //   ignore direct AudioManager calls and only respond to Telecom routing.
-
   // On Android both plugins must be called for cross-OEM compatibility:
   // - Helper.setSpeakerphoneOn (AudioSwitch/flutter-webrtc): AOSP and devices
   //   where AudioSwitch owns hardware routing and overrides direct AudioManager calls.
