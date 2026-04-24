@@ -53,34 +53,19 @@ class CallMediaManager {
   // Call session lifecycle
   // ---------------------------------------------------------------------------
 
-  /// Called for every individual call start event from signaling.
-  ///
-  /// On iOS: activates manual audio management so the app controls
-  /// AVAudioSession activation instead of WebRTC doing it automatically.
   void onCallStarted() {
-    if (Platform.isIOS) {
-      AppleNativeAudioManagement.setUseManualAudio(true);
-    }
+    AppleNativeAudioManagement.setUseManualAudio(true);
   }
 
-  /// Called when the first active call appears (0 → 1 transition).
-  ///
-  /// On iOS: resets sticky speaker state inherited from a previous session.
   void onFirstCallStarted() {
     _logger.info('onFirstCallStarted');
-    if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
+    Helper.setSpeakerphoneOn(false);
   }
 
-  /// Called when the last active call ends (N → 0 transition).
-  ///
-  /// iOS: releases AVAudioSession from voice chat mode.
-  /// Android: clears the communication device, switching audio back from
-  /// SCO (call profile) to A2DP (media profile). Without this, apps like
-  /// YouTube or music players continue using degraded call-quality audio.
   void onLastCallEnded() {
     _logger.info('onLastCallEnded');
-    if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
-    if (Platform.isAndroid) Helper.clearAndroidCommunicationDevice();
+    Helper.setSpeakerphoneOn(false);
+    Helper.clearAndroidCommunicationDevice();
   }
 
   // ---------------------------------------------------------------------------
