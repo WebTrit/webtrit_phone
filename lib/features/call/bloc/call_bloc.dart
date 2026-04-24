@@ -1318,6 +1318,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final contactName = await contactNameResolver.resolveWithNumber(handle.value);
     final displayName = contactName ?? event.callerDisplayName;
 
+    final activeCall = state.retrieveActiveCall(event.callId)!;
+
+    if (activeCall.processingStatus == CallProcessingStatus.disconnecting) {
+      _logger.warning(
+        '__onCallSignalingEventCallUpdating: ignoring call update for callId ${event.callId} because call is disconnecting',
+      );
+      return;
+    }
+
     emit(
       state.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(
@@ -1329,13 +1338,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }),
     );
 
-    final activeCall = state.retrieveActiveCall(event.callId)!;
-
     await callkeep.reportUpdateCall(
       event.callId,
       handle: handle,
-      displayName: activeCall.displayName,
-      hasVideo: activeCall.video,
+      displayName: displayName ?? activeCall.displayName,
+      hasVideo: event.jsep?.hasVideo ?? activeCall.video,
       proximityEnabled: state.shouldListenToProximity,
     );
 
