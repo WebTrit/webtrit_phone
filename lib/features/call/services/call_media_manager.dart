@@ -124,21 +124,51 @@ class CallMediaManager {
   Future<void> setDevice(String callId, CallAudioDevice device) async {
     _logger.info('setDevice: ${device.type} (id=${device.id}) for call $callId');
     if (Platform.isAndroid) {
-      // AudioSwitch owns hardware routing — must be called first.
-      // callkeep's setAudioDevice uses directRouteAudioDevice (setSpeakerphoneOn/setCommunicationDevice)
-      // which bypasses AudioSwitch and can be overridden by it. Calling AudioSwitch directly
-      // ensures the hardware route sticks.
-      Helper.setSpeakerphoneOn(device.type == CallAudioDeviceType.speaker);
-      _callkeep.setAudioDevice(callId, device.toCallkeep());
-    } else if (Platform.isIOS) {
       if (device.type == CallAudioDeviceType.speaker) {
-        Helper.setSpeakerphoneOn(true);
+        _enableSpeaker(callId);
       } else {
         Helper.setSpeakerphoneOn(false);
+        _callkeep.setAudioDevice(callId, device.toCallkeep());
+      }
+    } else if (Platform.isIOS) {
+      if (device.type == CallAudioDeviceType.speaker) {
+        _enableSpeaker(callId);
+      } else {
+        _disableSpeaker(callId);
         final deviceId = device.id;
         if (deviceId != null) Helper.selectAudioInput(deviceId);
       }
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Speaker helpers
+  // ---------------------------------------------------------------------------
+
+  // On Android both plugins are called for cross-OEM compatibility:
+  // - Helper.setSpeakerphoneOn (AudioSwitch/flutter-webrtc): required on AOSP
+  //   and devices where AudioSwitch owns hardware routing and overrides direct
+  //   AudioManager calls.
+  // - callkeep.setAudioDevice (Telecom): required on MIUI and other OEMs that
+  //   ignore direct AudioManager calls and only respond to Telecom routing.
+
+  // On Android both plugins must be called for cross-OEM compatibility:
+  // - Helper.setSpeakerphoneOn (AudioSwitch/flutter-webrtc): AOSP and devices
+  //   where AudioSwitch owns hardware routing and overrides direct AudioManager calls.
+  // - callkeep.setAudioDevice (Telecom): MIUI and OEMs that ignore direct
+  //   AudioManager calls and only respond to Telecom routing.
+  // On iOS Helper.setSpeakerphoneOn is sufficient — no Telecom layer involved.
+
+  void _enableSpeaker(String callId) {
+    Helper.setSpeakerphoneOn(true);
+    if (Platform.isAndroid)
+      _callkeep.setAudioDevice(callId, const CallAudioDevice(type: CallAudioDeviceType.speaker).toCallkeep());
+  }
+
+  void _disableSpeaker(String callId) {
+    Helper.setSpeakerphoneOn(false);
+    if (Platform.isAndroid)
+      _callkeep.setAudioDevice(callId, const CallAudioDevice(type: CallAudioDeviceType.earpiece).toCallkeep());
   }
 
   // ---------------------------------------------------------------------------
@@ -153,9 +183,7 @@ class CallMediaManager {
   /// iOS: no-op — the mode switch is handled by WebRTC internally.
   Future<void> onVideoEnabled(String callId) async {
     _logger.info('onVideoEnabled: $callId');
-    if (Platform.isAndroid) {
-      await setDevice(callId, const CallAudioDevice(type: CallAudioDeviceType.speaker));
-    }
+    if (Platform.isAndroid) _enableSpeaker(callId);
     // iOS: WebRTC sets AVAudioSessionModeVideoChat automatically when a video
     // track is added, which routes audio to the speaker.
   }
@@ -179,8 +207,6 @@ class CallMediaManager {
       await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(appleAudioMode: AppleAudioMode.voiceChat));
       await Helper.setSpeakerphoneOn(false);
     }
-    if (Platform.isAndroid) {
-      await setDevice(callId, const CallAudioDevice(type: CallAudioDeviceType.earpiece));
-    }
+    _disableSpeaker(callId);
   }
 }
