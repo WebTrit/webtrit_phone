@@ -154,14 +154,16 @@ class CallMediaManager {
 
   void _enableSpeaker(String callId) {
     Helper.setSpeakerphoneOn(true);
-    if (Platform.isAndroid)
+    if (Platform.isAndroid) {
       _callkeep.setAudioDevice(callId, const CallAudioDevice(type: CallAudioDeviceType.speaker).toCallkeep());
+    }
   }
 
   void _disableSpeaker(String callId) {
     Helper.setSpeakerphoneOn(false);
-    if (Platform.isAndroid)
+    if (Platform.isAndroid) {
       _callkeep.setAudioDevice(callId, const CallAudioDevice(type: CallAudioDeviceType.earpiece).toCallkeep());
+    }
   }
 
   // ---------------------------------------------------------------------------
