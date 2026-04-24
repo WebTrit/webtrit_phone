@@ -3757,6 +3757,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ///   (of something unexpected happens with RTP stream, will be good to try to recorer it with renegotiation)
   /// - you name it..
   Future<void> _safeRenegotiate(String callId, int? lineId, {int retryCount = 0}) async {
+    final pc = await _peerConnectionManager.retrieve(callId);
+    if (pc == null) {
+      _logger.info('_safeRenegotiate: pc disposed, skipping renegotiation');
+      return;
+    }
+
     final activeCall = state.retrieveActiveCall(callId);
     if (activeCall == null) {
       _logger.info('_safeRenegotiate: activeCall disposed, skipping renegotiation');
@@ -3772,12 +3778,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.info(
         '_safeRenegotiate: activeCall processingStatus is ${activeCall.processingStatus}, skipping renegotiation',
       );
-      return;
-    }
-
-    final pc = await _peerConnectionManager.retrieve(callId);
-    if (pc == null) {
-      _logger.info('_safeRenegotiate: pc disposed, skipping renegotiation');
       return;
     }
 
