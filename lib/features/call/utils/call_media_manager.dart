@@ -43,21 +43,16 @@ class CallMediaManager {
 
   void _configure() {
     if (Platform.isAndroid) {
-      AndroidNativeAudioManagement.setAndroidAudioConfiguration(
-        AndroidAudioConfiguration(preferredOutputOrder: _voiceCallOutputOrder),
-      );
+      _android.setAndroidAudioConfiguration(AndroidAudioConfiguration(preferredOutputOrder: _voiceCallOutputOrder));
     }
+    if (Platform.isIOS) _apple.setUseManualAudio(true);
   }
 
   // ---------------------------------------------------------------------------
   // Call session lifecycle
   // ---------------------------------------------------------------------------
 
-  void onCallStarted() {
-    AppleNativeAudioManagement.setUseManualAudio(true);
-  }
-
-  void clearCommunicationDevice() => Helper.clearAndroidCommunicationDevice();
+  void clearCommunicationDevice() => _helper.clearAndroidCommunicationDevice();
 
   // ---------------------------------------------------------------------------
   // iOS audio session (WebtritCallkeepDelegate callbacks)

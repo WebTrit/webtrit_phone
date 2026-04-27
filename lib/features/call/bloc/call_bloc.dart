@@ -494,8 +494,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   //
 
   Future<void> _onCallStarted(CallStarted event, Emitter<CallState> emit) async {
-    mediaManager.onCallStarted();
-
     // Initialize app lifecycle state
     final lifecycleState = WidgetsFlutterBinding.ensureInitialized().lifecycleState;
     emit(state.copyWith(currentAppLifecycleState: lifecycleState));
