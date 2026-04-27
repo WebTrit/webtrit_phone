@@ -17,9 +17,9 @@ final _logger = Logger('CallMediaManager');
 /// Responsibilities:
 /// - Platform-specific device routing (Android via Telecom, iOS via AVAudioSession)
 /// - iOS audio session lifecycle ([didActivateAudioSession], [didDeactivateAudioSession])
-/// - iOS manual audio management setup ([AppleNativeAudioManagement])
 /// - Video-triggered routing: speaker on video enable, voice mode restore on disable
-/// - Cleanup after call sessions end
+/// - Speaker toggle with cross-OEM compatibility ([setSpeaker])
+/// - Android communication device cleanup after calls ([clearCommunicationDevice])
 ///
 /// [CallBloc] retains ownership of [CallState.audioDevice] and
 /// [CallState.availableAudioDevices] — this class does not emit state.
