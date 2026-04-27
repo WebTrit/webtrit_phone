@@ -2468,7 +2468,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // If the WS was already closed when the answer flow failed, the server-side
       // call session is gone — sending DeclineRequest on the reconnected WS would
       // target a stale call and trigger another 4610 close.
-      if (e is WebtritSignalingTransactionTerminateByDisconnectException) {
+      //
+      // A transaction timeout (retries exhausted while the network was degraded)
+      // is treated the same way: the server may have already processed the accept
+      // SDP and promoted the call to connected state, so sending decline would
+      // silently kill an active call. The handshake processor handles the correct
+      // action on the next reconnect — restoring the call if the server accepted
+      // it, or re-delivering the incoming call event if it did not.
+      if (e is WebtritSignalingTransactionTerminateByDisconnectException ||
+          e is WebtritSignalingTransactionTimeoutException) {
         callErrorReporter.handle(e, stackTrace, '__onCallPerformEventAnswered error:');
         return;
       }
