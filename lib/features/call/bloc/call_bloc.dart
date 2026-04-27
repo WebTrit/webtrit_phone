@@ -1868,6 +1868,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(newState);
 
     await callkeep.reportUpdateCall(state.activeCalls.current.callId, proximityEnabled: state.shouldListenToProximity);
+
+    // Hendgehog been there and removed putting on hold
+    // He knows it was nessacery for first implementation of attended! transfer when our code can't auto hold on new call creation
+    // but now we have it and hold inside _onCallControlEventAttendedTransferInitiated removed too
+    //
+    // The question is why it was added there (blind transter) also, because it cause race conditions
+    // Attentioin: if you wanna bring it back, consider to prevent race condition (WT-1399) beetween holding and submitting refer (e.g fast initiating above recents tab and click on user)
   }
 
   Future<void> _onCallControlEventAttendedTransferInitiated(
