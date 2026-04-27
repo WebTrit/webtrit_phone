@@ -165,6 +165,9 @@ class CallMediaManager {
 
   /// Called when video is enabled (camera turned on during a call).
   ///
+  /// Must be called after [getUserMedia] completes — AudioSwitch (AudioSwitchManager)
+  /// calls activate() inside getUserAudio(), so any routing request before that is a no-op.
+  ///
   /// Android: explicitly routes audio to speakerphone, mirroring iOS behavior
   /// where WebRTC automatically switches to speaker via AVAudioSession
   /// VideoChat mode when a video track is added.
