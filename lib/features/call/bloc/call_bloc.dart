@@ -75,7 +75,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   final Callkeep callkeep;
   final CallkeepConnections callkeepConnections;
-  late final CallMediaManager mediaManager;
+  late final CallMediaManager _mediaManager;
 
   final SDPMunger? sdpMunger;
   final SdpSanitizer? sdpSanitizer;
@@ -132,7 +132,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     this.onCallEnded,
     Stream<void>? foregroundCallPushSignal,
   }) : super(const CallState()) {
-    mediaManager = CallMediaManager(callkeep: callkeep);
+    _mediaManager = CallMediaManager(callkeep: callkeep);
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
     _handshakeProcessor = HandshakeProcessor(
@@ -391,12 +391,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final isEmpty = currentCalls.isEmpty;
 
     // First call started (0 → 1).
-    if (wasEmpty && !isEmpty) mediaManager.setSpeaker(null, enabled: false);
+    if (wasEmpty && !isEmpty) unawaited(_mediaManager.setSpeaker(null, enabled: false));
 
     // Last call ended (N → 0).
     if (!wasEmpty && isEmpty) {
-      mediaManager.setSpeaker(null, enabled: false);
-      mediaManager.clearCommunicationDevice();
+      unawaited(_mediaManager.setSpeaker(null, enabled: false));
+      _mediaManager.clearCommunicationDevice();
     }
   }
 
@@ -410,7 +410,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// in Telecom, so setAudioDevice can route to speaker safely.
   Future<void> _onVideoStreamReady(String callId) async {
     final call = state.retrieveActiveCall(callId);
-    if (call?.video == true) await mediaManager.onVideoEnabled(callId);
+    if (call?.video == true) await _mediaManager.onVideoEnabled(callId);
   }
 
   void _handleConnectionFailed(SignalingFailureInfo failure) {
@@ -1763,10 +1763,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       currentVideoTrack.enabled = event.enabled;
       emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: event.enabled)));
       if (event.enabled) {
-        await mediaManager.onVideoEnabled(event.callId);
+        await _mediaManager.onVideoEnabled(event.callId);
       } else {
         final speakerActive = state.audioDevice?.type == CallAudioDeviceType.speaker;
-        await mediaManager.onVideoDisabled(event.callId, speakerActive: speakerActive);
+        await _mediaManager.onVideoDisabled(event.callId, speakerActive: speakerActive);
         await callkeep.reportUpdateCall(event.callId, hasVideo: false);
       }
       return;
@@ -1796,7 +1796,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: true)));
 
-      await mediaManager.onVideoEnabled(event.callId);
+      await _mediaManager.onVideoEnabled(event.callId);
       await callkeep.reportUpdateCall(event.callId, hasVideo: true);
     } on UserMediaError catch (e) {
       _logger.warning('_onCallControlEventCameraEnabled cant enable: $e');
@@ -1806,7 +1806,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> _onCallControlEventAudioDeviceSet(_CallControlEventAudioDeviceSet event, Emitter<CallState> emit) async {
     await state.performOnActiveCall(event.callId, (activeCall) async {
-      await mediaManager.setDevice(event.callId, event.device);
+      await _mediaManager.setDevice(event.callId, event.device);
     });
   }
 
@@ -3498,12 +3498,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   @override
   void didActivateAudioSession() {
-    mediaManager.didActivateAudioSession();
+    _mediaManager.didActivateAudioSession();
   }
 
   @override
   void didDeactivateAudioSession() {
-    mediaManager.didDeactivateAudioSession();
+    _mediaManager.didDeactivateAudioSession();
   }
 
   @override

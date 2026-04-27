@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -76,10 +77,14 @@ class CallMediaManager {
   void didActivateAudioSession() {
     if (!Platform.isIOS) return;
     _logger.fine('didActivateAudioSession');
-    () async {
-      await AppleNativeAudioManagement.audioSessionDidActivate();
-      await AppleNativeAudioManagement.setIsAudioEnabled(true);
-    }().catchError((e) => _logger.warning('didActivateAudioSession failed: $e'));
+    unawaited(() async {
+      try {
+        await AppleNativeAudioManagement.audioSessionDidActivate();
+        await AppleNativeAudioManagement.setIsAudioEnabled(true);
+      } catch (e, st) {
+        _logger.warning('didActivateAudioSession failed', e, st);
+      }
+    }());
   }
 
   /// Called by [WebtritCallkeepDelegate.didDeactivateAudioSession].
@@ -89,10 +94,14 @@ class CallMediaManager {
   void didDeactivateAudioSession() {
     if (!Platform.isIOS) return;
     _logger.fine('didDeactivateAudioSession');
-    () async {
-      await AppleNativeAudioManagement.setIsAudioEnabled(false);
-      await AppleNativeAudioManagement.audioSessionDidDeactivate();
-    }().catchError((e) => _logger.warning('didDeactivateAudioSession failed: $e'));
+    unawaited(() async {
+      try {
+        await AppleNativeAudioManagement.setIsAudioEnabled(false);
+        await AppleNativeAudioManagement.audioSessionDidDeactivate();
+      } catch (e, st) {
+        _logger.warning('didDeactivateAudioSession failed', e, st);
+      }
+    }());
   }
 
   // ---------------------------------------------------------------------------
@@ -107,18 +116,20 @@ class CallMediaManager {
     _logger.info('setDevice: ${device.type} (id=${device.id}) for call $callId');
     if (Platform.isAndroid) {
       if (device.type == CallAudioDeviceType.speaker) {
-        setSpeaker(callId, enabled: true);
+        await setSpeaker(callId, enabled: true);
       } else {
-        setSpeaker(callId, enabled: false);
-        _callkeep.setAudioDevice(callId, device.toCallkeep());
+        // Only clear AudioSwitch speaker state — Telecom routing goes directly
+        // to the target device below to avoid a double setAudioDevice call.
+        await Helper.setSpeakerphoneOn(false);
+        await _callkeep.setAudioDevice(callId, device.toCallkeep());
       }
     } else if (Platform.isIOS) {
       if (device.type == CallAudioDeviceType.speaker) {
-        setSpeaker(callId, enabled: true);
+        await setSpeaker(callId, enabled: true);
       } else {
-        setSpeaker(callId, enabled: false);
+        await setSpeaker(callId, enabled: false);
         final deviceId = device.id;
-        if (deviceId != null) Helper.selectAudioInput(deviceId);
+        if (deviceId != null) await Helper.selectAudioInput(deviceId);
       }
     }
   }
@@ -138,10 +149,10 @@ class CallMediaManager {
   /// [callId] is optional — when null only the WebRTC side is updated (used for
   /// global resets at call start/end when no Telecom connection is available).
   /// On iOS [Helper.setSpeakerphoneOn] is sufficient — no Telecom layer involved.
-  void setSpeaker(String? callId, {required bool enabled}) {
-    Helper.setSpeakerphoneOn(enabled);
+  Future<void> setSpeaker(String? callId, {required bool enabled}) async {
+    await Helper.setSpeakerphoneOn(enabled);
     if (Platform.isAndroid && callId != null) {
-      _callkeep.setAudioDevice(
+      await _callkeep.setAudioDevice(
         callId,
         CallAudioDevice(type: enabled ? CallAudioDeviceType.speaker : CallAudioDeviceType.earpiece).toCallkeep(),
       );

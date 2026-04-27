@@ -41,11 +41,33 @@ class CallAudioDevice {
   }
 
   factory CallAudioDevice.fromCallkeep(CallkeepAudioDevice device) {
-    return CallAudioDevice(type: CallAudioDeviceType.values.byName(device.type.name), id: device.id, name: device.name);
+    return CallAudioDevice(
+      type: switch (device.type) {
+        CallkeepAudioDeviceType.earpiece => CallAudioDeviceType.earpiece,
+        CallkeepAudioDeviceType.speaker => CallAudioDeviceType.speaker,
+        CallkeepAudioDeviceType.bluetooth => CallAudioDeviceType.bluetooth,
+        CallkeepAudioDeviceType.wiredHeadset => CallAudioDeviceType.wiredHeadset,
+        CallkeepAudioDeviceType.streaming => CallAudioDeviceType.streaming,
+        CallkeepAudioDeviceType.unknown => CallAudioDeviceType.unknown,
+      },
+      id: device.id,
+      name: device.name,
+    );
   }
 
   CallkeepAudioDevice toCallkeep() {
-    return CallkeepAudioDevice(type: CallkeepAudioDeviceType.values.byName(type.name), id: id, name: name);
+    return CallkeepAudioDevice(
+      type: switch (type) {
+        CallAudioDeviceType.earpiece => CallkeepAudioDeviceType.earpiece,
+        CallAudioDeviceType.speaker => CallkeepAudioDeviceType.speaker,
+        CallAudioDeviceType.bluetooth => CallkeepAudioDeviceType.bluetooth,
+        CallAudioDeviceType.wiredHeadset => CallkeepAudioDeviceType.wiredHeadset,
+        CallAudioDeviceType.streaming => CallkeepAudioDeviceType.streaming,
+        CallAudioDeviceType.unknown => CallkeepAudioDeviceType.unknown,
+      },
+      id: id,
+      name: name,
+    );
   }
 
   @override
