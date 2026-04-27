@@ -61,7 +61,9 @@ class CallMediaManager {
   /// Without this, Bluetooth stays in SCO (call profile, mono/low-quality) instead
   /// of switching back to A2DP (media profile), causing degraded audio in
   /// YouTube, music players, etc. until the app is restarted.
-  void clearCommunicationDevice() => Helper.clearAndroidCommunicationDevice();
+  void clearCommunicationDevice() {
+    if (Platform.isAndroid) Helper.clearAndroidCommunicationDevice();
+  }
 
   // ---------------------------------------------------------------------------
   // iOS audio session (WebtritCallkeepDelegate callbacks)
@@ -77,7 +79,7 @@ class CallMediaManager {
     () async {
       await AppleNativeAudioManagement.audioSessionDidActivate();
       await AppleNativeAudioManagement.setIsAudioEnabled(true);
-    }();
+    }().catchError((e) => _logger.warning('didActivateAudioSession failed: $e'));
   }
 
   /// Called by [WebtritCallkeepDelegate.didDeactivateAudioSession].
@@ -90,7 +92,7 @@ class CallMediaManager {
     () async {
       await AppleNativeAudioManagement.setIsAudioEnabled(false);
       await AppleNativeAudioManagement.audioSessionDidDeactivate();
-    }();
+    }().catchError((e) => _logger.warning('didDeactivateAudioSession failed: $e'));
   }
 
   // ---------------------------------------------------------------------------
@@ -107,7 +109,7 @@ class CallMediaManager {
       if (device.type == CallAudioDeviceType.speaker) {
         setSpeaker(callId, enabled: true);
       } else {
-        Helper.setSpeakerphoneOn(false);
+        setSpeaker(callId, enabled: false);
         _callkeep.setAudioDevice(callId, device.toCallkeep());
       }
     } else if (Platform.isIOS) {
@@ -181,6 +183,7 @@ class CallMediaManager {
     if (Platform.isIOS) {
       await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(appleAudioMode: AppleAudioMode.voiceChat));
       await Helper.setSpeakerphoneOn(false);
+      return;
     }
     setSpeaker(callId, enabled: false);
   }

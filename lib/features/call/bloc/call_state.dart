@@ -312,6 +312,3 @@ extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
 
   T? get blindTransferInitiated => firstWhereOrNull((activeCall) => activeCall.transfer is BlindTransferInitiated);
 }
-
-// CallAudioDevice, CallAudioDeviceType and CallAudioDeviceIterableExtension
-// live in ../models/call_audio_device.dart and are imported via call_bloc.dart.
