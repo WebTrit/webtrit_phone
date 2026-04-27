@@ -41,6 +41,8 @@ class CallMediaManager {
     AndroidAudioOutputDevice.speakerphone,
   ];
 
+  // Sets Android audio output priority and enables iOS manual AVAudioSession
+  // management so CallKit controls activation instead of WebRTC doing it automatically.
   void _configure() {
     if (Platform.isAndroid) {
       AndroidNativeAudioManagement.setAndroidAudioConfiguration(
@@ -54,6 +56,11 @@ class CallMediaManager {
   // Call session lifecycle
   // ---------------------------------------------------------------------------
 
+  /// Clears the Android communication device after the last call ends (N → 0).
+  ///
+  /// Without this, Bluetooth stays in SCO (call profile, mono/low-quality) instead
+  /// of switching back to A2DP (media profile), causing degraded audio in
+  /// YouTube, music players, etc. until the app is restarted.
   void clearCommunicationDevice() => Helper.clearAndroidCommunicationDevice();
 
   // ---------------------------------------------------------------------------
@@ -118,13 +125,17 @@ class CallMediaManager {
   // Speaker helpers
   // ---------------------------------------------------------------------------
 
-  // On Android both plugins must be called for cross-OEM compatibility:
-  // - Helper.setSpeakerphoneOn (AudioSwitch/flutter-webrtc): AOSP and devices
-  //   where AudioSwitch owns hardware routing and overrides direct AudioManager calls.
-  // - callkeep.setAudioDevice (Telecom): MIUI and OEMs that ignore direct
-  //   AudioManager calls and only respond to Telecom routing.
-  // On iOS Helper.setSpeakerphoneOn is sufficient — no Telecom layer involved.
-
+  /// Toggles speakerphone for [callId].
+  ///
+  /// On Android both plugins must be called for cross-OEM compatibility:
+  /// - [Helper.setSpeakerphoneOn] (AudioSwitch/flutter-webrtc): AOSP and devices
+  ///   where AudioSwitch owns hardware routing and overrides direct AudioManager calls.
+  /// - [Callkeep.setAudioDevice] (Telecom): MIUI and OEMs that ignore direct
+  ///   AudioManager calls and only respond to Telecom routing.
+  ///
+  /// [callId] is optional — when null only the WebRTC side is updated (used for
+  /// global resets at call start/end when no Telecom connection is available).
+  /// On iOS [Helper.setSpeakerphoneOn] is sufficient — no Telecom layer involved.
   void setSpeaker(String? callId, {required bool enabled}) {
     Helper.setSpeakerphoneOn(enabled);
     if (Platform.isAndroid && callId != null) {
