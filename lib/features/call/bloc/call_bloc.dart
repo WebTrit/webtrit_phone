@@ -1858,8 +1858,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     var newState = state.copyWith(minimized: true);
 
-    await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
-
     newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
       return activeCall.copyWith(
         transfer: const Transfer.blindTransferInitiated(),
@@ -1885,8 +1883,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     emit(newState);
-
-    await __onCallControlEventSetHeld(_CallControlEventSetHeld(event.callId, true), emit);
   }
 
   Future<void> _onCallControlEventBlindTransferSubmitted(
