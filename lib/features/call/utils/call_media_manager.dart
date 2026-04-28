@@ -159,13 +159,17 @@ class CallMediaManager {
   /// - [WebtritCallkeep.setAudioDevice] updates the Telecom route so it stops overriding.
   /// [speakerDevice] is the speaker entry from [CallState.availableAudioDevices];
   /// when null the Telecom call is skipped (AudioSwitch only).
-  /// iOS: no-op — WebRTC sets AVAudioSessionModeVideoChat automatically when a
-  /// video track is added, which routes audio to the speaker.
+  ///
+  /// iOS: [setUseManualAudio] is enabled so WebRTC does not auto-switch the session mode.
+  /// The mode must be set explicitly to VideoChat before enabling speaker.
   Future<void> onVideoEnabled(String callId, {CallAudioDevice? speakerDevice}) async {
     _logger.info('onVideoEnabled: $callId');
     if (Platform.isAndroid) {
       await Helper.setSpeakerphoneOn(true);
       if (speakerDevice != null) await _callkeep.setAudioDevice(callId, speakerDevice.toCallkeep());
+    } else if (Platform.isIOS) {
+      await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(appleAudioMode: AppleAudioMode.videoChat));
+      await Helper.setSpeakerphoneOn(true);
     }
   }
 
