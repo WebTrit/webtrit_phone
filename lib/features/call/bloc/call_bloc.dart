@@ -75,6 +75,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   final Callkeep callkeep;
   final CallkeepConnections callkeepConnections;
+  late final CallMediaManager _mediaManager;
 
   final SDPMunger? sdpMunger;
   final SdpSanitizer? sdpSanitizer;
@@ -131,6 +132,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     this.onCallEnded,
     Stream<void>? foregroundCallPushSignal,
   }) : super(const CallState()) {
+    _mediaManager = CallMediaManager(callkeep: callkeep);
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
     _handshakeProcessor = HandshakeProcessor(
@@ -388,36 +390,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final wasEmpty = previousCalls.isEmpty;
     final isEmpty = currentCalls.isEmpty;
 
-    if (wasEmpty && !isEmpty) {
-      _onFirstCallStarted();
-    }
+    // First call started (0 → 1).
+    if (wasEmpty && !isEmpty) unawaited(_mediaManager.setSpeaker(null, enabled: false));
 
+    // Last call ended (N → 0).
     if (!wasEmpty && isEmpty) {
-      _onLastCallEnded();
+      unawaited(_mediaManager.setSpeaker(null, enabled: false));
+      _mediaManager.clearCommunicationDevice();
     }
   }
 
-  /// Triggered when the first active call is established (0 -> 1 active calls).
+  /// Reacts to mid-call video state transitions and adjusts audio routing.
   ///
-  /// * **iOS:** Forces the audio output to the Receiver (Earpiece) via `Helper.setSpeakerphoneOn(false)`.
-  ///   This is a critical hard-reset to fix the "sticky speaker" issue where iOS
-  ///   retains the speaker route from a previous, unrelated session.
-  void _onFirstCallStarted() {
-    _logger.info(() => 'Lifecycle: First call started');
-    if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
-  }
-
-  /// Triggered when the last remaining active call ends (N -> 0 active calls).
+  /// Only handles transitions for EXISTING calls (prevCall != null).
+  /// Called once after getUserMedia completes for a video call.
   ///
-  /// Resets platform audio routing to media profile:
-  /// * **iOS:** Disables speakerphone to release AVAudioSession from voice chat mode,
-  ///   preventing state bleeding between sessions.
-  /// * **Android:** Clears communication device to switch from SCO (call profile)
-  ///   back to A2DP (media profile), fixing degraded audio in YouTube/music after calls.
-  void _onLastCallEnded() {
-    _logger.info(() => 'Lifecycle: Last call ended');
-    if (Platform.isIOS) Helper.setSpeakerphoneOn(false);
-    if (Platform.isAndroid) Helper.clearAndroidCommunicationDevice();
+  /// At this point AudioSwitch has been activated (getUserMedia triggers
+  /// AudioSwitchManager.start → activate) and the PhoneConnection exists
+  /// in Telecom, so setAudioDevice can route to speaker safely.
+  Future<void> _onVideoStreamReady(String callId) async {
+    final call = state.retrieveActiveCall(callId);
+    if (call?.video == true) await _mediaManager.onVideoEnabled(callId);
   }
 
   void _handleConnectionFailed(SignalingFailureInfo failure) {
@@ -501,8 +494,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   //
 
   Future<void> _onCallStarted(CallStarted event, Emitter<CallState> emit) async {
-    AppleNativeAudioManagement.setUseManualAudio(true);
-
     // Initialize app lifecycle state
     final lifecycleState = WidgetsFlutterBinding.ensureInitialized().lifecycleState;
     emit(state.copyWith(currentAppLifecycleState: lifecycleState));
@@ -1771,22 +1762,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (currentVideoTrack != null) {
       currentVideoTrack.enabled = event.enabled;
       emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: event.enabled)));
-      if (!event.enabled) {
-        // When video was enabled, user_media_builder called
-        // _configureAppleAudio(hasVideo: true), which set the shared
-        // RTCAudioSessionConfiguration.webRTCConfiguration.mode singleton to
-        // AVAudioSessionModeVideoChat. That value persists: a subsequent
-        // setSpeakerphoneOn(false) reads the same singleton and re-applies
-        // VideoChat mode, which forces speaker routing regardless of the port
-        // override. Explicitly resetting the singleton to VoiceChat first
-        // means setSpeakerphoneOn(false) applies the correct mode and clears
-        // the port override, routing audio back to the earpiece.
-        // The reset is skipped when the user explicitly chose the speaker so
-        // their preference is preserved after turning the camera off.
-        if (Platform.isIOS && state.audioDevice?.type != CallAudioDeviceType.speaker) {
-          await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(appleAudioMode: AppleAudioMode.voiceChat));
-          await Helper.setSpeakerphoneOn(false);
-        }
+      if (event.enabled) {
+        await _mediaManager.onVideoEnabled(event.callId);
+      } else {
+        final speakerActive = state.audioDevice?.type == CallAudioDeviceType.speaker;
+        await _mediaManager.onVideoDisabled(event.callId, speakerActive: speakerActive);
         await callkeep.reportUpdateCall(event.callId, hasVideo: false);
       }
       return;
@@ -1816,6 +1796,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: true)));
 
+      await _mediaManager.onVideoEnabled(event.callId);
       await callkeep.reportUpdateCall(event.callId, hasVideo: true);
     } on UserMediaError catch (e) {
       _logger.warning('_onCallControlEventCameraEnabled cant enable: $e');
@@ -1825,17 +1806,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> _onCallControlEventAudioDeviceSet(_CallControlEventAudioDeviceSet event, Emitter<CallState> emit) async {
     await state.performOnActiveCall(event.callId, (activeCall) async {
-      if (Platform.isAndroid) {
-        callkeep.setAudioDevice(event.callId, event.device.toCallkeep());
-      } else if (Platform.isIOS) {
-        if (event.device.type == CallAudioDeviceType.speaker) {
-          Helper.setSpeakerphoneOn(true);
-        } else {
-          Helper.setSpeakerphoneOn(false);
-          final deviceId = event.device.id;
-          if (deviceId != null) Helper.selectAudioInput(deviceId);
-        }
-      }
+      await _mediaManager.setDevice(event.callId, event.device);
     });
   }
 
@@ -2198,6 +2169,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           return activeCall.copyWith(localStream: localStream);
         }),
       );
+      await _onVideoStreamReady(event.callId);
     } catch (e, stackTrace) {
       _logger.warning('__onCallPerformEventStarted _getUserMedia', e, stackTrace);
 
@@ -2378,15 +2350,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
+      final hasVideo = localStream.getVideoTracks().isNotEmpty;
       emit(
         state.copyWithMappedActiveCall(event.callId, (call) {
           return call.copyWith(
-            video: localStream.getVideoTracks().isNotEmpty,
+            video: hasVideo,
             localStream: localStream,
             processingStatus: CallProcessingStatus.incomingAnswering,
           );
         }),
       );
+      await _onVideoStreamReady(event.callId);
 
       final remoteDescription = offer.toDescription();
       sdpSanitizer?.apply(remoteDescription);
@@ -3221,6 +3195,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           ),
         ),
       );
+      await _onVideoStreamReady(event.callId);
       localStream = null;
 
       _peerConnectionManager.complete(event.callId, peerConnection);
@@ -3526,20 +3501,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   @override
   void didActivateAudioSession() {
-    _logger.fine('didActivateAudioSession');
-    () async {
-      await AppleNativeAudioManagement.audioSessionDidActivate();
-      await AppleNativeAudioManagement.setIsAudioEnabled(true);
-    }();
+    _mediaManager.didActivateAudioSession();
   }
 
   @override
   void didDeactivateAudioSession() {
-    _logger.fine('didDeactivateAudioSession');
-    () async {
-      await AppleNativeAudioManagement.setIsAudioEnabled(false);
-      await AppleNativeAudioManagement.audioSessionDidDeactivate();
-    }();
+    _mediaManager.didDeactivateAudioSession();
   }
 
   @override
