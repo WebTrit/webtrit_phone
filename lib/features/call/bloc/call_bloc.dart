@@ -2816,6 +2816,28 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
     }
 
+    final currentStream = state.retrieveActiveCall(event.callId)?.remoteStream;
+    final sameRef = identical(currentStream, event.stream);
+    _logger.info(
+      '__onPeerConnectionEventStreamAdded: callId=${event.callId} '
+      'streamId=${event.stream.id} '
+      'videoTracks=${event.stream.getVideoTracks().length} '
+      'sameRef=$sameRef',
+    );
+
+    // When onAddTrack fires with the same stream reference (existing stream gains
+    // a new video track during renegotiation), the Freezed equality check on
+    // ActiveCall would consider the state unchanged and skip the emit, leaving the
+    // RTCVideoRenderer subscribed to the old track. Clear remoteStream first to
+    // force a reference change that triggers renderer refresh.
+    if (sameRef) {
+      emit(
+        state.copyWithMappedActiveCall(event.callId, (activeCall) {
+          return activeCall.copyWith(remoteStream: null);
+        }),
+      );
+    }
+
     emit(
       state.copyWithMappedActiveCall(event.callId, (activeCall) {
         return activeCall.copyWith(remoteStream: event.stream);

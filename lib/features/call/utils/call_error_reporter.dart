@@ -6,6 +6,7 @@ import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
 
 import '../models/notification.dart';
+import 'pc_exceptions.dart';
 import 'user_media_builder.dart';
 
 final _logger = Logger('CallBloc:SignalingErrorReporter');

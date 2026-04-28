@@ -31,6 +31,8 @@ import 'package:webtrit_phone/features/call/call.dart'
 
 import 'package:drift/isolate.dart';
 
+import 'package:drift/isolate.dart';
+
 import 'app/session/session.dart';
 import 'firebase_options.dart';
 import 'services/services.dart';
