@@ -410,7 +410,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// in Telecom, so setAudioDevice can route to speaker safely.
   Future<void> _onVideoStreamReady(String callId) async {
     final call = state.retrieveActiveCall(callId);
-    if (call?.video == true) {
+    if (call?.video == true && call?.direction == CallDirection.outgoing) {
       await _mediaManager.onVideoEnabled(callId, speakerDevice: state.availableAudioDevices.getSpeaker);
     }
   }
