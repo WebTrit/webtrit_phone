@@ -411,7 +411,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> _onVideoStreamReady(String callId) async {
     final call = state.retrieveActiveCall(callId);
     if (call?.video == true) {
-      await _mediaManager.onVideoEnabled(callId);
+      await _mediaManager.onVideoEnabled(callId, speakerDevice: state.availableAudioDevices.getSpeaker);
     }
   }
 
@@ -2259,10 +2259,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       currentVideoTrack.enabled = e.enabled;
       emit(state.copyWithMappedActiveCall(e.callId, (call) => call.copyWith(video: e.enabled)));
       if (e.enabled) {
-        await _mediaManager.onVideoEnabled(e.callId);
+        await _mediaManager.onVideoEnabled(e.callId, speakerDevice: state.availableAudioDevices.getSpeaker);
       } else {
         final speakerActive = state.audioDevice?.type == CallAudioDeviceType.speaker;
-        await _mediaManager.onVideoDisabled(e.callId, speakerActive: speakerActive);
+        await _mediaManager.onVideoDisabled(
+          e.callId,
+          speakerActive: speakerActive,
+          earpieceDevice: state.availableAudioDevices.getEarpiece,
+        );
         await callkeep.reportUpdateCall(e.callId, hasVideo: false);
       }
       return;
@@ -2291,7 +2295,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
 
       emit(state.copyWithMappedActiveCall(e.callId, (call) => call.copyWith(video: true)));
-      await _mediaManager.onVideoEnabled(e.callId);
+      await _mediaManager.onVideoEnabled(e.callId, speakerDevice: state.availableAudioDevices.getSpeaker);
       await callkeep.reportUpdateCall(e.callId, hasVideo: true);
     } on UserMediaError catch (e) {
       _logger.warning('__onMutationControlSetCameraEnabled cant enable: $e');

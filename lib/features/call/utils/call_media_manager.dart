@@ -153,14 +153,20 @@ class CallMediaManager {
   /// Must be called after [getUserMedia] completes — AudioSwitch (AudioSwitchManager)
   /// calls activate() inside getUserAudio(), so any routing request before that is a no-op.
   ///
-  /// Android: routes to speaker via AudioSwitch only ([Helper.setSpeakerphoneOn]).
-  /// Telecom routing is intentionally skipped — AudioSwitch owns the device selection
-  /// here and a competing Telecom call can override AudioSwitch and silence the speaker.
+  /// Android: Telecom (uid 1000) holds the active audio route and overrides AudioSwitch
+  /// when both compete. Both APIs must be called:
+  /// - [Helper.setSpeakerphoneOn] updates AudioSwitch state.
+  /// - [WebtritCallkeep.setAudioDevice] updates the Telecom route so it stops overriding.
+  /// [speakerDevice] is the speaker entry from [CallState.availableAudioDevices];
+  /// when null the Telecom call is skipped (AudioSwitch only).
   /// iOS: no-op — WebRTC sets AVAudioSessionModeVideoChat automatically when a
   /// video track is added, which routes audio to the speaker.
-  Future<void> onVideoEnabled(String callId) async {
+  Future<void> onVideoEnabled(String callId, {CallAudioDevice? speakerDevice}) async {
     _logger.info('onVideoEnabled: $callId');
-    if (Platform.isAndroid) await Helper.setSpeakerphoneOn(true);
+    if (Platform.isAndroid) {
+      await Helper.setSpeakerphoneOn(true);
+      if (speakerDevice != null) await _callkeep.setAudioDevice(callId, speakerDevice.toCallkeep());
+    }
   }
 
   /// Called when video is disabled (camera turned off during a call).
@@ -168,14 +174,15 @@ class CallMediaManager {
   /// Reverts audio routing back to voice mode. Skipped when the user has
   /// explicitly chosen speaker ([speakerActive]).
   ///
-  /// Android: reverts via AudioSwitch only — mirrors [onVideoEnabled] so the
-  /// two paths stay symmetric and don't compete with Telecom routing.
+  /// Android: mirrors [onVideoEnabled] — both AudioSwitch and Telecom are updated.
+  /// [earpieceDevice] is the earpiece entry from [CallState.availableAudioDevices];
+  /// when null the Telecom call is skipped.
   ///
   /// iOS: resets the shared [RTCAudioSessionConfiguration] singleton from
   /// VideoChat → VoiceChat before calling [Helper.setSpeakerphoneOn(false)].
   /// Without this reset, [setSpeakerphoneOn(false)] re-applies VideoChat mode
   /// and keeps audio on speaker regardless of port override.
-  Future<void> onVideoDisabled(String callId, {required bool speakerActive}) async {
+  Future<void> onVideoDisabled(String callId, {required bool speakerActive, CallAudioDevice? earpieceDevice}) async {
     _logger.info('onVideoDisabled: $callId speakerActive=$speakerActive');
     if (speakerActive) return;
     if (Platform.isIOS) {
@@ -184,5 +191,6 @@ class CallMediaManager {
       return;
     }
     await Helper.setSpeakerphoneOn(false);
+    if (earpieceDevice != null) await _callkeep.setAudioDevice(callId, earpieceDevice.toCallkeep());
   }
 }
