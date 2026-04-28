@@ -1104,3 +1104,386 @@ class _RestoreAcceptedCall extends CallEvent {
   @override
   List<Object?> get props => [line, callId, acceptedEvent, acceptedTime, incomingCallEvent];
 }
+
+// ─── Mutation events ────────────────────────────────────────────────────────
+// Important: all operations that touch _peerConnectionManager, callkeep, or _signalingModule
+// are dispatched through this single sequential transformer queue to ensure proper ordering and avoid race conditions.
+//
+// Previously events were only grouped by family like signaling** contoll** perform** but not queued together
+// so it was possible for example start [signalingCallUpdating] [performEnd] [controlSetHeld] + bonus [renegotiate] at the same time
+// and start modifying PC, acquire media tracks, updating callkeep in random order which caused a lot of hard to reproduce bugs and crashes.
+// Now all these events are dispatched through the same queue so they are guaranteed to be processed one at a time in the order they were dispatched.
+
+sealed class _CallMutationEvent extends CallEvent {
+  const _CallMutationEvent();
+
+  // _CallPerformEvent redirects
+  const factory _CallMutationEvent.performStart(String callId, {required bool video}) = _CallMutationEventPerformStart;
+  const factory _CallMutationEvent.performAnswer(String callId) = _CallMutationEventPerformAnswer;
+  const factory _CallMutationEvent.performEnd(String callId) = _CallMutationEventPerformEnd;
+  const factory _CallMutationEvent.performSetHeld(String callId, bool onHold) = _CallMutationEventPerformSetHeld;
+  const factory _CallMutationEvent.performSetMuted(String callId, bool muted) = _CallMutationEventPerformSetMuted;
+  const factory _CallMutationEvent.performSendDTMF(String callId, String key) = _CallMutationEventPerformSendDTMF;
+  const factory _CallMutationEvent.performSetAudioDevice(String callId, CallAudioDevice device) =
+      _CallMutationEventPerformSetAudioDevice;
+
+  // _CallControlEvent redirects
+  const factory _CallMutationEvent.controlStart({
+    required CallkeepHandle handle,
+    required bool video,
+    required String? displayName,
+    required String? fromNumber,
+    required String? fromReplaces,
+  }) = _CallMutationEventControlStart;
+  const factory _CallMutationEvent.controlAnswer(String callId) = _CallMutationEventControlAnswer;
+  const factory _CallMutationEvent.controlEnd(String callId) = _CallMutationEventControlEnd;
+  const factory _CallMutationEvent.controlSetHeld(String callId, bool onHold) = _CallMutationEventControlSetHeld;
+  const factory _CallMutationEvent.controlSetMuted(String callId, bool muted) = _CallMutationEventControlSetMuted;
+  const factory _CallMutationEvent.controlSendDTMF(String callId, String key) = _CallMutationEventControlSendDTMF;
+  const factory _CallMutationEvent.controlSwitchCamera(String callId) = _CallMutationEventControlSwitchCamera;
+  const factory _CallMutationEvent.controlSetCameraEnabled(String callId, bool enabled) =
+      _CallMutationEventControlSetCameraEnabled;
+  const factory _CallMutationEvent.controlBlindTransfer(String callId, {required int? line, required String number}) =
+      _CallMutationEventControlBlindTransfer;
+  const factory _CallMutationEvent.controlAttendedTransfer({
+    required ActiveCall referorCall,
+    required ActiveCall replaceCall,
+  }) = _CallMutationEventControlAttendedTransfer;
+  const factory _CallMutationEvent.controlAttendedApprove({required String referId, required String referTo}) =
+      _CallMutationEventControlAttendedApprove;
+  const factory _CallMutationEvent.controlAttendedDecline({required String callId, required String referId}) =
+      _CallMutationEventControlAttendedDecline;
+
+  // _CallSignalingEvent redirects
+  const factory _CallMutationEvent.signalingIncoming({
+    required int? line,
+    required String callId,
+    required String caller,
+    required String callee,
+    String? callerDisplayName,
+    String? referredBy,
+    String? replaceCallId,
+    bool? isFocus,
+    JsepValue? jsep,
+  }) = _CallMutationEventSignalingIncoming;
+  const factory _CallMutationEvent.signalingAccepted({required String callId, JsepValue? jsep}) =
+      _CallMutationEventSignalingAccepted;
+  const factory _CallMutationEvent.signalingHangup({
+    required String callId,
+    required int code,
+    required String reason,
+  }) = _CallMutationEventSignalingHangup;
+  const factory _CallMutationEvent.signalingCallUpdating({
+    required String callId,
+    required String caller,
+    required String callee,
+    String? callerDisplayName,
+    JsepValue? jsep,
+  }) = _CallMutationEventSignalingCallUpdating;
+
+  // _PeerConnectionEvent redirects
+  const factory _CallMutationEvent.renegotiate(String callId, int? lineId) = _CallMutationEventRenegotiate;
+  const factory _CallMutationEvent.trickleIce(String callId, RTCIceCandidate candidate) = _CallMutationEventTrickleIce;
+  const factory _CallMutationEvent.iceGatheringComplete(String callId) = _CallMutationEventIceGatheringComplete;
+  const factory _CallMutationEvent.iceConnectionFailed(String callId) = _CallMutationEventIceConnectionFailed;
+  const factory _CallMutationEvent.restartIce(String callId) = _CallMutationEventRestartIce;
+
+  // Push / restore redirects
+  const factory _CallMutationEvent.restoreCall({
+    required String callId,
+    required int line,
+    required DateTime acceptedTime,
+    IncomingCallEvent? incomingCallEvent,
+    required AcceptedEvent acceptedEvent,
+  }) = _CallMutationEventRestoreCall;
+}
+
+// ── perform variants ─────────────────────────────────────────────────────────
+
+class _CallMutationEventPerformStart extends _CallMutationEvent {
+  const _CallMutationEventPerformStart(this.callId, {required this.video});
+  final String callId;
+  final bool video;
+  @override
+  List<Object?> get props => [callId, video];
+}
+
+class _CallMutationEventPerformAnswer extends _CallMutationEvent {
+  const _CallMutationEventPerformAnswer(this.callId);
+  final String callId;
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallMutationEventPerformEnd extends _CallMutationEvent {
+  const _CallMutationEventPerformEnd(this.callId);
+  final String callId;
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallMutationEventPerformSetHeld extends _CallMutationEvent {
+  const _CallMutationEventPerformSetHeld(this.callId, this.onHold);
+  final String callId;
+  final bool onHold;
+  @override
+  List<Object?> get props => [callId, onHold];
+}
+
+class _CallMutationEventPerformSetMuted extends _CallMutationEvent {
+  const _CallMutationEventPerformSetMuted(this.callId, this.muted);
+  final String callId;
+  final bool muted;
+  @override
+  List<Object?> get props => [callId, muted];
+}
+
+class _CallMutationEventPerformSendDTMF extends _CallMutationEvent {
+  const _CallMutationEventPerformSendDTMF(this.callId, this.key);
+  final String callId;
+  final String key;
+  @override
+  List<Object?> get props => [callId, key];
+}
+
+class _CallMutationEventPerformSetAudioDevice extends _CallMutationEvent {
+  const _CallMutationEventPerformSetAudioDevice(this.callId, this.device);
+  final String callId;
+  final CallAudioDevice device;
+  @override
+  List<Object?> get props => [callId, device];
+}
+
+// ── control variants ─────────────────────────────────────────────────────────
+
+class _CallMutationEventControlStart extends _CallMutationEvent {
+  const _CallMutationEventControlStart({
+    required this.handle,
+    required this.video,
+    required this.displayName,
+    required this.fromNumber,
+    required this.fromReplaces,
+  });
+  final CallkeepHandle handle;
+  final bool video;
+  final String? displayName;
+  final String? fromNumber;
+  final String? fromReplaces;
+  @override
+  List<Object?> get props => [handle, video, displayName, fromNumber, fromReplaces];
+}
+
+class _CallMutationEventControlAnswer extends _CallMutationEvent {
+  const _CallMutationEventControlAnswer(this.callId);
+  final String callId;
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallMutationEventControlEnd extends _CallMutationEvent {
+  const _CallMutationEventControlEnd(this.callId);
+  final String callId;
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallMutationEventControlSetHeld extends _CallMutationEvent {
+  const _CallMutationEventControlSetHeld(this.callId, this.onHold);
+  final String callId;
+  final bool onHold;
+  @override
+  List<Object?> get props => [callId, onHold];
+}
+
+class _CallMutationEventControlSetMuted extends _CallMutationEvent {
+  const _CallMutationEventControlSetMuted(this.callId, this.muted);
+  final String callId;
+  final bool muted;
+  @override
+  List<Object?> get props => [callId, muted];
+}
+
+class _CallMutationEventControlSendDTMF extends _CallMutationEvent {
+  const _CallMutationEventControlSendDTMF(this.callId, this.key);
+  final String callId;
+  final String key;
+  @override
+  List<Object?> get props => [callId, key];
+}
+
+class _CallMutationEventControlSwitchCamera extends _CallMutationEvent {
+  const _CallMutationEventControlSwitchCamera(this.callId);
+  final String callId;
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallMutationEventControlSetCameraEnabled extends _CallMutationEvent {
+  const _CallMutationEventControlSetCameraEnabled(this.callId, this.enabled);
+  final String callId;
+  final bool enabled;
+  @override
+  List<Object?> get props => [callId, enabled];
+}
+
+class _CallMutationEventControlBlindTransfer extends _CallMutationEvent {
+  const _CallMutationEventControlBlindTransfer(this.callId, {required this.line, required this.number});
+  final String callId;
+  final int? line;
+  final String number;
+  @override
+  List<Object?> get props => [callId, line, number];
+}
+
+class _CallMutationEventControlAttendedTransfer extends _CallMutationEvent {
+  const _CallMutationEventControlAttendedTransfer({required this.referorCall, required this.replaceCall});
+  final ActiveCall referorCall;
+  final ActiveCall replaceCall;
+  @override
+  List<Object?> get props => [referorCall, replaceCall];
+}
+
+class _CallMutationEventControlAttendedApprove extends _CallMutationEvent {
+  const _CallMutationEventControlAttendedApprove({required this.referId, required this.referTo});
+  final String referId;
+  final String referTo;
+  @override
+  List<Object?> get props => [referId, referTo];
+}
+
+class _CallMutationEventControlAttendedDecline extends _CallMutationEvent {
+  const _CallMutationEventControlAttendedDecline({required this.callId, required this.referId});
+  final String callId;
+  final String referId;
+  @override
+  List<Object?> get props => [callId, referId];
+}
+
+// ── signaling variants ───────────────────────────────────────────────────────
+
+class _CallMutationEventSignalingIncoming extends _CallMutationEvent {
+  const _CallMutationEventSignalingIncoming({
+    required this.line,
+    required this.callId,
+    required this.caller,
+    required this.callee,
+    this.callerDisplayName,
+    this.referredBy,
+    this.replaceCallId,
+    this.isFocus,
+    this.jsep,
+  });
+  final int? line;
+  final String callId;
+  final String caller;
+  final String callee;
+  final String? callerDisplayName;
+  final String? referredBy;
+  final String? replaceCallId;
+  final bool? isFocus;
+  final JsepValue? jsep;
+  @override
+  List<Object?> get props => [
+    line,
+    callId,
+    caller,
+    callee,
+    callerDisplayName,
+    referredBy,
+    replaceCallId,
+    isFocus,
+    jsep,
+  ];
+}
+
+class _CallMutationEventSignalingAccepted extends _CallMutationEvent {
+  const _CallMutationEventSignalingAccepted({required this.callId, this.jsep});
+  final String callId;
+  final JsepValue? jsep;
+  @override
+  List<Object?> get props => [callId, jsep];
+}
+
+class _CallMutationEventSignalingHangup extends _CallMutationEvent {
+  const _CallMutationEventSignalingHangup({required this.callId, required this.code, required this.reason});
+  final String callId;
+  final int code;
+  final String reason;
+  @override
+  List<Object?> get props => [callId, code, reason];
+}
+
+class _CallMutationEventSignalingCallUpdating extends _CallMutationEvent {
+  const _CallMutationEventSignalingCallUpdating({
+    required this.callId,
+    required this.caller,
+    required this.callee,
+    this.callerDisplayName,
+    this.jsep,
+  });
+  final String callId;
+  final String caller;
+  final String callee;
+  final String? callerDisplayName;
+  final JsepValue? jsep;
+  @override
+  List<Object?> get props => [callId, caller, callee, callerDisplayName, jsep];
+}
+
+// ── peer connection / ICE variants ───────────────────────────────────────────
+
+class _CallMutationEventRenegotiate extends _CallMutationEvent {
+  const _CallMutationEventRenegotiate(this.callId, this.lineId);
+  final String callId;
+  final int? lineId;
+  @override
+  List<Object?> get props => [callId, lineId];
+}
+
+class _CallMutationEventTrickleIce extends _CallMutationEvent {
+  const _CallMutationEventTrickleIce(this.callId, this.candidate);
+  final String callId;
+  final RTCIceCandidate candidate;
+  @override
+  List<Object?> get props => [callId, candidate];
+}
+
+class _CallMutationEventIceGatheringComplete extends _CallMutationEvent {
+  const _CallMutationEventIceGatheringComplete(this.callId);
+  final String callId;
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallMutationEventIceConnectionFailed extends _CallMutationEvent {
+  const _CallMutationEventIceConnectionFailed(this.callId);
+  final String callId;
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallMutationEventRestartIce extends _CallMutationEvent {
+  const _CallMutationEventRestartIce(this.callId);
+  final String callId;
+  @override
+  List<Object?> get props => [callId];
+}
+
+// ── push / restore variants ──────────────────────────────────────────────────
+
+class _CallMutationEventRestoreCall extends _CallMutationEvent {
+  const _CallMutationEventRestoreCall({
+    required this.callId,
+    required this.line,
+    required this.acceptedTime,
+    this.incomingCallEvent,
+    required this.acceptedEvent,
+  });
+  final String callId;
+  final int line;
+  final DateTime acceptedTime;
+  final IncomingCallEvent? incomingCallEvent;
+  final AcceptedEvent acceptedEvent;
+  @override
+  List<Object?> get props => [callId, line, acceptedTime, incomingCallEvent, acceptedEvent];
+}
