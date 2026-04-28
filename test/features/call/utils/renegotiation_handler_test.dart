@@ -73,6 +73,8 @@ void main() {
       // native "stable", so null must be treated as stable to allow the
       // first offer after restoration.
       when(() => mockPC.signalingState).thenReturn(null);
+      when(() => mockPC.getSenders()).thenAnswer((_) async => []);
+      when(() => mockPC.getReceivers()).thenAnswer((_) async => []);
       when(() => mockPC.createOffer(any())).thenAnswer((_) async => kOffer);
       when(() => mockPC.setLocalDescription(any())).thenAnswer((_) async {});
 
@@ -110,6 +112,8 @@ void main() {
       when(
         () => mockPC.signalingState,
       ).thenAnswer((_) => callCount++ == 0 ? RTCSignalingState.RTCSignalingStateStable : null);
+      when(() => mockPC.getSenders()).thenAnswer((_) async => []);
+      when(() => mockPC.getReceivers()).thenAnswer((_) async => []);
       when(() => mockPC.createOffer(any())).thenAnswer((_) async => kOffer);
       when(() => mockPC.setLocalDescription(any())).thenAnswer((_) async {});
     });
@@ -155,6 +159,8 @@ void main() {
   group('RenegotiationHandler — execute error handling', () {
     setUp(() {
       when(() => mockErrorReporter.handle(any(), any(), any())).thenReturn(null);
+      when(() => mockPC.getSenders()).thenAnswer((_) async => []);
+      when(() => mockPC.getReceivers()).thenAnswer((_) async => []);
     });
 
     test('reports error via callErrorReporter when execute throws', () async {
