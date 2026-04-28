@@ -1,4 +1,5 @@
-export 'call_actions.dart';
+export 'incoming_call_actions.dart';
+export 'active_call_actions.dart';
 export 'call_active_thumbnail.dart';
 export 'call_info.dart';
 export 'draggable_thumbnail.dart';
