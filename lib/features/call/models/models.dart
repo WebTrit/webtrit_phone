@@ -1,5 +1,6 @@
 export 'package:flutter_webrtc/flutter_webrtc.dart' show RTCVideoRenderer;
 
+export 'call_audio_device.dart';
 export 'call_display.dart';
 export 'jsep_value.dart';
 export 'notification.dart';
