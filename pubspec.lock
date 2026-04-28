@@ -823,7 +823,7 @@ packages:
     description:
       path: "."
       ref: "main_ext_rebase_10.07.25"
-      resolved-ref: f79f8747df8ffff207a9eea45467c3ea62dd3a63
+      resolved-ref: a7104c2290bbe7329d85e9e3f79d7fff97ff7b29
       url: "https://github.com/WebTrit/flutter-webrtc.git"
     source: git
     version: "0.14.3"
@@ -2017,7 +2017,7 @@ packages:
       path: "../webtrit_callkeep/webtrit_callkeep"
       relative: true
     source: path
-    version: "0.0.0+0"
+    version: "1.0.1+0"
   webtrit_callkeep_android:
     dependency: transitive
     description:
