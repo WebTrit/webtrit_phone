@@ -136,10 +136,13 @@ class CallMediaManager {
 
   /// Resets speaker state on the WebRTC layer (AudioSwitch / AVAudioSession).
   ///
-  /// Used for global resets at call start/end when no Telecom connection exists.
+  /// Android: used for global resets at call start/end when no Telecom connection exists.
   /// For routing during a live call use [setDevice] (user-triggered) or the
   /// video helpers [onVideoEnabled] / [onVideoDisabled] — they supply the actual
   /// device ID required by Telecom on Android.
+  ///
+  /// iOS: also called by [setDevice] during a live call — iOS has no Telecom layer,
+  /// so [Helper.setSpeakerphoneOn] is the only routing API needed.
   Future<void> setSpeaker({required bool enabled}) async {
     await Helper.setSpeakerphoneOn(enabled);
   }
@@ -195,6 +198,12 @@ class CallMediaManager {
       return;
     }
     await Helper.setSpeakerphoneOn(false);
-    if (earpieceDevice != null) await _callkeep.setAudioDevice(callId, earpieceDevice.toCallkeep());
+    if (earpieceDevice != null) {
+      await _callkeep.setAudioDevice(callId, earpieceDevice.toCallkeep());
+    } else {
+      _logger.warning(
+        'onVideoDisabled: earpiece device not available — Telecom route not updated, audio may stay on speaker',
+      );
+    }
   }
 }
