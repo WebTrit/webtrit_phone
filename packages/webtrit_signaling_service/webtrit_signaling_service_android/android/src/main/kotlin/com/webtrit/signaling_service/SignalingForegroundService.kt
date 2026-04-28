@@ -119,6 +119,16 @@ class SignalingForegroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "SignalingForegroundService onStartCommand")
 
+        // Re-satisfy Android's startForeground() requirement for this startForegroundService() call.
+        // In pushBound mode the service runs without a visible notification (stopForeground is called
+        // in onCreate). When startForegroundService() is called on an already-running-but-not-foreground
+        // service, Android starts a fresh 5-second timer — onCreate() is NOT called again, so without
+        // this call the timer expires and the app crashes with ForegroundServiceDidNotStartInTimeException.
+        startForeground()
+        if (StorageDelegate.isPushBound(applicationContext)) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        }
+
         // Path 4 guard: stopService() arrived in the Pigeon FIFO queue before this
         // service's H.CREATE_SERVICE ran (main thread was overloaded). The plugin
         // deferred the stop because calling context.stopService() at that point would
