@@ -15,10 +15,6 @@ import android.util.Log
 import androidx.annotation.Keep
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ProcessLifecycleOwner
 import io.flutter.plugin.common.BinaryMessenger
 
 /// Foreground service that manages the background Flutter engine for signaling.
@@ -62,13 +58,6 @@ class SignalingForegroundService : Service() {
     /// again before the already-posted block runs.
     /// Accessed only on the main thread.
     private var _engineInitPending = false
-
-    private var _isForeground = false
-
-    private val _appLifecycleObserver = object : DefaultLifecycleObserver {
-        override fun onStart(owner: LifecycleOwner) = suppressNotification()
-        override fun onStop(owner: LifecycleOwner) = restoreNotification()
-    }
 
     /// Set to true by the startup watchdog Runnable (after [stopSelf] is called).
     /// Prevents [startStartupWatchdog] from re-arming in the brief window between
@@ -117,9 +106,8 @@ class SignalingForegroundService : Service() {
     override fun onCreate() {
         super.onCreate()
         startForeground()
-        ProcessLifecycleOwner.get().lifecycle.addObserver(_appLifecycleObserver)
-        if (ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-            suppressNotification()
+        if (StorageDelegate.isPushBound(applicationContext)) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
         }
         Log.d(TAG, "SignalingForegroundService onCreate")
         instance = this
@@ -240,7 +228,6 @@ class SignalingForegroundService : Service() {
     }
 
     override fun onDestroy() {
-        ProcessLifecycleOwner.get().lifecycle.removeObserver(_appLifecycleObserver)
         // Enqueue restart before any teardown so the job is queued while the process is still valid.
         // Credentials guard: stopService() calls clearConnectionConfig() before stopping the service,
         // so after explicit logout coreUrl is already empty here and no job is scheduled.
@@ -291,21 +278,6 @@ class SignalingForegroundService : Service() {
         notificationDescription = description
     }
 
-    internal fun suppressNotification() {
-        if (!_isForeground) return
-        if (!StorageDelegate.isPushBound(applicationContext)) return
-        stopForeground(STOP_FOREGROUND_REMOVE)
-        _isForeground = false
-        Log.d(TAG, "notification suppressed (app in foreground)")
-    }
-
-    internal fun restoreNotification() {
-        if (_isForeground) return
-        if (!StorageDelegate.isPushBound(applicationContext)) return
-        startForeground()
-        Log.d(TAG, "notification restored (app going to background)")
-    }
-
     /// Stops the service immediately without signalling the background isolate,
     /// simulating an abrupt OS kill.
     ///
@@ -345,7 +317,6 @@ class SignalingForegroundService : Service() {
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_REMOTE_MESSAGING
             else 0,
         )
-        _isForeground = true
     }
 
     private fun createNotificationChannel(): String {
