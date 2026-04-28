@@ -108,6 +108,7 @@ class SignalingForegroundService : Service() {
         startForeground()
         if (StorageDelegate.isPushBound(applicationContext)) {
             stopForeground(STOP_FOREGROUND_REMOVE)
+            Log.d(TAG, "onCreate: pushBound mode -- notification suppressed")
         }
         Log.d(TAG, "SignalingForegroundService onCreate")
         instance = this
@@ -127,6 +128,7 @@ class SignalingForegroundService : Service() {
         startForeground()
         if (StorageDelegate.isPushBound(applicationContext)) {
             stopForeground(STOP_FOREGROUND_REMOVE)
+            Log.d(TAG, "onStartCommand: pushBound mode -- notification suppressed")
         }
 
         // Path 4 guard: stopService() arrived in the Pigeon FIFO queue before this
