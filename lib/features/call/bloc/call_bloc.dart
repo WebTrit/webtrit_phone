@@ -912,6 +912,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallSignalingEventNotifyRefer() => __onCallSignalingEventNotifyRefer(event, emit),
       _CallSignalingEventNotifyUnknown() => __onCallSignalingEventNotifyUnknown(event, emit),
       _CallSignalingEventRegistration() => __onCallSignalingEventRegistration(event, emit),
+      _CallSignalingEventCallError() => __onCallSignalingEventCallError(event, emit),
     };
   }
 
@@ -1256,6 +1257,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     final registration = Registration(status: event.status, code: event.code, reason: event.reason);
     add(_RegistrationChange(registration: registration));
+  }
+
+  Future<void> __onCallSignalingEventCallError(_CallSignalingEventCallError event, Emitter<CallState> emit) async {
+    _logger.fine('_CallSignalingEventCallError: $event');
+
+    if (event.code == 448 && event.reason.contains('SDP type answer is incompatible with session status incall')) {
+      _logger.warning('__onCallSignalingEventCallError: dispatch renegotiation after incompatible SDP error');
+      // May help to recover from the error by renegotiating the call with the correct SDP type.
+      Future.delayed(const Duration(seconds: 5), () {
+        if (isClosed) return;
+        add(_CallMutationEvent.restartIce(event.callId));
+      });
+    }
   }
 
   // processing call control events
@@ -3493,6 +3507,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.info('[SIG] HangingupEvent: callId=${event.callId} line=${event.line} - hangup in progress');
     } else if (event is IceHangupEvent) {
       _logger.info('[SIG] IceHangupEvent: line=${event.line} reason="${event.reason}"');
+    } else if (event is CallErrorEvent) {
+      add(
+        _CallSignalingEvent.callError(line: event.line, callId: event.callId, code: event.code, reason: event.reason),
+      );
     } else {
       _logger.warning('unhandled signaling event $event');
     }
