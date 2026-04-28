@@ -7,6 +7,8 @@ import 'call_error_reporter.dart';
 import 'pc_exceptions.dart';
 import 'sdp_munger.dart';
 
+import 'package:webtrit_phone/extensions/logger_extensions.dart';
+
 final _logger = Logger('RenegotiationHandler');
 
 /// Callback responsible for sending the renegotiation offer to the remote peer
@@ -99,9 +101,17 @@ class RenegotiationHandler {
           return;
         }
 
-        final localDescription = await peerConnection.createOffer({});
+        final anyoneHasVideo =
+            (await peerConnection.getSenders()).any((s) => s.track?.kind == 'video') ||
+            (await peerConnection.getReceivers()).any((r) => r.track?.kind == 'video');
+        _logger.fine(() => 'onRenegotiationNeeded: anyoneHasVideo=$anyoneHasVideo');
+
+        final localDescription = await peerConnection.createOffer({
+          'mandatory': {'OfferToReceiveAudio': true, 'OfferToReceiveVideo': anyoneHasVideo},
+        });
+
         sdpMunger?.apply(localDescription);
-        _logger.info(() => 'onRenegotiationNeeded offer SDP (callId=$callId):\n${localDescription.sdp}');
+        _logger.infoPretty(localDescription.sdp, tag: 'onRenegotiationNeeded offer SDP (callId=$callId)');
 
         final stateAfterOffer = peerConnection.signalingState;
         // Same null-as-stable reasoning as the pre-offer guard: if the Dart
