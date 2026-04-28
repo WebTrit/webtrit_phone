@@ -13,6 +13,8 @@ extension ProcessingStatusL10n on CallProcessingStatus {
         return context.l10n.callProcessingStatus_preparing;
       case CallProcessingStatus.incomingInitializingMedia:
         return context.l10n.callProcessingStatus_init_media;
+      case CallProcessingStatus.incomingRestoringMedia:
+        return context.l10n.callProcessingStatus_init_media;
       case CallProcessingStatus.incomingAnswering:
         return context.l10n.callProcessingStatus_answering;
 
@@ -21,6 +23,8 @@ extension ProcessingStatusL10n on CallProcessingStatus {
       case CallProcessingStatus.outgoingConnectingToSignaling:
         return context.l10n.callProcessingStatus_signaling_connecting;
       case CallProcessingStatus.outgoingInitializingMedia:
+        return context.l10n.callProcessingStatus_init_media;
+      case CallProcessingStatus.outgoingRestoringMedia:
         return context.l10n.callProcessingStatus_init_media;
       case CallProcessingStatus.outgoingOfferPreparing:
         return context.l10n.callProcessingStatus_invite;

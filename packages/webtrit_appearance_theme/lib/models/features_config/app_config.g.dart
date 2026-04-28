@@ -168,14 +168,12 @@ AppConfigMain _$AppConfigMainFromJson(Map<String, dynamic> json) =>
             ),
       systemNotificationsEnabled:
           json['systemNotificationsEnabled'] as bool? ?? true,
-      sipPresenceEnabled: json['sipPresenceEnabled'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$AppConfigMainToJson(AppConfigMain instance) =>
     <String, dynamic>{
       'bottomMenu': instance.bottomMenu.toJson(),
       'systemNotificationsEnabled': instance.systemNotificationsEnabled,
-      'sipPresenceEnabled': instance.sipPresenceEnabled,
     };
 
 AppConfigBottomMenu _$AppConfigBottomMenuFromJson(Map<String, dynamic> json) =>

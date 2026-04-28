@@ -15,7 +15,12 @@ abstract class PeerConnectionPolicyApplier {
   ///
   /// The [hasRemoteVideo] parameter indicates whether the remote SDP includes a video m-line.
   /// This allows conditional policy application based on call capabilities.
-  Future<void> apply(RTCPeerConnection peerConnection, {required bool hasRemoteVideo});
+  Future<void> apply(
+    RTCPeerConnection peerConnection, {
+    required bool hasRemoteVideo,
+    required MediaStream localStream,
+    bool? frontCamera,
+  });
 }
 
 /// Applies peer connection policies based on the provided [PeerConnectionSettings].
@@ -51,10 +56,20 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
       .negotiationSettings;
 
   @override
-  Future<void> apply(RTCPeerConnection peerConnection, {required bool hasRemoteVideo}) async {
+  Future<void> apply(
+    RTCPeerConnection peerConnection, {
+    required bool hasRemoteVideo,
+    required MediaStream localStream,
+    bool? frontCamera,
+  }) async {
     _logger.fine('Applying peer connection policies with settings: $_negotiationSettings');
-    // Check if the policy requires inserting an inactive video track for negotiation purposes
-    if (_negotiationSettings.includeInactiveVideoInOfferAnswer && hasRemoteVideo) {
+
+    // // Check if the policy requires inserting an inactive video track for negotiation purposes
+    // if (_negotiationSettings.includeInactiveVideoInOfferAnswer && hasRemoteVideo) {
+    //
+    // Enabled by default for test purposes
+    // TODO: if everything works well remove all related settings
+    if (hasRemoteVideo) {
       // Check if a video track is already added to the peer connection
       final senders = await peerConnection.getSenders();
       final alreadyHasVideo = senders.any((sender) => sender.track != null && sender.track!.kind == 'video');
@@ -64,14 +79,22 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
         return;
       }
 
-      // Acquire a local stream with video
-      final localStream = await _userMediaBuilder.build(video: true);
-      final localVideoTrack = localStream.getVideoTracks().firstOrNull;
+      // The video sender may be absent (e.g. after a glare-rollback or error recovery)
+      // while the caller's active camera track is still in localStream. Re-add it as-is
+      // to preserve the active video — never disable a track the caller already enabled.
+      final activeTrack = localStream.getVideoTracks().where((t) => t.enabled).firstOrNull;
+      if (activeTrack != null) {
+        _logger.fine('Active local video track found in stream, re-adding to peer connection');
+        await peerConnection.addTrack(activeTrack, localStream);
+        return;
+      }
+
+      final localVideoTrack = await _userMediaBuilder.ensureVideoTrack(localStream, frontCamera: frontCamera);
 
       // Add the video track to the peer connection, disabled initially
       if (localVideoTrack != null) {
         localVideoTrack.enabled = false;
-        peerConnection.addTrack(localVideoTrack, localStream);
+        await peerConnection.addTrack(localVideoTrack, localStream);
         _logger.fine('Added inactive local video track to peer connection');
       }
     }

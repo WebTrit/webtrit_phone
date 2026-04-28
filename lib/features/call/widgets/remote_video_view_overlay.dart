@@ -40,6 +40,8 @@ class RemoteVideoViewOverlay extends StatelessWidget {
     super.key,
     this.remotePlaceholderBuilder,
     this.backgroundMode = VideoBackgroundMode.blur,
+    this.hasRenderableRemoteFrame = true,
+    this.hideVideo = false,
   });
 
   /// Whether the call has been accepted and is currently active.
@@ -59,6 +61,15 @@ class RemoteVideoViewOverlay extends StatelessWidget {
   /// Optional builder for a placeholder widget while the stream is initializing.
   final WidgetBuilder? remotePlaceholderBuilder;
 
+  /// Whether to hide the video stream entirely.
+  final bool hideVideo;
+
+  /// Whether the sampled remote frame contains renderable content.
+  ///
+  /// When false, the widget falls back to the placeholder instead of rendering
+  /// a black/empty remote video frame.
+  final bool hasRenderableRemoteFrame;
+
   /// Determines how the empty space behind the video is rendered.
   ///
   /// Only applies when [videoFit] is [RTCVideoViewObjectFit.RTCVideoViewObjectFitContain].
@@ -66,10 +77,15 @@ class RemoteVideoViewOverlay extends StatelessWidget {
   final VideoBackgroundMode backgroundMode;
 
   bool get _shouldRenderBackground =>
-      videoFit == RTCVideoViewObjectFit.RTCVideoViewObjectFitContain && backgroundMode != VideoBackgroundMode.none;
+      hideVideo == false &&
+      hasRenderableRemoteFrame &&
+      videoFit == RTCVideoViewObjectFit.RTCVideoViewObjectFitContain &&
+      backgroundMode != VideoBackgroundMode.none;
 
   @override
   Widget build(BuildContext context) {
+    final stream = hasRenderableRemoteFrame ? remoteStream : null;
+
     return Positioned.fill(
       child: GestureDetector(
         onTap: activeCallWasAccepted ? onTap : null,
@@ -77,8 +93,8 @@ class RemoteVideoViewOverlay extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            if (_shouldRenderBackground) _BackgroundLayer(stream: remoteStream, mode: backgroundMode),
-            RTCStreamView(stream: remoteStream, placeholderBuilder: remotePlaceholderBuilder, fit: videoFit),
+            if (_shouldRenderBackground) _BackgroundLayer(stream: stream, mode: backgroundMode),
+            if (!hideVideo) RTCStreamView(stream: stream, placeholderBuilder: remotePlaceholderBuilder, fit: videoFit),
           ],
         ),
       ),

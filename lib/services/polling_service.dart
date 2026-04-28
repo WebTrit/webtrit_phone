@@ -239,6 +239,11 @@ class PollingService implements Disposable {
       final reachable = await _isReachable();
       if (_disposed) return _nextDelay(config);
 
+      if (!listener.isActive) {
+        unregister(listener);
+        return _nextDelay(config);
+      }
+
       if (reachable && !config.isRefreshing) {
         config.isRefreshing = true;
         try {
@@ -276,6 +281,10 @@ class PollingService implements Disposable {
       if (_disposed) return;
       try {
         if (_shouldRunTimers && reachable) {
+          if (!listener.isActive) {
+            unregister(listener);
+            return;
+          }
           await listener.refresh();
           _logger.finest('PollingService: leading refresh succeeded for $listener');
           config.consecutiveErrors = 0;

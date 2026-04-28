@@ -9,6 +9,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'l10n.dart';
 
@@ -23,6 +24,7 @@ String defaultErrorL10n(BuildContext context, Object error) {
     SignalingHangupFailure() => _defaultSignalingHangupFailureL10n(context, error),
     RequestFailure() => _defaultRequestFailureL10n(context, error),
     MessagingSocketException() => _defaultMessagingSocketExceptionL10n(context, error),
+    NotConnectedException() => context.l10n.common_noInternetConnection_message,
     _ => context.l10n.default_UnknownExceptionError(error.toString()),
   };
 }

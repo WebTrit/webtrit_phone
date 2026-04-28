@@ -171,7 +171,6 @@ class AppConfigMain with _$AppConfigMain {
       ],
     ),
     this.systemNotificationsEnabled = true,
-    this.sipPresenceEnabled = false,
   });
 
   @override
@@ -180,10 +179,6 @@ class AppConfigMain with _$AppConfigMain {
   @override
   @Deprecated('Use SupportedFeature.systemNotifications instead')
   final bool systemNotificationsEnabled;
-
-  @override
-  @Deprecated('Use SupportedFeature.sipPresence instead')
-  final bool sipPresenceEnabled;
 
   factory AppConfigMain.fromJson(Map<String, Object?> json) => _$AppConfigMainFromJson(json);
 

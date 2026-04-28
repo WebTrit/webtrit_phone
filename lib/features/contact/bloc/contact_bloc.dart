@@ -16,17 +16,23 @@ part 'contact_event.dart';
 part 'contact_state.dart';
 
 class ContactBloc extends Bloc<ContactEvent, ContactState> {
-  ContactBloc(this.contactId, {required this.contactsRepository, required this.favoritesRepository})
-    : super(const ContactState()) {
+  ContactBloc(
+    this.contactId, {
+    required this.contactsRepository,
+    required this.favoritesRepository,
+    required this.sipSubscriptionsRepository,
+  }) : super(const ContactState()) {
     on<ContactStarted>(_onStarted, transformer: restartable());
     on<ContactAddedToFavorites>(_onAddedToFavorites);
     on<ContactRemovedFromFavorites>(_onRemovedFromFavorites);
     on<ContactEmailSend>(_onEmailSend);
+    on<ContactSipSubscriptionToggled>(_onSipSubscriptionToggled);
   }
 
   final ContactId contactId;
   final ContactsRepository contactsRepository;
   final FavoritesRepository favoritesRepository;
+  final SipSubscriptionsRepository sipSubscriptionsRepository;
 
   /// Handles the [ContactStarted] event by subscribing to the contact stream
   /// from the [ContactsRepository] for the given [contactId].
@@ -40,7 +46,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   /// to contact removal.
   FutureOr<void> _onStarted(ContactStarted event, Emitter<ContactState> emit) async {
     await emit.forEach(
-      contactsRepository.watchContact(contactId),
+      contactsRepository.watchContact(contactId, includeSipSubscriptions: true),
       onData: (contact) => state.copyWith(contact: contact, deleted: contact == null),
     );
   }
@@ -57,6 +63,24 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     final emailLaunchUri = Uri(scheme: 'mailto', path: event.contactEmail.address);
     if (await canLaunchUrl(emailLaunchUri)) {
       await launchUrl(emailLaunchUri);
+    }
+  }
+
+  FutureOr<void> _onSipSubscriptionToggled(ContactSipSubscriptionToggled event, Emitter<ContactState> emit) async {
+    final ContactSipSubscriptionToggled(:enabled, :type) = event;
+    final Contact? contact = state.contact;
+    if (contact == null) return;
+    final number = contact.mobileNumber;
+    if (number == null) return;
+    final sourceId = contact.sourceId;
+    if (sourceId == null) return;
+
+    if (enabled) {
+      await sipSubscriptionsRepository.upsert(
+        SipSubscription(type: type, number: number, contactUserId: sourceId, subscribedAt: DateTime.now()),
+      );
+    } else {
+      await sipSubscriptionsRepository.remove(type, number);
     }
   }
 }

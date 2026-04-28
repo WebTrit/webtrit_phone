@@ -107,7 +107,7 @@ class _RecentTileState extends State<RecentTile> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final presenceSource = PresenceViewParams.of(context).viewSource;
+    final presenceParams = PresenceViewParams.of(context);
 
     return Dismissible(
       key: ObjectKey(widget.recent),
@@ -132,12 +132,13 @@ class _RecentTileState extends State<RecentTile> {
           thumbnailUrl: contact?.thumbnailUrl,
           registered: contact?.registered,
           presenceInfo: contact?.presenceInfo,
+          dialogInfo: contact?.dialogInfo,
         ),
         trailing: Text(dateFormat.format(callLogEntry.createdTime), style: themeData.textTheme.bodySmall),
         title: Text(
-          switch (presenceSource) {
-            PresenceViewSource.sipPresence => '${widget.recent.name} ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
-            PresenceViewSource.contactInfo => widget.recent.name,
+          switch (presenceParams.hybridPresenceSupport) {
+            true => '${widget.recent.name} ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
+            false => widget.recent.name,
           },
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

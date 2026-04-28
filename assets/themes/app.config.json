@@ -7,6 +7,9 @@
     {
       "type": "loggingConfig",
       "checkIntervalSec": 15
+    },
+    {
+      "type": "hybridPresence"
     }
   ],
   "loginConfig": {
@@ -98,8 +101,7 @@
         }
       ]
     },
-    "systemNotificationsEnabled": true,
-    "sipPresenceEnabled": true
+    "systemNotificationsEnabled": true
   },
   "settingsConfig": {
     "sections": [

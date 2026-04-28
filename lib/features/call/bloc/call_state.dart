@@ -41,13 +41,48 @@ class CallState with _$CallState {
   /// Indicates that the signaling connection to the server is successfully established.
   bool get isSignalingEstablished => callServiceState.signalingClientStatus.isConnect;
 
-  int? retrieveIdleLine() {
-    for (var line = 0; line < linesCount; line++) {
-      if (!activeCalls.any((activeCall) => activeCall.line == line)) {
-        return line;
+  /// Computes the [LinesState] that reflects the current lines and active calls.
+  ///
+  /// Returns [LinesState.blank] when [linesCount] is 0 and the signaling
+  /// handshake has not yet been received ([isHandshakeEstablished] is false),
+  /// keeping [CallRoutingCubit] in the unready state until server config arrives.
+  ///
+  /// After the handshake, [linesCount] == 0 is a valid server configuration
+  /// (no main lines), so a real [LinesState] is computed to allow guest-line calls.
+  LinesState toLinesState() {
+    if (linesCount == 0 && !isHandshakeEstablished) return LinesState.blank();
+
+    final List<LineState> mainLinesState = [];
+    for (var i = 0; i < linesCount; i++) {
+      final lineCall = activeCalls.firstWhereOrNull((e) => e.line == i);
+      if (lineCall != null) {
+        mainLinesState.add(LineState.inUse(callId: lineCall.callId));
+      } else {
+        mainLinesState.add(LineState.idle());
       }
     }
-    return null;
+    final guestLineCall = activeCalls.firstWhereOrNull((e) => e.line == null);
+    final guestLineState = guestLineCall != null ? LineState.inUse(callId: guestLineCall.callId) : LineState.idle();
+    return LinesState(mainLines: mainLinesState, guestLine: guestLineState);
+  }
+
+  static int? lastUsedLine;
+
+  /// Retrieves an idle line number with rotation
+  int? retrieveIdleLine() {
+    final linesList = List.generate(linesCount, (index) => index)
+      ..sort((a, b) {
+        if (a == lastUsedLine) return 1;
+        if (b == lastUsedLine) return -1;
+        return 0;
+      });
+
+    final idleLines = linesList.where((line) => !activeCalls.any((activeCall) => activeCall.line == line));
+    final choosenLine = idleLines.firstOrNull;
+    if (choosenLine != null) {
+      lastUsedLine = choosenLine;
+    }
+    return choosenLine;
   }
 
   CallDisplay get display {
@@ -73,6 +108,21 @@ class CallState with _$CallState {
   bool get isBlingTransferInitiated => activeCalls.blindTransferInitiated != null;
 
   bool get shouldListenToProximity => isActive && isVoiceChat && minimized != true;
+
+  List<ActiveCall> callsToTerminate(Set<String> activeLineCallIds) {
+    final result = <ActiveCall>[];
+    for (final activeCall in activeCalls) {
+      if (activeLineCallIds.contains(activeCall.callId)) continue;
+      if (activeCall.direction == CallDirection.outgoing &&
+          activeCall.acceptedTime == null &&
+          activeCall.hungUpTime == null &&
+          activeCall.processingStatus.isPreOfferSent) {
+        continue;
+      }
+      result.add(activeCall);
+    }
+    return result;
+  }
 
   ActiveCall? retrieveActiveCall(String callId) {
     for (var activeCall in activeCalls) {
@@ -320,7 +370,7 @@ extension CallAudioDeviceIterableExtension<T extends CallAudioDevice> on Iterabl
   bool get onlyBuiltIn =>
       every((device) => device.type == CallAudioDeviceType.earpiece || device.type == CallAudioDeviceType.speaker);
 
-  T get getSpeaker => firstWhere((device) => device.type == CallAudioDeviceType.speaker);
+  T? get getSpeaker => firstWhereOrNull((device) => device.type == CallAudioDeviceType.speaker);
 
-  T get getEarpiece => firstWhere((device) => device.type == CallAudioDeviceType.earpiece);
+  T? get getEarpiece => firstWhereOrNull((device) => device.type == CallAudioDeviceType.earpiece);
 }

@@ -255,6 +255,24 @@
   "@contactsSourceLocal": {},
   "contacts_Text_blingTransferInitiated": "Trasferimento senza vedere",
   "@contacts_Text_blingTransferInitiated": {},
+  "contacts_DialogsInfoView_title": "Informazioni chiamate (BLF):",
+  "@contacts_DialogsInfoView_title": {},
+  "contacts_ContactTile_inCall": "In chiamata: {destination}",
+  "@contacts_ContactTile_inCall": {
+    "placeholders": {
+      "destination": {}
+    }
+  },
+  "contacts_ContactScreen_options": "Opzioni:",
+  "@contacts_ContactScreen_options": {},
+  "contacts_ContactScreen_presenceViaSip": "Iscriviti allo stato utente tramite SIP (Presence)",
+  "@contacts_ContactScreen_presenceViaSip": {},
+  "contacts_ContactScreen_presenceViaSip_tooltip": "Oltre allo scambio diretto di dati (app-to-app), l'iscrizione tramite la funzione SIP-Presence consente di raccogliere informazioni di presenza da altri user agent (telefoni desktop, softphone standalone, ecc.). Si consiglia di abilitarla solo se il contatto utilizza agent legacy e si desidera vedere lo stato di presenza su tutti i dispositivi.",
+  "@contacts_ContactScreen_presenceViaSip_tooltip": {},
+  "contacts_ContactScreen_dialogsViaSipBlf": "Iscriviti allo stato delle chiamate tramite SIP (BLF/Dialogs)",
+  "@contacts_ContactScreen_dialogsViaSipBlf": {},
+  "contacts_ContactScreen_dialogsViaSipBlf_tooltip": "Oltre allo scambio diretto di dati (app-to-app), l'iscrizione tramite la funzione SIP-Dialogs consente di raccogliere informazioni sullo stato delle chiamate da altri user agent (telefoni desktop, softphone standalone, ecc.). Si consiglia di abilitarla solo se il contatto utilizza agent legacy e si desidera vedere lo stato delle chiamate su tutti i dispositivi.",
+  "@contacts_ContactScreen_dialogsViaSipBlf_tooltip": {},
   "copyToClipboard_floatingSnackBar": "Testo copiato",
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Copia negli appunti",
@@ -620,6 +638,14 @@
   "@login_RequestFailurePhoneNotFoundError": {
     "description": "Shown during login or signup when the user provides a phone number that cannot be found in the system. Condition: the entered phone number does not exist or is not recognized by the backend."
   },
+  "login_RequestFailureIncorrectCredentialsError": "Nome utente o password non corretti",
+  "@login_RequestFailureIncorrectCredentialsError": {
+    "description": "Shown during password login when the provided username or password is incorrect. Condition: the backend returns incorrect_credentials in response to POST /session."
+  },
+  "login_RequestFailureUserNotFoundError": "Utente non trovato",
+  "@login_RequestFailureUserNotFoundError": {
+    "description": "Shown during password login when the provided user reference does not exist. Condition: the backend returns user_not_found in response to POST /session."
+  },
   "login_RequestFailureUnconfiguredBundleIdError": "Errore di configurazione del backend dell'app - avvisare il proprio fornitore di servizi",
   "@login_RequestFailureUnconfiguredBundleIdError": {
     "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."
@@ -728,6 +754,21 @@
   "@logRecordsConsole_Text_failure": {
     "description": "Shown in the Log Console screen when an unexpected error occurs while loading or displaying log records."
   },
+  "logRecordsConsole_Text_recordsCountHint": "{count, plural, one{Visualizzazione dell\u2019ultimo {count} record. Usa Condividi per esportare il log completo.} other{Visualizzazione degli ultimi {count} record. Usa Condividi per esportare il log completo.}}",
+  "@logRecordsConsole_Text_recordsCountHint": {
+    "description": "Shown in the info dialog to inform the user that only the most recent records are displayed and the share button exports the complete log.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "logRecordsConsole_Button_infoClose": "Capito",
+  "@logRecordsConsole_Button_infoClose": {},
+  "logRecordsConsole_PopupMenuItem_info": "Info",
+  "@logRecordsConsole_PopupMenuItem_info": {},
+  "logRecordsConsole_PopupMenuItem_clear": "Cancella",
+  "@logRecordsConsole_PopupMenuItem_clear": {},
   "main_BottomNavigationBarItemLabel_chats": "Le chat",
   "@main_BottomNavigationBarItemLabel_chats": {},
   "main_BottomNavigationBarItemLabel_contacts": "Contatti",
@@ -966,6 +1007,10 @@
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {
     "description": "Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target."
   },
+  "notifications_errorSnackBar_blindTransferFailed": "Trasferimento fallito, ritorno alla chiamata attiva",
+  "@notifications_errorSnackBar_blindTransferFailed": {
+    "description": "Shown when a blind transfer fails because the transfer target declined. The original call is restored and the user is returned to the active call screen."
+  },
   "notifications_errorSnackBar_appOffline": "La tua apllicazione è offline",
   "@notifications_errorSnackBar_appOffline": {
     "description": "Shown in a notification or snackbar when the application is offline. Condition: the app loses connection to the server or network and cannot perform online actions."
@@ -986,6 +1031,14 @@
   "@notifications_errorSnackBar_callNegotiationTimeout": {
     "description": "Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server."
   },
+  "notifications_errorSnackBar_generalUnableToCall": "Impossibile stabilire la chiamata, riprovare più tardi",
+  "@notifications_errorSnackBar_generalUnableToCall": {
+    "description": "Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server."
+  },
+  "notifications_errorSnackBar_callServiceBusyLine": "Impossibile effettuare la chiamata in questo momento perché la linea è occupata. Riprova più tardi.",
+  "@notifications_errorSnackBar_callServiceBusyLine": {
+    "description": "Shown in a notification or snackbar when the user tries to start a call but the selected line is already busy. Context: occurs at call initiation when no free channel is available on the current line or account; advise the user to wait and retry."
+  },
   "notifications_errorSnackBar_callSignalingClientNotConnect": "Impossibile eseguire la chiamata, verificare lo stato della connessione",
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {
     "description": "Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the WebTrit core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability."
@@ -997,6 +1050,10 @@
   "notifications_errorSnackBar_callUndefinedLine": "Nessuna linea disponibile per avviare una chiamata",
   "@notifications_errorSnackBar_callUndefinedLine": {
     "description": "Shown in a snackbar when the user attempts to start a call but there is no outbound line available. Context: occurs at call initiation when no SIP/VoIP line is assigned or registered, all lines are disabled or busy, or the line was removed/disabled by an administrator; typical causes: unassigned or unregistered SIP line, account/line disabled, or concurrent channel limits."
+  },
+  "notifications_errorSnackBar_callMediaTrackSetup": "Configurazione chiamata fallita, riprova",
+  "@notifications_errorSnackBar_callMediaTrackSetup": {
+    "description": "Shown when a call fails due to an internal media track error, not a permission denial. Typical cause: a native audio/video track reference was invalidated after a previous call was cleaned up. No action to open Settings."
   },
   "notifications_errorSnackBar_callUserMedia": "Nessun accesso al server multimediale, controlla le autorizzazioni dell'app",
   "@notifications_errorSnackBar_callUserMedia": {
@@ -1132,6 +1189,21 @@
     "type": "text",
     "description": "Title of a dialog shown when the user selects persistent connection on Android 14+"
   },
+  "batteryOptimizationWarningTitle": "Ottimizzazione batteria attiva",
+  "@batteryOptimizationWarningTitle": {
+    "type": "text",
+    "description": "Title of dialog warning the user about battery optimization being active when persistent connection is selected"
+  },
+  "batteryOptimizationWarningContent": "L'ottimizzazione della batteria è attiva su questo dispositivo. Ciò potrebbe causare la perdita di chiamate quando lo schermo è spento. Disabilitala per mantenere attiva la connessione persistente.",
+  "@batteryOptimizationWarningContent": {
+    "type": "text",
+    "description": "Content of dialog warning the user about battery optimization when persistent connection is selected"
+  },
+  "batteryOptimizationWarningOpenSettings": "Apri impostazioni",
+  "@batteryOptimizationWarningOpenSettings": {
+    "type": "text",
+    "description": "Button label to open battery settings from the battery optimization warning dialog"
+  },
   "presence_activity_appointment_name": "In appuntamento",
   "@presence_activity_appointment_name": {},
   "presence_activity_away_name": "Assente",
@@ -1182,6 +1254,18 @@
   "@presence_infoView_title": {},
   "presence_infoView_updated": "Aggiornato:",
   "@presence_infoView_updated": {},
+  "presence_infoView_source": "Fonte: {source}",
+  "@presence_infoView_source": {
+    "placeholders": {
+      "source": {}
+    }
+  },
+  "presence_infoView_source_direct": "diretto",
+  "@presence_infoView_source_direct": {},
+  "presence_infoView_source_sip": "sip",
+  "@presence_infoView_source_sip": {},
+  "presence_infoView_source_sipAndDirect": "sip e diretto",
+  "@presence_infoView_source_sipAndDirect": {},
   "presence_preset_absent_name": "Assente",
   "@presence_preset_absent_name": {},
   "presence_preset_absent_note": "Assente",
@@ -1246,6 +1330,8 @@
   "@presence_settings_note_tooltip": {},
   "presence_settings_presets_label": "Scegli preset",
   "@presence_settings_presets_label": {},
+  "presence_settings_presets_label_custom": "Costume",
+  "@presence_settings_presets_label_custom": {},
   "presence_settings_presets_title": "Preset:",
   "@presence_settings_presets_title": {},
   "presence_settings_statusIcon_none": "Nessuna",
@@ -1310,6 +1396,22 @@
   "@request_StatusCode": {},
   "request_StatusName": "Nome dello stato",
   "@request_StatusName": {},
+  "sessionStatus_AppBar_waitingForNetwork": "In attesa della rete...",
+  "@sessionStatus_AppBar_waitingForNetwork": {
+    "description": "Shown in the main app bar when the device has no internet connectivity and the app is waiting for network access."
+  },
+  "sessionStatus_AppBar_waitingForConnection": "In attesa della connessione...",
+  "@sessionStatus_AppBar_waitingForConnection": {
+    "description": "Shown in the main app bar when the app is trying to establish or restore a connection to backend services."
+  },
+  "sessionStatus_AppBar_disconnected": "Disconnesso",
+  "@sessionStatus_AppBar_disconnected": {
+    "description": "Shown in the main app bar when the app is disconnected from backend services."
+  },
+  "sessionStatus_AppBar_connecting": "Connessione in corso...",
+  "@sessionStatus_AppBar_connecting": {
+    "description": "Shown in the main app bar while the app is actively connecting to backend services."
+  },
   "sessionStatus_pushNotificationServiceProblem": "Problema con la configurazione del servizio di notifiche push",
   "@sessionStatus_pushNotificationServiceProblem": {},
   "session_Teardown_progressText": "Disconnessione in corso...",
@@ -1334,6 +1436,8 @@
   "@settings_AccountDeleteConfirmDialog_content": {},
   "settings_AccountDeleteConfirmDialog_title": "Conferma eliminazione account",
   "@settings_AccountDeleteConfirmDialog_title": {},
+  "settings_AccountDeleteNotSupported_message": "Sfortunatamente, il tuo prodotto non supporta l'eliminazione dell'account.",
+  "@settings_AccountDeleteNotSupported_message": {},
   "settings_AppBarTitle_myAccount": "Il mio account",
   "@settings_AppBarTitle_myAccount": {},
   "settings_audioProcessing_Section_AGC_title": "Controllo automatico del guadagno",
@@ -1436,6 +1540,10 @@
   "@settings_encoding_Section_packetization_title": {},
   "settings_encoding_Section_packetization_tooltip": "Regola il tempo di pacchettizzazione audio in millisecondi, può essere utilizzato per ridurre la latenza audio o risolvere problemi di dimensione MTU di rete",
   "@settings_encoding_Section_packetization_tooltip": {},
+  "settings_encoding_Section_packetization_warning_title": "Attenzione:",
+  "@settings_encoding_Section_packetization_warning_title": {},
+  "settings_encoding_Section_packetization_warning_message": "Alcuni codec potrebbero avere difficoltà con valori ptime non predefiniti, causando glitch audio udibili o silenzio. Usare solo se si sa cosa si sta facendo.",
+  "@settings_encoding_Section_packetization_warning_message": {},
   "settings_encoding_Section_preset": "Preimpostato",
   "@settings_encoding_Section_preset": {},
   "settings_encoding_Section_preset_balance": "Bilanciato",

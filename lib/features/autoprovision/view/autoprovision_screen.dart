@@ -49,8 +49,6 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
     final error = state.error;
     if (error is RequestFailure && error.statusCode == 401) {
       notificationsBloc.add(const NotificationsSubmitted(InvalidAutoProvisioningToken()));
-    } else {
-      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(state.error)));
     }
   }
 

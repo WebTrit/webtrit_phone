@@ -28,6 +28,27 @@ class CallActiveThumbnail extends StatelessWidget {
     final frameSize = ThumbnailLayout.calcFrameSize(orientation: orientation, smallerSide: smallerSide);
     final hasRemoteVideo = activeCall.remoteStream?.getVideoTracks().isNotEmpty ?? false;
 
+    // Its important to hide video if held to avoid showing frozen/last frames when held,
+    // and especially for case when both sides turn on hold and after one side unholds video started to show for another 'holded' side.
+    final displayStream = hasRemoteVideo && activeCall.held == false;
+
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isAccepted = activeCall.wasAccepted;
+
+    final duration = isAccepted ? const Duration(milliseconds: 2500) : const Duration(milliseconds: 1500);
+
+    final baseAlpha = 0.75;
+    final highlightAlpha = 0.95;
+
+    final baseColor = isAccepted
+        ? colorScheme.primary.withValues(alpha: baseAlpha)
+        : colorScheme.surfaceContainerHighest.withValues(alpha: highlightAlpha);
+
+    final highlightColor = isAccepted
+        ? colorScheme.surface.withValues(alpha: baseAlpha)
+        : colorScheme.surface.withValues(alpha: highlightAlpha);
+
     return Card(
       child: SizedBox.fromSize(
         size: frameSize,
@@ -38,32 +59,11 @@ class CallActiveThumbnail extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                StreamThumbnail(
-                  stream: activeCall.remoteStream,
-                  placeholderBuilder: (context) {
-                    final theme = Theme.of(context);
-                    final colorScheme = theme.colorScheme;
-                    final isAccepted = activeCall.wasAccepted;
-
-                    final duration = isAccepted
-                        ? const Duration(milliseconds: 2500)
-                        : const Duration(milliseconds: 1500);
-
-                    final baseAlpha = 0.75;
-                    final highlightAlpha = 0.95;
-
-                    final baseColor = isAccepted
-                        ? colorScheme.primary.withValues(alpha: baseAlpha)
-                        : colorScheme.surfaceContainerHighest.withValues(alpha: highlightAlpha);
-
-                    final highlightColor = isAccepted
-                        ? colorScheme.surface.withValues(alpha: baseAlpha)
-                        : colorScheme.surface.withValues(alpha: highlightAlpha);
-
-                    return Shimmer(duration: duration, baseColor: baseColor, highlightColor: highlightColor);
-                  },
-                ),
-                if (!hasRemoteVideo) _AvatarOverlay(activeCall: activeCall, contactResolver: contactResolver),
+                Shimmer(duration: duration, baseColor: baseColor, highlightColor: highlightColor),
+                if (displayStream)
+                  StreamThumbnail(stream: activeCall.remoteStream)
+                else
+                  _AvatarOverlay(activeCall: activeCall, contactResolver: contactResolver),
               ],
             ),
           ),

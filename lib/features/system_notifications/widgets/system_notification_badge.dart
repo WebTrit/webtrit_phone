@@ -58,6 +58,7 @@ class _SystemNotificationsBadgeState extends State<SystemNotificationsBadge> wit
                 child: InkWell(
                   onTap: () {
                     controller.reset();
+                    FocusScope.of(context).unfocus();
                     context.router.navigate(const SystemNotificationsPageRoute());
                   },
                   child: SizedBox(

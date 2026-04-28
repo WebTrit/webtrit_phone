@@ -1,4 +1,5 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:webtrit_appearance_theme/models/models.dart';
 
 import 'package:webtrit_phone/models/models.dart';
@@ -8,9 +9,11 @@ import '../mocks/feature_access_mocks.dart';
 WebtritSystemInfo createMockSystemInfo() {
   final systemInfo = MockWebtritSystemInfo();
   final adapterInfo = MockAdapterInfo();
+  final coreInfo = CoreInfo(version: Version(0, 1, 0));
 
   when(() => adapterInfo.supported).thenReturn([]);
   when(() => systemInfo.adapter).thenReturn(adapterInfo);
+  when(() => systemInfo.core).thenReturn(coreInfo);
 
   return systemInfo;
 }
@@ -63,9 +66,6 @@ AppConfig createMockAppConfig() {
   // TODO: Migrate client configurations first before fully removing this property.
   // ignore: deprecated_member_use_from_same_package, deprecated_member_use
   when(() => main.systemNotificationsEnabled).thenReturn(false);
-  // TODO: Migrate client configurations first before fully removing this property.
-  // ignore: deprecated_member_use_from_same_package, deprecated_member_use
-  when(() => main.sipPresenceEnabled).thenReturn(false);
 
   when(() => settings.sections).thenReturn([]);
 

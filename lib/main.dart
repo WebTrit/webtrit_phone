@@ -105,6 +105,7 @@ class RootApp extends StatelessWidget {
 
           final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(prefs);
           final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(prefs, presenceDeviceName);
+          final queuedTerminationRequestsRepository = QueuedTerminationRequestsRepositoryPrefsImpl(prefs);
           final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(prefs);
           final userAgreementStatusRepository = UserAgreementStatusRepositoryPrefsImpl(prefs);
           final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(prefs);
@@ -129,6 +130,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
+              RepositoryProvider<QueuedTerminationRequestsRepository>.value(value: queuedTerminationRequestsRepository),
               RepositoryProvider<ActiveMainFlavorRepository>.value(value: activeMainFlavorRepository),
               RepositoryProvider<SessionRepository>.value(value: instanceRegistry.get<SessionRepository>()),
               RepositoryProvider<UserAgreementStatusRepository>.value(value: userAgreementStatusRepository),

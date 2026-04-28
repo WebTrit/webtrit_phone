@@ -156,6 +156,18 @@ class WebtritApiClient {
             );
           }
 
+          // Map 401 token_invalid to UnauthorizedException so the existing SessionGuard
+          // chain triggers logout when the server invalidates all tokens (e.g. after restart).
+          if (httpResponse.statusCode == 401 && error?.code == 'token_invalid') {
+            throw UnauthorizedException(
+              url: tenantUrl,
+              requestId: xRequestId,
+              statusCode: httpResponse.statusCode,
+              token: token,
+              error: error,
+            );
+          }
+
           // Map 422 with code="refresh_token_invalid" to UnauthorizedException.
           // This ensures higher layers can handle expired/invalid sessions in a unified way
           // (e.g., trigger global logout or token refresh).
@@ -333,15 +345,22 @@ class WebtritApiClient {
   }) async {
     final requestJson = sessionOtpCredential.toJson();
 
-    final responseJson = await _httpClientExecutePost(
-      [..._apiBasePathSegmentsV1, 'session', 'otp-create'],
-      null,
-      null,
-      requestJson,
-      requestOptions: options,
-    );
+    try {
+      final responseJson = await _httpClientExecutePost(
+        [..._apiBasePathSegmentsV1, 'session', 'otp-create'],
+        null,
+        null,
+        requestJson,
+        requestOptions: options,
+      );
 
-    return SessionOtpProvisional.fromJson(responseJson);
+      return SessionOtpProvisional.fromJson(responseJson);
+    } on RequestFailure catch (e) {
+      if (e.statusCode == 404) {
+        throw UserNotFoundException(url: e.url, requestId: e.requestId, statusCode: e.statusCode!);
+      }
+      rethrow;
+    }
   }
 
   Future<SessionToken> verifySessionOtp(
@@ -813,6 +832,57 @@ class WebtritApiClient {
 
     return FavoriteBatchSyncResult(
       data: FavoriteBatchSyncResponse.fromJson(responseJson),
+      etag: response.headers['etag'] ?? '0',
+    );
+  }
+
+  Future<SipSubscriptionsGetResult> getSipSubscriptions(
+    String token, {
+    String? ifNoneMatch,
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final response =
+        await _httpClientExecuteGet(
+              [..._apiBasePathSegmentsV1, 'user', 'sip_subscriptions'],
+              ifNoneMatch != null ? {'If-None-Match': ifNoneMatch} : null,
+              token,
+              requestOptions: options,
+              responseOptions: ResponseOptions(responseType: ResponseType.raw),
+            )
+            as http.Response;
+
+    if (response.statusCode == 304) {
+      return SipSubscriptionsGetResult(notModified: true, etag: response.headers['etag'] ?? '0');
+    }
+
+    final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
+    return SipSubscriptionsGetResult(
+      notModified: false,
+      etag: response.headers['etag'] ?? '0',
+      data: SipSubscriptionsListResponse.fromJson(responseJson),
+    );
+  }
+
+  Future<SipSubscriptionBatchSyncResult> batchSyncSipSubscriptions(
+    String token,
+    List<SipSubscriptionBatchAction> actions, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    final response =
+        await _httpClientExecutePost(
+              [..._apiBasePathSegmentsV1, 'user', 'sip_subscriptions', 'batch_sync'],
+              null,
+              token,
+              {'actions': actions.map((a) => a.toJson()).toList()},
+              requestOptions: options,
+              responseOptions: ResponseOptions(responseType: ResponseType.raw),
+            )
+            as http.Response;
+
+    final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
+
+    return SipSubscriptionBatchSyncResult(
+      data: SipSubscriptionBatchSyncResponse.fromJson(responseJson),
       etag: response.headers['etag'] ?? '0',
     );
   }

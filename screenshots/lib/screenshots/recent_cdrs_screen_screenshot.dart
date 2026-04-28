@@ -16,7 +16,7 @@ class RecentCdrsScreenScreenshot extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBarParams(
       systemNotificationsEnabled: false,
-      pullableCalls: const [],
+      pullableCallDialogs: const [],
       child: MultiProvider(
         providers: [Provider<ContactsRepository>(create: (_) => MockContactsRepository())],
         child: MultiBlocProvider(

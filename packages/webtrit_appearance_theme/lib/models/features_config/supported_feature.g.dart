@@ -64,13 +64,13 @@ Map<String, dynamic> _$SupportedSystemNotificationsToJson(
   SupportedSystemNotifications instance,
 ) => <String, dynamic>{'enabled': instance.enabled, 'type': instance.$type};
 
-SupportedSipPresence _$SupportedSipPresenceFromJson(
+SupportedHybridPresence _$SupportedHybridPresenceFromJson(
   Map<String, dynamic> json,
-) => SupportedSipPresence(
-  enabled: json['enabled'] as bool? ?? false,
+) => SupportedHybridPresence(
+  enabled: json['enabled'] as bool? ?? true,
   $type: json['type'] as String?,
 );
 
-Map<String, dynamic> _$SupportedSipPresenceToJson(
-  SupportedSipPresence instance,
+Map<String, dynamic> _$SupportedHybridPresenceToJson(
+  SupportedHybridPresence instance,
 ) => <String, dynamic>{'enabled': instance.enabled, 'type': instance.$type};

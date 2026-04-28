@@ -19,7 +19,6 @@ void main() {
   late RenegotiationHandler handler;
 
   const kCallId = 'call-1';
-  const kLineId = 0;
   final kOffer = RTCSessionDescription('v=0\r\n', 'offer');
 
   setUpAll(() {
@@ -39,7 +38,7 @@ void main() {
       when(() => mockPC.signalingState).thenReturn(RTCSignalingState.RTCSignalingStateHaveRemoteOffer);
 
       var executeCalled = false;
-      await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async => executeCalled = true);
+      await handler.handle(kCallId, mockPC, (_, _) async => executeCalled = true);
 
       verifyNever(() => mockPC.createOffer(any()));
       expect(executeCalled, isFalse);
@@ -50,7 +49,7 @@ void main() {
       when(() => mockPC.signalingState).thenReturn(RTCSignalingState.RTCSignalingStateHaveLocalOffer);
 
       var executeCalled = false;
-      await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async => executeCalled = true);
+      await handler.handle(kCallId, mockPC, (_, _) async => executeCalled = true);
 
       verifyNever(() => mockPC.createOffer(any()));
       expect(executeCalled, isFalse);
@@ -61,21 +60,27 @@ void main() {
       when(() => mockPC.signalingState).thenReturn(RTCSignalingState.RTCSignalingStateClosed);
 
       var executeCalled = false;
-      await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async => executeCalled = true);
+      await handler.handle(kCallId, mockPC, (_, _) async => executeCalled = true);
 
       verifyNever(() => mockPC.createOffer(any()));
       expect(executeCalled, isFalse);
     });
 
-    test('skips entirely when state is null', () async {
+    test('proceeds when state is null (Dart-side cache uninitialized = new PC in native stable state)', () async {
       handler = RenegotiationHandler(callErrorReporter: mockErrorReporter);
+      // null signalingState: flutter_webrtc has not yet received a native
+      // onSignalingStateChange callback. A new RTCPeerConnection starts in
+      // native "stable", so null must be treated as stable to allow the
+      // first offer after restoration.
       when(() => mockPC.signalingState).thenReturn(null);
+      when(() => mockPC.createOffer(any())).thenAnswer((_) async => kOffer);
+      when(() => mockPC.setLocalDescription(any())).thenAnswer((_) async {});
 
       var executeCalled = false;
-      await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async => executeCalled = true);
+      await handler.handle(kCallId, mockPC, (_, _) async => executeCalled = true);
 
-      verifyNever(() => mockPC.createOffer(any()));
-      expect(executeCalled, isFalse);
+      verify(() => mockPC.createOffer(any())).called(1);
+      expect(executeCalled, isTrue);
     });
   });
 
@@ -92,7 +97,7 @@ void main() {
       when(() => mockPC.createOffer(any())).thenAnswer((_) async => kOffer);
 
       var executeCalled = false;
-      await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async => executeCalled = true);
+      await handler.handle(kCallId, mockPC, (_, _) async => executeCalled = true);
 
       verifyNever(() => mockPC.setLocalDescription(any()));
       expect(executeCalled, isFalse);
@@ -115,17 +120,14 @@ void main() {
 
       RTCSessionDescription? capturedJsep;
       String? capturedCallId;
-      int? capturedLineId;
 
-      await handler.handle(kCallId, kLineId, mockPC, (callId, lineId, jsep) async {
+      await handler.handle(kCallId, mockPC, (callId, jsep) async {
         capturedCallId = callId;
-        capturedLineId = lineId;
         capturedJsep = jsep;
       });
 
       verify(() => mockPC.setLocalDescription(kOffer)).called(1);
       expect(capturedCallId, kCallId);
-      expect(capturedLineId, kLineId);
       expect(capturedJsep, kOffer);
     });
 
@@ -134,7 +136,7 @@ void main() {
       when(() => mockMunger.apply(any())).thenReturn(null);
       handler = RenegotiationHandler(callErrorReporter: mockErrorReporter, sdpMunger: mockMunger);
 
-      await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async {});
+      await handler.handle(kCallId, mockPC, (_, _) async {});
 
       verify(() => mockMunger.apply(kOffer)).called(1);
       verify(() => mockPC.setLocalDescription(kOffer)).called(1);
@@ -144,7 +146,7 @@ void main() {
       when(() => mockPC.signalingState).thenReturn(RTCSignalingState.RTCSignalingStateStable);
       handler = RenegotiationHandler(callErrorReporter: mockErrorReporter);
 
-      await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async {});
+      await handler.handle(kCallId, mockPC, (_, _) async {});
 
       verifyNever(() => mockMunger.apply(any()));
     });
@@ -162,7 +164,7 @@ void main() {
       handler = RenegotiationHandler(callErrorReporter: mockErrorReporter);
       final exception = Exception('signaling error');
 
-      await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async => throw exception);
+      await handler.handle(kCallId, mockPC, (_, _) async => throw exception);
 
       verify(() => mockErrorReporter.handle(exception, any(), any())).called(1);
     });
@@ -173,7 +175,7 @@ void main() {
       when(() => mockPC.createOffer(any())).thenThrow(exception);
       handler = RenegotiationHandler(callErrorReporter: mockErrorReporter);
 
-      await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async {});
+      await handler.handle(kCallId, mockPC, (_, _) async {});
 
       verify(() => mockErrorReporter.handle(exception, any(), any())).called(1);
     });
@@ -185,7 +187,7 @@ void main() {
       when(() => mockPC.setLocalDescription(any())).thenThrow(exception);
       handler = RenegotiationHandler(callErrorReporter: mockErrorReporter);
 
-      await handler.handle(kCallId, kLineId, mockPC, (_, _, _) async {});
+      await handler.handle(kCallId, mockPC, (_, _) async {});
 
       verify(() => mockErrorReporter.handle(exception, any(), any())).called(1);
     });
@@ -196,10 +198,7 @@ void main() {
       when(() => mockPC.setLocalDescription(any())).thenAnswer((_) async {});
       handler = RenegotiationHandler(callErrorReporter: mockErrorReporter);
 
-      await expectLater(
-        handler.handle(kCallId, kLineId, mockPC, (_, _, _) async => throw Exception('error')),
-        completes,
-      );
+      await expectLater(handler.handle(kCallId, mockPC, (_, _) async => throw Exception('error')), completes);
     });
   });
 }

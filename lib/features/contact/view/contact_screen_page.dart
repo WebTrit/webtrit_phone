@@ -58,6 +58,7 @@ class ContactScreenPage extends StatelessWidget {
           contactId,
           contactsRepository: context.read<ContactsRepository>(),
           favoritesRepository: context.read<FavoritesRepository>(),
+          sipSubscriptionsRepository: context.read<SipSubscriptionsRepository>(),
         )..add(const ContactStarted());
       },
       child: widget,

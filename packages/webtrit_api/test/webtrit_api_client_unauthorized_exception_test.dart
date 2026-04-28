@@ -56,5 +56,67 @@ void main() {
       verify(() => mockHttpClient.send(any())).called(1);
       verifyNoMoreInteractions(mockHttpClient);
     });
+
+    test('throws on 401 with code "token_invalid"', () async {
+      when(() => mockHttpClient.send(any())).thenAnswer((_) async {
+        return _jsonResponse({'code': 'token_invalid', 'message': 'Token is invalid'}, 401);
+      });
+
+      expect(
+        () => apiClient.getUserInfo(token),
+        throwsA(
+          isA<UnauthorizedException>()
+              .having((e) => e.statusCode, 'statusCode', 401)
+              .having((e) => e.error?.code, 'error.code', 'token_invalid'),
+        ),
+      );
+
+      verify(() => mockHttpClient.send(any())).called(1);
+      verifyNoMoreInteractions(mockHttpClient);
+    });
+  });
+
+  group('SessionMissingException', () {
+    late MockHttpClient mockHttpClient;
+    late WebtritApiClient apiClient;
+
+    setUp(() {
+      mockHttpClient = MockHttpClient();
+      apiClient = WebtritApiClient.inner(Uri.parse(baseUri), tenantId, httpClient: mockHttpClient);
+    });
+
+    tearDown(() {
+      apiClient.close();
+      reset(mockHttpClient);
+    });
+
+    test('throws on 401 with code "session_missing"', () async {
+      when(() => mockHttpClient.send(any())).thenAnswer((_) async {
+        return _jsonResponse({'code': 'session_missing', 'message': 'Session not found'}, 401);
+      });
+
+      expect(
+        () => apiClient.getUserInfo(token),
+        throwsA(
+          isA<SessionMissingException>()
+              .having((e) => e.statusCode, 'statusCode', 401)
+              .having((e) => e.error?.code, 'error.code', 'session_missing'),
+        ),
+      );
+
+      verify(() => mockHttpClient.send(any())).called(1);
+      verifyNoMoreInteractions(mockHttpClient);
+    });
+
+    test('does not throw UnauthorizedException on 401 with code "session_missing"', () async {
+      when(() => mockHttpClient.send(any())).thenAnswer((_) async {
+        return _jsonResponse({'code': 'session_missing', 'message': 'Session not found'}, 401);
+      });
+
+      expect(
+        () => apiClient.getUserInfo(token),
+        throwsA(isNot(isA<UnauthorizedException>())),
+      );
+    });
   });
 }

@@ -48,7 +48,8 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
 
     final scaffold = BlocConsumer<CallBloc, CallState>(
       bloc: callBloc,
-      listener: (context, state) async {
+      listener: (context, state) {
+        if (!context.mounted) return;
         if (state.isActive) {
           final activeCall = state.activeCalls.current;
           final activeCallFailure = activeCall.failure;

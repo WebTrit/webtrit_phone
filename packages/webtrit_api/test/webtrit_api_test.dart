@@ -336,6 +336,22 @@ void main() {
       );
     });
 
+    test('otp request throws UserNotFoundException on 404', () {
+      Future<Response> handler(Request request) async {
+        return Response('', 404, request: request);
+      }
+
+      final httpClient = MockClient(expectAsync1(handler));
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+
+      expect(
+        apiClient.createSessionOtp(
+          SessionOtpCredential(type: AppType.web, identifier: 'identifier_1', userRef: 'user@example.com'),
+        ),
+        throwsA(isA<UserNotFoundException>()),
+      );
+    });
+
     test('otp verify', () {
       Future<Response> handler(Request request) async {
         expect(request.method, equalsIgnoringCase('post'));

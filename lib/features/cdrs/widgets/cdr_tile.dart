@@ -159,8 +159,6 @@ class _CdrTileState extends State<CdrTile> {
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           borderRadius: BorderRadius.circular(8),
-          focusColor: Colors.yellow,
-          hoverColor: Colors.yellow,
           splashColor: colorScheme.secondary.withAlpha(50),
           key: tileKey,
           onTap: widget.onTap,
@@ -175,6 +173,7 @@ class _CdrTileState extends State<CdrTile> {
                   thumbnailUrl: contact?.thumbnailUrl,
                   registered: contact?.registered,
                   presenceInfo: contact?.presenceInfo,
+                  dialogInfo: contact?.dialogInfo,
                 ),
                 SizedBox(width: 8),
                 Expanded(

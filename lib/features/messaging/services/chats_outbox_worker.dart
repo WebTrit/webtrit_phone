@@ -6,6 +6,7 @@ import 'package:phoenix_socket/phoenix_socket.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 
 final _logger = Logger('ChatsOutboxWorker');
 
@@ -15,12 +16,11 @@ final _logger = Logger('ChatsOutboxWorker');
 /// ensuring that they are delivered to their intended recipients. It handles
 /// retries and error management to ensure reliable message delivery.
 class ChatsOutboxWorker {
-  ChatsOutboxWorker(this._client, this._chatsRepository, this._outboxRepository, this._onError);
+  ChatsOutboxWorker(this._client, this._chatsRepository, this._outboxRepository);
 
   final PhoenixSocket _client;
   final ChatsRepository _chatsRepository;
   final ChatsOutboxRepository _outboxRepository;
-  final Function(Object) _onError;
 
   bool _disposed = false;
 
@@ -89,8 +89,7 @@ class ChatsOutboxWorker {
       _logger.severe('Error processing new message, attempt: ${outboxEntry.sendAttempts}', e, s);
       if (outboxEntry.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxMessage(outboxEntry.idKey);
-        _logger.warning('Send attempts exceeded for message: ${outboxEntry.idKey}');
-        _onError(e);
+        _handleError(e, s, '_processNewMessage.afterAttemptsExceeded');
       } else {
         await _outboxRepository.upsertOutboxMessage(outboxEntry.incAttempt());
       }
@@ -118,8 +117,7 @@ class ChatsOutboxWorker {
       _logger.severe('Error processing message edit, attempt: ${messageEdit.sendAttempts}', e, s);
       if (messageEdit.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxMessageEdit(messageEdit.id);
-        _logger.warning('Send attempts exceeded for edit message: ${messageEdit.idKey}');
-        _onError(e);
+        _handleError(e, s, '_processMessageEdit.afterAttemptsExceeded');
       } else {
         await _outboxRepository.upsertOutboxMessageEdit(messageEdit.incAttempts());
       }
@@ -144,11 +142,10 @@ class ChatsOutboxWorker {
       await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
       _logger.fine('Processed delete message: ${message.id}');
     } catch (e, s) {
-      _logger.severe('Error processing message delete, attempt: ${messageDelete.sendAttempts}', e, s);
+      _logger.warning('Error processing message delete, attempt: ${messageDelete.sendAttempts}', e, s);
       if (messageDelete.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxMessageDelete(messageDelete.id);
-        _logger.severe('Send attempts exceeded for delete message: ${messageDelete.idKey}');
-        _onError(e);
+        _handleError(e, s, '_processMessageDelete.afterAttemptsExceeded');
       } else {
         await _outboxRepository.upsertOutboxMessageDelete(messageDelete.incAttempts());
       }
@@ -174,14 +171,18 @@ class ChatsOutboxWorker {
       await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);
       _logger.fine('Processed read cursor: ${readCursor.chatId}');
     } catch (e, s) {
-      _logger.severe('Error processing read cursor, attempt: ${readCursor.sendAttempts}', e, s);
+      _logger.warning('Error processing read cursor, attempt: ${readCursor.sendAttempts}', e, s);
       if (readCursor.sendAttempts > 5) {
         await _outboxRepository.deleteOutboxReadCursor(readCursor.chatId);
-        _logger.warning('Send attempts exceeded for read cursor: ${readCursor.chatId}');
-        _onError(e);
+        _handleError(e, s, '_processReadCursor.afterAttemptsExceeded');
       } else {
         await _outboxRepository.upsertOutboxReadCursor(readCursor.incAttempts());
       }
     }
+  }
+
+  void _handleError(Object error, StackTrace stack, String context) {
+    _logger.severe('[$context] An error occurred: $error', error, stack);
+    CrashlyticsUtils.recordError(error, stack: stack, reason: 'ChatsOutboxWorker: $context');
   }
 }

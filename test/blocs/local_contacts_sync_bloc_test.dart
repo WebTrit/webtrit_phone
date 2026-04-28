@@ -87,9 +87,9 @@ void main() {
       );
 
       blocTest<LocalContactsSyncBloc, LocalContactsSyncState>(
-        'emits LocalContactsSyncPermissionFailure when permission request is denied',
+        'emits LocalContactsSyncPermissionFailure when permission is not granted',
         build: () {
-          requestPermissionResult = false;
+          contactsPermissionGranted = false;
           return buildBloc();
         },
         act: (bloc) => bloc.add(const LocalContactsSyncStarted()),

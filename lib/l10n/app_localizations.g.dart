@@ -687,6 +687,48 @@ abstract class AppLocalizations {
   /// **'Performing blind transfer'**
   String get contacts_Text_blingTransferInitiated;
 
+  /// No description provided for @contacts_DialogsInfoView_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls information (BLF):'**
+  String get contacts_DialogsInfoView_title;
+
+  /// No description provided for @contacts_ContactTile_inCall.
+  ///
+  /// In en, this message translates to:
+  /// **'In call: {destination}'**
+  String contacts_ContactTile_inCall(Object destination);
+
+  /// No description provided for @contacts_ContactScreen_options.
+  ///
+  /// In en, this message translates to:
+  /// **'Options:'**
+  String get contacts_ContactScreen_options;
+
+  /// No description provided for @contacts_ContactScreen_presenceViaSip.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe to user status via SIP (Presence)'**
+  String get contacts_ContactScreen_presenceViaSip;
+
+  /// No description provided for @contacts_ContactScreen_presenceViaSip_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'In addition to direct(app to app) data exchange, subscribe via SIP-Presence feature allows gathering presence information from other user agents (desktop phones, standalone softphones, etc.). Recommended to enable only if your contact prefers to use legacy user agents and you want to see their presence status across all devices.'**
+  String get contacts_ContactScreen_presenceViaSip_tooltip;
+
+  /// No description provided for @contacts_ContactScreen_dialogsViaSipBlf.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe to active calls via SIP (BLF/Dialogs)'**
+  String get contacts_ContactScreen_dialogsViaSipBlf;
+
+  /// No description provided for @contacts_ContactScreen_dialogsViaSipBlf_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'In addition to direct(app to app) data exchange, subscribe via SIP-Dialogs feature allows gathering call state information from other user agents (desktop phones, standalone softphones, etc.). Recommended to enable only if your contact prefers to use legacy user agents and you want to see their call status across all devices.'**
+  String get contacts_ContactScreen_dialogsViaSipBlf_tooltip;
+
   /// No description provided for @copyToClipboard_floatingSnackBar.
   ///
   /// In en, this message translates to:
@@ -1365,6 +1407,18 @@ abstract class AppLocalizations {
   /// **'Phone number not found'**
   String get login_RequestFailurePhoneNotFoundError;
 
+  /// Shown during password login when the provided username or password is incorrect. Condition: the backend returns incorrect_credentials in response to POST /session.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect username or password'**
+  String get login_RequestFailureIncorrectCredentialsError;
+
+  /// Shown during password login when the provided user reference does not exist. Condition: the backend returns user_not_found in response to POST /session.
+  ///
+  /// In en, this message translates to:
+  /// **'User not found'**
+  String get login_RequestFailureUserNotFoundError;
+
   /// Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup.
   ///
   /// In en, this message translates to:
@@ -1574,6 +1628,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unexpected error occurred'**
   String get logRecordsConsole_Text_failure;
+
+  /// Shown in the info dialog to inform the user that only the most recent records are displayed and the share button exports the complete log.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing last {count, plural, one{{count} record} other{{count} records}}. Use Share to export the full log.'**
+  String logRecordsConsole_Text_recordsCountHint(int count);
+
+  /// No description provided for @logRecordsConsole_Button_infoClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get logRecordsConsole_Button_infoClose;
+
+  /// No description provided for @logRecordsConsole_PopupMenuItem_info.
+  ///
+  /// In en, this message translates to:
+  /// **'Info'**
+  String get logRecordsConsole_PopupMenuItem_info;
+
+  /// No description provided for @logRecordsConsole_PopupMenuItem_clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get logRecordsConsole_PopupMenuItem_clear;
 
   /// No description provided for @main_BottomNavigationBarItemLabel_chats.
   ///
@@ -2166,6 +2244,12 @@ abstract class AppLocalizations {
   /// **'You are already on the line with the recipient you are trying to blind transfer to'**
   String get notifications_errorSnackBar_activeLineBlindTransferWarning;
 
+  /// Shown when a blind transfer fails because the transfer target declined. The original call is restored and the user is returned to the active call screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer failed, returning to active call'**
+  String get notifications_errorSnackBar_blindTransferFailed;
+
   /// Shown in a notification or snackbar when the application is offline. Condition: the app loses connection to the server or network and cannot perform online actions.
   ///
   /// In en, this message translates to:
@@ -2196,6 +2280,18 @@ abstract class AppLocalizations {
   /// **'Cannot establish the call, please try again later'**
   String get notifications_errorSnackBar_callNegotiationTimeout;
 
+  /// Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot establish the call, please try again later'**
+  String get notifications_errorSnackBar_generalUnableToCall;
+
+  /// Shown in a notification or snackbar when the user tries to start a call but the selected line is already busy. Context: occurs at call initiation when no free channel is available on the current line or account; advise the user to wait and retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot make the call right now because the line is busy. Please try again later.'**
+  String get notifications_errorSnackBar_callServiceBusyLine;
+
   /// Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the WebTrit core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability.
   ///
   /// In en, this message translates to:
@@ -2213,6 +2309,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No idle lines to initiate the call'**
   String get notifications_errorSnackBar_callUndefinedLine;
+
+  /// Shown when a call fails due to an internal media track error, not a permission denial. Typical cause: a native audio/video track reference was invalidated after a previous call was cleaned up. No action to open Settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Call setup failed, please try again'**
+  String get notifications_errorSnackBar_callMediaTrackSetup;
 
   /// Shown in a notification or snackbar when the app cannot access camera or microphone required for a call. Context: occurs when getUserMedia or platform permission check fails; typical causes include the user denying camera/microphone permission, OS-level restriction or revoked permission, missing runtime permission (Android), or the device hardware being busy or unavailable.
   ///
@@ -2460,6 +2562,24 @@ abstract class AppLocalizations {
   /// **'Important Reminder'**
   String get persistentConnectionReminderTitle;
 
+  /// Title of dialog warning the user about battery optimization being active when persistent connection is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Battery Optimization Active'**
+  String get batteryOptimizationWarningTitle;
+
+  /// Content of dialog warning the user about battery optimization when persistent connection is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Battery optimization is active on this device. This may cause missed calls when the screen turns off. Disable it to keep the persistent connection alive.'**
+  String get batteryOptimizationWarningContent;
+
+  /// Button label to open battery settings from the battery optimization warning dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get batteryOptimizationWarningOpenSettings;
+
   /// No description provided for @presence_activity_appointment_name.
   ///
   /// In en, this message translates to:
@@ -2609,6 +2729,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Updated:'**
   String get presence_infoView_updated;
+
+  /// No description provided for @presence_infoView_source.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: {source}'**
+  String presence_infoView_source(Object source);
+
+  /// No description provided for @presence_infoView_source_direct.
+  ///
+  /// In en, this message translates to:
+  /// **'direct'**
+  String get presence_infoView_source_direct;
+
+  /// No description provided for @presence_infoView_source_sip.
+  ///
+  /// In en, this message translates to:
+  /// **'sip'**
+  String get presence_infoView_source_sip;
+
+  /// No description provided for @presence_infoView_source_sipAndDirect.
+  ///
+  /// In en, this message translates to:
+  /// **'sip and direct'**
+  String get presence_infoView_source_sipAndDirect;
 
   /// No description provided for @presence_preset_absent_name.
   ///
@@ -2802,6 +2946,12 @@ abstract class AppLocalizations {
   /// **'Choose preset'**
   String get presence_settings_presets_label;
 
+  /// No description provided for @presence_settings_presets_label_custom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get presence_settings_presets_label_custom;
+
   /// No description provided for @presence_settings_presets_title.
   ///
   /// In en, this message translates to:
@@ -2934,6 +3084,30 @@ abstract class AppLocalizations {
   /// **'Status name'**
   String get request_StatusName;
 
+  /// Shown in the main app bar when the device has no internet connectivity and the app is waiting for network access.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for network...'**
+  String get sessionStatus_AppBar_waitingForNetwork;
+
+  /// Shown in the main app bar when the app is trying to establish or restore a connection to backend services.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for connection...'**
+  String get sessionStatus_AppBar_waitingForConnection;
+
+  /// Shown in the main app bar when the app is disconnected from backend services.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get sessionStatus_AppBar_disconnected;
+
+  /// Shown in the main app bar while the app is actively connecting to backend services.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting...'**
+  String get sessionStatus_AppBar_connecting;
+
   /// No description provided for @sessionStatus_pushNotificationServiceProblem.
   ///
   /// In en, this message translates to:
@@ -2999,6 +3173,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm delete account'**
   String get settings_AccountDeleteConfirmDialog_title;
+
+  /// No description provided for @settings_AccountDeleteNotSupported_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Unfortunately, your product does not support account deletion.'**
+  String get settings_AccountDeleteNotSupported_message;
 
   /// No description provided for @settings_AppBarTitle_myAccount.
   ///
@@ -3305,6 +3485,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues'**
   String get settings_encoding_Section_packetization_tooltip;
+
+  /// No description provided for @settings_encoding_Section_packetization_warning_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning:'**
+  String get settings_encoding_Section_packetization_warning_title;
+
+  /// No description provided for @settings_encoding_Section_packetization_warning_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Some codecs may struggle with non-default ptime values, causing audible glitches or silence. Use only if you know what you are doing.'**
+  String get settings_encoding_Section_packetization_warning_message;
 
   /// No description provided for @settings_encoding_Section_preset.
   ///
@@ -4973,6 +5165,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'DTL transit is not my node ID'**
   String get cdr_disconnectReason_dtlTransitIsNotMyNodeId;
+
+  /// No description provided for @devTools_AppBarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dev Tools'**
+  String get devTools_AppBarTitle;
+
+  /// No description provided for @devTools_signalingService_groupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Signaling Service'**
+  String get devTools_signalingService_groupTitle;
+
+  /// No description provided for @devTools_signalingService_simulateKill_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulate service kill'**
+  String get devTools_signalingService_simulateKill_title;
+
+  /// No description provided for @devTools_signalingService_simulateKill_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stops the foreground service without graceful disconnect'**
+  String get devTools_signalingService_simulateKill_subtitle;
+
+  /// No description provided for @devTools_signalingService_simulateKill_confirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The signaling service will stop immediately. It will restart automatically if credentials are valid.'**
+  String get devTools_signalingService_simulateKill_confirmMessage;
+
+  /// No description provided for @devTools_signalingService_simulateKill_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Kill'**
+  String get devTools_signalingService_simulateKill_confirm;
+
+  /// No description provided for @devTools_signalingService_simulateKill_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get devTools_signalingService_simulateKill_cancel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

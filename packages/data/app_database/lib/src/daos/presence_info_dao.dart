@@ -21,6 +21,13 @@ class PresenceInfoDao extends DatabaseAccessor<AppDatabase> with _$PresenceInfoD
     return batch((batch) => batch.insertAllOnConflictUpdate(presenceInfoTable, info));
   }
 
+  Future<void> replaceData(List<PresenceInfoData> info) {
+    return batch((batch) {
+      batch.deleteAll(presenceInfoTable);
+      batch.insertAll(presenceInfoTable, info);
+    });
+  }
+
   Future<int> deletePresenceInfoByIds(List<String> ids) {
     final query = delete(presenceInfoTable)..where((tbl) => tbl.idKey.isIn(ids));
     return query.go();

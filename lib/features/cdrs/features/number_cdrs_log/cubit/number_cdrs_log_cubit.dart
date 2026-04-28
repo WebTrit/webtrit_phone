@@ -6,25 +6,19 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 
 part 'number_cdrs_log_state.dart';
 
 final _logger = Logger('NumberCdrsLogCubit');
 
 class NumberCdrsLogCubit extends Cubit<NumberCdrsLogState> {
-  NumberCdrsLogCubit(
-    this.number,
-    this._cdrsLocalRepository,
-    this._cdrsRemoteRepository,
-    this._submitNotification, {
-    this.pageSize = 50,
-  }) : super(const NumberCdrsLogState());
+  NumberCdrsLogCubit(this.number, this._cdrsLocalRepository, this._cdrsRemoteRepository, {this.pageSize = 50})
+    : super(const NumberCdrsLogState());
 
   final String number;
   final CdrsLocalRepository _cdrsLocalRepository;
   final CdrsRemoteRepository _cdrsRemoteRepository;
-  final Function(Notification) _submitNotification;
   final int pageSize;
   late final StreamSubscription _eventsSub;
 
@@ -88,8 +82,17 @@ class NumberCdrsLogCubit extends Cubit<NumberCdrsLogState> {
         emit(state.copyWith(fetchingHistory: false));
       }
     } catch (e, s) {
-      _submitNotification(DefaultErrorNotification(e));
       _logger.severe('Failed to load CDRs', e, s);
+      CrashlyticsUtils.recordError(
+        e,
+        stack: s,
+        reason: 'NumberCdrsLogCubit.fetchHistory',
+        information: [
+          'oldestLocal: ${state.records.isNotEmpty ? state.records.last.connectTime.toIso8601String() : 'none'}',
+          'pageSize: ${pageSize.toString()}',
+          'currentCount: ${state.records.length.toString()}',
+        ],
+      );
       emit(state.copyWith(fetchingHistory: false));
     }
   }

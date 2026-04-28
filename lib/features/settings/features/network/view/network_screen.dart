@@ -30,9 +30,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
         listenWhen: (previous, current) {
           return previous.incomingCallType != current.incomingCallType;
         },
-        listener: (context, state) {
-          if (state.isSelectedTypeInRemainder) _showTypeReminder(state.incomingCallType);
-        },
+        listener: (context, state) => _onIncomingTypeChanged(state),
         builder: (context, state) {
           return SingleChildScrollView(
             child: Column(
@@ -93,12 +91,40 @@ class _NetworkScreenState extends State<NetworkScreen> {
     );
   }
 
-  void _showTypeReminder(IncomingCallType type) {
+  Future<void> _onIncomingTypeChanged(NetworkState state) async {
+    if (state.isSelectedTypeInRemainder) await _showTypeReminder(state.incomingCallType);
+    if (state.incomingCallType == IncomingCallType.socket) await _checkAndShowBatteryWarning();
+  }
+
+  Future<void> _showTypeReminder(IncomingCallType type) async {
     final title = type.remainderTitleL10n(context);
     final description = type.remainderDescriptionL10n(context);
 
     if (context.mounted && title != null && description != null) {
-      AcknowledgeDialog.show(context, title: title, content: description);
+      await AcknowledgeDialog.show(context, title: title, content: description);
+    }
+  }
+
+  Future<void> _checkAndShowBatteryWarning() async {
+    final needsWarning = await _cubit.isSocketMissingBatteryExemption();
+    if (!needsWarning || !mounted) return;
+
+    final openSettings = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(ctx.l10n.batteryOptimizationWarningTitle),
+        content: Text(ctx.l10n.batteryOptimizationWarningContent),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(ctx.l10n.alertDialogActions_no)),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(ctx.l10n.batteryOptimizationWarningOpenSettings),
+          ),
+        ],
+      ),
+    );
+    if (openSettings == true && mounted) {
+      await _cubit.openBatterySettings();
     }
   }
 }

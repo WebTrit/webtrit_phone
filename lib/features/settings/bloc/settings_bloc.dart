@@ -12,6 +12,7 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/app_permissions.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/crashlytics_utils.dart';
 
 part 'settings_event.dart';
 
@@ -76,14 +77,18 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (emit.isDone) return;
 
       emit(state.copyWith(progress: false));
-    } catch (e, stackTrace) {
-      _logger.warning('_onAccountDeleted', e, stackTrace);
-
-      notificationsBloc.add(NotificationsSubmitted(DefaultErrorNotification(e)));
-      appBloc.maybeHandleError(e);
+    } on EndpointNotSupportedException catch (e, s) {
+      _logger.warning('_onAccountDeleted: endpoint not supported', e, s);
+      notificationsBloc.add(NotificationsSubmitted(const DeleteAccountNotSupportedNotification()));
 
       if (emit.isDone) return;
+      emit(state.copyWith(progress: false));
+    } catch (e, s) {
+      _logger.severe('_onAccountDeleted', e, s);
+      CrashlyticsUtils.recordError(e, stack: s, reason: 'SettingsBloc._onAccountDeleted');
 
+      appBloc.maybeHandleError(e);
+      if (emit.isDone) return;
       emit(state.copyWith(progress: false));
     }
   }

@@ -33,6 +33,15 @@ class _NavigatorMediaDevicesChange extends CallEvent {
   const _NavigatorMediaDevicesChange();
 }
 
+class _IceRestartTriggered extends CallEvent {
+  const _IceRestartTriggered(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
 // registration event change
 
 class _RegistrationChange extends CallEvent {
@@ -51,7 +60,8 @@ sealed class _ResetStateEvent extends CallEvent {
 
   const factory _ResetStateEvent.completeCalls() = _ResetStateEventCompleteCalls;
 
-  const factory _ResetStateEvent.completeCall(String callId) = _ResetStateEventCompleteCall;
+  const factory _ResetStateEvent.completeCall(String callId, {CallkeepEndCallReason endReason}) =
+      _ResetStateEventCompleteCall;
 }
 
 class _ResetStateEventCompleteCalls extends _ResetStateEvent {
@@ -59,12 +69,13 @@ class _ResetStateEventCompleteCalls extends _ResetStateEvent {
 }
 
 class _ResetStateEventCompleteCall extends _ResetStateEvent {
-  const _ResetStateEventCompleteCall(this.callId);
+  const _ResetStateEventCompleteCall(this.callId, {this.endReason = CallkeepEndCallReason.remoteEnded});
 
   final String callId;
+  final CallkeepEndCallReason endReason;
 
   @override
-  List<Object?> get props => [callId];
+  List<Object?> get props => [callId, endReason];
 }
 
 // signaling client events
@@ -168,7 +179,7 @@ sealed class _CallSignalingEvent extends CallEvent {
     required String reason,
   }) = _CallSignalingEventHangup;
 
-  const factory _CallSignalingEvent.updating({
+  const factory _CallSignalingEvent.callUpdating({
     required int? line,
     required String callId,
     required String callee,
@@ -178,7 +189,10 @@ sealed class _CallSignalingEvent extends CallEvent {
     String? replaceCallId,
     bool? isFocus,
     JsepValue? jsep,
-  }) = _CallSignalingEventUpdating;
+  }) = _CallSignalingEventCallUpdating;
+
+  const factory _CallSignalingEvent.updating({required int? line, required String callId}) =
+      _CallSignalingEventUpdating;
 
   const factory _CallSignalingEvent.updated({required int? line, required String callId}) = _CallSignalingEventUpdated;
 
@@ -193,14 +207,6 @@ sealed class _CallSignalingEvent extends CallEvent {
   const factory _CallSignalingEvent.transferring({required int? line, required String callId}) =
       _CallSignalingEventTransferring;
 
-  const factory _CallSignalingEvent.notifyDialog({
-    required int? line,
-    required String callId,
-    required String? notify,
-    required SubscriptionState? subscriptionState,
-    required List<UserActiveCall> userActiveCalls,
-  }) = _CallSignalingEventNotifyDialog;
-
   const factory _CallSignalingEvent.notifyRefer({
     required int? line,
     required String callId,
@@ -208,15 +214,6 @@ sealed class _CallSignalingEvent extends CallEvent {
     required SubscriptionState? subscriptionState,
     required ReferNotifyState state,
   }) = _CallSignalingEventNotifyRefer;
-
-  const factory _CallSignalingEvent.notifyPresence({
-    required int? line,
-    required String callId,
-    required String? notify,
-    required SubscriptionState? subscriptionState,
-    required String number,
-    required List<SignalingPresenceInfo> presenceInfo,
-  }) = _CallSignalingEventNotifyPresence;
 
   const factory _CallSignalingEvent.notifyUnknown({
     required int? line,
@@ -229,6 +226,23 @@ sealed class _CallSignalingEvent extends CallEvent {
 
   const factory _CallSignalingEvent.registration(RegistrationStatus status, {int? code, String? reason}) =
       _CallSignalingEventRegistration;
+}
+
+sealed class _GlobalEvent extends CallEvent {
+  const _GlobalEvent();
+
+  @override
+  List<Object?> get props => [];
+
+  const factory _GlobalEvent.numberPresenceUpdate({
+    required String number,
+    required List<SignalingPresenceInfo> presenceInfo,
+  }) = _GlobalEventNumberPresenceUpdate;
+
+  const factory _GlobalEvent.numberDialogsUpdate({
+    required String number,
+    required List<SignalingDialogInfo> dialogInfos,
+  }) = _GlobalEventNumberDialogsUpdate;
 }
 
 class _CallSignalingEventIncoming extends _CallSignalingEvent {
@@ -329,8 +343,8 @@ class _CallSignalingEventHangup extends _CallSignalingEvent {
   List<Object?> get props => [line, callId, code, reason];
 }
 
-class _CallSignalingEventUpdating extends _CallSignalingEvent {
-  const _CallSignalingEventUpdating({
+class _CallSignalingEventCallUpdating extends _CallSignalingEvent {
+  const _CallSignalingEventCallUpdating({
     required this.line,
     required this.callId,
     required this.callee,
@@ -372,6 +386,17 @@ class _CallSignalingEventUpdating extends _CallSignalingEvent {
     isFocus,
     jsep,
   ];
+}
+
+class _CallSignalingEventUpdating extends _CallSignalingEvent {
+  const _CallSignalingEventUpdating({required this.line, required this.callId});
+
+  final int? line;
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [line, callId];
 }
 
 class _CallSignalingEventUpdated extends _CallSignalingEvent {
@@ -418,29 +443,6 @@ class _CallSignalingEventTransferring extends _CallSignalingEvent {
   List<Object?> get props => [line, callId];
 }
 
-class _CallSignalingEventNotifyDialog extends _CallSignalingEvent {
-  const _CallSignalingEventNotifyDialog({
-    required this.line,
-    required this.callId,
-    required this.notify,
-    required this.subscriptionState,
-    required this.userActiveCalls,
-  });
-
-  final int? line;
-
-  final String callId;
-
-  final String? notify;
-
-  final SubscriptionState? subscriptionState;
-
-  final List<UserActiveCall> userActiveCalls;
-
-  @override
-  List<Object?> get props => [line, callId, notify, subscriptionState, userActiveCalls];
-}
-
 class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
   const _CallSignalingEventNotifyRefer({
     required this.line,
@@ -462,32 +464,6 @@ class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
 
   @override
   List<Object?> get props => [line, callId, notify, subscriptionState, state];
-}
-
-class _CallSignalingEventNotifyPresence extends _CallSignalingEvent {
-  const _CallSignalingEventNotifyPresence({
-    required this.line,
-    required this.callId,
-    required this.notify,
-    required this.subscriptionState,
-    required this.number,
-    required this.presenceInfo,
-  });
-
-  final int? line;
-
-  final String callId;
-
-  final String? notify;
-
-  final SubscriptionState? subscriptionState;
-
-  final String number;
-
-  final List<SignalingPresenceInfo> presenceInfo;
-
-  @override
-  List<Object?> get props => [line, callId, notify, subscriptionState, number, presenceInfo];
 }
 
 class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
@@ -514,6 +490,28 @@ class _CallSignalingEventNotifyUnknown extends _CallSignalingEvent {
 
   @override
   List<Object?> get props => [line, callId, notify, subscriptionState, contentType, content];
+}
+
+class _GlobalEventNumberPresenceUpdate extends _GlobalEvent {
+  const _GlobalEventNumberPresenceUpdate({required this.number, required this.presenceInfo});
+
+  final String number;
+
+  final List<SignalingPresenceInfo> presenceInfo;
+
+  @override
+  List<Object?> get props => [number, presenceInfo];
+}
+
+class _GlobalEventNumberDialogsUpdate extends _GlobalEvent {
+  const _GlobalEventNumberDialogsUpdate({required this.number, required this.dialogInfos});
+
+  final String number;
+
+  final List<SignalingDialogInfo> dialogInfos;
+
+  @override
+  List<Object?> get props => [number, dialogInfos];
 }
 
 class _CallSignalingEventRegistration extends _CallSignalingEvent {
@@ -960,6 +958,9 @@ sealed class _PeerConnectionEvent extends CallEvent {
 
   const factory _PeerConnectionEvent.streamRemoved(String callId, MediaStream stream) =
       _PeerConnectionEventStreamRemoved;
+
+  const factory _PeerConnectionEvent.renegotiationNeeded(String callId, int? lineId) =
+      _PeerConnectionEventRenegotiationNeeded;
 }
 
 class _PeerConnectionEventSignalingStateChanged extends _PeerConnectionEvent {
@@ -1039,6 +1040,17 @@ class _PeerConnectionEventStreamRemoved extends _PeerConnectionEvent {
   List<Object?> get props => [callId, stream];
 }
 
+class _PeerConnectionEventRenegotiationNeeded extends _PeerConnectionEvent {
+  const _PeerConnectionEventRenegotiationNeeded(this.callId, this.lineId);
+
+  final String callId;
+
+  final int? lineId;
+
+  @override
+  List<Object?> get props => [callId, lineId];
+}
+
 // call screen events
 
 sealed class CallScreenEvent extends CallEvent {
@@ -1072,4 +1084,23 @@ class _CallConfigEventUpdated extends CallConfigEvent {
 
   @override
   List<Object?> get props => [monitorCheckInterval];
+}
+
+class _RestoreAcceptedCall extends CallEvent {
+  const _RestoreAcceptedCall({
+    required this.line,
+    required this.callId,
+    required this.acceptedEvent,
+    required this.acceptedTime,
+    this.incomingCallEvent,
+  });
+
+  final int line;
+  final String callId;
+  final AcceptedEvent acceptedEvent;
+  final DateTime acceptedTime;
+  final IncomingCallEvent? incomingCallEvent;
+
+  @override
+  List<Object?> get props => [line, callId, acceptedEvent, acceptedTime, incomingCallEvent];
 }

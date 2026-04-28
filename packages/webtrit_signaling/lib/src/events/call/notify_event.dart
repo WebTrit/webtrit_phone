@@ -27,10 +27,6 @@ sealed class NotifyEvent extends CallEvent {
 
     final notifyValue = json['notify'];
     switch (notifyValue) {
-      case DialogNotifyEvent.notifyValue:
-        return DialogNotifyEvent.fromJson(json);
-      case PresenceNotifyEvent.notifyValue:
-        return PresenceNotifyEvent.fromJson(json);
       case ReferNotifyEvent.notifyValue:
         return ReferNotifyEvent.fromJson(json);
       default:
@@ -39,231 +35,82 @@ sealed class NotifyEvent extends CallEvent {
   }
 }
 
-class DialogNotifyEvent extends NotifyEvent with EquatableMixin {
-  const DialogNotifyEvent({
-    super.transaction,
-    required super.line,
-    required super.callId,
-    super.subscriptionState,
-    required this.userActiveCalls,
-  });
+// ---------------------------------------------------------------------------
+// ReferNotifyState — sealed class preserving the SIP response code
+// ---------------------------------------------------------------------------
 
-  static const notifyValue = 'dialog';
-  final List<UserActiveCall> userActiveCalls;
+sealed class ReferNotifyState {
+  const ReferNotifyState();
 
-  @override
-  Map<String, dynamic> toJson() => {
-    ...callBaseJson(NotifyEvent.typeValue),
-    'notify': notifyValue,
-    if (subscriptionState != null) 'subscription_state': subscriptionState!.name,
-    'user_active_calls': userActiveCalls
-        .map(
-          (c) => {
-            'id': c.id,
-            'state': c.state.name,
-            'call_id': c.callId,
-            'direction': c.direction.name,
-            'local_tag': c.localTag,
-            if (c.remoteTag != null) 'remote_tag': c.remoteTag,
-            'remote_number': c.remoteNumber,
-            if (c.remoteDisplayName != null) 'remote_display_name': c.remoteDisplayName,
-          },
-        )
-        .toList(),
-  };
+  factory ReferNotifyState.fromContent(String content) {
+    final match = RegExp(r'SIP/2\.0\s+(\d{3})\s*(.*)').firstMatch(content.trim());
+    if (match == null) return const ReferFailed(sipCode: null, reason: null);
 
-  @override
-  factory DialogNotifyEvent.fromJson(Map<String, dynamic> json) {
-    final eventTypeValue = json[Event.typeKey];
-    if (eventTypeValue != NotifyEvent.typeValue) {
-      throw ArgumentError.value(eventTypeValue, Event.typeKey, 'Not equal ${NotifyEvent.typeValue}');
-    }
+    final code = int.parse(match.group(1)!);
+    final reason = match.group(2)!.trim();
 
-    final notifyValue = json['notify'];
-    if (notifyValue != DialogNotifyEvent.notifyValue) {
-      throw ArgumentError.value(notifyValue, 'notify', 'Not equal ${DialogNotifyEvent.notifyValue}');
-    }
-
-    return DialogNotifyEvent(
-      transaction: json['transaction'],
-      line: json['line'],
-      callId: json['call_id'],
-      subscriptionState: json['subscription_state'] != null
-          ? SubscriptionState.values.byName(json['subscription_state'])
-          : null,
-      userActiveCalls: (json['user_active_calls'] as List)
-          .map((e) => UserActiveCall.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-  }
-
-  @override
-  List<Object?> get props => [transaction, line, callId, notify, subscriptionState, userActiveCalls];
-
-  @override
-  String toString() {
-    return 'DialogNotifyEvent{transaction: $transaction, line: $line, callId: $callId, notify: $notify, '
-        'subscriptionState: $subscriptionState, userActiveCalls: ${userActiveCalls.length}}';
+    return switch (code) {
+      >= 100 && < 200 => ReferProvisional(sipCode: code, reason: reason),
+      >= 200 && < 300 => const ReferAccepted(),
+      _ => ReferFailed(sipCode: code, reason: reason),
+    };
   }
 }
 
-enum UserActiveCallDirection { initiator, recipient }
+/// Transfer is in progress — target is ringing (1xx provisional).
+final class ReferProvisional extends ReferNotifyState {
+  const ReferProvisional({required this.sipCode, required this.reason});
 
-enum UserActiveCallState { proceeding, early, confirmed, terminated, unknown }
-
-class UserActiveCall extends Equatable {
-  UserActiveCall({
-    required this.id,
-    required this.state,
-    required this.callId,
-    required this.direction,
-    required this.localTag,
-    required this.remoteTag,
-    required this.remoteNumber,
-    this.remoteDisplayName,
-  });
-
-  final String id;
-  final UserActiveCallState state;
-  final String callId;
-  final UserActiveCallDirection direction;
-  final String localTag;
-  final String? remoteTag;
-  final String remoteNumber;
-  final String? remoteDisplayName;
-
-  factory UserActiveCall.fromJson(Map<String, dynamic> json) {
-    return UserActiveCall(
-      id: json['id'],
-      state: UserActiveCallState.values.firstWhere(
-        (e) => e.name == json['state'],
-        orElse: () => UserActiveCallState.unknown,
-      ),
-      callId: json['call_id'],
-      direction: UserActiveCallDirection.values.byName(json['direction']),
-      localTag: json['local_tag'],
-      remoteTag: json['remote_tag'],
-      remoteNumber: json['remote_number'],
-      remoteDisplayName: json['remote_display_name'],
-    );
-  }
+  final int sipCode;
+  final String reason;
 
   @override
-  List<Object?> get props => [id, state, callId, direction, localTag, remoteTag, remoteNumber, remoteDisplayName];
+  bool operator ==(Object other) =>
+      identical(this, other) || other is ReferProvisional && sipCode == other.sipCode && reason == other.reason;
 
   @override
-  String toString() {
-    return 'UserActiveCall{id: $id, state: $state, callId: $callId, direction: $direction, localTag: $localTag, remoteTag: $remoteTag, remoteNumber: $remoteNumber, remoteDisplayName: $remoteDisplayName}';
-  }
+  int get hashCode => Object.hash(sipCode, reason);
+
+  @override
+  String toString() => 'ReferProvisional($sipCode $reason)';
 }
 
-class PresenceNotifyEvent extends NotifyEvent with EquatableMixin {
-  const PresenceNotifyEvent({
-    super.transaction,
-    required super.line,
-    required super.callId,
-    super.subscriptionState,
-    required this.number,
-    required this.presenceInfo,
-  });
-
-  static const notifyValue = 'presence';
-  final String number;
-  final List<SignalingPresenceInfo> presenceInfo;
+/// Transfer succeeded — target accepted (2xx).
+final class ReferAccepted extends ReferNotifyState {
+  const ReferAccepted();
 
   @override
-  Map<String, dynamic> toJson() => {
-    ...callBaseJson(NotifyEvent.typeValue),
-    'notify': notifyValue,
-    if (subscriptionState != null) 'subscription_state': subscriptionState!.name,
-    'number': number,
-    'presence_info': presenceInfo
-        .map(
-          (p) => {
-            'id': p.id,
-            'available': p.available,
-            'note': p.note,
-            if (p.statusIcon != null) 'status_icon': p.statusIcon,
-            if (p.device != null) 'device': p.device,
-            if (p.timeOffsetMin != null) 'time_offset_min': p.timeOffsetMin,
-            if (p.timestamp != null) 'timestamp': p.timestamp,
-            'activities': p.activities,
-          },
-        )
-        .toList(),
-  };
+  bool operator ==(Object other) => other is ReferAccepted;
 
   @override
-  factory PresenceNotifyEvent.fromJson(Map<String, dynamic> json) {
-    return PresenceNotifyEvent(
-      transaction: json['transaction'],
-      line: json['line'],
-      callId: json['call_id'],
-      subscriptionState: json['subscription_state'] != null
-          ? SubscriptionState.values.byName(json['subscription_state'])
-          : null,
-      number: json['number'],
-      presenceInfo: (json['presence_info'] as List<dynamic>)
-          .map((item) => SignalingPresenceInfo.fromJson(item))
-          .toList(),
-    );
-  }
+  int get hashCode => runtimeType.hashCode;
 
   @override
-  List<Object?> get props => [transaction, line, callId, notify, subscriptionState, number, presenceInfo];
-
-  @override
-  String toString() {
-    return 'PresenceNotifyEvent{transaction: $transaction, line: $line, callId: $callId, notify: $notify, '
-        'subscriptionState: $subscriptionState, number: $number, presenceInfo: $presenceInfo}';
-  }
+  String toString() => 'ReferAccepted()';
 }
 
-class SignalingPresenceInfo extends Equatable {
-  const SignalingPresenceInfo({
-    required this.id,
-    required this.available,
-    required this.note,
-    required this.statusIcon,
-    required this.device,
-    required this.timeOffsetMin,
-    required this.timestamp,
-    required this.activities,
-  });
-  final String id;
-  final bool available;
-  final String note;
-  final String? statusIcon;
-  final String? device;
-  final int? timeOffsetMin;
-  final String? timestamp;
-  final List<String> activities;
+/// Transfer failed — target rejected (3xx–6xx) or content was malformed.
+/// [sipCode] is null only when the NOTIFY body could not be parsed.
+final class ReferFailed extends ReferNotifyState {
+  const ReferFailed({required this.sipCode, required this.reason});
+
+  final int? sipCode;
+  final String? reason;
 
   @override
-  factory SignalingPresenceInfo.fromJson(Map<String, dynamic> json) {
-    return SignalingPresenceInfo(
-      id: json['id'],
-      available: json['available'],
-      note: json['note'],
-      statusIcon: json['status_icon'],
-      device: json['device'],
-      timeOffsetMin: json['time_offset_min'],
-      timestamp: json['timestamp'],
-      activities: (json['activities'] as List<dynamic>).map((e) => e as String).toList(),
-    );
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) || other is ReferFailed && sipCode == other.sipCode && reason == other.reason;
 
   @override
-  List<Object?> get props => [id, available, note, statusIcon, device, timeOffsetMin, timestamp, activities];
+  int get hashCode => Object.hash(sipCode, reason);
 
   @override
-  String toString() {
-    return 'SignalingPresenceInfo{id: $id, available: $available, note: $note, statusIcon: $statusIcon, device: $device, '
-        'timeOffsetMin: $timeOffsetMin, timestamp: $timestamp, activities: $activities}';
-  }
+  String toString() => sipCode != null ? 'ReferFailed($sipCode $reason)' : 'ReferFailed(malformed)';
 }
 
-enum ReferNotifyState { trying, ok, unknown }
+// ---------------------------------------------------------------------------
+// ReferNotifyEvent
+// ---------------------------------------------------------------------------
 
 class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
   const ReferNotifyEvent({
@@ -283,20 +130,16 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
     'notify': notifyValue,
     if (subscriptionState != null) 'subscription_state': subscriptionState!.name,
     'content': switch (state) {
-      ReferNotifyState.trying => 'SIP/2.0 100 Trying',
-      ReferNotifyState.ok => 'SIP/2.0 200 OK',
-      ReferNotifyState.unknown => '',
+      ReferProvisional(:final sipCode, :final reason) => 'SIP/2.0 $sipCode $reason',
+      ReferAccepted() => 'SIP/2.0 200 OK',
+      ReferFailed(:final sipCode?, :final reason?) => 'SIP/2.0 $sipCode $reason',
+      ReferFailed() => '',
     },
   };
 
   @override
   factory ReferNotifyEvent.fromJson(Map<String, dynamic> json) {
     final contentStr = json['content'] as String;
-    final state = switch (contentStr) {
-      String s when s.startsWith('SIP/2.0 100') => ReferNotifyState.trying,
-      String s when s.contains('200 OK') => ReferNotifyState.ok,
-      _ => ReferNotifyState.unknown,
-    };
 
     return ReferNotifyEvent(
       transaction: json['transaction'],
@@ -305,7 +148,7 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
       subscriptionState: json['subscription_state'] != null
           ? SubscriptionState.values.byName(json['subscription_state'])
           : null,
-      state: state,
+      state: ReferNotifyState.fromContent(contentStr),
     );
   }
 
@@ -318,6 +161,10 @@ class ReferNotifyEvent extends NotifyEvent with EquatableMixin {
         'subscriptionState: $subscriptionState, state: $state}';
   }
 }
+
+// ---------------------------------------------------------------------------
+// UnknownNotifyEvent
+// ---------------------------------------------------------------------------
 
 class UnknownNotifyEvent extends NotifyEvent with EquatableMixin {
   const UnknownNotifyEvent({

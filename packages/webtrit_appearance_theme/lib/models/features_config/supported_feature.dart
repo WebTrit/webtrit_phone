@@ -26,7 +26,7 @@ sealed class SupportedFeature with _$SupportedFeature {
 
   const factory SupportedFeature.systemNotifications({@Default(true) bool enabled}) = SupportedSystemNotifications;
 
-  const factory SupportedFeature.sipPresence({@Default(false) bool enabled}) = SupportedSipPresence;
+  const factory SupportedFeature.hybridPresence({@Default(true) bool enabled}) = SupportedHybridPresence;
 
   factory SupportedFeature.fromJson(Map<String, Object?> json) => _$SupportedFeatureFromJson(json);
 }

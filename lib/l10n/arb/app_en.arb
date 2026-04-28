@@ -255,6 +255,24 @@
   "@contactsSourceLocal": {},
   "contacts_Text_blingTransferInitiated": "Performing blind transfer",
   "@contacts_Text_blingTransferInitiated": {},
+  "contacts_DialogsInfoView_title": "Calls information (BLF):",
+  "@contacts_DialogsInfoView_title": {},
+  "contacts_ContactTile_inCall": "In call: {destination}",
+  "@contacts_ContactTile_inCall": {
+    "placeholders": {
+      "destination": {}
+    }
+  },
+  "contacts_ContactScreen_options": "Options:",
+  "@contacts_ContactScreen_options": {},
+  "contacts_ContactScreen_presenceViaSip": "Subscribe to user status via SIP (Presence)",
+  "@contacts_ContactScreen_presenceViaSip": {},
+  "contacts_ContactScreen_presenceViaSip_tooltip": "In addition to direct(app to app) data exchange, subscribe via SIP-Presence feature allows gathering presence information from other user agents (desktop phones, standalone softphones, etc.). Recommended to enable only if your contact prefers to use legacy user agents and you want to see their presence status across all devices.",
+  "@contacts_ContactScreen_presenceViaSip_tooltip": {},
+  "contacts_ContactScreen_dialogsViaSipBlf": "Subscribe to active calls via SIP (BLF/Dialogs)",
+  "@contacts_ContactScreen_dialogsViaSipBlf": {},
+  "contacts_ContactScreen_dialogsViaSipBlf_tooltip": "In addition to direct(app to app) data exchange, subscribe via SIP-Dialogs feature allows gathering call state information from other user agents (desktop phones, standalone softphones, etc.). Recommended to enable only if your contact prefers to use legacy user agents and you want to see their call status across all devices.",
+  "@contacts_ContactScreen_dialogsViaSipBlf_tooltip": {},
   "copyToClipboard_floatingSnackBar": "Text copied",
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Copy to clipboard",
@@ -620,6 +638,14 @@
   "@login_RequestFailurePhoneNotFoundError": {
     "description": "Shown during login or signup when the user provides a phone number that cannot be found in the system. Condition: the entered phone number does not exist or is not recognized by the backend."
   },
+  "login_RequestFailureIncorrectCredentialsError": "Incorrect username or password",
+  "@login_RequestFailureIncorrectCredentialsError": {
+    "description": "Shown during password login when the provided username or password is incorrect. Condition: the backend returns incorrect_credentials in response to POST /session."
+  },
+  "login_RequestFailureUserNotFoundError": "User not found",
+  "@login_RequestFailureUserNotFoundError": {
+    "description": "Shown during password login when the provided user reference does not exist. Condition: the backend returns user_not_found in response to POST /session."
+  },
   "login_RequestFailureUnconfiguredBundleIdError": "The app is not supported by your WebTrit Cloud Backend",
   "@login_RequestFailureUnconfiguredBundleIdError": {
     "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."
@@ -728,6 +754,21 @@
   "@logRecordsConsole_Text_failure": {
     "description": "Shown in the Log Console screen when an unexpected error occurs while loading or displaying log records."
   },
+  "logRecordsConsole_Text_recordsCountHint": "Showing last {count, plural, one{{count} record} other{{count} records}}. Use Share to export the full log.",
+  "@logRecordsConsole_Text_recordsCountHint": {
+    "description": "Shown in the info dialog to inform the user that only the most recent records are displayed and the share button exports the complete log.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "logRecordsConsole_Button_infoClose": "Got it",
+  "@logRecordsConsole_Button_infoClose": {},
+  "logRecordsConsole_PopupMenuItem_info": "Info",
+  "@logRecordsConsole_PopupMenuItem_info": {},
+  "logRecordsConsole_PopupMenuItem_clear": "Clear",
+  "@logRecordsConsole_PopupMenuItem_clear": {},
   "main_BottomNavigationBarItemLabel_chats": "Chats",
   "@main_BottomNavigationBarItemLabel_chats": {},
   "main_BottomNavigationBarItemLabel_contacts": "Contacts",
@@ -966,6 +1007,10 @@
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {
     "description": "Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target."
   },
+  "notifications_errorSnackBar_blindTransferFailed": "Transfer failed, returning to active call",
+  "@notifications_errorSnackBar_blindTransferFailed": {
+    "description": "Shown when a blind transfer fails because the transfer target declined. The original call is restored and the user is returned to the active call screen."
+  },
   "notifications_errorSnackBar_appOffline": "Your application is currently offline",
   "@notifications_errorSnackBar_appOffline": {
     "description": "Shown in a notification or snackbar when the application is offline. Condition: the app loses connection to the server or network and cannot perform online actions."
@@ -986,6 +1031,14 @@
   "@notifications_errorSnackBar_callNegotiationTimeout": {
     "description": "Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server."
   },
+  "notifications_errorSnackBar_generalUnableToCall": "Cannot establish the call, please try again later",
+  "@notifications_errorSnackBar_generalUnableToCall": {
+    "description": "Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server."
+  },
+  "notifications_errorSnackBar_callServiceBusyLine": "Cannot make the call right now because the line is busy. Please try again later.",
+  "@notifications_errorSnackBar_callServiceBusyLine": {
+    "description": "Shown in a notification or snackbar when the user tries to start a call but the selected line is already busy. Context: occurs at call initiation when no free channel is available on the current line or account; advise the user to wait and retry."
+  },
   "notifications_errorSnackBar_callSignalingClientNotConnect": "Cannot initiate the call, please check the connection status",
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {
     "description": "Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the WebTrit core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability."
@@ -997,6 +1050,10 @@
   "notifications_errorSnackBar_callUndefinedLine": "No idle lines to initiate the call",
   "@notifications_errorSnackBar_callUndefinedLine": {
     "description": "Shown in a snackbar when the user attempts to start a call but there is no outbound line available. Context: occurs at call initiation when no SIP/VoIP line is assigned or registered, all lines are disabled or busy, or the line was removed/disabled by an administrator; typical causes: unassigned or unregistered SIP line, account/line disabled, or concurrent channel limits."
+  },
+  "notifications_errorSnackBar_callMediaTrackSetup": "Call setup failed, please try again",
+  "@notifications_errorSnackBar_callMediaTrackSetup": {
+    "description": "Shown when a call fails due to an internal media track error, not a permission denial. Typical cause: a native audio/video track reference was invalidated after a previous call was cleaned up. No action to open Settings."
   },
   "notifications_errorSnackBar_callUserMedia": "No access to media input, please check app permissions",
   "@notifications_errorSnackBar_callUserMedia": {
@@ -1132,6 +1189,21 @@
     "type": "text",
     "description": "Title of a dialog shown when the user selects persistent connection on Android 14+"
   },
+  "batteryOptimizationWarningTitle": "Battery Optimization Active",
+  "@batteryOptimizationWarningTitle": {
+    "type": "text",
+    "description": "Title of dialog warning the user about battery optimization being active when persistent connection is selected"
+  },
+  "batteryOptimizationWarningContent": "Battery optimization is active on this device. This may cause missed calls when the screen turns off. Disable it to keep the persistent connection alive.",
+  "@batteryOptimizationWarningContent": {
+    "type": "text",
+    "description": "Content of dialog warning the user about battery optimization when persistent connection is selected"
+  },
+  "batteryOptimizationWarningOpenSettings": "Open Settings",
+  "@batteryOptimizationWarningOpenSettings": {
+    "type": "text",
+    "description": "Button label to open battery settings from the battery optimization warning dialog"
+  },
   "presence_activity_appointment_name": "At an appointment",
   "@presence_activity_appointment_name": {},
   "presence_activity_away_name": "Away",
@@ -1182,6 +1254,18 @@
   "@presence_infoView_title": {},
   "presence_infoView_updated": "Updated:",
   "@presence_infoView_updated": {},
+  "presence_infoView_source": "Source: {source}",
+  "@presence_infoView_source": {
+    "placeholders": {
+      "source": {}
+    }
+  },
+  "presence_infoView_source_direct": "direct",
+  "@presence_infoView_source_direct": {},
+  "presence_infoView_source_sip": "sip",
+  "@presence_infoView_source_sip": {},
+  "presence_infoView_source_sipAndDirect": "sip and direct",
+  "@presence_infoView_source_sipAndDirect": {},
   "presence_preset_absent_name": "Absent",
   "@presence_preset_absent_name": {},
   "presence_preset_absent_note": "Absent",
@@ -1246,6 +1330,8 @@
   "@presence_settings_note_tooltip": {},
   "presence_settings_presets_label": "Choose preset",
   "@presence_settings_presets_label": {},
+  "presence_settings_presets_label_custom": "Custom",
+  "@presence_settings_presets_label_custom": {},
   "presence_settings_presets_title": "Presets:",
   "@presence_settings_presets_title": {},
   "presence_settings_statusIcon_none": "None",
@@ -1310,6 +1396,22 @@
   "@request_StatusCode": {},
   "request_StatusName": "Status name",
   "@request_StatusName": {},
+  "sessionStatus_AppBar_waitingForNetwork": "Waiting for network...",
+  "@sessionStatus_AppBar_waitingForNetwork": {
+    "description": "Shown in the main app bar when the device has no internet connectivity and the app is waiting for network access."
+  },
+  "sessionStatus_AppBar_waitingForConnection": "Waiting for connection...",
+  "@sessionStatus_AppBar_waitingForConnection": {
+    "description": "Shown in the main app bar when the app is trying to establish or restore a connection to backend services."
+  },
+  "sessionStatus_AppBar_disconnected": "Disconnected",
+  "@sessionStatus_AppBar_disconnected": {
+    "description": "Shown in the main app bar when the app is disconnected from backend services."
+  },
+  "sessionStatus_AppBar_connecting": "Connecting...",
+  "@sessionStatus_AppBar_connecting": {
+    "description": "Shown in the main app bar while the app is actively connecting to backend services."
+  },
   "sessionStatus_pushNotificationServiceProblem": "Problem with configuration push notification service",
   "@sessionStatus_pushNotificationServiceProblem": {},
   "session_Teardown_progressText": "Signing out...",
@@ -1334,6 +1436,8 @@
   "@settings_AccountDeleteConfirmDialog_content": {},
   "settings_AccountDeleteConfirmDialog_title": "Confirm delete account",
   "@settings_AccountDeleteConfirmDialog_title": {},
+  "settings_AccountDeleteNotSupported_message": "Unfortunately, your product does not support account deletion.",
+  "@settings_AccountDeleteNotSupported_message": {},
   "settings_AppBarTitle_myAccount": "My account",
   "@settings_AppBarTitle_myAccount": {},
   "settings_audioProcessing_Section_AGC_title": "Auto gain control",
@@ -1436,6 +1540,10 @@
   "@settings_encoding_Section_packetization_title": {},
   "settings_encoding_Section_packetization_tooltip": "Adjust audio packetization-time in milliseconds, can be used to reduce audio latency or fix Network MTU size issues",
   "@settings_encoding_Section_packetization_tooltip": {},
+  "settings_encoding_Section_packetization_warning_title": "Warning:",
+  "@settings_encoding_Section_packetization_warning_title": {},
+  "settings_encoding_Section_packetization_warning_message": "Some codecs may struggle with non-default ptime values, causing audible glitches or silence. Use only if you know what you are doing.",
+  "@settings_encoding_Section_packetization_warning_message": {},
   "settings_encoding_Section_preset": "Preset",
   "@settings_encoding_Section_preset": {},
   "settings_encoding_Section_preset_balance": "Balanced",
@@ -2079,5 +2187,20 @@
   "cdr_disconnectReason_internetworkingUnspecified": "Internetworking, unspecified",
   "cdr_disconnectReason_nextNodeIsUnreachable": "Next node is unreachable",
   "cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService": "Holst Telephony Service Provider Module (HTSPM) is out of service",
-  "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL transit is not my node ID"
+  "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL transit is not my node ID",
+
+  "devTools_AppBarTitle": "Dev Tools",
+  "@devTools_AppBarTitle": {},
+  "devTools_signalingService_groupTitle": "Signaling Service",
+  "@devTools_signalingService_groupTitle": {},
+  "devTools_signalingService_simulateKill_title": "Simulate service kill",
+  "@devTools_signalingService_simulateKill_title": {},
+  "devTools_signalingService_simulateKill_subtitle": "Stops the foreground service without graceful disconnect",
+  "@devTools_signalingService_simulateKill_subtitle": {},
+  "devTools_signalingService_simulateKill_confirmMessage": "The signaling service will stop immediately. It will restart automatically if credentials are valid.",
+  "@devTools_signalingService_simulateKill_confirmMessage": {},
+  "devTools_signalingService_simulateKill_confirm": "Kill",
+  "@devTools_signalingService_simulateKill_confirm": {},
+  "devTools_signalingService_simulateKill_cancel": "Cancel",
+  "@devTools_signalingService_simulateKill_cancel": {}
 }

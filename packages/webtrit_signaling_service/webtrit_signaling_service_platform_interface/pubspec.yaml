@@ -1,0 +1,23 @@
+name: webtrit_signaling_service_platform_interface
+description: Platform interface for the webtrit_signaling_service plugin.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.8.0
+  flutter: '>=3.32.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.1.8
+  logging: ^1.3.0
+  ssl_certificates:
+    path: ../../ssl_certificates
+  webtrit_signaling:
+    path: ../../webtrit_signaling
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

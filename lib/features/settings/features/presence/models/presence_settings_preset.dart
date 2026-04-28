@@ -25,18 +25,18 @@ class PresenceSettingsPreset {
       dndMode: false,
     ),
     PresenceSettingsPreset(
-      name: localization.presence_preset_away_name,
-      available: false,
-      note: localization.presence_preset_away_note,
-      activity: PresenceActivity.away,
-      dndMode: false,
-    ),
-    PresenceSettingsPreset(
       name: localization.presence_preset_dnd_name,
       available: false,
       note: localization.presence_preset_dnd_note,
       activity: PresenceActivity.doNotDisturb,
       dndMode: true,
+    ),
+    PresenceSettingsPreset(
+      name: localization.presence_preset_away_name,
+      available: false,
+      note: localization.presence_preset_away_note,
+      activity: PresenceActivity.away,
+      dndMode: false,
     ),
     PresenceSettingsPreset(
       name: localization.presence_preset_sleeping_name,

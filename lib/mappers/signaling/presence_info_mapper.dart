@@ -7,6 +7,7 @@ class SignalingPresenceInfoMapper {
   static PresenceInfo fromSignaling(SignalingPresenceInfo data) {
     return PresenceInfo(
       id: data.id,
+      number: data.number,
       available: data.available,
       note: data.note,
       statusIcon: data.statusIcon,
@@ -33,6 +34,8 @@ class SignalingPresenceInfoMapper {
           })
           .nonNulls
           .toList(),
+      source: PresenceInfoSource.values.byName(data.source.name),
+      arrivalTime: DateTime.now(),
     );
   }
 }

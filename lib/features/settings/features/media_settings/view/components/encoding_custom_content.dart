@@ -56,6 +56,22 @@ class EncodingCustomContent extends StatelessWidget {
               tooltip: context.l10n.settings_encoding_Section_packetization_tooltip,
               icon: const Icon(Icons.vertical_split_rounded),
             ),
+            Column(
+              children: [
+                Text(
+                  context.l10n.settings_encoding_Section_packetization_warning_title,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13.0,
+                  ),
+                ),
+                Text(
+                  context.l10n.settings_encoding_Section_packetization_warning_message,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12.0),
+                ),
+              ],
+            ),
             SlidableSection<int>(
               title: context.l10n.settings_encoding_Section_audio_ptime,
               optionPrefix: context.l10n.settings_encoding_Section_ptime_prefix,
@@ -92,6 +108,7 @@ class EncodingCustomContent extends StatelessWidget {
                 }
               },
             ),
+
             const Divider(height: 24),
             HeadingSection(
               title: context.l10n.settings_encoding_Section_opus_title,

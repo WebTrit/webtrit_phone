@@ -1,0 +1,13 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    prefer_single_quotes: true
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "pigeons/**"
+
+formatter:
+  page_width: 120

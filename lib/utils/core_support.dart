@@ -4,6 +4,13 @@ import 'package:webtrit_phone/app/constants.dart';
 
 import 'package:webtrit_phone/models/system_info/system_info.dart';
 
+// TODO:
+// - rename to adapter supported flags or
+// - think about remove it because its useles abstraction
+//   - we already have system info in our models, and its enough to move this getters to AdapterInfo
+//   - also real core supported getters exist in CoreInfo so there is logical mess
+//   - see [SipPresenceMapper] for example
+
 /// Abstraction for checking core system feature support.
 abstract class CoreSupport {
   /// Check if the voicemail feature is supported by remote system.
@@ -20,9 +27,6 @@ abstract class CoreSupport {
 
   /// Check if the system push notifications feature is supported by remote system.
   bool get supportsSystemPushNotifications;
-
-  /// Check if the SIP presence feature is supported by remote system.
-  bool get supportsSipPresence;
 }
 
 class CoreSupportImpl extends Equatable implements CoreSupport {
@@ -46,9 +50,6 @@ class CoreSupportImpl extends Equatable implements CoreSupport {
 
   @override
   bool get supportsSystemPushNotifications => _has(kSystemNotificationsPushFeatureFlag);
-
-  @override
-  bool get supportsSipPresence => _has(kSipPresenceFeatureFlag);
 
   @override
   List<Object?> get props {

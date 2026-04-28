@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_REMOTE_MESSAGING" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application>
+        <!--
+            SignalingForegroundService uses foregroundServiceType="remoteMessaging".
+
+            This service maintains a persistent WebSocket connection to the WebTrit signaling
+            server to exchange call-signaling messages (SDP, ICE candidates, call state events).
+            The remoteMessaging type is defined by Android as the appropriate type for services
+            that keep a long-running connection alive so a remote server can deliver messages to
+            the device at any time — which is exactly what this service does.
+
+            Required permission: FOREGROUND_SERVICE_REMOTE_MESSAGING (declared above).
+            Applies on Android 14+ (API 34+); older versions pass type=0.
+        -->
+        <service
+            android:name=".SignalingForegroundService"
+            android:foregroundServiceType="remoteMessaging"
+            android:exported="false" />
+
+        <receiver
+            android:name=".SignalingBootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

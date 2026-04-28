@@ -255,6 +255,24 @@
   "@contactsSourceLocal": {},
   "contacts_Text_blingTransferInitiated": "Безумовне переведення дзвінка",
   "@contacts_Text_blingTransferInitiated": {},
+  "contacts_DialogsInfoView_title": "Інформація про дзвінки (BLF):",
+  "@contacts_DialogsInfoView_title": {},
+  "contacts_ContactTile_inCall": "На дроті з: {destination}",
+  "@contacts_ContactTile_inCall": {
+    "placeholders": {
+      "destination": {}
+    }
+  },
+  "contacts_ContactScreen_options": "Параметри:",
+  "@contacts_ContactScreen_options": {},
+  "contacts_ContactScreen_presenceViaSip": "Підписатись на статус юзера через SIP (Presence)",
+  "@contacts_ContactScreen_presenceViaSip": {},
+  "contacts_ContactScreen_presenceViaSip_tooltip": "Окрім прямого обміну даними (додаток-до-додатку), підписка через функцію SIP-Presence дозволяє отримувати інформацію про статус від інших користувацьких агентів (настільні телефони, окремі софтфони тощо). Рекомендується вмикати лише якщо контакт використовує застарілі клієнти і ви хочете бачити його статус на всіх пристроях.",
+  "@contacts_ContactScreen_presenceViaSip_tooltip": {},
+  "contacts_ContactScreen_dialogsViaSipBlf": "Підписатись на статус викликів через SIP (BLF/Dialogs)",
+  "@contacts_ContactScreen_dialogsViaSipBlf": {},
+  "contacts_ContactScreen_dialogsViaSipBlf_tooltip": "Окрім прямого обміну даними (додаток-до-додатку), підписка через функцію SIP-Dialogs дозволяє отримувати інформацію про стан викликів від інших користувацьких агентів (настільні телефони, окремі софтфони тощо). Рекомендується вмикати лише якщо контакт використовує застарілі клієнти і ви хочете бачити стан його викликів на всіх пристроях.",
+  "@contacts_ContactScreen_dialogsViaSipBlf_tooltip": {},
   "copyToClipboard_floatingSnackBar": "Текст скопійовано",
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Скопіювати в буфер обміну",
@@ -620,6 +638,14 @@
   "@login_RequestFailurePhoneNotFoundError": {
     "description": "Shown during login or signup when the user provides a phone number that cannot be found in the system. Condition: the entered phone number does not exist or is not recognized by the backend."
   },
+  "login_RequestFailureIncorrectCredentialsError": "Невірне ім'я користувача або пароль",
+  "@login_RequestFailureIncorrectCredentialsError": {
+    "description": "Shown during password login when the provided username or password is incorrect. Condition: the backend returns incorrect_credentials in response to POST /session."
+  },
+  "login_RequestFailureUserNotFoundError": "Користувача не знайдено",
+  "@login_RequestFailureUserNotFoundError": {
+    "description": "Shown during password login when the provided user reference does not exist. Condition: the backend returns user_not_found in response to POST /session."
+  },
   "login_RequestFailureUnconfiguredBundleIdError": "Помилка конфігурації сервера застосунку - сповістіть свого постачальника послуг",
   "@login_RequestFailureUnconfiguredBundleIdError": {
     "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."
@@ -728,6 +754,21 @@
   "@logRecordsConsole_Text_failure": {
     "description": "Shown in the Log Console screen when an unexpected error occurs while loading or displaying log records."
   },
+  "logRecordsConsole_Text_recordsCountHint": "Відображено останні {count, plural, one{{count} запис} few{{count} записи} many{{count} записів} other{{count} записи}}. Використайте Поділитись для експорту повного журналу.",
+  "@logRecordsConsole_Text_recordsCountHint": {
+    "description": "Shown in the info dialog to inform the user that only the most recent records are displayed and the share button exports the complete log.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "logRecordsConsole_Button_infoClose": "Зрозуміло",
+  "@logRecordsConsole_Button_infoClose": {},
+  "logRecordsConsole_PopupMenuItem_info": "Інформація",
+  "@logRecordsConsole_PopupMenuItem_info": {},
+  "logRecordsConsole_PopupMenuItem_clear": "Очистити",
+  "@logRecordsConsole_PopupMenuItem_clear": {},
   "main_BottomNavigationBarItemLabel_chats": "Чати",
   "@main_BottomNavigationBarItemLabel_chats": {},
   "main_BottomNavigationBarItemLabel_contacts": "Контакти",
@@ -966,6 +1007,10 @@
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {
     "description": "Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target."
   },
+  "notifications_errorSnackBar_blindTransferFailed": "Переадресація не вдалась, повертаємо до активного дзвінка",
+  "@notifications_errorSnackBar_blindTransferFailed": {
+    "description": "Shown when a blind transfer fails because the transfer target declined. The original call is restored and the user is returned to the active call screen."
+  },
   "notifications_errorSnackBar_appOffline": "Ваш застосунок зараз офлайн.",
   "@notifications_errorSnackBar_appOffline": {
     "description": "Shown in a notification or snackbar when the application is offline. Condition: the app loses connection to the server or network and cannot perform online actions."
@@ -986,6 +1031,14 @@
   "@notifications_errorSnackBar_callNegotiationTimeout": {
     "description": "Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server."
   },
+  "notifications_errorSnackBar_generalUnableToCall": "Не вдається здійснити виклик, спробуйте пізніше",
+  "@notifications_errorSnackBar_generalUnableToCall": {
+    "description": "Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server."
+  },
+  "notifications_errorSnackBar_callServiceBusyLine": "Неможливо здійснити дзвінок зараз, оскільки лінія зайнята. Спробуйте пізніше.",
+  "@notifications_errorSnackBar_callServiceBusyLine": {
+    "description": "Shown in a notification or snackbar when the user tries to start a call but the selected line is already busy. Context: occurs at call initiation when no free channel is available on the current line or account; advise the user to wait and retry."
+  },
   "notifications_errorSnackBar_callSignalingClientNotConnect": "Не вдається ініціювати дзвінок, перевірте статус з'єднання",
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {
     "description": "Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the WebTrit core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability."
@@ -997,6 +1050,10 @@
   "notifications_errorSnackBar_callUndefinedLine": "Немає вільних ліній для ініціювання дзвінка",
   "@notifications_errorSnackBar_callUndefinedLine": {
     "description": "Shown in a snackbar when the user attempts to start a call but there is no outbound line available. Context: occurs at call initiation when no SIP/VoIP line is assigned or registered, all lines are disabled or busy, or the line was removed/disabled by an administrator; typical causes: unassigned or unregistered SIP line, account/line disabled, or concurrent channel limits."
+  },
+  "notifications_errorSnackBar_callMediaTrackSetup": "Не вдалося налаштувати дзвінок, спробуйте ще раз",
+  "@notifications_errorSnackBar_callMediaTrackSetup": {
+    "description": "Shown when a call fails due to an internal media track error, not a permission denial. Typical cause: a native audio/video track reference was invalidated after a previous call was cleaned up. No action to open Settings."
   },
   "notifications_errorSnackBar_callUserMedia": "Немає доступу до медіа-входу, будь ласка, перевірте дозволи застосунку",
   "@notifications_errorSnackBar_callUserMedia": {
@@ -1132,6 +1189,21 @@
     "type": "text",
     "description": "Title of a dialog shown when the user selects persistent connection on Android 14+"
   },
+  "batteryOptimizationWarningTitle": "Оптимізацію батареї активовано",
+  "@batteryOptimizationWarningTitle": {
+    "type": "text",
+    "description": "Title of dialog warning the user about battery optimization being active when persistent connection is selected"
+  },
+  "batteryOptimizationWarningContent": "На цьому пристрої активна оптимізація батареї. Це може призвести до пропущених дзвінків, коли екран вимкнено. Вимкніть її, щоб підтримувати постійне з'єднання.",
+  "@batteryOptimizationWarningContent": {
+    "type": "text",
+    "description": "Content of dialog warning the user about battery optimization when persistent connection is selected"
+  },
+  "batteryOptimizationWarningOpenSettings": "Відкрити налаштування",
+  "@batteryOptimizationWarningOpenSettings": {
+    "type": "text",
+    "description": "Button label to open battery settings from the battery optimization warning dialog"
+  },
   "presence_activity_appointment_name": "На зустрічі",
   "@presence_activity_appointment_name": {},
   "presence_activity_away_name": "Відійшов",
@@ -1182,6 +1254,18 @@
   "@presence_infoView_title": {},
   "presence_infoView_updated": "Оновлено:",
   "@presence_infoView_updated": {},
+  "presence_infoView_source": "Джерело: {source}",
+  "@presence_infoView_source": {
+    "placeholders": {
+      "source": {}
+    }
+  },
+  "presence_infoView_source_direct": "напряму",
+  "@presence_infoView_source_direct": {},
+  "presence_infoView_source_sip": "sip",
+  "@presence_infoView_source_sip": {},
+  "presence_infoView_source_sipAndDirect": "sip і напряму",
+  "@presence_infoView_source_sipAndDirect": {},
   "presence_preset_absent_name": "Відсутній",
   "@presence_preset_absent_name": {},
   "presence_preset_absent_note": "Відсутній",
@@ -1246,6 +1330,8 @@
   "@presence_settings_note_tooltip": {},
   "presence_settings_presets_label": "Виберіть пресет",
   "@presence_settings_presets_label": {},
+  "presence_settings_presets_label_custom": "Ручна конфігурація",
+  "@presence_settings_presets_label_custom": {},
   "presence_settings_presets_title": "Пресети:",
   "@presence_settings_presets_title": {},
   "presence_settings_statusIcon_none": "Немає",
@@ -1310,6 +1396,22 @@
   "@request_StatusCode": {},
   "request_StatusName": "Назва статусу запиту",
   "@request_StatusName": {},
+  "sessionStatus_AppBar_waitingForNetwork": "Очікування мережі...",
+  "@sessionStatus_AppBar_waitingForNetwork": {
+    "description": "Shown in the main app bar when the device has no internet connectivity and the app is waiting for network access."
+  },
+  "sessionStatus_AppBar_waitingForConnection": "Очікування підключення...",
+  "@sessionStatus_AppBar_waitingForConnection": {
+    "description": "Shown in the main app bar when the app is trying to establish or restore a connection to backend services."
+  },
+  "sessionStatus_AppBar_disconnected": "Відключено",
+  "@sessionStatus_AppBar_disconnected": {
+    "description": "Shown in the main app bar when the app is disconnected from backend services."
+  },
+  "sessionStatus_AppBar_connecting": "Підключення...",
+  "@sessionStatus_AppBar_connecting": {
+    "description": "Shown in the main app bar while the app is actively connecting to backend services."
+  },
   "sessionStatus_pushNotificationServiceProblem": "Проблема з налаштуванням служби пуш-сповіщень",
   "@sessionStatus_pushNotificationServiceProblem": {},
   "session_Teardown_progressText": "Вихід із системи...",
@@ -1334,6 +1436,8 @@
   "@settings_AccountDeleteConfirmDialog_content": {},
   "settings_AccountDeleteConfirmDialog_title": "Підтвердіть видалення облікового запису",
   "@settings_AccountDeleteConfirmDialog_title": {},
+  "settings_AccountDeleteNotSupported_message": "На жаль, ваш продукт не підтримує видалення облікового запису.",
+  "@settings_AccountDeleteNotSupported_message": {},
   "settings_AppBarTitle_myAccount": "Мій обліковий запис",
   "@settings_AppBarTitle_myAccount": {},
   "settings_audioProcessing_Section_AGC_title": "Автоматичне регулювання посилення",
@@ -1436,6 +1540,10 @@
   "@settings_encoding_Section_packetization_title": {},
   "settings_encoding_Section_packetization_tooltip": "Налаштування часу пакетування аудіо в мілісекундах, можна використовувати для зменшення затримки аудіо або вирішення проблем із розміром MTU мережі",
   "@settings_encoding_Section_packetization_tooltip": {},
+  "settings_encoding_Section_packetization_warning_title": "Увага:",
+  "@settings_encoding_Section_packetization_warning_title": {},
+  "settings_encoding_Section_packetization_warning_message": "Деякі кодеки можуть погано працювати з нестандартними значеннями ptime, що спричиняє чутні збої або тишу. Використовуйте лише якщо розумієте, що робите.",
+  "@settings_encoding_Section_packetization_warning_message": {},
   "settings_encoding_Section_preset": "Налаштування",
   "@settings_encoding_Section_preset": {},
   "settings_encoding_Section_preset_balance": "Збалансований",

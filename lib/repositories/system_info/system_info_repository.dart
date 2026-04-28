@@ -182,6 +182,9 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
   }
 
   @override
+  bool get isActive => true;
+
+  @override
   Future<void> refresh() async {
     _logger.info('Background refresh started');
     try {

@@ -24,8 +24,8 @@ String _handshakeJson({int keepaliveInterval = _kKeepaliveIntervalMs}) {
     'keepalive_interval': keepaliveInterval,
     'registration': {'status': 'registered'},
     'lines': [],
-    'user_active_calls': [],
-    'presence_contacts_info': {},
+    'dialog_infos': [],
+    'presence_infos': [],
     'guest_line': null,
   });
 }

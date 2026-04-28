@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
@@ -54,6 +55,39 @@ class CrashlyticsUtils {
   static void log(String message) {
     FirebaseCrashlytics.instance.log(message);
   }
+
+  /// Records an caught error that is needed to be reported, non fatal by default.
+  ///
+  /// [exception] can be any object that can be transformed into a string, but it's best to use an Exception for proper grouping in Crashlytics.
+  /// [stack] is the stack trace associated with the error. If not available, you can use `StackTrace.current` to capture the current stack.
+  ///
+  /// [fatal] indicates whether this error should be treated as fatal in Crashlytics (affects how it's grouped and displayed in the dashboard).
+  ///
+  /// [reason] is an optional string providing additional context about the error.
+  /// [information] is an optional iterable of objects that can provide extra details about the error, which will be included in report.
+  static Future<void> recordError(
+    dynamic exception, {
+    StackTrace? stack,
+    bool fatal = false,
+    dynamic reason,
+    Iterable<Object> information = const [],
+    bool skipInDebug = true,
+    bool skipNetwork = true,
+  }) async {
+    if (kDebugMode && skipInDebug) return;
+    if (skipNetwork && _isTransientNetworkError(exception)) return;
+
+    await FirebaseCrashlytics.instance.recordError(
+      exception,
+      stack,
+      reason: reason,
+      information: information,
+      fatal: fatal,
+    );
+  }
+
+  static bool _isTransientNetworkError(Object error) =>
+      error is SocketException || error is TimeoutException || error is TlsException;
 
   /// Used for reporting errors manually triggered by the user via the
   /// "report a problem" feature. This is not for silent/automatic error

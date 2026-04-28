@@ -3,9 +3,24 @@ import 'package:flutter/material.dart';
 const kApiClientConnectionTimeout = Duration(seconds: 5);
 
 const kSignalingClientConnectionTimeout = Duration(seconds: 10);
+
+/// How long to wait for signaling to reconnect after an outgoing call is
+/// already registered with the system call UI (dialing state).
+///
+/// Longer than [kSignalingClientConnectionTimeout] because the user is
+/// looking at the call screen and expects the call to survive a brief
+/// network interruption (e.g. switching from Wi-Fi to LTE).
+const kOutgoingCallSignalingWaitTimeout = Duration(seconds: 30);
 const kCallRoutingStateTimeout = Duration(seconds: 10);
 const kSignalingClientReconnectDelay = Duration(seconds: 3);
 const kSignalingClientFastReconnectDelay = Duration(seconds: 1);
+
+/// How long [WebtritSignalingService.connect] waits for a terminal event
+/// (Connected / Disconnected / ConnectionFailed) before resetting
+/// [_startPending] and retrying. Covers the case where the background isolate
+/// accepts the connect command but never sends a response — e.g. a WebSocket
+/// upgrade that hangs at the OS/TCP level without timing out.
+const kSignalingStartPendingTimeout = Duration(seconds: 30);
 
 const kPeerConnectionRetrieveTimeout = Duration(seconds: 5);
 
@@ -52,6 +67,7 @@ const kVoicemailFeatureFlag = 'voicemail';
 const kSystemNotificationsFeatureFlag = 'notifications';
 const kSystemNotificationsPushFeatureFlag = 'notificationsPush';
 const kSipPresenceFeatureFlag = 'sipPresence';
+const kSipDialogsFeatureFlag = 'sipDialogs';
 
 const kSystemNotificationsTask = 'systemNotificationsTask';
 const kSystemNotificationsTaskId = 'systemNotificationsTask-id';

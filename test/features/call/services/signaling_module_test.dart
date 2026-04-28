@@ -1,12 +1,13 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
+
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/features/call/services/signaling_module.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 // ---------------------------------------------------------------------------
 // Fakes / Mocks
@@ -20,6 +21,8 @@ class _FakeSignalingClient extends Fake implements WebtritSignalingClient {
 
   bool disconnected = false;
   int? lastDisconnectCode;
+  int executeCallCount = 0;
+  final Queue<Object?> _executeResponses = Queue<Object?>();
 
   @override
   void listen({
@@ -41,13 +44,21 @@ class _FakeSignalingClient extends Fake implements WebtritSignalingClient {
   }
 
   @override
-  Future<void> execute(Request request, [Duration? timeout]) async {}
+  Future<void> execute(Request request, [Duration? timeout]) async {
+    executeCallCount += 1;
+    if (_executeResponses.isEmpty) return;
+    final response = _executeResponses.removeFirst();
+    if (response != null) throw response;
+  }
 
   // Helpers to inject server-side messages in tests.
   void injectHandshake(StateHandshake handshake) => _onStateHandshake?.call(handshake);
   void injectEvent(Event event) => _onEvent?.call(event);
   void injectError(Object error, [StackTrace? st]) => _onError?.call(error, st);
   void injectDisconnect(int? code, String? reason) => _onDisconnect?.call(code, reason);
+  void enqueueExecuteTimeout() => _executeResponses.add(WebtritSignalingTransactionTimeoutException(1, 'tx-timeout'));
+  void enqueueExecuteError(Object error) => _executeResponses.add(error);
+  void enqueueExecuteSuccess() => _executeResponses.add(null);
 }
 
 /// Variant of [_FakeSignalingClient] whose [disconnect] always throws.
@@ -129,8 +140,8 @@ final _kHandshake = StateHandshake(
   timestamp: 1705322000000,
   registration: const Registration(status: RegistrationStatus.registered),
   lines: const [],
-  userActiveCalls: const [],
-  contactsPresenceInfo: const {},
+  dialogInfos: const [],
+  presenceInfos: const [],
   guestLine: null,
 );
 
@@ -138,13 +149,17 @@ final _kHandshake = StateHandshake(
 // Module builder
 // ---------------------------------------------------------------------------
 
-SignalingModule _buildModule(SignalingClientFactory factory) => SignalingModule(
+SignalingModuleImpl _buildModule(SignalingClientFactory factory) => SignalingModuleImpl(
   coreUrl: 'https://example.com',
   tenantId: 'test-tenant',
   token: 'test-token',
   trustedCertificates: TrustedCertificates.empty,
-  signalingClientFactory: factory,
+  connectionTimeout: kSignalingClientConnectionTimeout,
+  reconnectDelay: kSignalingClientReconnectDelay,
+  clientFactory: factory,
 );
+
+Request _buildRequest() => HangupRequest(transaction: 'tx-1', line: 0, callId: 'call-1');
 
 // ---------------------------------------------------------------------------
 // Tests
@@ -269,111 +284,6 @@ void main() {
 
   // -------------------------------------------------------------------------
 
-  group('SignalingModule - isRepeated deduplication', () {
-    test('first failure has isRepeated: false', () async {
-      final error = Exception('socket error');
-      final module = _buildModule(_failingFactory(error));
-      addTearDown(module.dispose);
-
-      SignalingConnectionFailed? failed;
-      module.events.listen((e) {
-        if (e is SignalingConnectionFailed) failed = e;
-      });
-
-      module.connect();
-      await pumpEventQueue();
-
-      expect(failed?.isRepeated, isFalse);
-    });
-
-    test('same error on second attempt has isRepeated: true', () async {
-      final error = Exception('socket error');
-      final module = _buildModule(_failingFactory(error));
-      addTearDown(module.dispose);
-
-      final failures = <SignalingConnectionFailed>[];
-      module.events.listen((e) {
-        if (e is SignalingConnectionFailed) failures.add(e);
-      });
-
-      module.connect();
-      await pumpEventQueue();
-      module.connect();
-      await pumpEventQueue();
-
-      expect(failures, hasLength(2));
-      expect(failures[0].isRepeated, isFalse);
-      expect(failures[1].isRepeated, isTrue);
-    });
-
-    test('different error resets isRepeated to false', () async {
-      final errors = [Exception('error A'), Exception('error B')];
-      var callCount = 0;
-
-      final module = _buildModule(
-        ({
-          required Uri url,
-          required String tenantId,
-          required String token,
-          required Duration connectionTimeout,
-          required TrustedCertificates certs,
-          required bool force,
-        }) async => throw errors[callCount++ < 1 ? 0 : 1],
-      );
-      addTearDown(module.dispose);
-
-      final failures = <SignalingConnectionFailed>[];
-      module.events.listen((e) {
-        if (e is SignalingConnectionFailed) failures.add(e);
-      });
-
-      module.connect();
-      await pumpEventQueue();
-      module.connect();
-      await pumpEventQueue();
-
-      expect(failures[0].isRepeated, isFalse);
-      expect(failures[1].isRepeated, isFalse);
-    });
-
-    test('successful connect clears error history - next failure is isRepeated: false', () async {
-      final error = Exception('socket error');
-      var failNext = false;
-
-      final module = _buildModule(({
-        required Uri url,
-        required String tenantId,
-        required String token,
-        required Duration connectionTimeout,
-        required TrustedCertificates certs,
-        required bool force,
-      }) async {
-        if (failNext) throw error;
-        return _FakeSignalingClient();
-      });
-      addTearDown(module.dispose);
-
-      // First: succeed (clears history).
-      module.connect();
-      await pumpEventQueue();
-
-      failNext = true;
-
-      // Second: fail - should NOT be repeated even if same error object.
-      SignalingConnectionFailed? failed;
-      module.events.listen((e) {
-        if (e is SignalingConnectionFailed) failed = e;
-      });
-
-      module.connect();
-      await pumpEventQueue();
-
-      expect(failed?.isRepeated, isFalse);
-    });
-  });
-
-  // -------------------------------------------------------------------------
-
   group('SignalingModule - disconnect()', () {
     test('emits SignalingDisconnecting and calls client.disconnect', () async {
       final client = _FakeSignalingClient();
@@ -405,6 +315,72 @@ void main() {
       await module.disconnect();
 
       expect(events, isEmpty);
+    });
+  });
+
+  // -------------------------------------------------------------------------
+
+  group('SignalingModule - execute()', () {
+    test('retries timeout up to 3 times and succeeds on the next attempt', () async {
+      final client = _FakeSignalingClient()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteSuccess();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+
+      await expectLater(module.execute(_buildRequest()), completes);
+      expect(client.executeCallCount, equals(4));
+    });
+
+    test('throws timeout error after retry limit is exhausted', () async {
+      final client = _FakeSignalingClient()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteTimeout();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+
+      await expectLater(module.execute(_buildRequest()), throwsA(isA<WebtritSignalingTransactionTimeoutException>()));
+      expect(client.executeCallCount, equals(4));
+    });
+
+    test('does not retry non-timeout execute errors', () async {
+      final client = _FakeSignalingClient()..enqueueExecuteError(StateError('execute failed'));
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      module.connect();
+      await pumpEventQueue();
+
+      await expectLater(module.execute(_buildRequest()), throwsA(isA<StateError>()));
+      expect(client.executeCallCount, equals(1));
+    });
+
+    test('queued execute is flushed on connect and uses timeout retries', () async {
+      final client = _FakeSignalingClient()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteTimeout()
+        ..enqueueExecuteSuccess();
+      final module = _buildModule(_successFactory(client));
+      addTearDown(module.dispose);
+
+      final pending = module.execute(_buildRequest());
+      expect(pending, isNotNull);
+
+      module.connect();
+      await pumpEventQueue();
+
+      await expectLater(pending, completes);
+      expect(client.executeCallCount, equals(3));
     });
   });
 
@@ -507,28 +483,6 @@ void main() {
       expect(failed, isNotNull);
       expect(failed!.error, same(error));
       expect(module.signalingClient, isNull);
-    });
-
-    test('_onError sets isRepeated: true on repeated server error', () async {
-      final client = _FakeSignalingClient();
-      final module = _buildModule(_successFactory(client));
-      addTearDown(module.dispose);
-
-      module.connect();
-      await pumpEventQueue();
-
-      final failures = <SignalingConnectionFailed>[];
-      module.events.listen((e) {
-        if (e is SignalingConnectionFailed) failures.add(e);
-      });
-
-      final error = Exception('keepalive timeout');
-      client.injectError(error);
-      client.injectError(error);
-      await pumpEventQueue();
-
-      expect(failures[0].isRepeated, isFalse);
-      expect(failures[1].isRepeated, isTrue);
     });
   });
 
@@ -691,7 +645,6 @@ void main() {
 
       expect(events[0], isA<SignalingConnecting>());
       expect(events[1], isA<SignalingConnectionFailed>());
-      expect((events[1] as SignalingConnectionFailed).isRepeated, isFalse);
       expect(events[2], isA<SignalingConnecting>());
       expect(events[3], isA<SignalingConnected>());
       expect(module.signalingClient, same(goodClient));
@@ -1367,9 +1320,9 @@ void main() {
   // the client concurrently tries to send a hangup request.
   //
   // The key asymmetry:
-  //   - Non-intentional 4610 → recommendedReconnectDelay != null → CallBloc schedules reconnect.
-  //   - Intentional disconnect() followed by server 4610 → recommendedReconnectDelay == null
-  //     → CallBloc does NOT schedule a reconnect automatically.
+  //   - Non-intentional 4610 -> recommendedReconnectDelay != null -> CallBloc schedules reconnect.
+  //   - Intentional disconnect() followed by server 4610 -> recommendedReconnectDelay == null
+  //     -> CallBloc does NOT schedule a reconnect automatically.
   //
   // The second case was the root cause of WT-1214 (cannot make calls after
   // blind transfer): post-transfer cleanup called disconnect() (intentional),

@@ -363,6 +363,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get contacts_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
+  String get contacts_DialogsInfoView_title => 'Інформація про дзвінки (BLF):';
+
+  @override
+  String contacts_ContactTile_inCall(Object destination) {
+    return 'На дроті з: $destination';
+  }
+
+  @override
+  String get contacts_ContactScreen_options => 'Параметри:';
+
+  @override
+  String get contacts_ContactScreen_presenceViaSip => 'Підписатись на статус юзера через SIP (Presence)';
+
+  @override
+  String get contacts_ContactScreen_presenceViaSip_tooltip =>
+      'Окрім прямого обміну даними (додаток-до-додатку), підписка через функцію SIP-Presence дозволяє отримувати інформацію про статус від інших користувацьких агентів (настільні телефони, окремі софтфони тощо). Рекомендується вмикати лише якщо контакт використовує застарілі клієнти і ви хочете бачити його статус на всіх пристроях.';
+
+  @override
+  String get contacts_ContactScreen_dialogsViaSipBlf => 'Підписатись на статус викликів через SIP (BLF/Dialogs)';
+
+  @override
+  String get contacts_ContactScreen_dialogsViaSipBlf_tooltip =>
+      'Окрім прямого обміну даними (додаток-до-додатку), підписка через функцію SIP-Dialogs дозволяє отримувати інформацію про стан викликів від інших користувацьких агентів (настільні телефони, окремі софтфони тощо). Рекомендується вмикати лише якщо контакт використовує застарілі клієнти і ви хочете бачити стан його викликів на всіх пристроях.';
+
+  @override
   String get copyToClipboard_floatingSnackBar => 'Текст скопійовано';
 
   @override
@@ -736,6 +761,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_RequestFailurePhoneNotFoundError => 'Номер телефону не знайдено';
 
   @override
+  String get login_RequestFailureIncorrectCredentialsError => 'Невірне ім\'я користувача або пароль';
+
+  @override
+  String get login_RequestFailureUserNotFoundError => 'Користувача не знайдено';
+
+  @override
   String get login_RequestFailureUnconfiguredBundleIdError =>
       'Помилка конфігурації сервера застосунку - сповістіть свого постачальника послуг';
 
@@ -855,6 +886,28 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get logRecordsConsole_Text_failure => 'Виникла неочікувана помилка';
+
+  @override
+  String logRecordsConsole_Text_recordsCountHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count записи',
+      many: '$count записів',
+      few: '$count записи',
+      one: '$count запис',
+    );
+    return 'Відображено останні $_temp0. Використайте Поділитись для експорту повного журналу.';
+  }
+
+  @override
+  String get logRecordsConsole_Button_infoClose => 'Зрозуміло';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_info => 'Інформація';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_clear => 'Очистити';
 
   @override
   String get main_BottomNavigationBarItemLabel_chats => 'Чати';
@@ -1166,6 +1219,10 @@ class AppLocalizationsUk extends AppLocalizations {
       'Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ';
 
   @override
+  String get notifications_errorSnackBar_blindTransferFailed =>
+      'Переадресація не вдалась, повертаємо до активного дзвінка';
+
+  @override
   String get notifications_errorSnackBar_appOffline => 'Ваш застосунок зараз офлайн.';
 
   @override
@@ -1182,6 +1239,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBar_callNegotiationTimeout => 'Не вдається здійснити виклик, спробуйте пізніше';
 
   @override
+  String get notifications_errorSnackBar_generalUnableToCall => 'Не вдається здійснити виклик, спробуйте пізніше';
+
+  @override
+  String get notifications_errorSnackBar_callServiceBusyLine =>
+      'Неможливо здійснити дзвінок зараз, оскільки лінія зайнята. Спробуйте пізніше.';
+
+  @override
   String get notifications_errorSnackBar_callSignalingClientNotConnect =>
       'Не вдається ініціювати дзвінок, перевірте статус з\'єднання';
 
@@ -1191,6 +1255,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'Немає вільних ліній для ініціювання дзвінка';
+
+  @override
+  String get notifications_errorSnackBar_callMediaTrackSetup => 'Не вдалося налаштувати дзвінок, спробуйте ще раз';
 
   @override
   String get notifications_errorSnackBar_callUserMedia =>
@@ -1337,6 +1404,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get persistentConnectionReminderTitle => 'Важливе нагадування';
 
   @override
+  String get batteryOptimizationWarningTitle => 'Оптимізацію батареї активовано';
+
+  @override
+  String get batteryOptimizationWarningContent =>
+      'На цьому пристрої активна оптимізація батареї. Це може призвести до пропущених дзвінків, коли екран вимкнено. Вимкніть її, щоб підтримувати постійне з\'єднання.';
+
+  @override
+  String get batteryOptimizationWarningOpenSettings => 'Відкрити налаштування';
+
+  @override
   String get presence_activity_appointment_name => 'На зустрічі';
 
   @override
@@ -1410,6 +1487,20 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get presence_infoView_updated => 'Оновлено:';
+
+  @override
+  String presence_infoView_source(Object source) {
+    return 'Джерело: $source';
+  }
+
+  @override
+  String get presence_infoView_source_direct => 'напряму';
+
+  @override
+  String get presence_infoView_source_sip => 'sip';
+
+  @override
+  String get presence_infoView_source_sipAndDirect => 'sip і напряму';
 
   @override
   String get presence_preset_absent_name => 'Відсутній';
@@ -1512,6 +1603,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get presence_settings_presets_label => 'Виберіть пресет';
 
   @override
+  String get presence_settings_presets_label_custom => 'Ручна конфігурація';
+
+  @override
   String get presence_settings_presets_title => 'Пресети:';
 
   @override
@@ -1592,6 +1686,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get request_StatusName => 'Назва статусу запиту';
 
   @override
+  String get sessionStatus_AppBar_waitingForNetwork => 'Очікування мережі...';
+
+  @override
+  String get sessionStatus_AppBar_waitingForConnection => 'Очікування підключення...';
+
+  @override
+  String get sessionStatus_AppBar_disconnected => 'Відключено';
+
+  @override
+  String get sessionStatus_AppBar_connecting => 'Підключення...';
+
+  @override
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
 
   @override
@@ -1623,6 +1729,10 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_AccountDeleteConfirmDialog_title => 'Підтвердіть видалення облікового запису';
+
+  @override
+  String get settings_AccountDeleteNotSupported_message =>
+      'На жаль, ваш продукт не підтримує видалення облікового запису.';
 
   @override
   String get settings_AppBarTitle_myAccount => 'Мій обліковий запис';
@@ -1787,6 +1897,13 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get settings_encoding_Section_packetization_tooltip =>
       'Налаштування часу пакетування аудіо в мілісекундах, можна використовувати для зменшення затримки аудіо або вирішення проблем із розміром MTU мережі';
+
+  @override
+  String get settings_encoding_Section_packetization_warning_title => 'Увага:';
+
+  @override
+  String get settings_encoding_Section_packetization_warning_message =>
+      'Деякі кодеки можуть погано працювати з нестандартними значеннями ptime, що спричиняє чутні збої або тишу. Використовуйте лише якщо розумієте, що робите.';
 
   @override
   String get settings_encoding_Section_preset => 'Налаштування';
@@ -2702,4 +2819,27 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get cdr_disconnectReason_dtlTransitIsNotMyNodeId => 'DTL-транзит не відповідає моєму ID вузла';
+
+  @override
+  String get devTools_AppBarTitle => 'Dev Tools';
+
+  @override
+  String get devTools_signalingService_groupTitle => 'Signaling Service';
+
+  @override
+  String get devTools_signalingService_simulateKill_title => 'Simulate service kill';
+
+  @override
+  String get devTools_signalingService_simulateKill_subtitle =>
+      'Stops the foreground service without graceful disconnect';
+
+  @override
+  String get devTools_signalingService_simulateKill_confirmMessage =>
+      'The signaling service will stop immediately. It will restart automatically if credentials are valid.';
+
+  @override
+  String get devTools_signalingService_simulateKill_confirm => 'Kill';
+
+  @override
+  String get devTools_signalingService_simulateKill_cancel => 'Cancel';
 }

@@ -9,8 +9,8 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 
-class DialogInfo extends StatefulWidget {
-  const DialogInfo(
+class DialogChatInfo extends StatefulWidget {
+  const DialogChatInfo(
     this.userId,
     this.participantId, {
     required this.isAudioCallEnabled,
@@ -24,10 +24,10 @@ class DialogInfo extends StatefulWidget {
   final bool isVideoCallEnabled;
 
   @override
-  State<DialogInfo> createState() => _DialogInfoState();
+  State<DialogChatInfo> createState() => _DialogChatInfoState();
 }
 
-class _DialogInfoState extends State<DialogInfo> {
+class _DialogChatInfoState extends State<DialogChatInfo> {
   late final conversationCubit = context.read<ConversationCubit>();
   late final _callController = CallControllerScope.of(context);
 
@@ -92,6 +92,7 @@ class _DialogInfoState extends State<DialogInfo> {
                             thumbnailUrl: contact?.thumbnailUrl,
                             registered: contact?.registered,
                             presenceInfo: contact?.presenceInfo,
+                            dialogInfo: contact?.dialogInfo,
                             radius: 50,
                           ),
                           const SizedBox(height: 8),

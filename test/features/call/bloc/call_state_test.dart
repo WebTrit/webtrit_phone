@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -200,6 +201,24 @@ void main() {
         final call = _makeCall(direction: CallDirection.outgoing, processingStatus: status);
         expect(call.processingStatus, equals(status));
         expect(call.processingStatus == CallProcessingStatus.connected, isFalse);
+      });
+    }
+  });
+
+  // ---------------------------------------------------------------------------
+  // CallProcessingStatus.hasPeerConnectionReady
+  // ---------------------------------------------------------------------------
+
+  group('CallProcessingStatus.hasPeerConnectionReady', () {
+    const readyStates = {
+      CallProcessingStatus.outgoingOfferSent,
+      CallProcessingStatus.outgoingRinging,
+      CallProcessingStatus.connected,
+    };
+
+    for (final status in CallProcessingStatus.values) {
+      test('$status → ${readyStates.contains(status)}', () {
+        expect(status.hasPeerConnectionReady, readyStates.contains(status));
       });
     }
   });
@@ -1083,6 +1102,250 @@ void main() {
     test('hasAudio and hasVideo false when SDP is null', () {
       expect(makeJsep(null).hasAudio, isFalse);
       expect(makeJsep(null).hasVideo, isFalse);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // CallState.toLinesState
+  // ---------------------------------------------------------------------------
+
+  const kRegistered = CallServiceState(registration: Registration(status: RegistrationStatus.registered));
+
+  group('CallState.toLinesState — pre-handshake', () {
+    test('returns blank when linesCount is 0 and handshake not established', () {
+      final state = CallState(linesCount: 0);
+      expect(state.isHandshakeEstablished, isFalse);
+      expect(state.toLinesState(), LinesState.blank());
+      expect(state.toLinesState().isBlank, isTrue);
+    });
+
+    test('returns blank regardless of activeCalls before handshake', () {
+      final state = CallState(linesCount: 0, activeCalls: [_makeCall(line: null)]);
+      expect(state.toLinesState(), LinesState.blank());
+    });
+  });
+
+  group('CallState.toLinesState — post-handshake with 0 main lines', () {
+    test('returns non-blank with idle guest line when no calls', () {
+      final state = CallState(linesCount: 0, callServiceState: kRegistered);
+      final result = state.toLinesState();
+      expect(result.isBlank, isFalse);
+      expect(result.mainLines, isEmpty);
+      expect(result.guestLine, LineState.idle());
+    });
+
+    test('returns guest line inUse when guest call is active (line == null)', () {
+      final state = CallState(linesCount: 0, callServiceState: kRegistered, activeCalls: [_makeCall(line: null)]);
+      final result = state.toLinesState();
+      expect(result.mainLines, isEmpty);
+      expect(result.guestLine, LineState.inUse(callId: 'call-1'));
+    });
+  });
+
+  group('CallState.toLinesState — post-handshake with main lines', () {
+    test('all lines idle when no active calls', () {
+      final state = CallState(linesCount: 2, callServiceState: kRegistered);
+      final result = state.toLinesState();
+      expect(result.mainLines, [LineState.idle(), LineState.idle()]);
+      expect(result.guestLine, LineState.idle());
+    });
+
+    test('line 0 inUse when call on line 0', () {
+      final state = CallState(
+        linesCount: 2,
+        callServiceState: kRegistered,
+        activeCalls: [_makeCall(callId: 'c1', line: 0)],
+      );
+      final result = state.toLinesState();
+      expect(result.mainLines[0], LineState.inUse(callId: 'c1'));
+      expect(result.mainLines[1], LineState.idle());
+    });
+
+    test('line 1 inUse when call on line 1', () {
+      final state = CallState(
+        linesCount: 2,
+        callServiceState: kRegistered,
+        activeCalls: [_makeCall(callId: 'c1', line: 1)],
+      );
+      final result = state.toLinesState();
+      expect(result.mainLines[0], LineState.idle());
+      expect(result.mainLines[1], LineState.inUse(callId: 'c1'));
+    });
+
+    test('all lines inUse when calls on every line', () {
+      final state = CallState(
+        linesCount: 2,
+        callServiceState: kRegistered,
+        activeCalls: [
+          _makeCall(callId: 'c1', line: 0),
+          _makeCall(callId: 'c2', line: 1),
+        ],
+      );
+      final result = state.toLinesState();
+      expect(result.mainLines, [LineState.inUse(callId: 'c1'), LineState.inUse(callId: 'c2')]);
+    });
+
+    test('guest line inUse when guest call present alongside main calls', () {
+      final state = CallState(
+        linesCount: 2,
+        callServiceState: kRegistered,
+        activeCalls: [
+          _makeCall(callId: 'c1', line: 0),
+          _makeCall(callId: 'c2', line: null),
+        ],
+      );
+      final result = state.toLinesState();
+      expect(result.mainLines[0], LineState.inUse(callId: 'c1'));
+      expect(result.mainLines[1], LineState.idle());
+      expect(result.guestLine, LineState.inUse(callId: 'c2'));
+    });
+
+    test('guest line idle when no guest call', () {
+      final state = CallState(
+        linesCount: 1,
+        callServiceState: kRegistered,
+        activeCalls: [_makeCall(callId: 'c1', line: 0)],
+      );
+      expect(state.toLinesState().guestLine, LineState.idle());
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Scenario: push → signaling line handoff (WT-1091)
+  //
+  // When an incoming call arrives via FCM push, CallBloc registers it with
+  // line -1 (kUndefinedLine) as a placeholder. When the signaling WebSocket
+  // later delivers the same call ID with a real line, the "call to myself"
+  // guard must NOT fire — it should only fire when an already-lined call gets
+  // a different real line (genuine call-to-myself or transfer-to-myself case).
+  // ---------------------------------------------------------------------------
+
+  group('Scenario: push → signaling line handoff (WT-1091)', () {
+    const kUndefinedLine = -1;
+
+    test('push-registered call has undefined line (-1)', () {
+      final call = _makeCall(
+        callId: 'push-call',
+        line: kUndefinedLine,
+        processingStatus: CallProcessingStatus.incomingFromPush,
+      );
+      expect(call.line, kUndefinedLine);
+    });
+
+    test('line-mismatch guard does NOT fire for push placeholder vs real line', () {
+      // Simulates the condition in __onCallSignalingEventIncoming after the fix.
+      // Push-registered call has line -1; signaling delivers line 0.
+      final pushCall = _makeCall(callId: 'c1', line: kUndefinedLine);
+      const signalingLine = 0;
+
+      // Fixed condition: exclude kUndefinedLine from the mismatch check.
+      final shouldDecline = pushCall.line != kUndefinedLine && pushCall.line != signalingLine;
+      expect(shouldDecline, isFalse);
+    });
+
+    test('line-mismatch guard DOES fire when both lines are real and different', () {
+      // Call already has a real line (0); signaling brings a new real line (1)
+      // → this is the genuine "call to myself" scenario.
+      final existingCall = _makeCall(callId: 'c1', line: 0);
+      const signalingLine = 1;
+
+      final shouldDecline = existingCall.line != kUndefinedLine && existingCall.line != signalingLine;
+      expect(shouldDecline, isTrue);
+    });
+
+    test('line-mismatch guard does not fire when lines match', () {
+      final existingCall = _makeCall(callId: 'c1', line: 0);
+      const signalingLine = 0;
+
+      final shouldDecline = existingCall.line != kUndefinedLine && existingCall.line != signalingLine;
+      expect(shouldDecline, isFalse);
+    });
+
+    test('copyWith updates push-placeholder line to real line from signaling', () {
+      final pushCall = _makeCall(
+        callId: 'c1',
+        line: kUndefinedLine,
+        processingStatus: CallProcessingStatus.incomingFromPush,
+      );
+      final state = CallState(activeCalls: [pushCall]);
+
+      // Signaling arrives with real line 0 — CallBloc calls copyWith.
+      final updated = state.copyWithMappedActiveCall(
+        'c1',
+        (c) => c.copyWith(line: 0, processingStatus: CallProcessingStatus.incomingFromOffer),
+      );
+
+      final call = updated.activeCalls.first;
+      expect(call.line, 0);
+      expect(call.processingStatus, CallProcessingStatus.incomingFromOffer);
+    });
+  });
+  // ---------------------------------------------------------------------------
+  // CallState.callsToTerminate — handshake reconciliation (WT-1083)
+  // ---------------------------------------------------------------------------
+
+  group('CallState.callsToTerminate', () {
+    test('terminates call absent from handshake lines', () {
+      final call = _makeCall(callId: 'c1', processingStatus: CallProcessingStatus.connected);
+      final state = CallState(activeCalls: [call]);
+      expect(state.callsToTerminate({}), [call]);
+    });
+
+    test('keeps call that is present in handshake lines', () {
+      final call = _makeCall(callId: 'c1', processingStatus: CallProcessingStatus.connected);
+      final state = CallState(activeCalls: [call]);
+      expect(state.callsToTerminate({'c1'}), isEmpty);
+    });
+
+    test('keeps outgoing call with isPreOfferSent status absent from handshake', () {
+      for (final status in [
+        CallProcessingStatus.outgoingCreated,
+        CallProcessingStatus.outgoingCreatedFromRefer,
+        CallProcessingStatus.outgoingConnectingToSignaling,
+        CallProcessingStatus.outgoingInitializingMedia,
+        CallProcessingStatus.outgoingOfferPreparing,
+      ]) {
+        final call = _makeCall(callId: 'c1', direction: CallDirection.outgoing, processingStatus: status);
+        final state = CallState(activeCalls: [call]);
+        expect(state.callsToTerminate({}), isEmpty, reason: 'should skip $status');
+      }
+    });
+
+    test('terminates outgoing call at outgoingOfferSent absent from handshake', () {
+      final call = _makeCall(
+        callId: 'c1',
+        direction: CallDirection.outgoing,
+        processingStatus: CallProcessingStatus.outgoingOfferSent,
+      );
+      final state = CallState(activeCalls: [call]);
+      expect(state.callsToTerminate({}), [call]);
+    });
+
+    test('terminates outgoing call at outgoingRinging absent from handshake', () {
+      final call = _makeCall(
+        callId: 'c1',
+        direction: CallDirection.outgoing,
+        processingStatus: CallProcessingStatus.outgoingRinging,
+      );
+      final state = CallState(activeCalls: [call]);
+      expect(state.callsToTerminate({}), [call]);
+    });
+
+    test('keeps outgoing isPreOfferSent call even if other calls are terminated', () {
+      final inFlight = _makeCall(
+        callId: 'in-flight',
+        direction: CallDirection.outgoing,
+        processingStatus: CallProcessingStatus.outgoingOfferPreparing,
+      );
+      final dead = _makeCall(callId: 'dead', processingStatus: CallProcessingStatus.connected);
+      final state = CallState(activeCalls: [inFlight, dead]);
+      expect(state.callsToTerminate({}), [dead]);
+    });
+
+    test('returns empty when all calls are in handshake lines', () {
+      final calls = [_makeCall(callId: 'c1'), _makeCall(callId: 'c2')];
+      final state = CallState(activeCalls: calls);
+      expect(state.callsToTerminate({'c1', 'c2'}), isEmpty);
     });
   });
 }

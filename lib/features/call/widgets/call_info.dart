@@ -87,6 +87,7 @@ class _CallInfoState extends State<CallInfo> {
   void _durationTimerCancel() {
     durationTimer?.cancel();
     durationTimer = null;
+    duration = null;
   }
 
   void _durationTic(DateTime acceptedTime) {

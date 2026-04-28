@@ -87,12 +87,12 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
     return ContactInfoBuilder(
       source: ContactSourceId(ContactSourceType.external, participant.userId),
       builder: (context, contact) {
-        final presenceSource = PresenceViewParams.of(context).viewSource;
+        final hybridPresenceSupport = PresenceViewParams.of(context).hybridPresenceSupport;
         final text = switch (contact) {
           null => context.l10n.messaging_ParticipantName_unknown,
-          _ => switch (presenceSource) {
-            PresenceViewSource.contactInfo => contact.displayTitle,
-            PresenceViewSource.sipPresence => '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
+          _ => switch (hybridPresenceSupport) {
+            true => '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
+            false => contact.displayTitle,
           },
         };
         return ListTile(
@@ -103,6 +103,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
             radius: 20,
             registered: contact?.registered,
             presenceInfo: contact?.presenceInfo,
+            dialogInfo: contact?.dialogInfo,
           ),
           title: Row(
             children: [

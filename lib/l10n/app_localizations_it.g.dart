@@ -357,6 +357,31 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contacts_Text_blingTransferInitiated => 'Trasferimento senza vedere';
 
   @override
+  String get contacts_DialogsInfoView_title => 'Informazioni chiamate (BLF):';
+
+  @override
+  String contacts_ContactTile_inCall(Object destination) {
+    return 'In chiamata: $destination';
+  }
+
+  @override
+  String get contacts_ContactScreen_options => 'Opzioni:';
+
+  @override
+  String get contacts_ContactScreen_presenceViaSip => 'Iscriviti allo stato utente tramite SIP (Presence)';
+
+  @override
+  String get contacts_ContactScreen_presenceViaSip_tooltip =>
+      'Oltre allo scambio diretto di dati (app-to-app), l\'iscrizione tramite la funzione SIP-Presence consente di raccogliere informazioni di presenza da altri user agent (telefoni desktop, softphone standalone, ecc.). Si consiglia di abilitarla solo se il contatto utilizza agent legacy e si desidera vedere lo stato di presenza su tutti i dispositivi.';
+
+  @override
+  String get contacts_ContactScreen_dialogsViaSipBlf => 'Iscriviti allo stato delle chiamate tramite SIP (BLF/Dialogs)';
+
+  @override
+  String get contacts_ContactScreen_dialogsViaSipBlf_tooltip =>
+      'Oltre allo scambio diretto di dati (app-to-app), l\'iscrizione tramite la funzione SIP-Dialogs consente di raccogliere informazioni sullo stato delle chiamate da altri user agent (telefoni desktop, softphone standalone, ecc.). Si consiglia di abilitarla solo se il contatto utilizza agent legacy e si desidera vedere lo stato delle chiamate su tutti i dispositivi.';
+
+  @override
   String get copyToClipboard_floatingSnackBar => 'Testo copiato';
 
   @override
@@ -732,6 +757,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get login_RequestFailurePhoneNotFoundError => 'Numero di telefono non trovato';
 
   @override
+  String get login_RequestFailureIncorrectCredentialsError => 'Nome utente o password non corretti';
+
+  @override
+  String get login_RequestFailureUserNotFoundError => 'Utente non trovato';
+
+  @override
   String get login_RequestFailureUnconfiguredBundleIdError =>
       'Errore di configurazione del backend dell\'app - avvisare il proprio fornitore di servizi';
 
@@ -851,6 +882,26 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get logRecordsConsole_Text_failure => 'Si è verificato un errore imprevisto';
+
+  @override
+  String logRecordsConsole_Text_recordsCountHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Visualizzazione degli ultimi $count record. Usa Condividi per esportare il log completo.',
+      one: 'Visualizzazione dell’ultimo $count record. Usa Condividi per esportare il log completo.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get logRecordsConsole_Button_infoClose => 'Capito';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_info => 'Info';
+
+  @override
+  String get logRecordsConsole_PopupMenuItem_clear => 'Cancella';
 
   @override
   String get main_BottomNavigationBarItemLabel_chats => 'Le chat';
@@ -1162,6 +1213,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'Sei già in linea con il destinatario a cui stai cercando di trasferire alla cieca';
 
   @override
+  String get notifications_errorSnackBar_blindTransferFailed => 'Trasferimento fallito, ritorno alla chiamata attiva';
+
+  @override
   String get notifications_errorSnackBar_appOffline => 'La tua apllicazione è offline';
 
   @override
@@ -1180,6 +1234,14 @@ class AppLocalizationsIt extends AppLocalizations {
       'Impossibile stabilire la chiamata, riprovare più tardi';
 
   @override
+  String get notifications_errorSnackBar_generalUnableToCall =>
+      'Impossibile stabilire la chiamata, riprovare più tardi';
+
+  @override
+  String get notifications_errorSnackBar_callServiceBusyLine =>
+      'Impossibile effettuare la chiamata in questo momento perché la linea è occupata. Riprova più tardi.';
+
+  @override
   String get notifications_errorSnackBar_callSignalingClientNotConnect =>
       'Impossibile eseguire la chiamata, verificare lo stato della connessione';
 
@@ -1189,6 +1251,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBar_callUndefinedLine => 'Nessuna linea disponibile per avviare una chiamata';
+
+  @override
+  String get notifications_errorSnackBar_callMediaTrackSetup => 'Configurazione chiamata fallita, riprova';
 
   @override
   String get notifications_errorSnackBar_callUserMedia =>
@@ -1337,6 +1402,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get persistentConnectionReminderTitle => 'Promemoria importante';
 
   @override
+  String get batteryOptimizationWarningTitle => 'Ottimizzazione batteria attiva';
+
+  @override
+  String get batteryOptimizationWarningContent =>
+      'L\'ottimizzazione della batteria è attiva su questo dispositivo. Ciò potrebbe causare la perdita di chiamate quando lo schermo è spento. Disabilitala per mantenere attiva la connessione persistente.';
+
+  @override
+  String get batteryOptimizationWarningOpenSettings => 'Apri impostazioni';
+
+  @override
   String get presence_activity_appointment_name => 'In appuntamento';
 
   @override
@@ -1410,6 +1485,20 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get presence_infoView_updated => 'Aggiornato:';
+
+  @override
+  String presence_infoView_source(Object source) {
+    return 'Fonte: $source';
+  }
+
+  @override
+  String get presence_infoView_source_direct => 'diretto';
+
+  @override
+  String get presence_infoView_source_sip => 'sip';
+
+  @override
+  String get presence_infoView_source_sipAndDirect => 'sip e diretto';
 
   @override
   String get presence_preset_absent_name => 'Assente';
@@ -1512,6 +1601,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get presence_settings_presets_label => 'Scegli preset';
 
   @override
+  String get presence_settings_presets_label_custom => 'Costume';
+
+  @override
   String get presence_settings_presets_title => 'Preset:';
 
   @override
@@ -1592,6 +1684,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get request_StatusName => 'Nome dello stato';
 
   @override
+  String get sessionStatus_AppBar_waitingForNetwork => 'In attesa della rete...';
+
+  @override
+  String get sessionStatus_AppBar_waitingForConnection => 'In attesa della connessione...';
+
+  @override
+  String get sessionStatus_AppBar_disconnected => 'Disconnesso';
+
+  @override
+  String get sessionStatus_AppBar_connecting => 'Connessione in corso...';
+
+  @override
   String get sessionStatus_pushNotificationServiceProblem =>
       'Problema con la configurazione del servizio di notifiche push';
 
@@ -1624,6 +1728,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_AccountDeleteConfirmDialog_title => 'Conferma eliminazione account';
+
+  @override
+  String get settings_AccountDeleteNotSupported_message =>
+      'Sfortunatamente, il tuo prodotto non supporta l\'eliminazione dell\'account.';
 
   @override
   String get settings_AppBarTitle_myAccount => 'Il mio account';
@@ -1788,6 +1896,13 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get settings_encoding_Section_packetization_tooltip =>
       'Regola il tempo di pacchettizzazione audio in millisecondi, può essere utilizzato per ridurre la latenza audio o risolvere problemi di dimensione MTU di rete';
+
+  @override
+  String get settings_encoding_Section_packetization_warning_title => 'Attenzione:';
+
+  @override
+  String get settings_encoding_Section_packetization_warning_message =>
+      'Alcuni codec potrebbero avere difficoltà con valori ptime non predefiniti, causando glitch audio udibili o silenzio. Usare solo se si sa cosa si sta facendo.';
 
   @override
   String get settings_encoding_Section_preset => 'Preimpostato';
@@ -2712,4 +2827,27 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get cdr_disconnectReason_dtlTransitIsNotMyNodeId => 'Il transito DTL non corrisponde al mio ID nodo';
+
+  @override
+  String get devTools_AppBarTitle => 'Dev Tools';
+
+  @override
+  String get devTools_signalingService_groupTitle => 'Signaling Service';
+
+  @override
+  String get devTools_signalingService_simulateKill_title => 'Simulate service kill';
+
+  @override
+  String get devTools_signalingService_simulateKill_subtitle =>
+      'Stops the foreground service without graceful disconnect';
+
+  @override
+  String get devTools_signalingService_simulateKill_confirmMessage =>
+      'The signaling service will stop immediately. It will restart automatically if credentials are valid.';
+
+  @override
+  String get devTools_signalingService_simulateKill_confirm => 'Kill';
+
+  @override
+  String get devTools_signalingService_simulateKill_cancel => 'Cancel';
 }
