@@ -2720,17 +2720,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           if (peerConnection == null) {
             _logger.warning('__onMutationSignalingCallUpdating: peerConnection is null - most likely some state issue');
           } else {
-            final localStream = activeCall.localStream;
-            final hadLocalVideo = localStream?.getVideoTracks().any((t) => t.enabled) ?? false;
-            if (localStream != null) {
-              await peerConnectionPolicyApplier?.apply(
-                peerConnection,
-                hasRemoteVideo: jsep.hasVideo,
-                localStream: localStream,
-                frontCamera: activeCall.frontCamera,
-              );
-            }
-
             // Optimistic pre-check for glare condition. May be stale because
             // flutter_webrtc caches signalingState and updates it only when the
             // onSignalingState callback fires - not when setLocalDescription completes.
@@ -2758,6 +2747,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
               } else {
                 rethrow;
               }
+            }
+
+            // Apply policy AFTER setRemoteDescription so that any stopped transceivers
+            // from a previous failed negotiation are re-activated by the remote offer
+            // before addTrack runs. If addTrack runs first, it creates a duplicate
+            // transceiver (RFC 8829: stopped transceivers are ineligible for reuse),
+            // which causes setLocalDescription to fail with a mid mismatch.
+            final localStream = activeCall.localStream;
+            final hadLocalVideo = localStream?.getVideoTracks().any((t) => t.enabled) ?? false;
+            if (localStream != null) {
+              await peerConnectionPolicyApplier?.apply(
+                peerConnection,
+                hasRemoteVideo: jsep.hasVideo,
+                localStream: localStream,
+                frontCamera: activeCall.frontCamera,
+              );
             }
 
             // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
