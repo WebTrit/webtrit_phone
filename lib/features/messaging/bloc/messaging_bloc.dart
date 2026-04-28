@@ -148,13 +148,6 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     await _smsOutboxRepository.wipeOutboxData();
   }
 
-  Future<void> wipeData() async {
-    await _chatsRepository.wipeChatsData();
-    await _chatsOutboxRepository.wipeOutboxData();
-    await _smsRepository.wipeData();
-    await _smsOutboxRepository.wipeOutboxData();
-  }
-
   void _disposeWorkers() {
     _chatsSyncWorker?.dispose();
     _chatsSyncWorker = null;
