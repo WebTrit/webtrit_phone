@@ -226,6 +226,13 @@ sealed class _CallSignalingEvent extends CallEvent {
 
   const factory _CallSignalingEvent.registration(RegistrationStatus status, {int? code, String? reason}) =
       _CallSignalingEventRegistration;
+
+  const factory _CallSignalingEvent.callError({
+    required int? line,
+    required String callId,
+    required int code,
+    required String reason,
+  }) = _CallSignalingEventCallError;
 }
 
 sealed class _GlobalEvent extends CallEvent {
@@ -523,6 +530,23 @@ class _CallSignalingEventRegistration extends _CallSignalingEvent {
 
   @override
   List<Object?> get props => [status, code, reason];
+}
+
+class _CallSignalingEventCallError extends _CallSignalingEvent {
+  const _CallSignalingEventCallError({
+    required this.line,
+    required this.callId,
+    required this.code,
+    required this.reason,
+  });
+
+  final int? line;
+  final String callId;
+  final int code;
+  final String reason;
+
+  @override
+  List<Object?> get props => [line, callId, code, reason];
 }
 
 // call push events
