@@ -61,6 +61,7 @@ kotlin {
 dependencies {
     implementation "androidx.core:core-ktx:1.16.0"
     implementation "androidx.work:work-runtime-ktx:2.9.0"
+    implementation "androidx.lifecycle:lifecycle-process:2.8.7"
 
     if (flutterSdkPath) {
         compileOnly files("$flutterSdkPath/bin/cache/artifacts/engine/android-x86/flutter.jar")
