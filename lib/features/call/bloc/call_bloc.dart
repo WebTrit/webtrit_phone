@@ -706,7 +706,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // user turn on network interfaces >> _onSignalingClientEventConnected >> safeRenegotiate
     for (final call in state.activeCalls.where((c) => c.processingStatus == CallProcessingStatus.connected)) {
       _logger.warning('__onSignalingClientEventConnected: triggering safe renegotiation for call ${call.callId}');
-      _safeRenegotiate(call.callId, call.line);
+      add(_CallMutationEvent.renegotiate(call.callId, call.line));
     }
 
     emit(
