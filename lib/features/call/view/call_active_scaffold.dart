@@ -333,10 +333,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                       interactionsDebounceActive == false &&
                                                       widget.callStatus == CallStatus.ready &&
                                                       activeCalls.any((call) => call.updating) == false,
-                                                  remoteVideo:
-                                                      incomingCall.remoteVideo &&
-                                                      _hasRenderableRemoteFrame &&
-                                                      incomingCall.held == false,
+                                                  remoteVideo: incomingCall.remoteVideo && incomingCall.held == false,
                                                   onHangupPressed: () {
                                                     _callBloc.add(CallControlEvent.ended(incomingCall.callId));
                                                     dispatchInteractionDebounce();
