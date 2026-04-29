@@ -29,8 +29,11 @@ final class HangupSignalingAction extends HandshakeAction {
 
 /// Send a [DeclineRequest] to the signaling server and stop processing.
 ///
-/// Emitted when the Callkeep connection for the line is [CallkeepConnectionState.stateDisconnected]
-/// and the latest call event is [IncomingCallEvent].
+/// Emitted when the Callkeep connection for the line is [CallkeepConnectionState.stateDisconnected],
+/// the latest call event is [IncomingCallEvent], and the call is **not** already
+/// tracked in BLoC state ([activeCallIds]). The [activeCallIds] guard prevents
+/// declining a call the user answered mid-service-restart, where the Callkeep
+/// connection can appear disconnected even though the answer is in progress.
 final class DeclineSignalingAction extends HandshakeAction {
   const DeclineSignalingAction({required this.line, required this.callId});
 
@@ -164,7 +167,14 @@ class HandshakeProcessor {
 
         if (connection?.state == CallkeepConnectionState.stateDisconnected) {
           if (callEvent is IncomingCallEvent) {
-            return [...actions, DeclineSignalingAction(line: callEvent.line, callId: callEvent.callId)];
+            // Guard: if CallBloc is already tracking this call (e.g. user answered
+            // mid-service-restart and the Callkeep connection ended up disconnected
+            // because the push-isolate flutterApi was null), do not decline it.
+            // The offer-replay block in _handleHandshakeReceived will deliver the
+            // SDP offer to unblock the answer path.
+            if (!activeCallIds.contains(callEvent.callId)) {
+              return [...actions, DeclineSignalingAction(line: callEvent.line, callId: callEvent.callId)];
+            }
           } else if (callEvent is! HangupEvent && callEvent is! MissedCallEvent) {
             return [...actions, HangupSignalingAction(line: callEvent.line, callId: callEvent.callId)];
           }

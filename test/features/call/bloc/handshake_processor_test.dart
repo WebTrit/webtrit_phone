@@ -397,6 +397,24 @@ void main() {
       final a = actions.first as DeclineSignalingAction;
       expect(a.callId, _kCallId);
     });
+
+    test('skips DeclineSignalingAction when call is already in BLoC state (mid-answer race)', () async {
+      // Reproduces the kill-on-background race: user answers from push notification
+      // while the service is restarting. The push-isolate flutterApi is null so the
+      // Callkeep connection ends up stateDisconnected, but CallBloc is already
+      // tracking the call in incomingPerformingStarted. Declining here would abort
+      // a call the user deliberately answered; offer-replay in _handleHandshakeReceived
+      // unblocks the answer path instead.
+      when(
+        () => mockConnections.getConnection(_kCallId),
+      ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
+
+      final line = _makeLine(callLogs: [CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent())]);
+
+      final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {_kCallId});
+
+      expect(actions, isEmpty);
+    });
   });
 
   // -------------------------------------------------------------------------
