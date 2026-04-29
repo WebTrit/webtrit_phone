@@ -2174,7 +2174,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.outgoingCreated,
     );
-    emit(state.copyWithPushActiveCall(newCall));
+    emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
 
     final callkeepError = await callkeep.startCall(
       callId,
