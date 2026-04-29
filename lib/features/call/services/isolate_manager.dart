@@ -22,9 +22,8 @@ import '../models/jsep_value.dart';
 /// releases the incoming call service when all work is done.
 /// Never reconnects — the isolate is short-lived by design.
 ///
-/// On Android, signaling runs through the FGS hub so push isolate and Activity
-/// share a single WebSocket connection. On iOS the connection runs directly in
-/// the main isolate. Call [init] after construction and before [run].
+/// On both Android and iOS the connection runs directly in the current isolate.
+/// Call [init] after construction and before [run].
 class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegate {
   PushNotificationIsolateManager({
     required this.callLogsRepository,
@@ -88,9 +87,8 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   /// Initialises the signaling module.
   ///
   /// Must be called once after construction and before [run]. Constructs
-  /// [WebtritSignalingService] and wires up the event subscription. Hub
-  /// discovery and FGS start happen later when [connect] is called from
-  /// [run] via the Android plugin's [HubConnectionManager].
+  /// [WebtritSignalingService] and wires up the event subscription.
+  /// The WebSocket connection starts when [connect] is called from [run].
   void init() {
     _initSignaling();
     _initialized = true;
@@ -109,8 +107,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     logger.info('run: callId=${metadata?.callId} isConnected=${_signalingModule.isConnected}');
     // WebtritSignalingService.connect() is idempotent: the internal
     // _startPending / _isConnected guard makes repeated calls safe.
-    // Always call it so HubConnectionManager starts FGS discovery on the
-    // first run() and is a no-op on any subsequent call.
+    // Always call it — idempotent on any subsequent call.
     _signalingModule.connect();
     return _completer!.future;
   }
@@ -148,6 +145,10 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       // instead of releasing so the ringing call is not terminated prematurely.
       await _handoffCall(_metadata?.callId);
     } else {
+      // In direct mode the push isolate's WebSocket is independent from the
+      // Activity's. If the Activity took over before IncomingCallEvent arrived
+      // (empty _incomingCallEvents), releaseCall only stops IncomingCallService
+      // here — the Activity keeps its own connection and handles the call normally.
       await _releaseCall(_metadata?.callId);
     }
     _completeWithError(StateError('PushNotificationIsolateManager closed'));
@@ -187,11 +188,9 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   // ---------------------------------------------------------------------------
 
   /// Sets up [WebtritSignalingService] for this isolate in
-  /// [SignalingServiceMode.pushBound] mode — the same mechanism the Activity
-  /// uses, so push isolate and Activity share exactly one FGS WebSocket on
-  /// Android. [HubConnectionManager] inside the service handles FGS start and
-  /// hub discovery. [connect] is called from [run], not here, so the
-  /// connection starts only when processing begins.
+  /// [SignalingServiceMode.pushBound] mode. Each isolate (push and Activity)
+  /// opens its own direct WebSocket — no shared FGS hub. [connect] is called
+  /// from [run], not here, so the connection starts only when processing begins.
   void _initSignaling() {
     logger.info('_initSignaling: creating WebtritSignalingService (pushBound)');
     _signalingModule = WebtritSignalingService(
