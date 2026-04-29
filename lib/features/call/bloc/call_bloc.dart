@@ -1263,11 +1263,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.fine('_CallSignalingEventCallError: $event');
 
     if (event.code == 448 && event.reason.contains('SDP type answer is incompatible with session status incall')) {
+      emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(updating: false)));
       _logger.warning('__onCallSignalingEventCallError: dispatch renegotiation after incompatible SDP error');
       // May help to recover from the error by renegotiating the call with the correct SDP type.
       Future.delayed(const Duration(seconds: 5), () {
         if (isClosed) return;
-        add(_CallMutationEvent.restartIce(event.callId));
+        _scheduleIceRestart(event.callId);
       });
     }
   }
@@ -2874,8 +2875,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onMutationRestartIce(_CallMutationEventRestartIce event, Emitter<CallState> emit) async {
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall == null) {
+      _logger.warning('__onMutationRestartIce: active call not found, skipping ICE restart');
+      return;
+    }
+
+    if (activeCall.processingStatus.hasPeerConnectionReady == false) {
+      _logger.warning('__onMutationRestartIce: call is not in connected state, skipping ICE restart');
+      return;
+    }
+
     final pc = await _peerConnectionManager.retrieve(event.callId);
-    if (pc == null) return;
+    if (pc == null) {
+      _logger.warning('__onMutationRestartIce: peer connection not found, skipping ICE restart');
+      return;
+    }
     _logger.info('__onMutationRestartIce: restarting ICE for call ${event.callId}');
     pc.restartIce();
   }
