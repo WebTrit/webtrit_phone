@@ -1211,6 +1211,7 @@ sealed class _CallMutationEvent extends CallEvent {
   const factory _CallMutationEvent.iceGatheringComplete(String callId) = _CallMutationEventIceGatheringComplete;
   const factory _CallMutationEvent.iceConnectionFailed(String callId) = _CallMutationEventIceConnectionFailed;
   const factory _CallMutationEvent.restartIce(String callId) = _CallMutationEventRestartIce;
+  const factory _CallMutationEvent.silentHoldUnhold(String callId) = _CallMutationEventSilentHoldUnhold;
 
   // Push / restore redirects
   const factory _CallMutationEvent.restoreCall({
@@ -1488,6 +1489,13 @@ class _CallMutationEventIceConnectionFailed extends _CallMutationEvent {
 
 class _CallMutationEventRestartIce extends _CallMutationEvent {
   const _CallMutationEventRestartIce(this.callId);
+  final String callId;
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallMutationEventSilentHoldUnhold extends _CallMutationEvent {
+  const _CallMutationEventSilentHoldUnhold(this.callId);
   final String callId;
   @override
   List<Object?> get props => [callId];

@@ -1264,11 +1264,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     if (event.code == 448 && event.reason.contains('SDP type answer is incompatible with session status incall')) {
       emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(updating: false)));
-      _logger.warning('__onCallSignalingEventCallError: dispatch renegotiation after incompatible SDP error');
-      // May help to recover from the error by renegotiating the call with the correct SDP type.
+      _logger.warning('__onCallSignalingEventCallError: silent hold/unhold after 448 glare race');
+      // ICE restart restores B→A WebRTC path (A-leg ICE reconnects after glare).
+      // Future.delayed(const Duration(seconds: 1), () {
+      //   if (isClosed) return;
+      //   _scheduleIceRestart(event.callId);
+      // });
+
+      // Silent hold/unhold forces a complete SIP re-INVITE on the A-leg so PortaSIP
+      // re-establishes A→B video routing, which ICE restart alone cannot fix for now.
+      //
+      // This is a temporary workaround for the stuck video from A to B after glare.
+      // TODO: replace back iceRestart code when find root case, main suspicious Janus or PortaSwitch
       Future.delayed(const Duration(seconds: 5), () {
         if (isClosed) return;
-        _scheduleIceRestart(event.callId);
+        add(_CallMutationEvent.silentHoldUnhold(event.callId));
       });
     }
   }
@@ -1711,6 +1721,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallMutationEventIceGatheringComplete() => __onMutationIceGatheringComplete(event, emit),
       _CallMutationEventIceConnectionFailed() => __onMutationIceConnectionFailed(event, emit),
       _CallMutationEventRestartIce() => __onMutationRestartIce(event, emit),
+      _CallMutationEventSilentHoldUnhold() => __onMutationSilentHoldUnhold(event, emit),
       _CallMutationEventRestoreCall() => __onMutationRestoreCall(event, emit),
     };
   }
@@ -2893,6 +2904,51 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
     _logger.info('__onMutationRestartIce: restarting ICE for call ${event.callId}');
     pc.restartIce();
+  }
+
+  /// Sends a SIP hold (inactive) followed immediately by unhold (sendrecv) without changing
+  /// the UI [ActiveCall.held] state. This forces a complete SIP re-INVITE cycle on the Janus
+  /// A-leg so that PortaSIP re-establishes outbound video routing after a WebRTC glare race.
+  ///
+  /// This is a temporary workaround for a specific issue that will be investigated deeply, but for now at least this can help to recover video.
+  /// TODO: remove after found issue, looks like it Janus or PortaSIP blocks video stream after glare and doesn't recover even if A-leg is re-INVITEd without hold.
+  Future<void> __onMutationSilentHoldUnhold(_CallMutationEventSilentHoldUnhold event, Emitter<CallState> emit) async {
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall == null) {
+      _logger.warning('__onMutationSilentHoldUnhold: active call not found, skipping');
+      return;
+    }
+
+    if (activeCall.processingStatus.hasPeerConnectionReady == false) {
+      _logger.warning('__onMutationSilentHoldUnhold: call is not in connected state, skipping');
+      return;
+    }
+
+    _logger.info('__onMutationSilentHoldUnhold: sending silent hold/unhold for call ${event.callId}');
+    try {
+      await _signalingModule.execute(
+        HoldRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: activeCall.line,
+          callId: activeCall.callId,
+          direction: HoldDirection.inactive,
+        ),
+      );
+      await Future.delayed(const Duration(seconds: 1));
+      await _signalingModule.execute(
+        UnholdRequest(
+          transaction: WebtritSignalingClient.generateTransactionId(),
+          line: activeCall.line,
+          callId: activeCall.callId,
+        ),
+      );
+    } on NotConnectedException {
+      _logger.warning('__onMutationSilentHoldUnhold: not connected, skipping');
+    } on WebtritSignalingTransactionTimeoutException {
+      _logger.warning('__onMutationSilentHoldUnhold: transaction timeout, skipping');
+    } catch (e, stackTrace) {
+      callErrorReporter.handle(e, stackTrace, '__onMutationSilentHoldUnhold error');
+    }
   }
 
   Future<void> __onMutationRestoreCall(_CallMutationEventRestoreCall event, Emitter<CallState> emit) async {
