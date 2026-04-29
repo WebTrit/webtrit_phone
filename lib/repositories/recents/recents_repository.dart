@@ -33,7 +33,7 @@ class RecentsRepository
                 ? 'callLog.username'
                 : 'callLog.number';
 
-            final mismatch = recent.name != entry.number;
+            final mismatch = contact?.maybeName == null && recent.name != entry.number;
 
             if (mismatch) {
               _logger.warning(
