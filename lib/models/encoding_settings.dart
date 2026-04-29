@@ -164,12 +164,14 @@ class EncodingSettings extends Equatable {
     (option: RTPCodecProfile.g722, enabled: true),
     (option: RTPCodecProfile.pcmu, enabled: true),
     (option: RTPCodecProfile.pcma, enabled: true),
-    (option: RTPCodecProfile.comfortNoise_32k, enabled: true),
-    (option: RTPCodecProfile.comfortNoise_16k, enabled: true),
     (option: RTPCodecProfile.comfortNoise_8k, enabled: true),
-    (option: RTPCodecProfile.telephoneEvent_48k, enabled: true),
-    (option: RTPCodecProfile.telephoneEvent_16k, enabled: true),
+    (option: RTPCodecProfile.comfortNoise_16k, enabled: true),
+    (option: RTPCodecProfile.comfortNoise_32k, enabled: true),
+    // moving TE8 on top fixes compatibility issues with Zoiper
+    // that shufflles pt 110 to 8k rate on re-invite to video
     (option: RTPCodecProfile.telephoneEvent_8k, enabled: true),
+    (option: RTPCodecProfile.telephoneEvent_16k, enabled: true),
+    (option: RTPCodecProfile.telephoneEvent_48k, enabled: true),
     (option: RTPCodecProfile.redundancy_audio, enabled: true),
   ];
 
