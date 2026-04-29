@@ -40,8 +40,12 @@ Future<PushNotificationIsolateManager> _getOrInit() async {
 
   _context = await PushIsolateContext.init();
 
+  // The push isolate is a separate Dart VM — it never receives the setModuleFactory()
+  // call made in bootstrap.dart (Activity isolate). Register the factory here so
+  // _startDirect() can create a SignalingModule when connect() is called from run().
+  await WebtritSignalingService.setModuleFactory(createSignalingModule);
   WebtritSignalingService.setHandoffCallback(() => _manager?.notifyActivityTookOver());
-  _logger.info('_getOrInit: handoff callback registered');
+  _logger.info('_getOrInit: module factory and handoff callback registered');
 
   _manager = PushNotificationIsolateManager(
     callLogsRepository: _context!.callLogsRepository,
@@ -52,7 +56,7 @@ Future<PushNotificationIsolateManager> _getOrInit() async {
     logger: Logger('PushNotificationIsolateManager'),
   );
   // init() constructs WebtritSignalingService and wires up the event subscription.
-  // Hub discovery and FGS start happen in connect(), which is called from run().
+  // The WebSocket connection starts in connect(), which is called from run().
   _logger.info('_getOrInit: initialising signaling module...');
   _manager!.init();
   _logger.info('_getOrInit: init complete');
