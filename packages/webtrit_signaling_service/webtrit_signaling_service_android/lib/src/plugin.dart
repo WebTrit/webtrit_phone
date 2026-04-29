@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:isolate';
 
-import 'dart:ui' show PluginUtilities;
-import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'dart:ui' show IsolateNameServer, PluginUtilities;
+import 'package:flutter/foundation.dart' show VoidCallback, visibleForTesting;
 import 'package:flutter/services.dart' show BinaryMessenger;
 import 'package:logging/logging.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
+import 'constants.dart';
 import 'hub_connection_manager.dart';
 import 'isolate/entry_point.dart' show signalingServiceCallbackDispatcher;
 import 'messages.g.dart';
@@ -109,6 +111,15 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   /// [pushBoundUseDirect] is true and [start] has been called).
   SignalingModule? _directModule;
   StreamSubscription<SignalingModuleEvent>? _directModuleSub;
+
+  /// Callback set by the push isolate via [setHandoffCallback]. Its presence
+  /// also signals to [_startDirect] that this instance runs in the push isolate,
+  /// causing it to register [kPushHandoffPortName] in [IsolateNameServer].
+  VoidCallback? _handoffCallback;
+
+  /// [ReceivePort] registered under [kPushHandoffPortName] by the push isolate.
+  /// Receives a null signal from the Activity when its WebSocket connects.
+  ReceivePort? _handoffPort;
 
   /// Set to `true` by [stopService] and [dispose] to prevent [_onHubServiceDead]
   /// from restarting the foreground service after an intentional stop.
@@ -375,6 +386,14 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   /// Starts a direct WebSocket in the current isolate without an FGS.
   /// Used when [pushBoundUseDirect] is true.
+  ///
+  /// **Push isolate** (detected by [_handoffCallback] being set): registers a
+  /// [ReceivePort] under [kPushHandoffPortName] in [IsolateNameServer] and
+  /// listens for a null signal from the Activity. On receipt, calls
+  /// [_handoffCallback] so app code can complete the push lifecycle early.
+  ///
+  /// **Activity** (no [_handoffCallback]): on [SignalingConnected], looks up
+  /// [kPushHandoffPortName] and sends null to notify the push isolate.
   Future<void> _startDirect(SignalingServiceConfig config) async {
     _logger.info('_startDirect: starting direct WebSocket (no FGS)');
     if (_isStopped) {
@@ -389,11 +408,30 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       );
     }
     await _tearDownDirectModule();
+
+    final isPushIsolate = _handoffCallback != null;
+    if (isPushIsolate) {
+      _handoffPort = ReceivePort('push_handoff');
+      IsolateNameServer.registerPortWithName(_handoffPort!.sendPort, kPushHandoffPortName);
+      _handoffPort!.listen((_) {
+        _logger.info('_startDirect: handoff signal received from Activity');
+        _handoffCallback?.call();
+      });
+      _logger.info('_startDirect: push isolate — handoff port registered');
+    }
+
     final module = factory(config);
     _directModuleSub = module.events.listen(
       (event) {
         _eventBuffer.onEvent(event);
         if (!_eventsController.isClosed) _eventsController.add(event);
+        if (!isPushIsolate && event is SignalingConnected) {
+          final port = IsolateNameServer.lookupPortByName(kPushHandoffPortName);
+          if (port != null) {
+            _logger.info('_startDirect: Activity connected — sending handoff signal to push isolate');
+            port.send(null);
+          }
+        }
       },
       onError: (Object e, StackTrace st) {
         if (!_eventsController.isClosed) _eventsController.addError(e, st);
@@ -408,12 +446,23 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     _directModuleSub = null;
     await _directModule?.dispose();
     _directModule = null;
+    if (_handoffPort != null) {
+      IsolateNameServer.removePortNameMapping(kPushHandoffPortName);
+      _handoffPort!.close();
+      _handoffPort = null;
+    }
   }
 
   @override
   void setPushBoundStrategy({bool useDirect = false}) {
     _logger.info('setPushBoundStrategy useDirect=$useDirect');
     pushBoundUseDirect = useDirect;
+  }
+
+  @override
+  void setHandoffCallback(VoidCallback callback) {
+    _logger.info('setHandoffCallback: registered');
+    _handoffCallback = callback;
   }
 }
 

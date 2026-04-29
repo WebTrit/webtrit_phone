@@ -115,6 +115,15 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     return _completer!.future;
   }
 
+  /// Called by the plugin when the Activity's WebSocket has connected in direct
+  /// push-bound mode. Completes [run]'s future early so [close] executes via the
+  /// [onPushNotificationSyncCallback] finally block, disposing the module and
+  /// cancelling any pending reconnect timers before they fire.
+  void notifyActivityTookOver() {
+    logger.info('notifyActivityTookOver: Activity WebSocket connected — completing push session early');
+    _complete();
+  }
+
   /// Cancels all timers and pending requests, then disposes the signaling module.
   Future<void> close() async {
     logger.info(
@@ -209,6 +218,9 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
           logger.info('Signaling: disconnecting');
         case SignalingDisconnected(:final code, :final reason, :final knownCode):
           logger.info('Signaling: disconnected code=$code reason=$reason knownCode=$knownCode');
+          if (knownCode == SignalingDisconnectCode.controllerForceAttachClose) {
+            _complete();
+          }
         case SignalingConnectionFailed(:final error):
           _onSignalingError(error);
       }

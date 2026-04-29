@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show VoidCallback;
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
@@ -113,4 +114,12 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   ///
   /// Must be called before the first [start] with [SignalingServiceMode.pushBound].
   void setPushBoundStrategy({bool useDirect = false}) {}
+
+  /// Registers a callback invoked when the Activity's WebSocket signals that it
+  /// has taken over the call in direct push-bound mode.
+  ///
+  /// Call this in the push isolate before [start] so the plugin can notify app
+  /// code when the handoff signal arrives via [IsolateNameServer]. No-op unless
+  /// [setPushBoundStrategy] was called with [useDirect] = true. No-op on iOS.
+  void setHandoffCallback(VoidCallback callback) {}
 }

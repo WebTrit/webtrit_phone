@@ -47,6 +47,11 @@ Future<PushNotificationIsolateManager> _getOrInit() async {
   // has the correct value in all isolates without any IPC.
   WebtritSignalingService.setPushBoundStrategy(useDirect: EnvironmentConfig.PUSH_BOUND_USE_DIRECT);
 
+  if (EnvironmentConfig.PUSH_BOUND_USE_DIRECT) {
+    WebtritSignalingService.setHandoffCallback(() => _manager?.notifyActivityTookOver());
+    _logger.info('_getOrInit: handoff callback registered');
+  }
+
   _manager = PushNotificationIsolateManager(
     callLogsRepository: _context!.callLogsRepository,
     localPushRepository: _context!.localPushRepository,

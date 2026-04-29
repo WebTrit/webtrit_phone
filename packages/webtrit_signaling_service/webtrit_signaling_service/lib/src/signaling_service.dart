@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show VoidCallback;
 import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
@@ -270,4 +271,14 @@ class WebtritSignalingService implements SignalingModule {
   /// instance is created with [SignalingServiceMode.pushBound].
   static void setPushBoundStrategy({bool useDirect = false}) =>
       SignalingServicePlatform.instance.setPushBoundStrategy(useDirect: useDirect);
+
+  /// Registers a callback invoked when the Activity's WebSocket signals that it
+  /// has taken over the call in direct push-bound mode.
+  ///
+  /// Call this in the push isolate before the first [WebtritSignalingService]
+  /// instance is created. The presence of this callback tells the Android plugin
+  /// that the current isolate is the push isolate, which causes it to register
+  /// an [IsolateNameServer] port for the Activity to signal. No-op on iOS.
+  static void setHandoffCallback(VoidCallback callback) =>
+      SignalingServicePlatform.instance.setHandoffCallback(callback);
 }
