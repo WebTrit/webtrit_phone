@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
@@ -13,6 +14,8 @@ import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/app/constants.dart';
 
 import '../call.dart';
+
+final _logger = Logger('CallShell');
 
 class CallShell extends StatefulWidget {
   const CallShell({required this.child, this.stickyPadding = kStickyOverlayPadding, super.key});
@@ -116,18 +119,23 @@ class _CallShellState extends State<CallShell> {
   void _updateOverlayContent(BuildContext context, CallState state, StackRouter router) {
     final hasActiveCalls = state.activeCalls.isNotEmpty;
 
+    _logger.fine('_updateOverlayContent: display=${state.display}, hasActiveCalls=$hasActiveCalls');
+
     if (!hasActiveCalls || state.display == CallDisplay.none || state.display == CallDisplay.noneScreen) {
+      _logger.fine('_updateOverlayContent: hiding overlay (no active calls or display=none)');
       _hideOverlay();
       return;
     }
 
     switch (state.display) {
       case CallDisplay.overlay:
+        _logger.fine('_updateOverlayContent: showing active call thumbnail');
         _showActiveCallThumbnail(context, state, router);
         break;
 
       case CallDisplay.screen:
         final activeCall = state.activeCalls.current;
+        _logger.fine('_updateOverlayContent: screen display, isCameraActive=${activeCall.isCameraActive}');
         if (activeCall.isCameraActive) {
           _showLocalCameraPreview(context, state);
         } else {

@@ -1131,7 +1131,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return activeCall.copyWith(
           handle: handle,
           displayName: displayName ?? activeCall.displayName,
-          video: event.jsep?.hasVideo ?? activeCall.video,
+          // Do NOT update `video` here from remote SDP. `video` tracks local camera
+          // intent (user-controlled). Setting it from the remote offer causes a
+          // transient isCameraActive=true flash when a disabled policy-applier track
+          // already exists in localStream. The mutation handler resets video if needed.
           updating: true,
         );
       }),
