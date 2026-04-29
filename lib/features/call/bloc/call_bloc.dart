@@ -940,6 +940,28 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.infoPretty(event.jsep?.sdp, tag: '__onCallSignalingEventIncoming');
 
     final handle = CallkeepHandle.number(event.caller);
+
+    if (event.jsep != null) {
+      final waitingCall = state.retrieveActiveCall(event.callId);
+      if (waitingCall != null && waitingCall.incomingOffer == null) {
+        final s = waitingCall.processingStatus;
+        if (s == CallProcessingStatus.incomingFromPush ||
+            s == CallProcessingStatus.incomingSubmittedAnswer ||
+            s == CallProcessingStatus.incomingPerformingStarted) {
+          _logger.info(
+            '__onCallSignalingEventIncoming: fast-pathing offer to awaiting push call — '
+            'callId=${event.callId} status=$s',
+          );
+          emit(
+            state.copyWithMappedActiveCall(
+              event.callId,
+              (call) => call.copyWith(incomingOffer: event.jsep, line: event.line),
+            ),
+          );
+        }
+      }
+    }
+
     final contactName = await contactNameResolver.resolveWithNumber(handle.value);
     final displayName = contactName ?? (event.callerDisplayName?.isEmpty == true ? null : event.callerDisplayName);
 
