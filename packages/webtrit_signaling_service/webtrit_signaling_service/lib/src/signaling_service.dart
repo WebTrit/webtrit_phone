@@ -259,4 +259,15 @@ class WebtritSignalingService implements SignalingModule {
   ///
   /// No-op on iOS. Intended for debug/QA use only to verify service-restart behaviour.
   static Future<void> simulateKill() => SignalingServicePlatform.instance.simulateKill();
+
+  /// Configures the push-bound signaling strategy.
+  ///
+  /// When [useDirect] is true, Android skips the foreground service for
+  /// [SignalingServiceMode.pushBound] and runs the WebSocket directly in the
+  /// calling isolate (like iOS). No-op on iOS.
+  ///
+  /// Call once during app bootstrap, before the first [WebtritSignalingService]
+  /// instance is created with [SignalingServiceMode.pushBound].
+  static void setPushBoundStrategy({bool useDirect = false}) =>
+      SignalingServicePlatform.instance.setPushBoundStrategy(useDirect: useDirect);
 }

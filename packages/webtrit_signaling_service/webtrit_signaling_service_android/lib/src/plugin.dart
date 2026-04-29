@@ -18,35 +18,28 @@ final _logger = Logger('WebtritSignalingServiceAndroid');
 
 /// Android implementation of [SignalingServicePlatform].
 ///
-/// Both modes run the WebSocket inside an Android foreground service
-/// (background isolate + [SignalingHub]). The only difference is the
-/// service lifecycle controlled by Kotlin:
+/// **FGS modes (default for pushBound and always for persistent):**
+/// The WebSocket runs inside an Android Foreground Service (background isolate
+/// + [SignalingHub]). Push and main isolates connect to the hub via
+/// [IsolateNameServer] — they never open their own WebSocket.
 ///
-/// **pushBound** -- [SignalingForegroundService.onTaskRemoved] calls stopSelf().
-/// The service dies when the user closes the app. The server detects the
-/// disconnect and sends an FCM push for the next incoming call. The
-/// push-notification isolate calls [start] to bring the service back up;
-/// the main isolate calls [attach] when the Activity opens.
+/// **pushBound with [pushBoundUseDirect] = true:**
+/// Skips the FGS entirely. The WebSocket runs directly in the calling isolate,
+/// identical to the iOS implementation. Use [setPushBoundStrategy] to enable.
 ///
-/// **persistent** -- onTaskRemoved does NOT stop the service. The WebSocket
-/// stays alive indefinitely. Incoming calls arrive directly via the running
-/// WebSocket; no FCM push is required. The service is restarted by
-/// [SignalingBootReceiver] after device reboot.
-///
-/// In both modes the WebSocket lives exclusively in the foreground-service
-/// background isolate. Push and main isolates only connect to the hub via
-/// [IsolateNameServer] -- they never open their own WebSocket.
+/// Mode details:
+/// - **pushBound** -- service dies when the user closes the app; FCM push starts
+///   a fresh instance for the next call.
+/// - **persistent** -- service survives app closure; restarted after device reboot.
 ///
 /// Lifecycle:
-///   1. [start] -- initialises the foreground service + hub init loop.
-///   2. [attach] -- connects to an already-running hub without starting a
-///      new service (used by the main isolate when the Activity opens).
-///   3. [updateMode] -- switches lifecycle mode without restarting the
-///      WebSocket connection.
-///   4. [dispose] -- tears down Dart-side resources. The Android service
-///      lifecycle is managed by Kotlin:
-///        - pushBound: onTaskRemoved -> stopSelf()
-///        - persistent: service keeps running; BootReceiver restarts after reboot.
+///   1. [start] -- initialises the foreground service (FGS path) or direct
+///      WebSocket (direct path) and begins hub/module init.
+///   2. [attach] -- attaches to an already-running FGS hub (FGS path only).
+///      No-op in direct mode.
+///   3. [updateMode] -- switches lifecycle mode. Tears down the direct module
+///      when switching away from direct pushBound.
+///   4. [dispose] -- tears down all Dart-side resources.
 class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   WebtritSignalingServiceAndroid._({BinaryMessenger? binaryMessenger})
     : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger);
@@ -71,6 +64,13 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     _instance ??= WebtritSignalingServiceAndroid._();
     SignalingServicePlatform.instance = _instance!;
   }
+
+  /// When true, [SignalingServiceMode.pushBound] skips the foreground service
+  /// and runs the WebSocket directly in the calling isolate (like iOS).
+  ///
+  /// Set via [setPushBoundStrategy] during app bootstrap before the first
+  /// [start] call with [SignalingServiceMode.pushBound].
+  static bool pushBoundUseDirect = false;
 
   final PSignalingServiceHostApi _hostApi;
 
@@ -100,6 +100,15 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   /// [SignalingServiceMode.pushBound]), this field ensures the most recently
   /// chosen mode is used instead of reverting to the stale parameter.
   SignalingServiceMode? _currentMode;
+
+  /// Factory stored for the direct-mode WebSocket path.
+  /// Set in [setModuleFactory]; used in [_startDirect] when [pushBoundUseDirect] is true.
+  SignalingModuleFactory? _factory;
+
+  /// Active module for the direct-mode WebSocket path (non-null only when
+  /// [pushBoundUseDirect] is true and [start] has been called).
+  SignalingModule? _directModule;
+  StreamSubscription<SignalingModuleEvent>? _directModuleSub;
 
   /// Set to `true` by [stopService] and [dispose] to prevent [_onHubServiceDead]
   /// from restarting the foreground service after an intentional stop.
@@ -151,11 +160,26 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   @override
   Future<void> attach() async {
     _logger.info('attach');
+    if (_currentMode == SignalingServiceMode.pushBound && pushBoundUseDirect) {
+      _logger.info('attach: direct mode — no-op (no FGS hub to attach to)');
+      return;
+    }
     _hubManager.begin();
   }
 
   @override
   Future<void> execute(Request request) async {
+    final directModule = _directModule;
+    if (directModule != null) {
+      if (directModule.isConnected) {
+        _logger.fine('execute (direct) ${request.runtimeType}');
+        final future = directModule.execute(request);
+        if (future != null) await future;
+        return;
+      }
+      _logger.warning('execute called but direct module not connected (${request.runtimeType})');
+      throw NotConnectedException('SignalingServiceAndroid: not connected (direct mode)');
+    }
     if (_hubManager.isConnected) {
       _logger.fine('execute ${request.runtimeType}');
       await _hubManager.execute(request)!;
@@ -167,11 +191,10 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   /// Switches the service lifecycle mode.
   ///
-  /// Updates the Kotlin-side lifecycle behaviour (whether [onTaskRemoved]
-  /// stops the service) by restarting the foreground service with the new
-  /// mode. The WebSocket connection in the background isolate is preserved
-  /// across the mode switch because the service is not stopped -- only the
-  /// mode flag stored by [StorageDelegate] changes.
+  /// For FGS modes, updates the Kotlin-side lifecycle behaviour by restarting
+  /// the foreground service with the new mode. The WebSocket in the background
+  /// isolate is preserved. For transitions away from direct pushBound, tears
+  /// down the direct module before starting the FGS.
   @override
   Future<void> updateMode(SignalingServiceMode mode) async {
     _logger.info('updateMode $mode');
@@ -183,6 +206,9 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     }
 
     _eventBuffer.clear();
+    if (_directModule != null) {
+      await _tearDownDirectModule();
+    }
     await _startService(config, mode);
   }
 
@@ -191,6 +217,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     _isStopped = true;
     _logger.info('dispose');
     await _hubManager.tearDown();
+    await _tearDownDirectModule();
 
     // NOTE: stopService() is intentionally NOT called here.
     // The Android service lifecycle is managed by the Kotlin side:
@@ -224,6 +251,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   @override
   Future<void> setModuleFactory(SignalingModuleFactory factory) async {
+    _factory = factory;
     final handle = PluginUtilities.getCallbackHandle(factory);
     if (handle == null) {
       _logger.warning(
@@ -239,6 +267,10 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   Future<void> stopService() async {
     _isStopped = true;
     _logger.info('stopService');
+    if (_currentMode == SignalingServiceMode.pushBound && pushBoundUseDirect) {
+      await _tearDownDirectModule();
+      return;
+    }
     await _hostApi.stopService();
   }
 
@@ -278,7 +310,12 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   }
 
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {
-    _logger.fine('_startService mode=$mode');
+    if (mode == SignalingServiceMode.pushBound && pushBoundUseDirect) {
+      await _startDirect(config);
+      return;
+    }
+
+    _logger.fine('_startService mode=$mode (FGS)');
     if (_isStopped) {
       _logger.warning('_startService: aborted — service already stopped');
       return;
@@ -334,6 +371,49 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     // "connecting". If a stale port does reach the init loop, the 500 ms ack
     // timeout causes a safe retry without blocking the happy path.
     _hubManager.begin();
+  }
+
+  /// Starts a direct WebSocket in the current isolate without an FGS.
+  /// Used when [pushBoundUseDirect] is true.
+  Future<void> _startDirect(SignalingServiceConfig config) async {
+    _logger.info('_startDirect: starting direct WebSocket (no FGS)');
+    if (_isStopped) {
+      _logger.warning('_startDirect: aborted — service already stopped');
+      return;
+    }
+    final factory = _factory;
+    if (factory == null) {
+      throw StateError(
+        'No SignalingModuleFactory registered — call setModuleFactory() before start() '
+        'when using pushBoundUseDirect.',
+      );
+    }
+    await _tearDownDirectModule();
+    final module = factory(config);
+    _directModuleSub = module.events.listen(
+      (event) {
+        _eventBuffer.onEvent(event);
+        if (!_eventsController.isClosed) _eventsController.add(event);
+      },
+      onError: (Object e, StackTrace st) {
+        if (!_eventsController.isClosed) _eventsController.addError(e, st);
+      },
+    );
+    _directModule = module;
+    module.connect();
+  }
+
+  Future<void> _tearDownDirectModule() async {
+    await _directModuleSub?.cancel();
+    _directModuleSub = null;
+    await _directModule?.dispose();
+    _directModule = null;
+  }
+
+  @override
+  void setPushBoundStrategy({bool useDirect = false}) {
+    _logger.info('setPushBoundStrategy useDirect=$useDirect');
+    pushBoundUseDirect = useDirect;
   }
 }
 
