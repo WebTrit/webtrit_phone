@@ -5,6 +5,7 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'package:webtrit_phone/common/common.dart';
+import 'package:webtrit_phone/environment_config.dart';
 
 import 'isolate_manager.dart';
 
@@ -39,6 +40,13 @@ Future<PushNotificationIsolateManager> _getOrInit() async {
   if (_manager != null) return _manager!;
 
   _context = await PushIsolateContext.init();
+
+  // Propagate the push-bound strategy into this isolate.
+  // Each Dart isolate has its own memory — the static flag set in bootstrap.dart
+  // is not visible here. PUSH_BOUND_USE_DIRECT is a compile-time const, so it
+  // has the correct value in all isolates without any IPC.
+  WebtritSignalingService.setPushBoundStrategy(useDirect: EnvironmentConfig.PUSH_BOUND_USE_DIRECT);
+
   _manager = PushNotificationIsolateManager(
     callLogsRepository: _context!.callLogsRepository,
     localPushRepository: _context!.localPushRepository,
