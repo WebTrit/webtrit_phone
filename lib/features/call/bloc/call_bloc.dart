@@ -3205,13 +3205,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
                 ),
               )
               ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived hangupRequest error'));
-          // Early return is intentional: HangupSignalingAction means the
-          // entire session is being torn down. Offer-replay for other calls
-          // is deferred to the next handshake cycle after the hang-up settles.
-          _logger.info(
-            '_handleHandshakeReceived: HangupSignalingAction — skipping offer-replay, callId=${action.callId}',
-          );
-          return;
+          _logger.info('_handleHandshakeReceived: HangupSignalingAction callId=${action.callId}');
 
         case DeclineSignalingAction():
           await _signalingModule
@@ -3223,12 +3217,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
                 ),
               )
               ?.catchError((e, s) => callErrorReporter.handle(e, s, '_handleHandshakeReceived declineRequest error'));
-          // Early return mirrors HangupSignalingAction: the incoming call is
-          // being declined server-side, so offer-replay is not applicable.
-          _logger.info(
-            '_handleHandshakeReceived: DeclineSignalingAction — skipping offer-replay, callId=${action.callId}',
-          );
-          return;
+          _logger.info('_handleHandshakeReceived: DeclineSignalingAction callId=${action.callId}');
 
         case RestoreCallAction():
           add(
@@ -3294,9 +3283,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // (break after match) to avoid dispatching the same offer more than once
     // in the unlikely case a call log contains duplicate entries.
     //
-    // Note: this block is unreachable when [HangupSignalingAction] or
-    // [DeclineSignalingAction] triggers an early return above. Those cases
-    // tear down the session entirely, making offer-replay irrelevant.
+    // [HangupSignalingAction] and [DeclineSignalingAction] no longer trigger an
+    // early return: those actions target calls that are absent from BLoC state
+    // (not in [activeCallIds]), so [retrieveActiveCall] below returns null for
+    // them and this block correctly skips them while still replaying offers for
+    // any other active call that is waiting for one (e.g. a call in
+    // [incomingPerformingStarted] status when a stale guestLine call is declined).
     // ---------------------------------------------------------------------------
     final linesToScan = [...stateHandshake.lines, stateHandshake.guestLine].whereType<Line>();
 
