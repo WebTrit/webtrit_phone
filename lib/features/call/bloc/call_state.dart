@@ -213,6 +213,11 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   @override
   final DateTime createdTime;
 
+  /// Whether the user has explicitly enabled the local camera for this call.
+  ///
+  /// This is local camera intent, not remote SDP capability. It is set only by
+  /// user actions ([CallControlEvent.cameraEnabled]) and initial media setup.
+  /// Never derive it from a remote SDP offer — that is what [remoteVideo] is for.
   @override
   final bool video;
 
