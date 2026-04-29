@@ -205,7 +205,10 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   /// For FGS modes, updates the Kotlin-side lifecycle behaviour by restarting
   /// the foreground service with the new mode. The WebSocket in the background
   /// isolate is preserved. For transitions away from direct pushBound, tears
-  /// down the direct module before starting the FGS.
+  /// down the direct module before starting the FGS. For transitions INTO direct
+  /// pushBound (e.g. persistent → pushBound), tears down the hub manager and
+  /// stops the FGS before starting the direct WebSocket to avoid running two
+  /// simultaneous connections.
   @override
   Future<void> updateMode(SignalingServiceMode mode) async {
     _logger.info('updateMode $mode');
@@ -219,6 +222,13 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     _eventBuffer.clear();
     if (_directModule != null) {
       await _tearDownDirectModule();
+    }
+    if (mode == SignalingServiceMode.pushBound && pushBoundUseDirect) {
+      // FGS hub may be running from a previous persistent/FGS mode — tear it
+      // down before opening the direct WebSocket to avoid two simultaneous
+      // connections for the same account.
+      await _hubManager.tearDown();
+      await _hostApi.stopService();
     }
     await _startService(config, mode);
   }
