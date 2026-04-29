@@ -940,6 +940,38 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.infoPretty(event.jsep?.sdp, tag: '__onCallSignalingEventIncoming');
 
     final handle = CallkeepHandle.number(event.caller);
+
+    // Fast-path offer delivery for push-registered calls waiting for an SDP offer.
+    //
+    // __onMutationPerformAnswer (in the sequential mutation queue) awaits
+    // stream.firstWhere(incomingOffer != null). The offer normally arrives via
+    // __onMutationSignalingIncoming, which is also a _CallMutationEvent. Because
+    // the mutation queue is sequential, __onMutationSignalingIncoming cannot run
+    // until __onMutationPerformAnswer completes — a deadlock that ends in a 10 s
+    // timeout.
+    //
+    // This handler runs in the _CallSignalingEvent queue, which is independent of
+    // the mutation queue. Emitting the offer here unblocks stream.firstWhere
+    // immediately, without waiting for the mutation to be scheduled.
+    // __onMutationSignalingIncoming still runs afterwards and re-sets the same
+    // offer (harmless), then dispatches CallControlEvent.answered which the
+    // canPerformAnswer guard drops safely.
+    if (event.jsep != null) {
+      final waitingCall = state.retrieveActiveCall(event.callId);
+      if (waitingCall != null && waitingCall.incomingOffer == null) {
+        final s = waitingCall.processingStatus;
+        if (s == CallProcessingStatus.incomingFromPush ||
+            s == CallProcessingStatus.incomingSubmittedAnswer ||
+            s == CallProcessingStatus.incomingPerformingStarted) {
+          _logger.info(
+            '__onCallSignalingEventIncoming: fast-pathing offer to awaiting push call — '
+            'callId=${event.callId} status=$s',
+          );
+          emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(incomingOffer: event.jsep)));
+        }
+      }
+    }
+
     final contactName = await contactNameResolver.resolveWithNumber(handle.value);
     final displayName = contactName ?? (event.callerDisplayName?.isEmpty == true ? null : event.callerDisplayName);
 
