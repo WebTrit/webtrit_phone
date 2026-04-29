@@ -115,13 +115,6 @@ class EnvironmentConfig {
         r'https://app\.webtrit\.com/call\?callId=([^&]+)&handle=([^&]+)&displayName=([^&]+)&hasVideo=(true|false)',
   );
 
-  static const PUSH_BOUND_USE_DIRECT__NAME = 'WEBTRIT_PUSH_BOUND_USE_DIRECT';
-
-  /// When true, push-bound incoming calls on Android bypass the Foreground
-  /// Service and run the WebSocket directly in the calling isolate (like iOS).
-  /// Activate with `--dart-define=WEBTRIT_PUSH_BOUND_USE_DIRECT=true`.
-  static const PUSH_BOUND_USE_DIRECT = bool.fromEnvironment(PUSH_BOUND_USE_DIRECT__NAME, defaultValue: false);
-
   static const CONNECTIVITY_CHECK_URL__NAME = 'WEBTRIT_APP_CONNECTIVITY_CHECK_URL';
 
   static const CONNECTIVITY_CHECK_URL = bool.hasEnvironment(CONNECTIVITY_CHECK_URL__NAME)

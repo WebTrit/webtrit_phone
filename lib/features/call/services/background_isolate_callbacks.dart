@@ -5,7 +5,6 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'package:webtrit_phone/common/common.dart';
-import 'package:webtrit_phone/environment_config.dart';
 
 import 'isolate_manager.dart';
 
@@ -41,16 +40,8 @@ Future<PushNotificationIsolateManager> _getOrInit() async {
 
   _context = await PushIsolateContext.init();
 
-  // Propagate the push-bound strategy into this isolate.
-  // Each Dart isolate has its own memory — the static flag set in bootstrap.dart
-  // is not visible here. PUSH_BOUND_USE_DIRECT is a compile-time const, so it
-  // has the correct value in all isolates without any IPC.
-  WebtritSignalingService.setPushBoundStrategy(useDirect: EnvironmentConfig.PUSH_BOUND_USE_DIRECT);
-
-  if (EnvironmentConfig.PUSH_BOUND_USE_DIRECT) {
-    WebtritSignalingService.setHandoffCallback(() => _manager?.notifyActivityTookOver());
-    _logger.info('_getOrInit: handoff callback registered');
-  }
+  WebtritSignalingService.setHandoffCallback(() => _manager?.notifyActivityTookOver());
+  _logger.info('_getOrInit: handoff callback registered');
 
   _manager = PushNotificationIsolateManager(
     callLogsRepository: _context!.callLogsRepository,
@@ -90,32 +81,17 @@ Future<void> _disposeContext() async {
 ///
 /// ## Lifecycle and handoff
 ///
-/// The push isolate runs until one of three outcomes:
+/// The push isolate opens its own WebSocket directly (no FGS). It runs until
+/// one of three outcomes:
 /// - **Missed call**: [HangupEvent] received before the user answers →
 ///   `releaseCall()` terminates the [PhoneConnection] and stops [IncomingCallService].
 /// - **Answered via push UI**: `performAnswerCall` fires before the timeout →
 ///   `handoffCall()` stops [IncomingCallService] without terminating the connection,
 ///   leaving the Activity to adopt the live call.
-/// - **Activity took over via full-screen intent**: the Activity subscribes to the
-///   [SignalingHub] and shows the incoming-call UI before the push isolate finishes.
-///   When the timeout fires the call is still active server-side (no [HangupEvent]
-///   received), so `handoffCall()` is used here too — the push isolate only
-///   unsubscribes from the hub and stops [IncomingCallService]; the [PhoneConnection]
-///   stays alive and the Activity continues handling the call normally.
-///
-/// ## SignalingForegroundService lifetime after this callback
-///
-/// When the push isolate unsubscribes and no other subscriber (Activity) is
-/// connected, [SignalingForegroundIsolateManager] starts a grace timer
-/// (`pushBoundNoSubscriberGrace`, default 10 s). During this window:
-/// - If the Activity subscribes within the grace period (normal answer flow),
-///   the timer is cancelled and the service keeps running.
-/// - If no subscriber arrives (call was declined before the Activity launched),
-///   the service stops itself after the grace period expires.
-///
-/// This means the [SignalingForegroundService] may stay alive for up to
-/// [_kPushNotificationSyncTimeout] + `pushBoundNoSubscriberGrace` after a push
-/// arrives before self-terminating in the worst case (timeout + no Activity).
+/// - **Activity took over**: the Activity opens its own WebSocket, the server sends
+///   4441 (`controllerForceAttachClose`) to the push isolate, or the plugin detects
+///   the Activity via [IsolateNameServer] and calls the handoff callback — whichever
+///   arrives first completes the push lifecycle early via `notifyActivityTookOver()`.
 @pragma('vm:entry-point')
 Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metadata) async {
   try {

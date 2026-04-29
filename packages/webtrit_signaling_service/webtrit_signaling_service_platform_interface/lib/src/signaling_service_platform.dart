@@ -106,20 +106,10 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   /// Intended for debug/QA use only to verify service-restart behaviour.
   Future<void> simulateKill() async {}
 
-  /// Configures the push-bound signaling strategy.
-  ///
-  /// When [useDirect] is true, Android skips the foreground service for
-  /// [SignalingServiceMode.pushBound] and runs the WebSocket directly in the
-  /// calling isolate — the same behaviour as iOS. No-op on iOS.
-  ///
-  /// Must be called before the first [start] with [SignalingServiceMode.pushBound].
-  void setPushBoundStrategy({bool useDirect = false}) {}
-
   /// Registers a callback invoked when the Activity's WebSocket signals that it
-  /// has taken over the call in direct push-bound mode.
+  /// has taken over the call in push-bound mode.
   ///
   /// Call this in the push isolate before [start] so the plugin can notify app
-  /// code when the handoff signal arrives via [IsolateNameServer]. No-op unless
-  /// [setPushBoundStrategy] was called with [useDirect] = true. No-op on iOS.
+  /// code when the handoff signal arrives via [IsolateNameServer]. No-op on iOS.
   void setHandoffCallback(VoidCallback callback) {}
 }

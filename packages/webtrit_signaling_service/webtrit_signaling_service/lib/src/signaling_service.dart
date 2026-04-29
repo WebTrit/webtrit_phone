@@ -269,11 +269,8 @@ class WebtritSignalingService implements SignalingModule {
   ///
   /// Call once during app bootstrap, before the first [WebtritSignalingService]
   /// instance is created with [SignalingServiceMode.pushBound].
-  static void setPushBoundStrategy({bool useDirect = false}) =>
-      SignalingServicePlatform.instance.setPushBoundStrategy(useDirect: useDirect);
-
   /// Registers a callback invoked when the Activity's WebSocket signals that it
-  /// has taken over the call in direct push-bound mode.
+  /// has taken over the call in push-bound mode.
   ///
   /// Call this in the push isolate before the first [WebtritSignalingService]
   /// instance is created. The presence of this callback tells the Android plugin

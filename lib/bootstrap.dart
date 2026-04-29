@@ -223,11 +223,6 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
 
   if (!Platform.isAndroid) return;
 
-  // Configure push-bound signaling strategy.
-  // When WEBTRIT_PUSH_BOUND_USE_DIRECT=true the FGS is bypassed for push-bound
-  // incoming calls; the WebSocket runs directly in the calling isolate (like iOS).
-  WebtritSignalingService.setPushBoundStrategy(useDirect: EnvironmentConfig.PUSH_BOUND_USE_DIRECT);
-
   // Registers the top-level callback that the native Android side invokes when a push
   // notification arrives in the background. Bootstraps the push isolate and delegates
   // to [onPushNotificationSyncCallback]. Must be annotated @pragma('vm:entry-point').

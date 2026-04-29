@@ -20,14 +20,14 @@ final _logger = Logger('WebtritSignalingServiceAndroid');
 
 /// Android implementation of [SignalingServicePlatform].
 ///
-/// **FGS modes (default for pushBound and always for persistent):**
+/// **FGS mode (persistent only):**
 /// The WebSocket runs inside an Android Foreground Service (background isolate
 /// + [SignalingHub]). Push and main isolates connect to the hub via
 /// [IsolateNameServer] — they never open their own WebSocket.
 ///
-/// **pushBound with [pushBoundUseDirect] = true:**
+/// **pushBound (direct mode):**
 /// Skips the FGS entirely. The WebSocket runs directly in the calling isolate,
-/// identical to the iOS implementation. Use [setPushBoundStrategy] to enable.
+/// identical to the iOS implementation.
 ///
 /// Mode details:
 /// - **pushBound** -- service dies when the user closes the app; FCM push starts
@@ -67,13 +67,6 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     SignalingServicePlatform.instance = _instance!;
   }
 
-  /// When true, [SignalingServiceMode.pushBound] skips the foreground service
-  /// and runs the WebSocket directly in the calling isolate (like iOS).
-  ///
-  /// Set via [setPushBoundStrategy] during app bootstrap before the first
-  /// [start] call with [SignalingServiceMode.pushBound].
-  static bool pushBoundUseDirect = false;
-
   final PSignalingServiceHostApi _hostApi;
 
   StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
@@ -104,11 +97,11 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   SignalingServiceMode? _currentMode;
 
   /// Factory stored for the direct-mode WebSocket path.
-  /// Set in [setModuleFactory]; used in [_startDirect] when [pushBoundUseDirect] is true.
+  /// Set in [setModuleFactory]; used in [_startDirect] for pushBound mode.
   SignalingModuleFactory? _factory;
 
-  /// Active module for the direct-mode WebSocket path (non-null only when
-  /// [pushBoundUseDirect] is true and [start] has been called).
+  /// Active module for the direct-mode WebSocket path (non-null only in
+  /// pushBound mode after [start] has been called).
   SignalingModule? _directModule;
   StreamSubscription<SignalingModuleEvent>? _directModuleSub;
 
@@ -171,7 +164,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   @override
   Future<void> attach() async {
     _logger.info('attach');
-    if (_currentMode == SignalingServiceMode.pushBound && pushBoundUseDirect) {
+    if (_currentMode == SignalingServiceMode.pushBound) {
       _logger.info('attach: direct mode — no-op (no FGS hub to attach to)');
       return;
     }
@@ -223,8 +216,8 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     if (_directModule != null) {
       await _tearDownDirectModule();
     }
-    if (mode == SignalingServiceMode.pushBound && pushBoundUseDirect) {
-      // FGS hub may be running from a previous persistent/FGS mode — tear it
+    if (mode == SignalingServiceMode.pushBound) {
+      // FGS hub may be running from a previous persistent mode — tear it
       // down before opening the direct WebSocket to avoid two simultaneous
       // connections for the same account.
       await _hubManager.tearDown();
@@ -288,7 +281,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   Future<void> stopService() async {
     _isStopped = true;
     _logger.info('stopService');
-    if (_currentMode == SignalingServiceMode.pushBound && pushBoundUseDirect) {
+    if (_currentMode == SignalingServiceMode.pushBound) {
       await _tearDownDirectModule();
       return;
     }
@@ -331,7 +324,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   }
 
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {
-    if (mode == SignalingServiceMode.pushBound && pushBoundUseDirect) {
+    if (mode == SignalingServiceMode.pushBound) {
       await _startDirect(config);
       return;
     }
@@ -395,7 +388,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   }
 
   /// Starts a direct WebSocket in the current isolate without an FGS.
-  /// Used when [pushBoundUseDirect] is true.
+  /// Used for [SignalingServiceMode.pushBound].
   ///
   /// **Push isolate** (detected by [_handoffCallback] being set): registers a
   /// [ReceivePort] under [kPushHandoffPortName] in [IsolateNameServer] and
@@ -413,8 +406,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     final factory = _factory;
     if (factory == null) {
       throw StateError(
-        'No SignalingModuleFactory registered — call setModuleFactory() before start() '
-        'when using pushBoundUseDirect.',
+        'No SignalingModuleFactory registered — call setModuleFactory() before start().',
       );
     }
     await _tearDownDirectModule();
@@ -461,12 +453,6 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       _handoffPort!.close();
       _handoffPort = null;
     }
-  }
-
-  @override
-  void setPushBoundStrategy({bool useDirect = false}) {
-    _logger.info('setPushBoundStrategy useDirect=$useDirect');
-    pushBoundUseDirect = useDirect;
   }
 
   @override
