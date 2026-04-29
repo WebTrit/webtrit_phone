@@ -41,13 +41,6 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   ///   is closed, allowing the next push to start a fresh instance.
   Future<void> start(SignalingServiceConfig config, {SignalingServiceMode mode = SignalingServiceMode.persistent});
 
-  /// Connects to an already-running service hub without starting a new service.
-  ///
-  /// Call this from the main isolate when the Activity opens after a push
-  /// notification has already started the service in [SignalingServiceMode.pushBound].
-  /// Events from the existing connection are delivered immediately via [events].
-  Future<void> attach();
-
   /// Sends [request] to the server via the active connection.
   Future<void> execute(Request request);
 

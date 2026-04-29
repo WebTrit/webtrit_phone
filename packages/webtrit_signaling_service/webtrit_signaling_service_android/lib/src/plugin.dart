@@ -37,9 +37,7 @@ final _logger = Logger('WebtritSignalingServiceAndroid');
 /// Lifecycle:
 ///   1. [start] -- initialises the foreground service (FGS path) or direct
 ///      WebSocket (direct path) and begins hub/module init.
-///   2. [attach] -- attaches to an already-running FGS hub (FGS path only).
-///      No-op in direct mode.
-///   3. [updateMode] -- switches lifecycle mode. Tears down the direct module
+///   2. [updateMode] -- switches lifecycle mode. Tears down the direct module
 ///      when switching away from direct pushBound.
 ///   4. [dispose] -- tears down all Dart-side resources.
 class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
@@ -159,16 +157,6 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     }
 
     await _startService(config, effectiveMode);
-  }
-
-  @override
-  Future<void> attach() async {
-    _logger.info('attach');
-    if (_currentMode == SignalingServiceMode.pushBound) {
-      _logger.info('attach: direct mode — no-op (no FGS hub to attach to)');
-      return;
-    }
-    _hubManager.begin();
   }
 
   @override

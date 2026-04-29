@@ -228,13 +228,6 @@ class WebtritSignalingService implements SignalingModule {
   static Future<void> setIncomingCallHandler(Function callback) =>
       SignalingServicePlatform.instance.setIncomingCallHandler(callback);
 
-  /// Connects to an already-running service hub without starting a new service.
-  ///
-  /// Call this from the main isolate when the Activity opens after a push has
-  /// already started the service in [SignalingServiceMode.pushBound]. No-op on
-  /// iOS.
-  static Future<void> attach() => SignalingServicePlatform.instance.attach();
-
   /// Switches the service lifecycle mode without restarting the connection.
   static Future<void> updateMode(SignalingServiceMode mode) => SignalingServicePlatform.instance.updateMode(mode);
 

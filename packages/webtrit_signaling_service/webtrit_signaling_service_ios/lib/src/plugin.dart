@@ -11,7 +11,6 @@ final _logger = Logger('WebtritSignalingServiceIos');
 ///
 /// On iOS there is no foreground service -- [SignalingModule] runs directly in
 /// the main isolate. [start] creates the module via the registered factory and opens the connection.
-/// [attach] is a no-op because there is no separate background process.
 class WebtritSignalingServiceIos extends SignalingServicePlatform {
   WebtritSignalingServiceIos._();
 
@@ -83,15 +82,6 @@ class WebtritSignalingServiceIos extends SignalingServicePlatform {
 
     _module = module;
     module.connect();
-  }
-
-  /// No-op on iOS -- there is no background service process to attach to.
-  ///
-  /// On iOS the [SignalingModule] always runs in the main isolate, so no
-  /// cross-isolate hub handshake is required.
-  @override
-  Future<void> attach() async {
-    _logger.info('WebtritSignalingServiceIos.attach -- no-op on iOS');
   }
 
   @override
