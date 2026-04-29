@@ -345,9 +345,9 @@ bootstrap.dart
   └── WebtritSignalingService().setIncomingCallHandler(onSignalingBackgroundIncomingCall)
 
 MainShellState.initState()
-  └── SignalingServiceModuleAdapter(WebtritSignalingService())
-         │  implements SignalingModule interface
-         │  delegates start()/attach() to WebtritSignalingService
+  └── WebtritSignalingService(config, mode)
+         │  implements SignalingModule directly
+         │  delegates events/execute/connect to platform instance
          │
          │  Stream<SignalingModuleEvent>  (replay buffer → live events)
          │
@@ -360,9 +360,9 @@ MainShellState.initState()
          │      subscribes in constructor — pure state mapping, no reconnect logic
          │      commands: connect() / disconnect() / module.execute(request)
          │
-         └──► background isolates (via plugin foreground service on Android)
-               PushNotificationIsolateManager — no reconnect, run()/close() API
-               SignalingForegroundIsolateManager — own timer, reconnects while started
+         └──► background isolates
+               PushNotificationIsolateManager — direct WebSocket (no FGS), no reconnect, run()/close() API
+               SignalingForegroundIsolateManager — FGS (persistent mode only), own timer, reconnects while started
 
 
 WebtritSignalingClient  ←  owned by SignalingModuleImpl  (1 instance at a time)
