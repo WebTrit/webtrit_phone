@@ -46,8 +46,10 @@ class CallMediaManager {
   // management so CallKit controls activation instead of WebRTC doing it automatically.
   void _configure() {
     if (Platform.isAndroid) {
+      // manageAudioFocus: false — Telecom owns audio focus for VoIP calls.
+      // Dual ownership with AudioSwitch leaves volume stuck in call mode on older MIUI (WT-1429).
       AndroidNativeAudioManagement.setAndroidAudioConfiguration(
-        AndroidAudioConfiguration(preferredOutputOrder: _voiceCallOutputOrder),
+        AndroidAudioConfiguration(preferredOutputOrder: _voiceCallOutputOrder, manageAudioFocus: false),
       );
     }
     if (Platform.isIOS) AppleNativeAudioManagement.setUseManualAudio(true);
