@@ -87,9 +87,13 @@ class _CallShellState extends State<CallShell> {
     if (current.display != CallDisplay.screen) return false;
 
     final prevCall = previous.activeCalls.isEmpty ? null : previous.activeCalls.current;
-    final currCall = current.activeCalls.isEmpty ? null : current.activeCalls.current;
+    final nextCall = current.activeCalls.isEmpty ? null : current.activeCalls.current;
 
-    return (prevCall?.isCameraActive ?? false) != (currCall?.isCameraActive ?? false);
+    // return (prevCall?.isCameraActive ?? false) != (nextCall?.isCameraActive ?? false);
+
+    // Can't compare muted track because its mutated in prev and next states together
+    // TODO: optimize later
+    return prevCall != nextCall;
   }
 
   void _updateOrientations(BuildContext context, CallDisplay display) {
