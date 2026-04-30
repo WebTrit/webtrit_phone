@@ -99,8 +99,8 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   /// Intended for debug/QA use only to verify service-restart behaviour.
   Future<void> simulateKill() async {}
 
-  /// Registers a callback invoked when the Activity's WebSocket signals that it
-  /// has taken over the call in push-bound mode.
+  /// Registers a callback invoked when another isolate's WebSocket connects in
+  /// push-bound mode, signalling that it has taken over the call.
   ///
   /// Call this in the push isolate before [start] so the plugin can notify app
   /// code when the handoff signal arrives via [IsolateNameServer]. No-op on iOS.

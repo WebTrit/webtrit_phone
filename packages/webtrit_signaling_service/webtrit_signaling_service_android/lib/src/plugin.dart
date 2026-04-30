@@ -109,7 +109,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   VoidCallback? _handoffCallback;
 
   /// [ReceivePort] registered under [kPushHandoffPortName] by the push isolate.
-  /// Receives a null signal from the Activity when its WebSocket connects.
+  /// Receives a null signal when any non-push isolate's WebSocket connects.
   ReceivePort? _handoffPort;
 
   /// Set to `true` by [stopService] and [dispose] to prevent [_onHubServiceDead]
@@ -378,13 +378,17 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   /// Starts a direct WebSocket in the current isolate without an FGS.
   /// Used for [SignalingServiceMode.pushBound].
   ///
-  /// **Push isolate** (detected by [_handoffCallback] being set): registers a
-  /// [ReceivePort] under [kPushHandoffPortName] in [IsolateNameServer] and
-  /// listens for a null signal from the Activity. On receipt, calls
-  /// [_handoffCallback] so app code can complete the push lifecycle early.
+  /// The role of this isolate is determined by whether [_handoffCallback] is set:
   ///
-  /// **Activity** (no [_handoffCallback]): on [SignalingConnected], looks up
-  /// [kPushHandoffPortName] and sends null to notify the push isolate.
+  /// **Push isolate** ([_handoffCallback] != null): registers a [ReceivePort]
+  /// under [kPushHandoffPortName] in [IsolateNameServer] and listens for a null
+  /// signal. On receipt, calls [_handoffCallback] so app code can complete the
+  /// push lifecycle early.
+  ///
+  /// **Non-push isolate** ([_handoffCallback] == null): on [SignalingConnected],
+  /// looks up [kPushHandoffPortName] and sends null to signal the push isolate.
+  /// In practice this is the Activity isolate, but the mechanism depends only on
+  /// the absence of the callback — not on which Flutter isolate is running.
   Future<void> _startDirect(SignalingServiceConfig config) async {
     _logger.info('_startDirect: starting direct WebSocket (no FGS)');
     if (_isStopped) {
@@ -404,7 +408,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       _handoffPort = ReceivePort('push_handoff');
       IsolateNameServer.registerPortWithName(_handoffPort!.sendPort, kPushHandoffPortName);
       _handoffPort!.listen((_) {
-        _logger.info('_startDirect: handoff signal received from Activity');
+        _logger.info('_startDirect: handoff signal received from non-push isolate');
         _handoffCallback?.call();
       });
       _logger.info('_startDirect: push isolate — handoff port registered');
@@ -418,7 +422,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
         if (!isPushIsolate && event is SignalingConnected) {
           final port = IsolateNameServer.lookupPortByName(kPushHandoffPortName);
           if (port != null) {
-            _logger.info('_startDirect: Activity connected — sending handoff signal to push isolate');
+            _logger.info('_startDirect: non-push isolate connected — sending handoff signal to push isolate');
             port.send(null);
           }
         }

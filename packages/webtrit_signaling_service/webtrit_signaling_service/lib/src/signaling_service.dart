@@ -254,13 +254,13 @@ class WebtritSignalingService implements SignalingModule {
   /// No-op on iOS. Intended for debug/QA use only to verify service-restart behaviour.
   static Future<void> simulateKill() => SignalingServicePlatform.instance.simulateKill();
 
-  /// Registers a callback invoked when the Activity's WebSocket signals that it
-  /// has taken over the call in push-bound mode.
+  /// Registers a callback invoked when another isolate's WebSocket connects in
+  /// push-bound mode, signalling that it has taken over the call.
   ///
   /// Call this in the push isolate before the first [WebtritSignalingService]
-  /// instance is created. The presence of this callback tells the Android plugin
-  /// that the current isolate is the push isolate, which causes it to register
-  /// an [IsolateNameServer] port for the Activity to signal. No-op on iOS.
+  /// instance is created. Its presence tells the Android plugin that this is the
+  /// push isolate — it registers an [IsolateNameServer] port so any other isolate
+  /// can signal on connect. No-op on iOS.
   static void setHandoffCallback(VoidCallback callback) =>
       SignalingServicePlatform.instance.setHandoffCallback(callback);
 }

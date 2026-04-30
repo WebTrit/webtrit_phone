@@ -372,6 +372,60 @@ WebtritSignalingClient  ←  owned by SignalingModuleImpl  (1 instance at a time
 
 ---
 
+## Push-bound handoff mechanism (Android)
+
+When the app is in push-bound mode, two isolates may open a direct WebSocket
+for the same incoming call. The plugin uses `IsolateNameServer` (process-scoped
+C++ runtime, shared across all Dart VMs in the process) to let the later isolate
+signal the earlier one to shut down.
+
+**Role detection — `_handoffCallback != null`:**
+
+The plugin does not know about "Activity" or "push isolate" as concepts.
+It detects the role of each isolate purely by whether `setHandoffCallback()` was
+called before `_startDirect()`:
+
+| `_handoffCallback` | Role | Behaviour in `_startDirect()` |
+|--------------------|------|-------------------------------|
+| set | Push isolate | Registers `ReceivePort` under `kPushHandoffPortName` in `IsolateNameServer`; waits for a signal |
+| null | Non-push isolate | On `SignalingConnected`, looks up `kPushHandoffPortName`; sends null if found |
+
+In practice the non-push isolate is always the Activity, but the mechanism is
+agnostic — any isolate that omits `setHandoffCallback()` will act as the signaller.
+
+**Sequence:**
+
+```
+Push isolate
+  setHandoffCallback(callback)        ← registers _handoffCallback
+  _startDirect()
+    isPushIsolate = true
+    ReceivePort registered as kPushHandoffPortName in IsolateNameServer
+    WebSocket opens, push isolate handles incoming call
+
+Non-push isolate (Activity)
+  _startDirect()
+    isPushIsolate = false
+    WebSocket opens
+    SignalingConnected →
+      lookupPortByName(kPushHandoffPortName) → found
+      port.send(null)                 ← signals push isolate
+
+Push isolate receives signal
+  _handoffCallback()                  ← notifyActivityTookOver()
+  IsolateManager completes early, push WebSocket closes
+```
+
+**Parallel path — code 4441:**
+
+The server also sends `controllerForceAttachClose` (code 4441) to the push
+isolate when it detects a duplicate session. This produces
+`SignalingDisconnected(recommendedReconnectDelay: Duration.zero)`, which the
+`IsolateManager` treats as an early-exit signal. Whichever path fires first
+(handoff port or 4441) closes the push session.
+
+---
+
 ## What was deleted
 
 | What | Where |
