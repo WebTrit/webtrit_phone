@@ -2177,6 +2177,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     }
 
+    final duplicateCall = state.activeCalls.firstWhereOrNull(
+      (c) => c.handle.value == e.handle.value && c.hungUpTime == null,
+    );
+    if (duplicateCall != null) {
+      _logger.info(
+        '__onMutationControlStart: call to ${e.handle.value} already exists (${duplicateCall.callId}), surfacing existing call',
+      );
+      emit(state.copyWith(minimized: false));
+      return;
+    }
+
     /// If there is an active call, the call should be put on hold before making a new call.
     /// Or it will be ended automatically by platform (via callkeep:performEndAction).
     await Future.forEach(state.activeCalls, (ActiveCall activeCall) async {
