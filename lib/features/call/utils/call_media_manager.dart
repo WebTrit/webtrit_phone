@@ -47,7 +47,11 @@ class CallMediaManager {
   void _configure() {
     if (Platform.isAndroid) {
       AndroidNativeAudioManagement.setAndroidAudioConfiguration(
-        AndroidAudioConfiguration(preferredOutputOrder: _voiceCallOutputOrder),
+        AndroidAudioConfiguration(
+          preferredOutputOrder: _voiceCallOutputOrder,
+          // Telecom owns audio focus; dual ownership leaves volume stuck in call mode on older MIUI (WT-1429).
+          manageAudioFocus: false,
+        ),
       );
     }
     if (Platform.isIOS) AppleNativeAudioManagement.setUseManualAudio(true);
