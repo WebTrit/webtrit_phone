@@ -37,7 +37,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   PushTokensState? _lastPushTokensState;
   CallState? _lastCallState;
 
-  final _debounce = DebounceMap<String>(_kReconnectDebounce);
+  final _debounce = Debounce(_kReconnectDebounce);
   SessionStatus? _pendingStatus;
 
   void _onPushTokensChanged(PushTokensState pushTokens) {
@@ -69,11 +69,11 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
       // so rapid transitions between connectIssue, inProgress, connectError do not animate.
       if (newStatus == state.status || newStatus == _pendingStatus) return;
       _pendingStatus = newStatus;
-      _debounce.schedule('status', _emitDebouncedStatus);
+      _debounce.schedule(_emitDebouncedStatus);
     } else {
       // Critical boundary: ready, error, connectivityNone, appUnregistered — immediate.
       _pendingStatus = null;
-      _debounce.cancel('status');
+      _debounce.cancel();
       emit(state.copyWith(status: newStatus));
     }
   }
