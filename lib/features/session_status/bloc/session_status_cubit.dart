@@ -53,7 +53,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   void _emitCombinedStatus() {
     _logger.finest('emitCombinedStatus: $_lastPushTokensState, $_lastCallState');
 
-    final newStatus = _resolveCurrentStatus('emitCombinedStatus');
+    final newStatus = _resolveCurrentStatus();
     if (newStatus == null) return;
 
     if (_isTransientReconnecting(newStatus) && _isTransientReconnecting(state.status)) {
@@ -73,17 +73,17 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
 
   void _emitDebouncedStatus() {
     _pendingStatus = null;
-    final freshStatus = _resolveCurrentStatus('emitDebouncedStatus');
+    final freshStatus = _resolveCurrentStatus();
     if (freshStatus == null) return;
     _logger.info('debounce fired, status: $freshStatus');
     emit(state.copyWith(status: freshStatus));
   }
 
-  SessionStatus? _resolveCurrentStatus(String caller) {
+  SessionStatus? _resolveCurrentStatus() {
     final pushTokens = _lastPushTokensState;
     final call = _lastCallState;
     if (pushTokens == null || call == null) {
-      _logger.warning('$caller: skipped — pushTokens=$pushTokens, call=$call');
+      _logger.warning('resolveCurrentStatus: skipped — pushTokens=$pushTokens, call=$call');
       return null;
     }
     return _mapCallStatusToSessionStatus(call.status, pushTokens);
