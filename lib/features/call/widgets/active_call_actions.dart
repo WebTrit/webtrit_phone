@@ -163,9 +163,10 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     final audioDevice = widget.audioDevice;
     final onAudioDeviceChanged = widget.onAudioDeviceChanged;
     final speakerOn = audioDevice?.type == CallAudioDeviceType.speaker;
-    final onBlindTransferInitiated = widget.enableInteractions ? widget.onBlindTransferInitiated : null;
-    final onAttendedTransferInitiated = widget.enableInteractions ? widget.onAttendedTransferInitiated : null;
-    final onAttendedTransferSubmitted = widget.enableInteractions ? widget.onAttendedTransferSubmitted : null;
+    // Transfer button itself is local (opens a popup), only the actions inside are signaling-dependent.
+    final onBlindTransferInitiated = widget.onBlindTransferInitiated;
+    final onAttendedTransferInitiated = widget.onAttendedTransferInitiated;
+    final onAttendedTransferSubmitted = widget.onAttendedTransferSubmitted;
     final onHeldChanged = widget.enableInteractions ? widget.onHeldChanged : null;
     final onSwapPressed = widget.enableInteractions ? widget.onSwapPressed : null;
     final onKeyPressed = widget.enableInteractions ? widget.onKeyPressed : null;
@@ -355,6 +356,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
                   if (onAttendedTransferSubmitted != null)
                     CallPopupMenuItem(
                       key: callActionsTransferMenuNumberKey,
+                      // Transfer is signaling-dependent, disable during renegotiation.
+                      enabled: widget.enableInteractions,
                       onTap: () => onAttendedTransferSubmitted.call(call),
                       text: call.displayName ?? call.handle.value,
                       icon: Icon(
@@ -366,6 +369,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
                     ),
                 if (onBlindTransferInitiated != null)
                   CallPopupMenuItem(
+                    // Transfer is signaling-dependent, disable during renegotiation.
+                    enabled: widget.enableInteractions,
                     onTap: onBlindTransferInitiated,
                     text: context.l10n.call_CallActionsTooltip_transfer_choose,
                     icon: Icon(
@@ -395,6 +400,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
                 if (onBlindTransferInitiated != null)
                   CallPopupMenuItem(
                     key: callActionsTransferMenuBlindInitKey,
+                    // Transfer is signaling-dependent, disable during renegotiation.
+                    enabled: widget.enableInteractions,
                     onTap: onBlindTransferInitiated,
                     text: context.l10n.call_CallActionsTooltip_unattended_transfer,
                     icon: Icon(
@@ -406,6 +413,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
                   ),
                 if (onAttendedTransferInitiated != null)
                   CallPopupMenuItem(
+                    // Transfer is signaling-dependent, disable during renegotiation.
+                    enabled: widget.enableInteractions,
                     onTap: onAttendedTransferInitiated,
                     text: context.l10n.call_CallActionsTooltip_attended_transfer,
                     icon: Icon(
