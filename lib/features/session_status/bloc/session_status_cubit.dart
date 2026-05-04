@@ -54,33 +54,38 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     final pushTokens = _lastPushTokensState;
     final call = _lastCallState;
 
-    if (pushTokens == null || call == null) return;
+    if (pushTokens == null || call == null) {
+      _logger.warning('emitCombinedStatus: skipped — pushTokens=$pushTokens, call=$call');
+      return;
+    }
 
     final newStatus = _mapCallStatusToSessionStatus(call.status, pushTokens);
 
     if (_isTransientReconnecting(newStatus) && _isTransientReconnecting(state.status)) {
-      // Both sides are within the reconnecting zone (connectIssue / inProgress /
-      // connectError). Debounce transitions between them so the AnimatedSwitcher
-      // in MainAppBar does not flicker on every reconnect attempt (WT-1431).
-      // Timer resets only when the *target* status changes, not on every event.
+      // Suppress AnimatedSwitcher flicker during reconnect backoff (WT-1431).
+      // Debounce fires only when the target status changes — not on every event —
+      // so rapid connectIssue ↔ inProgress ↔ connectError cycles do not animate.
       if (newStatus == state.status || newStatus == _pendingStatus) return;
       _pendingStatus = newStatus;
-      _debounce.schedule('status', _fireDebounce);
+      _debounce.schedule('status', _emitDebouncedStatus);
     } else {
-      // Critical boundary (ready↔error, network loss, unregistered) — immediate.
+      // Critical boundary: ready ↔ error, connectivityNone, appUnregistered — immediate.
       _pendingStatus = null;
       _debounce.cancel('status');
       emit(state.copyWith(status: newStatus));
     }
   }
 
-  void _fireDebounce() {
+  void _emitDebouncedStatus() {
     _pendingStatus = null;
     final pushTokens = _lastPushTokensState;
     final call = _lastCallState;
-    if (pushTokens == null || call == null) return;
+    if (pushTokens == null || call == null) {
+      _logger.warning('emitDebouncedStatus: skipped — pushTokens=$pushTokens, call=$call');
+      return;
+    }
     final freshStatus = _mapCallStatusToSessionStatus(call.status, pushTokens);
-    _logger.info('_emitCombinedStatus debounce fired -> $freshStatus');
+    _logger.info('debounce fired → $freshStatus');
     emit(state.copyWith(status: freshStatus));
   }
 
