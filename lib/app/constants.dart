@@ -12,14 +12,14 @@ const kSignalingClientConnectionTimeout = Duration(seconds: 10);
 /// network interruption (e.g. switching from Wi-Fi to LTE).
 const kOutgoingCallSignalingWaitTimeout = Duration(seconds: 30);
 const kCallRoutingStateTimeout = Duration(seconds: 10);
-const kSignalingClientReconnectDelaySeconds = 3;
-const kSignalingClientReconnectDelay = Duration(seconds: kSignalingClientReconnectDelaySeconds);
+const _kSignalingClientReconnectDelaySeconds = 3;
+const kSignalingClientReconnectDelay = Duration(seconds: _kSignalingClientReconnectDelaySeconds);
 const kSignalingClientFastReconnectDelay = Duration(seconds: 1);
 
 /// Debounce window for transient signaling status transitions (connectIssue,
 /// inProgress, connectError). Slightly longer than [kSignalingClientReconnectDelay]
 /// so one full reconnect cycle is absorbed before the UI updates.
-const kSignalingStatusDebounce = Duration(seconds: kSignalingClientReconnectDelaySeconds, milliseconds: 500);
+const kSignalingStatusDebounce = Duration(seconds: _kSignalingClientReconnectDelaySeconds, milliseconds: 500);
 
 /// How long [WebtritSignalingService.connect] waits for a terminal event
 /// (Connected / Disconnected / ConnectionFailed) before resetting
