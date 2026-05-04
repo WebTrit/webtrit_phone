@@ -43,36 +43,29 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _MainAppBarState extends State<MainAppBar> {
-  late SessionStatus _displayedStatus;
-  SessionStatus? _pendingStatus;
-  final _debounce = Debounce(kSignalingStatusDebounce);
+  late final TransientDebouncer<SessionStatus> _debouncer;
 
   @override
   void initState() {
     super.initState();
-    _displayedStatus = context.read<SessionStatusCubit>().state.status;
+    final initial = context.read<SessionStatusCubit>().state.status;
+    _debouncer = TransientDebouncer<SessionStatus>(
+      initial: initial,
+      duration: kSignalingStatusDebounce,
+      isTransient: (s) => s.signalingStatus.isTransientReconnecting,
+      getLatest: () => context.read<SessionStatusCubit>().state.status,
+    );
   }
 
   @override
   void dispose() {
-    _debounce.dispose();
+    _debouncer.dispose();
     super.dispose();
   }
 
   void _updateDisplayedStatus(SessionStatus newStatus) {
-    if (newStatus.signalingStatus.isTransientReconnecting && _displayedStatus.signalingStatus.isTransientReconnecting) {
-      if (newStatus == _displayedStatus || newStatus == _pendingStatus) return;
-      _pendingStatus = newStatus;
-      _debounce.schedule(() {
-        if (!mounted) return;
-        _pendingStatus = null;
-        setState(() => _displayedStatus = context.read<SessionStatusCubit>().state.status);
-      });
-    } else {
-      _pendingStatus = null;
-      _debounce.cancel();
-      setState(() => _displayedStatus = newStatus);
-    }
+    if (!mounted) return;
+    _debouncer.update(newStatus, () => setState(() {}));
   }
 
   @override
@@ -85,16 +78,16 @@ class _MainAppBarState extends State<MainAppBar> {
         title: Builder(
           builder: (context) {
             Widget? widgetToShow;
-            if (_displayedStatus.isEstablishing) {
+            if (_debouncer.displayed.isEstablishing) {
               widgetToShow = Row(
-                key: _displayedStatus.key,
+                key: _debouncer.displayed.key,
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   SizedBox(width: 16, height: 16, child: CircularProgressIndicator()),
                   SizedBox(width: 8),
                   Flexible(
                     child: Text(
-                      _displayedStatus.appBarl10n(context),
+                      _debouncer.displayed.appBarl10n(context),
                       style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
@@ -134,14 +127,14 @@ class _MainAppBarState extends State<MainAppBar> {
         elevation: widget.elevation,
         centerTitle: false,
         actions: [
-          if (_displayedStatus.isReady) ...[
+          if (_debouncer.displayed.isReady) ...[
             if (AppBarParams.of(context).pullableCallDialogs.isNotEmpty)
               CallPullBadge(pullableCallDialogs: AppBarParams.of(context).pullableCallDialogs),
             if (AppBarParams.of(context).systemNotificationsEnabled) SystemNotificationsBadge(),
           ],
           Ink(
             decoration: ShapeDecoration(
-              shape: CircleBorder(side: BorderSide(color: _displayedStatus.color(context))),
+              shape: CircleBorder(side: BorderSide(color: _debouncer.displayed.color(context))),
             ),
             child: BlocBuilder<UserInfoCubit, UserInfoState>(
               builder: (context, userinfoState) {

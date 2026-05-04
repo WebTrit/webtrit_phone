@@ -52,14 +52,17 @@ class _CallInfoState extends State<CallInfo> {
   Timer? durationTimer;
   Duration? duration;
 
-  late CallStatus _displayedCallStatus;
-  CallStatus? _pendingCallStatus;
-  final _debounce = Debounce(kSignalingStatusDebounce);
+  late final TransientDebouncer<CallStatus> _debouncer;
 
   @override
   void initState() {
     super.initState();
-    _displayedCallStatus = widget.callStatus;
+    _debouncer = TransientDebouncer<CallStatus>(
+      initial: widget.callStatus,
+      duration: kSignalingStatusDebounce,
+      isTransient: (s) => s.isTransientReconnecting,
+      getLatest: () => widget.callStatus,
+    );
     final acceptedTime = widget.acceptedTime;
     if (acceptedTime != null) {
       _durationTimerInit(acceptedTime);
@@ -70,7 +73,7 @@ class _CallInfoState extends State<CallInfo> {
   void didUpdateWidget(CallInfo oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.callStatus != oldWidget.callStatus) {
-      _updateDisplayedStatus(widget.callStatus);
+      _debouncer.update(widget.callStatus, () => setState(() {}));
     }
     if (widget.acceptedTime != oldWidget.acceptedTime) {
       _durationTimerCancel();
@@ -83,24 +86,9 @@ class _CallInfoState extends State<CallInfo> {
 
   @override
   void dispose() {
-    _debounce.dispose();
+    _debouncer.dispose();
     _durationTimerCancel();
     super.dispose();
-  }
-
-  void _updateDisplayedStatus(CallStatus newStatus) {
-    if (newStatus.isTransientReconnecting && _displayedCallStatus.isTransientReconnecting) {
-      if (newStatus == _displayedCallStatus || newStatus == _pendingCallStatus) return;
-      _pendingCallStatus = newStatus;
-      _debounce.schedule(() {
-        _pendingCallStatus = null;
-        setState(() => _displayedCallStatus = widget.callStatus);
-      });
-    } else {
-      _pendingCallStatus = null;
-      _debounce.cancel();
-      setState(() => _displayedCallStatus = newStatus);
-    }
   }
 
   void _durationTimerInit(DateTime acceptedTime) {
@@ -183,8 +171,8 @@ class _CallInfoState extends State<CallInfo> {
   String _buildStatusMessage(BuildContext context) {
     final duration = this.duration;
 
-    if (_displayedCallStatus != CallStatus.ready) {
-      return _displayedCallStatus.l10n(context);
+    if (_debouncer.displayed != CallStatus.ready) {
+      return _debouncer.displayed.l10n(context);
     } else if (duration == null) {
       if (widget.inviteToAttendedTransfer) {
         return context.l10n.call_description_inviteToAttendedTransfer;

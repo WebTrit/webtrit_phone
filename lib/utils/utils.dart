@@ -7,6 +7,7 @@ export 'core_support.dart';
 export 'crashlytics_utils.dart';
 export 'debounce.dart';
 export 'debounce_map.dart';
+export 'transient_debouncer.dart';
 export 'equatable_prop_to_string.dart';
 export 'expiring_cache.dart';
 export 'fixed_delay_scheduler.dart';
