@@ -9,7 +9,6 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -49,9 +48,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           title: Builder(
             builder: (context) {
               Widget? widgetToShow;
-              if (!status.hasPushTokenError &&
-                  status.signalingStatus != CallStatus.ready &&
-                  status.signalingStatus != CallStatus.appUnregistered) {
+              if (status.isEstablishing) {
                 widgetToShow = Row(
                   key: status.key,
                   mainAxisSize: MainAxisSize.max,
@@ -101,7 +98,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           elevation: elevation,
           centerTitle: false,
           actions: [
-            if (status.signalingStatus == CallStatus.ready && !status.hasPushTokenError) ...[
+            if (status.isReady) ...[
               if (AppBarParams.of(context).pullableCallDialogs.isNotEmpty)
                 CallPullBadge(pullableCallDialogs: AppBarParams.of(context).pullableCallDialogs),
               if (AppBarParams.of(context).systemNotificationsEnabled) SystemNotificationsBadge(),
