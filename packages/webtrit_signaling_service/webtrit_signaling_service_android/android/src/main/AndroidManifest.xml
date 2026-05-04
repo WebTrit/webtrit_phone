@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application>
+        <!--
+            SignalingForegroundService uses foregroundServiceType="phoneCall".
+
+            This service maintains a persistent WebSocket connection to the WebTrit VoIP
+            signaling server so that incoming call invitations (SDP offers, ICE candidates)
+            are delivered to the device immediately — within the SIP ring timeout (~30 s).
+            Without this service, incoming VoIP calls cannot be received reliably in the
+            background on devices where FCM high-priority push is restricted (Xiaomi MIUI,
+            Huawei EMUI). The phoneCall type is appropriate because the sole purpose of this
+            service is to enable VoIP call delivery.
+
+            Required permission: FOREGROUND_SERVICE_PHONE_CALL (declared above).
+            Applies on Android 14+ (API 34+); older versions pass type=0.
+        -->
+        <service
+            android:name=".SignalingForegroundService"
+            android:foregroundServiceType="phoneCall"
+            android:exported="false" />
+
+        <receiver
+            android:name=".SignalingBootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>
