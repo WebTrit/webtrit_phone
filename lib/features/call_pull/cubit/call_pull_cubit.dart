@@ -95,18 +95,23 @@ class CallPullCubit extends Cubit<List<DialogInfo>> {
     final now = DateTime.now();
     _removeExpiredActiveCallIds(now);
 
-    final notMine = _dialogInfos
+    final otherDevices = _dialogInfos
         .where((dialog) => dialog.callId != null && !_isActiveOrRecentlyActiveCallId(dialog.callId!, now))
         .toList();
 
-    final uniqCallIds = <String, DialogInfo>{};
-    for (final dialog in notMine) {
-      uniqCallIds.putIfAbsent(dialog.callId!, () => dialog);
-    }
+    // Show only pullable for this feature
+    // because showing other states have more troubles than advantages
+    // e.g log dublicates on call forking, ghost calls on app restart and state sync gapps
+    final pullable = otherDevices.where((e) => e.pullable).toList();
 
-    _logger.info('Computed pullable dialogs: ${uniqCallIds.length}/${notMine.length}/${_dialogInfos.length} dialogs');
+    _logger.info(
+      'Computed: '
+      'user:${_dialogInfos.length}/'
+      'otherDevices:${otherDevices.length}/'
+      'pullable:${pullable.length}',
+    );
 
-    emit(uniqCallIds.values.toList());
+    emit(pullable);
   }
 
   @override
