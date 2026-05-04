@@ -37,7 +37,13 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   PushTokensState? _lastPushTokensState;
   CallState? _lastCallState;
 
+  /// Debounces transitions within the transient reconnecting zone to prevent
+  /// AnimatedSwitcher from animating on every reconnect attempt.
   final _debounce = Debounce(_kReconnectDebounce);
+
+  /// The status queued by [_debounce] but not yet emitted.
+  /// Prevents the debounce timer from resetting when the same target status
+  /// arrives repeatedly during the reconnect backoff cycle.
   SessionStatus? _pendingStatus;
 
   void _onPushTokensChanged(PushTokensState pushTokens) {
