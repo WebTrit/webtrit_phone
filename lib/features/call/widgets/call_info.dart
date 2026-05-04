@@ -49,14 +49,12 @@ class CallInfo extends StatefulWidget {
 }
 
 class _CallInfoState extends State<CallInfo> {
-  static const _kStatusDebounce = kSignalingStatusDebounce;
-
   Timer? durationTimer;
   Duration? duration;
 
   late CallStatus _displayedCallStatus;
   CallStatus? _pendingCallStatus;
-  final _debounce = Debounce(_kStatusDebounce);
+  final _debounce = Debounce(kSignalingStatusDebounce);
 
   @override
   void initState() {
