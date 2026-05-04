@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -25,9 +26,10 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     _emitCombinedStatus();
   }
 
-  // Reconnect cycle fires every 3 sec; 3.5 sec absorbs status changes within
-  // a cycle without delaying genuine transitions between ready and error states.
-  static const _kReconnectDebounce = Duration(milliseconds: 3500);
+  // Slightly longer than kSignalingClientReconnectDelay so the debounce absorbs
+  // all status changes within one reconnect cycle without delaying genuine
+  // transitions between ready and error states.
+  static final _kReconnectDebounce = kSignalingClientReconnectDelay + const Duration(milliseconds: 500);
 
   late final StreamSubscription<PushTokensState> _pushTokensSubscription;
   late final StreamSubscription<CallState> _callSubscription;
