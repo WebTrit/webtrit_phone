@@ -53,15 +53,8 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   void _emitCombinedStatus() {
     _logger.finest('emitCombinedStatus: $_lastPushTokensState, $_lastCallState');
 
-    final pushTokens = _lastPushTokensState;
-    final call = _lastCallState;
-
-    if (pushTokens == null || call == null) {
-      _logger.warning('emitCombinedStatus: skipped — pushTokens=$pushTokens, call=$call');
-      return;
-    }
-
-    final newStatus = _mapCallStatusToSessionStatus(call.status, pushTokens);
+    final newStatus = _resolveCurrentStatus('emitCombinedStatus');
+    if (newStatus == null) return;
 
     if (_isTransientReconnecting(newStatus) && _isTransientReconnecting(state.status)) {
       // Suppress AnimatedSwitcher flicker during reconnect backoff (WT-1431).
@@ -80,15 +73,20 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
 
   void _emitDebouncedStatus() {
     _pendingStatus = null;
+    final freshStatus = _resolveCurrentStatus('emitDebouncedStatus');
+    if (freshStatus == null) return;
+    _logger.info('debounce fired, status: $freshStatus');
+    emit(state.copyWith(status: freshStatus));
+  }
+
+  SessionStatus? _resolveCurrentStatus(String caller) {
     final pushTokens = _lastPushTokensState;
     final call = _lastCallState;
     if (pushTokens == null || call == null) {
-      _logger.warning('emitDebouncedStatus: skipped — pushTokens=$pushTokens, call=$call');
-      return;
+      _logger.warning('$caller: skipped — pushTokens=$pushTokens, call=$call');
+      return null;
     }
-    final freshStatus = _mapCallStatusToSessionStatus(call.status, pushTokens);
-    _logger.info('debounce fired, status: $freshStatus');
-    emit(state.copyWith(status: freshStatus));
+    return _mapCallStatusToSessionStatus(call.status, pushTokens);
   }
 
   bool _isTransientReconnecting(SessionStatus status) =>
