@@ -157,6 +157,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     final themeData = Theme.of(context);
 
     final onCameraChanged = widget.enableInteractions ? widget.onCameraChanged : null;
+    // Mute and speaker are local-only (no SDP change), so they stay active during renegotiation.
     final onMutedChanged = widget.onMutedChanged;
     final audioDevice = widget.audioDevice;
     final onAudioDeviceChanged = widget.onAudioDeviceChanged;
