@@ -68,7 +68,7 @@ void main() {
       });
     });
 
-    test('emits immediately on every callStatus change — no debounce', () {
+    test('emits status on every callStatus change', () {
       fakeAsync((async) {
         final callController = StreamController<CallState>(sync: true);
 

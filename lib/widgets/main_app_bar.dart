@@ -52,7 +52,7 @@ class _MainAppBarState extends State<MainAppBar> {
     _debouncer = TransientDebouncer<SessionStatus>(
       initial: initial,
       duration: kSignalingStatusDebounce,
-      isTransient: (s) => s.signalingStatus.isTransientReconnecting,
+      isTransient: (s) => s.signalingStatus.isTransientReconnecting && !s.hasPushTokenError,
       getLatest: () => context.read<SessionStatusCubit>().state.status,
     );
   }

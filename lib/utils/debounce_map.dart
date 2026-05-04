@@ -13,7 +13,10 @@ class DebounceMap<K> {
   final Map<K, Debounce> _debouncers = {};
 
   void schedule(K key, void Function() callback) {
-    (_debouncers[key] ??= Debounce(duration)).schedule(callback);
+    (_debouncers[key] ??= Debounce(duration)).schedule(() {
+      _debouncers.remove(key);
+      callback();
+    });
   }
 
   void cancel(K key) => _debouncers.remove(key)?.cancel();
