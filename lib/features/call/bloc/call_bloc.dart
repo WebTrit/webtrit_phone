@@ -2799,7 +2799,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
                   }
                   return false;
                 })
-                .then((event) => (event as SignalingProtocolEvent).event);
+                .then((event) => (event as SignalingProtocolEvent).event)
+                .timeout(const Duration(seconds: 10));
 
             _logger.info('__onMutationSignalingCallUpdating: received response for update request: $result');
 
@@ -4045,7 +4046,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
             }
             return false;
           })
-          .then((event) => (event as SignalingProtocolEvent).event);
+          .then((event) => (event as SignalingProtocolEvent).event)
+          .timeout(const Duration(seconds: 10));
 
       _logger.info('__onMutationSignalingCallUpdating: received response for update request: $result');
 
