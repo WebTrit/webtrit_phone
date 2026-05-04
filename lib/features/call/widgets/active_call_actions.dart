@@ -156,6 +156,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
+    // Camera can trigger SDP renegotiation when adding a new track, so it is gated.
     final onCameraChanged = widget.enableInteractions ? widget.onCameraChanged : null;
     // Mute is local-only (no SDP change), so it stays active during renegotiation.
     final onMutedChanged = widget.onMutedChanged;
@@ -167,6 +168,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     final onBlindTransferInitiated = widget.onBlindTransferInitiated;
     final onAttendedTransferInitiated = widget.onAttendedTransferInitiated;
     final onAttendedTransferSubmitted = widget.onAttendedTransferSubmitted;
+    // Hold and swap send signaling requests and trigger renegotiation.
     final onHeldChanged = widget.enableInteractions ? widget.onHeldChanged : null;
     final onSwapPressed = widget.enableInteractions ? widget.onSwapPressed : null;
     final onKeyPressed = widget.enableInteractions ? widget.onKeyPressed : null;
