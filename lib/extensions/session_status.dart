@@ -35,8 +35,7 @@ extension SessionStatusColor on SessionStatus {
     final colorScheme = themeData.colorScheme;
     final callStatusStyles = themeData.extension<CallStatusStyles>()?.primary;
 
-    // TODO(Serdun): Move pushTokenError color to the color scheme
-    if (hasPushTokenError) return Colors.orange;
+    if (hasPushTokenError) return callStatusStyles?.connectIssue ?? colorScheme.error;
 
     return switch (signalingStatus) {
       CallStatus.connectivityNone => callStatusStyles?.connectivityNone ?? colorScheme.error,
