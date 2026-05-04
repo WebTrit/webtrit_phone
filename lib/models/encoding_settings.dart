@@ -180,13 +180,17 @@ class EncodingSettings extends Equatable {
   /// `null` means not set and use automatic mode.
   final List<Enableble<RTPCodecProfile>>? videoProfiles;
   static List<Enableble<RTPCodecProfile>> defaultVideoProfilesOrder = [
-    (option: RTPCodecProfile.h264_42e01f, enabled: true),
-    (option: RTPCodecProfile.h264_42e034, enabled: true),
-    (option: RTPCodecProfile.h264_640c34, enabled: true),
-    (option: RTPCodecProfile.h265, enabled: true),
     (option: RTPCodecProfile.vp8, enabled: true),
     (option: RTPCodecProfile.vp9, enabled: true),
     (option: RTPCodecProfile.av1, enabled: true),
+    (option: RTPCodecProfile.h265, enabled: true),
+
+    /// h264 downed 30 apr 2026 due to:
+    ///  - android/ios incompatibility (android support only h264_42e01f even some exynos dont, ios support h264_42e034 and h264_640c34)
+    ///  - android app crashes in some cases like upgrade to video race
+    (option: RTPCodecProfile.h264_42e01f, enabled: true),
+    (option: RTPCodecProfile.h264_42e034, enabled: true),
+    (option: RTPCodecProfile.h264_640c34, enabled: true),
     (option: RTPCodecProfile.redundancy_video, enabled: true),
   ];
 

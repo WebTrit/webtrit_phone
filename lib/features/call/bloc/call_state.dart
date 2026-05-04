@@ -307,7 +307,8 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   /// This is the primary flag for UI visibility. It evaluates to `true` only if:
   /// 1. The user has explicitly enabled video (logical state [video] is `true`).
   /// 2. A valid video track exists in the [localStream] (technical state [hasLocalVideoTrack] is `true`).
-  bool get isCameraActive => video && hasLocalVideoTrack;
+  bool get isCameraActive =>
+      video && hasLocalVideoTrack && localStream?.getVideoTracks().any((track) => track.enabled) == true;
 }
 
 extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/widgets.dart' hide Notification;
 
@@ -98,7 +99,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Timer? _presenceInfoSyncTimer;
 
   late final PeerConnectionManager _peerConnectionManager;
-  final Map<String, RenegotiationHandler> _renegotiationHandlers = {};
   late final HandshakeProcessor _handshakeProcessor;
 
   final _callkeepSound = WebtritCallkeepSound();
@@ -237,8 +237,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await _peerConnectionManager.dispose();
 
-    _clearRenegotiationHandlers();
-
     await super.close();
   }
 
@@ -280,7 +278,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.fine('onChange nextActiveCallUuids: $nextActiveCallUuids');
 
     for (final removeUuid in currentActiveCallUuids.difference(nextActiveCallUuids)) {
-      _clearRenegotiationHandler(removeUuid);
       // Disposal is intentionally not awaited to avoid blocking the Bloc processing loop.
       // The PeerConnectionManager implements an internal "disposal barrier" (via _pendingDisposals)
       // which guarantees that any subsequent createPeerConnection() for this CallId will
@@ -704,7 +701,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // Renegotiate active calls if there was reconnect
     //
     // Important to do in case if there was connection loss for a while and then webrtc detects network loss and restarts ice e.g
-    // user turn off all network interfaces >> __onPeerConnectionEventIceConnectionStateChanged >> RTCIceConnectionStateFailed >> peerConnection.restartIce() >> onRenegotiationNeeded >> _safeRenegotiate >> if(!signalingConnected) return;
+    // user turn off all network interfaces >> __onPeerConnectionEventIceConnectionStateChanged >> RTCIceConnectionStateFailed >> peerConnection.restartIce() >> onRenegotiationNeeded >> __onMutationRenegotiate >> if(!signalingConnected) return;
     // user turn on network interfaces >> _onSignalingClientEventConnected >> safeRenegotiate
     for (final call in state.activeCalls.where((c) => c.processingStatus == CallProcessingStatus.connected)) {
       _logger.warning('__onSignalingClientEventConnected: triggering safe renegotiation for call ${call.callId}');
@@ -1174,19 +1171,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallSignalingEventUpdating(_CallSignalingEventUpdating event, Emitter<CallState> emit) async {
-    emit(
-      state.copyWithMappedActiveCall(event.callId, (activeCall) {
-        return activeCall.copyWith(updating: true);
-      }),
-    );
+    // intercepted right inside [_CallMutationEvent.signalingCallUpdating] [__onMutationRenegotiate] call after [UpdateRequest] executed
   }
 
   Future<void> __onCallSignalingEventUpdated(_CallSignalingEventUpdated event, Emitter<CallState> emit) async {
-    emit(
-      state.copyWithMappedActiveCall(event.callId, (activeCall) {
-        return activeCall.copyWith(updating: false);
-      }),
-    );
+    // intercepted right inside [_CallMutationEvent.signalingCallUpdating] [__onMutationRenegotiate] call after [UpdateRequest] executed
   }
 
   Future<void> __onCallSignalingEventTransfer(_CallSignalingEventTransfer event, Emitter<CallState> emit) async {
@@ -1285,17 +1274,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallSignalingEventCallError(_CallSignalingEventCallError event, Emitter<CallState> emit) async {
-    _logger.fine('_CallSignalingEventCallError: $event');
-
-    if (event.code == 448 && event.reason.contains('SDP type answer is incompatible with session status incall')) {
-      emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(updating: false)));
-      _logger.warning('__onCallSignalingEventCallError: dispatch renegotiation after incompatible SDP error');
-      // May help to recover from the error by renegotiating the call with the correct SDP type.
-      Future.delayed(const Duration(seconds: 5), () {
-        if (isClosed) return;
-        _scheduleIceRestart(event.callId);
-      });
-    }
+    _logger.warning('_CallSignalingEventCallError: $event');
   }
 
   // processing call control events
@@ -2317,6 +2296,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final peerConnection = await _peerConnectionManager.retrieve(e.callId);
     if (peerConnection == null) return;
 
+    // Randomize a little bit to avoid double upgrade collisions
+    final preDelay = Random().nextInt(2000);
+    await Future.delayed(Duration(milliseconds: preDelay));
+
     try {
       final newVideoTrack = await userMediaBuilder.ensureVideoTrack(localStream, frontCamera: activeCall.frontCamera);
       if (newVideoTrack == null) {
@@ -2799,14 +2782,50 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
             await peerConnection.setLocalDescription(localDescription);
 
+            final transaction = WebtritSignalingClient.generateTransactionId();
+
             await _signalingModule.execute(
               UpdateRequest(
-                transaction: WebtritSignalingClient.generateTransactionId(),
+                transaction: transaction,
                 line: activeCall.line,
                 callId: activeCall.callId,
                 jsep: localDescription.toMap(),
               ),
             );
+
+            // Some events have double comfirmation like this,
+            // so lets wait for the final result to make sure the update request is processed, and only then pass mutation queue to next event
+            final result = await _signalingModule.events
+                .firstWhere((event) {
+                  if (event is SignalingProtocolEvent && event.event is SessionEvent) {
+                    final sessionEvent = event.event as SessionEvent;
+                    if (sessionEvent.transaction == transaction) return true;
+                  }
+                  return false;
+                })
+                .then((event) => (event as SignalingProtocolEvent).event)
+                .timeout(const Duration(seconds: 10));
+
+            _logger.info('__onMutationSignalingCallUpdating: received response for update request: $result');
+
+            if (result is UpdatedEvent) {
+              emit(state.copyWithMappedActiveCall(activeCall.callId, (call) => call.copyWith(updating: false)));
+            } else if (result is UpdatingEvent) {
+              emit(state.copyWithMappedActiveCall(activeCall.callId, (call) => call.copyWith(updating: true)));
+            } else if (result is CallErrorEvent) {
+              emit(state.copyWithMappedActiveCall(activeCall.callId, (call) => call.copyWith(updating: false)));
+              _logger.warning(
+                '__onCallSignalingEventCallError: received CallErrorEvent for update request: code=${result.code} reason="${result.reason}"',
+              );
+
+              // May help to recover from the error by renegotiating the call again
+              // According to sip 491 error resolution spec, randomize the delay before retrying to avoid potential collision
+              final delaySeconds = 2 + Random().nextInt(8);
+              Future.delayed(Duration(seconds: delaySeconds), () => _scheduleIceRestart(activeCall.callId));
+              _logger.info('__onCallSignalingEventCallError: dispatch renegotiation after (delay: $delaySeconds)');
+            } else {
+              throw result;
+            }
 
             if (!hadLocalVideo && localStream?.getVideoTracks().firstOrNull?.enabled == false) {
               emit(
@@ -2825,8 +2844,129 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
+  /// Performs a safe renegotiation by first checking if the active call and peer connection still exist before proceeding and no "updating" state is detected on the call.
+  ///
+  /// Designed to be triggered in response to the `onRenegotiationNeeded` or manually for scenarios like:
+  /// - boost call recovery after network switch
+  ///   (currently WebRTC built-in detector triggers after 10-15s, better to synchronize it with our signaling reconnection)
+  /// - force renegotiation after double network
+  ///   (when device had poor GSM, and then WIFI connected as second interface
+  ///   but WebRTC prefer stay on GSM network interface instead of switching to WIFI, so we can trigger renegotiation to make WebRTC switch to WIFI)
+  /// - if "STALLED" rtp traffic is detected
+  ///   (of something unexpected happens with RTP stream, will be good to try to recorer it with renegotiation)
+  /// - you name it..
   Future<void> __onMutationRenegotiate(_CallMutationEventRenegotiate e, Emitter<CallState> emit) async {
-    await _safeRenegotiate(e.callId, e.lineId);
+    final pc = await _peerConnectionManager.retrieve(e.callId);
+    if (pc == null) {
+      _logger.info('__onMutationRenegotiate: pc disposed, skipping renegotiation');
+      return;
+    }
+
+    if (pc.signalingState != RTCSignalingState.RTCSignalingStateStable) {
+      _logger.fine(() => '__onMutationRenegotiate: pc signalingState is ${pc.signalingState}, skipping renegotiation');
+      return;
+    }
+
+    final offerCandidate = await pc.createOffer();
+
+    // Note: prepare all asychronous info before checking synchrounous state below
+    // to avoid races as possible,
+    // for example:
+    // - while [await _peerConnectionManager.retrieve, await pc.createOffer], activeCall.updating or signalingConnected can be changed
+
+    final activeCall = state.retrieveActiveCall(e.callId);
+    if (activeCall == null) {
+      _logger.info('__onMutationRenegotiate: activeCall disposed, skipping renegotiation');
+      return;
+    }
+
+    if (activeCall.line == null || activeCall.line == _kUndefinedLine) {
+      _logger.info('__onMutationRenegotiate: activeCall line is ${activeCall.line}, skipping renegotiation');
+      return;
+    }
+
+    if (activeCall.processingStatus.hasPeerConnectionReady == false) {
+      _logger.info(
+        '__onMutationRenegotiate: activeCall processingStatus is ${activeCall.processingStatus}, skipping renegotiation',
+      );
+      return;
+    }
+
+    // Warning, this code block will executes even in case when app has no connection at all
+    // Example1:
+    // user turn off all network interfaces >> __onPeerConnectionEventIceConnectionStateChanged >> RTCIceConnectionStateFailed >> peerConnection.restartIce() >> onRenegotiationNeeded >> __onMutationRenegotiate
+    //
+    // so its important to prevent it from creating new offer and send it to nowhere or it will lead to hasLocalOffer stuck.
+    // Dont forget to invoke __onMutationRenegotiate manualy when signaling reconnected to make sure the new offer will be sended
+    //
+    final signalingConnected = state.isSignalingEstablished;
+    if (!signalingConnected) {
+      _logger.info('__onMutationRenegotiate: signaling not connected, skipping renegotiation');
+      return;
+    }
+
+    // If call already in updating state, mostly by remote renegetiation, hold, transfer etc..
+    // skip it but schedule another renegotiation in 1 second later to ensure the pending one is finished
+    if (activeCall.updating) {
+      await Future.delayed(Duration(seconds: 1));
+      _logger.info('__onMutationRenegotiate: activeCall is updating, retrying renegotiation');
+      add(_CallMutationEventRenegotiate(e.callId, e.lineId));
+    }
+
+    try {
+      final offer = offerCandidate;
+      sdpMunger?.apply(offer);
+      _logger.infoPretty(offer.sdp, tag: 'onRenegotiationNeeded offer SDP (callId=${e.callId}):');
+      await pc.setLocalDescription(offer);
+
+      final transaction = WebtritSignalingClient.generateTransactionId();
+
+      final updateRequest = UpdateRequest(
+        transaction: transaction,
+        line: activeCall.line,
+        callId: e.callId,
+        jsep: offer.toMap(),
+      );
+      await _signalingModule.execute(updateRequest);
+
+      // Some events have double comfirmation like this,
+      // so lets wait for the final result to make sure the update request is processed, and only then pass mutation queue to next event
+      final result = await _signalingModule.events
+          .firstWhere((event) {
+            if (event is SignalingProtocolEvent && event.event is SessionEvent) {
+              final sessionEvent = event.event as SessionEvent;
+              if (sessionEvent.transaction == transaction) return true;
+            }
+            return false;
+          })
+          .then((event) => (event as SignalingProtocolEvent).event)
+          .timeout(const Duration(seconds: 10));
+
+      _logger.info('__onMutationSignalingCallUpdating: received response for update request: $result');
+
+      if (result is UpdatedEvent) {
+        emit(state.copyWithMappedActiveCall(activeCall.callId, (call) => call.copyWith(updating: false)));
+      } else if (result is UpdatingEvent) {
+        emit(state.copyWithMappedActiveCall(activeCall.callId, (call) => call.copyWith(updating: true)));
+      } else if (result is CallErrorEvent) {
+        _logger.warning(
+          '__onCallSignalingEventCallError: received CallErrorEvent for update request: code=${result.code} reason="${result.reason}"',
+        );
+
+        emit(state.copyWithMappedActiveCall(activeCall.callId, (call) => call.copyWith(updating: false)));
+        // May help to recover from the error by renegotiating the call again
+        // According to sip 491 error resolution spec, randomize the delay before retrying to avoid potential collision
+        final delaySeconds = 2 + Random().nextInt(8);
+        Future.delayed(Duration(seconds: delaySeconds), () => _scheduleIceRestart(activeCall.callId));
+        _logger.info('__onCallSignalingEventCallError: dispatch renegotiation after (delay: $delaySeconds)');
+      } else {
+        throw result;
+      }
+    } catch (er, st) {
+      callErrorReporter.handle(er, st, '__onMutationRenegotiate failed for callId=${e.callId}');
+      _peerConnectionManager.completeError(activeCall.callId, er, st);
+      add(_ResetStateEvent.completeCall(activeCall.callId));
+    }
   }
 
   Future<void> __onMutationTrickleIce(_CallMutationEventTrickleIce event, Emitter<CallState> emit) async {
@@ -3918,114 +4058,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  void _clearRenegotiationHandler(String callId) {
-    _renegotiationHandlers.remove(callId);
-  }
-
-  void _clearRenegotiationHandlers() {
-    _renegotiationHandlers.clear();
-  }
-
-  RenegotiationHandler _getOrCreateRenegotiationHandler(String callId) {
-    return _renegotiationHandlers.putIfAbsent(
-      callId,
-      () => RenegotiationHandler(callErrorReporter: callErrorReporter, sdpMunger: sdpMunger),
-    );
-  }
-
   /// Schedules an ICE restart for [callId] after a short delay to allow a newly created
   /// network interface (e.g. VPN tunnel) to finish initializing before ICE probing starts.
   /// Any pending restart for the same call is cancelled and rescheduled on each call, so
   /// rapid consecutive connectivity events result in a single restart.
   void _scheduleIceRestart(String callId) {
+    if (isClosed) return;
     _iceRestartDebounce.schedule(callId, () => add(_IceRestartTriggered(callId)));
   }
 
   Future<void> _onIceRestartTriggered(_IceRestartTriggered event, Emitter<CallState> emit) async {
     add(_CallMutationEvent.restartIce(event.callId));
-  }
-
-  /// Performs a safe renegotiation by first checking if the active call and peer connection still exist before proceeding and no "updating" state is detected on the call.
-  ///
-  /// Designed to be triggered in response to the `onRenegotiationNeeded` or manually for scenarios like:
-  /// - boost call recovery after network switch
-  ///   (currently WebRTC built-in detector triggers after 10-15s, better to synchronize it with our signaling reconnection)
-  /// - force renegotiation after double network
-  ///   (when device had poor GSM, and then WIFI connected as second interface
-  ///   but WebRTC prefer stay on GSM network interface instead of switching to WIFI, so we can trigger renegotiation to make WebRTC switch to WIFI)
-  /// - if "STALLED" rtp traffic is detected
-  ///   (of something unexpected happens with RTP stream, will be good to try to recorer it with renegotiation)
-  /// - you name it..
-  Future<void> _safeRenegotiate(String callId, int? lineId, {int retryCount = 0}) async {
-    final pc = await _peerConnectionManager.retrieve(callId);
-    if (pc == null) {
-      _logger.info('_safeRenegotiate: pc disposed, skipping renegotiation');
-      return;
-    }
-
-    final activeCall = state.retrieveActiveCall(callId);
-    if (activeCall == null) {
-      _logger.info('_safeRenegotiate: activeCall disposed, skipping renegotiation');
-      return;
-    }
-
-    if (activeCall.line == null || activeCall.line == _kUndefinedLine) {
-      _logger.info('_safeRenegotiate: activeCall line is ${activeCall.line}, skipping renegotiation');
-      return;
-    }
-
-    if (activeCall.processingStatus.hasPeerConnectionReady == false) {
-      _logger.info(
-        '_safeRenegotiate: activeCall processingStatus is ${activeCall.processingStatus}, skipping renegotiation',
-      );
-      return;
-    }
-
-    // Warning, this code block will executes even in case when app has no connection at all
-    // Example1:
-    // user turn off all network interfaces >> __onPeerConnectionEventIceConnectionStateChanged >> RTCIceConnectionStateFailed >> peerConnection.restartIce() >> onRenegotiationNeeded >> _safeRenegotiate
-    //
-    // so its important to prevent it from creating new offer and send it to nowhere or it will lead to hasLocalOffer stuck.
-    // Dont forget to invoke _safeRenegotiate manualy when signaling reconnected to make sure the new offer will be sended
-    //
-    final signalingConnected = state.isSignalingEstablished;
-    if (!signalingConnected) {
-      _logger.info('_safeRenegotiate: signaling not connected, skipping renegotiation');
-      return;
-    }
-
-    // If call already in updating state, mostly by remote renegetiation, hold, transfer etc..
-    // we trying to wait and retry renegotiation after 1s,
-    // but after 3 times do it forcefully to avoid stuck in renegotiation loop if something goes wrong with call state
-    if (activeCall.updating && retryCount != 3) {
-      final newCount = retryCount + 1;
-      await Future.delayed(Duration(seconds: newCount));
-      _logger.info('_safeRenegotiate: activeCall is updating, retrying renegotiation (retryCount: $retryCount)');
-      return _safeRenegotiate(callId, lineId, retryCount: newCount);
-    }
-
-    final renegotiationHandler = _getOrCreateRenegotiationHandler(callId);
-    await renegotiationHandler.handle(callId, pc, _sendRenegotiationUpdate);
-  }
-
-  /// Sends a renegotiation [UpdateRequest] to the signaling server with the given [jsep] offer.
-  ///
-  /// Used as a [RenegotiationExecutor] callback by [RenegotiationHandler].
-  Future<void> _sendRenegotiationUpdate(String callId, RTCSessionDescription jsep) async {
-    state.performOnActiveCall(callId, (call) async {
-      if (call.line == null || call.line == _kUndefinedLine) {
-        _logger.severe('_sendRenegotiationUpdate: activeCall line is ${call.line}, its should never happen!!');
-        return;
-      }
-
-      final updateRequest = UpdateRequest(
-        transaction: WebtritSignalingClient.generateTransactionId(),
-        line: call.line,
-        callId: callId,
-        jsep: jsep.toMap(),
-      );
-      await _signalingModule.execute(updateRequest);
-    });
   }
 
   Never _onGetUserMediaPushKitTimeout() {
