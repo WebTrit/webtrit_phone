@@ -44,6 +44,12 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   /// The status queued by [_debounce] but not yet emitted.
   /// Prevents the debounce timer from resetting when the same target status
   /// arrives repeatedly during the reconnect backoff cycle.
+  ///
+  /// Note: when statuses alternate (e.g. inProgress, connectError, inProgress)
+  /// each arrival carries a different target, so the timer keeps resetting and
+  /// fires only once the cycle stabilises. The UI intentionally stays on the
+  /// last emitted pre-transient status (e.g. connectIssue) until the connection
+  /// resolves or the cycle stops alternating.
   SessionStatus? _pendingStatus;
 
   void _onPushTokensChanged(PushTokensState pushTokens) {
@@ -112,9 +118,9 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
 
   @override
   Future<void> close() {
-    _debounce.dispose();
-    _pushTokensSubscription.cancel();
     _callSubscription.cancel();
+    _pushTokensSubscription.cancel();
+    _debounce.dispose();
     return super.close();
   }
 }

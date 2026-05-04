@@ -16,7 +16,7 @@ class DebounceMap<K> {
     (_debouncers[key] ??= Debounce(duration)).schedule(callback);
   }
 
-  void cancel(K key) => _debouncers[key]?.cancel();
+  void cancel(K key) => _debouncers.remove(key)?.cancel();
 
   void dispose() {
     for (final debouncer in _debouncers.values) {
