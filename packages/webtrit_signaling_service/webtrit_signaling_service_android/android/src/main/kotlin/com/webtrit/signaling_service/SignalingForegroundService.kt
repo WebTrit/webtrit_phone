@@ -49,8 +49,8 @@ import io.flutter.plugin.common.BinaryMessenger
 class SignalingForegroundService : Service() {
 
     private lateinit var flutterEngineHelper: FlutterEngineHelper
-    private var notificationTitle: String = "Signaling Service"
-    private var notificationDescription: String = "Maintaining connection"
+    private var notificationTitle: String = "VoIP call service"
+    private var notificationDescription: String = "Waiting for incoming calls"
 
     private var _isolateFlutterApi: PSignalingServiceFlutterApi? = null
 
@@ -301,18 +301,17 @@ class SignalingForegroundService : Service() {
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
 
-        // FOREGROUND_SERVICE_TYPE_REMOTE_MESSAGING: this service maintains a persistent
-        // WebSocket to the WebTrit signaling server so it can receive call-signaling
-        // messages (SDP, ICE candidates, call events) at any time. The remoteMessaging
-        // type is the Android-defined category for exactly this use case.
-        // Passed to startForeground() on API 34+ only; older versions pass 0 and do
-        // not enforce a foreground service type here.
+        // FOREGROUND_SERVICE_TYPE_PHONE_CALL: this service maintains a persistent
+        // WebSocket to the WebTrit VoIP signaling server so that incoming call invitations
+        // are delivered immediately. The phoneCall type applies because the sole purpose
+        // of this service is to enable VoIP call receipt.
+        // Passed to startForeground() on API 34+ only; older versions pass 0.
         ServiceCompat.startForeground(
             this,
             NOTIFICATION_ID,
             notification,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_REMOTE_MESSAGING
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL
             else 0,
         )
     }
@@ -322,7 +321,7 @@ class SignalingForegroundService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
-                "Signaling Service",
+                "VoIP Call Service",
                 NotificationManager.IMPORTANCE_LOW,
             )
             val manager = getSystemService(NotificationManager::class.java)
