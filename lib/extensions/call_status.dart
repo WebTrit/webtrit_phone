@@ -4,6 +4,11 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 import 'package:webtrit_phone/models/models.dart';
 
+extension CallStatusReconnect on CallStatus {
+  bool get isTransientReconnecting =>
+      this == CallStatus.connectIssue || this == CallStatus.inProgress || this == CallStatus.connectError;
+}
+
 extension CallStatusL10n on CallStatus {
   String l10n(BuildContext context) {
     switch (this) {

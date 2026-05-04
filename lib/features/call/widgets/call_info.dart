@@ -91,7 +91,7 @@ class _CallInfoState extends State<CallInfo> {
   }
 
   void _updateDisplayedStatus(CallStatus newStatus) {
-    if (_isTransientReconnecting(newStatus) && _isTransientReconnecting(_displayedCallStatus)) {
+    if (newStatus.isTransientReconnecting && _displayedCallStatus.isTransientReconnecting) {
       if (newStatus == _displayedCallStatus || newStatus == _pendingCallStatus) return;
       _pendingCallStatus = newStatus;
       _debounce.schedule(() {
@@ -104,9 +104,6 @@ class _CallInfoState extends State<CallInfo> {
       setState(() => _displayedCallStatus = newStatus);
     }
   }
-
-  bool _isTransientReconnecting(CallStatus status) =>
-      status == CallStatus.connectIssue || status == CallStatus.inProgress || status == CallStatus.connectError;
 
   void _durationTimerInit(DateTime acceptedTime) {
     durationTimer = Timer.periodic(const Duration(seconds: 1), (_) {
