@@ -157,7 +157,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     final themeData = Theme.of(context);
 
     final onCameraChanged = widget.enableInteractions ? widget.onCameraChanged : null;
-    final onMutedChanged = widget.enableInteractions ? widget.onMutedChanged : null;
+    final onMutedChanged = widget.onMutedChanged;
     final audioDevice = widget.audioDevice;
     final onAudioDeviceChanged = widget.onAudioDeviceChanged;
     final speakerOn = audioDevice?.type == CallAudioDeviceType.speaker;
