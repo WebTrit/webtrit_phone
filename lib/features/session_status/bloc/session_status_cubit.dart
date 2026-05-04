@@ -26,7 +26,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   }
 
   // Reconnect cycle fires every 3 sec; 3.5 sec absorbs status changes within
-  // a cycle without delaying genuine transitions (ready↔error).
+  // a cycle without delaying genuine transitions between ready and error states.
   static const _kReconnectDebounce = Duration(milliseconds: 3500);
 
   late final StreamSubscription<PushTokensState> _pushTokensSubscription;
@@ -64,12 +64,12 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     if (_isTransientReconnecting(newStatus) && _isTransientReconnecting(state.status)) {
       // Suppress AnimatedSwitcher flicker during reconnect backoff (WT-1431).
       // Debounce fires only when the target status changes — not on every event —
-      // so rapid connectIssue ↔ inProgress ↔ connectError cycles do not animate.
+      // so rapid transitions between connectIssue, inProgress, connectError do not animate.
       if (newStatus == state.status || newStatus == _pendingStatus) return;
       _pendingStatus = newStatus;
       _debounce.schedule('status', _emitDebouncedStatus);
     } else {
-      // Critical boundary: ready ↔ error, connectivityNone, appUnregistered — immediate.
+      // Critical boundary: ready, error, connectivityNone, appUnregistered — immediate.
       _pendingStatus = null;
       _debounce.cancel('status');
       emit(state.copyWith(status: newStatus));
@@ -85,7 +85,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
       return;
     }
     final freshStatus = _mapCallStatusToSessionStatus(call.status, pushTokens);
-    _logger.info('debounce fired → $freshStatus');
+    _logger.info('debounce fired, status: $freshStatus');
     emit(state.copyWith(status: freshStatus));
   }
 
