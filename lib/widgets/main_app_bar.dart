@@ -9,7 +9,7 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/models/session_status.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -44,16 +44,16 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return BlocBuilder<SessionStatusCubit, SessionStatusState>(
       builder: (context, sessionState) {
+        final status = sessionState.status;
         return AppBar(
           title: Builder(
             builder: (context) {
               Widget? widgetToShow;
-
-              if (sessionState.status != SessionStatus.ready &&
-                  sessionState.status != SessionStatus.appUnregistered &&
-                  sessionState.status != SessionStatus.pushTokenError) {
+              if (!status.hasPushTokenError &&
+                  status.signalingStatus != CallStatus.ready &&
+                  status.signalingStatus != CallStatus.appUnregistered) {
                 widgetToShow = Row(
-                  key: Key('${mainAppBarKey}_status_${sessionState.status.name}'),
+                  key: status.key,
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     SizedBox(width: 16, height: 16, child: CircularProgressIndicator()),
@@ -101,7 +101,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           elevation: elevation,
           centerTitle: false,
           actions: [
-            if (sessionState.status == SessionStatus.ready) ...[
+            if (status.signalingStatus == CallStatus.ready && !status.hasPushTokenError) ...[
               if (AppBarParams.of(context).pullableCallDialogs.isNotEmpty)
                 CallPullBadge(pullableCallDialogs: AppBarParams.of(context).pullableCallDialogs),
               if (AppBarParams.of(context).systemNotificationsEnabled) SystemNotificationsBadge(),

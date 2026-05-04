@@ -52,20 +52,10 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   }
 
   SessionStatus _mapCallStatusToSessionStatus(CallStatus callStatus, PushTokensState pushTokens) {
-    // Use push token error as the main status if there is no push token or push token not delivered
-    if (pushTokens.pushToken == null && pushTokens.errorMessage != null) {
-      return SessionStatus.pushTokenError;
-    }
-
-    // Use call status as the main status
-    return switch (callStatus) {
-      CallStatus.connectivityNone => SessionStatus.connectivityNone,
-      CallStatus.connectError => SessionStatus.connectError,
-      CallStatus.appUnregistered => SessionStatus.appUnregistered,
-      CallStatus.connectIssue => SessionStatus.connectIssue,
-      CallStatus.inProgress => SessionStatus.inProgress,
-      CallStatus.ready => SessionStatus.ready,
-    };
+    final pushTokenError = (pushTokens.pushToken == null && pushTokens.errorMessage != null)
+        ? pushTokens.errorMessage
+        : null;
+    return SessionStatus(signalingStatus: callStatus, pushTokenError: pushTokenError);
   }
 
   @override
