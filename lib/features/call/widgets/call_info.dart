@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 import 'package:clock/clock.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';
@@ -47,12 +49,19 @@ class CallInfo extends StatefulWidget {
 }
 
 class _CallInfoState extends State<CallInfo> {
+  static final _kStatusDebounce = kSignalingClientReconnectDelay + const Duration(milliseconds: 500);
+
   Timer? durationTimer;
   Duration? duration;
+
+  late CallStatus _displayedCallStatus;
+  CallStatus? _pendingCallStatus;
+  final _debounce = Debounce(_kStatusDebounce);
 
   @override
   void initState() {
     super.initState();
+    _displayedCallStatus = widget.callStatus;
     final acceptedTime = widget.acceptedTime;
     if (acceptedTime != null) {
       _durationTimerInit(acceptedTime);
@@ -62,6 +71,9 @@ class _CallInfoState extends State<CallInfo> {
   @override
   void didUpdateWidget(CallInfo oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.callStatus != oldWidget.callStatus) {
+      _updateDisplayedStatus(widget.callStatus);
+    }
     if (widget.acceptedTime != oldWidget.acceptedTime) {
       _durationTimerCancel();
       final acceptedTime = widget.acceptedTime;
@@ -73,9 +85,28 @@ class _CallInfoState extends State<CallInfo> {
 
   @override
   void dispose() {
+    _debounce.dispose();
     _durationTimerCancel();
     super.dispose();
   }
+
+  void _updateDisplayedStatus(CallStatus newStatus) {
+    if (_isTransientReconnecting(newStatus) && _isTransientReconnecting(_displayedCallStatus)) {
+      if (newStatus == _displayedCallStatus || newStatus == _pendingCallStatus) return;
+      _pendingCallStatus = newStatus;
+      _debounce.schedule(() {
+        _pendingCallStatus = null;
+        setState(() => _displayedCallStatus = widget.callStatus);
+      });
+    } else {
+      _pendingCallStatus = null;
+      _debounce.cancel();
+      setState(() => _displayedCallStatus = newStatus);
+    }
+  }
+
+  bool _isTransientReconnecting(CallStatus status) =>
+      status == CallStatus.connectIssue || status == CallStatus.inProgress || status == CallStatus.connectError;
 
   void _durationTimerInit(DateTime acceptedTime) {
     durationTimer = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -157,8 +188,8 @@ class _CallInfoState extends State<CallInfo> {
   String _buildStatusMessage(BuildContext context) {
     final duration = this.duration;
 
-    if (widget.callStatus != CallStatus.ready) {
-      return widget.callStatus.l10n(context);
+    if (_displayedCallStatus != CallStatus.ready) {
+      return _displayedCallStatus.l10n(context);
     } else if (duration == null) {
       if (widget.inviteToAttendedTransfer) {
         return context.l10n.call_description_inviteToAttendedTransfer;
