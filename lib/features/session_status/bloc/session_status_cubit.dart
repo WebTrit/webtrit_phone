@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/utils/debounce_map.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 part 'session_status_state.dart';
 
