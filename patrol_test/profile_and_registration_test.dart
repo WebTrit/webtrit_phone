@@ -7,7 +7,7 @@ import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/extensions/session_status.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
 import 'package:webtrit_phone/features/settings/widgets/widgets.dart';
-import 'package:webtrit_phone/models/session_status.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import 'components/integration_test_environment_config.dart';
 import 'subsequences/login_by_method.dart';
@@ -35,14 +35,26 @@ void main() {
     await pumpFor(const Duration(seconds: 2), $);
     expect($(UserInfoListTile).$(accountName), findsOneWidget, reason: 'Verify account name');
     expect($(UserInfoListTile).$(accountMainNumber), findsOneWidget, reason: 'Verify account main number');
-    expect($(SessionStatus.ready.key), findsOneWidget, reason: 'Should be registered');
+    expect(
+      $(const SessionStatus(signalingStatus: CallStatus.ready).key),
+      findsOneWidget,
+      reason: 'Should be registered',
+    );
 
     // Check manual sip registration.
     await $(SwitchListTile).tap();
     await pumpFor(const Duration(seconds: 2), $);
-    expect($(SessionStatus.appUnregistered.key), findsOneWidget, reason: 'Should unregister sip session');
+    expect(
+      $(const SessionStatus(signalingStatus: CallStatus.appUnregistered).key),
+      findsOneWidget,
+      reason: 'Should unregister sip session',
+    );
     await $(SwitchListTile).tap();
     await pumpFor(const Duration(seconds: 2), $);
-    expect($(SessionStatus.ready.key), findsOneWidget, reason: 'Should register sip session');
+    expect(
+      $(const SessionStatus(signalingStatus: CallStatus.ready).key),
+      findsOneWidget,
+      reason: 'Should register sip session',
+    );
   });
 }
