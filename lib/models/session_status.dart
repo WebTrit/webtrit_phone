@@ -10,10 +10,15 @@ class SessionStatus {
 
   bool get hasPushTokenError => pushTokenError != null;
 
-  /// Signaling is ready and push token is operational — app is fully connected.
-  bool get isReady => signalingStatus == CallStatus.ready && !hasPushTokenError;
+  /// Signaling is connected — calls can be made and received.
+  /// Push token state is intentionally excluded: call functionality works
+  /// regardless of push notification delivery issues.
+  bool get isReady => signalingStatus == CallStatus.ready;
 
   /// App is actively trying to establish connection — show a progress indicator.
+  /// Push token error is excluded because it is surfaced separately via the
+  /// avatar ring color, matching previous behavior where pushTokenError overrode
+  /// all signaling states in the old enum.
   bool get isEstablishing =>
       !hasPushTokenError && signalingStatus != CallStatus.ready && signalingStatus != CallStatus.appUnregistered;
 
@@ -24,4 +29,7 @@ class SessionStatus {
 
   @override
   int get hashCode => Object.hash(signalingStatus, pushTokenError);
+
+  @override
+  String toString() => 'SessionStatus(signalingStatus: $signalingStatus, pushTokenError: $pushTokenError)';
 }

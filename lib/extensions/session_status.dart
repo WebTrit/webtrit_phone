@@ -17,8 +17,9 @@ extension SessionStatusL10n on SessionStatus {
     };
   }
 
+  // Only called from MainAppBar when isEstablishing is true, so hasPushTokenError
+  // is always false at call site — no push token branch needed here.
   String appBarl10n(BuildContext context) {
-    if (hasPushTokenError) return context.l10n.sessionStatus_AppBar_disconnected;
     return switch (signalingStatus) {
       CallStatus.connectivityNone => context.l10n.sessionStatus_AppBar_waitingForNetwork,
       CallStatus.connectError || CallStatus.connectIssue => context.l10n.sessionStatus_AppBar_waitingForConnection,
