@@ -15,6 +15,8 @@ class _MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {
 
 class _MockPushTokensBloc extends MockBloc<PushTokensEvent, PushTokensState> implements PushTokensBloc {}
 
+SessionStatus _ss(CallStatus s) => SessionStatus(signalingStatus: s);
+
 CallState _cs(CallStatus target) => switch (target) {
   CallStatus.ready => CallState(
     callServiceState: CallServiceState(
@@ -62,11 +64,11 @@ void main() {
 
         final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
 
-        expect(cubit.state.status, SessionStatus.ready);
+        expect(cubit.state.status, _ss(CallStatus.ready));
 
         // connectIssue is transient, ready is not — crosses non-transient boundary, immediate
         callController.add(_cs(CallStatus.connectIssue));
-        expect(cubit.state.status, SessionStatus.connectIssue);
+        expect(cubit.state.status, _ss(CallStatus.connectIssue));
 
         callController.close();
         unawaited(cubit.close());
@@ -81,18 +83,18 @@ void main() {
 
         // Cross into transient zone immediately (ready is non-transient)
         callController.add(_cs(CallStatus.connectIssue));
-        expect(cubit.state.status, SessionStatus.connectIssue);
+        expect(cubit.state.status, _ss(CallStatus.connectIssue));
 
         // Both subsequent statuses are transient — debounce suppresses them
         callController.add(_cs(CallStatus.inProgress));
         callController.add(_cs(CallStatus.connectError));
 
         async.elapse(const Duration(seconds: 1));
-        expect(cubit.state.status, SessionStatus.connectIssue);
+        expect(cubit.state.status, _ss(CallStatus.connectIssue));
 
         // Advance past the 3.5-second debounce window
         async.elapse(const Duration(seconds: 3));
-        expect(cubit.state.status, SessionStatus.connectError);
+        expect(cubit.state.status, _ss(CallStatus.connectError));
 
         callController.close();
         unawaited(cubit.close());
@@ -108,15 +110,15 @@ void main() {
         callController.add(_cs(CallStatus.connectIssue)); // immediate
         callController.add(_cs(CallStatus.inProgress)); // debounced
 
-        expect(cubit.state.status, SessionStatus.connectIssue);
+        expect(cubit.state.status, _ss(CallStatus.connectIssue));
 
         // ready is non-transient — cancels debounce and emits immediately
         callController.add(_cs(CallStatus.ready));
-        expect(cubit.state.status, SessionStatus.ready);
+        expect(cubit.state.status, _ss(CallStatus.ready));
 
         // No deferred emission after the debounce window
         async.elapse(const Duration(seconds: 4));
-        expect(cubit.state.status, SessionStatus.ready);
+        expect(cubit.state.status, _ss(CallStatus.ready));
 
         callController.close();
         unawaited(cubit.close());
@@ -132,14 +134,14 @@ void main() {
         callController.add(_cs(CallStatus.connectIssue)); // immediate
         callController.add(_cs(CallStatus.inProgress)); // debounced
 
-        expect(cubit.state.status, SessionStatus.connectIssue);
+        expect(cubit.state.status, _ss(CallStatus.connectIssue));
 
         // connectivityNone is non-transient — immediate even from within transient zone
         callController.add(_cs(CallStatus.connectivityNone));
-        expect(cubit.state.status, SessionStatus.connectivityNone);
+        expect(cubit.state.status, _ss(CallStatus.connectivityNone));
 
         async.elapse(const Duration(seconds: 4));
-        expect(cubit.state.status, SessionStatus.connectivityNone);
+        expect(cubit.state.status, _ss(CallStatus.connectivityNone));
 
         callController.close();
         unawaited(cubit.close());
@@ -155,14 +157,14 @@ void main() {
         callController.add(_cs(CallStatus.connectIssue)); // immediate
         callController.add(_cs(CallStatus.inProgress)); // debounced
 
-        expect(cubit.state.status, SessionStatus.connectIssue);
+        expect(cubit.state.status, _ss(CallStatus.connectIssue));
 
         // appUnregistered is non-transient — immediate even from within transient zone
         callController.add(_cs(CallStatus.appUnregistered));
-        expect(cubit.state.status, SessionStatus.appUnregistered);
+        expect(cubit.state.status, _ss(CallStatus.appUnregistered));
 
         async.elapse(const Duration(seconds: 4));
-        expect(cubit.state.status, SessionStatus.appUnregistered);
+        expect(cubit.state.status, _ss(CallStatus.appUnregistered));
 
         callController.close();
         unawaited(cubit.close());
@@ -178,14 +180,14 @@ void main() {
         callController.add(_cs(CallStatus.connectIssue)); // immediate
         callController.add(_cs(CallStatus.inProgress)); // debounced
 
-        expect(cubit.state.status, SessionStatus.connectIssue);
+        expect(cubit.state.status, _ss(CallStatus.connectIssue));
 
         // close() disposes the debounce timer, so the pending emission is dropped
         unawaited(cubit.close());
         async.flushMicrotasks();
 
         async.elapse(const Duration(seconds: 4));
-        expect(cubit.state.status, SessionStatus.connectIssue);
+        expect(cubit.state.status, _ss(CallStatus.connectIssue));
 
         callController.close();
       });
