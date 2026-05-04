@@ -263,30 +263,30 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         if (widget.availableAudioDevices.onlyBuiltIn)
           Tooltip(
             key: callActionsSpeakerKey,
-            message: speakerOn ?? false
+            message: speakerOn
                 ? context.l10n.call_CallActionsTooltip_disableSpeaker
                 : context.l10n.call_CallActionsTooltip_enableSpeaker,
             child: TextButton(
               onPressed: () {
                 final speakerDevice = widget.availableAudioDevices.getSpeaker;
                 final earpieceDevice = widget.availableAudioDevices.getEarpiece;
-                if (speakerOn == true) {
+                if (speakerOn) {
                   if (earpieceDevice != null) {
-                    onAudioDeviceChanged?.call(earpieceDevice);
+                    onAudioDeviceChanged.call(earpieceDevice);
                   } else {
                     _logger.warning('Earpiece device not found while trying to disable speakerphone');
                   }
                 } else {
                   if (speakerDevice != null) {
-                    onAudioDeviceChanged?.call(speakerDevice);
+                    onAudioDeviceChanged.call(speakerDevice);
                   } else {
                     _logger.warning('Speaker device not found while trying to enable speakerphone');
                   }
                 }
               },
-              statesController: _speakerStatesController..update(WidgetState.selected, speakerOn ?? false),
+              statesController: _speakerStatesController..update(WidgetState.selected, speakerOn),
               style: widget.style?.speaker,
-              child: Icon((speakerOn ?? false) ? Icons.volume_up : Icons.phone_in_talk, size: actionPadIconSize),
+              child: Icon(speakerOn ? Icons.volume_up : Icons.phone_in_talk, size: actionPadIconSize),
             ),
           ),
         if (!widget.availableAudioDevices.onlyBuiltIn)
