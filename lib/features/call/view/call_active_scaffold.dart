@@ -209,6 +209,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                             if (incomingRingingCalls.isEmpty)
                                               ActiveCallActions(
                                                 style: style?.actions,
+                                                // Blocks signaling-dependent actions (hold, transfer, camera).
+                                                // False during: interaction debounce, signaling not ready, SDP renegotiation.
                                                 enableInteractions:
                                                     interactionsDebounceActive == false &&
                                                     widget.callStatus == CallStatus.ready &&
