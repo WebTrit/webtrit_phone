@@ -158,9 +158,9 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
 
     final onCameraChanged = widget.enableInteractions ? widget.onCameraChanged : null;
     final onMutedChanged = widget.enableInteractions ? widget.onMutedChanged : null;
-    final audioDevice = widget.enableInteractions ? widget.audioDevice : null;
-    final onAudioDeviceChanged = widget.enableInteractions ? widget.onAudioDeviceChanged : null;
-    final speakerOn = widget.enableInteractions ? audioDevice?.type == CallAudioDeviceType.speaker : null;
+    final audioDevice = widget.audioDevice;
+    final onAudioDeviceChanged = widget.onAudioDeviceChanged;
+    final speakerOn = audioDevice?.type == CallAudioDeviceType.speaker;
     final onBlindTransferInitiated = widget.enableInteractions ? widget.onBlindTransferInitiated : null;
     final onAttendedTransferInitiated = widget.enableInteractions ? widget.onAttendedTransferInitiated : null;
     final onAttendedTransferSubmitted = widget.enableInteractions ? widget.onAttendedTransferSubmitted : null;
