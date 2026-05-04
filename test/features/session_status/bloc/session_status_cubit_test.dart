@@ -15,7 +15,8 @@ class _MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {
 
 class _MockPushTokensBloc extends MockBloc<PushTokensEvent, PushTokensState> implements PushTokensBloc {}
 
-SessionStatus _statusFor(CallStatus s) => SessionStatus(signalingStatus: s);
+SessionStatus _statusFor(CallStatus s, {String? pushTokenError}) =>
+    SessionStatus(signalingStatus: s, pushTokenError: pushTokenError);
 
 CallState _cs(CallStatus target) => switch (target) {
   CallStatus.ready => CallState(
@@ -58,138 +59,82 @@ void main() {
       return SessionStatusCubit(pushTokensBloc: pushTokensBloc, callBloc: callBloc);
     }
 
-    test('ready → connectIssue emits immediately without debounce', () {
+    test('emits initial status from constructor state', () {
       fakeAsync((async) {
-        final callController = StreamController<CallState>(sync: true);
-
-        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: const Stream.empty());
 
         expect(cubit.state.status, _statusFor(CallStatus.ready));
-
-        // connectIssue is transient, ready is not — crosses non-transient boundary, immediate
-        callController.add(_cs(CallStatus.connectIssue));
-        expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
-
-        callController.close();
         unawaited(cubit.close());
       });
     });
 
-    test('connectIssue → inProgress → connectError suppressed until debounce fires', () {
+    test('emits immediately on every callStatus change — no debounce', () {
       fakeAsync((async) {
         final callController = StreamController<CallState>(sync: true);
 
         final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
 
-        // Cross into transient zone immediately (ready is non-transient)
         callController.add(_cs(CallStatus.connectIssue));
         expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
 
-        // Both subsequent statuses are transient — debounce suppresses them
         callController.add(_cs(CallStatus.inProgress));
+        expect(cubit.state.status, _statusFor(CallStatus.inProgress));
+
         callController.add(_cs(CallStatus.connectError));
-
-        async.elapse(const Duration(seconds: 1));
-        expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
-
-        // Advance past the 3.5-second debounce window
-        async.elapse(const Duration(seconds: 3));
         expect(cubit.state.status, _statusFor(CallStatus.connectError));
 
-        callController.close();
-        unawaited(cubit.close());
-      });
-    });
-
-    test('inProgress → ready cancels debounce and emits ready immediately', () {
-      fakeAsync((async) {
-        final callController = StreamController<CallState>(sync: true);
-
-        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
-
-        callController.add(_cs(CallStatus.connectIssue)); // immediate
-        callController.add(_cs(CallStatus.inProgress)); // debounced
-
-        expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
-
-        // ready is non-transient — cancels debounce and emits immediately
         callController.add(_cs(CallStatus.ready));
         expect(cubit.state.status, _statusFor(CallStatus.ready));
 
-        // No deferred emission after the debounce window
-        async.elapse(const Duration(seconds: 4));
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('emits pushTokenError when push token is missing', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+        final pushController = StreamController<PushTokensState>(sync: true);
+
+        final cubit = buildCubit(
+          initialCallState: _cs(CallStatus.ready),
+          callStream: callController.stream,
+          pushStream: pushController.stream,
+        );
+
         expect(cubit.state.status, _statusFor(CallStatus.ready));
 
+        pushController.add(const PushTokensState(errorMessage: 'token failed'));
+        expect(cubit.state.status.hasPushTokenError, isTrue);
+        expect(cubit.state.status.signalingStatus, CallStatus.ready);
+
         callController.close();
+        pushController.close();
         unawaited(cubit.close());
       });
     });
 
-    test('connectivityNone bypasses debounce from within transient zone', () {
+    test('clears pushTokenError when push token is restored', () {
       fakeAsync((async) {
         final callController = StreamController<CallState>(sync: true);
+        final pushController = StreamController<PushTokensState>(sync: true);
 
-        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
+        final cubit = buildCubit(
+          initialCallState: _cs(CallStatus.ready),
+          callStream: callController.stream,
+          initialPushState: const PushTokensState(errorMessage: 'token failed'),
+          pushStream: pushController.stream,
+        );
 
-        callController.add(_cs(CallStatus.connectIssue)); // immediate
-        callController.add(_cs(CallStatus.inProgress)); // debounced
+        expect(cubit.state.status.hasPushTokenError, isTrue);
 
-        expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
-
-        // connectivityNone is non-transient — immediate even from within transient zone
-        callController.add(_cs(CallStatus.connectivityNone));
-        expect(cubit.state.status, _statusFor(CallStatus.connectivityNone));
-
-        async.elapse(const Duration(seconds: 4));
-        expect(cubit.state.status, _statusFor(CallStatus.connectivityNone));
-
-        callController.close();
-        unawaited(cubit.close());
-      });
-    });
-
-    test('appUnregistered bypasses debounce from within transient zone', () {
-      fakeAsync((async) {
-        final callController = StreamController<CallState>(sync: true);
-
-        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
-
-        callController.add(_cs(CallStatus.connectIssue)); // immediate
-        callController.add(_cs(CallStatus.inProgress)); // debounced
-
-        expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
-
-        // appUnregistered is non-transient — immediate even from within transient zone
-        callController.add(_cs(CallStatus.appUnregistered));
-        expect(cubit.state.status, _statusFor(CallStatus.appUnregistered));
-
-        async.elapse(const Duration(seconds: 4));
-        expect(cubit.state.status, _statusFor(CallStatus.appUnregistered));
+        pushController.add(const PushTokensState(pushToken: 'abc'));
+        expect(cubit.state.status.hasPushTokenError, isFalse);
+        expect(cubit.state.status.signalingStatus, CallStatus.ready);
 
         callController.close();
+        pushController.close();
         unawaited(cubit.close());
-      });
-    });
-
-    test('close() while debounce pending does not emit', () {
-      fakeAsync((async) {
-        final callController = StreamController<CallState>(sync: true);
-
-        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
-
-        callController.add(_cs(CallStatus.connectIssue)); // immediate
-        callController.add(_cs(CallStatus.inProgress)); // debounced
-
-        expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
-
-        // close() disposes the debounce timer, so the pending emission is dropped
-        unawaited(cubit.close());
-        async.flushMicrotasks();
-
-        async.elapse(const Duration(seconds: 4));
-        expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
-
-        callController.close();
       });
     });
   });
