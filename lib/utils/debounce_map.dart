@@ -19,8 +19,8 @@ class DebounceMap<K> {
   void cancel(K key) => _debouncers[key]?.cancel();
 
   void dispose() {
-    for (final d in _debouncers.values) {
-      d.dispose();
+    for (final debouncer in _debouncers.values) {
+      debouncer.dispose();
     }
     _debouncers.clear();
   }
