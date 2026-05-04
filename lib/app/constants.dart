@@ -15,6 +15,11 @@ const kCallRoutingStateTimeout = Duration(seconds: 10);
 const kSignalingClientReconnectDelay = Duration(seconds: 3);
 const kSignalingClientFastReconnectDelay = Duration(seconds: 1);
 
+/// Debounce window for transient signaling status transitions (connectIssue,
+/// inProgress, connectError). Slightly longer than [kSignalingClientReconnectDelay]
+/// so one full reconnect cycle is absorbed before the UI updates.
+const kSignalingStatusDebounce = Duration(seconds: 3, milliseconds: 500);
+
 /// How long [WebtritSignalingService.connect] waits for a terminal event
 /// (Connected / Disconnected / ConnectionFailed) before resetting
 /// [_startPending] and retrying. Covers the case where the background isolate

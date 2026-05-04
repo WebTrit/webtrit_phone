@@ -26,10 +26,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     _emitCombinedStatus();
   }
 
-  // Slightly longer than kSignalingClientReconnectDelay so the debounce absorbs
-  // all status changes within one reconnect cycle without delaying genuine
-  // transitions between ready and error states.
-  static final _kReconnectDebounce = kSignalingClientReconnectDelay + const Duration(milliseconds: 500);
+  static const _kReconnectDebounce = kSignalingStatusDebounce;
 
   late final StreamSubscription<PushTokensState> _pushTokensSubscription;
   late final StreamSubscription<CallState> _callSubscription;

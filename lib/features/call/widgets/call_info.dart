@@ -49,7 +49,7 @@ class CallInfo extends StatefulWidget {
 }
 
 class _CallInfoState extends State<CallInfo> {
-  static final _kStatusDebounce = kSignalingClientReconnectDelay + const Duration(milliseconds: 500);
+  static const _kStatusDebounce = kSignalingStatusDebounce;
 
   Timer? durationTimer;
   Duration? duration;
