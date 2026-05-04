@@ -85,6 +85,9 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     emit(state.copyWith(status: freshStatus));
   }
 
+  /// Computes the current [SessionStatus] from the latest [PushTokensState]
+  /// and [CallState]. Returns null and logs a warning if either is not yet
+  /// available.
   SessionStatus? _resolveCurrentStatus() {
     final pushTokens = _lastPushTokensState;
     final call = _lastCallState;
