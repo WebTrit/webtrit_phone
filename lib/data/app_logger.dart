@@ -2,8 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
-import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/models/models.dart';
 
@@ -22,8 +20,6 @@ class AppLogger {
     // Anonymization is intentionally applied only to remote logs (Logzio).
     // Console output is not anonymized to preserve full detail for local debugging.
     PrintAppender(formatter: const ColorFormatter()).attachToLogger(Logger.root);
-
-    WebtritCallkeepLogs().setLogsDelegate(CallkeepLogs());
 
     final instance = AppLogger._(remoteLoggingService, getLabels);
     instance.updateRemoteLabels();
