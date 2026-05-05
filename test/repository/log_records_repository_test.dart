@@ -238,11 +238,13 @@ void main() {
 
   group('LogRecordsFileRepositoryImpl', () {
     late Directory tempDir;
+    late String logFilePath;
     late LogRecordsFileRepositoryImpl repo;
 
     setUp(() {
       tempDir = Directory.systemTemp.createTempSync('log_records_file_test_');
-      repo = LogRecordsFileRepositoryImpl(tempDir.path);
+      logFilePath = '${tempDir.path}/app_logs.log';
+      repo = LogRecordsFileRepositoryImpl(logFilePath);
     });
 
     tearDown(() async {
@@ -255,18 +257,18 @@ void main() {
     });
 
     test('getLogRecords returns records from existing log file', () async {
-      File('${tempDir.path}/app_logs.log').writeAsStringSync('line-a\nline-b\n');
+      File(logFilePath).writeAsStringSync('line-a\nline-b\n');
 
       final records = await repo.getLogRecords();
       expect(records, ['line-b', 'line-a']);
     });
 
     test('clear deletes log files', () async {
-      File('${tempDir.path}/app_logs.log').writeAsStringSync('data');
+      File(logFilePath).writeAsStringSync('data');
 
       await repo.clear();
 
-      expect(File('${tempDir.path}/app_logs.log').existsSync(), isFalse);
+      expect(File(logFilePath).existsSync(), isFalse);
     });
 
     test('dispose completes without error', () async {
