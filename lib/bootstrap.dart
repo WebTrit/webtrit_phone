@@ -137,7 +137,7 @@ Future<InstanceRegistry> bootstrap() async {
     LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled),
     () => appLabels.logLabels,
   );
-  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
+  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, logFilePath: appPath.logFilePath)
     ..attachToLogger(Logger.root);
 
   final appLifecycle = await AppLifecycle.initMaster();

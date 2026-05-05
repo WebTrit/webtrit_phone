@@ -22,9 +22,13 @@ abstract class LogRecordsRepository {
   Future<List<String>> getLogRecords();
 
   /// Factory that returns concrete implementation depending on [useFileStorage].
-  static LogRecordsRepository create({required bool useFileStorage, required String path, int memoryCapacity = 1000}) {
+  static LogRecordsRepository create({
+    required bool useFileStorage,
+    required String logFilePath,
+    int memoryCapacity = 1000,
+  }) {
     if (useFileStorage) {
-      return LogRecordsFileRepositoryImpl(path);
+      return LogRecordsFileRepositoryImpl(logFilePath);
     } else {
       return LogRecordsMemoryRepositoryImpl(memoryCapacity);
     }
@@ -77,9 +81,9 @@ class LogRecordsMemoryRepositoryImpl implements LogRecordsRepository {
 }
 
 class LogRecordsFileRepositoryImpl implements LogRecordsRepository, Disposable {
-  LogRecordsFileRepositoryImpl(String path)
+  LogRecordsFileRepositoryImpl(String logFilePath)
     : appender = ReadableRotatingFileAppender(
-        baseFilePath: '$path/app_logs.log',
+        baseFilePath: logFilePath,
         keepRotateCount: 1,
         formatter: DefaultLogRecordFormatter(),
       );
