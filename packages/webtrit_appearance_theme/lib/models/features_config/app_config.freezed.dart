@@ -2265,7 +2265,7 @@ case _:
 /// @nodoc
 mixin _$EncodingDefaultPresetOverride {
 
- int? get audioBitrate; int? get videoBitrate; int? get ptime; int? get maxptime; int? get opusSamplingRate; int? get opusBitrate; bool? get opusStereo; bool? get opusDtx; bool? get removeExtmaps; bool? get removeStaticAudioRtpMaps; bool? get remapTE8payloadTo101;
+ int? get audioBitrate; int? get videoBitrate; int? get ptime; int? get maxptime; int? get opusSamplingRate; int? get opusBitrate; bool? get opusStereo; bool? get opusDtx; bool? get removeStaticAudioRtpMaps; bool? get remapTE8payloadTo101; bool? get removeREMBFeedback; bool? get removeTWCCFeedback; List<String>? get removeExtmaps;
 /// Create a copy of EncodingDefaultPresetOverride
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -2276,16 +2276,16 @@ $EncodingDefaultPresetOverrideCopyWith<EncodingDefaultPresetOverride> get copyWi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EncodingDefaultPresetOverride&&(identical(other.audioBitrate, audioBitrate) || other.audioBitrate == audioBitrate)&&(identical(other.videoBitrate, videoBitrate) || other.videoBitrate == videoBitrate)&&(identical(other.ptime, ptime) || other.ptime == ptime)&&(identical(other.maxptime, maxptime) || other.maxptime == maxptime)&&(identical(other.opusSamplingRate, opusSamplingRate) || other.opusSamplingRate == opusSamplingRate)&&(identical(other.opusBitrate, opusBitrate) || other.opusBitrate == opusBitrate)&&(identical(other.opusStereo, opusStereo) || other.opusStereo == opusStereo)&&(identical(other.opusDtx, opusDtx) || other.opusDtx == opusDtx)&&(identical(other.removeExtmaps, removeExtmaps) || other.removeExtmaps == removeExtmaps)&&(identical(other.removeStaticAudioRtpMaps, removeStaticAudioRtpMaps) || other.removeStaticAudioRtpMaps == removeStaticAudioRtpMaps)&&(identical(other.remapTE8payloadTo101, remapTE8payloadTo101) || other.remapTE8payloadTo101 == remapTE8payloadTo101));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EncodingDefaultPresetOverride&&(identical(other.audioBitrate, audioBitrate) || other.audioBitrate == audioBitrate)&&(identical(other.videoBitrate, videoBitrate) || other.videoBitrate == videoBitrate)&&(identical(other.ptime, ptime) || other.ptime == ptime)&&(identical(other.maxptime, maxptime) || other.maxptime == maxptime)&&(identical(other.opusSamplingRate, opusSamplingRate) || other.opusSamplingRate == opusSamplingRate)&&(identical(other.opusBitrate, opusBitrate) || other.opusBitrate == opusBitrate)&&(identical(other.opusStereo, opusStereo) || other.opusStereo == opusStereo)&&(identical(other.opusDtx, opusDtx) || other.opusDtx == opusDtx)&&(identical(other.removeStaticAudioRtpMaps, removeStaticAudioRtpMaps) || other.removeStaticAudioRtpMaps == removeStaticAudioRtpMaps)&&(identical(other.remapTE8payloadTo101, remapTE8payloadTo101) || other.remapTE8payloadTo101 == remapTE8payloadTo101)&&(identical(other.removeREMBFeedback, removeREMBFeedback) || other.removeREMBFeedback == removeREMBFeedback)&&(identical(other.removeTWCCFeedback, removeTWCCFeedback) || other.removeTWCCFeedback == removeTWCCFeedback)&&const DeepCollectionEquality().equals(other.removeExtmaps, removeExtmaps));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,audioBitrate,videoBitrate,ptime,maxptime,opusSamplingRate,opusBitrate,opusStereo,opusDtx,removeExtmaps,removeStaticAudioRtpMaps,remapTE8payloadTo101);
+int get hashCode => Object.hash(runtimeType,audioBitrate,videoBitrate,ptime,maxptime,opusSamplingRate,opusBitrate,opusStereo,opusDtx,removeStaticAudioRtpMaps,remapTE8payloadTo101,removeREMBFeedback,removeTWCCFeedback,const DeepCollectionEquality().hash(removeExtmaps));
 
 @override
 String toString() {
-  return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusSamplingRate: $opusSamplingRate, opusBitrate: $opusBitrate, opusStereo: $opusStereo, opusDtx: $opusDtx, removeExtmaps: $removeExtmaps, removeStaticAudioRtpMaps: $removeStaticAudioRtpMaps, remapTE8payloadTo101: $remapTE8payloadTo101)';
+  return 'EncodingDefaultPresetOverride(audioBitrate: $audioBitrate, videoBitrate: $videoBitrate, ptime: $ptime, maxptime: $maxptime, opusSamplingRate: $opusSamplingRate, opusBitrate: $opusBitrate, opusStereo: $opusStereo, opusDtx: $opusDtx, removeStaticAudioRtpMaps: $removeStaticAudioRtpMaps, remapTE8payloadTo101: $remapTE8payloadTo101, removeREMBFeedback: $removeREMBFeedback, removeTWCCFeedback: $removeTWCCFeedback, removeExtmaps: $removeExtmaps)';
 }
 
 
@@ -2296,7 +2296,7 @@ abstract mixin class $EncodingDefaultPresetOverrideCopyWith<$Res>  {
   factory $EncodingDefaultPresetOverrideCopyWith(EncodingDefaultPresetOverride value, $Res Function(EncodingDefaultPresetOverride) _then) = _$EncodingDefaultPresetOverrideCopyWithImpl;
 @useResult
 $Res call({
- int? audioBitrate, int? videoBitrate, int? ptime, int? maxptime, int? opusSamplingRate, int? opusBitrate, bool? opusStereo, bool? opusDtx, bool? removeExtmaps, bool? removeStaticAudioRtpMaps, bool? remapTE8payloadTo101
+ int? audioBitrate, int? videoBitrate, int? ptime, int? maxptime, int? opusSamplingRate, int? opusBitrate, bool? opusStereo, bool? opusDtx, bool? removeStaticAudioRtpMaps, bool? remapTE8payloadTo101, bool? removeREMBFeedback, bool? removeTWCCFeedback, List<String>? removeExtmaps
 });
 
 
@@ -2313,7 +2313,7 @@ class _$EncodingDefaultPresetOverrideCopyWithImpl<$Res>
 
 /// Create a copy of EncodingDefaultPresetOverride
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? audioBitrate = freezed,Object? videoBitrate = freezed,Object? ptime = freezed,Object? maxptime = freezed,Object? opusSamplingRate = freezed,Object? opusBitrate = freezed,Object? opusStereo = freezed,Object? opusDtx = freezed,Object? removeExtmaps = freezed,Object? removeStaticAudioRtpMaps = freezed,Object? remapTE8payloadTo101 = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? audioBitrate = freezed,Object? videoBitrate = freezed,Object? ptime = freezed,Object? maxptime = freezed,Object? opusSamplingRate = freezed,Object? opusBitrate = freezed,Object? opusStereo = freezed,Object? opusDtx = freezed,Object? removeStaticAudioRtpMaps = freezed,Object? remapTE8payloadTo101 = freezed,Object? removeREMBFeedback = freezed,Object? removeTWCCFeedback = freezed,Object? removeExtmaps = freezed,}) {
   return _then(EncodingDefaultPresetOverride(
 audioBitrate: freezed == audioBitrate ? _self.audioBitrate : audioBitrate // ignore: cast_nullable_to_non_nullable
 as int?,videoBitrate: freezed == videoBitrate ? _self.videoBitrate : videoBitrate // ignore: cast_nullable_to_non_nullable
@@ -2323,10 +2323,12 @@ as int?,opusSamplingRate: freezed == opusSamplingRate ? _self.opusSamplingRate :
 as int?,opusBitrate: freezed == opusBitrate ? _self.opusBitrate : opusBitrate // ignore: cast_nullable_to_non_nullable
 as int?,opusStereo: freezed == opusStereo ? _self.opusStereo : opusStereo // ignore: cast_nullable_to_non_nullable
 as bool?,opusDtx: freezed == opusDtx ? _self.opusDtx : opusDtx // ignore: cast_nullable_to_non_nullable
-as bool?,removeExtmaps: freezed == removeExtmaps ? _self.removeExtmaps : removeExtmaps // ignore: cast_nullable_to_non_nullable
 as bool?,removeStaticAudioRtpMaps: freezed == removeStaticAudioRtpMaps ? _self.removeStaticAudioRtpMaps : removeStaticAudioRtpMaps // ignore: cast_nullable_to_non_nullable
 as bool?,remapTE8payloadTo101: freezed == remapTE8payloadTo101 ? _self.remapTE8payloadTo101 : remapTE8payloadTo101 // ignore: cast_nullable_to_non_nullable
-as bool?,
+as bool?,removeREMBFeedback: freezed == removeREMBFeedback ? _self.removeREMBFeedback : removeREMBFeedback // ignore: cast_nullable_to_non_nullable
+as bool?,removeTWCCFeedback: freezed == removeTWCCFeedback ? _self.removeTWCCFeedback : removeTWCCFeedback // ignore: cast_nullable_to_non_nullable
+as bool?,removeExtmaps: freezed == removeExtmaps ? _self.removeExtmaps : removeExtmaps // ignore: cast_nullable_to_non_nullable
+as List<String>?,
   ));
 }
 
