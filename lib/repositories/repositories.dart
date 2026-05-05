@@ -22,6 +22,7 @@ export 'incoming_call_type/incoming_call_type_repository.dart';
 export 'lines_state/lines_state_repository.dart';
 export 'locale/locale_repository.dart';
 export 'log_records/log_records_repository.dart';
+export 'log_records/native_log_forwarder.dart';
 export 'messaging/messaging.dart';
 export 'peer_connection_settings/peer_connection_settings_repository.dart';
 export 'presence/presence_info_repository.dart';

@@ -139,6 +139,10 @@ Future<InstanceRegistry> bootstrap() async {
   );
   final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, logFilePath: appPath.logFilePath)
     ..attachToLogger(Logger.root);
+  final nativeLogForwarder = NativeLogForwarder(
+    nativeLogFilePath: appPath.nativeLogFilePath,
+    logger: Logger('callkeep'),
+  )..start();
 
   final appLifecycle = await AppLifecycle.initMaster();
 
@@ -172,6 +176,7 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<AppCertificates>(appCertificates);
   registry.register<AppLogger>(appLogger);
   registry.register<LogRecordsRepository>(appLoggerRepository);
+  registry.register<NativeLogForwarder>(nativeLogForwarder);
   registry.register<AppLifecycle>(appLifecycle);
   registry.register<SessionCleanupWorker>(sessionCleanupWorker);
 

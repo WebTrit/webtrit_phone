@@ -18,5 +18,7 @@ class AppPath {
 
   String get logFilePath => '$_applicationDocumentsPath/app_logs.log';
 
+  String get nativeLogFilePath => '$_applicationDocumentsPath/app_logs_native.log';
+
   String get mediaCacheBasePath => '$temporaryPath/media_cache';
 }

@@ -197,7 +197,12 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
     return result;
   }
 
-  /// Deletes all log files (base file and rotated files).
+  String get nativeLogFilePath {
+    final base = baseFilePath;
+    return base.endsWith('.log') ? '${base.substring(0, base.length - 4)}_native.log' : '${base}_native';
+  }
+
+  /// Deletes all log files (base file and rotated files) and the native callkeep log.
   Future<void> cleanLogs() async {
     try {
       // ignore: invalid_use_of_visible_for_testing_member
@@ -221,6 +226,18 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
         // try to log to the file system we are currently destroying.
         if (kDebugMode) {
           print('Error deleting log file ${file.path}: $e');
+        }
+      }
+    }
+
+    // Also delete the native callkeep log and its rotated backup.
+    for (final path in [nativeLogFilePath, '$nativeLogFilePath.1']) {
+      try {
+        final file = File(path);
+        if (await file.exists()) await file.delete();
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error deleting native log file $path: $e');
         }
       }
     }

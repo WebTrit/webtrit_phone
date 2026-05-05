@@ -127,6 +127,10 @@ class RootApp extends StatelessWidget {
                 create: (_) => instanceRegistry.get(),
                 dispose: disposeIfDisposable,
               ),
+              RepositoryProvider<NativeLogForwarder>(
+                create: (_) => instanceRegistry.get(),
+                dispose: disposeIfDisposable,
+              ),
               RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),

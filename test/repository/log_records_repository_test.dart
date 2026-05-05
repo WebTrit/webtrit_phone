@@ -229,6 +229,33 @@ void main() {
 
         expect(File('$basePath.1').existsSync(), isFalse);
       });
+
+      test('deletes native log file when it exists', () async {
+        final nativePath = '${tempDir.path}/app_native.log';
+        File(nativePath).writeAsStringSync('native data');
+
+        await appender.cleanLogs();
+
+        expect(File(nativePath).existsSync(), isFalse);
+      });
+
+      test('deletes native rotated backup when it exists', () async {
+        final nativeRotatedPath = '${tempDir.path}/app_native.log.1';
+        File(nativeRotatedPath).writeAsStringSync('old native data');
+
+        await appender.cleanLogs();
+
+        expect(File(nativeRotatedPath).existsSync(), isFalse);
+      });
+
+      test('after cleanLogs readAllLogs returns empty list', () async {
+        File(basePath).writeAsStringSync('flutter logs');
+        File('${tempDir.path}/app_native.log').writeAsStringSync('native logs');
+
+        await appender.cleanLogs();
+
+        expect(await appender.readAllLogs(), isEmpty);
+      });
     });
   });
 
