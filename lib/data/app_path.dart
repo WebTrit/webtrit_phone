@@ -18,6 +18,11 @@ class AppPath {
 
   String get logFilePath => '$_applicationDocumentsPath/app_logs.log';
 
+  /// Absolute path to the native (Kotlin) log buffer written by the callkeep_core process.
+  ///
+  /// This is the single source of truth for the native log path. Pass it to
+  /// [NativeLogForwarder] on startup so Flutter can watch the file and forward
+  /// new lines into the shared Flutter log and remote logging service.
   String get nativeLogFilePath => '$_applicationDocumentsPath/app_logs_native.log';
 
   String get mediaCacheBasePath => '$temporaryPath/media_cache';

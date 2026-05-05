@@ -197,6 +197,12 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
     return result;
   }
 
+  /// Path to the native (Kotlin) log file written by the callkeep_core process.
+  ///
+  /// Derived from [baseFilePath] by inserting `_native` before the `.log` extension
+  /// (e.g. `app_logs.log` becomes `app_logs_native.log`). Kotlin writes exclusively to
+  /// this file; Flutter reads it via [NativeLogForwarder] and forwards entries into the
+  /// shared [baseFilePath] log, keeping the two processes from contending on one file.
   String get nativeLogFilePath {
     final base = baseFilePath;
     return base.endsWith('.log') ? '${base.substring(0, base.length - 4)}_native.log' : '${base}_native';
