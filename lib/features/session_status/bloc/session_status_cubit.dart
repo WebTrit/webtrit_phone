@@ -45,23 +45,25 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
 
     final pushTokens = _lastPushTokensState;
     final call = _lastCallState;
-
-    if (pushTokens != null && call != null) {
-      emit(state.copyWith(status: _mapCallStatusToSessionStatus(call.status, pushTokens)));
+    if (pushTokens == null || call == null) {
+      _logger.warning('emitCombinedStatus: skipped — pushTokens=$pushTokens, call=$call');
+      return;
     }
-  }
 
-  SessionStatus _mapCallStatusToSessionStatus(CallStatus callStatus, PushTokensState pushTokens) {
     final pushTokenError = (pushTokens.pushToken == null && pushTokens.errorMessage != null)
         ? pushTokens.errorMessage
         : null;
-    return SessionStatus(signalingStatus: callStatus, pushTokenError: pushTokenError);
+    emit(
+      state.copyWith(
+        status: SessionStatus(signalingStatus: call.status, pushTokenError: pushTokenError),
+      ),
+    );
   }
 
   @override
   Future<void> close() {
-    _pushTokensSubscription.cancel();
     _callSubscription.cancel();
+    _pushTokensSubscription.cancel();
     return super.close();
   }
 }
