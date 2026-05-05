@@ -209,18 +209,80 @@ class EncodingCustomContent extends StatelessWidget {
             ),
             const Divider(height: 24),
             HeadingSection(
+              title: context.l10n.settings_encoding_Section_rtp_extensions_title,
+              icon: const Icon(Icons.extension_off),
+              tooltip: context.l10n.settings_encoding_Section_rtp_extensions_tooltip,
+            ),
+            _ExtmapToggle(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeExtmap_twcc,
+              type: SdpExtmapType.twcc,
+              encodingSettings: encodingSettings,
+              cubit: cubit,
+            ),
+            _ExtmapToggle(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeExtmap_absSendTime,
+              type: SdpExtmapType.absSendTime,
+              encodingSettings: encodingSettings,
+              cubit: cubit,
+            ),
+            _ExtmapToggle(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeExtmap_playoutDelay,
+              type: SdpExtmapType.playoutDelay,
+              encodingSettings: encodingSettings,
+              cubit: cubit,
+            ),
+            _ExtmapToggle(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeExtmap_videoContentType,
+              type: SdpExtmapType.videoContentType,
+              encodingSettings: encodingSettings,
+              cubit: cubit,
+            ),
+            _ExtmapToggle(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeExtmap_videoTiming,
+              type: SdpExtmapType.videoTiming,
+              encodingSettings: encodingSettings,
+              cubit: cubit,
+            ),
+            _ExtmapToggle(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeExtmap_colorSpace,
+              type: SdpExtmapType.colorSpace,
+              encodingSettings: encodingSettings,
+              cubit: cubit,
+            ),
+            _ExtmapToggle(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeExtmap_audioLevel,
+              type: SdpExtmapType.audioLevel,
+              encodingSettings: encodingSettings,
+              cubit: cubit,
+            ),
+            _ExtmapToggle(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeExtmap_tOffset,
+              type: SdpExtmapType.tOffset,
+              encodingSettings: encodingSettings,
+              cubit: cubit,
+            ),
+            _ExtmapToggle(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeExtmap_videoOrientation,
+              type: SdpExtmapType.videoOrientation,
+              encodingSettings: encodingSettings,
+              cubit: cubit,
+            ),
+            _ExtmapToggle(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeExtmap_rtpStreamId,
+              type: SdpExtmapType.rtpStreamId,
+              encodingSettings: encodingSettings,
+              cubit: cubit,
+            ),
+            _ExtmapToggle(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId,
+              type: SdpExtmapType.repairedRtpStreamId,
+              encodingSettings: encodingSettings,
+              cubit: cubit,
+            ),
+            const Divider(height: 24),
+            HeadingSection(
               title: context.l10n.settings_encoding_Section_extra_sdp_mod_title,
               icon: const Icon(Icons.edit_note_sharp),
-            ),
-            InlineSelectableSection<bool>(
-              title: context.l10n.settings_encoding_Section_extra_sdp_mod_extmapsRemove,
-              tooltip: context.l10n.settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip,
-              buildOptionTitle: (option) {
-                if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
-                return Text(context.l10n.settings_encoding_Section_value_off);
-              },
-              selected: encodingSettings.removeExtmaps,
-              onSelect: (option) => cubit.setEncodingSettings(encodingSettings.copyWithRemoveExtmaps(option)),
             ),
             InlineSelectableSection<bool>(
               title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps,
@@ -243,9 +305,57 @@ class EncodingCustomContent extends StatelessWidget {
               selected: encodingSettings.remapTE8payloadTo101,
               onSelect: (option) => cubit.setEncodingSettings(encodingSettings.copyWithRemapTE8payloadTo101(option)),
             ),
+            InlineSelectableSection<bool>(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeREMBFeedback,
+              tooltip: context.l10n.settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip,
+              buildOptionTitle: (option) {
+                if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
+                return Text(context.l10n.settings_encoding_Section_value_off);
+              },
+              selected: encodingSettings.removeREMBFeedback,
+              onSelect: (option) => cubit.setEncodingSettings(encodingSettings.copyWithRemoveREMBFeedback(option)),
+            ),
+            InlineSelectableSection<bool>(
+              title: context.l10n.settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback,
+              tooltip: context.l10n.settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip,
+              buildOptionTitle: (option) {
+                if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
+                return Text(context.l10n.settings_encoding_Section_value_off);
+              },
+              selected: encodingSettings.removeTWCCFeedback,
+              onSelect: (option) => cubit.setEncodingSettings(encodingSettings.copyWithRemoveTWCCFeedback(option)),
+            ),
           ],
         );
       },
+    );
+  }
+}
+
+class _ExtmapToggle extends StatelessWidget {
+  const _ExtmapToggle({required this.title, required this.type, required this.encodingSettings, required this.cubit});
+
+  final String title;
+  final SdpExtmapType type;
+  final EncodingSettings encodingSettings;
+  final MediaSettingsCubit cubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return InlineSelectableSection<bool>(
+      title: title,
+      buildOptionTitle: (option) {
+        if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
+        return Text(context.l10n.settings_encoding_Section_value_off);
+      },
+      selected: encodingSettings.removeExtmaps.contains(type),
+      onSelect: (v) => cubit.setEncodingSettings(
+        encodingSettings.copyWithRemoveExtmaps(
+          v
+              ? [...encodingSettings.removeExtmaps, type]
+              : encodingSettings.removeExtmaps.where((e) => e != type).toList(),
+        ),
+      ),
     );
   }
 }

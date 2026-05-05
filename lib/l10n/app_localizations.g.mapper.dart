@@ -1016,11 +1016,54 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_bitrate_title,
       'settings_encoding_Section_bitrate_tooltip':
           localizations.settings_encoding_Section_bitrate_tooltip,
-      'settings_encoding_Section_extra_sdp_mod_extmapsRemove':
-          localizations.settings_encoding_Section_extra_sdp_mod_extmapsRemove,
-      'settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip':
+      'settings_encoding_Section_rtp_extensions_title':
+          localizations.settings_encoding_Section_rtp_extensions_title,
+      'settings_encoding_Section_rtp_extensions_tooltip':
+          localizations.settings_encoding_Section_rtp_extensions_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_twcc': localizations
+          .settings_encoding_Section_extra_sdp_mod_removeExtmap_twcc,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_absSendTime':
           localizations
-              .settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip,
+              .settings_encoding_Section_extra_sdp_mod_removeExtmap_absSendTime,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_playoutDelay':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeExtmap_playoutDelay,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_videoContentType':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeExtmap_videoContentType,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_videoTiming':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeExtmap_videoTiming,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_colorSpace':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeExtmap_colorSpace,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_audioLevel':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeExtmap_audioLevel,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_tOffset':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeExtmap_tOffset,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_videoOrientation':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeExtmap_videoOrientation,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_rtpStreamId':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeExtmap_rtpStreamId,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId,
+      'settings_encoding_Section_extra_sdp_mod_removeREMBFeedback':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeREMBFeedback,
+      'settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback,
+      'settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip,
       'settings_encoding_Section_extra_sdp_mod_remapTE8':
           localizations.settings_encoding_Section_extra_sdp_mod_remapTE8,
       'settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip': localizations
