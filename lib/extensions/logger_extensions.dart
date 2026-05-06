@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
 extension LoggerPretty on Logger {
@@ -23,9 +22,7 @@ extension LoggerPretty on Logger {
     int maxLogLength = 20000,
     int maxCollectionItems = 50,
   }) {
-    if (!isLoggable(level) || kReleaseMode) {
-      return;
-    }
+    if (!isLoggable(level)) return;
 
     final effectiveTag = tag ?? name;
     final baseHeader = '[$effectiveTag]';
