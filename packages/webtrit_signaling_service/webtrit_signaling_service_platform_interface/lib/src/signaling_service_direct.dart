@@ -117,9 +117,6 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
   Future<void> setIncomingCallHandler(Function callback) async {}
 
   @override
-  Future<void> simulateKill() async {}
-
-  @override
   Future<void> stopService() async {
     _isStopped = true;
     await _tearDownModule();
