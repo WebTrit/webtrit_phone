@@ -53,6 +53,8 @@ class WebtritSignalingServiceAndroidDirect extends WebtritSignalingServiceDirect
       if (port != null) {
         _logger.info('onConnected: non-push isolate connected — sending handoff signal');
         port.send(null);
+      } else {
+        _logger.fine('onConnected: no handoff port registered — push isolate already gone or not yet ready');
       }
     }
   }
