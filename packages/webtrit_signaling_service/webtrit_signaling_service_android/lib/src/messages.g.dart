@@ -107,12 +107,6 @@ int _deepHash(Object? value) {
 }
 
 
-/// Mirrors [SignalingServiceMode] from the platform_interface package.
-enum PSignalingServiceMode {
-  persistent,
-  pushBound,
-}
-
 class PSignalingServiceStatus {
   PSignalingServiceStatus({
     required this.enabled,
@@ -206,11 +200,8 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is PSignalingServiceMode) {
-      buffer.putUint8(129);
-      writeValue(buffer, value.index);
     }    else if (value is PSignalingServiceStatus) {
-      buffer.putUint8(130);
+      buffer.putUint8(129);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -221,9 +212,6 @@ class _PigeonCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 129:
-        final value = readValue(buffer) as int?;
-        return value == null ? null : PSignalingServiceMode.values[value];
-      case 130:
         return PSignalingServiceStatus.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -371,15 +359,15 @@ class PSignalingServiceHostApi {
     ;
   }
 
-  /// Start the foreground service (idempotent). Always persistent mode.
-  Future<void> startService(PSignalingServiceMode mode) async {
+  /// Start the foreground service (idempotent).
+  Future<void> startService() async {
     final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.startService$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mode]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     _extractReplyValueOrThrow(

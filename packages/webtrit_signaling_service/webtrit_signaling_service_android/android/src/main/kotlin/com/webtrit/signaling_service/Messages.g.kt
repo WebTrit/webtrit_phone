@@ -195,18 +195,6 @@ class FlutterError (
   val details: Any? = null
 ) : Throwable()
 
-/** Mirrors [SignalingServiceMode] from the platform_interface package. */
-enum class PSignalingServiceMode(val raw: Int) {
-  PERSISTENT(0),
-  PUSH_BOUND(1);
-
-  companion object {
-    fun ofRaw(raw: Int): PSignalingServiceMode? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 /** Generated class from Pigeon that represents data sent in messages. */
 data class PSignalingServiceStatus (
   val enabled: Boolean,
@@ -289,11 +277,6 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       129.toByte() -> {
-        return (readValue(buffer) as Long?)?.let {
-          PSignalingServiceMode.ofRaw(it.toInt())
-        }
-      }
-      130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           PSignalingServiceStatus.fromList(it)
         }
@@ -303,12 +286,8 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?)   {
     when (value) {
-      is PSignalingServiceMode -> {
-        stream.write(129)
-        writeValue(stream, value.raw.toLong())
-      }
       is PSignalingServiceStatus -> {
-        stream.write(130)
+        stream.write(129)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -353,8 +332,8 @@ interface PSignalingServiceHostApi {
   fun saveModuleFactory(callbackHandle: Long)
   /** Set the foreground service notification text. */
   fun configureService(notificationTitle: String, notificationDescription: String)
-  /** Start the foreground service (idempotent). Always persistent mode. */
-  fun startService(mode: PSignalingServiceMode)
+  /** Start the foreground service (idempotent). */
+  fun startService()
   /** Stop the foreground service. */
   fun stopService()
   /**
@@ -508,11 +487,9 @@ interface PSignalingServiceHostApi {
       run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.startService$separatedMessageChannelSuffix", codec)
         if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val modeArg = args[0] as PSignalingServiceMode
+          channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
-              api.startService(modeArg)
+              api.startService()
               listOf(null)
             } catch (exception: Throwable) {
               MessagesPigeonUtils.wrapError(exception)

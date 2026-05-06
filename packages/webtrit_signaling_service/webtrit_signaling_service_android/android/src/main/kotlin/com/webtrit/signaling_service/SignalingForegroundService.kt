@@ -464,7 +464,7 @@ class SignalingForegroundService : Service() {
         override fun saveIncomingCallHandler(callbackHandle: Long) {}
         override fun saveModuleFactory(callbackHandle: Long) {}
         override fun configureService(notificationTitle: String, notificationDescription: String) {}
-        override fun startService(mode: PSignalingServiceMode) {}
+        override fun startService() {}
         override fun stopService() {}
         override fun connect() {}
         override fun simulateKill() {}

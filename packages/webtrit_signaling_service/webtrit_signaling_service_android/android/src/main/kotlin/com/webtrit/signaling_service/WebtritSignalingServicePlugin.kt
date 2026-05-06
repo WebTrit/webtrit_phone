@@ -77,7 +77,7 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
         this.notificationDescription = notificationDescription
     }
 
-    override fun startService(mode: PSignalingServiceMode) {
+    override fun startService() {
         Log.d(TAG, "startService isRunning=${SignalingForegroundService.isRunning} instance=${SignalingForegroundService.instance != null} _stopRequested=${_stopRequested.get()}")
         _stopRequested.set(false)
         Log.d(TAG, "startService: calling startForegroundService()")

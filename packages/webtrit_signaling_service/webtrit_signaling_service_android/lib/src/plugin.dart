@@ -11,7 +11,6 @@ import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_s
 
 import 'fgs/isolate/entry_point.dart' show signalingServiceCallbackDispatcher;
 import 'messages.g.dart';
-import 'mode_mapping.dart';
 import 'fgs/hub_connection_manager.dart';
 import 'direct/signaling_service_android_direct.dart';
 
@@ -331,7 +330,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       return;
     }
 
-    await _hostApi.startService(signalingModeToNative(mode));
+    await _hostApi.startService();
 
     _hubManager.begin();
   }

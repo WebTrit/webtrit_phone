@@ -13,12 +13,6 @@ import 'package:pigeon/pigeon.dart';
   ),
 )
 // ---------------------------------------------------------------------------
-// Enums
-// ---------------------------------------------------------------------------
-/// Mirrors [SignalingServiceMode] from the platform_interface package.
-enum PSignalingServiceMode { persistent, pushBound }
-
-// ---------------------------------------------------------------------------
 // Data classes
 // ---------------------------------------------------------------------------
 class PSignalingServiceStatus {
@@ -96,8 +90,8 @@ abstract class PSignalingServiceHostApi {
   /// Set the foreground service notification text.
   void configureService(String notificationTitle, String notificationDescription);
 
-  /// Start the foreground service (idempotent). Always persistent mode.
-  void startService(PSignalingServiceMode mode);
+  /// Start the foreground service (idempotent).
+  void startService();
 
   /// Stop the foreground service.
   void stopService();
