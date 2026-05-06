@@ -43,9 +43,14 @@ class NativeLogForwarder implements Disposable {
         _logger.log(_parseLevel(trimmed), trimmed);
       }
       _lastLineCount = lines.length;
-    } catch (_) {}
+    } catch (e, st) {
+      _logger.warning('NativeLogForwarder: failed to read ${_file.path}', e, st);
+    }
   }
 
+  // Expects lines in the format written by Kotlin Log.kt:
+  // "yyyy-MM-dd HH:mm:ss.SSS <level> <tag>: <message>"
+  // parts[2] is the single-character level: D=FINE, I=INFO, W=WARNING, E=SEVERE, V=FINEST.
   Level _parseLevel(String line) {
     final parts = line.split(' ');
     if (parts.length < 3) return Level.INFO;

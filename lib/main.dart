@@ -42,7 +42,12 @@ void main() {
         }
       };
 
-      Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
+      Logger.root.onRecord.listen((record) {
+        FirebaseCrashlytics.instance.log(record.toString());
+        if (!kIsWeb && !kDebugMode && record.level >= Level.SEVERE && record.loggerName == 'callkeep') {
+          FirebaseCrashlytics.instance.recordError(record.message, record.stackTrace, reason: 'native callkeep error');
+        }
+      });
 
       runApp(RootApp(instanceRegistry: instanceRegistry));
     },

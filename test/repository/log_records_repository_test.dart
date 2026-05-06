@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/repositories/log_records/log_records_repository.dart';
+import 'package:webtrit_phone/repositories/log_records/native_log_forwarder.dart';
 
 void main() {
   Logger.root.level = Level.ALL;
@@ -248,7 +249,7 @@ void main() {
         expect(File(nativeRotatedPath).existsSync(), isFalse);
       });
 
-      test('after cleanLogs readAllLogs returns empty list', () async {
+      test('after cleanLogs readAllLogs returns empty list including native log file', () async {
         File(basePath).writeAsStringSync('flutter logs');
         File('${tempDir.path}/app_native.log').writeAsStringSync('native logs');
 
@@ -300,6 +301,89 @@ void main() {
 
     test('dispose completes without error', () async {
       await expectLater(repo.dispose(), completes);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // NativeLogForwarder
+  // ---------------------------------------------------------------------------
+
+  group('NativeLogForwarder', () {
+    late Directory tempDir;
+    late String nativePath;
+    late Logger logger;
+    late List<LogRecord> captured;
+    late NativeLogForwarder forwarder;
+
+    setUp(() {
+      tempDir = Directory.systemTemp.createTempSync('native_log_forwarder_test_');
+      nativePath = '${tempDir.path}/app_native.log';
+      logger = Logger('test.native');
+      captured = [];
+      logger.onRecord.listen(captured.add);
+      forwarder = NativeLogForwarder(nativeLogFilePath: nativePath, logger: logger);
+    });
+
+    tearDown(() async {
+      await forwarder.dispose();
+      if (tempDir.existsSync()) tempDir.deleteSync(recursive: true);
+    });
+
+    Future<void> writeAndWait(String content, {FileMode mode = FileMode.write}) async {
+      File(nativePath).writeAsStringSync(content, mode: mode);
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    }
+
+    group('_parseLevel', () {
+      for (final entry in [
+        ('D', Level.FINE),
+        ('I', Level.INFO),
+        ('W', Level.WARNING),
+        ('E', Level.SEVERE),
+        ('V', Level.FINEST),
+        ('X', Level.INFO), // unknown defaults to INFO
+      ]) {
+        final (char, level) = entry;
+        test('parses $char as ${level.name}', () async {
+          forwarder.start();
+          await writeAndWait('2026-01-01 00:00:00.000 $char Tag: msg\n');
+          expect(captured.any((r) => r.level == level), isTrue);
+        });
+      }
+
+      test('defaults to INFO for short line', () async {
+        forwarder.start();
+        await writeAndWait('short\n');
+        expect(captured.any((r) => r.level == Level.INFO), isTrue);
+      });
+    });
+
+    test('skips blank lines', () async {
+      forwarder.start();
+      await writeAndWait('2026-01-01 00:00:00.000 I Tag: line1\n\n\n');
+      expect(captured, hasLength(1));
+    });
+
+    test('does not re-forward already seen lines', () async {
+      forwarder.start();
+      await writeAndWait('2026-01-01 00:00:00.000 I Tag: line1\n');
+      await writeAndWait('2026-01-01 00:00:00.000 I Tag: line1\n2026-01-01 00:00:00.001 I Tag: line2\n');
+      expect(captured, hasLength(2));
+    });
+
+    test('resets line count when file is truncated', () async {
+      forwarder.start();
+      await writeAndWait('2026-01-01 00:00:00.000 I Tag: line1\n2026-01-01 00:00:00.001 I Tag: line2\n');
+      await writeAndWait('2026-01-01 00:00:00.002 I Tag: new\n');
+      expect(captured.any((r) => r.message.contains('new')), isTrue);
+    });
+
+    test('dispose cancels watch subscription', () async {
+      forwarder.start();
+      await forwarder.dispose();
+      File(nativePath).writeAsStringSync('2026-01-01 00:00:00.000 I Tag: after dispose\n');
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+      expect(captured, isEmpty);
     });
   });
 }

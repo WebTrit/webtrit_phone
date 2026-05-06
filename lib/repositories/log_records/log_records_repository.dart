@@ -236,7 +236,8 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
       }
     }
 
-    // Also delete the native callkeep log and its rotated backup.
+    // Delete the native callkeep log and its single rotated backup.
+    // LogFileRotator.kt keeps at most one rotation (.1), so .1 is the only backup to clean.
     for (final path in [nativeLogFilePath, '$nativeLogFilePath.1']) {
       try {
         final file = File(path);
