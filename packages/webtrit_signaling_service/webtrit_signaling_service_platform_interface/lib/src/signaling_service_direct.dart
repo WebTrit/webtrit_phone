@@ -59,7 +59,8 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
   @override
   Future<void> start(
     SignalingServiceConfig config, {
-    SignalingServiceMode mode = SignalingServiceMode.persistent,
+    // ignore: avoid_unused_parameters
+    SignalingServiceMode mode = SignalingServiceMode.pushBound,
   }) async {
     _isStopped = false;
 
