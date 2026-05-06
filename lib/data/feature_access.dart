@@ -395,9 +395,11 @@ abstract final class CallMapper {
           opusBitrate: defaultPresetOverride.opusBitrate,
           opusStereo: defaultPresetOverride.opusStereo,
           opusDtx: defaultPresetOverride.opusDtx,
-          removeExtmaps: defaultPresetOverride.removeExtmaps,
           removeStaticAudioRtpMaps: defaultPresetOverride.removeStaticAudioRtpMaps,
           remapTE8payloadTo101: defaultPresetOverride.remapTE8payloadTo101,
+          removeREMBFeedback: defaultPresetOverride.removeREMBFeedback,
+          removeTWCCFeedback: defaultPresetOverride.removeTWCCFeedback,
+          removeExtmaps: _parseExtmapList(defaultPresetOverride.removeExtmaps),
         ),
       ),
       peerConnection: PeerConnectionSettings(
@@ -406,6 +408,11 @@ abstract final class CallMapper {
         ),
       ),
     );
+  }
+
+  static List<SdpExtmapType>? _parseExtmapList(List<String>? names) {
+    if (names == null) return null;
+    return names.map((name) => SdpExtmapType.values.where((t) => t.name == name).firstOrNull).nonNulls.toList();
   }
 }
 

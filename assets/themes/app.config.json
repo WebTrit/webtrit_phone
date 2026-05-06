@@ -242,9 +242,10 @@
         "opusBitrate": 16,
         "opusStereo": false,
         "opusDtx": true,
-        "removeExtmaps": false,
         "removeStaticAudioRtpMaps": false,
-        "remapTE8payloadTo101": false
+        "remapTE8payloadTo101": false,
+        "removeREMBFeedback": false,
+        "removeTWCCFeedback": false
       }
     },
     "peerConnection": {

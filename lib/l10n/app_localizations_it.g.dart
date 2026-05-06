@@ -1836,11 +1836,58 @@ class AppLocalizationsIt extends AppLocalizations {
       'Regola le impostazioni del bitrate per i codec audio e video: valori più bassi ridurranno l\'utilizzo della larghezza di banda ma influenzeranno la qualità, mentre valori più alti aumenteranno la qualità ma anche l\'utilizzo della larghezza di banda.';
 
   @override
-  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove => 'Rimuovere le extmaps';
+  String get settings_encoding_Section_extra_sdp_mod_removeREMBFeedback => 'Rimuovi feedback REMB';
 
   @override
-  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip =>
-      'Rimuovere tutte le linee extmap dall\'SDP, per ridurre la dimensione dell\'SDP. Può aiutare con problemi di frammentazione MTU su alcuni endpoint SIP.';
+  String get settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip =>
+      'Rimuove le righe goog-remb RTCP feedback dall\'SDP. Disabilita la stima della banda lato ricevitore su alcuni endpoint.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback => 'Rimuovi feedback TWCC';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip =>
+      'Rimuove il feedback RTCP transport-cc e l\'extmap transport-wide-cc dall\'SDP. Disabilita il controllo della congestione a livello di trasporto.';
+
+  @override
+  String get settings_encoding_Section_rtp_extensions_title => 'Estensioni RTP';
+
+  @override
+  String get settings_encoding_Section_rtp_extensions_tooltip =>
+      'Disabilita singole estensioni di intestazione RTP dalla negoziazione SDP.';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_twcc => 'TWCC';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_absSendTime => 'Abs-Send-Time';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_playoutDelay => 'Playout-Delay';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_videoContentType => 'Video-Content-Type';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_videoTiming => 'Video-Timing';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_colorSpace => 'Color-Space';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_audioLevel => 'Audio-Level';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_tOffset => 'TOffset';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_videoOrientation => 'Video-Orientation';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_rtpStreamId => 'RTP-Stream-ID';
+
+  @override
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId => 'Repaired-RTP-Stream-ID';
 
   @override
   String get settings_encoding_Section_extra_sdp_mod_remapTE8 => 'Rimappare il codice TE_8k a 101';

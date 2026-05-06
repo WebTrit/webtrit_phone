@@ -304,6 +304,108 @@ class SDPModBuilder {
     media['rtcpFb'] = originalRtcpFbs;
   }
 
+  /// Removes all `goog-remb` RTCP feedback entries from every media section.
+  /// Some endpoints reject or misbehave on `a=rtcp-fb:* goog-remb` lines.
+  void removeREMBFeedbacks() {
+    final mediaList = data['media'] as List<dynamic>;
+    for (final media in mediaList) {
+      if (media['rtcpFb'] is List<dynamic>) {
+        media['rtcpFb'] = (media['rtcpFb'] as List<dynamic>).where((fb) => fb['type'] != 'goog-remb').toList();
+      }
+    }
+  }
+
+  /// Removes all `transport-cc` RTCP feedback entries from every media section.
+  /// Some endpoints reject or misbehave on `a=rtcp-fb:* transport-cc` lines.
+  void removeTWCCFeedbacks() {
+    final mediaList = data['media'] as List<dynamic>;
+    for (final media in mediaList) {
+      if (media['rtcpFb'] is List<dynamic>) {
+        media['rtcpFb'] = (media['rtcpFb'] as List<dynamic>).where((fb) => fb['type'] != 'transport-cc').toList();
+      }
+    }
+  }
+
+  /// Removes the transport-wide congestion control extmap (`draft-holmer-rmcat-transport-wide-cc-extensions-01`)
+  /// from every media section.
+  void removeTWCCExtmap() {
+    const uri = 'http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01';
+    _removeExtmapByUri(uri);
+  }
+
+  /// Removes the absolute send time extmap (`abs-send-time`) from every media section.
+  void removeAbsSendTimeExtmap() {
+    const uri = 'http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time';
+    _removeExtmapByUri(uri);
+  }
+
+  /// Removes the playout delay extmap (`playout-delay`) from every media section.
+  void removePlayoutDelayExtmap() {
+    const uri = 'http://www.webrtc.org/experiments/rtp-hdrext/playout-delay';
+    _removeExtmapByUri(uri);
+  }
+
+  /// Removes the video content type extmap (`video-content-type`) from every media section.
+  void removeVideoContentTypeExtmap() {
+    const uri = 'http://www.webrtc.org/experiments/rtp-hdrext/video-content-type';
+    _removeExtmapByUri(uri);
+  }
+
+  /// Removes the video timing extmap (`video-timing`) from every media section.
+  void removeVideoTimingExtmap() {
+    const uri = 'http://www.webrtc.org/experiments/rtp-hdrext/video-timing';
+    _removeExtmapByUri(uri);
+  }
+
+  /// Removes the color space extmap (`color-space`) from every media section.
+  void removeColorSpaceExtmap() {
+    const uri = 'http://www.webrtc.org/experiments/rtp-hdrext/color-space';
+    _removeExtmapByUri(uri);
+  }
+
+  /// Removes the audio level extmap (`ssrc-audio-level`, RFC 6464) from every media section.
+  void removeAudioLevelExtmap() {
+    const uri = 'urn:ietf:params:rtp-hdrext:ssrc-audio-level';
+    _removeExtmapByUri(uri);
+  }
+
+  /// Removes the transmission offset extmap (`toffset`, RFC 5450) from every media section.
+  void removeTOffsetExtmap() {
+    const uri = 'urn:ietf:params:rtp-hdrext:toffset';
+    _removeExtmapByUri(uri);
+  }
+
+  /// Removes the video orientation extmap (`urn:3gpp:video-orientation`) from every media section.
+  void removeVideoOrientationExtmap() {
+    const uri = 'urn:3gpp:video-orientation';
+    _removeExtmapByUri(uri);
+  }
+
+  /// Removes the RTP stream ID extmap (`sdes:rtp-stream-id`) from every media section.
+  void removeRtpStreamIdExtmap() {
+    const uri = 'urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id';
+    _removeExtmapByUri(uri);
+  }
+
+  /// Removes the repaired RTP stream ID extmap (`sdes:repaired-rtp-stream-id`) from every media section.
+  void removeRepairedRtpStreamIdExtmap() {
+    const uri = 'urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-stream-id';
+    _removeExtmapByUri(uri);
+  }
+
+  /// Removes the extmap with the given [uri] from every media section, or only from [kind] if provided.
+  void removeExtmapByUri(String uri, {RTPCodecKind? kind}) {
+    final mediaList = data['media'] as List<dynamic>;
+    for (final media in mediaList) {
+      if (kind != null && media['type'] != kind.name) continue;
+      if (media['ext'] is List<dynamic>) {
+        media['ext'] = (media['ext'] as List<dynamic>).where((e) => e['uri'] != uri).toList();
+      }
+    }
+  }
+
+  void _removeExtmapByUri(String uri) => removeExtmapByUri(uri);
+
   /// Removes unknown rtp profiles declarations from the SDP
   /// because some of them causes Webrtc crash when setting it as remote description.
   ///

@@ -45,6 +45,9 @@ class ModifyWithEncodingSettings implements SDPMunger {
         opusSamplingRate: defaultPresetOverride.opusSamplingRate,
         opusStereo: defaultPresetOverride.opusStereo,
         opusDtx: defaultPresetOverride.opusDtx,
+        removeREMBFeedback: defaultPresetOverride.removeREMBFeedback,
+        removeTWCCFeedback: defaultPresetOverride.removeTWCCFeedback,
+        removeExtmaps: defaultPresetOverride.removeExtmaps,
       ),
       EncodingPreset.eco => EncodingSettings.eco(),
       EncodingPreset.balance => EncodingSettings.balance(),
@@ -75,9 +78,11 @@ class ModifyWithEncodingSettings implements SDPMunger {
       opusDtx,
       audioProfiles,
       videoProfiles,
-      removeExtmaps,
       removeStaticAudioRtpMaps,
       remapTE8payloadTo101,
+      removeREMBFeedback,
+      removeTWCCFeedback,
+      removeExtmaps,
     ) = settings.asRecord;
 
     final sdp = description.sdp;
@@ -121,8 +126,10 @@ class ModifyWithEncodingSettings implements SDPMunger {
       modified = true;
     }
 
-    if (removeExtmaps) {
-      builder.removeAudioExtmaps();
+    if (removeExtmaps.isNotEmpty) {
+      for (final type in removeExtmaps) {
+        builder.removeExtmapByUri(type.uri);
+      }
       modified = true;
     }
 
@@ -133,6 +140,16 @@ class ModifyWithEncodingSettings implements SDPMunger {
 
     if (remapTE8payloadTo101) {
       builder.remapTE8payloadTo101();
+      modified = true;
+    }
+
+    if (removeREMBFeedback) {
+      builder.removeREMBFeedbacks();
+      modified = true;
+    }
+
+    if (removeTWCCFeedback) {
+      builder.removeTWCCFeedbacks();
       modified = true;
     }
 

@@ -3372,17 +3372,107 @@ abstract class AppLocalizations {
   /// **'Adjust the bitrate settings for audio and video codecs, lower values will reduce the bandwidth usage but affect the quality, higher values will increase the quality but also the bandwidth usage.'**
   String get settings_encoding_Section_bitrate_tooltip;
 
-  /// No description provided for @settings_encoding_Section_extra_sdp_mod_extmapsRemove.
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeREMBFeedback.
   ///
   /// In en, this message translates to:
-  /// **'Remove extmaps'**
-  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove;
+  /// **'Remove REMB feedback'**
+  String get settings_encoding_Section_extra_sdp_mod_removeREMBFeedback;
 
-  /// No description provided for @settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip.
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip.
   ///
   /// In en, this message translates to:
-  /// **'Remove all extmap lines from SDP, to reduce SDP size. May help with MTU fragmentation issues on some SIP endpoints.'**
-  String get settings_encoding_Section_extra_sdp_mod_extmapsRemove_tooltip;
+  /// **'Remove goog-remb RTCP feedback lines from SDP. Disables receiver-side bandwidth estimation on some endpoints.'**
+  String get settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove TWCC feedback'**
+  String get settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove transport-cc RTCP feedback and the transport-wide-cc extmap from SDP. Disables transport-wide congestion control.'**
+  String get settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip;
+
+  /// No description provided for @settings_encoding_Section_rtp_extensions_title.
+  ///
+  /// In en, this message translates to:
+  /// **'RTP Extensions'**
+  String get settings_encoding_Section_rtp_extensions_title;
+
+  /// No description provided for @settings_encoding_Section_rtp_extensions_tooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable individual RTP header extensions from SDP negotiation.'**
+  String get settings_encoding_Section_rtp_extensions_tooltip;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeExtmap_twcc.
+  ///
+  /// In en, this message translates to:
+  /// **'TWCC'**
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_twcc;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeExtmap_absSendTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Abs-Send-Time'**
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_absSendTime;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeExtmap_playoutDelay.
+  ///
+  /// In en, this message translates to:
+  /// **'Playout-Delay'**
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_playoutDelay;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeExtmap_videoContentType.
+  ///
+  /// In en, this message translates to:
+  /// **'Video-Content-Type'**
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_videoContentType;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeExtmap_videoTiming.
+  ///
+  /// In en, this message translates to:
+  /// **'Video-Timing'**
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_videoTiming;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeExtmap_colorSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Color-Space'**
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_colorSpace;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeExtmap_audioLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio-Level'**
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_audioLevel;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeExtmap_tOffset.
+  ///
+  /// In en, this message translates to:
+  /// **'TOffset'**
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_tOffset;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeExtmap_videoOrientation.
+  ///
+  /// In en, this message translates to:
+  /// **'Video-Orientation'**
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_videoOrientation;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeExtmap_rtpStreamId.
+  ///
+  /// In en, this message translates to:
+  /// **'RTP-Stream-ID'**
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_rtpStreamId;
+
+  /// No description provided for @settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId.
+  ///
+  /// In en, this message translates to:
+  /// **'Repaired-RTP-Stream-ID'**
+  String get settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId;
 
   /// No description provided for @settings_encoding_Section_extra_sdp_mod_remapTE8.
   ///
