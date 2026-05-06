@@ -19,7 +19,7 @@ final _logger = Logger('WebtritSignalingServiceAndroid');
 /// Android implementation of [SignalingServicePlatform].
 ///
 /// **pushBound mode:**
-/// Delegates entirely to [WebtritSignalingServiceAndroidDirect] — the WebSocket
+/// Delegates entirely to [WebtritSignalingServiceAndroidDirect] -- the WebSocket
 /// runs directly in the calling isolate, identical to iOS. Events are forwarded
 /// from the delegate into this class's [_eventsController] so external consumers
 /// see a single stable stream regardless of mode.
@@ -27,7 +27,7 @@ final _logger = Logger('WebtritSignalingServiceAndroid');
 /// **persistent mode:**
 /// The WebSocket runs inside an Android Foreground Service (background isolate
 /// + [SignalingHub]). Push and main isolates connect to the hub via
-/// [IsolateNameServer] — they never open their own WebSocket.
+/// [IsolateNameServer] -- they never open their own WebSocket.
 ///
 /// Mode details:
 /// - **pushBound** -- WebSocket runs in the calling isolate and closes when it
@@ -149,13 +149,13 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     _eventBuffer.clear();
 
     if (mode == SignalingServiceMode.pushBound) {
-      // FGS hub may be running from a previous persistent mode — tear it
+      // FGS hub may be running from a previous persistent mode -- tear it
       // down before opening the direct WebSocket to avoid two simultaneous
       // connections for the same account.
       await _hubManager.tearDown();
       await _hostApi.stopService();
     } else {
-      // Switching away from pushBound — stop the direct delegate.
+      // Switching away from pushBound -- stop the direct delegate.
       await _directServiceSub?.cancel();
       _directServiceSub = null;
       await _directService.stopService();
@@ -263,7 +263,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       return;
     }
     if (mode == SignalingServiceMode.pushBound) {
-      _logger.info('_onHubServiceDead: pushBound mode — FCM push will trigger restart');
+      _logger.info('_onHubServiceDead: pushBound mode -- FCM push will trigger restart');
       return;
     }
     _logger.warning('_onHubServiceDead: hub service dead, restarting');
@@ -276,7 +276,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {
     if (mode == SignalingServiceMode.pushBound) {
-      _logger.fine('_startService mode=pushBound — delegating to direct service');
+      _logger.fine('_startService mode=pushBound -- delegating to direct service');
 
       // Cancel any existing forwarding subscription before starting the new
       // session to avoid stale event forwarding and duplicate subscriptions.
@@ -284,7 +284,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       _directServiceSub = null;
 
       // Start the direct service first so SignalingConnecting is emitted and
-      // buffered before we subscribe — this clears any stale events from a
+      // buffered before we subscribe -- this clears any stale events from a
       // previous session and guarantees the replay on subscribe is fresh.
       await _directService.start(config, mode: mode);
 
@@ -304,7 +304,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
     _logger.fine('_startService mode=$mode (FGS)');
     if (_isStopped) {
-      _logger.warning('_startService: aborted — service already stopped');
+      _logger.warning('_startService: aborted -- service already stopped');
       return;
     }
     final dispatcherHandle = PluginUtilities.getCallbackHandle(signalingServiceCallbackDispatcher);
@@ -322,7 +322,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     ]);
 
     if (_isStopped) {
-      _logger.warning('_startService: aborted — service stopped during credential save');
+      _logger.warning('_startService: aborted -- service stopped during credential save');
       return;
     }
 
