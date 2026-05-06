@@ -30,8 +30,8 @@ lib/src/
 
 ## Related packages
 
-| Package | Description |
-|---------|-------------|
+| Package                                                                                                     | Description                                               |
+|-------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
 | [`webtrit_signaling_service_platform_interface`](../webtrit_signaling_service_platform_interface/README.md) | Shared interface and `WebtritSignalingServiceDirect` base |
-| [`webtrit_signaling_service`](../webtrit_signaling_service/README.md) | Public API aggregator |
-| [`webtrit_signaling_service_android`](../webtrit_signaling_service_android/README.md) | Android implementation |
+| [`webtrit_signaling_service`](../webtrit_signaling_service/README.md)                                       | Public API aggregator                                     |
+| [`webtrit_signaling_service_android`](../webtrit_signaling_service_android/README.md)                       | Android implementation                                    |
