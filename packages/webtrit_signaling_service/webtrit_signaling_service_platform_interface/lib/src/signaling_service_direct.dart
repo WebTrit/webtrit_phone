@@ -112,9 +112,11 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
   }
 
   @override
+  // ignore: avoid_unused_parameters
   Future<void> updateMode(SignalingServiceMode mode) async {}
 
   @override
+  // ignore: avoid_unused_parameters
   Future<void> setIncomingCallHandler(Function callback) async {}
 
   @override
