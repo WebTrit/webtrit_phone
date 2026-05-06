@@ -85,11 +85,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   SignalingServiceConfig? _currentConfig;
 
-  /// Last mode explicitly set via [start] or [updateMode].
-  ///
-  /// When [start] is called for reconnection with the initial mode (e.g.
-  /// [SignalingServiceMode.pushBound]), this field preserves the most recently
-  /// chosen mode instead of reverting to a stale parameter.
+  /// Active mode, set by [start] and [updateMode], cleared by [dispose].
   SignalingServiceMode? _currentMode;
 
   /// Set to true by [stopService] and [dispose] to prevent [_onHubServiceDead]
@@ -114,8 +110,8 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   }) async {
     _isStopped = false;
     _currentConfig = config;
-    _currentMode ??= mode;
-    final effectiveMode = _currentMode!;
+    _currentMode = mode;
+    final effectiveMode = mode;
 
     _logger.info('start effectiveMode=$effectiveMode tenantId=${config.tenantId}');
 
