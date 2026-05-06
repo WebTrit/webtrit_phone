@@ -9,22 +9,14 @@ import 'dart:typed_data' show Float64List, Int32List, Int64List;
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart' show immutable, protected, visibleForTesting;
 
-Object? _extractReplyValueOrThrow(
-    List<Object?>? replyList,
-    String channelName, {
-    required bool isNullValid,
-}) {
+Object? _extractReplyValueOrThrow(List<Object?>? replyList, String channelName, {required bool isNullValid}) {
   if (replyList == null) {
     throw PlatformException(
       code: 'channel-error',
       message: 'Unable to establish connection on channel: "$channelName".',
     );
   } else if (replyList.length > 1) {
-    throw PlatformException(
-      code: replyList[0]! as String,
-      message: replyList[1] as String?,
-      details: replyList[2],
-    );
+    throw PlatformException(code: replyList[0]! as String, message: replyList[1] as String?, details: replyList[2]);
   } else if (!isNullValid && (replyList.isNotEmpty && replyList[0] == null)) {
     throw PlatformException(
       code: 'null-error',
@@ -33,7 +25,6 @@ Object? _extractReplyValueOrThrow(
   }
   return replyList.firstOrNull;
 }
-
 
 List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty = false}) {
   if (empty) {
@@ -44,6 +35,7 @@ List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty
   }
   return <Object?>[error.code, error.message, error.details];
 }
+
 bool _deepEquals(Object? a, Object? b) {
   if (identical(a, b)) {
     return true;
@@ -55,9 +47,7 @@ bool _deepEquals(Object? a, Object? b) {
     return a == b;
   }
   if (a is List && b is List) {
-    return a.length == b.length &&
-        a.indexed
-            .every(((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]));
+    return a.length == b.length && a.indexed.every(((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]));
   }
   if (a is Map && b is Map) {
     if (a.length != b.length) {
@@ -106,12 +96,8 @@ int _deepHash(Object? value) {
   return value.hashCode;
 }
 
-
 /// Mirrors [SignalingServiceMode] from the platform_interface package.
-enum PSignalingServiceMode {
-  persistent,
-  pushBound,
-}
+enum PSignalingServiceMode { persistent, pushBound }
 
 class PSignalingServiceStatus {
   PSignalingServiceStatus({
@@ -176,7 +162,8 @@ class PSignalingServiceStatus {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static PSignalingServiceStatus decode(Object result) {
     result as List<Object?>;
@@ -201,14 +188,20 @@ class PSignalingServiceStatus {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(enabled, other.enabled) && _deepEquals(coreUrl, other.coreUrl) && _deepEquals(tenantId, other.tenantId) && _deepEquals(token, other.token) && _deepEquals(trustedCertificatesJson, other.trustedCertificatesJson) && _deepEquals(incomingCallHandlerHandle, other.incomingCallHandlerHandle) && _deepEquals(moduleFactoryHandle, other.moduleFactoryHandle) && _deepEquals(mode, other.mode);
+    return _deepEquals(enabled, other.enabled) &&
+        _deepEquals(coreUrl, other.coreUrl) &&
+        _deepEquals(tenantId, other.tenantId) &&
+        _deepEquals(token, other.token) &&
+        _deepEquals(trustedCertificatesJson, other.trustedCertificatesJson) &&
+        _deepEquals(incomingCallHandlerHandle, other.incomingCallHandlerHandle) &&
+        _deepEquals(moduleFactoryHandle, other.moduleFactoryHandle) &&
+        _deepEquals(mode, other.mode);
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => _deepHash(<Object?>[runtimeType, ..._toList()]);
 }
-
 
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
@@ -217,10 +210,10 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is PSignalingServiceMode) {
+    } else if (value is PSignalingServiceMode) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    }    else if (value is PSignalingServiceStatus) {
+    } else if (value is PSignalingServiceStatus) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else {
@@ -247,8 +240,8 @@ class PSignalingServiceHostApi {
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   PSignalingServiceHostApi({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    : pigeonVar_binaryMessenger = binaryMessenger,
+      pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -258,7 +251,8 @@ class PSignalingServiceHostApi {
   /// Register the Dart callback dispatcher handle and the onSync entry point handle.
   /// Must be called before [startService].
   Future<void> initializeServiceCallback(int callbackDispatcher, int onSync) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.initializeServiceCallback$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.initializeServiceCallback$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -267,19 +261,15 @@ class PSignalingServiceHostApi {
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[callbackDispatcher, onSync]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
-    _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+    _extractReplyValueOrThrow(pigeonVar_replyList, pigeonVar_channelName, isNullValid: true);
   }
 
   /// Persist connection credentials so the foreground service can deliver them
   /// to the background isolate via [PSignalingServiceFlutterApi.onSynchronize].
   /// Must be called before [startService].
   Future<void> saveConnectionConfig(String coreUrl, String tenantId, String token) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.saveConnectionConfig$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.saveConnectionConfig$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -288,12 +278,7 @@ class PSignalingServiceHostApi {
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[coreUrl, tenantId, token]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
-    _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+    _extractReplyValueOrThrow(pigeonVar_replyList, pigeonVar_channelName, isNullValid: true);
   }
 
   /// Persist JSON-encoded trusted certificates for the background isolate.
@@ -301,7 +286,8 @@ class PSignalingServiceHostApi {
   /// Pass null to clear (revert to system trust store). Call before [startService]
   /// so the isolate receives the correct TLS configuration on first sync.
   Future<void> saveTrustedCertificates(String? certificatesJson) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.saveTrustedCertificates$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.saveTrustedCertificates$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -310,12 +296,7 @@ class PSignalingServiceHostApi {
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[certificatesJson]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
-    _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+    _extractReplyValueOrThrow(pigeonVar_replyList, pigeonVar_channelName, isNullValid: true);
   }
 
   /// Persist the raw callback handle for the app-side incoming call handler.
@@ -324,7 +305,8 @@ class PSignalingServiceHostApi {
   /// top-level function annotated with [@pragma('vm:entry-point')].
   /// Pass 0 to unregister.
   Future<void> saveIncomingCallHandler(int callbackHandle) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.saveIncomingCallHandler$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.saveIncomingCallHandler$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -333,12 +315,7 @@ class PSignalingServiceHostApi {
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[callbackHandle]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
-    _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+    _extractReplyValueOrThrow(pigeonVar_replyList, pigeonVar_channelName, isNullValid: true);
   }
 
   /// Persist the raw callback handle for the app-side [SignalingModuleFactory].
@@ -346,7 +323,8 @@ class PSignalingServiceHostApi {
   /// The handle is obtained via [PluginUtilities.getCallbackHandle] on a
   /// top-level function annotated with [@pragma('vm:entry-point')].
   Future<void> saveModuleFactory(int callbackHandle) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.saveModuleFactory$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.saveModuleFactory$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -355,31 +333,25 @@ class PSignalingServiceHostApi {
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[callbackHandle]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
-    _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+    _extractReplyValueOrThrow(pigeonVar_replyList, pigeonVar_channelName, isNullValid: true);
   }
 
   /// Set the foreground service notification text.
   Future<void> configureService(String notificationTitle, String notificationDescription) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.configureService$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.configureService$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[notificationTitle, notificationDescription]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[
+      notificationTitle,
+      notificationDescription,
+    ]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
-    _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+    _extractReplyValueOrThrow(pigeonVar_replyList, pigeonVar_channelName, isNullValid: true);
   }
 
   /// Start the foreground service (idempotent).
@@ -388,7 +360,8 @@ class PSignalingServiceHostApi {
   /// ([PSignalingServiceMode.pushBound]) or runs indefinitely
   /// ([PSignalingServiceMode.persistent]).
   Future<void> startService(PSignalingServiceMode mode) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.startService$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.startService$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -397,17 +370,13 @@ class PSignalingServiceHostApi {
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mode]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
-    _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+    _extractReplyValueOrThrow(pigeonVar_replyList, pigeonVar_channelName, isNullValid: true);
   }
 
   /// Stop the foreground service.
   Future<void> stopService() async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.stopService$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.stopService$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -416,12 +385,7 @@ class PSignalingServiceHostApi {
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
-    _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+    _extractReplyValueOrThrow(pigeonVar_replyList, pigeonVar_channelName, isNullValid: true);
   }
 
   /// Called from the background Dart isolate after [PSignalingServiceFlutterApi.setUp]
@@ -430,7 +394,8 @@ class PSignalingServiceHostApi {
   /// Kotlin responds by calling [SignalingForegroundService.synchronizeIsolate] so
   /// the service delivers the current status to the freshly-initialised isolate.
   Future<void> notifyIsolateReady() async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.notifyIsolateReady$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.notifyIsolateReady$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -439,12 +404,7 @@ class PSignalingServiceHostApi {
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
-    _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+    _extractReplyValueOrThrow(pigeonVar_replyList, pigeonVar_channelName, isNullValid: true);
   }
 
   /// Restores the persistent foreground service if it was killed by the OS.
@@ -452,7 +412,8 @@ class PSignalingServiceHostApi {
   /// No-op when push mode is active, the service is already running, credentials
   /// are missing (post-logout), or the callback dispatcher is not registered.
   Future<void> connect() async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.connect$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.connect$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -461,12 +422,7 @@ class PSignalingServiceHostApi {
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
-    _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+    _extractReplyValueOrThrow(pigeonVar_replyList, pigeonVar_channelName, isNullValid: true);
   }
 
   /// Stops the foreground service immediately without a graceful WebSocket
@@ -478,7 +434,8 @@ class PSignalingServiceHostApi {
   ///
   /// Intended for debug/QA use only to verify service-restart behaviour.
   Future<void> simulateKill() async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.simulateKill$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.simulateKill$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -487,12 +444,7 @@ class PSignalingServiceHostApi {
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
-    _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+    _extractReplyValueOrThrow(pigeonVar_replyList, pigeonVar_channelName, isNullValid: true);
   }
 }
 
@@ -503,12 +455,18 @@ abstract class PSignalingServiceFlutterApi {
   /// service status should be replayed to the freshly-started isolate.
   void onSynchronize(PSignalingServiceStatus status);
 
-  static void setUp(PSignalingServiceFlutterApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
+  static void setUp(
+    PSignalingServiceFlutterApi? api, {
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) {
     messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
     {
       final pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceFlutterApi.onSynchronize$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+        'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceFlutterApi.onSynchronize$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
@@ -520,8 +478,10 @@ abstract class PSignalingServiceFlutterApi {
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }

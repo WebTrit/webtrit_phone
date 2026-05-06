@@ -9,7 +9,7 @@ import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_s
 import 'package:ssl_certificates/ssl_certificates.dart';
 
 import '../hub/signaling_hub.dart';
-import '../messages.g.dart';
+import '../../messages.g.dart';
 
 final _logger = Logger('SignalingForegroundIsolateManager');
 

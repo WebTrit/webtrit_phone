@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import 'package:webtrit_signaling_service_android/src/hub/signaling_hub_codec.dart';
+import 'package:webtrit_signaling_service_android/src/fgs/hub/signaling_hub_codec.dart';
 
 final _kHandshake = StateHandshake(
   keepaliveInterval: const Duration(seconds: 30),

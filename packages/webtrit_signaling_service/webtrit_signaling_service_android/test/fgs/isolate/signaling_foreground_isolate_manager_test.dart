@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import 'package:webtrit_signaling_service_android/src/hub/signaling_hub.dart';
-import 'package:webtrit_signaling_service_android/src/isolate/signaling_foreground_isolate_manager.dart';
+import 'package:webtrit_signaling_service_android/src/fgs/hub/signaling_hub.dart';
+import 'package:webtrit_signaling_service_android/src/fgs/isolate/signaling_foreground_isolate_manager.dart';
 
 // ---------------------------------------------------------------------------
 // Fakes

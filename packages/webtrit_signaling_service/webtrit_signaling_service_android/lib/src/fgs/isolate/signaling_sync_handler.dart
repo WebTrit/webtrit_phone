@@ -1,6 +1,6 @@
 import 'package:logging/logging.dart';
 
-import '../messages.g.dart';
+import '../../messages.g.dart';
 import 'signaling_foreground_isolate_manager.dart';
 
 final _logger = Logger('SignalingSyncHandler');

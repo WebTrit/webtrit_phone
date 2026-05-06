@@ -386,17 +386,17 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('WebtritSignalingServiceIos -- execute()', () {
-    test('throws StateError when called before start()', () async {
+    test('throws NotConnectedException when called before start()', () async {
       final plugin = _buildPlugin(_failingFactory(Exception('x')));
       addTearDown(plugin.dispose);
 
       await expectLater(
         plugin.execute(HangupRequest(transaction: 'tx-1', line: 1, callId: 'c1')),
-        throwsA(isA<StateError>()),
+        throwsA(isA<NotConnectedException>()),
       );
     });
 
-    test('throws StateError when connection failed (not connected)', () async {
+    test('throws NotConnectedException when connection failed (not connected)', () async {
       final plugin = _buildPlugin(_failingFactory(Exception('refused')));
       addTearDown(plugin.dispose);
 
@@ -405,7 +405,7 @@ void main() {
 
       await expectLater(
         plugin.execute(HangupRequest(transaction: 'tx-2', line: 1, callId: 'c2')),
-        throwsA(isA<StateError>()),
+        throwsA(isA<NotConnectedException>()),
       );
     });
 
@@ -420,7 +420,7 @@ void main() {
       await expectLater(plugin.execute(HangupRequest(transaction: 'tx-3', line: 1, callId: 'c3')), completes);
     });
 
-    test('throws StateError after disconnect', () async {
+    test('throws NotConnectedException after disconnect', () async {
       final client = _FakeSignalingClient();
       final plugin = _buildPlugin(_successFactory(client));
       addTearDown(plugin.dispose);
@@ -433,7 +433,7 @@ void main() {
 
       await expectLater(
         plugin.execute(HangupRequest(transaction: 'tx-4', line: 1, callId: 'c4')),
-        throwsA(isA<StateError>()),
+        throwsA(isA<NotConnectedException>()),
       );
     });
   });
