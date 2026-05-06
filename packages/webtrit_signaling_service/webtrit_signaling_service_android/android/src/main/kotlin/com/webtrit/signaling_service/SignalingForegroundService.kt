@@ -137,7 +137,7 @@ class SignalingForegroundService : Service() {
             if (alreadyWired) {
                 // Service was already running when startService() was called again.
                 // Send a sync so the FGS Dart isolate can reconnect the WebSocket if it
-                // dropped while the app was backgrounded (e.g. screen unlock in PUSH_BOUND).
+                // dropped while the app was backgrounded (e.g. screen unlock).
                 // The watchdog is not re-armed: the isolate is already initialised.
                 //
                 // Reset _syncSucceeded so timer-based retries work correctly.
