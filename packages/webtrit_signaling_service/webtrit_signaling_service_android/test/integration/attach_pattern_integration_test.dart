@@ -1,5 +1,4 @@
-/// Integration tests for the attach() pattern and two-mode (persistent /
-/// pushBound) lifecycle.
+/// Integration tests for the attach() pattern and persistent-mode lifecycle.
 ///
 /// These tests model the real push-initiated call flow without spawning a
 /// native Android service.  The "background service" side is represented by
@@ -435,7 +434,7 @@ void main() {
       // Peek at the hub directly to reconnect (module.connect is internal).
       // In this test we verify that after hub teardown+restart the session
       // buffer starts fresh -- attach must not see stale handshake.
-      // Restart manager to simulate pushBound stop/start.
+      // Restart manager to verify session buffer starts fresh after stop/start.
       await manager.handleStatus(enabled: false);
       await manager.handleStatus(enabled: true);
       await Future<void>.delayed(Duration.zero);
@@ -794,11 +793,11 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // pushBound lifecycle pattern: stop clears hub
+  // Stop/restart lifecycle: hub cleanup and re-attach
   // -------------------------------------------------------------------------
 
-  group('pushBound lifecycle pattern', () {
-    test('hub is unavailable after manager stop (simulates pushBound service killed)', () async {
+  group('stop and restart lifecycle', () {
+    test('hub is unavailable after manager stop', () async {
       final (:manager, :fakeClient) = await _startServiceSide();
 
       final (:hubClient, :hubModule) = await _attachMainSide('pb-lifecycle-1');
@@ -807,7 +806,7 @@ void main() {
       await _waitFor<SignalingConnected>(hubModule.events);
       expect(hubModule.isConnected, isTrue);
 
-      // Service stops (onTaskRemoved fires in pushBound mode).
+      // Service stops.
       await manager.handleStatus(enabled: false);
 
       // Hub is gone -- new attach attempt returns null.

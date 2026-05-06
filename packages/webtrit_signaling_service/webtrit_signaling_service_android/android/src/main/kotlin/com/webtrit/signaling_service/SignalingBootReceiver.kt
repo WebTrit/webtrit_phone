@@ -19,10 +19,6 @@ class SignalingBootReceiver : BroadcastReceiver() {
             action != "android.intent.action.MY_PACKAGE_REPLACED"
         ) return
 
-        if (StorageDelegate.isPushBound(context)) {
-            Log.d(TAG, "pushBound mode -- skipping restart on boot")
-            return
-        }
         if (StorageDelegate.getCallbackDispatcher(context) == 0L) {
             Log.d(TAG, "callback dispatcher not set -- app never launched, skipping restart on boot")
             return

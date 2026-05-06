@@ -29,7 +29,6 @@ class PSignalingServiceStatus {
     required this.token,
     required this.incomingCallHandlerHandle,
     required this.moduleFactoryHandle,
-    required this.mode,
     this.trustedCertificatesJson,
   });
 
@@ -58,14 +57,6 @@ class PSignalingServiceStatus {
   /// Obtained via [PluginUtilities.getCallbackHandle] and persisted via
   /// [PSignalingServiceHostApi.saveModuleFactory]. 0 means no factory registered.
   final int moduleFactoryHandle;
-
-  /// The mode the service was started with.
-  ///
-  /// Included in every [onSynchronize] call so the background Dart isolate can
-  /// adapt its behaviour without reading Kotlin SharedPreferences directly.
-  /// When [enabled] is false this field carries [PSignalingServiceMode.persistent]
-  /// as a placeholder; consumers must not act on it in that case.
-  final PSignalingServiceMode mode;
 }
 
 // ---------------------------------------------------------------------------
@@ -105,11 +96,7 @@ abstract class PSignalingServiceHostApi {
   /// Set the foreground service notification text.
   void configureService(String notificationTitle, String notificationDescription);
 
-  /// Start the foreground service (idempotent).
-  ///
-  /// [mode] controls whether the service stops when the app Activity is closed
-  /// ([PSignalingServiceMode.pushBound]) or runs indefinitely
-  /// ([PSignalingServiceMode.persistent]).
+  /// Start the foreground service (idempotent). Always persistent mode.
   void startService(PSignalingServiceMode mode);
 
   /// Stop the foreground service.
@@ -124,8 +111,8 @@ abstract class PSignalingServiceHostApi {
 
   /// Restores the persistent foreground service if it was killed by the OS.
   ///
-  /// No-op when push mode is active, the service is already running, credentials
-  /// are missing (post-logout), or the callback dispatcher is not registered.
+  /// No-op when the service is already running, credentials are missing
+  /// (post-logout), or the callback dispatcher is not registered.
   void connect();
 
   /// Stops the foreground service immediately without a graceful WebSocket

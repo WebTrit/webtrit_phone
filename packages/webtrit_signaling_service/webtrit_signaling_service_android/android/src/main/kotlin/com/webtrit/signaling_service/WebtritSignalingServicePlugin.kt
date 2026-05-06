@@ -78,9 +78,8 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
     }
 
     override fun startService(mode: PSignalingServiceMode) {
-        Log.d(TAG, "startService mode=$mode isRunning=${SignalingForegroundService.isRunning} instance=${SignalingForegroundService.instance != null} _stopRequested=${_stopRequested.get()}")
+        Log.d(TAG, "startService isRunning=${SignalingForegroundService.isRunning} instance=${SignalingForegroundService.instance != null} _stopRequested=${_stopRequested.get()}")
         _stopRequested.set(false)
-        StorageDelegate.saveMode(context, mode)
         Log.d(TAG, "startService: calling startForegroundService()")
         SignalingForegroundService.start(context)
         Log.d(TAG, "startService: startForegroundService() returned")
@@ -109,7 +108,6 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
 
     override fun connect() {
         Log.d(TAG, "connect")
-        if (StorageDelegate.isPushBound(context)) return
         if (SignalingForegroundService.isRunning) return
         if (StorageDelegate.getCoreUrl(context).isEmpty()) return
         if (StorageDelegate.getTenantId(context).isEmpty()) return

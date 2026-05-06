@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'dart:ui' show CallbackHandle, PluginUtilities;
-import 'package:flutter/foundation.dart' show VoidCallback, visibleForTesting;
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 import 'package:ssl_certificates/ssl_certificates.dart';
 
 import '../hub/signaling_hub.dart';
-import '../../messages.g.dart';
 
 final _logger = Logger('SignalingForegroundIsolateManager');
 
@@ -43,15 +42,11 @@ class SignalingForegroundIsolateManager {
     this.trustedCertificatesJson,
     this.incomingCallHandlerHandle = 0,
     this.moduleFactoryHandle = 0,
-    this.isPushBound = false,
-    this.pushBoundNoSubscriberGrace = const Duration(seconds: 10),
     this.safetyReconnectGrace = const Duration(seconds: 2),
     @visibleForTesting SignalingModuleFactory? moduleFactory,
     @visibleForTesting SignalingHubFactory? hubFactory,
-    @visibleForTesting VoidCallback? stopServiceOverride,
   }) : _testModuleFactory = moduleFactory,
-       _testHubFactory = hubFactory,
-       _testStopService = stopServiceOverride;
+       _testHubFactory = hubFactory;
 
   final String coreUrl;
   final String tenantId;
@@ -78,23 +73,6 @@ class SignalingForegroundIsolateManager {
   /// Mutable so it can be updated in-place without requiring a WebSocket restart.
   int moduleFactoryHandle;
 
-  /// Whether the service was started in pushBound mode.
-  ///
-  /// In pushBound mode the service lifetime is tied to the Activity: it should
-  /// stop automatically when no subscriber (Activity or push-notification isolate)
-  /// remains connected after a short grace period. Without this guard the service
-  /// becomes orphaned when a call is declined before the Activity connects.
-  final bool isPushBound;
-
-  /// How long to wait after the last subscriber disconnects before stopping
-  /// the service in pushBound mode.
-  ///
-  /// Allows time for the Activity to start and subscribe after a normal incoming
-  /// call. If a subscriber arrives within this window the timer is cancelled and
-  /// the service continues normally. Exposed as a constructor parameter so it
-  /// can be overridden in tests without sleeping.
-  final Duration pushBoundNoSubscriberGrace;
-
   /// Extra time added on top of [recommendedReconnectDelay] before the safety
   /// reconnect fires when the main isolate's sync does not arrive.
   ///
@@ -110,20 +88,11 @@ class SignalingForegroundIsolateManager {
   /// Overrides [SignalingHub] construction in tests to avoid [IsolateNameServer].
   final SignalingHubFactory? _testHubFactory;
 
-  /// Overrides [PSignalingServiceHostApi().stopService()] in tests to avoid
-  /// binary-messenger dependency.
-  final VoidCallback? _testStopService;
-
   SignalingModule? _signalingModule;
   SignalingHub? _hub;
 
   StreamSubscription<SignalingModuleEvent>? _eventsSubscription;
   Timer? _reconnectTimer;
-
-  /// Scheduled in pushBound mode when [SignalingHub.hasSubscribers] drops to
-  /// false. Fires [_requestServiceStop] after [pushBoundNoSubscriberGrace] if
-  /// no new subscriber arrives. Cancelled when a subscriber connects.
-  Timer? _pushBoundCleanupTimer;
 
   bool _started = false;
 
@@ -187,9 +156,6 @@ class SignalingForegroundIsolateManager {
     _signalingModule = factory(config);
 
     _hub = (_testHubFactory ?? SignalingHub.new)(_signalingModule!);
-    if (isPushBound) {
-      _hub!.onHasSubscribersChanged = _onHubHasSubscribersChanged;
-    }
     _hub!.start();
 
     _eventsSubscription = _signalingModule!.events.listen(_onEvent);
@@ -206,8 +172,6 @@ class SignalingForegroundIsolateManager {
 
     _reconnectTimer?.cancel();
     _reconnectTimer = null;
-    _pushBoundCleanupTimer?.cancel();
-    _pushBoundCleanupTimer = null;
     await _eventsSubscription?.cancel();
     await _hub?.dispose();
     await _signalingModule?.dispose();
@@ -279,44 +243,6 @@ class SignalingForegroundIsolateManager {
         }
       default:
         break;
-    }
-  }
-
-  /// Called by [SignalingHub] when [hasSubscribers] transitions.
-  ///
-  /// In pushBound mode: schedules a cleanup timer when the last subscriber
-  /// leaves, and cancels it when a new subscriber arrives. When the timer fires
-  /// with no subscriber present the service is asked to stop — it means the
-  /// Activity never connected (call declined/missed before it launched).
-  void _onHubHasSubscribersChanged(bool hasSubscribers) {
-    if (hasSubscribers) {
-      _pushBoundCleanupTimer?.cancel();
-      _pushBoundCleanupTimer = null;
-      _logger.info('pushBound: subscriber arrived — cleanup timer cancelled');
-    } else {
-      _pushBoundCleanupTimer?.cancel();
-      _pushBoundCleanupTimer = Timer(pushBoundNoSubscriberGrace, _requestServiceStop);
-      _logger.info('pushBound: no subscribers — scheduling stop in ${pushBoundNoSubscriberGrace.inSeconds}s');
-    }
-  }
-
-  /// Asks Kotlin to stop the foreground service via the existing Pigeon HostApi.
-  ///
-  /// Called when the pushBound cleanup timer fires (no subscriber for the full
-  /// grace period). Kotlin's [SignalingForegroundService.onStartCommand] returned
-  /// [START_NOT_STICKY], so after [stopService] the OS will not restart the service.
-  void _requestServiceStop() {
-    _logger.info('pushBound: grace period elapsed with no subscribers — requesting service stop');
-    final stopOverride = _testStopService;
-    if (stopOverride != null) {
-      stopOverride();
-    } else {
-      unawaited(
-        PSignalingServiceHostApi().stopService().catchError(
-          (Object error, StackTrace stackTrace) =>
-              _logger.warning('pushBound: failed to request foreground service stop', error, stackTrace),
-        ),
-      );
     }
   }
 
