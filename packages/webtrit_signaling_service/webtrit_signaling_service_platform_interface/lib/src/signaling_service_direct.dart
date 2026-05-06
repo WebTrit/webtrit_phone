@@ -128,8 +128,6 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
     await _tearDownModule();
     _eventBuffer.clear();
     await _eventsController.close();
-    // Resurrect so events.listen() works before the next start().
-    _eventsController = StreamController<SignalingModuleEvent>.broadcast();
   }
 
   // ---------------------------------------------------------------------------
