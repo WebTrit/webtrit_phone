@@ -137,7 +137,7 @@ class SignalingForegroundService : Service() {
             if (alreadyWired) {
                 // Service was already running when startService() was called again.
                 // Send a sync so the FGS Dart isolate can reconnect the WebSocket if it
-                // dropped while the app was backgrounded (e.g. screen unlock in PUSH_BOUND).
+                // dropped while the app was backgrounded (e.g. screen unlock).
                 // The watchdog is not re-armed: the isolate is already initialised.
                 //
                 // Reset _syncSucceeded so timer-based retries work correctly.
@@ -150,7 +150,7 @@ class SignalingForegroundService : Service() {
                 cancelSyncRetries()
                 synchronizeIsolate()
             }
-            return if (StorageDelegate.isPushBound(applicationContext)) START_NOT_STICKY else START_STICKY
+            return START_STICKY
         }
 
         // Slow path: engine must be created. FlutterEngine() requires @UiThread, so it must
@@ -159,7 +159,7 @@ class SignalingForegroundService : Service() {
         // JNI/AOT initialisation (the source of MIUI / One UI start-command timeouts).
         if (_engineInitPending) {
             Log.d(TAG, "onStartCommand: engine init already pending — skipping duplicate")
-            return if (StorageDelegate.isPushBound(applicationContext)) START_NOT_STICKY else START_STICKY
+            return START_STICKY
         }
 
         _engineInitPending = true
@@ -196,7 +196,7 @@ class SignalingForegroundService : Service() {
             wireUpPigeon()
         }
 
-        return if (StorageDelegate.isPushBound(applicationContext)) START_NOT_STICKY else START_STICKY
+        return START_STICKY
     }
 
     /// Registers Pigeon channels on the FGS engine's binary messenger.
@@ -229,8 +229,7 @@ class SignalingForegroundService : Service() {
         // Enqueue restart before any teardown so the job is queued while the process is still valid.
         // Credentials guard: stopService() calls clearConnectionConfig() before stopping the service,
         // so after explicit logout coreUrl is already empty here and no job is scheduled.
-        if (!StorageDelegate.isPushBound(applicationContext) &&
-            StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
+        if (StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
             StorageDelegate.getTenantId(applicationContext).isNotEmpty() &&
             StorageDelegate.getToken(applicationContext).isNotEmpty() &&
             StorageDelegate.getCallbackDispatcher(applicationContext) != 0L
@@ -253,14 +252,11 @@ class SignalingForegroundService : Service() {
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         Log.d(TAG, "onTaskRemoved")
-        if (StorageDelegate.isPushBound(applicationContext)) {
-            Log.d(TAG, "pushBound mode -- stopping service on task removal")
-            gracefulStop { stopSelf() }
-        } else if (StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
+        if (StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
                    StorageDelegate.getTenantId(applicationContext).isNotEmpty() &&
                    StorageDelegate.getToken(applicationContext).isNotEmpty() &&
                    StorageDelegate.getCallbackDispatcher(applicationContext) != 0L) {
-            // persistent mode -- enqueue a fast restart in case the OS doesn't honour START_STICKY.
+            // Enqueue a fast restart in case the OS doesn't honour START_STICKY.
             // REPLACE resets any accumulated backoff: task removal is a UI action, not a
             // connection failure, so an immediate retry is appropriate.
             SignalingRestartWorker.enqueue(
@@ -417,7 +413,6 @@ class SignalingForegroundService : Service() {
                 trustedCertificatesJson = null,
                 incomingCallHandlerHandle = 0L,
                 moduleFactoryHandle = 0L,
-                mode = PSignalingServiceMode.PERSISTENT,
             ),
         ) { result ->
             result.onSuccess { settle("isolate ACKed stop signal") }
@@ -469,7 +464,7 @@ class SignalingForegroundService : Service() {
         override fun saveIncomingCallHandler(callbackHandle: Long) {}
         override fun saveModuleFactory(callbackHandle: Long) {}
         override fun configureService(notificationTitle: String, notificationDescription: String) {}
-        override fun startService(mode: PSignalingServiceMode) {}
+        override fun startService() {}
         override fun stopService() {}
         override fun connect() {}
         override fun simulateKill() {}
@@ -508,7 +503,6 @@ class SignalingForegroundService : Service() {
                 trustedCertificatesJson = StorageDelegate.getTrustedCertificatesJson(applicationContext),
                 incomingCallHandlerHandle = StorageDelegate.getIncomingCallHandler(applicationContext),
                 moduleFactoryHandle = StorageDelegate.getModuleFactoryHandle(applicationContext),
-                mode = if (StorageDelegate.isPushBound(applicationContext)) PSignalingServiceMode.PUSH_BOUND else PSignalingServiceMode.PERSISTENT,
             ),
         ) { result ->
             result.onSuccess {

@@ -1,6 +1,6 @@
 import 'package:logging/logging.dart';
 
-import '../messages.g.dart';
+import '../../messages.g.dart';
 import 'signaling_foreground_isolate_manager.dart';
 
 final _logger = Logger('SignalingSyncHandler');
@@ -37,13 +37,12 @@ Future<void> onSignalingServiceSync(PSignalingServiceStatus status) async {
           existing.moduleFactoryHandle != status.moduleFactoryHandle;
 
       // Connection params require a new WebSocket session (re-login, token
-      // refresh, server change, or mode switch).
+      // refresh, or server change).
       final connectionConfigChanged =
           existing.coreUrl != status.coreUrl ||
           existing.tenantId != status.tenantId ||
           existing.token != status.token ||
-          existing.trustedCertificatesJson != status.trustedCertificatesJson ||
-          existing.isPushBound != (status.mode == PSignalingServiceMode.pushBound);
+          existing.trustedCertificatesJson != status.trustedCertificatesJson;
 
       // Invariant: connection params change only on logout/login, which cannot
       // happen while a call is active. WebSocket is never recreated mid-call.
@@ -82,7 +81,6 @@ Future<void> onSignalingServiceSync(PSignalingServiceStatus status) async {
       trustedCertificatesJson: status.trustedCertificatesJson,
       incomingCallHandlerHandle: status.incomingCallHandlerHandle,
       moduleFactoryHandle: status.moduleFactoryHandle,
-      isPushBound: status.mode == PSignalingServiceMode.pushBound,
     );
   }
   await _manager?.handleStatus(enabled: status.enabled);
@@ -100,10 +98,5 @@ void _logConnectionConfigDelta(SignalingForegroundIsolateManager existing, PSign
   }
   if (existing.trustedCertificatesJson != next.trustedCertificatesJson) {
     _logger.info('onSignalingServiceSync delta: trustedCertificatesJson changed');
-  }
-  if (existing.isPushBound != (next.mode == PSignalingServiceMode.pushBound)) {
-    _logger.info(
-      'onSignalingServiceSync delta: isPushBound ${existing.isPushBound} -> ${next.mode == PSignalingServiceMode.pushBound}',
-    );
   }
 }

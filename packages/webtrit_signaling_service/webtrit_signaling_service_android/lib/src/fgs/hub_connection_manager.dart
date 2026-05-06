@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import 'constants.dart';
+import '../constants.dart';
 import 'hub/signaling_hub_client.dart';
 import 'hub/signaling_hub_module.dart';
 

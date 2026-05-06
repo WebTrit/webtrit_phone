@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import 'package:webtrit_signaling_service_android/src/hub/signaling_hub_client.dart';
-import 'package:webtrit_signaling_service_android/src/hub/signaling_hub_module.dart';
+import 'package:webtrit_signaling_service_android/src/fgs/hub/signaling_hub_client.dart';
+import 'package:webtrit_signaling_service_android/src/fgs/hub/signaling_hub_module.dart';
 
 // ---------------------------------------------------------------------------
 // Fake hub client

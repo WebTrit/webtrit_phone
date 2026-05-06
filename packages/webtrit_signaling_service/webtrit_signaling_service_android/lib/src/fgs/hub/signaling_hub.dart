@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import '../constants.dart';
+import '../../constants.dart';
 import 'signaling_hub_codec.dart';
 import 'signaling_hub_command.dart';
 
@@ -44,12 +44,6 @@ class SignalingHub {
   /// sync arrives mid-call, preventing the WebSocket from being torn down while
   /// the user is on a call.
   bool get hasActiveCalls => _callEventHistory.isNotEmpty;
-
-  /// Called when [hasSubscribers] transitions (false → true or true → false).
-  ///
-  /// Used by [SignalingForegroundIsolateManager] in pushBound mode to detect
-  /// when no subscriber remains and schedule a cleanup timer.
-  void Function(bool hasSubscribers)? onHasSubscribersChanged;
 
   /// Encoded non-protocol events since the last [SignalingConnecting] event.
   ///
@@ -264,10 +258,8 @@ class SignalingHub {
   }
 
   void _handleSubscribe(SignalingHubSubscribeCommand cmd) {
-    final wasEmpty = _subscribers.isEmpty;
     _subscribers[cmd.consumerId] = cmd.replyPort;
     _logger.fine('Hub subscriber added: ${cmd.consumerId} (total: ${_subscribers.length})');
-    if (wasEmpty) onHasSubscribersChanged?.call(true);
     // Ack first so the subscriber knows the hub port is alive (not stale).
     cmd.replyPort.send(encodeSubAck());
     // Replay current session buffer so the new subscriber gets the full connection state.
@@ -296,10 +288,8 @@ class SignalingHub {
   }
 
   void _handleUnsubscribe(SignalingHubUnsubscribeCommand cmd) {
-    final wasNotEmpty = _subscribers.isNotEmpty;
     _subscribers.remove(cmd.consumerId);
     _logger.fine('Hub subscriber removed: ${cmd.consumerId} (total: ${_subscribers.length})');
-    if (wasNotEmpty && _subscribers.isEmpty) onHasSubscribersChanged?.call(false);
   }
 
   void _handleExecute(SignalingHubExecuteCommand cmd) {

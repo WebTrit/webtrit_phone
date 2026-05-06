@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import 'package:webtrit_signaling_service_android/src/hub/signaling_hub.dart';
-import 'package:webtrit_signaling_service_android/src/isolate/signaling_foreground_isolate_manager.dart';
+import 'package:webtrit_signaling_service_android/src/fgs/hub/signaling_hub.dart';
+import 'package:webtrit_signaling_service_android/src/fgs/isolate/signaling_foreground_isolate_manager.dart';
 
 // ---------------------------------------------------------------------------
 // Fakes
@@ -90,33 +90,14 @@ class _FakeSignalingHub extends Fake implements SignalingHub {
   // ignore: avoid_unused_constructor_parameters
   _FakeSignalingHub(SignalingModule _);
 
-  /// Controls whether the hub reports active subscribers.
-  ///
-  /// Default [true] simulates the normal case where the app is open and the
-  /// main isolate is subscribed. Set to [false] to simulate persistent-service
-  /// mode where the app is closed and there are no subscribers.
   @override
   bool hasSubscribers = true;
-
-  /// Mirrors the real hub's [onHasSubscribersChanged] hook so tests can
-  /// drive subscriber-count transitions directly.
-  @override
-  void Function(bool hasSubscribers)? onHasSubscribersChanged;
 
   @override
   void start() {}
 
   @override
   Future<void> dispose() async {}
-
-  /// Simulates a subscriber connecting or disconnecting.
-  ///
-  /// Updates [hasSubscribers] and fires [onHasSubscribersChanged], matching
-  /// what the real hub does on a 0→1 or 1→0 transition.
-  void simulateSubscriberChange({required bool hasSubscribers}) {
-    this.hasSubscribers = hasSubscribers;
-    onHasSubscribersChanged?.call(hasSubscribers);
-  }
 }
 
 // ---------------------------------------------------------------------------
@@ -166,34 +147,6 @@ SignalingForegroundIsolateManager _makeManagerPersistentMode(_FakeSignalingModul
     moduleFactory: (_) => module,
     hubFactory: (m) => _FakeSignalingHub(m)..hasSubscribers = false,
   );
-}
-
-/// Creates a pushBound manager and exposes the hub so tests can trigger
-/// subscriber transitions.
-///
-/// [stopServiceCalls] is incremented every time [_requestServiceStop] fires,
-/// which substitutes for the Pigeon [PSignalingServiceHostApi().stopService()]
-/// call that is unavailable in unit tests.
-({SignalingForegroundIsolateManager manager, _FakeSignalingHub Function() hub, List<int> stopServiceCalls})
-_makePushBoundManager(_FakeSignalingModule module, {Duration grace = const Duration(milliseconds: 50)}) {
-  _FakeSignalingHub? capturedHub;
-  final stopCalls = <int>[];
-
-  final manager = SignalingForegroundIsolateManager(
-    coreUrl: 'wss://example.com',
-    tenantId: 'tenant',
-    token: 'tok',
-    isPushBound: true,
-    pushBoundNoSubscriberGrace: grace,
-    moduleFactory: (_) => module,
-    hubFactory: (m) {
-      capturedHub = _FakeSignalingHub(m);
-      return capturedHub!;
-    },
-    stopServiceOverride: () => stopCalls.add(1),
-  );
-
-  return (manager: manager, hub: () => capturedHub!, stopServiceCalls: stopCalls);
 }
 
 // ---------------------------------------------------------------------------
@@ -397,128 +350,6 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 150));
 
       expect(module.connectCount, 1, reason: 'timer cancelled by stop() — no reconnect after dispose');
-    });
-  });
-
-  // -------------------------------------------------------------------------
-  // pushBound mode — orphan-service cleanup
-  // -------------------------------------------------------------------------
-
-  // In pushBound mode the service is started by a push notification.
-  // The push-notification isolate (FSM) always subscribes to the hub first,
-  // then unsubscribes after processing the event. The cleanup timer is
-  // scheduled on 1→0 subscriber transitions (not at start time) so that
-  // the 10-second grace period begins from when the push isolate leaves —
-  // giving the Activity time to connect. If no Activity connects within the
-  // grace period, stopService() is called.
-
-  group('SignalingForegroundIsolateManager -- pushBound cleanup timer', () {
-    test('stopService called after grace period when push isolate leaves and Activity never connects', () async {
-      final module = _FakeSignalingModule();
-      final (:manager, :hub, :stopServiceCalls) = _makePushBoundManager(module);
-      addTearDown(() => manager.handleStatus(enabled: false));
-
-      await manager.handleStatus(enabled: true);
-      await Future<void>.delayed(Duration.zero);
-
-      // Push isolate subscribes (simulating FCM handler connecting to hub).
-      hub().simulateSubscriberChange(hasSubscribers: true);
-      expect(stopServiceCalls, isEmpty);
-
-      // Push isolate unsubscribes — 10s grace period starts now.
-      hub().simulateSubscriberChange(hasSubscribers: false);
-      expect(stopServiceCalls, isEmpty, reason: 'grace period has not elapsed yet');
-
-      // Activity never connects — timer fires.
-      await Future<void>.delayed(const Duration(milliseconds: 150));
-      expect(stopServiceCalls, hasLength(1), reason: 'stopService must fire after grace period with no Activity');
-    });
-
-    test('cleanup timer is cancelled when Activity connects within the grace period', () async {
-      final module = _FakeSignalingModule();
-      final (:manager, :hub, :stopServiceCalls) = _makePushBoundManager(module);
-      addTearDown(() => manager.handleStatus(enabled: false));
-
-      await manager.handleStatus(enabled: true);
-      await Future<void>.delayed(Duration.zero);
-
-      // Push isolate subscribes then unsubscribes — timer starts.
-      hub().simulateSubscriberChange(hasSubscribers: true);
-      hub().simulateSubscriberChange(hasSubscribers: false);
-
-      // Activity connects before grace period expires — timer must be cancelled.
-      hub().simulateSubscriberChange(hasSubscribers: true);
-
-      await Future<void>.delayed(const Duration(milliseconds: 150));
-      expect(stopServiceCalls, isEmpty, reason: 'Activity arrived — cleanup timer must be cancelled');
-    });
-
-    test('new cleanup timer is scheduled when Activity disconnects', () async {
-      final module = _FakeSignalingModule();
-      final (:manager, :hub, :stopServiceCalls) = _makePushBoundManager(module);
-      addTearDown(() => manager.handleStatus(enabled: false));
-
-      await manager.handleStatus(enabled: true);
-      await Future<void>.delayed(Duration.zero);
-
-      // Normal flow: push isolate subscribes/unsubscribes, Activity connects.
-      hub().simulateSubscriberChange(hasSubscribers: true);
-      hub().simulateSubscriberChange(hasSubscribers: false);
-      hub().simulateSubscriberChange(hasSubscribers: true);
-
-      // Activity disconnects — new cleanup timer starts.
-      hub().simulateSubscriberChange(hasSubscribers: false);
-
-      await Future<void>.delayed(const Duration(milliseconds: 150));
-      expect(stopServiceCalls, hasLength(1), reason: 'last subscriber left — stopService must fire after grace period');
-    });
-
-    test('stop() cancels the cleanup timer — stopService not called after explicit stop', () async {
-      final module = _FakeSignalingModule();
-      final (:manager, :hub, :stopServiceCalls) = _makePushBoundManager(module);
-
-      await manager.handleStatus(enabled: true);
-      await Future<void>.delayed(Duration.zero);
-
-      // Push isolate subscribes/unsubscribes — timer starts.
-      hub().simulateSubscriberChange(hasSubscribers: true);
-      hub().simulateSubscriberChange(hasSubscribers: false);
-
-      // Explicit stop before grace period expires.
-      await manager.handleStatus(enabled: false);
-
-      await Future<void>.delayed(const Duration(milliseconds: 150));
-      expect(stopServiceCalls, isEmpty, reason: 'explicit stop cancels cleanup timer');
-    });
-
-    test('persistent mode (isPushBound=false) never schedules a cleanup timer', () async {
-      final module = _FakeSignalingModule();
-      _FakeSignalingHub? capturedHub;
-      final stopCalls = <int>[];
-
-      final manager = SignalingForegroundIsolateManager(
-        coreUrl: 'wss://example.com',
-        tenantId: 'tenant',
-        token: 'tok',
-        isPushBound: false,
-        moduleFactory: (_) => module,
-        hubFactory: (m) {
-          capturedHub = _FakeSignalingHub(m);
-          return capturedHub!;
-        },
-        stopServiceOverride: () => stopCalls.add(1),
-      );
-      addTearDown(() => manager.handleStatus(enabled: false));
-
-      await manager.handleStatus(enabled: true);
-      await Future<void>.delayed(Duration.zero);
-
-      // Simulate subscriber leaving — in persistent mode this must be a no-op.
-      capturedHub!.simulateSubscriberChange(hasSubscribers: false);
-
-      await Future<void>.delayed(const Duration(milliseconds: 150));
-
-      expect(stopCalls, isEmpty, reason: 'persistent mode must not schedule cleanup timer');
     });
   });
 
