@@ -30,8 +30,8 @@ final _logger = Logger('WebtritSignalingServiceAndroid');
 /// [IsolateNameServer] — they never open their own WebSocket.
 ///
 /// Mode details:
-/// - **pushBound** -- service dies when the user closes the app; FCM push starts
-///   a fresh instance for the next call.
+/// - **pushBound** -- WebSocket runs in the calling isolate and closes when it
+///   dies; FCM push starts a fresh instance for the next call.
 /// - **persistent** -- service survives app closure; restarted after device reboot.
 class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   WebtritSignalingServiceAndroid._({BinaryMessenger? binaryMessenger})
