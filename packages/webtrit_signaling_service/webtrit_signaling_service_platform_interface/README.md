@@ -25,6 +25,7 @@ background isolate). Used as-is on iOS; subclassed on Android as
 `WebtritSignalingServiceAndroidDirect` to add the push-isolate handoff hook.
 
 Exposes two protected hooks for subclasses:
+
 - `onBeforeStart(config)` -- called after the previous module is torn down, before the new
   one is created. Used on Android to register the `IsolateNameServer` handoff port.
 - `onConnected()` -- called when the module emits `SignalingConnected`. Used on Android to
@@ -32,33 +33,33 @@ Exposes two protected hooks for subclasses:
 
 ### `SignalingServiceConfig`
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `coreUrl` | `String` | Server URL (scheme normalized by the implementation) |
-| `tenantId` | `String` | WebTrit tenant identifier |
-| `token` | `String` | Auth token |
-| `trustedCertificates` | `TrustedCertificates` | Custom CA certs; empty by default |
+| Field                 | Type                  | Description                                          |
+|-----------------------|-----------------------|------------------------------------------------------|
+| `coreUrl`             | `String`              | Server URL (scheme normalized by the implementation) |
+| `tenantId`            | `String`              | WebTrit tenant identifier                            |
+| `token`               | `String`              | Auth token                                           |
+| `trustedCertificates` | `TrustedCertificates` | Custom CA certs; empty by default                    |
 
 ### `SignalingServiceMode`
 
-| Value | Behaviour |
-|-------|-----------|
-| `persistent` | Android FGS survives app closure and device reboot (default) |
-| `pushBound` | Direct WebSocket in the calling isolate; lifecycle tied to the calling context |
+| Value        | Behaviour                                                                      |
+|--------------|--------------------------------------------------------------------------------|
+| `persistent` | Android FGS survives app closure and device reboot (default)                   |
+| `pushBound`  | Direct WebSocket in the calling isolate; lifecycle tied to the calling context |
 
 On iOS the mode parameter is ignored -- the connection always runs in the main isolate.
 
 ### `SignalingModuleEvent` (sealed)
 
-| Event | Key fields |
-|-------|------------|
-| `SignalingConnecting` | -- |
-| `SignalingConnected` | -- |
-| `SignalingConnectionFailed` | `error`, `isRepeated`, `recommendedReconnectDelay` |
-| `SignalingDisconnecting` | -- |
-| `SignalingDisconnected` | `code?`, `reason?`, `knownCode`, `recommendedReconnectDelay?` |
-| `SignalingHandshakeReceived` | `handshake` (`StateHandshake`) |
-| `SignalingProtocolEvent` | `event` (`Event`) |
+| Event                        | Key fields                                                    |
+|------------------------------|---------------------------------------------------------------|
+| `SignalingConnecting`        | --                                                            |
+| `SignalingConnected`         | --                                                            |
+| `SignalingConnectionFailed`  | `error`, `isRepeated`, `recommendedReconnectDelay`            |
+| `SignalingDisconnecting`     | --                                                            |
+| `SignalingDisconnected`      | `code?`, `reason?`, `knownCode`, `recommendedReconnectDelay?` |
+| `SignalingHandshakeReceived` | `handshake` (`StateHandshake`)                                |
+| `SignalingProtocolEvent`     | `event` (`Event`)                                             |
 
 ### `SignalingModule`
 
@@ -89,8 +90,8 @@ lib/src/
 
 ## Related packages
 
-| Package | Description |
-|---------|-------------|
-| [`webtrit_signaling_service`](../webtrit_signaling_service/README.md) | Public API aggregator |
+| Package                                                                               | Description            |
+|---------------------------------------------------------------------------------------|------------------------|
+| [`webtrit_signaling_service`](../webtrit_signaling_service/README.md)                 | Public API aggregator  |
 | [`webtrit_signaling_service_android`](../webtrit_signaling_service_android/README.md) | Android implementation |
-| [`webtrit_signaling_service_ios`](../webtrit_signaling_service_ios/README.md) | iOS implementation |
+| [`webtrit_signaling_service_ios`](../webtrit_signaling_service_ios/README.md)         | iOS implementation     |
