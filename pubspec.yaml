@@ -386,17 +386,26 @@ melos:
     # ===========================
 
     configurator:generate:
-      description: Generate app resources and run flutterfire configure for all platforms.
+      description: >
+        Fetch resources from configurator backend, generate app assets, and run
+        flutterfire configure for all platforms. Requires APP_ID and TOKEN env vars.
       run: |
+        KEYSTORE_APP_PATH="../webtrit_phone_keystores/applications/${APP_ID:?APP_ID is required}"
+        CACHE_PATH="$KEYSTORE_APP_PATH/cache_session_data.json"
+        dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
+          configurator-resources \
+          --applicationId=${APP_ID} \
+          --keystores-path=../webtrit_phone_keystores/applications \
+          --token=${TOKEN:?TOKEN is required}
         dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
           configurator-generate \
-          --cache-session-data-path ${CACHE_SESSION_DATA_PATH:?CACHE_SESSION_DATA_PATH is required}
+          --cache-session-data-path="$CACHE_PATH"
         dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
           configurator-setup \
           --platform ios \
           --platform android \
-          --keystore-path ${KEYSTORE_APP_PATH:?KEYSTORE_APP_PATH is required} \
-          --cache-session-data-path ${CACHE_SESSION_DATA_PATH:?CACHE_SESSION_DATA_PATH is required}
+          --keystore-path="$KEYSTORE_APP_PATH" \
+          --cache-session-data-path="$CACHE_PATH"
 
     # ===========================
     # Localization - melos run l10n:push | l10n:pull | l10n:generate | l10n:fetch
