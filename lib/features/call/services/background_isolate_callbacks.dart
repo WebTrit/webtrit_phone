@@ -22,8 +22,6 @@ export 'package:webtrit_signaling_service/webtrit_signaling_service.dart'
         SignalingHandshakeReceived,
         SignalingProtocolEvent;
 
-const _kPushNotificationSyncTimeout = Duration(seconds: 20);
-
 // When false, push fallback on persistent-session devices is suppressed entirely
 // and only logged. Flip to false to isolate FGS recovery behavior during testing.
 const _kPersistentPushFallbackEnabled = true;
@@ -81,8 +79,7 @@ Future<void> _disposeContext(PushIsolateContext context) async {
 /// Entry point for the CallKeep push-notification background isolate.
 ///
 /// Runs the full incoming-call lifecycle (signaling, missed-call notification,
-/// call log, native release) with a [_kPushNotificationSyncTimeout] timeout,
-/// then disposes all resources.
+/// call log, native release), then disposes all resources.
 /// Registered via [AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback].
 ///
 /// ## Persistent-session devices
@@ -100,7 +97,7 @@ Future<void> _disposeContext(PushIsolateContext context) async {
 /// one of three outcomes:
 /// - **Missed call**: [HangupEvent] received before the user answers ->
 ///   `releaseCall()` terminates the [PhoneConnection] and stops [IncomingCallService].
-/// - **Answered via push UI**: `performAnswerCall` fires before the timeout ->
+/// - **Answered via push UI**: `performAnswerCall` fires ->
 ///   `handoffCall()` stops [IncomingCallService] without terminating the connection,
 ///   leaving the Activity to adopt the live call.
 /// - **Activity took over**: the Activity opens its own WebSocket, the server sends
@@ -142,13 +139,19 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
   }
 
   // pushBound: run the direct-WS call lifecycle with the already-initialised context.
+  // No timeout is applied here - the push isolate owns a direct WebSocket and its
+  // lifecycle is driven by natural terminal events (HangupEvent, 4441 eviction, or
+  // user answering on this device). The legacy 20-second timeout was an Android FGS
+  // background-budget constraint that no longer applies in the pushBound architecture.
   try {
     final manager = await _getOrInit(context);
-    final incomingCallProcessing = manager.run(metadata);
-    await incomingCallProcessing.timeout(
-      _kPushNotificationSyncTimeout,
-      onTimeout: () => _logger.warning('onPushNotificationSyncCallback: timed out callId=${metadata?.callId}'),
-    );
+    // NOTE: the hard deadline for this call is enforced natively by
+    // IncomingCallService.INDEPENDENT_SERVICE_TIMEOUT_MS (60 s). When it fires,
+    // the Android side calls stopSelf() - onDestroy() cancels the notification
+    // and stops vibration correctly.
+    // TODO: consider moving all timeout constants (native + Dart) to a shared
+    // setup/config location so they can be reviewed and adjusted in one place.
+    await manager.run(metadata);
   } catch (e) {
     _logger.severe('onPushNotificationSyncCallback: error=$e');
   } finally {
