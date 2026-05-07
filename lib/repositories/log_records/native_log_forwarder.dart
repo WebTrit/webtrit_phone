@@ -7,12 +7,17 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/common/disposable.dart';
 
 class NativeLogForwarder implements Disposable {
-  NativeLogForwarder({required String nativeLogFilePath, required Logger logger})
-    : _file = File(nativeLogFilePath),
-      _logger = logger;
+  NativeLogForwarder({
+    required String nativeLogFilePath,
+    required Logger logger,
+    Level Function(String line)? levelParser,
+  }) : _file = File(nativeLogFilePath),
+       _logger = logger,
+       _levelParser = levelParser ?? _callkeepLevelParser;
 
   final File _file;
   final Logger _logger;
+  final Level Function(String line) _levelParser;
   int _readOffset = 0;
   String _remainder = '';
   StreamSubscription<FileSystemEvent>? _watchSubscription;
@@ -62,7 +67,7 @@ class NativeLogForwarder implements Disposable {
       for (final line in lines) {
         final trimmed = line.trim();
         if (trimmed.isEmpty) continue;
-        _logger.log(_parseLevel(trimmed), trimmed);
+        _logger.log(_levelParser(trimmed), trimmed);
       }
     } catch (e, st) {
       _logger.warning('NativeLogForwarder: failed to read ${_file.path}', e, st);
@@ -71,21 +76,6 @@ class NativeLogForwarder implements Disposable {
     }
   }
 
-  // Expects lines in the format written by Kotlin Log.kt:
-  // "yyyy-MM-dd HH:mm:ss.SSS <level> <tag>: <message>"
-  // parts[2] is the single-character level: D=FINE, I=INFO, W=WARNING, E=SEVERE, V=FINEST.
-  Level _parseLevel(String line) {
-    final parts = line.split(' ');
-    if (parts.length < 3) return Level.INFO;
-    return switch (parts[2]) {
-      'D' => Level.FINE,
-      'I' => Level.INFO,
-      'W' => Level.WARNING,
-      'E' => Level.SEVERE,
-      'V' => Level.FINEST,
-      _ => Level.INFO,
-    };
-  }
 
   @override
   Future<void> dispose() async {
@@ -94,4 +84,20 @@ class NativeLogForwarder implements Disposable {
     await _pendingForward;
     _pendingForward = null;
   }
+}
+
+// Default parser for the format written by webtrit_callkeep's Kotlin Log.kt:
+// "yyyy-MM-dd HH:mm:ss.SSS <level> <tag>: <message>"
+// parts[2] is the single-character level: D=FINE, I=INFO, W=WARNING, E=SEVERE, V=FINEST.
+Level _callkeepLevelParser(String line) {
+  final parts = line.split(' ');
+  if (parts.length < 3) return Level.INFO;
+  return switch (parts[2]) {
+    'D' => Level.FINE,
+    'I' => Level.INFO,
+    'W' => Level.WARNING,
+    'E' => Level.SEVERE,
+    'V' => Level.FINEST,
+    _ => Level.INFO,
+  };
 }
