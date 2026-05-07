@@ -14,6 +14,7 @@ class NativeLogForwarder implements Disposable {
   final Logger _logger;
   int _lastLineCount = 0;
   StreamSubscription<FileSystemEvent>? _watchSubscription;
+  Future<void>? _pendingForward;
 
   void start() {
     _watchSubscription = _file.parent.watch().where((e) => e.path == _file.absolute.path).listen(_onFileEvent);
@@ -24,7 +25,7 @@ class NativeLogForwarder implements Disposable {
       _lastLineCount = 0;
       return;
     }
-    _forwardNewLines();
+    _pendingForward = (_pendingForward ?? Future.value()).then((_) => _forwardNewLines());
   }
 
   Future<void> _forwardNewLines() async {
@@ -68,5 +69,7 @@ class NativeLogForwarder implements Disposable {
   Future<void> dispose() async {
     await _watchSubscription?.cancel();
     _watchSubscription = null;
+    await _pendingForward;
+    _pendingForward = null;
   }
 }
