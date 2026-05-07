@@ -145,6 +145,12 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
   // background-budget constraint that no longer applies in the pushBound architecture.
   try {
     final manager = await _getOrInit(context);
+    // NOTE: the hard deadline for this call is enforced natively by
+    // IncomingCallService.INDEPENDENT_SERVICE_TIMEOUT_MS (60 s). When it fires,
+    // the Android side calls stopSelf() → onDestroy() which cancels the
+    // notification and stops vibration correctly.
+    // TODO: consider moving all timeout constants (native + Dart) to a shared
+    // setup/config location so they can be reviewed and adjusted in one place.
     await manager.run(metadata);
   } catch (e) {
     _logger.severe('onPushNotificationSyncCallback: error=$e');
