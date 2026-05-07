@@ -103,9 +103,9 @@ class PushIsolateContext extends IsolateContext {
     super.deviceInfo,
     super.packageInfo,
     super.appLabelsProvider,
+    required this.localPushRepository,
     this.appPath,
     this.appDatabase,
-    this.localPushRepository,
     this.callLogsRepository,
   });
 
@@ -113,7 +113,7 @@ class PushIsolateContext extends IsolateContext {
   final AppCertificates appCertificates;
   final AppPath? appPath;
   final AppDatabase? appDatabase;
-  final LocalPushRepository? localPushRepository;
+  final LocalPushRepository localPushRepository;
   final CallLogsRepository? callLogsRepository;
 
   static Future<PushIsolateContext> init() async {
@@ -136,7 +136,7 @@ class PushIsolateContext extends IsolateContext {
       Logger.root.warning('PushIsolateContext: AppPath unavailable — skipping DB init');
     }
 
-    final localPushRepository = appDatabase != null ? LocalPushRepositoryFLNImpl() : null;
+    final localPushRepository = LocalPushRepositoryFLNImpl();
     final callLogsRepository = appDatabase != null ? CallLogsRepository(appDatabase: appDatabase) : null;
 
     return PushIsolateContext(
