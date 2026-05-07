@@ -43,7 +43,7 @@ PushNotificationIsolateManager? _manager;
 Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) async {
   if (_manager != null) return _manager!;
 
-  // The push isolate is a separate Dart VM — it never receives the setModuleFactory()
+  // The push isolate is a separate Dart VM -- it never receives the setModuleFactory()
   // call made in bootstrap.dart (Activity isolate). Register the factory here so
   // _startDirect() can create a SignalingModule when connect() is called from run().
   await WebtritSignalingService.setModuleFactory(createSignalingModule);
@@ -88,24 +88,24 @@ Future<void> _disposeContext(PushIsolateContext context) async {
 /// ## Persistent-session devices
 ///
 /// When [IncomingCallType.socket] is selected the FGS owns the persistent WebSocket.
-/// A push arriving on such a device means the FGS was frozen or killed by the OEM —
+/// A push arriving on such a device means the FGS was frozen or killed by the OEM --
 /// the push is a fallback wake-up, not a signal to open a competing WebSocket.
 /// Opening a direct WS here would race with the FGS reconnect and trigger a 4441
 /// eviction loop. Instead, [restoreService] is called to restart the FGS if it was
 /// killed (no-op when it is merely frozen), and the push isolate exits immediately.
 ///
-/// ## pushBound devices — lifecycle and handoff
+/// ## pushBound devices -- lifecycle and handoff
 ///
 /// The push isolate opens its own WebSocket directly (no FGS). It runs until
 /// one of three outcomes:
-/// - **Missed call**: [HangupEvent] received before the user answers →
+/// - **Missed call**: [HangupEvent] received before the user answers ->
 ///   `releaseCall()` terminates the [PhoneConnection] and stops [IncomingCallService].
-/// - **Answered via push UI**: `performAnswerCall` fires before the timeout →
+/// - **Answered via push UI**: `performAnswerCall` fires before the timeout ->
 ///   `handoffCall()` stops [IncomingCallService] without terminating the connection,
 ///   leaving the Activity to adopt the live call.
 /// - **Activity took over**: the Activity opens its own WebSocket, the server sends
 ///   4441 (`controllerForceAttachClose`) to the push isolate, or the plugin detects
-///   the Activity via [IsolateNameServer] and calls the handoff callback — whichever
+///   the Activity via [IsolateNameServer] and calls the handoff callback -- whichever
 ///   arrives first completes the push lifecycle early via `notifyActivityTookOver()`.
 @pragma('vm:entry-point')
 Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metadata) async {
@@ -124,13 +124,13 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
     if (!_kPersistentPushFallbackEnabled) {
       _logger.warning(
         'onPushNotificationSyncCallback: push fallback received on persistent-session device '
-        '(callId=${metadata?.callId}) — fallback disabled by flag, skipping FGS recovery',
+        '(callId=${metadata?.callId}) -- fallback disabled by flag, skipping FGS recovery',
       );
       return;
     }
     _logger.info(
       'onPushNotificationSyncCallback: push fallback received on persistent-session device '
-      '(callId=${metadata?.callId}) — FGS was likely frozen or killed by OEM; '
+      '(callId=${metadata?.callId}) -- FGS was likely frozen or killed by OEM; '
       'skipping direct WS, attempting FGS recovery via restoreService()',
     );
     try {

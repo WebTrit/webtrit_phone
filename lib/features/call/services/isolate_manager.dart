@@ -20,7 +20,7 @@ import '../models/jsep_value.dart';
 /// Opened once per incoming push notification, connects to the signaling server
 /// to retrieve call state, handles missed-call logging and notifications, and
 /// releases the incoming call service when all work is done.
-/// Never reconnects — the isolate is short-lived by design.
+/// Never reconnects -- the isolate is short-lived by design.
 ///
 /// On both Android and iOS the connection runs directly in the current isolate.
 /// Call [init] after construction and before [run].
@@ -107,7 +107,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     logger.info('run: callId=${metadata?.callId} isConnected=${_signalingModule.isConnected}');
     // WebtritSignalingService.connect() is idempotent: the internal
     // _startPending / _isConnected guard makes repeated calls safe.
-    // Always call it — idempotent on any subsequent call.
+    // Always call it -- idempotent on any subsequent call.
     _signalingModule.connect();
     return _completer!.future;
   }
@@ -117,7 +117,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   /// [onPushNotificationSyncCallback] finally block, disposing the module and
   /// cancelling any pending reconnect timers before they fire.
   void notifyActivityTookOver() {
-    logger.info('notifyActivityTookOver: Activity WebSocket connected — completing push session early');
+    logger.info('notifyActivityTookOver: Activity WebSocket connected -- completing push session early');
     _complete();
   }
 
@@ -140,7 +140,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     if (_answeredCallId != null) {
       await _handoffCall(_answeredCallId);
     } else if (_incomingCallEvents.containsKey(_metadata?.callId)) {
-      // The call is still active server-side (no HangupEvent received) — the
+      // The call is still active server-side (no HangupEvent received) -- the
       // Activity has likely taken over via a full-screen intent. Hand off
       // instead of releasing so the ringing call is not terminated prematurely.
       await _handoffCall(_metadata?.callId);
@@ -148,7 +148,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
       // In direct mode the push isolate's WebSocket is independent from the
       // Activity's. If the Activity took over before IncomingCallEvent arrived
       // (empty _incomingCallEvents), releaseCall only stops IncomingCallService
-      // here — the Activity keeps its own connection and handles the call normally.
+      // here -- the Activity keeps its own connection and handles the call normally.
       await _releaseCall(_metadata?.callId);
     }
     _completeWithError(StateError('PushNotificationIsolateManager closed'));
@@ -189,7 +189,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
 
   /// Sets up [WebtritSignalingService] for this isolate in
   /// [SignalingServiceMode.pushBound] mode. Each isolate (push and Activity)
-  /// opens its own direct WebSocket — no shared FGS hub. [connect] is called
+  /// opens its own direct WebSocket -- no shared FGS hub. [connect] is called
   /// from [run], not here, so the connection starts only when processing begins.
   void _initSignaling() {
     logger.info('_initSignaling: creating WebtritSignalingService (pushBound)');
@@ -429,7 +429,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
 
     final lineIndex = _lines[callId];
     if (lineIndex == null) {
-      logger.warning('_sendRequest: callId=$callId not in active lines — dropping request');
+      logger.warning('_sendRequest: callId=$callId not in active lines -- dropping request');
       return;
     }
 
@@ -505,7 +505,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
 
   /// Returns the best available display name for the missed-call notification.
   ///
-  /// Priority: signaling caller name → push metadata display name → phone number.
+  /// Priority: signaling caller name -> push metadata display name -> phone number.
   String? _getDisplayNameForMissedCall(HangupEvent event, NewCall call) {
     final metadataName = _metadata?.callId == event.callId ? _metadata?.displayName : null;
     return [call.username, metadataName, call.number].firstWhere((s) => s != null && s.isNotEmpty, orElse: () => null);
