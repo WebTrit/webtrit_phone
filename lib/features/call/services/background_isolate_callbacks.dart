@@ -31,8 +31,7 @@ const _kPersistentPushFallbackEnabled = true;
 
 final _logger = Logger('BackgroundCallIsolate');
 
-// Lazily-initialised isolate-level context.
-PushIsolateContext? _context;
+// Lazily-initialised isolate-level manager.
 PushNotificationIsolateManager? _manager;
 
 /// Returns the isolate-level manager, reusing an existing instance if already
@@ -45,8 +44,6 @@ PushNotificationIsolateManager? _manager;
 Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) async {
   if (_manager != null) return _manager!;
 
-  _context = context;
-
   // The push isolate is a separate Dart VM — it never receives the setModuleFactory()
   // call made in bootstrap.dart (Activity isolate). Register the factory here so
   // _startDirect() can create a SignalingModule when connect() is called from run().
@@ -55,11 +52,11 @@ Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) as
   _logger.info('_getOrInit: module factory and handoff callback registered');
 
   _manager = PushNotificationIsolateManager(
-    callLogsRepository: _context!.callLogsRepository,
-    localPushRepository: _context!.localPushRepository,
+    callLogsRepository: context.callLogsRepository,
+    localPushRepository: context.localPushRepository,
     callkeep: BackgroundPushNotificationService(),
-    storage: _context!.secureStorage,
-    certificates: _context!.appCertificates.trustedCertificates,
+    storage: context.secureStorage,
+    certificates: context.appCertificates.trustedCertificates,
     logger: Logger('PushNotificationIsolateManager'),
   );
   // init() constructs WebtritSignalingService and wires up the event subscription.
@@ -76,10 +73,9 @@ Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) as
 /// Must be called when [CallkeepPushNotificationSyncStatus.releaseResources]
 /// is received so the isolate does not hold open database connections or
 /// active signaling sessions after the OS reclaims the background process.
-Future<void> _disposeContext() async {
+Future<void> _disposeContext(PushIsolateContext context) async {
   await _manager?.close();
-  await _context?.dispose();
-  _context = null;
+  await context.dispose();
   _manager = null;
 }
 
@@ -150,7 +146,7 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
   } catch (e) {
     _logger.severe('onPushNotificationSyncCallback: error=$e');
   } finally {
-    await _disposeContext();
+    await _disposeContext(context);
   }
 }
 
