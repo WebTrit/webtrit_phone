@@ -73,7 +73,6 @@ class PushIsolateContext extends IsolateContext {
     required super.packageInfo,
     required super.secureStorage,
     required super.appLabelsProvider,
-    required this.appPreferences,
     required this.appPath,
     required this.appCertificates,
     required this.appDatabase,
@@ -81,7 +80,6 @@ class PushIsolateContext extends IsolateContext {
     required this.callLogsRepository,
   });
 
-  final AppPreferences appPreferences;
   final AppPath appPath;
   final AppCertificates appCertificates;
   final AppDatabase appDatabase;
@@ -90,7 +88,6 @@ class PushIsolateContext extends IsolateContext {
 
   static Future<PushIsolateContext> init() async {
     final base = await IsolateContext.init();
-    final appPreferences = await AppPreferencesImpl.init();
     final appPath = await AppPath.init();
     final appCertificates = await AppCertificates.init();
 
@@ -106,7 +103,6 @@ class PushIsolateContext extends IsolateContext {
       packageInfo: base.packageInfo,
       secureStorage: base.secureStorage,
       appLabelsProvider: base.appLabelsProvider,
-      appPreferences: appPreferences,
       appPath: appPath,
       appCertificates: appCertificates,
       appDatabase: appDatabase,

@@ -5,6 +5,7 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'package:webtrit_phone/common/common.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -110,11 +111,11 @@ Future<void> _disposeContext(PushIsolateContext context) async {
 ///   arrives first completes the push lifecycle early via `notifyActivityTookOver()`.
 @pragma('vm:entry-point')
 Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metadata) async {
-  final context = await PushIsolateContext.init();
-  final incomingCallType = IncomingCallTypeRepositoryPrefsImpl(context.appPreferences).getIncomingCallType();
+  // Lightweight prefs read — SharedPreferences only, no DB / certificates / remote config.
+  final prefs = await AppPreferencesImpl.init();
+  final incomingCallType = IncomingCallTypeRepositoryPrefsImpl(prefs).getIncomingCallType();
 
   if (incomingCallType == IncomingCallType.socket) {
-    await context.dispose();
     if (!_kPersistentPushFallbackEnabled) {
       _logger.warning(
         'onPushNotificationSyncCallback: push fallback received on persistent-session device '
@@ -135,8 +136,12 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
     return;
   }
 
-  // pushBound: open a direct WebSocket in this isolate and run the full call lifecycle.
+  // pushBound: build the full context (DB, certs, remote config) and run the
+  // direct-WS call lifecycle. Context is created inside try so any init failure
+  // is caught and dispose() is guaranteed in finally.
+  PushIsolateContext? context;
   try {
+    context = await PushIsolateContext.init();
     final manager = await _getOrInit(context);
     final incomingCallProcessing = manager.run(metadata);
     await incomingCallProcessing.timeout(
@@ -146,7 +151,7 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
   } catch (e) {
     _logger.severe('onPushNotificationSyncCallback: error=$e');
   } finally {
-    await _disposeContext(context);
+    if (context != null) await _disposeContext(context);
   }
 }
 
