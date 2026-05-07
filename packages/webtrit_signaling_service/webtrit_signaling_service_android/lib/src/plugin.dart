@@ -35,11 +35,15 @@ final _logger = Logger('WebtritSignalingServiceAndroid');
 /// - **persistent** -- service survives app closure; restarted after device reboot.
 class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   WebtritSignalingServiceAndroid._({BinaryMessenger? binaryMessenger})
-    : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger);
+    : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger),
+      _directService = WebtritSignalingServiceAndroidDirect();
 
   @visibleForTesting
-  WebtritSignalingServiceAndroid.forTesting({BinaryMessenger? binaryMessenger})
-    : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger);
+  WebtritSignalingServiceAndroid.forTesting({
+    BinaryMessenger? binaryMessenger,
+    WebtritSignalingServiceDirect? directService,
+  }) : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger),
+       _directService = directService ?? WebtritSignalingServiceAndroidDirect();
 
   @visibleForTesting
   void initStateForTesting({required SignalingServiceConfig config, required SignalingServiceMode mode}) {
@@ -77,7 +81,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   );
 
   /// Delegate for pushBound direct WebSocket mode.
-  final _directService = WebtritSignalingServiceAndroidDirect();
+  final WebtritSignalingServiceDirect _directService;
 
   /// Active subscription forwarding events from [_directService] into
   /// [_eventsController]. Non-null only while in pushBound mode.
@@ -299,7 +303,11 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       // previous session and guarantees the replay on subscribe is fresh.
       await _directService.start(config, mode: mode);
 
-      if (_isStopped || !identical(_startServiceToken, myToken)) {
+      if (_isStopped) {
+        _logger.fine('_startService: aborted — stopped during direct start');
+        return;
+      }
+      if (!identical(_startServiceToken, myToken)) {
         _logger.fine('_startService: aborted — superseded during direct start');
         return;
       }

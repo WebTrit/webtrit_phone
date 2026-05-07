@@ -108,13 +108,21 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
     }
 
     await _tearDownModule();
-    if (_isStopped || !identical(_startToken, myToken)) {
+    if (_isStopped) {
+      _logger.fine('start: aborted — stopped during _tearDownModule');
+      return;
+    }
+    if (!identical(_startToken, myToken)) {
       _logger.fine('start: aborted — superseded during _tearDownModule');
       return;
     }
 
     await onBeforeStart(config);
-    if (_isStopped || !identical(_startToken, myToken)) {
+    if (_isStopped) {
+      _logger.fine('start: aborted — stopped during onBeforeStart');
+      return;
+    }
+    if (!identical(_startToken, myToken)) {
       _logger.fine('start: aborted — superseded during onBeforeStart');
       return;
     }
