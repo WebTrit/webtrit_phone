@@ -236,9 +236,9 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
       }
     }
 
-    // Delete the native callkeep log and its single rotated backup.
+    // Delete the native callkeep log, its single rotated backup, and the cross-process lock file.
     // LogFileRotator.kt keeps at most one rotation (.1), so .1 is the only backup to clean.
-    for (final path in [nativeLogFilePath, '$nativeLogFilePath.1']) {
+    for (final path in [nativeLogFilePath, '$nativeLogFilePath.1', '$nativeLogFilePath.lock']) {
       try {
         final file = File(path);
         if (await file.exists()) await file.delete();
