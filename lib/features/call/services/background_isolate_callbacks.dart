@@ -5,7 +5,6 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'package:webtrit_phone/common/common.dart';
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -36,16 +35,17 @@ final _logger = Logger('BackgroundCallIsolate');
 PushIsolateContext? _context;
 PushNotificationIsolateManager? _manager;
 
-/// Returns the isolate-level manager, initialising context and manager on the
-/// first call and reusing the same instances on every subsequent call.
+/// Returns the isolate-level manager, reusing an existing instance if already
+/// initialised. Accepts an already-constructed [PushIsolateContext] so the
+/// caller controls when heavy resources (DB, certificates) are opened.
 ///
 /// [PushIsolateContext] is kept separate from [PushNotificationIsolateManager]
 /// because the manager depends on feature-layer imports that must not be pulled
 /// into [lib/common]. Both are torn down together by [_disposeContext].
-Future<PushNotificationIsolateManager> _getOrInit() async {
+Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) async {
   if (_manager != null) return _manager!;
 
-  _context = await PushIsolateContext.init();
+  _context = context;
 
   // The push isolate is a separate Dart VM — it never receives the setModuleFactory()
   // call made in bootstrap.dart (Activity isolate). Register the factory here so
@@ -114,10 +114,11 @@ Future<void> _disposeContext() async {
 ///   arrives first completes the push lifecycle early via `notifyActivityTookOver()`.
 @pragma('vm:entry-point')
 Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metadata) async {
-  final prefs = await AppPreferencesImpl.init();
-  final incomingCallType = IncomingCallTypeRepositoryPrefsImpl(prefs).getIncomingCallType();
+  final context = await PushIsolateContext.init();
+  final incomingCallType = IncomingCallTypeRepositoryPrefsImpl(context.appPreferences).getIncomingCallType();
 
   if (incomingCallType == IncomingCallType.socket) {
+    await context.dispose();
     if (!_kPersistentPushFallbackEnabled) {
       _logger.warning(
         'onPushNotificationSyncCallback: push fallback received on persistent-session device '
@@ -140,7 +141,7 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
 
   // pushBound: open a direct WebSocket in this isolate and run the full call lifecycle.
   try {
-    final manager = await _getOrInit();
+    final manager = await _getOrInit(context);
     final incomingCallProcessing = manager.run(metadata);
     await incomingCallProcessing.timeout(
       _kPushNotificationSyncTimeout,
