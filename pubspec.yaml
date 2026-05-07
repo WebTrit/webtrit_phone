@@ -388,16 +388,18 @@ melos:
     configurator:generate:
       description: >
         Fetch resources from configurator backend, generate app assets, and run
-        flutterfire configure for all platforms. Reads APP_ID and TOKEN from .env file.
+        flutterfire configure for all platforms. Reads APP_ID and CONFIGURATOR_TOKEN from .env file.
       run: |
-        APP_ID=$(grep -E '^(export[[:space:]]+)?APP_ID=' .env | cut -d '=' -f2)
-        TOKEN=$(grep -E '^(export[[:space:]]+)?TOKEN=' .env | cut -d '=' -f2)
+        set -eo pipefail
+        [ -f .env ] || { echo "ERROR: .env not found. Copy .env.example to .env and fill in your credentials." >&2; exit 1; }
+        APP_ID=$(grep -E '^(export[[:space:]]+)?APP_ID=' .env | cut -d '=' -f2-)
+        CONFIGURATOR_TOKEN=$(grep -E '^(export[[:space:]]+)?CONFIGURATOR_TOKEN=' .env | cut -d '=' -f2-)
         KEYSTORE_APP_PATH="../webtrit_phone_keystores/applications/${APP_ID:?APP_ID not found in .env}"
         dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
           configurator-resources \
           --applicationId="$APP_ID" \
           --keystores-path=../webtrit_phone_keystores/applications \
-          --token="${TOKEN:?TOKEN not found in .env}"
+          --token="${CONFIGURATOR_TOKEN:?CONFIGURATOR_TOKEN not found in .env}"
         dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
           configurator-generate
         dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
