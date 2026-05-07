@@ -488,8 +488,8 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     }
     try {
       await callLogsRepository!.add(call);
-    } catch (e) {
-      logger.severe('Failed to add call log', e);
+    } catch (e, st) {
+      logger.severe('Failed to add call log', e, st);
     }
   }
 
