@@ -11,8 +11,8 @@ import 'logging/logging.dart';
 Future<T?> _tryInit<T>(Future<T> Function() factory, String name) async {
   try {
     return await factory();
-  } catch (e) {
-    Logger.root.warning('IsolateContext: $name init failed, continuing without it: $e');
+  } catch (e, st) {
+    Logger.root.warning('$name init failed, continuing without it', e, st);
     return null;
   }
 }
