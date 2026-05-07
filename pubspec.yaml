@@ -393,21 +393,18 @@ melos:
         APP_ID=$(grep -E '^(export[[:space:]]+)?APP_ID=' .env | cut -d '=' -f2)
         TOKEN=$(grep -E '^(export[[:space:]]+)?TOKEN=' .env | cut -d '=' -f2)
         KEYSTORE_APP_PATH="../webtrit_phone_keystores/applications/${APP_ID:?APP_ID not found in .env}"
-        CACHE_PATH="$KEYSTORE_APP_PATH/cache_session_data.json"
         dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
           configurator-resources \
           --applicationId="$APP_ID" \
           --keystores-path=../webtrit_phone_keystores/applications \
           --token="${TOKEN:?TOKEN not found in .env}"
         dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
-          configurator-generate \
-          --cache-session-data-path="$CACHE_PATH"
+          configurator-generate
         dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
           configurator-setup \
           --platform ios \
           --platform android \
-          --keystore-path="$KEYSTORE_APP_PATH" \
-          --cache-session-data-path="$CACHE_PATH"
+          --keystore-path="$KEYSTORE_APP_PATH"
 
     # ===========================
     # Localization - melos run l10n:push | l10n:pull | l10n:generate | l10n:fetch
