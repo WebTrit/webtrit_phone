@@ -43,7 +43,7 @@ PushNotificationIsolateManager? _manager;
 Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) async {
   if (_manager != null) return _manager!;
 
-  // The push isolate is a separate Dart VM -- it never receives the setModuleFactory()
+  // The push isolate is a separate Dart VM - it never receives the setModuleFactory()
   // call made in bootstrap.dart (Activity isolate). Register the factory here so
   // _startDirect() can create a SignalingModule when connect() is called from run().
   await WebtritSignalingService.setModuleFactory(createSignalingModule);
@@ -94,7 +94,7 @@ Future<void> _disposeContext(PushIsolateContext context) async {
 /// eviction loop. Instead, [restoreService] is called to restart the FGS if it was
 /// killed (no-op when it is merely frozen), and the push isolate exits immediately.
 ///
-/// ## pushBound devices -- lifecycle and handoff
+/// ## pushBound devices - lifecycle and handoff
 ///
 /// The push isolate opens its own WebSocket directly (no FGS). It runs until
 /// one of three outcomes:
@@ -105,7 +105,7 @@ Future<void> _disposeContext(PushIsolateContext context) async {
 ///   leaving the Activity to adopt the live call.
 /// - **Activity took over**: the Activity opens its own WebSocket, the server sends
 ///   4441 (`controllerForceAttachClose`) to the push isolate, or the plugin detects
-///   the Activity via [IsolateNameServer] and calls the handoff callback -- whichever
+///   the Activity via [IsolateNameServer] and calls the handoff callback - whichever
 ///   arrives first completes the push lifecycle early via `notifyActivityTookOver()`.
 @pragma('vm:entry-point')
 Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metadata) async {
@@ -124,13 +124,13 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
     if (!_kPersistentPushFallbackEnabled) {
       _logger.warning(
         'onPushNotificationSyncCallback: push fallback received on persistent-session device '
-        '(callId=${metadata?.callId}) -- fallback disabled by flag, skipping FGS recovery',
+        '(callId=${metadata?.callId}) - fallback disabled by flag, skipping FGS recovery',
       );
       return;
     }
     _logger.info(
       'onPushNotificationSyncCallback: push fallback received on persistent-session device '
-      '(callId=${metadata?.callId}) -- FGS was likely frozen or killed by OEM; '
+      '(callId=${metadata?.callId}) - FGS was likely frozen or killed by OEM; '
       'skipping direct WS, attempting FGS recovery via restoreService()',
     );
     try {

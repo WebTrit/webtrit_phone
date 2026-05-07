@@ -23,9 +23,9 @@ Future<T?> _tryInit<T>(Future<T> Function() factory, String name) async {
 ///
 /// Used by both the Firebase background message handler and the CallKeep
 /// push-notification isolate. Each isolate maintains its own instance via a
-/// top-level nullable variable -- isolates do not share memory.
+/// top-level nullable variable - isolates do not share memory.
 ///
-/// Non-critical fields are nullable -- init failures are caught individually so
+/// Non-critical fields are nullable - init failures are caught individually so
 /// the main flow continues with partial data rather than aborting entirely.
 class IsolateContext {
   IsolateContext({
@@ -37,10 +37,10 @@ class IsolateContext {
     this.appLabelsProvider,
   });
 
-  /// Required -- credentials for signaling auth. Throws on failure.
+  /// Required - credentials for signaling auth. Throws on failure.
   final SecureStorage secureStorage;
 
-  /// Nullable -- best-effort. Null when remote config is unavailable.
+  /// Nullable - best-effort. Null when remote config is unavailable.
   final RemoteConfigService? remoteConfigService;
   final AppInfo? appInfo;
   final DeviceInfo? deviceInfo;
@@ -100,7 +100,7 @@ class IsolateContext {
 /// free of feature-layer imports.
 ///
 /// Critical fields ([incomingCallTypeRepository], [appCertificates]) are
-/// required -- failures there abort the push flow. All other push-specific
+/// required - failures there abort the push flow. All other push-specific
 /// fields are nullable with best-effort init.
 class PushIsolateContext extends IsolateContext {
   PushIsolateContext({
@@ -118,31 +118,31 @@ class PushIsolateContext extends IsolateContext {
     this.callLogsRepository,
   });
 
-  /// Required -- mode check (persistent vs pushBound). Throws on failure.
+  /// Required - mode check (persistent vs pushBound). Throws on failure.
   final IncomingCallTypeRepository incomingCallTypeRepository;
 
-  /// Required -- TLS certificates for WebSocket. Throws on failure.
+  /// Required - TLS certificates for WebSocket. Throws on failure.
   final AppCertificates appCertificates;
 
-  /// Nullable -- best-effort. Null when filesystem path is unavailable.
+  /// Nullable - best-effort. Null when filesystem path is unavailable.
   final AppPath? appPath;
 
-  /// Nullable -- best-effort. Null when [appPath] or DB open fails.
+  /// Nullable - best-effort. Null when [appPath] or DB open fails.
   final AppDatabase? appDatabase;
 
-  /// Always initialised -- uses FlutterLocalNotificationsPlugin, no DB dependency.
+  /// Always initialised - uses FlutterLocalNotificationsPlugin, no DB dependency.
   final LocalPushRepository localPushRepository;
 
-  /// Nullable -- best-effort. Null when [appDatabase] is unavailable.
+  /// Nullable - best-effort. Null when [appDatabase] is unavailable.
   final CallLogsRepository? callLogsRepository;
 
   static Future<PushIsolateContext> init() async {
-    // Phase 1 -- critical: abort if these fail.
+    // Phase 1 - critical: abort if these fail.
     final base = await IsolateContext.init();
     final appPreferences = await AppPreferencesImpl.init();
     final appCertificates = await AppCertificates.init();
 
-    // Phase 2 -- best-effort: failures are isolated, flow continues with nulls.
+    // Phase 2 - best-effort: failures are isolated, flow continues with nulls.
     final appPath = await _tryInit(AppPath.init, 'AppPath');
 
     AppDatabase? appDatabase;
@@ -153,7 +153,7 @@ class PushIsolateContext extends IsolateContext {
         'AppDatabase',
       );
     } else {
-      Logger.root.warning('PushIsolateContext: AppPath unavailable -- skipping DB init');
+      Logger.root.warning('PushIsolateContext: AppPath unavailable - skipping DB init');
     }
 
     final localPushRepository = LocalPushRepositoryFLNImpl();
