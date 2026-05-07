@@ -56,9 +56,9 @@ class WebtritSignalingServicePlugin : FlutterPlugin, PSignalingServiceHostApi {
         StorageDelegate.saveConnectionConfig(context, coreUrl, tenantId, token)
     }
 
-    override fun saveIncomingCallHandler(callbackHandle: Long) {
-        Log.d(TAG, "saveIncomingCallHandler handle=$callbackHandle")
-        StorageDelegate.saveIncomingCallHandler(context, callbackHandle)
+    override fun saveCallEventHandler(callbackHandle: Long) {
+        Log.d(TAG, "saveCallEventHandler handle=$callbackHandle")
+        StorageDelegate.saveCallEventHandler(context, callbackHandle)
     }
 
     override fun saveModuleFactory(callbackHandle: Long) {
