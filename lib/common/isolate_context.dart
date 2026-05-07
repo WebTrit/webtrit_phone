@@ -8,50 +8,74 @@ import 'app_id_provider.dart';
 import 'db/db.dart';
 import 'logging/logging.dart';
 
+Future<T?> _tryInit<T>(Future<T> Function() factory, String name) async {
+  try {
+    return await factory();
+  } catch (e) {
+    Logger.root.warning('IsolateContext: $name init failed, continuing without it: $e');
+    return null;
+  }
+}
+
 /// Shared lazily-initialised dependencies for background isolates.
 ///
 /// Used by both the Firebase background message handler and the CallKeep
 /// push-notification isolate. Each isolate maintains its own instance via a
 /// top-level nullable variable -- isolates do not share memory.
+///
+/// Non-critical fields are nullable — init failures are caught individually so
+/// the main flow continues with partial data rather than aborting entirely.
 class IsolateContext {
   IsolateContext({
-    required this.remoteConfigService,
-    required this.appInfo,
-    required this.deviceInfo,
-    required this.packageInfo,
     required this.secureStorage,
-    required this.appLabelsProvider,
+    this.remoteConfigService,
+    this.appInfo,
+    this.deviceInfo,
+    this.packageInfo,
+    this.appLabelsProvider,
   });
 
-  final RemoteConfigService remoteConfigService;
-  final AppInfo appInfo;
-  final DeviceInfo deviceInfo;
-  final PackageInfo packageInfo;
   final SecureStorage secureStorage;
-  final AppMetadataProvider appLabelsProvider;
+  final RemoteConfigService? remoteConfigService;
+  final AppInfo? appInfo;
+  final DeviceInfo? deviceInfo;
+  final PackageInfo? packageInfo;
+  final AppMetadataProvider? appLabelsProvider;
 
   static Future<IsolateContext> init() async {
-    final remoteConfigService = await DefaultRemoteCacheConfigService.init();
-    final appInfo = await AppInfo.init(const SharedPreferencesAppIdProvider());
-    final deviceInfo = await DeviceInfoFactory.init();
-    final packageInfo = await PackageInfoFactory.init();
     final secureStorage = await SecureStorageImpl.init();
-    final appLabelsProvider = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage);
 
-    final overrides = FeatureOverridesFactory.create(remoteConfigService.snapshot);
-    final loggingConfig = LoggingMapper.mapFromOverridesOnly(overrides);
-    await AppLogger.init(
-      loggingConfig,
-      LogzioLoggingService.fromEnvironment(loggingConfig.remoteLoggingEnabled),
-      () => appLabelsProvider.logLabels,
-    );
+    final remoteConfigService = await _tryInit(DefaultRemoteCacheConfigService.init, 'RemoteConfigService');
+    final appInfo = await _tryInit(() => AppInfo.init(const SharedPreferencesAppIdProvider()), 'AppInfo');
+    final deviceInfo = await _tryInit(DeviceInfoFactory.init, 'DeviceInfo');
+    final packageInfo = await _tryInit(PackageInfoFactory.init, 'PackageInfo');
+    final appLabelsProvider = packageInfo != null && deviceInfo != null && appInfo != null
+        ? await _tryInit(
+            () => DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage),
+            'AppMetadataProvider',
+          )
+        : null;
+
+    if (remoteConfigService != null && appLabelsProvider != null) {
+      try {
+        final overrides = FeatureOverridesFactory.create(remoteConfigService.snapshot);
+        final loggingConfig = LoggingMapper.mapFromOverridesOnly(overrides);
+        await AppLogger.init(
+          loggingConfig,
+          LogzioLoggingService.fromEnvironment(loggingConfig.remoteLoggingEnabled),
+          () => appLabelsProvider.logLabels,
+        );
+      } catch (e) {
+        Logger.root.warning('IsolateContext: AppLogger init failed, continuing without remote logging: $e');
+      }
+    }
 
     return IsolateContext(
+      secureStorage: secureStorage,
       remoteConfigService: remoteConfigService,
       appInfo: appInfo,
       deviceInfo: deviceInfo,
       packageInfo: packageInfo,
-      secureStorage: secureStorage,
       appLabelsProvider: appLabelsProvider,
     );
   }
@@ -65,55 +89,71 @@ class IsolateContext {
 ///
 /// Does NOT hold [PushNotificationIsolateManager] itself to keep this class
 /// free of feature-layer imports.
+///
+/// Critical fields ([incomingCallTypeRepository], [appCertificates]) are
+/// required — failures there abort the push flow. All other push-specific
+/// fields are nullable with best-effort init.
 class PushIsolateContext extends IsolateContext {
   PushIsolateContext({
-    required super.remoteConfigService,
-    required super.appInfo,
-    required super.deviceInfo,
-    required super.packageInfo,
     required super.secureStorage,
-    required super.appLabelsProvider,
     required this.incomingCallTypeRepository,
-    required this.appPath,
     required this.appCertificates,
-    required this.appDatabase,
-    required this.localPushRepository,
-    required this.callLogsRepository,
+    super.remoteConfigService,
+    super.appInfo,
+    super.deviceInfo,
+    super.packageInfo,
+    super.appLabelsProvider,
+    this.appPath,
+    this.appDatabase,
+    this.localPushRepository,
+    this.callLogsRepository,
   });
 
   final IncomingCallTypeRepository incomingCallTypeRepository;
-  final AppPath appPath;
   final AppCertificates appCertificates;
-  final AppDatabase appDatabase;
-  final LocalPushRepository localPushRepository;
-  final CallLogsRepository callLogsRepository;
+  final AppPath? appPath;
+  final AppDatabase? appDatabase;
+  final LocalPushRepository? localPushRepository;
+  final CallLogsRepository? callLogsRepository;
 
   static Future<PushIsolateContext> init() async {
+    // Phase 1 — critical: abort if these fail.
     final base = await IsolateContext.init();
     final appPreferences = await AppPreferencesImpl.init();
-    final appPath = await AppPath.init();
     final appCertificates = await AppCertificates.init();
 
-    Logger.root.info('IsolateDatabase.connectOrCreate call from PushIsolateContext.init');
-    final appDatabase = await IsolateDatabase.connectOrCreate(directoryPath: appPath.applicationDocumentsPath);
-    final localPushRepository = LocalPushRepositoryFLNImpl();
-    final callLogsRepository = CallLogsRepository(appDatabase: appDatabase);
+    // Phase 2 — best-effort: failures are isolated, flow continues with nulls.
+    final appPath = await _tryInit(AppPath.init, 'AppPath');
+
+    AppDatabase? appDatabase;
+    if (appPath != null) {
+      Logger.root.info('IsolateDatabase.connectOrCreate call from PushIsolateContext.init');
+      appDatabase = await _tryInit(
+        () => IsolateDatabase.connectOrCreate(directoryPath: appPath.applicationDocumentsPath),
+        'AppDatabase',
+      );
+    } else {
+      Logger.root.warning('PushIsolateContext: AppPath unavailable — skipping DB init');
+    }
+
+    final localPushRepository = appDatabase != null ? LocalPushRepositoryFLNImpl() : null;
+    final callLogsRepository = appDatabase != null ? CallLogsRepository(appDatabase: appDatabase) : null;
 
     return PushIsolateContext(
+      secureStorage: base.secureStorage,
       remoteConfigService: base.remoteConfigService,
       appInfo: base.appInfo,
       deviceInfo: base.deviceInfo,
       packageInfo: base.packageInfo,
-      secureStorage: base.secureStorage,
       appLabelsProvider: base.appLabelsProvider,
       incomingCallTypeRepository: IncomingCallTypeRepositoryPrefsImpl(appPreferences),
-      appPath: appPath,
       appCertificates: appCertificates,
+      appPath: appPath,
       appDatabase: appDatabase,
       localPushRepository: localPushRepository,
       callLogsRepository: callLogsRepository,
     );
   }
 
-  Future<void> dispose() => appDatabase.close();
+  Future<void> dispose() => appDatabase?.close() ?? Future.value();
 }
