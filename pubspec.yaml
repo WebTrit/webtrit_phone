@@ -388,15 +388,17 @@ melos:
     configurator:generate:
       description: >
         Fetch resources from configurator backend, generate app assets, and run
-        flutterfire configure for all platforms. Requires APP_ID and TOKEN env vars.
+        flutterfire configure for all platforms. Reads APP_ID and TOKEN from .env file.
       run: |
-        KEYSTORE_APP_PATH="../webtrit_phone_keystores/applications/${APP_ID:?APP_ID is required}"
+        APP_ID=$(grep -E '^(export[[:space:]]+)?APP_ID=' .env | cut -d '=' -f2)
+        TOKEN=$(grep -E '^(export[[:space:]]+)?TOKEN=' .env | cut -d '=' -f2)
+        KEYSTORE_APP_PATH="../webtrit_phone_keystores/applications/${APP_ID:?APP_ID not found in .env}"
         CACHE_PATH="$KEYSTORE_APP_PATH/cache_session_data.json"
         dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
           configurator-resources \
-          --applicationId=${APP_ID} \
+          --applicationId="$APP_ID" \
           --keystores-path=../webtrit_phone_keystores/applications \
-          --token=${TOKEN:?TOKEN is required}
+          --token="${TOKEN:?TOKEN not found in .env}"
         dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
           configurator-generate \
           --cache-session-data-path="$CACHE_PATH"
