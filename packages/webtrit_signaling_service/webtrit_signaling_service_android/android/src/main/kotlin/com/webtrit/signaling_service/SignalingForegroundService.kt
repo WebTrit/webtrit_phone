@@ -411,7 +411,7 @@ class SignalingForegroundService : Service() {
                 tenantId = "",
                 token = "",
                 trustedCertificatesJson = null,
-                incomingCallHandlerHandle = 0L,
+                callEventHandlerHandle = 0L,
                 moduleFactoryHandle = 0L,
             ),
         ) { result ->
@@ -461,7 +461,7 @@ class SignalingForegroundService : Service() {
         override fun initializeServiceCallback(callbackDispatcher: Long, onSync: Long) {}
         override fun saveConnectionConfig(coreUrl: String, tenantId: String, token: String) {}
         override fun saveTrustedCertificates(certificatesJson: String?) {}
-        override fun saveIncomingCallHandler(callbackHandle: Long) {}
+        override fun saveCallEventHandler(callbackHandle: Long) {}
         override fun saveModuleFactory(callbackHandle: Long) {}
         override fun configureService(notificationTitle: String, notificationDescription: String) {}
         override fun startService() {}
@@ -501,7 +501,7 @@ class SignalingForegroundService : Service() {
                 tenantId = tenantId,
                 token = token,
                 trustedCertificatesJson = StorageDelegate.getTrustedCertificatesJson(applicationContext),
-                incomingCallHandlerHandle = StorageDelegate.getIncomingCallHandler(applicationContext),
+                callEventHandlerHandle = StorageDelegate.getCallEventHandler(applicationContext),
                 moduleFactoryHandle = StorageDelegate.getModuleFactoryHandle(applicationContext),
             ),
         ) { result ->

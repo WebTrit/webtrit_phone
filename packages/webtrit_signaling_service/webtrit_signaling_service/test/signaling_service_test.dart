@@ -20,7 +20,7 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   final List<Request> executedRequests = [];
   Object? executeError;
   final List<SignalingServiceMode> updatedModes = [];
-  final List<Function> incomingCallHandles = [];
+  final List<Function> callEventHandles = [];
   final List<SignalingModuleFactory> moduleFactories = [];
   int disposeCount = 0;
   int stopServiceCount = 0;
@@ -50,7 +50,7 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   Future<void> updateMode(SignalingServiceMode mode) async => updatedModes.add(mode);
 
   @override
-  Future<void> setIncomingCallHandler(Function callback) async => incomingCallHandles.add(callback);
+  Future<void> setCallEventHandler(Function callback) async => callEventHandles.add(callback);
 
   @override
   Future<void> setModuleFactory(SignalingModuleFactory factory) async => moduleFactories.add(factory);
@@ -288,14 +288,14 @@ void main() {
       expect(platform.moduleFactories, [_dummyFactory]);
     });
 
-    test('setIncomingCallHandler delegates to platform', () async {
-      await WebtritSignalingService.setIncomingCallHandler(_dummyHandler);
-      expect(platform.incomingCallHandles, [_dummyHandler]);
+    test('setCallEventHandler delegates to platform', () async {
+      await WebtritSignalingService.setCallEventHandler(_dummyHandler);
+      expect(platform.callEventHandles, [_dummyHandler]);
     });
 
-    test('setIncomingCallHandler with different callback', () async {
-      await WebtritSignalingService.setIncomingCallHandler(_anotherHandler);
-      expect(platform.incomingCallHandles, [_anotherHandler]);
+    test('setCallEventHandler with different callback', () async {
+      await WebtritSignalingService.setCallEventHandler(_anotherHandler);
+      expect(platform.callEventHandles, [_anotherHandler]);
     });
 
     test('updateMode persistent delegates to platform', () async {

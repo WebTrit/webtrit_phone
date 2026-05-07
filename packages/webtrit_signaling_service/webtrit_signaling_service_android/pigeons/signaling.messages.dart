@@ -21,7 +21,7 @@ class PSignalingServiceStatus {
     required this.coreUrl,
     required this.tenantId,
     required this.token,
-    required this.incomingCallHandlerHandle,
+    required this.callEventHandlerHandle,
     required this.moduleFactoryHandle,
     this.trustedCertificatesJson,
   });
@@ -39,12 +39,12 @@ class PSignalingServiceStatus {
   /// to the main-isolate DI context.
   final String? trustedCertificatesJson;
 
-  /// Raw handle for the app-side incoming call callback.
+  /// Raw handle for the app-side call-event callback.
   ///
   /// Obtained via [PluginUtilities.getCallbackHandle] in the main isolate and
-  /// persisted via [PSignalingServiceHostApi.saveIncomingCallHandler].
+  /// persisted via [PSignalingServiceHostApi.saveCallEventHandler].
   /// 0 means no handler is registered.
-  final int incomingCallHandlerHandle;
+  final int callEventHandlerHandle;
 
   /// Raw handle for the app-side [SignalingModuleFactory] callback.
   ///
@@ -74,12 +74,12 @@ abstract class PSignalingServiceHostApi {
   /// so the isolate receives the correct TLS configuration on first sync.
   void saveTrustedCertificates(String? certificatesJson);
 
-  /// Persist the raw callback handle for the app-side incoming call handler.
+  /// Persist the raw callback handle for the app-side call-event handler.
   ///
   /// The handle is obtained via [PluginUtilities.getCallbackHandle] on a
   /// top-level function annotated with [@pragma('vm:entry-point')].
   /// Pass 0 to unregister.
-  void saveIncomingCallHandler(int callbackHandle);
+  void saveCallEventHandler(int callbackHandle);
 
   /// Persist the raw callback handle for the app-side [SignalingModuleFactory].
   ///

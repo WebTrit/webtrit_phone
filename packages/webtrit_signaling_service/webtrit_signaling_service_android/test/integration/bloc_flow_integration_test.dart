@@ -305,14 +305,14 @@ class _TestIsolateManager {
     required this.tenantId,
     required this.token,
     required this.signalingClientFactory,
-    this.incomingCallHandlerHandle = 0,
+    this.callEventHandlerHandle = 0,
   });
 
   final String coreUrl;
   final String tenantId;
   final String token;
   final _SignalingClientFactory signalingClientFactory;
-  final int incomingCallHandlerHandle;
+  final int callEventHandlerHandle;
 
   _SignalingModule? _module;
   SignalingHub? _hub;
@@ -814,14 +814,14 @@ void main() {
     });
 
     test('IncomingCallEvent with no handler registered does not throw', () async {
-      // When incomingCallHandlerHandle == 0 (default), _dispatchIncomingCall logs
+      // When callEventHandlerHandle == 0 (default), _dispatchCallEvent logs
       // a warning but must not throw and must not crash the event pipeline.
       final fakeClient = _FakeSignalingClient();
       final manager = _TestIsolateManager(
         coreUrl: 'https://example.com',
         tenantId: 'tenant',
         token: 'token',
-        incomingCallHandlerHandle: 0, // no handler
+        callEventHandlerHandle: 0, // no handler
         signalingClientFactory: _fakeFactory(fakeClient),
       );
       addTearDown(() => manager.handleStatus(enabled: false));
