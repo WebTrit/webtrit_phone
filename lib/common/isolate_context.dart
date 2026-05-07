@@ -8,6 +8,8 @@ import 'app_id_provider.dart';
 import 'db/db.dart';
 import 'logging/logging.dart';
 
+/// Runs [factory] and returns its result, or `null` if it throws.
+/// Logs a warning with the full stack trace so failures are visible in the isolate log.
 Future<T?> _tryInit<T>(Future<T> Function() factory, String name) async {
   try {
     return await factory();
@@ -35,7 +37,10 @@ class IsolateContext {
     this.appLabelsProvider,
   });
 
+  /// Required — credentials for signaling auth. Throws on failure.
   final SecureStorage secureStorage;
+
+  /// Nullable — best-effort. Null when remote config is unavailable.
   final RemoteConfigService? remoteConfigService;
   final AppInfo? appInfo;
   final DeviceInfo? deviceInfo;
@@ -113,11 +118,22 @@ class PushIsolateContext extends IsolateContext {
     this.callLogsRepository,
   });
 
+  /// Required — mode check (persistent vs pushBound). Throws on failure.
   final IncomingCallTypeRepository incomingCallTypeRepository;
+
+  /// Required — TLS certificates for WebSocket. Throws on failure.
   final AppCertificates appCertificates;
+
+  /// Nullable — best-effort. Null when filesystem path is unavailable.
   final AppPath? appPath;
+
+  /// Nullable — best-effort. Null when [appPath] or DB open fails.
   final AppDatabase? appDatabase;
+
+  /// Always initialised — uses FlutterLocalNotificationsPlugin, no DB dependency.
   final LocalPushRepository localPushRepository;
+
+  /// Nullable — best-effort. Null when [appDatabase] is unavailable.
   final CallLogsRepository? callLogsRepository;
 
   static Future<PushIsolateContext> init() async {
