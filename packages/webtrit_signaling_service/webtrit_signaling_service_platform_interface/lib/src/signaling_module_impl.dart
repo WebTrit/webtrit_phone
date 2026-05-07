@@ -73,6 +73,17 @@ SignalingModule createSignalingModule(SignalingServiceConfig config) {
 /// lifecycle. Safe to use in the main isolate, a background isolate, or an
 /// integration test without any Flutter dependency.
 ///
+/// ## Lifecycle contract
+///
+/// [coreUrl], [tenantId], and [token] are bound at construction and cannot
+/// change. A token refresh or server change requires creating a new instance.
+///
+/// [dispose] closes the internal broadcast [StreamController] permanently.
+/// After [dispose] the instance must not be reused — create a new one instead.
+/// This single-session contract keeps the internal state machine simple and
+/// avoids partial-reset bugs that arise from recycling a stream that may have
+/// buffered stale events.
+///
 /// Parameters:
 /// - [connectionTimeout] -- how long to wait for the initial WebSocket handshake.
 /// - [reconnectDelay] -- delay hint emitted in [SignalingConnectionFailed] and

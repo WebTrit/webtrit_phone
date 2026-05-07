@@ -22,6 +22,26 @@ final _logger = Logger('WebtritSignalingServiceDirect');
 /// no Foreground Service, no background isolate. Used as-is on iOS and as
 /// the pushBound delegate on Android.
 ///
+/// ## Module rotation
+///
+/// Each [start] call unconditionally disposes the previous [SignalingModule]
+/// and creates a fresh one via the registered factory — even when the config
+/// has not changed. The design trades a small per-reconnect overhead for a
+/// simpler invariant: no stale session state can carry over between starts,
+/// and no config-equality check is needed at the call site.
+///
+/// Reuse is not possible regardless: [SignalingModuleImpl] binds connection
+/// credentials (`token`, `tenantId`, `coreUrl`) as `final` fields, and
+/// [SignalingModule.dispose] closes the internal [StreamController]
+/// permanently, so a disposed instance can neither accept new credentials
+/// nor emit further events.
+///
+/// The rotation introduces two async suspension points inside [start] —
+/// [_tearDownModule] and [onBeforeStart] — where a second concurrent [start]
+/// call can slip through the [_isStopped] guard and create a duplicate
+/// WebSocket connection (zombie race). See [_isStopped] for what it covers
+/// and where it falls short.
+///
 /// Subclasses may override [onBeforeStart] and [onConnected] to inject
 /// platform-specific behaviour (e.g. Android push-isolate handoff via
 /// [IsolateNameServer]) without duplicating the core connection logic.
@@ -36,9 +56,22 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
   final _eventBuffer = SignalingEventBuffer();
 
   /// Set to true by [stopService] and [dispose]; reset to false at the start
-  /// of [start]. Guards against concurrent teardown racing with a new start
-  /// during the async gaps of [_tearDownModule] and [onBeforeStart].
+  /// of [start]. Guards against a [dispose]/[stopService] call racing with an
+  /// in-progress [start] at the [_tearDownModule] and [onBeforeStart]
+  /// suspension points.
+  ///
+  /// Does NOT protect against two concurrent [start] calls: both reset this
+  /// flag to `false`, so neither can detect the other's presence.
   bool _isStopped = false;
+
+  /// Identity token for the active [start] invocation.
+  ///
+  /// A fresh [Object] is assigned at the beginning of each [start] call.
+  /// After every suspension point the in-progress call compares its captured
+  /// token against the current value: a mismatch means a newer [start] has
+  /// been issued and this invocation must abort without creating a module,
+  /// preventing two concurrent [module.connect] calls from reaching the server.
+  Object? _startToken;
 
   @override
   Stream<SignalingModuleEvent> get events {
@@ -63,6 +96,7 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
     SignalingServiceMode mode = SignalingServiceMode.pushBound,
   }) async {
     _isStopped = false;
+    final myToken = _startToken = Object();
 
     final factory = _factory;
     if (factory == null) {
@@ -78,10 +112,18 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
       _logger.fine('start: aborted — stopped during _tearDownModule');
       return;
     }
+    if (!identical(_startToken, myToken)) {
+      _logger.fine('start: aborted — superseded during _tearDownModule');
+      return;
+    }
 
     await onBeforeStart(config);
     if (_isStopped) {
       _logger.fine('start: aborted — stopped during onBeforeStart');
+      return;
+    }
+    if (!identical(_startToken, myToken)) {
+      _logger.fine('start: aborted — superseded during onBeforeStart');
       return;
     }
 

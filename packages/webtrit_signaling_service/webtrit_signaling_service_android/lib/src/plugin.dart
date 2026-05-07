@@ -35,11 +35,15 @@ final _logger = Logger('WebtritSignalingServiceAndroid');
 /// - **persistent** -- service survives app closure; restarted after device reboot.
 class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   WebtritSignalingServiceAndroid._({BinaryMessenger? binaryMessenger})
-    : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger);
+    : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger),
+      _directService = WebtritSignalingServiceAndroidDirect();
 
   @visibleForTesting
-  WebtritSignalingServiceAndroid.forTesting({BinaryMessenger? binaryMessenger})
-    : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger);
+  WebtritSignalingServiceAndroid.forTesting({
+    BinaryMessenger? binaryMessenger,
+    WebtritSignalingServiceDirect? directService,
+  }) : _hostApi = PSignalingServiceHostApi(binaryMessenger: binaryMessenger),
+       _directService = directService ?? WebtritSignalingServiceAndroidDirect();
 
   @visibleForTesting
   void initStateForTesting({required SignalingServiceConfig config, required SignalingServiceMode mode}) {
@@ -77,11 +81,21 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   );
 
   /// Delegate for pushBound direct WebSocket mode.
-  final _directService = WebtritSignalingServiceAndroidDirect();
+  final WebtritSignalingServiceDirect _directService;
 
   /// Active subscription forwarding events from [_directService] into
   /// [_eventsController]. Non-null only while in pushBound mode.
   StreamSubscription<SignalingModuleEvent>? _directServiceSub;
+
+  /// Identity token for the active pushBound [_startService] invocation.
+  ///
+  /// Mirrors the [_startToken] pattern in [WebtritSignalingServiceDirect]:
+  /// concurrent [_startService] calls (from [start], [updateMode], or
+  /// [_onHubServiceDead]) all await [_directService.start] before subscribing
+  /// to [_directService.events]. Without this guard the faster-returning
+  /// (superseded) call would attach an orphaned subscription that forwards
+  /// duplicate events into [_eventsController].
+  Object? _startServiceToken;
 
   SignalingServiceConfig? _currentConfig;
 
@@ -277,6 +291,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {
     if (mode == SignalingServiceMode.pushBound) {
       _logger.fine('_startService mode=pushBound -- delegating to direct service');
+      final myToken = _startServiceToken = Object();
 
       // Cancel any existing forwarding subscription before starting the new
       // session to avoid stale event forwarding and duplicate subscriptions.
@@ -287,6 +302,15 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       // buffered before we subscribe -- this clears any stale events from a
       // previous session and guarantees the replay on subscribe is fresh.
       await _directService.start(config, mode: mode);
+
+      if (_isStopped) {
+        _logger.fine('_startService: aborted — stopped during direct start');
+        return;
+      }
+      if (!identical(_startServiceToken, myToken)) {
+        _logger.fine('_startService: aborted — superseded during direct start');
+        return;
+      }
 
       // Subscribe after start() so the replay contains only [SignalingConnecting]
       // (and any events already emitted synchronously during connect()).
