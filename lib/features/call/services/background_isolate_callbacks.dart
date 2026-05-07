@@ -5,6 +5,7 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'package:webtrit_phone/common/common.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import 'isolate_manager.dart';
 
@@ -23,22 +24,24 @@ export 'package:webtrit_signaling_service/webtrit_signaling_service.dart'
 
 const _kPushNotificationSyncTimeout = Duration(seconds: 20);
 
+// When false, push fallback on persistent-session devices is suppressed entirely
+// and only logged. Flip to false to isolate FGS recovery behavior during testing.
+const _kPersistentPushFallbackEnabled = true;
+
 final _logger = Logger('BackgroundCallIsolate');
 
-// Lazily-initialised isolate-level context.
-PushIsolateContext? _context;
+// Lazily-initialised isolate-level manager.
 PushNotificationIsolateManager? _manager;
 
-/// Returns the isolate-level manager, initialising context and manager on the
-/// first call and reusing the same instances on every subsequent call.
+/// Returns the isolate-level manager, reusing an existing instance if already
+/// initialised. Accepts an already-constructed [PushIsolateContext] so the
+/// caller controls when heavy resources (DB, certificates) are opened.
 ///
 /// [PushIsolateContext] is kept separate from [PushNotificationIsolateManager]
 /// because the manager depends on feature-layer imports that must not be pulled
 /// into [lib/common]. Both are torn down together by [_disposeContext].
-Future<PushNotificationIsolateManager> _getOrInit() async {
+Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) async {
   if (_manager != null) return _manager!;
-
-  _context = await PushIsolateContext.init();
 
   // The push isolate is a separate Dart VM — it never receives the setModuleFactory()
   // call made in bootstrap.dart (Activity isolate). Register the factory here so
@@ -48,11 +51,11 @@ Future<PushNotificationIsolateManager> _getOrInit() async {
   _logger.info('_getOrInit: module factory and handoff callback registered');
 
   _manager = PushNotificationIsolateManager(
-    callLogsRepository: _context!.callLogsRepository,
-    localPushRepository: _context!.localPushRepository,
+    callLogsRepository: context.callLogsRepository,
+    localPushRepository: context.localPushRepository,
     callkeep: BackgroundPushNotificationService(),
-    storage: _context!.secureStorage,
-    certificates: _context!.appCertificates.trustedCertificates,
+    storage: context.secureStorage,
+    certificates: context.appCertificates.trustedCertificates,
     logger: Logger('PushNotificationIsolateManager'),
   );
   // init() constructs WebtritSignalingService and wires up the event subscription.
@@ -69,10 +72,9 @@ Future<PushNotificationIsolateManager> _getOrInit() async {
 /// Must be called when [CallkeepPushNotificationSyncStatus.releaseResources]
 /// is received so the isolate does not hold open database connections or
 /// active signaling sessions after the OS reclaims the background process.
-Future<void> _disposeContext() async {
+Future<void> _disposeContext(PushIsolateContext context) async {
   await _manager?.close();
-  await _context?.dispose();
-  _context = null;
+  await context.dispose();
   _manager = null;
 }
 
@@ -83,7 +85,16 @@ Future<void> _disposeContext() async {
 /// then disposes all resources.
 /// Registered via [AndroidCallkeepServices.backgroundPushNotificationBootstrapService.initializeCallback].
 ///
-/// ## Lifecycle and handoff
+/// ## Persistent-session devices
+///
+/// When [IncomingCallType.socket] is selected the FGS owns the persistent WebSocket.
+/// A push arriving on such a device means the FGS was frozen or killed by the OEM —
+/// the push is a fallback wake-up, not a signal to open a competing WebSocket.
+/// Opening a direct WS here would race with the FGS reconnect and trigger a 4441
+/// eviction loop. Instead, [restoreService] is called to restart the FGS if it was
+/// killed (no-op when it is merely frozen), and the push isolate exits immediately.
+///
+/// ## pushBound devices — lifecycle and handoff
 ///
 /// The push isolate opens its own WebSocket directly (no FGS). It runs until
 /// one of three outcomes:
@@ -98,10 +109,41 @@ Future<void> _disposeContext() async {
 ///   arrives first completes the push lifecycle early via `notifyActivityTookOver()`.
 @pragma('vm:entry-point')
 Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metadata) async {
+  PushIsolateContext? context;
   try {
-    // Initialise context and manager lazily on first push notification.
-    final manager = await _getOrInit();
-    // Run the full incoming-call lifecycle; guard with a timeout in case it stalls.
+    context = await PushIsolateContext.init();
+  } catch (e) {
+    _logger.severe('onPushNotificationSyncCallback: context init failed, aborting: $e');
+    return;
+  }
+
+  final incomingCallType = context.incomingCallTypeRepository.getIncomingCallType();
+
+  if (incomingCallType == IncomingCallType.socket) {
+    await context.dispose();
+    if (!_kPersistentPushFallbackEnabled) {
+      _logger.warning(
+        'onPushNotificationSyncCallback: push fallback received on persistent-session device '
+        '(callId=${metadata?.callId}) — fallback disabled by flag, skipping FGS recovery',
+      );
+      return;
+    }
+    _logger.info(
+      'onPushNotificationSyncCallback: push fallback received on persistent-session device '
+      '(callId=${metadata?.callId}) — FGS was likely frozen or killed by OEM; '
+      'skipping direct WS, attempting FGS recovery via restoreService()',
+    );
+    try {
+      await WebtritSignalingService.restoreService();
+    } catch (e, st) {
+      _logger.warning('onPushNotificationSyncCallback: restoreService() failed', e, st);
+    }
+    return;
+  }
+
+  // pushBound: run the direct-WS call lifecycle with the already-initialised context.
+  try {
+    final manager = await _getOrInit(context);
     final incomingCallProcessing = manager.run(metadata);
     await incomingCallProcessing.timeout(
       _kPushNotificationSyncTimeout,
@@ -110,12 +152,7 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
   } catch (e) {
     _logger.severe('onPushNotificationSyncCallback: error=$e');
   } finally {
-    await _disposeContext();
-    try {
-      await WebtritSignalingService.restoreService();
-    } catch (e, st) {
-      _logger.warning('restoreService() after push failed', e, st);
-    }
+    await _disposeContext(context);
   }
 }
 
