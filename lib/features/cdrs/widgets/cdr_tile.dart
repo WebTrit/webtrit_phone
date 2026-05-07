@@ -117,10 +117,17 @@ class _CdrTileState extends State<CdrTile> {
     final colorScheme = themeData.colorScheme;
     final l10n = context.l10n;
 
+    // Reasons suppressed from display (ITU-T Q.850):
+    // - unknown: no meaningful info for the user
+    // - normalCallClearing: expected happy-path ending (cause 16)
+    // - validCauseCodeNotYetReceived: cause 0, written to CDR when no Reason header is present
+    // - internetworkingUnspecified: cause 127, fallback for SIP responses without specific Q.850 mapping
     String? disconnectText;
     if (cdr.disconnectReasonEnum != null) {
       if (cdr.disconnectReasonEnum != CdrDisconnectReason.unknown &&
-          cdr.disconnectReasonEnum != CdrDisconnectReason.normalCallClearing) {
+          cdr.disconnectReasonEnum != CdrDisconnectReason.normalCallClearing &&
+          cdr.disconnectReasonEnum != CdrDisconnectReason.validCauseCodeNotYetReceived &&
+          cdr.disconnectReasonEnum != CdrDisconnectReason.internetworkingUnspecified) {
         disconnectText = l10n.parseL10n(cdr.disconnectReasonEnum!.l10nKey) ?? cdr.disconnectReasonEnum!.rawValue;
       } else {
         disconnectText = null;
