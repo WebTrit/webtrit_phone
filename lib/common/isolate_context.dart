@@ -56,18 +56,22 @@ class IsolateContext {
           )
         : null;
 
-    if (remoteConfigService != null && appLabelsProvider != null) {
-      try {
-        final overrides = FeatureOverridesFactory.create(remoteConfigService.snapshot);
-        final loggingConfig = LoggingMapper.mapFromOverridesOnly(overrides);
-        await AppLogger.init(
-          loggingConfig,
-          LogzioLoggingService.fromEnvironment(loggingConfig.remoteLoggingEnabled),
-          () => appLabelsProvider.logLabels,
-        );
-      } catch (e) {
-        Logger.root.warning('IsolateContext: AppLogger init failed, continuing without remote logging: $e');
-      }
+    try {
+      final loggingConfig = remoteConfigService != null
+          ? LoggingMapper.mapFromOverridesOnly(FeatureOverridesFactory.create(remoteConfigService.snapshot))
+          : const LoggingConfig(
+              logLevel: Level.INFO,
+              monitorCheckInterval: Duration(seconds: 15),
+              remoteLoggingEnabled: false,
+              anonymizationEnabled: true,
+            );
+      await AppLogger.init(
+        loggingConfig,
+        LogzioLoggingService.fromEnvironment(loggingConfig.remoteLoggingEnabled),
+        () => appLabelsProvider?.logLabels ?? {},
+      );
+    } catch (e, st) {
+      Logger.root.warning('IsolateContext: AppLogger init failed, continuing without remote logging', e, st);
     }
 
     return IsolateContext(
