@@ -382,6 +382,23 @@ melos:
         - splash:generate
 
     # ===========================
+    # Configurator - melos run configurator:generate
+    # ===========================
+
+    configurator:generate:
+      description: Generate app resources and run flutterfire configure for all platforms.
+      run: |
+        dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
+          configurator-generate \
+          --cache-session-data-path ${CACHE_SESSION_DATA_PATH:?CACHE_SESSION_DATA_PATH is required}
+        dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
+          configurator-setup \
+          --platform ios \
+          --platform android \
+          --keystore-path ${KEYSTORE_APP_PATH:?KEYSTORE_APP_PATH is required} \
+          --cache-session-data-path ${CACHE_SESSION_DATA_PATH:?CACHE_SESSION_DATA_PATH is required}
+
+    # ===========================
     # Localization - melos run l10n:push | l10n:pull | l10n:generate | l10n:fetch
     # ===========================
 
