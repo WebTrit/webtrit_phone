@@ -139,7 +139,7 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
   }
 
   // pushBound: run the direct-WS call lifecycle with the already-initialised context.
-  // No timeout is applied here — the push isolate owns a direct WebSocket and its
+  // No timeout is applied here - the push isolate owns a direct WebSocket and its
   // lifecycle is driven by natural terminal events (HangupEvent, 4441 eviction, or
   // user answering on this device). The legacy 20-second timeout was an Android FGS
   // background-budget constraint that no longer applies in the pushBound architecture.
@@ -147,8 +147,8 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
     final manager = await _getOrInit(context);
     // NOTE: the hard deadline for this call is enforced natively by
     // IncomingCallService.INDEPENDENT_SERVICE_TIMEOUT_MS (60 s). When it fires,
-    // the Android side calls stopSelf() → onDestroy() which cancels the
-    // notification and stops vibration correctly.
+    // the Android side calls stopSelf() - onDestroy() cancels the notification
+    // and stops vibration correctly.
     // TODO: consider moving all timeout constants (native + Dart) to a shared
     // setup/config location so they can be reviewed and adjusted in one place.
     await manager.run(metadata);
