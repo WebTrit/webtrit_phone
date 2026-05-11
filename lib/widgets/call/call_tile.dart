@@ -47,9 +47,9 @@ List<PopupMenuEntry<dynamic>> buildNumberActions(
   return [
     if (onAudioCallPressed != null) PopupMenuItem(onTap: onAudioCallPressed, child: Text(l10n.numberActions_audioCall)),
     if (onVideoCallPressed != null) PopupMenuItem(onTap: onVideoCallPressed, child: Text(l10n.numberActions_videoCall)),
-    if (callNumbers.length > 1)
+    if (callNumbers.length > 1 && onCallFrom != null)
       for (final number in callNumbers)
-        PopupMenuItem(onTap: () => onCallFrom?.call(number), child: Text(l10n.numberActions_callFrom(number))),
+        PopupMenuItem(onTap: () => onCallFrom.call(number), child: Text(l10n.numberActions_callFrom(number))),
     if (onTransferPressed != null) PopupMenuItem(onTap: onTransferPressed, child: Text(l10n.numberActions_transfer)),
     if (onChatPressed != null) PopupMenuItem(onTap: onChatPressed, child: Text(l10n.numberActions_chat)),
     if (onSendSmsPressed != null) PopupMenuItem(onTap: onSendSmsPressed, child: Text(l10n.numberActions_sendSms)),
