@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:intl/intl.dart';
 
@@ -55,39 +54,25 @@ class _RecentTileState extends State<RecentTile> {
   late final contact = widget.recent.contact;
   late final callNumber = callLogEntry.number;
 
-  List<PopupMenuEntry> get actions => [
-    if (widget.onAudioCallPressed != null)
-      PopupMenuItem(onTap: widget.onAudioCallPressed, child: Text(context.l10n.numberActions_audioCall)),
-    if (widget.onVideoCallPressed != null)
-      PopupMenuItem(onTap: widget.onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
-    if (widget.callNumbers.length > 1)
-      for (final number in widget.callNumbers)
-        PopupMenuItem(
-          onTap: () => widget.onCallFrom?.call(number),
-          child: Text(context.l10n.numberActions_callFrom(number)),
-        ),
-    if (widget.onTransferPressed != null)
-      PopupMenuItem(onTap: widget.onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
-    if (widget.onChatPressed != null)
-      PopupMenuItem(onTap: widget.onChatPressed, child: Text(context.l10n.numberActions_chat)),
-    if (widget.onSendSmsPressed != null)
-      PopupMenuItem(onTap: widget.onSendSmsPressed, child: Text(context.l10n.numberActions_sendSms)),
-    if (widget.onViewContactPressed != null)
-      PopupMenuItem(onTap: widget.onViewContactPressed, child: Text(context.l10n.numberActions_viewContact)),
-    if (widget.onCallLogPressed != null)
-      PopupMenuItem(onTap: widget.onCallLogPressed, child: Text(context.l10n.numberActions_callLog)),
-    PopupMenuItem(
-      onTap: () {
-        Clipboard.setData(ClipboardData(text: callNumber));
-      },
-      child: Text(context.l10n.numberActions_copyNumber),
-    ),
-    if (widget.onDelete != null) PopupMenuItem(onTap: widget.onDelete, child: Text(context.l10n.numberActions_delete)),
-  ];
-
   void onLongPress() {
-    final position = getPosition();
-    showMenu(context: context, position: position, items: actions);
+    showMenu(
+      context: context,
+      position: getPosition(),
+      items: buildNumberActions(
+        context,
+        callNumbers: widget.callNumbers,
+        onAudioCallPressed: widget.onAudioCallPressed,
+        onVideoCallPressed: widget.onVideoCallPressed,
+        onTransferPressed: widget.onTransferPressed,
+        onChatPressed: widget.onChatPressed,
+        onSendSmsPressed: widget.onSendSmsPressed,
+        onViewContactPressed: widget.onViewContactPressed,
+        onCallLogPressed: widget.onCallLogPressed,
+        onCallFrom: widget.onCallFrom,
+        copyNumber: callNumber,
+        onDelete: widget.onDelete,
+      ),
+    );
   }
 
   RelativeRect getPosition() {
@@ -134,7 +119,14 @@ class _RecentTileState extends State<RecentTile> {
           presenceInfo: contact?.presenceInfo,
           dialogInfo: contact?.dialogInfo,
         ),
-        trailing: Text(dateFormat.format(callLogEntry.createdTime), style: themeData.textTheme.bodySmall),
+        trailing: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(dateFormat.format(callLogEntry.createdTime), style: themeData.textTheme.bodySmall),
+            TileMenuButton(onTap: onLongPress),
+          ],
+        ),
         title: Text(
           switch (presenceParams.hybridPresenceSupport) {
             true => '${widget.recent.name} ${contact?.presenceInfo.primaryStatusIcon ?? ''}',

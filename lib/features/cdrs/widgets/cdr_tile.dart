@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/recents/extensions/extensions.dart';
@@ -56,45 +55,25 @@ class _CdrTileState extends State<CdrTile> {
   String get number => participantNumber ?? participant;
   bool get nameSameAsNumber => name == number;
 
-  List<PopupMenuEntry> get actions => [
-    if (widget.onAudioCallPressed != null)
-      PopupMenuItem(onTap: widget.onAudioCallPressed, child: Text(context.l10n.numberActions_audioCall)),
-    if (widget.onVideoCallPressed != null)
-      PopupMenuItem(onTap: widget.onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
-    if (widget.callNumbers.length > 1)
-      for (final number in widget.callNumbers)
-        PopupMenuItem(
-          onTap: () => widget.onCallFrom?.call(number),
-          child: Text(context.l10n.numberActions_callFrom(number)),
-        ),
-    if (widget.onTransferPressed != null)
-      PopupMenuItem(onTap: widget.onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
-    if (widget.onChatPressed != null)
-      PopupMenuItem(onTap: widget.onChatPressed, child: Text(context.l10n.numberActions_chat)),
-    if (widget.onSendSmsPressed != null)
-      PopupMenuItem(onTap: widget.onSendSmsPressed, child: Text(context.l10n.numberActions_sendSms)),
-    if (widget.onViewContactPressed != null)
-      PopupMenuItem(onTap: widget.onViewContactPressed, child: Text(context.l10n.numberActions_viewContact)),
-    if (widget.onCallLogPressed != null)
-      PopupMenuItem(onTap: widget.onCallLogPressed, child: Text(context.l10n.numberActions_callLog)),
-    if (participantNumber != null)
-      PopupMenuItem(
-        onTap: () {
-          Clipboard.setData(ClipboardData(text: participantNumber!));
-        },
-        child: Text(context.l10n.numberActions_copyNumber),
-      ),
-    PopupMenuItem(
-      onTap: () {
-        Clipboard.setData(ClipboardData(text: cdr.callId));
-      },
-      child: Text(context.l10n.numberActions_copyCallId),
-    ),
-  ];
-
   void showMenuPopup() {
-    final position = getPosition();
-    showMenu(context: context, position: position, items: actions);
+    showMenu(
+      context: context,
+      position: getPosition(),
+      items: buildNumberActions(
+        context,
+        callNumbers: widget.callNumbers,
+        onAudioCallPressed: widget.onAudioCallPressed,
+        onVideoCallPressed: widget.onVideoCallPressed,
+        onTransferPressed: widget.onTransferPressed,
+        onChatPressed: widget.onChatPressed,
+        onSendSmsPressed: widget.onSendSmsPressed,
+        onViewContactPressed: widget.onViewContactPressed,
+        onCallLogPressed: widget.onCallLogPressed,
+        onCallFrom: widget.onCallFrom,
+        copyNumber: participantNumber,
+        copyCallId: cdr.callId,
+      ),
+    );
   }
 
   RelativeRect getPosition() {
@@ -211,17 +190,7 @@ class _CdrTileState extends State<CdrTile> {
                   ],
                 ),
                 SizedBox(width: 4),
-                GestureDetector(
-                  onTap: showMenuPopup,
-                  child: Container(
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: colorScheme.surface.withAlpha(1), // just for better tap tracking
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Icon(Icons.more_vert, size: 20, color: themeData.textTheme.labelMedium?.color),
-                  ),
-                ),
+                TileMenuButton(onTap: showMenuPopup),
               ],
             ),
           ),
