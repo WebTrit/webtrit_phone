@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$KeypadState {
 
- Contact? get contact;
+ Contact? get contact; String? get value;
 /// Create a copy of KeypadState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $KeypadStateCopyWith<KeypadState> get copyWith => _$KeypadStateCopyWithImpl<Keyp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is KeypadState&&(identical(other.contact, contact) || other.contact == contact));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is KeypadState&&(identical(other.contact, contact) || other.contact == contact)&&(identical(other.value, value) || other.value == value));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,contact);
+int get hashCode => Object.hash(runtimeType,contact,value);
 
 @override
 String toString() {
-  return 'KeypadState(contact: $contact)';
+  return 'KeypadState(contact: $contact, value: $value)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $KeypadStateCopyWith<$Res>  {
   factory $KeypadStateCopyWith(KeypadState value, $Res Function(KeypadState) _then) = _$KeypadStateCopyWithImpl;
 @useResult
 $Res call({
- Contact? contact
+ Contact? contact, String? value
 });
 
 
@@ -62,10 +62,11 @@ class _$KeypadStateCopyWithImpl<$Res>
 
 /// Create a copy of KeypadState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? contact = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? contact = freezed,Object? value = freezed,}) {
   return _then(KeypadState(
 contact: freezed == contact ? _self.contact : contact // ignore: cast_nullable_to_non_nullable
-as Contact?,
+as Contact?,value: freezed == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
