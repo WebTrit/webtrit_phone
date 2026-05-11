@@ -5,7 +5,27 @@ import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-import 'tile_menu_button.dart';
+class TileMenuButton extends StatelessWidget {
+  const TileMenuButton({super.key, required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 32,
+        decoration: BoxDecoration(
+          color: themeData.colorScheme.surface.withAlpha(1),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Icon(Icons.more_vert, size: 20, color: themeData.textTheme.labelMedium?.color),
+      ),
+    );
+  }
+}
 
 List<PopupMenuEntry<dynamic>> buildNumberActions(
   BuildContext context, {
