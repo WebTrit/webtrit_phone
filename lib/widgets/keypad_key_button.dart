@@ -8,7 +8,7 @@ import 'keypad_key_styles.dart';
 export 'keypad_key_style.dart';
 export 'keypad_key_styles.dart';
 
-class KeypadKeyButton extends StatefulWidget {
+class KeypadKeyButton extends StatelessWidget {
   const KeypadKeyButton({
     super.key,
     required this.text,
@@ -19,6 +19,14 @@ class KeypadKeyButton extends StatefulWidget {
     @Deprecated('Use style.textStyle instead') this.textColor,
     @Deprecated('Use style.subtextStyle instead') this.subtextFontSize,
   });
+
+  static const _subextPadding = EdgeInsets.symmetric(horizontal: 8);
+
+  /// Minimum alpha value applied when deriving subtext color.
+  static const double _minAlphaValue = 0.2;
+
+  /// Amount to reduce alpha from main text color for subtext.
+  static const double _subtextAlphaReduction = 0.3;
 
   final String text;
   final String subtext;
@@ -36,73 +44,43 @@ class KeypadKeyButton extends StatefulWidget {
   final double? subtextFontSize;
 
   @override
-  State<KeypadKeyButton> createState() => _KeypadKeyButtonState();
-}
-
-class _KeypadKeyButtonState extends State<KeypadKeyButton> {
-  static const _subextPadding = EdgeInsets.symmetric(horizontal: 8);
-  static const double _minAlphaValue = 0.2;
-  static const double _subtextAlphaReduction = 0.3;
-
-  TextStyle? _textStyle;
-  TextStyle? _subStyle;
-  ButtonStyle? _buttonStyle;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _updateStyles();
-  }
-
-  @override
-  void didUpdateWidget(KeypadKeyButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.style != widget.style ||
-        oldWidget.textFontSize != widget.textFontSize ||
-        oldWidget.textColor != widget.textColor ||
-        oldWidget.subtextFontSize != widget.subtextFontSize) {
-      _updateStyles();
-    }
-  }
-
-  void _updateStyles() {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final merged = KeypadKeyStyle.merge(theme.extension<KeypadKeyStyles>()?.primary, widget.style);
+    final themed = theme.extension<KeypadKeyStyles>()?.primary;
+
+    final merged = KeypadKeyStyle.merge(themed, style);
 
     final textStyle = (merged.textStyle ?? theme.textTheme.headlineLarge)?.copyWith(
-      fontSize: widget.textFontSize ?? merged.textStyle?.fontSize,
-      color: widget.textColor ?? merged.textStyle?.color,
+      fontSize: textFontSize ?? merged.textStyle?.fontSize,
+      color: textColor ?? merged.textStyle?.color,
       height: 1.0,
     );
 
+    // Derive subtext color from text color with reduced opacity if not set.
     Color? derivedSubColor = textStyle?.color;
     if (derivedSubColor != null) {
-      final a = (derivedSubColor.a - _subtextAlphaReduction).clamp(_minAlphaValue, 1.0);
+      var a = derivedSubColor.a - _subtextAlphaReduction;
+      if (a < _minAlphaValue) a = _minAlphaValue;
       derivedSubColor = derivedSubColor.withValues(alpha: a);
     }
 
-    _textStyle = textStyle;
-    _subStyle = (merged.subtextStyle ?? theme.textTheme.bodyMedium)?.copyWith(
-      fontSize: widget.subtextFontSize ?? merged.subtextStyle?.fontSize,
+    final subStyle = (merged.subtextStyle ?? theme.textTheme.bodyMedium)?.copyWith(
+      fontSize: subtextFontSize ?? merged.subtextStyle?.fontSize,
       color: merged.subtextStyle?.color ?? derivedSubColor,
       height: 1.0,
     );
-    _buttonStyle = merged.buttonStyle;
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => widget.onKeyPressed(widget.text),
-      onLongPress: widget.subtext.length != 1 ? null : () => widget.onKeyPressed(widget.subtext),
-      style: _buttonStyle,
+      onPressed: () => onKeyPressed(text),
+      onLongPress: subtext.length != 1 ? null : () => onKeyPressed(subtext),
+      style: merged.buttonStyle,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(widget.text, style: _textStyle),
+          Text(text, style: textStyle),
           Padding(
             padding: _subextPadding,
-            child: Text(widget.subtext, style: _subStyle),
+            child: Text(subtext, style: subStyle),
           ),
         ],
       ),
