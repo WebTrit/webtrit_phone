@@ -83,6 +83,13 @@ class CallMediaManager {
       try {
         await AppleNativeAudioManagement.audioSessionDidActivate();
         await AppleNativeAudioManagement.setIsAudioEnabled(true);
+
+        // restartAudio directly starts the AVAudioEngine ADM (initAndStartRecording +
+        // startPlayout). Must come after audioSessionDidActivate so the session is
+        // marked active before the engine starts
+        //
+        // Solves bug with hold/unhold silence after introducing RTCAudioDeviceModuleTypeAudioEngine on pc init:
+        await AppleNativeAudioManagement.restartAudio();
       } catch (e, st) {
         _logger.warning('didActivateAudioSession failed', e, st);
       }
