@@ -160,12 +160,10 @@ class _CallTileState extends State<CallTile> {
   RelativeRect getPosition() {
     final RenderBox renderBox = tileKey.currentContext!.findRenderObject()! as RenderBox;
     final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
-    final screenSize = MediaQuery.of(context).size;
-    final offset = Offset(screenSize.width - 16, 16);
     return RelativeRect.fromRect(
       Rect.fromPoints(
-        renderBox.localToGlobal(offset, ancestor: overlay),
-        renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero) + offset, ancestor: overlay),
+        renderBox.localToGlobal(Offset(renderBox.size.width, 0), ancestor: overlay),
+        renderBox.localToGlobal(renderBox.size.bottomRight(Offset.zero), ancestor: overlay),
       ),
       Offset.zero & overlay.size,
     );
