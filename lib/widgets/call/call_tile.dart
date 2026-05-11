@@ -228,8 +228,9 @@ class _CallTileState extends State<CallTile> {
       child: Material(
         color: colorScheme.surface.withAlpha(25),
         borderRadius: BorderRadius.circular(16),
+        clipBehavior: Clip.antiAlias,
         child: InkWell(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(16),
           splashColor: colorScheme.secondary.withAlpha(50),
           key: tileKey,
           onTap: widget.onTap,
