@@ -35,6 +35,7 @@ class IsolateContext {
     this.deviceInfo,
     this.packageInfo,
     this.appLabelsProvider,
+    required this.nativeLogForwarder,
   });
 
   /// Required - credentials for signaling auth. Throws on failure.
@@ -46,6 +47,7 @@ class IsolateContext {
   final DeviceInfo? deviceInfo;
   final PackageInfo? packageInfo;
   final AppMetadataProvider? appLabelsProvider;
+  final NativeLogForwarder nativeLogForwarder;
 
   static Future<IsolateContext> init() async {
     final secureStorage = await SecureStorageImpl.init();
@@ -79,6 +81,12 @@ class IsolateContext {
       Logger.root.warning('IsolateContext: AppLogger init failed, continuing without remote logging', e, st);
     }
 
+    final appPath = await AppPath.init();
+    final nativeLogForwarder = NativeLogForwarder(
+      nativeLogFilePath: appPath.nativeLogFilePath,
+      logger: Logger('callkeep'),
+    )..start();
+
     return IsolateContext(
       secureStorage: secureStorage,
       remoteConfigService: remoteConfigService,
@@ -86,6 +94,7 @@ class IsolateContext {
       deviceInfo: deviceInfo,
       packageInfo: packageInfo,
       appLabelsProvider: appLabelsProvider,
+      nativeLogForwarder: nativeLogForwarder,
     );
   }
 }
@@ -106,6 +115,7 @@ class PushIsolateContext extends IsolateContext {
   PushIsolateContext({
     required super.secureStorage,
     required this.incomingCallTypeRepository,
+    required super.nativeLogForwarder,
     required this.appCertificates,
     super.remoteConfigService,
     super.appInfo,
@@ -166,6 +176,7 @@ class PushIsolateContext extends IsolateContext {
       deviceInfo: base.deviceInfo,
       packageInfo: base.packageInfo,
       appLabelsProvider: base.appLabelsProvider,
+      nativeLogForwarder: base.nativeLogForwarder,
       incomingCallTypeRepository: IncomingCallTypeRepositoryPrefsImpl(appPreferences),
       appCertificates: appCertificates,
       appPath: appPath,
@@ -175,5 +186,8 @@ class PushIsolateContext extends IsolateContext {
     );
   }
 
-  Future<void> dispose() => appDatabase?.close() ?? Future.value();
+  Future<void> dispose() async {
+    await nativeLogForwarder.dispose();
+    await appDatabase?.close();
+  }
 }

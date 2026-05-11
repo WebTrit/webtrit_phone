@@ -83,6 +83,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         android: CallkeepAndroidOptions(
           ringtoneSound: Assets.ringtones.incomingCall1,
           ringbackSound: Assets.ringtones.outgoingCall1,
+          nativeLogFilePath: context.read<AppPath>().nativeLogFilePath,
         ),
       ),
     );
