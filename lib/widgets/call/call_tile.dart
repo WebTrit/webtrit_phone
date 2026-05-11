@@ -17,6 +17,7 @@ class TileMenuButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 32,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
           color: themeData.colorScheme.surface.withAlpha(1),
           borderRadius: BorderRadius.circular(16),
