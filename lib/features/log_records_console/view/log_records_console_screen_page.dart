@@ -24,6 +24,7 @@ class LogRecordsConsoleScreenPage extends StatelessWidget {
         appInfo: context.read<AppInfo>(),
         dateFormat: appTime.fileNameDateFormat,
         exportFilenamePrefix: appMetadataProvider.exportFilenamePrefix,
+        nativeLogFilePath: context.read<AppPath>().nativeLogFilePath,
       )..load(),
       child: LogRecordsConsoleScreen(),
     );

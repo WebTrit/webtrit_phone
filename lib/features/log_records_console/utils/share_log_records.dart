@@ -1,11 +1,16 @@
 import 'dart:io';
 
-import 'package:path/path.dart' show join;
+import 'package:path/path.dart' show basename, join;
 import 'package:share_plus/share_plus.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 
-Future<ShareResult> shareLogRecords(List<String> logRecords, {required String name}) async {
+Future<ShareResult> shareLogRecords(
+  List<String> logRecords, {
+  required String name,
+  String? nativeLogFilePath,
+  String? nativeLogName,
+}) async {
   final temporaryPath = await getTemporaryPath();
   final logRecordsPath = join(temporaryPath, name);
   final logRecordsFile = File(logRecordsPath);
@@ -16,9 +21,17 @@ Future<ShareResult> shareLogRecords(List<String> logRecords, {required String na
   }
   await logRecordsSink.close();
 
-  final logRecordsXFile = XFile(logRecordsPath, mimeType: 'text/plain', name: name);
+  final files = <XFile>[XFile(logRecordsPath, mimeType: 'text/plain', name: name)];
+
+  if (nativeLogFilePath != null) {
+    final nativeFile = File(nativeLogFilePath);
+    if (await nativeFile.exists()) {
+      files.add(XFile(nativeLogFilePath, mimeType: 'text/plain', name: nativeLogName ?? basename(nativeLogFilePath)));
+    }
+  }
+
   try {
-    return await SharePlus.instance.share(ShareParams(files: [logRecordsXFile]));
+    return await SharePlus.instance.share(ShareParams(files: files));
   } finally {
     if (await logRecordsFile.exists()) {
       await logRecordsFile.delete();
