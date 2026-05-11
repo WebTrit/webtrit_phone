@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/call_routing.dart';
+import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
 
@@ -29,6 +31,7 @@ class KeypadViewState extends State<KeypadView> {
   late final _callController = CallControllerScope.of(context);
   late TextEditingController _controller;
   late FocusNode _focusNode;
+  final _contactDebounce = Debounce(kDebounceDuration);
 
   EditableTextState? get _keypadTextFieldEditableTextState =>
       (_keypadTextFieldKey.currentState as TextSelectionGestureDetectorBuilderDelegate).editableTextKey.currentState;
@@ -37,14 +40,15 @@ class KeypadViewState extends State<KeypadView> {
   void initState() {
     super.initState();
     _controller = TextEditingController()
-      ..addListener(() {
-        context.read<KeypadCubit>().getContactByPhoneNumber(_controller.text);
-      });
+      ..addListener(
+        () => _contactDebounce.schedule(() => context.read<KeypadCubit>().getContactByPhoneNumber(_controller.text)),
+      );
     _focusNode = FocusNode();
   }
 
   @override
   void dispose() {
+    _contactDebounce.dispose();
     _focusNode.dispose();
     _controller.dispose();
     super.dispose();
