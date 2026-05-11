@@ -14,7 +14,7 @@ class RecentTile extends StatelessWidget {
     super.key,
     required this.recent,
     required this.callNumbers,
-    this.dateFormat,
+    required this.dateFormat,
     this.onTap,
     this.onAudioCallPressed,
     this.onVideoCallPressed,
@@ -29,7 +29,7 @@ class RecentTile extends StatelessWidget {
 
   final Recent recent;
   final List<String> callNumbers;
-  final DateFormat? dateFormat;
+  final DateFormat dateFormat;
   final Function()? onTap;
   final Function()? onAudioCallPressed;
   final Function()? onVideoCallPressed;
@@ -80,7 +80,7 @@ class RecentTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [directionIcon, const SizedBox(width: 4), videoIcon],
       ),
-      timeLabel: (dateFormat ?? DateFormat()).format(callLogEntry.createdTime),
+      timeLabel: dateFormat.format(callLogEntry.createdTime),
       dismissible: true,
       dismissBackground: Container(
         color: themeData.colorScheme.error,
