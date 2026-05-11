@@ -8,8 +8,8 @@ import 'package:webtrit_phone/utils/utils.dart';
 Future<ShareResult> shareLogRecords(
   List<String> logRecords, {
   required String name,
-  String? nativeLogFilePath,
-  String? nativeLogName,
+  String? callkeepLogFilePath,
+  String? callkeepLogName,
 }) async {
   final temporaryPath = await getTemporaryPath();
   final logRecordsPath = join(temporaryPath, name);
@@ -23,10 +23,12 @@ Future<ShareResult> shareLogRecords(
 
   final files = <XFile>[XFile(logRecordsPath, mimeType: 'text/plain', name: name)];
 
-  if (nativeLogFilePath != null) {
-    final nativeFile = File(nativeLogFilePath);
-    if (await nativeFile.exists()) {
-      files.add(XFile(nativeLogFilePath, mimeType: 'text/plain', name: nativeLogName ?? basename(nativeLogFilePath)));
+  if (callkeepLogFilePath != null) {
+    final callkeepFile = File(callkeepLogFilePath);
+    if (await callkeepFile.exists()) {
+      files.add(
+        XFile(callkeepLogFilePath, mimeType: 'text/plain', name: callkeepLogName ?? basename(callkeepLogFilePath)),
+      );
     }
   }
 

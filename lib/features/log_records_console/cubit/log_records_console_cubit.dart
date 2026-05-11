@@ -17,7 +17,7 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
     required this.appInfo,
     required this.dateFormat,
     required this.exportFilenamePrefix,
-    this.nativeLogFilePath,
+    this.callkeepLogFilePath,
   }) : super(const LogRecordsConsoleStateInitial());
 
   final LogRecordsRepository logRecordsRepository;
@@ -25,7 +25,7 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
   final AppInfo appInfo;
   final DateFormat dateFormat;
   final String exportFilenamePrefix;
-  final String? nativeLogFilePath;
+  final String? callkeepLogFilePath;
 
   void load() async {
     emit(const LogRecordsConsoleStateLoading());
@@ -53,8 +53,8 @@ class LogRecordsConsoleCubit extends Cubit<LogRecordsConsoleState> {
       await shareLogRecords(
         state.logRecords,
         name: name,
-        nativeLogFilePath: nativeLogFilePath,
-        nativeLogName: 'callkeep_$name',
+        callkeepLogFilePath: callkeepLogFilePath,
+        callkeepLogName: 'callkeep_$name',
       );
     } finally {
       emit(state.copyWith(isSharing: false));
