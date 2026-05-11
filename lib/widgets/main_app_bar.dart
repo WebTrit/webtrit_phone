@@ -72,122 +72,124 @@ class _MainAppBarState extends State<MainAppBar> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BlocListener<SessionStatusCubit, SessionStatusState>(
-      listener: (context, state) => _updateDisplayedStatus(state.status),
-      child: AppBar(
-        title: Builder(
-          builder: (context) {
-            Widget? widgetToShow;
-            if (_debouncer.displayed.isEstablishing) {
-              widgetToShow = Row(
-                key: _debouncer.displayed.key,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  SizedBox(width: 16, height: 16, child: CircularProgressIndicator()),
-                  SizedBox(width: 8),
-                  Flexible(
-                    child: Text(
-                      _debouncer.displayed.appBarl10n(context),
-                      style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+    return RepaintBoundary(
+      child: BlocListener<SessionStatusCubit, SessionStatusState>(
+        listener: (context, state) => _updateDisplayedStatus(state.status),
+        child: AppBar(
+          title: Builder(
+            builder: (context) {
+              Widget? widgetToShow;
+              if (_debouncer.displayed.isEstablishing) {
+                widgetToShow = Row(
+                  key: _debouncer.displayed.key,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    SizedBox(width: 16, height: 16, child: CircularProgressIndicator()),
+                    SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        _debouncer.displayed.appBarl10n(context),
+                        style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                     ),
-                  ),
-                ],
-              );
-            }
-            widgetToShow ??= Row(mainAxisSize: MainAxisSize.max, children: [widget.title ?? SizedBox.shrink()]);
+                  ],
+                );
+              }
+              widgetToShow ??= Row(mainAxisSize: MainAxisSize.max, children: [widget.title ?? SizedBox.shrink()]);
 
-            return AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              transitionBuilder: (child, animation) {
-                final r = animation.status == AnimationStatus.reverse;
-                return FadeTransition(
-                  opacity: animation.drive(CurveTween(curve: Curves.easeInOut)),
-                  child: SlideTransition(
-                    position: animation.drive(
-                      Tween<Offset>(
-                        begin: Offset(0, r ? -1 : 1),
-                        end: Offset.zero,
-                      ).chain(CurveTween(curve: Curves.easeOut)),
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                transitionBuilder: (child, animation) {
+                  final r = animation.status == AnimationStatus.reverse;
+                  return FadeTransition(
+                    opacity: animation.drive(CurveTween(curve: Curves.easeInOut)),
+                    child: SlideTransition(
+                      position: animation.drive(
+                        Tween<Offset>(
+                          begin: Offset(0, r ? -1 : 1),
+                          end: Offset.zero,
+                        ).chain(CurveTween(curve: Curves.easeOut)),
+                      ),
+                      child: child,
                     ),
-                    child: child,
-                  ),
-                );
-              },
-              switchInCurve: Curves.easeInExpo,
-              switchOutCurve: Curves.easeOutExpo,
-              child: widgetToShow,
-            );
-          },
-        ),
-        bottom: widget.bottom,
-        backgroundColor: widget.backgroundColor,
-        flexibleSpace: widget.flexibleSpace,
-        elevation: widget.elevation,
-        centerTitle: false,
-        actions: [
-          if (_debouncer.displayed.isReady) ...[
-            if (AppBarParams.of(context).pullableCallDialogs.isNotEmpty)
-              CallPullBadge(pullableCallDialogs: AppBarParams.of(context).pullableCallDialogs),
-            if (AppBarParams.of(context).systemNotificationsEnabled) SystemNotificationsBadge(),
-          ],
-          Ink(
-            decoration: ShapeDecoration(
-              shape: CircleBorder(side: BorderSide(color: _debouncer.displayed.color(context))),
-            ),
-            child: BlocBuilder<UserInfoCubit, UserInfoState>(
-              builder: (context, userinfoState) {
-                final info = userinfoState.userInfo;
-                return IconButton(
-                  key: mainAppBarKey,
-                  constraints: const BoxConstraints.tightFor(
-                    width: kMinInteractiveDimension,
-                    height: kMinInteractiveDimension,
-                  ),
-                  padding: const EdgeInsets.all(2),
-                  icon: Stack(
-                    clipBehavior: Clip.none,
-                    children: <Widget>[
-                      LeadingAvatar(
-                        username: info?.name ?? info?.numbers.main,
-                        thumbnailUrl: gravatarThumbnailUrl(info?.email),
-                        radius: kMinInteractiveDimension / 2,
-                        showLoading: true,
-                      ),
-                      BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
-                        builder: (context, microphoneStatusState) {
-                          return Visibility(
-                            visible:
-                                microphoneStatusState.microphonePermissionGranted != null &&
-                                !microphoneStatusState.microphonePermissionGranted!,
-                            child: Positioned(
-                              right: -8,
-                              top: -2,
-                              child: Container(
-                                padding: EdgeInsets.all(3),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.error,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(Icons.mic_off, color: Colors.white, size: 14),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    context.router.navigate(const SettingsRouterPageRoute());
-                  },
-                );
-              },
-            ),
+                  );
+                },
+                switchInCurve: Curves.easeInExpo,
+                switchOutCurve: Curves.easeOutExpo,
+                child: widgetToShow,
+              );
+            },
           ),
-          const SizedBox(width: NavigationToolbar.kMiddleSpacing),
-        ],
+          bottom: widget.bottom,
+          backgroundColor: widget.backgroundColor,
+          flexibleSpace: widget.flexibleSpace,
+          elevation: widget.elevation,
+          centerTitle: false,
+          actions: [
+            if (_debouncer.displayed.isReady) ...[
+              if (AppBarParams.of(context).pullableCallDialogs.isNotEmpty)
+                CallPullBadge(pullableCallDialogs: AppBarParams.of(context).pullableCallDialogs),
+              if (AppBarParams.of(context).systemNotificationsEnabled) SystemNotificationsBadge(),
+            ],
+            Ink(
+              decoration: ShapeDecoration(
+                shape: CircleBorder(side: BorderSide(color: _debouncer.displayed.color(context))),
+              ),
+              child: BlocBuilder<UserInfoCubit, UserInfoState>(
+                builder: (context, userinfoState) {
+                  final info = userinfoState.userInfo;
+                  return IconButton(
+                    key: mainAppBarKey,
+                    constraints: const BoxConstraints.tightFor(
+                      width: kMinInteractiveDimension,
+                      height: kMinInteractiveDimension,
+                    ),
+                    padding: const EdgeInsets.all(2),
+                    icon: Stack(
+                      clipBehavior: Clip.none,
+                      children: <Widget>[
+                        LeadingAvatar(
+                          username: info?.name ?? info?.numbers.main,
+                          thumbnailUrl: gravatarThumbnailUrl(info?.email),
+                          radius: kMinInteractiveDimension / 2,
+                          showLoading: true,
+                        ),
+                        BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
+                          builder: (context, microphoneStatusState) {
+                            return Visibility(
+                              visible:
+                                  microphoneStatusState.microphonePermissionGranted != null &&
+                                  !microphoneStatusState.microphonePermissionGranted!,
+                              child: Positioned(
+                                right: -8,
+                                top: -2,
+                                child: Container(
+                                  padding: EdgeInsets.all(3),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).colorScheme.error,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(Icons.mic_off, color: Colors.white, size: 14),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      context.router.navigate(const SettingsRouterPageRoute());
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: NavigationToolbar.kMiddleSpacing),
+          ],
+        ),
       ),
     );
   }
