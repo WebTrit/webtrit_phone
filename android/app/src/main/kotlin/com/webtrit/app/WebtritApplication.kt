@@ -3,6 +3,9 @@ package com.webtrit.app
 import android.app.Application
 import com.webtrit.callkeep.BackgroundPushNotificationIsolateBootstrapApi
 import com.webtrit.callkeep.PHostBackgroundPushNotificationIsolateBootstrapApi
+import com.webtrit.callkeep.PHostBackgroundPushNotificationIsolateApi
+import com.webtrit.callkeep.services.services.incoming_call.IncomingCallRelease
+import com.webtrit.callkeep.services.services.incoming_call.IncomingCallService
 import com.webtrit.signaling_service.SignalingForegroundService
 
 /// App-level initialization that wires together two independent Flutter plugins:
@@ -44,6 +47,35 @@ class WebtritApplication : Application() {
             PHostBackgroundPushNotificationIsolateBootstrapApi.setUp(
                 messenger,
                 BackgroundPushNotificationIsolateBootstrapApi(context),
+            )
+            // Register the full isolate API on the FGS engine so that releaseCall() /
+            // endCall() triggered from onSignalingBackgroundCallEvent reach a handler
+            // instead of timing out. The implementation delegates to IncomingCallService
+            // via its existing broadcast mechanism — the same path used by all other callers.
+            // If IncomingCallService is not running the broadcast is silently dropped.
+            PHostBackgroundPushNotificationIsolateApi.setUp(
+                messenger,
+                object : PHostBackgroundPushNotificationIsolateApi {
+                    override fun releaseCall(callId: String, callback: (Result<Unit>) -> Unit) {
+                        IncomingCallService.release(context, IncomingCallRelease.IC_RELEASE_WITH_DECLINE)
+                        callback(Result.success(Unit))
+                    }
+
+                    override fun endCall(callId: String, callback: (Result<Unit>) -> Unit) {
+                        IncomingCallService.release(context, IncomingCallRelease.IC_RELEASE_WITH_DECLINE)
+                        callback(Result.success(Unit))
+                    }
+
+                    override fun endAllCalls(callback: (Result<Unit>) -> Unit) {
+                        IncomingCallService.release(context, IncomingCallRelease.IC_RELEASE_WITH_DECLINE)
+                        callback(Result.success(Unit))
+                    }
+
+                    override fun handoffCall(callId: String, callback: (Result<Unit>) -> Unit) {
+                        // FGS owns the WebSocket in persistent mode; handoff is not applicable.
+                        callback(Result.success(Unit))
+                    }
+                },
             )
         }
     }
