@@ -175,6 +175,14 @@ Future<void> onSignalingBackgroundCallEvent(Event event) async {
 
   switch (event) {
     case IncomingCallEvent():
+      // TODO: using backgroundPushNotificationBootstrapService here is a workaround —
+      // it is the push-notification bootstrap pathway and has a side effect of triggering
+      // onPushNotificationSyncCallback via IncomingCallService when the app is in the
+      // background. A guard in that callback suppresses it, but the root cause is that
+      // the FGS engine lacks a direct way to trigger the callkeep incoming-call flow
+      // without going through the push-notification machinery. A dedicated API or Pigeon
+      // channel that exposes this to the FGS context without the push-path side effects
+      // should replace this call.
       final error = await AndroidCallkeepServices.backgroundPushNotificationBootstrapService
           .reportNewIncomingCall(
             event.callId,
