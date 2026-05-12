@@ -3,6 +3,7 @@ package com.webtrit.app
 import android.app.Application
 import com.webtrit.callkeep.BackgroundPushNotificationIsolateBootstrapApi
 import com.webtrit.callkeep.PHostBackgroundPushNotificationIsolateBootstrapApi
+import android.util.Log
 import com.webtrit.callkeep.PHostBackgroundPushNotificationIsolateApi
 import com.webtrit.callkeep.models.CallMetadata
 import com.webtrit.callkeep.services.core.CallkeepCore
@@ -60,18 +61,33 @@ class WebtritApplication : Application() {
                 messenger,
                 object : PHostBackgroundPushNotificationIsolateApi {
                     override fun releaseCall(callId: String, callback: (Result<Unit>) -> Unit) {
-                        CallkeepCore.instance.startDeclineCall(CallMetadata(callId = callId))
-                        callback(Result.success(Unit))
+                        try {
+                            CallkeepCore.instance.startDeclineCall(CallMetadata(callId = callId))
+                            callback(Result.success(Unit))
+                        } catch (e: Exception) {
+                            Log.e("WebtritApplication", "releaseCall failed for callId=$callId", e)
+                            callback(Result.failure(e))
+                        }
                     }
 
                     override fun endCall(callId: String, callback: (Result<Unit>) -> Unit) {
-                        CallkeepCore.instance.startDeclineCall(CallMetadata(callId = callId))
-                        callback(Result.success(Unit))
+                        try {
+                            CallkeepCore.instance.startDeclineCall(CallMetadata(callId = callId))
+                            callback(Result.success(Unit))
+                        } catch (e: Exception) {
+                            Log.e("WebtritApplication", "endCall failed for callId=$callId", e)
+                            callback(Result.failure(e))
+                        }
                     }
 
                     override fun endAllCalls(callback: (Result<Unit>) -> Unit) {
-                        CallkeepCore.instance.sendTearDownConnections()
-                        callback(Result.success(Unit))
+                        try {
+                            CallkeepCore.instance.sendTearDownConnections()
+                            callback(Result.success(Unit))
+                        } catch (e: Exception) {
+                            Log.e("WebtritApplication", "endAllCalls failed", e)
+                            callback(Result.failure(e))
+                        }
                     }
 
                     override fun handoffCall(callId: String, callback: (Result<Unit>) -> Unit) {
