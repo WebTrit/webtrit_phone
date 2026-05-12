@@ -3,7 +3,12 @@ import 'dart:typed_data';
 
 import 'package:share_plus/share_plus.dart';
 
-Future<ShareResult> shareLogRecords(List<String> logRecords, {required String name}) {
+Future<ShareResult> shareLogRecords(
+  List<String> logRecords, {
+  required String name,
+  String? callkeepLogFilePath,
+  String? callkeepLogName,
+}) {
   final logRecordsBuffer = StringBuffer();
   for (final logRecord in logRecords) {
     logRecordsBuffer.writeln(logRecord);
