@@ -301,7 +301,7 @@ class SignalingForegroundIsolateManager {
   /// The callback is a top-level Dart function annotated with
   /// [@pragma('vm:entry-point')] that the app registered via
   /// [WebtritSignalingService.setCallEventHandler]. It receives a signaling
-  /// [Event] and is responsible for callkeep integration — creating a call for
+  /// [Event] and is responsible for callkeep integration - creating a call for
   /// [IncomingCallEvent] and releasing it for [HangupEvent].
   void _dispatchCallEvent(CallEvent event) {
     if (callEventHandlerHandle == 0) {

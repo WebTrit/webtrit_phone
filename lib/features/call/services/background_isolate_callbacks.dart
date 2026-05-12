@@ -175,7 +175,7 @@ Future<void> onSignalingBackgroundCallEvent(Event event) async {
 
   switch (event) {
     case IncomingCallEvent():
-      // TODO: using backgroundPushNotificationBootstrapService here is a workaround —
+      // TODO: using backgroundPushNotificationBootstrapService here is a workaround -
       // it is the push-notification bootstrap pathway and has a side effect of triggering
       // onPushNotificationSyncCallback via IncomingCallService when the app is in the
       // background. A guard in that callback suppresses it, but the root cause is that
