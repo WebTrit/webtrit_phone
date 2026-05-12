@@ -4,8 +4,8 @@ import android.app.Application
 import com.webtrit.callkeep.BackgroundPushNotificationIsolateBootstrapApi
 import com.webtrit.callkeep.PHostBackgroundPushNotificationIsolateBootstrapApi
 import com.webtrit.callkeep.PHostBackgroundPushNotificationIsolateApi
-import com.webtrit.callkeep.services.services.incoming_call.IncomingCallRelease
-import com.webtrit.callkeep.services.services.incoming_call.IncomingCallService
+import com.webtrit.callkeep.models.CallMetadata
+import com.webtrit.callkeep.services.core.CallkeepCore
 import com.webtrit.signaling_service.SignalingForegroundService
 
 /// App-level initialization that wires together two independent Flutter plugins:
@@ -50,24 +50,24 @@ class WebtritApplication : Application() {
             )
             // Register the full isolate API on the FGS engine so that releaseCall() /
             // endCall() triggered from onSignalingBackgroundCallEvent reach a handler
-            // instead of timing out. The implementation delegates to IncomingCallService
-            // via its existing broadcast mechanism — the same path used by all other callers.
-            // If IncomingCallService is not running the broadcast is silently dropped.
+            // instead of timing out. Mirrors the CallLifecycleHandler path used in
+            // push-bound mode: Dart calls releaseCall() → Kotlin terminates the Telecom
+            // connection via CallkeepCore, which stops the ringtone and cleans up state.
             PHostBackgroundPushNotificationIsolateApi.setUp(
                 messenger,
                 object : PHostBackgroundPushNotificationIsolateApi {
                     override fun releaseCall(callId: String, callback: (Result<Unit>) -> Unit) {
-                        IncomingCallService.release(context, IncomingCallRelease.IC_RELEASE_WITH_DECLINE)
+                        CallkeepCore.instance.startDeclineCall(CallMetadata(callId = callId))
                         callback(Result.success(Unit))
                     }
 
                     override fun endCall(callId: String, callback: (Result<Unit>) -> Unit) {
-                        IncomingCallService.release(context, IncomingCallRelease.IC_RELEASE_WITH_DECLINE)
+                        CallkeepCore.instance.startDeclineCall(CallMetadata(callId = callId))
                         callback(Result.success(Unit))
                     }
 
                     override fun endAllCalls(callback: (Result<Unit>) -> Unit) {
-                        IncomingCallService.release(context, IncomingCallRelease.IC_RELEASE_WITH_DECLINE)
+                        CallkeepCore.instance.sendTearDownConnections()
                         callback(Result.success(Unit))
                     }
 
