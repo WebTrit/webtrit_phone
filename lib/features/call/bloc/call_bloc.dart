@@ -2662,43 +2662,38 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onMutationSignalingHangup(_CallMutationEventSignalingHangup event, Emitter<CallState> emit) async {
-    final code = SignalingResponseCode.values.byCode(event.code);
+    _stopRingbackSound().ignore();
+    _signalingModule.cancelRequestsByCallId(event.callId);
 
-    try {
-      _stopRingbackSound();
+    ActiveCall? call = state.retrieveActiveCall(event.callId);
+    if (call == null) return;
 
-      ActiveCall? call = state.retrieveActiveCall(event.callId);
-
-      if (call != null) {
-        CallkeepEndCallReason endReason = CallkeepEndCallReason.remoteEnded;
-
-        if (call.wasHungUp == false) {
-          _addToRecents(call.copyWith(hungUpTime: clock.now()));
-        }
-
-        if (call.direction == CallDirection.incoming && !call.wasAccepted) {
-          if (code == SignalingResponseCode.declineCall) endReason = CallkeepEndCallReason.declinedElsewhere;
-          if (code == SignalingResponseCode.requestTerminated) endReason = CallkeepEndCallReason.unanswered;
-          if (Platform.isAndroid && code != SignalingResponseCode.declineCall) {
-            _showMissedCallNotification(event.callId, call.displayName ?? call.handle.value);
-          }
-        }
-
-        try {
-          await _peerConnectionManager.disposePeerConnection(event.callId);
-        } catch (e) {
-          _logger.warning('__onMutationSignalingHangup: disposePeerConnection error $e');
-        }
-
-        await _releaseLocalStream(call.localStream);
-
-        emit(state.copyWithPopActiveCall(event.callId));
-
-        await callkeep.reportEndCall(event.callId, call.displayName ?? call.handle.value, endReason);
-      }
-    } catch (e) {
-      _logger.warning('__onMutationSignalingHangup: $e');
+    if (call.wasHungUp == false) {
+      call = call.copyWith(hungUpTime: clock.now());
+      _addToRecents(call);
     }
+
+    final code = SignalingResponseCode.values.byCode(event.code);
+    var endReason = CallkeepEndCallReason.remoteEnded;
+    if (call.direction == CallDirection.incoming && !call.wasAccepted) {
+      if (code == SignalingResponseCode.declineCall) endReason = CallkeepEndCallReason.declinedElsewhere;
+      if (code == SignalingResponseCode.requestTerminated) endReason = CallkeepEndCallReason.unanswered;
+      if (Platform.isAndroid && code != SignalingResponseCode.declineCall) {
+        _showMissedCallNotification(event.callId, call.displayName ?? call.handle.value);
+      }
+    }
+
+    await _peerConnectionManager.disposePeerConnection(event.callId).catchError((e) {
+      _logger.warning('__onMutationSignalingHangup: disposePeerConnection error $e');
+    });
+
+    await _releaseLocalStream(call.localStream).catchError((e) {
+      _logger.warning('__onMutationSignalingHangup: _releaseLocalStream error $e');
+    });
+
+    emit(state.copyWithPopActiveCall(event.callId));
+
+    await callkeep.reportEndCall(event.callId, call.displayName ?? call.handle.value, endReason);
   }
 
   Future<void> __onMutationSignalingCallUpdating(
@@ -2971,17 +2966,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> __onMutationTrickleIce(_CallMutationEventTrickleIce event, Emitter<CallState> emit) async {
     final callId = event.callId;
+
+    final activeCall = state.retrieveActiveCall(callId);
+    if (activeCall == null) return;
+    if (activeCall.wasHungUp) return;
+
     try {
-      await state.performOnActiveCall(callId, (activeCall) {
-        if (!activeCall.wasHungUp) {
-          final iceTrickleRequest = IceTrickleRequest(
-            transaction: WebtritSignalingClient.generateTransactionId(),
-            line: activeCall.line,
-            candidate: event.candidate.toMap(),
-          );
-          return _signalingModule.execute(iceTrickleRequest);
-        }
-      });
+      final iceTrickleRequest = IceTrickleRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: activeCall.line,
+        candidate: event.candidate.toMap(),
+      );
+      await _signalingModule.execute(iceTrickleRequest);
     } on NotConnectedException {
       _logger.warning('__onMutationTrickleIce: not connected, let call survive');
     } on WebtritSignalingTransactionTimeoutException {
@@ -2998,17 +2994,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final callId = event.callId;
+    final activeCall = state.retrieveActiveCall(callId);
+    if (activeCall == null) return;
+    if (activeCall.wasHungUp) return;
+
     try {
-      await state.performOnActiveCall(callId, (activeCall) {
-        if (!activeCall.wasHungUp) {
-          final iceTrickleRequest = IceTrickleRequest(
-            transaction: WebtritSignalingClient.generateTransactionId(),
-            line: activeCall.line,
-            candidate: null,
-          );
-          return _signalingModule.execute(iceTrickleRequest);
-        }
-      });
+      final iceTrickleRequest = IceTrickleRequest(
+        transaction: WebtritSignalingClient.generateTransactionId(),
+        line: activeCall.line,
+        candidate: null,
+      );
+      await _signalingModule.execute(iceTrickleRequest);
     } on NotConnectedException {
       _logger.warning('__onMutationIceGatheringComplete: not connected, let call survive');
     } on WebtritSignalingTransactionTimeoutException {
