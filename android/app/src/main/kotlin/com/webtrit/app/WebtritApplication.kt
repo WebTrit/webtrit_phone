@@ -48,6 +48,9 @@ class WebtritApplication : Application() {
                 messenger,
                 BackgroundPushNotificationIsolateBootstrapApi(context),
             )
+            // TODO: move this block into webtrit_callkeep_android — expose a single
+            //  WebtritCallkeepPlugin.setUpFgsEngine(context, messenger) entry point so
+            //  the app does not need to know about internal Pigeon channels or CallkeepCore.
             // Register the full isolate API on the FGS engine so that releaseCall() /
             // endCall() triggered from onSignalingBackgroundCallEvent reach a handler
             // instead of timing out. Mirrors the CallLifecycleHandler path used in
