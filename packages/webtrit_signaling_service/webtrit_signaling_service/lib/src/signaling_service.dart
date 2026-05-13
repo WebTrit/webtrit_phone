@@ -45,7 +45,7 @@ final _logger = Logger('WebtritSignalingService');
 /// Static setup (call once during app bootstrap before creating instances):
 ///   - [setModuleFactory] -- registers the [SignalingModule] factory for
 ///     the background isolate.
-///   - [setIncomingCallHandler] -- registers the incoming call callback for
+///   - [setCallEventHandler] -- registers the call-event callback for
 ///     background handling.
 ///   - [updateMode] -- switches the service lifecycle mode.
 class WebtritSignalingService implements SignalingModule {
@@ -220,13 +220,13 @@ class WebtritSignalingService implements SignalingModule {
   static Future<void> setModuleFactory(SignalingModuleFactory factory) =>
       SignalingServicePlatform.instance.setModuleFactory(factory);
 
-  /// Registers the app-side incoming call callback for background handling.
+  /// Registers the app-side call-event callback for background handling.
   ///
   /// [callback] must be a top-level function annotated with
   /// [@pragma('vm:entry-point')]. Must be called before
   /// [WebtritSignalingService.new].
-  static Future<void> setIncomingCallHandler(Function callback) =>
-      SignalingServicePlatform.instance.setIncomingCallHandler(callback);
+  static Future<void> setCallEventHandler(Function callback) =>
+      SignalingServicePlatform.instance.setCallEventHandler(callback);
 
   /// Switches the service lifecycle mode without restarting the connection.
   static Future<void> updateMode(SignalingServiceMode mode) => SignalingServicePlatform.instance.updateMode(mode);

@@ -27,7 +27,7 @@ import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/features/system_notifications/services/services.dart';
 
 import 'package:webtrit_phone/features/call/call.dart'
-    show onPushNotificationSyncCallback, onSignalingBackgroundIncomingCall;
+    show onPushNotificationSyncCallback, onSignalingBackgroundCallEvent;
 
 import 'package:drift/isolate.dart';
 
@@ -239,13 +239,13 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
     logger.severe('initializeCallback failed -- push notifications may not work in background', e, s);
   }
 
-  // Registers the top-level callback invoked by the signaling background isolate when an
-  // incoming call arrives in persistent mode (app closed or backgrounded). Must be
-  // annotated @pragma('vm:entry-point').
+  // Registers the top-level callback invoked by the signaling background isolate when a
+  // call-relevant event (IncomingCallEvent, HangupEvent) arrives in persistent mode
+  // (app closed or backgrounded). Must be annotated @pragma('vm:entry-point').
   try {
-    await WebtritSignalingService.setIncomingCallHandler(onSignalingBackgroundIncomingCall);
+    await WebtritSignalingService.setCallEventHandler(onSignalingBackgroundCallEvent);
   } catch (e, s) {
-    logger.severe('setIncomingCallHandler failed -- incoming calls in persistent mode may not work', e, s);
+    logger.severe('setCallEventHandler failed -- call events in persistent mode may not work', e, s);
   }
 
   // Configures Android CallKeep to process incoming SMS messages as call triggers

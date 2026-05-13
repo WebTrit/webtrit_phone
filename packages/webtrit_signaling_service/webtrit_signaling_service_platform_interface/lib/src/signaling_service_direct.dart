@@ -159,7 +159,7 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
 
   @override
   // ignore: avoid_unused_parameters
-  Future<void> setIncomingCallHandler(Function callback) async {}
+  Future<void> setCallEventHandler(Function callback) async {}
 
   @override
   Future<void> stopService() async {

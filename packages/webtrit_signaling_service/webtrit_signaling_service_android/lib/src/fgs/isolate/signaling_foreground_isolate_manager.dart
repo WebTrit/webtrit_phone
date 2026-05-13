@@ -30,17 +30,18 @@ typedef SignalingHubFactory = SignalingHub Function(SignalingModule module);
 /// is resolved from [PluginUtilities] so the factory can be called in the
 /// background isolate without the main isolate being alive.
 ///
-/// When an [IncomingCallEvent] arrives and [incomingCallHandlerHandle] is
-/// non-zero, the manager resolves the registered Dart callback via
-/// [PluginUtilities.getCallbackFromHandle] and invokes it with the event so
-/// that the app side can trigger callkeep without depending on this plugin.
+/// When an [IncomingCallEvent] or [HangupEvent] arrives and
+/// [callEventHandlerHandle] is non-zero, the manager resolves the registered
+/// Dart callback via [PluginUtilities.getCallbackFromHandle] and invokes it
+/// with the event so that the app side can drive callkeep without depending on
+/// the main isolate being alive.
 class SignalingForegroundIsolateManager {
   SignalingForegroundIsolateManager({
     required this.coreUrl,
     required this.tenantId,
     required this.token,
     this.trustedCertificatesJson,
-    this.incomingCallHandlerHandle = 0,
+    this.callEventHandlerHandle = 0,
     this.moduleFactoryHandle = 0,
     this.safetyReconnectGrace = const Duration(seconds: 2),
     @visibleForTesting SignalingModuleFactory? moduleFactory,
@@ -57,14 +58,14 @@ class SignalingForegroundIsolateManager {
   /// Null when the app uses the default system trust store.
   final String? trustedCertificatesJson;
 
-  /// Raw handle for the app-side incoming call callback.
+  /// Raw handle for the app-side call-event callback.
   ///
-  /// Registered by the app via [WebtritSignalingService.setIncomingCallHandler].
-  /// 0 means no handler is registered -- incoming calls are only forwarded to
-  /// the hub (main isolate) and silently ignored in the background.
+  /// Registered by the app via [WebtritSignalingService.setCallEventHandler].
+  /// 0 means no handler is registered -- call events are only forwarded to the
+  /// hub (main isolate) and silently ignored in the background.
   /// Mutable so it can be updated in-place when the Activity re-registers the
   /// handler without requiring a WebSocket restart.
-  int incomingCallHandlerHandle;
+  int callEventHandlerHandle;
 
   /// Raw handle for the app-side [SignalingModuleFactory] callback.
   ///
@@ -104,16 +105,16 @@ class SignalingForegroundIsolateManager {
 
   /// Updates runtime handles in-place without restarting the WebSocket connection.
   ///
-  /// Called by [SignalingSyncHandler] when only [incomingCallHandlerHandle] or
+  /// Called by [SignalingSyncHandler] when only [callEventHandlerHandle] or
   /// [moduleFactoryHandle] changed — e.g. when the Activity re-registers them
   /// after opening from a push notification. Neither handle affects the live
   /// WebSocket session, so no reconnect is needed.
-  void updateHandles({required int incomingCallHandlerHandle, required int moduleFactoryHandle}) {
-    this.incomingCallHandlerHandle = incomingCallHandlerHandle;
+  void updateHandles({required int callEventHandlerHandle, required int moduleFactoryHandle}) {
+    this.callEventHandlerHandle = callEventHandlerHandle;
     this.moduleFactoryHandle = moduleFactoryHandle;
     _logger.info(
       'SignalingForegroundIsolateManager handles updated in-place '
-      'incomingCallHandlerHandle=$incomingCallHandlerHandle moduleFactoryHandle=$moduleFactoryHandle',
+      'callEventHandlerHandle=$callEventHandlerHandle moduleFactoryHandle=$moduleFactoryHandle',
     );
   }
 
@@ -140,7 +141,7 @@ class SignalingForegroundIsolateManager {
       return;
     }
 
-    _logger.info('SignalingForegroundIsolateManager starting (incomingCallHandler=${incomingCallHandlerHandle != 0})');
+    _logger.info('SignalingForegroundIsolateManager starting (callEventHandler=${callEventHandlerHandle != 0})');
 
     final factory = _testModuleFactory ?? _resolveModuleFactory();
     if (factory == null) return;
@@ -226,8 +227,8 @@ class SignalingForegroundIsolateManager {
         _logger.info('IsolateManager: handshake lines=${handshake.lines}');
       case SignalingProtocolEvent(:final event):
         _logger.info('IsolateManager: protocol event ${event.runtimeType}');
-        if (event is IncomingCallEvent) {
-          _dispatchIncomingCall(event);
+        if (event is IncomingCallEvent || event is HangupEvent) {
+          _dispatchCallEvent(event as CallEvent);
         }
       case SignalingDisconnected(:final code, :final reason, :final recommendedReconnectDelay):
         _logger.info('IsolateManager: disconnected code=$code reason=$reason');
@@ -295,37 +296,38 @@ class SignalingForegroundIsolateManager {
     });
   }
 
-  /// Invokes the app-registered incoming call callback in this background isolate.
+  /// Invokes the app-registered call-event callback in this background isolate.
   ///
   /// The callback is a top-level Dart function annotated with
   /// [@pragma('vm:entry-point')] that the app registered via
-  /// [WebtritSignalingService.setIncomingCallHandler]. It receives the raw
-  /// [IncomingCallEvent] and is responsible for callkeep integration.
-  void _dispatchIncomingCall(IncomingCallEvent event) {
-    if (incomingCallHandlerHandle == 0) {
+  /// [WebtritSignalingService.setCallEventHandler]. It receives a signaling
+  /// [Event] and is responsible for callkeep integration - creating a call for
+  /// [IncomingCallEvent] and releasing it for [HangupEvent].
+  void _dispatchCallEvent(CallEvent event) {
+    if (callEventHandlerHandle == 0) {
       _logger.warning(
-        'IsolateManager: IncomingCallEvent received but no handler registered -- call will be missed in background',
+        'IsolateManager: ${event.runtimeType} received but no call-event handler registered -- event will be ignored in background',
       );
       return;
     }
 
-    final callback = PluginUtilities.getCallbackFromHandle(CallbackHandle.fromRawHandle(incomingCallHandlerHandle));
+    final callback = PluginUtilities.getCallbackFromHandle(CallbackHandle.fromRawHandle(callEventHandlerHandle));
     if (callback == null) {
-      _logger.severe('IsolateManager: could not resolve incoming call handler from handle $incomingCallHandlerHandle');
+      _logger.severe('IsolateManager: could not resolve call-event handler from handle $callEventHandlerHandle');
       return;
     }
 
-    _logger.info('IsolateManager: dispatching IncomingCallEvent callId=${event.callId} to app handler');
+    _logger.info('IsolateManager: dispatching ${event.runtimeType} callId=${event.callId} to app handler');
     try {
       // Use Function.apply so both sync and async callbacks work.
       final dynamic result = Function.apply(callback, [event]);
       if (result is Future<dynamic>) {
         result.catchError((Object e, StackTrace st) {
-          _logger.severe('IsolateManager: incoming call handler async error', e, st);
+          _logger.severe('IsolateManager: call-event handler async error', e, st);
         });
       }
     } catch (e, st) {
-      _logger.severe('IsolateManager: incoming call handler threw', e, st);
+      _logger.severe('IsolateManager: call-event handler threw', e, st);
     }
   }
 }

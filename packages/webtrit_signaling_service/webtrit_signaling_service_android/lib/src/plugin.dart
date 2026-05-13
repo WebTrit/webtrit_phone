@@ -201,16 +201,16 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   }
 
   @override
-  Future<void> setIncomingCallHandler(Function callback) async {
+  Future<void> setCallEventHandler(Function callback) async {
     final handle = PluginUtilities.getCallbackHandle(callback);
     if (handle == null) {
       _logger.warning(
-        'setIncomingCallHandler: could not obtain callback handle -- '
+        'setCallEventHandler: could not obtain callback handle -- '
         'ensure the function is top-level and annotated with @pragma(\'vm:entry-point\')',
       );
       return;
     }
-    await _hostApi.saveIncomingCallHandler(handle.toRawHandle());
+    await _hostApi.saveCallEventHandler(handle.toRawHandle());
   }
 
   @override

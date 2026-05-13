@@ -114,7 +114,7 @@ class PSignalingServiceStatus {
     required this.tenantId,
     required this.token,
     this.trustedCertificatesJson,
-    required this.incomingCallHandlerHandle,
+    required this.callEventHandlerHandle,
     required this.moduleFactoryHandle,
   });
 
@@ -134,12 +134,12 @@ class PSignalingServiceStatus {
   /// to the main-isolate DI context.
   String? trustedCertificatesJson;
 
-  /// Raw handle for the app-side incoming call callback.
+  /// Raw handle for the app-side call-event callback.
   ///
   /// Obtained via [PluginUtilities.getCallbackHandle] in the main isolate and
-  /// persisted via [PSignalingServiceHostApi.saveIncomingCallHandler].
+  /// persisted via [PSignalingServiceHostApi.saveCallEventHandler].
   /// 0 means no handler is registered.
-  int incomingCallHandlerHandle;
+  int callEventHandlerHandle;
 
   /// Raw handle for the app-side [SignalingModuleFactory] callback.
   ///
@@ -154,7 +154,7 @@ class PSignalingServiceStatus {
       tenantId,
       token,
       trustedCertificatesJson,
-      incomingCallHandlerHandle,
+      callEventHandlerHandle,
       moduleFactoryHandle,
     ];
   }
@@ -170,7 +170,7 @@ class PSignalingServiceStatus {
       tenantId: result[2]! as String,
       token: result[3]! as String,
       trustedCertificatesJson: result[4] as String?,
-      incomingCallHandlerHandle: result[5]! as int,
+      callEventHandlerHandle: result[5]! as int,
       moduleFactoryHandle: result[6]! as int,
     );
   }
@@ -184,7 +184,7 @@ class PSignalingServiceStatus {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(enabled, other.enabled) && _deepEquals(coreUrl, other.coreUrl) && _deepEquals(tenantId, other.tenantId) && _deepEquals(token, other.token) && _deepEquals(trustedCertificatesJson, other.trustedCertificatesJson) && _deepEquals(incomingCallHandlerHandle, other.incomingCallHandlerHandle) && _deepEquals(moduleFactoryHandle, other.moduleFactoryHandle);
+    return _deepEquals(enabled, other.enabled) && _deepEquals(coreUrl, other.coreUrl) && _deepEquals(tenantId, other.tenantId) && _deepEquals(token, other.token) && _deepEquals(trustedCertificatesJson, other.trustedCertificatesJson) && _deepEquals(callEventHandlerHandle, other.callEventHandlerHandle) && _deepEquals(moduleFactoryHandle, other.moduleFactoryHandle);
   }
 
   @override
@@ -295,13 +295,13 @@ class PSignalingServiceHostApi {
     ;
   }
 
-  /// Persist the raw callback handle for the app-side incoming call handler.
+  /// Persist the raw callback handle for the app-side call-event handler.
   ///
   /// The handle is obtained via [PluginUtilities.getCallbackHandle] on a
   /// top-level function annotated with [@pragma('vm:entry-point')].
   /// Pass 0 to unregister.
-  Future<void> saveIncomingCallHandler(int callbackHandle) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.saveIncomingCallHandler$pigeonVar_messageChannelSuffix';
+  Future<void> saveCallEventHandler(int callbackHandle) async {
+    final pigeonVar_channelName = 'dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.saveCallEventHandler$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,

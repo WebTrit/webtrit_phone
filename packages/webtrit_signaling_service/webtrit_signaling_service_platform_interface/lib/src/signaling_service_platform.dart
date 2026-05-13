@@ -50,17 +50,17 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   /// On iOS this is a no-op.
   Future<void> updateMode(SignalingServiceMode mode);
 
-  /// Registers the app-side incoming call callback for background handling.
+  /// Registers the app-side call-event callback for background handling.
   ///
   /// [callback] must be a top-level function annotated with
-  /// [@pragma('vm:entry-point')]. It receives an [IncomingCallEvent] and is
-  /// responsible for triggering callkeep when an incoming call arrives while
-  /// the app is closed.
+  /// [@pragma('vm:entry-point')]. It receives a signaling [Event] (currently
+  /// [IncomingCallEvent] and [HangupEvent]) and is responsible for callkeep
+  /// integration when a call event arrives while the app is closed.
   ///
   /// On Android the raw callback handle is persisted via [PluginUtilities] so
   /// the foreground-service isolate can invoke it without the main isolate being
   /// alive. On iOS this is a no-op.
-  Future<void> setIncomingCallHandler(Function callback);
+  Future<void> setCallEventHandler(Function callback);
 
   /// Registers the factory used to create [SignalingModule] instances.
   ///
