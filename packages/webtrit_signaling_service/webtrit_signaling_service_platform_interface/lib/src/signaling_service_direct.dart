@@ -51,6 +51,10 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
   SignalingModuleFactory? _factory;
   SignalingModule? _module;
   StreamSubscription<SignalingModuleEvent>? _moduleSub;
+
+  // Fans out SignalingModuleEvents to all subscribers (WebtritSignalingService, CallBloc, etc.).
+  // Currently closed permanently in dispose() -- any subscriber created after a logout+re-login
+  // receives onDone immediately and never sees SignalingConnected.
   StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
 
   final _eventBuffer = SignalingEventBuffer();
