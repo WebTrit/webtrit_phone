@@ -51,7 +51,11 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
   SignalingModuleFactory? _factory;
   SignalingModule? _module;
   StreamSubscription<SignalingModuleEvent>? _moduleSub;
-  StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
+
+  // Fans out SignalingModuleEvents to all subscribers (WebtritSignalingService, CallBloc, etc.).
+  // Intentionally not closed in dispose() -- closing it would deliver onDone to active subscribers,
+  // silently ending their subscriptions and breaking logout+re-login in the same process.
+  final StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
 
   final _eventBuffer = SignalingEventBuffer();
 
@@ -101,10 +105,6 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
     final factory = _factory;
     if (factory == null) {
       throw StateError('No SignalingModuleFactory registered — call setModuleFactory() before start()');
-    }
-
-    if (_eventsController.isClosed) {
-      _eventsController = StreamController<SignalingModuleEvent>.broadcast();
     }
 
     await _tearDownModule();
@@ -172,7 +172,9 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
     _isStopped = true;
     await _tearDownModule();
     _eventBuffer.clear();
-    await _eventsController.close();
+    // NOTE: _eventsController is intentionally NOT closed here.
+    // Closing it would deliver onDone to any active subscriber (e.g. WebtritSignalingService),
+    // silently ending their subscription and breaking logout+re-login in the same process.
   }
 
   // ---------------------------------------------------------------------------

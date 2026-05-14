@@ -56,22 +56,7 @@ class WebtritSignalingService implements SignalingModule {
   }) : _config = config,
        _mode = mode,
        _startPendingTimeout = startPendingTimeout {
-    _serviceEventsSub = SignalingServicePlatform.instance.events.listen((event) {
-      switch (event) {
-        case SignalingConnected():
-          _isConnected = true;
-          _clearStartPending();
-          unawaited(
-            _requestQueue.flush(execute: SignalingServicePlatform.instance.execute, isActive: () => _isConnected),
-          );
-        case SignalingDisconnected():
-        case SignalingConnectionFailed():
-          _isConnected = false;
-          _clearStartPending();
-        default:
-          break;
-      }
-    });
+    _serviceEventsSub = SignalingServicePlatform.instance.events.listen(_onServiceEvent, onDone: _onServiceEventsDone);
   }
 
   final SignalingServiceConfig _config;
@@ -193,6 +178,30 @@ class WebtritSignalingService implements SignalingModule {
   @override
   void clearTerminatingMark(String callId) {
     _requestQueue.removeTerminatingMark(callId);
+  }
+
+  void _onServiceEvent(SignalingModuleEvent event) {
+    switch (event) {
+      case SignalingConnected():
+        _isConnected = true;
+        _clearStartPending();
+        unawaited(
+          _requestQueue.flush(execute: SignalingServicePlatform.instance.execute, isActive: () => _isConnected),
+        );
+      case SignalingDisconnected():
+      case SignalingConnectionFailed():
+        _isConnected = false;
+        _clearStartPending();
+      default:
+        break;
+    }
+  }
+
+  void _onServiceEventsDone() {
+    _logger.severe(
+      '_serviceEventsSub: stream completed — this WebtritSignalingService instance '
+      'will never receive SignalingConnected; _isConnected stays false forever',
+    );
   }
 
   @override

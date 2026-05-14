@@ -63,7 +63,10 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   final PSignalingServiceHostApi _hostApi;
 
-  StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
+  // Fans out SignalingModuleEvents to all subscribers (WebtritSignalingService, CallBloc, etc.).
+  // Intentionally not closed in dispose() -- closing it would deliver onDone to active subscribers,
+  // silently ending their subscriptions and breaking logout+re-login in the same process.
+  final StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
 
   final _eventBuffer = SignalingEventBuffer();
 
@@ -129,10 +132,6 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
     _logger.info('start effectiveMode=$effectiveMode tenantId=${config.tenantId}');
 
-    if (_eventsController.isClosed) {
-      _eventsController = StreamController<SignalingModuleEvent>.broadcast();
-    }
-
     await _startService(config, effectiveMode);
   }
 
@@ -195,8 +194,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     _eventBuffer.clear();
     // NOTE: _eventsController is intentionally NOT closed here.
     // Closing it would deliver onDone to any active subscriber (e.g. CallBloc),
-    // silently ending their subscription. The next start() call creates a fresh
-    // controller only if this one is closed.
+    // silently ending their subscription and breaking logout+re-login in the same process.
     _logger.info('dispose complete');
   }
 
