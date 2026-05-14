@@ -142,7 +142,9 @@ Future<InstanceRegistry> bootstrap() async {
   final nativeLogForwarder = NativeLogForwarder(
     nativeLogFilePath: appPath.nativeLogFilePath,
     logger: Logger('callkeep'),
-  )..start();
+  );
+  // FileSystemEntity.watch is Android-only; not tested on iOS.
+  if (Platform.isAndroid) nativeLogForwarder.start();
 
   final appLifecycle = await AppLifecycle.initMaster();
 
