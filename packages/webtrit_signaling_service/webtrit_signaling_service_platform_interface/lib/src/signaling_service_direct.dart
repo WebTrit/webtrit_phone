@@ -80,12 +80,6 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
   @override
   Stream<SignalingModuleEvent> get events {
     return Stream.multi((sink) {
-      if (_eventsController.isClosed) {
-        _logger.severe(
-          'events: _eventsController is closed — new subscriber will receive onDone immediately; '
-          'signaling events will never reach this subscriber',
-        );
-      }
       final sub = _eventsController.stream.listen(sink.add, onError: sink.addError, onDone: sink.close);
       sink.onCancel = sub.cancel;
       for (final event in _eventBuffer.snapshot) {
