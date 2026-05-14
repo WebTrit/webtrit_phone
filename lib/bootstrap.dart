@@ -142,7 +142,12 @@ Future<InstanceRegistry> bootstrap() async {
   final nativeLogForwarder = NativeLogForwarder(
     nativeLogFilePath: appPath.nativeLogFilePath,
     logger: Logger('callkeep'),
-  )..start();
+  );
+  // FileSystemEntity.watch is not supported on iOS: the Dart SDK only implements
+  // it for Android/Linux (inotify), Windows, and macOS (FSEvents). Calling it on
+  // iOS throws FileSystemException("File system watching is not supported on this
+  // platform"). The Callkeep native log file also only exists on Android.
+  if (Platform.isAndroid) nativeLogForwarder.start();
 
   final appLifecycle = await AppLifecycle.initMaster();
 
