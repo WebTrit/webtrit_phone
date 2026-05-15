@@ -129,6 +129,10 @@ class _CandidateTile extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
+          if (candidate.networkCost.isNotEmpty) ...[
+            const SizedBox(width: 8),
+            Text('cost:${candidate.networkCost}', style: textTheme.labelSmall?.copyWith(color: colorScheme.outline)),
+          ],
         ],
       ),
     );
