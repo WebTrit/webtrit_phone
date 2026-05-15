@@ -644,6 +644,72 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnosticScreen_pushNotificationService_title => 'Служба push-сповіщень';
 
   @override
+  String get diagnostic_network_groupTitle => 'Мережа';
+
+  @override
+  String get diagnosticNetworkTest_status_offline => 'Офлайн';
+
+  @override
+  String get diagnosticNetworkTest_status_reachable => 'Доступно';
+
+  @override
+  String get diagnosticNetworkTest_status_restricted => 'Обмежено';
+
+  @override
+  String get diagnosticNetworkTest_status_checking => 'Перевірка…';
+
+  @override
+  String get diagnosticNetworkTest_status_unreachable => 'Недоступно';
+
+  @override
+  String get diagnosticNetworkTestItem_subtitle_noNetwork => 'Немає мережевого підключення';
+
+  @override
+  String diagnosticNetworkTestItem_subtitle_publicIps(String ips) {
+    return 'Публічна: $ips';
+  }
+
+  @override
+  String get diagnosticNetworkTestItem_subtitle_stunBlocked => 'STUN заблоковано · ретранслятор доступний';
+
+  @override
+  String get diagnosticNetworkTestItem_subtitle_stunUnreachable => 'STUN недоступний · тільки локально';
+
+  @override
+  String get diagnosticNetworkTestItem_subtitle_noCandidates => 'ICE-кандидатів не зібрано';
+
+  @override
+  String get diagnosticNetworkTestItem_network_wifi => 'WiFi';
+
+  @override
+  String get diagnosticNetworkTestItem_network_mobile => 'Мобільна';
+
+  @override
+  String get diagnosticNetworkTestItem_network_ethernet => 'Ethernet';
+
+  @override
+  String get diagnosticNetworkTestItem_network_vpn => 'VPN';
+
+  @override
+  String get diagnosticNetworkTestDetails_title => 'Доступність мережі';
+
+  @override
+  String get diagnosticNetworkTestDetails_description =>
+      'Перевіряє, чи може пристрій здійснювати та приймати дзвінки через інтернет, зондуючи мережеве підключення.\nServer-reflexive (srflx) кандидати підтверджують доступність публічної IP-адреси через STUN. Relay-кандидати означають, що прямий доступ заблоковано і потрібен TURN-сервер. Лише host-кандидати означають, що STUN недоступний і можливі лише локальні з\'єднання.';
+
+  @override
+  String get diagnosticNetworkTestDetails_status => 'Статус';
+
+  @override
+  String get diagnosticNetworkTestDetails_candidates => 'Кандидати';
+
+  @override
+  String get diagnosticNetworkTestDetails_noNetwork => 'Немає мережевого підключення';
+
+  @override
+  String get diagnosticNetworkTestDetails_noCandidates => 'ICE-кандидатів не зібрано';
+
+  @override
   String get favorites_BodyCenter_empty =>
       'Наразі у вас немає обраних номерів.\nДодайте обрані номери з Контактів, використовуючи іконку \"зірочка\"';
 

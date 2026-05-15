@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import '../bloc/network_tester_cubit.dart';
@@ -24,33 +25,43 @@ class DiagnosticNetworkTestItem extends StatelessWidget {
 
         final publicIps = srflx.map((c) => c.address).toSet().join(', ');
 
+        final l10n = context.l10n;
+
         final networkLabel = state.networks
             .where((n) => n != ConnectivityResult.none)
-            .map(_networkLabel)
+            .map((r) => _networkLabel(r, l10n))
             .toSet()
             .join(', ');
 
         final (title, icon, color) = switch (null) {
-          _ when offline => ('Offline', Icons.signal_wifi_off, Colors.red),
-          _ when srflx.isNotEmpty => ('Reachable', Icons.check_circle, Colors.green),
-          _ when relay.isNotEmpty => ('Restricted', Icons.warning_amber_rounded, Colors.orange),
-          _ when host.isNotEmpty => ('Restricted', Icons.warning_amber_rounded, Colors.orange),
-          _ when gathering => ('Checking…', Icons.pending_outlined, Colors.grey),
-          _ => ('Unreachable', Icons.error_outline, Colors.red),
+          _ when offline => (l10n.diagnosticNetworkTest_status_offline, Icons.signal_wifi_off, Colors.red),
+          _ when srflx.isNotEmpty => (l10n.diagnosticNetworkTest_status_reachable, Icons.check_circle, Colors.green),
+          _ when relay.isNotEmpty => (
+            l10n.diagnosticNetworkTest_status_restricted,
+            Icons.warning_amber_rounded,
+            Colors.orange,
+          ),
+          _ when host.isNotEmpty => (
+            l10n.diagnosticNetworkTest_status_restricted,
+            Icons.warning_amber_rounded,
+            Colors.orange,
+          ),
+          _ when gathering => (l10n.diagnosticNetworkTest_status_checking, Icons.pending_outlined, Colors.grey),
+          _ => (l10n.diagnosticNetworkTest_status_unreachable, Icons.error_outline, Colors.red),
         };
 
         final subtitleParts = [
           if (networkLabel.isNotEmpty) networkLabel,
           if (offline)
-            'No network connection'
+            l10n.diagnosticNetworkTestItem_subtitle_noNetwork
           else if (srflx.isNotEmpty)
-            'Public: $publicIps'
+            l10n.diagnosticNetworkTestItem_subtitle_publicIps(publicIps)
           else if (relay.isNotEmpty)
-            'STUN blocked · relay available'
+            l10n.diagnosticNetworkTestItem_subtitle_stunBlocked
           else if (host.isNotEmpty)
-            'STUN unreachable · local only'
+            l10n.diagnosticNetworkTestItem_subtitle_stunUnreachable
           else if (!gathering)
-            'No ICE candidates gathered',
+            l10n.diagnosticNetworkTestItem_subtitle_noCandidates,
         ];
 
         return ListTile(
@@ -65,8 +76,8 @@ class DiagnosticNetworkTestItem extends StatelessWidget {
                 GestureDetector(
                   onTap: () => context.read<NetworkTesterCubit>().refresh(),
                   child: Container(
-                    color: Colors.red,
                     padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.grey.withAlpha(1)),
                     child: const Icon(Icons.refresh, size: 16),
                   ),
                 ),
@@ -79,11 +90,11 @@ class DiagnosticNetworkTestItem extends StatelessWidget {
     );
   }
 
-  static String _networkLabel(ConnectivityResult r) => switch (r) {
-    ConnectivityResult.wifi => 'WiFi',
-    ConnectivityResult.mobile => 'Mobile',
-    ConnectivityResult.ethernet => 'Ethernet',
-    ConnectivityResult.vpn => 'VPN',
+  static String _networkLabel(ConnectivityResult r, AppLocalizations l10n) => switch (r) {
+    ConnectivityResult.wifi => l10n.diagnosticNetworkTestItem_network_wifi,
+    ConnectivityResult.mobile => l10n.diagnosticNetworkTestItem_network_mobile,
+    ConnectivityResult.ethernet => l10n.diagnosticNetworkTestItem_network_ethernet,
+    ConnectivityResult.vpn => l10n.diagnosticNetworkTestItem_network_vpn,
     _ => r.name,
   };
 }
