@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/ice_checker.dart';
 
 import '../models/models.dart';
 import 'diagnostic_screen.dart';
@@ -28,8 +29,15 @@ class DiagnosticScreenPage extends StatelessWidget {
       isLocalContactsFeatureEnabled: contactTab?.contactSourceTypes.contains(ContactSourceType.local) ?? false,
     );
 
-    return BlocProvider<DiagnosticCubit>(
-      create: (context) => DiagnosticCubit(pushTokensBloc: pushTokensBloc, appPermissions: appPermissions),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<DiagnosticCubit>(
+          create: (context) => DiagnosticCubit(pushTokensBloc: pushTokensBloc, appPermissions: appPermissions),
+        ),
+        BlocProvider<NetworkTesterCubit>(
+          create: (context) => NetworkTesterCubit(iceChecker: IceCheckerFlutterWebrtcImpl()),
+        ),
+      ],
       child: Provider<DiagnosticScreenContext>(create: (context) => screenContext, child: const DiagnosticScreen()),
     );
   }
