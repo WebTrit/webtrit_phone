@@ -9,10 +9,11 @@ import 'package:webtrit_phone/utils/utils.dart';
 part 'network_tester_state.dart';
 
 class NetworkTesterCubit extends Cubit<NetworkTesterState> {
-  NetworkTesterCubit({this.iceServers = _defaultIceServers, required this.iceChecker})
-    : super(const NetworkTesterState()) {
-    Connectivity().checkConnectivity().then(_onConnectivityChanged);
-    _connectivitySub = Connectivity().onConnectivityChanged.listen(_onConnectivityChanged);
+  NetworkTesterCubit({this.iceServers = _defaultIceServers, required this.iceChecker, Connectivity? connectivity})
+    : _connectivity = connectivity ?? Connectivity(),
+      super(const NetworkTesterState()) {
+    _connectivity.checkConnectivity().then(_onConnectivityChanged);
+    _connectivitySub = _connectivity.onConnectivityChanged.listen(_onConnectivityChanged);
   }
 
   static const _defaultIceServers = [
@@ -21,6 +22,7 @@ class NetworkTesterCubit extends Cubit<NetworkTesterState> {
 
   final List<Map<String, dynamic>> iceServers;
   final IceChecker iceChecker;
+  final Connectivity _connectivity;
   late final StreamSubscription<List<ConnectivityResult>> _connectivitySub;
   StreamSubscription<CandidateInfo>? _gatherSub;
 
