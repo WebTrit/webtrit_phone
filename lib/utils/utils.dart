@@ -12,6 +12,7 @@ export 'equatable_prop_to_string.dart';
 export 'expiring_cache.dart';
 export 'fixed_delay_scheduler.dart';
 export 'gravatar.dart';
+export 'ice_checker.dart';
 export 'jitter.dart';
 export 'multi_tap_trigger.dart';
 export 'og_preview.dart';

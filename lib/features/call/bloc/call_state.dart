@@ -196,6 +196,7 @@ class ActiveCall with _$ActiveCall implements CallEntry {
     this.localStream,
     this.remoteStream,
     this.speakerOnBeforeMinimize,
+    this.iceCandidates = const [],
   });
 
   @override
@@ -271,6 +272,9 @@ class ActiveCall with _$ActiveCall implements CallEntry {
 
   @override
   final bool? speakerOnBeforeMinimize;
+
+  @override
+  final List<RTCIceCandidate> iceCandidates;
 
   @override
   bool get isIncoming => direction == CallDirection.incoming;
