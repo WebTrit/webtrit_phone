@@ -404,6 +404,46 @@ class AppLocalizationsMapper {
           localizations.diagnosticScreen_permissionsGroup_title,
       'diagnosticScreen_pushNotificationService_title':
           localizations.diagnosticScreen_pushNotificationService_title,
+      'diagnostic_network_groupTitle':
+          localizations.diagnostic_network_groupTitle,
+      'diagnosticNetworkTest_status_offline':
+          localizations.diagnosticNetworkTest_status_offline,
+      'diagnosticNetworkTest_status_reachable':
+          localizations.diagnosticNetworkTest_status_reachable,
+      'diagnosticNetworkTest_status_restricted':
+          localizations.diagnosticNetworkTest_status_restricted,
+      'diagnosticNetworkTest_status_checking':
+          localizations.diagnosticNetworkTest_status_checking,
+      'diagnosticNetworkTest_status_unreachable':
+          localizations.diagnosticNetworkTest_status_unreachable,
+      'diagnosticNetworkTestItem_subtitle_noNetwork':
+          localizations.diagnosticNetworkTestItem_subtitle_noNetwork,
+      'diagnosticNetworkTestItem_subtitle_stunBlocked':
+          localizations.diagnosticNetworkTestItem_subtitle_stunBlocked,
+      'diagnosticNetworkTestItem_subtitle_stunUnreachable':
+          localizations.diagnosticNetworkTestItem_subtitle_stunUnreachable,
+      'diagnosticNetworkTestItem_subtitle_noCandidates':
+          localizations.diagnosticNetworkTestItem_subtitle_noCandidates,
+      'diagnosticNetworkTestItem_network_wifi':
+          localizations.diagnosticNetworkTestItem_network_wifi,
+      'diagnosticNetworkTestItem_network_mobile':
+          localizations.diagnosticNetworkTestItem_network_mobile,
+      'diagnosticNetworkTestItem_network_ethernet':
+          localizations.diagnosticNetworkTestItem_network_ethernet,
+      'diagnosticNetworkTestItem_network_vpn':
+          localizations.diagnosticNetworkTestItem_network_vpn,
+      'diagnosticNetworkTestDetails_title':
+          localizations.diagnosticNetworkTestDetails_title,
+      'diagnosticNetworkTestDetails_description':
+          localizations.diagnosticNetworkTestDetails_description,
+      'diagnosticNetworkTestDetails_status':
+          localizations.diagnosticNetworkTestDetails_status,
+      'diagnosticNetworkTestDetails_candidates':
+          localizations.diagnosticNetworkTestDetails_candidates,
+      'diagnosticNetworkTestDetails_noNetwork':
+          localizations.diagnosticNetworkTestDetails_noNetwork,
+      'diagnosticNetworkTestDetails_noCandidates':
+          localizations.diagnosticNetworkTestDetails_noCandidates,
       'favorites_BodyCenter_empty': localizations.favorites_BodyCenter_empty,
       'favorites_DeleteConfirmDialog_content':
           localizations.favorites_DeleteConfirmDialog_content,
@@ -454,6 +494,10 @@ class AppLocalizationsMapper {
           localizations.login_RequestFailureParametersApplyIssueError,
       'login_RequestFailurePhoneNotFoundError':
           localizations.login_RequestFailurePhoneNotFoundError,
+      'login_RequestFailureIncorrectCredentialsError':
+          localizations.login_RequestFailureIncorrectCredentialsError,
+      'login_RequestFailureUserNotFoundError':
+          localizations.login_RequestFailureUserNotFoundError,
       'login_RequestFailureUnconfiguredBundleIdError':
           localizations.login_RequestFailureUnconfiguredBundleIdError,
       'login_SupportedLoginTypeMissedExceptionError':
@@ -722,6 +766,8 @@ class AppLocalizationsMapper {
               .notifications_errorSnackBar_callSignalingClientSessionMissed,
       'notifications_errorSnackBar_callUndefinedLine':
           localizations.notifications_errorSnackBar_callUndefinedLine,
+      'notifications_errorSnackBar_callMediaTrackSetup':
+          localizations.notifications_errorSnackBar_callMediaTrackSetup,
       'notifications_errorSnackBar_callUserMedia':
           localizations.notifications_errorSnackBar_callUserMedia,
       'notifications_errorSnackBar_callWhileOffline':
@@ -1016,6 +1062,18 @@ class AppLocalizationsMapper {
           localizations.settings_encoding_Section_bitrate_title,
       'settings_encoding_Section_bitrate_tooltip':
           localizations.settings_encoding_Section_bitrate_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_removeREMBFeedback':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeREMBFeedback,
+      'settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback,
+      'settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip':
+          localizations
+              .settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip,
       'settings_encoding_Section_rtp_extensions_title':
           localizations.settings_encoding_Section_rtp_extensions_title,
       'settings_encoding_Section_rtp_extensions_tooltip':
@@ -1052,18 +1110,6 @@ class AppLocalizationsMapper {
       'settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId':
           localizations
               .settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId,
-      'settings_encoding_Section_extra_sdp_mod_removeREMBFeedback':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeREMBFeedback,
-      'settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip,
-      'settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback,
-      'settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip,
       'settings_encoding_Section_extra_sdp_mod_remapTE8':
           localizations.settings_encoding_Section_extra_sdp_mod_remapTE8,
       'settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip': localizations
@@ -1677,6 +1723,8 @@ class AppLocalizationsMapper {
           localizations.contacts_ContactTile_inCall(destination),
       'default_UnknownExceptionError': (error) =>
           localizations.default_UnknownExceptionError(error),
+      'diagnosticNetworkTestItem_subtitle_publicIps': (ips) =>
+          localizations.diagnosticNetworkTestItem_subtitle_publicIps(ips),
       'favorites_SnackBar_deleted': (name) =>
           localizations.favorites_SnackBar_deleted(name),
       'formatPhone': (style, main, ext) =>

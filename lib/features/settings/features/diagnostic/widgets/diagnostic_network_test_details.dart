@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import '../bloc/network_tester_cubit.dart';
@@ -23,13 +24,23 @@ class DiagnosticNetworkTestDetails extends StatelessWidget {
     final relay = effective.where((c) => c.type == IceType.relay).toList();
     final host = effective.where((c) => c.type == IceType.host).toList();
 
+    final l10n = context.l10n;
+
     final (statusTitle, statusIcon, statusColor) = switch (null) {
-      _ when offline => ('Offline', Icons.signal_wifi_off, Colors.red),
-      _ when srflx.isNotEmpty => ('Reachable', Icons.check_circle, Colors.green),
-      _ when relay.isNotEmpty => ('Restricted', Icons.warning_amber_rounded, Colors.orange),
-      _ when host.isNotEmpty => ('Restricted', Icons.warning_amber_rounded, Colors.orange),
-      _ when gathering => ('Checking…', Icons.pending_outlined, Colors.grey),
-      _ => ('Unreachable', Icons.error_outline, Colors.red),
+      _ when offline => (l10n.diagnosticNetworkTest_status_offline, Icons.signal_wifi_off, Colors.red),
+      _ when srflx.isNotEmpty => (l10n.diagnosticNetworkTest_status_reachable, Icons.check_circle, Colors.green),
+      _ when relay.isNotEmpty => (
+        l10n.diagnosticNetworkTest_status_restricted,
+        Icons.warning_amber_rounded,
+        Colors.orange,
+      ),
+      _ when host.isNotEmpty => (
+        l10n.diagnosticNetworkTest_status_restricted,
+        Icons.warning_amber_rounded,
+        Colors.orange,
+      ),
+      _ when gathering => (l10n.diagnosticNetworkTest_status_checking, Icons.pending_outlined, Colors.grey),
+      _ => (l10n.diagnosticNetworkTest_status_unreachable, Icons.error_outline, Colors.red),
     };
 
     return BlocBuilder<NetworkTesterCubit, NetworkTesterState>(
@@ -41,30 +52,32 @@ class DiagnosticNetworkTestDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: const Text('Network reachability'),
-                subtitle: const Text(
-                  'Checks if your device can make and receive calls over the internet by probing network connectivity. \n'
-                  'Server-reflexive (srflx) candidates confirm a public IP is reachable via STUN. '
-                  'Relay candidates mean direct access is blocked and a TURN server is required. '
-                  'Host-only means STUN is unreachable and only local connections are possible.',
-                ),
+                title: Text(l10n.diagnosticNetworkTestDetails_title),
+                subtitle: Text(l10n.diagnosticNetworkTestDetails_description),
+                titleTextStyle: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+                subtitleTextStyle: textTheme.bodySmall,
               ),
               ListTile(
-                title: const Text('Status'),
+                title: Text(l10n.diagnosticNetworkTestDetails_status),
                 subtitle: Text(statusTitle, style: textTheme.bodyMedium?.copyWith(color: statusColor)),
                 trailing: Icon(statusIcon, color: statusColor),
               ),
               if (effective.isNotEmpty) ...[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-                  child: Text('Candidates', style: textTheme.labelMedium?.copyWith(color: colorScheme.outline)),
+                  child: Text(
+                    l10n.diagnosticNetworkTestDetails_candidates,
+                    style: textTheme.labelMedium?.copyWith(color: colorScheme.outline),
+                  ),
                 ),
                 ...effective.map((c) => _CandidateTile(candidate: c)),
               ] else if (!gathering)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Text(
-                    offline ? 'No network connection' : 'No ICE candidates gathered',
+                    offline
+                        ? l10n.diagnosticNetworkTestDetails_noNetwork
+                        : l10n.diagnosticNetworkTestDetails_noCandidates,
                     style: textTheme.bodyMedium?.copyWith(color: colorScheme.outline),
                   ),
                 ),

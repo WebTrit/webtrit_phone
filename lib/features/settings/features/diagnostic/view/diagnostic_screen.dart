@@ -138,7 +138,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                     },
                   ),
                 ),
-                GroupTitleListTile(titleData: 'Network'),
+                GroupTitleListTile(titleData: context.l10n.diagnostic_network_groupTitle),
                 DiagnosticNetworkTestItem(
                   onTap: () {
                     showModalBottomSheet(
