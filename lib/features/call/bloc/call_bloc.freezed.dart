@@ -205,7 +205,7 @@ case _:
 /// @nodoc
 mixin _$ActiveCall {
 
- CallDirection get direction; int? get line; String get callId; CallkeepHandle get handle; DateTime get createdTime; bool get video; CallProcessingStatus get processingStatus; bool? get frontCamera; bool get held; bool get muted; bool get updating; JsepValue? get incomingOffer; String? get displayName; String? get fromReferId; String? get fromReplaces; String? get fromNumber; DateTime? get acceptedTime; DateTime? get hungUpTime; Transfer? get transfer; Object? get failure; MediaStream? get localStream; MediaStream? get remoteStream; bool? get speakerOnBeforeMinimize;
+ CallDirection get direction; int? get line; String get callId; CallkeepHandle get handle; DateTime get createdTime; bool get video; CallProcessingStatus get processingStatus; bool? get frontCamera; bool get held; bool get muted; bool get updating; JsepValue? get incomingOffer; String? get displayName; String? get fromReferId; String? get fromReplaces; String? get fromNumber; DateTime? get acceptedTime; DateTime? get hungUpTime; Transfer? get transfer; Object? get failure; MediaStream? get localStream; MediaStream? get remoteStream; bool? get speakerOnBeforeMinimize; List<RTCIceCandidate> get iceCandidates;
 /// Create a copy of ActiveCall
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -216,16 +216,16 @@ $ActiveCallCopyWith<ActiveCall> get copyWith => _$ActiveCallCopyWithImpl<ActiveC
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActiveCall&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.line, line) || other.line == line)&&(identical(other.callId, callId) || other.callId == callId)&&(identical(other.handle, handle) || other.handle == handle)&&(identical(other.createdTime, createdTime) || other.createdTime == createdTime)&&(identical(other.video, video) || other.video == video)&&(identical(other.processingStatus, processingStatus) || other.processingStatus == processingStatus)&&(identical(other.frontCamera, frontCamera) || other.frontCamera == frontCamera)&&(identical(other.held, held) || other.held == held)&&(identical(other.muted, muted) || other.muted == muted)&&(identical(other.updating, updating) || other.updating == updating)&&(identical(other.incomingOffer, incomingOffer) || other.incomingOffer == incomingOffer)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.fromReferId, fromReferId) || other.fromReferId == fromReferId)&&(identical(other.fromReplaces, fromReplaces) || other.fromReplaces == fromReplaces)&&(identical(other.fromNumber, fromNumber) || other.fromNumber == fromNumber)&&(identical(other.acceptedTime, acceptedTime) || other.acceptedTime == acceptedTime)&&(identical(other.hungUpTime, hungUpTime) || other.hungUpTime == hungUpTime)&&(identical(other.transfer, transfer) || other.transfer == transfer)&&const DeepCollectionEquality().equals(other.failure, failure)&&(identical(other.localStream, localStream) || other.localStream == localStream)&&(identical(other.remoteStream, remoteStream) || other.remoteStream == remoteStream)&&(identical(other.speakerOnBeforeMinimize, speakerOnBeforeMinimize) || other.speakerOnBeforeMinimize == speakerOnBeforeMinimize));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActiveCall&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.line, line) || other.line == line)&&(identical(other.callId, callId) || other.callId == callId)&&(identical(other.handle, handle) || other.handle == handle)&&(identical(other.createdTime, createdTime) || other.createdTime == createdTime)&&(identical(other.video, video) || other.video == video)&&(identical(other.processingStatus, processingStatus) || other.processingStatus == processingStatus)&&(identical(other.frontCamera, frontCamera) || other.frontCamera == frontCamera)&&(identical(other.held, held) || other.held == held)&&(identical(other.muted, muted) || other.muted == muted)&&(identical(other.updating, updating) || other.updating == updating)&&(identical(other.incomingOffer, incomingOffer) || other.incomingOffer == incomingOffer)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.fromReferId, fromReferId) || other.fromReferId == fromReferId)&&(identical(other.fromReplaces, fromReplaces) || other.fromReplaces == fromReplaces)&&(identical(other.fromNumber, fromNumber) || other.fromNumber == fromNumber)&&(identical(other.acceptedTime, acceptedTime) || other.acceptedTime == acceptedTime)&&(identical(other.hungUpTime, hungUpTime) || other.hungUpTime == hungUpTime)&&(identical(other.transfer, transfer) || other.transfer == transfer)&&const DeepCollectionEquality().equals(other.failure, failure)&&(identical(other.localStream, localStream) || other.localStream == localStream)&&(identical(other.remoteStream, remoteStream) || other.remoteStream == remoteStream)&&(identical(other.speakerOnBeforeMinimize, speakerOnBeforeMinimize) || other.speakerOnBeforeMinimize == speakerOnBeforeMinimize)&&const DeepCollectionEquality().equals(other.iceCandidates, iceCandidates));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,direction,line,callId,handle,createdTime,video,processingStatus,frontCamera,held,muted,updating,incomingOffer,displayName,fromReferId,fromReplaces,fromNumber,acceptedTime,hungUpTime,transfer,const DeepCollectionEquality().hash(failure),localStream,remoteStream,speakerOnBeforeMinimize]);
+int get hashCode => Object.hashAll([runtimeType,direction,line,callId,handle,createdTime,video,processingStatus,frontCamera,held,muted,updating,incomingOffer,displayName,fromReferId,fromReplaces,fromNumber,acceptedTime,hungUpTime,transfer,const DeepCollectionEquality().hash(failure),localStream,remoteStream,speakerOnBeforeMinimize,const DeepCollectionEquality().hash(iceCandidates)]);
 
 @override
 String toString() {
-  return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, fromReplaces: $fromReplaces, fromNumber: $fromNumber, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream, speakerOnBeforeMinimize: $speakerOnBeforeMinimize)';
+  return 'ActiveCall(direction: $direction, line: $line, callId: $callId, handle: $handle, createdTime: $createdTime, video: $video, processingStatus: $processingStatus, frontCamera: $frontCamera, held: $held, muted: $muted, updating: $updating, incomingOffer: $incomingOffer, displayName: $displayName, fromReferId: $fromReferId, fromReplaces: $fromReplaces, fromNumber: $fromNumber, acceptedTime: $acceptedTime, hungUpTime: $hungUpTime, transfer: $transfer, failure: $failure, localStream: $localStream, remoteStream: $remoteStream, speakerOnBeforeMinimize: $speakerOnBeforeMinimize, iceCandidates: $iceCandidates)';
 }
 
 
@@ -236,7 +236,7 @@ abstract mixin class $ActiveCallCopyWith<$Res>  {
   factory $ActiveCallCopyWith(ActiveCall value, $Res Function(ActiveCall) _then) = _$ActiveCallCopyWithImpl;
 @useResult
 $Res call({
- CallDirection direction, int? line, String callId, CallkeepHandle handle, DateTime createdTime, bool video, CallProcessingStatus processingStatus, bool? frontCamera, bool held, bool muted, bool updating, JsepValue? incomingOffer, String? displayName, String? fromReferId, String? fromReplaces, String? fromNumber, DateTime? acceptedTime, DateTime? hungUpTime, Transfer? transfer, Object? failure, MediaStream? localStream, MediaStream? remoteStream, bool? speakerOnBeforeMinimize
+ CallDirection direction, int? line, String callId, CallkeepHandle handle, DateTime createdTime, bool video, CallProcessingStatus processingStatus, bool? frontCamera, bool held, bool muted, bool updating, JsepValue? incomingOffer, String? displayName, String? fromReferId, String? fromReplaces, String? fromNumber, DateTime? acceptedTime, DateTime? hungUpTime, Transfer? transfer, Object? failure, MediaStream? localStream, MediaStream? remoteStream, bool? speakerOnBeforeMinimize, List<RTCIceCandidate> iceCandidates
 });
 
 
@@ -253,7 +253,7 @@ class _$ActiveCallCopyWithImpl<$Res>
 
 /// Create a copy of ActiveCall
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? direction = null,Object? line = freezed,Object? callId = null,Object? handle = null,Object? createdTime = null,Object? video = null,Object? processingStatus = null,Object? frontCamera = freezed,Object? held = null,Object? muted = null,Object? updating = null,Object? incomingOffer = freezed,Object? displayName = freezed,Object? fromReferId = freezed,Object? fromReplaces = freezed,Object? fromNumber = freezed,Object? acceptedTime = freezed,Object? hungUpTime = freezed,Object? transfer = freezed,Object? failure = freezed,Object? localStream = freezed,Object? remoteStream = freezed,Object? speakerOnBeforeMinimize = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? direction = null,Object? line = freezed,Object? callId = null,Object? handle = null,Object? createdTime = null,Object? video = null,Object? processingStatus = null,Object? frontCamera = freezed,Object? held = null,Object? muted = null,Object? updating = null,Object? incomingOffer = freezed,Object? displayName = freezed,Object? fromReferId = freezed,Object? fromReplaces = freezed,Object? fromNumber = freezed,Object? acceptedTime = freezed,Object? hungUpTime = freezed,Object? transfer = freezed,Object? failure = freezed,Object? localStream = freezed,Object? remoteStream = freezed,Object? speakerOnBeforeMinimize = freezed,Object? iceCandidates = null,}) {
   return _then(ActiveCall(
 direction: null == direction ? _self.direction : direction // ignore: cast_nullable_to_non_nullable
 as CallDirection,line: freezed == line ? _self.line : line // ignore: cast_nullable_to_non_nullable
@@ -277,7 +277,8 @@ as DateTime?,transfer: freezed == transfer ? _self.transfer : transfer // ignore
 as Transfer?,failure: freezed == failure ? _self.failure : failure ,localStream: freezed == localStream ? _self.localStream : localStream // ignore: cast_nullable_to_non_nullable
 as MediaStream?,remoteStream: freezed == remoteStream ? _self.remoteStream : remoteStream // ignore: cast_nullable_to_non_nullable
 as MediaStream?,speakerOnBeforeMinimize: freezed == speakerOnBeforeMinimize ? _self.speakerOnBeforeMinimize : speakerOnBeforeMinimize // ignore: cast_nullable_to_non_nullable
-as bool?,
+as bool?,iceCandidates: null == iceCandidates ? _self.iceCandidates : iceCandidates // ignore: cast_nullable_to_non_nullable
+as List<RTCIceCandidate>,
   ));
 }
 
@@ -286,193 +287,6 @@ as bool?,
 
 /// Adds pattern-matching-related methods to [ActiveCall].
 extension ActiveCallPatterns on ActiveCall {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-
-}
-
-/// @nodoc
-mixin _$CallAudioDevice {
-
- CallAudioDeviceType get type; String? get id; String? get name;
-/// Create a copy of CallAudioDevice
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$CallAudioDeviceCopyWith<CallAudioDevice> get copyWith => _$CallAudioDeviceCopyWithImpl<CallAudioDevice>(this as CallAudioDevice, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CallAudioDevice&&(identical(other.type, type) || other.type == type)&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,type,id,name);
-
-@override
-String toString() {
-  return 'CallAudioDevice(type: $type, id: $id, name: $name)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $CallAudioDeviceCopyWith<$Res>  {
-  factory $CallAudioDeviceCopyWith(CallAudioDevice value, $Res Function(CallAudioDevice) _then) = _$CallAudioDeviceCopyWithImpl;
-@useResult
-$Res call({
- CallAudioDeviceType type, String? id, String? name
-});
-
-
-
-
-}
-/// @nodoc
-class _$CallAudioDeviceCopyWithImpl<$Res>
-    implements $CallAudioDeviceCopyWith<$Res> {
-  _$CallAudioDeviceCopyWithImpl(this._self, this._then);
-
-  final CallAudioDevice _self;
-  final $Res Function(CallAudioDevice) _then;
-
-/// Create a copy of CallAudioDevice
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? type = null,Object? id = freezed,Object? name = freezed,}) {
-  return _then(CallAudioDevice(
-type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as CallAudioDeviceType,id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String?,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [CallAudioDevice].
-extension CallAudioDevicePatterns on CallAudioDevice {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

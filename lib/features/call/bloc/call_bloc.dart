@@ -3021,6 +3021,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     try {
+      final activeCall = state.retrieveActiveCall(event.callId);
+      if (activeCall == null) return;
+      if (activeCall.wasHungUp) return;
+
       final peerConnection = await _peerConnectionManager.retrieve(event.callId);
       if (peerConnection == null) return;
       final pcState = peerConnection.signalingState;
@@ -3029,10 +3033,42 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         // Will trigger [onPeerConnectionEventRenegotiationNeeded]
         // No need to create and send a new offer here, as the renegotiation flow will handle that.
         await peerConnection.restartIce();
+
+        // Additional error processing for diagnostics
+        final connectivity = await Connectivity().checkConnectivity();
+        if (connectivity.any((c) => c != ConnectivityResult.none)) {
+          final iceCandidates = activeCall.iceCandidates;
+          final srflx = iceCandidates.where((c) => c.type == 'srflx').toList();
+          final relay = iceCandidates.where((c) => c.type == 'relay').toList();
+          final host = iceCandidates.where((c) => c.type == 'host').toList();
+          _logger.warning(
+            '__onMutationIceConnectionFailed: ice count - srflx=${srflx.length}, relay=${relay.length}, host=${host.length}',
+          );
+          if (srflx.isEmpty && relay.isEmpty && host.isNotEmpty) {
+            reportWannaTurn(iceCandidates, connectivity);
+
+            final vpnActive = connectivity.any((e) => e == ConnectivityResult.vpn);
+            final wifiActive = connectivity.any((e) => e == ConnectivityResult.wifi);
+            // TODO: impl network diag hint, saves to state and resets on ice connection ok, show it to user
+          }
+        }
       }
     } catch (e, stackTrace) {
       callErrorReporter.handle(e, stackTrace, '__onMutationIceConnectionFailed error');
     }
+  }
+
+  void reportWannaTurn(List<RTCIceCandidate> candidates, List<ConnectivityResult> connectivity) {
+    final stack = StackTrace.current;
+    final iceInfo = 'ices:${candidates.map((e) => e.candidate).join('\n')}';
+    final connectivityInfo = 'connections:${connectivity.map((e) => e.name).join(',')})';
+
+    CrashlyticsUtils.recordError(
+      'ICE failed, WANNA TURN',
+      stack: stack,
+      information: [iceInfo, connectivityInfo],
+      fatal: true,
+    );
   }
 
   Future<void> __onMutationRestartIce(_CallMutationEventRestartIce event, Emitter<CallState> emit) async {
@@ -3184,7 +3220,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventIceGatheringStateChanged event,
     Emitter<CallState> emit,
   ) async {
-    if (event.state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
+    if (event.state == RTCIceGatheringState.RTCIceGatheringStateGathering) {
+      emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(iceCandidates: const [])));
+    } else if (event.state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
       add(_CallMutationEvent.iceGatheringComplete(event.callId));
     }
   }
@@ -3206,6 +3244,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.fine('__onPeerConnectionEventIceCandidateIdentified: skip by iceFiler');
       return;
     }
+
+    emit(
+      state.copyWithMappedActiveCall(
+        event.callId,
+        (call) => call.copyWith(iceCandidates: [...call.iceCandidates, event.candidate]),
+      ),
+    );
     add(_CallMutationEvent.trickleIce(event.callId, event.candidate));
   }
 
