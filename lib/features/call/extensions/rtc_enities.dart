@@ -1,6 +1,6 @@
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
-extension IceCandidateToToString on RTCIceCandidate {
+extension IceCandidateExt on RTCIceCandidate {
   // SDP: candidate:<foundation> <component> <transport> <priority> <address> <port> typ <type> ...
   String? get address {
     final parts = candidate?.split(' ');
@@ -43,34 +43,52 @@ extension IceCandidateToToString on RTCIceCandidate {
     return 'mid=$sdpMid ${type ?? '?'} ${transport ?? '?'} ${address ?? '?'}:${port ?? '?'}'
         '${cost != null ? ' cost=$cost' : ''}';
   }
+
+  bool isSfrlxCandidate() => type == 'srflx';
+
+  bool isRelayCandidate() => type == 'relay';
+
+  bool isHostCandidate() => type == 'host';
 }
 
-extension MediaStreamTrackToString on MediaStreamTrack {
+extension RTCIceCandidateListExt on Iterable<RTCIceCandidate> {
+  List<RTCIceCandidate> get hostCandidates => where((e) => e.isHostCandidate()).toList();
+
+  List<RTCIceCandidate> get srflxCandidates => where((e) => e.isSfrlxCandidate()).toList();
+
+  List<RTCIceCandidate> get relayCandidates => where((e) => e.isRelayCandidate()).toList();
+
+  (int host, int relay, int srflx) get typesCount {
+    return (hostCandidates.length, relayCandidates.length, srflxCandidates.length);
+  }
+}
+
+extension MediaStreamTrackExt on MediaStreamTrack {
   String get str => 'Track(id: $id, kind: $kind, label: $label, enabled: $enabled, muted: $muted)';
 }
 
-extension RTCRtpReceiverToString on RTCRtpReceiver {
+extension RTCRtpReceiverExt on RTCRtpReceiver {
   String get str => 'Receiver(id: $receiverId, track: ${track?.str})';
 }
 
-extension RTCRtpSenderToString on RTCRtpSender {
+extension RTCRtpSenderExt on RTCRtpSender {
   String get str => 'Sender(id: $senderId, track: ${track?.str})';
 }
 
-extension RTCRtpTransceiverToString on RTCRtpTransceiver {
+extension RTCRtpTransceiverExt on RTCRtpTransceiver {
   String get str => 'Transceiver(mid: $mid, sender: ${sender.str}, receiver: ${receiver.str})';
 }
 
-extension MediaStreamToString on MediaStream {
+extension MediaStreamExt on MediaStream {
   String get str =>
       'MediaStream(id: $id, ownerTag: $ownerTag, audio: ${getAudioTracks().length}, video: ${getVideoTracks().length})';
 }
 
-extension RTCTrackEventToString on RTCTrackEvent {
+extension RTCTrackEventExt on RTCTrackEvent {
   String get str =>
       'TrackEvent(track: ${track.str}, receiver: ${receiver?.str}, transceiver: ${transceiver?.str}, streams: ${streams.map((e) => e.str).toList()})';
 }
 
-extension MediaDeviceInfoToString on MediaDeviceInfo {
+extension MediaDeviceInfoExt on MediaDeviceInfo {
   String get str => 'MediaDeviceInfo(id: $deviceId, kind: $kind, label: $label, groupId: $groupId)';
 }
