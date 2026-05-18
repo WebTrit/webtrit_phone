@@ -226,6 +226,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callProcessingStatus_signaling_connecting => 'Connecting to the remote server';
 
   @override
+  String get iceConnectionIssue_iceFail => 'Media connection failed. Check your network';
+
+  @override
+  String get iceConnectionIssue_iceFailNoIcePath => 'Media connection failed. Try switching to another network';
+
+  @override
+  String get iceConnectionIssue_iceFailNoIcePathViaVpn => 'VPN may be blocking the call. Try disabling it';
+
+  @override
   String get callPullBadge_dialogTitle => 'Pullable Calls';
 
   @override

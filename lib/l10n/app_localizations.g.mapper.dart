@@ -173,6 +173,11 @@ class AppLocalizationsMapper {
           localizations.callProcessingStatus_routing,
       'callProcessingStatus_signaling_connecting':
           localizations.callProcessingStatus_signaling_connecting,
+      'iceConnectionIssue_iceFail': localizations.iceConnectionIssue_iceFail,
+      'iceConnectionIssue_iceFailNoIcePath':
+          localizations.iceConnectionIssue_iceFailNoIcePath,
+      'iceConnectionIssue_iceFailNoIcePathViaVpn':
+          localizations.iceConnectionIssue_iceFailNoIcePathViaVpn,
       'callPullBadge_dialogTitle': localizations.callPullBadge_dialogTitle,
       'callPullBadge_pickupButtonTitle':
           localizations.callPullBadge_pickupButtonTitle,

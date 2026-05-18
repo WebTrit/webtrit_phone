@@ -441,6 +441,24 @@ abstract class AppLocalizations {
   /// **'Connecting to the remote server'**
   String get callProcessingStatus_signaling_connecting;
 
+  /// No description provided for @iceConnectionIssue_iceFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Media connection failed. Check your network'**
+  String get iceConnectionIssue_iceFail;
+
+  /// No description provided for @iceConnectionIssue_iceFailNoIcePath.
+  ///
+  /// In en, this message translates to:
+  /// **'Media connection failed. Try switching to another network'**
+  String get iceConnectionIssue_iceFailNoIcePath;
+
+  /// No description provided for @iceConnectionIssue_iceFailNoIcePathViaVpn.
+  ///
+  /// In en, this message translates to:
+  /// **'VPN may be blocking the call. Try disabling it'**
+  String get iceConnectionIssue_iceFailNoIcePathViaVpn;
+
   /// No description provided for @callPullBadge_dialogTitle.
   ///
   /// In en, this message translates to:

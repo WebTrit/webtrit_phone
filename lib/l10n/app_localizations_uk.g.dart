@@ -235,6 +235,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callProcessingStatus_signaling_connecting => 'З\'єднання з віддаленим сервером';
 
   @override
+  String get iceConnectionIssue_iceFail => 'Помилка медіазʼєднання. Перевірте мережу';
+
+  @override
+  String get iceConnectionIssue_iceFailNoIcePath => 'Помилка медіазʼєднання. Спробуйте перейти на іншу мережу';
+
+  @override
+  String get iceConnectionIssue_iceFailNoIcePathViaVpn => 'VPN може блокувати дзвінок. Спробуйте вимкнути його';
+
+  @override
   String get callPullBadge_dialogTitle => 'Перехопляємі дзвінки';
 
   @override

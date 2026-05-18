@@ -228,6 +228,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callProcessingStatus_signaling_connecting => 'Connessione al server remoto';
 
   @override
+  String get iceConnectionIssue_iceFail => 'Connessione multimediale fallita. Controlla la rete';
+
+  @override
+  String get iceConnectionIssue_iceFailNoIcePath =>
+      'Connessione multimediale fallita. Prova a passare a un\'altra rete';
+
+  @override
+  String get iceConnectionIssue_iceFailNoIcePathViaVpn => 'La VPN potrebbe bloccare la chiamata. Prova a disattivarla';
+
+  @override
   String get callPullBadge_dialogTitle => 'Chiamate pullabili';
 
   @override
