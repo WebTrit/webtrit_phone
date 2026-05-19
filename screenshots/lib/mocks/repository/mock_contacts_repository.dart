@@ -21,7 +21,7 @@ class MockContactsRepository extends Mock implements ContactsRepository {
   }
 
   @override
-  Stream<Contact?> watchContactByPhoneNumberMatch(String number) {
+  Stream<Contact?> watchContactByPhoneNumber(String number) {
     return _contactStreamController.stream;
   }
 

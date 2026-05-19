@@ -56,7 +56,7 @@ class _ContactInfoBuilderState extends State<ContactInfoBuilder> {
     };
     contact = valuesPool[key];
     final stream = switch (widget.source) {
-      ContactSourcePhone(phoneNumber: var number) => contactsRepo.watchContactByPhoneNumberMatch(number),
+      ContactSourcePhone(phoneNumber: var number) => contactsRepo.watchContactByPhoneNumber(number),
       ContactSourceId(sourceType: var type, sourceId: var id) => contactsRepo.watchContactBySourceWithPhonesAndEmails(
         type,
         id,
