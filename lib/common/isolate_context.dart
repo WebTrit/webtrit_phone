@@ -35,7 +35,8 @@ class IsolateContext {
     this.deviceInfo,
     this.packageInfo,
     this.appLabelsProvider,
-    required this.nativeLogForwarder,
+    this.nativeLogForwarder,
+    this.appPath,
   });
 
   /// Required - credentials for signaling auth. Throws on failure.
@@ -47,7 +48,12 @@ class IsolateContext {
   final DeviceInfo? deviceInfo;
   final PackageInfo? packageInfo;
   final AppMetadataProvider? appLabelsProvider;
-  final NativeLogForwarder nativeLogForwarder;
+
+  /// Nullable - best-effort. Null when [appPath] is unavailable.
+  final NativeLogForwarder? nativeLogForwarder;
+
+  /// Nullable - best-effort. Null when filesystem path is unavailable.
+  final AppPath? appPath;
 
   static Future<IsolateContext> init() async {
     final secureStorage = await SecureStorageImpl.init();
@@ -81,11 +87,10 @@ class IsolateContext {
       Logger.root.warning('IsolateContext: AppLogger init failed, continuing without remote logging', e, st);
     }
 
-    final appPath = await AppPath.init();
-    final nativeLogForwarder = NativeLogForwarder(
-      nativeLogFilePath: appPath.nativeLogFilePath,
-      logger: Logger('callkeep'),
-    )..start();
+    final appPath = await _tryInit(AppPath.init, 'AppPath');
+    final nativeLogForwarder = appPath != null
+        ? (NativeLogForwarder(nativeLogFilePath: appPath.nativeLogFilePath, logger: Logger('callkeep'))..start())
+        : null;
 
     return IsolateContext(
       secureStorage: secureStorage,
@@ -95,6 +100,7 @@ class IsolateContext {
       packageInfo: packageInfo,
       appLabelsProvider: appLabelsProvider,
       nativeLogForwarder: nativeLogForwarder,
+      appPath: appPath,
     );
   }
 }
@@ -115,15 +121,15 @@ class PushIsolateContext extends IsolateContext {
   PushIsolateContext({
     required super.secureStorage,
     required this.incomingCallTypeRepository,
-    required super.nativeLogForwarder,
     required this.appCertificates,
+    required this.localPushRepository,
+    super.nativeLogForwarder,
+    super.appPath,
     super.remoteConfigService,
     super.appInfo,
     super.deviceInfo,
     super.packageInfo,
     super.appLabelsProvider,
-    required this.localPushRepository,
-    this.appPath,
     this.appDatabase,
     this.callLogsRepository,
   });
@@ -133,9 +139,6 @@ class PushIsolateContext extends IsolateContext {
 
   /// Required - TLS certificates for WebSocket. Throws on failure.
   final AppCertificates appCertificates;
-
-  /// Nullable - best-effort. Null when filesystem path is unavailable.
-  final AppPath? appPath;
 
   /// Nullable - best-effort. Null when [appPath] or DB open fails.
   final AppDatabase? appDatabase;
@@ -153,13 +156,11 @@ class PushIsolateContext extends IsolateContext {
     final appCertificates = await AppCertificates.init();
 
     // Phase 2 - best-effort: failures are isolated, flow continues with nulls.
-    final appPath = await _tryInit(AppPath.init, 'AppPath');
-
     AppDatabase? appDatabase;
-    if (appPath != null) {
+    if (base.appPath != null) {
       Logger.root.info('IsolateDatabase.connectOrCreate call from PushIsolateContext.init');
       appDatabase = await _tryInit(
-        () => IsolateDatabase.connectOrCreate(directoryPath: appPath.applicationDocumentsPath),
+        () => IsolateDatabase.connectOrCreate(directoryPath: base.appPath!.applicationDocumentsPath),
         'AppDatabase',
       );
     } else {
@@ -179,7 +180,7 @@ class PushIsolateContext extends IsolateContext {
       nativeLogForwarder: base.nativeLogForwarder,
       incomingCallTypeRepository: IncomingCallTypeRepositoryPrefsImpl(appPreferences),
       appCertificates: appCertificates,
-      appPath: appPath,
+      appPath: base.appPath,
       appDatabase: appDatabase,
       localPushRepository: localPushRepository,
       callLogsRepository: callLogsRepository,
@@ -187,7 +188,7 @@ class PushIsolateContext extends IsolateContext {
   }
 
   Future<void> dispose() async {
-    await nativeLogForwarder.dispose();
+    await nativeLogForwarder?.dispose();
     await appDatabase?.close();
   }
 }
