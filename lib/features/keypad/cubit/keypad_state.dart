@@ -10,5 +10,6 @@ class KeypadState with _$KeypadState {
   @override
   final String? value;
 
+  @override
   late final noValue = value?.isEmpty ?? true;
 }

@@ -376,14 +376,10 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 
     final appPath = _isolateContext!.appPath;
     if (appPath != null) {
-      await AppDatabaseScope.useOrNull(
-        directoryPath: appPath.applicationDocumentsPath,
-        action: (db) async {
-          final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: db);
-          await repo.set(activeMessagePush);
-        },
-        onError: (e, st) => logger.warning('MessagePush DB write failed: $e'),
-      );
+      await DatabaseScope(appPath.applicationDocumentsPath)
+          .onError((e, _) => logger.warning('MessagePush DB write failed: $e'))
+          .execute((db) async => ActiveMessagePushsRepositoryDriftImpl(appDatabase: db).set(activeMessagePush))
+          .run();
     }
   }
 }
@@ -397,28 +393,25 @@ Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, L
   final appPath = _isolateContext!.appPath;
   if (appPath == null) return appPush.call.displayName;
 
-  return await AppDatabaseScope.useOrNull(
-        directoryPath: appPath.applicationDocumentsPath,
-        onError: (e, st) {
-          logger.severe(
-            'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
-            'Fallback to push display name will be used.',
-            e,
-            st,
-          );
-        },
-        action: (db) async {
-          final contactsRepository = ContactsRepository(
-            appDatabase: db,
-            contactsRemoteDataSource: null,
-            contactsLocalDataSource: null,
-          );
-
-          final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
-          return contact?.maybeName ?? appPush.call.displayName;
-        },
-      ) ??
-      appPush.call.displayName;
+  String? contactName;
+  await DatabaseScope(appPath.applicationDocumentsPath)
+      .onError(
+        (e, s) => logger.severe(
+          'Failed to resolve contact name for handle: ${appPush.call.handle}. Fallback to push display name.',
+          e,
+          s,
+        ),
+      )
+      .execute((db) async {
+        final contact = await ContactsRepository(
+          appDatabase: db,
+          contactsRemoteDataSource: null,
+          contactsLocalDataSource: null,
+        ).getContactByPhoneNumber(appPush.call.handle);
+        contactName = contact?.maybeName;
+      })
+      .run();
+  return contactName ?? appPush.call.displayName;
 }
 
 CallkeepIncomingCallError? _onReportIncomingCallTimeout(Logger logger) {
@@ -507,20 +500,17 @@ void workManagerDispatcher() {
       final appPath = await AppPath.init();
       final localPushRepo = LocalPushRepositoryFLNImpl();
 
-      final result =
-          await AppDatabaseScope.useOrNull<bool>(
-            directoryPath: appPath.applicationDocumentsPath,
-            onError: (e, st) => logger.severe('System notifications task failed', e, st),
-            action: (db) async {
-              final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
-              final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
-              return worker.execute();
-            },
-          ) ??
-          false; // return false so WorkManager can retry on DB/worker failure
+      var taskSucceeded = false;
+      await DatabaseScope(
+        appPath.applicationDocumentsPath,
+      ).onError((e, s) => logger.severe('System notifications task failed', e, s)).execute((db) async {
+        final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
+        final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
+        taskSucceeded = await worker.execute();
+      }).run();
 
-      logger.info('Task result: $result');
-      return result;
+      logger.info('Task result: $taskSucceeded');
+      return taskSucceeded; // false - WorkManager retries
     } catch (e, st) {
       logger.severe('Unhandled WorkManager task error', e, st);
       // Return `false` so WorkManager can retry according to its backoff policy.
