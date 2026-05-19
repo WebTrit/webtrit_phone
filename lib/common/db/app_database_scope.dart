@@ -32,6 +32,7 @@ class DatabaseScope {
   }
 
   Future<void> run() async {
+    if (_action == null) throw StateError('DatabaseScope.run() called without execute()');
     AppDatabase? db;
     try {
       Logger.root.info('DatabaseScope - opening connection');
