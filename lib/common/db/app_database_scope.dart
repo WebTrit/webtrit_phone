@@ -47,7 +47,6 @@ class DatabaseScope {
       await _action!(db).timeout(_timeout);
       Logger.root.info('DatabaseScope - completed (time: ${DateTime.now().toIso8601String()})');
     } catch (e, s) {
-      Logger.root.severe('DatabaseScope - error: $e', e, s);
       _onError?.call(e, s);
     } finally {
       Logger.root.info('DatabaseScope - closing connection');
