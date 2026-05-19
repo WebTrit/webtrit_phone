@@ -377,7 +377,7 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
     final appPath = _isolateContext!.appPath;
     if (appPath != null) {
       await DatabaseScope(appPath.applicationDocumentsPath)
-          .onError((e, s) => logger.warning('MessagePush DB write failed: $e'))
+          .onError((e, _) => logger.warning('MessagePush DB write failed: $e'))
           .execute((db) async => ActiveMessagePushsRepositoryDriftImpl(appDatabase: db).set(activeMessagePush))
           .run();
     }
