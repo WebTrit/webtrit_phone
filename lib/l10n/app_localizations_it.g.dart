@@ -228,6 +228,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callProcessingStatus_signaling_connecting => 'Connessione al server remoto';
 
   @override
+  String get iceConnectionIssue_iceFail => 'Connessione multimediale fallita. Controlla la rete';
+
+  @override
+  String get iceConnectionIssue_iceFailNoIcePath =>
+      'Connessione multimediale fallita. Prova a passare a un\'altra rete';
+
+  @override
+  String get iceConnectionIssue_iceFailNoIcePathViaVpn => 'La VPN potrebbe bloccare la chiamata. Prova a disattivarla';
+
+  @override
   String get callPullBadge_dialogTitle => 'Chiamate pullabili';
 
   @override
@@ -638,6 +648,72 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get diagnosticScreen_pushNotificationService_title => 'Servizio di notifiche push';
+
+  @override
+  String get diagnostic_network_groupTitle => 'Rete';
+
+  @override
+  String get diagnosticNetworkTest_status_offline => 'Offline';
+
+  @override
+  String get diagnosticNetworkTest_status_reachable => 'Raggiungibile';
+
+  @override
+  String get diagnosticNetworkTest_status_restricted => 'Limitato';
+
+  @override
+  String get diagnosticNetworkTest_status_checking => 'Verifica…';
+
+  @override
+  String get diagnosticNetworkTest_status_unreachable => 'Non raggiungibile';
+
+  @override
+  String get diagnosticNetworkTestItem_subtitle_noNetwork => 'Nessuna connessione di rete';
+
+  @override
+  String diagnosticNetworkTestItem_subtitle_publicIps(String ips) {
+    return 'Pubblica: $ips';
+  }
+
+  @override
+  String get diagnosticNetworkTestItem_subtitle_stunBlocked => 'STUN bloccato · relay disponibile';
+
+  @override
+  String get diagnosticNetworkTestItem_subtitle_stunUnreachable => 'STUN non raggiungibile · solo locale';
+
+  @override
+  String get diagnosticNetworkTestItem_subtitle_noCandidates => 'Nessun candidato ICE raccolto';
+
+  @override
+  String get diagnosticNetworkTestItem_network_wifi => 'WiFi';
+
+  @override
+  String get diagnosticNetworkTestItem_network_mobile => 'Mobile';
+
+  @override
+  String get diagnosticNetworkTestItem_network_ethernet => 'Ethernet';
+
+  @override
+  String get diagnosticNetworkTestItem_network_vpn => 'VPN';
+
+  @override
+  String get diagnosticNetworkTestDetails_title => 'Raggiungibilità di rete';
+
+  @override
+  String get diagnosticNetworkTestDetails_description =>
+      'Verifica se il dispositivo può effettuare e ricevere chiamate tramite internet sondando la connettività di rete.\nI candidati server-reflexive (srflx) confermano che un IP pubblico è raggiungibile tramite STUN. I candidati relay indicano che l\'accesso diretto è bloccato ed è necessario un server TURN. Solo i candidati host indicano che STUN non è raggiungibile e sono possibili solo connessioni locali.';
+
+  @override
+  String get diagnosticNetworkTestDetails_status => 'Stato';
+
+  @override
+  String get diagnosticNetworkTestDetails_candidates => 'Candidati';
+
+  @override
+  String get diagnosticNetworkTestDetails_noNetwork => 'Nessuna connessione di rete';
+
+  @override
+  String get diagnosticNetworkTestDetails_noCandidates => 'Nessun candidato ICE raccolto';
 
   @override
   String get favorites_BodyCenter_empty =>

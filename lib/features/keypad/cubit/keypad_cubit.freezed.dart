@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$KeypadState {
 
- Contact? get contact; String? get value;
+ Contact? get contact; String? get value; dynamic get noValue;
 /// Create a copy of KeypadState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $KeypadStateCopyWith<KeypadState> get copyWith => _$KeypadStateCopyWithImpl<Keyp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is KeypadState&&(identical(other.contact, contact) || other.contact == contact)&&(identical(other.value, value) || other.value == value));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is KeypadState&&(identical(other.contact, contact) || other.contact == contact)&&(identical(other.value, value) || other.value == value)&&const DeepCollectionEquality().equals(other.noValue, noValue));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,contact,value);
+int get hashCode => Object.hash(runtimeType,contact,value,const DeepCollectionEquality().hash(noValue));
 
 @override
 String toString() {
-  return 'KeypadState(contact: $contact, value: $value)';
+  return 'KeypadState(contact: $contact, value: $value, noValue: $noValue)';
 }
 
 

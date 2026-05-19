@@ -3021,6 +3021,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     try {
+      final activeCall = state.retrieveActiveCall(event.callId);
+      if (activeCall == null) return;
+      if (activeCall.wasHungUp) return;
+
       final peerConnection = await _peerConnectionManager.retrieve(event.callId);
       if (peerConnection == null) return;
       final pcState = peerConnection.signalingState;
@@ -3184,7 +3188,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventIceGatheringStateChanged event,
     Emitter<CallState> emit,
   ) async {
-    if (event.state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
+    if (event.state == RTCIceGatheringState.RTCIceGatheringStateGathering) {
+      emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(iceCandidates: const [])));
+    } else if (event.state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
       add(_CallMutationEvent.iceGatheringComplete(event.callId));
     }
   }
@@ -3193,9 +3199,57 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _PeerConnectionEventIceConnectionStateChanged event,
     Emitter<CallState> emit,
   ) async {
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall == null) return;
+
     if (event.state == RTCIceConnectionState.RTCIceConnectionStateFailed) {
       add(_CallMutationEvent.iceConnectionFailed(event.callId));
+
+      // Additional error processing for diagnostics
+      final connectivity = await Connectivity().checkConnectivity();
+      if (connectivity.any((c) => c != ConnectivityResult.none)) {
+        final (host, relay, srflx) = activeCall.iceCandidates.typesCount;
+        _logger.warning('__onMutationIceConnectionFailed: candidates - srflx=$srflx, relay=$relay, host=$host');
+
+        var iceConnectionIssue = IceConnectionIssue.iceFail;
+        final noMediaPath = srflx == 0 && relay == 0 && host != 0;
+        final vpnActive = connectivity.any((e) => e == ConnectivityResult.vpn);
+
+        if (noMediaPath) {
+          reportWannaTurn(activeCall.iceCandidates, connectivity);
+          if (vpnActive) {
+            iceConnectionIssue = IceConnectionIssue.iceFailNoIcePathViaVpn;
+          } else {
+            iceConnectionIssue = IceConnectionIssue.iceFailNoIcePath;
+          }
+        }
+
+        emit(
+          state.copyWithMappedActiveCall(
+            activeCall.callId,
+            (call) => call.copyWith(iceConnectionIssue: iceConnectionIssue),
+          ),
+        );
+      }
+    } else {
+      emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(iceConnectionIssue: null)));
     }
+  }
+
+  // Special case for collect statistics about calls network issues that can be solved by adding TURN server
+  // WARN: Use separate function to create recognizable stack trace in crashlytics console
+  // TODO: remove or change name if TURN will be added
+  void reportWannaTurn(List<RTCIceCandidate> candidates, List<ConnectivityResult> connectivity) {
+    final stack = StackTrace.current;
+    final iceInfo = 'ices:${candidates.map((e) => e.candidate).join('\n')}';
+    final connectivityInfo = 'connections:${connectivity.map((e) => e.name).join(',')})';
+
+    CrashlyticsUtils.recordError(
+      'ICE failed, WANNA TURN',
+      stack: stack,
+      information: [iceInfo, connectivityInfo],
+      fatal: true,
+    );
   }
 
   Future<void> __onPeerConnectionEventIceCandidateIdentified(
@@ -3206,6 +3260,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.fine('__onPeerConnectionEventIceCandidateIdentified: skip by iceFiler');
       return;
     }
+
+    emit(
+      state.copyWithMappedActiveCall(
+        event.callId,
+        (call) => call.copyWith(iceCandidates: [...call.iceCandidates, event.candidate]),
+      ),
+    );
     add(_CallMutationEvent.trickleIce(event.callId, event.candidate));
   }
 

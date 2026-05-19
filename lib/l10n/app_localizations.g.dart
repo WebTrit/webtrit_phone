@@ -441,6 +441,24 @@ abstract class AppLocalizations {
   /// **'Connecting to the remote server'**
   String get callProcessingStatus_signaling_connecting;
 
+  /// No description provided for @iceConnectionIssue_iceFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Media connection failed. Check your network'**
+  String get iceConnectionIssue_iceFail;
+
+  /// No description provided for @iceConnectionIssue_iceFailNoIcePath.
+  ///
+  /// In en, this message translates to:
+  /// **'Media connection failed. Try switching to another network'**
+  String get iceConnectionIssue_iceFailNoIcePath;
+
+  /// No description provided for @iceConnectionIssue_iceFailNoIcePathViaVpn.
+  ///
+  /// In en, this message translates to:
+  /// **'VPN may be blocking the call. Try disabling it'**
+  String get iceConnectionIssue_iceFailNoIcePathViaVpn;
+
   /// No description provided for @callPullBadge_dialogTitle.
   ///
   /// In en, this message translates to:
@@ -1208,6 +1226,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Push notification service'**
   String get diagnosticScreen_pushNotificationService_title;
+
+  /// No description provided for @diagnostic_network_groupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Network'**
+  String get diagnostic_network_groupTitle;
+
+  /// No description provided for @diagnosticNetworkTest_status_offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get diagnosticNetworkTest_status_offline;
+
+  /// No description provided for @diagnosticNetworkTest_status_reachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Reachable'**
+  String get diagnosticNetworkTest_status_reachable;
+
+  /// No description provided for @diagnosticNetworkTest_status_restricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Restricted'**
+  String get diagnosticNetworkTest_status_restricted;
+
+  /// No description provided for @diagnosticNetworkTest_status_checking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking…'**
+  String get diagnosticNetworkTest_status_checking;
+
+  /// No description provided for @diagnosticNetworkTest_status_unreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unreachable'**
+  String get diagnosticNetworkTest_status_unreachable;
+
+  /// No description provided for @diagnosticNetworkTestItem_subtitle_noNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'No network connection'**
+  String get diagnosticNetworkTestItem_subtitle_noNetwork;
+
+  /// No description provided for @diagnosticNetworkTestItem_subtitle_publicIps.
+  ///
+  /// In en, this message translates to:
+  /// **'Public: {ips}'**
+  String diagnosticNetworkTestItem_subtitle_publicIps(String ips);
+
+  /// No description provided for @diagnosticNetworkTestItem_subtitle_stunBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'STUN blocked · relay available'**
+  String get diagnosticNetworkTestItem_subtitle_stunBlocked;
+
+  /// No description provided for @diagnosticNetworkTestItem_subtitle_stunUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'STUN unreachable · local only'**
+  String get diagnosticNetworkTestItem_subtitle_stunUnreachable;
+
+  /// No description provided for @diagnosticNetworkTestItem_subtitle_noCandidates.
+  ///
+  /// In en, this message translates to:
+  /// **'No ICE candidates gathered'**
+  String get diagnosticNetworkTestItem_subtitle_noCandidates;
+
+  /// No description provided for @diagnosticNetworkTestItem_network_wifi.
+  ///
+  /// In en, this message translates to:
+  /// **'WiFi'**
+  String get diagnosticNetworkTestItem_network_wifi;
+
+  /// No description provided for @diagnosticNetworkTestItem_network_mobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile'**
+  String get diagnosticNetworkTestItem_network_mobile;
+
+  /// No description provided for @diagnosticNetworkTestItem_network_ethernet.
+  ///
+  /// In en, this message translates to:
+  /// **'Ethernet'**
+  String get diagnosticNetworkTestItem_network_ethernet;
+
+  /// No description provided for @diagnosticNetworkTestItem_network_vpn.
+  ///
+  /// In en, this message translates to:
+  /// **'VPN'**
+  String get diagnosticNetworkTestItem_network_vpn;
+
+  /// No description provided for @diagnosticNetworkTestDetails_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Network reachability'**
+  String get diagnosticNetworkTestDetails_title;
+
+  /// No description provided for @diagnosticNetworkTestDetails_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Checks if your device can make and receive calls over the internet by probing network connectivity.\nServer-reflexive (srflx) candidates confirm a public IP is reachable via STUN. Relay candidates mean direct access is blocked and a TURN server is required. Host-only means STUN is unreachable and only local connections are possible.'**
+  String get diagnosticNetworkTestDetails_description;
+
+  /// No description provided for @diagnosticNetworkTestDetails_status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get diagnosticNetworkTestDetails_status;
+
+  /// No description provided for @diagnosticNetworkTestDetails_candidates.
+  ///
+  /// In en, this message translates to:
+  /// **'Candidates'**
+  String get diagnosticNetworkTestDetails_candidates;
+
+  /// No description provided for @diagnosticNetworkTestDetails_noNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'No network connection'**
+  String get diagnosticNetworkTestDetails_noNetwork;
+
+  /// No description provided for @diagnosticNetworkTestDetails_noCandidates.
+  ///
+  /// In en, this message translates to:
+  /// **'No ICE candidates gathered'**
+  String get diagnosticNetworkTestDetails_noCandidates;
 
   /// No description provided for @favorites_BodyCenter_empty.
   ///
