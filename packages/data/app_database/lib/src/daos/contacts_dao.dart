@@ -203,6 +203,14 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     return query.watch().map(_gatherSingleContact);
   }
 
+  Future<FullContactData?> getContactByPhoneMatchedEnding(String number) {
+    final query = _joinFullData(select(contactsTable));
+    query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
+    query.limit(1);
+
+    return query.get().then(_gatherSingleContact);
+  }
+
   Stream<FullContactData?> watchContactByPhoneMatchedEnding(String number) {
     final query = _joinFullData(select(contactsTable));
     query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
