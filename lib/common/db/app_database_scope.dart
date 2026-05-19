@@ -3,7 +3,7 @@ import 'package:webtrit_phone/data/data.dart';
 
 import 'isolate_database.dart';
 
-/// Scoped access to [AppDatabase] — opens a connection, runs the action, then closes it.
+/// Scoped access to [AppDatabase] - opens a connection, runs the action, then closes it.
 ///
 /// Build the scope with [execute] and [onError], then trigger execution with [run].
 ///

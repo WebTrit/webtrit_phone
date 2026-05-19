@@ -510,7 +510,7 @@ void workManagerDispatcher() {
       }).run();
 
       logger.info('Task result: $taskSucceeded');
-      return taskSucceeded; // false → WorkManager retries
+      return taskSucceeded; // false - WorkManager retries
     } catch (e, st) {
       logger.severe('Unhandled WorkManager task error', e, st);
       // Return `false` so WorkManager can retry according to its backoff policy.
