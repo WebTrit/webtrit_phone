@@ -35,8 +35,8 @@ class IsolateContext {
     this.deviceInfo,
     this.packageInfo,
     this.appLabelsProvider,
-    required this.nativeLogForwarder,
-    required this.appPath,
+    this.nativeLogForwarder,
+    this.appPath,
   });
 
   /// Required - credentials for signaling auth. Throws on failure.
@@ -48,8 +48,12 @@ class IsolateContext {
   final DeviceInfo? deviceInfo;
   final PackageInfo? packageInfo;
   final AppMetadataProvider? appLabelsProvider;
-  final NativeLogForwarder nativeLogForwarder;
-  final AppPath appPath;
+
+  /// Nullable - best-effort. Null when [appPath] is unavailable.
+  final NativeLogForwarder? nativeLogForwarder;
+
+  /// Nullable - best-effort. Null when filesystem path is unavailable.
+  final AppPath? appPath;
 
   static Future<IsolateContext> init() async {
     final secureStorage = await SecureStorageImpl.init();
@@ -83,11 +87,10 @@ class IsolateContext {
       Logger.root.warning('IsolateContext: AppLogger init failed, continuing without remote logging', e, st);
     }
 
-    final appPath = await AppPath.init();
-    final nativeLogForwarder = NativeLogForwarder(
-      nativeLogFilePath: appPath.nativeLogFilePath,
-      logger: Logger('callkeep'),
-    )..start();
+    final appPath = await _tryInit(AppPath.init, 'AppPath');
+    final nativeLogForwarder = appPath != null
+        ? (NativeLogForwarder(nativeLogFilePath: appPath.nativeLogFilePath, logger: Logger('callkeep'))..start())
+        : null;
 
     return IsolateContext(
       secureStorage: secureStorage,
@@ -118,15 +121,15 @@ class PushIsolateContext extends IsolateContext {
   PushIsolateContext({
     required super.secureStorage,
     required this.incomingCallTypeRepository,
-    required super.nativeLogForwarder,
     required this.appCertificates,
-    required super.appPath,
+    required this.localPushRepository,
+    super.nativeLogForwarder,
+    super.appPath,
     super.remoteConfigService,
     super.appInfo,
     super.deviceInfo,
     super.packageInfo,
     super.appLabelsProvider,
-    required this.localPushRepository,
     this.appDatabase,
     this.callLogsRepository,
   });
@@ -153,11 +156,16 @@ class PushIsolateContext extends IsolateContext {
     final appCertificates = await AppCertificates.init();
 
     // Phase 2 - best-effort: failures are isolated, flow continues with nulls.
-    Logger.root.info('IsolateDatabase.connectOrCreate call from PushIsolateContext.init');
-    final appDatabase = await _tryInit(
-      () => IsolateDatabase.connectOrCreate(directoryPath: base.appPath.applicationDocumentsPath),
-      'AppDatabase',
-    );
+    AppDatabase? appDatabase;
+    if (base.appPath != null) {
+      Logger.root.info('IsolateDatabase.connectOrCreate call from PushIsolateContext.init');
+      appDatabase = await _tryInit(
+        () => IsolateDatabase.connectOrCreate(directoryPath: base.appPath!.applicationDocumentsPath),
+        'AppDatabase',
+      );
+    } else {
+      Logger.root.warning('PushIsolateContext: AppPath unavailable - skipping DB init');
+    }
 
     final localPushRepository = LocalPushRepositoryFLNImpl();
     final callLogsRepository = appDatabase != null ? CallLogsRepository(appDatabase: appDatabase) : null;
@@ -180,7 +188,7 @@ class PushIsolateContext extends IsolateContext {
   }
 
   Future<void> dispose() async {
-    await nativeLogForwarder.dispose();
+    await nativeLogForwarder?.dispose();
     await appDatabase?.close();
   }
 }

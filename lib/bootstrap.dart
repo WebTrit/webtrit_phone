@@ -374,14 +374,17 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
       time: DateTime.now(),
     );
 
-    await AppDatabaseScope.useOrNull(
-      directoryPath: _isolateContext!.appPath.applicationDocumentsPath,
-      action: (db) async {
-        final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: db);
-        await repo.set(activeMessagePush);
-      },
-      onError: (e, st) => logger.warning('MessagePush DB write failed: $e'),
-    );
+    final appPath = _isolateContext!.appPath;
+    if (appPath != null) {
+      await AppDatabaseScope.useOrNull(
+        directoryPath: appPath.applicationDocumentsPath,
+        action: (db) async {
+          final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: db);
+          await repo.set(activeMessagePush);
+        },
+        onError: (e, st) => logger.warning('MessagePush DB write failed: $e'),
+      );
+    }
   }
 }
 
@@ -391,8 +394,11 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 /// when multiple isolates (e.g., background FCM and main app) access the database
 /// concurrently. If any error occurs, the display name from the push payload is returned.
 Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, Logger logger) async {
+  final appPath = _isolateContext!.appPath;
+  if (appPath == null) return appPush.call.displayName;
+
   return await AppDatabaseScope.useOrNull(
-        directoryPath: _isolateContext!.appPath.applicationDocumentsPath,
+        directoryPath: appPath.applicationDocumentsPath,
         onError: (e, st) {
           logger.severe(
             'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
