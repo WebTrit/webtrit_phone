@@ -205,6 +205,12 @@ class ContactsRepository
   }
 
   Stream<Contact?> watchContactByPhoneNumber(String number) async* {
+    // Remember nsnPart to avoid re-calculating it for each subscription update.
+    String? nsnPart;
+
+    // Stub to indicate that NSN is invalid for this number
+    const invalidNsnStub = '-1';
+
     await for (var data in _appDatabase.contactsDao.watchContactByPhoneNumber(number)) {
       // In case if exact phone number is not found try to find by national significant number (NSN)
       //
@@ -215,10 +221,10 @@ class ContactsRepository
       // In these cases we need to find contact by national significant number `0507259336`.
       // To do it we verify if that number is truly valid full number and only than extract NSN part.
       //
-      // Also check length to reduce libphonenumbers evaluation
+      // Also check length to reduce unnecessary libphonenumbers evaluation
       if (data == null && number.length >= 6) {
-        final nsnPart = number.nationalPhoneIfValid;
-        if (nsnPart != null && nsnPart != number) {
+        nsnPart ??= (number.nationalPhoneIfValid ?? invalidNsnStub);
+        if (nsnPart != invalidNsnStub) {
           data = await _appDatabase.contactsDao.getContactByPhoneMatchedEnding(nsnPart);
         }
       }
