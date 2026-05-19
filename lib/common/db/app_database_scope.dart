@@ -20,6 +20,12 @@ class DatabaseScope {
   final String _directoryPath;
   void Function(Object, StackTrace)? _onError;
   Future<void> Function(AppDatabase db)? _action;
+  Duration _timeout = const Duration(seconds: 10);
+
+  DatabaseScope withTimeout(Duration timeout) {
+    _timeout = timeout;
+    return this;
+  }
 
   DatabaseScope onError(void Function(Object, StackTrace) handler) {
     _onError = handler;
@@ -38,7 +44,7 @@ class DatabaseScope {
       Logger.root.info('DatabaseScope - opening connection');
       db = await IsolateDatabase.connectOrCreate(directoryPath: _directoryPath);
       Logger.root.info('DatabaseScope - running (time: ${DateTime.now().toIso8601String()})');
-      await _action!(db);
+      await _action!(db).timeout(_timeout);
       Logger.root.info('DatabaseScope - completed (time: ${DateTime.now().toIso8601String()})');
     } catch (e, s) {
       Logger.root.severe('DatabaseScope - error: $e', e, s);
