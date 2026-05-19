@@ -24,22 +24,32 @@ abstract final class AppDatabaseScope {
     final db = await IsolateDatabase.connectOrCreate(directoryPath: directoryPath, dbName: dbName);
     T? result;
     Object? error;
+    StackTrace? errorStackTrace;
+    var succeeded = false;
     try {
       Logger.root.info('AppDatabaseScope.use - running action (time: ${DateTime.now().toIso8601String()})');
 
       /// Run the action with a timeout to prevent hanging indefinitely if the database is locked or unresponsive.
       result = await action(db).timeout(timeout);
+      succeeded = true;
       Logger.root.info('AppDatabaseScope.use - action completed (time: ${DateTime.now().toIso8601String()})');
     } catch (e, s) {
       Logger.root.severe('AppDatabaseScope.use - error during action execution: $e', e, s);
       error = e;
+      errorStackTrace = s;
     }
     Logger.root.info('AppDatabaseScope.use - closing database connection (time: ${DateTime.now().toIso8601String()})');
 
     /// Ensure the database connection is closed even if the action throws an error.
     /// Before last change 17.04.2026, with finaly block, the connection was not closed if action threw an error, which could lead to resource leaks and locked database files.
     await db.close();
-    return result ?? (throw error ?? Exception('Unknown error in AppDatabaseScope.use'));
+    if (!succeeded) {
+      throw Error.throwWithStackTrace(
+        error ?? Exception('Unknown error in AppDatabaseScope.use'),
+        errorStackTrace ?? StackTrace.current,
+      );
+    }
+    return result as T;
   }
 
   /// Runs [action] within a database scope.
