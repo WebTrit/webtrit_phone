@@ -55,6 +55,12 @@ class IntegrationTestEnvironmentConfig {
 
   static const CROSS_CALL_SLEEP_SECONDS__NAME = 'WEBTRIT_APP_TEST_CROSS_CALL_SLEEP_SECONDS';
   static const CROSS_CALL_SLEEP_SECONDS = int.fromEnvironment(CROSS_CALL_SLEEP_SECONDS__NAME, defaultValue: 10);
+
+  static const PJSUA_SERVER_HOST__NAME = 'WEBTRIT_APP_TEST_PJSUA_SERVER_HOST';
+  static const PJSUA_SERVER_HOST = String.fromEnvironment(PJSUA_SERVER_HOST__NAME, defaultValue: '10.0.2.2');
+
+  static const PJSUA_SERVER_PORT__NAME = 'WEBTRIT_APP_TEST_PJSUA_SERVER_PORT';
+  static const PJSUA_SERVER_PORT = int.fromEnvironment(PJSUA_SERVER_PORT__NAME, defaultValue: 7788);
 }
 
 enum LoginMethod { email, otp, password }
