@@ -117,7 +117,6 @@ class ContactTile extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(child: contentColumn),
                 const SizedBox(width: 4),
-                // TileMenuButton(onTap: showMenuPopup),
               ],
             ),
           ),
