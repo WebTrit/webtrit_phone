@@ -17,7 +17,6 @@ class ContactTile extends StatelessWidget {
     this.smart = false,
     this.onTap,
     this.onLongPress,
-    this.onMessagePressed,
     this.presenceInfo,
     this.dialogInfo,
   });
@@ -29,13 +28,13 @@ class ContactTile extends StatelessWidget {
   final bool smart;
   final GestureTapCallback? onTap;
   final GestureLongPressCallback? onLongPress;
-  final GestureTapCallback? onMessagePressed;
   final List<PresenceInfo>? presenceInfo;
   final List<DialogInfo>? dialogInfo;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     final colorScheme = theme.colorScheme;
     final contentColor = colorScheme.onSurface;
 
@@ -81,28 +80,49 @@ class ContactTile extends StatelessWidget {
       );
     }
 
-    return ListTile(
-      contentPadding: const EdgeInsets.only(left: 16.0),
-      leading: LeadingAvatar(
-        username: displayName,
-        thumbnail: thumbnail,
-        thumbnailUrl: thumbnailUrl,
-        registered: registered,
-        smart: smart,
-        presenceInfo: presenceInfo,
-        dialogInfo: dialogInfo,
+    final contentColumn = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(title, maxLines: subtitle != null ? 1 : 2, overflow: TextOverflow.ellipsis, style: textTheme.titleMedium),
+        if (subtitle != null) subtitle,
+      ],
+    );
+
+    final leading = LeadingAvatar(
+      username: displayName,
+      thumbnail: thumbnail,
+      thumbnailUrl: thumbnailUrl,
+      registered: registered,
+      smart: smart,
+      presenceInfo: presenceInfo,
+      dialogInfo: dialogInfo,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      child: Material(
+        color: colorScheme.surface.withAlpha(25),
+        borderRadius: BorderRadius.circular(16),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          splashColor: colorScheme.secondary.withAlpha(50),
+          onTap: onTap,
+          onLongPress: onLongPress,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8, right: 0, top: 8, bottom: 8),
+            child: Row(
+              children: [
+                leading,
+                const SizedBox(width: 8),
+                Expanded(child: contentColumn),
+                const SizedBox(width: 4),
+                // TileMenuButton(onTap: showMenuPopup),
+              ],
+            ),
+          ),
+        ),
       ),
-      title: Text(title),
-      subtitle: subtitle,
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (onMessagePressed != null)
-            IconButton(splashRadius: 24, icon: const Icon(Icons.messenger_outline), onPressed: onMessagePressed),
-        ],
-      ),
-      onTap: onTap,
-      onLongPress: onLongPress,
     );
   }
 }
