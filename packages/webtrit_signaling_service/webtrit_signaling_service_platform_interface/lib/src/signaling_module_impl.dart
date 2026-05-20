@@ -22,6 +22,7 @@ typedef SignalingClientFactory =
       required String tenantId,
       required String token,
       required Duration connectionTimeout,
+      required Duration wsPingInterval,
       required TrustedCertificates certs,
       required bool force,
     });
@@ -36,6 +37,7 @@ Future<WebtritSignalingClient> _defaultClientFactory({
   required String tenantId,
   required String token,
   required Duration connectionTimeout,
+  required Duration wsPingInterval,
   required TrustedCertificates certs,
   required bool force,
 }) {
@@ -45,6 +47,7 @@ Future<WebtritSignalingClient> _defaultClientFactory({
     token,
     force,
     connectionTimeout: connectionTimeout,
+    pingInterval: wsPingInterval,
     certs: certs,
   );
 }
@@ -88,6 +91,8 @@ SignalingModule createSignalingModule(SignalingServiceConfig config) {
 /// - [connectionTimeout] -- how long to wait for the initial WebSocket handshake.
 /// - [reconnectDelay] -- delay hint emitted in [SignalingConnectionFailed] and
 ///   [SignalingDisconnected] events; consumers use it to schedule reconnects.
+/// - [wsPingInterval] -- interval for WebSocket protocol-level ping frames; helps detect
+///   zombie TCP connections (e.g. after a network switch on iOS).
 /// - [clientFactory] -- override for testing; defaults to [WebtritSignalingClient.connect].
 class SignalingModuleImpl implements SignalingModule {
   SignalingModuleImpl({
@@ -97,6 +102,7 @@ class SignalingModuleImpl implements SignalingModule {
     required this.trustedCertificates,
     this.connectionTimeout = const Duration(seconds: 10),
     this.reconnectDelay = const Duration(seconds: 3),
+    this.wsPingInterval = WebtritSignalingClient.defaultWsPingInterval,
     SignalingClientFactory? clientFactory,
   }) : _clientFactory = clientFactory ?? _defaultClientFactory;
 
@@ -106,6 +112,7 @@ class SignalingModuleImpl implements SignalingModule {
   final TrustedCertificates trustedCertificates;
   final Duration connectionTimeout;
   final Duration reconnectDelay;
+  final Duration wsPingInterval;
   final SignalingClientFactory _clientFactory;
 
   // sync: true ensures events are delivered to existing listeners in the same
@@ -298,6 +305,7 @@ class SignalingModuleImpl implements SignalingModule {
           tenantId: tenantId,
           token: token,
           connectionTimeout: connectionTimeout,
+          wsPingInterval: wsPingInterval,
           certs: trustedCertificates,
           force: true,
         );
@@ -436,7 +444,7 @@ class SignalingModuleImpl implements SignalingModule {
   /// - null -- do not reconnect (protocol error or intentional close)
   Duration? _reconnectDelay(SignalingDisconnectCode code) {
     if (code == SignalingDisconnectCode.controllerForceAttachClose) return Duration.zero;
-    if (code == SignalingDisconnectCode.protocolError) return null;
+    //if (code == SignalingDisconnectCode.protocolError) return null;
     return reconnectDelay;
   }
 

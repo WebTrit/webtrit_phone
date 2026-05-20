@@ -99,6 +99,7 @@ class _ControlledFactory {
         required String tenantId,
         required String token,
         required Duration connectionTimeout,
+        required Duration wsPingInterval,
         required TrustedCertificates certs,
         required bool force,
       }) {
@@ -135,6 +136,7 @@ SignalingModuleImpl _buildModuleFromClients(List<WebtritSignalingClient> clients
           required String tenantId,
           required String token,
           required Duration connectionTimeout,
+          required Duration wsPingInterval,
           required TrustedCertificates certs,
           required bool force,
         }) async => clients[index++],

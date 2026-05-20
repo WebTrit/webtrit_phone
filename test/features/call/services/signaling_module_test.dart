@@ -93,6 +93,7 @@ SignalingClientFactory _successFactory(_FakeSignalingClient client) {
     required String tenantId,
     required String token,
     required Duration connectionTimeout,
+    required Duration wsPingInterval,
     required TrustedCertificates certs,
     required bool force,
   }) async => client;
@@ -105,6 +106,7 @@ SignalingClientFactory _failingFactory(Object error) {
     required String tenantId,
     required String token,
     required Duration connectionTimeout,
+    required Duration wsPingInterval,
     required TrustedCertificates certs,
     required bool force,
   }) async => throw error;
@@ -120,6 +122,7 @@ class _ControlledFactory {
         required String tenantId,
         required String token,
         required Duration connectionTimeout,
+        required Duration wsPingInterval,
         required TrustedCertificates certs,
         required bool force,
       }) {
@@ -258,6 +261,7 @@ void main() {
         required String tenantId,
         required String token,
         required Duration connectionTimeout,
+        required Duration wsPingInterval,
         required TrustedCertificates certs,
         required bool force,
       }) async {
@@ -623,6 +627,7 @@ void main() {
         required String tenantId,
         required String token,
         required Duration connectionTimeout,
+        required Duration wsPingInterval,
         required TrustedCertificates certs,
         required bool force,
       }) async {
@@ -786,6 +791,7 @@ void main() {
         required String tenantId,
         required String token,
         required Duration connectionTimeout,
+        required Duration wsPingInterval,
         required TrustedCertificates certs,
         required bool force,
       }) async {
@@ -1227,6 +1233,7 @@ void main() {
         required String tenantId,
         required String token,
         required Duration connectionTimeout,
+        required Duration wsPingInterval,
         required TrustedCertificates certs,
         required bool force,
       }) async {
@@ -1399,6 +1406,7 @@ void main() {
           required String tenantId,
           required String token,
           required Duration connectionTimeout,
+          required Duration wsPingInterval,
           required TrustedCertificates certs,
           required bool force,
         }) async => client,

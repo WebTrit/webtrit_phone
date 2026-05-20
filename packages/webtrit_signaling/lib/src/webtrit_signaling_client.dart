@@ -54,6 +54,8 @@ class WebtritSignalingClient {
 
   static const defaultExecuteTransactionTimeoutDuration = Duration(milliseconds: 10000);
 
+  static const defaultWsPingInterval = Duration(seconds: 10);
+
   static int _createCounter = 0;
 
   @visibleForTesting
@@ -85,6 +87,7 @@ class WebtritSignalingClient {
     String token,
     bool force, {
     Duration? connectionTimeout,
+    Duration pingInterval = defaultWsPingInterval,
     TrustedCertificates certs = TrustedCertificates.empty,
   }) async {
     final tenantUrl = buildTenantUrl(baseUrl, tenantId);
@@ -99,6 +102,7 @@ class WebtritSignalingClient {
       signalingUrl,
       protocols: [subprotocol],
       connectionTimeout: connectionTimeout,
+      pingInterval: pingInterval,
       certs: certs,
     );
     final wsc = createWebSocketChannel(ws);
