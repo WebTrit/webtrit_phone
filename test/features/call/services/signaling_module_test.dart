@@ -519,11 +519,11 @@ void main() {
       expect(disc.recommendedReconnectDelay, Duration.zero);
     });
 
-    test('protocolError (1002) -> recommendedReconnectDelay is null', () async {
+    test('protocolError (1002) -> recommendedReconnectDelay is kSignalingClientReconnectDelay', () async {
       final disc = await disconnectWith(SignalingDisconnectCode.protocolError.code);
 
       expect(disc.knownCode, SignalingDisconnectCode.protocolError);
-      expect(disc.recommendedReconnectDelay, isNull);
+      expect(disc.recommendedReconnectDelay, kSignalingClientReconnectDelay);
     });
 
     test('normalClosure (1000) -> recommendedReconnectDelay is kSignalingClientReconnectDelay', () async {
