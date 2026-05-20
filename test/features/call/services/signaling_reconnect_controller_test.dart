@@ -706,6 +706,52 @@ void main() {
         expect(module.connectCalls, 1);
       });
     });
+
+    test('notifyNetworkAvailable — disconnects stale connection when isConnected=true', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        module.isConnected = true;
+        final controller = SignalingReconnectController(signalingModule: module);
+        addTearDown(controller.dispose);
+
+        controller.notifyNetworkAvailable();
+
+        expect(module.disconnectCalls, 1);
+      });
+    });
+
+    test('notifyNetworkAvailable — skips disconnect when isConnected=false', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        module.isConnected = false;
+        final controller = SignalingReconnectController(signalingModule: module);
+        addTearDown(controller.dispose);
+
+        controller.notifyNetworkAvailable();
+
+        expect(module.disconnectCalls, 0);
+      });
+    });
+
+    test('notifyNetworkAvailable — disconnect happens before reconnect timer fires', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        addTearDown(module.dispose);
+        module.isConnected = true;
+        final controller = SignalingReconnectController(signalingModule: module);
+        addTearDown(controller.dispose);
+
+        controller.notifyNetworkAvailable();
+        expect(module.disconnectCalls, 1); // disconnect fires synchronously before timer
+        expect(module.connectCalls, 0); // connect not yet called
+
+        module.isConnected = false; // simulate disconnect completing
+        async.elapse(kSignalingClientFastReconnectDelay);
+        expect(module.connectCalls, 1); // connect fires after timer
+      });
+    });
   });
 
   // -------------------------------------------------------------------------
