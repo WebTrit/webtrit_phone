@@ -190,20 +190,26 @@ class SignalingReconnectController {
   }
 
   /// Call when network becomes available ([ConnectivityResult] != none).
-  Future<void> notifyNetworkAvailable() async {
+  void notifyNetworkAvailable() {
     _logger.fine('notifyNetworkAvailable');
     _networkActive = true;
     _networkJustRestored = true;
     // On a network interface change (e.g. WiFi to LTE) the existing TCP connection
     // may appear alive at the socket level while packets are no longer delivered
-    // (zombie connection). Explicitly disconnecting here forces the WebSocket to
-    // reconnect on the new interface immediately, rather than waiting for the
-    // WS ping timeout (~20s) to detect the dead connection. On platforms where
-    // the OS already closes stale sockets on interface change (e.g. Android),
+    // (zombie connection). Disconnecting here forces the WebSocket to reconnect on
+    // the new interface without waiting for the ping timeout (~20s). On platforms
+    // where the OS already closes stale sockets on interface change (e.g. Android),
     // isConnected will already be false and this call is a no-op.
+    //
+    // Fire-and-forget: disconnect() sets _client=null and _connectToken=null
+    // synchronously before its first suspension point, so connect() called by the
+    // timer below proceeds immediately without waiting for TCP teardown. Awaiting
+    // disconnect() would block this handler for up to ~75s on a zombie TCP
+    // (OS-level TCP retransmission timeout) since the close frame cannot be
+    // delivered on the dead interface.
     if (_module.isConnected) {
       _logger.fine('notifyNetworkAvailable: disconnecting stale connection to reconnect on new interface');
-      await _module.disconnect();
+      _module.disconnect().ignore();
     }
     _scheduleReconnect(kSignalingClientFastReconnectDelay);
   }

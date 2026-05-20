@@ -516,7 +516,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (connectivityState == ConnectivityResult.none) {
       _reconnectController.notifyNetworkUnavailable();
     } else {
-      await _reconnectController.notifyNetworkAvailable();
+      _reconnectController.notifyNetworkAvailable();
     }
 
     WebRTC.initialize(options: webRtcOptionsBuilder?.build());
@@ -541,7 +541,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (connectivityResult == ConnectivityResult.none) {
       _reconnectController.notifyNetworkUnavailable();
     } else {
-      await _reconnectController.notifyNetworkAvailable();
+      _reconnectController.notifyNetworkAvailable();
 
       // Restart ICE for all active calls to trigger faster recovery from connectivity loss.
       //
