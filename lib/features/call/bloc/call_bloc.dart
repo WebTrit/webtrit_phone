@@ -698,11 +698,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onSignalingClientEventConnected(_SignalingClientEventConnected event, Emitter<CallState> emit) async {
-    // Renegotiate active calls if there was reconnect
+    // Renegotiate active calls on every signaling reconnect.
     //
-    // Important to do in case if there was connection loss for a while and then webrtc detects network loss and restarts ice e.g
-    // user turn off all network interfaces >> __onPeerConnectionEventIceConnectionStateChanged >> RTCIceConnectionStateFailed >> peerConnection.restartIce() >> onRenegotiationNeeded >> __onMutationRenegotiate >> if(!signalingConnected) return;
-    // user turn on network interfaces >> _onSignalingClientEventConnected >> safeRenegotiate
+    // Covers two paths that both leave the PC in stable state waiting for a fresh offer:
+    //
+    // Path 1 - ICE failure while signaling was down:
+    //   network loss >> RTCIceConnectionStateFailed >> restartIce() >> onRenegotiationNeeded
+    //   >> __onMutationRenegotiate >> signalingConnected==false >> early return (skipped)
+    //   >> signaling restored >> here >> renegotiate() dispatched
+    //
+    // Path 2 - signaling dropped mid-renegotiation (Fix B rollback):
+    //   onRenegotiationNeeded >> __onMutationRenegotiate >> setLocalDescription(offer)
+    //   >> signaling disconnect >> WebtritSignalingTransactionTerminateByDisconnectException
+    //   >> setLocalDescription('rollback') >> PC back to stable
+    //   >> signaling restored >> here >> renegotiate() dispatched
+    //
+    // This is the sole re-trigger mechanism for Path 2 and covers all reconnect causes
+    // (network switch, ping timeout, keepalive timeout, transient WS error) — not just
+    // connectivity events.
     for (final call in state.activeCalls.where((c) => c.processingStatus == CallProcessingStatus.connected)) {
       _logger.warning('__onSignalingClientEventConnected: triggering safe renegotiation for call ${call.callId}');
       add(_CallMutationEvent.renegotiate(call.callId, call.line));
@@ -2967,7 +2980,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         );
         try {
           await pc.setLocalDescription(RTCSessionDescription('', 'rollback'));
-          return; // signaling reconnect will re-trigger renegotiation
+          // __onSignalingClientEventConnected dispatches renegotiate() for every
+          // connected call on each signaling reconnect, so the new offer will be
+          // created and sent once the connection is restored.
+          return;
         } catch (rollbackError, rollbackSt) {
           _logger.warning('__onMutationRenegotiate: rollback failed, terminating call', rollbackError, rollbackSt);
         }
