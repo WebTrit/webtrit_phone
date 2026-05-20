@@ -2958,6 +2958,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         throw result;
       }
     } catch (er, st) {
+      if (er is WebtritSignalingTransactionTerminateByDisconnectException &&
+          pc.connectionState != RTCPeerConnectionState.RTCPeerConnectionStateFailed &&
+          pc.connectionState != RTCPeerConnectionState.RTCPeerConnectionStateClosed) {
+        _logger.warning(
+          '__onMutationRenegotiate: signaling disconnected during renegotiation, rolling back '
+          '(callId=${e.callId}, pcState=${pc.connectionState})',
+        );
+        try {
+          await pc.setLocalDescription(RTCSessionDescription('', 'rollback'));
+          return; // signaling reconnect will re-trigger renegotiation
+        } catch (rollbackError, rollbackSt) {
+          _logger.warning('__onMutationRenegotiate: rollback failed, terminating call', rollbackError, rollbackSt);
+        }
+      }
       callErrorReporter.handle(er, st, '__onMutationRenegotiate failed for callId=${e.callId}');
       _peerConnectionManager.completeError(activeCall.callId, er, st);
       add(_ResetStateEvent.completeCall(activeCall.callId));
