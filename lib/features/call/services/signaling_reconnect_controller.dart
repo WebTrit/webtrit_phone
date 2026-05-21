@@ -179,15 +179,10 @@ class SignalingReconnectController {
   /// When [hasActiveCalls] is true the app-active guard is bypassed so that
   /// reconnects triggered by [SignalingConnectionFailed] or an unexpected
   /// [SignalingDisconnected] can still fire during a background call.
-  /// When [hasActiveCalls] is false and the app is not active, disconnects
-  /// immediately - the call ended while backgrounded so signaling is no
-  /// longer needed.
+  /// The disconnect decision on call end belongs to the caller (e.g. [CallBloc]).
   void notifyHasActiveCalls({required bool hasActiveCalls}) {
     _logger.fine('notifyHasActiveCalls hasActiveCalls=$hasActiveCalls');
     _hasActiveCalls = hasActiveCalls;
-    if (!hasActiveCalls && !_appActive) {
-      _disconnect();
-    }
   }
 
   /// Call when network becomes available ([ConnectivityResult] != none).
