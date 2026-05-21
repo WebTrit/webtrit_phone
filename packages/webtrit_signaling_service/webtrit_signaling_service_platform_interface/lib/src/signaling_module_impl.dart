@@ -234,7 +234,6 @@ class SignalingModuleImpl implements SignalingModule {
     final client = _client;
     if (client == null) {
       _logger.info('disconnect: _client already null (hadInFlightConnect=$hadInFlightConnect) — skipping TCP teardown');
-      if (hadInFlightConnect) _logger.fine('disconnect: in-flight connect cancelled');
       return;
     }
     _logger.info('disconnect: clearing _client and initiating TCP teardown');
