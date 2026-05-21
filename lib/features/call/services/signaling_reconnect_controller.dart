@@ -142,7 +142,10 @@ class SignalingReconnectController {
 
   /// Call when [AppLifecycleState.paused] or [AppLifecycleState.detached] fires.
   ///
-  /// Disconnects immediately when there are no active calls.
+  /// When [hasActiveCalls] is false, marks the app as inactive and resets
+  /// reconnect state so the first post-resume failure goes through the
+  /// consecutive-failure threshold. Does not disconnect the module — the
+  /// service must stay alive in the background to receive incoming calls.
   /// When [hasActiveCalls] is true the signaling connection is kept alive so
   /// the ongoing call is not interrupted, and reconnects remain enabled so
   /// a dropped connection during a call can recover.

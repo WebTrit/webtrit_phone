@@ -36,8 +36,9 @@ final _logger = Logger('WebtritSignalingService');
 ///   - [connect] -- starts the underlying platform service. Idempotent: if a
 ///     start is already in progress or the hub is already connected, the call
 ///     is a no-op.
-///   - [disconnect] -- intentional no-op; the service stays connected while
-///     the app is backgrounded so incoming calls arrive via WebSocket.
+///   - [disconnect] -- resets internal connection state so the next [connect]
+///     call triggers a fresh WebSocket via [start]; does not send a close
+///     frame so the service may stay alive in the background.
 ///   - [execute] -- queues requests while not connected; flushes on connect.
 ///   - [dispose] -- cancels the events subscription, fails all queued
 ///     requests, and releases platform resources.
