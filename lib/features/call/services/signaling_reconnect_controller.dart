@@ -138,7 +138,10 @@ class SignalingReconnectController {
 
   /// Call when [AppLifecycleState.paused] or [AppLifecycleState.detached] fires.
   ///
-  /// Disconnects immediately when there are no active calls.
+  /// When [hasActiveCalls] is false, marks the app as inactive and resets
+  /// reconnect state so the first post-resume failure goes through the
+  /// consecutive-failure threshold. The connection is kept alive so incoming
+  /// calls can arrive via WebSocket while the app is backgrounded.
   /// When [hasActiveCalls] is true the signaling connection is kept alive so
   /// the ongoing call is not interrupted, and reconnects remain enabled so
   /// a dropped connection during a call can recover.
@@ -146,12 +149,13 @@ class SignalingReconnectController {
     _logger.fine('notifyAppPaused hasActiveCalls=$hasActiveCalls');
     if (!hasActiveCalls) {
       _appActive = false;
-      // Intentional disconnect on app pause — treat the next reconnect as a
-      // fresh attempt, not a "session lost" event. Without this reset the
-      // first post-unlock connect failure would bypass the consecutive-failure
-      // threshold and immediately fire onConnectionFailed (WT-1221).
+      // Reset state so the first post-resume failure goes through the
+      // consecutive-failure threshold instead of firing immediately (WT-1221).
+      // Do not call _module.disconnect() here - the service must stay alive
+      // in the background to receive incoming calls via WebSocket.
       _wasConnected = false;
-      _disconnect();
+      _reconnectTimer?.cancel();
+      _consecutiveFailures = 0;
     }
   }
 
