@@ -100,7 +100,7 @@ class SignalingReconnectController {
 
   // Set to true by notifyNetworkAvailable and consumed by the first timer that
   // fires after it. Allows a one-shot opportunistic reconnect when the network
-  // is restored while the app is backgrounded with no known active calls —
+  // is restored while the app is backgrounded with no known active calls -
   // the case where an FCM push was dropped during the offline window and
   // the only way to discover a pending incoming call is to reconnect and read
   // the handshake state from Core.
@@ -137,14 +137,25 @@ class SignalingReconnectController {
       _wasConnected = false;
     }
     _consecutiveFailures = 0;
-    _scheduleReconnect(kSignalingClientFastReconnectDelay, force: true);
+    // Skip state guards on resume - the existing connection may be stale after
+    // Doze or a background kill, so connect unconditionally.
+    if (!_reconnectEnabled) {
+      _logger.info('notifyAppResumed: skipped - reconnect disabled');
+      return;
+    }
+    _reconnectTimer?.cancel();
+    _reconnectTimer = Timer(kSignalingClientFastReconnectDelay, () {
+      if (_disposed) return;
+      _logger.info('notifyAppResumed timer: calling connect');
+      _module.connect();
+    });
   }
 
   /// Call when [AppLifecycleState.paused] or [AppLifecycleState.detached] fires.
   ///
   /// When [hasActiveCalls] is false, marks the app as inactive and resets
   /// reconnect state so the first post-resume failure goes through the
-  /// consecutive-failure threshold. Does not disconnect the module — the
+  /// consecutive-failure threshold. Does not disconnect the module - the
   /// service must stay alive in the background to receive incoming calls.
   /// When [hasActiveCalls] is true the signaling connection is kept alive so
   /// the ongoing call is not interrupted, and reconnects remain enabled so
@@ -167,17 +178,18 @@ class SignalingReconnectController {
   /// state - e.g. when a new active call appears while the app is in the
   /// background and the signaling client is not connected.
   ///
-  /// Uses [Duration.zero] so the reconnect fires in the next event-loop tick.
-  /// Callers (outgoing call start, incoming call answer from push) need the
-  /// WebSocket ready as fast as possible; any delay here directly adds latency
-  /// before the SDP offer reaches the server.
-  ///
-  /// Spurious "connection failed" toasts on transient failures are suppressed
-  /// by the consecutive-failure threshold, not by this delay, so reducing the
-  /// delay here is safe.
+  /// Calls [SignalingModule.connect] directly without scheduling a timer or
+  /// applying state guards. The caller has already evaluated all conditions
+  /// and made the decision to reconnect.
   void notifyForceReconnect() {
     _logger.fine('notifyForceReconnect');
-    _scheduleReconnect(Duration.zero, force: true);
+    if (!_reconnectEnabled || _disposed) {
+      _logger.info('notifyForceReconnect: skipped - reconnect disabled or disposed');
+      return;
+    }
+    _reconnectTimer?.cancel();
+    _logger.info('notifyForceReconnect: calling connect immediately');
+    _module.connect();
   }
 
   /// Call when network becomes available ([ConnectivityResult] != none).
@@ -278,7 +290,7 @@ class SignalingReconnectController {
   // Internal helpers
   // ---------------------------------------------------------------------------
 
-  void _scheduleReconnect(Duration delay, {bool force = false}) {
+  void _scheduleReconnect(Duration delay) {
     if (!_reconnectEnabled) return;
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
@@ -290,27 +302,27 @@ class SignalingReconnectController {
       _logger.info(
         '_scheduleReconnect timer fired after $delay - '
         'appActive=$_appActive networkActive=$_networkActive '
-        'force=$force connected=${_module.isConnected} '
+        'connected=${_module.isConnected} '
         'networkJustRestored=$networkJustRestored',
       );
 
-      if (!force && !_appActive && !_hasActiveCalls) {
+      if (!_appActive && !_hasActiveCalls) {
         if (!networkJustRestored) {
           _logger.info('_scheduleReconnect: skipped - app not active and no active calls');
           return;
         }
         _logger.info('_scheduleReconnect: network-restore opportunistic reconnect');
       }
-      if (!force && !_networkActive) {
+      if (!_networkActive) {
         _logger.info('_scheduleReconnect: skipped - network unavailable');
         return;
       }
-      if (!force && _module.isConnected) {
+      if (_module.isConnected) {
         _logger.info('_scheduleReconnect: skipped - already connected');
         return;
       }
 
-      _logger.info('_scheduleReconnect: calling connect (force=$force isConnected=${_module.isConnected})');
+      _logger.info('_scheduleReconnect: calling connect (isConnected=${_module.isConnected})');
       _module.connect();
     });
   }

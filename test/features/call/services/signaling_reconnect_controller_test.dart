@@ -726,8 +726,6 @@ void main() {
         controller.notifyAppPaused(hasActiveCalls: false);
         controller.notifyForceReconnect();
 
-        // Must fire immediately, not after kSignalingClientFastReconnectDelay.
-        async.elapse(Duration.zero);
         expect(module.connectCalls, 1);
       });
     });
@@ -743,8 +741,6 @@ void main() {
         controller.notifyNetworkUnavailable();
         controller.notifyForceReconnect();
 
-        // Must fire immediately, not after kSignalingClientFastReconnectDelay.
-        async.elapse(Duration.zero);
         expect(module.connectCalls, 1);
       });
     });
@@ -761,7 +757,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SignalingReconnectController - notifyForceReconnect timing', () {
-    test('reconnects immediately (Duration.zero), not after kSignalingClientFastReconnectDelay', () {
+    test('reconnects synchronously without scheduling a timer', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
         addTearDown(module.dispose);
@@ -771,10 +767,7 @@ void main() {
 
         controller.notifyForceReconnect();
 
-        // connect() must be scheduled for the next event-loop iteration via a
-        // Duration.zero timer, not after the full kSignalingClientFastReconnectDelay = 1 s.
-        expect(module.connectCalls, 0, reason: 'timer not yet fired synchronously');
-        async.elapse(Duration.zero);
+        // connect() is called synchronously - no timer is involved.
         expect(module.connectCalls, 1);
       });
     });
@@ -808,8 +801,7 @@ void main() {
         // Outgoing call started — signaling needed urgently.
         controller.notifyForceReconnect();
 
-        // connect() must fire immediately, not after another full second.
-        async.elapse(Duration.zero);
+        // connect() fires synchronously.
         expect(module.connectCalls, 1, reason: 'force reconnect for an outgoing call must be immediate');
 
         // The notifyAppResumed timer was cancelled by notifyForceReconnect;
@@ -841,7 +833,6 @@ void main() {
         controller.notifyAppPaused(hasActiveCalls: false);
         controller.notifyAppResumed();
         controller.notifyForceReconnect();
-        async.elapse(Duration.zero);
         expect(module.connectCalls, 1);
 
         // Transient DNS failure on the first attempt (e.g. post-unlock glitch).
