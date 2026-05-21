@@ -473,7 +473,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SignalingReconnectController - app lifecycle', () {
-    test('notifyAppPaused without active calls — disconnects and skips reconnect', () {
+    test('notifyAppPaused without active calls — does not disconnect, skips reconnect', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
         addTearDown(module.dispose);
@@ -482,7 +482,7 @@ void main() {
         addTearDown(controller.dispose);
 
         controller.notifyAppPaused(hasActiveCalls: false);
-        expect(module.disconnectCalls, 1);
+        expect(module.disconnectCalls, 0);
 
         module.emit(_failed());
         async.elapse(const Duration(minutes: 1));
@@ -869,12 +869,13 @@ void main() {
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
 
-        // App goes to background, signaling disconnects intentionally.
+        // App goes to background — timer cancelled, state reset, no disconnect.
         controller.notifyAppPaused(hasActiveCalls: false);
-        expect(module.disconnectCalls, 1);
+        expect(module.disconnectCalls, 0);
 
         // Network drops and restores while offline (e.g. WiFi toggle).
         controller.notifyNetworkUnavailable();
+        expect(module.disconnectCalls, 1);
         controller.notifyNetworkAvailable();
 
         // Must connect after the fast-reconnect delay.

@@ -144,10 +144,16 @@ class WebtritSignalingService implements SignalingModule {
     _startPendingTimer = null;
   }
 
-  /// No-op -- intentional. The service stays connected while the app is
-  /// backgrounded so incoming calls arrive via WebSocket without push.
+  /// Resets the connected state so the next [connect] call proceeds past the
+  /// [_isConnected] guard and triggers a fresh WebSocket via [start].
+  ///
+  /// Does not send a close frame -- the platform tears down the existing
+  /// module on the next [start] call, which handles cleanup.
   @override
-  Future<void> disconnect() async {}
+  Future<void> disconnect() async {
+    _isConnected = false;
+    _clearStartPending();
+  }
 
   @override
   Future<void>? execute(Request request) {
