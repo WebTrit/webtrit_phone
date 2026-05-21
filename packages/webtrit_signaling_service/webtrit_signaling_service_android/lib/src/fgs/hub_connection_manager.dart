@@ -84,9 +84,7 @@ class HubConnectionManager {
 
   Future<void>? execute(Request request) => _module?.execute(request);
 
-  Future<void> disconnect() async {
-    await _module?.disconnect();
-  }
+  Future<void> disconnect() => _module?.disconnect() ?? Future.value();
 
   /// Starts or restarts the hub-init polling loop.
   ///

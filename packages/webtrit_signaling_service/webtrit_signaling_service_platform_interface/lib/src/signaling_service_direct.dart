@@ -162,9 +162,7 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
   Future<void> setCallEventHandler(Function callback) async {}
 
   @override
-  Future<void> disconnect() async {
-    await _module?.disconnect();
-  }
+  Future<void> disconnect() => _module?.disconnect() ?? Future.value();
 
   @override
   Future<void> stopService() async {
