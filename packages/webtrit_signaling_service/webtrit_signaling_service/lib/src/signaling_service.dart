@@ -36,8 +36,9 @@ final _logger = Logger('WebtritSignalingService');
 ///   - [connect] -- starts the underlying platform service. Idempotent: if a
 ///     start is already in progress or the hub is already connected, the call
 ///     is a no-op.
-///   - [disconnect] -- intentional no-op; the service stays connected while
-///     the app is backgrounded so incoming calls arrive via WebSocket.
+///   - [disconnect] -- closes the active WebSocket connection by delegating
+///     to the platform layer. [isConnected] resets via the [SignalingDisconnected]
+///     event rather than eagerly.
 ///   - [execute] -- queues requests while not connected; flushes on connect.
 ///   - [dispose] -- cancels the events subscription, fails all queued
 ///     requests, and releases platform resources.
@@ -144,18 +145,16 @@ class WebtritSignalingService implements SignalingModule {
     _startPendingTimer = null;
   }
 
-  /// Resets [_isConnected] and delegates to [SignalingServicePlatform.disconnect]
-  /// to close the active WebSocket connection.
+  /// Closes the active WebSocket connection by delegating to
+  /// [SignalingServicePlatform.disconnect].
   ///
-  /// Does not clear [_startPending] - if a [start] is already in progress,
-  /// the next [connect] call will be held by the [_startPending] guard until
-  /// the in-flight start emits a terminal event, preventing overlapping
-  /// [start] calls on Android.
+  /// [_isConnected] is reset to false via the [SignalingDisconnected] event
+  /// that the platform emits once the connection is closed. Does not clear
+  /// [_startPending] - if a [start] is already in progress, the next [connect]
+  /// call will be held by the [_startPending] guard until the in-flight start
+  /// emits a terminal event, preventing overlapping [start] calls on Android.
   @override
-  Future<void> disconnect() async {
-    _isConnected = false;
-    await SignalingServicePlatform.instance.disconnect();
-  }
+  Future<void> disconnect() => SignalingServicePlatform.instance.disconnect();
 
   @override
   Future<void>? execute(Request request) {

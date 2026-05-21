@@ -251,17 +251,12 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('WebtritSignalingService -- disconnect()', () {
-    test('delegates to platform.disconnect and resets isConnected', () async {
+    test('delegates to platform.disconnect', () async {
       final service = WebtritSignalingService(config: _kConfig);
-      platform.inject(SignalingConnected());
-      await Future<void>.delayed(Duration.zero);
-      expect(service.isConnected, isTrue);
-
       await service.disconnect();
 
       expect(platform.disconnectCount, 1);
       expect(platform.disposeCount, 0);
-      expect(service.isConnected, isFalse);
       await service.dispose();
     });
   });
