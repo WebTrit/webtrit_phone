@@ -57,6 +57,7 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   final List<SignalingServiceMode> updatedModes = [];
   final List<Function> callEventHandles = [];
   final List<SignalingModuleFactory> moduleFactories = [];
+  int disconnectCount = 0;
   int disposeCount = 0;
   int stopServiceCount = 0;
   int restoreServiceCount = 0;
@@ -95,6 +96,9 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
     disposeCount++;
     // NOT closed -- mirrors real platform singleton that survives logout/login cycles.
   }
+
+  @override
+  Future<void> disconnect() async => disconnectCount++;
 
   @override
   Future<void> stopService() async => stopServiceCount++;
@@ -243,15 +247,21 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // disconnect() — no-op
+  // disconnect()
   // -------------------------------------------------------------------------
 
   group('WebtritSignalingService -- disconnect()', () {
-    test('is a no-op and does not call platform.dispose', () async {
+    test('delegates to platform.disconnect and resets isConnected', () async {
       final service = WebtritSignalingService(config: _kConfig);
+      platform.inject(SignalingConnected());
+      await Future<void>.delayed(Duration.zero);
+      expect(service.isConnected, isTrue);
+
       await service.disconnect();
 
+      expect(platform.disconnectCount, 1);
       expect(platform.disposeCount, 0);
+      expect(service.isConnected, isFalse);
       await service.dispose();
     });
   });
