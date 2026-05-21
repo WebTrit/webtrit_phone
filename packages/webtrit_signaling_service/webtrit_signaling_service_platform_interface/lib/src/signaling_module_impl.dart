@@ -282,9 +282,7 @@ class SignalingModuleImpl implements SignalingModule {
     try {
       final existing = _client;
       if (existing != null) {
-        _logger.warning(
-          '_connectAsync: found existing _client — must pre-disconnect before connecting (this may block on zombie TCP)',
-        );
+        _logger.warning('_connectAsync: found existing _client — pre-disconnecting before new connect');
         _client = null;
         final preDisconnectStart = DateTime.now();
         try {
