@@ -149,10 +149,11 @@ class SignalingReconnectController {
     _logger.fine('notifyAppPaused hasActiveCalls=$hasActiveCalls');
     if (!hasActiveCalls) {
       _appActive = false;
-      // Reset state so the first post-resume failure goes through the
-      // consecutive-failure threshold instead of firing immediately (WT-1221).
       // Do not call _module.disconnect() here - the service must stay alive
       // in the background to receive incoming calls via WebSocket.
+      // Clear _wasConnected so background connection drops (e.g. Doze) go
+      // through the consecutive-failure threshold on resume rather than
+      // triggering an immediate onConnectionFailed toast (WT-1221).
       _wasConnected = false;
       _reconnectTimer?.cancel();
       _consecutiveFailures = 0;
