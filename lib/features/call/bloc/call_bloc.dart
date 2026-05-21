@@ -144,6 +144,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       onConnectionFailed: _handleConnectionFailed,
       onConnectionPresenceChanged: (isAvailable) =>
           _logger.info('signaling presence changed: isAvailable=$isAvailable'),
+      hasActiveCalls: () => state.isActive,
     );
 
     _foregroundCallPushSubscription = foregroundCallPushSignal?.listen(
@@ -262,7 +263,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final connected = _signalingModule.isConnected;
 
       if (appInactive) {
-        _reconnectController.notifyHasActiveCalls(hasActiveCalls: hasActiveCalls);
         if (hasActiveCalls && !connected) {
           _reconnectController.notifyForceReconnect();
         }

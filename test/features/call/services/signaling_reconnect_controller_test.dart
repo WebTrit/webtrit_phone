@@ -572,9 +572,11 @@ void main() {
         final module = _FakeSignalingModule();
         addTearDown(module.dispose);
         int notifyCount = 0;
+        var activeCall = false;
         final controller = SignalingReconnectController(
           signalingModule: module,
           onConnectionFailed: (_) => notifyCount++,
+          hasActiveCalls: () => activeCall,
           notifyAfterConsecutiveFailures: 3,
           reconnectEnabled: false,
         );
@@ -585,7 +587,7 @@ void main() {
 
         // Brief background while a call is active (e.g. user swipes away and back).
         controller.notifyAppPaused(hasActiveCalls: true);
-        controller.notifyHasActiveCalls(hasActiveCalls: true);
+        activeCall = true;
 
         // App comes back to foreground during the call.
         controller.notifyAppResumed();

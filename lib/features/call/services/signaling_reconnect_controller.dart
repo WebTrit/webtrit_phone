@@ -64,12 +64,14 @@ class SignalingReconnectController {
     required SignalingModule signalingModule,
     void Function(SignalingFailureInfo)? onConnectionFailed,
     void Function(bool isAvailable)? onConnectionPresenceChanged,
+    bool Function()? hasActiveCalls,
     int notifyAfterConsecutiveFailures = 2,
     bool reconnectEnabled = true,
   }) : assert(notifyAfterConsecutiveFailures >= 1, 'notifyAfterConsecutiveFailures must be >= 1'),
        _module = signalingModule,
        _onConnectionFailed = onConnectionFailed,
        _onConnectionPresenceChanged = onConnectionPresenceChanged,
+       _hasActiveCalls = hasActiveCalls,
        _notifyThreshold = notifyAfterConsecutiveFailures,
        _reconnectEnabled = reconnectEnabled {
     _subscription = _module.events.listen(_onEvent);
@@ -78,6 +80,7 @@ class SignalingReconnectController {
   final SignalingModule _module;
   final void Function(SignalingFailureInfo)? _onConnectionFailed;
   final void Function(bool isAvailable)? _onConnectionPresenceChanged;
+  final bool Function()? _hasActiveCalls;
   final int _notifyThreshold;
   final bool _reconnectEnabled;
 
@@ -91,8 +94,9 @@ class SignalingReconnectController {
   int _consecutiveFailures = 0;
   bool _appActive = true;
   bool _networkActive = true;
-  bool _hasActiveCalls = false;
   bool _disposed = false;
+
+  bool get hasActiveCalls => _hasActiveCalls?.call() ?? false;
 
   // Set to true by notifyNetworkAvailable and consumed by the first timer that
   // fires after it. Allows a one-shot opportunistic reconnect when the network
@@ -129,7 +133,7 @@ class SignalingReconnectController {
     // Without active calls this reset prevents a persistent-mode background
     // reconnect (replayed via hub session buffer) from skipping the
     // consecutive-failure threshold on the first post-resume failure.
-    if (!_hasActiveCalls) {
+    if (!hasActiveCalls) {
       _wasConnected = false;
     }
     _consecutiveFailures = 0;
@@ -171,18 +175,6 @@ class SignalingReconnectController {
   void notifyForceReconnect() {
     _logger.fine('notifyForceReconnect');
     _scheduleReconnect(Duration.zero, force: true);
-  }
-
-  /// Call when active-call presence changes while the app may be in the
-  /// background.
-  ///
-  /// When [hasActiveCalls] is true the app-active guard is bypassed so that
-  /// reconnects triggered by [SignalingConnectionFailed] or an unexpected
-  /// [SignalingDisconnected] can still fire during a background call.
-  /// The disconnect decision on call end belongs to the caller (e.g. [CallBloc]).
-  void notifyHasActiveCalls({required bool hasActiveCalls}) {
-    _logger.fine('notifyHasActiveCalls hasActiveCalls=$hasActiveCalls');
-    _hasActiveCalls = hasActiveCalls;
   }
 
   /// Call when network becomes available ([ConnectivityResult] != none).
@@ -229,7 +221,7 @@ class SignalingReconnectController {
           _logger.fine('_onEvent: connection lost after established session - notifying immediately');
           _wasConnected = false;
           _consecutiveFailures = 0;
-          if (_appActive || _hasActiveCalls) {
+          if (_appActive || hasActiveCalls) {
             _onConnectionFailed?.call((knownCode: null, systemCode: null, systemReason: null));
           } else {
             _logger.info('_onEvent: suppressing notification - app inactive, no active calls');
@@ -240,7 +232,7 @@ class SignalingReconnectController {
           _logger.fine('_onEvent: connection failed (consecutive=$_consecutiveFailures)');
           if (_consecutiveFailures == _notifyThreshold) {
             _logger.info('_onEvent: notifying - consecutive failures reached threshold ($_notifyThreshold)');
-            if (_appActive || _hasActiveCalls) {
+            if (_appActive || hasActiveCalls) {
               _onConnectionFailed?.call((knownCode: null, systemCode: null, systemReason: null));
             } else {
               _logger.info('_onEvent: suppressing notification - app inactive, no active calls');
@@ -259,7 +251,7 @@ class SignalingReconnectController {
         final wasEstablished = _wasConnected;
         _wasConnected = false;
         _consecutiveFailures = 0;
-        if (wasEstablished && (_appActive || _hasActiveCalls)) {
+        if (wasEstablished && (_appActive || hasActiveCalls)) {
           _logger.fine('_onEvent: unexpected disconnect - notifying immediately');
           _onConnectionFailed?.call((knownCode: knownCode, systemCode: code, systemReason: reason));
         } else if (!wasEstablished) {
@@ -299,7 +291,7 @@ class SignalingReconnectController {
         'networkJustRestored=$networkJustRestored',
       );
 
-      if (!force && !_appActive && !_hasActiveCalls) {
+      if (!force && !_appActive && !hasActiveCalls) {
         if (!networkJustRestored) {
           _logger.info('_scheduleReconnect: skipped - app not active and no active calls');
           return;
