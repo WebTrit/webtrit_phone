@@ -146,12 +146,13 @@ class SignalingReconnectController {
     _logger.fine('notifyAppPaused hasActiveCalls=$hasActiveCalls');
     if (!hasActiveCalls) {
       _appActive = false;
-      // Intentional disconnect on app pause — treat the next reconnect as a
-      // fresh attempt, not a "session lost" event. Without this reset the
-      // first post-unlock connect failure would bypass the consecutive-failure
-      // threshold and immediately fire onConnectionFailed (WT-1221).
+      // Reset state so the first post-resume failure goes through the
+      // consecutive-failure threshold instead of firing immediately (WT-1221).
+      // Do not call _module.disconnect() here -- the service must stay alive
+      // in the background to receive incoming calls via WebSocket.
       _wasConnected = false;
-      _disconnect();
+      _reconnectTimer?.cancel();
+      _consecutiveFailures = 0;
     }
   }
 
