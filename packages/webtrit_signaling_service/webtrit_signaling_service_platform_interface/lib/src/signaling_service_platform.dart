@@ -70,6 +70,15 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   /// Must be called before [start].
   Future<void> setModuleFactory(SignalingModuleFactory factory);
 
+  /// Gracefully closes the current WebSocket connection without stopping the
+  /// service. The next [start] call will open a fresh connection.
+  ///
+  /// On platforms without a background service (e.g. iOS) this closes the
+  /// connection in the calling isolate directly. On Android persistent mode
+  /// this sends a disconnect command to the Foreground Service hub.
+  /// No-op when there is no active connection.
+  Future<void> disconnect() async {}
+
   /// Stops the service and releases all resources.
   Future<void> dispose();
 

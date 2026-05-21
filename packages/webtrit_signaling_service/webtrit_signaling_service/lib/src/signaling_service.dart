@@ -145,16 +145,17 @@ class WebtritSignalingService implements SignalingModule {
     _startPendingTimer = null;
   }
 
-  /// Resets [_isConnected] so the next [connect] call proceeds past the
-  /// [_isConnected] guard and triggers a fresh WebSocket via [start].
+  /// Resets [_isConnected] and delegates to [SignalingServicePlatform.disconnect]
+  /// to close the active WebSocket connection.
   ///
-  /// Does not send a close frame and does not clear [_startPending] —
-  /// if a [start] is already in progress, the next [connect] call will
-  /// be held by the [_startPending] guard until the in-flight start emits
-  /// a terminal event, preventing overlapping [start] calls on Android.
+  /// Does not clear [_startPending] - if a [start] is already in progress,
+  /// the next [connect] call will be held by the [_startPending] guard until
+  /// the in-flight start emits a terminal event, preventing overlapping
+  /// [start] calls on Android.
   @override
   Future<void> disconnect() async {
     _isConnected = false;
+    await SignalingServicePlatform.instance.disconnect();
   }
 
   @override
