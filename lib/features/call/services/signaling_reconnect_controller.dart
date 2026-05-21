@@ -191,7 +191,7 @@ class SignalingReconnectController {
 
   /// Call when network becomes available ([ConnectivityResult] != none).
   void notifyNetworkAvailable() {
-    _logger.fine('notifyNetworkAvailable');
+    _logger.info('notifyNetworkAvailable: isConnected=${_module.isConnected}');
     _networkActive = true;
     _networkJustRestored = true;
     _scheduleReconnect(kSignalingClientFastReconnectDelay);
@@ -199,7 +199,7 @@ class SignalingReconnectController {
 
   /// Call when network is lost ([ConnectivityResult.none]).
   void notifyNetworkUnavailable() {
-    _logger.fine('notifyNetworkUnavailable');
+    _logger.info('notifyNetworkUnavailable: isConnected=${_module.isConnected}');
     _networkActive = false;
     _disconnect();
     _emitPresence(false);
@@ -319,6 +319,7 @@ class SignalingReconnectController {
         return;
       }
 
+      _logger.info('_scheduleReconnect: calling connect (force=$force isConnected=${_module.isConnected})');
       _module.connect();
     });
   }

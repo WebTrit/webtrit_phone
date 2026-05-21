@@ -217,9 +217,10 @@ class SignalingModuleImpl implements SignalingModule {
       return;
     }
     if (_connectToken != null) {
-      _logger.fine('connect: skipped — already connecting or connected');
+      _logger.info('connect: skipped — already connecting or connected (connectToken set)');
       return;
     }
+    _logger.info('connect: starting new connect attempt (isConnected=$isConnected)');
     final token = _connectToken = Object();
     _eventBuffer.clear();
     unawaited(_connectAsync(token));
@@ -232,9 +233,10 @@ class SignalingModuleImpl implements SignalingModule {
 
     final client = _client;
     if (client == null) {
-      if (hadInFlightConnect) _logger.fine('disconnect: in-flight connect cancelled');
+      _logger.info('disconnect: _client already null (hadInFlightConnect=$hadInFlightConnect) — skipping TCP teardown');
       return;
     }
+    _logger.info('disconnect: clearing _client and initiating TCP teardown');
     _client = null;
     _intentionalDisconnect = true;
     _disconnectAck = Completer<void>();
@@ -279,12 +281,16 @@ class SignalingModuleImpl implements SignalingModule {
     try {
       final existing = _client;
       if (existing != null) {
+        _logger.warning('_connectAsync: found existing _client — pre-disconnecting before new connect');
         _client = null;
+        final preDisconnectStart = DateTime.now();
         try {
           await existing.disconnect();
         } catch (e, s) {
           _logger.warning('_connectAsync pre-disconnect error', e, s);
         }
+        final preDisconnectMs = DateTime.now().difference(preDisconnectStart).inMilliseconds;
+        _logger.info('_connectAsync: pre-disconnect completed in ${preDisconnectMs}ms');
       }
 
       if (_connectToken != connectToken || _disposed) return;

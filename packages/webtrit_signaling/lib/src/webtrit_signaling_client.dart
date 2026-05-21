@@ -297,7 +297,9 @@ class WebtritSignalingClient {
   //
 
   void _startKeepaliveTimer() {
-    _keepaliveTimer = Timer(_keepaliveInterval ?? Duration(seconds: 30), _onKeepalive);
+    final interval = _keepaliveInterval ?? const Duration(seconds: 30);
+    _logger.fine('$_id keepalive timer scheduled: $interval');
+    _keepaliveTimer = Timer(interval, _onKeepalive);
   }
 
   void _stopKeepaliveTimer() {
@@ -306,10 +308,12 @@ class WebtritSignalingClient {
 
   void _restartKeepaliveTimer() {
     _stopKeepaliveTimer();
+    _logger.fine('$_id keepalive timer restarted');
     _startKeepaliveTimer();
   }
 
   void _onKeepalive() async {
+    _logger.fine('$_id keepalive firing');
     try {
       final elapsed = await _executeKeepaliveTransaction(defaultExecuteTransactionTimeoutDuration);
       _logger.finest('$_id handshake keepalive latency: $elapsed');
