@@ -36,8 +36,10 @@ final _logger = Logger('WebtritSignalingService');
 ///   - [connect] -- starts the underlying platform service. Idempotent: if a
 ///     start is already in progress or the hub is already connected, the call
 ///     is a no-op.
-///   - [disconnect] -- intentional no-op; the service stays connected while
-///     the app is backgrounded so incoming calls arrive via WebSocket.
+///   - [disconnect] -- closes the active WebSocket connection by delegating
+///     to the platform layer. [isConnected] resets eagerly on
+///     [SignalingDisconnecting] - before the platform awaits the TCP
+///     close-handshake, which may hang on a dead network interface.
 ///   - [execute] -- queues requests while not connected; flushes on connect.
 ///   - [dispose] -- cancels the events subscription, fails all queued
 ///     requests, and releases platform resources.
@@ -45,7 +47,7 @@ final _logger = Logger('WebtritSignalingService');
 /// Static setup (call once during app bootstrap before creating instances):
 ///   - [setModuleFactory] -- registers the [SignalingModule] factory for
 ///     the background isolate.
-///   - [setIncomingCallHandler] -- registers the incoming call callback for
+///   - [setCallEventHandler] -- registers the call-event callback for
 ///     background handling.
 ///   - [updateMode] -- switches the service lifecycle mode.
 class WebtritSignalingService implements SignalingModule {
@@ -56,22 +58,7 @@ class WebtritSignalingService implements SignalingModule {
   }) : _config = config,
        _mode = mode,
        _startPendingTimeout = startPendingTimeout {
-    _serviceEventsSub = SignalingServicePlatform.instance.events.listen((event) {
-      switch (event) {
-        case SignalingConnected():
-          _isConnected = true;
-          _clearStartPending();
-          unawaited(
-            _requestQueue.flush(execute: SignalingServicePlatform.instance.execute, isActive: () => _isConnected),
-          );
-        case SignalingDisconnected():
-        case SignalingConnectionFailed():
-          _isConnected = false;
-          _clearStartPending();
-        default:
-          break;
-      }
-    });
+    _serviceEventsSub = SignalingServicePlatform.instance.events.listen(_onServiceEvent, onDone: _onServiceEventsDone);
   }
 
   final SignalingServiceConfig _config;
@@ -159,10 +146,18 @@ class WebtritSignalingService implements SignalingModule {
     _startPendingTimer = null;
   }
 
-  /// No-op -- intentional. The service stays connected while the app is
-  /// backgrounded so incoming calls arrive via WebSocket without push.
+  /// Closes the active WebSocket connection by delegating to
+  /// [SignalingServicePlatform.disconnect].
+  ///
+  /// [_isConnected] is reset to false via the [SignalingDisconnecting] event
+  /// that the platform emits synchronously inside [disconnect] - before the
+  /// [await client.disconnect()] suspension point where a zombie TCP
+  /// close-handshake may hang indefinitely. Does not clear [_startPending] -
+  /// if a [start] is already in progress, the next [connect] call is still
+  /// held by the [_startPending] guard until the in-flight start emits a
+  /// terminal event, preventing overlapping [start] calls on Android.
   @override
-  Future<void> disconnect() async {}
+  Future<void> disconnect() => SignalingServicePlatform.instance.disconnect();
 
   @override
   Future<void>? execute(Request request) {
@@ -195,6 +190,34 @@ class WebtritSignalingService implements SignalingModule {
     _requestQueue.removeTerminatingMark(callId);
   }
 
+  void _onServiceEvent(SignalingModuleEvent event) {
+    switch (event) {
+      case SignalingDisconnecting():
+        // Reset before the platform awaits the TCP close-handshake,
+        // which may hang indefinitely on a dead network interface.
+        _isConnected = false;
+      case SignalingConnected():
+        _isConnected = true;
+        _clearStartPending();
+        unawaited(
+          _requestQueue.flush(execute: SignalingServicePlatform.instance.execute, isActive: () => _isConnected),
+        );
+      case SignalingDisconnected():
+      case SignalingConnectionFailed():
+        _isConnected = false;
+        _clearStartPending();
+      default:
+        break;
+    }
+  }
+
+  void _onServiceEventsDone() {
+    _logger.severe(
+      '_serviceEventsSub: stream completed — this WebtritSignalingService instance '
+      'will never receive SignalingConnected; _isConnected stays false forever',
+    );
+  }
+
   @override
   Future<void> dispose() async {
     _isDisposed = true;
@@ -220,13 +243,13 @@ class WebtritSignalingService implements SignalingModule {
   static Future<void> setModuleFactory(SignalingModuleFactory factory) =>
       SignalingServicePlatform.instance.setModuleFactory(factory);
 
-  /// Registers the app-side incoming call callback for background handling.
+  /// Registers the app-side call-event callback for background handling.
   ///
   /// [callback] must be a top-level function annotated with
   /// [@pragma('vm:entry-point')]. Must be called before
   /// [WebtritSignalingService.new].
-  static Future<void> setIncomingCallHandler(Function callback) =>
-      SignalingServicePlatform.instance.setIncomingCallHandler(callback);
+  static Future<void> setCallEventHandler(Function callback) =>
+      SignalingServicePlatform.instance.setCallEventHandler(callback);
 
   /// Switches the service lifecycle mode without restarting the connection.
   static Future<void> updateMode(SignalingServiceMode mode) => SignalingServicePlatform.instance.updateMode(mode);

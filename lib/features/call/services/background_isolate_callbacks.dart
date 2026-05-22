@@ -159,36 +159,63 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
   }
 }
 
-/// Called by the [WebtritSignalingService] plugin when an incoming call
-/// arrives via the persistent foreground-service WebSocket connection.
+/// Called by the [WebtritSignalingService] plugin when a call-relevant signaling
+/// event arrives via the persistent foreground-service WebSocket connection.
 ///
 /// Runs inside the foreground-service background isolate. Must be a top-level
 /// function annotated with [@pragma('vm:entry-point')] so that [PluginUtilities]
 /// can serialise its handle.
 ///
-/// Reports the call to the Android telecom framework via [CallkeepHandle] so
-/// the system call UI is shown and the device rings. If reporting fails or
-/// times out, the error is logged and the call is silently dropped on the
-/// UI layer (the signaling session itself stays active).
+/// Handles [IncomingCallEvent] (report call to Android Telecom so the system
+/// call UI is shown) and [HangupEvent] (release the call so Telecom removes it
+/// and the notification is dismissed). Other event types are logged and ignored.
 @pragma('vm:entry-point')
-Future<void> onSignalingBackgroundIncomingCall(IncomingCallEvent event) async {
-  _logger.info('onSignalingBackgroundIncomingCall: callId=${event.callId} caller=${event.caller}');
+Future<void> onSignalingBackgroundCallEvent(Event event) async {
+  _logger.info('onSignalingBackgroundCallEvent: ${event.runtimeType}');
 
-  final error = await AndroidCallkeepServices.backgroundPushNotificationBootstrapService
-      .reportNewIncomingCall(
-        event.callId,
-        CallkeepHandle.number(event.caller),
-        displayName: event.callerDisplayName?.isEmpty == true ? null : event.callerDisplayName,
-      )
-      .timeout(
-        const Duration(seconds: 10),
-        onTimeout: () {
-          _logger.severe('onSignalingBackgroundIncomingCall: reportNewIncomingCall timed out callId=${event.callId}');
-          return null;
-        },
-      );
+  switch (event) {
+    case IncomingCallEvent():
+      // TODO: using backgroundPushNotificationBootstrapService here is a workaround -
+      // it is the push-notification bootstrap pathway and has a side effect of triggering
+      // onPushNotificationSyncCallback via IncomingCallService when the app is in the
+      // background. A guard in that callback suppresses it, but the root cause is that
+      // the FGS engine lacks a direct way to trigger the callkeep incoming-call flow
+      // without going through the push-notification machinery. A dedicated API or Pigeon
+      // channel that exposes this to the FGS context without the push-path side effects
+      // should replace this call.
+      final error = await AndroidCallkeepServices.backgroundPushNotificationBootstrapService
+          .reportNewIncomingCall(
+            event.callId,
+            CallkeepHandle.number(event.caller),
+            displayName: event.callerDisplayName?.isEmpty == true ? null : event.callerDisplayName,
+          )
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () {
+              _logger.severe('onSignalingBackgroundCallEvent: reportNewIncomingCall timed out callId=${event.callId}');
+              return null;
+            },
+          );
 
-  if (error != null) {
-    _logger.warning('onSignalingBackgroundIncomingCall: reportNewIncomingCall error=$error callId=${event.callId}');
+      if (error != null) {
+        _logger.warning('onSignalingBackgroundCallEvent: reportNewIncomingCall error=$error callId=${event.callId}');
+      }
+
+    case HangupEvent():
+      try {
+        await AndroidCallkeepServices.backgroundPushNotificationService
+            .releaseCall(event.callId)
+            .timeout(
+              const Duration(seconds: 10),
+              onTimeout: () {
+                _logger.severe('onSignalingBackgroundCallEvent: releaseCall timed out callId=${event.callId}');
+              },
+            );
+      } catch (e) {
+        _logger.warning('onSignalingBackgroundCallEvent: releaseCall error=$e callId=${event.callId}');
+      }
+
+    default:
+      _logger.warning('onSignalingBackgroundCallEvent: unhandled event ${event.runtimeType}');
   }
 }

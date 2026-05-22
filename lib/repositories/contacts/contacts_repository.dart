@@ -204,44 +204,44 @@ class ContactsRepository
     );
   }
 
-  Stream<Contact?> watchContactByPhoneNumber(String number) {
-    return _appDatabase.contactsDao.watchContactByPhoneNumber(number).map((data) {
-      if (data == null) return null;
-      return contactFromDrift(
-        data.contact,
-        phones: data.phones,
-        emails: data.emails,
-        favorites: data.favorites,
-        presenceInfo: data.presenceInfo,
-        dialogInfo: data.dialogInfo,
-      );
-    });
-  }
+  Stream<Contact?> watchContactByPhoneNumber(String number) async* {
+    // Remember nsnPart to avoid re-calculating it for each subscription update.
+    String? nsnPart;
 
-  Stream<Contact?> watchContactByPhoneNumberMatch(String number) {
-    number = number.replaceAll(RegExp(numberSanitizeRegex), '');
-    if (number.isEmpty) return Stream.value(null);
+    // Stub to indicate that NSN is invalid for this number
+    const invalidNsnStub = '-1';
 
-    // For short numbers(services numbers, extensions) do exact match only
-    // to avoid mismatches like matching "111" to "001234567111"
-    if (number.length <= 4) return watchContactByPhoneNumber(number);
+    await for (var data in _appDatabase.contactsDao.watchContactByPhoneNumber(number)) {
+      // In case if exact phone number is not found try to find by national significant number (NSN)
+      //
+      // Case 1: if user has local contact like '0507259336', but after call PBX automatically appends country code `+380`
+      // and CDR record becomes `+380507259336`, but local contact number stays `0507259336`.
+      // Case 2: if user just called using full international number `+380507259336` from keypad but local contact saved as `0507259336`.
+      //
+      // In these cases we need to find contact by national significant number `0507259336`.
+      // To do it we verify if that number is truly valid full number and only than extract NSN part.
+      //
+      // Also check length to reduce unnecessary libphonenumbers evaluation
+      if (data == null && number.length >= 6) {
+        nsnPart ??= (number.nationalPhoneIfValid ?? invalidNsnStub);
+        if (nsnPart != invalidNsnStub) {
+          data = await _appDatabase.contactsDao.getContactByPhoneMatchedEnding(nsnPart);
+        }
+      }
 
-    // Try to get national format if possible to improve matching
-    // for cases when contact stored in national format "123456789" but
-    // remote system automaticaly appends country code "+00123456789" after calling
-    // so only way to find such contact is to search by extract national part
-    final nationalNumber = number.nationalPhoneIfValid;
-    return _appDatabase.contactsDao.watchContactByPhoneMatchedEnding(nationalNumber ?? number).map((data) {
-      if (data == null) return null;
-      return contactFromDrift(
-        data.contact,
-        phones: data.phones,
-        emails: data.emails,
-        favorites: data.favorites,
-        presenceInfo: data.presenceInfo,
-        dialogInfo: data.dialogInfo,
-      );
-    });
+      if (data != null) {
+        yield contactFromDrift(
+          data.contact,
+          phones: data.phones,
+          emails: data.emails,
+          favorites: data.favorites,
+          presenceInfo: data.presenceInfo,
+          dialogInfo: data.dialogInfo,
+        );
+      } else {
+        yield null;
+      }
+    }
   }
 
   /// Synchronizes a list of external contacts.

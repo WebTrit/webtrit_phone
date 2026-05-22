@@ -1,7 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:intl/intl.dart';
 
@@ -12,12 +9,12 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../recents.dart';
 
-class RecentTile extends StatefulWidget {
+class RecentTile extends StatelessWidget {
   const RecentTile({
     super.key,
     required this.recent,
     required this.callNumbers,
-    this.dateFormat,
+    required this.dateFormat,
     this.onTap,
     this.onAudioCallPressed,
     this.onVideoCallPressed,
@@ -32,7 +29,7 @@ class RecentTile extends StatefulWidget {
 
   final Recent recent;
   final List<String> callNumbers;
-  final DateFormat? dateFormat;
+  final DateFormat dateFormat;
   final Function()? onTap;
   final Function()? onAudioCallPressed;
   final Function()? onVideoCallPressed;
@@ -45,73 +42,47 @@ class RecentTile extends StatefulWidget {
   final Function(String)? onCallFrom;
 
   @override
-  State<RecentTile> createState() => _RecentTileState();
-}
-
-class _RecentTileState extends State<RecentTile> {
-  late final tileKey = GlobalKey();
-  late final dateFormat = widget.dateFormat ?? DateFormat();
-  late final callLogEntry = widget.recent.callLogEntry;
-  late final contact = widget.recent.contact;
-  late final callNumber = callLogEntry.number;
-
-  List<PopupMenuEntry> get actions => [
-    if (widget.onAudioCallPressed != null)
-      PopupMenuItem(onTap: widget.onAudioCallPressed, child: Text(context.l10n.numberActions_audioCall)),
-    if (widget.onVideoCallPressed != null)
-      PopupMenuItem(onTap: widget.onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
-    if (widget.callNumbers.length > 1)
-      for (final number in widget.callNumbers)
-        PopupMenuItem(
-          onTap: () => widget.onCallFrom?.call(number),
-          child: Text(context.l10n.numberActions_callFrom(number)),
-        ),
-    if (widget.onTransferPressed != null)
-      PopupMenuItem(onTap: widget.onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
-    if (widget.onChatPressed != null)
-      PopupMenuItem(onTap: widget.onChatPressed, child: Text(context.l10n.numberActions_chat)),
-    if (widget.onSendSmsPressed != null)
-      PopupMenuItem(onTap: widget.onSendSmsPressed, child: Text(context.l10n.numberActions_sendSms)),
-    if (widget.onViewContactPressed != null)
-      PopupMenuItem(onTap: widget.onViewContactPressed, child: Text(context.l10n.numberActions_viewContact)),
-    if (widget.onCallLogPressed != null)
-      PopupMenuItem(onTap: widget.onCallLogPressed, child: Text(context.l10n.numberActions_callLog)),
-    PopupMenuItem(
-      onTap: () {
-        Clipboard.setData(ClipboardData(text: callNumber));
-      },
-      child: Text(context.l10n.numberActions_copyNumber),
-    ),
-    if (widget.onDelete != null) PopupMenuItem(onTap: widget.onDelete, child: Text(context.l10n.numberActions_delete)),
-  ];
-
-  void onLongPress() {
-    final position = getPosition();
-    showMenu(context: context, position: position, items: actions);
-  }
-
-  RelativeRect getPosition() {
-    final RenderBox renderBox = tileKey.currentContext!.findRenderObject()! as RenderBox;
-    final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
-    final screenSize = MediaQuery.of(context).size;
-    late Offset offset = Offset(screenSize.width - 16, 16);
-    return RelativeRect.fromRect(
-      Rect.fromPoints(
-        renderBox.localToGlobal(offset, ancestor: overlay),
-        renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero) + offset, ancestor: overlay),
-      ),
-      Offset.zero & overlay.size,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final presenceParams = PresenceViewParams.of(context);
+    final callLogEntry = recent.callLogEntry;
+    final contact = recent.contact;
+    final callNumber = callLogEntry.number;
 
-    return Dismissible(
-      key: ObjectKey(widget.recent),
-      background: Container(
+    final name = switch (presenceParams.hybridPresenceSupport) {
+      true => '${recent.name} ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
+      false => recent.name,
+    };
+
+    final directionIcon = Icon(
+      callLogEntry.direction.icon(callLogEntry.isComplete),
+      size: 16,
+      color: callLogEntry.isComplete
+          ? (callLogEntry.direction == CallDirection.incoming ? Colors.blue : Colors.green)
+          : Colors.red,
+    );
+
+    final videoIcon = Icon(callLogEntry.video ? Icons.videocam : Icons.call, size: 16, color: Colors.grey);
+
+    return CallTile(
+      dismissibleObject: recent,
+      leading: LeadingAvatar(
+        username: recent.name,
+        thumbnail: contact?.thumbnail,
+        thumbnailUrl: contact?.thumbnailUrl,
+        registered: contact?.registered,
+        presenceInfo: contact?.presenceInfo,
+        dialogInfo: contact?.dialogInfo,
+      ),
+      name: name,
+      subName: callNumber,
+      subtitleLeading: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [directionIcon, const SizedBox(width: 4), videoIcon],
+      ),
+      timeLabel: dateFormat.format(callLogEntry.createdTime),
+      dismissible: true,
+      dismissBackground: Container(
         color: themeData.colorScheme.error,
         padding: const EdgeInsets.only(right: 16),
         child: const Align(alignment: Alignment.centerRight, child: Icon(Icons.delete_outline)),
@@ -121,46 +92,19 @@ class _RecentTileState extends State<RecentTile> {
         title: context.l10n.recents_DeleteConfirmDialog_title,
         content: context.l10n.recents_DeleteConfirmDialog_content,
       ),
-      onDismissed: widget.onDelete == null ? null : (direction) => widget.onDelete!(),
-      direction: DismissDirection.endToStart,
-      child: ListTile(
-        key: tileKey,
-        contentPadding: const EdgeInsets.only(left: 16, right: 16),
-        leading: LeadingAvatar(
-          username: widget.recent.name,
-          thumbnail: contact?.thumbnail,
-          thumbnailUrl: contact?.thumbnailUrl,
-          registered: contact?.registered,
-          presenceInfo: contact?.presenceInfo,
-          dialogInfo: contact?.dialogInfo,
-        ),
-        trailing: Text(dateFormat.format(callLogEntry.createdTime), style: themeData.textTheme.bodySmall),
-        title: Text(
-          switch (presenceParams.hybridPresenceSupport) {
-            true => '${widget.recent.name} ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
-            false => widget.recent.name,
-          },
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: Row(
-          children: [
-            Icon(
-              callLogEntry.direction.icon(callLogEntry.isComplete),
-              size: 16,
-              color: callLogEntry.isComplete
-                  ? (callLogEntry.direction == CallDirection.incoming ? Colors.blue : Colors.green)
-                  : Colors.red,
-            ),
-            const Text(' '),
-            Icon(callLogEntry.video ? Icons.videocam : Icons.call, size: 16, color: Colors.grey),
-            const Text(' '),
-            Flexible(child: Text(callNumber, maxLines: 1, overflow: TextOverflow.ellipsis)),
-          ],
-        ),
-        onTap: widget.onTap,
-        onLongPress: onLongPress,
-      ),
+      onDismiss: onDelete,
+      onTap: onTap,
+      callNumbers: callNumbers,
+      onAudioCallPressed: onAudioCallPressed,
+      onVideoCallPressed: onVideoCallPressed,
+      onTransferPressed: onTransferPressed,
+      onChatPressed: onChatPressed,
+      onSendSmsPressed: onSendSmsPressed,
+      onViewContactPressed: onViewContactPressed,
+      onCallLogPressed: onCallLogPressed,
+      onCallFrom: onCallFrom,
+      copyNumber: callNumber,
+      onDelete: onDelete,
     );
   }
 }

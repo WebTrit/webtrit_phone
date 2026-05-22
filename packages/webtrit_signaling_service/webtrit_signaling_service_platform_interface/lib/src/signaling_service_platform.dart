@@ -50,17 +50,17 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   /// On iOS this is a no-op.
   Future<void> updateMode(SignalingServiceMode mode);
 
-  /// Registers the app-side incoming call callback for background handling.
+  /// Registers the app-side call-event callback for background handling.
   ///
   /// [callback] must be a top-level function annotated with
-  /// [@pragma('vm:entry-point')]. It receives an [IncomingCallEvent] and is
-  /// responsible for triggering callkeep when an incoming call arrives while
-  /// the app is closed.
+  /// [@pragma('vm:entry-point')]. It receives a signaling [Event] (currently
+  /// [IncomingCallEvent] and [HangupEvent]) and is responsible for callkeep
+  /// integration when a call event arrives while the app is closed.
   ///
   /// On Android the raw callback handle is persisted via [PluginUtilities] so
   /// the foreground-service isolate can invoke it without the main isolate being
   /// alive. On iOS this is a no-op.
-  Future<void> setIncomingCallHandler(Function callback);
+  Future<void> setCallEventHandler(Function callback);
 
   /// Registers the factory used to create [SignalingModule] instances.
   ///
@@ -69,6 +69,15 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   /// for the foreground-service background isolate.
   /// Must be called before [start].
   Future<void> setModuleFactory(SignalingModuleFactory factory);
+
+  /// Gracefully closes the current WebSocket connection without stopping the
+  /// service. The next [start] call will open a fresh connection.
+  ///
+  /// On platforms without a background service (e.g. iOS) this closes the
+  /// connection in the calling isolate directly. On Android persistent mode
+  /// this sends a disconnect command to the Foreground Service hub.
+  /// No-op when there is no active connection.
+  Future<void> disconnect() async {}
 
   /// Stops the service and releases all resources.
   Future<void> dispose();

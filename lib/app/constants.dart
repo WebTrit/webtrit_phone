@@ -75,6 +75,13 @@ const kSystemNotificationsPushFeatureFlag = 'notificationsPush';
 const kSipPresenceFeatureFlag = 'sipPresence';
 const kSipDialogsFeatureFlag = 'sipDialogs';
 
+/// Key under `system-info` `adapter.custom` listing the identifier types the
+/// backend adapter accepts for OTP sign-in (e.g. `phone_number`, `email`).
+///
+/// The OTP request screen reads this to show only the inputs the backend
+/// supports; absent for older cores, where the app falls back to phone + email.
+const kOtpLoginIdentifiersCustomKey = 'otp_login_identifiers';
+
 const kSystemNotificationsTask = 'systemNotificationsTask';
 const kSystemNotificationsTaskId = 'systemNotificationsTask-id';
 

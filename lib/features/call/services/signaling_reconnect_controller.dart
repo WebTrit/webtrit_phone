@@ -138,7 +138,10 @@ class SignalingReconnectController {
 
   /// Call when [AppLifecycleState.paused] or [AppLifecycleState.detached] fires.
   ///
-  /// Disconnects immediately when there are no active calls.
+  /// When [hasActiveCalls] is false, marks the app as inactive and resets
+  /// reconnect state so the first post-resume failure goes through the
+  /// consecutive-failure threshold. The connection is kept alive so incoming
+  /// calls can arrive via WebSocket while the app is backgrounded.
   /// When [hasActiveCalls] is true the signaling connection is kept alive so
   /// the ongoing call is not interrupted, and reconnects remain enabled so
   /// a dropped connection during a call can recover.
@@ -146,12 +149,14 @@ class SignalingReconnectController {
     _logger.fine('notifyAppPaused hasActiveCalls=$hasActiveCalls');
     if (!hasActiveCalls) {
       _appActive = false;
-      // Intentional disconnect on app pause — treat the next reconnect as a
-      // fresh attempt, not a "session lost" event. Without this reset the
-      // first post-unlock connect failure would bypass the consecutive-failure
-      // threshold and immediately fire onConnectionFailed (WT-1221).
+      // Do not call _module.disconnect() here - the service must stay alive
+      // in the background to receive incoming calls via WebSocket.
+      // Clear _wasConnected so background connection drops (e.g. Doze) go
+      // through the consecutive-failure threshold on resume rather than
+      // triggering an immediate onConnectionFailed toast (WT-1221).
       _wasConnected = false;
-      _disconnect();
+      _reconnectTimer?.cancel();
+      _consecutiveFailures = 0;
     }
   }
 
@@ -191,15 +196,32 @@ class SignalingReconnectController {
 
   /// Call when network becomes available ([ConnectivityResult] != none).
   void notifyNetworkAvailable() {
-    _logger.fine('notifyNetworkAvailable');
+    _logger.info('notifyNetworkAvailable: isConnected=${_module.isConnected}');
     _networkActive = true;
     _networkJustRestored = true;
+    // On a network interface change (e.g. WiFi to LTE) the existing TCP connection
+    // may appear alive at the socket level while packets are no longer delivered
+    // (zombie connection). Disconnecting here forces the WebSocket to reconnect on
+    // the new interface without waiting for the ping timeout (~20s). On platforms
+    // where the OS already closes stale sockets on interface change (e.g. Android),
+    // isConnected will already be false and this call is a no-op.
+    //
+    // Fire-and-forget: disconnect() emits SignalingDisconnecting synchronously
+    // before any suspension point, resetting isConnected so the connect() call
+    // below proceeds without waiting for TCP teardown. Awaiting disconnect()
+    // would block this handler for up to ~75s on a zombie TCP (OS-level TCP
+    // retransmission timeout) since the close frame cannot be delivered on the
+    // dead interface.
+    if (_module.isConnected) {
+      _logger.fine('notifyNetworkAvailable: disconnecting stale connection to reconnect on new interface');
+      _module.disconnect().ignore();
+    }
     _scheduleReconnect(kSignalingClientFastReconnectDelay);
   }
 
   /// Call when network is lost ([ConnectivityResult.none]).
   void notifyNetworkUnavailable() {
-    _logger.fine('notifyNetworkUnavailable');
+    _logger.info('notifyNetworkUnavailable: isConnected=${_module.isConnected}');
     _networkActive = false;
     _disconnect();
     _emitPresence(false);
@@ -319,6 +341,7 @@ class SignalingReconnectController {
         return;
       }
 
+      _logger.info('_scheduleReconnect: calling connect (force=$force isConnected=${_module.isConnected})');
       _module.connect();
     });
   }

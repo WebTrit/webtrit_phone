@@ -25,6 +25,12 @@ class FakeAppPath implements AppPath {
   String get temporaryPath => '${_root.path}/temp';
 
   @override
+  String get logFilePath => '${_root.path}/app_logs.log';
+
+  @override
+  String get nativeLogFilePath => '${_root.path}/app_logs_native.log';
+
+  @override
   String get mediaCacheBasePath => '$temporaryPath/media_cache';
 
   /// Deletes the temporary directory and all its contents.

@@ -155,7 +155,7 @@ class _VoicemailSubtitle extends StatelessWidget {
                       : CircleIndicator(color: colorScheme.tertiary),
                 ),
         ),
-        Text(dateFormat.format(DateTime.parse(voicemail.date))),
+        Text(dateFormat.format(DateTime.parse(voicemail.date).toLocal())),
       ],
     );
   }

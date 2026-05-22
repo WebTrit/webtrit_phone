@@ -27,7 +27,7 @@ import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/features/system_notifications/services/services.dart';
 
 import 'package:webtrit_phone/features/call/call.dart'
-    show onPushNotificationSyncCallback, onSignalingBackgroundIncomingCall;
+    show onPushNotificationSyncCallback, onSignalingBackgroundCallEvent;
 
 import 'package:drift/isolate.dart';
 
@@ -137,8 +137,17 @@ Future<InstanceRegistry> bootstrap() async {
     LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled),
     () => appLabels.logLabels,
   );
-  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, path: appPath.temporaryPath)
+  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, logFilePath: appPath.logFilePath)
     ..attachToLogger(Logger.root);
+  final nativeLogForwarder = NativeLogForwarder(
+    nativeLogFilePath: appPath.nativeLogFilePath,
+    logger: Logger('callkeep'),
+  );
+  // FileSystemEntity.watch is not supported on iOS: the Dart SDK only implements
+  // it for Android/Linux (inotify), Windows, and macOS (FSEvents). Calling it on
+  // iOS throws FileSystemException("File system watching is not supported on this
+  // platform"). The Callkeep native log file also only exists on Android.
+  if (Platform.isAndroid) nativeLogForwarder.start();
 
   final appLifecycle = await AppLifecycle.initMaster();
 
@@ -172,6 +181,7 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<AppCertificates>(appCertificates);
   registry.register<AppLogger>(appLogger);
   registry.register<LogRecordsRepository>(appLoggerRepository);
+  registry.register<NativeLogForwarder>(nativeLogForwarder);
   registry.register<AppLifecycle>(appLifecycle);
   registry.register<SessionCleanupWorker>(sessionCleanupWorker);
 
@@ -234,13 +244,13 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
     logger.severe('initializeCallback failed -- push notifications may not work in background', e, s);
   }
 
-  // Registers the top-level callback invoked by the signaling background isolate when an
-  // incoming call arrives in persistent mode (app closed or backgrounded). Must be
-  // annotated @pragma('vm:entry-point').
+  // Registers the top-level callback invoked by the signaling background isolate when a
+  // call-relevant event (IncomingCallEvent, HangupEvent) arrives in persistent mode
+  // (app closed or backgrounded). Must be annotated @pragma('vm:entry-point').
   try {
-    await WebtritSignalingService.setIncomingCallHandler(onSignalingBackgroundIncomingCall);
+    await WebtritSignalingService.setCallEventHandler(onSignalingBackgroundCallEvent);
   } catch (e, s) {
-    logger.severe('setIncomingCallHandler failed -- incoming calls in persistent mode may not work', e, s);
+    logger.severe('setCallEventHandler failed -- call events in persistent mode may not work', e, s);
   }
 
   // Configures Android CallKeep to process incoming SMS messages as call triggers
@@ -279,9 +289,6 @@ Future<void> _initFirebaseMessaging() async {
     logger.info('onMessage: ${message.toMap()}');
     final appPush = AppRemotePush.fromFCM(message);
     RemotePushBroker.handleForegroundPush(appPush);
-
-    // Type of notification for testing purposes
-    _dHandleInspectPush(message.data, false);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     logger.info('onMessageOpenedApp: ${message.toMap()}');
@@ -336,9 +343,6 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 
   logger.info('onBackgroundMessage: ${message.toMap()}');
 
-  // Type of notification for testing purposes
-  _dHandleInspectPush(message.data, true);
-
   if (appPush is PendingCallPush && Platform.isAndroid) {
     // Known issue: [SqliteException] with code 5 (database is locked) may occur
     // due to concurrent database access from multiple isolates.
@@ -355,8 +359,6 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
   }
 
   if (appPush is MessagePush) {
-    final appPath = await AppPath.init();
-
     final activeMessagePush = ActiveMessagePush(
       notificationId: appPush.id,
       messageId: appPush.messageId,
@@ -366,14 +368,13 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
       time: DateTime.now(),
     );
 
-    await AppDatabaseScope.useOrNull(
-      directoryPath: appPath.applicationDocumentsPath,
-      action: (db) async {
-        final repo = ActiveMessagePushsRepositoryDriftImpl(appDatabase: db);
-        await repo.set(activeMessagePush);
-      },
-      onError: (e, st) => logger.warning('MessagePush DB write failed: $e'),
-    );
+    final appPath = _isolateContext!.appPath;
+    if (appPath != null) {
+      await DatabaseScope(appPath.applicationDocumentsPath)
+          .onError((e, _) => logger.warning('MessagePush DB write failed: $e'))
+          .execute((db) async => ActiveMessagePushsRepositoryDriftImpl(appDatabase: db).set(activeMessagePush))
+          .run();
+    }
   }
 }
 
@@ -383,30 +384,28 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 /// when multiple isolates (e.g., background FCM and main app) access the database
 /// concurrently. If any error occurs, the display name from the push payload is returned.
 Future<String> _resolveContactDisplayNameWithFallback(PendingCallPush appPush, Logger logger) async {
-  final appPath = await AppPath.init();
+  final appPath = _isolateContext!.appPath;
+  if (appPath == null) return appPush.call.displayName;
 
-  return await AppDatabaseScope.useOrNull(
-        directoryPath: appPath.applicationDocumentsPath,
-        onError: (e, st) {
-          logger.severe(
-            'Failed to resolve contact name from database for handle: ${appPush.call.handle}. '
-            'Fallback to push display name will be used.',
-            e,
-            st,
-          );
-        },
-        action: (db) async {
-          final contactsRepository = ContactsRepository(
-            appDatabase: db,
-            contactsRemoteDataSource: null,
-            contactsLocalDataSource: null,
-          );
-
-          final contact = await contactsRepository.getContactByPhoneNumber(appPush.call.handle);
-          return contact?.maybeName ?? appPush.call.displayName;
-        },
-      ) ??
-      appPush.call.displayName;
+  String? contactName;
+  await DatabaseScope(appPath.applicationDocumentsPath)
+      .onError(
+        (e, s) => logger.severe(
+          'Failed to resolve contact name for handle: ${appPush.call.handle}. Fallback to push display name.',
+          e,
+          s,
+        ),
+      )
+      .execute((db) async {
+        final contact = await ContactsRepository(
+          appDatabase: db,
+          contactsRemoteDataSource: null,
+          contactsLocalDataSource: null,
+        ).getContactByPhoneNumber(appPush.call.handle);
+        contactName = contact?.maybeName;
+      })
+      .run();
+  return contactName ?? appPush.call.displayName;
 }
 
 CallkeepIncomingCallError? _onReportIncomingCallTimeout(Logger logger) {
@@ -428,37 +427,25 @@ Future _initLocalPushs() async {
     onDidReceiveBackgroundNotificationResponse: LocalPushsBroker.handleActionReceived,
   );
 
+  await _initAndroidNotificationChannel();
+
   final launchDetails = await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
   final data = launchDetails?.notificationResponse;
   if (data != null) LocalPushsBroker.handleActionReceived(data);
 }
 
-// Debugging push notifications
-void _dHandleInspectPush(Map<String, dynamic> data, bool background) {
-  if (data.containsKey('type') && data['type'] == 'inspect-push') {
-    final title = data['title'] ?? 'Inspect Push';
-    final body =
-        "${data['body'] ?? 'This is a local notification for testing notifications'} ${background ? 'Background' : 'Foreground'}";
+/// Creates the high-importance local push channel referenced by FCM's
+/// `default_notification_channel_id` and drops the legacy default-importance
+/// channel so heads-up banners and screen wake work for local pushes.
+Future<void> _initAndroidNotificationChannel() async {
+  final androidPlugin = FlutterLocalNotificationsPlugin()
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+  if (androidPlugin == null) return;
 
-    _dShowInspectLocalPush(title: title, body: body);
-  }
-}
-
-// Debugging push notifications
-Future<void> _dShowInspectLocalPush({required String title, required String body}) async {
-  await FlutterLocalNotificationsPlugin().show(
-    0,
-    title,
-    body,
-    const NotificationDetails(
-      android: AndroidNotificationDetails(
-        'inspect_push_channel',
-        'Inspect Push Notifications',
-        channelDescription: 'Channel for debugging push notifications',
-        importance: Importance.max,
-        priority: Priority.high,
-      ),
-    ),
+  // ignore: deprecated_member_use_from_same_package
+  await androidPlugin.deleteNotificationChannel(kLegacyLocalPushChannelId);
+  await androidPlugin.createNotificationChannel(
+    const AndroidNotificationChannel(kLocalPushChannelId, kLocalPushChannelName, importance: Importance.high),
   );
 }
 
@@ -495,20 +482,17 @@ void workManagerDispatcher() {
       final appPath = await AppPath.init();
       final localPushRepo = LocalPushRepositoryFLNImpl();
 
-      final result =
-          await AppDatabaseScope.useOrNull<bool>(
-            directoryPath: appPath.applicationDocumentsPath,
-            onError: (e, st) => logger.severe('System notifications task failed', e, st),
-            action: (db) async {
-              final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
-              final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
-              return worker.execute();
-            },
-          ) ??
-          false; // return false so WorkManager can retry on DB/worker failure
+      var taskSucceeded = false;
+      await DatabaseScope(
+        appPath.applicationDocumentsPath,
+      ).onError((e, s) => logger.severe('System notifications task failed', e, s)).execute((db) async {
+        final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
+        final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
+        taskSucceeded = await worker.execute();
+      }).run();
 
-      logger.info('Task result: $result');
-      return result;
+      logger.info('Task result: $taskSucceeded');
+      return taskSucceeded; // false - WorkManager retries
     } catch (e, st) {
       logger.severe('Unhandled WorkManager task error', e, st);
       // Return `false` so WorkManager can retry according to its backoff policy.

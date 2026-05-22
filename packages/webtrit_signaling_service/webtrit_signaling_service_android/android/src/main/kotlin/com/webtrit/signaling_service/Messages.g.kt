@@ -211,13 +211,13 @@ data class PSignalingServiceStatus (
    */
   val trustedCertificatesJson: String? = null,
   /**
-   * Raw handle for the app-side incoming call callback.
+   * Raw handle for the app-side call-event callback.
    *
    * Obtained via [PluginUtilities.getCallbackHandle] in the main isolate and
-   * persisted via [PSignalingServiceHostApi.saveIncomingCallHandler].
+   * persisted via [PSignalingServiceHostApi.saveCallEventHandler].
    * 0 means no handler is registered.
    */
-  val incomingCallHandlerHandle: Long,
+  val callEventHandlerHandle: Long,
   /**
    * Raw handle for the app-side [SignalingModuleFactory] callback.
    *
@@ -234,9 +234,9 @@ data class PSignalingServiceStatus (
       val tenantId = pigeonVar_list[2] as String
       val token = pigeonVar_list[3] as String
       val trustedCertificatesJson = pigeonVar_list[4] as String?
-      val incomingCallHandlerHandle = pigeonVar_list[5] as Long
+      val callEventHandlerHandle = pigeonVar_list[5] as Long
       val moduleFactoryHandle = pigeonVar_list[6] as Long
-      return PSignalingServiceStatus(enabled, coreUrl, tenantId, token, trustedCertificatesJson, incomingCallHandlerHandle, moduleFactoryHandle)
+      return PSignalingServiceStatus(enabled, coreUrl, tenantId, token, trustedCertificatesJson, callEventHandlerHandle, moduleFactoryHandle)
     }
   }
   fun toList(): List<Any?> {
@@ -246,7 +246,7 @@ data class PSignalingServiceStatus (
       tenantId,
       token,
       trustedCertificatesJson,
-      incomingCallHandlerHandle,
+      callEventHandlerHandle,
       moduleFactoryHandle,
     )
   }
@@ -258,7 +258,7 @@ data class PSignalingServiceStatus (
       return true
     }
     val other = other as PSignalingServiceStatus
-    return MessagesPigeonUtils.deepEquals(this.enabled, other.enabled) && MessagesPigeonUtils.deepEquals(this.coreUrl, other.coreUrl) && MessagesPigeonUtils.deepEquals(this.tenantId, other.tenantId) && MessagesPigeonUtils.deepEquals(this.token, other.token) && MessagesPigeonUtils.deepEquals(this.trustedCertificatesJson, other.trustedCertificatesJson) && MessagesPigeonUtils.deepEquals(this.incomingCallHandlerHandle, other.incomingCallHandlerHandle) && MessagesPigeonUtils.deepEquals(this.moduleFactoryHandle, other.moduleFactoryHandle)
+    return MessagesPigeonUtils.deepEquals(this.enabled, other.enabled) && MessagesPigeonUtils.deepEquals(this.coreUrl, other.coreUrl) && MessagesPigeonUtils.deepEquals(this.tenantId, other.tenantId) && MessagesPigeonUtils.deepEquals(this.token, other.token) && MessagesPigeonUtils.deepEquals(this.trustedCertificatesJson, other.trustedCertificatesJson) && MessagesPigeonUtils.deepEquals(this.callEventHandlerHandle, other.callEventHandlerHandle) && MessagesPigeonUtils.deepEquals(this.moduleFactoryHandle, other.moduleFactoryHandle)
   }
 
   override fun hashCode(): Int {
@@ -268,7 +268,7 @@ data class PSignalingServiceStatus (
     result = 31 * result + MessagesPigeonUtils.deepHash(this.tenantId)
     result = 31 * result + MessagesPigeonUtils.deepHash(this.token)
     result = 31 * result + MessagesPigeonUtils.deepHash(this.trustedCertificatesJson)
-    result = 31 * result + MessagesPigeonUtils.deepHash(this.incomingCallHandlerHandle)
+    result = 31 * result + MessagesPigeonUtils.deepHash(this.callEventHandlerHandle)
     result = 31 * result + MessagesPigeonUtils.deepHash(this.moduleFactoryHandle)
     return result
   }
@@ -316,13 +316,13 @@ interface PSignalingServiceHostApi {
    */
   fun saveTrustedCertificates(certificatesJson: String?)
   /**
-   * Persist the raw callback handle for the app-side incoming call handler.
+   * Persist the raw callback handle for the app-side call-event handler.
    *
    * The handle is obtained via [PluginUtilities.getCallbackHandle] on a
    * top-level function annotated with [@pragma('vm:entry-point')].
    * Pass 0 to unregister.
    */
-  fun saveIncomingCallHandler(callbackHandle: Long)
+  fun saveCallEventHandler(callbackHandle: Long)
   /**
    * Persist the raw callback handle for the app-side [SignalingModuleFactory].
    *
@@ -430,13 +430,13 @@ interface PSignalingServiceHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.saveIncomingCallHandler$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.webtrit_signaling_service_android.PSignalingServiceHostApi.saveCallEventHandler$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val callbackHandleArg = args[0] as Long
             val wrapped: List<Any?> = try {
-              api.saveIncomingCallHandler(callbackHandleArg)
+              api.saveCallEventHandler(callbackHandleArg)
               listOf(null)
             } catch (exception: Throwable) {
               MessagesPigeonUtils.wrapError(exception)

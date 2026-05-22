@@ -3,6 +3,10 @@ package com.webtrit.app
 import android.app.Application
 import com.webtrit.callkeep.BackgroundPushNotificationIsolateBootstrapApi
 import com.webtrit.callkeep.PHostBackgroundPushNotificationIsolateBootstrapApi
+import android.util.Log
+import com.webtrit.callkeep.PHostBackgroundPushNotificationIsolateApi
+import com.webtrit.callkeep.models.CallMetadata
+import com.webtrit.callkeep.services.core.CallkeepCore
 import com.webtrit.signaling_service.SignalingForegroundService
 
 /// App-level initialization that wires together two independent Flutter plugins:
@@ -44,6 +48,53 @@ class WebtritApplication : Application() {
             PHostBackgroundPushNotificationIsolateBootstrapApi.setUp(
                 messenger,
                 BackgroundPushNotificationIsolateBootstrapApi(context),
+            )
+            // TODO: move this block into webtrit_callkeep_android - expose a single
+            //  WebtritCallkeepPlugin.setUpFgsEngine(context, messenger) entry point so
+            //  the app does not need to know about internal Pigeon channels or CallkeepCore.
+            // Register the full isolate API on the FGS engine so that releaseCall() /
+            // endCall() triggered from onSignalingBackgroundCallEvent reach a handler
+            // instead of timing out. Mirrors the CallLifecycleHandler path used in
+            // push-bound mode: Dart calls releaseCall() -> Kotlin terminates the Telecom
+            // connection via CallkeepCore, which stops the ringtone and cleans up state.
+            PHostBackgroundPushNotificationIsolateApi.setUp(
+                messenger,
+                object : PHostBackgroundPushNotificationIsolateApi {
+                    override fun releaseCall(callId: String, callback: (Result<Unit>) -> Unit) {
+                        try {
+                            CallkeepCore.instance.startDeclineCall(CallMetadata(callId = callId))
+                            callback(Result.success(Unit))
+                        } catch (e: Exception) {
+                            Log.e("WebtritApplication", "releaseCall failed for callId=$callId", e)
+                            callback(Result.failure(e))
+                        }
+                    }
+
+                    override fun endCall(callId: String, callback: (Result<Unit>) -> Unit) {
+                        try {
+                            CallkeepCore.instance.startDeclineCall(CallMetadata(callId = callId))
+                            callback(Result.success(Unit))
+                        } catch (e: Exception) {
+                            Log.e("WebtritApplication", "endCall failed for callId=$callId", e)
+                            callback(Result.failure(e))
+                        }
+                    }
+
+                    override fun endAllCalls(callback: (Result<Unit>) -> Unit) {
+                        try {
+                            CallkeepCore.instance.sendTearDownConnections()
+                            callback(Result.success(Unit))
+                        } catch (e: Exception) {
+                            Log.e("WebtritApplication", "endAllCalls failed", e)
+                            callback(Result.failure(e))
+                        }
+                    }
+
+                    override fun handoffCall(callId: String, callback: (Result<Unit>) -> Unit) {
+                        // FGS owns the WebSocket in persistent mode; handoff is not applicable.
+                        callback(Result.success(Unit))
+                    }
+                },
             )
         }
     }

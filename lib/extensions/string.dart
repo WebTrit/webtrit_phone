@@ -9,6 +9,12 @@ extension StringExtension on String {
     }
   }
 
+  /// Returns null if the string is empty, otherwise returns the string.
+  String? get nullify {
+    if (isEmpty) return null;
+    return this;
+  }
+
   String get initialism {
     final trimmed = trim();
     if (trimmed.isEmpty) {

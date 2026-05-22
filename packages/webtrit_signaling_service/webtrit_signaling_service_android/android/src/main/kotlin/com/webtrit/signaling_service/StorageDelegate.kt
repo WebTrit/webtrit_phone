@@ -13,7 +13,8 @@ object StorageDelegate {
     private const val KEY_CORE_URL = "core_url"
     private const val KEY_TENANT_ID = "tenant_id"
     private const val KEY_TOKEN = "token"
-    private const val KEY_INCOMING_CALL_HANDLER = "incoming_call_handler"
+    private const val KEY_CALL_EVENT_HANDLER = "call_event_handler"
+    private const val KEY_CALL_EVENT_HANDLER_LEGACY = "incoming_call_handler"
     private const val KEY_MODULE_FACTORY = "module_factory"
     private const val KEY_TRUSTED_CERTIFICATES = "trusted_certificates_json"
 
@@ -44,11 +45,18 @@ object StorageDelegate {
     fun getTenantId(context: Context): String = prefs(context).getString(KEY_TENANT_ID, "") ?: ""
     fun getToken(context: Context): String = prefs(context).getString(KEY_TOKEN, "") ?: ""
 
-    fun saveIncomingCallHandler(context: Context, handle: Long) =
-        prefs(context).edit().putLong(KEY_INCOMING_CALL_HANDLER, handle).apply()
+    fun saveCallEventHandler(context: Context, handle: Long) =
+        prefs(context).edit().putLong(KEY_CALL_EVENT_HANDLER, handle).apply()
 
-    fun getIncomingCallHandler(context: Context): Long =
-        prefs(context).getLong(KEY_INCOMING_CALL_HANDLER, 0L)
+    fun getCallEventHandler(context: Context): Long {
+        val p = prefs(context)
+        val handle = p.getLong(KEY_CALL_EVENT_HANDLER, 0L)
+        if (handle != 0L) return handle
+        // Fallback: read the pre-rename key written by older app versions and migrate.
+        val legacy = p.getLong(KEY_CALL_EVENT_HANDLER_LEGACY, 0L)
+        if (legacy != 0L) p.edit().putLong(KEY_CALL_EVENT_HANDLER, legacy).apply()
+        return legacy
+    }
 
     fun saveModuleFactoryHandle(context: Context, handle: Long) =
         prefs(context).edit().putLong(KEY_MODULE_FACTORY, handle).apply()

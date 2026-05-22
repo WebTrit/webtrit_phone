@@ -822,11 +822,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "main_ext_rebase_10.07.25"
-      resolved-ref: f79f8747df8ffff207a9eea45467c3ea62dd3a63
+      ref: "main_ext_rebase_06.05.26"
+      resolved-ref: "2c1964a0c96470ef67771983e775b7648fab8257"
       url: "https://github.com/WebTrit/flutter-webrtc.git"
     source: git
-    version: "0.14.3"
+    version: "1.4.1"
   formz:
     dependency: "direct main"
     description:
@@ -1125,6 +1125,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
+  logger:
+    dependency: transitive
+    description:
+      name: logger
+      sha256: "25aee487596a6257655a1e091ec2ae66bc30e7af663592cc3a27e6591e05035c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.7.0"
   logging:
     dependency: "direct main"
     description:

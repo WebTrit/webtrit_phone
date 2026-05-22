@@ -4,6 +4,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/call/extensions/extensions.dart';
 
 import 'peer_connection_factory.dart';
 import 'rtp_traffic_monitor.dart';
@@ -366,7 +367,10 @@ final class PeerConnectionManager {
   }
 
   void _onIceCandidate(RTCIceCandidate iceCandidate, PeerConnectionObserver observer, Logger logger) {
-    logger.fine(() => 'onIceCandidate candidate: $iceCandidate');
+    // Skip useless candidates to reduce traffic and logging
+    if (iceCandidate.isLoopback) return;
+
+    logger.fine(() => 'onIceCandidate: ${iceCandidate.str}');
     observer.onIceCandidate?.call(iceCandidate);
   }
 
@@ -388,17 +392,17 @@ final class PeerConnectionManager {
   }
 
   void _onRemoveStream(MediaStream mediaStream, PeerConnectionObserver observer, Logger logger) {
-    logger.fine(() => 'onRemoveStream stream: $mediaStream');
+    logger.fine(() => 'onRemoveStream stream: ${mediaStream.str}');
     observer.onRemoveStream?.call(mediaStream);
   }
 
   void _onAddTrack(MediaStream stream, MediaStreamTrack mediaTrack, PeerConnectionObserver observer, Logger logger) {
-    logger.fine(() => 'onAddTrack stream: $stream track: $mediaTrack');
+    logger.fine(() => 'onAddTrack stream: ${stream.str} track: ${mediaTrack.str}');
     observer.onAddTrack?.call(stream, mediaTrack);
   }
 
   void _onRemoveTrack(MediaStream stream, MediaStreamTrack mediaTrack, PeerConnectionObserver observer, Logger logger) {
-    logger.fine(() => 'onRemoveTrack stream: $stream track: $mediaTrack');
+    logger.fine(() => 'onRemoveTrack stream: ${stream.str} track: ${mediaTrack.str}');
     observer.onRemoveTrack?.call(stream, mediaTrack);
   }
 
@@ -413,7 +417,7 @@ final class PeerConnectionManager {
   }
 
   void _onTrack(RTCTrackEvent trackEvent, PeerConnectionObserver observer, Logger logger) {
-    logger.fine(() => 'onTrack $trackEvent');
+    logger.fine(() => 'onTrack ${trackEvent.str}');
     observer.onTrack?.call(trackEvent);
   }
 }

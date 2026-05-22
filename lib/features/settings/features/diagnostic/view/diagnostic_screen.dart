@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/features/settings/features/diagnostic/bloc/network_tester_cubit.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/agreement_status.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -136,6 +137,18 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                       );
                     },
                   ),
+                ),
+                GroupTitleListTile(titleData: context.l10n.diagnostic_network_groupTitle),
+                DiagnosticNetworkTestItem(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<NetworkTesterCubit>(),
+                        child: DiagnosticNetworkTestDetails(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

@@ -22,9 +22,13 @@ abstract class LogRecordsRepository {
   Future<List<String>> getLogRecords();
 
   /// Factory that returns concrete implementation depending on [useFileStorage].
-  static LogRecordsRepository create({required bool useFileStorage, required String path, int memoryCapacity = 1000}) {
+  static LogRecordsRepository create({
+    required bool useFileStorage,
+    required String logFilePath,
+    int memoryCapacity = 1000,
+  }) {
     if (useFileStorage) {
-      return LogRecordsFileRepositoryImpl(path);
+      return LogRecordsFileRepositoryImpl(logFilePath);
     } else {
       return LogRecordsMemoryRepositoryImpl(memoryCapacity);
     }
@@ -77,9 +81,9 @@ class LogRecordsMemoryRepositoryImpl implements LogRecordsRepository {
 }
 
 class LogRecordsFileRepositoryImpl implements LogRecordsRepository, Disposable {
-  LogRecordsFileRepositoryImpl(String path)
+  LogRecordsFileRepositoryImpl(String logFilePath)
     : appender = ReadableRotatingFileAppender(
-        baseFilePath: '$path/app_logs.log',
+        baseFilePath: logFilePath,
         keepRotateCount: 1,
         formatter: DefaultLogRecordFormatter(),
       );
@@ -193,7 +197,18 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
     return result;
   }
 
-  /// Deletes all log files (base file and rotated files).
+  /// Path to the native (Kotlin) log file written by the callkeep_core process.
+  ///
+  /// Derived from [baseFilePath] by inserting `_native` before the `.log` extension
+  /// (e.g. `app_logs.log` becomes `app_logs_native.log`). Kotlin writes exclusively to
+  /// this file; Flutter reads it via [NativeLogForwarder] and forwards entries into the
+  /// shared [baseFilePath] log, keeping the two processes from contending on one file.
+  String get nativeLogFilePath {
+    final base = baseFilePath;
+    return base.endsWith('.log') ? '${base.substring(0, base.length - 4)}_native.log' : '${base}_native';
+  }
+
+  /// Deletes all log files (base file and rotated files) and the native callkeep log.
   Future<void> cleanLogs() async {
     try {
       // ignore: invalid_use_of_visible_for_testing_member
@@ -217,6 +232,19 @@ class ReadableRotatingFileAppender extends RotatingFileAppender {
         // try to log to the file system we are currently destroying.
         if (kDebugMode) {
           print('Error deleting log file ${file.path}: $e');
+        }
+      }
+    }
+
+    // Delete the native callkeep log, its single rotated backup, and the cross-process lock file.
+    // LogFileRotator.kt keeps at most one rotation (.1), so .1 is the only backup to clean.
+    for (final path in [nativeLogFilePath, '$nativeLogFilePath.1', '$nativeLogFilePath.lock']) {
+      try {
+        final file = File(path);
+        if (await file.exists()) await file.delete();
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error deleting native log file $path: $e');
         }
       }
     }

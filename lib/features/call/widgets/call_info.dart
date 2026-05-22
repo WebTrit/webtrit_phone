@@ -27,6 +27,7 @@ class CallInfo extends StatefulWidget {
     this.acceptedTime,
     this.processingStatus,
     required this.callStatus,
+    this.iceConnectionIssue,
     required this.style,
   });
 
@@ -39,6 +40,7 @@ class CallInfo extends StatefulWidget {
   final String? username;
   final DateTime? acceptedTime;
   final CallProcessingStatus? processingStatus;
+  final IceConnectionIssue? iceConnectionIssue;
   final CallInfoStyle? style;
 
   // TODO(Serdun): Rename class to better represent the actual data it holds
@@ -125,10 +127,15 @@ class _CallInfoState extends State<CallInfo> {
     final processingStatusTextStyle = _resolveStyle(style?.processingStatus, textTheme.labelLarge, null, fallbackColor);
 
     final statusMessage = _buildStatusMessage(context);
+    final processingStatus = widget.processingStatus?.l10n(context).nullify;
+    final iceConnectionIssue = widget.iceConnectionIssue?.l10n(context).nullify;
 
     return Column(
+      spacing: 8,
       children: [
-        if (widget.username != null) ...[
+        if (widget.username != null &&
+            widget.username != widget.number &&
+            (widget.number.contains(widget.username ?? '') == false)) ...[
           Text(
             widget.username!,
             style: userInfoTextStyle,
@@ -143,8 +150,7 @@ class _CallInfoState extends State<CallInfo> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-        ],
-        if (widget.username == null)
+        ] else
           Text(
             widget.number,
             style: userInfoTextStyle,
@@ -152,18 +158,11 @@ class _CallInfoState extends State<CallInfo> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-        const SizedBox(height: 10),
         Text(statusMessage, style: statusTextStyle),
-        const SizedBox(height: 10),
-        if (widget.processingStatus != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Text(
-              widget.processingStatus!.l10n(context),
-              style: processingStatusTextStyle,
-              textAlign: TextAlign.center,
-            ),
-          ),
+        if (processingStatus != null)
+          Text(processingStatus, style: processingStatusTextStyle, textAlign: TextAlign.center)
+        else if (iceConnectionIssue != null)
+          Text(iceConnectionIssue, style: processingStatusTextStyle, textAlign: TextAlign.center),
       ],
     );
   }

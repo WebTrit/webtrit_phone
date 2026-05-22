@@ -238,10 +238,10 @@ class _FailingSignalingModule implements SignalingModule {
 
 const _kConfig = SignalingServiceConfig(coreUrl: 'wss://example.com', tenantId: 'tenant', token: 'tok');
 
-// Dummy top-level callbacks used to test setIncomingCallHandler.
+// Dummy top-level callbacks used to test setCallEventHandler.
 // On iOS the method is a no-op, so the actual implementation does not matter.
-Future<void> _dummyIncomingCallHandler(IncomingCallEvent event) async {}
-Future<void> _anotherDummyHandler(IncomingCallEvent event) async {}
+Future<void> _dummyIncomingCallHandler(Event event) async {}
+Future<void> _anotherDummyHandler(Event event) async {}
 
 final _kHandshake = StateHandshake(
   keepaliveInterval: const Duration(seconds: 30),
@@ -517,22 +517,22 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // setIncomingCallHandler() -- no-op on iOS
+  // setCallEventHandler() -- no-op on iOS
   // -------------------------------------------------------------------------
 
-  group('WebtritSignalingServiceIos -- setIncomingCallHandler()', () {
+  group('WebtritSignalingServiceIos -- setCallEventHandler()', () {
     test('completes without error for a callback function', () async {
       final plugin = _buildPlugin(_failingFactory(Exception('x')));
       addTearDown(plugin.dispose);
 
-      await expectLater(plugin.setIncomingCallHandler(_dummyIncomingCallHandler), completes);
+      await expectLater(plugin.setCallEventHandler(_dummyIncomingCallHandler), completes);
     });
 
     test('completes without error for a different callback function', () async {
       final plugin = _buildPlugin(_failingFactory(Exception('x')));
       addTearDown(plugin.dispose);
 
-      await expectLater(plugin.setIncomingCallHandler(_anotherDummyHandler), completes);
+      await expectLater(plugin.setCallEventHandler(_anotherDummyHandler), completes);
     });
 
     test('does not affect the events stream', () async {
@@ -548,7 +548,7 @@ void main() {
       await Future<void>.delayed(Duration.zero); // let session buffer replay arrive
       events.clear();
 
-      await plugin.setIncomingCallHandler(_dummyIncomingCallHandler);
+      await plugin.setCallEventHandler(_dummyIncomingCallHandler);
       await Future<void>.delayed(Duration.zero);
 
       expect(events, isEmpty);

@@ -63,7 +63,10 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   final PSignalingServiceHostApi _hostApi;
 
-  StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
+  // Fans out SignalingModuleEvents to all subscribers (WebtritSignalingService, CallBloc, etc.).
+  // Intentionally not closed in dispose() -- closing it would deliver onDone to active subscribers,
+  // silently ending their subscriptions and breaking logout+re-login in the same process.
+  final StreamController<SignalingModuleEvent> _eventsController = StreamController<SignalingModuleEvent>.broadcast();
 
   final _eventBuffer = SignalingEventBuffer();
 
@@ -129,10 +132,6 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
     _logger.info('start effectiveMode=$effectiveMode tenantId=${config.tenantId}');
 
-    if (_eventsController.isClosed) {
-      _eventsController = StreamController<SignalingModuleEvent>.broadcast();
-    }
-
     await _startService(config, effectiveMode);
   }
 
@@ -195,22 +194,21 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     _eventBuffer.clear();
     // NOTE: _eventsController is intentionally NOT closed here.
     // Closing it would deliver onDone to any active subscriber (e.g. CallBloc),
-    // silently ending their subscription. The next start() call creates a fresh
-    // controller only if this one is closed.
+    // silently ending their subscription and breaking logout+re-login in the same process.
     _logger.info('dispose complete');
   }
 
   @override
-  Future<void> setIncomingCallHandler(Function callback) async {
+  Future<void> setCallEventHandler(Function callback) async {
     final handle = PluginUtilities.getCallbackHandle(callback);
     if (handle == null) {
       _logger.warning(
-        'setIncomingCallHandler: could not obtain callback handle -- '
+        'setCallEventHandler: could not obtain callback handle -- '
         'ensure the function is top-level and annotated with @pragma(\'vm:entry-point\')',
       );
       return;
     }
-    await _hostApi.saveIncomingCallHandler(handle.toRawHandle());
+    await _hostApi.saveCallEventHandler(handle.toRawHandle());
   }
 
   @override
@@ -228,6 +226,16 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       return;
     }
     await _hostApi.saveModuleFactory(handle.toRawHandle());
+  }
+
+  @override
+  Future<void> disconnect() async {
+    _logger.info('disconnect mode=$_currentMode');
+    if (_currentMode == SignalingServiceMode.pushBound) {
+      await _directService.disconnect();
+    } else {
+      await _hubManager.disconnect();
+    }
   }
 
   @override

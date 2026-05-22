@@ -8,6 +8,41 @@ import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_s
 
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
+class _FakeModule implements SignalingModule {
+  final _ctrl = StreamController<SignalingModuleEvent>.broadcast();
+  bool _connected = false;
+
+  void inject(SignalingModuleEvent event) {
+    if (event is SignalingConnected) _connected = true;
+    if (event is SignalingDisconnected || event is SignalingConnectionFailed) _connected = false;
+    if (!_ctrl.isClosed) _ctrl.add(event);
+  }
+
+  @override
+  Stream<SignalingModuleEvent> get events => _ctrl.stream;
+
+  @override
+  bool get isConnected => _connected;
+
+  @override
+  void connect() {}
+
+  @override
+  Future<void> disconnect() async {}
+
+  @override
+  Future<void>? execute(Request request) => null;
+
+  @override
+  Future<void> dispose() => _ctrl.close();
+
+  @override
+  void cancelRequestsByCallId(String callId) {}
+
+  @override
+  void clearTerminatingMark(String callId) {}
+}
+
 // ---------------------------------------------------------------------------
 // Fake platform implementation
 // ---------------------------------------------------------------------------
@@ -20,8 +55,9 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   final List<Request> executedRequests = [];
   Object? executeError;
   final List<SignalingServiceMode> updatedModes = [];
-  final List<Function> incomingCallHandles = [];
+  final List<Function> callEventHandles = [];
   final List<SignalingModuleFactory> moduleFactories = [];
+  int disconnectCount = 0;
   int disposeCount = 0;
   int stopServiceCount = 0;
   int restoreServiceCount = 0;
@@ -50,7 +86,7 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   Future<void> updateMode(SignalingServiceMode mode) async => updatedModes.add(mode);
 
   @override
-  Future<void> setIncomingCallHandler(Function callback) async => incomingCallHandles.add(callback);
+  Future<void> setCallEventHandler(Function callback) async => callEventHandles.add(callback);
 
   @override
   Future<void> setModuleFactory(SignalingModuleFactory factory) async => moduleFactories.add(factory);
@@ -58,7 +94,13 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   @override
   Future<void> dispose() async {
     disposeCount++;
-    await _eventsController.close();
+    // NOT closed -- mirrors real platform singleton that survives logout/login cycles.
+  }
+
+  @override
+  Future<void> disconnect() async {
+    disconnectCount++;
+    inject(SignalingDisconnecting());
   }
 
   @override
@@ -208,15 +250,33 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // disconnect() — no-op
+  // disconnect()
   // -------------------------------------------------------------------------
 
   group('WebtritSignalingService -- disconnect()', () {
-    test('is a no-op and does not call platform.dispose', () async {
+    test('delegates to platform.disconnect', () async {
       final service = WebtritSignalingService(config: _kConfig);
       await service.disconnect();
 
+      expect(platform.disconnectCount, 1);
       expect(platform.disposeCount, 0);
+      await service.dispose();
+    });
+
+    test('isConnected resets to false on SignalingDisconnecting (before SignalingDisconnected)', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      platform.inject(SignalingConnected());
+      await Future<void>.delayed(Duration.zero);
+      expect(service.isConnected, isTrue);
+
+      // The platform emits SignalingDisconnecting synchronously inside
+      // disconnect() before awaiting the TCP close handshake. Resetting
+      // _isConnected here handles the zombie-TCP case where
+      // SignalingDisconnected never arrives.
+      await service.disconnect();
+      await Future<void>.delayed(Duration.zero);
+      expect(service.isConnected, isFalse);
+
       await service.dispose();
     });
   });
@@ -288,14 +348,14 @@ void main() {
       expect(platform.moduleFactories, [_dummyFactory]);
     });
 
-    test('setIncomingCallHandler delegates to platform', () async {
-      await WebtritSignalingService.setIncomingCallHandler(_dummyHandler);
-      expect(platform.incomingCallHandles, [_dummyHandler]);
+    test('setCallEventHandler delegates to platform', () async {
+      await WebtritSignalingService.setCallEventHandler(_dummyHandler);
+      expect(platform.callEventHandles, [_dummyHandler]);
     });
 
-    test('setIncomingCallHandler with different callback', () async {
-      await WebtritSignalingService.setIncomingCallHandler(_anotherHandler);
-      expect(platform.incomingCallHandles, [_anotherHandler]);
+    test('setCallEventHandler with different callback', () async {
+      await WebtritSignalingService.setCallEventHandler(_anotherHandler);
+      expect(platform.callEventHandles, [_anotherHandler]);
     });
 
     test('updateMode persistent delegates to platform', () async {
@@ -436,6 +496,61 @@ void main() {
       expect(service.isConnected, isTrue);
       expect(platform.startedConfigs, hasLength(1));
       await service.dispose();
+    });
+  });
+
+  group('WebtritSignalingServiceDirect -- logout+re-login regression (WT-1525)', () {
+    late WebtritSignalingServiceDirect direct;
+    _FakeModule? currentModule;
+
+    setUp(() async {
+      direct = WebtritSignalingServiceDirect();
+      SignalingServicePlatform.instance = direct;
+      currentModule = null;
+      await direct.setModuleFactory((config) {
+        final m = _FakeModule();
+        currentModule = m;
+        return m;
+      });
+    });
+
+    test('isConnected becomes true on second session after dispose+re-login', () async {
+      final service1 = WebtritSignalingService(config: _kConfig);
+      service1.connect();
+      await Future<void>.delayed(Duration.zero);
+      currentModule!.inject(SignalingConnected());
+      await Future<void>.delayed(Duration.zero);
+      expect(service1.isConnected, isTrue);
+
+      await service1.dispose();
+
+      final service2 = WebtritSignalingService(config: _kConfig);
+      expect(service2.isConnected, isFalse);
+
+      service2.connect();
+      await Future<void>.delayed(Duration.zero);
+      currentModule!.inject(SignalingConnected());
+      await Future<void>.delayed(Duration.zero);
+
+      expect(service2.isConnected, isTrue);
+
+      await service2.dispose();
+    });
+
+    test('three consecutive sessions all become connected', () async {
+      for (var i = 0; i < 3; i++) {
+        final service = WebtritSignalingService(config: _kConfig);
+        expect(service.isConnected, isFalse, reason: 'session $i: starts disconnected');
+
+        service.connect();
+        await Future<void>.delayed(Duration.zero);
+        currentModule!.inject(SignalingConnected());
+        await Future<void>.delayed(Duration.zero);
+
+        expect(service.isConnected, isTrue, reason: 'session $i: becomes connected');
+
+        await service.dispose();
+      }
     });
   });
 }

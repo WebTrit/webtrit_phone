@@ -4,8 +4,10 @@ import 'dart:async';
 ///
 /// Calling [schedule] cancels any pending callback and starts a new [duration]
 /// countdown. Only the last scheduled callback within the quiet window executes.
+///
+/// [duration] default Duration(milliseconds: 300)
 class Debounce {
-  Debounce(this.duration);
+  Debounce([Duration? duration]) : duration = duration ?? const Duration(milliseconds: 300);
 
   final Duration duration;
   Timer? _timer;

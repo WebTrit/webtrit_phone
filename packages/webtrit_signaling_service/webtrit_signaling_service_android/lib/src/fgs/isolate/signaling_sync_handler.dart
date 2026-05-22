@@ -23,17 +23,17 @@ Future<void> pendingSync = Future.value();
 Future<void> onSignalingServiceSync(PSignalingServiceStatus status) async {
   _logger.info(
     'onSignalingServiceSync enabled=${status.enabled} tenantId=${status.tenantId} '
-    'hasIncomingCallHandler=${status.incomingCallHandlerHandle != 0} '
+    'hasCallEventHandler=${status.callEventHandlerHandle != 0} '
     'hasModuleFactory=${status.moduleFactoryHandle != 0}',
   );
   if (status.enabled) {
     final existing = _manager;
     if (existing != null) {
-      // Handles (incomingCallHandlerHandle, moduleFactoryHandle) are runtime
+      // Handles (callEventHandlerHandle, moduleFactoryHandle) are runtime
       // metadata — they change when the Activity re-registers them after opening
       // from a push notification but do not affect the live WebSocket session.
       final handlesChanged =
-          existing.incomingCallHandlerHandle != status.incomingCallHandlerHandle ||
+          existing.callEventHandlerHandle != status.callEventHandlerHandle ||
           existing.moduleFactoryHandle != status.moduleFactoryHandle;
 
       // Connection params require a new WebSocket session (re-login, token
@@ -50,7 +50,7 @@ Future<void> onSignalingServiceSync(PSignalingServiceStatus status) async {
         if (handlesChanged) {
           _logger.info('onSignalingServiceSync handles changed during active call — updating in-place');
           existing.updateHandles(
-            incomingCallHandlerHandle: status.incomingCallHandlerHandle,
+            callEventHandlerHandle: status.callEventHandlerHandle,
             moduleFactoryHandle: status.moduleFactoryHandle,
           );
         }
@@ -61,7 +61,7 @@ Future<void> onSignalingServiceSync(PSignalingServiceStatus status) async {
       } else if (handlesChanged && !connectionConfigChanged) {
         _logger.info('onSignalingServiceSync handles changed — updating in-place, no WebSocket restart');
         existing.updateHandles(
-          incomingCallHandlerHandle: status.incomingCallHandlerHandle,
+          callEventHandlerHandle: status.callEventHandlerHandle,
           moduleFactoryHandle: status.moduleFactoryHandle,
         );
       } else if (connectionConfigChanged) {
@@ -79,7 +79,7 @@ Future<void> onSignalingServiceSync(PSignalingServiceStatus status) async {
       tenantId: status.tenantId,
       token: status.token,
       trustedCertificatesJson: status.trustedCertificatesJson,
-      incomingCallHandlerHandle: status.incomingCallHandlerHandle,
+      callEventHandlerHandle: status.callEventHandlerHandle,
       moduleFactoryHandle: status.moduleFactoryHandle,
     );
   }

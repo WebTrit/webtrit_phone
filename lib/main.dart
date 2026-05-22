@@ -42,7 +42,7 @@ void main() {
         }
       };
 
-      Logger.root.onRecord.listen((record) => FirebaseCrashlytics.instance.log(record.toString()));
+      Logger.root.onRecord.listen(_onRootLogRecord);
 
       runApp(RootApp(instanceRegistry: instanceRegistry));
     },
@@ -53,6 +53,13 @@ void main() {
       }
     },
   );
+}
+
+void _onRootLogRecord(LogRecord record) {
+  FirebaseCrashlytics.instance.log(record.toString());
+  if (!kIsWeb && !kDebugMode && record.level >= Level.SEVERE && record.loggerName == 'callkeep') {
+    FirebaseCrashlytics.instance.recordError(record.message, record.stackTrace, reason: 'native callkeep error');
+  }
 }
 
 class RootApp extends StatelessWidget {
@@ -124,6 +131,10 @@ class RootApp extends StatelessWidget {
           return MultiRepositoryProvider(
             providers: [
               RepositoryProvider<LogRecordsRepository>(
+                create: (_) => instanceRegistry.get(),
+                dispose: disposeIfDisposable,
+              ),
+              RepositoryProvider<NativeLogForwarder>(
                 create: (_) => instanceRegistry.get(),
                 dispose: disposeIfDisposable,
               ),

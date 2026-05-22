@@ -74,11 +74,35 @@ class LocalPushRepositoryFLNImpl implements LocalPushRepository {
   }
 }
 
+/// Notification channel id for app-displayed local pushes (messages, missed
+/// calls, system notifications).
+///
+/// Deliberately differs from [kLegacyLocalPushChannelId]: Android caches a
+/// channel's importance at creation time, so raising importance on an existing
+/// channel has no effect for users who already have it. A new id forces the
+/// high-importance channel to be created.
+///
+/// Keep this value in sync with `default_notification_channel_id` in
+/// android/app/src/main/AndroidManifest.xml.
+const kLocalPushChannelId = 'app_notifications_channel';
+
+/// Human-readable name shown for [kLocalPushChannelId] in the system settings.
+const kLocalPushChannelName = 'Notifications';
+
+/// Legacy channel id created with default importance. Deleted on startup so it
+/// no longer lingers in the system notification settings.
+@Deprecated(
+  'Retained only to delete the old default-importance channel on startup. '
+  'Remove this constant together with the deleteNotificationChannel cleanup '
+  'once existing installs have migrated to kLocalPushChannelId.',
+)
+const kLegacyLocalPushChannelId = 'local_channel';
+
 const kAndroidNotificationDetails = AndroidNotificationDetails(
-  'local_channel',
-  'local channel',
-  importance: Importance.defaultImportance,
-  priority: Priority.defaultPriority,
+  kLocalPushChannelId,
+  kLocalPushChannelName,
+  importance: Importance.high,
+  priority: Priority.high,
 );
 const kDarwinNotificationDetails = DarwinNotificationDetails(
   presentAlert: true,
