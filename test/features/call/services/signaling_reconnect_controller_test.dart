@@ -473,7 +473,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SignalingReconnectController - app lifecycle', () {
-    test('notifyAppPaused without active calls — does not disconnect, skips reconnect', () {
+    test('notifyAppPaused without active calls - does not disconnect, skips reconnect', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
         addTearDown(module.dispose);
@@ -546,10 +546,10 @@ void main() {
         module.emit(SignalingConnected());
         expect(notifyCount, 0);
 
-        // Screen lock — reset state, keep connection alive.
+        // Screen lock - reset state, keep connection alive.
         controller.notifyAppPaused(hasActiveCalls: false);
 
-        // Screen unlock — first post-unlock connect failure.
+        // Screen unlock - first post-unlock connect failure.
         controller.notifyAppResumed();
         module.emit(_failed());
 
@@ -707,7 +707,7 @@ void main() {
       });
     });
 
-    test('notifyNetworkAvailable — disconnects stale connection when isConnected=true', () {
+    test('notifyNetworkAvailable - disconnects stale connection when isConnected=true', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
         addTearDown(module.dispose);
@@ -721,7 +721,7 @@ void main() {
       });
     });
 
-    test('notifyNetworkAvailable — skips disconnect when isConnected=false', () {
+    test('notifyNetworkAvailable - skips disconnect when isConnected=false', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
         addTearDown(module.dispose);
@@ -735,7 +735,7 @@ void main() {
       });
     });
 
-    test('notifyNetworkAvailable — disconnect happens before reconnect timer fires', () {
+    test('notifyNetworkAvailable - disconnect happens before reconnect timer fires', () {
       fakeAsync((async) {
         final module = _FakeSignalingModule();
         addTearDown(module.dispose);
@@ -826,7 +826,7 @@ void main() {
     // Full screen-unlock → immediate-call scenario.
     //
     // Reproduces the sequence from the bug log:
-    //   screen lock  → state reset, connection kept alive
+    //   screen lock  -> state reset, connection kept alive
     //   screen unlock → notifyAppResumed schedules 1 s reconnect timer
     //   user taps    → notifyForceReconnect must NOT reset the timer to another
     //                   full second; it must connect NOW.
@@ -838,10 +838,10 @@ void main() {
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
 
-        // Screen locked — state reset, connection kept alive.
+        // Screen locked - state reset, connection kept alive.
         controller.notifyAppPaused(hasActiveCalls: false);
 
-        // Screen unlocked — schedules fast reconnect in kSignalingClientFastReconnectDelay.
+        // Screen unlocked - schedules fast reconnect in kSignalingClientFastReconnectDelay.
         controller.notifyAppResumed();
 
         // User taps a recent call ~200 ms after unlock,
@@ -915,7 +915,7 @@ void main() {
         final controller = SignalingReconnectController(signalingModule: module);
         addTearDown(controller.dispose);
 
-        // App goes to background — reset state, keep connection alive.
+        // App goes to background - reset state, keep connection alive.
         controller.notifyAppPaused(hasActiveCalls: false);
         expect(module.disconnectCalls, 0);
 

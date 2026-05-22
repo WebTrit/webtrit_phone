@@ -38,7 +38,7 @@ final _logger = Logger('WebtritSignalingService');
 ///     is a no-op.
 ///   - [disconnect] -- closes the active WebSocket connection by delegating
 ///     to the platform layer. [isConnected] resets eagerly on
-///     [SignalingDisconnecting] — before the platform awaits the TCP
+///     [SignalingDisconnecting] - before the platform awaits the TCP
 ///     close-handshake, which may hang on a dead network interface.
 ///   - [execute] -- queues requests while not connected; flushes on connect.
 ///   - [dispose] -- cancels the events subscription, fails all queued
@@ -150,9 +150,9 @@ class WebtritSignalingService implements SignalingModule {
   /// [SignalingServicePlatform.disconnect].
   ///
   /// [_isConnected] is reset to false via the [SignalingDisconnecting] event
-  /// that the platform emits synchronously inside [disconnect] — before the
+  /// that the platform emits synchronously inside [disconnect] - before the
   /// [await client.disconnect()] suspension point where a zombie TCP
-  /// close-handshake may hang indefinitely. Does not clear [_startPending] —
+  /// close-handshake may hang indefinitely. Does not clear [_startPending] -
   /// if a [start] is already in progress, the next [connect] call is still
   /// held by the [_startPending] guard until the in-flight start emits a
   /// terminal event, preventing overlapping [start] calls on Android.
