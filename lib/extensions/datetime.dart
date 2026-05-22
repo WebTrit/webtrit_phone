@@ -28,6 +28,11 @@ extension DateTimeFormatting on DateTime {
 
 extension DateTimeComprassion on DateTime {
   bool isSameDay(DateTime anotherDate) {
-    return year == anotherDate.year && month == anotherDate.month && day == anotherDate.day;
+    final anotherLocal = anotherDate.toLocal();
+    final thisLocal = toLocal();
+
+    return thisLocal.year == anotherLocal.year &&
+        thisLocal.month == anotherLocal.month &&
+        thisLocal.day == anotherLocal.day;
   }
 }

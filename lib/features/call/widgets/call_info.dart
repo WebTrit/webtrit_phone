@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 import 'package:clock/clock.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import '../extensions/extensions.dart';
 import '../models/models.dart';
@@ -50,9 +52,17 @@ class _CallInfoState extends State<CallInfo> {
   Timer? durationTimer;
   Duration? duration;
 
+  late final TransientDebouncer<CallStatus> _debouncer;
+
   @override
   void initState() {
     super.initState();
+    _debouncer = TransientDebouncer<CallStatus>(
+      initial: widget.callStatus,
+      duration: kSignalingStatusDebounce,
+      isTransient: (s) => s.isTransientReconnecting,
+      getLatest: () => widget.callStatus,
+    );
     final acceptedTime = widget.acceptedTime;
     if (acceptedTime != null) {
       _durationTimerInit(acceptedTime);
@@ -62,6 +72,9 @@ class _CallInfoState extends State<CallInfo> {
   @override
   void didUpdateWidget(CallInfo oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.callStatus != oldWidget.callStatus) {
+      _debouncer.update(widget.callStatus, () => setState(() {}));
+    }
     if (widget.acceptedTime != oldWidget.acceptedTime) {
       _durationTimerCancel();
       final acceptedTime = widget.acceptedTime;
@@ -73,6 +86,7 @@ class _CallInfoState extends State<CallInfo> {
 
   @override
   void dispose() {
+    _debouncer.dispose();
     _durationTimerCancel();
     super.dispose();
   }
@@ -157,8 +171,8 @@ class _CallInfoState extends State<CallInfo> {
   String _buildStatusMessage(BuildContext context) {
     final duration = this.duration;
 
-    if (widget.callStatus != CallStatus.ready) {
-      return widget.callStatus.l10n(context);
+    if (_debouncer.displayed != CallStatus.ready) {
+      return _debouncer.displayed.l10n(context);
     } else if (duration == null) {
       if (widget.inviteToAttendedTransfer) {
         return context.l10n.call_description_inviteToAttendedTransfer;

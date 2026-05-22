@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import 'package:webtrit_phone/models/encoding_settings.dart';
+
 class EncodingConfig extends Equatable {
   const EncodingConfig({
     required this.bypassConfig,
@@ -25,9 +27,11 @@ class DefaultPresetOverride extends Equatable {
     required this.opusBitrate,
     required this.opusStereo,
     required this.opusDtx,
-    required this.removeExtmaps,
     required this.removeStaticAudioRtpMaps,
     required this.remapTE8payloadTo101,
+    this.removeREMBFeedback,
+    this.removeTWCCFeedback,
+    this.removeExtmaps,
   });
 
   final int? audioBitrate;
@@ -38,9 +42,11 @@ class DefaultPresetOverride extends Equatable {
   final int? opusBitrate;
   final bool? opusStereo;
   final bool? opusDtx;
-  final bool? removeExtmaps;
   final bool? removeStaticAudioRtpMaps;
   final bool? remapTE8payloadTo101;
+  final bool? removeREMBFeedback;
+  final bool? removeTWCCFeedback;
+  final List<SdpExtmapType>? removeExtmaps;
 
   @override
   List<Object?> get props => [
@@ -52,8 +58,10 @@ class DefaultPresetOverride extends Equatable {
     opusBitrate,
     opusStereo,
     opusDtx,
-    removeExtmaps,
     removeStaticAudioRtpMaps,
     remapTE8payloadTo101,
+    removeREMBFeedback,
+    removeTWCCFeedback,
+    removeExtmaps,
   ];
 }

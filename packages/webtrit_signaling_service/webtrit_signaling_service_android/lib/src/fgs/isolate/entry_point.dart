@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart' show WidgetsFlutterBinding;
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
-import '../messages.g.dart';
+import '../../messages.g.dart';
 import 'signaling_sync_handler.dart';
 
 final _logger = Logger('SignalingEntryPoint');

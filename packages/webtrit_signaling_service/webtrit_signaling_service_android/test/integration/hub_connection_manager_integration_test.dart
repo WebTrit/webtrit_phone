@@ -15,8 +15,8 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
 import 'package:webtrit_signaling_service_android/src/constants.dart';
-import 'package:webtrit_signaling_service_android/src/hub/signaling_hub.dart';
-import 'package:webtrit_signaling_service_android/src/hub_connection_manager.dart';
+import 'package:webtrit_signaling_service_android/src/fgs/hub/signaling_hub.dart';
+import 'package:webtrit_signaling_service_android/src/fgs/hub_connection_manager.dart';
 
 // ---------------------------------------------------------------------------
 // Minimal fake SignalingModule

@@ -17,9 +17,9 @@ import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import 'package:webtrit_signaling_service_android/src/hub/signaling_hub.dart';
-import 'package:webtrit_signaling_service_android/src/hub/signaling_hub_client.dart';
-import 'package:webtrit_signaling_service_android/src/hub/signaling_hub_module.dart';
+import 'package:webtrit_signaling_service_android/src/fgs/hub/signaling_hub.dart';
+import 'package:webtrit_signaling_service_android/src/fgs/hub/signaling_hub_client.dart';
+import 'package:webtrit_signaling_service_android/src/fgs/hub/signaling_hub_module.dart';
 
 // ---------------------------------------------------------------------------
 // Local SignalingClientFactory typedef (mirrors the deleted per-platform type)

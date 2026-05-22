@@ -302,9 +302,11 @@ class EncodingDefaultPresetOverride with _$EncodingDefaultPresetOverride {
     this.opusBitrate,
     this.opusStereo,
     this.opusDtx,
-    this.removeExtmaps,
     this.removeStaticAudioRtpMaps,
     this.remapTE8payloadTo101,
+    this.removeREMBFeedback,
+    this.removeTWCCFeedback,
+    this.removeExtmaps,
   });
 
   @override
@@ -332,13 +334,19 @@ class EncodingDefaultPresetOverride with _$EncodingDefaultPresetOverride {
   final bool? opusDtx;
 
   @override
-  final bool? removeExtmaps;
-
-  @override
   final bool? removeStaticAudioRtpMaps;
 
   @override
   final bool? remapTE8payloadTo101;
+
+  @override
+  final bool? removeREMBFeedback;
+
+  @override
+  final bool? removeTWCCFeedback;
+
+  @override
+  final List<String>? removeExtmaps;
 
   factory EncodingDefaultPresetOverride.fromJson(Map<String, Object?> json) =>
       _$EncodingDefaultPresetOverrideFromJson(json);

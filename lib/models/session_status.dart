@@ -1,1 +1,35 @@
-enum SessionStatus { connectivityNone, connectError, appUnregistered, connectIssue, inProgress, ready, pushTokenError }
+import 'call/call_status.dart';
+
+class SessionStatus {
+  const SessionStatus({required this.signalingStatus, this.pushTokenError});
+
+  final CallStatus signalingStatus;
+
+  /// Non-null when the push token registration failed. Independent of [signalingStatus].
+  final String? pushTokenError;
+
+  bool get hasPushTokenError => pushTokenError != null;
+
+  /// Signaling is connected — calls can be made and received.
+  /// Push token state is intentionally excluded: call functionality works
+  /// regardless of push notification delivery issues.
+  bool get isReady => signalingStatus == CallStatus.ready;
+
+  /// App is actively trying to establish connection — show a progress indicator.
+  /// Push token error is excluded because it is surfaced separately via the
+  /// avatar ring color, matching previous behavior where pushTokenError overrode
+  /// all signaling states in the old enum.
+  bool get isEstablishing =>
+      !hasPushTokenError && signalingStatus != CallStatus.ready && signalingStatus != CallStatus.appUnregistered;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SessionStatus && signalingStatus == other.signalingStatus && pushTokenError == other.pushTokenError;
+
+  @override
+  int get hashCode => Object.hash(signalingStatus, pushTokenError);
+
+  @override
+  String toString() => 'SessionStatus(signalingStatus: $signalingStatus, pushTokenError: $pushTokenError)';
+}

@@ -290,9 +290,13 @@ EncodingDefaultPresetOverride _$EncodingDefaultPresetOverrideFromJson(
   opusBitrate: (json['opusBitrate'] as num?)?.toInt(),
   opusStereo: json['opusStereo'] as bool?,
   opusDtx: json['opusDtx'] as bool?,
-  removeExtmaps: json['removeExtmaps'] as bool?,
   removeStaticAudioRtpMaps: json['removeStaticAudioRtpMaps'] as bool?,
   remapTE8payloadTo101: json['remapTE8payloadTo101'] as bool?,
+  removeREMBFeedback: json['removeREMBFeedback'] as bool?,
+  removeTWCCFeedback: json['removeTWCCFeedback'] as bool?,
+  removeExtmaps: (json['removeExtmaps'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
 );
 
 Map<String, dynamic> _$EncodingDefaultPresetOverrideToJson(
@@ -306,9 +310,11 @@ Map<String, dynamic> _$EncodingDefaultPresetOverrideToJson(
   'opusBitrate': instance.opusBitrate,
   'opusStereo': instance.opusStereo,
   'opusDtx': instance.opusDtx,
-  'removeExtmaps': instance.removeExtmaps,
   'removeStaticAudioRtpMaps': instance.removeStaticAudioRtpMaps,
   'remapTE8payloadTo101': instance.remapTE8payloadTo101,
+  'removeREMBFeedback': instance.removeREMBFeedback,
+  'removeTWCCFeedback': instance.removeTWCCFeedback,
+  'removeExtmaps': instance.removeExtmaps,
 };
 
 AppConfigSettings _$AppConfigSettingsFromJson(Map<String, dynamic> json) =>

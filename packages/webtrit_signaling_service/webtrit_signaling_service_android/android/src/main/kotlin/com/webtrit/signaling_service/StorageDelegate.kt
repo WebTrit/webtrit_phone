@@ -13,11 +13,9 @@ object StorageDelegate {
     private const val KEY_CORE_URL = "core_url"
     private const val KEY_TENANT_ID = "tenant_id"
     private const val KEY_TOKEN = "token"
-    private const val KEY_MODE = "mode"
     private const val KEY_INCOMING_CALL_HANDLER = "incoming_call_handler"
     private const val KEY_MODULE_FACTORY = "module_factory"
     private const val KEY_TRUSTED_CERTIFICATES = "trusted_certificates_json"
-    private val MODE_PUSH_BOUND = PSignalingServiceMode.PUSH_BOUND.name
 
     private fun prefs(context: Context): SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -45,12 +43,6 @@ object StorageDelegate {
     fun getCoreUrl(context: Context): String = prefs(context).getString(KEY_CORE_URL, "") ?: ""
     fun getTenantId(context: Context): String = prefs(context).getString(KEY_TENANT_ID, "") ?: ""
     fun getToken(context: Context): String = prefs(context).getString(KEY_TOKEN, "") ?: ""
-
-    fun saveMode(context: Context, mode: PSignalingServiceMode) =
-        prefs(context).edit().putString(KEY_MODE, mode.name).apply()
-
-    fun isPushBound(context: Context): Boolean =
-        prefs(context).getString(KEY_MODE, null) == MODE_PUSH_BOUND
 
     fun saveIncomingCallHandler(context: Context, handle: Long) =
         prefs(context).edit().putLong(KEY_INCOMING_CALL_HANDLER, handle).apply()

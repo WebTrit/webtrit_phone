@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';
 
-import '../constants.dart';
+import '../../constants.dart';
 import 'signaling_hub_codec.dart';
 import 'signaling_hub_command.dart';
 
@@ -45,12 +45,6 @@ class SignalingHub {
   /// the user is on a call.
   bool get hasActiveCalls => _callEventHistory.isNotEmpty;
 
-  /// Called when [hasSubscribers] transitions (false → true or true → false).
-  ///
-  /// Used by [SignalingForegroundIsolateManager] in pushBound mode to detect
-  /// when no subscriber remains and schedule a cleanup timer.
-  void Function(bool hasSubscribers)? onHasSubscribersChanged;
-
   /// Encoded non-protocol events since the last [SignalingConnecting] event.
   ///
   /// Replayed to late subscribers so they receive the current connection state
@@ -88,11 +82,12 @@ class SignalingHub {
   /// treat an already-answered call as still ringing.
   ///
   /// Lifecycle:
-  /// - [IncomingCallEvent] → new entry created for callId.
-  /// - Subsequent [CallEvent]s (e.g. [AcceptedEvent], [RingingEvent]) → appended.
-  /// - Terminal events ([HangupEvent], [MissedCallEvent]) → entry removed;
+  /// - [IncomingCallEvent] - new entry created for callId.
+  /// - Non-null [StateHandshake] lines on connect - entry created for each active line in [_onModuleEvent].
+  /// - Subsequent [CallEvent]s (e.g. [AcceptedEvent], [RingingEvent]) - appended.
+  /// - Terminal events ([HangupEvent], [MissedCallEvent]) - entry removed;
   ///   the dead call's line is also evicted from the buffered handshake.
-  /// - [SignalingConnecting] → entire map cleared (new session).
+  /// - [SignalingConnecting] - entire map cleared (new session).
   final Map<String, List<List<dynamic>>> _callEventHistory = {};
 
   StreamSubscription<SignalingModuleEvent>? _moduleSubscription;
@@ -150,6 +145,13 @@ class SignalingHub {
     final encoded = encodeHubEvent(event);
     if (event is! SignalingProtocolEvent) {
       _sessionBuffer.add(encoded);
+      if (event is SignalingHandshakeReceived) {
+        for (final line in event.handshake.lines) {
+          if (line != null) {
+            _callEventHistory.putIfAbsent(line.callId, () => []);
+          }
+        }
+      }
     } else {
       _updateCallHistory(event.event, encoded);
       if (_isRegistrationEvent(event.event)) {
@@ -183,11 +185,9 @@ class SignalingHub {
     if (event is! CallEvent) return;
 
     if (event is HangupEvent || event is MissedCallEvent) {
-      // Always evict the dead call's line from the handshake — regardless of
-      // whether this call was tracked in [_callEventHistory]. Calls that arrived
-      // in the initial [StateHandshake] (before the hub started) are never added
-      // to [_callEventHistory], but their stale handshake line must still be
-      // removed so late subscribers don't see an ended call in handshake.lines.
+      // Always evict the dead call's line from the handshake - regardless of
+      // how the call was tracked in [_callEventHistory] (via IncomingCallEvent
+      // or via StateHandshake lines populated in [_onModuleEvent]).
       _evictHandshakeLine(event.callId);
       _callEventHistory.remove(event.callId);
       _logger.fine('Hub: call history removed (terminal) callId=${event.callId}');
@@ -264,10 +264,8 @@ class SignalingHub {
   }
 
   void _handleSubscribe(SignalingHubSubscribeCommand cmd) {
-    final wasEmpty = _subscribers.isEmpty;
     _subscribers[cmd.consumerId] = cmd.replyPort;
     _logger.fine('Hub subscriber added: ${cmd.consumerId} (total: ${_subscribers.length})');
-    if (wasEmpty) onHasSubscribersChanged?.call(true);
     // Ack first so the subscriber knows the hub port is alive (not stale).
     cmd.replyPort.send(encodeSubAck());
     // Replay current session buffer so the new subscriber gets the full connection state.
@@ -296,10 +294,8 @@ class SignalingHub {
   }
 
   void _handleUnsubscribe(SignalingHubUnsubscribeCommand cmd) {
-    final wasNotEmpty = _subscribers.isNotEmpty;
     _subscribers.remove(cmd.consumerId);
     _logger.fine('Hub subscriber removed: ${cmd.consumerId} (total: ${_subscribers.length})');
-    if (wasNotEmpty && _subscribers.isEmpty) onHasSubscribersChanged?.call(false);
   }
 
   void _handleExecute(SignalingHubExecuteCommand cmd) {

@@ -35,8 +35,7 @@ class SignalingRestartWorker(
             return Result.success()
         }
         return try {
-            if (!StorageDelegate.isPushBound(applicationContext) &&
-                StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
+            if (StorageDelegate.getCoreUrl(applicationContext).isNotEmpty() &&
                 StorageDelegate.getTenantId(applicationContext).isNotEmpty() &&
                 StorageDelegate.getToken(applicationContext).isNotEmpty() &&
                 StorageDelegate.getCallbackDispatcher(applicationContext) != 0L

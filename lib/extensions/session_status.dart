@@ -6,37 +6,27 @@ import 'package:webtrit_phone/theme/styles/styles.dart';
 
 extension SessionStatusL10n on SessionStatus {
   String l10n(BuildContext context) {
-    switch (this) {
-      case SessionStatus.connectivityNone:
-        return context.l10n.callStatus_connectivityNone;
-      case SessionStatus.connectError:
-        return context.l10n.callStatus_connectError;
-      case SessionStatus.appUnregistered:
-        return context.l10n.callStatus_appUnregistered;
-      case SessionStatus.connectIssue:
-        return context.l10n.callStatus_connectIssue;
-      case SessionStatus.inProgress:
-        return context.l10n.callStatus_inProgress;
-      case SessionStatus.ready:
-        return context.l10n.callStatus_ready;
-      case SessionStatus.pushTokenError:
-        return context.l10n.sessionStatus_pushNotificationServiceProblem;
-    }
+    if (hasPushTokenError) return context.l10n.sessionStatus_pushNotificationServiceProblem;
+    return switch (signalingStatus) {
+      CallStatus.connectivityNone => context.l10n.callStatus_connectivityNone,
+      CallStatus.connectError => context.l10n.callStatus_connectError,
+      CallStatus.appUnregistered => context.l10n.callStatus_appUnregistered,
+      CallStatus.connectIssue => context.l10n.callStatus_connectIssue,
+      CallStatus.inProgress => context.l10n.callStatus_inProgress,
+      CallStatus.ready => context.l10n.callStatus_ready,
+    };
   }
 
+  // Only called from MainAppBar when isEstablishing is true, so hasPushTokenError
+  // is always false at call site — no push token branch needed here.
   String appBarl10n(BuildContext context) {
-    switch (this) {
-      case SessionStatus.connectivityNone:
-        return context.l10n.sessionStatus_AppBar_waitingForNetwork;
-      case SessionStatus.connectError || SessionStatus.connectIssue:
-        return context.l10n.sessionStatus_AppBar_waitingForConnection;
-      case SessionStatus.appUnregistered || SessionStatus.pushTokenError:
-        return context.l10n.sessionStatus_AppBar_disconnected;
-      case SessionStatus.inProgress:
-        return context.l10n.sessionStatus_AppBar_connecting;
-      case SessionStatus.ready:
-        return '_';
-    }
+    return switch (signalingStatus) {
+      CallStatus.connectivityNone => context.l10n.sessionStatus_AppBar_waitingForNetwork,
+      CallStatus.connectError || CallStatus.connectIssue => context.l10n.sessionStatus_AppBar_waitingForConnection,
+      CallStatus.appUnregistered => context.l10n.sessionStatus_AppBar_disconnected,
+      CallStatus.inProgress => context.l10n.sessionStatus_AppBar_connecting,
+      CallStatus.ready => '_',
+    };
   }
 }
 
@@ -46,43 +36,29 @@ extension SessionStatusColor on SessionStatus {
     final colorScheme = themeData.colorScheme;
     final callStatusStyles = themeData.extension<CallStatusStyles>()?.primary;
 
-    switch (this) {
-      case SessionStatus.connectivityNone:
-        return callStatusStyles?.connectivityNone ?? colorScheme.error;
-      case SessionStatus.connectError:
-        return callStatusStyles?.connectError ?? colorScheme.error;
-      case SessionStatus.appUnregistered:
-        return callStatusStyles?.appUnregistered ?? colorScheme.onSurfaceVariant;
-      case SessionStatus.connectIssue:
-        return callStatusStyles?.connectIssue ?? colorScheme.error;
-      case SessionStatus.inProgress:
-        return callStatusStyles?.inProgress ?? colorScheme.secondary;
-      case SessionStatus.ready:
-        return callStatusStyles?.ready ?? colorScheme.tertiary;
-      case SessionStatus.pushTokenError:
-        // TODO(Serdun): Move color to the color scheme
-        return Colors.orange;
-    }
+    if (hasPushTokenError) return callStatusStyles?.connectIssue ?? colorScheme.error;
+
+    return switch (signalingStatus) {
+      CallStatus.connectivityNone => callStatusStyles?.connectivityNone ?? colorScheme.error,
+      CallStatus.connectError => callStatusStyles?.connectError ?? colorScheme.error,
+      CallStatus.appUnregistered => callStatusStyles?.appUnregistered ?? colorScheme.onSurfaceVariant,
+      CallStatus.connectIssue => callStatusStyles?.connectIssue ?? colorScheme.error,
+      CallStatus.inProgress => callStatusStyles?.inProgress ?? colorScheme.secondary,
+      CallStatus.ready => callStatusStyles?.ready ?? colorScheme.tertiary,
+    };
   }
 }
 
 extension SessionStatusKey on SessionStatus {
   Key get key {
-    switch (this) {
-      case SessionStatus.connectivityNone:
-        return const Key('session_status_connectivityNone');
-      case SessionStatus.connectError:
-        return const Key('session_status_connectError');
-      case SessionStatus.appUnregistered:
-        return const Key('session_status_appUnregistered');
-      case SessionStatus.connectIssue:
-        return const Key('session_status_connectIssue');
-      case SessionStatus.inProgress:
-        return const Key('session_status_inProgress');
-      case SessionStatus.ready:
-        return const Key('session_status_ready');
-      case SessionStatus.pushTokenError:
-        return const Key('session_status_pushTokenError');
-    }
+    if (hasPushTokenError) return const Key('session_status_pushTokenError');
+    return switch (signalingStatus) {
+      CallStatus.connectivityNone => const Key('session_status_connectivityNone'),
+      CallStatus.connectError => const Key('session_status_connectError'),
+      CallStatus.appUnregistered => const Key('session_status_appUnregistered'),
+      CallStatus.connectIssue => const Key('session_status_connectIssue'),
+      CallStatus.inProgress => const Key('session_status_inProgress'),
+      CallStatus.ready => const Key('session_status_ready'),
+    };
   }
 }

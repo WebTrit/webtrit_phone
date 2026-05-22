@@ -45,33 +45,25 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
 
     final pushTokens = _lastPushTokensState;
     final call = _lastCallState;
-
-    if (pushTokens != null && call != null) {
-      emit(state.copyWith(status: _mapCallStatusToSessionStatus(call.status, pushTokens)));
-    }
-  }
-
-  SessionStatus _mapCallStatusToSessionStatus(CallStatus callStatus, PushTokensState pushTokens) {
-    // Use push token error as the main status if there is no push token or push token not delivered
-    if (pushTokens.pushToken == null && pushTokens.errorMessage != null) {
-      return SessionStatus.pushTokenError;
+    if (pushTokens == null || call == null) {
+      _logger.warning('emitCombinedStatus: skipped — pushTokens=$pushTokens, call=$call');
+      return;
     }
 
-    // Use call status as the main status
-    return switch (callStatus) {
-      CallStatus.connectivityNone => SessionStatus.connectivityNone,
-      CallStatus.connectError => SessionStatus.connectError,
-      CallStatus.appUnregistered => SessionStatus.appUnregistered,
-      CallStatus.connectIssue => SessionStatus.connectIssue,
-      CallStatus.inProgress => SessionStatus.inProgress,
-      CallStatus.ready => SessionStatus.ready,
-    };
+    final pushTokenError = (pushTokens.pushToken == null && pushTokens.errorMessage != null)
+        ? pushTokens.errorMessage
+        : null;
+    emit(
+      state.copyWith(
+        status: SessionStatus(signalingStatus: call.status, pushTokenError: pushTokenError),
+      ),
+    );
   }
 
   @override
   Future<void> close() {
-    _pushTokensSubscription.cancel();
     _callSubscription.cancel();
+    _pushTokensSubscription.cancel();
     return super.close();
   }
 }

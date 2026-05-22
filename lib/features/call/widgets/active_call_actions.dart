@@ -156,14 +156,19 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
+    // Camera can trigger SDP renegotiation when adding a new track, so it is gated.
     final onCameraChanged = widget.enableInteractions ? widget.onCameraChanged : null;
-    final onMutedChanged = widget.enableInteractions ? widget.onMutedChanged : null;
-    final audioDevice = widget.enableInteractions ? widget.audioDevice : null;
-    final onAudioDeviceChanged = widget.enableInteractions ? widget.onAudioDeviceChanged : null;
-    final speakerOn = widget.enableInteractions ? audioDevice?.type == CallAudioDeviceType.speaker : null;
-    final onBlindTransferInitiated = widget.enableInteractions ? widget.onBlindTransferInitiated : null;
-    final onAttendedTransferInitiated = widget.enableInteractions ? widget.onAttendedTransferInitiated : null;
-    final onAttendedTransferSubmitted = widget.enableInteractions ? widget.onAttendedTransferSubmitted : null;
+    // Mute is local-only (no SDP change), so it stays active during renegotiation.
+    final onMutedChanged = widget.onMutedChanged;
+    // Speaker switching is local-only (no SDP change), so it stays active during renegotiation.
+    final audioDevice = widget.audioDevice;
+    final onAudioDeviceChanged = widget.onAudioDeviceChanged;
+    final speakerOn = audioDevice?.type == CallAudioDeviceType.speaker;
+    // Transfer button itself is local (opens a popup), only the actions inside are signaling-dependent.
+    final onBlindTransferInitiated = widget.onBlindTransferInitiated;
+    final onAttendedTransferInitiated = widget.onAttendedTransferInitiated;
+    final onAttendedTransferSubmitted = widget.onAttendedTransferSubmitted;
+    // Hold and swap send signaling requests and trigger renegotiation.
     final onHeldChanged = widget.enableInteractions ? widget.onHeldChanged : null;
     final onSwapPressed = widget.enableInteractions ? widget.onSwapPressed : null;
     final onKeyPressed = widget.enableInteractions ? widget.onKeyPressed : null;
@@ -258,30 +263,30 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         if (widget.availableAudioDevices.onlyBuiltIn)
           Tooltip(
             key: callActionsSpeakerKey,
-            message: speakerOn ?? false
+            message: speakerOn
                 ? context.l10n.call_CallActionsTooltip_disableSpeaker
                 : context.l10n.call_CallActionsTooltip_enableSpeaker,
             child: TextButton(
               onPressed: () {
                 final speakerDevice = widget.availableAudioDevices.getSpeaker;
                 final earpieceDevice = widget.availableAudioDevices.getEarpiece;
-                if (speakerOn == true) {
+                if (speakerOn) {
                   if (earpieceDevice != null) {
-                    onAudioDeviceChanged?.call(earpieceDevice);
+                    onAudioDeviceChanged.call(earpieceDevice);
                   } else {
                     _logger.warning('Earpiece device not found while trying to disable speakerphone');
                   }
                 } else {
                   if (speakerDevice != null) {
-                    onAudioDeviceChanged?.call(speakerDevice);
+                    onAudioDeviceChanged.call(speakerDevice);
                   } else {
                     _logger.warning('Speaker device not found while trying to enable speakerphone');
                   }
                 }
               },
-              statesController: _speakerStatesController..update(WidgetState.selected, speakerOn ?? false),
+              statesController: _speakerStatesController..update(WidgetState.selected, speakerOn),
               style: widget.style?.speaker,
-              child: Icon((speakerOn ?? false) ? Icons.volume_up : Icons.phone_in_talk, size: actionPadIconSize),
+              child: Icon(speakerOn ? Icons.volume_up : Icons.phone_in_talk, size: actionPadIconSize),
             ),
           ),
         if (!widget.availableAudioDevices.onlyBuiltIn)
@@ -353,6 +358,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
                   if (onAttendedTransferSubmitted != null)
                     CallPopupMenuItem(
                       key: callActionsTransferMenuNumberKey,
+                      // Transfer is signaling-dependent, disable during renegotiation.
+                      enabled: widget.enableInteractions,
                       onTap: () => onAttendedTransferSubmitted.call(call),
                       text: call.displayName ?? call.handle.value,
                       icon: Icon(
@@ -364,6 +371,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
                     ),
                 if (onBlindTransferInitiated != null)
                   CallPopupMenuItem(
+                    // Transfer is signaling-dependent, disable during renegotiation.
+                    enabled: widget.enableInteractions,
                     onTap: onBlindTransferInitiated,
                     text: context.l10n.call_CallActionsTooltip_transfer_choose,
                     icon: Icon(
@@ -393,6 +402,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
                 if (onBlindTransferInitiated != null)
                   CallPopupMenuItem(
                     key: callActionsTransferMenuBlindInitKey,
+                    // Transfer is signaling-dependent, disable during renegotiation.
+                    enabled: widget.enableInteractions,
                     onTap: onBlindTransferInitiated,
                     text: context.l10n.call_CallActionsTooltip_unattended_transfer,
                     icon: Icon(
@@ -404,6 +415,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
                   ),
                 if (onAttendedTransferInitiated != null)
                   CallPopupMenuItem(
+                    // Transfer is signaling-dependent, disable during renegotiation.
+                    enabled: widget.enableInteractions,
                     onTap: onAttendedTransferInitiated,
                     text: context.l10n.call_CallActionsTooltip_attended_transfer,
                     icon: Icon(

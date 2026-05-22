@@ -26,9 +26,11 @@ mixin EncodingSettingsJsonMapper {
       opusDtx: map['opusDtx'] as bool?,
       audioProfiles: (map['audioProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).nonNulls.toList(),
       videoProfiles: (map['videoProfiles'] as List<dynamic>?)?.map((p) => profileFromMap(p)).nonNulls.toList(),
-      removeExtmaps: map['removeExtmaps'] as bool? ?? false,
       removeStaticAudioRtpMaps: map['removeStaticAudioRtpMaps'] as bool? ?? false,
       remapTE8payloadTo101: map['remapTE8payloadTo101'] as bool? ?? false,
+      removeREMBFeedback: map['removeREMBFeedback'] as bool? ?? false,
+      removeTWCCFeedback: map['removeTWCCFeedback'] as bool? ?? false,
+      removeExtmaps: _extmapListFromJson(map['removeExtmaps']),
     );
   }
 
@@ -44,10 +46,23 @@ mixin EncodingSettingsJsonMapper {
       'opusDtx': settings.opusDtx,
       'audioProfiles': settings.audioProfiles?.map((e) => profileToMap(e)).toList(),
       'videoProfiles': settings.videoProfiles?.map((e) => profileToMap(e)).toList(),
-      'removeExtmaps': settings.removeExtmaps,
       'removeStaticAudioRtpMaps': settings.removeStaticAudioRtpMaps,
       'remapTE8payloadTo101': settings.remapTE8payloadTo101,
+      'removeREMBFeedback': settings.removeREMBFeedback,
+      'removeTWCCFeedback': settings.removeTWCCFeedback,
+      'removeExtmaps': settings.removeExtmaps.map((e) => e.name).toList(),
     };
+  }
+
+  List<SdpExtmapType> _extmapListFromJson(dynamic value) {
+    if (value == null) return const [];
+
+    // Migrate from old version
+    if (value is bool) return const [];
+    return (value as List<dynamic>)
+        .map((e) => SdpExtmapType.values.firstWhereOrNull((t) => t.name == e))
+        .nonNulls
+        .toList();
   }
 
   // returns null if profile is not recognized, which means it should be ignored
