@@ -289,9 +289,6 @@ Future<void> _initFirebaseMessaging() async {
     logger.info('onMessage: ${message.toMap()}');
     final appPush = AppRemotePush.fromFCM(message);
     RemotePushBroker.handleForegroundPush(appPush);
-
-    // Type of notification for testing purposes
-    _dHandleInspectPush(message.data, false);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     logger.info('onMessageOpenedApp: ${message.toMap()}');
@@ -345,9 +342,6 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
   final appPush = AppRemotePush.fromFCM(message);
 
   logger.info('onBackgroundMessage: ${message.toMap()}');
-
-  // Type of notification for testing purposes
-  _dHandleInspectPush(message.data, true);
 
   if (appPush is PendingCallPush && Platform.isAndroid) {
     // Known issue: [SqliteException] with code 5 (database is locked) may occur
@@ -452,35 +446,6 @@ Future<void> _initAndroidNotificationChannel() async {
   await androidPlugin.deleteNotificationChannel(kLegacyLocalPushChannelId);
   await androidPlugin.createNotificationChannel(
     const AndroidNotificationChannel(kLocalPushChannelId, kLocalPushChannelName, importance: Importance.high),
-  );
-}
-
-// Debugging push notifications
-void _dHandleInspectPush(Map<String, dynamic> data, bool background) {
-  if (data.containsKey('type') && data['type'] == 'inspect-push') {
-    final title = data['title'] ?? 'Inspect Push';
-    final body =
-        "${data['body'] ?? 'This is a local notification for testing notifications'} ${background ? 'Background' : 'Foreground'}";
-
-    _dShowInspectLocalPush(title: title, body: body);
-  }
-}
-
-// Debugging push notifications
-Future<void> _dShowInspectLocalPush({required String title, required String body}) async {
-  await FlutterLocalNotificationsPlugin().show(
-    0,
-    title,
-    body,
-    const NotificationDetails(
-      android: AndroidNotificationDetails(
-        'inspect_push_channel',
-        'Inspect Push Notifications',
-        channelDescription: 'Channel for debugging push notifications',
-        importance: Importance.max,
-        priority: Priority.high,
-      ),
-    ),
   );
 }
 
