@@ -164,12 +164,14 @@ class EncodingSettings extends Equatable {
     (option: RTPCodecProfile.g722, enabled: true),
     (option: RTPCodecProfile.pcmu, enabled: true),
     (option: RTPCodecProfile.pcma, enabled: true),
-    (option: RTPCodecProfile.comfortNoise_32k, enabled: true),
-    (option: RTPCodecProfile.comfortNoise_16k, enabled: true),
     (option: RTPCodecProfile.comfortNoise_8k, enabled: true),
-    (option: RTPCodecProfile.telephoneEvent_48k, enabled: true),
-    (option: RTPCodecProfile.telephoneEvent_16k, enabled: true),
+    (option: RTPCodecProfile.comfortNoise_16k, enabled: true),
+    (option: RTPCodecProfile.comfortNoise_32k, enabled: true),
+    // moving TE8 on top fixes compatibility issues with Zoiper
+    // that shufflles pt 110 to 8k rate on re-invite to video
     (option: RTPCodecProfile.telephoneEvent_8k, enabled: true),
+    (option: RTPCodecProfile.telephoneEvent_16k, enabled: true),
+    (option: RTPCodecProfile.telephoneEvent_48k, enabled: true),
     (option: RTPCodecProfile.redundancy_audio, enabled: true),
   ];
 
@@ -178,13 +180,17 @@ class EncodingSettings extends Equatable {
   /// `null` means not set and use automatic mode.
   final List<Enableble<RTPCodecProfile>>? videoProfiles;
   static List<Enableble<RTPCodecProfile>> defaultVideoProfilesOrder = [
-    (option: RTPCodecProfile.h264_42e01f, enabled: true),
-    (option: RTPCodecProfile.h264_42e034, enabled: true),
-    (option: RTPCodecProfile.h264_640c34, enabled: true),
-    (option: RTPCodecProfile.h265, enabled: true),
     (option: RTPCodecProfile.vp8, enabled: true),
     (option: RTPCodecProfile.vp9, enabled: true),
     (option: RTPCodecProfile.av1, enabled: true),
+    (option: RTPCodecProfile.h265, enabled: true),
+
+    /// h264 downed 30 apr 2026 due to:
+    ///  - android/ios incompatibility (android support only h264_42e01f even some exynos dont, ios support h264_42e034 and h264_640c34)
+    ///  - android app crashes in some cases like upgrade to video race
+    (option: RTPCodecProfile.h264_42e01f, enabled: true),
+    (option: RTPCodecProfile.h264_42e034, enabled: true),
+    (option: RTPCodecProfile.h264_640c34, enabled: true),
     (option: RTPCodecProfile.redundancy_video, enabled: true),
   ];
 

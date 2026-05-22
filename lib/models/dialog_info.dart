@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 enum DialogDirection { initiator, recipient }
 
-enum DialogState { proceeding, early, confirmed, terminated, unknown }
+enum DialogState { trying, proceeding, early, confirmed, terminated, unknown }
 
 class DialogInfo extends Equatable {
   const DialogInfo({

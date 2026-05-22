@@ -2,27 +2,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_REMOTE_MESSAGING" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application>
         <!--
-            SignalingForegroundService uses foregroundServiceType="remoteMessaging".
+            SignalingForegroundService uses foregroundServiceType="phoneCall".
 
-            This service maintains a persistent WebSocket connection to the WebTrit signaling
-            server to exchange call-signaling messages (SDP, ICE candidates, call state events).
-            The remoteMessaging type is defined by Android as the appropriate type for services
-            that keep a long-running connection alive so a remote server can deliver messages to
-            the device at any time — which is exactly what this service does.
+            This service maintains a persistent WebSocket connection to the WebTrit VoIP
+            signaling server so that incoming call invitations (SDP offers, ICE candidates)
+            are delivered to the device immediately — within the SIP ring timeout (~30 s).
+            Without this service, incoming VoIP calls cannot be received reliably in the
+            background on devices where FCM high-priority push is restricted (Xiaomi MIUI,
+            Huawei EMUI). The phoneCall type is appropriate because the sole purpose of this
+            service is to enable VoIP call delivery.
 
-            Required permission: FOREGROUND_SERVICE_REMOTE_MESSAGING (declared above).
+            Required permission: FOREGROUND_SERVICE_PHONE_CALL (declared above).
             Applies on Android 14+ (API 34+); older versions pass type=0.
         -->
         <service
             android:name=".SignalingForegroundService"
-            android:foregroundServiceType="remoteMessaging"
+            android:foregroundServiceType="phoneCall"
             android:exported="false" />
 
         <receiver

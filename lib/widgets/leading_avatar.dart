@@ -140,7 +140,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
           if (presenceParams.hybridPresenceSupport && widget.presenceInfo != null)
             Positioned.fromRect(
               rect: _presenceRect,
-              child: _buildPresenceIndicator(_style, widget.presenceInfo!, widget.dialogInfo!),
+              child: _buildPresenceIndicator(_style, widget.presenceInfo!, widget.dialogInfo ?? []),
             ),
           if (widget.smart) Positioned.fromRect(rect: _smartRect, child: _smartIndicator(_diameter, _style, scheme)),
           if (widget.showLoading) _buildLoadingOverlay(_style),

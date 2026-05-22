@@ -17,7 +17,6 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
 
   final List<SignalingServiceConfig> startedConfigs = [];
   final List<SignalingServiceMode> startedModes = [];
-  int attachCount = 0;
   final List<Request> executedRequests = [];
   Object? executeError;
   final List<SignalingServiceMode> updatedModes = [];
@@ -40,9 +39,6 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
     startedConfigs.add(config);
     startedModes.add(mode);
   }
-
-  @override
-  Future<void> attach() async => attachCount++;
 
   @override
   Future<void> execute(Request request) async {
@@ -300,11 +296,6 @@ void main() {
     test('setIncomingCallHandler with different callback', () async {
       await WebtritSignalingService.setIncomingCallHandler(_anotherHandler);
       expect(platform.incomingCallHandles, [_anotherHandler]);
-    });
-
-    test('attach delegates to platform', () async {
-      await WebtritSignalingService.attach();
-      expect(platform.attachCount, 1);
     });
 
     test('updateMode persistent delegates to platform', () async {

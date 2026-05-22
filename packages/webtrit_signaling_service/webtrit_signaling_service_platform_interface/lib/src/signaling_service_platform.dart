@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show VoidCallback;
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
@@ -39,13 +40,6 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   /// - [SignalingServiceMode.pushBound] -- service stops when the app Activity
   ///   is closed, allowing the next push to start a fresh instance.
   Future<void> start(SignalingServiceConfig config, {SignalingServiceMode mode = SignalingServiceMode.persistent});
-
-  /// Connects to an already-running service hub without starting a new service.
-  ///
-  /// Call this from the main isolate when the Activity opens after a push
-  /// notification has already started the service in [SignalingServiceMode.pushBound].
-  /// Events from the existing connection are delivered immediately via [events].
-  Future<void> attach();
 
   /// Sends [request] to the server via the active connection.
   Future<void> execute(Request request);
@@ -104,4 +98,11 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   /// No-op on platforms without a persistent background service (e.g. iOS).
   /// Intended for debug/QA use only to verify service-restart behaviour.
   Future<void> simulateKill() async {}
+
+  /// Registers a callback invoked when another isolate's WebSocket connects in
+  /// push-bound mode, signalling that it has taken over the call.
+  ///
+  /// Call this in the push isolate before [start] so the plugin can notify app
+  /// code when the handoff signal arrives via [IsolateNameServer]. No-op on iOS.
+  void setHandoffCallback(VoidCallback callback) {}
 }

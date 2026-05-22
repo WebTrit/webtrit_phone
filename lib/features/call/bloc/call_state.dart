@@ -213,6 +213,11 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   @override
   final DateTime createdTime;
 
+  /// Whether the user has explicitly enabled the local camera for this call.
+  ///
+  /// This is local camera intent, not remote SDP capability. It is set only by
+  /// user actions ([CallControlEvent.cameraEnabled]) and initial media setup.
+  /// Never derive it from a remote SDP offer — that is what [remoteVideo] is for.
   @override
   final bool video;
 
@@ -302,7 +307,8 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   /// This is the primary flag for UI visibility. It evaluates to `true` only if:
   /// 1. The user has explicitly enabled video (logical state [video] is `true`).
   /// 2. A valid video track exists in the [localStream] (technical state [hasLocalVideoTrack] is `true`).
-  bool get isCameraActive => video && hasLocalVideoTrack;
+  bool get isCameraActive =>
+      video && hasLocalVideoTrack && localStream?.getVideoTracks().any((track) => track.enabled) == true;
 }
 
 extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
@@ -311,66 +317,4 @@ extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
   List<T> get nonCurrent => where((activeCall) => activeCall != current).toList();
 
   T? get blindTransferInitiated => firstWhereOrNull((activeCall) => activeCall.transfer is BlindTransferInitiated);
-}
-
-enum CallAudioDeviceType { earpiece, speaker, bluetooth, wiredHeadset, streaming, unknown }
-
-@freezed
-class CallAudioDevice with _$CallAudioDevice {
-  CallAudioDevice({required this.type, this.id, this.name});
-
-  @override
-  final CallAudioDeviceType type;
-
-  @override
-  final String? id;
-
-  @override
-  final String? name;
-
-  factory CallAudioDevice.fromMediaInput(MediaDeviceInfo device) {
-    return CallAudioDevice(
-      type: switch (device.groupId) {
-        'MicrophoneBuiltIn' => CallAudioDeviceType.earpiece,
-        'MicrophoneWired' || 'LineIn' || 'USBAudio' => CallAudioDeviceType.wiredHeadset,
-        'BluetoothHFP' => CallAudioDeviceType.bluetooth,
-        'CarAudio' => CallAudioDeviceType.streaming,
-        _ => CallAudioDeviceType.unknown,
-      },
-      name: device.label,
-      id: device.deviceId,
-    );
-  }
-
-  factory CallAudioDevice.fromMediaOutput(MediaDeviceInfo device) {
-    return CallAudioDevice(
-      type: switch (device.groupId) {
-        'Speaker' => CallAudioDeviceType.speaker,
-        'Receiver' => CallAudioDeviceType.earpiece,
-        'BluetoothA2DPOutput' || 'BluetoothHFP' || 'BluetoothLE' => CallAudioDeviceType.bluetooth,
-        'Headphones' || 'LineOut' || 'USBAudio' => CallAudioDeviceType.wiredHeadset,
-        'CarAudio' => CallAudioDeviceType.streaming,
-        _ => CallAudioDeviceType.unknown,
-      },
-      name: device.label,
-      id: device.deviceId,
-    );
-  }
-
-  factory CallAudioDevice.fromCallkeep(CallkeepAudioDevice device) {
-    return CallAudioDevice(type: CallAudioDeviceType.values.byName(device.type.name), id: device.id, name: device.name);
-  }
-
-  CallkeepAudioDevice toCallkeep() {
-    return CallkeepAudioDevice(type: CallkeepAudioDeviceType.values.byName(type.name), id: id, name: name);
-  }
-}
-
-extension CallAudioDeviceIterableExtension<T extends CallAudioDevice> on Iterable<T> {
-  bool get onlyBuiltIn =>
-      every((device) => device.type == CallAudioDeviceType.earpiece || device.type == CallAudioDeviceType.speaker);
-
-  T? get getSpeaker => firstWhereOrNull((device) => device.type == CallAudioDeviceType.speaker);
-
-  T? get getEarpiece => firstWhereOrNull((device) => device.type == CallAudioDeviceType.earpiece);
 }

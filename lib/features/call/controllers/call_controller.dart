@@ -36,12 +36,12 @@ class CallController {
   /// don't get confused with signaling connectivity (SIP registration)
   /// this is needed to determine what notification to show
   Future<bool> get isNetworkConnected async {
-    // If we already have a connectivity status from the stream, return it immediately.
-    // For cases if app was initialized and we know our connectivity status, we can avoid the overhead of an additional checkConnection call.
-    if (_netConnected != null) return _netConnected!;
+    // Only trust the cached value when it says connected. A cached false may be
+    // stale — OEMs (e.g. Xiaomi) can signal ConnectivityResult.none while the
+    // app is backgrounded even when the network interface stays up, and the
+    // stream may not re-emit after the app returns to the foreground.
+    if (_netConnected == true) return true;
 
-    // But if its null its means app was just launched and we haven't received any connectivity updates yet,
-    // so we should perform an active check to determine our connectivity status before proceeding with the call.
     _netConnected = await connectivityService.checkConnection().timeout(
       const Duration(seconds: 5),
       onTimeout: () {

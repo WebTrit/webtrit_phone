@@ -60,7 +60,10 @@ class CallToActionsCubit extends Cubit<CallToActionsCubitState> {
   Future<void> _loadFlavorActions(MainFlavor flavor, Locale locale) async {
     try {
       final userInfo = await _userRepository.getAndListen().first;
-      final flavorCallToActions = await _callToActionsRepository.getActions(flavor, locale, userInfo.email!);
+      final userEmail = userInfo.email;
+      if (userEmail == null) return;
+
+      final flavorCallToActions = await _callToActionsRepository.getActions(flavor, locale, userEmail);
       final updatedFlavorCallToActions = {...state.actions, flavor: flavorCallToActions};
 
       emit(state.copyWith(actions: updatedFlavorCallToActions));

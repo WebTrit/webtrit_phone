@@ -382,43 +382,6 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // attach()
-  // -------------------------------------------------------------------------
-
-  group('WebtritSignalingServiceIos -- attach()', () {
-    test('completes without error before start()', () async {
-      final plugin = _buildPlugin(_failingFactory(Exception('x')));
-      addTearDown(plugin.dispose);
-
-      await expectLater(plugin.attach(), completes);
-    });
-
-    test('completes without error after start()', () async {
-      final client = _FakeSignalingClient();
-      final plugin = _buildPlugin(_successFactory(client));
-      addTearDown(plugin.dispose);
-
-      await plugin.start(_kConfig);
-      await Future<void>.delayed(Duration.zero);
-
-      await expectLater(plugin.attach(), completes);
-    });
-
-    test('does not emit any events', () async {
-      final plugin = _buildPlugin(_failingFactory(Exception('x')));
-      addTearDown(plugin.dispose);
-
-      final events = <SignalingModuleEvent>[];
-      plugin.events.listen(events.add);
-
-      await plugin.attach();
-      await Future<void>.delayed(Duration.zero);
-
-      expect(events, isEmpty);
-    });
-  });
-
-  // -------------------------------------------------------------------------
   // execute()
   // -------------------------------------------------------------------------
 
