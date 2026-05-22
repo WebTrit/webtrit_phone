@@ -25,6 +25,8 @@ class NativeLogForwarder implements Disposable {
 
   void start() {
     _watchSubscription?.cancel();
+    _readOffset = _file.existsSync() ? _file.lengthSync() : 0;
+    _remainder = '';
     final absolutePath = _file.absolute.path;
     _watchSubscription = _file.parent
         .watch()
@@ -75,7 +77,6 @@ class NativeLogForwarder implements Disposable {
       await raf?.close();
     }
   }
-
 
   @override
   Future<void> dispose() async {
