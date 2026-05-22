@@ -439,10 +439,9 @@ class SignalingModuleImpl implements SignalingModule {
   ///
   /// - [Duration.zero] -- reconnect immediately (server evicted a duplicate session)
   /// - [reconnectDelay] -- standard slow reconnect
-  /// - null -- do not reconnect (protocol error or intentional close)
+  /// - null -- intentional close only (disconnect() was called by the app)
   Duration? _reconnectDelay(SignalingDisconnectCode code) {
     if (code == SignalingDisconnectCode.controllerForceAttachClose) return Duration.zero;
-    if (code == SignalingDisconnectCode.protocolError) return null;
     return reconnectDelay;
   }
 
