@@ -868,6 +868,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_TextFieldLabelText_otpSigninUserRef => 'Введіть свій номер телефону чи електронну пошту';
 
   @override
+  String get login_TextFieldLabelText_otpSigninUserRefPhone => 'Введіть свій номер телефону';
+
+  @override
+  String get login_TextFieldLabelText_otpSigninUserRefEmail => 'Введіть свою електронну пошту';
+
+  @override
   String get login_TextFieldLabelText_passwordSigninPassword => 'Введіть ваш пароль';
 
   @override

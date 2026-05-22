@@ -73,9 +73,11 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
 
         final refDecoration = refStyle?.decoration ?? const InputDecoration();
 
+        final identifiers = state.otpSigninIdentifiers;
+
         final decorationLabelText = context.parseL10n(
           refDecoration.labelText,
-          fallback: context.l10n.login_TextFieldLabelText_otpSigninUserRef,
+          fallback: identifiers.userRefLabel(context),
         );
 
         return Container(
@@ -104,8 +106,8 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
                 inputFormatters: maskConfig != null ? [_maskFormatter] : [],
                 style: refStyle?.textStyle,
                 textAlign: refStyle?.textAlign ?? TextAlign.start,
-                keyboardType: refStyle?.keyboardType ?? TextInputType.emailAddress,
-                autofillHints: const [AutofillHints.email, AutofillHints.telephoneNumber],
+                keyboardType: refStyle?.keyboardType ?? identifiers.userRefKeyboardType,
+                autofillHints: identifiers.userRefAutofillHints,
                 onChanged: context.read<LoginCubit>().otpSigninUserRefInputChanged,
                 onFieldSubmitted: !state.otpSigninUserRefInput.isValid ? null : (_) => _onSubmitted(context),
               ),
