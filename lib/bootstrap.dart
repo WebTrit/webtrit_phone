@@ -433,9 +433,26 @@ Future _initLocalPushs() async {
     onDidReceiveBackgroundNotificationResponse: LocalPushsBroker.handleActionReceived,
   );
 
+  await _initAndroidNotificationChannel();
+
   final launchDetails = await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
   final data = launchDetails?.notificationResponse;
   if (data != null) LocalPushsBroker.handleActionReceived(data);
+}
+
+/// Creates the high-importance local push channel referenced by FCM's
+/// `default_notification_channel_id` and drops the legacy default-importance
+/// channel so heads-up banners and screen wake work for local pushes.
+Future<void> _initAndroidNotificationChannel() async {
+  final androidPlugin = FlutterLocalNotificationsPlugin()
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+  if (androidPlugin == null) return;
+
+  // ignore: deprecated_member_use_from_same_package
+  await androidPlugin.deleteNotificationChannel(kLegacyLocalPushChannelId);
+  await androidPlugin.createNotificationChannel(
+    const AndroidNotificationChannel(kLocalPushChannelId, kLocalPushChannelName, importance: Importance.high),
+  );
 }
 
 // Debugging push notifications
