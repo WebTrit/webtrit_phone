@@ -75,6 +75,8 @@ const kSystemNotificationsPushFeatureFlag = 'notificationsPush';
 const kSipPresenceFeatureFlag = 'sipPresence';
 const kSipDialogsFeatureFlag = 'sipDialogs';
 
+const kOtpLoginIdentifiersCustomKey = 'otp_login_identifiers';
+
 const kSystemNotificationsTask = 'systemNotificationsTask';
 const kSystemNotificationsTaskId = 'systemNotificationsTask-id';
 

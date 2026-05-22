@@ -859,6 +859,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_TextFieldLabelText_otpSigninUserRef => 'Enter your phone number or email';
 
   @override
+  String get login_TextFieldLabelText_otpSigninUserRefPhone => 'Enter your phone number';
+
+  @override
+  String get login_TextFieldLabelText_otpSigninUserRefEmail => 'Enter your email';
+
+  @override
   String get login_TextFieldLabelText_passwordSigninPassword => 'Enter your password';
 
   @override

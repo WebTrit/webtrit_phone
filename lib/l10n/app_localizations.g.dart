@@ -1605,6 +1605,18 @@ abstract class AppLocalizations {
   /// **'Enter your phone number or email'**
   String get login_TextFieldLabelText_otpSigninUserRef;
 
+  /// No description provided for @login_TextFieldLabelText_otpSigninUserRefPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number'**
+  String get login_TextFieldLabelText_otpSigninUserRefPhone;
+
+  /// No description provided for @login_TextFieldLabelText_otpSigninUserRefEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get login_TextFieldLabelText_otpSigninUserRefEmail;
+
   /// No description provided for @login_TextFieldLabelText_passwordSigninPassword.
   ///
   /// In en, this message translates to:

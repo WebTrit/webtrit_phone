@@ -515,6 +515,10 @@ class AppLocalizationsMapper {
           localizations.login_TextFieldLabelText_otpSigninCode,
       'login_TextFieldLabelText_otpSigninUserRef':
           localizations.login_TextFieldLabelText_otpSigninUserRef,
+      'login_TextFieldLabelText_otpSigninUserRefPhone':
+          localizations.login_TextFieldLabelText_otpSigninUserRefPhone,
+      'login_TextFieldLabelText_otpSigninUserRefEmail':
+          localizations.login_TextFieldLabelText_otpSigninUserRefEmail,
       'login_TextFieldLabelText_passwordSigninPassword':
           localizations.login_TextFieldLabelText_passwordSigninPassword,
       'login_TextFieldLabelText_passwordSigninUserRef':

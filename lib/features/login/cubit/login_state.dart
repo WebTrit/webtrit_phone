@@ -99,4 +99,14 @@ class LoginState with _$LoginState {
 
   bool get hasValidSession =>
       coreUrl != null && tenantId != null && token != null && userId != null && systemInfo != null;
+
+  /// OTP login identifiers supported by the backend adapter.
+  ///
+  /// Derived from `system-info` (`adapter.custom.otp_login_identifiers`).
+  /// Falls back to all known identifiers when the backend does not advertise
+  /// the field (e.g. older cores), preserving the legacy "phone or email" UI.
+  List<OtpSigninIdentifier> get otpSigninIdentifiers {
+    final identifiers = OtpSigninIdentifier.fromValues(systemInfo?.adapter?.otpLoginIdentifiers ?? const []);
+    return identifiers.isNotEmpty ? identifiers : OtpSigninIdentifier.values;
+  }
 }
