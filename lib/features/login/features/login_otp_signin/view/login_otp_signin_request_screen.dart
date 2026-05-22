@@ -74,12 +74,10 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
         final refDecoration = refStyle?.decoration ?? const InputDecoration();
 
         final identifiers = state.otpSigninIdentifiers;
-        final hasPhone = identifiers.contains(OtpSigninIdentifier.phoneNumber);
-        final hasEmail = identifiers.contains(OtpSigninIdentifier.email);
 
         final decorationLabelText = context.parseL10n(
           refDecoration.labelText,
-          fallback: _userRefLabel(context, hasPhone: hasPhone, hasEmail: hasEmail),
+          fallback: identifiers.userRefLabel(context),
         );
 
         return Container(
@@ -108,8 +106,8 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
                 inputFormatters: maskConfig != null ? [_maskFormatter] : [],
                 style: refStyle?.textStyle,
                 textAlign: refStyle?.textAlign ?? TextAlign.start,
-                keyboardType: refStyle?.keyboardType ?? _userRefKeyboardType(hasPhone: hasPhone, hasEmail: hasEmail),
-                autofillHints: _userRefAutofillHints(hasPhone: hasPhone, hasEmail: hasEmail),
+                keyboardType: refStyle?.keyboardType ?? identifiers.userRefKeyboardType,
+                autofillHints: identifiers.userRefAutofillHints,
                 onChanged: context.read<LoginCubit>().otpSigninUserRefInputChanged,
                 onFieldSubmitted: !state.otpSigninUserRefInput.isValid ? null : (_) => _onSubmitted(context),
               ),
@@ -142,25 +140,5 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
 
   void _onSubmitted(BuildContext context) {
     context.read<LoginCubit>().loginOptSigninRequestSubmitted();
-  }
-
-  /// Picks the input label that matches the OTP login identifiers advertised by
-  /// the backend, so the hint only mentions inputs the backend actually accepts.
-  String _userRefLabel(BuildContext context, {required bool hasPhone, required bool hasEmail}) {
-    final l10n = context.l10n;
-    if (hasPhone && !hasEmail) return l10n.login_TextFieldLabelText_otpSigninUserRefPhone;
-    if (hasEmail && !hasPhone) return l10n.login_TextFieldLabelText_otpSigninUserRefEmail;
-    return l10n.login_TextFieldLabelText_otpSigninUserRef;
-  }
-
-  TextInputType _userRefKeyboardType({required bool hasPhone, required bool hasEmail}) {
-    if (hasPhone && !hasEmail) return TextInputType.phone;
-    return TextInputType.emailAddress;
-  }
-
-  List<String> _userRefAutofillHints({required bool hasPhone, required bool hasEmail}) {
-    if (hasPhone && !hasEmail) return const [AutofillHints.telephoneNumber];
-    if (hasEmail && !hasPhone) return const [AutofillHints.email];
-    return const [AutofillHints.email, AutofillHints.telephoneNumber];
   }
 }
