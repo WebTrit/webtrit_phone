@@ -229,6 +229,16 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   }
 
   @override
+  Future<void> disconnect() async {
+    _logger.info('disconnect mode=$_currentMode');
+    if (_currentMode == SignalingServiceMode.pushBound) {
+      await _directService.disconnect();
+    } else {
+      await _hubManager.disconnect();
+    }
+  }
+
+  @override
   Future<void> stopService() async {
     _isStopped = true;
     _logger.info('stopService');

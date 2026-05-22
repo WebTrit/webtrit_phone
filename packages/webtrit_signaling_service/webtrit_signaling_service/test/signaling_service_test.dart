@@ -57,6 +57,7 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   final List<SignalingServiceMode> updatedModes = [];
   final List<Function> callEventHandles = [];
   final List<SignalingModuleFactory> moduleFactories = [];
+  int disconnectCount = 0;
   int disposeCount = 0;
   int stopServiceCount = 0;
   int restoreServiceCount = 0;
@@ -94,6 +95,12 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   Future<void> dispose() async {
     disposeCount++;
     // NOT closed -- mirrors real platform singleton that survives logout/login cycles.
+  }
+
+  @override
+  Future<void> disconnect() async {
+    disconnectCount++;
+    inject(SignalingDisconnecting());
   }
 
   @override
@@ -243,15 +250,33 @@ void main() {
   });
 
   // -------------------------------------------------------------------------
-  // disconnect() — no-op
+  // disconnect()
   // -------------------------------------------------------------------------
 
   group('WebtritSignalingService -- disconnect()', () {
-    test('is a no-op and does not call platform.dispose', () async {
+    test('delegates to platform.disconnect', () async {
       final service = WebtritSignalingService(config: _kConfig);
       await service.disconnect();
 
+      expect(platform.disconnectCount, 1);
       expect(platform.disposeCount, 0);
+      await service.dispose();
+    });
+
+    test('isConnected resets to false on SignalingDisconnecting (before SignalingDisconnected)', () async {
+      final service = WebtritSignalingService(config: _kConfig);
+      platform.inject(SignalingConnected());
+      await Future<void>.delayed(Duration.zero);
+      expect(service.isConnected, isTrue);
+
+      // The platform emits SignalingDisconnecting synchronously inside
+      // disconnect() before awaiting the TCP close handshake. Resetting
+      // _isConnected here handles the zombie-TCP case where
+      // SignalingDisconnected never arrives.
+      await service.disconnect();
+      await Future<void>.delayed(Duration.zero);
+      expect(service.isConnected, isFalse);
+
       await service.dispose();
     });
   });
