@@ -21,5 +21,6 @@ class WebtritApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         SignalingForegroundService.onFgsEngineReady = WebtritCallkeep::attachToEngine
+        SignalingForegroundService.onFgsEngineDestroyed = WebtritCallkeep::detachFromEngine
     }
 }
