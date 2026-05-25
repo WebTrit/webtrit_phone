@@ -69,7 +69,7 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
     _initContactsSubscription();
 
-    add(const LocalContactsSyncRefreshed());
+    await _loadContacts(emit);
   }
 
   void _onRefreshed(LocalContactsSyncRefreshed event, Emitter<LocalContactsSyncState> emit) async {
@@ -98,11 +98,15 @@ class LocalContactsSyncBloc extends Bloc<LocalContactsSyncEvent, LocalContactsSy
 
     _initContactsSubscription();
 
+    await _loadContacts(emit);
+  }
+
+  Future<void> _loadContacts(Emitter<LocalContactsSyncState> emit) async {
     emit(const LocalContactsSyncRefreshInProgress());
     try {
       await localContactsRepository.load();
     } catch (error) {
-      _logger.warning('_onRefreshed error: ', error);
+      _logger.warning('_loadContacts error: ', error);
       if (!isClosed) emit(const LocalContactsSyncRefreshFailure());
     }
   }

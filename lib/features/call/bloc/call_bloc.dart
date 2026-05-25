@@ -498,6 +498,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWith(currentAppLifecycleState: lifecycleState));
     _logger.fine('_onCallStarted initial lifecycle state: $lifecycleState');
 
+    // Subscribe before the first await so close() cancels it reliably and no listener leaks during teardown
+    _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen(_handleConnectivityChanged);
+
     // Initialize connectivity state
     final connectivityState = (await Connectivity().checkConnectivity()).first;
     emit(
@@ -506,12 +509,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       ),
     );
     _logger.finer('_onCallStarted initial connectivity state: $connectivityState');
-
-    // Subscribe to future connectivity changes
-    _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((result) {
-      final currentConnectivityResult = result.first;
-      add(_ConnectivityResultChanged(currentConnectivityResult));
-    });
 
     if (connectivityState == ConnectivityResult.none) {
       _reconnectController.notifyNetworkUnavailable();
@@ -534,6 +531,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _reconnectController.notifyAppResumed();
     }
   }
+
+  void _handleConnectivityChanged(List<ConnectivityResult> result) => add(_ConnectivityResultChanged(result.first));
 
   Future<void> _onConnectivityResultChanged(_ConnectivityResultChanged event, Emitter<CallState> emit) async {
     final connectivityResult = event.result;
