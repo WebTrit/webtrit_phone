@@ -100,7 +100,7 @@ flowchart TB
   classDef app fill:#ffe6cc,stroke:#d79b00,color:#000
   classDef ext fill:#f5f5f5,stroke:#999999,color:#000
 
-  TITLE["CASE A - PUSH-BOUND (FCM)<br/>app DEAD -> isolated push isolate; app ALIVE but backgrounded -> main app handles (no isolate)"]:::ext
+  TITLE["CASE A - PUSH-BOUND (FCM)<br/>app DEAD -> isolated push isolate, app ALIVE but backgrounded -> main app handles (no isolate)"]:::ext
   FCM["FCM high-priority push"]:::ext
   FMISO["firebase_messaging background isolate (APP)<br/>bootstrap.dart : _firebaseMessagingBackgroundHandler<br/>reports the call (no WebSocket here)"]:::app
   BOOT["reportNewIncomingCall (callkeep bootstrap API)"]:::ck
@@ -230,7 +230,7 @@ sequenceDiagram
     alt User answers
         User->>SYS: Answer
         SYS->>PCS: onAnswer
-        PCS->>PISO: performAnswerCall (records _answeredCallId; no WS send)
+        PCS->>PISO: performAnswerCall (records _answeredCallId, no WS send)
         PISO->>ICS: handoffCall (stop service, keep connection)
         Note over ACT: Activity launches, binds ForegroundService, adopts the connection
         ACT->>WS: answer over the app WebSocket (SIP 200 OK)
