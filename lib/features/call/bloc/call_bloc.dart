@@ -97,8 +97,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   // signaling reconnect that follows can be marked with reregister=true -
   // asking Core to refresh the SIP Contact before any incoming call lands on
   // a stale NAT pinhole. Same-interface drop+restore is not reported as a
-  // change; debounce collapses rapid flapping.
-  final _interfaceChangeDetector = InterfaceChangeDetector();
+  // change; debounce collapses rapid flapping. Injectable so tests can use a
+  // detector with a fake clock or recorded results.
+  final InterfaceChangeDetector _interfaceChangeDetector;
 
   late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
@@ -137,7 +138,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required PeerConnectionManager peerConnectionManager,
     this.onCallEnded,
     Stream<void>? foregroundCallPushSignal,
-  }) : super(const CallState()) {
+    InterfaceChangeDetector? interfaceChangeDetector,
+  }) : _interfaceChangeDetector = interfaceChangeDetector ?? InterfaceChangeDetector(),
+       super(const CallState()) {
     _mediaManager = CallMediaManager(callkeep: callkeep);
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
