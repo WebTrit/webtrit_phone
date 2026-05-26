@@ -22,7 +22,6 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/call_routing/utils/resolve_from_number.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -56,6 +55,11 @@ typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallR
 /// application-level logout to resolve the state.
 typedef SignalingSessionInvalidatedCallback = void Function();
 
+/// Resolves the SIP `from` number for an outgoing call to [destination] based
+/// on the user's caller-ID settings. Composition root supplies the closure
+/// (see `main_shell.dart`); the bloc only knows the shape.
+typedef FromNumberResolver = String? Function(String destination);
+
 const _getUserMediaPushKitTimeout = Duration(seconds: 8);
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
@@ -67,7 +71,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final DialogInfoRepository dialogInfoRepository;
   final PresenceSettingsRepository presenceSettingsRepository;
   final QueuedTerminationRequestsRepository queuedTerminationRequestsRepository;
-  final CallerIdSettingsRepository callerIdSettingsRepository;
+  final FromNumberResolver resolveFromNumberForDestination;
   final Function(Notification) submitNotification;
 
   /// Callback invoked when the signaling client reports a critical session error
@@ -113,7 +117,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.dialogInfoRepository,
     required this.presenceSettingsRepository,
     required this.queuedTerminationRequestsRepository,
-    required this.callerIdSettingsRepository,
+    required this.resolveFromNumberForDestination,
     required this.onSessionInvalidated,
     required this.userRepository,
     required this.submitNotification,
@@ -1320,14 +1324,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // Match the behaviour CallController used to apply:
     //   - if the caller passed the user's main number, null it out so the
     //     call goes via the main line;
-    //   - otherwise, when no fromNumber was provided, resolve it from
-    //     caller-ID settings (longest-prefix match, default fallback).
+    //   - otherwise, when no fromNumber was provided, defer to the injected
+    //     [resolveFromNumberForDestination] closure (longest-prefix matcher /
+    //     default fallback against caller-ID settings).
     String? fromNumber = event.fromNumber;
     final mainNumber = userRepository.getLocalInfo()?.numbers.main;
     if (fromNumber != null && fromNumber == mainNumber) {
       fromNumber = null;
     } else {
-      fromNumber ??= resolveFromNumber(event.handle.value, callerIdSettingsRepository.getCallerIdSettings());
+      fromNumber ??= resolveFromNumberForDestination(event.handle.value);
     }
 
     add(
