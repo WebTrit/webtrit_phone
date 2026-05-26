@@ -1301,12 +1301,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallControlEventStarted(_CallControlEventStarted event, Emitter<CallState> emit) async {
-    if (state.callServiceState.registration?.status.isRegistered != true) {
-      _logger.info('__onCallControlEventStarted account is not registered');
-      submitNotification(CallWhileUnregisteredNotification());
-      return;
-    }
-
+    // WT-1554: do NOT reject here when not registered.
+    //
+    // The downstream [__onCallPerformEventStarted] path already waits up to
+    // [kOutgoingCallSignalingWaitTimeout] for signaling+registration, triggers
+    // [_reconnectController.notifyForceReconnect], and parks the call in
+    // [CallProcessingStatus.outgoingConnectingToSignaling] so the call screen can
+    // show a "Connecting…" state. Failing fast here prevents that recovery flow
+    // from running (e.g. when the app has just been opened from push mode and
+    // SIP REGISTER has not completed yet) and surfaces an avoidable error to the
+    // user. The unregistered/offline notifications still fire from
+    // [__onCallPerformEventStarted] after the wait truly times out.
     add(
       _CallMutationEvent.controlStart(
         handle: event.handle,
@@ -1486,12 +1491,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// Returns true when [__onCallPerformEventStarted] should stop waiting for
   /// signaling readiness.
   ///
-  /// Exits as soon as both the handshake and signaling are established, or when
-  /// the call leaves [CallProcessingStatus.outgoingConnectingToSignaling] — for
-  /// example because the user pressed hangup (status → disconnecting) or
-  /// another code path removed the call entirely.
+  /// Exits as soon as both the handshake and signaling are established AND the
+  /// SIP REGISTER has been accepted (WT-1554 — waiting only on the socket
+  /// allowed the wait to finish while registration was still in progress, and
+  /// the call was then rejected with [CallWhileUnregisteredNotification]).
+  ///
+  /// Also exits fast when registration has definitively failed, so a known-bad
+  /// state does not block the call for the full [kOutgoingCallSignalingWaitTimeout].
+  ///
+  /// Finally exits when the call leaves
+  /// [CallProcessingStatus.outgoingConnectingToSignaling] — for example because
+  /// the user pressed hangup (status → disconnecting) or another code path
+  /// removed the call entirely.
   bool _shouldExitOutgoingSignalingWait(CallState next, String callId) {
-    if (next.isHandshakeEstablished && next.isSignalingEstablished) return true;
+    final registration = next.callServiceState.registration;
+    if (next.isHandshakeEstablished && next.isSignalingEstablished && registration?.status.isRegistered == true) {
+      return true;
+    }
+    if (registration?.status.isFailed == true) return true;
     final call = next.retrieveActiveCall(callId);
     return call == null || call.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling;
   }
