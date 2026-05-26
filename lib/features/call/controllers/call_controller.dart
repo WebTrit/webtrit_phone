@@ -76,18 +76,9 @@ class CallController {
     bool video = false,
     String? fromNumber,
   }) async {
-    // WT-1554: fast-fail only in the narrow case where routing state has not
-    // initialized AND the bloc already knows the network is definitively down.
-    //
-    // [_waitForRoutingState] below would otherwise sit through the full
-    // [kCallRoutingStateTimeout] (~10 s) while routing state can never arrive
-    // without network, leaving the user with no feedback. We intentionally
-    // require BOTH conditions:
-    //   - callRoutingCubit.state == null  (routing state not yet initialized)
-    //   - networkStatus == NetworkStatus.none  (bloc has a definitive signal)
-    // For "routing state present" / "network just flapping" / "signaling
-    // reconnecting" cases we still let the call through and let CallBloc's
-    // downstream wait + reconnect flow decide.
+    // WT-1554: fast-fail when routing state has not initialized AND the bloc
+    // already knows we are offline - otherwise [_waitForRoutingState] would
+    // sit through the full [kCallRoutingStateTimeout] (~10 s) with no feedback.
     if (callRoutingCubit.state == null && callBloc.state.callServiceState.networkStatus == NetworkStatus.none) {
       _logger.warning('Cannot create call: routing state not initialized and network is offline.');
       notificationsBloc.add(const NotificationsSubmitted(NoInternetConnectionNotification()));
