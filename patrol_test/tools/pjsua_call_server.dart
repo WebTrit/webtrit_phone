@@ -4,14 +4,7 @@ import 'dart:io';
 
 import 'package:logging/logging.dart';
 
-const _sipServer = '217.182.47.194';
-const _sipUsername = '111000124';
-const _sipPassword = 'zzzxxx123';
-const _serverPort = 7788;
-
 // TODO:
-// - rewrite to classes
-// - save call pids to reuse themasa
 // - add remote muting (mute, unmute)
 // - add remote hold and resume
 // - add transfer
@@ -22,7 +15,7 @@ final _logger = Logger('pjsua_call_server');
 
 final _processes = <int, Process>{};
 
-void main() async {
+void main(List<String> args) async {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
     if (record.loggerName == 'pjsua_call_server') {
@@ -31,9 +24,10 @@ void main() async {
     }
   });
 
-  final server = await HttpServer.bind(InternetAddress.anyIPv4, _serverPort);
-  _logger.info('pjsua call server listening on http://0.0.0.0:$_serverPort');
-  _logger.info('SIP account: sip:$_sipUsername@$_sipServer');
+  final serverPort = args.isNotEmpty ? (int.tryParse(args[0]) ?? 7788) : 7788;
+
+  final server = await HttpServer.bind(InternetAddress.anyIPv4, serverPort);
+  _logger.info('pjsua call server listening on http://0.0.0.0:$serverPort');
 
   await for (final request in server) {
     switch (request.uri.path) {
@@ -41,25 +35,27 @@ void main() async {
         _respond(request, HttpStatus.ok, 'ok');
       case '/call':
         try {
-          final to = request.uri.queryParameters['to'];
-          if (to == null || to.isEmpty) {
-            _respond(request, HttpStatus.badRequest, 'missing "to" parameter');
-            return;
-          }
+          final params = request.uri.queryParameters;
 
-          final duration = int.tryParse(request.uri.queryParameters['duration'] ?? '') ?? 60;
-          final callTarget = 'sip:$to@$_sipServer';
+          final sipServer = _validateParam(params, 'sip_server');
+          final sipUsername = _validateParam(params, 'sip_username');
+          final sipPassword = _validateParam(params, 'sip_password');
+          final calle = _validateParam(params, 'calle');
+          final duration = int.parse(_validateParam(params, 'duration', defaultValue: '60'));
+          final callTarget = 'sip:$calle@$sipServer';
           _logger.info('Placing pjsua call → $callTarget (duration: ${duration}s)');
 
-          final process = await _spawnPjsua(callTarget, duration);
+          final process = await _spawnPjsua(callTarget, sipServer, sipUsername, sipPassword, duration);
           _logger.info('pjsua started with PID: ${process.pid}');
-          
+
           _processes[process.pid] = process;
           monitorExit(process.pid);
           attachStateTicker(process.pid);
           attachStdoutConsumer(process.pid);
 
           _respond(request, HttpStatus.ok, 'call initiated to $callTarget');
+        } on ArgumentError catch (e) {
+          _respond(request, HttpStatus.badRequest, e.message.toString());
         } catch (e) {
           _respond(request, HttpStatus.internalServerError, 'failed to spawn pjsua: $e');
         }
@@ -79,6 +75,15 @@ void main() async {
   }
 }
 
+String _validateParam(Map<String, String> params, String name, {String? defaultValue}) {
+  final value = params[name];
+  if (value == null || value.isEmpty) {
+    if (defaultValue != null) return defaultValue;
+    throw ArgumentError('missing "$name" parameter');
+  }
+  return value;
+}
+
 void _respond(HttpRequest request, int status, String body) {
   request.response
     ..statusCode = status
@@ -86,11 +91,17 @@ void _respond(HttpRequest request, int status, String body) {
     ..close();
 }
 
-Future<Process> _spawnPjsua(String callTarget, int duration) async {
+Future<Process> _spawnPjsua(
+  String callTarget,
+  String sipServer,
+  String sipUsername,
+  String sipPassword,
+  int duration,
+) async {
   final process = await Process.start('pjsua', [
-    '--id=sip:$_sipUsername@$_sipServer',
-    '--username=$_sipUsername',
-    '--password=$_sipPassword',
+    '--id=sip:$sipUsername@$sipServer',
+    '--username=$sipUsername',
+    '--password=$sipPassword',
     '--realm=*',
     '--local-port=0',
     '--null-audio',
