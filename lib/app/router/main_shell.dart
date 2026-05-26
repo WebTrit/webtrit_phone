@@ -520,8 +520,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         dialogInfoRepository: context.read<DialogInfoRepository>(),
                         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
                         queuedTerminationRequestsRepository: context.read<QueuedTerminationRequestsRepository>(),
-                        // WT-1554 Option B: owns the full outgoing-fromNumber policy
-                        // (main-number normalisation + caller-ID matcher fallback).
+                        // Outgoing SIP `from` policy: normalise the user's main number to
+                        // null (main line), or fall back to caller-ID matcher resolution.
                         resolveOutgoingFromNumber: (callerFromNumber, destination) {
                           final mainNumber = context.read<UserRepository>().getLocalInfo()?.numbers.main;
                           if (callerFromNumber != null && callerFromNumber == mainNumber) return null;

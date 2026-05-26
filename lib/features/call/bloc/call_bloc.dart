@@ -1314,7 +1314,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     };
   }
 
-  // Outgoing-call pipeline (WT-1554 Option B):
+  // Outgoing-call pipeline:
   //
   //   CallControlEvent.started
   //     -> _CallMutationEvent.controlStart        (sequential mutation queue)
@@ -1516,8 +1516,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ///
   /// Exits as soon as the handshake and signaling are established, the SIP
   /// REGISTER has been accepted (WT-1554) AND the line config has arrived
-  /// (linesCount > 0, Option B - so a cold-start outgoing call that parked
-  /// before the handshake will only proceed once a line is actually known).
+  /// (linesCount > 0 - so a cold-start outgoing call that parked before the
+  /// handshake only proceeds once a line is actually known).
   ///
   /// Also exits fast when registration has definitively failed, so a known-bad
   /// state does not block the call for the full [kOutgoingCallSignalingWaitTimeout].
@@ -1553,9 +1553,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallPerformEventStarted(_CallPerformEventStarted event, Emitter<CallState> emit) async {
-    // WT-1554 Option B (step 4): _kUndefinedLine is no longer an instant fail.
-    // It means the call was started before the signaling handshake arrived
-    // (cold start) and the main line will be allocated below, after the wait.
+    // _kUndefinedLine is not an instant fail here: it means the call was
+    // started before the signaling handshake arrived (cold start) and the
+    // main line will be allocated below, after the wait. WT-1554.
 
     final restoredCall = state.retrieveActiveCall(event.callId);
     final canPerformStart = switch (restoredCall?.processingStatus) {
@@ -1581,8 +1581,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     // Attempt to wait for signaling+handshake+registration+lines readiness
     // within kOutgoingCallSignalingWaitTimeout. Also covers the cold-start
-    // case (Option B step 4): if the call was parked with [_kUndefinedLine],
-    // we wait until linesCount > 0 so a real main line can be allocated below.
+    // case: if the call was parked with [_kUndefinedLine], wait until
+    // linesCount > 0 so a real main line can be allocated below.
     final activeCallNow = currentState.retrieveActiveCall(event.callId);
     final hasUndefinedLine = activeCallNow?.line == _kUndefinedLine;
     final needsWait =
@@ -1640,8 +1640,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    // WT-1554 Option B (step 4): resolve a parked [_kUndefinedLine] now that
-    // the wait has completed (linesCount > 0 in the exit condition).
+    // Resolve a parked [_kUndefinedLine] now that the wait has completed
+    // (linesCount > 0 in the exit condition). WT-1554.
     final waitingCall = currentState.retrieveActiveCall(event.callId);
     if (waitingCall?.line == _kUndefinedLine) {
       final resolvedLine = _resolveParkedOutgoingMainLine(currentState);
@@ -2272,12 +2272,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  /// Picks the initial main line for an outgoing call (WT-1554 Option B).
+  /// Picks the initial main line for an outgoing call.
   ///
   /// Three outcomes:
   ///   - real line index when an idle main line is available;
   ///   - [_kUndefinedLine] when `linesCount == 0` (cold start; the call is
-  ///     parked and [__onCallPerformEventStarted] will resolve the real line
+  ///     parked and [__onCallPerformEventStarted] resolves the real line
   ///     via [_resolveParkedOutgoingMainLine] once the wait completes);
   ///   - `null` when lines are known but all main lines are in use - caller
   ///     should fail with [GeneralUnableToCallNotification].

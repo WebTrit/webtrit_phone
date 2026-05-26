@@ -3,21 +3,16 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 
-/// Thin dispatcher for outgoing-call intent (WT-1554 Option B).
+/// Thin dispatcher for outgoing-call intent.
 ///
-/// CallController used to wait for [CallRoutingCubit] to be initialised
-/// (routing state with line counts from the signaling handshake) and ran a
-/// connectivity HTTP probe before sending the call event to [CallBloc]. Both
-/// gates introduced visible delays/false rejections at cold start, while the
-/// bloc already owns the wait + reconnect + line-allocation machinery.
-///
-/// This controller now does only two things:
+/// Does two things:
 ///   - debounce rapid taps (kDebounceDuration);
 ///   - dispatch [CallControlEvent.started] / [CallControlEvent.blindTransferSubmitted]
 ///     to [CallBloc].
 ///
 /// All gating (registration, signaling readiness, line availability,
-/// fromNumber resolution, offline detection) lives in CallBloc.
+/// fromNumber resolution, offline detection) lives in CallBloc, which owns
+/// the wait + reconnect + line-allocation machinery.
 class CallController {
   CallController({required this.callBloc, Logger? logger}) : _logger = logger ?? Logger('CallController');
 
