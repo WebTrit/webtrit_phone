@@ -1,7 +1,5 @@
+import 'dart:convert';
 import 'dart:io';
-
-const _defaultServerHost = '10.0.2.2'; // Android emulator → host localhost
-const _defaultServerPort = 7788;
 
 class PjsuaCallServerClient {
   const PjsuaCallServerClient({required this.host, required this.port});
@@ -9,83 +7,46 @@ class PjsuaCallServerClient {
   final String host;
   final int port;
 
-  // TODO: return ref
-  Future<void> call(String callee, {Duration callDuration = const Duration(seconds: 60)}) async {
-    final uri = Uri.http('$host:$port', '/call', {'to': callee, 'duration': callDuration.inSeconds.toString()});
-
-    final client = HttpClient();
-    try {
-      final req = await client.getUrl(uri).timeout(const Duration(seconds: 10));
-      final response = await req.close().timeout(const Duration(seconds: 10));
-      if (response.statusCode != HttpStatus.ok) {
-        throw Exception('pjsua call server responded ${response.statusCode} for $uri');
-      }
-    } finally {
-      client.close();
-    }
+  Future<int> call(
+    String callee, {
+    required String sipServer,
+    required String sipUsername,
+    required String sipPassword,
+    Duration callDuration = const Duration(seconds: 60),
+  }) async {
+    final body = await _get('/call', {
+      'calle': callee,
+      'sip_server': sipServer,
+      'sip_username': sipUsername,
+      'sip_password': sipPassword,
+      'duration': callDuration.inSeconds.toString(),
+    });
+    return int.parse(body.trim());
   }
 
-  Future<void> hangup({required String ref}) async {
-    const host = String.fromEnvironment('WEBTRIT_APP_TEST_PJSUA_SERVER_HOST', defaultValue: _defaultServerHost);
-    final port = int.fromEnvironment(
-      // ignore: avoid_redundant_argument_values
-      'WEBTRIT_APP_TEST_PJSUA_SERVER_PORT',
-      defaultValue: _defaultServerPort,
-    );
-
-    final uri = Uri.http('$host:$port', '/hangup', {'ref': ref});
-
-    final client = HttpClient();
-    try {
-      final req = await client.getUrl(uri).timeout(const Duration(seconds: 10));
-      final response = await req.close().timeout(const Duration(seconds: 10));
-      if (response.statusCode != HttpStatus.ok) {
-        throw Exception('pjsua call server responded ${response.statusCode} for $uri');
-      }
-    } finally {
-      client.close();
-    }
+  Future<void> hangup(int pid) async {
+    await _get('/hangup', {'pid': '$pid'});
   }
 
-  Future<void> mute({required String ref}) async {
-    const host = String.fromEnvironment('WEBTRIT_APP_TEST_PJSUA_SERVER_HOST', defaultValue: _defaultServerHost);
-    final port = int.fromEnvironment(
-      // ignore: avoid_redundant_argument_values
-      'WEBTRIT_APP_TEST_PJSUA_SERVER_PORT',
-      defaultValue: _defaultServerPort,
-    );
-
-    final uri = Uri.http('$host:$port', '/mute', {'ref': ref});
-
-    final client = HttpClient();
-    try {
-      final req = await client.getUrl(uri).timeout(const Duration(seconds: 10));
-      final response = await req.close().timeout(const Duration(seconds: 10));
-      if (response.statusCode != HttpStatus.ok) {
-        throw Exception('pjsua call server responded ${response.statusCode} for $uri');
-      }
-    } finally {
-      client.close();
-    }
+  Future<void> hold(int pid) async {
+    await _get('/hold', {'pid': '$pid'});
   }
 
-  Future<void> unmute({required String ref}) async {
-    const host = String.fromEnvironment('WEBTRIT_APP_TEST_PJSUA_SERVER_HOST', defaultValue: _defaultServerHost);
-    final port = int.fromEnvironment(
-      // ignore: avoid_redundant_argument_values
-      'WEBTRIT_APP_TEST_PJSUA_SERVER_PORT',
-      defaultValue: _defaultServerPort,
-    );
+  Future<void> unhold(int pid) async {
+    await _get('/unhold', {'pid': '$pid'});
+  }
 
-    final uri = Uri.http('$host:$port', '/unmute', {'ref': ref});
-
+  Future<String> _get(String path, Map<String, String> params) async {
+    final uri = Uri.http('$host:$port', path, params);
     final client = HttpClient();
     try {
       final req = await client.getUrl(uri).timeout(const Duration(seconds: 10));
       final response = await req.close().timeout(const Duration(seconds: 10));
+      final body = await response.transform(utf8.decoder).join();
       if (response.statusCode != HttpStatus.ok) {
-        throw Exception('pjsua call server responded ${response.statusCode} for $uri');
+        throw Exception('pjsua call server responded ${response.statusCode} for $uri: $body');
       }
+      return body;
     } finally {
       client.close();
     }

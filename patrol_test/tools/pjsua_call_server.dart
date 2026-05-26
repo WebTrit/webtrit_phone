@@ -28,6 +28,7 @@ void main(List<String> args) async {
   _logger.info('pjsua call server listening on http://0.0.0.0:$serverPort');
 
   await for (final request in server) {
+    _logger.info('Received request: ${request.uri}');
     switch (request.uri.path) {
       case '/health':
         _respond(request, HttpStatus.ok, 'ok');
@@ -102,7 +103,6 @@ void main(List<String> args) async {
         } catch (e) {
           _respond(request, HttpStatus.internalServerError, 'failed to hold: $e');
         }
-        throw UnimplementedError();
       case '/transfer':
         throw UnimplementedError();
       default:
