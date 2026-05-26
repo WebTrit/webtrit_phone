@@ -135,4 +135,4 @@ WEBTRIT_APP_TEST_CALLEE_VERIFY_CREDENTIAL=<callee-password> \
 dart test test/live_call_test.dart --tags live --reporter expanded
 ```
 
-Connection endpoint: `wss://<host>/signaling/v1?token=<token>[&force=<true|false>][&reregister=true]`
+Connection endpoint: `wss://<host>/signaling/v1?token=<token>&force=<true|false>[&reregister=true]`

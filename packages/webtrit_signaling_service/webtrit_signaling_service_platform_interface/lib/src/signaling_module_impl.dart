@@ -320,6 +320,13 @@ class SignalingModuleImpl implements SignalingModule {
 
       try {
         final url = _coreUrlToSignalingUrl(coreUrl);
+        // Snapshot the sticky reregister flag at the moment this attempt
+        // actually issues the factory call. A late connect(reregister: true)
+        // that arrives while the factory is awaiting sets the flag but does
+        // not get folded into this attempt; keeping a per-attempt snapshot
+        // lets the post-success cleanup leave the flag untouched in that
+        // case so the late intent carries into the next attempt.
+        final reregisterForThisAttempt = _nextConnectReregister;
         final client = await _clientFactory(
           url: url,
           tenantId: tenantId,
@@ -327,7 +334,7 @@ class SignalingModuleImpl implements SignalingModule {
           connectionTimeout: connectionTimeout,
           certs: trustedCertificates,
           force: true,
-          reregister: _nextConnectReregister,
+          reregister: reregisterForThisAttempt,
         );
 
         if (_connectToken != connectToken || _disposed) {
@@ -370,9 +377,12 @@ class SignalingModuleImpl implements SignalingModule {
         _client = client;
         _errorHandled = false;
         _lastConnectErrorString = null;
-        // Consume the sticky reregister flag once a connection is established;
-        // a subsequent reconnect from a normal disconnect must not carry it.
-        _nextConnectReregister = false;
+        // Consume the sticky reregister flag only when this attempt actually
+        // carried it. A late caller that set the flag while the factory was
+        // awaiting must not lose its intent on this attempt's success.
+        if (reregisterForThisAttempt) {
+          _nextConnectReregister = false;
+        }
         _emit(SignalingConnected());
         unawaited(_requestQueue.flush(execute: client.execute, isActive: () => identical(_client, client)));
       } catch (e, s) {

@@ -79,37 +79,39 @@ class WebtritSignalingClient {
 
   final _transactions = <String, Transaction>{};
 
+  /// Opens a new signaling WebSocket connection to WebTrit Core.
+  ///
+  /// [baseUrl] is the Core HTTP(S) base URL; the scheme is rewritten to
+  /// `ws`/`wss` and the `signaling/v1` path is appended.
+  ///
+  /// [force] - when true, this connect evicts any existing signaling session
+  /// bound to the same controller: Core closes the previously attached
+  /// WebSocket with `controllerForceAttachClose` (4441) and binds the new
+  /// socket to the existing controller. When false, Core rejects the connect
+  /// with `controllerAttachedError` (4431) if another session is already
+  /// attached. Typical use: pass `true` on a reconnect from the app so a
+  /// stale session that the server still considers alive (e.g. after a
+  /// previous app instance closed without a clean close, or a zombie TCP
+  /// whose FIN never reached the server) is replaced rather than blocking
+  /// the new one.
+  ///
+  /// [reregister] - when true, the WebSocket connect URL includes
+  /// `?reregister=true`. Core treats it as a request to drop any existing
+  /// controller for this account (destroying its Janus session) and start a
+  /// fresh one. The result is: a new Janus session, a new SIP REGISTER
+  /// issued over a new TCP connection to the PBX, a new NAT pinhole on the
+  /// server side, and the previous Contact in the registrar replaced.
+  /// Typical use: pass `true` on a connect that follows a network interface
+  /// change on the device (e.g. WiFi to LTE). The previous interface may
+  /// have left a half-open server-side TCP whose registered Contact still
+  /// appears alive to the PBX but no longer reaches Janus; re-registering
+  /// deterministically replaces that stale pinhole before the next incoming
+  /// call is routed to it.
   static Future<WebtritSignalingClient> connect(
     Uri baseUrl,
     String tenantId,
     String token,
-    // When true, this connect evicts any existing signaling session bound
-    // to the same controller: Core closes the previously attached
-    // WebSocket with `controllerForceAttachClose` (4441) and binds the new
-    // socket to the existing controller. When false, Core rejects the
-    // connect with `controllerAttachedError` (4431) if another session is
-    // already attached.
-    //
-    // Typical use: pass `true` on a reconnect from the app so a stale
-    // session that the server still considers alive (e.g. after a previous
-    // app instance closed without a clean close, or a zombie TCP whose
-    // FIN never reached the server) is replaced rather than blocking the
-    // new one.
     bool force, {
-    // When true, the WebSocket connect URL includes `?reregister=true`.
-    //
-    // Core treats it as a request to drop any existing controller for this
-    // account (destroying its Janus session) and start a fresh one. The
-    // result is: a new Janus session, a new SIP REGISTER issued over a new
-    // TCP connection to the PBX, a new NAT pinhole on the server side, and
-    // the previous Contact in the registrar replaced.
-    //
-    // Typical use: pass `true` on a connect that follows a network
-    // interface change on the device (e.g. WiFi to LTE). The previous
-    // interface may have left a half-open server-side TCP whose registered
-    // Contact still appears alive to the PBX but no longer reaches Janus;
-    // re-registering deterministically replaces that stale pinhole before
-    // the next incoming call is routed to it.
     bool reregister = false,
     Duration? connectionTimeout,
     TrustedCertificates certs = TrustedCertificates.empty,

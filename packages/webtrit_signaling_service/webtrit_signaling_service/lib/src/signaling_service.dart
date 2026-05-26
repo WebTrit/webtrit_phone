@@ -128,12 +128,7 @@ class WebtritSignalingService implements SignalingModule {
     if (_isDisposed || _startPending || _isConnected) return;
     _startPending = true;
     _startPendingTimer?.cancel();
-    _startPendingTimer = Timer(_startPendingTimeout, () {
-      _logger.warning('connect: no terminal event after $_startPendingTimeout — resetting and retrying');
-      _startPending = false;
-      _startPendingTimer = null;
-      connect(reregister: reregister);
-    });
+    _startPendingTimer = Timer(_startPendingTimeout, () => _onStartPendingTimeout(reregister));
     SignalingServicePlatform.instance.start(_config, mode: _mode, reregister: reregister).catchError((
       Object e,
       StackTrace s,
@@ -141,6 +136,13 @@ class WebtritSignalingService implements SignalingModule {
       _logger.severe('connect: start() failed', e, s);
       _clearStartPending();
     });
+  }
+
+  void _onStartPendingTimeout(bool reregister) {
+    _logger.warning('connect: no terminal event after $_startPendingTimeout - resetting and retrying');
+    _startPending = false;
+    _startPendingTimer = null;
+    connect(reregister: reregister);
   }
 
   void _clearStartPending() {
