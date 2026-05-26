@@ -83,6 +83,18 @@ class WebtritSignalingClient {
     Uri baseUrl,
     String tenantId,
     String token,
+    // When true, this connect evicts any existing signaling session bound
+    // to the same controller: Core closes the previously attached
+    // WebSocket with `controllerForceAttachClose` (4441) and binds the new
+    // socket to the existing controller. When false, Core rejects the
+    // connect with `controllerAttachedError` (4431) if another session is
+    // already attached.
+    //
+    // Typical use: pass `true` on a reconnect from the app so a stale
+    // session that the server still considers alive (e.g. after a previous
+    // app instance closed without a clean close, or a zombie TCP whose
+    // FIN never reached the server) is replaced rather than blocking the
+    // new one.
     bool force, {
     // When true, the WebSocket connect URL includes `?reregister=true`.
     //
