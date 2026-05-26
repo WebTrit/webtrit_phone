@@ -1600,9 +1600,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final needsWait = !currentState.isReadyForOutgoingCall || hasUndefinedLine;
 
     if (needsWait) {
-      // Trigger reconnect so that an outgoing call recovers signaling even when the previous
-      // disconnect was intentional (e.g. post-transfer cleanup) and no reconnect was scheduled.
-      _reconnectController.notifyForceReconnect();
+      // Force-reconnect ONLY when the wait is caused by an actual signaling
+      // gap (no handshake or no socket). Other wait reasons - registration
+      // in flight, line config still pending, line parked - run over a
+      // healthy socket and tearing it down would do harm.
+      if (!currentState.isHandshakeEstablished || !currentState.isSignalingEstablished) {
+        _reconnectController.notifyForceReconnect();
+      }
 
       emit(
         state.copyWithMappedActiveCall(event.callId, (activeCall) {
