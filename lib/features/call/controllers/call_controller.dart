@@ -4,8 +4,10 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
+import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/services/connectivity_service.dart';
 
 class CallController {
@@ -74,19 +76,23 @@ class CallController {
     bool video = false,
     String? fromNumber,
   }) async {
-    // WT-1554: do NOT pre-check connectivity / NetworkStatus here.
+    // WT-1554: fast-fail only in the narrow case where routing state has not
+    // initialized AND the bloc already knows the network is definitively down.
     //
-    // The original purpose of this gate was to fast-fail before waiting up to
-    // [kCallRoutingStateTimeout] for routing state when the app had no network
-    // on startup. However it also fired right after the app returned from
-    // background (stale ConnectivityService cache, or transient bloc
-    // NetworkStatus.none while the OS was refreshing) and blocked perfectly
-    // valid calls. The routing-state wait below already handles the only case
-    // that genuinely needs blocking — routing state never initialized — by
-    // emitting [GeneralUnableToCallNotification] after the timeout. For every
-    // other case (network just flapping, signaling reconnecting, registration
-    // re-establishing) we let the call through and let CallBloc's downstream
-    // wait + reconnect flow decide.
+    // [_waitForRoutingState] below would otherwise sit through the full
+    // [kCallRoutingStateTimeout] (~10 s) while routing state can never arrive
+    // without network, leaving the user with no feedback. We intentionally
+    // require BOTH conditions:
+    //   - callRoutingCubit.state == null  (routing state not yet initialized)
+    //   - networkStatus == NetworkStatus.none  (bloc has a definitive signal)
+    // For "routing state present" / "network just flapping" / "signaling
+    // reconnecting" cases we still let the call through and let CallBloc's
+    // downstream wait + reconnect flow decide.
+    if (callRoutingCubit.state == null && callBloc.state.callServiceState.networkStatus == NetworkStatus.none) {
+      _logger.warning('Cannot create call: routing state not initialized and network is offline.');
+      notificationsBloc.add(const NotificationsSubmitted(NoInternetConnectionNotification()));
+      return;
+    }
 
     // Use current state if available, otherwise wait for the first non-null emission.
     // Timeout guards against indefinite wait when routing state never initializes

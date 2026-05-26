@@ -7,9 +7,10 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
+import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
-import 'package:webtrit_phone/models/lines_state.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/services/connectivity_service.dart';
 
 class _MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {}
@@ -66,6 +67,11 @@ void main() {
     notificationsBloc = _MockNotificationsBloc();
     connectivityService = _MockConnectivityService();
     when(() => callBloc.add(any())).thenReturn(null);
+    // WT-1554: _createCallAsync now reads callBloc.state.callServiceState.networkStatus
+    // as part of the fast-fail check (only triggers when routing state is also null AND
+    // networkStatus == NetworkStatus.none). Default CallState() has networkStatus == null,
+    // so the fast-fail does not fire and the previous test expectations remain valid.
+    when(() => callBloc.state).thenReturn(const CallState());
     when(() => notificationsBloc.add(any())).thenReturn(null);
     when(() => connectivityService.connectionStream).thenAnswer((_) => const Stream<bool>.empty());
     when(() => connectivityService.checkConnection()).thenAnswer((_) async => true);
@@ -172,6 +178,24 @@ void main() {
           expect((captured as NotificationsSubmitted).notification, isA<GeneralUnableToCallNotification>());
           verifyNever(() => callBloc.add(any()));
         });
+      });
+
+      test('fast-fails with NoInternetConnectionNotification when bloc reports networkStatus.none', () async {
+        // WT-1554: when routing state is not initialized AND the bloc already knows
+        // the network is offline, do not wait the full kCallRoutingStateTimeout —
+        // surface NoInternetConnectionNotification immediately.
+        when(() => callRoutingCubit.state).thenReturn(null);
+        when(
+          () => callBloc.state,
+        ).thenReturn(const CallState(callServiceState: CallServiceState(networkStatus: NetworkStatus.none)));
+
+        controller.createCall(destination: '222');
+        await Future<void>.delayed(Duration.zero);
+
+        final captured = verify(() => notificationsBloc.add(captureAny())).captured.single;
+        expect(captured, isA<NotificationsSubmitted>());
+        expect((captured as NotificationsSubmitted).notification, isA<NoInternetConnectionNotification>());
+        verifyNever(() => callBloc.add(any()));
       });
     });
   });
