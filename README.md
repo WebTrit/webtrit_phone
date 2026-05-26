@@ -62,6 +62,10 @@ The application offers extensive customization options:
   ./testlab_assemble_android.sh <testfile(optional)>
   ./testlab_assemble_ios.sh <testfile(optional)>
   ```
+* Run android integration tests with remote call actions
+  ```bash
+  ./tool/scripts/patrol_e2e_run_local_android.sh <testfile(optional)>
+  ```
 
 ### Test variables
 
@@ -82,6 +86,11 @@ The application offers extensive customization options:
 * `WEBTRIT_APP_TEST_CALL_NUMBER_A` (_example 1111_)
 * `WEBTRIT_APP_TEST_CALL_NUMBER_B` (_example 2222_)
 * `WEBTRIT_APP_TEST_CROSS_CALL_SLEEP_SECONDS` (_example 10_)
+* `WEBTRIT_APP_TEST_PJSUA_SERVER_HOST` (_example localhost_)
+* `WEBTRIT_APP_TEST_PJSUA_SERVER_PORT` (_example 7788_)
+* `WEBTRIT_APP_TEST_PJSUA_SIP_USERNAME` (_example username_)
+* `WEBTRIT_APP_TEST_PJSUA_SIP_PASSWORD` (_example password_)
+* `WEBTRIT_APP_TEST_PJSUA_SIP_SERVER` (_example server_)
 
 ## Contributing
 
