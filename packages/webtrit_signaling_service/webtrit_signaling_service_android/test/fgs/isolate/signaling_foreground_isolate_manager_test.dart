@@ -26,7 +26,7 @@ class _FakeSignalingModule extends Fake implements SignalingModule {
   Stream<SignalingModuleEvent> get events => _controller.stream;
 
   @override
-  void connect() {
+  void connect({bool reregister = false}) {
     connectCount++;
     _connected = true;
     _controller.add(SignalingConnected());

@@ -43,7 +43,9 @@ sealed class SignalingHubCommand {
           );
         case _tagConnect:
           if (wire.length < 2) return null;
-          return SignalingHubConnectCommand(consumerId: wire[1] as String);
+          // reregister was added later; older wire payloads omit it.
+          final reregister = wire.length > 2 && wire[2] == true;
+          return SignalingHubConnectCommand(consumerId: wire[1] as String, reregister: reregister);
         case _tagDisconnect:
           if (wire.length < 2) return null;
           return SignalingHubDisconnectCommand(consumerId: wire[1] as String);
@@ -126,11 +128,19 @@ class SignalingHubExecuteCommand extends SignalingHubCommand {
 ///
 /// Sent by [SignalingHubModule.connect] so the main isolate can trigger a
 /// connection attempt without owning the WebSocket directly.
+///
+/// When [reregister] is true, the hub forwards the flag to the underlying
+/// [SignalingModule.connect] so the WebSocket connect URL carries
+/// `reregister=true`, asking Core to tear down the existing controller and
+/// start a fresh SIP registration.
 class SignalingHubConnectCommand extends SignalingHubCommand {
-  const SignalingHubConnectCommand({required String consumerId}) : super(consumerId);
+  const SignalingHubConnectCommand({required String consumerId, this.reregister = false}) : super(consumerId);
+
+  /// When true, the hub calls [SignalingModule.connect] with `reregister: true`.
+  final bool reregister;
 
   @override
-  List<Object?> encode() => [_tagConnect, consumerId];
+  List<Object?> encode() => [_tagConnect, consumerId, reregister];
 }
 
 /// Asks the hub to call [SignalingModule.disconnect] on the background WebSocket.

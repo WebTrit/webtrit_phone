@@ -25,7 +25,7 @@ class _FakeModule implements SignalingModule {
   bool get isConnected => _connected;
 
   @override
-  void connect() {}
+  void connect({bool reregister = false}) {}
 
   @override
   Future<void> disconnect() async {}
@@ -67,13 +67,17 @@ class _FakePlatform extends Fake implements SignalingServicePlatform {
   @override
   Stream<SignalingModuleEvent> get events => _eventsController.stream;
 
+  final List<bool> startedReregisters = [];
+
   @override
   Future<void> start(
     SignalingServiceConfig config, {
     SignalingServiceMode mode = SignalingServiceMode.persistent,
+    bool reregister = false,
   }) async {
     startedConfigs.add(config);
     startedModes.add(mode);
+    startedReregisters.add(reregister);
   }
 
   @override

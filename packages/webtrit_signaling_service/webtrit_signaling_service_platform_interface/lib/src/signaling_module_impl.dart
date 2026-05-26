@@ -24,6 +24,7 @@ typedef SignalingClientFactory =
       required Duration connectionTimeout,
       required TrustedCertificates certs,
       required bool force,
+      required bool reregister,
     });
 
 Uri _coreUrlToSignalingUrl(String coreUrl) {
@@ -38,12 +39,14 @@ Future<WebtritSignalingClient> _defaultClientFactory({
   required Duration connectionTimeout,
   required TrustedCertificates certs,
   required bool force,
+  required bool reregister,
 }) {
   return WebtritSignalingClient.connect(
     url,
     tenantId,
     token,
     force,
+    reregister: reregister,
     connectionTimeout: connectionTimeout,
     certs: certs,
   );
@@ -161,6 +164,13 @@ class SignalingModuleImpl implements SignalingModule {
   /// Last connect error as string for deduplication.
   String? _lastConnectErrorString;
 
+  /// Pending reregister flag for the next connect attempt.
+  ///
+  /// Set by [connect] with `reregister: true`. Sticky across failed attempts -
+  /// reset only when a [SignalingConnected] event is emitted, so a transient
+  /// failure does not lose the intent to re-register after a network change.
+  bool _nextConnectReregister = false;
+
   /// Broadcast stream of all module events.
   ///
   /// Each new subscriber immediately receives buffered lifecycle and handshake
@@ -210,8 +220,17 @@ class SignalingModuleImpl implements SignalingModule {
 
   /// Initiates a connection. Fire-and-forget -- result arrives via [events].
   /// Clears the session buffer on each call.
+  ///
+  /// When [reregister] is true, the URL of the next WebSocket connect attempt
+  /// includes `reregister=true`, asking Core to tear down the existing
+  /// controller and start a fresh SIP registration. The flag is sticky across
+  /// failed attempts and consumed when [SignalingConnected] is emitted, so a
+  /// transient failure does not lose the intent.
   @override
-  void connect() {
+  void connect({bool reregister = false}) {
+    if (reregister) {
+      _nextConnectReregister = true;
+    }
     if (_disposed) {
       _logger.fine('connect: skipped — disposed');
       return;
@@ -220,7 +239,9 @@ class SignalingModuleImpl implements SignalingModule {
       _logger.info('connect: skipped — already connecting or connected (connectToken set)');
       return;
     }
-    _logger.info('connect: starting new connect attempt (isConnected=$isConnected)');
+    _logger.info(
+      'connect: starting new connect attempt (isConnected=$isConnected reregister=$_nextConnectReregister)',
+    );
     final token = _connectToken = Object();
     _eventBuffer.clear();
     unawaited(_connectAsync(token));
@@ -306,6 +327,7 @@ class SignalingModuleImpl implements SignalingModule {
           connectionTimeout: connectionTimeout,
           certs: trustedCertificates,
           force: true,
+          reregister: _nextConnectReregister,
         );
 
         if (_connectToken != connectToken || _disposed) {
@@ -348,6 +370,9 @@ class SignalingModuleImpl implements SignalingModule {
         _client = client;
         _errorHandled = false;
         _lastConnectErrorString = null;
+        // Consume the sticky reregister flag once a connection is established;
+        // a subsequent reconnect from a normal disconnect must not carry it.
+        _nextConnectReregister = false;
         _emit(SignalingConnected());
         unawaited(_requestQueue.flush(execute: client.execute, isActive: () => identical(_client, client)));
       } catch (e, s) {

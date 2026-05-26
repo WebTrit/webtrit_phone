@@ -95,6 +95,7 @@ SignalingClientFactory _successFactory(_FakeSignalingClient client) {
     required Duration connectionTimeout,
     required TrustedCertificates certs,
     required bool force,
+    required bool reregister,
   }) async => client;
 }
 
@@ -107,6 +108,7 @@ SignalingClientFactory _failingFactory(Object error) {
     required Duration connectionTimeout,
     required TrustedCertificates certs,
     required bool force,
+    required bool reregister,
   }) async => throw error;
 }
 
@@ -122,6 +124,7 @@ class _ControlledFactory {
         required Duration connectionTimeout,
         required TrustedCertificates certs,
         required bool force,
+        required bool reregister,
       }) {
         _completer = Completer<WebtritSignalingClient>();
         return _completer!.future;
@@ -260,6 +263,7 @@ void main() {
         required Duration connectionTimeout,
         required TrustedCertificates certs,
         required bool force,
+        required bool reregister,
       }) async {
         callCount++;
         return callCount == 1 ? firstClient : secondClient;
@@ -625,6 +629,7 @@ void main() {
         required Duration connectionTimeout,
         required TrustedCertificates certs,
         required bool force,
+        required bool reregister,
       }) async {
         callCount++;
         if (callCount == 1) throw error;
@@ -788,6 +793,7 @@ void main() {
         required Duration connectionTimeout,
         required TrustedCertificates certs,
         required bool force,
+        required bool reregister,
       }) async {
         callCount++;
         return callCount == 1 ? client1 : client2;
@@ -1229,6 +1235,7 @@ void main() {
         required Duration connectionTimeout,
         required TrustedCertificates certs,
         required bool force,
+        required bool reregister,
       }) async {
         call++;
         return call == 1 ? client1 : client2;
@@ -1401,6 +1408,7 @@ void main() {
           required Duration connectionTimeout,
           required TrustedCertificates certs,
           required bool force,
+          required bool reregister,
         }) async => client,
       );
 

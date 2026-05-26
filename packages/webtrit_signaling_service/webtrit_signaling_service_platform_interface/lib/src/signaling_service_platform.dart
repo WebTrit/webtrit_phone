@@ -39,7 +39,16 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   ///   in the main isolate and is not persistent.
   /// - [SignalingServiceMode.pushBound] -- service stops when the app Activity
   ///   is closed, allowing the next push to start a fresh instance.
-  Future<void> start(SignalingServiceConfig config, {SignalingServiceMode mode = SignalingServiceMode.persistent});
+  ///
+  /// When [reregister] is true, the WebSocket connect URL includes
+  /// `reregister=true`, asking Core to tear down the existing controller and
+  /// start a fresh SIP registration on the new connection. Pass it on
+  /// reconnects that follow a network interface change.
+  Future<void> start(
+    SignalingServiceConfig config, {
+    SignalingServiceMode mode = SignalingServiceMode.persistent,
+    bool reregister = false,
+  });
 
   /// Sends [request] to the server via the active connection.
   Future<void> execute(Request request);

@@ -30,6 +30,7 @@ class _FakeDirectService extends WebtritSignalingServiceDirect {
   Future<void> start(
     SignalingServiceConfig config, {
     SignalingServiceMode mode = SignalingServiceMode.pushBound,
+    bool reregister = false,
   }) async {
     // Only the first call is gated; subsequent calls pass through immediately.
     if (!_gateConsumed && _gate != null) {

@@ -26,8 +26,16 @@ class _FakeSignalingModule implements SignalingModule {
 
   void emit(SignalingModuleEvent event) => _controller.add(event);
 
+  /// Records the reregister flag for each [connect] call so tests can assert
+  /// the controller forwards [SignalingReconnectController.notifyInterfaceChanged]
+  /// into the next connect attempt.
+  final List<bool> connectReregisterFlags = [];
+
   @override
-  void connect() => connectCalls++;
+  void connect({bool reregister = false}) {
+    connectCalls++;
+    connectReregisterFlags.add(reregister);
+  }
 
   @override
   Future<void> disconnect() async => disconnectCalls++;

@@ -72,8 +72,12 @@ class SignalingHubModule implements SignalingModule {
   /// which calls [SignalingModule.connect] on the real WebSocket module.
   /// The resulting [SignalingConnected] event arrives on [events] once the
   /// connection is established.
+  ///
+  /// When [reregister] is true, the flag is carried in the hub command and
+  /// applied to the underlying [SignalingModule.connect] in the foreground
+  /// service, so the WebSocket connect URL includes `reregister=true`.
   @override
-  void connect() => _hubClient.sendConnect();
+  void connect({bool reregister = false}) => _hubClient.sendConnect(reregister: reregister);
 
   /// Asks the hub to disconnect the background WebSocket.
   ///

@@ -102,6 +102,13 @@ class SignalingReconnectController {
   // the handshake state from Core.
   bool _networkJustRestored = false;
 
+  // Set to true by [notifyInterfaceChanged]; carried into the next
+  // [_module.connect] call and consumed there. Tells Core to tear down the
+  // existing controller and start a fresh SIP registration over a new TCP
+  // connection - the stale Contact left after a network interface change
+  // (e.g. WiFi to LTE) is replaced before the next incoming call arrives.
+  bool _reregisterNext = false;
+
   /// Last value passed to [_onConnectionPresenceChanged].
   /// Starts as `true` (assumed available) to avoid a spurious "available"
   /// callback on the first [SignalingConnected] event.
@@ -217,6 +224,22 @@ class SignalingReconnectController {
       _module.disconnect().ignore();
     }
     _scheduleReconnect(kSignalingClientFastReconnectDelay);
+  }
+
+  /// Call when the device's active network interface changed between two
+  /// live interfaces (e.g. WiFi to LTE, or vice versa).
+  ///
+  /// Marks the next [_module.connect] to include `reregister=true` in its
+  /// URL, asking Core to tear down the existing controller and start a
+  /// fresh SIP registration over a new TCP connection. The stale SIP
+  /// Contact left from the previous interface is replaced before the next
+  /// incoming call can arrive.
+  ///
+  /// Must be called before [notifyNetworkAvailable] for the same event so
+  /// the flag is set when the reconnect timer reads it.
+  void notifyInterfaceChanged() {
+    _logger.info('notifyInterfaceChanged: marking next connect as reregister');
+    _reregisterNext = true;
   }
 
   /// Call when network is lost ([ConnectivityResult.none]).
@@ -341,8 +364,12 @@ class SignalingReconnectController {
         return;
       }
 
-      _logger.info('_scheduleReconnect: calling connect (force=$force isConnected=${_module.isConnected})');
-      _module.connect();
+      final reregister = _reregisterNext;
+      _reregisterNext = false;
+      _logger.info(
+        '_scheduleReconnect: calling connect (force=$force isConnected=${_module.isConnected} reregister=$reregister)',
+      );
+      _module.connect(reregister: reregister);
     });
   }
 

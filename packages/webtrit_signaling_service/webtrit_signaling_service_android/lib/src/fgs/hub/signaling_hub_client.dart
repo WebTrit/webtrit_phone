@@ -163,8 +163,12 @@ class SignalingHubClient {
   /// Fire-and-forget: the hub will call [SignalingModule.connect] in the
   /// background isolate. The resulting [SignalingConnected] event will arrive
   /// on [events] once the connection is established.
-  void sendConnect() {
-    _hubPort.send(SignalingHubConnectCommand(consumerId: consumerId).encode());
+  ///
+  /// When [reregister] is true, the hub calls the underlying
+  /// [SignalingModule.connect] with `reregister: true` so the WebSocket connect
+  /// URL carries `reregister=true`.
+  void sendConnect({bool reregister = false}) {
+    _hubPort.send(SignalingHubConnectCommand(consumerId: consumerId, reregister: reregister).encode());
   }
 
   /// Asks the hub to disconnect the background WebSocket.
