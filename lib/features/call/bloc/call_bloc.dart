@@ -1502,10 +1502,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// Returns true when [__onCallPerformEventStarted] should stop waiting for
   /// signaling readiness.
   ///
-  /// Exits as soon as both the handshake and signaling are established AND the
-  /// SIP REGISTER has been accepted (WT-1554 - waiting only on the socket
-  /// allowed the wait to finish while registration was still in progress, and
-  /// the call was then rejected with [CallWhileUnregisteredNotification]).
+  /// Exits as soon as the handshake and signaling are established, the SIP
+  /// REGISTER has been accepted (WT-1554) AND the line config has arrived
+  /// (linesCount > 0, Option B - so a cold-start outgoing call that parked
+  /// before the handshake will only proceed once a line is actually known).
   ///
   /// Also exits fast when registration has definitively failed, so a known-bad
   /// state does not block the call for the full [kOutgoingCallSignalingWaitTimeout].
@@ -1516,7 +1516,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// removed the call entirely.
   bool _shouldExitOutgoingSignalingWait(CallState next, String callId) {
     final registration = next.callServiceState.registration;
-    if (next.isHandshakeEstablished && next.isSignalingEstablished && registration?.status.isRegistered == true) {
+    if (next.isHandshakeEstablished &&
+        next.isSignalingEstablished &&
+        registration?.status.isRegistered == true &&
+        next.linesCount > 0) {
       return true;
     }
     if (registration?.status.isFailed == true) return true;
