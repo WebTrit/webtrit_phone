@@ -93,15 +93,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   StreamSubscription<void>? _foregroundCallPushSubscription;
   final _iceRestartDebounce = DebounceMap<String>(const Duration(seconds: 2));
 
-  // Tracks the last non-none primary connectivity type so a transition between
-  // two live interfaces (e.g. WiFi -> LTE) is distinguishable from a simple
-  // drop+restore of the same interface. Used to decide when to ask Core for a
-  // full re-registration via [SignalingReconnectController.notifyInterfaceChanged].
-  // Not reset when connectivity goes to none, so the next non-none result can
-  // still be compared against the prior interface.
-  ConnectivityResult? _lastPrimaryNetwork;
-  DateTime? _lastInterfaceChangeAt;
-  static const _interfaceChangeDebounce = Duration(seconds: 2);
+  // Tracks transitions between two live interfaces (e.g. WiFi -> LTE) so the
+  // signaling reconnect that follows can be marked with reregister=true -
+  // asking Core to refresh the SIP Contact before any incoming call lands on
+  // a stale NAT pinhole. Same-interface drop+restore is not reported as a
+  // change; debounce collapses rapid flapping.
+  final _interfaceChangeDetector = InterfaceChangeDetector();
 
   late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
@@ -551,28 +548,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (connectivityResult == ConnectivityResult.none) {
       _reconnectController.notifyNetworkUnavailable();
     } else {
-      // Detect a transition between two live interfaces (e.g. WiFi -> LTE).
       // The stale TCP that Core holds to PBX may already be a dead NAT pinhole
-      // (WT-1467) - ask Core to tear down the controller and re-REGISTER on a
-      // fresh TCP. Must run before notifyNetworkAvailable so the flag is in
-      // place when the reconnect timer reads it.
-      final previousPrimary = _lastPrimaryNetwork;
-      if (previousPrimary != null && previousPrimary != connectivityResult) {
-        final now = DateTime.now();
-        final lastAt = _lastInterfaceChangeAt;
-        if (lastAt == null || now.difference(lastAt) > _interfaceChangeDebounce) {
-          _lastInterfaceChangeAt = now;
-          _logger.info(
-            '_onConnectivityResultChanged: interface change $previousPrimary -> $connectivityResult, marking reregister',
-          );
-          _reconnectController.notifyInterfaceChanged();
-        } else {
-          _logger.fine(
-            '_onConnectivityResultChanged: interface change $previousPrimary -> $connectivityResult debounced',
-          );
-        }
+      // (WT-1467) - on a real interface change ask Core to tear down the
+      // controller and re-REGISTER on a fresh TCP. Must run before
+      // notifyNetworkAvailable so the flag is in place when the reconnect
+      // timer reads it.
+      final change = _interfaceChangeDetector.update(connectivityResult);
+      if (change != null) {
+        _logger.info('_onConnectivityResultChanged: interface change $change, marking reregister');
+        _reconnectController.notifyInterfaceChanged();
       }
-      _lastPrimaryNetwork = connectivityResult;
       _reconnectController.notifyNetworkAvailable();
 
       // Restart ICE for all active calls to trigger faster recovery from connectivity loss.
