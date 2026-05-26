@@ -1307,33 +1307,27 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     };
   }
 
-  Future<void> __onCallControlEventStarted(_CallControlEventStarted event, Emitter<CallState> emit) async {
-    // WT-1554: do NOT reject here when not registered.
-    //
-    // The downstream [__onCallPerformEventStarted] path already waits up to
-    // [kOutgoingCallSignalingWaitTimeout] for signaling+registration, triggers
-    // [_reconnectController.notifyForceReconnect], and parks the call in
-    // [CallProcessingStatus.outgoingConnectingToSignaling] so the call screen can
-    // show a "Connecting..." state. Failing fast here prevents that recovery flow
-    // from running (e.g. when the app has just been opened from push mode and
-    // SIP REGISTER has not completed yet) and surfaces an avoidable error to the
-    // user. The unregistered/offline notifications still fire from
-    // [__onCallPerformEventStarted] after the wait truly times out.
+  // Outgoing-call pipeline (WT-1554 Option B):
+  //
+  //   CallControlEvent.started
+  //     -> _CallMutationEvent.controlStart        (sequential mutation queue)
+  //         -> callkeep.startCall                 (native call UI opens)
+  //             -> _CallPerformEvent.started      (callkeep delegate)
+  //                 -> _CallMutationEvent.performStart -> SIP INVITE
+  //
+  // Each arrow may park the call as `outgoingConnectingToSignaling` while we
+  // wait for handshake + registration + linesCount (see
+  // `_shouldExitOutgoingSignalingWait`). The three decision points are
+  // factored into helpers below to keep this surface name-driven:
+  //   - `_resolveOutgoingFromNumber`     (SIP `from` for the outgoing call)
+  //   - `_pickInitialOutgoingMainLine`   (initial line at mutation time)
+  //   - `_resolveParkedOutgoingMainLine` (line resolution after the wait)
 
-    // WT-1554 Option B (step 3): bloc owns SIP `from`-number resolution.
-    // Match the behaviour CallController used to apply:
-    //   - if the caller passed the user's main number, null it out so the
-    //     call goes via the main line;
-    //   - otherwise, when no fromNumber was provided, defer to the injected
-    //     [resolveFromNumberForDestination] closure (longest-prefix matcher /
-    //     default fallback against caller-ID settings).
-    String? fromNumber = event.fromNumber;
-    final mainNumber = userRepository.getLocalInfo()?.numbers.main;
-    if (fromNumber != null && fromNumber == mainNumber) {
-      fromNumber = null;
-    } else {
-      fromNumber ??= resolveFromNumberForDestination(event.handle.value);
-    }
+  Future<void> __onCallControlEventStarted(_CallControlEventStarted event, Emitter<CallState> emit) async {
+    // WT-1554: do NOT reject here when not registered. The downstream
+    // [__onCallPerformEventStarted] path handles signaling/registration wait
+    // and surfaces the appropriate notifications after the timeout.
+    final fromNumber = _resolveOutgoingFromNumber(event);
 
     add(
       _CallMutationEvent.controlStart(
@@ -1344,6 +1338,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         fromReplaces: event.replaces,
       ),
     );
+  }
+
+  /// Resolves the SIP `from` number for an outgoing-call request:
+  ///   - if the caller explicitly passed the user's main number, returns
+  ///     `null` so the call uses the main line;
+  ///   - if the caller passed `null`, defers to the injected
+  ///     [resolveFromNumberForDestination] closure (longest-prefix matcher
+  ///     against caller-ID settings, with a default fallback);
+  ///   - otherwise returns the caller's value verbatim (guest line).
+  String? _resolveOutgoingFromNumber(_CallControlEventStarted event) {
+    final fromNumber = event.fromNumber;
+    final mainNumber = userRepository.getLocalInfo()?.numbers.main;
+    if (fromNumber != null && fromNumber == mainNumber) return null;
+    return fromNumber ?? resolveFromNumberForDestination(event.handle.value);
   }
 
   /// Submitting the answer intent to system when answer button is pressed from app ui
@@ -1644,7 +1652,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // the wait has completed (linesCount > 0 in the exit condition).
     final waitingCall = currentState.retrieveActiveCall(event.callId);
     if (waitingCall?.line == _kUndefinedLine) {
-      final resolvedLine = currentState.retrieveIdleLine();
+      final resolvedLine = _resolveParkedOutgoingMainLine(currentState);
       if (resolvedLine == null) {
         _logger.info('__onCallPerformEventStarted no idle line after wait');
         event.fail();
@@ -1657,6 +1665,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     event.fulfill();
     add(_CallMutationEvent.performStart(event.callId, video: event.video));
+  }
+
+  /// Resolves the main line for an outgoing call that was parked with
+  /// [_kUndefinedLine] in [_pickInitialOutgoingMainLine]. Returns `null` when
+  /// no idle line is available after the wait - the caller should fail with
+  /// [GeneralUnableToCallNotification].
+  int? _resolveParkedOutgoingMainLine(CallState afterWait) {
+    return afterWait.retrieveIdleLine();
   }
 
   Future<void> __onCallPerformEventAnswered(_CallPerformEventAnswered event, Emitter<CallState> emit) async {
@@ -2213,22 +2229,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> __onMutationControlStart(_CallMutationEventControlStart e, Emitter<CallState> emit) async {
     int? line;
     if (e.fromNumber != null) {
+      // Guest line is implied; signaling layer handles it without a line index.
       line = null;
     } else {
-      line = state.retrieveIdleLine();
+      line = _pickInitialOutgoingMainLine();
       if (line == null) {
-        if (state.linesCount == 0) {
-          // WT-1554 Option B (step 4): cold start - signaling handshake has
-          // not arrived yet, so lines are unknown. Park the call with an
-          // undefined line; __onCallPerformEventStarted will resolve it once
-          // linesCount > 0.
-          line = _kUndefinedLine;
-        } else {
-          // Lines are known and all main lines are in use - fail fast.
-          _logger.info('__onMutationControlStart no idle line');
-          submitNotification(const GeneralUnableToCallNotification());
-          return;
-        }
+        // Lines are known and all main lines are in use - fail fast.
+        _logger.info('__onMutationControlStart no idle line');
+        submitNotification(const GeneralUnableToCallNotification());
+        return;
       }
     }
 
@@ -2269,6 +2278,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.warning('__onMutationControlStart error: $callkeepError');
       emit(state.copyWithPopActiveCall(callId));
     }
+  }
+
+  /// Picks the initial main line for an outgoing call (WT-1554 Option B).
+  ///
+  /// Three outcomes:
+  ///   - real line index when an idle main line is available;
+  ///   - [_kUndefinedLine] when `linesCount == 0` (cold start; the call is
+  ///     parked and [__onCallPerformEventStarted] will resolve the real line
+  ///     via [_resolveParkedOutgoingMainLine] once the wait completes);
+  ///   - `null` when lines are known but all main lines are in use - caller
+  ///     should fail with [GeneralUnableToCallNotification].
+  int? _pickInitialOutgoingMainLine() {
+    final idle = state.retrieveIdleLine();
+    if (idle != null) return idle;
+    if (state.linesCount == 0) return _kUndefinedLine;
+    return null;
   }
 
   Future<void> __onMutationControlAnswer(_CallMutationEventControlAnswer e, Emitter<CallState> emit) async {
