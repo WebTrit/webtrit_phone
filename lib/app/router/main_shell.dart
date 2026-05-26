@@ -520,6 +520,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         dialogInfoRepository: context.read<DialogInfoRepository>(),
                         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
                         queuedTerminationRequestsRepository: context.read<QueuedTerminationRequestsRepository>(),
+                        callerIdSettingsRepository: context.read<CallerIdSettingsRepository>(),
                         userRepository: context.read<UserRepository>(),
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         callkeep: _callkeep,

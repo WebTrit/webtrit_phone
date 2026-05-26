@@ -22,6 +22,7 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/call_routing/utils/resolve_from_number.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -66,6 +67,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final DialogInfoRepository dialogInfoRepository;
   final PresenceSettingsRepository presenceSettingsRepository;
   final QueuedTerminationRequestsRepository queuedTerminationRequestsRepository;
+  final CallerIdSettingsRepository callerIdSettingsRepository;
   final Function(Notification) submitNotification;
 
   /// Callback invoked when the signaling client reports a critical session error
@@ -111,6 +113,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.dialogInfoRepository,
     required this.presenceSettingsRepository,
     required this.queuedTerminationRequestsRepository,
+    required this.callerIdSettingsRepository,
     required this.onSessionInvalidated,
     required this.userRepository,
     required this.submitNotification,
@@ -1312,12 +1315,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // SIP REGISTER has not completed yet) and surfaces an avoidable error to the
     // user. The unregistered/offline notifications still fire from
     // [__onCallPerformEventStarted] after the wait truly times out.
+
+    // WT-1554 Option B (step 1): bloc-side fallback for resolving the SIP `from`
+    // number. CallController currently resolves this before dispatching, so
+    // this branch only fires when the caller passes [fromNumber] explicitly as
+    // null. Kept inert here; later steps stop the controller from resolving.
+    final fromNumber =
+        event.fromNumber ?? resolveFromNumber(event.handle.value, callerIdSettingsRepository.getCallerIdSettings());
+
     add(
       _CallMutationEvent.controlStart(
         handle: event.handle,
         video: event.video,
         displayName: event.displayName,
-        fromNumber: event.fromNumber,
+        fromNumber: fromNumber,
         fromReplaces: event.replaces,
       ),
     );
