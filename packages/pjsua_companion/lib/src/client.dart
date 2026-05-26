@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-class PjsuaCallServerClient {
-  const PjsuaCallServerClient({required this.host, required this.port});
+class PjsuaCompanionClient {
+  const PjsuaCompanionClient({required this.host, required this.port});
 
   final String host;
   final int port;

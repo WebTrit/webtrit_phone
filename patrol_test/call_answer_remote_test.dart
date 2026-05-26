@@ -10,7 +10,7 @@ import 'components/integration_test_environment_config.dart';
 import 'subsequences/login_by_method.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
-import 'tools/pjsua_call_server_client.dart';
+import 'package:pjsua_companion/pjsua_companion.dart';
 
 void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
@@ -23,7 +23,7 @@ void main() {
   var pjsuaServerHost = IntegrationTestEnvironmentConfig.PJSUA_SERVER_HOST;
   var pjsuaServerPort = IntegrationTestEnvironmentConfig.PJSUA_SERVER_PORT;
 
-  final pjsuaCallServerClient = PjsuaCallServerClient(host: pjsuaServerHost, port: pjsuaServerPort);
+  final pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
 
   Future<int> placeIncomingCall($) async {
     final pid = await pjsuaCallServerClient.call(

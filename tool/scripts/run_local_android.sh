@@ -4,7 +4,7 @@ set -euo pipefail
 
 target_file="${1:-patrol_test/just_run_test.dart}"
 
-dart run patrol_test/tools/pjsua_call_server.dart &
+dart run packages/pjsua_companion/bin/server.dart &
 PJSUA_SERVER_PID=$!
 
 cleanup() {

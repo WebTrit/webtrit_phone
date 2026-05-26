@@ -205,7 +205,6 @@ void attachStateTicker(int pid) {
 void attachStdoutConsumer(int pid) {
   final process = _processes[pid];
   if (process == null) return;
-  // Listen to pjsua stdout
   process.stdout.transform(Utf8Decoder(allowMalformed: true)).forEach((chunk) async {
     _logger.info('pjsua ($pid): $chunk');
     _logger.info('pjsua ($pid): ${chunk.length} \n-------------------------------');
@@ -216,44 +215,3 @@ void attachStdoutConsumer(int pid) {
     }
   });
 }
-
-
-// State example
-// 2026-05-26 11:47:32.200863 INFO pjsua (93869): >>>>
-// Account list:
-//   [ 0] <sip:192.168.31.123:59764>: does not register
-//        Online status: Online
-//   [ 1] <sip:192.168.31.123:59764;transport=TCP>: does not register
-//        Online status: Online
-//  *[ 2] sip:123123@123.182.47.123: does not register
-//        Online status: Online
-// Buddy list:
-//  [ 1] <?>  sip:123123@123.182.47.123
-
-// +=============================================================================+
-// |       Call Commands:         |   Buddy, IM & Presence:  |     Account:      |
-// |                              |                          |                   |
-// |  m  Make new call            | +b  Add new buddy        | +a  Add new accnt.|
-// |  M  Make multiple calls      | -b  Delete buddy         | -a  Delete accnt. |
-// |  a  Answer call              |  i  Send IM              | !a  Modify accnt. |
-// |  h  Hangup call  (ha=all)    |  s  Subscribe presence   | rr  (Re-)register |
-// |  H  Hold call                |  u  Unsubscribe presence | ru  Unregister    |
-// |  o  Toggle call SDP offer    |  D  Subscribe dlg event  |                   |
-// |                              |  Du Unsub dlg event      |                   |
-// |  v  re-inVite (release hold) |  t  Toggle online status |  >  Cycle next ac.|
-// |  U  send UPDATE              |  T  Set online status    |  <  Cycle prev ac.|
-// | ],[ Select next/prev call    +--------------------------+-------------------+
-// |  x  Xfer call                |      Media Commands:     |  Status & Config: |
-// |  X  Xfer with Replaces       |                          |                   |
-// |  #  Send RFC 2833 DTMF       | cl  List ports           |  d  Dump status   |
-// |  *  Send DTMF with INFO      | cc  Connect port         | dd  Dump detailed |
-// | rt  Send real-time text      | cd  Disconnect port      | dc  Dump config   |
-// | dq  Dump curr. call quality  |  V  Adjust audio Volume  |  f  Save config   |
-// |  S  Send arbitrary REQUEST   | Cp  Codec priorities     |                   |
-// +-----------------------------------------------------------------------------+
-// |  q  QUIT      L  ReLoad       I  IP change     n  detect NAT type           |
-// |  sleep MS     echo [0|1|txt]                                                |
-// +=============================================================================+
-// You have 0 active call
-// >>> 
-// 2026-05-26 11:47:32.201215 INFO pjsua (93869): 2281 

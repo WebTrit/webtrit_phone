@@ -1,0 +1,14 @@
+name: pjsua_companion
+resolution: workspace
+description: HTTP server that wraps pjsua CLI for integration test call automation.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.8.0
+
+dependencies:
+  logging: ^1.3.0
+
+dev_dependencies:
+  lints: ^6.0.0
