@@ -1316,12 +1316,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // user. The unregistered/offline notifications still fire from
     // [__onCallPerformEventStarted] after the wait truly times out.
 
-    // WT-1554 Option B (step 1): bloc-side fallback for resolving the SIP `from`
-    // number. CallController currently resolves this before dispatching, so
-    // this branch only fires when the caller passes [fromNumber] explicitly as
-    // null. Kept inert here; later steps stop the controller from resolving.
-    final fromNumber =
-        event.fromNumber ?? resolveFromNumber(event.handle.value, callerIdSettingsRepository.getCallerIdSettings());
+    // WT-1554 Option B (step 3): bloc owns SIP `from`-number resolution.
+    // Match the behaviour CallController used to apply:
+    //   - if the caller passed the user's main number, null it out so the
+    //     call goes via the main line;
+    //   - otherwise, when no fromNumber was provided, resolve it from
+    //     caller-ID settings (longest-prefix match, default fallback).
+    String? fromNumber = event.fromNumber;
+    final mainNumber = userRepository.getLocalInfo()?.numbers.main;
+    if (fromNumber != null && fromNumber == mainNumber) {
+      fromNumber = null;
+    } else {
+      fromNumber ??= resolveFromNumber(event.handle.value, callerIdSettingsRepository.getCallerIdSettings());
+    }
 
     add(
       _CallMutationEvent.controlStart(

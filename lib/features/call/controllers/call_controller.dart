@@ -107,20 +107,27 @@ class CallController {
       return;
     }
 
-    // Determine fromNumber based on routing settings
-    final shouldUseMainLine = fromNumber == callRoutingState.mainNumber;
+    // WT-1554 Option B (step 3): the outgoing fromNumber is left UNTOUCHED -
+    // CallBloc owns the canonical resolution (main-vs-guest normalisation +
+    // caller-ID matcher fallback) in [__onCallControlEventStarted].
+    //
+    // We still need a normalised view locally to decide whether to enforce
+    // the main-line or guest-line availability check below. This mirrors the
+    // bloc's logic so both sides agree on which line bucket the call uses.
+    String? effectiveFromNumber = fromNumber;
+    final shouldUseMainLine = effectiveFromNumber == callRoutingState.mainNumber;
     if (shouldUseMainLine) {
-      fromNumber = null;
+      effectiveFromNumber = null;
     } else {
-      fromNumber ??= callRoutingCubit.getFromNumber(destination);
+      effectiveFromNumber ??= callRoutingCubit.getFromNumber(destination);
     }
 
-    // Check line availability
+    // Check line availability using the local normalised view.
     final hasIdleMainLine = callRoutingState.hasIdleMainLine;
     final hasIdleGuestLine = callRoutingState.hasIdleGuestLine;
 
-    final noIdleMain = fromNumber == null && !hasIdleMainLine;
-    final noIdleGuest = fromNumber != null && !hasIdleGuestLine;
+    final noIdleMain = effectiveFromNumber == null && !hasIdleMainLine;
+    final noIdleGuest = effectiveFromNumber != null && !hasIdleGuestLine;
 
     if (noIdleMain || noIdleGuest) {
       _logger.warning('Cannot create call: no idle lines available.');
