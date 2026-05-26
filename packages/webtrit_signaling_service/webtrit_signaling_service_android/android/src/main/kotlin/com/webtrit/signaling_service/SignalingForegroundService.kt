@@ -243,6 +243,15 @@ class SignalingForegroundService : Service() {
         wakeLock?.let { if (it.isHeld) it.release() }
         stopForeground(STOP_FOREGROUND_REMOVE)
         _isolateFlutterApi = null
+        // Mirror onFgsEngineReady: let the host unregister from the FGS engine (with its messenger)
+        // before the engine is destroyed.
+        flutterEngineHelper.backgroundEngine?.dartExecutor?.binaryMessenger?.let { messenger ->
+            try {
+                onFgsEngineDestroyed?.invoke(messenger)
+            } catch (e: Exception) {
+                Log.e(TAG, "onFgsEngineDestroyed hook threw — continuing teardown", e)
+            }
+        }
         flutterEngineHelper.detachAndDestroyEngine()
         isRunning = false
         super.onDestroy()
@@ -593,5 +602,12 @@ class SignalingForegroundService : Service() {
         /// ```
         @Volatile
         var onFgsEngineReady: ((Context, BinaryMessenger) -> Unit)? = null
+
+        /// Optional callback invoked on the main thread inside [onDestroy], with the FGS engine's
+        /// messenger, immediately before the engine is destroyed. Mirrors [onFgsEngineReady] so a
+        /// host can unregister whatever it registered there, without coupling
+        /// [SignalingForegroundService] to other plugins.
+        @Volatile
+        var onFgsEngineDestroyed: ((BinaryMessenger) -> Unit)? = null
     }
 }

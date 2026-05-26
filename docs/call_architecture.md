@@ -4,6 +4,9 @@
 It implements both `Bloc<CallEvent, CallState>` and `CallkeepDelegate`, making it the single point
 that bridges signaling, native call UI, WebRTC media, and the Flutter UI layer.
 
+See also: [incoming_call_scenarios.md](incoming_call_scenarios.md) — incoming-call background
+scenarios (push-bound / persistent / foreground) with diagrams.
+
 ## Responsibilities
 
 - Manages all active calls (`List<ActiveCall>` in state)
