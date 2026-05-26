@@ -1307,7 +1307,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // [kOutgoingCallSignalingWaitTimeout] for signaling+registration, triggers
     // [_reconnectController.notifyForceReconnect], and parks the call in
     // [CallProcessingStatus.outgoingConnectingToSignaling] so the call screen can
-    // show a "Connecting…" state. Failing fast here prevents that recovery flow
+    // show a "Connecting..." state. Failing fast here prevents that recovery flow
     // from running (e.g. when the app has just been opened from push mode and
     // SIP REGISTER has not completed yet) and surfaces an avoidable error to the
     // user. The unregistered/offline notifications still fire from
@@ -1492,7 +1492,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// signaling readiness.
   ///
   /// Exits as soon as both the handshake and signaling are established AND the
-  /// SIP REGISTER has been accepted (WT-1554 — waiting only on the socket
+  /// SIP REGISTER has been accepted (WT-1554 - waiting only on the socket
   /// allowed the wait to finish while registration was still in progress, and
   /// the call was then rejected with [CallWhileUnregisteredNotification]).
   ///
@@ -1500,8 +1500,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// state does not block the call for the full [kOutgoingCallSignalingWaitTimeout].
   ///
   /// Finally exits when the call leaves
-  /// [CallProcessingStatus.outgoingConnectingToSignaling] — for example because
-  /// the user pressed hangup (status → disconnecting) or another code path
+  /// [CallProcessingStatus.outgoingConnectingToSignaling] - for example because
+  /// the user pressed hangup (status -> disconnecting) or another code path
   /// removed the call entirely.
   bool _shouldExitOutgoingSignalingWait(CallState next, String callId) {
     final registration = next.callServiceState.registration;

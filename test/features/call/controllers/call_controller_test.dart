@@ -182,7 +182,7 @@ void main() {
 
       test('fast-fails with NoInternetConnectionNotification when bloc reports networkStatus.none', () async {
         // WT-1554: when routing state is not initialized AND the bloc already knows
-        // the network is offline, do not wait the full kCallRoutingStateTimeout —
+        // the network is offline, do not wait the full kCallRoutingStateTimeout -
         // surface NoInternetConnectionNotification immediately.
         when(() => callRoutingCubit.state).thenReturn(null);
         when(
