@@ -1548,12 +1548,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallPerformEventStarted(_CallPerformEventStarted event, Emitter<CallState> emit) async {
-    if (await state.performOnActiveCall(event.callId, (activeCall) => activeCall.line != _kUndefinedLine) != true) {
-      event.fail();
-      emit(state.copyWithPopActiveCall(event.callId));
-      submitNotification(const GeneralUnableToCallNotification());
-      return;
-    }
+    // WT-1554 Option B (step 4): _kUndefinedLine is no longer an instant fail.
+    // It means the call was started before the signaling handshake arrived
+    // (cold start) and the main line will be allocated below, after the wait.
 
     final restoredCall = state.retrieveActiveCall(event.callId);
     final canPerformStart = switch (restoredCall?.processingStatus) {
@@ -1577,8 +1574,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     var currentState = state;
 
-    // Attempt to wait for signaling+handshake readiness within kOutgoingCallSignalingWaitTimeout.
-    if (!currentState.isHandshakeEstablished || !currentState.isSignalingEstablished) {
+    // Attempt to wait for signaling+handshake+registration+lines readiness
+    // within kOutgoingCallSignalingWaitTimeout. Also covers the cold-start
+    // case (Option B step 4): if the call was parked with [_kUndefinedLine],
+    // we wait until linesCount > 0 so a real main line can be allocated below.
+    final activeCallNow = currentState.retrieveActiveCall(event.callId);
+    final hasUndefinedLine = activeCallNow?.line == _kUndefinedLine;
+    final needsWait =
+        !currentState.isHandshakeEstablished ||
+        !currentState.isSignalingEstablished ||
+        currentState.callServiceState.registration?.status.isRegistered != true ||
+        currentState.linesCount == 0 ||
+        hasUndefinedLine;
+
+    if (needsWait) {
       // Trigger reconnect so that an outgoing call recovers signaling even when the previous
       // disconnect was intentional (e.g. post-transfer cleanup) and no reconnect was scheduled.
       _reconnectController.notifyForceReconnect();
@@ -1624,6 +1633,21 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       submitNotification(CallWhileUnregisteredNotification());
       event.fail();
       return;
+    }
+
+    // WT-1554 Option B (step 4): resolve a parked [_kUndefinedLine] now that
+    // the wait has completed (linesCount > 0 in the exit condition).
+    final waitingCall = currentState.retrieveActiveCall(event.callId);
+    if (waitingCall?.line == _kUndefinedLine) {
+      final resolvedLine = currentState.retrieveIdleLine();
+      if (resolvedLine == null) {
+        _logger.info('__onCallPerformEventStarted no idle line after wait');
+        event.fail();
+        emit(state.copyWithPopActiveCall(event.callId));
+        submitNotification(const GeneralUnableToCallNotification());
+        return;
+      }
+      emit(state.copyWithMappedActiveCall(event.callId, (c) => c.copyWith(line: resolvedLine)));
     }
 
     event.fulfill();
@@ -2188,9 +2212,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       line = state.retrieveIdleLine();
       if (line == null) {
-        _logger.info('__onMutationControlStart no idle line');
-        submitNotification(const GeneralUnableToCallNotification());
-        return;
+        if (state.linesCount == 0) {
+          // WT-1554 Option B (step 4): cold start - signaling handshake has
+          // not arrived yet, so lines are unknown. Park the call with an
+          // undefined line; __onCallPerformEventStarted will resolve it once
+          // linesCount > 0.
+          line = _kUndefinedLine;
+        } else {
+          // Lines are known and all main lines are in use - fail fast.
+          _logger.info('__onMutationControlStart no idle line');
+          submitNotification(const GeneralUnableToCallNotification());
+          return;
+        }
       }
     }
 
