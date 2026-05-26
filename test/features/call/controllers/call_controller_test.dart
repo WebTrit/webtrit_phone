@@ -66,6 +66,10 @@ void main() {
     notificationsBloc = _MockNotificationsBloc();
     connectivityService = _MockConnectivityService();
     when(() => callBloc.add(any())).thenReturn(null);
+    // WT-1554: CallController now reads callBloc.state.callServiceState.networkStatus
+    // before dispatching. Default CallState() has networkStatus == null (≠ none),
+    // so the gate passes and the previous test expectations stay valid.
+    when(() => callBloc.state).thenReturn(const CallState());
     when(() => notificationsBloc.add(any())).thenReturn(null);
     when(() => connectivityService.connectionStream).thenAnswer((_) => const Stream<bool>.empty());
     when(() => connectivityService.checkConnection()).thenAnswer((_) async => true);
