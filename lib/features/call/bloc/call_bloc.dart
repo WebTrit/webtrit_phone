@@ -2220,6 +2220,29 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onMutationControlStart(_CallMutationEventControlStart e, Emitter<CallState> emit) async {
+    // De-duplicate retry taps on the same destination while a previous attempt
+    // has not yet sent its SIP INVITE. Covers every pre-offer-sent outgoing
+    // status (created / created-from-refer / connecting-to-signaling /
+    // initializing-media / offer-preparing) so the dedup catches both the
+    // parked cold-start case and the short window before callkeep's perform
+    // callback fires. Without this, each tap allocates the next idle line and
+    // the user ends up with N parallel pending calls to the same number
+    // instead of a single retry. WT-1554.
+    final hasPendingToSameHandle = state.activeCalls.any(
+      (c) =>
+          c.direction == CallDirection.outgoing &&
+          c.processingStatus.isPreOfferSent &&
+          c.handle.value == e.handle.value,
+    );
+    if (hasPendingToSameHandle) {
+      _logger.info(
+        '__onMutationControlStart: ignoring duplicate tap, outgoing call to ${e.handle.value} already pending',
+      );
+      // Bring the user back to the pending call screen so the tap feels acknowledged.
+      emit(state.copyWith(minimized: false));
+      return;
+    }
+
     int? line;
     if (e.fromNumber != null) {
       // Guest line is implied; signaling layer handles it without a line index.
