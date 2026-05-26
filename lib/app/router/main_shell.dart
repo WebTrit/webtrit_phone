@@ -636,12 +636,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         builder: (context) {
                           final sipPresenceFeature = featureAccess.sipPresenceConfig;
                           return CallControllerScope(
-                            controller: _callController ??= CallController(
-                              callBloc: context.read<CallBloc>(),
-                              callRoutingCubit: context.read<CallRoutingCubit>(),
-                              notificationsBloc: context.read<NotificationsBloc>(),
-                              connectivityService: context.read<ConnectivityService>(),
-                            ),
+                            controller: _callController ??= CallController(callBloc: context.read<CallBloc>()),
                             child: PresenceViewParams(
                               hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
                               blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
