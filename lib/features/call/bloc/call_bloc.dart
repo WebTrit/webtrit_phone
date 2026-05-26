@@ -1326,29 +1326,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   // wait for handshake + registration + linesCount (see
   // `_shouldExitOutgoingSignalingWait`). The three decision points are:
   //   - `resolveOutgoingFromNumber`      (injected callback - SIP `from`)
-  //   - `_pickInitialOutgoingMainLine`   (initial line at mutation time)
+  //   - `state.pickOutgoingMainLine`     (initial line at mutation time)
   //   - `_resolveParkedOutgoingMainLine` (line resolution after the wait)
 
-  /// Picks the initial main line for an outgoing call.
-  ///
-  /// Three outcomes:
-  ///   - real line index when an idle main line is available;
-  ///   - [_kUndefinedLine] when `linesCount == 0` (cold start; the call is
-  ///     parked and [__onCallPerformEventStarted] resolves the real line
-  ///     via [_resolveParkedOutgoingMainLine] once the wait completes);
-  ///   - `null` when lines are known but all main lines are in use - caller
-  ///     should fail with [GeneralUnableToCallNotification].
-  int? _pickInitialOutgoingMainLine() {
-    final idle = state.retrieveIdleLine();
-    if (idle != null) return idle;
-    if (state.linesCount == 0) return _kUndefinedLine;
-    return null;
-  }
-
   /// Resolves the main line for an outgoing call that was parked with
-  /// [_kUndefinedLine] in [_pickInitialOutgoingMainLine]. Returns `null` when
-  /// no idle line is available after the wait - the caller should fail with
-  /// [GeneralUnableToCallNotification].
+  /// [_kUndefinedLine] in [CallState.pickOutgoingMainLine]. Returns `null`
+  /// when no idle line is available after the wait - the caller should fail
+  /// with [GeneralUnableToCallNotification].
   int? _resolveParkedOutgoingMainLine(CallState afterWait) {
     return afterWait.retrieveIdleLine();
   }
@@ -2247,7 +2231,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // Guest line is implied; signaling layer handles it without a line index.
       line = null;
     } else {
-      line = _pickInitialOutgoingMainLine();
+      line = state.pickOutgoingMainLine();
       if (line == null) {
         // Lines are known and all main lines are in use - fail fast.
         _logger.info('__onMutationControlStart no idle line');

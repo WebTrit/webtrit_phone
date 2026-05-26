@@ -100,6 +100,23 @@ class CallState with _$CallState {
     return choosenLine;
   }
 
+  /// Picks a main line for an outgoing call.
+  ///
+  /// Three outcomes:
+  ///   - real line index when an idle main line is available;
+  ///   - [_kUndefinedLine] when `linesCount == 0` (cold start: the signaling
+  ///     handshake has not arrived yet, so line config is unknown - the
+  ///     caller should park the call and resolve the real line once lines
+  ///     are known);
+  ///   - `null` when lines are known but all main lines are in use - the
+  ///     caller should fail with [GeneralUnableToCallNotification].
+  int? pickOutgoingMainLine() {
+    final idle = retrieveIdleLine();
+    if (idle != null) return idle;
+    if (linesCount == 0) return _kUndefinedLine;
+    return null;
+  }
+
   CallDisplay get display {
     if (activeCalls.isEmpty) {
       if (minimized == false) {
