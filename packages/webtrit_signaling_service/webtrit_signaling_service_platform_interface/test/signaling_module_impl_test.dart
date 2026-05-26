@@ -101,6 +101,7 @@ class _ControlledFactory {
         required Duration connectionTimeout,
         required TrustedCertificates certs,
         required bool force,
+        required bool reregister,
       }) {
         final c = Completer<WebtritSignalingClient>();
         _calls.add(c);
@@ -137,6 +138,7 @@ SignalingModuleImpl _buildModuleFromClients(List<WebtritSignalingClient> clients
           required Duration connectionTimeout,
           required TrustedCertificates certs,
           required bool force,
+          required bool reregister,
         }) async => clients[index++],
   );
 }

@@ -124,7 +124,7 @@ class WebtritSignalingService implements SignalingModule {
   /// The timer is cancelled immediately when a terminal event arrives, so it
   /// has no effect during normal operation.
   @override
-  void connect() {
+  void connect({bool reregister = false}) {
     if (_isDisposed || _startPending || _isConnected) return;
     _startPending = true;
     _startPendingTimer?.cancel();
@@ -132,9 +132,12 @@ class WebtritSignalingService implements SignalingModule {
       _logger.warning('connect: no terminal event after $_startPendingTimeout — resetting and retrying');
       _startPending = false;
       _startPendingTimer = null;
-      connect();
+      connect(reregister: reregister);
     });
-    SignalingServicePlatform.instance.start(_config, mode: _mode).catchError((Object e, StackTrace s) {
+    SignalingServicePlatform.instance.start(_config, mode: _mode, reregister: reregister).catchError((
+      Object e,
+      StackTrace s,
+    ) {
       _logger.severe('connect: start() failed', e, s);
       _clearStartPending();
     });

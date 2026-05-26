@@ -43,7 +43,7 @@ class _FakeSignalingModule implements SignalingModule {
   bool get isConnected => _connected;
 
   @override
-  void connect() {
+  void connect({bool reregister = false}) {
     _connected = true;
     _emit(SignalingConnecting());
     _emit(SignalingConnected());

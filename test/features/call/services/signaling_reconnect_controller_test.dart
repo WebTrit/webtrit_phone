@@ -27,7 +27,7 @@ class _FakeSignalingModule implements SignalingModule {
   void emit(SignalingModuleEvent event) => _controller.add(event);
 
   @override
-  void connect() => connectCalls++;
+  void connect({bool reregister = false}) => connectCalls++;
 
   @override
   Future<void> disconnect() async => disconnectCalls++;

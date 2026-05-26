@@ -76,7 +76,7 @@ class _SignalingModule implements SignalingModule {
   bool get isConnected => _client != null;
 
   @override
-  void connect() {
+  void connect({bool reregister = false}) {
     if (_disposed) return;
     unawaited(_connectAsync());
   }

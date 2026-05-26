@@ -84,14 +84,20 @@ class WebtritSignalingClient {
     String tenantId,
     String token,
     bool force, {
+    bool reregister = false,
     Duration? connectionTimeout,
     TrustedCertificates certs = TrustedCertificates.empty,
   }) async {
     final tenantUrl = buildTenantUrl(baseUrl, tenantId);
+    final queryParameters = {
+      'token': token,
+      'force': force.toString(),
+      if (reregister) 'reregister': 'true',
+    };
     final signalingUrl = tenantUrl
         .replace(
           pathSegments: [...tenantUrl.pathSegments, 'signaling', 'v1'],
-          queryParameters: {'token': token, 'force': force.toString()},
+          queryParameters: queryParameters,
         )
         .toString();
 

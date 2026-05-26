@@ -27,7 +27,13 @@ abstract interface class SignalingModule {
   /// Initiates a new connection attempt. Fire-and-forget.
   ///
   /// On [SignalingHubModule] this is a no-op -- the hub owns the connection.
-  void connect();
+  ///
+  /// When [reregister] is true, the connect URL includes the
+  /// `reregister=true` query parameter, asking Core to tear down the existing
+  /// controller and start a fresh SIP registration on the new connection.
+  /// Pass it on reconnects that follow a network interface change so the
+  /// stale SIP Contact in the registrar is replaced.
+  void connect({bool reregister = false});
 
   /// Gracefully closes the current connection.
   ///

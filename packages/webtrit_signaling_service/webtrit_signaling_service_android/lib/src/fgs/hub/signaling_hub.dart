@@ -244,8 +244,8 @@ class SignalingHub {
           _logger.warning('Hub connect: unknown subscriber ${cmd.consumerId}');
           return;
         }
-        _logger.fine('Hub received connect command from ${cmd.consumerId}');
-        _signalingModule.connect();
+        _logger.fine('Hub received connect command from ${cmd.consumerId} (reregister=${cmd.reregister})');
+        _signalingModule.connect(reregister: cmd.reregister);
       case SignalingHubDisconnectCommand():
         if (!_subscribers.containsKey(cmd.consumerId)) {
           _logger.warning('Hub disconnect: unknown subscriber ${cmd.consumerId}');
