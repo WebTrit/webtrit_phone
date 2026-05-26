@@ -16,50 +16,64 @@ void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
   const calleeNumber = IntegrationTestEnvironmentConfig.ACCOUNT_MAIN_NUMBER;
   const crossCallSleep = Duration(seconds: IntegrationTestEnvironmentConfig.CROSS_CALL_SLEEP_SECONDS);
+
   final remoteUser = IntegrationTestEnvironmentConfig.PJSUA_SIP_USERNAME;
   final remoteSipServer = IntegrationTestEnvironmentConfig.PJSUA_SIP_SERVER;
   final remotePassword = IntegrationTestEnvironmentConfig.PJSUA_SIP_PASSWORD;
+  final pjsuaServerHost = IntegrationTestEnvironmentConfig.PJSUA_SERVER_HOST;
+  final pjsuaServerPort = IntegrationTestEnvironmentConfig.PJSUA_SERVER_PORT;
 
-  var pjsuaServerHost = IntegrationTestEnvironmentConfig.PJSUA_SERVER_HOST;
-  var pjsuaServerPort = IntegrationTestEnvironmentConfig.PJSUA_SERVER_PORT;
+  final hasCredsToRunThisTest =
+      remoteUser.isNotEmpty &&
+      remoteSipServer.isNotEmpty &&
+      remotePassword.isNotEmpty &&
+      pjsuaServerHost.isNotEmpty &&
+      pjsuaServerPort != 0;
 
-  final pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
+  patrolTest(
+    'Should answer incoming call using app UI > verify it is active > verify remote hangup',
+    ($) async {
+      /// Prepare
+      final pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
 
-  Future<int> placeIncomingCall($) async {
-    final pid = await pjsuaCallServerClient.call(
-      calleeNumber,
-      sipServer: remoteSipServer,
-      sipUsername: remoteUser,
-      sipPassword: remotePassword,
-    );
-    return pid;
-  }
+      Future<int> placeIncomingCall($) async {
+        final pid = await pjsuaCallServerClient.call(
+          calleeNumber,
+          sipServer: remoteSipServer,
+          sipUsername: remoteUser,
+          sipPassword: remotePassword,
+        );
+        return pid;
+      }
 
-  patrolTest('Should answer incoming call using app UI > verify it is active > verify remote hangup', ($) async {
-    final instanceRegistry = await bootstrap();
-    await pumpRootAndWaitUntilVisible(instanceRegistry, $);
+      final instanceRegistry = await bootstrap();
+      await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 
-    // Login if not.
-    if ($(LoginModeSelectScreen).visible) {
-      await loginByMethod($, defaultLoginMethod);
-      // Wait some time for components loading and session establishment.
-      await pumpFor(const Duration(seconds: 5), $);
-    }
+      //// Test
 
-    // Place incoming call and wait for it
-    final pid = await placeIncomingCall($);
-    await $(CallActiveScaffold).waitUntilVisible(timeout: const Duration(seconds: 10));
+      // Login if not.
+      if ($(LoginModeSelectScreen).visible) {
+        await loginByMethod($, defaultLoginMethod);
+        // Wait some time for components loading and session establishment.
+        await pumpFor(const Duration(seconds: 5), $);
+      }
 
-    // Answer call
-    await $(find.widgetWithIcon(TextButton, Icons.call)).tap();
-    await pumpFor(const Duration(seconds: 3), $);
-    expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active after answer');
+      // Place incoming call and wait for it
+      final pid = await placeIncomingCall($);
+      await $(CallActiveScaffold).waitUntilVisible(timeout: const Duration(seconds: 10));
 
-    // Hangup call
-    await pjsuaCallServerClient.hangup(pid);
-    await pumpFor(const Duration(seconds: 3), $);
-    expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended after remote hangup');
+      // Answer call
+      await $(find.widgetWithIcon(TextButton, Icons.call)).tap();
+      await pumpFor(const Duration(seconds: 3), $);
+      expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active after answer');
 
-    await Future.delayed(crossCallSleep);
-  });
+      // Hangup call
+      await pjsuaCallServerClient.hangup(pid);
+      await pumpFor(const Duration(seconds: 3), $);
+      expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended after remote hangup');
+
+      await Future.delayed(crossCallSleep);
+    },
+    skip: hasCredsToRunThisTest == false,
+  );
 }
