@@ -1324,18 +1324,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   //
   // Each arrow may park the call as `outgoingConnectingToSignaling` while we
   // wait for handshake + registration + linesCount (see
-  // `_shouldExitOutgoingSignalingWait`). The three decision points are:
-  //   - `resolveOutgoingFromNumber`      (injected callback - SIP `from`)
-  //   - `state.pickOutgoingMainLine`     (initial line at mutation time)
-  //   - `_resolveParkedOutgoingMainLine` (line resolution after the wait)
-
-  /// Resolves the main line for an outgoing call that was parked with
-  /// [_kUndefinedLine] in [CallState.pickOutgoingMainLine]. Returns `null`
-  /// when no idle line is available after the wait - the caller should fail
-  /// with [GeneralUnableToCallNotification].
-  int? _resolveParkedOutgoingMainLine(CallState afterWait) {
-    return afterWait.retrieveIdleLine();
-  }
+  // `_shouldExitOutgoingSignalingWait`). The two decision points are:
+  //   - `resolveOutgoingFromNumber` (injected callback - SIP `from`)
+  //   - `state.pickOutgoingMainLine` (initial line at mutation time; the
+  //     parked call's real line is later picked via `state.retrieveIdleLine`
+  //     once the wait completes in `__onCallPerformEventStarted`)
 
   Future<void> __onCallControlEventStarted(_CallControlEventStarted event, Emitter<CallState> emit) async {
     // WT-1554: do NOT reject here when not registered. The downstream
@@ -1659,7 +1652,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // (linesCount > 0 in the exit condition). WT-1554.
     final waitingCall = currentState.retrieveActiveCall(event.callId);
     if (waitingCall?.line == _kUndefinedLine) {
-      final resolvedLine = _resolveParkedOutgoingMainLine(currentState);
+      final resolvedLine = currentState.retrieveIdleLine();
       if (resolvedLine == null) {
         _logger.info('__onCallPerformEventStarted no idle line after wait');
         event.fail();
