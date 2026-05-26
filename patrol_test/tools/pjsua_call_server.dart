@@ -1,19 +1,8 @@
-/// Host-side HTTP server that triggers pjsua to place a SIP call.
-///
-/// Run this on the host machine before executing patrol tests:
-///   dart patrol_test/tools/pjsua_call_server.dart
-///
-/// The server listens on port 7788 and exposes two endpoints:
-///   GET /health          → 200 ok
-///   GET /call?to=<ext>&duration=<seconds>  → spawns pjsua to call <ext>
-///
-/// On Android emulator the device reaches host localhost via 10.0.2.2.
-/// On a real device set WEBTRIT_APP_TEST_PJSUA_SERVER_HOST to the host's LAN IP
-/// and forward port 7788 (or set WEBTRIT_APP_TEST_PJSUA_SERVER_PORT accordingly).
-// ignore_for_file: avoid_print
-
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:logging/logging.dart';
 
 const _sipServer = '217.182.47.194';
 const _sipUsername = '111000124';
@@ -29,37 +18,65 @@ const _serverPort = 7788;
 // - add video file playback
 // - add incoming RTP check to verify app actions
 
+final _logger = Logger('pjsua_call_server');
+
+final _processes = <int, Process>{};
+
 void main() async {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    if (record.loggerName == 'pjsua_call_server') {
+      // ignore: avoid_print
+      print('${record.time} ${record.level.name} ${record.message}');
+    }
+  });
+
   final server = await HttpServer.bind(InternetAddress.anyIPv4, _serverPort);
-  print('pjsua call server listening on http://0.0.0.0:$_serverPort');
-  print('SIP account: sip:$_sipUsername@$_sipServer');
+  _logger.info('pjsua call server listening on http://0.0.0.0:$_serverPort');
+  _logger.info('SIP account: sip:$_sipUsername@$_sipServer');
 
   await for (final request in server) {
     switch (request.uri.path) {
       case '/health':
         _respond(request, HttpStatus.ok, 'ok');
       case '/call':
-        await _handleCall(request);
+        try {
+          final to = request.uri.queryParameters['to'];
+          if (to == null || to.isEmpty) {
+            _respond(request, HttpStatus.badRequest, 'missing "to" parameter');
+            return;
+          }
+
+          final duration = int.tryParse(request.uri.queryParameters['duration'] ?? '') ?? 60;
+          final callTarget = 'sip:$to@$_sipServer';
+          _logger.info('Placing pjsua call → $callTarget (duration: ${duration}s)');
+
+          final process = await _spawnPjsua(callTarget, duration);
+          _logger.info('pjsua started with PID: ${process.pid}');
+          
+          _processes[process.pid] = process;
+          monitorExit(process.pid);
+          attachStateTicker(process.pid);
+          attachStdoutConsumer(process.pid);
+
+          _respond(request, HttpStatus.ok, 'call initiated to $callTarget');
+        } catch (e) {
+          _respond(request, HttpStatus.internalServerError, 'failed to spawn pjsua: $e');
+        }
+      case '/hold':
+        throw UnimplementedError();
+      case '/unhold':
+        throw UnimplementedError();
+      case '/mute':
+        throw UnimplementedError();
+      case '/unmute':
+        throw UnimplementedError();
+      case '/transfer':
+        throw UnimplementedError();
       default:
         _respond(request, HttpStatus.notFound, 'not found');
     }
   }
-}
-
-Future<void> _handleCall(HttpRequest request) async {
-  final to = request.uri.queryParameters['to'];
-  if (to == null || to.isEmpty) {
-    _respond(request, HttpStatus.badRequest, 'missing "to" parameter');
-    return;
-  }
-
-  final duration = int.tryParse(request.uri.queryParameters['duration'] ?? '') ?? 60;
-  final callTarget = 'sip:$to@$_sipServer';
-  print('Placing pjsua call → $callTarget (duration: ${duration}s)');
-
-  _respond(request, HttpStatus.ok, 'call initiated to $callTarget');
-
-  await _spawnPjsua(callTarget, duration);
 }
 
 void _respond(HttpRequest request, int status, String body) {
@@ -69,59 +86,75 @@ void _respond(HttpRequest request, int status, String body) {
     ..close();
 }
 
-Future<void> _spawnPjsua(String callTarget, int duration) async {
-  try {
-    final process = await Process.start('pjsua', [
-      '--id=sip:$_sipUsername@$_sipServer',
-      // '--registrar=sip:$_sipServer',
-      '--username=$_sipUsername',
-      '--password=$_sipPassword',
-      '--realm=*',
-      '--local-port=0',
-      '--null-audio',
-      '--auto-loop',
-      '--duration=$duration',
-      '--log-append',
-      '--no-stderr',
-      '--no-color',
-      '--use-compact-form',
-      '--publish',
-      // '--mwi',
-      '--log-level=1',
-      callTarget,
-    ], runInShell: true);
+Future<Process> _spawnPjsua(String callTarget, int duration) async {
+  final process = await Process.start('pjsua', [
+    '--id=sip:$_sipUsername@$_sipServer',
+    '--username=$_sipUsername',
+    '--password=$_sipPassword',
+    '--realm=*',
+    '--local-port=0',
+    '--null-audio',
+    '--auto-loop',
+    '--duration=$duration',
+    '--log-append',
+    '--no-stderr',
+    '--no-color',
+    '--use-compact-form',
+    '--publish',
+    // '--mwi',
+    '--log-level=1',
+    callTarget,
+  ]);
 
-    final pid = process.pid;
-    print('pjsua started with PID: $pid');
+  final pid = process.pid;
+  _logger.info('pjsua started with PID: $pid');
 
-    Future<void> closeFunc() async {
-      process.stdin.writeln('q');
-      await process.stdin.flush();
-      await Future.delayed(const Duration(seconds: 5));
-      process.kill();
+  return process;
+}
+
+Future<void> closeProc(int pid) async {
+  final process = _processes[pid];
+  if (process != null) {
+    _logger.info('Closing pjsua ($pid)');
+    process.stdin.writeln('q');
+    await process.stdin.flush();
+    await Future.delayed(const Duration(seconds: 5));
+    process.kill();
+    _processes.remove(pid);
+  }
+}
+
+void monitorExit(int pid) {
+  final process = _processes[pid];
+  if (process != null) {
+    process.exitCode.then((code) {
+      _logger.info('pjsua ($pid) exited with code $code');
+      _processes.remove(pid);
+    });
+  }
+}
+
+void attachStateTicker(int pid) {
+  Timer.periodic(const Duration(seconds: 1), (timer) async {
+    if (_processes[pid] != null) {
+      _processes[pid]!.stdin.writeln('');
+      await _processes[pid]!.stdin.flush();
+    } else {
+      timer.cancel();
+    }
+  });
+}
+
+void attachStdoutConsumer(int pid) {
+  final process = _processes[pid];
+  if (process == null) return;
+  // Listen to pjsua stdout
+  process.stdout.transform(Utf8Decoder(allowMalformed: true)).forEach((chunk) async {
+    if (chunk.contains('You have 0 active call')) {
+      closeProc(pid);
     }
 
-    process.stdout.transform(Utf8Decoder(allowMalformed: true)).forEach((chunk) async {
-      if (chunk.contains('BYE sip:')) {
-        closeFunc();
-        print('Call ended');
-      }
-
-      print('pjsua ($pid): ${chunk}');
-      print('pjsua ($pid): ${chunk.length} \n-------------------------------');
-    });
-
-    // Future.delayed(Duration(seconds: 5), () async {
-    //   process.stdin.writeln('H');
-    //   await process.stdin.flush();
-    // });
-
-    // Quit gracefully once the call should be done; kill if it lingers.
-    Future.delayed(Duration(seconds: duration + 10), closeFunc);
-
-    final exitCode = await process.exitCode;
-    print('pjsua ($pid) exited with code $exitCode');
-  } catch (e) {
-    print('Failed to run pjsua: $e');
-  }
+    _logger.info('pjsua ($pid): $chunk');
+    _logger.info('pjsua ($pid): ${chunk.length} \n-------------------------------');
+  });
 }
