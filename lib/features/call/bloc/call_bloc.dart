@@ -1527,16 +1527,28 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// the user pressed hangup (status -> disconnecting) or another code path
   /// removed the call entirely.
   bool _shouldExitOutgoingSignalingWait(CallState next, String callId) {
-    final registration = next.callServiceState.registration;
-    if (next.isHandshakeEstablished &&
-        next.isSignalingEstablished &&
-        registration?.status.isRegistered == true &&
-        next.linesCount > 0) {
+    if (next.isReadyForOutgoingCall) {
+      _logger.info('outgoing signaling wait: ready for outgoing call (callId=$callId)');
       return true;
     }
-    if (registration?.status.isFailed == true) return true;
+    final registration = next.callServiceState.registration;
+    if (registration?.status.isFailed == true) {
+      _logger.info(
+        'outgoing signaling wait: registration failed - code=${registration?.code} '
+        'reason="${registration?.reason}" (callId=$callId)',
+      );
+      return true;
+    }
     final call = next.retrieveActiveCall(callId);
-    return call == null || call.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling;
+    if (call == null) {
+      _logger.info('outgoing signaling wait: call no longer present (callId=$callId)');
+      return true;
+    }
+    if (call.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling) {
+      _logger.info('outgoing signaling wait: status escaped to ${call.processingStatus.name} (callId=$callId)');
+      return true;
+    }
+    return false;
   }
 
   Future<void> _onCallPerformEvent(_CallPerformEvent event, Emitter<CallState> emit) {
@@ -1585,12 +1597,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // linesCount > 0 so a real main line can be allocated below.
     final activeCallNow = currentState.retrieveActiveCall(event.callId);
     final hasUndefinedLine = activeCallNow?.line == _kUndefinedLine;
-    final needsWait =
-        !currentState.isHandshakeEstablished ||
-        !currentState.isSignalingEstablished ||
-        currentState.callServiceState.registration?.status.isRegistered != true ||
-        currentState.linesCount == 0 ||
-        hasUndefinedLine;
+    final needsWait = !currentState.isReadyForOutgoingCall || hasUndefinedLine;
 
     if (needsWait) {
       // Trigger reconnect so that an outgoing call recovers signaling even when the previous

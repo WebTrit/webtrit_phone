@@ -41,6 +41,21 @@ class CallState with _$CallState {
   /// Indicates that the signaling connection to the server is successfully established.
   bool get isSignalingEstablished => callServiceState.signalingClientStatus.isConnect;
 
+  /// True when every precondition for placing an outgoing call is satisfied:
+  ///   - the signaling client is connected;
+  ///   - the handshake has been received;
+  ///   - the SIP REGISTER has succeeded;
+  ///   - the line config has arrived (`linesCount > 0`).
+  ///
+  /// Used to decide whether a dispatched outgoing call can proceed to INVITE
+  /// or must be parked in [CallProcessingStatus.outgoingConnectingToSignaling]
+  /// while the missing precondition resolves.
+  bool get isReadyForOutgoingCall =>
+      isHandshakeEstablished &&
+      isSignalingEstablished &&
+      callServiceState.registration?.status.isRegistered == true &&
+      linesCount > 0;
+
   /// Computes the [LinesState] that reflects the current lines and active calls.
   ///
   /// Returns [LinesState.blank] when [linesCount] is 0 and the signaling
