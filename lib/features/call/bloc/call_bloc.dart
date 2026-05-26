@@ -1651,19 +1651,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    // Resolve a parked [_kUndefinedLine] now that the wait has completed
-    // (linesCount > 0 in the exit condition). WT-1554.
-    final waitingCall = currentState.retrieveActiveCall(event.callId);
-    if (waitingCall?.line == _kUndefinedLine) {
-      final resolvedLine = currentState.retrieveIdleLine();
-      if (resolvedLine == null) {
-        _logger.info('__onCallPerformEventStarted no idle line after wait');
+    // Resolve the main line that was parked at mutation time (cold start, WT-1554).
+    if (currentState.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) {
+      final line = currentState.retrieveIdleLine();
+      if (line == null) {
+        _logger.info('no idle main line after outgoing signaling wait (callId=${event.callId})');
         event.fail();
         emit(state.copyWithPopActiveCall(event.callId));
         submitNotification(const GeneralUnableToCallNotification());
         return;
       }
-      emit(state.copyWithMappedActiveCall(event.callId, (c) => c.copyWith(line: resolvedLine)));
+      emit(state.copyWithMappedActiveCall(event.callId, (c) => c.copyWith(line: line)));
     }
 
     event.fulfill();
