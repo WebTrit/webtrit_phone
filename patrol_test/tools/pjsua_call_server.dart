@@ -5,8 +5,6 @@ import 'dart:io';
 import 'package:logging/logging.dart';
 
 // TODO:
-// - add remote muting (mute, unmute)
-// - add remote hold and resume
 // - add transfer
 // - add video file playback
 // - add incoming RTP check to verify app actions
@@ -53,19 +51,57 @@ void main(List<String> args) async {
           attachStateTicker(process.pid);
           attachStdoutConsumer(process.pid);
 
-          _respond(request, HttpStatus.ok, 'call initiated to $callTarget');
+          _respond(request, HttpStatus.ok, '${process.pid}');
         } on ArgumentError catch (e) {
           _respond(request, HttpStatus.badRequest, e.message.toString());
         } catch (e) {
           _respond(request, HttpStatus.internalServerError, 'failed to spawn pjsua: $e');
         }
       case '/hold':
-        throw UnimplementedError();
+        try {
+          final pid = int.parse(_validateParam(request.uri.queryParameters, 'pid'));
+          final process = _requireProcess(pid);
+          process.stdin.writeln('H');
+          await process.stdin.flush();
+          _logger.info('hold sent to pjsua ($pid)');
+          _respond(request, HttpStatus.ok, 'hold sent to pjsua ($pid)');
+        } on ArgumentError catch (e) {
+          _respond(request, HttpStatus.badRequest, e.message.toString());
+        } on NotFoundException catch (e) {
+          _respond(request, HttpStatus.notFound, e.message);
+        } catch (e) {
+          _respond(request, HttpStatus.internalServerError, 'failed to hold: $e');
+        }
       case '/unhold':
-        throw UnimplementedError();
-      case '/mute':
-        throw UnimplementedError();
-      case '/unmute':
+        try {
+          final pid = int.parse(_validateParam(request.uri.queryParameters, 'pid'));
+          final process = _requireProcess(pid);
+          process.stdin.writeln('v');
+          await process.stdin.flush();
+          _logger.info('unhold sent to pjsua ($pid)');
+          _respond(request, HttpStatus.ok, 'unhold sent to pjsua ($pid)');
+        } on ArgumentError catch (e) {
+          _respond(request, HttpStatus.badRequest, e.message.toString());
+        } on NotFoundException catch (e) {
+          _respond(request, HttpStatus.notFound, e.message);
+        } catch (e) {
+          _respond(request, HttpStatus.internalServerError, 'failed to unhold: $e');
+        }
+      case '/hangup':
+        try {
+          final pid = int.parse(_validateParam(request.uri.queryParameters, 'pid'));
+          final process = _requireProcess(pid);
+          process.stdin.writeln('h');
+          await process.stdin.flush();
+          _logger.info('hangup sent to pjsua ($pid)');
+          _respond(request, HttpStatus.ok, 'hangup sent to pjsua ($pid)');
+        } on ArgumentError catch (e) {
+          _respond(request, HttpStatus.badRequest, e.message.toString());
+        } on NotFoundException catch (e) {
+          _respond(request, HttpStatus.notFound, e.message);
+        } catch (e) {
+          _respond(request, HttpStatus.internalServerError, 'failed to hold: $e');
+        }
         throw UnimplementedError();
       case '/transfer':
         throw UnimplementedError();
@@ -82,6 +118,17 @@ String _validateParam(Map<String, String> params, String name, {String? defaultV
     throw ArgumentError('missing "$name" parameter');
   }
   return value;
+}
+
+Process _requireProcess(int pid) {
+  final process = _processes[pid];
+  if (process == null) throw NotFoundException('no active pjsua process with pid $pid');
+  return process;
+}
+
+class NotFoundException implements Exception {
+  NotFoundException(this.message);
+  final String message;
 }
 
 void _respond(HttpRequest request, int status, String body) {
@@ -112,7 +159,6 @@ Future<Process> _spawnPjsua(
     '--no-color',
     '--use-compact-form',
     '--publish',
-    // '--mwi',
     '--log-level=1',
     callTarget,
   ]);
@@ -161,11 +207,53 @@ void attachStdoutConsumer(int pid) {
   if (process == null) return;
   // Listen to pjsua stdout
   process.stdout.transform(Utf8Decoder(allowMalformed: true)).forEach((chunk) async {
-    if (chunk.contains('You have 0 active call')) {
-      closeProc(pid);
-    }
-
     _logger.info('pjsua ($pid): $chunk');
     _logger.info('pjsua ($pid): ${chunk.length} \n-------------------------------');
+
+    if (chunk.contains('You have 0 active call')) {
+      _logger.info('0 active call detected, shutting down pjsua ($pid)');
+      closeProc(pid);
+    }
   });
 }
+
+
+// State example
+// 2026-05-26 11:47:32.200863 INFO pjsua (93869): >>>>
+// Account list:
+//   [ 0] <sip:192.168.31.123:59764>: does not register
+//        Online status: Online
+//   [ 1] <sip:192.168.31.123:59764;transport=TCP>: does not register
+//        Online status: Online
+//  *[ 2] sip:123123@123.182.47.123: does not register
+//        Online status: Online
+// Buddy list:
+//  [ 1] <?>  sip:123123@123.182.47.123
+
+// +=============================================================================+
+// |       Call Commands:         |   Buddy, IM & Presence:  |     Account:      |
+// |                              |                          |                   |
+// |  m  Make new call            | +b  Add new buddy        | +a  Add new accnt.|
+// |  M  Make multiple calls      | -b  Delete buddy         | -a  Delete accnt. |
+// |  a  Answer call              |  i  Send IM              | !a  Modify accnt. |
+// |  h  Hangup call  (ha=all)    |  s  Subscribe presence   | rr  (Re-)register |
+// |  H  Hold call                |  u  Unsubscribe presence | ru  Unregister    |
+// |  o  Toggle call SDP offer    |  D  Subscribe dlg event  |                   |
+// |                              |  Du Unsub dlg event      |                   |
+// |  v  re-inVite (release hold) |  t  Toggle online status |  >  Cycle next ac.|
+// |  U  send UPDATE              |  T  Set online status    |  <  Cycle prev ac.|
+// | ],[ Select next/prev call    +--------------------------+-------------------+
+// |  x  Xfer call                |      Media Commands:     |  Status & Config: |
+// |  X  Xfer with Replaces       |                          |                   |
+// |  #  Send RFC 2833 DTMF       | cl  List ports           |  d  Dump status   |
+// |  *  Send DTMF with INFO      | cc  Connect port         | dd  Dump detailed |
+// | rt  Send real-time text      | cd  Disconnect port      | dc  Dump config   |
+// | dq  Dump curr. call quality  |  V  Adjust audio Volume  |  f  Save config   |
+// |  S  Send arbitrary REQUEST   | Cp  Codec priorities     |                   |
+// +-----------------------------------------------------------------------------+
+// |  q  QUIT      L  ReLoad       I  IP change     n  detect NAT type           |
+// |  sleep MS     echo [0|1|txt]                                                |
+// +=============================================================================+
+// You have 0 active call
+// >>> 
+// 2026-05-26 11:47:32.201215 INFO pjsua (93869): 2281 
