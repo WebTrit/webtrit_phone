@@ -84,6 +84,20 @@ class WebtritSignalingClient {
     String tenantId,
     String token,
     bool force, {
+    // When true, the WebSocket connect URL includes `?reregister=true`.
+    //
+    // Core treats it as a request to drop any existing controller for this
+    // account (destroying its Janus session) and start a fresh one. The
+    // result is: a new Janus session, a new SIP REGISTER issued over a new
+    // TCP connection to the PBX, a new NAT pinhole on the server side, and
+    // the previous Contact in the registrar replaced.
+    //
+    // Typical use: pass `true` on a connect that follows a network
+    // interface change on the device (e.g. WiFi to LTE). The previous
+    // interface may have left a half-open server-side TCP whose registered
+    // Contact still appears alive to the PBX but no longer reaches Janus;
+    // re-registering deterministically replaces that stale pinhole before
+    // the next incoming call is routed to it.
     bool reregister = false,
     Duration? connectionTimeout,
     TrustedCertificates certs = TrustedCertificates.empty,
