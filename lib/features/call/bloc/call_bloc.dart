@@ -55,10 +55,17 @@ typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallR
 /// application-level logout to resolve the state.
 typedef SignalingSessionInvalidatedCallback = void Function();
 
-/// Resolves the SIP `from` number for an outgoing call to [destination] based
-/// on the user's caller-ID settings. Composition root supplies the closure
+/// Resolves the final SIP `from` number for an outgoing call.
+///
+/// [callerProvidedFromNumber] is whatever the UI passed via
+/// [CallControlEvent.started] (a guest-line number, the user's main number,
+/// or `null`). [destination] is the dialed number (used for caller-ID matcher
+/// lookup when [callerProvidedFromNumber] is null).
+///
+/// The closure owns the full policy: main-number normalisation,
+/// matcher-based fallback, default fallback. Composition root supplies it
 /// (see `main_shell.dart`); the bloc only knows the shape.
-typedef FromNumberResolver = String? Function(String destination);
+typedef OutgoingFromNumberResolver = String? Function(String? callerProvidedFromNumber, String destination);
 
 const _getUserMediaPushKitTimeout = Duration(seconds: 8);
 
@@ -71,7 +78,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final DialogInfoRepository dialogInfoRepository;
   final PresenceSettingsRepository presenceSettingsRepository;
   final QueuedTerminationRequestsRepository queuedTerminationRequestsRepository;
-  final FromNumberResolver resolveFromNumberForDestination;
+  final OutgoingFromNumberResolver resolveOutgoingFromNumber;
   final Function(Notification) submitNotification;
 
   /// Callback invoked when the signaling client reports a critical session error
@@ -117,7 +124,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.dialogInfoRepository,
     required this.presenceSettingsRepository,
     required this.queuedTerminationRequestsRepository,
-    required this.resolveFromNumberForDestination,
+    required this.resolveOutgoingFromNumber,
     required this.onSessionInvalidated,
     required this.userRepository,
     required this.submitNotification,
@@ -1317,9 +1324,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   //
   // Each arrow may park the call as `outgoingConnectingToSignaling` while we
   // wait for handshake + registration + linesCount (see
-  // `_shouldExitOutgoingSignalingWait`). The three decision points are
-  // factored into helpers below to keep this surface name-driven:
-  //   - `_resolveOutgoingFromNumber`     (SIP `from` for the outgoing call)
+  // `_shouldExitOutgoingSignalingWait`). The three decision points are:
+  //   - `resolveOutgoingFromNumber`      (injected callback - SIP `from`)
   //   - `_pickInitialOutgoingMainLine`   (initial line at mutation time)
   //   - `_resolveParkedOutgoingMainLine` (line resolution after the wait)
 
@@ -1327,7 +1333,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // WT-1554: do NOT reject here when not registered. The downstream
     // [__onCallPerformEventStarted] path handles signaling/registration wait
     // and surfaces the appropriate notifications after the timeout.
-    final fromNumber = _resolveOutgoingFromNumber(event);
+    final fromNumber = resolveOutgoingFromNumber(event.fromNumber, event.handle.value);
 
     add(
       _CallMutationEvent.controlStart(
@@ -1338,20 +1344,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         fromReplaces: event.replaces,
       ),
     );
-  }
-
-  /// Resolves the SIP `from` number for an outgoing-call request:
-  ///   - if the caller explicitly passed the user's main number, returns
-  ///     `null` so the call uses the main line;
-  ///   - if the caller passed `null`, defers to the injected
-  ///     [resolveFromNumberForDestination] closure (longest-prefix matcher
-  ///     against caller-ID settings, with a default fallback);
-  ///   - otherwise returns the caller's value verbatim (guest line).
-  String? _resolveOutgoingFromNumber(_CallControlEventStarted event) {
-    final fromNumber = event.fromNumber;
-    final mainNumber = userRepository.getLocalInfo()?.numbers.main;
-    if (fromNumber != null && fromNumber == mainNumber) return null;
-    return fromNumber ?? resolveFromNumberForDestination(event.handle.value);
   }
 
   /// Submitting the answer intent to system when answer button is pressed from app ui

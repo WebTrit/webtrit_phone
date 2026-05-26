@@ -520,10 +520,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         dialogInfoRepository: context.read<DialogInfoRepository>(),
                         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
                         queuedTerminationRequestsRepository: context.read<QueuedTerminationRequestsRepository>(),
-                        resolveFromNumberForDestination: (destination) => context
-                            .read<CallerIdSettingsRepository>()
-                            .getCallerIdSettings()
-                            .resolveFromNumber(destination),
+                        // WT-1554 Option B: owns the full outgoing-fromNumber policy
+                        // (main-number normalisation + caller-ID matcher fallback).
+                        resolveOutgoingFromNumber: (callerFromNumber, destination) {
+                          final mainNumber = context.read<UserRepository>().getLocalInfo()?.numbers.main;
+                          if (callerFromNumber != null && callerFromNumber == mainNumber) return null;
+                          return callerFromNumber ??
+                              context.read<CallerIdSettingsRepository>().getCallerIdSettings().resolveFromNumber(
+                                destination,
+                              );
+                        },
                         userRepository: context.read<UserRepository>(),
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         callkeep: _callkeep,
