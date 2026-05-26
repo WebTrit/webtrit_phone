@@ -11,7 +11,6 @@ const kSignalingClientConnectionTimeout = Duration(seconds: 10);
 /// looking at the call screen and expects the call to survive a brief
 /// network interruption (e.g. switching from Wi-Fi to LTE).
 const kOutgoingCallSignalingWaitTimeout = Duration(seconds: 30);
-const kCallRoutingStateTimeout = Duration(seconds: 10);
 const _kSignalingClientReconnectDelaySeconds = 3;
 const kSignalingClientReconnectDelay = Duration(seconds: _kSignalingClientReconnectDelaySeconds);
 const kSignalingClientFastReconnectDelay = Duration(seconds: 1);
