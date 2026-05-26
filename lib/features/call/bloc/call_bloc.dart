@@ -1329,6 +1329,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   //   - `_pickInitialOutgoingMainLine`   (initial line at mutation time)
   //   - `_resolveParkedOutgoingMainLine` (line resolution after the wait)
 
+  /// Picks the initial main line for an outgoing call.
+  ///
+  /// Three outcomes:
+  ///   - real line index when an idle main line is available;
+  ///   - [_kUndefinedLine] when `linesCount == 0` (cold start; the call is
+  ///     parked and [__onCallPerformEventStarted] resolves the real line
+  ///     via [_resolveParkedOutgoingMainLine] once the wait completes);
+  ///   - `null` when lines are known but all main lines are in use - caller
+  ///     should fail with [GeneralUnableToCallNotification].
+  int? _pickInitialOutgoingMainLine() {
+    final idle = state.retrieveIdleLine();
+    if (idle != null) return idle;
+    if (state.linesCount == 0) return _kUndefinedLine;
+    return null;
+  }
+
+  /// Resolves the main line for an outgoing call that was parked with
+  /// [_kUndefinedLine] in [_pickInitialOutgoingMainLine]. Returns `null` when
+  /// no idle line is available after the wait - the caller should fail with
+  /// [GeneralUnableToCallNotification].
+  int? _resolveParkedOutgoingMainLine(CallState afterWait) {
+    return afterWait.retrieveIdleLine();
+  }
+
   Future<void> __onCallControlEventStarted(_CallControlEventStarted event, Emitter<CallState> emit) async {
     // WT-1554: do NOT reject here when not registered. The downstream
     // [__onCallPerformEventStarted] path handles signaling/registration wait
@@ -1664,14 +1688,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     event.fulfill();
     add(_CallMutationEvent.performStart(event.callId, video: event.video));
-  }
-
-  /// Resolves the main line for an outgoing call that was parked with
-  /// [_kUndefinedLine] in [_pickInitialOutgoingMainLine]. Returns `null` when
-  /// no idle line is available after the wait - the caller should fail with
-  /// [GeneralUnableToCallNotification].
-  int? _resolveParkedOutgoingMainLine(CallState afterWait) {
-    return afterWait.retrieveIdleLine();
   }
 
   Future<void> __onCallPerformEventAnswered(_CallPerformEventAnswered event, Emitter<CallState> emit) async {
@@ -2277,22 +2293,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.warning('__onMutationControlStart error: $callkeepError');
       emit(state.copyWithPopActiveCall(callId));
     }
-  }
-
-  /// Picks the initial main line for an outgoing call.
-  ///
-  /// Three outcomes:
-  ///   - real line index when an idle main line is available;
-  ///   - [_kUndefinedLine] when `linesCount == 0` (cold start; the call is
-  ///     parked and [__onCallPerformEventStarted] resolves the real line
-  ///     via [_resolveParkedOutgoingMainLine] once the wait completes);
-  ///   - `null` when lines are known but all main lines are in use - caller
-  ///     should fail with [GeneralUnableToCallNotification].
-  int? _pickInitialOutgoingMainLine() {
-    final idle = state.retrieveIdleLine();
-    if (idle != null) return idle;
-    if (state.linesCount == 0) return _kUndefinedLine;
-    return null;
   }
 
   Future<void> __onMutationControlAnswer(_CallMutationEventControlAnswer e, Emitter<CallState> emit) async {
