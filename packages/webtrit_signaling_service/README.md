@@ -420,7 +420,7 @@ await service.dispose();
 | Method / property | Description |
 | --- | --- |
 | `events` | Broadcast `Stream<SignalingModuleEvent>` |
-| `start(config, {mode})` | Starts the platform service; `mode` defaults to `SignalingServiceMode.persistent` |
+| `start(config, {mode, reregister})` | Starts the platform service; `mode` defaults to `SignalingServiceMode.persistent`. `reregister: true` adds `?reregister=true` to the underlying WebSocket connect URL, asking the server to drop the existing controller and start a fresh registration on the new connection. |
 | `attach()` | Connects to an already-running hub without starting a new service |
 | `execute(request)` | Sends a `Request` via the active connection; throws `StateError` when not connected |
 | `updateMode(mode)` | Switches lifecycle mode at runtime without restarting the WebSocket |

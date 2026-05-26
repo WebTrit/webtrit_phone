@@ -61,7 +61,7 @@ await service.dispose();
 |--------|-------------|
 | `events` | Broadcast `Stream<SignalingModuleEvent>` — safe to subscribe before `start()` |
 | `setModuleFactory(factory)` | Registers the app-provided `SignalingModuleFactory`; must be called before `start()` on all platforms |
-| `start(config, {mode})` | Starts the platform service; `mode` defaults to `SignalingServiceMode.persistent` |
+| `start(config, {mode, reregister})` | Starts the platform service; `mode` defaults to `SignalingServiceMode.persistent`. Pass `reregister: true` on a connect that follows a network interface change so the underlying WebSocket URL carries `reregister=true`, asking the server to drop the existing controller and start a fresh registration. |
 | `attach()` | Connects to an already-running hub without starting a new service |
 | `execute(request)` | Sends a `Request` via the active connection; throws when not connected |
 | `updateMode(mode)` | Switches service lifecycle mode at runtime without restarting the WebSocket |

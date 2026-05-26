@@ -10,7 +10,9 @@ layer over WebSocket. No Flutter dependency, no code generation.
 `WebtritSignalingClient` is the single public entry point:
 
 ```dart
-// 1. Connect (static factory)
+// 1. Connect (static factory).
+// Optional `reregister: true` asks the server to drop any existing controller
+// and start a fresh SIP registration on the new connection.
 final client = await WebtritSignalingClient.connect(baseUrl, tenantId, token, force);
 
 // 2. Register callbacks (single-use; throws StateError if called twice)
@@ -133,4 +135,4 @@ WEBTRIT_APP_TEST_CALLEE_VERIFY_CREDENTIAL=<callee-password> \
 dart test test/live_call_test.dart --tags live --reporter expanded
 ```
 
-Connection endpoint: `wss://<host>/signaling/v1?token=<token>[&force=<true|false>]`
+Connection endpoint: `wss://<host>/signaling/v1?token=<token>[&force=<true|false>][&reregister=true]`

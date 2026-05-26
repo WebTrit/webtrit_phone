@@ -15,7 +15,11 @@ abstract class SignalingServicePlatform extends PlatformInterface {
 
   Stream<SignalingModuleEvent> get events;
   Future<void> setModuleFactory(SignalingModuleFactory factory);
-  Future<void> start(SignalingServiceConfig config, {SignalingServiceMode mode = SignalingServiceMode.persistent});
+  Future<void> start(
+    SignalingServiceConfig config, {
+    SignalingServiceMode mode = SignalingServiceMode.persistent,
+    bool reregister = false,
+  });
   Future<void> attach();
   Future<void> execute(Request request);
   Future<void> updateMode(SignalingServiceMode mode);
@@ -108,7 +112,7 @@ Internal contract shared by `SignalingModuleImpl` and the plugin's `SignalingHub
 abstract interface class SignalingModule {
   Stream<SignalingModuleEvent> get events;
   bool get isConnected;
-  void connect();
+  void connect({bool reregister = false});
   Future<void> disconnect();
   Future<void>? execute(Request request);
   Future<void> dispose();

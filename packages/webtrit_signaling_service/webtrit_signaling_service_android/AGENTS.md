@@ -37,7 +37,7 @@ Registered via `registerWith()` as `SignalingServicePlatform.instance`.
 | Method | Behaviour |
 |--------|-----------|
 | `setModuleFactory(factory)` | Resolves the raw handle via `PluginUtilities.getCallbackHandle(factory)`, persists it via `PSignalingServiceHostApi.saveModuleFactory` → `StorageDelegate` → `SharedPreferences`. The background isolate reads `PSignalingServiceStatus.moduleFactoryHandle` at each sync and resolves the factory via `PluginUtilities.getCallbackFromHandle`. |
-| `start(config, {mode})` | Obtains Dart callback handles, calls `initializeServiceCallback` + `startService(mode)` via Pigeon, removes any stale `kSignalingHubPortName` entry from `IsolateNameServer`, then polls until the hub port appears. The effective mode is taken from `_currentMode` (last explicit mode), not the parameter, so reconnect calls never revert a user-selected `updateMode` change. |
+| `start(config, {mode, reregister})` | Obtains Dart callback handles, calls `initializeServiceCallback` + `startService(mode)` via Pigeon, removes any stale `kSignalingHubPortName` entry from `IsolateNameServer`, then polls until the hub port appears. The effective mode is taken from `_currentMode` (last explicit mode), not the parameter, so reconnect calls never revert a user-selected `updateMode` change. `reregister: true` is forwarded down the connect path (direct service or hub command) so the underlying WebSocket URL carries `reregister=true`. |
 | `attach()` | Connects to an already-running hub without starting a new service; polls `IsolateNameServer` the same way as `start()`. |
 | `execute(request)` | Delegates to the hub module. Throws `StateError` when not connected. |
 | `updateMode(mode)` | Saves new mode to `_currentMode`, calls `_startHubMode(config, mode)`. Both modes use the hub/foreground service — only the Kotlin-side lifecycle flag changes (whether `onTaskRemoved` stops the service). The WebSocket connection is preserved across the mode switch. |
@@ -92,7 +92,8 @@ what sends the `sub` command that triggers the ack.
 `SignalingModule` implementation backed by a `SignalingHubClient`.
 Used by the main isolate when the hub is already running in the foreground service.
 
-- `connect()` / `disconnect()` are **no-ops** — the hub owns the connection lifecycle.
+- `connect({reregister})` forwards the `reregister` flag to the hub as a `SignalingHubConnectCommand`; the foreground service applies it to the underlying `SignalingModule.connect`. With `reregister: false` (the default) the call is otherwise a no-op — the hub owns the connection lifecycle.
+- `disconnect()` is a **no-op** — the hub owns the connection lifecycle.
 - Maintains its own `_sessionBuffer` for late subscribers to the `events` stream.
 - `isConnected` tracks `SignalingConnected` / `SignalingDisconnected` / `SignalingConnectionFailed`.
 

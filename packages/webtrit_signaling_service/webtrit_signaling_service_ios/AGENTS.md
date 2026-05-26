@@ -23,7 +23,11 @@ Inherits the same interface as the Android package:
 ```dart
 Stream<SignalingModuleEvent> get events;
 Future<void> setModuleFactory(SignalingModuleFactory factory);
-Future<void> start(SignalingServiceConfig config, {SignalingServiceMode mode = SignalingServiceMode.persistent});
+Future<void> start(
+  SignalingServiceConfig config, {
+  SignalingServiceMode mode = SignalingServiceMode.persistent,
+  bool reregister = false,
+});
 Future<void> attach();
 Future<void> execute(Request request);
 Future<void> updateMode(SignalingServiceMode mode);
@@ -38,7 +42,7 @@ Future<void> dispose();
 | Method | Behaviour |
 |--------|-----------|
 | `setModuleFactory(factory)` | Stores `factory` in `_factory`. Must be called before `start()`. |
-| `start(config, {mode})` | Disposes any existing module; calls `_factory!(config)` to create a `SignalingModule`; pipes its events to `_eventsController`; calls `connect()`. `mode` is accepted for API compatibility — no behavioural difference on iOS. |
+| `start(config, {mode, reregister})` | Disposes any existing module; calls `_factory!(config)` to create a `SignalingModule`; pipes its events to `_eventsController`; calls `connect(reregister: reregister)`. `mode` is accepted for API compatibility — no behavioural difference on iOS. |
 | `attach()` | No-op. Logs a message. No background process exists to attach to. |
 | `execute(request)` | Delegates to the module's `execute`; throws `StateError` when not connected. |
 | `updateMode(mode)` | No-op. Logs a message. Mode switching has no meaning on iOS. |
