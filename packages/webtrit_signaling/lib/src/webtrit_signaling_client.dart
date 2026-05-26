@@ -127,6 +127,13 @@ class WebtritSignalingClient {
         )
         .toString();
 
+    // Log the public connect parameters so the URL the app builds (host,
+    // force and the optional reregister flag) is traceable alongside the
+    // SignalingClient instance lifecycle. Token is intentionally omitted.
+    Logger('WebtritSignalingClient').fine(
+      'connect: host=${tenantUrl.host} tenant=$tenantId force=$force reregister=$reregister',
+    );
+
     final ws = await connectWebSocket(
       signalingUrl,
       protocols: [subprotocol],
