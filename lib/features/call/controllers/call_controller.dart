@@ -7,6 +7,7 @@ import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/services/connectivity_service.dart';
 
 class CallController {
@@ -75,10 +76,17 @@ class CallController {
     bool video = false,
     String? fromNumber,
   }) async {
-    // Check network connectivity independently before attempting to get routing state,
-    // to provide more accurate notifications to the user.
-    final netConnected = await isNetworkConnected;
-    if (!netConnected) {
+    // WT-1554: trust the bloc's authoritative NetworkStatus instead of running
+    // a fresh HTTP connectivity probe.
+    //
+    // The probe could return a stale "no connection" right after the app
+    // returned from background (cached `_netConnected == false`, platform
+    // connectivity not yet refreshed), and the call was blocked here even when
+    // the bloc already knew the network was available. By the time the call
+    // would reach CallBloc, the existing wait + reconnect flow handles the
+    // genuine-offline case and surfaces the proper notifications after the
+    // 30 s timeout.
+    if (callBloc.state.callServiceState.networkStatus == NetworkStatus.none) {
       _logger.warning('Cannot create call: no network connectivity.');
       notificationsBloc.add(const NotificationsSubmitted(NoInternetConnectionNotification()));
       return;
