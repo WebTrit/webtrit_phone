@@ -92,8 +92,8 @@ what sends the `sub` command that triggers the ack.
 `SignalingModule` implementation backed by a `SignalingHubClient`.
 Used by the main isolate when the hub is already running in the foreground service.
 
-- `connect({reregister})` forwards the `reregister` flag to the hub as a `SignalingHubConnectCommand`; the foreground service applies it to the underlying `SignalingModule.connect`. With `reregister: false` (the default) the call is otherwise a no-op — the hub owns the connection lifecycle.
-- `disconnect()` is a **no-op** — the hub owns the connection lifecycle.
+- `connect({reregister})` forwards the `reregister` flag to the hub as a `SignalingHubConnectCommand`; the foreground service applies it to the underlying `SignalingModule.connect`. With `reregister: false` (the default) the call is otherwise a no-op - the hub owns the connection lifecycle.
+- `disconnect()` is a **no-op** - the hub owns the connection lifecycle.
 - Maintains its own `_sessionBuffer` for late subscribers to the `events` stream.
 - `isConnected` tracks `SignalingConnected` / `SignalingDisconnected` / `SignalingConnectionFailed`.
 

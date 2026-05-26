@@ -299,7 +299,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
   Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode, {bool reregister = false}) async {
     if (mode == SignalingServiceMode.pushBound) {
-      _logger.fine('_startService mode=pushBound -- delegating to direct service (reregister=$reregister)');
+      _logger.fine('_startService mode=pushBound - delegating to direct service (reregister=$reregister)');
       final myToken = _startServiceToken = Object();
 
       // Cancel any existing forwarding subscription before starting the new
