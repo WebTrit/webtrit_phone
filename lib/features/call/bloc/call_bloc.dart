@@ -1541,12 +1541,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return true;
     }
     final call = next.retrieveActiveCall(callId);
-    if (call == null) {
-      _logger.info('outgoing signaling wait: call no longer present (callId=$callId)');
-      return true;
-    }
-    if (call.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling) {
-      _logger.info('outgoing signaling wait: status escaped to ${call.processingStatus.name} (callId=$callId)');
+    if (call == null || call.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling) {
+      _logger.info(
+        'outgoing signaling wait: call escaped wait '
+        '(callId=$callId, present=${call != null}, processingStatus=${call?.processingStatus.name})',
+      );
       return true;
     }
     return false;
