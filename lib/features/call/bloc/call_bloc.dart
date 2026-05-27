@@ -2958,8 +2958,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    if (pc.signalingState != RTCSignalingState.RTCSignalingStateStable) {
-      _logger.fine(() => '__onMutationRenegotiate: pc signalingState is ${pc.signalingState}, skipping renegotiation');
+    final sigState = pc.signalingState;
+    if (sigState != null && sigState != RTCSignalingState.RTCSignalingStateStable) {
+      _logger.fine(() => '__onMutationRenegotiate: pc signalingState is $sigState, skipping renegotiation');
       return;
     }
 
