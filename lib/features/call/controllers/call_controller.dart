@@ -1,133 +1,30 @@
-import 'dart:async';
-
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
-import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/features/call/call.dart';
-import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
-import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/services/connectivity_service.dart';
 
+/// Thin dispatcher for outgoing-call intent.
+///
+/// Does two things:
+///   - debounce rapid taps (kDebounceDuration);
+///   - dispatch [CallControlEvent.started] / [CallControlEvent.blindTransferSubmitted]
+///     to [CallBloc].
+///
+/// All gating (registration, signaling readiness, line availability,
+/// fromNumber resolution, offline detection) lives in CallBloc, which owns
+/// the wait + reconnect + line-allocation machinery.
 class CallController {
-  CallController({
-    required this.callBloc,
-    required this.callRoutingCubit,
-    required this.notificationsBloc,
-    required this.connectivityService,
-    Logger? logger,
-  }) : _logger = logger ?? Logger('CallController') {
-    _connectivitySubscription = connectivityService.connectionStream.listen((connected) {
-      _netConnected = connected;
-    });
-  }
+  CallController({required this.callBloc, Logger? logger}) : _logger = logger ?? Logger('CallController');
 
   final CallBloc callBloc;
-  final CallRoutingCubit callRoutingCubit;
-  final NotificationsBloc notificationsBloc;
-  final ConnectivityService connectivityService;
   final Logger _logger;
-  StreamSubscription? _connectivitySubscription;
-  bool? _netConnected;
   DateTime? _createCallDebounceReleaseTime;
 
-  /// Checks network connectivity status.
-  ///
-  /// don't get confused with signaling connectivity (SIP registration)
-  /// this is needed to determine what notification to show
-  Future<bool> get isNetworkConnected async {
-    // Only trust the cached value when it says connected. A cached false may be
-    // stale — OEMs (e.g. Xiaomi) can signal ConnectivityResult.none while the
-    // app is backgrounded even when the network interface stays up, and the
-    // stream may not re-emit after the app returns to the foreground.
-    if (_netConnected == true) return true;
-
-    _netConnected = await connectivityService.checkConnection().timeout(
-      const Duration(seconds: 5),
-      onTimeout: () {
-        return false;
-      },
-    );
-
-    return _netConnected!;
-  }
-
-  /// Creates a new call using the current call routing state.
-  ///
-  /// If the routing state is not yet available (app just launched, internet
-  /// not yet connected), the call is held as pending and automatically
-  /// proceeds once the routing state becomes available.
-  void createCall({required String destination, String? displayName, bool video = false, String? fromNumber}) =>
-      unawaited(
-        _createCallAsync(
-          destination: destination,
-          displayName: displayName,
-          video: video,
-          fromNumber: fromNumber,
-        ).catchError(
-          (Object e, StackTrace st) => _logger.severe('createCall: unexpected error for $destination', e, st),
-        ),
-      );
-
-  Future<void> _createCallAsync({
-    required String destination,
-    String? displayName,
-    bool video = false,
-    String? fromNumber,
-  }) async {
-    // WT-1554: fast-fail when routing state has not initialized AND the bloc
-    // already knows we are offline - otherwise [_waitForRoutingState] would
-    // sit through the full [kCallRoutingStateTimeout] (~10 s) with no feedback.
-    if (callRoutingCubit.state == null && callBloc.state.callServiceState.networkStatus == NetworkStatus.none) {
-      _logger.warning('Cannot create call: routing state not initialized and network is offline.');
-      notificationsBloc.add(const NotificationsSubmitted(NoInternetConnectionNotification()));
-      return;
-    }
-
-    // Use current state if available, otherwise wait for the first non-null emission.
-    // Timeout guards against indefinite wait when routing state never initializes
-    // (e.g. no network on startup, backend never responded with line config).
-    // orElse returns null only if the cubit is closed while waiting (e.g. logout).
-    final CallRoutingState? callRoutingState;
-    try {
-      callRoutingState = callRoutingCubit.state ?? await _waitForRoutingState();
-    } on TimeoutException {
-      _logger.warning(
-        'createCall: routing state not available after ${kCallRoutingStateTimeout.inSeconds}s, no network',
-      );
-      notificationsBloc.add(const NotificationsSubmitted(GeneralUnableToCallNotification()));
-      return;
-    }
-
-    if (callRoutingState == null) {
-      _logger.warning(
-        'createCall: callRoutingCubit closed before routing state became available, dropping call to $destination',
-      );
-      return;
-    }
-
-    // Determine fromNumber based on routing settings
-    final shouldUseMainLine = fromNumber == callRoutingState.mainNumber;
-    if (shouldUseMainLine) {
-      fromNumber = null;
-    } else {
-      fromNumber ??= callRoutingCubit.getFromNumber(destination);
-    }
-
-    // Check line availability
-    final hasIdleMainLine = callRoutingState.hasIdleMainLine;
-    final hasIdleGuestLine = callRoutingState.hasIdleGuestLine;
-
-    final noIdleMain = fromNumber == null && !hasIdleMainLine;
-    final noIdleGuest = fromNumber != null && !hasIdleGuestLine;
-
-    if (noIdleMain || noIdleGuest) {
-      _logger.warning('Cannot create call: no idle lines available.');
-      notificationsBloc.add(const NotificationsSubmitted(GeneralUnableToCallNotification()));
-      return;
-    }
-
+  /// Dispatches an outgoing call. The call screen opens immediately; CallBloc
+  /// parks the call as `outgoingConnectingToSignaling` while waiting for
+  /// signaling/handshake/registration/lines, then sends the INVITE (or fails
+  /// with the proper notification after the timeout).
+  void createCall({required String destination, String? displayName, bool video = false, String? fromNumber}) {
     if (_isCreateCallDebounceActive) return;
     _createCallDebounceReleaseTime = DateTime.now().add(kDebounceDuration);
 
@@ -136,28 +33,17 @@ class CallController {
     );
   }
 
-  /// Returns true if the create call debounce is currently active, preventing new calls from being initiated.
+  /// Returns true if the create-call debounce is active, preventing new calls.
   bool get _isCreateCallDebounceActive {
     if (_createCallDebounceReleaseTime == null) return false;
     return DateTime.now().isBefore(_createCallDebounceReleaseTime!);
   }
 
-  /// Waits for the first non-null [CallRoutingState] from the cubit stream.
-  ///
-  /// Returns null if the cubit is closed before any state arrives (e.g. logout).
-  /// Throws [TimeoutException] if no state arrives within [kCallRoutingStateTimeout].
-  Future<CallRoutingState?> _waitForRoutingState() =>
-      callRoutingCubit.stream.firstWhere((s) => s != null, orElse: () => null).timeout(kCallRoutingStateTimeout);
-
   /// Submits a blind transfer for the given destination.
-  ///
-  /// Optionally calls [onTransferSubmitted] (e.g. for popping router stack).
   void submitTransfer(String destination) {
     _logger.info('Submitting blind transfer to $destination');
     callBloc.add(CallControlEvent.blindTransferSubmitted(number: destination));
   }
 
-  void dispose() {
-    _connectivitySubscription?.cancel();
-  }
+  void dispose() {}
 }

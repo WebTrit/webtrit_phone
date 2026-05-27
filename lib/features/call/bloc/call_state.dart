@@ -41,6 +41,21 @@ class CallState with _$CallState {
   /// Indicates that the signaling connection to the server is successfully established.
   bool get isSignalingEstablished => callServiceState.signalingClientStatus.isConnect;
 
+  /// True when every precondition for placing an outgoing call is satisfied:
+  ///   - the signaling client is connected;
+  ///   - the handshake has been received;
+  ///   - the SIP REGISTER has succeeded;
+  ///   - the line config has arrived (`linesCount > 0`).
+  ///
+  /// Used to decide whether a dispatched outgoing call can proceed to INVITE
+  /// or must be parked in [CallProcessingStatus.outgoingConnectingToSignaling]
+  /// while the missing precondition resolves.
+  bool get isReadyForOutgoingCall =>
+      isHandshakeEstablished &&
+      isSignalingEstablished &&
+      callServiceState.registration?.status.isRegistered == true &&
+      linesCount > 0;
+
   /// Computes the [LinesState] that reflects the current lines and active calls.
   ///
   /// Returns [LinesState.blank] when [linesCount] is 0 and the signaling
@@ -83,6 +98,23 @@ class CallState with _$CallState {
       lastUsedLine = choosenLine;
     }
     return choosenLine;
+  }
+
+  /// Picks a main line for an outgoing call.
+  ///
+  /// Three outcomes:
+  ///   - real line index when an idle main line is available;
+  ///   - [_kUndefinedLine] when `linesCount == 0` (cold start: the signaling
+  ///     handshake has not arrived yet, so line config is unknown - the
+  ///     caller should park the call and resolve the real line once lines
+  ///     are known);
+  ///   - `null` when lines are known but all main lines are in use - the
+  ///     caller should fail with [GeneralUnableToCallNotification].
+  int? pickOutgoingMainLine() {
+    final idle = retrieveIdleLine();
+    if (idle != null) return idle;
+    if (linesCount == 0) return _kUndefinedLine;
+    return null;
   }
 
   CallDisplay get display {

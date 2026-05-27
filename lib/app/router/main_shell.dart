@@ -520,6 +520,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         dialogInfoRepository: context.read<DialogInfoRepository>(),
                         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
                         queuedTerminationRequestsRepository: context.read<QueuedTerminationRequestsRepository>(),
+                        // Outgoing SIP `from` policy: normalise the user's main number to
+                        // null (main line), or fall back to caller-ID matcher resolution.
+                        resolveOutgoingFromNumber: (callerFromNumber, destination) {
+                          final mainNumber = context.read<UserRepository>().getLocalInfo()?.numbers.main;
+                          if (callerFromNumber != null && callerFromNumber == mainNumber) return null;
+                          return callerFromNumber ??
+                              context.read<CallerIdSettingsRepository>().getCallerIdSettings().resolveFromNumber(
+                                destination,
+                              );
+                        },
                         userRepository: context.read<UserRepository>(),
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         callkeep: _callkeep,
@@ -635,12 +645,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         builder: (context) {
                           final sipPresenceFeature = featureAccess.sipPresenceConfig;
                           return CallControllerScope(
-                            controller: _callController ??= CallController(
-                              callBloc: context.read<CallBloc>(),
-                              callRoutingCubit: context.read<CallRoutingCubit>(),
-                              notificationsBloc: context.read<NotificationsBloc>(),
-                              connectivityService: context.read<ConnectivityService>(),
-                            ),
+                            controller: _callController ??= CallController(callBloc: context.read<CallBloc>()),
                             child: PresenceViewParams(
                               hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
                               blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
