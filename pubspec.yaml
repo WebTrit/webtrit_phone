@@ -108,7 +108,7 @@ dependencies:
   workmanager: ^0.9.0+3
   country_code_picker: ^3.4.1
   icon_decoration: ^2.1.0
-  emoji_picker_flutter: ^4.3.0
+  emoji_picker_flutter: ^4.4.0
   mask_text_input_formatter: ^2.9.0
   async: ^2.13.1
   rxdart: ^0.28.0
