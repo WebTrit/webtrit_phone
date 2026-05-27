@@ -8,10 +8,13 @@ import 'package:webtrit_phone/models/models.dart';
 import 'local_contacts_repository.dart';
 
 // Hides synthetic raw_contacts created by messaging apps (WhatsApp, Viber, Telegram).
-// Why: WT-432 + the original 2022 filter. With a direct ContactsContract.Data
-// MIMETYPE query, any contact that has a phone number — Google-synced, SIM, or
-// device-local — has a phone_v2 row, so a single mimetype filter covers both
-// historical cases. Android only; iOS contacts have no equivalent concept.
+// Why: WT-432 + the original 2022 filter. The plugin's requiredDataMimetypes runs a
+// direct ContactsContract.Data MIMETYPE query
+// (see https://github.com/SERDUN/flutter_contacts/commit/b6c1542), so any contact
+// with a phone number — Google-synced, SIM, or device-local — already matches via
+// its phone_v2 row. The 1.x OR `account.type == 'com.google'` fallback is therefore
+// covered at the plugin level and intentionally not duplicated here. Android only;
+// iOS contacts have no equivalent concept.
 const _androidPhoneV2Mimetypes = {'vnd.android.cursor.item/phone_v2'};
 
 class LocalContactsRepository implements ILocalContactsRepository {
