@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 
@@ -19,14 +17,12 @@ class LocalContactsRepository implements ILocalContactsRepository {
 
   late StreamController<List<LocalContact>> _controller;
   late int _listenedCounter;
+  StreamSubscription<void>? _databaseSubscription;
 
   @override
   Future<bool> requestPermission() async {
-    if (await Permission.contacts.isPermanentlyDenied) {
-      return false;
-    } else {
-      return await FlutterContacts.requestPermission();
-    }
+    final status = await FlutterContacts.permissions.request(PermissionType.readWrite);
+    return status == PermissionStatus.granted || status == PermissionStatus.limited;
   }
 
   @override
@@ -42,47 +38,45 @@ class LocalContactsRepository implements ILocalContactsRepository {
 
   void _onListenCallback() {
     if (_listenedCounter++ == 0) {
-      FlutterContacts.addListener(_contactDatabaseChangesListener);
+      _databaseSubscription = FlutterContacts.onDatabaseChange.listen(_contactDatabaseChangesListener);
     }
   }
 
   void _onCancelCallback() {
     if (--_listenedCounter == 0) {
-      FlutterContacts.removeListener(_contactDatabaseChangesListener);
+      _databaseSubscription?.cancel();
+      _databaseSubscription = null;
     }
   }
 
-  void _contactDatabaseChangesListener() async {
+  void _contactDatabaseChangesListener(void _) async {
     await load();
   }
 
   Future<List<LocalContact>> _listContacts() async {
-    final contacts = await FlutterContacts.getContacts(withProperties: true, withAccounts: true, withThumbnail: true);
+    final contacts = await FlutterContacts.getAll(
+      properties: {ContactProperty.name, ContactProperty.phone, ContactProperty.email, ContactProperty.photoThumbnail},
+    );
+    // Android per-account filtering (mimetypes / com.google) removed: flutter_contacts 2.x
+    // no longer exposes per-contact accounts/mimetypes on `Contact`. If account-scoped
+    // filtering is needed again, switch to `FlutterContacts.accounts.getAll()` and pass
+    // the `account:` parameter to `getAll()`.
     return contacts
-        .where((contact) {
-          if (Platform.isAndroid) {
-            for (final account in contact.accounts) {
-              if (account.mimetypes.contains('vnd.android.cursor.item/phone_v2') || account.type == 'com.google') {
-                return true;
-              }
-            }
-            return false;
-          } else {
-            return true;
-          }
-        })
+        .where((contact) => contact.id != null)
         .map(
           (contact) => LocalContact(
-            id: contact.id,
+            id: contact.id!,
             displayName: contact.displayName,
-            firstName: contact.name.first,
-            lastName: contact.name.last,
-            thumbnail: contact.thumbnail,
+            firstName: contact.name?.first,
+            lastName: contact.name?.last,
+            thumbnail: contact.photo?.thumbnail,
             phones: contact.phones
                 .map(
                   (phone) => LocalContactPhone(
                     number: phone.number,
-                    label: phone.label == PhoneLabel.custom ? phone.customLabel : phone.label.name,
+                    label: phone.label.label == PhoneLabel.custom
+                        ? (phone.label.customLabel ?? '')
+                        : phone.label.label.name,
                   ),
                 )
                 .toList(),
@@ -90,7 +84,9 @@ class LocalContactsRepository implements ILocalContactsRepository {
                 .map(
                   (email) => LocalContactEmail(
                     address: email.address,
-                    label: email.label == EmailLabel.custom ? email.customLabel : email.label.name,
+                    label: email.label.label == EmailLabel.custom
+                        ? (email.label.customLabel ?? '')
+                        : email.label.label.name,
                   ),
                 )
                 .toList(),
