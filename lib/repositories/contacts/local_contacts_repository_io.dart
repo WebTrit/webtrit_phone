@@ -7,15 +7,12 @@ import 'package:webtrit_phone/models/models.dart';
 
 import 'local_contacts_repository.dart';
 
-// Hides synthetic raw_contacts created by messaging apps (WhatsApp, Viber, Telegram).
-// Why: WT-432 + the original 2022 filter. The plugin's requiredDataMimetypes runs a
-// direct ContactsContract.Data MIMETYPE query
-// (see https://github.com/SERDUN/flutter_contacts/commit/b6c1542), so any contact
-// with a phone number — Google-synced, SIM, or device-local — already matches via
-// its phone_v2 row. The 1.x OR `account.type == 'com.google'` fallback is therefore
-// covered at the plugin level and intentionally not duplicated here. Android only;
-// iOS contacts have no equivalent concept.
-const _androidPhoneV2Mimetypes = {'vnd.android.cursor.item/phone_v2'};
+// Filter values passed to FlutterContacts.getAll. The plugin combines them
+// with OR semantics: a contact passes if it has at least one data row with
+// _phoneV2Mimetype OR at least one raw contact in _googleAccountType.
+// Mirrors the 1.x filter behavior. Android only; iOS ignores both.
+const _phoneV2Mimetype = 'vnd.android.cursor.item/phone_v2';
+const _googleAccountType = 'com.google';
 
 class LocalContactsRepository implements ILocalContactsRepository {
   LocalContactsRepository() {
@@ -67,7 +64,8 @@ class LocalContactsRepository implements ILocalContactsRepository {
   Future<List<LocalContact>> _listContacts() async {
     final contacts = await FlutterContacts.getAll(
       properties: {ContactProperty.name, ContactProperty.phone, ContactProperty.email, ContactProperty.photoThumbnail},
-      requiredDataMimetypes: Platform.isAndroid ? _androidPhoneV2Mimetypes : null,
+      requiredDataMimetypes: Platform.isAndroid ? const {_phoneV2Mimetype} : null,
+      requiredAccountTypes: Platform.isAndroid ? const {_googleAccountType} : null,
     );
     return contacts
         .where((contact) => contact.id != null)
