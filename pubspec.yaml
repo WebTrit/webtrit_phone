@@ -62,7 +62,7 @@ dependencies:
   flutter_contacts:
     git:
       url: https://github.com/SERDUN/flutter_contacts.git
-      ref: b6c1542
+      ref: fe3ecb8
   flutter_secure_storage: ^10.3.1
   flutter_svg: ^2.3.0
   flutter_webrtc:

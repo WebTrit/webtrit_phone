@@ -658,8 +658,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: b6c1542
-      resolved-ref: b6c1542c2479a79fbcf26bc640d37ef2cd446567
+      ref: fe3ecb8
+      resolved-ref: fe3ecb8167b90fbcbe71014908b4e01cc0242be9
       url: "https://github.com/SERDUN/flutter_contacts.git"
     source: git
     version: "2.2.0"
