@@ -415,7 +415,7 @@ CallkeepIncomingCallError? _onReportIncomingCallTimeout(Logger logger) {
 
 Future _initLocalPushs() async {
   await FlutterLocalNotificationsPlugin().initialize(
-    const InitializationSettings(
+    settings: const InitializationSettings(
       iOS: DarwinInitializationSettings(
         requestAlertPermission: false,
         requestBadgePermission: false,
@@ -443,7 +443,7 @@ Future<void> _initAndroidNotificationChannel() async {
   if (androidPlugin == null) return;
 
   // ignore: deprecated_member_use_from_same_package
-  await androidPlugin.deleteNotificationChannel(kLegacyLocalPushChannelId);
+  await androidPlugin.deleteNotificationChannel(channelId: kLegacyLocalPushChannelId);
   await androidPlugin.createNotificationChannel(
     const AndroidNotificationChannel(kLocalPushChannelId, kLocalPushChannelName, importance: Importance.high),
   );
