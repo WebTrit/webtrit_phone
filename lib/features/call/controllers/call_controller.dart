@@ -7,6 +7,7 @@ import 'package:webtrit_phone/app/notifications/bloc/notifications_bloc.dart';
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/services/connectivity_service.dart';
 
 class CallController {
@@ -75,17 +76,18 @@ class CallController {
     bool video = false,
     String? fromNumber,
   }) async {
-    // Check network connectivity independently before attempting to get routing state,
-    // to provide more accurate notifications to the user.
-    final netConnected = await isNetworkConnected;
-    if (!netConnected) {
-      _logger.warning('Cannot create call: no network connectivity.');
+    // WT-1554: fast-fail when routing state has not initialized AND the bloc
+    // already knows we are offline - otherwise [_waitForRoutingState] would
+    // sit through the full [kCallRoutingStateTimeout] (~10 s) with no feedback.
+    if (callRoutingCubit.state == null && callBloc.state.callServiceState.networkStatus == NetworkStatus.none) {
+      _logger.warning('Cannot create call: routing state not initialized and network is offline.');
       notificationsBloc.add(const NotificationsSubmitted(NoInternetConnectionNotification()));
       return;
     }
 
     // Use current state if available, otherwise wait for the first non-null emission.
-    // Timeout guards against indefinite wait when there is no network on startup.
+    // Timeout guards against indefinite wait when routing state never initializes
+    // (e.g. no network on startup, backend never responded with line config).
     // orElse returns null only if the cubit is closed while waiting (e.g. logout).
     final CallRoutingState? callRoutingState;
     try {
