@@ -42,7 +42,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  auto_route: ^10.2.0
+  auto_route: ^11.1.0
   bloc: ^9.1.0
   bloc_concurrency: ^0.3.0
   characters: ^1.4.0
@@ -144,7 +144,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  auto_route_generator: ^10.2.5
+  auto_route_generator: ^10.4.0
   l10n_mapper_generator: ^2.2.0
   build_runner: ^2.7.1
   flutter_gen_runner: ^5.12.0
