@@ -181,6 +181,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                             child: ReorderableListView.builder(
                               padding: EdgeInsets.only(top: topPadding),
                               itemCount: favorites.length,
+                              // TODO: migrate to onReorderItem (deprecated after Flutter 3.41.0-0.0.pre)
+                              // ignore: deprecated_member_use
                               onReorder: (oldIndex, newIndex) {},
                               onReorderStart: onReorderStart,
                               onReorderEnd: onReorderEnd,

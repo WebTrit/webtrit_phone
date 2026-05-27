@@ -18,7 +18,7 @@ commit-msg:
       run: bash tool/scripts/commit-msg-check.sh {1}
 
 pre-push:
-  parallel: true
+  parallel: false
   commands:
     branch-name-check:
       run: bash tool/scripts/branch-name-check.sh

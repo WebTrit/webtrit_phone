@@ -53,6 +53,8 @@ class ReorderableSection<T> extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           ReorderableListView(
+            // TODO: migrate to onReorderItem (deprecated after Flutter 3.41.0-0.0.pre)
+            // ignore: deprecated_member_use
             onReorder: (oldIndex, newIndex) {
               if (oldIndex < newIndex) newIndex -= 1;
 

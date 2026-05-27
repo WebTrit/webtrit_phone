@@ -137,6 +137,8 @@ class _VoicemailSubtitle extends StatelessWidget {
           transitionBuilder: (child, animation) => SizeTransition(
             sizeFactor: animation,
             axis: Axis.horizontal,
+            // TODO: migrate to alignment (deprecated after Flutter 3.41.0-1.0.pre)
+            // ignore: deprecated_member_use
             axisAlignment: -1,
             child: FadeTransition(opacity: animation, child: child),
           ),
