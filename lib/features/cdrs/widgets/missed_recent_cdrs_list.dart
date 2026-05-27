@@ -127,6 +127,8 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                       onScrollToTop: scrollToTop,
                       child: ListView.builder(
                         controller: scrollController,
+                        // TODO: migrate to scrollCacheExtent (deprecated after Flutter 3.41.0-0.0.pre)
+                        // ignore: deprecated_member_use
                         cacheExtent: 500,
                         shrinkWrap: true,
                         itemCount: state.records.length + 1,

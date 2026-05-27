@@ -75,6 +75,8 @@ class _SystemNotificationsScreenState extends State<SystemNotificationsScreen> {
             child: ListView.builder(
               controller: scrollController,
               reverse: true,
+              // TODO: migrate to scrollCacheExtent (deprecated after Flutter 3.41.0-0.0.pre)
+              // ignore: deprecated_member_use
               cacheExtent: 500,
               shrinkWrap: true,
               padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 16, bottom: 16),
