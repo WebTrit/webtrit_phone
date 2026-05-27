@@ -7,8 +7,12 @@ import 'package:webtrit_phone/models/models.dart';
 
 import 'local_contacts_repository.dart';
 
-const _phoneV2Mimetype = 'vnd.android.cursor.item/phone_v2';
-const _googleAccountType = 'com.google';
+// Hides synthetic raw_contacts created by messaging apps (WhatsApp, Viber, Telegram).
+// Why: WT-432 + the original 2022 filter. With a direct ContactsContract.Data
+// MIMETYPE query, any contact that has a phone number — Google-synced, SIM, or
+// device-local — has a phone_v2 row, so a single mimetype filter covers both
+// historical cases. Android only; iOS contacts have no equivalent concept.
+const _androidPhoneV2Mimetypes = {'vnd.android.cursor.item/phone_v2'};
 
 class LocalContactsRepository implements ILocalContactsRepository {
   LocalContactsRepository() {
@@ -59,27 +63,11 @@ class LocalContactsRepository implements ILocalContactsRepository {
 
   Future<List<LocalContact>> _listContacts() async {
     final contacts = await FlutterContacts.getAll(
-      properties: {
-        ContactProperty.name,
-        ContactProperty.phone,
-        ContactProperty.email,
-        ContactProperty.photoThumbnail,
-        if (Platform.isAndroid) ContactProperty.identifiers,
-      },
+      properties: {ContactProperty.name, ContactProperty.phone, ContactProperty.email, ContactProperty.photoThumbnail},
+      requiredDataMimetypes: Platform.isAndroid ? _androidPhoneV2Mimetypes : null,
     );
     return contacts
-        .where((contact) {
-          if (contact.id == null) return false;
-          if (!Platform.isAndroid) return true;
-          // Hides synthetic raw_contacts created by messaging apps (WhatsApp, Viber, Telegram).
-          // Why: pass if any raw_contact has a phone_v2 data row (real telephony entry) OR
-          // belongs to a Google account (WT-432: Android 12+ Google contacts may lack phone_v2).
-          final rawContacts = contact.android?.identifiers?.rawContacts ?? const [];
-          if (rawContacts.isEmpty) return true;
-          return rawContacts.any(
-            (rc) => rc.dataMimetypes.contains(_phoneV2Mimetype) || rc.account?.type == _googleAccountType,
-          );
-        })
+        .where((contact) => contact.id != null)
         .map(
           (contact) => LocalContact(
             id: contact.id!,
