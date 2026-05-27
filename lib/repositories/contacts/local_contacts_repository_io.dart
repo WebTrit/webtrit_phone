@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter_contacts/flutter_contacts.dart';
 
@@ -10,7 +9,8 @@ import 'local_contacts_repository.dart';
 // Filter values passed to FlutterContacts.getAll. The plugin combines them
 // with OR semantics: a contact passes if it has at least one data row with
 // _phoneV2Mimetype OR at least one raw contact in _googleAccountType.
-// Mirrors the 1.x filter behavior. Android only; iOS ignores both.
+// Mirrors the 1.x filter behavior. Android-only — iOS ignores both
+// parameters via the androidXxx naming.
 const _phoneV2Mimetype = 'vnd.android.cursor.item/phone_v2';
 const _googleAccountType = 'com.google';
 
@@ -64,8 +64,8 @@ class LocalContactsRepository implements ILocalContactsRepository {
   Future<List<LocalContact>> _listContacts() async {
     final contacts = await FlutterContacts.getAll(
       properties: {ContactProperty.name, ContactProperty.phone, ContactProperty.email, ContactProperty.photoThumbnail},
-      requiredDataMimetypes: Platform.isAndroid ? const {_phoneV2Mimetype} : null,
-      requiredAccountTypes: Platform.isAndroid ? const {_googleAccountType} : null,
+      androidRequiredDataMimetypes: const {_phoneV2Mimetype},
+      androidRequiredAccountTypes: const {_googleAccountType},
     );
     return contacts
         .where((contact) => contact.id != null)
