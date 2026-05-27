@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_contacts/flutter_contacts.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 
 import 'local_contacts_repository.dart';
+
+const _phoneV2Mimetype = 'vnd.android.cursor.item/phone_v2';
+const _googleAccountType = 'com.google';
 
 class LocalContactsRepository implements ILocalContactsRepository {
   LocalContactsRepository() {
@@ -55,14 +59,27 @@ class LocalContactsRepository implements ILocalContactsRepository {
 
   Future<List<LocalContact>> _listContacts() async {
     final contacts = await FlutterContacts.getAll(
-      properties: {ContactProperty.name, ContactProperty.phone, ContactProperty.email, ContactProperty.photoThumbnail},
+      properties: {
+        ContactProperty.name,
+        ContactProperty.phone,
+        ContactProperty.email,
+        ContactProperty.photoThumbnail,
+        if (Platform.isAndroid) ContactProperty.identifiers,
+      },
     );
-    // Android per-account filtering (mimetypes / com.google) removed: flutter_contacts 2.x
-    // no longer exposes per-contact accounts/mimetypes on `Contact`. If account-scoped
-    // filtering is needed again, switch to `FlutterContacts.accounts.getAll()` and pass
-    // the `account:` parameter to `getAll()`.
     return contacts
-        .where((contact) => contact.id != null)
+        .where((contact) {
+          if (contact.id == null) return false;
+          if (!Platform.isAndroid) return true;
+          // Hides synthetic raw_contacts created by messaging apps (WhatsApp, Viber, Telegram).
+          // Why: pass if any raw_contact has a phone_v2 data row (real telephony entry) OR
+          // belongs to a Google account (WT-432: Android 12+ Google contacts may lack phone_v2).
+          final rawContacts = contact.android?.identifiers?.rawContacts ?? const [];
+          if (rawContacts.isEmpty) return true;
+          return rawContacts.any(
+            (rc) => rc.dataMimetypes.contains(_phoneV2Mimetype) || rc.account?.type == _googleAccountType,
+          );
+        })
         .map(
           (contact) => LocalContact(
             id: contact.id!,
