@@ -52,12 +52,12 @@ dependencies:
   device_info_plus: ^12.2.0
   drift: ^2.29.0
   equatable: ^2.0.7
-  firebase_analytics: ^12.0.4
-  firebase_app_installations: ^0.4.0+4
-  firebase_core: ^4.2.1
-  firebase_crashlytics: ^5.0.4
-  firebase_messaging: ^16.0.4
-  firebase_remote_config: ^6.1.1
+  firebase_analytics: ^12.4.1
+  firebase_app_installations: ^0.4.2+2
+  firebase_core: ^4.9.0
+  firebase_crashlytics: ^5.2.2
+  firebase_messaging: ^16.2.2
+  firebase_remote_config: ^6.5.1
   flutter_bloc: ^9.1.1
   flutter_contacts: ^1.1.9+2
   flutter_secure_storage: ^9.2.4
