@@ -3,6 +3,7 @@ include: package:flutter_lints/flutter.yaml
 linter:
   rules:
     prefer_single_quotes: true
+    prefer_initializing_formals: false
 
 analyzer:
   exclude:
