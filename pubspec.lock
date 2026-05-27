@@ -657,10 +657,11 @@ packages:
   flutter_contacts:
     dependency: "direct main"
     description:
-      name: flutter_contacts
-      sha256: "558247c39d89ca738aceb7859b6147a0ede0a5084492cffa215db87dea672479"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: b6c1542
+      resolved-ref: b6c1542c2479a79fbcf26bc640d37ef2cd446567
+      url: "https://github.com/SERDUN/flutter_contacts.git"
+    source: git
     version: "2.2.0"
   flutter_driver:
     dependency: "direct dev"

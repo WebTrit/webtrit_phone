@@ -59,7 +59,10 @@ dependencies:
   firebase_messaging: ^16.2.2
   firebase_remote_config: ^6.5.1
   flutter_bloc: ^9.1.1
-  flutter_contacts: ^2.2.0
+  flutter_contacts:
+    git:
+      url: https://github.com/SERDUN/flutter_contacts.git
+      ref: b6c1542
   flutter_secure_storage: ^10.3.1
   flutter_svg: ^2.3.0
   flutter_webrtc:
