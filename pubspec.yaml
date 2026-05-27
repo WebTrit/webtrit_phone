@@ -42,7 +42,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  auto_route: ^10.2.0
+  auto_route: ^11.1.0
   bloc: ^9.1.0
   bloc_concurrency: ^0.3.0
   characters: ^1.4.0
