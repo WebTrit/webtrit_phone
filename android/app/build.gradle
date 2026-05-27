@@ -3,7 +3,6 @@ import groovy.json.JsonSlurper
 
 plugins {
     id "com.android.application"
-    id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
     id "com.google.gms.google-services"
     id "com.google.firebase.crashlytics"
@@ -234,10 +233,6 @@ android {
         }
     }
 
-    kotlinOptions {
-        jvmTarget = '17'
-    }
-
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -281,6 +276,12 @@ android {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
     preBuild.dependsOn generateNetworkSecurityConfig
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
 }
 
 flutter {
