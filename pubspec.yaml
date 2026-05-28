@@ -59,6 +59,9 @@ dependencies:
   firebase_messaging: ^16.2.2
   firebase_remote_config: ^6.5.1
   flutter_bloc: ^9.1.1
+  # TODO: temporary fork pin. Switch back to a pub.dev version constraint once
+  # the androidRequiredDataMimetypes / androidRequiredAccountTypes filters land
+  # upstream (SERDUN/flutter_contacts#1 -> QuisApp/flutter_contacts).
   flutter_contacts:
     git:
       url: https://github.com/SERDUN/flutter_contacts.git
