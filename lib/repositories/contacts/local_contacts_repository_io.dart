@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_contacts/flutter_contacts.dart';
 
-import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/models/models.dart' hide Contact;
 
 import 'local_contacts_repository.dart';
 
@@ -61,6 +61,26 @@ class LocalContactsRepository implements ILocalContactsRepository {
     await load();
   }
 
+  /// Returns `true` for contacts that should appear in the app's contact list.
+  ///
+  /// Drops contacts without a stable id (can't build a [LocalContact]). On
+  /// Android additionally hides synthetic raw_contacts written by messaging
+  /// apps (WhatsApp, Viber, Telegram, ...) that do not carry a `phone_v2`
+  /// data row and are not in a trusted account family - mirrors the 1.x
+  /// `account.mimetypes.contains('phone_v2') OR account.type == 'com.google'`
+  /// behaviour. Empty `rawContacts` is treated as a device-local contact and
+  /// passes (some vendor ROMs do not expose account info for those).
+  bool _shouldIncludeContact(Contact contact) {
+    if (contact.id == null) return false;
+    if (!Platform.isAndroid) return true;
+    final rawContacts = contact.android?.identifiers?.rawContacts ?? const [];
+    if (rawContacts.isEmpty) return true;
+    return rawContacts.any(
+      (rawContact) =>
+          rawContact.dataMimetypes.contains(_phoneV2Mimetype) || rawContact.account?.type == _googleAccountType,
+    );
+  }
+
   Future<List<LocalContact>> _listContacts() async {
     final contacts = await FlutterContacts.getAll(
       properties: {
@@ -72,15 +92,7 @@ class LocalContactsRepository implements ILocalContactsRepository {
       },
     );
     return contacts
-        .where((contact) {
-          if (contact.id == null) return false;
-          if (!Platform.isAndroid) return true;
-          final rawContacts = contact.android?.identifiers?.rawContacts ?? const [];
-          if (rawContacts.isEmpty) return true;
-          return rawContacts.any(
-            (rc) => rc.dataMimetypes.contains(_phoneV2Mimetype) || rc.account?.type == _googleAccountType,
-          );
-        })
+        .where(_shouldIncludeContact)
         .map(
           (contact) => LocalContact(
             id: contact.id!,
