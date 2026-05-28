@@ -14,15 +14,6 @@ import 'local_contacts_repository.dart';
 const _phoneV2Mimetype = 'vnd.android.cursor.item/phone_v2';
 const _googleAccountType = 'com.google';
 
-/// Resolves the human-readable text for a `flutter_contacts` [Label].
-///
-/// Returns the [Label.customLabel] (or empty string when the user did not
-/// supply one) when the enum value matches [customValue]; otherwise returns
-/// the enum's `.name`. Works for any label enum that exposes a "custom"
-/// freeform value (Phone, Email, Address, Event, ...).
-String _resolveLabelText<T extends Enum>(Label<T> label, T customValue) =>
-    label.label == customValue ? (label.customLabel ?? '') : label.label.name;
-
 class LocalContactsRepository implements ILocalContactsRepository {
   LocalContactsRepository() {
     _controller = StreamController<List<LocalContact>>.broadcast(
@@ -79,6 +70,15 @@ class LocalContactsRepository implements ILocalContactsRepository {
           rawContact.dataMimetypes.contains(_phoneV2Mimetype) || rawContact.account?.type == _googleAccountType,
     );
   }
+
+  /// Resolves the human-readable text for a `flutter_contacts` [Label].
+  ///
+  /// Returns the [Label.customLabel] (or empty string when the user did not
+  /// supply one) when the enum value matches [customValue]; otherwise returns
+  /// the enum's `.name`. Works for any label enum that exposes a "custom"
+  /// freeform value (Phone, Email, Address, Event, ...).
+  static String _resolveLabelText<T extends Enum>(Label<T> label, T customValue) =>
+      label.label == customValue ? (label.customLabel ?? '') : label.label.name;
 
   Future<List<LocalContact>> _listContacts() async {
     final contacts = await FlutterContacts.getAll(
