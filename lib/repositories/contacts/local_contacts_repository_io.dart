@@ -20,11 +20,9 @@ class LocalContactsRepository implements ILocalContactsRepository {
       onListen: _onListenCallback,
       onCancel: _onCancelCallback,
     );
-    _listenedCounter = 0;
   }
 
   late StreamController<List<LocalContact>> _controller;
-  late int _listenedCounter;
   StreamSubscription<void>? _databaseSubscription;
 
   @override
@@ -45,16 +43,12 @@ class LocalContactsRepository implements ILocalContactsRepository {
   }
 
   void _onListenCallback() {
-    if (_listenedCounter++ == 0) {
-      _databaseSubscription = FlutterContacts.onDatabaseChange.listen(_contactDatabaseChangesListener);
-    }
+    _databaseSubscription = FlutterContacts.onDatabaseChange.listen(_contactDatabaseChangesListener);
   }
 
   void _onCancelCallback() {
-    if (--_listenedCounter == 0) {
-      _databaseSubscription?.cancel();
-      _databaseSubscription = null;
-    }
+    _databaseSubscription?.cancel();
+    _databaseSubscription = null;
   }
 
   void _contactDatabaseChangesListener(void _) async {
