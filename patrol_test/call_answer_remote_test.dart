@@ -8,6 +8,7 @@ import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart'
 
 import 'components/integration_test_environment_config.dart';
 import 'subsequences/login_by_method.dart';
+import 'subsequences/logout.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
 import 'package:pjsua_companion/pjsua_companion.dart';
@@ -15,7 +16,6 @@ import 'package:pjsua_companion/pjsua_companion.dart';
 void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
   const calleeNumber = IntegrationTestEnvironmentConfig.ACCOUNT_MAIN_NUMBER;
-  const crossCallSleep = Duration(seconds: IntegrationTestEnvironmentConfig.CROSS_CALL_SLEEP_SECONDS);
 
   final remoteUser = IntegrationTestEnvironmentConfig.PJSUA_SIP_USERNAME;
   final remoteSipServer = IntegrationTestEnvironmentConfig.PJSUA_SIP_SERVER;
@@ -72,7 +72,8 @@ void main() {
       await pumpFor(const Duration(seconds: 3), $);
       expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended after remote hangup');
 
-      await Future.delayed(crossCallSleep);
+      // Teardowning
+      await logout($);
     },
     skip: hasCredsToRunThisTest == false,
   );
