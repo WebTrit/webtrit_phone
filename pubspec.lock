@@ -1345,26 +1345,26 @@ packages:
     dependency: "direct dev"
     description:
       name: patrol
-      sha256: "7825a6e96a8f0755f68eec600a91a08b19bd0975488a70885b3696f6b65ffc0f"
+      sha256: f43fda9425e90c0e69d2dac9e495e3a3036a22a550466365b4720fa4dd53d6ae
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.0"
+    version: "4.6.1"
   patrol_finders:
     dependency: transitive
     description:
       name: patrol_finders
-      sha256: "9970eac0669a90b20ec7e1bcaabd0475655655998068ca656f4df9f6ec84f336"
+      sha256: "915da1e63fe7fd024418ab30b2394b1c8d6e812ce25be7d0b11634202521f0a9"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.0"
+    version: "3.4.0"
   patrol_log:
     dependency: transitive
     description:
       name: patrol_log
-      sha256: a2360db165c34692665c0de146e5157887d6b584fdccca8f141f947a5acf1b2e
+      sha256: "16ab747b28621640115d9493138eae82a1d410a613857cb0caf9000ce62fc546"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.0"
+    version: "0.9.0"
   permission_handler:
     dependency: "direct main"
     description:
@@ -2025,7 +2025,7 @@ packages:
       path: "../webtrit_callkeep/webtrit_callkeep"
       relative: true
     source: path
-    version: "0.0.0+0"
+    version: "1.1.0+0"
   webtrit_callkeep_android:
     dependency: transitive
     description:

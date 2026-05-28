@@ -42,6 +42,7 @@ void main() {
         sipServer: remoteSipServer,
         sipUsername: remoteUser,
         sipPassword: remotePassword,
+        callDuration: Duration(minutes: 5),
       );
       return pid;
     }
@@ -88,10 +89,17 @@ void main() {
     );
 
     // Try to hangup call using push notification
-    // Atention: If you have failed on this step, please check if all device notifications cleaned and re run test
-    // because android for example ofter bundles many notifications and hangup button collapsed
-    // TODO: find workaround
-    await $.platform.mobile.tapOnNotificationBySelector(Selector(textContains: 'Hung up'));
+    await $.platform.mobile.tap(
+      MobileSelector(
+        // MediaStyle shows the action as an icon in compact view but its content description equals the action title.
+        // related to pull https://github.com/WebTrit/webtrit_callkeep/pull/302
+        // 
+        // Alternatively on android we can expand all notifications in for loop using 
+        // AndroidSelector(resourceName: 'android:id/expand_button') untill tapOnNotificationBySelector(Selector(textContains: 'Hungup')) success
+        android: AndroidSelector(contentDescription: 'Hung up'),
+        ios: IOSSelector(textContains: 'Hung up'),
+      ),
+    );
     await $.platform.mobile.closeNotifications();
     await pumpFor(const Duration(seconds: 3), $);
     expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended after remote hangup');

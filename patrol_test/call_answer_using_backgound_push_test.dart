@@ -63,12 +63,11 @@ void main() {
     await $.platform.mobile.pressHome();
 
     // Place call
-    await placeIncomingCall($);
+    final callPid = await placeIncomingCall($);
     await Future.delayed(const Duration(seconds: 3));
 
     // Verify incoming call push notification
     final incomingCallNotification = await $.platform.mobile.getNotifications();
-    print(incomingCallNotification);
     expect(
       incomingCallNotification.toString(),
       contains('You have an incoming call from'),
@@ -82,22 +81,8 @@ void main() {
     await pumpFor(const Duration(seconds: 3), $);
     expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active after answer');
 
-    // Verify active call push notification
-    await $.platform.mobile.openNotifications();
-    final activeCallNotifications = await $.platform.mobile.getNotifications();
-
-    expect(
-      activeCallNotifications.toString(),
-      contains('Active call'),
-      reason: 'Active call push should exist and text ok',
-    );
-
-    // Try to hangup call using push notification
-    // Atention: If you have failed on this step, please check if all device notifications cleaned and re run test
-    // because android for example ofter bundles many notifications and hangup button collapsed
-    // TODO: find workaround
-    await $.platform.mobile.tapOnNotificationBySelector(Selector(textContains: 'Hung up'));
-    await $.platform.mobile.closeNotifications();
+    // Hangup call
+    await pjsuaCallServerClient.hangup(callPid);
     await pumpFor(const Duration(seconds: 3), $);
     expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended after remote hangup');
 
