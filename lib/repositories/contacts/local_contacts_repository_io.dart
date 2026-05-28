@@ -14,6 +14,15 @@ import 'local_contacts_repository.dart';
 const _phoneV2Mimetype = 'vnd.android.cursor.item/phone_v2';
 const _googleAccountType = 'com.google';
 
+/// Resolves the human-readable text for a `flutter_contacts` [Label].
+///
+/// Returns the [Label.customLabel] (or empty string when the user did not
+/// supply one) when the enum value matches [customValue]; otherwise returns
+/// the enum's `.name`. Works for any label enum that exposes a "custom"
+/// freeform value (Phone, Email, Address, Event, ...).
+String _resolveLabelText<T extends Enum>(Label<T> label, T customValue) =>
+    label.label == customValue ? (label.customLabel ?? '') : label.label.name;
+
 class LocalContactsRepository implements ILocalContactsRepository {
   LocalContactsRepository() {
     _controller = StreamController<List<LocalContact>>.broadcast(
@@ -92,21 +101,15 @@ class LocalContactsRepository implements ILocalContactsRepository {
             thumbnail: contact.photo?.thumbnail,
             phones: contact.phones
                 .map(
-                  (phone) => LocalContactPhone(
-                    number: phone.number,
-                    label: phone.label.label == PhoneLabel.custom
-                        ? (phone.label.customLabel ?? '')
-                        : phone.label.label.name,
-                  ),
+                  (phone) =>
+                      LocalContactPhone(number: phone.number, label: _resolveLabelText(phone.label, PhoneLabel.custom)),
                 )
                 .toList(),
             emails: contact.emails
                 .map(
                   (email) => LocalContactEmail(
                     address: email.address,
-                    label: email.label.label == EmailLabel.custom
-                        ? (email.label.customLabel ?? '')
-                        : email.label.label.name,
+                    label: _resolveLabelText(email.label, EmailLabel.custom),
                   ),
                 )
                 .toList(),
