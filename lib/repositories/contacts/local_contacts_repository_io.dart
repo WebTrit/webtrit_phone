@@ -43,16 +43,12 @@ class LocalContactsRepository implements ILocalContactsRepository {
   }
 
   void _onListenCallback() {
-    _databaseSubscription = FlutterContacts.onDatabaseChange.listen(_contactDatabaseChangesListener);
+    _databaseSubscription = FlutterContacts.onDatabaseChange.listen((_) => load());
   }
 
   void _onCancelCallback() {
     _databaseSubscription?.cancel();
     _databaseSubscription = null;
-  }
-
-  void _contactDatabaseChangesListener(void _) async {
-    await load();
   }
 
   /// Returns `true` for contacts that should appear in the app's contact list.
