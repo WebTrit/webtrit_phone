@@ -68,7 +68,7 @@ class LocalContactsRepository implements ILocalContactsRepository {
         ContactProperty.phone,
         ContactProperty.email,
         ContactProperty.photoThumbnail,
-        if (Platform.isAndroid) ContactProperty.identifiers,
+        if (Platform.isAndroid) ...{ContactProperty.identifiers, ContactProperty.dataMimetypes},
       },
     );
     return contacts
