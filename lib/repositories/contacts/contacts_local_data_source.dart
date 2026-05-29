@@ -230,7 +230,7 @@ class ContactsLocalDataSourceImpl implements ContactsLocalDataSource {
     final externalContactEmail = externalContact.email;
 
     // Cleanup old emails
-    final externalContactEmails = [if (externalContactEmail != null) externalContactEmail];
+    final externalContactEmails = [?externalContactEmail];
     await _appDatabase.contactEmailsDao.deleteOtherContactEmailsOfContactId(contactId, externalContactEmails);
 
     if (externalContactEmail != null) {

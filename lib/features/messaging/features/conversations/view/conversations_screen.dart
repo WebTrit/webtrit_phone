@@ -254,7 +254,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
             preferredSize: Size.fromHeight(
               (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
             ),
-            child: Column(children: [if (tabBar != null) tabBar, search]),
+            child: Column(children: [?tabBar, search]),
           ),
         ),
         body: MessagingStateWrapper(

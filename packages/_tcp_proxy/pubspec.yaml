@@ -11,4 +11,4 @@ dependencies:
   meta: any
 
 dev_dependencies:
-  lints: any
+  lints: ^6.1.0
