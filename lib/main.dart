@@ -16,7 +16,6 @@ import 'package:webtrit_phone/app/app.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -102,7 +101,7 @@ class RootApp extends StatelessWidget {
         // Provides `AppDatabase` by reading it from `AppDatabaseLifecycleHolder`.
         // When this provider is read, it triggers creation of the holder first (provider is lazy).
         Provider<AppDatabase>(create: (context) => context.read<AppDatabaseLifecycleHolder>().db),
-        Provider<ConnectivityService>(create: _createConnectivityService, dispose: _disposeConnectivityService),
+        Provider<ConnectivityService>(create: (_) => instanceRegistry.get(), dispose: _disposeConnectivityService),
       ],
       child: Builder(
         builder: (context) {
@@ -183,21 +182,6 @@ class RootApp extends StatelessWidget {
 
   Future<void> _disposeAppDatabaseLifecycleHolder(BuildContext _, AppDatabaseLifecycleHolder holder) async {
     await holder.dispose();
-  }
-
-  ConnectivityService _createConnectivityService(BuildContext context) {
-    final customUrl = EnvironmentConfig.CONNECTIVITY_CHECK_URL;
-    final apiFactory = context.read<WebtritApiClientFactory>();
-
-    final connectivityChecker = switch (customUrl) {
-      String url => CustomConnectivityChecker(
-        connectivityCheckUrl: url,
-        createHttpRequestExecutor: apiFactory.createHttpRequestExecutor(),
-      ),
-      null => DefaultConnectivityChecker(apiClient: apiFactory.createWebtritApiClient()),
-    };
-
-    return ConnectivityServiceImpl(connectivityChecker: connectivityChecker);
   }
 
   void _disposeConnectivityService(BuildContext _, ConnectivityService value) {
