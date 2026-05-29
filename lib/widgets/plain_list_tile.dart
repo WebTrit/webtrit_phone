@@ -75,10 +75,10 @@ class PlainListTile extends StatelessWidget {
                   ),
                 ),
               ),
-              if (trailing != null) trailing!,
+              ?trailing,
             ],
           ),
-          if (bottom != null) bottom!,
+          ?bottom,
         ],
       ),
     );
