@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
-// ignore: depend_on_referenced_packages
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+
+import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/base_remote_appender.dart';
 import 'package:logging_appenders/logging_appenders.dart';
@@ -25,32 +26,33 @@ class FilteredLogzIoAppender extends LogzIoApiAppender {
   bool _isConnectionLost = false;
 
   @override
-  Future<void> sendLogEventsWithDio(
+  Future<void> sendLogEventsWithHttp(
     List<LogEntry> entries,
     Map<String, String> userProperties,
-    CancelToken cancelToken,
+    Future<void> cancelToken,
   ) async {
     try {
-      await super.sendLogEventsWithDio(entries, userProperties, cancelToken);
+      await super.sendLogEventsWithHttp(entries, userProperties, cancelToken);
 
       if (_isConnectionLost) {
         _isConnectionLost = false;
-        // Print the message *once* when the connection is back.
         debugPrint('FilteredLogzIoAppender: Connection restored. Resuming remote logging.');
       }
-    } on DioException catch (e) {
-      if (RemoteLogFilter._shouldIgnoreDioConnectionError(e, url)) {
-        // Print the message if this is the *first time* we`ve seen it.
-        if (!_isConnectionLost) {
-          _isConnectionLost = true;
-          debugPrint('FilteredLogzIoAppender: Connection lost. Pausing remote logging. Will retry silently.');
-        }
-      } else {
-        debugPrint('FilteredLogzIoAppender: Unhandled DioException: $e');
-      }
+    } on http.ClientException catch (e) {
+      _markConnectionLostOnce('ClientException: $e');
+    } on SocketException catch (e) {
+      _markConnectionLostOnce('SocketException: $e');
+    } on TimeoutException catch (e) {
+      _markConnectionLostOnce('TimeoutException: $e');
     } catch (e, stackTrace) {
       debugPrint('FilteredLogzIoAppender: Unhandled Exception: $e\n$stackTrace');
     }
+  }
+
+  void _markConnectionLostOnce(String details) {
+    if (_isConnectionLost) return;
+    _isConnectionLost = true;
+    debugPrint('FilteredLogzIoAppender: Connection lost. Pausing remote logging. Will retry silently. $details');
   }
 
   @override
@@ -63,41 +65,24 @@ class FilteredLogzIoAppender extends LogzIoApiAppender {
 
 class RemoteLogFilter {
   static bool shouldLog(LogRecord record, String url, {Level? minLevel}) {
-    // Check minimum level
     if (minLevel != null && record.level < minLevel) {
       return false;
     }
 
-    // Allow all non-Dio errors
-    if (record.error == null || record.error is! DioException) {
-      return true;
+    final error = record.error;
+    if (error is http.ClientException) {
+      return !_isErrorForLoggerHost(error, url);
     }
-
-    // Filter specific Dio errors
-    final dioError = record.error as DioException;
-    return !_shouldIgnoreDioConnectionError(dioError, url);
+    return true;
   }
 
-  /// Decides whether a [DioException] should be ignored.
-  /// We only ignore *connection* errors to the *logger's* own host,
-  /// derived from the provided [url].
-  static bool _shouldIgnoreDioConnectionError(DioException dioError, String url) {
-    final Uri? loggerUri = Uri.tryParse(url);
-    final String? loggerHost = loggerUri?.host;
-
+  /// Skip records whose error is a network failure to the logger's own host —
+  /// avoids logging cycles when the logger itself is unreachable.
+  static bool _isErrorForLoggerHost(http.ClientException error, String url) {
+    final loggerHost = Uri.tryParse(url)?.host;
     if (loggerHost == null) {
       return false;
     }
-
-    final String requestHost = dioError.requestOptions.uri.host;
-
-    if (requestHost == loggerHost) {
-      return switch (dioError.type) {
-        DioExceptionType.connectionError || DioExceptionType.connectionTimeout || DioExceptionType.sendTimeout => true,
-        _ => false,
-      };
-    }
-
-    return false;
+    return error.uri?.host == loggerHost;
   }
 }
