@@ -150,8 +150,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  auto_route_generator: ^10.2.5
-  l10n_mapper_generator: ^3.0.0
+  auto_route_generator: ^10.5.0
+  # TODO: temporary fork pin. Switch back to a pub.dev version constraint once
+  # analyzer ^13.0.0 support lands upstream
+  # (SERDUN/l10n_mapper -> kwado-tech/l10n_mapper).
+  l10n_mapper_generator:
+    git:
+      url: https://github.com/SERDUN/l10n_mapper.git
+      ref: 8a90364
+      path: l10n_mapper_generator
   build_runner: ^2.7.1
   flutter_gen_runner: ^5.12.0
   flutter_launcher_icons: ^0.14.4

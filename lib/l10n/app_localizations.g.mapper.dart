@@ -14,1801 +14,1685 @@ extension BuildContextExtension on BuildContext {
   Locale get locale => Localizations.localeOf(this);
   String? parseL10n(String translationKey, {List<Object>? arguments}) {
     final localizations = AppLocalizations.of(this)!;
-    return L10nHelper.parseL10n(
-      localizations,
-      translationKey,
-      arguments: arguments,
-    );
+    return localizations.parseL10n(translationKey, arguments: arguments);
   }
 }
 
 extension AppLocalizationsExtension on AppLocalizations {
-  String? parseL10n(String translationKey, {List<Object>? arguments}) {
-    return L10nHelper.parseL10n(this, translationKey, arguments: arguments);
-  }
-}
-
-class L10nHelper {
-  // Cache to store localization maps per locale
-  static final Map<String, Map<String, dynamic>> _cache = {};
-
-  static String? parseL10n(
-    AppLocalizations localizations,
-    String translationKey, {
-    List<Object>? arguments,
-  }) {
-    // Get or create cached map for this locale
-    final localeName = localizations.localeName;
-    final cachedMap = _cache[localeName];
-
-    final map =
-        cachedMap ??
-        () {
-          const mapper = AppLocalizationsMapper();
-          final newMap = mapper.toLocalizationMap(localizations);
-          _cache[localeName] = newMap;
-          return newMap;
-        }();
-
-    final object = map[translationKey];
-    if (object is String || object == null) return object;
-    assert(arguments != null, 'Arguments should not be null!');
-    assert(arguments!.isNotEmpty, 'Arguments should not be empty!');
-    return Function.apply(object, arguments);
-  }
-
-  /// Clear the cache for a specific locale or all locales
-  static void clearCache([String? localeName]) {
-    if (localeName != null) {
-      _cache.remove(localeName);
-    } else {
-      _cache.clear();
-    }
-  }
-}
-
-class AppLocalizationsMapper {
-  const AppLocalizationsMapper();
-  Map<String, dynamic> toLocalizationMap(AppLocalizations localizations) {
-    return {
-      'localeName': localizations.localeName,
-      'account_selfCarePasswordExpired_message':
-          localizations.account_selfCarePasswordExpired_message,
-      'alertDialogActions_no': localizations.alertDialogActions_no,
-      'alertDialogActions_ok': localizations.alertDialogActions_ok,
-      'alertDialogActions_yes': localizations.alertDialogActions_yes,
-      'autoprovision_errorSnackBar_invalidToken':
-          localizations.autoprovision_errorSnackBar_invalidToken,
-      'autoprovision_ReloginDialog_confirm':
-          localizations.autoprovision_ReloginDialog_confirm,
-      'autoprovision_ReloginDialog_decline':
-          localizations.autoprovision_ReloginDialog_decline,
-      'autoprovision_ReloginDialog_text':
-          localizations.autoprovision_ReloginDialog_text,
-      'autoprovision_ReloginDialog_title':
-          localizations.autoprovision_ReloginDialog_title,
-      'autoprovision_successSnackBar_used':
-          localizations.autoprovision_successSnackBar_used,
-      'call_CallActionsTooltip_accept':
-          localizations.call_CallActionsTooltip_accept,
-      'call_CallActionsTooltip_accept_inviteToAttendedTransfer':
-          localizations.call_CallActionsTooltip_accept_inviteToAttendedTransfer,
-      'call_CallActionsTooltip_attended_transfer':
-          localizations.call_CallActionsTooltip_attended_transfer,
-      'call_CallActionsTooltip_changeAudioDevice':
-          localizations.call_CallActionsTooltip_changeAudioDevice,
-      'call_CallActionsTooltip_decline_inviteToAttendedTransfer': localizations
-          .call_CallActionsTooltip_decline_inviteToAttendedTransfer,
-      'call_CallActionsTooltip_device_bluetooth':
-          localizations.call_CallActionsTooltip_device_bluetooth,
-      'call_CallActionsTooltip_device_earpiece':
-          localizations.call_CallActionsTooltip_device_earpiece,
-      'call_CallActionsTooltip_device_speaker':
-          localizations.call_CallActionsTooltip_device_speaker,
-      'call_CallActionsTooltip_device_streaming':
-          localizations.call_CallActionsTooltip_device_streaming,
-      'call_CallActionsTooltip_device_unknown':
-          localizations.call_CallActionsTooltip_device_unknown,
-      'call_CallActionsTooltip_device_wiredHeadset':
-          localizations.call_CallActionsTooltip_device_wiredHeadset,
-      'call_CallActionsTooltip_disableCamera':
-          localizations.call_CallActionsTooltip_disableCamera,
-      'call_CallActionsTooltip_disableSpeaker':
-          localizations.call_CallActionsTooltip_disableSpeaker,
-      'call_CallActionsTooltip_enableCamera':
-          localizations.call_CallActionsTooltip_enableCamera,
-      'call_CallActionsTooltip_enableSpeaker':
-          localizations.call_CallActionsTooltip_enableSpeaker,
-      'call_CallActionsTooltip_hangup':
-          localizations.call_CallActionsTooltip_hangup,
-      'call_CallActionsTooltip_hangupAndAccept':
-          localizations.call_CallActionsTooltip_hangupAndAccept,
-      'call_CallActionsTooltip_hideKeypad':
-          localizations.call_CallActionsTooltip_hideKeypad,
-      'call_CallActionsTooltip_hold':
-          localizations.call_CallActionsTooltip_hold,
-      'call_CallActionsTooltip_holdAndAccept':
-          localizations.call_CallActionsTooltip_holdAndAccept,
-      'call_CallActionsTooltip_mute':
-          localizations.call_CallActionsTooltip_mute,
-      'call_CallActionsTooltip_showKeypad':
-          localizations.call_CallActionsTooltip_showKeypad,
-      'call_CallActionsTooltip_swap':
-          localizations.call_CallActionsTooltip_swap,
-      'call_CallActionsTooltip_transfer':
-          localizations.call_CallActionsTooltip_transfer,
-      'call_CallActionsTooltip_transfer_choose':
-          localizations.call_CallActionsTooltip_transfer_choose,
-      'call_CallActionsTooltip_unattended_transfer':
-          localizations.call_CallActionsTooltip_unattended_transfer,
-      'call_CallActionsTooltip_unhold':
-          localizations.call_CallActionsTooltip_unhold,
-      'call_CallActionsTooltip_unmute':
-          localizations.call_CallActionsTooltip_unmute,
-      'call_description_held': localizations.call_description_held,
-      'call_description_incoming': localizations.call_description_incoming,
-      'call_description_inviteToAttendedTransfer':
-          localizations.call_description_inviteToAttendedTransfer,
-      'call_description_outgoing': localizations.call_description_outgoing,
-      'call_description_requestToAttendedTransfer':
-          localizations.call_description_requestToAttendedTransfer,
-      'call_description_transferProcessing':
-          localizations.call_description_transferProcessing,
-      'call_errorRegisteringSelfManagedPhoneAccount':
-          localizations.call_errorRegisteringSelfManagedPhoneAccount,
-      'call_FailureAcknowledgeDialog_title':
-          localizations.call_FailureAcknowledgeDialog_title,
-      'callProcessingStatus_answering':
-          localizations.callProcessingStatus_answering,
-      'callProcessingStatus_disconnecting':
-          localizations.callProcessingStatus_disconnecting,
-      'callProcessingStatus_init_media':
-          localizations.callProcessingStatus_init_media,
-      'callProcessingStatus_invite': localizations.callProcessingStatus_invite,
-      'callProcessingStatus_preparing':
-          localizations.callProcessingStatus_preparing,
-      'callProcessingStatus_ringing':
-          localizations.callProcessingStatus_ringing,
-      'callProcessingStatus_routing':
-          localizations.callProcessingStatus_routing,
-      'callProcessingStatus_signaling_connecting':
-          localizations.callProcessingStatus_signaling_connecting,
-      'iceConnectionIssue_iceFail': localizations.iceConnectionIssue_iceFail,
-      'iceConnectionIssue_iceFailNoIcePath':
-          localizations.iceConnectionIssue_iceFailNoIcePath,
-      'iceConnectionIssue_iceFailNoIcePathViaVpn':
-          localizations.iceConnectionIssue_iceFailNoIcePathViaVpn,
-      'callPullBadge_dialogTitle': localizations.callPullBadge_dialogTitle,
-      'callPullBadge_pickupButtonTitle':
-          localizations.callPullBadge_pickupButtonTitle,
-      'call_settings_additional_options':
-          localizations.call_settings_additional_options,
-      'callStatus_appUnregistered': localizations.callStatus_appUnregistered,
-      'callStatus_connectError': localizations.callStatus_connectError,
-      'callStatus_connectIssue': localizations.callStatus_connectIssue,
-      'callStatus_connectivityNone': localizations.callStatus_connectivityNone,
-      'callStatus_inProgress': localizations.callStatus_inProgress,
-      'callStatus_ready': localizations.callStatus_ready,
-      'call_SystemErrorDialog_description':
-          localizations.call_SystemErrorDialog_description,
-      'call_SystemErrorDialog_title':
-          localizations.call_SystemErrorDialog_title,
-      'call_ThumbnailAvatar_currentlyNoActiveCall':
-          localizations.call_ThumbnailAvatar_currentlyNoActiveCall,
-      'call_videoBackground_actionLabel_disableBlur':
-          localizations.call_videoBackground_actionLabel_disableBlur,
-      'call_videoBackground_actionLabel_enableBlur':
-          localizations.call_videoBackground_actionLabel_enableBlur,
-      'call_videoView_actionLabel_cover':
-          localizations.call_videoView_actionLabel_cover,
-      'call_videoView_actionLabel_fit':
-          localizations.call_videoView_actionLabel_fit,
-      'cdrs_noMissedCalls_message': localizations.cdrs_noMissedCalls_message,
-      'cdrs_noRecentCalls_message': localizations.cdrs_noRecentCalls_message,
-      'common_noInternetConnection_message':
-          localizations.common_noInternetConnection_message,
-      'common_noInternetConnection_retryButton':
-          localizations.common_noInternetConnection_retryButton,
-      'common_noInternetConnection_title':
-          localizations.common_noInternetConnection_title,
-      'common_problemWithLoadingPage':
-          localizations.common_problemWithLoadingPage,
-      'contacts_agreement_button_text':
-          localizations.contacts_agreement_button_text,
-      'contacts_agreement_checkbox_text':
-          localizations.contacts_agreement_checkbox_text,
-      'contacts_agreement_description':
-          localizations.contacts_agreement_description,
-      'contacts_agreement_title': localizations.contacts_agreement_title,
-      'contacts_ExternalTabButton_refresh':
-          localizations.contacts_ExternalTabButton_refresh,
-      'contacts_ExternalTabText_empty':
-          localizations.contacts_ExternalTabText_empty,
-      'contacts_ExternalTabText_emptyOnSearching':
-          localizations.contacts_ExternalTabText_emptyOnSearching,
-      'contacts_ExternalTabText_failure':
-          localizations.contacts_ExternalTabText_failure,
-      'contacts_LocalTabButton_contactsAgreement':
-          localizations.contacts_LocalTabButton_contactsAgreement,
-      'contacts_LocalTabButton_openAppSettings':
-          localizations.contacts_LocalTabButton_openAppSettings,
-      'contacts_LocalTabButton_refresh':
-          localizations.contacts_LocalTabButton_refresh,
-      'contacts_LocalTabText_contactsAgreementFailure':
-          localizations.contacts_LocalTabText_contactsAgreementFailure,
-      'contacts_LocalTabText_empty': localizations.contacts_LocalTabText_empty,
-      'contacts_LocalTabText_emptyOnSearching':
-          localizations.contacts_LocalTabText_emptyOnSearching,
-      'contacts_LocalTabText_failure':
-          localizations.contacts_LocalTabText_failure,
-      'contacts_LocalTabText_permissionFailure':
-          localizations.contacts_LocalTabText_permissionFailure,
-      'contactsSourceExternal': localizations.contactsSourceExternal,
-      'contactsSourceLocal': localizations.contactsSourceLocal,
-      'contacts_Text_blingTransferInitiated':
-          localizations.contacts_Text_blingTransferInitiated,
-      'contacts_DialogsInfoView_title':
-          localizations.contacts_DialogsInfoView_title,
-      'contacts_ContactScreen_options':
-          localizations.contacts_ContactScreen_options,
-      'contacts_ContactScreen_presenceViaSip':
-          localizations.contacts_ContactScreen_presenceViaSip,
-      'contacts_ContactScreen_presenceViaSip_tooltip':
-          localizations.contacts_ContactScreen_presenceViaSip_tooltip,
-      'contacts_ContactScreen_dialogsViaSipBlf':
-          localizations.contacts_ContactScreen_dialogsViaSipBlf,
-      'contacts_ContactScreen_dialogsViaSipBlf_tooltip':
-          localizations.contacts_ContactScreen_dialogsViaSipBlf_tooltip,
-      'copyToClipboard_floatingSnackBar':
-          localizations.copyToClipboard_floatingSnackBar,
-      'copyToClipboard_popupMenuItem':
-          localizations.copyToClipboard_popupMenuItem,
-      'default_CannotRemoveOwnerMessagingSocketException':
-          localizations.default_CannotRemoveOwnerMessagingSocketException,
-      'default_ChatMemberNotFoundMessagingSocketException':
-          localizations.default_ChatMemberNotFoundMessagingSocketException,
-      'default_ChatNotFoundMessagingSocketException':
-          localizations.default_ChatNotFoundMessagingSocketException,
-      'default_ClientExceptionError':
-          localizations.default_ClientExceptionError,
-      'default_ErrorDetails': localizations.default_ErrorDetails,
-      'default_ErrorMessage': localizations.default_ErrorMessage,
-      'default_ErrorPath': localizations.default_ErrorPath,
-      'default_ErrorTransactionId': localizations.default_ErrorTransactionId,
-      'default_ForbiddenMessagingSocketException':
-          localizations.default_ForbiddenMessagingSocketException,
-      'default_FormatExceptionError':
-          localizations.default_FormatExceptionError,
-      'default_InternalErrorMessagingSocketException':
-          localizations.default_InternalErrorMessagingSocketException,
-      'default_InvalidChatTypeMessagingSocketException':
-          localizations.default_InvalidChatTypeMessagingSocketException,
-      'default_JoinCrashedMessagingSocketException':
-          localizations.default_JoinCrashedMessagingSocketException,
-      'default_MessagingSocketException':
-          localizations.default_MessagingSocketException,
-      'default_RequestFailureError': localizations.default_RequestFailureError,
-      'default_SelfAuthorityAssignmentForbiddenMessagingSocketException':
-          localizations
-              .default_SelfAuthorityAssignmentForbiddenMessagingSocketException,
-      'default_SelfRemovalForbiddenMessagingSocketException':
-          localizations.default_SelfRemovalForbiddenMessagingSocketException,
-      'default_SmsConversationNotFoundMessagingSocketException':
-          localizations.default_SmsConversationNotFoundMessagingSocketException,
-      'default_TimeoutExceptionError':
-          localizations.default_TimeoutExceptionError,
-      'default_TimeoutMessagingSocketException':
-          localizations.default_TimeoutMessagingSocketException,
-      'default_TlsExceptionError': localizations.default_TlsExceptionError,
-      'default_TypeErrorError': localizations.default_TypeErrorError,
-      'default_UnauthorizedMessagingSocketException':
-          localizations.default_UnauthorizedMessagingSocketException,
-      'default_UnauthorizedRequestFailureError':
-          localizations.default_UnauthorizedRequestFailureError,
-      'default_UserAlreadyInChatMessagingSocketException':
-          localizations.default_UserAlreadyInChatMessagingSocketException,
-      'diagnostic_AppBar_title': localizations.diagnostic_AppBar_title,
-      'diagnostic_battery_groupTitle':
-          localizations.diagnostic_battery_groupTitle,
-      'diagnostic_batteryMode_optimized_description':
-          localizations.diagnostic_batteryMode_optimized_description,
-      'diagnostic_batteryMode_optimized_title':
-          localizations.diagnostic_batteryMode_optimized_title,
-      'diagnostic_batteryMode_restricted_description':
-          localizations.diagnostic_batteryMode_restricted_description,
-      'diagnostic_batteryMode_restricted_title':
-          localizations.diagnostic_batteryMode_restricted_title,
-      'diagnostic_batteryMode_unknown_description':
-          localizations.diagnostic_batteryMode_unknown_description,
-      'diagnostic_batteryMode_unknown_title':
-          localizations.diagnostic_batteryMode_unknown_title,
-      'diagnostic_batteryMode_unrestricted_description':
-          localizations.diagnostic_batteryMode_unrestricted_description,
-      'diagnostic_batteryMode_unrestricted_title':
-          localizations.diagnostic_batteryMode_unrestricted_title,
-      'diagnostic_battery_navigate_section':
-          localizations.diagnostic_battery_navigate_section,
-      'diagnostic_battery_tile_title':
-          localizations.diagnostic_battery_tile_title,
-      'diagnostic_permission_camera_description':
-          localizations.diagnostic_permission_camera_description,
-      'diagnostic_permission_camera_title':
-          localizations.diagnostic_permission_camera_title,
-      'diagnostic_permission_contacts_description':
-          localizations.diagnostic_permission_contacts_description,
-      'diagnostic_permission_contacts_title':
-          localizations.diagnostic_permission_contacts_title,
-      'diagnosticPermissionDetails_button_managePermission':
-          localizations.diagnosticPermissionDetails_button_managePermission,
-      'diagnosticPermissionDetails_button_requestPermission':
-          localizations.diagnosticPermissionDetails_button_requestPermission,
-      'diagnosticPermissionDetails_title_statusPermission':
-          localizations.diagnosticPermissionDetails_title_statusPermission,
-      'diagnostic_permission_microphone_description':
-          localizations.diagnostic_permission_microphone_description,
-      'diagnostic_permission_microphone_title':
-          localizations.diagnostic_permission_microphone_title,
-      'diagnostic_permission_notification_description':
-          localizations.diagnostic_permission_notification_description,
-      'diagnostic_permission_notification_title':
-          localizations.diagnostic_permission_notification_title,
-      'diagnostic_permissionStatus_denied':
-          localizations.diagnostic_permissionStatus_denied,
-      'diagnostic_permissionStatus_granted':
-          localizations.diagnostic_permissionStatus_granted,
-      'diagnostic_permissionStatus_limited':
-          localizations.diagnostic_permissionStatus_limited,
-      'diagnostic_permissionStatus_permanentlyDenied':
-          localizations.diagnostic_permissionStatus_permanentlyDenied,
-      'diagnostic_permissionStatus_provisional':
-          localizations.diagnostic_permissionStatus_provisional,
-      'diagnostic_permissionStatus_restricted':
-          localizations.diagnostic_permissionStatus_restricted,
-      'diagnosticPushDetails_configuration_title':
-          localizations.diagnosticPushDetails_configuration_title,
-      'diagnosticPushDetails_errorMessage_intro':
-          localizations.diagnosticPushDetails_errorMessage_intro,
-      'diagnosticPushDetails_errorMessage_step1':
-          localizations.diagnosticPushDetails_errorMessage_step1,
-      'diagnosticPushDetails_errorMessage_step2':
-          localizations.diagnosticPushDetails_errorMessage_step2,
-      'diagnosticPushDetails_errorMessage_step3':
-          localizations.diagnosticPushDetails_errorMessage_step3,
-      'diagnosticPushDetails_errorMessage_step4':
-          localizations.diagnosticPushDetails_errorMessage_step4,
-      'diagnosticPushDetails_errorMessage_step5':
-          localizations.diagnosticPushDetails_errorMessage_step5,
-      'diagnosticPushDetails_successMessage':
-          localizations.diagnosticPushDetails_successMessage,
-      'diagnostic_pushTokenStatusType_progress':
-          localizations.diagnostic_pushTokenStatusType_progress,
-      'diagnostic_pushTokenStatusType_success':
-          localizations.diagnostic_pushTokenStatusType_success,
-      'diagnosticReportDialogAddNoteExpansionTileTitle':
-          localizations.diagnosticReportDialogAddNoteExpansionTileTitle,
-      'diagnosticReportDialogCancelButtonLabel':
-          localizations.diagnosticReportDialogCancelButtonLabel,
-      'diagnosticReportDialogCommentTextFieldHintText':
-          localizations.diagnosticReportDialogCommentTextFieldHintText,
-      'diagnosticReportDialogContent':
-          localizations.diagnosticReportDialogContent,
-      'diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle': localizations
-          .diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle,
-      'diagnosticReportDialogIncludeSystemLogsSwitchTileTitle':
-          localizations.diagnosticReportDialogIncludeSystemLogsSwitchTileTitle,
-      'diagnosticReportDialogSendReportButtonLabel':
-          localizations.diagnosticReportDialogSendReportButtonLabel,
-      'diagnosticReportDialogTitle': localizations.diagnosticReportDialogTitle,
-      'diagnosticScreen_contacts_agreement_description':
-          localizations.diagnosticScreen_contacts_agreement_description,
-      'diagnosticScreen_contacts_agreement_group_title':
-          localizations.diagnosticScreen_contacts_agreement_group_title,
-      'diagnosticScreen_contacts_agreement_title':
-          localizations.diagnosticScreen_contacts_agreement_title,
-      'diagnosticScreen_permissionsGroup_title':
-          localizations.diagnosticScreen_permissionsGroup_title,
-      'diagnosticScreen_pushNotificationService_title':
-          localizations.diagnosticScreen_pushNotificationService_title,
-      'diagnostic_network_groupTitle':
-          localizations.diagnostic_network_groupTitle,
-      'diagnosticNetworkTest_status_offline':
-          localizations.diagnosticNetworkTest_status_offline,
-      'diagnosticNetworkTest_status_reachable':
-          localizations.diagnosticNetworkTest_status_reachable,
-      'diagnosticNetworkTest_status_restricted':
-          localizations.diagnosticNetworkTest_status_restricted,
-      'diagnosticNetworkTest_status_checking':
-          localizations.diagnosticNetworkTest_status_checking,
-      'diagnosticNetworkTest_status_unreachable':
-          localizations.diagnosticNetworkTest_status_unreachable,
-      'diagnosticNetworkTestItem_subtitle_noNetwork':
-          localizations.diagnosticNetworkTestItem_subtitle_noNetwork,
-      'diagnosticNetworkTestItem_subtitle_stunBlocked':
-          localizations.diagnosticNetworkTestItem_subtitle_stunBlocked,
-      'diagnosticNetworkTestItem_subtitle_stunUnreachable':
-          localizations.diagnosticNetworkTestItem_subtitle_stunUnreachable,
-      'diagnosticNetworkTestItem_subtitle_noCandidates':
-          localizations.diagnosticNetworkTestItem_subtitle_noCandidates,
-      'diagnosticNetworkTestItem_network_wifi':
-          localizations.diagnosticNetworkTestItem_network_wifi,
-      'diagnosticNetworkTestItem_network_mobile':
-          localizations.diagnosticNetworkTestItem_network_mobile,
-      'diagnosticNetworkTestItem_network_ethernet':
-          localizations.diagnosticNetworkTestItem_network_ethernet,
-      'diagnosticNetworkTestItem_network_vpn':
-          localizations.diagnosticNetworkTestItem_network_vpn,
-      'diagnosticNetworkTestDetails_title':
-          localizations.diagnosticNetworkTestDetails_title,
-      'diagnosticNetworkTestDetails_description':
-          localizations.diagnosticNetworkTestDetails_description,
-      'diagnosticNetworkTestDetails_status':
-          localizations.diagnosticNetworkTestDetails_status,
-      'diagnosticNetworkTestDetails_candidates':
-          localizations.diagnosticNetworkTestDetails_candidates,
-      'diagnosticNetworkTestDetails_noNetwork':
-          localizations.diagnosticNetworkTestDetails_noNetwork,
-      'diagnosticNetworkTestDetails_noCandidates':
-          localizations.diagnosticNetworkTestDetails_noCandidates,
-      'favorites_BodyCenter_empty': localizations.favorites_BodyCenter_empty,
-      'favorites_DeleteConfirmDialog_content':
-          localizations.favorites_DeleteConfirmDialog_content,
-      'favorites_DeleteConfirmDialog_title':
-          localizations.favorites_DeleteConfirmDialog_title,
-      'favorites_Text_blingTransferInitiated':
-          localizations.favorites_Text_blingTransferInitiated,
-      'locale_default': localizations.locale_default,
-      'locale_en': localizations.locale_en,
-      'locale_it': localizations.locale_it,
-      'locale_uk': localizations.locale_uk,
-      'login_Button_coreUrlAssignProceed':
-          localizations.login_Button_coreUrlAssignProceed,
-      'login_Button_otpSigninRequestProceed':
-          localizations.login_Button_otpSigninRequestProceed,
-      'login_Button_otpSigninVerifyProceed':
-          localizations.login_Button_otpSigninVerifyProceed,
-      'login_Button_otpSigninVerifyRepeat':
-          localizations.login_Button_otpSigninVerifyRepeat,
-      'login_Button_passwordSigninProceed':
-          localizations.login_Button_passwordSigninProceed,
-      'login_Button_signIn': localizations.login_Button_signIn,
-      'login_Button_signupRequestProceed':
-          localizations.login_Button_signupRequestProceed,
-      'login_Button_signUpToDemoInstance':
-          localizations.login_Button_signUpToDemoInstance,
-      'login_Button_signupVerifyProceed':
-          localizations.login_Button_signupVerifyProceed,
-      'login_Button_signupVerifyRepeat':
-          localizations.login_Button_signupVerifyRepeat,
-      'login_ButtonTooltip_signInToYourInstance':
-          localizations.login_ButtonTooltip_signInToYourInstance,
-      'login_RequestFailureEmptyEmailError':
-          localizations.login_RequestFailureEmptyEmailError,
-      'login_RequestFailureIdentifierIsNotValid':
-          localizations.login_RequestFailureIdentifierIsNotValid,
-      'login_RequestFailureIncorrectOtpCodeError':
-          localizations.login_RequestFailureIncorrectOtpCodeError,
-      'login_RequestFailureOtpAlreadyVerifiedError':
-          localizations.login_RequestFailureOtpAlreadyVerifiedError,
-      'login_RequestFailureOtpExpiredError':
-          localizations.login_RequestFailureOtpExpiredError,
-      'login_RequestFailureOtpNotFoundError':
-          localizations.login_RequestFailureOtpNotFoundError,
-      'login_RequestFailureOtpVerificationAttemptsExceededError': localizations
-          .login_RequestFailureOtpVerificationAttemptsExceededError,
-      'login_RequestFailureParametersApplyIssueError':
-          localizations.login_RequestFailureParametersApplyIssueError,
-      'login_RequestFailurePhoneNotFoundError':
-          localizations.login_RequestFailurePhoneNotFoundError,
-      'login_RequestFailureIncorrectCredentialsError':
-          localizations.login_RequestFailureIncorrectCredentialsError,
-      'login_RequestFailureUserNotFoundError':
-          localizations.login_RequestFailureUserNotFoundError,
-      'login_RequestFailureUnconfiguredBundleIdError':
-          localizations.login_RequestFailureUnconfiguredBundleIdError,
-      'login_SupportedLoginTypeMissedExceptionError':
-          localizations.login_SupportedLoginTypeMissedExceptionError,
-      'login_Text_coreUrlAssignPreDescription':
-          localizations.login_Text_coreUrlAssignPreDescription,
-      'login_TextFieldLabelText_coreUrlAssign':
-          localizations.login_TextFieldLabelText_coreUrlAssign,
-      'login_TextFieldLabelText_otpSigninCode':
-          localizations.login_TextFieldLabelText_otpSigninCode,
-      'login_TextFieldLabelText_otpSigninUserRef':
-          localizations.login_TextFieldLabelText_otpSigninUserRef,
-      'login_TextFieldLabelText_otpSigninUserRefPhone':
-          localizations.login_TextFieldLabelText_otpSigninUserRefPhone,
-      'login_TextFieldLabelText_otpSigninUserRefEmail':
-          localizations.login_TextFieldLabelText_otpSigninUserRefEmail,
-      'login_TextFieldLabelText_passwordSigninPassword':
-          localizations.login_TextFieldLabelText_passwordSigninPassword,
-      'login_TextFieldLabelText_passwordSigninUserRef':
-          localizations.login_TextFieldLabelText_passwordSigninUserRef,
-      'login_TextFieldLabelText_signupCode':
-          localizations.login_TextFieldLabelText_signupCode,
-      'login_TextFieldLabelText_signupEmail':
-          localizations.login_TextFieldLabelText_signupEmail,
-      'login_Text_otpSigninRequestPostDescription':
-          localizations.login_Text_otpSigninRequestPostDescription,
-      'login_Text_otpSigninRequestPreDescription':
-          localizations.login_Text_otpSigninRequestPreDescription,
-      'login_Text_otpSigninVerifyPostDescriptionGeneral':
-          localizations.login_Text_otpSigninVerifyPostDescriptionGeneral,
-      'login_Text_passwordSigninPostDescription':
-          localizations.login_Text_passwordSigninPostDescription,
-      'login_Text_passwordSigninPreDescription':
-          localizations.login_Text_passwordSigninPreDescription,
-      'login_Text_signupRequestPostDescription':
-          localizations.login_Text_signupRequestPostDescription,
-      'login_Text_signupRequestPostDescriptionDemo':
-          localizations.login_Text_signupRequestPostDescriptionDemo,
-      'login_Text_signupRequestPreDescription':
-          localizations.login_Text_signupRequestPreDescription,
-      'login_Text_signupRequestPreDescriptionDemo':
-          localizations.login_Text_signupRequestPreDescriptionDemo,
-      'login_Text_signupVerifyPostDescriptionGeneral':
-          localizations.login_Text_signupVerifyPostDescriptionGeneral,
-      'loginType_otpSignin': localizations.loginType_otpSignin,
-      'loginType_passwordSignin': localizations.loginType_passwordSignin,
-      'loginType_signup': localizations.loginType_signup,
-      'login_validationCoreUrlError':
-          localizations.login_validationCoreUrlError,
-      'login_validationEmailError': localizations.login_validationEmailError,
-      'login_validationPhoneError': localizations.login_validationPhoneError,
-      'login_validationUserRefError':
-          localizations.login_validationUserRefError,
-      'logRecordsConsole_AppBarTitle':
-          localizations.logRecordsConsole_AppBarTitle,
-      'logRecordsConsole_Button_failureRefresh':
-          localizations.logRecordsConsole_Button_failureRefresh,
-      'logRecordsConsole_Text_failure':
-          localizations.logRecordsConsole_Text_failure,
-      'logRecordsConsole_Button_infoClose':
-          localizations.logRecordsConsole_Button_infoClose,
-      'logRecordsConsole_PopupMenuItem_info':
-          localizations.logRecordsConsole_PopupMenuItem_info,
-      'logRecordsConsole_PopupMenuItem_clear':
-          localizations.logRecordsConsole_PopupMenuItem_clear,
-      'main_BottomNavigationBarItemLabel_chats':
-          localizations.main_BottomNavigationBarItemLabel_chats,
-      'main_BottomNavigationBarItemLabel_contacts':
-          localizations.main_BottomNavigationBarItemLabel_contacts,
-      'main_BottomNavigationBarItemLabel_favorites':
-          localizations.main_BottomNavigationBarItemLabel_favorites,
-      'main_BottomNavigationBarItemLabel_keypad':
-          localizations.main_BottomNavigationBarItemLabel_keypad,
-      'main_BottomNavigationBarItemLabel_recents':
-          localizations.main_BottomNavigationBarItemLabel_recents,
-      'main_CompatibilityIssueDialogActions_logout':
-          localizations.main_CompatibilityIssueDialogActions_logout,
-      'main_CompatibilityIssueDialogActions_update':
-          localizations.main_CompatibilityIssueDialogActions_update,
-      'main_CompatibilityIssueDialog_title':
-          localizations.main_CompatibilityIssueDialog_title,
-      'messaging_ActionBtn_retry': localizations.messaging_ActionBtn_retry,
-      'messaging_ChooseContact_cancel':
-          localizations.messaging_ChooseContact_cancel,
-      'messaging_ChooseContact_empty':
-          localizations.messaging_ChooseContact_empty,
-      'messaging_ChooseContact_title':
-          localizations.messaging_ChooseContact_title,
-      'messaging_ConfirmDialog_ask': localizations.messaging_ConfirmDialog_ask,
-      'messaging_ConfirmDialog_cancel':
-          localizations.messaging_ConfirmDialog_cancel,
-      'messaging_ConfirmDialog_confirm':
-          localizations.messaging_ConfirmDialog_confirm,
-      'messaging_ConversationBuilders_back':
-          localizations.messaging_ConversationBuilders_back,
-      'messaging_ConversationBuilders_cancel':
-          localizations.messaging_ConversationBuilders_cancel,
-      'messaging_ConversationBuilders_contactOrNumberSearch_hint': localizations
-          .messaging_ConversationBuilders_contactOrNumberSearch_hint,
-      'messaging_ConversationBuilders_contactSearch_hint':
-          localizations.messaging_ConversationBuilders_contactSearch_hint,
-      'messaging_ConversationBuilders_create':
-          localizations.messaging_ConversationBuilders_create,
-      'messaging_ConversationBuilders_createGroup':
-          localizations.messaging_ConversationBuilders_createGroup,
-      'messaging_ConversationBuilders_externalContacts_heading':
-          localizations.messaging_ConversationBuilders_externalContacts_heading,
-      'messaging_ConversationBuilders_invalidNumber_message1':
-          localizations.messaging_ConversationBuilders_invalidNumber_message1,
-      'messaging_ConversationBuilders_invalidNumber_message2':
-          localizations.messaging_ConversationBuilders_invalidNumber_message2,
-      'messaging_ConversationBuilders_invalidNumber_ok':
-          localizations.messaging_ConversationBuilders_invalidNumber_ok,
-      'messaging_ConversationBuilders_invalidNumber_title':
-          localizations.messaging_ConversationBuilders_invalidNumber_title,
-      'messaging_ConversationBuilders_invite_heading':
-          localizations.messaging_ConversationBuilders_invite_heading,
-      'messaging_ConversationBuilders_localContacts_heading':
-          localizations.messaging_ConversationBuilders_localContacts_heading,
-      'messaging_ConversationBuilders_membersHeadline':
-          localizations.messaging_ConversationBuilders_membersHeadline,
-      'messaging_ConversationBuilders_nameFieldEmpty':
-          localizations.messaging_ConversationBuilders_nameFieldEmpty,
-      'messaging_ConversationBuilders_nameFieldLabel':
-          localizations.messaging_ConversationBuilders_nameFieldLabel,
-      'messaging_ConversationBuilders_nameFieldShort':
-          localizations.messaging_ConversationBuilders_nameFieldShort,
-      'messaging_ConversationBuilders_next_action':
-          localizations.messaging_ConversationBuilders_next_action,
-      'messaging_ConversationBuilders_noContacts':
-          localizations.messaging_ConversationBuilders_noContacts,
-      'messaging_ConversationBuilders_numberFormatExample':
-          localizations.messaging_ConversationBuilders_numberFormatExample,
-      'messaging_ConversationBuilders_numberSearch_errorError':
-          localizations.messaging_ConversationBuilders_numberSearch_errorError,
-      'messaging_ConversationBuilders_numberSearch_errorHint':
-          localizations.messaging_ConversationBuilders_numberSearch_errorHint,
-      'messaging_ConversationBuilders_title_group':
-          localizations.messaging_ConversationBuilders_title_group,
-      'messaging_ConversationBuilders_title_new':
-          localizations.messaging_ConversationBuilders_title_new,
-      'messaging_Conversation_failure':
-          localizations.messaging_Conversation_failure,
-      'messaging_ConversationScreen_titleAvailable':
-          localizations.messaging_ConversationScreen_titleAvailable,
-      'messaging_ConversationScreen_titlePrefix':
-          localizations.messaging_ConversationScreen_titlePrefix,
-      'messaging_ConversationsScreen_chatsSearch_hint':
-          localizations.messaging_ConversationsScreen_chatsSearch_hint,
-      'messaging_ConversationsScreen_empty':
-          localizations.messaging_ConversationsScreen_empty,
-      'messaging_ConversationsScreen_messages_title':
-          localizations.messaging_ConversationsScreen_messages_title,
-      'messaging_ConversationsScreen_noNumberAlert_text':
-          localizations.messaging_ConversationsScreen_noNumberAlert_text,
-      'messaging_ConversationsScreen_noNumberAlert_title':
-          localizations.messaging_ConversationsScreen_noNumberAlert_title,
-      'messaging_ConversationsScreen_selectNumberSheet_title':
-          localizations.messaging_ConversationsScreen_selectNumberSheet_title,
-      'messaging_ConversationsScreen_smses_title':
-          localizations.messaging_ConversationsScreen_smses_title,
-      'messaging_ConversationsScreen_smssSearch_hint':
-          localizations.messaging_ConversationsScreen_smssSearch_hint,
-      'messaging_ConversationsScreen_unsupported':
-          localizations.messaging_ConversationsScreen_unsupported,
-      'messaging_Conversations_tile_empty':
-          localizations.messaging_Conversations_tile_empty,
-      'messaging_Conversations_tile_you':
-          localizations.messaging_Conversations_tile_you,
-      'messaging_DialogInfo_deleteAsk':
-          localizations.messaging_DialogInfo_deleteAsk,
-      'messaging_DialogInfo_deleteBtn':
-          localizations.messaging_DialogInfo_deleteBtn,
-      'messaging_DialogInfo_title': localizations.messaging_DialogInfo_title,
-      'messaging_GroupAuthorities_moderator':
-          localizations.messaging_GroupAuthorities_moderator,
-      'messaging_GroupAuthorities_noauthorities':
-          localizations.messaging_GroupAuthorities_noauthorities,
-      'messaging_GroupAuthorities_owner':
-          localizations.messaging_GroupAuthorities_owner,
-      'messaging_GroupInfo_addUserBtnText':
-          localizations.messaging_GroupInfo_addUserBtnText,
-      'messaging_GroupInfo_deleteLeaveBtnText':
-          localizations.messaging_GroupInfo_deleteLeaveBtnText,
-      'messaging_GroupInfo_groupMembersHeadline':
-          localizations.messaging_GroupInfo_groupMembersHeadline,
-      'messaging_GroupInfo_leaveAndDeleteAsk':
-          localizations.messaging_GroupInfo_leaveAndDeleteAsk,
-      'messaging_GroupInfo_leaveAsk':
-          localizations.messaging_GroupInfo_leaveAsk,
-      'messaging_GroupInfo_leaveBtnText':
-          localizations.messaging_GroupInfo_leaveBtnText,
-      'messaging_GroupInfo_makeModeratorAsk':
-          localizations.messaging_GroupInfo_makeModeratorAsk,
-      'messaging_GroupInfo_makeModeratorBtnText':
-          localizations.messaging_GroupInfo_makeModeratorBtnText,
-      'messaging_GroupInfo_removeModeratorAsk':
-          localizations.messaging_GroupInfo_removeModeratorAsk,
-      'messaging_GroupInfo_removeUserAsk':
-          localizations.messaging_GroupInfo_removeUserAsk,
-      'messaging_GroupInfo_removeUserBtnText':
-          localizations.messaging_GroupInfo_removeUserBtnText,
-      'messaging_GroupInfo_title': localizations.messaging_GroupInfo_title,
-      'messaging_GroupInfo_titlePrefix':
-          localizations.messaging_GroupInfo_titlePrefix,
-      'messaging_GroupInfo_unmakeModeratorBtnText':
-          localizations.messaging_GroupInfo_unmakeModeratorBtnText,
-      'messaging_MessageField_hint': localizations.messaging_MessageField_hint,
-      'messaging_MessageListView_typingTrail':
-          localizations.messaging_MessageListView_typingTrail,
-      'messaging_MessageView_delete':
-          localizations.messaging_MessageView_delete,
-      'messaging_MessageView_deleted':
-          localizations.messaging_MessageView_deleted,
-      'messaging_MessageView_edit': localizations.messaging_MessageView_edit,
-      'messaging_MessageView_edited':
-          localizations.messaging_MessageView_edited,
-      'messaging_MessageView_forward':
-          localizations.messaging_MessageView_forward,
-      'messaging_MessageView_reply': localizations.messaging_MessageView_reply,
-      'messaging_MessageView_textcopy':
-          localizations.messaging_MessageView_textcopy,
-      'messaging_MessageView_today': localizations.messaging_MessageView_today,
-      'messaging_MessageView_yesterday':
-          localizations.messaging_MessageView_yesterday,
-      'messaging_ParticipantName_unknown':
-          localizations.messaging_ParticipantName_unknown,
-      'messaging_ParticipantName_you':
-          localizations.messaging_ParticipantName_you,
-      'messaging_SmsSendingStatus_delivered':
-          localizations.messaging_SmsSendingStatus_delivered,
-      'messaging_SmsSendingStatus_failed':
-          localizations.messaging_SmsSendingStatus_failed,
-      'messaging_SmsSendingStatus_sent':
-          localizations.messaging_SmsSendingStatus_sent,
-      'messaging_SmsSendingStatus_waiting':
-          localizations.messaging_SmsSendingStatus_waiting,
-      'messaging_StateBar_connecting':
-          localizations.messaging_StateBar_connecting,
-      'messaging_StateBar_error': localizations.messaging_StateBar_error,
-      'messaging_StateBar_initializing':
-          localizations.messaging_StateBar_initializing,
-      'notifications_errorSnackBarAction_callSdpConfiguration':
-          localizations.notifications_errorSnackBarAction_callSdpConfiguration,
-      'notifications_errorSnackBarAction_callUserMedia':
-          localizations.notifications_errorSnackBarAction_callUserMedia,
-      'notifications_errorSnackBar_activeLineBlindTransferWarning':
-          localizations
-              .notifications_errorSnackBar_activeLineBlindTransferWarning,
-      'notifications_errorSnackBar_blindTransferFailed':
-          localizations.notifications_errorSnackBar_blindTransferFailed,
-      'notifications_errorSnackBar_appOffline':
-          localizations.notifications_errorSnackBar_appOffline,
-      'notifications_errorSnackBar_appOnline':
-          localizations.notifications_errorSnackBar_appOnline,
-      'notifications_errorSnackBar_appUnregistered':
-          localizations.notifications_errorSnackBar_appUnregistered,
-      'notifications_errorSnackBar_callConnect':
-          localizations.notifications_errorSnackBar_callConnect,
-      'notifications_errorSnackBar_callNegotiationTimeout':
-          localizations.notifications_errorSnackBar_callNegotiationTimeout,
-      'notifications_errorSnackBar_generalUnableToCall':
-          localizations.notifications_errorSnackBar_generalUnableToCall,
-      'notifications_errorSnackBar_callServiceBusyLine':
-          localizations.notifications_errorSnackBar_callServiceBusyLine,
-      'notifications_errorSnackBar_callSignalingClientNotConnect': localizations
-          .notifications_errorSnackBar_callSignalingClientNotConnect,
-      'notifications_errorSnackBar_callSignalingClientSessionMissed':
-          localizations
-              .notifications_errorSnackBar_callSignalingClientSessionMissed,
-      'notifications_errorSnackBar_callUndefinedLine':
-          localizations.notifications_errorSnackBar_callUndefinedLine,
-      'notifications_errorSnackBar_callMediaTrackSetup':
-          localizations.notifications_errorSnackBar_callMediaTrackSetup,
-      'notifications_errorSnackBar_callUserMedia':
-          localizations.notifications_errorSnackBar_callUserMedia,
-      'notifications_errorSnackBar_callWhileOffline':
-          localizations.notifications_errorSnackBar_callWhileOffline,
-      'notifications_errorSnackBar_callWhileUnregistered':
-          localizations.notifications_errorSnackBar_callWhileUnregistered,
-      'notifications_errorSnackBar_sessionExpired':
-          localizations.notifications_errorSnackBar_sessionExpired,
-      'notifications_errorSnackBar_SignalingConnectFailed':
-          localizations.notifications_errorSnackBar_SignalingConnectFailed,
-      'notifications_errorSnackBar_SignalingSessionMissed':
-          localizations.notifications_errorSnackBar_SignalingSessionMissed,
-      'notifications_errorSnackBar_sipRegistrationFailed_Unavailable':
-          localizations
-              .notifications_errorSnackBar_sipRegistrationFailed_Unavailable,
-      'notifications_errorSnackBar_sipRegistrationFailed_Unexpected':
-          localizations
-              .notifications_errorSnackBar_sipRegistrationFailed_Unexpected,
-      'notifications_errorSnackBar_sipServiceUnavailable':
-          localizations.notifications_errorSnackBar_sipServiceUnavailable,
-      'notifications_messageSnackBar_appOffline':
-          localizations.notifications_messageSnackBar_appOffline,
-      'notifications_successSnackBar_appOnline':
-          localizations.notifications_successSnackBar_appOnline,
-      'numberActions_audioCall': localizations.numberActions_audioCall,
-      'numberActions_callLog': localizations.numberActions_callLog,
-      'numberActions_chat': localizations.numberActions_chat,
-      'numberActions_copyCallId': localizations.numberActions_copyCallId,
-      'numberActions_copyNumber': localizations.numberActions_copyNumber,
-      'numberActions_delete': localizations.numberActions_delete,
-      'numberActions_sendSms': localizations.numberActions_sendSms,
-      'numberActions_transfer': localizations.numberActions_transfer,
-      'numberActions_videoCall': localizations.numberActions_videoCall,
-      'numberActions_viewContact': localizations.numberActions_viewContact,
-      'permission_Button_request': localizations.permission_Button_request,
-      'permission_manageFullScreenNotificationInstructions_step1': localizations
-          .permission_manageFullScreenNotificationInstructions_step1,
-      'permission_manageFullScreenNotificationInstructions_step2': localizations
-          .permission_manageFullScreenNotificationInstructions_step2,
-      'permission_manageFullScreenNotificationInstructions_step3': localizations
-          .permission_manageFullScreenNotificationInstructions_step3,
-      'permission_manageFullScreenNotificationInstructions_step4': localizations
-          .permission_manageFullScreenNotificationInstructions_step4,
-      'permission_manageFullScreenNotificationInstructions_step5': localizations
-          .permission_manageFullScreenNotificationInstructions_step5,
-      'permission_manageFullScreenNotificationPermissions':
-          localizations.permission_manageFullScreenNotificationPermissions,
-      'permission_manufacturer_Button_gotIt':
-          localizations.permission_manufacturer_Button_gotIt,
-      'permission_manufacturer_Button_toSettings':
-          localizations.permission_manufacturer_Button_toSettings,
-      'permission_manufacturer_Text_heading':
-          localizations.permission_manufacturer_Text_heading,
-      'permission_manufacturer_Text_trailing':
-          localizations.permission_manufacturer_Text_trailing,
-      'permission_manufacturer_Text_xiaomi_tip1':
-          localizations.permission_manufacturer_Text_xiaomi_tip1,
-      'permission_manufacturer_Text_xiaomi_tip2':
-          localizations.permission_manufacturer_Text_xiaomi_tip2,
-      'permission_Text_description': localizations.permission_Text_description,
-      'persistentConnectionReminderContent':
-          localizations.persistentConnectionReminderContent,
-      'persistentConnectionReminderTitle':
-          localizations.persistentConnectionReminderTitle,
-      'batteryOptimizationWarningTitle':
-          localizations.batteryOptimizationWarningTitle,
-      'batteryOptimizationWarningContent':
-          localizations.batteryOptimizationWarningContent,
-      'batteryOptimizationWarningOpenSettings':
-          localizations.batteryOptimizationWarningOpenSettings,
-      'presence_activity_appointment_name':
-          localizations.presence_activity_appointment_name,
-      'presence_activity_away_name': localizations.presence_activity_away_name,
-      'presence_activity_busy_name': localizations.presence_activity_busy_name,
-      'presence_activity_doNotDisturb_name':
-          localizations.presence_activity_doNotDisturb_name,
-      'presence_activity_inTransit_name':
-          localizations.presence_activity_inTransit_name,
-      'presence_activity_meal_name': localizations.presence_activity_meal_name,
-      'presence_activity_meeting_name':
-          localizations.presence_activity_meeting_name,
-      'presence_activity_none_name': localizations.presence_activity_none_name,
-      'presence_activity_onThePhone_name':
-          localizations.presence_activity_onThePhone_name,
-      'presence_activity_permanentAbsence_name':
-          localizations.presence_activity_permanentAbsence_name,
-      'presence_activity_sleeping_name':
-          localizations.presence_activity_sleeping_name,
-      'presence_activity_travel_name':
-          localizations.presence_activity_travel_name,
-      'presence_activity_vacation_name':
-          localizations.presence_activity_vacation_name,
-      'presence_infoView_activity': localizations.presence_infoView_activity,
-      'presence_infoView_available': localizations.presence_infoView_available,
-      'presence_infoView_available_false':
-          localizations.presence_infoView_available_false,
-      'presence_infoView_available_true':
-          localizations.presence_infoView_available_true,
-      'presence_infoView_client': localizations.presence_infoView_client,
-      'presence_infoView_device': localizations.presence_infoView_device,
-      'presence_infoView_localTime': localizations.presence_infoView_localTime,
-      'presence_infoView_note': localizations.presence_infoView_note,
-      'presence_infoView_statusIcon':
-          localizations.presence_infoView_statusIcon,
-      'presence_infoView_timeZone': localizations.presence_infoView_timeZone,
-      'presence_infoView_title': localizations.presence_infoView_title,
-      'presence_infoView_updated': localizations.presence_infoView_updated,
-      'presence_infoView_source_direct':
-          localizations.presence_infoView_source_direct,
-      'presence_infoView_source_sip':
-          localizations.presence_infoView_source_sip,
-      'presence_infoView_source_sipAndDirect':
-          localizations.presence_infoView_source_sipAndDirect,
-      'presence_preset_absent_name': localizations.presence_preset_absent_name,
-      'presence_preset_absent_note': localizations.presence_preset_absent_note,
-      'presence_preset_appointment_name':
-          localizations.presence_preset_appointment_name,
-      'presence_preset_appointment_note':
-          localizations.presence_preset_appointment_note,
-      'presence_preset_available_name':
-          localizations.presence_preset_available_name,
-      'presence_preset_away_name': localizations.presence_preset_away_name,
-      'presence_preset_away_note': localizations.presence_preset_away_note,
-      'presence_preset_dnd_name': localizations.presence_preset_dnd_name,
-      'presence_preset_dnd_note': localizations.presence_preset_dnd_note,
-      'presence_preset_inTransit_name':
-          localizations.presence_preset_inTransit_name,
-      'presence_preset_inTransit_note':
-          localizations.presence_preset_inTransit_note,
-      'presence_preset_meal_name': localizations.presence_preset_meal_name,
-      'presence_preset_meal_note': localizations.presence_preset_meal_note,
-      'presence_preset_meeting_name':
-          localizations.presence_preset_meeting_name,
-      'presence_preset_meeting_note':
-          localizations.presence_preset_meeting_note,
-      'presence_preset_sleeping_name':
-          localizations.presence_preset_sleeping_name,
-      'presence_preset_sleeping_note':
-          localizations.presence_preset_sleeping_note,
-      'presence_preset_travel_name': localizations.presence_preset_travel_name,
-      'presence_preset_travel_note': localizations.presence_preset_travel_note,
-      'presence_preset_unavailable_name':
-          localizations.presence_preset_unavailable_name,
-      'presence_preset_vacation_name':
-          localizations.presence_preset_vacation_name,
-      'presence_preset_vacation_note':
-          localizations.presence_preset_vacation_note,
-      'presence_settings_activity_label':
-          localizations.presence_settings_activity_label,
-      'presence_settings_activity_tooltip':
-          localizations.presence_settings_activity_tooltip,
-      'presence_settings_availability_title':
-          localizations.presence_settings_availability_title,
-      'presence_settings_availability_tooltip':
-          localizations.presence_settings_availability_tooltip,
-      'presence_settings_config_title':
-          localizations.presence_settings_config_title,
-      'presence_settings_dnd_title': localizations.presence_settings_dnd_title,
-      'presence_settings_dnd_tooltip':
-          localizations.presence_settings_dnd_tooltip,
-      'presence_settings_note_label':
-          localizations.presence_settings_note_label,
-      'presence_settings_note_tooltip':
-          localizations.presence_settings_note_tooltip,
-      'presence_settings_presets_label':
-          localizations.presence_settings_presets_label,
-      'presence_settings_presets_label_custom':
-          localizations.presence_settings_presets_label_custom,
-      'presence_settings_presets_title':
-          localizations.presence_settings_presets_title,
-      'presence_settings_statusIcon_none':
-          localizations.presence_settings_statusIcon_none,
-      'presence_settings_statusIcon_title':
-          localizations.presence_settings_statusIcon_title,
-      'recents_DeleteConfirmDialog_content':
-          localizations.recents_DeleteConfirmDialog_content,
-      'recents_DeleteConfirmDialog_title':
-          localizations.recents_DeleteConfirmDialog_title,
-      'recents_HistoryTile_missedCallText':
-          localizations.recents_HistoryTile_missedCallText,
-      'recents_Text_blingTransferInitiated':
-          localizations.recents_Text_blingTransferInitiated,
-      'recentsVisibilityFilter_all': localizations.recentsVisibilityFilter_all,
-      'recentsVisibilityFilter_all_preposit':
-          localizations.recentsVisibilityFilter_all_preposit,
-      'recentsVisibilityFilter_incoming':
-          localizations.recentsVisibilityFilter_incoming,
-      'recentsVisibilityFilter_incoming_preposit':
-          localizations.recentsVisibilityFilter_incoming_preposit,
-      'recentsVisibilityFilter_missed':
-          localizations.recentsVisibilityFilter_missed,
-      'recentsVisibilityFilter_missed_preposit':
-          localizations.recentsVisibilityFilter_missed_preposit,
-      'recentsVisibilityFilter_outgoing':
-          localizations.recentsVisibilityFilter_outgoing,
-      'recentsVisibilityFilter_outgoing_preposit':
-          localizations.recentsVisibilityFilter_outgoing_preposit,
-      'request_Id': localizations.request_Id,
-      'request_StatusCode': localizations.request_StatusCode,
-      'request_StatusName': localizations.request_StatusName,
-      'sessionStatus_AppBar_waitingForNetwork':
-          localizations.sessionStatus_AppBar_waitingForNetwork,
-      'sessionStatus_AppBar_waitingForConnection':
-          localizations.sessionStatus_AppBar_waitingForConnection,
-      'sessionStatus_AppBar_disconnected':
-          localizations.sessionStatus_AppBar_disconnected,
-      'sessionStatus_AppBar_connecting':
-          localizations.sessionStatus_AppBar_connecting,
-      'sessionStatus_pushNotificationServiceProblem':
-          localizations.sessionStatus_pushNotificationServiceProblem,
-      'session_Teardown_progressText':
-          localizations.session_Teardown_progressText,
-      'settings_AboutText_ApplicationEmbeddedLinks':
-          localizations.settings_AboutText_ApplicationEmbeddedLinks,
-      'settings_AboutText_AppSessionIdentifier':
-          localizations.settings_AboutText_AppSessionIdentifier,
-      'settings_AboutText_AppVersion':
-          localizations.settings_AboutText_AppVersion,
-      'settings_AboutText_CoreVersion':
-          localizations.settings_AboutText_CoreVersion,
-      'settings_AboutText_CoreVersionUndefined':
-          localizations.settings_AboutText_CoreVersionUndefined,
-      'settings_AboutText_FCMPushNotificationToken':
-          localizations.settings_AboutText_FCMPushNotificationToken,
-      'settings_AboutText_StoreVersion':
-          localizations.settings_AboutText_StoreVersion,
-      'settings_AccountDeleteConfirmDialog_content':
-          localizations.settings_AccountDeleteConfirmDialog_content,
-      'settings_AccountDeleteConfirmDialog_title':
-          localizations.settings_AccountDeleteConfirmDialog_title,
-      'settings_AccountDeleteNotSupported_message':
-          localizations.settings_AccountDeleteNotSupported_message,
-      'settings_AppBarTitle_myAccount':
-          localizations.settings_AppBarTitle_myAccount,
-      'settings_audioProcessing_Section_AGC_title':
-          localizations.settings_audioProcessing_Section_AGC_title,
-      'settings_audioProcessing_Section_AM_title':
-          localizations.settings_audioProcessing_Section_AM_title,
-      'settings_audioProcessing_Section_EC_title':
-          localizations.settings_audioProcessing_Section_EC_title,
-      'settings_audioProcessing_Section_HPF_title':
-          localizations.settings_audioProcessing_Section_HPF_title,
-      'settings_audioProcessing_Section_NS_title':
-          localizations.settings_audioProcessing_Section_NS_title,
-      'settings_audioProcessing_Section_title':
-          localizations.settings_audioProcessing_Section_title,
-      'settings_audioProcessing_Section_tooltip':
-          localizations.settings_audioProcessing_Section_tooltip,
-      'settings_audioProcessing_Section_VP_title':
-          localizations.settings_audioProcessing_Section_VP_title,
-      'settings_call_codecs_preferred_audio_default':
-          localizations.settings_call_codecs_preferred_audio_default,
-      'settings_call_codecs_preferred_audio_tip':
-          localizations.settings_call_codecs_preferred_audio_tip,
-      'settings_call_codecs_preferred_audio_title':
-          localizations.settings_call_codecs_preferred_audio_title,
-      'settings_call_codecs_preferred_video_default':
-          localizations.settings_call_codecs_preferred_video_default,
-      'settings_call_codecs_preferred_video_tip':
-          localizations.settings_call_codecs_preferred_video_tip,
-      'settings_call_codecs_preferred_video_title':
-          localizations.settings_call_codecs_preferred_video_title,
-      'settings_callerId_cancel_button':
-          localizations.settings_callerId_cancel_button,
-      'settings_callerId_defaultTitle':
-          localizations.settings_callerId_defaultTitle,
-      'settings_callerId_dialcode': localizations.settings_callerId_dialcode,
-      'settings_callerId_dialCodeMatching_title':
-          localizations.settings_callerId_dialCodeMatching_title,
-      'settings_callerId_duplicate_dialcode_error':
-          localizations.settings_callerId_duplicate_dialcode_error,
-      'settings_callerId_number': localizations.settings_callerId_number,
-      'settings_callerId_number_hint':
-          localizations.settings_callerId_number_hint,
-      'settings_callerId_save_button':
-          localizations.settings_callerId_save_button,
-      'settings_connectionSection_title':
-          localizations.settings_connectionSection_title,
-      'settings_connectionSection_tooltip':
-          localizations.settings_connectionSection_tooltip,
-      'settings_encoding_AppBar_reset_tooltip':
-          localizations.settings_encoding_AppBar_reset_tooltip,
-      'settings_encoding_Section_audio_ptime':
-          localizations.settings_encoding_Section_audio_ptime,
-      'settings_encoding_Section_audio_ptime_limit':
-          localizations.settings_encoding_Section_audio_ptime_limit,
-      'settings_encoding_Section_bandwidth_prefix':
-          localizations.settings_encoding_Section_bandwidth_prefix,
-      'settings_encoding_Section_bitrate_prefix':
-          localizations.settings_encoding_Section_bitrate_prefix,
-      'settings_encoding_Section_bitrate_title':
-          localizations.settings_encoding_Section_bitrate_title,
-      'settings_encoding_Section_bitrate_tooltip':
-          localizations.settings_encoding_Section_bitrate_tooltip,
-      'settings_encoding_Section_extra_sdp_mod_removeREMBFeedback':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeREMBFeedback,
-      'settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip,
-      'settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback,
-      'settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip,
-      'settings_encoding_Section_rtp_extensions_title':
-          localizations.settings_encoding_Section_rtp_extensions_title,
-      'settings_encoding_Section_rtp_extensions_tooltip':
-          localizations.settings_encoding_Section_rtp_extensions_tooltip,
-      'settings_encoding_Section_extra_sdp_mod_removeExtmap_twcc': localizations
-          .settings_encoding_Section_extra_sdp_mod_removeExtmap_twcc,
-      'settings_encoding_Section_extra_sdp_mod_removeExtmap_absSendTime':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeExtmap_absSendTime,
-      'settings_encoding_Section_extra_sdp_mod_removeExtmap_playoutDelay':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeExtmap_playoutDelay,
-      'settings_encoding_Section_extra_sdp_mod_removeExtmap_videoContentType':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeExtmap_videoContentType,
-      'settings_encoding_Section_extra_sdp_mod_removeExtmap_videoTiming':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeExtmap_videoTiming,
-      'settings_encoding_Section_extra_sdp_mod_removeExtmap_colorSpace':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeExtmap_colorSpace,
-      'settings_encoding_Section_extra_sdp_mod_removeExtmap_audioLevel':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeExtmap_audioLevel,
-      'settings_encoding_Section_extra_sdp_mod_removeExtmap_tOffset':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeExtmap_tOffset,
-      'settings_encoding_Section_extra_sdp_mod_removeExtmap_videoOrientation':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeExtmap_videoOrientation,
-      'settings_encoding_Section_extra_sdp_mod_removeExtmap_rtpStreamId':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeExtmap_rtpStreamId,
-      'settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId,
-      'settings_encoding_Section_extra_sdp_mod_remapTE8':
-          localizations.settings_encoding_Section_extra_sdp_mod_remapTE8,
-      'settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip': localizations
-          .settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip,
-      'settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps,
-      'settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip':
-          localizations
-              .settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip,
-      'settings_encoding_Section_extra_sdp_mod_title':
-          localizations.settings_encoding_Section_extra_sdp_mod_title,
-      'settings_encoding_Section_measure_hz':
-          localizations.settings_encoding_Section_measure_hz,
-      'settings_encoding_Section_measure_kbps':
-          localizations.settings_encoding_Section_measure_kbps,
-      'settings_encoding_Section_measure_ms':
-          localizations.settings_encoding_Section_measure_ms,
-      'settings_encoding_Section_opus_bandwidth':
-          localizations.settings_encoding_Section_opus_bandwidth,
-      'settings_encoding_Section_opus_bitrate':
-          localizations.settings_encoding_Section_opus_bitrate,
-      'settings_encoding_Section_opus_channels':
-          localizations.settings_encoding_Section_opus_channels,
-      'settings_encoding_Section_opus_dtx':
-          localizations.settings_encoding_Section_opus_dtx,
-      'settings_encoding_Section_opus_samplingRate':
-          localizations.settings_encoding_Section_opus_samplingRate,
-      'settings_encoding_Section_opus_title':
-          localizations.settings_encoding_Section_opus_title,
-      'settings_encoding_Section_opus_tooltip':
-          localizations.settings_encoding_Section_opus_tooltip,
-      'settings_encoding_Section_packetization_title':
-          localizations.settings_encoding_Section_packetization_title,
-      'settings_encoding_Section_packetization_tooltip':
-          localizations.settings_encoding_Section_packetization_tooltip,
-      'settings_encoding_Section_packetization_warning_title':
-          localizations.settings_encoding_Section_packetization_warning_title,
-      'settings_encoding_Section_packetization_warning_message':
-          localizations.settings_encoding_Section_packetization_warning_message,
-      'settings_encoding_Section_preset':
-          localizations.settings_encoding_Section_preset,
-      'settings_encoding_Section_preset_balance':
-          localizations.settings_encoding_Section_preset_balance,
-      'settings_encoding_Section_preset_balance_tooltip':
-          localizations.settings_encoding_Section_preset_balance_tooltip,
-      'settings_encoding_Section_preset_eco':
-          localizations.settings_encoding_Section_preset_eco,
-      'settings_encoding_Section_preset_eco_tooltip':
-          localizations.settings_encoding_Section_preset_eco_tooltip,
-      'settings_encoding_Section_preset_custom':
-          localizations.settings_encoding_Section_preset_custom,
-      'settings_encoding_Section_preset_custom_tooltip':
-          localizations.settings_encoding_Section_preset_custom_tooltip,
-      'settings_encoding_Section_preset_default':
-          localizations.settings_encoding_Section_preset_default,
-      'settings_encoding_Section_preset_default_tooltip':
-          localizations.settings_encoding_Section_preset_default_tooltip,
-      'settings_encoding_Section_preset_bypass':
-          localizations.settings_encoding_Section_preset_bypass,
-      'settings_encoding_Section_preset_bypass_tooltip':
-          localizations.settings_encoding_Section_preset_bypass_tooltip,
-      'settings_encoding_Section_preset_full_flex':
-          localizations.settings_encoding_Section_preset_full_flex,
-      'settings_encoding_Section_preset_quality':
-          localizations.settings_encoding_Section_preset_quality,
-      'settings_encoding_Section_preset_quality_tooltip':
-          localizations.settings_encoding_Section_preset_quality_tooltip,
-      'settings_encoding_Section_preset_title':
-          localizations.settings_encoding_Section_preset_title,
-      'settings_encoding_Section_preset_tooltip':
-          localizations.settings_encoding_Section_preset_tooltip,
-      'settings_encoding_Section_ptime_prefix':
-          localizations.settings_encoding_Section_ptime_prefix,
-      'settings_encoding_Section_rtp_override_audio':
-          localizations.settings_encoding_Section_rtp_override_audio,
-      'settings_encoding_Section_rtp_override_title':
-          localizations.settings_encoding_Section_rtp_override_title,
-      'settings_encoding_Section_rtp_override_tooltip':
-          localizations.settings_encoding_Section_rtp_override_tooltip,
-      'settings_encoding_Section_rtp_override_video':
-          localizations.settings_encoding_Section_rtp_override_video,
-      'settings_encoding_Section_rtp_override_warning_message':
-          localizations.settings_encoding_Section_rtp_override_warning_message,
-      'settings_encoding_Section_rtp_override_warning_title':
-          localizations.settings_encoding_Section_rtp_override_warning_title,
-      'settings_encoding_Section_target_audio_bitrate':
-          localizations.settings_encoding_Section_target_audio_bitrate,
-      'settings_encoding_Section_target_video_bitrate':
-          localizations.settings_encoding_Section_target_video_bitrate,
-      'settings_encoding_Section_value_auto':
-          localizations.settings_encoding_Section_value_auto,
-      'settings_encoding_Section_value_disable':
-          localizations.settings_encoding_Section_value_disable,
-      'settings_encoding_Section_value_enable':
-          localizations.settings_encoding_Section_value_enable,
-      'settings_encoding_Section_value_mono':
-          localizations.settings_encoding_Section_value_mono,
-      'settings_encoding_Section_value_off':
-          localizations.settings_encoding_Section_value_off,
-      'settings_encoding_Section_value_on':
-          localizations.settings_encoding_Section_value_on,
-      'settings_encoding_Section_value_stereo':
-          localizations.settings_encoding_Section_value_stereo,
-      'settings_iceSettings_Section_netfilter_skipv4':
-          localizations.settings_iceSettings_Section_netfilter_skipv4,
-      'settings_iceSettings_Section_netfilter_skipv6':
-          localizations.settings_iceSettings_Section_netfilter_skipv6,
-      'settings_iceSettings_Section_netfilter_title':
-          localizations.settings_iceSettings_Section_netfilter_title,
-      'settings_iceSettings_Section_noskip':
-          localizations.settings_iceSettings_Section_noskip,
-      'settings_iceSettings_Section_title':
-          localizations.settings_iceSettings_Section_title,
-      'settings_iceSettings_Section_tooltip':
-          localizations.settings_iceSettings_Section_tooltip,
-      'settings_iceSettings_Section_trfilter_skipTcp':
-          localizations.settings_iceSettings_Section_trfilter_skipTcp,
-      'settings_iceSettings_Section_trfilter_skipUdp':
-          localizations.settings_iceSettings_Section_trfilter_skipUdp,
-      'settings_iceSettings_Section_trfilter_title':
-          localizations.settings_iceSettings_Section_trfilter_title,
-      'settings_ListViewTileTitle_about':
-          localizations.settings_ListViewTileTitle_about,
-      'settings_ListViewTileTitle_accountDelete':
-          localizations.settings_ListViewTileTitle_accountDelete,
-      'settings_ListViewTileTitle_call_codecs':
-          localizations.settings_ListViewTileTitle_call_codecs,
-      'settings_ListViewTileTitle_callerId':
-          localizations.settings_ListViewTileTitle_callerId,
-      'settings_ListViewTileTitle_encoding':
-          localizations.settings_ListViewTileTitle_encoding,
-      'settings_ListViewTileTitle_features':
-          localizations.settings_ListViewTileTitle_features,
-      'settings_ListViewTileTitle_help':
-          localizations.settings_ListViewTileTitle_help,
-      'settings_ListViewTileTitle_language':
-          localizations.settings_ListViewTileTitle_language,
-      'settings_ListViewTileTitle_logout':
-          localizations.settings_ListViewTileTitle_logout,
-      'settings_ListViewTileTitle_logRecordsConsole':
-          localizations.settings_ListViewTileTitle_logRecordsConsole,
-      'settings_ListViewTileTitle_mediaSettings':
-          localizations.settings_ListViewTileTitle_mediaSettings,
-      'settings_ListViewTileTitle_network':
-          localizations.settings_ListViewTileTitle_network,
-      'settings_ListViewTileTitle_presence':
-          localizations.settings_ListViewTileTitle_presence,
-      'settings_ListViewTileTitle_registered':
-          localizations.settings_ListViewTileTitle_registered,
-      'settings_ListViewTileTitle_self_config':
-          localizations.settings_ListViewTileTitle_self_config,
-      'settings_ListViewTileTitle_settings':
-          localizations.settings_ListViewTileTitle_settings,
-      'settings_ListViewTileTitle_termsConditions':
-          localizations.settings_ListViewTileTitle_termsConditions,
-      'settings_ListViewTileTitle_themeMode':
-          localizations.settings_ListViewTileTitle_themeMode,
-      'settings_ListViewTileTitle_toolbox':
-          localizations.settings_ListViewTileTitle_toolbox,
-      'settings_ListViewTileTitle_voicemail':
-          localizations.settings_ListViewTileTitle_voicemail,
-      'settings_LogoutConfirmDialog_content':
-          localizations.settings_LogoutConfirmDialog_content,
-      'settings_LogoutConfirmDialog_title':
-          localizations.settings_LogoutConfirmDialog_title,
-      'settings_missingMicrophoneIndicator_title':
-          localizations.settings_missingMicrophoneIndicator_title,
-      'settings_network_fallbackCalls_description':
-          localizations.settings_network_fallbackCalls_description,
-      'settings_network_fallbackCalls_title':
-          localizations.settings_network_fallbackCalls_title,
-      'settings_network_incomingCallType_pushNotification_description':
-          localizations
-              .settings_network_incomingCallType_pushNotification_description,
-      'settings_network_incomingCallType_pushNotification_title': localizations
-          .settings_network_incomingCallType_pushNotification_title,
-      'settings_network_incomingCallType_socket_description':
-          localizations.settings_network_incomingCallType_socket_description,
-      'settings_network_incomingCallType_socket_title':
-          localizations.settings_network_incomingCallType_socket_title,
-      'settings_network_incomingCallType_title':
-          localizations.settings_network_incomingCallType_title,
-      'settings_network_smsFallback_toggle':
-          localizations.settings_network_smsFallback_toggle,
-      'settings_videoCapturing_Section_framerate_prefix':
-          localizations.settings_videoCapturing_Section_framerate_prefix,
-      'settings_videoCapturing_Section_framerate_title':
-          localizations.settings_videoCapturing_Section_framerate_title,
-      'settings_videoCapturing_Section_resolution_prefix':
-          localizations.settings_videoCapturing_Section_resolution_prefix,
-      'settings_videoCapturing_Section_resolution_title':
-          localizations.settings_videoCapturing_Section_resolution_title,
-      'settings_videoCapturing_Section_title':
-          localizations.settings_videoCapturing_Section_title,
-      'settings_videoCapturing_Section_tooltip':
-          localizations.settings_videoCapturing_Section_tooltip,
-      'settings_videoOffer_option_ignore':
-          localizations.settings_videoOffer_option_ignore,
-      'settings_videoOffer_option_includeInactive':
-          localizations.settings_videoOffer_option_includeInactive,
-      'settings_videoOffer_title': localizations.settings_videoOffer_title,
-      'signalingResponseCode_ambiguousRequest':
-          localizations.signalingResponseCode_ambiguousRequest,
-      'signalingResponseCode_busyEverywhere':
-          localizations.signalingResponseCode_busyEverywhere,
-      'signalingResponseCode_callNotExist':
-          localizations.signalingResponseCode_callNotExist,
-      'signalingResponseCode_declineCall':
-          localizations.signalingResponseCode_declineCall,
-      'signalingResponseCode_errorAttachingPlugin':
-          localizations.signalingResponseCode_errorAttachingPlugin,
-      'signalingResponseCode_errorDetachingPlugin':
-          localizations.signalingResponseCode_errorDetachingPlugin,
-      'signalingResponseCode_errorSendingMessage':
-          localizations.signalingResponseCode_errorSendingMessage,
-      'signalingResponseCode_exchangeRoutingError':
-          localizations.signalingResponseCode_exchangeRoutingError,
-      'signalingResponseCode_handleNotFound':
-          localizations.signalingResponseCode_handleNotFound,
-      'signalingResponseCode_incompatibleDestination':
-          localizations.signalingResponseCode_incompatibleDestination,
-      'signalingResponseCode_invalidElementType':
-          localizations.signalingResponseCode_invalidElementType,
-      'signalingResponseCode_invalidJson':
-          localizations.signalingResponseCode_invalidJson,
-      'signalingResponseCode_invalidJsonObject':
-          localizations.signalingResponseCode_invalidJsonObject,
-      'signalingResponseCode_invalidNumberFormat':
-          localizations.signalingResponseCode_invalidNumberFormat,
-      'signalingResponseCode_invalidPath':
-          localizations.signalingResponseCode_invalidPath,
-      'signalingResponseCode_invalidSdp':
-          localizations.signalingResponseCode_invalidSdp,
-      'signalingResponseCode_invalidStream':
-          localizations.signalingResponseCode_invalidStream,
-      'signalingResponseCode_loopDetected':
-          localizations.signalingResponseCode_loopDetected,
-      'signalingResponseCode_missingMandatoryElement':
-          localizations.signalingResponseCode_missingMandatoryElement,
-      'signalingResponseCode_missingRequest':
-          localizations.signalingResponseCode_missingRequest,
-      'signalingResponseCode_normalUnspecified':
-          localizations.signalingResponseCode_normalUnspecified,
-      'signalingResponseCode_notAcceptable':
-          localizations.signalingResponseCode_notAcceptable,
-      'signalingResponseCode_notAcceptingNewSessions':
-          localizations.signalingResponseCode_notAcceptingNewSessions,
-      'signalingResponseCode_notFoundRoutesInReplyFromBE':
-          localizations.signalingResponseCode_notFoundRoutesInReplyFromBE,
-      'signalingResponseCode_pluginNotFound':
-          localizations.signalingResponseCode_pluginNotFound,
-      'signalingResponseCode_rejected':
-          localizations.signalingResponseCode_rejected,
-      'signalingResponseCode_requestTerminated':
-          localizations.signalingResponseCode_requestTerminated,
-      'signalingResponseCode_sessionIdInUse':
-          localizations.signalingResponseCode_sessionIdInUse,
-      'signalingResponseCode_sessionNotFound':
-          localizations.signalingResponseCode_sessionNotFound,
-      'signalingResponseCode_tokenNotFound':
-          localizations.signalingResponseCode_tokenNotFound,
-      'signalingResponseCode_transportSpecificError':
-          localizations.signalingResponseCode_transportSpecificError,
-      'signalingResponseCodeType_callHangup':
-          localizations.signalingResponseCodeType_callHangup,
-      'signalingResponseCodeType_plugin':
-          localizations.signalingResponseCodeType_plugin,
-      'signalingResponseCodeType_request':
-          localizations.signalingResponseCodeType_request,
-      'signalingResponseCodeType_session':
-          localizations.signalingResponseCodeType_session,
-      'signalingResponseCodeType_token':
-          localizations.signalingResponseCodeType_token,
-      'signalingResponseCodeType_transport':
-          localizations.signalingResponseCodeType_transport,
-      'signalingResponseCodeType_unauthorized':
-          localizations.signalingResponseCodeType_unauthorized,
-      'signalingResponseCodeType_unknown':
-          localizations.signalingResponseCodeType_unknown,
-      'signalingResponseCodeType_webrtc':
-          localizations.signalingResponseCodeType_webrtc,
-      'signalingResponseCode_unauthorizedAccess':
-          localizations.signalingResponseCode_unauthorizedAccess,
-      'signalingResponseCode_unauthorizedRequest':
-          localizations.signalingResponseCode_unauthorizedRequest,
-      'signalingResponseCode_unexpectedAnswer':
-          localizations.signalingResponseCode_unexpectedAnswer,
-      'signalingResponseCode_unknownError':
-          localizations.signalingResponseCode_unknownError,
-      'signalingResponseCode_unknownRequest':
-          localizations.signalingResponseCode_unknownRequest,
-      'signalingResponseCode_unsupportedJsepType':
-          localizations.signalingResponseCode_unsupportedJsepType,
-      'signalingResponseCode_unwanted':
-          localizations.signalingResponseCode_unwanted,
-      'signalingResponseCode_userBusy':
-          localizations.signalingResponseCode_userBusy,
-      'signalingResponseCode_userNotExist':
-          localizations.signalingResponseCode_userNotExist,
-      'signalingResponseCode_wrongWebrtcState':
-          localizations.signalingResponseCode_wrongWebrtcState,
-      'socketError_connectionRefused':
-          localizations.socketError_connectionRefused,
-      'socketError_connectionRefusedDescription':
-          localizations.socketError_connectionRefusedDescription,
-      'socketError_connectionReset': localizations.socketError_connectionReset,
-      'socketError_connectionResetDescription':
-          localizations.socketError_connectionResetDescription,
-      'socketError_connectionTimedOut':
-          localizations.socketError_connectionTimedOut,
-      'socketError_connectionTimedOutDescription':
-          localizations.socketError_connectionTimedOutDescription,
-      'socketError_default': localizations.socketError_default,
-      'socketError_networkUnreachable':
-          localizations.socketError_networkUnreachable,
-      'socketError_networkUnreachableDescription':
-          localizations.socketError_networkUnreachableDescription,
-      'socketError_serverUnreachable':
-          localizations.socketError_serverUnreachable,
-      'socketError_serverUnreachableDescription':
-          localizations.socketError_serverUnreachableDescription,
-      'system_notifications_screen_list_empty':
-          localizations.system_notifications_screen_list_empty,
-      'system_notifications_screen_title':
-          localizations.system_notifications_screen_title,
-      'themeMode_dark': localizations.themeMode_dark,
-      'themeMode_light': localizations.themeMode_light,
-      'themeMode_system': localizations.themeMode_system,
-      'undefined_autoprovision_invalidToken':
-          localizations.undefined_autoprovision_invalidToken,
-      'undefined_autoprovision_invalidToken_title':
-          localizations.undefined_autoprovision_invalidToken_title,
-      'undefined_stackScreenNotSupported':
-          localizations.undefined_stackScreenNotSupported,
-      'undefined_stackScreenNotSupported_title':
-          localizations.undefined_stackScreenNotSupported_title,
-      'user_agreement_agrement_link':
-          localizations.user_agreement_agrement_link,
-      'user_agreement_button_text': localizations.user_agreement_button_text,
-      'validationBlankError': localizations.validationBlankError,
-      'voicemail_Description_notSupported':
-          localizations.voicemail_Description_notSupported,
-      'voicemail_Dialog_deleteSelectedContent':
-          localizations.voicemail_Dialog_deleteSelectedContent,
-      'voicemail_Dialog_deleteSelectedTitle':
-          localizations.voicemail_Dialog_deleteSelectedTitle,
-      'voicemail_Dialog_deleteSingleContent':
-          localizations.voicemail_Dialog_deleteSingleContent,
-      'voicemail_Dialog_deleteSingleTitle':
-          localizations.voicemail_Dialog_deleteSingleTitle,
-      'voicemail_Label_call': localizations.voicemail_Label_call,
-      'voicemail_Label_delete': localizations.voicemail_Label_delete,
-      'voicemail_Label_deleteAll': localizations.voicemail_Label_deleteAll,
-      'voicemail_Label_deleteAllDescription':
-          localizations.voicemail_Label_deleteAllDescription,
-      'voicemail_Label_empty': localizations.voicemail_Label_empty,
-      'voicemail_Label_markAsHeard': localizations.voicemail_Label_markAsHeard,
-      'voicemail_Label_markAsNew': localizations.voicemail_Label_markAsNew,
-      'voicemail_Label_playbackError':
-          localizations.voicemail_Label_playbackError,
-      'voicemail_Label_retry': localizations.voicemail_Label_retry,
-      'voicemail_Snackbar_notConfigured':
-          localizations.voicemail_Snackbar_notConfigured,
-      'voicemail_Title_notSupported':
-          localizations.voicemail_Title_notSupported,
-      'voicemail_Widget_screenTitle':
-          localizations.voicemail_Widget_screenTitle,
-      'webRegistration_ErrorAcknowledgeDialogActions_retry':
-          localizations.webRegistration_ErrorAcknowledgeDialogActions_retry,
-      'webRegistration_ErrorAcknowledgeDialogActions_skip':
-          localizations.webRegistration_ErrorAcknowledgeDialogActions_skip,
-      'webRegistration_ErrorAcknowledgeDialog_title':
-          localizations.webRegistration_ErrorAcknowledgeDialog_title,
-      'webview_defaultError_reload': localizations.webview_defaultError_reload,
-      'webview_defaultError_title': localizations.webview_defaultError_title,
-      'webview_sslError_details': localizations.webview_sslError_details,
-      'webview_sslError_details_type':
-          localizations.webview_sslError_details_type,
-      'webview_sslError_details_url':
-          localizations.webview_sslError_details_url,
-      'webview_sslError_message': localizations.webview_sslError_message,
-      'webview_sslError_title': localizations.webview_sslError_title,
-      'webview_sslError_tryAgain': localizations.webview_sslError_tryAgain,
-      'cdr_disconnectReason_unknown':
-          localizations.cdr_disconnectReason_unknown,
-      'cdr_disconnectReason_validCauseCodeNotYetReceived':
-          localizations.cdr_disconnectReason_validCauseCodeNotYetReceived,
-      'cdr_disconnectReason_unallocatedNumber':
-          localizations.cdr_disconnectReason_unallocatedNumber,
-      'cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan': localizations
-          .cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan,
-      'cdr_disconnectReason_noRouteToDestination':
-          localizations.cdr_disconnectReason_noRouteToDestination,
-      'cdr_disconnectReason_sendSpecialInformationTone':
-          localizations.cdr_disconnectReason_sendSpecialInformationTone,
-      'cdr_disconnectReason_misdialledTrunkPrefix':
-          localizations.cdr_disconnectReason_misdialledTrunkPrefix,
-      'cdr_disconnectReason_channelUnacceptable':
-          localizations.cdr_disconnectReason_channelUnacceptable,
-      'cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel':
-          localizations
-              .cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel,
-      'cdr_disconnectReason_prefix0DialedButNotAllowedPreemption': localizations
-          .cdr_disconnectReason_prefix0DialedButNotAllowedPreemption,
-      'cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved':
-          localizations
-              .cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved,
-      'cdr_disconnectReason_prefix1DialedButNotRequired':
-          localizations.cdr_disconnectReason_prefix1DialedButNotRequired,
-      'cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding':
-          localizations
-              .cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding,
-      'cdr_disconnectReason_normalCallClearing':
-          localizations.cdr_disconnectReason_normalCallClearing,
-      'cdr_disconnectReason_userBusy':
-          localizations.cdr_disconnectReason_userBusy,
-      'cdr_disconnectReason_noUserResponding':
-          localizations.cdr_disconnectReason_noUserResponding,
-      'cdr_disconnectReason_noAnswerFromUser':
-          localizations.cdr_disconnectReason_noAnswerFromUser,
-      'cdr_disconnectReason_subscriberIsAbsent':
-          localizations.cdr_disconnectReason_subscriberIsAbsent,
-      'cdr_disconnectReason_callRejected':
-          localizations.cdr_disconnectReason_callRejected,
-      'cdr_disconnectReason_numberChanged':
-          localizations.cdr_disconnectReason_numberChanged,
-      'cdr_disconnectReason_reverseChargingRejected':
-          localizations.cdr_disconnectReason_reverseChargingRejected,
-      'cdr_disconnectReason_callSuspended':
-          localizations.cdr_disconnectReason_callSuspended,
-      'cdr_disconnectReason_callResumed':
-          localizations.cdr_disconnectReason_callResumed,
-      'cdr_disconnectReason_nonSelectedUserClearing':
-          localizations.cdr_disconnectReason_nonSelectedUserClearing,
-      'cdr_disconnectReason_destinationOutOfOrder':
-          localizations.cdr_disconnectReason_destinationOutOfOrder,
-      'cdr_disconnectReason_invalidNumberFormatIncompleteNumber': localizations
-          .cdr_disconnectReason_invalidNumberFormatIncompleteNumber,
-      'cdr_disconnectReason_facilityRejected':
-          localizations.cdr_disconnectReason_facilityRejected,
-      'cdr_disconnectReason_responseToStatusEnquiry':
-          localizations.cdr_disconnectReason_responseToStatusEnquiry,
-      'cdr_disconnectReason_normalUnspecified':
-          localizations.cdr_disconnectReason_normalUnspecified,
-      'cdr_disconnectReason_circuitOutOfOrder':
-          localizations.cdr_disconnectReason_circuitOutOfOrder,
-      'cdr_disconnectReason_noCircuitChannelAvailable':
-          localizations.cdr_disconnectReason_noCircuitChannelAvailable,
-      'cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable':
-          localizations
-              .cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable,
-      'cdr_disconnectReason_vpciVciAssignmentFailure':
-          localizations.cdr_disconnectReason_vpciVciAssignmentFailure,
-      'cdr_disconnectReason_degradedServiceCallRateIsnNotValid':
-          localizations.cdr_disconnectReason_degradedServiceCallRateIsnNotValid,
-      'cdr_disconnectReason_networkWanOutOfOrder':
-          localizations.cdr_disconnectReason_networkWanOutOfOrder,
-      'cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService':
-          localizations
-              .cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService,
-      'cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational':
-          localizations
-              .cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational,
-      'cdr_disconnectReason_temporaryFailure':
-          localizations.cdr_disconnectReason_temporaryFailure,
-      'cdr_disconnectReason_switchingEquipmentCongestion':
-          localizations.cdr_disconnectReason_switchingEquipmentCongestion,
-      'cdr_disconnectReason_accessInformationDiscarded':
-          localizations.cdr_disconnectReason_accessInformationDiscarded,
-      'cdr_disconnectReason_requestedCircuitChannelNotAvailable': localizations
-          .cdr_disconnectReason_requestedCircuitChannelNotAvailable,
-      'cdr_disconnectReason_preEmptedNoVpciVciIsAvailable':
-          localizations.cdr_disconnectReason_preEmptedNoVpciVciIsAvailable,
-      'cdr_disconnectReason_precedenceCallBlocked':
-          localizations.cdr_disconnectReason_precedenceCallBlocked,
-      'cdr_disconnectReason_resourceUnavailableUnspecified':
-          localizations.cdr_disconnectReason_resourceUnavailableUnspecified,
-      'cdr_disconnectReason_dspError':
-          localizations.cdr_disconnectReason_dspError,
-      'cdr_disconnectReason_qualityOfServiceUnavailable':
-          localizations.cdr_disconnectReason_qualityOfServiceUnavailable,
-      'cdr_disconnectReason_requestedFacilityNotSubscribed':
-          localizations.cdr_disconnectReason_requestedFacilityNotSubscribed,
-      'cdr_disconnectReason_reverseChargingNotAllowed':
-          localizations.cdr_disconnectReason_reverseChargingNotAllowed,
-      'cdr_disconnectReason_outgoingCallsBarred':
-          localizations.cdr_disconnectReason_outgoingCallsBarred,
-      'cdr_disconnectReason_outgoingCallsBarredWithinCug':
-          localizations.cdr_disconnectReason_outgoingCallsBarredWithinCug,
-      'cdr_disconnectReason_incomingCallsBarred':
-          localizations.cdr_disconnectReason_incomingCallsBarred,
-      'cdr_disconnectReason_incomingCallsBarredWithinCug':
-          localizations.cdr_disconnectReason_incomingCallsBarredWithinCug,
-      'cdr_disconnectReason_callWaitingNotSubscribed':
-          localizations.cdr_disconnectReason_callWaitingNotSubscribed,
-      'cdr_disconnectReason_bearerCapabilityNotAuthorized':
-          localizations.cdr_disconnectReason_bearerCapabilityNotAuthorized,
-      'cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable':
-          localizations
-              .cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable,
-      'cdr_disconnectReason_inconsistancyInTheInformationAndClass':
-          localizations
-              .cdr_disconnectReason_inconsistancyInTheInformationAndClass,
-      'cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified':
-          localizations
-              .cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified,
-      'cdr_disconnectReason_bearerServiceNotImplemented':
-          localizations.cdr_disconnectReason_bearerServiceNotImplemented,
-      'cdr_disconnectReason_channelTypeNotImplemented':
-          localizations.cdr_disconnectReason_channelTypeNotImplemented,
-      'cdr_disconnectReason_transitNetworkSelectionNotImplemented':
-          localizations
-              .cdr_disconnectReason_transitNetworkSelectionNotImplemented,
-      'cdr_disconnectReason_messageNotImplemented':
-          localizations.cdr_disconnectReason_messageNotImplemented,
-      'cdr_disconnectReason_requestedFacilityNotImplemented':
-          localizations.cdr_disconnectReason_requestedFacilityNotImplemented,
-      'cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable':
-          localizations
-              .cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable,
-      'cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified':
-          localizations
-              .cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified,
-      'cdr_disconnectReason_invalidCallReferenceValue':
-          localizations.cdr_disconnectReason_invalidCallReferenceValue,
-      'cdr_disconnectReason_identifiedChannelDoesNotExist':
-          localizations.cdr_disconnectReason_identifiedChannelDoesNotExist,
-      'cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot':
-          localizations
-              .cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot,
-      'cdr_disconnectReason_callIdentityInUse':
-          localizations.cdr_disconnectReason_callIdentityInUse,
-      'cdr_disconnectReason_noCallSuspended':
-          localizations.cdr_disconnectReason_noCallSuspended,
-      'cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared':
-          localizations
-              .cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared,
-      'cdr_disconnectReason_calledUserNotMemberOfCug':
-          localizations.cdr_disconnectReason_calledUserNotMemberOfCug,
-      'cdr_disconnectReason_incompatibleDestination':
-          localizations.cdr_disconnectReason_incompatibleDestination,
-      'cdr_disconnectReason_nonExistentAbbreviatedAddressEntry':
-          localizations.cdr_disconnectReason_nonExistentAbbreviatedAddressEntry,
-      'cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed':
-          localizations
-              .cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed,
-      'cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse':
-          localizations
-              .cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse,
-      'cdr_disconnectReason_invalidFacilityParameter':
-          localizations.cdr_disconnectReason_invalidFacilityParameter,
-      'cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported':
-          localizations
-              .cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported,
-      'cdr_disconnectReason_invalidMessageUnspecified':
-          localizations.cdr_disconnectReason_invalidMessageUnspecified,
-      'cdr_disconnectReason_mandatoryInformationElementIsMissing': localizations
-          .cdr_disconnectReason_mandatoryInformationElementIsMissing,
-      'cdr_disconnectReason_messageTypeNonExistentOrNotImplemented':
-          localizations
-              .cdr_disconnectReason_messageTypeNonExistentOrNotImplemented,
-      'cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented':
-          localizations
-              .cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented,
-      'cdr_disconnectReason_informationElementNonexistantOrNotImplemented':
-          localizations
-              .cdr_disconnectReason_informationElementNonexistantOrNotImplemented,
-      'cdr_disconnectReason_invalidInformationElementContents':
-          localizations.cdr_disconnectReason_invalidInformationElementContents,
-      'cdr_disconnectReason_messageNotCompatibleWithCallState':
-          localizations.cdr_disconnectReason_messageNotCompatibleWithCallState,
-      'cdr_disconnectReason_recoveryOnTimerExpiry':
-          localizations.cdr_disconnectReason_recoveryOnTimerExpiry,
-      'cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn':
-          localizations
-              .cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn,
-      'cdr_disconnectReason_urecognizedParameterMessageDiscarded': localizations
-          .cdr_disconnectReason_urecognizedParameterMessageDiscarded,
-      'cdr_disconnectReason_protocolErrorUnspecified':
-          localizations.cdr_disconnectReason_protocolErrorUnspecified,
-      'cdr_disconnectReason_internetworkingUnspecified':
-          localizations.cdr_disconnectReason_internetworkingUnspecified,
-      'cdr_disconnectReason_nextNodeIsUnreachable':
-          localizations.cdr_disconnectReason_nextNodeIsUnreachable,
-      'cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService':
-          localizations
-              .cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService,
-      'cdr_disconnectReason_dtlTransitIsNotMyNodeId':
-          localizations.cdr_disconnectReason_dtlTransitIsNotMyNodeId,
-      'devTools_AppBarTitle': localizations.devTools_AppBarTitle,
-      'devTools_signalingService_groupTitle':
-          localizations.devTools_signalingService_groupTitle,
-      'devTools_signalingService_simulateKill_title':
-          localizations.devTools_signalingService_simulateKill_title,
-      'devTools_signalingService_simulateKill_subtitle':
-          localizations.devTools_signalingService_simulateKill_subtitle,
-      'devTools_signalingService_simulateKill_confirmMessage':
-          localizations.devTools_signalingService_simulateKill_confirmMessage,
-      'devTools_signalingService_simulateKill_confirm':
-          localizations.devTools_signalingService_simulateKill_confirm,
-      'devTools_signalingService_simulateKill_cancel':
-          localizations.devTools_signalingService_simulateKill_cancel,
-      'agoTicker_daysAgo': (days) => localizations.agoTicker_daysAgo(days),
-      'agoTicker_hoursAgo': (hours) => localizations.agoTicker_hoursAgo(hours),
-      'agoTicker_minutesAgo': (minutes) =>
-          localizations.agoTicker_minutesAgo(minutes),
-      'agoTicker_secondsAgo': (seconds) =>
-          localizations.agoTicker_secondsAgo(seconds),
-      'contacts_ContactTile_inCall': (destination) =>
-          localizations.contacts_ContactTile_inCall(destination),
-      'default_UnknownExceptionError': (error) =>
-          localizations.default_UnknownExceptionError(error),
-      'diagnosticNetworkTestItem_subtitle_publicIps': (ips) =>
-          localizations.diagnosticNetworkTestItem_subtitle_publicIps(ips),
-      'favorites_SnackBar_deleted': (name) =>
-          localizations.favorites_SnackBar_deleted(name),
-      'formatPhone': (style, main, ext) =>
-          localizations.formatPhone(style, main, ext),
-      'login_Button_otpSigninVerifyRepeatInterval': (seconds) =>
-          localizations.login_Button_otpSigninVerifyRepeatInterval(seconds),
-      'login_Button_signupVerifyRepeatInterval': (seconds) =>
-          localizations.login_Button_signupVerifyRepeatInterval(seconds),
-      'login_CoreVersionUnsupportedExceptionError':
-          (actual, supportedConstraint) =>
-              localizations.login_CoreVersionUnsupportedExceptionError(
-                actual,
-                supportedConstraint,
-              ),
-      'login_Text_coreUrlAssignPostDescription': (email) =>
-          localizations.login_Text_coreUrlAssignPostDescription(email),
-      'login_Text_otpSigninVerifyPostDescriptionFromEmail': (email) =>
-          localizations.login_Text_otpSigninVerifyPostDescriptionFromEmail(
-            email,
+  Object? lookupKey(String key, [List<Object>? args]) {
+    return switch (key) {
+      'localeName' => localeName,
+      'account_selfCarePasswordExpired_message' =>
+        account_selfCarePasswordExpired_message,
+      'alertDialogActions_no' => alertDialogActions_no,
+      'alertDialogActions_ok' => alertDialogActions_ok,
+      'alertDialogActions_yes' => alertDialogActions_yes,
+      'autoprovision_errorSnackBar_invalidToken' =>
+        autoprovision_errorSnackBar_invalidToken,
+      'autoprovision_ReloginDialog_confirm' =>
+        autoprovision_ReloginDialog_confirm,
+      'autoprovision_ReloginDialog_decline' =>
+        autoprovision_ReloginDialog_decline,
+      'autoprovision_ReloginDialog_text' => autoprovision_ReloginDialog_text,
+      'autoprovision_ReloginDialog_title' => autoprovision_ReloginDialog_title,
+      'autoprovision_successSnackBar_used' =>
+        autoprovision_successSnackBar_used,
+      'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
+      'call_CallActionsTooltip_accept_inviteToAttendedTransfer' =>
+        call_CallActionsTooltip_accept_inviteToAttendedTransfer,
+      'call_CallActionsTooltip_attended_transfer' =>
+        call_CallActionsTooltip_attended_transfer,
+      'call_CallActionsTooltip_changeAudioDevice' =>
+        call_CallActionsTooltip_changeAudioDevice,
+      'call_CallActionsTooltip_decline_inviteToAttendedTransfer' =>
+        call_CallActionsTooltip_decline_inviteToAttendedTransfer,
+      'call_CallActionsTooltip_device_bluetooth' =>
+        call_CallActionsTooltip_device_bluetooth,
+      'call_CallActionsTooltip_device_earpiece' =>
+        call_CallActionsTooltip_device_earpiece,
+      'call_CallActionsTooltip_device_speaker' =>
+        call_CallActionsTooltip_device_speaker,
+      'call_CallActionsTooltip_device_streaming' =>
+        call_CallActionsTooltip_device_streaming,
+      'call_CallActionsTooltip_device_unknown' =>
+        call_CallActionsTooltip_device_unknown,
+      'call_CallActionsTooltip_device_wiredHeadset' =>
+        call_CallActionsTooltip_device_wiredHeadset,
+      'call_CallActionsTooltip_disableCamera' =>
+        call_CallActionsTooltip_disableCamera,
+      'call_CallActionsTooltip_disableSpeaker' =>
+        call_CallActionsTooltip_disableSpeaker,
+      'call_CallActionsTooltip_enableCamera' =>
+        call_CallActionsTooltip_enableCamera,
+      'call_CallActionsTooltip_enableSpeaker' =>
+        call_CallActionsTooltip_enableSpeaker,
+      'call_CallActionsTooltip_hangup' => call_CallActionsTooltip_hangup,
+      'call_CallActionsTooltip_hangupAndAccept' =>
+        call_CallActionsTooltip_hangupAndAccept,
+      'call_CallActionsTooltip_hideKeypad' =>
+        call_CallActionsTooltip_hideKeypad,
+      'call_CallActionsTooltip_hold' => call_CallActionsTooltip_hold,
+      'call_CallActionsTooltip_holdAndAccept' =>
+        call_CallActionsTooltip_holdAndAccept,
+      'call_CallActionsTooltip_mute' => call_CallActionsTooltip_mute,
+      'call_CallActionsTooltip_showKeypad' =>
+        call_CallActionsTooltip_showKeypad,
+      'call_CallActionsTooltip_swap' => call_CallActionsTooltip_swap,
+      'call_CallActionsTooltip_transfer' => call_CallActionsTooltip_transfer,
+      'call_CallActionsTooltip_transfer_choose' =>
+        call_CallActionsTooltip_transfer_choose,
+      'call_CallActionsTooltip_unattended_transfer' =>
+        call_CallActionsTooltip_unattended_transfer,
+      'call_CallActionsTooltip_unhold' => call_CallActionsTooltip_unhold,
+      'call_CallActionsTooltip_unmute' => call_CallActionsTooltip_unmute,
+      'call_description_held' => call_description_held,
+      'call_description_incoming' => call_description_incoming,
+      'call_description_inviteToAttendedTransfer' =>
+        call_description_inviteToAttendedTransfer,
+      'call_description_outgoing' => call_description_outgoing,
+      'call_description_requestToAttendedTransfer' =>
+        call_description_requestToAttendedTransfer,
+      'call_description_transferProcessing' =>
+        call_description_transferProcessing,
+      'call_errorRegisteringSelfManagedPhoneAccount' =>
+        call_errorRegisteringSelfManagedPhoneAccount,
+      'call_FailureAcknowledgeDialog_title' =>
+        call_FailureAcknowledgeDialog_title,
+      'callProcessingStatus_answering' => callProcessingStatus_answering,
+      'callProcessingStatus_disconnecting' =>
+        callProcessingStatus_disconnecting,
+      'callProcessingStatus_init_media' => callProcessingStatus_init_media,
+      'callProcessingStatus_invite' => callProcessingStatus_invite,
+      'callProcessingStatus_preparing' => callProcessingStatus_preparing,
+      'callProcessingStatus_ringing' => callProcessingStatus_ringing,
+      'callProcessingStatus_routing' => callProcessingStatus_routing,
+      'callProcessingStatus_signaling_connecting' =>
+        callProcessingStatus_signaling_connecting,
+      'iceConnectionIssue_iceFail' => iceConnectionIssue_iceFail,
+      'iceConnectionIssue_iceFailNoIcePath' =>
+        iceConnectionIssue_iceFailNoIcePath,
+      'iceConnectionIssue_iceFailNoIcePathViaVpn' =>
+        iceConnectionIssue_iceFailNoIcePathViaVpn,
+      'callPullBadge_dialogTitle' => callPullBadge_dialogTitle,
+      'callPullBadge_pickupButtonTitle' => callPullBadge_pickupButtonTitle,
+      'call_settings_additional_options' => call_settings_additional_options,
+      'callStatus_appUnregistered' => callStatus_appUnregistered,
+      'callStatus_connectError' => callStatus_connectError,
+      'callStatus_connectIssue' => callStatus_connectIssue,
+      'callStatus_connectivityNone' => callStatus_connectivityNone,
+      'callStatus_inProgress' => callStatus_inProgress,
+      'callStatus_ready' => callStatus_ready,
+      'call_SystemErrorDialog_description' =>
+        call_SystemErrorDialog_description,
+      'call_SystemErrorDialog_title' => call_SystemErrorDialog_title,
+      'call_ThumbnailAvatar_currentlyNoActiveCall' =>
+        call_ThumbnailAvatar_currentlyNoActiveCall,
+      'call_videoBackground_actionLabel_disableBlur' =>
+        call_videoBackground_actionLabel_disableBlur,
+      'call_videoBackground_actionLabel_enableBlur' =>
+        call_videoBackground_actionLabel_enableBlur,
+      'call_videoView_actionLabel_cover' => call_videoView_actionLabel_cover,
+      'call_videoView_actionLabel_fit' => call_videoView_actionLabel_fit,
+      'cdrs_noMissedCalls_message' => cdrs_noMissedCalls_message,
+      'cdrs_noRecentCalls_message' => cdrs_noRecentCalls_message,
+      'common_noInternetConnection_message' =>
+        common_noInternetConnection_message,
+      'common_noInternetConnection_retryButton' =>
+        common_noInternetConnection_retryButton,
+      'common_noInternetConnection_title' => common_noInternetConnection_title,
+      'common_problemWithLoadingPage' => common_problemWithLoadingPage,
+      'contacts_agreement_button_text' => contacts_agreement_button_text,
+      'contacts_agreement_checkbox_text' => contacts_agreement_checkbox_text,
+      'contacts_agreement_description' => contacts_agreement_description,
+      'contacts_agreement_title' => contacts_agreement_title,
+      'contacts_ExternalTabButton_refresh' =>
+        contacts_ExternalTabButton_refresh,
+      'contacts_ExternalTabText_empty' => contacts_ExternalTabText_empty,
+      'contacts_ExternalTabText_emptyOnSearching' =>
+        contacts_ExternalTabText_emptyOnSearching,
+      'contacts_ExternalTabText_failure' => contacts_ExternalTabText_failure,
+      'contacts_LocalTabButton_contactsAgreement' =>
+        contacts_LocalTabButton_contactsAgreement,
+      'contacts_LocalTabButton_openAppSettings' =>
+        contacts_LocalTabButton_openAppSettings,
+      'contacts_LocalTabButton_refresh' => contacts_LocalTabButton_refresh,
+      'contacts_LocalTabText_contactsAgreementFailure' =>
+        contacts_LocalTabText_contactsAgreementFailure,
+      'contacts_LocalTabText_empty' => contacts_LocalTabText_empty,
+      'contacts_LocalTabText_emptyOnSearching' =>
+        contacts_LocalTabText_emptyOnSearching,
+      'contacts_LocalTabText_failure' => contacts_LocalTabText_failure,
+      'contacts_LocalTabText_permissionFailure' =>
+        contacts_LocalTabText_permissionFailure,
+      'contactsSourceExternal' => contactsSourceExternal,
+      'contactsSourceLocal' => contactsSourceLocal,
+      'contacts_Text_blingTransferInitiated' =>
+        contacts_Text_blingTransferInitiated,
+      'contacts_DialogsInfoView_title' => contacts_DialogsInfoView_title,
+      'contacts_ContactScreen_options' => contacts_ContactScreen_options,
+      'contacts_ContactScreen_presenceViaSip' =>
+        contacts_ContactScreen_presenceViaSip,
+      'contacts_ContactScreen_presenceViaSip_tooltip' =>
+        contacts_ContactScreen_presenceViaSip_tooltip,
+      'contacts_ContactScreen_dialogsViaSipBlf' =>
+        contacts_ContactScreen_dialogsViaSipBlf,
+      'contacts_ContactScreen_dialogsViaSipBlf_tooltip' =>
+        contacts_ContactScreen_dialogsViaSipBlf_tooltip,
+      'copyToClipboard_floatingSnackBar' => copyToClipboard_floatingSnackBar,
+      'copyToClipboard_popupMenuItem' => copyToClipboard_popupMenuItem,
+      'default_CannotRemoveOwnerMessagingSocketException' =>
+        default_CannotRemoveOwnerMessagingSocketException,
+      'default_ChatMemberNotFoundMessagingSocketException' =>
+        default_ChatMemberNotFoundMessagingSocketException,
+      'default_ChatNotFoundMessagingSocketException' =>
+        default_ChatNotFoundMessagingSocketException,
+      'default_ClientExceptionError' => default_ClientExceptionError,
+      'default_ErrorDetails' => default_ErrorDetails,
+      'default_ErrorMessage' => default_ErrorMessage,
+      'default_ErrorPath' => default_ErrorPath,
+      'default_ErrorTransactionId' => default_ErrorTransactionId,
+      'default_ForbiddenMessagingSocketException' =>
+        default_ForbiddenMessagingSocketException,
+      'default_FormatExceptionError' => default_FormatExceptionError,
+      'default_InternalErrorMessagingSocketException' =>
+        default_InternalErrorMessagingSocketException,
+      'default_InvalidChatTypeMessagingSocketException' =>
+        default_InvalidChatTypeMessagingSocketException,
+      'default_JoinCrashedMessagingSocketException' =>
+        default_JoinCrashedMessagingSocketException,
+      'default_MessagingSocketException' => default_MessagingSocketException,
+      'default_RequestFailureError' => default_RequestFailureError,
+      'default_SelfAuthorityAssignmentForbiddenMessagingSocketException' =>
+        default_SelfAuthorityAssignmentForbiddenMessagingSocketException,
+      'default_SelfRemovalForbiddenMessagingSocketException' =>
+        default_SelfRemovalForbiddenMessagingSocketException,
+      'default_SmsConversationNotFoundMessagingSocketException' =>
+        default_SmsConversationNotFoundMessagingSocketException,
+      'default_TimeoutExceptionError' => default_TimeoutExceptionError,
+      'default_TimeoutMessagingSocketException' =>
+        default_TimeoutMessagingSocketException,
+      'default_TlsExceptionError' => default_TlsExceptionError,
+      'default_TypeErrorError' => default_TypeErrorError,
+      'default_UnauthorizedMessagingSocketException' =>
+        default_UnauthorizedMessagingSocketException,
+      'default_UnauthorizedRequestFailureError' =>
+        default_UnauthorizedRequestFailureError,
+      'default_UserAlreadyInChatMessagingSocketException' =>
+        default_UserAlreadyInChatMessagingSocketException,
+      'diagnostic_AppBar_title' => diagnostic_AppBar_title,
+      'diagnostic_battery_groupTitle' => diagnostic_battery_groupTitle,
+      'diagnostic_batteryMode_optimized_description' =>
+        diagnostic_batteryMode_optimized_description,
+      'diagnostic_batteryMode_optimized_title' =>
+        diagnostic_batteryMode_optimized_title,
+      'diagnostic_batteryMode_restricted_description' =>
+        diagnostic_batteryMode_restricted_description,
+      'diagnostic_batteryMode_restricted_title' =>
+        diagnostic_batteryMode_restricted_title,
+      'diagnostic_batteryMode_unknown_description' =>
+        diagnostic_batteryMode_unknown_description,
+      'diagnostic_batteryMode_unknown_title' =>
+        diagnostic_batteryMode_unknown_title,
+      'diagnostic_batteryMode_unrestricted_description' =>
+        diagnostic_batteryMode_unrestricted_description,
+      'diagnostic_batteryMode_unrestricted_title' =>
+        diagnostic_batteryMode_unrestricted_title,
+      'diagnostic_battery_navigate_section' =>
+        diagnostic_battery_navigate_section,
+      'diagnostic_battery_tile_title' => diagnostic_battery_tile_title,
+      'diagnostic_permission_camera_description' =>
+        diagnostic_permission_camera_description,
+      'diagnostic_permission_camera_title' =>
+        diagnostic_permission_camera_title,
+      'diagnostic_permission_contacts_description' =>
+        diagnostic_permission_contacts_description,
+      'diagnostic_permission_contacts_title' =>
+        diagnostic_permission_contacts_title,
+      'diagnosticPermissionDetails_button_managePermission' =>
+        diagnosticPermissionDetails_button_managePermission,
+      'diagnosticPermissionDetails_button_requestPermission' =>
+        diagnosticPermissionDetails_button_requestPermission,
+      'diagnosticPermissionDetails_title_statusPermission' =>
+        diagnosticPermissionDetails_title_statusPermission,
+      'diagnostic_permission_microphone_description' =>
+        diagnostic_permission_microphone_description,
+      'diagnostic_permission_microphone_title' =>
+        diagnostic_permission_microphone_title,
+      'diagnostic_permission_notification_description' =>
+        diagnostic_permission_notification_description,
+      'diagnostic_permission_notification_title' =>
+        diagnostic_permission_notification_title,
+      'diagnostic_permissionStatus_denied' =>
+        diagnostic_permissionStatus_denied,
+      'diagnostic_permissionStatus_granted' =>
+        diagnostic_permissionStatus_granted,
+      'diagnostic_permissionStatus_limited' =>
+        diagnostic_permissionStatus_limited,
+      'diagnostic_permissionStatus_permanentlyDenied' =>
+        diagnostic_permissionStatus_permanentlyDenied,
+      'diagnostic_permissionStatus_provisional' =>
+        diagnostic_permissionStatus_provisional,
+      'diagnostic_permissionStatus_restricted' =>
+        diagnostic_permissionStatus_restricted,
+      'diagnosticPushDetails_configuration_title' =>
+        diagnosticPushDetails_configuration_title,
+      'diagnosticPushDetails_errorMessage_intro' =>
+        diagnosticPushDetails_errorMessage_intro,
+      'diagnosticPushDetails_errorMessage_step1' =>
+        diagnosticPushDetails_errorMessage_step1,
+      'diagnosticPushDetails_errorMessage_step2' =>
+        diagnosticPushDetails_errorMessage_step2,
+      'diagnosticPushDetails_errorMessage_step3' =>
+        diagnosticPushDetails_errorMessage_step3,
+      'diagnosticPushDetails_errorMessage_step4' =>
+        diagnosticPushDetails_errorMessage_step4,
+      'diagnosticPushDetails_errorMessage_step5' =>
+        diagnosticPushDetails_errorMessage_step5,
+      'diagnosticPushDetails_successMessage' =>
+        diagnosticPushDetails_successMessage,
+      'diagnostic_pushTokenStatusType_progress' =>
+        diagnostic_pushTokenStatusType_progress,
+      'diagnostic_pushTokenStatusType_success' =>
+        diagnostic_pushTokenStatusType_success,
+      'diagnosticReportDialogAddNoteExpansionTileTitle' =>
+        diagnosticReportDialogAddNoteExpansionTileTitle,
+      'diagnosticReportDialogCancelButtonLabel' =>
+        diagnosticReportDialogCancelButtonLabel,
+      'diagnosticReportDialogCommentTextFieldHintText' =>
+        diagnosticReportDialogCommentTextFieldHintText,
+      'diagnosticReportDialogContent' => diagnosticReportDialogContent,
+      'diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle' =>
+        diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle,
+      'diagnosticReportDialogIncludeSystemLogsSwitchTileTitle' =>
+        diagnosticReportDialogIncludeSystemLogsSwitchTileTitle,
+      'diagnosticReportDialogSendReportButtonLabel' =>
+        diagnosticReportDialogSendReportButtonLabel,
+      'diagnosticReportDialogTitle' => diagnosticReportDialogTitle,
+      'diagnosticScreen_contacts_agreement_description' =>
+        diagnosticScreen_contacts_agreement_description,
+      'diagnosticScreen_contacts_agreement_group_title' =>
+        diagnosticScreen_contacts_agreement_group_title,
+      'diagnosticScreen_contacts_agreement_title' =>
+        diagnosticScreen_contacts_agreement_title,
+      'diagnosticScreen_permissionsGroup_title' =>
+        diagnosticScreen_permissionsGroup_title,
+      'diagnosticScreen_pushNotificationService_title' =>
+        diagnosticScreen_pushNotificationService_title,
+      'diagnostic_network_groupTitle' => diagnostic_network_groupTitle,
+      'diagnosticNetworkTest_status_offline' =>
+        diagnosticNetworkTest_status_offline,
+      'diagnosticNetworkTest_status_reachable' =>
+        diagnosticNetworkTest_status_reachable,
+      'diagnosticNetworkTest_status_restricted' =>
+        diagnosticNetworkTest_status_restricted,
+      'diagnosticNetworkTest_status_checking' =>
+        diagnosticNetworkTest_status_checking,
+      'diagnosticNetworkTest_status_unreachable' =>
+        diagnosticNetworkTest_status_unreachable,
+      'diagnosticNetworkTestItem_subtitle_noNetwork' =>
+        diagnosticNetworkTestItem_subtitle_noNetwork,
+      'diagnosticNetworkTestItem_subtitle_stunBlocked' =>
+        diagnosticNetworkTestItem_subtitle_stunBlocked,
+      'diagnosticNetworkTestItem_subtitle_stunUnreachable' =>
+        diagnosticNetworkTestItem_subtitle_stunUnreachable,
+      'diagnosticNetworkTestItem_subtitle_noCandidates' =>
+        diagnosticNetworkTestItem_subtitle_noCandidates,
+      'diagnosticNetworkTestItem_network_wifi' =>
+        diagnosticNetworkTestItem_network_wifi,
+      'diagnosticNetworkTestItem_network_mobile' =>
+        diagnosticNetworkTestItem_network_mobile,
+      'diagnosticNetworkTestItem_network_ethernet' =>
+        diagnosticNetworkTestItem_network_ethernet,
+      'diagnosticNetworkTestItem_network_vpn' =>
+        diagnosticNetworkTestItem_network_vpn,
+      'diagnosticNetworkTestDetails_title' =>
+        diagnosticNetworkTestDetails_title,
+      'diagnosticNetworkTestDetails_description' =>
+        diagnosticNetworkTestDetails_description,
+      'diagnosticNetworkTestDetails_status' =>
+        diagnosticNetworkTestDetails_status,
+      'diagnosticNetworkTestDetails_candidates' =>
+        diagnosticNetworkTestDetails_candidates,
+      'diagnosticNetworkTestDetails_noNetwork' =>
+        diagnosticNetworkTestDetails_noNetwork,
+      'diagnosticNetworkTestDetails_noCandidates' =>
+        diagnosticNetworkTestDetails_noCandidates,
+      'favorites_BodyCenter_empty' => favorites_BodyCenter_empty,
+      'favorites_DeleteConfirmDialog_content' =>
+        favorites_DeleteConfirmDialog_content,
+      'favorites_DeleteConfirmDialog_title' =>
+        favorites_DeleteConfirmDialog_title,
+      'favorites_Text_blingTransferInitiated' =>
+        favorites_Text_blingTransferInitiated,
+      'locale_default' => locale_default,
+      'locale_en' => locale_en,
+      'locale_it' => locale_it,
+      'locale_uk' => locale_uk,
+      'login_Button_coreUrlAssignProceed' => login_Button_coreUrlAssignProceed,
+      'login_Button_otpSigninRequestProceed' =>
+        login_Button_otpSigninRequestProceed,
+      'login_Button_otpSigninVerifyProceed' =>
+        login_Button_otpSigninVerifyProceed,
+      'login_Button_otpSigninVerifyRepeat' =>
+        login_Button_otpSigninVerifyRepeat,
+      'login_Button_passwordSigninProceed' =>
+        login_Button_passwordSigninProceed,
+      'login_Button_signIn' => login_Button_signIn,
+      'login_Button_signupRequestProceed' => login_Button_signupRequestProceed,
+      'login_Button_signUpToDemoInstance' => login_Button_signUpToDemoInstance,
+      'login_Button_signupVerifyProceed' => login_Button_signupVerifyProceed,
+      'login_Button_signupVerifyRepeat' => login_Button_signupVerifyRepeat,
+      'login_ButtonTooltip_signInToYourInstance' =>
+        login_ButtonTooltip_signInToYourInstance,
+      'login_RequestFailureEmptyEmailError' =>
+        login_RequestFailureEmptyEmailError,
+      'login_RequestFailureIdentifierIsNotValid' =>
+        login_RequestFailureIdentifierIsNotValid,
+      'login_RequestFailureIncorrectOtpCodeError' =>
+        login_RequestFailureIncorrectOtpCodeError,
+      'login_RequestFailureOtpAlreadyVerifiedError' =>
+        login_RequestFailureOtpAlreadyVerifiedError,
+      'login_RequestFailureOtpExpiredError' =>
+        login_RequestFailureOtpExpiredError,
+      'login_RequestFailureOtpNotFoundError' =>
+        login_RequestFailureOtpNotFoundError,
+      'login_RequestFailureOtpVerificationAttemptsExceededError' =>
+        login_RequestFailureOtpVerificationAttemptsExceededError,
+      'login_RequestFailureParametersApplyIssueError' =>
+        login_RequestFailureParametersApplyIssueError,
+      'login_RequestFailurePhoneNotFoundError' =>
+        login_RequestFailurePhoneNotFoundError,
+      'login_RequestFailureIncorrectCredentialsError' =>
+        login_RequestFailureIncorrectCredentialsError,
+      'login_RequestFailureUserNotFoundError' =>
+        login_RequestFailureUserNotFoundError,
+      'login_RequestFailureUnconfiguredBundleIdError' =>
+        login_RequestFailureUnconfiguredBundleIdError,
+      'login_SupportedLoginTypeMissedExceptionError' =>
+        login_SupportedLoginTypeMissedExceptionError,
+      'login_Text_coreUrlAssignPreDescription' =>
+        login_Text_coreUrlAssignPreDescription,
+      'login_TextFieldLabelText_coreUrlAssign' =>
+        login_TextFieldLabelText_coreUrlAssign,
+      'login_TextFieldLabelText_otpSigninCode' =>
+        login_TextFieldLabelText_otpSigninCode,
+      'login_TextFieldLabelText_otpSigninUserRef' =>
+        login_TextFieldLabelText_otpSigninUserRef,
+      'login_TextFieldLabelText_otpSigninUserRefPhone' =>
+        login_TextFieldLabelText_otpSigninUserRefPhone,
+      'login_TextFieldLabelText_otpSigninUserRefEmail' =>
+        login_TextFieldLabelText_otpSigninUserRefEmail,
+      'login_TextFieldLabelText_passwordSigninPassword' =>
+        login_TextFieldLabelText_passwordSigninPassword,
+      'login_TextFieldLabelText_passwordSigninUserRef' =>
+        login_TextFieldLabelText_passwordSigninUserRef,
+      'login_TextFieldLabelText_signupCode' =>
+        login_TextFieldLabelText_signupCode,
+      'login_TextFieldLabelText_signupEmail' =>
+        login_TextFieldLabelText_signupEmail,
+      'login_Text_otpSigninRequestPostDescription' =>
+        login_Text_otpSigninRequestPostDescription,
+      'login_Text_otpSigninRequestPreDescription' =>
+        login_Text_otpSigninRequestPreDescription,
+      'login_Text_otpSigninVerifyPostDescriptionGeneral' =>
+        login_Text_otpSigninVerifyPostDescriptionGeneral,
+      'login_Text_passwordSigninPostDescription' =>
+        login_Text_passwordSigninPostDescription,
+      'login_Text_passwordSigninPreDescription' =>
+        login_Text_passwordSigninPreDescription,
+      'login_Text_signupRequestPostDescription' =>
+        login_Text_signupRequestPostDescription,
+      'login_Text_signupRequestPostDescriptionDemo' =>
+        login_Text_signupRequestPostDescriptionDemo,
+      'login_Text_signupRequestPreDescription' =>
+        login_Text_signupRequestPreDescription,
+      'login_Text_signupRequestPreDescriptionDemo' =>
+        login_Text_signupRequestPreDescriptionDemo,
+      'login_Text_signupVerifyPostDescriptionGeneral' =>
+        login_Text_signupVerifyPostDescriptionGeneral,
+      'loginType_otpSignin' => loginType_otpSignin,
+      'loginType_passwordSignin' => loginType_passwordSignin,
+      'loginType_signup' => loginType_signup,
+      'login_validationCoreUrlError' => login_validationCoreUrlError,
+      'login_validationEmailError' => login_validationEmailError,
+      'login_validationPhoneError' => login_validationPhoneError,
+      'login_validationUserRefError' => login_validationUserRefError,
+      'logRecordsConsole_AppBarTitle' => logRecordsConsole_AppBarTitle,
+      'logRecordsConsole_Button_failureRefresh' =>
+        logRecordsConsole_Button_failureRefresh,
+      'logRecordsConsole_Text_failure' => logRecordsConsole_Text_failure,
+      'logRecordsConsole_Button_infoClose' =>
+        logRecordsConsole_Button_infoClose,
+      'logRecordsConsole_PopupMenuItem_info' =>
+        logRecordsConsole_PopupMenuItem_info,
+      'logRecordsConsole_PopupMenuItem_clear' =>
+        logRecordsConsole_PopupMenuItem_clear,
+      'main_BottomNavigationBarItemLabel_chats' =>
+        main_BottomNavigationBarItemLabel_chats,
+      'main_BottomNavigationBarItemLabel_contacts' =>
+        main_BottomNavigationBarItemLabel_contacts,
+      'main_BottomNavigationBarItemLabel_favorites' =>
+        main_BottomNavigationBarItemLabel_favorites,
+      'main_BottomNavigationBarItemLabel_keypad' =>
+        main_BottomNavigationBarItemLabel_keypad,
+      'main_BottomNavigationBarItemLabel_recents' =>
+        main_BottomNavigationBarItemLabel_recents,
+      'main_CompatibilityIssueDialogActions_logout' =>
+        main_CompatibilityIssueDialogActions_logout,
+      'main_CompatibilityIssueDialogActions_update' =>
+        main_CompatibilityIssueDialogActions_update,
+      'main_CompatibilityIssueDialog_title' =>
+        main_CompatibilityIssueDialog_title,
+      'messaging_ActionBtn_retry' => messaging_ActionBtn_retry,
+      'messaging_ChooseContact_cancel' => messaging_ChooseContact_cancel,
+      'messaging_ChooseContact_empty' => messaging_ChooseContact_empty,
+      'messaging_ChooseContact_title' => messaging_ChooseContact_title,
+      'messaging_ConfirmDialog_ask' => messaging_ConfirmDialog_ask,
+      'messaging_ConfirmDialog_cancel' => messaging_ConfirmDialog_cancel,
+      'messaging_ConfirmDialog_confirm' => messaging_ConfirmDialog_confirm,
+      'messaging_ConversationBuilders_back' =>
+        messaging_ConversationBuilders_back,
+      'messaging_ConversationBuilders_cancel' =>
+        messaging_ConversationBuilders_cancel,
+      'messaging_ConversationBuilders_contactOrNumberSearch_hint' =>
+        messaging_ConversationBuilders_contactOrNumberSearch_hint,
+      'messaging_ConversationBuilders_contactSearch_hint' =>
+        messaging_ConversationBuilders_contactSearch_hint,
+      'messaging_ConversationBuilders_create' =>
+        messaging_ConversationBuilders_create,
+      'messaging_ConversationBuilders_createGroup' =>
+        messaging_ConversationBuilders_createGroup,
+      'messaging_ConversationBuilders_externalContacts_heading' =>
+        messaging_ConversationBuilders_externalContacts_heading,
+      'messaging_ConversationBuilders_invalidNumber_message1' =>
+        messaging_ConversationBuilders_invalidNumber_message1,
+      'messaging_ConversationBuilders_invalidNumber_message2' =>
+        messaging_ConversationBuilders_invalidNumber_message2,
+      'messaging_ConversationBuilders_invalidNumber_ok' =>
+        messaging_ConversationBuilders_invalidNumber_ok,
+      'messaging_ConversationBuilders_invalidNumber_title' =>
+        messaging_ConversationBuilders_invalidNumber_title,
+      'messaging_ConversationBuilders_invite_heading' =>
+        messaging_ConversationBuilders_invite_heading,
+      'messaging_ConversationBuilders_localContacts_heading' =>
+        messaging_ConversationBuilders_localContacts_heading,
+      'messaging_ConversationBuilders_membersHeadline' =>
+        messaging_ConversationBuilders_membersHeadline,
+      'messaging_ConversationBuilders_nameFieldEmpty' =>
+        messaging_ConversationBuilders_nameFieldEmpty,
+      'messaging_ConversationBuilders_nameFieldLabel' =>
+        messaging_ConversationBuilders_nameFieldLabel,
+      'messaging_ConversationBuilders_nameFieldShort' =>
+        messaging_ConversationBuilders_nameFieldShort,
+      'messaging_ConversationBuilders_next_action' =>
+        messaging_ConversationBuilders_next_action,
+      'messaging_ConversationBuilders_noContacts' =>
+        messaging_ConversationBuilders_noContacts,
+      'messaging_ConversationBuilders_numberFormatExample' =>
+        messaging_ConversationBuilders_numberFormatExample,
+      'messaging_ConversationBuilders_numberSearch_errorError' =>
+        messaging_ConversationBuilders_numberSearch_errorError,
+      'messaging_ConversationBuilders_numberSearch_errorHint' =>
+        messaging_ConversationBuilders_numberSearch_errorHint,
+      'messaging_ConversationBuilders_title_group' =>
+        messaging_ConversationBuilders_title_group,
+      'messaging_ConversationBuilders_title_new' =>
+        messaging_ConversationBuilders_title_new,
+      'messaging_Conversation_failure' => messaging_Conversation_failure,
+      'messaging_ConversationScreen_titleAvailable' =>
+        messaging_ConversationScreen_titleAvailable,
+      'messaging_ConversationScreen_titlePrefix' =>
+        messaging_ConversationScreen_titlePrefix,
+      'messaging_ConversationsScreen_chatsSearch_hint' =>
+        messaging_ConversationsScreen_chatsSearch_hint,
+      'messaging_ConversationsScreen_empty' =>
+        messaging_ConversationsScreen_empty,
+      'messaging_ConversationsScreen_messages_title' =>
+        messaging_ConversationsScreen_messages_title,
+      'messaging_ConversationsScreen_noNumberAlert_text' =>
+        messaging_ConversationsScreen_noNumberAlert_text,
+      'messaging_ConversationsScreen_noNumberAlert_title' =>
+        messaging_ConversationsScreen_noNumberAlert_title,
+      'messaging_ConversationsScreen_selectNumberSheet_title' =>
+        messaging_ConversationsScreen_selectNumberSheet_title,
+      'messaging_ConversationsScreen_smses_title' =>
+        messaging_ConversationsScreen_smses_title,
+      'messaging_ConversationsScreen_smssSearch_hint' =>
+        messaging_ConversationsScreen_smssSearch_hint,
+      'messaging_ConversationsScreen_unsupported' =>
+        messaging_ConversationsScreen_unsupported,
+      'messaging_Conversations_tile_empty' =>
+        messaging_Conversations_tile_empty,
+      'messaging_Conversations_tile_you' => messaging_Conversations_tile_you,
+      'messaging_DialogInfo_deleteAsk' => messaging_DialogInfo_deleteAsk,
+      'messaging_DialogInfo_deleteBtn' => messaging_DialogInfo_deleteBtn,
+      'messaging_DialogInfo_title' => messaging_DialogInfo_title,
+      'messaging_GroupAuthorities_moderator' =>
+        messaging_GroupAuthorities_moderator,
+      'messaging_GroupAuthorities_noauthorities' =>
+        messaging_GroupAuthorities_noauthorities,
+      'messaging_GroupAuthorities_owner' => messaging_GroupAuthorities_owner,
+      'messaging_GroupInfo_addUserBtnText' =>
+        messaging_GroupInfo_addUserBtnText,
+      'messaging_GroupInfo_deleteLeaveBtnText' =>
+        messaging_GroupInfo_deleteLeaveBtnText,
+      'messaging_GroupInfo_groupMembersHeadline' =>
+        messaging_GroupInfo_groupMembersHeadline,
+      'messaging_GroupInfo_leaveAndDeleteAsk' =>
+        messaging_GroupInfo_leaveAndDeleteAsk,
+      'messaging_GroupInfo_leaveAsk' => messaging_GroupInfo_leaveAsk,
+      'messaging_GroupInfo_leaveBtnText' => messaging_GroupInfo_leaveBtnText,
+      'messaging_GroupInfo_makeModeratorAsk' =>
+        messaging_GroupInfo_makeModeratorAsk,
+      'messaging_GroupInfo_makeModeratorBtnText' =>
+        messaging_GroupInfo_makeModeratorBtnText,
+      'messaging_GroupInfo_removeModeratorAsk' =>
+        messaging_GroupInfo_removeModeratorAsk,
+      'messaging_GroupInfo_removeUserAsk' => messaging_GroupInfo_removeUserAsk,
+      'messaging_GroupInfo_removeUserBtnText' =>
+        messaging_GroupInfo_removeUserBtnText,
+      'messaging_GroupInfo_title' => messaging_GroupInfo_title,
+      'messaging_GroupInfo_titlePrefix' => messaging_GroupInfo_titlePrefix,
+      'messaging_GroupInfo_unmakeModeratorBtnText' =>
+        messaging_GroupInfo_unmakeModeratorBtnText,
+      'messaging_MessageField_hint' => messaging_MessageField_hint,
+      'messaging_MessageListView_typingTrail' =>
+        messaging_MessageListView_typingTrail,
+      'messaging_MessageView_delete' => messaging_MessageView_delete,
+      'messaging_MessageView_deleted' => messaging_MessageView_deleted,
+      'messaging_MessageView_edit' => messaging_MessageView_edit,
+      'messaging_MessageView_edited' => messaging_MessageView_edited,
+      'messaging_MessageView_forward' => messaging_MessageView_forward,
+      'messaging_MessageView_reply' => messaging_MessageView_reply,
+      'messaging_MessageView_textcopy' => messaging_MessageView_textcopy,
+      'messaging_MessageView_today' => messaging_MessageView_today,
+      'messaging_MessageView_yesterday' => messaging_MessageView_yesterday,
+      'messaging_ParticipantName_unknown' => messaging_ParticipantName_unknown,
+      'messaging_ParticipantName_you' => messaging_ParticipantName_you,
+      'messaging_SmsSendingStatus_delivered' =>
+        messaging_SmsSendingStatus_delivered,
+      'messaging_SmsSendingStatus_failed' => messaging_SmsSendingStatus_failed,
+      'messaging_SmsSendingStatus_sent' => messaging_SmsSendingStatus_sent,
+      'messaging_SmsSendingStatus_waiting' =>
+        messaging_SmsSendingStatus_waiting,
+      'messaging_StateBar_connecting' => messaging_StateBar_connecting,
+      'messaging_StateBar_error' => messaging_StateBar_error,
+      'messaging_StateBar_initializing' => messaging_StateBar_initializing,
+      'notifications_errorSnackBarAction_callSdpConfiguration' =>
+        notifications_errorSnackBarAction_callSdpConfiguration,
+      'notifications_errorSnackBarAction_callUserMedia' =>
+        notifications_errorSnackBarAction_callUserMedia,
+      'notifications_errorSnackBar_activeLineBlindTransferWarning' =>
+        notifications_errorSnackBar_activeLineBlindTransferWarning,
+      'notifications_errorSnackBar_blindTransferFailed' =>
+        notifications_errorSnackBar_blindTransferFailed,
+      'notifications_errorSnackBar_appOffline' =>
+        notifications_errorSnackBar_appOffline,
+      'notifications_errorSnackBar_appOnline' =>
+        notifications_errorSnackBar_appOnline,
+      'notifications_errorSnackBar_appUnregistered' =>
+        notifications_errorSnackBar_appUnregistered,
+      'notifications_errorSnackBar_callConnect' =>
+        notifications_errorSnackBar_callConnect,
+      'notifications_errorSnackBar_callNegotiationTimeout' =>
+        notifications_errorSnackBar_callNegotiationTimeout,
+      'notifications_errorSnackBar_generalUnableToCall' =>
+        notifications_errorSnackBar_generalUnableToCall,
+      'notifications_errorSnackBar_callServiceBusyLine' =>
+        notifications_errorSnackBar_callServiceBusyLine,
+      'notifications_errorSnackBar_callSignalingClientNotConnect' =>
+        notifications_errorSnackBar_callSignalingClientNotConnect,
+      'notifications_errorSnackBar_callSignalingClientSessionMissed' =>
+        notifications_errorSnackBar_callSignalingClientSessionMissed,
+      'notifications_errorSnackBar_callUndefinedLine' =>
+        notifications_errorSnackBar_callUndefinedLine,
+      'notifications_errorSnackBar_callMediaTrackSetup' =>
+        notifications_errorSnackBar_callMediaTrackSetup,
+      'notifications_errorSnackBar_callUserMedia' =>
+        notifications_errorSnackBar_callUserMedia,
+      'notifications_errorSnackBar_callWhileOffline' =>
+        notifications_errorSnackBar_callWhileOffline,
+      'notifications_errorSnackBar_callWhileUnregistered' =>
+        notifications_errorSnackBar_callWhileUnregistered,
+      'notifications_errorSnackBar_sessionExpired' =>
+        notifications_errorSnackBar_sessionExpired,
+      'notifications_errorSnackBar_SignalingConnectFailed' =>
+        notifications_errorSnackBar_SignalingConnectFailed,
+      'notifications_errorSnackBar_SignalingSessionMissed' =>
+        notifications_errorSnackBar_SignalingSessionMissed,
+      'notifications_errorSnackBar_sipRegistrationFailed_Unavailable' =>
+        notifications_errorSnackBar_sipRegistrationFailed_Unavailable,
+      'notifications_errorSnackBar_sipRegistrationFailed_Unexpected' =>
+        notifications_errorSnackBar_sipRegistrationFailed_Unexpected,
+      'notifications_errorSnackBar_sipServiceUnavailable' =>
+        notifications_errorSnackBar_sipServiceUnavailable,
+      'notifications_messageSnackBar_appOffline' =>
+        notifications_messageSnackBar_appOffline,
+      'notifications_successSnackBar_appOnline' =>
+        notifications_successSnackBar_appOnline,
+      'numberActions_audioCall' => numberActions_audioCall,
+      'numberActions_callLog' => numberActions_callLog,
+      'numberActions_chat' => numberActions_chat,
+      'numberActions_copyCallId' => numberActions_copyCallId,
+      'numberActions_copyNumber' => numberActions_copyNumber,
+      'numberActions_delete' => numberActions_delete,
+      'numberActions_sendSms' => numberActions_sendSms,
+      'numberActions_transfer' => numberActions_transfer,
+      'numberActions_videoCall' => numberActions_videoCall,
+      'numberActions_viewContact' => numberActions_viewContact,
+      'permission_Button_request' => permission_Button_request,
+      'permission_manageFullScreenNotificationInstructions_step1' =>
+        permission_manageFullScreenNotificationInstructions_step1,
+      'permission_manageFullScreenNotificationInstructions_step2' =>
+        permission_manageFullScreenNotificationInstructions_step2,
+      'permission_manageFullScreenNotificationInstructions_step3' =>
+        permission_manageFullScreenNotificationInstructions_step3,
+      'permission_manageFullScreenNotificationInstructions_step4' =>
+        permission_manageFullScreenNotificationInstructions_step4,
+      'permission_manageFullScreenNotificationInstructions_step5' =>
+        permission_manageFullScreenNotificationInstructions_step5,
+      'permission_manageFullScreenNotificationPermissions' =>
+        permission_manageFullScreenNotificationPermissions,
+      'permission_manufacturer_Button_gotIt' =>
+        permission_manufacturer_Button_gotIt,
+      'permission_manufacturer_Button_toSettings' =>
+        permission_manufacturer_Button_toSettings,
+      'permission_manufacturer_Text_heading' =>
+        permission_manufacturer_Text_heading,
+      'permission_manufacturer_Text_trailing' =>
+        permission_manufacturer_Text_trailing,
+      'permission_manufacturer_Text_xiaomi_tip1' =>
+        permission_manufacturer_Text_xiaomi_tip1,
+      'permission_manufacturer_Text_xiaomi_tip2' =>
+        permission_manufacturer_Text_xiaomi_tip2,
+      'permission_Text_description' => permission_Text_description,
+      'persistentConnectionReminderContent' =>
+        persistentConnectionReminderContent,
+      'persistentConnectionReminderTitle' => persistentConnectionReminderTitle,
+      'batteryOptimizationWarningTitle' => batteryOptimizationWarningTitle,
+      'batteryOptimizationWarningContent' => batteryOptimizationWarningContent,
+      'batteryOptimizationWarningOpenSettings' =>
+        batteryOptimizationWarningOpenSettings,
+      'presence_activity_appointment_name' =>
+        presence_activity_appointment_name,
+      'presence_activity_away_name' => presence_activity_away_name,
+      'presence_activity_busy_name' => presence_activity_busy_name,
+      'presence_activity_doNotDisturb_name' =>
+        presence_activity_doNotDisturb_name,
+      'presence_activity_inTransit_name' => presence_activity_inTransit_name,
+      'presence_activity_meal_name' => presence_activity_meal_name,
+      'presence_activity_meeting_name' => presence_activity_meeting_name,
+      'presence_activity_none_name' => presence_activity_none_name,
+      'presence_activity_onThePhone_name' => presence_activity_onThePhone_name,
+      'presence_activity_permanentAbsence_name' =>
+        presence_activity_permanentAbsence_name,
+      'presence_activity_sleeping_name' => presence_activity_sleeping_name,
+      'presence_activity_travel_name' => presence_activity_travel_name,
+      'presence_activity_vacation_name' => presence_activity_vacation_name,
+      'presence_infoView_activity' => presence_infoView_activity,
+      'presence_infoView_available' => presence_infoView_available,
+      'presence_infoView_available_false' => presence_infoView_available_false,
+      'presence_infoView_available_true' => presence_infoView_available_true,
+      'presence_infoView_client' => presence_infoView_client,
+      'presence_infoView_device' => presence_infoView_device,
+      'presence_infoView_localTime' => presence_infoView_localTime,
+      'presence_infoView_note' => presence_infoView_note,
+      'presence_infoView_statusIcon' => presence_infoView_statusIcon,
+      'presence_infoView_timeZone' => presence_infoView_timeZone,
+      'presence_infoView_title' => presence_infoView_title,
+      'presence_infoView_updated' => presence_infoView_updated,
+      'presence_infoView_source_direct' => presence_infoView_source_direct,
+      'presence_infoView_source_sip' => presence_infoView_source_sip,
+      'presence_infoView_source_sipAndDirect' =>
+        presence_infoView_source_sipAndDirect,
+      'presence_preset_absent_name' => presence_preset_absent_name,
+      'presence_preset_absent_note' => presence_preset_absent_note,
+      'presence_preset_appointment_name' => presence_preset_appointment_name,
+      'presence_preset_appointment_note' => presence_preset_appointment_note,
+      'presence_preset_available_name' => presence_preset_available_name,
+      'presence_preset_away_name' => presence_preset_away_name,
+      'presence_preset_away_note' => presence_preset_away_note,
+      'presence_preset_dnd_name' => presence_preset_dnd_name,
+      'presence_preset_dnd_note' => presence_preset_dnd_note,
+      'presence_preset_inTransit_name' => presence_preset_inTransit_name,
+      'presence_preset_inTransit_note' => presence_preset_inTransit_note,
+      'presence_preset_meal_name' => presence_preset_meal_name,
+      'presence_preset_meal_note' => presence_preset_meal_note,
+      'presence_preset_meeting_name' => presence_preset_meeting_name,
+      'presence_preset_meeting_note' => presence_preset_meeting_note,
+      'presence_preset_sleeping_name' => presence_preset_sleeping_name,
+      'presence_preset_sleeping_note' => presence_preset_sleeping_note,
+      'presence_preset_travel_name' => presence_preset_travel_name,
+      'presence_preset_travel_note' => presence_preset_travel_note,
+      'presence_preset_unavailable_name' => presence_preset_unavailable_name,
+      'presence_preset_vacation_name' => presence_preset_vacation_name,
+      'presence_preset_vacation_note' => presence_preset_vacation_note,
+      'presence_settings_activity_label' => presence_settings_activity_label,
+      'presence_settings_activity_tooltip' =>
+        presence_settings_activity_tooltip,
+      'presence_settings_availability_title' =>
+        presence_settings_availability_title,
+      'presence_settings_availability_tooltip' =>
+        presence_settings_availability_tooltip,
+      'presence_settings_config_title' => presence_settings_config_title,
+      'presence_settings_dnd_title' => presence_settings_dnd_title,
+      'presence_settings_dnd_tooltip' => presence_settings_dnd_tooltip,
+      'presence_settings_note_label' => presence_settings_note_label,
+      'presence_settings_note_tooltip' => presence_settings_note_tooltip,
+      'presence_settings_presets_label' => presence_settings_presets_label,
+      'presence_settings_presets_label_custom' =>
+        presence_settings_presets_label_custom,
+      'presence_settings_presets_title' => presence_settings_presets_title,
+      'presence_settings_statusIcon_none' => presence_settings_statusIcon_none,
+      'presence_settings_statusIcon_title' =>
+        presence_settings_statusIcon_title,
+      'recents_DeleteConfirmDialog_content' =>
+        recents_DeleteConfirmDialog_content,
+      'recents_DeleteConfirmDialog_title' => recents_DeleteConfirmDialog_title,
+      'recents_HistoryTile_missedCallText' =>
+        recents_HistoryTile_missedCallText,
+      'recents_Text_blingTransferInitiated' =>
+        recents_Text_blingTransferInitiated,
+      'recentsVisibilityFilter_all' => recentsVisibilityFilter_all,
+      'recentsVisibilityFilter_all_preposit' =>
+        recentsVisibilityFilter_all_preposit,
+      'recentsVisibilityFilter_incoming' => recentsVisibilityFilter_incoming,
+      'recentsVisibilityFilter_incoming_preposit' =>
+        recentsVisibilityFilter_incoming_preposit,
+      'recentsVisibilityFilter_missed' => recentsVisibilityFilter_missed,
+      'recentsVisibilityFilter_missed_preposit' =>
+        recentsVisibilityFilter_missed_preposit,
+      'recentsVisibilityFilter_outgoing' => recentsVisibilityFilter_outgoing,
+      'recentsVisibilityFilter_outgoing_preposit' =>
+        recentsVisibilityFilter_outgoing_preposit,
+      'request_Id' => request_Id,
+      'request_StatusCode' => request_StatusCode,
+      'request_StatusName' => request_StatusName,
+      'sessionStatus_AppBar_waitingForNetwork' =>
+        sessionStatus_AppBar_waitingForNetwork,
+      'sessionStatus_AppBar_waitingForConnection' =>
+        sessionStatus_AppBar_waitingForConnection,
+      'sessionStatus_AppBar_disconnected' => sessionStatus_AppBar_disconnected,
+      'sessionStatus_AppBar_connecting' => sessionStatus_AppBar_connecting,
+      'sessionStatus_pushNotificationServiceProblem' =>
+        sessionStatus_pushNotificationServiceProblem,
+      'session_Teardown_progressText' => session_Teardown_progressText,
+      'settings_AboutText_ApplicationEmbeddedLinks' =>
+        settings_AboutText_ApplicationEmbeddedLinks,
+      'settings_AboutText_AppSessionIdentifier' =>
+        settings_AboutText_AppSessionIdentifier,
+      'settings_AboutText_AppVersion' => settings_AboutText_AppVersion,
+      'settings_AboutText_CoreVersion' => settings_AboutText_CoreVersion,
+      'settings_AboutText_CoreVersionUndefined' =>
+        settings_AboutText_CoreVersionUndefined,
+      'settings_AboutText_FCMPushNotificationToken' =>
+        settings_AboutText_FCMPushNotificationToken,
+      'settings_AboutText_StoreVersion' => settings_AboutText_StoreVersion,
+      'settings_AccountDeleteConfirmDialog_content' =>
+        settings_AccountDeleteConfirmDialog_content,
+      'settings_AccountDeleteConfirmDialog_title' =>
+        settings_AccountDeleteConfirmDialog_title,
+      'settings_AccountDeleteNotSupported_message' =>
+        settings_AccountDeleteNotSupported_message,
+      'settings_AppBarTitle_myAccount' => settings_AppBarTitle_myAccount,
+      'settings_audioProcessing_Section_AGC_title' =>
+        settings_audioProcessing_Section_AGC_title,
+      'settings_audioProcessing_Section_AM_title' =>
+        settings_audioProcessing_Section_AM_title,
+      'settings_audioProcessing_Section_EC_title' =>
+        settings_audioProcessing_Section_EC_title,
+      'settings_audioProcessing_Section_HPF_title' =>
+        settings_audioProcessing_Section_HPF_title,
+      'settings_audioProcessing_Section_NS_title' =>
+        settings_audioProcessing_Section_NS_title,
+      'settings_audioProcessing_Section_title' =>
+        settings_audioProcessing_Section_title,
+      'settings_audioProcessing_Section_tooltip' =>
+        settings_audioProcessing_Section_tooltip,
+      'settings_audioProcessing_Section_VP_title' =>
+        settings_audioProcessing_Section_VP_title,
+      'settings_call_codecs_preferred_audio_default' =>
+        settings_call_codecs_preferred_audio_default,
+      'settings_call_codecs_preferred_audio_tip' =>
+        settings_call_codecs_preferred_audio_tip,
+      'settings_call_codecs_preferred_audio_title' =>
+        settings_call_codecs_preferred_audio_title,
+      'settings_call_codecs_preferred_video_default' =>
+        settings_call_codecs_preferred_video_default,
+      'settings_call_codecs_preferred_video_tip' =>
+        settings_call_codecs_preferred_video_tip,
+      'settings_call_codecs_preferred_video_title' =>
+        settings_call_codecs_preferred_video_title,
+      'settings_callerId_cancel_button' => settings_callerId_cancel_button,
+      'settings_callerId_defaultTitle' => settings_callerId_defaultTitle,
+      'settings_callerId_dialcode' => settings_callerId_dialcode,
+      'settings_callerId_dialCodeMatching_title' =>
+        settings_callerId_dialCodeMatching_title,
+      'settings_callerId_duplicate_dialcode_error' =>
+        settings_callerId_duplicate_dialcode_error,
+      'settings_callerId_number' => settings_callerId_number,
+      'settings_callerId_number_hint' => settings_callerId_number_hint,
+      'settings_callerId_save_button' => settings_callerId_save_button,
+      'settings_connectionSection_title' => settings_connectionSection_title,
+      'settings_connectionSection_tooltip' =>
+        settings_connectionSection_tooltip,
+      'settings_encoding_AppBar_reset_tooltip' =>
+        settings_encoding_AppBar_reset_tooltip,
+      'settings_encoding_Section_audio_ptime' =>
+        settings_encoding_Section_audio_ptime,
+      'settings_encoding_Section_audio_ptime_limit' =>
+        settings_encoding_Section_audio_ptime_limit,
+      'settings_encoding_Section_bandwidth_prefix' =>
+        settings_encoding_Section_bandwidth_prefix,
+      'settings_encoding_Section_bitrate_prefix' =>
+        settings_encoding_Section_bitrate_prefix,
+      'settings_encoding_Section_bitrate_title' =>
+        settings_encoding_Section_bitrate_title,
+      'settings_encoding_Section_bitrate_tooltip' =>
+        settings_encoding_Section_bitrate_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_removeREMBFeedback' =>
+        settings_encoding_Section_extra_sdp_mod_removeREMBFeedback,
+      'settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip' =>
+        settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback' =>
+        settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback,
+      'settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip' =>
+        settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip,
+      'settings_encoding_Section_rtp_extensions_title' =>
+        settings_encoding_Section_rtp_extensions_title,
+      'settings_encoding_Section_rtp_extensions_tooltip' =>
+        settings_encoding_Section_rtp_extensions_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_twcc' =>
+        settings_encoding_Section_extra_sdp_mod_removeExtmap_twcc,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_absSendTime' =>
+        settings_encoding_Section_extra_sdp_mod_removeExtmap_absSendTime,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_playoutDelay' =>
+        settings_encoding_Section_extra_sdp_mod_removeExtmap_playoutDelay,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_videoContentType' =>
+        settings_encoding_Section_extra_sdp_mod_removeExtmap_videoContentType,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_videoTiming' =>
+        settings_encoding_Section_extra_sdp_mod_removeExtmap_videoTiming,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_colorSpace' =>
+        settings_encoding_Section_extra_sdp_mod_removeExtmap_colorSpace,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_audioLevel' =>
+        settings_encoding_Section_extra_sdp_mod_removeExtmap_audioLevel,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_tOffset' =>
+        settings_encoding_Section_extra_sdp_mod_removeExtmap_tOffset,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_videoOrientation' =>
+        settings_encoding_Section_extra_sdp_mod_removeExtmap_videoOrientation,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_rtpStreamId' =>
+        settings_encoding_Section_extra_sdp_mod_removeExtmap_rtpStreamId,
+      'settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId' =>
+        settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId,
+      'settings_encoding_Section_extra_sdp_mod_remapTE8' =>
+        settings_encoding_Section_extra_sdp_mod_remapTE8,
+      'settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip' =>
+        settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps' =>
+        settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps,
+      'settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip' =>
+        settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip,
+      'settings_encoding_Section_extra_sdp_mod_title' =>
+        settings_encoding_Section_extra_sdp_mod_title,
+      'settings_encoding_Section_measure_hz' =>
+        settings_encoding_Section_measure_hz,
+      'settings_encoding_Section_measure_kbps' =>
+        settings_encoding_Section_measure_kbps,
+      'settings_encoding_Section_measure_ms' =>
+        settings_encoding_Section_measure_ms,
+      'settings_encoding_Section_opus_bandwidth' =>
+        settings_encoding_Section_opus_bandwidth,
+      'settings_encoding_Section_opus_bitrate' =>
+        settings_encoding_Section_opus_bitrate,
+      'settings_encoding_Section_opus_channels' =>
+        settings_encoding_Section_opus_channels,
+      'settings_encoding_Section_opus_dtx' =>
+        settings_encoding_Section_opus_dtx,
+      'settings_encoding_Section_opus_samplingRate' =>
+        settings_encoding_Section_opus_samplingRate,
+      'settings_encoding_Section_opus_title' =>
+        settings_encoding_Section_opus_title,
+      'settings_encoding_Section_opus_tooltip' =>
+        settings_encoding_Section_opus_tooltip,
+      'settings_encoding_Section_packetization_title' =>
+        settings_encoding_Section_packetization_title,
+      'settings_encoding_Section_packetization_tooltip' =>
+        settings_encoding_Section_packetization_tooltip,
+      'settings_encoding_Section_packetization_warning_title' =>
+        settings_encoding_Section_packetization_warning_title,
+      'settings_encoding_Section_packetization_warning_message' =>
+        settings_encoding_Section_packetization_warning_message,
+      'settings_encoding_Section_preset' => settings_encoding_Section_preset,
+      'settings_encoding_Section_preset_balance' =>
+        settings_encoding_Section_preset_balance,
+      'settings_encoding_Section_preset_balance_tooltip' =>
+        settings_encoding_Section_preset_balance_tooltip,
+      'settings_encoding_Section_preset_eco' =>
+        settings_encoding_Section_preset_eco,
+      'settings_encoding_Section_preset_eco_tooltip' =>
+        settings_encoding_Section_preset_eco_tooltip,
+      'settings_encoding_Section_preset_custom' =>
+        settings_encoding_Section_preset_custom,
+      'settings_encoding_Section_preset_custom_tooltip' =>
+        settings_encoding_Section_preset_custom_tooltip,
+      'settings_encoding_Section_preset_default' =>
+        settings_encoding_Section_preset_default,
+      'settings_encoding_Section_preset_default_tooltip' =>
+        settings_encoding_Section_preset_default_tooltip,
+      'settings_encoding_Section_preset_bypass' =>
+        settings_encoding_Section_preset_bypass,
+      'settings_encoding_Section_preset_bypass_tooltip' =>
+        settings_encoding_Section_preset_bypass_tooltip,
+      'settings_encoding_Section_preset_full_flex' =>
+        settings_encoding_Section_preset_full_flex,
+      'settings_encoding_Section_preset_quality' =>
+        settings_encoding_Section_preset_quality,
+      'settings_encoding_Section_preset_quality_tooltip' =>
+        settings_encoding_Section_preset_quality_tooltip,
+      'settings_encoding_Section_preset_title' =>
+        settings_encoding_Section_preset_title,
+      'settings_encoding_Section_preset_tooltip' =>
+        settings_encoding_Section_preset_tooltip,
+      'settings_encoding_Section_ptime_prefix' =>
+        settings_encoding_Section_ptime_prefix,
+      'settings_encoding_Section_rtp_override_audio' =>
+        settings_encoding_Section_rtp_override_audio,
+      'settings_encoding_Section_rtp_override_title' =>
+        settings_encoding_Section_rtp_override_title,
+      'settings_encoding_Section_rtp_override_tooltip' =>
+        settings_encoding_Section_rtp_override_tooltip,
+      'settings_encoding_Section_rtp_override_video' =>
+        settings_encoding_Section_rtp_override_video,
+      'settings_encoding_Section_rtp_override_warning_message' =>
+        settings_encoding_Section_rtp_override_warning_message,
+      'settings_encoding_Section_rtp_override_warning_title' =>
+        settings_encoding_Section_rtp_override_warning_title,
+      'settings_encoding_Section_target_audio_bitrate' =>
+        settings_encoding_Section_target_audio_bitrate,
+      'settings_encoding_Section_target_video_bitrate' =>
+        settings_encoding_Section_target_video_bitrate,
+      'settings_encoding_Section_value_auto' =>
+        settings_encoding_Section_value_auto,
+      'settings_encoding_Section_value_disable' =>
+        settings_encoding_Section_value_disable,
+      'settings_encoding_Section_value_enable' =>
+        settings_encoding_Section_value_enable,
+      'settings_encoding_Section_value_mono' =>
+        settings_encoding_Section_value_mono,
+      'settings_encoding_Section_value_off' =>
+        settings_encoding_Section_value_off,
+      'settings_encoding_Section_value_on' =>
+        settings_encoding_Section_value_on,
+      'settings_encoding_Section_value_stereo' =>
+        settings_encoding_Section_value_stereo,
+      'settings_iceSettings_Section_netfilter_skipv4' =>
+        settings_iceSettings_Section_netfilter_skipv4,
+      'settings_iceSettings_Section_netfilter_skipv6' =>
+        settings_iceSettings_Section_netfilter_skipv6,
+      'settings_iceSettings_Section_netfilter_title' =>
+        settings_iceSettings_Section_netfilter_title,
+      'settings_iceSettings_Section_noskip' =>
+        settings_iceSettings_Section_noskip,
+      'settings_iceSettings_Section_title' =>
+        settings_iceSettings_Section_title,
+      'settings_iceSettings_Section_tooltip' =>
+        settings_iceSettings_Section_tooltip,
+      'settings_iceSettings_Section_trfilter_skipTcp' =>
+        settings_iceSettings_Section_trfilter_skipTcp,
+      'settings_iceSettings_Section_trfilter_skipUdp' =>
+        settings_iceSettings_Section_trfilter_skipUdp,
+      'settings_iceSettings_Section_trfilter_title' =>
+        settings_iceSettings_Section_trfilter_title,
+      'settings_ListViewTileTitle_about' => settings_ListViewTileTitle_about,
+      'settings_ListViewTileTitle_accountDelete' =>
+        settings_ListViewTileTitle_accountDelete,
+      'settings_ListViewTileTitle_call_codecs' =>
+        settings_ListViewTileTitle_call_codecs,
+      'settings_ListViewTileTitle_callerId' =>
+        settings_ListViewTileTitle_callerId,
+      'settings_ListViewTileTitle_encoding' =>
+        settings_ListViewTileTitle_encoding,
+      'settings_ListViewTileTitle_features' =>
+        settings_ListViewTileTitle_features,
+      'settings_ListViewTileTitle_help' => settings_ListViewTileTitle_help,
+      'settings_ListViewTileTitle_language' =>
+        settings_ListViewTileTitle_language,
+      'settings_ListViewTileTitle_logout' => settings_ListViewTileTitle_logout,
+      'settings_ListViewTileTitle_logRecordsConsole' =>
+        settings_ListViewTileTitle_logRecordsConsole,
+      'settings_ListViewTileTitle_mediaSettings' =>
+        settings_ListViewTileTitle_mediaSettings,
+      'settings_ListViewTileTitle_network' =>
+        settings_ListViewTileTitle_network,
+      'settings_ListViewTileTitle_presence' =>
+        settings_ListViewTileTitle_presence,
+      'settings_ListViewTileTitle_registered' =>
+        settings_ListViewTileTitle_registered,
+      'settings_ListViewTileTitle_self_config' =>
+        settings_ListViewTileTitle_self_config,
+      'settings_ListViewTileTitle_settings' =>
+        settings_ListViewTileTitle_settings,
+      'settings_ListViewTileTitle_termsConditions' =>
+        settings_ListViewTileTitle_termsConditions,
+      'settings_ListViewTileTitle_themeMode' =>
+        settings_ListViewTileTitle_themeMode,
+      'settings_ListViewTileTitle_toolbox' =>
+        settings_ListViewTileTitle_toolbox,
+      'settings_ListViewTileTitle_voicemail' =>
+        settings_ListViewTileTitle_voicemail,
+      'settings_LogoutConfirmDialog_content' =>
+        settings_LogoutConfirmDialog_content,
+      'settings_LogoutConfirmDialog_title' =>
+        settings_LogoutConfirmDialog_title,
+      'settings_missingMicrophoneIndicator_title' =>
+        settings_missingMicrophoneIndicator_title,
+      'settings_network_fallbackCalls_description' =>
+        settings_network_fallbackCalls_description,
+      'settings_network_fallbackCalls_title' =>
+        settings_network_fallbackCalls_title,
+      'settings_network_incomingCallType_pushNotification_description' =>
+        settings_network_incomingCallType_pushNotification_description,
+      'settings_network_incomingCallType_pushNotification_title' =>
+        settings_network_incomingCallType_pushNotification_title,
+      'settings_network_incomingCallType_socket_description' =>
+        settings_network_incomingCallType_socket_description,
+      'settings_network_incomingCallType_socket_title' =>
+        settings_network_incomingCallType_socket_title,
+      'settings_network_incomingCallType_title' =>
+        settings_network_incomingCallType_title,
+      'settings_network_smsFallback_toggle' =>
+        settings_network_smsFallback_toggle,
+      'settings_videoCapturing_Section_framerate_prefix' =>
+        settings_videoCapturing_Section_framerate_prefix,
+      'settings_videoCapturing_Section_framerate_title' =>
+        settings_videoCapturing_Section_framerate_title,
+      'settings_videoCapturing_Section_resolution_prefix' =>
+        settings_videoCapturing_Section_resolution_prefix,
+      'settings_videoCapturing_Section_resolution_title' =>
+        settings_videoCapturing_Section_resolution_title,
+      'settings_videoCapturing_Section_title' =>
+        settings_videoCapturing_Section_title,
+      'settings_videoCapturing_Section_tooltip' =>
+        settings_videoCapturing_Section_tooltip,
+      'settings_videoOffer_option_ignore' => settings_videoOffer_option_ignore,
+      'settings_videoOffer_option_includeInactive' =>
+        settings_videoOffer_option_includeInactive,
+      'settings_videoOffer_title' => settings_videoOffer_title,
+      'signalingResponseCode_ambiguousRequest' =>
+        signalingResponseCode_ambiguousRequest,
+      'signalingResponseCode_busyEverywhere' =>
+        signalingResponseCode_busyEverywhere,
+      'signalingResponseCode_callNotExist' =>
+        signalingResponseCode_callNotExist,
+      'signalingResponseCode_declineCall' => signalingResponseCode_declineCall,
+      'signalingResponseCode_errorAttachingPlugin' =>
+        signalingResponseCode_errorAttachingPlugin,
+      'signalingResponseCode_errorDetachingPlugin' =>
+        signalingResponseCode_errorDetachingPlugin,
+      'signalingResponseCode_errorSendingMessage' =>
+        signalingResponseCode_errorSendingMessage,
+      'signalingResponseCode_exchangeRoutingError' =>
+        signalingResponseCode_exchangeRoutingError,
+      'signalingResponseCode_handleNotFound' =>
+        signalingResponseCode_handleNotFound,
+      'signalingResponseCode_incompatibleDestination' =>
+        signalingResponseCode_incompatibleDestination,
+      'signalingResponseCode_invalidElementType' =>
+        signalingResponseCode_invalidElementType,
+      'signalingResponseCode_invalidJson' => signalingResponseCode_invalidJson,
+      'signalingResponseCode_invalidJsonObject' =>
+        signalingResponseCode_invalidJsonObject,
+      'signalingResponseCode_invalidNumberFormat' =>
+        signalingResponseCode_invalidNumberFormat,
+      'signalingResponseCode_invalidPath' => signalingResponseCode_invalidPath,
+      'signalingResponseCode_invalidSdp' => signalingResponseCode_invalidSdp,
+      'signalingResponseCode_invalidStream' =>
+        signalingResponseCode_invalidStream,
+      'signalingResponseCode_loopDetected' =>
+        signalingResponseCode_loopDetected,
+      'signalingResponseCode_missingMandatoryElement' =>
+        signalingResponseCode_missingMandatoryElement,
+      'signalingResponseCode_missingRequest' =>
+        signalingResponseCode_missingRequest,
+      'signalingResponseCode_normalUnspecified' =>
+        signalingResponseCode_normalUnspecified,
+      'signalingResponseCode_notAcceptable' =>
+        signalingResponseCode_notAcceptable,
+      'signalingResponseCode_notAcceptingNewSessions' =>
+        signalingResponseCode_notAcceptingNewSessions,
+      'signalingResponseCode_notFoundRoutesInReplyFromBE' =>
+        signalingResponseCode_notFoundRoutesInReplyFromBE,
+      'signalingResponseCode_pluginNotFound' =>
+        signalingResponseCode_pluginNotFound,
+      'signalingResponseCode_rejected' => signalingResponseCode_rejected,
+      'signalingResponseCode_requestTerminated' =>
+        signalingResponseCode_requestTerminated,
+      'signalingResponseCode_sessionIdInUse' =>
+        signalingResponseCode_sessionIdInUse,
+      'signalingResponseCode_sessionNotFound' =>
+        signalingResponseCode_sessionNotFound,
+      'signalingResponseCode_tokenNotFound' =>
+        signalingResponseCode_tokenNotFound,
+      'signalingResponseCode_transportSpecificError' =>
+        signalingResponseCode_transportSpecificError,
+      'signalingResponseCodeType_callHangup' =>
+        signalingResponseCodeType_callHangup,
+      'signalingResponseCodeType_plugin' => signalingResponseCodeType_plugin,
+      'signalingResponseCodeType_request' => signalingResponseCodeType_request,
+      'signalingResponseCodeType_session' => signalingResponseCodeType_session,
+      'signalingResponseCodeType_token' => signalingResponseCodeType_token,
+      'signalingResponseCodeType_transport' =>
+        signalingResponseCodeType_transport,
+      'signalingResponseCodeType_unauthorized' =>
+        signalingResponseCodeType_unauthorized,
+      'signalingResponseCodeType_unknown' => signalingResponseCodeType_unknown,
+      'signalingResponseCodeType_webrtc' => signalingResponseCodeType_webrtc,
+      'signalingResponseCode_unauthorizedAccess' =>
+        signalingResponseCode_unauthorizedAccess,
+      'signalingResponseCode_unauthorizedRequest' =>
+        signalingResponseCode_unauthorizedRequest,
+      'signalingResponseCode_unexpectedAnswer' =>
+        signalingResponseCode_unexpectedAnswer,
+      'signalingResponseCode_unknownError' =>
+        signalingResponseCode_unknownError,
+      'signalingResponseCode_unknownRequest' =>
+        signalingResponseCode_unknownRequest,
+      'signalingResponseCode_unsupportedJsepType' =>
+        signalingResponseCode_unsupportedJsepType,
+      'signalingResponseCode_unwanted' => signalingResponseCode_unwanted,
+      'signalingResponseCode_userBusy' => signalingResponseCode_userBusy,
+      'signalingResponseCode_userNotExist' =>
+        signalingResponseCode_userNotExist,
+      'signalingResponseCode_wrongWebrtcState' =>
+        signalingResponseCode_wrongWebrtcState,
+      'socketError_connectionRefused' => socketError_connectionRefused,
+      'socketError_connectionRefusedDescription' =>
+        socketError_connectionRefusedDescription,
+      'socketError_connectionReset' => socketError_connectionReset,
+      'socketError_connectionResetDescription' =>
+        socketError_connectionResetDescription,
+      'socketError_connectionTimedOut' => socketError_connectionTimedOut,
+      'socketError_connectionTimedOutDescription' =>
+        socketError_connectionTimedOutDescription,
+      'socketError_default' => socketError_default,
+      'socketError_networkUnreachable' => socketError_networkUnreachable,
+      'socketError_networkUnreachableDescription' =>
+        socketError_networkUnreachableDescription,
+      'socketError_serverUnreachable' => socketError_serverUnreachable,
+      'socketError_serverUnreachableDescription' =>
+        socketError_serverUnreachableDescription,
+      'system_notifications_screen_list_empty' =>
+        system_notifications_screen_list_empty,
+      'system_notifications_screen_title' => system_notifications_screen_title,
+      'themeMode_dark' => themeMode_dark,
+      'themeMode_light' => themeMode_light,
+      'themeMode_system' => themeMode_system,
+      'undefined_autoprovision_invalidToken' =>
+        undefined_autoprovision_invalidToken,
+      'undefined_autoprovision_invalidToken_title' =>
+        undefined_autoprovision_invalidToken_title,
+      'undefined_stackScreenNotSupported' => undefined_stackScreenNotSupported,
+      'undefined_stackScreenNotSupported_title' =>
+        undefined_stackScreenNotSupported_title,
+      'user_agreement_agrement_link' => user_agreement_agrement_link,
+      'user_agreement_button_text' => user_agreement_button_text,
+      'validationBlankError' => validationBlankError,
+      'voicemail_Description_notSupported' =>
+        voicemail_Description_notSupported,
+      'voicemail_Dialog_deleteSelectedContent' =>
+        voicemail_Dialog_deleteSelectedContent,
+      'voicemail_Dialog_deleteSelectedTitle' =>
+        voicemail_Dialog_deleteSelectedTitle,
+      'voicemail_Dialog_deleteSingleContent' =>
+        voicemail_Dialog_deleteSingleContent,
+      'voicemail_Dialog_deleteSingleTitle' =>
+        voicemail_Dialog_deleteSingleTitle,
+      'voicemail_Label_call' => voicemail_Label_call,
+      'voicemail_Label_delete' => voicemail_Label_delete,
+      'voicemail_Label_deleteAll' => voicemail_Label_deleteAll,
+      'voicemail_Label_deleteAllDescription' =>
+        voicemail_Label_deleteAllDescription,
+      'voicemail_Label_empty' => voicemail_Label_empty,
+      'voicemail_Label_markAsHeard' => voicemail_Label_markAsHeard,
+      'voicemail_Label_markAsNew' => voicemail_Label_markAsNew,
+      'voicemail_Label_playbackError' => voicemail_Label_playbackError,
+      'voicemail_Label_retry' => voicemail_Label_retry,
+      'voicemail_Snackbar_notConfigured' => voicemail_Snackbar_notConfigured,
+      'voicemail_Title_notSupported' => voicemail_Title_notSupported,
+      'voicemail_Widget_screenTitle' => voicemail_Widget_screenTitle,
+      'webRegistration_ErrorAcknowledgeDialogActions_retry' =>
+        webRegistration_ErrorAcknowledgeDialogActions_retry,
+      'webRegistration_ErrorAcknowledgeDialogActions_skip' =>
+        webRegistration_ErrorAcknowledgeDialogActions_skip,
+      'webRegistration_ErrorAcknowledgeDialog_title' =>
+        webRegistration_ErrorAcknowledgeDialog_title,
+      'webview_defaultError_reload' => webview_defaultError_reload,
+      'webview_defaultError_title' => webview_defaultError_title,
+      'webview_sslError_details' => webview_sslError_details,
+      'webview_sslError_details_type' => webview_sslError_details_type,
+      'webview_sslError_details_url' => webview_sslError_details_url,
+      'webview_sslError_message' => webview_sslError_message,
+      'webview_sslError_title' => webview_sslError_title,
+      'webview_sslError_tryAgain' => webview_sslError_tryAgain,
+      'cdr_disconnectReason_unknown' => cdr_disconnectReason_unknown,
+      'cdr_disconnectReason_validCauseCodeNotYetReceived' =>
+        cdr_disconnectReason_validCauseCodeNotYetReceived,
+      'cdr_disconnectReason_unallocatedNumber' =>
+        cdr_disconnectReason_unallocatedNumber,
+      'cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan' =>
+        cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan,
+      'cdr_disconnectReason_noRouteToDestination' =>
+        cdr_disconnectReason_noRouteToDestination,
+      'cdr_disconnectReason_sendSpecialInformationTone' =>
+        cdr_disconnectReason_sendSpecialInformationTone,
+      'cdr_disconnectReason_misdialledTrunkPrefix' =>
+        cdr_disconnectReason_misdialledTrunkPrefix,
+      'cdr_disconnectReason_channelUnacceptable' =>
+        cdr_disconnectReason_channelUnacceptable,
+      'cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel' =>
+        cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel,
+      'cdr_disconnectReason_prefix0DialedButNotAllowedPreemption' =>
+        cdr_disconnectReason_prefix0DialedButNotAllowedPreemption,
+      'cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved' =>
+        cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved,
+      'cdr_disconnectReason_prefix1DialedButNotRequired' =>
+        cdr_disconnectReason_prefix1DialedButNotRequired,
+      'cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding' =>
+        cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding,
+      'cdr_disconnectReason_normalCallClearing' =>
+        cdr_disconnectReason_normalCallClearing,
+      'cdr_disconnectReason_userBusy' => cdr_disconnectReason_userBusy,
+      'cdr_disconnectReason_noUserResponding' =>
+        cdr_disconnectReason_noUserResponding,
+      'cdr_disconnectReason_noAnswerFromUser' =>
+        cdr_disconnectReason_noAnswerFromUser,
+      'cdr_disconnectReason_subscriberIsAbsent' =>
+        cdr_disconnectReason_subscriberIsAbsent,
+      'cdr_disconnectReason_callRejected' => cdr_disconnectReason_callRejected,
+      'cdr_disconnectReason_numberChanged' =>
+        cdr_disconnectReason_numberChanged,
+      'cdr_disconnectReason_reverseChargingRejected' =>
+        cdr_disconnectReason_reverseChargingRejected,
+      'cdr_disconnectReason_callSuspended' =>
+        cdr_disconnectReason_callSuspended,
+      'cdr_disconnectReason_callResumed' => cdr_disconnectReason_callResumed,
+      'cdr_disconnectReason_nonSelectedUserClearing' =>
+        cdr_disconnectReason_nonSelectedUserClearing,
+      'cdr_disconnectReason_destinationOutOfOrder' =>
+        cdr_disconnectReason_destinationOutOfOrder,
+      'cdr_disconnectReason_invalidNumberFormatIncompleteNumber' =>
+        cdr_disconnectReason_invalidNumberFormatIncompleteNumber,
+      'cdr_disconnectReason_facilityRejected' =>
+        cdr_disconnectReason_facilityRejected,
+      'cdr_disconnectReason_responseToStatusEnquiry' =>
+        cdr_disconnectReason_responseToStatusEnquiry,
+      'cdr_disconnectReason_normalUnspecified' =>
+        cdr_disconnectReason_normalUnspecified,
+      'cdr_disconnectReason_circuitOutOfOrder' =>
+        cdr_disconnectReason_circuitOutOfOrder,
+      'cdr_disconnectReason_noCircuitChannelAvailable' =>
+        cdr_disconnectReason_noCircuitChannelAvailable,
+      'cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable' =>
+        cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable,
+      'cdr_disconnectReason_vpciVciAssignmentFailure' =>
+        cdr_disconnectReason_vpciVciAssignmentFailure,
+      'cdr_disconnectReason_degradedServiceCallRateIsnNotValid' =>
+        cdr_disconnectReason_degradedServiceCallRateIsnNotValid,
+      'cdr_disconnectReason_networkWanOutOfOrder' =>
+        cdr_disconnectReason_networkWanOutOfOrder,
+      'cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService' =>
+        cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService,
+      'cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational' =>
+        cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational,
+      'cdr_disconnectReason_temporaryFailure' =>
+        cdr_disconnectReason_temporaryFailure,
+      'cdr_disconnectReason_switchingEquipmentCongestion' =>
+        cdr_disconnectReason_switchingEquipmentCongestion,
+      'cdr_disconnectReason_accessInformationDiscarded' =>
+        cdr_disconnectReason_accessInformationDiscarded,
+      'cdr_disconnectReason_requestedCircuitChannelNotAvailable' =>
+        cdr_disconnectReason_requestedCircuitChannelNotAvailable,
+      'cdr_disconnectReason_preEmptedNoVpciVciIsAvailable' =>
+        cdr_disconnectReason_preEmptedNoVpciVciIsAvailable,
+      'cdr_disconnectReason_precedenceCallBlocked' =>
+        cdr_disconnectReason_precedenceCallBlocked,
+      'cdr_disconnectReason_resourceUnavailableUnspecified' =>
+        cdr_disconnectReason_resourceUnavailableUnspecified,
+      'cdr_disconnectReason_dspError' => cdr_disconnectReason_dspError,
+      'cdr_disconnectReason_qualityOfServiceUnavailable' =>
+        cdr_disconnectReason_qualityOfServiceUnavailable,
+      'cdr_disconnectReason_requestedFacilityNotSubscribed' =>
+        cdr_disconnectReason_requestedFacilityNotSubscribed,
+      'cdr_disconnectReason_reverseChargingNotAllowed' =>
+        cdr_disconnectReason_reverseChargingNotAllowed,
+      'cdr_disconnectReason_outgoingCallsBarred' =>
+        cdr_disconnectReason_outgoingCallsBarred,
+      'cdr_disconnectReason_outgoingCallsBarredWithinCug' =>
+        cdr_disconnectReason_outgoingCallsBarredWithinCug,
+      'cdr_disconnectReason_incomingCallsBarred' =>
+        cdr_disconnectReason_incomingCallsBarred,
+      'cdr_disconnectReason_incomingCallsBarredWithinCug' =>
+        cdr_disconnectReason_incomingCallsBarredWithinCug,
+      'cdr_disconnectReason_callWaitingNotSubscribed' =>
+        cdr_disconnectReason_callWaitingNotSubscribed,
+      'cdr_disconnectReason_bearerCapabilityNotAuthorized' =>
+        cdr_disconnectReason_bearerCapabilityNotAuthorized,
+      'cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable' =>
+        cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable,
+      'cdr_disconnectReason_inconsistancyInTheInformationAndClass' =>
+        cdr_disconnectReason_inconsistancyInTheInformationAndClass,
+      'cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified' =>
+        cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified,
+      'cdr_disconnectReason_bearerServiceNotImplemented' =>
+        cdr_disconnectReason_bearerServiceNotImplemented,
+      'cdr_disconnectReason_channelTypeNotImplemented' =>
+        cdr_disconnectReason_channelTypeNotImplemented,
+      'cdr_disconnectReason_transitNetworkSelectionNotImplemented' =>
+        cdr_disconnectReason_transitNetworkSelectionNotImplemented,
+      'cdr_disconnectReason_messageNotImplemented' =>
+        cdr_disconnectReason_messageNotImplemented,
+      'cdr_disconnectReason_requestedFacilityNotImplemented' =>
+        cdr_disconnectReason_requestedFacilityNotImplemented,
+      'cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable' =>
+        cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable,
+      'cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified' =>
+        cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified,
+      'cdr_disconnectReason_invalidCallReferenceValue' =>
+        cdr_disconnectReason_invalidCallReferenceValue,
+      'cdr_disconnectReason_identifiedChannelDoesNotExist' =>
+        cdr_disconnectReason_identifiedChannelDoesNotExist,
+      'cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot' =>
+        cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot,
+      'cdr_disconnectReason_callIdentityInUse' =>
+        cdr_disconnectReason_callIdentityInUse,
+      'cdr_disconnectReason_noCallSuspended' =>
+        cdr_disconnectReason_noCallSuspended,
+      'cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared' =>
+        cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared,
+      'cdr_disconnectReason_calledUserNotMemberOfCug' =>
+        cdr_disconnectReason_calledUserNotMemberOfCug,
+      'cdr_disconnectReason_incompatibleDestination' =>
+        cdr_disconnectReason_incompatibleDestination,
+      'cdr_disconnectReason_nonExistentAbbreviatedAddressEntry' =>
+        cdr_disconnectReason_nonExistentAbbreviatedAddressEntry,
+      'cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed' =>
+        cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed,
+      'cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse' =>
+        cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse,
+      'cdr_disconnectReason_invalidFacilityParameter' =>
+        cdr_disconnectReason_invalidFacilityParameter,
+      'cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported' =>
+        cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported,
+      'cdr_disconnectReason_invalidMessageUnspecified' =>
+        cdr_disconnectReason_invalidMessageUnspecified,
+      'cdr_disconnectReason_mandatoryInformationElementIsMissing' =>
+        cdr_disconnectReason_mandatoryInformationElementIsMissing,
+      'cdr_disconnectReason_messageTypeNonExistentOrNotImplemented' =>
+        cdr_disconnectReason_messageTypeNonExistentOrNotImplemented,
+      'cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented' =>
+        cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented,
+      'cdr_disconnectReason_informationElementNonexistantOrNotImplemented' =>
+        cdr_disconnectReason_informationElementNonexistantOrNotImplemented,
+      'cdr_disconnectReason_invalidInformationElementContents' =>
+        cdr_disconnectReason_invalidInformationElementContents,
+      'cdr_disconnectReason_messageNotCompatibleWithCallState' =>
+        cdr_disconnectReason_messageNotCompatibleWithCallState,
+      'cdr_disconnectReason_recoveryOnTimerExpiry' =>
+        cdr_disconnectReason_recoveryOnTimerExpiry,
+      'cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn' =>
+        cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn,
+      'cdr_disconnectReason_urecognizedParameterMessageDiscarded' =>
+        cdr_disconnectReason_urecognizedParameterMessageDiscarded,
+      'cdr_disconnectReason_protocolErrorUnspecified' =>
+        cdr_disconnectReason_protocolErrorUnspecified,
+      'cdr_disconnectReason_internetworkingUnspecified' =>
+        cdr_disconnectReason_internetworkingUnspecified,
+      'cdr_disconnectReason_nextNodeIsUnreachable' =>
+        cdr_disconnectReason_nextNodeIsUnreachable,
+      'cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService' =>
+        cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService,
+      'cdr_disconnectReason_dtlTransitIsNotMyNodeId' =>
+        cdr_disconnectReason_dtlTransitIsNotMyNodeId,
+      'devTools_AppBarTitle' => devTools_AppBarTitle,
+      'devTools_signalingService_groupTitle' =>
+        devTools_signalingService_groupTitle,
+      'devTools_signalingService_simulateKill_title' =>
+        devTools_signalingService_simulateKill_title,
+      'devTools_signalingService_simulateKill_subtitle' =>
+        devTools_signalingService_simulateKill_subtitle,
+      'devTools_signalingService_simulateKill_confirmMessage' =>
+        devTools_signalingService_simulateKill_confirmMessage,
+      'devTools_signalingService_simulateKill_confirm' =>
+        devTools_signalingService_simulateKill_confirm,
+      'devTools_signalingService_simulateKill_cancel' =>
+        devTools_signalingService_simulateKill_cancel,
+      'agoTicker_daysAgo' => switch (args) {
+        [final int days] => agoTicker_daysAgo(days),
+        _ => throw ArgumentError('agoTicker_daysAgo requires 1 arguments'),
+      },
+      'agoTicker_hoursAgo' => switch (args) {
+        [final int hours] => agoTicker_hoursAgo(hours),
+        _ => throw ArgumentError('agoTicker_hoursAgo requires 1 arguments'),
+      },
+      'agoTicker_minutesAgo' => switch (args) {
+        [final int minutes] => agoTicker_minutesAgo(minutes),
+        _ => throw ArgumentError('agoTicker_minutesAgo requires 1 arguments'),
+      },
+      'agoTicker_secondsAgo' => switch (args) {
+        [final num seconds] => agoTicker_secondsAgo(seconds),
+        _ => throw ArgumentError('agoTicker_secondsAgo requires 1 arguments'),
+      },
+      'contacts_ContactTile_inCall' => switch (args) {
+        [final Object destination] => contacts_ContactTile_inCall(destination),
+        _ => throw ArgumentError(
+          'contacts_ContactTile_inCall requires 1 arguments',
+        ),
+      },
+      'default_UnknownExceptionError' => switch (args) {
+        [final String error] => default_UnknownExceptionError(error),
+        _ => throw ArgumentError(
+          'default_UnknownExceptionError requires 1 arguments',
+        ),
+      },
+      'diagnosticNetworkTestItem_subtitle_publicIps' => switch (args) {
+        [final String ips] => diagnosticNetworkTestItem_subtitle_publicIps(ips),
+        _ => throw ArgumentError(
+          'diagnosticNetworkTestItem_subtitle_publicIps requires 1 arguments',
+        ),
+      },
+      'favorites_SnackBar_deleted' => switch (args) {
+        [final String name] => favorites_SnackBar_deleted(name),
+        _ => throw ArgumentError(
+          'favorites_SnackBar_deleted requires 1 arguments',
+        ),
+      },
+      'formatPhone' => switch (args) {
+        [final String style, final String main, final String ext] =>
+          formatPhone(style, main, ext),
+        _ => throw ArgumentError('formatPhone requires 3 arguments'),
+      },
+      'login_Button_otpSigninVerifyRepeatInterval' => switch (args) {
+        [final int seconds] => login_Button_otpSigninVerifyRepeatInterval(
+          seconds,
+        ),
+        _ => throw ArgumentError(
+          'login_Button_otpSigninVerifyRepeatInterval requires 1 arguments',
+        ),
+      },
+      'login_Button_signupVerifyRepeatInterval' => switch (args) {
+        [final int seconds] => login_Button_signupVerifyRepeatInterval(seconds),
+        _ => throw ArgumentError(
+          'login_Button_signupVerifyRepeatInterval requires 1 arguments',
+        ),
+      },
+      'login_CoreVersionUnsupportedExceptionError' => switch (args) {
+        [final String actual, final String supportedConstraint] =>
+          login_CoreVersionUnsupportedExceptionError(
+            actual,
+            supportedConstraint,
           ),
-      'login_Text_otpSigninVerifyPreDescriptionUserRef': (userRef) =>
-          localizations.login_Text_otpSigninVerifyPreDescriptionUserRef(
-            userRef,
+        _ => throw ArgumentError(
+          'login_CoreVersionUnsupportedExceptionError requires 2 arguments',
+        ),
+      },
+      'login_Text_coreUrlAssignPostDescription' => switch (args) {
+        [final Object email] => login_Text_coreUrlAssignPostDescription(email),
+        _ => throw ArgumentError(
+          'login_Text_coreUrlAssignPostDescription requires 1 arguments',
+        ),
+      },
+      'login_Text_otpSigninVerifyPostDescriptionFromEmail' => switch (args) {
+        [final String email] =>
+          login_Text_otpSigninVerifyPostDescriptionFromEmail(email),
+        _ => throw ArgumentError(
+          'login_Text_otpSigninVerifyPostDescriptionFromEmail requires 1 arguments',
+        ),
+      },
+      'login_Text_otpSigninVerifyPreDescriptionUserRef' => switch (args) {
+        [final String userRef] =>
+          login_Text_otpSigninVerifyPreDescriptionUserRef(userRef),
+        _ => throw ArgumentError(
+          'login_Text_otpSigninVerifyPreDescriptionUserRef requires 1 arguments',
+        ),
+      },
+      'login_Text_signupVerifyPostDescriptionFromEmail' => switch (args) {
+        [final String email] => login_Text_signupVerifyPostDescriptionFromEmail(
+          email,
+        ),
+        _ => throw ArgumentError(
+          'login_Text_signupVerifyPostDescriptionFromEmail requires 1 arguments',
+        ),
+      },
+      'login_Text_signupVerifyPreDescriptionEmail' => switch (args) {
+        [final String email] => login_Text_signupVerifyPreDescriptionEmail(
+          email,
+        ),
+        _ => throw ArgumentError(
+          'login_Text_signupVerifyPreDescriptionEmail requires 1 arguments',
+        ),
+      },
+      'logRecordsConsole_Text_recordsCountHint' => switch (args) {
+        [final int count] => logRecordsConsole_Text_recordsCountHint(count),
+        _ => throw ArgumentError(
+          'logRecordsConsole_Text_recordsCountHint requires 1 arguments',
+        ),
+      },
+      'main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError' =>
+        switch (args) {
+          [final String actual, final String supportedConstraint] =>
+            main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
+              actual,
+              supportedConstraint,
+            ),
+          _ => throw ArgumentError(
+            'main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError requires 2 arguments',
           ),
-      'login_Text_signupVerifyPostDescriptionFromEmail': (email) =>
-          localizations.login_Text_signupVerifyPostDescriptionFromEmail(email),
-      'login_Text_signupVerifyPreDescriptionEmail': (email) =>
-          localizations.login_Text_signupVerifyPreDescriptionEmail(email),
-      'logRecordsConsole_Text_recordsCountHint': (count) =>
-          localizations.logRecordsConsole_Text_recordsCountHint(count),
-      'main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError':
-          (actual, supportedConstraint) => localizations
-              .main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
-                actual,
-                supportedConstraint,
-              ),
-      'messaging_ConversationBuilders_contactExtension': (extension) =>
-          localizations.messaging_ConversationBuilders_contactExtension(
-            extension,
+        },
+      'messaging_ConversationBuilders_contactExtension' => switch (args) {
+        [final String extension] =>
+          messaging_ConversationBuilders_contactExtension(extension),
+        _ => throw ArgumentError(
+          'messaging_ConversationBuilders_contactExtension requires 1 arguments',
+        ),
+      },
+      'notifications_errorSnackBar_signalingDisconnectWithCodeName' =>
+        switch (args) {
+          [final String codeName] =>
+            notifications_errorSnackBar_signalingDisconnectWithCodeName(
+              codeName,
+            ),
+          _ => throw ArgumentError(
+            'notifications_errorSnackBar_signalingDisconnectWithCodeName requires 1 arguments',
           ),
-      'notifications_errorSnackBar_signalingDisconnectWithCodeName':
-          (codeName) => localizations
-              .notifications_errorSnackBar_signalingDisconnectWithCodeName(
-                codeName,
-              ),
-      'notifications_errorSnackBar_signalingDisconnectWithSystemReason':
-          (reason) => localizations
-              .notifications_errorSnackBar_signalingDisconnectWithSystemReason(
-                reason,
-              ),
-      'notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason':
-          (reason) => localizations
-              .notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
-                reason,
-              ),
-      'numberActions_callFrom': (number) =>
-          localizations.numberActions_callFrom(number),
-      'presence_infoView_source': (source) =>
-          localizations.presence_infoView_source(source),
-      'recents_BodyCenter_empty': (filter) =>
-          localizations.recents_BodyCenter_empty(filter),
-      'recents_snackBar_deleted': (name) =>
-          localizations.recents_snackBar_deleted(name),
-      'recentTimeAfterMidnight': (time) =>
-          localizations.recentTimeAfterMidnight(time),
-      'recentTimeBeforeMidnight': (time) =>
-          localizations.recentTimeBeforeMidnight(time),
-      'socketError_defaultDescription': (errorCode) =>
-          localizations.socketError_defaultDescription(errorCode),
-      'user_agreement_checkbox_text': (url) =>
-          localizations.user_agreement_checkbox_text(url),
-      'user_agreement_description': (appName) =>
-          localizations.user_agreement_description(appName),
-      'webview_defaultError_details': (description, code) =>
-          localizations.webview_defaultError_details(description, code),
+        },
+      'notifications_errorSnackBar_signalingDisconnectWithSystemReason' =>
+        switch (args) {
+          [final String reason] =>
+            notifications_errorSnackBar_signalingDisconnectWithSystemReason(
+              reason,
+            ),
+          _ => throw ArgumentError(
+            'notifications_errorSnackBar_signalingDisconnectWithSystemReason requires 1 arguments',
+          ),
+        },
+      'notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason' =>
+        switch (args) {
+          [final String reason] =>
+            notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason(
+              reason,
+            ),
+          _ => throw ArgumentError(
+            'notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason requires 1 arguments',
+          ),
+        },
+      'numberActions_callFrom' => switch (args) {
+        [final String number] => numberActions_callFrom(number),
+        _ => throw ArgumentError('numberActions_callFrom requires 1 arguments'),
+      },
+      'presence_infoView_source' => switch (args) {
+        [final Object source] => presence_infoView_source(source),
+        _ => throw ArgumentError(
+          'presence_infoView_source requires 1 arguments',
+        ),
+      },
+      'recents_BodyCenter_empty' => switch (args) {
+        [final Object filter] => recents_BodyCenter_empty(filter),
+        _ => throw ArgumentError(
+          'recents_BodyCenter_empty requires 1 arguments',
+        ),
+      },
+      'recents_snackBar_deleted' => switch (args) {
+        [final String name] => recents_snackBar_deleted(name),
+        _ => throw ArgumentError(
+          'recents_snackBar_deleted requires 1 arguments',
+        ),
+      },
+      'recentTimeAfterMidnight' => switch (args) {
+        [final DateTime time] => recentTimeAfterMidnight(time),
+        _ => throw ArgumentError(
+          'recentTimeAfterMidnight requires 1 arguments',
+        ),
+      },
+      'recentTimeBeforeMidnight' => switch (args) {
+        [final DateTime time] => recentTimeBeforeMidnight(time),
+        _ => throw ArgumentError(
+          'recentTimeBeforeMidnight requires 1 arguments',
+        ),
+      },
+      'socketError_defaultDescription' => switch (args) {
+        [final int? errorCode] => socketError_defaultDescription(errorCode),
+        _ => throw ArgumentError(
+          'socketError_defaultDescription requires 1 arguments',
+        ),
+      },
+      'user_agreement_checkbox_text' => switch (args) {
+        [final Object url] => user_agreement_checkbox_text(url),
+        _ => throw ArgumentError(
+          'user_agreement_checkbox_text requires 1 arguments',
+        ),
+      },
+      'user_agreement_description' => switch (args) {
+        [final Object appName] => user_agreement_description(appName),
+        _ => throw ArgumentError(
+          'user_agreement_description requires 1 arguments',
+        ),
+      },
+      'webview_defaultError_details' => switch (args) {
+        [final String description, final int code] =>
+          webview_defaultError_details(description, code),
+        _ => throw ArgumentError(
+          'webview_defaultError_details requires 2 arguments',
+        ),
+      },
+      _ => null,
     };
+  }
+
+  String? parseL10n(String translationKey, {List<Object>? arguments}) {
+    final result = lookupKey(translationKey, arguments);
+    if (result == null) {
+      return null;
+    }
+    return result as String;
   }
 }
