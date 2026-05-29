@@ -25,6 +25,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
@@ -102,7 +103,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final VoidCallback? onCallEnded;
   final OnDiagnosticReportRequested onDiagnosticReportRequested;
 
-  StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
+  StreamSubscription<ConnectivityResult>? _connectivityChangedSubscription;
   StreamSubscription<void>? _foregroundCallPushSubscription;
   final _iceRestartDebounce = DebounceMap<String>(const Duration(seconds: 2));
 
@@ -113,6 +114,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   late final PeerConnectionManager _peerConnectionManager;
   late final HandshakeProcessor _handshakeProcessor;
+  final ConnectivityService _connectivityService;
 
   final _callkeepSound = WebtritCallkeepSound();
 
@@ -142,9 +144,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     this.peerConnectionPolicyApplier,
     required SignalingModule signalingModule,
     required PeerConnectionManager peerConnectionManager,
+    required ConnectivityService connectivityService,
     this.onCallEnded,
     Stream<void>? foregroundCallPushSignal,
-  }) : super(const CallState()) {
+  }) : _connectivityService = connectivityService,
+       super(const CallState()) {
     _mediaManager = CallMediaManager(callkeep: callkeep);
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
@@ -512,8 +516,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWith(currentAppLifecycleState: lifecycleState));
     _logger.fine('_onCallStarted initial lifecycle state: $lifecycleState');
 
-    // Initialize connectivity state
-    final connectivityState = (await Connectivity().checkConnectivity()).first;
+    // Initialize connectivity state from the centralized service. The service
+    // owns the single subscription to `Connectivity().onConnectivityChanged`
+    // and exposes a deduplicated stream of changes, so the bloc no longer
+    // talks to the plugin directly.
+    final connectivityState = _connectivityService.currentConnectivityResult;
     emit(
       state.copyWith(
         callServiceState: state.callServiceState.copyWith(networkStatus: connectivityState.toNetworkStatus()),
@@ -521,10 +528,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
     _logger.finer('_onCallStarted initial connectivity state: $connectivityState');
 
-    // Subscribe to future connectivity changes
-    _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((result) {
-      final currentConnectivityResult = result.first;
-      add(_ConnectivityResultChanged(currentConnectivityResult));
+    // Subscribe to deduplicated future connectivity changes. The first replay
+    // event from `Connectivity().onConnectivityChanged` is already filtered by
+    // the service when it matches the cached initial value, so no bootstrap
+    // call to the reconnect controller is needed here - the initial WS connect
+    // is initiated by MainShell `..connect()` and runtime changes flow through
+    // this subscription.
+    _connectivityChangedSubscription = _connectivityService.connectivityResultStream.listen((result) {
+      add(_ConnectivityResultChanged(result));
     });
 
     // Initial WS connect is initiated by MainShell `..connect()`; runtime
