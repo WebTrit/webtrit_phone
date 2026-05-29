@@ -2963,13 +2963,26 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    final offerCandidate = await pc.createOffer();
-
-    // Note: prepare all asychronous info before checking synchrounous state below
-    // to avoid races as possible,
-    // for example:
-    // - while [await _peerConnectionManager.retrieve, await pc.createOffer], activeCall.updating or signalingConnected can be changed
-
+    // All synchronous state guards run BEFORE createOffer.
+    //
+    // createOffer is not a read-only "snapshot the SDP" call: with the default
+    // OfferToReceiveAudio/Video constraints flutter-webrtc instructs the native
+    // PC to add recvonly transceivers if matching ones do not already exist,
+    // which advances the internal mid counter. If we bail after createOffer
+    // (e.g. because signaling is not connected), those transceivers leak onto
+    // the PC. The next renegotiate cycle calls createOffer again and adds
+    // ANOTHER set, eventually emitting an offer whose m-line mids no longer
+    // match what Janus answers with (mid:0 from Asterisk pass-through), so
+    // setRemoteDescription rejects the answer and the PC is stuck in
+    // have-local-offer forever.
+    //
+    // Guard order trade-off: the original author placed createOffer first to
+    // capture "fresh" SDP before checking state, on the assumption that state
+    // could shift during an async wait. That race window still exists between
+    // createOffer and setLocalDescription/execute below, but the cost of
+    // proceeding with stale state there (offer sent to a freshly-closed
+    // signaling channel -> SignalingTransactionTerminateByDisconnect, caught
+    // by the catch block) is far cheaper than the PC corruption above.
     final activeCall = state.retrieveActiveCall(e.callId);
     if (activeCall == null) {
       _logger.info('__onMutationRenegotiate: activeCall disposed, skipping renegotiation');
@@ -3000,6 +3013,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.info('__onMutationRenegotiate: signaling not connected, skipping renegotiation');
       return;
     }
+
+    final offerCandidate = await pc.createOffer();
 
     // If call already in updating state, mostly by remote renegetiation, hold, transfer etc..
     // skip it but schedule another renegotiation in 1 second later to ensure the pending one is finished
