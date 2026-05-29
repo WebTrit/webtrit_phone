@@ -3004,16 +3004,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // Dont forget to invoke __onMutationRenegotiate manualy when signaling reconnected to make sure the new offer will be sended
     //
     final signalingConnected = state.isSignalingEstablished;
-    _logger.info(
-      '__onMutationRenegotiate: signaling check'
-      ' signalingConnected=$signalingConnected'
-      ' signalingClientStatus=${state.callServiceState.signalingClientStatus}'
-      ' isHandshakeEstablished=${state.isHandshakeEstablished}'
-      ' registration=${state.callServiceState.registration?.status}'
-      ' networkStatus=${state.callServiceState.networkStatus}'
-      ' linesCount=${state.linesCount}'
-      ' appLifecycle=${state.currentAppLifecycleState}',
-    );
     if (!signalingConnected) {
       _logger.info('__onMutationRenegotiate: signaling not connected, skipping renegotiation');
       return;
