@@ -6,14 +6,24 @@ abstract interface class AutocompleteHistoryRepository {
 }
 
 class AutocompleteHistoryRepositoryPrefsImpl implements AutocompleteHistoryRepository {
-  AutocompleteHistoryRepositoryPrefsImpl(this._appPreferences);
+  AutocompleteHistoryRepositoryPrefsImpl(this._appPreferences, {this.presets = const {}});
   final AppPreferences _appPreferences;
+  final Map<String, List<String>> presets;
   final _prefsKeyPrefix = 'autocomplete_history_';
 
   @override
   List<String> getHistory(String key) {
     final valueKey = _prefsKeyPrefix + key;
-    return _appPreferences.getStringList(valueKey) ?? [];
+    final stored = _appPreferences.getStringList(valueKey) ?? const [];
+    final preset = presets[key] ?? const [];
+    if (preset.isEmpty) return stored;
+
+    final seen = <String>{};
+    final merged = <String>[];
+    for (final v in [...stored, ...preset]) {
+      if (seen.add(v.toLowerCase())) merged.add(v);
+    }
+    return merged;
   }
 
   @override

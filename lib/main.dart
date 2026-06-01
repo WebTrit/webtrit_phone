@@ -126,7 +126,10 @@ class RootApp extends StatelessWidget {
           final encodingSettingsRepository = EncodingSettingsRepositoryPrefsImpl(prefs);
           final localeRepository = LocaleRepositoryPrefsImpl(prefs);
           final themeModeRepository = ThemeModeRepositoryPrefsImpl(prefs);
-          final autocompleteHistoryRepository = AutocompleteHistoryRepositoryPrefsImpl(prefs);
+          final autocompleteHistoryRepository = AutocompleteHistoryRepositoryPrefsImpl(
+            prefs,
+            presets: {'recent_core_urls': EnvironmentConfig.PREDEFINED_CORE_URLS},
+          );
 
           return MultiRepositoryProvider(
             providers: [
