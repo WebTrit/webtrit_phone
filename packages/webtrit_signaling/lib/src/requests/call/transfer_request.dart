@@ -34,14 +34,13 @@ class TransferRequest extends CallRequest {
 
   @override
   Map<String, dynamic> toJson() {
-    final replaceCallId = this.replaceCallId;
     return {
       Request.typeKey: typeValue,
       'transaction': transaction,
       'line': line,
       'call_id': callId,
       'number': number,
-      if (replaceCallId != null) 'replace_call_id': replaceCallId,
+      'replace_call_id': ?replaceCallId,
     };
   }
 }
