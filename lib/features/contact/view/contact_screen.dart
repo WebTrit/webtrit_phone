@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
@@ -164,6 +165,7 @@ class _ContactScreenState extends State<ContactScreen> {
                             ),
                           for (final contactEmail in contact.emails)
                             ContactEmailTile(
+                              key: contactEmailTileKey,
                               address: contactEmail.address,
                               label: contactEmail.label,
                               onEmailPressed: widget.enableTileEmail ? () => _onEmailPressed(contactEmail) : null,

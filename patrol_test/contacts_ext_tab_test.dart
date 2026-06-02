@@ -16,10 +16,10 @@ import 'subsequences/pump_root_and_wait_until_visible.dart';
 
 void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
-  const uniqueContactAName = IntegrationTestEnvironmentConfig.EXT_CONTACT_UNIQUE_A_NAME;
-  const uniqueContactANumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_UNIQUE_A_NUMBER;
-  const uniqueContactBName = IntegrationTestEnvironmentConfig.EXT_CONTACT_UNIQUE_B_NAME;
-  const uniqueContactBNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_UNIQUE_B_NUMBER;
+  const contactAUniqueName = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_UNIQUE_NAME;
+  const contactAUniqueNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_UNIQUE_NUMBER;
+  const contactBUniqueName = IntegrationTestEnvironmentConfig.EXT_CONTACT_B_UNIQUE_NAME;
+  const contactBUniqueNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_B_UNIQUE_NUMBER;
   const multiSearchQuery = IntegrationTestEnvironmentConfig.EXT_CONTACT_MULTI_SEARCH_QUERY;
 
   patrolTest('External contact tab test: '
@@ -63,79 +63,79 @@ void main() {
     );
     await $(contactsSerchInputClearKey).tap();
 
-    // Check if search of uniqueContactAName returns exactly one result, then verify number in detail.
-    await $(contactsSerchInputKey).enterText(uniqueContactAName);
+    // Check if search of contactAUniqueName returns exactly one result, then verify number in detail.
+    await $(contactsSerchInputKey).enterText(contactAUniqueName);
     await pumpFor(const Duration(seconds: 1), $);
     expect(
-      $(contactsExtContactTileKey).containing(RegExp(uniqueContactAName)),
+      $(contactsExtContactTileKey).containing(RegExp(contactAUniqueName)),
       findsOneWidget,
-      reason: '$uniqueContactAName should present if name match',
+      reason: '$contactAUniqueName should present if name match',
     );
     expect(
-      $(contactsExtContactTileKey).containing(RegExp(uniqueContactBName)),
+      $(contactsExtContactTileKey).containing(RegExp(contactBUniqueName)),
       findsNothing,
-      reason: '$uniqueContactBName shouldnt present if name match',
+      reason: '$contactBUniqueName shouldnt present if name match',
     );
-    await $(contactsExtContactTileKey).containing(RegExp(uniqueContactAName)).tap();
-    await $(contactPhoneTileKey).containing(uniqueContactANumber).waitUntilVisible();
+    await $(contactsExtContactTileKey).containing(RegExp(contactAUniqueName)).tap();
+    await $(contactPhoneTileKey).containing(contactAUniqueNumber).waitUntilVisible();
     expect(
-      $(contactPhoneTileKey).containing(uniqueContactANumber),
+      $(contactPhoneTileKey).containing(contactAUniqueNumber),
       findsOneWidget,
-      reason: '$uniqueContactANumber should be visible in $uniqueContactAName detail',
+      reason: '$contactAUniqueNumber should be visible in $contactAUniqueName detail',
     );
     await $(BackButtonIcon).tap();
     await $(contactsSerchInputClearKey).tap();
 
-    // Check if search of uniqueContactANumber returns exactly one result, then verify name in result.
-    await $(contactsSerchInputKey).enterText(uniqueContactANumber);
+    // Check if search of contactAUniqueNumber returns exactly one result, then verify name in result.
+    await $(contactsSerchInputKey).enterText(contactAUniqueNumber);
     await pumpFor(const Duration(seconds: 1), $);
     expect(
-      $(contactsExtContactTileKey).containing(RegExp(uniqueContactAName)),
+      $(contactsExtContactTileKey).containing(RegExp(contactAUniqueName)),
       findsOneWidget,
-      reason: '$uniqueContactAName should present if number match',
+      reason: '$contactAUniqueName should present if number match',
     );
     expect(
-      $(contactsExtContactTileKey).containing(RegExp(uniqueContactBName)),
+      $(contactsExtContactTileKey).containing(RegExp(contactBUniqueName)),
       findsNothing,
-      reason: '$uniqueContactBName shouldnt present if number match',
+      reason: '$contactBUniqueName shouldnt present if number match',
     );
     await $(contactsSerchInputClearKey).tap();
 
-    // Check if search of uniqueContactBName returns exactly one result, then verify number in detail.
-    await $(contactsSerchInputKey).enterText(uniqueContactBName);
+    // Check if search of contactBUniqueName returns exactly one result, then verify number in detail.
+    await $(contactsSerchInputKey).enterText(contactBUniqueName);
     await pumpFor(const Duration(seconds: 1), $);
     expect(
-      $(contactsExtContactTileKey).containing(RegExp(uniqueContactBName)),
+      $(contactsExtContactTileKey).containing(RegExp(contactBUniqueName)),
       findsOneWidget,
-      reason: '$uniqueContactBName should present if name match',
+      reason: '$contactBUniqueName should present if name match',
     );
     expect(
-      $(contactsExtContactTileKey).containing(RegExp(uniqueContactAName)),
+      $(contactsExtContactTileKey).containing(RegExp(contactAUniqueName)),
       findsNothing,
-      reason: '$uniqueContactAName shouldnt present if name match',
+      reason: '$contactAUniqueName shouldnt present if name match',
     );
-    await $(contactsExtContactTileKey).containing(RegExp(uniqueContactBName)).tap();
-    await $(contactPhoneTileKey).containing(uniqueContactBNumber).waitUntilVisible();
+    await $(contactsExtContactTileKey).containing(RegExp(contactBUniqueName)).tap();
+    await $(contactPhoneTileKey).containing(contactBUniqueNumber).waitUntilVisible();
     expect(
-      $(contactPhoneTileKey).containing(uniqueContactBNumber),
+      $(contactPhoneTileKey).containing(contactBUniqueNumber),
       findsOneWidget,
-      reason: '$uniqueContactBNumber should be visible in $uniqueContactBName detail',
+      reason: '$contactBUniqueNumber should be visible in $contactBUniqueName detail',
     );
     await $(BackButtonIcon).tap();
     await $(contactsSerchInputClearKey).tap();
 
-    // Check if search of uniqueContactBNumber returns exactly one result, then verify name in result.
-    await $(contactsSerchInputKey).enterText(uniqueContactBNumber);
+    // Check if search of contactBUniqueNumber returns exactly one result, then verify name in result.
+    await $(contactsSerchInputKey).enterText(contactBUniqueNumber);
     await pumpFor(const Duration(seconds: 1), $);
     expect(
-      $(contactsExtContactTileKey).containing(RegExp(uniqueContactBName)),
+      $(contactsExtContactTileKey).containing(RegExp(contactBUniqueName)),
       findsOneWidget,
-      reason: '$uniqueContactBName should present if number match',
+      reason: '$contactBUniqueName should present if number match',
     );
     expect(
-      $(contactsExtContactTileKey).containing(RegExp(uniqueContactAName)),
+      $(contactsExtContactTileKey).containing(RegExp(contactAUniqueName)),
       findsNothing,
-      reason: '$uniqueContactAName shouldnt present if number match',
+      reason: '$contactAUniqueName shouldnt present if number match',
     );
     await $(contactsSerchInputClearKey).tap();
 

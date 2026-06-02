@@ -17,10 +17,10 @@ import 'subsequences/pump_root_and_wait_until_visible.dart';
 
 void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
-  const uniqueContactAName = IntegrationTestEnvironmentConfig.EXT_CONTACT_UNIQUE_A_NAME;
-  const uniqueContactANumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_UNIQUE_A_NUMBER;
-  const uniqueContactBName = IntegrationTestEnvironmentConfig.EXT_CONTACT_UNIQUE_B_NAME;
-  const uniqueContactBNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_UNIQUE_B_NUMBER;
+  const contactAUniqueName = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_UNIQUE_NAME;
+  const contactAUniqueNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_UNIQUE_NUMBER;
+  const contactBUniqueName = IntegrationTestEnvironmentConfig.EXT_CONTACT_B_UNIQUE_NAME;
+  const contactBUniqueNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_B_UNIQUE_NUMBER;
 
   patrolTest('Favorites: '
       'add via contact detail | '
@@ -40,20 +40,20 @@ void main() {
     // Check which contacts are already in favorites to avoid double-adding.
     await $(MainFlavor.favorites.toNavBarKey()).tap();
     await $.pumpAndTrySettle();
-    final contactAAlreadyFavorited = $(favoriteTileKey).containing(RegExp(uniqueContactAName)).visible;
-    final contactBAlreadyFavorited = $(favoriteTileKey).containing(RegExp(uniqueContactBName)).visible;
+    final contactAAlreadyFavorited = $(favoriteTileKey).containing(RegExp(contactAUniqueName)).visible;
+    final contactBAlreadyFavorited = $(favoriteTileKey).containing(RegExp(contactBUniqueName)).visible;
 
     if (!contactAAlreadyFavorited) {
       await $(MainFlavor.contacts.toNavBarKey()).tap();
       await $(contactsTabExtKey).tap().then((e) => $.pumpAndTrySettle());
-      final contactAVisible = $(contactsExtContactTileKey).containing(RegExp(uniqueContactAName)).visible;
+      final contactAVisible = $(contactsExtContactTileKey).containing(RegExp(contactAUniqueName)).visible;
       if (!contactAVisible) {
-        await $(contactsSerchInputKey).enterText(uniqueContactAName);
+        await $(contactsSerchInputKey).enterText(contactAUniqueName);
         await pumpFor(const Duration(seconds: 1), $);
       }
-      await $(contactsExtContactTileKey).containing(RegExp(uniqueContactAName)).tap();
-      await $(contactPhoneTileKey).containing(uniqueContactANumber).waitUntilVisible();
-      await $(contactPhoneTileKey).containing(uniqueContactANumber).$(contactPhoneTileFavIconKey).tap();
+      await $(contactsExtContactTileKey).containing(RegExp(contactAUniqueName)).tap();
+      await $(contactPhoneTileKey).containing(contactAUniqueNumber).waitUntilVisible();
+      await $(contactPhoneTileKey).containing(contactAUniqueNumber).$(contactPhoneTileFavIconKey).tap();
       await $(BackButtonIcon).tap();
       if (!contactAVisible) await $(contactsSerchInputClearKey).tap();
     }
@@ -61,14 +61,14 @@ void main() {
     if (!contactBAlreadyFavorited) {
       await $(MainFlavor.contacts.toNavBarKey()).tap();
       await $(contactsTabExtKey).tap().then((e) => $.pumpAndTrySettle());
-      final contactBVisible = $(contactsExtContactTileKey).containing(RegExp(uniqueContactBName)).visible;
+      final contactBVisible = $(contactsExtContactTileKey).containing(RegExp(contactBUniqueName)).visible;
       if (!contactBVisible) {
-        await $(contactsSerchInputKey).enterText(uniqueContactBName);
+        await $(contactsSerchInputKey).enterText(contactBUniqueName);
         await pumpFor(const Duration(seconds: 1), $);
       }
-      await $(contactsExtContactTileKey).containing(RegExp(uniqueContactBName)).tap();
-      await $(contactPhoneTileKey).containing(uniqueContactBNumber).waitUntilVisible();
-      await $(contactPhoneTileKey).containing(uniqueContactBNumber).$(contactPhoneTileFavIconKey).tap();
+      await $(contactsExtContactTileKey).containing(RegExp(contactBUniqueName)).tap();
+      await $(contactPhoneTileKey).containing(contactBUniqueNumber).waitUntilVisible();
+      await $(contactPhoneTileKey).containing(contactBUniqueNumber).$(contactPhoneTileFavIconKey).tap();
       await $(BackButtonIcon).tap();
       if (!contactBVisible) await $(contactsSerchInputClearKey).tap();
     }
@@ -77,14 +77,14 @@ void main() {
     await $(MainFlavor.favorites.toNavBarKey()).tap();
     await $.pumpAndTrySettle();
     expect(
-      $(favoriteTileKey).containing(RegExp(uniqueContactAName)),
+      $(favoriteTileKey).containing(RegExp(contactAUniqueName)),
       findsOneWidget,
-      reason: '$uniqueContactAName should be in favorites',
+      reason: '$contactAUniqueName should be in favorites',
     );
     expect(
-      $(favoriteTileKey).containing(RegExp(uniqueContactBName)),
+      $(favoriteTileKey).containing(RegExp(contactBUniqueName)),
       findsOneWidget,
-      reason: '$uniqueContactBName should be in favorites',
+      reason: '$contactBUniqueName should be in favorites',
     );
 
     // Wait, logout, login again and verify favorites persisted.
@@ -95,34 +95,34 @@ void main() {
 
     await $(MainFlavor.favorites.toNavBarKey()).tap();
     expect(
-      $(favoriteTileKey).containing(RegExp(uniqueContactAName)),
+      $(favoriteTileKey).containing(RegExp(contactAUniqueName)),
       findsOneWidget,
-      reason: '$uniqueContactAName should still be in favorites after re-login',
+      reason: '$contactAUniqueName should still be in favorites after re-login',
     );
     expect(
-      $(favoriteTileKey).containing(RegExp(uniqueContactBName)),
+      $(favoriteTileKey).containing(RegExp(contactBUniqueName)),
       findsOneWidget,
-      reason: '$uniqueContactBName should still be in favorites after re-login',
+      reason: '$contactBUniqueName should still be in favorites after re-login',
     );
 
-    // Open dropdown for uniqueContactAName via three-dots icon, verify all actions, then open View Contact.
-    await $(favoriteTileKey).containing(RegExp(uniqueContactAName)).$(Icons.more_vert).tap();
+    // Open dropdown for contactAUniqueName via three-dots icon, verify all actions, then open View Contact.
+    await $(favoriteTileKey).containing(RegExp(contactAUniqueName)).$(Icons.more_vert).tap();
     await $.pumpAndTrySettle();
     expect($('Audio call'), findsOneWidget, reason: 'Audio call action should be present');
     expect($('Video call'), findsOneWidget, reason: 'Video call action should be present');
     expect($('View Contact'), findsOneWidget, reason: 'View Contact action should be present');
     expect($('Delete'), findsOneWidget, reason: 'Delete action should be present');
     await $('View Contact').tap();
-    await $(contactPhoneTileKey).containing(uniqueContactANumber).waitUntilVisible();
+    await $(contactPhoneTileKey).containing(contactAUniqueNumber).waitUntilVisible();
     expect(
-      $(contactPhoneTileKey).containing(uniqueContactANumber),
+      $(contactPhoneTileKey).containing(contactAUniqueNumber),
       findsOneWidget,
-      reason: '$uniqueContactANumber should be visible in $uniqueContactAName contact detail',
+      reason: '$contactAUniqueNumber should be visible in $contactAUniqueName contact detail',
     );
     await $(BackButtonIcon).tap();
 
-    // Open dropdown for uniqueContactAName via three-dots icon, then audio call and hangup after 5 secs.
-    await $(favoriteTileKey).containing(RegExp(uniqueContactAName)).$(Icons.more_vert).tap();
+    // Open dropdown for contactAUniqueName via three-dots icon, then audio call and hangup after 5 secs.
+    await $(favoriteTileKey).containing(RegExp(contactAUniqueName)).$(Icons.more_vert).tap();
     await $.pumpAndTrySettle();
     await $('Audio call').tap();
     await $(CallActiveScaffold).waitUntilVisible();
@@ -130,30 +130,30 @@ void main() {
     if ($(CallActiveScaffold).visible) await $(callActionsHangupKey).tap();
     await $.pumpAndTrySettle();
 
-    // Open dropdown for uniqueContactAName via three-dots icon again, then delete.
-    await $(favoriteTileKey).containing(RegExp(uniqueContactAName)).$(Icons.more_vert).tap();
+    // Open dropdown for contactAUniqueName via three-dots icon again, then delete.
+    await $(favoriteTileKey).containing(RegExp(contactAUniqueName)).$(Icons.more_vert).tap();
     await $.pumpAndTrySettle();
     await $('Delete').tap();
     await $.pumpAndTrySettle();
 
-    // Open dropdown for uniqueContactBName via long press, verify all actions, then open View Contact.
-    await $(favoriteTileKey).containing(RegExp(uniqueContactBName)).longPress();
+    // Open dropdown for contactBUniqueName via long press, verify all actions, then open View Contact.
+    await $(favoriteTileKey).containing(RegExp(contactBUniqueName)).longPress();
     await $.pumpAndTrySettle();
     expect($('Audio call'), findsOneWidget, reason: 'Audio call action should be present');
     expect($('Video call'), findsOneWidget, reason: 'Video call action should be present');
     expect($('View Contact'), findsOneWidget, reason: 'View Contact action should be present');
     expect($('Delete'), findsOneWidget, reason: 'Delete action should be present');
     await $('View Contact').tap();
-    await $(contactPhoneTileKey).containing(uniqueContactBNumber).waitUntilVisible();
+    await $(contactPhoneTileKey).containing(contactBUniqueNumber).waitUntilVisible();
     expect(
-      $(contactPhoneTileKey).containing(uniqueContactBNumber),
+      $(contactPhoneTileKey).containing(contactBUniqueNumber),
       findsOneWidget,
-      reason: '$uniqueContactBNumber should be visible in $uniqueContactBName contact detail',
+      reason: '$contactBUniqueNumber should be visible in $contactBUniqueName contact detail',
     );
     await $(BackButtonIcon).tap();
 
-    // Open dropdown for uniqueContactBName via long press, then audio call and hangup after 5 secs.
-    await $(favoriteTileKey).containing(RegExp(uniqueContactBName)).longPress();
+    // Open dropdown for contactBUniqueName via long press, then audio call and hangup after 5 secs.
+    await $(favoriteTileKey).containing(RegExp(contactBUniqueName)).longPress();
     await $.pumpAndTrySettle();
     await $('Audio call').tap();
     await $(CallActiveScaffold).waitUntilVisible();
@@ -161,22 +161,22 @@ void main() {
     if ($(CallActiveScaffold).visible) await $(callActionsHangupKey).tap();
     await $.pumpAndTrySettle();
 
-    // Open dropdown for uniqueContactBName via long press again, then delete.
-    await $(favoriteTileKey).containing(RegExp(uniqueContactBName)).longPress();
+    // Open dropdown for contactBUniqueName via long press again, then delete.
+    await $(favoriteTileKey).containing(RegExp(contactBUniqueName)).longPress();
     await $.pumpAndTrySettle();
     await $('Delete').tap();
     await $.pumpAndTrySettle();
 
     // Verify both are gone from favorites.
     expect(
-      $(favoriteTileKey).containing(RegExp(uniqueContactAName)),
+      $(favoriteTileKey).containing(RegExp(contactAUniqueName)),
       findsNothing,
-      reason: '$uniqueContactAName should be removed from favorites',
+      reason: '$contactAUniqueName should be removed from favorites',
     );
     expect(
-      $(favoriteTileKey).containing(RegExp(uniqueContactBName)),
+      $(favoriteTileKey).containing(RegExp(contactBUniqueName)),
       findsNothing,
-      reason: '$uniqueContactBName should be removed from favorites',
+      reason: '$contactBUniqueName should be removed from favorites',
     );
 
     // Logout, login again and verify deletion persisted.
@@ -188,14 +188,14 @@ void main() {
     await $(MainFlavor.favorites.toNavBarKey()).tap();
     await $.pumpAndTrySettle();
     expect(
-      $(favoriteTileKey).containing(RegExp(uniqueContactAName)),
+      $(favoriteTileKey).containing(RegExp(contactAUniqueName)),
       findsNothing,
-      reason: '$uniqueContactAName should still be absent from favorites after re-login',
+      reason: '$contactAUniqueName should still be absent from favorites after re-login',
     );
     expect(
-      $(favoriteTileKey).containing(RegExp(uniqueContactBName)),
+      $(favoriteTileKey).containing(RegExp(contactBUniqueName)),
       findsNothing,
-      reason: '$uniqueContactBName should still be absent from favorites after re-login',
+      reason: '$contactBUniqueName should still be absent from favorites after re-login',
     );
 
     // Teardowning
