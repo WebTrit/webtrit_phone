@@ -534,9 +534,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // call to the reconnect controller is needed here - the initial WS connect
     // is initiated by MainShell `..connect()` and runtime changes flow through
     // this subscription.
-    _connectivityChangedSubscription = _connectivityService.connectivityResultStream.listen((result) {
-      add(_ConnectivityResultChanged(result));
-    });
+    _connectivityChangedSubscription = _connectivityService.connectivityResultStream.listen(
+      (result) => add(_ConnectivityResultChanged(result)),
+    );
 
     // Initial WS connect is initiated by MainShell `..connect()`; runtime
     // connectivity changes flow through the subscription above. No bootstrap

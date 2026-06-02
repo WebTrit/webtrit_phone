@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
@@ -42,7 +43,7 @@ class ConnectivityServiceImpl implements ConnectivityService {
   /// subscribes. Must be awaited so the listener's first replayed event is
   /// recognized as a duplicate and filtered.
   static Future<ConnectivityServiceImpl> create({required ConnectivityChecker connectivityChecker}) async {
-    final initialResult = (await Connectivity().checkConnectivity()).first;
+    final initialResult = (await Connectivity().checkConnectivity()).firstOrNull ?? ConnectivityResult.none;
     return ConnectivityServiceImpl._(connectivityChecker: connectivityChecker, initialResult: initialResult);
   }
 
@@ -67,13 +68,15 @@ class ConnectivityServiceImpl implements ConnectivityService {
   Future<bool> checkConnection() => _checkConnection(_lastResult);
 
   Future<void> _handleConnectivityChange(List<ConnectivityResult> result) async {
-    final next = result.first;
+    final next = result.firstOrNull ?? ConnectivityResult.none;
     if (next != _lastResult) {
       _lastResult = next;
       _resultController.add(next);
     }
     final connected = await _checkConnection(next);
-    _onlineController.add(connected);
+    if (next == _lastResult) {
+      _onlineController.add(connected);
+    }
   }
 
   Future<bool> _checkConnection(ConnectivityResult current) async {
