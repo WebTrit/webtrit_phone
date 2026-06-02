@@ -527,11 +527,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(_ConnectivityResultChanged(currentConnectivityResult));
     });
 
-    if (connectivityState == ConnectivityResult.none) {
-      _reconnectController.notifyNetworkUnavailable();
-    } else {
-      _reconnectController.notifyNetworkAvailable();
-    }
+    // Initial WS connect is initiated by MainShell `..connect()`; runtime
+    // connectivity changes flow through the subscription above. No bootstrap
+    // call to the reconnect controller is needed - calling notifyNetworkAvailable
+    // here would proactively disconnect a healthy WS that just delivered the
+    // handshake (the disconnect path inside notifyNetworkAvailable assumes a
+    // real interface change, which a bootstrap snapshot is not).
 
     WebRTC.initialize(options: webRtcOptionsBuilder?.build());
   }
@@ -2958,8 +2959,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    if (pc.signalingState != RTCSignalingState.RTCSignalingStateStable) {
-      _logger.fine(() => '__onMutationRenegotiate: pc signalingState is ${pc.signalingState}, skipping renegotiation');
+    // pc.signalingState is a Dart-side cache populated only after the first
+    // native state event. On a freshly created PC the event may not have
+    // arrived yet; force a platform round-trip in that case so the guard
+    // gets the real native state instead of guessing what null means.
+    final cachedSigState = pc.signalingState;
+    final sigState = cachedSigState ?? await pc.getSignalingState();
+    _logger.info('__onMutationRenegotiate: sigState=$sigState (cache=$cachedSigState)');
+    if (sigState != RTCSignalingState.RTCSignalingStateStable) {
+      _logger.fine(() => '__onMutationRenegotiate: pc signalingState is $sigState, skipping renegotiation');
       return;
     }
 
