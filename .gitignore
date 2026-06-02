@@ -59,3 +59,4 @@ makefile.shared
 .claude/settings.local.json
 CLAUDE.local.md
 **/.claude/
+integration_test/patrol_test_bundle.dart
