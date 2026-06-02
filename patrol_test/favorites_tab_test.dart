@@ -46,25 +46,31 @@ void main() {
     if (!contactAAlreadyFavorited) {
       await $(MainFlavor.contacts.toNavBarKey()).tap();
       await $(contactsTabExtKey).tap().then((e) => $.pumpAndTrySettle());
-      await $(contactsSerchInputKey).enterText(uniqueContactAName);
-      await pumpFor(const Duration(seconds: 1), $);
+      final contactAVisible = $(contactsExtContactTileKey).containing(RegExp(uniqueContactAName)).visible;
+      if (!contactAVisible) {
+        await $(contactsSerchInputKey).enterText(uniqueContactAName);
+        await pumpFor(const Duration(seconds: 1), $);
+      }
       await $(contactsExtContactTileKey).containing(RegExp(uniqueContactAName)).tap();
       await $(contactPhoneTileKey).containing(uniqueContactANumber).waitUntilVisible();
       await $(contactPhoneTileKey).containing(uniqueContactANumber).$(contactPhoneTileFavIconKey).tap();
       await $(BackButtonIcon).tap();
-      await $(contactsSerchInputClearKey).tap();
+      if (!contactAVisible) await $(contactsSerchInputClearKey).tap();
     }
 
     if (!contactBAlreadyFavorited) {
       await $(MainFlavor.contacts.toNavBarKey()).tap();
       await $(contactsTabExtKey).tap().then((e) => $.pumpAndTrySettle());
-      await $(contactsSerchInputKey).enterText(uniqueContactBName);
-      await pumpFor(const Duration(seconds: 1), $);
+      final contactBVisible = $(contactsExtContactTileKey).containing(RegExp(uniqueContactBName)).visible;
+      if (!contactBVisible) {
+        await $(contactsSerchInputKey).enterText(uniqueContactBName);
+        await pumpFor(const Duration(seconds: 1), $);
+      }
       await $(contactsExtContactTileKey).containing(RegExp(uniqueContactBName)).tap();
       await $(contactPhoneTileKey).containing(uniqueContactBNumber).waitUntilVisible();
       await $(contactPhoneTileKey).containing(uniqueContactBNumber).$(contactPhoneTileFavIconKey).tap();
       await $(BackButtonIcon).tap();
-      await $(contactsSerchInputClearKey).tap();
+      if (!contactBVisible) await $(contactsSerchInputClearKey).tap();
     }
 
     // Verify both contacts appear in the favorites tab.
