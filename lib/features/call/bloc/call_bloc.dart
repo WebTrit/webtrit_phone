@@ -2971,7 +2971,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    final offerCandidate = await pc.createOffer();
+    // Look up the active call up-front so we can gate the createOffer constraints
+    // on the actual media policy (audio-only vs video). The existing null/state
+    // guards below still run after the offer to preserve the original race semantics.
+    final renegotiateCall = state.retrieveActiveCall(e.callId);
+    final renegotiateHasVideo = renegotiateCall?.video ?? false;
+
+    // Pass explicit OfferToReceive* constraints so the underlying flutter-webrtc
+    // layer does not silently add a recvonly video transceiver as a side-effect
+    // of createOffer({}) for an audio-only call. Without this, an audio-only
+    // restoration produces a BUNDLE 0 1 offer (m=audio + m=video recvonly), and
+    // the next renegotiate cycle drifts the mids to 2/3 — which Janus then
+    // answers with mid:0 and libwebrtc rejects on mid mismatch, killing audio.
+    final offerCandidate = await pc.createOffer(<String, dynamic>{
+      'mandatory': <String, dynamic>{'OfferToReceiveAudio': true, 'OfferToReceiveVideo': renegotiateHasVideo},
+      'optional': <dynamic>[],
+    });
 
     // Note: prepare all asychronous info before checking synchrounous state below
     // to avoid races as possible,
