@@ -22,7 +22,10 @@ void main() {
   const uniqueContactBNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_UNIQUE_B_NUMBER;
   const multiSearchQuery = IntegrationTestEnvironmentConfig.EXT_CONTACT_MULTI_SEARCH_QUERY;
 
-  patrolTest('External contact tab test - tests tab swtitching, search and contact details', ($) async {
+  patrolTest('External contact tab test: '
+  'inner tab swtitching |'
+  'search by name and number |'
+  'contact details navigate', ($) async {
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 
