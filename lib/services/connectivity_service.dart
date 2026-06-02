@@ -42,6 +42,13 @@ class ConnectivityServiceImpl implements ConnectivityService {
   /// state via `checkConnectivity()` to seed the cache before any consumer
   /// subscribes. Must be awaited so the listener's first replayed event is
   /// recognized as a duplicate and filtered.
+  ///
+  /// The awaited read is a cheap local platform-channel query of the OS
+  /// transport state - it performs no network I/O (the HTTP liveness probe runs
+  /// later, on change events), so its cost on the bootstrap/splash path is
+  /// negligible next to heavier inits such as the DB isolate spawn. An empty
+  /// platform result is treated as `ConnectivityResult.none` rather than
+  /// throwing, so startup is never blocked by a missing entry.
   static Future<ConnectivityServiceImpl> create({required ConnectivityChecker connectivityChecker}) async {
     final initialResult = (await Connectivity().checkConnectivity()).firstOrNull ?? ConnectivityResult.none;
     return ConnectivityServiceImpl._(connectivityChecker: connectivityChecker, initialResult: initialResult);
