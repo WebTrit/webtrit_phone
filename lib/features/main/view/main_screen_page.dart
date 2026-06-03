@@ -30,7 +30,10 @@ class MainScreenPage extends StatelessWidget {
     final bottomMenuManager = featureAccess.bottomMenuConfig;
     final tabs = bottomMenuManager.tabs;
 
-    final callToActionsEnabled = featureAccess.coreSupport.supportsCallToActions;
+    // Reactive: rebuilds when the adapter capability becomes available (e.g. system-info loads async).
+    final callToActionsEnabled = context.select<FeatureAccess, bool>(
+      (features) => features.coreSupport.supportsCallToActions,
+    );
 
     final systemNotificationsFeature = featureAccess.systemNotificationsConfig;
     final systemNotificationsEnabled = systemNotificationsFeature.systemNotificationsSupport;
@@ -43,7 +46,6 @@ class MainScreenPage extends StatelessWidget {
 
         if (callToActionsEnabled) {
           final isRouteActive = context.router.isRouteActive(MainScreenPageRoute.name);
-          final tabsRouter = AutoTabsRouter.of(context);
           final flavor = MainFlavor.values[tabsRouter.activeIndex];
 
           context.read<CallToActionsCubit>()
