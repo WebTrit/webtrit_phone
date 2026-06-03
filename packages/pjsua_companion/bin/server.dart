@@ -44,11 +44,12 @@ void main(List<String> args) async {
           final callTarget = 'sip:$calle@$sipServer';
           _logger.info('Placing pjsua call → $callTarget (duration: ${duration}s)');
 
-          final process = await _spawnPjsua(callTarget, sipServer, sipUsername, sipPassword, duration);
+          final process = await _spawnPjsua(sipServer, sipUsername, sipPassword, duration, callTarget: callTarget);
           _logger.info('pjsua started with PID: ${process.pid}');
 
           _processes[process.pid] = process;
-          monitorExit(process.pid);
+          attachExitMonitor(process.pid);
+          attachStaleProcessMonitor(process.pid, ttl: duration + 10);
           attachStateTicker(process.pid);
           attachStdoutConsumer(process.pid);
 
@@ -139,14 +140,16 @@ void _respond(HttpRequest request, int status, String body) {
 }
 
 Future<Process> _spawnPjsua(
-  String callTarget,
   String sipServer,
   String sipUsername,
   String sipPassword,
-  int duration,
-) async {
+  int duration, {
+  String? callTarget,
+  bool autoAnswer = false,
+}) async {
   final process = await Process.start('pjsua', [
     '--id=sip:$sipUsername@$sipServer',
+    '--registrar=sip:$sipServer',
     '--username=$sipUsername',
     '--password=$sipPassword',
     '--realm=*',
@@ -160,7 +163,8 @@ Future<Process> _spawnPjsua(
     '--use-compact-form',
     '--publish',
     '--log-level=1',
-    callTarget,
+    if (autoAnswer) '--auto-answer=200',
+    if (callTarget != null) callTarget,
   ]);
 
   final pid = process.pid;
@@ -181,7 +185,7 @@ Future<void> closeProc(int pid) async {
   }
 }
 
-void monitorExit(int pid) {
+void attachExitMonitor(int pid) {
   final process = _processes[pid];
   if (process != null) {
     process.exitCode.then((code) {
@@ -189,6 +193,20 @@ void monitorExit(int pid) {
       _processes.remove(pid);
     });
   }
+}
+
+void attachStaleProcessMonitor(int pid, {int ttl = 60}) {
+  final startTime = DateTime.now();
+  Timer.periodic(Duration(seconds: 10), (timer) async {
+    if (_processes[pid] != null) {
+      if (DateTime.now().difference(startTime).inSeconds > ttl) {
+        _logger.info('pjsua ($pid) is stale, removing');
+        closeProc(pid);
+      }
+    } else {
+      timer.cancel();
+    }
+  });
 }
 
 void attachStateTicker(int pid) {
