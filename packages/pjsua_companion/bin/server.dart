@@ -129,6 +129,20 @@ void main(List<String> args) async {
         } catch (e) {
           _respond(request, HttpStatus.internalServerError, 'failed to hold: $e');
         }
+      case '/close':
+        try {
+          final pid = int.parse(_validateParam(request.uri.queryParameters, 'pid'));
+          _requireProcess(pid);
+          await closeProc(pid);
+          _logger.info('close sent to pjsua ($pid)');
+          _respond(request, HttpStatus.ok, 'instance ($pid) closed');
+        } on ArgumentError catch (e) {
+          _respond(request, HttpStatus.badRequest, e.message.toString());
+        } on NotFoundException catch (e) {
+          _respond(request, HttpStatus.notFound, e.message);
+        } catch (e) {
+          _respond(request, HttpStatus.internalServerError, 'failed to close: $e');
+        }
       case '/transfer':
         throw UnimplementedError();
       default:
