@@ -33,6 +33,9 @@ abstract class CoreSupport {
 
   /// Check if the call history (CDR) feature is supported by the remote system.
   bool get supportsCallHistory;
+
+  /// Check if the external (server/PBX) contacts directory is supported by the remote system.
+  bool get supportsExtensions;
 }
 
 class CoreSupportImpl extends Equatable implements CoreSupport {
@@ -62,6 +65,9 @@ class CoreSupportImpl extends Equatable implements CoreSupport {
 
   @override
   bool get supportsCallHistory => _has(kCallHistoryFeatureFlag);
+
+  @override
+  bool get supportsExtensions => _has(kExtensionsFeatureFlag);
 
   @override
   List<Object?> get props {
