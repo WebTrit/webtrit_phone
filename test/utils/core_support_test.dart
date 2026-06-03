@@ -17,6 +17,15 @@ void main() {
       expect(cs.supportsChats, isFalse);
       expect(cs.supportsSystemNotifications, isFalse);
       expect(cs.supportsSystemPushNotifications, isFalse);
+      expect(cs.supportsCallToActions, isFalse);
+    });
+
+    test('call-to-actions only', () {
+      final cs = createCoreSupportWithFlags([kCtaListFeatureFlag]);
+
+      expect(cs.supportsCallToActions, isTrue);
+      expect(cs.supportsVoicemail, isFalse);
+      expect(cs.supportsSms, isFalse);
     });
 
     test('voicemail only', () {

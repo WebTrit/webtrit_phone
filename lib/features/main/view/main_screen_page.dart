@@ -25,12 +25,12 @@ class MainScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mainScreenRouteStateRepository = context.read<MainScreenRouteStateRepository>();
-    // TODO(Serdun): Move this to the environment configuration not to use the CORE_URL.
-    const appDemoFlow = EnvironmentConfig.CORE_URL == null;
 
     final featureAccess = context.read<FeatureAccess>();
     final bottomMenuManager = featureAccess.bottomMenuConfig;
     final tabs = bottomMenuManager.tabs;
+
+    final callToActionsEnabled = featureAccess.coreSupport.supportsCallToActions;
 
     final systemNotificationsFeature = featureAccess.systemNotificationsConfig;
     final systemNotificationsEnabled = systemNotificationsFeature.systemNotificationsSupport;
@@ -41,7 +41,7 @@ class MainScreenPage extends StatelessWidget {
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
 
-        if (appDemoFlow) {
+        if (callToActionsEnabled) {
           final isRouteActive = context.router.isRouteActive(MainScreenPageRoute.name);
           final tabsRouter = AutoTabsRouter.of(context);
           final flavor = MainFlavor.values[tabsRouter.activeIndex];
@@ -84,7 +84,7 @@ class MainScreenPage extends StatelessWidget {
           storeInfoExtractor: StoreInfoExtractor(),
         )..add(const MainBlocInit());
       },
-      child: appDemoFlow
+      child: callToActionsEnabled
           ? BlocProvider<CallToActionsCubit>(
               create: (context) => CallToActionsCubit(
                 callToActionsRepository: context.read<CallToActionsRepository>(),
