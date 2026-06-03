@@ -108,7 +108,7 @@ class FeatureAccess extends Equatable {
       final termsConfig = TermsMapper.map(embeddedResources);
 
       final loginConfig = LoginMapper.map(appConfig, embeddedConfig.embeddedResources);
-      final bottomMenuConfig = BottomMenuMapper.map(appConfig, embeddedConfig);
+      final bottomMenuConfig = BottomMenuMapper.map(appConfig, embeddedConfig, coreSupport);
       final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupport, termsConfig);
       final callConfig = CallMapper.map(appConfig, featureOverrides);
       final messagingConfig = MessagingMapper.map(appConfig, coreSupport);
@@ -200,7 +200,10 @@ abstract final class LoginMapper {
 /// Mapper responsible for transforming [AppConfig] into [BottomMenuConfig].
 abstract final class BottomMenuMapper {
   /// Maps [AppConfig] and [EmbeddedConfig] to a [BottomMenuConfig].
-  static BottomMenuConfig map(AppConfig appConfig, EmbeddedConfig embeddedConfig) {
+  ///
+  /// [coreSupport] is used to resolve capability-gated tab options (e.g. the
+  /// recents tab only uses server CDRs when the adapter advertises call history).
+  static BottomMenuConfig map(AppConfig appConfig, EmbeddedConfig embeddedConfig, CoreSupport coreSupport) {
     final bottomMenu = appConfig.mainConfig.bottomMenu;
 
     if (bottomMenu.tabs.isEmpty) {
@@ -209,7 +212,7 @@ abstract final class BottomMenuMapper {
 
     final bottomMenuTabs = bottomMenu.tabs
         .where((tab) => tab.enabled)
-        .map((tab) => _createBottomMenuTab(tab, embeddedConfig))
+        .map((tab) => _createBottomMenuTab(tab, embeddedConfig, coreSupport))
         .toList();
 
     if (bottomMenuTabs.isEmpty) {
@@ -219,7 +222,11 @@ abstract final class BottomMenuMapper {
     return BottomMenuConfig(tabs: List.unmodifiable(bottomMenuTabs));
   }
 
-  static BottomMenuTab _createBottomMenuTab(BottomMenuTabScheme tab, EmbeddedConfig embeddedConfig) {
+  static BottomMenuTab _createBottomMenuTab(
+    BottomMenuTabScheme tab,
+    EmbeddedConfig embeddedConfig,
+    CoreSupport coreSupport,
+  ) {
     return tab.when(
       favorites: (enabled, initial, titleL10n, icon) => FavoritesBottomMenuTab(
         enabled: tab.enabled,
@@ -228,7 +235,7 @@ abstract final class BottomMenuMapper {
         icon: tab.icon.toIconData(),
       ),
       recents: (enabled, initial, titleL10n, icon, useCdrs) => RecentsBottomMenuTab(
-        useCdrs: useCdrs,
+        useCdrs: useCdrs && coreSupport.supportsCallHistory,
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
