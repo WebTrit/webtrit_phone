@@ -30,6 +30,9 @@ abstract class CoreSupport {
 
   /// Check if the call-to-action list feature is supported by the remote system.
   bool get supportsCallToActions;
+
+  /// Check if the call history (CDR) feature is supported by the remote system.
+  bool get supportsCallHistory;
 }
 
 class CoreSupportImpl extends Equatable implements CoreSupport {
@@ -56,6 +59,9 @@ class CoreSupportImpl extends Equatable implements CoreSupport {
 
   @override
   bool get supportsCallToActions => _has(kCtaListFeatureFlag);
+
+  @override
+  bool get supportsCallHistory => _has(kCallHistoryFeatureFlag);
 
   @override
   List<Object?> get props {

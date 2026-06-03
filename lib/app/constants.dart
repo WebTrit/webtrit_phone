@@ -73,6 +73,7 @@ const kSystemNotificationsFeatureFlag = 'notifications';
 const kSystemNotificationsPushFeatureFlag = 'notificationsPush';
 const kSipPresenceFeatureFlag = 'sipPresence';
 const kSipDialogsFeatureFlag = 'sipDialogs';
+const kCallHistoryFeatureFlag = 'callHistory';
 
 /// Adapter capability for the call-to-action list shown in the client UI.
 ///
