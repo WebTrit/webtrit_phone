@@ -74,6 +74,12 @@ const kSystemNotificationsPushFeatureFlag = 'notificationsPush';
 const kSipPresenceFeatureFlag = 'sipPresence';
 const kSipDialogsFeatureFlag = 'sipDialogs';
 
+/// Adapter capability for the call-to-action list shown in the client UI.
+///
+/// Note: the wire value is snake_case (`cta_list`), unlike the other camelCase
+/// capability flags. See webtrit_bss_adapter_python `app/bss/models.py` `SupportedEnum`.
+const kCtaListFeatureFlag = 'cta_list';
+
 /// Key under `system-info` `adapter.custom` listing the identifier types the
 /// backend adapter accepts for OTP sign-in (e.g. `phone_number`, `email`).
 ///

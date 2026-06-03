@@ -27,6 +27,9 @@ abstract class CoreSupport {
 
   /// Check if the system push notifications feature is supported by remote system.
   bool get supportsSystemPushNotifications;
+
+  /// Check if the call-to-action list feature is supported by the remote system.
+  bool get supportsCallToActions;
 }
 
 class CoreSupportImpl extends Equatable implements CoreSupport {
@@ -50,6 +53,9 @@ class CoreSupportImpl extends Equatable implements CoreSupport {
 
   @override
   bool get supportsSystemPushNotifications => _has(kSystemNotificationsPushFeatureFlag);
+
+  @override
+  bool get supportsCallToActions => _has(kCtaListFeatureFlag);
 
   @override
   List<Object?> get props {
