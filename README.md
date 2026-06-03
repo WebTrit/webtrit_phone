@@ -62,34 +62,70 @@ The application offers extensive customization options:
   ./testlab_assemble_android.sh <testfile(optional)>
   ./testlab_assemble_ios.sh <testfile(optional)>
   ```
-* Run android integration tests with remote call actions
+* Run android integration tests with remote call companion
   ```bash
   ./tool/scripts/patrol_e2e_run_local_android.sh <testfile(optional)>
   ```
+<!-- TODO: instruction for companion -->
 
-### Test variables
+### Integration test variables
 
-* `WEBTRIT_APP_TEST_CUSTOM_CORE_URL` (_example core.demo.mycompany.com_)
+##### Login methods tests / default login settings
+
+*Email login: (optional)* 
 * `WEBTRIT_APP_TEST_EMAIL_CREDENTIAL` (_example myaccount@mail.com_)
 * `WEBTRIT_APP_TEST_EMAIL_VERIFY_CREDENTIAL` (_example 123456_)
+
+*OTP login: (optional)* 
 * `WEBTRIT_APP_TEST_OTP_CREDENTIAL` (_example +1234566789_)
 * `WEBTRIT_APP_TEST_OTP_VERIFY_CREDENTIAL` (_example 123456_)
+
+*Password login: (optional)* 
 * `WEBTRIT_APP_TEST_PASSWORD_USER_CREDENTIAL`  (_example username_)
 * `WEBTRIT_APP_TEST_PASSWORD_PASSWORD_CREDENTIAL` (_example 123456_)
-* `WEBTRIT_APP_TEST_DEFAULT_LOGIN_METHOD` (_email_ | _password_ | _otp_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_A` (_example User A_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_A_NUMBER` (_example 00123_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_B` (_example User B_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_B_NUMBER` (_example 00456_)
+
+*Custom core url, if not defined default signin button will be used*
+* `WEBTRIT_APP_TEST_CUSTOM_CORE_URL` (_example core.demo.mycompany.com_)
+
+*Login method that will be used for other tests*
+* `WEBTRIT_APP_TEST_DEFAULT_LOGIN_METHOD` -  (_email_ | _password_ | _otp_)
+
+##### Contacts and favorites tests
+
+*Search query that must match **more than one** external contact*
+* `WEBTRIT_APP_TEST_EXT_CONTACT_MULTI_SEARCH_QUERY` (_example Doe_)
+
+*Unique name query matches **exactly one** external contact but doesn't match another*
+* `WEBTRIT_APP_TEST_EXT_CONTACT_UNIQUE_A_NAME` (_example John_)
+* `WEBTRIT_APP_TEST_EXT_CONTACT_UNIQUE_B_NAME` (_example Jane_)
+
+*Phone number of that contact*
+* `WEBTRIT_APP_TEST_EXT_CONTACT_UNIQUE_A_NUMBER` (_example 00111_)
+* `WEBTRIT_APP_TEST_EXT_CONTACT_UNIQUE_B_NUMBER` (_example 00222_)
+  
+##### User info tests 
+*Name that should be displayed in account info section*
 * `WEBTRIT_APP_TEST_ACCOUNT_NAME` (_example Test Account_)
+
+*Main number that should be displayed in account info section*
 * `WEBTRIT_APP_TEST_ACCOUNT_MAIN_NUMBER` (_example 1230000_)
+
+##### Calls tests
 * `WEBTRIT_APP_TEST_CALL_NUMBER_A` (_example 1111_)
 * `WEBTRIT_APP_TEST_CALL_NUMBER_B` (_example 2222_)
 * `WEBTRIT_APP_TEST_CROSS_CALL_SLEEP_SECONDS` (_example 10_)
+
+*PJSUA server host, if not defined `localhost`*
 * `WEBTRIT_APP_TEST_PJSUA_SERVER_HOST` (_example localhost_)
+
+*PJSUA server port, if not defined `7788`*
 * `WEBTRIT_APP_TEST_PJSUA_SERVER_PORT` (_example 7788_)
-* `WEBTRIT_APP_TEST_PJSUA_SIP_USERNAME` (_example username_)
-* `WEBTRIT_APP_TEST_PJSUA_SIP_PASSWORD` (_example password_)
+
+*PJSUA SIP username, if not defined `myusername`*
+* `WEBTRIT_APP_TEST_PJSUA_SIP_USERNAME` (_example myusername_)
+
+*PJSUA SIP password, if not defined `mypassword`*
+* `WEBTRIT_APP_TEST_PJSUA_SIP_PASSWORD` (_example mypassword_)
 * `WEBTRIT_APP_TEST_PJSUA_SIP_SERVER` (_example server_)
 
 ## Contributing
