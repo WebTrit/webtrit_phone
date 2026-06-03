@@ -517,7 +517,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.fine('_onCallStarted initial lifecycle state: $lifecycleState');
 
     // Initialize connectivity state from the centralized service. The service
-    // owns the single subscription to `Connectivity().onConnectivityChanged`
+    // owns the call subsystem's subscription to `Connectivity().onConnectivityChanged`
     // and exposes a deduplicated stream of changes, so the bloc no longer
     // talks to the plugin directly.
     final connectivityState = _connectivityService.currentConnectivityResult;

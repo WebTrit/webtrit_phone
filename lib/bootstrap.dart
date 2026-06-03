@@ -151,7 +151,8 @@ Future<InstanceRegistry> bootstrap() async {
 
   final appLifecycle = await AppLifecycle.initMaster();
 
-  // ConnectivityService - single owner of `Connectivity()` plugin subscription.
+  // ConnectivityService - owns the `Connectivity()` plugin subscription used by
+  // the call subsystem (other features still keep their own direct subscriptions).
   // Built here (not in RootApp) so the deduplication cache can be seeded via an
   // awaited `checkConnectivity()` read before any consumer subscribes. This
   // prevents the listener's first replayed event from being misinterpreted as a

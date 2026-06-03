@@ -61,6 +61,7 @@ class ConnectivityServiceImpl implements ConnectivityService {
   late final StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
   ConnectivityResult _lastResult;
+  bool _disposed = false;
 
   @override
   ConnectivityResult get currentConnectivityResult => _lastResult;
@@ -81,7 +82,7 @@ class ConnectivityServiceImpl implements ConnectivityService {
       _resultController.add(next);
     }
     final connected = await _checkConnection(next);
-    if (next == _lastResult) {
+    if (!_disposed && next == _lastResult) {
       _onlineController.add(connected);
     }
   }
@@ -93,6 +94,7 @@ class ConnectivityServiceImpl implements ConnectivityService {
 
   @override
   void dispose() {
+    _disposed = true;
     _connectivityChecker.dispose();
     _connectivitySubscription.cancel();
     _resultController.close();
