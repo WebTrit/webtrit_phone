@@ -51,6 +51,31 @@ void main(List<String> args) async {
           attachExitMonitor(process.pid);
           attachStaleProcessMonitor(process.pid, ttl: duration + 10);
           attachStateTicker(process.pid);
+          attachStdoutConsumer(process.pid, exitOnIdle: true);
+
+          _respond(request, HttpStatus.ok, '${process.pid}');
+        } on ArgumentError catch (e) {
+          _respond(request, HttpStatus.badRequest, e.message.toString());
+        } catch (e) {
+          _respond(request, HttpStatus.internalServerError, 'failed to spawn pjsua: $e');
+        }
+      case '/register_autoanswer':
+        try {
+          final params = request.uri.queryParameters;
+
+          final sipServer = _validateParam(params, 'sip_server');
+          final sipUsername = _validateParam(params, 'sip_username');
+          final sipPassword = _validateParam(params, 'sip_password');
+          final duration = int.parse(_validateParam(params, 'duration', defaultValue: '60'));
+          _logger.info('Registering pjsua for auto-answer (duration: ${duration}s)');
+
+          final process = await _spawnPjsua(sipServer, sipUsername, sipPassword, duration, autoAnswer: true);
+          _logger.info('pjsua started with PID: ${process.pid}');
+
+          _processes[process.pid] = process;
+          attachExitMonitor(process.pid);
+          attachStaleProcessMonitor(process.pid, ttl: duration + 10);
+          attachStateTicker(process.pid);
           attachStdoutConsumer(process.pid);
 
           _respond(request, HttpStatus.ok, '${process.pid}');
@@ -220,14 +245,14 @@ void attachStateTicker(int pid) {
   });
 }
 
-void attachStdoutConsumer(int pid) {
+void attachStdoutConsumer(int pid, {bool exitOnIdle = false}) {
   final process = _processes[pid];
   if (process == null) return;
   process.stdout.transform(Utf8Decoder(allowMalformed: true)).forEach((chunk) async {
     _logger.info('pjsua ($pid): $chunk');
     _logger.info('pjsua ($pid): ${chunk.length} \n-------------------------------');
 
-    if (chunk.contains('You have 0 active call')) {
+    if (exitOnIdle && chunk.contains('You have 0 active call')) {
       _logger.info('0 active call detected, shutting down pjsua ($pid)');
       closeProc(pid);
     }
