@@ -319,6 +319,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.info(() => 'status transitions: $currentProcessingStatuses -> $nextProcessingStatuses');
     }
 
+    // WT-1415: play a soft call-waiting tone while a second call is ringing
+    // alongside an already-connected call. Driven from here (the reliable source
+    // of call state) on both iOS and Android via the callkeep sound API.
+    _syncCallWaitingTone(change.nextState);
+
     /// RegistrationStatus can be null if the signaling state
     /// was not yet fully initialized. In this case, RegistrationStatus was made nullable to indicate that signaling has not been initialized yet.
     ///
@@ -4178,6 +4183,35 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> _playRingbackSound() => _callkeepSound.playRingbackSound();
 
   Future<void> _stopRingbackSound() => _callkeepSound.stopRingbackSound();
+
+  /// Tracks whether the call-waiting tone is currently playing, so it is
+  /// started/stopped exactly once per state edge (WT-1415).
+  bool _callWaitingTonePlaying = false;
+
+  /// Play the soft call-waiting tone while a second call is ringing alongside an
+  /// already-connected call; stop it otherwise. The platform layer only plays the
+  /// tone — the decision lives here, where the full call state is known.
+  void _syncCallWaitingTone(CallState state) {
+    const ringingIncoming = {
+      CallProcessingStatus.incomingFromPush,
+      CallProcessingStatus.incomingFromOffer,
+    };
+    final hasConnected = state.activeCalls.any((c) => c.processingStatus == CallProcessingStatus.connected);
+    final hasRingingIncoming = state.activeCalls.any((c) => ringingIncoming.contains(c.processingStatus));
+    final shouldPlay = hasConnected && hasRingingIncoming;
+
+    if (shouldPlay && !_callWaitingTonePlaying) {
+      _callWaitingTonePlaying = true;
+      _callkeepSound.playCallWaitingTone().catchError(
+        (Object e, StackTrace s) => _logger.warning('playCallWaitingTone failed', e, s),
+      );
+    } else if (!shouldPlay && _callWaitingTonePlaying) {
+      _callWaitingTonePlaying = false;
+      _callkeepSound.stopCallWaitingTone().catchError(
+        (Object e, StackTrace s) => _logger.warning('stopCallWaitingTone failed', e, s),
+      );
+    }
+  }
 
   Future<void> _releaseLocalStream(MediaStream? stream) async {
     if (stream == null) return;
