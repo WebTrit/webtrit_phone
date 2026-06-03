@@ -60,7 +60,3 @@ const contactsSerchInputClearKey = Key('contactsSearchInputClear');
 const contactPhoneTileKey = Key('contactPhoneTile');
 const contactPhoneTileFavIconKey = Key('contactPhoneTileFavIcon');
 const contactEmailTileKey = Key('contactEmailTile');
-
-const favoriteTileKey = Key('favoriteTile');
-
-const recentsTileKey = Key('recentsTile');

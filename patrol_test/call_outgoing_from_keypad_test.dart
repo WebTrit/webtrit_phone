@@ -18,18 +18,19 @@ import 'subsequences/pump_root_and_wait_until_visible.dart';
 
 void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
-  const callNumber = IntegrationTestEnvironmentConfig.CALL_NUMBER_A;
+  const callNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_UNIQUE_NUMBER;
 
-  final remoteUser = IntegrationTestEnvironmentConfig.PJSUA_SIP_USERNAME;
-  final remoteSipServer = IntegrationTestEnvironmentConfig.PJSUA_SIP_SERVER;
-  final remotePassword = IntegrationTestEnvironmentConfig.PJSUA_SIP_PASSWORD;
   final pjsuaServerHost = IntegrationTestEnvironmentConfig.PJSUA_SERVER_HOST;
   final pjsuaServerPort = IntegrationTestEnvironmentConfig.PJSUA_SERVER_PORT;
+  final remoteSipServer = IntegrationTestEnvironmentConfig.PJSUA_SIP_SERVER;
 
-  final hasRemoteCompanion =
+  final remoteUser = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_SIP_USERNAME;
+  final remotePassword = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_SIP_PASSWORD;
+
+  final hasCredsToRunThisTest =
       remoteUser.isNotEmpty &&
-      remoteSipServer.isNotEmpty &&
       remotePassword.isNotEmpty &&
+      remoteSipServer.isNotEmpty &&
       pjsuaServerHost.isNotEmpty &&
       pjsuaServerPort != 0;
 
@@ -44,17 +45,12 @@ void main() {
       await pumpFor(const Duration(seconds: 5), $);
     }
 
-    PjsuaCompanionClient? pjsuaCallServerClient;
-    int? companionPid;
-    // If remote companion configured register it to receive incoming call
-    if (hasRemoteCompanion) {
-      pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
-      companionPid = await pjsuaCallServerClient.registerAutoanswer(
-        sipServer: remoteSipServer,
-        sipUsername: remoteUser,
-        sipPassword: remotePassword,
-      );
-    }
+    final pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
+    final companionPid = await pjsuaCallServerClient.registerAutoanswer(
+      sipServer: remoteSipServer,
+      sipUsername: remoteUser,
+      sipPassword: remotePassword,
+    );
 
     // Make a call and check if it is active.
     await $(MainFlavor.keypad.toNavBarKey()).tap();
@@ -69,12 +65,8 @@ void main() {
     await pumpFor(const Duration(seconds: 2), $);
     expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended');
 
-    // Release remote companion process
-    if (pjsuaCallServerClient != null && companionPid != null) {
-      pjsuaCallServerClient.hangup(companionPid).ignore();
-    }
-
     // Teardowning
+    pjsuaCallServerClient.close(companionPid).ignore();
     await logout($);
-  });
+  }, skip: hasCredsToRunThisTest == false);
 }

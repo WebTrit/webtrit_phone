@@ -11,6 +11,7 @@ import 'package:webtrit_phone/models/models.dart';
 
 import 'components/integration_test_environment_config.dart';
 import 'subsequences/login_by_method.dart';
+import 'subsequences/logout.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
 
@@ -56,5 +57,8 @@ void main() {
       findsOneWidget,
       reason: 'Should register sip session',
     );
+
+    // Teardowning
+    await logout($);
   });
 }

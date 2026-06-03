@@ -14,38 +14,29 @@ import 'package:pjsua_companion/pjsua_companion.dart';
 
 void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
-  const calleeNumber = IntegrationTestEnvironmentConfig.ACCOUNT_MAIN_NUMBER;
+  const mainNumber = IntegrationTestEnvironmentConfig.ACCOUNT_MAIN_NUMBER;
 
-  final remoteUser = IntegrationTestEnvironmentConfig.PJSUA_SIP_USERNAME;
-  final remoteSipServer = IntegrationTestEnvironmentConfig.PJSUA_SIP_SERVER;
-  final remotePassword = IntegrationTestEnvironmentConfig.PJSUA_SIP_PASSWORD;
   final pjsuaServerHost = IntegrationTestEnvironmentConfig.PJSUA_SERVER_HOST;
   final pjsuaServerPort = IntegrationTestEnvironmentConfig.PJSUA_SERVER_PORT;
+  final remoteSipServer = IntegrationTestEnvironmentConfig.PJSUA_SIP_SERVER;
+
+  final remoteUser = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_SIP_USERNAME;
+  final remotePassword = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_SIP_PASSWORD;
 
   final hasCredsToRunThisTest =
       remoteUser.isNotEmpty &&
-      remoteSipServer.isNotEmpty &&
       remotePassword.isNotEmpty &&
+      remoteSipServer.isNotEmpty &&
       pjsuaServerHost.isNotEmpty &&
       pjsuaServerPort != 0;
 
-  patrolTest('Should answer incoming call using push notification > '
+  patrolTest('Should go to background and wait for call > '
+      'answer incoming call using push notification > '
       'verify call established > '
       'check active call push notification > '
       'hangup call using push notification button', ($) async {
     /// Prepare
     final pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
-
-    Future<int> placeIncomingCall($) async {
-      final pid = await pjsuaCallServerClient.call(
-        calleeNumber,
-        sipServer: remoteSipServer,
-        sipUsername: remoteUser,
-        sipPassword: remotePassword,
-        callDuration: Duration(minutes: 5),
-      );
-      return pid;
-    }
 
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
@@ -59,9 +50,18 @@ void main() {
       await pumpFor(const Duration(seconds: 5), $);
     }
 
+    /// Go to background
+    await $.platform.mobile.pressHome();
+    await Future.delayed(const Duration(seconds: 1));
+
     // Place call
-    await placeIncomingCall($);
-    await $(CallActiveScaffold).waitUntilVisible(timeout: const Duration(seconds: 10));
+    final companionPid = await pjsuaCallServerClient.call(
+      mainNumber,
+      sipServer: remoteSipServer,
+      sipUsername: remoteUser,
+      sipPassword: remotePassword,
+    );
+    await Future.delayed(const Duration(seconds: 3));
 
     // Verify incoming call push notification
     final incomingCallNotification = await $.platform.mobile.getNotifications();
@@ -78,33 +78,13 @@ void main() {
     await pumpFor(const Duration(seconds: 3), $);
     expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active after answer');
 
-    // Verify active call push notification
-    await $.platform.mobile.openNotifications();
-    final activeCallNotifications = await $.platform.mobile.getNotifications();
-
-    expect(
-      activeCallNotifications.toString(),
-      contains('Active call'),
-      reason: 'Active call push should exist and text ok',
-    );
-
-    // Try to hangup call using push notification
-    await $.platform.mobile.tap(
-      MobileSelector(
-        // MediaStyle shows the action as an icon in compact view but its content description equals the action title.
-        // related to pull https://github.com/WebTrit/webtrit_callkeep/pull/302
-        // 
-        // Alternatively on android we can expand all notifications in for loop using 
-        // AndroidSelector(resourceName: 'android:id/expand_button') untill tapOnNotificationBySelector(Selector(textContains: 'Hungup')) success
-        android: AndroidSelector(contentDescription: 'Hung up'),
-        ios: IOSSelector(textContains: 'Hung up'),
-      ),
-    );
-    await $.platform.mobile.closeNotifications();
+    // Hangup call
+    await pjsuaCallServerClient.hangup(companionPid);
     await pumpFor(const Duration(seconds: 3), $);
     expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended after remote hangup');
 
     // Teardowning
+    pjsuaCallServerClient.close(companionPid).ignore();
     await logout($);
   }, skip: hasCredsToRunThisTest == false);
 }

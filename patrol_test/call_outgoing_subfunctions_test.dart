@@ -14,12 +14,13 @@ import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart'
 import 'components/integration_test_environment_config.dart';
 import 'subsequences/enter_keypad_number.dart';
 import 'subsequences/login_by_method.dart';
+import 'subsequences/logout.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
 
 void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
-  const callNumber = IntegrationTestEnvironmentConfig.CALL_NUMBER_A;
+  const callNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_UNIQUE_NUMBER;
   const crossCallSleep = Duration(seconds: IntegrationTestEnvironmentConfig.CROSS_CALL_SLEEP_SECONDS);
 
   patrolTest('Should make call and verify sub actions e.g minimize, hold, switch to video, speaker, mute etc', (
@@ -92,5 +93,8 @@ void main() {
     expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended');
 
     await Future.delayed(crossCallSleep);
+
+    // Teardowning
+    await logout($);
   });
 }

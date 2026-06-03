@@ -11,13 +11,14 @@ import 'package:webtrit_phone/models/main_flavor.dart';
 import 'components/integration_test_environment_config.dart';
 import 'subsequences/enter_keypad_number.dart';
 import 'subsequences/login_by_method.dart';
+import 'subsequences/logout.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
 
 void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
-  const callNumberA = IntegrationTestEnvironmentConfig.CALL_NUMBER_A;
-  const callNumberB = IntegrationTestEnvironmentConfig.CALL_NUMBER_B;
+  const callNumberA = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_UNIQUE_NUMBER;
+  const callNumberB = IntegrationTestEnvironmentConfig.EXT_CONTACT_B_UNIQUE_NUMBER;
   const crossCallSleep = Duration(seconds: IntegrationTestEnvironmentConfig.CROSS_CALL_SLEEP_SECONDS);
 
   patrolTest('Should make blind and attended transfers', ($) async {
@@ -75,5 +76,8 @@ void main() {
     expect($(CallActiveScaffold).visible, false, reason: 'Call2 should be transferred');
 
     await Future.delayed(crossCallSleep);
+
+    // Teardowning
+    await logout($);
   });
 }
