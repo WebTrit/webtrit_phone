@@ -2,10 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 
 import 'package:webtrit_phone/bootstrap.dart';
-import 'package:webtrit_phone/features/call/view/call_active_scaffold.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
 
 import 'components/integration_test_environment_config.dart';
+import 'subsequences/active_call_helpers.dart';
 import 'subsequences/login_by_method.dart';
 import 'subsequences/logout.dart';
 import 'subsequences/pump_for.dart';
@@ -14,11 +14,11 @@ import 'package:pjsua_companion/pjsua_companion.dart';
 
 void main() {
   final defaultLoginMethod = IntegrationTestEnvironmentConfig.DEFAULT_LOGIN_METHOD;
-  const calleeNumber = IntegrationTestEnvironmentConfig.ACCOUNT_MAIN_NUMBER;
+  const mainNumber = IntegrationTestEnvironmentConfig.ACCOUNT_MAIN_NUMBER;
 
-  final remoteUser = IntegrationTestEnvironmentConfig.PJSUA_SIP_USERNAME;
+  final remoteUser = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_SIP_USERNAME;
   final remoteSipServer = IntegrationTestEnvironmentConfig.PJSUA_SIP_SERVER;
-  final remotePassword = IntegrationTestEnvironmentConfig.PJSUA_SIP_PASSWORD;
+  final remotePassword = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_SIP_PASSWORD;
   final pjsuaServerHost = IntegrationTestEnvironmentConfig.PJSUA_SERVER_HOST;
   final pjsuaServerPort = IntegrationTestEnvironmentConfig.PJSUA_SERVER_PORT;
 
@@ -29,23 +29,9 @@ void main() {
       pjsuaServerHost.isNotEmpty &&
       pjsuaServerPort != 0;
 
-  patrolTest('Should go to background and wait for call > '
-      'answer incoming call using push notification > '
-      'verify call established > '
-      'check active call push notification > '
-      'hangup call using push notification button', ($) async {
+  patrolTest('Verifies answer on incoming call using foreground push function', ($) async {
     /// Prepare
     final pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
-
-    Future<int> placeIncomingCall($) async {
-      final pid = await pjsuaCallServerClient.call(
-        calleeNumber,
-        sipServer: remoteSipServer,
-        sipUsername: remoteUser,
-        sipPassword: remotePassword,
-      );
-      return pid;
-    }
 
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
@@ -59,11 +45,13 @@ void main() {
       await pumpFor(const Duration(seconds: 5), $);
     }
 
-    /// Go to background
-    await $.platform.mobile.pressHome();
-
     // Place call
-    final callPid = await placeIncomingCall($);
+    final companionPid = await pjsuaCallServerClient.call(
+      mainNumber,
+      sipServer: remoteSipServer,
+      sipUsername: remoteUser,
+      sipPassword: remotePassword,
+    );
     await Future.delayed(const Duration(seconds: 3));
 
     // Verify incoming call push notification
@@ -78,15 +66,14 @@ void main() {
     await $.platform.mobile.openNotifications();
     await $.platform.mobile.tapOnNotificationBySelector(Selector(textContains: 'Answer'));
     await $.platform.mobile.closeNotifications();
-    await pumpFor(const Duration(seconds: 3), $);
-    expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active after answer');
+    await expectActiveCallDurationGte(const Duration(seconds: 3), $);
 
     // Hangup call
-    await pjsuaCallServerClient.hangup(callPid);
-    await pumpFor(const Duration(seconds: 3), $);
-    expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended after remote hangup');
+    await pjsuaCallServerClient.hangup(companionPid);
+    await expectActiveCallHangup($);
 
     // Teardowning
+    pjsuaCallServerClient.close(companionPid).ignore();
     await logout($);
   }, skip: hasCredsToRunThisTest == false);
 }

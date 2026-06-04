@@ -22,10 +22,7 @@ void main() {
   const contactBUniqueNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_B_UNIQUE_NUMBER;
   const multiSearchQuery = IntegrationTestEnvironmentConfig.EXT_CONTACT_MULTI_SEARCH_QUERY;
 
-  patrolTest('External contact tab test: '
-  'inner tab swtitching |'
-  'search by name and number |'
-  'contact details navigate', ($) async {
+  patrolTest('Verifies PBX contacts tab functionality', ($) async {
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 

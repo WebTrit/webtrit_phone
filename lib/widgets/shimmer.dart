@@ -17,21 +17,32 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: widget.duration)..repeat();
+    _controller = AnimationController(vsync: this, duration: widget.duration);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncAnimation();
   }
 
   @override
   void didUpdateWidget(covariant Shimmer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _handleAnimationUpdate(oldWidget);
-  }
-
-  void _handleAnimationUpdate(Shimmer oldWidget) {
     if (oldWidget.duration != widget.duration) {
       final double currentValue = _controller.value;
       _controller.duration = widget.duration;
       // Restart from the current position to ensure the speed change is instantaneous.
       _controller.forward(from: currentValue);
+      _controller.repeat();
+    }
+    _syncAnimation();
+  }
+
+  void _syncAnimation() {
+    if (testSemanticsDisableShimmerAnimation == true) {
+      _controller.stop();
+    } else if (!_controller.isAnimating) {
       _controller.repeat();
     }
   }
@@ -115,3 +126,10 @@ class _ShimmerPainter extends CustomPainter {
       oldDelegate.baseColor != baseColor ||
       oldDelegate.highlightColor != highlightColor;
 }
+
+/// For tests only.
+/// Disable shimmer animation to speed up tests.
+///
+/// because its infinitely animated and not possible to wait settle in tests.
+@visibleForTesting
+bool? testSemanticsDisableShimmerAnimation;

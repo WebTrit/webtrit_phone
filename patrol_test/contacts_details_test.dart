@@ -30,76 +30,7 @@ void main() {
   const contactBUniqueSmsNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_B_UNIQUE_SMS_NUMBER;
   const contactBUniqueEmail = IntegrationTestEnvironmentConfig.EXT_CONTACT_B_UNIQUE_EMAIL;
 
-  Future<void> verifyContactDetails(
-    PatrolIntegrationTester $, {
-    required String contactName,
-    required String mainNumber,
-    required String extNumber,
-    required String additionalNumber,
-    required String smsNumber,
-    required String email,
-  }) async {
-    final searchWasUsed = !$(contactsExtContactTileKey).containing(RegExp(contactName)).visible;
-    if (searchWasUsed) {
-      await $(contactsSerchInputKey).enterText(contactName);
-      await pumpFor(const Duration(seconds: 1), $);
-    }
-    await $(contactsExtContactTileKey).containing(RegExp(contactName)).tap();
-    await $(contactPhoneTileKey).waitUntilVisible();
-
-    if (extNumber.isNotEmpty) {
-      expect(
-        $(contactPhoneTileKey).containing(RegExp('ext')).containing(extNumber),
-        findsOneWidget,
-        reason: '$contactName should have ext number $extNumber',
-      );
-    }
-    if (mainNumber.isNotEmpty) {
-      expect(
-        $(contactPhoneTileKey).containing(RegExp('number')).containing(mainNumber),
-        findsOneWidget,
-        reason: '$contactName should have main number $mainNumber',
-      );
-    }
-    if (additionalNumber.isNotEmpty) {
-      expect(
-        $(contactPhoneTileKey).containing(RegExp('additional')).containing(additionalNumber),
-        findsOneWidget,
-        reason: '$contactName should have additional number $additionalNumber',
-      );
-    }
-    if (smsNumber.isNotEmpty) {
-      expect(
-        $(contactPhoneTileKey).containing(RegExp('sms')).containing(smsNumber),
-        findsOneWidget,
-        reason: '$contactName should have sms number $smsNumber',
-      );
-    }
-    if (email.isNotEmpty) {
-      expect($(contactEmailTileKey).containing(email), findsOneWidget, reason: '$contactName should have email $email');
-    }
-
-    // Call using ext number if available, otherwise fall back to main number.
-    final callNumber = extNumber.isNotEmpty ? extNumber : mainNumber;
-    if (callNumber.isNotEmpty) {
-      await $(contactPhoneTileKey).containing(callNumber).$(Icons.call).tap();
-      await $(CallActiveScaffold).waitUntilVisible();
-      await pumpFor(const Duration(seconds: 5), $);
-      if ($(CallActiveScaffold).visible) await $(callActionsHangupKey).tap();
-      await $.pumpAndTrySettle();
-    }
-
-    await $(BackButtonIcon).tap();
-    if (searchWasUsed) await $(contactsSerchInputClearKey).tap();
-  }
-
-  patrolTest('Contact details: '
-      'verify ext number | '
-      'verify main number | '
-      'verify additional number | '
-      'verify sms number | '
-      'verify email | '
-      'audio call and hangup', ($) async {
+  patrolTest('Verifies PBX contacts details functionality', ($) async {
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 
@@ -112,7 +43,7 @@ void main() {
     await $(MainFlavor.contacts.toNavBarKey()).tap();
     await $(contactsTabExtKey).tap().then((e) => $.pumpAndTrySettle());
 
-    await verifyContactDetails(
+    await _verifyContactDetails(
       $,
       contactName: contactAUniqueName,
       mainNumber: contactAUniqueNumber,
@@ -121,7 +52,7 @@ void main() {
       smsNumber: contactAUniqueSmsNumber,
       email: contactAUniqueEmail,
     );
-    await verifyContactDetails(
+    await _verifyContactDetails(
       $,
       contactName: contactBUniqueName,
       mainNumber: contactBUniqueNumber,
@@ -134,4 +65,67 @@ void main() {
     // Teardowning
     await logout($);
   });
+}
+
+Future<void> _verifyContactDetails(
+  PatrolIntegrationTester $, {
+  required String contactName,
+  required String mainNumber,
+  required String extNumber,
+  required String additionalNumber,
+  required String smsNumber,
+  required String email,
+}) async {
+  final searchWasUsed = !$(contactsExtContactTileKey).containing(RegExp(contactName)).visible;
+  if (searchWasUsed) {
+    await $(contactsSerchInputKey).enterText(contactName);
+    await pumpFor(const Duration(seconds: 1), $);
+  }
+  await $(contactsExtContactTileKey).containing(RegExp(contactName)).tap();
+  await $(contactPhoneTileKey).waitUntilVisible();
+
+  if (extNumber.isNotEmpty) {
+    expect(
+      $(contactPhoneTileKey).containing(RegExp('ext')).containing(extNumber),
+      findsOneWidget,
+      reason: '$contactName should have ext number $extNumber',
+    );
+  }
+  if (mainNumber.isNotEmpty) {
+    expect(
+      $(contactPhoneTileKey).containing(RegExp('number')).containing(mainNumber),
+      findsOneWidget,
+      reason: '$contactName should have main number $mainNumber',
+    );
+  }
+  if (additionalNumber.isNotEmpty) {
+    expect(
+      $(contactPhoneTileKey).containing(RegExp('additional')).containing(additionalNumber),
+      findsOneWidget,
+      reason: '$contactName should have additional number $additionalNumber',
+    );
+  }
+  if (smsNumber.isNotEmpty) {
+    expect(
+      $(contactPhoneTileKey).containing(RegExp('sms')).containing(smsNumber),
+      findsOneWidget,
+      reason: '$contactName should have sms number $smsNumber',
+    );
+  }
+  if (email.isNotEmpty) {
+    expect($(contactEmailTileKey).containing(email), findsOneWidget, reason: '$contactName should have email $email');
+  }
+
+  // Call using ext number if available, otherwise fall back to main number.
+  final callNumber = extNumber.isNotEmpty ? extNumber : mainNumber;
+  if (callNumber.isNotEmpty) {
+    await $(contactPhoneTileKey).containing(callNumber).$(Icons.call).tap();
+    await $(CallActiveScaffold).waitUntilVisible();
+    await pumpFor(const Duration(seconds: 5), $);
+    if ($(CallActiveScaffold).visible) await $(callActionsHangupKey).tap();
+    await $.pumpAndTrySettle();
+  }
+
+  await $(BackButtonIcon).tap();
+  if (searchWasUsed) await $(contactsSerchInputClearKey).tap();
 }

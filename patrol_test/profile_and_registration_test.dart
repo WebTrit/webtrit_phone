@@ -11,6 +11,7 @@ import 'package:webtrit_phone/models/models.dart';
 
 import 'components/integration_test_environment_config.dart';
 import 'subsequences/login_by_method.dart';
+import 'subsequences/logout.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
 
@@ -19,7 +20,7 @@ void main() {
   const accountName = IntegrationTestEnvironmentConfig.ACCOUNT_NAME;
   const accountMainNumber = IntegrationTestEnvironmentConfig.ACCOUNT_MAIN_NUMBER;
 
-  patrolTest('Should show correct profile data and perform sip registration', ($) async {
+  patrolTest('Verifies correct profile data and sip re-registration function', ($) async {
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 
@@ -56,5 +57,8 @@ void main() {
       findsOneWidget,
       reason: 'Should register sip session',
     );
+
+    // Teardowning
+    await logout($);
   });
 }

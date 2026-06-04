@@ -6,7 +6,6 @@ import 'package:logging/logging.dart';
 
 // TODO:
 // - add transfer
-// - add video file playback
 // - add incoming RTP check to verify app actions
 
 final _logger = Logger('pjsua_call_server');
@@ -41,14 +40,64 @@ void main(List<String> args) async {
           final sipPassword = _validateParam(params, 'sip_password');
           final calle = _validateParam(params, 'calle');
           final duration = int.parse(_validateParam(params, 'duration', defaultValue: '60'));
+          final playMusic = params['play_music'] == 'true';
+          final playVideo = params['play_video'] == 'true';
           final callTarget = 'sip:$calle@$sipServer';
-          _logger.info('Placing pjsua call → $callTarget (duration: ${duration}s)');
+          _logger.info(
+            'Placing pjsua call → $callTarget (duration: ${duration}s, playMusic: $playMusic, playVideo: $playVideo)',
+          );
 
-          final process = await _spawnPjsua(callTarget, sipServer, sipUsername, sipPassword, duration);
+          final process = await _spawnPjsua(
+            sipServer,
+            sipUsername,
+            sipPassword,
+            duration,
+            callTarget: callTarget,
+            playMusic: playMusic,
+            playVideo: playVideo,
+          );
           _logger.info('pjsua started with PID: ${process.pid}');
 
           _processes[process.pid] = process;
-          monitorExit(process.pid);
+          attachExitMonitor(process.pid);
+          attachStaleProcessMonitor(process.pid, ttl: duration + 10);
+          attachStateTicker(process.pid);
+          attachStdoutConsumer(process.pid, exitOnIdle: true);
+
+          _respond(request, HttpStatus.ok, '${process.pid}');
+        } on ArgumentError catch (e) {
+          _respond(request, HttpStatus.badRequest, e.message.toString());
+        } catch (e) {
+          _respond(request, HttpStatus.internalServerError, 'failed to spawn pjsua: $e');
+        }
+      case '/register_autoanswer':
+        try {
+          final params = request.uri.queryParameters;
+
+          final sipServer = _validateParam(params, 'sip_server');
+          final sipUsername = _validateParam(params, 'sip_username');
+          final sipPassword = _validateParam(params, 'sip_password');
+          final duration = int.parse(_validateParam(params, 'duration', defaultValue: '60'));
+          final playMusic = params['play_music'] == 'true';
+          final playVideo = params['play_video'] == 'true';
+          _logger.info(
+            'Registering pjsua for auto-answer (duration: ${duration}s, playMusic: $playMusic, playVideo: $playVideo)',
+          );
+
+          final process = await _spawnPjsua(
+            sipServer,
+            sipUsername,
+            sipPassword,
+            duration,
+            autoAnswer: true,
+            playMusic: playMusic,
+            playVideo: playVideo,
+          );
+          _logger.info('pjsua started with PID: ${process.pid}');
+
+          _processes[process.pid] = process;
+          attachExitMonitor(process.pid);
+          attachStaleProcessMonitor(process.pid, ttl: duration + 10);
           attachStateTicker(process.pid);
           attachStdoutConsumer(process.pid);
 
@@ -103,6 +152,20 @@ void main(List<String> args) async {
         } catch (e) {
           _respond(request, HttpStatus.internalServerError, 'failed to hold: $e');
         }
+      case '/close':
+        try {
+          final pid = int.parse(_validateParam(request.uri.queryParameters, 'pid'));
+          _requireProcess(pid);
+          await closeProc(pid);
+          _logger.info('close sent to pjsua ($pid)');
+          _respond(request, HttpStatus.ok, 'instance ($pid) closed');
+        } on ArgumentError catch (e) {
+          _respond(request, HttpStatus.badRequest, e.message.toString());
+        } on NotFoundException catch (e) {
+          _respond(request, HttpStatus.notFound, e.message);
+        } catch (e) {
+          _respond(request, HttpStatus.internalServerError, 'failed to close: $e');
+        }
       case '/transfer':
         throw UnimplementedError();
       default:
@@ -139,20 +202,33 @@ void _respond(HttpRequest request, int status, String body) {
 }
 
 Future<Process> _spawnPjsua(
-  String callTarget,
   String sipServer,
   String sipUsername,
   String sipPassword,
-  int duration,
-) async {
+  int duration, {
+  String? callTarget,
+  bool autoAnswer = false,
+  bool playMusic = false,
+  bool playVideo = false,
+}) async {
+  final scriptDir = File(Platform.script.toFilePath()).parent.path;
+  final musicFile = '$scriptDir/media/flying_bird.wav';
+  final videoFile = '$scriptDir/media/vid.avi';
+
   final process = await Process.start('pjsua', [
     '--id=sip:$sipUsername@$sipServer',
+    '--registrar=sip:$sipServer',
     '--username=$sipUsername',
     '--password=$sipPassword',
     '--realm=*',
     '--local-port=0',
     '--null-audio',
     '--auto-loop',
+    if (playMusic) '--play-file=$musicFile',
+    if (playMusic) '--auto-play',
+    if (playVideo) '--video',
+    if (playVideo) '--play-avi=$videoFile',
+    if (playVideo) '--auto-play-avi',
     '--duration=$duration',
     '--log-append',
     '--no-stderr',
@@ -160,7 +236,8 @@ Future<Process> _spawnPjsua(
     '--use-compact-form',
     '--publish',
     '--log-level=1',
-    callTarget,
+    if (autoAnswer) '--auto-answer=200',
+    if (callTarget != null) callTarget,
   ]);
 
   final pid = process.pid;
@@ -181,7 +258,7 @@ Future<void> closeProc(int pid) async {
   }
 }
 
-void monitorExit(int pid) {
+void attachExitMonitor(int pid) {
   final process = _processes[pid];
   if (process != null) {
     process.exitCode.then((code) {
@@ -189,6 +266,20 @@ void monitorExit(int pid) {
       _processes.remove(pid);
     });
   }
+}
+
+void attachStaleProcessMonitor(int pid, {int ttl = 60}) {
+  final startTime = DateTime.now();
+  Timer.periodic(Duration(seconds: 10), (timer) async {
+    if (_processes[pid] != null) {
+      if (DateTime.now().difference(startTime).inSeconds > ttl) {
+        _logger.info('pjsua ($pid) is stale, removing');
+        closeProc(pid);
+      }
+    } else {
+      timer.cancel();
+    }
+  });
 }
 
 void attachStateTicker(int pid) {
@@ -202,14 +293,14 @@ void attachStateTicker(int pid) {
   });
 }
 
-void attachStdoutConsumer(int pid) {
+void attachStdoutConsumer(int pid, {bool exitOnIdle = false}) {
   final process = _processes[pid];
   if (process == null) return;
   process.stdout.transform(Utf8Decoder(allowMalformed: true)).forEach((chunk) async {
     _logger.info('pjsua ($pid): $chunk');
     _logger.info('pjsua ($pid): ${chunk.length} \n-------------------------------');
 
-    if (chunk.contains('You have 0 active call')) {
+    if (exitOnIdle && chunk.contains('You have 0 active call')) {
       _logger.info('0 active call detected, shutting down pjsua ($pid)');
       closeProc(pid);
     }

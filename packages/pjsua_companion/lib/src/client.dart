@@ -24,6 +24,25 @@ class PjsuaCompanionClient {
     return int.parse(body.trim());
   }
 
+  Future<int> registerAutoanswer({
+    required String sipServer,
+    required String sipUsername,
+    required String sipPassword,
+    Duration callDuration = const Duration(seconds: 60),
+  }) async {
+    final body = await _get('/register_autoanswer', {
+      'sip_server': sipServer,
+      'sip_username': sipUsername,
+      'sip_password': sipPassword,
+      'duration': callDuration.inSeconds.toString(),
+    });
+    return int.parse(body.trim());
+  }
+
+  Future<void> close(int pid) async {
+    await _get('/close', {'pid': '$pid'});
+  }
+
   Future<void> hangup(int pid) async {
     await _get('/hangup', {'pid': '$pid'});
   }
