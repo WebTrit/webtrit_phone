@@ -20,7 +20,7 @@ void main() {
   const passwordPasswordCredential = IntegrationTestEnvironmentConfig.PASSWORD_PASSWORD_CREDENTIAL;
   final hasPasswordCredentials = passwordUserCredential.isNotEmpty && passwordPasswordCredential.isNotEmpty;
 
-  patrolTest('should login by email credentials', ($) async {
+  patrolTest('Verifies login by email credentials', ($) async {
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
     await loginByMethod($, LoginMethod.email);
@@ -28,7 +28,7 @@ void main() {
     await logout($);
   }, skip: hasEmailCredentials == false);
 
-  patrolTest('should login by otp credentials', ($) async {
+  patrolTest('Verifies login by otp credentials', ($) async {
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
     await loginByMethod($, LoginMethod.otp);
@@ -36,7 +36,7 @@ void main() {
     await logout($);
   }, skip: hasOtpCredentials == false);
 
-  patrolTest('should login by password credentials', ($) async {
+  patrolTest('Verifies login by password credentials', ($) async {
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
     await loginByMethod($, LoginMethod.password);

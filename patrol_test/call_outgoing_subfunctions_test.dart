@@ -23,9 +23,7 @@ void main() {
   const callNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_A_UNIQUE_NUMBER;
   const crossCallSleep = Duration(seconds: IntegrationTestEnvironmentConfig.CROSS_CALL_SLEEP_SECONDS);
 
-  patrolTest('Should make call and verify sub actions e.g minimize, hold, switch to video, speaker, mute etc', (
-    $,
-  ) async {
+  patrolTest('Verifies call sub functions e.g hold, mute, switch to video, speaker, etc', ($) async {
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 

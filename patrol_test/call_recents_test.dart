@@ -44,7 +44,7 @@ void main() {
       contactASipPassword.isNotEmpty &&
       remoteSipServer.isNotEmpty;
 
-  patrolTest('Should make simple call and verify recents', ($) async {
+  patrolTest('Verifies recent calls functionality', ($) async {
     /// Prepare
     final pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
 

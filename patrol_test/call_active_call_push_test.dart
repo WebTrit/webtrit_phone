@@ -30,10 +30,7 @@ void main() {
       pjsuaServerHost.isNotEmpty &&
       pjsuaServerPort != 0;
 
-  patrolTest('Should answer incoming call using push notification > '
-      'verify call established > '
-      'check active call push notification > '
-      'hangup call using push notification button', ($) async {
+  patrolTest('Verifies active call push notification', ($) async {
     /// Prepare
     final pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
 

@@ -35,7 +35,7 @@ void main() {
       pjsuaServerHost.isNotEmpty &&
       pjsuaServerPort != 0;
 
-  patrolTest('Should open keypad, enter number and make call', ($) async {
+  patrolTest('Verifies keypad call functionality', ($) async {
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 

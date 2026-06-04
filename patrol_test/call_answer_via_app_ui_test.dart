@@ -31,48 +31,44 @@ void main() {
       pjsuaServerHost.isNotEmpty &&
       pjsuaServerPort != 0;
 
-  patrolTest(
-    'Should answer incoming call using app UI > verify it is active > verify remote hangup',
-    ($) async {
-      /// Prepare
-      final pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
+  patrolTest('Verifies answer on incoming call using app UI functionality', ($) async {
+    /// Prepare
+    final pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
 
-      final instanceRegistry = await bootstrap();
-      await pumpRootAndWaitUntilVisible(instanceRegistry, $);
+    final instanceRegistry = await bootstrap();
+    await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 
-      //// Test
+    //// Test
 
-      // Login if not.
-      if ($(LoginModeSelectScreen).visible) {
-        await loginByMethod($, defaultLoginMethod);
-        // Wait some time for components loading and session establishment.
-        await pumpFor(const Duration(seconds: 5), $);
-      }
-
-      // Place incoming call and wait for it
-      final companionPid = await pjsuaCallServerClient.call(
-        mainNumber,
-        sipServer: remoteSipServer,
-        sipUsername: remoteUser,
-        sipPassword: remotePassword,
-      );
-      await $(CallActiveScaffold).waitUntilVisible(timeout: const Duration(seconds: 10));
+    // Login if not.
+    if ($(LoginModeSelectScreen).visible) {
+      await loginByMethod($, defaultLoginMethod);
+      // Wait some time for components loading and session establishment.
       await pumpFor(const Duration(seconds: 5), $);
+    }
 
-      // Answer call
-      await $(find.widgetWithIcon(TextButton, Icons.call)).tap();
-      await pumpFor(const Duration(seconds: 3), $);
-      expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active after answer');
+    // Place incoming call and wait for it
+    final companionPid = await pjsuaCallServerClient.call(
+      mainNumber,
+      sipServer: remoteSipServer,
+      sipUsername: remoteUser,
+      sipPassword: remotePassword,
+    );
+    await $(CallActiveScaffold).waitUntilVisible(timeout: const Duration(seconds: 10));
+    await pumpFor(const Duration(seconds: 5), $);
 
-      // Hangup call
-      await pjsuaCallServerClient.hangup(companionPid);
-      await pumpFor(const Duration(seconds: 3), $);
-      expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended after remote hangup');
+    // Answer call
+    await $(find.widgetWithIcon(TextButton, Icons.call)).tap();
+    await pumpFor(const Duration(seconds: 3), $);
+    expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active after answer');
 
-      // Teardowning
-      pjsuaCallServerClient.close(companionPid).ignore();
-      await logout($);
-    },
-    skip: hasCredsToRunThisTest == false,
-  );
+    // Hangup call
+    await pjsuaCallServerClient.hangup(companionPid);
+    await pumpFor(const Duration(seconds: 3), $);
+    expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended after remote hangup');
+
+    // Teardowning
+    pjsuaCallServerClient.close(companionPid).ignore();
+    await logout($);
+  }, skip: hasCredsToRunThisTest == false);
 }

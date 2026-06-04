@@ -42,7 +42,7 @@ void main() {
       contactASipPassword.isNotEmpty &&
       remoteSipServer.isNotEmpty;
 
-  patrolTest('Should make blind and attended transfers', ($) async {
+  patrolTest('Verifies blind and attended transfers functionality', ($) async {
     final pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
 
     final instanceRegistry = await bootstrap();
@@ -51,7 +51,6 @@ void main() {
     // Disable shimmer animation to unblock settle waiters when call is minimized.
     // ignore: invalid_use_of_visible_for_testing_member
     testSemanticsDisableShimmerAnimation = true;
-
 
     // Login if not.
     if ($(LoginModeSelectScreen).visible) {

@@ -23,12 +23,7 @@ void main() {
   const contactBUniqueName = IntegrationTestEnvironmentConfig.EXT_CONTACT_B_UNIQUE_NAME;
   const contactBUniqueNumber = IntegrationTestEnvironmentConfig.EXT_CONTACT_B_UNIQUE_NUMBER;
 
-  patrolTest('Favorites: '
-      'add via contact detail | '
-      'verify favorites tab | '
-      'persist across re-login | '
-      'dropdown via three-dots (view contact, call, delete) | '
-      'dropdown via long press (view contact, call, delete)', ($) async {
+  patrolTest('Verify favorites functionality', ($) async {
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 

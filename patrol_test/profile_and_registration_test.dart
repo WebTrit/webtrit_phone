@@ -20,7 +20,7 @@ void main() {
   const accountName = IntegrationTestEnvironmentConfig.ACCOUNT_NAME;
   const accountMainNumber = IntegrationTestEnvironmentConfig.ACCOUNT_MAIN_NUMBER;
 
-  patrolTest('Should show correct profile data and perform sip registration', ($) async {
+  patrolTest('Verifies correct profile data and sip re-registration function', ($) async {
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 
