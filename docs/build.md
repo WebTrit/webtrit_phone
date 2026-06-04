@@ -139,36 +139,42 @@ flavors.
 
 ## Flutter Version Configuration
 
-The Flutter SDK version used for building the project is defined in `.github/flutter_version.yaml`.
-
-This file provides a centralized way to define the required Flutter version and channel. It helps
-ensure consistency across development machines and automated build environments.
+The Flutter SDK version used for building the project is pinned in `.fvmrc` — the single source of
+truth, read by [`fvm`](https://fvm.app) locally and by the `webtrit_phone_builder` CI.
 
 ### Format
 
-```yaml
-flutter:
-  version: "3.29.0"
-  channel: "stable"
+```json
+{
+  "flutter": "3.44.0"
+}
 ```
 
 ### Purpose
 
 By declaring the Flutter version here:
 
+- One file drives both local development (`fvm flutter ...`) and CI — no drift between them
 - You avoid hardcoding versions in CI workflows
-- All environments (local and CI) can stay aligned
 - Builds remain reproducible and predictable
 
-The file is intended to be read by automation scripts to configure the correct SDK version before
-building the project.
+Install the pinned SDK once per machine with `fvm install`. The downloaded `.fvm/` cache is
+gitignored.
+
+> The channel is implied by the pinned version (we ship exact `stable` releases). The CI defaults
+> the channel to `stable`.
 
 ### When to update
 
-Update `.github/flutter_version.yaml` when:
+Update `.fvmrc` when:
 
 - You upgrade the Flutter SDK in local development
 - You have tested that the project works with the new version
 - You want to ensure CI uses the updated version
 
-Always validate builds locally before changing this file.
+Keep the version noted in `AGENTS.md` in sync, and always validate builds locally before changing
+this file.
+
+> **Legacy note:** `.github/flutter_version.yaml` was the previous source. It was removed once
+> `.fvmrc` became the single source and `webtrit_phone_builder` was updated to read it. Older
+> release branches may still carry the yaml; the builder falls back to it there.
