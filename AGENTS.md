@@ -5,7 +5,7 @@ Flutter 3.44.0 (stable), Android SDK 35.0.1.
 
 ## Toolchain
 
-- Flutter version is pinned in **two** files that MUST stay in sync: `.fvmrc` (local, read by `fvm`) and `.github/flutter_version.yaml` (CI). When you change one, change the other in the same commit — and update the version mentioned above.
+- Flutter version is pinned **only** in `.fvmrc` — single source of truth, read by `fvm` locally and by the `webtrit_phone_builder` CI. When you bump it, update the version mentioned above in the same commit. (Older release branches may still carry the legacy `.github/flutter_version.yaml`; the builder falls back to it there.)
 - Use `fvm flutter ...` / `fvm dart ...` so the pinned SDK is used; a bare `flutter` from `PATH` may be a different version. The `.fvm/` SDK cache is gitignored — run `fvm install` once per machine.
 
 ## Build & Test
