@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
+
 import 'package:webtrit_phone/utils/connectivity_checker.dart';
 
 class _MockWebtritApiClient extends Mock implements WebtritApiClient {}
@@ -28,14 +30,14 @@ void main() {
       var current = oldClient;
       final checker = DefaultConnectivityChecker(createApiClient: () => current);
 
-      await checker.checkConnection();
+      expect(await checker.checkConnection(), isTrue);
       verify(() => oldClient.healthCheck()).called(1);
 
       // Simulate login / core-URL switch: the factory now hands out a client
       // bound to the new session URL.
       current = newClient;
 
-      await checker.checkConnection();
+      expect(await checker.checkConnection(), isTrue);
       verify(() => newClient.healthCheck()).called(1);
       verifyNoMoreInteractions(oldClient);
     });
@@ -55,7 +57,19 @@ void main() {
       expect(resolveCount, 2);
     });
 
-    test('returns false when the health check throws', () async {
+    // healthCheck() swallows transport failures and returns false instead of
+    // throwing, so the checker must propagate that boolean rather than report
+    // a live connection.
+    test('returns false when the health check reports failure', () async {
+      when(() => oldClient.healthCheck()).thenAnswer((_) async => false);
+      final checker = DefaultConnectivityChecker(createApiClient: () => oldClient);
+
+      expect(await checker.checkConnection(), isFalse);
+    });
+
+    // Defensive guard: if resolving or probing the client ever throws, the
+    // checker reports no connection instead of propagating the error.
+    test('returns false when probing the client throws', () async {
       when(() => oldClient.healthCheck()).thenThrow(Exception('timeout'));
       final checker = DefaultConnectivityChecker(createApiClient: () => oldClient);
 

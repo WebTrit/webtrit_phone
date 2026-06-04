@@ -25,9 +25,12 @@ class DefaultConnectivityChecker implements ConnectivityChecker {
   Future<bool> checkConnection() async {
     _logger.finest('Checking connectivity via API client.');
     try {
-      await createApiClient().healthCheck();
-      _logger.finest('API connectivity check successful.');
-      return true;
+      // healthCheck() swallows transport failures and returns false rather than
+      // throwing, so the boolean result must be propagated; returning a hardcoded
+      // true would report a live connection even when the probe failed.
+      final isHealthy = await createApiClient().healthCheck();
+      _logger.finest('API connectivity check result: $isHealthy.');
+      return isHealthy;
     } catch (e) {
       _logger.finest('API connectivity check failed: $e');
       return false;
