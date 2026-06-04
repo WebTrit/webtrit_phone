@@ -107,9 +107,9 @@ class NoDataPlaceholder extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (iconWidget != null) iconWidget,
-          if (contentWidget != null) contentWidget,
-          if (actionsWidget != null) actionsWidget,
+          ?iconWidget,
+          ?contentWidget,
+          ?actionsWidget,
         ],
       ),
     );

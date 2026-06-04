@@ -25,6 +25,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
@@ -102,7 +103,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final VoidCallback? onCallEnded;
   final OnDiagnosticReportRequested onDiagnosticReportRequested;
 
-  StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
+  StreamSubscription<ConnectivityResult>? _connectivityChangedSubscription;
   StreamSubscription<void>? _foregroundCallPushSubscription;
   final _iceRestartDebounce = DebounceMap<String>(const Duration(seconds: 2));
 
@@ -113,6 +114,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   late final PeerConnectionManager _peerConnectionManager;
   late final HandshakeProcessor _handshakeProcessor;
+  final ConnectivityService _connectivityService;
 
   final _callkeepSound = WebtritCallkeepSound();
 
@@ -142,9 +144,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     this.peerConnectionPolicyApplier,
     required SignalingModule signalingModule,
     required PeerConnectionManager peerConnectionManager,
+    required ConnectivityService connectivityService,
     this.onCallEnded,
     Stream<void>? foregroundCallPushSignal,
-  }) : super(const CallState()) {
+  }) : _connectivityService = connectivityService,
+       super(const CallState()) {
     _mediaManager = CallMediaManager(callkeep: callkeep);
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
@@ -512,8 +516,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWith(currentAppLifecycleState: lifecycleState));
     _logger.fine('_onCallStarted initial lifecycle state: $lifecycleState');
 
-    // Initialize connectivity state
-    final connectivityState = (await Connectivity().checkConnectivity()).first;
+    // Initialize connectivity state from the centralized service. The service
+    // owns the call subsystem's subscription to `Connectivity().onConnectivityChanged`
+    // and exposes a deduplicated stream of changes, so the bloc no longer
+    // talks to the plugin directly.
+    final connectivityState = _connectivityService.currentConnectivityResult;
     emit(
       state.copyWith(
         callServiceState: state.callServiceState.copyWith(networkStatus: connectivityState.toNetworkStatus()),
@@ -521,17 +528,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
     _logger.finer('_onCallStarted initial connectivity state: $connectivityState');
 
-    // Subscribe to future connectivity changes
-    _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((result) {
-      final currentConnectivityResult = result.first;
-      add(_ConnectivityResultChanged(currentConnectivityResult));
-    });
+    // Subscribe to deduplicated future connectivity changes. The first replay
+    // event from `Connectivity().onConnectivityChanged` is already filtered by
+    // the service when it matches the cached initial value, so no bootstrap
+    // call to the reconnect controller is needed here - the initial WS connect
+    // is initiated by MainShell `..connect()` and runtime changes flow through
+    // this subscription.
+    _connectivityChangedSubscription = _connectivityService.connectivityResultStream.listen(
+      (result) => add(_ConnectivityResultChanged(result)),
+    );
 
-    if (connectivityState == ConnectivityResult.none) {
-      _reconnectController.notifyNetworkUnavailable();
-    } else {
-      _reconnectController.notifyNetworkAvailable();
-    }
+    // Initial WS connect is initiated by MainShell `..connect()`; runtime
+    // connectivity changes flow through the subscription above. No bootstrap
+    // call to the reconnect controller is needed - calling notifyNetworkAvailable
+    // here would proactively disconnect a healthy WS that just delivered the
+    // handshake (the disconnect path inside notifyNetworkAvailable assumes a
+    // real interface change, which a bootstrap snapshot is not).
 
     WebRTC.initialize(options: webRtcOptionsBuilder?.build());
   }
@@ -2958,12 +2970,34 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    if (pc.signalingState != RTCSignalingState.RTCSignalingStateStable) {
-      _logger.fine(() => '__onMutationRenegotiate: pc signalingState is ${pc.signalingState}, skipping renegotiation');
+    // pc.signalingState is a Dart-side cache populated only after the first
+    // native state event. On a freshly created PC the event may not have
+    // arrived yet; force a platform round-trip in that case so the guard
+    // gets the real native state instead of guessing what null means.
+    final cachedSigState = pc.signalingState;
+    final sigState = cachedSigState ?? await pc.getSignalingState();
+    _logger.info('__onMutationRenegotiate: sigState=$sigState (cache=$cachedSigState)');
+    if (sigState != RTCSignalingState.RTCSignalingStateStable) {
+      _logger.fine(() => '__onMutationRenegotiate: pc signalingState is $sigState, skipping renegotiation');
       return;
     }
 
-    final offerCandidate = await pc.createOffer();
+    // Look up the active call up-front so we can gate the createOffer constraints
+    // on the actual media policy (audio-only vs video). The existing null/state
+    // guards below still run after the offer to preserve the original race semantics.
+    final renegotiateCall = state.retrieveActiveCall(e.callId);
+    final renegotiateHasVideo = renegotiateCall?.video ?? false;
+
+    // Pass explicit OfferToReceive* constraints so the underlying flutter-webrtc
+    // layer does not silently add a recvonly video transceiver as a side-effect
+    // of createOffer({}) for an audio-only call. Without this, an audio-only
+    // restoration produces a BUNDLE 0 1 offer (m=audio + m=video recvonly), and
+    // the next renegotiate cycle drifts the mids to 2/3 — which Janus then
+    // answers with mid:0 and libwebrtc rejects on mid mismatch, killing audio.
+    final offerCandidate = await pc.createOffer(<String, dynamic>{
+      'mandatory': <String, dynamic>{'OfferToReceiveAudio': true, 'OfferToReceiveVideo': renegotiateHasVideo},
+      'optional': <dynamic>[],
+    });
 
     // Note: prepare all asychronous info before checking synchrounous state below
     // to avoid races as possible,

@@ -75,8 +75,8 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
       'osVersion': _deviceInfo.systemVersion,
       'authorization': token != null ? 'authorized' : 'unauthorized',
       if (urls != null && urls.isNotEmpty) 'embeddedUrls': urls.join(', '),
-      if (coreUrl != null) 'coreUrl': coreUrl,
-      if (tenantId != null) 'tenantId': tenantId,
+      'coreUrl': ?coreUrl,
+      'tenantId': ?tenantId,
     };
   }
 

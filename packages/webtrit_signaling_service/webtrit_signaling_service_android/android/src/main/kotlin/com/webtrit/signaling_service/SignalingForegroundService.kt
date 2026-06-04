@@ -311,14 +311,36 @@ class SignalingForegroundService : Service() {
         // are delivered immediately. The phoneCall type applies because the sole purpose
         // of this service is to enable VoIP call receipt.
         // Passed to startForeground() on API 34+ only; older versions pass 0.
-        ServiceCompat.startForeground(
-            this,
-            NOTIFICATION_ID,
-            notification,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL
-            else 0,
-        )
+        //
+        // WT-1524: Android 15+ blocks starting a phoneCall FGS from any background context
+        // (BOOT_COMPLETED broadcasts, START_STICKY restarts that originate from boot, and
+        // mem-pressure re-creations while backgrounded). The exception is thrown here on the
+        // main thread inside onCreate, AFTER startForegroundService() has already returned on
+        // another thread — so a try-catch around startForegroundService() in
+        // SignalingRestartWorker cannot protect against it. This is the only place that can
+        // stop the crash: on ForegroundServiceStartNotAllowedException we stopSelf() instead
+        // of crashing, and onDestroy re-enqueues SignalingRestartWorker (delay 15 s) so the
+        // crash loop degrades to a slow retry. Persistent mode then resumes once the app
+        // becomes user-visible again.
+        try {
+            ServiceCompat.startForeground(
+                this,
+                NOTIFICATION_ID,
+                notification,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL
+                else 0,
+            )
+        } catch (e: Exception) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                e is android.app.ForegroundServiceStartNotAllowedException
+            ) {
+                Log.w(TAG, "startForeground: phoneCall type not allowed in current state — stopping for retry", e)
+                stopSelf()
+            } else {
+                throw e
+            }
+        }
     }
 
     private fun createNotificationChannel(): String {

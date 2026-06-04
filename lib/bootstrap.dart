@@ -151,6 +151,16 @@ Future<InstanceRegistry> bootstrap() async {
 
   final appLifecycle = await AppLifecycle.initMaster();
 
+  // ConnectivityService - owns the `Connectivity()` plugin subscription used by
+  // the call subsystem (other features still keep their own direct subscriptions).
+  // Built here (not in RootApp) so the deduplication cache can be seeded via an
+  // awaited `checkConnectivity()` read before any consumer subscribes. This
+  // prevents the listener's first replayed event from being misinterpreted as a
+  // real interface change downstream.
+  final connectivityService = await ConnectivityServiceImpl.create(
+    connectivityChecker: _createConnectivityChecker(apiClientFactory),
+  );
+
   // Register instances into the Registry
 
   // Configuration & Info
@@ -188,12 +198,28 @@ Future<InstanceRegistry> bootstrap() async {
   // Network clients
   registry.register<WebtritApiClientFactory>(apiClientFactory);
   registry.register<RemoteConfigService>(cachedRemoteConfigService);
+  registry.register<ConnectivityService>(connectivityService);
 
   // Final side-effect initializations that rely on registered components
   await _initCallkeep(featureAccess);
   await _initWorkManager();
 
   return registry;
+}
+
+/// Creates the platform [ConnectivityChecker] used by [ConnectivityService]
+/// for HTTP liveness probes. Picks the custom-URL implementation if a
+/// dedicated check endpoint is provided via [EnvironmentConfig], otherwise
+/// falls back to the default API-client-based check.
+ConnectivityChecker _createConnectivityChecker(WebtritApiClientFactory apiClientFactory) {
+  final customUrl = EnvironmentConfig.CONNECTIVITY_CHECK_URL;
+  return switch (customUrl) {
+    String url => CustomConnectivityChecker(
+      connectivityCheckUrl: url,
+      createHttpRequestExecutor: apiClientFactory.createHttpRequestExecutor(),
+    ),
+    null => DefaultConnectivityChecker(apiClient: apiClientFactory.createWebtritApiClient()),
+  };
 }
 
 /// Initializes [AppPermissions] with an exclusion callback.

@@ -30,7 +30,7 @@ class HttpRequestExecutor {
     final request = http.Request(method.toUpperCase(), uri);
 
     final xRequestId = requestId ?? RequestUtil.generate();
-    final finalHeaders = {'x-request-id': xRequestId, if (headers != null) ...headers};
+    final finalHeaders = {'x-request-id': xRequestId, ...?headers};
 
     request.headers.addAll(finalHeaders);
 

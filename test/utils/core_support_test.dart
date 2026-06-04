@@ -17,6 +17,16 @@ void main() {
       expect(cs.supportsChats, isFalse);
       expect(cs.supportsSystemNotifications, isFalse);
       expect(cs.supportsSystemPushNotifications, isFalse);
+      expect(cs.supportsCallToActions, isFalse);
+      expect(cs.supportsCallHistory, isFalse);
+    });
+
+    test('call-to-actions only', () {
+      final cs = createCoreSupportWithFlags([kCtaListFeatureFlag]);
+
+      expect(cs.supportsCallToActions, isTrue);
+      expect(cs.supportsVoicemail, isFalse);
+      expect(cs.supportsSms, isFalse);
     });
 
     test('voicemail only', () {
@@ -46,6 +56,14 @@ void main() {
     test('system notifications only', () {
       final cs = createCoreSupportWithFlags([kSystemNotificationsFeatureFlag]);
       expect(cs.supportsSystemNotifications, isTrue);
+    });
+
+    test('call history only', () {
+      final cs = createCoreSupportWithFlags([kCallHistoryFeatureFlag]);
+
+      expect(cs.supportsCallHistory, isTrue);
+      expect(cs.supportsVoicemail, isFalse);
+      expect(cs.supportsSms, isFalse);
     });
 
     test('all flags -> all getters true', () {
