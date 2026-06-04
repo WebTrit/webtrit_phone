@@ -19,12 +19,21 @@ void main() {
       expect(cs.supportsSystemPushNotifications, isFalse);
       expect(cs.supportsCallToActions, isFalse);
       expect(cs.supportsCallHistory, isFalse);
+      expect(cs.supportsExtensions, isFalse);
     });
 
     test('call-to-actions only', () {
       final cs = createCoreSupportWithFlags([kCtaListFeatureFlag]);
 
       expect(cs.supportsCallToActions, isTrue);
+      expect(cs.supportsVoicemail, isFalse);
+      expect(cs.supportsSms, isFalse);
+    });
+
+    test('extensions only', () {
+      final cs = createCoreSupportWithFlags([kExtensionsFeatureFlag]);
+
+      expect(cs.supportsExtensions, isTrue);
       expect(cs.supportsVoicemail, isFalse);
       expect(cs.supportsSms, isFalse);
     });

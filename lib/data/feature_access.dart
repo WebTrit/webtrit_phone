@@ -201,8 +201,9 @@ abstract final class LoginMapper {
 abstract final class BottomMenuMapper {
   /// Maps [AppConfig] and [EmbeddedConfig] to a [BottomMenuConfig].
   ///
-  /// [coreSupport] is used to resolve capability-gated tab options (e.g. the
-  /// recents tab only uses server CDRs when the adapter advertises call history).
+  /// [coreSupport] resolves capability-gated tab options - e.g. the recents tab uses server CDRs only
+  /// when the adapter advertises call history, and the contacts tab keeps the `external` source only
+  /// when it advertises the `extensions` capability.
   static BottomMenuConfig map(AppConfig appConfig, EmbeddedConfig embeddedConfig, CoreSupport coreSupport) {
     final bottomMenu = appConfig.mainConfig.bottomMenu;
 
@@ -213,6 +214,7 @@ abstract final class BottomMenuMapper {
     final bottomMenuTabs = bottomMenu.tabs
         .where((tab) => tab.enabled)
         .map((tab) => _createBottomMenuTab(tab, embeddedConfig, coreSupport))
+        .where((tab) => !(tab is ContactsBottomMenuTab && tab.contactSourceTypes.isEmpty))
         .toList();
 
     if (bottomMenuTabs.isEmpty) {
@@ -246,7 +248,10 @@ abstract final class BottomMenuMapper {
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
-        contactSourceTypes: contactSourceTypes.map((type) => ContactSourceType.values.byName(type)).toList(),
+        contactSourceTypes: contactSourceTypes
+            .map((type) => ContactSourceType.values.byName(type))
+            .where((type) => type != ContactSourceType.external || coreSupport.supportsExtensions)
+            .toList(),
       ),
       keypad: (enabled, initial, titleL10n, icon) => KeypadBottomMenuTab(
         enabled: tab.enabled,

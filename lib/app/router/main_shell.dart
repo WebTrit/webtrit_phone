@@ -209,7 +209,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
             final token = context.read<AppBloc>().state.session.token!;
 
-            final contactsRemoteDataSource = ContactsRemoteDataSourceImpl(webtritApiClient, token);
+            final supportsExtensions = context.read<FeatureAccess>().coreSupport.supportsExtensions;
+            final contactsRemoteDataSource = supportsExtensions
+                ? ContactsRemoteDataSourceImpl(webtritApiClient, token)
+                : null;
             final contactsLocalDataSource = ContactsLocalDataSourceImpl(appDatabase);
 
             return ContactsRepository(
@@ -452,16 +455,17 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       return bloc;
                     },
                   ),
-                  BlocProvider<ExternalContactsSyncBloc>(
-                    lazy: false,
-                    create: (context) {
-                      return ExternalContactsSyncBloc(
-                        userRepository: context.read<UserRepository>(),
-                        externalContactsRepository: context.read<ExternalContactsRepository>(),
-                        contactsRepository: context.read<ContactsRepository>(),
-                      )..add(const ExternalContactsSyncStarted());
-                    },
-                  ),
+                  if (featureAccess.coreSupport.supportsExtensions)
+                    BlocProvider<ExternalContactsSyncBloc>(
+                      lazy: false,
+                      create: (context) {
+                        return ExternalContactsSyncBloc(
+                          userRepository: context.read<UserRepository>(),
+                          externalContactsRepository: context.read<ExternalContactsRepository>(),
+                          contactsRepository: context.read<ContactsRepository>(),
+                        )..add(const ExternalContactsSyncStarted());
+                      },
+                    ),
                   BlocProvider<CallBloc>(
                     create: (context) {
                       final appBloc = context.read<AppBloc>();
@@ -695,6 +699,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// can be made here without touching the [Provider] or [PollingService] setup.
   List<PollingRegistration> _pollingRegistrations(BuildContext context) {
     final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.voicemailsEnabled;
+    final supportsExtensions = context.read<FeatureAccess>().coreSupport.supportsExtensions;
     final cliSettingsRepository = context.read<CallerIdSettingsRepository>();
     final favoritesRepository = context.read<FavoritesRepository>();
     final sipSubscriptionsRepository = context.read<SipSubscriptionsRepository>();
@@ -708,10 +713,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         listener: context.read<SystemInfoRepository>(),
         interval: const Duration(seconds: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
-      PollingRegistration(
-        listener: context.read<ExternalContactsRepository>(),
-        interval: const Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS),
-      ),
+      if (supportsExtensions)
+        PollingRegistration(
+          listener: context.read<ExternalContactsRepository>(),
+          interval: const Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS),
+        ),
       if (isVoicemailsEnabled)
         PollingRegistration(
           listener: context.read<VoicemailRepository>(),
