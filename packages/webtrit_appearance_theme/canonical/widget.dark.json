@@ -1,0 +1,268 @@
+{
+  "fonts": {
+    "fontFamily": "Montserrat"
+  },
+  "button": {
+    "primaryElevatedButton": {
+      "textStyle": {
+        "fontFamily": null,
+        "fontSize": 14.0,
+        "fontWeight": {
+          "weight": 500
+        },
+        "fontStyle": null,
+        "color": null,
+        "letterSpacing": null,
+        "wordSpacing": null,
+        "height": null,
+        "decoration": null,
+        "backgroundColor": null,
+        "backgroundBorderRadius": null,
+        "backgroundPadding": null
+      },
+      "backgroundColor": "#A5C6E4",
+      "foregroundColor": "#092D4A",
+      "disabledBackgroundColor": "#333537",
+      "disabledForegroundColor": "#8E918F",
+      "disabledIconColor": null,
+      "disabledShadowColor": null,
+      "overlayColor": null,
+      "shadowColor": null,
+      "surfaceTintColor": null,
+      "elevation": null,
+      "padding": null,
+      "minimumSize": null,
+      "fixedSize": null,
+      "maximumSize": null,
+      "iconColor": null,
+      "iconSize": null,
+      "side": null,
+      "shape": {
+        "type": "rounded",
+        "borderRadius": 8.0
+      },
+      "visualDensity": null,
+      "animationDuration": null
+    }
+  },
+  "group": {
+    "groupTitleListTile": {
+      "backgroundColor": "#1D2022",
+      "textStyle": {
+        "fontFamily": null,
+        "fontSize": 12.0,
+        "fontWeight": {
+          "weight": 600
+        },
+        "fontStyle": null,
+        "color": "#A5C6E4",
+        "letterSpacing": null,
+        "wordSpacing": null,
+        "height": null,
+        "decoration": null,
+        "backgroundColor": null,
+        "backgroundBorderRadius": null,
+        "backgroundPadding": null
+      }
+    },
+    "callActions": {
+      "callStartBackgroundColor": null,
+      "hangupBackgroundColor": null,
+      "transferBackgroundColor": null,
+      "cameraBackgroundColor": null,
+      "cameraActiveBackgroundColor": null,
+      "mutedBackgroundColor": null,
+      "mutedActiveBackgroundColor": null,
+      "speakerBackgroundColor": null,
+      "speakerActiveBackgroundColor": null,
+      "heldBackgroundColor": null,
+      "heldActiveBackgroundColor": null,
+      "swapBackgroundColor": null,
+      "keyBackgroundColor": null,
+      "keypadBackgroundColor": null,
+      "keypadActiveBackgroundColor": null
+    }
+  },
+  "bar": {
+    "bottomNavigationBar": {
+      "backgroundColor": "#111315",
+      "selectedItemColor": "#A5C6E4",
+      "unSelectedItemColor": "#8E918F"
+    },
+    "appBarConfig": {
+      "primary": true,
+      "showBackButton": true,
+      "backgroundColor": "#00000000",
+      "foregroundColor": "#E2E2E2",
+      "shadowColor": null,
+      "surfaceTintColor": "#00000000",
+      "elevation": 0.0,
+      "scrolledUnderElevation": 0.0,
+      "titleSpacing": null,
+      "leadingWidth": null,
+      "toolbarHeight": null,
+      "centerTitle": true,
+      "iconTheme": null,
+      "actionsIconTheme": null,
+      "titleTextStyle": {
+        "fontFamily": null,
+        "fontSize": 18.0,
+        "fontWeight": {
+          "weight": 600
+        },
+        "fontStyle": null,
+        "color": "#E2E2E2",
+        "letterSpacing": null,
+        "wordSpacing": null,
+        "height": null,
+        "decoration": null,
+        "backgroundColor": null,
+        "backgroundBorderRadius": null,
+        "backgroundPadding": null
+      },
+      "toolbarTextStyle": null,
+      "systemOverlayStyle": null
+    },
+    "tabBarConfig": {
+      "indicatorColor": "#A5C6E4",
+      "dividerColor": "#00000000",
+      "labelColor": "#092D4A",
+      "unselectedLabelColor": "#8E918F",
+      "overlayColor": null,
+      "dividerHeight": null,
+      "labelPadding": null,
+      "labelStyle": null,
+      "unselectedLabelStyle": null,
+      "indicatorSize": "tab",
+      "tabAlignment": "fill",
+      "indicatorAnimation": null,
+      "splashFactory": null,
+      "indicatorBorder": null
+    }
+  },
+  "imageAssets": {
+    "defaultPlaceholderImage": {
+      "id": null,
+      "uri": "asset://assets/images/secondary_onboarding_logo.svg",
+      "$ref": "asset",
+      "render": null,
+      "metadata": {
+        "attributes": {}
+      }
+    },
+    "appIcon": {
+      "color": null
+    },
+    "leadingAvatarStyle": {
+      "backgroundColor": "#3C4750",
+      "radius": 20.0,
+      "initialsTextStyle": {
+        "fontFamily": "Montserrat",
+        "fontSize": 16.0,
+        "fontWeight": {
+          "weight": 700
+        },
+        "fontStyle": null,
+        "color": "#D1E4F5",
+        "letterSpacing": null,
+        "wordSpacing": null,
+        "height": null,
+        "decoration": null,
+        "backgroundColor": null,
+        "backgroundBorderRadius": null,
+        "backgroundPadding": null
+      },
+      "placeholderIcon": {
+        "codePoint": "0xe497",
+        "fontFamily": "MaterialIcons",
+        "matchTextDirection": false
+      },
+      "loading": {
+        "showByDefault": false,
+        "padding": {
+          "left": 2.0,
+          "top": 2.0,
+          "right": 2.0,
+          "bottom": 2.0
+        },
+        "strokeWidth": 1.0
+      },
+      "smartIndicator": {
+        "backgroundColor": "#1D2022",
+        "icon": {
+          "codePoint": "0xe491",
+          "fontFamily": "MaterialIcons",
+          "matchTextDirection": false
+        },
+        "sizeFactor": 0.4
+      },
+      "registeredBadge": {
+        "registeredColor": null,
+        "unregisteredColor": null,
+        "sizeFactor": 0.2
+      },
+      "presenceBadge": {
+        "availableColor": null,
+        "unavailableColor": null,
+        "sizeFactor": 0.325
+      }
+    }
+  },
+  "input": {
+    "primary": {
+      "labelColor": "#A5C6E4",
+      "border": {
+        "disabled": {
+          "typicalColor": "#444749",
+          "errorColor": "#FF897D"
+        },
+        "focused": {
+          "typicalColor": "#A5C6E4",
+          "errorColor": "#FF897D"
+        },
+        "any": {
+          "typicalColor": "#8E918F",
+          "errorColor": "#FF897D"
+        }
+      }
+    }
+  },
+  "text": {
+    "selection": {
+      "cursorColor": "#A5C6E4",
+      "selectionColor": "#1F618F",
+      "selectionHandleColor": "#A5C6E4"
+    },
+    "linkify": {
+      "styleColor": "#E2E2E2",
+      "linkifyStyleColor": "#A5C6E4"
+    }
+  },
+  "dialog": {
+    "confirmDialog": {
+      "activeButtonColor1": null,
+      "activeButtonColor2": null,
+      "defaultButtonColor": null
+    },
+    "snackBar": {
+      "successBackgroundColor": "#B8E078",
+      "errorBackgroundColor": "#FF897D",
+      "infoBackgroundColor": "#8E918F",
+      "warningBackgroundColor": "#FFB59D"
+    }
+  },
+  "statuses": {
+    "registrationStatuses": {
+      "online": "#B8E078",
+      "offline": "#37393B"
+    },
+    "callStatuses": {
+      "connectivityNone": "#FF897D",
+      "connectError": "#FF897D",
+      "appUnregistered": "#8E918F",
+      "connectIssue": "#FF897D",
+      "inProgress": "#A5C6E4",
+      "ready": "#B8E078"
+    }
+  }
+}

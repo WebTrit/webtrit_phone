@@ -1,0 +1,447 @@
+{
+  "login": {
+    "modeSelect": {
+      "themeOverride": {
+        "mode": "system",
+        "applyToAppBar": true
+      },
+      "systemUiOverlayStyle": {
+        "systemNavigationBarColor": "#000000",
+        "systemNavigationBarIconBrightness": "light",
+        "statusBarIconBrightness": "dark",
+        "statusBarBrightness": "light"
+      },
+      "mainLogo": {
+        "id": null,
+        "uri": "asset://assets/images/primary_onboarding_logo.svg",
+        "$ref": "asset",
+        "render": {
+          "scale": 0.42,
+          "padding": {
+            "left": 0.0,
+            "top": 0.0,
+            "right": 0.0,
+            "bottom": 0.0
+          },
+          "alignment": "center",
+          "fit": null
+        },
+        "metadata": {
+          "attributes": {}
+        }
+      },
+      "buttonLoginStyleType": "neutralOnDark",
+      "buttonSignupStyleType": "neutralOnDark",
+      "background": {
+        "colors": [
+          "#5CACE3",
+          "#123752"
+        ],
+        "stops": [
+          0.0,
+          1.0
+        ],
+        "beginX": 0.0,
+        "beginY": 0.0,
+        "endX": 0.0,
+        "endY": 1.0,
+        "type": "gradient"
+      },
+      "greetingTextStyle": null,
+      "appBarBlurredSurface": null
+    },
+    "switchPage": {
+      "themeOverride": {
+        "mode": "system",
+        "applyToAppBar": true
+      },
+      "mainLogo": {
+        "id": null,
+        "uri": "asset://assets/images/secondary_onboarding_logo.svg",
+        "$ref": "asset",
+        "render": {
+          "scale": 0.25,
+          "padding": {
+            "left": 0.0,
+            "top": 80.0,
+            "right": 0.0,
+            "bottom": 24.0
+          },
+          "alignment": null,
+          "fit": null
+        },
+        "metadata": {
+          "attributes": {}
+        }
+      },
+      "background": null,
+      "segmentButtonStyle": {
+        "textStyle": null,
+        "backgroundColor": null,
+        "foregroundColor": null,
+        "disabledBackgroundColor": null,
+        "disabledForegroundColor": null,
+        "disabledIconColor": null,
+        "disabledShadowColor": null,
+        "overlayColor": null,
+        "shadowColor": null,
+        "surfaceTintColor": null,
+        "elevation": null,
+        "padding": null,
+        "minimumSize": null,
+        "fixedSize": null,
+        "maximumSize": null,
+        "iconColor": null,
+        "iconSize": null,
+        "side": null,
+        "shape": {
+          "type": "rounded",
+          "borderRadius": 4.0
+        },
+        "visualDensity": null,
+        "animationDuration": null
+      },
+      "appBarBlurredSurface": null
+    },
+    "otpSignin": {
+      "refTextField": null
+    },
+    "passwordSignin": {
+      "refTextField": null,
+      "passwordTextField": null
+    },
+    "otpSigninVerify": {
+      "countdownRepeatIntervalSeconds": 30
+    },
+    "signupVerify": {
+      "countdownRepeatIntervalSeconds": 30
+    }
+  },
+  "about": {
+    "mainLogo": {
+      "id": null,
+      "uri": "asset://assets/images/secondary_onboarding_logo.svg",
+      "$ref": "asset",
+      "render": {
+        "scale": 0.25,
+        "padding": {
+          "left": 0.0,
+          "top": 48.0,
+          "right": 0.0,
+          "bottom": 0.0
+        },
+        "alignment": null,
+        "fit": null
+      },
+      "metadata": {
+        "attributes": {}
+      }
+    },
+    "metadata": {
+      "attributes": {}
+    },
+    "background": null,
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10.0,
+      "sigmaY": 10.0
+    }
+  },
+  "dialing": {
+    "systemUiOverlayStyle": {
+      "systemNavigationBarColor": "#000000",
+      "systemNavigationBarIconBrightness": "light",
+      "statusBarIconBrightness": "dark",
+      "statusBarBrightness": "light"
+    },
+    "appBarStyle": {
+      "primary": false,
+      "showBackButton": true,
+      "backgroundColor": null,
+      "foregroundColor": null,
+      "shadowColor": null,
+      "surfaceTintColor": null,
+      "elevation": null,
+      "scrolledUnderElevation": null,
+      "titleSpacing": null,
+      "leadingWidth": null,
+      "toolbarHeight": null,
+      "centerTitle": null,
+      "iconTheme": null,
+      "actionsIconTheme": null,
+      "titleTextStyle": null,
+      "toolbarTextStyle": null,
+      "systemOverlayStyle": null
+    },
+    "callInfo": {
+      "usernameTextStyle": {
+        "fontFamily": null,
+        "fontSize": 24.0,
+        "fontWeight": {
+          "weight": 400
+        },
+        "fontStyle": null,
+        "color": "#FFFFFF",
+        "letterSpacing": null,
+        "wordSpacing": null,
+        "height": null,
+        "decoration": null,
+        "backgroundColor": null,
+        "backgroundBorderRadius": null,
+        "backgroundPadding": null
+      },
+      "numberTextStyle": {
+        "fontFamily": null,
+        "fontSize": 20.0,
+        "fontWeight": {
+          "weight": 400
+        },
+        "fontStyle": null,
+        "color": "#EEF3F6",
+        "letterSpacing": null,
+        "wordSpacing": null,
+        "height": null,
+        "decoration": null,
+        "backgroundColor": null,
+        "backgroundBorderRadius": null,
+        "backgroundPadding": null
+      },
+      "callStatusTextStyle": {
+        "fontFamily": null,
+        "fontSize": 16.0,
+        "fontWeight": {
+          "weight": 400
+        },
+        "fontStyle": null,
+        "color": "#EEF3F6",
+        "letterSpacing": null,
+        "wordSpacing": null,
+        "height": null,
+        "decoration": null,
+        "backgroundColor": null,
+        "backgroundBorderRadius": null,
+        "backgroundPadding": null
+      },
+      "processingStatusTextStyle": {
+        "fontFamily": null,
+        "fontSize": 14.0,
+        "fontWeight": {
+          "weight": 500
+        },
+        "fontStyle": null,
+        "color": "#EEF3F6",
+        "letterSpacing": null,
+        "wordSpacing": null,
+        "height": null,
+        "decoration": null,
+        "backgroundColor": null,
+        "backgroundBorderRadius": null,
+        "backgroundPadding": null
+      }
+    },
+    "actions": {
+      "callStart": {
+        "backgroundColor": "#75B943",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledIconColor": "#848581",
+        "disabledBackgroundColor": "#66DDE0E3",
+        "disabledForegroundColor": "#848581"
+      },
+      "hangup": {
+        "backgroundColor": "#E74C3C",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledIconColor": "#848581",
+        "disabledBackgroundColor": "#66DDE0E3",
+        "disabledForegroundColor": "#848581"
+      },
+      "transfer": {
+        "backgroundColor": "#123752",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledIconColor": "#848581",
+        "disabledBackgroundColor": "#66DDE0E3",
+        "disabledForegroundColor": "#848581"
+      },
+      "camera": {
+        "backgroundColor": "#66FFFFFF",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledIconColor": "#848581",
+        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledForegroundColor": "#848581"
+      },
+      "muted": {
+        "backgroundColor": "#66FFFFFF",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledIconColor": "#848581",
+        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledForegroundColor": "#848581"
+      },
+      "speaker": {
+        "backgroundColor": "#66FFFFFF",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledIconColor": "#848581",
+        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledForegroundColor": "#848581"
+      },
+      "held": {
+        "backgroundColor": "#66FFFFFF",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledIconColor": "#848581",
+        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledForegroundColor": "#848581"
+      },
+      "swap": {
+        "backgroundColor": "#66FFFFFF",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledIconColor": "#848581",
+        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledForegroundColor": "#848581"
+      },
+      "key": {
+        "backgroundColor": "#66FFFFFF",
+        "foregroundColor": "#FFFFFFFF",
+        "textColor": "#FFFFFFFF",
+        "iconColor": "#FFFFFFFF",
+        "disabledIconColor": "#848581",
+        "disabledBackgroundColor": "#33FFFFFF",
+        "disabledForegroundColor": "#848581"
+      }
+    },
+    "background": {
+      "colors": [
+        "#5CACE3",
+        "#123752"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0,
+      "type": "gradient"
+    },
+    "appBarBlurredSurface": null
+  },
+  "keypad": {
+    "systemUiOverlayStyle": null,
+    "textField": null,
+    "contactName": null,
+    "keypad": null,
+    "actionpad": null,
+    "background": {
+      "colors": [
+        "#E1F5FE",
+        "#FFFFFF"
+      ],
+      "stops": [
+        0.0,
+        1.0
+      ],
+      "beginX": 0.0,
+      "beginY": 0.0,
+      "endX": 0.0,
+      "endY": 1.0,
+      "type": "gradient"
+    },
+    "themeOverride": {
+      "mode": "system",
+      "applyToAppBar": true
+    },
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10.0,
+      "sigmaY": 10.0
+    }
+  },
+  "settings": {
+    "themeOverride": {
+      "mode": "system",
+      "applyToAppBar": true
+    },
+    "leadingIconsColor": null,
+    "userIconColor": null,
+    "logoutIconColor": null,
+    "groupTitleListTile": null,
+    "showSeparators": true,
+    "background": null,
+    "itemTextStyle": null,
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10.0,
+      "sigmaY": 10.0
+    }
+  },
+  "contacts": {
+    "themeOverride": {
+      "mode": "system",
+      "applyToAppBar": true
+    },
+    "background": null,
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10.0,
+      "sigmaY": 10.0
+    }
+  },
+  "embedded": {
+    "themeOverride": {
+      "mode": "system",
+      "applyToAppBar": true
+    },
+    "background": null,
+    "appBarBlurredSurface": null
+  },
+  "favorites": {
+    "themeOverride": {
+      "mode": "system",
+      "applyToAppBar": true
+    },
+    "background": null,
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10.0,
+      "sigmaY": 10.0
+    }
+  },
+  "conversations": {
+    "themeOverride": {
+      "mode": "system",
+      "applyToAppBar": true
+    },
+    "background": null,
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10.0,
+      "sigmaY": 10.0
+    }
+  },
+  "recents": {
+    "themeOverride": {
+      "mode": "system",
+      "applyToAppBar": true
+    },
+    "background": null,
+    "appBarBlurredSurface": {
+      "color": "#96EEF5FA",
+      "sigmaX": 10.0,
+      "sigmaY": 10.0
+    }
+  }
+}

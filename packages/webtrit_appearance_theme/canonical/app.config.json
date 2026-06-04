@@ -1,0 +1,306 @@
+{
+  "loginConfig": {
+    "common": {
+      "fullScreenLaunchEmbeddedResourceId": null
+    },
+    "modeSelect": {
+      "greetingL10n": "WebTrit",
+      "actions": [
+        {
+          "enabled": true,
+          "type": "login",
+          "titleL10n": "login_Button_signUpToDemoInstance",
+          "embeddedId": null
+        },
+        {
+          "enabled": false,
+          "type": "embedded",
+          "titleL10n": "login_Button_signUpToDemoInstance",
+          "embeddedId": "example_embedded_login"
+        },
+        {
+          "enabled": false,
+          "type": "embedded",
+          "titleL10n": "login_Button_signInMediaQueryExample",
+          "embeddedId": "example_embedded_media_query"
+        }
+      ]
+    }
+  },
+  "mainConfig": {
+    "bottomMenu": {
+      "cacheSelectedTab": true,
+      "tabs": [
+        {
+          "enabled": true,
+          "initial": false,
+          "titleL10n": "main_BottomNavigationBarItemLabel_favorites",
+          "icon": "0xe5fd",
+          "type": "favorites"
+        },
+        {
+          "enabled": true,
+          "initial": false,
+          "titleL10n": "main_BottomNavigationBarItemLabel_recents",
+          "icon": "0xe03a",
+          "type": "recents"
+        },
+        {
+          "enabled": true,
+          "initial": false,
+          "titleL10n": "main_BottomNavigationBarItemLabel_contacts",
+          "icon": "0xee35",
+          "contactSourceTypes": [
+            "local",
+            "external"
+          ],
+          "type": "contacts"
+        },
+        {
+          "enabled": true,
+          "initial": true,
+          "titleL10n": "main_BottomNavigationBarItemLabel_keypad",
+          "icon": "0xe1ce",
+          "type": "keypad"
+        },
+        {
+          "enabled": true,
+          "initial": false,
+          "titleL10n": "main_BottomNavigationBarItemLabel_chats",
+          "icon": "0xe155",
+          "type": "messaging"
+        },
+        {
+          "enabled": false,
+          "initial": false,
+          "titleL10n": "main_BottomNavigationBarItemLabel_embedded",
+          "icon": "0xe2ce",
+          "embeddedResourceId": "example_embedded_payload_data",
+          "type": "embedded"
+        },
+        {
+          "enabled": false,
+          "initial": false,
+          "titleL10n": "main_BottomNavigationBarItemLabel_embedded_spa_example",
+          "icon": "0xe2ce",
+          "embeddedResourceId": "example_embedded_spa",
+          "type": "embedded"
+        }
+      ]
+    },
+    "systemNotificationsEnabled": true
+  },
+  "settingsConfig": {
+    "sections": [
+      {
+        "titleL10n": "settings_ListViewTileTitle_features",
+        "enabled": false,
+        "items": [
+          {
+            "enabled": false,
+            "titleL10n": "settings_ListViewTileTitle_voicemail",
+            "type": "voicemail",
+            "icon": "0xe6c1",
+            "iconColor": null,
+            "embeddedResourceId": null
+          }
+        ]
+      },
+      {
+        "titleL10n": "settings_ListViewTileTitle_settings",
+        "enabled": true,
+        "items": [
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_presence",
+            "type": "presence",
+            "icon": "0xf4c8",
+            "iconColor": null,
+            "embeddedResourceId": null
+          },
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_network",
+            "type": "network",
+            "icon": "0xe424",
+            "iconColor": null,
+            "embeddedResourceId": null
+          },
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_mediaSettings",
+            "type": "mediaSettings",
+            "icon": "0xf1cf",
+            "iconColor": null,
+            "embeddedResourceId": null
+          },
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_callerId",
+            "type": "callerId",
+            "icon": "0xf26e",
+            "iconColor": null,
+            "embeddedResourceId": null
+          },
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_language",
+            "type": "language",
+            "icon": "0xe366",
+            "iconColor": null,
+            "embeddedResourceId": null
+          },
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_themeMode",
+            "type": "themeMode",
+            "icon": "0xe518",
+            "iconColor": null,
+            "embeddedResourceId": null
+          },
+          {
+            "enabled": false,
+            "titleL10n": "settings_ListViewTileTitle_help",
+            "type": "help",
+            "icon": "0xe30b",
+            "iconColor": null,
+            "embeddedResourceId": null
+          },
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_termsConditions",
+            "type": "terms",
+            "icon": "0xeedf",
+            "iconColor": null,
+            "embeddedResourceId": "privacy-policy-for-webtrit-app"
+          },
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_about",
+            "type": "about",
+            "icon": "0xe140",
+            "iconColor": null,
+            "embeddedResourceId": null
+          }
+        ]
+      },
+      {
+        "titleL10n": "settings_ListViewTileTitle_toolbox",
+        "enabled": true,
+        "items": [
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_logRecordsConsole",
+            "type": "log",
+            "icon": "0xee79",
+            "iconColor": null,
+            "embeddedResourceId": null
+          },
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_accountDelete",
+            "type": "deleteAccount",
+            "icon": "0xe1bb",
+            "iconColor": null,
+            "embeddedResourceId": null
+          },
+          {
+            "enabled": false,
+            "titleL10n": "settings_ListViewTileTitle_embedded1",
+            "type": "embedded",
+            "icon": "0xe3a2",
+            "iconColor": null,
+            "embeddedResourceId": "example_embedded_registration"
+          },
+          {
+            "enabled": false,
+            "titleL10n": "settings_ListViewTileTitle_embedded2",
+            "type": "embedded",
+            "icon": "0xe3a2",
+            "iconColor": null,
+            "embeddedResourceId": "example_embedded_statistics"
+          }
+        ]
+      },
+      {
+        "titleL10n": "settings_ListViewTileTitle_embedded_section1",
+        "enabled": false,
+        "items": [
+          {
+            "enabled": true,
+            "titleL10n": "settings_ListViewTileTitle_embedded3",
+            "type": "embedded",
+            "icon": "0xe3a2",
+            "iconColor": null,
+            "embeddedResourceId": "example_embedded_rating"
+          }
+        ]
+      }
+    ]
+  },
+  "callConfig": {
+    "videoEnabled": true,
+    "transfer": {
+      "enableBlindTransfer": true,
+      "enableAttendedTransfer": true
+    },
+    "encoding": {
+      "bypassConfig": false,
+      "defaultPresetOverride": {
+        "audioBitrate": null,
+        "videoBitrate": null,
+        "ptime": null,
+        "maxptime": null,
+        "opusSamplingRate": null,
+        "opusBitrate": null,
+        "opusStereo": null,
+        "opusDtx": null,
+        "removeStaticAudioRtpMaps": null,
+        "remapTE8payloadTo101": null,
+        "removeREMBFeedback": null,
+        "removeTWCCFeedback": null,
+        "removeExtmaps": null
+      }
+    },
+    "peerConnection": {
+      "negotiation": {
+        "includeInactiveVideoInOfferAnswer": false
+      }
+    }
+  },
+  "contacts": {
+    "list": {},
+    "details": {
+      "actions": {
+        "appBar": null,
+        "phoneTile": null,
+        "emailTile": null
+      }
+    }
+  },
+  "messaging": {
+    "sms": {},
+    "chats": {
+      "groupChatButtonEnabled": true,
+      "contactInfo": {
+        "showVideoButtonAction": true
+      }
+    }
+  },
+  "supported": [
+    {
+      "mode": "system",
+      "type": "themeMode"
+    },
+    {
+      "logLevel": "INFO",
+      "checkIntervalSec": 15,
+      "anonymizationEnabled": true,
+      "type": "loggingConfig"
+    },
+    {
+      "enabled": true,
+      "type": "hybridPresence"
+    }
+  ]
+}
