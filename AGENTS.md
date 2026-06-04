@@ -54,3 +54,11 @@ packages/   → shared libs (must NOT import from lib/)
 - Theme: never raw `Colors.xxx` or `TextStyle` in widgets; `Theme.of(context).extension<T>()`.
 - Widgets: `StatelessWidget` always (not helper methods); dumb widgets in `features/*/view/widgets/`.
 - Tests: `MockClient`/`mocktail` — no real network calls; DB migrations via `SchemaVerifier`.
+- Routing (`auto_route`): the `AppRouter.routes` tree must ALWAYS be complete — never gate route
+  *declarations* on async/runtime values (server capability, login state, feature flags).
+  `routeCollection` is `late final`, built once at router construction (before server `system-info`
+  loads), so any `if (capability) AutoRoute(...)` is frozen with whatever the value was at startup;
+  later navigation to a route omitted then throws `Failed to navigate to <Route>`. Register every
+  variant unconditionally and decide which one to *show* at navigation/build time (e.g.
+  `AutoTabsRouter.routes`, guards, initial-tab resolver). Sibling routes may share a `path`
+  (`recents`) — `RouteCollection` only requires unique route *names*, and tab matching is name-based.

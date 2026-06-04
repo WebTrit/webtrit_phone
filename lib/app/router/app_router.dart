@@ -164,28 +164,31 @@ class AppRouter extends RootStackRouter {
                   ],
                 ),
 
-                if (_bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory == false)
-                  AutoRoute(
-                    page: RecentsRouterPageRoute.page,
-                    path: MainFlavor.recents.name,
-                    children: [
-                      AutoRoute(page: RecentsScreenPageRoute.page, path: ''),
-                      AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
-                      AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
-                      AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
-                    ],
-                  ),
-                if (_bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory == true)
-                  AutoRoute(
-                    page: RecentCdrsRouterPageRoute.page,
-                    path: MainFlavor.recents.name,
-                    children: [
-                      AutoRoute(page: RecentCdrsScreenPageRoute.page, path: ''),
-                      AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
-                      AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
-                      AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
-                    ],
-                  ),
+                // Both recents tab variants are registered unconditionally so the frozen
+                // routeCollection (built once, before the server call-history capability is
+                // known) always remains a superset of any tab selection. Which variant is
+                // shown is decided at navigation/build time by _buildRoutePages and the
+                // initial-tab resolver based on the live supportsCallHistory capability.
+                AutoRoute(
+                  page: RecentsRouterPageRoute.page,
+                  path: MainFlavor.recents.name,
+                  children: [
+                    AutoRoute(page: RecentsScreenPageRoute.page, path: ''),
+                    AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
+                    AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
+                    AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
+                  ],
+                ),
+                AutoRoute(
+                  page: RecentCdrsRouterPageRoute.page,
+                  path: MainFlavor.recents.name,
+                  children: [
+                    AutoRoute(page: RecentCdrsScreenPageRoute.page, path: ''),
+                    AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
+                    AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
+                    AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
+                  ],
+                ),
 
                 AutoRoute(
                   page: ContactsRouterPageRoute.page,
