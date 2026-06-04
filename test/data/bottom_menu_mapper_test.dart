@@ -9,12 +9,12 @@ import 'package:webtrit_phone/utils/core_support.dart';
 
 void main() {
   group('BottomMenuMapper recents useCdrs gating by the callHistory capability', () {
-    AppConfig appConfigWithRecents({required bool useCdrs}) {
+    AppConfig appConfigWithRecents() {
       return AppConfig(
         mainConfig: AppConfigMain(
           bottomMenu: AppConfigBottomMenu(
             tabs: [
-              BottomMenuTabScheme.recents(enabled: true, titleL10n: 'recents', icon: '0xe03a', useCdrs: useCdrs),
+              const BottomMenuTabScheme.recents(enabled: true, titleL10n: 'recents', icon: '0xe03a'),
               const BottomMenuTabScheme.keypad(enabled: true, titleL10n: 'keypad', icon: '0xe1ce'),
             ],
           ),
@@ -26,19 +26,15 @@ void main() {
 
     bool? recentsUseCdrs(AppConfig appConfig, List<String> flags) {
       final config = BottomMenuMapper.map(appConfig, emptyEmbedded, CoreSupportImpl(flags));
-      return config.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs;
+      return config.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory;
     }
 
-    test('useCdrs configured AND callHistory advertised -> true', () {
-      expect(recentsUseCdrs(appConfigWithRecents(useCdrs: true), [kCallHistoryFeatureFlag]), isTrue);
+    test('callHistory advertised -> true', () {
+      expect(recentsUseCdrs(appConfigWithRecents(), [kCallHistoryFeatureFlag]), isTrue);
     });
 
-    test('useCdrs configured but callHistory NOT advertised -> false (local fallback)', () {
-      expect(recentsUseCdrs(appConfigWithRecents(useCdrs: true), const []), isFalse);
-    });
-
-    test('callHistory advertised but useCdrs not configured -> false', () {
-      expect(recentsUseCdrs(appConfigWithRecents(useCdrs: false), [kCallHistoryFeatureFlag]), isFalse);
+    test('callHistory NOT advertised -> false (local call log fallback)', () {
+      expect(recentsUseCdrs(appConfigWithRecents(), const []), isFalse);
     });
   });
 }

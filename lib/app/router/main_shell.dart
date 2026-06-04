@@ -365,7 +365,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               dispose: (context, service) => service.dispose(),
               lazy: false,
             ),
-            if (featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
+            if (featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory == true)
               Provider<CdrsSyncWorker>(
                 create: (context) =>
                     CdrsSyncWorker(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),

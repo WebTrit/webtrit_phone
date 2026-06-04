@@ -18,7 +18,7 @@ class FavoritesScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
 
-    final cdrsEnabled = featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs;
+    final cdrsEnabled = featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory;
 
     final widget = FavoritesScreen(
       title: const Text(EnvironmentConfig.APP_NAME),
