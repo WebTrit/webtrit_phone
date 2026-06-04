@@ -2,10 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 
 import 'package:webtrit_phone/bootstrap.dart';
-import 'package:webtrit_phone/features/call/view/call_active_scaffold.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
 
 import 'components/integration_test_environment_config.dart';
+import 'subsequences/active_call_helpers.dart';
 import 'subsequences/login_by_method.dart';
 import 'subsequences/logout.dart';
 import 'subsequences/pump_for.dart';
@@ -71,13 +71,11 @@ void main() {
     await $.platform.mobile.openNotifications();
     await $.platform.mobile.tapOnNotificationBySelector(Selector(textContains: 'Answer'));
     await $.platform.mobile.closeNotifications();
-    await pumpFor(const Duration(seconds: 3), $);
-    expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active after answer');
+    await expectActiveCallDurationGte(const Duration(seconds: 3), $);
 
     // Hangup call
     await pjsuaCallServerClient.hangup(companionPid);
-    await pumpFor(const Duration(seconds: 3), $);
-    expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended after remote hangup');
+    await expectActiveCallHangup($);
 
     // Teardowning
     pjsuaCallServerClient.close(companionPid).ignore();

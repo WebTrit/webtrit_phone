@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 import 'package:pjsua_companion/pjsua_companion.dart';
 
@@ -8,11 +7,11 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/models/main_flavor.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/call/view/call_active_scaffold.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
 import 'package:webtrit_phone/widgets/shimmer.dart';
 
 import 'components/integration_test_environment_config.dart';
+import 'subsequences/active_call_helpers.dart';
 import 'subsequences/enter_keypad_number.dart';
 import 'subsequences/login_by_method.dart';
 import 'subsequences/logout.dart';
@@ -52,7 +51,7 @@ void main() {
       // Wait some time for components loading and session establishment.
       await pumpFor(const Duration(seconds: 5), $);
     }
-  
+
     // Open keypad and enter number.
     await $(MainFlavor.keypad.toNavBarKey()).tap();
     await enterKeypadNumber($, callNumber);
@@ -67,17 +66,16 @@ void main() {
 
     // Make a call and check if it is active.
     await $(Icons.call).tap();
-    await $(CallActiveScaffold).waitUntilVisible();
-    await pumpFor(const Duration(seconds: 5), $);
-    expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active');
+    await expectActiveCall($);
+    await expectActiveCallDurationGte(const Duration(seconds: 3), $);
 
     // Hangup call and check if it is done.
     await $(callActionsHangupKey).tap();
-    await pumpFor(const Duration(seconds: 2), $);
-    expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended');
+    await expectActiveCallHangup($);
 
     // Teardowning
     pjsuaCallServerClient.close(companionPid).ignore();
     await logout($);
   }, skip: hasCredsToRunThisTest == false);
 }
+

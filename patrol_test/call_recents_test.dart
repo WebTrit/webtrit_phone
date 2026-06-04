@@ -6,12 +6,12 @@ import 'package:webtrit_phone/app/keys.dart';
 
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/extensions/main_flavor.dart';
-import 'package:webtrit_phone/features/call/view/call_active_scaffold.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
 import 'package:webtrit_phone/models/main_flavor.dart';
 import 'package:webtrit_phone/widgets/call/call_tile.dart';
 
 import 'components/integration_test_environment_config.dart';
+import 'subsequences/active_call_helpers.dart';
 import 'subsequences/login_by_method.dart';
 import 'subsequences/logout.dart';
 import 'subsequences/pump_for.dart';
@@ -67,18 +67,16 @@ void main() {
       sipUsername: contactASipUsername,
       sipPassword: contactASipPassword,
     );
-    await $(CallActiveScaffold).waitUntilVisible(timeout: const Duration(seconds: 10));
+    await expectActiveCall($);
     await pumpFor(const Duration(seconds: 5), $);
 
     // Answer call
     await $(find.widgetWithIcon(TextButton, Icons.call)).tap();
-    await pumpFor(const Duration(seconds: 3), $);
-    expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active after answer');
+    await expectActiveCallDurationGte(const Duration(seconds: 3), $);
 
     // Hangup call
     await pjsuaCallServerClient.hangup(companionPid);
-    await pumpFor(const Duration(seconds: 3), $);
-    expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended after remote hangup');
+    await expectActiveCallHangup($);
     pjsuaCallServerClient.close(companionPid).ignore();
 
     // Check if the call is first in recents list.
@@ -96,18 +94,16 @@ void main() {
       sipUsername: contactBSipUsername,
       sipPassword: contactBSipPassword,
     );
-    await $(CallActiveScaffold).waitUntilVisible(timeout: const Duration(seconds: 10));
+    await expectActiveCall($);
     await pumpFor(const Duration(seconds: 5), $);
 
     // Answer call
     await $(find.widgetWithIcon(TextButton, Icons.call)).tap();
-    await pumpFor(const Duration(seconds: 3), $);
-    expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active after answer');
+    await expectActiveCallDurationGte(const Duration(seconds: 3), $);
 
     // Hangup call
     await pjsuaCallServerClient.hangup(companionPid);
-    await pumpFor(const Duration(seconds: 3), $);
-    expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended after remote hangup');
+    await expectActiveCallHangup($);
     pjsuaCallServerClient.close(companionPid).ignore();
 
     // Check if the call is in the recents list and match previous calls position
@@ -130,14 +126,12 @@ void main() {
       sipPassword: contactASipPassword,
     );
     await $(CallTile).at(1).tap();
-    await $(CallActiveScaffold).waitUntilVisible(timeout: const Duration(seconds: 10));
-    await pumpFor(const Duration(seconds: 5), $);
-    expect(find.textContaining('00:0'), findsOneWidget, reason: 'Outgoing call should be connected');
+    await expectActiveCall($);
+    await expectActiveCallDurationGte(const Duration(seconds: 5), $);
 
     // Hangup call and check if it is done.
     await $(callActionsHangupKey).tap();
-    await pumpFor(const Duration(seconds: 2), $);
-    expect($(CallActiveScaffold).visible, false, reason: 'Call should be ended');
+    await expectActiveCallHangup($);
     pjsuaCallServerClient.close(companionPid).ignore();
 
     // Check if the call is in the recents list and match previous calls position

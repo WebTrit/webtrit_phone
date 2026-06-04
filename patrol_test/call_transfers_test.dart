@@ -6,12 +6,12 @@ import 'package:pjsua_companion/pjsua_companion.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/call/view/call_active_scaffold.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
 import 'package:webtrit_phone/models/main_flavor.dart';
 import 'package:webtrit_phone/widgets/shimmer.dart';
 
 import 'components/integration_test_environment_config.dart';
+import 'subsequences/active_call_helpers.dart';
 import 'subsequences/enter_keypad_number.dart';
 import 'subsequences/login_by_method.dart';
 import 'subsequences/logout.dart';
@@ -75,9 +75,8 @@ void main() {
     await $(MainFlavor.keypad.toNavBarKey()).tap();
     await enterKeypadNumber($, contactANumber);
     await $(Icons.call).tap();
-    await $(CallActiveScaffold).waitUntilVisible();
-    await pumpFor(const Duration(seconds: 5), $);
-    expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call1 should be active');
+    await expectActiveCall($);
+    await expectActiveCallDurationGte(const Duration(seconds: 5), $);
 
     // Transfer the call blindly and verify that the call is transferred.
     await $(callActionsTransferMenuKey).tap();
@@ -85,8 +84,7 @@ void main() {
     await $(MainFlavor.keypad.toNavBarKey()).tap();
     await enterKeypadNumber($, contactBNumber);
     await $(Icons.phone_forwarded).tap();
-    await pumpFor(const Duration(seconds: 2), $);
-    expect($(CallActiveScaffold).visible, false, reason: 'Call1 should be transferred');
+    await expectActiveCallHangup($);
 
     // Release companion processes.
     pjsuaCallServerClient.close(contactACompanionPid).ignore();
@@ -110,9 +108,8 @@ void main() {
     await $(MainFlavor.keypad.toNavBarKey()).tap();
     await enterKeypadNumber($, contactANumber);
     await $(Icons.call).tap();
-    await $(CallActiveScaffold).waitUntilVisible();
-    await pumpFor(const Duration(seconds: 5), $);
-    expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call2 should be active');
+    await expectActiveCall($);
+    await expectActiveCallDurationGte(const Duration(seconds: 5), $);
     // Make second call and wait for it to be active.
     // await $.platformAutomator.mobile.swipeBack();
     await $(callActionsTransferMenuKey).tap();
@@ -120,16 +117,14 @@ void main() {
     await $(MainFlavor.keypad.toNavBarKey()).tap();
     await enterKeypadNumber($, contactBNumber);
     await $(Icons.call).tap();
-    await $(CallActiveScaffold).waitUntilVisible();
-    await pumpFor(const Duration(seconds: 5), $);
+    await expectActiveCall($);
+    await expectActiveCallDurationGte(const Duration(seconds: 5), $);
     expect(find.textContaining('On hold'), findsOneWidget, reason: 'One call should be on hold');
-    expect(find.textContaining('00:0'), findsOneWidget, reason: 'Another call should be active');
 
     // Make attended transfer and verify that the call is transferred.
     await $(callActionsTransferMenuKey).tap();
     await $(callActionsTransferMenuNumberKey).at(0).tap();
-    await pumpFor(const Duration(seconds: 2), $);
-    expect($(CallActiveScaffold).visible, false, reason: 'Call2 should be transferred');
+    await expectActiveCallHangup($);
 
     // Close companions.
     pjsuaCallServerClient.close(contactACompanionPid).ignore();
