@@ -6,7 +6,6 @@ import 'package:logging/logging.dart';
 
 // TODO:
 // - add transfer
-// - add video file playback
 // - add incoming RTP check to verify app actions
 
 final _logger = Logger('pjsua_call_server');
@@ -41,10 +40,22 @@ void main(List<String> args) async {
           final sipPassword = _validateParam(params, 'sip_password');
           final calle = _validateParam(params, 'calle');
           final duration = int.parse(_validateParam(params, 'duration', defaultValue: '60'));
+          final playMusic = params['play_music'] == 'true';
+          final playVideo = params['play_video'] == 'true';
           final callTarget = 'sip:$calle@$sipServer';
-          _logger.info('Placing pjsua call → $callTarget (duration: ${duration}s)');
+          _logger.info(
+            'Placing pjsua call → $callTarget (duration: ${duration}s, playMusic: $playMusic, playVideo: $playVideo)',
+          );
 
-          final process = await _spawnPjsua(sipServer, sipUsername, sipPassword, duration, callTarget: callTarget);
+          final process = await _spawnPjsua(
+            sipServer,
+            sipUsername,
+            sipPassword,
+            duration,
+            callTarget: callTarget,
+            playMusic: playMusic,
+            playVideo: playVideo,
+          );
           _logger.info('pjsua started with PID: ${process.pid}');
 
           _processes[process.pid] = process;
@@ -67,9 +78,21 @@ void main(List<String> args) async {
           final sipUsername = _validateParam(params, 'sip_username');
           final sipPassword = _validateParam(params, 'sip_password');
           final duration = int.parse(_validateParam(params, 'duration', defaultValue: '60'));
-          _logger.info('Registering pjsua for auto-answer (duration: ${duration}s)');
+          final playMusic = params['play_music'] == 'true';
+          final playVideo = params['play_video'] == 'true';
+          _logger.info(
+            'Registering pjsua for auto-answer (duration: ${duration}s, playMusic: $playMusic, playVideo: $playVideo)',
+          );
 
-          final process = await _spawnPjsua(sipServer, sipUsername, sipPassword, duration, autoAnswer: true);
+          final process = await _spawnPjsua(
+            sipServer,
+            sipUsername,
+            sipPassword,
+            duration,
+            autoAnswer: true,
+            playMusic: playMusic,
+            playVideo: playVideo,
+          );
           _logger.info('pjsua started with PID: ${process.pid}');
 
           _processes[process.pid] = process;
@@ -185,7 +208,13 @@ Future<Process> _spawnPjsua(
   int duration, {
   String? callTarget,
   bool autoAnswer = false,
+  bool playMusic = false,
+  bool playVideo = false,
 }) async {
+  final scriptDir = File(Platform.script.toFilePath()).parent.path;
+  final musicFile = '$scriptDir/media/flying_bird.wav';
+  final videoFile = '$scriptDir/media/vid.avi';
+
   final process = await Process.start('pjsua', [
     '--id=sip:$sipUsername@$sipServer',
     '--registrar=sip:$sipServer',
@@ -195,6 +224,11 @@ Future<Process> _spawnPjsua(
     '--local-port=0',
     '--null-audio',
     '--auto-loop',
+    if (playMusic) '--play-file=$musicFile',
+    if (playMusic) '--auto-play',
+    if (playVideo) '--video',
+    if (playVideo) '--play-avi=$videoFile',
+    if (playVideo) '--auto-play-avi',
     '--duration=$duration',
     '--log-append',
     '--no-stderr',

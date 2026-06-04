@@ -5,6 +5,8 @@ Integration tests use `PjsuaCompanionClient` (Dart HTTP client) to drive the ser
 
 ## Prerequisites
 
+### Native install
+
 Install `pjsua` on the machine that will run the server:
 
 ```bash
@@ -20,6 +22,27 @@ Verify the binary is on `PATH`:
 ```bash
 pjsua --version
 ```
+
+> **Note:** The native `pjsua` binary installed via package managers is built without video support.
+> Use the Docker image (see below) if you need `play_video` functionality.
+
+### Docker
+
+A multi-stage `Dockerfile` is provided that compiles `pjsua` from source with full video support
+(FFmpeg + SDL) and bundles it together with the Dart server:
+
+```bash
+# Build the image from the repo root
+docker build -t pjsua-companion packages/pjsua_companion/
+
+# Run — exposes the server on port 7788
+docker run --rm -p 7788:7788 pjsua-companion
+
+# Custom port
+docker run --rm -p 9000:7788 pjsua-companion
+```
+
+The image uses `SDL_VIDEODRIVER=offscreen` so video rendering works without a display.
 
 ## Starting the server
 
@@ -58,12 +81,18 @@ Spawn a `pjsua` process that registers and immediately places an outgoing call.
 | `sip_password`| yes | SIP account password |
 | `calle`       | yes | Callee username (target URI becomes `sip:<calle>@<sip_server>`) |
 | `duration`    | no  | Max call duration in seconds (default `60`) |
+| `play_music`  | no  | `true` — stream the bundled `flying_bird.wav` audio file to the remote party |
+| `play_video`  | no  | `true` — stream the bundled `vid.avi` video file (requires video-capable `pjsua`; use Docker) |
 
 Returns the PID of the spawned process. The process exits automatically after `duration` seconds or when the call ends.
 
 ```
 GET /call?sip_server=sip.example.com&sip_username=alice&sip_password=secret&calle=bob&duration=30
 → 42137
+
+# With audio and video playback
+GET /call?sip_server=sip.example.com&sip_username=alice&sip_password=secret&calle=bob&play_music=true&play_video=true
+→ 42138
 ```
 
 ---
@@ -78,8 +107,10 @@ Spawn a `pjsua` process that registers and auto-answers any incoming call (`--au
 | `sip_username`| yes | SIP account username |
 | `sip_password`| yes | SIP account password |
 | `duration`    | no  | Max lifetime in seconds (default `60`) |
+| `play_music`  | no  | `true` — stream the bundled `flying_bird.wav` audio file to the caller |
+| `play_video`  | no  | `true` — stream the bundled `vid.avi` video file to the caller (requires video-capable `pjsua`; use Docker) |
 
-Returns the PID. Audio is looped back (`--auto-loop`, `--null-audio`).
+Returns the PID. Audio is looped back by default (`--auto-loop`, `--null-audio`); enabling `play_music` replaces loopback with the WAV file.
 
 ---
 
@@ -104,6 +135,18 @@ Hang up the active call in process `<pid>` (sends `h` to `pjsua` stdin).
 ### `GET /close?pid=<pid>`
 
 Gracefully quit the `pjsua` process `<pid>` (sends `q`, waits 5 s, then kills it).
+
+## Bundled media files
+
+The server ships two media files under `bin/media/` that are used by the `play_music` and `play_video` options:
+
+| File | Format | Used by |
+|------|--------|---------|
+| `flying_bird.wav` | PCM WAV | `play_music=true` — passed to pjsua via `--play-file` + `--auto-play` |
+| `vid.avi` | AVI | `play_video=true` — passed to pjsua via `--play-avi` + `--auto-play-avi` |
+
+Both paths are resolved relative to the `bin/` directory at runtime (`Platform.script`), so they work
+whether the server is launched with `dart run` or inside Docker.
 
 ## Dart client
 
