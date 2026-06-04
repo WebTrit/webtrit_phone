@@ -40,108 +40,22 @@ The application offers extensive customization options:
 
 # Testing
 
-## Test commands
-* Run unit and widget tests
+### Unit and widget tests
+* Run unit and widget tests:
   ```bash
   flutter test
   ```
-* Run integration tests in dev mode
-  ```bash
-  patrol develop --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json --flavor=deeplinkssmsReceiver
-  ```
-* Build integration tests
-  ```bash
-  patrol build android/ios --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json --flavor=deeplinkssmsReceiver
-  ```
-* To specify a test file, use the `-t` option:
-  ```bash
-  patrol build -t patrol_test/call_and_recent_test.dart ...
-  ```
-* For build and deploy to Firebase Test Lab, use the following command from the `tool/scripts` directory:
-  ```bash
-  ./testlab_assemble_android.sh <testfile(optional)>
-  ./testlab_assemble_ios.sh <testfile(optional)>
-  ```
-* Run android integration tests with remote call companion
-  ```bash
-  ./tool/scripts/patrol_e2e_run_local_android.sh <testfile(optional)>
-  ```
-<!-- TODO: instruction for companion -->
+### Integration tests
+- **Framework**: We use Patrol framework for integration testing.
+It helps us to automate native iOS and Android behaviors and simplifyes routine tasks during testing.
+You can find more information about it here: https://patrol.dev/ 
+Integration tests are located in the `patrol_test` folder.
 
-### Integration test variables
+- **Configuration**: The configuration file `dart_define.integration_test.json` defines all the environment variables (login credentials, contacts, user info, and call settings) for the integration tests. [Integration Test Variables](docs/integration_test_variables.md).
 
-##### Login methods tests / default login settings
+- **Calls test**: For simulating SIP calls during tests, here is [pjsua Companion](packages/pjsua_companion/README.md) — an HTTP server that wraps the `pjsua` CLI to place and answer calls programmatically when app tests is running.
 
-*Email login: (optional)* 
-* `WEBTRIT_APP_TEST_EMAIL_CREDENTIAL` (_example myaccount@mail.com_)
-* `WEBTRIT_APP_TEST_EMAIL_VERIFY_CREDENTIAL` (_example 123456_)
-
-*OTP login: (optional)* 
-* `WEBTRIT_APP_TEST_OTP_CREDENTIAL` (_example +1234566789_)
-* `WEBTRIT_APP_TEST_OTP_VERIFY_CREDENTIAL` (_example 123456_)
-
-*Password login: (optional)* 
-* `WEBTRIT_APP_TEST_PASSWORD_USER_CREDENTIAL`  (_example username_)
-* `WEBTRIT_APP_TEST_PASSWORD_PASSWORD_CREDENTIAL` (_example 123456_)
-
-*Custom core url, if not defined default signin button will be used*
-* `WEBTRIT_APP_TEST_CUSTOM_CORE_URL` (_example core.demo.mycompany.com_)
-
-*Login method that will be used for other tests*
-* `WEBTRIT_APP_TEST_DEFAULT_LOGIN_METHOD` -  (_email_ | _password_ | _otp_)
-
-##### Contacts and favorites tests
-
-*Search query that must match **more than one** external contact*
-* `WEBTRIT_APP_TEST_EXT_CONTACT_MULTI_SEARCH_QUERY` (_example Doe_)
-
-*Unique name query matches **exactly one** external contact but doesn't match another*
-* `WEBTRIT_APP_TEST_EXT_CONTACT_A_UNIQUE_NAME` (_example John_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_B_UNIQUE_NAME` (_example Jane_)
-
-*Phone number of that contact _(optional in contact details test — verification skipped if empty)_*
-* `WEBTRIT_APP_TEST_EXT_CONTACT_A_UNIQUE_NUMBER` (_example 00111_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_B_UNIQUE_NUMBER` (_example 00222_)
-
-*Phone number with label `ext` in that contact's detail _(optional — verification skipped if empty)_*
-* `WEBTRIT_APP_TEST_EXT_CONTACT_A_UNIQUE_EXT_NUMBER` (_example 00114_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_B_UNIQUE_EXT_NUMBER` (_example 00225_)
-
-*Phone number with label `additional` in that contact's detail _(optional — verification skipped if empty)_*
-* `WEBTRIT_APP_TEST_EXT_CONTACT_A_UNIQUE_ADDITIONAL_NUMBER` (_example 00112_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_B_UNIQUE_ADDITIONAL_NUMBER` (_example 00223_)
-
-*Phone number with label `sms` in that contact's detail _(optional — verification skipped if empty)_*
-* `WEBTRIT_APP_TEST_EXT_CONTACT_A_UNIQUE_SMS_NUMBER` (_example 00113_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_B_UNIQUE_SMS_NUMBER` (_example 00224_)
-
-*Email address in that contact's detail _(optional — verification skipped if empty)_*
-* `WEBTRIT_APP_TEST_EXT_CONTACT_A_UNIQUE_EMAIL` (_example user.a@example.com_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_B_UNIQUE_EMAIL` (_example user.b@example.com_)
-
-*SIP credentials used by pjsua companion to place/receive calls on behalf of that contact*
-* `WEBTRIT_APP_TEST_EXT_CONTACT_A_SIP_USERNAME` (_example 00111_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_A_SIP_PASSWORD` (_example 00111PWD_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_B_SIP_USERNAME` (_example 00222_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_B_SIP_PASSWORD` (_example 00222PWD_)
-
-##### User info tests 
-*Name that should be displayed in account info section*
-* `WEBTRIT_APP_TEST_ACCOUNT_NAME` (_example Test Account_)
-
-*Main number that should be displayed in account info section*
-* `WEBTRIT_APP_TEST_ACCOUNT_MAIN_NUMBER` (_example 1230000_)
-
-##### Calls tests
-* `WEBTRIT_APP_TEST_CROSS_CALL_SLEEP_SECONDS` (_example 10_)
-
-*PJSUA server host, if not defined `localhost`*
-* `WEBTRIT_APP_TEST_PJSUA_SERVER_HOST` (_example localhost_)
-
-*PJSUA server port, if not defined `7788`*
-* `WEBTRIT_APP_TEST_PJSUA_SERVER_PORT` (_example 7788_)
-
-* `WEBTRIT_APP_TEST_PJSUA_SIP_SERVER` (_example server_)
+- **Commands**: See [Integration Test Commands](docs/integration_test_commands.md) for all patrol build, run, Firebase Test Lab, and local companion commands.
 
 ## Contributing
 
