@@ -164,28 +164,26 @@ class AppRouter extends RootStackRouter {
                   ],
                 ),
 
-                if (_bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory == false)
-                  AutoRoute(
-                    page: RecentsRouterPageRoute.page,
-                    path: MainFlavor.recents.name,
-                    children: [
-                      AutoRoute(page: RecentsScreenPageRoute.page, path: ''),
-                      AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
-                      AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
-                      AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
-                    ],
-                  ),
-                if (_bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory == true)
-                  AutoRoute(
-                    page: RecentCdrsRouterPageRoute.page,
-                    path: MainFlavor.recents.name,
-                    children: [
-                      AutoRoute(page: RecentCdrsScreenPageRoute.page, path: ''),
-                      AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
-                      AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
-                      AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
-                    ],
-                  ),
+                AutoRoute(
+                  page: RecentsRouterPageRoute.page,
+                  path: MainFlavor.recents.name,
+                  children: [
+                    AutoRoute(page: RecentsScreenPageRoute.page, path: ''),
+                    AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
+                    AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
+                    AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
+                  ],
+                ),
+                AutoRoute(
+                  page: RecentCdrsRouterPageRoute.page,
+                  path: MainFlavor.recents.name,
+                  children: [
+                    AutoRoute(page: RecentCdrsScreenPageRoute.page, path: ''),
+                    AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
+                    AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
+                    AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
+                  ],
+                ),
 
                 AutoRoute(
                   page: ContactsRouterPageRoute.page,
