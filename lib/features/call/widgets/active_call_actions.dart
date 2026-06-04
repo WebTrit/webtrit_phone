@@ -352,6 +352,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
           Tooltip(
             message: context.l10n.call_CallActionsTooltip_transfer,
             child: CallPopupMenuButton(
+              key: callActionsTransferMenuKey,
               offset: Offset(_dimension + 8, 0),
               items: [
                 for (final call in widget.transferableCalls)
@@ -415,6 +416,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
                   ),
                 if (onAttendedTransferInitiated != null)
                   CallPopupMenuItem(
+                    key: callActionsTransferMenuAttendedInitKey,
                     // Transfer is signaling-dependent, disable during renegotiation.
                     enabled: widget.enableInteractions,
                     onTap: onAttendedTransferInitiated,

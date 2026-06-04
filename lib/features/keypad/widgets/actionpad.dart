@@ -108,7 +108,6 @@ class Actionpad extends StatelessWidget {
           Transform.scale(
             scale: localStyle?.primary?.scale ?? 1.0,
             child: TextButton(
-              key: actionPadStartKey,
               onPressed: actionsEnabled ? onAudioCallPressed : null,
               style: localStyle?.primary?.style,
               child: Icon(Icons.call, size: iconSize),

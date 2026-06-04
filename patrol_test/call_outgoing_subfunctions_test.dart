@@ -39,7 +39,7 @@ void main() {
     // Make a call and check if it is active.
     await $(MainFlavor.keypad.toNavBarKey()).tap();
     await enterKeypadNumber($, callNumber);
-    await $(actionPadStartKey).tap();
+    await $(Icons.call).tap();
     await $(CallActiveScaffold).waitUntilVisible();
     await pumpFor(const Duration(seconds: 5), $);
     expect(find.textContaining('00:0'), findsOneWidget, reason: 'Call should be active');

@@ -35,7 +35,6 @@ const settingsLogoutButtonKey = Key('settingsLogoutButton');
 const confirmDialogYesButtonKey = Key('confirmDialogYesButton');
 const confirmDialogNoButtonKey = Key('confirmDialogNoButton');
 
-const actionPadStartKey = Key('actionPadStart');
 const actionPadVideoCallKey = Key('actionPadVideoCall');
 const actionPadBackspaceKey = Key('actionPadBackspace');
 
@@ -48,6 +47,7 @@ const callActionsKeypadKey = Key('callActionsKeypad');
 const callActionsHangupKey = Key('callActionsHangup');
 const callActionsTransferMenuKey = Key('callActionsTransferMenu');
 const callActionsTransferMenuBlindInitKey = Key('callActionsTransferMenuBlindInit');
+const callActionsTransferMenuAttendedInitKey = Key('callActionsTransferMenuAttendedInit');
 const callActionsTransferMenuNumberKey = Key('callActionsTransferAttendedNumber');
 const callFrontCameraPreviewKey = Key('callFrontCameraPreview');
 
