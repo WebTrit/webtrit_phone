@@ -57,6 +57,8 @@ Integration tests are located in the `patrol_test` folder.
 
 - **Commands**: See [Integration Test Commands](docs/integration_test_commands.md) for all patrol build, run, Firebase Test Lab, and local companion commands.
 
+- **Coverage**: See [Integration Test Coverage](docs/integration_test_coverage.md) for a description of every test file and its steps.
+
 ## Contributing
 
 We welcome contributions from the community! Please follow our contribution guidelines when submitting pull requests.
