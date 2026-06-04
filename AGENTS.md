@@ -1,7 +1,12 @@
 # AGENTS.md
 
 WebTrit Phone — Flutter VoIP app, Melos monorepo.
-Flutter 3.32.4 (stable), Android SDK 35.0.1.
+Flutter 3.44.0 (stable), Android SDK 35.0.1.
+
+## Toolchain
+
+- Flutter version is pinned in **two** files that MUST stay in sync: `.fvmrc` (local, read by `fvm`) and `.github/flutter_version.yaml` (CI). When you change one, change the other in the same commit — and update the version mentioned above.
+- Use `fvm flutter ...` / `fvm dart ...` so the pinned SDK is used; a bare `flutter` from `PATH` may be a different version. The `.fvm/` SDK cache is gitignored — run `fvm install` once per machine.
 
 ## Build & Test
 
