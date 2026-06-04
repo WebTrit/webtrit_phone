@@ -122,7 +122,7 @@ class EmbeddedScreenPage extends StatelessWidget {
         connectivityCheckUrl: url,
         createHttpRequestExecutor: apiFactory.createHttpRequestExecutor(),
       ),
-      null => DefaultConnectivityChecker(apiClient: apiFactory.createWebtritApiClient()),
+      null => DefaultConnectivityChecker(createApiClient: apiFactory.createWebtritApiClient),
     };
 
     return ConnectivityRecoveryStrategy.create(

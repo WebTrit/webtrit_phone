@@ -12,16 +12,20 @@ abstract class ConnectivityChecker {
 }
 
 class DefaultConnectivityChecker implements ConnectivityChecker {
-  const DefaultConnectivityChecker({required this.apiClient});
+  const DefaultConnectivityChecker({required this.createApiClient});
 
-  /// API client instance.
-  final WebtritApiClient apiClient;
+  /// Resolves a [WebtritApiClient] bound to the *current* session core URL on
+  /// each probe. Resolving lazily on every check (instead of capturing a single
+  /// client at construction) keeps the liveness probe following the active
+  /// session after login or a core-URL switch, rather than sticking to the
+  /// bootstrap-time default URL.
+  final WebtritApiClient Function() createApiClient;
 
   @override
   Future<bool> checkConnection() async {
     _logger.finest('Checking connectivity via API client.');
     try {
-      await apiClient.healthCheck();
+      await createApiClient().healthCheck();
       _logger.finest('API connectivity check successful.');
       return true;
     } catch (e) {
@@ -32,7 +36,7 @@ class DefaultConnectivityChecker implements ConnectivityChecker {
 
   @override
   Future<void> dispose() async {
-    apiClient.close();
+    createApiClient().close();
   }
 }
 

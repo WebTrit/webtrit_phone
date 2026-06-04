@@ -218,7 +218,7 @@ ConnectivityChecker _createConnectivityChecker(WebtritApiClientFactory apiClient
       connectivityCheckUrl: url,
       createHttpRequestExecutor: apiClientFactory.createHttpRequestExecutor(),
     ),
-    null => DefaultConnectivityChecker(apiClient: apiClientFactory.createWebtritApiClient()),
+    null => DefaultConnectivityChecker(createApiClient: apiClientFactory.createWebtritApiClient),
   };
 }
 
