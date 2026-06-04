@@ -76,7 +76,7 @@ class MainScreenScreenshot extends StatelessWidget {
         initial: false,
         titleL10n: 'main_BottomNavigationBarItemLabel_recents',
         icon: Icons.history,
-        useCdrs: false,
+        supportsCallHistory: false,
       ),
       ContactsBottomMenuTab(
         enabled: true,
