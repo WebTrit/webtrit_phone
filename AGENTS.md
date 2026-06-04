@@ -22,7 +22,7 @@ dart run bin/create_new_schema_dump_and_test_migration.dart   # after Drift tabl
 ## Code Standards
 
 - No Cyrillic anywhere (source, comments, strings, logs, keys).
-- No inline comments — DartDoc only for public APIs.
+- Comments: no redundant *what* comments that restate the code; comments explain non-obvious *why* (rationale, gotchas, workarounds, links to issues). DartDoc for public APIs.
 - No DI frameworks (`get_it`, `injectable`, Service Locator — forbidden).
 - Single quotes; 120-char line width.
 - Never edit `*.g.dart` / `*.freezed.dart` / `*.gr.dart` — regenerate via `build_runner`.
