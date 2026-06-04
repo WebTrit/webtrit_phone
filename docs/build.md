@@ -5,6 +5,7 @@ It includes melos script usage, flavor configuration, Flutter SDK version manage
 for local development.
 
 For all available melos scripts, see [Melos Commands](make_file.md).
+For how a release pins its `webtrit_callkeep` version, see [Release Versioning](release_versioning.md).
 
 ---
 
