@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 import 'package:pjsua_companion/pjsua_companion.dart';
@@ -9,6 +10,7 @@ import 'package:webtrit_phone/models/main_flavor.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call/view/call_active_scaffold.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
+import 'package:webtrit_phone/widgets/shimmer.dart';
 
 import 'components/integration_test_environment_config.dart';
 import 'subsequences/enter_keypad_number.dart';
@@ -39,13 +41,23 @@ void main() {
     final instanceRegistry = await bootstrap();
     await pumpRootAndWaitUntilVisible(instanceRegistry, $);
 
+    // Disable shimmer animation to unblock settle waiters when call is minimized.
+    // ignore: invalid_use_of_visible_for_testing_member
+    testSemanticsDisableShimmerAnimation = true;
+    debugSemanticsDisableAnimations = true;
+
     // Login if not.
     if ($(LoginModeSelectScreen).visible) {
       await loginByMethod($, defaultLoginMethod);
       // Wait some time for components loading and session establishment.
       await pumpFor(const Duration(seconds: 5), $);
     }
+  
+    // Open keypad and enter number.
+    await $(MainFlavor.keypad.toNavBarKey()).tap();
+    await enterKeypadNumber($, callNumber);
 
+    // Prepare remote client for incoming call.
     final pjsuaCallServerClient = PjsuaCompanionClient(host: pjsuaServerHost, port: pjsuaServerPort);
     final companionPid = await pjsuaCallServerClient.registerAutoanswer(
       sipServer: remoteSipServer,
@@ -54,8 +66,6 @@ void main() {
     );
 
     // Make a call and check if it is active.
-    await $(MainFlavor.keypad.toNavBarKey()).tap();
-    await enterKeypadNumber($, callNumber);
     await $(Icons.call).tap();
     await $(CallActiveScaffold).waitUntilVisible();
     await pumpFor(const Duration(seconds: 5), $);
