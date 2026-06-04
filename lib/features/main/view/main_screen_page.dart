@@ -119,7 +119,7 @@ class MainScreenPage extends StatelessWidget {
         case MessagingBottomMenuTab():
           return const ConversationsScreenPageRoute();
         case RecentsBottomMenuTab():
-          return tab.useCdrs ? const RecentCdrsScreenPageRoute() : const RecentsRouterPageRoute();
+          return tab.supportsCallHistory ? const RecentCdrsScreenPageRoute() : const RecentsRouterPageRoute();
         case ContactsBottomMenuTab():
           return ContactsRouterPageRoute(children: [ContactsScreenPageRoute(sourceTypes: tab.contactSourceTypes)]);
         case EmbeddedBottomMenuTab():

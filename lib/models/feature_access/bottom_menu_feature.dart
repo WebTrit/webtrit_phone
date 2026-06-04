@@ -77,7 +77,7 @@ final class RecentsBottomMenuTab extends BottomMenuTab {
   static const cdrsSegment = 'cdrs';
 
   const RecentsBottomMenuTab({
-    required this.useCdrs,
+    required this.supportsCallHistory,
     required super.enabled,
     required super.initial,
     required super.titleL10n,
@@ -85,16 +85,18 @@ final class RecentsBottomMenuTab extends BottomMenuTab {
     super.data,
   });
 
-  final bool useCdrs;
+  // Formerly `useCdrs`. Resolved from the adapter `callHistory` capability
+  // (CoreSupport.supportsCallHistory); when true the recents tab uses remote CDRs.
+  final bool supportsCallHistory;
 
   @override
   MainFlavor get flavor => MainFlavor.recents;
 
   @override
-  String get routePath => '${super.routePath}${useCdrs ? '/$cdrsSegment' : ''}';
+  String get routePath => '${super.routePath}${supportsCallHistory ? '/$cdrsSegment' : ''}';
 
   @override
-  List<Object?> get props => [...super.props, useCdrs];
+  List<Object?> get props => [...super.props, supportsCallHistory];
 }
 
 final class ContactsBottomMenuTab extends BottomMenuTab {

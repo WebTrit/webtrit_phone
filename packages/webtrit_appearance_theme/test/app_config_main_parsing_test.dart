@@ -51,12 +51,11 @@ void main() {
       // Recents
       tabs[1].when(
         favorites: unexpectedFavorites,
-        recents: (enabled, initial, titleL10n, icon, useCdrs) {
+        recents: (enabled, initial, titleL10n, icon) {
           expect(enabled, isFalse);
           expect(initial, isFalse);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_recents');
           expect(icon, '0xe03a');
-          expect(useCdrs, isFalse); // default
         },
         contacts: unexpectedContacts,
         keypad: unexpectedKeypad,

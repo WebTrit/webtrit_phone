@@ -6,16 +6,16 @@ navigation structure, and screen-specific behaviors.
 ## Table of Contents
 
 - [Login Configuration](#login-configuration)
-    - [Login Common](#login-common)
-    - [Login Mode Select](#login-mode-select)
+  - [Login Common](#login-common)
+  - [Login Mode Select](#login-mode-select)
 - [Main Configuration](#main-configuration)
-    - [Bottom Menu Configuration](#bottom-menu-configuration)
-    - [Tab Variants](#tab-variants)
+  - [Bottom Menu Configuration](#bottom-menu-configuration)
+  - [Tab Variants](#tab-variants)
 - [Call Configuration](#call-configuration)
-    - [Transfer Configuration](#transfer-configuration)
+  - [Transfer Configuration](#transfer-configuration)
 - [Settings Configuration](#settings-configuration)
-    - [Settings Sections](#settings-sections)
-    - [Settings Items](#settings-items)
+  - [Settings Sections](#settings-sections)
+  - [Settings Items](#settings-items)
 - [Embedded Pages](#embedded-pages)
 
 ---
@@ -99,8 +99,7 @@ the application.
           "initial": false,
           "type": "recents",
           "titleL10n": "main_BottomNavigationBarItemLabel_recents",
-          "icon": "0xe03a",
-          "useCdrs": false
+          "icon": "0xe03a"
         },
         {
           "enabled": true,
@@ -183,12 +182,13 @@ Recent calls or history screen.
   "type": "recents",
   "enabled": true,
   "titleL10n": "main_BottomNavigationBarItemLabel_recents",
-  "icon": "0xe03a",
-  "useCdrs": false
+  "icon": "0xe03a"
 }
 ```
 
-- `useCdrs`: *(optional)* whether to fetch recent data from remote CDR history.
+Remote call history (CDRs) is no longer configured here. It is enabled automatically when the
+server advertises the `callHistory` adapter capability in system-info; otherwise the recents tab
+falls back to the local device call log.
 
 ### **ContactsTabScheme**
 

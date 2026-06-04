@@ -236,8 +236,8 @@ abstract final class BottomMenuMapper {
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      recents: (enabled, initial, titleL10n, icon, useCdrs) => RecentsBottomMenuTab(
-        useCdrs: useCdrs && coreSupport.supportsCallHistory,
+      recents: (enabled, initial, titleL10n, icon) => RecentsBottomMenuTab(
+        supportsCallHistory: coreSupport.supportsCallHistory,
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,

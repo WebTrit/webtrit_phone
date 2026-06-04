@@ -147,7 +147,6 @@ class AppConfigMain with _$AppConfigMain {
           initial: false,
           titleL10n: 'main_BottomNavigationBarItemLabel_recents',
           icon: '0xe03a',
-          useCdrs: false,
         ),
         ContactsTabScheme(
           enabled: true,
@@ -372,7 +371,6 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
     @Default(false) bool initial,
     required String titleL10n,
     required String icon,
-    @Default(false) bool useCdrs,
   }) = RecentsTabScheme;
 
   @JsonSerializable(explicitToJson: true)
