@@ -1794,6 +1794,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_AboutText_AppVersion => 'Версія застосунку';
 
   @override
+  String get settings_AboutText_CallkeepVersion => 'Версія CallKeep';
+
+  @override
   String get settings_AboutText_CoreVersion => 'Версія WebTrit Cloud Backend';
 
   @override

@@ -3294,6 +3294,12 @@ abstract class AppLocalizations {
   /// **'App Version'**
   String get settings_AboutText_AppVersion;
 
+  /// No description provided for @settings_AboutText_CallkeepVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'CallKeep version'**
+  String get settings_AboutText_CallkeepVersion;
+
   /// No description provided for @settings_AboutText_CoreVersion.
   ///
   /// In en, this message translates to:
