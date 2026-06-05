@@ -33,13 +33,25 @@ jobs:
             exit 1
           fi
 
-          REGEX="^(feat|fix|chore|refactor|test|docs|style|ci|perf|build|revert)(\([^)]+\))?: [^A-Z].+$"
+          # A capitalized first letter in the description is allowed (e.g. "fix: WebRTC ...").
+          REGEX="^(feat|fix|chore|refactor|test|docs|style|ci|perf|build|revert)(\([^)]+\))?: .+$"
+
+          # Legacy commits that predate the current convention and are already merged into
+          # shared history. Rewriting them would rewrite hundreds of commits across dozens of
+          # branches, so they are exempted by exact subject instead.
+          ALLOWLIST=(
+            "fix fix changing info icon color (#836)"
+          )
 
           while IFS= read -r SUBJECT; do
             if [ -z "$SUBJECT" ]; then continue; fi
-          
+
+            for ALLOWED in "${ALLOWLIST[@]}"; do
+              if [ "$SUBJECT" = "$ALLOWED" ]; then continue 2; fi
+            done
+
             if [[ ! "$SUBJECT" =~ $REGEX ]]; then
-              echo "Invalid format or capitalized description: '$SUBJECT'"
+              echo "Invalid commit message format: '$SUBJECT'"
               exit 1
             fi
           done <<< "$COMMITS_SUBJECTS"
