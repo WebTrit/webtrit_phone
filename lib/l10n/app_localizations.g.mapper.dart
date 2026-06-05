@@ -822,6 +822,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'settings_AboutText_AppSessionIdentifier' =>
         settings_AboutText_AppSessionIdentifier,
       'settings_AboutText_AppVersion' => settings_AboutText_AppVersion,
+      'settings_AboutText_CallkeepVersion' =>
+        settings_AboutText_CallkeepVersion,
       'settings_AboutText_CoreVersion' => settings_AboutText_CoreVersion,
       'settings_AboutText_CoreVersionUndefined' =>
         settings_AboutText_CoreVersionUndefined,

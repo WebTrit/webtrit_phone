@@ -17,6 +17,7 @@ class MockAboutBloc extends MockBloc<AboutEvent, AboutState> implements AboutBlo
     appIdentifier: 'com.webtrit.phone',
     coreUrl: Uri.parse('https://core.example.com'),
     fcmPushToken: 'fcm-token-demo',
+    callkeepVersion: '1.2.0',
     coreVersion: coreVersion,
   );
 
