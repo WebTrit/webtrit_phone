@@ -1,12 +1,15 @@
 name: callkeep-pin-guard
 
-# A release tag must pin webtrit_callkeep to a git ref (see docs/release_versioning.md).
-# Mirror of callkeep-path-guard (which keeps develop on a path dependency).
+# On release branches and release tags, webtrit_callkeep must be pinned to a git ref
+# (see docs/release_versioning.md). Mirror of callkeep-path-guard (which keeps develop on path).
 
 on:
   push:
     tags:
       - "*.*.*"
+  pull_request:
+    branches:
+      - "release/**"
 
 permissions:
   contents: read
@@ -23,7 +26,7 @@ jobs:
           REF=$(yq -r '.dependencies.webtrit_callkeep.git.ref // ""' pubspec.yaml)
           echo "webtrit_callkeep: has(git)=$HAS_GIT ref=$REF"
           if [ "$HAS_GIT" != "true" ] || [ -z "$REF" ]; then
-            echo "::error::Release tag '${GITHUB_REF_NAME}' requires webtrit_callkeep pinned to a git ref (got path/none). See docs/release_versioning.md."
+            echo "::error::On release branches and tags, webtrit_callkeep must be pinned to a git ref (got path/none). See docs/release_versioning.md."
             exit 1
           fi
           echo "OK: webtrit_callkeep is pinned to ref '$REF'."
