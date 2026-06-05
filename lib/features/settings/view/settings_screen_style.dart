@@ -23,6 +23,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     this.groupTitleListStyle,
     this.listViewPadding,
     this.showSeparators,
+    this.separatorColor,
     this.itemTextStyle,
   });
 
@@ -47,6 +48,9 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   /// Whether to show separators between settings list items.
   final bool? showSeparators;
 
+  /// Color of the separators between settings list items. `null` → theme default.
+  final Color? separatorColor;
+
   /// Text style for list items
   final TextStyle? itemTextStyle;
 
@@ -61,6 +65,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     GroupTitleListStyle? groupTitleListStyle,
     EdgeInsetsGeometry? listViewPadding,
     bool? showSeparators,
+    Color? separatorColor,
     TextStyle? itemTextStyle,
   }) {
     return SettingScreenStyle(
@@ -74,6 +79,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
       groupTitleListStyle: groupTitleListStyle ?? this.groupTitleListStyle,
       listViewPadding: listViewPadding ?? this.listViewPadding,
       showSeparators: showSeparators ?? this.showSeparators,
+      separatorColor: separatorColor ?? this.separatorColor,
       itemTextStyle: itemTextStyle ?? this.itemTextStyle,
     );
   }
@@ -93,6 +99,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
       groupTitleListStyle: GroupTitleListStyle.merge(a.groupTitleListStyle, b.groupTitleListStyle),
       listViewPadding: b.listViewPadding ?? a.listViewPadding,
       showSeparators: b.showSeparators ?? a.showSeparators,
+      separatorColor: b.separatorColor ?? a.separatorColor,
       itemTextStyle: a.itemTextStyle?.merge(b.itemTextStyle) ?? b.itemTextStyle,
     );
   }
@@ -109,6 +116,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
       groupTitleListStyle: GroupTitleListStyle.lerp(a?.groupTitleListStyle, b?.groupTitleListStyle, t),
       listViewPadding: EdgeInsetsGeometry.lerp(a?.listViewPadding, b?.listViewPadding, t),
       showSeparators: t < 0.5 ? a?.showSeparators : b?.showSeparators,
+      separatorColor: Color.lerp(a?.separatorColor, b?.separatorColor, t),
       itemTextStyle: TextStyle.lerp(a?.itemTextStyle, b?.itemTextStyle, t),
     );
   }
@@ -126,6 +134,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
       ..add(DiagnosticsProperty<GroupTitleListStyle?>('groupTitleListStyle', groupTitleListStyle))
       ..add(DiagnosticsProperty<EdgeInsetsGeometry?>('listViewPadding', listViewPadding))
       ..add(DiagnosticsProperty<bool?>('showSeparators', showSeparators))
+      ..add(ColorProperty('separatorColor', separatorColor))
       ..add(DiagnosticsProperty<TextStyle?>('itemTextStyle', itemTextStyle));
   }
 }
