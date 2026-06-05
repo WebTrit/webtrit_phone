@@ -102,6 +102,12 @@ void main() {
         child: const MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME)),
       );
     });
+    takeScreenshotTestWidgets('main_screen__keypad_dialing', () {
+      return ScreenshotApp(
+        appBloc: appContext.appBloc,
+        child: const MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME), keypadDialing: true),
+      );
+    });
   });
 
   group('take call screen screenshots', () {

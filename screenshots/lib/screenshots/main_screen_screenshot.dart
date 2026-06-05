@@ -16,10 +16,13 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:screenshots/mocks/mocks.dart';
 
 class MainScreenScreenshot extends StatelessWidget {
-  const MainScreenScreenshot(this.flavor, this.title, {super.key});
+  const MainScreenScreenshot(this.flavor, this.title, {super.key, this.keypadDialing = false});
 
   final MainFlavor flavor;
   final Widget? title;
+
+  /// When the keypad flavor is shown, pre-fill it with a dialed number and resolved contact.
+  final bool keypadDialing;
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +155,7 @@ class MainScreenScreenshot extends StatelessWidget {
         );
       case MainFlavor.keypad:
         return BlocProvider<KeypadCubit>(
-          create: (_) => MockKeypadCubit.mainScreen(),
+          create: (_) => keypadDialing ? MockKeypadCubit.dialing() : MockKeypadCubit.mainScreen(),
           child: KeypadScreen(title: title, videoEnabled: true, transferEnabled: false),
         );
       case MainFlavor.embedded:
