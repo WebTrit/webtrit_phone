@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/features/settings/features/diagnostic/bloc/diagnostic_cubit.dart';
+import 'package:webtrit_phone/features/settings/features/diagnostic/bloc/network_tester_cubit.dart';
 import 'package:webtrit_phone/features/settings/features/diagnostic/models/diagnostic_context.dart';
 import 'package:webtrit_phone/features/settings/features/diagnostic/view/diagnostic_screen.dart';
 
@@ -35,8 +36,11 @@ class _DiagnosticScreenScreenshotState extends State<DiagnosticScreenScreenshot>
                   create: (_) => DiagnosticScreenContext(isLocalContactsFeatureEnabled: true),
                 ),
               ],
-              child: BlocProvider<DiagnosticCubit>(
-                create: (_) => MockDiagnosticCubit.initial(),
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<DiagnosticCubit>(create: (_) => MockDiagnosticCubit.initial()),
+                  BlocProvider<NetworkTesterCubit>(create: (_) => MockNetworkTesterCubit.initial()),
+                ],
                 child: const DiagnosticScreen(),
               ),
             );
