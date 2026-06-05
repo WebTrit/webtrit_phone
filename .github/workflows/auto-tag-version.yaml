@@ -28,7 +28,10 @@ jobs:
       - name: Create version tag if missing
         run: |
           set -euo pipefail
-          VERSION_FIELD=$(grep -m1 '^app_version:' pubspec.yaml | awk '{print $2}')
+          # awk (not grep|awk): returns 0 even with no match, so a missing
+          # app_version yields an empty VERSION and reaches the error below
+          # instead of aborting on pipefail.
+          VERSION_FIELD=$(awk '/^app_version:/{print $2; exit}' pubspec.yaml)
           VERSION="${VERSION_FIELD%%+*}"
           if [ -z "$VERSION" ]; then
             echo "::error::Could not read app_version from pubspec.yaml"
