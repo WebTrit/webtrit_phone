@@ -74,7 +74,7 @@ class SettingsScreen extends StatelessWidget {
                       builder: (context, sessionState) =>
                           SessionStatusListTile(status: sessionState.status, onTap: () => _onDiagnosticTap(context)),
                     ),
-                    if (showSeparators) const ListTileSeparator(),
+                    if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
                     BlocBuilder<RegisterStatusCubit, RegisterStatus>(
                       builder: (context, registerState) => SwitchListTile(
                         title: Text(
@@ -93,7 +93,7 @@ class SettingsScreen extends StatelessWidget {
                               ),
                       ),
                     ),
-                    if (showSeparators) const ListTileSeparator(),
+                    if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
                     SettingsTile(
                       key: settingsLogoutButtonKey,
                       title: context.l10n.settings_ListViewTileTitle_logout,
@@ -101,6 +101,7 @@ class SettingsScreen extends StatelessWidget {
                       iconColor: effectiveStyle?.logoutIconColor ?? effectiveStyle?.leadingIconsColor,
                       textStyle: effectiveStyle?.itemTextStyle,
                       showSeparator: showSeparators,
+                      separatorColor: effectiveStyle?.separatorColor,
                       onTap: () => _onLogoutTap(context),
                     ),
                     for (final section in sections) ...[
@@ -121,6 +122,7 @@ class SettingsScreen extends StatelessWidget {
                                 iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
                                 textStyle: effectiveStyle?.itemTextStyle,
                                 showSeparator: showSeparators,
+                                separatorColor: effectiveStyle?.separatorColor,
                                 onTap: () => _onItemTap(context, item),
                               );
                             },
@@ -133,6 +135,7 @@ class SettingsScreen extends StatelessWidget {
                               iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
                               textStyle: effectiveStyle?.itemTextStyle,
                               showSeparator: showSeparators,
+                              separatorColor: effectiveStyle?.separatorColor,
                               onTap: () => _onItemTap(context, item),
                             ),
                         ] else if (item.flavor == SettingsFlavor.voicemail) ...[
@@ -143,6 +146,7 @@ class SettingsScreen extends StatelessWidget {
                             trailing: UnreadBadge(count: state.unreadVoicemailCount),
                             textStyle: effectiveStyle?.itemTextStyle,
                             showSeparator: showSeparators,
+                            separatorColor: effectiveStyle?.separatorColor,
                             onTap: () => _onItemTap(context, item),
                           ),
                         ] else
@@ -152,6 +156,7 @@ class SettingsScreen extends StatelessWidget {
                             iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
                             textStyle: effectiveStyle?.itemTextStyle,
                             showSeparator: showSeparators,
+                            separatorColor: effectiveStyle?.separatorColor,
                             onTap: () => _onItemTap(context, item),
                           ),
                       ],

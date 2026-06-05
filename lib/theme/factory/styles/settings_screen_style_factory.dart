@@ -29,6 +29,13 @@ class SettingsScreenStyleFactory implements ThemeStyleFactory<SettingsScreenStyl
       defaultFontFamily,
     ).create().primary;
 
+    // Separator: prefer the new `separator` style; fall back to the deprecated `showSeparators`
+    // boolean for any in-memory config not produced via fromJson (JSON loads are migrated).
+    final separator = config?.separator;
+    // ignore: deprecated_member_use
+    final showSeparators = separator?.enabled ?? config?.showSeparators;
+    final separatorColor = separator?.color?.toColor();
+
     // Resolve theme override values safely
     final contentThemeOverride = config?.themeOverride.mode.toThemeMode();
     final applyToAppBar = config?.themeOverride.applyToAppBar;
@@ -44,7 +51,8 @@ class SettingsScreenStyleFactory implements ThemeStyleFactory<SettingsScreenStyl
         logoutIconColor: logoutIconColor,
         groupTitleListStyle: groupTitleListStyle,
         listViewPadding: null,
-        showSeparators: config?.showSeparators,
+        showSeparators: showSeparators,
+        separatorColor: separatorColor,
         itemTextStyle: itemTextStyle,
       ),
     );

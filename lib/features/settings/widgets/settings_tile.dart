@@ -16,6 +16,7 @@ class SettingsTile extends StatelessWidget {
     this.trailing,
     this.textStyle,
     this.showSeparator = true,
+    this.separatorColor,
     this.enabled = true,
     this.opacity = 1.0,
     super.key,
@@ -27,6 +28,7 @@ class SettingsTile extends StatelessWidget {
   final Widget? trailing;
   final TextStyle? textStyle;
   final bool showSeparator;
+  final Color? separatorColor;
   final VoidCallback onTap;
   final bool enabled;
   final double opacity;
@@ -46,6 +48,12 @@ class SettingsTile extends StatelessWidget {
 
     if (!showSeparator) return tile;
 
-    return Column(mainAxisSize: MainAxisSize.min, children: [tile, const ListTileSeparator()]);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        tile,
+        ListTileSeparator(color: separatorColor),
+      ],
+    );
   }
 }
