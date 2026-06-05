@@ -75,8 +75,9 @@ class _LoginScreenshotState extends State<LoginScreenshot> {
   }
 
   Widget _signupBody(BuildContext context, LoginEmbeddedModeButton? embedded) {
+    // No embedded resource configured → the app falls back to the native sign-up screen.
     if (embedded == null) {
-      return const Center(child: Text('Embedded page not set up'));
+      return const LoginSignupRequestScreen();
     }
 
     final appMetadataProvider = context.read<AppMetadataProvider>();
