@@ -98,6 +98,11 @@ class _AboutScreenState extends State<AboutScreen> {
                                   ),
                                   SizedBox(height: delimiterHeight / 2),
                                   InfoTile(
+                                    label: context.l10n.settings_AboutText_CallkeepVersion,
+                                    value: state.callkeepVersion,
+                                  ),
+                                  SizedBox(height: delimiterHeight / 2),
+                                  InfoTile(
                                     label: context.l10n.settings_AboutText_AppSessionIdentifier,
                                     value: state.appIdentifier,
                                   ),
@@ -105,11 +110,6 @@ class _AboutScreenState extends State<AboutScreen> {
                                   InfoTile(
                                     label: context.l10n.settings_AboutText_FCMPushNotificationToken,
                                     value: state.fcmPushToken,
-                                  ),
-                                  SizedBox(height: delimiterHeight / 2),
-                                  InfoTile(
-                                    label: context.l10n.settings_AboutText_CallkeepVersion,
-                                    value: state.callkeepVersion,
                                   ),
                                   SizedBox(height: delimiterHeight / 2),
                                   CoreInfoTile(
