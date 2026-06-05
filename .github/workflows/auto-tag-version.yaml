@@ -1,0 +1,45 @@
+name: auto-tag-version
+
+# After a release PR lands on main, publish the version tag automatically.
+# Reads the app_version field from the root pubspec.yaml and creates an annotated
+# tag X.Y.Z on the merged main commit if it does not already exist.
+# Idempotent: pushes that do not change app_version (or where the tag already
+# exists, e.g. a hotfix X.Y.Z+N reusing the same base) are no-ops.
+# Note: app_version (not the standard version: field) is the release version.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - pubspec.yaml
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create version tag if missing
+        run: |
+          set -euo pipefail
+          VERSION_FIELD=$(grep -m1 '^app_version:' pubspec.yaml | awk '{print $2}')
+          VERSION="${VERSION_FIELD%%+*}"
+          if [ -z "$VERSION" ]; then
+            echo "::error::Could not read app_version from pubspec.yaml"
+            exit 1
+          fi
+          if git rev-parse -q --verify "refs/tags/$VERSION" >/dev/null; then
+            echo "Tag '$VERSION' already exists - nothing to do."
+            exit 0
+          fi
+          echo "Creating tag '$VERSION' on $GITHUB_SHA"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$VERSION" -m "release $VERSION"
+          git push origin "$VERSION"
