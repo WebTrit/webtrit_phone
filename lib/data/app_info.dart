@@ -12,7 +12,7 @@ class AppInfo {
     final id = await appIdProvider.getId();
 
     String? appVersion = await getAppVersion();
-    String callkeepVersion = await getCallkeepVersion();
+    final callkeepVersion = await getCallkeepVersion();
 
     return AppInfo._(appIdProvider, id, appVersion, callkeepVersion);
   }
