@@ -21,7 +21,7 @@ dart run bin/create_new_schema_dump_and_test_migration.dart   # after Drift tabl
 
 ## Code Standards
 
-- No Cyrillic anywhere (source, comments, strings, logs, keys).
+- No Cyrillic in source, comments, logs, strings, or keys, except translation values in localization ARB files (`lib/l10n/arb/*.arb`).
 - Comments: no redundant *what* comments that restate the code; comments explain non-obvious *why* (rationale, gotchas, workarounds, links to issues). DartDoc for public APIs.
 - No DI frameworks (`get_it`, `injectable`, Service Locator — forbidden).
 - Single quotes; 120-char line width.
