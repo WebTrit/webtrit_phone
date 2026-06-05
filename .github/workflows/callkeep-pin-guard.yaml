@@ -1,0 +1,35 @@
+name: callkeep-pin-guard
+
+# On release branches and release tags, webtrit_callkeep must be pinned to a git ref
+# (see docs/release_versioning.md). Mirror of callkeep-path-guard (which keeps develop on path).
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+  pull_request:
+    branches:
+      - "release/**"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Uses Ruby's built-in YAML (psych) - always available on GitHub runners, no extra install.
+      - name: Ensure webtrit_callkeep is pinned to a git ref
+        run: |
+          ruby -ryaml -e '
+            dep = (YAML.load_file("pubspec.yaml")["dependencies"] || {})["webtrit_callkeep"]
+            git = dep.is_a?(Hash) ? dep["git"] : nil
+            ref = git.is_a?(Hash) ? git["ref"].to_s : ""
+            if ref.empty?
+              warn "::error::On release branches and tags, webtrit_callkeep must be pinned to a git ref (got path/none). See docs/release_versioning.md."
+              exit 1
+            end
+            puts "OK: webtrit_callkeep is pinned to ref #{ref}."
+          '

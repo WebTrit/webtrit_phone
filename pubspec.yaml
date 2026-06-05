@@ -128,6 +128,9 @@ dependencies:
   webtrit_signaling_service:
     path: ./packages/webtrit_signaling_service/webtrit_signaling_service
   webtrit_callkeep:
+    # develop tracks the local working copy of callkeep for co-development.
+    # On release branches this is pinned to a callkeep tag (see docs/release_versioning.md).
+    # Never back-merge a git ref onto develop - keep this a path here (enforced by callkeep-path-guard).
     path: ../webtrit_callkeep/webtrit_callkeep
   store_info_extractor:
     path: ./packages/store_info_extractor
