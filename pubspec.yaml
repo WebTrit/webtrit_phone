@@ -31,7 +31,7 @@ version: 0.0.0+0000000
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
 # app_version represents tasks and fixed bugs, which is different from the build version that is specific to each client
-app_version: 1.15.3+0
+app_version: 1.15.4+0
 
 environment:
   sdk: ^3.12.0
@@ -125,10 +125,11 @@ dependencies:
   webtrit_appearance_theme:
     path: ./packages/webtrit_appearance_theme
   webtrit_callkeep:
-    # develop tracks the local working copy of callkeep for co-development.
-    # On release branches this is pinned to a callkeep tag (see docs/release_versioning.md).
-    # Never back-merge a git ref onto develop - keep this a path here (enforced by callkeep-path-guard).
-    path: ../webtrit_callkeep/webtrit_callkeep
+    # Release branches pin callkeep to a published tag (see docs/release_versioning.md).
+    git:
+      url: https://github.com/WebTrit/webtrit_callkeep.git
+      ref: 1.2.0
+      path: webtrit_callkeep
   webtrit_phone_number:
     path: ./packages/webtrit_phone_number
   webtrit_signaling:
