@@ -111,7 +111,10 @@ class ThemedScaffold extends StatelessWidget {
         width: double.infinity,
         height: double.infinity,
         decoration: boxDecoration,
-        child: currentBody,
+        // A transparent Material above the background so descendants that paint as Ink on the
+        // nearest Material (ListTile.tileColor, Ink) render over the gradient/image instead of
+        // under it — otherwise this decoration Container hides those colors.
+        child: Material(type: MaterialType.transparency, child: currentBody),
       );
     }
 
