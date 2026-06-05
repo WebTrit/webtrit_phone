@@ -29,7 +29,9 @@ class KeypadView extends StatefulWidget {
 class KeypadViewState extends State<KeypadView> {
   late final _callController = CallControllerScope.of(context);
   late final _keypadCubit = context.read<KeypadCubit>();
-  late final _textController = TextEditingController();
+  // Seed the field from the cubit's initial value so the displayed number stays derivable from
+  // state (empty in production; lets screenshot mocks and tests pre-fill a dialed number).
+  late final _textController = TextEditingController(text: _keypadCubit.state.value ?? '');
   late final _focusNode = FocusNode();
   late final _setValueDebounce = Debounce(Duration(milliseconds: 128));
 

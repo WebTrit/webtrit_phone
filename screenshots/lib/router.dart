@@ -65,6 +65,10 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
       ),
       ScreenshotApp(
         appBloc: appBloc,
+        child: const MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME), keypadDialing: true),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
         child: Builder(
           builder: (context) => const MainScreenScreenshot(MainFlavor.messaging, Text(EnvironmentConfig.APP_NAME)),
         ),
