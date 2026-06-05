@@ -1,0 +1,29 @@
+name: callkeep-path-guard
+
+# On develop, webtrit_callkeep must stay a path dependency (see docs/release_versioning.md).
+# This catches a release `git:` ref accidentally back-merged onto develop.
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ensure webtrit_callkeep is a path dependency
+        run: |
+          HAS_PATH=$(yq '.dependencies.webtrit_callkeep | has("path")' pubspec.yaml)
+          HAS_GIT=$(yq '.dependencies.webtrit_callkeep | has("git")' pubspec.yaml)
+          echo "webtrit_callkeep: has(path)=$HAS_PATH has(git)=$HAS_GIT"
+          if [ "$HAS_PATH" != "true" ] || [ "$HAS_GIT" = "true" ]; then
+            echo "::error::On develop, webtrit_callkeep must use 'path:', not a git ref. A release pin was likely back-merged. See docs/release_versioning.md."
+            exit 1
+          fi
+          echo "OK: webtrit_callkeep is a path dependency."
