@@ -33,13 +33,14 @@ jobs:
             exit 1
           fi
 
-          REGEX="^(feat|fix|chore|refactor|test|docs|style|ci|perf|build|revert)(\([^)]+\))?: [^A-Z].+$"
+          # A capitalized first letter in the description is allowed (e.g. "fix: WebRTC ...").
+          REGEX="^(feat|fix|chore|refactor|test|docs|style|ci|perf|build|revert)(\([^)]+\))?: .+$"
 
           while IFS= read -r SUBJECT; do
             if [ -z "$SUBJECT" ]; then continue; fi
-          
+
             if [[ ! "$SUBJECT" =~ $REGEX ]]; then
-              echo "Invalid format or capitalized description: '$SUBJECT'"
+              echo "Invalid commit message format: '$SUBJECT'"
               exit 1
             fi
           done <<< "$COMMITS_SUBJECTS"
