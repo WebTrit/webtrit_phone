@@ -121,7 +121,11 @@ dependencies:
   webtrit_signaling_service:
     path: ./packages/webtrit_signaling_service/webtrit_signaling_service
   webtrit_callkeep:
-    path: ../webtrit_callkeep/webtrit_callkeep
+    # Release branches pin callkeep to a published tag (see docs/release_versioning.md).
+    git:
+      url: https://github.com/WebTrit/webtrit_callkeep.git
+      ref: 1.0.0
+      path: webtrit_callkeep
   store_info_extractor:
     path: ./packages/store_info_extractor
   ssl_certificates:
