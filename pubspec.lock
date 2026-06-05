@@ -1886,59 +1886,75 @@ packages:
   webtrit_callkeep:
     dependency: "direct main"
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep"
-      relative: true
-    source: path
-    version: "0.3.5+0"
+      path: webtrit_callkeep
+      ref: "0.1.2"
+      resolved-ref: b4205d8f48ad84fc3846e82079e9268be3e0f73f
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
+    version: "0.1.2+0"
   webtrit_callkeep_android:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_android"
-      relative: true
-    source: path
-    version: "0.1.0+1"
+      path: webtrit_callkeep_android
+      ref: "0.1.2"
+      resolved-ref: b4205d8f48ad84fc3846e82079e9268be3e0f73f
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
+    version: "0.0.0+0"
   webtrit_callkeep_ios:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_ios"
-      relative: true
-    source: path
-    version: "0.1.0+1"
+      path: webtrit_callkeep_ios
+      ref: "0.1.2"
+      resolved-ref: b4205d8f48ad84fc3846e82079e9268be3e0f73f
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
+    version: "0.0.0+0"
   webtrit_callkeep_linux:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_linux"
-      relative: true
-    source: path
-    version: "0.1.0+1"
+      path: webtrit_callkeep_linux
+      ref: "0.1.2"
+      resolved-ref: b4205d8f48ad84fc3846e82079e9268be3e0f73f
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
+    version: "0.0.0+0"
   webtrit_callkeep_macos:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_macos"
-      relative: true
-    source: path
-    version: "0.1.0+1"
+      path: webtrit_callkeep_macos
+      ref: "0.1.2"
+      resolved-ref: b4205d8f48ad84fc3846e82079e9268be3e0f73f
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
+    version: "0.0.0+0"
   webtrit_callkeep_platform_interface:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_platform_interface"
-      relative: true
-    source: path
-    version: "0.3.5+0"
+      path: webtrit_callkeep_platform_interface
+      ref: "0.1.2"
+      resolved-ref: b4205d8f48ad84fc3846e82079e9268be3e0f73f
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
+    version: "0.0.0+0"
   webtrit_callkeep_web:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_web"
-      relative: true
-    source: path
-    version: "0.1.0+1"
+      path: webtrit_callkeep_web
+      ref: "0.1.2"
+      resolved-ref: b4205d8f48ad84fc3846e82079e9268be3e0f73f
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
+    version: "0.0.0+0"
   webtrit_callkeep_windows:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_windows"
-      relative: true
-    source: path
-    version: "0.1.0+1"
+      path: webtrit_callkeep_windows
+      ref: "0.1.2"
+      resolved-ref: b4205d8f48ad84fc3846e82079e9268be3e0f73f
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
+    version: "0.0.0+0"
   webtrit_phone_number:
     dependency: "direct main"
     description:
