@@ -15,14 +15,32 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
 
-class MainScreenScreenshot extends StatelessWidget {
-  const MainScreenScreenshot(this.flavor, this.title, {super.key, this.keypadDialing = false});
+class MainScreenScreenshot extends StatefulWidget {
+  const MainScreenScreenshot(
+    this.flavor,
+    this.title, {
+    super.key,
+    this.keypadDialing = false,
+    this.interactive = false,
+  });
 
   final MainFlavor flavor;
   final Widget? title;
 
   /// When the keypad flavor is shown, pre-fill it with a dialed number and resolved contact.
+  /// Ignored when [interactive] is true (the live keypad starts empty and reacts to input).
   final bool keypadDialing;
+
+  /// Enables bottom-menu tab switching and wires a live keypad cubit, so the
+  /// preview behaves like the app instead of a single static snapshot.
+  final bool interactive;
+
+  @override
+  State<MainScreenScreenshot> createState() => _MainScreenScreenshotState();
+}
+
+class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
+  late MainFlavor _flavor = widget.flavor;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +63,7 @@ class MainScreenScreenshot extends StatelessWidget {
             body: AppBarParams(
               systemNotificationsEnabled: true,
               pullableCallDialogs: const [],
-              child: _buildFlavorWidget(context, flavor, featureAccess),
+              child: _buildFlavorWidget(context, _flavor, featureAccess),
             ),
             bottomNavigationBar: _buildBottomNavigationBar(context, tabs),
           ),
@@ -106,15 +124,23 @@ class MainScreenScreenshot extends StatelessWidget {
   BottomNavigationBar _buildBottomNavigationBar(BuildContext context, List<BottomMenuTab> tabs) {
     final textTheme = Theme.of(context).textTheme;
 
+    final selectedIndex = tabs.indexWhere((tab) => tab.flavor == _flavor);
+
     return BottomNavigationBar(
-      currentIndex: tabs.indexWhere((tab) => tab.flavor == flavor),
+      currentIndex: selectedIndex < 0 ? 0 : selectedIndex,
       type: BottomNavigationBarType.fixed,
       selectedLabelStyle: textTheme.bodySmall,
       unselectedLabelStyle: textTheme.bodySmall,
+      onTap: widget.interactive ? (index) => _selectTab(tabs[index].flavor) : null,
       items: tabs
           .map((tab) => BottomNavigationBarItem(icon: Icon(tab.icon), label: context.parseL10n(tab.titleL10n)))
           .toList(),
     );
+  }
+
+  void _selectTab(MainFlavor flavor) {
+    if (flavor == _flavor) return;
+    setState(() => _flavor = flavor);
   }
 
   Widget _buildFlavorWidget(BuildContext context, MainFlavor flavor, FeatureAccess? featureAccess) {
@@ -125,7 +151,7 @@ class MainScreenScreenshot extends StatelessWidget {
         return BlocProvider<FavoritesBloc>(
           create: (_) => MockFavoritesBloc.mainScreen(),
           child: FavoritesScreen(
-            title: title,
+            title: widget.title,
             transferEnabled: false,
             videoEnabled: true,
             chatsEnabled: false,
@@ -137,7 +163,7 @@ class MainScreenScreenshot extends StatelessWidget {
         return BlocProvider<RecentsBloc>(
           create: (_) => MockRecentsBloc.mainScreen(),
           child: RecentsScreen(
-            title: title,
+            title: widget.title,
             transferEnabled: false,
             videoEnabled: true,
             chatsEnabled: false,
@@ -150,13 +176,22 @@ class MainScreenScreenshot extends StatelessWidget {
           child: ContactsScreen(
             sourceTypes: const [ContactSourceType.local, ContactSourceType.external],
             sourceTypeWidgetBuilder: _buildContactSourceTypeWidget,
-            title: title,
+            title: widget.title,
           ),
         );
       case MainFlavor.keypad:
         return BlocProvider<KeypadCubit>(
-          create: (_) => keypadDialing ? MockKeypadCubit.dialing() : MockKeypadCubit.mainScreen(),
-          child: KeypadScreen(title: title, videoEnabled: true, transferEnabled: false),
+          create: (context) => widget.interactive
+              ? KeypadCubit(context.read<ContactsRepository>())
+              : (widget.keypadDialing ? MockKeypadCubit.dialing() : MockKeypadCubit.mainScreen()),
+          child: Builder(
+            // CallControllerScope is only read when a call action is tapped; provide it so the
+            // interactive keypad's call buttons dispatch to the (mock) CallBloc instead of asserting.
+            builder: (context) => CallControllerScope(
+              controller: CallController(callBloc: context.read<CallBloc>()),
+              child: KeypadScreen(title: widget.title, videoEnabled: true, transferEnabled: false),
+            ),
+          ),
         );
       case MainFlavor.embedded:
         return BlocProvider<EmbeddedCubit>(

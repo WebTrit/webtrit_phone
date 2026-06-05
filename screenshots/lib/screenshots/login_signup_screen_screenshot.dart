@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/widgets/widgets.dart';
-import 'package:webtrit_phone/app/constants.dart';
 
-import 'package:screenshots/mocks/mocks.dart';
+import 'login_screenshot.dart';
 
 class LoginSignUpScreenshot extends StatelessWidget {
   const LoginSignUpScreenshot({
@@ -21,47 +14,6 @@ class LoginSignUpScreenshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    final appMetadataProvider = context.read<AppMetadataProvider>();
-
-    final LoginSwitchScreenStyles? loginPageStyles = themeData.extension<LoginSwitchScreenStyles>();
-    final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
-
-    final sections = context.watch<FeatureAccess?>()?.loginConfig.actions.firstWhereOrNull(
-      (element) => element.flavor == LoginFlavor.embedded,
-    );
-
-    final embedded = sections as LoginEmbeddedModeButton?;
-
-    if (embedded == null) {
-      return const Center(child: Text('Embedded page not set up'));
-    }
-
-    return BlocProvider<LoginCubit>(
-      create: (context) => MockLoginCubit.loginSwitchScreen(embedded: embedded.customLoginFeature),
-      child: LoginSwitchScreen(
-        appBar: AppBar(leading: const ExtBackButton(disabled: false), backgroundColor: Colors.transparent),
-        header: Column(
-          children: [
-            ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
-            const SizedBox(height: kInset),
-          ],
-        ),
-        body: LoginSignupEmbeddedRequestScreen(
-          initialUrl: embedded.customLoginFeature.uri,
-          userAgent: appMetadataProvider.userAgent,
-          mediaQueryMetricsData: null,
-          deviceInfoData: null,
-          pageInjectionStrategyBuilder: () {
-            return DefaultPayloadInjectionStrategy();
-          },
-          connectivityRecoveryStrategyBuilder: () {
-            return NoneConnectivityRecoveryStrategy();
-          },
-        ),
-        currentLoginType: LoginType.signup,
-        supportedLoginTypes: supportedLoginTypes,
-      ),
-    );
+    return LoginScreenshot(initialLoginType: LoginType.signup, supportedLoginTypes: supportedLoginTypes);
   }
 }
