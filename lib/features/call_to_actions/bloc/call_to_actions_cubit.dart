@@ -36,11 +36,15 @@ class CallToActionsCubit extends Cubit<CallToActionsCubitState> {
     // Emit the updated state with the new locale, resetting flavor and actions
     emit(state.copyWith(locale: locale, flavor: null, actions: {}));
 
-    // Re-fetch actions if a flavor was previously set
-    if (flavor != null) getActions(state.flavor!);
+    // Re-fetch actions for the previously set flavor (no-op if none was set).
+    // Pass the captured local `flavor`, not `state.flavor`, which the emit above
+    // just reset to null.
+    getActions(flavor);
   }
 
-  Future<void> getActions(MainFlavor flavor) async {
+  Future<void> getActions(MainFlavor? flavor) async {
+    if (flavor == null) return;
+
     if (state.flavor == flavor) {
       _logger.finest('Flavor $flavor is already set.');
       return;
