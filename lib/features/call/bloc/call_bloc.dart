@@ -97,7 +97,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final IceFilter? iceFilter;
   final UserMediaBuilder userMediaBuilder;
   final PeerConnectionPolicyApplier? peerConnectionPolicyApplier;
-  final ContactNameResolver contactNameResolver;
+  final ContactResolver contactResolver;
   final CallErrorReporter callErrorReporter;
   final bool sendPresenceSettings;
   final VoidCallback? onCallEnded;
@@ -133,7 +133,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callkeep,
     required this.callkeepConnections,
     required this.userMediaBuilder,
-    required this.contactNameResolver,
+    required this.contactResolver,
     required this.callErrorReporter,
     required this.sendPresenceSettings,
     required this.onDiagnosticReportRequested,
@@ -868,7 +868,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    final contactName = await contactNameResolver.resolveWithNumber(event.handle.value);
+    final contactName = (await contactResolver.resolve(event.handle.value))?.maybeName;
     final displayName = contactName ?? (event.displayName?.isEmpty == true ? null : event.displayName);
 
     // Re-check after the async gap: the signaling path may have created an entry
@@ -985,7 +985,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     }
 
-    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final contactName = (await contactResolver.resolve(handle.value))?.maybeName;
     final displayName = contactName ?? (event.callerDisplayName?.isEmpty == true ? null : event.callerDisplayName);
 
     final activeCallWithSameId = state.retrieveActiveCall(event.callId);
@@ -1159,7 +1159,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     Emitter<CallState> emit,
   ) async {
     final handle = CallkeepHandle.number(event.caller);
-    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final contactName = (await contactResolver.resolve(handle.value))?.maybeName;
     final displayName = contactName ?? event.callerDisplayName;
 
     final activeCall = state.retrieveActiveCall(event.callId)!;
@@ -2277,7 +2277,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     final callId = WebtritSignalingClient.generateCallId();
-    final contactName = await contactNameResolver.resolveWithNumber(e.handle.value);
+    final contactName = (await contactResolver.resolve(e.handle.value))?.maybeName;
     final displayName = contactName ?? e.displayName;
 
     final newCall = ActiveCall(
@@ -3730,7 +3730,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       direction = CallDirection.outgoing;
     }
 
-    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final contactName = (await contactResolver.resolve(handle.value))?.maybeName;
     final displayName = contactName ?? callerDisplayName;
 
     if (state.activeCalls.any((c) => c.callId == event.callId)) {

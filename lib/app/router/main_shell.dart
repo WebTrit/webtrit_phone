@@ -500,10 +500,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         peerConnectionConfig,
                         userMediaBuilder,
                       );
-                      // Initialize contact name resolver with app-specific contact repository
-                      // Used to display contact name of caller
-                      final contactNameResolver = DefaultContactNameResolver(
-                        contactRepository: context.read<ContactsRepository>(),
+                      // Initialize contact resolver with app-specific contact repository
+                      // Used to resolve the contact (and its display name) of the caller
+                      final contactResolver = DefaultContactResolver(
+                        contactsRepository: context.read<ContactsRepository>(),
                       );
 
                       // Try to get CDRs sync worker to trigger immediate sync after call ends
@@ -546,7 +546,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         sdpSanitizer: RemoteSdpSanitizer(),
                         webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(audioProcessingSettingsRepository),
                         userMediaBuilder: userMediaBuilder,
-                        contactNameResolver: contactNameResolver,
+                        contactResolver: contactResolver,
                         callErrorReporter: DefaultCallErrorReporter(
                           (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         ),
