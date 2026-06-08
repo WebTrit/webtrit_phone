@@ -1149,6 +1149,19 @@
       }
     }
   },
+  "notifications_errorSnackBar_emergencyNumber": "{number} is an emergency number and cannot be dialed from the app",
+  "@notifications_errorSnackBar_emergencyNumber": {
+    "description": "Shown in a snackbar when the user tries to call a number the device recognizes as an emergency number (e.g. 999, 112, 911). The app cannot place emergency calls itself, so it offers to open the system phone dialer instead. The action button label is notifications_errorSnackBarAction_emergencyNumber.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBarAction_emergencyNumber": "Open dialer",
+  "@notifications_errorSnackBarAction_emergencyNumber": {
+    "description": "Action button on the emergency-number snackbar. Tapping it opens the system phone dialer pre-filled with the emergency number so the user can place the call there."
+  },
   "notifications_errorSnackBar_SignalingSessionMissed": "Authentication error, please re-login",
   "@notifications_errorSnackBar_SignalingSessionMissed": {
     "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality."

@@ -1370,6 +1370,14 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String notifications_errorSnackBar_emergencyNumber(String number) {
+    return '$number - екстрений номер, його не можна набрати з застосунку';
+  }
+
+  @override
+  String get notifications_errorSnackBarAction_emergencyNumber => 'Відкрити дайлер';
+
+  @override
   String get notifications_errorSnackBar_SignalingSessionMissed => 'Помилка автентифікації, будь ласка увійдіть знову';
 
   @override

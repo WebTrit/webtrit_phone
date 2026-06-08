@@ -2514,6 +2514,18 @@ abstract class AppLocalizations {
   /// **'Disconnected from the core due to the following reason: {reason}'**
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason);
 
+  /// Shown in a snackbar when the user tries to call a number the device recognizes as an emergency number (e.g. 999, 112, 911). The app cannot place emergency calls itself, so it offers to open the system phone dialer instead. The action button label is notifications_errorSnackBarAction_emergencyNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} is an emergency number and cannot be dialed from the app'**
+  String notifications_errorSnackBar_emergencyNumber(String number);
+
+  /// Action button on the emergency-number snackbar. Tapping it opens the system phone dialer pre-filled with the emergency number so the user can place the call there.
+  ///
+  /// In en, this message translates to:
+  /// **'Open dialer'**
+  String get notifications_errorSnackBarAction_emergencyNumber;
+
   /// Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality.
   ///
   /// In en, this message translates to:
