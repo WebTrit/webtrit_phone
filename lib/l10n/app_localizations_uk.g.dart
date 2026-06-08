@@ -523,6 +523,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnostic_battery_tile_title => 'Режим батареї';
 
   @override
+  String get diagnostic_callingMode_groupTitle => 'Calling mode';
+
+  @override
+  String get diagnostic_callingMode_tile_title => 'Calling mode';
+
+  @override
+  String get diagnostic_callingMode_standalone_title => 'Limited call mode';
+
+  @override
+  String get diagnostic_callingMode_standalone_caption => 'Standalone - delivery may be delayed';
+
+  @override
+  String get diagnostic_callingMode_standalone_description =>
+      'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Outgoing calls, hold and Bluetooth or wired headset selection are not available in this mode.';
+
+  @override
   String get diagnostic_permission_camera_description =>
       'Цей застосунок потребує дозволу на доступ до камери для здійснення відеодзвінків.';
 

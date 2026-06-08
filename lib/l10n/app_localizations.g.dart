@@ -987,6 +987,36 @@ abstract class AppLocalizations {
   /// **'Battery mode'**
   String get diagnostic_battery_tile_title;
 
+  /// No description provided for @diagnostic_callingMode_groupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calling mode'**
+  String get diagnostic_callingMode_groupTitle;
+
+  /// No description provided for @diagnostic_callingMode_tile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Calling mode'**
+  String get diagnostic_callingMode_tile_title;
+
+  /// No description provided for @diagnostic_callingMode_standalone_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Limited call mode'**
+  String get diagnostic_callingMode_standalone_title;
+
+  /// No description provided for @diagnostic_callingMode_standalone_caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Standalone - delivery may be delayed'**
+  String get diagnostic_callingMode_standalone_caption;
+
+  /// No description provided for @diagnostic_callingMode_standalone_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Outgoing calls, hold and Bluetooth or wired headset selection are not available in this mode.'**
+  String get diagnostic_callingMode_standalone_description;
+
   /// No description provided for @diagnostic_permission_camera_description.
   ///
   /// In en, this message translates to:
