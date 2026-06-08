@@ -504,6 +504,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       // Used to resolve the contact (and its display name) of the caller
                       final contactResolver = DefaultContactResolver(
                         contactsRepository: context.read<ContactsRepository>(),
+                        userRepository: context.read<UserRepository>(),
                       );
 
                       // Try to get CDRs sync worker to trigger immediate sync after call ends
