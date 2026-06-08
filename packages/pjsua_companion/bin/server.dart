@@ -237,7 +237,7 @@ Future<Process> _spawnPjsua(
     '--publish',
     '--log-level=1',
     if (autoAnswer) '--auto-answer=200',
-    if (callTarget != null) callTarget,
+    ?callTarget,
   ]);
 
   final pid = process.pid;
