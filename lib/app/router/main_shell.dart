@@ -500,8 +500,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         peerConnectionConfig,
                         userMediaBuilder,
                       );
-                      // Initialize contact name resolver with app-specific contact repository
-                      // Used to display contact name of caller
+                      // Initialize contact resolver with app-specific contact repository
+                      // Used to resolve the contact (and its display name) of the caller
                       final contactResolver = DefaultContactResolver(
                         contactsRepository: context.read<ContactsRepository>(),
                       );
