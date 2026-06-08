@@ -1149,6 +1149,16 @@
       }
     }
   },
+  "notifications_errorSnackBar_emergencyNumber": "{number} - екстрений номер, його не можна набрати з застосунку",
+  "@notifications_errorSnackBar_emergencyNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBarAction_emergencyNumber": "Відкрити дайлер",
+  "@notifications_errorSnackBarAction_emergencyNumber": {},
   "notifications_errorSnackBar_SignalingSessionMissed": "Помилка автентифікації, будь ласка увійдіть знову",
   "@notifications_errorSnackBar_SignalingSessionMissed": {
     "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality."

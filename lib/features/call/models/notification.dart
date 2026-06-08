@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:permission_handler/permission_handler.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
@@ -154,6 +155,32 @@ final class GeneralUnableToCallNotification extends MessageNotification {
   @override
   String l10n(BuildContext context) {
     return context.l10n.notifications_errorSnackBar_generalUnableToCall;
+  }
+}
+
+/// Shown when callkeep rejects an outgoing call because the number is an
+/// emergency number. A self-managed phone account cannot place emergency
+/// calls, so we explain why and offer to hand the number off to the system
+/// dialer instead of silently switching apps.
+final class EmergencyNumberNotification extends MessageNotification {
+  const EmergencyNumberNotification(this.number);
+
+  final String number;
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_emergencyNumber(number);
+  }
+
+  @override
+  SnackBarAction? action(BuildContext context) {
+    return SnackBarAction(
+      label: context.l10n.notifications_errorSnackBarAction_emergencyNumber,
+      onPressed: () async {
+        final telUri = Uri(scheme: 'tel', path: number);
+        if (await canLaunchUrl(telUri)) launchUrl(telUri);
+      },
+    );
   }
 }
 

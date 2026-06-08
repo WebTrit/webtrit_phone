@@ -1367,6 +1367,14 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String notifications_errorSnackBar_emergencyNumber(String number) {
+    return '$number è un numero di emergenza e non può essere chiamato dall\'app';
+  }
+
+  @override
+  String get notifications_errorSnackBarAction_emergencyNumber => 'Apri il telefono';
+
+  @override
   String get notifications_errorSnackBar_SignalingSessionMissed =>
       'Errore di autenticazione, effettuare nuovamente l\'accesso';
 

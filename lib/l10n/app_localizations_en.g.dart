@@ -1348,6 +1348,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String notifications_errorSnackBar_emergencyNumber(String number) {
+    return '$number is an emergency number and cannot be dialed from the app';
+  }
+
+  @override
+  String get notifications_errorSnackBarAction_emergencyNumber => 'Open dialer';
+
+  @override
   String get notifications_errorSnackBar_SignalingSessionMissed => 'Authentication error, please re-login';
 
   @override

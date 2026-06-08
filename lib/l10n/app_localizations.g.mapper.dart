@@ -658,6 +658,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         notifications_errorSnackBar_sessionExpired,
       'notifications_errorSnackBar_SignalingConnectFailed' =>
         notifications_errorSnackBar_SignalingConnectFailed,
+      'notifications_errorSnackBarAction_emergencyNumber' =>
+        notifications_errorSnackBarAction_emergencyNumber,
       'notifications_errorSnackBar_SignalingSessionMissed' =>
         notifications_errorSnackBar_SignalingSessionMissed,
       'notifications_errorSnackBar_sipRegistrationFailed_Unavailable' =>
@@ -1617,6 +1619,14 @@ extension AppLocalizationsExtension on AppLocalizations {
             'notifications_errorSnackBar_signalingDisconnectWithSystemReason requires 1 arguments',
           ),
         },
+      'notifications_errorSnackBar_emergencyNumber' => switch (args) {
+        [final String number] => notifications_errorSnackBar_emergencyNumber(
+          number,
+        ),
+        _ => throw ArgumentError(
+          'notifications_errorSnackBar_emergencyNumber requires 1 arguments',
+        ),
+      },
       'notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason' =>
         switch (args) {
           [final String reason] =>
