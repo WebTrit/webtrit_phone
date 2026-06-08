@@ -67,12 +67,19 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   children: [
                     BlocBuilder<UserInfoCubit, UserInfoState>(
-                      builder: (context, state) => UserInfoListTile(info: state.userInfo),
+                      builder: (context, state) => UserInfoListTile(
+                        info: state.userInfo,
+                        topIssue: context.watch<SessionStatusCubit>().state.topIssue,
+                      ),
                     ),
                     BlocBuilder<SessionStatusCubit, SessionStatusState>(
-                      buildWhen: (previous, current) => previous.status != current.status,
-                      builder: (context, sessionState) =>
-                          SessionStatusListTile(status: sessionState.status, onTap: () => _onDiagnosticTap(context)),
+                      buildWhen: (previous, current) =>
+                          previous.status != current.status || previous.topIssue != current.topIssue,
+                      builder: (context, sessionState) => SessionStatusListTile(
+                        status: sessionState.status,
+                        topIssue: sessionState.topIssue,
+                        onTap: () => _onDiagnosticTap(context),
+                      ),
                     ),
                     if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
                     BlocBuilder<RegisterStatusCubit, RegisterStatus>(

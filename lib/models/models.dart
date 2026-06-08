@@ -40,6 +40,7 @@ export 'queued_termination_request.dart';
 export 'recent.dart';
 export 'recents_visibility_filter.dart';
 export 'rtp_codec_profile.dart';
+export 'session_issue.dart';
 export 'session_status.dart';
 export 'settings_flavor.dart';
 export 'settings_sync_metadata.dart';

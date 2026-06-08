@@ -3312,6 +3312,18 @@ abstract class AppLocalizations {
   /// **'Problem with configuration push notification service'**
   String get sessionStatus_pushNotificationServiceProblem;
 
+  /// No description provided for @sessionStatus_issue_limitedStandaloneCallMode_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Limited call mode'**
+  String get sessionStatus_issue_limitedStandaloneCallMode_title;
+
+  /// No description provided for @sessionStatus_issue_limitedStandaloneCallMode_caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Standalone - delivery may be delayed'**
+  String get sessionStatus_issue_limitedStandaloneCallMode_caption;
+
   /// Status message displayed while the application is performing cleanup during the logout process.
   ///
   /// In en, this message translates to:
