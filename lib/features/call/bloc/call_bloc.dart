@@ -1428,7 +1428,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> _onCallControlEventAudioDeviceSet(_CallControlEventAudioDeviceSet event, Emitter<CallState> emit) async {
     await state.performOnActiveCall(event.callId, (activeCall) async {
-      await _mediaManager.setDevice(event.callId, event.device);
+      await _mediaManager.setDevice(event.callId, event.device, hasVideo: activeCall.video);
     });
   }
 
