@@ -132,6 +132,13 @@ class CallMediaManager {
       if (device.type == CallAudioDeviceType.speaker) {
         await setSpeaker(enabled: true);
       } else {
+        // Reset the session mode to VoiceChat before disabling the speaker.
+        // During a video call the mode is VideoChat (set by onVideoEnabled), and
+        // Helper.setSpeakerphoneOn(false) cannot route to the earpiece while that
+        // mode is active — it silently keeps audio on the speaker. Mirrors
+        // onVideoDisabled. Without this the earpiece switch is a no-op for video
+        // calls, including when both cameras are off (WT-1593).
+        await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(appleAudioMode: AppleAudioMode.voiceChat));
         await setSpeaker(enabled: false);
         final deviceId = device.id;
         if (deviceId != null) await Helper.selectAudioInput(deviceId);
