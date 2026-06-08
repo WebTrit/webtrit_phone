@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:permission_handler/permission_handler.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_signaling/webtrit_signaling.dart';
@@ -176,7 +176,10 @@ final class EmergencyNumberNotification extends MessageNotification {
   SnackBarAction? action(BuildContext context) {
     return SnackBarAction(
       label: context.l10n.notifications_errorSnackBarAction_emergencyNumber,
-      onPressed: () => launchUrl(Uri(scheme: 'tel', path: number)),
+      onPressed: () async {
+        final telUri = Uri(scheme: 'tel', path: number);
+        if (await canLaunchUrl(telUri)) launchUrl(telUri);
+      },
     );
   }
 }

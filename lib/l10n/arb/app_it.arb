@@ -1149,7 +1149,7 @@
       }
     }
   },
-  "notifications_errorSnackBar_emergencyNumber": "{number} e un numero di emergenza e non puo essere chiamato dall'app",
+  "notifications_errorSnackBar_emergencyNumber": "{number} è un numero di emergenza e non può essere chiamato dall'app",
   "@notifications_errorSnackBar_emergencyNumber": {
     "placeholders": {
       "number": {

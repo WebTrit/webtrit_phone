@@ -1368,7 +1368,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String notifications_errorSnackBar_emergencyNumber(String number) {
-    return '$number e un numero di emergenza e non puo essere chiamato dall\'app';
+    return '$number è un numero di emergenza e non può essere chiamato dall\'app';
   }
 
   @override
