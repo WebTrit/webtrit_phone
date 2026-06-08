@@ -13,6 +13,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:async/async.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -2303,7 +2304,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
 
     if (callkeepError != null) {
-      _logger.warning('__onMutationControlStart error: $callkeepError');
+      if (callkeepError == CallkeepCallRequestError.emergencyNumber) {
+        // Self-managed phone accounts cannot place emergency calls; hand the
+        // number off to the system dialer so the user can still dial it.
+        launchUrl(Uri(scheme: 'tel', path: e.handle.value));
+      } else if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
+        CrashlyticsUtils.recordError(
+          'CallBloc - __onMutationControlStart selfManagedPhoneAccountNotRegistered',
+          information: ['callId: $callId', 'handle: ${e.handle.value}'],
+        );
+      } else {
+        _logger.warning('__onMutationControlStart error: $callkeepError');
+        onDiagnosticReportRequested(callId, callkeepError);
+      }
       emit(state.copyWithPopActiveCall(callId));
     }
   }
