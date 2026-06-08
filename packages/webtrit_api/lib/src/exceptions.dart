@@ -81,3 +81,13 @@ class SessionMissingException extends RequestFailure {
   @override
   String toString() => 'SessionMissingException(statusCode: $statusCode, requestId: $requestId, url: $url)';
 }
+
+class PasswordChangeRequiredException extends RequestFailure {
+  PasswordChangeRequiredException({
+    required super.url,
+    required super.requestId,
+    required super.statusCode,
+    super.token,
+    super.error,
+  });
+}

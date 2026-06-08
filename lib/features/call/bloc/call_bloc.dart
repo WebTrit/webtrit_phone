@@ -491,18 +491,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> _notifyAccountErrorSafely() async {
     try {
       await userRepository.getRemoteInfo();
+    } on PasswordChangeRequiredException {
+      _logger.info('Account session revoked');
+      submitNotification(const SelfCarePasswordExpiredNotification());
     } on RequestFailure catch (e) {
-      final errorCode = AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code);
-
-      switch (errorCode) {
-        case AccountErrorCode.passwordChangeRequired:
-          _logger.info('Account session revoked');
-          submitNotification(const SelfCarePasswordExpiredNotification());
-          break;
-        default:
-          _logger.warning('Account error code: $errorCode');
-          break;
-      }
+      _logger.warning('Account error code: ${e.error?.code}');
     } catch (e, st) {
       _logger.warning('Unexpected error during account info refresh', e, st);
     }
