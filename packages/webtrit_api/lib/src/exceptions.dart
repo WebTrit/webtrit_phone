@@ -90,7 +90,4 @@ class PasswordChangeRequiredException extends RequestFailure {
     super.token,
     super.error,
   });
-
-  @override
-  String toString() => 'PasswordChangeRequiredException(statusCode: $statusCode, requestId: $requestId, url: $url)';
 }
