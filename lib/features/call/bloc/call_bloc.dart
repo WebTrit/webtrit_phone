@@ -4194,9 +4194,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.info(
       '[Recents:store] '
       'direction=${activeCall.direction.name} '
-      'number=$number '
       'number.hash=${number.hashCode} '
-      'username=$username '
       'username.hash=${username?.hashCode} '
       'numberEqualsUsername=${number == username} '
       'usernameIsNull=${username == null}',
