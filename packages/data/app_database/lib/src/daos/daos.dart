@@ -4,6 +4,7 @@ export 'cdrs_dao.dart';
 export 'chats_dao.dart';
 export 'contact_emails_dao.dart';
 export 'contact_phones_dao.dart';
+export 'contact_source_priority.dart';
 export 'contacts_dao.dart';
 export 'dialog_info_dao.dart';
 export 'favorites_dao.dart';
