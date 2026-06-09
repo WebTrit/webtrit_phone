@@ -235,6 +235,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get iceConnectionIssue_iceFailNoIcePathViaVpn => 'VPN may be blocking the call. Try disabling it';
 
   @override
+  String get callNetworkQuality_yourAudioWeak => 'Your audio is weak';
+
+  @override
+  String get callNetworkQuality_yourVideoWeak => 'Your video is weak';
+
+  @override
+  String get callNetworkQuality_theirAudioWeak => 'Their audio is weak';
+
+  @override
+  String get callNetworkQuality_theirVideoWeak => 'Their video is weak';
+
+  @override
   String get callPullBadge_dialogTitle => 'Pullable Calls';
 
   @override

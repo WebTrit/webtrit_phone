@@ -238,6 +238,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get iceConnectionIssue_iceFailNoIcePathViaVpn => 'La VPN potrebbe bloccare la chiamata. Prova a disattivarla';
 
   @override
+  String get callNetworkQuality_yourAudioWeak => 'Il tuo audio è debole';
+
+  @override
+  String get callNetworkQuality_yourVideoWeak => 'Il tuo video è debole';
+
+  @override
+  String get callNetworkQuality_theirAudioWeak => 'L\'audio dell\'altro è debole';
+
+  @override
+  String get callNetworkQuality_theirVideoWeak => 'Il video dell\'altro è debole';
+
+  @override
   String get callPullBadge_dialogTitle => 'Chiamate pullabili';
 
   @override

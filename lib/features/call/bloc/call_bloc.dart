@@ -119,6 +119,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   StreamSubscription<void>? _foregroundCallPushSubscription;
   final _iceRestartDebounce = DebounceMap<String>(const Duration(seconds: 2));
 
+  /// Auto-hides the slowlink network-quality indicator once events stop, and
+  /// drives the brief "recovered" confirmation. Keyed by callId; rescheduling
+  /// the same key resets the countdown, so a steady stream of slowlink events
+  /// keeps the indicator visible.
+  final _slowlinkDebounce = DebounceMap<String>(const Duration(seconds: 2));
+
+  /// Per-call slowlink hit counter; feeds the severity heuristic (more frequent
+  /// events escalate severity). Cleared when the indicator is hidden.
+  final Map<String, int> _slowlinkHits = {};
+
   late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
   late final SignalingReconnectController _reconnectController;
@@ -256,6 +266,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _presenceInfoSyncTimer?.cancel();
 
     _iceRestartDebounce.dispose();
+
+    _slowlinkDebounce.dispose();
+    _slowlinkHits.clear();
 
     await _signalingSubscription.cancel();
 
@@ -689,6 +702,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.warning('__onResetStateEventCompleteCall: ${event.callId}');
 
     _iceRestartDebounce.cancel(event.callId);
+    _slowlinkDebounce.cancel(event.callId);
+    _slowlinkHits.remove(event.callId);
     await _stopRingbackSound();
 
     try {
@@ -1829,6 +1844,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallMutationEventIceGatheringComplete() => __onMutationIceGatheringComplete(event, emit),
       _CallMutationEventIceConnectionFailed() => __onMutationIceConnectionFailed(event, emit),
       _CallMutationEventRestartIce() => __onMutationRestartIce(event, emit),
+      _CallMutationEventSlowlinkDetected() => __onMutationSlowlinkDetected(event, emit),
+      _CallMutationEventSlowlinkCleared() => __onMutationSlowlinkCleared(event, emit),
+      _CallMutationEventSlowlinkHidden() => __onMutationSlowlinkHidden(event, emit),
       _CallMutationEventRestoreCall() => __onMutationRestoreCall(event, emit),
     };
   }
@@ -3234,6 +3252,52 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     pc.restartIce();
   }
 
+  /// Handles an incoming Janus `slowlink` event: surfaces a transient
+  /// network-quality indicator on the call and (re)arms the auto-hide timer.
+  /// A real ICE failure ([iceConnectionIssue]) takes precedence and suppresses it.
+  Future<void> __onMutationSlowlinkDetected(_CallMutationEventSlowlinkDetected event, Emitter<CallState> emit) async {
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall == null) return;
+    if (activeCall.iceConnectionIssue != null) return;
+
+    final hits = (_slowlinkHits[event.callId] ?? 0) + 1;
+    _slowlinkHits[event.callId] = hits;
+
+    final quality = CallNetworkQuality(
+      severity: CallNetworkQualitySeverity.fromSlowlink(hits: hits, lost: event.lost),
+      uplink: event.uplink,
+      media: event.media,
+    );
+    emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(networkQuality: quality)));
+
+    _slowlinkDebounce.schedule(event.callId, () => add(_CallMutationEvent.slowlinkCleared(event.callId)));
+  }
+
+  /// Slowlink events stopped arriving: show the brief "recovered" confirmation,
+  /// then arm a final timer to hide the indicator entirely.
+  Future<void> __onMutationSlowlinkCleared(_CallMutationEventSlowlinkCleared event, Emitter<CallState> emit) async {
+    final activeCall = state.retrieveActiveCall(event.callId);
+    final quality = activeCall?.networkQuality;
+    if (quality == null || quality.recovered) return;
+
+    emit(
+      state.copyWithMappedActiveCall(
+        event.callId,
+        (call) => call.copyWith(networkQuality: quality.copyWith(recovered: true)),
+      ),
+    );
+
+    _slowlinkDebounce.schedule(event.callId, () => add(_CallMutationEvent.slowlinkHidden(event.callId)));
+  }
+
+  /// Removes the network-quality indicator after the recovered confirmation.
+  Future<void> __onMutationSlowlinkHidden(_CallMutationEventSlowlinkHidden event, Emitter<CallState> emit) async {
+    _slowlinkHits.remove(event.callId);
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall?.networkQuality == null) return;
+    emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(networkQuality: null)));
+  }
+
   Future<void> __onMutationRestoreCall(_CallMutationEventRestoreCall event, Emitter<CallState> emit) async {
     final activeCall = state.retrieveActiveCall(event.callId);
     if (activeCall == null) return;
@@ -3923,6 +3987,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.info('[SIG] HangingupEvent: callId=${event.callId} line=${event.line} - hangup in progress');
     } else if (event is IceHangupEvent) {
       _logger.info('[SIG] IceHangupEvent: line=${event.line} reason="${event.reason}"');
+    } else if (event is IceSlowLinkEvent) {
+      final activeCall = state.activeCalls.firstWhereOrNull((c) => c.line == event.line);
+      if (activeCall != null) {
+        add(
+          _CallMutationEvent.slowlinkDetected(
+            callId: activeCall.callId,
+            uplink: event.uplink,
+            media: CallMediaKind.values.byName(event.media.name),
+            lost: event.lost,
+          ),
+        );
+      } else {
+        _logger.fine('[SIG] IceSlowLinkEvent: no active call on line=${event.line}');
+      }
     } else if (event is CallErrorEvent) {
       add(
         _CallSignalingEvent.callError(line: event.line, callId: event.callId, code: event.code, reason: event.reason),

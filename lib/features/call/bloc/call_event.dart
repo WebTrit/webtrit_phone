@@ -1212,6 +1212,16 @@ sealed class _CallMutationEvent extends CallEvent {
   const factory _CallMutationEvent.iceConnectionFailed(String callId) = _CallMutationEventIceConnectionFailed;
   const factory _CallMutationEvent.restartIce(String callId) = _CallMutationEventRestartIce;
 
+  // Slowlink (graceful media degradation) redirects
+  const factory _CallMutationEvent.slowlinkDetected({
+    required String callId,
+    required bool uplink,
+    required CallMediaKind media,
+    required int lost,
+  }) = _CallMutationEventSlowlinkDetected;
+  const factory _CallMutationEvent.slowlinkCleared(String callId) = _CallMutationEventSlowlinkCleared;
+  const factory _CallMutationEvent.slowlinkHidden(String callId) = _CallMutationEventSlowlinkHidden;
+
   // Push / restore redirects
   const factory _CallMutationEvent.restoreCall({
     required String callId,
@@ -1488,6 +1498,35 @@ class _CallMutationEventIceConnectionFailed extends _CallMutationEvent {
 
 class _CallMutationEventRestartIce extends _CallMutationEvent {
   const _CallMutationEventRestartIce(this.callId);
+  final String callId;
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallMutationEventSlowlinkDetected extends _CallMutationEvent {
+  const _CallMutationEventSlowlinkDetected({
+    required this.callId,
+    required this.uplink,
+    required this.media,
+    required this.lost,
+  });
+  final String callId;
+  final bool uplink;
+  final CallMediaKind media;
+  final int lost;
+  @override
+  List<Object?> get props => [callId, uplink, media, lost];
+}
+
+class _CallMutationEventSlowlinkCleared extends _CallMutationEvent {
+  const _CallMutationEventSlowlinkCleared(this.callId);
+  final String callId;
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallMutationEventSlowlinkHidden extends _CallMutationEvent {
+  const _CallMutationEventSlowlinkHidden(this.callId);
   final String callId;
   @override
   List<Object?> get props => [callId];

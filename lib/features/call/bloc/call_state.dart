@@ -230,6 +230,7 @@ class ActiveCall with _$ActiveCall implements CallEntry {
     this.speakerOnBeforeMinimize,
     this.iceCandidates = const [],
     this.iceConnectionIssue,
+    this.networkQuality,
   });
 
   @override
@@ -311,6 +312,11 @@ class ActiveCall with _$ActiveCall implements CallEntry {
 
   @override
   final IceConnectionIssue? iceConnectionIssue;
+
+  /// Transient media-degradation indicator from Janus `slowlink` events.
+  /// Null when the media is healthy; auto-cleared once slowlink events stop.
+  @override
+  final CallNetworkQuality? networkQuality;
 
   @override
   bool get isIncoming => direction == CallDirection.incoming;
