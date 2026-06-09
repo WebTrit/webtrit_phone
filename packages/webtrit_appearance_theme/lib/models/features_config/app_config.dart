@@ -55,6 +55,7 @@ class AppConfigLogin with _$AppConfigLogin {
   const AppConfigLogin({
     this.common = const AppConfigLoginCommon(),
     this.modeSelect = const AppConfigLoginModeSelect(),
+    this.signinOrder = const ['passwordSignin', 'otpSignin', 'signup'],
   });
 
   @override
@@ -62,6 +63,13 @@ class AppConfigLogin with _$AppConfigLogin {
 
   @override
   final AppConfigLoginModeSelect modeSelect;
+
+  /// Order of the sign-in tabs on the login switch screen, by login type name
+  /// (passwordSignin, otpSignin, signup). Only the types advertised by the
+  /// backend are shown; this controls their order and which one is selected by
+  /// default. Unknown or omitted names are placed last.
+  @override
+  final List<String> signinOrder;
 
   factory AppConfigLogin.fromJson(Map<String, Object?> json) => _$AppConfigLoginFromJson(json);
 

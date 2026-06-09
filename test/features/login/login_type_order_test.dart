@@ -18,7 +18,7 @@ void main() {
       expect(sortLoginTypes([LoginType.passwordSignin, LoginType.otpSignin]), expected);
     });
 
-    test('honours an explicit env-style order', () {
+    test('honours an explicit configured order', () {
       final result = sortLoginTypes(
         [LoginType.passwordSignin, LoginType.otpSignin],
         orderConfig: const ['otpSignin', 'passwordSignin'],

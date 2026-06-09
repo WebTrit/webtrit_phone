@@ -190,6 +190,7 @@ abstract final class LoginMapper {
     return LoginConfig(
       titleL10n: appConfig.loginConfig.modeSelect.greetingL10n,
       actions: List.unmodifiable(buttons),
+      signinOrder: appConfig.loginConfig.signinOrder,
       launchLoginPage: embeddedData.firstWhereOrNull(
         (it) => it.id == appConfig.loginConfig.common.fullScreenLaunchEmbeddedResourceId,
       ),
