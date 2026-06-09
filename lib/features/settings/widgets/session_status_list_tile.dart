@@ -10,9 +10,19 @@ import '../../microphone_status/microphone_status.dart';
 import '../settings.dart';
 
 class SessionStatusListTile extends StatelessWidget {
-  const SessionStatusListTile({super.key, required this.status, this.info, this.onTap, this.contentPadding});
+  const SessionStatusListTile({
+    super.key,
+    required this.status,
+    this.topIssue,
+    this.info,
+    this.onTap,
+    this.contentPadding,
+  });
 
   final SessionStatus status;
+
+  /// Most severe active side issue, surfaced as a warning subtitle. Null hides it.
+  final SessionIssue? topIssue;
   final UserInfo? info;
   final VoidCallback? onTap;
   final EdgeInsetsGeometry? contentPadding;
@@ -35,6 +45,12 @@ class SessionStatusListTile extends StatelessWidget {
                   child: CircleAvatar(radius: 4, backgroundColor: status.color(context)),
                 ),
                 title: Text(status.l10n(context), key: status.key, style: themeData.textTheme.labelLarge),
+                subtitle: topIssue == null
+                    ? null
+                    : Text(
+                        topIssue!.caption(context),
+                        style: themeData.textTheme.bodySmall?.copyWith(color: topIssue!.color(context)),
+                      ),
                 trailing: const Icon(Icons.arrow_right),
               ),
               BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
