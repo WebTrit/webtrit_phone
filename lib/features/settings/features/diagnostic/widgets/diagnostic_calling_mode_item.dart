@@ -8,7 +8,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 class DiagnosticCallingModeItem extends StatelessWidget {
   const DiagnosticCallingModeItem({super.key, required this.onTap});
 
-  final Function() onTap;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class DiagnosticCallingModeItem extends StatelessWidget {
     const statusColor = Colors.orange;
 
     return ListTile(
-      onTap: onTap.call,
+      onTap: onTap,
       leading: const Icon(Icons.phone_in_talk, color: statusColor),
       title: Text(context.l10n.diagnostic_callingMode_standalone_title),
       subtitle: Text(

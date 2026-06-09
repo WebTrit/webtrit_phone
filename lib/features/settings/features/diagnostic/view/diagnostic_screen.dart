@@ -95,12 +95,10 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                 if (androidTarget && state.callDeliveryMode == CallkeepAndroidCallDeliveryMode.standalone) ...[
                   GroupTitleListTile(titleData: context.l10n.diagnostic_callingMode_groupTitle),
                   DiagnosticCallingModeItem(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) => const DiagnosticCallingModeDetails(),
-                      );
-                    },
+                    onTap: () => showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) => const DiagnosticCallingModeDetails(),
+                    ),
                   ),
                 ],
                 GroupTitleListTile(titleData: context.l10n.diagnosticScreen_permissionsGroup_title),
