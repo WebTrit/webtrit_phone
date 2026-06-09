@@ -11,9 +11,9 @@ class MigrationV23 extends Migration {
     // Drop the redundant UNIQUE constraint on cdrs.call_id. The column is the
     // single-column primary key, which already enforces uniqueness, so the
     // extra UNIQUE is a no-op. SQLite cannot drop a column constraint in place,
-    // so recreate the table without it and copy the rows over.
-    await db.customStatement('PRAGMA foreign_keys = OFF');
-
+    // so recreate the table without it and copy the rows over. No foreign_keys
+    // toggling is needed here: nothing references cdrs, and the surrounding
+    // onUpgrade already runs migrations with foreign_keys disabled.
     await db.customStatement('''
       CREATE TABLE cdrs_new (
         call_id TEXT NOT NULL,
@@ -46,7 +46,5 @@ class MigrationV23 extends Migration {
     await db.customStatement('DROP TABLE cdrs');
 
     await db.customStatement('ALTER TABLE cdrs_new RENAME TO cdrs');
-
-    await db.customStatement('PRAGMA foreign_keys = ON');
   }
 }
