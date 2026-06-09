@@ -1806,10 +1806,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
 
   @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_title => 'Limited call mode';
+  String get sessionStatus_issue_limitedStandaloneCallMode_title => 'Обмежений режим дзвінків';
 
   @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_caption => 'Standalone - delivery may be delayed';
+  String get sessionStatus_issue_limitedStandaloneCallMode_caption => 'Standalone — можлива затримка доставки';
 
   @override
   String get session_Teardown_progressText => 'Вихід із системи...';

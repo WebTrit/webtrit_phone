@@ -1490,6 +1490,10 @@
   },
   "sessionStatus_pushNotificationServiceProblem": "Problema con la configurazione del servizio di notifiche push",
   "@sessionStatus_pushNotificationServiceProblem": {},
+  "sessionStatus_issue_limitedStandaloneCallMode_title": "Modalità chiamate limitata",
+  "@sessionStatus_issue_limitedStandaloneCallMode_title": {},
+  "sessionStatus_issue_limitedStandaloneCallMode_caption": "Standalone - possibile ritardo nella consegna",
+  "@sessionStatus_issue_limitedStandaloneCallMode_caption": {},
   "session_Teardown_progressText": "Disconnessione in corso...",
   "@session_Teardown_progressText": {
     "description": "Status message displayed while the application is performing cleanup during the logout process."

@@ -1806,10 +1806,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Problema con la configurazione del servizio di notifiche push';
 
   @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_title => 'Limited call mode';
+  String get sessionStatus_issue_limitedStandaloneCallMode_title => 'Modalità chiamate limitata';
 
   @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_caption => 'Standalone - delivery may be delayed';
+  String get sessionStatus_issue_limitedStandaloneCallMode_caption => 'Standalone - possibile ritardo nella consegna';
 
   @override
   String get session_Teardown_progressText => 'Disconnessione in corso...';
