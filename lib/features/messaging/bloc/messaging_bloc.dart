@@ -71,7 +71,20 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     // wipeData()
 
     emit(state.copyWith(status: ConnectionStatus.connecting));
-    _client.connect();
+
+    // This connect() is fire-and-forget; without a handler its error would escape to
+    // runZonedGuarded and be recorded as a FATAL crash. See _onConnectError.
+    unawaited(_client.connect().catchError(_onConnectError));
+  }
+
+  // Handle a connect-time transport failure (DNS "Failed host lookup", connection
+  // timeout, TLS) at the socket owner: route it through the existing _ClientError path
+  // so it surfaces as the bloc error state instead of an uncaught FATAL. The Phoenix
+  // socket reconnects on its own.
+  PhoenixSocket? _onConnectError(Object e, StackTrace s) {
+    _logger.warning('_connect failed', e, s);
+    if (!isClosed) add(_ClientError(e));
+    return null;
   }
 
   void _refresh(Refresh event, Emitter<MessagingState> emit) async {
