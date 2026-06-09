@@ -523,6 +523,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnostic_battery_tile_title => 'Режим батареї';
 
   @override
+  String get diagnostic_callingMode_groupTitle => 'Режим дзвінків';
+
+  @override
+  String get diagnostic_callingMode_tile_title => 'Режим дзвінків';
+
+  @override
+  String get diagnostic_callingMode_standalone_title => 'Обмежений режим дзвінків';
+
+  @override
+  String get diagnostic_callingMode_standalone_caption => 'Standalone — можлива затримка доставки';
+
+  @override
+  String get diagnostic_callingMode_standalone_description =>
+      'Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вихідні дзвінки, утримання та вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступні.';
+
+  @override
   String get diagnostic_permission_camera_description =>
       'Цей застосунок потребує дозволу на доступ до камери для здійснення відеодзвінків.';
 

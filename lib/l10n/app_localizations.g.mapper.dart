@@ -240,6 +240,14 @@ extension AppLocalizationsExtension on AppLocalizations {
       'diagnostic_battery_navigate_section' =>
         diagnostic_battery_navigate_section,
       'diagnostic_battery_tile_title' => diagnostic_battery_tile_title,
+      'diagnostic_callingMode_groupTitle' => diagnostic_callingMode_groupTitle,
+      'diagnostic_callingMode_tile_title' => diagnostic_callingMode_tile_title,
+      'diagnostic_callingMode_standalone_title' =>
+        diagnostic_callingMode_standalone_title,
+      'diagnostic_callingMode_standalone_caption' =>
+        diagnostic_callingMode_standalone_caption,
+      'diagnostic_callingMode_standalone_description' =>
+        diagnostic_callingMode_standalone_description,
       'diagnostic_permission_camera_description' =>
         diagnostic_permission_camera_description,
       'diagnostic_permission_camera_title' =>
