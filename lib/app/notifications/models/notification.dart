@@ -125,15 +125,6 @@ class NoInternetConnectionNotification extends MessageNotification {
   }
 }
 
-class SelfCarePasswordExpiredNotification extends MessageNotification {
-  const SelfCarePasswordExpiredNotification();
-
-  @override
-  String l10n(BuildContext context) {
-    return context.l10n.account_selfCarePasswordExpired_message;
-  }
-}
-
 class SessionExpiredNotification extends MessageNotification {
   const SessionExpiredNotification();
 

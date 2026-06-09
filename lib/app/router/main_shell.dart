@@ -567,8 +567,15 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         signalingModule: _signalingModule,
                         peerConnectionManager: peerConnectionManager,
                         connectivityService: context.read<ConnectivityService>(),
-                        onSessionInvalidated: () =>
-                            appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.sessionMissed)),
+                        onSessionInvalidated: (reason) => appBloc.add(
+                          AppLogoutRequested(
+                            reason: switch (reason) {
+                              SignalingSessionInvalidationReason.passwordChangeRequired =>
+                                AppLogoutReason.passwordChangeRequired,
+                              SignalingSessionInvalidationReason.sessionMissed => AppLogoutReason.sessionMissed,
+                            },
+                          ),
+                        ),
                         foregroundCallPushSignal: RemotePushBroker.pendingCallForegroundPushs,
                       )..add(const CallStarted());
                     },

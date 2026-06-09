@@ -111,13 +111,23 @@ void main() {
       expect(find.text(context.l10n.notifications_errorSnackBar_accountNotFound), findsOneWidget);
     });
 
-    testWidgets('does not show the account-not-found message for other logout reasons', (tester) async {
+    testWidgets('shows the password-expired message when logoutReason is passwordChangeRequired', (tester) async {
+      when(() => appBloc.state).thenReturn(_appState(logoutReason: AppLogoutReason.passwordChangeRequired));
+
+      await tester.pumpWidget(_buildSubject(appBloc));
+
+      final context = tester.element(find.byType(TeardownScreen));
+      expect(find.text(context.l10n.account_selfCarePasswordExpired_message), findsOneWidget);
+    });
+
+    testWidgets('does not show a reason message for other logout reasons', (tester) async {
       when(() => appBloc.state).thenReturn(_appState(logoutReason: AppLogoutReason.userRequest));
 
       await tester.pumpWidget(_buildSubject(appBloc));
 
       final context = tester.element(find.byType(TeardownScreen));
       expect(find.text(context.l10n.notifications_errorSnackBar_accountNotFound), findsNothing);
+      expect(find.text(context.l10n.account_selfCarePasswordExpired_message), findsNothing);
     });
   });
 }

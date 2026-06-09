@@ -17,6 +17,11 @@ enum AppLogoutReason {
   /// e.g. it was deactivated or removed. Terminal; requires only local data
   /// cleanup since the remote user record is already gone.
   userNotFound,
+
+  /// The self-care password expired or was changed (403 password_change_required),
+  /// detected after the signaling session was dropped. The server already
+  /// terminated the session, so only local cleanup is required.
+  passwordChangeRequired,
 }
 
 sealed class AppEvent extends Equatable {
