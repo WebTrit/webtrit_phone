@@ -161,25 +161,27 @@ class _CallInfoState extends State<CallInfo> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-        Row(
+        // Timer + a FIXED-SIZE reserved meter slot directly below it. Keeping
+        // the slot's footprint constant across all states (healthy / mild /
+        // moderate / severe / recovered) means the surrounding FittedBox never
+        // rescales, so the centered timer never shifts. The icon-only meter
+        // just fades and cross-fades inside the fixed slot.
+        Column(
           mainAxisSize: MainAxisSize.min,
-          spacing: 6,
           children: [
             Text(statusMessage, style: statusTextStyle),
-            // Smoothly fade/grow the network-quality meter in and out, and
-            // cross-fade between severity/direction/recovered states. Keyed by
-            // the full meter signature so every transition animates; a real ICE
-            // failure suppresses it (the failure text owns the next line).
-            RepaintBoundary(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 250),
-                switchInCurve: Curves.easeOut,
-                switchOutCurve: Curves.easeIn,
-                transitionBuilder: (child, animation) => FadeTransition(
-                  opacity: animation,
-                  child: SizeTransition(axis: Axis.horizontal, sizeFactor: animation, child: child),
+            SizedBox(
+              height: 18,
+              width: 60,
+              child: Center(
+                child: RepaintBoundary(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 250),
+                    switchInCurve: Curves.easeOut,
+                    switchOutCurve: Curves.easeIn,
+                    child: _buildMeterSlot(statusTextStyle?.color),
+                  ),
                 ),
-                child: _buildMeterSlot(statusTextStyle?.color),
               ),
             ),
           ],
