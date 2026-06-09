@@ -51,10 +51,22 @@ final _logger = Logger('CallBloc');
 /// as parameters, allowing for detailed error logging or reporting.
 typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallRequestError error);
 
+/// Why the signaling session was invalidated, so the application layer can pick
+/// a matching logout reason / user message without depending on app-level enums.
+enum SignalingSessionInvalidationReason {
+  /// Generic: the session was missing/expired (signaling error 4201) with no
+  /// more specific account cause detected.
+  sessionMissed,
+
+  /// The self-care password expired or was changed (403 password_change_required).
+  passwordChangeRequired,
+}
+
 /// Callback triggered when the signaling session is determined to be invalid
 /// (e.g., session revoked remotely, expired, or deleted), requiring a forced
-/// application-level logout to resolve the state.
-typedef SignalingSessionInvalidatedCallback = void Function();
+/// application-level logout to resolve the state. Carries the resolved
+/// [SignalingSessionInvalidationReason] so the caller can tailor the logout.
+typedef SignalingSessionInvalidatedCallback = void Function(SignalingSessionInvalidationReason reason);
 
 /// Resolves the final SIP `from` number for an outgoing call.
 ///
@@ -481,24 +493,45 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (code == SignalingDisconnectCode.sessionMissedError) {
         _logger.info('Signaling session listener: session is missing ${current.lastSignalingDisconnectCode}');
 
-        unawaited(_notifyAccountErrorSafely());
-        onSessionInvalidated();
+        unawaited(_invalidateSession());
       }
     }
   }
 
-  // TODO: Consider moving this method to a separate repository
-  Future<void> _notifyAccountErrorSafely() async {
+  /// Resolves why the session was invalidated and triggers the forced logout
+  /// with that reason, so the teardown UI can show a specific message.
+  Future<void> _invalidateSession() async {
+    try {
+      final reason = await _resolveInvalidationReason();
+      // A null reason means the probe hit an auth error the session guard
+      // already owns (it dispatches its own, more specific logout) - avoid a
+      // second, conflicting AppLogoutRequested.
+      if (reason != null) onSessionInvalidated(reason);
+    } catch (e, st) {
+      _logger.warning('Session invalidation handling failed', e, st);
+    }
+  }
+
+  // TODO: Consider moving this probe to a separate repository
+  Future<SignalingSessionInvalidationReason?> _resolveInvalidationReason() async {
     try {
       await userRepository.getRemoteInfo();
     } on PasswordChangeRequiredException {
-      _logger.info('Account session revoked');
-      submitNotification(const SelfCarePasswordExpiredNotification());
+      _logger.info('Account session revoked: password change required');
+      return SignalingSessionInvalidationReason.passwordChangeRequired;
+    } on UnauthorizedException catch (_) {
+      // Handled by the session guard inside getInfo(); it drives the logout.
+      return null;
+    } on UserNotFoundException catch (_) {
+      return null;
+    } on SessionMissingException catch (_) {
+      return null;
     } on RequestFailure catch (e) {
       _logger.warning('Account error code: ${e.error?.code}');
     } catch (e, st) {
       _logger.warning('Unexpected error during account info refresh', e, st);
     }
+    return SignalingSessionInvalidationReason.sessionMissed;
   }
 
   //

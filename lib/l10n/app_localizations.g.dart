@@ -2526,6 +2526,12 @@ abstract class AppLocalizations {
   /// **'Your session has expired. Please log in again.'**
   String get notifications_errorSnackBar_sessionExpired;
 
+  /// Shown in a notification or snackbar when the backend returns 404 (user not found) for the current account, e.g. it was deactivated or removed on the server. The user is logged out; advise them to contact their administrator.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account was not found. It may have been deactivated or removed. Please contact your administrator.'**
+  String get notifications_errorSnackBar_accountNotFound;
+
   /// Shown in a notification or snackbar when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Context: occurs when the signaling/WebSocket connection cannot be established due to network outages, server unreachability, TLS/handshake failures, authentication errors (expired/invalid tokens), or firewall/VPN restrictions. Suggest the user check their network, retry, or reauthenticate if the problem persists.
   ///
   /// In en, this message translates to:

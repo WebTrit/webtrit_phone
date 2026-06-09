@@ -1351,6 +1351,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_sessionExpired => 'Your session has expired. Please log in again.';
 
   @override
+  String get notifications_errorSnackBar_accountNotFound =>
+      'Your account was not found. It may have been deactivated or removed. Please contact your administrator.';
+
+  @override
   String get notifications_errorSnackBar_SignalingConnectFailed => 'Connecting to the core failed, trying to reconnect';
 
   @override

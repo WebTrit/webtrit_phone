@@ -1369,6 +1369,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notifications_errorSnackBar_sessionExpired => 'La tua sessione è scaduta. Accedi di nuovo.';
 
   @override
+  String get notifications_errorSnackBar_accountNotFound =>
+      'Il tuo account non è stato trovato. Potrebbe essere stato disattivato o rimosso. Contatta il tuo amministratore.';
+
+  @override
   String get notifications_errorSnackBar_SignalingConnectFailed =>
       'Connessione al server non riuscita, tentativo di riconnessione in corso';
 

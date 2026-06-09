@@ -6,7 +6,7 @@ import 'package:webtrit_phone/common/common.dart';
 
 import 'session_guard.dart';
 
-typedef AsyncVoidCallback = FutureOr<void> Function();
+typedef SessionGuardCallback = FutureOr<void> Function(Exception e);
 
 final _log = Logger('RouterLogoutSessionGuard');
 
@@ -26,11 +26,14 @@ class RouterLogoutSessionGuard implements SessionGuard, Disposable {
   RouterLogoutSessionGuard({required this.performLogout, this.onPreLogout});
 
   /// Function that performs the actual logout (e.g. dispatching a logout event).
-  final AsyncVoidCallback performLogout;
+  /// Receives the unauthorized [Exception] so callers can tailor the logout
+  /// (e.g. distinguish an expired session from a deleted account).
+  final SessionGuardCallback performLogout;
 
   /// Optional hook executed before [performLogout].
-  /// Useful for cleaning up resources or saving state.
-  final AsyncVoidCallback? onPreLogout;
+  /// Useful for cleaning up resources or saving state. Receives the same
+  /// unauthorized [Exception] passed to [performLogout].
+  final SessionGuardCallback? onPreLogout;
 
   bool _handled = false;
   bool _disposed = false;
@@ -50,8 +53,8 @@ class RouterLogoutSessionGuard implements SessionGuard, Disposable {
 
       _log.warning('Unauthorized access detected: ${e.toString()}');
 
-      await _runHookSafe();
-      await _runLogoutSafe();
+      await _runHookSafe(e);
+      await _runLogoutSafe(e);
     });
   }
 
@@ -61,19 +64,19 @@ class RouterLogoutSessionGuard implements SessionGuard, Disposable {
     return true;
   }
 
-  Future<void> _runHookSafe() async {
+  Future<void> _runHookSafe(Exception e) async {
     final hook = onPreLogout;
     if (hook == null) return;
     try {
-      await hook();
+      await hook(e);
     } catch (err, st) {
-      _log.warning('onBeforeLogout failed', err, st);
+      _log.warning('onPreLogout failed', err, st);
     }
   }
 
-  Future<void> _runLogoutSafe() async {
+  Future<void> _runLogoutSafe(Exception e) async {
     try {
-      await performLogout();
+      await performLogout(e);
     } catch (err, st) {
       _log.severe('logoutLocal failed', err, st);
     }
