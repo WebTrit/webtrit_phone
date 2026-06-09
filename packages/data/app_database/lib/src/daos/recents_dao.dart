@@ -27,20 +27,27 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
   RecentsDao(super.db);
 
   Stream<List<RecentData>> watchLastRecents([Duration period = const Duration(days: 14)]) {
-    final callsQuery = select(callLogsTable)
-      ..where((t) => t.createdAt.isBiggerOrEqualValue(clock.agoBy(period)))
-      ..orderBy([(t) => OrderingTerm.desc(t.createdAt), (t) => OrderingTerm.desc(t.hungUpAt.unixepoch)]);
+    final callsQuery = select(callLogsTable)..where((t) => t.createdAt.isBiggerOrEqualValue(clock.agoBy(period)));
 
     final sourcePhone = alias(contactPhonesTable, 'source_phone');
     final contactPhones = alias(contactPhonesTable, 'contact_phones');
 
-    final recentsQuery = callsQuery.join([
-      leftOuterJoin(sourcePhone, callLogsTable.number.equalsExp(sourcePhone.number), useColumns: false),
-      leftOuterJoin(contactsTable, contactsTable.id.equalsExp(sourcePhone.contactId)),
-      leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
-      leftOuterJoin(contactPhones, contactPhones.contactId.equalsExp(contactsTable.id)),
-      leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
-    ]);
+    final recentsQuery =
+        callsQuery.join([
+            leftOuterJoin(sourcePhone, callLogsTable.number.equalsExp(sourcePhone.number), useColumns: false),
+            leftOuterJoin(contactsTable, contactsTable.id.equalsExp(sourcePhone.contactId)),
+            leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
+            leftOuterJoin(contactPhones, contactPhones.contactId.equalsExp(contactsTable.id)),
+            leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
+          ])
+          // createdAt/hungUpAt define the recents order; the trailing source-priority term is a
+          // per-call-log tie-break so a number shared by a local and an external (PBX) contact
+          // resolves to the external one (the first row kept by _rowsToRecent).
+          ..orderBy([
+            OrderingTerm.desc(callLogsTable.createdAt),
+            OrderingTerm.desc(callLogsTable.hungUpAt.unixepoch),
+            ...contactsTable.sourcePriorityOrder(),
+          ]);
 
     return recentsQuery.watch().map(_rowsToRecent);
   }
@@ -51,7 +58,7 @@ class RecentsDao extends DatabaseAccessor<AppDatabase> with _$RecentsDaoMixin {
       leftOuterJoin(contactsTable, contactsTable.id.equalsExp(contactPhonesTable.contactId)),
       leftOuterJoin(contactEmailsTable, contactEmailsTable.contactId.equalsExp(contactsTable.id)),
       leftOuterJoin(presenceInfoTable, presenceInfoTable.number.equalsExp(contactPhonesTable.number)),
-    ]);
+    ])..orderBy(contactsTable.sourcePriorityOrder());
     return q.get().then((rows) => _rowsToRecent(rows).first);
   }
 
