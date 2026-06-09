@@ -48,14 +48,25 @@ class _TeardownScreenState extends State<TeardownScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Reason is still set while teardown renders (AppBloc clears it only at the
+    // end of cleanup, when this screen is already being replaced by login).
+    final reason = context.read<AppBloc>().state.logoutReason;
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
+            const CircularProgressIndicator(),
+            const SizedBox(height: 16),
             Text(context.l10n.session_Teardown_progressText),
+            if (reason == AppLogoutReason.userNotFound) ...[
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Text(context.l10n.notifications_errorSnackBar_accountNotFound, textAlign: TextAlign.center),
+              ),
+            ],
           ],
         ),
       ),

@@ -13,12 +13,27 @@ import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_s
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/session_status/view/teardown_screen.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 
 // ---------------------------------------------------------------------------
 // Fakes / Mocks
 // ---------------------------------------------------------------------------
 
 class _MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
+
+/// [AppState] requires a [ThemeSettings], but [TeardownScreen.build] never reads
+/// it (only [AppState.logoutReason]), so a fake placeholder is enough.
+class _FakeThemeSettings extends Fake implements ThemeSettings {}
+
+AppState _appState({AppLogoutReason? logoutReason}) => AppState(
+  logoutReason: logoutReason,
+  themeSettings: _FakeThemeSettings(),
+  themeMode: ThemeMode.system,
+  locale: const Locale('en'),
+  userAgreementStatus: AgreementStatus.accepted,
+  contactsAgreementStatus: AgreementStatus.accepted,
+);
 
 /// Fake platform that records the order in which operations are invoked.
 /// Shared [callLog] lets tests verify ordering across stopService and add().
@@ -55,6 +70,7 @@ void main() {
 
   setUp(() {
     appBloc = _MockAppBloc();
+    when(() => appBloc.state).thenReturn(_appState());
     platform = _FakePlatform();
     SignalingServicePlatform.instance = platform;
   });
@@ -84,6 +100,24 @@ void main() {
       await tester.pump();
 
       expect(platform.callLog, ['stopService', 'AppCleanupRequested']);
+    });
+
+    testWidgets('shows the account-not-found message when logoutReason is userNotFound', (tester) async {
+      when(() => appBloc.state).thenReturn(_appState(logoutReason: AppLogoutReason.userNotFound));
+
+      await tester.pumpWidget(_buildSubject(appBloc));
+
+      final context = tester.element(find.byType(TeardownScreen));
+      expect(find.text(context.l10n.notifications_errorSnackBar_accountNotFound), findsOneWidget);
+    });
+
+    testWidgets('does not show the account-not-found message for other logout reasons', (tester) async {
+      when(() => appBloc.state).thenReturn(_appState(logoutReason: AppLogoutReason.userRequest));
+
+      await tester.pumpWidget(_buildSubject(appBloc));
+
+      final context = tester.element(find.byType(TeardownScreen));
+      expect(find.text(context.l10n.notifications_errorSnackBar_accountNotFound), findsNothing);
     });
   });
 }
