@@ -50,6 +50,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// reading from a potentially deactivated [BuildContext].
   late final AppBloc _appBloc;
 
+  /// Captured in [initState] so the session-guard callbacks can submit
+  /// notifications without touching a possibly-deactivated [BuildContext].
+  late final NotificationsBloc _notificationsBloc;
+
   /// Created and connected in [initState] so that the WebSocket handshake
   /// runs in parallel while the widget tree and [CallBloc] are being built.
   /// Late subscribers (including [CallBloc]) receive all buffered session
@@ -104,21 +108,26 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       startPendingTimeout: kSignalingStartPendingTimeout,
     )..connect();
 
-    final notificationsBloc = context.read<NotificationsBloc>();
+    _notificationsBloc = context.read<NotificationsBloc>();
 
     _sessionGuard = RouterLogoutSessionGuard(
-      performLogout: (e) {
-        final reason = e is UserNotFoundException ? AppLogoutReason.userNotFound : AppLogoutReason.serverRejection;
-        _appBloc.add(AppLogoutRequested(reason: reason));
-      },
-      onPreLogout: (e) {
-        notificationsBloc.add(
-          NotificationsSubmitted(
-            e is UserNotFoundException ? const AccountNotFoundNotification() : const SessionExpiredNotification(),
-          ),
-        );
-      },
+      performLogout: _onSessionGuardLogout,
+      onPreLogout: _onSessionGuardPreLogout,
     );
+  }
+
+  /// Maps an unauthorized [Exception] to a logout reason and triggers logout.
+  void _onSessionGuardLogout(Exception e) {
+    final reason = e is UserNotFoundException ? AppLogoutReason.userNotFound : AppLogoutReason.serverRejection;
+    _appBloc.add(AppLogoutRequested(reason: reason));
+  }
+
+  /// Surfaces a reason-specific notification before the guard logs the user out.
+  void _onSessionGuardPreLogout(Exception e) {
+    final notification = e is UserNotFoundException
+        ? const AccountNotFoundNotification()
+        : const SessionExpiredNotification();
+    _notificationsBloc.add(NotificationsSubmitted(notification));
   }
 
   @override

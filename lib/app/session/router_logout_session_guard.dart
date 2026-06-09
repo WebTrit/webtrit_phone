@@ -70,7 +70,7 @@ class RouterLogoutSessionGuard implements SessionGuard, Disposable {
     try {
       await hook(e);
     } catch (err, st) {
-      _log.warning('onBeforeLogout failed', err, st);
+      _log.warning('onPreLogout failed', err, st);
     }
   }
 

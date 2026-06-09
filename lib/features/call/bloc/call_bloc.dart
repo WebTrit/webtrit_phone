@@ -501,16 +501,31 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// Resolves why the session was invalidated and triggers the forced logout
   /// with that reason, so the teardown UI can show a specific message.
   Future<void> _invalidateSession() async {
-    onSessionInvalidated(await _resolveInvalidationReason());
+    try {
+      final reason = await _resolveInvalidationReason();
+      // A null reason means the probe hit an auth error the session guard
+      // already owns (it dispatches its own, more specific logout) - avoid a
+      // second, conflicting AppLogoutRequested.
+      if (reason != null) onSessionInvalidated(reason);
+    } catch (e, st) {
+      _logger.warning('Session invalidation handling failed', e, st);
+    }
   }
 
   // TODO: Consider moving this probe to a separate repository
-  Future<SignalingSessionInvalidationReason> _resolveInvalidationReason() async {
+  Future<SignalingSessionInvalidationReason?> _resolveInvalidationReason() async {
     try {
       await userRepository.getRemoteInfo();
     } on PasswordChangeRequiredException {
       _logger.info('Account session revoked: password change required');
       return SignalingSessionInvalidationReason.passwordChangeRequired;
+    } on UnauthorizedException catch (_) {
+      // Handled by the session guard inside getInfo(); it drives the logout.
+      return null;
+    } on UserNotFoundException catch (_) {
+      return null;
+    } on SessionMissingException catch (_) {
+      return null;
     } on RequestFailure catch (e) {
       _logger.warning('Account error code: ${e.error?.code}');
     } catch (e, st) {
