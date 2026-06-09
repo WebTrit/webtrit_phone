@@ -161,22 +161,49 @@ class _CallInfoState extends State<CallInfo> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-        if (widget.networkQuality != null && widget.iceConnectionIssue == null)
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 6,
-            children: [
-              Text(statusMessage, style: statusTextStyle),
-              CallNetworkQualityMeter(quality: widget.networkQuality!, baseColor: statusTextStyle?.color),
-            ],
-          )
-        else
-          Text(statusMessage, style: statusTextStyle),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 6,
+          children: [
+            Text(statusMessage, style: statusTextStyle),
+            // Smoothly fade/grow the network-quality meter in and out, and
+            // cross-fade between severity/direction/recovered states. Keyed by
+            // the full meter signature so every transition animates; a real ICE
+            // failure suppresses it (the failure text owns the next line).
+            RepaintBoundary(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                switchInCurve: Curves.easeOut,
+                switchOutCurve: Curves.easeIn,
+                transitionBuilder: (child, animation) => FadeTransition(
+                  opacity: animation,
+                  child: SizeTransition(axis: Axis.horizontal, sizeFactor: animation, child: child),
+                ),
+                child: _buildMeterSlot(statusTextStyle?.color),
+              ),
+            ),
+          ],
+        ),
         if (processingStatus != null)
           Text(processingStatus, style: processingStatusTextStyle, textAlign: TextAlign.center)
         else if (iceConnectionIssue != null)
           Text(iceConnectionIssue, style: processingStatusTextStyle, textAlign: TextAlign.center),
       ],
+    );
+  }
+
+  /// The animated-switcher child: the meter keyed by its full state (so each
+  /// transition cross-fades), or an empty keyed box when there is nothing to
+  /// show (healthy media, or a real ICE failure that owns the status line).
+  Widget _buildMeterSlot(Color? baseColor) {
+    final quality = widget.networkQuality;
+    if (quality == null || widget.iceConnectionIssue != null) {
+      return const SizedBox.shrink(key: ValueKey('meter-none'));
+    }
+    return CallNetworkQualityMeter(
+      key: ValueKey('meter-${quality.severity}-${quality.uplink}-${quality.media}-${quality.recovered}'),
+      quality: quality,
+      baseColor: baseColor,
     );
   }
 
