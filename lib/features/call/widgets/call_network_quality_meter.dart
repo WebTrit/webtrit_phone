@@ -75,7 +75,7 @@ class CallNetworkQualityMeter extends StatelessWidget {
             const SizedBox(width: 4),
             Text(
               quality.severeLabel(context),
-              style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w500),
+              style: themeData.textTheme.labelMedium?.copyWith(color: color, fontWeight: FontWeight.w500),
             ),
           ],
         ],
