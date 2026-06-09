@@ -25,14 +25,21 @@ typedef LoginSuccessCallback = void Function(Session session, WebtritSystemInfo 
 final _logger = Logger('LoginCubit');
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit({required this.authRepository, required this.notificationsBloc, required this.onLoginSuccess})
-    : super(const LoginState());
+  LoginCubit({
+    required this.authRepository,
+    required this.notificationsBloc,
+    required this.onLoginSuccess,
+    this.signinOrder = const [],
+  }) : super(const LoginState());
 
   final AuthRepository authRepository;
 
   final LoginSuccessCallback onLoginSuccess;
 
   final NotificationsBloc notificationsBloc;
+
+  /// Configured order of the sign-in tabs, by login type name (from app config).
+  final List<String> signinOrder;
 
   // Environment getters
   String? get coreUrlFromEnvironment => EnvironmentConfig.CORE_URL;
@@ -93,10 +100,14 @@ class LoginCubit extends Cubit<LoginState> {
       }
 
       final supportedFeatures = systemInfo.adapter?.supported ?? [];
-      final supportedLoginTypes = supportedFeatures
+      final parsedLoginTypes = supportedFeatures
           .where((f) => LoginType.values.map((e) => e.name).contains(f))
           .map((f) => LoginType.values.byName(f))
           .toList();
+      // Backend may list the options in an unstable order; impose a deterministic
+      // client-side order (driven by app config) so the login tabs do not jump
+      // around between requests.
+      final supportedLoginTypes = sortLoginTypes(parsedLoginTypes, orderConfig: signinOrder);
       if (demo) supportedLoginTypes.removeWhere((loginType) => loginType != LoginType.signup);
 
       if (supportedLoginTypes.isEmpty) {

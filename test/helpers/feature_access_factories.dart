@@ -59,6 +59,7 @@ AppConfig createMockAppConfig() {
 
   when(() => login.modeSelect).thenReturn(loginModeSelect);
   when(() => loginModeSelect.actions).thenReturn([]);
+  when(() => login.signinOrder).thenReturn(const ['passwordSignin', 'otpSignin', 'signup']);
   when(() => login.common).thenReturn(const AppConfigLoginCommon());
 
   when(() => main.bottomMenu).thenReturn(bottomMenu);
