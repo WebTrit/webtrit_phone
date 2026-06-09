@@ -52,11 +52,10 @@ class CallNetworkQualityMeter extends StatelessWidget {
 
     final directionIcon = quality.uplink ? Icons.north : Icons.south;
     final mediaIcon = quality.media == CallMediaKind.video ? Icons.videocam : Icons.mic;
+    final showLabel = quality.severity == CallNetworkQualitySeverity.severe;
 
-    // Icon-only on purpose: the meter must keep a small, roughly constant
-    // footprint so it never reflows the FittedBox'd call header (which would
-    // jolt the centered timer). The descriptive label is exposed to assistive
-    // tech via Semantics instead of taking horizontal space.
+    // The meter sits on its own centered line below the timer, so it may carry
+    // the descriptive label (at severe) without shifting the timer sideways.
     return Semantics(
       label: quality.severeLabel(context),
       child: Row(
@@ -66,6 +65,13 @@ class CallNetworkQualityMeter extends StatelessWidget {
           const SizedBox(width: 4),
           Icon(directionIcon, size: _glyphSize, color: color),
           Icon(mediaIcon, size: _glyphSize, color: color),
+          if (showLabel) ...[
+            const SizedBox(width: 4),
+            Text(
+              quality.severeLabel(context),
+              style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w500),
+            ),
+          ],
         ],
       ),
     );

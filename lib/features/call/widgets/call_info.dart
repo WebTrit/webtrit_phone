@@ -161,27 +161,31 @@ class _CallInfoState extends State<CallInfo> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-        // Timer + a FIXED-SIZE reserved meter slot directly below it. Keeping
-        // the slot's footprint constant across all states (healthy / mild /
-        // moderate / severe / recovered) means the surrounding FittedBox never
-        // rescales, so the centered timer never shifts. The icon-only meter
-        // just fades and cross-fades inside the fixed slot.
+        // Timer stays alone and centered; the network-quality meter lives on
+        // its OWN centered line directly below it. Because it is a separate
+        // centered line (not beside the timer), its width never pushes the
+        // timer sideways. It fades + grows in/out and cross-fades between
+        // states; a real ICE failure suppresses it (failure text owns the next
+        // line).
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(statusMessage, style: statusTextStyle),
-            SizedBox(
-              height: 18,
-              width: 60,
-              child: Center(
-                child: RepaintBoundary(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 250),
-                    switchInCurve: Curves.easeOut,
-                    switchOutCurve: Curves.easeIn,
-                    child: _buildMeterSlot(statusTextStyle?.color),
+            RepaintBoundary(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                switchInCurve: Curves.easeOut,
+                switchOutCurve: Curves.easeIn,
+                transitionBuilder: (child, animation) => FadeTransition(
+                  opacity: animation,
+                  child: SizeTransition(
+                    axis: Axis.vertical,
+                    alignment: Alignment.topCenter,
+                    sizeFactor: animation,
+                    child: child,
                   ),
                 ),
+                child: _buildMeterSlot(statusTextStyle?.color),
               ),
             ),
           ],
