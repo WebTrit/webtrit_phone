@@ -3694,6 +3694,9 @@ class $ChatMembersTableTable extends ChatMembersTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES chats (id) ON DELETE CASCADE',
+    ),
   );
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
@@ -4031,6 +4034,9 @@ class $ChatMessagesTableTable extends ChatMessagesTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES chats (id) ON DELETE CASCADE',
+    ),
   );
   static const VerificationMeta _replyToIdMeta = const VerificationMeta(
     'replyToId',
@@ -4731,6 +4737,9 @@ class $ChatMessageSyncCursorTableTable extends ChatMessageSyncCursorTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES chats (id) ON DELETE CASCADE',
+    ),
   );
   @override
   late final GeneratedColumnWithTypeConverter<MessageSyncCursorTypeEnum, String>
@@ -5026,6 +5035,9 @@ class $ChatMessageReadCursorTableTable extends ChatMessageReadCursorTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES chats (id) ON DELETE CASCADE',
+    ),
   );
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
@@ -5312,6 +5324,9 @@ class $ChatOutboxMessageTableTable extends ChatOutboxMessageTable
     true,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES chats (id) ON DELETE CASCADE',
+    ),
   );
   static const VerificationMeta _participantIdMeta = const VerificationMeta(
     'participantId',
@@ -5859,6 +5874,9 @@ class $ChatOutboxMessageEditTableTable extends ChatOutboxMessageEditTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES chats (id) ON DELETE CASCADE',
+    ),
   );
   static const VerificationMeta _newContentMeta = const VerificationMeta(
     'newContent',
@@ -6219,6 +6237,9 @@ class $ChatOutboxMessageDeleteTableTable extends ChatOutboxMessageDeleteTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES chats (id) ON DELETE CASCADE',
+    ),
   );
   static const VerificationMeta _sendAttemptsMeta = const VerificationMeta(
     'sendAttempts',
@@ -6503,6 +6524,9 @@ class $ChatOutboxReadCursorsTableTable extends ChatOutboxReadCursorsTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES chats (id) ON DELETE CASCADE',
+    ),
   );
   static const VerificationMeta _timestampUsecMeta = const VerificationMeta(
     'timestampUsec',
@@ -7181,6 +7205,9 @@ class $SmsMessagesTableTable extends SmsMessagesTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES sms_conversations (id) ON DELETE CASCADE',
+    ),
   );
   static const VerificationMeta _fromPhoneNumberMeta = const VerificationMeta(
     'fromPhoneNumber',
@@ -7848,6 +7875,9 @@ class $SmsMessageSyncCursorTableTable extends SmsMessageSyncCursorTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES sms_conversations (id) ON DELETE CASCADE',
+    ),
   );
   @override
   late final GeneratedColumnWithTypeConverter<SmsSyncCursorTypeEnum, String>
@@ -8152,6 +8182,9 @@ class $SmsMessageReadCursorTableTable extends SmsMessageReadCursorTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES sms_conversations (id) ON DELETE CASCADE',
+    ),
   );
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
@@ -8445,6 +8478,9 @@ class $SmsOutboxMessagesTableTable extends SmsOutboxMessagesTable
     true,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES sms_conversations (id) ON DELETE CASCADE',
+    ),
   );
   static const VerificationMeta _fromPhoneNumberMeta = const VerificationMeta(
     'fromPhoneNumber',
@@ -8954,6 +8990,9 @@ class $SmsOutboxMessageDeleteTableTable extends SmsOutboxMessageDeleteTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES sms_conversations (id) ON DELETE CASCADE',
+    ),
   );
   static const VerificationMeta _sendAttemptsMeta = const VerificationMeta(
     'sendAttempts',
@@ -9250,6 +9289,9 @@ class $SmsOutboxReadCursorsTableTable extends SmsOutboxReadCursorsTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES sms_conversations (id) ON DELETE CASCADE',
+    ),
   );
   static const VerificationMeta _timestampUsecMeta = const VerificationMeta(
     'timestampUsec',
@@ -11985,6 +12027,9 @@ class $SystemNotificationsOutboxTableTable
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES system_notifications (id) ON DELETE CASCADE',
+    ),
   );
   @override
   late final GeneratedColumnWithTypeConverter<SnOutboxDataActionType, String>
@@ -13829,7 +13874,6 @@ class $CdrTableTable extends CdrTable
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
   @override
   late final GeneratedColumnWithTypeConverter<CallDirectionData, String>
@@ -14711,6 +14755,143 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       ),
       result: [TableUpdate('contact_phones', kind: UpdateKind.delete)],
     ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'contacts',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('contact_emails', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'contact_phones',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('favorites', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('chat_members', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('chat_messages', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('chat_message_sync_cursors', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('chat_message_read_cursors', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('chat_outbox_messages', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('chat_outbox_message_edits', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('chat_outbox_message_deletes', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'chats',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('chat_outbox_read_cursors', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sms_conversations',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('sms_messages', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sms_conversations',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('sms_message_sync_cursors', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sms_conversations',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('sms_message_read_cursors', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sms_conversations',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('sms_outbox_messages', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sms_conversations',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('sms_outbox_message_deletes', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sms_conversations',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('sms_outbox_read_cursors', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'system_notifications',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('system_notifications_outbox', kind: UpdateKind.delete),
+      ],
+    ),
   ]);
 }
 
@@ -14773,6 +14954,30 @@ final class $$ContactsTableTableReferences
 
     final cache = $_typedResult.readTableOrNull(
       _contactPhonesTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$ContactEmailsTableTable, List<ContactEmailData>>
+  _contactEmailsTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.contactEmailsTable,
+        aliasName: $_aliasNameGenerator(
+          db.contactsTable.id,
+          db.contactEmailsTable.contactId,
+        ),
+      );
+
+  $$ContactEmailsTableTableProcessedTableManager get contactEmailsTableRefs {
+    final manager = $$ContactEmailsTableTableTableManager(
+      $_db,
+      $_db.contactEmailsTable,
+    ).filter((f) => f.contactId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _contactEmailsTableRefsTable($_db),
     );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
@@ -14876,6 +15081,31 @@ class $$ContactsTableTableFilterComposer
           }) => $$ContactPhonesTableTableFilterComposer(
             $db: $db,
             $table: $db.contactPhonesTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> contactEmailsTableRefs(
+    Expression<bool> Function($$ContactEmailsTableTableFilterComposer f) f,
+  ) {
+    final $$ContactEmailsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.contactEmailsTable,
+      getReferencedColumn: (t) => t.contactId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ContactEmailsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.contactEmailsTable,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -15045,6 +15275,32 @@ class $$ContactsTableTableAnnotationComposer
         );
     return f(composer);
   }
+
+  Expression<T> contactEmailsTableRefs<T extends Object>(
+    Expression<T> Function($$ContactEmailsTableTableAnnotationComposer a) f,
+  ) {
+    final $$ContactEmailsTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.contactEmailsTable,
+          getReferencedColumn: (t) => t.contactId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ContactEmailsTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.contactEmailsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$ContactsTableTableTableManager
@@ -15060,7 +15316,10 @@ class $$ContactsTableTableTableManager
           $$ContactsTableTableUpdateCompanionBuilder,
           (ContactData, $$ContactsTableTableReferences),
           ContactData,
-          PrefetchHooks Function({bool contactPhonesTableRefs})
+          PrefetchHooks Function({
+            bool contactPhonesTableRefs,
+            bool contactEmailsTableRefs,
+          })
         > {
   $$ContactsTableTableTableManager(_$AppDatabase db, $ContactsTableTable table)
     : super(
@@ -15141,38 +15400,66 @@ class $$ContactsTableTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({contactPhonesTableRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (contactPhonesTableRefs) db.contactPhonesTable,
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (contactPhonesTableRefs)
-                    await $_getPrefetchedData<
-                      ContactData,
-                      $ContactsTableTable,
-                      ContactPhoneData
-                    >(
-                      currentTable: table,
-                      referencedTable: $$ContactsTableTableReferences
-                          ._contactPhonesTableRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$ContactsTableTableReferences(
-                            db,
-                            table,
-                            p0,
-                          ).contactPhonesTableRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.contactId == item.id),
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({
+                contactPhonesTableRefs = false,
+                contactEmailsTableRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (contactPhonesTableRefs) db.contactPhonesTable,
+                    if (contactEmailsTableRefs) db.contactEmailsTable,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (contactPhonesTableRefs)
+                        await $_getPrefetchedData<
+                          ContactData,
+                          $ContactsTableTable,
+                          ContactPhoneData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ContactsTableTableReferences
+                              ._contactPhonesTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ContactsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).contactPhonesTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.contactId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (contactEmailsTableRefs)
+                        await $_getPrefetchedData<
+                          ContactData,
+                          $ContactsTableTable,
+                          ContactEmailData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ContactsTableTableReferences
+                              ._contactEmailsTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ContactsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).contactEmailsTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.contactId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -15189,7 +15476,10 @@ typedef $$ContactsTableTableProcessedTableManager =
       $$ContactsTableTableUpdateCompanionBuilder,
       (ContactData, $$ContactsTableTableReferences),
       ContactData,
-      PrefetchHooks Function({bool contactPhonesTableRefs})
+      PrefetchHooks Function({
+        bool contactPhonesTableRefs,
+        bool contactEmailsTableRefs,
+      })
     >;
 typedef $$ContactPhonesTableTableCreateCompanionBuilder =
     ContactPhoneDataCompanion Function({
@@ -15242,6 +15532,27 @@ final class $$ContactPhonesTableTableReferences
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$FavoritesTableTable, List<FavoriteData>>
+  _favoritesTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.favoritesTable,
+    aliasName: $_aliasNameGenerator(
+      db.contactPhonesTable.id,
+      db.favoritesTable.contactPhoneId,
+    ),
+  );
+
+  $$FavoritesTableTableProcessedTableManager get favoritesTableRefs {
+    final manager = $$FavoritesTableTableTableManager(
+      $_db,
+      $_db.favoritesTable,
+    ).filter((f) => f.contactPhoneId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_favoritesTableRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
     );
   }
 }
@@ -15301,6 +15612,31 @@ class $$ContactPhonesTableTableFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> favoritesTableRefs(
+    Expression<bool> Function($$FavoritesTableTableFilterComposer f) f,
+  ) {
+    final $$FavoritesTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.favoritesTable,
+      getReferencedColumn: (t) => t.contactPhoneId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FavoritesTableTableFilterComposer(
+            $db: $db,
+            $table: $db.favoritesTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 }
 
@@ -15410,6 +15746,31 @@ class $$ContactPhonesTableTableAnnotationComposer
     );
     return composer;
   }
+
+  Expression<T> favoritesTableRefs<T extends Object>(
+    Expression<T> Function($$FavoritesTableTableAnnotationComposer a) f,
+  ) {
+    final $$FavoritesTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.favoritesTable,
+      getReferencedColumn: (t) => t.contactPhoneId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FavoritesTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.favoritesTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$ContactPhonesTableTableTableManager
@@ -15425,7 +15786,7 @@ class $$ContactPhonesTableTableTableManager
           $$ContactPhonesTableTableUpdateCompanionBuilder,
           (ContactPhoneData, $$ContactPhonesTableTableReferences),
           ContactPhoneData,
-          PrefetchHooks Function({bool contactId})
+          PrefetchHooks Function({bool contactId, bool favoritesTableRefs})
         > {
   $$ContactPhonesTableTableTableManager(
     _$AppDatabase db,
@@ -15483,49 +15844,74 @@ class $$ContactPhonesTableTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({contactId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (contactId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.contactId,
-                                referencedTable:
-                                    $$ContactPhonesTableTableReferences
-                                        ._contactIdTable(db),
-                                referencedColumn:
-                                    $$ContactPhonesTableTableReferences
-                                        ._contactIdTable(db)
-                                        .id,
-                              )
-                              as T;
-                    }
+          prefetchHooksCallback:
+              ({contactId = false, favoritesTableRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (favoritesTableRefs) db.favoritesTable,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (contactId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.contactId,
+                                    referencedTable:
+                                        $$ContactPhonesTableTableReferences
+                                            ._contactIdTable(db),
+                                    referencedColumn:
+                                        $$ContactPhonesTableTableReferences
+                                            ._contactIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (favoritesTableRefs)
+                        await $_getPrefetchedData<
+                          ContactPhoneData,
+                          $ContactPhonesTableTable,
+                          FavoriteData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ContactPhonesTableTableReferences
+                              ._favoritesTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ContactPhonesTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).favoritesTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.contactPhoneId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [];
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -15542,7 +15928,7 @@ typedef $$ContactPhonesTableTableProcessedTableManager =
       $$ContactPhonesTableTableUpdateCompanionBuilder,
       (ContactPhoneData, $$ContactPhonesTableTableReferences),
       ContactPhoneData,
-      PrefetchHooks Function({bool contactId})
+      PrefetchHooks Function({bool contactId, bool favoritesTableRefs})
     >;
 typedef $$ContactEmailsTableTableCreateCompanionBuilder =
     ContactEmailDataCompanion Function({
@@ -15562,6 +15948,42 @@ typedef $$ContactEmailsTableTableUpdateCompanionBuilder =
       Value<DateTime?> insertedAt,
       Value<DateTime?> updatedAt,
     });
+
+final class $$ContactEmailsTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $ContactEmailsTableTable,
+          ContactEmailData
+        > {
+  $$ContactEmailsTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ContactsTableTable _contactIdTable(_$AppDatabase db) =>
+      db.contactsTable.createAlias(
+        $_aliasNameGenerator(
+          db.contactEmailsTable.contactId,
+          db.contactsTable.id,
+        ),
+      );
+
+  $$ContactsTableTableProcessedTableManager get contactId {
+    final $_column = $_itemColumn<int>('contact_id')!;
+
+    final manager = $$ContactsTableTableTableManager(
+      $_db,
+      $_db.contactsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_contactIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
 
 class $$ContactEmailsTableTableFilterComposer
     extends Composer<_$AppDatabase, $ContactEmailsTableTable> {
@@ -15587,11 +16009,6 @@ class $$ContactEmailsTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get contactId => $composableBuilder(
-    column: $table.contactId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<DateTime> get insertedAt => $composableBuilder(
     column: $table.insertedAt,
     builder: (column) => ColumnFilters(column),
@@ -15601,6 +16018,29 @@ class $$ContactEmailsTableTableFilterComposer
     column: $table.updatedAt,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$ContactsTableTableFilterComposer get contactId {
+    final $$ContactsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.contactId,
+      referencedTable: $db.contactsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ContactsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.contactsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ContactEmailsTableTableOrderingComposer
@@ -15627,11 +16067,6 @@ class $$ContactEmailsTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get contactId => $composableBuilder(
-    column: $table.contactId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<DateTime> get insertedAt => $composableBuilder(
     column: $table.insertedAt,
     builder: (column) => ColumnOrderings(column),
@@ -15641,6 +16076,29 @@ class $$ContactEmailsTableTableOrderingComposer
     column: $table.updatedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$ContactsTableTableOrderingComposer get contactId {
+    final $$ContactsTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.contactId,
+      referencedTable: $db.contactsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ContactsTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.contactsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ContactEmailsTableTableAnnotationComposer
@@ -15661,9 +16119,6 @@ class $$ContactEmailsTableTableAnnotationComposer
   GeneratedColumn<String> get label =>
       $composableBuilder(column: $table.label, builder: (column) => column);
 
-  GeneratedColumn<int> get contactId =>
-      $composableBuilder(column: $table.contactId, builder: (column) => column);
-
   GeneratedColumn<DateTime> get insertedAt => $composableBuilder(
     column: $table.insertedAt,
     builder: (column) => column,
@@ -15671,6 +16126,29 @@ class $$ContactEmailsTableTableAnnotationComposer
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$ContactsTableTableAnnotationComposer get contactId {
+    final $$ContactsTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.contactId,
+      referencedTable: $db.contactsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ContactsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.contactsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ContactEmailsTableTableTableManager
@@ -15684,16 +16162,9 @@ class $$ContactEmailsTableTableTableManager
           $$ContactEmailsTableTableAnnotationComposer,
           $$ContactEmailsTableTableCreateCompanionBuilder,
           $$ContactEmailsTableTableUpdateCompanionBuilder,
-          (
-            ContactEmailData,
-            BaseReferences<
-              _$AppDatabase,
-              $ContactEmailsTableTable,
-              ContactEmailData
-            >,
-          ),
+          (ContactEmailData, $$ContactEmailsTableTableReferences),
           ContactEmailData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool contactId})
         > {
   $$ContactEmailsTableTableTableManager(
     _$AppDatabase db,
@@ -15744,9 +16215,56 @@ class $$ContactEmailsTableTableTableManager
                 updatedAt: updatedAt,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ContactEmailsTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({contactId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (contactId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.contactId,
+                                referencedTable:
+                                    $$ContactEmailsTableTableReferences
+                                        ._contactIdTable(db),
+                                referencedColumn:
+                                    $$ContactEmailsTableTableReferences
+                                        ._contactIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -15761,16 +16279,9 @@ typedef $$ContactEmailsTableTableProcessedTableManager =
       $$ContactEmailsTableTableAnnotationComposer,
       $$ContactEmailsTableTableCreateCompanionBuilder,
       $$ContactEmailsTableTableUpdateCompanionBuilder,
-      (
-        ContactEmailData,
-        BaseReferences<
-          _$AppDatabase,
-          $ContactEmailsTableTable,
-          ContactEmailData
-        >,
-      ),
+      (ContactEmailData, $$ContactEmailsTableTableReferences),
       ContactEmailData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool contactId})
     >;
 typedef $$CallLogsTableTableCreateCompanionBuilder =
     CallLogDataCompanion Function({
@@ -16043,6 +16554,37 @@ typedef $$FavoritesTableTableUpdateCompanionBuilder =
       Value<int> position,
     });
 
+final class $$FavoritesTableTableReferences
+    extends BaseReferences<_$AppDatabase, $FavoritesTableTable, FavoriteData> {
+  $$FavoritesTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ContactPhonesTableTable _contactPhoneIdTable(_$AppDatabase db) =>
+      db.contactPhonesTable.createAlias(
+        $_aliasNameGenerator(
+          db.favoritesTable.contactPhoneId,
+          db.contactPhonesTable.id,
+        ),
+      );
+
+  $$ContactPhonesTableTableProcessedTableManager get contactPhoneId {
+    final $_column = $_itemColumn<int>('contact_phone_id')!;
+
+    final manager = $$ContactPhonesTableTableTableManager(
+      $_db,
+      $_db.contactPhonesTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_contactPhoneIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$FavoritesTableTableFilterComposer
     extends Composer<_$AppDatabase, $FavoritesTableTable> {
   $$FavoritesTableTableFilterComposer({
@@ -16057,15 +16599,33 @@ class $$FavoritesTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get contactPhoneId => $composableBuilder(
-    column: $table.contactPhoneId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<int> get position => $composableBuilder(
     column: $table.position,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$ContactPhonesTableTableFilterComposer get contactPhoneId {
+    final $$ContactPhonesTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.contactPhoneId,
+      referencedTable: $db.contactPhonesTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ContactPhonesTableTableFilterComposer(
+            $db: $db,
+            $table: $db.contactPhonesTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$FavoritesTableTableOrderingComposer
@@ -16082,15 +16642,33 @@ class $$FavoritesTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get contactPhoneId => $composableBuilder(
-    column: $table.contactPhoneId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<int> get position => $composableBuilder(
     column: $table.position,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$ContactPhonesTableTableOrderingComposer get contactPhoneId {
+    final $$ContactPhonesTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.contactPhoneId,
+      referencedTable: $db.contactPhonesTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ContactPhonesTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.contactPhonesTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$FavoritesTableTableAnnotationComposer
@@ -16105,13 +16683,32 @@ class $$FavoritesTableTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<int> get contactPhoneId => $composableBuilder(
-    column: $table.contactPhoneId,
-    builder: (column) => column,
-  );
-
   GeneratedColumn<int> get position =>
       $composableBuilder(column: $table.position, builder: (column) => column);
+
+  $$ContactPhonesTableTableAnnotationComposer get contactPhoneId {
+    final $$ContactPhonesTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.contactPhoneId,
+          referencedTable: $db.contactPhonesTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ContactPhonesTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.contactPhonesTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$FavoritesTableTableTableManager
@@ -16125,12 +16722,9 @@ class $$FavoritesTableTableTableManager
           $$FavoritesTableTableAnnotationComposer,
           $$FavoritesTableTableCreateCompanionBuilder,
           $$FavoritesTableTableUpdateCompanionBuilder,
-          (
-            FavoriteData,
-            BaseReferences<_$AppDatabase, $FavoritesTableTable, FavoriteData>,
-          ),
+          (FavoriteData, $$FavoritesTableTableReferences),
           FavoriteData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool contactPhoneId})
         > {
   $$FavoritesTableTableTableManager(
     _$AppDatabase db,
@@ -16166,9 +16760,55 @@ class $$FavoritesTableTableTableManager
                 position: position,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$FavoritesTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({contactPhoneId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (contactPhoneId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.contactPhoneId,
+                                referencedTable: $$FavoritesTableTableReferences
+                                    ._contactPhoneIdTable(db),
+                                referencedColumn:
+                                    $$FavoritesTableTableReferences
+                                        ._contactPhoneIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -16183,12 +16823,9 @@ typedef $$FavoritesTableTableProcessedTableManager =
       $$FavoritesTableTableAnnotationComposer,
       $$FavoritesTableTableCreateCompanionBuilder,
       $$FavoritesTableTableUpdateCompanionBuilder,
-      (
-        FavoriteData,
-        BaseReferences<_$AppDatabase, $FavoritesTableTable, FavoriteData>,
-      ),
+      (FavoriteData, $$FavoritesTableTableReferences),
       FavoriteData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool contactPhoneId})
     >;
 typedef $$FavoritesOutboxTableTableCreateCompanionBuilder =
     FavoriteOutboxEntryDataCompanion Function({
@@ -16712,6 +17349,226 @@ typedef $$ChatsTableTableUpdateCompanionBuilder =
       Value<DateTime> updatedAtRemote,
     });
 
+final class $$ChatsTableTableReferences
+    extends BaseReferences<_$AppDatabase, $ChatsTableTable, ChatData> {
+  $$ChatsTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$ChatMembersTableTable, List<ChatMemberData>>
+  _chatMembersTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.chatMembersTable,
+    aliasName: $_aliasNameGenerator(
+      db.chatsTable.id,
+      db.chatMembersTable.chatId,
+    ),
+  );
+
+  $$ChatMembersTableTableProcessedTableManager get chatMembersTableRefs {
+    final manager = $$ChatMembersTableTableTableManager(
+      $_db,
+      $_db.chatMembersTable,
+    ).filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _chatMembersTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$ChatMessagesTableTable, List<ChatMessageData>>
+  _chatMessagesTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.chatMessagesTable,
+        aliasName: $_aliasNameGenerator(
+          db.chatsTable.id,
+          db.chatMessagesTable.chatId,
+        ),
+      );
+
+  $$ChatMessagesTableTableProcessedTableManager get chatMessagesTableRefs {
+    final manager = $$ChatMessagesTableTableTableManager(
+      $_db,
+      $_db.chatMessagesTable,
+    ).filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _chatMessagesTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $ChatMessageSyncCursorTableTable,
+    List<ChatMessageSyncCursorData>
+  >
+  _chatMessageSyncCursorTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.chatMessageSyncCursorTable,
+        aliasName: $_aliasNameGenerator(
+          db.chatsTable.id,
+          db.chatMessageSyncCursorTable.chatId,
+        ),
+      );
+
+  $$ChatMessageSyncCursorTableTableProcessedTableManager
+  get chatMessageSyncCursorTableRefs {
+    final manager = $$ChatMessageSyncCursorTableTableTableManager(
+      $_db,
+      $_db.chatMessageSyncCursorTable,
+    ).filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _chatMessageSyncCursorTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $ChatMessageReadCursorTableTable,
+    List<ChatMessageReadCursorData>
+  >
+  _chatMessageReadCursorTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.chatMessageReadCursorTable,
+        aliasName: $_aliasNameGenerator(
+          db.chatsTable.id,
+          db.chatMessageReadCursorTable.chatId,
+        ),
+      );
+
+  $$ChatMessageReadCursorTableTableProcessedTableManager
+  get chatMessageReadCursorTableRefs {
+    final manager = $$ChatMessageReadCursorTableTableTableManager(
+      $_db,
+      $_db.chatMessageReadCursorTable,
+    ).filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _chatMessageReadCursorTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $ChatOutboxMessageTableTable,
+    List<ChatOutboxMessageData>
+  >
+  _chatOutboxMessageTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.chatOutboxMessageTable,
+        aliasName: $_aliasNameGenerator(
+          db.chatsTable.id,
+          db.chatOutboxMessageTable.chatId,
+        ),
+      );
+
+  $$ChatOutboxMessageTableTableProcessedTableManager
+  get chatOutboxMessageTableRefs {
+    final manager = $$ChatOutboxMessageTableTableTableManager(
+      $_db,
+      $_db.chatOutboxMessageTable,
+    ).filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _chatOutboxMessageTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $ChatOutboxMessageEditTableTable,
+    List<ChatOutboxMessageEditData>
+  >
+  _chatOutboxMessageEditTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.chatOutboxMessageEditTable,
+        aliasName: $_aliasNameGenerator(
+          db.chatsTable.id,
+          db.chatOutboxMessageEditTable.chatId,
+        ),
+      );
+
+  $$ChatOutboxMessageEditTableTableProcessedTableManager
+  get chatOutboxMessageEditTableRefs {
+    final manager = $$ChatOutboxMessageEditTableTableTableManager(
+      $_db,
+      $_db.chatOutboxMessageEditTable,
+    ).filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _chatOutboxMessageEditTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $ChatOutboxMessageDeleteTableTable,
+    List<ChatOutboxMessageDeleteData>
+  >
+  _chatOutboxMessageDeleteTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.chatOutboxMessageDeleteTable,
+        aliasName: $_aliasNameGenerator(
+          db.chatsTable.id,
+          db.chatOutboxMessageDeleteTable.chatId,
+        ),
+      );
+
+  $$ChatOutboxMessageDeleteTableTableProcessedTableManager
+  get chatOutboxMessageDeleteTableRefs {
+    final manager = $$ChatOutboxMessageDeleteTableTableTableManager(
+      $_db,
+      $_db.chatOutboxMessageDeleteTable,
+    ).filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _chatOutboxMessageDeleteTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $ChatOutboxReadCursorsTableTable,
+    List<ChatOutboxReadCursorData>
+  >
+  _chatOutboxReadCursorsTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.chatOutboxReadCursorsTable,
+        aliasName: $_aliasNameGenerator(
+          db.chatsTable.id,
+          db.chatOutboxReadCursorsTable.chatId,
+        ),
+      );
+
+  $$ChatOutboxReadCursorsTableTableProcessedTableManager
+  get chatOutboxReadCursorsTableRefs {
+    final manager = $$ChatOutboxReadCursorsTableTableTableManager(
+      $_db,
+      $_db.chatOutboxReadCursorsTable,
+    ).filter((f) => f.chatId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _chatOutboxReadCursorsTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
 class $$ChatsTableTableFilterComposer
     extends Composer<_$AppDatabase, $ChatsTableTable> {
   $$ChatsTableTableFilterComposer({
@@ -16746,6 +17603,219 @@ class $$ChatsTableTableFilterComposer
     column: $table.updatedAtRemote,
     builder: (column) => ColumnFilters(column),
   );
+
+  Expression<bool> chatMembersTableRefs(
+    Expression<bool> Function($$ChatMembersTableTableFilterComposer f) f,
+  ) {
+    final $$ChatMembersTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.chatMembersTable,
+      getReferencedColumn: (t) => t.chatId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatMembersTableTableFilterComposer(
+            $db: $db,
+            $table: $db.chatMembersTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> chatMessagesTableRefs(
+    Expression<bool> Function($$ChatMessagesTableTableFilterComposer f) f,
+  ) {
+    final $$ChatMessagesTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.chatMessagesTable,
+      getReferencedColumn: (t) => t.chatId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatMessagesTableTableFilterComposer(
+            $db: $db,
+            $table: $db.chatMessagesTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> chatMessageSyncCursorTableRefs(
+    Expression<bool> Function($$ChatMessageSyncCursorTableTableFilterComposer f)
+    f,
+  ) {
+    final $$ChatMessageSyncCursorTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatMessageSyncCursorTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatMessageSyncCursorTableTableFilterComposer(
+                $db: $db,
+                $table: $db.chatMessageSyncCursorTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<bool> chatMessageReadCursorTableRefs(
+    Expression<bool> Function($$ChatMessageReadCursorTableTableFilterComposer f)
+    f,
+  ) {
+    final $$ChatMessageReadCursorTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatMessageReadCursorTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatMessageReadCursorTableTableFilterComposer(
+                $db: $db,
+                $table: $db.chatMessageReadCursorTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<bool> chatOutboxMessageTableRefs(
+    Expression<bool> Function($$ChatOutboxMessageTableTableFilterComposer f) f,
+  ) {
+    final $$ChatOutboxMessageTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatOutboxMessageTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatOutboxMessageTableTableFilterComposer(
+                $db: $db,
+                $table: $db.chatOutboxMessageTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<bool> chatOutboxMessageEditTableRefs(
+    Expression<bool> Function($$ChatOutboxMessageEditTableTableFilterComposer f)
+    f,
+  ) {
+    final $$ChatOutboxMessageEditTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatOutboxMessageEditTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatOutboxMessageEditTableTableFilterComposer(
+                $db: $db,
+                $table: $db.chatOutboxMessageEditTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<bool> chatOutboxMessageDeleteTableRefs(
+    Expression<bool> Function(
+      $$ChatOutboxMessageDeleteTableTableFilterComposer f,
+    )
+    f,
+  ) {
+    final $$ChatOutboxMessageDeleteTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatOutboxMessageDeleteTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatOutboxMessageDeleteTableTableFilterComposer(
+                $db: $db,
+                $table: $db.chatOutboxMessageDeleteTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<bool> chatOutboxReadCursorsTableRefs(
+    Expression<bool> Function($$ChatOutboxReadCursorsTableTableFilterComposer f)
+    f,
+  ) {
+    final $$ChatOutboxReadCursorsTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatOutboxReadCursorsTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatOutboxReadCursorsTableTableFilterComposer(
+                $db: $db,
+                $table: $db.chatOutboxReadCursorsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$ChatsTableTableOrderingComposer
@@ -16810,6 +17880,228 @@ class $$ChatsTableTableAnnotationComposer
     column: $table.updatedAtRemote,
     builder: (column) => column,
   );
+
+  Expression<T> chatMembersTableRefs<T extends Object>(
+    Expression<T> Function($$ChatMembersTableTableAnnotationComposer a) f,
+  ) {
+    final $$ChatMembersTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.chatMembersTable,
+      getReferencedColumn: (t) => t.chatId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatMembersTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.chatMembersTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> chatMessagesTableRefs<T extends Object>(
+    Expression<T> Function($$ChatMessagesTableTableAnnotationComposer a) f,
+  ) {
+    final $$ChatMessagesTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatMessagesTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatMessagesTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.chatMessagesTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> chatMessageSyncCursorTableRefs<T extends Object>(
+    Expression<T> Function(
+      $$ChatMessageSyncCursorTableTableAnnotationComposer a,
+    )
+    f,
+  ) {
+    final $$ChatMessageSyncCursorTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatMessageSyncCursorTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatMessageSyncCursorTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.chatMessageSyncCursorTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> chatMessageReadCursorTableRefs<T extends Object>(
+    Expression<T> Function(
+      $$ChatMessageReadCursorTableTableAnnotationComposer a,
+    )
+    f,
+  ) {
+    final $$ChatMessageReadCursorTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatMessageReadCursorTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatMessageReadCursorTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.chatMessageReadCursorTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> chatOutboxMessageTableRefs<T extends Object>(
+    Expression<T> Function($$ChatOutboxMessageTableTableAnnotationComposer a) f,
+  ) {
+    final $$ChatOutboxMessageTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatOutboxMessageTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatOutboxMessageTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.chatOutboxMessageTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> chatOutboxMessageEditTableRefs<T extends Object>(
+    Expression<T> Function(
+      $$ChatOutboxMessageEditTableTableAnnotationComposer a,
+    )
+    f,
+  ) {
+    final $$ChatOutboxMessageEditTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatOutboxMessageEditTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatOutboxMessageEditTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.chatOutboxMessageEditTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> chatOutboxMessageDeleteTableRefs<T extends Object>(
+    Expression<T> Function(
+      $$ChatOutboxMessageDeleteTableTableAnnotationComposer a,
+    )
+    f,
+  ) {
+    final $$ChatOutboxMessageDeleteTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatOutboxMessageDeleteTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatOutboxMessageDeleteTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.chatOutboxMessageDeleteTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> chatOutboxReadCursorsTableRefs<T extends Object>(
+    Expression<T> Function(
+      $$ChatOutboxReadCursorsTableTableAnnotationComposer a,
+    )
+    f,
+  ) {
+    final $$ChatOutboxReadCursorsTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.chatOutboxReadCursorsTable,
+          getReferencedColumn: (t) => t.chatId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ChatOutboxReadCursorsTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.chatOutboxReadCursorsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$ChatsTableTableTableManager
@@ -16823,9 +18115,18 @@ class $$ChatsTableTableTableManager
           $$ChatsTableTableAnnotationComposer,
           $$ChatsTableTableCreateCompanionBuilder,
           $$ChatsTableTableUpdateCompanionBuilder,
-          (ChatData, BaseReferences<_$AppDatabase, $ChatsTableTable, ChatData>),
+          (ChatData, $$ChatsTableTableReferences),
           ChatData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({
+            bool chatMembersTableRefs,
+            bool chatMessagesTableRefs,
+            bool chatMessageSyncCursorTableRefs,
+            bool chatMessageReadCursorTableRefs,
+            bool chatOutboxMessageTableRefs,
+            bool chatOutboxMessageEditTableRefs,
+            bool chatOutboxMessageDeleteTableRefs,
+            bool chatOutboxReadCursorsTableRefs,
+          })
         > {
   $$ChatsTableTableTableManager(_$AppDatabase db, $ChatsTableTable table)
     : super(
@@ -16867,9 +18168,216 @@ class $$ChatsTableTableTableManager
                 updatedAtRemote: updatedAtRemote,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ChatsTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback:
+              ({
+                chatMembersTableRefs = false,
+                chatMessagesTableRefs = false,
+                chatMessageSyncCursorTableRefs = false,
+                chatMessageReadCursorTableRefs = false,
+                chatOutboxMessageTableRefs = false,
+                chatOutboxMessageEditTableRefs = false,
+                chatOutboxMessageDeleteTableRefs = false,
+                chatOutboxReadCursorsTableRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (chatMembersTableRefs) db.chatMembersTable,
+                    if (chatMessagesTableRefs) db.chatMessagesTable,
+                    if (chatMessageSyncCursorTableRefs)
+                      db.chatMessageSyncCursorTable,
+                    if (chatMessageReadCursorTableRefs)
+                      db.chatMessageReadCursorTable,
+                    if (chatOutboxMessageTableRefs) db.chatOutboxMessageTable,
+                    if (chatOutboxMessageEditTableRefs)
+                      db.chatOutboxMessageEditTable,
+                    if (chatOutboxMessageDeleteTableRefs)
+                      db.chatOutboxMessageDeleteTable,
+                    if (chatOutboxReadCursorsTableRefs)
+                      db.chatOutboxReadCursorsTable,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (chatMembersTableRefs)
+                        await $_getPrefetchedData<
+                          ChatData,
+                          $ChatsTableTable,
+                          ChatMemberData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ChatsTableTableReferences
+                              ._chatMembersTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ChatsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).chatMembersTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.chatId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (chatMessagesTableRefs)
+                        await $_getPrefetchedData<
+                          ChatData,
+                          $ChatsTableTable,
+                          ChatMessageData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ChatsTableTableReferences
+                              ._chatMessagesTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ChatsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).chatMessagesTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.chatId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (chatMessageSyncCursorTableRefs)
+                        await $_getPrefetchedData<
+                          ChatData,
+                          $ChatsTableTable,
+                          ChatMessageSyncCursorData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ChatsTableTableReferences
+                              ._chatMessageSyncCursorTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ChatsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).chatMessageSyncCursorTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.chatId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (chatMessageReadCursorTableRefs)
+                        await $_getPrefetchedData<
+                          ChatData,
+                          $ChatsTableTable,
+                          ChatMessageReadCursorData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ChatsTableTableReferences
+                              ._chatMessageReadCursorTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ChatsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).chatMessageReadCursorTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.chatId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (chatOutboxMessageTableRefs)
+                        await $_getPrefetchedData<
+                          ChatData,
+                          $ChatsTableTable,
+                          ChatOutboxMessageData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ChatsTableTableReferences
+                              ._chatOutboxMessageTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ChatsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).chatOutboxMessageTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.chatId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (chatOutboxMessageEditTableRefs)
+                        await $_getPrefetchedData<
+                          ChatData,
+                          $ChatsTableTable,
+                          ChatOutboxMessageEditData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ChatsTableTableReferences
+                              ._chatOutboxMessageEditTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ChatsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).chatOutboxMessageEditTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.chatId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (chatOutboxMessageDeleteTableRefs)
+                        await $_getPrefetchedData<
+                          ChatData,
+                          $ChatsTableTable,
+                          ChatOutboxMessageDeleteData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ChatsTableTableReferences
+                              ._chatOutboxMessageDeleteTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ChatsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).chatOutboxMessageDeleteTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.chatId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (chatOutboxReadCursorsTableRefs)
+                        await $_getPrefetchedData<
+                          ChatData,
+                          $ChatsTableTable,
+                          ChatOutboxReadCursorData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ChatsTableTableReferences
+                              ._chatOutboxReadCursorsTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ChatsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).chatOutboxReadCursorsTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.chatId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
         ),
       );
 }
@@ -16884,9 +18392,18 @@ typedef $$ChatsTableTableProcessedTableManager =
       $$ChatsTableTableAnnotationComposer,
       $$ChatsTableTableCreateCompanionBuilder,
       $$ChatsTableTableUpdateCompanionBuilder,
-      (ChatData, BaseReferences<_$AppDatabase, $ChatsTableTable, ChatData>),
+      (ChatData, $$ChatsTableTableReferences),
       ChatData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({
+        bool chatMembersTableRefs,
+        bool chatMessagesTableRefs,
+        bool chatMessageSyncCursorTableRefs,
+        bool chatMessageReadCursorTableRefs,
+        bool chatOutboxMessageTableRefs,
+        bool chatOutboxMessageEditTableRefs,
+        bool chatOutboxMessageDeleteTableRefs,
+        bool chatOutboxReadCursorsTableRefs,
+      })
     >;
 typedef $$ChatMembersTableTableCreateCompanionBuilder =
     ChatMemberDataCompanion Function({
@@ -16903,6 +18420,35 @@ typedef $$ChatMembersTableTableUpdateCompanionBuilder =
       Value<GroupAuthoritiesEnum?> groupAuthorities,
     });
 
+final class $$ChatMembersTableTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $ChatMembersTableTable, ChatMemberData> {
+  $$ChatMembersTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias(
+        $_aliasNameGenerator(db.chatMembersTable.chatId, db.chatsTable.id),
+      );
+
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
+    final manager = $$ChatsTableTableTableManager(
+      $_db,
+      $_db.chatsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$ChatMembersTableTableFilterComposer
     extends Composer<_$AppDatabase, $ChatMembersTableTable> {
   $$ChatMembersTableTableFilterComposer({
@@ -16914,11 +18460,6 @@ class $$ChatMembersTableTableFilterComposer
   });
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get chatId => $composableBuilder(
-    column: $table.chatId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -16936,6 +18477,29 @@ class $$ChatMembersTableTableFilterComposer
     column: $table.groupAuthorities,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatMembersTableTableOrderingComposer
@@ -16952,11 +18516,6 @@ class $$ChatMembersTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get chatId => $composableBuilder(
-    column: $table.chatId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get userId => $composableBuilder(
     column: $table.userId,
     builder: (column) => ColumnOrderings(column),
@@ -16966,6 +18525,29 @@ class $$ChatMembersTableTableOrderingComposer
     column: $table.groupAuthorities,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatMembersTableTableAnnotationComposer
@@ -16980,9 +18562,6 @@ class $$ChatMembersTableTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<int> get chatId =>
-      $composableBuilder(column: $table.chatId, builder: (column) => column);
-
   GeneratedColumn<String> get userId =>
       $composableBuilder(column: $table.userId, builder: (column) => column);
 
@@ -16991,6 +18570,29 @@ class $$ChatMembersTableTableAnnotationComposer
     column: $table.groupAuthorities,
     builder: (column) => column,
   );
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatMembersTableTableTableManager
@@ -17004,16 +18606,9 @@ class $$ChatMembersTableTableTableManager
           $$ChatMembersTableTableAnnotationComposer,
           $$ChatMembersTableTableCreateCompanionBuilder,
           $$ChatMembersTableTableUpdateCompanionBuilder,
-          (
-            ChatMemberData,
-            BaseReferences<
-              _$AppDatabase,
-              $ChatMembersTableTable,
-              ChatMemberData
-            >,
-          ),
+          (ChatMemberData, $$ChatMembersTableTableReferences),
           ChatMemberData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool chatId})
         > {
   $$ChatMembersTableTableTableManager(
     _$AppDatabase db,
@@ -17055,9 +18650,56 @@ class $$ChatMembersTableTableTableManager
                 groupAuthorities: groupAuthorities,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ChatMembersTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (chatId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.chatId,
+                                referencedTable:
+                                    $$ChatMembersTableTableReferences
+                                        ._chatIdTable(db),
+                                referencedColumn:
+                                    $$ChatMembersTableTableReferences
+                                        ._chatIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -17072,12 +18714,9 @@ typedef $$ChatMembersTableTableProcessedTableManager =
       $$ChatMembersTableTableAnnotationComposer,
       $$ChatMembersTableTableCreateCompanionBuilder,
       $$ChatMembersTableTableUpdateCompanionBuilder,
-      (
-        ChatMemberData,
-        BaseReferences<_$AppDatabase, $ChatMembersTableTable, ChatMemberData>,
-      ),
+      (ChatMemberData, $$ChatMembersTableTableReferences),
       ChatMemberData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool chatId})
     >;
 typedef $$ChatMessagesTableTableCreateCompanionBuilder =
     ChatMessageDataCompanion Function({
@@ -17110,6 +18749,39 @@ typedef $$ChatMessagesTableTableUpdateCompanionBuilder =
       Value<int?> deletedAtRemoteUsec,
     });
 
+final class $$ChatMessagesTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $ChatMessagesTableTable,
+          ChatMessageData
+        > {
+  $$ChatMessagesTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias(
+        $_aliasNameGenerator(db.chatMessagesTable.chatId, db.chatsTable.id),
+      );
+
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
+    final manager = $$ChatsTableTableTableManager(
+      $_db,
+      $_db.chatsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$ChatMessagesTableTableFilterComposer
     extends Composer<_$AppDatabase, $ChatMessagesTableTable> {
   $$ChatMessagesTableTableFilterComposer({
@@ -17131,11 +18803,6 @@ class $$ChatMessagesTableTableFilterComposer
 
   ColumnFilters<String> get senderId => $composableBuilder(
     column: $table.senderId,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get chatId => $composableBuilder(
-    column: $table.chatId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -17178,6 +18845,29 @@ class $$ChatMessagesTableTableFilterComposer
     column: $table.deletedAtRemoteUsec,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatMessagesTableTableOrderingComposer
@@ -17201,11 +18891,6 @@ class $$ChatMessagesTableTableOrderingComposer
 
   ColumnOrderings<String> get senderId => $composableBuilder(
     column: $table.senderId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get chatId => $composableBuilder(
-    column: $table.chatId,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -17248,6 +18933,29 @@ class $$ChatMessagesTableTableOrderingComposer
     column: $table.deletedAtRemoteUsec,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatMessagesTableTableAnnotationComposer
@@ -17267,9 +18975,6 @@ class $$ChatMessagesTableTableAnnotationComposer
 
   GeneratedColumn<String> get senderId =>
       $composableBuilder(column: $table.senderId, builder: (column) => column);
-
-  GeneratedColumn<int> get chatId =>
-      $composableBuilder(column: $table.chatId, builder: (column) => column);
 
   GeneratedColumn<int> get replyToId =>
       $composableBuilder(column: $table.replyToId, builder: (column) => column);
@@ -17304,6 +19009,29 @@ class $$ChatMessagesTableTableAnnotationComposer
     column: $table.deletedAtRemoteUsec,
     builder: (column) => column,
   );
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatMessagesTableTableTableManager
@@ -17317,16 +19045,9 @@ class $$ChatMessagesTableTableTableManager
           $$ChatMessagesTableTableAnnotationComposer,
           $$ChatMessagesTableTableCreateCompanionBuilder,
           $$ChatMessagesTableTableUpdateCompanionBuilder,
-          (
-            ChatMessageData,
-            BaseReferences<
-              _$AppDatabase,
-              $ChatMessagesTableTable,
-              ChatMessageData
-            >,
-          ),
+          (ChatMessageData, $$ChatMessagesTableTableReferences),
           ChatMessageData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool chatId})
         > {
   $$ChatMessagesTableTableTableManager(
     _$AppDatabase db,
@@ -17401,9 +19122,56 @@ class $$ChatMessagesTableTableTableManager
                 deletedAtRemoteUsec: deletedAtRemoteUsec,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ChatMessagesTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (chatId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.chatId,
+                                referencedTable:
+                                    $$ChatMessagesTableTableReferences
+                                        ._chatIdTable(db),
+                                referencedColumn:
+                                    $$ChatMessagesTableTableReferences
+                                        ._chatIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -17418,12 +19186,9 @@ typedef $$ChatMessagesTableTableProcessedTableManager =
       $$ChatMessagesTableTableAnnotationComposer,
       $$ChatMessagesTableTableCreateCompanionBuilder,
       $$ChatMessagesTableTableUpdateCompanionBuilder,
-      (
-        ChatMessageData,
-        BaseReferences<_$AppDatabase, $ChatMessagesTableTable, ChatMessageData>,
-      ),
+      (ChatMessageData, $$ChatMessagesTableTableReferences),
       ChatMessageData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool chatId})
     >;
 typedef $$ChatMessageSyncCursorTableTableCreateCompanionBuilder =
     ChatMessageSyncCursorDataCompanion Function({
@@ -17440,6 +19205,42 @@ typedef $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder =
       Value<int> rowid,
     });
 
+final class $$ChatMessageSyncCursorTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $ChatMessageSyncCursorTableTable,
+          ChatMessageSyncCursorData
+        > {
+  $$ChatMessageSyncCursorTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias(
+        $_aliasNameGenerator(
+          db.chatMessageSyncCursorTable.chatId,
+          db.chatsTable.id,
+        ),
+      );
+
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
+    final manager = $$ChatsTableTableTableManager(
+      $_db,
+      $_db.chatsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$ChatMessageSyncCursorTableTableFilterComposer
     extends Composer<_$AppDatabase, $ChatMessageSyncCursorTableTable> {
   $$ChatMessageSyncCursorTableTableFilterComposer({
@@ -17449,11 +19250,6 @@ class $$ChatMessageSyncCursorTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get chatId => $composableBuilder(
-    column: $table.chatId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnWithTypeConverterFilters<
     MessageSyncCursorTypeEnum,
     MessageSyncCursorTypeEnum,
@@ -17468,6 +19264,29 @@ class $$ChatMessageSyncCursorTableTableFilterComposer
     column: $table.timestampUsec,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatMessageSyncCursorTableTableOrderingComposer
@@ -17479,11 +19298,6 @@ class $$ChatMessageSyncCursorTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get chatId => $composableBuilder(
-    column: $table.chatId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get cursorType => $composableBuilder(
     column: $table.cursorType,
     builder: (column) => ColumnOrderings(column),
@@ -17493,6 +19307,29 @@ class $$ChatMessageSyncCursorTableTableOrderingComposer
     column: $table.timestampUsec,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatMessageSyncCursorTableTableAnnotationComposer
@@ -17504,9 +19341,6 @@ class $$ChatMessageSyncCursorTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get chatId =>
-      $composableBuilder(column: $table.chatId, builder: (column) => column);
-
   GeneratedColumnWithTypeConverter<MessageSyncCursorTypeEnum, String>
   get cursorType => $composableBuilder(
     column: $table.cursorType,
@@ -17517,6 +19351,29 @@ class $$ChatMessageSyncCursorTableTableAnnotationComposer
     column: $table.timestampUsec,
     builder: (column) => column,
   );
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatMessageSyncCursorTableTableTableManager
@@ -17532,14 +19389,10 @@ class $$ChatMessageSyncCursorTableTableTableManager
           $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder,
           (
             ChatMessageSyncCursorData,
-            BaseReferences<
-              _$AppDatabase,
-              $ChatMessageSyncCursorTableTable,
-              ChatMessageSyncCursorData
-            >,
+            $$ChatMessageSyncCursorTableTableReferences,
           ),
           ChatMessageSyncCursorData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool chatId})
         > {
   $$ChatMessageSyncCursorTableTableTableManager(
     _$AppDatabase db,
@@ -17589,9 +19442,56 @@ class $$ChatMessageSyncCursorTableTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ChatMessageSyncCursorTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (chatId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.chatId,
+                                referencedTable:
+                                    $$ChatMessageSyncCursorTableTableReferences
+                                        ._chatIdTable(db),
+                                referencedColumn:
+                                    $$ChatMessageSyncCursorTableTableReferences
+                                        ._chatIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -17606,16 +19506,9 @@ typedef $$ChatMessageSyncCursorTableTableProcessedTableManager =
       $$ChatMessageSyncCursorTableTableAnnotationComposer,
       $$ChatMessageSyncCursorTableTableCreateCompanionBuilder,
       $$ChatMessageSyncCursorTableTableUpdateCompanionBuilder,
-      (
-        ChatMessageSyncCursorData,
-        BaseReferences<
-          _$AppDatabase,
-          $ChatMessageSyncCursorTableTable,
-          ChatMessageSyncCursorData
-        >,
-      ),
+      (ChatMessageSyncCursorData, $$ChatMessageSyncCursorTableTableReferences),
       ChatMessageSyncCursorData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool chatId})
     >;
 typedef $$ChatMessageReadCursorTableTableCreateCompanionBuilder =
     ChatMessageReadCursorDataCompanion Function({
@@ -17632,6 +19525,42 @@ typedef $$ChatMessageReadCursorTableTableUpdateCompanionBuilder =
       Value<int> rowid,
     });
 
+final class $$ChatMessageReadCursorTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $ChatMessageReadCursorTableTable,
+          ChatMessageReadCursorData
+        > {
+  $$ChatMessageReadCursorTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias(
+        $_aliasNameGenerator(
+          db.chatMessageReadCursorTable.chatId,
+          db.chatsTable.id,
+        ),
+      );
+
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
+    final manager = $$ChatsTableTableTableManager(
+      $_db,
+      $_db.chatsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$ChatMessageReadCursorTableTableFilterComposer
     extends Composer<_$AppDatabase, $ChatMessageReadCursorTableTable> {
   $$ChatMessageReadCursorTableTableFilterComposer({
@@ -17641,11 +19570,6 @@ class $$ChatMessageReadCursorTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get chatId => $composableBuilder(
-    column: $table.chatId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<String> get userId => $composableBuilder(
     column: $table.userId,
     builder: (column) => ColumnFilters(column),
@@ -17655,6 +19579,29 @@ class $$ChatMessageReadCursorTableTableFilterComposer
     column: $table.timestampUsec,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatMessageReadCursorTableTableOrderingComposer
@@ -17666,11 +19613,6 @@ class $$ChatMessageReadCursorTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get chatId => $composableBuilder(
-    column: $table.chatId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get userId => $composableBuilder(
     column: $table.userId,
     builder: (column) => ColumnOrderings(column),
@@ -17680,6 +19622,29 @@ class $$ChatMessageReadCursorTableTableOrderingComposer
     column: $table.timestampUsec,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatMessageReadCursorTableTableAnnotationComposer
@@ -17691,9 +19656,6 @@ class $$ChatMessageReadCursorTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get chatId =>
-      $composableBuilder(column: $table.chatId, builder: (column) => column);
-
   GeneratedColumn<String> get userId =>
       $composableBuilder(column: $table.userId, builder: (column) => column);
 
@@ -17701,6 +19663,29 @@ class $$ChatMessageReadCursorTableTableAnnotationComposer
     column: $table.timestampUsec,
     builder: (column) => column,
   );
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatMessageReadCursorTableTableTableManager
@@ -17716,14 +19701,10 @@ class $$ChatMessageReadCursorTableTableTableManager
           $$ChatMessageReadCursorTableTableUpdateCompanionBuilder,
           (
             ChatMessageReadCursorData,
-            BaseReferences<
-              _$AppDatabase,
-              $ChatMessageReadCursorTableTable,
-              ChatMessageReadCursorData
-            >,
+            $$ChatMessageReadCursorTableTableReferences,
           ),
           ChatMessageReadCursorData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool chatId})
         > {
   $$ChatMessageReadCursorTableTableTableManager(
     _$AppDatabase db,
@@ -17772,9 +19753,56 @@ class $$ChatMessageReadCursorTableTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ChatMessageReadCursorTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (chatId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.chatId,
+                                referencedTable:
+                                    $$ChatMessageReadCursorTableTableReferences
+                                        ._chatIdTable(db),
+                                referencedColumn:
+                                    $$ChatMessageReadCursorTableTableReferences
+                                        ._chatIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -17789,16 +19817,9 @@ typedef $$ChatMessageReadCursorTableTableProcessedTableManager =
       $$ChatMessageReadCursorTableTableAnnotationComposer,
       $$ChatMessageReadCursorTableTableCreateCompanionBuilder,
       $$ChatMessageReadCursorTableTableUpdateCompanionBuilder,
-      (
-        ChatMessageReadCursorData,
-        BaseReferences<
-          _$AppDatabase,
-          $ChatMessageReadCursorTableTable,
-          ChatMessageReadCursorData
-        >,
-      ),
+      (ChatMessageReadCursorData, $$ChatMessageReadCursorTableTableReferences),
       ChatMessageReadCursorData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool chatId})
     >;
 typedef $$ChatOutboxMessageTableTableCreateCompanionBuilder =
     ChatOutboxMessageDataCompanion Function({
@@ -17825,6 +19846,42 @@ typedef $$ChatOutboxMessageTableTableUpdateCompanionBuilder =
       Value<int> rowid,
     });
 
+final class $$ChatOutboxMessageTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $ChatOutboxMessageTableTable,
+          ChatOutboxMessageData
+        > {
+  $$ChatOutboxMessageTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias(
+        $_aliasNameGenerator(
+          db.chatOutboxMessageTable.chatId,
+          db.chatsTable.id,
+        ),
+      );
+
+  $$ChatsTableTableProcessedTableManager? get chatId {
+    final $_column = $_itemColumn<int>('chat_id');
+    if ($_column == null) return null;
+    final manager = $$ChatsTableTableTableManager(
+      $_db,
+      $_db.chatsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$ChatOutboxMessageTableTableFilterComposer
     extends Composer<_$AppDatabase, $ChatOutboxMessageTableTable> {
   $$ChatOutboxMessageTableTableFilterComposer({
@@ -17836,11 +19893,6 @@ class $$ChatOutboxMessageTableTableFilterComposer
   });
   ColumnFilters<String> get idKey => $composableBuilder(
     column: $table.idKey,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get chatId => $composableBuilder(
-    column: $table.chatId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -17873,6 +19925,29 @@ class $$ChatOutboxMessageTableTableFilterComposer
     column: $table.sendAttempts,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatOutboxMessageTableTableOrderingComposer
@@ -17886,11 +19961,6 @@ class $$ChatOutboxMessageTableTableOrderingComposer
   });
   ColumnOrderings<String> get idKey => $composableBuilder(
     column: $table.idKey,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get chatId => $composableBuilder(
-    column: $table.chatId,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -17923,6 +19993,29 @@ class $$ChatOutboxMessageTableTableOrderingComposer
     column: $table.sendAttempts,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatOutboxMessageTableTableAnnotationComposer
@@ -17936,9 +20029,6 @@ class $$ChatOutboxMessageTableTableAnnotationComposer
   });
   GeneratedColumn<String> get idKey =>
       $composableBuilder(column: $table.idKey, builder: (column) => column);
-
-  GeneratedColumn<int> get chatId =>
-      $composableBuilder(column: $table.chatId, builder: (column) => column);
 
   GeneratedColumn<String> get participantId => $composableBuilder(
     column: $table.participantId,
@@ -17963,6 +20053,29 @@ class $$ChatOutboxMessageTableTableAnnotationComposer
     column: $table.sendAttempts,
     builder: (column) => column,
   );
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatOutboxMessageTableTableTableManager
@@ -17976,16 +20089,9 @@ class $$ChatOutboxMessageTableTableTableManager
           $$ChatOutboxMessageTableTableAnnotationComposer,
           $$ChatOutboxMessageTableTableCreateCompanionBuilder,
           $$ChatOutboxMessageTableTableUpdateCompanionBuilder,
-          (
-            ChatOutboxMessageData,
-            BaseReferences<
-              _$AppDatabase,
-              $ChatOutboxMessageTableTable,
-              ChatOutboxMessageData
-            >,
-          ),
+          (ChatOutboxMessageData, $$ChatOutboxMessageTableTableReferences),
           ChatOutboxMessageData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool chatId})
         > {
   $$ChatOutboxMessageTableTableTableManager(
     _$AppDatabase db,
@@ -18054,9 +20160,56 @@ class $$ChatOutboxMessageTableTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ChatOutboxMessageTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (chatId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.chatId,
+                                referencedTable:
+                                    $$ChatOutboxMessageTableTableReferences
+                                        ._chatIdTable(db),
+                                referencedColumn:
+                                    $$ChatOutboxMessageTableTableReferences
+                                        ._chatIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -18071,16 +20224,9 @@ typedef $$ChatOutboxMessageTableTableProcessedTableManager =
       $$ChatOutboxMessageTableTableAnnotationComposer,
       $$ChatOutboxMessageTableTableCreateCompanionBuilder,
       $$ChatOutboxMessageTableTableUpdateCompanionBuilder,
-      (
-        ChatOutboxMessageData,
-        BaseReferences<
-          _$AppDatabase,
-          $ChatOutboxMessageTableTable,
-          ChatOutboxMessageData
-        >,
-      ),
+      (ChatOutboxMessageData, $$ChatOutboxMessageTableTableReferences),
       ChatOutboxMessageData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool chatId})
     >;
 typedef $$ChatOutboxMessageEditTableTableCreateCompanionBuilder =
     ChatOutboxMessageEditDataCompanion Function({
@@ -18098,6 +20244,42 @@ typedef $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder =
       Value<String> newContent,
       Value<int> sendAttempts,
     });
+
+final class $$ChatOutboxMessageEditTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $ChatOutboxMessageEditTableTable,
+          ChatOutboxMessageEditData
+        > {
+  $$ChatOutboxMessageEditTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias(
+        $_aliasNameGenerator(
+          db.chatOutboxMessageEditTable.chatId,
+          db.chatsTable.id,
+        ),
+      );
+
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
+    final manager = $$ChatsTableTableTableManager(
+      $_db,
+      $_db.chatsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
 
 class $$ChatOutboxMessageEditTableTableFilterComposer
     extends Composer<_$AppDatabase, $ChatOutboxMessageEditTableTable> {
@@ -18118,11 +20300,6 @@ class $$ChatOutboxMessageEditTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get chatId => $composableBuilder(
-    column: $table.chatId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<String> get newContent => $composableBuilder(
     column: $table.newContent,
     builder: (column) => ColumnFilters(column),
@@ -18132,6 +20309,29 @@ class $$ChatOutboxMessageEditTableTableFilterComposer
     column: $table.sendAttempts,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatOutboxMessageEditTableTableOrderingComposer
@@ -18153,11 +20353,6 @@ class $$ChatOutboxMessageEditTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get chatId => $composableBuilder(
-    column: $table.chatId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get newContent => $composableBuilder(
     column: $table.newContent,
     builder: (column) => ColumnOrderings(column),
@@ -18167,6 +20362,29 @@ class $$ChatOutboxMessageEditTableTableOrderingComposer
     column: $table.sendAttempts,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatOutboxMessageEditTableTableAnnotationComposer
@@ -18184,9 +20402,6 @@ class $$ChatOutboxMessageEditTableTableAnnotationComposer
   GeneratedColumn<String> get idKey =>
       $composableBuilder(column: $table.idKey, builder: (column) => column);
 
-  GeneratedColumn<int> get chatId =>
-      $composableBuilder(column: $table.chatId, builder: (column) => column);
-
   GeneratedColumn<String> get newContent => $composableBuilder(
     column: $table.newContent,
     builder: (column) => column,
@@ -18196,6 +20411,29 @@ class $$ChatOutboxMessageEditTableTableAnnotationComposer
     column: $table.sendAttempts,
     builder: (column) => column,
   );
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatOutboxMessageEditTableTableTableManager
@@ -18211,14 +20449,10 @@ class $$ChatOutboxMessageEditTableTableTableManager
           $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder,
           (
             ChatOutboxMessageEditData,
-            BaseReferences<
-              _$AppDatabase,
-              $ChatOutboxMessageEditTableTable,
-              ChatOutboxMessageEditData
-            >,
+            $$ChatOutboxMessageEditTableTableReferences,
           ),
           ChatOutboxMessageEditData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool chatId})
         > {
   $$ChatOutboxMessageEditTableTableTableManager(
     _$AppDatabase db,
@@ -18271,9 +20505,56 @@ class $$ChatOutboxMessageEditTableTableTableManager
                 sendAttempts: sendAttempts,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ChatOutboxMessageEditTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (chatId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.chatId,
+                                referencedTable:
+                                    $$ChatOutboxMessageEditTableTableReferences
+                                        ._chatIdTable(db),
+                                referencedColumn:
+                                    $$ChatOutboxMessageEditTableTableReferences
+                                        ._chatIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -18288,16 +20569,9 @@ typedef $$ChatOutboxMessageEditTableTableProcessedTableManager =
       $$ChatOutboxMessageEditTableTableAnnotationComposer,
       $$ChatOutboxMessageEditTableTableCreateCompanionBuilder,
       $$ChatOutboxMessageEditTableTableUpdateCompanionBuilder,
-      (
-        ChatOutboxMessageEditData,
-        BaseReferences<
-          _$AppDatabase,
-          $ChatOutboxMessageEditTableTable,
-          ChatOutboxMessageEditData
-        >,
-      ),
+      (ChatOutboxMessageEditData, $$ChatOutboxMessageEditTableTableReferences),
       ChatOutboxMessageEditData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool chatId})
     >;
 typedef $$ChatOutboxMessageDeleteTableTableCreateCompanionBuilder =
     ChatOutboxMessageDeleteDataCompanion Function({
@@ -18313,6 +20587,42 @@ typedef $$ChatOutboxMessageDeleteTableTableUpdateCompanionBuilder =
       Value<int> chatId,
       Value<int> sendAttempts,
     });
+
+final class $$ChatOutboxMessageDeleteTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $ChatOutboxMessageDeleteTableTable,
+          ChatOutboxMessageDeleteData
+        > {
+  $$ChatOutboxMessageDeleteTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias(
+        $_aliasNameGenerator(
+          db.chatOutboxMessageDeleteTable.chatId,
+          db.chatsTable.id,
+        ),
+      );
+
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
+    final manager = $$ChatsTableTableTableManager(
+      $_db,
+      $_db.chatsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
 
 class $$ChatOutboxMessageDeleteTableTableFilterComposer
     extends Composer<_$AppDatabase, $ChatOutboxMessageDeleteTableTable> {
@@ -18333,15 +20643,33 @@ class $$ChatOutboxMessageDeleteTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get chatId => $composableBuilder(
-    column: $table.chatId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<int> get sendAttempts => $composableBuilder(
     column: $table.sendAttempts,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatOutboxMessageDeleteTableTableOrderingComposer
@@ -18363,15 +20691,33 @@ class $$ChatOutboxMessageDeleteTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get chatId => $composableBuilder(
-    column: $table.chatId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<int> get sendAttempts => $composableBuilder(
     column: $table.sendAttempts,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatOutboxMessageDeleteTableTableAnnotationComposer
@@ -18389,13 +20735,33 @@ class $$ChatOutboxMessageDeleteTableTableAnnotationComposer
   GeneratedColumn<String> get idKey =>
       $composableBuilder(column: $table.idKey, builder: (column) => column);
 
-  GeneratedColumn<int> get chatId =>
-      $composableBuilder(column: $table.chatId, builder: (column) => column);
-
   GeneratedColumn<int> get sendAttempts => $composableBuilder(
     column: $table.sendAttempts,
     builder: (column) => column,
   );
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatOutboxMessageDeleteTableTableTableManager
@@ -18411,14 +20777,10 @@ class $$ChatOutboxMessageDeleteTableTableTableManager
           $$ChatOutboxMessageDeleteTableTableUpdateCompanionBuilder,
           (
             ChatOutboxMessageDeleteData,
-            BaseReferences<
-              _$AppDatabase,
-              $ChatOutboxMessageDeleteTableTable,
-              ChatOutboxMessageDeleteData
-            >,
+            $$ChatOutboxMessageDeleteTableTableReferences,
           ),
           ChatOutboxMessageDeleteData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool chatId})
         > {
   $$ChatOutboxMessageDeleteTableTableTableManager(
     _$AppDatabase db,
@@ -18467,9 +20829,56 @@ class $$ChatOutboxMessageDeleteTableTableTableManager
                 sendAttempts: sendAttempts,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ChatOutboxMessageDeleteTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (chatId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.chatId,
+                                referencedTable:
+                                    $$ChatOutboxMessageDeleteTableTableReferences
+                                        ._chatIdTable(db),
+                                referencedColumn:
+                                    $$ChatOutboxMessageDeleteTableTableReferences
+                                        ._chatIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -18486,14 +20895,10 @@ typedef $$ChatOutboxMessageDeleteTableTableProcessedTableManager =
       $$ChatOutboxMessageDeleteTableTableUpdateCompanionBuilder,
       (
         ChatOutboxMessageDeleteData,
-        BaseReferences<
-          _$AppDatabase,
-          $ChatOutboxMessageDeleteTableTable,
-          ChatOutboxMessageDeleteData
-        >,
+        $$ChatOutboxMessageDeleteTableTableReferences,
       ),
       ChatOutboxMessageDeleteData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool chatId})
     >;
 typedef $$ChatOutboxReadCursorsTableTableCreateCompanionBuilder =
     ChatOutboxReadCursorDataCompanion Function({
@@ -18508,6 +20913,42 @@ typedef $$ChatOutboxReadCursorsTableTableUpdateCompanionBuilder =
       Value<int> sendAttempts,
     });
 
+final class $$ChatOutboxReadCursorsTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $ChatOutboxReadCursorsTableTable,
+          ChatOutboxReadCursorData
+        > {
+  $$ChatOutboxReadCursorsTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ChatsTableTable _chatIdTable(_$AppDatabase db) =>
+      db.chatsTable.createAlias(
+        $_aliasNameGenerator(
+          db.chatOutboxReadCursorsTable.chatId,
+          db.chatsTable.id,
+        ),
+      );
+
+  $$ChatsTableTableProcessedTableManager get chatId {
+    final $_column = $_itemColumn<int>('chat_id')!;
+
+    final manager = $$ChatsTableTableTableManager(
+      $_db,
+      $_db.chatsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_chatIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$ChatOutboxReadCursorsTableTableFilterComposer
     extends Composer<_$AppDatabase, $ChatOutboxReadCursorsTableTable> {
   $$ChatOutboxReadCursorsTableTableFilterComposer({
@@ -18517,11 +20958,6 @@ class $$ChatOutboxReadCursorsTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get chatId => $composableBuilder(
-    column: $table.chatId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<int> get timestampUsec => $composableBuilder(
     column: $table.timestampUsec,
     builder: (column) => ColumnFilters(column),
@@ -18531,6 +20967,29 @@ class $$ChatOutboxReadCursorsTableTableFilterComposer
     column: $table.sendAttempts,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$ChatsTableTableFilterComposer get chatId {
+    final $$ChatsTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableFilterComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatOutboxReadCursorsTableTableOrderingComposer
@@ -18542,11 +21001,6 @@ class $$ChatOutboxReadCursorsTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get chatId => $composableBuilder(
-    column: $table.chatId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<int> get timestampUsec => $composableBuilder(
     column: $table.timestampUsec,
     builder: (column) => ColumnOrderings(column),
@@ -18556,6 +21010,29 @@ class $$ChatOutboxReadCursorsTableTableOrderingComposer
     column: $table.sendAttempts,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$ChatsTableTableOrderingComposer get chatId {
+    final $$ChatsTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatOutboxReadCursorsTableTableAnnotationComposer
@@ -18567,9 +21044,6 @@ class $$ChatOutboxReadCursorsTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get chatId =>
-      $composableBuilder(column: $table.chatId, builder: (column) => column);
-
   GeneratedColumn<int> get timestampUsec => $composableBuilder(
     column: $table.timestampUsec,
     builder: (column) => column,
@@ -18579,6 +21053,29 @@ class $$ChatOutboxReadCursorsTableTableAnnotationComposer
     column: $table.sendAttempts,
     builder: (column) => column,
   );
+
+  $$ChatsTableTableAnnotationComposer get chatId {
+    final $$ChatsTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.chatId,
+      referencedTable: $db.chatsTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ChatsTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.chatsTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$ChatOutboxReadCursorsTableTableTableManager
@@ -18594,14 +21091,10 @@ class $$ChatOutboxReadCursorsTableTableTableManager
           $$ChatOutboxReadCursorsTableTableUpdateCompanionBuilder,
           (
             ChatOutboxReadCursorData,
-            BaseReferences<
-              _$AppDatabase,
-              $ChatOutboxReadCursorsTableTable,
-              ChatOutboxReadCursorData
-            >,
+            $$ChatOutboxReadCursorsTableTableReferences,
           ),
           ChatOutboxReadCursorData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool chatId})
         > {
   $$ChatOutboxReadCursorsTableTableTableManager(
     _$AppDatabase db,
@@ -18646,9 +21139,56 @@ class $$ChatOutboxReadCursorsTableTableTableManager
                 sendAttempts: sendAttempts,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ChatOutboxReadCursorsTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({chatId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (chatId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.chatId,
+                                referencedTable:
+                                    $$ChatOutboxReadCursorsTableTableReferences
+                                        ._chatIdTable(db),
+                                referencedColumn:
+                                    $$ChatOutboxReadCursorsTableTableReferences
+                                        ._chatIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -18663,16 +21203,9 @@ typedef $$ChatOutboxReadCursorsTableTableProcessedTableManager =
       $$ChatOutboxReadCursorsTableTableAnnotationComposer,
       $$ChatOutboxReadCursorsTableTableCreateCompanionBuilder,
       $$ChatOutboxReadCursorsTableTableUpdateCompanionBuilder,
-      (
-        ChatOutboxReadCursorData,
-        BaseReferences<
-          _$AppDatabase,
-          $ChatOutboxReadCursorsTableTable,
-          ChatOutboxReadCursorData
-        >,
-      ),
+      (ChatOutboxReadCursorData, $$ChatOutboxReadCursorsTableTableReferences),
       ChatOutboxReadCursorData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool chatId})
     >;
 typedef $$SmsConversationsTableTableCreateCompanionBuilder =
     SmsConversationDataCompanion Function({
@@ -18690,6 +21223,183 @@ typedef $$SmsConversationsTableTableUpdateCompanionBuilder =
       Value<DateTime> createdAtRemote,
       Value<DateTime> updatedAtRemote,
     });
+
+final class $$SmsConversationsTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $SmsConversationsTableTable,
+          SmsConversationData
+        > {
+  $$SmsConversationsTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static MultiTypedResultKey<$SmsMessagesTableTable, List<SmsMessageData>>
+  _smsMessagesTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.smsMessagesTable,
+    aliasName: $_aliasNameGenerator(
+      db.smsConversationsTable.id,
+      db.smsMessagesTable.conversationId,
+    ),
+  );
+
+  $$SmsMessagesTableTableProcessedTableManager get smsMessagesTableRefs {
+    final manager = $$SmsMessagesTableTableTableManager(
+      $_db,
+      $_db.smsMessagesTable,
+    ).filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _smsMessagesTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $SmsMessageSyncCursorTableTable,
+    List<SmsMessageSyncCursorData>
+  >
+  _smsMessageSyncCursorTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.smsMessageSyncCursorTable,
+        aliasName: $_aliasNameGenerator(
+          db.smsConversationsTable.id,
+          db.smsMessageSyncCursorTable.conversationId,
+        ),
+      );
+
+  $$SmsMessageSyncCursorTableTableProcessedTableManager
+  get smsMessageSyncCursorTableRefs {
+    final manager = $$SmsMessageSyncCursorTableTableTableManager(
+      $_db,
+      $_db.smsMessageSyncCursorTable,
+    ).filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _smsMessageSyncCursorTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $SmsMessageReadCursorTableTable,
+    List<SmsMessageReadCursorData>
+  >
+  _smsMessageReadCursorTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.smsMessageReadCursorTable,
+        aliasName: $_aliasNameGenerator(
+          db.smsConversationsTable.id,
+          db.smsMessageReadCursorTable.conversationId,
+        ),
+      );
+
+  $$SmsMessageReadCursorTableTableProcessedTableManager
+  get smsMessageReadCursorTableRefs {
+    final manager = $$SmsMessageReadCursorTableTableTableManager(
+      $_db,
+      $_db.smsMessageReadCursorTable,
+    ).filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _smsMessageReadCursorTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $SmsOutboxMessagesTableTable,
+    List<SmsOutboxMessageData>
+  >
+  _smsOutboxMessagesTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.smsOutboxMessagesTable,
+        aliasName: $_aliasNameGenerator(
+          db.smsConversationsTable.id,
+          db.smsOutboxMessagesTable.conversationId,
+        ),
+      );
+
+  $$SmsOutboxMessagesTableTableProcessedTableManager
+  get smsOutboxMessagesTableRefs {
+    final manager = $$SmsOutboxMessagesTableTableTableManager(
+      $_db,
+      $_db.smsOutboxMessagesTable,
+    ).filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _smsOutboxMessagesTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $SmsOutboxMessageDeleteTableTable,
+    List<SmsOutboxMessageDeleteData>
+  >
+  _smsOutboxMessageDeleteTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.smsOutboxMessageDeleteTable,
+        aliasName: $_aliasNameGenerator(
+          db.smsConversationsTable.id,
+          db.smsOutboxMessageDeleteTable.conversationId,
+        ),
+      );
+
+  $$SmsOutboxMessageDeleteTableTableProcessedTableManager
+  get smsOutboxMessageDeleteTableRefs {
+    final manager = $$SmsOutboxMessageDeleteTableTableTableManager(
+      $_db,
+      $_db.smsOutboxMessageDeleteTable,
+    ).filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _smsOutboxMessageDeleteTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $SmsOutboxReadCursorsTableTable,
+    List<SmsOutboxReadCursorData>
+  >
+  _smsOutboxReadCursorsTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.smsOutboxReadCursorsTable,
+        aliasName: $_aliasNameGenerator(
+          db.smsConversationsTable.id,
+          db.smsOutboxReadCursorsTable.conversationId,
+        ),
+      );
+
+  $$SmsOutboxReadCursorsTableTableProcessedTableManager
+  get smsOutboxReadCursorsTableRefs {
+    final manager = $$SmsOutboxReadCursorsTableTableTableManager(
+      $_db,
+      $_db.smsOutboxReadCursorsTable,
+    ).filter((f) => f.conversationId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _smsOutboxReadCursorsTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
 
 class $$SmsConversationsTableTableFilterComposer
     extends Composer<_$AppDatabase, $SmsConversationsTableTable> {
@@ -18724,6 +21434,167 @@ class $$SmsConversationsTableTableFilterComposer
     column: $table.updatedAtRemote,
     builder: (column) => ColumnFilters(column),
   );
+
+  Expression<bool> smsMessagesTableRefs(
+    Expression<bool> Function($$SmsMessagesTableTableFilterComposer f) f,
+  ) {
+    final $$SmsMessagesTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.smsMessagesTable,
+      getReferencedColumn: (t) => t.conversationId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SmsMessagesTableTableFilterComposer(
+            $db: $db,
+            $table: $db.smsMessagesTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> smsMessageSyncCursorTableRefs(
+    Expression<bool> Function($$SmsMessageSyncCursorTableTableFilterComposer f)
+    f,
+  ) {
+    final $$SmsMessageSyncCursorTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.smsMessageSyncCursorTable,
+          getReferencedColumn: (t) => t.conversationId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsMessageSyncCursorTableTableFilterComposer(
+                $db: $db,
+                $table: $db.smsMessageSyncCursorTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<bool> smsMessageReadCursorTableRefs(
+    Expression<bool> Function($$SmsMessageReadCursorTableTableFilterComposer f)
+    f,
+  ) {
+    final $$SmsMessageReadCursorTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.smsMessageReadCursorTable,
+          getReferencedColumn: (t) => t.conversationId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsMessageReadCursorTableTableFilterComposer(
+                $db: $db,
+                $table: $db.smsMessageReadCursorTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<bool> smsOutboxMessagesTableRefs(
+    Expression<bool> Function($$SmsOutboxMessagesTableTableFilterComposer f) f,
+  ) {
+    final $$SmsOutboxMessagesTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.smsOutboxMessagesTable,
+          getReferencedColumn: (t) => t.conversationId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsOutboxMessagesTableTableFilterComposer(
+                $db: $db,
+                $table: $db.smsOutboxMessagesTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<bool> smsOutboxMessageDeleteTableRefs(
+    Expression<bool> Function(
+      $$SmsOutboxMessageDeleteTableTableFilterComposer f,
+    )
+    f,
+  ) {
+    final $$SmsOutboxMessageDeleteTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.smsOutboxMessageDeleteTable,
+          getReferencedColumn: (t) => t.conversationId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsOutboxMessageDeleteTableTableFilterComposer(
+                $db: $db,
+                $table: $db.smsOutboxMessageDeleteTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<bool> smsOutboxReadCursorsTableRefs(
+    Expression<bool> Function($$SmsOutboxReadCursorsTableTableFilterComposer f)
+    f,
+  ) {
+    final $$SmsOutboxReadCursorsTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.smsOutboxReadCursorsTable,
+          getReferencedColumn: (t) => t.conversationId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsOutboxReadCursorsTableTableFilterComposer(
+                $db: $db,
+                $table: $db.smsOutboxReadCursorsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$SmsConversationsTableTableOrderingComposer
@@ -18792,6 +21663,167 @@ class $$SmsConversationsTableTableAnnotationComposer
     column: $table.updatedAtRemote,
     builder: (column) => column,
   );
+
+  Expression<T> smsMessagesTableRefs<T extends Object>(
+    Expression<T> Function($$SmsMessagesTableTableAnnotationComposer a) f,
+  ) {
+    final $$SmsMessagesTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.smsMessagesTable,
+      getReferencedColumn: (t) => t.conversationId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SmsMessagesTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.smsMessagesTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> smsMessageSyncCursorTableRefs<T extends Object>(
+    Expression<T> Function($$SmsMessageSyncCursorTableTableAnnotationComposer a)
+    f,
+  ) {
+    final $$SmsMessageSyncCursorTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.smsMessageSyncCursorTable,
+          getReferencedColumn: (t) => t.conversationId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsMessageSyncCursorTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.smsMessageSyncCursorTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> smsMessageReadCursorTableRefs<T extends Object>(
+    Expression<T> Function($$SmsMessageReadCursorTableTableAnnotationComposer a)
+    f,
+  ) {
+    final $$SmsMessageReadCursorTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.smsMessageReadCursorTable,
+          getReferencedColumn: (t) => t.conversationId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsMessageReadCursorTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.smsMessageReadCursorTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> smsOutboxMessagesTableRefs<T extends Object>(
+    Expression<T> Function($$SmsOutboxMessagesTableTableAnnotationComposer a) f,
+  ) {
+    final $$SmsOutboxMessagesTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.smsOutboxMessagesTable,
+          getReferencedColumn: (t) => t.conversationId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsOutboxMessagesTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.smsOutboxMessagesTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> smsOutboxMessageDeleteTableRefs<T extends Object>(
+    Expression<T> Function(
+      $$SmsOutboxMessageDeleteTableTableAnnotationComposer a,
+    )
+    f,
+  ) {
+    final $$SmsOutboxMessageDeleteTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.smsOutboxMessageDeleteTable,
+          getReferencedColumn: (t) => t.conversationId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsOutboxMessageDeleteTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.smsOutboxMessageDeleteTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> smsOutboxReadCursorsTableRefs<T extends Object>(
+    Expression<T> Function($$SmsOutboxReadCursorsTableTableAnnotationComposer a)
+    f,
+  ) {
+    final $$SmsOutboxReadCursorsTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.smsOutboxReadCursorsTable,
+          getReferencedColumn: (t) => t.conversationId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsOutboxReadCursorsTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.smsOutboxReadCursorsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$SmsConversationsTableTableTableManager
@@ -18805,16 +21837,16 @@ class $$SmsConversationsTableTableTableManager
           $$SmsConversationsTableTableAnnotationComposer,
           $$SmsConversationsTableTableCreateCompanionBuilder,
           $$SmsConversationsTableTableUpdateCompanionBuilder,
-          (
-            SmsConversationData,
-            BaseReferences<
-              _$AppDatabase,
-              $SmsConversationsTableTable,
-              SmsConversationData
-            >,
-          ),
+          (SmsConversationData, $$SmsConversationsTableTableReferences),
           SmsConversationData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({
+            bool smsMessagesTableRefs,
+            bool smsMessageSyncCursorTableRefs,
+            bool smsMessageReadCursorTableRefs,
+            bool smsOutboxMessagesTableRefs,
+            bool smsOutboxMessageDeleteTableRefs,
+            bool smsOutboxReadCursorsTableRefs,
+          })
         > {
   $$SmsConversationsTableTableTableManager(
     _$AppDatabase db,
@@ -18867,9 +21899,175 @@ class $$SmsConversationsTableTableTableManager
                 updatedAtRemote: updatedAtRemote,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$SmsConversationsTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback:
+              ({
+                smsMessagesTableRefs = false,
+                smsMessageSyncCursorTableRefs = false,
+                smsMessageReadCursorTableRefs = false,
+                smsOutboxMessagesTableRefs = false,
+                smsOutboxMessageDeleteTableRefs = false,
+                smsOutboxReadCursorsTableRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (smsMessagesTableRefs) db.smsMessagesTable,
+                    if (smsMessageSyncCursorTableRefs)
+                      db.smsMessageSyncCursorTable,
+                    if (smsMessageReadCursorTableRefs)
+                      db.smsMessageReadCursorTable,
+                    if (smsOutboxMessagesTableRefs) db.smsOutboxMessagesTable,
+                    if (smsOutboxMessageDeleteTableRefs)
+                      db.smsOutboxMessageDeleteTable,
+                    if (smsOutboxReadCursorsTableRefs)
+                      db.smsOutboxReadCursorsTable,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (smsMessagesTableRefs)
+                        await $_getPrefetchedData<
+                          SmsConversationData,
+                          $SmsConversationsTableTable,
+                          SmsMessageData
+                        >(
+                          currentTable: table,
+                          referencedTable:
+                              $$SmsConversationsTableTableReferences
+                                  ._smsMessagesTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$SmsConversationsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).smsMessagesTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.conversationId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (smsMessageSyncCursorTableRefs)
+                        await $_getPrefetchedData<
+                          SmsConversationData,
+                          $SmsConversationsTableTable,
+                          SmsMessageSyncCursorData
+                        >(
+                          currentTable: table,
+                          referencedTable:
+                              $$SmsConversationsTableTableReferences
+                                  ._smsMessageSyncCursorTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$SmsConversationsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).smsMessageSyncCursorTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.conversationId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (smsMessageReadCursorTableRefs)
+                        await $_getPrefetchedData<
+                          SmsConversationData,
+                          $SmsConversationsTableTable,
+                          SmsMessageReadCursorData
+                        >(
+                          currentTable: table,
+                          referencedTable:
+                              $$SmsConversationsTableTableReferences
+                                  ._smsMessageReadCursorTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$SmsConversationsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).smsMessageReadCursorTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.conversationId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (smsOutboxMessagesTableRefs)
+                        await $_getPrefetchedData<
+                          SmsConversationData,
+                          $SmsConversationsTableTable,
+                          SmsOutboxMessageData
+                        >(
+                          currentTable: table,
+                          referencedTable:
+                              $$SmsConversationsTableTableReferences
+                                  ._smsOutboxMessagesTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$SmsConversationsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).smsOutboxMessagesTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.conversationId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (smsOutboxMessageDeleteTableRefs)
+                        await $_getPrefetchedData<
+                          SmsConversationData,
+                          $SmsConversationsTableTable,
+                          SmsOutboxMessageDeleteData
+                        >(
+                          currentTable: table,
+                          referencedTable:
+                              $$SmsConversationsTableTableReferences
+                                  ._smsOutboxMessageDeleteTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$SmsConversationsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).smsOutboxMessageDeleteTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.conversationId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (smsOutboxReadCursorsTableRefs)
+                        await $_getPrefetchedData<
+                          SmsConversationData,
+                          $SmsConversationsTableTable,
+                          SmsOutboxReadCursorData
+                        >(
+                          currentTable: table,
+                          referencedTable:
+                              $$SmsConversationsTableTableReferences
+                                  ._smsOutboxReadCursorsTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$SmsConversationsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).smsOutboxReadCursorsTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.conversationId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
         ),
       );
 }
@@ -18884,16 +22082,16 @@ typedef $$SmsConversationsTableTableProcessedTableManager =
       $$SmsConversationsTableTableAnnotationComposer,
       $$SmsConversationsTableTableCreateCompanionBuilder,
       $$SmsConversationsTableTableUpdateCompanionBuilder,
-      (
-        SmsConversationData,
-        BaseReferences<
-          _$AppDatabase,
-          $SmsConversationsTableTable,
-          SmsConversationData
-        >,
-      ),
+      (SmsConversationData, $$SmsConversationsTableTableReferences),
       SmsConversationData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({
+        bool smsMessagesTableRefs,
+        bool smsMessageSyncCursorTableRefs,
+        bool smsMessageReadCursorTableRefs,
+        bool smsOutboxMessagesTableRefs,
+        bool smsOutboxMessageDeleteTableRefs,
+        bool smsOutboxReadCursorsTableRefs,
+      })
     >;
 typedef $$SmsMessagesTableTableCreateCompanionBuilder =
     SmsMessageDataCompanion Function({
@@ -18924,6 +22122,38 @@ typedef $$SmsMessagesTableTableUpdateCompanionBuilder =
       Value<int?> deletedAtRemoteUsec,
     });
 
+final class $$SmsMessagesTableTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $SmsMessagesTableTable, SmsMessageData> {
+  $$SmsMessagesTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $SmsConversationsTableTable _conversationIdTable(_$AppDatabase db) =>
+      db.smsConversationsTable.createAlias(
+        $_aliasNameGenerator(
+          db.smsMessagesTable.conversationId,
+          db.smsConversationsTable.id,
+        ),
+      );
+
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
+    final manager = $$SmsConversationsTableTableTableManager(
+      $_db,
+      $_db.smsConversationsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$SmsMessagesTableTableFilterComposer
     extends Composer<_$AppDatabase, $SmsMessagesTableTable> {
   $$SmsMessagesTableTableFilterComposer({
@@ -18945,11 +22175,6 @@ class $$SmsMessagesTableTableFilterComposer
 
   ColumnFilters<String> get externalId => $composableBuilder(
     column: $table.externalId,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -18992,6 +22217,30 @@ class $$SmsMessagesTableTableFilterComposer
     column: $table.deletedAtRemoteUsec,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$SmsConversationsTableTableFilterComposer get conversationId {
+    final $$SmsConversationsTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableFilterComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsMessagesTableTableOrderingComposer
@@ -19015,11 +22264,6 @@ class $$SmsMessagesTableTableOrderingComposer
 
   ColumnOrderings<String> get externalId => $composableBuilder(
     column: $table.externalId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -19057,6 +22301,30 @@ class $$SmsMessagesTableTableOrderingComposer
     column: $table.deletedAtRemoteUsec,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$SmsConversationsTableTableOrderingComposer get conversationId {
+    final $$SmsConversationsTableTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableOrderingComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsMessagesTableTableAnnotationComposer
@@ -19076,11 +22344,6 @@ class $$SmsMessagesTableTableAnnotationComposer
 
   GeneratedColumn<String> get externalId => $composableBuilder(
     column: $table.externalId,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
     builder: (column) => column,
   );
 
@@ -19117,6 +22380,30 @@ class $$SmsMessagesTableTableAnnotationComposer
     column: $table.deletedAtRemoteUsec,
     builder: (column) => column,
   );
+
+  $$SmsConversationsTableTableAnnotationComposer get conversationId {
+    final $$SmsConversationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsMessagesTableTableTableManager
@@ -19130,16 +22417,9 @@ class $$SmsMessagesTableTableTableManager
           $$SmsMessagesTableTableAnnotationComposer,
           $$SmsMessagesTableTableCreateCompanionBuilder,
           $$SmsMessagesTableTableUpdateCompanionBuilder,
-          (
-            SmsMessageData,
-            BaseReferences<
-              _$AppDatabase,
-              $SmsMessagesTableTable,
-              SmsMessageData
-            >,
-          ),
+          (SmsMessageData, $$SmsMessagesTableTableReferences),
           SmsMessageData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool conversationId})
         > {
   $$SmsMessagesTableTableTableManager(
     _$AppDatabase db,
@@ -19208,9 +22488,56 @@ class $$SmsMessagesTableTableTableManager
                 deletedAtRemoteUsec: deletedAtRemoteUsec,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$SmsMessagesTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({conversationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (conversationId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.conversationId,
+                                referencedTable:
+                                    $$SmsMessagesTableTableReferences
+                                        ._conversationIdTable(db),
+                                referencedColumn:
+                                    $$SmsMessagesTableTableReferences
+                                        ._conversationIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -19225,12 +22552,9 @@ typedef $$SmsMessagesTableTableProcessedTableManager =
       $$SmsMessagesTableTableAnnotationComposer,
       $$SmsMessagesTableTableCreateCompanionBuilder,
       $$SmsMessagesTableTableUpdateCompanionBuilder,
-      (
-        SmsMessageData,
-        BaseReferences<_$AppDatabase, $SmsMessagesTableTable, SmsMessageData>,
-      ),
+      (SmsMessageData, $$SmsMessagesTableTableReferences),
       SmsMessageData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool conversationId})
     >;
 typedef $$SmsMessageSyncCursorTableTableCreateCompanionBuilder =
     SmsMessageSyncCursorDataCompanion Function({
@@ -19247,6 +22571,42 @@ typedef $$SmsMessageSyncCursorTableTableUpdateCompanionBuilder =
       Value<int> rowid,
     });
 
+final class $$SmsMessageSyncCursorTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $SmsMessageSyncCursorTableTable,
+          SmsMessageSyncCursorData
+        > {
+  $$SmsMessageSyncCursorTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $SmsConversationsTableTable _conversationIdTable(_$AppDatabase db) =>
+      db.smsConversationsTable.createAlias(
+        $_aliasNameGenerator(
+          db.smsMessageSyncCursorTable.conversationId,
+          db.smsConversationsTable.id,
+        ),
+      );
+
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
+    final manager = $$SmsConversationsTableTableTableManager(
+      $_db,
+      $_db.smsConversationsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$SmsMessageSyncCursorTableTableFilterComposer
     extends Composer<_$AppDatabase, $SmsMessageSyncCursorTableTable> {
   $$SmsMessageSyncCursorTableTableFilterComposer({
@@ -19256,11 +22616,6 @@ class $$SmsMessageSyncCursorTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnWithTypeConverterFilters<
     SmsSyncCursorTypeEnum,
     SmsSyncCursorTypeEnum,
@@ -19275,6 +22630,30 @@ class $$SmsMessageSyncCursorTableTableFilterComposer
     column: $table.timestampUsec,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$SmsConversationsTableTableFilterComposer get conversationId {
+    final $$SmsConversationsTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableFilterComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsMessageSyncCursorTableTableOrderingComposer
@@ -19286,11 +22665,6 @@ class $$SmsMessageSyncCursorTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get cursorType => $composableBuilder(
     column: $table.cursorType,
     builder: (column) => ColumnOrderings(column),
@@ -19300,6 +22674,30 @@ class $$SmsMessageSyncCursorTableTableOrderingComposer
     column: $table.timestampUsec,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$SmsConversationsTableTableOrderingComposer get conversationId {
+    final $$SmsConversationsTableTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableOrderingComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsMessageSyncCursorTableTableAnnotationComposer
@@ -19311,11 +22709,6 @@ class $$SmsMessageSyncCursorTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => column,
-  );
-
   GeneratedColumnWithTypeConverter<SmsSyncCursorTypeEnum, String>
   get cursorType => $composableBuilder(
     column: $table.cursorType,
@@ -19326,6 +22719,30 @@ class $$SmsMessageSyncCursorTableTableAnnotationComposer
     column: $table.timestampUsec,
     builder: (column) => column,
   );
+
+  $$SmsConversationsTableTableAnnotationComposer get conversationId {
+    final $$SmsConversationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsMessageSyncCursorTableTableTableManager
@@ -19341,14 +22758,10 @@ class $$SmsMessageSyncCursorTableTableTableManager
           $$SmsMessageSyncCursorTableTableUpdateCompanionBuilder,
           (
             SmsMessageSyncCursorData,
-            BaseReferences<
-              _$AppDatabase,
-              $SmsMessageSyncCursorTableTable,
-              SmsMessageSyncCursorData
-            >,
+            $$SmsMessageSyncCursorTableTableReferences,
           ),
           SmsMessageSyncCursorData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool conversationId})
         > {
   $$SmsMessageSyncCursorTableTableTableManager(
     _$AppDatabase db,
@@ -19397,9 +22810,56 @@ class $$SmsMessageSyncCursorTableTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$SmsMessageSyncCursorTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({conversationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (conversationId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.conversationId,
+                                referencedTable:
+                                    $$SmsMessageSyncCursorTableTableReferences
+                                        ._conversationIdTable(db),
+                                referencedColumn:
+                                    $$SmsMessageSyncCursorTableTableReferences
+                                        ._conversationIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -19414,16 +22874,9 @@ typedef $$SmsMessageSyncCursorTableTableProcessedTableManager =
       $$SmsMessageSyncCursorTableTableAnnotationComposer,
       $$SmsMessageSyncCursorTableTableCreateCompanionBuilder,
       $$SmsMessageSyncCursorTableTableUpdateCompanionBuilder,
-      (
-        SmsMessageSyncCursorData,
-        BaseReferences<
-          _$AppDatabase,
-          $SmsMessageSyncCursorTableTable,
-          SmsMessageSyncCursorData
-        >,
-      ),
+      (SmsMessageSyncCursorData, $$SmsMessageSyncCursorTableTableReferences),
       SmsMessageSyncCursorData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool conversationId})
     >;
 typedef $$SmsMessageReadCursorTableTableCreateCompanionBuilder =
     SmsMessageReadCursorDataCompanion Function({
@@ -19440,6 +22893,42 @@ typedef $$SmsMessageReadCursorTableTableUpdateCompanionBuilder =
       Value<int> rowid,
     });
 
+final class $$SmsMessageReadCursorTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $SmsMessageReadCursorTableTable,
+          SmsMessageReadCursorData
+        > {
+  $$SmsMessageReadCursorTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $SmsConversationsTableTable _conversationIdTable(_$AppDatabase db) =>
+      db.smsConversationsTable.createAlias(
+        $_aliasNameGenerator(
+          db.smsMessageReadCursorTable.conversationId,
+          db.smsConversationsTable.id,
+        ),
+      );
+
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
+    final manager = $$SmsConversationsTableTableTableManager(
+      $_db,
+      $_db.smsConversationsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$SmsMessageReadCursorTableTableFilterComposer
     extends Composer<_$AppDatabase, $SmsMessageReadCursorTableTable> {
   $$SmsMessageReadCursorTableTableFilterComposer({
@@ -19449,11 +22938,6 @@ class $$SmsMessageReadCursorTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<String> get userId => $composableBuilder(
     column: $table.userId,
     builder: (column) => ColumnFilters(column),
@@ -19463,6 +22947,30 @@ class $$SmsMessageReadCursorTableTableFilterComposer
     column: $table.timestampUsec,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$SmsConversationsTableTableFilterComposer get conversationId {
+    final $$SmsConversationsTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableFilterComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsMessageReadCursorTableTableOrderingComposer
@@ -19474,11 +22982,6 @@ class $$SmsMessageReadCursorTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get userId => $composableBuilder(
     column: $table.userId,
     builder: (column) => ColumnOrderings(column),
@@ -19488,6 +22991,30 @@ class $$SmsMessageReadCursorTableTableOrderingComposer
     column: $table.timestampUsec,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$SmsConversationsTableTableOrderingComposer get conversationId {
+    final $$SmsConversationsTableTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableOrderingComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsMessageReadCursorTableTableAnnotationComposer
@@ -19499,11 +23026,6 @@ class $$SmsMessageReadCursorTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => column,
-  );
-
   GeneratedColumn<String> get userId =>
       $composableBuilder(column: $table.userId, builder: (column) => column);
 
@@ -19511,6 +23033,30 @@ class $$SmsMessageReadCursorTableTableAnnotationComposer
     column: $table.timestampUsec,
     builder: (column) => column,
   );
+
+  $$SmsConversationsTableTableAnnotationComposer get conversationId {
+    final $$SmsConversationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsMessageReadCursorTableTableTableManager
@@ -19526,14 +23072,10 @@ class $$SmsMessageReadCursorTableTableTableManager
           $$SmsMessageReadCursorTableTableUpdateCompanionBuilder,
           (
             SmsMessageReadCursorData,
-            BaseReferences<
-              _$AppDatabase,
-              $SmsMessageReadCursorTableTable,
-              SmsMessageReadCursorData
-            >,
+            $$SmsMessageReadCursorTableTableReferences,
           ),
           SmsMessageReadCursorData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool conversationId})
         > {
   $$SmsMessageReadCursorTableTableTableManager(
     _$AppDatabase db,
@@ -19582,9 +23124,56 @@ class $$SmsMessageReadCursorTableTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$SmsMessageReadCursorTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({conversationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (conversationId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.conversationId,
+                                referencedTable:
+                                    $$SmsMessageReadCursorTableTableReferences
+                                        ._conversationIdTable(db),
+                                referencedColumn:
+                                    $$SmsMessageReadCursorTableTableReferences
+                                        ._conversationIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -19599,16 +23188,9 @@ typedef $$SmsMessageReadCursorTableTableProcessedTableManager =
       $$SmsMessageReadCursorTableTableAnnotationComposer,
       $$SmsMessageReadCursorTableTableCreateCompanionBuilder,
       $$SmsMessageReadCursorTableTableUpdateCompanionBuilder,
-      (
-        SmsMessageReadCursorData,
-        BaseReferences<
-          _$AppDatabase,
-          $SmsMessageReadCursorTableTable,
-          SmsMessageReadCursorData
-        >,
-      ),
+      (SmsMessageReadCursorData, $$SmsMessageReadCursorTableTableReferences),
       SmsMessageReadCursorData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool conversationId})
     >;
 typedef $$SmsOutboxMessagesTableTableCreateCompanionBuilder =
     SmsOutboxMessageDataCompanion Function({
@@ -19633,6 +23215,42 @@ typedef $$SmsOutboxMessagesTableTableUpdateCompanionBuilder =
       Value<int> rowid,
     });
 
+final class $$SmsOutboxMessagesTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $SmsOutboxMessagesTableTable,
+          SmsOutboxMessageData
+        > {
+  $$SmsOutboxMessagesTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $SmsConversationsTableTable _conversationIdTable(_$AppDatabase db) =>
+      db.smsConversationsTable.createAlias(
+        $_aliasNameGenerator(
+          db.smsOutboxMessagesTable.conversationId,
+          db.smsConversationsTable.id,
+        ),
+      );
+
+  $$SmsConversationsTableTableProcessedTableManager? get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id');
+    if ($_column == null) return null;
+    final manager = $$SmsConversationsTableTableTableManager(
+      $_db,
+      $_db.smsConversationsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$SmsOutboxMessagesTableTableFilterComposer
     extends Composer<_$AppDatabase, $SmsOutboxMessagesTableTable> {
   $$SmsOutboxMessagesTableTableFilterComposer({
@@ -19644,11 +23262,6 @@ class $$SmsOutboxMessagesTableTableFilterComposer
   });
   ColumnFilters<String> get idKey => $composableBuilder(
     column: $table.idKey,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -19676,6 +23289,30 @@ class $$SmsOutboxMessagesTableTableFilterComposer
     column: $table.sendAttempts,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$SmsConversationsTableTableFilterComposer get conversationId {
+    final $$SmsConversationsTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableFilterComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsOutboxMessagesTableTableOrderingComposer
@@ -19689,11 +23326,6 @@ class $$SmsOutboxMessagesTableTableOrderingComposer
   });
   ColumnOrderings<String> get idKey => $composableBuilder(
     column: $table.idKey,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -19721,6 +23353,30 @@ class $$SmsOutboxMessagesTableTableOrderingComposer
     column: $table.sendAttempts,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$SmsConversationsTableTableOrderingComposer get conversationId {
+    final $$SmsConversationsTableTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableOrderingComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsOutboxMessagesTableTableAnnotationComposer
@@ -19734,11 +23390,6 @@ class $$SmsOutboxMessagesTableTableAnnotationComposer
   });
   GeneratedColumn<String> get idKey =>
       $composableBuilder(column: $table.idKey, builder: (column) => column);
-
-  GeneratedColumn<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => column,
-  );
 
   GeneratedColumn<String> get fromPhoneNumber => $composableBuilder(
     column: $table.fromPhoneNumber,
@@ -19762,6 +23413,30 @@ class $$SmsOutboxMessagesTableTableAnnotationComposer
     column: $table.sendAttempts,
     builder: (column) => column,
   );
+
+  $$SmsConversationsTableTableAnnotationComposer get conversationId {
+    final $$SmsConversationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsOutboxMessagesTableTableTableManager
@@ -19775,16 +23450,9 @@ class $$SmsOutboxMessagesTableTableTableManager
           $$SmsOutboxMessagesTableTableAnnotationComposer,
           $$SmsOutboxMessagesTableTableCreateCompanionBuilder,
           $$SmsOutboxMessagesTableTableUpdateCompanionBuilder,
-          (
-            SmsOutboxMessageData,
-            BaseReferences<
-              _$AppDatabase,
-              $SmsOutboxMessagesTableTable,
-              SmsOutboxMessageData
-            >,
-          ),
+          (SmsOutboxMessageData, $$SmsOutboxMessagesTableTableReferences),
           SmsOutboxMessageData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool conversationId})
         > {
   $$SmsOutboxMessagesTableTableTableManager(
     _$AppDatabase db,
@@ -19849,9 +23517,56 @@ class $$SmsOutboxMessagesTableTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$SmsOutboxMessagesTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({conversationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (conversationId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.conversationId,
+                                referencedTable:
+                                    $$SmsOutboxMessagesTableTableReferences
+                                        ._conversationIdTable(db),
+                                referencedColumn:
+                                    $$SmsOutboxMessagesTableTableReferences
+                                        ._conversationIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -19866,16 +23581,9 @@ typedef $$SmsOutboxMessagesTableTableProcessedTableManager =
       $$SmsOutboxMessagesTableTableAnnotationComposer,
       $$SmsOutboxMessagesTableTableCreateCompanionBuilder,
       $$SmsOutboxMessagesTableTableUpdateCompanionBuilder,
-      (
-        SmsOutboxMessageData,
-        BaseReferences<
-          _$AppDatabase,
-          $SmsOutboxMessagesTableTable,
-          SmsOutboxMessageData
-        >,
-      ),
+      (SmsOutboxMessageData, $$SmsOutboxMessagesTableTableReferences),
       SmsOutboxMessageData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool conversationId})
     >;
 typedef $$SmsOutboxMessageDeleteTableTableCreateCompanionBuilder =
     SmsOutboxMessageDeleteDataCompanion Function({
@@ -19891,6 +23599,42 @@ typedef $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder =
       Value<int> conversationId,
       Value<int> sendAttempts,
     });
+
+final class $$SmsOutboxMessageDeleteTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $SmsOutboxMessageDeleteTableTable,
+          SmsOutboxMessageDeleteData
+        > {
+  $$SmsOutboxMessageDeleteTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $SmsConversationsTableTable _conversationIdTable(_$AppDatabase db) =>
+      db.smsConversationsTable.createAlias(
+        $_aliasNameGenerator(
+          db.smsOutboxMessageDeleteTable.conversationId,
+          db.smsConversationsTable.id,
+        ),
+      );
+
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
+    final manager = $$SmsConversationsTableTableTableManager(
+      $_db,
+      $_db.smsConversationsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
 
 class $$SmsOutboxMessageDeleteTableTableFilterComposer
     extends Composer<_$AppDatabase, $SmsOutboxMessageDeleteTableTable> {
@@ -19911,15 +23655,34 @@ class $$SmsOutboxMessageDeleteTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<int> get sendAttempts => $composableBuilder(
     column: $table.sendAttempts,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$SmsConversationsTableTableFilterComposer get conversationId {
+    final $$SmsConversationsTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableFilterComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsOutboxMessageDeleteTableTableOrderingComposer
@@ -19941,15 +23704,34 @@ class $$SmsOutboxMessageDeleteTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<int> get sendAttempts => $composableBuilder(
     column: $table.sendAttempts,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$SmsConversationsTableTableOrderingComposer get conversationId {
+    final $$SmsConversationsTableTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableOrderingComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsOutboxMessageDeleteTableTableAnnotationComposer
@@ -19967,15 +23749,34 @@ class $$SmsOutboxMessageDeleteTableTableAnnotationComposer
   GeneratedColumn<String> get idKey =>
       $composableBuilder(column: $table.idKey, builder: (column) => column);
 
-  GeneratedColumn<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => column,
-  );
-
   GeneratedColumn<int> get sendAttempts => $composableBuilder(
     column: $table.sendAttempts,
     builder: (column) => column,
   );
+
+  $$SmsConversationsTableTableAnnotationComposer get conversationId {
+    final $$SmsConversationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsOutboxMessageDeleteTableTableTableManager
@@ -19991,14 +23792,10 @@ class $$SmsOutboxMessageDeleteTableTableTableManager
           $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder,
           (
             SmsOutboxMessageDeleteData,
-            BaseReferences<
-              _$AppDatabase,
-              $SmsOutboxMessageDeleteTableTable,
-              SmsOutboxMessageDeleteData
-            >,
+            $$SmsOutboxMessageDeleteTableTableReferences,
           ),
           SmsOutboxMessageDeleteData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool conversationId})
         > {
   $$SmsOutboxMessageDeleteTableTableTableManager(
     _$AppDatabase db,
@@ -20047,9 +23844,56 @@ class $$SmsOutboxMessageDeleteTableTableTableManager
                 sendAttempts: sendAttempts,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$SmsOutboxMessageDeleteTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({conversationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (conversationId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.conversationId,
+                                referencedTable:
+                                    $$SmsOutboxMessageDeleteTableTableReferences
+                                        ._conversationIdTable(db),
+                                referencedColumn:
+                                    $$SmsOutboxMessageDeleteTableTableReferences
+                                        ._conversationIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -20066,14 +23910,10 @@ typedef $$SmsOutboxMessageDeleteTableTableProcessedTableManager =
       $$SmsOutboxMessageDeleteTableTableUpdateCompanionBuilder,
       (
         SmsOutboxMessageDeleteData,
-        BaseReferences<
-          _$AppDatabase,
-          $SmsOutboxMessageDeleteTableTable,
-          SmsOutboxMessageDeleteData
-        >,
+        $$SmsOutboxMessageDeleteTableTableReferences,
       ),
       SmsOutboxMessageDeleteData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool conversationId})
     >;
 typedef $$SmsOutboxReadCursorsTableTableCreateCompanionBuilder =
     SmsOutboxReadCursorDataCompanion Function({
@@ -20088,6 +23928,42 @@ typedef $$SmsOutboxReadCursorsTableTableUpdateCompanionBuilder =
       Value<int> sendAttempts,
     });
 
+final class $$SmsOutboxReadCursorsTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $SmsOutboxReadCursorsTableTable,
+          SmsOutboxReadCursorData
+        > {
+  $$SmsOutboxReadCursorsTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $SmsConversationsTableTable _conversationIdTable(_$AppDatabase db) =>
+      db.smsConversationsTable.createAlias(
+        $_aliasNameGenerator(
+          db.smsOutboxReadCursorsTable.conversationId,
+          db.smsConversationsTable.id,
+        ),
+      );
+
+  $$SmsConversationsTableTableProcessedTableManager get conversationId {
+    final $_column = $_itemColumn<int>('conversation_id')!;
+
+    final manager = $$SmsConversationsTableTableTableManager(
+      $_db,
+      $_db.smsConversationsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_conversationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$SmsOutboxReadCursorsTableTableFilterComposer
     extends Composer<_$AppDatabase, $SmsOutboxReadCursorsTableTable> {
   $$SmsOutboxReadCursorsTableTableFilterComposer({
@@ -20097,11 +23973,6 @@ class $$SmsOutboxReadCursorsTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<int> get timestampUsec => $composableBuilder(
     column: $table.timestampUsec,
     builder: (column) => ColumnFilters(column),
@@ -20111,6 +23982,30 @@ class $$SmsOutboxReadCursorsTableTableFilterComposer
     column: $table.sendAttempts,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$SmsConversationsTableTableFilterComposer get conversationId {
+    final $$SmsConversationsTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableFilterComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsOutboxReadCursorsTableTableOrderingComposer
@@ -20122,11 +24017,6 @@ class $$SmsOutboxReadCursorsTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<int> get timestampUsec => $composableBuilder(
     column: $table.timestampUsec,
     builder: (column) => ColumnOrderings(column),
@@ -20136,6 +24026,30 @@ class $$SmsOutboxReadCursorsTableTableOrderingComposer
     column: $table.sendAttempts,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$SmsConversationsTableTableOrderingComposer get conversationId {
+    final $$SmsConversationsTableTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableOrderingComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsOutboxReadCursorsTableTableAnnotationComposer
@@ -20147,11 +24061,6 @@ class $$SmsOutboxReadCursorsTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get conversationId => $composableBuilder(
-    column: $table.conversationId,
-    builder: (column) => column,
-  );
-
   GeneratedColumn<int> get timestampUsec => $composableBuilder(
     column: $table.timestampUsec,
     builder: (column) => column,
@@ -20161,6 +24070,30 @@ class $$SmsOutboxReadCursorsTableTableAnnotationComposer
     column: $table.sendAttempts,
     builder: (column) => column,
   );
+
+  $$SmsConversationsTableTableAnnotationComposer get conversationId {
+    final $$SmsConversationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.conversationId,
+          referencedTable: $db.smsConversationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SmsConversationsTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.smsConversationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SmsOutboxReadCursorsTableTableTableManager
@@ -20174,16 +24107,9 @@ class $$SmsOutboxReadCursorsTableTableTableManager
           $$SmsOutboxReadCursorsTableTableAnnotationComposer,
           $$SmsOutboxReadCursorsTableTableCreateCompanionBuilder,
           $$SmsOutboxReadCursorsTableTableUpdateCompanionBuilder,
-          (
-            SmsOutboxReadCursorData,
-            BaseReferences<
-              _$AppDatabase,
-              $SmsOutboxReadCursorsTableTable,
-              SmsOutboxReadCursorData
-            >,
-          ),
+          (SmsOutboxReadCursorData, $$SmsOutboxReadCursorsTableTableReferences),
           SmsOutboxReadCursorData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool conversationId})
         > {
   $$SmsOutboxReadCursorsTableTableTableManager(
     _$AppDatabase db,
@@ -20228,9 +24154,56 @@ class $$SmsOutboxReadCursorsTableTableTableManager
                 sendAttempts: sendAttempts,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$SmsOutboxReadCursorsTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({conversationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (conversationId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.conversationId,
+                                referencedTable:
+                                    $$SmsOutboxReadCursorsTableTableReferences
+                                        ._conversationIdTable(db),
+                                referencedColumn:
+                                    $$SmsOutboxReadCursorsTableTableReferences
+                                        ._conversationIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -20245,16 +24218,9 @@ typedef $$SmsOutboxReadCursorsTableTableProcessedTableManager =
       $$SmsOutboxReadCursorsTableTableAnnotationComposer,
       $$SmsOutboxReadCursorsTableTableCreateCompanionBuilder,
       $$SmsOutboxReadCursorsTableTableUpdateCompanionBuilder,
-      (
-        SmsOutboxReadCursorData,
-        BaseReferences<
-          _$AppDatabase,
-          $SmsOutboxReadCursorsTableTable,
-          SmsOutboxReadCursorData
-        >,
-      ),
+      (SmsOutboxReadCursorData, $$SmsOutboxReadCursorsTableTableReferences),
       SmsOutboxReadCursorData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool conversationId})
     >;
 typedef $$SipSubscriptionsTableTableCreateCompanionBuilder =
     SipSubscriptionDataCompanion Function({
@@ -21406,6 +25372,48 @@ typedef $$SystemNotificationsTableTableUpdateCompanionBuilder =
       Value<int> updatedAtRemoteUsec,
     });
 
+final class $$SystemNotificationsTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $SystemNotificationsTableTable,
+          SystemNotificationData
+        > {
+  $$SystemNotificationsTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static MultiTypedResultKey<
+    $SystemNotificationsOutboxTableTable,
+    List<SystemNotificationOutboxEntryData>
+  >
+  _systemNotificationsOutboxTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.systemNotificationsOutboxTable,
+        aliasName: $_aliasNameGenerator(
+          db.systemNotificationsTable.id,
+          db.systemNotificationsOutboxTable.notificationId,
+        ),
+      );
+
+  $$SystemNotificationsOutboxTableTableProcessedTableManager
+  get systemNotificationsOutboxTableRefs {
+    final manager = $$SystemNotificationsOutboxTableTableTableManager(
+      $_db,
+      $_db.systemNotificationsOutboxTable,
+    ).filter((f) => f.notificationId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _systemNotificationsOutboxTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
 class $$SystemNotificationsTableTableFilterComposer
     extends Composer<_$AppDatabase, $SystemNotificationsTableTable> {
   $$SystemNotificationsTableTableFilterComposer({
@@ -21454,6 +25462,35 @@ class $$SystemNotificationsTableTableFilterComposer
     column: $table.updatedAtRemoteUsec,
     builder: (column) => ColumnFilters(column),
   );
+
+  Expression<bool> systemNotificationsOutboxTableRefs(
+    Expression<bool> Function(
+      $$SystemNotificationsOutboxTableTableFilterComposer f,
+    )
+    f,
+  ) {
+    final $$SystemNotificationsOutboxTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.systemNotificationsOutboxTable,
+          getReferencedColumn: (t) => t.notificationId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SystemNotificationsOutboxTableTableFilterComposer(
+                $db: $db,
+                $table: $db.systemNotificationsOutboxTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$SystemNotificationsTableTableOrderingComposer
@@ -21534,6 +25571,35 @@ class $$SystemNotificationsTableTableAnnotationComposer
     column: $table.updatedAtRemoteUsec,
     builder: (column) => column,
   );
+
+  Expression<T> systemNotificationsOutboxTableRefs<T extends Object>(
+    Expression<T> Function(
+      $$SystemNotificationsOutboxTableTableAnnotationComposer a,
+    )
+    f,
+  ) {
+    final $$SystemNotificationsOutboxTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.systemNotificationsOutboxTable,
+          getReferencedColumn: (t) => t.notificationId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SystemNotificationsOutboxTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.systemNotificationsOutboxTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$SystemNotificationsTableTableTableManager
@@ -21547,16 +25613,9 @@ class $$SystemNotificationsTableTableTableManager
           $$SystemNotificationsTableTableAnnotationComposer,
           $$SystemNotificationsTableTableCreateCompanionBuilder,
           $$SystemNotificationsTableTableUpdateCompanionBuilder,
-          (
-            SystemNotificationData,
-            BaseReferences<
-              _$AppDatabase,
-              $SystemNotificationsTableTable,
-              SystemNotificationData
-            >,
-          ),
+          (SystemNotificationData, $$SystemNotificationsTableTableReferences),
           SystemNotificationData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool systemNotificationsOutboxTableRefs})
         > {
   $$SystemNotificationsTableTableTableManager(
     _$AppDatabase db,
@@ -21617,9 +25676,50 @@ class $$SystemNotificationsTableTableTableManager
                 updatedAtRemoteUsec: updatedAtRemoteUsec,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$SystemNotificationsTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback:
+              ({systemNotificationsOutboxTableRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (systemNotificationsOutboxTableRefs)
+                      db.systemNotificationsOutboxTable,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (systemNotificationsOutboxTableRefs)
+                        await $_getPrefetchedData<
+                          SystemNotificationData,
+                          $SystemNotificationsTableTable,
+                          SystemNotificationOutboxEntryData
+                        >(
+                          currentTable: table,
+                          referencedTable:
+                              $$SystemNotificationsTableTableReferences
+                                  ._systemNotificationsOutboxTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$SystemNotificationsTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).systemNotificationsOutboxTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.notificationId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
         ),
       );
 }
@@ -21634,16 +25734,9 @@ typedef $$SystemNotificationsTableTableProcessedTableManager =
       $$SystemNotificationsTableTableAnnotationComposer,
       $$SystemNotificationsTableTableCreateCompanionBuilder,
       $$SystemNotificationsTableTableUpdateCompanionBuilder,
-      (
-        SystemNotificationData,
-        BaseReferences<
-          _$AppDatabase,
-          $SystemNotificationsTableTable,
-          SystemNotificationData
-        >,
-      ),
+      (SystemNotificationData, $$SystemNotificationsTableTableReferences),
       SystemNotificationData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool systemNotificationsOutboxTableRefs})
     >;
 typedef $$SystemNotificationsOutboxTableTableCreateCompanionBuilder =
     SystemNotificationOutboxEntryDataCompanion Function({
@@ -21662,6 +25755,43 @@ typedef $$SystemNotificationsOutboxTableTableUpdateCompanionBuilder =
       Value<int> rowid,
     });
 
+final class $$SystemNotificationsOutboxTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $SystemNotificationsOutboxTableTable,
+          SystemNotificationOutboxEntryData
+        > {
+  $$SystemNotificationsOutboxTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $SystemNotificationsTableTable _notificationIdTable(
+    _$AppDatabase db,
+  ) => db.systemNotificationsTable.createAlias(
+    $_aliasNameGenerator(
+      db.systemNotificationsOutboxTable.notificationId,
+      db.systemNotificationsTable.id,
+    ),
+  );
+
+  $$SystemNotificationsTableTableProcessedTableManager get notificationId {
+    final $_column = $_itemColumn<int>('notification_id')!;
+
+    final manager = $$SystemNotificationsTableTableTableManager(
+      $_db,
+      $_db.systemNotificationsTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_notificationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
 class $$SystemNotificationsOutboxTableTableFilterComposer
     extends Composer<_$AppDatabase, $SystemNotificationsOutboxTableTable> {
   $$SystemNotificationsOutboxTableTableFilterComposer({
@@ -21671,11 +25801,6 @@ class $$SystemNotificationsOutboxTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get notificationId => $composableBuilder(
-    column: $table.notificationId,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnWithTypeConverterFilters<
     SnOutboxDataActionType,
     SnOutboxDataActionType,
@@ -21696,6 +25821,30 @@ class $$SystemNotificationsOutboxTableTableFilterComposer
     column: $table.sendAttempts,
     builder: (column) => ColumnFilters(column),
   );
+
+  $$SystemNotificationsTableTableFilterComposer get notificationId {
+    final $$SystemNotificationsTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.notificationId,
+          referencedTable: $db.systemNotificationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SystemNotificationsTableTableFilterComposer(
+                $db: $db,
+                $table: $db.systemNotificationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SystemNotificationsOutboxTableTableOrderingComposer
@@ -21707,11 +25856,6 @@ class $$SystemNotificationsOutboxTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get notificationId => $composableBuilder(
-    column: $table.notificationId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get actionType => $composableBuilder(
     column: $table.actionType,
     builder: (column) => ColumnOrderings(column),
@@ -21726,6 +25870,30 @@ class $$SystemNotificationsOutboxTableTableOrderingComposer
     column: $table.sendAttempts,
     builder: (column) => ColumnOrderings(column),
   );
+
+  $$SystemNotificationsTableTableOrderingComposer get notificationId {
+    final $$SystemNotificationsTableTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.notificationId,
+          referencedTable: $db.systemNotificationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SystemNotificationsTableTableOrderingComposer(
+                $db: $db,
+                $table: $db.systemNotificationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SystemNotificationsOutboxTableTableAnnotationComposer
@@ -21737,11 +25905,6 @@ class $$SystemNotificationsOutboxTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get notificationId => $composableBuilder(
-    column: $table.notificationId,
-    builder: (column) => column,
-  );
-
   GeneratedColumnWithTypeConverter<SnOutboxDataActionType, String>
   get actionType => $composableBuilder(
     column: $table.actionType,
@@ -21755,6 +25918,30 @@ class $$SystemNotificationsOutboxTableTableAnnotationComposer
     column: $table.sendAttempts,
     builder: (column) => column,
   );
+
+  $$SystemNotificationsTableTableAnnotationComposer get notificationId {
+    final $$SystemNotificationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.notificationId,
+          referencedTable: $db.systemNotificationsTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$SystemNotificationsTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.systemNotificationsTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$SystemNotificationsOutboxTableTableTableManager
@@ -21770,14 +25957,10 @@ class $$SystemNotificationsOutboxTableTableTableManager
           $$SystemNotificationsOutboxTableTableUpdateCompanionBuilder,
           (
             SystemNotificationOutboxEntryData,
-            BaseReferences<
-              _$AppDatabase,
-              $SystemNotificationsOutboxTableTable,
-              SystemNotificationOutboxEntryData
-            >,
+            $$SystemNotificationsOutboxTableTableReferences,
           ),
           SystemNotificationOutboxEntryData,
-          PrefetchHooks Function()
+          PrefetchHooks Function({bool notificationId})
         > {
   $$SystemNotificationsOutboxTableTableTableManager(
     _$AppDatabase db,
@@ -21830,9 +26013,56 @@ class $$SystemNotificationsOutboxTableTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$SystemNotificationsOutboxTableTableReferences(db, table, e),
+                ),
+              )
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({notificationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (notificationId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.notificationId,
+                                referencedTable:
+                                    $$SystemNotificationsOutboxTableTableReferences
+                                        ._notificationIdTable(db),
+                                referencedColumn:
+                                    $$SystemNotificationsOutboxTableTableReferences
+                                        ._notificationIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ),
       );
 }
@@ -21849,14 +26079,10 @@ typedef $$SystemNotificationsOutboxTableTableProcessedTableManager =
       $$SystemNotificationsOutboxTableTableUpdateCompanionBuilder,
       (
         SystemNotificationOutboxEntryData,
-        BaseReferences<
-          _$AppDatabase,
-          $SystemNotificationsOutboxTableTable,
-          SystemNotificationOutboxEntryData
-        >,
+        $$SystemNotificationsOutboxTableTableReferences,
       ),
       SystemNotificationOutboxEntryData,
-      PrefetchHooks Function()
+      PrefetchHooks Function({bool notificationId})
     >;
 typedef $$PresenceInfoTableTableCreateCompanionBuilder =
     PresenceInfoDataCompanion Function({

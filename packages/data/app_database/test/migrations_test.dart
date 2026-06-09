@@ -11,6 +11,8 @@ import 'package:app_database/src/migrations/generated/schema.dart';
 import 'package:app_database/src/migrations/generated/schema_v18.dart' as v18;
 import 'package:app_database/src/migrations/generated/schema_v19.dart' as v19;
 import 'package:app_database/src/migrations/generated/schema_v20.dart' as v20;
+import 'package:app_database/src/migrations/generated/schema_v22.dart' as v22;
+import 'package:app_database/src/migrations/generated/schema_v23.dart' as v23;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -233,6 +235,85 @@ void main() {
         expect(rows.length, 2);
         expect(rows.any((r) => r.read<String>('label') == 'number'), isTrue);
         expect(rows.any((r) => r.read<String>('label') == 'sms'), isTrue);
+
+        await checkDb.close();
+      } finally {
+        schema.close();
+      }
+    });
+  });
+
+  group('migration v23 data integrity', () {
+    test('preserves existing cdrs rows after dropping the redundant UNIQUE', () async {
+      final schema = await verifier.schemaAt(22);
+      try {
+        final oldDb = v22.DatabaseAtV22(schema.newConnection());
+
+        await oldDb.customStatement('''
+          INSERT INTO cdrs (
+            call_id, direction, status, callee, callee_number, caller, caller_number,
+            connect_time_usec, disconnect_time_usec, disconnect_reason, duration_seconds, recording_id
+          ) VALUES ('call-1', 'incoming', 'accepted', 'Alice', '1001', 'Bob', '2001', 100, 200, 'normal', 60, 'rec-1')
+        ''');
+        await oldDb.customStatement('''
+          INSERT INTO cdrs (
+            call_id, direction, status, callee, caller,
+            connect_time_usec, disconnect_time_usec, disconnect_reason, duration_seconds
+          ) VALUES ('call-2', 'outgoing', 'missed', 'Carol', 'Dave', 300, 400, 'busy', 0)
+        ''');
+        await oldDb.close();
+
+        final appDatabase = AppDatabase(schema.newConnection());
+        await verifier.migrateAndValidate(appDatabase, 23);
+        await appDatabase.close();
+
+        final checkDb = v23.DatabaseAtV23(schema.newConnection());
+
+        final rows = await checkDb
+            .customSelect('SELECT call_id, status, duration_seconds, recording_id FROM cdrs ORDER BY call_id ASC')
+            .get();
+
+        expect(rows.length, 2);
+        expect(rows[0].read<String>('call_id'), 'call-1');
+        expect(rows[0].read<String>('status'), 'accepted');
+        expect(rows[0].read<int>('duration_seconds'), 60);
+        expect(rows[0].read<String>('recording_id'), 'rec-1');
+        expect(rows[1].read<String>('call_id'), 'call-2');
+        expect(rows[1].read<String?>('recording_id'), null);
+
+        await checkDb.close();
+      } finally {
+        schema.close();
+      }
+    });
+
+    test('primary key still rejects duplicate call_id after migration', () async {
+      final schema = await verifier.schemaAt(22);
+      try {
+        final oldDb = v22.DatabaseAtV22(schema.newConnection());
+        await oldDb.customStatement('''
+          INSERT INTO cdrs (
+            call_id, direction, status, callee, caller,
+            connect_time_usec, disconnect_time_usec, disconnect_reason, duration_seconds
+          ) VALUES ('call-1', 'incoming', 'accepted', 'Alice', 'Bob', 100, 200, 'normal', 60)
+        ''');
+        await oldDb.close();
+
+        final appDatabase = AppDatabase(schema.newConnection());
+        await verifier.migrateAndValidate(appDatabase, 23);
+        await appDatabase.close();
+
+        final checkDb = v23.DatabaseAtV23(schema.newConnection());
+
+        await expectLater(
+          checkDb.customStatement('''
+            INSERT INTO cdrs (
+              call_id, direction, status, callee, caller,
+              connect_time_usec, disconnect_time_usec, disconnect_reason, duration_seconds
+            ) VALUES ('call-1', 'outgoing', 'declined', 'X', 'Y', 1, 2, 'normal', 1)
+          '''),
+          throwsA(anything),
+        );
 
         await checkDb.close();
       } finally {

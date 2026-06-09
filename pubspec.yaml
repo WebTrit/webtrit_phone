@@ -58,7 +58,7 @@ dependencies:
   device_info_plus: ^13.1.0
   device_region: ^1.4.0
   dlibphonenumber: ^1.1.64
-  drift: ^2.29.0
+  drift: ^2.32.1
   emoji_picker_flutter: ^4.4.0
   equatable: ^2.0.8
   firebase_analytics: ^12.4.1

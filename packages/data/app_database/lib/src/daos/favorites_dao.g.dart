@@ -4,10 +4,10 @@ part of 'favorites_dao.dart';
 
 // ignore_for_file: type=lint
 mixin _$FavoritesDaoMixin on DatabaseAccessor<AppDatabase> {
-  $FavoritesTableTable get favoritesTable => attachedDatabase.favoritesTable;
   $ContactsTableTable get contactsTable => attachedDatabase.contactsTable;
   $ContactPhonesTableTable get contactPhonesTable =>
       attachedDatabase.contactPhonesTable;
+  $FavoritesTableTable get favoritesTable => attachedDatabase.favoritesTable;
   $ContactEmailsTableTable get contactEmailsTable =>
       attachedDatabase.contactEmailsTable;
   $PresenceInfoTableTable get presenceInfoTable =>
@@ -18,17 +18,17 @@ mixin _$FavoritesDaoMixin on DatabaseAccessor<AppDatabase> {
 class FavoritesDaoManager {
   final _$FavoritesDaoMixin _db;
   FavoritesDaoManager(this._db);
-  $$FavoritesTableTableTableManager get favoritesTable =>
-      $$FavoritesTableTableTableManager(
-        _db.attachedDatabase,
-        _db.favoritesTable,
-      );
   $$ContactsTableTableTableManager get contactsTable =>
       $$ContactsTableTableTableManager(_db.attachedDatabase, _db.contactsTable);
   $$ContactPhonesTableTableTableManager get contactPhonesTable =>
       $$ContactPhonesTableTableTableManager(
         _db.attachedDatabase,
         _db.contactPhonesTable,
+      );
+  $$FavoritesTableTableTableManager get favoritesTable =>
+      $$FavoritesTableTableTableManager(
+        _db.attachedDatabase,
+        _db.favoritesTable,
       );
   $$ContactEmailsTableTableTableManager get contactEmailsTable =>
       $$ContactEmailsTableTableTableManager(
