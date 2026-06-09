@@ -1373,6 +1373,10 @@ class AppLocalizationsUk extends AppLocalizations {
       'Термін дії вашої сесії закінчився. Будь ласка, увійдіть знову.';
 
   @override
+  String get notifications_errorSnackBar_accountNotFound =>
+      'Ваш обліковий запис не знайдено. Можливо, його деактивовано або видалено. Зверніться до адміністратора.';
+
+  @override
   String get notifications_errorSnackBar_SignalingConnectFailed => 'Підключення до ядра не вдалося, спроба з\'єднання';
 
   @override

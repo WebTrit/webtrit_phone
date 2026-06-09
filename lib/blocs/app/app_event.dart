@@ -12,6 +12,11 @@ enum AppLogoutReason {
   /// The server explicitly rejected a request due to authentication.
   /// Requires both remote session revocation and local data cleanup.
   serverRejection,
+
+  /// The account no longer exists on the server (404 UserNotFoundException),
+  /// e.g. it was deactivated or removed. Terminal; requires only local data
+  /// cleanup since the remote user record is already gone.
+  userNotFound,
 }
 
 sealed class AppEvent extends Equatable {

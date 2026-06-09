@@ -143,6 +143,15 @@ class SessionExpiredNotification extends MessageNotification {
   }
 }
 
+class AccountNotFoundNotification extends MessageNotification {
+  const AccountNotFoundNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_accountNotFound;
+  }
+}
+
 class DeleteAccountNotSupportedNotification extends MessageNotification {
   const DeleteAccountNotSupportedNotification();
 

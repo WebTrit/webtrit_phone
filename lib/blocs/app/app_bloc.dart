@@ -131,8 +131,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     final currentSession = sessionRepository.getCurrent();
 
     // Determine if we should attempt to revoke the session on the server.
-    // We skip this only for 'sessionMissed' because the socket error (4201)
-    // guarantees the session is already terminated.
+    // We skip this for 'sessionMissed' because the socket error (4201)
+    // guarantees the session is already terminated, and for 'userNotFound'
+    // because the account no longer exists (the revoke would just 404 again).
     final shouldRevokeRemote = reason == AppLogoutReason.userRequest || reason == AppLogoutReason.serverRejection;
 
     if (shouldRevokeRemote && currentSession.isLoggedIn) {

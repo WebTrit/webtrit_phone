@@ -107,11 +107,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     final notificationsBloc = context.read<NotificationsBloc>();
 
     _sessionGuard = RouterLogoutSessionGuard(
-      performLogout: () {
-        _appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.serverRejection));
+      performLogout: (e) {
+        final reason = e is UserNotFoundException ? AppLogoutReason.userNotFound : AppLogoutReason.serverRejection;
+        _appBloc.add(AppLogoutRequested(reason: reason));
       },
-      onPreLogout: () {
-        notificationsBloc.add(NotificationsSubmitted(SessionExpiredNotification()));
+      onPreLogout: (e) {
+        notificationsBloc.add(
+          NotificationsSubmitted(
+            e is UserNotFoundException ? const AccountNotFoundNotification() : const SessionExpiredNotification(),
+          ),
+        );
       },
     );
   }
