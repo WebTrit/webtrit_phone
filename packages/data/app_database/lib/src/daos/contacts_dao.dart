@@ -174,7 +174,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
   Future<FullContactData?> getContactByPhoneNumber(String number) async {
     final query = _joinFullData(select(contactsTable))
       ..where(contactPhonesTable.number.equals(number))
-      ..orderBy([OrderingTerm(expression: contactsTable.sourceType, mode: OrderingMode.desc)])
+      ..orderBy(contactsTable.sourcePriorityOrder())
       ..limit(1);
 
     return query.get().then(_gatherSingleContact);
@@ -199,7 +199,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
   Stream<FullContactData?> watchContactByPhoneNumber(String number) {
     final query = _joinFullData(select(contactsTable))
       ..where(contactPhonesTable.number.equals(number))
-      ..orderBy([OrderingTerm(expression: contactsTable.sourceType, mode: OrderingMode.desc)])
+      ..orderBy(contactsTable.sourcePriorityOrder())
       ..limit(1);
 
     return query.watch().map(_gatherSingleContact);
@@ -208,7 +208,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
   Future<FullContactData?> getContactByPhoneMatchedEnding(String number) {
     final query = _joinFullData(select(contactsTable));
     query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
-    query.orderBy([OrderingTerm(expression: contactsTable.sourceType, mode: OrderingMode.desc)]);
+    query.orderBy(contactsTable.sourcePriorityOrder());
     query.limit(1);
 
     return query.get().then(_gatherSingleContact);
@@ -217,7 +217,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
   Stream<FullContactData?> watchContactByPhoneMatchedEnding(String number) {
     final query = _joinFullData(select(contactsTable));
     query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
-    query.orderBy([OrderingTerm(expression: contactsTable.sourceType, mode: OrderingMode.desc)]);
+    query.orderBy(contactsTable.sourcePriorityOrder());
     query.limit(1);
 
     return query.watch().map((data) => _gatherMultipleContacts(data).firstOrNull);

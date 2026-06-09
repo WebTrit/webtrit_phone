@@ -54,6 +54,26 @@ dart test test/contacts_dao_test.dart
 - `watch()` methods for reactive UI updates.
 - Never edit `.g.dart` manually.
 
+#### Contact source priority (number collisions)
+
+The same phone number can belong to BOTH a local (device phonebook) contact and an
+external (PBX) contact. Any query that resolves a number to a single display contact
+MUST make the winner deterministic instead of leaving it to SQLite's unspecified row
+order. Use the shared ordering term, never an ad-hoc `ORDER BY sourceType`:
+
+```dart
+..orderBy(contactsTable.sourcePriorityOrder()) // defaults to external (PBX) first
+```
+
+`sourcePriorityOrder` lives in `daos/contact_source_priority.dart`. It uses an explicit
+CASE (independent of the enum's int encoding) and takes a `ContactSourcePreference`
+for the rare case where local priority is intentional.
+
+- Single-contact lookups (`LIMIT 1`): add the ordering before the limit.
+- Entry-centric joins (call_log/voicemail -> contact_phones -> contacts): a colliding
+  number yields one joined row per contact, so order by the term AND collapse to one
+  contact per entry (keep the first, which is the preferred source).
+
 ### Domain Areas
 
 | Domain        | Tables                                                                         | DAO                                                    |
