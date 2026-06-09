@@ -459,6 +459,30 @@ abstract class AppLocalizations {
   /// **'VPN may be blocking the call. Try disabling it'**
   String get iceConnectionIssue_iceFailNoIcePathViaVpn;
 
+  /// No description provided for @callNetworkQuality_yourAudioWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Your audio is weak'**
+  String get callNetworkQuality_yourAudioWeak;
+
+  /// No description provided for @callNetworkQuality_yourVideoWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Your video is weak'**
+  String get callNetworkQuality_yourVideoWeak;
+
+  /// No description provided for @callNetworkQuality_theirAudioWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Their audio is weak'**
+  String get callNetworkQuality_theirAudioWeak;
+
+  /// No description provided for @callNetworkQuality_theirVideoWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Their video is weak'**
+  String get callNetworkQuality_theirVideoWeak;
+
   /// No description provided for @callPullBadge_dialogTitle.
   ///
   /// In en, this message translates to:

@@ -113,6 +113,10 @@ extension AppLocalizationsExtension on AppLocalizations {
         iceConnectionIssue_iceFailNoIcePath,
       'iceConnectionIssue_iceFailNoIcePathViaVpn' =>
         iceConnectionIssue_iceFailNoIcePathViaVpn,
+      'callNetworkQuality_yourAudioWeak' => callNetworkQuality_yourAudioWeak,
+      'callNetworkQuality_yourVideoWeak' => callNetworkQuality_yourVideoWeak,
+      'callNetworkQuality_theirAudioWeak' => callNetworkQuality_theirAudioWeak,
+      'callNetworkQuality_theirVideoWeak' => callNetworkQuality_theirVideoWeak,
       'callPullBadge_dialogTitle' => callPullBadge_dialogTitle,
       'callPullBadge_pickupButtonTitle' => callPullBadge_pickupButtonTitle,
       'call_settings_additional_options' => call_settings_additional_options,
@@ -664,6 +668,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         notifications_errorSnackBar_callWhileUnregistered,
       'notifications_errorSnackBar_sessionExpired' =>
         notifications_errorSnackBar_sessionExpired,
+      'notifications_errorSnackBar_accountNotFound' =>
+        notifications_errorSnackBar_accountNotFound,
       'notifications_errorSnackBar_SignalingConnectFailed' =>
         notifications_errorSnackBar_SignalingConnectFailed,
       'notifications_errorSnackBarAction_emergencyNumber' =>

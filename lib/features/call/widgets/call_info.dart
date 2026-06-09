@@ -13,6 +13,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 import '../extensions/extensions.dart';
 import '../models/models.dart';
 import '../view/call_screen_style.dart';
+import 'call_network_quality_meter.dart';
 
 class CallInfo extends StatefulWidget {
   const CallInfo({
@@ -28,6 +29,7 @@ class CallInfo extends StatefulWidget {
     this.processingStatus,
     required this.callStatus,
     this.iceConnectionIssue,
+    this.networkQuality,
     required this.style,
   });
 
@@ -41,6 +43,7 @@ class CallInfo extends StatefulWidget {
   final DateTime? acceptedTime;
   final CallProcessingStatus? processingStatus;
   final IceConnectionIssue? iceConnectionIssue;
+  final CallNetworkQuality? networkQuality;
   final CallInfoStyle? style;
 
   // TODO(Serdun): Rename class to better represent the actual data it holds
@@ -158,7 +161,17 @@ class _CallInfoState extends State<CallInfo> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-        Text(statusMessage, style: statusTextStyle),
+        if (widget.networkQuality != null && widget.iceConnectionIssue == null)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 6,
+            children: [
+              Text(statusMessage, style: statusTextStyle),
+              CallNetworkQualityMeter(quality: widget.networkQuality!, baseColor: statusTextStyle?.color),
+            ],
+          )
+        else
+          Text(statusMessage, style: statusTextStyle),
         if (processingStatus != null)
           Text(processingStatus, style: processingStatusTextStyle, textAlign: TextAlign.center)
         else if (iceConnectionIssue != null)

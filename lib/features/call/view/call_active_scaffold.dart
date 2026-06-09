@@ -212,6 +212,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 processingStatus: activeCall.processingStatus,
                                                 callStatus: widget.callStatus,
                                                 iceConnectionIssue: activeCall.iceConnectionIssue,
+                                                networkQuality: activeCall.networkQuality,
                                               ),
                                             ],
 

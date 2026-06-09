@@ -244,6 +244,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get iceConnectionIssue_iceFailNoIcePathViaVpn => 'VPN може блокувати дзвінок. Спробуйте вимкнути його';
 
   @override
+  String get callNetworkQuality_yourAudioWeak => 'Ваш звук слабкий';
+
+  @override
+  String get callNetworkQuality_yourVideoWeak => 'Ваше відео слабке';
+
+  @override
+  String get callNetworkQuality_theirAudioWeak => 'Звук співрозмовника слабкий';
+
+  @override
+  String get callNetworkQuality_theirVideoWeak => 'Відео співрозмовника слабке';
+
+  @override
   String get callPullBadge_dialogTitle => 'Перехопляємі дзвінки';
 
   @override
