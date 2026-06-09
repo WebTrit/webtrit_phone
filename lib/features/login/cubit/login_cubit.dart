@@ -93,10 +93,13 @@ class LoginCubit extends Cubit<LoginState> {
       }
 
       final supportedFeatures = systemInfo.adapter?.supported ?? [];
-      final supportedLoginTypes = supportedFeatures
+      final parsedLoginTypes = supportedFeatures
           .where((f) => LoginType.values.map((e) => e.name).contains(f))
           .map((f) => LoginType.values.byName(f))
           .toList();
+      // Backend may list the options in an unstable order; impose a deterministic
+      // client-side order so the login tabs do not jump around between requests.
+      final supportedLoginTypes = sortLoginTypes(parsedLoginTypes, orderConfig: EnvironmentConfig.LOGIN_TYPES_ORDER);
       if (demo) supportedLoginTypes.removeWhere((loginType) => loginType != LoginType.signup);
 
       if (supportedLoginTypes.isEmpty) {

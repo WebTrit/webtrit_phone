@@ -3,6 +3,7 @@ export 'email_input.dart';
 export 'notifications.dart';
 export 'login_mode.dart';
 export 'login_type.dart';
+export 'login_type_order.dart';
 export 'otp_signin_identifier.dart';
 export 'password_input.dart';
 export 'phone_input.dart';

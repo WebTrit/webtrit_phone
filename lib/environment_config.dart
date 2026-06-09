@@ -40,6 +40,14 @@ class EnvironmentConfig {
       .where((e) => e.isNotEmpty)
       .toList(growable: false);
 
+  static const LOGIN_TYPES_ORDER__NAME = 'WEBTRIT_APP_LOGIN_TYPES_ORDER';
+  static const _LOGIN_TYPES_ORDER_RAW = String.fromEnvironment(LOGIN_TYPES_ORDER__NAME);
+  static final List<String> LOGIN_TYPES_ORDER = _LOGIN_TYPES_ORDER_RAW
+      .split(';')
+      .map((e) => e.trim())
+      .where((e) => e.isNotEmpty)
+      .toList(growable: false);
+
   static const CORE_VERSION_CONSTRAINT__NAME = 'WEBTRIT_APP_CORE_VERSION_CONSTRAINT';
   static const CORE_VERSION_CONSTRAINT = String.fromEnvironment(
     CORE_VERSION_CONSTRAINT__NAME,

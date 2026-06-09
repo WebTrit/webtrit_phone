@@ -6,6 +6,8 @@
   "WEBTRIT_APP_DEMO_CORE_URL": "http://192.168.10.100:4000",
   "_WEBTRIT_APP_PREDEFINED_CORE_URLS": "",
   "__WEBTRIT_APP_PREDEFINED_CORE_URLS_DESCRIPTION": "Semicolon-separated list of Core URLs to pre-populate the core URL autocomplete dropdown on the login screen. Example: 'https://core1.example.com;https://core2.example.com'. Suggestions are always shown; user-typed entries appear above presets and case-insensitive duplicates are merged.",
+  "_WEBTRIT_APP_LOGIN_TYPES_ORDER": "passwordSignin;otpSignin;signup",
+  "__WEBTRIT_APP_LOGIN_TYPES_ORDER_DESCRIPTION": "Semicolon-separated order of login tabs by LoginType name (passwordSignin, otpSignin, signup). Only the options advertised by the backend are shown; this controls their order and which one is selected by default. Unknown or omitted names are placed last. Empty falls back to the built-in default 'passwordSignin;otpSignin;signup'.",
   "_WEBTRIT_APP_CORE_VERSION_CONSTRAINT": "",
   "WEBTRIT_APP_LINK_DOMAIN": "app.webtrit.com",
   "__WEBTRIT_APP_LINK_DOMAIN_DESCRIPTION": "If provided, enables Android App Links integration via intent-filter. Must match assetlinks.json configuration on the target domain. This functionality is configured via Android flavors — if the value is non-empty, the 'deeplinks' flavor is selected automatically.",
