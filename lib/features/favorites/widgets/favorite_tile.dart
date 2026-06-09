@@ -136,10 +136,18 @@ class _FavoriteTileState extends State<FavoriteTile> {
                 dialogInfo: contact?.dialogInfo,
               ),
               title: switch (presenceParams.hybridPresenceSupport) {
-                true => Text('$name ${contact?.presenceInfo.primaryStatusIcon ?? ''}'),
-                false => Text(name),
+                true => Text(
+                  '$name ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                false => Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
               },
-              subtitle: Text('${widget.favorite.label.capitalize}: ${widget.favorite.number}'),
+              subtitle: Text(
+                '${widget.favorite.label.capitalize}: ${widget.favorite.number}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
               onTap: widget.gesturesEnabled ? widget.onTap : null,
               onLongPress: widget.gesturesEnabled ? onLongPress : null,
             ),
