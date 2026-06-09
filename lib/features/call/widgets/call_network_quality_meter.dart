@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/theme/styles/styles.dart';
+
 import '../extensions/extensions.dart';
 import '../models/models.dart';
 
-/// Compact, icon-only signal meter surfaced beside the call timer when Janus
+/// Compact signal meter shown on its own line below the call timer when Janus
 /// `slowlink` events indicate the media is degrading (before a hard failure).
 ///
 /// Encodes the slowlink fields: bar count + color = severity, an up/down arrow =
@@ -11,6 +13,10 @@ import '../models/models.dart';
 /// At [CallNetworkQualitySeverity.severe] it also shows a short text label. When
 /// the stream recovers it briefly renders a green "stable" confirmation before
 /// the bloc clears it.
+///
+/// State changes are morphed in place (bar colors tween, the row resizes) rather
+/// than cross-faded, so only appearing/disappearing fades; switching severity or
+/// direction does not flicker.
 class CallNetworkQualityMeter extends StatelessWidget {
   const CallNetworkQualityMeter({super.key, required this.quality, this.baseColor});
 
@@ -20,45 +26,45 @@ class CallNetworkQualityMeter extends StatelessWidget {
   /// text color so the meter blends with the call timer.
   final Color? baseColor;
 
-  // Severity palette. These intentionally live outside the Material ColorScheme
-  // because it has no amber/orange "warning" semantic role. Coral/red stays
-  // reserved for real failures (IceConnectionIssue) and is never used here.
-  static const _amber = Color(0xFFFFB300);
-  static const _orange = Color(0xFFF95A14);
-  static const _green = Color(0xFF75B943);
-
   static const double _glyphSize = 14;
+  static const _morph = Duration(milliseconds: 250);
 
   @override
   Widget build(BuildContext context) {
-    final base = baseColor ?? DefaultTextStyle.of(context).style.color ?? Theme.of(context).colorScheme.onSurface;
+    final themeData = Theme.of(context);
+    final colorScheme = themeData.colorScheme;
+    final base = baseColor ?? DefaultTextStyle.of(context).style.color ?? colorScheme.onSurface;
 
+    // Severity colors come from the theme's semantic palette (SnackBarStyles:
+    // warning = degrading, success = recovered), with ColorScheme fallbacks.
+    // Coral/error stays reserved for real failures (IceConnectionIssue).
+    final semantic = themeData.extension<SnackBarStyles>()?.primary;
+    final warningColor = semantic?.warningBackgroundColor ?? base;
+    final successColor = semantic?.successBackgroundColor ?? colorScheme.tertiary;
+
+    final Widget content;
     if (quality.recovered) {
-      return Row(
+      content = Row(
+        key: const ValueKey('recovered'),
         mainAxisSize: MainAxisSize.min,
         children: [
-          _SignalBars(active: 3, activeColor: _green, inactiveColor: _green),
+          _SignalBars(active: 3, activeColor: successColor, inactiveColor: successColor),
           const SizedBox(width: 4),
-          const Icon(Icons.check, size: _glyphSize, color: _green),
+          Icon(Icons.check, size: _glyphSize, color: successColor),
         ],
       );
-    }
+    } else {
+      final (int activeBars, Color color) = switch (quality.severity) {
+        CallNetworkQualitySeverity.mild => (3, base),
+        CallNetworkQualitySeverity.moderate => (2, warningColor),
+        CallNetworkQualitySeverity.severe => (1, warningColor),
+      };
+      final directionIcon = quality.uplink ? Icons.north : Icons.south;
+      final mediaIcon = quality.media == CallMediaKind.video ? Icons.videocam : Icons.mic;
+      final showLabel = quality.severity == CallNetworkQualitySeverity.severe;
 
-    final (int activeBars, Color color) = switch (quality.severity) {
-      CallNetworkQualitySeverity.mild => (3, base),
-      CallNetworkQualitySeverity.moderate => (2, _amber),
-      CallNetworkQualitySeverity.severe => (1, _orange),
-    };
-
-    final directionIcon = quality.uplink ? Icons.north : Icons.south;
-    final mediaIcon = quality.media == CallMediaKind.video ? Icons.videocam : Icons.mic;
-    final showLabel = quality.severity == CallNetworkQualitySeverity.severe;
-
-    // The meter sits on its own centered line below the timer, so it may carry
-    // the descriptive label (at severe) without shifting the timer sideways.
-    return Semantics(
-      label: quality.severeLabel(context),
-      child: Row(
+      content = Row(
+        key: const ValueKey('active'),
         mainAxisSize: MainAxisSize.min,
         children: [
           _SignalBars(active: activeBars, activeColor: color, inactiveColor: base.withValues(alpha: 0.3)),
@@ -73,7 +79,15 @@ class CallNetworkQualityMeter extends StatelessWidget {
             ),
           ],
         ],
-      ),
+      );
+    }
+
+    // AnimatedSize smooths the in-place width/height changes (label appearing,
+    // recovered swap); bar colors tween via AnimatedContainer. No whole-widget
+    // cross-fade -- that is reserved for the show/hide handled by the parent.
+    return Semantics(
+      label: quality.severeLabel(context),
+      child: AnimatedSize(duration: _morph, curve: Curves.easeInOut, child: content),
     );
   }
 }
@@ -96,7 +110,9 @@ class _SignalBars extends StatelessWidget {
       children: [
         for (var i = 0; i < _heights.length; i++) ...[
           if (i > 0) const SizedBox(width: 2),
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
             width: 3,
             height: _heights[i],
             decoration: BoxDecoration(

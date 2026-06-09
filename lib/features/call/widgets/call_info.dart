@@ -164,9 +164,9 @@ class _CallInfoState extends State<CallInfo> {
         // Timer stays alone and centered; the network-quality meter lives on
         // its OWN centered line directly below it. Because it is a separate
         // centered line (not beside the timer), its width never pushes the
-        // timer sideways. It fades + grows in/out and cross-fades between
-        // states; a real ICE failure suppresses it (failure text owns the next
-        // line).
+        // timer sideways. This AnimatedSwitcher only fades + grows it on
+        // show/hide; state changes morph in place inside the meter. A real ICE
+        // failure suppresses it (failure text owns the next line).
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -198,19 +198,17 @@ class _CallInfoState extends State<CallInfo> {
     );
   }
 
-  /// The animated-switcher child: the meter keyed by its full state (so each
-  /// transition cross-fades), or an empty keyed box when there is nothing to
-  /// show (healthy media, or a real ICE failure that owns the status line).
+  /// The animated-switcher child. Keyed only by PRESENCE (`meter` vs
+  /// `meter-none`) so the parent AnimatedSwitcher fades only on show/hide; state
+  /// changes (severity/direction/recovered) are morphed in place inside the
+  /// meter instead of cross-faded. Hidden when healthy or when a real ICE
+  /// failure owns the status line.
   Widget _buildMeterSlot(Color? baseColor) {
     final quality = widget.networkQuality;
     if (quality == null || widget.iceConnectionIssue != null) {
       return const SizedBox.shrink(key: ValueKey('meter-none'));
     }
-    return CallNetworkQualityMeter(
-      key: ValueKey('meter-${quality.severity}-${quality.uplink}-${quality.media}-${quality.recovered}'),
-      quality: quality,
-      baseColor: baseColor,
-    );
+    return CallNetworkQualityMeter(key: const ValueKey('meter'), quality: quality, baseColor: baseColor);
   }
 
   String _buildStatusMessage(BuildContext context) {
