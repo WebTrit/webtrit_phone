@@ -530,7 +530,8 @@ void main() {
   // ---------------------------------------------------------------------------
   // Combined-action plans
   //
-  // The single intents (answeredEndingOthers / answeredHoldingOthers / swapped)
+  // The single intents (answeredEndingOthers / answeredHoldingOthers /
+  // resumedHoldingOthers)
   // dispatch exactly these ordered primitive events. The state layer only
   // supplies the other-call ids (CallState.otherCallIds); the plans live on the
   // event layer (CallControlEvent). This pins the semantics the call screen
@@ -580,12 +581,30 @@ void main() {
     });
   });
 
-  group('CallControlEvent.swapPlan', () {
-    test('holds the target first, then resumes the other call', () {
-      expect(CallControlEvent.swapPlan('active', ['held']), const [
+  group('CallControlEvent.resumeHoldingOthersPlan', () {
+    test('holds the live others first, then resumes the target', () {
+      expect(CallControlEvent.resumeHoldingOthersPlan('held', ['active']), const [
         CallControlEvent.setHeld('active', true),
         CallControlEvent.setHeld('held', false),
       ]);
+    });
+
+    test('just resumes when nothing else is live', () {
+      expect(CallControlEvent.resumeHoldingOthersPlan('held', []), const [CallControlEvent.setHeld('held', false)]);
+    });
+  });
+
+  group('CallState.otherCallIdsToHold', () {
+    test('returns only the other answered, not-held calls', () {
+      final live = _makeCall(callId: 'live', acceptedTime: DateTime(2024));
+      final held = _makeCall(callId: 'held', acceptedTime: DateTime(2024), held: true);
+      final ringing = _makeCall(callId: 'ringing', processingStatus: CallProcessingStatus.incomingFromOffer);
+      final target = _makeCall(callId: 'target', acceptedTime: DateTime(2024), held: true);
+      final state = CallState(activeCalls: [live, held, ringing, target]);
+
+      // Already-held and still-ringing calls do not need holding; the target
+      // itself is excluded.
+      expect(state.otherCallIdsToHold('target'), ['live']);
     });
   });
 

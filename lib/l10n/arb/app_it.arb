@@ -101,8 +101,6 @@
   "@call_CallActionsTooltip_mute": {},
   "call_CallActionsTooltip_showKeypad": "Mostra tastiera",
   "@call_CallActionsTooltip_showKeypad": {},
-  "call_CallActionsTooltip_swap": "Scambio chiamate",
-  "@call_CallActionsTooltip_swap": {},
   "call_CallActionsTooltip_transfer": "Trasferimento",
   "@call_CallActionsTooltip_transfer": {},
   "call_CallActionsTooltip_transfer_choose": "Scegliere il numero",

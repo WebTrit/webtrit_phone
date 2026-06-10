@@ -1,7 +1,7 @@
 # Call
 
 The in-app calling experience: placing and receiving SIP/WebRTC calls, the
-full-screen call UI, multi-call handling (hold, swap, transfer), and the native
+full-screen call UI, multi-call handling (hold/resume, transfer), and the native
 CallKit / ConnectionService integration.
 
 Last reviewed: 2026-06-10
@@ -60,7 +60,7 @@ Single call:
 - **1 incoming** - caller info + Decline / Answer.
 - **1 active** - caller info + control grid (mute, camera, speaker, transfer,
   hold, keypad) + hang up.
-- **1 on hold** - same grid with Hold shown as Resume.
+- **1 on hold** - same grid with Hold shown as Resume (play glyph).
 
 Multiple calls (list-based):
 
@@ -123,7 +123,8 @@ Rollout is incremental (foundations first, then UI), each step behind tests:
 | Focused actions | "Acting on" hint + two-button ringing focus (single answerFocused intent); combined-icon buttons removed | Merged (PR #1380) |
 | Cleanup / edges | Dead-code and obsolete l10n removal; scaffold-level widget tests for single/multi/3-call states | Merged (PR #1381) |
 | Toolbar status | Signaling/connectivity status, media failures and stream quality move to the AppBar status line (global, worst across calls); the central info block keeps only name/description/duration | Merged (PR #1385) |
-| Visual alignment | Status dots on rows, short Incoming/Outgoing trailing labels, central info block single-call only, acting-on hint as a translucent pill with highlighted names | In review |
+| Visual alignment | Status dots on rows, short Incoming/Outgoing trailing labels, central info block single-call only, acting-on hint as a translucent pill with highlighted names | Merged (PR #1386) |
+| Hold/Resume on focus | The hold slot always acts on the focused call (pause/play glyph); Resume holds the other live calls first; the swap button is gone - switching lines = focus a row + Resume | In review |
 
 The redesign lands on the `refactor/call` integration branch - every stage is a
 PR into that branch, and once the whole flow is tested there a single PR merges

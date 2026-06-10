@@ -162,9 +162,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_showKeypad => 'Показати клавіатуру';
 
   @override
-  String get call_CallActionsTooltip_swap => 'Перемкнути дзвінки';
-
-  @override
   String get call_CallActionsTooltip_transfer => 'Переадресація';
 
   @override

@@ -173,6 +173,28 @@ void main() {
     });
   });
 
+  group('CallActiveScaffold - hold and resume on the focused call', () {
+    testWidgets('Hold on an active focus holds just that call', (tester) async {
+      final held = _makeCall(callId: 'held', acceptedTime: DateTime(2024), held: true, displayName: 'Clara Diaz');
+      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [held, active], focusedCall: active));
+
+      await tester.tap(find.byIcon(Icons.pause));
+      verify(() => callBloc.add(const CallControlEvent.setHeld('active', true))).called(1);
+      await _teardown(tester);
+    });
+
+    testWidgets('Resume on a held focus holds the live call and resumes the focused one', (tester) async {
+      final held = _makeCall(callId: 'held', acceptedTime: DateTime(2024), held: true, displayName: 'Clara Diaz');
+      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [held, active], focusedCall: held));
+
+      // The slot is a Resume affordance for a held focus - no swap button.
+      expect(find.byIcon(Icons.swap_calls), findsNothing);
+      await tester.tap(find.byIcon(Icons.play_arrow));
+      verify(() => callBloc.add(const CallControlEvent.resumedHoldingOthers('held'))).called(1);
+      await _teardown(tester);
+    });
+  });
+
   group('CallActiveScaffold - 3 calls (held + active + incoming)', () {
     testWidgets('three rows, ringing focus keeps two buttons and the hint', (tester) async {
       final held = _makeCall(callId: 'held', acceptedTime: DateTime(2024), held: true, displayName: 'Clara Diaz');
