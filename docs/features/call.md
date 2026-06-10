@@ -124,7 +124,8 @@ Rollout is incremental (foundations first, then UI), each step behind tests:
 | Cleanup / edges | Dead-code and obsolete l10n removal; scaffold-level widget tests for single/multi/3-call states | Merged (PR #1381) |
 | Toolbar status | Signaling/connectivity status, media failures and stream quality move to the AppBar status line (global, worst across calls); the central info block keeps only name/description/duration | Merged (PR #1385) |
 | Visual alignment | Status dots on rows, short Incoming/Outgoing trailing labels, central info block single-call only, acting-on hint as a translucent pill with highlighted names | Merged (PR #1386) |
-| Hold/Resume on focus | The hold slot always acts on the focused call (pause/play glyph); Resume holds the other live calls first; the swap button is gone - switching lines = focus a row + Resume | In review |
+| Hold/Resume on focus | The hold slot always acts on the focused call (pause/play glyph); Resume holds the other live calls first; the swap button is gone - switching lines = focus a row + Resume | Merged (PR #1387) |
+| Row overlay polish | Call rows use light overlay tints of the on-screen text color: focused = brighter + light border (design polarity), bigger radius and padding | In review |
 
 The redesign lands on the `refactor/call` integration branch - every stage is a
 PR into that branch, and once the whole flow is tested there a single PR merges
