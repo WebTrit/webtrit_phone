@@ -350,6 +350,68 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
+  // ActiveCallIterableExtension — toolbar status aggregation
+  // ---------------------------------------------------------------------------
+
+  group('ActiveCallIterableExtension.worstNetworkQuality', () {
+    const mild = CallNetworkQuality(
+      severity: CallNetworkQualitySeverity.mild,
+      uplink: true,
+      media: CallMediaKind.audio,
+    );
+    const severe = CallNetworkQuality(
+      severity: CallNetworkQualitySeverity.severe,
+      uplink: false,
+      media: CallMediaKind.audio,
+    );
+    const recovered = CallNetworkQuality(
+      severity: CallNetworkQualitySeverity.severe,
+      uplink: true,
+      media: CallMediaKind.audio,
+      recovered: true,
+    );
+
+    test('null when every stream is healthy', () {
+      expect([_makeCall(callId: 'c1'), _makeCall(callId: 'c2')].worstNetworkQuality, isNull);
+    });
+
+    test('picks the higher severity across calls', () {
+      final calls = [
+        _makeCall(callId: 'c1').copyWith(networkQuality: mild),
+        _makeCall(callId: 'c2').copyWith(networkQuality: severe),
+      ];
+      expect(calls.worstNetworkQuality, severe);
+    });
+
+    test('an active warning beats a recovered confirmation', () {
+      final calls = [
+        _makeCall(callId: 'c1').copyWith(networkQuality: recovered),
+        _makeCall(callId: 'c2').copyWith(networkQuality: mild),
+      ];
+      expect(calls.worstNetworkQuality, mild);
+    });
+
+    test('a recovered confirmation still surfaces when it is the only signal', () {
+      final calls = [_makeCall(callId: 'c1').copyWith(networkQuality: recovered), _makeCall(callId: 'c2')];
+      expect(calls.worstNetworkQuality, recovered);
+    });
+  });
+
+  group('ActiveCallIterableExtension.firstIceConnectionIssue', () {
+    test('null when no call has a media failure', () {
+      expect([_makeCall(callId: 'c1')].firstIceConnectionIssue, isNull);
+    });
+
+    test('returns the first failure across calls', () {
+      final calls = [
+        _makeCall(callId: 'c1'),
+        _makeCall(callId: 'c2').copyWith(iceConnectionIssue: IceConnectionIssue.iceFail),
+      ];
+      expect(calls.firstIceConnectionIssue, IceConnectionIssue.iceFail);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
   // CallState — focusedCall (list-based call screen foundation)
   // ---------------------------------------------------------------------------
 

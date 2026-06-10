@@ -5,6 +5,7 @@ export 'call_info.dart';
 export 'call_list.dart';
 export 'focused_action_hint.dart';
 export 'call_network_quality_meter.dart';
+export 'call_toolbar_status.dart';
 export 'draggable_thumbnail.dart';
 export 'local_camera_preview_thumbnail.dart';
 export 'popup_menu.dart';
