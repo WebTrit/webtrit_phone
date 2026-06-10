@@ -192,6 +192,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_CallList_statusOnCall => 'In chiamata';
 
   @override
+  String call_FocusedActionHint_actingOn(String name) {
+    return 'Azione su: $name';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeEnded(String name) {
+    return 'La chiamata con $name verrà terminata';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeHeld(String name) {
+    return 'La chiamata con $name sarà messa in attesa';
+  }
+
+  @override
   String get call_description_held => 'In attesa';
 
   @override

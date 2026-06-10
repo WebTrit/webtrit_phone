@@ -10,6 +10,11 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 export 'call_actions_style.dart';
 export 'call_actions_styles.dart';
 
+/// Decline / Answer buttons for the focused ringing call.
+///
+/// Always at most two actions: what happens to the other calls on answer is
+/// decided by the caller (see [CallControlEvent.answerFocused]) and explained
+/// by the hint above the buttons, not by extra combined-icon buttons.
 class IncomingCallActions extends StatefulWidget {
   const IncomingCallActions({
     super.key,
@@ -17,8 +22,6 @@ class IncomingCallActions extends StatefulWidget {
     required this.remoteVideo,
     required this.inviteToAttendedTransfer,
     this.onHangupPressed,
-    this.onHangupAndAcceptPressed,
-    this.onHoldAndAcceptPressed,
     this.onAcceptPressed,
     this.style,
   });
@@ -27,8 +30,6 @@ class IncomingCallActions extends StatefulWidget {
   final bool remoteVideo;
   final bool inviteToAttendedTransfer;
   final void Function()? onHangupPressed;
-  final void Function()? onHangupAndAcceptPressed;
-  final void Function()? onHoldAndAcceptPressed;
   final void Function()? onAcceptPressed;
 
   final CallScreenActionsStyle? style;
@@ -92,9 +93,6 @@ class _IncomingCallActionsState extends State<IncomingCallActions> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    final onHangupAndAcceptPressed = widget.enableInteractions ? widget.onHangupAndAcceptPressed : null;
-    final onHoldAndAcceptPressed = widget.enableInteractions ? widget.onHoldAndAcceptPressed : null;
-
     final onAcceptPressed = widget.onAcceptPressed;
     final onHangupPressed = widget.onHangupPressed;
 
@@ -124,36 +122,6 @@ class _IncomingCallActionsState extends State<IncomingCallActions> {
             onPressed: onAcceptPressed,
             style: widget.style?.callStart,
             child: Icon(widget.remoteVideo ? Icons.videocam : Icons.call, size: actionPadIconSize),
-          ),
-        ),
-      if (widget.onHangupAndAcceptPressed != null)
-        Tooltip(
-          message: context.l10n.call_CallActionsTooltip_hangupAndAccept,
-          child: TextButton(
-            onPressed: onHangupAndAcceptPressed,
-            style: widget.style?.callStart,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.call_end, size: actionPadIconSize),
-                Icon(widget.remoteVideo ? Icons.videocam : Icons.call, size: actionPadIconSize),
-              ],
-            ),
-          ),
-        ),
-      if (widget.onHoldAndAcceptPressed != null)
-        Tooltip(
-          message: context.l10n.call_CallActionsTooltip_holdAndAccept,
-          child: TextButton(
-            onPressed: onHoldAndAcceptPressed,
-            style: widget.style?.callStart,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.pause, size: actionPadIconSize),
-                Icon(widget.remoteVideo ? Icons.videocam : Icons.call, size: actionPadIconSize),
-              ],
-            ),
           ),
         ),
     ];
