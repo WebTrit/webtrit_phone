@@ -228,10 +228,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                     widget.callStatus == CallStatus.ready &&
                                                     activeCalls.any((call) => call.updating) == false,
                                                 isIncoming: activeCall.isIncoming,
-                                                remoteVideo:
-                                                    activeCall.remoteVideo &&
-                                                    _hasRenderableRemoteFrame &&
-                                                    activeCall.held == false,
                                                 wasAccepted: activeCall.wasAccepted,
                                                 wasHungUp: activeCall.wasHungUp,
                                                 cameraValue: activeCall.isCameraActive,
