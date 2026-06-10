@@ -16,6 +16,7 @@ ActiveCall _makeCall({
   CallDirection direction = CallDirection.incoming,
   CallProcessingStatus processingStatus = CallProcessingStatus.connected,
   bool held = false,
+  bool video = false,
   DateTime? acceptedTime,
   CallkeepHandle handle = _kHandle,
   String? displayName,
@@ -26,7 +27,7 @@ ActiveCall _makeCall({
     line: 0,
     handle: handle,
     createdTime: DateTime(2024),
-    video: false,
+    video: video,
     processingStatus: processingStatus,
     held: held,
     acceptedTime: acceptedTime,
@@ -121,6 +122,20 @@ void main() {
       CallRow rowOf(String callId) => tester.widget<CallRow>(find.byKey(ValueKey('CallRow-$callId')));
       expect(rowOf('on-call').focused, isTrue);
       expect(rowOf('ringing').focused, isFalse);
+    });
+
+    testWidgets('marks a video line with the camera glyph', (tester) async {
+      final video = _makeCall(callId: 'video', acceptedTime: DateTime.now(), video: true, displayName: 'Video Vlad');
+      await tester.pumpWidget(_buildSubject(calls: [video, onCall], focusedCallId: 'video', onCallTap: (_) {}));
+
+      expect(find.byKey(const ValueKey('CallRowVideoBadge')), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('voice lines carry no camera glyph', (tester) async {
+      await tester.pumpWidget(_buildSubject(calls: [ringing, onCall], focusedCallId: 'ringing', onCallTap: (_) {}));
+      expect(find.byKey(const ValueKey('CallRowVideoBadge')), findsNothing);
+      await tester.pumpWidget(const SizedBox());
     });
 
     testWidgets('shows a ticking duration for an answered call and the direction while ringing', (tester) async {
