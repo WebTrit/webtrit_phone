@@ -81,6 +81,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         call_CallActionsTooltip_unattended_transfer,
       'call_CallActionsTooltip_unhold' => call_CallActionsTooltip_unhold,
       'call_CallActionsTooltip_unmute' => call_CallActionsTooltip_unmute,
+      'call_CallList_incoming' => call_CallList_incoming,
+      'call_CallList_outgoing' => call_CallList_outgoing,
       'call_CallList_statusOnCall' => call_CallList_statusOnCall,
       'call_ToolbarStatus_connecting' => call_ToolbarStatus_connecting,
       'call_ToolbarStatus_reconnecting' => call_ToolbarStatus_reconnecting,

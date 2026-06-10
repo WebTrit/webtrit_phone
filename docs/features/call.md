@@ -64,13 +64,16 @@ Single call:
 
 Multiple calls (list-based):
 
-- The screen shows one tappable `CallRow` per call - status badge (RINGING /
-  ON CALL / ON HOLD), name, live duration - under an "N calls - tap to choose"
-  header. Tapping a row focuses that call.
+- The screen shows one tappable `CallRow` per call - colored status dot +
+  badge (RINGING / ON CALL / ON HOLD), name, live duration or a short
+  Incoming/Outgoing label - under an "N calls - tap to choose" header. Tapping
+  a row focuses that call. With multiple calls the rows carry the per-call
+  info; the central info block appears for a single call only.
 - The `CallInfo` block and the action area below act on the focused call only.
   A ringing focus gets exactly Decline / Answer plus an "Acting on: <name>"
-  hint that spells out the side effect ("<name> will be put on hold" or
-  "will be ended"); an active/held focus gets the control grid + End.
+  hint - a translucent pill with the focused name in bold and the affected
+  names highlighted - that spells out the side effect ("<name> will be put on
+  hold" or "will be ended"); an active/held focus gets the control grid + End.
 - Answer is one intent (`CallControlEvent.answerFocused`): it holds the
   answered calls when possible, ends the non-holdable ones (e.g. an outgoing
   call still ringing), and leaves another ringing incoming call ringing.
@@ -119,7 +122,8 @@ Rollout is incremental (foundations first, then UI), each step behind tests:
 | Call list | Selectable list of calls + status badges + header; auto-focus rules; info + action area bind to the focused call | Merged (PR #1379) |
 | Focused actions | "Acting on" hint + two-button ringing focus (single answerFocused intent); combined-icon buttons removed | Merged (PR #1380) |
 | Cleanup / edges | Dead-code and obsolete l10n removal; scaffold-level widget tests for single/multi/3-call states | Merged (PR #1381) |
-| Toolbar status | Signaling/connectivity status, media failures and stream quality move to the AppBar status line (global, worst across calls); the central info block keeps only name/description/duration | In review |
+| Toolbar status | Signaling/connectivity status, media failures and stream quality move to the AppBar status line (global, worst across calls); the central info block keeps only name/description/duration | Merged (PR #1385) |
+| Visual alignment | Status dots on rows, short Incoming/Outgoing trailing labels, central info block single-call only, acting-on hint as a translucent pill with highlighted names | In review |
 
 The redesign lands on the `refactor/call` integration branch - every stage is a
 PR into that branch, and once the whole flow is tested there a single PR merges
