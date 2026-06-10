@@ -178,6 +178,20 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_CallActionsTooltip_unmute => 'Attiva il microfono';
 
   @override
+  String call_CallList_header(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count chiamate - tocca per scegliere',
+      one: '$count chiamata - tocca per scegliere',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get call_CallList_statusOnCall => 'In chiamata';
+
+  @override
   String get call_description_held => 'In attesa';
 
   @override

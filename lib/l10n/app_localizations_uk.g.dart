@@ -186,6 +186,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_unmute => 'Увімкнути мікрофон';
 
   @override
+  String call_CallList_header(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count дзвінка - торкніться, щоб вибрати',
+      many: '$count дзвінків - торкніться, щоб вибрати',
+      few: '$count дзвінки - торкніться, щоб вибрати',
+      one: '$count дзвінок - торкніться, щоб вибрати',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get call_CallList_statusOnCall => 'Розмова';
+
+  @override
   String get call_description_held => 'На утриманні';
 
   @override

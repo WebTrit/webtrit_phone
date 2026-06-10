@@ -101,8 +101,8 @@ Rollout is incremental (foundations first, then UI), each step behind tests:
 | Stage | Scope | Status |
 |---|---|---|
 | Focus state | `selectedCallId` + `focusedCall` + `callSelected` event (invisible groundwork) | Merged (PR #1376) |
-| Action intents | Combined actions (hold&accept / hangup&accept / swap) move into bloc intents | In review |
-| Call list | Selectable list of calls + status badges + header | Planned |
+| Action intents | Combined actions (hold&accept / hangup&accept / swap) move into bloc intents | Merged (PR #1378) |
+| Call list | Selectable list of calls + status badges + header; auto-focus (a new ringing call grabs focus, the next ringing one after the focused call ends); info + action area bind to the focused call | In review |
 | Focused actions | Single action area + "Acting on" hint; drop combined-icon buttons | Planned |
 | Cleanup / edges | Single-call polish, dead-code removal, 3-call / transfer / landscape | Planned |
 
