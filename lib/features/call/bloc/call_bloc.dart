@@ -1349,6 +1349,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> _onCallControlEvent(CallControlEvent event, Emitter<CallState> emit) {
     return switch (event) {
       _CallControlEventStarted() => __onCallControlEventStarted(event, emit),
+      _CallControlEventCallSelected() => __onCallControlEventCallSelected(event, emit),
       _CallControlEventAnswered() => __onCallControlEventAnswered(event, emit),
       _CallControlEventEnded() => __onCallControlEventEnded(event, emit),
       _CallControlEventSetHeld() => __onCallControlEventSetHeld(event, emit),
@@ -1398,6 +1399,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         fromReplaces: event.replaces,
       ),
     );
+  }
+
+  /// Focuses a call in the list-based call screen. Pure UI selection: clamps to
+  /// a live call via [CallState.copyWithSelectedCall] (no media side effects).
+  Future<void> __onCallControlEventCallSelected(_CallControlEventCallSelected event, Emitter<CallState> emit) async {
+    emit(state.copyWithSelectedCall(event.callId));
   }
 
   /// Submitting the answer intent to system when answer button is pressed from app ui

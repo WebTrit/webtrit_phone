@@ -592,6 +592,10 @@ sealed class CallControlEvent extends CallEvent {
 
   const factory CallControlEvent.answered(String callId) = _CallControlEventAnswered;
 
+  /// Focuses a call in the call list (list-based call screen). Pure UI state:
+  /// sets [CallState.selectedCallId] so the action area acts on that call.
+  const factory CallControlEvent.callSelected(String callId) = _CallControlEventCallSelected;
+
   const factory CallControlEvent.ended(String callId) = _CallControlEventEnded;
 
   const factory CallControlEvent.setHeld(String callId, bool onHold) = _CallControlEventSetHeld;
@@ -665,6 +669,15 @@ class _CallControlEventStarted extends CallControlEvent with CallControlEventSta
 
 class _CallControlEventAnswered extends CallControlEvent {
   const _CallControlEventAnswered(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventCallSelected extends CallControlEvent {
+  const _CallControlEventCallSelected(this.callId);
 
   final String callId;
 
