@@ -142,16 +142,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_CallActionsTooltip_hangup => 'Termina chiamata';
 
   @override
-  String get call_CallActionsTooltip_hangupAndAccept => 'Riagganciare e accettare';
-
-  @override
   String get call_CallActionsTooltip_hideKeypad => 'Nascondi tastiera';
 
   @override
   String get call_CallActionsTooltip_hold => 'Attesa';
-
-  @override
-  String get call_CallActionsTooltip_holdAndAccept => 'Tenere in attesa e accettare';
 
   @override
   String get call_CallActionsTooltip_mute => 'Disattiva il microfono';

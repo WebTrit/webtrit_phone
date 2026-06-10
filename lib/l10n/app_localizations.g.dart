@@ -273,12 +273,6 @@ abstract class AppLocalizations {
   /// **'Hangup'**
   String get call_CallActionsTooltip_hangup;
 
-  /// No description provided for @call_CallActionsTooltip_hangupAndAccept.
-  ///
-  /// In en, this message translates to:
-  /// **'Hangup & Accept'**
-  String get call_CallActionsTooltip_hangupAndAccept;
-
   /// No description provided for @call_CallActionsTooltip_hideKeypad.
   ///
   /// In en, this message translates to:
@@ -290,12 +284,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hold call'**
   String get call_CallActionsTooltip_hold;
-
-  /// No description provided for @call_CallActionsTooltip_holdAndAccept.
-  ///
-  /// In en, this message translates to:
-  /// **'Hold & Accept'**
-  String get call_CallActionsTooltip_holdAndAccept;
 
   /// No description provided for @call_CallActionsTooltip_mute.
   ///

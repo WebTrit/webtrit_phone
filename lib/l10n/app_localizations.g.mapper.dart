@@ -67,13 +67,9 @@ extension AppLocalizationsExtension on AppLocalizations {
       'call_CallActionsTooltip_enableSpeaker' =>
         call_CallActionsTooltip_enableSpeaker,
       'call_CallActionsTooltip_hangup' => call_CallActionsTooltip_hangup,
-      'call_CallActionsTooltip_hangupAndAccept' =>
-        call_CallActionsTooltip_hangupAndAccept,
       'call_CallActionsTooltip_hideKeypad' =>
         call_CallActionsTooltip_hideKeypad,
       'call_CallActionsTooltip_hold' => call_CallActionsTooltip_hold,
-      'call_CallActionsTooltip_holdAndAccept' =>
-        call_CallActionsTooltip_holdAndAccept,
       'call_CallActionsTooltip_mute' => call_CallActionsTooltip_mute,
       'call_CallActionsTooltip_showKeypad' =>
         call_CallActionsTooltip_showKeypad,
@@ -85,6 +81,7 @@ extension AppLocalizationsExtension on AppLocalizations {
         call_CallActionsTooltip_unattended_transfer,
       'call_CallActionsTooltip_unhold' => call_CallActionsTooltip_unhold,
       'call_CallActionsTooltip_unmute' => call_CallActionsTooltip_unmute,
+      'call_CallList_statusOnCall' => call_CallList_statusOnCall,
       'call_description_held' => call_description_held,
       'call_description_incoming' => call_description_incoming,
       'call_description_inviteToAttendedTransfer' =>
@@ -1503,6 +1500,28 @@ extension AppLocalizationsExtension on AppLocalizations {
       'agoTicker_secondsAgo' => switch (args) {
         [final num seconds] => agoTicker_secondsAgo(seconds),
         _ => throw ArgumentError('agoTicker_secondsAgo requires 1 arguments'),
+      },
+      'call_CallList_header' => switch (args) {
+        [final int count] => call_CallList_header(count),
+        _ => throw ArgumentError('call_CallList_header requires 1 arguments'),
+      },
+      'call_FocusedActionHint_actingOn' => switch (args) {
+        [final String name] => call_FocusedActionHint_actingOn(name),
+        _ => throw ArgumentError(
+          'call_FocusedActionHint_actingOn requires 1 arguments',
+        ),
+      },
+      'call_FocusedActionHint_willBeEnded' => switch (args) {
+        [final String name] => call_FocusedActionHint_willBeEnded(name),
+        _ => throw ArgumentError(
+          'call_FocusedActionHint_willBeEnded requires 1 arguments',
+        ),
+      },
+      'call_FocusedActionHint_willBeHeld' => switch (args) {
+        [final String name] => call_FocusedActionHint_willBeHeld(name),
+        _ => throw ArgumentError(
+          'call_FocusedActionHint_willBeHeld requires 1 arguments',
+        ),
       },
       'contacts_ContactTile_inCall' => switch (args) {
         [final Object destination] => contacts_ContactTile_inCall(destination),

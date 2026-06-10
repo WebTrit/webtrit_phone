@@ -141,16 +141,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_hangup => 'Hangup';
 
   @override
-  String get call_CallActionsTooltip_hangupAndAccept => 'Hangup & Accept';
-
-  @override
   String get call_CallActionsTooltip_hideKeypad => 'Hide keypad';
 
   @override
   String get call_CallActionsTooltip_hold => 'Hold call';
-
-  @override
-  String get call_CallActionsTooltip_holdAndAccept => 'Hold & Accept';
 
   @override
   String get call_CallActionsTooltip_mute => 'Mute microphone';

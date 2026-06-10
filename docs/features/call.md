@@ -108,8 +108,8 @@ Rollout is incremental (foundations first, then UI), each step behind tests:
 | Focus state | `selectedCallId` + `focusedCall` + `callSelected` event (invisible groundwork) | Merged (PR #1376) |
 | Action intents | Combined actions (hold&accept / hangup&accept / swap) move into bloc intents | Merged (PR #1378) |
 | Call list | Selectable list of calls + status badges + header; auto-focus rules; info + action area bind to the focused call | Merged (PR #1379) |
-| Focused actions | "Acting on" hint + two-button ringing focus (single answerFocused intent); combined-icon buttons removed | In review |
-| Cleanup / edges | Single-call polish, dead-code removal, 3-call / transfer / landscape | Planned |
+| Focused actions | "Acting on" hint + two-button ringing focus (single answerFocused intent); combined-icon buttons removed | Merged (PR #1380) |
+| Cleanup / edges | Dead-code and obsolete l10n removal; scaffold-level widget tests for single/multi/3-call states | In review |
 
 The redesign lands on the `refactor/call` integration branch - every stage is a
 PR into that branch, and once the whole flow is tested there a single PR merges
