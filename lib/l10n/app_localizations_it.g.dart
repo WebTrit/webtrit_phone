@@ -94,6 +94,18 @@ class AppLocalizationsIt extends AppLocalizations {
       'Le vostre impostazioni sono state recuperate con successo, l\'App è pronta per l\'uso';
 
   @override
+  String get callTileActions_contact => 'Contatto';
+
+  @override
+  String get callTileActions_history => 'Cronologia';
+
+  @override
+  String get callTileActions_message => 'Messaggio';
+
+  @override
+  String get callTileActions_more => 'Altro';
+
+  @override
   String get call_CallActionsTooltip_accept => 'Accetta chiamata';
 
   @override

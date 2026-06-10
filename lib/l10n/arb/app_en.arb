@@ -61,6 +61,22 @@
   "@autoprovision_ReloginDialog_title": {},
   "autoprovision_successSnackBar_used": "Successfully retrieved your settings, your app is ready to use",
   "@autoprovision_successSnackBar_used": {},
+  "callTileActions_contact": "Contact",
+  "@callTileActions_contact": {
+    "description": "Label of the expanded call tile action that opens the contact details screen."
+  },
+  "callTileActions_history": "History",
+  "@callTileActions_history": {
+    "description": "Label of the expanded call tile action that opens the call history for the number."
+  },
+  "callTileActions_message": "Message",
+  "@callTileActions_message": {
+    "description": "Label of the expanded call tile action that opens a chat with the contact."
+  },
+  "callTileActions_more": "More",
+  "@callTileActions_more": {
+    "description": "Label of the expanded call tile action that opens the full actions menu."
+  },
   "call_CallActionsTooltip_accept": "Accept",
   "@call_CallActionsTooltip_accept": {},
   "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "Accept transfer",

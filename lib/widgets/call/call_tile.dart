@@ -70,6 +70,92 @@ List<PopupMenuEntry<dynamic>> buildNumberActions(
   ];
 }
 
+class CallTileActionsBar extends StatelessWidget {
+  const CallTileActionsBar({
+    super.key,
+    this.onVideoCallPressed,
+    this.onChatPressed,
+    this.onCallLogPressed,
+    this.onViewContactPressed,
+    required this.onMorePressed,
+  });
+
+  final VoidCallback? onVideoCallPressed;
+  final VoidCallback? onChatPressed;
+  final VoidCallback? onCallLogPressed;
+  final VoidCallback? onViewContactPressed;
+  final VoidCallback? onMorePressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Row(
+      children: [
+        if (onVideoCallPressed != null)
+          Expanded(
+            child: _CallTileAction(
+              icon: Icons.videocam_outlined,
+              label: l10n.numberActions_videoCall,
+              onTap: onVideoCallPressed!,
+            ),
+          ),
+        if (onChatPressed != null)
+          Expanded(
+            child: _CallTileAction(
+              icon: Icons.chat_outlined,
+              label: l10n.callTileActions_message,
+              onTap: onChatPressed!,
+            ),
+          ),
+        if (onCallLogPressed != null)
+          Expanded(
+            child: _CallTileAction(icon: Icons.history, label: l10n.callTileActions_history, onTap: onCallLogPressed!),
+          ),
+        if (onViewContactPressed != null)
+          Expanded(
+            child: _CallTileAction(
+              icon: Icons.person_outline,
+              label: l10n.callTileActions_contact,
+              onTap: onViewContactPressed!,
+            ),
+          ),
+        if (onMorePressed != null)
+          Expanded(
+            child: _CallTileAction(icon: Icons.more_horiz, label: l10n.callTileActions_more, onTap: onMorePressed!),
+          ),
+      ],
+    );
+  }
+}
+
+class _CallTileAction extends StatelessWidget {
+  const _CallTileAction({required this.icon, required this.label, required this.onTap});
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 22, color: themeData.colorScheme.primary),
+            const SizedBox(height: 2),
+            Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: themeData.textTheme.labelSmall),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class CallTile extends StatefulWidget {
   const CallTile({
     super.key,
@@ -77,10 +163,13 @@ class CallTile extends StatefulWidget {
     required this.name,
     this.subName,
     this.subtitleLeading,
-    required this.timeLabel,
+    this.timeLabel,
     this.durationLabel,
     this.disconnectReason,
     this.onTap,
+    this.expanded = false,
+    this.onDialPressed,
+    this.gesturesEnabled = true,
     this.dismissible = false,
     this.dismissibleObject,
     this.dismissBackground,
@@ -104,10 +193,13 @@ class CallTile extends StatefulWidget {
   final String name;
   final String? subName;
   final Widget? subtitleLeading;
-  final String timeLabel;
+  final String? timeLabel;
   final String? durationLabel;
   final String? disconnectReason;
   final VoidCallback? onTap;
+  final bool expanded;
+  final VoidCallback? onDialPressed;
+  final bool gesturesEnabled;
 
   final bool dismissible;
   final Object? dismissibleObject;
@@ -135,26 +227,40 @@ class CallTile extends StatefulWidget {
 class _CallTileState extends State<CallTile> {
   late final tileKey = GlobalKey();
 
+  /// Mirrors the gating of [buildNumberActions] so menu affordances (the
+  /// trailing button and the More action) are hidden when the menu is empty.
+  bool get hasMenuActions =>
+      widget.onAudioCallPressed != null ||
+      widget.onVideoCallPressed != null ||
+      (widget.callNumbers.length > 1 && widget.onCallFrom != null) ||
+      widget.onTransferPressed != null ||
+      widget.onChatPressed != null ||
+      widget.onSendSmsPressed != null ||
+      widget.onViewContactPressed != null ||
+      widget.onCallLogPressed != null ||
+      widget.copyNumber != null ||
+      widget.copyCallId != null ||
+      widget.onDelete != null;
+
   void showMenuPopup() {
-    showMenu(
-      context: context,
-      position: getPosition(),
-      items: buildNumberActions(
-        context,
-        callNumbers: widget.callNumbers,
-        onAudioCallPressed: widget.onAudioCallPressed,
-        onVideoCallPressed: widget.onVideoCallPressed,
-        onTransferPressed: widget.onTransferPressed,
-        onChatPressed: widget.onChatPressed,
-        onSendSmsPressed: widget.onSendSmsPressed,
-        onViewContactPressed: widget.onViewContactPressed,
-        onCallLogPressed: widget.onCallLogPressed,
-        onCallFrom: widget.onCallFrom,
-        copyNumber: widget.copyNumber,
-        copyCallId: widget.copyCallId,
-        onDelete: widget.onDelete,
-      ),
+    final items = buildNumberActions(
+      context,
+      callNumbers: widget.callNumbers,
+      onAudioCallPressed: widget.onAudioCallPressed,
+      onVideoCallPressed: widget.onVideoCallPressed,
+      onTransferPressed: widget.onTransferPressed,
+      onChatPressed: widget.onChatPressed,
+      onSendSmsPressed: widget.onSendSmsPressed,
+      onViewContactPressed: widget.onViewContactPressed,
+      onCallLogPressed: widget.onCallLogPressed,
+      onCallFrom: widget.onCallFrom,
+      copyNumber: widget.copyNumber,
+      copyCallId: widget.copyCallId,
+      onDelete: widget.onDelete,
     );
+    if (items.isEmpty) return;
+
+    showMenu(context: context, position: getPosition(), items: items);
   }
 
   RelativeRect getPosition() {
@@ -233,27 +339,57 @@ class _CallTileState extends State<CallTile> {
           borderRadius: BorderRadius.circular(16),
           splashColor: colorScheme.secondary.withAlpha(50),
           key: tileKey,
-          onTap: widget.onTap,
-          onLongPress: showMenuPopup,
+          onTap: widget.gesturesEnabled ? widget.onTap : null,
+          onLongPress: widget.gesturesEnabled ? showMenuPopup : null,
           child: Padding(
             padding: const EdgeInsets.only(left: 8, right: 0, top: 8, bottom: 8),
-            child: Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                widget.leading,
-                const SizedBox(width: 8),
-                Expanded(child: contentColumn),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Row(
                   children: [
-                    Text(widget.timeLabel, style: themeData.textTheme.labelSmall),
-                    if (widget.durationLabel != null) ...[
-                      const SizedBox(height: 2),
-                      Text(widget.durationLabel!, style: themeData.textTheme.labelSmall),
-                    ],
+                    widget.leading,
+                    const SizedBox(width: 8),
+                    Expanded(child: contentColumn),
+                    if (widget.timeLabel != null)
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(widget.timeLabel!, style: themeData.textTheme.labelSmall),
+                          if (widget.durationLabel != null) ...[
+                            const SizedBox(height: 2),
+                            Text(widget.durationLabel!, style: themeData.textTheme.labelSmall),
+                          ],
+                        ],
+                      ),
+                    const SizedBox(width: 4),
+                    if (widget.gesturesEnabled)
+                      if (widget.onDialPressed != null)
+                        IconButton(
+                          onPressed: widget.onDialPressed,
+                          icon: Icon(Icons.call, color: colorScheme.primary),
+                        )
+                      else if (hasMenuActions)
+                        TileMenuButton(onTap: showMenuPopup),
                   ],
                 ),
-                const SizedBox(width: 4),
-                TileMenuButton(onTap: showMenuPopup),
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeInOut,
+                  alignment: Alignment.topCenter,
+                  child: widget.expanded && widget.gesturesEnabled
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 4, right: 8),
+                          child: CallTileActionsBar(
+                            onVideoCallPressed: widget.onVideoCallPressed,
+                            onChatPressed: widget.onChatPressed,
+                            onCallLogPressed: widget.onCallLogPressed,
+                            onViewContactPressed: widget.onViewContactPressed,
+                            onMorePressed: hasMenuActions ? showMenuPopup : null,
+                          ),
+                        )
+                      : const SizedBox(width: double.infinity),
+                ),
               ],
             ),
           ),

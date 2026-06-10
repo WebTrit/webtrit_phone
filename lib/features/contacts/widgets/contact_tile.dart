@@ -16,9 +16,20 @@ class ContactTile extends StatelessWidget {
     this.registered,
     this.smart = false,
     this.onTap,
-    this.onLongPress,
+    this.expanded = false,
+    this.onDialPressed,
     this.presenceInfo,
     this.dialogInfo,
+    this.callNumbers = const [],
+    this.onAudioCallPressed,
+    this.onVideoCallPressed,
+    this.onTransferPressed,
+    this.onChatPressed,
+    this.onSendSmsPressed,
+    this.onViewContactPressed,
+    this.onCallLogPressed,
+    this.onCallFrom,
+    this.copyNumber,
   });
 
   final String displayName;
@@ -27,17 +38,24 @@ class ContactTile extends StatelessWidget {
   final bool? registered;
   final bool smart;
   final GestureTapCallback? onTap;
-  final GestureLongPressCallback? onLongPress;
+  final bool expanded;
+  final VoidCallback? onDialPressed;
   final List<PresenceInfo>? presenceInfo;
   final List<DialogInfo>? dialogInfo;
 
+  final List<String> callNumbers;
+  final VoidCallback? onAudioCallPressed;
+  final VoidCallback? onVideoCallPressed;
+  final VoidCallback? onTransferPressed;
+  final VoidCallback? onChatPressed;
+  final VoidCallback? onSendSmsPressed;
+  final VoidCallback? onViewContactPressed;
+  final VoidCallback? onCallLogPressed;
+  final void Function(String)? onCallFrom;
+  final String? copyNumber;
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final colorScheme = theme.colorScheme;
-    final contentColor = colorScheme.onSurface;
-
     final presenceParams = PresenceViewParams.of(context);
 
     final title = switch (presenceParams.hybridPresenceSupport) {
@@ -45,7 +63,7 @@ class ContactTile extends StatelessWidget {
       false => displayName,
     };
 
-    Widget? subtitle;
+    String? subName;
 
     if (presenceParams.blfViaSipSupport && (dialogInfo ?? []).isNotEmpty) {
       final dialog = dialogInfo!.first;
@@ -60,68 +78,41 @@ class ContactTile extends StatelessWidget {
       }
 
       if (destination != null) {
-        subtitle = Text(
-          context.l10n.contacts_ContactTile_inCall(destination),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: contentColor.withValues(alpha: 0.7)),
-        );
+        subName = context.l10n.contacts_ContactTile_inCall(destination);
       }
     }
 
     final presenceNote = (presenceInfo ?? []).primaryNote;
 
-    if (subtitle == null && presenceParams.hybridPresenceSupport && presenceNote != null && presenceNote.isNotEmpty) {
-      subtitle = Text(
-        presenceNote,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.bodySmall,
-      );
+    if (subName == null && presenceParams.hybridPresenceSupport && presenceNote != null && presenceNote.isNotEmpty) {
+      subName = presenceNote;
     }
 
-    final contentColumn = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(title, maxLines: subtitle != null ? 1 : 2, overflow: TextOverflow.ellipsis, style: textTheme.titleMedium),
-        ?subtitle,
-      ],
-    );
-
-    final leading = LeadingAvatar(
-      username: displayName,
-      thumbnail: thumbnail,
-      thumbnailUrl: thumbnailUrl,
-      registered: registered,
-      smart: smart,
-      presenceInfo: presenceInfo,
-      dialogInfo: dialogInfo,
-    );
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      child: Material(
-        color: colorScheme.surface.withAlpha(25),
-        borderRadius: BorderRadius.circular(16),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          splashColor: colorScheme.secondary.withAlpha(50),
-          onTap: onTap,
-          onLongPress: onLongPress,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8, right: 0, top: 8, bottom: 8),
-            child: Row(
-              children: [
-                leading,
-                const SizedBox(width: 8),
-                Expanded(child: contentColumn),
-                const SizedBox(width: 4),
-              ],
-            ),
-          ),
-        ),
+    return CallTile(
+      leading: LeadingAvatar(
+        username: displayName,
+        thumbnail: thumbnail,
+        thumbnailUrl: thumbnailUrl,
+        registered: registered,
+        smart: smart,
+        presenceInfo: presenceInfo,
+        dialogInfo: dialogInfo,
       ),
+      name: title,
+      subName: subName,
+      onTap: onTap,
+      expanded: expanded,
+      onDialPressed: onDialPressed,
+      callNumbers: callNumbers,
+      onAudioCallPressed: onAudioCallPressed,
+      onVideoCallPressed: onVideoCallPressed,
+      onTransferPressed: onTransferPressed,
+      onChatPressed: onChatPressed,
+      onSendSmsPressed: onSendSmsPressed,
+      onViewContactPressed: onViewContactPressed,
+      onCallLogPressed: onCallLogPressed,
+      onCallFrom: onCallFrom,
+      copyNumber: copyNumber,
     );
   }
 }

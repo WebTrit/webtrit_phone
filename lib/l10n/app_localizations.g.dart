@@ -177,6 +177,30 @@ abstract class AppLocalizations {
   /// **'Successfully retrieved your settings, your app is ready to use'**
   String get autoprovision_successSnackBar_used;
 
+  /// Label of the expanded call tile action that opens the contact details screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get callTileActions_contact;
+
+  /// Label of the expanded call tile action that opens the call history for the number.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get callTileActions_history;
+
+  /// Label of the expanded call tile action that opens a chat with the contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get callTileActions_message;
+
+  /// Label of the expanded call tile action that opens the full actions menu.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get callTileActions_more;
+
   /// No description provided for @call_CallActionsTooltip_accept.
   ///
   /// In en, this message translates to:

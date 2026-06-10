@@ -102,6 +102,18 @@ class AppLocalizationsUk extends AppLocalizations {
       'Ваші налаштування було успішно отримано, застосунок готовий до використання';
 
   @override
+  String get callTileActions_contact => 'Контакт';
+
+  @override
+  String get callTileActions_history => 'Історія';
+
+  @override
+  String get callTileActions_message => 'Повідомлення';
+
+  @override
+  String get callTileActions_more => 'Більше';
+
+  @override
   String get call_CallActionsTooltip_accept => 'Прийняти';
 
   @override
