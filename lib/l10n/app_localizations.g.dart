@@ -357,6 +357,24 @@ abstract class AppLocalizations {
   /// **'On call'**
   String get call_CallList_statusOnCall;
 
+  /// Hint above the call action buttons naming the focused call the actions apply to.
+  ///
+  /// In en, this message translates to:
+  /// **'Acting on: {name}'**
+  String call_FocusedActionHint_actingOn(String name);
+
+  /// Side-effect line under the acting-on hint: the named call will be ended on answer.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be ended'**
+  String call_FocusedActionHint_willBeEnded(String name);
+
+  /// Side-effect line under the acting-on hint: the named call will be put on hold on answer.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be put on hold'**
+  String call_FocusedActionHint_willBeHeld(String name);
+
   /// No description provided for @call_description_held.
   ///
   /// In en, this message translates to:

@@ -602,6 +602,21 @@ sealed class CallControlEvent extends CallEvent {
     for (final otherCallId in otherCallIds) CallControlEvent.setHeld(otherCallId, false),
   ];
 
+  /// The single Answer intent for the focused ringing call: hold the other
+  /// calls when at least one is answered (holdable), otherwise end them when
+  /// any non-ringing one exists (e.g. an outgoing call that cannot be held
+  /// yet), otherwise a plain answer. Another ringing incoming call is
+  /// unaffected either way - it keeps ringing.
+  static CallControlEvent answerFocused(
+    String callId, {
+    required bool hasHoldableOthers,
+    required bool hasNonRingingOthers,
+  }) {
+    if (hasHoldableOthers) return CallControlEvent.answeredHoldingOthers(callId);
+    if (hasNonRingingOthers) return CallControlEvent.answeredEndingOthers(callId);
+    return CallControlEvent.answered(callId);
+  }
+
   const factory CallControlEvent.started({
     int? line,
     String? generic,

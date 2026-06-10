@@ -202,6 +202,21 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallList_statusOnCall => 'Розмова';
 
   @override
+  String call_FocusedActionHint_actingOn(String name) {
+    return 'Дія для: $name';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeEnded(String name) {
+    return 'Дзвінок з $name буде завершено';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeHeld(String name) {
+    return 'Дзвінок з $name буде поставлено на утримання';
+  }
+
+  @override
   String get call_description_held => 'На утриманні';
 
   @override

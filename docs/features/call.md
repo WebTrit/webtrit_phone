@@ -53,32 +53,37 @@ Single call:
   hold, keypad) + hang up.
 - **1 on hold** - same grid with Hold shown as Resume.
 
-Multiple calls today (stacked layout):
+Multiple calls (list-based):
 
-- The screen stacks a `CallInfo` block per call. The "current" call is derived,
-  not explicitly chosen: `activeCalls.current` = the last non-held call.
-- For a second incoming call while one is active, `IncomingCallActions` shows
-  combined-icon buttons: End & Answer (`call_end` + `call`), Decline (`call_end`),
-  Hold & Answer (`pause` + `call`). Hold is impossible while a call is ringing,
-  so the user answers first; the combined actions end or hold the other call,
-  then answer.
+- The screen shows one tappable `CallRow` per call - status badge (RINGING /
+  ON CALL / ON HOLD), name, live duration - under an "N calls - tap to choose"
+  header. Tapping a row focuses that call.
+- The `CallInfo` block and the action area below act on the focused call only.
+  A ringing focus gets exactly Decline / Answer plus an "Acting on: <name>"
+  hint that spells out the side effect ("<name> will be put on hold" or
+  "will be ended"); an active/held focus gets the control grid + End.
+- Answer is one intent (`CallControlEvent.answerFocused`): it holds the
+  answered calls when possible, ends the non-holdable ones (e.g. an outgoing
+  call still ringing), and leaves another ringing incoming call ringing.
 
 ### Focused call
 
 `CallState.selectedCallId` + the `focusedCall` getter express which call the
-action area acts on. `focusedCall` returns the explicitly selected call when it
-still maps to a live call, otherwise the derived `current`; it is `null` only
-when there are no active calls. Today nothing sets `selectedCallId`, so
-`focusedCall` mirrors `current`. This is the seam the list-based UI consumes
-(see below).
+info block and action area act on: the explicitly selected call when it still
+maps to a live call, otherwise the derived `current` (= last non-held call).
+Auto-focus: a new ringing incoming call grabs the focus; when the focused call
+ends, the next ringing incoming call is focused. The media overlay keeps
+following the derived `current` call.
 
 ## Key widgets
 
 | Widget | File | Role |
 |---|---|---|
-| `CallActiveScaffold` | `view/call_active_scaffold.dart` | Active call screen; lays out info + actions per call |
-| `CallInfo` | `widgets/call_info.dart` | Per-call name / number / status / timer / network quality |
-| `IncomingCallActions` | `widgets/incoming_call_actions.dart` | Ringing-call buttons (decline / answer / combined) |
+| `CallActiveScaffold` | `view/call_active_scaffold.dart` | Active call screen; list + focused info + actions |
+| `CallList` / `CallRow` | `widgets/call_list.dart` | Tappable per-call rows with status badge + duration |
+| `FocusedActionHint` | `widgets/focused_action_hint.dart` | "Acting on" hint + answer side effect |
+| `CallInfo` | `widgets/call_info.dart` | Focused-call name / number / status / timer / network quality |
+| `IncomingCallActions` | `widgets/incoming_call_actions.dart` | Decline / Answer for the focused ringing call |
 | `ActiveCallActions` | `widgets/active_call_actions.dart` | In-call control grid + hang up + keypad |
 
 ## Redesign / in progress - list-based call flow
@@ -102,8 +107,8 @@ Rollout is incremental (foundations first, then UI), each step behind tests:
 |---|---|---|
 | Focus state | `selectedCallId` + `focusedCall` + `callSelected` event (invisible groundwork) | Merged (PR #1376) |
 | Action intents | Combined actions (hold&accept / hangup&accept / swap) move into bloc intents | Merged (PR #1378) |
-| Call list | Selectable list of calls + status badges + header; auto-focus (a new ringing call grabs focus, the next ringing one after the focused call ends); info + action area bind to the focused call | In review |
-| Focused actions | Single action area + "Acting on" hint; drop combined-icon buttons | Planned |
+| Call list | Selectable list of calls + status badges + header; auto-focus rules; info + action area bind to the focused call | Merged (PR #1379) |
+| Focused actions | "Acting on" hint + two-button ringing focus (single answerFocused intent); combined-icon buttons removed | In review |
 | Cleanup / edges | Single-call polish, dead-code removal, 3-call / transfer / landscape | Planned |
 
 The redesign lands on the `refactor/call` integration branch - every stage is a

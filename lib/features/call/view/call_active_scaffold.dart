@@ -333,11 +333,31 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                   _callBloc.add(CallControlEvent.sentDTMF(focusedCall.callId, value));
                                                 },
                                               )
-                                            else
-                                              // Answer/decline actions for the focused ringing call.
+                                            else ...[
+                                              // Decline / Answer for the focused ringing call -
+                                              // always two buttons. Answering holds the answered
+                                              // calls (or ends the non-holdable ones); the hint
+                                              // names the focused call and spells the side effect.
                                               // Edge-cases (covered by the call list above):
                                               // - two incoming ringing calls
                                               // - one outgoing ringing + one incoming ringing
+                                              if (activeCalls.length > 1)
+                                                FocusedActionHint(
+                                                  focusedName: focusedCall.displayName ?? focusedCall.handle.value,
+                                                  willBeHeldNames: nonIncomingRingingCanBeHolded.isEmpty
+                                                      ? const []
+                                                      : [
+                                                          for (final call in nonIncomingRingingCanBeHolded)
+                                                            if (!call.held) call.displayName ?? call.handle.value,
+                                                        ],
+                                                  willBeEndedNames: nonIncomingRingingCanBeHolded.isNotEmpty
+                                                      ? const []
+                                                      : [
+                                                          for (final call in nonIncomingRingingCalls)
+                                                            call.displayName ?? call.handle.value,
+                                                        ],
+                                                  style: style?.callInfo,
+                                                ),
                                               IncomingCallActions(
                                                 style: style?.actions,
                                                 inviteToAttendedTransfer: false,
@@ -350,28 +370,27 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                   _callBloc.add(CallControlEvent.ended(focusedCall.callId));
                                                   dispatchInteractionDebounce();
                                                 },
-                                                onAcceptPressed: nonIncomingRingingCalls.isNotEmpty
-                                                    ? null
-                                                    : () {
-                                                        _callBloc.add(CallControlEvent.answered(focusedCall.callId));
-                                                      },
-                                                onHangupAndAcceptPressed: nonIncomingRingingCalls.isEmpty
-                                                    ? null
-                                                    : () {
-                                                        _callBloc.add(
-                                                          CallControlEvent.answeredEndingOthers(focusedCall.callId),
-                                                        );
-                                                        dispatchInteractionDebounce();
-                                                      },
-                                                onHoldAndAcceptPressed: nonIncomingRingingCanBeHolded.isEmpty
+                                                // Answering with other calls present mutates them
+                                                // (hold/end), so it is gated by the interactions
+                                                // debounce like any signaling-dependent action.
+                                                onAcceptPressed:
+                                                    nonIncomingRingingCalls.isNotEmpty &&
+                                                        (interactionsDebounceActive ||
+                                                            widget.callStatus != CallStatus.ready ||
+                                                            activeCalls.any((call) => call.updating))
                                                     ? null
                                                     : () {
                                                         _callBloc.add(
-                                                          CallControlEvent.answeredHoldingOthers(focusedCall.callId),
+                                                          CallControlEvent.answerFocused(
+                                                            focusedCall.callId,
+                                                            hasHoldableOthers: nonIncomingRingingCanBeHolded.isNotEmpty,
+                                                            hasNonRingingOthers: nonIncomingRingingCalls.isNotEmpty,
+                                                          ),
                                                         );
                                                         dispatchInteractionDebounce();
                                                       },
                                               ),
+                                            ],
                                           ],
                                         ),
                                       ),
