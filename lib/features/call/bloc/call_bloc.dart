@@ -1351,6 +1351,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallControlEventStarted() => __onCallControlEventStarted(event, emit),
       _CallControlEventCallSelected() => __onCallControlEventCallSelected(event, emit),
       _CallControlEventAnswered() => __onCallControlEventAnswered(event, emit),
+      _CallControlEventAnsweredEndingOthers() => __onCallControlEventAnsweredEndingOthers(event, emit),
+      _CallControlEventAnsweredHoldingOthers() => __onCallControlEventAnsweredHoldingOthers(event, emit),
+      _CallControlEventSwapped() => __onCallControlEventSwapped(event, emit),
       _CallControlEventEnded() => __onCallControlEventEnded(event, emit),
       _CallControlEventSetHeld() => __onCallControlEventSetHeld(event, emit),
       _CallControlEventSetMuted() => __onCallControlEventSetMuted(event, emit),
@@ -1405,6 +1408,34 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// a live call via [CallState.copyWithSelectedCall] (no media side effects).
   Future<void> __onCallControlEventCallSelected(_CallControlEventCallSelected event, Emitter<CallState> emit) async {
     emit(state.copyWithSelectedCall(event.callId));
+  }
+
+  // Combined-action intents. Each re-dispatches the ordered primitive events
+  // produced by the pure plans on [CallControlEvent]; state only supplies the
+  // other-call ids ([CallState.otherCallIds]). This replaces the per-call loops
+  // the call screen used to synthesize itself. The primitives go through the
+  // same sequential CallControlEvent queue as before, so semantics are
+  // unchanged.
+
+  /// "End & Answer": ends every other active call, then answers [event.callId].
+  Future<void> __onCallControlEventAnsweredEndingOthers(
+    _CallControlEventAnsweredEndingOthers event,
+    Emitter<CallState> emit,
+  ) async {
+    CallControlEvent.answerEndingOthersPlan(event.callId, state.otherCallIds(event.callId)).forEach(add);
+  }
+
+  /// "Hold & Answer": holds every other active call, then answers [event.callId].
+  Future<void> __onCallControlEventAnsweredHoldingOthers(
+    _CallControlEventAnsweredHoldingOthers event,
+    Emitter<CallState> emit,
+  ) async {
+    CallControlEvent.answerHoldingOthersPlan(event.callId, state.otherCallIds(event.callId)).forEach(add);
+  }
+
+  /// Swap: holds [event.callId], then resumes the other calls.
+  Future<void> __onCallControlEventSwapped(_CallControlEventSwapped event, Emitter<CallState> emit) async {
+    CallControlEvent.swapPlan(event.callId, state.otherCallIds(event.callId)).forEach(add);
   }
 
   /// Submitting the answer intent to system when answer button is pressed from app ui
