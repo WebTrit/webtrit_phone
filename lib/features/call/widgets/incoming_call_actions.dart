@@ -73,6 +73,21 @@ class _IncomingCallActionsState extends State<IncomingCallActions> {
     if (mounted) setState(() {});
   }
 
+  /// Wraps an action button with its short label below, as in the redesign.
+  Widget _labeled(Widget action, String label) {
+    final labelStyle = _themeData.textTheme.bodySmall?.copyWith(color: _themeData.colorScheme.surface);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        action,
+        Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(label, style: labelStyle),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
@@ -86,27 +101,33 @@ class _IncomingCallActionsState extends State<IncomingCallActions> {
     final TextButtonsTable buttonsTable;
 
     final buttons = [
-      Tooltip(
-        message: widget.inviteToAttendedTransfer
-            ? context.l10n.call_CallActionsTooltip_decline_inviteToAttendedTransfer
-            : context.l10n.call_CallActionsTooltip_hangup,
-        child: TextButton(
-          key: callActionsHangupKey,
-          onPressed: onHangupPressed,
-          style: widget.style?.hangup,
-          child: Icon(Icons.call_end, size: actionPadIconSize),
-        ),
-      ),
-      if (widget.onAcceptPressed != null)
+      _labeled(
         Tooltip(
           message: widget.inviteToAttendedTransfer
-              ? context.l10n.call_CallActionsTooltip_accept_inviteToAttendedTransfer
-              : context.l10n.call_CallActionsTooltip_accept,
+              ? context.l10n.call_CallActionsTooltip_decline_inviteToAttendedTransfer
+              : context.l10n.call_CallActionsTooltip_hangup,
           child: TextButton(
-            onPressed: onAcceptPressed,
-            style: widget.style?.callStart,
-            child: Icon(widget.remoteVideo ? Icons.videocam : Icons.call, size: actionPadIconSize),
+            key: callActionsHangupKey,
+            onPressed: onHangupPressed,
+            style: widget.style?.hangup,
+            child: Icon(Icons.call_end, size: actionPadIconSize),
           ),
+        ),
+        context.l10n.call_CallActions_decline,
+      ),
+      if (widget.onAcceptPressed != null)
+        _labeled(
+          Tooltip(
+            message: widget.inviteToAttendedTransfer
+                ? context.l10n.call_CallActionsTooltip_accept_inviteToAttendedTransfer
+                : context.l10n.call_CallActionsTooltip_accept,
+            child: TextButton(
+              onPressed: onAcceptPressed,
+              style: widget.style?.callStart,
+              child: Icon(widget.remoteVideo ? Icons.videocam : Icons.call, size: actionPadIconSize),
+            ),
+          ),
+          context.l10n.call_CallActions_answer,
         ),
     ];
 

@@ -171,15 +171,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_unmute => 'Unmute microphone';
 
   @override
+  String get call_CallActions_answer => 'Answer';
+
+  @override
+  String get call_CallActions_audio => 'Audio';
+
+  @override
+  String get call_CallActions_decline => 'Decline';
+
+  @override
+  String get call_CallActions_end => 'End';
+
+  @override
+  String get call_CallActions_hide => 'Hide';
+
+  @override
+  String get call_CallActions_hold => 'Hold';
+
+  @override
+  String get call_CallActions_keypad => 'Keypad';
+
+  @override
+  String get call_CallActions_mute => 'Mute';
+
+  @override
+  String get call_CallActions_speaker => 'Speaker';
+
+  @override
+  String get call_CallActions_swap => 'Swap';
+
+  @override
+  String get call_CallActions_transfer => 'Transfer';
+
+  @override
+  String get call_CallActions_video => 'Video';
+
+  @override
   String call_CallList_header(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count calls - tap to choose',
-      one: '$count call - tap to choose',
+      other: '$count calls · tap to choose',
+      one: '$count call · tap to choose',
     );
     return '$_temp0';
   }
+
+  @override
+  String get call_CallList_incoming => 'Incoming';
+
+  @override
+  String get call_CallList_outgoing => 'Outgoing';
 
   @override
   String get call_CallList_statusOnCall => 'On call';

@@ -113,7 +113,31 @@
   "@call_CallActionsTooltip_unhold": {},
   "call_CallActionsTooltip_unmute": "Attiva il microfono",
   "@call_CallActionsTooltip_unmute": {},
-  "call_CallList_header": "{count, plural, one{{count} chiamata - tocca per scegliere} other{{count} chiamate - tocca per scegliere}}",
+  "call_CallActions_answer": "Rispondi",
+  "@call_CallActions_answer": {},
+  "call_CallActions_audio": "Audio",
+  "@call_CallActions_audio": {},
+  "call_CallActions_decline": "Rifiuta",
+  "@call_CallActions_decline": {},
+  "call_CallActions_end": "Termina",
+  "@call_CallActions_end": {},
+  "call_CallActions_hide": "Nascondi",
+  "@call_CallActions_hide": {},
+  "call_CallActions_hold": "Attesa",
+  "@call_CallActions_hold": {},
+  "call_CallActions_keypad": "Tastiera",
+  "@call_CallActions_keypad": {},
+  "call_CallActions_mute": "Muto",
+  "@call_CallActions_mute": {},
+  "call_CallActions_speaker": "Altoparlante",
+  "@call_CallActions_speaker": {},
+  "call_CallActions_swap": "Scambia",
+  "@call_CallActions_swap": {},
+  "call_CallActions_transfer": "Trasferisci",
+  "@call_CallActions_transfer": {},
+  "call_CallActions_video": "Video",
+  "@call_CallActions_video": {},
+  "call_CallList_header": "{count, plural, one{{count} chiamata · tocca per scegliere} other{{count} chiamate · tocca per scegliere}}",
   "@call_CallList_header": {
     "description": "Header above the call list on the call screen when more than one call is in progress.",
     "placeholders": {
@@ -121,6 +145,14 @@
         "type": "int"
       }
     }
+  },
+  "call_CallList_incoming": "In arrivo",
+  "@call_CallList_incoming": {
+    "description": "Short trailing label in the call list for a ringing incoming call."
+  },
+  "call_CallList_outgoing": "In uscita",
+  "@call_CallList_outgoing": {
+    "description": "Short trailing label in the call list for a ringing outgoing call."
   },
   "call_CallList_statusOnCall": "In chiamata",
   "@call_CallList_statusOnCall": {

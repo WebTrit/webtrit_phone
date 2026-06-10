@@ -333,11 +333,95 @@ abstract class AppLocalizations {
   /// **'Unmute microphone'**
   String get call_CallActionsTooltip_unmute;
 
+  /// No description provided for @call_CallActions_answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer'**
+  String get call_CallActions_answer;
+
+  /// No description provided for @call_CallActions_audio.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get call_CallActions_audio;
+
+  /// No description provided for @call_CallActions_decline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get call_CallActions_decline;
+
+  /// No description provided for @call_CallActions_end.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get call_CallActions_end;
+
+  /// No description provided for @call_CallActions_hide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide'**
+  String get call_CallActions_hide;
+
+  /// No description provided for @call_CallActions_hold.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold'**
+  String get call_CallActions_hold;
+
+  /// No description provided for @call_CallActions_keypad.
+  ///
+  /// In en, this message translates to:
+  /// **'Keypad'**
+  String get call_CallActions_keypad;
+
+  /// No description provided for @call_CallActions_mute.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute'**
+  String get call_CallActions_mute;
+
+  /// No description provided for @call_CallActions_speaker.
+  ///
+  /// In en, this message translates to:
+  /// **'Speaker'**
+  String get call_CallActions_speaker;
+
+  /// No description provided for @call_CallActions_swap.
+  ///
+  /// In en, this message translates to:
+  /// **'Swap'**
+  String get call_CallActions_swap;
+
+  /// No description provided for @call_CallActions_transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get call_CallActions_transfer;
+
+  /// No description provided for @call_CallActions_video.
+  ///
+  /// In en, this message translates to:
+  /// **'Video'**
+  String get call_CallActions_video;
+
   /// Header above the call list on the call screen when more than one call is in progress.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, one{{count} call - tap to choose} other{{count} calls - tap to choose}}'**
+  /// **'{count, plural, one{{count} call · tap to choose} other{{count} calls · tap to choose}}'**
   String call_CallList_header(int count);
+
+  /// Short trailing label in the call list for a ringing incoming call.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming'**
+  String get call_CallList_incoming;
+
+  /// Short trailing label in the call list for a ringing outgoing call.
+  ///
+  /// In en, this message translates to:
+  /// **'Outgoing'**
+  String get call_CallList_outgoing;
 
   /// Status badge in the call list for an answered, not held call.
   ///

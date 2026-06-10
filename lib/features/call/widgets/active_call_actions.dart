@@ -140,6 +140,21 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     if (mounted) setState(() {});
   }
 
+  /// Wraps an action button with its short label below, as in the redesign.
+  Widget _labeled(Widget action, String label) {
+    final labelStyle = _themeData.textTheme.bodySmall?.copyWith(color: _themeData.colorScheme.surface);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        action,
+        Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(label, style: labelStyle),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
@@ -224,245 +239,274 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     } else {
       actions = [
         // row
-        Tooltip(
-          message: widget.mutedValue
-              ? context.l10n.call_CallActionsTooltip_unmute
-              : context.l10n.call_CallActionsTooltip_mute,
-          child: TextButton(
-            key: callActionsMuteKey,
-            onPressed: onMutedChanged != null ? () => onMutedChanged(!widget.mutedValue) : null,
-            statesController: _mutedStatesController..update(WidgetState.selected, widget.mutedValue),
-            style: widget.style?.muted,
-            child: Icon(widget.mutedValue ? Icons.mic_off : Icons.mic, size: actionPadIconSize),
-          ),
-        ),
-        Tooltip(
-          key: callActionsVideoCallKey,
-          message: widget.cameraValue
-              ? context.l10n.call_CallActionsTooltip_disableCamera
-              : context.l10n.call_CallActionsTooltip_enableCamera,
-          child: TextButton(
-            onPressed: () => onCameraChanged?.call(!widget.cameraValue),
-            statesController: _cameraStatesController..update(WidgetState.selected, widget.cameraValue),
-            style: widget.style?.camera,
-            child: Icon(widget.cameraValue ? Icons.videocam : Icons.videocam_off, size: actionPadIconSize),
-          ),
-        ),
-        if (widget.availableAudioDevices.onlyBuiltIn)
+        _labeled(
           Tooltip(
-            key: callActionsSpeakerKey,
-            message: speakerOn
-                ? context.l10n.call_CallActionsTooltip_disableSpeaker
-                : context.l10n.call_CallActionsTooltip_enableSpeaker,
+            message: widget.mutedValue
+                ? context.l10n.call_CallActionsTooltip_unmute
+                : context.l10n.call_CallActionsTooltip_mute,
             child: TextButton(
-              onPressed: () {
-                final speakerDevice = widget.availableAudioDevices.getSpeaker;
-                final earpieceDevice = widget.availableAudioDevices.getEarpiece;
-                if (speakerOn) {
-                  if (earpieceDevice != null) {
-                    onAudioDeviceChanged.call(earpieceDevice);
-                  } else {
-                    _logger.warning('Earpiece device not found while trying to disable speakerphone');
-                  }
-                } else {
-                  if (speakerDevice != null) {
-                    onAudioDeviceChanged.call(speakerDevice);
-                  } else {
-                    _logger.warning('Speaker device not found while trying to enable speakerphone');
-                  }
-                }
-              },
-              statesController: _speakerStatesController..update(WidgetState.selected, speakerOn),
-              style: widget.style?.speaker,
-              child: Icon(speakerOn ? Icons.volume_up : Icons.phone_in_talk, size: actionPadIconSize),
+              key: callActionsMuteKey,
+              onPressed: onMutedChanged != null ? () => onMutedChanged(!widget.mutedValue) : null,
+              statesController: _mutedStatesController..update(WidgetState.selected, widget.mutedValue),
+              style: widget.style?.muted,
+              child: Icon(widget.mutedValue ? Icons.mic_off : Icons.mic, size: actionPadIconSize),
             ),
           ),
-        if (!widget.availableAudioDevices.onlyBuiltIn)
+          context.l10n.call_CallActions_mute,
+        ),
+        _labeled(
           Tooltip(
-            message: context.l10n.call_CallActionsTooltip_changeAudioDevice,
-            child: CallPopupMenuButton<CallAudioDevice>(
-              offset: Offset(_dimension + 8, 0),
-              items: widget.availableAudioDevices
-                  .map((device) {
-                    final CallAudioDevice(:name, :type, :id) = device;
-                    return CallPopupMenuItem<CallAudioDevice>(
-                      value: device,
-                      text: switch (type) {
-                        CallAudioDeviceType.speaker => context.l10n.call_CallActionsTooltip_device_speaker,
-                        CallAudioDeviceType.earpiece => context.l10n.call_CallActionsTooltip_device_earpiece,
-                        CallAudioDeviceType.wiredHeadset => context.l10n.call_CallActionsTooltip_device_wiredHeadset,
-                        CallAudioDeviceType.bluetooth => name ?? context.l10n.call_CallActionsTooltip_device_bluetooth,
-                        CallAudioDeviceType.streaming => name ?? context.l10n.call_CallActionsTooltip_device_streaming,
-                        _ => name ?? context.l10n.call_CallActionsTooltip_device_unknown,
-                      },
-                      icon: Icon(
-                        switch (type) {
-                          CallAudioDeviceType.speaker => Icons.volume_up,
-                          CallAudioDeviceType.bluetooth => Icons.bluetooth_audio,
-                          CallAudioDeviceType.wiredHeadset => Icons.headset,
-                          CallAudioDeviceType.earpiece => Icons.phone_in_talk,
-                          CallAudioDeviceType.streaming => Icons.usb,
-                          _ => Icons.device_unknown,
+            key: callActionsVideoCallKey,
+            message: widget.cameraValue
+                ? context.l10n.call_CallActionsTooltip_disableCamera
+                : context.l10n.call_CallActionsTooltip_enableCamera,
+            child: TextButton(
+              onPressed: () => onCameraChanged?.call(!widget.cameraValue),
+              statesController: _cameraStatesController..update(WidgetState.selected, widget.cameraValue),
+              style: widget.style?.camera,
+              child: Icon(widget.cameraValue ? Icons.videocam : Icons.videocam_off, size: actionPadIconSize),
+            ),
+          ),
+          context.l10n.call_CallActions_video,
+        ),
+        if (widget.availableAudioDevices.onlyBuiltIn)
+          _labeled(
+            Tooltip(
+              key: callActionsSpeakerKey,
+              message: speakerOn
+                  ? context.l10n.call_CallActionsTooltip_disableSpeaker
+                  : context.l10n.call_CallActionsTooltip_enableSpeaker,
+              child: TextButton(
+                onPressed: () {
+                  final speakerDevice = widget.availableAudioDevices.getSpeaker;
+                  final earpieceDevice = widget.availableAudioDevices.getEarpiece;
+                  if (speakerOn) {
+                    if (earpieceDevice != null) {
+                      onAudioDeviceChanged.call(earpieceDevice);
+                    } else {
+                      _logger.warning('Earpiece device not found while trying to disable speakerphone');
+                    }
+                  } else {
+                    if (speakerDevice != null) {
+                      onAudioDeviceChanged.call(speakerDevice);
+                    } else {
+                      _logger.warning('Speaker device not found while trying to enable speakerphone');
+                    }
+                  }
+                },
+                statesController: _speakerStatesController..update(WidgetState.selected, speakerOn),
+                style: widget.style?.speaker,
+                child: Icon(speakerOn ? Icons.volume_up : Icons.phone_in_talk, size: actionPadIconSize),
+              ),
+            ),
+            context.l10n.call_CallActions_speaker,
+          ),
+        if (!widget.availableAudioDevices.onlyBuiltIn)
+          _labeled(
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_changeAudioDevice,
+              child: CallPopupMenuButton<CallAudioDevice>(
+                offset: Offset(_dimension + 8, 0),
+                items: widget.availableAudioDevices
+                    .map((device) {
+                      final CallAudioDevice(:name, :type, :id) = device;
+                      return CallPopupMenuItem<CallAudioDevice>(
+                        value: device,
+                        text: switch (type) {
+                          CallAudioDeviceType.speaker => context.l10n.call_CallActionsTooltip_device_speaker,
+                          CallAudioDeviceType.earpiece => context.l10n.call_CallActionsTooltip_device_earpiece,
+                          CallAudioDeviceType.wiredHeadset => context.l10n.call_CallActionsTooltip_device_wiredHeadset,
+                          CallAudioDeviceType.bluetooth =>
+                            name ?? context.l10n.call_CallActionsTooltip_device_bluetooth,
+                          CallAudioDeviceType.streaming =>
+                            name ?? context.l10n.call_CallActionsTooltip_device_streaming,
+                          _ => name ?? context.l10n.call_CallActionsTooltip_device_unknown,
                         },
-                        size: 20,
-                        color: themeData.textTheme.bodyMedium!.color,
-                      ),
-                      textStyle: themeData.textTheme.bodyMedium,
-                    );
-                  })
-                  .toList(growable: false),
-              onSelected: onAudioDeviceChanged,
-              child: IgnorePointer(
-                child: TextButton(
-                  /// Use an empty callback instead of null to prevent the button from
-                  /// entering the 'disabled' state, which would override the custom
-                  /// style with default disabled theme colors.
-                  onPressed: () {},
-                  statesController: _speakerStatesController..update(WidgetState.selected, isAudioSelected),
-                  style: widget.style?.speaker,
-                  child: Icon(switch (audioDevice?.type) {
-                    CallAudioDeviceType.speaker => Icons.volume_up,
-                    CallAudioDeviceType.bluetooth => Icons.bluetooth_audio,
-                    CallAudioDeviceType.wiredHeadset => Icons.headset,
-                    CallAudioDeviceType.earpiece => Icons.phone_in_talk,
-                    CallAudioDeviceType.streaming => Icons.usb,
-                    _ => Icons.volume_off,
-                  }, size: actionPadIconSize),
+                        icon: Icon(
+                          switch (type) {
+                            CallAudioDeviceType.speaker => Icons.volume_up,
+                            CallAudioDeviceType.bluetooth => Icons.bluetooth_audio,
+                            CallAudioDeviceType.wiredHeadset => Icons.headset,
+                            CallAudioDeviceType.earpiece => Icons.phone_in_talk,
+                            CallAudioDeviceType.streaming => Icons.usb,
+                            _ => Icons.device_unknown,
+                          },
+                          size: 20,
+                          color: themeData.textTheme.bodyMedium!.color,
+                        ),
+                        textStyle: themeData.textTheme.bodyMedium,
+                      );
+                    })
+                    .toList(growable: false),
+                onSelected: onAudioDeviceChanged,
+                child: IgnorePointer(
+                  child: TextButton(
+                    /// Use an empty callback instead of null to prevent the button from
+                    /// entering the 'disabled' state, which would override the custom
+                    /// style with default disabled theme colors.
+                    onPressed: () {},
+                    statesController: _speakerStatesController..update(WidgetState.selected, isAudioSelected),
+                    style: widget.style?.speaker,
+                    child: Icon(switch (audioDevice?.type) {
+                      CallAudioDeviceType.speaker => Icons.volume_up,
+                      CallAudioDeviceType.bluetooth => Icons.bluetooth_audio,
+                      CallAudioDeviceType.wiredHeadset => Icons.headset,
+                      CallAudioDeviceType.earpiece => Icons.phone_in_talk,
+                      CallAudioDeviceType.streaming => Icons.usb,
+                      _ => Icons.volume_off,
+                    }, size: actionPadIconSize),
+                  ),
                 ),
               ),
             ),
+            context.l10n.call_CallActions_audio,
           ),
         // delimiter
         const SizedBox(),
         SizedBox.square(dimension: _actionsDelimiterDimension),
         const SizedBox(),
         if (widget.transferableCalls.isNotEmpty)
-          Tooltip(
-            message: context.l10n.call_CallActionsTooltip_transfer,
-            child: CallPopupMenuButton(
-              key: callActionsTransferMenuKey,
-              offset: Offset(_dimension + 8, 0),
-              items: [
-                for (final call in widget.transferableCalls)
-                  if (onAttendedTransferSubmitted != null)
+          _labeled(
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_transfer,
+              child: CallPopupMenuButton(
+                key: callActionsTransferMenuKey,
+                offset: Offset(_dimension + 8, 0),
+                items: [
+                  for (final call in widget.transferableCalls)
+                    if (onAttendedTransferSubmitted != null)
+                      CallPopupMenuItem(
+                        key: callActionsTransferMenuNumberKey,
+                        // Transfer is signaling-dependent, disable during renegotiation.
+                        enabled: widget.enableInteractions,
+                        onTap: () => onAttendedTransferSubmitted.call(call),
+                        text: call.displayName ?? call.handle.value,
+                        icon: Icon(
+                          Icons.phone_paused_outlined,
+                          size: popupMenuIconSize,
+                          color: themeData.textTheme.bodyMedium!.color,
+                        ),
+                        textStyle: themeData.textTheme.bodyMedium,
+                      ),
+                  if (onBlindTransferInitiated != null)
                     CallPopupMenuItem(
-                      key: callActionsTransferMenuNumberKey,
                       // Transfer is signaling-dependent, disable during renegotiation.
                       enabled: widget.enableInteractions,
-                      onTap: () => onAttendedTransferSubmitted.call(call),
-                      text: call.displayName ?? call.handle.value,
+                      onTap: onBlindTransferInitiated,
+                      text: context.l10n.call_CallActionsTooltip_transfer_choose,
                       icon: Icon(
-                        Icons.phone_paused_outlined,
+                        Icons.phone_forwarded_outlined,
                         size: popupMenuIconSize,
                         color: themeData.textTheme.bodyMedium!.color,
                       ),
                       textStyle: themeData.textTheme.bodyMedium,
                     ),
-                if (onBlindTransferInitiated != null)
-                  CallPopupMenuItem(
-                    // Transfer is signaling-dependent, disable during renegotiation.
-                    enabled: widget.enableInteractions,
-                    onTap: onBlindTransferInitiated,
-                    text: context.l10n.call_CallActionsTooltip_transfer_choose,
-                    icon: Icon(
-                      Icons.phone_forwarded_outlined,
-                      size: popupMenuIconSize,
-                      color: themeData.textTheme.bodyMedium!.color,
-                    ),
-                    textStyle: themeData.textTheme.bodyMedium,
+                ],
+                child: IgnorePointer(
+                  child: TextButton(
+                    onPressed: () {},
+                    style: widget.style?.transfer,
+                    child: Icon(Icons.phone_forwarded, size: actionPadIconSize),
                   ),
-              ],
-              child: IgnorePointer(
-                child: TextButton(
-                  onPressed: () {},
-                  style: widget.style?.transfer,
-                  child: Icon(Icons.phone_forwarded, size: actionPadIconSize),
                 ),
               ),
             ),
+            context.l10n.call_CallActions_transfer,
           ),
         if (widget.transferableCalls.isEmpty)
-          Tooltip(
-            message: context.l10n.call_CallActionsTooltip_transfer,
-            child: CallPopupMenuButton(
-              key: callActionsTransferMenuKey,
-              offset: Offset(_dimension + 8, 0),
-              items: [
-                if (onBlindTransferInitiated != null)
-                  CallPopupMenuItem(
-                    key: callActionsTransferMenuBlindInitKey,
-                    // Transfer is signaling-dependent, disable during renegotiation.
-                    enabled: widget.enableInteractions,
-                    onTap: onBlindTransferInitiated,
-                    text: context.l10n.call_CallActionsTooltip_unattended_transfer,
-                    icon: Icon(
-                      Icons.phone_forwarded_outlined,
-                      size: popupMenuIconSize,
-                      color: themeData.textTheme.bodyMedium!.color,
+          _labeled(
+            Tooltip(
+              message: context.l10n.call_CallActionsTooltip_transfer,
+              child: CallPopupMenuButton(
+                key: callActionsTransferMenuKey,
+                offset: Offset(_dimension + 8, 0),
+                items: [
+                  if (onBlindTransferInitiated != null)
+                    CallPopupMenuItem(
+                      key: callActionsTransferMenuBlindInitKey,
+                      // Transfer is signaling-dependent, disable during renegotiation.
+                      enabled: widget.enableInteractions,
+                      onTap: onBlindTransferInitiated,
+                      text: context.l10n.call_CallActionsTooltip_unattended_transfer,
+                      icon: Icon(
+                        Icons.phone_forwarded_outlined,
+                        size: popupMenuIconSize,
+                        color: themeData.textTheme.bodyMedium!.color,
+                      ),
+                      textStyle: themeData.textTheme.bodyMedium,
                     ),
-                    textStyle: themeData.textTheme.bodyMedium,
-                  ),
-                if (onAttendedTransferInitiated != null)
-                  CallPopupMenuItem(
-                    key: callActionsTransferMenuAttendedInitKey,
-                    // Transfer is signaling-dependent, disable during renegotiation.
-                    enabled: widget.enableInteractions,
-                    onTap: onAttendedTransferInitiated,
-                    text: context.l10n.call_CallActionsTooltip_attended_transfer,
-                    icon: Icon(
-                      Icons.phone_forwarded_outlined,
-                      size: popupMenuIconSize,
-                      color: themeData.textTheme.bodyMedium!.color,
+                  if (onAttendedTransferInitiated != null)
+                    CallPopupMenuItem(
+                      key: callActionsTransferMenuAttendedInitKey,
+                      // Transfer is signaling-dependent, disable during renegotiation.
+                      enabled: widget.enableInteractions,
+                      onTap: onAttendedTransferInitiated,
+                      text: context.l10n.call_CallActionsTooltip_attended_transfer,
+                      icon: Icon(
+                        Icons.phone_forwarded_outlined,
+                        size: popupMenuIconSize,
+                        color: themeData.textTheme.bodyMedium!.color,
+                      ),
+                      textStyle: themeData.textTheme.bodyMedium,
                     ),
-                    textStyle: themeData.textTheme.bodyMedium,
+                ],
+                child: IgnorePointer(
+                  child: TextButton(
+                    onPressed: onBlindTransferInitiated == null && onAttendedTransferInitiated == null ? null : () {},
+                    style: widget.style?.transfer,
+                    child: Icon(Icons.phone_forwarded, size: actionPadIconSize),
                   ),
-              ],
-              child: IgnorePointer(
-                child: TextButton(
-                  onPressed: onBlindTransferInitiated == null && onAttendedTransferInitiated == null ? null : () {},
-                  style: widget.style?.transfer,
-                  child: Icon(Icons.phone_forwarded, size: actionPadIconSize),
                 ),
               ),
             ),
+            context.l10n.call_CallActions_transfer,
           ),
         if (onSwapPressed == null)
-          Tooltip(
-            key: callActionsHoldKey,
-            message: widget.heldValue
-                ? context.l10n.call_CallActionsTooltip_unhold
-                : context.l10n.call_CallActionsTooltip_hold,
-            child: TextButton(
-              onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
-              statesController: _heldStatesController..update(WidgetState.selected, widget.heldValue),
-              style: widget.style?.held,
-              child: Icon(Icons.pause, size: actionPadIconSize),
+          _labeled(
+            Tooltip(
+              key: callActionsHoldKey,
+              message: widget.heldValue
+                  ? context.l10n.call_CallActionsTooltip_unhold
+                  : context.l10n.call_CallActionsTooltip_hold,
+              child: TextButton(
+                onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
+                statesController: _heldStatesController..update(WidgetState.selected, widget.heldValue),
+                style: widget.style?.held,
+                child: Icon(Icons.pause, size: actionPadIconSize),
+              ),
             ),
+            context.l10n.call_CallActions_hold,
           ),
         if (onSwapPressed != null)
+          _labeled(
+            Tooltip(
+              key: callActionsSwapKey,
+              message: context.l10n.call_CallActionsTooltip_swap,
+              child: TextButton(
+                onPressed: onSwapPressed,
+                style: widget.style?.speaker,
+                child: Icon(Icons.swap_calls, size: actionPadIconSize),
+              ),
+            ),
+            context.l10n.call_CallActions_swap,
+          ),
+        _labeled(
           Tooltip(
-            key: callActionsSwapKey,
-            message: context.l10n.call_CallActionsTooltip_swap,
+            key: callActionsKeypadKey,
+            message: context.l10n.call_CallActionsTooltip_showKeypad,
             child: TextButton(
-              onPressed: onSwapPressed,
-              style: widget.style?.speaker,
-              child: Icon(Icons.swap_calls, size: actionPadIconSize),
+              onPressed: onKeyPressed == null || !_isOrientationPortrait
+                  ? null
+                  : () {
+                      setState(() {
+                        _keypadShow = true;
+                      });
+                    },
+              style: widget.style?.key,
+              child: Icon(Icons.dialpad, size: actionPadIconSize),
             ),
           ),
-        Tooltip(
-          key: callActionsKeypadKey,
-          message: context.l10n.call_CallActionsTooltip_showKeypad,
-          child: TextButton(
-            onPressed: onKeyPressed == null || !_isOrientationPortrait
-                ? null
-                : () {
-                    setState(() {
-                      _keypadShow = true;
-                    });
-                  },
-            style: widget.style?.key,
-            child: Icon(Icons.dialpad, size: actionPadIconSize),
-          ),
+          context.l10n.call_CallActions_keypad,
         ),
         // hangup delimiter
         const SizedBox(),
@@ -479,29 +523,35 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         ...actions,
         // hangup row
         const SizedBox(),
-        Tooltip(
-          message: context.l10n.call_CallActionsTooltip_hangup,
-          child: TextButton(
-            key: callActionsHangupKey,
-            onPressed: onHangupPressed,
-            style: widget.style?.hangup,
-            child: Icon(Icons.call_end, size: actionPadIconSize),
+        _labeled(
+          Tooltip(
+            message: context.l10n.call_CallActionsTooltip_hangup,
+            child: TextButton(
+              key: callActionsHangupKey,
+              onPressed: onHangupPressed,
+              style: widget.style?.hangup,
+              child: Icon(Icons.call_end, size: actionPadIconSize),
+            ),
           ),
+          context.l10n.call_CallActions_end,
         ),
         _keypadShow
-            ? Tooltip(
-                message: context.l10n.call_CallActionsTooltip_hideKeypad,
-                child: TextButton(
-                  onPressed: () {
-                    _keypadTextEditingController.clear();
+            ? _labeled(
+                Tooltip(
+                  message: context.l10n.call_CallActionsTooltip_hideKeypad,
+                  child: TextButton(
+                    onPressed: () {
+                      _keypadTextEditingController.clear();
 
-                    setState(() {
-                      _keypadShow = false;
-                    });
-                  },
-                  style: widget.style?.key,
-                  child: Icon(Icons.dialpad, size: actionPadIconSize),
+                      setState(() {
+                        _keypadShow = false;
+                      });
+                    },
+                    style: widget.style?.key,
+                    child: Icon(Icons.dialpad, size: actionPadIconSize),
+                  ),
                 ),
+                context.l10n.call_CallActions_hide,
               )
             : const SizedBox(),
       ],

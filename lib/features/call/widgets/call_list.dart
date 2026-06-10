@@ -107,7 +107,14 @@ class _CallRowState extends State<CallRow> {
     final call = widget.call;
     final acceptedTime = call.acceptedTime;
     if (acceptedTime != null) return clock.now().difference(acceptedTime).format();
-    return call.isIncoming ? context.l10n.call_description_incoming : context.l10n.call_description_outgoing;
+    return call.isIncoming ? context.l10n.call_CallList_incoming : context.l10n.call_CallList_outgoing;
+  }
+
+  Color _statusDotColor() {
+    final call = widget.call;
+    if (!call.wasAccepted) return Colors.amber.shade300;
+    if (call.held) return Colors.blueGrey.shade200;
+    return Colors.lightGreen.shade400;
   }
 
   @override
@@ -132,6 +139,12 @@ class _CallRowState extends State<CallRow> {
             ),
             child: Row(
               children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: _statusDotColor()),
+                ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

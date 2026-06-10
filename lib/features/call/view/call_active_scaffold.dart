@@ -219,21 +219,24 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                   _callBloc.add(CallControlEvent.callSelected(callId));
                                                 },
                                               ),
-                                            CallInfo(
-                                              transfering: focusedTransfer is Transfering,
-                                              requestToAttendedTransfer: false,
-                                              inviteToAttendedTransfer: focusedTransfer is InviteToAttendedTransfer,
-                                              isIncoming: focusedCall.isIncoming,
-                                              held: focusedCall.held,
-                                              number: focusedCall.handle.value,
-                                              username: focusedCall.displayName,
-                                              acceptedTime: focusedCall.acceptedTime,
-                                              style: style?.callInfo,
-                                              processingStatus: focusedCall.processingStatus,
-                                              callStatus: widget.callStatus,
-                                              iceConnectionIssue: focusedCall.iceConnectionIssue,
-                                              networkQuality: focusedCall.networkQuality,
-                                            ),
+                                            // With multiple calls the list rows carry the per-call
+                                            // info, so the central info block is single-call only.
+                                            if (activeCalls.length == 1)
+                                              CallInfo(
+                                                transfering: focusedTransfer is Transfering,
+                                                requestToAttendedTransfer: false,
+                                                inviteToAttendedTransfer: focusedTransfer is InviteToAttendedTransfer,
+                                                isIncoming: focusedCall.isIncoming,
+                                                held: focusedCall.held,
+                                                number: focusedCall.handle.value,
+                                                username: focusedCall.displayName,
+                                                acceptedTime: focusedCall.acceptedTime,
+                                                style: style?.callInfo,
+                                                processingStatus: focusedCall.processingStatus,
+                                                callStatus: widget.callStatus,
+                                                iceConnectionIssue: focusedCall.iceConnectionIssue,
+                                                networkQuality: focusedCall.networkQuality,
+                                              ),
                                             if (!focusedIsRinging)
                                               ActiveCallActions(
                                                 style: style?.actions,
@@ -329,60 +332,68 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                   _callBloc.add(CallControlEvent.sentDTMF(focusedCall.callId, value));
                                                 },
                                               )
-                                            else ...[
+                                            else
                                               // Decline / Answer for the focused ringing call -
                                               // always two buttons. Answering holds the answered
                                               // calls (or ends the non-holdable ones); the hint
                                               // names the focused call and spells the side effect.
+                                              // The hint and the buttons are one column child so
+                                              // the spaceBetween layout keeps them glued together
+                                              // at the bottom.
                                               // Edge-cases (covered by the call list above):
                                               // - two incoming ringing calls
                                               // - one outgoing ringing + one incoming ringing
-                                              if (activeCalls.length > 1)
-                                                FocusedActionHint(
-                                                  focusedName: focusedCall.displayName ?? focusedCall.handle.value,
-                                                  willBeHeldNames: nonIncomingRingingCanBeHolded.isEmpty
-                                                      ? const []
-                                                      : [
-                                                          for (final call in nonIncomingRingingCanBeHolded)
-                                                            if (!call.held) call.displayName ?? call.handle.value,
-                                                        ],
-                                                  willBeEndedNames: nonIncomingRingingCanBeHolded.isNotEmpty
-                                                      ? const []
-                                                      : [
-                                                          for (final call in nonIncomingRingingCalls)
-                                                            call.displayName ?? call.handle.value,
-                                                        ],
-                                                  style: style?.callInfo,
-                                                ),
-                                              IncomingCallActions(
-                                                style: style?.actions,
-                                                inviteToAttendedTransfer: false,
-                                                remoteVideo: focusedCall.remoteVideo && focusedCall.held == false,
-                                                onHangupPressed: () {
-                                                  _callBloc.add(CallControlEvent.ended(focusedCall.callId));
-                                                  dispatchInteractionDebounce();
-                                                },
-                                                // Answering with other calls present mutates them
-                                                // (hold/end), so it is gated by the interactions
-                                                // debounce like any signaling-dependent action.
-                                                onAcceptPressed:
-                                                    nonIncomingRingingCalls.isNotEmpty &&
-                                                        (interactionsDebounceActive ||
-                                                            widget.callStatus != CallStatus.ready ||
-                                                            activeCalls.any((call) => call.updating))
-                                                    ? null
-                                                    : () {
-                                                        _callBloc.add(
-                                                          CallControlEvent.answerFocused(
-                                                            focusedCall.callId,
-                                                            hasHoldableOthers: nonIncomingRingingCanBeHolded.isNotEmpty,
-                                                            hasNonRingingOthers: nonIncomingRingingCalls.isNotEmpty,
-                                                          ),
-                                                        );
-                                                        dispatchInteractionDebounce();
-                                                      },
+                                              Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  if (activeCalls.length > 1)
+                                                    FocusedActionHint(
+                                                      focusedName: focusedCall.displayName ?? focusedCall.handle.value,
+                                                      willBeHeldNames: nonIncomingRingingCanBeHolded.isEmpty
+                                                          ? const []
+                                                          : [
+                                                              for (final call in nonIncomingRingingCanBeHolded)
+                                                                if (!call.held) call.displayName ?? call.handle.value,
+                                                            ],
+                                                      willBeEndedNames: nonIncomingRingingCanBeHolded.isNotEmpty
+                                                          ? const []
+                                                          : [
+                                                              for (final call in nonIncomingRingingCalls)
+                                                                call.displayName ?? call.handle.value,
+                                                            ],
+                                                      style: style?.callInfo,
+                                                    ),
+                                                  IncomingCallActions(
+                                                    style: style?.actions,
+                                                    inviteToAttendedTransfer: false,
+                                                    remoteVideo: focusedCall.remoteVideo && focusedCall.held == false,
+                                                    onHangupPressed: () {
+                                                      _callBloc.add(CallControlEvent.ended(focusedCall.callId));
+                                                      dispatchInteractionDebounce();
+                                                    },
+                                                    // Answering with other calls present mutates them
+                                                    // (hold/end), so it is gated by the interactions
+                                                    // debounce like any signaling-dependent action.
+                                                    onAcceptPressed:
+                                                        nonIncomingRingingCalls.isNotEmpty &&
+                                                            (interactionsDebounceActive ||
+                                                                widget.callStatus != CallStatus.ready ||
+                                                                activeCalls.any((call) => call.updating))
+                                                        ? null
+                                                        : () {
+                                                            _callBloc.add(
+                                                              CallControlEvent.answerFocused(
+                                                                focusedCall.callId,
+                                                                hasHoldableOthers:
+                                                                    nonIncomingRingingCanBeHolded.isNotEmpty,
+                                                                hasNonRingingOthers: nonIncomingRingingCalls.isNotEmpty,
+                                                              ),
+                                                            );
+                                                            dispatchInteractionDebounce();
+                                                          },
+                                                  ),
+                                                ],
                                               ),
-                                            ],
                                           ],
                                         ),
                                       ),

@@ -113,7 +113,31 @@
   "@call_CallActionsTooltip_unhold": {},
   "call_CallActionsTooltip_unmute": "Увімкнути мікрофон",
   "@call_CallActionsTooltip_unmute": {},
-  "call_CallList_header": "{count, plural, one{{count} дзвінок - торкніться, щоб вибрати} few{{count} дзвінки - торкніться, щоб вибрати} many{{count} дзвінків - торкніться, щоб вибрати} other{{count} дзвінка - торкніться, щоб вибрати}}",
+  "call_CallActions_answer": "Відповісти",
+  "@call_CallActions_answer": {},
+  "call_CallActions_audio": "Аудіо",
+  "@call_CallActions_audio": {},
+  "call_CallActions_decline": "Відхилити",
+  "@call_CallActions_decline": {},
+  "call_CallActions_end": "Завершити",
+  "@call_CallActions_end": {},
+  "call_CallActions_hide": "Сховати",
+  "@call_CallActions_hide": {},
+  "call_CallActions_hold": "Утримання",
+  "@call_CallActions_hold": {},
+  "call_CallActions_keypad": "Клавіатура",
+  "@call_CallActions_keypad": {},
+  "call_CallActions_mute": "Без звуку",
+  "@call_CallActions_mute": {},
+  "call_CallActions_speaker": "Динамік",
+  "@call_CallActions_speaker": {},
+  "call_CallActions_swap": "Поміняти",
+  "@call_CallActions_swap": {},
+  "call_CallActions_transfer": "Переадресація",
+  "@call_CallActions_transfer": {},
+  "call_CallActions_video": "Відео",
+  "@call_CallActions_video": {},
+  "call_CallList_header": "{count, plural, one{{count} дзвінок · торкніться, щоб вибрати} few{{count} дзвінки · торкніться, щоб вибрати} many{{count} дзвінків · торкніться, щоб вибрати} other{{count} дзвінка · торкніться, щоб вибрати}}",
   "@call_CallList_header": {
     "description": "Header above the call list on the call screen when more than one call is in progress.",
     "placeholders": {
@@ -121,6 +145,14 @@
         "type": "int"
       }
     }
+  },
+  "call_CallList_incoming": "Вхідний",
+  "@call_CallList_incoming": {
+    "description": "Short trailing label in the call list for a ringing incoming call."
+  },
+  "call_CallList_outgoing": "Вихідний",
+  "@call_CallList_outgoing": {
+    "description": "Short trailing label in the call list for a ringing outgoing call."
   },
   "call_CallList_statusOnCall": "Розмова",
   "@call_CallList_statusOnCall": {

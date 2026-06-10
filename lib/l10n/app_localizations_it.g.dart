@@ -172,15 +172,57 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_CallActionsTooltip_unmute => 'Attiva il microfono';
 
   @override
+  String get call_CallActions_answer => 'Rispondi';
+
+  @override
+  String get call_CallActions_audio => 'Audio';
+
+  @override
+  String get call_CallActions_decline => 'Rifiuta';
+
+  @override
+  String get call_CallActions_end => 'Termina';
+
+  @override
+  String get call_CallActions_hide => 'Nascondi';
+
+  @override
+  String get call_CallActions_hold => 'Attesa';
+
+  @override
+  String get call_CallActions_keypad => 'Tastiera';
+
+  @override
+  String get call_CallActions_mute => 'Muto';
+
+  @override
+  String get call_CallActions_speaker => 'Altoparlante';
+
+  @override
+  String get call_CallActions_swap => 'Scambia';
+
+  @override
+  String get call_CallActions_transfer => 'Trasferisci';
+
+  @override
+  String get call_CallActions_video => 'Video';
+
+  @override
   String call_CallList_header(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count chiamate - tocca per scegliere',
-      one: '$count chiamata - tocca per scegliere',
+      other: '$count chiamate · tocca per scegliere',
+      one: '$count chiamata · tocca per scegliere',
     );
     return '$_temp0';
   }
+
+  @override
+  String get call_CallList_incoming => 'In arrivo';
+
+  @override
+  String get call_CallList_outgoing => 'In uscita';
 
   @override
   String get call_CallList_statusOnCall => 'In chiamata';

@@ -113,7 +113,31 @@
   "@call_CallActionsTooltip_unhold": {},
   "call_CallActionsTooltip_unmute": "Unmute microphone",
   "@call_CallActionsTooltip_unmute": {},
-  "call_CallList_header": "{count, plural, one{{count} call - tap to choose} other{{count} calls - tap to choose}}",
+  "call_CallActions_answer": "Answer",
+  "@call_CallActions_answer": {},
+  "call_CallActions_audio": "Audio",
+  "@call_CallActions_audio": {},
+  "call_CallActions_decline": "Decline",
+  "@call_CallActions_decline": {},
+  "call_CallActions_end": "End",
+  "@call_CallActions_end": {},
+  "call_CallActions_hide": "Hide",
+  "@call_CallActions_hide": {},
+  "call_CallActions_hold": "Hold",
+  "@call_CallActions_hold": {},
+  "call_CallActions_keypad": "Keypad",
+  "@call_CallActions_keypad": {},
+  "call_CallActions_mute": "Mute",
+  "@call_CallActions_mute": {},
+  "call_CallActions_speaker": "Speaker",
+  "@call_CallActions_speaker": {},
+  "call_CallActions_swap": "Swap",
+  "@call_CallActions_swap": {},
+  "call_CallActions_transfer": "Transfer",
+  "@call_CallActions_transfer": {},
+  "call_CallActions_video": "Video",
+  "@call_CallActions_video": {},
+  "call_CallList_header": "{count, plural, one{{count} call · tap to choose} other{{count} calls · tap to choose}}",
   "@call_CallList_header": {
     "description": "Header above the call list on the call screen when more than one call is in progress.",
     "placeholders": {
@@ -121,6 +145,14 @@
         "type": "int"
       }
     }
+  },
+  "call_CallList_incoming": "Incoming",
+  "@call_CallList_incoming": {
+    "description": "Short trailing label in the call list for a ringing incoming call."
+  },
+  "call_CallList_outgoing": "Outgoing",
+  "@call_CallList_outgoing": {
+    "description": "Short trailing label in the call list for a ringing outgoing call."
   },
   "call_CallList_statusOnCall": "On call",
   "@call_CallList_statusOnCall": {

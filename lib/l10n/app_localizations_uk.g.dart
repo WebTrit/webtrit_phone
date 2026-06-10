@@ -180,17 +180,59 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_unmute => 'Увімкнути мікрофон';
 
   @override
+  String get call_CallActions_answer => 'Відповісти';
+
+  @override
+  String get call_CallActions_audio => 'Аудіо';
+
+  @override
+  String get call_CallActions_decline => 'Відхилити';
+
+  @override
+  String get call_CallActions_end => 'Завершити';
+
+  @override
+  String get call_CallActions_hide => 'Сховати';
+
+  @override
+  String get call_CallActions_hold => 'Утримання';
+
+  @override
+  String get call_CallActions_keypad => 'Клавіатура';
+
+  @override
+  String get call_CallActions_mute => 'Без звуку';
+
+  @override
+  String get call_CallActions_speaker => 'Динамік';
+
+  @override
+  String get call_CallActions_swap => 'Поміняти';
+
+  @override
+  String get call_CallActions_transfer => 'Переадресація';
+
+  @override
+  String get call_CallActions_video => 'Відео';
+
+  @override
   String call_CallList_header(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count дзвінка - торкніться, щоб вибрати',
-      many: '$count дзвінків - торкніться, щоб вибрати',
-      few: '$count дзвінки - торкніться, щоб вибрати',
-      one: '$count дзвінок - торкніться, щоб вибрати',
+      other: '$count дзвінка · торкніться, щоб вибрати',
+      many: '$count дзвінків · торкніться, щоб вибрати',
+      few: '$count дзвінки · торкніться, щоб вибрати',
+      one: '$count дзвінок · торкніться, щоб вибрати',
     );
     return '$_temp0';
   }
+
+  @override
+  String get call_CallList_incoming => 'Вхідний';
+
+  @override
+  String get call_CallList_outgoing => 'Вихідний';
 
   @override
   String get call_CallList_statusOnCall => 'Розмова';
