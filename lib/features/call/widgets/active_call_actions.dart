@@ -20,7 +20,6 @@ class ActiveCallActions extends StatefulWidget {
     super.key,
     required this.enableInteractions,
     required this.isIncoming,
-    required this.remoteVideo,
     required this.wasAccepted,
     required this.wasHungUp,
     required this.cameraValue,
@@ -45,7 +44,6 @@ class ActiveCallActions extends StatefulWidget {
 
   final bool enableInteractions;
   final bool isIncoming;
-  final bool remoteVideo;
   final bool wasAccepted;
   final bool wasHungUp;
   final bool cameraValue;
@@ -114,12 +112,6 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
   }
 
   @override
-  void didUpdateWidget(covariant ActiveCallActions oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.remoteVideo != widget.remoteVideo) computeDimensions();
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _mediaQueryData = MediaQuery.of(context);
@@ -137,11 +129,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     _dimension = min(_mediaQueryData.size.width, _mediaQueryData.size.height) / 5;
     if (_isOrientationPortrait) {
       _actionsDelimiterDimension = _dimension / 5;
-      if (widget.remoteVideo) {
-        _hangupDelimiterDimension = _actionsDelimiterDimension;
-      } else {
-        _hangupDelimiterDimension = _actionsDelimiterDimension * 3 + _dimension * 2;
-      }
+      _hangupDelimiterDimension = _actionsDelimiterDimension;
       _horizontalPadding = _dimension / 2;
     } else {
       _actionsDelimiterDimension = _dimension / 9;
