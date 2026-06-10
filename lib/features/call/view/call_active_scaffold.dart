@@ -295,16 +295,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 },
                                                 onSwapPressed: activeCalls.length == 2
                                                     ? () {
-                                                        _callBloc.add(
-                                                          CallControlEvent.setHeld(activeCall.callId, true),
-                                                        );
-                                                        for (final otherActiveCall in activeCalls) {
-                                                          if (otherActiveCall.callId != activeCall.callId) {
-                                                            _callBloc.add(
-                                                              CallControlEvent.setHeld(otherActiveCall.callId, false),
-                                                            );
-                                                          }
-                                                        }
+                                                        _callBloc.add(CallControlEvent.swapped(activeCall.callId));
                                                         dispatchInteractionDebounce();
                                                       }
                                                     : null,
@@ -356,27 +347,17 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                   onHangupAndAcceptPressed: nonIncomingRingingCalls.isEmpty
                                                       ? null
                                                       : () {
-                                                          for (final otherActiveCall in activeCalls) {
-                                                            if (otherActiveCall.callId != incomingCall.callId) {
-                                                              _callBloc.add(
-                                                                CallControlEvent.ended(otherActiveCall.callId),
-                                                              );
-                                                            }
-                                                          }
-                                                          _callBloc.add(CallControlEvent.answered(incomingCall.callId));
+                                                          _callBloc.add(
+                                                            CallControlEvent.answeredEndingOthers(incomingCall.callId),
+                                                          );
                                                           dispatchInteractionDebounce();
                                                         },
                                                   onHoldAndAcceptPressed: nonIncomingRingingCanBeHolded.isEmpty
                                                       ? null
                                                       : () {
-                                                          for (final otherActiveCall in activeCalls) {
-                                                            if (otherActiveCall.callId != incomingCall.callId) {
-                                                              _callBloc.add(
-                                                                CallControlEvent.setHeld(otherActiveCall.callId, true),
-                                                              );
-                                                            }
-                                                          }
-                                                          _callBloc.add(CallControlEvent.answered(incomingCall.callId));
+                                                          _callBloc.add(
+                                                            CallControlEvent.answeredHoldingOthers(incomingCall.callId),
+                                                          );
                                                           dispatchInteractionDebounce();
                                                         },
                                                 ),

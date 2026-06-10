@@ -235,6 +235,14 @@ class CallState with _$CallState {
     if (retrieveActiveCall(callId) == null) return this;
     return copyWith(selectedCallId: callId);
   }
+
+  /// Ids of every active call except [callId], in list order. Pure data query;
+  /// the event layer (see the combined-action plans on [CallControlEvent])
+  /// turns these into the primitive events to dispatch.
+  List<String> otherCallIds(String callId) => [
+    for (final call in activeCalls)
+      if (call.callId != callId) call.callId,
+  ];
 }
 
 @freezed

@@ -100,14 +100,16 @@ Rollout is incremental (foundations first, then UI), each step behind tests:
 
 | Stage | Scope | Status |
 |---|---|---|
-| Focus state | `selectedCallId` + `focusedCall` + `callSelected` event (invisible groundwork) | In review (PR #1376) |
-| Action intents | Combined actions (hold&accept / hangup&accept / swap) move into bloc intents | Planned |
+| Focus state | `selectedCallId` + `focusedCall` + `callSelected` event (invisible groundwork) | Merged (PR #1376) |
+| Action intents | Combined actions (hold&accept / hangup&accept / swap) move into bloc intents | In review |
 | Call list | Selectable list of calls + status badges + header | Planned |
 | Focused actions | Single action area + "Acting on" hint; drop combined-icon buttons | Planned |
 | Cleanup / edges | Single-call polish, dead-code removal, 3-call / transfer / landscape | Planned |
 
-The visible UI stages are gated behind a feature flag so `develop` stays
-shippable while the redesign lands piece by piece.
+The redesign lands on the `refactor/call` integration branch - every stage is a
+PR into that branch, and once the whole flow is tested there a single PR merges
+it into `develop`. `develop` therefore stays shippable throughout; no feature
+flag is involved.
 
 ## Keeping this doc current
 
