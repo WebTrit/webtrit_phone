@@ -333,6 +333,18 @@ abstract class AppLocalizations {
   /// **'Unmute microphone'**
   String get call_CallActionsTooltip_unmute;
 
+  /// Trailing label on a ringing incoming row in the call list.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming'**
+  String get call_CallList_incoming;
+
+  /// Trailing label on a ringing outgoing row in the call list.
+  ///
+  /// In en, this message translates to:
+  /// **'Outgoing'**
+  String get call_CallList_outgoing;
+
   /// Header above the call list on the call screen when more than one call is in progress.
   ///
   /// In en, this message translates to:

@@ -113,6 +113,14 @@
   "@call_CallActionsTooltip_unhold": {},
   "call_CallActionsTooltip_unmute": "Unmute microphone",
   "@call_CallActionsTooltip_unmute": {},
+  "call_CallList_incoming": "Incoming",
+  "@call_CallList_incoming": {
+    "description": "Trailing label on a ringing incoming row in the call list."
+  },
+  "call_CallList_outgoing": "Outgoing",
+  "@call_CallList_outgoing": {
+    "description": "Trailing label on a ringing outgoing row in the call list."
+  },
   "call_CallList_header": "{count, plural, one{{count} call - tap to choose} other{{count} calls - tap to choose}}",
   "@call_CallList_header": {
     "description": "Header above the call list on the call screen when more than one call is in progress.",

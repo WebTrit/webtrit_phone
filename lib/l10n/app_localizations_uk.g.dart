@@ -180,6 +180,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_unmute => 'Увімкнути мікрофон';
 
   @override
+  String get call_CallList_incoming => 'Вхідний';
+
+  @override
+  String get call_CallList_outgoing => 'Вихідний';
+
+  @override
   String call_CallList_header(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

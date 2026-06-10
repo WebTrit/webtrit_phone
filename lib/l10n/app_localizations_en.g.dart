@@ -171,6 +171,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_unmute => 'Unmute microphone';
 
   @override
+  String get call_CallList_incoming => 'Incoming';
+
+  @override
+  String get call_CallList_outgoing => 'Outgoing';
+
+  @override
   String call_CallList_header(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

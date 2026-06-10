@@ -32,30 +32,65 @@ class FocusedActionHint extends StatelessWidget {
 
   final CallInfoStyle? style;
 
+  /// Builds a span for [text] with the [highlight] substring emphasized via
+  /// [emphasis]. The localized templates inline the names as plain text, so
+  /// the name is found by substring rather than by splitting the template.
+  TextSpan _highlightedSpan(String text, String highlight, TextStyle base, TextStyle emphasis) {
+    final index = text.indexOf(highlight);
+    if (index < 0) return TextSpan(text: text, style: base);
+    return TextSpan(
+      style: base,
+      children: [
+        TextSpan(text: text.substring(0, index)),
+        TextSpan(text: highlight, style: emphasis),
+        TextSpan(text: text.substring(index + highlight.length)),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final baseStyle = style?.callStatus ?? const TextStyle();
+    final actingOnStyle = baseStyle.copyWith(fontSize: 13);
+    final focusedNameStyle = actingOnStyle.copyWith(fontWeight: FontWeight.w700);
+    final sideEffectStyle = baseStyle.copyWith(fontSize: 12);
+    final affectedNameStyle = sideEffectStyle.copyWith(color: Colors.amber.shade200, fontWeight: FontWeight.w600);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.25), borderRadius: BorderRadius.circular(14)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            context.l10n.call_FocusedActionHint_actingOn(focusedName),
-            style: baseStyle.copyWith(fontSize: 13, fontWeight: FontWeight.w600),
+          Text.rich(
+            _highlightedSpan(
+              context.l10n.call_FocusedActionHint_actingOn(focusedName),
+              focusedName,
+              actingOnStyle,
+              focusedNameStyle,
+            ),
             textAlign: TextAlign.center,
           ),
           if (willBeHeldNames.isNotEmpty)
-            Text(
-              context.l10n.call_FocusedActionHint_willBeHeld(willBeHeldNames.join(', ')),
-              style: baseStyle.copyWith(fontSize: 12),
+            Text.rich(
+              _highlightedSpan(
+                context.l10n.call_FocusedActionHint_willBeHeld(willBeHeldNames.join(', ')),
+                willBeHeldNames.join(', '),
+                sideEffectStyle,
+                affectedNameStyle,
+              ),
               textAlign: TextAlign.center,
             )
           else if (willBeEndedNames.isNotEmpty)
-            Text(
-              context.l10n.call_FocusedActionHint_willBeEnded(willBeEndedNames.join(', ')),
-              style: baseStyle.copyWith(fontSize: 12),
+            Text.rich(
+              _highlightedSpan(
+                context.l10n.call_FocusedActionHint_willBeEnded(willBeEndedNames.join(', ')),
+                willBeEndedNames.join(', '),
+                sideEffectStyle,
+                affectedNameStyle,
+              ),
               textAlign: TextAlign.center,
             ),
         ],

@@ -129,7 +129,7 @@ void main() {
       await tester.pumpWidget(_buildSubject(calls: [ringing, onCall], focusedCallId: 'ringing', onCallTap: (_) {}));
       final context = tester.element(find.byType(CallList));
 
-      expect(find.text(context.l10n.call_description_incoming), findsOneWidget);
+      expect(find.text(context.l10n.call_CallList_incoming), findsOneWidget);
       expect(find.textContaining(RegExp(r'^\d{2}:\d{2}')), findsOneWidget);
 
       // Let the periodic ticker fire once, then dispose cleanly.

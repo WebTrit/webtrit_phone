@@ -113,6 +113,14 @@
   "@call_CallActionsTooltip_unhold": {},
   "call_CallActionsTooltip_unmute": "Увімкнути мікрофон",
   "@call_CallActionsTooltip_unmute": {},
+  "call_CallList_incoming": "Вхідний",
+  "@call_CallList_incoming": {
+    "description": "Trailing label on a ringing incoming row in the call list."
+  },
+  "call_CallList_outgoing": "Вихідний",
+  "@call_CallList_outgoing": {
+    "description": "Trailing label on a ringing outgoing row in the call list."
+  },
   "call_CallList_header": "{count, plural, one{{count} дзвінок - торкніться, щоб вибрати} few{{count} дзвінки - торкніться, щоб вибрати} many{{count} дзвінків - торкніться, щоб вибрати} other{{count} дзвінка - торкніться, щоб вибрати}}",
   "@call_CallList_header": {
     "description": "Header above the call list on the call screen when more than one call is in progress.",

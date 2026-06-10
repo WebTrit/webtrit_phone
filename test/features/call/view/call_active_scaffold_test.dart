@@ -100,6 +100,7 @@ void main() {
       expect(find.byType(ActiveCallActions), findsNothing);
       expect(find.byType(CallList), findsNothing);
       expect(find.byType(FocusedActionHint), findsNothing);
+      expect(find.byType(CallInfo), findsOneWidget);
       await _teardown(tester);
     });
 
@@ -131,10 +132,18 @@ void main() {
       expect(find.byType(CallRow), findsNWidgets(2));
       expect(find.byType(IncomingCallActions), findsOneWidget);
       expect(find.byType(ActiveCallActions), findsNothing);
+      // With multiple calls the rows carry the info; no central block.
+      expect(find.byType(CallInfo), findsNothing);
 
       // The hint names the focused call and the answered call to be held.
-      expect(find.text(context.l10n.call_FocusedActionHint_actingOn('Anna Marchenko')), findsOneWidget);
-      expect(find.text(context.l10n.call_FocusedActionHint_willBeHeld('Boris Klein')), findsOneWidget);
+      expect(
+        find.text(context.l10n.call_FocusedActionHint_actingOn('Anna Marchenko'), findRichText: true),
+        findsOneWidget,
+      );
+      expect(
+        find.text(context.l10n.call_FocusedActionHint_willBeHeld('Boris Klein'), findRichText: true),
+        findsOneWidget,
+      );
       await _teardown(tester);
     });
 
@@ -174,7 +183,10 @@ void main() {
       expect(find.byType(IncomingCallActions), findsOneWidget);
       // Only the still-active call is named in the hold side effect; the
       // already-held one does not change state.
-      expect(find.text(context.l10n.call_FocusedActionHint_willBeHeld('Boris Klein')), findsOneWidget);
+      expect(
+        find.text(context.l10n.call_FocusedActionHint_willBeHeld('Boris Klein'), findRichText: true),
+        findsOneWidget,
+      );
       await _teardown(tester);
     });
   });

@@ -28,21 +28,30 @@ void main() {
       await tester.pumpWidget(_buildSubject(focusedName: 'Boris Klein'));
       final context = tester.element(find.byType(FocusedActionHint));
 
-      expect(find.text(context.l10n.call_FocusedActionHint_actingOn('Boris Klein')), findsOneWidget);
+      expect(
+        find.text(context.l10n.call_FocusedActionHint_actingOn('Boris Klein'), findRichText: true),
+        findsOneWidget,
+      );
     });
 
     testWidgets('spells out the will-be-held side effect', (tester) async {
       await tester.pumpWidget(_buildSubject(focusedName: 'Boris Klein', willBeHeldNames: const ['Anna Marchenko']));
       final context = tester.element(find.byType(FocusedActionHint));
 
-      expect(find.text(context.l10n.call_FocusedActionHint_willBeHeld('Anna Marchenko')), findsOneWidget);
+      expect(
+        find.text(context.l10n.call_FocusedActionHint_willBeHeld('Anna Marchenko'), findRichText: true),
+        findsOneWidget,
+      );
     });
 
     testWidgets('spells out the will-be-ended side effect when nothing can be held', (tester) async {
       await tester.pumpWidget(_buildSubject(focusedName: 'Boris Klein', willBeEndedNames: const ['Anna Marchenko']));
       final context = tester.element(find.byType(FocusedActionHint));
 
-      expect(find.text(context.l10n.call_FocusedActionHint_willBeEnded('Anna Marchenko')), findsOneWidget);
+      expect(
+        find.text(context.l10n.call_FocusedActionHint_willBeEnded('Anna Marchenko'), findRichText: true),
+        findsOneWidget,
+      );
     });
 
     testWidgets('hold side effect wins over ended when both are passed', (tester) async {
@@ -55,8 +64,14 @@ void main() {
       );
       final context = tester.element(find.byType(FocusedActionHint));
 
-      expect(find.text(context.l10n.call_FocusedActionHint_willBeHeld('Anna Marchenko')), findsOneWidget);
-      expect(find.text(context.l10n.call_FocusedActionHint_willBeEnded('Clara Diaz')), findsNothing);
+      expect(
+        find.text(context.l10n.call_FocusedActionHint_willBeHeld('Anna Marchenko'), findRichText: true),
+        findsOneWidget,
+      );
+      expect(
+        find.text(context.l10n.call_FocusedActionHint_willBeEnded('Clara Diaz'), findRichText: true),
+        findsNothing,
+      );
     });
 
     testWidgets('joins multiple affected names', (tester) async {
@@ -65,7 +80,10 @@ void main() {
       );
       final context = tester.element(find.byType(FocusedActionHint));
 
-      expect(find.text(context.l10n.call_FocusedActionHint_willBeHeld('Anna Marchenko, Clara Diaz')), findsOneWidget);
+      expect(
+        find.text(context.l10n.call_FocusedActionHint_willBeHeld('Anna Marchenko, Clara Diaz'), findRichText: true),
+        findsOneWidget,
+      );
     });
 
     testWidgets('shows no side-effect line without affected calls', (tester) async {
