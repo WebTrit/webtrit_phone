@@ -153,6 +153,10 @@
       }
     }
   },
+  "call_ToolbarStatus_connecting": "Connessione...",
+  "@call_ToolbarStatus_connecting": {
+    "description": "Toolbar status line while the very first signaling connection is being established (turns into Reconnecting once a connection has existed)."
+  },
   "call_ToolbarStatus_reconnecting": "Riconnessione...",
   "@call_ToolbarStatus_reconnecting": {
     "description": "Suffix on the call screen toolbar status line while the signaling connection is being re-established."

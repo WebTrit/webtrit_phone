@@ -18,7 +18,13 @@ import '../models/models.dart';
 /// than cross-faded, so only appearing/disappearing fades; switching severity or
 /// direction does not flicker.
 class CallNetworkQualityMeter extends StatelessWidget {
-  const CallNetworkQualityMeter({super.key, required this.quality, this.baseColor, this.showLabel});
+  const CallNetworkQualityMeter({
+    super.key,
+    required this.quality,
+    this.baseColor,
+    this.showLabel,
+    this.showMediaGlyph,
+  });
 
   final CallNetworkQuality quality;
 
@@ -30,6 +36,11 @@ class CallNetworkQualityMeter extends StatelessWidget {
   /// (label only at severe), `false` never shows it (the caller renders its
   /// own text, e.g. the toolbar status line).
   final bool? showLabel;
+
+  /// Whether to render the mic/camera glyph after the direction arrow.
+  /// Defaults to `true`; the toolbar status line passes `false` (its label
+  /// already says audio/video), keeping the design's "bars + arrow" shape.
+  final bool? showMediaGlyph;
 
   static const double _glyphSize = 14;
   static const _morph = Duration(milliseconds: 250);
@@ -75,7 +86,7 @@ class CallNetworkQualityMeter extends StatelessWidget {
           _SignalBars(active: activeBars, activeColor: color, inactiveColor: base.withValues(alpha: 0.3)),
           const SizedBox(width: 4),
           Icon(directionIcon, size: _glyphSize, color: color),
-          Icon(mediaIcon, size: _glyphSize, color: color),
+          if (showMediaGlyph ?? true) Icon(mediaIcon, size: _glyphSize, color: color),
           if (showLabel) ...[
             const SizedBox(width: 4),
             Text(

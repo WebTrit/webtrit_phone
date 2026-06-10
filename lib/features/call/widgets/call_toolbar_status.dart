@@ -14,11 +14,14 @@ import 'call_network_quality_meter.dart';
 
 /// The call screen toolbar status line (lives in the AppBar title slot).
 ///
-/// Shows ONE global indicator at a time, by priority:
-/// 1. signaling/connectivity trouble - red dot + status + "Reconnecting...";
+/// Global, never tied to a call row. Shows ONE indicator at a time, by
+/// priority:
+/// 1. signaling state - "No internet connection" / "Not registered" (coral
+///    static dot), or "Connecting..." / "Reconnecting..." (amber pulsing dot;
+///    Reconnecting once a connection has existed before);
 /// 2. a real media failure ([IceConnectionIssue]) - warning glyph + message;
-/// 3. media degradation ([CallNetworkQuality], worst across calls) - the
-///    signal meter + an always-visible label.
+/// 3. media degradation ([CallNetworkQuality], worst across calls) - signal
+///    bars + direction arrow + an always-visible label.
 /// Renders nothing while everything is healthy. Status flaps during reconnect
 /// backoff are debounced the same way the old in-info message was.
 class CallToolbarStatus extends StatefulWidget {
@@ -42,9 +45,14 @@ class CallToolbarStatus extends StatefulWidget {
 class _CallToolbarStatusState extends State<CallToolbarStatus> {
   late final TransientDebouncer<CallStatus> _debouncer;
 
+  /// Whether the signaling connection has been up at least once: turns the
+  /// transient "Connecting..." label into "Reconnecting...".
+  late bool _everConnected;
+
   @override
   void initState() {
     super.initState();
+    _everConnected = widget.callStatus == CallStatus.ready;
     _debouncer = TransientDebouncer<CallStatus>(
       initial: widget.callStatus,
       duration: kSignalingStatusDebounce,
@@ -56,6 +64,7 @@ class _CallToolbarStatusState extends State<CallToolbarStatus> {
   @override
   void didUpdateWidget(covariant CallToolbarStatus oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.callStatus == CallStatus.ready) _everConnected = true;
     if (widget.callStatus != oldWidget.callStatus) {
       _debouncer.update(widget.callStatus, () => setState(() {}));
     }
@@ -83,31 +92,29 @@ class _CallToolbarStatusState extends State<CallToolbarStatus> {
 
     final Widget content;
     if (status != CallStatus.ready) {
+      // Connecting/Reconnecting are one transient amber state; "no internet"
+      // and "not registered" are hard states with a coral dot.
+      final transient = status.isTransientReconnecting;
+      final dotColor = transient ? warningColor : errorColor;
+      final message = switch (status) {
+        _ when transient =>
+          _everConnected ? context.l10n.call_ToolbarStatus_reconnecting : context.l10n.call_ToolbarStatus_connecting,
+        _ => status.l10n(context),
+      };
       content = Row(
         key: const ValueKey('toolbar-connect'),
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: errorColor),
-          ),
+          _StatusDot(color: dotColor, pulsing: transient),
           const SizedBox(width: 6),
           Flexible(
             child: Text(
-              status.l10n(context),
+              message,
               style: baseStyle?.copyWith(fontWeight: FontWeight.w600),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          if (status != CallStatus.appUnregistered) ...[
-            Text(' - ', style: baseStyle),
-            Text(
-              context.l10n.call_ToolbarStatus_reconnecting,
-              style: baseStyle?.copyWith(color: baseColor.withValues(alpha: 0.7)),
-            ),
-          ],
         ],
       );
     } else if (iceConnectionIssue != null) {
@@ -135,7 +142,8 @@ class _CallToolbarStatusState extends State<CallToolbarStatus> {
         key: const ValueKey('toolbar-quality'),
         mainAxisSize: MainAxisSize.min,
         children: [
-          CallNetworkQualityMeter(quality: quality, baseColor: baseColor, showLabel: false),
+          // Bars + direction arrow only; the label already says audio/video.
+          CallNetworkQualityMeter(quality: quality, baseColor: baseColor, showLabel: false, showMediaGlyph: false),
           const SizedBox(width: 6),
           Flexible(
             child: Text(
@@ -156,6 +164,65 @@ class _CallToolbarStatusState extends State<CallToolbarStatus> {
       switchInCurve: Curves.easeOut,
       switchOutCurve: Curves.easeIn,
       child: content,
+    );
+  }
+}
+
+/// The 8px signaling-state dot; pulses (opacity breathing) for the transient
+/// Connecting/Reconnecting state and stays solid for hard states.
+class _StatusDot extends StatefulWidget {
+  const _StatusDot({required this.color, required this.pulsing});
+
+  final Color color;
+  final bool pulsing;
+
+  @override
+  State<_StatusDot> createState() => _StatusDotState();
+}
+
+class _StatusDotState extends State<_StatusDot> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 900));
+    _syncPulse();
+  }
+
+  @override
+  void didUpdateWidget(covariant _StatusDot oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.pulsing != oldWidget.pulsing) _syncPulse();
+  }
+
+  void _syncPulse() {
+    if (widget.pulsing) {
+      _controller.repeat(reverse: true);
+    } else {
+      _controller.stop();
+      _controller.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: Tween<double>(
+        begin: 1,
+        end: 0.35,
+      ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut)),
+      child: Container(
+        width: 8,
+        height: 8,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: widget.color),
+      ),
     );
   }
 }

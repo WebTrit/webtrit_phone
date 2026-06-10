@@ -45,12 +45,14 @@ Each call is an `ActiveCall` with the flags the UI reads:
 - `processingStatus` - fine-grained lifecycle (see the state machine in the
   architecture doc).
 
-The toolbar (AppBar title slot) carries one global status line
-(`CallToolbarStatus`): signaling/connectivity trouble (red dot +
-"Reconnecting..."), a media failure, or the worst stream-quality warning
-across calls (signal meter + label). The central `CallInfo` shows only
-name/number, the call description or live duration, and the processing
-status.
+The toolbar (AppBar title slot, centered) carries one global status line
+(`CallToolbarStatus`), never tied to a call row. Signaling states: "No
+internet connection" / "Not registered" (coral dot), "Connecting..." /
+"Reconnecting..." (amber pulsing dot; Reconnecting once a connection has
+existed). Below those: a media failure message, or the worst stream-quality
+warning across calls (signal bars + direction arrow + label). The central
+`CallInfo` shows only name/number, the call description or live duration, and
+the processing status.
 - `displayName` / `handle`, `remoteVideo`, `muted`, `transfer`.
 
 Single call:

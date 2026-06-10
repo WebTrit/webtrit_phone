@@ -187,10 +187,9 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                 backgroundColor: style?.appBar?.backgroundColor,
                                 foregroundColor: style?.appBar?.foregroundColor,
                                 primary: style?.appBar?.primary ?? false,
-                                // Global status line: signaling trouble, media
+                                // Global status line: signaling state, media
                                 // failure or the worst stream quality across calls.
-                                centerTitle: false,
-                                titleSpacing: 0,
+                                centerTitle: true,
                                 title: CallToolbarStatus(
                                   callStatus: widget.callStatus,
                                   networkQuality: activeCalls.worstNetworkQuality,

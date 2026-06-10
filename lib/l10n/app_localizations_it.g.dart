@@ -201,6 +201,9 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get call_ToolbarStatus_connecting => 'Connessione...';
+
+  @override
   String get call_ToolbarStatus_reconnecting => 'Riconnessione...';
 
   @override

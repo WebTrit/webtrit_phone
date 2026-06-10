@@ -211,6 +211,9 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get call_ToolbarStatus_connecting => 'Підключення...';
+
+  @override
   String get call_ToolbarStatus_reconnecting => 'Перепідключення...';
 
   @override
