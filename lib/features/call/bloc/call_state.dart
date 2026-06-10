@@ -10,6 +10,7 @@ class CallState with _$CallState {
     this.minimized,
     this.audioDevice,
     this.availableAudioDevices = const [],
+    this.selectedCallId,
   });
 
   @override
@@ -33,7 +34,29 @@ class CallState with _$CallState {
   @override
   final List<CallAudioDevice> availableAudioDevices;
 
+  /// The call the user has explicitly focused (e.g. tapped in the call list).
+  ///
+  /// `null` means no explicit selection - consumers fall back to the derived
+  /// [ActiveCallIterableExtension.current]. This is the foundation for the
+  /// list-based call screen, where one bottom action area acts on the focused
+  /// call. Always read it through [focusedCall], which clamps a stale id back
+  /// to `current`.
+  @override
+  final String? selectedCallId;
+
   CallStatus get status => callServiceState.status;
+
+  /// The call the action area should act on: the explicitly [selectedCallId]
+  /// when it still maps to a live call, otherwise the derived `current`.
+  ///
+  /// Returns `null` only when there are no active calls. Behavior is identical
+  /// to `activeCalls.current` until something dispatches
+  /// [CallControlEvent.callSelected], so this is a no-op seam for existing UI.
+  ActiveCall? get focusedCall {
+    if (activeCalls.isEmpty) return null;
+    final selected = selectedCallId == null ? null : retrieveActiveCall(selectedCallId!);
+    return selected ?? activeCalls.current;
+  }
 
   /// Indicates that the handshake phase has completed and registration status is available.
   bool get isHandshakeEstablished => callServiceState.registration?.status != null;
@@ -198,7 +221,19 @@ class CallState with _$CallState {
     final activeCalls = this.activeCalls.where((activeCall) {
       return activeCall.callId != callId;
     }).toList();
-    return copyWith(activeCalls: activeCalls, minimized: activeCalls.isEmpty ? null : minimized);
+    return copyWith(
+      activeCalls: activeCalls,
+      minimized: activeCalls.isEmpty ? null : minimized,
+      // Drop a dangling selection so [focusedCall] falls back to `current`.
+      selectedCallId: selectedCallId == callId ? null : selectedCallId,
+    );
+  }
+
+  /// Focuses the call [callId] when it maps to a live call; otherwise returns
+  /// the state unchanged. Keeps [selectedCallId] clamped to an existing call.
+  CallState copyWithSelectedCall(String callId) {
+    if (retrieveActiveCall(callId) == null) return this;
+    return copyWith(selectedCallId: callId);
   }
 }
 

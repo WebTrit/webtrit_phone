@@ -350,6 +350,88 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
+  // CallState — focusedCall (list-based call screen foundation)
+  // ---------------------------------------------------------------------------
+
+  group('CallState.focusedCall', () {
+    test('returns null when there are no active calls', () {
+      const state = CallState();
+      expect(state.focusedCall, isNull);
+    });
+
+    test('falls back to current when no explicit selection', () {
+      final held = _makeCall(callId: 'held', held: true);
+      final active = _makeCall(callId: 'active', held: false);
+      final state = CallState(activeCalls: [held, active]);
+      // selectedCallId is null -> mirrors activeCalls.current (last non-held).
+      expect(state.selectedCallId, isNull);
+      expect(state.focusedCall?.callId, 'active');
+    });
+
+    test('returns the explicitly selected call', () {
+      final held = _makeCall(callId: 'held', held: true);
+      final active = _makeCall(callId: 'active', held: false);
+      final state = CallState(activeCalls: [held, active], selectedCallId: 'held');
+      // Selection wins over the derived current.
+      expect(state.focusedCall?.callId, 'held');
+    });
+
+    test('falls back to current when the selected id no longer maps to a call', () {
+      final active = _makeCall(callId: 'active', held: false);
+      final state = CallState(activeCalls: [active], selectedCallId: 'gone');
+      expect(state.focusedCall?.callId, 'active');
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // CallState — copyWithSelectedCall
+  // ---------------------------------------------------------------------------
+
+  group('CallState.copyWithSelectedCall', () {
+    test('sets selectedCallId when the call exists', () {
+      final c1 = _makeCall(callId: 'c1');
+      final c2 = _makeCall(callId: 'c2');
+      final state = CallState(activeCalls: [c1, c2]);
+      final next = state.copyWithSelectedCall('c2');
+      expect(next.selectedCallId, 'c2');
+      expect(next.focusedCall?.callId, 'c2');
+    });
+
+    test('leaves state unchanged for an unknown call id', () {
+      final c1 = _makeCall(callId: 'c1');
+      final state = CallState(activeCalls: [c1]);
+      final next = state.copyWithSelectedCall('ghost');
+      expect(next.selectedCallId, isNull);
+      expect(next, same(state));
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // CallState — copyWithPopActiveCall clears a dangling selection
+  // ---------------------------------------------------------------------------
+
+  group('CallState.copyWithPopActiveCall — selection clamp', () {
+    test('clears selectedCallId when the selected call is removed', () {
+      final c1 = _makeCall(callId: 'c1');
+      final c2 = _makeCall(callId: 'c2');
+      final state = CallState(activeCalls: [c1, c2], selectedCallId: 'c1');
+      final next = state.copyWithPopActiveCall('c1');
+      expect(next.selectedCallId, isNull);
+      // focusedCall falls back to the surviving call.
+      expect(next.focusedCall?.callId, 'c2');
+    });
+
+    test('keeps selectedCallId when a different call is removed', () {
+      final c1 = _makeCall(callId: 'c1');
+      final c2 = _makeCall(callId: 'c2');
+      final state = CallState(activeCalls: [c1, c2], selectedCallId: 'c2');
+      final next = state.copyWithPopActiveCall('c1');
+      expect(next.selectedCallId, 'c2');
+      expect(next.focusedCall?.callId, 'c2');
+    });
+  });
+
+  // ---------------------------------------------------------------------------
   // CallState — display
   // ---------------------------------------------------------------------------
 
