@@ -119,23 +119,28 @@ class _CallRowState extends State<CallRow> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final nameStyle = widget.style?.number ?? const TextStyle();
     final statusStyle = widget.style?.callStatus ?? const TextStyle();
 
+    // Rows are light overlay tints of the on-screen text color (white on the
+    // standard call gradient): the FOCUSED row is the brighter one with a
+    // light border, unfocused rows stay dimmer - matching the design's
+    // polarity regardless of what colorScheme.surface resolves to.
+    final overlayColor = statusStyle.color ?? Theme.of(context).colorScheme.surface;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: Material(
-        color: colorScheme.surface.withValues(alpha: widget.focused ? 0.28 : 0.12),
-        borderRadius: BorderRadius.circular(12),
+        color: overlayColor.withValues(alpha: widget.focused ? 0.26 : 0.10),
+        borderRadius: BorderRadius.circular(16),
         child: InkWell(
           onTap: widget.onTap,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: widget.focused ? Border.all(color: colorScheme.surface.withValues(alpha: 0.6)) : null,
+              borderRadius: BorderRadius.circular(16),
+              border: widget.focused ? Border.all(color: overlayColor.withValues(alpha: 0.55)) : null,
             ),
             child: Row(
               children: [
