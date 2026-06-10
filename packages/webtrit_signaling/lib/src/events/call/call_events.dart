@@ -7,6 +7,7 @@ export 'hangingup_event.dart';
 export 'hangup_event.dart';
 export 'holding_event.dart';
 export 'incoming_call_event.dart';
+export 'media_state_event.dart';
 export 'missed_call_event.dart';
 export 'notify_event.dart';
 export 'proceeding_event.dart';

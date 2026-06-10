@@ -986,6 +986,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallSignalingEventUpdating() => __onCallSignalingEventUpdating(event, emit),
       _CallSignalingEventCallUpdating() => __onCallSignalingEventCallUpdating(event, emit),
       _CallSignalingEventUpdated() => __onCallSignalingEventUpdated(event, emit),
+      _CallSignalingEventMediaState() => __onCallSignalingEventMediaState(event, emit),
       _CallSignalingEventTransfer() => __onCallSignalingEventTransfer(event, emit),
       _CallSignalingEventTransferring() => __onCallSignalingEventTransfering(event, emit),
       _CallSignalingEventNotifyRefer() => __onCallSignalingEventNotifyRefer(event, emit),
@@ -1126,6 +1127,33 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return call.copyWith(processingStatus: CallProcessingStatus.outgoingRinging);
       }),
     );
+
+    _maybeSendPendingMediaState(event.callId);
+  }
+
+  /// Best-effort informational signal so the remote side can reflect the
+  /// camera state without SDP renegotiation - the only channel that works
+  /// while the call is still ringing.
+  void _sendMediaState(ActiveCall call, {required bool video}) {
+    final transaction = WebtritSignalingClient.generateTransactionId();
+    _signalingModule
+        .execute(
+          MediaStateRequest(transaction: transaction, line: call.line, callId: call.callId, media: {'video': video}),
+        )
+        ?.catchError((Object e) => _logger.info('_sendMediaState: $e'));
+  }
+
+  /// A media_state sent before the first provisional response is rejected
+  /// upstream (no early dialog to route it yet), so once 180/183 arrives
+  /// re-send the camera-off state if it no longer matches the offer.
+  void _maybeSendPendingMediaState(String callId) {
+    final call = state.retrieveActiveCall(callId);
+    if (call == null || call.wasAccepted) return;
+
+    final videoTrack = call.localStream?.getVideoTracks().firstOrNull;
+    if (videoTrack != null && !videoTrack.enabled) {
+      _sendMediaState(call, video: false);
+    }
   }
 
   // early media - set specified session description
@@ -1145,6 +1173,37 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       _logger.warning('__onCallSignalingEventProgress: jsep must not be null');
     }
+
+    _maybeSendPendingMediaState(event.callId);
+  }
+
+  /// Informational media state from the remote side (e.g. the caller turned
+  /// the camera off while this incoming call is still ringing). Carries no
+  /// SDP, so no renegotiation is involved - only the video flag and the
+  /// native call UI are updated.
+  Future<void> __onCallSignalingEventMediaState(_CallSignalingEventMediaState event, Emitter<CallState> emit) async {
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall == null) return;
+
+    final video = event.media['video'];
+    if (video is! bool) {
+      _logger.info('__onCallSignalingEventMediaState: no video flag in media: ${event.media}');
+      return;
+    }
+
+    // `video` reflects the LOCAL camera intent on outgoing and answered
+    // calls; remote media state must not override it there. Pre-answer
+    // incoming is the only window where it represents the remote offer.
+    if (!activeCall.isIncoming || activeCall.wasAccepted) {
+      _logger.info(
+        '__onCallSignalingEventMediaState: ignoring for '
+        '${activeCall.direction.name}/${activeCall.processingStatus.name}',
+      );
+      return;
+    }
+
+    emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: video)));
+    await callkeep.reportUpdateCall(event.callId, hasVideo: video);
   }
 
   /// Event fired when the call is accepted by any! user or call update request aplied.
@@ -2513,6 +2572,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(
         state.copyWithMappedActiveCall(callId, (call) => call.copyWith(video: e.enabled, videoPermissionDenied: false)),
       );
+      // Soft mute changes no SDP, so the remote side cannot learn about the
+      // camera state from the media plane - signal it explicitly (matters
+      // most while the call is still ringing on the other end).
+      _sendMediaState(activeCall, video: e.enabled);
       if (e.enabled) {
         await _mediaManager.onVideoEnabled(e.callId, speakerDevice: state.availableAudioDevices.getSpeaker);
       } else {
@@ -4030,6 +4093,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(_CallSignalingEvent.updating(line: event.line, callId: event.callId));
     } else if (event is UpdatedEvent) {
       add(_CallSignalingEvent.updated(line: event.line, callId: event.callId));
+    } else if (event is MediaStateEvent) {
+      add(_CallSignalingEvent.mediaState(line: event.line, callId: event.callId, media: event.media));
     } else if (event is TransferEvent) {
       add(
         _CallSignalingEvent.transfer(

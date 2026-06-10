@@ -29,6 +29,7 @@ abstract class CallRequest extends LineRequest {
     DeclineRequest.typeValue: DeclineRequest.fromJson,
     HangupRequest.typeValue: HangupRequest.fromJson,
     HoldRequest.typeValue: HoldRequest.fromJson,
+    MediaStateRequest.typeValue: MediaStateRequest.fromJson,
     OutgoingCallRequest.typeValue: OutgoingCallRequest.fromJson,
     TransferRequest.typeValue: TransferRequest.fromJson,
     UnholdRequest.typeValue: UnholdRequest.fromJson,
