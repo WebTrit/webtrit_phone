@@ -150,16 +150,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_hangup => 'Завершити';
 
   @override
-  String get call_CallActionsTooltip_hangupAndAccept => 'Завершити та прийняти';
-
-  @override
   String get call_CallActionsTooltip_hideKeypad => 'Приховати клавіатуру';
 
   @override
   String get call_CallActionsTooltip_hold => 'Утримати дзвінок';
-
-  @override
-  String get call_CallActionsTooltip_holdAndAccept => 'Утримати та прийняти';
 
   @override
   String get call_CallActionsTooltip_mute => 'Вимкнути мікрофон';

@@ -18,7 +18,6 @@ export 'call_actions_styles.dart';
 class IncomingCallActions extends StatefulWidget {
   const IncomingCallActions({
     super.key,
-    required this.enableInteractions,
     required this.remoteVideo,
     required this.inviteToAttendedTransfer,
     this.onHangupPressed,
@@ -26,7 +25,6 @@ class IncomingCallActions extends StatefulWidget {
     this.style,
   });
 
-  final bool enableInteractions;
   final bool remoteVideo;
   final bool inviteToAttendedTransfer;
   final void Function()? onHangupPressed;
@@ -39,8 +37,6 @@ class IncomingCallActions extends StatefulWidget {
 }
 
 class _IncomingCallActionsState extends State<IncomingCallActions> {
-  late TextEditingController _keypadTextEditingController;
-
   late MediaQueryData _mediaQueryData;
   late ThemeData _themeData;
 
@@ -49,18 +45,6 @@ class _IncomingCallActionsState extends State<IncomingCallActions> {
   late bool _isOrientationPortrait;
   late double _dimension;
   late double _horizontalPadding;
-
-  @override
-  void initState() {
-    super.initState();
-    _keypadTextEditingController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _keypadTextEditingController.dispose();
-    super.dispose();
-  }
 
   @override
   void didUpdateWidget(covariant IncomingCallActions oldWidget) {

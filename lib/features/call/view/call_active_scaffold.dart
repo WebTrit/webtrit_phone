@@ -357,10 +357,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                               IncomingCallActions(
                                                 style: style?.actions,
                                                 inviteToAttendedTransfer: false,
-                                                enableInteractions:
-                                                    interactionsDebounceActive == false &&
-                                                    widget.callStatus == CallStatus.ready &&
-                                                    activeCalls.any((call) => call.updating) == false,
                                                 remoteVideo: focusedCall.remoteVideo && focusedCall.held == false,
                                                 onHangupPressed: () {
                                                   _callBloc.add(CallControlEvent.ended(focusedCall.callId));

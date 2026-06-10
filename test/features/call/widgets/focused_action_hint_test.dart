@@ -82,7 +82,6 @@ void main() {
         supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: IncomingCallActions(
-            enableInteractions: true,
             remoteVideo: false,
             inviteToAttendedTransfer: false,
             onHangupPressed: onHangup,
