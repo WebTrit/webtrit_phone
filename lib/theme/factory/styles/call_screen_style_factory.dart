@@ -37,8 +37,33 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
         systemUiOverlayStyle: pageConfig?.systemUiOverlayStyle?.toSystemUiOverlayStyle(),
         appBar: _mapAppBarStyle(appBarCfg),
         callInfo: _mapCallInfoStyle(infoCfg),
+        list: _mapCallListStyle(pageConfig?.callList),
+        hint: _mapHintStyle(pageConfig?.actingOnHint),
         actions: _resolveActionsStyle(fromPage: pageConfig?.actions, fromLegacy: legacyCallActionsConfig),
       ),
+    );
+  }
+
+  /// Call-list row colors. Theme JSON values win; the defaults are
+  /// scheme-derived tints of [ColorScheme.surface] (the call-screen text
+  /// color), keeping the focused row the brighter one.
+  CallListStyle _mapCallListStyle(CallPageListConfig? cfg) {
+    return CallListStyle(
+      rowBackground: cfg?.rowBackgroundColor?.toColor() ?? colors.surface.withValues(alpha: 0.10),
+      rowFocusedBackground: cfg?.rowFocusedBackgroundColor?.toColor() ?? colors.surface.withValues(alpha: 0.26),
+      rowFocusedBorder: cfg?.rowFocusedBorderColor?.toColor() ?? colors.surface.withValues(alpha: 0.55),
+      dotRinging: cfg?.dotRingingColor?.toColor() ?? colors.tertiary,
+      dotOnCall: cfg?.dotOnCallColor?.toColor() ?? colors.tertiaryContainer,
+      dotHeld: cfg?.dotHeldColor?.toColor() ?? colors.surface.withValues(alpha: 0.55),
+    );
+  }
+
+  /// "Acting on" hint pill colors. Theme JSON values win; the defaults are a
+  /// scrim tint for the pill and the tertiary accent for the affected names.
+  FocusedActionHintStyle _mapHintStyle(CallPageHintConfig? cfg) {
+    return FocusedActionHintStyle(
+      background: cfg?.backgroundColor?.toColor() ?? colors.scrim.withValues(alpha: 0.25),
+      affectedName: cfg?.affectedNameColor?.toColor() ?? colors.tertiary,
     );
   }
 

@@ -127,7 +127,8 @@ Rollout is incremental (foundations first, then UI), each step behind tests:
 | Visual alignment | Status dots on rows, short Incoming/Outgoing trailing labels, central info block single-call only, acting-on hint as a translucent pill with highlighted names | Merged (PR #1386) |
 | Hold/Resume on focus | The hold slot always acts on the focused call (pause/play glyph); Resume holds the other live calls first; the swap button is gone - switching lines = focus a row + Resume | Merged (PR #1387) |
 | Row overlay polish | Call rows use light overlay tints of the on-screen text color: focused = brighter + light border (design polarity), bigger radius and padding | Merged (PR #1388) |
-| Video line badge | A camera glyph next to the trailing label marks video lines in the call list | In review |
+| Video line badge | A camera glyph next to the trailing label marks video lines in the call list | Merged (PR #1389) |
+| Themed color roles | Call-list rows/dots and the acting-on hint take colors from the theme pipeline: CallPageListConfig/CallPageHintConfig in webtrit_appearance_theme -> assets/themes JSONs -> CallListStyle/FocusedActionHintStyle; no fixed colors in widgets | In review |
 
 The redesign lands on the `refactor/call` integration branch - every stage is a
 PR into that branch, and once the whole flow is tested there a single PR merges

@@ -18,6 +18,7 @@ class FocusedActionHint extends StatelessWidget {
     this.willBeHeldNames = const [],
     this.willBeEndedNames = const [],
     this.style,
+    this.hintStyle,
   });
 
   final String focusedName;
@@ -31,6 +32,9 @@ class FocusedActionHint extends StatelessWidget {
   final List<String> willBeEndedNames;
 
   final CallInfoStyle? style;
+
+  /// Pill and highlight colors from the themed palette (theme JSONs).
+  final FocusedActionHintStyle? hintStyle;
 
   /// Builds a span for [text] with the [highlight] substring emphasized via
   /// [emphasis]. The localized templates inline the names as plain text, so
@@ -54,13 +58,19 @@ class FocusedActionHint extends StatelessWidget {
     final actingOnStyle = baseStyle.copyWith(fontSize: 13);
     final focusedNameStyle = actingOnStyle.copyWith(fontWeight: FontWeight.w700);
     final sideEffectStyle = baseStyle.copyWith(fontSize: 12);
-    final affectedNameStyle = sideEffectStyle.copyWith(color: Colors.amber.shade200, fontWeight: FontWeight.w600);
+    // Colors come from the themed palette (FocusedActionHintStyle, fed by the
+    // theme JSONs); the fallbacks derive from the ambient scheme/text color.
+    final affectedNameStyle = sideEffectStyle.copyWith(
+      color: hintStyle?.affectedName ?? sideEffectStyle.color,
+      fontWeight: FontWeight.w600,
+    );
+    final backgroundColor = hintStyle?.background ?? Theme.of(context).colorScheme.scrim.withValues(alpha: 0.25);
 
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.25), borderRadius: BorderRadius.circular(14)),
+      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(14)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

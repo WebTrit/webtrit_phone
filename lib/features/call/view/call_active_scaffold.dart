@@ -224,6 +224,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 calls: activeCalls,
                                                 focusedCallId: focusedCall.callId,
                                                 style: style?.callInfo,
+                                                listStyle: style?.list,
                                                 onCallTap: (callId) {
                                                   _callBloc.add(CallControlEvent.callSelected(callId));
                                                 },
@@ -365,6 +366,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                                 call.displayName ?? call.handle.value,
                                                             ],
                                                       style: style?.callInfo,
+                                                      hintStyle: style?.hint,
                                                     ),
                                                   IncomingCallActions(
                                                     style: style?.actions,
