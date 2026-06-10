@@ -2,6 +2,7 @@ export 'incoming_call_actions.dart';
 export 'active_call_actions.dart';
 export 'call_active_thumbnail.dart';
 export 'call_info.dart';
+export 'call_list.dart';
 export 'call_network_quality_meter.dart';
 export 'draggable_thumbnail.dart';
 export 'local_camera_preview_thumbnail.dart';

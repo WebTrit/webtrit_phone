@@ -214,18 +214,28 @@ class CallState with _$CallState {
   }
 
   CallState copyWithPushActiveCall(ActiveCall activeCall) {
-    return copyWith(activeCalls: [...activeCalls, activeCall]);
+    return copyWith(
+      activeCalls: [...activeCalls, activeCall],
+      // A new ringing incoming call demands a decision, so it grabs the focus;
+      // any other call keeps the user's selection.
+      selectedCallId: activeCall.isIncoming && !activeCall.wasAccepted ? activeCall.callId : selectedCallId,
+    );
   }
 
   CallState copyWithPopActiveCall(String callId) {
     final activeCalls = this.activeCalls.where((activeCall) {
       return activeCall.callId != callId;
     }).toList();
+    // When the focused call ends, prefer the next ringing incoming call (it
+    // still demands a decision); otherwise clear so [focusedCall] falls back
+    // to `current`. An unrelated selection is kept as is.
+    final selectedCallId = this.selectedCallId == callId
+        ? activeCalls.firstWhereOrNull((call) => call.isIncoming && !call.wasAccepted)?.callId
+        : this.selectedCallId;
     return copyWith(
       activeCalls: activeCalls,
       minimized: activeCalls.isEmpty ? null : minimized,
-      // Drop a dangling selection so [focusedCall] falls back to `current`.
-      selectedCallId: selectedCallId == callId ? null : selectedCallId,
+      selectedCallId: selectedCallId,
     );
   }
 
