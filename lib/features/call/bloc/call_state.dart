@@ -235,6 +235,33 @@ class CallState with _$CallState {
     if (retrieveActiveCall(callId) == null) return this;
     return copyWith(selectedCallId: callId);
   }
+
+  // Pure planners for the combined call actions. Each returns the ordered list
+  // of primitive [CallControlEvent]s the corresponding intent dispatches, so
+  // the multi-step semantics stay unit-testable without a full [CallBloc].
+
+  /// "End & Answer" plan for [callId]: end every other active call, then
+  /// answer [callId].
+  List<CallControlEvent> planAnswerEndingOthers(String callId) => [
+    for (final call in activeCalls)
+      if (call.callId != callId) CallControlEvent.ended(call.callId),
+    CallControlEvent.answered(callId),
+  ];
+
+  /// "Hold & Answer" plan for [callId]: put every other active call on hold,
+  /// then answer [callId].
+  List<CallControlEvent> planAnswerHoldingOthers(String callId) => [
+    for (final call in activeCalls)
+      if (call.callId != callId) CallControlEvent.setHeld(call.callId, true),
+    CallControlEvent.answered(callId),
+  ];
+
+  /// Swap plan for [callId]: hold [callId], then resume every other call.
+  List<CallControlEvent> planSwap(String callId) => [
+    CallControlEvent.setHeld(callId, true),
+    for (final call in activeCalls)
+      if (call.callId != callId) CallControlEvent.setHeld(call.callId, false),
+  ];
 }
 
 @freezed

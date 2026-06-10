@@ -596,6 +596,17 @@ sealed class CallControlEvent extends CallEvent {
   /// sets [CallState.selectedCallId] so the action area acts on that call.
   const factory CallControlEvent.callSelected(String callId) = _CallControlEventCallSelected;
 
+  /// Answers [callId] after ending every other active call - the "End & Answer"
+  /// action for a second incoming call, as a single intent.
+  const factory CallControlEvent.answeredEndingOthers(String callId) = _CallControlEventAnsweredEndingOthers;
+
+  /// Answers [callId] after putting every other active call on hold - the
+  /// "Hold & Answer" action for a second incoming call, as a single intent.
+  const factory CallControlEvent.answeredHoldingOthers(String callId) = _CallControlEventAnsweredHoldingOthers;
+
+  /// Swaps the active and held calls: holds [callId] and resumes the others.
+  const factory CallControlEvent.swapped(String callId) = _CallControlEventSwapped;
+
   const factory CallControlEvent.ended(String callId) = _CallControlEventEnded;
 
   const factory CallControlEvent.setHeld(String callId, bool onHold) = _CallControlEventSetHeld;
@@ -678,6 +689,33 @@ class _CallControlEventAnswered extends CallControlEvent {
 
 class _CallControlEventCallSelected extends CallControlEvent {
   const _CallControlEventCallSelected(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventAnsweredEndingOthers extends CallControlEvent {
+  const _CallControlEventAnsweredEndingOthers(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventAnsweredHoldingOthers extends CallControlEvent {
+  const _CallControlEventAnsweredHoldingOthers(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventSwapped extends CallControlEvent {
+  const _CallControlEventSwapped(this.callId);
 
   final String callId;
 
