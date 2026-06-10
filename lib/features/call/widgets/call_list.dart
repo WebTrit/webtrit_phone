@@ -167,6 +167,12 @@ class _CallRowState extends State<CallRow> {
                     ],
                   ),
                 ),
+                // Video lines carry a camera glyph next to the trailing
+                // duration/direction label.
+                if (widget.call.remoteVideo) ...[
+                  Icon(Icons.videocam, key: const ValueKey('CallRowVideoBadge'), size: 16, color: statusStyle.color),
+                  const SizedBox(width: 6),
+                ],
                 Text(_trailing(context), style: statusStyle.copyWith(fontSize: 13)),
               ],
             ),
