@@ -345,6 +345,18 @@ abstract class AppLocalizations {
   /// **'Unmute microphone'**
   String get call_CallActionsTooltip_unmute;
 
+  /// Header above the call list on the call screen when more than one call is in progress.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count} call - tap to choose} other{{count} calls - tap to choose}}'**
+  String call_CallList_header(int count);
+
+  /// Status badge in the call list for an answered, not held call.
+  ///
+  /// In en, this message translates to:
+  /// **'On call'**
+  String get call_CallList_statusOnCall;
+
   /// No description provided for @call_description_held.
   ///
   /// In en, this message translates to:

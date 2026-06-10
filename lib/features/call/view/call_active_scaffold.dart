@@ -22,6 +22,7 @@ class CallActiveScaffold extends StatefulWidget {
     super.key,
     required this.callStatus,
     required this.activeCalls,
+    required this.focusedCall,
     required this.audioDevice,
     required this.availableAudioDevices,
     required this.callConfig,
@@ -31,6 +32,10 @@ class CallActiveScaffold extends StatefulWidget {
 
   final CallStatus callStatus;
   final List<ActiveCall> activeCalls;
+
+  /// The call the info block and the action area act on (see
+  /// [CallState.focusedCall]); the call list highlights its row.
+  final ActiveCall focusedCall;
   final CallAudioDevice? audioDevice;
   final List<CallAudioDevice> availableAudioDevices;
   final CallCapabilitiesConfig callConfig;
@@ -128,7 +133,11 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final nonIncomingRingingCalls = activeCalls.whereNot((call) => incomingRingingCalls.contains(call)).toList();
     final nonIncomingRingingCanBeHolded = nonIncomingRingingCalls.where((call) => call.wasAccepted == true).toList();
 
-    final activeTransfer = activeCall.transfer;
+    // The info block and the action area below act on the focused call; the
+    // media overlay keeps following the derived `current` call.
+    final focusedCall = widget.focusedCall;
+    final focusedIsRinging = focusedCall.isIncoming && !focusedCall.wasAccepted;
+    final focusedTransfer = focusedCall.transfer;
 
     final themeData = Theme.of(context);
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
@@ -198,27 +207,34 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            for (final activeCall in nonIncomingRingingCalls) ...[
-                                              CallInfo(
-                                                transfering: activeTransfer is Transfering,
-                                                requestToAttendedTransfer: false,
-                                                inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
-                                                isIncoming: activeCall.isIncoming,
-                                                held: activeCall.held,
-                                                number: activeCall.handle.value,
-                                                username: activeCall.displayName,
-                                                acceptedTime: activeCall.acceptedTime,
+                                            // List-based call screen: with more than one call every
+                                            // call is a tappable row, and the info block + action
+                                            // area below act on the focused call.
+                                            if (activeCalls.length > 1)
+                                              CallList(
+                                                calls: activeCalls,
+                                                focusedCallId: focusedCall.callId,
                                                 style: style?.callInfo,
-                                                processingStatus: activeCall.processingStatus,
-                                                callStatus: widget.callStatus,
-                                                iceConnectionIssue: activeCall.iceConnectionIssue,
-                                                networkQuality: activeCall.networkQuality,
+                                                onCallTap: (callId) {
+                                                  _callBloc.add(CallControlEvent.callSelected(callId));
+                                                },
                                               ),
-                                            ],
-
-                                            // Not in for because no space for multiple active call, show for current active
-                                            // Only if no icoming ringing calls that beed to be accepted, of se else
-                                            if (incomingRingingCalls.isEmpty)
+                                            CallInfo(
+                                              transfering: focusedTransfer is Transfering,
+                                              requestToAttendedTransfer: false,
+                                              inviteToAttendedTransfer: focusedTransfer is InviteToAttendedTransfer,
+                                              isIncoming: focusedCall.isIncoming,
+                                              held: focusedCall.held,
+                                              number: focusedCall.handle.value,
+                                              username: focusedCall.displayName,
+                                              acceptedTime: focusedCall.acceptedTime,
+                                              style: style?.callInfo,
+                                              processingStatus: focusedCall.processingStatus,
+                                              callStatus: widget.callStatus,
+                                              iceConnectionIssue: focusedCall.iceConnectionIssue,
+                                              networkQuality: focusedCall.networkQuality,
+                                            ),
+                                            if (!focusedIsRinging)
                                               ActiveCallActions(
                                                 style: style?.actions,
                                                 // Blocks signaling-dependent actions (hold, transfer, camera).
@@ -227,141 +243,131 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                     interactionsDebounceActive == false &&
                                                     widget.callStatus == CallStatus.ready &&
                                                     activeCalls.any((call) => call.updating) == false,
-                                                isIncoming: activeCall.isIncoming,
-                                                wasAccepted: activeCall.wasAccepted,
-                                                wasHungUp: activeCall.wasHungUp,
-                                                cameraValue: activeCall.isCameraActive,
-                                                inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
+                                                isIncoming: focusedCall.isIncoming,
+                                                wasAccepted: focusedCall.wasAccepted,
+                                                wasHungUp: focusedCall.wasHungUp,
+                                                cameraValue: focusedCall.isCameraActive,
+                                                inviteToAttendedTransfer: focusedTransfer is InviteToAttendedTransfer,
                                                 onCameraChanged: widget.callConfig.isVideoCallEnabled
                                                     ? (bool value) {
                                                         _callBloc.add(
-                                                          CallControlEvent.cameraEnabled(activeCall.callId, value),
+                                                          CallControlEvent.cameraEnabled(focusedCall.callId, value),
                                                         );
                                                         dispatchInteractionDebounce();
                                                       }
                                                     : null,
-                                                mutedValue: activeCall.muted,
+                                                mutedValue: focusedCall.muted,
                                                 onMutedChanged: (bool value) {
-                                                  _callBloc.add(CallControlEvent.setMuted(activeCall.callId, value));
+                                                  _callBloc.add(CallControlEvent.setMuted(focusedCall.callId, value));
                                                 },
                                                 audioDevice: widget.audioDevice,
                                                 availableAudioDevices: widget.availableAudioDevices,
                                                 onAudioDeviceChanged: (CallAudioDevice device) {
                                                   _callBloc.add(
-                                                    CallControlEvent.audioDeviceSet(activeCall.callId, device),
+                                                    CallControlEvent.audioDeviceSet(focusedCall.callId, device),
                                                   );
                                                 },
                                                 transferableCalls: heldCalls,
                                                 onBlindTransferInitiated: widget.callConfig.isBlindTransferEnabled
-                                                    ? (!activeCall.wasAccepted || activeTransfer != null
+                                                    ? (!focusedCall.wasAccepted || focusedTransfer != null
                                                           ? null
                                                           : () {
                                                               _callBloc.add(
                                                                 CallControlEvent.blindTransferInitiated(
-                                                                  activeCall.callId,
+                                                                  focusedCall.callId,
                                                                 ),
                                                               );
                                                             })
                                                     : null,
                                                 // TODO (Serdun): Simplify complex condition in the widget tree.
                                                 onAttendedTransferInitiated: widget.callConfig.isAttendedTransferEnabled
-                                                    ? (!activeCall.wasAccepted || activeTransfer != null
+                                                    ? (!focusedCall.wasAccepted || focusedTransfer != null
                                                           ? null
                                                           : () {
                                                               _callBloc.add(
                                                                 CallControlEvent.attendedTransferInitiated(
-                                                                  activeCall.callId,
+                                                                  focusedCall.callId,
                                                                 ),
                                                               );
                                                             })
                                                     : null,
                                                 // TODO (Serdun): Simplify complex condition in the widget tree.
                                                 onAttendedTransferSubmitted: widget.callConfig.isAttendedTransferEnabled
-                                                    ? (!activeCall.wasAccepted || activeTransfer != null
+                                                    ? (!focusedCall.wasAccepted || focusedTransfer != null
                                                           ? null
                                                           : (ActiveCall referorCall) {
                                                               _callBloc.add(
                                                                 CallControlEvent.attendedTransferSubmitted(
                                                                   referorCall: referorCall,
-                                                                  replaceCall: activeCall,
+                                                                  replaceCall: focusedCall,
                                                                 ),
                                                               );
                                                             })
                                                     : null,
-                                                heldValue: activeCall.held,
+                                                heldValue: focusedCall.held,
                                                 onHeldChanged: (bool value) {
-                                                  _callBloc.add(CallControlEvent.setHeld(activeCall.callId, value));
+                                                  _callBloc.add(CallControlEvent.setHeld(focusedCall.callId, value));
                                                   dispatchInteractionDebounce();
                                                 },
+                                                // Swap keeps acting on the derived current call: its
+                                                // semantics are "hold the active one, resume the rest"
+                                                // regardless of which row is focused.
                                                 onSwapPressed: activeCalls.length == 2
                                                     ? () {
-                                                        _callBloc.add(CallControlEvent.swapped(activeCall.callId));
+                                                        _callBloc.add(
+                                                          CallControlEvent.swapped(activeCalls.current.callId),
+                                                        );
                                                         dispatchInteractionDebounce();
                                                       }
                                                     : null,
                                                 onHangupPressed: () {
-                                                  _callBloc.add(CallControlEvent.ended(activeCall.callId));
+                                                  _callBloc.add(CallControlEvent.ended(focusedCall.callId));
                                                   dispatchInteractionDebounce();
                                                 },
 
                                                 onKeyPressed: (value) {
-                                                  _callBloc.add(CallControlEvent.sentDTMF(activeCall.callId, value));
+                                                  _callBloc.add(CallControlEvent.sentDTMF(focusedCall.callId, value));
                                                 },
                                               )
                                             else
-                                              // Show incoming calls info and answer/decline actions grouped by each incoming call
-                                              // Check edge-cases:
+                                              // Answer/decline actions for the focused ringing call.
+                                              // Edge-cases (covered by the call list above):
                                               // - two incoming ringing calls
                                               // - one outgoing ringing + one incoming ringing
-                                              for (final incomingCall in incomingRingingCalls) ...[
-                                                CallInfo(
-                                                  transfering: activeTransfer is Transfering,
-                                                  requestToAttendedTransfer: false,
-                                                  inviteToAttendedTransfer: activeTransfer is InviteToAttendedTransfer,
-                                                  isIncoming: incomingCall.isIncoming,
-                                                  held: incomingCall.held,
-                                                  number: incomingCall.handle.value,
-                                                  username: incomingCall.displayName,
-                                                  acceptedTime: incomingCall.acceptedTime,
-                                                  style: style?.callInfo,
-                                                  processingStatus: incomingCall.processingStatus,
-                                                  callStatus: widget.callStatus,
-                                                ),
-                                                IncomingCallActions(
-                                                  style: style?.actions,
-                                                  inviteToAttendedTransfer: false,
-                                                  enableInteractions:
-                                                      interactionsDebounceActive == false &&
-                                                      widget.callStatus == CallStatus.ready &&
-                                                      activeCalls.any((call) => call.updating) == false,
-                                                  remoteVideo: incomingCall.remoteVideo && incomingCall.held == false,
-                                                  onHangupPressed: () {
-                                                    _callBloc.add(CallControlEvent.ended(incomingCall.callId));
-                                                    dispatchInteractionDebounce();
-                                                  },
-                                                  onAcceptPressed: nonIncomingRingingCalls.isNotEmpty
-                                                      ? null
-                                                      : () {
-                                                          _callBloc.add(CallControlEvent.answered(incomingCall.callId));
-                                                        },
-                                                  onHangupAndAcceptPressed: nonIncomingRingingCalls.isEmpty
-                                                      ? null
-                                                      : () {
-                                                          _callBloc.add(
-                                                            CallControlEvent.answeredEndingOthers(incomingCall.callId),
-                                                          );
-                                                          dispatchInteractionDebounce();
-                                                        },
-                                                  onHoldAndAcceptPressed: nonIncomingRingingCanBeHolded.isEmpty
-                                                      ? null
-                                                      : () {
-                                                          _callBloc.add(
-                                                            CallControlEvent.answeredHoldingOthers(incomingCall.callId),
-                                                          );
-                                                          dispatchInteractionDebounce();
-                                                        },
-                                                ),
-                                              ],
+                                              IncomingCallActions(
+                                                style: style?.actions,
+                                                inviteToAttendedTransfer: false,
+                                                enableInteractions:
+                                                    interactionsDebounceActive == false &&
+                                                    widget.callStatus == CallStatus.ready &&
+                                                    activeCalls.any((call) => call.updating) == false,
+                                                remoteVideo: focusedCall.remoteVideo && focusedCall.held == false,
+                                                onHangupPressed: () {
+                                                  _callBloc.add(CallControlEvent.ended(focusedCall.callId));
+                                                  dispatchInteractionDebounce();
+                                                },
+                                                onAcceptPressed: nonIncomingRingingCalls.isNotEmpty
+                                                    ? null
+                                                    : () {
+                                                        _callBloc.add(CallControlEvent.answered(focusedCall.callId));
+                                                      },
+                                                onHangupAndAcceptPressed: nonIncomingRingingCalls.isEmpty
+                                                    ? null
+                                                    : () {
+                                                        _callBloc.add(
+                                                          CallControlEvent.answeredEndingOthers(focusedCall.callId),
+                                                        );
+                                                        dispatchInteractionDebounce();
+                                                      },
+                                                onHoldAndAcceptPressed: nonIncomingRingingCanBeHolded.isEmpty
+                                                    ? null
+                                                    : () {
+                                                        _callBloc.add(
+                                                          CallControlEvent.answeredHoldingOthers(focusedCall.callId),
+                                                        );
+                                                        dispatchInteractionDebounce();
+                                                      },
+                                              ),
                                           ],
                                         ),
                                       ),

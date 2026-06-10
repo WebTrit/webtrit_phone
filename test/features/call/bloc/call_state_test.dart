@@ -411,14 +411,25 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('CallState.copyWithPopActiveCall — selection clamp', () {
-    test('clears selectedCallId when the selected call is removed', () {
+    test('clears selectedCallId when the selected call is removed and none is ringing', () {
       final c1 = _makeCall(callId: 'c1');
-      final c2 = _makeCall(callId: 'c2');
+      final c2 = _makeCall(callId: 'c2', acceptedTime: DateTime(2024));
       final state = CallState(activeCalls: [c1, c2], selectedCallId: 'c1');
       final next = state.copyWithPopActiveCall('c1');
       expect(next.selectedCallId, isNull);
       // focusedCall falls back to the surviving call.
       expect(next.focusedCall?.callId, 'c2');
+    });
+
+    test('re-focuses the next ringing incoming call when the selected call is removed', () {
+      final selected = _makeCall(callId: 'selected');
+      final answered = _makeCall(callId: 'answered', acceptedTime: DateTime(2024));
+      final ringing = _makeCall(callId: 'ringing', processingStatus: CallProcessingStatus.incomingFromOffer);
+      final state = CallState(activeCalls: [selected, answered, ringing], selectedCallId: 'selected');
+      final next = state.copyWithPopActiveCall('selected');
+      // The remaining ringing incoming call still demands a decision.
+      expect(next.selectedCallId, 'ringing');
+      expect(next.focusedCall?.callId, 'ringing');
     });
 
     test('keeps selectedCallId when a different call is removed', () {
@@ -428,6 +439,29 @@ void main() {
       final next = state.copyWithPopActiveCall('c1');
       expect(next.selectedCallId, 'c2');
       expect(next.focusedCall?.callId, 'c2');
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // CallState — copyWithPushActiveCall auto-focus
+  // ---------------------------------------------------------------------------
+
+  group('CallState.copyWithPushActiveCall — auto-focus', () {
+    test('a new ringing incoming call grabs the focus', () {
+      final answered = _makeCall(callId: 'answered', acceptedTime: DateTime(2024));
+      final state = CallState(activeCalls: [answered], selectedCallId: 'answered');
+      final incoming = _makeCall(callId: 'incoming', processingStatus: CallProcessingStatus.incomingFromOffer);
+      final next = state.copyWithPushActiveCall(incoming);
+      expect(next.selectedCallId, 'incoming');
+      expect(next.focusedCall?.callId, 'incoming');
+    });
+
+    test('a new outgoing call keeps the existing selection', () {
+      final answered = _makeCall(callId: 'answered', acceptedTime: DateTime(2024));
+      final state = CallState(activeCalls: [answered], selectedCallId: 'answered');
+      final outgoing = _makeCall(callId: 'outgoing', direction: CallDirection.outgoing);
+      final next = state.copyWithPushActiveCall(outgoing);
+      expect(next.selectedCallId, 'answered');
     });
   });
 
