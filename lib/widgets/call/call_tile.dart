@@ -84,7 +84,7 @@ class CallTileActionsBar extends StatelessWidget {
   final VoidCallback? onChatPressed;
   final VoidCallback? onCallLogPressed;
   final VoidCallback? onViewContactPressed;
-  final VoidCallback onMorePressed;
+  final VoidCallback? onMorePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -119,9 +119,10 @@ class CallTileActionsBar extends StatelessWidget {
               onTap: onViewContactPressed!,
             ),
           ),
-        Expanded(
-          child: _CallTileAction(icon: Icons.more_horiz, label: l10n.callTileActions_more, onTap: onMorePressed),
-        ),
+        if (onMorePressed != null)
+          Expanded(
+            child: _CallTileAction(icon: Icons.more_horiz, label: l10n.callTileActions_more, onTap: onMorePressed!),
+          ),
       ],
     );
   }
@@ -225,6 +226,21 @@ class CallTile extends StatefulWidget {
 
 class _CallTileState extends State<CallTile> {
   late final tileKey = GlobalKey();
+
+  /// Mirrors the gating of [buildNumberActions] so menu affordances (the
+  /// trailing button and the More action) are hidden when the menu is empty.
+  bool get hasMenuActions =>
+      widget.onAudioCallPressed != null ||
+      widget.onVideoCallPressed != null ||
+      (widget.callNumbers.length > 1 && widget.onCallFrom != null) ||
+      widget.onTransferPressed != null ||
+      widget.onChatPressed != null ||
+      widget.onSendSmsPressed != null ||
+      widget.onViewContactPressed != null ||
+      widget.onCallLogPressed != null ||
+      widget.copyNumber != null ||
+      widget.copyCallId != null ||
+      widget.onDelete != null;
 
   void showMenuPopup() {
     final items = buildNumberActions(
@@ -353,7 +369,7 @@ class _CallTileState extends State<CallTile> {
                           onPressed: widget.onDialPressed,
                           icon: Icon(Icons.call, color: colorScheme.primary),
                         )
-                      else
+                      else if (hasMenuActions)
                         TileMenuButton(onTap: showMenuPopup),
                   ],
                 ),
@@ -369,7 +385,7 @@ class _CallTileState extends State<CallTile> {
                             onChatPressed: widget.onChatPressed,
                             onCallLogPressed: widget.onCallLogPressed,
                             onViewContactPressed: widget.onViewContactPressed,
-                            onMorePressed: showMenuPopup,
+                            onMorePressed: hasMenuActions ? showMenuPopup : null,
                           ),
                         )
                       : const SizedBox(width: double.infinity),

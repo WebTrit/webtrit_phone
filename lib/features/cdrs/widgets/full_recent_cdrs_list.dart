@@ -158,14 +158,11 @@ class _FullRecentCdrsListState extends State<FullRecentCdrsList> {
                                     cdr: cdr,
                                     contact: contact,
                                     callNumbers: callNumbers,
-                                    onTap: () {
-                                      if (transfer) {
-                                        if (participantNumber == null) return;
-                                        submitTransfer(destination: participantNumber);
-                                      } else {
-                                        _toggleExpanded(cdr.callId);
-                                      }
-                                    },
+                                    onTap: transfer
+                                        ? (participantNumber != null
+                                              ? () => submitTransfer(destination: participantNumber)
+                                              : null)
+                                        : () => _toggleExpanded(cdr.callId),
                                     expanded: !transfer && _expandedCallId == cdr.callId,
                                     onDialPressed: !transfer && participantNumber != null
                                         ? () => _callController.createCall(

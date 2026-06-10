@@ -196,12 +196,8 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                   callNumbers: callRoutingState?.allNumbers ?? [],
                                   dateFormat: context.read<RecentsBloc>().dateFormat,
                                   onTap: transfer
-                                      ? () {
-                                          submitTransfer(destination: callLogEntry.number);
-                                        }
-                                      : () {
-                                          _toggleExpanded(callLogEntry.id);
-                                        },
+                                      ? () => submitTransfer(destination: callLogEntry.number)
+                                      : () => _toggleExpanded(callLogEntry.id),
                                   expanded: !transfer && _expandedRecentId == callLogEntry.id,
                                   onDialPressed: transfer
                                       ? null

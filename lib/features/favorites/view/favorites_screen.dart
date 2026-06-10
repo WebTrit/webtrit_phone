@@ -213,12 +213,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                           contact: contact,
                                           callNumbers: callRoutingState?.allNumbers ?? [],
                                           onTap: blingTransferInitiated
-                                              ? () {
-                                                  submitTransfer(destination: favorite.number);
-                                                }
-                                              : () {
-                                                  _toggleExpanded('${favorite.number}_${favorite.sourceType.name}');
-                                                },
+                                              ? () => submitTransfer(destination: favorite.number)
+                                              : () => _toggleExpanded('${favorite.number}_${favorite.sourceType.name}'),
                                           expanded:
                                               !blingTransferInitiated &&
                                               !isReorderMode &&

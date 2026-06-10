@@ -8,6 +8,7 @@ import 'package:webtrit_phone/widgets/call/call_tile.dart';
 void main() {
   Widget buildTestable(Widget child) {
     return MaterialApp(
+      locale: const Locale('en'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(body: child),
@@ -31,6 +32,7 @@ void main() {
       subName: '1001',
       timeLabel: '12:00',
       callNumbers: const [],
+      copyNumber: '1001',
       onTap: onTap,
       expanded: expanded,
       gesturesEnabled: gesturesEnabled,
@@ -149,6 +151,24 @@ void main() {
       expect(find.byIcon(Icons.call), findsNothing);
       expect(find.byIcon(Icons.more_vert), findsNothing);
       expect(find.text('History'), findsNothing);
+    });
+
+    testWidgets('without any menu actions hides the menu button and More', (tester) async {
+      await tester.pumpWidget(
+        buildTestable(
+          const CallTile(
+            leading: CircleAvatar(),
+            name: 'John Doe',
+            timeLabel: '12:00',
+            callNumbers: [],
+            expanded: true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.more_vert), findsNothing);
+      expect(find.text('More'), findsNothing);
     });
 
     testWidgets('More opens the full actions menu', (tester) async {

@@ -9,6 +9,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 void main() {
   Widget buildTestable(Widget child) {
     return MaterialApp(
+      locale: const Locale('en'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: PresenceViewParams(
