@@ -109,20 +109,14 @@
   "@call_CallActionsTooltip_enableSpeaker": {},
   "call_CallActionsTooltip_hangup": "Termina chiamata",
   "@call_CallActionsTooltip_hangup": {},
-  "call_CallActionsTooltip_hangupAndAccept": "Riagganciare e accettare",
-  "@call_CallActionsTooltip_hangupAndAccept": {},
   "call_CallActionsTooltip_hideKeypad": "Nascondi tastiera",
   "@call_CallActionsTooltip_hideKeypad": {},
   "call_CallActionsTooltip_hold": "Attesa",
   "@call_CallActionsTooltip_hold": {},
-  "call_CallActionsTooltip_holdAndAccept": "Tenere in attesa e accettare",
-  "@call_CallActionsTooltip_holdAndAccept": {},
   "call_CallActionsTooltip_mute": "Disattiva il microfono",
   "@call_CallActionsTooltip_mute": {},
   "call_CallActionsTooltip_showKeypad": "Mostra tastiera",
   "@call_CallActionsTooltip_showKeypad": {},
-  "call_CallActionsTooltip_swap": "Scambio chiamate",
-  "@call_CallActionsTooltip_swap": {},
   "call_CallActionsTooltip_transfer": "Trasferimento",
   "@call_CallActionsTooltip_transfer": {},
   "call_CallActionsTooltip_transfer_choose": "Scegliere il numero",
@@ -133,6 +127,62 @@
   "@call_CallActionsTooltip_unhold": {},
   "call_CallActionsTooltip_unmute": "Attiva il microfono",
   "@call_CallActionsTooltip_unmute": {},
+  "call_CallList_incoming": "In arrivo",
+  "@call_CallList_incoming": {
+    "description": "Trailing label on a ringing incoming row in the call list."
+  },
+  "call_CallList_outgoing": "In uscita",
+  "@call_CallList_outgoing": {
+    "description": "Trailing label on a ringing outgoing row in the call list."
+  },
+  "call_CallList_header": "{count, plural, one{{count} chiamata - tocca per scegliere} other{{count} chiamate - tocca per scegliere}}",
+  "@call_CallList_header": {
+    "description": "Header above the call list on the call screen when more than one call is in progress.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "call_CallList_statusOnCall": "In chiamata",
+  "@call_CallList_statusOnCall": {
+    "description": "Status badge in the call list for an answered, not held call."
+  },
+  "call_FocusedActionHint_actingOn": "Azione su: {name}",
+  "@call_FocusedActionHint_actingOn": {
+    "description": "Hint above the call action buttons naming the focused call the actions apply to.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_FocusedActionHint_willBeEnded": "La chiamata con {name} verrà terminata",
+  "@call_FocusedActionHint_willBeEnded": {
+    "description": "Side-effect line under the acting-on hint: the named call will be ended on answer.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_FocusedActionHint_willBeHeld": "La chiamata con {name} sarà messa in attesa",
+  "@call_FocusedActionHint_willBeHeld": {
+    "description": "Side-effect line under the acting-on hint: the named call will be put on hold on answer.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_ToolbarStatus_connecting": "Connessione...",
+  "@call_ToolbarStatus_connecting": {
+    "description": "Toolbar status line while the very first signaling connection is being established (turns into Reconnecting once a connection has existed)."
+  },
+  "call_ToolbarStatus_reconnecting": "Riconnessione...",
+  "@call_ToolbarStatus_reconnecting": {
+    "description": "Suffix on the call screen toolbar status line while the signaling connection is being re-established."
+  },
   "call_description_held": "In attesa",
   "@call_description_held": {},
   "call_description_incoming": "Chiamata in arrivo",

@@ -153,25 +153,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_hangup => 'Hangup';
 
   @override
-  String get call_CallActionsTooltip_hangupAndAccept => 'Hangup & Accept';
-
-  @override
   String get call_CallActionsTooltip_hideKeypad => 'Hide keypad';
 
   @override
   String get call_CallActionsTooltip_hold => 'Hold call';
 
   @override
-  String get call_CallActionsTooltip_holdAndAccept => 'Hold & Accept';
-
-  @override
   String get call_CallActionsTooltip_mute => 'Mute microphone';
 
   @override
   String get call_CallActionsTooltip_showKeypad => 'Show keypad';
-
-  @override
-  String get call_CallActionsTooltip_swap => 'Swap calls';
 
   @override
   String get call_CallActionsTooltip_transfer => 'Transfer';
@@ -187,6 +178,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get call_CallActionsTooltip_unmute => 'Unmute microphone';
+
+  @override
+  String get call_CallList_incoming => 'Incoming';
+
+  @override
+  String get call_CallList_outgoing => 'Outgoing';
+
+  @override
+  String call_CallList_header(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count calls - tap to choose',
+      one: '$count call - tap to choose',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get call_CallList_statusOnCall => 'On call';
+
+  @override
+  String call_FocusedActionHint_actingOn(String name) {
+    return 'Acting on: $name';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeEnded(String name) {
+    return '$name will be ended';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeHeld(String name) {
+    return '$name will be put on hold';
+  }
+
+  @override
+  String get call_ToolbarStatus_connecting => 'Connecting...';
+
+  @override
+  String get call_ToolbarStatus_reconnecting => 'Reconnecting...';
 
   @override
   String get call_description_held => 'On hold';

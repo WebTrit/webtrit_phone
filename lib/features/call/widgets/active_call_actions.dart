@@ -36,7 +36,6 @@ class ActiveCallActions extends StatefulWidget {
     required this.onAttendedTransferSubmitted,
     required this.heldValue,
     this.onHeldChanged,
-    this.onSwapPressed,
     this.onHangupPressed,
     this.onKeyPressed,
     this.style,
@@ -60,7 +59,6 @@ class ActiveCallActions extends StatefulWidget {
   final void Function(ActiveCall call)? onAttendedTransferSubmitted;
   final bool heldValue;
   final ValueChanged<bool>? onHeldChanged;
-  final void Function()? onSwapPressed;
   final void Function()? onHangupPressed;
   final void Function(String value)? onKeyPressed;
 
@@ -156,9 +154,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     final onBlindTransferInitiated = widget.onBlindTransferInitiated;
     final onAttendedTransferInitiated = widget.onAttendedTransferInitiated;
     final onAttendedTransferSubmitted = widget.onAttendedTransferSubmitted;
-    // Hold and swap send signaling requests and trigger renegotiation.
+    // Hold/resume sends signaling requests and triggers renegotiation.
     final onHeldChanged = widget.enableInteractions ? widget.onHeldChanged : null;
-    final onSwapPressed = widget.enableInteractions ? widget.onSwapPressed : null;
     final onKeyPressed = widget.enableInteractions ? widget.onKeyPressed : null;
 
     // Always allow the user to hang up or answer the call
@@ -426,29 +423,18 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
               ),
             ),
           ),
-        if (onSwapPressed == null)
-          Tooltip(
-            key: callActionsHoldKey,
-            message: widget.heldValue
-                ? context.l10n.call_CallActionsTooltip_unhold
-                : context.l10n.call_CallActionsTooltip_hold,
-            child: TextButton(
-              onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
-              statesController: _heldStatesController..update(WidgetState.selected, widget.heldValue),
-              style: widget.style?.held,
-              child: Icon(Icons.pause, size: actionPadIconSize),
-            ),
+        Tooltip(
+          key: callActionsHoldKey,
+          message: widget.heldValue
+              ? context.l10n.call_CallActionsTooltip_unhold
+              : context.l10n.call_CallActionsTooltip_hold,
+          child: TextButton(
+            onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
+            statesController: _heldStatesController..update(WidgetState.selected, widget.heldValue),
+            style: widget.style?.held,
+            child: Icon(widget.heldValue ? Icons.play_arrow : Icons.pause, size: actionPadIconSize),
           ),
-        if (onSwapPressed != null)
-          Tooltip(
-            key: callActionsSwapKey,
-            message: context.l10n.call_CallActionsTooltip_swap,
-            child: TextButton(
-              onPressed: onSwapPressed,
-              style: widget.style?.speaker,
-              child: Icon(Icons.swap_calls, size: actionPadIconSize),
-            ),
-          ),
+        ),
         Tooltip(
           key: callActionsKeypadKey,
           message: context.l10n.call_CallActionsTooltip_showKeypad,

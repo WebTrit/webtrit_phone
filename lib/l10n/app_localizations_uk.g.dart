@@ -162,25 +162,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_hangup => 'Завершити';
 
   @override
-  String get call_CallActionsTooltip_hangupAndAccept => 'Завершити та прийняти';
-
-  @override
   String get call_CallActionsTooltip_hideKeypad => 'Приховати клавіатуру';
 
   @override
   String get call_CallActionsTooltip_hold => 'Утримати дзвінок';
 
   @override
-  String get call_CallActionsTooltip_holdAndAccept => 'Утримати та прийняти';
-
-  @override
   String get call_CallActionsTooltip_mute => 'Вимкнути мікрофон';
 
   @override
   String get call_CallActionsTooltip_showKeypad => 'Показати клавіатуру';
-
-  @override
-  String get call_CallActionsTooltip_swap => 'Перемкнути дзвінки';
 
   @override
   String get call_CallActionsTooltip_transfer => 'Переадресація';
@@ -196,6 +187,49 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get call_CallActionsTooltip_unmute => 'Увімкнути мікрофон';
+
+  @override
+  String get call_CallList_incoming => 'Вхідний';
+
+  @override
+  String get call_CallList_outgoing => 'Вихідний';
+
+  @override
+  String call_CallList_header(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count дзвінка - торкніться, щоб вибрати',
+      many: '$count дзвінків - торкніться, щоб вибрати',
+      few: '$count дзвінки - торкніться, щоб вибрати',
+      one: '$count дзвінок - торкніться, щоб вибрати',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get call_CallList_statusOnCall => 'Розмова';
+
+  @override
+  String call_FocusedActionHint_actingOn(String name) {
+    return 'Дія для: $name';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeEnded(String name) {
+    return 'Дзвінок з $name буде завершено';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeHeld(String name) {
+    return 'Дзвінок з $name буде поставлено на утримання';
+  }
+
+  @override
+  String get call_ToolbarStatus_connecting => 'Підключення...';
+
+  @override
+  String get call_ToolbarStatus_reconnecting => 'Перепідключення...';
 
   @override
   String get call_description_held => 'На утриманні';

@@ -350,6 +350,282 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
+  // ActiveCallIterableExtension — toolbar status aggregation
+  // ---------------------------------------------------------------------------
+
+  group('ActiveCallIterableExtension.worstNetworkQuality', () {
+    const mild = CallNetworkQuality(
+      severity: CallNetworkQualitySeverity.mild,
+      uplink: true,
+      media: CallMediaKind.audio,
+    );
+    const severe = CallNetworkQuality(
+      severity: CallNetworkQualitySeverity.severe,
+      uplink: false,
+      media: CallMediaKind.audio,
+    );
+    const recovered = CallNetworkQuality(
+      severity: CallNetworkQualitySeverity.severe,
+      uplink: true,
+      media: CallMediaKind.audio,
+      recovered: true,
+    );
+
+    test('null when every stream is healthy', () {
+      expect([_makeCall(callId: 'c1'), _makeCall(callId: 'c2')].worstNetworkQuality, isNull);
+    });
+
+    test('picks the higher severity across calls', () {
+      final calls = [
+        _makeCall(callId: 'c1').copyWith(networkQuality: mild),
+        _makeCall(callId: 'c2').copyWith(networkQuality: severe),
+      ];
+      expect(calls.worstNetworkQuality, severe);
+    });
+
+    test('an active warning beats a recovered confirmation', () {
+      final calls = [
+        _makeCall(callId: 'c1').copyWith(networkQuality: recovered),
+        _makeCall(callId: 'c2').copyWith(networkQuality: mild),
+      ];
+      expect(calls.worstNetworkQuality, mild);
+    });
+
+    test('a recovered confirmation still surfaces when it is the only signal', () {
+      final calls = [_makeCall(callId: 'c1').copyWith(networkQuality: recovered), _makeCall(callId: 'c2')];
+      expect(calls.worstNetworkQuality, recovered);
+    });
+  });
+
+  group('ActiveCallIterableExtension.firstIceConnectionIssue', () {
+    test('null when no call has a media failure', () {
+      expect([_makeCall(callId: 'c1')].firstIceConnectionIssue, isNull);
+    });
+
+    test('returns the first failure across calls', () {
+      final calls = [
+        _makeCall(callId: 'c1'),
+        _makeCall(callId: 'c2').copyWith(iceConnectionIssue: IceConnectionIssue.iceFail),
+      ];
+      expect(calls.firstIceConnectionIssue, IceConnectionIssue.iceFail);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // CallState — focusedCall (list-based call screen foundation)
+  // ---------------------------------------------------------------------------
+
+  group('CallState.focusedCall', () {
+    test('returns null when there are no active calls', () {
+      const state = CallState();
+      expect(state.focusedCall, isNull);
+    });
+
+    test('falls back to current when no explicit selection', () {
+      final held = _makeCall(callId: 'held', held: true);
+      final active = _makeCall(callId: 'active', held: false);
+      final state = CallState(activeCalls: [held, active]);
+      // selectedCallId is null -> mirrors activeCalls.current (last non-held).
+      expect(state.selectedCallId, isNull);
+      expect(state.focusedCall?.callId, 'active');
+    });
+
+    test('returns the explicitly selected call', () {
+      final held = _makeCall(callId: 'held', held: true);
+      final active = _makeCall(callId: 'active', held: false);
+      final state = CallState(activeCalls: [held, active], selectedCallId: 'held');
+      // Selection wins over the derived current.
+      expect(state.focusedCall?.callId, 'held');
+    });
+
+    test('falls back to current when the selected id no longer maps to a call', () {
+      final active = _makeCall(callId: 'active', held: false);
+      final state = CallState(activeCalls: [active], selectedCallId: 'gone');
+      expect(state.focusedCall?.callId, 'active');
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // CallState — copyWithSelectedCall
+  // ---------------------------------------------------------------------------
+
+  group('CallState.copyWithSelectedCall', () {
+    test('sets selectedCallId when the call exists', () {
+      final c1 = _makeCall(callId: 'c1');
+      final c2 = _makeCall(callId: 'c2');
+      final state = CallState(activeCalls: [c1, c2]);
+      final next = state.copyWithSelectedCall('c2');
+      expect(next.selectedCallId, 'c2');
+      expect(next.focusedCall?.callId, 'c2');
+    });
+
+    test('leaves state unchanged for an unknown call id', () {
+      final c1 = _makeCall(callId: 'c1');
+      final state = CallState(activeCalls: [c1]);
+      final next = state.copyWithSelectedCall('ghost');
+      expect(next.selectedCallId, isNull);
+      expect(next, same(state));
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // CallState — copyWithPopActiveCall clears a dangling selection
+  // ---------------------------------------------------------------------------
+
+  group('CallState.copyWithPopActiveCall — selection clamp', () {
+    test('clears selectedCallId when the selected call is removed and none is ringing', () {
+      final c1 = _makeCall(callId: 'c1');
+      final c2 = _makeCall(callId: 'c2', acceptedTime: DateTime(2024));
+      final state = CallState(activeCalls: [c1, c2], selectedCallId: 'c1');
+      final next = state.copyWithPopActiveCall('c1');
+      expect(next.selectedCallId, isNull);
+      // focusedCall falls back to the surviving call.
+      expect(next.focusedCall?.callId, 'c2');
+    });
+
+    test('re-focuses the next ringing incoming call when the selected call is removed', () {
+      final selected = _makeCall(callId: 'selected');
+      final answered = _makeCall(callId: 'answered', acceptedTime: DateTime(2024));
+      final ringing = _makeCall(callId: 'ringing', processingStatus: CallProcessingStatus.incomingFromOffer);
+      final state = CallState(activeCalls: [selected, answered, ringing], selectedCallId: 'selected');
+      final next = state.copyWithPopActiveCall('selected');
+      // The remaining ringing incoming call still demands a decision.
+      expect(next.selectedCallId, 'ringing');
+      expect(next.focusedCall?.callId, 'ringing');
+    });
+
+    test('keeps selectedCallId when a different call is removed', () {
+      final c1 = _makeCall(callId: 'c1');
+      final c2 = _makeCall(callId: 'c2');
+      final state = CallState(activeCalls: [c1, c2], selectedCallId: 'c2');
+      final next = state.copyWithPopActiveCall('c1');
+      expect(next.selectedCallId, 'c2');
+      expect(next.focusedCall?.callId, 'c2');
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // CallState — copyWithPushActiveCall auto-focus
+  // ---------------------------------------------------------------------------
+
+  group('CallState.copyWithPushActiveCall — auto-focus', () {
+    test('a new ringing incoming call grabs the focus', () {
+      final answered = _makeCall(callId: 'answered', acceptedTime: DateTime(2024));
+      final state = CallState(activeCalls: [answered], selectedCallId: 'answered');
+      final incoming = _makeCall(callId: 'incoming', processingStatus: CallProcessingStatus.incomingFromOffer);
+      final next = state.copyWithPushActiveCall(incoming);
+      expect(next.selectedCallId, 'incoming');
+      expect(next.focusedCall?.callId, 'incoming');
+    });
+
+    test('a new outgoing call keeps the existing selection', () {
+      final answered = _makeCall(callId: 'answered', acceptedTime: DateTime(2024));
+      final state = CallState(activeCalls: [answered], selectedCallId: 'answered');
+      final outgoing = _makeCall(callId: 'outgoing', direction: CallDirection.outgoing);
+      final next = state.copyWithPushActiveCall(outgoing);
+      expect(next.selectedCallId, 'answered');
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Combined-action plans
+  //
+  // The single intents (answeredEndingOthers / answeredHoldingOthers /
+  // resumedHoldingOthers)
+  // dispatch exactly these ordered primitive events. The state layer only
+  // supplies the other-call ids (CallState.otherCallIds); the plans live on the
+  // event layer (CallControlEvent). This pins the semantics the call screen
+  // used to synthesize with per-call loops.
+  // ---------------------------------------------------------------------------
+
+  group('CallState.otherCallIds', () {
+    test('returns every other call id in list order', () {
+      final held = _makeCall(callId: 'held', held: true, acceptedTime: DateTime(2024));
+      final active = _makeCall(callId: 'active', acceptedTime: DateTime(2024));
+      final incoming = _makeCall(callId: 'incoming', processingStatus: CallProcessingStatus.incomingFromOffer);
+      final state = CallState(activeCalls: [held, active, incoming]);
+
+      expect(state.otherCallIds('incoming'), ['held', 'active']);
+    });
+
+    test('returns empty when the target is the only call', () {
+      final state = CallState(activeCalls: [_makeCall(callId: 'incoming')]);
+      expect(state.otherCallIds('incoming'), isEmpty);
+    });
+  });
+
+  group('CallControlEvent.answerEndingOthersPlan', () {
+    test('ends every other call (in given order), then answers the target', () {
+      expect(CallControlEvent.answerEndingOthersPlan('incoming', ['held', 'active']), const [
+        CallControlEvent.ended('held'),
+        CallControlEvent.ended('active'),
+        CallControlEvent.answered('incoming'),
+      ]);
+    });
+
+    test('only answers when there are no other calls', () {
+      expect(CallControlEvent.answerEndingOthersPlan('incoming', []), const [CallControlEvent.answered('incoming')]);
+    });
+  });
+
+  group('CallControlEvent.answerHoldingOthersPlan', () {
+    test('holds every other call (in given order), then answers the target', () {
+      expect(CallControlEvent.answerHoldingOthersPlan('incoming', ['active']), const [
+        CallControlEvent.setHeld('active', true),
+        CallControlEvent.answered('incoming'),
+      ]);
+    });
+
+    test('only answers when there are no other calls', () {
+      expect(CallControlEvent.answerHoldingOthersPlan('incoming', []), const [CallControlEvent.answered('incoming')]);
+    });
+  });
+
+  group('CallControlEvent.resumeHoldingOthersPlan', () {
+    test('holds the live others first, then resumes the target', () {
+      expect(CallControlEvent.resumeHoldingOthersPlan('held', ['active']), const [
+        CallControlEvent.setHeld('active', true),
+        CallControlEvent.setHeld('held', false),
+      ]);
+    });
+
+    test('just resumes when nothing else is live', () {
+      expect(CallControlEvent.resumeHoldingOthersPlan('held', []), const [CallControlEvent.setHeld('held', false)]);
+    });
+  });
+
+  group('CallState.otherCallIdsToHold', () {
+    test('returns only the other answered, not-held calls', () {
+      final live = _makeCall(callId: 'live', acceptedTime: DateTime(2024));
+      final held = _makeCall(callId: 'held', acceptedTime: DateTime(2024), held: true);
+      final ringing = _makeCall(callId: 'ringing', processingStatus: CallProcessingStatus.incomingFromOffer);
+      final target = _makeCall(callId: 'target', acceptedTime: DateTime(2024), held: true);
+      final state = CallState(activeCalls: [live, held, ringing, target]);
+
+      // Already-held and still-ringing calls do not need holding; the target
+      // itself is excluded.
+      expect(state.otherCallIdsToHold('target'), ['live']);
+    });
+  });
+
+  group('CallControlEvent.answerFocused', () {
+    test('holds the others when at least one is answered', () {
+      final event = CallControlEvent.answerFocused('incoming', hasHoldableOthers: true, hasNonRingingOthers: true);
+      expect(event, const CallControlEvent.answeredHoldingOthers('incoming'));
+    });
+
+    test('ends the others when none can be held but some exist', () {
+      final event = CallControlEvent.answerFocused('incoming', hasHoldableOthers: false, hasNonRingingOthers: true);
+      expect(event, const CallControlEvent.answeredEndingOthers('incoming'));
+    });
+
+    test('plain answer when there is nothing else to affect', () {
+      final event = CallControlEvent.answerFocused('incoming', hasHoldableOthers: false, hasNonRingingOthers: false);
+      expect(event, const CallControlEvent.answered('incoming'));
+    });
+  });
+
+  // ---------------------------------------------------------------------------
   // CallState — display
   // ---------------------------------------------------------------------------
 

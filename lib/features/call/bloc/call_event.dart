@@ -579,6 +579,48 @@ class _CallPushEventIncoming extends CallEvent {
 sealed class CallControlEvent extends CallEvent {
   const CallControlEvent();
 
+  // Pure plans for the combined call actions. Each returns the ordered list of
+  // primitive events the corresponding intent dispatches ([otherCallIds] comes
+  // from [CallState.otherCallIds]), keeping the multi-step semantics
+  // unit-testable without a full [CallBloc].
+
+  /// "End & Answer" plan: end every other call, then answer [callId].
+  static List<CallControlEvent> answerEndingOthersPlan(String callId, List<String> otherCallIds) => [
+    for (final otherCallId in otherCallIds) CallControlEvent.ended(otherCallId),
+    CallControlEvent.answered(callId),
+  ];
+
+  /// "Hold & Answer" plan: put every other call on hold, then answer [callId].
+  static List<CallControlEvent> answerHoldingOthersPlan(String callId, List<String> otherCallIds) => [
+    for (final otherCallId in otherCallIds) CallControlEvent.setHeld(otherCallId, true),
+    CallControlEvent.answered(callId),
+  ];
+
+  /// Resume plan for the focused held call: put the other unheld answered
+  /// calls on hold first ([otherCallIdsToHold], from
+  /// [CallState.otherCallIdsToHold]) so only one call is live, then resume
+  /// [callId]. With two calls this is the classic swap; switching which call
+  /// is live is done by focusing its row and pressing Resume.
+  static List<CallControlEvent> resumeHoldingOthersPlan(String callId, List<String> otherCallIdsToHold) => [
+    for (final otherCallId in otherCallIdsToHold) CallControlEvent.setHeld(otherCallId, true),
+    CallControlEvent.setHeld(callId, false),
+  ];
+
+  /// The single Answer intent for the focused ringing call: hold the other
+  /// calls when at least one is answered (holdable), otherwise end them when
+  /// any non-ringing one exists (e.g. an outgoing call that cannot be held
+  /// yet), otherwise a plain answer. Another ringing incoming call is
+  /// unaffected either way - it keeps ringing.
+  static CallControlEvent answerFocused(
+    String callId, {
+    required bool hasHoldableOthers,
+    required bool hasNonRingingOthers,
+  }) {
+    if (hasHoldableOthers) return CallControlEvent.answeredHoldingOthers(callId);
+    if (hasNonRingingOthers) return CallControlEvent.answeredEndingOthers(callId);
+    return CallControlEvent.answered(callId);
+  }
+
   const factory CallControlEvent.started({
     int? line,
     String? generic,
@@ -591,6 +633,22 @@ sealed class CallControlEvent extends CallEvent {
   }) = _CallControlEventStarted;
 
   const factory CallControlEvent.answered(String callId) = _CallControlEventAnswered;
+
+  /// Focuses a call in the call list (list-based call screen). Pure UI state:
+  /// sets [CallState.selectedCallId] so the action area acts on that call.
+  const factory CallControlEvent.callSelected(String callId) = _CallControlEventCallSelected;
+
+  /// Answers [callId] after ending every other active call - the "End & Answer"
+  /// action for a second incoming call, as a single intent.
+  const factory CallControlEvent.answeredEndingOthers(String callId) = _CallControlEventAnsweredEndingOthers;
+
+  /// Answers [callId] after putting every other active call on hold - the
+  /// "Hold & Answer" action for a second incoming call, as a single intent.
+  const factory CallControlEvent.answeredHoldingOthers(String callId) = _CallControlEventAnsweredHoldingOthers;
+
+  /// Resumes the focused held call [callId] after putting the other live
+  /// calls on hold, as a single intent (the Resume button on a held focus).
+  const factory CallControlEvent.resumedHoldingOthers(String callId) = _CallControlEventResumedHoldingOthers;
 
   const factory CallControlEvent.ended(String callId) = _CallControlEventEnded;
 
@@ -665,6 +723,42 @@ class _CallControlEventStarted extends CallControlEvent with CallControlEventSta
 
 class _CallControlEventAnswered extends CallControlEvent {
   const _CallControlEventAnswered(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventCallSelected extends CallControlEvent {
+  const _CallControlEventCallSelected(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventAnsweredEndingOthers extends CallControlEvent {
+  const _CallControlEventAnsweredEndingOthers(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventAnsweredHoldingOthers extends CallControlEvent {
+  const _CallControlEventAnsweredHoldingOthers(this.callId);
+
+  final String callId;
+
+  @override
+  List<Object?> get props => [callId];
+}
+
+class _CallControlEventResumedHoldingOthers extends CallControlEvent {
+  const _CallControlEventResumedHoldingOthers(this.callId);
 
   final String callId;
 

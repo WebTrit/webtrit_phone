@@ -109,20 +109,14 @@
   "@call_CallActionsTooltip_enableSpeaker": {},
   "call_CallActionsTooltip_hangup": "Завершити",
   "@call_CallActionsTooltip_hangup": {},
-  "call_CallActionsTooltip_hangupAndAccept": "Завершити та прийняти",
-  "@call_CallActionsTooltip_hangupAndAccept": {},
   "call_CallActionsTooltip_hideKeypad": "Приховати клавіатуру",
   "@call_CallActionsTooltip_hideKeypad": {},
   "call_CallActionsTooltip_hold": "Утримати дзвінок",
   "@call_CallActionsTooltip_hold": {},
-  "call_CallActionsTooltip_holdAndAccept": "Утримати та прийняти",
-  "@call_CallActionsTooltip_holdAndAccept": {},
   "call_CallActionsTooltip_mute": "Вимкнути мікрофон",
   "@call_CallActionsTooltip_mute": {},
   "call_CallActionsTooltip_showKeypad": "Показати клавіатуру",
   "@call_CallActionsTooltip_showKeypad": {},
-  "call_CallActionsTooltip_swap": "Перемкнути дзвінки",
-  "@call_CallActionsTooltip_swap": {},
   "call_CallActionsTooltip_transfer": "Переадресація",
   "@call_CallActionsTooltip_transfer": {},
   "call_CallActionsTooltip_transfer_choose": "Вибрати номер",
@@ -133,6 +127,62 @@
   "@call_CallActionsTooltip_unhold": {},
   "call_CallActionsTooltip_unmute": "Увімкнути мікрофон",
   "@call_CallActionsTooltip_unmute": {},
+  "call_CallList_incoming": "Вхідний",
+  "@call_CallList_incoming": {
+    "description": "Trailing label on a ringing incoming row in the call list."
+  },
+  "call_CallList_outgoing": "Вихідний",
+  "@call_CallList_outgoing": {
+    "description": "Trailing label on a ringing outgoing row in the call list."
+  },
+  "call_CallList_header": "{count, plural, one{{count} дзвінок - торкніться, щоб вибрати} few{{count} дзвінки - торкніться, щоб вибрати} many{{count} дзвінків - торкніться, щоб вибрати} other{{count} дзвінка - торкніться, щоб вибрати}}",
+  "@call_CallList_header": {
+    "description": "Header above the call list on the call screen when more than one call is in progress.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "call_CallList_statusOnCall": "Розмова",
+  "@call_CallList_statusOnCall": {
+    "description": "Status badge in the call list for an answered, not held call."
+  },
+  "call_FocusedActionHint_actingOn": "Дія для: {name}",
+  "@call_FocusedActionHint_actingOn": {
+    "description": "Hint above the call action buttons naming the focused call the actions apply to.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_FocusedActionHint_willBeEnded": "Дзвінок з {name} буде завершено",
+  "@call_FocusedActionHint_willBeEnded": {
+    "description": "Side-effect line under the acting-on hint: the named call will be ended on answer.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_FocusedActionHint_willBeHeld": "Дзвінок з {name} буде поставлено на утримання",
+  "@call_FocusedActionHint_willBeHeld": {
+    "description": "Side-effect line under the acting-on hint: the named call will be put on hold on answer.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_ToolbarStatus_connecting": "Підключення...",
+  "@call_ToolbarStatus_connecting": {
+    "description": "Toolbar status line while the very first signaling connection is being established (turns into Reconnecting once a connection has existed)."
+  },
+  "call_ToolbarStatus_reconnecting": "Перепідключення...",
+  "@call_ToolbarStatus_reconnecting": {
+    "description": "Suffix on the call screen toolbar status line while the signaling connection is being re-established."
+  },
   "call_description_held": "На утриманні",
   "@call_description_held": {},
   "call_description_incoming": "Вхідний дзвінок",

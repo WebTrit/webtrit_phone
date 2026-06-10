@@ -154,25 +154,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_CallActionsTooltip_hangup => 'Termina chiamata';
 
   @override
-  String get call_CallActionsTooltip_hangupAndAccept => 'Riagganciare e accettare';
-
-  @override
   String get call_CallActionsTooltip_hideKeypad => 'Nascondi tastiera';
 
   @override
   String get call_CallActionsTooltip_hold => 'Attesa';
 
   @override
-  String get call_CallActionsTooltip_holdAndAccept => 'Tenere in attesa e accettare';
-
-  @override
   String get call_CallActionsTooltip_mute => 'Disattiva il microfono';
 
   @override
   String get call_CallActionsTooltip_showKeypad => 'Mostra tastiera';
-
-  @override
-  String get call_CallActionsTooltip_swap => 'Scambio chiamate';
 
   @override
   String get call_CallActionsTooltip_transfer => 'Trasferimento';
@@ -188,6 +179,47 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get call_CallActionsTooltip_unmute => 'Attiva il microfono';
+
+  @override
+  String get call_CallList_incoming => 'In arrivo';
+
+  @override
+  String get call_CallList_outgoing => 'In uscita';
+
+  @override
+  String call_CallList_header(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count chiamate - tocca per scegliere',
+      one: '$count chiamata - tocca per scegliere',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get call_CallList_statusOnCall => 'In chiamata';
+
+  @override
+  String call_FocusedActionHint_actingOn(String name) {
+    return 'Azione su: $name';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeEnded(String name) {
+    return 'La chiamata con $name verrà terminata';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeHeld(String name) {
+    return 'La chiamata con $name sarà messa in attesa';
+  }
+
+  @override
+  String get call_ToolbarStatus_connecting => 'Connessione...';
+
+  @override
+  String get call_ToolbarStatus_reconnecting => 'Riconnessione...';
 
   @override
   String get call_description_held => 'In attesa';

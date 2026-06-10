@@ -297,12 +297,6 @@ abstract class AppLocalizations {
   /// **'Hangup'**
   String get call_CallActionsTooltip_hangup;
 
-  /// No description provided for @call_CallActionsTooltip_hangupAndAccept.
-  ///
-  /// In en, this message translates to:
-  /// **'Hangup & Accept'**
-  String get call_CallActionsTooltip_hangupAndAccept;
-
   /// No description provided for @call_CallActionsTooltip_hideKeypad.
   ///
   /// In en, this message translates to:
@@ -315,12 +309,6 @@ abstract class AppLocalizations {
   /// **'Hold call'**
   String get call_CallActionsTooltip_hold;
 
-  /// No description provided for @call_CallActionsTooltip_holdAndAccept.
-  ///
-  /// In en, this message translates to:
-  /// **'Hold & Accept'**
-  String get call_CallActionsTooltip_holdAndAccept;
-
   /// No description provided for @call_CallActionsTooltip_mute.
   ///
   /// In en, this message translates to:
@@ -332,12 +320,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show keypad'**
   String get call_CallActionsTooltip_showKeypad;
-
-  /// No description provided for @call_CallActionsTooltip_swap.
-  ///
-  /// In en, this message translates to:
-  /// **'Swap calls'**
-  String get call_CallActionsTooltip_swap;
 
   /// No description provided for @call_CallActionsTooltip_transfer.
   ///
@@ -368,6 +350,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unmute microphone'**
   String get call_CallActionsTooltip_unmute;
+
+  /// Trailing label on a ringing incoming row in the call list.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming'**
+  String get call_CallList_incoming;
+
+  /// Trailing label on a ringing outgoing row in the call list.
+  ///
+  /// In en, this message translates to:
+  /// **'Outgoing'**
+  String get call_CallList_outgoing;
+
+  /// Header above the call list on the call screen when more than one call is in progress.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count} call - tap to choose} other{{count} calls - tap to choose}}'**
+  String call_CallList_header(int count);
+
+  /// Status badge in the call list for an answered, not held call.
+  ///
+  /// In en, this message translates to:
+  /// **'On call'**
+  String get call_CallList_statusOnCall;
+
+  /// Hint above the call action buttons naming the focused call the actions apply to.
+  ///
+  /// In en, this message translates to:
+  /// **'Acting on: {name}'**
+  String call_FocusedActionHint_actingOn(String name);
+
+  /// Side-effect line under the acting-on hint: the named call will be ended on answer.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be ended'**
+  String call_FocusedActionHint_willBeEnded(String name);
+
+  /// Side-effect line under the acting-on hint: the named call will be put on hold on answer.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be put on hold'**
+  String call_FocusedActionHint_willBeHeld(String name);
+
+  /// Toolbar status line while the very first signaling connection is being established (turns into Reconnecting once a connection has existed).
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting...'**
+  String get call_ToolbarStatus_connecting;
+
+  /// Suffix on the call screen toolbar status line while the signaling connection is being re-established.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting...'**
+  String get call_ToolbarStatus_reconnecting;
 
   /// No description provided for @call_description_held.
   ///

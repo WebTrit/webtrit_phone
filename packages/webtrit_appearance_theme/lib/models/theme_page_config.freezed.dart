@@ -1905,7 +1905,7 @@ case _:
 /// @nodoc
 mixin _$CallPageConfig {
 
- OverlayStyleModel? get systemUiOverlayStyle; AppBarConfig? get appBarStyle; CallPageInfoConfig? get callInfo; CallPageActionsConfig? get actions; PageBackground? get background; BlurredSurfaceConfig? get appBarBlurredSurface;
+ OverlayStyleModel? get systemUiOverlayStyle; AppBarConfig? get appBarStyle; CallPageInfoConfig? get callInfo; CallPageListConfig? get callList; CallPageHintConfig? get actingOnHint; CallPageActionsConfig? get actions; PageBackground? get background; BlurredSurfaceConfig? get appBarBlurredSurface;
 /// Create a copy of CallPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1916,16 +1916,16 @@ $CallPageConfigCopyWith<CallPageConfig> get copyWith => _$CallPageConfigCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CallPageConfig&&(identical(other.systemUiOverlayStyle, systemUiOverlayStyle) || other.systemUiOverlayStyle == systemUiOverlayStyle)&&(identical(other.appBarStyle, appBarStyle) || other.appBarStyle == appBarStyle)&&(identical(other.callInfo, callInfo) || other.callInfo == callInfo)&&(identical(other.actions, actions) || other.actions == actions)&&(identical(other.background, background) || other.background == background)&&(identical(other.appBarBlurredSurface, appBarBlurredSurface) || other.appBarBlurredSurface == appBarBlurredSurface));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CallPageConfig&&(identical(other.systemUiOverlayStyle, systemUiOverlayStyle) || other.systemUiOverlayStyle == systemUiOverlayStyle)&&(identical(other.appBarStyle, appBarStyle) || other.appBarStyle == appBarStyle)&&(identical(other.callInfo, callInfo) || other.callInfo == callInfo)&&(identical(other.callList, callList) || other.callList == callList)&&(identical(other.actingOnHint, actingOnHint) || other.actingOnHint == actingOnHint)&&(identical(other.actions, actions) || other.actions == actions)&&(identical(other.background, background) || other.background == background)&&(identical(other.appBarBlurredSurface, appBarBlurredSurface) || other.appBarBlurredSurface == appBarBlurredSurface));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,systemUiOverlayStyle,appBarStyle,callInfo,actions,background,appBarBlurredSurface);
+int get hashCode => Object.hash(runtimeType,systemUiOverlayStyle,appBarStyle,callInfo,callList,actingOnHint,actions,background,appBarBlurredSurface);
 
 @override
 String toString() {
-  return 'CallPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, appBarStyle: $appBarStyle, callInfo: $callInfo, actions: $actions, background: $background, appBarBlurredSurface: $appBarBlurredSurface)';
+  return 'CallPageConfig(systemUiOverlayStyle: $systemUiOverlayStyle, appBarStyle: $appBarStyle, callInfo: $callInfo, callList: $callList, actingOnHint: $actingOnHint, actions: $actions, background: $background, appBarBlurredSurface: $appBarBlurredSurface)';
 }
 
 
@@ -1936,7 +1936,7 @@ abstract mixin class $CallPageConfigCopyWith<$Res>  {
   factory $CallPageConfigCopyWith(CallPageConfig value, $Res Function(CallPageConfig) _then) = _$CallPageConfigCopyWithImpl;
 @useResult
 $Res call({
- OverlayStyleModel? systemUiOverlayStyle, CallPageInfoConfig? callInfo, CallPageActionsConfig? actions, PageBackground? background, AppBarConfig? appBarStyle, BlurredSurfaceConfig? appBarBlurredSurface
+ OverlayStyleModel? systemUiOverlayStyle, CallPageInfoConfig? callInfo, CallPageListConfig? callList, CallPageHintConfig? actingOnHint, CallPageActionsConfig? actions, PageBackground? background, AppBarConfig? appBarStyle, BlurredSurfaceConfig? appBarBlurredSurface
 });
 
 
@@ -1953,11 +1953,13 @@ class _$CallPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of CallPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? systemUiOverlayStyle = freezed,Object? callInfo = freezed,Object? actions = freezed,Object? background = freezed,Object? appBarStyle = freezed,Object? appBarBlurredSurface = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? systemUiOverlayStyle = freezed,Object? callInfo = freezed,Object? callList = freezed,Object? actingOnHint = freezed,Object? actions = freezed,Object? background = freezed,Object? appBarStyle = freezed,Object? appBarBlurredSurface = freezed,}) {
   return _then(CallPageConfig(
 systemUiOverlayStyle: freezed == systemUiOverlayStyle ? _self.systemUiOverlayStyle : systemUiOverlayStyle // ignore: cast_nullable_to_non_nullable
 as OverlayStyleModel?,callInfo: freezed == callInfo ? _self.callInfo : callInfo // ignore: cast_nullable_to_non_nullable
-as CallPageInfoConfig?,actions: freezed == actions ? _self.actions : actions // ignore: cast_nullable_to_non_nullable
+as CallPageInfoConfig?,callList: freezed == callList ? _self.callList : callList // ignore: cast_nullable_to_non_nullable
+as CallPageListConfig?,actingOnHint: freezed == actingOnHint ? _self.actingOnHint : actingOnHint // ignore: cast_nullable_to_non_nullable
+as CallPageHintConfig?,actions: freezed == actions ? _self.actions : actions // ignore: cast_nullable_to_non_nullable
 as CallPageActionsConfig?,background: freezed == background ? _self.background : background // ignore: cast_nullable_to_non_nullable
 as PageBackground?,appBarStyle: freezed == appBarStyle ? _self.appBarStyle : appBarStyle // ignore: cast_nullable_to_non_nullable
 as AppBarConfig?,appBarBlurredSurface: freezed == appBarBlurredSurface ? _self.appBarBlurredSurface : appBarBlurredSurface // ignore: cast_nullable_to_non_nullable
@@ -2477,6 +2479,384 @@ case _:
 
 
 /// @nodoc
+mixin _$CallPageListConfig {
+
+ String? get rowBackgroundColor; String? get rowFocusedBackgroundColor; String? get rowFocusedBorderColor; String? get dotRingingColor; String? get dotOnCallColor; String? get dotHeldColor;
+/// Create a copy of CallPageListConfig
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CallPageListConfigCopyWith<CallPageListConfig> get copyWith => _$CallPageListConfigCopyWithImpl<CallPageListConfig>(this as CallPageListConfig, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CallPageListConfig&&(identical(other.rowBackgroundColor, rowBackgroundColor) || other.rowBackgroundColor == rowBackgroundColor)&&(identical(other.rowFocusedBackgroundColor, rowFocusedBackgroundColor) || other.rowFocusedBackgroundColor == rowFocusedBackgroundColor)&&(identical(other.rowFocusedBorderColor, rowFocusedBorderColor) || other.rowFocusedBorderColor == rowFocusedBorderColor)&&(identical(other.dotRingingColor, dotRingingColor) || other.dotRingingColor == dotRingingColor)&&(identical(other.dotOnCallColor, dotOnCallColor) || other.dotOnCallColor == dotOnCallColor)&&(identical(other.dotHeldColor, dotHeldColor) || other.dotHeldColor == dotHeldColor));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,rowBackgroundColor,rowFocusedBackgroundColor,rowFocusedBorderColor,dotRingingColor,dotOnCallColor,dotHeldColor);
+
+@override
+String toString() {
+  return 'CallPageListConfig(rowBackgroundColor: $rowBackgroundColor, rowFocusedBackgroundColor: $rowFocusedBackgroundColor, rowFocusedBorderColor: $rowFocusedBorderColor, dotRingingColor: $dotRingingColor, dotOnCallColor: $dotOnCallColor, dotHeldColor: $dotHeldColor)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CallPageListConfigCopyWith<$Res>  {
+  factory $CallPageListConfigCopyWith(CallPageListConfig value, $Res Function(CallPageListConfig) _then) = _$CallPageListConfigCopyWithImpl;
+@useResult
+$Res call({
+ String? rowBackgroundColor, String? rowFocusedBackgroundColor, String? rowFocusedBorderColor, String? dotRingingColor, String? dotOnCallColor, String? dotHeldColor
+});
+
+
+
+
+}
+/// @nodoc
+class _$CallPageListConfigCopyWithImpl<$Res>
+    implements $CallPageListConfigCopyWith<$Res> {
+  _$CallPageListConfigCopyWithImpl(this._self, this._then);
+
+  final CallPageListConfig _self;
+  final $Res Function(CallPageListConfig) _then;
+
+/// Create a copy of CallPageListConfig
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? rowBackgroundColor = freezed,Object? rowFocusedBackgroundColor = freezed,Object? rowFocusedBorderColor = freezed,Object? dotRingingColor = freezed,Object? dotOnCallColor = freezed,Object? dotHeldColor = freezed,}) {
+  return _then(CallPageListConfig(
+rowBackgroundColor: freezed == rowBackgroundColor ? _self.rowBackgroundColor : rowBackgroundColor // ignore: cast_nullable_to_non_nullable
+as String?,rowFocusedBackgroundColor: freezed == rowFocusedBackgroundColor ? _self.rowFocusedBackgroundColor : rowFocusedBackgroundColor // ignore: cast_nullable_to_non_nullable
+as String?,rowFocusedBorderColor: freezed == rowFocusedBorderColor ? _self.rowFocusedBorderColor : rowFocusedBorderColor // ignore: cast_nullable_to_non_nullable
+as String?,dotRingingColor: freezed == dotRingingColor ? _self.dotRingingColor : dotRingingColor // ignore: cast_nullable_to_non_nullable
+as String?,dotOnCallColor: freezed == dotOnCallColor ? _self.dotOnCallColor : dotOnCallColor // ignore: cast_nullable_to_non_nullable
+as String?,dotHeldColor: freezed == dotHeldColor ? _self.dotHeldColor : dotHeldColor // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [CallPageListConfig].
+extension CallPageListConfigPatterns on CallPageListConfig {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
+
+/// @nodoc
+mixin _$CallPageHintConfig {
+
+ String? get backgroundColor; String? get affectedNameColor;
+/// Create a copy of CallPageHintConfig
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CallPageHintConfigCopyWith<CallPageHintConfig> get copyWith => _$CallPageHintConfigCopyWithImpl<CallPageHintConfig>(this as CallPageHintConfig, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CallPageHintConfig&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.affectedNameColor, affectedNameColor) || other.affectedNameColor == affectedNameColor));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,backgroundColor,affectedNameColor);
+
+@override
+String toString() {
+  return 'CallPageHintConfig(backgroundColor: $backgroundColor, affectedNameColor: $affectedNameColor)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CallPageHintConfigCopyWith<$Res>  {
+  factory $CallPageHintConfigCopyWith(CallPageHintConfig value, $Res Function(CallPageHintConfig) _then) = _$CallPageHintConfigCopyWithImpl;
+@useResult
+$Res call({
+ String? backgroundColor, String? affectedNameColor
+});
+
+
+
+
+}
+/// @nodoc
+class _$CallPageHintConfigCopyWithImpl<$Res>
+    implements $CallPageHintConfigCopyWith<$Res> {
+  _$CallPageHintConfigCopyWithImpl(this._self, this._then);
+
+  final CallPageHintConfig _self;
+  final $Res Function(CallPageHintConfig) _then;
+
+/// Create a copy of CallPageHintConfig
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? backgroundColor = freezed,Object? affectedNameColor = freezed,}) {
+  return _then(CallPageHintConfig(
+backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
+as String?,affectedNameColor: freezed == affectedNameColor ? _self.affectedNameColor : affectedNameColor // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [CallPageHintConfig].
+extension CallPageHintConfigPatterns on CallPageHintConfig {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
+
+/// @nodoc
 mixin _$KeypadPageConfig {
 
  OverlayStyleModel? get systemUiOverlayStyle; TextFieldConfig? get textField; TextFieldConfig? get contactName; KeypadStyleConfig? get keypad; ActionPadWidgetConfig? get actionpad; PageBackground? get background; ThemeOverrideConfig get themeOverride; BlurredSurfaceConfig? get appBarBlurredSurface;
@@ -2856,7 +3236,6 @@ case _:
 
 }
 
-
 /// @nodoc
 mixin _$SettingsPageConfig {
 
@@ -2874,7 +3253,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsPageConfig&&(identical(other.themeOverride, themeOverride) || other.themeOverride == themeOverride)&&(identical(other.leadingIconsColor, leadingIconsColor) || other.leadingIconsColor == leadingIconsColor)&&(identical(other.userIconColor, userIconColor) || other.userIconColor == userIconColor)&&(identical(other.logoutIconColor, logoutIconColor) || other.logoutIconColor == logoutIconColor)&&(identical(other.groupTitleListTile, groupTitleListTile) || other.groupTitleListTile == groupTitleListTile)&&(identical(other.showSeparators, showSeparators) || other.showSeparators == showSeparators)&&(identical(other.separator, separator) || other.separator == separator)&&(identical(other.background, background) || other.background == background)&&(identical(other.itemTextStyle, itemTextStyle) || other.itemTextStyle == itemTextStyle)&&(identical(other.appBarBlurredSurface, appBarBlurredSurface) || other.appBarBlurredSurface == appBarBlurredSurface));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,themeOverride,leadingIconsColor,userIconColor,logoutIconColor,groupTitleListTile,showSeparators,separator,background,itemTextStyle,appBarBlurredSurface);
 

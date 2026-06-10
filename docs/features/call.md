@@ -1,7 +1,7 @@
 # Call
 
 The in-app calling experience: placing and receiving SIP/WebRTC calls, the
-full-screen call UI, multi-call handling (hold, swap, transfer), and the native
+full-screen call UI, multi-call handling (hold/resume, transfer), and the native
 CallKit / ConnectionService integration.
 
 Last reviewed: 2026-06-10
@@ -44,6 +44,15 @@ Each call is an `ActiveCall` with the flags the UI reads:
 - `held` - on hold.
 - `processingStatus` - fine-grained lifecycle (see the state machine in the
   architecture doc).
+
+The toolbar (AppBar title slot, centered) carries one global status line
+(`CallToolbarStatus`), never tied to a call row. Signaling states: "No
+internet connection" / "Not registered" (coral dot), "Connecting..." /
+"Reconnecting..." (amber pulsing dot; Reconnecting once a connection has
+existed). Below those: a media failure message, or the worst stream-quality
+warning across calls (signal bars + direction arrow + label). The central
+`CallInfo` shows only name/number, the call description or live duration, and
+the processing status.
 - `displayName` / `handle`, `remoteVideo`, `muted`, `transfer`.
 
 Single call:
@@ -51,34 +60,43 @@ Single call:
 - **1 incoming** - caller info + Decline / Answer.
 - **1 active** - caller info + control grid (mute, camera, speaker, transfer,
   hold, keypad) + hang up.
-- **1 on hold** - same grid with Hold shown as Resume.
+- **1 on hold** - same grid with Hold shown as Resume (play glyph).
 
-Multiple calls today (stacked layout):
+Multiple calls (list-based):
 
-- The screen stacks a `CallInfo` block per call. The "current" call is derived,
-  not explicitly chosen: `activeCalls.current` = the last non-held call.
-- For a second incoming call while one is active, `IncomingCallActions` shows
-  combined-icon buttons: End & Answer (`call_end` + `call`), Decline (`call_end`),
-  Hold & Answer (`pause` + `call`). Hold is impossible while a call is ringing,
-  so the user answers first; the combined actions end or hold the other call,
-  then answer.
+- The screen shows one tappable `CallRow` per call - colored status dot +
+  badge (RINGING / ON CALL / ON HOLD), name, live duration or a short
+  Incoming/Outgoing label, and a camera glyph on video lines - under an
+  "N calls - tap to choose" header. Tapping
+  a row focuses that call. With multiple calls the rows carry the per-call
+  info; the central info block appears for a single call only.
+- The `CallInfo` block and the action area below act on the focused call only.
+  A ringing focus gets exactly Decline / Answer plus an "Acting on: <name>"
+  hint - a translucent pill with the focused name in bold and the affected
+  names highlighted - that spells out the side effect ("<name> will be put on
+  hold" or "will be ended"); an active/held focus gets the control grid + End.
+- Answer is one intent (`CallControlEvent.answerFocused`): it holds the
+  answered calls when possible, ends the non-holdable ones (e.g. an outgoing
+  call still ringing), and leaves another ringing incoming call ringing.
 
 ### Focused call
 
 `CallState.selectedCallId` + the `focusedCall` getter express which call the
-action area acts on. `focusedCall` returns the explicitly selected call when it
-still maps to a live call, otherwise the derived `current`; it is `null` only
-when there are no active calls. Today nothing sets `selectedCallId`, so
-`focusedCall` mirrors `current`. This is the seam the list-based UI consumes
-(see below).
+info block and action area act on: the explicitly selected call when it still
+maps to a live call, otherwise the derived `current` (= last non-held call).
+Auto-focus: a new ringing incoming call grabs the focus; when the focused call
+ends, the next ringing incoming call is focused. The media overlay keeps
+following the derived `current` call.
 
 ## Key widgets
 
 | Widget | File | Role |
 |---|---|---|
-| `CallActiveScaffold` | `view/call_active_scaffold.dart` | Active call screen; lays out info + actions per call |
-| `CallInfo` | `widgets/call_info.dart` | Per-call name / number / status / timer / network quality |
-| `IncomingCallActions` | `widgets/incoming_call_actions.dart` | Ringing-call buttons (decline / answer / combined) |
+| `CallActiveScaffold` | `view/call_active_scaffold.dart` | Active call screen; list + focused info + actions |
+| `CallList` / `CallRow` | `widgets/call_list.dart` | Tappable per-call rows with status badge + duration |
+| `FocusedActionHint` | `widgets/focused_action_hint.dart` | "Acting on" hint + answer side effect |
+| `CallInfo` | `widgets/call_info.dart` | Focused-call name / number / call description / timer |
+| `IncomingCallActions` | `widgets/incoming_call_actions.dart` | Decline / Answer for the focused ringing call |
 | `ActiveCallActions` | `widgets/active_call_actions.dart` | In-call control grid + hang up + keypad |
 
 ## Redesign / in progress - list-based call flow
@@ -100,14 +118,22 @@ Rollout is incremental (foundations first, then UI), each step behind tests:
 
 | Stage | Scope | Status |
 |---|---|---|
-| Focus state | `selectedCallId` + `focusedCall` + `callSelected` event (invisible groundwork) | In review (PR #1376) |
-| Action intents | Combined actions (hold&accept / hangup&accept / swap) move into bloc intents | Planned |
-| Call list | Selectable list of calls + status badges + header | Planned |
-| Focused actions | Single action area + "Acting on" hint; drop combined-icon buttons | Planned |
-| Cleanup / edges | Single-call polish, dead-code removal, 3-call / transfer / landscape | Planned |
+| Focus state | `selectedCallId` + `focusedCall` + `callSelected` event (invisible groundwork) | Merged (PR #1376) |
+| Action intents | Combined actions (hold&accept / hangup&accept / swap) move into bloc intents | Merged (PR #1378) |
+| Call list | Selectable list of calls + status badges + header; auto-focus rules; info + action area bind to the focused call | Merged (PR #1379) |
+| Focused actions | "Acting on" hint + two-button ringing focus (single answerFocused intent); combined-icon buttons removed | Merged (PR #1380) |
+| Cleanup / edges | Dead-code and obsolete l10n removal; scaffold-level widget tests for single/multi/3-call states | Merged (PR #1381) |
+| Toolbar status | Signaling/connectivity status, media failures and stream quality move to the AppBar status line (global, worst across calls); the central info block keeps only name/description/duration | Merged (PR #1385) |
+| Visual alignment | Status dots on rows, short Incoming/Outgoing trailing labels, central info block single-call only, acting-on hint as a translucent pill with highlighted names | Merged (PR #1386) |
+| Hold/Resume on focus | The hold slot always acts on the focused call (pause/play glyph); Resume holds the other live calls first; the swap button is gone - switching lines = focus a row + Resume | Merged (PR #1387) |
+| Row overlay polish | Call rows use light overlay tints of the on-screen text color: focused = brighter + light border (design polarity), bigger radius and padding | Merged (PR #1388) |
+| Video line badge | A camera glyph next to the trailing label marks video lines in the call list | Merged (PR #1389) |
+| Themed color roles | Call-list rows/dots and the acting-on hint take colors from the theme pipeline: CallPageListConfig/CallPageHintConfig in webtrit_appearance_theme -> assets/themes JSONs -> CallListStyle/FocusedActionHintStyle; no fixed colors in widgets | In review |
 
-The visible UI stages are gated behind a feature flag so `develop` stays
-shippable while the redesign lands piece by piece.
+The redesign lands on the `refactor/call` integration branch - every stage is a
+PR into that branch, and once the whole flow is tested there a single PR merges
+it into `develop`. `develop` therefore stays shippable throughout; no feature
+flag is involved.
 
 ## Keeping this doc current
 
