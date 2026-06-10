@@ -314,21 +314,18 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                             })
                                                     : null,
                                                 heldValue: focusedCall.held,
+                                                // Hold pauses just the focused call; Resume brings it
+                                                // back as the only live one (the other live calls are
+                                                // put on hold first). Switching lines = focus the other
+                                                // row and press Resume - there is no separate swap.
                                                 onHeldChanged: (bool value) {
-                                                  _callBloc.add(CallControlEvent.setHeld(focusedCall.callId, value));
+                                                  _callBloc.add(
+                                                    value
+                                                        ? CallControlEvent.setHeld(focusedCall.callId, true)
+                                                        : CallControlEvent.resumedHoldingOthers(focusedCall.callId),
+                                                  );
                                                   dispatchInteractionDebounce();
                                                 },
-                                                // Swap keeps acting on the derived current call: its
-                                                // semantics are "hold the active one, resume the rest"
-                                                // regardless of which row is focused.
-                                                onSwapPressed: activeCalls.length == 2
-                                                    ? () {
-                                                        _callBloc.add(
-                                                          CallControlEvent.swapped(activeCalls.current.callId),
-                                                        );
-                                                        dispatchInteractionDebounce();
-                                                      }
-                                                    : null,
                                                 onHangupPressed: () {
                                                   _callBloc.add(CallControlEvent.ended(focusedCall.callId));
                                                   dispatchInteractionDebounce();

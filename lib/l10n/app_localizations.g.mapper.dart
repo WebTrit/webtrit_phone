@@ -73,7 +73,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'call_CallActionsTooltip_mute' => call_CallActionsTooltip_mute,
       'call_CallActionsTooltip_showKeypad' =>
         call_CallActionsTooltip_showKeypad,
-      'call_CallActionsTooltip_swap' => call_CallActionsTooltip_swap,
       'call_CallActionsTooltip_transfer' => call_CallActionsTooltip_transfer,
       'call_CallActionsTooltip_transfer_choose' =>
         call_CallActionsTooltip_transfer_choose,

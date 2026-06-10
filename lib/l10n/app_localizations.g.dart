@@ -297,12 +297,6 @@ abstract class AppLocalizations {
   /// **'Show keypad'**
   String get call_CallActionsTooltip_showKeypad;
 
-  /// No description provided for @call_CallActionsTooltip_swap.
-  ///
-  /// In en, this message translates to:
-  /// **'Swap calls'**
-  String get call_CallActionsTooltip_swap;
-
   /// No description provided for @call_CallActionsTooltip_transfer.
   ///
   /// In en, this message translates to:

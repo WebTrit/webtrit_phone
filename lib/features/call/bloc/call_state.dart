@@ -253,6 +253,14 @@ class CallState with _$CallState {
     for (final call in activeCalls)
       if (call.callId != callId) call.callId,
   ];
+
+  /// Ids of every other answered, not-yet-held call - the ones that must be
+  /// put on hold before resuming [callId] so only one call stays live. Pure
+  /// data query for the event-layer plans.
+  List<String> otherCallIdsToHold(String callId) => [
+    for (final call in activeCalls)
+      if (call.callId != callId && call.wasAccepted && !call.held) call.callId,
+  ];
 }
 
 @freezed

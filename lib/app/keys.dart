@@ -42,7 +42,6 @@ const callActionsMuteKey = Key('callActionsMute');
 const callActionsVideoCallKey = Key('callActionsVideoCall');
 const callActionsSpeakerKey = Key('callActionsSpeaker');
 const callActionsHoldKey = Key('callActionsHold');
-const callActionsSwapKey = Key('callActionsSwap');
 const callActionsKeypadKey = Key('callActionsKeypad');
 const callActionsHangupKey = Key('callActionsHangup');
 const callActionsTransferMenuKey = Key('callActionsTransferMenu');

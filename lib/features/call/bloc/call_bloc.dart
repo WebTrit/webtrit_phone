@@ -1353,7 +1353,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallControlEventAnswered() => __onCallControlEventAnswered(event, emit),
       _CallControlEventAnsweredEndingOthers() => __onCallControlEventAnsweredEndingOthers(event, emit),
       _CallControlEventAnsweredHoldingOthers() => __onCallControlEventAnsweredHoldingOthers(event, emit),
-      _CallControlEventSwapped() => __onCallControlEventSwapped(event, emit),
+      _CallControlEventResumedHoldingOthers() => __onCallControlEventResumedHoldingOthers(event, emit),
       _CallControlEventEnded() => __onCallControlEventEnded(event, emit),
       _CallControlEventSetHeld() => __onCallControlEventSetHeld(event, emit),
       _CallControlEventSetMuted() => __onCallControlEventSetMuted(event, emit),
@@ -1433,9 +1433,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     CallControlEvent.answerHoldingOthersPlan(event.callId, state.otherCallIds(event.callId)).forEach(add);
   }
 
-  /// Swap: holds [event.callId], then resumes the other calls.
-  Future<void> __onCallControlEventSwapped(_CallControlEventSwapped event, Emitter<CallState> emit) async {
-    CallControlEvent.swapPlan(event.callId, state.otherCallIds(event.callId)).forEach(add);
+  /// Resume on a held focus: holds the other live calls, then resumes
+  /// [event.callId], so exactly one call stays live.
+  Future<void> __onCallControlEventResumedHoldingOthers(
+    _CallControlEventResumedHoldingOthers event,
+    Emitter<CallState> emit,
+  ) async {
+    CallControlEvent.resumeHoldingOthersPlan(event.callId, state.otherCallIdsToHold(event.callId)).forEach(add);
   }
 
   /// Submitting the answer intent to system when answer button is pressed from app ui

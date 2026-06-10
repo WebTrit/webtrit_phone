@@ -596,10 +596,14 @@ sealed class CallControlEvent extends CallEvent {
     CallControlEvent.answered(callId),
   ];
 
-  /// Swap plan: hold [callId], then resume every other call.
-  static List<CallControlEvent> swapPlan(String callId, List<String> otherCallIds) => [
-    CallControlEvent.setHeld(callId, true),
-    for (final otherCallId in otherCallIds) CallControlEvent.setHeld(otherCallId, false),
+  /// Resume plan for the focused held call: put the other unheld answered
+  /// calls on hold first ([otherCallIdsToHold], from
+  /// [CallState.otherCallIdsToHold]) so only one call is live, then resume
+  /// [callId]. With two calls this is the classic swap; switching which call
+  /// is live is done by focusing its row and pressing Resume.
+  static List<CallControlEvent> resumeHoldingOthersPlan(String callId, List<String> otherCallIdsToHold) => [
+    for (final otherCallId in otherCallIdsToHold) CallControlEvent.setHeld(otherCallId, true),
+    CallControlEvent.setHeld(callId, false),
   ];
 
   /// The single Answer intent for the focused ringing call: hold the other
@@ -642,8 +646,9 @@ sealed class CallControlEvent extends CallEvent {
   /// "Hold & Answer" action for a second incoming call, as a single intent.
   const factory CallControlEvent.answeredHoldingOthers(String callId) = _CallControlEventAnsweredHoldingOthers;
 
-  /// Swaps the active and held calls: holds [callId] and resumes the others.
-  const factory CallControlEvent.swapped(String callId) = _CallControlEventSwapped;
+  /// Resumes the focused held call [callId] after putting the other live
+  /// calls on hold, as a single intent (the Resume button on a held focus).
+  const factory CallControlEvent.resumedHoldingOthers(String callId) = _CallControlEventResumedHoldingOthers;
 
   const factory CallControlEvent.ended(String callId) = _CallControlEventEnded;
 
@@ -752,8 +757,8 @@ class _CallControlEventAnsweredHoldingOthers extends CallControlEvent {
   List<Object?> get props => [callId];
 }
 
-class _CallControlEventSwapped extends CallControlEvent {
-  const _CallControlEventSwapped(this.callId);
+class _CallControlEventResumedHoldingOthers extends CallControlEvent {
+  const _CallControlEventResumedHoldingOthers(this.callId);
 
   final String callId;
 

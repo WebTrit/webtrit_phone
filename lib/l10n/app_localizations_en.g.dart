@@ -153,9 +153,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_showKeypad => 'Show keypad';
 
   @override
-  String get call_CallActionsTooltip_swap => 'Swap calls';
-
-  @override
   String get call_CallActionsTooltip_transfer => 'Transfer';
 
   @override
