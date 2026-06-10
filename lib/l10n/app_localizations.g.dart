@@ -363,6 +363,12 @@ abstract class AppLocalizations {
   /// **'{name} will be put on hold'**
   String call_FocusedActionHint_willBeHeld(String name);
 
+  /// Suffix on the call screen toolbar status line while the signaling connection is being re-established.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting...'**
+  String get call_ToolbarStatus_reconnecting;
+
   /// No description provided for @call_description_held.
   ///
   /// In en, this message translates to:

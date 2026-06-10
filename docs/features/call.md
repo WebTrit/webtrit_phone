@@ -44,6 +44,13 @@ Each call is an `ActiveCall` with the flags the UI reads:
 - `held` - on hold.
 - `processingStatus` - fine-grained lifecycle (see the state machine in the
   architecture doc).
+
+The toolbar (AppBar title slot) carries one global status line
+(`CallToolbarStatus`): signaling/connectivity trouble (red dot +
+"Reconnecting..."), a media failure, or the worst stream-quality warning
+across calls (signal meter + label). The central `CallInfo` shows only
+name/number, the call description or live duration, and the processing
+status.
 - `displayName` / `handle`, `remoteVideo`, `muted`, `transfer`.
 
 Single call:
@@ -109,7 +116,8 @@ Rollout is incremental (foundations first, then UI), each step behind tests:
 | Action intents | Combined actions (hold&accept / hangup&accept / swap) move into bloc intents | Merged (PR #1378) |
 | Call list | Selectable list of calls + status badges + header; auto-focus rules; info + action area bind to the focused call | Merged (PR #1379) |
 | Focused actions | "Acting on" hint + two-button ringing focus (single answerFocused intent); combined-icon buttons removed | Merged (PR #1380) |
-| Cleanup / edges | Dead-code and obsolete l10n removal; scaffold-level widget tests for single/multi/3-call states | In review |
+| Cleanup / edges | Dead-code and obsolete l10n removal; scaffold-level widget tests for single/multi/3-call states | Merged (PR #1381) |
+| Toolbar status | Signaling/connectivity status, media failures and stream quality move to the AppBar status line (global, worst across calls); the central info block keeps only name/description/duration | In review |
 
 The redesign lands on the `refactor/call` integration branch - every stage is a
 PR into that branch, and once the whole flow is tested there a single PR merges

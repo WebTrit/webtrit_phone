@@ -187,6 +187,16 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                 backgroundColor: style?.appBar?.backgroundColor,
                                 foregroundColor: style?.appBar?.foregroundColor,
                                 primary: style?.appBar?.primary ?? false,
+                                // Global status line: signaling trouble, media
+                                // failure or the worst stream quality across calls.
+                                centerTitle: false,
+                                titleSpacing: 0,
+                                title: CallToolbarStatus(
+                                  callStatus: widget.callStatus,
+                                  networkQuality: activeCalls.worstNetworkQuality,
+                                  iceConnectionIssue: activeCalls.firstIceConnectionIssue,
+                                  style: style?.callInfo,
+                                ),
                                 actions: [
                                   if (activeCalls.shouldAutoCompact)
                                     CallPopupMenuButton<void>(
@@ -230,9 +240,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                               acceptedTime: focusedCall.acceptedTime,
                                               style: style?.callInfo,
                                               processingStatus: focusedCall.processingStatus,
-                                              callStatus: widget.callStatus,
-                                              iceConnectionIssue: focusedCall.iceConnectionIssue,
-                                              networkQuality: focusedCall.networkQuality,
                                             ),
                                             if (!focusedIsRinging)
                                               ActiveCallActions(

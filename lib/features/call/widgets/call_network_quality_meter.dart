@@ -18,13 +18,18 @@ import '../models/models.dart';
 /// than cross-faded, so only appearing/disappearing fades; switching severity or
 /// direction does not flicker.
 class CallNetworkQualityMeter extends StatelessWidget {
-  const CallNetworkQualityMeter({super.key, required this.quality, this.baseColor});
+  const CallNetworkQualityMeter({super.key, required this.quality, this.baseColor, this.showLabel});
 
   final CallNetworkQuality quality;
 
   /// Color for the mild bars and inactive bar slots; defaults to the ambient
   /// text color so the meter blends with the call timer.
   final Color? baseColor;
+
+  /// Overrides the built-in label visibility: `null` keeps the default
+  /// (label only at severe), `false` never shows it (the caller renders its
+  /// own text, e.g. the toolbar status line).
+  final bool? showLabel;
 
   static const double _glyphSize = 14;
   static const _morph = Duration(milliseconds: 250);
@@ -61,7 +66,7 @@ class CallNetworkQualityMeter extends StatelessWidget {
       };
       final directionIcon = quality.uplink ? Icons.north : Icons.south;
       final mediaIcon = quality.media == CallMediaKind.video ? Icons.videocam : Icons.mic;
-      final showLabel = quality.severity == CallNetworkQualitySeverity.severe;
+      final showLabel = this.showLabel ?? quality.severity == CallNetworkQualitySeverity.severe;
 
       content = Row(
         key: const ValueKey('active'),

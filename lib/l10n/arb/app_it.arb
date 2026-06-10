@@ -153,6 +153,10 @@
       }
     }
   },
+  "call_ToolbarStatus_reconnecting": "Riconnessione...",
+  "@call_ToolbarStatus_reconnecting": {
+    "description": "Suffix on the call screen toolbar status line while the signaling connection is being re-established."
+  },
   "call_description_held": "In attesa",
   "@call_description_held": {},
   "call_description_incoming": "Chiamata in arrivo",

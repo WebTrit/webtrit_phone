@@ -416,4 +416,24 @@ extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
   List<T> get nonCurrent => where((activeCall) => activeCall != current).toList();
 
   T? get blindTransferInitiated => firstWhereOrNull((activeCall) => activeCall.transfer is BlindTransferInitiated);
+
+  /// The most concerning media-degradation indicator across all calls, for the
+  /// global toolbar status line: an active (non-recovered) warning beats a
+  /// recovered confirmation, then the higher severity wins. `null` when every
+  /// stream is healthy.
+  CallNetworkQuality? get worstNetworkQuality {
+    CallNetworkQuality? worst;
+    for (final call in this) {
+      final quality = call.networkQuality;
+      if (quality == null) continue;
+      int score(CallNetworkQuality q) => q.recovered ? -1 : q.severity.index;
+      if (worst == null || score(quality) > score(worst)) worst = quality;
+    }
+    return worst;
+  }
+
+  /// The first real media failure across all calls; failures take precedence
+  /// over degradation warnings on the toolbar status line.
+  IceConnectionIssue? get firstIceConnectionIssue =>
+      firstWhereOrNull((activeCall) => activeCall.iceConnectionIssue != null)?.iceConnectionIssue;
 }

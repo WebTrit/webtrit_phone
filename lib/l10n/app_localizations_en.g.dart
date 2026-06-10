@@ -200,6 +200,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get call_ToolbarStatus_reconnecting => 'Reconnecting...';
+
+  @override
   String get call_description_held => 'On hold';
 
   @override
