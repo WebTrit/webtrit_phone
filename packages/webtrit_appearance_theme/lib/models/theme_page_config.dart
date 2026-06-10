@@ -293,6 +293,8 @@ class CallPageConfig with _$CallPageConfig implements BasePageConfig {
   const CallPageConfig({
     this.systemUiOverlayStyle,
     this.callInfo,
+    this.callList,
+    this.actingOnHint,
     this.actions,
     this.background,
     this.appBarStyle,
@@ -307,6 +309,12 @@ class CallPageConfig with _$CallPageConfig implements BasePageConfig {
 
   @override
   final CallPageInfoConfig? callInfo;
+
+  @override
+  final CallPageListConfig? callList;
+
+  @override
+  final CallPageHintConfig? actingOnHint;
 
   @override
   final CallPageActionsConfig? actions;
@@ -395,6 +403,62 @@ class CallPageInfoConfig with _$CallPageInfoConfig {
   factory CallPageInfoConfig.fromJson(Map<String, Object?> json) => _$CallPageInfoConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$CallPageInfoConfigToJson(this);
+}
+
+/// Colors of the call-list rows on the **Call Screen** (the list-based
+/// multi-call layout): row overlays, the focused border and the per-state
+/// status dots. CSS hex strings, alpha-first (#AARRGGBB) supported.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class CallPageListConfig with _$CallPageListConfig {
+  const CallPageListConfig({
+    this.rowBackgroundColor,
+    this.rowFocusedBackgroundColor,
+    this.rowFocusedBorderColor,
+    this.dotRingingColor,
+    this.dotOnCallColor,
+    this.dotHeldColor,
+  });
+
+  @override
+  final String? rowBackgroundColor;
+
+  @override
+  final String? rowFocusedBackgroundColor;
+
+  @override
+  final String? rowFocusedBorderColor;
+
+  @override
+  final String? dotRingingColor;
+
+  @override
+  final String? dotOnCallColor;
+
+  @override
+  final String? dotHeldColor;
+
+  factory CallPageListConfig.fromJson(Map<String, Object?> json) => _$CallPageListConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$CallPageListConfigToJson(this);
+}
+
+/// Colors of the "Acting on" hint pill on the **Call Screen**: the pill
+/// background and the highlighted affected-call names.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class CallPageHintConfig with _$CallPageHintConfig {
+  const CallPageHintConfig({this.backgroundColor, this.affectedNameColor});
+
+  @override
+  final String? backgroundColor;
+
+  @override
+  final String? affectedNameColor;
+
+  factory CallPageHintConfig.fromJson(Map<String, Object?> json) => _$CallPageHintConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$CallPageHintConfigToJson(this);
 }
 
 /// Declarative configuration for the **Keypad Screen**.

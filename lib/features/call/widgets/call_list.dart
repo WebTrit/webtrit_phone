@@ -18,12 +18,20 @@ import '../view/call_screen_style.dart';
 /// caller can focus it (see [CallControlEvent.callSelected]); the focused row
 /// is highlighted.
 class CallList extends StatelessWidget {
-  const CallList({super.key, required this.calls, required this.focusedCallId, required this.onCallTap, this.style});
+  const CallList({
+    super.key,
+    required this.calls,
+    required this.focusedCallId,
+    required this.onCallTap,
+    this.style,
+    this.listStyle,
+  });
 
   final List<ActiveCall> calls;
   final String focusedCallId;
   final ValueChanged<String> onCallTap;
   final CallInfoStyle? style;
+  final CallListStyle? listStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +53,7 @@ class CallList extends StatelessWidget {
             focused: call.callId == focusedCallId,
             onTap: () => onCallTap(call.callId),
             style: style,
+            listStyle: listStyle,
           ),
       ],
     );
@@ -54,12 +63,20 @@ class CallList extends StatelessWidget {
 /// One call in the [CallList]: status badge, name/number and a live duration
 /// for answered calls (or the call direction while it is still ringing).
 class CallRow extends StatefulWidget {
-  const CallRow({super.key, required this.call, required this.focused, required this.onTap, this.style});
+  const CallRow({
+    super.key,
+    required this.call,
+    required this.focused,
+    required this.onTap,
+    this.style,
+    this.listStyle,
+  });
 
   final ActiveCall call;
   final bool focused;
   final VoidCallback onTap;
   final CallInfoStyle? style;
+  final CallListStyle? listStyle;
 
   @override
   State<CallRow> createState() => _CallRowState();
@@ -110,11 +127,15 @@ class _CallRowState extends State<CallRow> {
     return call.isIncoming ? context.l10n.call_CallList_incoming : context.l10n.call_CallList_outgoing;
   }
 
-  Color _statusDotColor() {
+  /// Status dot from the themed call-list palette (CallListStyle, fed by the
+  /// theme JSONs); the fallback is the row text color so an unthemed harness
+  /// stays legible without any fixed colors.
+  Color _statusDotColor(Color base) {
     final call = widget.call;
-    if (!call.wasAccepted) return Colors.amber.shade300;
-    if (call.held) return Colors.blueGrey.shade200;
-    return Colors.lightGreen.shade400;
+    final listStyle = widget.listStyle;
+    if (!call.wasAccepted) return listStyle?.dotRinging ?? base;
+    if (call.held) return listStyle?.dotHeld ?? base;
+    return listStyle?.dotOnCall ?? base;
   }
 
   @override
@@ -122,16 +143,20 @@ class _CallRowState extends State<CallRow> {
     final nameStyle = widget.style?.number ?? const TextStyle();
     final statusStyle = widget.style?.callStatus ?? const TextStyle();
 
-    // Rows are light overlay tints of the on-screen text color (white on the
-    // standard call gradient): the FOCUSED row is the brighter one with a
-    // light border, unfocused rows stay dimmer - matching the design's
-    // polarity regardless of what colorScheme.surface resolves to.
-    final overlayColor = statusStyle.color ?? Theme.of(context).colorScheme.surface;
+    // Row colors come from the themed call-list palette (CallListStyle, fed
+    // by the theme JSONs); the fallbacks derive from the row text color so an
+    // unthemed harness keeps the design polarity (focused = brighter).
+    final base = statusStyle.color ?? Theme.of(context).colorScheme.surface;
+    final listStyle = widget.listStyle;
+    final rowColor = widget.focused
+        ? (listStyle?.rowFocusedBackground ?? base.withValues(alpha: 0.26))
+        : (listStyle?.rowBackground ?? base.withValues(alpha: 0.10));
+    final borderColor = listStyle?.rowFocusedBorder ?? base.withValues(alpha: 0.55);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: Material(
-        color: overlayColor.withValues(alpha: widget.focused ? 0.26 : 0.10),
+        color: rowColor,
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           onTap: widget.onTap,
@@ -140,7 +165,7 @@ class _CallRowState extends State<CallRow> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: widget.focused ? Border.all(color: overlayColor.withValues(alpha: 0.55)) : null,
+              border: widget.focused ? Border.all(color: borderColor) : null,
             ),
             child: Row(
               children: [
@@ -148,7 +173,7 @@ class _CallRowState extends State<CallRow> {
                   width: 8,
                   height: 8,
                   margin: const EdgeInsets.only(right: 10),
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: _statusDotColor()),
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: _statusDotColor(base)),
                 ),
                 Expanded(
                   child: Column(

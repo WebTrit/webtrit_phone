@@ -318,6 +318,14 @@ CallPageConfig _$CallPageConfigFromJson(
   callInfo: json['callInfo'] == null
       ? null
       : CallPageInfoConfig.fromJson(json['callInfo'] as Map<String, dynamic>),
+  callList: json['callList'] == null
+      ? null
+      : CallPageListConfig.fromJson(json['callList'] as Map<String, dynamic>),
+  actingOnHint: json['actingOnHint'] == null
+      ? null
+      : CallPageHintConfig.fromJson(
+          json['actingOnHint'] as Map<String, dynamic>,
+        ),
   actions: json['actions'] == null
       ? null
       : CallPageActionsConfig.fromJson(json['actions'] as Map<String, dynamic>),
@@ -339,6 +347,8 @@ Map<String, dynamic> _$CallPageConfigToJson(CallPageConfig instance) =>
       'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
       'appBarStyle': instance.appBarStyle?.toJson(),
       'callInfo': instance.callInfo?.toJson(),
+      'callList': instance.callList?.toJson(),
+      'actingOnHint': instance.actingOnHint?.toJson(),
       'actions': instance.actions?.toJson(),
       'background': instance.background?.toJson(),
       'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
@@ -438,6 +448,38 @@ Map<String, dynamic> _$CallPageInfoConfigToJson(CallPageInfoConfig instance) =>
       'numberTextStyle': instance.numberTextStyle?.toJson(),
       'callStatusTextStyle': instance.callStatusTextStyle?.toJson(),
       'processingStatusTextStyle': instance.processingStatusTextStyle?.toJson(),
+    };
+
+CallPageListConfig _$CallPageListConfigFromJson(Map<String, dynamic> json) =>
+    CallPageListConfig(
+      rowBackgroundColor: json['rowBackgroundColor'] as String?,
+      rowFocusedBackgroundColor: json['rowFocusedBackgroundColor'] as String?,
+      rowFocusedBorderColor: json['rowFocusedBorderColor'] as String?,
+      dotRingingColor: json['dotRingingColor'] as String?,
+      dotOnCallColor: json['dotOnCallColor'] as String?,
+      dotHeldColor: json['dotHeldColor'] as String?,
+    );
+
+Map<String, dynamic> _$CallPageListConfigToJson(CallPageListConfig instance) =>
+    <String, dynamic>{
+      'rowBackgroundColor': instance.rowBackgroundColor,
+      'rowFocusedBackgroundColor': instance.rowFocusedBackgroundColor,
+      'rowFocusedBorderColor': instance.rowFocusedBorderColor,
+      'dotRingingColor': instance.dotRingingColor,
+      'dotOnCallColor': instance.dotOnCallColor,
+      'dotHeldColor': instance.dotHeldColor,
+    };
+
+CallPageHintConfig _$CallPageHintConfigFromJson(Map<String, dynamic> json) =>
+    CallPageHintConfig(
+      backgroundColor: json['backgroundColor'] as String?,
+      affectedNameColor: json['affectedNameColor'] as String?,
+    );
+
+Map<String, dynamic> _$CallPageHintConfigToJson(CallPageHintConfig instance) =>
+    <String, dynamic>{
+      'backgroundColor': instance.backgroundColor,
+      'affectedNameColor': instance.affectedNameColor,
     };
 
 KeypadPageConfig _$KeypadPageConfigFromJson(Map<String, dynamic> json) =>
