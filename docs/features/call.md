@@ -95,7 +95,7 @@ following the derived `current` call.
 | `CallActiveScaffold` | `view/call_active_scaffold.dart` | Active call screen; list + focused info + actions |
 | `CallList` / `CallRow` | `widgets/call_list.dart` | Tappable per-call rows with status badge + duration |
 | `FocusedActionHint` | `widgets/focused_action_hint.dart` | "Acting on" hint + answer side effect |
-| `CallInfo` | `widgets/call_info.dart` | Focused-call name / number / status / timer / network quality |
+| `CallInfo` | `widgets/call_info.dart` | Focused-call name / number / call description / timer |
 | `IncomingCallActions` | `widgets/incoming_call_actions.dart` | Decline / Answer for the focused ringing call |
 | `ActiveCallActions` | `widgets/active_call_actions.dart` | In-call control grid + hang up + keypad |
 

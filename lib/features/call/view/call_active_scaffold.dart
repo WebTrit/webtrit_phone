@@ -123,6 +123,48 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     }
   }
 
+  // --- Focused-call intent helpers -----------------------------------------
+  // AGENTS.md: callbacks in the widget tree are single-expression; multi-step
+  // logic lives here.
+
+  /// Holds the focused call, or resumes it (holding the other live calls
+  /// first) when it is already held.
+  void _toggleFocusedHeld(bool value) {
+    _callBloc.add(
+      value
+          ? CallControlEvent.setHeld(widget.focusedCall.callId, true)
+          : CallControlEvent.resumedHoldingOthers(widget.focusedCall.callId),
+    );
+    dispatchInteractionDebounce();
+  }
+
+  void _toggleFocusedCamera(bool value) {
+    _callBloc.add(CallControlEvent.cameraEnabled(widget.focusedCall.callId, value));
+    dispatchInteractionDebounce();
+  }
+
+  void _hangupFocused() {
+    _callBloc.add(CallControlEvent.ended(widget.focusedCall.callId));
+    dispatchInteractionDebounce();
+  }
+
+  /// Answers the focused ringing call with the single intent that holds the
+  /// answered others / ends the non-holdable ones (see
+  /// [CallControlEvent.answerFocused]).
+  void _answerFocused() {
+    final activeCalls = widget.activeCalls;
+    final incomingRinging = activeCalls.where((call) => call.isIncoming && call.wasAccepted == false).toList();
+    final others = activeCalls.whereNot(incomingRinging.contains).toList();
+    _callBloc.add(
+      CallControlEvent.answerFocused(
+        widget.focusedCall.callId,
+        hasHoldableOthers: others.any((call) => call.wasAccepted),
+        hasNonRingingOthers: others.isNotEmpty,
+      ),
+    );
+    dispatchInteractionDebounce();
+  }
+
   @override
   Widget build(BuildContext context) {
     final activeCalls = widget.activeCalls;
@@ -259,12 +301,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 cameraValue: focusedCall.isCameraActive,
                                                 inviteToAttendedTransfer: focusedTransfer is InviteToAttendedTransfer,
                                                 onCameraChanged: widget.callConfig.isVideoCallEnabled
-                                                    ? (bool value) {
-                                                        _callBloc.add(
-                                                          CallControlEvent.cameraEnabled(focusedCall.callId, value),
-                                                        );
-                                                        dispatchInteractionDebounce();
-                                                      }
+                                                    ? _toggleFocusedCamera
                                                     : null,
                                                 mutedValue: focusedCall.muted,
                                                 onMutedChanged: (bool value) {
@@ -319,18 +356,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 // back as the only live one (the other live calls are
                                                 // put on hold first). Switching lines = focus the other
                                                 // row and press Resume - there is no separate swap.
-                                                onHeldChanged: (bool value) {
-                                                  _callBloc.add(
-                                                    value
-                                                        ? CallControlEvent.setHeld(focusedCall.callId, true)
-                                                        : CallControlEvent.resumedHoldingOthers(focusedCall.callId),
-                                                  );
-                                                  dispatchInteractionDebounce();
-                                                },
-                                                onHangupPressed: () {
-                                                  _callBloc.add(CallControlEvent.ended(focusedCall.callId));
-                                                  dispatchInteractionDebounce();
-                                                },
+                                                onHeldChanged: _toggleFocusedHeld,
+                                                onHangupPressed: _hangupFocused,
 
                                                 onKeyPressed: (value) {
                                                   _callBloc.add(CallControlEvent.sentDTMF(focusedCall.callId, value));
@@ -372,10 +399,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                     style: style?.actions,
                                                     inviteToAttendedTransfer: false,
                                                     remoteVideo: focusedCall.remoteVideo && focusedCall.held == false,
-                                                    onHangupPressed: () {
-                                                      _callBloc.add(CallControlEvent.ended(focusedCall.callId));
-                                                      dispatchInteractionDebounce();
-                                                    },
+                                                    onHangupPressed: _hangupFocused,
                                                     // Answering with other calls present mutates them
                                                     // (hold/end), so it is gated by the interactions
                                                     // debounce like any signaling-dependent action.
@@ -385,17 +409,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                                 widget.callStatus != CallStatus.ready ||
                                                                 activeCalls.any((call) => call.updating))
                                                         ? null
-                                                        : () {
-                                                            _callBloc.add(
-                                                              CallControlEvent.answerFocused(
-                                                                focusedCall.callId,
-                                                                hasHoldableOthers:
-                                                                    nonIncomingRingingCanBeHolded.isNotEmpty,
-                                                                hasNonRingingOthers: nonIncomingRingingCalls.isNotEmpty,
-                                                              ),
-                                                            );
-                                                            dispatchInteractionDebounce();
-                                                          },
+                                                        : _answerFocused,
                                                   ),
                                                 ],
                                               ),
