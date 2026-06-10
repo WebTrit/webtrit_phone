@@ -1411,17 +1411,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   // Combined-action intents. Each re-dispatches the ordered primitive events
-  // produced by the pure planners on [CallState] (planAnswerEndingOthers /
-  // planAnswerHoldingOthers / planSwap), replacing the per-call loops the call
-  // screen used to synthesize itself. The primitives go through the same
-  // sequential CallControlEvent queue as before, so semantics are unchanged.
+  // produced by the pure plans on [CallControlEvent]; state only supplies the
+  // other-call ids ([CallState.otherCallIds]). This replaces the per-call loops
+  // the call screen used to synthesize itself. The primitives go through the
+  // same sequential CallControlEvent queue as before, so semantics are
+  // unchanged.
 
   /// "End & Answer": ends every other active call, then answers [event.callId].
   Future<void> __onCallControlEventAnsweredEndingOthers(
     _CallControlEventAnsweredEndingOthers event,
     Emitter<CallState> emit,
   ) async {
-    state.planAnswerEndingOthers(event.callId).forEach(add);
+    CallControlEvent.answerEndingOthersPlan(event.callId, state.otherCallIds(event.callId)).forEach(add);
   }
 
   /// "Hold & Answer": holds every other active call, then answers [event.callId].
@@ -1429,12 +1430,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _CallControlEventAnsweredHoldingOthers event,
     Emitter<CallState> emit,
   ) async {
-    state.planAnswerHoldingOthers(event.callId).forEach(add);
+    CallControlEvent.answerHoldingOthersPlan(event.callId, state.otherCallIds(event.callId)).forEach(add);
   }
 
   /// Swap: holds [event.callId], then resumes the other calls.
   Future<void> __onCallControlEventSwapped(_CallControlEventSwapped event, Emitter<CallState> emit) async {
-    state.planSwap(event.callId).forEach(add);
+    CallControlEvent.swapPlan(event.callId, state.otherCallIds(event.callId)).forEach(add);
   }
 
   /// Submitting the answer intent to system when answer button is pressed from app ui

@@ -432,60 +432,61 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
-  // CallState — combined-action planners
+  // Combined-action plans
   //
   // The single intents (answeredEndingOthers / answeredHoldingOthers / swapped)
-  // dispatch exactly these ordered primitive events; this pins the semantics
-  // the call screen used to synthesize with per-call loops.
+  // dispatch exactly these ordered primitive events. The state layer only
+  // supplies the other-call ids (CallState.otherCallIds); the plans live on the
+  // event layer (CallControlEvent). This pins the semantics the call screen
+  // used to synthesize with per-call loops.
   // ---------------------------------------------------------------------------
 
-  group('CallState.planAnswerEndingOthers', () {
-    test('ends every other call (in list order), then answers the target', () {
+  group('CallState.otherCallIds', () {
+    test('returns every other call id in list order', () {
       final held = _makeCall(callId: 'held', held: true, acceptedTime: DateTime(2024));
       final active = _makeCall(callId: 'active', acceptedTime: DateTime(2024));
       final incoming = _makeCall(callId: 'incoming', processingStatus: CallProcessingStatus.incomingFromOffer);
       final state = CallState(activeCalls: [held, active, incoming]);
 
-      expect(state.planAnswerEndingOthers('incoming'), const [
+      expect(state.otherCallIds('incoming'), ['held', 'active']);
+    });
+
+    test('returns empty when the target is the only call', () {
+      final state = CallState(activeCalls: [_makeCall(callId: 'incoming')]);
+      expect(state.otherCallIds('incoming'), isEmpty);
+    });
+  });
+
+  group('CallControlEvent.answerEndingOthersPlan', () {
+    test('ends every other call (in given order), then answers the target', () {
+      expect(CallControlEvent.answerEndingOthersPlan('incoming', ['held', 'active']), const [
         CallControlEvent.ended('held'),
         CallControlEvent.ended('active'),
         CallControlEvent.answered('incoming'),
       ]);
     });
 
-    test('only answers when the target is the only call', () {
-      final incoming = _makeCall(callId: 'incoming');
-      final state = CallState(activeCalls: [incoming]);
-      expect(state.planAnswerEndingOthers('incoming'), const [CallControlEvent.answered('incoming')]);
+    test('only answers when there are no other calls', () {
+      expect(CallControlEvent.answerEndingOthersPlan('incoming', []), const [CallControlEvent.answered('incoming')]);
     });
   });
 
-  group('CallState.planAnswerHoldingOthers', () {
-    test('holds every other call (in list order), then answers the target', () {
-      final active = _makeCall(callId: 'active', acceptedTime: DateTime(2024));
-      final incoming = _makeCall(callId: 'incoming', processingStatus: CallProcessingStatus.incomingFromOffer);
-      final state = CallState(activeCalls: [active, incoming]);
-
-      expect(state.planAnswerHoldingOthers('incoming'), const [
+  group('CallControlEvent.answerHoldingOthersPlan', () {
+    test('holds every other call (in given order), then answers the target', () {
+      expect(CallControlEvent.answerHoldingOthersPlan('incoming', ['active']), const [
         CallControlEvent.setHeld('active', true),
         CallControlEvent.answered('incoming'),
       ]);
     });
 
-    test('only answers when the target is the only call', () {
-      final incoming = _makeCall(callId: 'incoming');
-      final state = CallState(activeCalls: [incoming]);
-      expect(state.planAnswerHoldingOthers('incoming'), const [CallControlEvent.answered('incoming')]);
+    test('only answers when there are no other calls', () {
+      expect(CallControlEvent.answerHoldingOthersPlan('incoming', []), const [CallControlEvent.answered('incoming')]);
     });
   });
 
-  group('CallState.planSwap', () {
+  group('CallControlEvent.swapPlan', () {
     test('holds the target first, then resumes the other call', () {
-      final active = _makeCall(callId: 'active', acceptedTime: DateTime(2024));
-      final held = _makeCall(callId: 'held', held: true, acceptedTime: DateTime(2024));
-      final state = CallState(activeCalls: [active, held]);
-
-      expect(state.planSwap('active'), const [
+      expect(CallControlEvent.swapPlan('active', ['held']), const [
         CallControlEvent.setHeld('active', true),
         CallControlEvent.setHeld('held', false),
       ]);

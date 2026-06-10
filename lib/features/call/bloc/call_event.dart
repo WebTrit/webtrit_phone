@@ -579,6 +579,29 @@ class _CallPushEventIncoming extends CallEvent {
 sealed class CallControlEvent extends CallEvent {
   const CallControlEvent();
 
+  // Pure plans for the combined call actions. Each returns the ordered list of
+  // primitive events the corresponding intent dispatches ([otherCallIds] comes
+  // from [CallState.otherCallIds]), keeping the multi-step semantics
+  // unit-testable without a full [CallBloc].
+
+  /// "End & Answer" plan: end every other call, then answer [callId].
+  static List<CallControlEvent> answerEndingOthersPlan(String callId, List<String> otherCallIds) => [
+    for (final otherCallId in otherCallIds) CallControlEvent.ended(otherCallId),
+    CallControlEvent.answered(callId),
+  ];
+
+  /// "Hold & Answer" plan: put every other call on hold, then answer [callId].
+  static List<CallControlEvent> answerHoldingOthersPlan(String callId, List<String> otherCallIds) => [
+    for (final otherCallId in otherCallIds) CallControlEvent.setHeld(otherCallId, true),
+    CallControlEvent.answered(callId),
+  ];
+
+  /// Swap plan: hold [callId], then resume every other call.
+  static List<CallControlEvent> swapPlan(String callId, List<String> otherCallIds) => [
+    CallControlEvent.setHeld(callId, true),
+    for (final otherCallId in otherCallIds) CallControlEvent.setHeld(otherCallId, false),
+  ];
+
   const factory CallControlEvent.started({
     int? line,
     String? generic,
