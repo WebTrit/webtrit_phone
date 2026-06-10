@@ -527,6 +527,23 @@ void main() {
     });
   });
 
+  group('CallControlEvent.answerFocused', () {
+    test('holds the others when at least one is answered', () {
+      final event = CallControlEvent.answerFocused('incoming', hasHoldableOthers: true, hasNonRingingOthers: true);
+      expect(event, const CallControlEvent.answeredHoldingOthers('incoming'));
+    });
+
+    test('ends the others when none can be held but some exist', () {
+      final event = CallControlEvent.answerFocused('incoming', hasHoldableOthers: false, hasNonRingingOthers: true);
+      expect(event, const CallControlEvent.answeredEndingOthers('incoming'));
+    });
+
+    test('plain answer when there is nothing else to affect', () {
+      final event = CallControlEvent.answerFocused('incoming', hasHoldableOthers: false, hasNonRingingOthers: false);
+      expect(event, const CallControlEvent.answered('incoming'));
+    });
+  });
+
   // ---------------------------------------------------------------------------
   // CallState — display
   // ---------------------------------------------------------------------------

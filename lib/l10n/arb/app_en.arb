@@ -130,6 +130,33 @@
   "@call_CallList_statusOnCall": {
     "description": "Status badge in the call list for an answered, not held call."
   },
+  "call_FocusedActionHint_actingOn": "Acting on: {name}",
+  "@call_FocusedActionHint_actingOn": {
+    "description": "Hint above the call action buttons naming the focused call the actions apply to.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_FocusedActionHint_willBeEnded": "{name} will be ended",
+  "@call_FocusedActionHint_willBeEnded": {
+    "description": "Side-effect line under the acting-on hint: the named call will be ended on answer.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_FocusedActionHint_willBeHeld": "{name} will be put on hold",
+  "@call_FocusedActionHint_willBeHeld": {
+    "description": "Side-effect line under the acting-on hint: the named call will be put on hold on answer.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "call_description_held": "On hold",
   "@call_description_held": {},
   "call_description_incoming": "Incoming call",
