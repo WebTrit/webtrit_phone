@@ -227,25 +227,24 @@ class _CallTileState extends State<CallTile> {
   late final tileKey = GlobalKey();
 
   void showMenuPopup() {
-    showMenu(
-      context: context,
-      position: getPosition(),
-      items: buildNumberActions(
-        context,
-        callNumbers: widget.callNumbers,
-        onAudioCallPressed: widget.onAudioCallPressed,
-        onVideoCallPressed: widget.onVideoCallPressed,
-        onTransferPressed: widget.onTransferPressed,
-        onChatPressed: widget.onChatPressed,
-        onSendSmsPressed: widget.onSendSmsPressed,
-        onViewContactPressed: widget.onViewContactPressed,
-        onCallLogPressed: widget.onCallLogPressed,
-        onCallFrom: widget.onCallFrom,
-        copyNumber: widget.copyNumber,
-        copyCallId: widget.copyCallId,
-        onDelete: widget.onDelete,
-      ),
+    final items = buildNumberActions(
+      context,
+      callNumbers: widget.callNumbers,
+      onAudioCallPressed: widget.onAudioCallPressed,
+      onVideoCallPressed: widget.onVideoCallPressed,
+      onTransferPressed: widget.onTransferPressed,
+      onChatPressed: widget.onChatPressed,
+      onSendSmsPressed: widget.onSendSmsPressed,
+      onViewContactPressed: widget.onViewContactPressed,
+      onCallLogPressed: widget.onCallLogPressed,
+      onCallFrom: widget.onCallFrom,
+      copyNumber: widget.copyNumber,
+      copyCallId: widget.copyCallId,
+      onDelete: widget.onDelete,
     );
+    if (items.isEmpty) return;
+
+    showMenu(context: context, position: getPosition(), items: items);
   }
 
   RelativeRect getPosition() {

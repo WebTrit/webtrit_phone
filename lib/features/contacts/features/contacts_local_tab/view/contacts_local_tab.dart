@@ -20,6 +20,12 @@ class ContactsLocalTab extends StatefulWidget {
 }
 
 class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBindingObserver {
+  int? _expandedContactId;
+
+  void _toggleExpanded(int contactId) {
+    setState(() => _expandedContactId = _expandedContactId == contactId ? null : contactId);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -41,10 +47,6 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final elevatedButtonStyles = theme.extension<ElevatedButtonStyles>();
-
-    Future routeToContactScreen(int contactId) async {
-      context.router.navigate(ContactScreenPageRoute(contactId: contactId));
-    }
 
     Future routeToDiagnosticScreen() async {
       FocusScope.of(context).unfocus();
@@ -72,12 +74,11 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
               itemCount: state.contacts.length,
               itemBuilder: (context, index) {
                 final contact = state.contacts[index];
-                return ContactTile(
-                  key: contactsLocalContactTileKey,
-                  displayName: contact.displayTitle,
-                  thumbnail: contact.thumbnail,
-                  thumbnailUrl: contact.thumbnailUrl,
-                  onTap: () => routeToContactScreen(contact.id),
+                return ContactTileAdapter(
+                  tileKey: contactsLocalContactTileKey,
+                  contact: contact,
+                  expanded: _expandedContactId == contact.id,
+                  onToggleExpanded: () => _toggleExpanded(contact.id),
                 );
               },
             ),

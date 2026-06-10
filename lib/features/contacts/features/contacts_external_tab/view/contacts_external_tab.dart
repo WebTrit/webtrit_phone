@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
-import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../contacts.dart';
 
-class ContactsExternalTab extends StatelessWidget {
+class ContactsExternalTab extends StatefulWidget {
   const ContactsExternalTab({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    Future routeToContactScreen(int contactId) async {
-      context.router.navigate(ContactScreenPageRoute(contactId: contactId));
-    }
+  State<ContactsExternalTab> createState() => _ContactsExternalTabState();
+}
 
+class _ContactsExternalTabState extends State<ContactsExternalTab> {
+  int? _expandedContactId;
+
+  void _toggleExpanded(int contactId) {
+    setState(() => _expandedContactId = _expandedContactId == contactId ? null : contactId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     Future refreshContacts() async {
       final tabBloc = context.read<ContactsExternalTabBloc>();
       tabBloc.add(const ContactsExternalTabRefreshed());
@@ -37,15 +42,11 @@ class ContactsExternalTab extends StatelessWidget {
               itemBuilder: (context, index) {
                 final contact = state.contacts[index];
 
-                return ContactTile(
-                  key: contactsExtContactTileKey,
-                  displayName: contact.displayTitle,
-                  thumbnail: contact.thumbnail,
-                  thumbnailUrl: contact.thumbnailUrl,
-                  registered: contact.registered,
-                  onTap: () => routeToContactScreen(contact.id),
-                  presenceInfo: contact.presenceInfo,
-                  dialogInfo: contact.dialogInfo,
+                return ContactTileAdapter(
+                  tileKey: contactsExtContactTileKey,
+                  contact: contact,
+                  expanded: _expandedContactId == contact.id,
+                  onToggleExpanded: () => _toggleExpanded(contact.id),
                 );
               },
             ),
