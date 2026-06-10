@@ -46,6 +46,11 @@ class RecentsScreen extends StatefulWidget {
 class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProviderStateMixin {
   late final _callController = CallControllerScope.of(context);
   late TabController _tabController;
+  int? _expandedRecentId;
+
+  void _toggleExpanded(int callLogEntryId) {
+    setState(() => _expandedRecentId = _expandedRecentId == callLogEntryId ? null : callLogEntryId);
+  }
 
   @override
   void initState() {
@@ -194,6 +199,12 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                       ? () {
                                           submitTransfer(destination: callLogEntry.number);
                                         }
+                                      : () {
+                                          _toggleExpanded(callLogEntry.id);
+                                        },
+                                  expanded: !transfer && _expandedRecentId == callLogEntry.id,
+                                  onDialPressed: transfer
+                                      ? null
                                       : () {
                                           _callController.createCall(
                                             destination: callLogEntry.number,

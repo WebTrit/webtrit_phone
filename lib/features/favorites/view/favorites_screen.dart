@@ -45,6 +45,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   late final _callController = CallControllerScope.of(context);
   bool isReorderMode = false;
   int? draggingIndex;
+  String? _expandedFavoriteId;
+
+  void _toggleExpanded(String favoriteId) {
+    setState(() => _expandedFavoriteId = _expandedFavoriteId == favoriteId ? null : favoriteId);
+  }
 
   void submitTransfer({required String destination}) {
     _callController.submitTransfer(destination);
@@ -211,6 +216,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                               ? () {
                                                   submitTransfer(destination: favorite.number);
                                                 }
+                                              : () {
+                                                  _toggleExpanded('${favorite.number}_${favorite.sourceType.name}');
+                                                },
+                                          expanded:
+                                              !blingTransferInitiated &&
+                                              !isReorderMode &&
+                                              _expandedFavoriteId == '${favorite.number}_${favorite.sourceType.name}',
+                                          onDialPressed: blingTransferInitiated
+                                              ? null
                                               : () {
                                                   _callController.createCall(
                                                     destination: favorite.number,

@@ -14,6 +14,8 @@ class FavoriteTile extends StatefulWidget {
     this.contact,
     required this.callNumbers,
     this.onTap,
+    this.expanded = false,
+    this.onDialPressed,
     this.onAudioCallPressed,
     this.onVideoCallPressed,
     this.onTransferPressed,
@@ -30,6 +32,8 @@ class FavoriteTile extends StatefulWidget {
   final Contact? contact;
   final List<String> callNumbers;
   final Function()? onTap;
+  final bool expanded;
+  final Function()? onDialPressed;
   final Function()? onAudioCallPressed;
   final Function()? onVideoCallPressed;
   final Function()? onTransferPressed;
@@ -121,38 +125,66 @@ class _FavoriteTileState extends State<FavoriteTile> {
       ),
       onDismissed: widget.onDelete == null ? null : (direction) => widget.onDelete!(),
       direction: DismissDirection.endToStart,
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: ListTile(
-              key: tileKey,
-              contentPadding: const EdgeInsets.only(left: 16.0),
-              leading: LeadingAvatar(
-                username: name,
-                thumbnail: contact?.thumbnail,
-                thumbnailUrl: contact?.thumbnailUrl,
-                registered: contact?.registered,
-                presenceInfo: contact?.presenceInfo,
-                dialogInfo: contact?.dialogInfo,
-              ),
-              title: switch (presenceParams.hybridPresenceSupport) {
-                true => Text(
-                  '$name ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+          Row(
+            children: [
+              Expanded(
+                child: ListTile(
+                  key: tileKey,
+                  contentPadding: const EdgeInsets.only(left: 16.0),
+                  leading: LeadingAvatar(
+                    username: name,
+                    thumbnail: contact?.thumbnail,
+                    thumbnailUrl: contact?.thumbnailUrl,
+                    registered: contact?.registered,
+                    presenceInfo: contact?.presenceInfo,
+                    dialogInfo: contact?.dialogInfo,
+                  ),
+                  title: switch (presenceParams.hybridPresenceSupport) {
+                    true => Text(
+                      '$name ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    false => Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  },
+                  subtitle: Text(
+                    '${widget.favorite.label.capitalize}: ${widget.favorite.number}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  onTap: widget.gesturesEnabled ? widget.onTap : null,
+                  onLongPress: widget.gesturesEnabled ? onLongPress : null,
                 ),
-                false => Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
-              },
-              subtitle: Text(
-                '${widget.favorite.label.capitalize}: ${widget.favorite.number}',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
-              onTap: widget.gesturesEnabled ? widget.onTap : null,
-              onLongPress: widget.gesturesEnabled ? onLongPress : null,
-            ),
+              if (widget.gesturesEnabled)
+                widget.onDialPressed != null
+                    ? IconButton(
+                        onPressed: widget.onDialPressed,
+                        icon: Icon(Icons.call, color: colorScheme.primary),
+                      )
+                    : GestureDetector(onTap: onLongPress, child: const Icon(Icons.more_vert)),
+            ],
           ),
-          if (widget.gesturesEnabled) GestureDetector(onTap: onLongPress, child: const Icon(Icons.more_vert)),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            alignment: Alignment.topCenter,
+            child: widget.expanded && widget.gesturesEnabled
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16, bottom: 4),
+                    child: CallTileActionsBar(
+                      onVideoCallPressed: widget.onVideoCallPressed,
+                      onChatPressed: widget.onChatPressed,
+                      onCallLogPressed: widget.onCallLogPressed,
+                      onViewContactPressed: widget.onViewContactPressed,
+                      onMorePressed: onLongPress,
+                    ),
+                  )
+                : const SizedBox(width: double.infinity),
+          ),
         ],
       ),
     );

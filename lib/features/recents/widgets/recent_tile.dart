@@ -16,6 +16,8 @@ class RecentTile extends StatelessWidget {
     required this.callNumbers,
     required this.dateFormat,
     this.onTap,
+    this.expanded = false,
+    this.onDialPressed,
     this.onAudioCallPressed,
     this.onVideoCallPressed,
     this.onTransferPressed,
@@ -31,6 +33,8 @@ class RecentTile extends StatelessWidget {
   final List<String> callNumbers;
   final DateFormat dateFormat;
   final Function()? onTap;
+  final bool expanded;
+  final Function()? onDialPressed;
   final Function()? onAudioCallPressed;
   final Function()? onVideoCallPressed;
   final Function()? onTransferPressed;
@@ -94,6 +98,8 @@ class RecentTile extends StatelessWidget {
       ),
       onDismiss: onDelete,
       onTap: onTap,
+      expanded: expanded,
+      onDialPressed: onDialPressed,
       callNumbers: callNumbers,
       onAudioCallPressed: onAudioCallPressed,
       onVideoCallPressed: onVideoCallPressed,

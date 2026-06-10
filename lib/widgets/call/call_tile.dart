@@ -70,6 +70,91 @@ List<PopupMenuEntry<dynamic>> buildNumberActions(
   ];
 }
 
+class CallTileActionsBar extends StatelessWidget {
+  const CallTileActionsBar({
+    super.key,
+    this.onVideoCallPressed,
+    this.onChatPressed,
+    this.onCallLogPressed,
+    this.onViewContactPressed,
+    required this.onMorePressed,
+  });
+
+  final VoidCallback? onVideoCallPressed;
+  final VoidCallback? onChatPressed;
+  final VoidCallback? onCallLogPressed;
+  final VoidCallback? onViewContactPressed;
+  final VoidCallback onMorePressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Row(
+      children: [
+        if (onVideoCallPressed != null)
+          Expanded(
+            child: _CallTileAction(
+              icon: Icons.videocam_outlined,
+              label: l10n.numberActions_videoCall,
+              onTap: onVideoCallPressed!,
+            ),
+          ),
+        if (onChatPressed != null)
+          Expanded(
+            child: _CallTileAction(
+              icon: Icons.chat_outlined,
+              label: l10n.callTileActions_message,
+              onTap: onChatPressed!,
+            ),
+          ),
+        if (onCallLogPressed != null)
+          Expanded(
+            child: _CallTileAction(icon: Icons.history, label: l10n.callTileActions_history, onTap: onCallLogPressed!),
+          ),
+        if (onViewContactPressed != null)
+          Expanded(
+            child: _CallTileAction(
+              icon: Icons.person_outline,
+              label: l10n.callTileActions_contact,
+              onTap: onViewContactPressed!,
+            ),
+          ),
+        Expanded(
+          child: _CallTileAction(icon: Icons.more_horiz, label: l10n.callTileActions_more, onTap: onMorePressed),
+        ),
+      ],
+    );
+  }
+}
+
+class _CallTileAction extends StatelessWidget {
+  const _CallTileAction({required this.icon, required this.label, required this.onTap});
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 22, color: themeData.colorScheme.primary),
+            const SizedBox(height: 2),
+            Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: themeData.textTheme.labelSmall),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class CallTile extends StatefulWidget {
   const CallTile({
     super.key,
@@ -81,6 +166,8 @@ class CallTile extends StatefulWidget {
     this.durationLabel,
     this.disconnectReason,
     this.onTap,
+    this.expanded = false,
+    this.onDialPressed,
     this.dismissible = false,
     this.dismissibleObject,
     this.dismissBackground,
@@ -108,6 +195,8 @@ class CallTile extends StatefulWidget {
   final String? durationLabel;
   final String? disconnectReason;
   final VoidCallback? onTap;
+  final bool expanded;
+  final VoidCallback? onDialPressed;
 
   final bool dismissible;
   final Object? dismissibleObject;
@@ -237,23 +326,51 @@ class _CallTileState extends State<CallTile> {
           onLongPress: showMenuPopup,
           child: Padding(
             padding: const EdgeInsets.only(left: 8, right: 0, top: 8, bottom: 8),
-            child: Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                widget.leading,
-                const SizedBox(width: 8),
-                Expanded(child: contentColumn),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Row(
                   children: [
-                    Text(widget.timeLabel, style: themeData.textTheme.labelSmall),
-                    if (widget.durationLabel != null) ...[
-                      const SizedBox(height: 2),
-                      Text(widget.durationLabel!, style: themeData.textTheme.labelSmall),
-                    ],
+                    widget.leading,
+                    const SizedBox(width: 8),
+                    Expanded(child: contentColumn),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(widget.timeLabel, style: themeData.textTheme.labelSmall),
+                        if (widget.durationLabel != null) ...[
+                          const SizedBox(height: 2),
+                          Text(widget.durationLabel!, style: themeData.textTheme.labelSmall),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(width: 4),
+                    if (widget.onDialPressed != null)
+                      IconButton(
+                        onPressed: widget.onDialPressed,
+                        icon: Icon(Icons.call, color: colorScheme.primary),
+                      )
+                    else
+                      TileMenuButton(onTap: showMenuPopup),
                   ],
                 ),
-                const SizedBox(width: 4),
-                TileMenuButton(onTap: showMenuPopup),
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeInOut,
+                  alignment: Alignment.topCenter,
+                  child: widget.expanded
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 4, right: 8),
+                          child: CallTileActionsBar(
+                            onVideoCallPressed: widget.onVideoCallPressed,
+                            onChatPressed: widget.onChatPressed,
+                            onCallLogPressed: widget.onCallLogPressed,
+                            onViewContactPressed: widget.onViewContactPressed,
+                            onMorePressed: showMenuPopup,
+                          ),
+                        )
+                      : const SizedBox(width: double.infinity),
+                ),
               ],
             ),
           ),

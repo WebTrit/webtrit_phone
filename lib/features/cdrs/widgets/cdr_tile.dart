@@ -13,6 +13,8 @@ class CdrTile extends StatelessWidget {
     this.contact,
     required this.callNumbers,
     this.onTap,
+    this.expanded = false,
+    this.onDialPressed,
     this.onAudioCallPressed,
     this.onVideoCallPressed,
     this.onTransferPressed,
@@ -27,6 +29,8 @@ class CdrTile extends StatelessWidget {
   final Contact? contact;
   final List<String> callNumbers;
   final Function()? onTap;
+  final bool expanded;
+  final Function()? onDialPressed;
   final Function()? onAudioCallPressed;
   final Function()? onVideoCallPressed;
   final Function()? onTransferPressed;
@@ -83,6 +87,8 @@ class CdrTile extends StatelessWidget {
       durationLabel: cdr.duration.format(),
       disconnectReason: disconnectText,
       onTap: onTap,
+      expanded: expanded,
+      onDialPressed: onDialPressed,
       callNumbers: callNumbers,
       onAudioCallPressed: onAudioCallPressed,
       onVideoCallPressed: onVideoCallPressed,

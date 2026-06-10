@@ -93,6 +93,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get autoprovision_successSnackBar_used => 'Successfully retrieved your settings, your app is ready to use';
 
   @override
+  String get callTileActions_contact => 'Contact';
+
+  @override
+  String get callTileActions_history => 'History';
+
+  @override
+  String get callTileActions_message => 'Message';
+
+  @override
+  String get callTileActions_more => 'More';
+
+  @override
   String get call_CallActionsTooltip_accept => 'Accept';
 
   @override

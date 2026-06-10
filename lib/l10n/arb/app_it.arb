@@ -61,6 +61,22 @@
   "@autoprovision_ReloginDialog_title": {},
   "autoprovision_successSnackBar_used": "Le vostre impostazioni sono state recuperate con successo, l'App è pronta per l'uso",
   "@autoprovision_successSnackBar_used": {},
+  "callTileActions_contact": "Contatto",
+  "@callTileActions_contact": {
+    "description": "Label of the expanded call tile action that opens the contact details screen."
+  },
+  "callTileActions_history": "Cronologia",
+  "@callTileActions_history": {
+    "description": "Label of the expanded call tile action that opens the call history for the number."
+  },
+  "callTileActions_message": "Messaggio",
+  "@callTileActions_message": {
+    "description": "Label of the expanded call tile action that opens a chat with the contact."
+  },
+  "callTileActions_more": "Altro",
+  "@callTileActions_more": {
+    "description": "Label of the expanded call tile action that opens the full actions menu."
+  },
   "call_CallActionsTooltip_accept": "Accetta chiamata",
   "@call_CallActionsTooltip_accept": {},
   "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "Accetta trasferimento",
