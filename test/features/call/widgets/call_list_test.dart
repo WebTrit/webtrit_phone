@@ -92,9 +92,9 @@ void main() {
       );
       final context = tester.element(find.byType(CallList));
 
-      expect(find.text(context.l10n.callProcessingStatus_ringing.toUpperCase()), findsOneWidget);
-      expect(find.text(context.l10n.call_CallList_statusOnCall.toUpperCase()), findsOneWidget);
-      expect(find.text(context.l10n.call_description_held.toUpperCase()), findsOneWidget);
+      expect(find.text(context.l10n.callProcessingStatus_ringing), findsOneWidget);
+      expect(find.text(context.l10n.call_CallList_statusOnCall), findsOneWidget);
+      expect(find.text(context.l10n.call_description_held), findsOneWidget);
     });
 
     testWidgets('shows the header only when more than one call is present', (tester) async {

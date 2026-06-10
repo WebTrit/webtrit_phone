@@ -179,10 +179,7 @@ class _CallRowState extends State<CallRow> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        _statusBadge(context).toUpperCase(),
-                        style: statusStyle.copyWith(fontSize: 10, letterSpacing: 1.1),
-                      ),
+                      Text(_statusBadge(context), style: statusStyle.copyWith(fontSize: 10, letterSpacing: 1.1)),
                       Text(
                         widget.call.displayName ?? widget.call.handle.value,
                         style: nameStyle.copyWith(fontSize: 16),
