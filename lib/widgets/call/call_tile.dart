@@ -162,12 +162,13 @@ class CallTile extends StatefulWidget {
     required this.name,
     this.subName,
     this.subtitleLeading,
-    required this.timeLabel,
+    this.timeLabel,
     this.durationLabel,
     this.disconnectReason,
     this.onTap,
     this.expanded = false,
     this.onDialPressed,
+    this.gesturesEnabled = true,
     this.dismissible = false,
     this.dismissibleObject,
     this.dismissBackground,
@@ -191,12 +192,13 @@ class CallTile extends StatefulWidget {
   final String name;
   final String? subName;
   final Widget? subtitleLeading;
-  final String timeLabel;
+  final String? timeLabel;
   final String? durationLabel;
   final String? disconnectReason;
   final VoidCallback? onTap;
   final bool expanded;
   final VoidCallback? onDialPressed;
+  final bool gesturesEnabled;
 
   final bool dismissible;
   final Object? dismissibleObject;
@@ -322,8 +324,8 @@ class _CallTileState extends State<CallTile> {
           borderRadius: BorderRadius.circular(16),
           splashColor: colorScheme.secondary.withAlpha(50),
           key: tileKey,
-          onTap: widget.onTap,
-          onLongPress: showMenuPopup,
+          onTap: widget.gesturesEnabled ? widget.onTap : null,
+          onLongPress: widget.gesturesEnabled ? showMenuPopup : null,
           child: Padding(
             padding: const EdgeInsets.only(left: 8, right: 0, top: 8, bottom: 8),
             child: Column(
@@ -334,31 +336,33 @@ class _CallTileState extends State<CallTile> {
                     widget.leading,
                     const SizedBox(width: 8),
                     Expanded(child: contentColumn),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(widget.timeLabel, style: themeData.textTheme.labelSmall),
-                        if (widget.durationLabel != null) ...[
-                          const SizedBox(height: 2),
-                          Text(widget.durationLabel!, style: themeData.textTheme.labelSmall),
+                    if (widget.timeLabel != null)
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(widget.timeLabel!, style: themeData.textTheme.labelSmall),
+                          if (widget.durationLabel != null) ...[
+                            const SizedBox(height: 2),
+                            Text(widget.durationLabel!, style: themeData.textTheme.labelSmall),
+                          ],
                         ],
-                      ],
-                    ),
+                      ),
                     const SizedBox(width: 4),
-                    if (widget.onDialPressed != null)
-                      IconButton(
-                        onPressed: widget.onDialPressed,
-                        icon: Icon(Icons.call, color: colorScheme.primary),
-                      )
-                    else
-                      TileMenuButton(onTap: showMenuPopup),
+                    if (widget.gesturesEnabled)
+                      if (widget.onDialPressed != null)
+                        IconButton(
+                          onPressed: widget.onDialPressed,
+                          icon: Icon(Icons.call, color: colorScheme.primary),
+                        )
+                      else
+                        TileMenuButton(onTap: showMenuPopup),
                   ],
                 ),
                 AnimatedSize(
                   duration: const Duration(milliseconds: 200),
                   curve: Curves.easeInOut,
                   alignment: Alignment.topCenter,
-                  child: widget.expanded
+                  child: widget.expanded && widget.gesturesEnabled
                       ? Padding(
                           padding: const EdgeInsets.only(top: 4, right: 8),
                           child: CallTileActionsBar(

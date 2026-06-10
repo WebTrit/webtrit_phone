@@ -17,6 +17,7 @@ void main() {
   CallTile buildTile({
     VoidCallback? onTap,
     bool expanded = false,
+    bool gesturesEnabled = true,
     VoidCallback? onDialPressed,
     VoidCallback? onAudioCallPressed,
     VoidCallback? onVideoCallPressed,
@@ -32,6 +33,7 @@ void main() {
       callNumbers: const [],
       onTap: onTap,
       expanded: expanded,
+      gesturesEnabled: gesturesEnabled,
       onDialPressed: onDialPressed,
       onAudioCallPressed: onAudioCallPressed,
       onVideoCallPressed: onVideoCallPressed,
@@ -136,6 +138,17 @@ void main() {
       await tester.tap(find.text('History'));
       expect(video, isTrue);
       expect(history, isTrue);
+    });
+
+    testWidgets('disabled gestures hide dial button and actions bar', (tester) async {
+      await tester.pumpWidget(
+        buildTestable(buildTile(expanded: true, gesturesEnabled: false, onDialPressed: () {}, onCallLogPressed: () {})),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.call), findsNothing);
+      expect(find.byIcon(Icons.more_vert), findsNothing);
+      expect(find.text('History'), findsNothing);
     });
 
     testWidgets('More opens the full actions menu', (tester) async {

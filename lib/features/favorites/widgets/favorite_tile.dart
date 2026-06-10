@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -7,7 +6,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class FavoriteTile extends StatefulWidget {
+class FavoriteTile extends StatelessWidget {
   const FavoriteTile({
     super.key,
     required this.favorite,
@@ -46,75 +45,31 @@ class FavoriteTile extends StatefulWidget {
   final bool gesturesEnabled;
 
   @override
-  State<FavoriteTile> createState() => _FavoriteTileState();
-}
-
-class _FavoriteTileState extends State<FavoriteTile> {
-  late final tileKey = GlobalKey();
-  late final number = widget.favorite.number;
-
-  List<PopupMenuEntry> get actions => [
-    if (widget.onAudioCallPressed != null)
-      PopupMenuItem(onTap: widget.onAudioCallPressed, child: Text(context.l10n.numberActions_audioCall)),
-    if (widget.onVideoCallPressed != null)
-      PopupMenuItem(onTap: widget.onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
-    if (widget.callNumbers.length > 1)
-      for (final callNumber in widget.callNumbers)
-        PopupMenuItem(
-          onTap: () => widget.onCallFrom?.call(callNumber),
-          child: Text(context.l10n.numberActions_callFrom(callNumber)),
-        ),
-    if (widget.onTransferPressed != null)
-      PopupMenuItem(onTap: widget.onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
-    if (widget.onChatPressed != null)
-      PopupMenuItem(onTap: widget.onChatPressed, child: Text(context.l10n.numberActions_chat)),
-    if (widget.onSendSmsPressed != null)
-      PopupMenuItem(onTap: widget.onSendSmsPressed, child: Text(context.l10n.numberActions_sendSms)),
-    if (widget.onViewContactPressed != null)
-      PopupMenuItem(onTap: widget.onViewContactPressed, child: Text(context.l10n.numberActions_viewContact)),
-    if (widget.onCallLogPressed != null)
-      PopupMenuItem(onTap: widget.onCallLogPressed, child: Text(context.l10n.numberActions_callLog)),
-    PopupMenuItem(
-      onTap: () {
-        Clipboard.setData(ClipboardData(text: number));
-      },
-      child: Text(context.l10n.numberActions_copyNumber),
-    ),
-    if (widget.onDelete != null) PopupMenuItem(onTap: widget.onDelete, child: Text(context.l10n.numberActions_delete)),
-  ];
-
-  void onLongPress() {
-    final position = getPosition();
-    showMenu(context: context, position: position, items: actions);
-  }
-
-  RelativeRect getPosition() {
-    final RenderBox renderBox = tileKey.currentContext!.findRenderObject()! as RenderBox;
-    final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
-    final screenSize = MediaQuery.of(context).size;
-    late Offset offset = Offset(screenSize.width - 16, 16);
-    return RelativeRect.fromRect(
-      Rect.fromPoints(
-        renderBox.localToGlobal(offset, ancestor: overlay),
-        renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero) + offset, ancestor: overlay),
-      ),
-      Offset.zero & overlay.size,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final colorScheme = themeData.colorScheme;
     final presenceParams = PresenceViewParams.of(context);
 
-    final contact = widget.contact;
-    final name = widget.contact?.maybeName ?? widget.favorite.number;
+    final name = contact?.maybeName ?? favorite.number;
+    final title = switch (presenceParams.hybridPresenceSupport) {
+      true => '$name ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
+      false => name,
+    };
 
-    return Dismissible(
-      key: ObjectKey(widget.favorite),
-      background: Container(
-        color: colorScheme.error,
+    return CallTile(
+      dismissibleObject: favorite,
+      leading: LeadingAvatar(
+        username: name,
+        thumbnail: contact?.thumbnail,
+        thumbnailUrl: contact?.thumbnailUrl,
+        registered: contact?.registered,
+        presenceInfo: contact?.presenceInfo,
+        dialogInfo: contact?.dialogInfo,
+      ),
+      name: title,
+      subName: '${favorite.label.capitalize}: ${favorite.number}',
+      dismissible: true,
+      dismissBackground: Container(
+        color: themeData.colorScheme.error,
         padding: const EdgeInsets.only(right: 16),
         child: const Align(alignment: Alignment.centerRight, child: Icon(Icons.delete_outline)),
       ),
@@ -123,70 +78,22 @@ class _FavoriteTileState extends State<FavoriteTile> {
         title: context.l10n.favorites_DeleteConfirmDialog_title,
         content: context.l10n.favorites_DeleteConfirmDialog_content,
       ),
-      onDismissed: widget.onDelete == null ? null : (direction) => widget.onDelete!(),
-      direction: DismissDirection.endToStart,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: ListTile(
-                  key: tileKey,
-                  contentPadding: const EdgeInsets.only(left: 16.0),
-                  leading: LeadingAvatar(
-                    username: name,
-                    thumbnail: contact?.thumbnail,
-                    thumbnailUrl: contact?.thumbnailUrl,
-                    registered: contact?.registered,
-                    presenceInfo: contact?.presenceInfo,
-                    dialogInfo: contact?.dialogInfo,
-                  ),
-                  title: switch (presenceParams.hybridPresenceSupport) {
-                    true => Text(
-                      '$name ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    false => Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
-                  },
-                  subtitle: Text(
-                    '${widget.favorite.label.capitalize}: ${widget.favorite.number}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  onTap: widget.gesturesEnabled ? widget.onTap : null,
-                  onLongPress: widget.gesturesEnabled ? onLongPress : null,
-                ),
-              ),
-              if (widget.gesturesEnabled)
-                widget.onDialPressed != null
-                    ? IconButton(
-                        onPressed: widget.onDialPressed,
-                        icon: Icon(Icons.call, color: colorScheme.primary),
-                      )
-                    : GestureDetector(onTap: onLongPress, child: const Icon(Icons.more_vert)),
-            ],
-          ),
-          AnimatedSize(
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeInOut,
-            alignment: Alignment.topCenter,
-            child: widget.expanded && widget.gesturesEnabled
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16, bottom: 4),
-                    child: CallTileActionsBar(
-                      onVideoCallPressed: widget.onVideoCallPressed,
-                      onChatPressed: widget.onChatPressed,
-                      onCallLogPressed: widget.onCallLogPressed,
-                      onViewContactPressed: widget.onViewContactPressed,
-                      onMorePressed: onLongPress,
-                    ),
-                  )
-                : const SizedBox(width: double.infinity),
-          ),
-        ],
-      ),
+      onDismiss: onDelete,
+      onTap: onTap,
+      expanded: expanded,
+      onDialPressed: onDialPressed,
+      gesturesEnabled: gesturesEnabled,
+      callNumbers: callNumbers,
+      onAudioCallPressed: onAudioCallPressed,
+      onVideoCallPressed: onVideoCallPressed,
+      onTransferPressed: onTransferPressed,
+      onChatPressed: onChatPressed,
+      onSendSmsPressed: onSendSmsPressed,
+      onViewContactPressed: onViewContactPressed,
+      onCallLogPressed: onCallLogPressed,
+      onCallFrom: onCallFrom,
+      copyNumber: favorite.number,
+      onDelete: onDelete,
     );
   }
 }

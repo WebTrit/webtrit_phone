@@ -272,10 +272,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                               : null,
                                           onCallLogPressed: () => openCallLog(number: favorite.number),
                                           onDelete: () => delete(favorite: favorite),
+                                          onCallFrom: (fromNumber) => _callController.createCall(
+                                            destination: favorite.number,
+                                            displayName: contact?.maybeName ?? favorite.number,
+                                            fromNumber: fromNumber,
+                                            video: false,
+                                          ),
                                         ),
                                       ),
-
-                                      const SizedBox(width: 8),
                                     ],
                                   ),
                                 );
