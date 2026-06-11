@@ -143,6 +143,22 @@ void main() {
     expect(calls.last, 'startFlexible');
   });
 
+  test('failed flexible update neither installs nor suppresses future prompts', () async {
+    final service = buildService();
+    info = _info(
+      updateAvailability: UpdateAvailability.updateAvailable,
+      flexibleUpdateAllowed: true,
+      availableVersionCode: 42,
+    );
+    flexibleResult = AppUpdateResult.inAppUpdateFailed;
+
+    await service.check();
+    await service.check();
+
+    expect(calls, ['check', 'startFlexible', 'check', 'startFlexible']);
+    expect(calls, isNot(contains('completeFlexible')));
+  });
+
   test('download completed while away triggers install without a new prompt', () async {
     info = _info(installStatus: InstallStatus.downloaded);
 
