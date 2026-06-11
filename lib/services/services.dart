@@ -1,3 +1,4 @@
+export 'app_update_service.dart';
 export 'connectivity_lifecycle_service.dart';
 export 'connectivity_service.dart';
 export 'diagnostic/diagnostic.dart';
