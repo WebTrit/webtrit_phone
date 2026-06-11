@@ -63,6 +63,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// The [PollingService] instance that handles periodic polling of repositories.
   late PollingService? _polling;
 
+  /// Drives the native Play Core update prompt; checked once on startup. No-op outside Android.
+  final AppUpdateService _appUpdateService = AppUpdateService();
+
   /// Lazily initialised on first [build] once [CallBloc], [CallRoutingCubit],
   /// and [NotificationsBloc] are available in the widget tree. The `??=`
   /// assignment guarantees a single instance for the lifetime of this [State],
@@ -114,6 +117,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       performLogout: _onSessionGuardLogout,
       onPreLogout: _onSessionGuardPreLogout,
     );
+
+    unawaited(_appUpdateService.check());
   }
 
   /// Maps an unauthorized [Exception] to a logout reason and triggers logout.
@@ -149,9 +154,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    _polling?.didChangeAppLifecycleState(state);
-  }
+  void didChangeAppLifecycleState(AppLifecycleState state) => _polling?.didChangeAppLifecycleState(state);
 
   @override
   Widget build(BuildContext context) {

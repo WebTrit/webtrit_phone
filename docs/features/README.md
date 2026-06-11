@@ -21,6 +21,7 @@ A feature doc should link to those rather than repeat them.
 
 | Feature | Doc | Status |
 |---|---|---|
+| App update / version compatibility | [app-update.md](app-update.md) | Active - force-update (app side) and iOS pending |
 | Call | [call.md](call.md) | Active - UI redesign in progress |
 
 ## Conventions
