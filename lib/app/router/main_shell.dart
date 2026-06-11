@@ -155,7 +155,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) => _handleAppLifecycleState(state);
+
+  void _handleAppLifecycleState(AppLifecycleState state) {
     _polling?.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       unawaited(_appUpdateService.check());
