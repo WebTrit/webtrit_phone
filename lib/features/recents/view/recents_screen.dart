@@ -209,7 +209,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                             video: callLogEntry.video && widget.videoEnabled,
                                           );
                                         },
-                                  onAudioCallPressed: callLogEntry.video
+                                  onAudioCallPressed: (callLogEntry.video && widget.videoEnabled)
                                       ? () => _callController.createCall(
                                           destination: callLogEntry.number,
                                           displayName: contact?.maybeName,

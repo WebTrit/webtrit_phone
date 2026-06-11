@@ -97,7 +97,7 @@ class CallTileActionsBar extends StatelessWidget {
           Expanded(
             child: _CallTileAction(
               icon: Icons.call_outlined,
-              label: l10n.numberActions_audioCall, // wait, is this the right l10n? let's check
+              label: l10n.numberActions_audioCall,
               onTap: onAudioCallPressed!,
             ),
           ),
