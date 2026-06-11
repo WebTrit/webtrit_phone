@@ -73,6 +73,7 @@ List<PopupMenuEntry<dynamic>> buildNumberActions(
 class CallTileActionsBar extends StatelessWidget {
   const CallTileActionsBar({
     super.key,
+    this.onAudioCallPressed,
     this.onVideoCallPressed,
     this.onChatPressed,
     this.onCallLogPressed,
@@ -80,6 +81,7 @@ class CallTileActionsBar extends StatelessWidget {
     required this.onMorePressed,
   });
 
+  final VoidCallback? onAudioCallPressed;
   final VoidCallback? onVideoCallPressed;
   final VoidCallback? onChatPressed;
   final VoidCallback? onCallLogPressed;
@@ -91,6 +93,14 @@ class CallTileActionsBar extends StatelessWidget {
     final l10n = context.l10n;
     return Row(
       children: [
+        if (onAudioCallPressed != null)
+          Expanded(
+            child: _CallTileAction(
+              icon: Icons.call_outlined,
+              label: l10n.numberActions_audioCall, // wait, is this the right l10n? let's check
+              onTap: onAudioCallPressed!,
+            ),
+          ),
         if (onVideoCallPressed != null)
           Expanded(
             child: _CallTileAction(
@@ -169,6 +179,7 @@ class CallTile extends StatefulWidget {
     this.onTap,
     this.expanded = false,
     this.onDialPressed,
+    this.dialIcon,
     this.gesturesEnabled = true,
     this.dismissible = false,
     this.dismissibleObject,
@@ -199,6 +210,7 @@ class CallTile extends StatefulWidget {
   final VoidCallback? onTap;
   final bool expanded;
   final VoidCallback? onDialPressed;
+  final IconData? dialIcon;
   final bool gesturesEnabled;
 
   final bool dismissible;
@@ -367,7 +379,7 @@ class _CallTileState extends State<CallTile> {
                       if (widget.onDialPressed != null)
                         IconButton(
                           onPressed: widget.onDialPressed,
-                          icon: Icon(Icons.call, color: colorScheme.primary),
+                          icon: Icon(widget.dialIcon ?? Icons.call, color: colorScheme.primary),
                         )
                       else if (hasMenuActions)
                         TileMenuButton(onTap: showMenuPopup),
@@ -381,6 +393,7 @@ class _CallTileState extends State<CallTile> {
                       ? Padding(
                           padding: const EdgeInsets.only(top: 4, right: 8),
                           child: CallTileActionsBar(
+                            onAudioCallPressed: widget.onAudioCallPressed,
                             onVideoCallPressed: widget.onVideoCallPressed,
                             onChatPressed: widget.onChatPressed,
                             onCallLogPressed: widget.onCallLogPressed,

@@ -27,6 +27,7 @@ class RecentTile extends StatelessWidget {
     this.onCallLogPressed,
     this.onDelete,
     this.onCallFrom,
+    this.videoEnabled = true,
   });
 
   final Recent recent;
@@ -44,6 +45,7 @@ class RecentTile extends StatelessWidget {
   final Function()? onCallLogPressed;
   final Function()? onDelete;
   final Function(String)? onCallFrom;
+  final bool videoEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +102,7 @@ class RecentTile extends StatelessWidget {
       onTap: onTap,
       expanded: expanded,
       onDialPressed: onDialPressed,
+      dialIcon: (callLogEntry.video && videoEnabled) ? Icons.videocam : Icons.call,
       callNumbers: callNumbers,
       onAudioCallPressed: onAudioCallPressed,
       onVideoCallPressed: onVideoCallPressed,
