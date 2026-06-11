@@ -1145,14 +1145,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   /// A media_state sent before the first provisional response is rejected
   /// upstream (no early dialog to route it yet), so once 180/183 arrives
-  /// re-send the camera-off state if it no longer matches the offer.
+  /// re-send the current camera state. Covers both directions: camera turned
+  /// off on a video call and a video track added to an audio call. Idempotent
+  /// payload, so repeating the offer's own state is harmless.
   void _maybeSendPendingMediaState(String callId) {
     final call = state.retrieveActiveCall(callId);
     if (call == null || call.wasAccepted) return;
 
     final videoTrack = call.localStream?.getVideoTracks().firstOrNull;
-    if (videoTrack != null && !videoTrack.enabled) {
-      _sendMediaState(call, video: false);
+    if (videoTrack != null) {
+      _sendMediaState(call, video: videoTrack.enabled);
     }
   }
 
@@ -2620,6 +2622,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(
         state.copyWithMappedActiveCall(e.callId, (call) => call.copyWith(video: true, videoPermissionDenied: false)),
       );
+      // The added track reaches the remote side only after renegotiation
+      // completes (post-answer for a ringing call) - signal the camera state
+      // explicitly so the remote UI can reflect the upgrade right away.
+      _sendMediaState(activeCall, video: true);
       await _mediaManager.onVideoEnabled(e.callId, speakerDevice: state.availableAudioDevices.getSpeaker);
       await callkeep.reportUpdateCall(e.callId, hasVideo: true);
     } on UserMediaError catch (e) {
