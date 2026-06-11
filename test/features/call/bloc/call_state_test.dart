@@ -118,6 +118,23 @@ void main() {
       final videoCall = _makeCall(video: true);
       expect(videoCall.remoteVideo, isTrue);
     });
+
+    test('explicit remote camera-off report overrides the video flag', () {
+      // Soft mute keeps the negotiated track alive (black frames), so a
+      // media_state camera-off report must win over any other video signal.
+      final call = _makeCall(video: true).copyWith(remoteCameraEnabled: false);
+      expect(call.remoteVideo, isFalse);
+    });
+
+    test('remote camera-on report keeps the regular fallbacks', () {
+      final videoCall = _makeCall(video: true).copyWith(remoteCameraEnabled: true);
+      expect(videoCall.remoteVideo, isTrue);
+
+      // Camera reported on, but neither a track nor the video flag yet -
+      // nothing to present.
+      final voiceCall = _makeCall(video: false).copyWith(remoteCameraEnabled: true);
+      expect(voiceCall.remoteVideo, isFalse);
+    });
   });
 
   // ---------------------------------------------------------------------------

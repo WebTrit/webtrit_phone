@@ -1193,18 +1193,25 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    // `video` reflects the LOCAL camera intent on outgoing and answered
-    // calls; remote media state must not override it there. Pre-answer
-    // incoming is the only window where it represents the remote offer.
-    if (!activeCall.isIncoming || activeCall.wasAccepted) {
-      _logger.info(
-        '__onCallSignalingEventMediaState: ignoring for '
-        '${activeCall.direction.name}/${activeCall.processingStatus.name}',
-      );
+    if (!activeCall.isIncoming) {
+      _logger.info('__onCallSignalingEventMediaState: ignoring for ${activeCall.direction.name}');
       return;
     }
 
-    emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: video)));
+    if (activeCall.wasAccepted) {
+      // In-call: only the remote camera state changes. The negotiated track
+      // keeps flowing (soft mute = black frames), so without this flag the UI
+      // would keep presenting a video call; `video` stays untouched - it is
+      // the LOCAL camera intent.
+      emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(remoteCameraEnabled: video)));
+      return;
+    }
+
+    // Pre-answer: the flag drives both the incoming-call UI and the answer
+    // default (a call downgraded to audio is answered as an audio call).
+    emit(
+      state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: video, remoteCameraEnabled: video)),
+    );
     await callkeep.reportUpdateCall(event.callId, hasVideo: video);
   }
 
