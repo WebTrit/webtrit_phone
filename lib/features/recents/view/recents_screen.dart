@@ -211,17 +211,17 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                         },
                                   onAudioCallPressed: callLogEntry.video
                                       ? () => _callController.createCall(
-                                            destination: callLogEntry.number,
-                                            displayName: contact?.maybeName,
-                                            video: false,
-                                          )
+                                          destination: callLogEntry.number,
+                                          displayName: contact?.maybeName,
+                                          video: false,
+                                        )
                                       : null,
                                   onVideoCallPressed: (!callLogEntry.video && widget.videoEnabled)
                                       ? () => _callController.createCall(
-                                            destination: callLogEntry.number,
-                                            displayName: contact?.maybeName,
-                                            video: true,
-                                          )
+                                          destination: callLogEntry.number,
+                                          displayName: contact?.maybeName,
+                                          video: true,
+                                        )
                                       : null,
                                   onTransferPressed: widget.transferEnabled && hasActiveCall
                                       ? () {

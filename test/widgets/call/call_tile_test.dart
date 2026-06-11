@@ -178,7 +178,7 @@ void main() {
       await tester.tap(find.text('More'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Audio call'), findsOneWidget);
+      expect(find.text('Audio call'), findsNWidgets(2));
     });
   });
 }
