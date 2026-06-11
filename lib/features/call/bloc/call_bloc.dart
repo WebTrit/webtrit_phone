@@ -2135,7 +2135,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
       final offer = call.incomingOffer!;
 
-      _logger.info('__onMutationPerformAnswer: processing offer, hasVideo=${offer.hasVideo}');
+      _logger.info('__onMutationPerformAnswer: processing offer, hasVideo=${offer.hasVideo}, callVideo=${call.video}');
 
       emit(
         state.copyWithMappedActiveCall(event.callId, (call) {
@@ -2143,8 +2143,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }),
       );
 
+      // The camera follows the state the call PRESENTS, not the raw offer:
+      // after a soft-mute downgrade the offer still advertises m=video, and
+      // answering with the camera on would silently put the user on air in a
+      // call their UI shows as audio. `call.video` carries the offer value
+      // updated by media_state; the explicit remoteCameraEnabled check also
+      // survives incoming-event replays that reset `video` from the jsep.
+      final answerWithVideo = call.video && call.remoteCameraEnabled != false;
       final localStream = await userMediaBuilder
-          .build(video: offer.hasVideo, frontCamera: call.frontCamera, allowAudioFallback: true)
+          .build(video: answerWithVideo, frontCamera: call.frontCamera, allowAudioFallback: true)
           .timeout(_getUserMediaPushKitTimeout, onTimeout: _onGetUserMediaPushKitTimeout);
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
