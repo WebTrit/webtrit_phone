@@ -20,6 +20,7 @@ void main() {
     bool expanded = false,
     bool gesturesEnabled = true,
     VoidCallback? onDialPressed,
+    IconData? dialIcon,
     VoidCallback? onAudioCallPressed,
     VoidCallback? onVideoCallPressed,
     VoidCallback? onChatPressed,
@@ -37,6 +38,7 @@ void main() {
       expanded: expanded,
       gesturesEnabled: gesturesEnabled,
       onDialPressed: onDialPressed,
+      dialIcon: dialIcon,
       onAudioCallPressed: onAudioCallPressed,
       onVideoCallPressed: onVideoCallPressed,
       onChatPressed: onChatPressed,
@@ -115,6 +117,16 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.tap(find.byIcon(Icons.call));
+      expect(dialed, isTrue);
+    });
+
+    testWidgets('dial button shows custom dialIcon when provided', (tester) async {
+      var dialed = false;
+      await tester.pumpWidget(buildTestable(buildTile(onDialPressed: () => dialed = true, dialIcon: Icons.videocam)));
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.call), findsNothing);
+      await tester.tap(find.byIcon(Icons.videocam));
       expect(dialed, isTrue);
     });
 
