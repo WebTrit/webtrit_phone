@@ -139,17 +139,25 @@ void main() {
     });
 
     testWidgets('expanded action buttons fire their callbacks', (tester) async {
+      var audio = false;
       var video = false;
       var history = false;
       await tester.pumpWidget(
         buildTestable(
-          buildTile(expanded: true, onVideoCallPressed: () => video = true, onCallLogPressed: () => history = true),
+          buildTile(
+            expanded: true,
+            onAudioCallPressed: () => audio = true,
+            onVideoCallPressed: () => video = true,
+            onCallLogPressed: () => history = true,
+          ),
         ),
       );
       await tester.pumpAndSettle();
 
+      await tester.tap(find.text('Audio call'));
       await tester.tap(find.text('Video call'));
       await tester.tap(find.text('History'));
+      expect(audio, isTrue);
       expect(video, isTrue);
       expect(history, isTrue);
     });
@@ -187,10 +195,12 @@ void main() {
       await tester.pumpWidget(buildTestable(buildTile(expanded: true, onAudioCallPressed: () {})));
       await tester.pumpAndSettle();
 
+      expect(find.widgetWithText(CallTileActionsBar, 'Audio call'), findsOneWidget);
+
       await tester.tap(find.text('More'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Audio call'), findsNWidgets(2));
+      expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Audio call'), findsOneWidget);
     });
   });
 }
