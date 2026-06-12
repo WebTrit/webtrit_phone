@@ -24,6 +24,7 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
   String? _activeId;
   bool _isLoading = false;
   Object? _error;
+  Timer? _loadingDebounce;
 
   String? get activeId => _activeId;
   bool get isLoading => _isLoading;
@@ -51,8 +52,15 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
     }
 
     _activeId = id;
-    _isLoading = true;
     _error = null;
+    // Show the player UI immediately (optimistic); only show loading spinner
+    // if setAudioSource takes longer than the debounce threshold (e.g. slow network).
+    // This prevents a blink on cached audio where loading is near-instant.
+    _loadingDebounce?.cancel();
+    _loadingDebounce = Timer(const Duration(milliseconds: 200), () {
+      _isLoading = true;
+      notifyListeners();
+    });
     notifyListeners();
 
     try {
@@ -65,11 +73,17 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
         isLocal: isLocal,
       );
       await _player.setAudioSource(source);
-      _isLoading = false;
-      notifyListeners();
+      _loadingDebounce?.cancel();
+      _loadingDebounce = null;
+      if (_isLoading) {
+        _isLoading = false;
+        notifyListeners();
+      }
       await _player.play();
     } catch (e, s) {
       _logger.warning('Playback error for $uri', e, s);
+      _loadingDebounce?.cancel();
+      _loadingDebounce = null;
       _isLoading = false;
       _error = e;
       notifyListeners();
@@ -128,6 +142,7 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _loadingDebounce?.cancel();
     _playerStateSub?.cancel();
     _player.stopAndDispose();
     super.dispose();
