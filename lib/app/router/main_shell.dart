@@ -17,6 +17,7 @@ import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/session/session.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
@@ -534,9 +535,14 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],
                       );
 
+                      final localPushRepository = context.read<LocalPushRepository>();
                       return CallBloc(
                         callLogsRepository: context.read<CallLogsRepository>(),
-                        localPushRepository: context.read<LocalPushRepository>(),
+                        onMissedCall: (callId, callerName) => localPushRepository
+                            .displayPush(
+                              AppLocalPush.missedCall(callId, context.l10n.notifications_missedCall_title, callerName),
+                            )
+                            .catchError((e) => _logger.warning('onMissedCall: $e')),
                         linesStateRepository: context.read<LinesStateRepository>(),
                         presenceInfoRepository: context.read<PresenceInfoRepository>(),
                         dialogInfoRepository: context.read<DialogInfoRepository>(),

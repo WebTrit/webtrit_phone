@@ -1481,6 +1481,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_successSnackBar_appOnline => 'Ваш застосунок онлайн.';
 
   @override
+  String get notifications_missedCall_title => 'Пропущений дзвінок';
+
+  @override
+  String get notifications_missedCall_unknownCaller => 'Невідомий';
+
+  @override
   String get numberActions_audioCall => 'Aудіо дзвінок';
 
   @override
