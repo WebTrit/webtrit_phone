@@ -1393,6 +1393,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notifications_successSnackBar_appOnline => 'La tua apllicazione è online';
 
   @override
+  String get notifications_missedCall_title => 'Chiamata persa';
+
+  @override
+  String get notifications_missedCall_unknownCaller => 'Sconosciuto';
+
+  @override
   String get numberActions_audioCall => 'Audiochiamata';
 
   @override

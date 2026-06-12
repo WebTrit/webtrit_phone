@@ -50,6 +50,10 @@ packages/   → shared libs (must NOT import from lib/)
 
 - State: `@freezed` for state; `sealed class + Equatable` for events (never `freezed` on events).
 - BLoC deps via `Provider`/`RepositoryProvider`; never pass `BuildContext` into BLoC/Service.
+  Exception: localized strings needed inside a callback may close over `context.l10n`, but ONLY
+  when the closure is evaluated lazily (after construction). Do NOT call `context.l10n` synchronously
+  inside `BlocProvider.create` — it uses `dependOnInheritedWidgetOfExactType` which throws
+  "Tried to listen to InheritedWidget in a life-cycle that will never be called again" there.
 - DB: DAOs only — never `AppDatabase` directly; Drift-generated classes stay in repo layer.
 - Theme: never raw `Colors.xxx` or `TextStyle` in widgets; `Theme.of(context).extension<T>()`.
 - Widgets: `StatelessWidget` always (not helper methods); dumb widgets in `features/*/view/widgets/`.

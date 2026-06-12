@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -123,6 +124,7 @@ class PushIsolateContext extends IsolateContext {
     required this.incomingCallTypeRepository,
     required this.appCertificates,
     required this.localPushRepository,
+    required this.locale,
     super.nativeLogForwarder,
     super.appPath,
     super.remoteConfigService,
@@ -149,6 +151,9 @@ class PushIsolateContext extends IsolateContext {
   /// Nullable - best-effort. Null when [appDatabase] is unavailable.
   final CallLogsRepository? callLogsRepository;
 
+  /// User's selected locale, used to resolve localised strings in the isolate.
+  final Locale locale;
+
   static Future<PushIsolateContext> init() async {
     // Phase 1 - critical: abort if these fail.
     final base = await IsolateContext.init();
@@ -169,6 +174,7 @@ class PushIsolateContext extends IsolateContext {
 
     final localPushRepository = LocalPushRepositoryFLNImpl();
     final callLogsRepository = appDatabase != null ? CallLogsRepository(appDatabase: appDatabase) : null;
+    final locale = LocaleRepositoryPrefsImpl(appPreferences).getLocale();
 
     return PushIsolateContext(
       secureStorage: base.secureStorage,
@@ -184,6 +190,7 @@ class PushIsolateContext extends IsolateContext {
       appDatabase: appDatabase,
       localPushRepository: localPushRepository,
       callLogsRepository: callLogsRepository,
+      locale: locale,
     );
   }
 

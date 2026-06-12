@@ -1373,6 +1373,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_successSnackBar_appOnline => 'Your application is online';
 
   @override
+  String get notifications_missedCall_title => 'Missed Call';
+
+  @override
+  String get notifications_missedCall_unknownCaller => 'Unknown';
+
+  @override
   String get numberActions_audioCall => 'Audio call';
 
   @override

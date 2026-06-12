@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
@@ -5,7 +6,9 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'package:webtrit_phone/common/common.dart';
+import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/push_notification/push_notifications.dart';
 
 import 'isolate_manager.dart';
 
@@ -31,6 +34,15 @@ final _logger = Logger('BackgroundCallIsolate');
 // Lazily-initialised isolate-level manager.
 PushNotificationIsolateManager? _manager;
 
+// Resolves an arbitrary persisted locale to a locale that lookupAppLocalizations
+// can handle. Falls back to the first supported locale (EN) when the stored value
+// is the 'und' sentinel (no locale ever selected) or any other unsupported tag.
+Locale _effectiveLocale(Locale locale) {
+  if (AppLocalizations.supportedLocales.contains(locale)) return locale;
+  final byLanguage = AppLocalizations.supportedLocales.where((s) => s.languageCode == locale.languageCode).firstOrNull;
+  return byLanguage ?? AppLocalizations.supportedLocales.first;
+}
+
 /// Returns the isolate-level manager, reusing an existing instance if already
 /// initialised. Accepts an already-constructed [PushIsolateContext] so the
 /// caller controls when heavy resources (DB, certificates) are opened.
@@ -48,13 +60,21 @@ Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) as
   WebtritSignalingService.setHandoffCallback(() => _manager?.notifyActivityTookOver());
   _logger.info('_getOrInit: module factory and handoff callback registered');
 
+  final l10n = lookupAppLocalizations(_effectiveLocale(context.locale));
+  final localPushRepository = context.localPushRepository;
   _manager = PushNotificationIsolateManager(
     callLogsRepository: context.callLogsRepository,
-    localPushRepository: context.localPushRepository,
     callkeep: BackgroundPushNotificationService(),
     storage: context.secureStorage,
     certificates: context.appCertificates.trustedCertificates,
     logger: Logger('PushNotificationIsolateManager'),
+    onMissedCall: (callId, callerName) => localPushRepository.displayPush(
+      AppLocalPush.missedCall(
+        callId,
+        l10n.notifications_missedCall_title,
+        callerName ?? l10n.notifications_missedCall_unknownCaller,
+      ),
+    ),
   );
   // init() constructs WebtritSignalingService and wires up the event subscription.
   // The WebSocket connection starts in connect(), which is called from run().
