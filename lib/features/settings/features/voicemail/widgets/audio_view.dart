@@ -90,7 +90,9 @@ class _InactiveAudioView extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: AudioSlider(position: Duration.zero, duration: Duration.zero, onSeek: (_) {}),
+          child: IgnorePointer(
+            child: AudioSlider(position: Duration.zero, duration: Duration.zero, onSeek: (_) {}),
+          ),
         ),
       ],
     );

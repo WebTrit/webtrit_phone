@@ -14,18 +14,27 @@ import 'package:webtrit_phone/utils/utils.dart';
 final _logger = Logger('VoicemailPlaybackController');
 
 class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObserver {
-  VoicemailPlaybackController() {
+  VoicemailPlaybackController({AudioPlayer? player, Future<void> Function()? setupAudioSession})
+    : _player = player ?? AudioPlayer(),
+      _setupAudioSession = setupAudioSession ?? _defaultSetupAudioSession {
     WidgetsBinding.instance.addObserver(this);
     _playerStateSub = _player.playerStateStream.listen(_onPlayerStateChanged);
   }
 
-  final AudioPlayer _player = AudioPlayer();
+  static Future<void> _defaultSetupAudioSession() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.speech());
+  }
+
+  final AudioPlayer _player;
+  final Future<void> Function() _setupAudioSession;
   StreamSubscription<PlayerState>? _playerStateSub;
 
   String? _activeId;
   bool _isLoading = false;
   Object? _error;
   final _loadingDebounce = Debounce(const Duration(milliseconds: 200));
+  int _generation = 0;
 
   String? get activeId => _activeId;
   bool get isLoading => _isLoading;
@@ -47,10 +56,13 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
     String? cacheKey,
     bool isLocal = false,
   }) async {
-    if (_activeId == id) {
+    // Resume same track -- but fall through if previous attempt left an error.
+    if (_activeId == id && _error == null) {
       if (!_player.playing && !_isLoading) await _player.play();
       return;
     }
+
+    final generation = ++_generation;
 
     _activeId = id;
     _error = null;
@@ -58,13 +70,17 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
     // if setAudioSource takes longer than the debounce threshold (e.g. slow network).
     // This prevents a blink on cached audio where loading is near-instant.
     _loadingDebounce.schedule(() {
-      _isLoading = true;
-      notifyListeners();
+      if (_generation == generation) {
+        _isLoading = true;
+        notifyListeners();
+      }
     });
     notifyListeners();
 
     try {
       await _setupAudioSession();
+      if (_generation != generation) return;
+
       final source = await _buildSource(
         uri: uri,
         headers: headers,
@@ -72,7 +88,11 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
         cacheKey: cacheKey,
         isLocal: isLocal,
       );
+      if (_generation != generation) return;
+
       await _player.setAudioSource(source);
+      if (_generation != generation) return;
+
       _loadingDebounce.cancel();
       if (_isLoading) {
         _isLoading = false;
@@ -80,10 +100,12 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
       }
       await _player.play();
     } catch (e, s) {
+      if (_generation != generation) return;
       _logger.warning('Playback error for $uri', e, s);
       _loadingDebounce.cancel();
       _isLoading = false;
       _error = e;
+      _player.stop();
       notifyListeners();
     }
   }
@@ -93,11 +115,6 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
   Future<void> resume() => _player.play();
 
   void seek(Duration position) => _player.seek(position);
-
-  Future<void> _setupAudioSession() async {
-    final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration.speech());
-  }
 
   Future<AudioSource> _buildSource({
     required Uri uri,
@@ -116,17 +133,21 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
     if (cacheBasePath != null) {
       await Directory(cacheBasePath).create(recursive: true);
     }
-    final cacheFile = _resolveCacheFile(cacheBasePath: cacheBasePath, uri: uri, cacheKey: cacheKey);
+    final cacheFile = resolveCacheFile(cacheBasePath: cacheBasePath, uri: uri, cacheKey: cacheKey);
     // ignore: experimental_member_use
     return LockCachingAudioSource(uri, headers: headers, cacheFile: cacheFile);
   }
 
-  File? _resolveCacheFile({required String? cacheBasePath, required Uri uri, required String? cacheKey}) {
+  @visibleForTesting
+  File? resolveCacheFile({required String? cacheBasePath, required Uri uri, required String? cacheKey}) {
     if (cacheBasePath == null) return null;
     final rawKey = cacheKey ?? uri.pathSegments.where((s) => s.isNotEmpty).join('_');
     if (rawKey.isEmpty) return null;
-    // Prevent path traversal from server-provided cacheKey values.
+    // Prevent path traversal from server-provided cacheKey values: strip path
+    // separators, and reject the special directory names `.`/`..` which would
+    // otherwise escape cacheBasePath via path.join even without a separator.
     final key = rawKey.replaceAll(RegExp(r'[/\\]'), '_');
+    if (key == '.' || key == '..') return null;
     return File(path.join(cacheBasePath, key));
   }
 
