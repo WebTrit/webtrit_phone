@@ -1188,10 +1188,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     add(_CallMutationEvent.signalingHangup(callId: event.callId, code: event.code, reason: event.reason));
   }
 
-  void _showMissedCallNotification(String callId, String callerName) {
-    onMissedCall(callId, callerName);
-  }
-
   Future<void> __onCallSignalingEventCallUpdating(
     _CallSignalingEventCallUpdating event,
     Emitter<CallState> emit,
@@ -2888,7 +2884,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (code == SignalingResponseCode.declineCall) endReason = CallkeepEndCallReason.declinedElsewhere;
       if (code == SignalingResponseCode.requestTerminated) endReason = CallkeepEndCallReason.unanswered;
       if (Platform.isAndroid && code != SignalingResponseCode.declineCall) {
-        _showMissedCallNotification(event.callId, call.displayName ?? call.handle.value);
+        onMissedCall(event.callId, call.displayName ?? call.handle.value);
       }
     }
 
