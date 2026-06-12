@@ -164,6 +164,7 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
   }
 
   File? _getCacheFile() {
+    // Local paths are served via AudioSource.uri directly -- no caching needed.
     // On iOS, fall back to just_audio's internal hash-based cache; custom path not validated on this platform.
     if (widget.path.isLocalPath || Platform.isIOS) return null;
 
