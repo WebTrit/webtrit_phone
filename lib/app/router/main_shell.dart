@@ -536,11 +536,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       );
 
                       final localPushRepository = context.read<LocalPushRepository>();
-                      final missedCallTitle = context.l10n.notifications_missedCall_title;
                       return CallBloc(
                         callLogsRepository: context.read<CallLogsRepository>(),
                         onMissedCall: (callId, callerName) => localPushRepository
-                            .displayPush(AppLocalPush.missedCall(callId, missedCallTitle, callerName))
+                            .displayPush(
+                              AppLocalPush.missedCall(callId, context.l10n.notifications_missedCall_title, callerName),
+                            )
                             .catchError((e) => _logger.warning('onMissedCall: $e')),
                         linesStateRepository: context.read<LinesStateRepository>(),
                         presenceInfoRepository: context.read<PresenceInfoRepository>(),
