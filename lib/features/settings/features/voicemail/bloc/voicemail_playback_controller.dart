@@ -9,6 +9,7 @@ import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
 
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('VoicemailPlaybackController');
 
@@ -24,7 +25,7 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
   String? _activeId;
   bool _isLoading = false;
   Object? _error;
-  Timer? _loadingDebounce;
+  final _loadingDebounce = Debounce(const Duration(milliseconds: 200));
 
   String? get activeId => _activeId;
   bool get isLoading => _isLoading;
@@ -56,8 +57,7 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
     // Show the player UI immediately (optimistic); only show loading spinner
     // if setAudioSource takes longer than the debounce threshold (e.g. slow network).
     // This prevents a blink on cached audio where loading is near-instant.
-    _loadingDebounce?.cancel();
-    _loadingDebounce = Timer(const Duration(milliseconds: 200), () {
+    _loadingDebounce.schedule(() {
       _isLoading = true;
       notifyListeners();
     });
@@ -73,8 +73,7 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
         isLocal: isLocal,
       );
       await _player.setAudioSource(source);
-      _loadingDebounce?.cancel();
-      _loadingDebounce = null;
+      _loadingDebounce.cancel();
       if (_isLoading) {
         _isLoading = false;
         notifyListeners();
@@ -82,8 +81,7 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
       await _player.play();
     } catch (e, s) {
       _logger.warning('Playback error for $uri', e, s);
-      _loadingDebounce?.cancel();
-      _loadingDebounce = null;
+      _loadingDebounce.cancel();
       _isLoading = false;
       _error = e;
       notifyListeners();
@@ -142,7 +140,7 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _loadingDebounce?.cancel();
+    _loadingDebounce.dispose();
     _playerStateSub?.cancel();
     _player.stopAndDispose();
     super.dispose();
