@@ -164,9 +164,6 @@ class _AudioViewState extends State<AudioView> with WidgetsBindingObserver {
   }
 
   File? _getCacheFile() {
-    // Do not provide a custom cacheFile on iOS:
-    // just_audio internally handles caching on iOS, and supplying a custom file
-    // may lead to PlayerException (-11828) if the file is not yet created or invalid.
     if (widget.path.isLocalPath || Platform.isIOS) return null;
 
     final rawKey = widget.cacheKey ?? _uri.pathSegments.where((s) => s.isNotEmpty).join('_');
