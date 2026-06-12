@@ -83,7 +83,7 @@ const _getUserMediaPushKitTimeout = Duration(seconds: 8);
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final CallLogsRepository callLogsRepository;
-  final void Function(String callId, String callerName) onMissedCall;
+  final void Function(String callId, String callerName) _onMissedCall;
   final UserRepository userRepository;
   final LinesStateRepository linesStateRepository;
   final PresenceInfoRepository presenceInfoRepository;
@@ -141,7 +141,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   CallBloc({
     required this.callLogsRepository,
-    required this.onMissedCall,
+    required void Function(String callId, String callerName) onMissedCall,
     required this.linesStateRepository,
     required this.presenceInfoRepository,
     required this.dialogInfoRepository,
@@ -168,7 +168,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required ConnectivityService connectivityService,
     this.onCallEnded,
     Stream<void>? foregroundCallPushSignal,
-  }) : _connectivityService = connectivityService,
+  }) : _onMissedCall = onMissedCall,
+       _connectivityService = connectivityService,
        super(const CallState()) {
     _mediaManager = CallMediaManager(callkeep: callkeep);
     _signalingModule = signalingModule;
@@ -2884,7 +2885,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (code == SignalingResponseCode.declineCall) endReason = CallkeepEndCallReason.declinedElsewhere;
       if (code == SignalingResponseCode.requestTerminated) endReason = CallkeepEndCallReason.unanswered;
       if (Platform.isAndroid && code != SignalingResponseCode.declineCall) {
-        onMissedCall(event.callId, call.displayName ?? call.handle.value);
+        _onMissedCall(event.callId, call.displayName ?? call.handle.value);
       }
     }
 
