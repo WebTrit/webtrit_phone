@@ -11,7 +11,6 @@ import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/push_notification/push_notifications.dart';
 
 import '../models/jsep_value.dart';
 
@@ -30,11 +29,10 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     required this.storage,
     required this.certificates,
     required this.logger,
-    required this.localPushRepository,
-    required this.missedCallTitle,
-    required this.unknownCallerFallback,
+    required Future<void> Function(String callId, String? callerName) onMissedCall,
     this.callLogsRepository,
-  }) : _pushService = callkeep {
+  }) : _onMissedCall = onMissedCall,
+       _pushService = callkeep {
     // setBackgroundServiceDelegate is called in the constructor so callkeep can
     // route performAnswerCall / performEndCall as soon as the object exists,
     // before [init] is called.
@@ -42,12 +40,10 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   }
 
   final Logger logger;
-  final LocalPushRepository localPushRepository;
   final CallLogsRepository? callLogsRepository;
   final SecureStorage storage;
   final TrustedCertificates certificates;
-  final String missedCallTitle;
-  final String unknownCallerFallback;
+  final Future<void> Function(String callId, String? callerName) _onMissedCall;
 
   final BackgroundPushNotificationService _pushService;
 
@@ -499,13 +495,7 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
 
   Future<void> _showMissedCallNotification(HangupEvent event, NewCall call) async {
     try {
-      await localPushRepository.displayPush(
-        AppLocalPush.missedCall(
-          event.callId,
-          missedCallTitle,
-          _getDisplayNameForMissedCall(event, call) ?? unknownCallerFallback,
-        ),
-      );
+      await _onMissedCall(event.callId, _getDisplayNameForMissedCall(event, call));
     } catch (e) {
       logger.severe('Failed to show missed call notification', e);
     }
