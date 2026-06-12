@@ -535,10 +535,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],
                       );
 
+                      final localPushRepository = context.read<LocalPushRepository>();
+                      final missedCallTitle = context.l10n.notifications_missedCall_title;
                       return CallBloc(
                         callLogsRepository: context.read<CallLogsRepository>(),
-                        localPushRepository: context.read<LocalPushRepository>(),
-                        missedCallTitle: context.l10n.notifications_missedCall_title,
+                        onMissedCall: (callId, callerName) => localPushRepository
+                            .displayPush(AppLocalPush.missedCall(callId, missedCallTitle, callerName))
+                            .catchError((e) => _logger.warning('onMissedCall: $e')),
                         linesStateRepository: context.read<LinesStateRepository>(),
                         presenceInfoRepository: context.read<PresenceInfoRepository>(),
                         dialogInfoRepository: context.read<DialogInfoRepository>(),

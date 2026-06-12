@@ -23,7 +23,6 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -84,8 +83,7 @@ const _getUserMediaPushKitTimeout = Duration(seconds: 8);
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final CallLogsRepository callLogsRepository;
-  final LocalPushRepository localPushRepository;
-  final String missedCallTitle;
+  final void Function(String callId, String callerName) onMissedCall;
   final UserRepository userRepository;
   final LinesStateRepository linesStateRepository;
   final PresenceInfoRepository presenceInfoRepository;
@@ -143,8 +141,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   CallBloc({
     required this.callLogsRepository,
-    required this.localPushRepository,
-    required this.missedCallTitle,
+    required this.onMissedCall,
     required this.linesStateRepository,
     required this.presenceInfoRepository,
     required this.dialogInfoRepository,
@@ -1192,9 +1189,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   void _showMissedCallNotification(String callId, String callerName) {
-    localPushRepository
-        .displayPush(AppLocalPush.missedCall(callId, missedCallTitle, callerName))
-        .catchError((e) => _logger.warning('_showMissedCallNotification: $e'));
+    onMissedCall(callId, callerName);
   }
 
   Future<void> __onCallSignalingEventCallUpdating(
