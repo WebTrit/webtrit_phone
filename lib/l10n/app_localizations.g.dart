@@ -2688,6 +2688,18 @@ abstract class AppLocalizations {
   /// **'Your application is online'**
   String get notifications_successSnackBar_appOnline;
 
+  /// No description provided for @notifications_missedCall_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed Call'**
+  String get notifications_missedCall_title;
+
+  /// No description provided for @notifications_missedCall_unknownCaller.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get notifications_missedCall_unknownCaller;
+
   /// No description provided for @numberActions_audioCall.
   ///
   /// In en, this message translates to:

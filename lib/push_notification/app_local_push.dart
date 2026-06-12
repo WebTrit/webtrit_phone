@@ -6,14 +6,8 @@ class AppLocalPush {
 
   AppLocalPush(this.id, this.title, this.body, {this.payload});
 
-  factory AppLocalPush.missedCall(String callId, String callerName) {
-    return AppLocalPush(
-      callId.hashCode,
-      // TODO: Add localization
-      'Missed Call',
-      callerName,
-      payload: {'callId': callId, 'type': 'missed_call'},
-    );
+  factory AppLocalPush.missedCall(String callId, String title, String callerName) {
+    return AppLocalPush(callId.hashCode, title, callerName, payload: {'callId': callId, 'type': 'missed_call'});
   }
 
   @override

@@ -31,6 +31,8 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
     required this.certificates,
     required this.logger,
     required this.localPushRepository,
+    required this.missedCallTitle,
+    required this.unknownCallerFallback,
     this.callLogsRepository,
   }) : _pushService = callkeep {
     // setBackgroundServiceDelegate is called in the constructor so callkeep can
@@ -44,6 +46,8 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   final CallLogsRepository? callLogsRepository;
   final SecureStorage storage;
   final TrustedCertificates certificates;
+  final String missedCallTitle;
+  final String unknownCallerFallback;
 
   final BackgroundPushNotificationService _pushService;
 
@@ -496,7 +500,11 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   Future<void> _showMissedCallNotification(HangupEvent event, NewCall call) async {
     try {
       await localPushRepository.displayPush(
-        AppLocalPush.missedCall(event.callId, _getDisplayNameForMissedCall(event, call) ?? 'Unknown'),
+        AppLocalPush.missedCall(
+          event.callId,
+          missedCallTitle,
+          _getDisplayNameForMissedCall(event, call) ?? unknownCallerFallback,
+        ),
       );
     } catch (e) {
       logger.severe('Failed to show missed call notification', e);

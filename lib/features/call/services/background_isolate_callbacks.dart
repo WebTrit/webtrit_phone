@@ -5,6 +5,7 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
 import 'package:webtrit_phone/common/common.dart';
+import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'isolate_manager.dart';
@@ -48,6 +49,7 @@ Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) as
   WebtritSignalingService.setHandoffCallback(() => _manager?.notifyActivityTookOver());
   _logger.info('_getOrInit: module factory and handoff callback registered');
 
+  final l10n = lookupAppLocalizations(context.locale);
   _manager = PushNotificationIsolateManager(
     callLogsRepository: context.callLogsRepository,
     localPushRepository: context.localPushRepository,
@@ -55,6 +57,8 @@ Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) as
     storage: context.secureStorage,
     certificates: context.appCertificates.trustedCertificates,
     logger: Logger('PushNotificationIsolateManager'),
+    missedCallTitle: l10n.notifications_missedCall_title,
+    unknownCallerFallback: l10n.notifications_missedCall_unknownCaller,
   );
   // init() constructs WebtritSignalingService and wires up the event subscription.
   // The WebSocket connection starts in connect(), which is called from run().

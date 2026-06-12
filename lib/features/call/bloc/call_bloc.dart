@@ -85,6 +85,7 @@ const _getUserMediaPushKitTimeout = Duration(seconds: 8);
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final CallLogsRepository callLogsRepository;
   final LocalPushRepository localPushRepository;
+  final String missedCallTitle;
   final UserRepository userRepository;
   final LinesStateRepository linesStateRepository;
   final PresenceInfoRepository presenceInfoRepository;
@@ -143,6 +144,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   CallBloc({
     required this.callLogsRepository,
     required this.localPushRepository,
+    required this.missedCallTitle,
     required this.linesStateRepository,
     required this.presenceInfoRepository,
     required this.dialogInfoRepository,
@@ -1191,7 +1193,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   void _showMissedCallNotification(String callId, String callerName) {
     localPushRepository
-        .displayPush(AppLocalPush.missedCall(callId, callerName))
+        .displayPush(AppLocalPush.missedCall(callId, missedCallTitle, callerName))
         .catchError((e) => _logger.warning('_showMissedCallNotification: $e'));
   }
 
