@@ -1886,6 +1886,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Вбудовані посилання застосунку';
 
   @override
+  String get settings_AboutText_ThirdPartyLicenses => 'Ліцензії третіх сторін';
+
+  @override
   String get settings_AboutText_AppSessionIdentifier => 'Ідентифікатор сесії застосунку';
 
   @override

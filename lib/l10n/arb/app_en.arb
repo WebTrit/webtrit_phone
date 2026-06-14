@@ -1585,6 +1585,8 @@
   },
   "settings_AboutText_ApplicationEmbeddedLinks": "Application embedded links",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
+  "settings_AboutText_ThirdPartyLicenses": "Third-party licenses",
+  "@settings_AboutText_ThirdPartyLicenses": {},
   "settings_AboutText_AppSessionIdentifier": "Application session identifier",
   "@settings_AboutText_AppSessionIdentifier": {},
   "settings_AboutText_AppVersion": "App Version",

@@ -1582,6 +1582,8 @@
   },
   "settings_AboutText_ApplicationEmbeddedLinks": "Collegamenti incorporati dell'applicazione",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
+  "settings_AboutText_ThirdPartyLicenses": "Licenze di terze parti",
+  "@settings_AboutText_ThirdPartyLicenses": {},
   "settings_AboutText_AppSessionIdentifier": "Identificatore della sessione dell'applicazione",
   "@settings_AboutText_AppSessionIdentifier": {},
   "settings_AboutText_AppVersion": "Versione dell'app",

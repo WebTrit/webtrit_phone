@@ -37,6 +37,10 @@ extension AppLocalizationsExtension on AppLocalizations {
       'autoprovision_ReloginDialog_title' => autoprovision_ReloginDialog_title,
       'autoprovision_successSnackBar_used' =>
         autoprovision_successSnackBar_used,
+      'callTileActions_contact' => callTileActions_contact,
+      'callTileActions_history' => callTileActions_history,
+      'callTileActions_message' => callTileActions_message,
+      'callTileActions_more' => callTileActions_more,
       'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
       'call_CallActionsTooltip_accept_inviteToAttendedTransfer' =>
         call_CallActionsTooltip_accept_inviteToAttendedTransfer,
@@ -686,6 +690,9 @@ extension AppLocalizationsExtension on AppLocalizations {
         notifications_messageSnackBar_appOffline,
       'notifications_successSnackBar_appOnline' =>
         notifications_successSnackBar_appOnline,
+      'notifications_missedCall_title' => notifications_missedCall_title,
+      'notifications_missedCall_unknownCaller' =>
+        notifications_missedCall_unknownCaller,
       'numberActions_audioCall' => numberActions_audioCall,
       'numberActions_callLog' => numberActions_callLog,
       'numberActions_chat' => numberActions_chat,
@@ -839,6 +846,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'session_Teardown_progressText' => session_Teardown_progressText,
       'settings_AboutText_ApplicationEmbeddedLinks' =>
         settings_AboutText_ApplicationEmbeddedLinks,
+      'settings_AboutText_ThirdPartyLicenses' =>
+        settings_AboutText_ThirdPartyLicenses,
       'settings_AboutText_AppSessionIdentifier' =>
         settings_AboutText_AppSessionIdentifier,
       'settings_AboutText_AppVersion' => settings_AboutText_AppVersion,

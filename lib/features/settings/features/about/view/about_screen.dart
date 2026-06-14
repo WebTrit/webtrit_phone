@@ -128,12 +128,25 @@ class _AboutScreenState extends State<AboutScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                padding: const EdgeInsets.only(left: 16, right: 16),
                 child: TextButton.icon(
                   onPressed: () => _showEmbeddedLinksDialog(context, state.embeddedLinks),
+                  style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
                   icon: const Icon(Icons.link),
                   label: Text(
                     context.l10n.settings_AboutText_ApplicationEmbeddedLinks,
+                    style: themeData.textTheme.bodyMedium,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                child: TextButton.icon(
+                  onPressed: () => _showLicenses(context),
+                  style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
+                  icon: const Icon(Icons.description_outlined),
+                  label: Text(
+                    context.l10n.settings_AboutText_ThirdPartyLicenses,
                     style: themeData.textTheme.bodyMedium,
                   ),
                 ),
@@ -171,6 +184,10 @@ class _AboutScreenState extends State<AboutScreen> {
         ],
       ),
     );
+  }
+
+  void _showLicenses(BuildContext context) {
+    showLicensePage(context: context);
   }
 
   void _onMultiTapTriggered() {

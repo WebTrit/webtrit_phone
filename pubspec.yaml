@@ -271,6 +271,14 @@ melos:
           - build_runner
 
     # ===========================
+    # Licenses - melos run licenses:generate
+    # ===========================
+
+    licenses:generate:
+      description: Regenerate THIRD_PARTY_LICENSES.md from the resolved dependencies.
+      run: dart run tool/generate_licenses.dart
+
+    # ===========================
     # Testing - melos run test
     # ===========================
 
