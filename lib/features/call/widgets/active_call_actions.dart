@@ -23,6 +23,8 @@ class ActiveCallActions extends StatefulWidget {
     required this.wasAccepted,
     required this.wasHungUp,
     required this.cameraValue,
+    this.cameraPermissionDenied = false,
+    this.onCameraPermissionDeniedPressed,
     required this.inviteToAttendedTransfer,
     this.onCameraChanged,
     required this.mutedValue,
@@ -46,6 +48,15 @@ class ActiveCallActions extends StatefulWidget {
   final bool wasAccepted;
   final bool wasHungUp;
   final bool cameraValue;
+
+  /// Whether camera permission was denied for this call (audio-only downgrade).
+  /// When set, the camera button shows a settings hint instead of toggling.
+  final bool cameraPermissionDenied;
+
+  /// Invoked when the camera button is tapped while [cameraPermissionDenied].
+  /// The handler re-checks the live permission and either enables the camera
+  /// (now granted) or opens app settings (still denied).
+  final VoidCallback? onCameraPermissionDeniedPressed;
   final bool inviteToAttendedTransfer;
   final ValueChanged<bool>? onCameraChanged;
   final bool mutedValue;
@@ -235,11 +246,15 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         ),
         Tooltip(
           key: callActionsVideoCallKey,
-          message: widget.cameraValue
+          message: widget.cameraPermissionDenied
+              ? context.l10n.call_CallActionsTooltip_cameraPermissionDenied
+              : widget.cameraValue
               ? context.l10n.call_CallActionsTooltip_disableCamera
               : context.l10n.call_CallActionsTooltip_enableCamera,
           child: TextButton(
-            onPressed: () => onCameraChanged?.call(!widget.cameraValue),
+            onPressed: widget.cameraPermissionDenied
+                ? () => widget.onCameraPermissionDeniedPressed?.call()
+                : () => onCameraChanged?.call(!widget.cameraValue),
             statesController: _cameraStatesController..update(WidgetState.selected, widget.cameraValue),
             style: widget.style?.camera,
             child: Icon(widget.cameraValue ? Icons.videocam : Icons.videocam_off, size: actionPadIconSize),

@@ -285,6 +285,12 @@ abstract class AppLocalizations {
   /// **'Enable camera'**
   String get call_CallActionsTooltip_enableCamera;
 
+  /// No description provided for @call_CallActionsTooltip_cameraPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera permission denied. Tap to open settings'**
+  String get call_CallActionsTooltip_cameraPermissionDenied;
+
   /// No description provided for @call_CallActionsTooltip_enableSpeaker.
   ///
   /// In en, this message translates to:
@@ -2507,6 +2513,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check'**
   String get notifications_errorSnackBarAction_callUserMedia;
+
+  /// Shown when an incoming video call is answered audio-only because camera permission was denied. Offers a shortcut to app settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Answered with camera off - camera permission not granted'**
+  String get notifications_messageSnackBar_callVideoDowngraded;
+
+  /// No description provided for @notifications_messageSnackBarAction_callVideoDowngraded.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get notifications_messageSnackBarAction_callVideoDowngraded;
 
   /// Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target.
   ///

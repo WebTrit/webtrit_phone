@@ -147,6 +147,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_enableCamera => 'Enable camera';
 
   @override
+  String get call_CallActionsTooltip_cameraPermissionDenied => 'Camera permission denied. Tap to open settings';
+
+  @override
   String get call_CallActionsTooltip_enableSpeaker => 'Enable speakerphone';
 
   @override
@@ -1348,6 +1351,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Check';
+
+  @override
+  String get notifications_messageSnackBar_callVideoDowngraded =>
+      'Answered with camera off - camera permission not granted';
+
+  @override
+  String get notifications_messageSnackBarAction_callVideoDowngraded => 'Settings';
 
   @override
   String get notifications_errorSnackBar_activeLineBlindTransferWarning =>

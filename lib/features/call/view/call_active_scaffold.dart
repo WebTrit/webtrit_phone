@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -141,6 +142,21 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   void _toggleFocusedCamera(bool value) {
     _callBloc.add(CallControlEvent.cameraEnabled(widget.focusedCall.callId, value));
     dispatchInteractionDebounce();
+  }
+
+  /// Handles a camera-button tap when the call was downgraded to audio-only
+  /// because camera permission was denied. Re-checks the live permission so a
+  /// mid-call grant is honoured: if granted, enables the camera; otherwise
+  /// opens app settings.
+  Future<void> _onCameraPermissionDeniedPressed() async {
+    final appPermissions = context.read<AppPermissions>();
+    final granted = await appPermissions.isPermissionGranted(Permission.camera);
+    if (!mounted) return;
+    if (granted) {
+      _toggleFocusedCamera(true);
+    } else {
+      await appPermissions.toAppSettings();
+    }
   }
 
   void _hangupFocused() {
@@ -299,6 +315,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 wasAccepted: focusedCall.wasAccepted,
                                                 wasHungUp: focusedCall.wasHungUp,
                                                 cameraValue: focusedCall.isCameraActive,
+                                                cameraPermissionDenied:
+                                                    widget.callConfig.isVideoCallEnabled &&
+                                                    focusedCall.videoPermissionDenied,
+                                                onCameraPermissionDeniedPressed: _onCameraPermissionDeniedPressed,
                                                 inviteToAttendedTransfer: focusedTransfer is InviteToAttendedTransfer,
                                                 onCameraChanged: widget.callConfig.isVideoCallEnabled
                                                     ? _toggleFocusedCamera

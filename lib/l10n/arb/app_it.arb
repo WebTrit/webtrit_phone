@@ -105,6 +105,8 @@
   "@call_CallActionsTooltip_disableSpeaker": {},
   "call_CallActionsTooltip_enableCamera": "Attiva video",
   "@call_CallActionsTooltip_enableCamera": {},
+  "call_CallActionsTooltip_cameraPermissionDenied": "Permesso fotocamera negato. Tocca per aprire le impostazioni",
+  "@call_CallActionsTooltip_cameraPermissionDenied": {},
   "call_CallActionsTooltip_enableSpeaker": "Attiva vivavoce",
   "@call_CallActionsTooltip_enableSpeaker": {},
   "call_CallActionsTooltip_hangup": "Termina chiamata",
@@ -1143,6 +1145,12 @@
   },
   "notifications_errorSnackBarAction_callUserMedia": "Verifica",
   "@notifications_errorSnackBarAction_callUserMedia": {},
+  "notifications_messageSnackBar_callVideoDowngraded": "Risposta senza fotocamera - permesso fotocamera non concesso",
+  "@notifications_messageSnackBar_callVideoDowngraded": {
+    "description": "Shown when an incoming video call is answered audio-only because camera permission was denied. Offers a shortcut to app settings."
+  },
+  "notifications_messageSnackBarAction_callVideoDowngraded": "Impostazioni",
+  "@notifications_messageSnackBarAction_callVideoDowngraded": {},
   "notifications_errorSnackBar_activeLineBlindTransferWarning": "Sei già in linea con il destinatario a cui stai cercando di trasferire alla cieca",
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {
     "description": "Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target."

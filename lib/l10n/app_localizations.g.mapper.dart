@@ -37,6 +37,10 @@ extension AppLocalizationsExtension on AppLocalizations {
       'autoprovision_ReloginDialog_title' => autoprovision_ReloginDialog_title,
       'autoprovision_successSnackBar_used' =>
         autoprovision_successSnackBar_used,
+      'callTileActions_contact' => callTileActions_contact,
+      'callTileActions_history' => callTileActions_history,
+      'callTileActions_message' => callTileActions_message,
+      'callTileActions_more' => callTileActions_more,
       'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
       'call_CallActionsTooltip_accept_inviteToAttendedTransfer' =>
         call_CallActionsTooltip_accept_inviteToAttendedTransfer,
@@ -64,6 +68,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         call_CallActionsTooltip_disableSpeaker,
       'call_CallActionsTooltip_enableCamera' =>
         call_CallActionsTooltip_enableCamera,
+      'call_CallActionsTooltip_cameraPermissionDenied' =>
+        call_CallActionsTooltip_cameraPermissionDenied,
       'call_CallActionsTooltip_enableSpeaker' =>
         call_CallActionsTooltip_enableSpeaker,
       'call_CallActionsTooltip_hangup' => call_CallActionsTooltip_hangup,
@@ -634,6 +640,10 @@ extension AppLocalizationsExtension on AppLocalizations {
         notifications_errorSnackBarAction_callSdpConfiguration,
       'notifications_errorSnackBarAction_callUserMedia' =>
         notifications_errorSnackBarAction_callUserMedia,
+      'notifications_messageSnackBar_callVideoDowngraded' =>
+        notifications_messageSnackBar_callVideoDowngraded,
+      'notifications_messageSnackBarAction_callVideoDowngraded' =>
+        notifications_messageSnackBarAction_callVideoDowngraded,
       'notifications_errorSnackBar_activeLineBlindTransferWarning' =>
         notifications_errorSnackBar_activeLineBlindTransferWarning,
       'notifications_errorSnackBar_blindTransferFailed' =>
@@ -686,6 +696,9 @@ extension AppLocalizationsExtension on AppLocalizations {
         notifications_messageSnackBar_appOffline,
       'notifications_successSnackBar_appOnline' =>
         notifications_successSnackBar_appOnline,
+      'notifications_missedCall_title' => notifications_missedCall_title,
+      'notifications_missedCall_unknownCaller' =>
+        notifications_missedCall_unknownCaller,
       'numberActions_audioCall' => numberActions_audioCall,
       'numberActions_callLog' => numberActions_callLog,
       'numberActions_chat' => numberActions_chat,

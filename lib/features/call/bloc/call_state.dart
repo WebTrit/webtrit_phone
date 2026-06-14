@@ -273,6 +273,7 @@ class ActiveCall with _$ActiveCall implements CallEntry {
     required this.createdTime,
     required this.video,
     required this.processingStatus,
+    this.videoPermissionDenied = false,
     this.frontCamera = true,
     this.held = false,
     this.muted = false,
@@ -316,6 +317,14 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   /// Never derive it from a remote SDP offer — that is what [remoteVideo] is for.
   @override
   final bool video;
+
+  /// Set when an incoming video call was answered audio-only because camera
+  /// permission was denied. Drives the camera-button hint that routes the user
+  /// to app settings. It is a best-effort hint: the button re-checks the live
+  /// permission on tap, so a stale value cannot send a user with granted
+  /// permission to settings.
+  @override
+  final bool videoPermissionDenied;
 
   @override
   final CallProcessingStatus processingStatus;

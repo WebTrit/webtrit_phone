@@ -148,6 +148,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_CallActionsTooltip_enableCamera => 'Attiva video';
 
   @override
+  String get call_CallActionsTooltip_cameraPermissionDenied =>
+      'Permesso fotocamera negato. Tocca per aprire le impostazioni';
+
+  @override
   String get call_CallActionsTooltip_enableSpeaker => 'Attiva vivavoce';
 
   @override
@@ -1361,6 +1365,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Verifica';
+
+  @override
+  String get notifications_messageSnackBar_callVideoDowngraded =>
+      'Risposta senza fotocamera - permesso fotocamera non concesso';
+
+  @override
+  String get notifications_messageSnackBarAction_callVideoDowngraded => 'Impostazioni';
 
   @override
   String get notifications_errorSnackBar_activeLineBlindTransferWarning =>
