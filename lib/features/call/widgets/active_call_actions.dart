@@ -155,6 +155,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
 
     // Camera can trigger SDP renegotiation when adding a new track, so it is gated.
     final onCameraChanged = widget.enableInteractions ? widget.onCameraChanged : null;
+    // The permission-denied tap can enable the camera (-> SDP renegotiation), so it is gated too.
+    final onCameraPermissionDeniedPressed = widget.enableInteractions ? widget.onCameraPermissionDeniedPressed : null;
     // Mute is local-only (no SDP change), so it stays active during renegotiation.
     final onMutedChanged = widget.onMutedChanged;
     // Speaker switching is local-only (no SDP change), so it stays active during renegotiation.
@@ -253,7 +255,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
               : context.l10n.call_CallActionsTooltip_enableCamera,
           child: TextButton(
             onPressed: widget.cameraPermissionDenied
-                ? () => widget.onCameraPermissionDeniedPressed?.call()
+                ? () => onCameraPermissionDeniedPressed?.call()
                 : () => onCameraChanged?.call(!widget.cameraValue),
             statesController: _cameraStatesController..update(WidgetState.selected, widget.cameraValue),
             style: widget.style?.camera,

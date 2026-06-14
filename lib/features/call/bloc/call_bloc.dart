@@ -2491,6 +2491,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     final activeCall = state.retrieveActiveCall(e.callId);
     if (activeCall == null) return;
+    final callId = e.callId;
 
     final localStream = activeCall.localStream;
     if (localStream == null) return;
@@ -2498,7 +2499,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final currentVideoTrack = localStream.getVideoTracks().firstOrNull;
     if (currentVideoTrack != null) {
       currentVideoTrack.enabled = e.enabled;
-      emit(state.copyWithMappedActiveCall(e.callId, (call) => call.copyWith(video: e.enabled)));
+      // A usable video track exists, so camera permission is granted: clear any
+      // stale downgrade hint left from an earlier audio-only answer.
+      emit(
+        state.copyWithMappedActiveCall(callId, (call) => call.copyWith(video: e.enabled, videoPermissionDenied: false)),
+      );
       if (e.enabled) {
         await _mediaManager.onVideoEnabled(e.callId, speakerDevice: state.availableAudioDevices.getSpeaker);
       } else {
@@ -2526,6 +2531,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final newVideoTrack = await userMediaBuilder.ensureVideoTrack(localStream, frontCamera: activeCall.frontCamera);
       if (newVideoTrack == null) {
         submitNotification(const CallUserMediaErrorNotification());
+        await _syncVideoPermissionDenied(callId, emit);
         return;
       }
 
@@ -2547,7 +2553,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } on UserMediaError catch (e) {
       _logger.warning('__onMutationControlSetCameraEnabled cant enable: $e');
       submitNotification(const CallUserMediaErrorNotification());
+      await _syncVideoPermissionDenied(callId, emit);
     }
+  }
+
+  /// Re-derives [ActiveCall.videoPermissionDenied] from the live camera
+  /// permission after a camera-enable attempt fails. Clears a stale hint once
+  /// the user has granted access, and keeps it when permission is still denied,
+  /// so the camera button never misreports the reason video is unavailable.
+  Future<void> _syncVideoPermissionDenied(String callId, Emitter<CallState> emit) async {
+    final denied = !(await isCameraPermissionGranted?.call() ?? true);
+    emit(state.copyWithMappedActiveCall(callId, (call) => call.copyWith(videoPermissionDenied: denied)));
   }
 
   Future<void> __onMutationControlBlindTransfer(
