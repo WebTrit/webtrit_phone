@@ -3456,6 +3456,12 @@ abstract class AppLocalizations {
   /// **'Application embedded links'**
   String get settings_AboutText_ApplicationEmbeddedLinks;
 
+  /// No description provided for @settings_AboutText_ThirdPartyLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Third-party licenses'**
+  String get settings_AboutText_ThirdPartyLicenses;
+
   /// No description provided for @settings_AboutText_AppSessionIdentifier.
   ///
   /// In en, this message translates to:

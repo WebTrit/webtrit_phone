@@ -1590,6 +1590,8 @@
   },
   "settings_AboutText_ApplicationEmbeddedLinks": "Вбудовані посилання застосунку",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
+  "settings_AboutText_ThirdPartyLicenses": "Ліцензії третіх сторін",
+  "@settings_AboutText_ThirdPartyLicenses": {},
   "settings_AboutText_AppSessionIdentifier": "Ідентифікатор сесії застосунку",
   "@settings_AboutText_AppSessionIdentifier": {},
   "settings_AboutText_AppVersion": "Версія застосунку",

@@ -1895,6 +1895,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Collegamenti incorporati dell\'applicazione';
 
   @override
+  String get settings_AboutText_ThirdPartyLicenses => 'Licenze di terze parti';
+
+  @override
   String get settings_AboutText_AppSessionIdentifier => 'Identificatore della sessione dell\'applicazione';
 
   @override

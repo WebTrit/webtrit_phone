@@ -1872,6 +1872,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Application embedded links';
 
   @override
+  String get settings_AboutText_ThirdPartyLicenses => 'Third-party licenses';
+
+  @override
   String get settings_AboutText_AppSessionIdentifier => 'Application session identifier';
 
   @override

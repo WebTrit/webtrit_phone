@@ -852,6 +852,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'session_Teardown_progressText' => session_Teardown_progressText,
       'settings_AboutText_ApplicationEmbeddedLinks' =>
         settings_AboutText_ApplicationEmbeddedLinks,
+      'settings_AboutText_ThirdPartyLicenses' =>
+        settings_AboutText_ThirdPartyLicenses,
       'settings_AboutText_AppSessionIdentifier' =>
         settings_AboutText_AppSessionIdentifier,
       'settings_AboutText_AppVersion' => settings_AboutText_AppVersion,
