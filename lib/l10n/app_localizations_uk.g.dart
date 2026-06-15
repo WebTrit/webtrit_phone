@@ -156,6 +156,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_enableCamera => 'Увімкнути камеру';
 
   @override
+  String get call_CallActionsTooltip_cameraPermissionDenied =>
+      'Доступ до камери заборонено. Торкніться, щоб відкрити налаштування';
+
+  @override
   String get call_CallActionsTooltip_enableSpeaker => 'Увімкнути динамік';
 
   @override
@@ -1368,6 +1372,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBarAction_callUserMedia => 'Перевірити';
+
+  @override
+  String get notifications_messageSnackBar_callVideoDowngraded => 'Відповідь без камери - доступ до камери не надано';
+
+  @override
+  String get notifications_messageSnackBarAction_callVideoDowngraded => 'Налаштування';
 
   @override
   String get notifications_errorSnackBar_activeLineBlindTransferWarning =>

@@ -83,6 +83,27 @@ final class CallUserMediaErrorNotification extends MessageNotification {
   }
 }
 
+/// Soft notification shown when an incoming video call is answered audio-only
+/// because camera permission was denied. Unlike [CallUserMediaErrorNotification]
+/// (a hard media error), this communicates a graceful fallback and offers a
+/// shortcut to grant the permission in app settings.
+final class CallVideoDowngradedNotification extends MessageNotification {
+  const CallVideoDowngradedNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_messageSnackBar_callVideoDowngraded;
+  }
+
+  @override
+  SnackBarAction? action(BuildContext context) {
+    return SnackBarAction(
+      label: context.l10n.notifications_messageSnackBarAction_callVideoDowngraded,
+      onPressed: () => openAppSettings(),
+    );
+  }
+}
+
 final class CallMediaTrackSetupErrorNotification extends MessageNotification {
   const CallMediaTrackSetupErrorNotification();
 

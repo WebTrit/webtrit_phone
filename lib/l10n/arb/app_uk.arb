@@ -105,6 +105,8 @@
   "@call_CallActionsTooltip_disableSpeaker": {},
   "call_CallActionsTooltip_enableCamera": "Увімкнути камеру",
   "@call_CallActionsTooltip_enableCamera": {},
+  "call_CallActionsTooltip_cameraPermissionDenied": "Доступ до камери заборонено. Торкніться, щоб відкрити налаштування",
+  "@call_CallActionsTooltip_cameraPermissionDenied": {},
   "call_CallActionsTooltip_enableSpeaker": "Увімкнути динамік",
   "@call_CallActionsTooltip_enableSpeaker": {},
   "call_CallActionsTooltip_hangup": "Завершити",
@@ -1143,6 +1145,12 @@
   },
   "notifications_errorSnackBarAction_callUserMedia": "Перевірити",
   "@notifications_errorSnackBarAction_callUserMedia": {},
+  "notifications_messageSnackBar_callVideoDowngraded": "Відповідь без камери - доступ до камери не надано",
+  "@notifications_messageSnackBar_callVideoDowngraded": {
+    "description": "Shown when an incoming video call is answered audio-only because camera permission was denied. Offers a shortcut to app settings."
+  },
+  "notifications_messageSnackBarAction_callVideoDowngraded": "Налаштування",
+  "@notifications_messageSnackBarAction_callVideoDowngraded": {},
   "notifications_errorSnackBar_activeLineBlindTransferWarning": "Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ",
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {
     "description": "Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target."

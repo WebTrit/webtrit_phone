@@ -93,6 +93,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final OutgoingFromNumberResolver resolveOutgoingFromNumber;
   final Function(Notification) submitNotification;
 
+  /// Resolves the current camera permission state. Used to confirm that an
+  /// audio-only downgrade on an incoming video call was caused by a denied
+  /// camera permission (rather than a hardware failure) before steering the
+  /// user toward app settings. When [null], no downgrade hint is raised.
+  final Future<bool> Function()? isCameraPermissionGranted;
+
   /// Callback invoked when the signaling client reports a critical session error
   /// (e.g. [SignalingDisconnectCode.sessionMissedError]), indicating the
   /// current session is no longer valid on the server.
@@ -158,6 +164,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callErrorReporter,
     required this.sendPresenceSettings,
     required this.onDiagnosticReportRequested,
+    this.isCameraPermissionGranted,
     this.sdpMunger,
     this.sdpSanitizer,
     this.webRtcOptionsBuilder,
@@ -2049,15 +2056,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
       final hasVideo = localStream.getVideoTracks().isNotEmpty;
+      // The offer requested video but the stream came back audio-only: the
+      // camera was downgraded. Confirm it is a permission denial (not a
+      // hardware failure) before hinting the user toward app settings.
+      final videoDowngraded = offer.hasVideo && !hasVideo;
+      final videoPermissionDenied = videoDowngraded && !(await _isCameraPermissionGranted());
       emit(
         state.copyWithMappedActiveCall(event.callId, (call) {
           return call.copyWith(
             video: hasVideo,
+            videoPermissionDenied: videoPermissionDenied,
             localStream: localStream,
             processingStatus: CallProcessingStatus.incomingAnswering,
           );
         }),
       );
+      if (videoPermissionDenied) {
+        submitNotification(const CallVideoDowngradedNotification());
+      }
       await _onVideoStreamReady(event.callId);
 
       final remoteDescription = offer.toDescription();
@@ -2475,6 +2491,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     final activeCall = state.retrieveActiveCall(e.callId);
     if (activeCall == null) return;
+    final callId = e.callId;
 
     final localStream = activeCall.localStream;
     if (localStream == null) return;
@@ -2482,7 +2499,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final currentVideoTrack = localStream.getVideoTracks().firstOrNull;
     if (currentVideoTrack != null) {
       currentVideoTrack.enabled = e.enabled;
-      emit(state.copyWithMappedActiveCall(e.callId, (call) => call.copyWith(video: e.enabled)));
+      // A usable video track exists, so camera permission is granted: clear any
+      // stale downgrade hint left from an earlier audio-only answer.
+      emit(
+        state.copyWithMappedActiveCall(callId, (call) => call.copyWith(video: e.enabled, videoPermissionDenied: false)),
+      );
       if (e.enabled) {
         await _mediaManager.onVideoEnabled(e.callId, speakerDevice: state.availableAudioDevices.getSpeaker);
       } else {
@@ -2510,6 +2531,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final newVideoTrack = await userMediaBuilder.ensureVideoTrack(localStream, frontCamera: activeCall.frontCamera);
       if (newVideoTrack == null) {
         submitNotification(const CallUserMediaErrorNotification());
+        await _syncVideoPermissionDenied(callId, emit);
         return;
       }
 
@@ -2523,12 +2545,39 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _checkSenderResult(videoSenderResult, 'video');
       }
 
-      emit(state.copyWithMappedActiveCall(e.callId, (call) => call.copyWith(video: true)));
+      emit(
+        state.copyWithMappedActiveCall(e.callId, (call) => call.copyWith(video: true, videoPermissionDenied: false)),
+      );
       await _mediaManager.onVideoEnabled(e.callId, speakerDevice: state.availableAudioDevices.getSpeaker);
       await callkeep.reportUpdateCall(e.callId, hasVideo: true);
     } on UserMediaError catch (e) {
       _logger.warning('__onMutationControlSetCameraEnabled cant enable: $e');
       submitNotification(const CallUserMediaErrorNotification());
+      await _syncVideoPermissionDenied(callId, emit);
+    }
+  }
+
+  /// Re-derives [ActiveCall.videoPermissionDenied] from the live camera
+  /// permission after a camera-enable attempt fails. Clears a stale hint once
+  /// the user has granted access, and keeps it when permission is still denied,
+  /// so the camera button never misreports the reason video is unavailable.
+  Future<void> _syncVideoPermissionDenied(String callId, Emitter<CallState> emit) async {
+    final denied = !(await _isCameraPermissionGranted());
+    // The check awaits, so the call may have ended meanwhile; skip the emit then.
+    if (state.retrieveActiveCall(callId) == null) return;
+    emit(state.copyWithMappedActiveCall(callId, (call) => call.copyWith(videoPermissionDenied: denied)));
+  }
+
+  /// Live camera-permission check that never throws. A failing permission plugin
+  /// (e.g. a `PlatformException`) must not break call answering or camera
+  /// toggling, so the unknown case is treated as granted: we never block the
+  /// flow and never raise a misleading "permission denied" hint.
+  Future<bool> _isCameraPermissionGranted() async {
+    try {
+      return await isCameraPermissionGranted?.call() ?? true;
+    } catch (e, s) {
+      _logger.warning('camera permission check failed, assuming granted', e, s);
+      return true;
     }
   }
 

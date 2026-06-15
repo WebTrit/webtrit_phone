@@ -4,7 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:provider/provider.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call/view/call_active_scaffold.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -17,6 +19,8 @@ import 'package:webtrit_phone/theme/theme.dart';
 
 class _MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {}
 
+class _MockAppPermissions extends Mock implements AppPermissions {}
+
 const _kHandle = CallkeepHandle.number('+380991234567');
 
 ActiveCall _makeCall({
@@ -26,6 +30,7 @@ ActiveCall _makeCall({
   bool held = false,
   DateTime? acceptedTime,
   String? displayName,
+  bool videoPermissionDenied = false,
 }) {
   return ActiveCall(
     callId: callId,
@@ -38,10 +43,33 @@ ActiveCall _makeCall({
     held: held,
     acceptedTime: acceptedTime,
     displayName: displayName,
+    videoPermissionDenied: videoPermissionDenied,
   );
 }
 
-Widget _buildSubject(_MockCallBloc callBloc, {required List<ActiveCall> activeCalls, required ActiveCall focusedCall}) {
+Widget _buildSubject(
+  _MockCallBloc callBloc, {
+  required List<ActiveCall> activeCalls,
+  required ActiveCall focusedCall,
+  AppPermissions? appPermissions,
+}) {
+  Widget scaffold = BlocProvider<CallBloc>.value(
+    value: callBloc,
+    child: CallActiveScaffold(
+      callStatus: CallStatus.ready,
+      activeCalls: activeCalls,
+      focusedCall: focusedCall,
+      audioDevice: null,
+      availableAudioDevices: const [],
+      callConfig: const CallCapabilitiesConfig(),
+      localePlaceholderBuilder: null,
+      remotePlaceholderBuilder: null,
+    ),
+  );
+  // Only the camera permission-denied tap reads AppPermissions; provide it on demand.
+  if (appPermissions != null) {
+    scaffold = Provider<AppPermissions>.value(value: appPermissions, child: scaffold);
+  }
   return ThemeProvider(
     settings: const ThemeSettings(),
     lightDynamic: null,
@@ -53,19 +81,7 @@ Widget _buildSubject(_MockCallBloc callBloc, {required List<ActiveCall> activeCa
       theme: ThemeData(
         extensions: [CallScreenStyles(primary: CallScreenStyle(appBar: const AppBarStyle(showBackButton: false)))],
       ),
-      home: BlocProvider<CallBloc>.value(
-        value: callBloc,
-        child: CallActiveScaffold(
-          callStatus: CallStatus.ready,
-          activeCalls: activeCalls,
-          focusedCall: focusedCall,
-          audioDevice: null,
-          availableAudioDevices: const [],
-          callConfig: const CallCapabilitiesConfig(),
-          localePlaceholderBuilder: null,
-          remotePlaceholderBuilder: null,
-        ),
-      ),
+      home: scaffold,
     ),
   );
 }
@@ -191,6 +207,50 @@ void main() {
       expect(find.byIcon(Icons.swap_calls), findsNothing);
       await tester.tap(find.byIcon(Icons.play_arrow));
       verify(() => callBloc.add(const CallControlEvent.resumedHoldingOthers('held'))).called(1);
+      await _teardown(tester);
+    });
+  });
+
+  group('CallActiveScaffold - camera permission denied', () {
+    testWidgets('camera button shows the permission-denied tooltip', (tester) async {
+      final call = _makeCall(callId: 'active', acceptedTime: DateTime(2024), videoPermissionDenied: true);
+      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [call], focusedCall: call));
+      final context = tester.element(find.byType(CallActiveScaffold));
+
+      expect(find.byTooltip(context.l10n.call_CallActionsTooltip_cameraPermissionDenied), findsOneWidget);
+      expect(find.byTooltip(context.l10n.call_CallActionsTooltip_enableCamera), findsNothing);
+      await _teardown(tester);
+    });
+
+    testWidgets('tap enables the camera when permission is now granted', (tester) async {
+      final appPermissions = _MockAppPermissions();
+      when(() => appPermissions.isPermissionGranted(Permission.camera)).thenAnswer((_) async => true);
+      final call = _makeCall(callId: 'active', acceptedTime: DateTime(2024), videoPermissionDenied: true);
+      await tester.pumpWidget(
+        _buildSubject(callBloc, activeCalls: [call], focusedCall: call, appPermissions: appPermissions),
+      );
+
+      await tester.tap(find.byIcon(Icons.videocam_off));
+      await tester.pump();
+
+      verify(() => callBloc.add(const CallControlEvent.cameraEnabled('active', true))).called(1);
+      verifyNever(() => appPermissions.toAppSettings());
+      await _teardown(tester);
+    });
+
+    testWidgets('tap opens app settings when permission is still denied', (tester) async {
+      final appPermissions = _MockAppPermissions();
+      when(() => appPermissions.isPermissionGranted(Permission.camera)).thenAnswer((_) async => false);
+      when(() => appPermissions.toAppSettings()).thenAnswer((_) async {});
+      final call = _makeCall(callId: 'active', acceptedTime: DateTime(2024), videoPermissionDenied: true);
+      await tester.pumpWidget(
+        _buildSubject(callBloc, activeCalls: [call], focusedCall: call, appPermissions: appPermissions),
+      );
+
+      await tester.tap(find.byIcon(Icons.videocam_off));
+      await tester.pump();
+
+      verify(() => appPermissions.toAppSettings()).called(1);
       await _teardown(tester);
     });
   });

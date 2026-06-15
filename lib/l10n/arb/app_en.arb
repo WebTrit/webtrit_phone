@@ -105,6 +105,8 @@
   "@call_CallActionsTooltip_disableSpeaker": {},
   "call_CallActionsTooltip_enableCamera": "Enable camera",
   "@call_CallActionsTooltip_enableCamera": {},
+  "call_CallActionsTooltip_cameraPermissionDenied": "Camera permission denied. Tap to open settings",
+  "@call_CallActionsTooltip_cameraPermissionDenied": {},
   "call_CallActionsTooltip_enableSpeaker": "Enable speakerphone",
   "@call_CallActionsTooltip_enableSpeaker": {},
   "call_CallActionsTooltip_hangup": "Hangup",
@@ -1143,6 +1145,12 @@
   },
   "notifications_errorSnackBarAction_callUserMedia": "Check",
   "@notifications_errorSnackBarAction_callUserMedia": {},
+  "notifications_messageSnackBar_callVideoDowngraded": "Answered with camera off - camera permission not granted",
+  "@notifications_messageSnackBar_callVideoDowngraded": {
+    "description": "Shown when an incoming video call is answered audio-only because camera permission was denied. Offers a shortcut to app settings."
+  },
+  "notifications_messageSnackBarAction_callVideoDowngraded": "Settings",
+  "@notifications_messageSnackBarAction_callVideoDowngraded": {},
   "notifications_errorSnackBar_activeLineBlindTransferWarning": "You are already on the line with the recipient you are trying to blind transfer to",
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {
     "description": "Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target."
