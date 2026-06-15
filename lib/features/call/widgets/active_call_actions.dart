@@ -255,8 +255,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
               : context.l10n.call_CallActionsTooltip_enableCamera,
           child: TextButton(
             onPressed: widget.cameraPermissionDenied
-                ? () => onCameraPermissionDeniedPressed?.call()
-                : () => onCameraChanged?.call(!widget.cameraValue),
+                ? (onCameraPermissionDeniedPressed != null ? () => onCameraPermissionDeniedPressed() : null)
+                : (onCameraChanged != null ? () => onCameraChanged(!widget.cameraValue) : null),
             statesController: _cameraStatesController..update(WidgetState.selected, widget.cameraValue),
             style: widget.style?.camera,
             child: Icon(widget.cameraValue ? Icons.videocam : Icons.videocam_off, size: actionPadIconSize),

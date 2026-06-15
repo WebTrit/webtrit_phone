@@ -157,7 +157,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.onSessionInvalidated,
     required this.userRepository,
     required this.submitNotification,
-    this.isCameraPermissionGranted,
     required this.callkeep,
     required this.callkeepConnections,
     required this.userMediaBuilder,
@@ -165,6 +164,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callErrorReporter,
     required this.sendPresenceSettings,
     required this.onDiagnosticReportRequested,
+    this.isCameraPermissionGranted,
     this.sdpMunger,
     this.sdpSanitizer,
     this.webRtcOptionsBuilder,
@@ -2060,7 +2060,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // camera was downgraded. Confirm it is a permission denial (not a
       // hardware failure) before hinting the user toward app settings.
       final videoDowngraded = offer.hasVideo && !hasVideo;
-      final videoPermissionDenied = videoDowngraded && !(await isCameraPermissionGranted?.call() ?? true);
+      final videoPermissionDenied = videoDowngraded && !(await _isCameraPermissionGranted());
       emit(
         state.copyWithMappedActiveCall(event.callId, (call) {
           return call.copyWith(
@@ -2562,8 +2562,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// the user has granted access, and keeps it when permission is still denied,
   /// so the camera button never misreports the reason video is unavailable.
   Future<void> _syncVideoPermissionDenied(String callId, Emitter<CallState> emit) async {
-    final denied = !(await isCameraPermissionGranted?.call() ?? true);
+    final denied = !(await _isCameraPermissionGranted());
+    // The check awaits, so the call may have ended meanwhile; skip the emit then.
+    if (state.retrieveActiveCall(callId) == null) return;
     emit(state.copyWithMappedActiveCall(callId, (call) => call.copyWith(videoPermissionDenied: denied)));
+  }
+
+  /// Live camera-permission check that never throws. A failing permission plugin
+  /// (e.g. a `PlatformException`) must not break call answering or camera
+  /// toggling, so the unknown case is treated as granted: we never block the
+  /// flow and never raise a misleading "permission denied" hint.
+  Future<bool> _isCameraPermissionGranted() async {
+    try {
+      return await isCameraPermissionGranted?.call() ?? true;
+    } catch (e, s) {
+      _logger.warning('camera permission check failed, assuming granted', e, s);
+      return true;
+    }
   }
 
   Future<void> __onMutationControlBlindTransfer(
