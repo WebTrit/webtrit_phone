@@ -193,6 +193,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                 key: ValueKey(recent),
                                 child: RecentTile(
                                   recent: recent,
+                                  videoEnabled: widget.videoEnabled,
                                   callNumbers: callRoutingState?.allNumbers ?? [],
                                   dateFormat: context.read<RecentsBloc>().dateFormat,
                                   onTap: transfer
@@ -208,12 +209,14 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                             video: callLogEntry.video && widget.videoEnabled,
                                           );
                                         },
-                                  onAudioCallPressed: () => _callController.createCall(
-                                    destination: callLogEntry.number,
-                                    displayName: contact?.maybeName,
-                                    video: false,
-                                  ),
-                                  onVideoCallPressed: widget.videoEnabled
+                                  onAudioCallPressed: (callLogEntry.video && widget.videoEnabled)
+                                      ? () => _callController.createCall(
+                                          destination: callLogEntry.number,
+                                          displayName: contact?.maybeName,
+                                          video: false,
+                                        )
+                                      : null,
+                                  onVideoCallPressed: (!callLogEntry.video && widget.videoEnabled)
                                       ? () => _callController.createCall(
                                           destination: callLogEntry.number,
                                           displayName: contact?.maybeName,

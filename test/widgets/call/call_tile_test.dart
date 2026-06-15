@@ -20,6 +20,7 @@ void main() {
     bool expanded = false,
     bool gesturesEnabled = true,
     VoidCallback? onDialPressed,
+    IconData? dialIcon,
     VoidCallback? onAudioCallPressed,
     VoidCallback? onVideoCallPressed,
     VoidCallback? onChatPressed,
@@ -37,6 +38,7 @@ void main() {
       expanded: expanded,
       gesturesEnabled: gesturesEnabled,
       onDialPressed: onDialPressed,
+      dialIcon: dialIcon,
       onAudioCallPressed: onAudioCallPressed,
       onVideoCallPressed: onVideoCallPressed,
       onChatPressed: onChatPressed,
@@ -118,6 +120,16 @@ void main() {
       expect(dialed, isTrue);
     });
 
+    testWidgets('dial button shows custom dialIcon when provided', (tester) async {
+      var dialed = false;
+      await tester.pumpWidget(buildTestable(buildTile(onDialPressed: () => dialed = true, dialIcon: Icons.videocam)));
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.call), findsNothing);
+      await tester.tap(find.byIcon(Icons.videocam));
+      expect(dialed, isTrue);
+    });
+
     testWidgets('without onDialPressed falls back to the menu button', (tester) async {
       await tester.pumpWidget(buildTestable(buildTile()));
       await tester.pumpAndSettle();
@@ -127,17 +139,25 @@ void main() {
     });
 
     testWidgets('expanded action buttons fire their callbacks', (tester) async {
+      var audio = false;
       var video = false;
       var history = false;
       await tester.pumpWidget(
         buildTestable(
-          buildTile(expanded: true, onVideoCallPressed: () => video = true, onCallLogPressed: () => history = true),
+          buildTile(
+            expanded: true,
+            onAudioCallPressed: () => audio = true,
+            onVideoCallPressed: () => video = true,
+            onCallLogPressed: () => history = true,
+          ),
         ),
       );
       await tester.pumpAndSettle();
 
+      await tester.tap(find.text('Audio call'));
       await tester.tap(find.text('Video call'));
       await tester.tap(find.text('History'));
+      expect(audio, isTrue);
       expect(video, isTrue);
       expect(history, isTrue);
     });
@@ -175,10 +195,12 @@ void main() {
       await tester.pumpWidget(buildTestable(buildTile(expanded: true, onAudioCallPressed: () {})));
       await tester.pumpAndSettle();
 
+      expect(find.widgetWithText(CallTileActionsBar, 'Audio call'), findsOneWidget);
+
       await tester.tap(find.text('More'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Audio call'), findsOneWidget);
+      expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Audio call'), findsOneWidget);
     });
   });
 }
