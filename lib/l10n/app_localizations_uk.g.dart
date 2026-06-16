@@ -2495,7 +2495,7 @@ class AppLocalizationsUk extends AppLocalizations {
       'Не знайдено необхідного компонента. Спробуйте перезапустити застосунок.';
 
   @override
-  String get signalingResponseCode_rejected => 'Ваш запит було відхилено. Будь ласка, спробуйте ще раз.';
+  String get signalingResponseCode_rejected => 'Виклик відхилено';
 
   @override
   String get signalingResponseCode_requestTerminated => 'Ваш запит було відхилено. Будь ласка, спробуйте ще раз.';
@@ -2571,11 +2571,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signalingResponseCode_unwanted => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
 
   @override
-  String get signalingResponseCode_userBusy =>
-      'Користувач, якого ви намагаєтеся знайти, зайнятий. Будь ласка, спробуйте пізніше.';
+  String get signalingResponseCode_userBusy => 'Користувач зайнятий';
 
   @override
-  String get signalingResponseCode_userNotExist => 'Користувача, якого ви намагаєтеся знайти, не існує.';
+  String get signalingResponseCode_userNotExist => 'Користувача не існує';
+
+  @override
+  String get signalingResponseCode_unableToComplete => 'Не вдалося здійснити виклик.';
 
   @override
   String get signalingResponseCode_wrongWebrtcState =>

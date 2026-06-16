@@ -1181,9 +1181,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       case SignalingResponseCode.invalidNumberFormat:
         submitNotification(CallInvalidNumberNotification());
       default:
+        submitNotification(CallUnableToCompleteNotification());
         _logger.severe('onCallSignalingEventHangup: $code');
         CrashlyticsUtils.recordError(
-          'CallBloc - onCallSignalingEventHangup ${code.name}}',
+          'CallBloc - onCallSignalingEventHangup ${code.name}',
           information: [
             'callId: ${event.callId}',
             'reason: ${event.reason}',

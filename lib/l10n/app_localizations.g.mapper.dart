@@ -1240,6 +1240,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'signalingResponseCode_userBusy' => signalingResponseCode_userBusy,
       'signalingResponseCode_userNotExist' =>
         signalingResponseCode_userNotExist,
+      'signalingResponseCode_unableToComplete' =>
+        signalingResponseCode_unableToComplete,
       'signalingResponseCode_wrongWebrtcState' =>
         signalingResponseCode_wrongWebrtcState,
       'socketError_connectionRefused' => socketError_connectionRefused,

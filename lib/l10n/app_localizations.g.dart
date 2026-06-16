@@ -4497,7 +4497,7 @@ abstract class AppLocalizations {
   /// Shown when a dialed phone number is not in a valid format. Typical cause: non-numeric input, missing country code, or format not supported by SIP/PBX.
   ///
   /// In en, this message translates to:
-  /// **'The number you entered is invalid.'**
+  /// **'Invalid number format'**
   String get signalingResponseCode_invalidNumberFormat;
 
   /// Shown when the signaling request points to an invalid or unsupported path/endpoint in the server.
@@ -4569,7 +4569,7 @@ abstract class AppLocalizations {
   /// Shown when the call request is rejected by an intermediary (e.g. proxy, SBC, or policy server) before reaching the recipient. SIP 603 Decline or similar.
   ///
   /// In en, this message translates to:
-  /// **'The call was rejected by a machine or process on the way, without reaching the destination... '**
+  /// **'Call rejected'**
   String get signalingResponseCode_rejected;
 
   /// Shown when a signaling request was terminated prematurely. SIP 487 Request Terminated, often due to caller cancelling before answer.
@@ -4701,14 +4701,20 @@ abstract class AppLocalizations {
   /// Shown when the callee is busy (SIP 486 Busy Here).
   ///
   /// In en, this message translates to:
-  /// **'The user you\'re trying to reach is busy. Please try again later.'**
+  /// **'User busy'**
   String get signalingResponseCode_userBusy;
 
   /// Shown when the dialed user is not registered or does not exist in the PBX. SIP 404 Not Found.
   ///
   /// In en, this message translates to:
-  /// **'The user you\'re trying to reach doesn\'t exist.'**
+  /// **'User does not exist'**
   String get signalingResponseCode_userNotExist;
+
+  /// Generic neutral fallback shown when an outgoing call fails for an unrecognized reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to complete the call.'**
+  String get signalingResponseCode_unableToComplete;
 
   /// Shown when a WebRTC operation is attempted in an invalid state (e.g. sending media before offer/answer exchange).
   ///

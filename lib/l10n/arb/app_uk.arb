@@ -2016,7 +2016,7 @@
   "@signalingResponseCode_pluginNotFound": {
     "description": "Shown when the requested Janus plugin is not found or unavailable. Cause: wrong plugin name, not loaded on server, or removed."
   },
-  "signalingResponseCode_rejected": "Ваш запит було відхилено. Будь ласка, спробуйте ще раз.",
+  "signalingResponseCode_rejected": "Виклик відхилено",
   "@signalingResponseCode_rejected": {
     "description": "Shown when the call request is rejected by an intermediary (e.g. proxy, SBC, or policy server) before reaching the recipient. SIP 603 Decline or similar."
   },
@@ -2104,13 +2104,17 @@
   "@signalingResponseCode_unwanted": {
     "description": "Shown when the call is flagged as unwanted by the recipient or network. SIP 607 Unwanted."
   },
-  "signalingResponseCode_userBusy": "Користувач, якого ви намагаєтеся знайти, зайнятий. Будь ласка, спробуйте пізніше.",
+  "signalingResponseCode_userBusy": "Користувач зайнятий",
   "@signalingResponseCode_userBusy": {
     "description": "Shown when the callee is busy (SIP 486 Busy Here)."
   },
-  "signalingResponseCode_userNotExist": "Користувача, якого ви намагаєтеся знайти, не існує.",
+  "signalingResponseCode_userNotExist": "Користувача не існує",
   "@signalingResponseCode_userNotExist": {
     "description": "Shown when the dialed user is not registered or does not exist in the PBX. SIP 404 Not Found."
+  },
+  "signalingResponseCode_unableToComplete": "Не вдалося здійснити виклик.",
+  "@signalingResponseCode_unableToComplete": {
+    "description": "Generic neutral fallback shown when an outgoing call fails for an unrecognized reason."
   },
   "signalingResponseCode_wrongWebrtcState": "Сталася помилка, пов’язана з викликом. Завершіть виклик і спробуйте ще раз.",
   "@signalingResponseCode_wrongWebrtcState": {

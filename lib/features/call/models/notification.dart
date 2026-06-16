@@ -240,6 +240,15 @@ final class CallInvalidNumberNotification extends MessageNotification {
   }
 }
 
+/// Generic neutral fallback shown when an outgoing call fails for a reason we
+/// do not surface with a specific message.
+final class CallUnableToCompleteNotification extends MessageNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.signalingResponseCode_unableToComplete;
+  }
+}
+
 @Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 final class SipRegistrationFailedNotification extends ErrorNotification {
   SipRegistrationFailedNotification({required this.knownCode, this.systemCode, this.systemReason});
