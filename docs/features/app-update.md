@@ -13,11 +13,11 @@ Last reviewed: 2026-06-11
 - `lib/app/router/main_shell.dart` - calls `AppUpdateService.check()` on
   startup and on every foreground resume.
 - `lib/features/main/` - the core-compatibility check and dialog:
-  - `bloc/main_bloc.dart` - `MainBloc`: core-version verification + store lookup.
-  - `bloc/main_state.dart` - `CoreVersionState` (`Unknown` / `Compatible` /
-    `Incompatible` with optional `updateStoreUrl`).
-  - `view/main_screen.dart` - `BlocListener` that shows the dialog.
-  - `widgets/compatibility_issue_dialog.dart` - the dialog itself.
+    - `bloc/main_bloc.dart` - `MainBloc`: core-version verification + store lookup.
+    - `bloc/main_state.dart` - `CoreVersionState` (`Unknown` / `Compatible` /
+      `Incompatible` with optional `updateStoreUrl`).
+    - `view/main_screen.dart` - `BlocListener` that shows the dialog.
+    - `widgets/compatibility_issue_dialog.dart` - the dialog itself.
 - `packages/store_info_extractor/` - workspace package that fetches the latest
   published app version from the platform store (its only consumer is `MainBloc`).
 
@@ -35,10 +35,10 @@ Play Core update UI - no in-app dialogs and no client-side version comparison
    (`InstallStatus.downloaded`) is installed right away, otherwise the user
    keeps running the old version until a cold restart.
 3. An available update runs as:
-   - **flexible** (background download, install on completion) - the default;
-   - **immediate** (blocking native overlay) - only when the release was
-     published with in-app update priority >= 4 (Google Play Developer API
-     `inAppUpdatePriority`, defaults to 0) or when flexible is not allowed.
+    - **flexible** (background download, install on completion) - the default;
+    - **immediate** (blocking native overlay) - only when the release was
+      published with in-app update priority >= 4 (Google Play Developer API
+      `inAppUpdatePriority`, defaults to 0) or when flexible is not allowed.
 4. A declined flexible update is remembered by version code and not
    re-prompted until a newer build is published (in-memory, resets on app
    restart).
@@ -84,11 +84,11 @@ answers "can an app update fix this?", not "is there an update".
 
 `StoreInfoExtractor.getStoreInfo(appPackageName)` picks a client by platform:
 
-| Platform | Client | Method |
-|---|---|---|
-| Android | `GooglePlayStoreClient` | HTTP GET `play.google.com/store/apps/details?id=<pkg>`, regex `[[["x.y.z"]]]` over the HTML |
-| iOS / macOS | `AppleAppStoreClient` | iTunes lookup JSON API (`itunes.apple.com/lookup?bundleId=<pkg>`) |
-| Web | `StubStoreClient` | always `null` |
+| Platform    | Client                  | Method                                                                                      |
+|-------------|-------------------------|---------------------------------------------------------------------------------------------|
+| Android     | `GooglePlayStoreClient` | HTTP GET `play.google.com/store/apps/details?id=<pkg>`, regex `[[["x.y.z"]]]` over the HTML |
+| iOS / macOS | `AppleAppStoreClient`   | iTunes lookup JSON API (`itunes.apple.com/lookup?bundleId=<pkg>`)                           |
+| Web         | `StubStoreClient`       | always `null`                                                                               |
 
 Known limitations: the Android HTML scraping is fragile and is now redundant
 for the soft-update use case (Play Core covers it); it remains only as the
@@ -97,12 +97,12 @@ carry version `0.0.0`, so any store version compares as newer there.
 
 ## Redesign / in progress
 
-| Mechanism | Trigger | UX | Status |
-|---|---|---|---|
-| Soft update prompt (above) | newer build published in Google Play | native Play Core prompt, app keeps working | this PR |
-| Core compatibility (above) | core version outside the app's constraint | blocking dialog, Update button when the store is newer | shipped |
+| Mechanism                   | Trigger                                                              | UX                                                             | Status                      |
+|-----------------------------|----------------------------------------------------------------------|----------------------------------------------------------------|-----------------------------|
+| Soft update prompt (above)  | newer build published in Google Play                                 | native Play Core prompt, app keeps working                     | this PR                     |
+| Core compatibility (above)  | core version outside the app's constraint                            | blocking dialog, Update button when the store is newer         | shipped                     |
 | Backend-driven force update | backend declares `min_supported_app_version` above the app's version | non-dismissible update prompt + signaling socket not connected | backend done, app side TODO |
-| iOS soft update | newer version in the App Store | custom prompt -> App Store (no native API on iOS) | future |
+| iOS soft update             | newer version in the App Store                                       | custom prompt -> App Store (no native API on iOS)              | future                      |
 
 - **Backend-driven force update**: the backend already exposes an optional
   `min_supported_app_version` (semver) in `GET /api/v1/system-info` (`null` =

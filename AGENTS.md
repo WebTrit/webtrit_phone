@@ -66,3 +66,10 @@ packages/   → shared libs (must NOT import from lib/)
   variant unconditionally and decide which one to *show* at navigation/build time (e.g.
   `AutoTabsRouter.routes`, guards, initial-tab resolver). Sibling routes may share a `path`
   (`recents`) — `RouteCollection` only requires unique route *names*, and tab matching is name-based.
+
+## Documentation
+
+- `docs/features/features.md` indexes the feature docs; the `docs/` root holds cross-cutting / component and app-level docs.
+- Per feature `<name>` (kebab-case): a small one is a single `docs/features/<name>.md`. Split a grown one into `<name>_ux.md` (product/UX: what the user does, screen states, key widgets, in-progress redesign) + `<name>_arch.md` (code/architecture: bloc, events, state machine, flows, isolates, key patterns), and drop the plain `<name>.md` — `features.md` is the index, keep no redundant per-feature index.
+- Cross-cutting components shared by several features live at the `docs/` root (e.g. `signaling_architecture_target.md`), not under features/; feature docs link to them rather than repeat them. Scenario docs (flows + diagrams) keep a descriptive name and live by scope — cross-component ones at the root (e.g. `incoming_call_scenarios.md`).
+- Each doc: start with a one-line summary + a `Last reviewed:` date; describe current behavior first and put unfinished work under a marked "Redesign / in progress" section; link code by relative path (`lib/features/<name>/...`) and sibling docs relatively; update the doc in the same PR that changes the feature. Plain ASCII (repo convention).
