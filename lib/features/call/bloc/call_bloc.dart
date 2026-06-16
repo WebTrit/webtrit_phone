@@ -294,7 +294,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   void onError(Object error, StackTrace stackTrace) {
     super.onError(error, stackTrace);
     _logger.warning('onError', error, stackTrace);
-    // TODO: analise error and finalize necessary active call
+    // onError stays a pure logger by design: it has no call context (only error +
+    // stackTrace) and a live call must survive a transient signaling drop. Finalizing
+    // a call whose signaling is lost is handled by the disconnect/hangup/ICE paths.
+    // See docs/signaling_architecture_target.md, section
+    // "CallBloc (main isolate)" > "Call finalization on signaling loss (onError)".
   }
 
   @override
