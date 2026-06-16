@@ -324,6 +324,28 @@ The block acts only while the app is `paused` / `detached` / `inactive`:
 The reconnect/notification policy itself stays in `SignalingReconnectController`;
 `onChange` only feeds it lifecycle edges.
 
+#### Call finalization on signaling loss (`onError`)
+
+`CallBloc.onError` is the BLoC catch-all for uncaught exceptions thrown inside event
+handlers (nothing in the call feature calls `addError`). It only logs. It deliberately
+does **not** finalize the active call, even though a stale placeholder once suggested it
+should: `onError` carries no call context (only `error` + `stackTrace`), so it cannot tell
+which `ActiveCall` an exception belongs to, and a live call must survive a transient
+signaling/network drop rather than be torn down on the first error.
+
+Finalization of a call whose signaling drops is instead handled by four narrower paths that
+do have call context:
+
+| Path | Where | Behaviour |
+|------|-------|-----------|
+| Survive-and-recover | `__onSignalingClientEventConnected` (`safeRenegotiate`), `_onConnectivityResultChanged` / `__onMutationIceConnectionFailed` (`restartIce`), the silent disconnect codes | keep the call in `activeCalls` across the outage and recover it on reconnect instead of finalizing it |
+| Remote hangup | `__onCallSignalingEventHangup` -> `__onMutationSignalingHangup` -> `callkeep.reportEndCall` | when signaling reconnects and the server tore the leg down, its hangup ends the call authoritatively |
+| `requestCallIdError` cleanup | `__onSignalingClientEventDisconnected` | for calls already marked `wasHungUp`, completes them once the disconnect confirms the call id is gone |
+| Visible ICE issue | `__onPeerConnectionEventIceConnectionStateChanged` | a persistent ICE failure surfaces `iceConnectionIssue` on the call so the user can end it manually instead of it sitting as an invisible phantom |
+
+So `onError` stays a pure logger by design; the "finalize the affected call" responsibility
+lives in the disconnect / hangup / ICE paths above, not in the catch-all.
+
 ### IsolateManager (background isolates)
 
 **`PushNotificationIsolateManager`** — never reconnects. Opened once per incoming push
