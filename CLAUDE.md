@@ -1,7 +1,7 @@
 # WebTrit Phone — Claude Code
 
 @AGENTS.md
-@docs/features/call.md
+@docs/features/call_arch.md
 
 ## Package Docs
 
