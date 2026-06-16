@@ -1184,7 +1184,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         submitNotification(CallUnableToCompleteNotification());
         _logger.severe('onCallSignalingEventHangup: $code');
         CrashlyticsUtils.recordError(
-          'CallBloc - onCallSignalingEventHangup ${code.name}}',
+          'CallBloc - onCallSignalingEventHangup ${code.name}',
           information: [
             'callId: ${event.callId}',
             'reason: ${event.reason}',
