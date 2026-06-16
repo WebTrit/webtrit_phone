@@ -10,10 +10,10 @@ diagrams in [`../incoming_call_scenarios.md`](../incoming_call_scenarios.md).
 ## Where it lives
 
 - `lib/features/call/` - the whole feature: bloc, views, widgets, extensions.
-  - `bloc/` - `CallBloc`, `CallState`, `CallEvent` (the brain).
-  - `view/call_active_scaffold.dart` - the active call screen layout.
-  - `widgets/` - `CallInfo`, `IncomingCallActions`, `ActiveCallActions`,
-    video overlays, keypad.
+    - `bloc/` - `CallBloc`, `CallState`, `CallEvent` (the brain).
+    - `view/call_active_scaffold.dart` - the active call screen layout.
+    - `widgets/` - `CallInfo`, `IncomingCallActions`, `ActiveCallActions`,
+      video overlays, keypad.
 - `webtrit_callkeep` (sibling plugin) - native call UI (CallKit on iOS,
   ConnectionService on Android).
 

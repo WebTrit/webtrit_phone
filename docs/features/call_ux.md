@@ -34,6 +34,7 @@ existed). Below those: a media failure message, or the worst stream-quality
 warning across calls (signal bars + direction arrow + label). The central
 `CallInfo` shows only name/number, the call description or live duration, and
 the processing status.
+
 - `displayName` / `handle`, `remoteVideo`, `muted`, `transfer`.
 
 Single call:
@@ -71,14 +72,14 @@ following the derived `current` call.
 
 ## Key widgets
 
-| Widget | File | Role |
-|---|---|---|
-| `CallActiveScaffold` | `view/call_active_scaffold.dart` | Active call screen; list + focused info + actions |
-| `CallList` / `CallRow` | `widgets/call_list.dart` | Tappable per-call rows with status badge + duration |
-| `FocusedActionHint` | `widgets/focused_action_hint.dart` | "Acting on" hint + answer side effect |
-| `CallInfo` | `widgets/call_info.dart` | Focused-call name / number / call description / timer |
-| `IncomingCallActions` | `widgets/incoming_call_actions.dart` | Decline / Answer for the focused ringing call |
-| `ActiveCallActions` | `widgets/active_call_actions.dart` | In-call control grid + hang up + keypad |
+| Widget                 | File                                 | Role                                                  |
+|------------------------|--------------------------------------|-------------------------------------------------------|
+| `CallActiveScaffold`   | `view/call_active_scaffold.dart`     | Active call screen; list + focused info + actions     |
+| `CallList` / `CallRow` | `widgets/call_list.dart`             | Tappable per-call rows with status badge + duration   |
+| `FocusedActionHint`    | `widgets/focused_action_hint.dart`   | "Acting on" hint + answer side effect                 |
+| `CallInfo`             | `widgets/call_info.dart`             | Focused-call name / number / call description / timer |
+| `IncomingCallActions`  | `widgets/incoming_call_actions.dart` | Decline / Answer for the focused ringing call         |
+| `ActiveCallActions`    | `widgets/active_call_actions.dart`   | In-call control grid + hang up + keypad               |
 
 ## Redesign / in progress - list-based call flow
 
@@ -97,19 +98,19 @@ The multi-call UI is being reworked into a single, consistent model:
 
 Rollout is incremental (foundations first, then UI), each step behind tests:
 
-| Stage | Scope | Status |
-|---|---|---|
-| Focus state | `selectedCallId` + `focusedCall` + `callSelected` event (invisible groundwork) | Merged (PR #1376) |
-| Action intents | Combined actions (hold&accept / hangup&accept / swap) move into bloc intents | Merged (PR #1378) |
-| Call list | Selectable list of calls + status badges + header; auto-focus rules; info + action area bind to the focused call | Merged (PR #1379) |
-| Focused actions | "Acting on" hint + two-button ringing focus (single answerFocused intent); combined-icon buttons removed | Merged (PR #1380) |
-| Cleanup / edges | Dead-code and obsolete l10n removal; scaffold-level widget tests for single/multi/3-call states | Merged (PR #1381) |
-| Toolbar status | Signaling/connectivity status, media failures and stream quality move to the AppBar status line (global, worst across calls); the central info block keeps only name/description/duration | Merged (PR #1385) |
-| Visual alignment | Status dots on rows, short Incoming/Outgoing trailing labels, central info block single-call only, acting-on hint as a translucent pill with highlighted names | Merged (PR #1386) |
-| Hold/Resume on focus | The hold slot always acts on the focused call (pause/play glyph); Resume holds the other live calls first; the swap button is gone - switching lines = focus a row + Resume | Merged (PR #1387) |
-| Row overlay polish | Call rows use light overlay tints of the on-screen text color: focused = brighter + light border (design polarity), bigger radius and padding | Merged (PR #1388) |
-| Video line badge | A camera glyph next to the trailing label marks video lines in the call list | Merged (PR #1389) |
-| Themed color roles | Call-list rows/dots and the acting-on hint take colors from the theme pipeline: CallPageListConfig/CallPageHintConfig in webtrit_appearance_theme -> assets/themes JSONs -> CallListStyle/FocusedActionHintStyle; no fixed colors in widgets | In review |
+| Stage                | Scope                                                                                                                                                                                                                                        | Status            |
+|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| Focus state          | `selectedCallId` + `focusedCall` + `callSelected` event (invisible groundwork)                                                                                                                                                               | Merged (PR #1376) |
+| Action intents       | Combined actions (hold&accept / hangup&accept / swap) move into bloc intents                                                                                                                                                                 | Merged (PR #1378) |
+| Call list            | Selectable list of calls + status badges + header; auto-focus rules; info + action area bind to the focused call                                                                                                                             | Merged (PR #1379) |
+| Focused actions      | "Acting on" hint + two-button ringing focus (single answerFocused intent); combined-icon buttons removed                                                                                                                                     | Merged (PR #1380) |
+| Cleanup / edges      | Dead-code and obsolete l10n removal; scaffold-level widget tests for single/multi/3-call states                                                                                                                                              | Merged (PR #1381) |
+| Toolbar status       | Signaling/connectivity status, media failures and stream quality move to the AppBar status line (global, worst across calls); the central info block keeps only name/description/duration                                                    | Merged (PR #1385) |
+| Visual alignment     | Status dots on rows, short Incoming/Outgoing trailing labels, central info block single-call only, acting-on hint as a translucent pill with highlighted names                                                                               | Merged (PR #1386) |
+| Hold/Resume on focus | The hold slot always acts on the focused call (pause/play glyph); Resume holds the other live calls first; the swap button is gone - switching lines = focus a row + Resume                                                                  | Merged (PR #1387) |
+| Row overlay polish   | Call rows use light overlay tints of the on-screen text color: focused = brighter + light border (design polarity), bigger radius and padding                                                                                                | Merged (PR #1388) |
+| Video line badge     | A camera glyph next to the trailing label marks video lines in the call list                                                                                                                                                                 | Merged (PR #1389) |
+| Themed color roles   | Call-list rows/dots and the acting-on hint take colors from the theme pipeline: CallPageListConfig/CallPageHintConfig in webtrit_appearance_theme -> assets/themes JSONs -> CallListStyle/FocusedActionHintStyle; no fixed colors in widgets | In review         |
 
 The redesign lands on the `refactor/call` integration branch - every stage is a
 PR into that branch, and once the whole flow is tested there a single PR merges
