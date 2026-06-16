@@ -8,8 +8,9 @@ the relevant file in the same PR that changes the feature.
 How these differ from the other docs:
 
 - **Feature docs (here)** - everything about one user-facing feature, split by
-  concern (see the file pattern below): an index, the product/UX view, and the
-  code/architecture deep-dive.
+  concern (see the file pattern below): the product/UX view and the
+  code/architecture deep-dive. This file (`features.md`) is the central index;
+  there is no separate per-feature index file.
 - **Cross-cutting docs** - components shared by several features stay at the docs
   root (e.g. [`../signaling_architecture_target.md`](../signaling_architecture_target.md)
   - the signaling layer, shared by call and push). Feature docs link to them
@@ -21,31 +22,33 @@ How these differ from the other docs:
 
 ## File pattern
 
-Per feature `<name>` (kebab-case), keep the docs split by concern:
+Per feature `<name>` (kebab-case), split the docs by concern:
 
 | File | Holds |
 |------|-------|
-| `<name>.md` | index/overview: one-line summary, "Where it lives", and links to the docs below |
+| `<name>.md` | small feature - everything in one file |
 | `<name>_ux.md` | product / UX: what the user can do, screen states, key widgets, in-progress redesign |
 | `<name>_arch.md` | code / architecture: bloc, events, state machine, flows, isolates, key patterns |
 
-Split only when a section grows enough to warrant it - a small feature can keep
-everything in `<name>.md` and add `_ux` / `_arch` later. Scenario-style docs
-(flows + diagrams) keep a descriptive name and live by scope (cross-component ones
-at the docs root, e.g. `../incoming_call_scenarios.md`).
-The call feature is the reference layout: `call.md` + `call_ux.md` + `call_arch.md`.
+A small feature stays a single `<name>.md` (e.g. `app-update.md`). Split into
+`<name>_ux.md` + `<name>_arch.md` once it grows enough to warrant it; when you split,
+drop the plain `<name>.md` rather than keep a redundant per-feature index - this
+`features.md` is the index. Scenario-style docs (flows + diagrams) keep a descriptive
+name and live by scope (cross-component ones at the docs root, e.g.
+`../incoming_call_scenarios.md`). The call feature is the reference split layout:
+`call_ux.md` + `call_arch.md`.
 
 ## Index
 
-| Feature | Doc | Status |
+| Feature | Docs | Status |
 |---|---|---|
 | App update / version compatibility | [app-update.md](app-update.md) | Active - force-update (app side) and iOS pending |
-| Call | [call.md](call.md) | Active - UI redesign in progress |
+| Call | [call_ux.md](call_ux.md) · [call_arch.md](call_arch.md) | Active - UI redesign in progress |
 
 ## Conventions
 
-- Name files per the "File pattern" above: `<name>.md` / `<name>_ux.md` /
-  `<name>_arch.md`, kebab-case.
+- Name files per the "File pattern" above: a single `<name>.md`, or the
+  `<name>_ux.md` / `<name>_arch.md` split, kebab-case.
 - Start with a one-line summary and a `Last reviewed:` date.
 - Describe the CURRENT behavior first; put in-progress work under a clearly
   marked "Redesign / in progress" section so the doc never lies about what ships.

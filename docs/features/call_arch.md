@@ -7,6 +7,16 @@ that bridges signaling, native call UI, WebRTC media, and the Flutter UI layer.
 The product/UX view lives in [`call_ux.md`](call_ux.md); incoming-call background scenarios with
 diagrams in [`../incoming_call_scenarios.md`](../incoming_call_scenarios.md).
 
+## Where it lives
+
+- `lib/features/call/` - the whole feature: bloc, views, widgets, extensions.
+  - `bloc/` - `CallBloc`, `CallState`, `CallEvent` (the brain).
+  - `view/call_active_scaffold.dart` - the active call screen layout.
+  - `widgets/` - `CallInfo`, `IncomingCallActions`, `ActiveCallActions`,
+    video overlays, keypad.
+- `webtrit_callkeep` (sibling plugin) - native call UI (CallKit on iOS,
+  ConnectionService on Android).
+
 ## Responsibilities
 
 - Manages all active calls (`List<ActiveCall>` in state)
