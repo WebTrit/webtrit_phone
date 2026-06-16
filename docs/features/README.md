@@ -14,8 +14,10 @@ How these differ from the other docs:
   root (e.g. [`../signaling_architecture_target.md`](../signaling_architecture_target.md)
   - the signaling layer, shared by call and push). Feature docs link to them
   rather than repeat them.
-- **Scenario docs** - specific flows with diagrams; feature-specific ones live here
-  too (e.g. [`incoming_call_scenarios.md`](incoming_call_scenarios.md)).
+- **Scenario docs** - specific flows with diagrams. They live where their scope is:
+  a single-feature flow can sit in features/, but a cross-component one stays at the
+  docs root (e.g. [`../incoming_call_scenarios.md`](../incoming_call_scenarios.md) -
+  incoming-call delivery across push, callkeep and signaling).
 
 ## File pattern
 
@@ -29,7 +31,8 @@ Per feature `<name>` (kebab-case), keep the docs split by concern:
 
 Split only when a section grows enough to warrant it - a small feature can keep
 everything in `<name>.md` and add `_ux` / `_arch` later. Scenario-style docs
-(flows + diagrams) keep a descriptive name (e.g. `incoming_call_scenarios.md`).
+(flows + diagrams) keep a descriptive name and live by scope (cross-component ones
+at the docs root, e.g. `../incoming_call_scenarios.md`).
 The call feature is the reference layout: `call.md` + `call_ux.md` + `call_arch.md`.
 
 ## Index

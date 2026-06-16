@@ -25,7 +25,8 @@ Last reviewed: 2026-06-10
 - [`call_arch.md`](call_arch.md) - code / architecture: `CallBloc`
   responsibilities, event categories, processing-status state machine, flows,
   isolates, key patterns, signaling edges (`onChange` / `onError`).
-- [`incoming_call_scenarios.md`](incoming_call_scenarios.md) - incoming-call
-  background scenarios (push-bound / persistent / foreground) with diagrams.
+- [`../incoming_call_scenarios.md`](../incoming_call_scenarios.md) - incoming-call
+  background scenarios (push-bound / persistent / foreground) with diagrams
+  (cross-cutting: push + callkeep + signaling).
 - [`../signaling_architecture_target.md`](../signaling_architecture_target.md) -
   the signaling layer (cross-cutting; shared by call and push).
