@@ -297,8 +297,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // onError stays a pure logger by design: it has no call context (only error +
     // stackTrace) and a live call must survive a transient signaling drop. Finalizing
     // a call whose signaling is lost is handled by the disconnect/hangup/ICE paths.
-    // See docs/signaling_architecture_target.md, section
-    // "CallBloc (main isolate)" > "Call finalization on signaling loss (onError)".
+    // See docs/features/call_architecture.md, section
+    // "Signaling edges (onChange / onError)" > "Call finalization on signaling loss (onError)".
   }
 
   @override
@@ -308,8 +308,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // Re-notify the reconnect controller when the call-active state flips while
     // the app is backgrounded - covers the gap the lifecycle handler misses
     // (it only samples isActive at the instant the app foregrounds/backgrounds).
-    // See docs/signaling_architecture_target.md, section
-    // "CallBloc (main isolate)" > "Background call-active edge (onChange)".
+    // See docs/features/call_architecture.md, section
+    // "Signaling edges (onChange / onError)" > "Background call-active edge (onChange)".
     if (change.currentState.isActive != change.nextState.isActive) {
       final appLifecycleState = change.nextState.currentAppLifecycleState;
       final appInactive =

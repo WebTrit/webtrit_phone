@@ -18,9 +18,10 @@ Last reviewed: 2026-06-10
 
 Deeper references:
 
-- [`../call_architecture.md`](../call_architecture.md) - `CallBloc` responsibilities,
-  event categories, processing-status state machine, isolates, key patterns.
-- [`../incoming_call_scenarios.md`](../incoming_call_scenarios.md) - incoming-call
+- [`call_architecture.md`](call_architecture.md) - `CallBloc` responsibilities,
+  event categories, processing-status state machine, isolates, key patterns,
+  signaling edges (`onChange` / `onError`).
+- [`incoming_call_scenarios.md`](incoming_call_scenarios.md) - incoming-call
   background scenarios (push-bound / persistent / foreground) with diagrams.
 - [`../signaling_architecture_target.md`](../signaling_architecture_target.md) -
   signaling layer.

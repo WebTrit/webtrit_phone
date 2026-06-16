@@ -9,11 +9,13 @@ How these differ from the other docs:
 
 - **Feature docs (here)** - product-level: what the user sees, the screen states,
   the in-progress redesigns, and pointers into the deeper docs.
-- **Architecture docs** (e.g. [`../call_architecture.md`](../call_architecture.md),
-  [`../signaling_architecture_target.md`](../signaling_architecture_target.md)) -
-  implementation deep-dives: blocs, events, state machines, isolates.
-- **Scenario docs** (e.g. [`../incoming_call_scenarios.md`](../incoming_call_scenarios.md))
-  - specific flows with diagrams.
+- **Architecture docs** - implementation deep-dives: blocs, events, state machines,
+  isolates. Feature-specific ones live here next to the feature doc
+  (e.g. [`call_architecture.md`](call_architecture.md)); cross-cutting ones stay at the
+  docs root (e.g. [`../signaling_architecture_target.md`](../signaling_architecture_target.md)
+  - the signaling layer, shared by call and push).
+- **Scenario docs** - specific flows with diagrams; feature-specific ones live here too
+  (e.g. [`incoming_call_scenarios.md`](incoming_call_scenarios.md)).
 
 A feature doc should link to those rather than repeat them.
 

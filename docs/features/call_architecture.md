@@ -151,3 +151,50 @@ The transfer target follows the normal outgoing flow from that status onward.
 **iOS audio reset** — on the first and last call, the BLoC forces audio to earpiece via
 `AppleNativeAudioManagement` to work around a platform bug where speaker stays active across
 calls.
+
+## Signaling edges (`onChange` / `onError`)
+
+How `CallBloc` reacts to signaling/reconnect edges. The signaling layer itself is documented
+in [`../signaling_architecture_target.md`](../signaling_architecture_target.md); this section
+covers only the CallBloc-side behaviour.
+
+### Background call-active edge (`onChange`)
+
+`CallBloc.onChange` re-notifies `SignalingReconnectController` whenever `CallState.isActive`
+flips. This covers a gap the app-lifecycle handler cannot: `_onAppLifecycleStateChanged`
+samples `isActive` only at the instant the app moves between foreground and background, so it
+never re-fires for a call that becomes active (an incoming call answered from a push) or ends
+while the app is *already* backgrounded.
+
+The block acts only while the app is `paused` / `detached` / `inactive`:
+
+| Transition (while backgrounded)  | Call into controller             | Why |
+|----------------------------------|----------------------------------|-----|
+| call became active, socket down  | `notifyForceReconnect()`         | reconnect now so signaling can carry the call, instead of waiting for the next lifecycle/network event |
+| active-call presence changed     | `notifyHasActiveCalls(...)`      | refresh the active-call guard so a background reconnect can fire during the call; disconnect if the call just ended |
+| last call ended                  | `notifyAppPaused(hasActiveCalls: false)` | move to the paused-no-calls state so the controller stops holding the connection open |
+
+The reconnect/notification policy itself stays in `SignalingReconnectController`; `onChange`
+only feeds it lifecycle edges.
+
+### Call finalization on signaling loss (`onError`)
+
+`CallBloc.onError` is the BLoC catch-all for uncaught exceptions thrown inside event handlers
+(nothing in the call feature calls `addError`). It only logs. It deliberately does **not**
+finalize the active call, even though a stale placeholder once suggested it should: `onError`
+carries no call context (only `error` + `stackTrace`), so it cannot tell which `ActiveCall` an
+exception belongs to, and a live call must survive a transient signaling/network drop rather
+than be torn down on the first error.
+
+Finalization of a call whose signaling drops is instead handled by four narrower paths that do
+have call context:
+
+| Path | Where | Behaviour |
+|------|-------|-----------|
+| Survive-and-recover | `__onSignalingClientEventConnected` (`safeRenegotiate`), `_onConnectivityResultChanged` / `__onMutationIceConnectionFailed` (`restartIce`), the silent disconnect codes | keep the call in `activeCalls` across the outage and recover it on reconnect instead of finalizing it |
+| Remote hangup | `__onCallSignalingEventHangup` -> `__onMutationSignalingHangup` -> `callkeep.reportEndCall` | when signaling reconnects and the server tore the leg down, its hangup ends the call authoritatively |
+| `requestCallIdError` cleanup | `__onSignalingClientEventDisconnected` | for calls already marked `wasHungUp`, completes them once the disconnect confirms the call id is gone |
+| Visible ICE issue | `__onPeerConnectionEventIceConnectionStateChanged` | a persistent ICE failure surfaces `iceConnectionIssue` on the call so the user can end it manually instead of it sitting as an invisible phantom |
+
+So `onError` stays a pure logger by design; the "finalize the affected call" responsibility
+lives in the disconnect / hangup / ICE paths above, not in the catch-all.
