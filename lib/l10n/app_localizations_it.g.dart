@@ -2453,8 +2453,7 @@ class AppLocalizationsIt extends AppLocalizations {
       'Alcune delle informazioni fornite non sono valide. Verifica e riprova.';
 
   @override
-  String get signalingResponseCode_invalidNumberFormat =>
-      'Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ';
+  String get signalingResponseCode_invalidNumberFormat => 'Formato del numero non valido';
 
   @override
   String get signalingResponseCode_invalidPath => 'L\'azione richiesta non è disponibile. Prova un\'opzione diversa.';
@@ -2493,7 +2492,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signalingResponseCode_pluginNotFound => 'Manca un componente necessario. Prova a riavviare l\'app.';
 
   @override
-  String get signalingResponseCode_rejected => 'La tua richiesta è stata rifiutata. Riprova.';
+  String get signalingResponseCode_rejected => 'Chiamata rifiutata';
 
   @override
   String get signalingResponseCode_requestTerminated => 'La tua richiesta è stata terminata. Riprova.';
@@ -2571,11 +2570,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signalingResponseCode_unwanted => 'La tua richiesta non è gradita. Riprova.';
 
   @override
-  String get signalingResponseCode_userBusy => 'Il destinatario è occupato. Riprova più tardi.';
+  String get signalingResponseCode_userBusy => 'Utente occupato';
 
   @override
-  String get signalingResponseCode_userNotExist =>
-      'Il destinatario non esiste. Controlla il numero di telefono e riprova.';
+  String get signalingResponseCode_userNotExist => 'L\'utente non esiste';
 
   @override
   String get signalingResponseCode_unableToComplete => 'Impossibile completare la chiamata.';

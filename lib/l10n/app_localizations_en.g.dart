@@ -2427,7 +2427,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Some of the information provided was not valid. Please double-check and try again.';
 
   @override
-  String get signalingResponseCode_invalidNumberFormat => 'The number you entered is invalid.';
+  String get signalingResponseCode_invalidNumberFormat => 'Invalid number format';
 
   @override
   String get signalingResponseCode_invalidPath =>
@@ -2468,8 +2468,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signalingResponseCode_pluginNotFound => 'A required component is missing. Please try restarting the app.';
 
   @override
-  String get signalingResponseCode_rejected =>
-      'The call was rejected by a machine or process on the way, without reaching the destination... ';
+  String get signalingResponseCode_rejected => 'Call rejected';
 
   @override
   String get signalingResponseCode_requestTerminated => 'Your request was terminated. Please try again.';
@@ -2543,10 +2542,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signalingResponseCode_unwanted => 'The recipient marked the call as unwanted.';
 
   @override
-  String get signalingResponseCode_userBusy => 'The user you\'re trying to reach is busy. Please try again later.';
+  String get signalingResponseCode_userBusy => 'User busy';
 
   @override
-  String get signalingResponseCode_userNotExist => 'The user you\'re trying to reach doesn\'t exist.';
+  String get signalingResponseCode_userNotExist => 'User does not exist';
 
   @override
   String get signalingResponseCode_unableToComplete => 'Unable to complete the call.';
