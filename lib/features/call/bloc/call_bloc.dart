@@ -301,7 +301,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   void onChange(Change<CallState> change) {
     super.onChange(change);
 
-    // TODO: add detailed explanation of the following code and why it is necessary to initialize signaling client in background
+    // Re-notify the reconnect controller when the call-active state flips while
+    // the app is backgrounded - covers the gap the lifecycle handler misses
+    // (it only samples isActive at the instant the app foregrounds/backgrounds).
+    // See docs/signaling_architecture_target.md, section
+    // "CallBloc (main isolate)" > "Background call-active edge (onChange)".
     if (change.currentState.isActive != change.nextState.isActive) {
       final appLifecycleState = change.nextState.currentAppLifecycleState;
       final appInactive =

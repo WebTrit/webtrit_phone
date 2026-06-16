@@ -305,6 +305,25 @@ _signalingSubscription = _signalingModule.events.listen((event) {
 });
 ```
 
+#### Background call-active edge (`onChange`)
+
+`CallBloc.onChange` re-notifies the controller whenever `CallState.isActive` flips.
+This covers a gap the app-lifecycle handler cannot: `_onAppLifecycleStateChanged`
+samples `isActive` only at the instant the app moves between foreground and
+background, so it never re-fires for a call that becomes active (an incoming call
+answered from a push) or ends while the app is *already* backgrounded.
+
+The block acts only while the app is `paused` / `detached` / `inactive`:
+
+| Transition (while backgrounded)  | Call into controller             | Why |
+|----------------------------------|----------------------------------|-----|
+| call became active, socket down  | `notifyForceReconnect()`         | reconnect now so signaling can carry the call, instead of waiting for the next lifecycle/network event |
+| active-call presence changed     | `notifyHasActiveCalls(...)`      | refresh the active-call guard so a background reconnect can fire during the call; disconnect if the call just ended |
+| last call ended                  | `notifyAppPaused(hasActiveCalls: false)` | move to the paused-no-calls state so the controller stops holding the connection open |
+
+The reconnect/notification policy itself stays in `SignalingReconnectController`;
+`onChange` only feeds it lifecycle edges.
+
 ### IsolateManager (background isolates)
 
 **`PushNotificationIsolateManager`** — never reconnects. Opened once per incoming push
