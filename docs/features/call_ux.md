@@ -2,7 +2,7 @@
 
 The product-level view of the calling experience: what the user can do, the
 screen states, the widgets that back them, and the in-progress redesign. The
-implementation deep-dive lives in [`call_architecture.md`](call_architecture.md).
+implementation deep-dive lives in [`call.md`](call.md).
 
 Last reviewed: 2026-06-10
 
