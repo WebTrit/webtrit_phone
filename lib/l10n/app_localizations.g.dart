@@ -4710,6 +4710,12 @@ abstract class AppLocalizations {
   /// **'The user you\'re trying to reach doesn\'t exist.'**
   String get signalingResponseCode_userNotExist;
 
+  /// Generic neutral fallback shown when an outgoing call fails for an unrecognized reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to complete the call.'**
+  String get signalingResponseCode_unableToComplete;
+
   /// Shown when a WebRTC operation is attempted in an invalid state (e.g. sending media before offer/answer exchange).
   ///
   /// In en, this message translates to:

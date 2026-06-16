@@ -2549,6 +2549,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signalingResponseCode_userNotExist => 'The user you\'re trying to reach doesn\'t exist.';
 
   @override
+  String get signalingResponseCode_unableToComplete => 'Unable to complete the call.';
+
+  @override
   String get signalingResponseCode_wrongWebrtcState => 'A call-related error occurred. Please hang up and try again.';
 
   @override

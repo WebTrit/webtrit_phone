@@ -2112,6 +2112,10 @@
   "@signalingResponseCode_userNotExist": {
     "description": "Shown when the dialed user is not registered or does not exist in the PBX. SIP 404 Not Found."
   },
+  "signalingResponseCode_unableToComplete": "Не вдалося здійснити виклик.",
+  "@signalingResponseCode_unableToComplete": {
+    "description": "Generic neutral fallback shown when an outgoing call fails for an unrecognized reason."
+  },
   "signalingResponseCode_wrongWebrtcState": "Сталася помилка, пов’язана з викликом. Завершіть виклик і спробуйте ще раз.",
   "@signalingResponseCode_wrongWebrtcState": {
     "description": "Shown when a WebRTC operation is attempted in an invalid state (e.g. sending media before offer/answer exchange)."

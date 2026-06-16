@@ -2578,6 +2578,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signalingResponseCode_userNotExist => 'Користувача, якого ви намагаєтеся знайти, не існує.';
 
   @override
+  String get signalingResponseCode_unableToComplete => 'Не вдалося здійснити виклик.';
+
+  @override
   String get signalingResponseCode_wrongWebrtcState =>
       'Сталася помилка, пов’язана з викликом. Завершіть виклик і спробуйте ще раз.';
 

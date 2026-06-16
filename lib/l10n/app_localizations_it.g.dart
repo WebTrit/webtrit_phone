@@ -2578,6 +2578,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'Il destinatario non esiste. Controlla il numero di telefono e riprova.';
 
   @override
+  String get signalingResponseCode_unableToComplete => 'Impossibile completare la chiamata.';
+
+  @override
   String get signalingResponseCode_wrongWebrtcState =>
       'Si è verificato un errore relativo alla chiamata. Riaggancia e riprova.';
 
