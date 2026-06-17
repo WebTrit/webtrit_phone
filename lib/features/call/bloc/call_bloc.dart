@@ -2930,7 +2930,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _signalingModule.cancelRequestsByCallId(event.callId);
 
     ActiveCall? call = state.retrieveActiveCall(event.callId);
-    if (call == null) return;
+    if (call == null) {
+      // The call was never registered in state - the signaling hangup won the race against
+      // a still-connecting incoming call (e.g. a push->foreground handoff where the caller hung
+      // up before CallBloc was seeded). Report the end to callkeep so the native tracker marks
+      // the call terminated and suppresses a late connection-state replay that would otherwise
+      // seed a ghost incoming call. reportEndCall does not invoke performEndCall and sends no
+      // server request - signaling already terminated the call.
+      await callkeep.reportEndCall(event.callId, '', CallkeepEndCallReason.remoteEnded);
+      return;
+    }
 
     if (call.wasHungUp == false) {
       call = call.copyWith(hungUpTime: clock.now());
