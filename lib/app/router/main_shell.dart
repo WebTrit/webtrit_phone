@@ -44,6 +44,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   late final Callkeep _callkeep = Callkeep();
   late final CallkeepConnections _callkeepConnections = CallkeepConnections();
 
+  /// Buffering callkeep delegate attached EARLY in [initState] (before [CallBloc] exists)
+  /// so callkeep's onDelegateSet -> native connection-state replay runs during the quiet
+  /// boot window. An in-flight incoming call (push->foreground handoff) is captured here
+  /// and replayed into [CallBloc] the instant it attaches, before a late signaling hangup.
+  late final CallkeepDelegateRelay _callkeepDelegateRelay = CallkeepDelegateRelay();
+
   /// The [SessionGuard] instance that handles session expiration and logout.
   late final SessionGuard _sessionGuard;
 
@@ -95,6 +101,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         ),
       ),
     );
+
+    // Attach the buffering delegate immediately (in parallel with signaling connect below),
+    // long before CallBloc is built, so the native connection-state replay fires early and a
+    // handed-off incoming call is buffered for replay into CallBloc on attach.
+    _callkeep.setDelegate(_callkeepDelegateRelay);
 
     // After authentication, regenerate the labels to include core URL and tenant ID in remote logging labels
     context.read<AppLogger>().updateRemoteLabels();
@@ -563,6 +574,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         isCameraPermissionGranted: () => appPermissions.isPermissionGranted(Permission.camera),
                         callkeep: _callkeep,
                         callkeepConnections: _callkeepConnections,
+                        callkeepDelegateRelay: _callkeepDelegateRelay,
                         sdpMunger: ModifyWithEncodingSettings(
                           encodingSettingsRepository,
                           encodingConfig,

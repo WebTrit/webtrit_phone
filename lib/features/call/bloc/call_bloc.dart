@@ -106,6 +106,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   final Callkeep callkeep;
   final CallkeepConnections callkeepConnections;
+
+  /// Optional early-attached buffering delegate relay (see [CallkeepDelegateRelay]).
+  /// When provided, this bloc registers through it (so a pre-bloc incoming buffered
+  /// during app boot is replayed in immediately) instead of calling
+  /// `callkeep.setDelegate(this)` directly.
+  final CallkeepDelegateRelay? callkeepDelegateRelay;
   late final CallMediaManager _mediaManager;
 
   final SDPMunger? sdpMunger;
@@ -159,6 +165,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.submitNotification,
     required this.callkeep,
     required this.callkeepConnections,
+    this.callkeepDelegateRelay,
     required this.userMediaBuilder,
     required this.contactResolver,
     required this.callErrorReporter,
@@ -251,7 +258,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     WidgetsBinding.instance.addObserver(this);
 
-    callkeep.setDelegate(this);
+    // Register as the callkeep delegate. When an early relay is provided (attached in
+    // MainShell.initState), attach to it so any incoming call buffered during app boot
+    // (push->foreground handoff) is replayed in immediately; otherwise set directly.
+    final relay = callkeepDelegateRelay;
+    if (relay != null) {
+      relay.attach(this);
+    } else {
+      callkeep.setDelegate(this);
+    }
 
     if (sendPresenceSettings) {
       _presenceInfoSyncTimer = Timer.periodic(const Duration(seconds: 5), (_) => syncPresenceSettings());
@@ -260,7 +275,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   @override
   Future<void> close() async {
-    callkeep.setDelegate(null);
+    final relay = callkeepDelegateRelay;
+    if (relay != null) {
+      relay.detach();
+    } else {
+      callkeep.setDelegate(null);
+    }
 
     WidgetsBinding.instance.removeObserver(this);
     navigator.mediaDevices.ondevicechange = null;
