@@ -10,7 +10,14 @@ part 'system_info.g.dart';
 @freezed
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class SystemInfo with _$SystemInfo {
-  const SystemInfo({required this.core, required this.postgres, this.adapter, this.janus, this.gorush});
+  const SystemInfo({
+    required this.core,
+    required this.postgres,
+    this.adapter,
+    this.janus,
+    this.gorush,
+    this.minSupportedAppVersion,
+  });
 
   @override
   final CoreInfo core;
@@ -26,6 +33,13 @@ class SystemInfo with _$SystemInfo {
 
   @override
   final GorushInfo? gorush;
+
+  /// Optional minimum app version the backend declares it supports, as a raw
+  /// semver string (JSON key `min_supported_app_version`). `null` = not
+  /// enforced. Kept as a `String?` here so the API layer stays a dumb
+  /// transport; the domain mapper parses it into a [Version].
+  @override
+  final String? minSupportedAppVersion;
 
   factory SystemInfo.fromJson(Map<String, Object?> json) => _$SystemInfoFromJson(json);
 

@@ -1,3 +1,5 @@
+import 'package:pub_semver/pub_semver.dart';
+
 import 'package:webtrit_api/webtrit_api.dart' as api;
 
 import 'package:webtrit_phone/models/models.dart';
@@ -10,7 +12,19 @@ mixin SystemInfoApiMapper {
       adapter: systemInfo.adapter != null ? adapterInfoFromApi(systemInfo.adapter!) : null,
       janus: systemInfo.janus != null ? janusInfoFromApi(systemInfo.janus!) : null,
       gorush: systemInfo.gorush != null ? gorushInfoFromApi(systemInfo.gorush!) : null,
+      minSupportedAppVersion: _tryParseVersion(systemInfo.minSupportedAppVersion),
     );
+  }
+
+  /// Parses a backend-provided semver string into a [Version], tolerating null
+  /// or malformed input by returning null (treated as "no minimum enforced").
+  Version? _tryParseVersion(String? raw) {
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      return Version.parse(raw);
+    } on FormatException {
+      return null;
+    }
   }
 
   CoreInfo coreInfoFromApi(api.CoreInfo coreInfo) {

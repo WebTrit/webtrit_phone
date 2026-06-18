@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 import 'components/adapter_info.dart';
 import 'components/core_info.dart';
@@ -17,7 +18,14 @@ export 'components/websocket.dart';
 export 'components/sip_version.dart';
 
 class WebtritSystemInfo with EquatableMixin {
-  WebtritSystemInfo({required this.core, required this.postgres, this.adapter, this.janus, this.gorush});
+  WebtritSystemInfo({
+    required this.core,
+    required this.postgres,
+    this.adapter,
+    this.janus,
+    this.gorush,
+    this.minSupportedAppVersion,
+  });
 
   final CoreInfo core;
   final PostgresInfo postgres;
@@ -25,8 +33,12 @@ class WebtritSystemInfo with EquatableMixin {
   final JanusInfo? janus;
   final GorushInfo? gorush;
 
+  /// Minimum app version the backend declares it supports. `null` = the
+  /// backend does not enforce a minimum.
+  final Version? minSupportedAppVersion;
+
   @override
-  List<Object?> get props => [core, postgres, adapter, janus, gorush];
+  List<Object?> get props => [core, postgres, adapter, janus, gorush, minSupportedAppVersion];
 
   @override
   bool get stringify => true;

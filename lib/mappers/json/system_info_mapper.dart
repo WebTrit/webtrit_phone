@@ -14,12 +14,14 @@ mixin SystemInfoJsonMapper {
   }
 
   WebtritSystemInfo systemInfoFromMap(Map<String, dynamic> map) {
+    final rawMinSupportedAppVersion = map['min_supported_app_version'];
     return WebtritSystemInfo(
       core: coreInfoFromMap(map['core']),
       postgres: postgresInfoFromMap(map['postgres']),
       adapter: map['adapter'] != null ? adapterInfoFromMap(map['adapter']) : null,
       janus: map['janus'] != null ? janusInfoFromMap(map['janus']) : null,
       gorush: map['gorush'] != null ? gorushInfoFromMap(map['gorush']) : null,
+      minSupportedAppVersion: rawMinSupportedAppVersion != null ? Version.parse(rawMinSupportedAppVersion) : null,
     );
   }
 
@@ -30,6 +32,7 @@ mixin SystemInfoJsonMapper {
       'adapter': systemInfo.adapter != null ? adapterInfoToMap(systemInfo.adapter!) : null,
       'janus': systemInfo.janus != null ? janusInfoToMap(systemInfo.janus!) : null,
       'gorush': systemInfo.gorush != null ? gorushInfoToMap(systemInfo.gorush!) : null,
+      'min_supported_app_version': systemInfo.minSupportedAppVersion?.toString(),
     };
   }
 
