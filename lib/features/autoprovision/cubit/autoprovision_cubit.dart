@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
@@ -64,6 +65,14 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMap
       if (isCoreSupported == false) {
         final notSupportedCoreException = Exception('Core version is not supported. Please update the core.');
         emit(AutoprovisionState.error(notSupportedCoreException));
+        return;
+      }
+
+      if (!systemInfo.isAppVersionSupported(Version.parse(packageInfo.version))) {
+        final appVersionUnsupportedException = Exception(
+          'App version is not supported. Please update the application.',
+        );
+        emit(AutoprovisionState.error(appVersionUnsupportedException));
         return;
       }
 

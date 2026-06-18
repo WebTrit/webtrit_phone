@@ -20,7 +20,24 @@ class MainScreen extends StatelessWidget {
       listener: (context, state) async {
         final coreVersionState = state.coreVersionState;
 
-        if (coreVersionState is Incompatible) {
+        if (coreVersionState is AppVersionUnsupported) {
+          final canUpdateApp = coreVersionState.updateStoreUrl != null;
+
+          AppUpdateRequiredDialog.show(
+            context,
+            coreVersionState.currentVersion,
+            coreVersionState.minSupportedVersion,
+            onUpdatePressed: canUpdateApp
+                ? () {
+                    context.read<MainBloc>().add(MainBlocAppUpdatePressed(coreVersionState.updateStoreUrl!));
+                  }
+                : null,
+            onLogoutPressed: () {
+              Navigator.of(context).maybePop();
+              context.read<AppBloc>().add(const AppLogoutRequested(reason: AppLogoutReason.userRequest));
+            },
+          );
+        } else if (coreVersionState is Incompatible) {
           final canUpdateApp = coreVersionState.updateStoreUrl != null;
 
           CompatibilityIssueDialog.show(

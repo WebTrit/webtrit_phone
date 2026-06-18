@@ -740,6 +740,18 @@
       }
     }
   },
+  "login_AppVersionUnsupportedExceptionError": "Версія вашого застосунку більше не підтримується, будь ласка, оновіть застосунок, щоб продовжити (поточна: {actual}, мінімальна потрібна: {minSupported})",
+  "@login_AppVersionUnsupportedExceptionError": {
+    "description": "Shown during login when the backend declares a minimum supported app version that is newer than this build. Context: user tries to sign in. Condition: app version is older than min_supported_app_version (current: {actual}, minimum required: {minSupported}).",
+    "placeholders": {
+      "actual": {
+        "type": "String"
+      },
+      "minSupported": {
+        "type": "String"
+      }
+    }
+  },
   "login_RequestFailureEmptyEmailError": "Не вдалося відправити код підтвердження",
   "@login_RequestFailureEmptyEmailError": {
     "description": "Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty."
@@ -939,6 +951,20 @@
   },
   "main_CompatibilityIssueDialog_title": "Проблема сумісності",
   "@main_CompatibilityIssueDialog_title": {},
+  "main_AppUpdateRequiredDialog_title": "Потрібне оновлення",
+  "@main_AppUpdateRequiredDialog_title": {},
+  "main_AppUpdateRequiredDialog_content": "Версія вашого застосунку більше не підтримується. Будь ласка, оновіть застосунок, щоб продовжити.\n\nПоточна версія:\n{actual}\n\nМінімальна потрібна версія:\n{minSupported}",
+  "@main_AppUpdateRequiredDialog_content": {
+    "description": "Shown in the update-required dialog when the running app is older than the backend-declared minimum supported app version. Condition: app version is below min_supported_app_version. Placeholders: {actual} for the current app version, {minSupported} for the minimum required version.",
+    "placeholders": {
+      "actual": {
+        "type": "String"
+      },
+      "minSupported": {
+        "type": "String"
+      }
+    }
+  },
   "messaging_ActionBtn_retry": "Повторить спробу",
   "@messaging_ActionBtn_retry": {},
   "messaging_ChooseContact_cancel": "Скасувати",

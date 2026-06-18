@@ -35,3 +35,20 @@ final class Incompatible extends CoreVersionState with EquatableMixin {
   @override
   bool get stringify => true;
 }
+
+/// The running app is older than the backend-declared minimum supported app
+/// version (`min_supported_app_version` from system-info). A non-dismissible
+/// update prompt must be shown.
+final class AppVersionUnsupported extends CoreVersionState with EquatableMixin {
+  final Version currentVersion;
+  final Version minSupportedVersion;
+  final Uri? updateStoreUrl;
+
+  AppVersionUnsupported(this.currentVersion, this.minSupportedVersion, {this.updateStoreUrl});
+
+  @override
+  List<Object?> get props => [currentVersion, minSupportedVersion, updateStoreUrl];
+
+  @override
+  bool get stringify => true;
+}

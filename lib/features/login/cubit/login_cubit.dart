@@ -4,11 +4,13 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:linkify/linkify.dart';
 import 'package:logging/logging.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -28,6 +30,7 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit({
     required this.authRepository,
     required this.notificationsBloc,
+    required this.packageInfo,
     required this.onLoginSuccess,
     this.signinOrder = const [],
   }) : super(const LoginState());
@@ -37,6 +40,8 @@ class LoginCubit extends Cubit<LoginState> {
   final LoginSuccessCallback onLoginSuccess;
 
   final NotificationsBloc notificationsBloc;
+
+  final PackageInfo packageInfo;
 
   /// Configured order of the sign-in tabs, by login type name (from app config).
   final List<String> signinOrder;
@@ -49,6 +54,8 @@ class LoginCubit extends Cubit<LoginState> {
   String? get demoCoreUrlFromEnvironment => EnvironmentConfig.DEMO_CORE_URL;
 
   String get coreVersionConstraint => EnvironmentConfig.CORE_VERSION_CONSTRAINT;
+
+  Version get appVersion => Version.parse(packageInfo.version);
 
   String get defaultTenantId => '';
 
@@ -139,6 +146,18 @@ class LoginCubit extends Cubit<LoginState> {
 
     if (!isCoreSupported) {
       final notification = CoreVersionUnsupportedErrorNotification(coreInfo.version.toString(), coreVersionConstraint);
+      notificationsBloc.add(NotificationsSubmitted(notification));
+      return null;
+    }
+
+    // Inverse check: the backend may declare the minimum app version it
+    // supports. If this app is older, abort the login so no session is created
+    // and signaling is never connected.
+    if (!systemInfo.isAppVersionSupported(appVersion)) {
+      final notification = AppVersionUnsupportedErrorNotification(
+        appVersion.toString(),
+        systemInfo.minSupportedAppVersion.toString(),
+      );
       notificationsBloc.add(NotificationsSubmitted(notification));
       return null;
     }

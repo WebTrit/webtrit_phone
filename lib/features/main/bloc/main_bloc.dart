@@ -78,30 +78,49 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
   /// Also chacks if the app is up to date and can be a reason for the incompatibility.
   /// in this case, it shows the dialog with the app update button.
   void _onSystemInfoArrived(MainBlocSystemInfoArrived event, Emitter<MainBlocState> emit) async {
-    final coreInfo = event.systemInfo.core;
+    final systemInfo = event.systemInfo;
+    final coreInfo = systemInfo.core;
     final constraint = VersionConstraint.parse(coreVersionConstraint);
     final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
+    final isAppSupported = systemInfo.isAppVersionSupported(appVersion);
 
-    if (isCoreSupported) {
-      emit(state.copyWith(coreVersionState: Compatible()));
+    if (!isAppSupported) {
+      // The backend declares a higher minimum app version than this build: a
+      // hard, non-dismissible update prompt (inverse of the core check).
+      final maybeStoreUrl = await _resolveStoreUpdateUrl();
+      emit(
+        state.copyWith(
+          coreVersionState: AppVersionUnsupported(
+            appVersion,
+            systemInfo.minSupportedAppVersion!,
+            updateStoreUrl: maybeStoreUrl,
+          ),
+        ),
+      );
+    } else if (!isCoreSupported) {
+      final maybeStoreUrl = await _resolveStoreUpdateUrl();
+      emit(state.copyWith(coreVersionState: Incompatible(coreInfo.version, constraint, updateStoreUrl: maybeStoreUrl)));
     } else {
-      Uri? maybeStoreUrl;
-
-      StoreInfo? storeInfo;
-
-      try {
-        storeInfo = await storeInfoExtractor?.getStoreInfo(appPackageName);
-      } catch (e, stackTrace) {
-        _logger.warning('storeInfoExtractor.getStoreInfo for $appPackageName error - ignore', e, stackTrace);
-      }
-
-      if (storeInfo != null && storeInfo.version > appVersion) {
-        maybeStoreUrl = storeInfo.viewUrl;
-      }
-
-      var coreVersionState = Incompatible(coreInfo.version, constraint, updateStoreUrl: maybeStoreUrl);
-      emit(state.copyWith(coreVersionState: coreVersionState));
+      emit(state.copyWith(coreVersionState: Compatible()));
     }
+  }
+
+  /// Resolves the store URL to offer as the "Update" action, but only when the
+  /// store actually hosts a build newer than the running one. Failures are
+  /// swallowed (the prompt simply omits the Update button).
+  Future<Uri?> _resolveStoreUpdateUrl() async {
+    StoreInfo? storeInfo;
+
+    try {
+      storeInfo = await storeInfoExtractor?.getStoreInfo(appPackageName);
+    } catch (e, stackTrace) {
+      _logger.warning('storeInfoExtractor.getStoreInfo for $appPackageName error - ignore', e, stackTrace);
+    }
+
+    if (storeInfo != null && storeInfo.version > appVersion) {
+      return storeInfo.viewUrl;
+    }
+    return null;
   }
 
   void _onAppUpdatePressed(MainBlocAppUpdatePressed event, Emitter<MainBlocState> emit) async {
