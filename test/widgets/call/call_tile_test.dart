@@ -162,6 +162,40 @@ void main() {
       expect(history, isTrue);
     });
 
+    testWidgets('expanded hides the inline audio action when the dial button is audio', (tester) async {
+      await tester.pumpWidget(
+        buildTestable(
+          buildTile(expanded: true, onDialPressed: () {}, onAudioCallPressed: () {}, onVideoCallPressed: () {}),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // The static dial button stays and keeps the audio action.
+      expect(find.byIcon(Icons.call), findsOneWidget);
+      // The inline audio action is dropped so it is not duplicated.
+      expect(find.text('Audio call'), findsNothing);
+      expect(find.text('Video call'), findsOneWidget);
+    });
+
+    testWidgets('expanded hides the inline video action when the dial button is video', (tester) async {
+      await tester.pumpWidget(
+        buildTestable(
+          buildTile(
+            expanded: true,
+            onDialPressed: () {},
+            dialIcon: Icons.videocam,
+            onAudioCallPressed: () {},
+            onVideoCallPressed: () {},
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.videocam), findsOneWidget);
+      expect(find.text('Video call'), findsNothing);
+      expect(find.text('Audio call'), findsOneWidget);
+    });
+
     testWidgets('disabled gestures hide dial button and actions bar', (tester) async {
       await tester.pumpWidget(
         buildTestable(buildTile(expanded: true, gesturesEnabled: false, onDialPressed: () {}, onCallLogPressed: () {})),
@@ -191,7 +225,8 @@ void main() {
       expect(find.text('More'), findsNothing);
     });
 
-    testWidgets('More opens the full actions menu', (tester) async {
+    testWidgets('More opens the overflow menu without the inline actions', (tester) async {
+      // Audio call is a primary (inline) action; copyNumber is an overflow action.
       await tester.pumpWidget(buildTestable(buildTile(expanded: true, onAudioCallPressed: () {})));
       await tester.pumpAndSettle();
 
@@ -200,7 +235,20 @@ void main() {
       await tester.tap(find.text('More'));
       await tester.pumpAndSettle();
 
+      // The overflow menu carries the remaining action, not the inline ones.
+      expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Copy number'), findsOneWidget);
+      expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Audio call'), findsNothing);
+    });
+
+    testWidgets('long press opens the full menu including inline actions', (tester) async {
+      await tester.pumpWidget(buildTestable(buildTile(onAudioCallPressed: () {})));
+      await tester.pumpAndSettle();
+
+      await tester.longPress(find.text('John Doe'));
+      await tester.pumpAndSettle();
+
       expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Audio call'), findsOneWidget);
+      expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Copy number'), findsOneWidget);
     });
   });
 }

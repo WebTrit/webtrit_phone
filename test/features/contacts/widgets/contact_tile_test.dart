@@ -29,6 +29,7 @@ void main() {
     VoidCallback? onChatPressed,
     VoidCallback? onCallLogPressed,
     VoidCallback? onViewContactPressed,
+    String? copyNumber,
   }) {
     return ContactTile(
       displayName: 'John Doe',
@@ -39,6 +40,7 @@ void main() {
       onChatPressed: onChatPressed,
       onCallLogPressed: onCallLogPressed,
       onViewContactPressed: onViewContactPressed,
+      copyNumber: copyNumber,
     );
   }
 
@@ -55,7 +57,14 @@ void main() {
     testWidgets('expanded tile shows actions for non-null callbacks', (tester) async {
       await tester.pumpWidget(
         buildTestable(
-          buildTile(expanded: true, onVideoCallPressed: () {}, onCallLogPressed: () {}, onViewContactPressed: () {}),
+          buildTile(
+            expanded: true,
+            onVideoCallPressed: () {},
+            onCallLogPressed: () {},
+            onViewContactPressed: () {},
+            // overflow action so the More affordance is rendered
+            copyNumber: '1001',
+          ),
         ),
       );
       await tester.pumpAndSettle();
@@ -65,6 +74,20 @@ void main() {
       expect(find.text('Contact'), findsOneWidget);
       expect(find.text('More'), findsOneWidget);
       expect(find.text('Message'), findsNothing);
+    });
+
+    testWidgets('expanded tile hides More when there are no overflow actions', (tester) async {
+      await tester.pumpWidget(
+        buildTestable(
+          buildTile(expanded: true, onVideoCallPressed: () {}, onCallLogPressed: () {}, onViewContactPressed: () {}),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Video call'), findsOneWidget);
+      expect(find.text('History'), findsOneWidget);
+      expect(find.text('Contact'), findsOneWidget);
+      expect(find.text('More'), findsNothing);
     });
 
     testWidgets('row tap calls onTap and not onDialPressed', (tester) async {

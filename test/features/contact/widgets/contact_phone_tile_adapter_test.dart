@@ -311,7 +311,7 @@ void main() {
         await tester.tap(find.byIcon(Icons.more_vert));
         await tester.pumpAndSettle();
 
-        expect(find.text('View call history'), findsOneWidget);
+        expect(find.text('History'), findsOneWidget);
       });
 
       testWidgets('hidden when enableTileCallLog is false', (tester) async {
@@ -320,7 +320,7 @@ void main() {
         await tester.tap(find.byIcon(Icons.more_vert));
         await tester.pumpAndSettle();
 
-        expect(find.text('View call history'), findsNothing);
+        expect(find.text('History'), findsNothing);
       });
 
       testWidgets('tapping call log entry triggers onCallLogPressed', (tester) async {
@@ -331,7 +331,7 @@ void main() {
 
         await tester.tap(find.byIcon(Icons.more_vert));
         await tester.pumpAndSettle();
-        await tester.tap(find.text('View call history'));
+        await tester.tap(find.text('History'));
         await tester.pumpAndSettle();
 
         expect(called, isTrue);

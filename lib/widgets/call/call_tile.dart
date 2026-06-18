@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/call/number_actions.dart';
 
 class TileMenuButton extends StatelessWidget {
   const TileMenuButton({super.key, required this.onTap});
@@ -28,64 +28,13 @@ class TileMenuButton extends StatelessWidget {
   }
 }
 
-List<PopupMenuEntry<dynamic>> buildNumberActions(
-  BuildContext context, {
-  required List<String> callNumbers,
-  VoidCallback? onAudioCallPressed,
-  VoidCallback? onVideoCallPressed,
-  VoidCallback? onTransferPressed,
-  VoidCallback? onChatPressed,
-  VoidCallback? onSendSmsPressed,
-  VoidCallback? onViewContactPressed,
-  VoidCallback? onCallLogPressed,
-  void Function(String)? onCallFrom,
-  String? copyNumber,
-  String? copyCallId,
-  VoidCallback? onDelete,
-}) {
-  final l10n = context.l10n;
-  return [
-    if (onAudioCallPressed != null) PopupMenuItem(onTap: onAudioCallPressed, child: Text(l10n.numberActions_audioCall)),
-    if (onVideoCallPressed != null) PopupMenuItem(onTap: onVideoCallPressed, child: Text(l10n.numberActions_videoCall)),
-    if (callNumbers.length > 1 && onCallFrom != null)
-      for (final number in callNumbers)
-        PopupMenuItem(onTap: () => onCallFrom.call(number), child: Text(l10n.numberActions_callFrom(number))),
-    if (onTransferPressed != null) PopupMenuItem(onTap: onTransferPressed, child: Text(l10n.numberActions_transfer)),
-    if (onChatPressed != null) PopupMenuItem(onTap: onChatPressed, child: Text(l10n.numberActions_chat)),
-    if (onSendSmsPressed != null) PopupMenuItem(onTap: onSendSmsPressed, child: Text(l10n.numberActions_sendSms)),
-    if (onViewContactPressed != null)
-      PopupMenuItem(onTap: onViewContactPressed, child: Text(l10n.numberActions_viewContact)),
-    if (onCallLogPressed != null) PopupMenuItem(onTap: onCallLogPressed, child: Text(l10n.numberActions_callLog)),
-    if (copyNumber != null)
-      PopupMenuItem(
-        onTap: () => Clipboard.setData(ClipboardData(text: copyNumber)),
-        child: Text(l10n.numberActions_copyNumber),
-      ),
-    if (copyCallId != null)
-      PopupMenuItem(
-        onTap: () => Clipboard.setData(ClipboardData(text: copyCallId)),
-        child: Text(l10n.numberActions_copyCallId),
-      ),
-    if (onDelete != null) PopupMenuItem(onTap: onDelete, child: Text(l10n.numberActions_delete)),
-  ];
-}
-
 class CallTileActionsBar extends StatelessWidget {
-  const CallTileActionsBar({
-    super.key,
-    this.onAudioCallPressed,
-    this.onVideoCallPressed,
-    this.onChatPressed,
-    this.onCallLogPressed,
-    this.onViewContactPressed,
-    required this.onMorePressed,
-  });
+  const CallTileActionsBar({super.key, required this.actions, this.onMorePressed});
 
-  final VoidCallback? onAudioCallPressed;
-  final VoidCallback? onVideoCallPressed;
-  final VoidCallback? onChatPressed;
-  final VoidCallback? onCallLogPressed;
-  final VoidCallback? onViewContactPressed;
+  /// Primary actions to render inline (see [NumberAction.primary]).
+  final List<NumberAction> actions;
+
+  /// Opens the overflow menu with the remaining actions; hidden when null.
   final VoidCallback? onMorePressed;
 
   @override
@@ -93,41 +42,9 @@ class CallTileActionsBar extends StatelessWidget {
     final l10n = context.l10n;
     return Row(
       children: [
-        if (onAudioCallPressed != null)
+        for (final action in actions)
           Expanded(
-            child: _CallTileAction(
-              icon: Icons.call_outlined,
-              label: l10n.numberActions_audioCall,
-              onTap: onAudioCallPressed!,
-            ),
-          ),
-        if (onVideoCallPressed != null)
-          Expanded(
-            child: _CallTileAction(
-              icon: Icons.videocam_outlined,
-              label: l10n.numberActions_videoCall,
-              onTap: onVideoCallPressed!,
-            ),
-          ),
-        if (onChatPressed != null)
-          Expanded(
-            child: _CallTileAction(
-              icon: Icons.chat_outlined,
-              label: l10n.callTileActions_message,
-              onTap: onChatPressed!,
-            ),
-          ),
-        if (onCallLogPressed != null)
-          Expanded(
-            child: _CallTileAction(icon: Icons.history, label: l10n.callTileActions_history, onTap: onCallLogPressed!),
-          ),
-        if (onViewContactPressed != null)
-          Expanded(
-            child: _CallTileAction(
-              icon: Icons.person_outline,
-              label: l10n.callTileActions_contact,
-              onTap: onViewContactPressed!,
-            ),
+            child: _CallTileAction(icon: action.icon, label: action.label, onTap: action.onTap),
           ),
         if (onMorePressed != null)
           Expanded(
@@ -239,37 +156,30 @@ class CallTile extends StatefulWidget {
 class _CallTileState extends State<CallTile> {
   late final tileKey = GlobalKey();
 
-  /// Mirrors the gating of [buildNumberActions] so menu affordances (the
-  /// trailing button and the More action) are hidden when the menu is empty.
-  bool get hasMenuActions =>
-      widget.onAudioCallPressed != null ||
-      widget.onVideoCallPressed != null ||
-      (widget.callNumbers.length > 1 && widget.onCallFrom != null) ||
-      widget.onTransferPressed != null ||
-      widget.onChatPressed != null ||
-      widget.onSendSmsPressed != null ||
-      widget.onViewContactPressed != null ||
-      widget.onCallLogPressed != null ||
-      widget.copyNumber != null ||
-      widget.copyCallId != null ||
-      widget.onDelete != null;
+  List<NumberAction> buildActions() => buildNumberActions(
+    context,
+    callNumbers: widget.callNumbers,
+    onAudioCallPressed: widget.onAudioCallPressed,
+    onVideoCallPressed: widget.onVideoCallPressed,
+    onChatPressed: widget.onChatPressed,
+    onCallLogPressed: widget.onCallLogPressed,
+    onViewContactPressed: widget.onViewContactPressed,
+    onTransferPressed: widget.onTransferPressed,
+    onSendSmsPressed: widget.onSendSmsPressed,
+    onCallFrom: widget.onCallFrom,
+    copyNumber: widget.copyNumber,
+    copyCallId: widget.copyCallId,
+    onDelete: widget.onDelete,
+  );
 
-  void showMenuPopup() {
-    final items = buildNumberActions(
-      context,
-      callNumbers: widget.callNumbers,
-      onAudioCallPressed: widget.onAudioCallPressed,
-      onVideoCallPressed: widget.onVideoCallPressed,
-      onTransferPressed: widget.onTransferPressed,
-      onChatPressed: widget.onChatPressed,
-      onSendSmsPressed: widget.onSendSmsPressed,
-      onViewContactPressed: widget.onViewContactPressed,
-      onCallLogPressed: widget.onCallLogPressed,
-      onCallFrom: widget.onCallFrom,
-      copyNumber: widget.copyNumber,
-      copyCallId: widget.copyCallId,
-      onDelete: widget.onDelete,
-    );
+  /// Shows the popup menu. When [overflowOnly] is set, the primary actions that
+  /// already sit in the inline bar are filtered out, so the "More" menu never
+  /// repeats them. The collapsed-row affordances (long press, trailing button)
+  /// pass the full set instead.
+  void showMenuPopup({bool overflowOnly = false}) {
+    var actions = buildActions();
+    if (overflowOnly) actions = actions.where((action) => !action.primary).toList();
+    final items = numberActionsToMenu(actions);
     if (items.isEmpty) return;
 
     showMenu(context: context, position: getPosition(), items: items);
@@ -291,6 +201,20 @@ class _CallTileState extends State<CallTile> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
+
+    final actions = buildActions();
+    final hasOverflowActions = actions.any((action) => !action.primary);
+
+    // The trailing dial button is a static call shortcut. When expanded, drop the
+    // inline call action of the same kind (audio/video) so the bar does not
+    // duplicate it; the dial button stays visible and keeps that action.
+    final suppressedInlineIcon = widget.onDialPressed == null
+        ? null
+        : (widget.dialIcon == Icons.videocam ? Icons.videocam_outlined : Icons.call_outlined);
+    final primaryActions = actions
+        .where((action) => action.primary)
+        .where((action) => !(widget.expanded && action.icon == suppressedInlineIcon))
+        .toList();
 
     final nameText = Text(
       widget.name,
@@ -352,7 +276,7 @@ class _CallTileState extends State<CallTile> {
           splashColor: colorScheme.secondary.withAlpha(50),
           key: tileKey,
           onTap: widget.gesturesEnabled ? widget.onTap : null,
-          onLongPress: widget.gesturesEnabled ? showMenuPopup : null,
+          onLongPress: widget.gesturesEnabled ? () => showMenuPopup() : null,
           child: Padding(
             padding: const EdgeInsets.only(left: 8, right: 0, top: 8, bottom: 8),
             child: Column(
@@ -381,8 +305,8 @@ class _CallTileState extends State<CallTile> {
                           onPressed: widget.onDialPressed,
                           icon: Icon(widget.dialIcon ?? Icons.call, color: colorScheme.primary),
                         )
-                      else if (hasMenuActions)
-                        TileMenuButton(onTap: showMenuPopup),
+                      else if (actions.isNotEmpty)
+                        TileMenuButton(onTap: () => showMenuPopup()),
                   ],
                 ),
                 AnimatedSize(
@@ -393,12 +317,8 @@ class _CallTileState extends State<CallTile> {
                       ? Padding(
                           padding: const EdgeInsets.only(top: 4, right: 8),
                           child: CallTileActionsBar(
-                            onAudioCallPressed: widget.onAudioCallPressed,
-                            onVideoCallPressed: widget.onVideoCallPressed,
-                            onChatPressed: widget.onChatPressed,
-                            onCallLogPressed: widget.onCallLogPressed,
-                            onViewContactPressed: widget.onViewContactPressed,
-                            onMorePressed: hasMenuActions ? showMenuPopup : null,
+                            actions: primaryActions,
+                            onMorePressed: hasOverflowActions ? () => showMenuPopup(overflowOnly: true) : null,
                           ),
                         )
                       : const SizedBox(width: double.infinity),
