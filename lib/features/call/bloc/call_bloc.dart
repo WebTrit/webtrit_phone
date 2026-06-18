@@ -1138,7 +1138,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final transaction = WebtritSignalingClient.generateTransactionId();
     _signalingModule
         .execute(
-          MediaStateRequest(transaction: transaction, line: call.line, callId: call.callId, media: {'video': video}),
+          MediaStatePeerMessageRequest(transaction: transaction, line: call.line, callId: call.callId, video: video),
         )
         ?.catchError((Object e) => _logger.info('_sendMediaState: $e'));
   }
@@ -4130,8 +4130,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(_CallSignalingEvent.updating(line: event.line, callId: event.callId));
     } else if (event is UpdatedEvent) {
       add(_CallSignalingEvent.updated(line: event.line, callId: event.callId));
-    } else if (event is MediaStateEvent) {
-      add(_CallSignalingEvent.mediaState(line: event.line, callId: event.callId, media: event.media));
+    } else if (event is PeerMessageEvent) {
+      switch (event) {
+        case MediaStatePeerMessageEvent e:
+          add(_CallSignalingEvent.mediaState(line: e.line, callId: e.callId, media: {'video': e.video}));
+        case UnknownPeerMessageEvent e:
+          _logger.info('[SIG] PeerMessageEvent: ignoring unknown type "${e.type}"');
+      }
     } else if (event is TransferEvent) {
       add(
         _CallSignalingEvent.transfer(
