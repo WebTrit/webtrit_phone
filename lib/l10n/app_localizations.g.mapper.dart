@@ -503,6 +503,12 @@ extension AppLocalizationsExtension on AppLocalizations {
         main_CompatibilityIssueDialog_title,
       'main_AppUpdateRequiredDialog_title' =>
         main_AppUpdateRequiredDialog_title,
+      'main_AppUpdateRequiredDialog_description' =>
+        main_AppUpdateRequiredDialog_description,
+      'main_AppUpdateRequiredDialog_currentVersionLabel' =>
+        main_AppUpdateRequiredDialog_currentVersionLabel,
+      'main_AppUpdateRequiredDialog_minimumVersionLabel' =>
+        main_AppUpdateRequiredDialog_minimumVersionLabel,
       'messaging_ActionBtn_retry' => messaging_ActionBtn_retry,
       'messaging_ChooseContact_cancel' => messaging_ChooseContact_cancel,
       'messaging_ChooseContact_empty' => messaging_ChooseContact_empty,
@@ -1658,13 +1664,6 @@ extension AppLocalizationsExtension on AppLocalizations {
             'main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError requires 2 arguments',
           ),
         },
-      'main_AppUpdateRequiredDialog_content' => switch (args) {
-        [final String actual, final String minSupported] =>
-          main_AppUpdateRequiredDialog_content(actual, minSupported),
-        _ => throw ArgumentError(
-          'main_AppUpdateRequiredDialog_content requires 2 arguments',
-        ),
-      },
       'messaging_ConversationBuilders_contactExtension' => switch (args) {
         [final String extension] =>
           messaging_ConversationBuilders_contactExtension(extension),

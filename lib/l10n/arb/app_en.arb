@@ -953,17 +953,17 @@
   "@main_CompatibilityIssueDialog_title": {},
   "main_AppUpdateRequiredDialog_title": "Update required",
   "@main_AppUpdateRequiredDialog_title": {},
-  "main_AppUpdateRequiredDialog_content": "Your app version is no longer supported. Please update the application to continue.\n\nCurrent version:\n{actual}\n\nMinimum required version:\n{minSupported}",
-  "@main_AppUpdateRequiredDialog_content": {
-    "description": "Shown in the update-required dialog when the running app is older than the backend-declared minimum supported app version. Condition: app version is below min_supported_app_version. Placeholders: {actual} for the current app version, {minSupported} for the minimum required version.",
-    "placeholders": {
-      "actual": {
-        "type": "String"
-      },
-      "minSupported": {
-        "type": "String"
-      }
-    }
+  "main_AppUpdateRequiredDialog_description": "Your app version is no longer supported. Please update the application to continue.",
+  "@main_AppUpdateRequiredDialog_description": {
+    "description": "Body text of the full-screen update-required prompt, shown when the running app is older than the backend-declared minimum supported app version."
+  },
+  "main_AppUpdateRequiredDialog_currentVersionLabel": "Current version",
+  "@main_AppUpdateRequiredDialog_currentVersionLabel": {
+    "description": "Label above the running app version on the update-required prompt."
+  },
+  "main_AppUpdateRequiredDialog_minimumVersionLabel": "Minimum required version",
+  "@main_AppUpdateRequiredDialog_minimumVersionLabel": {
+    "description": "Label above the minimum supported app version on the update-required prompt."
   },
   "messaging_ActionBtn_retry": "Retry",
   "@messaging_ActionBtn_retry": {},

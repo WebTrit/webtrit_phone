@@ -1109,9 +1109,14 @@ class AppLocalizationsUk extends AppLocalizations {
   String get main_AppUpdateRequiredDialog_title => 'Потрібне оновлення';
 
   @override
-  String main_AppUpdateRequiredDialog_content(String actual, String minSupported) {
-    return 'Версія вашого застосунку більше не підтримується. Будь ласка, оновіть застосунок, щоб продовжити.\n\nПоточна версія:\n$actual\n\nМінімальна потрібна версія:\n$minSupported';
-  }
+  String get main_AppUpdateRequiredDialog_description =>
+      'Версія вашого застосунку більше не підтримується. Будь ласка, оновіть застосунок, щоб продовжити.';
+
+  @override
+  String get main_AppUpdateRequiredDialog_currentVersionLabel => 'Поточна версія';
+
+  @override
+  String get main_AppUpdateRequiredDialog_minimumVersionLabel => 'Мінімальна потрібна версія';
 
   @override
   String get messaging_ActionBtn_retry => 'Повторить спробу';

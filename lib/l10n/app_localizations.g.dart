@@ -1998,11 +1998,23 @@ abstract class AppLocalizations {
   /// **'Update required'**
   String get main_AppUpdateRequiredDialog_title;
 
-  /// Shown in the update-required dialog when the running app is older than the backend-declared minimum supported app version. Condition: app version is below min_supported_app_version. Placeholders: {actual} for the current app version, {minSupported} for the minimum required version.
+  /// Body text of the full-screen update-required prompt, shown when the running app is older than the backend-declared minimum supported app version.
   ///
   /// In en, this message translates to:
-  /// **'Your app version is no longer supported. Please update the application to continue.\n\nCurrent version:\n{actual}\n\nMinimum required version:\n{minSupported}'**
-  String main_AppUpdateRequiredDialog_content(String actual, String minSupported);
+  /// **'Your app version is no longer supported. Please update the application to continue.'**
+  String get main_AppUpdateRequiredDialog_description;
+
+  /// Label above the running app version on the update-required prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Current version'**
+  String get main_AppUpdateRequiredDialog_currentVersionLabel;
+
+  /// Label above the minimum supported app version on the update-required prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum required version'**
+  String get main_AppUpdateRequiredDialog_minimumVersionLabel;
 
   /// No description provided for @messaging_ActionBtn_retry.
   ///

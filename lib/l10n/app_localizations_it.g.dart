@@ -1102,9 +1102,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get main_AppUpdateRequiredDialog_title => 'Aggiornamento richiesto';
 
   @override
-  String main_AppUpdateRequiredDialog_content(String actual, String minSupported) {
-    return 'La versione della tua app non è più supportata. Aggiorna l\'applicazione per continuare.\n\nVersione attuale:\n$actual\n\nVersione minima richiesta:\n$minSupported';
-  }
+  String get main_AppUpdateRequiredDialog_description =>
+      'La versione della tua app non è più supportata. Aggiorna l\'applicazione per continuare.';
+
+  @override
+  String get main_AppUpdateRequiredDialog_currentVersionLabel => 'Versione attuale';
+
+  @override
+  String get main_AppUpdateRequiredDialog_minimumVersionLabel => 'Versione minima richiesta';
 
   @override
   String get messaging_ActionBtn_retry => 'Riprova';
