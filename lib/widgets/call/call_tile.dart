@@ -203,8 +203,18 @@ class _CallTileState extends State<CallTile> {
     final colorScheme = themeData.colorScheme;
 
     final actions = buildActions();
-    final primaryActions = actions.where((action) => action.primary).toList();
     final hasOverflowActions = actions.any((action) => !action.primary);
+
+    // The trailing dial button is a static call shortcut. When expanded, drop the
+    // inline call action of the same kind (audio/video) so the bar does not
+    // duplicate it; the dial button stays visible and keeps that action.
+    final suppressedInlineIcon = widget.onDialPressed == null
+        ? null
+        : (widget.dialIcon == Icons.videocam ? Icons.videocam_outlined : Icons.call_outlined);
+    final primaryActions = actions
+        .where((action) => action.primary)
+        .where((action) => !(widget.expanded && action.icon == suppressedInlineIcon))
+        .toList();
 
     final nameText = Text(
       widget.name,
