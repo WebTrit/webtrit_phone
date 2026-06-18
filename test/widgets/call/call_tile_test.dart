@@ -191,7 +191,8 @@ void main() {
       expect(find.text('More'), findsNothing);
     });
 
-    testWidgets('More opens the full actions menu', (tester) async {
+    testWidgets('More opens the overflow menu without the inline actions', (tester) async {
+      // Audio call is a primary (inline) action; copyNumber is an overflow action.
       await tester.pumpWidget(buildTestable(buildTile(expanded: true, onAudioCallPressed: () {})));
       await tester.pumpAndSettle();
 
@@ -200,7 +201,20 @@ void main() {
       await tester.tap(find.text('More'));
       await tester.pumpAndSettle();
 
+      // The overflow menu carries the remaining action, not the inline ones.
+      expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Copy number'), findsOneWidget);
+      expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Audio call'), findsNothing);
+    });
+
+    testWidgets('long press opens the full menu including inline actions', (tester) async {
+      await tester.pumpWidget(buildTestable(buildTile(onAudioCallPressed: () {})));
+      await tester.pumpAndSettle();
+
+      await tester.longPress(find.text('John Doe'));
+      await tester.pumpAndSettle();
+
       expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Audio call'), findsOneWidget);
+      expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Copy number'), findsOneWidget);
     });
   });
 }
