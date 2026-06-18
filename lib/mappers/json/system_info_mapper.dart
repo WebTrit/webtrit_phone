@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/version_utils.dart';
 
 mixin SystemInfoJsonMapper {
   WebtritSystemInfo systemInfoFromJson(String json) {
@@ -14,14 +15,13 @@ mixin SystemInfoJsonMapper {
   }
 
   WebtritSystemInfo systemInfoFromMap(Map<String, dynamic> map) {
-    final rawMinSupportedAppVersion = map['min_supported_app_version'];
     return WebtritSystemInfo(
       core: coreInfoFromMap(map['core']),
       postgres: postgresInfoFromMap(map['postgres']),
       adapter: map['adapter'] != null ? adapterInfoFromMap(map['adapter']) : null,
       janus: map['janus'] != null ? janusInfoFromMap(map['janus']) : null,
       gorush: map['gorush'] != null ? gorushInfoFromMap(map['gorush']) : null,
-      minSupportedAppVersion: rawMinSupportedAppVersion != null ? Version.parse(rawMinSupportedAppVersion) : null,
+      minSupportedAppVersion: tryParseVersion(map['min_supported_app_version']),
     );
   }
 

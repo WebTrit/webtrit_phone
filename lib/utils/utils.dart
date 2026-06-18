@@ -23,6 +23,7 @@ export 'regexes.dart';
 export 'string_phone_utils.dart';
 export 'text_matchers.dart';
 export 'ttl_cache.dart';
+export 'version_utils.dart';
 export 'view_params/view_params.dart';
 export 'webtrit_api_client_factory.dart';
 export 'webtrit_signaling_client.dart';
