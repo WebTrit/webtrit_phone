@@ -20,6 +20,16 @@ class MainScreen extends StatelessWidget {
       listener: (context, state) async {
         final coreVersionState = state.coreVersionState;
 
+        // The gate dialog is pushed on the root navigator (showDialog defaults to
+        // useRootNavigator: true), so dismissal must target the root navigator -
+        // Navigator.of(context) here would resolve the nested auto_route navigator.
+        // Capture the blocs and navigator while this context is still mounted: the
+        // dialog outlives MainScreen during logout, so its button closures must not
+        // touch a possibly-defunct context.
+        final appBloc = context.read<AppBloc>();
+        final mainBloc = context.read<MainBloc>();
+        final rootNavigator = Navigator.of(context, rootNavigator: true);
+
         if (coreVersionState is AppVersionUnsupported) {
           final canUpdateApp = coreVersionState.updateStoreUrl != null;
 
@@ -28,13 +38,13 @@ class MainScreen extends StatelessWidget {
             coreVersionState.currentVersion,
             coreVersionState.minSupportedVersion,
             onUpdatePressed: canUpdateApp
-                ? () {
-                    context.read<MainBloc>().add(MainBlocAppUpdatePressed(coreVersionState.updateStoreUrl!));
-                  }
+                ? () => mainBloc.add(MainBlocAppUpdatePressed(coreVersionState.updateStoreUrl!))
                 : null,
             onLogoutPressed: () {
-              Navigator.of(context).maybePop();
-              context.read<AppBloc>().add(const AppLogoutRequested(reason: AppLogoutReason.userRequest));
+              // Force pop (not maybePop, which PopScope(canPop: false) blocks) to
+              // close the gate before logout tears the screen down.
+              rootNavigator.pop();
+              appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.userRequest));
             },
           );
         } else if (coreVersionState is Incompatible) {
@@ -45,13 +55,11 @@ class MainScreen extends StatelessWidget {
             coreVersionState.currentVersion,
             coreVersionState.supportedConstraint,
             onUpdatePressed: canUpdateApp
-                ? () {
-                    context.read<MainBloc>().add(MainBlocAppUpdatePressed(coreVersionState.updateStoreUrl!));
-                  }
+                ? () => mainBloc.add(MainBlocAppUpdatePressed(coreVersionState.updateStoreUrl!))
                 : null,
             onLogoutPressed: () {
-              Navigator.of(context).maybePop();
-              context.read<AppBloc>().add(const AppLogoutRequested(reason: AppLogoutReason.userRequest));
+              rootNavigator.pop();
+              appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.userRequest));
             },
           );
         }
