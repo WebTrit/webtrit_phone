@@ -193,6 +193,8 @@ class AppPermissions {
       switch (permission) {
         case CallkeepSpecialPermissions.fullScreenIntent:
           await _webtritCallkeepPermissions.openFullScreenIntentSettings();
+        // Not reached via the current flow (backgroundActivityStart is not in
+        // _specialPermissions); the live trigger is toBackgroundActivityStartSettings().
         case CallkeepSpecialPermissions.backgroundActivityStart:
           await _webtritCallkeepPermissions.openBackgroundActivityStartSettings();
       }

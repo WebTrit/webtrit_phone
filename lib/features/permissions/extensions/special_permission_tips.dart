@@ -15,6 +15,9 @@ extension SpecialPermissionTips on CallkeepSpecialPermissions {
           context.l10n.permission_manageFullScreenNotificationInstructions_step4,
           context.l10n.permission_manageFullScreenNotificationInstructions_step5,
         ];
+      // Reached only if backgroundActivityStart is added to
+      // AppPermissions._specialPermissions; today it is surfaced via the
+      // manufacturer tip (ManufacturerTips.tips), which uses the same strings.
       case CallkeepSpecialPermissions.backgroundActivityStart:
         return [
           context.l10n.permission_manufacturer_Text_xiaomi_tip1,
