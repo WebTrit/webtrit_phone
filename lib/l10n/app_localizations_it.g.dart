@@ -1568,10 +1568,12 @@ class AppLocalizationsIt extends AppLocalizations {
       'I permessi potrebbero essere modificati in qualsiasi momento in futuro.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip1 => 'Vai su \"Impostazioni dell\'app\" → \"Notifiche\".';
+  String get permission_manufacturer_Text_xiaomi_tip1 =>
+      'Apri la schermata \"Altre autorizzazioni\" di questa app con il pulsante in basso.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip2 => 'Trova e attiva \"Notifiche sulla schermata di blocco\".';
+  String get permission_manufacturer_Text_xiaomi_tip2 =>
+      'Attiva \"Mostra finestre popup in background\" (e \"Mostra nella schermata di blocco\") per far apparire le chiamate in arrivo sopra la schermata di blocco.';
 
   @override
   String get permission_Text_description =>

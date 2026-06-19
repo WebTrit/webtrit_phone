@@ -1570,10 +1570,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_manufacturer_Text_trailing => 'Дозволи можуть бути змінені в будь-який час у майбутньому.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip1 => 'Перейдіть у «Налаштування програми» → «Сповіщення».';
+  String get permission_manufacturer_Text_xiaomi_tip1 =>
+      'Відкрийте екран «Інші дозволи» цього застосунку кнопкою нижче.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip2 => 'Знайдіть і ввімкніть «Сповіщення на екрані блокування».';
+  String get permission_manufacturer_Text_xiaomi_tip2 =>
+      'Увімкніть «Показ спливаючих вікон під час роботи у фоні» (та «Показ на екрані блокування»), щоб вхідні дзвінки зʼявлялися поверх екрана блокування.';
 
   @override
   String get permission_Text_description =>

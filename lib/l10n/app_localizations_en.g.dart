@@ -1546,10 +1546,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permission_manufacturer_Text_trailing => 'Permissions could be changed at any time in the future.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip1 => 'Go to \"App settings\" → \"Notifications\".';
+  String get permission_manufacturer_Text_xiaomi_tip1 =>
+      'Open this app\'s \"Other permissions\" screen using the button below.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip2 => 'Find and turn on \"Lockscreen notifications\".';
+  String get permission_manufacturer_Text_xiaomi_tip2 =>
+      'Turn on \"Display pop-up windows while running in background\" (and \"Show on lock screen\") so incoming calls can appear over the lock screen.';
 
   @override
   String get permission_Text_description =>

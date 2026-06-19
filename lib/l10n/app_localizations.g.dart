@@ -2853,13 +2853,13 @@ abstract class AppLocalizations {
   /// No description provided for @permission_manufacturer_Text_xiaomi_tip1.
   ///
   /// In en, this message translates to:
-  /// **'Go to \"App settings\" → \"Notifications\".'**
+  /// **'Open this app\'s \"Other permissions\" screen using the button below.'**
   String get permission_manufacturer_Text_xiaomi_tip1;
 
   /// No description provided for @permission_manufacturer_Text_xiaomi_tip2.
   ///
   /// In en, this message translates to:
-  /// **'Find and turn on \"Lockscreen notifications\".'**
+  /// **'Turn on \"Display pop-up windows while running in background\" (and \"Show on lock screen\") so incoming calls can appear over the lock screen.'**
   String get permission_manufacturer_Text_xiaomi_tip2;
 
   /// No description provided for @permission_Text_description.
