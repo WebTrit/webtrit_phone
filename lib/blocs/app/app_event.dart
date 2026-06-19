@@ -126,3 +126,14 @@ class AppLogoutRequested extends AppEvent {
 class AppCleanupRequested extends AppEvent {
   const AppCleanupRequested();
 }
+
+/// Internal: carries a freshly resolved [AppCompatibility] from the system-info
+/// stream into the bloc so the force-update gate can be enforced by the router.
+class _AppCompatibilityUpdated extends AppEvent {
+  const _AppCompatibilityUpdated(this.compatibility);
+
+  final AppCompatibility compatibility;
+
+  @override
+  List<Object?> get props => [compatibility];
+}

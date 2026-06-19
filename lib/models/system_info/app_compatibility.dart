@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import 'system_info.dart';
@@ -52,22 +53,31 @@ sealed class AppCompatibility {
 }
 
 /// The running build satisfies both the core constraint and the declared minimum.
-final class AppCompatible extends AppCompatibility {
+final class AppCompatible extends AppCompatibility with EquatableMixin {
   const AppCompatible();
+
+  @override
+  List<Object?> get props => [];
 }
 
 /// The backend core version is outside the app's supported [constraint].
-final class CoreVersionUnsupported extends AppCompatibility {
+final class CoreVersionUnsupported extends AppCompatibility with EquatableMixin {
   const CoreVersionUnsupported({required this.coreVersion, required this.constraint});
 
   final Version coreVersion;
   final VersionConstraint constraint;
+
+  @override
+  List<Object?> get props => [coreVersion, constraint];
 }
 
 /// The running app is older than the backend-declared [minSupportedVersion].
-final class AppVersionTooOld extends AppCompatibility {
+final class AppVersionTooOld extends AppCompatibility with EquatableMixin {
   const AppVersionTooOld({required this.appVersion, required this.minSupportedVersion});
 
   final Version appVersion;
   final Version minSupportedVersion;
+
+  @override
+  List<Object?> get props => [appVersion, minSupportedVersion];
 }

@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:store_info_extractor/store_info_extractor.dart';
-
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -76,35 +73,23 @@ class MainScreenPage extends StatelessWidget {
       },
       navigatorObservers: () => [MainScreenNavigatorObserver(mainScreenRouteStateRepository)],
     );
-    final provider = BlocProvider(
-      create: (context) {
-        return MainBloc(
-          context.read<SystemInfoRepository>(),
-          context.read<PrivateGatewayRepository>(),
-          EnvironmentConfig.CORE_VERSION_CONSTRAINT,
-          context.read<PackageInfo>(),
-          appCompatibilityResolver: context.read<AppCompatibilityResolver>(),
-          storeInfoExtractor: StoreInfoExtractor(),
-        )..add(const MainBlocInit());
-      },
-      child: callToActionsEnabled
-          ? BlocProvider<CallToActionsCubit>(
-              create: (context) => CallToActionsCubit(
-                callToActionsRepository: context.read<CallToActionsRepository>(),
-                userRepository: context.read<UserRepository>(),
-                locale: context.read<AppBloc>().state.locale,
-              ),
-              child: CallToActionsShell(child: autoTabsRouter),
-            )
-          : autoTabsRouter,
-    );
+    final content = callToActionsEnabled
+        ? BlocProvider<CallToActionsCubit>(
+            create: (context) => CallToActionsCubit(
+              callToActionsRepository: context.read<CallToActionsRepository>(),
+              userRepository: context.read<UserRepository>(),
+              locale: context.read<AppBloc>().state.locale,
+            ),
+            child: CallToActionsShell(child: autoTabsRouter),
+          )
+        : autoTabsRouter;
 
     return BlocBuilder<CallPullCubit, List<DialogInfo>>(
       builder: (context, dialogs) {
         return AppBarParams(
           systemNotificationsEnabled: systemNotificationsEnabled,
           pullableCallDialogs: dialogs,
-          child: provider,
+          child: content,
         );
       },
     );

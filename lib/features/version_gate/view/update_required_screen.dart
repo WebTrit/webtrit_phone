@@ -1,61 +1,99 @@
 import 'package:flutter/material.dart';
 
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:store_info_extractor/store_info_extractor.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
-/// Non-dismissible, full-screen prompt shown when the running app is older than
-/// the backend-declared minimum supported app version (`min_supported_app_version`
-/// from system-info). The inverse of [CompatibilityIssueDialog]: there the
-/// backend is too new, here the app is too old. The user must update or log out.
-class AppUpdateRequiredDialog extends StatelessWidget {
-  static Future show(
-    BuildContext context,
-    Version currentVersion,
-    Version minSupportedVersion, {
-    VoidCallback? onUpdatePressed,
-    VoidCallback? onLogoutPressed,
-  }) {
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      useSafeArea: false,
-      builder: (context) {
-        // PopScope blocks the Android back button so the gate cannot be escaped.
-        return PopScope(
-          canPop: false,
-          child: AppUpdateRequiredDialog._(
-            currentVersion,
-            minSupportedVersion,
-            onUpdatePressed: onUpdatePressed,
-            onLogoutPressed: onLogoutPressed,
-          ),
-        );
-      },
+final _logger = Logger('UpdateRequiredScreen');
+
+/// Full-screen, non-dismissible force-update gate shown when the running app is
+/// older than the backend-declared minimum supported version
+/// (`min_supported_app_version` from system-info). The user must update or log out.
+///
+/// Replaces the former `AppUpdateRequiredDialog` overlay: as a routed page it
+/// removes the visual blink where the real main content flashed before the
+/// dialog covered it. The router guard ([AppRouter.onMainShellRouteGuardNavigation])
+/// redirects here while [AppState.appCompatibility] is [AppVersionTooOld].
+@RoutePage()
+class UpdateRequiredScreenPage extends StatelessWidget {
+  const UpdateRequiredScreenPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final packageInfo = context.read<PackageInfo>();
+    final compatibility = context.select<AppBloc, AppCompatibility>((bloc) => bloc.state.appCompatibility);
+
+    final currentVersion = Version.parse(packageInfo.version);
+    final minSupportedVersion = compatibility is AppVersionTooOld ? compatibility.minSupportedVersion : currentVersion;
+
+    // The Android back button must not escape the gate.
+    return PopScope(
+      canPop: false,
+      child: _UpdateRequiredView(currentVersion: currentVersion, minSupportedVersion: minSupportedVersion),
     );
   }
+}
 
-  const AppUpdateRequiredDialog._(
-    this.currentVersion,
-    this.minSupportedVersion, {
-    this.onUpdatePressed,
-    this.onLogoutPressed,
-  });
+/// Hosts the async store-URL resolution: the "Update" action is only offered
+/// when the store actually hosts a build newer than the running one (matching
+/// the former MainBloc behaviour). Resolution failures are swallowed and the
+/// Update button is simply omitted.
+class _UpdateRequiredView extends StatefulWidget {
+  const _UpdateRequiredView({required this.currentVersion, required this.minSupportedVersion});
 
   final Version currentVersion;
   final Version minSupportedVersion;
-  final VoidCallback? onUpdatePressed;
-  final VoidCallback? onLogoutPressed;
 
-  // The dialog owns its own dismissal: it pops the navigator it was pushed onto
-  // (its own context resolves it), then signals the pure logout intent. The
-  // caller therefore knows nothing about routing or PopScope. Update keeps the
-  // gate open on purpose, so it does not pop.
-  void _onLogout(BuildContext context) {
-    Navigator.of(context).pop();
-    onLogoutPressed?.call();
+  @override
+  State<_UpdateRequiredView> createState() => _UpdateRequiredViewState();
+}
+
+class _UpdateRequiredViewState extends State<_UpdateRequiredView> {
+  Uri? _updateStoreUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _resolveStoreUpdateUrl();
+  }
+
+  Future<void> _resolveStoreUpdateUrl() async {
+    final packageInfo = context.read<PackageInfo>();
+    final appVersion = widget.currentVersion;
+
+    StoreInfo? storeInfo;
+    try {
+      storeInfo = await StoreInfoExtractor().getStoreInfo(packageInfo.packageName);
+    } catch (e, st) {
+      _logger.warning('getStoreInfo for ${packageInfo.packageName} error - ignore', e, st);
+    }
+
+    if (!mounted) return;
+    if (storeInfo != null && storeInfo.version > appVersion) {
+      setState(() => _updateStoreUrl = storeInfo!.viewUrl);
+    }
+  }
+
+  Future<void> _onUpdate() async {
+    final url = _updateStoreUrl;
+    if (url != null && await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  void _onLogout() {
+    context.read<AppBloc>().add(const AppLogoutRequested(reason: AppLogoutReason.userRequest));
   }
 
   @override
@@ -65,9 +103,9 @@ class AppUpdateRequiredDialog extends StatelessWidget {
     final textTheme = theme.textTheme;
     final elevatedButtonStyles = theme.extension<ElevatedButtonStyles>();
 
-    return Dialog.fullscreen(
+    return Scaffold(
       backgroundColor: colorScheme.surface,
-      child: SafeArea(
+      body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
@@ -94,18 +132,21 @@ class AppUpdateRequiredDialog extends StatelessWidget {
                           style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant),
                         ),
                         const SizedBox(height: kInset * 1.5),
-                        _VersionCard(currentVersion: currentVersion, minSupportedVersion: minSupportedVersion),
+                        _VersionCard(
+                          currentVersion: widget.currentVersion,
+                          minSupportedVersion: widget.minSupportedVersion,
+                        ),
                         const Spacer(flex: 2),
-                        if (onUpdatePressed != null) ...[
+                        if (_updateStoreUrl != null) ...[
                           ElevatedButton(
-                            onPressed: onUpdatePressed,
+                            onPressed: _onUpdate,
                             style: elevatedButtonStyles?.primary,
                             child: Text(context.l10n.main_CompatibilityIssueDialogActions_update),
                           ),
                           const SizedBox(height: kInset / 3),
                         ],
                         TextButton(
-                          onPressed: () => _onLogout(context),
+                          onPressed: _onLogout,
                           child: Text(context.l10n.main_CompatibilityIssueDialogActions_logout),
                         ),
                       ],

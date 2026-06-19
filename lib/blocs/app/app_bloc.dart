@@ -7,10 +7,12 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -36,6 +38,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.themeModeRepository,
     required this.userSessionCleanupResolver,
     required this.systemInfoRepository,
+    required this.appCompatibilityResolver,
+    required this.packageInfo,
     required AppThemes appThemes,
   }) : super(
          AppState(
@@ -57,6 +61,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppAgreementAccepted>(_onUserAgreementAccepted, transformer: droppable());
     on<AppLogoutRequested>(_onLogoutRequested, transformer: droppable());
     on<AppCleanupRequested>(_onCleanupRequested, transformer: droppable());
+    on<_AppCompatibilityUpdated>(_onAppCompatibilityUpdated);
+
+    // Resolve the gate once from any cached system-info so the flag is correct
+    // before the first MainShell navigation, then keep it in sync via the stream.
+    _resolveCachedAppCompatibility();
+    _systemInfoSubscription = systemInfoRepository.infoStream.listen((systemInfo) {
+      add(_AppCompatibilityUpdated(_resolveAppCompatibility(systemInfo)));
+    });
   }
 
   final UserAgreementStatusRepository userAgreementStatusRepository;
@@ -67,6 +79,42 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final ThemeModeRepository themeModeRepository;
   final UserSessionCleanupResolver userSessionCleanupResolver;
   final SystemInfoRepository systemInfoRepository;
+  final AppCompatibilityResolver appCompatibilityResolver;
+  final PackageInfo packageInfo;
+
+  StreamSubscription<WebtritSystemInfo>? _systemInfoSubscription;
+
+  @override
+  Future<void> close() async {
+    await _systemInfoSubscription?.cancel();
+    return super.close();
+  }
+
+  /// Resolves the force-update gate from any cached system-info. Treats a
+  /// missing/unparseable cache as [AppCompatible] (not gated) so a transient
+  /// read failure never blocks the user behind the update screen.
+  Future<void> _resolveCachedAppCompatibility() async {
+    try {
+      final systemInfo = await systemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheFirst);
+      if (systemInfo != null && !isClosed) {
+        add(_AppCompatibilityUpdated(_resolveAppCompatibility(systemInfo)));
+      }
+    } catch (e, st) {
+      _logger.warning('Failed to resolve cached app compatibility - treating as compatible', e, st);
+    }
+  }
+
+  AppCompatibility _resolveAppCompatibility(WebtritSystemInfo systemInfo) {
+    return appCompatibilityResolver.resolve(
+      systemInfo: systemInfo,
+      appVersion: Version.parse(packageInfo.version),
+      coreVersionConstraint: EnvironmentConfig.CORE_VERSION_CONSTRAINT,
+    );
+  }
+
+  void _onAppCompatibilityUpdated(_AppCompatibilityUpdated event, Emitter<AppState> emit) {
+    emit(state.copyWith(appCompatibility: event.compatibility));
+  }
 
   @override
   void onChange(Change<AppState> change) {
