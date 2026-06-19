@@ -6,7 +6,8 @@ Never unexpectedKeypad(bool a, bool b, String c, String d) => throw TestFailure(
 
 Never unexpectedMessaging(bool a, bool b, String c, String d) => throw TestFailure('Unexpected messaging variant hit');
 
-Never unexpectedRecents(bool a, bool b, String c, String d) => throw TestFailure('Unexpected recents variant hit');
+Never unexpectedRecents(bool a, bool b, String c, String d, bool e) =>
+    throw TestFailure('Unexpected recents variant hit');
 
 Never unexpectedContacts(bool a, bool b, String c, String d, List<String> e) =>
     throw TestFailure('Unexpected contacts variant hit');

@@ -10,13 +10,18 @@ import 'package:webtrit_phone/utils/core_support.dart';
 void main() {
   final emptyEmbedded = EmbeddedMapper.map(const []);
 
-  group('BottomMenuMapper recents useCdrs gating by the callHistory capability', () {
-    AppConfig appConfigWithRecents() {
+  group('BottomMenuMapper recents call history gated by local flag AND callHistory capability', () {
+    AppConfig appConfigWithRecents({required bool supportsCallHistory}) {
       return AppConfig(
         mainConfig: AppConfigMain(
           bottomMenu: AppConfigBottomMenu(
             tabs: [
-              const BottomMenuTabScheme.recents(enabled: true, titleL10n: 'recents', icon: '0xe03a'),
+              BottomMenuTabScheme.recents(
+                enabled: true,
+                titleL10n: 'recents',
+                icon: '0xe03a',
+                supportsCallHistory: supportsCallHistory,
+              ),
               const BottomMenuTabScheme.keypad(enabled: true, titleL10n: 'keypad', icon: '0xe1ce'),
             ],
           ),
@@ -24,17 +29,29 @@ void main() {
       );
     }
 
-    bool? recentsUseCdrs(AppConfig appConfig, List<String> flags) {
-      final config = BottomMenuMapper.map(appConfig, emptyEmbedded, CoreSupportImpl(flags));
+    bool? recentsUseCdrs({required bool localFlag, required List<String> flags}) {
+      final config = BottomMenuMapper.map(
+        appConfigWithRecents(supportsCallHistory: localFlag),
+        emptyEmbedded,
+        CoreSupportImpl(flags),
+      );
       return config.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory;
     }
 
-    test('callHistory advertised -> true', () {
-      expect(recentsUseCdrs(appConfigWithRecents(), [kCallHistoryFeatureFlag]), isTrue);
+    test('local flag true AND callHistory advertised -> true', () {
+      expect(recentsUseCdrs(localFlag: true, flags: [kCallHistoryFeatureFlag]), isTrue);
     });
 
-    test('callHistory NOT advertised -> false (local call log fallback)', () {
-      expect(recentsUseCdrs(appConfigWithRecents(), const []), isFalse);
+    test('local flag true but callHistory NOT advertised -> false (local call log fallback)', () {
+      expect(recentsUseCdrs(localFlag: true, flags: const []), isFalse);
+    });
+
+    test('local flag false even when callHistory advertised -> false', () {
+      expect(recentsUseCdrs(localFlag: false, flags: [kCallHistoryFeatureFlag]), isFalse);
+    });
+
+    test('local flag false and callHistory NOT advertised -> false', () {
+      expect(recentsUseCdrs(localFlag: false, flags: const []), isFalse);
     });
   });
 
