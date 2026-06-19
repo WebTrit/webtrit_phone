@@ -986,7 +986,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallSignalingEventUpdating() => __onCallSignalingEventUpdating(event, emit),
       _CallSignalingEventCallUpdating() => __onCallSignalingEventCallUpdating(event, emit),
       _CallSignalingEventUpdated() => __onCallSignalingEventUpdated(event, emit),
-      _CallSignalingEventMediaState() => __onCallSignalingEventMediaState(event, emit),
+      _CallSignalingEventPeerMediaState() => __onCallSignalingEventPeerMediaState(event, emit),
       _CallSignalingEventTransfer() => __onCallSignalingEventTransfer(event, emit),
       _CallSignalingEventTransferring() => __onCallSignalingEventTransfering(event, emit),
       _CallSignalingEventNotifyRefer() => __onCallSignalingEventNotifyRefer(event, emit),
@@ -1183,14 +1183,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// the camera off while this incoming call is still ringing). Carries no
   /// SDP, so no renegotiation is involved - only the video flag and the
   /// native call UI are updated.
-  Future<void> __onCallSignalingEventMediaState(_CallSignalingEventMediaState event, Emitter<CallState> emit) async {
+  Future<void> __onCallSignalingEventPeerMediaState(
+    _CallSignalingEventPeerMediaState event,
+    Emitter<CallState> emit,
+  ) async {
     final activeCall = state.retrieveActiveCall(event.callId);
     if (activeCall == null) return;
 
     final video = event.video;
 
     if (!activeCall.isIncoming) {
-      _logger.info('__onCallSignalingEventMediaState: ignoring for ${activeCall.direction.name}');
+      _logger.info('__onCallSignalingEventPeerMediaState: ignoring for ${activeCall.direction.name}');
       return;
     }
 
@@ -4112,7 +4115,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else if (event is PeerMessageEvent) {
       switch (event) {
         case MediaStatePeerMessageEvent e:
-          add(_CallSignalingEvent.mediaState(line: e.line, callId: e.callId, video: e.video));
+          add(_CallSignalingEvent.peerMediaState(line: e.line, callId: e.callId, video: e.video));
         case UnknownPeerMessageEvent e:
           _logger.info('[SIG] PeerMessageEvent: ignoring unknown type "${e.type}"');
       }
