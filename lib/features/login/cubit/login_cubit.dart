@@ -141,28 +141,28 @@ class LoginCubit extends Cubit<LoginState> {
   Future<WebtritSystemInfo?> _loadAndValidateSystemInfo(String coreUrl, String tenantId) async {
     final systemInfo = await authRepository.getSystemInfo(coreUrl, tenantId);
 
-    final coreInfo = systemInfo.core;
-    final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
-
-    if (!isCoreSupported) {
-      final notification = CoreVersionUnsupportedErrorNotification(coreInfo.version.toString(), coreVersionConstraint);
-      notificationsBloc.add(NotificationsSubmitted(notification));
-      return null;
+    // Shared version gate (see [AppCompatibility]). Aborting here means no
+    // session is created and signaling is never connected for an unsupported build.
+    final compatibility = AppCompatibility.resolve(
+      systemInfo: systemInfo,
+      appVersion: appVersion,
+      coreVersionConstraint: coreVersionConstraint,
+    );
+    switch (compatibility) {
+      case CoreVersionUnsupported(:final coreVersion, :final constraint):
+        final notification = CoreVersionUnsupportedErrorNotification(coreVersion.toString(), constraint.toString());
+        notificationsBloc.add(NotificationsSubmitted(notification));
+        return null;
+      case AppVersionTooOld(:final appVersion, :final minSupportedVersion):
+        final notification = AppVersionUnsupportedErrorNotification(
+          appVersion.toString(),
+          minSupportedVersion.toString(),
+        );
+        notificationsBloc.add(NotificationsSubmitted(notification));
+        return null;
+      case AppCompatible():
+        return systemInfo;
     }
-
-    // Inverse check: the backend may declare the minimum app version it
-    // supports. If this app is older, abort the login so no session is created
-    // and signaling is never connected.
-    if (!systemInfo.isAppVersionSupported(appVersion)) {
-      final notification = AppVersionUnsupportedErrorNotification(
-        appVersion.toString(),
-        systemInfo.minSupportedAppVersion.toString(),
-      );
-      notificationsBloc.add(NotificationsSubmitted(notification));
-      return null;
-    }
-
-    return systemInfo;
   }
 
   // LoginModeSelect
