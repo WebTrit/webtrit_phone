@@ -191,8 +191,8 @@ sealed class _CallSignalingEvent extends CallEvent {
     JsepValue? jsep,
   }) = _CallSignalingEventCallUpdating;
 
-  const factory _CallSignalingEvent.mediaState({required int? line, required String callId, required bool video}) =
-      _CallSignalingEventMediaState;
+  const factory _CallSignalingEvent.peerMediaState({required int? line, required String callId, required bool video}) =
+      _CallSignalingEventPeerMediaState;
 
   const factory _CallSignalingEvent.updating({required int? line, required String callId}) =
       _CallSignalingEventUpdating;
@@ -353,8 +353,8 @@ class _CallSignalingEventHangup extends _CallSignalingEvent {
   List<Object?> get props => [line, callId, code, reason];
 }
 
-class _CallSignalingEventMediaState extends _CallSignalingEvent {
-  const _CallSignalingEventMediaState({required this.line, required this.callId, required this.video});
+class _CallSignalingEventPeerMediaState extends _CallSignalingEvent {
+  const _CallSignalingEventPeerMediaState({required this.line, required this.callId, required this.video});
 
   final int? line;
 
