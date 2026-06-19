@@ -29,11 +29,12 @@ void main() {
       );
     }
 
-    bool? resolvedSupportsCallHistory({required bool localFlag, required List<String> flags}) {
+    bool? resolvedSupportsCallHistory({required bool localFlag, required List<String> flags, bool? firebaseOverride}) {
       final config = BottomMenuMapper.map(
         appConfigWithRecents(supportsCallHistory: localFlag),
         emptyEmbedded,
         CoreSupportImpl(flags),
+        FeatureOverrides(isCallHistoryEnabled: firebaseOverride),
       );
       return config.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory;
     }
@@ -52,6 +53,31 @@ void main() {
 
     test('local flag false and callHistory NOT advertised -> false', () {
       expect(resolvedSupportsCallHistory(localFlag: false, flags: const []), isFalse);
+    });
+
+    test('firebase override true lifts a false local flag when callHistory advertised -> true', () {
+      expect(
+        resolvedSupportsCallHistory(localFlag: false, flags: [kCallHistoryFeatureFlag], firebaseOverride: true),
+        isTrue,
+      );
+    });
+
+    test('firebase override false suppresses a true local flag even when callHistory advertised -> false', () {
+      expect(
+        resolvedSupportsCallHistory(localFlag: true, flags: [kCallHistoryFeatureFlag], firebaseOverride: false),
+        isFalse,
+      );
+    });
+
+    test('firebase override true cannot bypass a missing callHistory capability -> false', () {
+      expect(resolvedSupportsCallHistory(localFlag: false, flags: const [], firebaseOverride: true), isFalse);
+    });
+
+    test('null firebase override falls back to the local flag', () {
+      expect(
+        resolvedSupportsCallHistory(localFlag: true, flags: [kCallHistoryFeatureFlag], firebaseOverride: null),
+        isTrue,
+      );
     });
   });
 
@@ -75,7 +101,7 @@ void main() {
     }
 
     ContactsBottomMenuTab? contactsTab(AppConfig appConfig, List<String> flags) {
-      final config = BottomMenuMapper.map(appConfig, emptyEmbedded, CoreSupportImpl(flags));
+      final config = BottomMenuMapper.map(appConfig, emptyEmbedded, CoreSupportImpl(flags), const FeatureOverrides());
       return config.getTabEnabled<ContactsBottomMenuTab>();
     }
 
