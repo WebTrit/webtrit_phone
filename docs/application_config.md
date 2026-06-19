@@ -182,13 +182,25 @@ Recent calls or history screen.
   "type": "recents",
   "enabled": true,
   "titleL10n": "main_BottomNavigationBarItemLabel_recents",
-  "icon": "0xe03a"
+  "icon": "0xe03a",
+  "supportsCallHistory": true
 }
 ```
 
-Remote call history (CDRs) is no longer configured here. It is enabled automatically when the
-server advertises the `callHistory` adapter capability in system-info; otherwise the recents tab
-falls back to the local device call log.
+| Field                 | Type      | Default | Description |
+| --------------------- | --------- | ------- | ----------- |
+| `supportsCallHistory` | `boolean` | `true`  | Local opt-in for remote call history (CDRs). |
+
+Remote call history (CDRs) is shown only when both signals agree: the resolved local flag is `true`
+AND the server advertises the `callHistory` adapter capability in system-info. When either is false
+the recents tab falls back to the local device call log. The legacy `useCdrs` key is still accepted
+on read and migrated to `supportsCallHistory`.
+
+The local flag can be overridden remotely via the Firebase Remote Config boolean
+`feature_call_history_enabled`: when set, it takes precedence over the config `supportsCallHistory`
+value; when unset it falls back to the config value. The remote override can flip the local opt-in
+either way, but it never bypasses the server `callHistory` capability - the capability gate always
+applies. Resolution: `(feature_call_history_enabled ?? supportsCallHistory) && callHistory`.
 
 ### **ContactsTabScheme**
 

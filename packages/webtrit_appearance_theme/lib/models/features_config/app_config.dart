@@ -155,6 +155,7 @@ class AppConfigMain with _$AppConfigMain {
           initial: false,
           titleL10n: 'main_BottomNavigationBarItemLabel_recents',
           icon: '0xe03a',
+          supportsCallHistory: true,
         ),
         ContactsTabScheme(
           enabled: true,
@@ -361,6 +362,11 @@ class EncodingDefaultPresetOverride with _$EncodingDefaultPresetOverride {
   Map<String, Object?> toJson() => _$EncodingDefaultPresetOverrideToJson(this);
 }
 
+// Migration shim for the recents tab call-history flag: prefer the current
+// `supportsCallHistory` key (when present, even if null), fall back to the
+// legacy `useCdrs` key, then let the field default apply when neither is present.
+Object? _readRecentsSupportsCallHistory(Map json, String key) => json.containsKey(key) ? json[key] : json['useCdrs'];
+
 @Freezed(unionKey: 'type')
 sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
   const BottomMenuTabScheme._();
@@ -379,6 +385,11 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
     @Default(false) bool initial,
     required String titleL10n,
     required String icon,
+    // Local opt-in for remote call history (CDRs). Resolved against the server
+    // `callHistory` adapter capability in feature_access (both must be true).
+    // Reads the `supportsCallHistory` key and falls back to the legacy `useCdrs`
+    // key so existing configs keep their value.
+    @JsonKey(readValue: _readRecentsSupportsCallHistory) @Default(true) bool supportsCallHistory,
   }) = RecentsTabScheme;
 
   @JsonSerializable(explicitToJson: true)

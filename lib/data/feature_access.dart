@@ -108,7 +108,7 @@ class FeatureAccess extends Equatable {
       final termsConfig = TermsMapper.map(embeddedResources);
 
       final loginConfig = LoginMapper.map(appConfig, embeddedConfig.embeddedResources);
-      final bottomMenuConfig = BottomMenuMapper.map(appConfig, embeddedConfig, coreSupport);
+      final bottomMenuConfig = BottomMenuMapper.map(appConfig, embeddedConfig, coreSupport, featureOverrides);
       final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupport, termsConfig);
       final callConfig = CallMapper.map(appConfig, featureOverrides);
       final messagingConfig = MessagingMapper.map(appConfig, coreSupport);
@@ -205,7 +205,15 @@ abstract final class BottomMenuMapper {
   /// [coreSupport] resolves capability-gated tab options - e.g. the recents tab uses server CDRs only
   /// when the adapter advertises call history, and the contacts tab keeps the `external` source only
   /// when it advertises the `extensions` capability.
-  static BottomMenuConfig map(AppConfig appConfig, EmbeddedConfig embeddedConfig, CoreSupport coreSupport) {
+  ///
+  /// [overrides] carries remote (Firebase Remote Config) overrides; when defined they take precedence
+  /// over the local config flag but never over a missing core capability.
+  static BottomMenuConfig map(
+    AppConfig appConfig,
+    EmbeddedConfig embeddedConfig,
+    CoreSupport coreSupport,
+    FeatureOverrides overrides,
+  ) {
     final bottomMenu = appConfig.mainConfig.bottomMenu;
 
     if (bottomMenu.tabs.isEmpty) {
@@ -214,7 +222,7 @@ abstract final class BottomMenuMapper {
 
     final bottomMenuTabs = bottomMenu.tabs
         .where((tab) => tab.enabled)
-        .map((tab) => _createBottomMenuTab(tab, embeddedConfig, coreSupport))
+        .map((tab) => _createBottomMenuTab(tab, embeddedConfig, coreSupport, overrides))
         .where((tab) => !(tab is ContactsBottomMenuTab && tab.contactSourceTypes.isEmpty))
         .toList();
 
@@ -229,6 +237,7 @@ abstract final class BottomMenuMapper {
     BottomMenuTabScheme tab,
     EmbeddedConfig embeddedConfig,
     CoreSupport coreSupport,
+    FeatureOverrides overrides,
   ) {
     return tab.when(
       favorites: (enabled, initial, titleL10n, icon) => FavoritesBottomMenuTab(
@@ -237,8 +246,11 @@ abstract final class BottomMenuMapper {
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      recents: (enabled, initial, titleL10n, icon) => RecentsBottomMenuTab(
-        supportsCallHistory: coreSupport.supportsCallHistory,
+      // Local flag (config) can be overridden by Firebase Remote Config, then gated by the core
+      // capability: call history is shown only when the resolved local flag AND the server
+      // callHistory capability are both true.
+      recents: (enabled, initial, titleL10n, icon, supportsCallHistory) => RecentsBottomMenuTab(
+        supportsCallHistory: (overrides.isCallHistoryEnabled ?? supportsCallHistory) && coreSupport.supportsCallHistory,
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
