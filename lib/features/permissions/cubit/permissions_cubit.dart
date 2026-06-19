@@ -40,6 +40,10 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     final manufacturerTip = await _resolveManufacturerTip();
     _logger.info('Manufacturer tip: $manufacturerTip');
 
+    // checkPermissions() is fire-and-forget on every resume and emits after
+    // several awaits; bail out if the cubit was closed in the meantime.
+    if (isClosed) return;
+
     emit(
       state.copyWith(
         isPermanentlyDenied: isDenied,
