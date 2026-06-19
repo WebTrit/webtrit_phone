@@ -36,6 +36,7 @@ class FeatureOverrides extends Equatable {
     monitorCheckInterval,
     logLevel,
     remoteLoggingEnabled,
+    isLogAnonymizationEnabled,
   ];
 }
 

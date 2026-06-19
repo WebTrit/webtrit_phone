@@ -246,19 +246,16 @@ abstract final class BottomMenuMapper {
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      recents: (enabled, initial, titleL10n, icon, supportsCallHistory) {
-        // Local flag (config) can be overridden by Firebase Remote Config, then gated by the core
-        // capability: call history is shown only when the resolved local flag AND the server
-        // callHistory capability are both true.
-        final localFlag = overrides.isCallHistoryEnabled ?? supportsCallHistory;
-        return RecentsBottomMenuTab(
-          supportsCallHistory: localFlag && coreSupport.supportsCallHistory,
-          enabled: tab.enabled,
-          initial: tab.initial,
-          titleL10n: tab.titleL10n,
-          icon: tab.icon.toIconData(),
-        );
-      },
+      // Local flag (config) can be overridden by Firebase Remote Config, then gated by the core
+      // capability: call history is shown only when the resolved local flag AND the server
+      // callHistory capability are both true.
+      recents: (enabled, initial, titleL10n, icon, supportsCallHistory) => RecentsBottomMenuTab(
+        supportsCallHistory: (overrides.isCallHistoryEnabled ?? supportsCallHistory) && coreSupport.supportsCallHistory,
+        enabled: tab.enabled,
+        initial: tab.initial,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon.toIconData(),
+      ),
       contacts: (enabled, initial, titleL10n, icon, contactSourceTypes) => ContactsBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,

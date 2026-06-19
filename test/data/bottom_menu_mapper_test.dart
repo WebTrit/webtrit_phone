@@ -55,14 +55,14 @@ void main() {
       expect(resolvedSupportsCallHistory(localFlag: false, flags: const []), isFalse);
     });
 
-    test('firebase override true lifts a false local flag when callHistory advertised -> true', () {
+    test('firebase override true lifts a false local flag when callHistory is advertised -> true', () {
       expect(
         resolvedSupportsCallHistory(localFlag: false, flags: [kCallHistoryFeatureFlag], firebaseOverride: true),
         isTrue,
       );
     });
 
-    test('firebase override false suppresses a true local flag even when callHistory advertised -> false', () {
+    test('firebase override false suppresses a true local flag even when callHistory is advertised -> false', () {
       expect(
         resolvedSupportsCallHistory(localFlag: true, flags: [kCallHistoryFeatureFlag], firebaseOverride: false),
         isFalse,
