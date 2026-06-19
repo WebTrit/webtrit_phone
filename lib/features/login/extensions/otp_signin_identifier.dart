@@ -18,7 +18,11 @@ extension OtpSigninIdentifiersInput on List<OtpSigninIdentifier> {
     return l10n.login_TextFieldLabelText_otpSigninUserRef;
   }
 
-  TextInputType get userRefKeyboardType => _hasPhone && !_hasEmail ? TextInputType.phone : TextInputType.emailAddress;
+  /// Account references may be alphanumeric (for example `ph123x456`) even when
+  /// the backend advertises phone as the only OTP identifier, so a phone-only
+  /// dial pad would wrongly block letters. Use a text keyboard whenever email is
+  /// not advertised, and the email keyboard otherwise for the handy `@` key.
+  TextInputType get userRefKeyboardType => _hasEmail ? TextInputType.emailAddress : TextInputType.text;
 
   List<String> get userRefAutofillHints {
     if (_hasPhone && !_hasEmail) return const [AutofillHints.telephoneNumber];
