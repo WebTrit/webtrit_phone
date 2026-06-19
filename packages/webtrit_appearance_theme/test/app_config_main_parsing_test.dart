@@ -187,6 +187,10 @@ void main() {
       expect(recentsSupportsCallHistory({'supportsCallHistory': false, 'useCdrs': true}), isFalse);
     });
 
+    test('explicit null new key does not fall back to legacy useCdrs (default applies)', () {
+      expect(recentsSupportsCallHistory({'supportsCallHistory': null, 'useCdrs': false}), isTrue);
+    });
+
     test('defaults to true when neither key is present', () {
       expect(recentsSupportsCallHistory(const {}), isTrue);
     });

@@ -29,7 +29,7 @@ void main() {
       );
     }
 
-    bool? recentsUseCdrs({required bool localFlag, required List<String> flags}) {
+    bool? resolvedSupportsCallHistory({required bool localFlag, required List<String> flags}) {
       final config = BottomMenuMapper.map(
         appConfigWithRecents(supportsCallHistory: localFlag),
         emptyEmbedded,
@@ -39,19 +39,19 @@ void main() {
     }
 
     test('local flag true AND callHistory advertised -> true', () {
-      expect(recentsUseCdrs(localFlag: true, flags: [kCallHistoryFeatureFlag]), isTrue);
+      expect(resolvedSupportsCallHistory(localFlag: true, flags: [kCallHistoryFeatureFlag]), isTrue);
     });
 
     test('local flag true but callHistory NOT advertised -> false (local call log fallback)', () {
-      expect(recentsUseCdrs(localFlag: true, flags: const []), isFalse);
+      expect(resolvedSupportsCallHistory(localFlag: true, flags: const []), isFalse);
     });
 
     test('local flag false even when callHistory advertised -> false', () {
-      expect(recentsUseCdrs(localFlag: false, flags: [kCallHistoryFeatureFlag]), isFalse);
+      expect(resolvedSupportsCallHistory(localFlag: false, flags: [kCallHistoryFeatureFlag]), isFalse);
     });
 
     test('local flag false and callHistory NOT advertised -> false', () {
-      expect(recentsUseCdrs(localFlag: false, flags: const []), isFalse);
+      expect(resolvedSupportsCallHistory(localFlag: false, flags: const []), isFalse);
     });
   });
 

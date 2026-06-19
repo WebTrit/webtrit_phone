@@ -363,9 +363,9 @@ class EncodingDefaultPresetOverride with _$EncodingDefaultPresetOverride {
 }
 
 // Migration shim for the recents tab call-history flag: prefer the current
-// `supportsCallHistory` key, fall back to the legacy `useCdrs` key, then let the
-// field default apply when neither is present.
-Object? _readRecentsSupportsCallHistory(Map json, String key) => json[key] ?? json['useCdrs'];
+// `supportsCallHistory` key (when present, even if null), fall back to the
+// legacy `useCdrs` key, then let the field default apply when neither is present.
+Object? _readRecentsSupportsCallHistory(Map json, String key) => json.containsKey(key) ? json[key] : json['useCdrs'];
 
 @Freezed(unionKey: 'type')
 sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
