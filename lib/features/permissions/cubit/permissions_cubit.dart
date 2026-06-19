@@ -144,7 +144,15 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   /// This is used to provide manufacturer-specific instructions or tips for enabling permissions.
   /// Returns `null` if the manufacturer is not in the predefined list.
   Manufacturer? _checkManufacturer() {
-    return Manufacturer.values.asNameMap()[deviceInfo.manufacturer.toLowerCase()];
+    final manufacturer = deviceInfo.manufacturer.toLowerCase();
+    // Xiaomi sub-brands (Redmi/Poco) report their own manufacturer string but
+    // share the same MIUI/HyperOS lock-screen restriction. Match the same family
+    // the native side (PermissionsHelper.isXiaomiFamily) uses, so guidance shows
+    // on every affected device rather than only the literal "xiaomi".
+    if (manufacturer.contains('xiaomi') || manufacturer.contains('redmi') || manufacturer.contains('poco')) {
+      return Manufacturer.xiaomi;
+    }
+    return Manufacturer.values.asNameMap()[manufacturer];
   }
 
   void dismissError() {
