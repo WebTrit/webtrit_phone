@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
