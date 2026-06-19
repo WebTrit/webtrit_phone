@@ -170,3 +170,15 @@ final class CoreVersionUnsupportedErrorNotification extends MessageNotification 
     return context.l10n.login_CoreVersionUnsupportedExceptionError(actual, supportedConstraint);
   }
 }
+
+final class AppVersionUnsupportedErrorNotification extends MessageNotification {
+  const AppVersionUnsupportedErrorNotification(this.actual, this.minSupported);
+
+  final String actual;
+  final String minSupported;
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_AppVersionUnsupportedExceptionError(actual, minSupported);
+  }
+}

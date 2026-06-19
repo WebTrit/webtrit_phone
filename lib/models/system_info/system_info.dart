@@ -37,6 +37,22 @@ class WebtritSystemInfo with EquatableMixin {
   /// backend does not enforce a minimum.
   final Version? minSupportedAppVersion;
 
+  /// Whether [appVersion] satisfies the backend-declared minimum supported app
+  /// version. This is the inverse of the core-compatibility check: here the
+  /// backend declares how new the app must be.
+  ///
+  /// Returns `true` (supported) when:
+  /// - the backend does not declare a minimum ([minSupportedAppVersion] null);
+  /// - the app reports `0.0.0` (debug/sideload builds whose version never
+  ///   carries the real number) -- never block these;
+  /// - the app version is greater than or equal to the declared minimum.
+  bool isAppVersionSupported(Version appVersion) {
+    final minVersion = minSupportedAppVersion;
+    if (minVersion == null) return true;
+    if (appVersion == Version.none) return true;
+    return appVersion >= minVersion;
+  }
+
   @override
   List<Object?> get props => [core, postgres, adapter, janus, gorush, minSupportedAppVersion];
 

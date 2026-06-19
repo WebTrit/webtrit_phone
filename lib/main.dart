@@ -17,6 +17,7 @@ import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -74,6 +75,9 @@ class RootApp extends StatelessWidget {
         Provider<AppInfo>(create: (_) => instanceRegistry.get()),
         Provider<AppThemes>(create: (_) => instanceRegistry.get()),
         Provider<PackageInfo>(create: (_) => instanceRegistry.get()),
+        // Stateless version-compatibility policy shared by the login gate and the
+        // in-app force-update gate; const, so no bootstrap registration needed.
+        Provider<AppCompatibilityResolver>(create: (_) => const DefaultAppCompatibilityResolver()),
         Provider<DeviceInfo>(create: (_) => instanceRegistry.get()),
         Provider<AppPreferences>(create: (_) => instanceRegistry.get()),
         // Provides reactive [FeatureAccess] configuration synchronized with [SystemInfoRepository] and [RemoteConfigService].

@@ -501,6 +501,14 @@ extension AppLocalizationsExtension on AppLocalizations {
         main_CompatibilityIssueDialogActions_update,
       'main_CompatibilityIssueDialog_title' =>
         main_CompatibilityIssueDialog_title,
+      'main_AppUpdateRequiredDialog_title' =>
+        main_AppUpdateRequiredDialog_title,
+      'main_AppUpdateRequiredDialog_description' =>
+        main_AppUpdateRequiredDialog_description,
+      'main_AppUpdateRequiredDialog_currentVersionLabel' =>
+        main_AppUpdateRequiredDialog_currentVersionLabel,
+      'main_AppUpdateRequiredDialog_minimumVersionLabel' =>
+        main_AppUpdateRequiredDialog_minimumVersionLabel,
       'messaging_ActionBtn_retry' => messaging_ActionBtn_retry,
       'messaging_ChooseContact_cancel' => messaging_ChooseContact_cancel,
       'messaging_ChooseContact_empty' => messaging_ChooseContact_empty,
@@ -1594,6 +1602,13 @@ extension AppLocalizationsExtension on AppLocalizations {
           ),
         _ => throw ArgumentError(
           'login_CoreVersionUnsupportedExceptionError requires 2 arguments',
+        ),
+      },
+      'login_AppVersionUnsupportedExceptionError' => switch (args) {
+        [final String actual, final String minSupported] =>
+          login_AppVersionUnsupportedExceptionError(actual, minSupported),
+        _ => throw ArgumentError(
+          'login_AppVersionUnsupportedExceptionError requires 2 arguments',
         ),
       },
       'login_Text_coreUrlAssignPostDescription' => switch (args) {

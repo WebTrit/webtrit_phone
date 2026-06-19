@@ -13,6 +13,7 @@ sealed class AppState with _$AppState {
     required Locale locale,
     required AgreementStatus userAgreementStatus,
     required AgreementStatus contactsAgreementStatus,
+    @Default(AppCompatible()) AppCompatibility appCompatibility,
   }) = _AppState;
 
   const AppState._();
@@ -31,6 +32,7 @@ sealed class AppState with _$AppState {
         logoutReason == other.logoutReason &&
         session == other.session &&
         userAgreementStatus == other.userAgreementStatus &&
-        contactsAgreementStatus == other.contactsAgreementStatus;
+        contactsAgreementStatus == other.contactsAgreementStatus &&
+        appCompatibility == other.appCompatibility;
   }
 }

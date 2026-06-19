@@ -740,6 +740,18 @@
       }
     }
   },
+  "login_AppVersionUnsupportedExceptionError": "Your app version is no longer supported, please update the application to continue (current: {actual}, minimum required: {minSupported})",
+  "@login_AppVersionUnsupportedExceptionError": {
+    "description": "Shown during login when the backend declares a minimum supported app version that is newer than this build. Context: user tries to sign in. Condition: app version is older than min_supported_app_version (current: {actual}, minimum required: {minSupported}).",
+    "placeholders": {
+      "actual": {
+        "type": "String"
+      },
+      "minSupported": {
+        "type": "String"
+      }
+    }
+  },
   "login_RequestFailureEmptyEmailError": "Cannot send the verification code",
   "@login_RequestFailureEmptyEmailError": {
     "description": "Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty."
@@ -939,6 +951,20 @@
   },
   "main_CompatibilityIssueDialog_title": "Compatibility issue",
   "@main_CompatibilityIssueDialog_title": {},
+  "main_AppUpdateRequiredDialog_title": "Update required",
+  "@main_AppUpdateRequiredDialog_title": {},
+  "main_AppUpdateRequiredDialog_description": "Your app version is no longer supported. Please update the application to continue.",
+  "@main_AppUpdateRequiredDialog_description": {
+    "description": "Body text of the full-screen update-required prompt, shown when the running app is older than the backend-declared minimum supported app version."
+  },
+  "main_AppUpdateRequiredDialog_currentVersionLabel": "Current version",
+  "@main_AppUpdateRequiredDialog_currentVersionLabel": {
+    "description": "Label above the running app version on the update-required prompt."
+  },
+  "main_AppUpdateRequiredDialog_minimumVersionLabel": "Minimum required version",
+  "@main_AppUpdateRequiredDialog_minimumVersionLabel": {
+    "description": "Label above the minimum supported app version on the update-required prompt."
+  },
   "messaging_ActionBtn_retry": "Retry",
   "@messaging_ActionBtn_retry": {},
   "messaging_ChooseContact_cancel": "Cancel",

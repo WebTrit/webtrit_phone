@@ -7,6 +7,7 @@ import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import '../models/models.dart';
 
@@ -53,6 +54,7 @@ class AutoprovisionScreenPage extends StatelessWidget {
       create: (context) => AutoprovisionCubit(
         appInfo: context.read<AppInfo>(),
         packageInfo: context.read<PackageInfo>(),
+        appCompatibilityResolver: context.read<AppCompatibilityResolver>(),
         config: config,
       ),
       child: const AutoprovisionScreen(),

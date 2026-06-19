@@ -876,6 +876,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String login_AppVersionUnsupportedExceptionError(String actual, String minSupported) {
+    return 'Your app version is no longer supported, please update the application to continue (current: $actual, minimum required: $minSupported)';
+  }
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
 
   @override
@@ -1080,6 +1085,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get main_CompatibilityIssueDialog_title => 'Compatibility issue';
+
+  @override
+  String get main_AppUpdateRequiredDialog_title => 'Update required';
+
+  @override
+  String get main_AppUpdateRequiredDialog_description =>
+      'Your app version is no longer supported. Please update the application to continue.';
+
+  @override
+  String get main_AppUpdateRequiredDialog_currentVersionLabel => 'Current version';
+
+  @override
+  String get main_AppUpdateRequiredDialog_minimumVersionLabel => 'Minimum required version';
 
   @override
   String get messaging_ActionBtn_retry => 'Retry';

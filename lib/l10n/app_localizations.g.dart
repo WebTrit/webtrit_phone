@@ -1617,6 +1617,12 @@ abstract class AppLocalizations {
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
 
+  /// Shown during login when the backend declares a minimum supported app version that is newer than this build. Context: user tries to sign in. Condition: app version is older than min_supported_app_version (current: {actual}, minimum required: {minSupported}).
+  ///
+  /// In en, this message translates to:
+  /// **'Your app version is no longer supported, please update the application to continue (current: {actual}, minimum required: {minSupported})'**
+  String login_AppVersionUnsupportedExceptionError(String actual, String minSupported);
+
   /// Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty.
   ///
   /// In en, this message translates to:
@@ -1985,6 +1991,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Compatibility issue'**
   String get main_CompatibilityIssueDialog_title;
+
+  /// No description provided for @main_AppUpdateRequiredDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Update required'**
+  String get main_AppUpdateRequiredDialog_title;
+
+  /// Body text of the full-screen update-required prompt, shown when the running app is older than the backend-declared minimum supported app version.
+  ///
+  /// In en, this message translates to:
+  /// **'Your app version is no longer supported. Please update the application to continue.'**
+  String get main_AppUpdateRequiredDialog_description;
+
+  /// Label above the running app version on the update-required prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Current version'**
+  String get main_AppUpdateRequiredDialog_currentVersionLabel;
+
+  /// Label above the minimum supported app version on the update-required prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum required version'**
+  String get main_AppUpdateRequiredDialog_minimumVersionLabel;
 
   /// No description provided for @messaging_ActionBtn_retry.
   ///

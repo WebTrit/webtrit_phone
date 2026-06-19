@@ -887,6 +887,11 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String login_AppVersionUnsupportedExceptionError(String actual, String minSupported) {
+    return 'Версія вашого застосунку більше не підтримується, будь ласка, оновіть застосунок, щоб продовжити (поточна: $actual, мінімальна потрібна: $minSupported)';
+  }
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'Не вдалося відправити код підтвердження';
 
   @override
@@ -1099,6 +1104,19 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get main_CompatibilityIssueDialog_title => 'Проблема сумісності';
+
+  @override
+  String get main_AppUpdateRequiredDialog_title => 'Потрібне оновлення';
+
+  @override
+  String get main_AppUpdateRequiredDialog_description =>
+      'Версія вашого застосунку більше не підтримується. Будь ласка, оновіть застосунок, щоб продовжити.';
+
+  @override
+  String get main_AppUpdateRequiredDialog_currentVersionLabel => 'Поточна версія';
+
+  @override
+  String get main_AppUpdateRequiredDialog_minimumVersionLabel => 'Мінімальна потрібна версія';
 
   @override
   String get messaging_ActionBtn_retry => 'Повторить спробу';

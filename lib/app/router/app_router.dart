@@ -130,6 +130,16 @@ class AppRouter extends RootStackRouter {
           path: 'permissions',
         ),
         AutoRoute.guarded(
+          page: UpdateRequiredScreenPageRoute.page,
+          onNavigation: onUpdateRequiredScreenGuardNavigation,
+          path: 'update-required',
+        ),
+        AutoRoute.guarded(
+          page: CompatibilityIssueScreenPageRoute.page,
+          onNavigation: onCompatibilityIssueScreenGuardNavigation,
+          path: 'compatibility-issue',
+        ),
+        AutoRoute.guarded(
           page: UserAgreementScreenPageRoute.page,
           onNavigation: onUserAgreementScreenPageRouteGuardNavigation,
           path: 'user-agreement',
@@ -317,6 +327,43 @@ class AppRouter extends RootStackRouter {
     }
   }
 
+  /// Keeps the user on the too-old-app gate while the app is still below the
+  /// backend-declared minimum, and lets them back into the app automatically
+  /// once the server lowers the requirement (reevaluation fires because
+  /// [AppState.compareToReevaluate] now includes appCompatibility).
+  void onUpdateRequiredScreenGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onUpdateRequiredScreenGuardNavigation', resolver));
+
+    final state = _appBloc.state;
+    // Stay on the gate only while an authenticated user is still too old. Once the
+    // user logs out (or the server lowers the minimum), bounce to MainShell and let
+    // its guard route to login/teardown/main as appropriate.
+    if (state.status == AppLifecycleStatus.authenticated && state.appCompatibility is AppVersionTooOld) {
+      resolver.next(true);
+    } else {
+      resolver.next(false);
+      router.replaceAll([const MainShellRoute()]);
+    }
+  }
+
+  /// Keeps the user on the unsupported-core gate while the backend core remains
+  /// outside the supported constraint, and returns them to the app once it is
+  /// back in range.
+  void onCompatibilityIssueScreenGuardNavigation(NavigationResolver resolver, StackRouter router) {
+    _logger.fine(_onNavigationLoggerMessage('onCompatibilityIssueScreenGuardNavigation', resolver));
+
+    final state = _appBloc.state;
+    // Stay on the gate only while an authenticated user still faces an unsupported
+    // core. Once the user logs out (or the core returns to range), bounce to
+    // MainShell and let its guard route to login/teardown/main as appropriate.
+    if (state.status == AppLifecycleStatus.authenticated && state.appCompatibility is CoreVersionUnsupported) {
+      resolver.next(true);
+    } else {
+      resolver.next(false);
+      router.replaceAll([const MainShellRoute()]);
+    }
+  }
+
   /// Orchestrates navigation logic for the application's main shell.
   ///
   /// Evaluates the current [AppLifecycleStatus] and enforces access control based on
@@ -358,6 +405,24 @@ class AppRouter extends RootStackRouter {
       resolver.next(false);
       router.replaceAll([LoginRouterPageRoute(launchEmbeddedData: _launchEmbeddedData)]);
       return;
+    }
+
+    // Enforce the force-update gate before agreements/permissions: a too-old app
+    // or an unsupported backend core must update or log out, full-screen, with no
+    // blink of the real main content behind a dialog. The decision lives in
+    // [AppState.appCompatibility] (resolved by AppBloc from system-info);
+    // reevaluation fires when it flips (see AppState.compareToReevaluate).
+    switch (state.appCompatibility) {
+      case AppVersionTooOld():
+        resolver.next(false);
+        router.replaceAll([const UpdateRequiredScreenPageRoute()]);
+        return;
+      case CoreVersionUnsupported():
+        resolver.next(false);
+        router.replaceAll([const CompatibilityIssueScreenPageRoute()]);
+        return;
+      case AppCompatible():
+        break;
     }
 
     // Enforce mandatory legal agreements and system permissions.

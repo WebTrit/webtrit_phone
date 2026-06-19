@@ -92,6 +92,8 @@ class LoginRouterPage extends StatelessWidget {
     final login = LoginCubit(
       notificationsBloc: context.read<NotificationsBloc>(),
       authRepository: context.read<AuthRepository>(),
+      packageInfo: context.read<PackageInfo>(),
+      appCompatibilityResolver: context.read<AppCompatibilityResolver>(),
       signinOrder: context.read<FeatureAccess>().loginConfig.signinOrder,
       onLoginSuccess: (session, systemInfo) =>
           context.read<AppBloc>().add(AppLoggedIn(session: session, systemInfo: systemInfo)),
