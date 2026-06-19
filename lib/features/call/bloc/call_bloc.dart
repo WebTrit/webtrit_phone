@@ -1187,11 +1187,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final activeCall = state.retrieveActiveCall(event.callId);
     if (activeCall == null) return;
 
-    final video = event.media['video'];
-    if (video is! bool) {
-      _logger.info('__onCallSignalingEventMediaState: no video flag in media: ${event.media}');
-      return;
-    }
+    final video = event.video;
 
     if (!activeCall.isIncoming) {
       _logger.info('__onCallSignalingEventMediaState: ignoring for ${activeCall.direction.name}');
@@ -4116,7 +4112,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else if (event is PeerMessageEvent) {
       switch (event) {
         case MediaStatePeerMessageEvent e:
-          add(_CallSignalingEvent.mediaState(line: e.line, callId: e.callId, media: {'video': e.video}));
+          add(_CallSignalingEvent.mediaState(line: e.line, callId: e.callId, video: e.video));
         case UnknownPeerMessageEvent e:
           _logger.info('[SIG] PeerMessageEvent: ignoring unknown type "${e.type}"');
       }
