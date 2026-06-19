@@ -2655,11 +2655,11 @@ return embedded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  favorites,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  recents,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes)?  contacts,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  keypad,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  messaging,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId)?  embedded,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  favorites,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory)?  recents,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes)?  contacts,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  keypad,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  messaging,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId)?  embedded,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case FavoritesTabScheme() when favorites != null:
 return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case RecentsTabScheme() when recents != null:
-return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case ContactsTabScheme() when contacts != null:
+return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.supportsCallHistory);case ContactsTabScheme() when contacts != null:
 return contacts(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.contactSourceTypes);case KeypadTabScheme() when keypad != null:
 return keypad(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case MessagingTabScheme() when messaging != null:
 return messaging(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case EmbeddedTabScheme() when embedded != null:
@@ -2681,11 +2681,11 @@ return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.emb
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)  favorites,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)  recents,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes)  contacts,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)  keypad,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)  messaging,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId)  embedded,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)  favorites,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory)  recents,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes)  contacts,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)  keypad,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)  messaging,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId)  embedded,}) {final _that = this;
 switch (_that) {
 case FavoritesTabScheme():
 return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case RecentsTabScheme():
-return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case ContactsTabScheme():
+return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.supportsCallHistory);case ContactsTabScheme():
 return contacts(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.contactSourceTypes);case KeypadTabScheme():
 return keypad(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case MessagingTabScheme():
 return messaging(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case EmbeddedTabScheme():
@@ -2703,11 +2703,11 @@ return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.emb
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  favorites,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  recents,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes)?  contacts,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  keypad,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  messaging,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId)?  embedded,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  favorites,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory)?  recents,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes)?  contacts,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  keypad,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  messaging,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId)?  embedded,}) {final _that = this;
 switch (_that) {
 case FavoritesTabScheme() when favorites != null:
 return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case RecentsTabScheme() when recents != null:
-return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case ContactsTabScheme() when contacts != null:
+return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.supportsCallHistory);case ContactsTabScheme() when contacts != null:
 return contacts(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.contactSourceTypes);case KeypadTabScheme() when keypad != null:
 return keypad(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case MessagingTabScheme() when messaging != null:
 return messaging(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case EmbeddedTabScheme() when embedded != null:
@@ -2802,13 +2802,18 @@ as String,
 
 @JsonSerializable(explicitToJson: true)
 class RecentsTabScheme extends BottomMenuTabScheme {
-  const RecentsTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, final  String? $type}): $type = $type ?? 'recents',super._();
+  const RecentsTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, @JsonKey(readValue: _readRecentsSupportsCallHistory) this.supportsCallHistory = true, final  String? $type}): $type = $type ?? 'recents',super._();
   factory RecentsTabScheme.fromJson(Map<String, dynamic> json) => _$RecentsTabSchemeFromJson(json);
 
 @override@JsonKey() final  bool enabled;
 @override@JsonKey() final  bool initial;
 @override final  String titleL10n;
 @override final  String icon;
+// Local opt-in for remote call history (CDRs). Resolved against the server
+// `callHistory` adapter capability in feature_access (both must be true).
+// Reads the `supportsCallHistory` key and falls back to the legacy `useCdrs`
+// key so existing configs keep their value.
+@JsonKey(readValue: _readRecentsSupportsCallHistory) final  bool supportsCallHistory;
 
 @JsonKey(name: 'type')
 final String $type;
@@ -2827,16 +2832,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RecentsTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RecentsTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.supportsCallHistory, supportsCallHistory) || other.supportsCallHistory == supportsCallHistory));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon);
+int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,supportsCallHistory);
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.recents(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon)';
+  return 'BottomMenuTabScheme.recents(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, supportsCallHistory: $supportsCallHistory)';
 }
 
 
@@ -2847,7 +2852,7 @@ abstract mixin class $RecentsTabSchemeCopyWith<$Res> implements $BottomMenuTabSc
   factory $RecentsTabSchemeCopyWith(RecentsTabScheme value, $Res Function(RecentsTabScheme) _then) = _$RecentsTabSchemeCopyWithImpl;
 @override @useResult
 $Res call({
- bool enabled, bool initial, String titleL10n, String icon
+ bool enabled, bool initial, String titleL10n, String icon,@JsonKey(readValue: _readRecentsSupportsCallHistory) bool supportsCallHistory
 });
 
 
@@ -2864,13 +2869,14 @@ class _$RecentsTabSchemeCopyWithImpl<$Res>
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? supportsCallHistory = null,}) {
   return _then(RecentsTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
 as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String,
+as String,supportsCallHistory: null == supportsCallHistory ? _self.supportsCallHistory : supportsCallHistory // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
