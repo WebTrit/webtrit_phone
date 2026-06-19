@@ -49,6 +49,15 @@ class AppUpdateRequiredDialog extends StatelessWidget {
   final VoidCallback? onUpdatePressed;
   final VoidCallback? onLogoutPressed;
 
+  // The dialog owns its own dismissal: it pops the navigator it was pushed onto
+  // (its own context resolves it), then signals the pure logout intent. The
+  // caller therefore knows nothing about routing or PopScope. Update keeps the
+  // gate open on purpose, so it does not pop.
+  void _onLogout(BuildContext context) {
+    Navigator.of(context).pop();
+    onLogoutPressed?.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -96,7 +105,7 @@ class AppUpdateRequiredDialog extends StatelessWidget {
                           const SizedBox(height: kInset / 3),
                         ],
                         TextButton(
-                          onPressed: onLogoutPressed,
+                          onPressed: () => _onLogout(context),
                           child: Text(context.l10n.main_CompatibilityIssueDialogActions_logout),
                         ),
                       ],

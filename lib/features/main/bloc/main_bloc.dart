@@ -71,37 +71,51 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
     });
   }
 
-  /// Handles the [WebtritSystemInfo] arrival event.
-  /// Verifies the compatibility of the core version with the app.
-  /// If the core version is not supported, it shows the compatibility issue dialog.
-  ///
-  /// Also chacks if the app is up to date and can be a reason for the incompatibility.
-  /// in this case, it shows the dialog with the app update button.
+  /// Handles the [WebtritSystemInfo] arrival event: resolves the app/core
+  /// compatibility verdict and emits it as the [CoreVersionState] the UI gates on.
   void _onSystemInfoArrived(MainBlocSystemInfoArrived event, Emitter<MainBlocState> emit) async {
-    final systemInfo = event.systemInfo;
-    final coreInfo = systemInfo.core;
-    final constraint = VersionConstraint.parse(coreVersionConstraint);
-    final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
-    final isAppSupported = systemInfo.isAppVersionSupported(appVersion);
+    final verdict = _resolveCoreVersionVerdict(event.systemInfo);
+    // The store link is async and best-effort, so it is attached after the pure
+    // verdict rather than computed inside it.
+    emit(state.copyWith(coreVersionState: await _withStoreUpdateUrl(verdict)));
+  }
 
-    if (!isAppSupported) {
-      // The backend declares a higher minimum app version than this build: a
-      // hard, non-dismissible update prompt (inverse of the core check).
-      final maybeStoreUrl = await _resolveStoreUpdateUrl();
-      emit(
-        state.copyWith(
-          coreVersionState: AppVersionUnsupported(
-            appVersion,
-            systemInfo.minSupportedAppVersion!,
-            updateStoreUrl: maybeStoreUrl,
-          ),
-        ),
-      );
-    } else if (!isCoreSupported) {
-      final maybeStoreUrl = await _resolveStoreUpdateUrl();
-      emit(state.copyWith(coreVersionState: Incompatible(coreInfo.version, constraint, updateStoreUrl: maybeStoreUrl)));
-    } else {
-      emit(state.copyWith(coreVersionState: Compatible()));
+  /// Pure compatibility decision mapping system-info + the running app version to
+  /// a [CoreVersionState]. App-too-old takes priority over core-incompatible.
+  ///
+  /// No null-assertion on the minimum: the branch returning [AppVersionUnsupported]
+  /// guards `minSupportedAppVersion != null` itself, so it is promoted to non-null
+  /// (and `isAppVersionSupported` already treats a null minimum as supported).
+  CoreVersionState _resolveCoreVersionVerdict(WebtritSystemInfo systemInfo) {
+    final minSupportedAppVersion = systemInfo.minSupportedAppVersion;
+    if (minSupportedAppVersion != null && !systemInfo.isAppVersionSupported(appVersion)) {
+      return AppVersionUnsupported(appVersion, minSupportedAppVersion);
+    }
+    if (!systemInfo.core.verifyVersionStr(coreVersionConstraint)) {
+      return Incompatible(systemInfo.core.version, VersionConstraint.parse(coreVersionConstraint));
+    }
+    return Compatible();
+  }
+
+  /// Attaches the best-effort store update URL to the "needs update" verdicts;
+  /// the others pass through unchanged.
+  Future<CoreVersionState> _withStoreUpdateUrl(CoreVersionState verdict) async {
+    switch (verdict) {
+      case AppVersionUnsupported():
+        return AppVersionUnsupported(
+          verdict.currentVersion,
+          verdict.minSupportedVersion,
+          updateStoreUrl: await _resolveStoreUpdateUrl(),
+        );
+      case Incompatible():
+        return Incompatible(
+          verdict.currentVersion,
+          verdict.supportedConstraint,
+          updateStoreUrl: await _resolveStoreUpdateUrl(),
+        );
+      case Compatible():
+      case Unknown():
+        return verdict;
     }
   }
 

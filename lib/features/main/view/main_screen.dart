@@ -20,15 +20,12 @@ class MainScreen extends StatelessWidget {
       listener: (context, state) async {
         final coreVersionState = state.coreVersionState;
 
-        // The gate dialog is pushed on the root navigator (showDialog defaults to
-        // useRootNavigator: true), so dismissal must target the root navigator -
-        // Navigator.of(context) here would resolve the nested auto_route navigator.
-        // Capture the blocs and navigator while this context is still mounted: the
-        // dialog outlives MainScreen during logout, so its button closures must not
-        // touch a possibly-defunct context.
+        // Capture the blocs while this context is mounted: the gate dialog outlives
+        // MainScreen during logout, so its button closures must not read a possibly
+        // defunct context. Dismissal lives inside the dialog; here we only wire the
+        // pure update/logout intents.
         final appBloc = context.read<AppBloc>();
         final mainBloc = context.read<MainBloc>();
-        final rootNavigator = Navigator.of(context, rootNavigator: true);
 
         if (coreVersionState is AppVersionUnsupported) {
           final canUpdateApp = coreVersionState.updateStoreUrl != null;
@@ -40,12 +37,7 @@ class MainScreen extends StatelessWidget {
             onUpdatePressed: canUpdateApp
                 ? () => mainBloc.add(MainBlocAppUpdatePressed(coreVersionState.updateStoreUrl!))
                 : null,
-            onLogoutPressed: () {
-              // Force pop (not maybePop, which PopScope(canPop: false) blocks) to
-              // close the gate before logout tears the screen down.
-              rootNavigator.pop();
-              appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.userRequest));
-            },
+            onLogoutPressed: () => appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.userRequest)),
           );
         } else if (coreVersionState is Incompatible) {
           final canUpdateApp = coreVersionState.updateStoreUrl != null;
@@ -57,10 +49,7 @@ class MainScreen extends StatelessWidget {
             onUpdatePressed: canUpdateApp
                 ? () => mainBloc.add(MainBlocAppUpdatePressed(coreVersionState.updateStoreUrl!))
                 : null,
-            onLogoutPressed: () {
-              rootNavigator.pop();
-              appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.userRequest));
-            },
+            onLogoutPressed: () => appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.userRequest)),
           );
         }
       },

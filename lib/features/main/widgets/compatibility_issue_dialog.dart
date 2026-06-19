@@ -38,6 +38,13 @@ class CompatibilityIssueDialog extends StatelessWidget {
   final VoidCallback? onUpdatePressed;
   final VoidCallback? onLogoutPressed;
 
+  // The dialog owns its own dismissal: pop the navigator it was pushed onto, then
+  // signal the pure logout intent. The caller knows nothing about routing.
+  void _onLogout(BuildContext context) {
+    Navigator.of(context).pop();
+    onLogoutPressed?.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -51,7 +58,10 @@ class CompatibilityIssueDialog extends StatelessWidget {
       actions: [
         if (onUpdatePressed != null)
           TextButton(onPressed: onUpdatePressed, child: Text(context.l10n.main_CompatibilityIssueDialogActions_update)),
-        TextButton(onPressed: onLogoutPressed, child: Text(context.l10n.main_CompatibilityIssueDialogActions_logout)),
+        TextButton(
+          onPressed: () => _onLogout(context),
+          child: Text(context.l10n.main_CompatibilityIssueDialogActions_logout),
+        ),
       ],
     );
   }
