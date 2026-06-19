@@ -95,13 +95,19 @@ final class UnknownPeerMessageEvent extends PeerMessageEvent {
   };
 
   factory UnknownPeerMessageEvent.fromJson(Map<String, dynamic> json) {
+    // Guard the casts: this is the fallback for unknown/malformed messages, so a
+    // non-string `type` or non-map `data` must decode to null here rather than
+    // throw - otherwise the forward-compat path crashes on the very payloads it
+    // exists to absorb.
+    final type = json['type'];
+    final data = json['data'];
     return UnknownPeerMessageEvent(
       transaction: json['transaction'],
       line: json['line'],
       callId: json['call_id'],
       sender: json['sender'],
-      type: json['type'],
-      data: json['data'],
+      type: type is String ? type : null,
+      data: data is Map<String, dynamic> ? data : null,
     );
   }
 }

@@ -88,6 +88,36 @@ void main() {
     const UnknownPeerMessageEvent(line: 0, callId: 'qwerty', type: 'media_state', data: {'video': 'not-a-bool'}),
   );
 
+  testFromJson(
+    'UnknownPeerMessageEvent: non-string type decodes to null (no cast crash)',
+    json.decode(r'''
+    {
+      "line": 0,
+      "call_id": "qwerty",
+      "event": "peer_message",
+      "type": 42,
+      "data": {"x": 1}
+    }
+    ''')
+        as Map<String, dynamic>,
+    const UnknownPeerMessageEvent(line: 0, callId: 'qwerty', data: {'x': 1}),
+  );
+
+  testFromJson(
+    'UnknownPeerMessageEvent: non-map data decodes to null (no cast crash)',
+    json.decode(r'''
+    {
+      "line": 0,
+      "call_id": "qwerty",
+      "event": "peer_message",
+      "type": "media_state",
+      "data": "not-a-map"
+    }
+    ''')
+        as Map<String, dynamic>,
+    const UnknownPeerMessageEvent(line: 0, callId: 'qwerty', type: 'media_state'),
+  );
+
   test('MediaStatePeerMessageEvent: toJson round trip', () {
     const event = MediaStatePeerMessageEvent(
       transaction: 'transaction 1',
