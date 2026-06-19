@@ -14,7 +14,7 @@ WebtritSystemInfo _systemInfo({required Version coreVersion, Version? minSupport
 }
 
 AppCompatibility _resolve(WebtritSystemInfo systemInfo, Version appVersion) {
-  return AppCompatibility.resolve(
+  return const DefaultAppCompatibilityResolver().resolve(
     systemInfo: systemInfo,
     appVersion: appVersion,
     coreVersionConstraint: _coreConstraint,
@@ -22,7 +22,7 @@ AppCompatibility _resolve(WebtritSystemInfo systemInfo, Version appVersion) {
 }
 
 void main() {
-  group('AppCompatibility.resolve', () {
+  group('DefaultAppCompatibilityResolver.resolve', () {
     test('is AppCompatible when core is in range and app satisfies (or no) minimum', () {
       final noMinimum = _systemInfo(coreVersion: Version(1, 5, 0));
       expect(_resolve(noMinimum, Version(1, 0, 0)), isA<AppCompatible>());

@@ -83,6 +83,7 @@ class MainScreenPage extends StatelessWidget {
           context.read<PrivateGatewayRepository>(),
           EnvironmentConfig.CORE_VERSION_CONSTRAINT,
           context.read<PackageInfo>(),
+          appCompatibilityResolver: context.read<AppCompatibilityResolver>(),
           storeInfoExtractor: StoreInfoExtractor(),
         )..add(const MainBlocInit());
       },

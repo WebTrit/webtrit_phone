@@ -53,6 +53,7 @@ void main() {
       privateGatewayRepository,
       _coreVersionConstraint,
       _FakePackageInfo(appVersion),
+      appCompatibilityResolver: const DefaultAppCompatibilityResolver(),
     );
   }
 

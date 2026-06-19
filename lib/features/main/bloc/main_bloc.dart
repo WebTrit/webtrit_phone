@@ -28,6 +28,7 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
     this.customPrivateGatewayRepository,
     this.coreVersionConstraint,
     this.packageInfo, {
+    required this.appCompatibilityResolver,
     this.storeInfoExtractor,
   }) : super(MainBlocState.initial()) {
     on<MainBlocInit>(_onInit, transformer: restartable());
@@ -40,6 +41,7 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
   final String coreVersionConstraint;
   final StoreInfoExtractor? storeInfoExtractor;
   final PackageInfo packageInfo;
+  final AppCompatibilityResolver appCompatibilityResolver;
 
   String get appPackageName => packageInfo.packageName;
 
@@ -84,7 +86,7 @@ class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
   /// the main UI gates on. The version rules and their priority live in
   /// [AppCompatibility.resolve], shared with the login gate.
   CoreVersionState _resolveCoreVersionState(WebtritSystemInfo systemInfo) {
-    final compatibility = AppCompatibility.resolve(
+    final compatibility = appCompatibilityResolver.resolve(
       systemInfo: systemInfo,
       appVersion: appVersion,
       coreVersionConstraint: coreVersionConstraint,

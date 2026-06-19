@@ -55,6 +55,7 @@ void main() {
       authRepository: authRepository,
       notificationsBloc: notificationsBloc,
       packageInfo: _FakePackageInfo(appVersion),
+      appCompatibilityResolver: const DefaultAppCompatibilityResolver(),
       onLoginSuccess: (session, _) => loginSuccesses.add(session),
     );
   }

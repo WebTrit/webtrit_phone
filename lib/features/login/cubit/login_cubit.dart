@@ -31,6 +31,7 @@ class LoginCubit extends Cubit<LoginState> {
     required this.authRepository,
     required this.notificationsBloc,
     required this.packageInfo,
+    required this.appCompatibilityResolver,
     required this.onLoginSuccess,
     this.signinOrder = const [],
   }) : super(const LoginState());
@@ -42,6 +43,8 @@ class LoginCubit extends Cubit<LoginState> {
   final NotificationsBloc notificationsBloc;
 
   final PackageInfo packageInfo;
+
+  final AppCompatibilityResolver appCompatibilityResolver;
 
   /// Configured order of the sign-in tabs, by login type name (from app config).
   final List<String> signinOrder;
@@ -143,7 +146,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     // Shared version gate (see [AppCompatibility]). Aborting here means no
     // session is created and signaling is never connected for an unsupported build.
-    final compatibility = AppCompatibility.resolve(
+    final compatibility = appCompatibilityResolver.resolve(
       systemInfo: systemInfo,
       appVersion: appVersion,
       coreVersionConstraint: coreVersionConstraint,
