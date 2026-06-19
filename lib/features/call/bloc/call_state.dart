@@ -413,7 +413,10 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   ///
   /// Returns `true` when the remote stream contains at least one video track
   /// (confirmed by WebRTC). Falls back to the logical [video] flag when the
-  /// stream is absent or audio-only — this covers the window between the SDP
+  /// stream is absent or audio-only. Note [video] is the LOCAL camera intent
+  /// (see its doc), used here only as a provisional proxy until the remote
+  /// tracks confirm; the authoritative remote signal is [remoteCameraEnabled].
+  /// The fallback covers the window between the SDP
   /// negotiation completing and the first video frame arriving, which is
   /// especially common after a glare-resolution rollback where [onAddStream]
   /// does not re-fire for the updated stream and only [onAddTrack] signals the
