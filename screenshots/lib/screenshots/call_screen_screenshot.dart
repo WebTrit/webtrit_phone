@@ -11,11 +11,15 @@ class CallScreenScreenshot extends StatefulWidget {
   const CallScreenScreenshot(
     this.video, {
     super.key,
+    this.interactive = false,
     this.localePlaceholderImageUrl = 'https://dummyimage.com/600x800/00e326/fff.jpg&text=locale',
     this.remotePlaceholderImageUrl = 'https://dummyimage.com/600x800/0048e3/fff.jpg&text=remote',
   });
 
   final bool video;
+
+  /// Use a reactive call bloc so the mute/hold buttons toggle instead of staying frozen.
+  final bool interactive;
   final String localePlaceholderImageUrl;
   final String remotePlaceholderImageUrl;
 
@@ -38,7 +42,13 @@ class _CallScreenScreenshotState extends State<CallScreenScreenshot> {
         PageRouteBuilder(
           pageBuilder: (context, _, _) {
             return MultiBlocProvider(
-              providers: [BlocProvider<CallBloc>(create: (context) => MockCallBloc.callScreen(widget.video))],
+              providers: [
+                BlocProvider<CallBloc>(
+                  create: (context) => widget.interactive
+                      ? InteractiveCallBloc(video: widget.video)
+                      : MockCallBloc.callScreen(widget.video),
+                ),
+              ],
               child: CallScreen(
                 localePlaceholderBuilder: (context) =>
                     Image.network(widget.localePlaceholderImageUrl, fit: BoxFit.fitHeight),

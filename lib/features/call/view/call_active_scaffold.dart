@@ -91,6 +91,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
         dispatchInteractionDebounce();
       }
     });
+
+    _compactController.addListener(_onCompactChanged);
   }
 
   @override
@@ -103,9 +105,17 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   @override
   void dispose() {
     _disposeRemoteFrameWatcher();
+    _compactController.removeListener(_onCompactChanged);
     _compactController.dispose();
     _debounceByStateSubscription?.cancel();
     super.dispose();
+  }
+
+  void _onCompactChanged() {
+    if (_compactController.compact && mounted) {
+      _logger.finer('_onCompactChanged - closing all popups');
+      Navigator.of(context).popUntil((route) => route is! PopupRoute);
+    }
   }
 
   @override

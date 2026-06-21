@@ -84,7 +84,7 @@ class ContactTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(title, maxLines: subtitle != null ? 1 : 2, overflow: TextOverflow.ellipsis, style: textTheme.titleMedium),
-        if (subtitle != null) subtitle,
+        ?subtitle,
       ],
     );
 

@@ -164,28 +164,26 @@ class AppRouter extends RootStackRouter {
                   ],
                 ),
 
-                if (_bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == false)
-                  AutoRoute(
-                    page: RecentsRouterPageRoute.page,
-                    path: MainFlavor.recents.name,
-                    children: [
-                      AutoRoute(page: RecentsScreenPageRoute.page, path: ''),
-                      AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
-                      AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
-                      AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
-                    ],
-                  ),
-                if (_bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
-                  AutoRoute(
-                    page: RecentCdrsRouterPageRoute.page,
-                    path: MainFlavor.recents.name,
-                    children: [
-                      AutoRoute(page: RecentCdrsScreenPageRoute.page, path: ''),
-                      AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
-                      AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
-                      AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
-                    ],
-                  ),
+                AutoRoute(
+                  page: RecentsRouterPageRoute.page,
+                  path: MainFlavor.recents.name,
+                  children: [
+                    AutoRoute(page: RecentsScreenPageRoute.page, path: ''),
+                    AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
+                    AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
+                    AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
+                  ],
+                ),
+                AutoRoute(
+                  page: RecentCdrsRouterPageRoute.page,
+                  path: MainFlavor.recents.name,
+                  children: [
+                    AutoRoute(page: RecentCdrsScreenPageRoute.page, path: ''),
+                    AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
+                    AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
+                    AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
+                  ],
+                ),
 
                 AutoRoute(
                   page: ContactsRouterPageRoute.page,
@@ -391,7 +389,7 @@ class AppRouter extends RootStackRouter {
           children: [
             switch (_mainInitialTab) {
               // Recents tab can be either with CDRs or standard
-              RecentsBottomMenuTab(useCdrs: true) => const RecentCdrsRouterPageRoute(),
+              RecentsBottomMenuTab(supportsCallHistory: true) => const RecentCdrsRouterPageRoute(),
               RecentsBottomMenuTab() => const RecentsRouterPageRoute(),
               // Contacts tab
               ContactsBottomMenuTab() => const ContactsRouterPageRoute(),

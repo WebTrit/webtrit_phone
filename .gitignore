@@ -59,3 +59,7 @@ makefile.shared
 .claude/settings.local.json
 CLAUDE.local.md
 **/.claude/
+integration_test/patrol_test_bundle.dart
+
+# FVM SDK cache (managed by fvm; version pinned via .fvmrc)
+.fvm/

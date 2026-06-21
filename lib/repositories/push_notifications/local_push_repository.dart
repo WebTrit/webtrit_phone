@@ -51,17 +51,17 @@ class LocalPushRepositoryFLNImpl implements LocalPushRepository {
   @override
   Future<void> displayPush(AppLocalPush notification) {
     return FlutterLocalNotificationsPlugin().show(
-      notification.id,
-      notification.title,
-      notification.body,
-      kNotificationDetails,
+      id: notification.id,
+      title: notification.title,
+      body: notification.body,
+      notificationDetails: kNotificationDetails,
       payload: jsonEncode(notification.payload ?? {}),
     );
   }
 
   @override
   Future<void> dissmissById(int id) async {
-    await FlutterLocalNotificationsPlugin().cancel(id);
+    await FlutterLocalNotificationsPlugin().cancel(id: id);
   }
 
   @override
@@ -69,7 +69,7 @@ class LocalPushRepositoryFLNImpl implements LocalPushRepository {
     final active = await FlutterLocalNotificationsPlugin().getActiveNotifications();
     final matched = active.where((n) => n.title == title && n.body == body).toList();
     for (final n in matched) {
-      await FlutterLocalNotificationsPlugin().cancel(n.id ?? 0, tag: n.tag);
+      await FlutterLocalNotificationsPlugin().cancel(id: n.id ?? 0, tag: n.tag);
     }
   }
 }

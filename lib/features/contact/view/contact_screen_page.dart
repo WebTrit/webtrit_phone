@@ -29,7 +29,7 @@ class ContactScreenPage extends StatelessWidget {
     final canVideoCall = callConfig.isVideoCallEnabled;
     final canTransfer = callConfig.isBlindTransferEnabled;
     final favoritesEnabled = bottomMenuFeature.getTabEnabled<FavoritesBottomMenuTab>() != null;
-    final useCdrsForHistory = bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs ?? false;
+    final useCdrsForHistory = bottomMenuFeature.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory ?? false;
 
     bool isTileEnabled(ContactAction action, [bool capability = true]) {
       return contactsConfig.phoneTileActions.contains(action) && capability;

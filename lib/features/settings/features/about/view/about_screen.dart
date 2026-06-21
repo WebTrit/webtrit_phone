@@ -98,6 +98,11 @@ class _AboutScreenState extends State<AboutScreen> {
                                   ),
                                   SizedBox(height: delimiterHeight / 2),
                                   InfoTile(
+                                    label: context.l10n.settings_AboutText_CallkeepVersion,
+                                    value: state.callkeepVersion,
+                                  ),
+                                  SizedBox(height: delimiterHeight / 2),
+                                  InfoTile(
                                     label: context.l10n.settings_AboutText_AppSessionIdentifier,
                                     value: state.appIdentifier,
                                   ),

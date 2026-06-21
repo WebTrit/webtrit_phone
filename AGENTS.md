@@ -1,7 +1,12 @@
 # AGENTS.md
 
 WebTrit Phone — Flutter VoIP app, Melos monorepo.
-Flutter 3.32.4 (stable), Android SDK 35.0.1.
+Flutter 3.44.0 (stable), Android SDK 35.0.1.
+
+## Toolchain
+
+- Flutter version is pinned **only** in `.fvmrc` — single source of truth, read by `fvm` locally and by the `webtrit_phone_builder` CI. When you bump it, update the version mentioned above in the same commit. (Older release branches may still carry the legacy `.github/flutter_version.yaml`; the builder falls back to it there.)
+- Use `fvm flutter ...` / `fvm dart ...` so the pinned SDK is used; a bare `flutter` from `PATH` may be a different version. The `.fvm/` SDK cache is gitignored — run `fvm install` once per machine.
 
 ## Build & Test
 
@@ -16,8 +21,8 @@ dart run bin/create_new_schema_dump_and_test_migration.dart   # after Drift tabl
 
 ## Code Standards
 
-- No Cyrillic anywhere (source, comments, strings, logs, keys).
-- No inline comments — DartDoc only for public APIs.
+- No Cyrillic in source, comments, logs, strings, or keys, except translation values in localization ARB files (`lib/l10n/arb/*.arb`).
+- Comments: no redundant *what* comments that restate the code; comments explain non-obvious *why* (rationale, gotchas, workarounds, links to issues). DartDoc for public APIs.
 - No DI frameworks (`get_it`, `injectable`, Service Locator — forbidden).
 - Single quotes; 120-char line width.
 - Never edit `*.g.dart` / `*.freezed.dart` / `*.gr.dart` — regenerate via `build_runner`.
@@ -49,3 +54,11 @@ packages/   → shared libs (must NOT import from lib/)
 - Theme: never raw `Colors.xxx` or `TextStyle` in widgets; `Theme.of(context).extension<T>()`.
 - Widgets: `StatelessWidget` always (not helper methods); dumb widgets in `features/*/view/widgets/`.
 - Tests: `MockClient`/`mocktail` — no real network calls; DB migrations via `SchemaVerifier`.
+- Routing (`auto_route`): the `AppRouter.routes` tree must ALWAYS be complete — never gate route
+  *declarations* on async/runtime values (server capability, login state, feature flags).
+  `routeCollection` is `late final`, built once at router construction (before server `system-info`
+  loads), so any `if (capability) AutoRoute(...)` is frozen with whatever the value was at startup;
+  later navigation to a route omitted then throws `Failed to navigate to <Route>`. Register every
+  variant unconditionally and decide which one to *show* at navigation/build time (e.g.
+  `AutoTabsRouter.routes`, guards, initial-tab resolver). Sibling routes may share a `path`
+  (`recents`) — `RouteCollection` only requires unique route *names*, and tab matching is name-based.

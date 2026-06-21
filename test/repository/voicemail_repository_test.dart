@@ -12,13 +12,13 @@ import '../mocks/voicemails_fixture_factory.dart';
 
 void main() {
   late AppDatabase appDatabase;
-  late VoicemailRepositoryImpl dataSource;
+  late VoicemailRepositoryImpl repo;
   late MockWebtritApiClient apiClient;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
     apiClient = MockWebtritApiClient();
-    dataSource = VoicemailRepositoryImpl(
+    repo = VoicemailRepositoryImpl(
       webtritApiClient: apiClient,
       token: 'user_token',
       appDatabase: appDatabase,
@@ -28,6 +28,125 @@ void main() {
 
   tearDown(() async {
     await appDatabase.close();
+  });
+
+  group('watchUnreadVoicemailsCount', () {
+    test('emits 0 when database is empty', () async {
+      expect(await repo.watchUnreadVoicemailsCount().first, equals(0));
+    });
+
+    test('emits total count when all voicemails are unread', () async {
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '1', seen: false),
+      );
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '2', seen: false),
+      );
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '3', seen: false),
+      );
+
+      expect(await repo.watchUnreadVoicemailsCount().first, equals(3));
+    });
+
+    test('emits 0 when all voicemails are read', () async {
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '1', seen: true),
+      );
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '2', seen: true),
+      );
+
+      expect(await repo.watchUnreadVoicemailsCount().first, equals(0));
+    });
+
+    test('emits only the unread count when voicemails are mixed', () async {
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '1', seen: false),
+      );
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '2', seen: true),
+      );
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '3', seen: false),
+      );
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '4', seen: true),
+      );
+
+      expect(await repo.watchUnreadVoicemailsCount().first, equals(2));
+    });
+
+    test('decreases reactively when an unread voicemail is marked as seen', () async {
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '1', seen: false),
+      );
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '2', seen: false),
+      );
+
+      final future = expectLater(repo.watchUnreadVoicemailsCount(), emitsInOrder([2, 1]));
+      await pumpEventQueue();
+      await repo.updateVoicemailSeenStatus('1', true);
+      await future;
+    });
+
+    test('drops to 0 reactively when the last unread voicemail is marked as seen', () async {
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '1', seen: false),
+      );
+
+      final future = expectLater(repo.watchUnreadVoicemailsCount(), emitsInOrder([1, 0]));
+      await pumpEventQueue();
+      await repo.updateVoicemailSeenStatus('1', true);
+      await future;
+    });
+
+    test('decreases reactively when an unread voicemail is deleted', () async {
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '1', seen: false),
+      );
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '2', seen: false),
+      );
+
+      final future = expectLater(repo.watchUnreadVoicemailsCount(), emitsInOrder([2, 1]));
+      await pumpEventQueue();
+      await repo.removeVoicemail('1');
+      await future;
+    });
+
+    test('does not change count reactively when a read voicemail is deleted', () async {
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '1', seen: false),
+      );
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '2', seen: true),
+      );
+
+      final events = <int>[];
+      final subscription = repo.watchUnreadVoicemailsCount().listen(events.add);
+      await pumpEventQueue();
+
+      await repo.removeVoicemail('2');
+      await pumpEventQueue();
+
+      expect(events.last, equals(1));
+      await subscription.cancel();
+    });
+
+    test('increases reactively when a new unread voicemail is inserted', () async {
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '1', seen: false),
+      );
+
+      final future = expectLater(repo.watchUnreadVoicemailsCount(), emitsInOrder([1, 2]));
+      await pumpEventQueue();
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: '2', seen: false),
+      );
+      await future;
+    });
   });
 
   group('VoicemailRepository', () {
@@ -47,9 +166,9 @@ void main() {
       expect(voicemails.where((voicemail) => voicemail.seen).length, 2);
       expect(voicemails.where((voicemail) => !voicemail.seen).length, 2);
 
-      await dataSource.updateVoicemailSeenStatus('1', false);
-      await dataSource.updateVoicemailSeenStatus('2', true);
-      await dataSource.updateVoicemailSeenStatus('4', true);
+      await repo.updateVoicemailSeenStatus('1', false);
+      await repo.updateVoicemailSeenStatus('2', true);
+      await repo.updateVoicemailSeenStatus('4', true);
 
       voicemails = await appDatabase.voicemailDao.getAllVoicemails();
       expect(voicemails.where((voicemail) => voicemail.seen).length, 3);
@@ -68,7 +187,7 @@ void main() {
       var voicemails = await appDatabase.voicemailDao.getAllVoicemails();
       expect(voicemails.length, 3);
 
-      await dataSource.removeMultipleVoicemails(['1', '3']);
+      await repo.removeMultipleVoicemails(['1', '3']);
 
       voicemails = await appDatabase.voicemailDao.getAllVoicemails();
       expect(voicemails.length, 1);

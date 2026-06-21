@@ -532,6 +532,11 @@ SettingsPageConfig _$SettingsPageConfigFromJson(Map<String, dynamic> json) =>
               json['groupTitleListTile'] as Map<String, dynamic>,
             ),
       showSeparators: json['showSeparators'] as bool? ?? true,
+      separator: json['separator'] == null
+          ? null
+          : SeparatorStyleConfig.fromJson(
+              json['separator'] as Map<String, dynamic>,
+            ),
       background: json['background'] == null
           ? null
           : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
@@ -555,6 +560,7 @@ Map<String, dynamic> _$SettingsPageConfigToJson(SettingsPageConfig instance) =>
       'logoutIconColor': instance.logoutIconColor,
       'groupTitleListTile': instance.groupTitleListTile?.toJson(),
       'showSeparators': instance.showSeparators,
+      'separator': instance.separator?.toJson(),
       'background': instance.background?.toJson(),
       'itemTextStyle': instance.itemTextStyle?.toJson(),
       'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),

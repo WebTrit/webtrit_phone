@@ -156,8 +156,11 @@ class VoicemailRepositoryImpl
     _fetchingCompleter!.future.ignore();
 
     try {
-      /// Emit unknown status to indicate sync in progress
-      await _emitCachedVoicemails(status: ReadStatus.unknown);
+      /// Do not emit unknown status to show updating state, because it leads to UI flicker on SettingsScreen
+      /// especially on android if user checks status bar and app changes its lifecycle from innactive to resumed (WT-1424)
+      /// 
+      /// Add separate event if needed
+      await _emitCachedVoicemails();
 
       final remoteItems = await _webtritApiClient.getUserVoicemailList(_token, locale: localeCode);
 
@@ -189,12 +192,9 @@ class VoicemailRepositoryImpl
   }
 
   /// Retrieves local voicemails and pushes them to the stream controller.
-  ///
-  /// If [status] is provided, it overrides the items' actual status.
-  /// Otherwise, uses the status stored in the database.
-  Future<void> _emitCachedVoicemails({ReadStatus? status}) async {
+  Future<void> _emitCachedVoicemails() async {
     final dataList = await _appDatabase.voicemailDao.getVoicemailsWithContacts();
-    final items = dataList.map((it) => _voicemailFromDriftWithContact(it, readStatus: status)).toList();
+    final items = dataList.map(_voicemailFromDriftWithContact).toList();
 
     if (items.isNotEmpty) {
       _updatesController?.add(items);

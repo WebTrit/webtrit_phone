@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call/call.dart';
@@ -181,6 +180,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                             child: ReorderableListView.builder(
                               padding: EdgeInsets.only(top: topPadding),
                               itemCount: favorites.length,
+                              // TODO: migrate to onReorderItem (deprecated after Flutter 3.41.0-0.0.pre)
+                              // ignore: deprecated_member_use
                               onReorder: (oldIndex, newIndex) {},
                               onReorderStart: onReorderStart,
                               onReorderEnd: onReorderEnd,
@@ -202,7 +203,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                       if (isReorderMode) ...[SizedBox(width: 4), const Icon(Icons.drag_handle)],
                                       Expanded(
                                         child: FavoriteTile(
-                                          key: favoriteTileKey,
                                           gesturesEnabled: !isReorderMode,
                                           favorite: favorite,
                                           contact: contact,

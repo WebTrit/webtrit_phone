@@ -209,7 +209,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
             final token = context.read<AppBloc>().state.session.token!;
 
-            final contactsRemoteDataSource = ContactsRemoteDataSourceImpl(webtritApiClient, token);
+            final supportsExtensions = context.read<FeatureAccess>().coreSupport.supportsExtensions;
+            final contactsRemoteDataSource = supportsExtensions
+                ? ContactsRemoteDataSourceImpl(webtritApiClient, token)
+                : null;
             final contactsLocalDataSource = ContactsLocalDataSourceImpl(appDatabase);
 
             return ContactsRepository(
@@ -365,7 +368,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               dispose: (context, service) => service.dispose(),
               lazy: false,
             ),
-            if (featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.useCdrs == true)
+            if (featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory == true)
               Provider<CdrsSyncWorker>(
                 create: (context) =>
                     CdrsSyncWorker(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
@@ -452,16 +455,17 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                       return bloc;
                     },
                   ),
-                  BlocProvider<ExternalContactsSyncBloc>(
-                    lazy: false,
-                    create: (context) {
-                      return ExternalContactsSyncBloc(
-                        userRepository: context.read<UserRepository>(),
-                        externalContactsRepository: context.read<ExternalContactsRepository>(),
-                        contactsRepository: context.read<ContactsRepository>(),
-                      )..add(const ExternalContactsSyncStarted());
-                    },
-                  ),
+                  if (featureAccess.coreSupport.supportsExtensions)
+                    BlocProvider<ExternalContactsSyncBloc>(
+                      lazy: false,
+                      create: (context) {
+                        return ExternalContactsSyncBloc(
+                          userRepository: context.read<UserRepository>(),
+                          externalContactsRepository: context.read<ExternalContactsRepository>(),
+                          contactsRepository: context.read<ContactsRepository>(),
+                        )..add(const ExternalContactsSyncStarted());
+                      },
+                    ),
                   BlocProvider<CallBloc>(
                     create: (context) {
                       final appBloc = context.read<AppBloc>();
@@ -520,6 +524,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         dialogInfoRepository: context.read<DialogInfoRepository>(),
                         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
                         queuedTerminationRequestsRepository: context.read<QueuedTerminationRequestsRepository>(),
+                        // Outgoing SIP `from` policy: normalise the user's main number to
+                        // null (main line), or fall back to caller-ID matcher resolution.
+                        resolveOutgoingFromNumber: (callerFromNumber, destination) {
+                          final mainNumber = context.read<UserRepository>().getLocalInfo()?.numbers.main;
+                          if (callerFromNumber != null && callerFromNumber == mainNumber) return null;
+                          return callerFromNumber ??
+                              context.read<CallerIdSettingsRepository>().getCallerIdSettings().resolveFromNumber(
+                                destination,
+                              );
+                        },
                         userRepository: context.read<UserRepository>(),
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         callkeep: _callkeep,
@@ -546,6 +560,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         ),
                         signalingModule: _signalingModule,
                         peerConnectionManager: peerConnectionManager,
+                        connectivityService: context.read<ConnectivityService>(),
                         onSessionInvalidated: () =>
                             appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.sessionMissed)),
                         foregroundCallPushSignal: RemotePushBroker.pendingCallForegroundPushs,
@@ -635,12 +650,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         builder: (context) {
                           final sipPresenceFeature = featureAccess.sipPresenceConfig;
                           return CallControllerScope(
-                            controller: _callController ??= CallController(
-                              callBloc: context.read<CallBloc>(),
-                              callRoutingCubit: context.read<CallRoutingCubit>(),
-                              notificationsBloc: context.read<NotificationsBloc>(),
-                              connectivityService: context.read<ConnectivityService>(),
-                            ),
+                            controller: _callController ??= CallController(callBloc: context.read<CallBloc>()),
                             child: PresenceViewParams(
                               hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
                               blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
@@ -689,6 +699,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// can be made here without touching the [Provider] or [PollingService] setup.
   List<PollingRegistration> _pollingRegistrations(BuildContext context) {
     final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.voicemailsEnabled;
+    final supportsExtensions = context.read<FeatureAccess>().coreSupport.supportsExtensions;
     final cliSettingsRepository = context.read<CallerIdSettingsRepository>();
     final favoritesRepository = context.read<FavoritesRepository>();
     final sipSubscriptionsRepository = context.read<SipSubscriptionsRepository>();
@@ -702,10 +713,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         listener: context.read<SystemInfoRepository>(),
         interval: const Duration(seconds: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
-      PollingRegistration(
-        listener: context.read<ExternalContactsRepository>(),
-        interval: const Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS),
-      ),
+      if (supportsExtensions)
+        PollingRegistration(
+          listener: context.read<ExternalContactsRepository>(),
+          interval: const Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS),
+        ),
       if (isVoicemailsEnabled)
         PollingRegistration(
           listener: context.read<VoicemailRepository>(),

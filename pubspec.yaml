@@ -15,7 +15,9 @@ workspace:
   - packages/_http_client
   - packages/_web_socket_channel
   - packages/_tcp_proxy
+  - packages/pjsua_companion
   - screenshots
+
 # Version format: <Major>.<Minor>.<Patch>[-<Pre-release>]+<Build>
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
@@ -29,11 +31,11 @@ version: 0.0.0+0000000
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
 # app_version represents tasks and fixed bugs, which is different from the build version that is specific to each client
-app_version: 1.15.3+0
+app_version: 1.15.4+2
 
 environment:
-  sdk: ^3.8.0
-  flutter: ^3.41.2
+  sdk: ^3.12.0
+  flutter: ^3.44.0
 
 dependencies:
   flutter:
@@ -41,97 +43,112 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  auto_route: ^10.2.0
-  bloc: ^9.1.0
+  async: ^2.13.1
+  audio_session: ^0.2.3
+  auto_route: ^11.1.0
+  bloc: ^9.2.1
   bloc_concurrency: ^0.3.0
-  characters: ^1.4.0
+  bloc_test: ^10.0.0
+  characters: ^1.4.1
   clock: ^1.1.2
-  connectivity_plus: ^7.0.0
-  cross_file: ^0.3.5
-  device_info_plus: ^12.2.0
+  collection: ^1.19.1
+  connectivity_plus: ^7.1.1
+  country_code_picker: ^3.4.1
+  cross_file: ^0.3.5+2
+  device_info_plus: ^13.1.0
+  device_region: ^1.4.0
+  dlibphonenumber: ^1.1.64
   drift: ^2.29.0
-  equatable: ^2.0.7
-  firebase_analytics: ^12.0.4
-  firebase_app_installations: ^0.4.0+4
-  firebase_core: ^4.2.1
-  firebase_crashlytics: ^5.0.4
-  firebase_messaging: ^16.0.4
-  firebase_remote_config: ^6.1.1
+  emoji_picker_flutter: ^4.4.0
+  equatable: ^2.0.8
+  firebase_analytics: ^12.4.1
+  firebase_app_installations: ^0.4.2+2
+  firebase_core: ^4.9.0
+  firebase_crashlytics: ^5.2.2
+  firebase_messaging: ^16.2.2
+  firebase_remote_config: ^6.5.1
   flutter_bloc: ^9.1.1
-  flutter_contacts: ^1.1.9+2
-  flutter_secure_storage: ^9.2.4
-  flutter_svg: ^2.2.2
-  flutter_webrtc:
-    git:
-      url: https://github.com/WebTrit/flutter-webrtc.git
-      ref: main_ext_rebase_06.05.26
+  flutter_local_notifications: ^21.0.0
+  flutter_parsed_text: ^2.2.1
+  flutter_secure_storage: ^10.3.1
+  flutter_svg: ^2.3.0
   formz: ^0.8.0
   freezed_annotation: ^3.1.0
-  google_fonts: ^6.3.2
   google_api_availability: ^5.0.1
+  google_fonts: ^8.1.0
+  gravatar_utils: ^1.0.0
+  html: ^0.15.6
+  http: ^1.6.0
+  icon_decoration: ^2.1.0
   intl: any
-  json_annotation: ^4.9.0
+  json_annotation: ^4.12.0
   just_audio: ^0.10.5
   linkify: ^5.0.0
   logging: ^1.3.0
-  logging_appenders: ^1.4.0+1
+  logging_appenders: ^2.0.0+1
+  mask_text_input_formatter: ^2.9.0
   material_color_utilities: any
   meta: any
-  package_info_plus: ^9.0.0
+  package_info_plus: ^10.1.0
   path: ^1.9.1
   path_provider: ^2.1.5
   permission_handler: ^12.0.1
   phoenix_socket: ^0.8.0
   provider: ^6.1.5+1
   pub_semver: ^2.2.0
+  quiver: ^3.2.2
+  rxdart: ^0.28.0
   sdp_transform: ^0.3.2
-  share_plus: ^12.0.1
-  shared_preferences: ^2.5.3
+  share_plus: ^13.1.0
+  shared_preferences: ^2.5.5
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
-  uuid: ^4.5.2
+  uuid: ^4.5.3
   validators: ^3.0.0
-  webview_flutter: ^4.13.0
+  webview_flutter: ^4.13.1
   webview_flutter_web: ^0.2.3+4
-  collection: ^1.19.1
-  quiver: ^3.2.2
-  flutter_parsed_text: ^2.2.1
-  flutter_local_notifications: ^19.5.0
-  gravatar_utils: ^1.0.0
-  dlibphonenumber: ^1.1.51
-  device_region: ^1.4.0
-  html: ^0.15.6
-  http: ^1.5.0
-  audio_session: ^0.2.2
-  bloc_test: ^10.0.0
   workmanager: ^0.9.0+3
-  country_code_picker: ^3.4.1
-  icon_decoration: ^2.1.0
-  emoji_picker_flutter: ^4.3.0
-  mask_text_input_formatter: ^2.9.0
-  async: ^2.13.0
-  rxdart: ^0.28.0
 
+  # Local path/workspace packages, sorted by name.
+  app_database:
+    path: ./packages/data/app_database
+  device_auto_rotate:
+    path: ./packages/device_auto_rotate
+  pjsua_companion:
+    path: ./packages/pjsua_companion
+  ssl_certificates:
+    path: ./packages/ssl_certificates
+  store_info_extractor:
+    path: ./packages/store_info_extractor
   webtrit_api:
     path: ./packages/webtrit_api
+  webtrit_appearance_theme:
+    path: ./packages/webtrit_appearance_theme
+  webtrit_callkeep:
+    # Release branches pin callkeep to a published tag (see docs/release_versioning.md).
+    git:
+      url: https://github.com/WebTrit/webtrit_callkeep.git
+      ref: 1.2.0
+      path: webtrit_callkeep
   webtrit_phone_number:
     path: ./packages/webtrit_phone_number
   webtrit_signaling:
     path: ./packages/webtrit_signaling
   webtrit_signaling_service:
     path: ./packages/webtrit_signaling_service/webtrit_signaling_service
-  webtrit_callkeep:
-    path: ../webtrit_callkeep/webtrit_callkeep
-  store_info_extractor:
-    path: ./packages/store_info_extractor
-  ssl_certificates:
-    path: ./packages/ssl_certificates
-  app_database:
-    path: ./packages/data/app_database
-  webtrit_appearance_theme:
-    path: ./packages/webtrit_appearance_theme
-  device_auto_rotate:
-    path: ./packages/device_auto_rotate
+
+  # Git forks, sorted by name.
+  # TODO: temporary fork pin. Switch back to a pub.dev version constraint once
+  # RawContact.dataMimetypes lands upstream
+  # (SERDUN/flutter_contacts#2 -> QuisApp/flutter_contacts).
+  flutter_contacts:
+    git:
+      url: https://github.com/SERDUN/flutter_contacts.git
+      ref: main
+  flutter_webrtc:
+    git:
+      url: https://github.com/WebTrit/flutter-webrtc.git
+      ref: main_ext_rebase_06.05.26
 
 dev_dependencies:
   integration_test:
@@ -141,19 +158,26 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  auto_route_generator: ^10.2.5
-  l10n_mapper_generator: ^2.2.0
-  build_runner: ^2.7.1
-  flutter_gen_runner: ^5.12.0
+  auto_route_generator: ^10.5.0
+  build_runner: ^2.15.0
+  fake_async: ^1.3.3
+  flutter_gen_runner: ^5.14.1
   flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
   flutter_native_splash: ^2.4.7
-  freezed: ^3.2.3
-  json_serializable: ^6.11.1
-  patrol: ^4.5.0
-  mocktail: ^1.0.4
-  fake_async: ^1.3.3
-  melos: ^7.0.0
+  freezed: ^3.2.5
+  json_serializable: ^6.14.0
+  # TODO: temporary fork pin. Switch back to a pub.dev version constraint once
+  # analyzer ^13.0.0 support lands upstream
+  # (SERDUN/l10n_mapper -> kwado-tech/l10n_mapper).
+  l10n_mapper_generator:
+    git:
+      url: https://github.com/SERDUN/l10n_mapper.git
+      ref: 8a90364
+      path: l10n_mapper_generator
+  melos: ^7.8.0
+  mocktail: ^1.0.5
+  patrol: ^4.6.1
 
 flutter:
   generate: true
@@ -227,14 +251,14 @@ melos:
 
     generate:
       description: Run build_runner for packages that use code generation.
-      exec: dart run build_runner build --delete-conflicting-outputs
+      exec: dart run build_runner build --workspace
       packageFilters:
         dependsOn:
           - build_runner
 
     generate:watch:
       description: Watch and rebuild generated files on change.
-      exec: dart run build_runner watch --delete-conflicting-outputs
+      exec: dart run build_runner watch --workspace
       packageFilters:
         dependsOn:
           - build_runner

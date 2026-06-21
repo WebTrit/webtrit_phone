@@ -37,6 +37,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
            userAgent: appMetadataProvider.userAgent,
            appInfo: appMetadataProvider.appInfo,
            deviceInfo: appMetadataProvider.deviceInfo,
+           callkeepVersion: appInfo.callkeepVersion,
          ),
        ) {
     on<AboutStarted>(_onStarted, transformer: restartable());

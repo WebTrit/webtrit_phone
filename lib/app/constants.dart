@@ -11,7 +11,6 @@ const kSignalingClientConnectionTimeout = Duration(seconds: 10);
 /// looking at the call screen and expects the call to survive a brief
 /// network interruption (e.g. switching from Wi-Fi to LTE).
 const kOutgoingCallSignalingWaitTimeout = Duration(seconds: 30);
-const kCallRoutingStateTimeout = Duration(seconds: 10);
 const _kSignalingClientReconnectDelaySeconds = 3;
 const kSignalingClientReconnectDelay = Duration(seconds: _kSignalingClientReconnectDelaySeconds);
 const kSignalingClientFastReconnectDelay = Duration(seconds: 1);
@@ -74,6 +73,14 @@ const kSystemNotificationsFeatureFlag = 'notifications';
 const kSystemNotificationsPushFeatureFlag = 'notificationsPush';
 const kSipPresenceFeatureFlag = 'sipPresence';
 const kSipDialogsFeatureFlag = 'sipDialogs';
+const kCallHistoryFeatureFlag = 'callHistory';
+const kExtensionsFeatureFlag = 'extensions';
+
+/// Adapter capability for the call-to-action list shown in the client UI.
+///
+/// Note: the wire value is snake_case (`cta_list`), unlike the other camelCase
+/// capability flags. See webtrit_bss_adapter_python `app/bss/models.py` `SupportedEnum`.
+const kCtaListFeatureFlag = 'cta_list';
 
 /// Key under `system-info` `adapter.custom` listing the identifier types the
 /// backend adapter accepts for OTP sign-in (e.g. `phone_number`, `email`).

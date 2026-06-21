@@ -51,12 +51,12 @@ void main() {
       // Recents
       tabs[1].when(
         favorites: unexpectedFavorites,
-        recents: (enabled, initial, titleL10n, icon, useCdrs) {
-          expect(enabled, isFalse);
+        recents: (enabled, initial, titleL10n, icon, supportsCallHistory) {
+          expect(enabled, isTrue);
           expect(initial, isFalse);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_recents');
           expect(icon, '0xe03a');
-          expect(useCdrs, isFalse); // default
+          expect(supportsCallHistory, isTrue);
         },
         contacts: unexpectedContacts,
         keypad: unexpectedKeypad,
@@ -102,7 +102,7 @@ void main() {
         contacts: unexpectedContacts,
         keypad: unexpectedKeypad,
         messaging: (enabled, initial, titleL10n, icon) {
-          expect(enabled, isFalse);
+          expect(enabled, isTrue);
           expect(initial, isFalse);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_chats');
           expect(icon, '0xe155');
@@ -157,6 +157,42 @@ void main() {
       final settingsSection = sections.firstWhere((s) => s.titleL10n == 'settings_ListViewTileTitle_settings');
       expect(settingsSection.enabled, isTrue);
       expect(settingsSection.items.any((i) => i.type == 'terms'), isTrue);
+    });
+  });
+
+  group('RecentsTabScheme.supportsCallHistory parsing & useCdrs migration', () {
+    bool recentsSupportsCallHistory(Map<String, Object?> extra) {
+      final scheme = BottomMenuTabScheme.fromJson({
+        'type': 'recents',
+        'enabled': true,
+        'titleL10n': 'recents',
+        'icon': '0xe03a',
+        ...extra,
+      });
+      return (scheme as RecentsTabScheme).supportsCallHistory;
+    }
+
+    test('new key is honoured', () {
+      expect(recentsSupportsCallHistory({'supportsCallHistory': false}), isFalse);
+      expect(recentsSupportsCallHistory({'supportsCallHistory': true}), isTrue);
+    });
+
+    test('legacy useCdrs key migrates when new key is absent', () {
+      expect(recentsSupportsCallHistory({'useCdrs': false}), isFalse);
+      expect(recentsSupportsCallHistory({'useCdrs': true}), isTrue);
+    });
+
+    test('new key wins over legacy useCdrs when both present', () {
+      expect(recentsSupportsCallHistory({'supportsCallHistory': true, 'useCdrs': false}), isTrue);
+      expect(recentsSupportsCallHistory({'supportsCallHistory': false, 'useCdrs': true}), isFalse);
+    });
+
+    test('explicit null new key does not fall back to legacy useCdrs (default applies)', () {
+      expect(recentsSupportsCallHistory({'supportsCallHistory': null, 'useCdrs': false}), isTrue);
+    });
+
+    test('defaults to true when neither key is present', () {
+      expect(recentsSupportsCallHistory(const {}), isTrue);
     });
   });
 }

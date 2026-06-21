@@ -140,7 +140,7 @@ AppConfigMain _$AppConfigMainFromJson(Map<String, dynamic> json) =>
                   initial: false,
                   titleL10n: 'main_BottomNavigationBarItemLabel_recents',
                   icon: '0xe03a',
-                  useCdrs: false,
+                  supportsCallHistory: true,
                 ),
                 ContactsTabScheme(
                   enabled: true,
@@ -563,7 +563,10 @@ RecentsTabScheme _$RecentsTabSchemeFromJson(Map<String, dynamic> json) =>
       initial: json['initial'] as bool? ?? false,
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      useCdrs: json['useCdrs'] as bool? ?? false,
+      supportsCallHistory:
+          _readRecentsSupportsCallHistory(json, 'supportsCallHistory')
+              as bool? ??
+          true,
       $type: json['type'] as String?,
     );
 
@@ -573,7 +576,7 @@ Map<String, dynamic> _$RecentsTabSchemeToJson(RecentsTabScheme instance) =>
       'initial': instance.initial,
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'useCdrs': instance.useCdrs,
+      'supportsCallHistory': instance.supportsCallHistory,
       'type': instance.$type,
     };
 

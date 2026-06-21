@@ -9,6 +9,7 @@ class FeatureOverrides extends Equatable {
     this.isSystemNotificationsEnabled,
     this.hybridPresenceSupport,
     this.isVoicemailEnabled,
+    this.isCallHistoryEnabled,
     this.monitorCheckInterval,
     this.logLevel,
     this.remoteLoggingEnabled,
@@ -19,6 +20,7 @@ class FeatureOverrides extends Equatable {
   final bool? isSystemNotificationsEnabled;
   final bool? hybridPresenceSupport;
   final bool? isVoicemailEnabled;
+  final bool? isCallHistoryEnabled;
   final Duration? monitorCheckInterval;
   final Level? logLevel;
   final bool? remoteLoggingEnabled;
@@ -30,9 +32,11 @@ class FeatureOverrides extends Equatable {
     isSystemNotificationsEnabled,
     hybridPresenceSupport,
     isVoicemailEnabled,
+    isCallHistoryEnabled,
     monitorCheckInterval,
     logLevel,
     remoteLoggingEnabled,
+    isLogAnonymizationEnabled,
   ];
 }
 
@@ -41,6 +45,7 @@ abstract final class FeatureOverridesFactory {
   static const _kSystemNotificationsEnabledKey = 'feature_system_notifications_enabled';
   static const _kHybridPresenceEnabledKey = 'feature_hybrid_presence_enabled';
   static const _kVoicemailEnabledKey = 'feature_voicemail_enabled';
+  static const _kCallHistoryEnabledKey = 'feature_call_history_enabled';
   static const _kMonitorCheckIntervalKey = 'feature_monitor_check_interval_sec';
   static const _kLogLevelKey = 'feature_log_level';
   static const _kRemoteLoggingEnabledKey = 'firebaseRemoteLogging';
@@ -61,6 +66,7 @@ abstract final class FeatureOverridesFactory {
       isSystemNotificationsEnabled: snapshot.getBool(_kSystemNotificationsEnabledKey),
       hybridPresenceSupport: snapshot.getBool(_kHybridPresenceEnabledKey),
       isVoicemailEnabled: snapshot.getBool(_kVoicemailEnabledKey),
+      isCallHistoryEnabled: snapshot.getBool(_kCallHistoryEnabledKey),
       monitorCheckInterval: monitorCheckInterval,
       logLevel: logLevel,
       remoteLoggingEnabled: snapshot.getBool(_kRemoteLoggingEnabledKey),

@@ -132,7 +132,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
             preferredSize: Size.fromHeight(
               (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
             ),
-            child: Column(children: [if (tabBar != null) tabBar, search]),
+            child: Column(children: [?tabBar, search]),
           ),
         ),
         body: MediaQuery(

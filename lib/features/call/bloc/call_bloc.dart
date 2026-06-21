@@ -25,6 +25,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
@@ -55,6 +56,18 @@ typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallR
 /// application-level logout to resolve the state.
 typedef SignalingSessionInvalidatedCallback = void Function();
 
+/// Resolves the final SIP `from` number for an outgoing call.
+///
+/// [callerProvidedFromNumber] is whatever the UI passed via
+/// [CallControlEvent.started] (a guest-line number, the user's main number,
+/// or `null`). [destination] is the dialed number (used for caller-ID matcher
+/// lookup when [callerProvidedFromNumber] is null).
+///
+/// The closure owns the full policy: main-number normalisation,
+/// matcher-based fallback, default fallback. Composition root supplies it
+/// (see `main_shell.dart`); the bloc only knows the shape.
+typedef OutgoingFromNumberResolver = String? Function(String? callerProvidedFromNumber, String destination);
+
 const _getUserMediaPushKitTimeout = Duration(seconds: 8);
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
@@ -66,6 +79,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final DialogInfoRepository dialogInfoRepository;
   final PresenceSettingsRepository presenceSettingsRepository;
   final QueuedTerminationRequestsRepository queuedTerminationRequestsRepository;
+  final OutgoingFromNumberResolver resolveOutgoingFromNumber;
   final Function(Notification) submitNotification;
 
   /// Callback invoked when the signaling client reports a critical session error
@@ -89,7 +103,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final VoidCallback? onCallEnded;
   final OnDiagnosticReportRequested onDiagnosticReportRequested;
 
-  StreamSubscription<List<ConnectivityResult>>? _connectivityChangedSubscription;
+  StreamSubscription<ConnectivityResult>? _connectivityChangedSubscription;
   StreamSubscription<void>? _foregroundCallPushSubscription;
   final _iceRestartDebounce = DebounceMap<String>(const Duration(seconds: 2));
 
@@ -100,6 +114,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   late final PeerConnectionManager _peerConnectionManager;
   late final HandshakeProcessor _handshakeProcessor;
+  final ConnectivityService _connectivityService;
 
   final _callkeepSound = WebtritCallkeepSound();
 
@@ -111,6 +126,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.dialogInfoRepository,
     required this.presenceSettingsRepository,
     required this.queuedTerminationRequestsRepository,
+    required this.resolveOutgoingFromNumber,
     required this.onSessionInvalidated,
     required this.userRepository,
     required this.submitNotification,
@@ -128,9 +144,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     this.peerConnectionPolicyApplier,
     required SignalingModule signalingModule,
     required PeerConnectionManager peerConnectionManager,
+    required ConnectivityService connectivityService,
     this.onCallEnded,
     Stream<void>? foregroundCallPushSignal,
-  }) : super(const CallState()) {
+  }) : _connectivityService = connectivityService,
+       super(const CallState()) {
     _mediaManager = CallMediaManager(callkeep: callkeep);
     _signalingModule = signalingModule;
     _peerConnectionManager = peerConnectionManager;
@@ -498,8 +516,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     emit(state.copyWith(currentAppLifecycleState: lifecycleState));
     _logger.fine('_onCallStarted initial lifecycle state: $lifecycleState');
 
-    // Initialize connectivity state
-    final connectivityState = (await Connectivity().checkConnectivity()).first;
+    // Initialize connectivity state from the centralized service. The service
+    // owns the call subsystem's subscription to `Connectivity().onConnectivityChanged`
+    // and exposes a deduplicated stream of changes, so the bloc no longer
+    // talks to the plugin directly.
+    final connectivityState = _connectivityService.currentConnectivityResult;
     emit(
       state.copyWith(
         callServiceState: state.callServiceState.copyWith(networkStatus: connectivityState.toNetworkStatus()),
@@ -507,17 +528,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
     _logger.finer('_onCallStarted initial connectivity state: $connectivityState');
 
-    // Subscribe to future connectivity changes
-    _connectivityChangedSubscription = Connectivity().onConnectivityChanged.listen((result) {
-      final currentConnectivityResult = result.first;
-      add(_ConnectivityResultChanged(currentConnectivityResult));
-    });
+    // Subscribe to deduplicated future connectivity changes. The first replay
+    // event from `Connectivity().onConnectivityChanged` is already filtered by
+    // the service when it matches the cached initial value, so no bootstrap
+    // call to the reconnect controller is needed here - the initial WS connect
+    // is initiated by MainShell `..connect()` and runtime changes flow through
+    // this subscription.
+    _connectivityChangedSubscription = _connectivityService.connectivityResultStream.listen(
+      (result) => add(_ConnectivityResultChanged(result)),
+    );
 
-    if (connectivityState == ConnectivityResult.none) {
-      _reconnectController.notifyNetworkUnavailable();
-    } else {
-      _reconnectController.notifyNetworkAvailable();
-    }
+    // Initial WS connect is initiated by MainShell `..connect()`; runtime
+    // connectivity changes flow through the subscription above. No bootstrap
+    // call to the reconnect controller is needed - calling notifyNetworkAvailable
+    // here would proactively disconnect a healthy WS that just delivered the
+    // handshake (the disconnect path inside notifyNetworkAvailable assumes a
+    // real interface change, which a bootstrap snapshot is not).
 
     WebRTC.initialize(options: webRtcOptionsBuilder?.build());
   }
@@ -1300,19 +1326,34 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     };
   }
 
+  // Outgoing-call pipeline:
+  //
+  //   CallControlEvent.started
+  //     -> _CallMutationEvent.controlStart        (sequential mutation queue)
+  //         -> callkeep.startCall                 (native call UI opens)
+  //             -> _CallPerformEvent.started      (callkeep delegate)
+  //                 -> _CallMutationEvent.performStart -> SIP INVITE
+  //
+  // Each arrow may park the call as `outgoingConnectingToSignaling` while we
+  // wait for handshake + registration + linesCount (see
+  // `_shouldExitOutgoingSignalingWait`). The two decision points are:
+  //   - `resolveOutgoingFromNumber` (injected callback - SIP `from`)
+  //   - `state.pickOutgoingMainLine` (initial line at mutation time; the
+  //     parked call's real line is later picked via `state.retrieveIdleLine`
+  //     once the wait completes in `__onCallPerformEventStarted`)
+
   Future<void> __onCallControlEventStarted(_CallControlEventStarted event, Emitter<CallState> emit) async {
-    if (state.callServiceState.registration?.status.isRegistered != true) {
-      _logger.info('__onCallControlEventStarted account is not registered');
-      submitNotification(CallWhileUnregisteredNotification());
-      return;
-    }
+    // WT-1554: do NOT reject here when not registered. The downstream
+    // [__onCallPerformEventStarted] path handles signaling/registration wait
+    // and surfaces the appropriate notifications after the timeout.
+    final fromNumber = resolveOutgoingFromNumber(event.fromNumber, event.handle.value);
 
     add(
       _CallMutationEvent.controlStart(
         handle: event.handle,
         video: event.video,
         displayName: event.displayName,
-        fromNumber: event.fromNumber,
+        fromNumber: fromNumber,
         fromReplaces: event.replaces,
       ),
     );
@@ -1486,14 +1527,40 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// Returns true when [__onCallPerformEventStarted] should stop waiting for
   /// signaling readiness.
   ///
-  /// Exits as soon as both the handshake and signaling are established, or when
-  /// the call leaves [CallProcessingStatus.outgoingConnectingToSignaling] — for
-  /// example because the user pressed hangup (status → disconnecting) or
-  /// another code path removed the call entirely.
+  /// Exits as soon as the handshake and signaling are established, the SIP
+  /// REGISTER has been accepted (WT-1554) AND the line config has arrived
+  /// (linesCount > 0 - so a cold-start outgoing call that parked before the
+  /// handshake only proceeds once a line is actually known).
+  ///
+  /// Also exits fast when registration has definitively failed, so a known-bad
+  /// state does not block the call for the full [kOutgoingCallSignalingWaitTimeout].
+  ///
+  /// Finally exits when the call leaves
+  /// [CallProcessingStatus.outgoingConnectingToSignaling] - for example because
+  /// the user pressed hangup (status -> disconnecting) or another code path
+  /// removed the call entirely.
   bool _shouldExitOutgoingSignalingWait(CallState next, String callId) {
-    if (next.isHandshakeEstablished && next.isSignalingEstablished) return true;
+    if (next.isReadyForOutgoingCall) {
+      _logger.info('outgoing signaling wait: ready for outgoing call (callId=$callId)');
+      return true;
+    }
+    final registration = next.callServiceState.registration;
+    if (registration?.status.isFailed == true) {
+      _logger.info(
+        'outgoing signaling wait: registration failed - code=${registration?.code} '
+        'reason="${registration?.reason}" (callId=$callId)',
+      );
+      return true;
+    }
     final call = next.retrieveActiveCall(callId);
-    return call == null || call.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling;
+    if (call == null || call.processingStatus != CallProcessingStatus.outgoingConnectingToSignaling) {
+      _logger.info(
+        'outgoing signaling wait: call escaped wait '
+        '(callId=$callId, present=${call != null}, processingStatus=${call?.processingStatus.name})',
+      );
+      return true;
+    }
+    return false;
   }
 
   Future<void> _onCallPerformEvent(_CallPerformEvent event, Emitter<CallState> emit) {
@@ -1510,12 +1577,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onCallPerformEventStarted(_CallPerformEventStarted event, Emitter<CallState> emit) async {
-    if (await state.performOnActiveCall(event.callId, (activeCall) => activeCall.line != _kUndefinedLine) != true) {
-      event.fail();
-      emit(state.copyWithPopActiveCall(event.callId));
-      submitNotification(const GeneralUnableToCallNotification());
-      return;
-    }
+    // _kUndefinedLine is not an instant fail here: it means the call was
+    // started before the signaling handshake arrived (cold start) and the
+    // main line will be allocated below, after the wait. WT-1554.
 
     final restoredCall = state.retrieveActiveCall(event.callId);
     final canPerformStart = switch (restoredCall?.processingStatus) {
@@ -1539,11 +1603,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     var currentState = state;
 
-    // Attempt to wait for signaling+handshake readiness within kOutgoingCallSignalingWaitTimeout.
-    if (!currentState.isHandshakeEstablished || !currentState.isSignalingEstablished) {
-      // Trigger reconnect so that an outgoing call recovers signaling even when the previous
-      // disconnect was intentional (e.g. post-transfer cleanup) and no reconnect was scheduled.
-      _reconnectController.notifyForceReconnect();
+    // Attempt to wait for signaling+handshake+registration+lines readiness
+    // within kOutgoingCallSignalingWaitTimeout. Also covers the cold-start
+    // case: if the call was parked with [_kUndefinedLine], wait until
+    // linesCount > 0 so a real main line can be allocated below.
+    final activeCallNow = currentState.retrieveActiveCall(event.callId);
+    final hasUndefinedLine = activeCallNow?.line == _kUndefinedLine;
+    final needsWait = !currentState.isReadyForOutgoingCall || hasUndefinedLine;
+
+    if (needsWait) {
+      // Force-reconnect ONLY when the wait is caused by an actual signaling
+      // gap (no handshake or no socket). Other wait reasons - registration
+      // in flight, line config still pending, line parked - run over a
+      // healthy socket and tearing it down would do harm.
+      if (!currentState.isHandshakeEstablished || !currentState.isSignalingEstablished) {
+        _reconnectController.notifyForceReconnect();
+      }
 
       emit(
         state.copyWithMappedActiveCall(event.callId, (activeCall) {
@@ -1586,6 +1661,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       submitNotification(CallWhileUnregisteredNotification());
       event.fail();
       return;
+    }
+
+    // Resolve the main line that was parked at mutation time (cold start, WT-1554).
+    if (currentState.retrieveActiveCall(event.callId)?.line == _kUndefinedLine) {
+      final line = currentState.retrieveIdleLine();
+      if (line == null) {
+        _logger.info('no idle main line after outgoing signaling wait (callId=${event.callId})');
+        event.fail();
+        emit(state.copyWithPopActiveCall(event.callId));
+        submitNotification(const GeneralUnableToCallNotification());
+        return;
+      }
+      emit(state.copyWithMappedActiveCall(event.callId, (c) => c.copyWith(line: line)));
     }
 
     event.fulfill();
@@ -2144,12 +2232,37 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onMutationControlStart(_CallMutationEventControlStart e, Emitter<CallState> emit) async {
+    // De-duplicate retry taps on the same destination while a previous attempt
+    // has not yet sent its SIP INVITE. Covers every pre-offer-sent outgoing
+    // status (created / created-from-refer / connecting-to-signaling /
+    // initializing-media / offer-preparing) so the dedup catches both the
+    // parked cold-start case and the short window before callkeep's perform
+    // callback fires. Without this, each tap allocates the next idle line and
+    // the user ends up with N parallel pending calls to the same number
+    // instead of a single retry. WT-1554.
+    final hasPendingToSameHandle = state.activeCalls.any(
+      (c) =>
+          c.direction == CallDirection.outgoing &&
+          c.processingStatus.isPreOfferSent &&
+          c.handle.value == e.handle.value,
+    );
+    if (hasPendingToSameHandle) {
+      _logger.info(
+        '__onMutationControlStart: ignoring duplicate tap, outgoing call to ${e.handle.value} already pending',
+      );
+      // Bring the user back to the pending call screen so the tap feels acknowledged.
+      emit(state.copyWith(minimized: false));
+      return;
+    }
+
     int? line;
     if (e.fromNumber != null) {
+      // Guest line is implied; signaling layer handles it without a line index.
       line = null;
     } else {
-      line = state.retrieveIdleLine();
+      line = state.pickOutgoingMainLine();
       if (line == null) {
+        // Lines are known and all main lines are in use - fail fast.
         _logger.info('__onMutationControlStart no idle line');
         submitNotification(const GeneralUnableToCallNotification());
         return;
@@ -2857,12 +2970,34 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    if (pc.signalingState != RTCSignalingState.RTCSignalingStateStable) {
-      _logger.fine(() => '__onMutationRenegotiate: pc signalingState is ${pc.signalingState}, skipping renegotiation');
+    // pc.signalingState is a Dart-side cache populated only after the first
+    // native state event. On a freshly created PC the event may not have
+    // arrived yet; force a platform round-trip in that case so the guard
+    // gets the real native state instead of guessing what null means.
+    final cachedSigState = pc.signalingState;
+    final sigState = cachedSigState ?? await pc.getSignalingState();
+    _logger.info('__onMutationRenegotiate: sigState=$sigState (cache=$cachedSigState)');
+    if (sigState != RTCSignalingState.RTCSignalingStateStable) {
+      _logger.fine(() => '__onMutationRenegotiate: pc signalingState is $sigState, skipping renegotiation');
       return;
     }
 
-    final offerCandidate = await pc.createOffer();
+    // Look up the active call up-front so we can gate the createOffer constraints
+    // on the actual media policy (audio-only vs video). The existing null/state
+    // guards below still run after the offer to preserve the original race semantics.
+    final renegotiateCall = state.retrieveActiveCall(e.callId);
+    final renegotiateHasVideo = renegotiateCall?.video ?? false;
+
+    // Pass explicit OfferToReceive* constraints so the underlying flutter-webrtc
+    // layer does not silently add a recvonly video transceiver as a side-effect
+    // of createOffer({}) for an audio-only call. Without this, an audio-only
+    // restoration produces a BUNDLE 0 1 offer (m=audio + m=video recvonly), and
+    // the next renegotiate cycle drifts the mids to 2/3 — which Janus then
+    // answers with mid:0 and libwebrtc rejects on mid mismatch, killing audio.
+    final offerCandidate = await pc.createOffer(<String, dynamic>{
+      'mandatory': <String, dynamic>{'OfferToReceiveAudio': true, 'OfferToReceiveVideo': renegotiateHasVideo},
+      'optional': <dynamic>[],
+    });
 
     // Note: prepare all asychronous info before checking synchrounous state below
     // to avoid races as possible,

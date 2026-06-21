@@ -34,7 +34,7 @@ class LoginSwitchScreen extends StatelessWidget {
       appBar: appBar,
       body: Column(
         children: [
-          if (header != null) header!,
+          ?header,
           if (supportedLoginTypes.length > 1) ...[
             SegmentedButton<LoginType>(
               style: localStyle?.segmentButtonStyle,

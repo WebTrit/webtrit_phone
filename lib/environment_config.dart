@@ -32,6 +32,14 @@ class EnvironmentConfig {
   static const DEMO_CORE_URL__NAME = 'WEBTRIT_APP_DEMO_CORE_URL';
   static const DEMO_CORE_URL = String.fromEnvironment(DEMO_CORE_URL__NAME, defaultValue: 'http://localhost:4000');
 
+  static const PREDEFINED_CORE_URLS__NAME = 'WEBTRIT_APP_PREDEFINED_CORE_URLS';
+  static const _PREDEFINED_CORE_URLS_RAW = String.fromEnvironment(PREDEFINED_CORE_URLS__NAME);
+  static final List<String> PREDEFINED_CORE_URLS = _PREDEFINED_CORE_URLS_RAW
+      .split(';')
+      .map((e) => e.trim())
+      .where((e) => e.isNotEmpty)
+      .toList(growable: false);
+
   static const CORE_VERSION_CONSTRAINT__NAME = 'WEBTRIT_APP_CORE_VERSION_CONSTRAINT';
   static const CORE_VERSION_CONSTRAINT = String.fromEnvironment(
     CORE_VERSION_CONSTRAINT__NAME,

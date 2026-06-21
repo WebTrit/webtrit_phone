@@ -35,4 +35,8 @@ class MockContactsRepository extends Mock implements ContactsRepository {
       (contact) => contact.sourceType == sourceType && contact.sourceId == sourceId,
     );
   }
+
+  // Used by the real KeypadCubit during interactive keypad previews; no live lookup needed.
+  @override
+  Future<Contact?> getContactByPhoneNumber(String number) async => null;
 }

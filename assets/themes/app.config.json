@@ -56,7 +56,7 @@
           "type": "recents",
           "titleL10n": "main_BottomNavigationBarItemLabel_recents",
           "icon": "0xe03a",
-          "useCdrs": false
+          "supportsCallHistory": true
         },
         {
           "enabled": true,

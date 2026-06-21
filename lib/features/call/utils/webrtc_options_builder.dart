@@ -19,6 +19,6 @@ class WebrtcOptionsWithAppSettingsBuilder implements WebrtcOptionsBuilder {
     final settings = _audioProcessingSettingsRepository.getAudioProcessingSettings();
     final bypassVoiceProcessing = settings.bypassVoiceProcessing;
 
-    return {if (bypassVoiceProcessing != null) 'bypassVoiceProcessing': bypassVoiceProcessing};
+    return {'bypassVoiceProcessing': ?bypassVoiceProcessing};
   }
 }

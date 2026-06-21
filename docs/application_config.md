@@ -6,16 +6,16 @@ navigation structure, and screen-specific behaviors.
 ## Table of Contents
 
 - [Login Configuration](#login-configuration)
-    - [Login Common](#login-common)
-    - [Login Mode Select](#login-mode-select)
+  - [Login Common](#login-common)
+  - [Login Mode Select](#login-mode-select)
 - [Main Configuration](#main-configuration)
-    - [Bottom Menu Configuration](#bottom-menu-configuration)
-    - [Tab Variants](#tab-variants)
+  - [Bottom Menu Configuration](#bottom-menu-configuration)
+  - [Tab Variants](#tab-variants)
 - [Call Configuration](#call-configuration)
-    - [Transfer Configuration](#transfer-configuration)
+  - [Transfer Configuration](#transfer-configuration)
 - [Settings Configuration](#settings-configuration)
-    - [Settings Sections](#settings-sections)
-    - [Settings Items](#settings-items)
+  - [Settings Sections](#settings-sections)
+  - [Settings Items](#settings-items)
 - [Embedded Pages](#embedded-pages)
 
 ---
@@ -99,8 +99,7 @@ the application.
           "initial": false,
           "type": "recents",
           "titleL10n": "main_BottomNavigationBarItemLabel_recents",
-          "icon": "0xe03a",
-          "useCdrs": false
+          "icon": "0xe03a"
         },
         {
           "enabled": true,
@@ -184,11 +183,24 @@ Recent calls or history screen.
   "enabled": true,
   "titleL10n": "main_BottomNavigationBarItemLabel_recents",
   "icon": "0xe03a",
-  "useCdrs": false
+  "supportsCallHistory": true
 }
 ```
 
-- `useCdrs`: *(optional)* whether to fetch recent data from remote CDR history.
+| Field                 | Type      | Default | Description |
+| --------------------- | --------- | ------- | ----------- |
+| `supportsCallHistory` | `boolean` | `true`  | Local opt-in for remote call history (CDRs). |
+
+Remote call history (CDRs) is shown only when both signals agree: the resolved local flag is `true`
+AND the server advertises the `callHistory` adapter capability in system-info. When either is false
+the recents tab falls back to the local device call log. The legacy `useCdrs` key is still accepted
+on read and migrated to `supportsCallHistory`.
+
+The local flag can be overridden remotely via the Firebase Remote Config boolean
+`feature_call_history_enabled`: when set, it takes precedence over the config `supportsCallHistory`
+value; when unset it falls back to the config value. The remote override can flip the local opt-in
+either way, but it never bypasses the server `callHistory` capability - the capability gate always
+applies. Resolution: `(feature_call_history_enabled ?? supportsCallHistory) && callHistory`.
 
 ### **ContactsTabScheme**
 

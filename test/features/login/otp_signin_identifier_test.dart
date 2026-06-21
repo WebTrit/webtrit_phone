@@ -1,4 +1,6 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
@@ -78,6 +80,24 @@ void main() {
         kOtpLoginIdentifiersCustomKey: ['email'],
       });
       expect(state.otpSigninIdentifiers, [OtpSigninIdentifier.email]);
+    });
+  });
+
+  group('OtpSigninIdentifiersInput.userRefKeyboardType', () {
+    test('allows letters for phone-only identifiers (alphanumeric accounts)', () {
+      expect([OtpSigninIdentifier.phoneNumber].userRefKeyboardType, TextInputType.text);
+    });
+
+    test('uses the email keyboard when email is advertised', () {
+      expect([OtpSigninIdentifier.email].userRefKeyboardType, TextInputType.emailAddress);
+      expect(
+        [OtpSigninIdentifier.phoneNumber, OtpSigninIdentifier.email].userRefKeyboardType,
+        TextInputType.emailAddress,
+      );
+    });
+
+    test('falls back to a text keyboard when nothing is advertised', () {
+      expect(<OtpSigninIdentifier>[].userRefKeyboardType, TextInputType.text);
     });
   });
 }

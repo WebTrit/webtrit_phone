@@ -40,48 +40,24 @@ The application offers extensive customization options:
 
 # Testing
 
-## Test commands
-* Run unit and widget tests
+### Unit and widget tests
+* Run unit and widget tests:
   ```bash
   flutter test
   ```
-* Run integration tests in dev mode
-  ```bash
-  patrol develop --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json --flavor=deeplinkssmsReceiver
-  ```
-* Build integration tests
-  ```bash
-  patrol build android/ios --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json --flavor=deeplinkssmsReceiver
-  ```
-* To specify a test file, use the `-t` option:
-  ```bash
-  patrol build -t patrol_test/call_and_recent_test.dart ...
-  ```
-* For build and deploy to Firebase Test Lab, use the following command from the `tool/scripts` directory:
-  ```bash
-  ./testlab_assemble_android.sh <testfile(optional)>
-  ./testlab_assemble_ios.sh <testfile(optional)>
-  ```
+### Integration tests
+- **Framework**: We use Patrol framework for integration testing.
+It helps us to automate native iOS and Android behaviors and simplifyes routine tasks during testing.
+You can find more information about it here: https://patrol.dev/ 
+Integration tests are located in the `patrol_test` folder.
 
-### Test variables
+- **Configuration**: The configuration file `dart_define.integration_test.json` defines all the environment variables (login credentials, contacts, user info, and call settings) for the integration tests. [Integration Test Variables](docs/integration_test_variables.md).
 
-* `WEBTRIT_APP_TEST_CUSTOM_CORE_URL` (_example core.demo.mycompany.com_)
-* `WEBTRIT_APP_TEST_EMAIL_CREDENTIAL` (_example myaccount@mail.com_)
-* `WEBTRIT_APP_TEST_EMAIL_VERIFY_CREDENTIAL` (_example 123456_)
-* `WEBTRIT_APP_TEST_OTP_CREDENTIAL` (_example +1234566789_)
-* `WEBTRIT_APP_TEST_OTP_VERIFY_CREDENTIAL` (_example 123456_)
-* `WEBTRIT_APP_TEST_PASSWORD_USER_CREDENTIAL`  (_example username_)
-* `WEBTRIT_APP_TEST_PASSWORD_PASSWORD_CREDENTIAL` (_example 123456_)
-* `WEBTRIT_APP_TEST_DEFAULT_LOGIN_METHOD` (_email_ | _password_ | _otp_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_A` (_example User A_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_A_NUMBER` (_example 00123_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_B` (_example User B_)
-* `WEBTRIT_APP_TEST_EXT_CONTACT_B_NUMBER` (_example 00456_)
-* `WEBTRIT_APP_TEST_ACCOUNT_NAME` (_example Test Account_)
-* `WEBTRIT_APP_TEST_ACCOUNT_MAIN_NUMBER` (_example 1230000_)
-* `WEBTRIT_APP_TEST_CALL_NUMBER_A` (_example 1111_)
-* `WEBTRIT_APP_TEST_CALL_NUMBER_B` (_example 2222_)
-* `WEBTRIT_APP_TEST_CROSS_CALL_SLEEP_SECONDS` (_example 10_)
+- **Calls test**: For simulating SIP calls during tests, here is [pjsua Companion](packages/pjsua_companion/README.md) — an HTTP server that wraps the `pjsua` CLI to place and answer calls programmatically when app tests is running.
+
+- **Commands**: See [Integration Test Commands](docs/integration_test_commands.md) for all patrol build, run, Firebase Test Lab, and local companion commands.
+
+- **Coverage**: See [Integration Test Coverage](docs/integration_test_coverage.md) for a description of every test file and its steps.
 
 ## Contributing
 
