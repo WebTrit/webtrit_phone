@@ -1,0 +1,32 @@
+name: webtrit_signaling_service_web
+description: Web implementation of the webtrit_signaling_service plugin.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.8.0
+  flutter: '>=3.32.0'
+
+flutter:
+  plugin:
+    implements: webtrit_signaling_service
+    platforms:
+      web:
+        pluginClass: WebtritSignalingServiceWeb
+        fileName: webtrit_signaling_service_web.dart
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  webtrit_signaling_service_platform_interface:
+    path: ../webtrit_signaling_service_platform_interface
+  webtrit_signaling:
+    path: ../../webtrit_signaling
+  logging: ^1.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
