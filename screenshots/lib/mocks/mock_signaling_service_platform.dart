@@ -19,7 +19,8 @@ void ensureMockSignalingServicePlatform() {
   try {
     SignalingServicePlatform.instance;
     return;
-  } catch (_) {
+  } on StateError catch (_) {
+    // Thrown only when no platform is registered; install the no-op fallback.
     final platform = MockSignalingServicePlatform();
     when(() => platform.stopService()).thenAnswer((_) async {});
     SignalingServicePlatform.instance = platform;
