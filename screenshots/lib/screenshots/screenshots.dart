@@ -6,6 +6,7 @@ export 'chat_conversation_screen_screenshot.dart';
 export 'contact_screen_screenshot.dart';
 export 'contacts_agreement_screen_screenshot.dart';
 export 'diagnostic_screen_screenshot.dart';
+export 'dialogs_showcase_screenshot.dart';
 export 'embedded_error_dialog_screenshot.dart';
 export 'language_screen_screenshot.dart';
 export 'log_records_console_screen_screenshot.dart';
