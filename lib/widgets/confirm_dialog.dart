@@ -10,6 +10,12 @@ export 'confirm_dialog_style.dart';
 export 'confirm_dialog_styles.dart';
 
 class ConfirmDialog extends StatelessWidget {
+  // Anchor the dialog to the nearest navigator instead of the app-wide root. The
+  // originating theme is preserved by showDialog's InheritedTheme capture, so the
+  // appearance and behavior are unchanged in the app; this only matters when a
+  // screen is hosted inside another navigator (the configurator preview), where the
+  // root navigator belongs to the host and the dialog would otherwise escape its
+  // surface and lose the phone's Localizations.
   static Future<bool?> show(
     BuildContext context, {
     required String title,
@@ -18,6 +24,7 @@ class ConfirmDialog extends StatelessWidget {
   }) {
     return showDialog<bool?>(
       context: context,
+      useRootNavigator: false,
       builder: (context) {
         return ConfirmDialog._(title: title, content: content, style: style);
       },
@@ -32,6 +39,7 @@ class ConfirmDialog extends StatelessWidget {
   }) {
     return showDialog<bool?>(
       context: context,
+      useRootNavigator: false,
       builder: (context) {
         return ConfirmDialog._(dangerous: true, title: title, content: content, style: style);
       },
