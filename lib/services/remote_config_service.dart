@@ -76,24 +76,26 @@ class CachedRemoteConfigService implements RemoteConfigService {
     // cache. TODO(web): revisit if RC realtime ever works on web.
     if (kIsWeb) return;
     _onConfigUpdatedSubscription = _remoteConfig.onConfigUpdated.listen(
-      (event) async {
-        _logger.info('Remote config update signal received. Updated keys: ${event.updatedKeys}');
-        try {
-          await _remoteConfig.activate();
-
-          // Guard against calling add/unawaited logic after the service is disposed.
-          if (_controller.isClosed) return;
-
-          final snapshot = _createSnapshot();
-          _controller.add(snapshot);
-          unawaited(_updateCache(snapshot));
-        } catch (e, stackTrace) {
-          _logger.warning('Failed to activate remote config update', e, stackTrace);
-        }
-      },
+      _onConfigUpdated,
       // Without this, a transient realtime-stream error escapes to the zone.
       onError: (Object e, StackTrace s) => _logger.warning('Remote config update stream error', e, s),
     );
+  }
+
+  Future<void> _onConfigUpdated(RemoteConfigUpdate event) async {
+    _logger.info('Remote config update signal received. Updated keys: ${event.updatedKeys}');
+    try {
+      await _remoteConfig.activate();
+
+      // Guard against calling add/unawaited logic after the service is disposed.
+      if (_controller.isClosed) return;
+
+      final snapshot = _createSnapshot();
+      _controller.add(snapshot);
+      unawaited(_updateCache(snapshot));
+    } catch (e, stackTrace) {
+      _logger.warning('Failed to activate remote config update', e, stackTrace);
+    }
   }
 
   final FirebaseRemoteConfig _remoteConfig;

@@ -59,18 +59,17 @@ class AppPermissions {
   }
 
   AppPermissions._(this._excludePermissions, this._webtritCallkeepPermissions) {
-    _permissionsCache = ExpiringCache(
-      ttl: _cacheTTL,
-      compute: () {
-        final excluded = _excludePermissions();
-        return _fullPermissions
-            .where((p) => !excluded.contains(p))
-            // On web, drop permissions the platform cannot handle - otherwise
-            // request()/status throw UnsupportedError.
-            .where((p) => !kIsWeb || _webSupportedPermissions.contains(p))
-            .toList();
-      },
-    );
+    _permissionsCache = ExpiringCache(ttl: _cacheTTL, compute: _computePermissions);
+  }
+
+  /// The non-excluded permissions to request. On web, permissions the platform
+  /// cannot handle are dropped - otherwise request()/status throw UnsupportedError.
+  List<Permission> _computePermissions() {
+    final excluded = _excludePermissions();
+    return _fullPermissions
+        .where((p) => !excluded.contains(p))
+        .where((p) => !kIsWeb || _webSupportedPermissions.contains(p))
+        .toList();
   }
 
   /// Manages permissions related to `webtrit_callkeep` plugin.
