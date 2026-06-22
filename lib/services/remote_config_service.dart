@@ -70,21 +70,30 @@ abstract class RemoteCacheConfigService {
 /// Implementation of [RemoteConfigService] using Firebase Remote Config.
 class CachedRemoteConfigService implements RemoteConfigService {
   CachedRemoteConfigService(this._cacheService, this._remoteConfig) {
-    _onConfigUpdatedSubscription = _remoteConfig.onConfigUpdated.listen((event) async {
-      _logger.info('Remote config update signal received. Updated keys: ${event.updatedKeys}');
-      try {
-        await _remoteConfig.activate();
+    // Firebase Remote Config realtime updates are not available on web: the
+    // stream cannot connect and emits `remoteconfig/stream-error` continuously.
+    // Skip the subscription there - values still come from init's fetch and the
+    // cache. TODO(web): revisit if RC realtime ever works on web.
+    if (kIsWeb) return;
+    _onConfigUpdatedSubscription = _remoteConfig.onConfigUpdated.listen(
+      (event) async {
+        _logger.info('Remote config update signal received. Updated keys: ${event.updatedKeys}');
+        try {
+          await _remoteConfig.activate();
 
-        // Guard against calling add/unawaited logic after the service is disposed.
-        if (_controller.isClosed) return;
+          // Guard against calling add/unawaited logic after the service is disposed.
+          if (_controller.isClosed) return;
 
-        final snapshot = _createSnapshot();
-        _controller.add(snapshot);
-        unawaited(_updateCache(snapshot));
-      } catch (e, stackTrace) {
-        _logger.warning('Failed to activate remote config update', e, stackTrace);
-      }
-    });
+          final snapshot = _createSnapshot();
+          _controller.add(snapshot);
+          unawaited(_updateCache(snapshot));
+        } catch (e, stackTrace) {
+          _logger.warning('Failed to activate remote config update', e, stackTrace);
+        }
+      },
+      // Without this, a transient realtime-stream error escapes to the zone.
+      onError: (Object e, StackTrace s) => _logger.warning('Remote config update stream error', e, s),
+    );
   }
 
   final FirebaseRemoteConfig _remoteConfig;
