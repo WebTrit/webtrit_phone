@@ -22,10 +22,11 @@ workspace:
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
 #   - <Pre-release>: optional, series of dot-separated identifiers, decided by the developer
-#   - <Build>: non-negative integer computed as follows:
-#       <Major> * 1000000 + <Minor> * 10000 + <Patch> * 100 + <published build iteration for Major.Minor.Patch combination>
-# Note: <Minor>, <Patch>, and <Build> should be within the range of 0 to 99.
-version: 0.0.0+0000000
+#   - <Build>: non-negative integer; a monotonic counter incremented by one on
+#       each published build for a given client/platform. It is NOT derived from
+#       <Major>.<Minor>.<Patch> and has no per-part range limit (only the platform
+#       store maximum applies, e.g. Android versionCode).
+version: 0.0.0+0
 
 # Version format for app_version: <Major>.<Minor>.<Patch>
 # Where:
