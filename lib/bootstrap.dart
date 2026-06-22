@@ -84,11 +84,19 @@ Future<InstanceRegistry> bootstrap() async {
     remoteDatasource: systemInfoRemoteDatasource,
   );
 
+  if (kIsWeb && EnvironmentConfig.WEB_BUNDLE_ID == null) {
+    Logger('bootstrap').warning(
+      'Web build has no WEBTRIT_APP_WEB_BUNDLE_ID dart-define; falling back to '
+      'packageInfo.packageName ("${packageInfo.packageName}") as bundle_id, which the '
+      'server will likely reject with unconfigured_bundle_id (login/autoprovision fail).',
+    );
+  }
+
   final authRepository = AuthRepositoryImpl(
     apiClientFactory: apiClientFactory,
     systemInfoRemoteDatasource: systemInfoRemoteDatasource,
     appIdentifier: appInfo.identifier,
-    appBundleId: packageInfo.packageName,
+    appBundleId: EnvironmentConfig.resolveBundleId(packageInfo.packageName),
   );
 
   final sessionRepository = SessionRepositoryImpl(
