@@ -1,30 +1,34 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/features/session_status/view/teardown_screen.dart';
 
-/// Preview-only stand-in for the teardown screen.
+import 'package:screenshots/mocks/mocks.dart';
+
+/// Renders the real [TeardownScreen] so the preview stays in sync with the app.
 ///
-/// The real `TeardownScreen.initState` calls `WebtritSignalingService.stopService()`,
-/// which reaches `SignalingServicePlatform.instance` and throws synchronously when the
-/// native platform is not initialized (as in the configurator preview / web harness).
-/// The screenshot only needs the visual, so render the same layout here without the
-/// side effects instead of mounting the real screen.
-class TeardownScreenScreenshot extends StatelessWidget {
+/// `TeardownScreen.initState` calls `WebtritSignalingService.stopService()`, which
+/// reaches `SignalingServicePlatform.instance` and throws synchronously when the
+/// native platform is not initialized (the configurator preview / web harness).
+/// Register a no-op platform before the real screen mounts instead of copying its
+/// UI, which would drift from the actual screen over time.
+class TeardownScreenScreenshot extends StatefulWidget {
   const TeardownScreenScreenshot({super.key});
 
   @override
+  State<TeardownScreenScreenshot> createState() => _TeardownScreenScreenshotState();
+}
+
+class _TeardownScreenScreenshotState extends State<TeardownScreenScreenshot> {
+  @override
+  void initState() {
+    super.initState();
+    // Runs before the child TeardownScreen mounts, so its initState side effect
+    // has a platform to call into.
+    ensureMockSignalingServicePlatform();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const CircularProgressIndicator(),
-            const SizedBox(height: 16),
-            Text(context.l10n.session_Teardown_progressText),
-          ],
-        ),
-      ),
-    );
+    return const TeardownScreen();
   }
 }
