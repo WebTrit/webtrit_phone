@@ -17,6 +17,8 @@ flutter:
         default_package: webtrit_signaling_service_android
       ios:
         default_package: webtrit_signaling_service_ios
+      web:
+        default_package: webtrit_signaling_service_web
 
 dependencies:
   flutter:
@@ -30,6 +32,8 @@ dependencies:
     path: ../webtrit_signaling_service_android
   webtrit_signaling_service_ios:
     path: ../webtrit_signaling_service_ios
+  webtrit_signaling_service_web:
+    path: ../webtrit_signaling_service_web
 
 dev_dependencies:
   flutter_test:
