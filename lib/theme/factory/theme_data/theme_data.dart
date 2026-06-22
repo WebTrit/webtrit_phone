@@ -1,5 +1,6 @@
 export 'app_bar_theme_data_factory.dart';
 export 'bottom_navigation_bar_theme_data_factory.dart';
+export 'dialog_theme_data_factory.dart';
 export 'elevated_button_theme_data_factory.dart';
 export 'input_decoration_theme_data_factory.dart';
 export 'list_tile_theme_data_factory.dart';
