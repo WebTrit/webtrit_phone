@@ -51,6 +51,12 @@ class ConfirmDialog extends StatelessWidget {
     final localStyle = ConfirmDialogStyle.merge(style, Theme.of(context).extension<ConfirmDialogStyles>()?.primary);
 
     return AlertDialog(
+      backgroundColor: localStyle.backgroundColor,
+      surfaceTintColor: localStyle.surfaceTintColor,
+      elevation: localStyle.elevation,
+      shape: localStyle.shape,
+      titleTextStyle: localStyle.titleTextStyle,
+      contentTextStyle: localStyle.contentTextStyle,
       title: Text(title),
       content: Text(content),
       actions: [
