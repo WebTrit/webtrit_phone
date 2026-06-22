@@ -261,24 +261,23 @@ Future<AppPermissions> _createAppPermissions(
 Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   final logger = Logger('bootstrap');
 
-  if (kIsWeb) {
-    // Callkeep background services and the signaling module factory are not
-    // initialized on web.
-    logger.info('callkeep + signaling init skipped on web');
-    return;
-  }
-
   // Registers the factory used by the signaling service to create a [SignalingModule]
   // instance. Must be a top-level function annotated @pragma('vm:entry-point').
   // iOS: stored in memory, called directly in start(). Android: also persisted to
   // SharedPreferences for deserialization in the background isolate.
+  // Required on every platform - web/iOS run the signaling in the main isolate
+  // (WebtritSignalingServiceDirect) and start() throws without a registered factory.
   try {
     await WebtritSignalingService.setModuleFactory(createSignalingModule);
   } catch (e, s) {
     logger.severe('setModuleFactory failed -- signaling may not work in background isolate', e, s);
   }
 
-  if (!Platform.isAndroid) return;
+  // The remaining callkeep services (Android background push isolate,
+  // persistent-mode call-event handler, SMS triggers) are Android-only; web has
+  // no background isolates and iOS does not use them. kIsWeb short-circuits before
+  // the dart:io Platform check (which is unavailable on web).
+  if (kIsWeb || !Platform.isAndroid) return;
 
   // Registers the top-level callback that the native Android side invokes when a push
   // notification arrives in the background. Bootstraps the push isolate and delegates
