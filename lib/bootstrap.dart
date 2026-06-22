@@ -144,7 +144,9 @@ Future<InstanceRegistry> bootstrap() async {
     LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled),
     () => appLabels.logLabels,
   );
-  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, logFilePath: appPath.logFilePath)
+  // File-based log storage uses dart:io and is unavailable on web; fall back to
+  // the in-memory log repository there. TODO(web): persistent web logging.
+  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: !kIsWeb, logFilePath: appPath.logFilePath)
     ..attachToLogger(Logger.root);
   final nativeLogForwarder = NativeLogForwarder(
     nativeLogFilePath: appPath.nativeLogFilePath,

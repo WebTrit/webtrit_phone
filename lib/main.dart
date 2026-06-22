@@ -57,7 +57,9 @@ void main() {
 }
 
 void _onRootLogRecord(LogRecord record) {
-  FirebaseCrashlytics.instance.log(record.toString());
+  // firebase_crashlytics has no web implementation; calling it throws
+  // MissingPluginException on every record (and the rethrow re-logs -> loop).
+  if (!kIsWeb) FirebaseCrashlytics.instance.log(record.toString());
   if (!kIsWeb && !kDebugMode && record.level >= Level.SEVERE && record.loggerName == 'callkeep') {
     FirebaseCrashlytics.instance.recordError(record.message, record.stackTrace, reason: 'native callkeep error');
   }

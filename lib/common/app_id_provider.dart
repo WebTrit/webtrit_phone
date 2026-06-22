@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:firebase_app_installations/firebase_app_installations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
@@ -28,7 +30,11 @@ class FirebaseAppIdProvider implements AppIdProvider {
   @override
   Future<String> getId() async {
     try {
-      final id = await FirebaseInstallations.instance.getId();
+      final future = FirebaseInstallations.instance.getId();
+      // On web a misconfigured Installations promise can never settle, which would
+      // hang bootstrap forever (the catch below never fires). Bound it so we fall
+      // back to a locally generated id instead of blocking startup.
+      final id = await (kIsWeb ? future.timeout(const Duration(seconds: 5)) : future);
       await _saveIdToSharedPreferences(id);
       return id;
     } catch (e) {

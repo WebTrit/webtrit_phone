@@ -96,14 +96,30 @@ class CachedRemoteConfigService implements RemoteConfigService {
   static Future<CachedRemoteConfigService> init(RemoteCacheConfigService cache) async {
     final remoteConfig = FirebaseRemoteConfig.instance;
 
-    await remoteConfig.setConfigSettings(
-      RemoteConfigSettings(
-        fetchTimeout: const Duration(seconds: 30),
-        minimumFetchInterval: kDebugMode ? const Duration(seconds: 10) : const Duration(hours: 12),
-      ),
-    );
+    Future<void> setup() async {
+      await remoteConfig.setConfigSettings(
+        RemoteConfigSettings(
+          fetchTimeout: const Duration(seconds: 30),
+          minimumFetchInterval: kDebugMode ? const Duration(seconds: 10) : const Duration(hours: 12),
+        ),
+      );
+      await remoteConfig.fetchAndActivate().catchError(_handleFetchError);
+    }
 
-    await remoteConfig.fetchAndActivate().catchError(_handleFetchError);
+    if (kIsWeb) {
+      // On web the Remote Config SDK can leave setConfigSettings/fetchAndActivate
+      // pending indefinitely (it does not honor fetchTimeout like the mobile SDK),
+      // which would block app startup. Bound it and fall back to cached/default
+      // values; onConfigUpdated still delivers later updates.
+      // TODO(web): finish Remote Config web setup.
+      try {
+        await setup().timeout(const Duration(seconds: 5));
+      } catch (e, s) {
+        _logger.severe('Remote config init bounded on web', e, s);
+      }
+    } else {
+      await setup();
+    }
 
     final service = CachedRemoteConfigService(cache, remoteConfig);
     // Initial cache synchronization
