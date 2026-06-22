@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -17,6 +19,12 @@ class AppPermissions {
 
   /// The list of all possible permissions that the app may request.
   static const _fullPermissions = [..._requiredPermissions, Permission.camera, Permission.contacts, Permission.sms];
+
+  /// Permissions supported by permission_handler's web implementation. Requesting
+  /// or querying any other permission on web throws UnsupportedError, so on web
+  /// the requested set is restricted to these. (contacts/sms are not available on
+  /// web; camera + microphone cover the call use case.)
+  static const _webSupportedPermissions = [Permission.microphone, Permission.camera];
 
   /// A list of special permissions that are absolutely required for the app to function correctly.
   static const _requiredSpecialPermissions = [CallkeepSpecialPermissions.fullScreenIntent];
@@ -51,10 +59,17 @@ class AppPermissions {
   }
 
   AppPermissions._(this._excludePermissions, this._webtritCallkeepPermissions) {
-    _permissionsCache = ExpiringCache(
-      ttl: _cacheTTL,
-      compute: () => _fullPermissions.where((p) => !_excludePermissions().contains(p)).toList(),
-    );
+    _permissionsCache = ExpiringCache(ttl: _cacheTTL, compute: _computePermissions);
+  }
+
+  /// The non-excluded permissions to request. On web, permissions the platform
+  /// cannot handle are dropped - otherwise request()/status throw UnsupportedError.
+  List<Permission> _computePermissions() {
+    final excluded = _excludePermissions();
+    return _fullPermissions
+        .where((p) => !excluded.contains(p))
+        .where((p) => !kIsWeb || _webSupportedPermissions.contains(p))
+        .toList();
   }
 
   /// Manages permissions related to `webtrit_callkeep` plugin.
@@ -196,10 +211,12 @@ class AppPermissions {
   }
 
   Future<bool> isContactPermissionGranted() async {
+    if (kIsWeb) return false; // contacts permission is not supported on web
     return isPermissionGranted(Permission.contacts);
   }
 
   Future<bool> requestContactPermission() async {
+    if (kIsWeb) return false; // contacts permission is not supported on web
     final status = await Permission.contacts.request();
     return status.isGranted;
   }
