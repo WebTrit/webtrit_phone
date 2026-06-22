@@ -74,6 +74,7 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
         ),
       ),
       ScreenshotApp(appBloc: appBloc, child: const SettingScreenScreenshot()),
+      ScreenshotApp(appBloc: appBloc, child: const DialogsShowcaseScreenshot()),
       ScreenshotApp(appBloc: appBloc, child: MediaSettingsScreenScreenshot(initialOpenSection: 1)),
       ScreenshotApp(appBloc: appBloc, child: const CallScreenScreenshot(false)),
       ScreenshotApp(appBloc: appBloc, child: const CallScreenScreenshot(true)),
