@@ -47,11 +47,16 @@ class FirebaseAppIdProvider implements AppIdProvider {
   Stream<String> get onIdChange => _idChangeController.stream;
 
   void _initializeIdListener() {
+    // firebase_app_installations has no reliable web implementation for the
+    // onIdChange stream; skip the subscription on web (getId() already provides
+    // the one-shot id with a bounded fallback). On native, guard onError so a
+    // transient stream error does not escape to the zone.
+    if (kIsWeb) return;
     FirebaseInstallations.instance.onIdChange.listen((id) async {
       await _saveIdToSharedPreferences(id);
       _idChangeController.add(id);
       _logger.info('Firebase ID changed: $id');
-    });
+    }, onError: (Object e, StackTrace s) => _logger.warning('Firebase onIdChange stream error', e, s));
   }
 
   Future<void> _saveIdToSharedPreferences(String id) async {

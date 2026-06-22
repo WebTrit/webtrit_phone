@@ -84,15 +84,19 @@ Future<InstanceRegistry> bootstrap() async {
     remoteDatasource: systemInfoRemoteDatasource,
   );
 
+  if (kIsWeb && EnvironmentConfig.WEB_BUNDLE_ID == null) {
+    Logger('bootstrap').warning(
+      'Web build has no WEBTRIT_APP_WEB_BUNDLE_ID dart-define; falling back to '
+      'packageInfo.packageName ("${packageInfo.packageName}") as bundle_id, which the '
+      'server will likely reject with unconfigured_bundle_id (login/autoprovision fail).',
+    );
+  }
+
   final authRepository = AuthRepositoryImpl(
     apiClientFactory: apiClientFactory,
     systemInfoRemoteDatasource: systemInfoRemoteDatasource,
     appIdentifier: appInfo.identifier,
-    // Web has no platform bundle id; allow a build-time override so the session
-    // bundle_id matches what is configured on the server for the web app type.
-    // TODO(web): cleaner long-term fix is to register the web bundle_id on the
-    // server (PortaOne/Core) so this override is unnecessary.
-    appBundleId: (kIsWeb ? EnvironmentConfig.WEB_BUNDLE_ID : null) ?? packageInfo.packageName,
+    appBundleId: EnvironmentConfig.resolveBundleId(packageInfo.packageName),
   );
 
   final sessionRepository = SessionRepositoryImpl(

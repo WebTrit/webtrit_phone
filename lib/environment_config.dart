@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names, non_constant_identifier_names
 
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 class EnvironmentConfig {
   EnvironmentConfig._();
 
@@ -63,6 +65,13 @@ class EnvironmentConfig {
   static const WEB_BUNDLE_ID = bool.hasEnvironment(WEB_BUNDLE_ID__NAME)
       ? String.fromEnvironment(WEB_BUNDLE_ID__NAME)
       : null;
+
+  /// The bundle_id sent to the backend in session/autoprovision requests.
+  ///
+  /// On web there is no platform bundle id, so [WEB_BUNDLE_ID] (the
+  /// WEBTRIT_APP_WEB_BUNDLE_ID dart-define) overrides [packageName] when set;
+  /// otherwise it falls back to [packageName]. Native always uses [packageName].
+  static String resolveBundleId(String packageName) => (kIsWeb ? WEB_BUNDLE_ID : null) ?? packageName;
 
   static const APP_GREETING__NAME = 'WEBTRIT_APP_GREETING';
   static const APP_GREETING = bool.hasEnvironment(APP_GREETING__NAME)

@@ -119,7 +119,9 @@ class CachedRemoteConfigService implements RemoteConfigService {
       // On web the Remote Config SDK can leave setConfigSettings/fetchAndActivate
       // pending indefinitely (it does not honor fetchTimeout like the mobile SDK),
       // which would block app startup. Bound it and fall back to cached/default
-      // values; onConfigUpdated still delivers later updates.
+      // values. Note: on web the realtime onConfigUpdated subscription is skipped
+      // (see the constructor), so config is this bounded fetch + cache only - there
+      // are no live updates during a web session.
       // TODO(web): finish Remote Config web setup.
       try {
         await setup().timeout(const Duration(seconds: 5));
@@ -158,14 +160,21 @@ class CachedRemoteConfigService implements RemoteConfigService {
   }
 
   RemoteConfigSnapshot _createSnapshot() {
-    final remoteValues = _remoteConfig.getAll();
     final Map<String, String> plainValues = {};
 
-    for (final entry in remoteValues.entries) {
-      final value = entry.value.asString();
-      if (value.isNotEmpty) {
-        plainValues[entry.key] = value;
+    try {
+      final remoteValues = _remoteConfig.getAll();
+      for (final entry in remoteValues.entries) {
+        final value = entry.value.asString();
+        if (value.isNotEmpty) {
+          plainValues[entry.key] = value;
+        }
       }
+    } catch (e, stackTrace) {
+      // On web getAll() can throw if RC init was bounded/timed out before the SDK
+      // finished initializing. Fall back to an empty snapshot (cached values still
+      // apply via _cacheService) instead of letting it abort bootstrap.
+      _logger.warning('Remote config getAll() failed; using empty snapshot', e, stackTrace);
     }
 
     return RemoteConfigSnapshot(plainValues, _cacheService);

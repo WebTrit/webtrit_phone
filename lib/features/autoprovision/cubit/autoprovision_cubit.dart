@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:pub_semver/pub_semver.dart';
 
@@ -36,11 +35,7 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMap
 
   String get _identifier => appInfo.identifier;
 
-  // Web has no platform bundle id; allow a build-time override so the bundle_id
-  // matches what is configured on the server for the web app type.
-  // TODO(web): cleaner long-term fix is to register the web bundle_id on the
-  // server (PortaOne/Core) so this override is unnecessary.
-  String get _bundleId => (kIsWeb ? EnvironmentConfig.WEB_BUNDLE_ID : null) ?? packageInfo.packageName;
+  String get _bundleId => EnvironmentConfig.resolveBundleId(packageInfo.packageName);
 
   WebtritApiClient _apiClient(String coreUrl, String tenantId) {
     return WebtritApiClient(Uri.parse(coreUrl), tenantId, connectionTimeout: kApiClientConnectionTimeout);
