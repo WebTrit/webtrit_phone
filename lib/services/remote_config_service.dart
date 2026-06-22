@@ -70,21 +70,32 @@ abstract class RemoteCacheConfigService {
 /// Implementation of [RemoteConfigService] using Firebase Remote Config.
 class CachedRemoteConfigService implements RemoteConfigService {
   CachedRemoteConfigService(this._cacheService, this._remoteConfig) {
-    _onConfigUpdatedSubscription = _remoteConfig.onConfigUpdated.listen((event) async {
-      _logger.info('Remote config update signal received. Updated keys: ${event.updatedKeys}');
-      try {
-        await _remoteConfig.activate();
+    // Firebase Remote Config realtime updates are not available on web: the
+    // stream cannot connect and emits `remoteconfig/stream-error` continuously.
+    // Skip the subscription there - values still come from init's fetch and the
+    // cache. TODO(web): revisit if RC realtime ever works on web.
+    if (kIsWeb) return;
+    _onConfigUpdatedSubscription = _remoteConfig.onConfigUpdated.listen(
+      _onConfigUpdated,
+      // Without this, a transient realtime-stream error escapes to the zone.
+      onError: (Object e, StackTrace s) => _logger.warning('Remote config update stream error', e, s),
+    );
+  }
 
-        // Guard against calling add/unawaited logic after the service is disposed.
-        if (_controller.isClosed) return;
+  Future<void> _onConfigUpdated(RemoteConfigUpdate event) async {
+    _logger.info('Remote config update signal received. Updated keys: ${event.updatedKeys}');
+    try {
+      await _remoteConfig.activate();
 
-        final snapshot = _createSnapshot();
-        _controller.add(snapshot);
-        unawaited(_updateCache(snapshot));
-      } catch (e, stackTrace) {
-        _logger.warning('Failed to activate remote config update', e, stackTrace);
-      }
-    });
+      // Guard against calling add/unawaited logic after the service is disposed.
+      if (_controller.isClosed) return;
+
+      final snapshot = _createSnapshot();
+      _controller.add(snapshot);
+      unawaited(_updateCache(snapshot));
+    } catch (e, stackTrace) {
+      _logger.warning('Failed to activate remote config update', e, stackTrace);
+    }
   }
 
   final FirebaseRemoteConfig _remoteConfig;
@@ -96,14 +107,32 @@ class CachedRemoteConfigService implements RemoteConfigService {
   static Future<CachedRemoteConfigService> init(RemoteCacheConfigService cache) async {
     final remoteConfig = FirebaseRemoteConfig.instance;
 
-    await remoteConfig.setConfigSettings(
-      RemoteConfigSettings(
-        fetchTimeout: const Duration(seconds: 30),
-        minimumFetchInterval: kDebugMode ? const Duration(seconds: 10) : const Duration(hours: 12),
-      ),
-    );
+    Future<void> setup() async {
+      await remoteConfig.setConfigSettings(
+        RemoteConfigSettings(
+          fetchTimeout: const Duration(seconds: 30),
+          minimumFetchInterval: kDebugMode ? const Duration(seconds: 10) : const Duration(hours: 12),
+        ),
+      );
+      await remoteConfig.fetchAndActivate().catchError(_handleFetchError);
+    }
 
-    await remoteConfig.fetchAndActivate().catchError(_handleFetchError);
+    if (kIsWeb) {
+      // On web the Remote Config SDK can leave setConfigSettings/fetchAndActivate
+      // pending indefinitely (it does not honor fetchTimeout like the mobile SDK),
+      // which would block app startup. Bound it and fall back to cached/default
+      // values. Note: on web the realtime onConfigUpdated subscription is skipped
+      // (see the constructor), so config is this bounded fetch + cache only - there
+      // are no live updates during a web session.
+      // TODO(web): finish Remote Config web setup.
+      try {
+        await setup().timeout(const Duration(seconds: 5));
+      } catch (e, s) {
+        _logger.severe('Remote config init bounded on web', e, s);
+      }
+    } else {
+      await setup();
+    }
 
     final service = CachedRemoteConfigService(cache, remoteConfig);
     // Initial cache synchronization
@@ -133,14 +162,21 @@ class CachedRemoteConfigService implements RemoteConfigService {
   }
 
   RemoteConfigSnapshot _createSnapshot() {
-    final remoteValues = _remoteConfig.getAll();
     final Map<String, String> plainValues = {};
 
-    for (final entry in remoteValues.entries) {
-      final value = entry.value.asString();
-      if (value.isNotEmpty) {
-        plainValues[entry.key] = value;
+    try {
+      final remoteValues = _remoteConfig.getAll();
+      for (final entry in remoteValues.entries) {
+        final value = entry.value.asString();
+        if (value.isNotEmpty) {
+          plainValues[entry.key] = value;
+        }
       }
+    } catch (e, stackTrace) {
+      // On web getAll() can throw if RC init was bounded/timed out before the SDK
+      // finished initializing. Fall back to an empty snapshot (cached values still
+      // apply via _cacheService) instead of letting it abort bootstrap.
+      _logger.warning('Remote config getAll() failed; using empty snapshot', e, stackTrace);
     }
 
     return RemoteConfigSnapshot(plainValues, _cacheService);

@@ -118,8 +118,15 @@ Future<InstanceRegistry> bootstrap() async {
   // Spawn the shared DriftIsolate database server. All isolates (FCM background,
   // WorkManager) connect to this single server via IsolateNameServer, eliminating
   // write-write SQLite contention.
-  final driftIsolate = await IsolateDatabase.spawnServer(directoryPath: appPath.applicationDocumentsPath);
-  registry.register<DriftIsolate>(driftIsolate);
+  if (kIsWeb) {
+    // TODO(web): dart:isolate is unsupported on web, so there is no DriftIsolate
+    // server. The drift WasmDatabase is opened lazily on first access in main.dart
+    // (see AppDatabaseLifecycleHolder); nothing to register here.
+    Logger('bootstrap').warning('DriftIsolate server skipped on web; using lazy WasmDatabase connection');
+  } else {
+    final driftIsolate = await IsolateDatabase.spawnServer(directoryPath: appPath.applicationDocumentsPath);
+    registry.register<DriftIsolate>(driftIsolate);
+  }
 
   final appPermissions = await _createAppPermissions(featureAccess, contactsAgreementStatusRepository);
   final appTime = await AppTime.init();
@@ -137,7 +144,9 @@ Future<InstanceRegistry> bootstrap() async {
     LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled),
     () => appLabels.logLabels,
   );
-  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, logFilePath: appPath.logFilePath)
+  // File-based log storage uses dart:io and is unavailable on web; fall back to
+  // the in-memory log repository there. TODO(web): persistent web logging.
+  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: !kIsWeb, logFilePath: appPath.logFilePath)
     ..attachToLogger(Logger.root);
   final nativeLogForwarder = NativeLogForwarder(
     nativeLogFilePath: appPath.nativeLogFilePath,
@@ -147,7 +156,12 @@ Future<InstanceRegistry> bootstrap() async {
   // it for Android/Linux (inotify), Windows, and macOS (FSEvents). Calling it on
   // iOS throws FileSystemException("File system watching is not supported on this
   // platform"). The Callkeep native log file also only exists on Android.
-  if (Platform.isAndroid) nativeLogForwarder.start();
+  if (kIsWeb) {
+    // TODO(web): the native callkeep log file does not exist on web; nothing to forward.
+    Logger('bootstrap').info('NativeLogForwarder not started on web');
+  } else if (Platform.isAndroid) {
+    nativeLogForwarder.start();
+  }
 
   final appLifecycle = await AppLifecycle.initMaster();
 
@@ -247,6 +261,14 @@ Future<AppPermissions> _createAppPermissions(
 Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   final logger = Logger('bootstrap');
 
+  if (kIsWeb) {
+    // TODO(web): the signaling module factory and callkeep background services are
+    // wired in a later web PR (federated webtrit_signaling_service_web). Skip on
+    // web here so SignalingServicePlatform.instance is not touched before it exists.
+    logger.info('callkeep + signaling init skipped on web');
+    return;
+  }
+
   // Registers the factory used by the signaling service to create a [SignalingModule]
   // instance. Must be a top-level function annotated @pragma('vm:entry-point').
   // iOS: stored in memory, called directly in start(). Android: also persisted to
@@ -306,6 +328,13 @@ Future<void> _initFirebaseApp() async {
 
 Future<void> _initFirebaseMessaging() async {
   final logger = Logger('FirebaseMessaging');
+
+  if (kIsWeb) {
+    // TODO(web): wire FCM web (service worker + onMessage) when push support on
+    // web is in scope. Skipped for now - several APIs below are mobile-only.
+    logger.info('Firebase messaging init skipped on web');
+    return;
+  }
 
   FirebaseMessaging.instance.setDeliveryMetricsExportToBigQuery(true);
 
@@ -369,7 +398,7 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 
   logger.info('onBackgroundMessage: ${message.toMap()}');
 
-  if (appPush is PendingCallPush && Platform.isAndroid) {
+  if (!kIsWeb && appPush is PendingCallPush && Platform.isAndroid) {
     // Known issue: [SqliteException] with code 5 (database is locked) may occur
     // due to concurrent database access from multiple isolates.
     final displayName = await _resolveContactDisplayNameWithFallback(appPush, logger);
@@ -440,6 +469,12 @@ CallkeepIncomingCallError? _onReportIncomingCallTimeout(Logger logger) {
 }
 
 Future _initLocalPushs() async {
+  if (kIsWeb) {
+    // TODO(web): flutter_local_notifications has no web platform; local push
+    // channels are skipped on web.
+    Logger('bootstrap').info('Local notifications init skipped on web');
+    return;
+  }
   await FlutterLocalNotificationsPlugin().initialize(
     settings: const InitializationSettings(
       iOS: DarwinInitializationSettings(
@@ -476,6 +511,12 @@ Future<void> _initAndroidNotificationChannel() async {
 }
 
 Future<void> _initWorkManager() async {
+  if (kIsWeb) {
+    // TODO(web): workmanager has no web platform; background system-notification
+    // polling is not available on web.
+    Logger('bootstrap').info('WorkManager init skipped on web');
+    return;
+  }
   Workmanager().initialize(workManagerDispatcher);
 }
 
