@@ -52,6 +52,18 @@ class EnvironmentConfig {
   static const APP_NAME__NAME = 'WEBTRIT_APP_NAME';
   static const APP_NAME = String.fromEnvironment(APP_NAME__NAME, defaultValue: 'WebTrit');
 
+  // Web has no platform bundle identifier, so `packageInfo.packageName` resolves
+  // to the pubspec project name on web, which the backend rejects with
+  // `unconfigured_bundle_id`. This build-time override lets a web build send a
+  // bundle_id that is registered on the server for the `web` app type.
+  // TODO(web): the cleaner long-term fix is to register the web bundle_id on the
+  // server (PortaOne/Core) for the `web` app type, so this client override is no
+  // longer needed.
+  static const WEB_BUNDLE_ID__NAME = 'WEBTRIT_APP_WEB_BUNDLE_ID';
+  static const WEB_BUNDLE_ID = bool.hasEnvironment(WEB_BUNDLE_ID__NAME)
+      ? String.fromEnvironment(WEB_BUNDLE_ID__NAME)
+      : null;
+
   static const APP_GREETING__NAME = 'WEBTRIT_APP_GREETING';
   static const APP_GREETING = bool.hasEnvironment(APP_GREETING__NAME)
       ? String.fromEnvironment(APP_GREETING__NAME)
