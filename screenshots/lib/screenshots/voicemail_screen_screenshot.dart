@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/features/settings/features/voicemail/bloc/voicemail_cubit.dart';
+import 'package:webtrit_phone/features/settings/features/voicemail/bloc/voicemail_playback_controller.dart';
 import 'package:webtrit_phone/features/settings/features/voicemail/models/voicemail_screen_context.dart';
 import 'package:webtrit_phone/features/settings/features/voicemail/view/voicemail_screen.dart';
 
@@ -30,16 +31,22 @@ class _VoicemailScreenScreenshotState extends State<VoicemailScreenScreenshot> {
         context,
         PageRouteBuilder(
           pageBuilder: (context, _, _) {
-            return Provider<VoicemailScreenContext>(
-              create: (_) => VoicemailScreenContext(
-                mediaCacheBasePath: '/tmp/screenshots_cache',
-                dateFormat: DateFormat.yMMMd().add_Hm(),
-                mediaHeaders: const {},
-              ),
-              child: BlocProvider<VoicemailCubit>(
-                create: (_) => MockVoicemailCubit.withItems(),
-                child: const VoicemailScreen(),
-              ),
+            // Mirror VoicemailScreenPage's provider set so VoicemailTile/AudioView
+            // can resolve VoicemailPlaybackController; omitting it throws
+            // ProviderNotFoundException while building the preview.
+            return MultiProvider(
+              providers: [
+                Provider<VoicemailScreenContext>(
+                  create: (_) => VoicemailScreenContext(
+                    mediaCacheBasePath: '/tmp/screenshots_cache',
+                    dateFormat: DateFormat.yMMMd().add_Hm(),
+                    mediaHeaders: const {},
+                  ),
+                ),
+                BlocProvider<VoicemailCubit>(create: (_) => MockVoicemailCubit.withItems()),
+                ChangeNotifierProvider(create: (_) => VoicemailPlaybackController()),
+              ],
+              child: const VoicemailScreen(),
             );
           },
           transitionDuration: Duration.zero,

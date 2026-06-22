@@ -115,6 +115,7 @@ class ThemeProvider extends InheritedWidget {
       bottomNavigationBarTheme: style.createBottomNavigationBarThemeData(),
       listTileTheme: style.createListTileThemeData(),
       snackBarTheme: style.createSnackBarThemeData(),
+      dialogTheme: style.createDialogThemeData(),
       elevatedButtonTheme: style.createElevatedButtonThemeData(),
       outlinedButtonTheme: style.createOutlinedButtonThemeData(),
       textButtonTheme: style.createTextButtonThemeData(),
