@@ -33,9 +33,6 @@
 
   <script src="sql-wasm.js" defer=""></script>
 
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer=""></script>
-
   <style id="splash-screen-style">
     html {
       height: 100%
@@ -182,6 +179,9 @@
     <img src="assets/logo.svg">
   </div>
   <script>
+    {{flutter_js}}
+    {{flutter_build_config}}
+
     window.addEventListener('load', function () {
       var loadingElement = document.querySelector('#loading');
       _flutter.loader.load({
