@@ -182,6 +182,11 @@ class RootApp extends StatelessWidget {
   }
 
   AppDatabaseLifecycleHolder _createAppDatabaseLifecycleHolder(BuildContext context) {
+    if (kIsWeb) {
+      // TODO(web): no DriftIsolate server on web; open the WasmDatabase directly.
+      final db = IsolateDatabase.openWeb();
+      return AppDatabaseLifecycleHolder(db, null)..attach();
+    }
     final driftIsolate = instanceRegistry.get<DriftIsolate>();
     // Establish the connection; the IPC handshake to the server isolate starts when this Future is created.
     final db = AppDatabase(DatabaseConnection.delayed(driftIsolate.connect()));
@@ -201,7 +206,8 @@ class AppDatabaseLifecycleHolder with WidgetsBindingObserver {
   AppDatabaseLifecycleHolder(this.db, this._driftIsolate);
 
   final AppDatabase db;
-  final DriftIsolate _driftIsolate;
+  // Null on web - there is no DriftIsolate server (dart:isolate spawning is unsupported).
+  final DriftIsolate? _driftIsolate;
 
   void attach() => WidgetsBinding.instance.addObserver(this);
 
@@ -210,8 +216,11 @@ class AppDatabaseLifecycleHolder with WidgetsBindingObserver {
   Future<void> dispose() async {
     detach();
     await db.close();
-    IsolateNameServer.removePortNameMapping(IsolateDatabase.kDbPortName);
-    _driftIsolate.shutdownAll();
+    if (!kIsWeb) {
+      // dart:ui IsolateNameServer and DriftIsolate are native-only.
+      IsolateNameServer.removePortNameMapping(IsolateDatabase.kDbPortName);
+      _driftIsolate?.shutdownAll();
+    }
   }
 
   @override

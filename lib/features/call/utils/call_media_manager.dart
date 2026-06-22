@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import '../models/models.dart';
+import 'native_audio_restart.dart' if (dart.library.js_interop) 'native_audio_restart_web.dart';
 
 final _logger = Logger('CallMediaManager');
 
@@ -45,6 +48,11 @@ class CallMediaManager {
   // Sets Android audio output priority and enables iOS manual AVAudioSession
   // management so CallKit controls activation instead of WebRTC doing it automatically.
   void _configure() {
+    if (kIsWeb) {
+      // TODO(web): no native audio routing on web; the browser owns the audio device.
+      _logger.warning('CallMediaManager: native audio configuration skipped on web');
+      return;
+    }
     if (Platform.isAndroid) {
       // manageAudioFocus: false — Telecom owns audio focus for VoIP calls.
       // Dual ownership with AudioSwitch leaves volume stuck in call mode on older MIUI (WT-1429).
@@ -65,6 +73,7 @@ class CallMediaManager {
   /// of switching back to A2DP (media profile), causing degraded audio in
   /// YouTube, music players, etc. until the app is restarted.
   void clearCommunicationDevice() {
+    if (kIsWeb) return; // browser releases the audio device automatically
     if (Platform.isAndroid) Helper.clearAndroidCommunicationDevice();
   }
 
@@ -77,6 +86,7 @@ class CallMediaManager {
   /// Signals to WebRTC that the AVAudioSession is active and audio I/O
   /// can begin. No-op on Android.
   void didActivateAudioSession() {
+    if (kIsWeb) return; // no AVAudioSession on web
     if (!Platform.isIOS) return;
     _logger.fine('didActivateAudioSession');
     unawaited(() async {
@@ -89,7 +99,7 @@ class CallMediaManager {
         // marked active before the engine starts
         //
         // Solves bug with hold/unhold silence after introducing RTCAudioDeviceModuleTypeAudioEngine on pc init:
-        await AppleNativeAudioManagement.restartAudio();
+        await nativeRestartAudio();
       } catch (e, st) {
         _logger.warning('didActivateAudioSession failed', e, st);
       }
@@ -101,6 +111,7 @@ class CallMediaManager {
   /// Signals to WebRTC that the AVAudioSession is about to deactivate.
   /// No-op on Android.
   void didDeactivateAudioSession() {
+    if (kIsWeb) return; // no AVAudioSession on web
     if (!Platform.isIOS) return;
     _logger.fine('didDeactivateAudioSession');
     unawaited(() async {
@@ -128,6 +139,7 @@ class CallMediaManager {
   /// in VoiceChat after an earpiece -> speaker toggle.
   Future<void> setDevice(String callId, CallAudioDevice device, {required bool hasVideo}) async {
     _logger.info('setDevice: ${device.type} (id=${device.id}) hasVideo=$hasVideo for call $callId');
+    if (kIsWeb) return; // browser handles output device selection
     if (Platform.isAndroid) {
       await Helper.setSpeakerphoneOn(device.type == CallAudioDeviceType.speaker);
       await _callkeep.setAudioDevice(callId, device.toCallkeep());
@@ -193,6 +205,7 @@ class CallMediaManager {
   /// The mode must be set explicitly to VideoChat before enabling speaker.
   Future<void> onVideoEnabled(String callId, {CallAudioDevice? speakerDevice}) async {
     _logger.info('onVideoEnabled: $callId');
+    if (kIsWeb) return; // browser handles audio routing on video enable
     if (Platform.isAndroid) {
       await Helper.setSpeakerphoneOn(true);
       if (speakerDevice != null) await _callkeep.setAudioDevice(callId, speakerDevice.toCallkeep());
@@ -217,6 +230,7 @@ class CallMediaManager {
   /// and keeps audio on speaker regardless of port override.
   Future<void> onVideoDisabled(String callId, {required bool speakerActive, CallAudioDevice? earpieceDevice}) async {
     _logger.info('onVideoDisabled: $callId speakerActive=$speakerActive');
+    if (kIsWeb) return; // browser handles audio routing on video disable
     if (speakerActive) return;
     if (Platform.isIOS) {
       await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(appleAudioMode: AppleAudioMode.voiceChat));
