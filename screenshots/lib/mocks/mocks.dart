@@ -36,6 +36,7 @@ export 'mock_recents_bloc.dart';
 export 'mock_register_status_cubit.dart';
 export 'mock_session_status_cubit.dart';
 export 'mock_settings_bloc.dart';
+export 'mock_signaling_service_platform.dart';
 export 'mock_sms_conversation_cubit.dart';
 export 'mock_sms_conversations_cubit.dart';
 export 'mock_sms_typing_cubit.dart';

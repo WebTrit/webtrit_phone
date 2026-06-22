@@ -397,6 +397,9 @@ Map<String, dynamic> _$LinkifyWidgetConfigToJson(
 
 DialogWidgetConfig _$DialogWidgetConfigFromJson(Map<String, dynamic> json) =>
     DialogWidgetConfig(
+      theme: json['theme'] == null
+          ? const DialogThemeConfig()
+          : DialogThemeConfig.fromJson(json['theme'] as Map<String, dynamic>),
       confirmDialog: json['confirmDialog'] == null
           ? const ConfirmDialogWidgetConfig()
           : ConfirmDialogWidgetConfig.fromJson(
@@ -411,8 +414,41 @@ DialogWidgetConfig _$DialogWidgetConfigFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$DialogWidgetConfigToJson(DialogWidgetConfig instance) =>
     <String, dynamic>{
+      'theme': instance.theme.toJson(),
       'confirmDialog': instance.confirmDialog.toJson(),
       'snackBar': instance.snackBar.toJson(),
+    };
+
+DialogThemeConfig _$DialogThemeConfigFromJson(Map<String, dynamic> json) =>
+    DialogThemeConfig(
+      backgroundColor: json['backgroundColor'] as String?,
+      surfaceTintColor: json['surfaceTintColor'] as String?,
+      shadowColor: json['shadowColor'] as String?,
+      barrierColor: json['barrierColor'] as String?,
+      elevation: (json['elevation'] as num?)?.toDouble(),
+      borderRadius: (json['borderRadius'] as num?)?.toDouble(),
+      titleTextStyle: json['titleTextStyle'] == null
+          ? null
+          : TextStyleConfig.fromJson(
+              json['titleTextStyle'] as Map<String, dynamic>,
+            ),
+      contentTextStyle: json['contentTextStyle'] == null
+          ? null
+          : TextStyleConfig.fromJson(
+              json['contentTextStyle'] as Map<String, dynamic>,
+            ),
+    );
+
+Map<String, dynamic> _$DialogThemeConfigToJson(DialogThemeConfig instance) =>
+    <String, dynamic>{
+      'backgroundColor': instance.backgroundColor,
+      'surfaceTintColor': instance.surfaceTintColor,
+      'shadowColor': instance.shadowColor,
+      'barrierColor': instance.barrierColor,
+      'elevation': instance.elevation,
+      'borderRadius': instance.borderRadius,
+      'titleTextStyle': instance.titleTextStyle?.toJson(),
+      'contentTextStyle': instance.contentTextStyle?.toJson(),
     };
 
 ConfirmDialogWidgetConfig _$ConfirmDialogWidgetConfigFromJson(
@@ -421,6 +457,20 @@ ConfirmDialogWidgetConfig _$ConfirmDialogWidgetConfigFromJson(
   activeButtonColor1: json['activeButtonColor1'] as String?,
   activeButtonColor2: json['activeButtonColor2'] as String?,
   defaultButtonColor: json['defaultButtonColor'] as String?,
+  backgroundColor: json['backgroundColor'] as String?,
+  surfaceTintColor: json['surfaceTintColor'] as String?,
+  elevation: (json['elevation'] as num?)?.toDouble(),
+  borderRadius: (json['borderRadius'] as num?)?.toDouble(),
+  titleTextStyle: json['titleTextStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(
+          json['titleTextStyle'] as Map<String, dynamic>,
+        ),
+  contentTextStyle: json['contentTextStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(
+          json['contentTextStyle'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$ConfirmDialogWidgetConfigToJson(
@@ -429,6 +479,12 @@ Map<String, dynamic> _$ConfirmDialogWidgetConfigToJson(
   'activeButtonColor1': instance.activeButtonColor1,
   'activeButtonColor2': instance.activeButtonColor2,
   'defaultButtonColor': instance.defaultButtonColor,
+  'backgroundColor': instance.backgroundColor,
+  'surfaceTintColor': instance.surfaceTintColor,
+  'elevation': instance.elevation,
+  'borderRadius': instance.borderRadius,
+  'titleTextStyle': instance.titleTextStyle?.toJson(),
+  'contentTextStyle': instance.contentTextStyle?.toJson(),
 };
 
 SnackBarWidgetConfig _$SnackBarWidgetConfigFromJson(
