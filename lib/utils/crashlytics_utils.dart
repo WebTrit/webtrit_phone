@@ -21,6 +21,9 @@ class CrashlyticsUtils {
 
   /// Writes useful isolate/platform context into Crashlytics custom keys.
   static Future<void> logIsolateInfo() async {
+    // firebase_crashlytics has no web implementation; any access to its instance
+    // throws on web (and in embedded previews that skip Firebase init).
+    if (kIsWeb) return;
     final label = currentIsolateLabel();
     final dbg = kIsWeb ? null : Isolate.current.debugName;
     final hash = kIsWeb ? null : Isolate.current.hashCode;
@@ -39,6 +42,7 @@ class CrashlyticsUtils {
     required String coreUrl,
     required String sessionId,
   }) async {
+    if (kIsWeb) return;
     final crashlytics = FirebaseCrashlytics.instance;
     unawaited(crashlytics.setUserIdentifier(userId));
     unawaited(crashlytics.setCustomKey('tenantId', tenantId));
@@ -49,10 +53,12 @@ class CrashlyticsUtils {
 
   /// Convenience wrappers
   static void setKey(String key, Object value) {
+    if (kIsWeb) return;
     unawaited(FirebaseCrashlytics.instance.setCustomKey(key, value));
   }
 
   static void log(String message) {
+    if (kIsWeb) return;
     FirebaseCrashlytics.instance.log(message);
   }
 
@@ -74,6 +80,7 @@ class CrashlyticsUtils {
     bool skipInDebug = true,
     bool skipNetwork = true,
   }) async {
+    if (kIsWeb) return;
     if (kDebugMode && skipInDebug) return;
     if (skipNetwork && _isTransientNetworkError(exception)) return;
 
@@ -102,6 +109,7 @@ class CrashlyticsUtils {
     String errorGroup = 'UserReport.submit',
     bool isFatal = true,
   }) async {
+    if (kIsWeb) return;
     final crashlytics = FirebaseCrashlytics.instance;
 
     if (comment.isNotEmpty) {
