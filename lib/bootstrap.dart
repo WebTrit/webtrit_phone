@@ -270,7 +270,7 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   try {
     await WebtritSignalingService.setModuleFactory(createSignalingModule);
   } catch (e, s) {
-    logger.severe('setModuleFactory failed -- signaling may not work in background isolate', e, s);
+    logger.severe('signaling module factory registration failed -- signaling may not work', e, s);
   }
 
   // The remaining callkeep services (Android background push isolate,
