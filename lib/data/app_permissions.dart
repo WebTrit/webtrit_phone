@@ -62,14 +62,16 @@ class AppPermissions {
     _permissionsCache = ExpiringCache(ttl: _cacheTTL, compute: _computePermissions);
   }
 
+  /// Whether [permission] can be queried or requested on the current platform.
+  /// On web, permission_handler only implements [_webSupportedPermissions];
+  /// querying or requesting anything else throws UnsupportedError.
+  static bool _isPermissionSupported(Permission permission) => !kIsWeb || _webSupportedPermissions.contains(permission);
+
   /// The non-excluded permissions to request. On web, permissions the platform
   /// cannot handle are dropped - otherwise request()/status throw UnsupportedError.
   List<Permission> _computePermissions() {
     final excluded = _excludePermissions();
-    return _fullPermissions
-        .where((p) => !excluded.contains(p))
-        .where((p) => !kIsWeb || _webSupportedPermissions.contains(p))
-        .toList();
+    return _fullPermissions.where((p) => !excluded.contains(p)).where(_isPermissionSupported).toList();
   }
 
   /// Manages permissions related to `webtrit_callkeep` plugin.
@@ -211,12 +213,12 @@ class AppPermissions {
   }
 
   Future<bool> isContactPermissionGranted() async {
-    if (kIsWeb) return false; // contacts permission is not supported on web
+    if (!_isPermissionSupported(Permission.contacts)) return false;
     return isPermissionGranted(Permission.contacts);
   }
 
   Future<bool> requestContactPermission() async {
-    if (kIsWeb) return false; // contacts permission is not supported on web
+    if (!_isPermissionSupported(Permission.contacts)) return false;
     final status = await Permission.contacts.request();
     return status.isGranted;
   }
