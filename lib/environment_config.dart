@@ -5,28 +5,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class EnvironmentConfig {
   EnvironmentConfig._();
 
-  static const DEBUG_LEVEL__NAME = 'WEBTRIT_APP_DEBUG_LEVEL';
-  static const DEBUG_LEVEL = String.fromEnvironment(DEBUG_LEVEL__NAME, defaultValue: 'INFO');
-
   static const DATABASE_LOG_STATEMENTS__NAME = 'WEBTRIT_APP_DATABASE_LOG_STATEMENTS';
   static const DATABASE_LOG_STATEMENTS = bool.fromEnvironment(DATABASE_LOG_STATEMENTS__NAME, defaultValue: false);
-
-  static const PERIODIC_POLLING__NAME = 'WEBTRIT_APP_PERIODIC_POLLING';
-  @Deprecated(
-    'Use specific polling interval constants instead, e.g. '
-    'SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS, '
-    'EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS, or '
-    'VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS. '
-    'To define a new one, create an int.fromEnvironment constant like:\n'
-    '  static const MY_FEATURE_POLLING_INTERVAL_SECONDS__NAME = '
-    '\'WEBTRIT_APP_MY_FEATURE_POLLING_INTERVAL_SECONDS\';\n'
-    '  static const MY_FEATURE_POLLING_INTERVAL_SECONDS = int.fromEnvironment('
-    'MY_FEATURE_POLLING_INTERVAL_SECONDS__NAME, defaultValue: 120);',
-  )
-  static const PERIODIC_POLLING = bool.fromEnvironment(PERIODIC_POLLING__NAME, defaultValue: true);
-
-  static const ENABLE_ATTENDED_TRANSFER__NAME = 'WEBTRIT_APP_ENABLE_ATTENDED_TRANSFER';
-  static const ENABLE_ATTENDED_TRANSFER = bool.fromEnvironment(ENABLE_ATTENDED_TRANSFER__NAME, defaultValue: true);
 
   static const CORE_URL__NAME = 'WEBTRIT_APP_CORE_URL';
   static const CORE_URL = bool.hasEnvironment(CORE_URL__NAME) ? String.fromEnvironment(CORE_URL__NAME) : null;
@@ -73,11 +53,6 @@ class EnvironmentConfig {
   /// WEBTRIT_APP_WEB_BUNDLE_ID dart-define) overrides [packageName] when set;
   /// otherwise it falls back to [packageName]. Native always uses [packageName].
   static String resolveBundleId(String packageName) => (kIsWeb ? WEB_BUNDLE_ID : null) ?? packageName;
-
-  static const APP_GREETING__NAME = 'WEBTRIT_APP_GREETING';
-  static const APP_GREETING = bool.hasEnvironment(APP_GREETING__NAME)
-      ? String.fromEnvironment(APP_GREETING__NAME)
-      : null;
 
   static const APP_ABOUT_URL__NAME = 'WEBTRIT_APP_ABOUT_URL';
   static const APP_ABOUT_URL = bool.hasEnvironment(APP_ABOUT_URL__NAME)
