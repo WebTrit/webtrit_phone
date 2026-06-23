@@ -47,11 +47,8 @@ class FirebaseAppIdProvider implements AppIdProvider {
   Stream<String> get onIdChange => _idChangeController.stream;
 
   void _initializeIdListener() {
-    // firebase_app_installations has no reliable web implementation for the
-    // onIdChange stream; skip the subscription on web (getId() already provides
-    // the one-shot id with a bounded fallback). On native, guard onError so a
-    // transient stream error does not escape to the zone.
-    if (kIsWeb) return;
+    // Persist a rotated installation id and republish it to listeners; onError
+    // keeps a transient stream error from escaping to the zone.
     FirebaseInstallations.instance.onIdChange.listen((id) async {
       await _saveIdToSharedPreferences(id);
       _idChangeController.add(id);
@@ -66,6 +63,14 @@ class FirebaseAppIdProvider implements AppIdProvider {
 
   Future<String> _generateFallbackId() async {
     final prefs = await SharedPreferences.getInstance();
+
+    // Reuse a previously stored id so the fallback identifier stays stable across
+    // restarts/reloads (important on web, where getId() may keep timing out);
+    // generate a fresh one only on first use.
+    final existing = prefs.getString(_appIdKey);
+    if (existing != null && existing.isNotEmpty) {
+      return existing;
+    }
 
     final newId = _generateRandomId();
     await prefs.setString(_appIdKey, newId);

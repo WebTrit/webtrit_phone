@@ -262,9 +262,8 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   final logger = Logger('bootstrap');
 
   if (kIsWeb) {
-    // TODO(web): the signaling module factory and callkeep background services are
-    // wired in a later web PR (federated webtrit_signaling_service_web). Skip on
-    // web here so SignalingServicePlatform.instance is not touched before it exists.
+    // Callkeep background services and the signaling module factory are not
+    // initialized on web.
     logger.info('callkeep + signaling init skipped on web');
     return;
   }
