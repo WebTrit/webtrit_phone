@@ -20,6 +20,7 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
@@ -66,9 +67,40 @@ void _onRootLogRecord(LogRecord record) {
 }
 
 class RootApp extends StatelessWidget {
-  const RootApp({super.key, required this.instanceRegistry});
+  const RootApp({
+    super.key,
+    required this.instanceRegistry,
+    this.externalThemeSettings,
+    this.externalThemeMode,
+    this.externalFeatureAccess,
+    this.externalFeatureAccessInitial,
+    this.embeddedPreview = false,
+  });
 
   final InstanceRegistry instanceRegistry;
+
+  /// Whether the app runs embedded inside another Flutter host (e.g. the theme
+  /// configurator's realtime preview). Forwarded to [App] so Firebase-backed
+  /// integrations such as the analytics navigator observer are skipped.
+  final bool embeddedPreview;
+
+  /// Optional external [ThemeSettings] stream forwarded to [App] so embedders
+  /// such as the theme configurator's realtime preview can drive the running
+  /// app's appearance live.
+  final Stream<ThemeSettings>? externalThemeSettings;
+
+  /// Optional external [ThemeMode] stream forwarded to [App], paired with
+  /// [externalThemeSettings].
+  final Stream<ThemeMode>? externalThemeMode;
+
+  /// Optional external [FeatureAccess] stream that replaces the bootstrap-built
+  /// reactive configuration, letting embedders (the configurator's realtime
+  /// preview) drive the live app/login/feature config being edited.
+  final Stream<FeatureAccess>? externalFeatureAccess;
+
+  /// Initial [FeatureAccess] paired with [externalFeatureAccess]; used as the
+  /// `StreamProvider` seed so the first frame already reflects the edited config.
+  final FeatureAccess? externalFeatureAccessInitial;
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +118,8 @@ class RootApp extends StatelessWidget {
         //
         // Initializes with bootstrap data and updates whenever system information or remote configuration changes.
         StreamProvider<FeatureAccess>(
-          initialData: instanceRegistry.get<FeatureAccess>(),
-          create: (_) => instanceRegistry.get<FeatureAccessStreamFactory>().create(),
+          initialData: externalFeatureAccessInitial ?? instanceRegistry.get<FeatureAccess>(),
+          create: (_) => externalFeatureAccess ?? instanceRegistry.get<FeatureAccessStreamFactory>().create(),
           updateShouldNotify: (previous, next) => previous != next,
         ),
         Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
@@ -147,7 +179,12 @@ class RootApp extends StatelessWidget {
                 create: (_) => instanceRegistry.get(),
                 dispose: disposeIfDisposable,
               ),
-              RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
+              // Lazy so embedders that skip Firebase (e.g. the configurator's realtime
+              // preview) never touch FirebaseAnalytics.instance, which throws when the
+              // host's default Firebase app is misconfigured/absent.
+              RepositoryProvider<AppAnalyticsRepository>(
+                create: (_) => AppAnalyticsRepository(instance: FirebaseAnalytics.instance),
+              ),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
               RepositoryProvider<QueuedTerminationRequestsRepository>.value(value: queuedTerminationRequestsRepository),
@@ -176,7 +213,11 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<UserLocalDatasource>(create: (_) => instanceRegistry.get()),
               RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get()),
             ],
-            child: const App(),
+            child: App(
+              externalThemeSettings: externalThemeSettings,
+              externalThemeMode: externalThemeMode,
+              embeddedPreview: embeddedPreview,
+            ),
           );
         },
       ),
