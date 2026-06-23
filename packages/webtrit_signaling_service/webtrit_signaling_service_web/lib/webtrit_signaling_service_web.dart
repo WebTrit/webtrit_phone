@@ -10,7 +10,12 @@ import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_s
 class WebtritSignalingServiceWeb extends WebtritSignalingServiceDirect {
   WebtritSignalingServiceWeb._();
 
+  static WebtritSignalingServiceWeb? _instance;
+
   static void registerWith(Registrar registrar) {
-    SignalingServicePlatform.instance = WebtritSignalingServiceWeb._();
+    // Reuse the existing instance on a repeated registration so the registered
+    // module factory and the active events controller are not dropped.
+    _instance ??= WebtritSignalingServiceWeb._();
+    SignalingServicePlatform.instance = _instance!;
   }
 }
