@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +23,17 @@ import 'package:webtrit_phone/resolvers/resolvers.dart';
 final _logger = Logger('AppWidget');
 
 class App extends StatefulWidget {
-  const App({super.key, this.embeddedPreview = false});
+  const App({super.key, this.externalThemeSettings, this.externalThemeMode, this.embeddedPreview = false});
+
+  /// Optional external [ThemeSettings] stream used by embedders such as the
+  /// theme configurator's realtime preview to drive the running app's
+  /// appearance live. Emissions are applied via [AppThemeSettingsChanged] and
+  /// are not persisted to local preferences.
+  final Stream<ThemeSettings>? externalThemeSettings;
+
+  /// Optional external [ThemeMode] stream paired with [externalThemeSettings];
+  /// emissions are applied via [AppThemeModeChanged].
+  final Stream<ThemeMode>? externalThemeMode;
 
   /// Whether the app runs embedded inside another Flutter host (realtime
   /// preview). When true, Firebase-backed integrations such as the analytics
@@ -36,6 +48,9 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late final AppBloc appBloc;
   late final AppRouter appRouter;
+
+  StreamSubscription<ThemeSettings>? _externalThemeSettingsSubscription;
+  StreamSubscription<ThemeMode>? _externalThemeModeSubscription;
 
   @override
   void initState() {
@@ -89,6 +104,13 @@ class _AppState extends State<App> {
       initialTabResolver,
       featureAccess.checker,
     );
+
+    _externalThemeSettingsSubscription = widget.externalThemeSettings?.listen(
+      (settings) => appBloc.add(AppThemeSettingsChanged(settings)),
+    );
+    _externalThemeModeSubscription = widget.externalThemeMode?.listen(
+      (themeMode) => appBloc.add(AppThemeModeChanged(themeMode)),
+    );
   }
 
   @override
@@ -114,6 +136,8 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
+    _externalThemeSettingsSubscription?.cancel();
+    _externalThemeModeSubscription?.cancel();
     appBloc.close();
     super.dispose();
   }
