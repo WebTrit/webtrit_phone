@@ -265,11 +265,19 @@ class EnvRegistry {
   /// Whether an override is set for [name].
   bool has(String name) => _overrides.containsKey(name);
 
-  /// Resolves a required string value.
-  String string(String name, String compileTime) => _overrides[name] ?? compileTime;
+  /// Resolves a required string value. An empty override is treated as "unset"
+  /// (a blank `--dart-define` means not-set), so it falls back to [compileTime]
+  /// rather than yielding an empty app name, core URL, etc.
+  String string(String name, String compileTime) {
+    final value = _overrides[name];
+    return (value == null || value.isEmpty) ? compileTime : value;
+  }
 
-  /// Resolves an optional string value.
-  String? stringOrNull(String name, String? compileTime) => _overrides[name] ?? compileTime;
+  /// Resolves an optional string value; an empty override is treated as "unset".
+  String? stringOrNull(String name, String? compileTime) {
+    final value = _overrides[name];
+    return (value == null || value.isEmpty) ? compileTime : value;
+  }
 
   /// Resolves a boolean value (`'true'` override, case-insensitive, is true).
   bool boolean(String name, bool compileTime) =>
