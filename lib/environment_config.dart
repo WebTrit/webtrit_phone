@@ -62,9 +62,10 @@ class EnvironmentConfig {
   // server (PortaOne/Core) for the `web` app type, so this client override is no
   // longer needed.
   static const WEB_BUNDLE_ID__NAME = 'WEBTRIT_APP_WEB_BUNDLE_ID';
-  static const WEB_BUNDLE_ID = bool.hasEnvironment(WEB_BUNDLE_ID__NAME)
-      ? String.fromEnvironment(WEB_BUNDLE_ID__NAME)
-      : null;
+  static const _WEB_BUNDLE_ID_VALUE = String.fromEnvironment(WEB_BUNDLE_ID__NAME);
+  // An empty dart-define (key disabled or blanked) is treated as unset so the
+  // resolver falls back to packageName and the bootstrap diagnostic fires.
+  static const WEB_BUNDLE_ID = _WEB_BUNDLE_ID_VALUE == '' ? null : _WEB_BUNDLE_ID_VALUE;
 
   /// The bundle_id sent to the backend in session/autoprovision requests.
   ///
