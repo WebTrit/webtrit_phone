@@ -688,6 +688,8 @@
   "@locale_it": {},
   "locale_uk": "Українська",
   "@locale_uk": {},
+  "locale_th": "тайська",
+  "@locale_th": {},
   "login_Button_coreUrlAssignProceed": "Продовжити",
   "@login_Button_coreUrlAssignProceed": {},
   "login_Button_otpSigninRequestProceed": "Продовжити",

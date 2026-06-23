@@ -386,6 +386,7 @@ extension AppLocalizationsExtension on AppLocalizations {
       'locale_en' => locale_en,
       'locale_it' => locale_it,
       'locale_uk' => locale_uk,
+      'locale_th' => locale_th,
       'login_Button_coreUrlAssignProceed' => login_Button_coreUrlAssignProceed,
       'login_Button_otpSigninRequestProceed' =>
         login_Button_otpSigninRequestProceed,

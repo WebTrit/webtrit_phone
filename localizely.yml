@@ -10,6 +10,8 @@ upload:
       locale_code: uk
     - file: lib/l10n/arb/app_it.arb
       locale_code: it
+    - file: lib/l10n/arb/app_th.arb
+      locale_code: th
   params:
     overwrite: false
     reviewed: false
@@ -27,6 +29,8 @@ download:
       locale_code: uk
     - file: lib/l10n/arb/app_it.arb
       locale_code: it
+    - file: lib/l10n/arb/app_th.arb
+      locale_code: th
   params:
     export_empty_as: main
     java_properties_encoding: utf_8
