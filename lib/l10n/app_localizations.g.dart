@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.g.dart';
 import 'app_localizations_it.g.dart';
+import 'app_localizations_th.g.dart';
 import 'app_localizations_uk.g.dart';
 
 // ignore_for_file: type=lint
@@ -91,7 +92,7 @@ abstract class AppLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('it'), Locale('uk')];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('it'), Locale('th'), Locale('uk')];
 
   /// Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted.
   ///
@@ -1532,6 +1533,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ukrainian'**
   String get locale_uk;
+
+  /// No description provided for @locale_th.
+  ///
+  /// In en, this message translates to:
+  /// **'Thai'**
+  String get locale_th;
 
   /// No description provided for @login_Button_coreUrlAssignProceed.
   ///
@@ -5686,7 +5693,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'it', 'uk'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'it', 'th', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -5699,6 +5706,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEn();
     case 'it':
       return AppLocalizationsIt();
+    case 'th':
+      return AppLocalizationsTh();
     case 'uk':
       return AppLocalizationsUk();
   }

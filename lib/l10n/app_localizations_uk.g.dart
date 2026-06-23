@@ -839,6 +839,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get locale_uk => 'Українська';
 
   @override
+  String get locale_th => 'тайська';
+
+  @override
   String get login_Button_coreUrlAssignProceed => 'Продовжити';
 
   @override

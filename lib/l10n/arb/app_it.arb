@@ -688,6 +688,8 @@
   "@locale_it": {},
   "locale_uk": "Ucraino",
   "@locale_uk": {},
+  "locale_th": "Tailandese",
+  "@locale_th": {},
   "login_Button_coreUrlAssignProceed": "Procedi",
   "@login_Button_coreUrlAssignProceed": {},
   "login_Button_otpSigninRequestProceed": "Procedi",
