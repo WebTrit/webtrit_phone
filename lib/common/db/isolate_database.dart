@@ -155,6 +155,21 @@ abstract final class IsolateDatabase {
     return create(directoryPath: directoryPath, dbName: dbName);
   }
 
+  /// Opens a direct web [AppDatabase] backed by a drift `WasmDatabase`.
+  ///
+  /// Web has no isolate server (`dart:isolate` spawning is unsupported), so the
+  /// single connection is created here and opened lazily on first query. The
+  /// directory path is ignored on web; the database lives in IndexedDB/OPFS.
+  static AppDatabase openWeb({String dbName = 'db.sqlite'}) {
+    final executor = createAppDatabaseConnection(
+      null,
+      dbName,
+      logStatements: EnvironmentConfig.DATABASE_LOG_STATEMENTS,
+    );
+    Logger.root.info('IsolateDatabase.openWeb - created web database connection');
+    return AppDatabase(executor);
+  }
+
   /// Opens a new direct [AppDatabase] instance for [directoryPath]/[dbName].
   ///
   /// Note: This creates a new SQLite connection each time. Avoid calling it repeatedly in
