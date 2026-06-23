@@ -39,20 +39,32 @@ import 'services/services.dart';
 // Dart isolates do not share memory -- each background isolate gets its own instance.
 IsolateContext? _isolateContext;
 
-Future<InstanceRegistry> bootstrap() async {
+/// Boots the application dependencies.
+///
+/// When [embeddedPreview] is true the app is hosted inside another Flutter app
+/// (e.g. the theme configurator's realtime preview) that already owns the
+/// default Firebase app — which may be misconfigured for this app or absent.
+/// In that mode all Firebase side effects are skipped and Firebase-backed
+/// services fall back to local, offline-safe implementations so the embedded
+/// app can render without a valid Firebase configuration.
+Future<InstanceRegistry> bootstrap({bool embeddedPreview = false}) async {
   final registry = InstanceRegistry();
 
   // External SDKs (Side effects only, don't need registration)
-  await _initFirebaseApp();
-  await _initFirebaseMessaging();
-  await _initLocalPushs();
+  if (!embeddedPreview) {
+    await _initFirebaseApp();
+    await _initFirebaseMessaging();
+    await _initLocalPushs();
+  }
 
   // Initialize Components
 
   // App Info & Device Data
 
   final packageInfo = await PackageInfoFactory.init();
-  final appInfo = await AppInfo.init(FirebaseAppIdProvider());
+  final appInfo = await AppInfo.init(
+    embeddedPreview ? const SharedPreferencesAppIdProvider() : FirebaseAppIdProvider(),
+  );
   final deviceInfo = await DeviceInfoFactory.init();
 
   // Storages
@@ -99,7 +111,22 @@ Future<InstanceRegistry> bootstrap() async {
 
   // Remote configuration
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
-  final cachedRemoteConfigService = await CachedRemoteConfigService.init(remoteCacheConfigService);
+  // Firebase Remote Config (and its underlying Installations) may be unavailable
+  // when the app is embedded in another host (e.g. the theme configurator's
+  // realtime preview) that owns the default Firebase app, or when offline. Fall
+  // back to the local shared-preferences cache so bootstrap still completes;
+  // [DefaultRemoteCacheConfigService] also implements [RemoteConfigService].
+  RemoteConfigService cachedRemoteConfigService;
+  if (embeddedPreview) {
+    cachedRemoteConfigService = remoteCacheConfigService;
+  } else {
+    try {
+      cachedRemoteConfigService = await CachedRemoteConfigService.init(remoteCacheConfigService);
+    } catch (e, s) {
+      Logger('bootstrap').warning('Firebase Remote Config init failed; using local cache fallback', e, s);
+      cachedRemoteConfigService = remoteCacheConfigService;
+    }
+  }
 
   final featureAccessStreamFactory = FeatureAccessStreamFactory(
     appThemes: appThemes,

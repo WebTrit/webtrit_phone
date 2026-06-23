@@ -66,9 +66,14 @@ void _onRootLogRecord(LogRecord record) {
 }
 
 class RootApp extends StatelessWidget {
-  const RootApp({super.key, required this.instanceRegistry});
+  const RootApp({super.key, required this.instanceRegistry, this.embeddedPreview = false});
 
   final InstanceRegistry instanceRegistry;
+
+  /// Whether the app runs embedded inside another Flutter host (e.g. the theme
+  /// configurator's realtime preview). Forwarded to [App] so Firebase-backed
+  /// integrations such as the analytics navigator observer are skipped.
+  final bool embeddedPreview;
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +152,12 @@ class RootApp extends StatelessWidget {
                 create: (_) => instanceRegistry.get(),
                 dispose: disposeIfDisposable,
               ),
-              RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
+              // Lazy so embedders that skip Firebase (e.g. the configurator's realtime
+              // preview) never touch FirebaseAnalytics.instance, which throws when the
+              // host's default Firebase app is misconfigured/absent.
+              RepositoryProvider<AppAnalyticsRepository>(
+                create: (_) => AppAnalyticsRepository(instance: FirebaseAnalytics.instance),
+              ),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
               RepositoryProvider<QueuedTerminationRequestsRepository>.value(value: queuedTerminationRequestsRepository),
@@ -176,7 +186,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<UserLocalDatasource>(create: (_) => instanceRegistry.get()),
               RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get()),
             ],
-            child: const App(),
+            child: App(embeddedPreview: embeddedPreview),
           );
         },
       ),

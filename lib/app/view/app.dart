@@ -21,7 +21,13 @@ import 'package:webtrit_phone/resolvers/resolvers.dart';
 final _logger = Logger('AppWidget');
 
 class App extends StatefulWidget {
-  const App({super.key});
+  const App({super.key, this.embeddedPreview = false});
+
+  /// Whether the app runs embedded inside another Flutter host (realtime
+  /// preview). When true, Firebase-backed integrations such as the analytics
+  /// navigator observer are skipped to avoid touching a misconfigured/absent
+  /// Firebase app.
+  final bool embeddedPreview;
 
   @override
   State<App> createState() => _AppState();
@@ -147,7 +153,7 @@ class _AppState extends State<App> {
                   deepLinkBuilder: isDeepLinkEnabled ? appRouter.deepLinkBuilder : null,
                   navigatorObservers: () => [
                     AppRouterObserver(),
-                    context.read<AppAnalyticsRepository>().createObserver(),
+                    if (!widget.embeddedPreview) context.read<AppAnalyticsRepository>().createObserver(),
                     AutoRouteObserver(),
                   ],
                   reevaluateListenable: ReevaluateListenable.stream(
