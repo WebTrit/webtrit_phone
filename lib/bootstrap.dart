@@ -42,17 +42,27 @@ IsolateContext? _isolateContext;
 Future<InstanceRegistry> bootstrap() async {
   final registry = InstanceRegistry();
 
-  // External SDKs (Side effects only, don't need registration)
-  await _initFirebaseApp();
-  await _initFirebaseMessaging();
-  await _initLocalPushs();
+  // External SDKs (Side effects only, don't need registration). Gated by the
+  // WEBTRIT_APP_FIREBASE_ENABLED config so a host that owns the default Firebase
+  // app (e.g. the theme configurator's realtime preview) can run this app
+  // Firebase-free by configuring that flag off.
+  final firebaseEnabled = EnvironmentConfig.FIREBASE_ENABLED;
+  if (firebaseEnabled) {
+    await _initFirebaseApp();
+    await _initFirebaseMessaging();
+    await _initLocalPushs();
+  }
 
   // Initialize Components
 
   // App Info & Device Data
 
   final packageInfo = await PackageInfoFactory.init();
-  final appInfo = await AppInfo.init(FirebaseAppIdProvider());
+  // FirebaseAppIdProvider uses Firebase Installations; without Firebase use the
+  // local shared-preferences id provider instead.
+  final appInfo = await AppInfo.init(
+    firebaseEnabled ? FirebaseAppIdProvider() : const SharedPreferencesAppIdProvider(),
+  );
   final deviceInfo = await DeviceInfoFactory.init();
 
   // Storages
@@ -97,9 +107,21 @@ Future<InstanceRegistry> bootstrap() async {
     apiClientFactory: apiClientFactory,
   );
 
-  // Remote configuration
+  // Remote configuration. Firebase Remote Config needs the Firebase app, so when
+  // Firebase is disabled fall back to the local shared-preferences cache
+  // (DefaultRemoteCacheConfigService also implements RemoteConfigService).
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
-  final cachedRemoteConfigService = await CachedRemoteConfigService.init(remoteCacheConfigService);
+  RemoteConfigService cachedRemoteConfigService;
+  if (firebaseEnabled) {
+    try {
+      cachedRemoteConfigService = await CachedRemoteConfigService.init(remoteCacheConfigService);
+    } catch (e, s) {
+      Logger('bootstrap').warning('Firebase Remote Config init failed; using local cache fallback', e, s);
+      cachedRemoteConfigService = remoteCacheConfigService;
+    }
+  } else {
+    cachedRemoteConfigService = remoteCacheConfigService;
+  }
 
   final featureAccessStreamFactory = FeatureAccessStreamFactory(
     appThemes: appThemes,

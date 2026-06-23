@@ -47,6 +47,14 @@ class EnvironmentConfig {
     return seconds > 0 ? seconds : compileTime;
   }
 
+  // Whether Firebase (app, messaging, local push, Remote Config, Installations,
+  // Analytics) is initialised. Disable it when this app is embedded in a host
+  // that owns the default Firebase app (the theme configurator's realtime
+  // preview), so the embedded app runs Firebase-free.
+  static const FIREBASE_ENABLED__NAME = 'WEBTRIT_APP_FIREBASE_ENABLED';
+  static bool get FIREBASE_ENABLED =>
+      _env.boolean(FIREBASE_ENABLED__NAME, const bool.fromEnvironment(FIREBASE_ENABLED__NAME, defaultValue: true));
+
   static const DATABASE_LOG_STATEMENTS__NAME = 'WEBTRIT_APP_DATABASE_LOG_STATEMENTS';
   static bool get DATABASE_LOG_STATEMENTS => _env.boolean(
     DATABASE_LOG_STATEMENTS__NAME,

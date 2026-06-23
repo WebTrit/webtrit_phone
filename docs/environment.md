@@ -36,6 +36,8 @@ maintainability and enabling tools to parse configuration reliably.
 - `WEBTRIT_APP_DEMO_CORE_URL` – Demo core URL (_default: **http://localhost:4000**_).
 - `WEBTRIT_APP_DATABASE_LOG_STATEMENTS` – Enables logging of database queries (
   _default: **false**_).
+- `WEBTRIT_APP_FIREBASE_ENABLED` – Whether Firebase is initialised (_default: **true**_). Set to
+  `false` to run embedded in a host that owns the default Firebase app (configurator realtime preview).
 - `_WEBTRIT_APP_CORE_URL` – Custom core URL (optional override).
 - `_WEBTRIT_APP_CORE_VERSION_CONSTRAINT` – Core compatibility range.
 - `_WEBTRIT_APP_ABOUT_URL` – URL for "About" screen content.

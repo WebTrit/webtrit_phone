@@ -1,4 +1,6 @@
 {
+  "WEBTRIT_APP_FIREBASE_ENABLED": true,
+  "__WEBTRIT_APP_FIREBASE_ENABLED_DESCRIPTION": "Whether Firebase (app, messaging, local push, Remote Config, Installations, Analytics) is initialised. Default true. Disable when the app is embedded in a host that owns the default Firebase app (e.g. the theme configurator's realtime preview) so the embedded app runs Firebase-free.",
   "WEBTRIT_APP_DATABASE_LOG_STATEMENTS": false,
   "_WEBTRIT_APP_CORE_URL": "",
   "WEBTRIT_APP_DEMO_CORE_URL": "http://192.168.10.100:4000",
