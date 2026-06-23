@@ -214,7 +214,7 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
             BlocProvider<UnreadCountCubit>(create: (_) => MockUnreadCountCubit.withUnreadMessages()),
           ],
           child: ConversationsScreen(
-            title: const Text(EnvironmentConfig.APP_NAME),
+            title: Text(EnvironmentConfig.APP_NAME),
             // Dual tabs expose the chat/sms tab bar (its TabController is local, so switching
             // works) for the interactive preview; the snapshot stays chat-only.
             initialTabsState: widget.interactive

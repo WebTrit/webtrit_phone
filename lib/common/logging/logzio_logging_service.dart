@@ -15,8 +15,8 @@ class LogzioLoggingService implements RemoteLoggingService {
   static LogzioLoggingService? fromEnvironment(bool enabled) {
     if (!enabled) return null;
 
-    const url = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_URL;
-    const token = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_TOKEN;
+    final url = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_URL;
+    final token = EnvironmentConfig.REMOTE_LOGZIO_LOGGING_TOKEN;
     if (url == null || token == null) return null;
 
     final minLevel = Level.LEVELS.firstWhere((l) => l.name == EnvironmentConfig.REMOTE_LOGZIO_LOG_LEVEL);

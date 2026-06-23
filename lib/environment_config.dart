@@ -2,37 +2,86 @@
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+/// Application configuration sourced from `--dart-define` values.
+///
+/// Every value is resolved at read time: a runtime override (see
+/// [applyOverrides]) takes precedence over the compile-time `*.fromEnvironment`
+/// default. This lets embedders such as the theme configurator's realtime
+/// preview inject the whole dart-define set at runtime, while standalone builds
+/// keep behaving exactly as before (no overrides applied).
+///
+/// The `*__NAME` members stay compile-time constants because they are the
+/// dart-define keys, not values, and are used as override-map keys.
 class EnvironmentConfig {
   EnvironmentConfig._();
 
+  static Map<String, String> _overrides = const {};
+
+  /// Replaces the runtime override set used by every value getter.
+  ///
+  /// Keys are the `WEBTRIT_APP_*` dart-define names (the `*__NAME` members).
+  /// Must be applied before any consumer (e.g. `bootstrap()`) reads a value.
+  /// Pass an empty map (or call [clearOverrides]) to fall back to the
+  /// compile-time defines.
+  static void applyOverrides(Map<String, String> overrides) {
+    _overrides = Map<String, String>.unmodifiable(overrides);
+  }
+
+  /// Drops all runtime overrides, restoring the compile-time dart-define values.
+  static void clearOverrides() {
+    _overrides = const {};
+  }
+
+  /// Whether a runtime override is currently set for [name].
+  static bool hasOverride(String name) => _overrides.containsKey(name);
+
+  static String _string(String name, String compileTime) => _overrides[name] ?? compileTime;
+
+  static String? _stringOrNull(String name, String? compileTime) => _overrides[name] ?? compileTime;
+
+  static bool _bool(String name, bool compileTime) =>
+      _overrides.containsKey(name) ? _overrides[name]!.toLowerCase() == 'true' : compileTime;
+
+  static int _int(String name, int compileTime) =>
+      _overrides.containsKey(name) ? (int.tryParse(_overrides[name]!) ?? compileTime) : compileTime;
+
   static const DATABASE_LOG_STATEMENTS__NAME = 'WEBTRIT_APP_DATABASE_LOG_STATEMENTS';
-  static const DATABASE_LOG_STATEMENTS = bool.fromEnvironment(DATABASE_LOG_STATEMENTS__NAME, defaultValue: false);
+  static bool get DATABASE_LOG_STATEMENTS => _bool(
+    DATABASE_LOG_STATEMENTS__NAME,
+    const bool.fromEnvironment(DATABASE_LOG_STATEMENTS__NAME, defaultValue: false),
+  );
 
   static const CORE_URL__NAME = 'WEBTRIT_APP_CORE_URL';
-  static const CORE_URL = bool.hasEnvironment(CORE_URL__NAME) ? String.fromEnvironment(CORE_URL__NAME) : null;
+  static const String? _CORE_URL_ENV = bool.hasEnvironment(CORE_URL__NAME)
+      ? String.fromEnvironment(CORE_URL__NAME)
+      : null;
+  static String? get CORE_URL => _stringOrNull(CORE_URL__NAME, _CORE_URL_ENV);
 
   static const DEMO_CORE_URL__NAME = 'WEBTRIT_APP_DEMO_CORE_URL';
-  static const DEMO_CORE_URL = String.fromEnvironment(DEMO_CORE_URL__NAME, defaultValue: 'http://localhost:4000');
+  static String get DEMO_CORE_URL => _string(
+    DEMO_CORE_URL__NAME,
+    const String.fromEnvironment(DEMO_CORE_URL__NAME, defaultValue: 'http://localhost:4000'),
+  );
 
   static const PREDEFINED_CORE_URLS__NAME = 'WEBTRIT_APP_PREDEFINED_CORE_URLS';
-  static const _PREDEFINED_CORE_URLS_RAW = String.fromEnvironment(PREDEFINED_CORE_URLS__NAME);
-  static final List<String> PREDEFINED_CORE_URLS = _PREDEFINED_CORE_URLS_RAW
-      .split(';')
-      .map((e) => e.trim())
-      .where((e) => e.isNotEmpty)
-      .toList(growable: false);
+  static List<String> get PREDEFINED_CORE_URLS {
+    final raw = _string(PREDEFINED_CORE_URLS__NAME, const String.fromEnvironment(PREDEFINED_CORE_URLS__NAME));
+    return raw.split(';').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(growable: false);
+  }
 
   static const CORE_VERSION_CONSTRAINT__NAME = 'WEBTRIT_APP_CORE_VERSION_CONSTRAINT';
-  static const CORE_VERSION_CONSTRAINT = String.fromEnvironment(
+  static String get CORE_VERSION_CONSTRAINT => _string(
     CORE_VERSION_CONSTRAINT__NAME,
-    defaultValue: '>=0.7.0-alpha <2.0.0',
+    const String.fromEnvironment(CORE_VERSION_CONSTRAINT__NAME, defaultValue: '>=0.7.0-alpha <2.0.0'),
   );
 
   static const APP_LINK_DOMAIN__NAME = 'WEBTRIT_APP_LINK_DOMAIN';
-  static const APP_LINK_DOMAIN = String.fromEnvironment(APP_LINK_DOMAIN__NAME, defaultValue: '');
+  static String get APP_LINK_DOMAIN =>
+      _string(APP_LINK_DOMAIN__NAME, const String.fromEnvironment(APP_LINK_DOMAIN__NAME, defaultValue: ''));
 
   static const APP_NAME__NAME = 'WEBTRIT_APP_NAME';
-  static const APP_NAME = String.fromEnvironment(APP_NAME__NAME, defaultValue: 'WebTrit');
+  static String get APP_NAME =>
+      _string(APP_NAME__NAME, const String.fromEnvironment(APP_NAME__NAME, defaultValue: 'WebTrit'));
 
   // Web has no platform bundle identifier, so `packageInfo.packageName` resolves
   // to the pubspec project name on web, which the backend rejects with
@@ -42,10 +91,12 @@ class EnvironmentConfig {
   // server (PortaOne/Core) for the `web` app type, so this client override is no
   // longer needed.
   static const WEB_BUNDLE_ID__NAME = 'WEBTRIT_APP_WEB_BUNDLE_ID';
-  static const _WEB_BUNDLE_ID_VALUE = String.fromEnvironment(WEB_BUNDLE_ID__NAME);
   // An empty dart-define (key disabled or blanked) is treated as unset so the
   // resolver falls back to packageName and the bootstrap diagnostic fires.
-  static const WEB_BUNDLE_ID = _WEB_BUNDLE_ID_VALUE == '' ? null : _WEB_BUNDLE_ID_VALUE;
+  static String? get WEB_BUNDLE_ID {
+    final raw = _string(WEB_BUNDLE_ID__NAME, const String.fromEnvironment(WEB_BUNDLE_ID__NAME));
+    return raw == '' ? null : raw;
+  }
 
   /// The bundle_id sent to the backend in session/autoprovision requests.
   ///
@@ -55,122 +106,142 @@ class EnvironmentConfig {
   static String resolveBundleId(String packageName) => (kIsWeb ? WEB_BUNDLE_ID : null) ?? packageName;
 
   static const APP_ABOUT_URL__NAME = 'WEBTRIT_APP_ABOUT_URL';
-  static const APP_ABOUT_URL = bool.hasEnvironment(APP_ABOUT_URL__NAME)
+  static const String? _APP_ABOUT_URL_ENV = bool.hasEnvironment(APP_ABOUT_URL__NAME)
       ? String.fromEnvironment(APP_ABOUT_URL__NAME)
       : null;
+  static String? get APP_ABOUT_URL => _stringOrNull(APP_ABOUT_URL__NAME, _APP_ABOUT_URL_ENV);
 
   static const APP_CREDENTIALS_REQUEST_URL__NAME = 'WEBTRIT_APP_CREDENTIALS_REQUEST_URL';
-  static const APP_CREDENTIALS_REQUEST_URL = bool.hasEnvironment(APP_CREDENTIALS_REQUEST_URL__NAME)
+  static const String? _APP_CREDENTIALS_REQUEST_URL_ENV = bool.hasEnvironment(APP_CREDENTIALS_REQUEST_URL__NAME)
       ? String.fromEnvironment(APP_CREDENTIALS_REQUEST_URL__NAME)
       : null;
+  static String? get APP_CREDENTIALS_REQUEST_URL =>
+      _stringOrNull(APP_CREDENTIALS_REQUEST_URL__NAME, _APP_CREDENTIALS_REQUEST_URL_ENV);
 
   static const SALES_EMAIL__NAME = 'WEBTRIT_APP_SALES_EMAIL';
-  static const SALES_EMAIL = String.fromEnvironment(SALES_EMAIL__NAME, defaultValue: 'sales@webtrit.com');
+  static String get SALES_EMAIL =>
+      _string(SALES_EMAIL__NAME, const String.fromEnvironment(SALES_EMAIL__NAME, defaultValue: 'sales@webtrit.com'));
 
   static const FCM_VAPID_KEY__NAME = 'WEBTRIT_APP_FCM_VAPID_KEY';
-  static const FCM_VAPID_KEY = bool.hasEnvironment(FCM_VAPID_KEY__NAME)
+  static const String? _FCM_VAPID_KEY_ENV = bool.hasEnvironment(FCM_VAPID_KEY__NAME)
       ? String.fromEnvironment(FCM_VAPID_KEY__NAME)
       : null;
+  static String? get FCM_VAPID_KEY => _stringOrNull(FCM_VAPID_KEY__NAME, _FCM_VAPID_KEY_ENV);
 
   // LOGZIO service-specific configuration.
   // If additional logging services are introduced, consider moving these to a separate logging configuration file.
   static const REMOTE_LOGZIO_LOGGING_URL__NAME = 'WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_URL';
-  static const REMOTE_LOGZIO_LOGGING_URL = bool.hasEnvironment(REMOTE_LOGZIO_LOGGING_URL__NAME)
+  static const String? _REMOTE_LOGZIO_LOGGING_URL_ENV = bool.hasEnvironment(REMOTE_LOGZIO_LOGGING_URL__NAME)
       ? String.fromEnvironment(REMOTE_LOGZIO_LOGGING_URL__NAME)
       : null;
+  static String? get REMOTE_LOGZIO_LOGGING_URL =>
+      _stringOrNull(REMOTE_LOGZIO_LOGGING_URL__NAME, _REMOTE_LOGZIO_LOGGING_URL_ENV);
 
   // LOGZIO service-specific configuration.
   // If additional logging services are introduced, consider moving these to a separate logging configuration file.
   static const REMOTE_LOGZIO_LOG_LEVEL__NAME = 'WEBTRIT_APP_REMOTE_LOGZIO_LOG_LEVEL';
-  static const REMOTE_LOGZIO_LOG_LEVEL = String.fromEnvironment(REMOTE_LOGZIO_LOG_LEVEL__NAME, defaultValue: 'INFO');
+  static String get REMOTE_LOGZIO_LOG_LEVEL => _string(
+    REMOTE_LOGZIO_LOG_LEVEL__NAME,
+    const String.fromEnvironment(REMOTE_LOGZIO_LOG_LEVEL__NAME, defaultValue: 'INFO'),
+  );
 
   // LOGZIO service-specific configuration.
   // If additional logging services are introduced, consider moving these to a separate logging configuration file.
   static const REMOTE_LOGZIO_LOGGING_TOKEN__NAME = 'WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_TOKEN';
-  static const REMOTE_LOGZIO_LOGGING_TOKEN = bool.hasEnvironment(REMOTE_LOGZIO_LOGGING_TOKEN__NAME)
+  static const String? _REMOTE_LOGZIO_LOGGING_TOKEN_ENV = bool.hasEnvironment(REMOTE_LOGZIO_LOGGING_TOKEN__NAME)
       ? String.fromEnvironment(REMOTE_LOGZIO_LOGGING_TOKEN__NAME)
       : null;
+  static String? get REMOTE_LOGZIO_LOGGING_TOKEN =>
+      _stringOrNull(REMOTE_LOGZIO_LOGGING_TOKEN__NAME, _REMOTE_LOGZIO_LOGGING_TOKEN_ENV);
 
   // LOGZIO service-specific configuration.
   // If additional logging services are introduced, consider moving these to a separate logging configuration file.
   static const _REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__KB = 0;
   static const REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__NAME = 'WEBTRIT_APP_REMOTE_LOGZIO_LOGGING_BUFFER_SIZE';
-  static final REMOTE_LOGZIO_LOGGING_BUFFER_SIZE =
-      int.tryParse(const String.fromEnvironment(REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__NAME)) ??
-      _REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__KB;
+  static int get REMOTE_LOGZIO_LOGGING_BUFFER_SIZE => _int(
+    REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__NAME,
+    int.tryParse(const String.fromEnvironment(REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__NAME)) ??
+        _REMOTE_LOGZIO_LOGGING_BUFFER_SIZE__KB,
+  );
 
   // SMS-based incoming call trigger mechanism (fallback).
   // If enabled, the app listens for specially formatted incoming SMS messages to trigger incoming calls.
   static const CALL_TRIGGER_MECHANISM_SMS__NAME = 'WEBTRIT_CALL_TRIGGER_MECHANISM_SMS';
-  static const CALL_TRIGGER_MECHANISM_SMS = bool.fromEnvironment(CALL_TRIGGER_MECHANISM_SMS__NAME, defaultValue: false);
+  static bool get CALL_TRIGGER_MECHANISM_SMS => _bool(
+    CALL_TRIGGER_MECHANISM_SMS__NAME,
+    const bool.fromEnvironment(CALL_TRIGGER_MECHANISM_SMS__NAME, defaultValue: false),
+  );
 
   // SMS-based incoming call trigger prefix.
   // Used to filter incoming SMS messages. Only messages starting with this prefix are processed.
   static const CALL_TRIGGER_MECHANISM_SMS_PREFIX__NAME = 'WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_PREFIX';
-  static const CALL_TRIGGER_MECHANISM_SMS_PREFIX = String.fromEnvironment(
+  static String get CALL_TRIGGER_MECHANISM_SMS_PREFIX => _string(
     CALL_TRIGGER_MECHANISM_SMS_PREFIX__NAME,
-    defaultValue: '<#> WEBTRIT:',
+    const String.fromEnvironment(CALL_TRIGGER_MECHANISM_SMS_PREFIX__NAME, defaultValue: '<#> WEBTRIT:'),
   );
 
   // ICU regex pattern to extract callId, handle, displayName and hasVideo from SMS body.
   static const CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN__NAME = 'WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN';
-  static const CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN = String.fromEnvironment(
+  static String get CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN => _string(
     CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN__NAME,
-    defaultValue:
-        r'https://app\.webtrit\.com/call\?callId=([^&]+)&handle=([^&]+)&displayName=([^&]+)&hasVideo=(true|false)',
+    const String.fromEnvironment(
+      CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN__NAME,
+      defaultValue:
+          r'https://app\.webtrit\.com/call\?callId=([^&]+)&handle=([^&]+)&displayName=([^&]+)&hasVideo=(true|false)',
+    ),
   );
 
   static const CONNECTIVITY_CHECK_URL__NAME = 'WEBTRIT_APP_CONNECTIVITY_CHECK_URL';
-
-  static const CONNECTIVITY_CHECK_URL = bool.hasEnvironment(CONNECTIVITY_CHECK_URL__NAME)
+  static const String? _CONNECTIVITY_CHECK_URL_ENV = bool.hasEnvironment(CONNECTIVITY_CHECK_URL__NAME)
       ? String.fromEnvironment(CONNECTIVITY_CHECK_URL__NAME)
       : null;
+  static String? get CONNECTIVITY_CHECK_URL => _stringOrNull(CONNECTIVITY_CHECK_URL__NAME, _CONNECTIVITY_CHECK_URL_ENV);
 
   static const USER_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME = 'WEBTRIT_APP_USER_REPOSITORY_POLLING_INTERVAL_SECONDS';
-  static const USER_REPOSITORY_POLLING_INTERVAL_SECONDS = int.fromEnvironment(
+  static int get USER_REPOSITORY_POLLING_INTERVAL_SECONDS => _int(
     USER_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME,
-    defaultValue: 10,
+    const int.fromEnvironment(USER_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME, defaultValue: 10),
   );
 
   static const SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME =
       'WEBTRIT_APP_SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS';
-  static const SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS = int.fromEnvironment(
+  static int get SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS => _int(
     SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME,
-    defaultValue: 300,
+    const int.fromEnvironment(SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME, defaultValue: 300),
   );
 
   static const EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME =
       'WEBTRIT_APP_EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS';
-  static const EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS = int.fromEnvironment(
+  static int get EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS => _int(
     EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME,
-    defaultValue: 60,
+    const int.fromEnvironment(EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME, defaultValue: 60),
   );
 
   static const VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME =
       'WEBTRIT_APP_VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS';
-  static const VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS = int.fromEnvironment(
+  static int get VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS => _int(
     VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME,
-    defaultValue: 300,
+    const int.fromEnvironment(VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME, defaultValue: 300),
   );
 
   static const CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME =
       'WEBTRIT_APP_CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS';
-  static const CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS = int.fromEnvironment(
+  static int get CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS => _int(
     CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME,
-    defaultValue: 300,
+    const int.fromEnvironment(CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME, defaultValue: 300),
   );
 
   static const FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME =
       'WEBTRIT_APP_FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS';
-  static const FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS = int.fromEnvironment(
+  static int get FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS => _int(
     FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME,
-    defaultValue: 300,
+    const int.fromEnvironment(FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME, defaultValue: 300),
   );
 
   static const SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME =
       'WEBTRIT_APP_SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS';
-  static const SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS = int.fromEnvironment(
+  static int get SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS => _int(
     SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME,
-    defaultValue: 300,
+    const int.fromEnvironment(SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME, defaultValue: 300),
   );
 }

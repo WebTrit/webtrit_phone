@@ -739,36 +739,36 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     return [
       PollingRegistration(
         listener: context.read<UserRepository>(),
-        interval: const Duration(seconds: EnvironmentConfig.USER_REPOSITORY_POLLING_INTERVAL_SECONDS),
+        interval: Duration(seconds: EnvironmentConfig.USER_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
       PollingRegistration(
         listener: context.read<SystemInfoRepository>(),
-        interval: const Duration(seconds: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS),
+        interval: Duration(seconds: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
       if (supportsExtensions)
         PollingRegistration(
           listener: context.read<ExternalContactsRepository>(),
-          interval: const Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS),
+          interval: Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
       if (isVoicemailsEnabled)
         PollingRegistration(
           listener: context.read<VoicemailRepository>(),
-          interval: const Duration(seconds: EnvironmentConfig.VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS),
+          interval: Duration(seconds: EnvironmentConfig.VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
       if (cliSettingsRepository is CallerIdSettingsRepositoryRemoteImpl)
         PollingRegistration(
           listener: cliSettingsRepository,
-          interval: const Duration(seconds: EnvironmentConfig.CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS),
+          interval: Duration(seconds: EnvironmentConfig.CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
       if (favoritesRepository is FavoritesRepositorySyncableImpl)
         PollingRegistration(
           listener: favoritesRepository,
-          interval: const Duration(seconds: EnvironmentConfig.FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS),
+          interval: Duration(seconds: EnvironmentConfig.FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
       if (sipSubscriptionsRepository is SipSubscriptionsRepositorySyncableImpl)
         PollingRegistration(
           listener: sipSubscriptionsRepository,
-          interval: const Duration(seconds: EnvironmentConfig.SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS),
+          interval: Duration(seconds: EnvironmentConfig.SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
     ];
   }

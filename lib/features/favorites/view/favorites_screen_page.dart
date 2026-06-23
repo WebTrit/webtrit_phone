@@ -21,7 +21,7 @@ class FavoritesScreenPage extends StatelessWidget {
     final cdrsEnabled = featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory;
 
     final widget = FavoritesScreen(
-      title: const Text(EnvironmentConfig.APP_NAME),
+      title: Text(EnvironmentConfig.APP_NAME),
       transferEnabled: featureAccess.callConfig.capabilities.isBlindTransferEnabled,
       videoEnabled: featureAccess.callConfig.capabilities.isVideoCallEnabled,
       chatsEnabled: featureAccess.messagingConfig.chatsPresent,

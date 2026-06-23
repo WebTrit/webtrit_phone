@@ -402,7 +402,7 @@ abstract final class CallMapper {
         isBlindTransferEnabled: transferConfig.enableBlindTransfer,
         isAttendedTransferEnabled: transferConfig.enableAttendedTransfer,
       ),
-      triggerConfig: const CallTriggerConfig(
+      triggerConfig: CallTriggerConfig(
         smsFallback: SmsFallbackTriggerConfig(
           enabled: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS,
           available: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS,

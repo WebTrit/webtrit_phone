@@ -17,7 +17,7 @@ class RecentsScreenPage extends StatelessWidget {
     final featureAccess = context.read<FeatureAccess>();
 
     final widget = RecentsScreen(
-      title: const Text(EnvironmentConfig.APP_NAME),
+      title: Text(EnvironmentConfig.APP_NAME),
       transferEnabled: featureAccess.callConfig.capabilities.isBlindTransferEnabled,
       videoEnabled: featureAccess.callConfig.capabilities.isVideoCallEnabled,
       chatsEnabled: featureAccess.messagingConfig.chatsPresent,

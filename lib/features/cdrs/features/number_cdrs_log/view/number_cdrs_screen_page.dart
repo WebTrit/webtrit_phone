@@ -23,7 +23,7 @@ class NumberCdrsScreenPage extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           NumberCdrsLogCubit(number, context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
-      child: NumberCdrsScreen(title: const Text(EnvironmentConfig.APP_NAME), videoVisible: videoVisible),
+      child: NumberCdrsScreen(title: Text(EnvironmentConfig.APP_NAME), videoVisible: videoVisible),
     );
   }
 }
