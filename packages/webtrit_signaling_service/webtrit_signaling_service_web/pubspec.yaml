@@ -24,7 +24,6 @@ dependencies:
     path: ../webtrit_signaling_service_platform_interface
   webtrit_signaling:
     path: ../../webtrit_signaling
-  logging: ^1.3.0
 
 dev_dependencies:
   flutter_test:
