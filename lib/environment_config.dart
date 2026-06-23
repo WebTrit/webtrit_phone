@@ -2,6 +2,10 @@
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+import 'package:logging/logging.dart';
+
+final _logger = Logger('EnvRegistry');
+
 /// Application configuration sourced from `--dart-define` values.
 ///
 /// Each value is read through the shared [_env] registry, which resolves a
@@ -279,11 +283,31 @@ class EnvRegistry {
     return (value == null || value.isEmpty) ? compileTime : value;
   }
 
-  /// Resolves a boolean value (`'true'` override, case-insensitive, is true).
-  bool boolean(String name, bool compileTime) =>
-      _overrides.containsKey(name) ? _overrides[name]!.toLowerCase() == 'true' : compileTime;
+  /// Resolves a boolean value. `'true'`/`'false'` (case-insensitive) are
+  /// honoured; an empty override is treated as unset; any other value is logged
+  /// and falls back to [compileTime] instead of being silently coerced.
+  bool boolean(String name, bool compileTime) {
+    final value = _overrides[name];
+    if (value == null || value.isEmpty) return compileTime;
+    switch (value.toLowerCase()) {
+      case 'true':
+        return true;
+      case 'false':
+        return false;
+      default:
+        _logger.warning('Override "$name"="$value" is not a bool; using $compileTime');
+        return compileTime;
+    }
+  }
 
-  /// Resolves an integer value, falling back to [compileTime] on a non-numeric override.
-  int integer(String name, int compileTime) =>
-      _overrides.containsKey(name) ? (int.tryParse(_overrides[name]!) ?? compileTime) : compileTime;
+  /// Resolves an integer value. An empty override is treated as unset; a
+  /// non-numeric override is logged and falls back to [compileTime].
+  int integer(String name, int compileTime) {
+    final value = _overrides[name];
+    if (value == null || value.isEmpty) return compileTime;
+    final parsed = int.tryParse(value);
+    if (parsed != null) return parsed;
+    _logger.warning('Override "$name"="$value" is not an int; using $compileTime');
+    return compileTime;
+  }
 }
