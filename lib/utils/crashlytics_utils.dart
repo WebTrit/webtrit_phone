@@ -4,9 +4,15 @@ import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'crashlytics_sink/crashlytics_sink.dart';
 
 /// Small helper around Firebase Crashlytics for consistent context logging.
+///
+/// The actual Crashlytics calls go through a platform-split sink
+/// (`crashlytics_sink/`): native forwards to `FirebaseCrashlytics.instance`,
+/// web/unsupported are no-ops. This keeps `firebase_crashlytics` (which has no
+/// web implementation) out of the web bundle entirely, instead of guarding each
+/// call at runtime.
 class CrashlyticsUtils {
   CrashlyticsUtils._();
 
@@ -21,17 +27,13 @@ class CrashlyticsUtils {
 
   /// Writes useful isolate/platform context into Crashlytics custom keys.
   static Future<void> logIsolateInfo() async {
-    // firebase_crashlytics has no web implementation; any access to its instance
-    // throws on web (and in embedded previews that skip Firebase init).
-    if (kIsWeb) return;
     final label = currentIsolateLabel();
     final dbg = kIsWeb ? null : Isolate.current.debugName;
     final hash = kIsWeb ? null : Isolate.current.hashCode;
 
-    final crashlytics = FirebaseCrashlytics.instance;
-    unawaited(crashlytics.setCustomKey('isolate_label', label));
-    if (dbg != null) unawaited(crashlytics.setCustomKey('isolate_debugName', dbg));
-    if (hash != null) unawaited(crashlytics.setCustomKey('isolate_hash', hash));
+    unawaited(crashlyticsSetCustomKey('isolate_label', label));
+    if (dbg != null) unawaited(crashlyticsSetCustomKey('isolate_debugName', dbg));
+    if (hash != null) unawaited(crashlyticsSetCustomKey('isolate_hash', hash));
   }
 
   /// Sets Crashlytics user + common session keys.
@@ -42,24 +44,20 @@ class CrashlyticsUtils {
     required String coreUrl,
     required String sessionId,
   }) async {
-    if (kIsWeb) return;
-    final crashlytics = FirebaseCrashlytics.instance;
-    unawaited(crashlytics.setUserIdentifier(userId));
-    unawaited(crashlytics.setCustomKey('tenantId', tenantId));
-    unawaited(crashlytics.setCustomKey('coreUrl', coreUrl));
-    unawaited(crashlytics.setCustomKey('sessionId', sessionId));
+    unawaited(crashlyticsSetUserIdentifier(userId));
+    unawaited(crashlyticsSetCustomKey('tenantId', tenantId));
+    unawaited(crashlyticsSetCustomKey('coreUrl', coreUrl));
+    unawaited(crashlyticsSetCustomKey('sessionId', sessionId));
     await logIsolateInfo();
   }
 
   /// Convenience wrappers
   static void setKey(String key, Object value) {
-    if (kIsWeb) return;
-    unawaited(FirebaseCrashlytics.instance.setCustomKey(key, value));
+    unawaited(crashlyticsSetCustomKey(key, value));
   }
 
   static void log(String message) {
-    if (kIsWeb) return;
-    FirebaseCrashlytics.instance.log(message);
+    crashlyticsLog(message);
   }
 
   /// Records an caught error that is needed to be reported, non fatal by default.
@@ -80,17 +78,10 @@ class CrashlyticsUtils {
     bool skipInDebug = true,
     bool skipNetwork = true,
   }) async {
-    if (kIsWeb) return;
     if (kDebugMode && skipInDebug) return;
     if (skipNetwork && _isTransientNetworkError(exception)) return;
 
-    await FirebaseCrashlytics.instance.recordError(
-      exception,
-      stack,
-      reason: reason,
-      information: information,
-      fatal: fatal,
-    );
+    await crashlyticsRecordError(exception, stack, reason: reason, information: information, fatal: fatal);
   }
 
   static bool _isTransientNetworkError(Object error) =>
@@ -109,16 +100,13 @@ class CrashlyticsUtils {
     String errorGroup = 'UserReport.submit',
     bool isFatal = true,
   }) async {
-    if (kIsWeb) return;
-    final crashlytics = FirebaseCrashlytics.instance;
-
     if (comment.isNotEmpty) {
       _setSafeCustomKey('report_comment', comment);
-      crashlytics.log('Diagnostic Comment: $comment');
+      crashlyticsLog('Diagnostic Comment: $comment');
     }
 
     if (diagnostics.isNotEmpty) {
-      crashlytics.log('Diagnostics: $diagnostics');
+      crashlyticsLog('Diagnostics: $diagnostics');
     }
 
     final allKeys = {...metadata, ...extras, ...diagnostics};
@@ -130,7 +118,7 @@ class CrashlyticsUtils {
     final exception = UserDiagnosticReportException(errorDescription);
     final syntheticStackTrace = StackTrace.fromString('#0      $errorGroup (user_diagnostic_report:1:1)');
 
-    await crashlytics.recordError(
+    await crashlyticsRecordError(
       exception,
       syntheticStackTrace,
       reason: 'Manual User Report via Service',
@@ -142,7 +130,7 @@ class CrashlyticsUtils {
 
   static void _setSafeCustomKey(String key, dynamic value) {
     final safeValue = (value is String || value is num || value is bool) ? value : value.toString();
-    unawaited(FirebaseCrashlytics.instance.setCustomKey(key, safeValue));
+    unawaited(crashlyticsSetCustomKey(key, safeValue));
   }
 }
 
