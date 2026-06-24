@@ -19,6 +19,7 @@ class DialogInfo extends Equatable {
     required this.remoteDisplayName,
     required this.arrivalVersion,
     required this.arrivalTime,
+    this.hasVideo,
   });
 
   final String id;
@@ -35,11 +36,19 @@ class DialogInfo extends Equatable {
   final String arrivalVersion;
   final DateTime arrivalTime;
 
+  /// Whether the dialog currently has an active video stream. Null when the
+  /// backend does not report media type yet (treated as unknown, not audio).
+  final bool? hasVideo;
+
   String? get displayName => remoteDisplayName ?? remoteNumber;
 
   bool get pullable {
     if (state != DialogState.confirmed) return false;
     if (remoteNumber == null || callId == null || localTag == null || remoteTag == null) return false;
+    // Pulling a video call offers audio-only and crashes on the answer's video
+    // m-line, so exclude known-video dialogs. Null (unknown) stays pullable to
+    // preserve current behaviour until the backend reports media type.
+    if (hasVideo == true) return false;
     return true;
   }
 
@@ -58,10 +67,11 @@ class DialogInfo extends Equatable {
     remoteDisplayName,
     arrivalVersion,
     arrivalTime,
+    hasVideo,
   ];
 
   @override
   String toString() {
-    return 'DialogInfo{id: $id, entityNumber: $entityNumber, state: $state, callId: $callId, direction: $direction, localTag: $localTag, localNumber: $localNumber, localDisplayName: $localDisplayName, remoteTag: $remoteTag, remoteNumber: $remoteNumber, remoteDisplayName: $remoteDisplayName, arrivalVersion: $arrivalVersion, arrivalTime: $arrivalTime}';
+    return 'DialogInfo{id: $id, entityNumber: $entityNumber, state: $state, callId: $callId, direction: $direction, localTag: $localTag, localNumber: $localNumber, localDisplayName: $localDisplayName, remoteTag: $remoteTag, remoteNumber: $remoteNumber, remoteDisplayName: $remoteDisplayName, arrivalVersion: $arrivalVersion, arrivalTime: $arrivalTime, hasVideo: $hasVideo}';
   }
 }

@@ -13203,6 +13203,20 @@ class $DialogInfoTableTable extends DialogInfoTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _hasVideoMeta = const VerificationMeta(
+    'hasVideo',
+  );
+  @override
+  late final GeneratedColumn<bool> hasVideo = GeneratedColumn<bool>(
+    'has_video',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("has_video" IN (0, 1))',
+    ),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     idKey,
@@ -13218,6 +13232,7 @@ class $DialogInfoTableTable extends DialogInfoTable
     remoteDisplayName,
     arrivalVersion,
     arrivalTimeUsec,
+    hasVideo,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -13340,6 +13355,12 @@ class $DialogInfoTableTable extends DialogInfoTable
     } else if (isInserting) {
       context.missing(_arrivalTimeUsecMeta);
     }
+    if (data.containsKey('has_video')) {
+      context.handle(
+        _hasVideoMeta,
+        hasVideo.isAcceptableOrUnknown(data['has_video']!, _hasVideoMeta),
+      );
+    }
     return context;
   }
 
@@ -13401,6 +13422,10 @@ class $DialogInfoTableTable extends DialogInfoTable
         DriftSqlType.int,
         data['${effectivePrefix}arrival_time_usec'],
       )!,
+      hasVideo: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}has_video'],
+      ),
     );
   }
 
@@ -13424,6 +13449,7 @@ class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
   final String? remoteDisplayName;
   final String arrivalVersion;
   final int arrivalTimeUsec;
+  final bool? hasVideo;
   const DialogInfoData({
     required this.idKey,
     required this.entityNumber,
@@ -13438,6 +13464,7 @@ class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
     this.remoteDisplayName,
     required this.arrivalVersion,
     required this.arrivalTimeUsec,
+    this.hasVideo,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -13471,6 +13498,9 @@ class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
     }
     map['arrival_version'] = Variable<String>(arrivalVersion);
     map['arrival_time_usec'] = Variable<int>(arrivalTimeUsec);
+    if (!nullToAbsent || hasVideo != null) {
+      map['has_video'] = Variable<bool>(hasVideo);
+    }
     return map;
   }
 
@@ -13505,6 +13535,9 @@ class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
           : Value(remoteDisplayName),
       arrivalVersion: Value(arrivalVersion),
       arrivalTimeUsec: Value(arrivalTimeUsec),
+      hasVideo: hasVideo == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hasVideo),
     );
   }
 
@@ -13529,6 +13562,7 @@ class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
       ),
       arrivalVersion: serializer.fromJson<String>(json['arrivalVersion']),
       arrivalTimeUsec: serializer.fromJson<int>(json['arrivalTimeUsec']),
+      hasVideo: serializer.fromJson<bool?>(json['hasVideo']),
     );
   }
   @override
@@ -13548,6 +13582,7 @@ class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
       'remoteDisplayName': serializer.toJson<String?>(remoteDisplayName),
       'arrivalVersion': serializer.toJson<String>(arrivalVersion),
       'arrivalTimeUsec': serializer.toJson<int>(arrivalTimeUsec),
+      'hasVideo': serializer.toJson<bool?>(hasVideo),
     };
   }
 
@@ -13565,6 +13600,7 @@ class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
     Value<String?> remoteDisplayName = const Value.absent(),
     String? arrivalVersion,
     int? arrivalTimeUsec,
+    Value<bool?> hasVideo = const Value.absent(),
   }) => DialogInfoData(
     idKey: idKey ?? this.idKey,
     entityNumber: entityNumber ?? this.entityNumber,
@@ -13583,6 +13619,7 @@ class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
         : this.remoteDisplayName,
     arrivalVersion: arrivalVersion ?? this.arrivalVersion,
     arrivalTimeUsec: arrivalTimeUsec ?? this.arrivalTimeUsec,
+    hasVideo: hasVideo.present ? hasVideo.value : this.hasVideo,
   );
   DialogInfoData copyWithCompanion(DialogInfoDataCompanion data) {
     return DialogInfoData(
@@ -13613,6 +13650,7 @@ class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
       arrivalTimeUsec: data.arrivalTimeUsec.present
           ? data.arrivalTimeUsec.value
           : this.arrivalTimeUsec,
+      hasVideo: data.hasVideo.present ? data.hasVideo.value : this.hasVideo,
     );
   }
 
@@ -13631,7 +13669,8 @@ class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
           ..write('remoteNumber: $remoteNumber, ')
           ..write('remoteDisplayName: $remoteDisplayName, ')
           ..write('arrivalVersion: $arrivalVersion, ')
-          ..write('arrivalTimeUsec: $arrivalTimeUsec')
+          ..write('arrivalTimeUsec: $arrivalTimeUsec, ')
+          ..write('hasVideo: $hasVideo')
           ..write(')'))
         .toString();
   }
@@ -13651,6 +13690,7 @@ class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
     remoteDisplayName,
     arrivalVersion,
     arrivalTimeUsec,
+    hasVideo,
   );
   @override
   bool operator ==(Object other) =>
@@ -13668,7 +13708,8 @@ class DialogInfoData extends DataClass implements Insertable<DialogInfoData> {
           other.remoteNumber == this.remoteNumber &&
           other.remoteDisplayName == this.remoteDisplayName &&
           other.arrivalVersion == this.arrivalVersion &&
-          other.arrivalTimeUsec == this.arrivalTimeUsec);
+          other.arrivalTimeUsec == this.arrivalTimeUsec &&
+          other.hasVideo == this.hasVideo);
 }
 
 class DialogInfoDataCompanion extends UpdateCompanion<DialogInfoData> {
@@ -13685,6 +13726,7 @@ class DialogInfoDataCompanion extends UpdateCompanion<DialogInfoData> {
   final Value<String?> remoteDisplayName;
   final Value<String> arrivalVersion;
   final Value<int> arrivalTimeUsec;
+  final Value<bool?> hasVideo;
   final Value<int> rowid;
   const DialogInfoDataCompanion({
     this.idKey = const Value.absent(),
@@ -13700,6 +13742,7 @@ class DialogInfoDataCompanion extends UpdateCompanion<DialogInfoData> {
     this.remoteDisplayName = const Value.absent(),
     this.arrivalVersion = const Value.absent(),
     this.arrivalTimeUsec = const Value.absent(),
+    this.hasVideo = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   DialogInfoDataCompanion.insert({
@@ -13716,6 +13759,7 @@ class DialogInfoDataCompanion extends UpdateCompanion<DialogInfoData> {
     this.remoteDisplayName = const Value.absent(),
     required String arrivalVersion,
     required int arrivalTimeUsec,
+    this.hasVideo = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : idKey = Value(idKey),
        entityNumber = Value(entityNumber),
@@ -13736,6 +13780,7 @@ class DialogInfoDataCompanion extends UpdateCompanion<DialogInfoData> {
     Expression<String>? remoteDisplayName,
     Expression<String>? arrivalVersion,
     Expression<int>? arrivalTimeUsec,
+    Expression<bool>? hasVideo,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -13752,6 +13797,7 @@ class DialogInfoDataCompanion extends UpdateCompanion<DialogInfoData> {
       if (remoteDisplayName != null) 'remote_display_name': remoteDisplayName,
       if (arrivalVersion != null) 'arrival_version': arrivalVersion,
       if (arrivalTimeUsec != null) 'arrival_time_usec': arrivalTimeUsec,
+      if (hasVideo != null) 'has_video': hasVideo,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -13770,6 +13816,7 @@ class DialogInfoDataCompanion extends UpdateCompanion<DialogInfoData> {
     Value<String?>? remoteDisplayName,
     Value<String>? arrivalVersion,
     Value<int>? arrivalTimeUsec,
+    Value<bool?>? hasVideo,
     Value<int>? rowid,
   }) {
     return DialogInfoDataCompanion(
@@ -13786,6 +13833,7 @@ class DialogInfoDataCompanion extends UpdateCompanion<DialogInfoData> {
       remoteDisplayName: remoteDisplayName ?? this.remoteDisplayName,
       arrivalVersion: arrivalVersion ?? this.arrivalVersion,
       arrivalTimeUsec: arrivalTimeUsec ?? this.arrivalTimeUsec,
+      hasVideo: hasVideo ?? this.hasVideo,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -13832,6 +13880,9 @@ class DialogInfoDataCompanion extends UpdateCompanion<DialogInfoData> {
     if (arrivalTimeUsec.present) {
       map['arrival_time_usec'] = Variable<int>(arrivalTimeUsec.value);
     }
+    if (hasVideo.present) {
+      map['has_video'] = Variable<bool>(hasVideo.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -13854,6 +13905,7 @@ class DialogInfoDataCompanion extends UpdateCompanion<DialogInfoData> {
           ..write('remoteDisplayName: $remoteDisplayName, ')
           ..write('arrivalVersion: $arrivalVersion, ')
           ..write('arrivalTimeUsec: $arrivalTimeUsec, ')
+          ..write('hasVideo: $hasVideo, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -26436,6 +26488,7 @@ typedef $$DialogInfoTableTableCreateCompanionBuilder =
       Value<String?> remoteDisplayName,
       required String arrivalVersion,
       required int arrivalTimeUsec,
+      Value<bool?> hasVideo,
       Value<int> rowid,
     });
 typedef $$DialogInfoTableTableUpdateCompanionBuilder =
@@ -26453,6 +26506,7 @@ typedef $$DialogInfoTableTableUpdateCompanionBuilder =
       Value<String?> remoteDisplayName,
       Value<String> arrivalVersion,
       Value<int> arrivalTimeUsec,
+      Value<bool?> hasVideo,
       Value<int> rowid,
     });
 
@@ -26527,6 +26581,11 @@ class $$DialogInfoTableTableFilterComposer
 
   ColumnFilters<int> get arrivalTimeUsec => $composableBuilder(
     column: $table.arrivalTimeUsec,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get hasVideo => $composableBuilder(
+    column: $table.hasVideo,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -26604,6 +26663,11 @@ class $$DialogInfoTableTableOrderingComposer
     column: $table.arrivalTimeUsec,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get hasVideo => $composableBuilder(
+    column: $table.hasVideo,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$DialogInfoTableTableAnnotationComposer
@@ -26667,6 +26731,9 @@ class $$DialogInfoTableTableAnnotationComposer
     column: $table.arrivalTimeUsec,
     builder: (column) => column,
   );
+
+  GeneratedColumn<bool> get hasVideo =>
+      $composableBuilder(column: $table.hasVideo, builder: (column) => column);
 }
 
 class $$DialogInfoTableTableTableManager
@@ -26719,6 +26786,7 @@ class $$DialogInfoTableTableTableManager
                 Value<String?> remoteDisplayName = const Value.absent(),
                 Value<String> arrivalVersion = const Value.absent(),
                 Value<int> arrivalTimeUsec = const Value.absent(),
+                Value<bool?> hasVideo = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => DialogInfoDataCompanion(
                 idKey: idKey,
@@ -26734,6 +26802,7 @@ class $$DialogInfoTableTableTableManager
                 remoteDisplayName: remoteDisplayName,
                 arrivalVersion: arrivalVersion,
                 arrivalTimeUsec: arrivalTimeUsec,
+                hasVideo: hasVideo,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -26751,6 +26820,7 @@ class $$DialogInfoTableTableTableManager
                 Value<String?> remoteDisplayName = const Value.absent(),
                 required String arrivalVersion,
                 required int arrivalTimeUsec,
+                Value<bool?> hasVideo = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => DialogInfoDataCompanion.insert(
                 idKey: idKey,
@@ -26766,6 +26836,7 @@ class $$DialogInfoTableTableTableManager
                 remoteDisplayName: remoteDisplayName,
                 arrivalVersion: arrivalVersion,
                 arrivalTimeUsec: arrivalTimeUsec,
+                hasVideo: hasVideo,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

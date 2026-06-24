@@ -72,4 +72,28 @@ void main() {
       expect(info.direction, isNull);
     });
   });
+
+  group('has_video parsing', () {
+    test('true → hasVideo true', () {
+      final json = baseJson(state: 'confirmed')..['has_video'] = true;
+      expect(SignalingDialogInfo.fromJson(json).hasVideo, isTrue);
+    });
+
+    test('false → hasVideo false', () {
+      final json = baseJson(state: 'confirmed')..['has_video'] = false;
+      expect(SignalingDialogInfo.fromJson(json).hasVideo, isFalse);
+    });
+
+    test('absent → hasVideo null (backend does not report media type yet)', () {
+      expect(SignalingDialogInfo.fromJson(baseJson(state: 'confirmed')).hasVideo, isNull);
+    });
+
+    test('round-trips through toJson only when set', () {
+      final withVideo = SignalingDialogInfo.fromJson(baseJson(state: 'confirmed')..['has_video'] = true);
+      expect(withVideo.toJson()['has_video'], isTrue);
+
+      final withoutVideo = SignalingDialogInfo.fromJson(baseJson(state: 'confirmed'));
+      expect(withoutVideo.toJson().containsKey('has_video'), isFalse);
+    });
+  });
 }
