@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:stream_transform/stream_transform.dart';
 
+import 'package:webtrit_phone/app/app_config_source.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/app/router/app_router_observer.dart';
@@ -23,17 +24,11 @@ import 'package:webtrit_phone/resolvers/resolvers.dart';
 final _logger = Logger('AppWidget');
 
 class App extends StatefulWidget {
-  const App({super.key, this.externalThemeSettings, this.externalThemeMode});
+  const App({super.key, this.configSource});
 
-  /// Optional external [ThemeSettings] stream used by a host (the theme
-  /// configurator's realtime preview) to drive the running app's appearance
-  /// live. Emissions are applied via [AppThemeSettingsChanged] and are not
-  /// persisted to local preferences.
-  final Stream<ThemeSettings>? externalThemeSettings;
-
-  /// Optional external [ThemeMode] stream paired with [externalThemeSettings];
-  /// emissions are applied via [AppThemeModeChanged].
-  final Stream<ThemeMode>? externalThemeMode;
+  /// Optional live config supplied by an external host (the configurator's
+  /// realtime preview); when present, the app follows its theme streams.
+  final AppConfigSource? configSource;
 
   @override
   State<App> createState() => _AppState();
@@ -43,8 +38,8 @@ class _AppState extends State<App> {
   late final AppBloc appBloc;
   late final AppRouter appRouter;
 
-  StreamSubscription<ThemeSettings>? _externalThemeSettingsSubscription;
-  StreamSubscription<ThemeMode>? _externalThemeModeSubscription;
+  StreamSubscription<ThemeSettings>? _themeSettingsSubscription;
+  StreamSubscription<ThemeMode>? _themeModeSubscription;
 
   @override
   void initState() {
@@ -99,10 +94,10 @@ class _AppState extends State<App> {
       featureAccess.checker,
     );
 
-    _externalThemeSettingsSubscription = widget.externalThemeSettings?.listen(
+    _themeSettingsSubscription = widget.configSource?.themeSettings?.listen(
       (settings) => appBloc.add(AppThemeSettingsChanged(settings)),
     );
-    _externalThemeModeSubscription = widget.externalThemeMode?.listen(
+    _themeModeSubscription = widget.configSource?.themeMode?.listen(
       (themeMode) => appBloc.add(AppThemeModeChanged(themeMode)),
     );
   }
@@ -130,8 +125,8 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
-    _externalThemeSettingsSubscription?.cancel();
-    _externalThemeModeSubscription?.cancel();
+    _themeSettingsSubscription?.cancel();
+    _themeModeSubscription?.cancel();
     appBloc.close();
     super.dispose();
   }

@@ -20,7 +20,6 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
@@ -67,33 +66,14 @@ void _onRootLogRecord(LogRecord record) {
 }
 
 class RootApp extends StatelessWidget {
-  const RootApp({
-    super.key,
-    required this.instanceRegistry,
-    this.externalThemeSettings,
-    this.externalThemeMode,
-    this.externalFeatureAccess,
-    this.externalFeatureAccessInitial,
-  });
+  const RootApp({super.key, required this.instanceRegistry, this.configSource});
 
   final InstanceRegistry instanceRegistry;
 
-  /// Optional external [ThemeSettings] stream forwarded to [App] so a host
-  /// (the configurator's realtime preview) can drive the running app's
-  /// appearance live.
-  final Stream<ThemeSettings>? externalThemeSettings;
-
-  /// Optional external [ThemeMode] stream forwarded to [App], paired with
-  /// [externalThemeSettings].
-  final Stream<ThemeMode>? externalThemeMode;
-
-  /// Optional external [FeatureAccess] stream that replaces the bootstrap-built
-  /// reactive configuration, letting a host drive the live feature/login config.
-  final Stream<FeatureAccess>? externalFeatureAccess;
-
-  /// Initial [FeatureAccess] paired with [externalFeatureAccess]; used as the
-  /// `StreamProvider` seed so the first frame already reflects the host config.
-  final FeatureAccess? externalFeatureAccessInitial;
+  /// Optional live configuration supplied by an external host (the configurator's
+  /// realtime preview): theme + feature config the app follows. Null in a normal
+  /// run, where the app uses its bootstrap-built defaults.
+  final AppConfigSource? configSource;
 
   @override
   Widget build(BuildContext context) {
@@ -111,8 +91,8 @@ class RootApp extends StatelessWidget {
         //
         // Initializes with bootstrap data and updates whenever system information or remote configuration changes.
         StreamProvider<FeatureAccess>(
-          initialData: externalFeatureAccessInitial ?? instanceRegistry.get<FeatureAccess>(),
-          create: (_) => externalFeatureAccess ?? instanceRegistry.get<FeatureAccessStreamFactory>().create(),
+          initialData: configSource?.featureAccessInitial ?? instanceRegistry.get<FeatureAccess>(),
+          create: (_) => configSource?.featureAccess ?? instanceRegistry.get<FeatureAccessStreamFactory>().create(),
           updateShouldNotify: (previous, next) => previous != next,
         ),
         Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
@@ -207,7 +187,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<UserLocalDatasource>(create: (_) => instanceRegistry.get()),
               RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get()),
             ],
-            child: App(externalThemeSettings: externalThemeSettings, externalThemeMode: externalThemeMode),
+            child: App(configSource: configSource),
           );
         },
       ),
