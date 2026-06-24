@@ -31,6 +31,9 @@ class _AppState extends State<App> {
   late final AppBloc appBloc;
   late final AppRouter appRouter;
 
+  ThemeSettings? _lastHostThemeSettings;
+  ThemeMode? _lastHostThemeMode;
+
   @override
   void initState() {
     super.initState();
@@ -104,6 +107,20 @@ class _AppState extends State<App> {
       initialTabResolver,
       featureAccess.checker,
     );
+
+    // A host (the configurator's realtime preview) supplies its theme through the
+    // tree; push it into the AppBloc so AppState stays the single source of truth.
+    final hostThemeSettings = context.watch<ThemeSettings?>();
+    if (hostThemeSettings != null && hostThemeSettings != _lastHostThemeSettings) {
+      _lastHostThemeSettings = hostThemeSettings;
+      appBloc.add(AppThemeSettingsChanged(hostThemeSettings));
+    }
+
+    final hostThemeMode = context.watch<ThemeMode?>();
+    if (hostThemeMode != null && hostThemeMode != _lastHostThemeMode) {
+      _lastHostThemeMode = hostThemeMode;
+      appBloc.add(AppThemeModeChanged(hostThemeMode));
+    }
   }
 
   @override
@@ -118,16 +135,11 @@ class _AppState extends State<App> {
 
     final featureAccess = context.watch<FeatureAccess>();
 
-    // A host (the configurator's realtime preview) provides its own theme down the
-    // tree; the app falls back to its AppBloc theme otherwise.
-    final hostThemeSettings = context.watch<ThemeSettings?>();
-    final hostThemeMode = context.watch<ThemeMode?>();
-
     final materialApp = BlocBuilder<AppBloc, AppState>(
       buildWhen: (previous, current) => previous.themeSettings != current.themeSettings,
       builder: (context, state) {
         return ThemeProvider(
-          settings: hostThemeSettings ?? state.themeSettings,
+          settings: state.themeSettings,
           lightDynamic: null,
           darkDynamic: null,
           child: BlocBuilder<AppBloc, AppState>(
@@ -137,9 +149,7 @@ class _AppState extends State<App> {
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
               final forcedMode = featureAccess.supportedConfig.themeMode;
-              final finalThemeMode = forcedMode == ThemeMode.system
-                  ? (hostThemeMode ?? state.effectiveThemeMode)
-                  : forcedMode;
+              final finalThemeMode = forcedMode == ThemeMode.system ? state.effectiveThemeMode : forcedMode;
 
               return MaterialApp.router(
                 locale: state.effectiveLocale,
