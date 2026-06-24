@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +25,7 @@ class App extends StatefulWidget {
   const App({super.key, this.configSource});
 
   /// Optional live config supplied by an external host (the configurator's
-  /// realtime preview); when present, the app follows its theme streams.
+  /// realtime preview); when present, the app renders its theme and feature config.
   final AppConfigSource? configSource;
 
   @override
@@ -37,9 +35,6 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late final AppBloc appBloc;
   late final AppRouter appRouter;
-
-  StreamSubscription<ThemeSettings>? _themeSettingsSubscription;
-  StreamSubscription<ThemeMode>? _themeModeSubscription;
 
   @override
   void initState() {
@@ -93,13 +88,6 @@ class _AppState extends State<App> {
       initialTabResolver,
       featureAccess.checker,
     );
-
-    _themeSettingsSubscription = widget.configSource?.themeSettings?.listen(
-      (settings) => appBloc.add(AppThemeSettingsChanged(settings)),
-    );
-    _themeModeSubscription = widget.configSource?.themeMode?.listen(
-      (themeMode) => appBloc.add(AppThemeModeChanged(themeMode)),
-    );
   }
 
   @override
@@ -125,8 +113,6 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
-    _themeSettingsSubscription?.cancel();
-    _themeModeSubscription?.cancel();
     appBloc.close();
     super.dispose();
   }
@@ -137,11 +123,15 @@ class _AppState extends State<App> {
 
     final featureAccess = context.watch<FeatureAccess>();
 
+    // A host (the configurator's realtime preview) renders its own theme; the
+    // app falls back to its AppBloc theme otherwise.
+    final configSource = widget.configSource;
+
     final materialApp = BlocBuilder<AppBloc, AppState>(
       buildWhen: (previous, current) => previous.themeSettings != current.themeSettings,
       builder: (context, state) {
         return ThemeProvider(
-          settings: state.themeSettings,
+          settings: configSource?.themeSettings ?? state.themeSettings,
           lightDynamic: null,
           darkDynamic: null,
           child: BlocBuilder<AppBloc, AppState>(
@@ -151,7 +141,9 @@ class _AppState extends State<App> {
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
               final forcedMode = featureAccess.supportedConfig.themeMode;
-              final finalThemeMode = forcedMode == ThemeMode.system ? state.effectiveThemeMode : forcedMode;
+              final finalThemeMode = forcedMode == ThemeMode.system
+                  ? (configSource?.themeMode ?? state.effectiveThemeMode)
+                  : forcedMode;
 
               return MaterialApp.router(
                 locale: state.effectiveLocale,

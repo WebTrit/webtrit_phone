@@ -90,11 +90,15 @@ class RootApp extends StatelessWidget {
         // Provides reactive [FeatureAccess] configuration synchronized with [SystemInfoRepository] and [RemoteConfigService].
         //
         // Initializes with bootstrap data and updates whenever system information or remote configuration changes.
-        StreamProvider<FeatureAccess>(
-          initialData: configSource?.featureAccessInitial ?? instanceRegistry.get<FeatureAccess>(),
-          create: (_) => configSource?.featureAccess ?? instanceRegistry.get<FeatureAccessStreamFactory>().create(),
-          updateShouldNotify: (previous, next) => previous != next,
-        ),
+        // A host (the configurator's realtime preview) overrides it with a plain value it re-supplies on edits.
+        if (configSource?.featureAccess != null)
+          Provider<FeatureAccess>.value(value: configSource!.featureAccess!)
+        else
+          StreamProvider<FeatureAccess>(
+            initialData: instanceRegistry.get<FeatureAccess>(),
+            create: (_) => instanceRegistry.get<FeatureAccessStreamFactory>().create(),
+            updateShouldNotify: (previous, next) => previous != next,
+          ),
         Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
         Provider<AppPermissions>(create: (_) => instanceRegistry.get()),
         Provider<AppLogger>(create: (_) => instanceRegistry.get()),

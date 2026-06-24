@@ -4,24 +4,22 @@ import 'package:webtrit_phone/data/feature_access.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 /// Live application configuration supplied by an external host (the theme
-/// configurator's realtime preview).
+/// configurator's realtime preview), passed down the widget tree like any other
+/// config.
 ///
-/// Every field is optional: when a source is provided the app follows it,
-/// otherwise it uses its own bootstrap-built defaults. This is a plain config
-/// source — it carries no notion of "embedding", so the app stays unaware of
-/// where it runs.
+/// Every field is optional: when present the app renders it, otherwise it uses
+/// its bootstrap-built defaults. These are plain values, not streams — the host
+/// re-supplies a new instance on each edit, so reactivity comes from the normal
+/// widget rebuild. The app carries no notion of "embedding".
 class AppConfigSource {
-  const AppConfigSource({this.themeSettings, this.themeMode, this.featureAccess, this.featureAccessInitial});
+  const AppConfigSource({this.themeSettings, this.themeMode, this.featureAccess});
 
-  /// Live theme appearance applied via `AppThemeSettingsChanged` (not persisted).
-  final Stream<ThemeSettings>? themeSettings;
+  /// Theme appearance to render instead of the app's own.
+  final ThemeSettings? themeSettings;
 
-  /// Live theme mode applied via `AppThemeModeChanged`, paired with [themeSettings].
-  final Stream<ThemeMode>? themeMode;
+  /// Theme mode (light/dark) to apply, paired with [themeSettings].
+  final ThemeMode? themeMode;
 
-  /// Reactive [FeatureAccess] that replaces the bootstrap-built configuration.
-  final Stream<FeatureAccess>? featureAccess;
-
-  /// First-frame [FeatureAccess] seed paired with [featureAccess].
-  final FeatureAccess? featureAccessInitial;
+  /// [FeatureAccess] to use instead of the bootstrap-built configuration.
+  final FeatureAccess? featureAccess;
 }
