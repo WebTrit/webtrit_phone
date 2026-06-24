@@ -67,15 +67,18 @@ void _onRootLogRecord(LogRecord record) {
 }
 
 class RootApp extends StatelessWidget {
-  const RootApp({super.key, required this.instanceRegistry, this.themeSettings, this.themeMode, this.featureAccess});
+  const RootApp({super.key, required this.instanceRegistry, this.themeSettings, this.featureAccess});
 
   final InstanceRegistry instanceRegistry;
 
   /// Optional config supplied by an external host (the configurator's realtime
   /// preview) and provided down the tree so the app renders it instead of its
   /// own. Null in a normal run, where the app uses its bootstrap-built defaults.
+  ///
+  /// The theme mode is intentionally not a separate parameter: a host drives it
+  /// through [featureAccess] (`supportedConfig.themeMode`), which the app already
+  /// treats as the authoritative mode, so there is a single source for it.
   final ThemeSettings? themeSettings;
-  final ThemeMode? themeMode;
   final FeatureAccess? featureAccess;
 
   @override
@@ -104,7 +107,6 @@ class RootApp extends StatelessWidget {
           ),
         // Optional host-supplied theme; null in a normal run (App falls back to its AppBloc theme).
         Provider<ThemeSettings?>.value(value: themeSettings),
-        Provider<ThemeMode?>.value(value: themeMode),
         Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
         Provider<AppPermissions>(create: (_) => instanceRegistry.get()),
         Provider<AppLogger>(create: (_) => instanceRegistry.get()),

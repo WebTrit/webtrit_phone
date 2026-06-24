@@ -32,7 +32,6 @@ class _AppState extends State<App> {
   late final AppRouter appRouter;
 
   ThemeSettings? _lastHostThemeSettings;
-  ThemeMode? _lastHostThemeMode;
 
   @override
   void initState() {
@@ -110,16 +109,12 @@ class _AppState extends State<App> {
 
     // A host (the configurator's realtime preview) supplies its theme through the
     // tree; push it into the AppBloc so AppState stays the single source of truth.
+    // The theme mode is not pushed here: it comes from featureAccess
+    // (supportedConfig.themeMode), which build() already treats as authoritative.
     final hostThemeSettings = context.watch<ThemeSettings?>();
     if (hostThemeSettings != null && hostThemeSettings != _lastHostThemeSettings) {
       _lastHostThemeSettings = hostThemeSettings;
       appBloc.add(AppThemeSettingsChanged(hostThemeSettings));
-    }
-
-    final hostThemeMode = context.watch<ThemeMode?>();
-    if (hostThemeMode != null && hostThemeMode != _lastHostThemeMode) {
-      _lastHostThemeMode = hostThemeMode;
-      appBloc.add(AppThemeModeChanged(hostThemeMode));
     }
   }
 
