@@ -17,7 +17,6 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/resolvers/resolvers.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 part 'app_bloc.freezed.dart';
@@ -40,14 +39,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.systemInfoRepository,
     required this.appCompatibilityResolver,
     required this.packageInfo,
-    required AppThemes appThemes,
   }) : super(
          AppState(
            session: sessionRepository.getCurrent(),
            status: (sessionRepository.getCurrent().isLoggedIn)
                ? AppLifecycleStatus.authenticated
                : AppLifecycleStatus.unauthenticated,
-           themeSettings: appThemes.values.first.settings,
            themeMode: themeModeRepository.getThemeMode(),
            locale: localeRepository.getLocale(),
            userAgreementStatus: userAgreementStatusRepository.getUserAgreementStatus(),
@@ -55,7 +52,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
          ),
        ) {
     on<AppLoggedIn>(_onLoggedIn);
-    on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());
     on<AppAgreementAccepted>(_onUserAgreementAccepted, transformer: droppable());
@@ -195,10 +191,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     await sessionRepository.clean();
 
     emit(state.copyWith(status: AppLifecycleStatus.unauthenticated, session: const Session(), logoutReason: null));
-  }
-
-  void _onThemeSettingsChanged(AppThemeSettingsChanged event, Emitter<AppState> emit) {
-    emit(state.copyWith(themeSettings: event.value));
   }
 
   void _onThemeModeChanged(AppThemeModeChanged event, Emitter<AppState> emit) async {

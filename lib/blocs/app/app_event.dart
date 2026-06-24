@@ -45,15 +45,6 @@ class AppLoggedIn extends AppEvent {
   List<Object?> get props => [session, systemInfo];
 }
 
-class AppThemeSettingsChanged extends AppEvent {
-  const AppThemeSettingsChanged(this.value);
-
-  final ThemeSettings value;
-
-  @override
-  List<Object?> get props => [value];
-}
-
 class AppThemeModeChanged extends AppEvent {
   const AppThemeModeChanged(this.value);
 
