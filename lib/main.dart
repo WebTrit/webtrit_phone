@@ -45,7 +45,19 @@ void main() {
 
       Logger.root.onRecord.listen(_onRootLogRecord);
 
-      runApp(RootApp(instanceRegistry: instanceRegistry));
+      runApp(
+        RootApp(
+          instanceRegistry: instanceRegistry,
+          featureAccess: (
+            initial: instanceRegistry.get<FeatureAccess>(),
+            updates: instanceRegistry.get<FeatureAccessStreamFactory>().create(),
+          ),
+          themeSettings: (
+            initial: instanceRegistry.get<AppThemes>().values.first.settings,
+            updates: const Stream.empty(),
+          ),
+        ),
+      );
     },
     (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
@@ -65,10 +77,22 @@ void _onRootLogRecord(LogRecord record) {
   }
 }
 
+/// A reactive config input: the [initial] value for the first frame plus an
+/// [updates] stream that replaces it as it changes.
+typedef ConfigSource<T> = ({T initial, Stream<T> updates});
+
 class RootApp extends StatelessWidget {
-  const RootApp({super.key, required this.instanceRegistry});
+  const RootApp({super.key, required this.instanceRegistry, required this.featureAccess, required this.themeSettings});
 
   final InstanceRegistry instanceRegistry;
+
+  /// Reactive config the app renders, provided down the tree as inherited values.
+  /// The composition root decides the source: standalone (`main`) resolves it
+  /// from the bootstrap registry; a host that embeds this app (the configurator's
+  /// realtime preview) passes its own streams so the preview reflects live edits.
+  /// RootApp itself stays agnostic - it only wires whatever source it is given.
+  final ConfigSource<FeatureAccess> featureAccess;
+  final ConfigSource<ThemeSettings> themeSettings;
 
   @override
   Widget build(BuildContext context) {
@@ -77,21 +101,24 @@ class RootApp extends StatelessWidget {
         Provider<AppInfo>(create: (_) => instanceRegistry.get()),
         // The active theme, provided down the tree as an inherited value so the
         // app consumes it directly (see App.build) instead of holding it in
-        // AppState. A host that embeds this app can override this provider to
-        // drive the theme; standalone it is the first bootstrap-built theme.
-        Provider<ThemeSettings>(create: (_) => instanceRegistry.get<AppThemes>().values.first.settings),
+        // AppState. The source is supplied by the caller (see [themeSettings]).
+        StreamProvider<ThemeSettings>(
+          initialData: themeSettings.initial,
+          create: (_) => themeSettings.updates,
+          updateShouldNotify: (previous, next) => previous != next,
+        ),
         Provider<PackageInfo>(create: (_) => instanceRegistry.get()),
         // Stateless version-compatibility policy shared by the login gate and the
         // in-app force-update gate; const, so no bootstrap registration needed.
         Provider<AppCompatibilityResolver>(create: (_) => const DefaultAppCompatibilityResolver()),
         Provider<DeviceInfo>(create: (_) => instanceRegistry.get()),
         Provider<AppPreferences>(create: (_) => instanceRegistry.get()),
-        // Provides reactive [FeatureAccess] configuration synchronized with [SystemInfoRepository] and [RemoteConfigService].
-        //
-        // Initializes with bootstrap data and updates whenever system information or remote configuration changes.
+        // Reactive [FeatureAccess]; the source is supplied by the caller (see
+        // [featureAccess]). Standalone it is the bootstrap stream synchronized
+        // with SystemInfoRepository and RemoteConfigService.
         StreamProvider<FeatureAccess>(
-          initialData: instanceRegistry.get<FeatureAccess>(),
-          create: (_) => instanceRegistry.get<FeatureAccessStreamFactory>().create(),
+          initialData: featureAccess.initial,
+          create: (_) => featureAccess.updates,
           updateShouldNotify: (previous, next) => previous != next,
         ),
         Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
