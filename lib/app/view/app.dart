@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-import 'package:webtrit_phone/app/app_config_source.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/app/router/app_router_observer.dart';
@@ -22,11 +21,7 @@ import 'package:webtrit_phone/resolvers/resolvers.dart';
 final _logger = Logger('AppWidget');
 
 class App extends StatefulWidget {
-  const App({super.key, this.configSource});
-
-  /// Optional live config supplied by an external host (the configurator's
-  /// realtime preview); when present, the app renders its theme and feature config.
-  final AppConfigSource? configSource;
+  const App({super.key});
 
   @override
   State<App> createState() => _AppState();
@@ -123,15 +118,16 @@ class _AppState extends State<App> {
 
     final featureAccess = context.watch<FeatureAccess>();
 
-    // A host (the configurator's realtime preview) renders its own theme; the
-    // app falls back to its AppBloc theme otherwise.
-    final configSource = widget.configSource;
+    // A host (the configurator's realtime preview) provides its own theme down the
+    // tree; the app falls back to its AppBloc theme otherwise.
+    final hostThemeSettings = context.watch<ThemeSettings?>();
+    final hostThemeMode = context.watch<ThemeMode?>();
 
     final materialApp = BlocBuilder<AppBloc, AppState>(
       buildWhen: (previous, current) => previous.themeSettings != current.themeSettings,
       builder: (context, state) {
         return ThemeProvider(
-          settings: configSource?.themeSettings ?? state.themeSettings,
+          settings: hostThemeSettings ?? state.themeSettings,
           lightDynamic: null,
           darkDynamic: null,
           child: BlocBuilder<AppBloc, AppState>(
@@ -142,7 +138,7 @@ class _AppState extends State<App> {
               final themeProvider = ThemeProvider.of(context);
               final forcedMode = featureAccess.supportedConfig.themeMode;
               final finalThemeMode = forcedMode == ThemeMode.system
-                  ? (configSource?.themeMode ?? state.effectiveThemeMode)
+                  ? (hostThemeMode ?? state.effectiveThemeMode)
                   : forcedMode;
 
               return MaterialApp.router(
