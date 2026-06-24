@@ -20,6 +20,7 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
@@ -66,9 +67,16 @@ void _onRootLogRecord(LogRecord record) {
 }
 
 class RootApp extends StatelessWidget {
-  const RootApp({super.key, required this.instanceRegistry});
+  const RootApp({super.key, required this.instanceRegistry, this.themeSettings, this.themeMode, this.featureAccess});
 
   final InstanceRegistry instanceRegistry;
+
+  /// Optional config supplied by an external host (the configurator's realtime
+  /// preview) and provided down the tree so the app renders it instead of its
+  /// own. Null in a normal run, where the app uses its bootstrap-built defaults.
+  final ThemeSettings? themeSettings;
+  final ThemeMode? themeMode;
+  final FeatureAccess? featureAccess;
 
   @override
   Widget build(BuildContext context) {
@@ -85,11 +93,18 @@ class RootApp extends StatelessWidget {
         // Provides reactive [FeatureAccess] configuration synchronized with [SystemInfoRepository] and [RemoteConfigService].
         //
         // Initializes with bootstrap data and updates whenever system information or remote configuration changes.
-        StreamProvider<FeatureAccess>(
-          initialData: instanceRegistry.get<FeatureAccess>(),
-          create: (_) => instanceRegistry.get<FeatureAccessStreamFactory>().create(),
-          updateShouldNotify: (previous, next) => previous != next,
-        ),
+        // A host (the configurator's realtime preview) overrides it with a plain value it re-supplies on edits.
+        if (featureAccess != null)
+          Provider<FeatureAccess>.value(value: featureAccess!)
+        else
+          StreamProvider<FeatureAccess>(
+            initialData: instanceRegistry.get<FeatureAccess>(),
+            create: (_) => instanceRegistry.get<FeatureAccessStreamFactory>().create(),
+            updateShouldNotify: (previous, next) => previous != next,
+          ),
+        // Optional host-supplied theme; null in a normal run (App falls back to its AppBloc theme).
+        Provider<ThemeSettings?>.value(value: themeSettings),
+        Provider<ThemeMode?>.value(value: themeMode),
         Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
         Provider<AppPermissions>(create: (_) => instanceRegistry.get()),
         Provider<AppLogger>(create: (_) => instanceRegistry.get()),
