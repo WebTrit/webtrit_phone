@@ -63,20 +63,6 @@ class AppThemeModeChanged extends AppEvent {
   List<Object?> get props => [value];
 }
 
-/// Sets the theme mode for the current session only, without persisting it.
-///
-/// Used when an external host (the configurator's realtime preview) supplies an
-/// ephemeral theme mode: it must not overwrite the device's saved preference,
-/// unlike [AppThemeModeChanged] which is a user action and is persisted.
-class AppThemeModePreviewed extends AppEvent {
-  const AppThemeModePreviewed(this.value);
-
-  final ThemeMode value;
-
-  @override
-  List<Object?> get props => [value];
-}
-
 class AppLocaleChanged extends AppEvent {
   const AppLocaleChanged(this.value);
 
