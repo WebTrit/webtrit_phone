@@ -117,6 +117,10 @@ class _AppState extends State<App> {
 
     final featureAccess = context.watch<FeatureAccess>();
     final themeSettings = context.watch<ThemeSettings>();
+    // Optional read-only override from a host (the configurator's preview);
+    // null in a standalone run. When set it wins, so the preview reflects the
+    // host's light/dark toggle without persisting anything.
+    final hostThemeMode = context.watch<ThemeMode?>();
 
     final materialApp = ThemeProvider(
       settings: themeSettings,
@@ -128,9 +132,9 @@ class _AppState extends State<App> {
         builder: (context, state) {
           final themeProvider = ThemeProvider.of(context);
           final forcedMode = featureAccess.supportedConfig.themeMode;
-          final finalThemeMode = forcedMode == ThemeMode.system
-              ? themeSettings.effectiveThemeMode(state.themeMode)
-              : forcedMode;
+          final finalThemeMode =
+              hostThemeMode ??
+              (forcedMode == ThemeMode.system ? themeSettings.effectiveThemeMode(state.themeMode) : forcedMode);
 
           return MaterialApp.router(
             locale: state.effectiveLocale,

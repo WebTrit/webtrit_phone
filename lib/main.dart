@@ -82,7 +82,13 @@ void _onRootLogRecord(LogRecord record) {
 typedef ConfigSource<T> = ({T initial, Stream<T> updates});
 
 class RootApp extends StatelessWidget {
-  const RootApp({super.key, required this.instanceRegistry, required this.featureAccess, required this.themeSettings});
+  const RootApp({
+    super.key,
+    required this.instanceRegistry,
+    required this.featureAccess,
+    required this.themeSettings,
+    this.themeMode,
+  });
 
   final InstanceRegistry instanceRegistry;
 
@@ -93,6 +99,11 @@ class RootApp extends StatelessWidget {
   /// RootApp itself stays agnostic - it only wires whatever source it is given.
   final ConfigSource<FeatureAccess> featureAccess;
   final ConfigSource<ThemeSettings> themeSettings;
+
+  /// Optional read-only override for the displayed theme mode (the configurator's
+  /// light/dark preview toggle). Null in a standalone run, where the mode comes
+  /// from FeatureAccess / AppState; when set it wins, and nothing is persisted.
+  final ConfigSource<ThemeMode>? themeMode;
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +118,16 @@ class RootApp extends StatelessWidget {
           create: (_) => themeSettings.updates,
           updateShouldNotify: (previous, next) => previous != next,
         ),
+        // Optional host theme-mode override (see [themeMode]); always provided as
+        // a nullable value so App can read it, null in a standalone run.
+        if (themeMode case final source?)
+          StreamProvider<ThemeMode?>(
+            initialData: source.initial,
+            create: (_) => source.updates,
+            updateShouldNotify: (previous, next) => previous != next,
+          )
+        else
+          Provider<ThemeMode?>.value(value: null),
         Provider<PackageInfo>(create: (_) => instanceRegistry.get()),
         // Stateless version-compatibility policy shared by the login gate and the
         // in-app force-update gate; const, so no bootstrap registration needed.
