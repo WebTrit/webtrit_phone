@@ -19,6 +19,7 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
@@ -74,7 +75,11 @@ class RootApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<AppInfo>(create: (_) => instanceRegistry.get()),
-        Provider<AppThemes>(create: (_) => instanceRegistry.get()),
+        // The active theme, provided down the tree as an inherited value so the
+        // app consumes it directly (see App.build) instead of holding it in
+        // AppState. A host that embeds this app can override this provider to
+        // drive the theme; standalone it is the first bootstrap-built theme.
+        Provider<ThemeSettings>(create: (_) => instanceRegistry.get<AppThemes>().values.first.settings),
         Provider<PackageInfo>(create: (_) => instanceRegistry.get()),
         // Stateless version-compatibility policy shared by the login gate and the
         // in-app force-update gate; const, so no bootstrap registration needed.

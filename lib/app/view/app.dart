@@ -41,7 +41,6 @@ class _AppState extends State<App> {
       contactsAgreementStatusRepository: context.read<ContactsAgreementStatusRepository>(),
       localeRepository: context.read<LocaleRepository>(),
       themeModeRepository: context.read<ThemeModeRepository>(),
-      appThemes: context.read<AppThemes>(),
       sessionRepository: context.read<SessionRepository>(),
       systemInfoRepository: context.read<SystemInfoRepository>(),
       appCompatibilityResolver: context.read<AppCompatibilityResolver>(),
@@ -117,63 +116,60 @@ class _AppState extends State<App> {
     final isDeepLinkEnabled = EnvironmentConfig.APP_LINK_DOMAIN.isNotEmpty;
 
     final featureAccess = context.watch<FeatureAccess>();
+    final themeSettings = context.watch<ThemeSettings>();
 
-    final materialApp = BlocBuilder<AppBloc, AppState>(
-      buildWhen: (previous, current) => previous.themeSettings != current.themeSettings,
-      builder: (context, state) {
-        return ThemeProvider(
-          settings: state.themeSettings,
-          lightDynamic: null,
-          darkDynamic: null,
-          child: BlocBuilder<AppBloc, AppState>(
-            buildWhen: (previous, current) =>
-                previous.effectiveLocale != current.effectiveLocale ||
-                previous.effectiveThemeMode != current.effectiveThemeMode,
-            builder: (context, state) {
-              final themeProvider = ThemeProvider.of(context);
-              final forcedMode = featureAccess.supportedConfig.themeMode;
-              final finalThemeMode = forcedMode == ThemeMode.system ? state.effectiveThemeMode : forcedMode;
+    final materialApp = ThemeProvider(
+      settings: themeSettings,
+      lightDynamic: null,
+      darkDynamic: null,
+      child: BlocBuilder<AppBloc, AppState>(
+        buildWhen: (previous, current) =>
+            previous.effectiveLocale != current.effectiveLocale || previous.themeMode != current.themeMode,
+        builder: (context, state) {
+          final themeProvider = ThemeProvider.of(context);
+          final forcedMode = featureAccess.supportedConfig.themeMode;
+          final finalThemeMode = forcedMode == ThemeMode.system
+              ? themeSettings.effectiveThemeMode(state.themeMode)
+              : forcedMode;
 
-              return MaterialApp.router(
-                locale: state.effectiveLocale,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                supportedLocales: AppLocalizations.supportedLocales,
-                // restorationScopeId: 'App', // TODO: temporary comment to prevent AppShell's AutoRouter placeholder blink - additional investigation necessary
-                title: EnvironmentConfig.APP_NAME,
-                themeMode: finalThemeMode,
-                theme: themeProvider.light(),
-                darkTheme: themeProvider.dark(),
-                routerConfig: appRouter.config(
-                  deepLinkBuilder: isDeepLinkEnabled ? appRouter.deepLinkBuilder : null,
-                  navigatorObservers: () => [
-                    AppRouterObserver(),
-                    context.read<AppAnalyticsRepository>().createObserver(),
-                    AutoRouteObserver(),
-                  ],
-                  reevaluateListenable: ReevaluateListenable.stream(
-                    // Insert and skip the initial state to ensure the distinct buffer if filled
-                    // and ensure the next state change is emitted only if it differ from the initial state.
-                    //
-                    // Please verify next caases if you change this logic:
-                    // - Call drop after theme change or locale change:
-                    appBloc.stream
-                        .mergeAll([
-                          Stream.fromIterable([appBloc.state]),
-                        ])
-                        .distinct((p, n) {
-                          final same = p.compareToReevaluate(n);
-                          _logger.fine('AppState compareToReevaluate: $same');
-                          if (!same) _logger.fine('AppState compareToReevaluate: previous: $p\n  next: $n');
-                          return same;
-                        })
-                        .skip(1),
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
+          return MaterialApp.router(
+            locale: state.effectiveLocale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            // restorationScopeId: 'App', // TODO: temporary comment to prevent AppShell's AutoRouter placeholder blink - additional investigation necessary
+            title: EnvironmentConfig.APP_NAME,
+            themeMode: finalThemeMode,
+            theme: themeProvider.light(),
+            darkTheme: themeProvider.dark(),
+            routerConfig: appRouter.config(
+              deepLinkBuilder: isDeepLinkEnabled ? appRouter.deepLinkBuilder : null,
+              navigatorObservers: () => [
+                AppRouterObserver(),
+                context.read<AppAnalyticsRepository>().createObserver(),
+                AutoRouteObserver(),
+              ],
+              reevaluateListenable: ReevaluateListenable.stream(
+                // Insert and skip the initial state to ensure the distinct buffer if filled
+                // and ensure the next state change is emitted only if it differ from the initial state.
+                //
+                // Please verify next caases if you change this logic:
+                // - Call drop after theme change or locale change:
+                appBloc.stream
+                    .mergeAll([
+                      Stream.fromIterable([appBloc.state]),
+                    ])
+                    .distinct((p, n) {
+                      final same = p.compareToReevaluate(n);
+                      _logger.fine('AppState compareToReevaluate: $same');
+                      if (!same) _logger.fine('AppState compareToReevaluate: previous: $p\n  next: $n');
+                      return same;
+                    })
+                    .skip(1),
+              ),
+            ),
+          );
+        },
+      ),
     );
 
     return MultiBlocProvider(

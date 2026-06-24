@@ -11,7 +11,6 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/resolvers/resolvers.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 
 class _MockUserAgreementStatusRepository extends Mock implements UserAgreementStatusRepository {}
 
@@ -28,10 +27,6 @@ class _MockSystemInfoRepository extends Mock implements SystemInfoRepository {}
 class _MockUserSessionCleanupResolver extends Mock implements UserSessionCleanupResolver {}
 
 class _MockAppInfo extends Mock implements AppInfo {}
-
-class _MockAppThemes extends Mock implements AppThemes {}
-
-class _FakeThemeSettings extends Fake implements ThemeSettings {}
 
 class _FakePackageInfo implements PackageInfo {
   _FakePackageInfo(this.version);
@@ -68,7 +63,6 @@ void main() {
   late _MockUserSessionCleanupResolver userSessionCleanupResolver;
   late _MockAppInfo appInfo;
   late StreamController<WebtritSystemInfo> infoStreamController;
-  late _MockAppThemes appThemes;
 
   setUpAll(() {
     registerFallbackValue(FetchPolicy.cacheFirst);
@@ -84,9 +78,6 @@ void main() {
     userSessionCleanupResolver = _MockUserSessionCleanupResolver();
     appInfo = _MockAppInfo();
     infoStreamController = StreamController<WebtritSystemInfo>.broadcast();
-
-    appThemes = _MockAppThemes();
-    when(() => appThemes.values).thenReturn([AppTheme(settings: _FakeThemeSettings())]);
 
     when(() => sessionRepository.getCurrent()).thenReturn(const Session());
     when(() => themeModeRepository.getThemeMode()).thenReturn(ThemeMode.system);
@@ -116,7 +107,6 @@ void main() {
       appInfo: appInfo,
       appCompatibilityResolver: const DefaultAppCompatibilityResolver(),
       packageInfo: _FakePackageInfo(appVersion),
-      appThemes: appThemes,
     );
   }
 

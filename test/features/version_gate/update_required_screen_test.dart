@@ -12,11 +12,8 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/version_gate/version_gate.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 
 class _MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
-
-class _FakeThemeSettings extends Fake implements ThemeSettings {}
 
 class _FakePackageInfo implements PackageInfo {
   _FakePackageInfo(this.version);
@@ -35,7 +32,6 @@ class _FakePackageInfo implements PackageInfo {
 }
 
 AppState _appState(AppCompatibility compatibility) => AppState(
-  themeSettings: _FakeThemeSettings(),
   themeMode: ThemeMode.system,
   locale: const Locale('en'),
   userAgreementStatus: AgreementStatus.accepted,
