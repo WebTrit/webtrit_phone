@@ -57,6 +57,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppLoggedIn>(_onLoggedIn);
     on<AppThemeSettingsChanged>(_onThemeSettingsChanged, transformer: droppable());
     on<AppThemeModeChanged>(_onThemeModeChanged, transformer: droppable());
+    on<AppThemeModePreviewed>(_onThemeModePreviewed);
     on<AppLocaleChanged>(_onLocaleChanged, transformer: droppable());
     on<AppAgreementAccepted>(_onUserAgreementAccepted, transformer: droppable());
     on<AppLogoutRequested>(_onLogoutRequested, transformer: droppable());
@@ -209,6 +210,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       await themeModeRepository.setThemeMode(themeMode);
     }
     emit(state.copyWith(themeMode: themeMode));
+  }
+
+  void _onThemeModePreviewed(AppThemeModePreviewed event, Emitter<AppState> emit) {
+    emit(state.copyWith(themeMode: event.value));
   }
 
   void _onLocaleChanged(AppLocaleChanged event, Emitter<AppState> emit) async {

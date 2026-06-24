@@ -119,7 +119,9 @@ class _AppState extends State<App> {
     final hostThemeMode = context.watch<ThemeMode?>();
     if (hostThemeMode != null && hostThemeMode != _lastHostThemeMode) {
       _lastHostThemeMode = hostThemeMode;
-      appBloc.add(AppThemeModeChanged(hostThemeMode));
+      // Previewed, not persisted: the host theme mode is ephemeral and must not
+      // overwrite the device's saved preference (unlike AppThemeModeChanged).
+      appBloc.add(AppThemeModePreviewed(hostThemeMode));
     }
   }
 
