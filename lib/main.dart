@@ -147,7 +147,13 @@ class RootApp extends StatelessWidget {
                 create: (_) => instanceRegistry.get(),
                 dispose: disposeIfDisposable,
               ),
-              RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
+              // Lazy so the FirebaseAnalytics.instance handle is created only when the
+              // analytics observer is actually attached. With WEBTRIT_APP_FIREBASE_ENABLED
+              // false the observer is skipped (see App), so this provider is never read and
+              // the embedded app stays Firebase-free.
+              RepositoryProvider<AppAnalyticsRepository>(
+                create: (_) => AppAnalyticsRepository(instance: FirebaseAnalytics.instance),
+              ),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
               RepositoryProvider<QueuedTerminationRequestsRepository>.value(value: queuedTerminationRequestsRepository),

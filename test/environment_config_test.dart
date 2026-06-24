@@ -91,5 +91,15 @@ void main() {
       EnvironmentConfig.applyOverrides({name: '30'});
       expect(EnvironmentConfig.USER_REPOSITORY_POLLING_INTERVAL_SECONDS, 30);
     });
+
+    test('FIREBASE_ENABLED defaults to true and reflects a false override', () {
+      expect(EnvironmentConfig.FIREBASE_ENABLED, isTrue);
+
+      EnvironmentConfig.applyOverrides({EnvironmentConfig.FIREBASE_ENABLED__NAME: 'false'});
+      expect(EnvironmentConfig.FIREBASE_ENABLED, isFalse);
+
+      EnvironmentConfig.clearOverrides();
+      expect(EnvironmentConfig.FIREBASE_ENABLED, isTrue);
+    });
   });
 }

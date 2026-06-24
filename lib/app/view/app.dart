@@ -147,7 +147,7 @@ class _AppState extends State<App> {
                   deepLinkBuilder: isDeepLinkEnabled ? appRouter.deepLinkBuilder : null,
                   navigatorObservers: () => [
                     AppRouterObserver(),
-                    context.read<AppAnalyticsRepository>().createObserver(),
+                    if (EnvironmentConfig.FIREBASE_ENABLED) context.read<AppAnalyticsRepository>().createObserver(),
                     AutoRouteObserver(),
                   ],
                   reevaluateListenable: ReevaluateListenable.stream(
