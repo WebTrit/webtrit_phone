@@ -31,6 +31,7 @@ import 'package:webtrit_phone/features/call/call.dart'
 
 import 'package:drift/isolate.dart';
 
+import 'app/firebase_integration.dart';
 import 'app/session/session.dart';
 import 'firebase_options.dart';
 import 'services/services.dart';
@@ -39,20 +40,21 @@ import 'services/services.dart';
 // Dart isolates do not share memory -- each background isolate gets its own instance.
 IsolateContext? _isolateContext;
 
-Future<InstanceRegistry> bootstrap() async {
+Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const FirebaseIntegrationEnabled()}) async {
   final registry = InstanceRegistry();
 
-  // External SDKs (Side effects only, don't need registration)
-  await _initFirebaseApp();
-  await _initFirebaseMessaging();
-  await _initLocalPushs();
+  // External SDKs (side effects only, don't need registration). The [firebase]
+  // strategy decides whether these run: standalone wires Firebase, while an
+  // embedder that owns the default Firebase app (e.g. the theme configurator's
+  // realtime preview) passes a disabled strategy so the app runs Firebase-free.
+  await firebase.initPlatform();
 
   // Initialize Components
 
   // App Info & Device Data
 
   final packageInfo = await PackageInfoFactory.init();
-  final appInfo = await AppInfo.init(FirebaseAppIdProvider());
+  final appInfo = await AppInfo.init(firebase.appIdProvider);
   final deviceInfo = await DeviceInfoFactory.init();
 
   // Storages
@@ -97,9 +99,12 @@ Future<InstanceRegistry> bootstrap() async {
     apiClientFactory: apiClientFactory,
   );
 
-  // Remote configuration
+  // Remote configuration. The Firebase-backed service needs the Firebase app, so
+  // the strategy resolves it (with a local-cache fallback); a disabled strategy
+  // just uses the local cache (DefaultRemoteCacheConfigService also implements
+  // RemoteConfigService).
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
-  final cachedRemoteConfigService = await CachedRemoteConfigService.init(remoteCacheConfigService);
+  final cachedRemoteConfigService = await firebase.remoteConfig(remoteCacheConfigService);
 
   final featureAccessStreamFactory = FeatureAccessStreamFactory(
     appThemes: appThemes,
@@ -221,12 +226,44 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<WebtritApiClientFactory>(apiClientFactory);
   registry.register<RemoteConfigService>(cachedRemoteConfigService);
   registry.register<ConnectivityService>(connectivityService);
+  registry.register<AppAnalyticsRepository>(firebase.analytics);
 
   // Final side-effect initializations that rely on registered components
   await _initCallkeep(featureAccess);
   await _initWorkManager();
 
   return registry;
+}
+
+/// Standalone integration: real Firebase platform init, the Firebase id provider,
+/// Firebase Remote Config (with a local-cache fallback) and Firebase Analytics.
+/// This is the default [bootstrap] strategy. Lives here so it can reuse the
+/// private Firebase init functions below.
+class FirebaseIntegrationEnabled implements FirebaseIntegration {
+  const FirebaseIntegrationEnabled();
+
+  @override
+  Future<void> initPlatform() async {
+    await _initFirebaseApp();
+    await _initFirebaseMessaging();
+    await _initLocalPushs();
+  }
+
+  @override
+  AppIdProvider get appIdProvider => FirebaseAppIdProvider();
+
+  @override
+  Future<RemoteConfigService> remoteConfig(DefaultRemoteCacheConfigService cache) async {
+    try {
+      return await CachedRemoteConfigService.init(cache);
+    } catch (e, s) {
+      Logger('bootstrap').warning('Firebase Remote Config init failed; using local cache fallback', e, s);
+      return cache;
+    }
+  }
+
+  @override
+  AppAnalyticsRepository get analytics => FirebaseAppAnalyticsRepository();
 }
 
 /// Creates the platform [ConnectivityChecker] used by [ConnectivityService]

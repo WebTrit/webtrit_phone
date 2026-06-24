@@ -7,7 +7,6 @@ import 'package:drift/drift.dart';
 import 'package:drift/isolate.dart';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -147,7 +146,9 @@ class RootApp extends StatelessWidget {
                 create: (_) => instanceRegistry.get(),
                 dispose: disposeIfDisposable,
               ),
-              RepositoryProvider.value(value: AppAnalyticsRepository(instance: FirebaseAnalytics.instance)),
+              // Built by bootstrap's Firebase integration strategy: the Firebase-backed
+              // repository standalone, a no-op one when Firebase is disabled.
+              RepositoryProvider<AppAnalyticsRepository>(create: (_) => instanceRegistry.get()),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
               RepositoryProvider<QueuedTerminationRequestsRepository>.value(value: queuedTerminationRequestsRepository),
