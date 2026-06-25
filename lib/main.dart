@@ -45,19 +45,7 @@ void main() {
 
       Logger.root.onRecord.listen(_onRootLogRecord);
 
-      runApp(
-        RootApp(
-          instanceRegistry: instanceRegistry,
-          featureAccess: (
-            initial: instanceRegistry.get<FeatureAccess>(),
-            updates: instanceRegistry.get<FeatureAccessStreamFactory>().create(),
-          ),
-          themeSettings: (
-            initial: instanceRegistry.get<AppThemes>().values.first.settings,
-            updates: const Stream.empty(),
-          ),
-        ),
-      );
+      runApp(RootApp.standalone(instanceRegistry));
     },
     (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
@@ -89,6 +77,19 @@ class RootApp extends StatelessWidget {
     required this.themeSettings,
     this.themeMode,
   });
+
+  /// Standalone composition: resolves the config sources from the bootstrap
+  /// [instanceRegistry] (the reactive FeatureAccess stream and the first
+  /// bootstrap-built theme, which is static). A host that embeds the app uses
+  /// the default constructor and supplies its own sources instead.
+  factory RootApp.standalone(InstanceRegistry instanceRegistry) => RootApp(
+    instanceRegistry: instanceRegistry,
+    featureAccess: (
+      initial: instanceRegistry.get<FeatureAccess>(),
+      updates: instanceRegistry.get<FeatureAccessStreamFactory>().create(),
+    ),
+    themeSettings: (initial: instanceRegistry.get<AppThemes>().values.first.settings, updates: const Stream.empty()),
+  );
 
   final InstanceRegistry instanceRegistry;
 
