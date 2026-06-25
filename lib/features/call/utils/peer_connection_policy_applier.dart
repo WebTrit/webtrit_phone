@@ -98,6 +98,11 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
 
   /// Adds a disabled local camera track (sendrecv) so the `m=video` line is backed
   /// by an actual media track. Opens the camera via [UserMediaBuilder].
+  ///
+  /// **Important:**
+  /// - Depends on [UserMediaBuilder] to acquire the local video stream.
+  /// - The added video track is explicitly disabled (`enabled = false`) to avoid
+  ///   rendering or sending video until explicitly activated by the user.
   Future<void> _addInactiveSendrecvVideo(
     RTCPeerConnection peerConnection,
     MediaStream? localStream,
@@ -107,6 +112,12 @@ class ModifyWithSettingsPeerConnectionPolicyApplier implements PeerConnectionPol
       _logger.warning('inactiveSendrecv strategy requires a localStream; skipping');
       return;
     }
+
+    // // Check if the policy requires inserting an inactive video track for negotiation purposes
+    // if (_negotiationSettings.includeInactiveVideoInOfferAnswer && hasRemoteVideo) {
+    //
+    // Enabled by default for test purposes
+    // TODO: if everything works well remove all related settings
 
     // Check if a video track is already added to the peer connection
     final senders = await peerConnection.getSenders();
