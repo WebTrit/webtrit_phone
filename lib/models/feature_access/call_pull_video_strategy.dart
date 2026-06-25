@@ -6,7 +6,14 @@ enum CallPullVideoStrategy {
 
   /// Video calls are excluded from the pull list. Requires the backend to report
   /// media type via dialog-info `has_video`.
-  hideVideo;
+  hideVideo,
+
+  /// The pull mirrors the real media: a video dialog is pulled as a video call
+  /// (the offer carries a real, camera-backed video m-line), an audio dialog as
+  /// audio. Requires the backend to report media type via dialog-info `has_video`
+  /// and relies on the server answering a matching video answer. Unlike softMute,
+  /// it opens the local camera on pull of a video call.
+  mirror;
 
   /// Parses a configurator/Remote-Config string (by enum name) into a strategy,
   /// or null when unknown/absent.

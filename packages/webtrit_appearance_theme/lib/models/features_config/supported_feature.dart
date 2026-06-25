@@ -30,7 +30,7 @@ sealed class SupportedFeature with _$SupportedFeature {
 
   /// Call Pull video handling. [videoStrategy] selects how the pull of a video
   /// call is handled; parsed by the app into a CallPullVideoStrategy. Defaults to
-  /// 'softMute' (the no-backend strategy). Other value: 'hideVideo'.
+  /// 'softMute' (the no-backend strategy). Other values: 'hideVideo', 'mirror'.
   const factory SupportedFeature.callPull({@Default('softMute') String videoStrategy}) = SupportedCallPull;
 
   factory SupportedFeature.fromJson(Map<String, Object?> json) => _$SupportedFeatureFromJson(json);

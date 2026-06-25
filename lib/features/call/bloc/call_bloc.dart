@@ -1963,7 +1963,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // setRemoteDescription rejects the answer "order of m-lines ..."). recvonly
       // adds the m-line WITHOUT opening the camera, so an audio pull on a camera-
       // denied / camera-less device is unaffected. Under the hide-video strategy
-      // video calls are not pullable at all, so the m-line is not needed.
+      // video calls are not pullable at all; under the mirror strategy a video pull
+      // already carries a real (camera-backed) video track from the started event's
+      // video flag - so in both cases the recvonly m-line is not needed here.
       if (activeCall.fromReplaces != null && callPullVideoStrategy == CallPullVideoStrategy.softMute) {
         await peerConnectionPolicyApplier?.apply(
           peerConnection,

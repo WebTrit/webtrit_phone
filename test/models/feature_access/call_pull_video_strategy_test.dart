@@ -7,6 +7,7 @@ void main() {
     test('parses known names', () {
       expect(CallPullVideoStrategy.tryParse('softMute'), CallPullVideoStrategy.softMute);
       expect(CallPullVideoStrategy.tryParse('hideVideo'), CallPullVideoStrategy.hideVideo);
+      expect(CallPullVideoStrategy.tryParse('mirror'), CallPullVideoStrategy.mirror);
     });
 
     test('returns null for null/unknown values', () {
