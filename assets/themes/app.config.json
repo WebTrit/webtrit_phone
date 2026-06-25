@@ -10,6 +10,10 @@
     },
     {
       "type": "hybridPresence"
+    },
+    {
+      "type": "callPull",
+      "videoStrategy": "softMute"
     }
   ],
   "loginConfig": {
