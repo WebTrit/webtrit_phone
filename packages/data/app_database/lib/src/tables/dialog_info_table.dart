@@ -34,7 +34,7 @@ class DialogInfoTable extends Table {
 
   IntColumn get arrivalTimeUsec => integer()();
 
-  // Nullable: the backend does not yet emit a media-type flag, so persisted rows
+  // Nullable: the backend may not send a media-type flag, so persisted rows
   // and older payloads leave this null. Consumers treat null as "unknown".
   BoolColumn get hasVideo => boolean().nullable()();
 }

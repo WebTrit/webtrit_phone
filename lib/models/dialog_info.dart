@@ -45,10 +45,11 @@ class DialogInfo extends Equatable {
   bool get pullable {
     if (state != DialogState.confirmed) return false;
     if (remoteNumber == null || callId == null || localTag == null || remoteTag == null) return false;
-    // Video calls are pullable too: the pull offer carries a video m-line so it
-    // matches the server's video answer (no setRemoteDescription m-line mismatch;
-    // see the CallBloc pull path). `hasVideo` is plumbed but has no consumer here
-    // yet - kept for a future use such as a media indicator on the pull list.
+    // This getter stays media-agnostic: video calls are pullable as well, and
+    // whether a video dialog is offered is decided downstream by the configured
+    // CallPullVideoStrategy (see CallPullCubit, which reads `hasVideo`). Under the
+    // soft-mute strategy the pull offer carries a video m-line so it matches the
+    // server's video answer (no setRemoteDescription m-line mismatch).
     return true;
   }
 
