@@ -20,17 +20,17 @@ DialogInfo _confirmed({bool? hasVideo}) => DialogInfo(
 );
 
 void main() {
-  group('DialogInfo.pullable hasVideo gate', () {
+  group('DialogInfo.pullable', () {
     test('audio dialog (hasVideo false) is pullable', () {
       expect(_confirmed(hasVideo: false).pullable, isTrue);
     });
 
-    test('unknown media (hasVideo null) stays pullable to preserve current behaviour', () {
+    test('unknown media (hasVideo null) is pullable', () {
       expect(_confirmed(hasVideo: null).pullable, isTrue);
     });
 
-    test('video dialog (hasVideo true) is excluded from pull', () {
-      expect(_confirmed(hasVideo: true).pullable, isFalse);
+    test('video dialog (hasVideo true) is pullable (offer carries an inactive video m-line)', () {
+      expect(_confirmed(hasVideo: true).pullable, isTrue);
     });
 
     test('hasVideo does not override the other pullable preconditions', () {

@@ -1955,6 +1955,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final peerConnection = await _createPeerConnection(event.callId, activeCall.line);
       await Future.wait(localStream.getTracks().map((track) => peerConnection.addTrack(track, localStream)));
 
+      // A pull (Replaces) takes over an existing call whose remote answer keeps its
+      // original video m-line. Add an inactive video m-line to the pull offer so the
+      // offer/answer media layouts match (otherwise setRemoteDescription rejects the
+      // answer "order of m-lines ..."). Reuses the same inactive-video mechanism the
+      // caller uses for video negotiation; the track is disabled so no camera is sent.
+      if (activeCall.fromReplaces != null) {
+        await peerConnectionPolicyApplier?.apply(
+          peerConnection,
+          hasRemoteVideo: true,
+          localStream: localStream,
+          frontCamera: activeCall.frontCamera,
+        );
+      }
+
       final localDescription = await peerConnection.createOffer({});
       sdpMunger?.apply(localDescription);
       _logger.infoPretty(localDescription.sdp, tag: '__onMutationPerformStart');

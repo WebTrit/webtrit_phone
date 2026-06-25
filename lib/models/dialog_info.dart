@@ -45,10 +45,9 @@ class DialogInfo extends Equatable {
   bool get pullable {
     if (state != DialogState.confirmed) return false;
     if (remoteNumber == null || callId == null || localTag == null || remoteTag == null) return false;
-    // Pulling a video call offers audio-only and crashes on the answer's video
-    // m-line, so exclude known-video dialogs. Null (unknown) stays pullable to
-    // preserve current behaviour until the backend reports media type.
-    if (hasVideo == true) return false;
+    // Video calls are pullable too: the pull offer carries an inactive video
+    // m-line so it matches the server's video answer (no setRemoteDescription
+    // m-line mismatch). `hasVideo` is kept for UI (e.g. a video badge), not gating.
     return true;
   }
 

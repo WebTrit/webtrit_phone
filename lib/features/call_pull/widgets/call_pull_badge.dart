@@ -57,6 +57,10 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
 
     callBloc.add(
       CallControlEvent.started(
+        // The local camera stays off on pull (video: false). The call bloc adds an
+        // inactive video m-line to the pull offer so its media layout matches the
+        // server's answer for a video call, avoiding the setRemoteDescription
+        // m-line mismatch; the user can enable the camera afterwards.
         number: remoteNumber,
         video: false,
         replaces: '$callId;from-tag=$localTag;to-tag=$remoteTag',
