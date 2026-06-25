@@ -66,8 +66,13 @@ void _onRootLogRecord(LogRecord record) {
 }
 
 /// A reactive config input: the [initial] value for the first frame plus an
-/// [updates] stream that replaces it as it changes.
-typedef ConfigSource<T> = ({T initial, Stream<T> updates});
+/// [updates] factory that creates the stream replacing it as it changes.
+///
+/// [updates] is a factory (not a ready stream) so every provider subscription
+/// gets a fresh stream - the bootstrap FeatureAccess stream is single-subscription
+/// and reactive (it follows runtime system-info / remote-config changes), so a
+/// re-created provider must be able to listen again without throwing or going stale.
+typedef ConfigSource<T> = ({T initial, Stream<T> Function() updates});
 
 class RootApp extends StatelessWidget {
   const RootApp({
@@ -86,9 +91,12 @@ class RootApp extends StatelessWidget {
     instanceRegistry: instanceRegistry,
     featureAccess: (
       initial: instanceRegistry.get<FeatureAccess>(),
-      updates: instanceRegistry.get<FeatureAccessStreamFactory>().create(),
+      updates: () => instanceRegistry.get<FeatureAccessStreamFactory>().create(),
     ),
-    themeSettings: (initial: instanceRegistry.get<AppThemes>().values.first.settings, updates: const Stream.empty()),
+    themeSettings: (
+      initial: instanceRegistry.get<AppThemes>().values.first.settings,
+      updates: () => const Stream.empty(),
+    ),
   );
 
   final InstanceRegistry instanceRegistry;
@@ -116,7 +124,7 @@ class RootApp extends StatelessWidget {
         // AppState. The source is supplied by the caller (see [themeSettings]).
         StreamProvider<ThemeSettings>(
           initialData: themeSettings.initial,
-          create: (_) => themeSettings.updates,
+          create: (_) => themeSettings.updates(),
           updateShouldNotify: (previous, next) => previous != next,
         ),
         // Optional host theme-mode override (see [themeMode]); always provided as
@@ -124,7 +132,7 @@ class RootApp extends StatelessWidget {
         if (themeMode case final source?)
           StreamProvider<ThemeMode?>(
             initialData: source.initial,
-            create: (_) => source.updates,
+            create: (_) => source.updates(),
             updateShouldNotify: (previous, next) => previous != next,
           )
         else
@@ -140,7 +148,7 @@ class RootApp extends StatelessWidget {
         // with SystemInfoRepository and RemoteConfigService.
         StreamProvider<FeatureAccess>(
           initialData: featureAccess.initial,
-          create: (_) => featureAccess.updates,
+          create: (_) => featureAccess.updates(),
           updateShouldNotify: (previous, next) => previous != next,
         ),
         Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
