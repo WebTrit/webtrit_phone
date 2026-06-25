@@ -578,6 +578,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         iceFilter: FilterWithAppSettings(iceSettingsRepository),
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
                         sendPresenceSettings: featureAccess.sipPresenceConfig.hybridPresenceSupport,
+                        callPullVideoStrategy: featureAccess.callConfig.capabilities.callPullVideoStrategy,
                         onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
                         onDiagnosticReportRequested: (id, error) => diagnosticService.request(
                           DiagnosticType.androidCallkeepOnly,
@@ -666,6 +667,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                             userRepository: context.read<UserRepository>(),
                             dialogInfoRepository: context.read<DialogInfoRepository>(),
                             linesStateRepository: context.read<LinesStateRepository>(),
+                            callPullVideoStrategy: featureAccess.callConfig.capabilities.callPullVideoStrategy,
                           )..init(),
                         ),
                         BlocProvider<CallRoutingCubit>(

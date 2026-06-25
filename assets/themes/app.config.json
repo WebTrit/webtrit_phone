@@ -10,6 +10,11 @@
     },
     {
       "type": "hybridPresence"
+    },
+    {
+      "type": "callPull",
+      "__videoStrategy": "How Call Pull handles a video call. Must match a 'CallPullVideoStrategy' enum name: 'softMute' (no backend, default; recvonly video, camera off), 'hideVideo' (excludes video dialogs from the pull list, needs backend has_video), or 'mirror' (pulls a video dialog as a video call with the camera on, needs backend has_video). If omitted or invalid, defaults to 'softMute'.",
+      "videoStrategy": "softMute"
     }
   ],
   "loginConfig": {

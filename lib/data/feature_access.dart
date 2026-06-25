@@ -396,11 +396,20 @@ abstract final class CallMapper {
     // Apply remote overrides
     final isVideoEnabled = featureOverrides.isVideoCallEnabled ?? rawCallConfig.videoEnabled;
 
+    // Call Pull video strategy: Remote Config override wins, else the configurator
+    // default (SupportedFeature.callPull), else soft-mute.
+    final configuratorCallPullStrategy = CallPullVideoStrategy.tryParse(
+      appConfig.supported.whereType<SupportedCallPull>().firstOrNull?.videoStrategy,
+    );
+    final callPullVideoStrategy =
+        featureOverrides.callPullVideoStrategy ?? configuratorCallPullStrategy ?? CallPullVideoStrategy.softMute;
+
     return CallConfig(
       capabilities: CallCapabilitiesConfig(
         isVideoCallEnabled: isVideoEnabled,
         isBlindTransferEnabled: transferConfig.enableBlindTransfer,
         isAttendedTransferEnabled: transferConfig.enableAttendedTransfer,
+        callPullVideoStrategy: callPullVideoStrategy,
       ),
       triggerConfig: CallTriggerConfig(
         smsFallback: SmsFallbackTriggerConfig(

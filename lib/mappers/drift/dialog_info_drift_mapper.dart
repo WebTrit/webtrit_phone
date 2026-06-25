@@ -17,6 +17,7 @@ mixin DialogInfoDriftMapper {
       remoteDisplayName: data.remoteDisplayName,
       arrivalVersion: data.arrivalVersion,
       arrivalTime: DateTime.fromMicrosecondsSinceEpoch(data.arrivalTimeUsec),
+      hasVideo: data.hasVideo,
     );
   }
 
@@ -35,6 +36,7 @@ mixin DialogInfoDriftMapper {
       remoteDisplayName: info.remoteDisplayName,
       arrivalVersion: info.arrivalVersion,
       arrivalTimeUsec: info.arrivalTime.microsecondsSinceEpoch,
+      hasVideo: info.hasVideo,
     );
   }
 }
