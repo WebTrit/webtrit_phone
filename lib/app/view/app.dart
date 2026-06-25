@@ -117,6 +117,10 @@ class _AppState extends State<App> {
 
     final featureAccess = context.watch<FeatureAccess>();
     final themeSettings = context.watch<ThemeSettings>();
+    // Optional read-only override from a host (the configurator's preview);
+    // null in a standalone run. When set it wins, so the preview reflects the
+    // host's light/dark toggle without persisting anything.
+    final hostThemeMode = context.watch<ThemeMode?>();
 
     final materialApp = ThemeProvider(
       settings: themeSettings,
@@ -128,9 +132,15 @@ class _AppState extends State<App> {
         builder: (context, state) {
           final themeProvider = ThemeProvider.of(context);
           final forcedMode = featureAccess.supportedConfig.themeMode;
-          final finalThemeMode = forcedMode == ThemeMode.system
-              ? themeSettings.effectiveThemeMode(state.themeMode)
-              : forcedMode;
+          // Precedence: a host override wins over the feature-access forced mode
+          // by design. It is only ever set in a preview (the configurator's
+          // light/dark variant toggle), where it must show the chosen variant
+          // even if the previewed config enforces a mode; that override-an-
+          // enforced-mode case cannot happen in a standalone run, where
+          // hostThemeMode is always null and forcedMode governs as before.
+          final finalThemeMode =
+              hostThemeMode ??
+              (forcedMode == ThemeMode.system ? themeSettings.effectiveThemeMode(state.themeMode) : forcedMode);
 
           return MaterialApp.router(
             locale: state.effectiveLocale,
