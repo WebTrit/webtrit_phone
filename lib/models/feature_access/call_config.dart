@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../call/call_trigger_config.dart';
+import 'call_pull_video_strategy.dart';
 import '../peer_connection_settings.dart';
 import 'encoding_config.dart';
 
@@ -38,6 +39,7 @@ class CallCapabilitiesConfig extends Equatable {
     this.isAudioToVideoSwitchEnabled = true,
     this.isBlindTransferEnabled = true,
     this.isAttendedTransferEnabled = true,
+    this.callPullVideoStrategy = CallPullVideoStrategy.softMute,
   });
 
   /// Whether the UI should show video call functionality.
@@ -60,11 +62,15 @@ class CallCapabilitiesConfig extends Equatable {
   /// If `true`, the user can talk to the recipient before transferring the call.
   final bool isAttendedTransferEnabled;
 
+  /// How the pull of a video call is handled (soft-mute by default).
+  final CallPullVideoStrategy callPullVideoStrategy;
+
   @override
   List<Object?> get props => [
     isVideoCallEnabled,
     isAudioToVideoSwitchEnabled,
     isBlindTransferEnabled,
     isAttendedTransferEnabled,
+    callPullVideoStrategy,
   ];
 }

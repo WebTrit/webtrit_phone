@@ -117,6 +117,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final ContactResolver contactResolver;
   final CallErrorReporter callErrorReporter;
   final bool sendPresenceSettings;
+  final CallPullVideoStrategy callPullVideoStrategy;
   final VoidCallback? onCallEnded;
   final OnDiagnosticReportRequested onDiagnosticReportRequested;
 
@@ -163,6 +164,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.contactResolver,
     required this.callErrorReporter,
     required this.sendPresenceSettings,
+    required this.callPullVideoStrategy,
     required this.onDiagnosticReportRequested,
     this.isCameraPermissionGranted,
     this.sdpMunger,
@@ -1956,12 +1958,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await Future.wait(localStream.getTracks().map((track) => peerConnection.addTrack(track, localStream)));
 
       // A pull (Replaces) takes over an existing call whose remote answer keeps its
-      // original video m-line. Add a recvonly video m-line to the pull offer so the
-      // offer/answer media layouts match (otherwise setRemoteDescription rejects the
-      // answer "order of m-lines ..."). recvonly adds the m-line WITHOUT opening the
-      // camera, so an audio pull on a camera-denied / camera-less device is
-      // unaffected; the user can enable the camera afterwards via the upgrade flow.
-      if (activeCall.fromReplaces != null) {
+      // original video m-line. Under the soft-mute strategy, add a recvonly video
+      // m-line to the pull offer so the offer/answer media layouts match (otherwise
+      // setRemoteDescription rejects the answer "order of m-lines ..."). recvonly
+      // adds the m-line WITHOUT opening the camera, so an audio pull on a camera-
+      // denied / camera-less device is unaffected. Under the hide-video strategy
+      // video calls are not pullable at all, so the m-line is not needed.
+      if (activeCall.fromReplaces != null && callPullVideoStrategy == CallPullVideoStrategy.softMute) {
         await peerConnectionPolicyApplier?.apply(
           peerConnection,
           hasRemoteVideo: true,
