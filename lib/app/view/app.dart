@@ -132,6 +132,12 @@ class _AppState extends State<App> {
         builder: (context, state) {
           final themeProvider = ThemeProvider.of(context);
           final forcedMode = featureAccess.supportedConfig.themeMode;
+          // Precedence: a host override wins over the feature-access forced mode
+          // by design. It is only ever set in a preview (the configurator's
+          // light/dark variant toggle), where it must show the chosen variant
+          // even if the previewed config enforces a mode; that override-an-
+          // enforced-mode case cannot happen in a standalone run, where
+          // hostThemeMode is always null and forcedMode governs as before.
           final finalThemeMode =
               hostThemeMode ??
               (forcedMode == ThemeMode.system ? themeSettings.effectiveThemeMode(state.themeMode) : forcedMode);
