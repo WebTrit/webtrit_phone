@@ -21,7 +21,12 @@ import 'package:webtrit_phone/resolvers/resolvers.dart';
 final _logger = Logger('AppWidget');
 
 class App extends StatefulWidget {
-  const App({super.key});
+  const App({super.key, this.ownsBrowserHistory = true});
+
+  /// See `RootApp.ownsBrowserHistory`: when `false` (embedded preview) the app's
+  /// router uses an in-memory route-information provider, so it renders normally
+  /// but never syncs the browser URL.
+  final bool ownsBrowserHistory;
 
   @override
   State<App> createState() => _AppState();
@@ -30,6 +35,13 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late final AppBloc appBloc;
   late final AppRouter appRouter;
+
+  /// In-memory route-information provider for an embedded instance (when the app
+  /// does not own the browser history). Seeds the initial location and swallows
+  /// navigations so the browser URL is never touched. Null in a standalone run.
+  late final RouteInformationProvider? _embeddedRouteInformationProvider = widget.ownsBrowserHistory
+      ? null
+      : _InMemoryRouteInformationProvider(RouteInformation(uri: Uri.parse('/')));
 
   @override
   void initState() {
@@ -142,6 +154,32 @@ class _AppState extends State<App> {
               hostThemeMode ??
               (forcedMode == ThemeMode.system ? themeSettings.effectiveThemeMode(state.themeMode) : forcedMode);
 
+          // Routing inputs shared by both router modes below.
+          final deepLinkBuilder = isDeepLinkEnabled ? appRouter.deepLinkBuilder : null;
+          List<NavigatorObserver> navigatorObservers() => [
+            AppRouterObserver(),
+            context.read<AppAnalyticsRepository>().createObserver(),
+            AutoRouteObserver(),
+          ];
+          final reevaluateListenable = ReevaluateListenable.stream(
+            // Insert and skip the initial state to ensure the distinct buffer if filled
+            // and ensure the next state change is emitted only if it differ from the initial state.
+            //
+            // Please verify next caases if you change this logic:
+            // - Call drop after theme change or locale change:
+            appBloc.stream
+                .mergeAll([
+                  Stream.fromIterable([appBloc.state]),
+                ])
+                .distinct((p, n) {
+                  final same = p.compareToReevaluate(n);
+                  _logger.fine('AppState compareToReevaluate: $same');
+                  if (!same) _logger.fine('AppState compareToReevaluate: previous: $p\n  next: $n');
+                  return same;
+                })
+                .skip(1),
+          );
+
           return MaterialApp.router(
             locale: state.effectiveLocale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -151,32 +189,27 @@ class _AppState extends State<App> {
             themeMode: finalThemeMode,
             theme: themeProvider.light(),
             darkTheme: themeProvider.dark(),
-            routerConfig: appRouter.config(
-              deepLinkBuilder: isDeepLinkEnabled ? appRouter.deepLinkBuilder : null,
-              navigatorObservers: () => [
-                AppRouterObserver(),
-                context.read<AppAnalyticsRepository>().createObserver(),
-                AutoRouteObserver(),
-              ],
-              reevaluateListenable: ReevaluateListenable.stream(
-                // Insert and skip the initial state to ensure the distinct buffer if filled
-                // and ensure the next state change is emitted only if it differ from the initial state.
-                //
-                // Please verify next caases if you change this logic:
-                // - Call drop after theme change or locale change:
-                appBloc.stream
-                    .mergeAll([
-                      Stream.fromIterable([appBloc.state]),
-                    ])
-                    .distinct((p, n) {
-                      final same = p.compareToReevaluate(n);
-                      _logger.fine('AppState compareToReevaluate: $same');
-                      if (!same) _logger.fine('AppState compareToReevaluate: previous: $p\n  next: $n');
-                      return same;
-                    })
-                    .skip(1),
-              ),
-            ),
+            // Standalone owns the browser history: the full config syncs the URL.
+            routerConfig: widget.ownsBrowserHistory
+                ? appRouter.config(
+                    deepLinkBuilder: deepLinkBuilder,
+                    navigatorObservers: navigatorObservers,
+                    reevaluateListenable: reevaluateListenable,
+                  )
+                : null,
+            // Embedded preview: the same parser/delegate (so the initial route
+            // renders normally) but an in-memory route-information provider, so
+            // navigation stays internal and never writes the host's browser URL.
+            routeInformationParser: widget.ownsBrowserHistory ? null : appRouter.defaultRouteParser(),
+            routeInformationProvider: widget.ownsBrowserHistory ? null : _embeddedRouteInformationProvider,
+            backButtonDispatcher: widget.ownsBrowserHistory ? null : RootBackButtonDispatcher(),
+            routerDelegate: widget.ownsBrowserHistory
+                ? null
+                : appRouter.delegate(
+                    deepLinkBuilder: deepLinkBuilder,
+                    navigatorObservers: navigatorObservers,
+                    reevaluateListenable: reevaluateListenable,
+                  ),
           );
         },
       ),
@@ -195,5 +228,28 @@ class _AppState extends State<App> {
       ],
       child: materialApp,
     );
+  }
+}
+
+/// A [RouteInformationProvider] that keeps routing entirely in memory.
+///
+/// It seeds a fixed initial location and ignores navigations reported by the
+/// router (it never calls into the platform / `window.history`). Used by an
+/// embedded instance that must not own the browser URL, while still driving the
+/// app's parser/delegate so screens render normally.
+class _InMemoryRouteInformationProvider extends RouteInformationProvider with ChangeNotifier {
+  _InMemoryRouteInformationProvider(this._value);
+
+  RouteInformation _value;
+
+  @override
+  RouteInformation get value => _value;
+
+  @override
+  void routerReportsNewRouteInformation(
+    RouteInformation routeInformation, {
+    RouteInformationReportingType type = RouteInformationReportingType.none,
+  }) {
+    _value = routeInformation;
   }
 }

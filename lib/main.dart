@@ -81,6 +81,7 @@ class RootApp extends StatelessWidget {
     required this.featureAccess,
     required this.themeSettings,
     this.themeMode,
+    this.ownsBrowserHistory = true,
   });
 
   /// Standalone composition: resolves the config sources from the bootstrap
@@ -113,6 +114,15 @@ class RootApp extends StatelessWidget {
   /// light/dark preview toggle). Null in a standalone run, where the mode comes
   /// from FeatureAccess / AppState; when set it wins, and nothing is persisted.
   final ConfigSource<ThemeMode>? themeMode;
+
+  /// Whether this app instance owns the browser history (the URL / `window.history`).
+  ///
+  /// On the web only one router may sync the URL. When the app is embedded in a
+  /// host that already owns it (the configurator's realtime preview), pass `false`:
+  /// the app then runs a delegate-only router that navigates internally without
+  /// touching the URL, so it can't clobber the host's routing. Default `true` for
+  /// a standalone run, where the app is the sole owner of the URL.
+  final bool ownsBrowserHistory;
 
   @override
   Widget build(BuildContext context) {
@@ -239,7 +249,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<UserLocalDatasource>(create: (_) => instanceRegistry.get()),
               RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get()),
             ],
-            child: const App(),
+            child: App(ownsBrowserHistory: ownsBrowserHistory),
           );
         },
       ),
