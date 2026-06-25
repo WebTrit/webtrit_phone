@@ -13,6 +13,7 @@
     },
     {
       "type": "callPull",
+      "_videoStrategyOptions": "softMute (default, no backend) | hideVideo (needs backend has_video)",
       "videoStrategy": "softMute"
     }
   ],
