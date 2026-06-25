@@ -39,9 +39,51 @@ class _AppState extends State<App> {
   /// In-memory route-information provider for an embedded instance (when the app
   /// does not own the browser history). Seeds the initial location and swallows
   /// navigations so the browser URL is never touched. Null in a standalone run.
-  late final RouteInformationProvider? _embeddedRouteInformationProvider = widget.ownsBrowserHistory
+  late final _InMemoryRouteInformationProvider? _embeddedRouteInformationProvider = widget.ownsBrowserHistory
       ? null
       : _InMemoryRouteInformationProvider(RouteInformation(uri: Uri.parse('/')));
+
+  /// Inert back-button dispatcher for an embedded instance. A standalone run lets
+  /// [AppRouter.config] install a [RootBackButtonDispatcher], which registers a
+  /// global observer on the platform back button; on the engine the embedded
+  /// preview shares with its host that would swallow the host's back button. The
+  /// inert dispatcher never claims it, so the host keeps full control. Null in a
+  /// standalone run.
+  late final BackButtonDispatcher? _embeddedBackButtonDispatcher = widget.ownsBrowserHistory
+      ? null
+      : _NoopBackButtonDispatcher();
+
+  /// Deep-link builder, resolved once. Null when deep links are disabled.
+  late final _deepLinkBuilder = EnvironmentConfig.APP_LINK_DOMAIN.isNotEmpty ? appRouter.deepLinkBuilder : null;
+
+  /// Drives router guard re-evaluation off [AppBloc]. Built once (not per
+  /// rebuild): the router caches the first listenable it is handed, so rebuilding
+  /// it would leak an [AppBloc] stream subscription on every theme/locale change.
+  /// Disposed in [dispose].
+  late final ReevaluateListenable _reevaluateListenable = ReevaluateListenable.stream(
+    // Insert and skip the initial state to ensure the distinct buffer if filled
+    // and ensure the next state change is emitted only if it differ from the initial state.
+    //
+    // Please verify next caases if you change this logic:
+    // - Call drop after theme change or locale change:
+    appBloc.stream
+        .mergeAll([
+          Stream.fromIterable([appBloc.state]),
+        ])
+        .distinct((p, n) {
+          final same = p.compareToReevaluate(n);
+          _logger.fine('AppState compareToReevaluate: $same');
+          if (!same) _logger.fine('AppState compareToReevaluate: previous: $p\n  next: $n');
+          return same;
+        })
+        .skip(1),
+  );
+
+  List<NavigatorObserver> _navigatorObservers() => [
+    AppRouterObserver(),
+    context.read<AppAnalyticsRepository>().createObserver(),
+    AutoRouteObserver(),
+  ];
 
   @override
   void initState() {
@@ -119,14 +161,14 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
+    _reevaluateListenable.dispose();
+    _embeddedRouteInformationProvider?.dispose();
     appBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDeepLinkEnabled = EnvironmentConfig.APP_LINK_DOMAIN.isNotEmpty;
-
     final featureAccess = context.watch<FeatureAccess>();
     final themeSettings = context.watch<ThemeSettings>();
     // Optional read-only override from a host (the configurator's preview);
@@ -154,32 +196,6 @@ class _AppState extends State<App> {
               hostThemeMode ??
               (forcedMode == ThemeMode.system ? themeSettings.effectiveThemeMode(state.themeMode) : forcedMode);
 
-          // Routing inputs shared by both router modes below.
-          final deepLinkBuilder = isDeepLinkEnabled ? appRouter.deepLinkBuilder : null;
-          List<NavigatorObserver> navigatorObservers() => [
-            AppRouterObserver(),
-            context.read<AppAnalyticsRepository>().createObserver(),
-            AutoRouteObserver(),
-          ];
-          final reevaluateListenable = ReevaluateListenable.stream(
-            // Insert and skip the initial state to ensure the distinct buffer if filled
-            // and ensure the next state change is emitted only if it differ from the initial state.
-            //
-            // Please verify next caases if you change this logic:
-            // - Call drop after theme change or locale change:
-            appBloc.stream
-                .mergeAll([
-                  Stream.fromIterable([appBloc.state]),
-                ])
-                .distinct((p, n) {
-                  final same = p.compareToReevaluate(n);
-                  _logger.fine('AppState compareToReevaluate: $same');
-                  if (!same) _logger.fine('AppState compareToReevaluate: previous: $p\n  next: $n');
-                  return same;
-                })
-                .skip(1),
-          );
-
           return MaterialApp.router(
             locale: state.effectiveLocale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -192,23 +208,31 @@ class _AppState extends State<App> {
             // Standalone owns the browser history: the full config syncs the URL.
             routerConfig: widget.ownsBrowserHistory
                 ? appRouter.config(
-                    deepLinkBuilder: deepLinkBuilder,
-                    navigatorObservers: navigatorObservers,
-                    reevaluateListenable: reevaluateListenable,
+                    deepLinkBuilder: _deepLinkBuilder,
+                    navigatorObservers: _navigatorObservers,
+                    reevaluateListenable: _reevaluateListenable,
                   )
                 : null,
             // Embedded preview: the same parser/delegate (so the initial route
-            // renders normally) but an in-memory route-information provider, so
-            // navigation stays internal and never writes the host's browser URL.
+            // renders normally) but an in-memory route-information provider and an
+            // inert back-button dispatcher, so forward navigation stays internal
+            // and never writes the host's browser URL, and the system back button
+            // is left to the host.
+            //
+            // Known limitation: an in-app back (`context.back()`) routes through
+            // auto_route's own web navigation history, which calls
+            // `window.history.back()` directly and is not injectable without
+            // forking auto_route internals. It is acceptable here because the
+            // preview is forward-oriented (login flow) and the host can recover.
             routeInformationParser: widget.ownsBrowserHistory ? null : appRouter.defaultRouteParser(),
             routeInformationProvider: widget.ownsBrowserHistory ? null : _embeddedRouteInformationProvider,
-            backButtonDispatcher: widget.ownsBrowserHistory ? null : RootBackButtonDispatcher(),
+            backButtonDispatcher: widget.ownsBrowserHistory ? null : _embeddedBackButtonDispatcher,
             routerDelegate: widget.ownsBrowserHistory
                 ? null
                 : appRouter.delegate(
-                    deepLinkBuilder: deepLinkBuilder,
-                    navigatorObservers: navigatorObservers,
-                    reevaluateListenable: reevaluateListenable,
+                    deepLinkBuilder: _deepLinkBuilder,
+                    navigatorObservers: _navigatorObservers,
+                    reevaluateListenable: _reevaluateListenable,
                   ),
           );
         },
@@ -253,3 +277,11 @@ class _InMemoryRouteInformationProvider extends RouteInformationProvider with Ch
     _value = routeInformation;
   }
 }
+
+/// A [BackButtonDispatcher] that never claims the platform back button.
+///
+/// Unlike [RootBackButtonDispatcher], the base dispatcher installs no
+/// `WidgetsBinding` observer, so the platform back button is never routed to it.
+/// An embedded instance uses it to avoid intercepting the back button on the
+/// engine it shares with its host.
+class _NoopBackButtonDispatcher extends BackButtonDispatcher {}
