@@ -1146,7 +1146,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // An older core does not know the peer_message request and would tear down
     // the whole signaling socket (code 4600) in response, so skip the signal
     // entirely when the core does not advertise support.
-    if (!peerMessageSupported) return;
+    if (!peerMessageSupported) {
+      _logger.fine('_sendMediaState: skipped (core does not support peer_message) for call ${call.callId}');
+      return;
+    }
 
     final transaction = WebtritSignalingClient.generateTransactionId();
     _signalingModule
