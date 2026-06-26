@@ -1,6 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:sdp_transform/sdp_transform.dart' as sdp_transform;
+
+import 'package:flutter_webrtc/flutter_webrtc.dart';
+
 import 'package:webtrit_phone/features/call/utils/sdp_mod_builder.dart';
+import 'package:webtrit_phone/features/call/utils/sdp_munger.dart';
+import 'package:webtrit_phone/models/encoding_settings.dart';
+import 'package:webtrit_phone/models/feature_access/encoding_config.dart';
+import 'package:webtrit_phone/repositories/encoding_preset/encoding_preset_repository.dart';
+import 'package:webtrit_phone/repositories/encoding_settings/encoding_settings_repository.dart';
 
 // Probe: can the SDP munger (sdp_transform parse -> mutate -> write) alter the
 // local answer ICE ufrag and produce a value shorter than 4 chars, which
@@ -39,6 +48,25 @@ String _answerSdp(String ufrag, String pwd) =>
 // A realistic 22-char base64 ICE pwd.
 const _pwd = 'i/t5V07djNTEAYr75Avl1rCf';
 
+class _MockEncodingPresetRepository extends Mock implements EncodingPresetRepository {}
+
+class _MockEncodingSettingsRepository extends Mock implements EncodingSettingsRepository {}
+
+// DefaultPresetOverride is required by EncodingConfig but unused on the preset
+// branch below (balance returns a self-contained EncodingSettings).
+const _override = DefaultPresetOverride(
+  audioBitrate: null,
+  videoBitrate: null,
+  ptime: null,
+  maxptime: null,
+  opusSamplingRate: null,
+  opusBitrate: null,
+  opusStereo: null,
+  opusDtx: null,
+  removeStaticAudioRtpMaps: null,
+  remapTE8payloadTo101: null,
+);
+
 void main() {
   // The mechanism in isolation: does the parser itself coerce a numeric ufrag?
   group('sdp_transform parse coercion (root mechanism)', () {
@@ -70,6 +98,41 @@ void main() {
         // Direct length check against the real validation rule.
         final m = RegExp(r'a=ice-ufrag:(\S*)').firstMatch(out);
         final outUfrag = m?.group(1) ?? '';
+        expect(
+          outUfrag.length,
+          greaterThanOrEqualTo(4),
+          reason: 'ufrag "$ufrag" emerged shorter than 4 chars ("$outUfrag") - setLocalDescription would reject',
+        );
+      });
+    }
+  });
+
+  // The real production munger (ModifyWithEncodingSettings) end-to-end: the same
+  // object call_bloc invokes on the local answer (sdpMunger?.apply(localDescription)).
+  // With the balance preset the opus path fires, so apply() re-serializes the SDP.
+  group('ModifyWithEncodingSettings.apply preserves ICE ufrag', () {
+    late _MockEncodingPresetRepository presetRepo;
+    late ModifyWithEncodingSettings munger;
+
+    setUp(() {
+      presetRepo = _MockEncodingPresetRepository();
+      when(() => presetRepo.getEncodingPreset()).thenReturn(EncodingPreset.balance);
+      munger = ModifyWithEncodingSettings(
+        _MockEncodingSettingsRepository(),
+        const EncodingConfig(bypassConfig: false, configurationAllowed: true, defaultPresetOverride: _override),
+        presetRepo,
+      );
+    });
+
+    for (final ufrag in ['fMNB', '7200', '0048', '0001', '0X48']) {
+      test('ufrag "$ufrag" unchanged after apply()', () {
+        final description = RTCSessionDescription(_answerSdp(ufrag, _pwd), 'answer');
+
+        munger.apply(description);
+
+        final out = description.sdp ?? '';
+        final outUfrag = RegExp(r'a=ice-ufrag:(\S*)').firstMatch(out)?.group(1) ?? '';
+        expect(outUfrag, ufrag, reason: 'production munger corrupted ufrag "$ufrag" -> "$outUfrag"');
         expect(
           outUfrag.length,
           greaterThanOrEqualTo(4),
