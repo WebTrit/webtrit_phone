@@ -15,6 +15,8 @@ import 'package:webtrit_phone/models/models.dart';
 
 class _MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
 
+class _MockAppInfo extends Mock implements AppInfo {}
+
 class _FakePackageInfo implements PackageInfo {
   _FakePackageInfo(this.version);
 
@@ -41,19 +43,23 @@ AppState _appState(AppCompatibility compatibility) => AppState(
 
 void main() {
   late _MockAppBloc appBloc;
+  late _MockAppInfo appInfo;
 
   setUp(() {
     appBloc = _MockAppBloc();
+    appInfo = _MockAppInfo();
   });
 
   Widget host({required Version current, required Version min}) {
     when(() => appBloc.state).thenReturn(_appState(AppVersionTooOld(appVersion: current, minSupportedVersion: min)));
+    when(() => appInfo.version).thenReturn(current);
 
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: MultiProvider(
         providers: [
+          Provider<AppInfo>.value(value: appInfo),
           Provider<PackageInfo>.value(value: _FakePackageInfo(current.toString())),
           BlocProvider<AppBloc>.value(value: appBloc),
         ],

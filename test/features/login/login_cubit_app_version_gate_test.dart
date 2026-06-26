@@ -10,21 +10,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 class _MockAuthRepository extends Mock implements AuthRepository {}
 
-class _FakePackageInfo implements PackageInfo {
-  _FakePackageInfo(this.version);
-
-  @override
-  final String version;
-
-  @override
-  String get appName => 'WebTrit';
-
-  @override
-  String get packageName => 'com.webtrit.app';
-
-  @override
-  String get buildNumber => '0';
-}
+class _MockAppInfo extends Mock implements AppInfo {}
 
 WebtritSystemInfo _systemInfo({Version? minSupportedAppVersion, List<String> supported = const ['passwordSignin']}) {
   return WebtritSystemInfo(
@@ -51,10 +37,12 @@ void main() {
   });
 
   LoginCubit buildCubit(String appVersion) {
+    final appInfo = _MockAppInfo();
+    when(() => appInfo.version).thenReturn(Version.parse(appVersion));
     return LoginCubit(
       authRepository: authRepository,
       notificationsBloc: notificationsBloc,
-      packageInfo: _FakePackageInfo(appVersion),
+      appInfo: appInfo,
       appCompatibilityResolver: const DefaultAppCompatibilityResolver(),
       onLoginSuccess: (session, _) => loginSuccesses.add(session),
     );
