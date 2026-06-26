@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
-import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
@@ -69,7 +68,7 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMap
       // priority matches the login and in-app gates.
       final compatibility = appCompatibilityResolver.resolve(
         systemInfo: systemInfo,
-        appVersion: Version.parse(packageInfo.version),
+        appVersion: appInfo.version,
         coreVersionConstraint: config.coreVersionConstraint,
       );
       switch (compatibility) {

@@ -45,7 +45,6 @@ class _AppState extends State<App> {
       sessionRepository: context.read<SessionRepository>(),
       systemInfoRepository: context.read<SystemInfoRepository>(),
       appCompatibilityResolver: context.read<AppCompatibilityResolver>(),
-      packageInfo: context.read<PackageInfo>(),
       appInfo: context.read<AppInfo>(),
       userSessionCleanupResolver: RepositoryUserSessionCleanupResolver(
         systemInfoRepository: context.read<SystemInfoRepository>(),
