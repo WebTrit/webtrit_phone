@@ -100,7 +100,10 @@ dependencies:
   pub_semver: ^2.2.0
   quiver: ^3.2.2
   rxdart: ^0.28.0
-  sdp_transform: ^0.3.2
+  sdp_transform:
+    git:
+      url: https://github.com/SERDUN/dart-sdp-transform.git
+      ref: fix/ufrag-numeric-coercion
   share_plus: ^13.1.0
   shared_preferences: ^2.5.5
   stream_transform: ^2.1.1
