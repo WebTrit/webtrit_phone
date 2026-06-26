@@ -37,4 +37,9 @@ class CoreInfo with EquatableMixin {
     // Hybrid presence was was added in 0.28.0-alpha.1
     return verifyVersionStr('>=0.28.0-alpha.1 <2.0.0');
   }
+
+  bool get supportsPeerMessage {
+    // peer_message app-to-app side channel was added in 0.33.0
+    return verifyVersionStr('>=0.33.0 <2.0.0');
+  }
 }
