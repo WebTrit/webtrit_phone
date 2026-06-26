@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart' as services;
 
 import 'package:logging/logging.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/common/common.dart';
@@ -11,20 +12,27 @@ class AppInfo {
   static Future<AppInfo> init(AppIdProvider appIdProvider) async {
     final id = await appIdProvider.getId();
 
-    String? appVersion = await getAppVersion();
+    final appVersion = await getAppVersion();
     final callkeepVersion = await getCallkeepVersion();
 
     return AppInfo._(appIdProvider, id, appVersion, callkeepVersion);
   }
 
-  static Future<String?> getAppVersion() async {
+  /// Parses the custom `app_version` field from the bundled pubspec.yaml as a
+  /// semantic [Version]. This is the version shared across the whole codebase,
+  /// NOT the platform build version (`PackageInfo.version`), which is derived
+  /// from the standard pubspec `version:` (pinned to `0.0.0`) and differs per
+  /// client build. A missing or unparseable value yields [Version.none]
+  /// (`0.0.0`).
+  static Future<Version> getAppVersion() async {
     try {
       final pubspecString = await services.rootBundle.loadString(Assets.pubspec);
       final regExp = RegExp(r'app_version:\s*(\d+\.\d+\.\d+(\+\d+)?)');
-      return regExp.firstMatch(pubspecString)?.group(1);
+      final raw = regExp.firstMatch(pubspecString)?.group(1);
+      return raw == null ? Version.none : Version.parse(raw);
     } catch (e) {
       _logger.warning(e);
-      return null;
+      return Version.none;
     }
   }
 
@@ -63,13 +71,13 @@ class AppInfo {
 
   String _identifier;
 
-  final String? _appVersion;
+  final Version _appVersion;
 
   final String _callkeepVersion;
 
   String get identifier => _identifier;
 
-  String get version => _appVersion ?? '';
+  Version get version => _appVersion;
 
   String get callkeepVersion => _callkeepVersion;
 }

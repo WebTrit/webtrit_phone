@@ -28,22 +28,6 @@ class _MockUserSessionCleanupResolver extends Mock implements UserSessionCleanup
 
 class _MockAppInfo extends Mock implements AppInfo {}
 
-class _FakePackageInfo implements PackageInfo {
-  _FakePackageInfo(this.version);
-
-  @override
-  final String version;
-
-  @override
-  String get appName => 'WebTrit';
-
-  @override
-  String get packageName => 'com.webtrit.app';
-
-  @override
-  String get buildNumber => '0';
-}
-
 // The default core version constraint is '>=0.7.0-alpha <2.0.0'.
 WebtritSystemInfo _systemInfo({Version? coreVersion, Version? minSupportedAppVersion}) {
   return WebtritSystemInfo(
@@ -96,6 +80,7 @@ void main() {
   });
 
   AppBloc buildBloc(String appVersion) {
+    when(() => appInfo.version).thenReturn(Version.parse(appVersion));
     return AppBloc(
       userAgreementStatusRepository: userAgreementStatusRepository,
       contactsAgreementStatusRepository: contactsAgreementStatusRepository,
@@ -106,7 +91,6 @@ void main() {
       userSessionCleanupResolver: userSessionCleanupResolver,
       appInfo: appInfo,
       appCompatibilityResolver: const DefaultAppCompatibilityResolver(),
-      packageInfo: _FakePackageInfo(appVersion),
     );
   }
 

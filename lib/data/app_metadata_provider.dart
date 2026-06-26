@@ -64,7 +64,7 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
 
     return <String, String>{
       'app': _packageInfo.appName,
-      'appVersion': _appInfo.version,
+      'appVersion': _appInfo.version.toString(),
       'appSessionIdentifier': _appInfo.identifier,
       'storeVersion': _packageInfo.version,
       'packageName': _packageInfo.packageName,
@@ -101,7 +101,7 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
 
     final parts = [
       _packageInfo.appName,
-      _appInfo.version,
+      _appInfo.version.toString(),
       _appInfo.identifier,
       _deviceInfo.model,
       _packageInfo.version,

@@ -30,7 +30,7 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit({
     required this.authRepository,
     required this.notificationsBloc,
-    required this.packageInfo,
+    required this.appInfo,
     required this.appCompatibilityResolver,
     required this.onLoginSuccess,
     this.signinOrder = const [],
@@ -42,7 +42,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   final NotificationsBloc notificationsBloc;
 
-  final PackageInfo packageInfo;
+  final AppInfo appInfo;
 
   final AppCompatibilityResolver appCompatibilityResolver;
 
@@ -58,7 +58,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   String get coreVersionConstraint => EnvironmentConfig.CORE_VERSION_CONSTRAINT;
 
-  Version get appVersion => Version.parse(packageInfo.version);
+  Version get appVersion => appInfo.version;
 
   String get defaultTenantId => '';
 
