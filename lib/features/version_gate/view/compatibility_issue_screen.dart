@@ -28,10 +28,10 @@ class CompatibilityIssueScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final packageInfo = context.read<PackageInfo>();
+    final appInfo = context.read<AppInfo>();
     final compatibility = context.select<AppBloc, AppCompatibility>((bloc) => bloc.state.appCompatibility);
 
-    final currentVersion = Version.parse(packageInfo.version);
+    final currentVersion = appInfo.version;
     final supportedConstraint = compatibility is CoreVersionUnsupported
         ? compatibility.constraint
         : VersionConstraint.any;

@@ -7,7 +7,6 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
-import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
@@ -39,7 +38,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.userSessionCleanupResolver,
     required this.systemInfoRepository,
     required this.appCompatibilityResolver,
-    required this.packageInfo,
     required AppThemes appThemes,
   }) : super(
          AppState(
@@ -80,7 +78,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final UserSessionCleanupResolver userSessionCleanupResolver;
   final SystemInfoRepository systemInfoRepository;
   final AppCompatibilityResolver appCompatibilityResolver;
-  final PackageInfo packageInfo;
 
   StreamSubscription<WebtritSystemInfo>? _systemInfoSubscription;
 
@@ -107,7 +104,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppCompatibility _resolveAppCompatibility(WebtritSystemInfo systemInfo) {
     return appCompatibilityResolver.resolve(
       systemInfo: systemInfo,
-      appVersion: Version.parse(packageInfo.version),
+      appVersion: appInfo.version,
       coreVersionConstraint: EnvironmentConfig.CORE_VERSION_CONSTRAINT,
     );
   }
