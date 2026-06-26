@@ -118,6 +118,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final CallErrorReporter callErrorReporter;
   final bool sendPresenceSettings;
   final CallPullVideoStrategy callPullVideoStrategy;
+
+  /// Whether the remote core supports the `peer_message` side channel.
+  ///
+  /// An older core rejects an unknown `peer_message` request by closing the
+  /// signaling socket (code 4600), so [_sendMediaState] is suppressed unless
+  /// this is `true`.
+  final bool peerMessageSupported;
   final VoidCallback? onCallEnded;
   final OnDiagnosticReportRequested onDiagnosticReportRequested;
 
@@ -163,6 +170,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callErrorReporter,
     required this.sendPresenceSettings,
     required this.callPullVideoStrategy,
+    required this.peerMessageSupported,
     required this.onDiagnosticReportRequested,
     this.isCameraPermissionGranted,
     this.sdpMunger,
@@ -1135,6 +1143,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// camera state without SDP renegotiation - the only channel that works
   /// while the call is still ringing.
   void _sendMediaState(ActiveCall call, {required bool video}) {
+    // An older core does not know the peer_message request and would tear down
+    // the whole signaling socket (code 4600) in response, so skip the signal
+    // entirely when the core does not advertise support.
+    if (!peerMessageSupported) {
+      _logger.fine('_sendMediaState: skipped (core does not support peer_message) for call ${call.callId}');
+      return;
+    }
+
     final transaction = WebtritSignalingClient.generateTransactionId();
     _signalingModule
         .execute(
