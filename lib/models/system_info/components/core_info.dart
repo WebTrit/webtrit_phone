@@ -40,6 +40,6 @@ class CoreInfo with EquatableMixin {
 
   bool get supportsPeerMessage {
     // peer_message app-to-app side channel was added in 0.33.0
-    return verifyVersionStr('>=0.33.0 <2.0.0');
+    return verifyVersionStr('>=0.33.0-alpha <2.0.0');
   }
 }

@@ -33,7 +33,8 @@ void main() {
 
   test('supportsPeerMessage', () {
     expect(CoreInfo(version: Version(0, 32, 0)).supportsPeerMessage, false);
-    expect(CoreInfo(version: Version(0, 33, 0, pre: 'alpha.1')).supportsPeerMessage, false);
+    expect(CoreInfo(version: Version(0, 33, 0, pre: 'alpha')).supportsPeerMessage, true);
+    expect(CoreInfo(version: Version(0, 33, 0, pre: 'alpha.1')).supportsPeerMessage, true);
     expect(CoreInfo(version: Version(0, 33, 0)).supportsPeerMessage, true);
     expect(CoreInfo(version: Version(0, 34, 5)).supportsPeerMessage, true);
     expect(CoreInfo(version: Version(2, 0, 0)).supportsPeerMessage, false);
