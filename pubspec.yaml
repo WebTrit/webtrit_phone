@@ -100,7 +100,15 @@ dependencies:
   pub_semver: ^2.2.0
   quiver: ^3.2.2
   rxdart: ^0.28.0
-  sdp_transform: ^0.3.2
+  # Temporary git pin: forked sdp_transform that restores the lossless guard in
+  # toIntIfInt (the published parser coerces numeric/hex ICE ufrags to int and
+  # corrupts them, e.g. 0X48 -> 72, breaking the local answer).
+  # TODO: move this fork off a personal account onto a corporate/org account, and
+  # re-pin to a stable commit or tag once the upstream parser fix is merged.
+  sdp_transform:
+    git:
+      url: https://github.com/SERDUN/dart-sdp-transform.git
+      ref: fix/ufrag-numeric-coercion
   share_plus: ^13.1.0
   shared_preferences: ^2.5.5
   stream_transform: ^2.1.1
