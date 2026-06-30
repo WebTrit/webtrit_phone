@@ -210,7 +210,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Future<FullContactData?> getContactByPhoneMatchedEnding(String number) {
     final query = _joinFullData(select(contactsTable));
-    query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
+    query.where(contactPhonesTable.number.regexp('.*${_escapeRegExp(number)}', caseSensitive: false));
     query.orderBy(contactsTable.sourcePriorityOrder());
     query.limit(1);
 
@@ -219,7 +219,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Stream<FullContactData?> watchContactByPhoneMatchedEnding(String number) {
     final query = _joinFullData(select(contactsTable));
-    query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
+    query.where(contactPhonesTable.number.regexp('.*${_escapeRegExp(number)}', caseSensitive: false));
     query.orderBy(contactsTable.sourcePriorityOrder());
     query.limit(1);
 

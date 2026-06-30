@@ -257,6 +257,23 @@ void main() {
     });
   });
 
+  group('getContactByPhoneMatchedEnding regex escaping', () {
+    // Both seed contacts share phone "1234567890".
+    test('a metacharacter-bearing number does not throw and matches nothing', () async {
+      // Unescaped, "+99" makes the pattern '.*+99' which Dart RegExp rejects.
+      final contact = await database.contactsDao.getContactByPhoneMatchedEnding('+99');
+
+      expect(contact, isNull);
+    });
+
+    test('a plain ending still matches', () async {
+      final contact = await database.contactsDao.getContactByPhoneMatchedEnding('7890');
+
+      expect(contact, isNotNull);
+      expect(contact!.phones.first.number, '1234567890');
+    });
+  });
+
   group('getContactByPhoneNumber', () {
     test('should return contact for existing phone number', () async {
       final fetchedContact = await database.contactsDao.getContactByPhoneNumber('1234567890');
