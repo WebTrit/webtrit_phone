@@ -2977,12 +2977,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     }
 
-    await _peerConnectionManager.disposePeerConnection(event.callId).catchError((e) {
-      _logger.warning('__onMutationSignalingHangup: disposePeerConnection error $e');
-    });
-
+    // Invoke _releaseLocalStream before disposePeerConnection to ensure that the local media tracks are stopped and released properly.
+    // or there might be a record indicator stuck after call
     await _releaseLocalStream(call.localStream).catchError((e) {
       _logger.warning('__onMutationSignalingHangup: _releaseLocalStream error $e');
+    });
+    await _peerConnectionManager.disposePeerConnection(event.callId).catchError((e) {
+      _logger.warning('__onMutationSignalingHangup: disposePeerConnection error $e');
     });
 
     emit(state.copyWithPopActiveCall(event.callId));
