@@ -2922,10 +2922,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return;
       }
 
-      _logger.info(
-        '__onMutationSignalingAccepted answer SDP (callId=${event.callId}, initialAccept=$initialAccept):\n'
-        '${remoteDescription.sdp}',
-      );
+      _logger.info('__onMutationSignalingAccepted answer SDP (callId=${event.callId}, initialAccept=$initialAccept)');
+      _logger.infoPretty(remoteDescription.sdp, tag: '__onMutationSignalingAccepted answer SDP');
 
       try {
         await peerConnection.setRemoteDescription(remoteDescription);
