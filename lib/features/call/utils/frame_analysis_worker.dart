@@ -1,18 +1,23 @@
 import 'dart:async';
 import 'dart:isolate';
 import 'dart:math' as math;
-import 'dart:typed_data';
-
+import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 
 const int _maxSamples = 1200;
 const int _blackLumaThreshold = 16;
 const double _blackFrameRatioThreshold = 0.98;
 
-bool _analyzeFrameInIsolate(Uint8List frameBytes) {
+@visibleForTesting
+bool analyzeFrameInIsolate(Uint8List frameBytes) {
   if (frameBytes.isEmpty) return true;
 
-  final decoded = img.decodeImage(frameBytes);
+  final img.Image? decoded;
+  try {
+    decoded = img.decodeImage(frameBytes);
+  } catch (_) {
+    return true;
+  }
   if (decoded == null) return true;
 
   final totalPixels = decoded.width * decoded.height;
@@ -42,7 +47,7 @@ void _isolateEntry(SendPort mainSendPort) {
   receivePort.listen((message) {
     if (message is Uint8List) {
       try {
-        mainSendPort.send(_analyzeFrameInIsolate(message));
+        mainSendPort.send(analyzeFrameInIsolate(message));
       } catch (_) {
         mainSendPort.send(false); // optimistically renderable on analysis error
       }
