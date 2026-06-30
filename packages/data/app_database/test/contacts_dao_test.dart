@@ -120,6 +120,108 @@ void main() {
     });
   });
 
+  group('watchAllContacts search with regex metacharacters', () {
+    // Regression for the "contacts search invalid regex" bug: the raw search
+    // string is interpolated into the SQL REGEXP pattern, so metacharacters
+    // must be escaped or the query throws / matches the wrong rows.
+    setUp(() async {
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          sourceId: Value('source-meta-1'),
+          firstName: Value(''),
+          lastName: Value('Acme (HQ)'),
+          aliasName: Value(''),
+        ),
+      );
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          sourceId: Value('source-meta-2'),
+          firstName: Value(''),
+          lastName: Value('C++ Developer'),
+          aliasName: Value(''),
+        ),
+      );
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          sourceId: Value('source-meta-3'),
+          firstName: Value(''),
+          lastName: Value('Cxx Developer'),
+          aliasName: Value(''),
+        ),
+      );
+    });
+
+    test('unbalanced "(" does not throw and matches literally', () async {
+      // Before the fix, RegExp('.*(.*') is an invalid pattern and the query throws.
+      final contacts = await database.contactsDao.watchAllContacts(['(']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, 'Acme (HQ)');
+    });
+
+    test('"(HQ)" matches the literal parentheses', () async {
+      final contacts = await database.contactsDao.watchAllContacts(['(HQ)']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, 'Acme (HQ)');
+    });
+
+    test('"+" is treated as a literal, not a quantifier', () async {
+      // Escaped "C\+\+" matches "C++ Developer" but not "Cxx Developer".
+      final contacts = await database.contactsDao.watchAllContacts(['C++']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, 'C++ Developer');
+    });
+  });
+
+  group('watchAllContacts CJK and Thai search', () {
+    setUp(() async {
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          sourceId: Value('source-cjk'),
+          firstName: Value(''),
+          lastName: Value('王小明'),
+          aliasName: Value(''),
+        ),
+      );
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          sourceId: Value('source-thai'),
+          firstName: Value(''),
+          lastName: Value('สมชาย'),
+          aliasName: Value(''),
+        ),
+      );
+    });
+
+    test('matches a CJK (Chinese/Taiwanese) substring', () async {
+      final contacts = await database.contactsDao.watchAllContacts(['小明']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, '王小明');
+    });
+
+    test('matches a full CJK name', () async {
+      final contacts = await database.contactsDao.watchAllContacts(['王小明']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, '王小明');
+    });
+
+    test('matches a Thai substring', () async {
+      final contacts = await database.contactsDao.watchAllContacts(['ชาย']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, 'สมชาย');
+    });
+  });
+
   group('getContactByPhoneNumber', () {
     test('should return contact for existing phone number', () async {
       final fetchedContact = await database.contactsDao.getContactByPhoneNumber('1234567890');
