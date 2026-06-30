@@ -222,6 +222,41 @@ void main() {
     });
   });
 
+  group('watchAllContacts regex injection is neutralized', () {
+    // The seed data has two contacts ("Тарас Шевченко", "Шевченко Кобзар"),
+    // both sharing phone number "1234567890". A crafted search must be treated
+    // as a literal string, never as an active pattern that over-matches.
+
+    test('".*" does not act as a wildcard and matches nothing', () async {
+      // Unescaped, ".*" makes REGEXP match every row (full contact-list leak).
+      final contacts = await database.contactsDao.watchAllContacts(['.*']).first;
+
+      expect(contacts, isEmpty);
+    });
+
+    test('alternation "Тарас|Кобзар" is literal and matches nothing', () async {
+      // Unescaped, "|" would match either alternative and return both contacts.
+      final contacts = await database.contactsDao.watchAllContacts(['Тарас|Кобзар']).first;
+
+      expect(contacts, isEmpty);
+    });
+
+    test('"\\d" does not match digits in the phone number', () async {
+      // Unescaped, "\d" would match the "1234567890" phone of both contacts.
+      final contacts = await database.contactsDao.watchAllContacts([r'\d']).first;
+
+      expect(contacts, isEmpty);
+    });
+
+    test('".*" still works as a plain prefix on a real query', () async {
+      // Sanity: escaping the injection must not break normal substring search.
+      final contacts = await database.contactsDao.watchAllContacts(['Тарас']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, 'Тарас Шевченко');
+    });
+  });
+
   group('getContactByPhoneNumber', () {
     test('should return contact for existing phone number', () async {
       final fetchedContact = await database.contactsDao.getContactByPhoneNumber('1234567890');
