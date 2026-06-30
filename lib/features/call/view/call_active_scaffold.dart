@@ -1,13 +1,14 @@
 import 'dart:async';
+import 'dart:isolate';
 import 'dart:math' as math;
 import 'dart:typed_data';
-import 'dart:ui' as ui;
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
+import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:image/image.dart' as img;
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/data.dart';
@@ -17,6 +18,58 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../call.dart';
 
 final _logger = Logger('CallActiveScaffold');
+
+const int _remoteFrameMaxSamples = 1200;
+const int _blackLumaThreshold = 16;
+const double _blackFrameRatioThreshold = 0.98;
+
+// Decodes PNG bytes and determines whether the frame is black or empty.
+// Runs entirely in the worker isolate — no dart:ui dependency.
+bool _analyzeFrameInIsolate(Uint8List pngBytes) {
+  if (pngBytes.isEmpty) return true;
+
+  final decoded = img.decodeImage(pngBytes);
+  if (decoded == null) return true;
+
+  final totalPixels = decoded.width * decoded.height;
+  if (totalPixels == 0) return true;
+
+  final step = math.max(1, totalPixels ~/ _remoteFrameMaxSamples);
+  var sampledPixels = 0;
+  var opaquePixels = 0;
+  var blackPixels = 0;
+
+  for (var i = 0; i < totalPixels; i += step) {
+    final pixel = decoded.getPixel(i % decoded.width, i ~/ decoded.width);
+    sampledPixels++;
+    if (pixel.a == 0) continue;
+    opaquePixels++;
+    final luma = (pixel.r * 299 + pixel.g * 587 + pixel.b * 114) ~/ 1000;
+    if (luma <= _blackLumaThreshold) blackPixels++;
+  }
+
+  if (sampledPixels == 0 || opaquePixels == 0) return true;
+  return blackPixels / opaquePixels >= _blackFrameRatioThreshold;
+}
+
+// Entry point for the long-lived frame-analysis isolate.
+// Sends back its own SendPort on startup, then processes PNG Uint8List messages
+// and replies with a bool. Any non-Uint8List message (null) shuts it down.
+void _frameAnalysisIsolateEntry(SendPort mainSendPort) {
+  final receivePort = ReceivePort();
+  mainSendPort.send(receivePort.sendPort);
+  receivePort.listen((message) {
+    if (message is Uint8List) {
+      try {
+        mainSendPort.send(_analyzeFrameInIsolate(message));
+      } catch (_) {
+        mainSendPort.send(false); // optimistically renderable on analysis error
+      }
+    } else {
+      receivePort.close();
+    }
+  });
+}
 
 class CallActiveScaffold extends StatefulWidget {
   const CallActiveScaffold({
@@ -48,10 +101,7 @@ class CallActiveScaffold extends StatefulWidget {
 }
 
 class CallActiveScaffoldState extends State<CallActiveScaffold> {
-  static const Duration _remoteFrameProbeNoTrackInterval = Duration(seconds: 1);
-  static const int _remoteFrameMaxSamples = 1200;
-  static const int _blackLumaThreshold = 16;
-  static const double _blackFrameRatioThreshold = 0.98;
+  static const Duration _remoteFrameProbeThrottle = Duration(seconds: 1);
 
   /// Cached `CallBloc` obtained in `initState`.
   /// Avoids unsafe `context.read` during widget deactivation (e.g., navigation pop).
@@ -74,6 +124,12 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   Timer? _remoteFrameWatcher;
   bool _hasRenderableRemoteFrame = false;
 
+  Isolate? _frameAnalysisIsolate;
+  ReceivePort? _frameAnalysisReceivePort;
+  SendPort? _frameAnalysisSendPort;
+  Completer<bool>? _pendingFrameAnalysis;
+  late Future<void> _frameAnalysisIsolateReady;
+
   static const Duration _debounceDuration = Duration(seconds: 2);
   DateTime? _debounceReleaseTime;
   Timer? _debounceTimer;
@@ -87,6 +143,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
     // Synchronize the auto-hide logic with the initial call list configuration.
     _compactController = CompactAutoResetController(initiallyActive: widget.activeCalls.shouldAutoCompact);
+    _frameAnalysisIsolateReady = _initFrameAnalysisIsolate();
     _scheduleNextProbe(Duration.zero);
 
     // Dispatch interaction debounce whenever any call is in updating state
@@ -110,6 +167,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   @override
   void dispose() {
     _disposeRemoteFrameWatcher();
+    _disposeFrameAnalysisIsolate();
     _compactController.removeListener(_onCompactChanged);
     _compactController.dispose();
     _debounceByStateSubscription?.cancel();
@@ -507,7 +565,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
     final track = _currentRemoteVideoTrack;
     if (track == null) {
-      _scheduleNextProbe(_remoteFrameProbeNoTrackInterval);
+      _scheduleNextProbe(_remoteFrameProbeThrottle * 2);
       return;
     }
 
@@ -521,78 +579,48 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     } finally {
       final elapsed = DateTime.now().difference(startTime);
       _logger.fine('Remote frame probe completed in ${elapsed.inMilliseconds}ms, $_hasRenderableRemoteFrame');
-      _scheduleNextProbe(elapsed * 4);
+      _scheduleNextProbe(_remoteFrameProbeThrottle);
     }
   }
 
   Future<bool> _isTrackFrameBlackOrEmpty(MediaStreamTrack track) async {
     final capturedFrame = await track.captureFrame();
-    final framePngBytes = capturedFrame.asUint8List();
-
-    if (framePngBytes.isEmpty) {
-      return true;
-    }
-
-    final codec = await ui.instantiateImageCodec(framePngBytes);
-    try {
-      final nextFrame = await codec.getNextFrame();
-      final image = nextFrame.image;
-      try {
-        final frameRgbaBytes = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
-
-        if (frameRgbaBytes == null || frameRgbaBytes.lengthInBytes == 0) {
-          return true;
-        }
-
-        final rgbaBytes = frameRgbaBytes.buffer.asUint8List(frameRgbaBytes.offsetInBytes, frameRgbaBytes.lengthInBytes);
-
-        return _isMostlyBlackRgbaFrame(rgbaBytes);
-      } finally {
-        image.dispose();
-      }
-    } finally {
-      codec.dispose();
-    }
+    return _analyzeFrame(capturedFrame.asUint8List());
   }
 
-  bool _isMostlyBlackRgbaFrame(Uint8List rgbaBytes) {
-    final totalPixels = rgbaBytes.length ~/ 4;
-
-    if (totalPixels == 0) {
-      return true;
-    }
-
-    final step = math.max(1, totalPixels ~/ _remoteFrameMaxSamples);
-    var sampledPixels = 0;
-    var opaquePixels = 0;
-    var blackPixels = 0;
-
-    for (var pixelIndex = 0; pixelIndex < totalPixels; pixelIndex += step) {
-      final offset = pixelIndex * 4;
-      final red = rgbaBytes[offset];
-      final green = rgbaBytes[offset + 1];
-      final blue = rgbaBytes[offset + 2];
-      final alpha = rgbaBytes[offset + 3];
-
-      sampledPixels++;
-
-      if (alpha == 0) {
-        continue;
+  Future<void> _initFrameAnalysisIsolate() async {
+    final receivePort = ReceivePort();
+    _frameAnalysisReceivePort = receivePort;
+    final handshake = Completer<SendPort>();
+    receivePort.listen((message) {
+      if (!handshake.isCompleted) {
+        handshake.complete(message as SendPort);
+      } else if (message is bool) {
+        _pendingFrameAnalysis?.complete(message);
+        _pendingFrameAnalysis = null;
       }
+    });
+    _frameAnalysisIsolate = await Isolate.spawn(_frameAnalysisIsolateEntry, receivePort.sendPort);
+    _frameAnalysisSendPort = await handshake.future;
+  }
 
-      opaquePixels++;
+  void _disposeFrameAnalysisIsolate() {
+    _pendingFrameAnalysis?.completeError(StateError('disposed'));
+    _pendingFrameAnalysis = null;
+    _frameAnalysisSendPort?.send(null);
+    _frameAnalysisIsolate?.kill(priority: Isolate.immediate);
+    _frameAnalysisReceivePort?.close();
+    _frameAnalysisIsolate = null;
+    _frameAnalysisSendPort = null;
+    _frameAnalysisReceivePort = null;
+  }
 
-      final luma = ((red * 299) + (green * 587) + (blue * 114)) ~/ 1000;
-      if (luma <= _blackLumaThreshold) {
-        blackPixels++;
-      }
-    }
-
-    if (sampledPixels == 0 || opaquePixels == 0) {
-      return true;
-    }
-
-    return blackPixels / opaquePixels >= _blackFrameRatioThreshold;
+  Future<bool> _analyzeFrame(Uint8List pngBytes) async {
+    await _frameAnalysisIsolateReady;
+    final completer = Completer<bool>();
+    _pendingFrameAnalysis = completer;
+    _frameAnalysisSendPort!.send(pngBytes);
+    return completer.future;
   }
 
   void _setHasRenderableRemoteFrame(bool value) {
