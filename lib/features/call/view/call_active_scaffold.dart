@@ -48,7 +48,7 @@ class CallActiveScaffold extends StatefulWidget {
 }
 
 class CallActiveScaffoldState extends State<CallActiveScaffold> {
-  static const Duration _remoteFrameProbeInterval = Duration(seconds: 1);
+  static const Duration _remoteFrameProbeNoTrackInterval = Duration(seconds: 1);
   static const int _remoteFrameMaxSamples = 1200;
   static const int _blackLumaThreshold = 16;
   static const double _blackFrameRatioThreshold = 0.98;
@@ -72,7 +72,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   VideoBackgroundMode _backgroundMode = VideoBackgroundMode.blur;
 
   Timer? _remoteFrameWatcher;
-  bool _remoteFrameProbeInProgress = false;
   bool _hasRenderableRemoteFrame = false;
 
   static const Duration _debounceDuration = Duration(seconds: 2);
@@ -88,7 +87,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
     // Synchronize the auto-hide logic with the initial call list configuration.
     _compactController = CompactAutoResetController(initiallyActive: widget.activeCalls.shouldAutoCompact);
-    _remoteFrameWatcher = Timer.periodic(_remoteFrameProbeInterval, (_) => _probeRemoteFrame());
+    _scheduleNextProbe(Duration.zero);
 
     // Dispatch interaction debounce whenever any call is in updating state
     // to prevent user race conditions e.g hold or upgrade to video when the call is updating from remote side.
@@ -498,13 +497,20 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     return tracks.first;
   }
 
+  void _scheduleNextProbe(Duration delay) {
+    if (!mounted) return;
+    _remoteFrameWatcher = Timer(delay, _probeRemoteFrame);
+  }
+
   Future<void> _probeRemoteFrame() async {
-    if (_remoteFrameProbeInProgress || mounted == false) return;
+    if (!mounted) return;
 
     final track = _currentRemoteVideoTrack;
-    if (track == null) return;
+    if (track == null) {
+      _scheduleNextProbe(_remoteFrameProbeNoTrackInterval);
+      return;
+    }
 
-    _remoteFrameProbeInProgress = true;
     final startTime = DateTime.now();
     try {
       final isBlackOrEmpty = await _isTrackFrameBlackOrEmpty(track).timeout(const Duration(seconds: 5));
@@ -513,9 +519,9 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
       // In case of any errors during frame capture or analysis, we optimistically assume that the remote frame is renderable.
       _setHasRenderableRemoteFrame(true);
     } finally {
-      _remoteFrameProbeInProgress = false;
       final elapsed = DateTime.now().difference(startTime);
       _logger.fine('Remote frame probe completed in ${elapsed.inMilliseconds}ms, $_hasRenderableRemoteFrame');
+      _scheduleNextProbe(elapsed * 4);
     }
   }
 
