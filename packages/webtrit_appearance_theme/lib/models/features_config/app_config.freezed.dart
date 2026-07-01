@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AppConfig {
 
- AppConfigLogin get loginConfig; AppConfigMain get mainConfig; AppConfigSettings get settingsConfig; AppConfigCall get callConfig; AppConfigContacts get contacts; AppConfigMessaging get messaging; List<SupportedFeature> get supported;
+ AppConfigLogin get loginConfig; AppConfigMain get mainConfig; AppConfigSettings get settingsConfig; AppConfigCall get callConfig; AppConfigContacts get contacts; AppConfigMessaging get messaging; AppConfigLocalization get localization; List<SupportedFeature> get supported;
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $AppConfigCopyWith<AppConfig> get copyWith => _$AppConfigCopyWithImpl<AppConfig>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfig&&(identical(other.loginConfig, loginConfig) || other.loginConfig == loginConfig)&&(identical(other.mainConfig, mainConfig) || other.mainConfig == mainConfig)&&(identical(other.settingsConfig, settingsConfig) || other.settingsConfig == settingsConfig)&&(identical(other.callConfig, callConfig) || other.callConfig == callConfig)&&(identical(other.contacts, contacts) || other.contacts == contacts)&&(identical(other.messaging, messaging) || other.messaging == messaging)&&const DeepCollectionEquality().equals(other.supported, supported));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfig&&(identical(other.loginConfig, loginConfig) || other.loginConfig == loginConfig)&&(identical(other.mainConfig, mainConfig) || other.mainConfig == mainConfig)&&(identical(other.settingsConfig, settingsConfig) || other.settingsConfig == settingsConfig)&&(identical(other.callConfig, callConfig) || other.callConfig == callConfig)&&(identical(other.contacts, contacts) || other.contacts == contacts)&&(identical(other.messaging, messaging) || other.messaging == messaging)&&(identical(other.localization, localization) || other.localization == localization)&&const DeepCollectionEquality().equals(other.supported, supported));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,loginConfig,mainConfig,settingsConfig,callConfig,contacts,messaging,const DeepCollectionEquality().hash(supported));
+int get hashCode => Object.hash(runtimeType,loginConfig,mainConfig,settingsConfig,callConfig,contacts,messaging,localization,const DeepCollectionEquality().hash(supported));
 
 @override
 String toString() {
-  return 'AppConfig(loginConfig: $loginConfig, mainConfig: $mainConfig, settingsConfig: $settingsConfig, callConfig: $callConfig, contacts: $contacts, messaging: $messaging, supported: $supported)';
+  return 'AppConfig(loginConfig: $loginConfig, mainConfig: $mainConfig, settingsConfig: $settingsConfig, callConfig: $callConfig, contacts: $contacts, messaging: $messaging, localization: $localization, supported: $supported)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $AppConfigCopyWith<$Res>  {
   factory $AppConfigCopyWith(AppConfig value, $Res Function(AppConfig) _then) = _$AppConfigCopyWithImpl;
 @useResult
 $Res call({
- AppConfigLogin loginConfig, AppConfigMain mainConfig, AppConfigSettings settingsConfig, AppConfigCall callConfig, AppConfigContacts contacts, AppConfigMessaging messaging, List<SupportedFeature> supported
+ AppConfigLogin loginConfig, AppConfigMain mainConfig, AppConfigSettings settingsConfig, AppConfigCall callConfig, AppConfigContacts contacts, AppConfigMessaging messaging, AppConfigLocalization localization, List<SupportedFeature> supported
 });
 
 
@@ -63,7 +63,7 @@ class _$AppConfigCopyWithImpl<$Res>
 
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? loginConfig = null,Object? mainConfig = null,Object? settingsConfig = null,Object? callConfig = null,Object? contacts = null,Object? messaging = null,Object? supported = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? loginConfig = null,Object? mainConfig = null,Object? settingsConfig = null,Object? callConfig = null,Object? contacts = null,Object? messaging = null,Object? localization = null,Object? supported = null,}) {
   return _then(AppConfig(
 loginConfig: null == loginConfig ? _self.loginConfig : loginConfig // ignore: cast_nullable_to_non_nullable
 as AppConfigLogin,mainConfig: null == mainConfig ? _self.mainConfig : mainConfig // ignore: cast_nullable_to_non_nullable
@@ -71,7 +71,8 @@ as AppConfigMain,settingsConfig: null == settingsConfig ? _self.settingsConfig :
 as AppConfigSettings,callConfig: null == callConfig ? _self.callConfig : callConfig // ignore: cast_nullable_to_non_nullable
 as AppConfigCall,contacts: null == contacts ? _self.contacts : contacts // ignore: cast_nullable_to_non_nullable
 as AppConfigContacts,messaging: null == messaging ? _self.messaging : messaging // ignore: cast_nullable_to_non_nullable
-as AppConfigMessaging,supported: null == supported ? _self.supported : supported // ignore: cast_nullable_to_non_nullable
+as AppConfigMessaging,localization: null == localization ? _self.localization : localization // ignore: cast_nullable_to_non_nullable
+as AppConfigLocalization,supported: null == supported ? _self.supported : supported // ignore: cast_nullable_to_non_nullable
 as List<SupportedFeature>,
   ));
 }
@@ -5083,6 +5084,192 @@ as bool,
 
 /// Adds pattern-matching-related methods to [ChatContactInfo].
 extension ChatContactInfoPatterns on ChatContactInfo {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
+
+/// @nodoc
+mixin _$AppConfigLocalization {
+
+ List<String> get enabledLanguages;
+/// Create a copy of AppConfigLocalization
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AppConfigLocalizationCopyWith<AppConfigLocalization> get copyWith => _$AppConfigLocalizationCopyWithImpl<AppConfigLocalization>(this as AppConfigLocalization, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigLocalization&&const DeepCollectionEquality().equals(other.enabledLanguages, enabledLanguages));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(enabledLanguages));
+
+@override
+String toString() {
+  return 'AppConfigLocalization(enabledLanguages: $enabledLanguages)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $AppConfigLocalizationCopyWith<$Res>  {
+  factory $AppConfigLocalizationCopyWith(AppConfigLocalization value, $Res Function(AppConfigLocalization) _then) = _$AppConfigLocalizationCopyWithImpl;
+@useResult
+$Res call({
+ List<String> enabledLanguages
+});
+
+
+
+
+}
+/// @nodoc
+class _$AppConfigLocalizationCopyWithImpl<$Res>
+    implements $AppConfigLocalizationCopyWith<$Res> {
+  _$AppConfigLocalizationCopyWithImpl(this._self, this._then);
+
+  final AppConfigLocalization _self;
+  final $Res Function(AppConfigLocalization) _then;
+
+/// Create a copy of AppConfigLocalization
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? enabledLanguages = null,}) {
+  return _then(AppConfigLocalization(
+enabledLanguages: null == enabledLanguages ? _self.enabledLanguages : enabledLanguages // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [AppConfigLocalization].
+extension AppConfigLocalizationPatterns on AppConfigLocalization {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

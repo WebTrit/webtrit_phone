@@ -26,7 +26,9 @@ EmbeddedResource createMockTermsResource() {
 
   when(() => resource.id).thenReturn('terms_id');
   when(() => resource.type).thenReturn(EmbeddedResourceType.terms);
-  when(() => resource.uriOrNull).thenReturn(Uri.parse('https://example.com/terms'));
+  when(
+    () => resource.uriOrNull,
+  ).thenReturn(Uri.parse('https://example.com/terms'));
   when(() => resource.uri).thenReturn('https://example.com/terms');
   when(() => resource.reconnectStrategy).thenReturn(null);
   when(() => resource.toolbar).thenReturn(toolbar);
@@ -62,7 +64,9 @@ AppConfig createMockAppConfig() {
   when(() => login.common).thenReturn(const AppConfigLoginCommon());
 
   when(() => main.bottomMenu).thenReturn(bottomMenu);
-  when(() => bottomMenu.tabs).thenReturn([BottomMenuTabScheme.keypad(titleL10n: 'Keypad', icon: '0xe1ce')]);
+  when(() => bottomMenu.tabs).thenReturn([
+    BottomMenuTabScheme.keypad(titleL10n: 'Keypad', icon: '0xe1ce'),
+  ]);
   // TODO: Migrate client configurations first before fully removing this property.
   // ignore: deprecated_member_use_from_same_package, deprecated_member_use
   when(() => main.systemNotificationsEnabled).thenReturn(false);
@@ -97,6 +101,7 @@ AppConfig createMockAppConfig() {
   when(() => appConfig.callConfig).thenReturn(call);
   when(() => appConfig.contacts).thenReturn(contacts);
   when(() => appConfig.messaging).thenReturn(messaging);
+  when(() => appConfig.localization).thenReturn(const AppConfigLocalization());
   when(() => appConfig.supported).thenReturn([]);
 
   return appConfig;
