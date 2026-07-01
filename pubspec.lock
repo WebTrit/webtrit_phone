@@ -978,7 +978,7 @@ packages:
     source: hosted
     version: "2.1.0"
   image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image
       sha256: "492bd52f6c4fbb6ee41f781ff27765ce5f627910e1e0cbecfa3d9add5562604c"
@@ -2036,7 +2036,7 @@ packages:
       path: "../webtrit_callkeep/webtrit_callkeep"
       relative: true
     source: path
-    version: "1.3.0+0"
+    version: "1.2.0+0"
   webtrit_callkeep_android:
     dependency: transitive
     description:

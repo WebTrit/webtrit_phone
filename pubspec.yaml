@@ -80,6 +80,7 @@ dependencies:
   gravatar_utils: ^1.0.0
   html: ^0.15.6
   http: ^1.6.0
+  image: ^4.0.0
   icon_decoration: ^2.1.0
   in_app_update: ^4.2.5
   intl: any
