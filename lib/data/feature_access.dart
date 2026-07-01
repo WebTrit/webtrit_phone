@@ -113,35 +113,14 @@ class FeatureAccess extends Equatable {
       // Note: TermsConfig must be initialized before SettingsConfig because Settings might fallback to Terms config.
       final termsConfig = TermsMapper.map(embeddedResources);
 
-      final loginConfig = LoginMapper.map(
-        appConfig,
-        embeddedConfig.embeddedResources,
-      );
-      final bottomMenuConfig = BottomMenuMapper.map(
-        appConfig,
-        embeddedConfig,
-        coreSupport,
-        featureOverrides,
-      );
-      final settingsConfig = SettingsMapper.map(
-        appConfig,
-        embeddedResources,
-        coreSupport,
-        termsConfig,
-      );
+      final loginConfig = LoginMapper.map(appConfig, embeddedConfig.embeddedResources);
+      final bottomMenuConfig = BottomMenuMapper.map(appConfig, embeddedConfig, coreSupport, featureOverrides);
+      final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupport, termsConfig);
       final callConfig = CallMapper.map(appConfig, featureOverrides);
       final messagingConfig = MessagingMapper.map(appConfig, coreSupport);
       final contactsConfig = ContactsMapper.map(appConfig);
-      final systemNotificationsConfig = SystemNotificationsMapper.map(
-        coreSupport,
-        appConfig,
-        featureOverrides,
-      );
-      final sipPresenceConfig = SipPresenceMapper.map(
-        systemInfo,
-        appConfig,
-        featureOverrides,
-      );
+      final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupport, appConfig, featureOverrides);
+      final sipPresenceConfig = SipPresenceMapper.map(systemInfo, appConfig, featureOverrides);
       final loggingConfig = LoggingMapper.map(appConfig, featureOverrides);
 
       final supportedConfig = SupportedMapper.map(appConfig.supported);
@@ -197,16 +176,12 @@ abstract final class LoginMapper {
   // Currently, modeSelectActions control both the launch screen and the buttons on the login_mode_select_screen,
   // which leads to unclear and tightly coupled logic.
   static LoginConfig map(AppConfig appConfig, List<EmbeddedData> embeddedData) {
-    final rawButtons = appConfig.loginConfig.modeSelect.actions.where(
-      (button) => button.enabled,
-    );
+    final rawButtons = appConfig.loginConfig.modeSelect.actions.where((button) => button.enabled);
     final buttons = <LoginModeAction>[];
 
     for (final action in rawButtons) {
       final loginFlavor = LoginFlavor.values.byName(action.type);
-      final loginEmbeddedData = embeddedData.firstWhereOrNull(
-        (dto) => dto.id == action.embeddedId,
-      );
+      final loginEmbeddedData = embeddedData.firstWhereOrNull((dto) => dto.id == action.embeddedId);
 
       if (loginEmbeddedData != null && loginFlavor == LoginFlavor.embedded) {
         buttons.add(
@@ -217,12 +192,7 @@ abstract final class LoginMapper {
           ),
         );
       } else if (loginFlavor == LoginFlavor.login) {
-        buttons.add(
-          LoginDefaultModeAction(
-            titleL10n: action.titleL10n,
-            flavor: loginFlavor,
-          ),
-        );
+        buttons.add(LoginDefaultModeAction(titleL10n: action.titleL10n, flavor: loginFlavor));
       }
     }
 
@@ -230,9 +200,7 @@ abstract final class LoginMapper {
       titleL10n: appConfig.loginConfig.modeSelect.greetingL10n,
       actions: List.unmodifiable(buttons),
       launchLoginPage: embeddedData.firstWhereOrNull(
-        (it) =>
-            it.id ==
-            appConfig.loginConfig.common.fullScreenLaunchEmbeddedResourceId,
+        (it) => it.id == appConfig.loginConfig.common.fullScreenLaunchEmbeddedResourceId,
       ),
     );
   }
@@ -262,14 +230,8 @@ abstract final class BottomMenuMapper {
 
     final bottomMenuTabs = bottomMenu.tabs
         .where((tab) => tab.enabled)
-        .map(
-          (tab) =>
-              _createBottomMenuTab(tab, embeddedConfig, coreSupport, overrides),
-        )
-        .where(
-          (tab) =>
-              !(tab is ContactsBottomMenuTab && tab.contactSourceTypes.isEmpty),
-        )
+        .map((tab) => _createBottomMenuTab(tab, embeddedConfig, coreSupport, overrides))
+        .where((tab) => !(tab is ContactsBottomMenuTab && tab.contactSourceTypes.isEmpty))
         .toList();
 
     if (bottomMenuTabs.isEmpty) {
@@ -295,31 +257,23 @@ abstract final class BottomMenuMapper {
       // Local flag (config) can be overridden by Firebase Remote Config, then gated by the core
       // capability: call history is shown only when the resolved local flag AND the server
       // callHistory capability are both true.
-      recents: (enabled, initial, titleL10n, icon, supportsCallHistory) =>
-          RecentsBottomMenuTab(
-            supportsCallHistory:
-                (overrides.isCallHistoryEnabled ?? supportsCallHistory) &&
-                coreSupport.supportsCallHistory,
-            enabled: tab.enabled,
-            initial: tab.initial,
-            titleL10n: tab.titleL10n,
-            icon: tab.icon.toIconData(),
-          ),
-      contacts: (enabled, initial, titleL10n, icon, contactSourceTypes) =>
-          ContactsBottomMenuTab(
-            enabled: tab.enabled,
-            initial: tab.initial,
-            titleL10n: tab.titleL10n,
-            icon: tab.icon.toIconData(),
-            contactSourceTypes: contactSourceTypes
-                .map((type) => ContactSourceType.values.byName(type))
-                .where(
-                  (type) =>
-                      type != ContactSourceType.external ||
-                      coreSupport.supportsExtensions,
-                )
-                .toList(),
-          ),
+      recents: (enabled, initial, titleL10n, icon, supportsCallHistory) => RecentsBottomMenuTab(
+        supportsCallHistory: (overrides.isCallHistoryEnabled ?? supportsCallHistory) && coreSupport.supportsCallHistory,
+        enabled: tab.enabled,
+        initial: tab.initial,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon.toIconData(),
+      ),
+      contacts: (enabled, initial, titleL10n, icon, contactSourceTypes) => ContactsBottomMenuTab(
+        enabled: tab.enabled,
+        initial: tab.initial,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon.toIconData(),
+        contactSourceTypes: contactSourceTypes
+            .map((type) => ContactSourceType.values.byName(type))
+            .where((type) => type != ContactSourceType.external || coreSupport.supportsExtensions)
+            .toList(),
+      ),
       keypad: (enabled, initial, titleL10n, icon) => KeypadBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
@@ -333,8 +287,9 @@ abstract final class BottomMenuMapper {
         icon: tab.icon.toIconData(),
       ),
       embedded: (enabled, initial, titleL10n, icon, embeddedId) {
-        final embeddedResource = embeddedConfig.embeddedResources
-            .firstWhereOrNull((resource) => resource.id == embeddedId);
+        final embeddedResource = embeddedConfig.embeddedResources.firstWhereOrNull(
+          (resource) => resource.id == embeddedId,
+        );
         return EmbeddedBottomMenuTab(
           id: embeddedId,
           enabled: tab.enabled,
@@ -361,9 +316,7 @@ abstract final class SettingsMapper {
     final settingSections = <SettingsSection>[];
     bool hasVoicemail = false;
 
-    for (final section in appConfig.settingsConfig.sections.where(
-      (s) => s.enabled,
-    )) {
+    for (final section in appConfig.settingsConfig.sections.where((s) => s.enabled)) {
       final items = <SettingItem>[];
 
       for (final item in section.items.where((i) => i.enabled)) {
@@ -380,12 +333,7 @@ abstract final class SettingsMapper {
           titleL10n: item.titleL10n,
           icon: item.icon.toIconData(),
           iconColor: item.iconColor?.toColor(),
-          data: _getEmbeddedDataResource(
-            embeddedResources,
-            item,
-            flavor,
-            termsConfig,
-          ),
+          data: _getEmbeddedDataResource(embeddedResources, item, flavor, termsConfig),
           flavor: flavor,
         );
 
@@ -393,29 +341,19 @@ abstract final class SettingsMapper {
       }
 
       if (items.isNotEmpty) {
-        settingSections.add(
-          SettingsSection(titleL10n: section.titleL10n, items: items),
-        );
+        settingSections.add(SettingsSection(titleL10n: section.titleL10n, items: items));
       }
     }
 
-    return SettingsConfig(
-      voicemailsEnabled: hasVoicemail,
-      sections: List.unmodifiable(settingSections),
-    );
+    return SettingsConfig(voicemailsEnabled: hasVoicemail, sections: List.unmodifiable(settingSections));
   }
 
   // TODO (Serdun): Move platform-specific configuration to a separate config file.
   static bool _isFeatureSupportedByPlatform(SettingsFlavor flavor) {
-    return !(flavor == SettingsFlavor.network &&
-        !kIsWeb &&
-        !Platform.isAndroid);
+    return !(flavor == SettingsFlavor.network && !kIsWeb && !Platform.isAndroid);
   }
 
-  static bool _isFeatureSupportedByCore(
-    SettingsFlavor flavor,
-    CoreSupport coreSupport,
-  ) {
+  static bool _isFeatureSupportedByCore(SettingsFlavor flavor, CoreSupport coreSupport) {
     return flavor != SettingsFlavor.voicemail || coreSupport.supportsVoicemail;
   }
 
@@ -425,9 +363,7 @@ abstract final class SettingsMapper {
     SettingsFlavor flavor,
     TermsConfig termsConfig,
   ) {
-    final resource = embeddedResources.firstWhereOrNull(
-      (r) => r.id == item.embeddedResourceId,
-    );
+    final resource = embeddedResources.firstWhereOrNull((r) => r.id == item.embeddedResourceId);
 
     if (resource?.uriOrNull == null && flavor == SettingsFlavor.terms) {
       return termsConfig.configData;
@@ -453,10 +389,7 @@ abstract final class SettingsMapper {
 /// and environment settings.
 abstract final class CallMapper {
   /// Maps [AppConfig] to [CallCapabilitiesConfig].
-  static CallConfig map(
-    AppConfig appConfig,
-    FeatureOverrides featureOverrides,
-  ) {
+  static CallConfig map(AppConfig appConfig, FeatureOverrides featureOverrides) {
     final rawCallConfig = appConfig.callConfig;
     final transferConfig = rawCallConfig.transfer;
     final encodingConfig = rawCallConfig.encoding;
@@ -465,15 +398,11 @@ abstract final class CallMapper {
 
     // Determine if the media settings UI should be accessible
     final encodingViewEnabled = appConfig.settingsConfig.sections.any(
-      (section) => section.items.any(
-        (item) =>
-            item.type == SettingsFlavor.mediaSettings.name && item.enabled,
-      ),
+      (section) => section.items.any((item) => item.type == SettingsFlavor.mediaSettings.name && item.enabled),
     );
 
     // Apply remote overrides
-    final isVideoEnabled =
-        featureOverrides.isVideoCallEnabled ?? rawCallConfig.videoEnabled;
+    final isVideoEnabled = featureOverrides.isVideoCallEnabled ?? rawCallConfig.videoEnabled;
 
     return CallConfig(
       capabilities: CallCapabilitiesConfig(
@@ -499,8 +428,7 @@ abstract final class CallMapper {
           opusBitrate: defaultPresetOverride.opusBitrate,
           opusStereo: defaultPresetOverride.opusStereo,
           opusDtx: defaultPresetOverride.opusDtx,
-          removeStaticAudioRtpMaps:
-              defaultPresetOverride.removeStaticAudioRtpMaps,
+          removeStaticAudioRtpMaps: defaultPresetOverride.removeStaticAudioRtpMaps,
           remapTE8payloadTo101: defaultPresetOverride.remapTE8payloadTo101,
           removeREMBFeedback: defaultPresetOverride.removeREMBFeedback,
           removeTWCCFeedback: defaultPresetOverride.removeTWCCFeedback,
@@ -509,9 +437,7 @@ abstract final class CallMapper {
       ),
       peerConnection: PeerConnectionSettings(
         negotiationSettings: NegotiationSettings(
-          includeInactiveVideoInOfferAnswer: peerConnectionConfig
-              .negotiation
-              .includeInactiveVideoInOfferAnswer,
+          includeInactiveVideoInOfferAnswer: peerConnectionConfig.negotiation.includeInactiveVideoInOfferAnswer,
         ),
       ),
     );
@@ -519,13 +445,7 @@ abstract final class CallMapper {
 
   static List<SdpExtmapType>? _parseExtmapList(List<String>? names) {
     if (names == null) return null;
-    return names
-        .map(
-          (name) =>
-              SdpExtmapType.values.where((t) => t.name == name).firstOrNull,
-        )
-        .nonNulls
-        .toList();
+    return names.map((name) => SdpExtmapType.values.where((t) => t.name == name).firstOrNull).nonNulls.toList();
   }
 }
 
@@ -533,10 +453,7 @@ abstract final class MessagingMapper {
   /// Maps configuration and core support to [MessagingConfig].
   static MessagingConfig map(AppConfig appConfig, CoreSupport coreSupport) {
     final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any(
-      (tab) => tab.maybeWhen(
-        messaging: (enabled, _, _, _) => enabled,
-        orElse: () => false,
-      ),
+      (tab) => tab.maybeWhen(messaging: (enabled, _, _, _) => enabled, orElse: () => false),
     );
 
     return MessagingConfig(
@@ -544,8 +461,7 @@ abstract final class MessagingMapper {
       coreChatsSupport: coreSupport.supportsChats,
       tabEnabled: tabEnabled,
       groupChatSupport: appConfig.messaging.chats.groupChatButtonEnabled,
-      contactInfoVideoCallSupport:
-          appConfig.messaging.chats.contactInfo.showVideoButtonAction,
+      contactInfoVideoCallSupport: appConfig.messaging.chats.contactInfo.showVideoButtonAction,
     );
   }
 }
@@ -558,9 +474,7 @@ abstract final class TermsMapper {
   /// either from a provided embedded resource ID or by searching for a resource of type `terms`.
   static TermsConfig map(List<EmbeddedResource> embeddedResources) {
     // Attempt to find the terms resource from the embedded resources list.
-    final termsResource = embeddedResources.firstWhereOrNull(
-      (resource) => resource.type == EmbeddedResourceType.terms,
-    );
+    final termsResource = embeddedResources.firstWhereOrNull((resource) => resource.type == EmbeddedResourceType.terms);
 
     // TODO(Serdun): It would be better to add a separate privacy policy feature in AppConfig,
     // with a direct link to the embedded resource. Implement logic to check if the feature access
@@ -596,9 +510,7 @@ abstract final class EmbeddedMapper {
         id: resource.id,
         uri: Uri.parse(resource.uri),
         reconnectStrategy: reconnectStrategy,
-        payload: resource.payload
-            .map((it) => EmbeddedPayloadData.values.byName(it))
-            .toList(),
+        payload: resource.payload.map((it) => EmbeddedPayloadData.values.byName(it)).toList(),
       );
     }).toList();
 
@@ -614,52 +526,37 @@ abstract final class SystemNotificationsMapper {
     AppConfig appConfig,
     FeatureOverrides featureOverrides,
   ) {
-    final supportedFeature = appConfig.supported
-        .whereType<SupportedSystemNotifications>()
-        .firstOrNull;
+    final supportedFeature = appConfig.supported.whereType<SupportedSystemNotifications>().firstOrNull;
 
     // TODO: Migrate client configurations first before fully removing this property.
-    // ignore: deprecated_member_use_from_same_package, deprecated_member_use
     final baseAppSupport =
         supportedFeature?.enabled ??
+        // ignore: deprecated_member_use_from_same_package, deprecated_member_use
         appConfig.mainConfig.systemNotificationsEnabled;
     // Apply remote config overrides
-    final appSupport =
-        featureOverrides.isSystemNotificationsEnabled ?? baseAppSupport;
+    final appSupport = featureOverrides.isSystemNotificationsEnabled ?? baseAppSupport;
     // Check if the backend supports system notifications
     final backendSupport = coreSupport.supportsSystemNotifications;
 
     final isEnabled = appSupport && backendSupport;
     final withPush = isEnabled && coreSupport.supportsSystemPushNotifications;
 
-    return SystemNotificationsConfig(
-      systemNotificationsSupport: isEnabled,
-      systemNotificationsPushSupport: withPush,
-    );
+    return SystemNotificationsConfig(systemNotificationsSupport: isEnabled, systemNotificationsPushSupport: withPush);
   }
 }
 
 /// Mapper responsible for evaluating SIP presence support based on config and core capabilities.
 abstract final class SipPresenceMapper {
   /// Maps [CoreSupport] and [AppConfig] to [SipPresenceConfig].
-  static SipPresenceConfig map(
-    WebtritSystemInfo? systemInfo,
-    AppConfig appConfig,
-    FeatureOverrides featureOverrides,
-  ) {
-    final appSupportsBase = appConfig.supported
-        .whereType<SupportedHybridPresence>()
-        .isNotEmpty;
-    final appSupports =
-        featureOverrides.hybridPresenceSupport ?? appSupportsBase;
+  static SipPresenceConfig map(WebtritSystemInfo? systemInfo, AppConfig appConfig, FeatureOverrides featureOverrides) {
+    final appSupportsBase = appConfig.supported.whereType<SupportedHybridPresence>().isNotEmpty;
+    final appSupports = featureOverrides.hybridPresenceSupport ?? appSupportsBase;
 
     final backendSupports = systemInfo?.core.hybridPresenceAware ?? false;
 
     final isSupported = appSupports && backendSupports;
-    final withBlfViaSip =
-        isSupported && (systemInfo?.adapter?.supportsSipDialogs ?? false);
-    final withpresenceViaSip =
-        isSupported && (systemInfo?.adapter?.supportsSipPresence ?? false);
+    final withBlfViaSip = isSupported && (systemInfo?.adapter?.supportsSipDialogs ?? false);
+    final withpresenceViaSip = isSupported && (systemInfo?.adapter?.supportsSipPresence ?? false);
 
     return SipPresenceConfig(
       hybridPresenceSupport: isSupported,
@@ -672,12 +569,9 @@ abstract final class SipPresenceMapper {
 /// Mapper responsible for parsing and preparing [ContactsConfig] from application configuration.
 abstract final class ContactsMapper {
   static const Set<ContactAction> _defaultAppBarActions = {ContactAction.chat};
-  static const Set<ContactAction> _defaultEmailActions = {
-    ContactAction.sendEmail,
-  };
+  static const Set<ContactAction> _defaultEmailActions = {ContactAction.sendEmail};
 
-  static final Map<String, ContactAction> _actionByName = ContactAction.values
-      .asNameMap();
+  static final Map<String, ContactAction> _actionByName = ContactAction.values.asNameMap();
 
   /// Maps [AppConfig] to [ContactsConfig].
   ///
@@ -687,39 +581,22 @@ abstract final class ContactsMapper {
     final detailsDto = appConfig.contacts.details;
 
     // Pre-calculate the default "All except chat" for phone tiles.
-    final defaultPhoneActions = ContactAction.values
-        .where((action) => action != ContactAction.chat)
-        .toSet();
+    final defaultPhoneActions = ContactAction.values.where((action) => action != ContactAction.chat).toSet();
 
     return ContactsConfig(
       detailsConfig: ContactDetailsConfig(
-        appBarActions: _parseActions(
-          detailsDto.actions.appBar,
-          fallback: _defaultAppBarActions,
-        ),
-        phoneTileActions: _parseActions(
-          detailsDto.actions.phoneTile,
-          fallback: defaultPhoneActions,
-        ),
-        emailTileActions: _parseActions(
-          detailsDto.actions.emailTile,
-          fallback: _defaultEmailActions,
-        ),
+        appBarActions: _parseActions(detailsDto.actions.appBar, fallback: _defaultAppBarActions),
+        phoneTileActions: _parseActions(detailsDto.actions.phoneTile, fallback: defaultPhoneActions),
+        emailTileActions: _parseActions(detailsDto.actions.emailTile, fallback: _defaultEmailActions),
       ),
     );
   }
 
   /// Parses a list of raw action strings into a set of [ContactAction] enums.
-  static Set<ContactAction> _parseActions(
-    List<String>? rawActions, {
-    required Set<ContactAction> fallback,
-  }) {
+  static Set<ContactAction> _parseActions(List<String>? rawActions, {required Set<ContactAction> fallback}) {
     if (rawActions == null) return fallback;
 
-    final parsed = rawActions
-        .map((e) => _actionByName[e])
-        .whereType<ContactAction>()
-        .toSet();
+    final parsed = rawActions.map((e) => _actionByName[e]).whereType<ContactAction>().toSet();
 
     return parsed.isEmpty ? fallback : parsed;
   }
@@ -740,10 +617,7 @@ abstract final class SupportedMapper {
   /// Maps a list of [SupportedFeature]s to a [SupportedConfig].
   static SupportedConfig map(List<SupportedFeature> supportedFeatures) {
     final themeFeature =
-        supportedFeatures.firstWhere(
-              (e) => e is SupportedThemeMode,
-              orElse: () => const SupportedFeature.themeMode(),
-            )
+        supportedFeatures.firstWhere((e) => e is SupportedThemeMode, orElse: () => const SupportedFeature.themeMode())
             as SupportedThemeMode;
 
     final videoCallFeature =
@@ -759,10 +633,7 @@ abstract final class SupportedMapper {
       ThemeModeConfig.dark => ThemeMode.dark,
     };
 
-    return SupportedConfig(
-      themeMode: configThemeMode,
-      isVideoCallEnabled: videoCallFeature.enabled,
-    );
+    return SupportedConfig(themeMode: configThemeMode, isVideoCallEnabled: videoCallFeature.enabled);
   }
 }
 
@@ -779,9 +650,7 @@ abstract final class LocalizationMapper {
     // so unknown codes are logged and ignored, and resolve() keeps at least the
     // full bundled set.
     if (enabledLanguages.isNotEmpty) {
-      final bundledCodes = bundled
-          .map((l) => l.languageCode.toLowerCase())
-          .toSet();
+      final bundledCodes = bundled.map((l) => l.languageCode.toLowerCase()).toSet();
       final unknown = enabledLanguages
           .map((code) => code.trim().toLowerCase())
           .where((code) => code.isNotEmpty && !bundledCodes.contains(code))
@@ -794,19 +663,10 @@ abstract final class LocalizationMapper {
       }
     }
 
-    final supportedLocales = LocalizationConfig.resolve(
-      bundled,
-      enabledLanguages,
-    );
-    if (enabledLanguages.isNotEmpty &&
-        supportedLocales.length == bundled.length) {
-      final requested = enabledLanguages
-          .map((c) => c.trim().toLowerCase())
-          .where((c) => c.isNotEmpty)
-          .toSet();
-      final anyValid = bundled.any(
-        (l) => requested.contains(l.languageCode.toLowerCase()),
-      );
+    final supportedLocales = LocalizationConfig.resolve(bundled, enabledLanguages);
+    if (enabledLanguages.isNotEmpty && supportedLocales.length == bundled.length) {
+      final requested = enabledLanguages.map((c) => c.trim().toLowerCase()).where((c) => c.isNotEmpty).toSet();
+      final anyValid = bundled.any((l) => requested.contains(l.languageCode.toLowerCase()));
       if (!anyValid) {
         _logger.warning(
           'localization.enabledLanguages ($enabledLanguages) matched no bundled '
@@ -826,33 +686,23 @@ abstract final class LoggingMapper {
 
   static LoggingConfig map(AppConfig appConfig, FeatureOverrides overrides) {
     final loggingFeature =
-        appConfig.supported.firstWhereOrNull((e) => e is SupportedLoggingConfig)
-            as SupportedLoggingConfig?;
+        appConfig.supported.firstWhereOrNull((e) => e is SupportedLoggingConfig) as SupportedLoggingConfig?;
 
     final logLevel =
         overrides.logLevel ??
         (loggingFeature != null
-            ? Level.LEVELS
-                      .where((l) => l.name == loggingFeature.logLevel)
-                      .firstOrNull ??
-                  _defaultLogLevel
+            ? Level.LEVELS.where((l) => l.name == loggingFeature.logLevel).firstOrNull ?? _defaultLogLevel
             : _defaultLogLevel);
 
     final monitorCheckInterval =
         overrides.monitorCheckInterval ??
-        (loggingFeature != null
-            ? Duration(seconds: loggingFeature.checkIntervalSec)
-            : _defaultInterval);
+        (loggingFeature != null ? Duration(seconds: loggingFeature.checkIntervalSec) : _defaultInterval);
 
     return LoggingConfig(
       logLevel: logLevel,
       monitorCheckInterval: monitorCheckInterval,
-      remoteLoggingEnabled:
-          overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
-      anonymizationEnabled:
-          overrides.isLogAnonymizationEnabled ??
-          loggingFeature?.anonymizationEnabled ??
-          true,
+      remoteLoggingEnabled: overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
+      anonymizationEnabled: overrides.isLogAnonymizationEnabled ?? loggingFeature?.anonymizationEnabled ?? true,
     );
   }
 
@@ -860,8 +710,7 @@ abstract final class LoggingMapper {
     return LoggingConfig(
       logLevel: overrides.logLevel ?? _defaultLogLevel,
       monitorCheckInterval: overrides.monitorCheckInterval ?? _defaultInterval,
-      remoteLoggingEnabled:
-          overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
+      remoteLoggingEnabled: overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
       anonymizationEnabled: overrides.isLogAnonymizationEnabled ?? true,
     );
   }
