@@ -86,8 +86,10 @@ class KeypadViewState extends State<KeypadView> {
           // The input is intentionally invisible (blends with the background), so its own hit
           // target is a tiny box in the center. Catch long-presses across the whole upper region
           // and surface the input's context menu (paste/copy) from anywhere on the background.
+          // Translucent (not opaque) so pointers still reach the field's own gesture handlers
+          // instead of being fully absorbed by this background detector.
           child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
+            behavior: HitTestBehavior.translucent,
             onLongPress: _showInputContextMenu,
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: scaledInset),
