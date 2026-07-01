@@ -13,6 +13,10 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "build/**"
+    # patrol is not a committed dependency (see pubspec.yaml), so the integration
+    # tests that import it are excluded from analysis. They are provisioned and run
+    # only via tool/scripts/* (which add patrol first).
+    - "patrol_test/**"
   errors:
     deprecated_subclass: ignore
     # TODO: remove this suppression and refactor lib/extensions/string.dart

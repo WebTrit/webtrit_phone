@@ -177,7 +177,11 @@ dev_dependencies:
       path: l10n_mapper_generator
   melos: ^7.8.0
   mocktail: ^1.0.5
-  patrol: ^4.6.1
+  # patrol is provisioned only for integration-test builds (see tool/scripts/*),
+  # NOT committed here: patrol.podspec weak-links XCTest and Flutter does not strip
+  # dev dependencies from iOS release builds (flutter/flutter#163874), so shipping it
+  # makes the app reference XCTest and Apple rejects it (guideline 2.5.1). Provision
+  # for tests with: flutter pub add dev:patrol:^4.6.1
 
 flutter:
   generate: true
