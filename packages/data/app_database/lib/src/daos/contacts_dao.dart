@@ -207,7 +207,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Future<FullContactData?> getContactByPhoneMatchedEnding(String number) {
     final query = _joinFullData(select(contactsTable));
-    query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
+    query.where(contactPhonesTable.number.regexp('.*${_escapeRegExp(number)}', caseSensitive: false));
     query.orderBy(contactsTable.sourcePriorityOrder());
     query.limit(1);
 
@@ -216,7 +216,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Stream<FullContactData?> watchContactByPhoneMatchedEnding(String number) {
     final query = _joinFullData(select(contactsTable));
-    query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
+    query.where(contactPhonesTable.number.regexp('.*${_escapeRegExp(number)}', caseSensitive: false));
     query.orderBy(contactsTable.sourcePriorityOrder());
     query.limit(1);
 
@@ -249,7 +249,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
                 contactsTable.aliasName,
                 contactPhonesTable.number,
                 contactEmailsTable.address,
-              ].map((c) => c.regexp('.*$searchBit.*', caseSensitive: false)).reduce((v, e) => v | e);
+              ].map((c) => c.regexp('.*${_escapeRegExp(searchBit)}.*', caseSensitive: false)).reduce((v, e) => v | e);
             })
             .reduce((v, e) => v | e),
       );
@@ -327,3 +327,11 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
         .go();
   }
 }
+
+final _regExpMetaChars = RegExp(r'[\\^$.|?*+()[\]{}]');
+
+/// Escapes regular-expression metacharacters so a raw, user-typed search string
+/// can be safely interpolated into the pattern passed to the SQL `REGEXP`
+/// operator (backed by Dart's [RegExp]). Without this, characters such as
+/// `( [ * +` would produce an invalid pattern and break the contacts search.
+String _escapeRegExp(String input) => input.replaceAllMapped(_regExpMetaChars, (match) => '\\${match[0]}');
