@@ -160,6 +160,28 @@ void main() {
     });
   });
 
+  group('AppConfig.localization parsing', () {
+    test('the bundled config lists every supported language by default', () async {
+      final json = await loadFixtureJson('../../assets/themes/app.config.json');
+      final config = AppConfig.fromJson(json);
+      expect(config.localization.enabledLanguages, ['en', 'it', 'th', 'uk']);
+    });
+
+    test('parses an explicit allowlist', () {
+      final config = AppConfig.fromJson({
+        'localization': {
+          'enabledLanguages': ['en', 'it'],
+        },
+      });
+      expect(config.localization.enabledLanguages, ['en', 'it']);
+    });
+
+    test('defaults to an empty allowlist when the block is absent', () {
+      final config = AppConfig.fromJson(const {});
+      expect(config.localization.enabledLanguages, isEmpty);
+    });
+  });
+
   group('RecentsTabScheme.supportsCallHistory parsing & useCdrs migration', () {
     bool recentsSupportsCallHistory(Map<String, Object?> extra) {
       final scheme = BottomMenuTabScheme.fromJson({
