@@ -650,10 +650,39 @@ abstract final class SupportedMapper {
 /// actually bundles ([AppLocalizations.supportedLocales]).
 abstract final class LocalizationMapper {
   static LocalizationConfig map(AppConfig appConfig) {
-    final supportedLocales = LocalizationConfig.resolve(
-      AppLocalizations.supportedLocales,
-      appConfig.localization.enabledLanguages,
-    );
+    final enabledLanguages = appConfig.localization.enabledLanguages;
+    final bundled = AppLocalizations.supportedLocales;
+
+    // Diagnose misconfiguration without throwing: a bad code in a per-brand
+    // config must never brick the app (this feeds MaterialApp.supportedLocales),
+    // so unknown codes are logged and ignored, and resolve() keeps at least the
+    // full bundled set.
+    if (enabledLanguages.isNotEmpty) {
+      final bundledCodes = bundled.map((l) => l.languageCode.toLowerCase()).toSet();
+      final unknown = enabledLanguages
+          .map((code) => code.trim().toLowerCase())
+          .where((code) => code.isNotEmpty && !bundledCodes.contains(code))
+          .toList(growable: false);
+      if (unknown.isNotEmpty) {
+        _logger.warning(
+          'localization.enabledLanguages contains code(s) not bundled in the app '
+          '$unknown; ignoring them. Bundled: ${bundledCodes.toList()}',
+        );
+      }
+    }
+
+    final supportedLocales = LocalizationConfig.resolve(bundled, enabledLanguages);
+    if (enabledLanguages.isNotEmpty && supportedLocales.length == bundled.length) {
+      final requested = enabledLanguages.map((c) => c.trim().toLowerCase()).where((c) => c.isNotEmpty).toSet();
+      final anyValid = bundled.any((l) => requested.contains(l.languageCode.toLowerCase()));
+      if (!anyValid) {
+        _logger.warning(
+          'localization.enabledLanguages ($enabledLanguages) matched no bundled '
+          'language; falling back to all bundled languages.',
+        );
+      }
+    }
+
     return LocalizationConfig(supportedLocales: supportedLocales);
   }
 }
