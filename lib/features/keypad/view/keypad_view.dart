@@ -174,22 +174,26 @@ class KeypadViewState extends State<KeypadView> {
   }
 
   Future<void> _showInputContextMenu() async {
-    _focusNode.requestFocus();
-
-    // The keypad input is paste-oriented: an empty field has nothing selected to copy, so the
-    // toolbar is only meaningful when the clipboard holds text. Without this guard a long-press
-    // on an empty field with an empty clipboard surfaces an empty toolbar and reads as if the
-    // gesture did nothing. Awaiting the clipboard also lets the focus/input connection settle
-    // before showToolbar(), which is a no-op on an unfocused/unconnected field.
+    // Decide whether there is anything to show BEFORE taking focus. The keypad input is
+    // paste-oriented: an empty field has nothing selected to copy, so the toolbar is only
+    // meaningful when the clipboard holds text. Guarding first also avoids focusing the hidden
+    // input on a long-press that would surface nothing (which would leave a stray blinking
+    // cursor and shift caret/toolbar timing for later key presses).
     final hasSelection = !_textController.selection.isCollapsed;
     final clipboard = await Clipboard.getData(Clipboard.kTextPlain);
     final hasPasteableText = (clipboard?.text ?? '').isNotEmpty;
     if (!mounted || (!hasSelection && !hasPasteableText)) return;
 
-    if (!_textController.selection.isValid) {
-      _textController.selection = TextSelection.collapsed(offset: _textController.text.length);
-    }
-    _keypadTextFieldEditableTextState?.showToolbar();
+    _focusNode.requestFocus();
+    // Defer so the just-requested focus / input connection is established before showToolbar(),
+    // which is a no-op on an unfocused/unconnected field.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (!_textController.selection.isValid) {
+        _textController.selection = TextSelection.collapsed(offset: _textController.text.length);
+      }
+      _keypadTextFieldEditableTextState?.showToolbar();
+    });
   }
 
   String _popNumber() {
