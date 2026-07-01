@@ -16,7 +16,12 @@ import 'keypad_screen_style.dart';
 // - do not use ValueListenableBuilder to watch number change because of huge perfomance impact on low-end devices
 
 class KeypadView extends StatefulWidget {
-  const KeypadView({super.key, required this.videoEnabled, required this.transferEnabled, required this.style});
+  const KeypadView({
+    super.key,
+    required this.videoEnabled,
+    required this.transferEnabled,
+    required this.style,
+  });
 
   final bool videoEnabled;
   final bool transferEnabled;
@@ -31,13 +36,18 @@ class KeypadViewState extends State<KeypadView> {
   late final _keypadCubit = context.read<KeypadCubit>();
   // Seed the field from the cubit's initial value so the displayed number stays derivable from
   // state (empty in production; lets screenshot mocks and tests pre-fill a dialed number).
-  late final _textController = TextEditingController(text: _keypadCubit.state.value ?? '');
+  late final _textController = TextEditingController(
+    text: _keypadCubit.state.value ?? '',
+  );
   late final _focusNode = FocusNode();
   late final _setValueDebounce = Debounce(Duration(milliseconds: 128));
 
   final _keypadTextFieldKey = GlobalKey();
   EditableTextState? get _keypadTextFieldEditableTextState =>
-      (_keypadTextFieldKey.currentState as TextSelectionGestureDetectorBuilderDelegate).editableTextKey.currentState;
+      (_keypadTextFieldKey.currentState
+              as TextSelectionGestureDetectorBuilderDelegate)
+          .editableTextKey
+          .currentState;
 
   @override
   void initState() {
@@ -62,7 +72,8 @@ class KeypadViewState extends State<KeypadView> {
     final scaledInset = MediaQuery.of(context).size.height > 800 ? 16.0 : 8.0;
     final themeData = Theme.of(context);
 
-    final InputDecorations? baseInputDecorations = themeData.extension<InputDecorations>();
+    final InputDecorations? baseInputDecorations = themeData
+        .extension<InputDecorations>();
 
     final inputField = widget.style?.inputField;
     final contactField = widget.style?.contactNameField;
@@ -71,44 +82,60 @@ class KeypadViewState extends State<KeypadView> {
     return Column(
       children: [
         Expanded(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: scaledInset),
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  key: _keypadTextFieldKey,
-                  controller: _textController,
-                  focusNode: _focusNode,
-                  decoration: inputField?.decoration ?? baseInputDecorations?.keypad,
-                  style: inputField?.textStyle ?? themeData.textTheme.headlineLarge,
-                  textAlign: inputField?.textAlign ?? TextAlign.center,
-                  showCursor: inputField?.showCursor ?? true,
-                  keyboardType: inputField?.keyboardType ?? TextInputType.none,
-                  cursorColor: inputField?.cursorColor,
-                  inputFormatters: [PhoneNormalizingFormatter()],
-                ),
-                RepaintBoundary(
-                  child: BlocBuilder<KeypadCubit, KeypadState>(
-                    buildWhen: (p, c) {
-                      final pName = p.contact?.maybeName ?? '';
-                      final cName = c.contact?.maybeName ?? '';
-                      return pName != cName;
-                    },
-                    builder: (context, state) => Text(
-                      state.contact?.maybeName ?? '',
-                      style: contactField?.textStyle ?? themeData.textTheme.bodyMedium,
-                      textAlign: contactField?.textAlign ?? TextAlign.center,
+          // The input is intentionally invisible (blends with the background), so its own hit
+          // target is a tiny box in the center. Catch long-presses across the whole upper region
+          // and surface the input's context menu (paste/copy) from anywhere on the background.
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onLongPress: _showInputContextMenu,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: scaledInset),
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    key: _keypadTextFieldKey,
+                    controller: _textController,
+                    focusNode: _focusNode,
+                    decoration:
+                        inputField?.decoration ?? baseInputDecorations?.keypad,
+                    style:
+                        inputField?.textStyle ??
+                        themeData.textTheme.headlineLarge,
+                    textAlign: inputField?.textAlign ?? TextAlign.center,
+                    showCursor: inputField?.showCursor ?? true,
+                    keyboardType:
+                        inputField?.keyboardType ?? TextInputType.none,
+                    cursorColor: inputField?.cursorColor,
+                    inputFormatters: [PhoneNormalizingFormatter()],
+                  ),
+                  RepaintBoundary(
+                    child: BlocBuilder<KeypadCubit, KeypadState>(
+                      buildWhen: (p, c) {
+                        final pName = p.contact?.maybeName ?? '';
+                        final cName = c.contact?.maybeName ?? '';
+                        return pName != cName;
+                      },
+                      builder: (context, state) => Text(
+                        state.contact?.maybeName ?? '',
+                        style:
+                            contactField?.textStyle ??
+                            themeData.textTheme.bodyMedium,
+                        textAlign: contactField?.textAlign ?? TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
         RepaintBoundary(
-          child: Keypad(onKeypadPressed: _addChar, style: widget.style?.keypadStyle),
+          child: Keypad(
+            onKeypadPressed: _addChar,
+            style: widget.style?.keypadStyle,
+          ),
         ),
         SizedBox(height: scaledInset),
         RepaintBoundary(
@@ -119,7 +146,8 @@ class KeypadViewState extends State<KeypadView> {
             builder: (context, keypadState) {
               return BlocBuilder<CallBloc, CallState>(
                 buildWhen: (p, c) =>
-                    p.isBlingTransferInitiated != c.isBlingTransferInitiated || p.activeCalls != c.activeCalls,
+                    p.isBlingTransferInitiated != c.isBlingTransferInitiated ||
+                    p.activeCalls != c.activeCalls,
                 builder: (context, callState) {
                   final activeCalls = callState.activeCalls;
                   final transferInitiated = callState.isBlingTransferInitiated;
@@ -132,15 +160,28 @@ class KeypadViewState extends State<KeypadView> {
                         actionsEnabled: canCall,
                         onBackspacePressed: _removeLastChar,
                         onBackspaceLongPress: _cleanInput,
-                        onAudioCallPressed: () => _callController.createCall(destination: _popNumber()),
+                        onAudioCallPressed: () => _callController.createCall(
+                          destination: _popNumber(),
+                        ),
                         onVideoCallPressed: widget.videoEnabled
-                            ? () => _callController.createCall(destination: _popNumber(), video: true)
+                            ? () => _callController.createCall(
+                                destination: _popNumber(),
+                                video: true,
+                              )
                             : null,
-                        onTransferPressed: widget.transferEnabled && activeCalls.isNotEmpty ? _transferCall : null,
-                        onInitiatedTransferPressed: widget.transferEnabled && transferInitiated ? _transferCall : null,
+                        onTransferPressed:
+                            widget.transferEnabled && activeCalls.isNotEmpty
+                            ? _transferCall
+                            : null,
+                        onInitiatedTransferPressed:
+                            widget.transferEnabled && transferInitiated
+                            ? _transferCall
+                            : null,
                         callNumbers: callRoutingState?.allNumbers ?? [],
-                        onCallFrom: (number) =>
-                            _callController.createCall(destination: _popNumber(), fromNumber: number),
+                        onCallFrom: (number) => _callController.createCall(
+                          destination: _popNumber(),
+                          fromNumber: number,
+                        ),
                         style: actionpadStyle,
                       );
                     },
@@ -153,6 +194,21 @@ class KeypadViewState extends State<KeypadView> {
         SizedBox(height: scaledInset),
       ],
     );
+  }
+
+  void _showInputContextMenu() {
+    _focusNode.requestFocus();
+    // Defer past the current frame so the focus and input connection are established;
+    // showToolbar() is a no-op on an unfocused/unconnected field.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (!_textController.selection.isValid) {
+        _textController.selection = TextSelection.collapsed(
+          offset: _textController.text.length,
+        );
+      }
+      _keypadTextFieldEditableTextState?.showToolbar();
+    });
   }
 
   String _popNumber() {
@@ -169,26 +225,42 @@ class KeypadViewState extends State<KeypadView> {
 
   void _addChar(String keyText) {
     if (!_textController.selection.isValid) {
-      _textController.selection = TextSelection.collapsed(offset: _textController.text.length);
+      _textController.selection = TextSelection.collapsed(
+        offset: _textController.text.length,
+      );
     }
 
-    final textBefore = _textController.selection.textBefore(_textController.text);
+    final textBefore = _textController.selection.textBefore(
+      _textController.text,
+    );
     final textAfter = _textController.selection.textAfter(_textController.text);
 
     final newText = textBefore + keyText + textAfter;
-    final newSelection = TextSelection.collapsed(offset: _textController.selection.start + 1);
-    final value = _textController.value.copyWith(text: newText, selection: newSelection);
-    _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
+    final newSelection = TextSelection.collapsed(
+      offset: _textController.selection.start + 1,
+    );
+    final value = _textController.value.copyWith(
+      text: newText,
+      selection: newSelection,
+    );
+    _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(
+      value,
+      SelectionChangedCause.keyboard,
+    );
 
     _keypadTextFieldEditableTextState?.hideToolbar();
   }
 
   void _removeLastChar() {
     if (!_textController.selection.isValid) {
-      _textController.selection = TextSelection.collapsed(offset: _textController.text.length);
+      _textController.selection = TextSelection.collapsed(
+        offset: _textController.text.length,
+      );
     }
 
-    final textBefore = _textController.selection.textBefore(_textController.text);
+    final textBefore = _textController.selection.textBefore(
+      _textController.text,
+    );
     final textAfter = _textController.selection.textAfter(_textController.text);
 
     String? newText;
@@ -196,24 +268,38 @@ class KeypadViewState extends State<KeypadView> {
     if (_textController.selection.isCollapsed) {
       if (textBefore.isNotEmpty) {
         newText = textBefore.substring(0, textBefore.length - 1) + textAfter;
-        newSelection = TextSelection.collapsed(offset: _textController.selection.start - 1);
+        newSelection = TextSelection.collapsed(
+          offset: _textController.selection.start - 1,
+        );
       }
     } else {
       newText = textBefore + textAfter;
-      newSelection = TextSelection.collapsed(offset: _textController.selection.start);
+      newSelection = TextSelection.collapsed(
+        offset: _textController.selection.start,
+      );
     }
-    final value = _textController.value.copyWith(text: newText, selection: newSelection);
-    _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
+    final value = _textController.value.copyWith(
+      text: newText,
+      selection: newSelection,
+    );
+    _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(
+      value,
+      SelectionChangedCause.keyboard,
+    );
 
     _keypadTextFieldEditableTextState?.hideToolbar();
   }
 
   void _cleanInput() {
     if (!_textController.selection.isValid) {
-      _textController.selection = TextSelection.collapsed(offset: _textController.text.length);
+      _textController.selection = TextSelection.collapsed(
+        offset: _textController.text.length,
+      );
     }
 
-    final textBefore = _textController.selection.textBefore(_textController.text);
+    final textBefore = _textController.selection.textBefore(
+      _textController.text,
+    );
     final textAfter = _textController.selection.textAfter(_textController.text);
 
     String newText;
@@ -223,10 +309,18 @@ class KeypadViewState extends State<KeypadView> {
       newSelection = const TextSelection.collapsed(offset: 0);
     } else {
       newText = textBefore + textAfter;
-      newSelection = TextSelection.collapsed(offset: _textController.selection.start);
+      newSelection = TextSelection.collapsed(
+        offset: _textController.selection.start,
+      );
     }
-    final value = _textController.value.copyWith(text: newText, selection: newSelection);
-    _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
+    final value = _textController.value.copyWith(
+      text: newText,
+      selection: newSelection,
+    );
+    _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(
+      value,
+      SelectionChangedCause.keyboard,
+    );
 
     _keypadTextFieldEditableTextState?.hideToolbar();
   }
