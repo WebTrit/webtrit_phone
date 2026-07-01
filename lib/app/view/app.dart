@@ -37,10 +37,8 @@ class _AppState extends State<App> {
     final featureAccess = context.read<FeatureAccess>();
 
     appBloc = AppBloc(
-      userAgreementStatusRepository: context
-          .read<UserAgreementStatusRepository>(),
-      contactsAgreementStatusRepository: context
-          .read<ContactsAgreementStatusRepository>(),
+      userAgreementStatusRepository: context.read<UserAgreementStatusRepository>(),
+      contactsAgreementStatusRepository: context.read<ContactsAgreementStatusRepository>(),
       localeRepository: context.read<LocaleRepository>(),
       themeModeRepository: context.read<ThemeModeRepository>(),
       appThemes: context.read<AppThemes>(),
@@ -52,22 +50,16 @@ class _AppState extends State<App> {
         systemInfoRepository: context.read<SystemInfoRepository>(),
         registerStatusRepository: context.read<RegisterStatusRepository>(),
         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
-        queuedTerminationRequestsRepository: context
-            .read<QueuedTerminationRequestsRepository>(),
+        queuedTerminationRequestsRepository: context.read<QueuedTerminationRequestsRepository>(),
         activeMainFlavorRepository: context.read<ActiveMainFlavorRepository>(),
-        activeRecentsVisibilityFilterRepository: context
-            .read<ActiveRecentsVisibilityFilterRepository>(),
-        activeContactSourceTypeRepository: context
-            .read<ActiveContactSourceTypeRepository>(),
-        audioProcessingSettingsRepository: context
-            .read<AudioProcessingSettingsRepository>(),
+        activeRecentsVisibilityFilterRepository: context.read<ActiveRecentsVisibilityFilterRepository>(),
+        activeContactSourceTypeRepository: context.read<ActiveContactSourceTypeRepository>(),
+        audioProcessingSettingsRepository: context.read<AudioProcessingSettingsRepository>(),
         encodingPresetRepository: context.read<EncodingPresetRepository>(),
         iceSettingsRepository: context.read<IceSettingsRepository>(),
         incomingCallTypeRepository: context.read<IncomingCallTypeRepository>(),
-        peerConnectionSettingsRepository: context
-            .read<PeerConnectionSettingsRepository>(),
-        videoCapturingSettingsRepository: context
-            .read<VideoCapturingSettingsRepository>(),
+        peerConnectionSettingsRepository: context.read<PeerConnectionSettingsRepository>(),
+        videoCapturingSettingsRepository: context.read<VideoCapturingSettingsRepository>(),
         encodingSettingsRepository: context.read<EncodingSettingsRepository>(),
         localeRepository: context.read<LocaleRepository>(),
         themeModeRepository: context.read<ThemeModeRepository>(),
@@ -126,8 +118,7 @@ class _AppState extends State<App> {
     final featureAccess = context.watch<FeatureAccess>();
 
     final materialApp = BlocBuilder<AppBloc, AppState>(
-      buildWhen: (previous, current) =>
-          previous.themeSettings != current.themeSettings,
+      buildWhen: (previous, current) => previous.themeSettings != current.themeSettings,
       builder: (context, state) {
         return ThemeProvider(
           settings: state.themeSettings,
@@ -140,24 +131,19 @@ class _AppState extends State<App> {
             builder: (context, state) {
               final themeProvider = ThemeProvider.of(context);
               final forcedMode = featureAccess.supportedConfig.themeMode;
-              final finalThemeMode = forcedMode == ThemeMode.system
-                  ? state.effectiveThemeMode
-                  : forcedMode;
+              final finalThemeMode = forcedMode == ThemeMode.system ? state.effectiveThemeMode : forcedMode;
 
               return MaterialApp.router(
                 locale: state.effectiveLocale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
-                supportedLocales:
-                    featureAccess.localizationConfig.supportedLocales,
+                supportedLocales: featureAccess.localizationConfig.supportedLocales,
                 // restorationScopeId: 'App', // TODO: temporary comment to prevent AppShell's AutoRouter placeholder blink - additional investigation necessary
                 title: EnvironmentConfig.APP_NAME,
                 themeMode: finalThemeMode,
                 theme: themeProvider.light(),
                 darkTheme: themeProvider.dark(),
                 routerConfig: appRouter.config(
-                  deepLinkBuilder: isDeepLinkEnabled
-                      ? appRouter.deepLinkBuilder
-                      : null,
+                  deepLinkBuilder: isDeepLinkEnabled ? appRouter.deepLinkBuilder : null,
                   navigatorObservers: () => [
                     AppRouterObserver(),
                     context.read<AppAnalyticsRepository>().createObserver(),
@@ -176,10 +162,9 @@ class _AppState extends State<App> {
                         .distinct((p, n) {
                           final same = p.compareToReevaluate(n);
                           _logger.fine('AppState compareToReevaluate: $same');
-                          if (!same)
-                            _logger.fine(
-                              'AppState compareToReevaluate: previous: $p\n  next: $n',
-                            );
+                          if (!same) {
+                            _logger.fine('AppState compareToReevaluate: previous: $p\n  next: $n');
+                          }
                           return same;
                         })
                         .skip(1),
@@ -200,9 +185,7 @@ class _AppState extends State<App> {
               OrientationsBloc(deviceRotationUtil: const DeviceRotationUtil())
                 ..add(const OrientationsChanged(PreferredOrientation.portrait)),
         ),
-        BlocProvider<NotificationsBloc>(
-          create: (context) => NotificationsBloc(),
-        ),
+        BlocProvider<NotificationsBloc>(create: (context) => NotificationsBloc()),
         BlocProvider<AppBloc>.value(value: appBloc),
       ],
       child: materialApp,
