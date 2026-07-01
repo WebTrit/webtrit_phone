@@ -71,39 +71,46 @@ class KeypadViewState extends State<KeypadView> {
     return Column(
       children: [
         Expanded(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: scaledInset),
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  key: _keypadTextFieldKey,
-                  controller: _textController,
-                  focusNode: _focusNode,
-                  decoration: inputField?.decoration ?? baseInputDecorations?.keypad,
-                  style: inputField?.textStyle ?? themeData.textTheme.headlineLarge,
-                  textAlign: inputField?.textAlign ?? TextAlign.center,
-                  showCursor: inputField?.showCursor ?? true,
-                  keyboardType: inputField?.keyboardType ?? TextInputType.none,
-                  cursorColor: inputField?.cursorColor,
-                  inputFormatters: [PhoneNormalizingFormatter()],
-                ),
-                RepaintBoundary(
-                  child: BlocBuilder<KeypadCubit, KeypadState>(
-                    buildWhen: (p, c) {
-                      final pName = p.contact?.maybeName ?? '';
-                      final cName = c.contact?.maybeName ?? '';
-                      return pName != cName;
-                    },
-                    builder: (context, state) => Text(
-                      state.contact?.maybeName ?? '',
-                      style: contactField?.textStyle ?? themeData.textTheme.bodyMedium,
-                      textAlign: contactField?.textAlign ?? TextAlign.center,
+          // The input is intentionally invisible (blends with the background), so its own hit
+          // target is a tiny box in the center. Catch long-presses across the whole upper region
+          // and surface the input's context menu (paste/copy) from anywhere on the background.
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onLongPress: _showInputContextMenu,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: scaledInset),
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    key: _keypadTextFieldKey,
+                    controller: _textController,
+                    focusNode: _focusNode,
+                    decoration: inputField?.decoration ?? baseInputDecorations?.keypad,
+                    style: inputField?.textStyle ?? themeData.textTheme.headlineLarge,
+                    textAlign: inputField?.textAlign ?? TextAlign.center,
+                    showCursor: inputField?.showCursor ?? true,
+                    keyboardType: inputField?.keyboardType ?? TextInputType.none,
+                    cursorColor: inputField?.cursorColor,
+                    inputFormatters: [PhoneNormalizingFormatter()],
+                  ),
+                  RepaintBoundary(
+                    child: BlocBuilder<KeypadCubit, KeypadState>(
+                      buildWhen: (p, c) {
+                        final pName = p.contact?.maybeName ?? '';
+                        final cName = c.contact?.maybeName ?? '';
+                        return pName != cName;
+                      },
+                      builder: (context, state) => Text(
+                        state.contact?.maybeName ?? '',
+                        style: contactField?.textStyle ?? themeData.textTheme.bodyMedium,
+                        textAlign: contactField?.textAlign ?? TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -153,6 +160,19 @@ class KeypadViewState extends State<KeypadView> {
         SizedBox(height: scaledInset),
       ],
     );
+  }
+
+  void _showInputContextMenu() {
+    _focusNode.requestFocus();
+    // Defer past the current frame so the focus and input connection are established;
+    // showToolbar() is a no-op on an unfocused/unconnected field.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (!_textController.selection.isValid) {
+        _textController.selection = TextSelection.collapsed(offset: _textController.text.length);
+      }
+      _keypadTextFieldEditableTextState?.showToolbar();
+    });
   }
 
   String _popNumber() {
