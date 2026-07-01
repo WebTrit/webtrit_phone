@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/theme/theme.dart';
-import 'package:webtrit_phone/utils/regexes.dart';
 
 class ClearedTextField extends StatefulWidget {
-  const ClearedTextField({super.key, this.initialValue, this.onChanged, this.onSubmitted, this.iconConstraints});
+  const ClearedTextField({
+    super.key,
+    this.initialValue,
+    this.onChanged,
+    this.onSubmitted,
+    this.iconConstraints,
+  });
 
   final String? initialValue;
   final ValueChanged<String>? onChanged;
@@ -37,12 +41,15 @@ class ClearedTextFieldState extends State<ClearedTextField> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final InputDecorations? inputDecorations = themeData.extension<InputDecorations>();
+    final InputDecorations? inputDecorations = themeData
+        .extension<InputDecorations>();
     final iconConstraints = widget.iconConstraints;
     return Ink(
       decoration: BoxDecoration(
         color: themeData.colorScheme.surfaceBright,
-        borderRadius: iconConstraints == null ? null : BorderRadius.circular(iconConstraints.minHeight / 2),
+        borderRadius: iconConstraints == null
+            ? null
+            : BorderRadius.circular(iconConstraints.minHeight / 2),
       ),
       child: TextField(
         controller: _controller,
@@ -74,7 +81,6 @@ class ClearedTextFieldState extends State<ClearedTextField> {
           widget.onChanged?.call(value);
         },
         onSubmitted: (value) => widget.onSubmitted,
-        inputFormatters: [FilteringTextInputFormatter.deny(RegExp(symbolsRegex))],
       ),
     );
   }
