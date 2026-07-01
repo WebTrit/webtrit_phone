@@ -37,8 +37,16 @@ class KeypadViewState extends State<KeypadView> {
   late final _setValueDebounce = Debounce(Duration(milliseconds: 128));
 
   final _keypadTextFieldKey = GlobalKey();
-  EditableTextState? get _keypadTextFieldEditableTextState =>
-      (_keypadTextFieldKey.currentState as TextSelectionGestureDetectorBuilderDelegate).editableTextKey.currentState;
+  EditableTextState? get _keypadTextFieldEditableTextState {
+    // Guard the cast: currentState is null while the field is detached/rebuilt under the key
+    // (e.g. a theme swap reparenting the subtree in the same frame). A hard cast would throw a
+    // _TypeError there; return null instead so `?.showToolbar()` skips gracefully.
+    final delegate = _keypadTextFieldKey.currentState;
+    if (delegate is! TextSelectionGestureDetectorBuilderDelegate) return null;
+    // The `is` guard covers both null and wrong-type; promotion does not apply here because the
+    // delegate mixin is not a subtype of State, so an explicit (now safe) cast is still needed.
+    return (delegate as TextSelectionGestureDetectorBuilderDelegate).editableTextKey.currentState;
+  }
 
   @override
   void initState() {
