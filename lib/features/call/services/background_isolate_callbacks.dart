@@ -1,10 +1,15 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
+import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -37,10 +42,37 @@ PushNotificationIsolateManager? _manager;
 // Resolves an arbitrary persisted locale to a locale that lookupAppLocalizations
 // can handle. Falls back to the first supported locale (EN) when the stored value
 // is the 'und' sentinel (no locale ever selected) or any other unsupported tag.
-Locale _effectiveLocale(Locale locale) {
-  if (AppLocalizations.supportedLocales.contains(locale)) return locale;
-  final byLanguage = AppLocalizations.supportedLocales.where((s) => s.languageCode == locale.languageCode).firstOrNull;
-  return byLanguage ?? AppLocalizations.supportedLocales.first;
+// [supported] is the app's configured locale allowlist (see [_resolveSupportedLocales]).
+Locale _effectiveLocale(Locale locale, List<Locale> supported) {
+  if (supported.contains(locale)) return locale;
+  final byLanguage = supported
+      .where((s) => s.languageCode == locale.languageCode)
+      .firstOrNull;
+  return byLanguage ?? supported.first;
+}
+
+// The push isolate is a separate Dart VM without a FeatureAccess instance, so it
+// reads the language allowlist straight from the bundled app config asset and
+// intersects it with the locales the app ships. Any failure falls back to the
+// full bundled set, matching the pre-config behavior.
+Future<List<Locale>> _resolveSupportedLocales() async {
+  try {
+    final raw = await rootBundle.loadString(Assets.themes.appConfig);
+    final appConfig = AppConfig.fromJson(
+      jsonDecode(raw) as Map<String, Object?>,
+    );
+    return LocalizationConfig.resolve(
+      AppLocalizations.supportedLocales,
+      appConfig.localization.enabledLanguages,
+    );
+  } catch (e, st) {
+    _logger.warning(
+      'Failed to resolve supported locales from app config; using all bundled locales',
+      e,
+      st,
+    );
+    return AppLocalizations.supportedLocales;
+  }
 }
 
 /// Returns the isolate-level manager, reusing an existing instance if already
@@ -50,17 +82,24 @@ Locale _effectiveLocale(Locale locale) {
 /// [PushIsolateContext] is kept separate from [PushNotificationIsolateManager]
 /// because the manager depends on feature-layer imports that must not be pulled
 /// into [lib/common]. Both are torn down together by [_disposeContext].
-Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) async {
+Future<PushNotificationIsolateManager> _getOrInit(
+  PushIsolateContext context,
+) async {
   if (_manager != null) return _manager!;
 
   // The push isolate is a separate Dart VM - it never receives the setModuleFactory()
   // call made in bootstrap.dart (Activity isolate). Register the factory here so
   // _startDirect() can create a SignalingModule when connect() is called from run().
   await WebtritSignalingService.setModuleFactory(createSignalingModule);
-  WebtritSignalingService.setHandoffCallback(() => _manager?.notifyActivityTookOver());
+  WebtritSignalingService.setHandoffCallback(
+    () => _manager?.notifyActivityTookOver(),
+  );
   _logger.info('_getOrInit: module factory and handoff callback registered');
 
-  final l10n = lookupAppLocalizations(_effectiveLocale(context.locale));
+  final supportedLocales = await _resolveSupportedLocales();
+  final l10n = lookupAppLocalizations(
+    _effectiveLocale(context.locale, supportedLocales),
+  );
   final localPushRepository = context.localPushRepository;
   _manager = PushNotificationIsolateManager(
     callLogsRepository: context.callLogsRepository,
@@ -125,16 +164,21 @@ Future<void> _disposeContext(PushIsolateContext context) async {
 ///   the Activity via [IsolateNameServer] and calls the handoff callback - whichever
 ///   arrives first completes the push lifecycle early via `notifyActivityTookOver()`.
 @pragma('vm:entry-point')
-Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metadata) async {
+Future<void> onPushNotificationSyncCallback(
+  CallkeepIncomingCallMetadata? metadata,
+) async {
   PushIsolateContext? context;
   try {
     context = await PushIsolateContext.init();
   } catch (e) {
-    _logger.severe('onPushNotificationSyncCallback: context init failed, aborting: $e');
+    _logger.severe(
+      'onPushNotificationSyncCallback: context init failed, aborting: $e',
+    );
     return;
   }
 
-  final incomingCallType = context.incomingCallTypeRepository.getIncomingCallType();
+  final incomingCallType = context.incomingCallTypeRepository
+      .getIncomingCallType();
 
   if (incomingCallType == IncomingCallType.socket) {
     await context.dispose();
@@ -153,7 +197,11 @@ Future<void> onPushNotificationSyncCallback(CallkeepIncomingCallMetadata? metada
     try {
       await WebtritSignalingService.restoreService();
     } catch (e, st) {
-      _logger.warning('onPushNotificationSyncCallback: restoreService() failed', e, st);
+      _logger.warning(
+        'onPushNotificationSyncCallback: restoreService() failed',
+        e,
+        st,
+      );
     }
     return;
   }
@@ -199,22 +247,29 @@ Future<void> onSignalingBackgroundCallEvent(Event event) async {
       // WebtritCallkeep.attachToEngine. While that engine is attached callkeep treats it as the
       // owner of background work, so it shows the incoming-call UI without starting its own push
       // isolate (no redundant WebSocket, no onPushNotificationSyncCallback side effect).
-      final error = await AndroidCallkeepServices.backgroundPushNotificationBootstrapService
+      final error = await AndroidCallkeepServices
+          .backgroundPushNotificationBootstrapService
           .reportNewIncomingCall(
             event.callId,
             CallkeepHandle.number(event.caller),
-            displayName: event.callerDisplayName?.isEmpty == true ? null : event.callerDisplayName,
+            displayName: event.callerDisplayName?.isEmpty == true
+                ? null
+                : event.callerDisplayName,
           )
           .timeout(
             const Duration(seconds: 10),
             onTimeout: () {
-              _logger.severe('onSignalingBackgroundCallEvent: reportNewIncomingCall timed out callId=${event.callId}');
+              _logger.severe(
+                'onSignalingBackgroundCallEvent: reportNewIncomingCall timed out callId=${event.callId}',
+              );
               return null;
             },
           );
 
       if (error != null) {
-        _logger.warning('onSignalingBackgroundCallEvent: reportNewIncomingCall error=$error callId=${event.callId}');
+        _logger.warning(
+          'onSignalingBackgroundCallEvent: reportNewIncomingCall error=$error callId=${event.callId}',
+        );
       }
 
     case HangupEvent():
@@ -224,14 +279,20 @@ Future<void> onSignalingBackgroundCallEvent(Event event) async {
             .timeout(
               const Duration(seconds: 10),
               onTimeout: () {
-                _logger.severe('onSignalingBackgroundCallEvent: releaseCall timed out callId=${event.callId}');
+                _logger.severe(
+                  'onSignalingBackgroundCallEvent: releaseCall timed out callId=${event.callId}',
+                );
               },
             );
       } catch (e) {
-        _logger.warning('onSignalingBackgroundCallEvent: releaseCall error=$e callId=${event.callId}');
+        _logger.warning(
+          'onSignalingBackgroundCallEvent: releaseCall error=$e callId=${event.callId}',
+        );
       }
 
     default:
-      _logger.warning('onSignalingBackgroundCallEvent: unhandled event ${event.runtimeType}');
+      _logger.warning(
+        'onSignalingBackgroundCallEvent: unhandled event ${event.runtimeType}',
+      );
   }
 }
