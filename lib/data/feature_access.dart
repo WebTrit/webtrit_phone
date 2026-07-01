@@ -8,6 +8,7 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -60,6 +61,7 @@ class FeatureAccess extends Equatable {
     this.systemNotificationsConfig,
     this.sipPresenceConfig,
     this.supportedConfig,
+    this.localizationConfig,
     this.coreSupport,
     this.overrides,
     this.loggingConfig,
@@ -76,6 +78,10 @@ class FeatureAccess extends Equatable {
   final SystemNotificationsConfig systemNotificationsConfig;
   final SipPresenceConfig sipPresenceConfig;
   final LoggingConfig loggingConfig;
+
+  /// Locales the app exposes for selection and auto-resolution, resolved from
+  /// the app config's language allowlist intersected with the bundled locales.
+  final LocalizationConfig localizationConfig;
 
   /// Represents the set of features explicitly supported and configured within the application's static [AppConfig].
   /// This includes features like theme mode and video call capabilities as defined in the application's build-time configuration.
@@ -118,6 +124,7 @@ class FeatureAccess extends Equatable {
       final loggingConfig = LoggingMapper.map(appConfig, featureOverrides);
 
       final supportedConfig = SupportedMapper.map(appConfig.supported);
+      final localizationConfig = LocalizationMapper.map(appConfig);
 
       return FeatureAccess._(
         embeddedConfig,
@@ -131,6 +138,7 @@ class FeatureAccess extends Equatable {
         systemNotificationsConfig,
         sipPresenceConfig,
         supportedConfig,
+        localizationConfig,
         coreSupport,
         featureOverrides,
         loggingConfig,
@@ -155,6 +163,7 @@ class FeatureAccess extends Equatable {
     sipPresenceConfig,
     loggingConfig,
     supportedConfig,
+    localizationConfig,
     coreSupport,
     overrides,
   ];
@@ -633,6 +642,19 @@ abstract final class SupportedMapper {
     };
 
     return SupportedConfig(themeMode: configThemeMode, isVideoCallEnabled: videoCallFeature.enabled);
+  }
+}
+
+/// Mapper responsible for resolving the app's selectable locales from the
+/// language allowlist in [AppConfig], intersected with the locales the app
+/// actually bundles ([AppLocalizations.supportedLocales]).
+abstract final class LocalizationMapper {
+  static LocalizationConfig map(AppConfig appConfig) {
+    final supportedLocales = LocalizationConfig.resolve(
+      AppLocalizations.supportedLocales,
+      appConfig.localization.enabledLanguages,
+    );
+    return LocalizationConfig(supportedLocales: supportedLocales);
   }
 }
 

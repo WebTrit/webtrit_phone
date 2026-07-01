@@ -295,6 +295,10 @@
         "showVideoButtonAction": true
       }
     }
+  },
+  "localization": {
+    "__enabledLanguages": "Allowlist of language codes (ISO 639-1) exposed by the app. Intersected with the languages the app bundles, so only ones present in both are selectable and used for auto-resolution. Defaults to every bundled language; remove entries to restrict a build (e.g. keep only [\"en\"] to ship English). An empty list also means no restriction (all bundled languages).",
+    "enabledLanguages": ["en", "it", "th", "uk"]
   }
 }
 
