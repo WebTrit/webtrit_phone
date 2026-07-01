@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+# patrol is not a committed dependency (it links XCTest into the app, which Apple
+# rejects). Provision it just for this test run.
+grep -qE '^  patrol:' pubspec.yaml || flutter pub add 'dev:patrol:^4.6.1'
+
 target_file="${1:-patrol_test/just_run_test.dart}"
 
 dart run packages/pjsua_companion/bin/server.dart &

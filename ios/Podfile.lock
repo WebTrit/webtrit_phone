@@ -1,15 +1,10 @@
 PODS:
-  - CocoaAsyncSocket (7.6.5)
   - device_region (0.0.1):
     - Flutter
   - Flutter (1.0.0)
   - flutter_webrtc (1.4.0):
     - Flutter
     - WebRTC-SDK (= 144.7559.04)
-  - patrol (0.0.1):
-    - CocoaAsyncSocket (~> 7.6)
-    - Flutter
-    - FlutterMacOS
   - WebRTC-SDK (144.7559.04)
   - workmanager_apple (0.0.1):
     - Flutter
@@ -18,12 +13,10 @@ DEPENDENCIES:
   - device_region (from `.symlinks/plugins/device_region/ios`)
   - Flutter (from `Flutter`)
   - flutter_webrtc (from `.symlinks/plugins/flutter_webrtc/ios`)
-  - patrol (from `.symlinks/plugins/patrol/darwin`)
   - workmanager_apple (from `.symlinks/plugins/workmanager_apple/ios`)
 
 SPEC REPOS:
   trunk:
-    - CocoaAsyncSocket
     - WebRTC-SDK
 
 EXTERNAL SOURCES:
@@ -33,17 +26,13 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_webrtc:
     :path: ".symlinks/plugins/flutter_webrtc/ios"
-  patrol:
-    :path: ".symlinks/plugins/patrol/darwin"
   workmanager_apple:
     :path: ".symlinks/plugins/workmanager_apple/ios"
 
 SPEC CHECKSUMS:
-  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   device_region: ba5fcd31baab2323f50b73a33850490df4d082a8
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_webrtc: 3cea548ace6c8cdefc98a898fe0c177d680080b7
-  patrol: cea8074f183a2a4232d0ebd10569ae05149ada42
   WebRTC-SDK: ac5965a3cc2c258973466e3b1739ab0308bab0d0
   workmanager_apple: 904529ae31e97fc5be632cf628507652294a0778
 
