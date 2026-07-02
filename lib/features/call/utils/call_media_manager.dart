@@ -79,6 +79,20 @@ class CallMediaManager {
   /// Stops the ringback sound once the outgoing call is connected or ended.
   Future<void> stopRingbackSound() => _callkeepSound.stopRingbackSound();
 
+  /// Plays a soft, recurrent beep over the active call audio to signal a second
+  /// incoming call. Playback is owned by webtrit_callkeep on both platforms; the
+  /// Android connection service only suppresses the full ringtone in this scenario.
+  Future<void> playCallWaitingTone() async {
+    if (kIsWeb) return; // the tone has no web implementation
+    await _callkeepSound.playCallWaitingTone();
+  }
+
+  /// Stops the call-waiting tone (second call answered, declined or ended).
+  Future<void> stopCallWaitingTone() async {
+    if (kIsWeb) return; // the tone has no web implementation
+    await _callkeepSound.stopCallWaitingTone();
+  }
+
   /// Clears the Android communication device after the last call ends (N → 0).
   ///
   /// Without this, Bluetooth stays in SCO (call profile, mono/low-quality) instead

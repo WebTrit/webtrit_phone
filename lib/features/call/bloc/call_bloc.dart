@@ -144,6 +144,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   late final HandshakeProcessor _handshakeProcessor;
   final ConnectivityService _connectivityService;
 
+  // Edge guard for the iOS call-waiting tone (play/stop once per transition).
+  bool _callWaitingTonePlaying = false;
+
   CallBloc({
     required this.callLogsRepository,
     required void Function(String callId, String callerName) onMissedCall,
@@ -304,6 +307,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   @override
   void onChange(Change<CallState> change) {
     super.onChange(change);
+
+    _syncCallWaitingTone(change.nextState);
 
     // Re-notify the reconnect controller when the call-active state flips while
     // the app is backgrounded - covers the gap the lifecycle handler misses
@@ -4410,6 +4415,28 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       hungUpTime: activeCall.hungUpTime,
     );
     callLogsRepository.add(call);
+  }
+
+  // Soft beep over the earpiece when a second call rings in while another call is
+  // connected. The side effect goes through CallMediaManager; playback lives in the
+  // callkeep plugin on both platforms.
+  void _syncCallWaitingTone(CallState state) {
+    const ringingIncoming = {CallProcessingStatus.incomingFromPush, CallProcessingStatus.incomingFromOffer};
+    final hasConnected = state.activeCalls.any((c) => c.processingStatus == CallProcessingStatus.connected);
+    final hasRingingIncoming = state.activeCalls.any((c) => ringingIncoming.contains(c.processingStatus));
+    final shouldPlay = hasConnected && hasRingingIncoming;
+
+    if (shouldPlay && !_callWaitingTonePlaying) {
+      _callWaitingTonePlaying = true;
+      _mediaManager.playCallWaitingTone().catchError(
+        (Object e, StackTrace s) => _logger.warning('playCallWaitingTone failed', e, s),
+      );
+    } else if (!shouldPlay && _callWaitingTonePlaying) {
+      _callWaitingTonePlaying = false;
+      _mediaManager.stopCallWaitingTone().catchError(
+        (Object e, StackTrace s) => _logger.warning('stopCallWaitingTone failed', e, s),
+      );
+    }
   }
 
   Future<void> _releaseLocalStream(MediaStream? stream) async {
