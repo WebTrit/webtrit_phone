@@ -144,8 +144,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   late final HandshakeProcessor _handshakeProcessor;
   final ConnectivityService _connectivityService;
 
-  final _callkeepSound = WebtritCallkeepSound();
-
   CallBloc({
     required this.callLogsRepository,
     required void Function(String callId, String callerName) onMissedCall,
@@ -281,7 +279,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await _signalingSubscription.cancel();
 
-    await _stopRingbackSound();
+    await _mediaManager.stopRingbackSound();
 
     for (final activeCall in state.activeCalls) {
       await _releaseLocalStream(activeCall.localStream);
@@ -721,7 +719,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _iceRestartDebounce.cancel(event.callId);
     _slowlinkDebounce.cancel(event.callId);
     _slowlinkHits.remove(event.callId);
-    await _stopRingbackSound();
+    await _mediaManager.stopRingbackSound();
 
     try {
       emit(
@@ -1121,7 +1119,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // no early media - play ringtone
   Future<void> __onCallSignalingEventRinging(_CallSignalingEventRinging event, Emitter<CallState> emit) async {
-    await _playRingbackSound();
+    await _mediaManager.playRingbackSound();
 
     emit(
       state.copyWithMappedActiveCall(event.callId, (call) {
@@ -1132,7 +1130,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // early media - set specified session description
   Future<void> __onCallSignalingEventProgress(_CallSignalingEventProgress event, Emitter<CallState> emit) async {
-    await _stopRingbackSound();
+    await _mediaManager.stopRingbackSound();
 
     final jsep = event.jsep;
     if (jsep != null) {
@@ -2007,7 +2005,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // Handles exceptions during the outgoing call perform event, sends a notification, stops the ringtone, and completes the peer connection with an error.
       // The specific error "Error setting ICE locally" indicates an issue with ICE (Interactive Connectivity Establishment) negotiation in the WebRTC signaling process.
       callErrorReporter.handle(e, stackTrace, '__onMutationPerformStart error:');
-      await _stopRingbackSound();
+      await _mediaManager.stopRingbackSound();
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
       add(_ResetStateEvent.completeCall(event.callId));
     }
@@ -2217,7 +2215,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> __onMutationPerformEnd(_CallMutationEventPerformEnd event, Emitter<CallState> emit) async {
     try {
-      await _stopRingbackSound();
+      await _mediaManager.stopRingbackSound();
 
       emit(
         state.copyWithMappedActiveCall(event.callId, (activeCall) {
@@ -2893,7 +2891,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       call = call.copyWith(processingStatus: CallProcessingStatus.connected, acceptedTime: clock.now());
 
       if (outgoing) {
-        await _stopRingbackSound();
+        await _mediaManager.stopRingbackSound();
         await callkeep.reportConnectedOutgoingCall(event.callId);
       }
     } else {
@@ -2943,7 +2941,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onMutationSignalingHangup(_CallMutationEventSignalingHangup event, Emitter<CallState> emit) async {
-    _stopRingbackSound().ignore();
+    _mediaManager.stopRingbackSound().ignore();
     _signalingModule.cancelRequestsByCallId(event.callId);
 
     ActiveCall? call = state.retrieveActiveCall(event.callId);
@@ -4413,10 +4411,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
     callLogsRepository.add(call);
   }
-
-  Future<void> _playRingbackSound() => _callkeepSound.playRingbackSound();
-
-  Future<void> _stopRingbackSound() => _callkeepSound.stopRingbackSound();
 
   Future<void> _releaseLocalStream(MediaStream? stream) async {
     if (stream == null) return;

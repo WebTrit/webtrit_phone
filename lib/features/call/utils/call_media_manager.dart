@@ -33,6 +33,7 @@ class CallMediaManager {
   }
 
   final Callkeep _callkeep;
+  final _callkeepSound = WebtritCallkeepSound();
 
   // Audio device priority for voice calls on Android.
   // AudioSwitch selects the first available device from this list on activate().
@@ -66,6 +67,17 @@ class CallMediaManager {
   // ---------------------------------------------------------------------------
   // Call session lifecycle
   // ---------------------------------------------------------------------------
+
+  // ---------------------------------------------------------------------------
+  // Call sounds (callkeep sound surface)
+  // ---------------------------------------------------------------------------
+
+  /// Plays the ringback sound while an outgoing call is progressing
+  /// (e.g. on SIP 180 Ringing).
+  Future<void> playRingbackSound() => _callkeepSound.playRingbackSound();
+
+  /// Stops the ringback sound once the outgoing call is connected or ended.
+  Future<void> stopRingbackSound() => _callkeepSound.stopRingbackSound();
 
   /// Clears the Android communication device after the last call ends (N → 0).
   ///
