@@ -854,10 +854,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'sessionStatus_AppBar_connecting' => sessionStatus_AppBar_connecting,
       'sessionStatus_pushNotificationServiceProblem' =>
         sessionStatus_pushNotificationServiceProblem,
-      'sessionStatus_issue_limitedStandaloneCallMode_title' =>
-        sessionStatus_issue_limitedStandaloneCallMode_title,
-      'sessionStatus_issue_limitedStandaloneCallMode_caption' =>
-        sessionStatus_issue_limitedStandaloneCallMode_caption,
       'session_Teardown_progressText' => session_Teardown_progressText,
       'settings_AboutText_ApplicationEmbeddedLinks' =>
         settings_AboutText_ApplicationEmbeddedLinks,
