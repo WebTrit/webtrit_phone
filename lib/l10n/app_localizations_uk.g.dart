@@ -1605,7 +1605,11 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get permission_manufacturer_Text_xiaomi_tip2 =>
-      'Увімкніть «Показ спливаючих вікон під час роботи у фоні» (та «Показ на екрані блокування»), щоб вхідні дзвінки зʼявлялися поверх екрана блокування.';
+      'Увімкніть «Показ спливаючих вікон під час роботи у фоні», щоб вхідні дзвінки з\'являлися, поки застосунок працює у фоновому режимі.';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip3 =>
+      'Увімкніть «Показ на екрані блокування», щоб вхідні дзвінки з\'являлися поверх екрана блокування.';
 
   @override
   String get permission_Text_description =>

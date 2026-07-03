@@ -1581,7 +1581,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permission_manufacturer_Text_xiaomi_tip2 =>
-      'Turn on \"Display pop-up windows while running in background\" (and \"Show on lock screen\") so incoming calls can appear over the lock screen.';
+      'Turn on \"Display pop-up windows while running in background\" so incoming calls can appear while the app is in the background.';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip3 =>
+      'Turn on \"Show on lock screen\" so incoming calls can appear over the lock screen.';
 
   @override
   String get permission_Text_description =>

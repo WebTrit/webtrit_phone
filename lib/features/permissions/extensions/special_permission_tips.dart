@@ -22,6 +22,7 @@ extension SpecialPermissionTips on CallkeepSpecialPermissions {
         return [
           context.l10n.permission_manufacturer_Text_xiaomi_tip1,
           context.l10n.permission_manufacturer_Text_xiaomi_tip2,
+          context.l10n.permission_manufacturer_Text_xiaomi_tip3,
         ];
     }
   }

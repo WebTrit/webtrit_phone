@@ -107,17 +107,19 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   /// Resolves manufacturer-specific guidance for reliable lock-screen calls.
   ///
   /// On Xiaomi/HyperOS the incoming-call UI cannot cover the lock screen unless
-  /// the OEM "display pop-up windows while running in background" capability is
-  /// granted, which the standard Android permissions do not cover. The tip is
-  /// surfaced only while that capability is missing, so it clears itself once
-  /// the user enables it and returns to the app. A dismissed tip is preserved.
+  /// the OEM "display pop-up windows while running in background" and "show on
+  /// lock screen" capabilities are granted, which the standard Android
+  /// permissions do not cover. The tip is surfaced while either capability is
+  /// missing, so it clears itself once the user enables both and returns to
+  /// the app. A dismissed tip is preserved.
   Future<ManufacturerTip?> _resolveManufacturerTip() async {
     final manufacturer = _checkManufacturer();
     _logger.info('Manufacturer: $manufacturer');
     if (manufacturer == null) return null;
 
     final backgroundStartDenied = (await appPermissions.backgroundActivityStartStatus()).isDenied;
-    if (!backgroundStartDenied) return null;
+    final showWhenLockedDenied = (await appPermissions.showOnLockscreenStatus()).isDenied;
+    if (!backgroundStartDenied && !showWhenLockedDenied) return null;
 
     return state.manufacturerTip ?? ManufacturerTip(manufacturer: manufacturer);
   }
@@ -167,8 +169,11 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     appPermissions.toAppSettings();
   }
 
-  /// Opens the OEM permissions screen hosting the "display pop-up windows while
-  /// running in background" toggle (Xiaomi/HyperOS), with a native fallback.
+  /// Opens the OEM permissions screen hosting both the "display pop-up windows
+  /// while running in background" and "show on lock screen" toggles
+  /// (Xiaomi/HyperOS), with a native fallback. Both toggles live on the same
+  /// MIUI "Other permissions" screen, so either entry point lands the user
+  /// there.
   void openManufacturerCallPermissionSettings() {
     appPermissions.toBackgroundActivityStartSettings();
   }

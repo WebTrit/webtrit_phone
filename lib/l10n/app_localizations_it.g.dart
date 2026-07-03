@@ -1603,7 +1603,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get permission_manufacturer_Text_xiaomi_tip2 =>
-      'Attiva \"Mostra finestre popup in background\" (e \"Mostra nella schermata di blocco\") per far apparire le chiamate in arrivo sopra la schermata di blocco.';
+      'Attiva \"Mostra finestre popup in background\" per far apparire le chiamate in arrivo mentre l\'app è in background.';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip3 =>
+      'Attiva \"Mostra nella schermata di blocco\" per far apparire le chiamate in arrivo sopra la schermata di blocco.';
 
   @override
   String get permission_Text_description =>

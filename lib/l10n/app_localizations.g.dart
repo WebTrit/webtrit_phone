@@ -2913,8 +2913,14 @@ abstract class AppLocalizations {
   /// No description provided for @permission_manufacturer_Text_xiaomi_tip2.
   ///
   /// In en, this message translates to:
-  /// **'Turn on \"Display pop-up windows while running in background\" (and \"Show on lock screen\") so incoming calls can appear over the lock screen.'**
+  /// **'Turn on \"Display pop-up windows while running in background\" so incoming calls can appear while the app is in the background.'**
   String get permission_manufacturer_Text_xiaomi_tip2;
+
+  /// No description provided for @permission_manufacturer_Text_xiaomi_tip3.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on \"Show on lock screen\" so incoming calls can appear over the lock screen.'**
+  String get permission_manufacturer_Text_xiaomi_tip3;
 
   /// No description provided for @permission_Text_description.
   ///
