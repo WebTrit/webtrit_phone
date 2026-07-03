@@ -502,7 +502,7 @@
   "@diagnostic_callingMode_standalone_title": {},
   "diagnostic_callingMode_standalone_caption": "Standalone — можлива затримка доставки",
   "@diagnostic_callingMode_standalone_caption": {},
-  "diagnostic_callingMode_standalone_description": "Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вихідні дзвінки, утримання та вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступні.",
+  "diagnostic_callingMode_standalone_description": "Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступний.",
   "@diagnostic_callingMode_standalone_description": {},
   "diagnostic_permission_camera_description": "Цей застосунок потребує дозволу на доступ до камери для здійснення відеодзвінків.",
   "@diagnostic_permission_camera_description": {},
