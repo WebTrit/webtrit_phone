@@ -182,6 +182,16 @@ class AppPermissions {
   /// running in background" toggle (falls back to app settings natively).
   Future<void> toBackgroundActivityStartSettings() => _webtritCallkeepPermissions.openBackgroundActivityStartSettings();
 
+  /// Status of the OEM "show on lock screen" capability (MIUI/HyperOS), which
+  /// gates showing the incoming-call UI over the lock screen. Reports granted
+  /// where the capability does not apply.
+  Future<CallkeepSpecialPermissionStatus> showOnLockscreenStatus() =>
+      _webtritCallkeepPermissions.getShowWhenLockedPermissionStatus();
+
+  /// Opens the OEM permissions screen hosting the "show on lock screen"
+  /// toggle (falls back to app settings natively).
+  Future<void> toShowOnLockscreenSettings() => _webtritCallkeepPermissions.openShowWhenLockedSettings();
+
   /// Attempts to open the settings screen for the given special permission.
   ///
   /// If the specific permission screen (e.g., full screen intent) is not supported
