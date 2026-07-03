@@ -1609,10 +1609,6 @@
   },
   "sessionStatus_pushNotificationServiceProblem": "Problem with configuration push notification service",
   "@sessionStatus_pushNotificationServiceProblem": {},
-  "sessionStatus_issue_limitedStandaloneCallMode_title": "Limited call mode",
-  "@sessionStatus_issue_limitedStandaloneCallMode_title": {},
-  "sessionStatus_issue_limitedStandaloneCallMode_caption": "Standalone - delivery may be delayed",
-  "@sessionStatus_issue_limitedStandaloneCallMode_caption": {},
   "session_Teardown_progressText": "Signing out...",
   "@session_Teardown_progressText": {
     "description": "Status message displayed while the application is performing cleanup during the logout process."
