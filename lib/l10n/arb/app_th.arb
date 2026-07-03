@@ -1613,10 +1613,6 @@
   },
   "sessionStatus_pushNotificationServiceProblem": "เกิดปัญหากับการตั้งค่าบริการ push notification",
   "@sessionStatus_pushNotificationServiceProblem": {},
-  "sessionStatus_issue_limitedStandaloneCallMode_title": "โหมดการโทรแบบจำกัด",
-  "@sessionStatus_issue_limitedStandaloneCallMode_title": {},
-  "sessionStatus_issue_limitedStandaloneCallMode_caption": "โหมดสแตนด์อโลน - การส่งอาจล่าช้า",
-  "@sessionStatus_issue_limitedStandaloneCallMode_caption": {},
   "session_Teardown_progressText": "กำลังออกจากระบบ...",
   "@session_Teardown_progressText": {
     "description": "Status message displayed while the application is performing cleanup during the logout process."

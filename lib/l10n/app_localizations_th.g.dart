@@ -1880,12 +1880,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get sessionStatus_pushNotificationServiceProblem => 'เกิดปัญหากับการตั้งค่าบริการ push notification';
 
   @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_title => 'โหมดการโทรแบบจำกัด';
-
-  @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_caption => 'โหมดสแตนด์อโลน - การส่งอาจล่าช้า';
-
-  @override
   String get session_Teardown_progressText => 'กำลังออกจากระบบ...';
 
   @override
