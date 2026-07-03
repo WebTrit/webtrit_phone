@@ -655,6 +655,36 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnostic_permissionStatus_restricted => 'Обмежений доступ';
 
   @override
+  String get diagnostic_specialPermissionStatus_denied => 'Доступ заборонено';
+
+  @override
+  String get diagnostic_specialPermissionStatus_granted => 'Доступ надано';
+
+  @override
+  String get diagnostic_specialPermissionStatus_unknown => 'Невідомо';
+
+  @override
+  String get diagnostic_xiaomi_backgroundActivityStart_description =>
+      'MIUI/HyperOS не дозволяє показувати екран вхідного дзвінка поверх заблокованого екрана, поки застосунок працює у фоновому режимі, якщо для нього не надано дозвіл «Показ спливаючих вікон під час роботи у фоновому режимі».';
+
+  @override
+  String get diagnostic_xiaomi_backgroundActivityStart_tile_title =>
+      'Показ спливаючих вікон під час роботи у фоновому режимі';
+
+  @override
+  String get diagnostic_xiaomi_groupTitle => 'Дозволи Xiaomi';
+
+  @override
+  String get diagnostic_xiaomi_navigate_section => 'Перейдіть до розділу дозволів заблокованого екрана';
+
+  @override
+  String get diagnostic_xiaomi_showWhenLocked_description =>
+      'MIUI/HyperOS не дозволяє показувати екран вхідного дзвінка поверх заблокованого екрана, якщо для цього застосунку не надано дозвіл «Показ на заблокованому екрані».';
+
+  @override
+  String get diagnostic_xiaomi_showWhenLocked_tile_title => 'Показ на заблокованому екрані';
+
+  @override
   String get diagnosticPushDetails_configuration_title => 'Налаштування служби push-сповіщень';
 
   @override

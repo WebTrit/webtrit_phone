@@ -1209,6 +1209,60 @@ abstract class AppLocalizations {
   /// **'Restricted Access'**
   String get diagnostic_permissionStatus_restricted;
 
+  /// No description provided for @diagnostic_specialPermissionStatus_denied.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Denied'**
+  String get diagnostic_specialPermissionStatus_denied;
+
+  /// No description provided for @diagnostic_specialPermissionStatus_granted.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Granted'**
+  String get diagnostic_specialPermissionStatus_granted;
+
+  /// No description provided for @diagnostic_specialPermissionStatus_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get diagnostic_specialPermissionStatus_unknown;
+
+  /// No description provided for @diagnostic_xiaomi_backgroundActivityStart_description.
+  ///
+  /// In en, this message translates to:
+  /// **'MIUI/HyperOS restricts showing the incoming-call screen while the app runs in the background unless the \"Display pop-up windows while running in background\" permission is granted for this app.'**
+  String get diagnostic_xiaomi_backgroundActivityStart_description;
+
+  /// No description provided for @diagnostic_xiaomi_backgroundActivityStart_tile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Display pop-up windows while running in background'**
+  String get diagnostic_xiaomi_backgroundActivityStart_tile_title;
+
+  /// No description provided for @diagnostic_xiaomi_groupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Xiaomi permissions'**
+  String get diagnostic_xiaomi_groupTitle;
+
+  /// No description provided for @diagnostic_xiaomi_navigate_section.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to the lock screen permissions section'**
+  String get diagnostic_xiaomi_navigate_section;
+
+  /// No description provided for @diagnostic_xiaomi_showWhenLocked_description.
+  ///
+  /// In en, this message translates to:
+  /// **'MIUI/HyperOS restricts showing the incoming-call screen over the lock screen unless the \"Show on Lock screen\" permission is granted for this app.'**
+  String get diagnostic_xiaomi_showWhenLocked_description;
+
+  /// No description provided for @diagnostic_xiaomi_showWhenLocked_tile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Show on lock screen'**
+  String get diagnostic_xiaomi_showWhenLocked_tile_title;
+
   /// No description provided for @diagnosticPushDetails_configuration_title.
   ///
   /// In en, this message translates to:

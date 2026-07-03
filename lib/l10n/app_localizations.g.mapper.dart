@@ -292,6 +292,23 @@ extension AppLocalizationsExtension on AppLocalizations {
         diagnostic_permissionStatus_provisional,
       'diagnostic_permissionStatus_restricted' =>
         diagnostic_permissionStatus_restricted,
+      'diagnostic_specialPermissionStatus_denied' =>
+        diagnostic_specialPermissionStatus_denied,
+      'diagnostic_specialPermissionStatus_granted' =>
+        diagnostic_specialPermissionStatus_granted,
+      'diagnostic_specialPermissionStatus_unknown' =>
+        diagnostic_specialPermissionStatus_unknown,
+      'diagnostic_xiaomi_backgroundActivityStart_description' =>
+        diagnostic_xiaomi_backgroundActivityStart_description,
+      'diagnostic_xiaomi_backgroundActivityStart_tile_title' =>
+        diagnostic_xiaomi_backgroundActivityStart_tile_title,
+      'diagnostic_xiaomi_groupTitle' => diagnostic_xiaomi_groupTitle,
+      'diagnostic_xiaomi_navigate_section' =>
+        diagnostic_xiaomi_navigate_section,
+      'diagnostic_xiaomi_showWhenLocked_description' =>
+        diagnostic_xiaomi_showWhenLocked_description,
+      'diagnostic_xiaomi_showWhenLocked_tile_title' =>
+        diagnostic_xiaomi_showWhenLocked_tile_title,
       'diagnosticPushDetails_configuration_title' =>
         diagnosticPushDetails_configuration_title,
       'diagnosticPushDetails_errorMessage_intro' =>

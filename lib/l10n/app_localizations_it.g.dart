@@ -650,6 +650,36 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnostic_permissionStatus_restricted => 'Accesso limitato';
 
   @override
+  String get diagnostic_specialPermissionStatus_denied => 'Accesso negato';
+
+  @override
+  String get diagnostic_specialPermissionStatus_granted => 'Accesso consentito';
+
+  @override
+  String get diagnostic_specialPermissionStatus_unknown => 'Sconosciuto';
+
+  @override
+  String get diagnostic_xiaomi_backgroundActivityStart_description =>
+      'MIUI/HyperOS impedisce di mostrare la schermata di chiamata in arrivo sopra la schermata di blocco mentre l\'app è in esecuzione in background, a meno che non sia concessa l\'autorizzazione \"Visualizza finestre pop-up quando è in esecuzione in background\".';
+
+  @override
+  String get diagnostic_xiaomi_backgroundActivityStart_tile_title =>
+      'Visualizza finestre pop-up quando è in esecuzione in background';
+
+  @override
+  String get diagnostic_xiaomi_groupTitle => 'Autorizzazioni Xiaomi';
+
+  @override
+  String get diagnostic_xiaomi_navigate_section => 'Vai alla sezione delle autorizzazioni della schermata di blocco';
+
+  @override
+  String get diagnostic_xiaomi_showWhenLocked_description =>
+      'MIUI/HyperOS impedisce di mostrare la schermata di chiamata in arrivo sopra la schermata di blocco, a meno che non sia concessa l\'autorizzazione \"Mostra sulla schermata di blocco\" per questa app.';
+
+  @override
+  String get diagnostic_xiaomi_showWhenLocked_tile_title => 'Mostra sulla schermata di blocco';
+
+  @override
   String get diagnosticPushDetails_configuration_title => 'Configurazione del servizio di notifiche push';
 
   @override
