@@ -1105,7 +1105,7 @@ abstract class AppLocalizations {
   /// No description provided for @diagnostic_callingMode_standalone_description.
   ///
   /// In en, this message translates to:
-  /// **'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Outgoing calls, hold and Bluetooth or wired headset selection are not available in this mode.'**
+  /// **'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Bluetooth and wired headset selection is not available in this mode.'**
   String get diagnostic_callingMode_standalone_description;
 
   /// No description provided for @diagnostic_permission_camera_description.
