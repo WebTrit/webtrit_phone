@@ -1878,12 +1878,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sessionStatus_pushNotificationServiceProblem => 'Problem with configuration push notification service';
 
   @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_title => 'Limited call mode';
-
-  @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_caption => 'Standalone - delivery may be delayed';
-
-  @override
   String get session_Teardown_progressText => 'Signing out...';
 
   @override
