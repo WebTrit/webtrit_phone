@@ -500,7 +500,7 @@
   "@diagnostic_callingMode_tile_title": {},
   "diagnostic_callingMode_standalone_title": "โหมดโทรแบบจำกัด",
   "@diagnostic_callingMode_standalone_title": {},
-  "diagnostic_callingMode_standalone_caption": "แบบสแตนด์อโลน - การส่งอาจล่าช้า",
+  "diagnostic_callingMode_standalone_caption": "แบบสแตนด์อโลน - การแจ้งสายเรียกเข้าและการเลือกหูฟังอาจถูกจำกัด",
   "@diagnostic_callingMode_standalone_caption": {},
   "diagnostic_callingMode_standalone_description": "อุปกรณ์นี้ไม่รองรับเฟรมเวิร์กการโทรของระบบ (Telecom) ดังนั้นสายเรียกเข้าจะใช้บริการเบื้องหลังแบบจำกัด สายอาจล่าช้าหรือพลาดเมื่อระบบจำกัดแอปที่ทำงานเบื้องหลัง การเลือกหูฟังบลูทูธหรือแบบมีสายไม่สามารถใช้งานได้ในโหมดนี้",
   "@diagnostic_callingMode_standalone_description": {},

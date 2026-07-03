@@ -580,7 +580,8 @@ class AppLocalizationsTh extends AppLocalizations {
   String get diagnostic_callingMode_standalone_title => 'โหมดโทรแบบจำกัด';
 
   @override
-  String get diagnostic_callingMode_standalone_caption => 'แบบสแตนด์อโลน - การส่งอาจล่าช้า';
+  String get diagnostic_callingMode_standalone_caption =>
+      'แบบสแตนด์อโลน - การแจ้งสายเรียกเข้าและการเลือกหูฟังอาจถูกจำกัด';
 
   @override
   String get diagnostic_callingMode_standalone_description =>

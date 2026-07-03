@@ -500,7 +500,7 @@
   "@diagnostic_callingMode_tile_title": {},
   "diagnostic_callingMode_standalone_title": "Обмежений режим дзвінків",
   "@diagnostic_callingMode_standalone_title": {},
-  "diagnostic_callingMode_standalone_caption": "Standalone — можлива затримка доставки",
+  "diagnostic_callingMode_standalone_caption": "Standalone — можливі обмеження сповіщення про дзвінок і вибору гарнітури",
   "@diagnostic_callingMode_standalone_caption": {},
   "diagnostic_callingMode_standalone_description": "Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступний.",
   "@diagnostic_callingMode_standalone_description": {},
