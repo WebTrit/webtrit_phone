@@ -116,7 +116,7 @@ class FeatureAccess extends Equatable {
       final loginConfig = LoginMapper.map(appConfig, embeddedConfig.embeddedResources);
       final bottomMenuConfig = BottomMenuMapper.map(appConfig, embeddedConfig, coreSupport, featureOverrides);
       final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupport, termsConfig);
-      final callConfig = CallMapper.map(appConfig, featureOverrides);
+      final callConfig = CallMapper.map(appConfig, featureOverrides, systemInfo);
       final messagingConfig = MessagingMapper.map(appConfig, coreSupport);
       final contactsConfig = ContactsMapper.map(appConfig);
       final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupport, appConfig, featureOverrides);
@@ -390,7 +390,7 @@ abstract final class SettingsMapper {
 /// and environment settings.
 abstract final class CallMapper {
   /// Maps [AppConfig] to [CallCapabilitiesConfig].
-  static CallConfig map(AppConfig appConfig, FeatureOverrides featureOverrides) {
+  static CallConfig map(AppConfig appConfig, FeatureOverrides featureOverrides, WebtritSystemInfo? systemInfo) {
     final rawCallConfig = appConfig.callConfig;
     final transferConfig = rawCallConfig.transfer;
     final encodingConfig = rawCallConfig.encoding;
@@ -413,12 +413,17 @@ abstract final class CallMapper {
     final callPullVideoStrategy =
         featureOverrides.callPullVideoStrategy ?? configuratorCallPullStrategy ?? CallPullVideoStrategy.softMute;
 
+    // Version-gated: the in-call peer_message side channel is only safe to use
+    // when the remote core understands the request (see CoreInfo.supportsPeerMessage).
+    final isPeerMessageEnabled = systemInfo?.core.supportsPeerMessage ?? false;
+
     return CallConfig(
       capabilities: CallCapabilitiesConfig(
         isVideoCallEnabled: isVideoEnabled,
         isBlindTransferEnabled: transferConfig.enableBlindTransfer,
         isAttendedTransferEnabled: transferConfig.enableAttendedTransfer,
         callPullVideoStrategy: callPullVideoStrategy,
+        isPeerMessageEnabled: isPeerMessageEnabled,
       ),
       triggerConfig: CallTriggerConfig(
         smsFallback: SmsFallbackTriggerConfig(

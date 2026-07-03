@@ -577,8 +577,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         ),
                         iceFilter: FilterWithAppSettings(iceSettingsRepository),
                         peerConnectionPolicyApplier: pearConnectionPolicyApplier,
+                        // TODO(Serdun): these per-feature capability flags keep growing as
+                        // individual constructor args; inject a single capabilities/config
+                        // struct (e.g. CallCapabilitiesConfig) instead of one bool each.
                         sendPresenceSettings: featureAccess.sipPresenceConfig.hybridPresenceSupport,
                         callPullVideoStrategy: featureAccess.callConfig.capabilities.callPullVideoStrategy,
+                        peerMessageSupported: featureAccess.callConfig.capabilities.isPeerMessageEnabled,
                         onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),
                         onDiagnosticReportRequested: (id, error) => diagnosticService.request(
                           DiagnosticType.androidCallkeepOnly,

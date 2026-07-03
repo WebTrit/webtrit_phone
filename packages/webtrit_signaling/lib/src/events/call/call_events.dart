@@ -9,6 +9,7 @@ export 'holding_event.dart';
 export 'incoming_call_event.dart';
 export 'missed_call_event.dart';
 export 'notify_event.dart';
+export 'peer_message_event.dart';
 export 'proceeding_event.dart';
 export 'progress_event.dart';
 export 'resuming_event.dart';
