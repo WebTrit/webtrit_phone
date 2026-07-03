@@ -594,7 +594,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnostic_callingMode_standalone_title => 'Обмежений режим дзвінків';
 
   @override
-  String get diagnostic_callingMode_standalone_caption => 'Standalone — можлива затримка доставки';
+  String get diagnostic_callingMode_standalone_caption =>
+      'Standalone — можливі обмеження сповіщення про дзвінок і вибору гарнітури';
 
   @override
   String get diagnostic_callingMode_standalone_description =>
