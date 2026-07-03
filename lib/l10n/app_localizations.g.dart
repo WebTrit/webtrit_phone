@@ -3499,6 +3499,12 @@ abstract class AppLocalizations {
   /// **'App Version'**
   String get settings_AboutText_AppVersion;
 
+  /// No description provided for @settings_AboutText_BundleVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Bundle version'**
+  String get settings_AboutText_BundleVersion;
+
   /// No description provided for @settings_AboutText_CallkeepVersion.
   ///
   /// In en, this message translates to:

@@ -1620,6 +1620,8 @@
   "@settings_AboutText_AppSessionIdentifier": {},
   "settings_AboutText_AppVersion": "Versione dell'app",
   "@settings_AboutText_AppVersion": {},
+  "settings_AboutText_BundleVersion": "Versione bundle",
+  "@settings_AboutText_BundleVersion": {},
   "settings_AboutText_CallkeepVersion": "Versione di CallKeep",
   "@settings_AboutText_CallkeepVersion": {},
   "settings_AboutText_CoreVersion": "Versione WebTrit Cloud Backend",

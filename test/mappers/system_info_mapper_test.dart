@@ -11,19 +11,21 @@ class _Mapper with SystemInfoApiMapper, SystemInfoJsonMapper {}
 void main() {
   final mapper = _Mapper();
 
-  api.SystemInfo apiInfo({String? minSupportedAppVersion}) {
+  api.SystemInfo apiInfo({String? minSupportedAppVersion, String? bundleVersion}) {
     return api.SystemInfo(
       core: api.CoreInfo(version: Version(1, 0, 0)),
       postgres: api.PostgresInfo(version: '15.0'),
       minSupportedAppVersion: minSupportedAppVersion,
+      bundleVersion: bundleVersion,
     );
   }
 
-  WebtritSystemInfo domainInfo({Version? minSupportedAppVersion}) {
+  WebtritSystemInfo domainInfo({Version? minSupportedAppVersion, String? bundleVersion}) {
     return WebtritSystemInfo(
       core: CoreInfo(version: Version(1, 0, 0)),
       postgres: PostgresInfo(version: '15.0'),
       minSupportedAppVersion: minSupportedAppVersion,
+      bundleVersion: bundleVersion,
     );
   }
 
@@ -60,6 +62,35 @@ void main() {
     test('reads a malformed cached value as null instead of throwing', () {
       final map = mapper.systemInfoToMap(domainInfo())..['min_supported_app_version'] = 'garbage';
       expect(mapper.systemInfoFromMap(map).minSupportedAppVersion, isNull);
+    });
+  });
+
+  group('SystemInfoApiMapper.systemInfoFromApi bundleVersion', () {
+    test('passes the raw string through', () {
+      expect(mapper.systemInfoFromApi(apiInfo(bundleVersion: '0.14.7')).bundleVersion, '0.14.7');
+    });
+
+    test('maps null to null', () {
+      expect(mapper.systemInfoFromApi(apiInfo(bundleVersion: null)).bundleVersion, isNull);
+    });
+  });
+
+  group('SystemInfoJsonMapper bundleVersion round-trip', () {
+    test('round-trips a non-null value through to/from map', () {
+      final map = mapper.systemInfoToMap(domainInfo(bundleVersion: '0.14.7'));
+      expect(map['bundle_version'], '0.14.7');
+      expect(mapper.systemInfoFromMap(map).bundleVersion, '0.14.7');
+    });
+
+    test('round-trips null', () {
+      final map = mapper.systemInfoToMap(domainInfo(bundleVersion: null));
+      expect(map['bundle_version'], isNull);
+      expect(mapper.systemInfoFromMap(map).bundleVersion, isNull);
+    });
+
+    test('reads a cached map without the key as null', () {
+      final map = mapper.systemInfoToMap(domainInfo())..remove('bundle_version');
+      expect(mapper.systemInfoFromMap(map).bundleVersion, isNull);
     });
   });
 }

@@ -14,6 +14,7 @@ class AboutState with _$AboutState {
     required this.callkeepVersion,
     this.fcmPushToken,
     this.coreVersion,
+    this.bundleVersion,
   });
 
   @override
@@ -48,4 +49,9 @@ class AboutState with _$AboutState {
 
   @override
   final Version? coreVersion;
+
+  /// Version of the deployment bundle (e.g. the Add-on Mart package version).
+  /// `null` = the backend does not provide it; the About screen hides the row.
+  @override
+  final String? bundleVersion;
 }
