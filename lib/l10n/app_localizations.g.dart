@@ -1098,7 +1098,7 @@ abstract class AppLocalizations {
   /// No description provided for @diagnostic_callingMode_standalone_caption.
   ///
   /// In en, this message translates to:
-  /// **'Standalone - delivery may be delayed'**
+  /// **'Standalone - ringing and headset selection may be limited'**
   String get diagnostic_callingMode_standalone_caption;
 
   /// No description provided for @diagnostic_callingMode_standalone_description.

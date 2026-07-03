@@ -583,7 +583,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnostic_callingMode_standalone_title => 'Limited call mode';
 
   @override
-  String get diagnostic_callingMode_standalone_caption => 'Standalone - delivery may be delayed';
+  String get diagnostic_callingMode_standalone_caption => 'Standalone - ringing and headset selection may be limited';
 
   @override
   String get diagnostic_callingMode_standalone_description =>
