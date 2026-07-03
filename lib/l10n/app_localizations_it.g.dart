@@ -589,7 +589,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnostic_callingMode_standalone_title => 'Modalità chiamate limitata';
 
   @override
-  String get diagnostic_callingMode_standalone_caption => 'Standalone - possibile ritardo nella consegna';
+  String get diagnostic_callingMode_standalone_caption =>
+      'Standalone - squillo e selezione dell\'auricolare possono essere limitati';
 
   @override
   String get diagnostic_callingMode_standalone_description =>
