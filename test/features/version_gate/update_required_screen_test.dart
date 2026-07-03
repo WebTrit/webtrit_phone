@@ -18,19 +18,19 @@ class _MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
 class _MockAppInfo extends Mock implements AppInfo {}
 
 class _FakePackageInfo implements PackageInfo {
-  _FakePackageInfo(this.version);
+  _FakePackageInfo(this.version, [this.buildNumber = '0']);
 
   @override
   final String version;
+
+  @override
+  final String buildNumber;
 
   @override
   String get appName => 'WebTrit';
 
   @override
   String get packageName => 'com.webtrit.app';
-
-  @override
-  String get buildNumber => '0';
 }
 
 AppState _appState(AppCompatibility compatibility) => AppState(
@@ -50,7 +50,12 @@ void main() {
     appInfo = _MockAppInfo();
   });
 
-  Widget host({required Version current, required Version min}) {
+  Widget host({
+    required Version current,
+    required Version min,
+    String storeVersion = '0.0.0',
+    String storeBuildNumber = '0',
+  }) {
     when(() => appBloc.state).thenReturn(_appState(AppVersionTooOld(appVersion: current, minSupportedVersion: min)));
     when(() => appInfo.version).thenReturn(current);
 
@@ -60,7 +65,7 @@ void main() {
       home: MultiProvider(
         providers: [
           Provider<AppInfo>.value(value: appInfo),
-          Provider<PackageInfo>.value(value: _FakePackageInfo(current.toString())),
+          Provider<PackageInfo>.value(value: _FakePackageInfo(storeVersion, storeBuildNumber)),
           BlocProvider<AppBloc>.value(value: appBloc),
         ],
         child: const UpdateRequiredScreenPage(),
@@ -69,7 +74,7 @@ void main() {
   }
 
   testWidgets('renders title, description, both versions and the logout action', (tester) async {
-    await tester.pumpWidget(host(current: Version(1, 14, 0), min: Version(1, 15, 0)));
+    await tester.pumpWidget(host(current: Version(1, 14, 0), min: Version(1, 15, 0), storeVersion: '4.4.9'));
     await tester.pumpAndSettle();
 
     final context = tester.element(find.byType(UpdateRequiredScreenPage));
@@ -77,9 +82,36 @@ void main() {
     expect(find.text(context.l10n.main_AppUpdateRequiredDialog_description), findsOneWidget);
     expect(find.text(context.l10n.main_AppUpdateRequiredDialog_currentVersionLabel), findsOneWidget);
     expect(find.text(context.l10n.main_AppUpdateRequiredDialog_minimumVersionLabel), findsOneWidget);
+    // The internal app_version and the build version+code render as two
+    // explicitly labeled values.
+    expect(find.text(context.l10n.main_AppUpdateRequiredDialog_buildVersionLabel), findsOneWidget);
     expect(find.text('1.14.0'), findsOneWidget);
+    expect(find.text('4.4.9+0'), findsOneWidget);
     expect(find.text('1.15.0'), findsOneWidget);
     expect(find.text(context.l10n.main_CompatibilityIssueDialogActions_logout), findsOneWidget);
+  });
+
+  testWidgets('fits long build versions on one line without overflow', (tester) async {
+    await tester.pumpWidget(
+      host(
+        current: Version.parse('1.16.0+6'),
+        min: Version(99, 0, 0),
+        storeVersion: '4.4.9',
+        storeBuildNumber: '449000002',
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('1.16.0+6'), findsOneWidget);
+    expect(find.text('4.4.9+449000002'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('shows the literal 0.0.0 placeholder for builds without a store version', (tester) async {
+    await tester.pumpWidget(host(current: Version(1, 14, 0), min: Version(1, 15, 0)));
+    await tester.pumpAndSettle();
+
+    expect(find.text('0.0.0+0'), findsOneWidget);
   });
 
   testWidgets('hides the Update action when no newer store build is available', (tester) async {

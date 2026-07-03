@@ -961,10 +961,14 @@
   "@main_AppUpdateRequiredDialog_description": {
     "description": "Body text of the full-screen update-required prompt, shown when the running app is older than the backend-declared minimum supported app version."
   },
-  "main_AppUpdateRequiredDialog_currentVersionLabel": "เวอร์ชันปัจจุบัน",
+  "main_AppUpdateRequiredDialog_currentVersionLabel": "เวอร์ชันแอป",
   "@main_AppUpdateRequiredDialog_currentVersionLabel": {
     "description": "Label above the running app version on the update-required prompt."
   },
+  "main_AppUpdateRequiredDialog_buildVersionLabel": "เวอร์ชันบิลด์",
+  "@main_AppUpdateRequiredDialog_buildVersionLabel": {},
+  "main_AppUpdateRequiredDialog_currentVersionValue": "{appVersion} (บิลด์ {storeVersion})",
+  "@main_AppUpdateRequiredDialog_currentVersionValue": {},
   "main_AppUpdateRequiredDialog_minimumVersionLabel": "เวอร์ชันขั้นต่ำที่ต้องการ",
   "@main_AppUpdateRequiredDialog_minimumVersionLabel": {
     "description": "Label above the minimum supported app version on the update-required prompt."

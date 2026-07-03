@@ -959,10 +959,14 @@
   "@main_AppUpdateRequiredDialog_description": {
     "description": "Body text of the full-screen update-required prompt, shown when the running app is older than the backend-declared minimum supported app version."
   },
-  "main_AppUpdateRequiredDialog_currentVersionLabel": "Поточна версія",
+  "main_AppUpdateRequiredDialog_currentVersionLabel": "Версія застосунку",
   "@main_AppUpdateRequiredDialog_currentVersionLabel": {
     "description": "Label above the running app version on the update-required prompt."
   },
+  "main_AppUpdateRequiredDialog_buildVersionLabel": "Версія збірки",
+  "@main_AppUpdateRequiredDialog_buildVersionLabel": {},
+  "main_AppUpdateRequiredDialog_currentVersionValue": "{appVersion} (збірка {storeVersion})",
+  "@main_AppUpdateRequiredDialog_currentVersionValue": {},
   "main_AppUpdateRequiredDialog_minimumVersionLabel": "Мінімальна потрібна версія",
   "@main_AppUpdateRequiredDialog_minimumVersionLabel": {
     "description": "Label above the minimum supported app version on the update-required prompt."

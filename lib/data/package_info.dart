@@ -10,6 +10,13 @@ abstract class PackageInfo {
   String get buildNumber;
 }
 
+extension PackageInfoFullVersion on PackageInfo {
+  /// Full build version as shipped to the store: versionName plus versionCode
+  /// (e.g. "4.4.9+449000002"). Same composition the diagnostic appInfo string
+  /// uses in the app metadata provider.
+  String get fullVersion => '$version+$buildNumber';
+}
+
 class PackageInfoFactory {
   static Future<PackageInfo> init() async {
     return PackageInfoImpl(await plugin.PackageInfo.fromPlatform());

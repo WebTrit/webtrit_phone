@@ -1117,7 +1117,15 @@ class AppLocalizationsUk extends AppLocalizations {
       'Версія вашого застосунку більше не підтримується. Будь ласка, оновіть застосунок, щоб продовжити.';
 
   @override
-  String get main_AppUpdateRequiredDialog_currentVersionLabel => 'Поточна версія';
+  String get main_AppUpdateRequiredDialog_currentVersionLabel => 'Версія застосунку';
+
+  @override
+  String get main_AppUpdateRequiredDialog_buildVersionLabel => 'Версія збірки';
+
+  @override
+  String main_AppUpdateRequiredDialog_currentVersionValue(String storeVersion, String appVersion) {
+    return '$appVersion (збірка $storeVersion)';
+  }
 
   @override
   String get main_AppUpdateRequiredDialog_minimumVersionLabel => 'Мінімальна потрібна версія';

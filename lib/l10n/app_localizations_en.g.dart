@@ -1097,7 +1097,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your app version is no longer supported. Please update the application to continue.';
 
   @override
-  String get main_AppUpdateRequiredDialog_currentVersionLabel => 'Current version';
+  String get main_AppUpdateRequiredDialog_currentVersionLabel => 'App version';
+
+  @override
+  String get main_AppUpdateRequiredDialog_buildVersionLabel => 'Build version';
+
+  @override
+  String main_AppUpdateRequiredDialog_currentVersionValue(String storeVersion, String appVersion) {
+    return '$appVersion (build $storeVersion)';
+  }
 
   @override
   String get main_AppUpdateRequiredDialog_minimumVersionLabel => 'Minimum required version';

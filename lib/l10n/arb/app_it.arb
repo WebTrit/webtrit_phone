@@ -959,10 +959,14 @@
   "@main_AppUpdateRequiredDialog_description": {
     "description": "Body text of the full-screen update-required prompt, shown when the running app is older than the backend-declared minimum supported app version."
   },
-  "main_AppUpdateRequiredDialog_currentVersionLabel": "Versione attuale",
+  "main_AppUpdateRequiredDialog_currentVersionLabel": "Versione app",
   "@main_AppUpdateRequiredDialog_currentVersionLabel": {
     "description": "Label above the running app version on the update-required prompt."
   },
+  "main_AppUpdateRequiredDialog_buildVersionLabel": "Versione build",
+  "@main_AppUpdateRequiredDialog_buildVersionLabel": {},
+  "main_AppUpdateRequiredDialog_currentVersionValue": "{appVersion} (build {storeVersion})",
+  "@main_AppUpdateRequiredDialog_currentVersionValue": {},
   "main_AppUpdateRequiredDialog_minimumVersionLabel": "Versione minima richiesta",
   "@main_AppUpdateRequiredDialog_minimumVersionLabel": {
     "description": "Label above the minimum supported app version on the update-required prompt."
