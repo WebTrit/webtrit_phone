@@ -1928,6 +1928,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get settings_AboutText_AppVersion => 'เวอร์ชันแอป';
 
   @override
+  String get settings_AboutText_BundleVersion => 'เวอร์ชันบันเดิล';
+
+  @override
   String get settings_AboutText_CallkeepVersion => 'เวอร์ชัน CallKeep';
 
   @override

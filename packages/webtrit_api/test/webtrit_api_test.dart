@@ -85,6 +85,7 @@ void main() {
               'custom': {'abc': 'qwe'},
             },
             'min_supported_app_version': '1.5.0',
+            'bundle_version': '0.14.7',
           }),
           200,
           request: request,
@@ -108,13 +109,14 @@ void main() {
               ),
               postgres: PostgresInfo(version: '1.0.0'),
               minSupportedAppVersion: '1.5.0',
+              bundleVersion: '0.14.7',
             ),
           ),
         ),
       );
     });
 
-    test('get info without min_supported_app_version yields null', () {
+    test('get info without min_supported_app_version and bundle_version yields nulls', () {
       Future<Response> handler(Request request) async {
         return Response(
           jsonEncode({
