@@ -907,6 +907,10 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedError =>
+      'บัญชีนี้ไม่มีอีเมลหรือช่องทางติดต่ออื่นสำหรับรับรหัสยืนยัน';
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'ไม่สามารถส่งรหัสยืนยันได้';
 
   @override

@@ -574,6 +574,7 @@ class LoginCubit extends Cubit<LoginState> {
         'validation_error' => const LoginValidationErrorNotification(),
         'parameters_apply_issue' => const LoginParametersApplyIssueNotification(),
         'empty_email' => const LoginEmptyEmailNotification(),
+        'delivery_channel_unspecified' => const LoginDeliveryChannelUnspecifiedNotification(),
         _ => null,
       };
       if (readableNotification != null) {

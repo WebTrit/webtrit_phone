@@ -23,6 +23,8 @@ final class LoginErrorNotification extends DefaultErrorNotification {
           return context.l10n.login_RequestFailurePhoneNotFoundError;
         case 'empty_email':
           return context.l10n.login_RequestFailureEmptyEmailError;
+        case 'delivery_channel_unspecified':
+          return context.l10n.login_RequestFailureDeliveryChannelUnspecifiedError;
         case 'validation_error':
           return context.l10n.login_RequestFailureIdentifierIsNotValid;
         // sessionOtpVerify
@@ -147,6 +149,15 @@ final class LoginEmptyEmailNotification extends MessageNotification {
   @override
   String l10n(BuildContext context) {
     return context.l10n.login_RequestFailureEmptyEmailError;
+  }
+}
+
+final class LoginDeliveryChannelUnspecifiedNotification extends MessageNotification {
+  const LoginDeliveryChannelUnspecifiedNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.login_RequestFailureDeliveryChannelUnspecifiedError;
   }
 }
 

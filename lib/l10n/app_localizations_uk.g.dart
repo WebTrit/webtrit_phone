@@ -926,6 +926,10 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedError =>
+      'До цього облікового запису не прив\'язано адресу електронної пошти чи інший спосіб зв\'язку для отримання коду підтвердження';
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'Не вдалося відправити код підтвердження';
 
   @override

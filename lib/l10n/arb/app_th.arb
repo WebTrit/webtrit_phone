@@ -774,6 +774,10 @@
       }
     }
   },
+  "login_RequestFailureDeliveryChannelUnspecifiedError": "บัญชีนี้ไม่มีอีเมลหรือช่องทางติดต่ออื่นสำหรับรับรหัสยืนยัน",
+  "@login_RequestFailureDeliveryChannelUnspecifiedError": {
+    "description": "Shown during OTP sign-in when the requested account has no configured delivery channel (such as an email address) to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+  },
   "login_RequestFailureEmptyEmailError": "ไม่สามารถส่งรหัสยืนยันได้",
   "@login_RequestFailureEmptyEmailError": {
     "description": "Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty."
