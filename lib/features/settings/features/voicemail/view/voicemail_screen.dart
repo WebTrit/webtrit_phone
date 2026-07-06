@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +8,7 @@ import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../bloc/voicemail_cubit.dart';
+import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
 
 class VoicemailScreen extends StatefulWidget {
@@ -19,7 +21,9 @@ class VoicemailScreen extends StatefulWidget {
 class _VoicemailScreenState extends State<VoicemailScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<VoicemailCubit, VoicemailState>(
+    return BlocConsumer<VoicemailCubit, VoicemailState>(
+      listenWhen: (previous, current) => previous.items != current.items,
+      listener: _stopPlaybackOfRemovedVoicemail,
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -75,6 +79,17 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
         );
       },
     );
+  }
+
+  // The player is screen-scoped and not owned by the tiles, so when the
+  // active voicemail leaves the list (deleted on this device or remotely)
+  // nothing else stops the audio.
+  void _stopPlaybackOfRemovedVoicemail(BuildContext context, VoicemailState state) {
+    final controller = context.read<VoicemailPlaybackController>();
+    final activeId = controller.activeId;
+    if (activeId != null && !state.items.any((it) => it.id == activeId)) {
+      unawaited(controller.stop());
+    }
   }
 
   void _onRetryFetch() {
