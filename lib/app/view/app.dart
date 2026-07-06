@@ -17,6 +17,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/resolvers/resolvers.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('AppWidget');
 
@@ -135,7 +136,38 @@ class _AppState extends State<App> {
       initialTabResolver,
       featureAccess.checker,
     );
+
+    _logAppSettings();
   }
+
+  /// Seeds Crashlytics custom keys with the app configuration, so crash
+  /// reports carry the real app/callkeep versions (the store build version is
+  /// 0.0.0 outside release builds) and the user settings that shape behavior.
+  void _logAppSettings() {
+    CrashlyticsUtils.logAppSettings({
+      ...context.read<AppMetadataProvider>().logLabels,
+      'callkeepVersion': context.read<AppInfo>().callkeepVersion,
+      'themeMode': appBloc.state.themeMode.name,
+      'locale': appBloc.state.effectiveLocale?.toLanguageTag() ?? 'system',
+      'incomingCallType': context.read<IncomingCallTypeRepository>().getIncomingCallType().name,
+    });
+  }
+
+  /// Remote-config override flags, keyed by their Remote Config parameter
+  /// names so a crash report maps 1:1 to the console. A missing key means the
+  /// override is not set and the configurator/app default applies.
+  Map<String, Object?> _featureOverrideSettings(FeatureOverrides overrides) => {
+    'feature_video_call_enabled': overrides.isVideoCallEnabled,
+    'feature_system_notifications_enabled': overrides.isSystemNotificationsEnabled,
+    'feature_hybrid_presence_enabled': overrides.hybridPresenceSupport,
+    'feature_voicemail_enabled': overrides.isVoicemailEnabled,
+    'feature_call_history_enabled': overrides.isCallHistoryEnabled,
+    'feature_call_pull_video_strategy': overrides.callPullVideoStrategy?.name,
+    'feature_monitor_check_interval_sec': overrides.monitorCheckInterval?.inSeconds,
+    'feature_log_level': overrides.logLevel?.name,
+    'firebaseRemoteLogging': overrides.remoteLoggingEnabled,
+    'feature_log_anonymization_enabled': overrides.isLogAnonymizationEnabled,
+  };
 
   @override
   void didChangeDependencies() {
@@ -144,6 +176,7 @@ class _AppState extends State<App> {
     final featureAccess = context.watch<FeatureAccess>();
 
     context.read<AppLogger>().applyConfig(featureAccess.loggingConfig);
+    CrashlyticsUtils.logAppSettings(_featureOverrideSettings(featureAccess.overrides));
 
     final initialTabResolver = BottomMenuInitialTabResolver(
       config: featureAccess.bottomMenuConfig,

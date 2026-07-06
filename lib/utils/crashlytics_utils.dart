@@ -51,6 +51,18 @@ class CrashlyticsUtils {
     await logIsolateInfo();
   }
 
+  /// Writes application configuration/settings into Crashlytics custom keys
+  /// so crash reports carry the context they happened in (versions, feature
+  /// flags, user settings). Null values are skipped, so for optional entries
+  /// (e.g. remote-config overrides) a missing key means "not set".
+  static void logAppSettings(Map<String, Object?> settings) {
+    for (final entry in settings.entries) {
+      final value = entry.value;
+      if (value == null) continue;
+      _setSafeCustomKey(entry.key, value);
+    }
+  }
+
   /// Convenience wrappers
   static void setKey(String key, Object value) {
     unawaited(crashlyticsSetCustomKey(key, value));

@@ -197,6 +197,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     } else {
       await themeModeRepository.setThemeMode(themeMode);
     }
+    CrashlyticsUtils.setKey('themeMode', themeMode.name);
     emit(state.copyWith(themeMode: themeMode));
   }
 
@@ -207,6 +208,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     } else {
       await localeRepository.setLocale(locale);
     }
+    CrashlyticsUtils.setKey('locale', locale == LocaleExtension.defaultNull ? 'system' : locale.toLanguageTag());
     emit(state.copyWith(locale: locale));
   }
 
