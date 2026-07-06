@@ -82,7 +82,7 @@ void main() {
     expect(find.text(context.l10n.main_CompatibilityIssueDialogActions_logout), findsOneWidget);
   });
 
-  testWidgets('hides the Update action when no newer store build is available', (tester) async {
+  testWidgets('hides the Update action when the store listing does not resolve', (tester) async {
     // On the test platform StoreInfoExtractor resolves to null, so the Update
     // button must never appear.
     await tester.pumpWidget(host(current: Version(1, 14, 0), min: Version(1, 15, 0)));
