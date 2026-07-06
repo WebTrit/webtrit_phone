@@ -14,13 +14,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:async/async.dart';
 
-import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/mappers/signaling/signaling.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -84,7 +84,7 @@ const _getUserMediaPushKitTimeout = Duration(seconds: 8);
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final CallLogsRepository callLogsRepository;
   final void Function(String callId, String callerName) _onMissedCall;
-  final UserRepository userRepository;
+  final SessionVerifier sessionVerifier;
   final LinesStateRepository linesStateRepository;
   final PresenceInfoRepository presenceInfoRepository;
   final DialogInfoRepository dialogInfoRepository;
@@ -161,7 +161,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.queuedTerminationRequestsRepository,
     required this.resolveOutgoingFromNumber,
     required this.onSessionInvalidated,
-    required this.userRepository,
+    required this.sessionVerifier,
     required this.submitNotification,
     required this.callkeep,
     required this.callkeepConnections,
@@ -534,40 +534,30 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  /// Resolves why the session was invalidated and triggers the forced logout
-  /// with that reason, so the teardown UI can show a specific message.
+  /// Confirms the signaling session error over the REST API and triggers the
+  /// forced logout only on a positive verdict, so a backend outage (no
+  /// verdict) or a false signaling report (session alive) keeps the user
+  /// logged in while the reconnect loop keeps retrying.
   Future<void> _invalidateSession() async {
     try {
-      final reason = await _resolveInvalidationReason();
-      // A null reason means the probe hit an auth error the session guard
-      // already owns (it dispatches its own, more specific logout) - avoid a
-      // second, conflicting AppLogoutRequested.
-      if (reason != null) onSessionInvalidated(reason);
+      final result = await sessionVerifier.verify();
+      switch (result) {
+        case SessionMissed():
+          onSessionInvalidated(SignalingSessionInvalidationReason.sessionMissed);
+        case SessionPasswordChangeRequired():
+          onSessionInvalidated(SignalingSessionInvalidationReason.passwordChangeRequired);
+        case SessionVerdictDelegated():
+          // The session guard wired into the user datasource dispatches its
+          // own, more specific logout - avoid a second, conflicting one.
+          _logger.info('Session invalidation delegated to the session guard');
+        case SessionAlive():
+          _logger.info('Session alive despite the signaling report - keeping the session');
+        case SessionUnverifiable():
+          _logger.info('Session state unverifiable (backend unavailable) - keeping the session');
+      }
     } catch (e, st) {
       _logger.warning('Session invalidation handling failed', e, st);
     }
-  }
-
-  // TODO: Consider moving this probe to a separate repository
-  Future<SignalingSessionInvalidationReason?> _resolveInvalidationReason() async {
-    try {
-      await userRepository.getRemoteInfo();
-    } on PasswordChangeRequiredException {
-      _logger.info('Account session revoked: password change required');
-      return SignalingSessionInvalidationReason.passwordChangeRequired;
-    } on UnauthorizedException catch (_) {
-      // Handled by the session guard inside getInfo(); it drives the logout.
-      return null;
-    } on UserNotFoundException catch (_) {
-      return null;
-    } on SessionMissingException catch (_) {
-      return null;
-    } on RequestFailure catch (e) {
-      _logger.warning('Account error code: ${e.error?.code}');
-    } catch (e, st) {
-      _logger.warning('Unexpected error during account info refresh', e, st);
-    }
-    return SignalingSessionInvalidationReason.sessionMissed;
   }
 
   //

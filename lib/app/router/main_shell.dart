@@ -558,7 +558,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                                 destination,
                               );
                         },
-                        userRepository: context.read<UserRepository>(),
+                        sessionVerifier: SessionVerifier(context.read<UserRepository>()),
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         isCameraPermissionGranted: () => appPermissions.isPermissionGranted(Permission.camera),
                         callkeep: _callkeep,
