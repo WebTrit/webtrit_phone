@@ -525,6 +525,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         main_AppUpdateRequiredDialog_description,
       'main_AppUpdateRequiredDialog_currentVersionLabel' =>
         main_AppUpdateRequiredDialog_currentVersionLabel,
+      'main_AppUpdateRequiredDialog_buildVersionLabel' =>
+        main_AppUpdateRequiredDialog_buildVersionLabel,
       'main_AppUpdateRequiredDialog_minimumVersionLabel' =>
         main_AppUpdateRequiredDialog_minimumVersionLabel,
       'messaging_ActionBtn_retry' => messaging_ActionBtn_retry,
@@ -1679,6 +1681,16 @@ extension AppLocalizationsExtension on AppLocalizations {
             'main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError requires 2 arguments',
           ),
         },
+      'main_AppUpdateRequiredDialog_currentVersionValue' => switch (args) {
+        [final String storeVersion, final String appVersion] =>
+          main_AppUpdateRequiredDialog_currentVersionValue(
+            storeVersion,
+            appVersion,
+          ),
+        _ => throw ArgumentError(
+          'main_AppUpdateRequiredDialog_currentVersionValue requires 2 arguments',
+        ),
+      },
       'messaging_ConversationBuilders_contactExtension' => switch (args) {
         [final String extension] =>
           messaging_ConversationBuilders_contactExtension(extension),

@@ -12,6 +12,8 @@ class _MockAuthRepository extends Mock implements AuthRepository {}
 
 class _MockAppInfo extends Mock implements AppInfo {}
 
+class _MockPackageInfo extends Mock implements PackageInfo {}
+
 WebtritSystemInfo _systemInfo({Version? minSupportedAppVersion, List<String> supported = const ['passwordSignin']}) {
   return WebtritSystemInfo(
     core: CoreInfo(version: Version(1, 0, 0)),
@@ -36,13 +38,17 @@ void main() {
     notificationsBloc.close();
   });
 
-  LoginCubit buildCubit(String appVersion) {
+  LoginCubit buildCubit(String appVersion, {String storeVersion = '0.0.0', String storeBuildNumber = '0'}) {
     final appInfo = _MockAppInfo();
     when(() => appInfo.version).thenReturn(Version.parse(appVersion));
+    final packageInfo = _MockPackageInfo();
+    when(() => packageInfo.version).thenReturn(storeVersion);
+    when(() => packageInfo.buildNumber).thenReturn(storeBuildNumber);
     return LoginCubit(
       authRepository: authRepository,
       notificationsBloc: notificationsBloc,
       appInfo: appInfo,
+      packageInfo: packageInfo,
       appCompatibilityResolver: const DefaultAppCompatibilityResolver(),
       onLoginSuccess: (session, _) => loginSuccesses.add(session),
     );
@@ -59,10 +65,15 @@ void main() {
       () => authRepository.getSystemInfo(any(), any()),
     ).thenAnswer((_) async => _systemInfo(minSupportedAppVersion: Version(2, 0, 0)));
 
-    final cubit = buildCubit('1.15.3');
+    final cubit = buildCubit('1.15.3', storeVersion: '4.4.9', storeBuildNumber: '449000002');
     await submitCoreUrl(cubit);
 
-    expect(notificationsBloc.state.lastNotification, isA<AppVersionUnsupportedErrorNotification>());
+    final notification = notificationsBloc.state.lastNotification;
+    expect(notification, isA<AppVersionUnsupportedErrorNotification>());
+    // The internal app_version leads the message; the build version+code
+    // rides along in parentheses.
+    expect((notification as AppVersionUnsupportedErrorNotification).storeVersion, '4.4.9+449000002');
+    expect(notification.appVersion, '1.15.3');
     expect(cubit.state.systemInfo, isNull);
     expect(cubit.state.supportedLoginTypes, isNull);
     expect(loginSuccesses, isEmpty);

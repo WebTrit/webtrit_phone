@@ -2065,11 +2065,23 @@ abstract class AppLocalizations {
   /// **'Your app version is no longer supported. Please update the application to continue.'**
   String get main_AppUpdateRequiredDialog_description;
 
-  /// Label above the running app version on the update-required prompt.
+  /// Label above the running app's internal app_version on the update-required prompt.
   ///
   /// In en, this message translates to:
-  /// **'Current version'**
+  /// **'App version'**
   String get main_AppUpdateRequiredDialog_currentVersionLabel;
+
+  /// Label above the per-client build version+code (native versionName+versionCode) on the update-required prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Build version'**
+  String get main_AppUpdateRequiredDialog_buildVersionLabel;
+
+  /// Composed current-version value on version-gate surfaces: the internal app_version leads, the per-client build (store distribution) version follows in parentheses.
+  ///
+  /// In en, this message translates to:
+  /// **'{appVersion} (build {storeVersion})'**
+  String main_AppUpdateRequiredDialog_currentVersionValue(String storeVersion, String appVersion);
 
   /// Label above the minimum supported app version on the update-required prompt.
   ///
