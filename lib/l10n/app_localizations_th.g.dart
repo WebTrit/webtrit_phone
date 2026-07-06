@@ -1035,10 +1035,39 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
+  String get login_qrSignin_scanHint => 'สแกนคิวอาร์โค้ดเพื่อเข้าสู่ระบบ';
+
+  @override
+  String get login_qrSignin_verifyingTitle => 'กำลังเข้าสู่ระบบ...';
+
+  @override
+  String get login_qrSignin_verifyingText => 'สแกนคิวอาร์โค้ดแล้ว กำลังตรวจสอบกับเซิร์ฟเวอร์';
+
+  @override
+  String get login_qrSignin_cameraPermissionTitle => 'การเข้าถึงกล้องถูกปิดอยู่';
+
+  @override
+  String login_qrSignin_cameraPermissionText(String appName) {
+    return '$appName ต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกนคิวอาร์โค้ด โปรดเปิดใช้งานเพื่อดำเนินการต่อ';
+  }
+
+  @override
+  String get login_qrSignin_allowCameraAccessButton => 'อนุญาตการเข้าถึงกล้อง';
+
+  @override
+  String get login_qrSignin_openSettingsButton => 'เปิดการตั้งค่า';
+
+  @override
+  String get login_qrSignin_invalidCodeError => 'คิวอาร์โค้ดนี้ใช้เข้าสู่ระบบไม่ได้';
+
+  @override
   String get loginType_otpSignin => 'เข้าสู่ระบบด้วย OTP';
 
   @override
   String get loginType_passwordSignin => 'เข้าสู่ระบบด้วยรหัสผ่าน';
+
+  @override
+  String get loginType_qrSignin => 'คิวอาร์โค้ด';
 
   @override
   String get loginType_signup => 'สมัครสมาชิก';

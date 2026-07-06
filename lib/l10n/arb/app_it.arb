@@ -635,7 +635,9 @@
   "diagnosticNetworkTestItem_subtitle_publicIps": "Pubblica: {ips}",
   "@diagnosticNetworkTestItem_subtitle_publicIps": {
     "placeholders": {
-      "ips": {"type": "String"}
+      "ips": {
+        "type": "String"
+      }
     }
   },
   "diagnosticNetworkTestItem_subtitle_stunBlocked": "STUN bloccato · relay disponibile",
@@ -898,10 +900,34 @@
       }
     }
   },
+  "login_qrSignin_scanHint": "Scansiona il codice QR per accedere.",
+  "@login_qrSignin_scanHint": {},
+  "login_qrSignin_verifyingTitle": "Accesso in corso...",
+  "@login_qrSignin_verifyingTitle": {},
+  "login_qrSignin_verifyingText": "Codice QR scansionato. Verifica con il server in corso.",
+  "@login_qrSignin_verifyingText": {},
+  "login_qrSignin_cameraPermissionTitle": "L'accesso alla fotocamera è disattivato",
+  "@login_qrSignin_cameraPermissionTitle": {},
+  "login_qrSignin_cameraPermissionText": "{appName} ha bisogno dell'accesso alla fotocamera per scansionare un codice QR. Attivalo per continuare.",
+  "@login_qrSignin_cameraPermissionText": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "login_qrSignin_allowCameraAccessButton": "Consenti l'accesso alla fotocamera",
+  "@login_qrSignin_allowCameraAccessButton": {},
+  "login_qrSignin_openSettingsButton": "Apri le impostazioni",
+  "@login_qrSignin_openSettingsButton": {},
+  "login_qrSignin_invalidCodeError": "Questo codice QR non può essere utilizzato per accedere.",
+  "@login_qrSignin_invalidCodeError": {},
   "loginType_otpSignin": "Accesso con OTP",
   "@loginType_otpSignin": {},
   "loginType_passwordSignin": "Accesso con password",
   "@loginType_passwordSignin": {},
+  "loginType_qrSignin": "Codice QR",
+  "@loginType_qrSignin": {},
   "loginType_signup": "Iscrizione",
   "@loginType_signup": {},
   "login_validationCoreUrlError": "Prego inserisci un URL valido",
@@ -928,7 +954,7 @@
   "@logRecordsConsole_Text_failure": {
     "description": "Shown in the Log Console screen when an unexpected error occurs while loading or displaying log records."
   },
-  "logRecordsConsole_Text_recordsCountHint": "{count, plural, one{Visualizzazione dell\u2019ultimo {count} record. Usa Condividi per esportare il log completo.} other{Visualizzazione degli ultimi {count} record. Usa Condividi per esportare il log completo.}}",
+  "logRecordsConsole_Text_recordsCountHint": "{count, plural, one{Visualizzazione dell’ultimo {count} record. Usa Condividi per esportare il log completo.} other{Visualizzazione degli ultimi {count} record. Usa Condividi per esportare il log completo.}}",
   "@logRecordsConsole_Text_recordsCountHint": {
     "description": "Shown in the info dialog to inform the user that only the most recent records are displayed and the share button exports the complete log.",
     "placeholders": {

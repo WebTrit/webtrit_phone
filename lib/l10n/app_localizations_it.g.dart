@@ -1051,10 +1051,39 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get login_qrSignin_scanHint => 'Scansiona il codice QR per accedere.';
+
+  @override
+  String get login_qrSignin_verifyingTitle => 'Accesso in corso...';
+
+  @override
+  String get login_qrSignin_verifyingText => 'Codice QR scansionato. Verifica con il server in corso.';
+
+  @override
+  String get login_qrSignin_cameraPermissionTitle => 'L\'accesso alla fotocamera è disattivato';
+
+  @override
+  String login_qrSignin_cameraPermissionText(String appName) {
+    return '$appName ha bisogno dell\'accesso alla fotocamera per scansionare un codice QR. Attivalo per continuare.';
+  }
+
+  @override
+  String get login_qrSignin_allowCameraAccessButton => 'Consenti l\'accesso alla fotocamera';
+
+  @override
+  String get login_qrSignin_openSettingsButton => 'Apri le impostazioni';
+
+  @override
+  String get login_qrSignin_invalidCodeError => 'Questo codice QR non può essere utilizzato per accedere.';
+
+  @override
   String get loginType_otpSignin => 'Accesso con OTP';
 
   @override
   String get loginType_passwordSignin => 'Accesso con password';
+
+  @override
+  String get loginType_qrSignin => 'Codice QR';
 
   @override
   String get loginType_signup => 'Iscrizione';

@@ -1912,6 +1912,54 @@ abstract class AppLocalizations {
   /// **'A one-time verification code was sent to {email}.'**
   String login_Text_signupVerifyPreDescriptionEmail(String email);
 
+  /// No description provided for @login_qrSignin_scanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan the QR code to log in.'**
+  String get login_qrSignin_scanHint;
+
+  /// No description provided for @login_qrSignin_verifyingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing you in...'**
+  String get login_qrSignin_verifyingTitle;
+
+  /// No description provided for @login_qrSignin_verifyingText.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code scanned. Verifying with the server.'**
+  String get login_qrSignin_verifyingText;
+
+  /// No description provided for @login_qrSignin_cameraPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is off'**
+  String get login_qrSignin_cameraPermissionTitle;
+
+  /// No description provided for @login_qrSignin_cameraPermissionText.
+  ///
+  /// In en, this message translates to:
+  /// **'{appName} needs camera access to scan a QR code. Enable it to continue.'**
+  String login_qrSignin_cameraPermissionText(String appName);
+
+  /// No description provided for @login_qrSignin_allowCameraAccessButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow camera access'**
+  String get login_qrSignin_allowCameraAccessButton;
+
+  /// No description provided for @login_qrSignin_openSettingsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get login_qrSignin_openSettingsButton;
+
+  /// No description provided for @login_qrSignin_invalidCodeError.
+  ///
+  /// In en, this message translates to:
+  /// **'This QR code cannot be used to sign in.'**
+  String get login_qrSignin_invalidCodeError;
+
   /// No description provided for @loginType_otpSignin.
   ///
   /// In en, this message translates to:
@@ -1923,6 +1971,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Password sign in'**
   String get loginType_passwordSignin;
+
+  /// No description provided for @loginType_qrSignin.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code'**
+  String get loginType_qrSignin;
 
   /// No description provided for @loginType_signup.
   ///

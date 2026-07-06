@@ -19,6 +19,7 @@
   ],
   "loginConfig": {
     "signinOrder": ["passwordSignin", "otpSignin", "signup"],
+    "qr": { "enabled": false, "schemes": ["csc"], "expectedHost": null },
     "common": {
       "fullScreenLaunchEmbeddedResourceId": null
     },

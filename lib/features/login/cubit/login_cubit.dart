@@ -35,7 +35,9 @@ class LoginCubit extends Cubit<LoginState> {
     required this.appCompatibilityResolver,
     required this.onLoginSuccess,
     this.signinOrder = const [],
-  }) : super(const LoginState());
+    QrSigninConfig? qrSigninConfig,
+  }) : qrSigninConfig = qrSigninConfig ?? QrSigninConfig.disabled,
+       super(const LoginState());
 
   final AuthRepository authRepository;
 
@@ -51,6 +53,9 @@ class LoginCubit extends Cubit<LoginState> {
 
   /// Configured order of the sign-in tabs, by login type name (from app config).
   final List<String> signinOrder;
+
+  /// Configuration of the QR-code sign-in tab (from app config).
+  final QrSigninConfig qrSigninConfig;
 
   // Environment getters
   String? get coreUrlFromEnvironment => EnvironmentConfig.CORE_URL;
@@ -117,6 +122,12 @@ class LoginCubit extends Cubit<LoginState> {
           .where((f) => LoginType.values.map((e) => e.name).contains(f))
           .map((f) => LoginType.values.byName(f))
           .toList();
+      // The QR tab is not a backend capability: the scanned code carries plain
+      // credentials, so it is offered whenever password sign-in is available
+      // and the app config enables it.
+      if (qrSigninConfig.enabled && parsedLoginTypes.contains(LoginType.passwordSignin)) {
+        parsedLoginTypes.add(LoginType.qrSignin);
+      }
       // Backend may list the options in an unstable order; impose a deterministic
       // client-side order (driven by app config) so the login tabs do not jump
       // around between requests.
@@ -358,6 +369,35 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(processing: false));
 
       handleError(e, s, 'LoginSignupVerifySubmitted');
+    }
+  }
+
+  // LoginQrSignin
+
+  /// Signs in with credentials decoded from a scanned QR code.
+  ///
+  /// Follows the same session path as [loginPasswordSigninSubmitted]; the
+  /// credentials come from the scanner instead of the input fields. Completes
+  /// when the attempt is over so the caller can resume scanning on failure.
+  Future<void> loginQrSigninSubmitted({required String userRef, required String password}) async {
+    if (state.processing) return;
+
+    emit(state.copyWith(processing: true));
+
+    try {
+      final sessionToken = await authRepository.login(
+        coreUrl: state.coreUrl!,
+        tenantId: state.tenantId!,
+        userRef: userRef,
+        password: password,
+      );
+
+      // does not set processing to false to hold processing widgets state during navigation
+      loginSigninSubmitted(sessionToken);
+    } catch (e, s) {
+      emit(state.copyWith(processing: false));
+
+      handleError(e, s, 'LoginQrSigninSubmitted');
     }
   }
 

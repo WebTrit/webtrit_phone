@@ -67,6 +67,9 @@ AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const ['passwordSignin', 'otpSignin', 'signup'],
+      qr: json['qr'] == null
+          ? const AppConfigLoginQr()
+          : AppConfigLoginQr.fromJson(json['qr'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AppConfigLoginToJson(AppConfigLogin instance) =>
@@ -74,6 +77,25 @@ Map<String, dynamic> _$AppConfigLoginToJson(AppConfigLogin instance) =>
       'common': instance.common.toJson(),
       'modeSelect': instance.modeSelect.toJson(),
       'signinOrder': instance.signinOrder,
+      'qr': instance.qr.toJson(),
+    };
+
+AppConfigLoginQr _$AppConfigLoginQrFromJson(Map<String, dynamic> json) =>
+    AppConfigLoginQr(
+      enabled: json['enabled'] as bool? ?? false,
+      schemes:
+          (json['schemes'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const ['csc'],
+      expectedHost: json['expectedHost'] as String?,
+    );
+
+Map<String, dynamic> _$AppConfigLoginQrToJson(AppConfigLoginQr instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'schemes': instance.schemes,
+      'expectedHost': instance.expectedHost,
     };
 
 AppConfigLoginCommon _$AppConfigLoginCommonFromJson(

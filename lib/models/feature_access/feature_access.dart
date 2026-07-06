@@ -13,6 +13,7 @@ export 'login_config.dart';
 export 'login_mode_action.dart';
 export 'messaging_config.dart';
 export 'logging_config.dart';
+export 'qr_signin_config.dart';
 export 'settings_config.dart';
 export 'settings_feature.dart';
 export 'sip_presence_config.dart';

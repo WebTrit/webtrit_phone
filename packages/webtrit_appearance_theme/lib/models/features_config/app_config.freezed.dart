@@ -208,7 +208,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigLogin {
 
- AppConfigLoginCommon get common; AppConfigLoginModeSelect get modeSelect; List<String> get signinOrder;
+ AppConfigLoginCommon get common; AppConfigLoginModeSelect get modeSelect; List<String> get signinOrder; AppConfigLoginQr get qr;
 /// Create a copy of AppConfigLogin
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -219,16 +219,16 @@ $AppConfigLoginCopyWith<AppConfigLogin> get copyWith => _$AppConfigLoginCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigLogin&&(identical(other.common, common) || other.common == common)&&(identical(other.modeSelect, modeSelect) || other.modeSelect == modeSelect)&&const DeepCollectionEquality().equals(other.signinOrder, signinOrder));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigLogin&&(identical(other.common, common) || other.common == common)&&(identical(other.modeSelect, modeSelect) || other.modeSelect == modeSelect)&&const DeepCollectionEquality().equals(other.signinOrder, signinOrder)&&(identical(other.qr, qr) || other.qr == qr));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,common,modeSelect,const DeepCollectionEquality().hash(signinOrder));
+int get hashCode => Object.hash(runtimeType,common,modeSelect,const DeepCollectionEquality().hash(signinOrder),qr);
 
 @override
 String toString() {
-  return 'AppConfigLogin(common: $common, modeSelect: $modeSelect, signinOrder: $signinOrder)';
+  return 'AppConfigLogin(common: $common, modeSelect: $modeSelect, signinOrder: $signinOrder, qr: $qr)';
 }
 
 
@@ -239,7 +239,7 @@ abstract mixin class $AppConfigLoginCopyWith<$Res>  {
   factory $AppConfigLoginCopyWith(AppConfigLogin value, $Res Function(AppConfigLogin) _then) = _$AppConfigLoginCopyWithImpl;
 @useResult
 $Res call({
- AppConfigLoginCommon common, AppConfigLoginModeSelect modeSelect, List<String> signinOrder
+ AppConfigLoginCommon common, AppConfigLoginModeSelect modeSelect, List<String> signinOrder, AppConfigLoginQr qr
 });
 
 
@@ -256,12 +256,13 @@ class _$AppConfigLoginCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigLogin
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? common = null,Object? modeSelect = null,Object? signinOrder = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? common = null,Object? modeSelect = null,Object? signinOrder = null,Object? qr = null,}) {
   return _then(AppConfigLogin(
 common: null == common ? _self.common : common // ignore: cast_nullable_to_non_nullable
 as AppConfigLoginCommon,modeSelect: null == modeSelect ? _self.modeSelect : modeSelect // ignore: cast_nullable_to_non_nullable
 as AppConfigLoginModeSelect,signinOrder: null == signinOrder ? _self.signinOrder : signinOrder // ignore: cast_nullable_to_non_nullable
-as List<String>,
+as List<String>,qr: null == qr ? _self.qr : qr // ignore: cast_nullable_to_non_nullable
+as AppConfigLoginQr,
   ));
 }
 
@@ -270,6 +271,194 @@ as List<String>,
 
 /// Adds pattern-matching-related methods to [AppConfigLogin].
 extension AppConfigLoginPatterns on AppConfigLogin {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
+
+/// @nodoc
+mixin _$AppConfigLoginQr {
+
+ bool get enabled; List<String> get schemes; String? get expectedHost;
+/// Create a copy of AppConfigLoginQr
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AppConfigLoginQrCopyWith<AppConfigLoginQr> get copyWith => _$AppConfigLoginQrCopyWithImpl<AppConfigLoginQr>(this as AppConfigLoginQr, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigLoginQr&&(identical(other.enabled, enabled) || other.enabled == enabled)&&const DeepCollectionEquality().equals(other.schemes, schemes)&&(identical(other.expectedHost, expectedHost) || other.expectedHost == expectedHost));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,enabled,const DeepCollectionEquality().hash(schemes),expectedHost);
+
+@override
+String toString() {
+  return 'AppConfigLoginQr(enabled: $enabled, schemes: $schemes, expectedHost: $expectedHost)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $AppConfigLoginQrCopyWith<$Res>  {
+  factory $AppConfigLoginQrCopyWith(AppConfigLoginQr value, $Res Function(AppConfigLoginQr) _then) = _$AppConfigLoginQrCopyWithImpl;
+@useResult
+$Res call({
+ bool enabled, List<String> schemes, String? expectedHost
+});
+
+
+
+
+}
+/// @nodoc
+class _$AppConfigLoginQrCopyWithImpl<$Res>
+    implements $AppConfigLoginQrCopyWith<$Res> {
+  _$AppConfigLoginQrCopyWithImpl(this._self, this._then);
+
+  final AppConfigLoginQr _self;
+  final $Res Function(AppConfigLoginQr) _then;
+
+/// Create a copy of AppConfigLoginQr
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? schemes = null,Object? expectedHost = freezed,}) {
+  return _then(AppConfigLoginQr(
+enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
+as bool,schemes: null == schemes ? _self.schemes : schemes // ignore: cast_nullable_to_non_nullable
+as List<String>,expectedHost: freezed == expectedHost ? _self.expectedHost : expectedHost // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [AppConfigLoginQr].
+extension AppConfigLoginQrPatterns on AppConfigLoginQr {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

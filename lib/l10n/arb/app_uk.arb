@@ -635,7 +635,9 @@
   "diagnosticNetworkTestItem_subtitle_publicIps": "Публічна: {ips}",
   "@diagnosticNetworkTestItem_subtitle_publicIps": {
     "placeholders": {
-      "ips": {"type": "String"}
+      "ips": {
+        "type": "String"
+      }
     }
   },
   "diagnosticNetworkTestItem_subtitle_stunBlocked": "STUN заблоковано · ретранслятор доступний",
@@ -898,10 +900,34 @@
       }
     }
   },
+  "login_qrSignin_scanHint": "Відскануйте QR-код, щоб увійти.",
+  "@login_qrSignin_scanHint": {},
+  "login_qrSignin_verifyingTitle": "Виконуємо вхід...",
+  "@login_qrSignin_verifyingTitle": {},
+  "login_qrSignin_verifyingText": "QR-код відскановано. Перевірка на сервері.",
+  "@login_qrSignin_verifyingText": {},
+  "login_qrSignin_cameraPermissionTitle": "Доступ до камери вимкнено",
+  "@login_qrSignin_cameraPermissionTitle": {},
+  "login_qrSignin_cameraPermissionText": "{appName} потребує доступу до камери для сканування QR-коду. Увімкніть його, щоб продовжити.",
+  "@login_qrSignin_cameraPermissionText": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "login_qrSignin_allowCameraAccessButton": "Надати доступ до камери",
+  "@login_qrSignin_allowCameraAccessButton": {},
+  "login_qrSignin_openSettingsButton": "Відкрити налаштування",
+  "@login_qrSignin_openSettingsButton": {},
+  "login_qrSignin_invalidCodeError": "Цей QR-код не можна використати для входу.",
+  "@login_qrSignin_invalidCodeError": {},
   "loginType_otpSignin": "Увійти за OTP",
   "@loginType_otpSignin": {},
   "loginType_passwordSignin": "Вхід за паролем",
   "@loginType_passwordSignin": {},
+  "loginType_qrSignin": "QR-код",
+  "@loginType_qrSignin": {},
   "loginType_signup": "Зареєструватися",
   "@loginType_signup": {},
   "login_validationCoreUrlError": "Будь ласка, введіть правильний URL",
