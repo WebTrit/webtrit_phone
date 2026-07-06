@@ -229,10 +229,10 @@ packages:
     dependency: transitive
     description:
       name: code_assets
-      sha256: ae0db647e668cbb295a3527f0938e4039e004c80099dce2f964102373f5ce0b5
+      sha256: bf394f466ba9205f1812a0433b392d6af280f155f56651eda7c18cc32ed493b8
       url: "https://pub.dev"
     source: hosted
-    version: "0.19.10"
+    version: "1.2.1"
   code_builder:
     dependency: transitive
     description:
@@ -409,14 +409,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.1"
-  dispose_scope:
-    dependency: transitive
-    description:
-      name: dispose_scope
-      sha256: "48ec38ca2631c53c4f8fa96b294c801e55c335db5e3fb9f82cede150cfe5a2af"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
   dlibphonenumber:
     dependency: "direct main"
     description:
@@ -429,18 +421,18 @@ packages:
     dependency: "direct main"
     description:
       name: drift
-      sha256: "5ea2f718558c0b31d4b8c36a3d8e5b7016f1265f46ceb5a5920e16117f0c0d6a"
+      sha256: "8033500116b24398fba0cca0369cc31678cd627c01e41753a61186911cea743e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.30.1"
+    version: "2.33.0"
   drift_dev:
     dependency: transitive
     description:
       name: drift_dev
-      sha256: "917184b2fb867b70a548a83bf0d36268423b38d39968c06cce4905683da49587"
+      sha256: b3dd5b75e30522a91da8abda9f5bb17230cb038097f6d15fa75d42bb563428aa
       url: "https://pub.dev"
     source: hosted
-    version: "2.31.0"
+    version: "2.33.0"
   emoji_picker_flutter:
     dependency: "direct main"
     description:
@@ -925,10 +917,10 @@ packages:
     dependency: transitive
     description:
       name: hooks
-      sha256: "5410b9f4f6c9f01e8ff0eb81c9801ea13a3c3d39f8f0b1613cda08e27eab3c18"
+      sha256: "9a62a50b50b769a737bc0a8ff381f333529df3ab746b2f6b02e83760231455ba"
       url: "https://pub.dev"
     source: hosted
-    version: "0.20.5"
+    version: "2.0.2"
   hotreloader:
     dependency: transitive
     description:
@@ -993,6 +985,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.1"
+  in_app_update:
+    dependency: "direct main"
+    description:
+      name: in_app_update
+      sha256: "9924a3efe592e1c0ec89dda3683b3cfec3d4cd02d908e6de00c24b759038ddb1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.5"
   integration_test:
     dependency: "direct dev"
     description: flutter
@@ -1211,10 +1211,10 @@ packages:
     dependency: transitive
     description:
       name: native_toolchain_c
-      sha256: f8872ea6c7a50ce08db9ae280ca2b8efdd973157ce462826c82f3c3051d154ce
+      sha256: f59351d28f49520cd3a74eb1f41c5f19ae15e53c65a3231d14af672e46510a96
       url: "https://pub.dev"
     source: hosted
-    version: "0.17.2"
+    version: "0.19.1"
   nested:
     dependency: transitive
     description:
@@ -1243,10 +1243,10 @@ packages:
     dependency: transitive
     description:
       name: objective_c
-      sha256: "55eb67ede1002d9771b3f9264d2c9d30bc364f0267bc1c6cc0883280d5f0c7cb"
+      sha256: "6cb691c686fa2838c6deb34980d426145c2a5d537491cb83d463c33cdbc726ed"
       url: "https://pub.dev"
     source: hosted
-    version: "9.2.2"
+    version: "9.4.1"
   package_config:
     dependency: transitive
     description:
@@ -1335,30 +1335,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
-  patrol:
-    dependency: "direct dev"
-    description:
-      name: patrol
-      sha256: f43fda9425e90c0e69d2dac9e495e3a3036a22a550466365b4720fa4dd53d6ae
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.6.1"
-  patrol_finders:
-    dependency: transitive
-    description:
-      name: patrol_finders
-      sha256: "915da1e63fe7fd024418ab30b2394b1c8d6e812ce25be7d0b11634202521f0a9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.4.0"
-  patrol_log:
-    dependency: transitive
-    description:
-      name: patrol_log
-      sha256: "16ab747b28621640115d9493138eae82a1d410a613857cb0caf9000ce62fc546"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.9.0"
   permission_handler:
     dependency: "direct main"
     description:
@@ -1527,6 +1503,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  record_use:
+    dependency: transitive
+    description:
+      name: record_use
+      sha256: "2551bd8eecfe95d14ae75f6021ad0248be5c27f138c2ec12fcb52b500b3ba1ed"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.0"
   rxdart:
     dependency: "direct main"
     description:
@@ -1696,10 +1680,10 @@ packages:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: "3145bd74dcdb4fd6f5c6dda4d4e4490a8087d7f286a14dee5d37087290f0f8a2"
+      sha256: "9488c7d2cdb1091c91cacf7e207cff81b28bff8e366f042bad3afe7d34afe189"
       url: "https://pub.dev"
     source: hosted
-    version: "2.9.4"
+    version: "3.3.2"
   sqlite3_flutter_libs:
     dependency: transitive
     description:
@@ -1712,10 +1696,10 @@ packages:
     dependency: transitive
     description:
       name: sqlparser
-      sha256: "337e9997f7141ffdd054259128553c348635fa318f7ca492f07a4ab76f850d19"
+      sha256: ecdc06d4a7d79dcbc928d99afd2f7f5b0f98a637c46f89be83d911617f759978
       url: "https://pub.dev"
     source: hosted
-    version: "0.43.1"
+    version: "0.44.4"
   stack_trace:
     dependency: transitive
     description:
@@ -2016,58 +2000,74 @@ packages:
   webtrit_callkeep:
     dependency: "direct main"
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep"
-      relative: true
-    source: path
-    version: "1.1.0+0"
+      path: webtrit_callkeep
+      ref: "1.3.0"
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
+    version: "1.3.0+1"
   webtrit_callkeep_android:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_android"
-      relative: true
-    source: path
+      path: webtrit_callkeep_android
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
     version: "0.0.0+0"
   webtrit_callkeep_ios:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_ios"
-      relative: true
-    source: path
+      path: webtrit_callkeep_ios
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
     version: "0.0.0+0"
   webtrit_callkeep_linux:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_linux"
-      relative: true
-    source: path
+      path: webtrit_callkeep_linux
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
     version: "0.1.0+1"
   webtrit_callkeep_macos:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_macos"
-      relative: true
-    source: path
+      path: webtrit_callkeep_macos
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
     version: "0.1.0+1"
   webtrit_callkeep_platform_interface:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_platform_interface"
-      relative: true
-    source: path
+      path: webtrit_callkeep_platform_interface
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
     version: "0.0.0+0"
   webtrit_callkeep_web:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_web"
-      relative: true
-    source: path
+      path: webtrit_callkeep_web
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
     version: "0.0.0+0"
   webtrit_callkeep_windows:
     dependency: transitive
     description:
-      path: "../webtrit_callkeep/webtrit_callkeep_windows"
-      relative: true
-    source: path
+      path: webtrit_callkeep_windows
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      url: "https://github.com/WebTrit/webtrit_callkeep.git"
+    source: git
     version: "0.1.0+1"
   webtrit_signaling_service:
     dependency: "direct main"

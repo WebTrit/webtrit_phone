@@ -46,6 +46,11 @@ class RecentsScreen extends StatefulWidget {
 class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProviderStateMixin {
   late final _callController = CallControllerScope.of(context);
   late TabController _tabController;
+  int? _expandedRecentId;
+
+  void _toggleExpanded(int callLogEntryId) {
+    setState(() => _expandedRecentId = _expandedRecentId == callLogEntryId ? null : callLogEntryId);
+  }
 
   @override
   void initState() {
@@ -188,12 +193,15 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                 key: ValueKey(recent),
                                 child: RecentTile(
                                   recent: recent,
+                                  videoEnabled: widget.videoEnabled,
                                   callNumbers: callRoutingState?.allNumbers ?? [],
                                   dateFormat: context.read<RecentsBloc>().dateFormat,
                                   onTap: transfer
-                                      ? () {
-                                          submitTransfer(destination: callLogEntry.number);
-                                        }
+                                      ? () => submitTransfer(destination: callLogEntry.number)
+                                      : () => _toggleExpanded(callLogEntry.id),
+                                  expanded: !transfer && _expandedRecentId == callLogEntry.id,
+                                  onDialPressed: transfer
+                                      ? null
                                       : () {
                                           _callController.createCall(
                                             destination: callLogEntry.number,
@@ -201,12 +209,14 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                                             video: callLogEntry.video && widget.videoEnabled,
                                           );
                                         },
-                                  onAudioCallPressed: () => _callController.createCall(
-                                    destination: callLogEntry.number,
-                                    displayName: contact?.maybeName,
-                                    video: false,
-                                  ),
-                                  onVideoCallPressed: widget.videoEnabled
+                                  onAudioCallPressed: (callLogEntry.video && widget.videoEnabled)
+                                      ? () => _callController.createCall(
+                                          destination: callLogEntry.number,
+                                          displayName: contact?.maybeName,
+                                          video: false,
+                                        )
+                                      : null,
+                                  onVideoCallPressed: (!callLogEntry.video && widget.videoEnabled)
                                       ? () => _callController.createCall(
                                           destination: callLogEntry.number,
                                           displayName: contact?.maybeName,

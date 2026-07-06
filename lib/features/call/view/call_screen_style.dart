@@ -5,12 +5,22 @@ import 'package:flutter/services.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
 class CallScreenStyle with Diagnosticable {
-  CallScreenStyle({this.background, this.systemUiOverlayStyle, this.appBar, this.callInfo, this.actions});
+  CallScreenStyle({
+    this.background,
+    this.systemUiOverlayStyle,
+    this.appBar,
+    this.callInfo,
+    this.list,
+    this.hint,
+    this.actions,
+  });
 
   final BackgroundStyle? background;
   final SystemUiOverlayStyle? systemUiOverlayStyle;
   final AppBarStyle? appBar;
   final CallInfoStyle? callInfo;
+  final CallListStyle? list;
+  final FocusedActionHintStyle? hint;
   final CallScreenActionsStyle? actions;
 
   static CallScreenStyle? lerp(CallScreenStyle? a, CallScreenStyle? b, double t) {
@@ -20,6 +30,8 @@ class CallScreenStyle with Diagnosticable {
       background: BackgroundStyle.lerp(a?.background, b?.background, t),
       systemUiOverlayStyle: b?.systemUiOverlayStyle ?? a?.systemUiOverlayStyle,
       callInfo: CallInfoStyle.lerp(a?.callInfo, b?.callInfo, t),
+      list: CallListStyle.lerp(a?.list, b?.list, t),
+      hint: FocusedActionHintStyle.lerp(a?.hint, b?.hint, t),
       appBar: AppBarStyle.lerp(a?.appBar, b?.appBar, t),
       actions: CallScreenActionsStyle.lerp(a?.actions, b?.actions, t),
     );
@@ -33,7 +45,80 @@ class CallScreenStyle with Diagnosticable {
       ..add(DiagnosticsProperty<SystemUiOverlayStyle?>('systemUiOverlayStyle', systemUiOverlayStyle))
       ..add(DiagnosticsProperty<AppBarStyle?>('appBar', appBar))
       ..add(DiagnosticsProperty<CallInfoStyle?>('callInfo', callInfo))
+      ..add(DiagnosticsProperty<CallListStyle?>('list', list))
+      ..add(DiagnosticsProperty<FocusedActionHintStyle?>('hint', hint))
       ..add(DiagnosticsProperty<CallScreenActionsStyle?>('actions', actions));
+  }
+}
+
+/// Colors of the call-list rows: overlays, the focused border and the
+/// per-state status dots.
+class CallListStyle with Diagnosticable {
+  const CallListStyle({
+    this.rowBackground,
+    this.rowFocusedBackground,
+    this.rowFocusedBorder,
+    this.dotRinging,
+    this.dotOnCall,
+    this.dotHeld,
+  });
+
+  final Color? rowBackground;
+  final Color? rowFocusedBackground;
+  final Color? rowFocusedBorder;
+  final Color? dotRinging;
+  final Color? dotOnCall;
+  final Color? dotHeld;
+
+  static CallListStyle? lerp(CallListStyle? a, CallListStyle? b, double t) {
+    if (identical(a, b)) return a;
+
+    return CallListStyle(
+      rowBackground: Color.lerp(a?.rowBackground, b?.rowBackground, t),
+      rowFocusedBackground: Color.lerp(a?.rowFocusedBackground, b?.rowFocusedBackground, t),
+      rowFocusedBorder: Color.lerp(a?.rowFocusedBorder, b?.rowFocusedBorder, t),
+      dotRinging: Color.lerp(a?.dotRinging, b?.dotRinging, t),
+      dotOnCall: Color.lerp(a?.dotOnCall, b?.dotOnCall, t),
+      dotHeld: Color.lerp(a?.dotHeld, b?.dotHeld, t),
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(ColorProperty('rowBackground', rowBackground))
+      ..add(ColorProperty('rowFocusedBackground', rowFocusedBackground))
+      ..add(ColorProperty('rowFocusedBorder', rowFocusedBorder))
+      ..add(ColorProperty('dotRinging', dotRinging))
+      ..add(ColorProperty('dotOnCall', dotOnCall))
+      ..add(ColorProperty('dotHeld', dotHeld));
+  }
+}
+
+/// Colors of the "Acting on" hint pill: the pill background and the
+/// highlighted affected-call names.
+class FocusedActionHintStyle with Diagnosticable {
+  const FocusedActionHintStyle({this.background, this.affectedName});
+
+  final Color? background;
+  final Color? affectedName;
+
+  static FocusedActionHintStyle? lerp(FocusedActionHintStyle? a, FocusedActionHintStyle? b, double t) {
+    if (identical(a, b)) return a;
+
+    return FocusedActionHintStyle(
+      background: Color.lerp(a?.background, b?.background, t),
+      affectedName: Color.lerp(a?.affectedName, b?.affectedName, t),
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(ColorProperty('background', background))
+      ..add(ColorProperty('affectedName', affectedName));
   }
 }
 

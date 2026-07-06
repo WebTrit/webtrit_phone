@@ -25,6 +25,7 @@ export 'request_failure.dart';
 export 'route_match.dart';
 export 'rtc_peer_connection_extension.dart';
 export 'secure_storage_extension.dart';
+export 'session_issue.dart';
 export 'session_status.dart';
 export 'signaling_exception.dart';
 export 'signaling_hangup_failure.dart';

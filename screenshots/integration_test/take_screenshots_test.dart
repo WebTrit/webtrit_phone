@@ -114,6 +114,9 @@ void main() {
     takeScreenshotTestWidgets('settings_screen', () {
       return ScreenshotApp(appBloc: appContext.appBloc, child: const SettingScreenScreenshot());
     });
+    takeScreenshotTestWidgets('dialogs_showcase', () {
+      return ScreenshotApp(appBloc: appContext.appBloc, child: const DialogsShowcaseScreenshot());
+    });
   });
 
   group('take call screen screenshots', () {

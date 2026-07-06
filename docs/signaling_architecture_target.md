@@ -305,6 +305,12 @@ _signalingSubscription = _signalingModule.events.listen((event) {
 });
 ```
 
+CallBloc-side reconnect edges (`onChange` background call-active notify, and the `onError`
+catch-all / where call finalization actually happens) are documented with the rest of the
+CallBloc internals in
+[`features/call_arch.md`](features/call_arch.md) ->
+"Signaling edges (`onChange` / `onError`)".
+
 ### IsolateManager (background isolates)
 
 **`PushNotificationIsolateManager`** — never reconnects. Opened once per incoming push

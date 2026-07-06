@@ -3786,7 +3786,7 @@ case _:
 /// @nodoc
 mixin _$DialogWidgetConfig {
 
- ConfirmDialogWidgetConfig get confirmDialog; SnackBarWidgetConfig get snackBar;
+ DialogThemeConfig get theme; ConfirmDialogWidgetConfig get confirmDialog; SnackBarWidgetConfig get snackBar;
 /// Create a copy of DialogWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -3797,16 +3797,16 @@ $DialogWidgetConfigCopyWith<DialogWidgetConfig> get copyWith => _$DialogWidgetCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DialogWidgetConfig&&(identical(other.confirmDialog, confirmDialog) || other.confirmDialog == confirmDialog)&&(identical(other.snackBar, snackBar) || other.snackBar == snackBar));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DialogWidgetConfig&&(identical(other.theme, theme) || other.theme == theme)&&(identical(other.confirmDialog, confirmDialog) || other.confirmDialog == confirmDialog)&&(identical(other.snackBar, snackBar) || other.snackBar == snackBar));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,confirmDialog,snackBar);
+int get hashCode => Object.hash(runtimeType,theme,confirmDialog,snackBar);
 
 @override
 String toString() {
-  return 'DialogWidgetConfig(confirmDialog: $confirmDialog, snackBar: $snackBar)';
+  return 'DialogWidgetConfig(theme: $theme, confirmDialog: $confirmDialog, snackBar: $snackBar)';
 }
 
 
@@ -3817,7 +3817,7 @@ abstract mixin class $DialogWidgetConfigCopyWith<$Res>  {
   factory $DialogWidgetConfigCopyWith(DialogWidgetConfig value, $Res Function(DialogWidgetConfig) _then) = _$DialogWidgetConfigCopyWithImpl;
 @useResult
 $Res call({
- ConfirmDialogWidgetConfig confirmDialog, SnackBarWidgetConfig snackBar
+ DialogThemeConfig theme, ConfirmDialogWidgetConfig confirmDialog, SnackBarWidgetConfig snackBar
 });
 
 
@@ -3834,9 +3834,10 @@ class _$DialogWidgetConfigCopyWithImpl<$Res>
 
 /// Create a copy of DialogWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? confirmDialog = null,Object? snackBar = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? theme = null,Object? confirmDialog = null,Object? snackBar = null,}) {
   return _then(DialogWidgetConfig(
-confirmDialog: null == confirmDialog ? _self.confirmDialog : confirmDialog // ignore: cast_nullable_to_non_nullable
+theme: null == theme ? _self.theme : theme // ignore: cast_nullable_to_non_nullable
+as DialogThemeConfig,confirmDialog: null == confirmDialog ? _self.confirmDialog : confirmDialog // ignore: cast_nullable_to_non_nullable
 as ConfirmDialogWidgetConfig,snackBar: null == snackBar ? _self.snackBar : snackBar // ignore: cast_nullable_to_non_nullable
 as SnackBarWidgetConfig,
   ));
@@ -3971,9 +3972,202 @@ case _:
 
 
 /// @nodoc
+mixin _$DialogThemeConfig {
+
+ String? get backgroundColor; String? get surfaceTintColor; String? get shadowColor; String? get barrierColor; double? get elevation; double? get borderRadius; TextStyleConfig? get titleTextStyle; TextStyleConfig? get contentTextStyle;
+/// Create a copy of DialogThemeConfig
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DialogThemeConfigCopyWith<DialogThemeConfig> get copyWith => _$DialogThemeConfigCopyWithImpl<DialogThemeConfig>(this as DialogThemeConfig, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DialogThemeConfig&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.surfaceTintColor, surfaceTintColor) || other.surfaceTintColor == surfaceTintColor)&&(identical(other.shadowColor, shadowColor) || other.shadowColor == shadowColor)&&(identical(other.barrierColor, barrierColor) || other.barrierColor == barrierColor)&&(identical(other.elevation, elevation) || other.elevation == elevation)&&(identical(other.borderRadius, borderRadius) || other.borderRadius == borderRadius)&&(identical(other.titleTextStyle, titleTextStyle) || other.titleTextStyle == titleTextStyle)&&(identical(other.contentTextStyle, contentTextStyle) || other.contentTextStyle == contentTextStyle));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,backgroundColor,surfaceTintColor,shadowColor,barrierColor,elevation,borderRadius,titleTextStyle,contentTextStyle);
+
+@override
+String toString() {
+  return 'DialogThemeConfig(backgroundColor: $backgroundColor, surfaceTintColor: $surfaceTintColor, shadowColor: $shadowColor, barrierColor: $barrierColor, elevation: $elevation, borderRadius: $borderRadius, titleTextStyle: $titleTextStyle, contentTextStyle: $contentTextStyle)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DialogThemeConfigCopyWith<$Res>  {
+  factory $DialogThemeConfigCopyWith(DialogThemeConfig value, $Res Function(DialogThemeConfig) _then) = _$DialogThemeConfigCopyWithImpl;
+@useResult
+$Res call({
+ String? backgroundColor, String? surfaceTintColor, String? shadowColor, String? barrierColor, double? elevation, double? borderRadius, TextStyleConfig? titleTextStyle, TextStyleConfig? contentTextStyle
+});
+
+
+
+
+}
+/// @nodoc
+class _$DialogThemeConfigCopyWithImpl<$Res>
+    implements $DialogThemeConfigCopyWith<$Res> {
+  _$DialogThemeConfigCopyWithImpl(this._self, this._then);
+
+  final DialogThemeConfig _self;
+  final $Res Function(DialogThemeConfig) _then;
+
+/// Create a copy of DialogThemeConfig
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? backgroundColor = freezed,Object? surfaceTintColor = freezed,Object? shadowColor = freezed,Object? barrierColor = freezed,Object? elevation = freezed,Object? borderRadius = freezed,Object? titleTextStyle = freezed,Object? contentTextStyle = freezed,}) {
+  return _then(DialogThemeConfig(
+backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
+as String?,surfaceTintColor: freezed == surfaceTintColor ? _self.surfaceTintColor : surfaceTintColor // ignore: cast_nullable_to_non_nullable
+as String?,shadowColor: freezed == shadowColor ? _self.shadowColor : shadowColor // ignore: cast_nullable_to_non_nullable
+as String?,barrierColor: freezed == barrierColor ? _self.barrierColor : barrierColor // ignore: cast_nullable_to_non_nullable
+as String?,elevation: freezed == elevation ? _self.elevation : elevation // ignore: cast_nullable_to_non_nullable
+as double?,borderRadius: freezed == borderRadius ? _self.borderRadius : borderRadius // ignore: cast_nullable_to_non_nullable
+as double?,titleTextStyle: freezed == titleTextStyle ? _self.titleTextStyle : titleTextStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,contentTextStyle: freezed == contentTextStyle ? _self.contentTextStyle : contentTextStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [DialogThemeConfig].
+extension DialogThemeConfigPatterns on DialogThemeConfig {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
+
+/// @nodoc
 mixin _$ConfirmDialogWidgetConfig {
 
- String? get activeButtonColor1; String? get activeButtonColor2; String? get defaultButtonColor;
+ String? get activeButtonColor1; String? get activeButtonColor2; String? get defaultButtonColor; String? get backgroundColor; String? get surfaceTintColor; double? get elevation; double? get borderRadius; TextStyleConfig? get titleTextStyle; TextStyleConfig? get contentTextStyle;
 /// Create a copy of ConfirmDialogWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -3984,16 +4178,16 @@ $ConfirmDialogWidgetConfigCopyWith<ConfirmDialogWidgetConfig> get copyWith => _$
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConfirmDialogWidgetConfig&&(identical(other.activeButtonColor1, activeButtonColor1) || other.activeButtonColor1 == activeButtonColor1)&&(identical(other.activeButtonColor2, activeButtonColor2) || other.activeButtonColor2 == activeButtonColor2)&&(identical(other.defaultButtonColor, defaultButtonColor) || other.defaultButtonColor == defaultButtonColor));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConfirmDialogWidgetConfig&&(identical(other.activeButtonColor1, activeButtonColor1) || other.activeButtonColor1 == activeButtonColor1)&&(identical(other.activeButtonColor2, activeButtonColor2) || other.activeButtonColor2 == activeButtonColor2)&&(identical(other.defaultButtonColor, defaultButtonColor) || other.defaultButtonColor == defaultButtonColor)&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.surfaceTintColor, surfaceTintColor) || other.surfaceTintColor == surfaceTintColor)&&(identical(other.elevation, elevation) || other.elevation == elevation)&&(identical(other.borderRadius, borderRadius) || other.borderRadius == borderRadius)&&(identical(other.titleTextStyle, titleTextStyle) || other.titleTextStyle == titleTextStyle)&&(identical(other.contentTextStyle, contentTextStyle) || other.contentTextStyle == contentTextStyle));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,activeButtonColor1,activeButtonColor2,defaultButtonColor);
+int get hashCode => Object.hash(runtimeType,activeButtonColor1,activeButtonColor2,defaultButtonColor,backgroundColor,surfaceTintColor,elevation,borderRadius,titleTextStyle,contentTextStyle);
 
 @override
 String toString() {
-  return 'ConfirmDialogWidgetConfig(activeButtonColor1: $activeButtonColor1, activeButtonColor2: $activeButtonColor2, defaultButtonColor: $defaultButtonColor)';
+  return 'ConfirmDialogWidgetConfig(activeButtonColor1: $activeButtonColor1, activeButtonColor2: $activeButtonColor2, defaultButtonColor: $defaultButtonColor, backgroundColor: $backgroundColor, surfaceTintColor: $surfaceTintColor, elevation: $elevation, borderRadius: $borderRadius, titleTextStyle: $titleTextStyle, contentTextStyle: $contentTextStyle)';
 }
 
 
@@ -4004,7 +4198,7 @@ abstract mixin class $ConfirmDialogWidgetConfigCopyWith<$Res>  {
   factory $ConfirmDialogWidgetConfigCopyWith(ConfirmDialogWidgetConfig value, $Res Function(ConfirmDialogWidgetConfig) _then) = _$ConfirmDialogWidgetConfigCopyWithImpl;
 @useResult
 $Res call({
- String? activeButtonColor1, String? activeButtonColor2, String? defaultButtonColor
+ String? activeButtonColor1, String? activeButtonColor2, String? defaultButtonColor, String? backgroundColor, String? surfaceTintColor, double? elevation, double? borderRadius, TextStyleConfig? titleTextStyle, TextStyleConfig? contentTextStyle
 });
 
 
@@ -4021,12 +4215,18 @@ class _$ConfirmDialogWidgetConfigCopyWithImpl<$Res>
 
 /// Create a copy of ConfirmDialogWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? activeButtonColor1 = freezed,Object? activeButtonColor2 = freezed,Object? defaultButtonColor = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? activeButtonColor1 = freezed,Object? activeButtonColor2 = freezed,Object? defaultButtonColor = freezed,Object? backgroundColor = freezed,Object? surfaceTintColor = freezed,Object? elevation = freezed,Object? borderRadius = freezed,Object? titleTextStyle = freezed,Object? contentTextStyle = freezed,}) {
   return _then(ConfirmDialogWidgetConfig(
 activeButtonColor1: freezed == activeButtonColor1 ? _self.activeButtonColor1 : activeButtonColor1 // ignore: cast_nullable_to_non_nullable
 as String?,activeButtonColor2: freezed == activeButtonColor2 ? _self.activeButtonColor2 : activeButtonColor2 // ignore: cast_nullable_to_non_nullable
 as String?,defaultButtonColor: freezed == defaultButtonColor ? _self.defaultButtonColor : defaultButtonColor // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
+as String?,surfaceTintColor: freezed == surfaceTintColor ? _self.surfaceTintColor : surfaceTintColor // ignore: cast_nullable_to_non_nullable
+as String?,elevation: freezed == elevation ? _self.elevation : elevation // ignore: cast_nullable_to_non_nullable
+as double?,borderRadius: freezed == borderRadius ? _self.borderRadius : borderRadius // ignore: cast_nullable_to_non_nullable
+as double?,titleTextStyle: freezed == titleTextStyle ? _self.titleTextStyle : titleTextStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,contentTextStyle: freezed == contentTextStyle ? _self.contentTextStyle : contentTextStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,
   ));
 }
 

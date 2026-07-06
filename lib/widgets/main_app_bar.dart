@@ -177,6 +177,18 @@ class _MainAppBarState extends State<MainAppBar> {
                             );
                           },
                         ),
+                        BlocBuilder<SessionStatusCubit, SessionStatusState>(
+                          buildWhen: (previous, current) => previous.topIssue != current.topIssue,
+                          builder: (context, sessionState) {
+                            final topIssue = sessionState.topIssue;
+                            if (topIssue == null) return const SizedBox.shrink();
+                            return Positioned(
+                              right: -2,
+                              bottom: -2,
+                              child: SessionIssueBadge(color: topIssue.color(context), size: 12),
+                            );
+                          },
+                        ),
                       ],
                     ),
                     onPressed: () {

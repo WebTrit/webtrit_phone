@@ -12,6 +12,8 @@ dependencies:
   # (https://pub.dev/packages/web_socket_channel/changelog#241)
   web_socket_channel: ^3.0.3
 
+  web: ^1.1.0
+
   ssl_certificates:
     path: ../ssl_certificates
 

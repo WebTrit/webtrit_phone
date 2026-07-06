@@ -9,7 +9,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
-import '../bloc/voicemail_cubit.dart';
+import '../bloc/bloc.dart';
 import '../models/models.dart';
 import '../utils/utils.dart';
 
@@ -36,13 +36,19 @@ class VoicemailScreenPage extends StatelessWidget {
       mediaHeaders: mediaHeaders,
     );
 
-    return BlocProvider(
-      create: (context) => VoicemailCubit(
-        repository: context.read<VoicemailRepository>(),
-        onCallStarted: (number) => callBloc.add(CallControlEvent.started(number: number, video: false)),
-        onSubmitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
-      ),
-      child: Provider<VoicemailScreenContext>(create: (context) => screenContext, child: const VoicemailScreen()),
+    return MultiProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => VoicemailCubit(
+            repository: context.read<VoicemailRepository>(),
+            onCallStarted: (number) => callBloc.add(CallControlEvent.started(number: number, video: false)),
+            onSubmitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
+          ),
+        ),
+        Provider<VoicemailScreenContext>(create: (_) => screenContext),
+        ChangeNotifierProvider(create: (_) => VoicemailPlaybackController()),
+      ],
+      child: const VoicemailScreen(),
     );
   }
 }

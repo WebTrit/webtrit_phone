@@ -1,5 +1,9 @@
 import 'package:drift/drift.dart';
 
+// needed for db generator
+// ignore: unused_import
+import 'contact_phones_table.dart';
+
 @DataClassName('FavoriteData')
 class FavoritesTable extends Table {
   @override

@@ -13,6 +13,7 @@ import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/resolvers/resolvers.dart';
@@ -43,6 +44,7 @@ class _AppState extends State<App> {
       appThemes: context.read<AppThemes>(),
       sessionRepository: context.read<SessionRepository>(),
       systemInfoRepository: context.read<SystemInfoRepository>(),
+      appCompatibilityResolver: context.read<AppCompatibilityResolver>(),
       appInfo: context.read<AppInfo>(),
       userSessionCleanupResolver: RepositoryUserSessionCleanupResolver(
         systemInfoRepository: context.read<SystemInfoRepository>(),

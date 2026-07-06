@@ -145,6 +145,18 @@
     }
   },
   "dialing": {
+    "callList": {
+      "rowBackgroundColor": "#1AFFFFFF",
+      "rowFocusedBackgroundColor": "#42FFFFFF",
+      "rowFocusedBorderColor": "#8CFFFFFF",
+      "dotRingingColor": "#FFD54F",
+      "dotOnCallColor": "#9CCC65",
+      "dotHeldColor": "#8CFFFFFF"
+    },
+    "actingOnHint": {
+      "backgroundColor": "#40000000",
+      "affectedNameColor": "#FFE082"
+    },
     "background": {
       "type": "gradient",
       "colors": [

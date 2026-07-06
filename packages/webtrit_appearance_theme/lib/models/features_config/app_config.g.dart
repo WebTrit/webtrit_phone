@@ -56,12 +56,18 @@ AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) =>
           : AppConfigLoginModeSelect.fromJson(
               json['modeSelect'] as Map<String, dynamic>,
             ),
+      signinOrder:
+          (json['signinOrder'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const ['passwordSignin', 'otpSignin', 'signup'],
     );
 
 Map<String, dynamic> _$AppConfigLoginToJson(AppConfigLogin instance) =>
     <String, dynamic>{
       'common': instance.common.toJson(),
       'modeSelect': instance.modeSelect.toJson(),
+      'signinOrder': instance.signinOrder,
     };
 
 AppConfigLoginCommon _$AppConfigLoginCommonFromJson(

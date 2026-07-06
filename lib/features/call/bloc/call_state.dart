@@ -10,6 +10,7 @@ class CallState with _$CallState {
     this.minimized,
     this.audioDevice,
     this.availableAudioDevices = const [],
+    this.selectedCallId,
   });
 
   @override
@@ -33,7 +34,29 @@ class CallState with _$CallState {
   @override
   final List<CallAudioDevice> availableAudioDevices;
 
+  /// The call the user has explicitly focused (e.g. tapped in the call list).
+  ///
+  /// `null` means no explicit selection - consumers fall back to the derived
+  /// [ActiveCallIterableExtension.current]. This is the foundation for the
+  /// list-based call screen, where one bottom action area acts on the focused
+  /// call. Always read it through [focusedCall], which clamps a stale id back
+  /// to `current`.
+  @override
+  final String? selectedCallId;
+
   CallStatus get status => callServiceState.status;
+
+  /// The call the action area should act on: the explicitly [selectedCallId]
+  /// when it still maps to a live call, otherwise the derived `current`.
+  ///
+  /// Returns `null` only when there are no active calls. Behavior is identical
+  /// to `activeCalls.current` until something dispatches
+  /// [CallControlEvent.callSelected], so this is a no-op seam for existing UI.
+  ActiveCall? get focusedCall {
+    if (activeCalls.isEmpty) return null;
+    final selected = selectedCallId == null ? null : retrieveActiveCall(selectedCallId!);
+    return selected ?? activeCalls.current;
+  }
 
   /// Indicates that the handshake phase has completed and registration status is available.
   bool get isHandshakeEstablished => callServiceState.registration?.status != null;
@@ -191,15 +214,53 @@ class CallState with _$CallState {
   }
 
   CallState copyWithPushActiveCall(ActiveCall activeCall) {
-    return copyWith(activeCalls: [...activeCalls, activeCall]);
+    return copyWith(
+      activeCalls: [...activeCalls, activeCall],
+      // A new ringing incoming call demands a decision, so it grabs the focus;
+      // any other call keeps the user's selection.
+      selectedCallId: activeCall.isIncoming && !activeCall.wasAccepted ? activeCall.callId : selectedCallId,
+    );
   }
 
   CallState copyWithPopActiveCall(String callId) {
     final activeCalls = this.activeCalls.where((activeCall) {
       return activeCall.callId != callId;
     }).toList();
-    return copyWith(activeCalls: activeCalls, minimized: activeCalls.isEmpty ? null : minimized);
+    // When the focused call ends, prefer the next ringing incoming call (it
+    // still demands a decision); otherwise clear so [focusedCall] falls back
+    // to `current`. An unrelated selection is kept as is.
+    final selectedCallId = this.selectedCallId == callId
+        ? activeCalls.firstWhereOrNull((call) => call.isIncoming && !call.wasAccepted)?.callId
+        : this.selectedCallId;
+    return copyWith(
+      activeCalls: activeCalls,
+      minimized: activeCalls.isEmpty ? null : minimized,
+      selectedCallId: selectedCallId,
+    );
   }
+
+  /// Focuses the call [callId] when it maps to a live call; otherwise returns
+  /// the state unchanged. Keeps [selectedCallId] clamped to an existing call.
+  CallState copyWithSelectedCall(String callId) {
+    if (retrieveActiveCall(callId) == null) return this;
+    return copyWith(selectedCallId: callId);
+  }
+
+  /// Ids of every active call except [callId], in list order. Pure data query;
+  /// the event layer (see the combined-action plans on [CallControlEvent])
+  /// turns these into the primitive events to dispatch.
+  List<String> otherCallIds(String callId) => [
+    for (final call in activeCalls)
+      if (call.callId != callId) call.callId,
+  ];
+
+  /// Ids of every other answered, not-yet-held call - the ones that must be
+  /// put on hold before resuming [callId] so only one call stays live. Pure
+  /// data query for the event-layer plans.
+  List<String> otherCallIdsToHold(String callId) => [
+    for (final call in activeCalls)
+      if (call.callId != callId && call.wasAccepted && !call.held) call.callId,
+  ];
 }
 
 @freezed
@@ -212,6 +273,7 @@ class ActiveCall with _$ActiveCall implements CallEntry {
     required this.createdTime,
     required this.video,
     required this.processingStatus,
+    this.videoPermissionDenied = false,
     this.frontCamera = true,
     this.held = false,
     this.muted = false,
@@ -230,6 +292,7 @@ class ActiveCall with _$ActiveCall implements CallEntry {
     this.speakerOnBeforeMinimize,
     this.iceCandidates = const [],
     this.iceConnectionIssue,
+    this.networkQuality,
   });
 
   @override
@@ -254,6 +317,14 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   /// Never derive it from a remote SDP offer — that is what [remoteVideo] is for.
   @override
   final bool video;
+
+  /// Set when an incoming video call was answered audio-only because camera
+  /// permission was denied. Drives the camera-button hint that routes the user
+  /// to app settings. It is a best-effort hint: the button re-checks the live
+  /// permission on tap, so a stale value cannot send a user with granted
+  /// permission to settings.
+  @override
+  final bool videoPermissionDenied;
 
   @override
   final CallProcessingStatus processingStatus;
@@ -312,6 +383,11 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   @override
   final IceConnectionIssue? iceConnectionIssue;
 
+  /// Transient media-degradation indicator from Janus `slowlink` events.
+  /// Null when the media is healthy; auto-cleared once slowlink events stop.
+  @override
+  final CallNetworkQuality? networkQuality;
+
   @override
   bool get isIncoming => direction == CallDirection.incoming;
 
@@ -357,4 +433,24 @@ extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
   List<T> get nonCurrent => where((activeCall) => activeCall != current).toList();
 
   T? get blindTransferInitiated => firstWhereOrNull((activeCall) => activeCall.transfer is BlindTransferInitiated);
+
+  /// The most concerning media-degradation indicator across all calls, for the
+  /// global toolbar status line: an active (non-recovered) warning beats a
+  /// recovered confirmation, then the higher severity wins. `null` when every
+  /// stream is healthy.
+  CallNetworkQuality? get worstNetworkQuality {
+    CallNetworkQuality? worst;
+    for (final call in this) {
+      final quality = call.networkQuality;
+      if (quality == null) continue;
+      int score(CallNetworkQuality q) => q.recovered ? -1 : q.severity.index;
+      if (worst == null || score(quality) > score(worst)) worst = quality;
+    }
+    return worst;
+  }
+
+  /// The first real media failure across all calls; failures take precedence
+  /// over degradation warnings on the toolbar status line.
+  IceConnectionIssue? get firstIceConnectionIssue =>
+      firstWhereOrNull((activeCall) => activeCall.iceConnectionIssue != null)?.iceConnectionIssue;
 }

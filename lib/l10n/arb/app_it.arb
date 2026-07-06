@@ -61,6 +61,22 @@
   "@autoprovision_ReloginDialog_title": {},
   "autoprovision_successSnackBar_used": "Le vostre impostazioni sono state recuperate con successo, l'App è pronta per l'uso",
   "@autoprovision_successSnackBar_used": {},
+  "callTileActions_contact": "Contatto",
+  "@callTileActions_contact": {
+    "description": "Label of the expanded call tile action that opens the contact details screen."
+  },
+  "callTileActions_history": "Cronologia",
+  "@callTileActions_history": {
+    "description": "Label of the expanded call tile action that opens the call history for the number."
+  },
+  "callTileActions_message": "Messaggio",
+  "@callTileActions_message": {
+    "description": "Label of the expanded call tile action that opens a chat with the contact."
+  },
+  "callTileActions_more": "Altro",
+  "@callTileActions_more": {
+    "description": "Label of the expanded call tile action that opens the full actions menu."
+  },
   "call_CallActionsTooltip_accept": "Accetta chiamata",
   "@call_CallActionsTooltip_accept": {},
   "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "Accetta trasferimento",
@@ -89,24 +105,20 @@
   "@call_CallActionsTooltip_disableSpeaker": {},
   "call_CallActionsTooltip_enableCamera": "Attiva video",
   "@call_CallActionsTooltip_enableCamera": {},
+  "call_CallActionsTooltip_cameraPermissionDenied": "Permesso fotocamera negato. Tocca per aprire le impostazioni",
+  "@call_CallActionsTooltip_cameraPermissionDenied": {},
   "call_CallActionsTooltip_enableSpeaker": "Attiva vivavoce",
   "@call_CallActionsTooltip_enableSpeaker": {},
   "call_CallActionsTooltip_hangup": "Termina chiamata",
   "@call_CallActionsTooltip_hangup": {},
-  "call_CallActionsTooltip_hangupAndAccept": "Riagganciare e accettare",
-  "@call_CallActionsTooltip_hangupAndAccept": {},
   "call_CallActionsTooltip_hideKeypad": "Nascondi tastiera",
   "@call_CallActionsTooltip_hideKeypad": {},
   "call_CallActionsTooltip_hold": "Attesa",
   "@call_CallActionsTooltip_hold": {},
-  "call_CallActionsTooltip_holdAndAccept": "Tenere in attesa e accettare",
-  "@call_CallActionsTooltip_holdAndAccept": {},
   "call_CallActionsTooltip_mute": "Disattiva il microfono",
   "@call_CallActionsTooltip_mute": {},
   "call_CallActionsTooltip_showKeypad": "Mostra tastiera",
   "@call_CallActionsTooltip_showKeypad": {},
-  "call_CallActionsTooltip_swap": "Scambio chiamate",
-  "@call_CallActionsTooltip_swap": {},
   "call_CallActionsTooltip_transfer": "Trasferimento",
   "@call_CallActionsTooltip_transfer": {},
   "call_CallActionsTooltip_transfer_choose": "Scegliere il numero",
@@ -117,6 +129,62 @@
   "@call_CallActionsTooltip_unhold": {},
   "call_CallActionsTooltip_unmute": "Attiva il microfono",
   "@call_CallActionsTooltip_unmute": {},
+  "call_CallList_incoming": "In arrivo",
+  "@call_CallList_incoming": {
+    "description": "Trailing label on a ringing incoming row in the call list."
+  },
+  "call_CallList_outgoing": "In uscita",
+  "@call_CallList_outgoing": {
+    "description": "Trailing label on a ringing outgoing row in the call list."
+  },
+  "call_CallList_header": "{count, plural, one{{count} chiamata - tocca per scegliere} other{{count} chiamate - tocca per scegliere}}",
+  "@call_CallList_header": {
+    "description": "Header above the call list on the call screen when more than one call is in progress.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "call_CallList_statusOnCall": "In chiamata",
+  "@call_CallList_statusOnCall": {
+    "description": "Status badge in the call list for an answered, not held call."
+  },
+  "call_FocusedActionHint_actingOn": "Azione su: {name}",
+  "@call_FocusedActionHint_actingOn": {
+    "description": "Hint above the call action buttons naming the focused call the actions apply to.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_FocusedActionHint_willBeEnded": "La chiamata con {name} verrà terminata",
+  "@call_FocusedActionHint_willBeEnded": {
+    "description": "Side-effect line under the acting-on hint: the named call will be ended on answer.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_FocusedActionHint_willBeHeld": "La chiamata con {name} sarà messa in attesa",
+  "@call_FocusedActionHint_willBeHeld": {
+    "description": "Side-effect line under the acting-on hint: the named call will be put on hold on answer.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_ToolbarStatus_connecting": "Connessione...",
+  "@call_ToolbarStatus_connecting": {
+    "description": "Toolbar status line while the very first signaling connection is being established (turns into Reconnecting once a connection has existed)."
+  },
+  "call_ToolbarStatus_reconnecting": "Riconnessione...",
+  "@call_ToolbarStatus_reconnecting": {
+    "description": "Suffix on the call screen toolbar status line while the signaling connection is being re-established."
+  },
   "call_description_held": "In attesa",
   "@call_description_held": {},
   "call_description_incoming": "Chiamata in arrivo",
@@ -157,6 +225,14 @@
   "@iceConnectionIssue_iceFailNoIcePath": {},
   "iceConnectionIssue_iceFailNoIcePathViaVpn": "La VPN potrebbe bloccare la chiamata. Prova a disattivarla",
   "@iceConnectionIssue_iceFailNoIcePathViaVpn": {},
+  "callNetworkQuality_yourAudioWeak": "Il tuo audio è debole",
+  "@callNetworkQuality_yourAudioWeak": {},
+  "callNetworkQuality_yourVideoWeak": "Il tuo video è debole",
+  "@callNetworkQuality_yourVideoWeak": {},
+  "callNetworkQuality_theirAudioWeak": "L'audio dell'altro è debole",
+  "@callNetworkQuality_theirAudioWeak": {},
+  "callNetworkQuality_theirVideoWeak": "Il video dell'altro è debole",
+  "@callNetworkQuality_theirVideoWeak": {},
   "callPullBadge_dialogTitle": "Chiamate pullabili",
   "@callPullBadge_dialogTitle": {},
   "callPullBadge_pickupButtonTitle": "Raccolta",
@@ -418,6 +494,16 @@
   "@diagnostic_battery_navigate_section": {},
   "diagnostic_battery_tile_title": "Modalità batteria",
   "@diagnostic_battery_tile_title": {},
+  "diagnostic_callingMode_groupTitle": "Modalità di chiamata",
+  "@diagnostic_callingMode_groupTitle": {},
+  "diagnostic_callingMode_tile_title": "Modalità di chiamata",
+  "@diagnostic_callingMode_tile_title": {},
+  "diagnostic_callingMode_standalone_title": "Modalità chiamate limitata",
+  "@diagnostic_callingMode_standalone_title": {},
+  "diagnostic_callingMode_standalone_caption": "Standalone - squillo e selezione dell'auricolare possono essere limitati",
+  "@diagnostic_callingMode_standalone_caption": {},
+  "diagnostic_callingMode_standalone_description": "Questo dispositivo non supporta il framework di chiamata di sistema (Telecom), quindi le chiamate in arrivo usano un servizio in background limitato. Le chiamate possono essere ritardate o perse quando il sistema limita le app in background. In questa modalità non è disponibile la selezione dell'auricolare Bluetooth o cablato.",
+  "@diagnostic_callingMode_standalone_description": {},
   "diagnostic_permission_camera_description": "Questa app richiede il permesso di accedere alla fotocamera per effettuare videochiamate.",
   "@diagnostic_permission_camera_description": {},
   "diagnostic_permission_camera_title": "Fotocamera",
@@ -654,6 +740,18 @@
       }
     }
   },
+  "login_AppVersionUnsupportedExceptionError": "La versione della tua app non è più supportata, aggiorna l'applicazione per continuare (attuale: {actual}, minima richiesta: {minSupported})",
+  "@login_AppVersionUnsupportedExceptionError": {
+    "description": "Shown during login when the backend declares a minimum supported app version that is newer than this build. Context: user tries to sign in. Condition: app version is older than min_supported_app_version (current: {actual}, minimum required: {minSupported}).",
+    "placeholders": {
+      "actual": {
+        "type": "String"
+      },
+      "minSupported": {
+        "type": "String"
+      }
+    }
+  },
   "login_RequestFailureEmptyEmailError": "Impossibile inviare il codice di verifica",
   "@login_RequestFailureEmptyEmailError": {
     "description": "Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty."
@@ -853,6 +951,20 @@
   },
   "main_CompatibilityIssueDialog_title": "Problema di compatibilità",
   "@main_CompatibilityIssueDialog_title": {},
+  "main_AppUpdateRequiredDialog_title": "Aggiornamento richiesto",
+  "@main_AppUpdateRequiredDialog_title": {},
+  "main_AppUpdateRequiredDialog_description": "La versione della tua app non è più supportata. Aggiorna l'applicazione per continuare.",
+  "@main_AppUpdateRequiredDialog_description": {
+    "description": "Body text of the full-screen update-required prompt, shown when the running app is older than the backend-declared minimum supported app version."
+  },
+  "main_AppUpdateRequiredDialog_currentVersionLabel": "Versione attuale",
+  "@main_AppUpdateRequiredDialog_currentVersionLabel": {
+    "description": "Label above the running app version on the update-required prompt."
+  },
+  "main_AppUpdateRequiredDialog_minimumVersionLabel": "Versione minima richiesta",
+  "@main_AppUpdateRequiredDialog_minimumVersionLabel": {
+    "description": "Label above the minimum supported app version on the update-required prompt."
+  },
   "messaging_ActionBtn_retry": "Riprova",
   "@messaging_ActionBtn_retry": {},
   "messaging_ChooseContact_cancel": "Cancellare",
@@ -1059,6 +1171,12 @@
   },
   "notifications_errorSnackBarAction_callUserMedia": "Verifica",
   "@notifications_errorSnackBarAction_callUserMedia": {},
+  "notifications_messageSnackBar_callVideoDowngraded": "Risposta senza fotocamera - permesso fotocamera non concesso",
+  "@notifications_messageSnackBar_callVideoDowngraded": {
+    "description": "Shown when an incoming video call is answered audio-only because camera permission was denied. Offers a shortcut to app settings."
+  },
+  "notifications_messageSnackBarAction_callVideoDowngraded": "Impostazioni",
+  "@notifications_messageSnackBarAction_callVideoDowngraded": {},
   "notifications_errorSnackBar_activeLineBlindTransferWarning": "Sei già in linea con il destinatario a cui stai cercando di trasferire alla cieca",
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {
     "description": "Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target."
@@ -1127,6 +1245,10 @@
   "@notifications_errorSnackBar_sessionExpired": {
     "description": "Shown in a notification or snackbar when the user's authentication session has expired and re-authentication is required. Typical causes: access or refresh token expiration/revocation, failed token refresh, or the backend invalidating the session. Advise the user to sign in again to restore full functionality."
   },
+  "notifications_errorSnackBar_accountNotFound": "Il tuo account non è stato trovato. Potrebbe essere stato disattivato o rimosso. Contatta il tuo amministratore.",
+  "@notifications_errorSnackBar_accountNotFound": {
+    "description": "Shown in a notification or snackbar when the backend returns 404 (user not found) for the current account, e.g. it was deactivated or removed on the server. The user is logged out; advise them to contact their administrator."
+  },
   "notifications_errorSnackBar_SignalingConnectFailed": "Connessione al server non riuscita, tentativo di riconnessione in corso",
   "@notifications_errorSnackBar_SignalingConnectFailed": {
     "description": "Shown in a notification or snackbar when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Context: occurs when the signaling/WebSocket connection cannot be established due to network outages, server unreachability, TLS/handshake failures, authentication errors (expired/invalid tokens), or firewall/VPN restrictions. Suggest the user check their network, retry, or reauthenticate if the problem persists."
@@ -1149,6 +1271,16 @@
       }
     }
   },
+  "notifications_errorSnackBar_emergencyNumber": "{number} è un numero di emergenza e non può essere chiamato dall'app",
+  "@notifications_errorSnackBar_emergencyNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBarAction_emergencyNumber": "Apri il telefono",
+  "@notifications_errorSnackBarAction_emergencyNumber": {},
   "notifications_errorSnackBar_SignalingSessionMissed": "Errore di autenticazione, effettuare nuovamente l'accesso",
   "@notifications_errorSnackBar_SignalingSessionMissed": {
     "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality."
@@ -1179,6 +1311,10 @@
   },
   "notifications_successSnackBar_appOnline": "La tua apllicazione è online",
   "@notifications_successSnackBar_appOnline": {},
+  "notifications_missedCall_title": "Chiamata persa",
+  "@notifications_missedCall_title": {},
+  "notifications_missedCall_unknownCaller": "Sconosciuto",
+  "@notifications_missedCall_unknownCaller": {},
   "numberActions_audioCall": "Audiochiamata",
   "@numberActions_audioCall": {},
   "numberActions_callFrom": "Chiama da {number}",
@@ -1476,6 +1612,8 @@
   },
   "settings_AboutText_ApplicationEmbeddedLinks": "Collegamenti incorporati dell'applicazione",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
+  "settings_AboutText_ThirdPartyLicenses": "Licenze di terze parti",
+  "@settings_AboutText_ThirdPartyLicenses": {},
   "settings_AboutText_AppSessionIdentifier": "Identificatore della sessione dell'applicazione",
   "@settings_AboutText_AppSessionIdentifier": {},
   "settings_AboutText_AppVersion": "Versione dell'app",
@@ -1852,7 +1990,7 @@
   "@signalingResponseCode_invalidJsonObject": {
     "description": "Shown when a JSON object in the request is syntactically valid but contains invalid fields or values (e.g. wrong types or missing mandatory keys)."
   },
-  "signalingResponseCode_invalidNumberFormat": "Il numero di telefono inserito non è valido. Deve essere inserito nel formato: ",
+  "signalingResponseCode_invalidNumberFormat": "Formato del numero non valido",
   "@signalingResponseCode_invalidNumberFormat": {
     "description": "Shown when a dialed phone number is not in a valid format. Typical cause: non-numeric input, missing country code, or format not supported by SIP/PBX."
   },
@@ -1900,7 +2038,7 @@
   "@signalingResponseCode_pluginNotFound": {
     "description": "Shown when the requested Janus plugin is not found or unavailable. Cause: wrong plugin name, not loaded on server, or removed."
   },
-  "signalingResponseCode_rejected": "La tua richiesta è stata rifiutata. Riprova.",
+  "signalingResponseCode_rejected": "Chiamata rifiutata",
   "@signalingResponseCode_rejected": {
     "description": "Shown when the call request is rejected by an intermediary (e.g. proxy, SBC, or policy server) before reaching the recipient. SIP 603 Decline or similar."
   },
@@ -1988,13 +2126,17 @@
   "@signalingResponseCode_unwanted": {
     "description": "Shown when the call is flagged as unwanted by the recipient or network. SIP 607 Unwanted."
   },
-  "signalingResponseCode_userBusy": "Il destinatario è occupato. Riprova più tardi.",
+  "signalingResponseCode_userBusy": "Utente occupato",
   "@signalingResponseCode_userBusy": {
     "description": "Shown when the callee is busy (SIP 486 Busy Here)."
   },
-  "signalingResponseCode_userNotExist": "Il destinatario non esiste. Controlla il numero di telefono e riprova.",
+  "signalingResponseCode_userNotExist": "L'utente non esiste",
   "@signalingResponseCode_userNotExist": {
     "description": "Shown when the dialed user is not registered or does not exist in the PBX. SIP 404 Not Found."
+  },
+  "signalingResponseCode_unableToComplete": "Impossibile completare la chiamata.",
+  "@signalingResponseCode_unableToComplete": {
+    "description": "Generic neutral fallback shown when an outgoing call fails for an unrecognized reason."
   },
   "signalingResponseCode_wrongWebrtcState": "Si è verificato un errore relativo alla chiamata. Riaggancia e riprova.",
   "@signalingResponseCode_wrongWebrtcState": {

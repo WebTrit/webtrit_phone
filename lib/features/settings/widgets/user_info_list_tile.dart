@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/session_status/session_status.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class UserInfoListTile extends StatelessWidget {
-  const UserInfoListTile({super.key, this.info, this.onEditPressed, this.contentPadding});
+  const UserInfoListTile({super.key, this.info, this.topIssue, this.onEditPressed, this.contentPadding});
 
   final UserInfo? info;
+
+  /// Most severe active side issue, shown as a badge overlay on the avatar. Null hides it.
+  final SessionIssue? topIssue;
   final VoidCallback? onEditPressed;
 
   final EdgeInsetsGeometry? contentPadding;
@@ -37,12 +41,19 @@ class UserInfoListTile extends StatelessWidget {
         minimum: resolvedContentPadding,
         child: Row(
           children: [
-            LeadingAvatar(
-              username: info?.name ?? info?.numbers.main,
-              thumbnailUrl: gravatarThumbnailUrl(info?.email),
-              radius: radius,
-              showLoading: true,
-              loadingPadding: EdgeInsets.zero,
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                LeadingAvatar(
+                  username: info?.name ?? info?.numbers.main,
+                  thumbnailUrl: gravatarThumbnailUrl(info?.email),
+                  radius: radius,
+                  showLoading: true,
+                  loadingPadding: EdgeInsets.zero,
+                ),
+                if (topIssue != null)
+                  Positioned(right: -2, bottom: -2, child: SessionIssueBadge(color: topIssue!.color(context))),
+              ],
             ),
             const SizedBox(width: 8),
             Expanded(

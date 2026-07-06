@@ -93,6 +93,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get autoprovision_successSnackBar_used => 'Successfully retrieved your settings, your app is ready to use';
 
   @override
+  String get callTileActions_contact => 'Contact';
+
+  @override
+  String get callTileActions_history => 'History';
+
+  @override
+  String get callTileActions_message => 'Message';
+
+  @override
+  String get callTileActions_more => 'More';
+
+  @override
   String get call_CallActionsTooltip_accept => 'Accept';
 
   @override
@@ -135,13 +147,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_enableCamera => 'Enable camera';
 
   @override
+  String get call_CallActionsTooltip_cameraPermissionDenied => 'Camera permission denied. Tap to open settings';
+
+  @override
   String get call_CallActionsTooltip_enableSpeaker => 'Enable speakerphone';
 
   @override
   String get call_CallActionsTooltip_hangup => 'Hangup';
-
-  @override
-  String get call_CallActionsTooltip_hangupAndAccept => 'Hangup & Accept';
 
   @override
   String get call_CallActionsTooltip_hideKeypad => 'Hide keypad';
@@ -150,16 +162,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_CallActionsTooltip_hold => 'Hold call';
 
   @override
-  String get call_CallActionsTooltip_holdAndAccept => 'Hold & Accept';
-
-  @override
   String get call_CallActionsTooltip_mute => 'Mute microphone';
 
   @override
   String get call_CallActionsTooltip_showKeypad => 'Show keypad';
-
-  @override
-  String get call_CallActionsTooltip_swap => 'Swap calls';
 
   @override
   String get call_CallActionsTooltip_transfer => 'Transfer';
@@ -175,6 +181,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get call_CallActionsTooltip_unmute => 'Unmute microphone';
+
+  @override
+  String get call_CallList_incoming => 'Incoming';
+
+  @override
+  String get call_CallList_outgoing => 'Outgoing';
+
+  @override
+  String call_CallList_header(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count calls - tap to choose',
+      one: '$count call - tap to choose',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get call_CallList_statusOnCall => 'On call';
+
+  @override
+  String call_FocusedActionHint_actingOn(String name) {
+    return 'Acting on: $name';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeEnded(String name) {
+    return '$name will be ended';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeHeld(String name) {
+    return '$name will be put on hold';
+  }
+
+  @override
+  String get call_ToolbarStatus_connecting => 'Connecting...';
+
+  @override
+  String get call_ToolbarStatus_reconnecting => 'Reconnecting...';
 
   @override
   String get call_description_held => 'On hold';
@@ -233,6 +280,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get iceConnectionIssue_iceFailNoIcePathViaVpn => 'VPN may be blocking the call. Try disabling it';
+
+  @override
+  String get callNetworkQuality_yourAudioWeak => 'Your audio is weak';
+
+  @override
+  String get callNetworkQuality_yourVideoWeak => 'Your video is weak';
+
+  @override
+  String get callNetworkQuality_theirAudioWeak => 'Their audio is weak';
+
+  @override
+  String get callNetworkQuality_theirVideoWeak => 'Their video is weak';
 
   @override
   String get callPullBadge_dialogTitle => 'Pullable Calls';
@@ -513,6 +572,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagnostic_battery_tile_title => 'Battery mode';
+
+  @override
+  String get diagnostic_callingMode_groupTitle => 'Calling mode';
+
+  @override
+  String get diagnostic_callingMode_tile_title => 'Calling mode';
+
+  @override
+  String get diagnostic_callingMode_standalone_title => 'Limited call mode';
+
+  @override
+  String get diagnostic_callingMode_standalone_caption => 'Standalone - ringing and headset selection may be limited';
+
+  @override
+  String get diagnostic_callingMode_standalone_description =>
+      'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Bluetooth and wired headset selection is not available in this mode.';
 
   @override
   String get diagnostic_permission_camera_description =>
@@ -801,6 +876,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String login_AppVersionUnsupportedExceptionError(String actual, String minSupported) {
+    return 'Your app version is no longer supported, please update the application to continue (current: $actual, minimum required: $minSupported)';
+  }
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
 
   @override
@@ -1005,6 +1085,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get main_CompatibilityIssueDialog_title => 'Compatibility issue';
+
+  @override
+  String get main_AppUpdateRequiredDialog_title => 'Update required';
+
+  @override
+  String get main_AppUpdateRequiredDialog_description =>
+      'Your app version is no longer supported. Please update the application to continue.';
+
+  @override
+  String get main_AppUpdateRequiredDialog_currentVersionLabel => 'Current version';
+
+  @override
+  String get main_AppUpdateRequiredDialog_minimumVersionLabel => 'Minimum required version';
 
   @override
   String get messaging_ActionBtn_retry => 'Retry';
@@ -1278,6 +1371,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBarAction_callUserMedia => 'Check';
 
   @override
+  String get notifications_messageSnackBar_callVideoDowngraded =>
+      'Answered with camera off - camera permission not granted';
+
+  @override
+  String get notifications_messageSnackBarAction_callVideoDowngraded => 'Settings';
+
+  @override
   String get notifications_errorSnackBar_activeLineBlindTransferWarning =>
       'You are already on the line with the recipient you are trying to blind transfer to';
 
@@ -1335,6 +1435,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifications_errorSnackBar_sessionExpired => 'Your session has expired. Please log in again.';
 
   @override
+  String get notifications_errorSnackBar_accountNotFound =>
+      'Your account was not found. It may have been deactivated or removed. Please contact your administrator.';
+
+  @override
   String get notifications_errorSnackBar_SignalingConnectFailed => 'Connecting to the core failed, trying to reconnect';
 
   @override
@@ -1346,6 +1450,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason) {
     return 'Disconnected from the core due to the following reason: $reason';
   }
+
+  @override
+  String notifications_errorSnackBar_emergencyNumber(String number) {
+    return '$number is an emergency number and cannot be dialed from the app';
+  }
+
+  @override
+  String get notifications_errorSnackBarAction_emergencyNumber => 'Open dialer';
 
   @override
   String get notifications_errorSnackBar_SignalingSessionMissed => 'Authentication error, please re-login';
@@ -1371,6 +1483,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifications_successSnackBar_appOnline => 'Your application is online';
+
+  @override
+  String get notifications_missedCall_title => 'Missed Call';
+
+  @override
+  String get notifications_missedCall_unknownCaller => 'Unknown';
 
   @override
   String get numberActions_audioCall => 'Audio call';
@@ -1764,6 +1882,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Application embedded links';
+
+  @override
+  String get settings_AboutText_ThirdPartyLicenses => 'Third-party licenses';
 
   @override
   String get settings_AboutText_AppSessionIdentifier => 'Application session identifier';
@@ -2318,7 +2439,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Some of the information provided was not valid. Please double-check and try again.';
 
   @override
-  String get signalingResponseCode_invalidNumberFormat => 'The number you entered is invalid.';
+  String get signalingResponseCode_invalidNumberFormat => 'Invalid number format';
 
   @override
   String get signalingResponseCode_invalidPath =>
@@ -2359,8 +2480,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signalingResponseCode_pluginNotFound => 'A required component is missing. Please try restarting the app.';
 
   @override
-  String get signalingResponseCode_rejected =>
-      'The call was rejected by a machine or process on the way, without reaching the destination... ';
+  String get signalingResponseCode_rejected => 'Call rejected';
 
   @override
   String get signalingResponseCode_requestTerminated => 'Your request was terminated. Please try again.';
@@ -2434,10 +2554,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signalingResponseCode_unwanted => 'The recipient marked the call as unwanted.';
 
   @override
-  String get signalingResponseCode_userBusy => 'The user you\'re trying to reach is busy. Please try again later.';
+  String get signalingResponseCode_userBusy => 'User busy';
 
   @override
-  String get signalingResponseCode_userNotExist => 'The user you\'re trying to reach doesn\'t exist.';
+  String get signalingResponseCode_userNotExist => 'User does not exist';
+
+  @override
+  String get signalingResponseCode_unableToComplete => 'Unable to complete the call.';
 
   @override
   String get signalingResponseCode_wrongWebrtcState => 'A call-related error occurred. Please hang up and try again.';

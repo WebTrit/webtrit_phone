@@ -19,12 +19,17 @@ part 'autoprovision_state.dart';
 final _logger = Logger('AutoprovisionCubit');
 
 class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMapper {
-  AutoprovisionCubit({required this.appInfo, required this.packageInfo, required this.config})
-    : super(AutoprovisionState.initial());
+  AutoprovisionCubit({
+    required this.appInfo,
+    required this.packageInfo,
+    required this.appCompatibilityResolver,
+    required this.config,
+  }) : super(AutoprovisionState.initial());
 
   final AutoprovisionConfig config;
   final AppInfo appInfo;
   final PackageInfo packageInfo;
+  final AppCompatibilityResolver appCompatibilityResolver;
 
   String get _identifier => appInfo.identifier;
 
@@ -58,13 +63,23 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMap
       final apiClient = _apiClient(coreUrl, config.tenantId);
 
       final systemInfo = await _retrieveSystemInfo(apiClient);
-      final coreInfo = systemInfo.core;
-      final isCoreSupported = coreInfo.verifyVersionStr(config.coreVersionConstraint);
 
-      if (isCoreSupported == false) {
-        final notSupportedCoreException = Exception('Core version is not supported. Please update the core.');
-        emit(AutoprovisionState.error(notSupportedCoreException));
-        return;
+      // Shared version gate (see [AppCompatibility]) so the app-too-old/core
+      // priority matches the login and in-app gates.
+      final compatibility = appCompatibilityResolver.resolve(
+        systemInfo: systemInfo,
+        appVersion: appInfo.version,
+        coreVersionConstraint: config.coreVersionConstraint,
+      );
+      switch (compatibility) {
+        case AppVersionTooOld():
+          emit(AutoprovisionState.error(Exception('App version is not supported. Please update the application.')));
+          return;
+        case CoreVersionUnsupported():
+          emit(AutoprovisionState.error(Exception('Core version is not supported. Please update the core.')));
+          return;
+        case AppCompatible():
+          break;
       }
 
       final session = await apiClient.createSessionAutoProvision(credentials);

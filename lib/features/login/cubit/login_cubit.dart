@@ -4,11 +4,13 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:linkify/linkify.dart';
 import 'package:logging/logging.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -25,14 +27,27 @@ typedef LoginSuccessCallback = void Function(Session session, WebtritSystemInfo 
 final _logger = Logger('LoginCubit');
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit({required this.authRepository, required this.notificationsBloc, required this.onLoginSuccess})
-    : super(const LoginState());
+  LoginCubit({
+    required this.authRepository,
+    required this.notificationsBloc,
+    required this.appInfo,
+    required this.appCompatibilityResolver,
+    required this.onLoginSuccess,
+    this.signinOrder = const [],
+  }) : super(const LoginState());
 
   final AuthRepository authRepository;
 
   final LoginSuccessCallback onLoginSuccess;
 
   final NotificationsBloc notificationsBloc;
+
+  final AppInfo appInfo;
+
+  final AppCompatibilityResolver appCompatibilityResolver;
+
+  /// Configured order of the sign-in tabs, by login type name (from app config).
+  final List<String> signinOrder;
 
   // Environment getters
   String? get coreUrlFromEnvironment => EnvironmentConfig.CORE_URL;
@@ -42,6 +57,8 @@ class LoginCubit extends Cubit<LoginState> {
   String? get demoCoreUrlFromEnvironment => EnvironmentConfig.DEMO_CORE_URL;
 
   String get coreVersionConstraint => EnvironmentConfig.CORE_VERSION_CONSTRAINT;
+
+  Version get appVersion => appInfo.version;
 
   String get defaultTenantId => '';
 
@@ -93,10 +110,14 @@ class LoginCubit extends Cubit<LoginState> {
       }
 
       final supportedFeatures = systemInfo.adapter?.supported ?? [];
-      final supportedLoginTypes = supportedFeatures
+      final parsedLoginTypes = supportedFeatures
           .where((f) => LoginType.values.map((e) => e.name).contains(f))
           .map((f) => LoginType.values.byName(f))
           .toList();
+      // Backend may list the options in an unstable order; impose a deterministic
+      // client-side order (driven by app config) so the login tabs do not jump
+      // around between requests.
+      final supportedLoginTypes = sortLoginTypes(parsedLoginTypes, orderConfig: signinOrder);
       if (demo) supportedLoginTypes.removeWhere((loginType) => loginType != LoginType.signup);
 
       if (supportedLoginTypes.isEmpty) {
@@ -123,16 +144,28 @@ class LoginCubit extends Cubit<LoginState> {
   Future<WebtritSystemInfo?> _loadAndValidateSystemInfo(String coreUrl, String tenantId) async {
     final systemInfo = await authRepository.getSystemInfo(coreUrl, tenantId);
 
-    final coreInfo = systemInfo.core;
-    final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
-
-    if (!isCoreSupported) {
-      final notification = CoreVersionUnsupportedErrorNotification(coreInfo.version.toString(), coreVersionConstraint);
-      notificationsBloc.add(NotificationsSubmitted(notification));
-      return null;
+    // Shared version gate (see [AppCompatibility]). Aborting here means no
+    // session is created and signaling is never connected for an unsupported build.
+    final compatibility = appCompatibilityResolver.resolve(
+      systemInfo: systemInfo,
+      appVersion: appVersion,
+      coreVersionConstraint: coreVersionConstraint,
+    );
+    switch (compatibility) {
+      case CoreVersionUnsupported(:final coreVersion, :final constraint):
+        final notification = CoreVersionUnsupportedErrorNotification(coreVersion.toString(), constraint.toString());
+        notificationsBloc.add(NotificationsSubmitted(notification));
+        return null;
+      case AppVersionTooOld(:final appVersion, :final minSupportedVersion):
+        final notification = AppVersionUnsupportedErrorNotification(
+          appVersion.toString(),
+          minSupportedVersion.toString(),
+        );
+        notificationsBloc.add(NotificationsSubmitted(notification));
+        return null;
+      case AppCompatible():
+        return systemInfo;
     }
-
-    return systemInfo;
   }
 
   // LoginModeSelect

@@ -102,6 +102,18 @@ class AppLocalizationsUk extends AppLocalizations {
       'Ваші налаштування було успішно отримано, застосунок готовий до використання';
 
   @override
+  String get callTileActions_contact => 'Контакт';
+
+  @override
+  String get callTileActions_history => 'Історія';
+
+  @override
+  String get callTileActions_message => 'Повідомлення';
+
+  @override
+  String get callTileActions_more => 'Більше';
+
+  @override
   String get call_CallActionsTooltip_accept => 'Прийняти';
 
   @override
@@ -144,13 +156,14 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_enableCamera => 'Увімкнути камеру';
 
   @override
+  String get call_CallActionsTooltip_cameraPermissionDenied =>
+      'Доступ до камери заборонено. Торкніться, щоб відкрити налаштування';
+
+  @override
   String get call_CallActionsTooltip_enableSpeaker => 'Увімкнути динамік';
 
   @override
   String get call_CallActionsTooltip_hangup => 'Завершити';
-
-  @override
-  String get call_CallActionsTooltip_hangupAndAccept => 'Завершити та прийняти';
 
   @override
   String get call_CallActionsTooltip_hideKeypad => 'Приховати клавіатуру';
@@ -159,16 +172,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_CallActionsTooltip_hold => 'Утримати дзвінок';
 
   @override
-  String get call_CallActionsTooltip_holdAndAccept => 'Утримати та прийняти';
-
-  @override
   String get call_CallActionsTooltip_mute => 'Вимкнути мікрофон';
 
   @override
   String get call_CallActionsTooltip_showKeypad => 'Показати клавіатуру';
-
-  @override
-  String get call_CallActionsTooltip_swap => 'Перемкнути дзвінки';
 
   @override
   String get call_CallActionsTooltip_transfer => 'Переадресація';
@@ -184,6 +191,49 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get call_CallActionsTooltip_unmute => 'Увімкнути мікрофон';
+
+  @override
+  String get call_CallList_incoming => 'Вхідний';
+
+  @override
+  String get call_CallList_outgoing => 'Вихідний';
+
+  @override
+  String call_CallList_header(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count дзвінка - торкніться, щоб вибрати',
+      many: '$count дзвінків - торкніться, щоб вибрати',
+      few: '$count дзвінки - торкніться, щоб вибрати',
+      one: '$count дзвінок - торкніться, щоб вибрати',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get call_CallList_statusOnCall => 'Розмова';
+
+  @override
+  String call_FocusedActionHint_actingOn(String name) {
+    return 'Дія для: $name';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeEnded(String name) {
+    return 'Дзвінок з $name буде завершено';
+  }
+
+  @override
+  String call_FocusedActionHint_willBeHeld(String name) {
+    return 'Дзвінок з $name буде поставлено на утримання';
+  }
+
+  @override
+  String get call_ToolbarStatus_connecting => 'Підключення...';
+
+  @override
+  String get call_ToolbarStatus_reconnecting => 'Перепідключення...';
 
   @override
   String get call_description_held => 'На утриманні';
@@ -242,6 +292,18 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get iceConnectionIssue_iceFailNoIcePathViaVpn => 'VPN може блокувати дзвінок. Спробуйте вимкнути його';
+
+  @override
+  String get callNetworkQuality_yourAudioWeak => 'Ваш звук слабкий';
+
+  @override
+  String get callNetworkQuality_yourVideoWeak => 'Ваше відео слабке';
+
+  @override
+  String get callNetworkQuality_theirAudioWeak => 'Звук співрозмовника слабкий';
+
+  @override
+  String get callNetworkQuality_theirVideoWeak => 'Відео співрозмовника слабке';
 
   @override
   String get callPullBadge_dialogTitle => 'Перехопляємі дзвінки';
@@ -521,6 +583,23 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get diagnostic_battery_tile_title => 'Режим батареї';
+
+  @override
+  String get diagnostic_callingMode_groupTitle => 'Режим дзвінків';
+
+  @override
+  String get diagnostic_callingMode_tile_title => 'Режим дзвінків';
+
+  @override
+  String get diagnostic_callingMode_standalone_title => 'Обмежений режим дзвінків';
+
+  @override
+  String get diagnostic_callingMode_standalone_caption =>
+      'Standalone — можливі обмеження сповіщення про дзвінок і вибору гарнітури';
+
+  @override
+  String get diagnostic_callingMode_standalone_description =>
+      'Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступний.';
 
   @override
   String get diagnostic_permission_camera_description =>
@@ -809,6 +888,11 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String login_AppVersionUnsupportedExceptionError(String actual, String minSupported) {
+    return 'Версія вашого застосунку більше не підтримується, будь ласка, оновіть застосунок, щоб продовжити (поточна: $actual, мінімальна потрібна: $minSupported)';
+  }
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'Не вдалося відправити код підтвердження';
 
   @override
@@ -1021,6 +1105,19 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get main_CompatibilityIssueDialog_title => 'Проблема сумісності';
+
+  @override
+  String get main_AppUpdateRequiredDialog_title => 'Потрібне оновлення';
+
+  @override
+  String get main_AppUpdateRequiredDialog_description =>
+      'Версія вашого застосунку більше не підтримується. Будь ласка, оновіть застосунок, щоб продовжити.';
+
+  @override
+  String get main_AppUpdateRequiredDialog_currentVersionLabel => 'Поточна версія';
+
+  @override
+  String get main_AppUpdateRequiredDialog_minimumVersionLabel => 'Мінімальна потрібна версія';
 
   @override
   String get messaging_ActionBtn_retry => 'Повторить спробу';
@@ -1296,6 +1393,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get notifications_errorSnackBarAction_callUserMedia => 'Перевірити';
 
   @override
+  String get notifications_messageSnackBar_callVideoDowngraded => 'Відповідь без камери - доступ до камери не надано';
+
+  @override
+  String get notifications_messageSnackBarAction_callVideoDowngraded => 'Налаштування';
+
+  @override
   String get notifications_errorSnackBar_activeLineBlindTransferWarning =>
       'Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ';
 
@@ -1357,6 +1460,10 @@ class AppLocalizationsUk extends AppLocalizations {
       'Термін дії вашої сесії закінчився. Будь ласка, увійдіть знову.';
 
   @override
+  String get notifications_errorSnackBar_accountNotFound =>
+      'Ваш обліковий запис не знайдено. Можливо, його деактивовано або видалено. Зверніться до адміністратора.';
+
+  @override
   String get notifications_errorSnackBar_SignalingConnectFailed => 'Підключення до ядра не вдалося, спроба з\'єднання';
 
   @override
@@ -1368,6 +1475,14 @@ class AppLocalizationsUk extends AppLocalizations {
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason) {
     return 'Від’єднано від ядра з причини: $reason';
   }
+
+  @override
+  String notifications_errorSnackBar_emergencyNumber(String number) {
+    return '$number - екстрений номер, його не можна набрати з застосунку';
+  }
+
+  @override
+  String get notifications_errorSnackBarAction_emergencyNumber => 'Відкрити дайлер';
 
   @override
   String get notifications_errorSnackBar_SignalingSessionMissed => 'Помилка автентифікації, будь ласка увійдіть знову';
@@ -1393,6 +1508,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get notifications_successSnackBar_appOnline => 'Ваш застосунок онлайн.';
+
+  @override
+  String get notifications_missedCall_title => 'Пропущений дзвінок';
+
+  @override
+  String get notifications_missedCall_unknownCaller => 'Невідомий';
 
   @override
   String get numberActions_audioCall => 'Aудіо дзвінок';
@@ -1786,6 +1907,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Вбудовані посилання застосунку';
+
+  @override
+  String get settings_AboutText_ThirdPartyLicenses => 'Ліцензії третіх сторін';
 
   @override
   String get settings_AboutText_AppSessionIdentifier => 'Ідентифікатор сесії застосунку';
@@ -2384,7 +2508,7 @@ class AppLocalizationsUk extends AppLocalizations {
       'Не знайдено необхідного компонента. Спробуйте перезапустити застосунок.';
 
   @override
-  String get signalingResponseCode_rejected => 'Ваш запит було відхилено. Будь ласка, спробуйте ще раз.';
+  String get signalingResponseCode_rejected => 'Виклик відхилено';
 
   @override
   String get signalingResponseCode_requestTerminated => 'Ваш запит було відхилено. Будь ласка, спробуйте ще раз.';
@@ -2460,11 +2584,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signalingResponseCode_unwanted => 'Ваш запит не може бути виконаний. Будь ласка, спробуйте ще раз.';
 
   @override
-  String get signalingResponseCode_userBusy =>
-      'Користувач, якого ви намагаєтеся знайти, зайнятий. Будь ласка, спробуйте пізніше.';
+  String get signalingResponseCode_userBusy => 'Користувач зайнятий';
 
   @override
-  String get signalingResponseCode_userNotExist => 'Користувача, якого ви намагаєтеся знайти, не існує.';
+  String get signalingResponseCode_userNotExist => 'Користувача не існує';
+
+  @override
+  String get signalingResponseCode_unableToComplete => 'Не вдалося здійснити виклик.';
 
   @override
   String get signalingResponseCode_wrongWebrtcState =>

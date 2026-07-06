@@ -12,7 +12,7 @@ class CdrTable extends Table {
   @override
   Set<Column> get primaryKey => {callId};
 
-  TextColumn get callId => text().unique()();
+  TextColumn get callId => text()();
 
   TextColumn get direction => textEnum<CallDirectionData>()();
 

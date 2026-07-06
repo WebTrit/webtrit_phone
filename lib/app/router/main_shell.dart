@@ -17,6 +17,7 @@ import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/session/session.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
@@ -50,6 +51,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// reading from a potentially deactivated [BuildContext].
   late final AppBloc _appBloc;
 
+  /// Captured in [initState] so the session-guard callbacks can submit
+  /// notifications without touching a possibly-deactivated [BuildContext].
+  late final NotificationsBloc _notificationsBloc;
+
   /// Created and connected in [initState] so that the WebSocket handshake
   /// runs in parallel while the widget tree and [CallBloc] are being built.
   /// Late subscribers (including [CallBloc]) receive all buffered session
@@ -58,6 +63,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
   /// The [PollingService] instance that handles periodic polling of repositories.
   late PollingService? _polling;
+
+  /// Drives the native Play Core update prompt; checked once on startup. No-op outside Android.
+  final AppUpdateService _appUpdateService = AppUpdateService();
 
   /// Lazily initialised on first [build] once [CallBloc], [CallRoutingCubit],
   /// and [NotificationsBloc] are available in the widget tree. The `??=`
@@ -104,16 +112,28 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
       startPendingTimeout: kSignalingStartPendingTimeout,
     )..connect();
 
-    final notificationsBloc = context.read<NotificationsBloc>();
+    _notificationsBloc = context.read<NotificationsBloc>();
 
     _sessionGuard = RouterLogoutSessionGuard(
-      performLogout: () {
-        _appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.serverRejection));
-      },
-      onPreLogout: () {
-        notificationsBloc.add(NotificationsSubmitted(SessionExpiredNotification()));
-      },
+      performLogout: _onSessionGuardLogout,
+      onPreLogout: _onSessionGuardPreLogout,
     );
+
+    unawaited(_appUpdateService.check());
+  }
+
+  /// Maps an unauthorized [Exception] to a logout reason and triggers logout.
+  void _onSessionGuardLogout(Exception e) {
+    final reason = e is UserNotFoundException ? AppLogoutReason.userNotFound : AppLogoutReason.serverRejection;
+    _appBloc.add(AppLogoutRequested(reason: reason));
+  }
+
+  /// Surfaces a reason-specific notification before the guard logs the user out.
+  void _onSessionGuardPreLogout(Exception e) {
+    final notification = e is UserNotFoundException
+        ? const AccountNotFoundNotification()
+        : const SessionExpiredNotification();
+    _notificationsBloc.add(NotificationsSubmitted(notification));
   }
 
   @override
@@ -135,9 +155,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    _polling?.didChangeAppLifecycleState(state);
-  }
+  void didChangeAppLifecycleState(AppLifecycleState state) => _polling?.didChangeAppLifecycleState(state);
 
   @override
   Widget build(BuildContext context) {
@@ -500,10 +518,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         peerConnectionConfig,
                         userMediaBuilder,
                       );
-                      // Initialize contact name resolver with app-specific contact repository
-                      // Used to display contact name of caller
-                      final contactNameResolver = DefaultContactNameResolver(
-                        contactRepository: context.read<ContactsRepository>(),
+                      // Initialize contact resolver with app-specific contact repository
+                      // Used to resolve the contact (and its display name) of the caller
+                      final contactResolver = DefaultContactResolver(
+                        contactsRepository: context.read<ContactsRepository>(),
+                        userRepository: context.read<UserRepository>(),
                       );
 
                       // Try to get CDRs sync worker to trigger immediate sync after call ends
@@ -516,9 +535,14 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],
                       );
 
+                      final localPushRepository = context.read<LocalPushRepository>();
                       return CallBloc(
                         callLogsRepository: context.read<CallLogsRepository>(),
-                        localPushRepository: context.read<LocalPushRepository>(),
+                        onMissedCall: (callId, callerName) => localPushRepository
+                            .displayPush(
+                              AppLocalPush.missedCall(callId, context.l10n.notifications_missedCall_title, callerName),
+                            )
+                            .catchError((e) => _logger.warning('onMissedCall: $e')),
                         linesStateRepository: context.read<LinesStateRepository>(),
                         presenceInfoRepository: context.read<PresenceInfoRepository>(),
                         dialogInfoRepository: context.read<DialogInfoRepository>(),
@@ -536,6 +560,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         },
                         userRepository: context.read<UserRepository>(),
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
+                        isCameraPermissionGranted: () => appPermissions.isPermissionGranted(Permission.camera),
                         callkeep: _callkeep,
                         callkeepConnections: _callkeepConnections,
                         sdpMunger: ModifyWithEncodingSettings(
@@ -546,7 +571,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         sdpSanitizer: RemoteSdpSanitizer(),
                         webRtcOptionsBuilder: WebrtcOptionsWithAppSettingsBuilder(audioProcessingSettingsRepository),
                         userMediaBuilder: userMediaBuilder,
-                        contactNameResolver: contactNameResolver,
+                        contactResolver: contactResolver,
                         callErrorReporter: DefaultCallErrorReporter(
                           (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         ),
@@ -561,8 +586,15 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         signalingModule: _signalingModule,
                         peerConnectionManager: peerConnectionManager,
                         connectivityService: context.read<ConnectivityService>(),
-                        onSessionInvalidated: () =>
-                            appBloc.add(const AppLogoutRequested(reason: AppLogoutReason.sessionMissed)),
+                        onSessionInvalidated: (reason) => appBloc.add(
+                          AppLogoutRequested(
+                            reason: switch (reason) {
+                              SignalingSessionInvalidationReason.passwordChangeRequired =>
+                                AppLogoutReason.passwordChangeRequired,
+                              SignalingSessionInvalidationReason.sessionMissed => AppLogoutReason.sessionMissed,
+                            },
+                          ),
+                        ),
                         foregroundCallPushSignal: RemotePushBroker.pendingCallForegroundPushs,
                       )..add(const CallStarted());
                     },

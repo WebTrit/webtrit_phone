@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SystemInfo {
 
- CoreInfo get core; PostgresInfo get postgres; AdapterInfo? get adapter; JanusInfo? get janus; GorushInfo? get gorush;
+ CoreInfo get core; PostgresInfo get postgres; AdapterInfo? get adapter; JanusInfo? get janus; GorushInfo? get gorush; String? get minSupportedAppVersion;
 /// Create a copy of SystemInfo
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $SystemInfoCopyWith<SystemInfo> get copyWith => _$SystemInfoCopyWithImpl<SystemI
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemInfo&&(identical(other.core, core) || other.core == core)&&(identical(other.postgres, postgres) || other.postgres == postgres)&&(identical(other.adapter, adapter) || other.adapter == adapter)&&(identical(other.janus, janus) || other.janus == janus)&&(identical(other.gorush, gorush) || other.gorush == gorush));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemInfo&&(identical(other.core, core) || other.core == core)&&(identical(other.postgres, postgres) || other.postgres == postgres)&&(identical(other.adapter, adapter) || other.adapter == adapter)&&(identical(other.janus, janus) || other.janus == janus)&&(identical(other.gorush, gorush) || other.gorush == gorush)&&(identical(other.minSupportedAppVersion, minSupportedAppVersion) || other.minSupportedAppVersion == minSupportedAppVersion));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,core,postgres,adapter,janus,gorush);
+int get hashCode => Object.hash(runtimeType,core,postgres,adapter,janus,gorush,minSupportedAppVersion);
 
 @override
 String toString() {
-  return 'SystemInfo(core: $core, postgres: $postgres, adapter: $adapter, janus: $janus, gorush: $gorush)';
+  return 'SystemInfo(core: $core, postgres: $postgres, adapter: $adapter, janus: $janus, gorush: $gorush, minSupportedAppVersion: $minSupportedAppVersion)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $SystemInfoCopyWith<$Res>  {
   factory $SystemInfoCopyWith(SystemInfo value, $Res Function(SystemInfo) _then) = _$SystemInfoCopyWithImpl;
 @useResult
 $Res call({
- CoreInfo core, PostgresInfo postgres, AdapterInfo? adapter, JanusInfo? janus, GorushInfo? gorush
+ CoreInfo core, PostgresInfo postgres, AdapterInfo? adapter, JanusInfo? janus, GorushInfo? gorush, String? minSupportedAppVersion
 });
 
 
@@ -63,14 +63,15 @@ class _$SystemInfoCopyWithImpl<$Res>
 
 /// Create a copy of SystemInfo
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? core = null,Object? postgres = null,Object? adapter = freezed,Object? janus = freezed,Object? gorush = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? core = null,Object? postgres = null,Object? adapter = freezed,Object? janus = freezed,Object? gorush = freezed,Object? minSupportedAppVersion = freezed,}) {
   return _then(SystemInfo(
 core: null == core ? _self.core : core // ignore: cast_nullable_to_non_nullable
 as CoreInfo,postgres: null == postgres ? _self.postgres : postgres // ignore: cast_nullable_to_non_nullable
 as PostgresInfo,adapter: freezed == adapter ? _self.adapter : adapter // ignore: cast_nullable_to_non_nullable
 as AdapterInfo?,janus: freezed == janus ? _self.janus : janus // ignore: cast_nullable_to_non_nullable
 as JanusInfo?,gorush: freezed == gorush ? _self.gorush : gorush // ignore: cast_nullable_to_non_nullable
-as GorushInfo?,
+as GorushInfo?,minSupportedAppVersion: freezed == minSupportedAppVersion ? _self.minSupportedAppVersion : minSupportedAppVersion // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

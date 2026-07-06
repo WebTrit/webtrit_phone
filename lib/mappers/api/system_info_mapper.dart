@@ -1,6 +1,7 @@
 import 'package:webtrit_api/webtrit_api.dart' as api;
 
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/version_utils.dart';
 
 mixin SystemInfoApiMapper {
   WebtritSystemInfo systemInfoFromApi(api.SystemInfo systemInfo) {
@@ -10,6 +11,7 @@ mixin SystemInfoApiMapper {
       adapter: systemInfo.adapter != null ? adapterInfoFromApi(systemInfo.adapter!) : null,
       janus: systemInfo.janus != null ? janusInfoFromApi(systemInfo.janus!) : null,
       gorush: systemInfo.gorush != null ? gorushInfoFromApi(systemInfo.gorush!) : null,
+      minSupportedAppVersion: tryParseVersion(systemInfo.minSupportedAppVersion),
     );
   }
 

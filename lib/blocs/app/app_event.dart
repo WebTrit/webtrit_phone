@@ -12,6 +12,16 @@ enum AppLogoutReason {
   /// The server explicitly rejected a request due to authentication.
   /// Requires both remote session revocation and local data cleanup.
   serverRejection,
+
+  /// The account no longer exists on the server (404 UserNotFoundException),
+  /// e.g. it was deactivated or removed. Terminal; requires only local data
+  /// cleanup since the remote user record is already gone.
+  userNotFound,
+
+  /// The self-care password expired or was changed (403 password_change_required),
+  /// detected after the signaling session was dropped. The server already
+  /// terminated the session, so only local cleanup is required.
+  passwordChangeRequired,
 }
 
 sealed class AppEvent extends Equatable {
@@ -115,4 +125,15 @@ class AppLogoutRequested extends AppEvent {
 /// * **sessionMissed**: Skips remote revocation since the session is already terminated.
 class AppCleanupRequested extends AppEvent {
   const AppCleanupRequested();
+}
+
+/// Internal: carries a freshly resolved [AppCompatibility] from the system-info
+/// stream into the bloc so the force-update gate can be enforced by the router.
+class _AppCompatibilityUpdated extends AppEvent {
+  const _AppCompatibilityUpdated(this.compatibility);
+
+  final AppCompatibility compatibility;
+
+  @override
+  List<Object?> get props => [compatibility];
 }

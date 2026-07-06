@@ -606,6 +606,102 @@ void main() {
     });
   });
 
+  group('phone-number lookups - local vs external number collision', () {
+    // A local phonebook contact and an external/PBX contact share the SAME phone
+    // number. Without an explicit ORDER BY the winner is left to SQLite's
+    // unspecified row order (platform/data dependent). Ordering by sourceType DESC
+    // makes the external (PBX) entry win deterministically across every lookup
+    // method, regardless of insertion order.
+    Future<void> setupCollision({required bool localFirst}) async {
+      final dao = database.contactsDao;
+      final phonesDao = database.contactPhonesDao;
+
+      Future<void> addLocal() async {
+        final c = await dao.insertOnUniqueConflictUpdateContact(
+          ContactDataCompanion(
+            sourceType: Value(ContactSourceTypeEnum.local),
+            sourceId: Value('local-4'),
+            firstName: Value('Local Contact 4'),
+            aliasName: Value('Local Contact 4'),
+          ),
+        );
+        await phonesDao.insertOnUniqueConflictUpdateContactPhone(
+          ContactPhoneDataCompanion(contactId: Value(c.id), number: Value('4'), label: Value('mobile')),
+        );
+      }
+
+      Future<void> addExternal() async {
+        final c = await dao.insertOnUniqueConflictUpdateContact(
+          ContactDataCompanion(
+            sourceType: Value(ContactSourceTypeEnum.external),
+            sourceId: Value('ext-4'),
+            aliasName: Value('Dima4'),
+          ),
+        );
+        await phonesDao.insertOnUniqueConflictUpdateContactPhone(
+          ContactPhoneDataCompanion(contactId: Value(c.id), number: Value('4'), label: Value('ext')),
+        );
+      }
+
+      if (localFirst) {
+        await addLocal();
+        await addExternal();
+      } else {
+        await addExternal();
+        await addLocal();
+      }
+    }
+
+    // Sanity: prove a REAL collision exists (both a local and an external
+    // contact carry number "4") so a passing winner-assertion is not a false
+    // negative caused by one side failing to insert.
+    Future<void> assertRealCollision() async {
+      final all = await database.contactsDao.getAllContacts(null);
+      final withNumber4 = all.where((c) => c.phones.any((p) => p.number == '4')).toList();
+      expect(withNumber4.length, 2, reason: 'both local + external must carry number 4');
+      expect(
+        withNumber4.any(
+          (c) => c.contact.sourceType == ContactSourceTypeEnum.local && c.contact.aliasName == 'Local Contact 4',
+        ),
+        isTrue,
+      );
+      expect(
+        withNumber4.any(
+          (c) => c.contact.sourceType == ContactSourceTypeEnum.external && c.contact.aliasName == 'Dima4',
+        ),
+        isTrue,
+      );
+    }
+
+    // Every lookup path touched by the ORDER BY fix must prefer the external
+    // (PBX) contact on a collision - exact-number and matched-ending, get + watch.
+    final lookups = <String, Future<FullContactData?> Function()>{
+      'getContactByPhoneNumber': () => database.contactsDao.getContactByPhoneNumber('4'),
+      'watchContactByPhoneNumber': () => database.contactsDao.watchContactByPhoneNumber('4').first,
+      'getContactByPhoneMatchedEnding': () => database.contactsDao.getContactByPhoneMatchedEnding('4'),
+      'watchContactByPhoneMatchedEnding': () => database.contactsDao.watchContactByPhoneMatchedEnding('4').first,
+    };
+
+    for (final entry in lookups.entries) {
+      for (final localFirst in [true, false]) {
+        test('${entry.key} prefers external (local-first=$localFirst)', () async {
+          await setupCollision(localFirst: localFirst);
+          await assertRealCollision();
+
+          final contact = await entry.value();
+
+          expect(contact, isNotNull);
+          expect(
+            contact!.contact.sourceType,
+            ContactSourceTypeEnum.external,
+            reason: 'external (PBX) should win on collision',
+          );
+          expect(contact.contact.aliasName, 'Dima4');
+        });
+      }
+    }
+  });
+
   group('ContactPhonesDao', () {
     late int contactId;
 

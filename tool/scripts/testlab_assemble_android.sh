@@ -1,3 +1,7 @@
+# patrol is not a committed dependency (it links XCTest into the app, which Apple
+# rejects). Provision it just for this test build.
+grep -qE '^  patrol:' pubspec.yaml || flutter pub add 'dev:patrol:^4.6.1'
+
 flutter clean
 
 testfile=$1

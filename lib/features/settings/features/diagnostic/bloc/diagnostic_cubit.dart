@@ -54,6 +54,7 @@ class DiagnosticCubit extends Cubit<DiagnosticState> {
   Future<void> fetchStatuses() async {
     await _fetchPermissionsStatus();
     await _fetchBatteryModeStatus();
+    await _fetchCallDeliveryModeStatus();
   }
 
   Future<void> _fetchPermissionsStatus() async {
@@ -76,6 +77,15 @@ class DiagnosticCubit extends Cubit<DiagnosticState> {
       emit(state.copyWith(batteryMode: status));
     } catch (e) {
       _logger.warning('fetchPermissionsStatus', e);
+    }
+  }
+
+  Future<void> _fetchCallDeliveryModeStatus() async {
+    try {
+      final status = await WebtritCallkeepPermissions().getCallDeliveryMode();
+      emit(state.copyWith(callDeliveryMode: status));
+    } catch (e) {
+      _logger.warning('fetchCallDeliveryModeStatus', e);
     }
   }
 

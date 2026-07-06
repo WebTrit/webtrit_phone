@@ -13,6 +13,7 @@
     }
   ],
   "loginConfig": {
+    "signinOrder": ["passwordSignin", "otpSignin", "signup"],
     "common": {
       "fullScreenLaunchEmbeddedResourceId": null
     },

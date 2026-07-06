@@ -4,7 +4,6 @@ export 'handshake_processor.dart';
 export 'pc_exceptions.dart';
 export 'call_error_reporter.dart';
 export 'compact_auto_reset_controller.dart';
-export 'contact_name_resolver.dart';
 export 'contact_resolver.dart';
 export 'ice_filter.dart';
 export 'logging_rtp_traffic_monitor_delegate.dart';

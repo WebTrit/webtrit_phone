@@ -177,6 +177,30 @@ abstract class AppLocalizations {
   /// **'Successfully retrieved your settings, your app is ready to use'**
   String get autoprovision_successSnackBar_used;
 
+  /// Label of the expanded call tile action that opens the contact details screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get callTileActions_contact;
+
+  /// Label of the expanded call tile action that opens the call history for the number.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get callTileActions_history;
+
+  /// Label of the expanded call tile action that opens a chat with the contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get callTileActions_message;
+
+  /// Label of the expanded call tile action that opens the full actions menu.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get callTileActions_more;
+
   /// No description provided for @call_CallActionsTooltip_accept.
   ///
   /// In en, this message translates to:
@@ -261,6 +285,12 @@ abstract class AppLocalizations {
   /// **'Enable camera'**
   String get call_CallActionsTooltip_enableCamera;
 
+  /// No description provided for @call_CallActionsTooltip_cameraPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera permission denied. Tap to open settings'**
+  String get call_CallActionsTooltip_cameraPermissionDenied;
+
   /// No description provided for @call_CallActionsTooltip_enableSpeaker.
   ///
   /// In en, this message translates to:
@@ -272,12 +302,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hangup'**
   String get call_CallActionsTooltip_hangup;
-
-  /// No description provided for @call_CallActionsTooltip_hangupAndAccept.
-  ///
-  /// In en, this message translates to:
-  /// **'Hangup & Accept'**
-  String get call_CallActionsTooltip_hangupAndAccept;
 
   /// No description provided for @call_CallActionsTooltip_hideKeypad.
   ///
@@ -291,12 +315,6 @@ abstract class AppLocalizations {
   /// **'Hold call'**
   String get call_CallActionsTooltip_hold;
 
-  /// No description provided for @call_CallActionsTooltip_holdAndAccept.
-  ///
-  /// In en, this message translates to:
-  /// **'Hold & Accept'**
-  String get call_CallActionsTooltip_holdAndAccept;
-
   /// No description provided for @call_CallActionsTooltip_mute.
   ///
   /// In en, this message translates to:
@@ -308,12 +326,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show keypad'**
   String get call_CallActionsTooltip_showKeypad;
-
-  /// No description provided for @call_CallActionsTooltip_swap.
-  ///
-  /// In en, this message translates to:
-  /// **'Swap calls'**
-  String get call_CallActionsTooltip_swap;
 
   /// No description provided for @call_CallActionsTooltip_transfer.
   ///
@@ -344,6 +356,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unmute microphone'**
   String get call_CallActionsTooltip_unmute;
+
+  /// Trailing label on a ringing incoming row in the call list.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming'**
+  String get call_CallList_incoming;
+
+  /// Trailing label on a ringing outgoing row in the call list.
+  ///
+  /// In en, this message translates to:
+  /// **'Outgoing'**
+  String get call_CallList_outgoing;
+
+  /// Header above the call list on the call screen when more than one call is in progress.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count} call - tap to choose} other{{count} calls - tap to choose}}'**
+  String call_CallList_header(int count);
+
+  /// Status badge in the call list for an answered, not held call.
+  ///
+  /// In en, this message translates to:
+  /// **'On call'**
+  String get call_CallList_statusOnCall;
+
+  /// Hint above the call action buttons naming the focused call the actions apply to.
+  ///
+  /// In en, this message translates to:
+  /// **'Acting on: {name}'**
+  String call_FocusedActionHint_actingOn(String name);
+
+  /// Side-effect line under the acting-on hint: the named call will be ended on answer.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be ended'**
+  String call_FocusedActionHint_willBeEnded(String name);
+
+  /// Side-effect line under the acting-on hint: the named call will be put on hold on answer.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will be put on hold'**
+  String call_FocusedActionHint_willBeHeld(String name);
+
+  /// Toolbar status line while the very first signaling connection is being established (turns into Reconnecting once a connection has existed).
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting...'**
+  String get call_ToolbarStatus_connecting;
+
+  /// Suffix on the call screen toolbar status line while the signaling connection is being re-established.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting...'**
+  String get call_ToolbarStatus_reconnecting;
 
   /// No description provided for @call_description_held.
   ///
@@ -458,6 +524,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'VPN may be blocking the call. Try disabling it'**
   String get iceConnectionIssue_iceFailNoIcePathViaVpn;
+
+  /// No description provided for @callNetworkQuality_yourAudioWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Your audio is weak'**
+  String get callNetworkQuality_yourAudioWeak;
+
+  /// No description provided for @callNetworkQuality_yourVideoWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Your video is weak'**
+  String get callNetworkQuality_yourVideoWeak;
+
+  /// No description provided for @callNetworkQuality_theirAudioWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Their audio is weak'**
+  String get callNetworkQuality_theirAudioWeak;
+
+  /// No description provided for @callNetworkQuality_theirVideoWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Their video is weak'**
+  String get callNetworkQuality_theirVideoWeak;
 
   /// No description provided for @callPullBadge_dialogTitle.
   ///
@@ -987,6 +1077,36 @@ abstract class AppLocalizations {
   /// **'Battery mode'**
   String get diagnostic_battery_tile_title;
 
+  /// No description provided for @diagnostic_callingMode_groupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calling mode'**
+  String get diagnostic_callingMode_groupTitle;
+
+  /// No description provided for @diagnostic_callingMode_tile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Calling mode'**
+  String get diagnostic_callingMode_tile_title;
+
+  /// No description provided for @diagnostic_callingMode_standalone_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Limited call mode'**
+  String get diagnostic_callingMode_standalone_title;
+
+  /// No description provided for @diagnostic_callingMode_standalone_caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Standalone - ringing and headset selection may be limited'**
+  String get diagnostic_callingMode_standalone_caption;
+
+  /// No description provided for @diagnostic_callingMode_standalone_description.
+  ///
+  /// In en, this message translates to:
+  /// **'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Bluetooth and wired headset selection is not available in this mode.'**
+  String get diagnostic_callingMode_standalone_description;
+
   /// No description provided for @diagnostic_permission_camera_description.
   ///
   /// In en, this message translates to:
@@ -1497,6 +1617,12 @@ abstract class AppLocalizations {
   /// **'An incompatible instance version provided, please contact the administrator of your system (actual: {actual}, supported: {supportedConstraint})'**
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint);
 
+  /// Shown during login when the backend declares a minimum supported app version that is newer than this build. Context: user tries to sign in. Condition: app version is older than min_supported_app_version (current: {actual}, minimum required: {minSupported}).
+  ///
+  /// In en, this message translates to:
+  /// **'Your app version is no longer supported, please update the application to continue (current: {actual}, minimum required: {minSupported})'**
+  String login_AppVersionUnsupportedExceptionError(String actual, String minSupported);
+
   /// Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty.
   ///
   /// In en, this message translates to:
@@ -1865,6 +1991,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Compatibility issue'**
   String get main_CompatibilityIssueDialog_title;
+
+  /// No description provided for @main_AppUpdateRequiredDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Update required'**
+  String get main_AppUpdateRequiredDialog_title;
+
+  /// Body text of the full-screen update-required prompt, shown when the running app is older than the backend-declared minimum supported app version.
+  ///
+  /// In en, this message translates to:
+  /// **'Your app version is no longer supported. Please update the application to continue.'**
+  String get main_AppUpdateRequiredDialog_description;
+
+  /// Label above the running app version on the update-required prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Current version'**
+  String get main_AppUpdateRequiredDialog_currentVersionLabel;
+
+  /// Label above the minimum supported app version on the update-required prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum required version'**
+  String get main_AppUpdateRequiredDialog_minimumVersionLabel;
 
   /// No description provided for @messaging_ActionBtn_retry.
   ///
@@ -2394,6 +2544,18 @@ abstract class AppLocalizations {
   /// **'Check'**
   String get notifications_errorSnackBarAction_callUserMedia;
 
+  /// Shown when an incoming video call is answered audio-only because camera permission was denied. Offers a shortcut to app settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Answered with camera off - camera permission not granted'**
+  String get notifications_messageSnackBar_callVideoDowngraded;
+
+  /// No description provided for @notifications_messageSnackBarAction_callVideoDowngraded.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get notifications_messageSnackBarAction_callVideoDowngraded;
+
   /// Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target.
   ///
   /// In en, this message translates to:
@@ -2496,6 +2658,12 @@ abstract class AppLocalizations {
   /// **'Your session has expired. Please log in again.'**
   String get notifications_errorSnackBar_sessionExpired;
 
+  /// Shown in a notification or snackbar when the backend returns 404 (user not found) for the current account, e.g. it was deactivated or removed on the server. The user is logged out; advise them to contact their administrator.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account was not found. It may have been deactivated or removed. Please contact your administrator.'**
+  String get notifications_errorSnackBar_accountNotFound;
+
   /// Shown in a notification or snackbar when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Context: occurs when the signaling/WebSocket connection cannot be established due to network outages, server unreachability, TLS/handshake failures, authentication errors (expired/invalid tokens), or firewall/VPN restrictions. Suggest the user check their network, retry, or reauthenticate if the problem persists.
   ///
   /// In en, this message translates to:
@@ -2513,6 +2681,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disconnected from the core due to the following reason: {reason}'**
   String notifications_errorSnackBar_signalingDisconnectWithSystemReason(String reason);
+
+  /// Shown in a snackbar when the user tries to call a number the device recognizes as an emergency number (e.g. 999, 112, 911). The app cannot place emergency calls itself, so it offers to open the system phone dialer instead. The action button label is notifications_errorSnackBarAction_emergencyNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'{number} is an emergency number and cannot be dialed from the app'**
+  String notifications_errorSnackBar_emergencyNumber(String number);
+
+  /// Action button on the emergency-number snackbar. Tapping it opens the system phone dialer pre-filled with the emergency number so the user can place the call there.
+  ///
+  /// In en, this message translates to:
+  /// **'Open dialer'**
+  String get notifications_errorSnackBarAction_emergencyNumber;
 
   /// Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality.
   ///
@@ -2555,6 +2735,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your application is online'**
   String get notifications_successSnackBar_appOnline;
+
+  /// No description provided for @notifications_missedCall_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed Call'**
+  String get notifications_missedCall_title;
+
+  /// No description provided for @notifications_missedCall_unknownCaller.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get notifications_missedCall_unknownCaller;
 
   /// No description provided for @numberActions_audioCall.
   ///
@@ -3281,6 +3473,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Application embedded links'**
   String get settings_AboutText_ApplicationEmbeddedLinks;
+
+  /// No description provided for @settings_AboutText_ThirdPartyLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Third-party licenses'**
+  String get settings_AboutText_ThirdPartyLicenses;
 
   /// No description provided for @settings_AboutText_AppSessionIdentifier.
   ///
@@ -4317,7 +4515,7 @@ abstract class AppLocalizations {
   /// Shown when a dialed phone number is not in a valid format. Typical cause: non-numeric input, missing country code, or format not supported by SIP/PBX.
   ///
   /// In en, this message translates to:
-  /// **'The number you entered is invalid.'**
+  /// **'Invalid number format'**
   String get signalingResponseCode_invalidNumberFormat;
 
   /// Shown when the signaling request points to an invalid or unsupported path/endpoint in the server.
@@ -4389,7 +4587,7 @@ abstract class AppLocalizations {
   /// Shown when the call request is rejected by an intermediary (e.g. proxy, SBC, or policy server) before reaching the recipient. SIP 603 Decline or similar.
   ///
   /// In en, this message translates to:
-  /// **'The call was rejected by a machine or process on the way, without reaching the destination... '**
+  /// **'Call rejected'**
   String get signalingResponseCode_rejected;
 
   /// Shown when a signaling request was terminated prematurely. SIP 487 Request Terminated, often due to caller cancelling before answer.
@@ -4521,14 +4719,20 @@ abstract class AppLocalizations {
   /// Shown when the callee is busy (SIP 486 Busy Here).
   ///
   /// In en, this message translates to:
-  /// **'The user you\'re trying to reach is busy. Please try again later.'**
+  /// **'User busy'**
   String get signalingResponseCode_userBusy;
 
   /// Shown when the dialed user is not registered or does not exist in the PBX. SIP 404 Not Found.
   ///
   /// In en, this message translates to:
-  /// **'The user you\'re trying to reach doesn\'t exist.'**
+  /// **'User does not exist'**
   String get signalingResponseCode_userNotExist;
+
+  /// Generic neutral fallback shown when an outgoing call fails for an unrecognized reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to complete the call.'**
+  String get signalingResponseCode_unableToComplete;
 
   /// Shown when a WebRTC operation is attempted in an invalid state (e.g. sending media before offer/answer exchange).
   ///

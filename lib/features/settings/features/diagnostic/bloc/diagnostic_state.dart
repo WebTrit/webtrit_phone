@@ -6,6 +6,7 @@ class DiagnosticState with _$DiagnosticState {
     this.permissions = const [],
     this.pushTokenStatus = const PushTokenStatus(),
     this.batteryMode = CallkeepAndroidBatteryMode.unknown,
+    this.callDeliveryMode = CallkeepAndroidCallDeliveryMode.unknown,
   });
 
   @override
@@ -16,6 +17,9 @@ class DiagnosticState with _$DiagnosticState {
 
   @override
   final CallkeepAndroidBatteryMode batteryMode;
+
+  @override
+  final CallkeepAndroidCallDeliveryMode callDeliveryMode;
 
   List<PermissionWithStatus> filterPermissionsByAgreement({List<Permission> exclude = const []}) {
     return permissions.where((permission) {

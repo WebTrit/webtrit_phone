@@ -20,10 +20,11 @@ class ActiveCallActions extends StatefulWidget {
     super.key,
     required this.enableInteractions,
     required this.isIncoming,
-    required this.remoteVideo,
     required this.wasAccepted,
     required this.wasHungUp,
     required this.cameraValue,
+    this.cameraPermissionDenied = false,
+    this.onCameraPermissionDeniedPressed,
     required this.inviteToAttendedTransfer,
     this.onCameraChanged,
     required this.mutedValue,
@@ -37,7 +38,6 @@ class ActiveCallActions extends StatefulWidget {
     required this.onAttendedTransferSubmitted,
     required this.heldValue,
     this.onHeldChanged,
-    this.onSwapPressed,
     this.onHangupPressed,
     this.onKeyPressed,
     this.style,
@@ -45,10 +45,18 @@ class ActiveCallActions extends StatefulWidget {
 
   final bool enableInteractions;
   final bool isIncoming;
-  final bool remoteVideo;
   final bool wasAccepted;
   final bool wasHungUp;
   final bool cameraValue;
+
+  /// Whether camera permission was denied for this call (audio-only downgrade).
+  /// When set, the camera button shows a settings hint instead of toggling.
+  final bool cameraPermissionDenied;
+
+  /// Invoked when the camera button is tapped while [cameraPermissionDenied].
+  /// The handler re-checks the live permission and either enables the camera
+  /// (now granted) or opens app settings (still denied).
+  final VoidCallback? onCameraPermissionDeniedPressed;
   final bool inviteToAttendedTransfer;
   final ValueChanged<bool>? onCameraChanged;
   final bool mutedValue;
@@ -62,7 +70,6 @@ class ActiveCallActions extends StatefulWidget {
   final void Function(ActiveCall call)? onAttendedTransferSubmitted;
   final bool heldValue;
   final ValueChanged<bool>? onHeldChanged;
-  final void Function()? onSwapPressed;
   final void Function()? onHangupPressed;
   final void Function(String value)? onKeyPressed;
 
@@ -114,12 +121,6 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
   }
 
   @override
-  void didUpdateWidget(covariant ActiveCallActions oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.remoteVideo != widget.remoteVideo) computeDimensions();
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _mediaQueryData = MediaQuery.of(context);
@@ -137,11 +138,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     _dimension = min(_mediaQueryData.size.width, _mediaQueryData.size.height) / 5;
     if (_isOrientationPortrait) {
       _actionsDelimiterDimension = _dimension / 5;
-      if (widget.remoteVideo) {
-        _hangupDelimiterDimension = _actionsDelimiterDimension;
-      } else {
-        _hangupDelimiterDimension = _actionsDelimiterDimension * 3 + _dimension * 2;
-      }
+      _hangupDelimiterDimension = _actionsDelimiterDimension;
       _horizontalPadding = _dimension / 2;
     } else {
       _actionsDelimiterDimension = _dimension / 9;
@@ -158,6 +155,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
 
     // Camera can trigger SDP renegotiation when adding a new track, so it is gated.
     final onCameraChanged = widget.enableInteractions ? widget.onCameraChanged : null;
+    // The permission-denied tap can enable the camera (-> SDP renegotiation), so it is gated too.
+    final onCameraPermissionDeniedPressed = widget.enableInteractions ? widget.onCameraPermissionDeniedPressed : null;
     // Mute is local-only (no SDP change), so it stays active during renegotiation.
     final onMutedChanged = widget.onMutedChanged;
     // Speaker switching is local-only (no SDP change), so it stays active during renegotiation.
@@ -168,9 +167,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     final onBlindTransferInitiated = widget.onBlindTransferInitiated;
     final onAttendedTransferInitiated = widget.onAttendedTransferInitiated;
     final onAttendedTransferSubmitted = widget.onAttendedTransferSubmitted;
-    // Hold and swap send signaling requests and trigger renegotiation.
+    // Hold/resume sends signaling requests and triggers renegotiation.
     final onHeldChanged = widget.enableInteractions ? widget.onHeldChanged : null;
-    final onSwapPressed = widget.enableInteractions ? widget.onSwapPressed : null;
     final onKeyPressed = widget.enableInteractions ? widget.onKeyPressed : null;
 
     // Always allow the user to hang up or answer the call
@@ -250,11 +248,15 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         ),
         Tooltip(
           key: callActionsVideoCallKey,
-          message: widget.cameraValue
+          message: widget.cameraPermissionDenied
+              ? context.l10n.call_CallActionsTooltip_cameraPermissionDenied
+              : widget.cameraValue
               ? context.l10n.call_CallActionsTooltip_disableCamera
               : context.l10n.call_CallActionsTooltip_enableCamera,
           child: TextButton(
-            onPressed: () => onCameraChanged?.call(!widget.cameraValue),
+            onPressed: widget.cameraPermissionDenied
+                ? (onCameraPermissionDeniedPressed != null ? () => onCameraPermissionDeniedPressed() : null)
+                : (onCameraChanged != null ? () => onCameraChanged(!widget.cameraValue) : null),
             statesController: _cameraStatesController..update(WidgetState.selected, widget.cameraValue),
             style: widget.style?.camera,
             child: Icon(widget.cameraValue ? Icons.videocam : Icons.videocam_off, size: actionPadIconSize),
@@ -438,29 +440,18 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
               ),
             ),
           ),
-        if (onSwapPressed == null)
-          Tooltip(
-            key: callActionsHoldKey,
-            message: widget.heldValue
-                ? context.l10n.call_CallActionsTooltip_unhold
-                : context.l10n.call_CallActionsTooltip_hold,
-            child: TextButton(
-              onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
-              statesController: _heldStatesController..update(WidgetState.selected, widget.heldValue),
-              style: widget.style?.held,
-              child: Icon(Icons.pause, size: actionPadIconSize),
-            ),
+        Tooltip(
+          key: callActionsHoldKey,
+          message: widget.heldValue
+              ? context.l10n.call_CallActionsTooltip_unhold
+              : context.l10n.call_CallActionsTooltip_hold,
+          child: TextButton(
+            onPressed: onHeldChanged == null ? null : () => onHeldChanged(!widget.heldValue),
+            statesController: _heldStatesController..update(WidgetState.selected, widget.heldValue),
+            style: widget.style?.held,
+            child: Icon(widget.heldValue ? Icons.play_arrow : Icons.pause, size: actionPadIconSize),
           ),
-        if (onSwapPressed != null)
-          Tooltip(
-            key: callActionsSwapKey,
-            message: context.l10n.call_CallActionsTooltip_swap,
-            child: TextButton(
-              onPressed: onSwapPressed,
-              style: widget.style?.speaker,
-              child: Icon(Icons.swap_calls, size: actionPadIconSize),
-            ),
-          ),
+        ),
         Tooltip(
           key: callActionsKeypadKey,
           message: context.l10n.call_CallActionsTooltip_showKeypad,

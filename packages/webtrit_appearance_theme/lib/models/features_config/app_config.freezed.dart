@@ -207,7 +207,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigLogin {
 
- AppConfigLoginCommon get common; AppConfigLoginModeSelect get modeSelect;
+ AppConfigLoginCommon get common; AppConfigLoginModeSelect get modeSelect; List<String> get signinOrder;
 /// Create a copy of AppConfigLogin
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -218,16 +218,16 @@ $AppConfigLoginCopyWith<AppConfigLogin> get copyWith => _$AppConfigLoginCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigLogin&&(identical(other.common, common) || other.common == common)&&(identical(other.modeSelect, modeSelect) || other.modeSelect == modeSelect));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigLogin&&(identical(other.common, common) || other.common == common)&&(identical(other.modeSelect, modeSelect) || other.modeSelect == modeSelect)&&const DeepCollectionEquality().equals(other.signinOrder, signinOrder));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,common,modeSelect);
+int get hashCode => Object.hash(runtimeType,common,modeSelect,const DeepCollectionEquality().hash(signinOrder));
 
 @override
 String toString() {
-  return 'AppConfigLogin(common: $common, modeSelect: $modeSelect)';
+  return 'AppConfigLogin(common: $common, modeSelect: $modeSelect, signinOrder: $signinOrder)';
 }
 
 
@@ -238,7 +238,7 @@ abstract mixin class $AppConfigLoginCopyWith<$Res>  {
   factory $AppConfigLoginCopyWith(AppConfigLogin value, $Res Function(AppConfigLogin) _then) = _$AppConfigLoginCopyWithImpl;
 @useResult
 $Res call({
- AppConfigLoginCommon common, AppConfigLoginModeSelect modeSelect
+ AppConfigLoginCommon common, AppConfigLoginModeSelect modeSelect, List<String> signinOrder
 });
 
 
@@ -255,11 +255,12 @@ class _$AppConfigLoginCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigLogin
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? common = null,Object? modeSelect = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? common = null,Object? modeSelect = null,Object? signinOrder = null,}) {
   return _then(AppConfigLogin(
 common: null == common ? _self.common : common // ignore: cast_nullable_to_non_nullable
 as AppConfigLoginCommon,modeSelect: null == modeSelect ? _self.modeSelect : modeSelect // ignore: cast_nullable_to_non_nullable
-as AppConfigLoginModeSelect,
+as AppConfigLoginModeSelect,signinOrder: null == signinOrder ? _self.signinOrder : signinOrder // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 

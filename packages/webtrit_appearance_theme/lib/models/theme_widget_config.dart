@@ -505,9 +505,18 @@ class LinkifyWidgetConfig with _$LinkifyWidgetConfig {
 @JsonSerializable(explicitToJson: true)
 class DialogWidgetConfig with _$DialogWidgetConfig {
   const DialogWidgetConfig({
+    this.theme = const DialogThemeConfig(),
     this.confirmDialog = const ConfirmDialogWidgetConfig(),
     this.snackBar = const SnackBarWidgetConfig(),
   });
+
+  /// Baseline appearance applied to every dialog via [ThemeData.dialogTheme].
+  ///
+  /// Material 3 derives the dialog background from `surfaceContainerHigh`, which
+  /// can resolve to an unreadable color in some color schemes; this config lets a
+  /// theme pin a predictable surface/text/shape for all dialogs.
+  @override
+  final DialogThemeConfig theme;
 
   @override
   final ConfirmDialogWidgetConfig confirmDialog;
@@ -520,10 +529,67 @@ class DialogWidgetConfig with _$DialogWidgetConfig {
   Map<String, Object?> toJson() => _$DialogWidgetConfigToJson(this);
 }
 
+/// Global dialog appearance mapped to [ThemeData.dialogTheme].
+///
+/// All fields are nullable so existing configs keep working; a null field falls
+/// back to a readable color-scheme role (or the Material default) in the bridge.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class DialogThemeConfig with _$DialogThemeConfig {
+  const DialogThemeConfig({
+    this.backgroundColor,
+    this.surfaceTintColor,
+    this.shadowColor,
+    this.barrierColor,
+    this.elevation,
+    this.borderRadius,
+    this.titleTextStyle,
+    this.contentTextStyle,
+  });
+
+  @override
+  final String? backgroundColor;
+
+  @override
+  final String? surfaceTintColor;
+
+  @override
+  final String? shadowColor;
+
+  @override
+  final String? barrierColor;
+
+  @override
+  final double? elevation;
+
+  @override
+  final double? borderRadius;
+
+  @override
+  final TextStyleConfig? titleTextStyle;
+
+  @override
+  final TextStyleConfig? contentTextStyle;
+
+  factory DialogThemeConfig.fromJson(Map<String, Object?> json) => _$DialogThemeConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$DialogThemeConfigToJson(this);
+}
+
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ConfirmDialogWidgetConfig with _$ConfirmDialogWidgetConfig {
-  const ConfirmDialogWidgetConfig({this.activeButtonColor1, this.activeButtonColor2, this.defaultButtonColor});
+  const ConfirmDialogWidgetConfig({
+    this.activeButtonColor1,
+    this.activeButtonColor2,
+    this.defaultButtonColor,
+    this.backgroundColor,
+    this.surfaceTintColor,
+    this.elevation,
+    this.borderRadius,
+    this.titleTextStyle,
+    this.contentTextStyle,
+  });
 
   @override
   final String? activeButtonColor1;
@@ -533,6 +599,26 @@ class ConfirmDialogWidgetConfig with _$ConfirmDialogWidgetConfig {
 
   @override
   final String? defaultButtonColor;
+
+  /// Confirm-dialog-only overrides layered on top of [DialogThemeConfig];
+  /// when null the dialog inherits [ThemeData.dialogTheme].
+  @override
+  final String? backgroundColor;
+
+  @override
+  final String? surfaceTintColor;
+
+  @override
+  final double? elevation;
+
+  @override
+  final double? borderRadius;
+
+  @override
+  final TextStyleConfig? titleTextStyle;
+
+  @override
+  final TextStyleConfig? contentTextStyle;
 
   factory ConfirmDialogWidgetConfig.fromJson(Map<String, Object?> json) => _$ConfirmDialogWidgetConfigFromJson(json);
 

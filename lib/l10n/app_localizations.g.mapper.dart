@@ -37,6 +37,10 @@ extension AppLocalizationsExtension on AppLocalizations {
       'autoprovision_ReloginDialog_title' => autoprovision_ReloginDialog_title,
       'autoprovision_successSnackBar_used' =>
         autoprovision_successSnackBar_used,
+      'callTileActions_contact' => callTileActions_contact,
+      'callTileActions_history' => callTileActions_history,
+      'callTileActions_message' => callTileActions_message,
+      'callTileActions_more' => callTileActions_more,
       'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
       'call_CallActionsTooltip_accept_inviteToAttendedTransfer' =>
         call_CallActionsTooltip_accept_inviteToAttendedTransfer,
@@ -64,20 +68,17 @@ extension AppLocalizationsExtension on AppLocalizations {
         call_CallActionsTooltip_disableSpeaker,
       'call_CallActionsTooltip_enableCamera' =>
         call_CallActionsTooltip_enableCamera,
+      'call_CallActionsTooltip_cameraPermissionDenied' =>
+        call_CallActionsTooltip_cameraPermissionDenied,
       'call_CallActionsTooltip_enableSpeaker' =>
         call_CallActionsTooltip_enableSpeaker,
       'call_CallActionsTooltip_hangup' => call_CallActionsTooltip_hangup,
-      'call_CallActionsTooltip_hangupAndAccept' =>
-        call_CallActionsTooltip_hangupAndAccept,
       'call_CallActionsTooltip_hideKeypad' =>
         call_CallActionsTooltip_hideKeypad,
       'call_CallActionsTooltip_hold' => call_CallActionsTooltip_hold,
-      'call_CallActionsTooltip_holdAndAccept' =>
-        call_CallActionsTooltip_holdAndAccept,
       'call_CallActionsTooltip_mute' => call_CallActionsTooltip_mute,
       'call_CallActionsTooltip_showKeypad' =>
         call_CallActionsTooltip_showKeypad,
-      'call_CallActionsTooltip_swap' => call_CallActionsTooltip_swap,
       'call_CallActionsTooltip_transfer' => call_CallActionsTooltip_transfer,
       'call_CallActionsTooltip_transfer_choose' =>
         call_CallActionsTooltip_transfer_choose,
@@ -85,6 +86,11 @@ extension AppLocalizationsExtension on AppLocalizations {
         call_CallActionsTooltip_unattended_transfer,
       'call_CallActionsTooltip_unhold' => call_CallActionsTooltip_unhold,
       'call_CallActionsTooltip_unmute' => call_CallActionsTooltip_unmute,
+      'call_CallList_incoming' => call_CallList_incoming,
+      'call_CallList_outgoing' => call_CallList_outgoing,
+      'call_CallList_statusOnCall' => call_CallList_statusOnCall,
+      'call_ToolbarStatus_connecting' => call_ToolbarStatus_connecting,
+      'call_ToolbarStatus_reconnecting' => call_ToolbarStatus_reconnecting,
       'call_description_held' => call_description_held,
       'call_description_incoming' => call_description_incoming,
       'call_description_inviteToAttendedTransfer' =>
@@ -113,6 +119,10 @@ extension AppLocalizationsExtension on AppLocalizations {
         iceConnectionIssue_iceFailNoIcePath,
       'iceConnectionIssue_iceFailNoIcePathViaVpn' =>
         iceConnectionIssue_iceFailNoIcePathViaVpn,
+      'callNetworkQuality_yourAudioWeak' => callNetworkQuality_yourAudioWeak,
+      'callNetworkQuality_yourVideoWeak' => callNetworkQuality_yourVideoWeak,
+      'callNetworkQuality_theirAudioWeak' => callNetworkQuality_theirAudioWeak,
+      'callNetworkQuality_theirVideoWeak' => callNetworkQuality_theirVideoWeak,
       'callPullBadge_dialogTitle' => callPullBadge_dialogTitle,
       'callPullBadge_pickupButtonTitle' => callPullBadge_pickupButtonTitle,
       'call_settings_additional_options' => call_settings_additional_options,
@@ -240,6 +250,14 @@ extension AppLocalizationsExtension on AppLocalizations {
       'diagnostic_battery_navigate_section' =>
         diagnostic_battery_navigate_section,
       'diagnostic_battery_tile_title' => diagnostic_battery_tile_title,
+      'diagnostic_callingMode_groupTitle' => diagnostic_callingMode_groupTitle,
+      'diagnostic_callingMode_tile_title' => diagnostic_callingMode_tile_title,
+      'diagnostic_callingMode_standalone_title' =>
+        diagnostic_callingMode_standalone_title,
+      'diagnostic_callingMode_standalone_caption' =>
+        diagnostic_callingMode_standalone_caption,
+      'diagnostic_callingMode_standalone_description' =>
+        diagnostic_callingMode_standalone_description,
       'diagnostic_permission_camera_description' =>
         diagnostic_permission_camera_description,
       'diagnostic_permission_camera_title' =>
@@ -483,6 +501,14 @@ extension AppLocalizationsExtension on AppLocalizations {
         main_CompatibilityIssueDialogActions_update,
       'main_CompatibilityIssueDialog_title' =>
         main_CompatibilityIssueDialog_title,
+      'main_AppUpdateRequiredDialog_title' =>
+        main_AppUpdateRequiredDialog_title,
+      'main_AppUpdateRequiredDialog_description' =>
+        main_AppUpdateRequiredDialog_description,
+      'main_AppUpdateRequiredDialog_currentVersionLabel' =>
+        main_AppUpdateRequiredDialog_currentVersionLabel,
+      'main_AppUpdateRequiredDialog_minimumVersionLabel' =>
+        main_AppUpdateRequiredDialog_minimumVersionLabel,
       'messaging_ActionBtn_retry' => messaging_ActionBtn_retry,
       'messaging_ChooseContact_cancel' => messaging_ChooseContact_cancel,
       'messaging_ChooseContact_empty' => messaging_ChooseContact_empty,
@@ -622,6 +648,10 @@ extension AppLocalizationsExtension on AppLocalizations {
         notifications_errorSnackBarAction_callSdpConfiguration,
       'notifications_errorSnackBarAction_callUserMedia' =>
         notifications_errorSnackBarAction_callUserMedia,
+      'notifications_messageSnackBar_callVideoDowngraded' =>
+        notifications_messageSnackBar_callVideoDowngraded,
+      'notifications_messageSnackBarAction_callVideoDowngraded' =>
+        notifications_messageSnackBarAction_callVideoDowngraded,
       'notifications_errorSnackBar_activeLineBlindTransferWarning' =>
         notifications_errorSnackBar_activeLineBlindTransferWarning,
       'notifications_errorSnackBar_blindTransferFailed' =>
@@ -656,8 +686,12 @@ extension AppLocalizationsExtension on AppLocalizations {
         notifications_errorSnackBar_callWhileUnregistered,
       'notifications_errorSnackBar_sessionExpired' =>
         notifications_errorSnackBar_sessionExpired,
+      'notifications_errorSnackBar_accountNotFound' =>
+        notifications_errorSnackBar_accountNotFound,
       'notifications_errorSnackBar_SignalingConnectFailed' =>
         notifications_errorSnackBar_SignalingConnectFailed,
+      'notifications_errorSnackBarAction_emergencyNumber' =>
+        notifications_errorSnackBarAction_emergencyNumber,
       'notifications_errorSnackBar_SignalingSessionMissed' =>
         notifications_errorSnackBar_SignalingSessionMissed,
       'notifications_errorSnackBar_sipRegistrationFailed_Unavailable' =>
@@ -670,6 +704,9 @@ extension AppLocalizationsExtension on AppLocalizations {
         notifications_messageSnackBar_appOffline,
       'notifications_successSnackBar_appOnline' =>
         notifications_successSnackBar_appOnline,
+      'notifications_missedCall_title' => notifications_missedCall_title,
+      'notifications_missedCall_unknownCaller' =>
+        notifications_missedCall_unknownCaller,
       'numberActions_audioCall' => numberActions_audioCall,
       'numberActions_callLog' => numberActions_callLog,
       'numberActions_chat' => numberActions_chat,
@@ -819,6 +856,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'session_Teardown_progressText' => session_Teardown_progressText,
       'settings_AboutText_ApplicationEmbeddedLinks' =>
         settings_AboutText_ApplicationEmbeddedLinks,
+      'settings_AboutText_ThirdPartyLicenses' =>
+        settings_AboutText_ThirdPartyLicenses,
       'settings_AboutText_AppSessionIdentifier' =>
         settings_AboutText_AppSessionIdentifier,
       'settings_AboutText_AppVersion' => settings_AboutText_AppVersion,
@@ -1205,6 +1244,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'signalingResponseCode_userBusy' => signalingResponseCode_userBusy,
       'signalingResponseCode_userNotExist' =>
         signalingResponseCode_userNotExist,
+      'signalingResponseCode_unableToComplete' =>
+        signalingResponseCode_unableToComplete,
       'signalingResponseCode_wrongWebrtcState' =>
         signalingResponseCode_wrongWebrtcState,
       'socketError_connectionRefused' => socketError_connectionRefused,
@@ -1484,6 +1525,28 @@ extension AppLocalizationsExtension on AppLocalizations {
         [final num seconds] => agoTicker_secondsAgo(seconds),
         _ => throw ArgumentError('agoTicker_secondsAgo requires 1 arguments'),
       },
+      'call_CallList_header' => switch (args) {
+        [final int count] => call_CallList_header(count),
+        _ => throw ArgumentError('call_CallList_header requires 1 arguments'),
+      },
+      'call_FocusedActionHint_actingOn' => switch (args) {
+        [final String name] => call_FocusedActionHint_actingOn(name),
+        _ => throw ArgumentError(
+          'call_FocusedActionHint_actingOn requires 1 arguments',
+        ),
+      },
+      'call_FocusedActionHint_willBeEnded' => switch (args) {
+        [final String name] => call_FocusedActionHint_willBeEnded(name),
+        _ => throw ArgumentError(
+          'call_FocusedActionHint_willBeEnded requires 1 arguments',
+        ),
+      },
+      'call_FocusedActionHint_willBeHeld' => switch (args) {
+        [final String name] => call_FocusedActionHint_willBeHeld(name),
+        _ => throw ArgumentError(
+          'call_FocusedActionHint_willBeHeld requires 1 arguments',
+        ),
+      },
       'contacts_ContactTile_inCall' => switch (args) {
         [final Object destination] => contacts_ContactTile_inCall(destination),
         _ => throw ArgumentError(
@@ -1535,6 +1598,13 @@ extension AppLocalizationsExtension on AppLocalizations {
           ),
         _ => throw ArgumentError(
           'login_CoreVersionUnsupportedExceptionError requires 2 arguments',
+        ),
+      },
+      'login_AppVersionUnsupportedExceptionError' => switch (args) {
+        [final String actual, final String minSupported] =>
+          login_AppVersionUnsupportedExceptionError(actual, minSupported),
+        _ => throw ArgumentError(
+          'login_AppVersionUnsupportedExceptionError requires 2 arguments',
         ),
       },
       'login_Text_coreUrlAssignPostDescription' => switch (args) {
@@ -1617,6 +1687,14 @@ extension AppLocalizationsExtension on AppLocalizations {
             'notifications_errorSnackBar_signalingDisconnectWithSystemReason requires 1 arguments',
           ),
         },
+      'notifications_errorSnackBar_emergencyNumber' => switch (args) {
+        [final String number] => notifications_errorSnackBar_emergencyNumber(
+          number,
+        ),
+        _ => throw ArgumentError(
+          'notifications_errorSnackBar_emergencyNumber requires 1 arguments',
+        ),
+      },
       'notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason' =>
         switch (args) {
           [final String reason] =>

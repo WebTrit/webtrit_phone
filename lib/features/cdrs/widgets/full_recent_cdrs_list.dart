@@ -37,6 +37,11 @@ class _FullRecentCdrsListState extends State<FullRecentCdrsList> {
   late final scrollController = ScrollController();
 
   bool scrolledAway = false;
+  String? _expandedCallId;
+
+  void _toggleExpanded(String callId) {
+    setState(() => _expandedCallId = _expandedCallId == callId ? null : callId);
+  }
 
   @override
   void initState() {
@@ -153,18 +158,18 @@ class _FullRecentCdrsListState extends State<FullRecentCdrsList> {
                                     cdr: cdr,
                                     contact: contact,
                                     callNumbers: callNumbers,
-                                    onTap: () {
-                                      if (participantNumber == null) return;
-
-                                      if (transfer) {
-                                        submitTransfer(destination: participantNumber);
-                                      } else {
-                                        _callController.createCall(
-                                          destination: participantNumber,
-                                          displayName: contact?.maybeName,
-                                        );
-                                      }
-                                    },
+                                    onTap: transfer
+                                        ? (participantNumber != null
+                                              ? () => submitTransfer(destination: participantNumber)
+                                              : null)
+                                        : () => _toggleExpanded(cdr.callId),
+                                    expanded: !transfer && _expandedCallId == cdr.callId,
+                                    onDialPressed: !transfer && participantNumber != null
+                                        ? () => _callController.createCall(
+                                            destination: participantNumber,
+                                            displayName: contact?.maybeName,
+                                          )
+                                        : null,
                                     onAudioCallPressed: participantNumber != null
                                         ? () => _callController.createCall(
                                             destination: participantNumber,

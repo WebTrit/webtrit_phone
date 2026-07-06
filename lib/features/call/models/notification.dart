@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:permission_handler/permission_handler.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 
@@ -82,6 +83,27 @@ final class CallUserMediaErrorNotification extends MessageNotification {
   }
 }
 
+/// Soft notification shown when an incoming video call is answered audio-only
+/// because camera permission was denied. Unlike [CallUserMediaErrorNotification]
+/// (a hard media error), this communicates a graceful fallback and offers a
+/// shortcut to grant the permission in app settings.
+final class CallVideoDowngradedNotification extends MessageNotification {
+  const CallVideoDowngradedNotification();
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_messageSnackBar_callVideoDowngraded;
+  }
+
+  @override
+  SnackBarAction? action(BuildContext context) {
+    return SnackBarAction(
+      label: context.l10n.notifications_messageSnackBarAction_callVideoDowngraded,
+      onPressed: () => openAppSettings(),
+    );
+  }
+}
+
 final class CallMediaTrackSetupErrorNotification extends MessageNotification {
   const CallMediaTrackSetupErrorNotification();
 
@@ -157,6 +179,32 @@ final class GeneralUnableToCallNotification extends MessageNotification {
   }
 }
 
+/// Shown when callkeep rejects an outgoing call because the number is an
+/// emergency number. A self-managed phone account cannot place emergency
+/// calls, so we explain why and offer to hand the number off to the system
+/// dialer instead of silently switching apps.
+final class EmergencyNumberNotification extends MessageNotification {
+  const EmergencyNumberNotification(this.number);
+
+  final String number;
+
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.notifications_errorSnackBar_emergencyNumber(number);
+  }
+
+  @override
+  SnackBarAction? action(BuildContext context) {
+    return SnackBarAction(
+      label: context.l10n.notifications_errorSnackBarAction_emergencyNumber,
+      onPressed: () async {
+        final telUri = Uri(scheme: 'tel', path: number);
+        if (await canLaunchUrl(telUri)) launchUrl(telUri);
+      },
+    );
+  }
+}
+
 final class CallRejectedNotification extends MessageNotification {
   @override
   String l10n(BuildContext context) {
@@ -189,6 +237,15 @@ final class CallInvalidNumberNotification extends MessageNotification {
   @override
   String l10n(BuildContext context) {
     return context.l10n.signalingResponseCode_invalidNumberFormat;
+  }
+}
+
+/// Generic neutral fallback shown when an outgoing call fails for a reason we
+/// do not surface with a specific message.
+final class CallUnableToCompleteNotification extends MessageNotification {
+  @override
+  String l10n(BuildContext context) {
+    return context.l10n.signalingResponseCode_unableToComplete;
   }
 }
 

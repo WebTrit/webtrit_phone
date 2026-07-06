@@ -70,7 +70,12 @@ class ThemeStyleFactoryProvider {
 
     // Specific widget styles
     final appIconStylesProvider = AppIconStyleFactory(colorScheme, appIconConfig);
-    final confirmDialogStylesProvider = ConfirmDialogStyleFactory(colorScheme, textButtonStyle, confirmDialog);
+    final confirmDialogStylesProvider = ConfirmDialogStyleFactory(
+      colorScheme,
+      textButtonStyle,
+      confirmDialog,
+      defaultFontFamily,
+    );
     final inputDecorationStyleFactory = InputDecorationStyleFactory(colorScheme);
     final callStatusStyleFactory = CallStatusStyleFactory(colorScheme, callStatuses);
     final elevatedButtonStyleFactory = ElevatedButtonStyleFactory(colorScheme, elevatedButton, defaultFontFamily);
@@ -193,6 +198,14 @@ class ThemeStyleFactoryProvider {
 
   SnackBarThemeData createSnackBarThemeData() {
     return SnackBarThemeDataFactory(colorScheme).create();
+  }
+
+  DialogThemeData createDialogThemeData() {
+    return DialogThemeDataFactory(
+      colorScheme,
+      widgetConfig.dialog.theme,
+      defaultTextTheme.bodyMedium?.fontFamily,
+    ).create();
   }
 
   ListTileThemeData createListTileThemeData() {

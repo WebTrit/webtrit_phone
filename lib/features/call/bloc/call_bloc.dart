@@ -23,7 +23,6 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -51,10 +50,22 @@ final _logger = Logger('CallBloc');
 /// as parameters, allowing for detailed error logging or reporting.
 typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallRequestError error);
 
+/// Why the signaling session was invalidated, so the application layer can pick
+/// a matching logout reason / user message without depending on app-level enums.
+enum SignalingSessionInvalidationReason {
+  /// Generic: the session was missing/expired (signaling error 4201) with no
+  /// more specific account cause detected.
+  sessionMissed,
+
+  /// The self-care password expired or was changed (403 password_change_required).
+  passwordChangeRequired,
+}
+
 /// Callback triggered when the signaling session is determined to be invalid
 /// (e.g., session revoked remotely, expired, or deleted), requiring a forced
-/// application-level logout to resolve the state.
-typedef SignalingSessionInvalidatedCallback = void Function();
+/// application-level logout to resolve the state. Carries the resolved
+/// [SignalingSessionInvalidationReason] so the caller can tailor the logout.
+typedef SignalingSessionInvalidatedCallback = void Function(SignalingSessionInvalidationReason reason);
 
 /// Resolves the final SIP `from` number for an outgoing call.
 ///
@@ -72,7 +83,7 @@ const _getUserMediaPushKitTimeout = Duration(seconds: 8);
 
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final CallLogsRepository callLogsRepository;
-  final LocalPushRepository localPushRepository;
+  final void Function(String callId, String callerName) _onMissedCall;
   final UserRepository userRepository;
   final LinesStateRepository linesStateRepository;
   final PresenceInfoRepository presenceInfoRepository;
@@ -81,6 +92,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final QueuedTerminationRequestsRepository queuedTerminationRequestsRepository;
   final OutgoingFromNumberResolver resolveOutgoingFromNumber;
   final Function(Notification) submitNotification;
+
+  /// Resolves the current camera permission state. Used to confirm that an
+  /// audio-only downgrade on an incoming video call was caused by a denied
+  /// camera permission (rather than a hardware failure) before steering the
+  /// user toward app settings. When [null], no downgrade hint is raised.
+  final Future<bool> Function()? isCameraPermissionGranted;
 
   /// Callback invoked when the signaling client reports a critical session error
   /// (e.g. [SignalingDisconnectCode.sessionMissedError]), indicating the
@@ -97,7 +114,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final IceFilter? iceFilter;
   final UserMediaBuilder userMediaBuilder;
   final PeerConnectionPolicyApplier? peerConnectionPolicyApplier;
-  final ContactNameResolver contactNameResolver;
+  final ContactResolver contactResolver;
   final CallErrorReporter callErrorReporter;
   final bool sendPresenceSettings;
   final VoidCallback? onCallEnded;
@@ -106,6 +123,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   StreamSubscription<ConnectivityResult>? _connectivityChangedSubscription;
   StreamSubscription<void>? _foregroundCallPushSubscription;
   final _iceRestartDebounce = DebounceMap<String>(const Duration(seconds: 2));
+
+  /// Auto-hides the slowlink network-quality indicator once events stop, and
+  /// drives the brief "recovered" confirmation. Keyed by callId; rescheduling
+  /// the same key resets the countdown, so a steady stream of slowlink events
+  /// keeps the indicator visible.
+  final _slowlinkDebounce = DebounceMap<String>(const Duration(seconds: 2));
+
+  /// Per-call slowlink hit counter; feeds the severity heuristic (more frequent
+  /// events escalate severity). Cleared when the indicator is hidden.
+  final Map<String, int> _slowlinkHits = {};
 
   late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
@@ -120,7 +147,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   CallBloc({
     required this.callLogsRepository,
-    required this.localPushRepository,
+    required void Function(String callId, String callerName) onMissedCall,
     required this.linesStateRepository,
     required this.presenceInfoRepository,
     required this.dialogInfoRepository,
@@ -133,10 +160,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.callkeep,
     required this.callkeepConnections,
     required this.userMediaBuilder,
-    required this.contactNameResolver,
+    required this.contactResolver,
     required this.callErrorReporter,
     required this.sendPresenceSettings,
     required this.onDiagnosticReportRequested,
+    this.isCameraPermissionGranted,
     this.sdpMunger,
     this.sdpSanitizer,
     this.webRtcOptionsBuilder,
@@ -147,7 +175,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required ConnectivityService connectivityService,
     this.onCallEnded,
     Stream<void>? foregroundCallPushSignal,
-  }) : _connectivityService = connectivityService,
+  }) : _onMissedCall = onMissedCall,
+       _connectivityService = connectivityService,
        super(const CallState()) {
     _mediaManager = CallMediaManager(callkeep: callkeep);
     _signalingModule = signalingModule;
@@ -245,6 +274,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _iceRestartDebounce.dispose();
 
+    _slowlinkDebounce.dispose();
+    _slowlinkHits.clear();
+
     await _signalingSubscription.cancel();
 
     await _stopRingbackSound();
@@ -262,14 +294,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   void onError(Object error, StackTrace stackTrace) {
     super.onError(error, stackTrace);
     _logger.warning('onError', error, stackTrace);
-    // TODO: analise error and finalize necessary active call
+    // onError stays a pure logger by design: it has no call context (only error +
+    // stackTrace) and a live call must survive a transient signaling drop. Finalizing
+    // a call whose signaling is lost is handled by the disconnect/hangup/ICE paths.
+    // See docs/features/call_arch.md, section
+    // "Signaling edges (onChange / onError)" > "Call finalization on signaling loss (onError)".
   }
 
   @override
   void onChange(Change<CallState> change) {
     super.onChange(change);
 
-    // TODO: add detailed explanation of the following code and why it is necessary to initialize signaling client in background
+    // Re-notify the reconnect controller when the call-active state flips while
+    // the app is backgrounded - covers the gap the lifecycle handler misses
+    // (it only samples isActive at the instant the app foregrounds/backgrounds).
+    // See docs/features/call_arch.md, section
+    // "Signaling edges (onChange / onError)" > "Background call-active edge (onChange)".
     if (change.currentState.isActive != change.nextState.isActive) {
       final appLifecycleState = change.nextState.currentAppLifecycleState;
       final appInactive =
@@ -481,31 +521,45 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (code == SignalingDisconnectCode.sessionMissedError) {
         _logger.info('Signaling session listener: session is missing ${current.lastSignalingDisconnectCode}');
 
-        unawaited(_notifyAccountErrorSafely());
-        onSessionInvalidated();
+        unawaited(_invalidateSession());
       }
     }
   }
 
-  // TODO: Consider moving this method to a separate repository
-  Future<void> _notifyAccountErrorSafely() async {
+  /// Resolves why the session was invalidated and triggers the forced logout
+  /// with that reason, so the teardown UI can show a specific message.
+  Future<void> _invalidateSession() async {
+    try {
+      final reason = await _resolveInvalidationReason();
+      // A null reason means the probe hit an auth error the session guard
+      // already owns (it dispatches its own, more specific logout) - avoid a
+      // second, conflicting AppLogoutRequested.
+      if (reason != null) onSessionInvalidated(reason);
+    } catch (e, st) {
+      _logger.warning('Session invalidation handling failed', e, st);
+    }
+  }
+
+  // TODO: Consider moving this probe to a separate repository
+  Future<SignalingSessionInvalidationReason?> _resolveInvalidationReason() async {
     try {
       await userRepository.getRemoteInfo();
+    } on PasswordChangeRequiredException {
+      _logger.info('Account session revoked: password change required');
+      return SignalingSessionInvalidationReason.passwordChangeRequired;
+    } on UnauthorizedException catch (_) {
+      // Handled by the session guard inside getInfo(); it drives the logout.
+      return null;
+    } on UserNotFoundException catch (_) {
+      return null;
+    } on SessionMissingException catch (_) {
+      return null;
     } on RequestFailure catch (e) {
-      final errorCode = AccountErrorCode.values.firstWhereOrNull((it) => it.value == e.error?.code);
-
-      switch (errorCode) {
-        case AccountErrorCode.passwordChangeRequired:
-          _logger.info('Account session revoked');
-          submitNotification(const SelfCarePasswordExpiredNotification());
-          break;
-        default:
-          _logger.warning('Account error code: $errorCode');
-          break;
-      }
+      _logger.warning('Account error code: ${e.error?.code}');
     } catch (e, st) {
       _logger.warning('Unexpected error during account info refresh', e, st);
     }
+    return SignalingSessionInvalidationReason.sessionMissed;
   }
 
   //
@@ -663,6 +717,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.warning('__onResetStateEventCompleteCall: ${event.callId}');
 
     _iceRestartDebounce.cancel(event.callId);
+    _slowlinkDebounce.cancel(event.callId);
+    _slowlinkHits.remove(event.callId);
     await _stopRingbackSound();
 
     try {
@@ -868,7 +924,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       return;
     }
 
-    final contactName = await contactNameResolver.resolveWithNumber(event.handle.value);
+    final contactName = (await contactResolver.resolve(event.handle.value))?.maybeName;
     final displayName = contactName ?? (event.displayName?.isEmpty == true ? null : event.displayName);
 
     // Re-check after the async gap: the signaling path may have created an entry
@@ -985,7 +1041,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     }
 
-    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final contactName = (await contactResolver.resolve(handle.value))?.maybeName;
     final displayName = contactName ?? (event.callerDisplayName?.isEmpty == true ? null : event.callerDisplayName);
 
     final activeCallWithSameId = state.retrieveActiveCall(event.callId);
@@ -1133,9 +1189,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       case SignalingResponseCode.invalidNumberFormat:
         submitNotification(CallInvalidNumberNotification());
       default:
+        submitNotification(CallUnableToCompleteNotification());
         _logger.severe('onCallSignalingEventHangup: $code');
         CrashlyticsUtils.recordError(
-          'CallBloc - onCallSignalingEventHangup ${code.name}}',
+          'CallBloc - onCallSignalingEventHangup ${code.name}',
           information: [
             'callId: ${event.callId}',
             'reason: ${event.reason}',
@@ -1148,18 +1205,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     add(_CallMutationEvent.signalingHangup(callId: event.callId, code: event.code, reason: event.reason));
   }
 
-  void _showMissedCallNotification(String callId, String callerName) {
-    localPushRepository
-        .displayPush(AppLocalPush.missedCall(callId, callerName))
-        .catchError((e) => _logger.warning('_showMissedCallNotification: $e'));
-  }
-
   Future<void> __onCallSignalingEventCallUpdating(
     _CallSignalingEventCallUpdating event,
     Emitter<CallState> emit,
   ) async {
     final handle = CallkeepHandle.number(event.caller);
-    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final contactName = (await contactResolver.resolve(handle.value))?.maybeName;
     final displayName = contactName ?? event.callerDisplayName;
 
     final activeCall = state.retrieveActiveCall(event.callId)!;
@@ -1308,7 +1359,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> _onCallControlEvent(CallControlEvent event, Emitter<CallState> emit) {
     return switch (event) {
       _CallControlEventStarted() => __onCallControlEventStarted(event, emit),
+      _CallControlEventCallSelected() => __onCallControlEventCallSelected(event, emit),
       _CallControlEventAnswered() => __onCallControlEventAnswered(event, emit),
+      _CallControlEventAnsweredEndingOthers() => __onCallControlEventAnsweredEndingOthers(event, emit),
+      _CallControlEventAnsweredHoldingOthers() => __onCallControlEventAnsweredHoldingOthers(event, emit),
+      _CallControlEventResumedHoldingOthers() => __onCallControlEventResumedHoldingOthers(event, emit),
       _CallControlEventEnded() => __onCallControlEventEnded(event, emit),
       _CallControlEventSetHeld() => __onCallControlEventSetHeld(event, emit),
       _CallControlEventSetMuted() => __onCallControlEventSetMuted(event, emit),
@@ -1357,6 +1412,44 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         fromReplaces: event.replaces,
       ),
     );
+  }
+
+  /// Focuses a call in the list-based call screen. Pure UI selection: clamps to
+  /// a live call via [CallState.copyWithSelectedCall] (no media side effects).
+  Future<void> __onCallControlEventCallSelected(_CallControlEventCallSelected event, Emitter<CallState> emit) async {
+    emit(state.copyWithSelectedCall(event.callId));
+  }
+
+  // Combined-action intents. Each re-dispatches the ordered primitive events
+  // produced by the pure plans on [CallControlEvent]; state only supplies the
+  // other-call ids ([CallState.otherCallIds]). This replaces the per-call loops
+  // the call screen used to synthesize itself. The primitives go through the
+  // same sequential CallControlEvent queue as before, so semantics are
+  // unchanged.
+
+  /// "End & Answer": ends every other active call, then answers [event.callId].
+  Future<void> __onCallControlEventAnsweredEndingOthers(
+    _CallControlEventAnsweredEndingOthers event,
+    Emitter<CallState> emit,
+  ) async {
+    CallControlEvent.answerEndingOthersPlan(event.callId, state.otherCallIds(event.callId)).forEach(add);
+  }
+
+  /// "Hold & Answer": holds every other active call, then answers [event.callId].
+  Future<void> __onCallControlEventAnsweredHoldingOthers(
+    _CallControlEventAnsweredHoldingOthers event,
+    Emitter<CallState> emit,
+  ) async {
+    CallControlEvent.answerHoldingOthersPlan(event.callId, state.otherCallIds(event.callId)).forEach(add);
+  }
+
+  /// Resume on a held focus: holds the other live calls, then resumes
+  /// [event.callId], so exactly one call stays live.
+  Future<void> __onCallControlEventResumedHoldingOthers(
+    _CallControlEventResumedHoldingOthers event,
+    Emitter<CallState> emit,
+  ) async {
+    CallControlEvent.resumeHoldingOthersPlan(event.callId, state.otherCallIdsToHold(event.callId)).forEach(add);
   }
 
   /// Submitting the answer intent to system when answer button is pressed from app ui
@@ -1428,7 +1521,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> _onCallControlEventAudioDeviceSet(_CallControlEventAudioDeviceSet event, Emitter<CallState> emit) async {
     await state.performOnActiveCall(event.callId, (activeCall) async {
-      await _mediaManager.setDevice(event.callId, event.device);
+      await _mediaManager.setDevice(event.callId, event.device, hasVideo: activeCall.video);
     });
   }
 
@@ -1803,6 +1896,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallMutationEventIceGatheringComplete() => __onMutationIceGatheringComplete(event, emit),
       _CallMutationEventIceConnectionFailed() => __onMutationIceConnectionFailed(event, emit),
       _CallMutationEventRestartIce() => __onMutationRestartIce(event, emit),
+      _CallMutationEventSlowlinkDetected() => __onMutationSlowlinkDetected(event, emit),
+      _CallMutationEventSlowlinkCleared() => __onMutationSlowlinkCleared(event, emit),
+      _CallMutationEventSlowlinkHidden() => __onMutationSlowlinkHidden(event, emit),
       _CallMutationEventRestoreCall() => __onMutationRestoreCall(event, emit),
     };
   }
@@ -1969,15 +2065,24 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
 
       final hasVideo = localStream.getVideoTracks().isNotEmpty;
+      // The offer requested video but the stream came back audio-only: the
+      // camera was downgraded. Confirm it is a permission denial (not a
+      // hardware failure) before hinting the user toward app settings.
+      final videoDowngraded = offer.hasVideo && !hasVideo;
+      final videoPermissionDenied = videoDowngraded && !(await _isCameraPermissionGranted());
       emit(
         state.copyWithMappedActiveCall(event.callId, (call) {
           return call.copyWith(
             video: hasVideo,
+            videoPermissionDenied: videoPermissionDenied,
             localStream: localStream,
             processingStatus: CallProcessingStatus.incomingAnswering,
           );
         }),
       );
+      if (videoPermissionDenied) {
+        submitNotification(const CallVideoDowngradedNotification());
+      }
       await _onVideoStreamReady(event.callId);
 
       final remoteDescription = offer.toDescription();
@@ -2277,7 +2382,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     });
 
     final callId = WebtritSignalingClient.generateCallId();
-    final contactName = await contactNameResolver.resolveWithNumber(e.handle.value);
+    final contactName = (await contactResolver.resolve(e.handle.value))?.maybeName;
     final displayName = contactName ?? e.displayName;
 
     final newCall = ActiveCall(
@@ -2303,7 +2408,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
 
     if (callkeepError != null) {
-      _logger.warning('__onMutationControlStart error: $callkeepError');
+      if (callkeepError == CallkeepCallRequestError.emergencyNumber) {
+        // Self-managed phone accounts cannot place emergency calls. Explain why
+        // and offer to hand the number off to the system dialer, instead of
+        // silently switching to it.
+        submitNotification(EmergencyNumberNotification(e.handle.value));
+      } else if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
+        CrashlyticsUtils.recordError(
+          'CallBloc - __onMutationControlStart selfManagedPhoneAccountNotRegistered',
+          information: ['callId: $callId', 'handle: ${e.handle.value}'],
+        );
+      } else {
+        _logger.warning('__onMutationControlStart error: $callkeepError');
+        onDiagnosticReportRequested(callId, callkeepError);
+      }
       emit(state.copyWithPopActiveCall(callId));
     }
   }
@@ -2382,6 +2500,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     final activeCall = state.retrieveActiveCall(e.callId);
     if (activeCall == null) return;
+    final callId = e.callId;
 
     final localStream = activeCall.localStream;
     if (localStream == null) return;
@@ -2389,7 +2508,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final currentVideoTrack = localStream.getVideoTracks().firstOrNull;
     if (currentVideoTrack != null) {
       currentVideoTrack.enabled = e.enabled;
-      emit(state.copyWithMappedActiveCall(e.callId, (call) => call.copyWith(video: e.enabled)));
+      // A usable video track exists, so camera permission is granted: clear any
+      // stale downgrade hint left from an earlier audio-only answer.
+      emit(
+        state.copyWithMappedActiveCall(callId, (call) => call.copyWith(video: e.enabled, videoPermissionDenied: false)),
+      );
       if (e.enabled) {
         await _mediaManager.onVideoEnabled(e.callId, speakerDevice: state.availableAudioDevices.getSpeaker);
       } else {
@@ -2417,6 +2540,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final newVideoTrack = await userMediaBuilder.ensureVideoTrack(localStream, frontCamera: activeCall.frontCamera);
       if (newVideoTrack == null) {
         submitNotification(const CallUserMediaErrorNotification());
+        await _syncVideoPermissionDenied(callId, emit);
         return;
       }
 
@@ -2430,12 +2554,39 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         _checkSenderResult(videoSenderResult, 'video');
       }
 
-      emit(state.copyWithMappedActiveCall(e.callId, (call) => call.copyWith(video: true)));
+      emit(
+        state.copyWithMappedActiveCall(e.callId, (call) => call.copyWith(video: true, videoPermissionDenied: false)),
+      );
       await _mediaManager.onVideoEnabled(e.callId, speakerDevice: state.availableAudioDevices.getSpeaker);
       await callkeep.reportUpdateCall(e.callId, hasVideo: true);
     } on UserMediaError catch (e) {
       _logger.warning('__onMutationControlSetCameraEnabled cant enable: $e');
       submitNotification(const CallUserMediaErrorNotification());
+      await _syncVideoPermissionDenied(callId, emit);
+    }
+  }
+
+  /// Re-derives [ActiveCall.videoPermissionDenied] from the live camera
+  /// permission after a camera-enable attempt fails. Clears a stale hint once
+  /// the user has granted access, and keeps it when permission is still denied,
+  /// so the camera button never misreports the reason video is unavailable.
+  Future<void> _syncVideoPermissionDenied(String callId, Emitter<CallState> emit) async {
+    final denied = !(await _isCameraPermissionGranted());
+    // The check awaits, so the call may have ended meanwhile; skip the emit then.
+    if (state.retrieveActiveCall(callId) == null) return;
+    emit(state.copyWithMappedActiveCall(callId, (call) => call.copyWith(videoPermissionDenied: denied)));
+  }
+
+  /// Live camera-permission check that never throws. A failing permission plugin
+  /// (e.g. a `PlatformException`) must not break call answering or camera
+  /// toggling, so the unknown case is treated as granted: we never block the
+  /// flow and never raise a misleading "permission denied" hint.
+  Future<bool> _isCameraPermissionGranted() async {
+    try {
+      return await isCameraPermissionGranted?.call() ?? true;
+    } catch (e, s) {
+      _logger.warning('camera permission check failed, assuming granted', e, s);
+      return true;
     }
   }
 
@@ -2779,7 +2930,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _signalingModule.cancelRequestsByCallId(event.callId);
 
     ActiveCall? call = state.retrieveActiveCall(event.callId);
-    if (call == null) return;
+    if (call == null) {
+      // The call was never registered in state - the signaling hangup won the race against
+      // a still-connecting incoming call (e.g. a push->foreground handoff where the caller hung
+      // up before CallBloc was seeded). Report the end to callkeep with the missedWhileConnecting
+      // reason: it marks the call terminated AND flags that the app never presented this call, so a
+      // late connection-state replay that re-drives reportNewIncomingCall for the same callId is
+      // rejected (no ghost). The flag is specific to this never-presented case, so a transfer-back
+      // (which reuses a call the app did know) is unaffected. reportEndCall does not invoke
+      // performEndCall and sends no server request - signaling already terminated the call.
+      await callkeep.reportEndCall(event.callId, '', CallkeepEndCallReason.missedWhileConnecting);
+      return;
+    }
 
     if (call.wasHungUp == false) {
       call = call.copyWith(hungUpTime: clock.now());
@@ -2792,7 +2954,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (code == SignalingResponseCode.declineCall) endReason = CallkeepEndCallReason.declinedElsewhere;
       if (code == SignalingResponseCode.requestTerminated) endReason = CallkeepEndCallReason.unanswered;
       if (Platform.isAndroid && code != SignalingResponseCode.declineCall) {
-        _showMissedCallNotification(event.callId, call.displayName ?? call.handle.value);
+        _onMissedCall(event.callId, call.displayName ?? call.handle.value);
       }
     }
 
@@ -3193,6 +3355,52 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
     _logger.info('__onMutationRestartIce: restarting ICE for call ${event.callId}');
     pc.restartIce();
+  }
+
+  /// Handles an incoming Janus `slowlink` event: surfaces a transient
+  /// network-quality indicator on the call and (re)arms the auto-hide timer.
+  /// A real ICE failure ([iceConnectionIssue]) takes precedence and suppresses it.
+  Future<void> __onMutationSlowlinkDetected(_CallMutationEventSlowlinkDetected event, Emitter<CallState> emit) async {
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall == null) return;
+    if (activeCall.iceConnectionIssue != null) return;
+
+    final hits = (_slowlinkHits[event.callId] ?? 0) + 1;
+    _slowlinkHits[event.callId] = hits;
+
+    final quality = CallNetworkQuality(
+      severity: CallNetworkQualitySeverity.fromSlowlink(hits: hits, lost: event.lost),
+      uplink: event.uplink,
+      media: event.media,
+    );
+    emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(networkQuality: quality)));
+
+    _slowlinkDebounce.schedule(event.callId, () => add(_CallMutationEvent.slowlinkCleared(event.callId)));
+  }
+
+  /// Slowlink events stopped arriving: show the brief "recovered" confirmation,
+  /// then arm a final timer to hide the indicator entirely.
+  Future<void> __onMutationSlowlinkCleared(_CallMutationEventSlowlinkCleared event, Emitter<CallState> emit) async {
+    final activeCall = state.retrieveActiveCall(event.callId);
+    final quality = activeCall?.networkQuality;
+    if (quality == null || quality.recovered) return;
+
+    emit(
+      state.copyWithMappedActiveCall(
+        event.callId,
+        (call) => call.copyWith(networkQuality: quality.copyWith(recovered: true)),
+      ),
+    );
+
+    _slowlinkDebounce.schedule(event.callId, () => add(_CallMutationEvent.slowlinkHidden(event.callId)));
+  }
+
+  /// Removes the network-quality indicator after the recovered confirmation.
+  Future<void> __onMutationSlowlinkHidden(_CallMutationEventSlowlinkHidden event, Emitter<CallState> emit) async {
+    _slowlinkHits.remove(event.callId);
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall?.networkQuality == null) return;
+    emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(networkQuality: null)));
   }
 
   Future<void> __onMutationRestoreCall(_CallMutationEventRestoreCall event, Emitter<CallState> emit) async {
@@ -3730,7 +3938,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       direction = CallDirection.outgoing;
     }
 
-    final contactName = await contactNameResolver.resolveWithNumber(handle.value);
+    final contactName = (await contactResolver.resolve(handle.value))?.maybeName;
     final displayName = contactName ?? callerDisplayName;
 
     if (state.activeCalls.any((c) => c.callId == event.callId)) {
@@ -3884,6 +4092,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _logger.info('[SIG] HangingupEvent: callId=${event.callId} line=${event.line} - hangup in progress');
     } else if (event is IceHangupEvent) {
       _logger.info('[SIG] IceHangupEvent: line=${event.line} reason="${event.reason}"');
+    } else if (event is IceSlowLinkEvent) {
+      final activeCall = state.activeCalls.firstWhereOrNull((c) => c.line == event.line);
+      if (activeCall != null) {
+        add(
+          _CallMutationEvent.slowlinkDetected(
+            callId: activeCall.callId,
+            uplink: event.uplink,
+            media: CallMediaKind.values.byName(event.media.name),
+            lost: event.lost,
+          ),
+        );
+      } else {
+        _logger.fine('[SIG] IceSlowLinkEvent: no active call on line=${event.line}');
+      }
     } else if (event is CallErrorEvent) {
       add(
         _CallSignalingEvent.callError(line: event.line, callId: event.callId, code: event.code, reason: event.reason),
@@ -4155,9 +4377,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _logger.info(
       '[Recents:store] '
       'direction=${activeCall.direction.name} '
-      'number=$number '
       'number.hash=${number.hashCode} '
-      'username=$username '
       'username.hash=${username?.hashCode} '
       'numberEqualsUsername=${number == username} '
       'usernameIsNull=${username == null}',

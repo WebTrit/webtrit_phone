@@ -122,16 +122,33 @@ class CallMediaManager {
   /// Android: calls both [Helper.setSpeakerphoneOn] (AudioSwitch/AOSP) and
   /// [WebtritCallkeep.setAudioDevice] (Telecom/MIUI) with the actual device ID
   /// for cross-OEM compatibility.
-  /// iOS: uses [Helper.setSpeakerphoneOn] and [Helper.selectAudioInput].
-  Future<void> setDevice(String callId, CallAudioDevice device) async {
-    _logger.info('setDevice: ${device.type} (id=${device.id}) for call $callId');
+  /// iOS: uses [Helper.setSpeakerphoneOn] and [Helper.selectAudioInput], and
+  /// keeps the AVAudioSession mode in sync with the route — [hasVideo] selects
+  /// VideoChat vs VoiceChat for the speaker so a video call does not get stuck
+  /// in VoiceChat after an earpiece -> speaker toggle.
+  Future<void> setDevice(String callId, CallAudioDevice device, {required bool hasVideo}) async {
+    _logger.info('setDevice: ${device.type} (id=${device.id}) hasVideo=$hasVideo for call $callId');
     if (Platform.isAndroid) {
       await Helper.setSpeakerphoneOn(device.type == CallAudioDeviceType.speaker);
       await _callkeep.setAudioDevice(callId, device.toCallkeep());
     } else if (Platform.isIOS) {
       if (device.type == CallAudioDeviceType.speaker) {
+        // Restore the session mode that matches the call type before enabling
+        // the speaker: VideoChat for a video call (as onVideoEnabled sets),
+        // VoiceChat otherwise. Without this, a prior earpiece switch leaves a
+        // video call stuck in VoiceChat once the user toggles back to speaker.
+        await Helper.setAppleAudioConfiguration(
+          AppleAudioConfiguration(appleAudioMode: hasVideo ? AppleAudioMode.videoChat : AppleAudioMode.voiceChat),
+        );
         await setSpeaker(enabled: true);
       } else {
+        // Reset the session mode to VoiceChat before disabling the speaker.
+        // During a video call the mode is VideoChat (set by onVideoEnabled), and
+        // Helper.setSpeakerphoneOn(false) cannot route to the earpiece while that
+        // mode is active — it silently keeps audio on the speaker. Mirrors
+        // onVideoDisabled. Without this the earpiece switch is a no-op for video
+        // calls, including when both cameras are off (WT-1593).
+        await Helper.setAppleAudioConfiguration(AppleAudioConfiguration(appleAudioMode: AppleAudioMode.voiceChat));
         await setSpeaker(enabled: false);
         final deviceId = device.id;
         if (deviceId != null) await Helper.selectAudioInput(deviceId);

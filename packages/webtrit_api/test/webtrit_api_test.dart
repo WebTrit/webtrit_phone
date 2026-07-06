@@ -84,6 +84,7 @@ void main() {
               'supported': ['feat1', 'feat2'],
               'custom': {'abc': 'qwe'},
             },
+            'min_supported_app_version': '1.5.0',
           }),
           200,
           request: request,
@@ -105,6 +106,35 @@ void main() {
                 supported: ['feat1', 'feat2'],
                 custom: {'abc': 'qwe'},
               ),
+              postgres: PostgresInfo(version: '1.0.0'),
+              minSupportedAppVersion: '1.5.0',
+            ),
+          ),
+        ),
+      );
+    });
+
+    test('get info without min_supported_app_version yields null', () {
+      Future<Response> handler(Request request) async {
+        return Response(
+          jsonEncode({
+            'core': {'version': '1.0.0'},
+            'postgres': {'version': '1.0.0'},
+          }),
+          200,
+          request: request,
+        );
+      }
+
+      final httpClient = MockClient(expectAsync1(handler));
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+
+      expect(
+        apiClient.getSystemInfo(),
+        completion(
+          equals(
+            SystemInfo(
+              core: CoreInfo(version: Version(1, 0, 0)),
               postgres: PostgresInfo(version: '1.0.0'),
             ),
           ),

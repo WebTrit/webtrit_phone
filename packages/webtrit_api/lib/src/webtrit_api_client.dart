@@ -203,6 +203,19 @@ class WebtritApiClient {
             );
           }
 
+          // Map password_change_required (self-care password expired, HTTP 403) to a
+          // dedicated exception so callers can surface the "password expired" message
+          // instead of treating it as a generic, unactionable request failure.
+          if (error?.code == AccountErrorCode.passwordChangeRequired.value) {
+            throw PasswordChangeRequiredException(
+              url: tenantUrl,
+              requestId: xRequestId,
+              statusCode: httpResponse.statusCode,
+              token: token,
+              error: error,
+            );
+          }
+
           throw RequestFailure(
             url: tenantUrl,
             statusCode: httpResponse.statusCode,

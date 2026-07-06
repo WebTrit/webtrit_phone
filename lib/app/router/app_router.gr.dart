@@ -303,6 +303,22 @@ class ChatConversationScreenPageRouteArgs {
 }
 
 /// generated route for
+/// [CompatibilityIssueScreenPage]
+class CompatibilityIssueScreenPageRoute extends PageRouteInfo<void> {
+  const CompatibilityIssueScreenPageRoute({List<PageRouteInfo>? children})
+    : super(CompatibilityIssueScreenPageRoute.name, initialChildren: children);
+
+  static const String name = 'CompatibilityIssueScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CompatibilityIssueScreenPage();
+    },
+  );
+}
+
+/// generated route for
 /// [ContactScreenPage]
 class ContactScreenPageRoute extends PageRouteInfo<ContactScreenPageRouteArgs> {
   ContactScreenPageRoute({
@@ -1625,6 +1641,22 @@ class UndefinedScreenPageRouteArgs {
 
   @override
   int get hashCode => undefinedType.hashCode;
+}
+
+/// generated route for
+/// [UpdateRequiredScreenPage]
+class UpdateRequiredScreenPageRoute extends PageRouteInfo<void> {
+  const UpdateRequiredScreenPageRoute({List<PageRouteInfo>? children})
+    : super(UpdateRequiredScreenPageRoute.name, initialChildren: children);
+
+  static const String name = 'UpdateRequiredScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const UpdateRequiredScreenPage();
+    },
+  );
 }
 
 /// generated route for

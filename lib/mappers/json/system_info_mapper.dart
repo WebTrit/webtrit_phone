@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/version_utils.dart';
 
 mixin SystemInfoJsonMapper {
   WebtritSystemInfo systemInfoFromJson(String json) {
@@ -20,6 +21,7 @@ mixin SystemInfoJsonMapper {
       adapter: map['adapter'] != null ? adapterInfoFromMap(map['adapter']) : null,
       janus: map['janus'] != null ? janusInfoFromMap(map['janus']) : null,
       gorush: map['gorush'] != null ? gorushInfoFromMap(map['gorush']) : null,
+      minSupportedAppVersion: tryParseVersion(map['min_supported_app_version']),
     );
   }
 
@@ -30,6 +32,7 @@ mixin SystemInfoJsonMapper {
       'adapter': systemInfo.adapter != null ? adapterInfoToMap(systemInfo.adapter!) : null,
       'janus': systemInfo.janus != null ? janusInfoToMap(systemInfo.janus!) : null,
       'gorush': systemInfo.gorush != null ? gorushInfoToMap(systemInfo.gorush!) : null,
+      'min_supported_app_version': systemInfo.minSupportedAppVersion?.toString(),
     };
   }
 

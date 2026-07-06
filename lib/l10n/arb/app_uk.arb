@@ -61,6 +61,22 @@
   "@autoprovision_ReloginDialog_title": {},
   "autoprovision_successSnackBar_used": "Ваші налаштування було успішно отримано, застосунок готовий до використання",
   "@autoprovision_successSnackBar_used": {},
+  "callTileActions_contact": "Контакт",
+  "@callTileActions_contact": {
+    "description": "Label of the expanded call tile action that opens the contact details screen."
+  },
+  "callTileActions_history": "Історія",
+  "@callTileActions_history": {
+    "description": "Label of the expanded call tile action that opens the call history for the number."
+  },
+  "callTileActions_message": "Повідомлення",
+  "@callTileActions_message": {
+    "description": "Label of the expanded call tile action that opens a chat with the contact."
+  },
+  "callTileActions_more": "Більше",
+  "@callTileActions_more": {
+    "description": "Label of the expanded call tile action that opens the full actions menu."
+  },
   "call_CallActionsTooltip_accept": "Прийняти",
   "@call_CallActionsTooltip_accept": {},
   "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "Прийняти переадресацію",
@@ -89,24 +105,20 @@
   "@call_CallActionsTooltip_disableSpeaker": {},
   "call_CallActionsTooltip_enableCamera": "Увімкнути камеру",
   "@call_CallActionsTooltip_enableCamera": {},
+  "call_CallActionsTooltip_cameraPermissionDenied": "Доступ до камери заборонено. Торкніться, щоб відкрити налаштування",
+  "@call_CallActionsTooltip_cameraPermissionDenied": {},
   "call_CallActionsTooltip_enableSpeaker": "Увімкнути динамік",
   "@call_CallActionsTooltip_enableSpeaker": {},
   "call_CallActionsTooltip_hangup": "Завершити",
   "@call_CallActionsTooltip_hangup": {},
-  "call_CallActionsTooltip_hangupAndAccept": "Завершити та прийняти",
-  "@call_CallActionsTooltip_hangupAndAccept": {},
   "call_CallActionsTooltip_hideKeypad": "Приховати клавіатуру",
   "@call_CallActionsTooltip_hideKeypad": {},
   "call_CallActionsTooltip_hold": "Утримати дзвінок",
   "@call_CallActionsTooltip_hold": {},
-  "call_CallActionsTooltip_holdAndAccept": "Утримати та прийняти",
-  "@call_CallActionsTooltip_holdAndAccept": {},
   "call_CallActionsTooltip_mute": "Вимкнути мікрофон",
   "@call_CallActionsTooltip_mute": {},
   "call_CallActionsTooltip_showKeypad": "Показати клавіатуру",
   "@call_CallActionsTooltip_showKeypad": {},
-  "call_CallActionsTooltip_swap": "Перемкнути дзвінки",
-  "@call_CallActionsTooltip_swap": {},
   "call_CallActionsTooltip_transfer": "Переадресація",
   "@call_CallActionsTooltip_transfer": {},
   "call_CallActionsTooltip_transfer_choose": "Вибрати номер",
@@ -117,6 +129,62 @@
   "@call_CallActionsTooltip_unhold": {},
   "call_CallActionsTooltip_unmute": "Увімкнути мікрофон",
   "@call_CallActionsTooltip_unmute": {},
+  "call_CallList_incoming": "Вхідний",
+  "@call_CallList_incoming": {
+    "description": "Trailing label on a ringing incoming row in the call list."
+  },
+  "call_CallList_outgoing": "Вихідний",
+  "@call_CallList_outgoing": {
+    "description": "Trailing label on a ringing outgoing row in the call list."
+  },
+  "call_CallList_header": "{count, plural, one{{count} дзвінок - торкніться, щоб вибрати} few{{count} дзвінки - торкніться, щоб вибрати} many{{count} дзвінків - торкніться, щоб вибрати} other{{count} дзвінка - торкніться, щоб вибрати}}",
+  "@call_CallList_header": {
+    "description": "Header above the call list on the call screen when more than one call is in progress.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "call_CallList_statusOnCall": "Розмова",
+  "@call_CallList_statusOnCall": {
+    "description": "Status badge in the call list for an answered, not held call."
+  },
+  "call_FocusedActionHint_actingOn": "Дія для: {name}",
+  "@call_FocusedActionHint_actingOn": {
+    "description": "Hint above the call action buttons naming the focused call the actions apply to.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_FocusedActionHint_willBeEnded": "Дзвінок з {name} буде завершено",
+  "@call_FocusedActionHint_willBeEnded": {
+    "description": "Side-effect line under the acting-on hint: the named call will be ended on answer.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_FocusedActionHint_willBeHeld": "Дзвінок з {name} буде поставлено на утримання",
+  "@call_FocusedActionHint_willBeHeld": {
+    "description": "Side-effect line under the acting-on hint: the named call will be put on hold on answer.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_ToolbarStatus_connecting": "Підключення...",
+  "@call_ToolbarStatus_connecting": {
+    "description": "Toolbar status line while the very first signaling connection is being established (turns into Reconnecting once a connection has existed)."
+  },
+  "call_ToolbarStatus_reconnecting": "Перепідключення...",
+  "@call_ToolbarStatus_reconnecting": {
+    "description": "Suffix on the call screen toolbar status line while the signaling connection is being re-established."
+  },
   "call_description_held": "На утриманні",
   "@call_description_held": {},
   "call_description_incoming": "Вхідний дзвінок",
@@ -157,6 +225,14 @@
   "@iceConnectionIssue_iceFailNoIcePath": {},
   "iceConnectionIssue_iceFailNoIcePathViaVpn": "VPN може блокувати дзвінок. Спробуйте вимкнути його",
   "@iceConnectionIssue_iceFailNoIcePathViaVpn": {},
+  "callNetworkQuality_yourAudioWeak": "Ваш звук слабкий",
+  "@callNetworkQuality_yourAudioWeak": {},
+  "callNetworkQuality_yourVideoWeak": "Ваше відео слабке",
+  "@callNetworkQuality_yourVideoWeak": {},
+  "callNetworkQuality_theirAudioWeak": "Звук співрозмовника слабкий",
+  "@callNetworkQuality_theirAudioWeak": {},
+  "callNetworkQuality_theirVideoWeak": "Відео співрозмовника слабке",
+  "@callNetworkQuality_theirVideoWeak": {},
   "callPullBadge_dialogTitle": "Перехопляємі дзвінки",
   "@callPullBadge_dialogTitle": {},
   "callPullBadge_pickupButtonTitle": "Перехопити",
@@ -418,6 +494,16 @@
   "@diagnostic_battery_navigate_section": {},
   "diagnostic_battery_tile_title": "Режим батареї",
   "@diagnostic_battery_tile_title": {},
+  "diagnostic_callingMode_groupTitle": "Режим дзвінків",
+  "@diagnostic_callingMode_groupTitle": {},
+  "diagnostic_callingMode_tile_title": "Режим дзвінків",
+  "@diagnostic_callingMode_tile_title": {},
+  "diagnostic_callingMode_standalone_title": "Обмежений режим дзвінків",
+  "@diagnostic_callingMode_standalone_title": {},
+  "diagnostic_callingMode_standalone_caption": "Standalone — можливі обмеження сповіщення про дзвінок і вибору гарнітури",
+  "@diagnostic_callingMode_standalone_caption": {},
+  "diagnostic_callingMode_standalone_description": "Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступний.",
+  "@diagnostic_callingMode_standalone_description": {},
   "diagnostic_permission_camera_description": "Цей застосунок потребує дозволу на доступ до камери для здійснення відеодзвінків.",
   "@diagnostic_permission_camera_description": {},
   "diagnostic_permission_camera_title": "Камера",
@@ -654,6 +740,18 @@
       }
     }
   },
+  "login_AppVersionUnsupportedExceptionError": "Версія вашого застосунку більше не підтримується, будь ласка, оновіть застосунок, щоб продовжити (поточна: {actual}, мінімальна потрібна: {minSupported})",
+  "@login_AppVersionUnsupportedExceptionError": {
+    "description": "Shown during login when the backend declares a minimum supported app version that is newer than this build. Context: user tries to sign in. Condition: app version is older than min_supported_app_version (current: {actual}, minimum required: {minSupported}).",
+    "placeholders": {
+      "actual": {
+        "type": "String"
+      },
+      "minSupported": {
+        "type": "String"
+      }
+    }
+  },
   "login_RequestFailureEmptyEmailError": "Не вдалося відправити код підтвердження",
   "@login_RequestFailureEmptyEmailError": {
     "description": "Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty."
@@ -853,6 +951,20 @@
   },
   "main_CompatibilityIssueDialog_title": "Проблема сумісності",
   "@main_CompatibilityIssueDialog_title": {},
+  "main_AppUpdateRequiredDialog_title": "Потрібне оновлення",
+  "@main_AppUpdateRequiredDialog_title": {},
+  "main_AppUpdateRequiredDialog_description": "Версія вашого застосунку більше не підтримується. Будь ласка, оновіть застосунок, щоб продовжити.",
+  "@main_AppUpdateRequiredDialog_description": {
+    "description": "Body text of the full-screen update-required prompt, shown when the running app is older than the backend-declared minimum supported app version."
+  },
+  "main_AppUpdateRequiredDialog_currentVersionLabel": "Поточна версія",
+  "@main_AppUpdateRequiredDialog_currentVersionLabel": {
+    "description": "Label above the running app version on the update-required prompt."
+  },
+  "main_AppUpdateRequiredDialog_minimumVersionLabel": "Мінімальна потрібна версія",
+  "@main_AppUpdateRequiredDialog_minimumVersionLabel": {
+    "description": "Label above the minimum supported app version on the update-required prompt."
+  },
   "messaging_ActionBtn_retry": "Повторить спробу",
   "@messaging_ActionBtn_retry": {},
   "messaging_ChooseContact_cancel": "Скасувати",
@@ -1059,6 +1171,12 @@
   },
   "notifications_errorSnackBarAction_callUserMedia": "Перевірити",
   "@notifications_errorSnackBarAction_callUserMedia": {},
+  "notifications_messageSnackBar_callVideoDowngraded": "Відповідь без камери - доступ до камери не надано",
+  "@notifications_messageSnackBar_callVideoDowngraded": {
+    "description": "Shown when an incoming video call is answered audio-only because camera permission was denied. Offers a shortcut to app settings."
+  },
+  "notifications_messageSnackBarAction_callVideoDowngraded": "Налаштування",
+  "@notifications_messageSnackBarAction_callVideoDowngraded": {},
   "notifications_errorSnackBar_activeLineBlindTransferWarning": "Ви вже на лінії з одержувачем, до якого намагаєтеся здійснити безумовний переказ",
   "@notifications_errorSnackBar_activeLineBlindTransferWarning": {
     "description": "Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target."
@@ -1127,6 +1245,10 @@
   "@notifications_errorSnackBar_sessionExpired": {
     "description": "Shown in a notification or snackbar when the user's authentication session has expired and re-authentication is required. Typical causes: access or refresh token expiration/revocation, failed token refresh, or the backend invalidating the session. Advise the user to sign in again to restore full functionality."
   },
+  "notifications_errorSnackBar_accountNotFound": "Ваш обліковий запис не знайдено. Можливо, його деактивовано або видалено. Зверніться до адміністратора.",
+  "@notifications_errorSnackBar_accountNotFound": {
+    "description": "Shown in a notification or snackbar when the backend returns 404 (user not found) for the current account, e.g. it was deactivated or removed on the server. The user is logged out; advise them to contact their administrator."
+  },
   "notifications_errorSnackBar_SignalingConnectFailed": "Підключення до ядра не вдалося, спроба з'єднання",
   "@notifications_errorSnackBar_SignalingConnectFailed": {
     "description": "Shown in a notification or snackbar when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Context: occurs when the signaling/WebSocket connection cannot be established due to network outages, server unreachability, TLS/handshake failures, authentication errors (expired/invalid tokens), or firewall/VPN restrictions. Suggest the user check their network, retry, or reauthenticate if the problem persists."
@@ -1149,6 +1271,16 @@
       }
     }
   },
+  "notifications_errorSnackBar_emergencyNumber": "{number} - екстрений номер, його не можна набрати з застосунку",
+  "@notifications_errorSnackBar_emergencyNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBarAction_emergencyNumber": "Відкрити дайлер",
+  "@notifications_errorSnackBarAction_emergencyNumber": {},
   "notifications_errorSnackBar_SignalingSessionMissed": "Помилка автентифікації, будь ласка увійдіть знову",
   "@notifications_errorSnackBar_SignalingSessionMissed": {
     "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality."
@@ -1179,6 +1311,10 @@
   },
   "notifications_successSnackBar_appOnline": "Ваш застосунок онлайн.",
   "@notifications_successSnackBar_appOnline": {},
+  "notifications_missedCall_title": "Пропущений дзвінок",
+  "@notifications_missedCall_title": {},
+  "notifications_missedCall_unknownCaller": "Невідомий",
+  "@notifications_missedCall_unknownCaller": {},
   "numberActions_audioCall": "Aудіо дзвінок",
   "@numberActions_audioCall": {},
   "numberActions_callFrom": "Дзвінок від {number}",
@@ -1476,6 +1612,8 @@
   },
   "settings_AboutText_ApplicationEmbeddedLinks": "Вбудовані посилання застосунку",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
+  "settings_AboutText_ThirdPartyLicenses": "Ліцензії третіх сторін",
+  "@settings_AboutText_ThirdPartyLicenses": {},
   "settings_AboutText_AppSessionIdentifier": "Ідентифікатор сесії застосунку",
   "@settings_AboutText_AppSessionIdentifier": {},
   "settings_AboutText_AppVersion": "Версія застосунку",
@@ -1900,7 +2038,7 @@
   "@signalingResponseCode_pluginNotFound": {
     "description": "Shown when the requested Janus plugin is not found or unavailable. Cause: wrong plugin name, not loaded on server, or removed."
   },
-  "signalingResponseCode_rejected": "Ваш запит було відхилено. Будь ласка, спробуйте ще раз.",
+  "signalingResponseCode_rejected": "Виклик відхилено",
   "@signalingResponseCode_rejected": {
     "description": "Shown when the call request is rejected by an intermediary (e.g. proxy, SBC, or policy server) before reaching the recipient. SIP 603 Decline or similar."
   },
@@ -1988,13 +2126,17 @@
   "@signalingResponseCode_unwanted": {
     "description": "Shown when the call is flagged as unwanted by the recipient or network. SIP 607 Unwanted."
   },
-  "signalingResponseCode_userBusy": "Користувач, якого ви намагаєтеся знайти, зайнятий. Будь ласка, спробуйте пізніше.",
+  "signalingResponseCode_userBusy": "Користувач зайнятий",
   "@signalingResponseCode_userBusy": {
     "description": "Shown when the callee is busy (SIP 486 Busy Here)."
   },
-  "signalingResponseCode_userNotExist": "Користувача, якого ви намагаєтеся знайти, не існує.",
+  "signalingResponseCode_userNotExist": "Користувача не існує",
   "@signalingResponseCode_userNotExist": {
     "description": "Shown when the dialed user is not registered or does not exist in the PBX. SIP 404 Not Found."
+  },
+  "signalingResponseCode_unableToComplete": "Не вдалося здійснити виклик.",
+  "@signalingResponseCode_unableToComplete": {
+    "description": "Generic neutral fallback shown when an outgoing call fails for an unrecognized reason."
   },
   "signalingResponseCode_wrongWebrtcState": "Сталася помилка, пов’язана з викликом. Завершіть виклик і спробуйте ще раз.",
   "@signalingResponseCode_wrongWebrtcState": {

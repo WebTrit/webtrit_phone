@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
+
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/settings/features/diagnostic/bloc/network_tester_cubit.dart';
@@ -90,6 +92,15 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                       );
                     },
                   ),
+                if (androidTarget && state.callDeliveryMode == CallkeepAndroidCallDeliveryMode.standalone) ...[
+                  GroupTitleListTile(titleData: context.l10n.diagnostic_callingMode_groupTitle),
+                  DiagnosticCallingModeItem(
+                    onTap: () => showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) => const DiagnosticCallingModeDetails(),
+                    ),
+                  ),
+                ],
                 GroupTitleListTile(titleData: context.l10n.diagnosticScreen_permissionsGroup_title),
                 ...state
                     .filterPermissionsByAgreement(
