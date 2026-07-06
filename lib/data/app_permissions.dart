@@ -189,6 +189,26 @@ class AppPermissions {
   /// Opens the app settings page.
   Future<void> toAppSettings() => openAppSettings();
 
+  /// Status of the OEM "display pop-up windows while running in background"
+  /// capability (MIUI/HyperOS), which gates showing the incoming-call UI over
+  /// the lock screen. Reports granted where the capability does not apply.
+  Future<CallkeepSpecialPermissionStatus> backgroundActivityStartStatus() =>
+      _webtritCallkeepPermissions.getBackgroundActivityStartPermissionStatus();
+
+  /// Opens the OEM permissions screen hosting the "display pop-up windows while
+  /// running in background" toggle (falls back to app settings natively).
+  Future<void> toBackgroundActivityStartSettings() => _webtritCallkeepPermissions.openBackgroundActivityStartSettings();
+
+  /// Status of the OEM "show on lock screen" capability (MIUI/HyperOS), which
+  /// gates showing the incoming-call UI over the lock screen. Reports granted
+  /// where the capability does not apply.
+  Future<CallkeepSpecialPermissionStatus> showOnLockscreenStatus() =>
+      _webtritCallkeepPermissions.getShowWhenLockedPermissionStatus();
+
+  /// Opens the OEM permissions screen hosting the "show on lock screen"
+  /// toggle (falls back to app settings natively).
+  Future<void> toShowOnLockscreenSettings() => _webtritCallkeepPermissions.openShowWhenLockedSettings();
+
   /// Attempts to open the settings screen for the given special permission.
   ///
   /// If the specific permission screen (e.g., full screen intent) is not supported
@@ -197,10 +217,13 @@ class AppPermissions {
   /// are typically located outside the standard app settings.
   Future<void> toSpecialPermissionsSetting(CallkeepSpecialPermissions permission) async {
     try {
-      if (permission == CallkeepSpecialPermissions.fullScreenIntent) {
-        await _webtritCallkeepPermissions.openFullScreenIntentSettings();
-      } else {
-        await _webtritCallkeepPermissions.openSettings();
+      switch (permission) {
+        case CallkeepSpecialPermissions.fullScreenIntent:
+          await _webtritCallkeepPermissions.openFullScreenIntentSettings();
+        // Not reached via the current flow (backgroundActivityStart is not in
+        // _specialPermissions); the live trigger is toBackgroundActivityStartSettings().
+        case CallkeepSpecialPermissions.backgroundActivityStart:
+          await _webtritCallkeepPermissions.openBackgroundActivityStartSettings();
       }
     } catch (e) {
       await _webtritCallkeepPermissions.openSettings();

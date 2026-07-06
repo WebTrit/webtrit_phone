@@ -644,6 +644,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnostic_permissionStatus_restricted => 'Restricted Access';
 
   @override
+  String get diagnostic_specialPermissionStatus_denied => 'Access Denied';
+
+  @override
+  String get diagnostic_specialPermissionStatus_granted => 'Access Granted';
+
+  @override
+  String get diagnostic_specialPermissionStatus_unknown => 'Unknown';
+
+  @override
+  String get diagnostic_xiaomi_backgroundActivityStart_description =>
+      'MIUI/HyperOS restricts showing the incoming-call screen while the app runs in the background unless the \"Display pop-up windows while running in background\" permission is granted for this app.';
+
+  @override
+  String get diagnostic_xiaomi_backgroundActivityStart_tile_title =>
+      'Display pop-up windows while running in background';
+
+  @override
+  String get diagnostic_xiaomi_groupTitle => 'Xiaomi permissions';
+
+  @override
+  String get diagnostic_xiaomi_navigate_section => 'Navigate to the lock screen permissions section';
+
+  @override
+  String get diagnostic_xiaomi_showWhenLocked_description =>
+      'MIUI/HyperOS restricts showing the incoming-call screen over the lock screen unless the \"Show on Lock screen\" permission is granted for this app.';
+
+  @override
+  String get diagnostic_xiaomi_showWhenLocked_tile_title => 'Show on lock screen';
+
+  @override
   String get diagnosticPushDetails_configuration_title => 'Push Notification service configuration';
 
   @override
@@ -1567,10 +1597,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get permission_manufacturer_Text_trailing => 'Permissions could be changed at any time in the future.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip1 => 'Go to \"App settings\" → \"Notifications\".';
+  String get permission_manufacturer_Text_xiaomi_tip1 =>
+      'Open this app\'s \"Other permissions\" screen using the button below.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip2 => 'Find and turn on \"Lockscreen notifications\".';
+  String get permission_manufacturer_Text_xiaomi_tip2 =>
+      'Turn on \"Display pop-up windows while running in background\" so incoming calls can appear while the app is in the background.';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip3 =>
+      'Turn on \"Show on lock screen\" so incoming calls can appear over the lock screen.';
 
   @override
   String get permission_Text_description =>

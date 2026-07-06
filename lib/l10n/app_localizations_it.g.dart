@@ -651,6 +651,36 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnostic_permissionStatus_restricted => 'Accesso limitato';
 
   @override
+  String get diagnostic_specialPermissionStatus_denied => 'Accesso negato';
+
+  @override
+  String get diagnostic_specialPermissionStatus_granted => 'Accesso consentito';
+
+  @override
+  String get diagnostic_specialPermissionStatus_unknown => 'Sconosciuto';
+
+  @override
+  String get diagnostic_xiaomi_backgroundActivityStart_description =>
+      'MIUI/HyperOS impedisce di mostrare la schermata di chiamata in arrivo sopra la schermata di blocco mentre l\'app è in esecuzione in background, a meno che non sia concessa l\'autorizzazione \"Visualizza finestre pop-up quando è in esecuzione in background\".';
+
+  @override
+  String get diagnostic_xiaomi_backgroundActivityStart_tile_title =>
+      'Visualizza finestre pop-up quando è in esecuzione in background';
+
+  @override
+  String get diagnostic_xiaomi_groupTitle => 'Autorizzazioni Xiaomi';
+
+  @override
+  String get diagnostic_xiaomi_navigate_section => 'Vai alla sezione delle autorizzazioni della schermata di blocco';
+
+  @override
+  String get diagnostic_xiaomi_showWhenLocked_description =>
+      'MIUI/HyperOS impedisce di mostrare la schermata di chiamata in arrivo sopra la schermata di blocco, a meno che non sia concessa l\'autorizzazione \"Mostra sulla schermata di blocco\" per questa app.';
+
+  @override
+  String get diagnostic_xiaomi_showWhenLocked_tile_title => 'Mostra sulla schermata di blocco';
+
+  @override
   String get diagnosticPushDetails_configuration_title => 'Configurazione del servizio di notifiche push';
 
   @override
@@ -1590,10 +1620,16 @@ class AppLocalizationsIt extends AppLocalizations {
       'I permessi potrebbero essere modificati in qualsiasi momento in futuro.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip1 => 'Vai su \"Impostazioni dell\'app\" → \"Notifiche\".';
+  String get permission_manufacturer_Text_xiaomi_tip1 =>
+      'Apri la schermata \"Altre autorizzazioni\" di questa app con il pulsante in basso.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip2 => 'Trova e attiva \"Notifiche sulla schermata di blocco\".';
+  String get permission_manufacturer_Text_xiaomi_tip2 =>
+      'Attiva \"Mostra finestre popup in background\" per far apparire le chiamate in arrivo mentre l\'app è in background.';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip3 =>
+      'Attiva \"Mostra nella schermata di blocco\" per far apparire le chiamate in arrivo sopra la schermata di blocco.';
 
   @override
   String get permission_Text_description =>
