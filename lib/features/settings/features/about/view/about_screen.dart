@@ -117,6 +117,13 @@ class _AboutScreenState extends State<AboutScreen> {
                                     coreVersion: state.coreVersion,
                                     progress: state.progress,
                                   ),
+                                  if (state.bundleVersion != null) ...[
+                                    SizedBox(height: delimiterHeight / 2),
+                                    InfoTile(
+                                      label: context.l10n.settings_AboutText_BundleVersion,
+                                      value: state.bundleVersion,
+                                    ),
+                                  ],
                                 ],
                               ),
                             ),

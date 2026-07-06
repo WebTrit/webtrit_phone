@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DiagnosticState {
 
- List<PermissionWithStatus> get permissions; PushTokenStatus get pushTokenStatus; CallkeepAndroidBatteryMode get batteryMode; CallkeepAndroidCallDeliveryMode get callDeliveryMode;
+ List<PermissionWithStatus> get permissions; PushTokenStatus get pushTokenStatus; CallkeepAndroidBatteryMode get batteryMode; CallkeepAndroidCallDeliveryMode get callDeliveryMode; bool get isXiaomiDevice; CallkeepSpecialPermissionStatus get backgroundActivityStartStatus; CallkeepSpecialPermissionStatus get showWhenLockedStatus;
 /// Create a copy of DiagnosticState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $DiagnosticStateCopyWith<DiagnosticState> get copyWith => _$DiagnosticStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DiagnosticState&&const DeepCollectionEquality().equals(other.permissions, permissions)&&(identical(other.pushTokenStatus, pushTokenStatus) || other.pushTokenStatus == pushTokenStatus)&&(identical(other.batteryMode, batteryMode) || other.batteryMode == batteryMode)&&(identical(other.callDeliveryMode, callDeliveryMode) || other.callDeliveryMode == callDeliveryMode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DiagnosticState&&const DeepCollectionEquality().equals(other.permissions, permissions)&&(identical(other.pushTokenStatus, pushTokenStatus) || other.pushTokenStatus == pushTokenStatus)&&(identical(other.batteryMode, batteryMode) || other.batteryMode == batteryMode)&&(identical(other.callDeliveryMode, callDeliveryMode) || other.callDeliveryMode == callDeliveryMode)&&(identical(other.isXiaomiDevice, isXiaomiDevice) || other.isXiaomiDevice == isXiaomiDevice)&&(identical(other.backgroundActivityStartStatus, backgroundActivityStartStatus) || other.backgroundActivityStartStatus == backgroundActivityStartStatus)&&(identical(other.showWhenLockedStatus, showWhenLockedStatus) || other.showWhenLockedStatus == showWhenLockedStatus));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(permissions),pushTokenStatus,batteryMode,callDeliveryMode);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(permissions),pushTokenStatus,batteryMode,callDeliveryMode,isXiaomiDevice,backgroundActivityStartStatus,showWhenLockedStatus);
 
 @override
 String toString() {
-  return 'DiagnosticState(permissions: $permissions, pushTokenStatus: $pushTokenStatus, batteryMode: $batteryMode, callDeliveryMode: $callDeliveryMode)';
+  return 'DiagnosticState(permissions: $permissions, pushTokenStatus: $pushTokenStatus, batteryMode: $batteryMode, callDeliveryMode: $callDeliveryMode, isXiaomiDevice: $isXiaomiDevice, backgroundActivityStartStatus: $backgroundActivityStartStatus, showWhenLockedStatus: $showWhenLockedStatus)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $DiagnosticStateCopyWith<$Res>  {
   factory $DiagnosticStateCopyWith(DiagnosticState value, $Res Function(DiagnosticState) _then) = _$DiagnosticStateCopyWithImpl;
 @useResult
 $Res call({
- List<PermissionWithStatus> permissions, PushTokenStatus pushTokenStatus, CallkeepAndroidBatteryMode batteryMode, CallkeepAndroidCallDeliveryMode callDeliveryMode
+ List<PermissionWithStatus> permissions, PushTokenStatus pushTokenStatus, CallkeepAndroidBatteryMode batteryMode, CallkeepAndroidCallDeliveryMode callDeliveryMode, bool isXiaomiDevice, CallkeepSpecialPermissionStatus backgroundActivityStartStatus, CallkeepSpecialPermissionStatus showWhenLockedStatus
 });
 
 
@@ -62,13 +62,16 @@ class _$DiagnosticStateCopyWithImpl<$Res>
 
 /// Create a copy of DiagnosticState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? permissions = null,Object? pushTokenStatus = null,Object? batteryMode = null,Object? callDeliveryMode = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? permissions = null,Object? pushTokenStatus = null,Object? batteryMode = null,Object? callDeliveryMode = null,Object? isXiaomiDevice = null,Object? backgroundActivityStartStatus = null,Object? showWhenLockedStatus = null,}) {
   return _then(DiagnosticState(
 permissions: null == permissions ? _self.permissions : permissions // ignore: cast_nullable_to_non_nullable
 as List<PermissionWithStatus>,pushTokenStatus: null == pushTokenStatus ? _self.pushTokenStatus : pushTokenStatus // ignore: cast_nullable_to_non_nullable
 as PushTokenStatus,batteryMode: null == batteryMode ? _self.batteryMode : batteryMode // ignore: cast_nullable_to_non_nullable
 as CallkeepAndroidBatteryMode,callDeliveryMode: null == callDeliveryMode ? _self.callDeliveryMode : callDeliveryMode // ignore: cast_nullable_to_non_nullable
-as CallkeepAndroidCallDeliveryMode,
+as CallkeepAndroidCallDeliveryMode,isXiaomiDevice: null == isXiaomiDevice ? _self.isXiaomiDevice : isXiaomiDevice // ignore: cast_nullable_to_non_nullable
+as bool,backgroundActivityStartStatus: null == backgroundActivityStartStatus ? _self.backgroundActivityStartStatus : backgroundActivityStartStatus // ignore: cast_nullable_to_non_nullable
+as CallkeepSpecialPermissionStatus,showWhenLockedStatus: null == showWhenLockedStatus ? _self.showWhenLockedStatus : showWhenLockedStatus // ignore: cast_nullable_to_non_nullable
+as CallkeepSpecialPermissionStatus,
   ));
 }
 

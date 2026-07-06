@@ -32,15 +32,26 @@ class UpdateRequiredScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appInfo = context.read<AppInfo>();
+    final packageInfo = context.read<PackageInfo>();
     final compatibility = context.select<AppBloc, AppCompatibility>((bloc) => bloc.state.appCompatibility);
 
     final currentVersion = appInfo.version;
+    // The per-client build version+code (native versionName+versionCode, what
+    // the store console lists) rides along as a muted sub-line so users and
+    // support can match the numbers they see in Play Store / App Store.
+    // Debug/sideload builds show their literal 0.0.0+0 placeholder - only
+    // developers ever see those builds.
+    final storeVersion = packageInfo.fullVersion;
     final minSupportedVersion = compatibility is AppVersionTooOld ? compatibility.minSupportedVersion : currentVersion;
 
     // The Android back button must not escape the gate.
     return PopScope(
       canPop: false,
-      child: _UpdateRequiredView(currentVersion: currentVersion, minSupportedVersion: minSupportedVersion),
+      child: _UpdateRequiredView(
+        currentVersion: currentVersion,
+        storeVersion: storeVersion,
+        minSupportedVersion: minSupportedVersion,
+      ),
     );
   }
 }
@@ -52,9 +63,14 @@ class UpdateRequiredScreenPage extends StatelessWidget {
 /// forced-update gate the store link is always the right way out. Resolution
 /// failures are swallowed and the Update button is simply omitted.
 class _UpdateRequiredView extends StatefulWidget {
-  const _UpdateRequiredView({required this.currentVersion, required this.minSupportedVersion});
+  const _UpdateRequiredView({
+    required this.currentVersion,
+    required this.storeVersion,
+    required this.minSupportedVersion,
+  });
 
   final Version currentVersion;
+  final String storeVersion;
   final Version minSupportedVersion;
 
   @override
@@ -135,6 +151,7 @@ class _UpdateRequiredViewState extends State<_UpdateRequiredView> {
                         const SizedBox(height: kInset * 1.5),
                         _VersionCard(
                           currentVersion: widget.currentVersion,
+                          storeVersion: widget.storeVersion,
                           minSupportedVersion: widget.minSupportedVersion,
                         ),
                         const Spacer(flex: 2),
@@ -199,10 +216,17 @@ class _UpdateHero extends StatelessWidget {
 }
 
 /// Bordered card contrasting the running version with the required minimum.
+///
+/// The running build is described by two explicitly labeled values: the
+/// internal app_version (the headline, what the minimum is compared against)
+/// and the per-client build version+code (native versionName+versionCode, the
+/// numbers visible in the store console). The required minimum exists only in
+/// internal app_version terms, so it is rendered as a secondary line.
 class _VersionCard extends StatelessWidget {
-  const _VersionCard({required this.currentVersion, required this.minSupportedVersion});
+  const _VersionCard({required this.currentVersion, required this.storeVersion, required this.minSupportedVersion});
 
   final Version currentVersion;
+  final String storeVersion;
   final Version minSupportedVersion;
 
   @override
@@ -219,14 +243,22 @@ class _VersionCard extends StatelessWidget {
         children: [
           _VersionRow(
             label: context.l10n.main_AppUpdateRequiredDialog_currentVersionLabel,
-            version: currentVersion,
+            value: currentVersion.toString(),
             valueColor: colorScheme.onSurface,
+          ),
+          const SizedBox(height: kInset / 2),
+          _VersionRow(
+            label: context.l10n.main_AppUpdateRequiredDialog_buildVersionLabel,
+            value: storeVersion,
+            valueColor: colorScheme.onSurfaceVariant,
+            emphasized: false,
           ),
           Divider(height: kInset, color: colorScheme.outlineVariant),
           _VersionRow(
             label: context.l10n.main_AppUpdateRequiredDialog_minimumVersionLabel,
-            version: minSupportedVersion,
+            value: minSupportedVersion.toString(),
             valueColor: colorScheme.primary,
+            emphasized: false,
           ),
         ],
       ),
@@ -235,15 +267,17 @@ class _VersionCard extends StatelessWidget {
 }
 
 class _VersionRow extends StatelessWidget {
-  const _VersionRow({required this.label, required this.version, required this.valueColor});
+  const _VersionRow({required this.label, required this.value, required this.valueColor, this.emphasized = true});
 
   final String label;
-  final Version version;
+  final String value;
   final Color valueColor;
+  final bool emphasized;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final valueStyle = emphasized ? theme.textTheme.titleLarge : theme.textTheme.titleMedium;
     return Column(
       children: [
         Text(
@@ -252,13 +286,18 @@ class _VersionRow extends StatelessWidget {
           style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
         ),
         const SizedBox(height: kInset / 6),
-        Text(
-          version.toString(),
-          textAlign: TextAlign.center,
-          style: theme.textTheme.titleLarge?.copyWith(
-            color: valueColor,
-            fontWeight: FontWeight.bold,
-            fontFeatures: const [FontFeature.tabularFigures()],
+        // Versions/build codes can be long: keep each line whole and shrink it
+        // to fit instead of wrapping mid-number.
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            value,
+            textAlign: TextAlign.center,
+            style: valueStyle?.copyWith(
+              color: valueColor,
+              fontWeight: FontWeight.bold,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
           ),
         ),
       ],

@@ -656,6 +656,36 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnostic_permissionStatus_restricted => 'Обмежений доступ';
 
   @override
+  String get diagnostic_specialPermissionStatus_denied => 'Доступ заборонено';
+
+  @override
+  String get diagnostic_specialPermissionStatus_granted => 'Доступ надано';
+
+  @override
+  String get diagnostic_specialPermissionStatus_unknown => 'Невідомо';
+
+  @override
+  String get diagnostic_xiaomi_backgroundActivityStart_description =>
+      'MIUI/HyperOS не дозволяє показувати екран вхідного дзвінка поверх заблокованого екрана, поки застосунок працює у фоновому режимі, якщо для нього не надано дозвіл «Показ спливаючих вікон під час роботи у фоновому режимі».';
+
+  @override
+  String get diagnostic_xiaomi_backgroundActivityStart_tile_title =>
+      'Показ спливаючих вікон під час роботи у фоновому режимі';
+
+  @override
+  String get diagnostic_xiaomi_groupTitle => 'Дозволи Xiaomi';
+
+  @override
+  String get diagnostic_xiaomi_navigate_section => 'Перейдіть до розділу дозволів заблокованого екрана';
+
+  @override
+  String get diagnostic_xiaomi_showWhenLocked_description =>
+      'MIUI/HyperOS не дозволяє показувати екран вхідного дзвінка поверх заблокованого екрана, якщо для цього застосунку не надано дозвіл «Показ на заблокованому екрані».';
+
+  @override
+  String get diagnostic_xiaomi_showWhenLocked_tile_title => 'Показ на заблокованому екрані';
+
+  @override
   String get diagnosticPushDetails_configuration_title => 'Налаштування служби push-сповіщень';
 
   @override
@@ -1117,7 +1147,15 @@ class AppLocalizationsUk extends AppLocalizations {
       'Версія вашого застосунку більше не підтримується. Будь ласка, оновіть застосунок, щоб продовжити.';
 
   @override
-  String get main_AppUpdateRequiredDialog_currentVersionLabel => 'Поточна версія';
+  String get main_AppUpdateRequiredDialog_currentVersionLabel => 'Версія застосунку';
+
+  @override
+  String get main_AppUpdateRequiredDialog_buildVersionLabel => 'Версія збірки';
+
+  @override
+  String main_AppUpdateRequiredDialog_currentVersionValue(String storeVersion, String appVersion) {
+    return '$appVersion (збірка $storeVersion)';
+  }
 
   @override
   String get main_AppUpdateRequiredDialog_minimumVersionLabel => 'Мінімальна потрібна версія';
@@ -1592,10 +1630,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get permission_manufacturer_Text_trailing => 'Дозволи можуть бути змінені в будь-який час у майбутньому.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip1 => 'Перейдіть у «Налаштування програми» → «Сповіщення».';
+  String get permission_manufacturer_Text_xiaomi_tip1 =>
+      'Відкрийте екран «Інші дозволи» цього застосунку кнопкою нижче.';
 
   @override
-  String get permission_manufacturer_Text_xiaomi_tip2 => 'Знайдіть і ввімкніть «Сповіщення на екрані блокування».';
+  String get permission_manufacturer_Text_xiaomi_tip2 =>
+      'Увімкніть «Показ спливаючих вікон під час роботи у фоні», щоб вхідні дзвінки з\'являлися, поки застосунок працює у фоновому режимі.';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip3 =>
+      'Увімкніть «Показ на екрані блокування», щоб вхідні дзвінки з\'являлися поверх екрана блокування.';
 
   @override
   String get permission_Text_description =>
@@ -1919,6 +1963,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_AboutText_AppVersion => 'Версія застосунку';
+
+  @override
+  String get settings_AboutText_BundleVersion => 'Версія бандла';
 
   @override
   String get settings_AboutText_CallkeepVersion => 'Версія CallKeep';

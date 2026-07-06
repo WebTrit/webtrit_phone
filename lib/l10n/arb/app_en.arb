@@ -538,6 +538,24 @@
   "@diagnostic_permissionStatus_provisional": {},
   "diagnostic_permissionStatus_restricted": "Restricted Access",
   "@diagnostic_permissionStatus_restricted": {},
+  "diagnostic_specialPermissionStatus_denied": "Access Denied",
+  "@diagnostic_specialPermissionStatus_denied": {},
+  "diagnostic_specialPermissionStatus_granted": "Access Granted",
+  "@diagnostic_specialPermissionStatus_granted": {},
+  "diagnostic_specialPermissionStatus_unknown": "Unknown",
+  "@diagnostic_specialPermissionStatus_unknown": {},
+  "diagnostic_xiaomi_backgroundActivityStart_description": "MIUI/HyperOS restricts showing the incoming-call screen while the app runs in the background unless the \"Display pop-up windows while running in background\" permission is granted for this app.",
+  "@diagnostic_xiaomi_backgroundActivityStart_description": {},
+  "diagnostic_xiaomi_backgroundActivityStart_tile_title": "Display pop-up windows while running in background",
+  "@diagnostic_xiaomi_backgroundActivityStart_tile_title": {},
+  "diagnostic_xiaomi_groupTitle": "Xiaomi permissions",
+  "@diagnostic_xiaomi_groupTitle": {},
+  "diagnostic_xiaomi_navigate_section": "Navigate to the lock screen permissions section",
+  "@diagnostic_xiaomi_navigate_section": {},
+  "diagnostic_xiaomi_showWhenLocked_description": "MIUI/HyperOS restricts showing the incoming-call screen over the lock screen unless the \"Show on Lock screen\" permission is granted for this app.",
+  "@diagnostic_xiaomi_showWhenLocked_description": {},
+  "diagnostic_xiaomi_showWhenLocked_tile_title": "Show on lock screen",
+  "@diagnostic_xiaomi_showWhenLocked_tile_title": {},
   "diagnosticPushDetails_configuration_title": "Push Notification service configuration",
   "@diagnosticPushDetails_configuration_title": {},
   "diagnosticPushDetails_errorMessage_intro": "Some steps to try:\n",
@@ -959,9 +977,25 @@
   "@main_AppUpdateRequiredDialog_description": {
     "description": "Body text of the full-screen update-required prompt, shown when the running app is older than the backend-declared minimum supported app version."
   },
-  "main_AppUpdateRequiredDialog_currentVersionLabel": "Current version",
+  "main_AppUpdateRequiredDialog_currentVersionLabel": "App version",
   "@main_AppUpdateRequiredDialog_currentVersionLabel": {
-    "description": "Label above the running app version on the update-required prompt."
+    "description": "Label above the running app's internal app_version on the update-required prompt."
+  },
+  "main_AppUpdateRequiredDialog_buildVersionLabel": "Build version",
+  "@main_AppUpdateRequiredDialog_buildVersionLabel": {
+    "description": "Label above the per-client build version+code (native versionName+versionCode) on the update-required prompt."
+  },
+  "main_AppUpdateRequiredDialog_currentVersionValue": "{appVersion} (build {storeVersion})",
+  "@main_AppUpdateRequiredDialog_currentVersionValue": {
+    "description": "Composed current-version value on version-gate surfaces: the internal app_version leads, the per-client build (store distribution) version follows in parentheses.",
+    "placeholders": {
+      "storeVersion": {
+        "type": "String"
+      },
+      "appVersion": {
+        "type": "String"
+      }
+    }
   },
   "main_AppUpdateRequiredDialog_minimumVersionLabel": "Minimum required version",
   "@main_AppUpdateRequiredDialog_minimumVersionLabel": {
@@ -1370,10 +1404,12 @@
   "@permission_manufacturer_Text_heading": {},
   "permission_manufacturer_Text_trailing": "Permissions could be changed at any time in the future.",
   "@permission_manufacturer_Text_trailing": {},
-  "permission_manufacturer_Text_xiaomi_tip1": "Go to \"App settings\" → \"Notifications\".",
+  "permission_manufacturer_Text_xiaomi_tip1": "Open this app's \"Other permissions\" screen using the button below.",
   "@permission_manufacturer_Text_xiaomi_tip1": {},
-  "permission_manufacturer_Text_xiaomi_tip2": "Find and turn on \"Lockscreen notifications\".",
+  "permission_manufacturer_Text_xiaomi_tip2": "Turn on \"Display pop-up windows while running in background\" so incoming calls can appear while the app is in the background.",
   "@permission_manufacturer_Text_xiaomi_tip2": {},
+  "permission_manufacturer_Text_xiaomi_tip3": "Turn on \"Show on lock screen\" so incoming calls can appear over the lock screen.",
+  "@permission_manufacturer_Text_xiaomi_tip3": {},
   "permission_Text_description": "To ensure the best user experience, the app needs to be granted the following permissions: microphone for audio calls, camera for video calls, and contacts to simplify reaching them from the app.\n\nPermissions could be changed at any time in the future.",
   "@permission_Text_description": {},
   "persistentConnectionReminderContent": "You have to manually launch the app after your phone restarted at least once to re-establish the persistent connection and receive incoming calls.",
@@ -1623,6 +1659,8 @@
   "@settings_AboutText_AppSessionIdentifier": {},
   "settings_AboutText_AppVersion": "App Version",
   "@settings_AboutText_AppVersion": {},
+  "settings_AboutText_BundleVersion": "Bundle version",
+  "@settings_AboutText_BundleVersion": {},
   "settings_AboutText_CallkeepVersion": "CallKeep version",
   "@settings_AboutText_CallkeepVersion": {},
   "settings_AboutText_CoreVersion": "WebTrit Cloud Backend version",

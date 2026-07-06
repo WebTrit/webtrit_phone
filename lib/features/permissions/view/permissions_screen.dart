@@ -160,7 +160,7 @@ class _PermissionsScreenState extends State<PermissionsScreen> with WidgetsBindi
 
         return ManufacturerPermission(
           manufacturer: manufacturer,
-          onGoToAppSettings: permissionCubit.openAppSettings,
+          onGoToAppSettings: permissionCubit.openManufacturerCallPermissionSettings,
           onPop: onPopCallback(),
         );
       },

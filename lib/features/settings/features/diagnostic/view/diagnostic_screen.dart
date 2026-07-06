@@ -123,6 +123,45 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                         ),
                       ),
                     ),
+                if (androidTarget && state.isXiaomiDevice) ...[
+                  GroupTitleListTile(titleData: context.l10n.diagnostic_xiaomi_groupTitle),
+                  DiagnosticXiaomiPermissionItem(
+                    title: context.l10n.diagnostic_xiaomi_backgroundActivityStart_tile_title,
+                    status: state.backgroundActivityStartStatus,
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) => DiagnosticXiaomiPermissionDetails(
+                          title: context.l10n.diagnostic_xiaomi_backgroundActivityStart_tile_title,
+                          description: context.l10n.diagnostic_xiaomi_backgroundActivityStart_description,
+                          status: state.backgroundActivityStartStatus,
+                          onTap: () {
+                            _openBackgroundActivityStartSettings();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                  DiagnosticXiaomiPermissionItem(
+                    title: context.l10n.diagnostic_xiaomi_showWhenLocked_tile_title,
+                    status: state.showWhenLockedStatus,
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) => DiagnosticXiaomiPermissionDetails(
+                          title: context.l10n.diagnostic_xiaomi_showWhenLocked_tile_title,
+                          description: context.l10n.diagnostic_xiaomi_showWhenLocked_description,
+                          status: state.showWhenLockedStatus,
+                          onTap: () {
+                            _openShowWhenLockedSettings();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ],
                 Visibility(
                   visible: context.read<DiagnosticScreenContext>().isLocalContactsFeatureEnabled,
                   child: GroupTitleListTile(titleData: context.l10n.diagnosticScreen_contacts_agreement_group_title),
@@ -175,5 +214,13 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
 
   void _openPermissions() {
     context.read<DiagnosticCubit>().openAppSettings();
+  }
+
+  void _openShowWhenLockedSettings() {
+    context.read<DiagnosticCubit>().openShowWhenLockedSettings();
+  }
+
+  void _openBackgroundActivityStartSettings() {
+    context.read<DiagnosticCubit>().openBackgroundActivityStartSettings();
   }
 }
