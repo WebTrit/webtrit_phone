@@ -640,6 +640,35 @@ class AppLocalizationsTh extends AppLocalizations {
   String get diagnostic_permissionStatus_restricted => 'การเข้าถึงถูกจำกัด';
 
   @override
+  String get diagnostic_specialPermissionStatus_denied => 'การเข้าถึงถูกปฏิเสธ';
+
+  @override
+  String get diagnostic_specialPermissionStatus_granted => 'ได้รับสิทธิ์การเข้าถึงแล้ว';
+
+  @override
+  String get diagnostic_specialPermissionStatus_unknown => 'ไม่ทราบ';
+
+  @override
+  String get diagnostic_xiaomi_backgroundActivityStart_description =>
+      'MIUI/HyperOS จำกัดการแสดงหน้าจอสายเรียกเข้าขณะที่แอปทำงานอยู่เบื้องหลัง หากไม่ได้เปิดสิทธิ์ \"แสดงหน้าต่างป๊อปอัปขณะทำงานอยู่เบื้องหลัง\" ให้กับแอปนี้';
+
+  @override
+  String get diagnostic_xiaomi_backgroundActivityStart_tile_title => 'แสดงหน้าต่างป๊อปอัปขณะทำงานอยู่เบื้องหลัง';
+
+  @override
+  String get diagnostic_xiaomi_groupTitle => 'สิทธิ์ของ Xiaomi';
+
+  @override
+  String get diagnostic_xiaomi_navigate_section => 'ไปที่ส่วนสิทธิ์หน้าจอล็อก';
+
+  @override
+  String get diagnostic_xiaomi_showWhenLocked_description =>
+      'MIUI/HyperOS จำกัดการแสดงหน้าจอสายเรียกเข้าบนหน้าจอล็อก หากไม่ได้เปิดสิทธิ์ \"แสดงบนหน้าจอล็อก\" ให้กับแอปนี้';
+
+  @override
+  String get diagnostic_xiaomi_showWhenLocked_tile_title => 'แสดงบนหน้าจอล็อก';
+
+  @override
   String get diagnosticPushDetails_configuration_title => 'การกำหนดค่าบริการแจ้งเตือนแบบพุช';
 
   @override
@@ -1570,6 +1599,10 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get permission_manufacturer_Text_xiaomi_tip2 => 'ค้นหาและเปิดใช้งาน \"Lockscreen notifications\"';
+
+  @override
+  String get permission_manufacturer_Text_xiaomi_tip3 =>
+      'เปิดใช้งาน \"แสดงบนหน้าจอล็อก\" เพื่อให้สายเรียกเข้าแสดงบนหน้าจอล็อกได้';
 
   @override
   String get permission_Text_description =>
