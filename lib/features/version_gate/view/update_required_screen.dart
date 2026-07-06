@@ -56,10 +56,12 @@ class UpdateRequiredScreenPage extends StatelessWidget {
   }
 }
 
-/// Hosts the async store-URL resolution: the "Update" action is only offered
-/// when the store actually hosts a build newer than the running one (matching
-/// the former MainBloc behaviour). Resolution failures are swallowed and the
-/// Update button is simply omitted.
+/// Hosts the async store-URL resolution: the "Update" action is offered
+/// whenever the store listing resolves for this package. No version comparison
+/// is involved: the store lists the per-client build version while the gate
+/// speaks internal app_version terms - the two are not comparable - and on a
+/// forced-update gate the store link is always the right way out. Resolution
+/// failures are swallowed and the Update button is simply omitted.
 class _UpdateRequiredView extends StatefulWidget {
   const _UpdateRequiredView({
     required this.currentVersion,
@@ -86,7 +88,6 @@ class _UpdateRequiredViewState extends State<_UpdateRequiredView> {
 
   Future<void> _resolveStoreUpdateUrl() async {
     final packageInfo = context.read<PackageInfo>();
-    final appVersion = widget.currentVersion;
 
     StoreInfo? storeInfo;
     try {
@@ -96,7 +97,7 @@ class _UpdateRequiredViewState extends State<_UpdateRequiredView> {
     }
 
     if (!mounted) return;
-    if (storeInfo != null && storeInfo.version > appVersion) {
+    if (storeInfo != null) {
       setState(() => _updateStoreUrl = storeInfo!.viewUrl);
     }
   }
