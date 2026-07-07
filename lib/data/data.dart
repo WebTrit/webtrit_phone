@@ -10,6 +10,7 @@ export 'app_permissions.dart';
 export 'app_preferences.dart';
 export 'app_themes.dart';
 export 'app_time.dart';
+export 'crashlytics_app_context.dart';
 export 'device_info.dart';
 export 'feature_access.dart';
 export 'feature_access_stream_factory.dart';

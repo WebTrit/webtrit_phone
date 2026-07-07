@@ -17,7 +17,6 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/resolvers/resolvers.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('AppWidget');
 
@@ -137,58 +136,20 @@ class _AppState extends State<App> {
       featureAccess.checker,
     );
 
-    _logAppSettings();
+    _crashlyticsAppContext = CrashlyticsAppContext(
+      metadataProvider: context.read<AppMetadataProvider>(),
+      callkeepVersion: context.read<AppInfo>().callkeepVersion,
+      incomingCallTypeRepository: context.read<IncomingCallTypeRepository>(),
+      encodingPresetRepository: context.read<EncodingPresetRepository>(),
+      encodingSettingsRepository: context.read<EncodingSettingsRepository>(),
+      audioProcessingSettingsRepository: context.read<AudioProcessingSettingsRepository>(),
+      videoCapturingSettingsRepository: context.read<VideoCapturingSettingsRepository>(),
+      iceSettingsRepository: context.read<IceSettingsRepository>(),
+      peerConnectionSettingsRepository: context.read<PeerConnectionSettingsRepository>(),
+    )..logStartup(defaultPeerConnectionSettings: featureAccess.callConfig.peerConnection);
   }
 
-  /// Seeds Crashlytics custom keys with the app configuration, so crash
-  /// reports carry the real app/callkeep versions (the store build version is
-  /// 0.0.0 outside release builds) and the user settings that shape behavior.
-  /// Keys owned by a lifecycle elsewhere are not written here to keep a single
-  /// writer per key: authorization/themeMode/locale belong to [AppBloc], and
-  /// incomingCallType/media keys are refreshed by their settings cubits.
-  void _logAppSettings() {
-    final labels = Map<String, Object?>.from(context.read<AppMetadataProvider>().logLabels)..remove('authorization');
-    final featureAccess = context.read<FeatureAccess>();
-
-    CrashlyticsUtils.logAppSettings({
-      ...labels,
-      'callkeepVersion': context.read<AppInfo>().callkeepVersion,
-      'incomingCallType': context.read<IncomingCallTypeRepository>().getIncomingCallType().name,
-      ...mediaSettingsCrashKeys(
-        encodingPreset: context.read<EncodingPresetRepository>().getEncodingPreset(),
-        encodingSettings: context.read<EncodingSettingsRepository>().getEncodingSettings(),
-        audioProcessingSettings: context.read<AudioProcessingSettingsRepository>().getAudioProcessingSettings(),
-        videoCapturingSettings: context.read<VideoCapturingSettingsRepository>().getVideoCapturingSettings(),
-        iceSettings: context.read<IceSettingsRepository>().getIceSettings(),
-        peerConnectionSettings: context.read<PeerConnectionSettingsRepository>().getPeerConnectionSettings(
-          defaultValue: featureAccess.callConfig.peerConnection,
-        ),
-      ),
-    });
-  }
-
-  /// The last [FeatureOverrides] written to Crashlytics; didChangeDependencies
-  /// fires for unrelated inherited changes too, so unchanged overrides are not
-  /// re-written (10 platform-channel calls each time).
-  FeatureOverrides? _lastLoggedOverrides;
-
-  /// Remote-config override flags, keyed by their Remote Config parameter
-  /// names so a crash report maps 1:1 to the console. Crashlytics cannot
-  /// delete keys, so an absent override is written as the 'unset' sentinel;
-  /// otherwise an override removed mid-session would leave its old value
-  /// stuck for the rest of the run.
-  Map<String, Object?> _featureOverrideSettings(FeatureOverrides overrides) => {
-    'feature_video_call_enabled': overrides.isVideoCallEnabled ?? 'unset',
-    'feature_system_notifications_enabled': overrides.isSystemNotificationsEnabled ?? 'unset',
-    'feature_hybrid_presence_enabled': overrides.hybridPresenceSupport ?? 'unset',
-    'feature_voicemail_enabled': overrides.isVoicemailEnabled ?? 'unset',
-    'feature_call_history_enabled': overrides.isCallHistoryEnabled ?? 'unset',
-    'feature_call_pull_video_strategy': overrides.callPullVideoStrategy?.name ?? 'unset',
-    'feature_monitor_check_interval_sec': overrides.monitorCheckInterval?.inSeconds ?? 'unset',
-    'feature_log_level': overrides.logLevel?.name ?? 'unset',
-    'firebaseRemoteLogging': overrides.remoteLoggingEnabled ?? 'unset',
-    'feature_log_anonymization_enabled': overrides.isLogAnonymizationEnabled ?? 'unset',
-  };
+  late final CrashlyticsAppContext _crashlyticsAppContext;
 
   @override
   void didChangeDependencies() {
@@ -197,10 +158,7 @@ class _AppState extends State<App> {
     final featureAccess = context.watch<FeatureAccess>();
 
     context.read<AppLogger>().applyConfig(featureAccess.loggingConfig);
-    if (featureAccess.overrides != _lastLoggedOverrides) {
-      _lastLoggedOverrides = featureAccess.overrides;
-      CrashlyticsUtils.logAppSettings(_featureOverrideSettings(featureAccess.overrides));
-    }
+    _crashlyticsAppContext.logFeatureOverrides(featureAccess.overrides);
 
     final initialTabResolver = BottomMenuInitialTabResolver(
       config: featureAccess.bottomMenuConfig,
