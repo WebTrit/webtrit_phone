@@ -232,6 +232,29 @@ void main() {
 
         expect((result as QrSigninParseFailure).error, QrSigninParseError.unrecognized);
       });
+
+      test('a dialect with renamed fields is a structure parameter, not a new decoder', () {
+        final dialect = QrSigninPayloadParser([
+          JsonQrSigninPayloadDecoder(
+            structure: const JsonQrSigninStructure(
+              markerKey: 'kind',
+              markerValue: 'acme-login',
+              userKey: 'username',
+              passwordKey: 'pwd',
+            ),
+          ),
+        ]);
+
+        final result = dialect.parse(jsonEncode({'kind': 'acme-login', 'username': 'user123', 'pwd': 'p@ss'}));
+
+        expect(result, isA<QrSigninCredentials>());
+        final credentials = result as QrSigninCredentials;
+        expect(credentials.userRef, 'user123');
+        expect(credentials.password, 'p@ss');
+        // The default WebTrit shape is not this dialect's payload.
+        final webtrit = dialect.parse(jsonEncode({'t': 'webtrit-signin', 'user': 'u', 'password': 'p'}));
+        expect((webtrit as QrSigninParseFailure).error, QrSigninParseError.unrecognized);
+      });
     });
   });
 }

@@ -3,33 +3,58 @@ import 'dart:convert';
 import 'qr_signin_parse_result.dart';
 import 'qr_signin_payload_decoder.dart';
 
+/// Where the sign-in fields live in a JSON payload.
+///
+/// The default layout is the WebTrit-issued code shape; a dialect that only
+/// renames fields or uses another marker is a different [JsonQrSigninStructure]
+/// passed to the same decoder - no new decoder class needed. Payloads whose
+/// shape differs beyond field names (nesting, different semantics) still get
+/// their own [QrSigninPayloadDecoder].
+class JsonQrSigninStructure {
+  const JsonQrSigninStructure({
+    this.markerKey = 't',
+    this.markerValue = 'webtrit-signin',
+    this.versionKey = 'v',
+    this.supportedVersion = 1,
+    this.userKey = 'user',
+    this.passwordKey = 'password',
+    this.hostKey = 'host',
+  });
+
+  /// Discriminator field and its expected value: bare JSON has no scheme, so
+  /// only objects declaring the marker are treated as sign-in codes.
+  final String markerKey;
+  final String markerValue;
+
+  /// Payload version field; an absent field means [supportedVersion].
+  final String versionKey;
+  final int supportedVersion;
+
+  final String userKey;
+  final String passwordKey;
+  final String hostKey;
+}
+
 /// Decodes credential payloads carried as a JSON object:
 ///
 /// ```json
 /// {"t": "webtrit-signin", "v": 1, "user": "user123", "password": "p@ssword", "host": "EXAMPLE"}
 /// ```
 ///
-/// Bare JSON has no scheme to claim it, so the marker field `t` is the
-/// discriminator: only objects declaring `"t": "webtrit-signin"` are treated
-/// as sign-in codes; any other text or JSON falls through to the next decoder.
-/// `v` is the payload version (absent means 1). `password` may be omitted or
-/// empty - the user reference is then prefilled on the password tab. Unknown
-/// fields are ignored so the format can grow without breaking older builds.
+/// The field layout comes from [structure] (see [JsonQrSigninStructure]); any
+/// JSON not declaring the structure's marker falls through to the next
+/// decoder. `password` may be omitted or empty - the user reference is then
+/// prefilled on the password tab. Unknown fields are ignored so the format can
+/// grow without breaking older builds.
 class JsonQrSigninPayloadDecoder implements QrSigninPayloadDecoder {
-  JsonQrSigninPayloadDecoder({this.expectedHost});
+  JsonQrSigninPayloadDecoder({this.expectedHost, this.structure = const JsonQrSigninStructure()});
 
   final String? expectedHost;
+  final JsonQrSigninStructure structure;
 
-  static const _markerKey = 't';
-  static const _markerValue = 'webtrit-signin';
-  static const _versionKey = 'v';
-  static const _supportedVersion = 1;
-  static const _userKey = 'user';
-  static const _passwordKey = 'password';
-  static const _hostKey = 'host';
-
-  /// Fields that would redirect the sign-in to another core; rejected because
-  /// a scanned code must not choose where credentials go.
+  /// Fields that would redirect the sign-in to another core; rejected
+  /// regardless of the structure because a scanned code must not choose where
+  /// credentials go.
   static const _coreOverrideKeys = {'core', 'tenant', 'core_url', 'tenant_id'};
 
   @override
@@ -44,10 +69,12 @@ class JsonQrSigninPayloadDecoder implements QrSigninPayloadDecoder {
       return null; // Not JSON at all - not this decoder's payload.
     }
     if (decoded is! Map<String, Object?>) return null;
-    if (decoded[_markerKey] != _markerValue) return null;
+    if (decoded[structure.markerKey] != structure.markerValue) return null;
 
-    final version = decoded[_versionKey] ?? _supportedVersion;
-    if (version != _supportedVersion) return const QrSigninParseFailure(QrSigninParseError.unsupportedVersion);
+    final version = decoded[structure.versionKey] ?? structure.supportedVersion;
+    if (version != structure.supportedVersion) {
+      return const QrSigninParseFailure(QrSigninParseError.unsupportedVersion);
+    }
 
     if (decoded.keys.any(_coreOverrideKeys.contains)) {
       return const QrSigninParseFailure(QrSigninParseError.coreOverrideNotAllowed);
@@ -55,16 +82,16 @@ class JsonQrSigninPayloadDecoder implements QrSigninPayloadDecoder {
 
     final expectedHost = this.expectedHost;
     if (expectedHost != null) {
-      final host = decoded[_hostKey];
+      final host = decoded[structure.hostKey];
       if (host is! String || host.toLowerCase() != expectedHost.toLowerCase()) {
         return const QrSigninParseFailure(QrSigninParseError.hostMismatch);
       }
     }
 
-    final userRef = decoded[_userKey];
+    final userRef = decoded[structure.userKey];
     if (userRef is! String || userRef.isEmpty) return const QrSigninParseFailure(QrSigninParseError.malformed);
 
-    final password = decoded[_passwordKey];
+    final password = decoded[structure.passwordKey];
     if (password != null && password is! String) return const QrSigninParseFailure(QrSigninParseError.malformed);
     if (password == null || (password as String).isEmpty) return QrSigninUserRefOnly(userRef: userRef);
 

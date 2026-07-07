@@ -103,6 +103,11 @@ ignored so the format can grow without breaking older builds. The JSON form is
 reserved for WebTrit-issued codes (nothing produces it yet); prefer the URI form for
 plain user+password codes - it makes a sparser, easier-to-scan QR.
 
+The field layout (marker, version and field names) is described by a
+`JsonQrSigninStructure` value: a dialect that only renames fields or uses another
+marker is a different structure passed to the same decoder, not a new decoder class.
+Payloads whose shape differs beyond field names still get their own decoder.
+
 The decoder lives in
 `lib/features/login/features/login_qr_signin/models/json_qr_signin_payload_decoder.dart`.
 
