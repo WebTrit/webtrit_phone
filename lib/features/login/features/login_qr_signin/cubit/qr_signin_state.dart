@@ -12,9 +12,18 @@ enum QrSigninStatus {
 }
 
 class QrSigninState extends Equatable {
-  const QrSigninState({this.status = QrSigninStatus.checkingPermission, this.parseError, this.detection});
+  const QrSigninState({
+    this.status = QrSigninStatus.checkingPermission,
+    this.cameraPermanentlyDenied = false,
+    this.parseError,
+    this.detection,
+  });
 
   final QrSigninStatus status;
+
+  /// Whether asking again is pointless (the OS will not show the dialog);
+  /// the user has to enable the permission on the settings screen instead.
+  final bool cameraPermanentlyDenied;
 
   /// Why the last scanned code was rejected; cleared automatically after
   /// [QrSigninCubit.errorDisplayDuration].
@@ -25,16 +34,18 @@ class QrSigninState extends Equatable {
 
   QrSigninState copyWith({
     QrSigninStatus? status,
+    bool? cameraPermanentlyDenied,
     QrSigninParseError? Function()? parseError,
     QrSigninParseResult? Function()? detection,
   }) {
     return QrSigninState(
       status: status ?? this.status,
+      cameraPermanentlyDenied: cameraPermanentlyDenied ?? this.cameraPermanentlyDenied,
       parseError: parseError != null ? parseError() : this.parseError,
       detection: detection != null ? detection() : this.detection,
     );
   }
 
   @override
-  List<Object?> get props => [status, parseError, detection];
+  List<Object?> get props => [status, cameraPermanentlyDenied, parseError, detection];
 }

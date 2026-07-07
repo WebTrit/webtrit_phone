@@ -90,7 +90,9 @@ class _LoginQrSigninScreenState extends State<LoginQrSigninScreen> with WidgetsB
 
                 return switch (state.status) {
                   QrSigninStatus.checkingPermission => const SizedBox.shrink(),
-                  QrSigninStatus.permissionRequired => const _PermissionRequiredView(),
+                  QrSigninStatus.permissionRequired => _PermissionRequiredView(
+                    permanentlyDenied: state.cameraPermanentlyDenied,
+                  ),
                   QrSigninStatus.scanning => _ScannerView(
                     controller: _scannerController,
                     onDetect: _onDetect,
@@ -176,7 +178,9 @@ class _VerifyingView extends StatelessWidget {
 }
 
 class _PermissionRequiredView extends StatelessWidget {
-  const _PermissionRequiredView();
+  const _PermissionRequiredView({required this.permanentlyDenied});
+
+  final bool permanentlyDenied;
 
   @override
   Widget build(BuildContext context) {
@@ -206,14 +210,18 @@ class _PermissionRequiredView extends StatelessWidget {
           style: themeData.textTheme.bodyMedium,
         ),
         const SizedBox(height: kInset),
-        ElevatedButton(
-          onPressed: context.read<QrSigninCubit>().requestPermission,
-          child: Text(context.l10n.login_qrSignin_allowCameraAccessButton),
-        ),
-        TextButton(
-          onPressed: context.read<QrSigninCubit>().openAppSettings,
-          child: Text(context.l10n.login_qrSignin_openSettingsButton),
-        ),
+        // A single action: request while the OS still shows the dialog; once
+        // the denial is permanent, the settings screen is the only way left.
+        if (permanentlyDenied)
+          ElevatedButton(
+            onPressed: context.read<QrSigninCubit>().openAppSettings,
+            child: Text(context.l10n.login_qrSignin_openSettingsButton),
+          )
+        else
+          ElevatedButton(
+            onPressed: context.read<QrSigninCubit>().requestPermission,
+            child: Text(context.l10n.login_qrSignin_allowCameraAccessButton),
+          ),
       ],
     );
   }

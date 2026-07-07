@@ -36,9 +36,14 @@ class QrSigninCubit extends Cubit<QrSigninState> {
   String? _lastRaw;
 
   Future<void> _checkPermission() async {
-    final granted = await appPermissions.isPermissionGranted(Permission.camera);
+    final status = await Permission.camera.status;
     if (isClosed) return;
-    emit(state.copyWith(status: granted ? QrSigninStatus.scanning : QrSigninStatus.permissionRequired));
+    emit(
+      state.copyWith(
+        status: status.isGranted ? QrSigninStatus.scanning : QrSigninStatus.permissionRequired,
+        cameraPermanentlyDenied: status.isPermanentlyDenied,
+      ),
+    );
   }
 
   /// Re-runs the permission check, e.g. when the app returns from the
@@ -52,7 +57,12 @@ class QrSigninCubit extends Cubit<QrSigninState> {
     final status = await Permission.camera.request();
     _logger.info('Camera permission request result: $status');
     if (isClosed) return;
-    emit(state.copyWith(status: status.isGranted ? QrSigninStatus.scanning : QrSigninStatus.permissionRequired));
+    emit(
+      state.copyWith(
+        status: status.isGranted ? QrSigninStatus.scanning : QrSigninStatus.permissionRequired,
+        cameraPermanentlyDenied: status.isPermanentlyDenied,
+      ),
+    );
   }
 
   Future<void> openAppSettings() => appPermissions.toAppSettings();
