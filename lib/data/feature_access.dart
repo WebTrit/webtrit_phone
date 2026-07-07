@@ -204,7 +204,7 @@ abstract final class LoginMapper {
       signinOrder: appConfig.loginConfig.signinOrder,
       qrSignin: QrSigninConfig(
         enabled: qr.enabled,
-        formats: [for (final f in qr.formats) QrSigninFormatConfig(type: f.type, schemes: f.schemes)],
+        formats: [for (final format in qr.formats) QrSigninFormatConfig(type: format.type, schemes: format.schemes)],
         expectedHost: qr.expectedHost,
       ),
       launchLoginPage: embeddedData.firstWhereOrNull(

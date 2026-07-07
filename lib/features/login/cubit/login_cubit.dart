@@ -122,7 +122,7 @@ class LoginCubit extends Cubit<LoginState> {
       // (added below), so an adapter advertising it must not bypass the config
       // gate or duplicate the tab.
       const backendLoginTypes = [LoginType.otpSignin, LoginType.passwordSignin, LoginType.signup];
-      final parsedLoginTypes = backendLoginTypes.where((t) => supportedFeatures.contains(t.name)).toList();
+      final parsedLoginTypes = backendLoginTypes.where((type) => supportedFeatures.contains(type.name)).toList();
       // The QR tab is not a backend capability: the scanned code carries plain
       // credentials, so it is offered whenever password sign-in is available
       // and the app config enables it.
