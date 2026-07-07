@@ -122,7 +122,7 @@ hint and keeps scanning).
 |--------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
 | `csc`  | Cloud Softphone provider portal (Tools -> QR code generator)                | The default and currently the only known producer. `HOST` is the portal's cloud id (an opaque identifier assigned by the portal); a trailing `*` marks a test (non-approved) app version and is tolerated. The portal URL-encodes the username/password segments. |
 
-Adding a scheme is a config-only change: list its name in `loginConfig.qr.schemes`.
+Adding a scheme is a config-only change: list its name in the `schemes` of the `uri` entry under `loginConfig.qr.formats`.
 Use this when a brand's provisioning system issues codes in the same
 `scheme:user:password@host` shape under a different name. Codes with a different
 STRUCTURE (not just a different scheme name) are not supported by configuration and
