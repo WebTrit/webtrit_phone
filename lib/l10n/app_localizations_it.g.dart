@@ -1051,29 +1051,29 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get login_qrSignin_scanHint => 'Scansiona il codice QR per accedere.';
+  String get login_Text_qrSigninScanHint => 'Scansiona il codice QR per accedere.';
 
   @override
-  String get login_qrSignin_verifyingTitle => 'Accesso in corso...';
+  String get login_Text_qrSigninVerifyingTitle => 'Accesso in corso...';
 
   @override
-  String get login_qrSignin_verifyingText => 'Codice QR scansionato. Verifica con il server in corso.';
+  String get login_Text_qrSigninVerifyingDescription => 'Codice QR scansionato. Verifica con il server in corso.';
 
   @override
-  String get login_qrSignin_cameraPermissionTitle => 'L\'accesso alla fotocamera è disattivato';
+  String get login_Text_qrSigninCameraPermissionTitle => 'L\'accesso alla fotocamera è disattivato';
 
   @override
-  String get login_qrSignin_cameraPermissionText =>
+  String get login_Text_qrSigninCameraPermissionDescription =>
       'L\'accesso alla fotocamera è necessario per scansionare un codice QR. Attivalo per continuare.';
 
   @override
-  String get login_qrSignin_allowCameraAccessButton => 'Consenti l\'accesso alla fotocamera';
+  String get login_Button_qrSigninAllowCameraAccess => 'Consenti l\'accesso alla fotocamera';
 
   @override
-  String get login_qrSignin_openSettingsButton => 'Apri le impostazioni';
+  String get login_Button_qrSigninOpenSettings => 'Apri le impostazioni';
 
   @override
-  String get login_qrSignin_invalidCodeError => 'Questo codice QR non può essere utilizzato per accedere.';
+  String get login_Text_qrSigninInvalidCodeError => 'Questo codice QR non può essere utilizzato per accedere.';
 
   @override
   String get loginType_otpSignin => 'Accesso con OTP';

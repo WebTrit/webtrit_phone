@@ -23,7 +23,11 @@ class QrScannerView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(context.l10n.login_qrSignin_scanHint, textAlign: TextAlign.center, style: themeData.textTheme.bodyLarge),
+        Text(
+          context.l10n.login_Text_qrSigninScanHint,
+          textAlign: TextAlign.center,
+          style: themeData.textTheme.bodyLarge,
+        ),
         const SizedBox(height: kInset),
         Center(
           child: ConstrainedBox(
@@ -49,7 +53,7 @@ class QrScannerView extends StatelessWidget {
         const SizedBox(height: kInset / 2),
         // Reserve the line so the layout does not jump when an error appears.
         Text(
-          parseError != null ? context.l10n.login_qrSignin_invalidCodeError : '',
+          parseError != null ? context.l10n.login_Text_qrSigninInvalidCodeError : '',
           textAlign: TextAlign.center,
           style: themeData.textTheme.bodyMedium?.copyWith(color: themeData.colorScheme.error),
         ),

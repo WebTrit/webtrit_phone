@@ -1,13 +1,15 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 
 import '../models/qr_signin_uri_parser.dart';
+
+part 'qr_signin_cubit.freezed.dart';
 
 part 'qr_signin_state.dart';
 
@@ -36,7 +38,7 @@ class QrSigninCubit extends Cubit<QrSigninState> {
   String? _lastRaw;
 
   Future<void> _checkPermission() async {
-    final status = await Permission.camera.status;
+    final status = await appPermissions.getCameraPermissionStatus();
     if (isClosed) return;
     emit(
       state.copyWith(
@@ -54,8 +56,7 @@ class QrSigninCubit extends Cubit<QrSigninState> {
   }
 
   Future<void> requestPermission() async {
-    final status = await Permission.camera.request();
-    _logger.info('Camera permission request result: $status');
+    final status = await appPermissions.requestCameraPermission();
     if (isClosed) return;
     emit(
       state.copyWith(
@@ -79,19 +80,19 @@ class QrSigninCubit extends Cubit<QrSigninState> {
     switch (parser.parse(rawValue)) {
       case QrSigninParseFailure(:final error):
         _logger.info('Scanned code rejected: ${error.name}');
-        emit(state.copyWith(parseError: () => error));
+        emit(state.copyWith(parseError: error));
         _errorResetTimer?.cancel();
         _errorResetTimer = Timer(errorDisplayDuration, () {
           if (isClosed) return;
           _lastRaw = null;
-          emit(state.copyWith(parseError: () => null));
+          emit(state.copyWith(parseError: null));
         });
       case final QrSigninCredentials credentials:
         _errorResetTimer?.cancel();
-        emit(state.copyWith(parseError: () => null, detection: () => credentials));
+        emit(state.copyWith(parseError: null, detection: credentials));
       case final QrSigninUserRefOnly userRefOnly:
         _errorResetTimer?.cancel();
-        emit(state.copyWith(parseError: () => null, detection: () => userRefOnly));
+        emit(state.copyWith(parseError: null, detection: userRefOnly));
     }
   }
 
@@ -100,11 +101,13 @@ class QrSigninCubit extends Cubit<QrSigninState> {
   ///
   /// The last payload stays ignored for a short cooldown: a rejected code is
   /// usually still in the viewfinder, and clearing it right away would retry
-  /// the same failing sign-in in a tight loop.
+  /// the same failing sign-in in a tight loop. May be reached after the tab
+  /// (and this cubit) is gone when the sign-in attempt outlives it.
   void detectionHandled() {
+    if (isClosed) return;
     _retryCooldownTimer?.cancel();
     _retryCooldownTimer = Timer(errorDisplayDuration, () => _lastRaw = null);
-    emit(state.copyWith(detection: () => null));
+    emit(state.copyWith(detection: null));
   }
 
   @override

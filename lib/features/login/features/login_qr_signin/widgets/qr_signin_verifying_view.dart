@@ -19,13 +19,13 @@ class QrSigninVerifyingView extends StatelessWidget {
         const Center(child: CircularProgressIndicator()),
         const SizedBox(height: kInset),
         Text(
-          context.l10n.login_qrSignin_verifyingTitle,
+          context.l10n.login_Text_qrSigninVerifyingTitle,
           textAlign: TextAlign.center,
           style: themeData.textTheme.titleLarge,
         ),
         const SizedBox(height: kInset / 2),
         Text(
-          context.l10n.login_qrSignin_verifyingText,
+          context.l10n.login_Text_qrSigninVerifyingDescription,
           textAlign: TextAlign.center,
           style: themeData.textTheme.bodyMedium,
         ),

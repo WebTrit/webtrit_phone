@@ -1043,28 +1043,29 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get login_qrSignin_scanHint => 'Scan the QR code to log in.';
+  String get login_Text_qrSigninScanHint => 'Scan the QR code to log in.';
 
   @override
-  String get login_qrSignin_verifyingTitle => 'Signing you in...';
+  String get login_Text_qrSigninVerifyingTitle => 'Signing you in...';
 
   @override
-  String get login_qrSignin_verifyingText => 'QR code scanned. Verifying with the server.';
+  String get login_Text_qrSigninVerifyingDescription => 'QR code scanned. Verifying with the server.';
 
   @override
-  String get login_qrSignin_cameraPermissionTitle => 'Camera access is off';
+  String get login_Text_qrSigninCameraPermissionTitle => 'Camera access is off';
 
   @override
-  String get login_qrSignin_cameraPermissionText => 'Camera access is needed to scan a QR code. Enable it to continue.';
+  String get login_Text_qrSigninCameraPermissionDescription =>
+      'Camera access is needed to scan a QR code. Enable it to continue.';
 
   @override
-  String get login_qrSignin_allowCameraAccessButton => 'Allow camera access';
+  String get login_Button_qrSigninAllowCameraAccess => 'Allow camera access';
 
   @override
-  String get login_qrSignin_openSettingsButton => 'Open settings';
+  String get login_Button_qrSigninOpenSettings => 'Open settings';
 
   @override
-  String get login_qrSignin_invalidCodeError => 'This QR code cannot be used to sign in.';
+  String get login_Text_qrSigninInvalidCodeError => 'This QR code cannot be used to sign in.';
 
   @override
   String get loginType_otpSignin => 'OTP sign in';

@@ -91,6 +91,28 @@ void main() {
       expect(cubit.state.supportedLoginTypes, [LoginType.otpSignin]);
     });
 
+    test('a backend-advertised qrSignin is ignored: it must not bypass the config gate', () async {
+      when(
+        () => authRepository.getSystemInfo(any(), any()),
+      ).thenAnswer((_) async => _systemInfo(supported: ['passwordSignin', 'qrSignin']));
+
+      final cubit = buildCubit();
+      await submitCoreUrl(cubit);
+
+      expect(cubit.state.supportedLoginTypes, [LoginType.passwordSignin]);
+    });
+
+    test('a backend-advertised qrSignin does not duplicate the enabled tab', () async {
+      when(
+        () => authRepository.getSystemInfo(any(), any()),
+      ).thenAnswer((_) async => _systemInfo(supported: ['passwordSignin', 'qrSignin']));
+
+      final cubit = buildCubit(qrSigninConfig: QrSigninConfig(enabled: true));
+      await submitCoreUrl(cubit);
+
+      expect(cubit.state.supportedLoginTypes, [LoginType.passwordSignin, LoginType.qrSignin]);
+    });
+
     test('position follows the configured sign-in order', () async {
       when(() => authRepository.getSystemInfo(any(), any())).thenAnswer((_) async => _systemInfo());
 

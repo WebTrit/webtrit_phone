@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -32,10 +34,36 @@ class _LoginQrSigninScreenState extends State<LoginQrSigninScreen> with WidgetsB
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // The permission may have been granted on the system settings screen.
-    if (state == AppLifecycleState.resumed) {
-      context.read<QrSigninCubit>().recheckPermission();
+    // The MobileScanner widget manages the app lifecycle only for its own
+    // internal controller; with an external one the camera session must be
+    // stopped and resumed here, or the preview stays frozen after the app
+    // returns from the background.
+    switch (state) {
+      case AppLifecycleState.resumed:
+        // The permission may have been granted on the system settings screen.
+        context.read<QrSigninCubit>().recheckPermission();
+        if (_isScannerVisible) _startScannerSafely();
+      case AppLifecycleState.inactive:
+        unawaited(_scannerController.stop());
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+        break;
     }
+  }
+
+  /// Whether the scanner preview is currently part of the tree: the camera is
+  /// pointless while the sign-in request is in flight or the permission view
+  /// is shown.
+  bool get _isScannerVisible =>
+      context.read<QrSigninCubit>().state.status == QrSigninStatus.scanning &&
+      !context.read<LoginCubit>().state.processing;
+
+  /// Starting is a no-op when the camera is already running, but throws while
+  /// a concurrent start (e.g. the remounted widget's auto-start) is still in
+  /// flight - tolerate that instead of crashing.
+  void _startScannerSafely() {
+    unawaited(_scannerController.start().onError<MobileScannerException>((_, _) {}));
   }
 
   void _onDetect(BarcodeCapture capture) {
@@ -47,8 +75,9 @@ class _LoginQrSigninScreenState extends State<LoginQrSigninScreen> with WidgetsB
     final loginCubit = context.read<LoginCubit>();
     final qrSigninCubit = context.read<QrSigninCubit>();
 
-    await _scannerController.stop();
-
+    // No explicit camera stop/start here: swapping the scanner widget out for
+    // the verifying view (and back) already stops and restarts the camera, and
+    // an extra start() would race the remounted widget's auto-start.
     switch (detection) {
       case QrSigninCredentials(:final userRef, :final password):
         await loginCubit.loginQrSigninSubmitted(userRef: userRef, password: password);
@@ -67,9 +96,6 @@ class _LoginQrSigninScreenState extends State<LoginQrSigninScreen> with WidgetsB
     // Reached when the sign-in attempt failed (on success this widget is gone)
     // or after the prefill handoff: let the scanner accept codes again.
     qrSigninCubit.detectionHandled();
-    if (mounted && qrSigninCubit.state.status == QrSigninStatus.scanning) {
-      await _scannerController.start();
-    }
   }
 
   @override

@@ -118,10 +118,11 @@ class LoginCubit extends Cubit<LoginState> {
       }
 
       final supportedFeatures = systemInfo.adapter?.supported ?? [];
-      final parsedLoginTypes = supportedFeatures
-          .where((f) => LoginType.values.map((e) => e.name).contains(f))
-          .map((f) => LoginType.values.byName(f))
-          .toList();
+      // Only these types are accepted from the backend; qrSignin is client-side
+      // (added below), so an adapter advertising it must not bypass the config
+      // gate or duplicate the tab.
+      const backendLoginTypes = [LoginType.otpSignin, LoginType.passwordSignin, LoginType.signup];
+      final parsedLoginTypes = backendLoginTypes.where((t) => supportedFeatures.contains(t.name)).toList();
       // The QR tab is not a backend capability: the scanned code carries plain
       // credentials, so it is offered whenever password sign-in is available
       // and the app config enables it.
@@ -349,27 +350,15 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginPasswordSigninSubmitted() async {
-    if (state.processing || !state.passwordSigninUserRefInput.isValid || !state.passwordSigninPasswordInput.isValid) {
+    if (!state.passwordSigninUserRefInput.isValid || !state.passwordSigninPasswordInput.isValid) {
       return;
     }
 
-    emit(state.copyWith(processing: true));
-
-    try {
-      final sessionToken = await authRepository.login(
-        coreUrl: state.coreUrl!,
-        tenantId: state.tenantId!,
-        userRef: state.passwordSigninUserRefInput.value,
-        password: state.passwordSigninPasswordInput.value,
-      );
-
-      // does not set processing to false to hold processing widgets state during navigation
-      loginSigninSubmitted(sessionToken);
-    } catch (e, s) {
-      emit(state.copyWith(processing: false));
-
-      handleError(e, s, 'LoginSignupVerifySubmitted');
-    }
+    await _submitPasswordLogin(
+      userRef: state.passwordSigninUserRefInput.value,
+      password: state.passwordSigninPasswordInput.value,
+      errorContext: 'LoginPasswordSigninSubmitted',
+    );
   }
 
   // LoginQrSignin
@@ -379,7 +368,17 @@ class LoginCubit extends Cubit<LoginState> {
   /// Follows the same session path as [loginPasswordSigninSubmitted]; the
   /// credentials come from the scanner instead of the input fields. Completes
   /// when the attempt is over so the caller can resume scanning on failure.
-  Future<void> loginQrSigninSubmitted({required String userRef, required String password}) async {
+  Future<void> loginQrSigninSubmitted({required String userRef, required String password}) {
+    return _submitPasswordLogin(userRef: userRef, password: password, errorContext: 'LoginQrSigninSubmitted');
+  }
+
+  /// Shared session-creation path of the password-based sign-ins (manual entry
+  /// and scanned QR credentials).
+  Future<void> _submitPasswordLogin({
+    required String userRef,
+    required String password,
+    required String errorContext,
+  }) async {
     if (state.processing) return;
 
     emit(state.copyWith(processing: true));
@@ -397,7 +396,7 @@ class LoginCubit extends Cubit<LoginState> {
     } catch (e, s) {
       emit(state.copyWith(processing: false));
 
-      handleError(e, s, 'LoginQrSigninSubmitted');
+      handleError(e, s, errorContext);
     }
   }
 

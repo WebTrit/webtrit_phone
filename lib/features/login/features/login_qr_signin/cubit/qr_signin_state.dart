@@ -11,7 +11,8 @@ enum QrSigninStatus {
   permissionRequired,
 }
 
-class QrSigninState extends Equatable {
+@freezed
+class QrSigninState with _$QrSigninState {
   const QrSigninState({
     this.status = QrSigninStatus.checkingPermission,
     this.cameraPermanentlyDenied = false,
@@ -19,33 +20,20 @@ class QrSigninState extends Equatable {
     this.detection,
   });
 
+  @override
   final QrSigninStatus status;
 
   /// Whether asking again is pointless (the OS will not show the dialog);
   /// the user has to enable the permission on the settings screen instead.
+  @override
   final bool cameraPermanentlyDenied;
 
   /// Why the last scanned code was rejected; cleared automatically after
   /// [QrSigninCubit.errorDisplayDuration].
+  @override
   final QrSigninParseError? parseError;
 
   /// A successfully parsed code waiting to be handed over to the login flow.
-  final QrSigninParseResult? detection;
-
-  QrSigninState copyWith({
-    QrSigninStatus? status,
-    bool? cameraPermanentlyDenied,
-    QrSigninParseError? Function()? parseError,
-    QrSigninParseResult? Function()? detection,
-  }) {
-    return QrSigninState(
-      status: status ?? this.status,
-      cameraPermanentlyDenied: cameraPermanentlyDenied ?? this.cameraPermanentlyDenied,
-      parseError: parseError != null ? parseError() : this.parseError,
-      detection: detection != null ? detection() : this.detection,
-    );
-  }
-
   @override
-  List<Object?> get props => [status, cameraPermanentlyDenied, parseError, detection];
+  final QrSigninParseResult? detection;
 }

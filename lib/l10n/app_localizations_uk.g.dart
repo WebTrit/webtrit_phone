@@ -1056,29 +1056,29 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get login_qrSignin_scanHint => 'Відскануйте QR-код, щоб увійти.';
+  String get login_Text_qrSigninScanHint => 'Відскануйте QR-код, щоб увійти.';
 
   @override
-  String get login_qrSignin_verifyingTitle => 'Виконуємо вхід...';
+  String get login_Text_qrSigninVerifyingTitle => 'Виконуємо вхід...';
 
   @override
-  String get login_qrSignin_verifyingText => 'QR-код відскановано. Перевірка на сервері.';
+  String get login_Text_qrSigninVerifyingDescription => 'QR-код відскановано. Перевірка на сервері.';
 
   @override
-  String get login_qrSignin_cameraPermissionTitle => 'Доступ до камери вимкнено';
+  String get login_Text_qrSigninCameraPermissionTitle => 'Доступ до камери вимкнено';
 
   @override
-  String get login_qrSignin_cameraPermissionText =>
+  String get login_Text_qrSigninCameraPermissionDescription =>
       'Для сканування QR-коду потрібен доступ до камери. Увімкніть його, щоб продовжити.';
 
   @override
-  String get login_qrSignin_allowCameraAccessButton => 'Надати доступ до камери';
+  String get login_Button_qrSigninAllowCameraAccess => 'Надати доступ до камери';
 
   @override
-  String get login_qrSignin_openSettingsButton => 'Відкрити налаштування';
+  String get login_Button_qrSigninOpenSettings => 'Відкрити налаштування';
 
   @override
-  String get login_qrSignin_invalidCodeError => 'Цей QR-код не можна використати для входу.';
+  String get login_Text_qrSigninInvalidCodeError => 'Цей QR-код не можна використати для входу.';
 
   @override
   String get loginType_otpSignin => 'Увійти за OTP';

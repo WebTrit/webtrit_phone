@@ -32,14 +32,14 @@ scheme:USER_REF:PASSWORD@HOST[?query]
 Example:
 
 ```
-csc:ph3142x777:Test%40777@DEE-CALL
+csc:user123:p%40ssword@EXAMPLE
 ```
 
 | Part       | Description                                                                                                                              |
 |------------|------------------------------------------------------------------------------------------------------------------------------------------|
 | `scheme`   | URI scheme name, matched case-insensitively against the configured `schemes` list (default `csc`).                                        |
-| `USER_REF` | Percent-encoded user reference (account id, phone number or email). Decoded as `ph3142x777`.                                              |
-| `PASSWORD` | Percent-encoded password. `Test%40777` decodes to `Test@777`. May be empty or omitted - see below.                                        |
+| `USER_REF` | Percent-encoded user reference (account id, phone number or email). Decoded as `user123`.                                              |
+| `PASSWORD` | Percent-encoded password. `p%40ssword` decodes to `p@ssword`. May be empty or omitted - see below.                                        |
 | `HOST`     | Cloud/tenant identifier of the issuing portal. Validated against `expectedHost` when configured, otherwise ignored. A trailing `*` (test-version marker) is stripped before comparison. |
 | `?query`   | Optional. Unknown parameters are ignored so generator-side extras do not break scanning.                                                   |
 
@@ -71,7 +71,7 @@ hint and keeps scanning).
 
 | Scheme | Issued by                                                                 | Notes                                                                                                                             |
 |--------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| `csc`  | Cloud Softphone provider portal (Tools -> QR code generator)                | The default and currently the only known producer. `HOST` is the portal's cloud id (e.g. `DEE-CALL`); a trailing `*` marks a test (non-approved) app version and is tolerated. The portal URL-encodes the username/password segments. |
+| `csc`  | Cloud Softphone provider portal (Tools -> QR code generator)                | The default and currently the only known producer. `HOST` is the portal's cloud id (an opaque identifier assigned by the portal); a trailing `*` marks a test (non-approved) app version and is tolerated. The portal URL-encodes the username/password segments. |
 
 Adding a scheme is a config-only change: list its name in `loginConfig.qr.schemes`.
 Use this when a brand's provisioning system issues codes in the same
@@ -91,7 +91,7 @@ The feature is driven by the `qr` block of `loginConfig` in the application conf
     "qr": {
       "enabled": true,
       "schemes": ["csc"],
-      "expectedHost": "DEE-CALL"
+      "expectedHost": "EXAMPLE"
     }
   }
 }

@@ -37,23 +37,23 @@ class QrSigninPermissionView extends StatelessWidget {
         ),
         const SizedBox(height: kInset),
         Text(
-          context.l10n.login_qrSignin_cameraPermissionTitle,
+          context.l10n.login_Text_qrSigninCameraPermissionTitle,
           textAlign: TextAlign.center,
           style: themeData.textTheme.titleLarge,
         ),
         const SizedBox(height: kInset / 2),
         Text(
-          context.l10n.login_qrSignin_cameraPermissionText,
+          context.l10n.login_Text_qrSigninCameraPermissionDescription,
           textAlign: TextAlign.center,
           style: themeData.textTheme.bodyMedium,
         ),
         const SizedBox(height: kInset),
         if (permanentlyDenied)
-          ElevatedButton(onPressed: onOpenSettings, child: Text(context.l10n.login_qrSignin_openSettingsButton))
+          ElevatedButton(onPressed: onOpenSettings, child: Text(context.l10n.login_Button_qrSigninOpenSettings))
         else
           ElevatedButton(
             onPressed: onRequestPermission,
-            child: Text(context.l10n.login_qrSignin_allowCameraAccessButton),
+            child: Text(context.l10n.login_Button_qrSigninAllowCameraAccess),
           ),
       ],
     );

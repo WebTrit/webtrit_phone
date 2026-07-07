@@ -486,17 +486,19 @@ extension AppLocalizationsExtension on AppLocalizations {
         login_Text_signupRequestPreDescriptionDemo,
       'login_Text_signupVerifyPostDescriptionGeneral' =>
         login_Text_signupVerifyPostDescriptionGeneral,
-      'login_qrSignin_scanHint' => login_qrSignin_scanHint,
-      'login_qrSignin_verifyingTitle' => login_qrSignin_verifyingTitle,
-      'login_qrSignin_verifyingText' => login_qrSignin_verifyingText,
-      'login_qrSignin_cameraPermissionTitle' =>
-        login_qrSignin_cameraPermissionTitle,
-      'login_qrSignin_cameraPermissionText' =>
-        login_qrSignin_cameraPermissionText,
-      'login_qrSignin_allowCameraAccessButton' =>
-        login_qrSignin_allowCameraAccessButton,
-      'login_qrSignin_openSettingsButton' => login_qrSignin_openSettingsButton,
-      'login_qrSignin_invalidCodeError' => login_qrSignin_invalidCodeError,
+      'login_Text_qrSigninScanHint' => login_Text_qrSigninScanHint,
+      'login_Text_qrSigninVerifyingTitle' => login_Text_qrSigninVerifyingTitle,
+      'login_Text_qrSigninVerifyingDescription' =>
+        login_Text_qrSigninVerifyingDescription,
+      'login_Text_qrSigninCameraPermissionTitle' =>
+        login_Text_qrSigninCameraPermissionTitle,
+      'login_Text_qrSigninCameraPermissionDescription' =>
+        login_Text_qrSigninCameraPermissionDescription,
+      'login_Button_qrSigninAllowCameraAccess' =>
+        login_Button_qrSigninAllowCameraAccess,
+      'login_Button_qrSigninOpenSettings' => login_Button_qrSigninOpenSettings,
+      'login_Text_qrSigninInvalidCodeError' =>
+        login_Text_qrSigninInvalidCodeError,
       'loginType_otpSignin' => loginType_otpSignin,
       'loginType_passwordSignin' => loginType_passwordSignin,
       'loginType_qrSignin' => loginType_qrSignin,

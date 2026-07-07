@@ -75,6 +75,9 @@ class QrSigninUriParser {
     if (queryStart != -1) {
       try {
         query = Uri.splitQueryString(body.substring(queryStart + 1));
+        // Broken percent-encoding surfaces as ArgumentError, not FormatException.
+      } on ArgumentError {
+        return const QrSigninParseFailure(QrSigninParseError.malformed);
       } on FormatException {
         return const QrSigninParseFailure(QrSigninParseError.malformed);
       }
