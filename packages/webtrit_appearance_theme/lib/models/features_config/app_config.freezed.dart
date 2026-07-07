@@ -397,7 +397,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigLoginQr {
 
- bool get enabled; List<String> get formats; List<String> get schemes; String? get expectedHost;
+ bool get enabled; List<AppConfigLoginQrFormat> get formats; String? get expectedHost;
 /// Create a copy of AppConfigLoginQr
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -408,16 +408,16 @@ $AppConfigLoginQrCopyWith<AppConfigLoginQr> get copyWith => _$AppConfigLoginQrCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigLoginQr&&(identical(other.enabled, enabled) || other.enabled == enabled)&&const DeepCollectionEquality().equals(other.formats, formats)&&const DeepCollectionEquality().equals(other.schemes, schemes)&&(identical(other.expectedHost, expectedHost) || other.expectedHost == expectedHost));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigLoginQr&&(identical(other.enabled, enabled) || other.enabled == enabled)&&const DeepCollectionEquality().equals(other.formats, formats)&&(identical(other.expectedHost, expectedHost) || other.expectedHost == expectedHost));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,const DeepCollectionEquality().hash(formats),const DeepCollectionEquality().hash(schemes),expectedHost);
+int get hashCode => Object.hash(runtimeType,enabled,const DeepCollectionEquality().hash(formats),expectedHost);
 
 @override
 String toString() {
-  return 'AppConfigLoginQr(enabled: $enabled, formats: $formats, schemes: $schemes, expectedHost: $expectedHost)';
+  return 'AppConfigLoginQr(enabled: $enabled, formats: $formats, expectedHost: $expectedHost)';
 }
 
 
@@ -428,7 +428,7 @@ abstract mixin class $AppConfigLoginQrCopyWith<$Res>  {
   factory $AppConfigLoginQrCopyWith(AppConfigLoginQr value, $Res Function(AppConfigLoginQr) _then) = _$AppConfigLoginQrCopyWithImpl;
 @useResult
 $Res call({
- bool enabled, List<String> formats, List<String> schemes, String? expectedHost
+ bool enabled, List<AppConfigLoginQrFormat> formats, String? expectedHost
 });
 
 
@@ -445,12 +445,11 @@ class _$AppConfigLoginQrCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigLoginQr
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? formats = null,Object? schemes = null,Object? expectedHost = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? formats = null,Object? expectedHost = freezed,}) {
   return _then(AppConfigLoginQr(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,formats: null == formats ? _self.formats : formats // ignore: cast_nullable_to_non_nullable
-as List<String>,schemes: null == schemes ? _self.schemes : schemes // ignore: cast_nullable_to_non_nullable
-as List<String>,expectedHost: freezed == expectedHost ? _self.expectedHost : expectedHost // ignore: cast_nullable_to_non_nullable
+as List<AppConfigLoginQrFormat>,expectedHost: freezed == expectedHost ? _self.expectedHost : expectedHost // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -460,6 +459,193 @@ as String?,
 
 /// Adds pattern-matching-related methods to [AppConfigLoginQr].
 extension AppConfigLoginQrPatterns on AppConfigLoginQr {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
+
+/// @nodoc
+mixin _$AppConfigLoginQrFormat {
+
+ String get type; List<String>? get schemes;
+/// Create a copy of AppConfigLoginQrFormat
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AppConfigLoginQrFormatCopyWith<AppConfigLoginQrFormat> get copyWith => _$AppConfigLoginQrFormatCopyWithImpl<AppConfigLoginQrFormat>(this as AppConfigLoginQrFormat, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigLoginQrFormat&&(identical(other.type, type) || other.type == type)&&const DeepCollectionEquality().equals(other.schemes, schemes));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,type,const DeepCollectionEquality().hash(schemes));
+
+@override
+String toString() {
+  return 'AppConfigLoginQrFormat(type: $type, schemes: $schemes)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $AppConfigLoginQrFormatCopyWith<$Res>  {
+  factory $AppConfigLoginQrFormatCopyWith(AppConfigLoginQrFormat value, $Res Function(AppConfigLoginQrFormat) _then) = _$AppConfigLoginQrFormatCopyWithImpl;
+@useResult
+$Res call({
+ String type, List<String>? schemes
+});
+
+
+
+
+}
+/// @nodoc
+class _$AppConfigLoginQrFormatCopyWithImpl<$Res>
+    implements $AppConfigLoginQrFormatCopyWith<$Res> {
+  _$AppConfigLoginQrFormatCopyWithImpl(this._self, this._then);
+
+  final AppConfigLoginQrFormat _self;
+  final $Res Function(AppConfigLoginQrFormat) _then;
+
+/// Create a copy of AppConfigLoginQrFormat
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? type = null,Object? schemes = freezed,}) {
+  return _then(AppConfigLoginQrFormat(
+type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,schemes: freezed == schemes ? _self.schemes : schemes // ignore: cast_nullable_to_non_nullable
+as List<String>?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [AppConfigLoginQrFormat].
+extension AppConfigLoginQrFormatPatterns on AppConfigLoginQrFormat {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

@@ -6,13 +6,11 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 void main() {
-  QrSigninPayloadParser parser({
-    List<String> formats = const ['uri', 'json'],
-    List<String> schemes = const ['csc'],
-    String? expectedHost,
-  }) {
+  QrSigninPayloadParser parser({List<QrSigninFormatConfig>? formats, String? expectedHost}) {
     return QrSigninPayloadParser.fromConfig(
-      QrSigninConfig(enabled: true, formats: formats, schemes: schemes, expectedHost: expectedHost),
+      formats == null
+          ? QrSigninConfig(enabled: true, expectedHost: expectedHost)
+          : QrSigninConfig(enabled: true, formats: formats, expectedHost: expectedHost),
     );
   }
 
@@ -27,15 +25,26 @@ void main() {
       });
 
       test('only the configured formats are probed', () {
-        final uriOnly = parser(formats: ['uri']);
+        final uriOnly = parser(formats: const [QrSigninFormatConfig(type: 'uri')]);
         final jsonPayload = jsonEncode({'t': 'webtrit-signin', 'user': 'user123', 'password': 'p@ss'});
 
         expect((uriOnly.parse(jsonPayload) as QrSigninParseFailure).error, QrSigninParseError.unrecognized);
         expect(uriOnly.parse('csc:user:pass@EXAMPLE'), isA<QrSigninCredentials>());
       });
 
-      test('unknown format names are ignored', () {
-        final result = parser(formats: ['xml', 'uri']).parse('csc:user:pass@EXAMPLE');
+      test('unknown format types are ignored', () {
+        final result = parser(
+          formats: const [
+            QrSigninFormatConfig(type: 'xml'),
+            QrSigninFormatConfig(type: 'uri'),
+          ],
+        ).parse('csc:user:pass@EXAMPLE');
+
+        expect(result, isA<QrSigninCredentials>());
+      });
+
+      test('a uri format entry without schemes falls back to csc', () {
+        final result = parser(formats: const [QrSigninFormatConfig(type: 'uri')]).parse('csc:user:pass@EXAMPLE');
 
         expect(result, isA<QrSigninCredentials>());
       });
@@ -70,7 +79,11 @@ void main() {
       });
 
       test('accepts any configured scheme', () {
-        final result = parser(schemes: ['csc', 'acme']).parse('acme:user:pass@EXAMPLE');
+        final result = parser(
+          formats: const [
+            QrSigninFormatConfig(type: 'uri', schemes: ['csc', 'acme']),
+          ],
+        ).parse('acme:user:pass@EXAMPLE');
 
         expect(result, isA<QrSigninCredentials>());
       });

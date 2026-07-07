@@ -28,7 +28,7 @@ login is a single scan instead of typing credentials.
 ## Payload Formats
 
 Payloads are interpreted by a chain of format decoders (adapters), probed in the
-order set by `loginConfig.qr.formats`: the first decoder that RECOGNIZES the payload
+order of the `loginConfig.qr.formats` entries: the first decoder that RECOGNIZES the payload
 fully decides the outcome (including failures such as a host mismatch); when none
 does, the code is reported as "not a sign-in code". Supporting a new payload
 structure is one new decoder class
@@ -139,8 +139,10 @@ The feature is driven by the `qr` block of `loginConfig` in the application conf
     "signinOrder": ["passwordSignin", "otpSignin", "signup", "qrSignin"],
     "qr": {
       "enabled": true,
-      "formats": ["uri", "json"],
-      "schemes": ["csc"],
+      "formats": [
+        { "type": "uri", "schemes": ["csc"] },
+        { "type": "json" }
+      ],
       "expectedHost": "EXAMPLE"
     }
   }
@@ -150,9 +152,15 @@ The feature is driven by the `qr` block of `loginConfig` in the application conf
 | Field          | Type           | Default   | Description                                                                                   |
 |----------------|----------------|-----------|-----------------------------------------------------------------------------------------------|
 | `enabled`      | `bool`         | `false`   | Whether the QR sign-in tab is available at all.                                                |
-| `formats`      | `List<String>` | `["uri", "json"]` | Accepted payload formats (decoder names), probed in this order.                        |
-| `schemes`      | `List<String>` | `["csc"]` | Accepted URI scheme names of the `uri` format, matched case-insensitively.                     |
-| `expectedHost` | `string?`      | `null`    | Expected host (cloud id) of the code. When set, codes issued for a different host are rejected; `null` accepts any host. |
+| `formats`      | `List<Format>` | uri (csc) + json | Accepted payload formats with their per-format options, probed in this order.           |
+| `expectedHost` | `string?`      | `null`    | Expected host (cloud id) of the code, shared by all formats. When set, codes issued for a different host are rejected; `null` accepts any host. |
+
+Each `formats` entry:
+
+| Field     | Type            | Applies to | Description                                                                 |
+|-----------|-----------------|------------|-------------------------------------------------------------------------------|
+| `type`    | `string`        | all        | Decoder name: `uri` or `json`. Unknown types are ignored.                       |
+| `schemes` | `List<String>?` | `uri`      | Accepted scheme names, matched case-insensitively. Defaults to `["csc"]`.       |
 
 The tab's position and default selection follow the regular `signinOrder` mechanism;
 add `qrSignin` to the list to control its placement (unlisted types go last).

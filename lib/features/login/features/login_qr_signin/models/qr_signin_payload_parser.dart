@@ -16,12 +16,15 @@ class QrSigninPayloadParser {
   QrSigninPayloadParser(List<QrSigninPayloadDecoder> decoders) : _decoders = List.unmodifiable(decoders);
 
   /// Builds the decoder chain from the app config, preserving the
-  /// [QrSigninConfig.formats] order. Unknown format names are ignored.
+  /// [QrSigninConfig.formats] order. Unknown format types are ignored.
   factory QrSigninPayloadParser.fromConfig(QrSigninConfig config) {
     return QrSigninPayloadParser([
       for (final format in config.formats)
-        ?switch (format) {
-          uriFormat => UriQrSigninPayloadDecoder(schemes: config.schemes, expectedHost: config.expectedHost),
+        ?switch (format.type) {
+          uriFormat => UriQrSigninPayloadDecoder(
+            schemes: format.schemes ?? const [defaultUriScheme],
+            expectedHost: config.expectedHost,
+          ),
           jsonFormat => JsonQrSigninPayloadDecoder(expectedHost: config.expectedHost),
           _ => null,
         },
@@ -33,6 +36,9 @@ class QrSigninPayloadParser {
 
   /// The marker-discriminated JSON object format.
   static const jsonFormat = 'json';
+
+  /// Scheme assumed for a `uri` format entry that does not list its own.
+  static const defaultUriScheme = 'csc';
 
   final List<QrSigninPayloadDecoder> _decoders;
 

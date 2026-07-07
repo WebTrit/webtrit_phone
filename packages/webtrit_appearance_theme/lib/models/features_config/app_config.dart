@@ -96,8 +96,10 @@ class AppConfigLogin with _$AppConfigLogin {
 class AppConfigLoginQr with _$AppConfigLoginQr {
   const AppConfigLoginQr({
     this.enabled = false,
-    this.formats = const ['uri', 'json'],
-    this.schemes = const ['csc'],
+    this.formats = const [
+      AppConfigLoginQrFormat(type: 'uri', schemes: ['csc']),
+      AppConfigLoginQrFormat(type: 'json'),
+    ],
     this.expectedHost,
   });
 
@@ -105,22 +107,38 @@ class AppConfigLoginQr with _$AppConfigLoginQr {
   @override
   final bool enabled;
 
-  /// Accepted payload formats (`uri`, `json`), probed in this order.
+  /// Accepted payload formats with their per-format options, probed in this
+  /// order.
   @override
-  final List<String> formats;
+  final List<AppConfigLoginQrFormat> formats;
 
-  /// Accepted URI scheme names of the `uri` format, matched case-insensitively.
-  @override
-  final List<String> schemes;
-
-  /// Expected host (cloud id) part of the URI. When set, codes issued for a
-  /// different host are rejected; null accepts any host.
+  /// Expected host (cloud id) of the code, shared by all formats. When set,
+  /// codes issued for a different host are rejected; null accepts any host.
   @override
   final String? expectedHost;
 
   factory AppConfigLoginQr.fromJson(Map<String, Object?> json) => _$AppConfigLoginQrFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigLoginQrToJson(this);
+}
+
+/// One accepted QR payload format and its format-specific options.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigLoginQrFormat with _$AppConfigLoginQrFormat {
+  const AppConfigLoginQrFormat({required this.type, this.schemes});
+
+  /// Decoder name (`uri`, `json`).
+  @override
+  final String type;
+
+  /// `uri` only: accepted scheme names, matched case-insensitively.
+  @override
+  final List<String>? schemes;
+
+  factory AppConfigLoginQrFormat.fromJson(Map<String, Object?> json) => _$AppConfigLoginQrFormatFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigLoginQrFormatToJson(this);
 }
 
 @freezed

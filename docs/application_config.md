@@ -33,8 +33,10 @@ The `loginConfig` section defines the app’s login screen behavior and embedded
     "signinOrder": ["passwordSignin", "otpSignin", "signup"],
     "qr": {
       "enabled": false,
-      "formats": ["uri", "json"],
-      "schemes": ["csc"],
+      "formats": [
+        { "type": "uri", "schemes": ["csc"] },
+        { "type": "json" }
+      ],
       "expectedHost": null
     },
     "common": {
@@ -75,9 +77,8 @@ format, scheme descriptions and screen behavior.
 | Field          | Type           | Default   | Description                                                                                   |
 |----------------|----------------|-----------|-----------------------------------------------------------------------------------------------|
 | `enabled`      | `bool`         | `false`   | Whether the QR sign-in tab is available. The tab also requires the backend to support password sign-in. |
-| `formats`      | `List<String>` | `["uri", "json"]` | Accepted payload formats (decoder names), probed in this order.                        |
-| `schemes`      | `List<String>` | `["csc"]` | Accepted URI scheme names of the `uri` format, matched case-insensitively.                     |
-| `expectedHost` | `string?`      | `null`    | Expected host (cloud id) of the code; mismatching codes are rejected. `null` accepts any host. |
+| `formats`      | `List<Format>` | uri (csc) + json | Accepted payload formats (`{ "type": "uri" | "json", "schemes": [...] }`), probed in this order; `schemes` applies to `uri` only. |
+| `expectedHost` | `string?`      | `null`    | Expected host (cloud id) of the code, shared by all formats; mismatching codes are rejected. `null` accepts any host. |
 
 ### Login Common
 
