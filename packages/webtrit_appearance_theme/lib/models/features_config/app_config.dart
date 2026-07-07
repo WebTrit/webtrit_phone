@@ -87,7 +87,7 @@ class AppConfigLogin with _$AppConfigLogin {
 /// Configuration of the QR-code sign-in tab.
 ///
 /// The QR code carries plain credentials in a provisioning URI (for example
-/// `csc:username:password@CLOUD-ID` with percent-encoded segments); scanning it
+/// `csc:username:password@EXAMPLE` with percent-encoded segments); scanning it
 /// signs the user in through the regular password login. The tab appears only
 /// when [enabled] is true and the backend supports password sign-in; its
 /// position among the other tabs follows [AppConfigLogin.signinOrder].
