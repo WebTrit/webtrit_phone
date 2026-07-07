@@ -131,7 +131,16 @@ class _ScannerView extends StatelessWidget {
               aspectRatio: 1,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(kInset),
-                child: MobileScanner(controller: controller, onDetect: onDetect),
+                // The neutral backdrop keeps the viewfinder shape visible while
+                // the camera initializes (the preview flickers in otherwise).
+                child: ColoredBox(
+                  color: themeData.colorScheme.surfaceContainerHighest,
+                  child: MobileScanner(
+                    controller: controller,
+                    onDetect: onDetect,
+                    placeholderBuilder: (context) => const SizedBox.expand(),
+                  ),
+                ),
               ),
             ),
           ),
