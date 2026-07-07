@@ -1063,9 +1063,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get login_qrSignin_cameraPermissionTitle => 'L\'accesso alla fotocamera è disattivato';
 
   @override
-  String login_qrSignin_cameraPermissionText(String appName) {
-    return '$appName ha bisogno dell\'accesso alla fotocamera per scansionare un codice QR. Attivalo per continuare.';
-  }
+  String get login_qrSignin_cameraPermissionText =>
+      'L\'accesso alla fotocamera è necessario per scansionare un codice QR. Attivalo per continuare.';
 
   @override
   String get login_qrSignin_allowCameraAccessButton => 'Consenti l\'accesso alla fotocamera';

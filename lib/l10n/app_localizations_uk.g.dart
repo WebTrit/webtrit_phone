@@ -1068,9 +1068,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_qrSignin_cameraPermissionTitle => 'Доступ до камери вимкнено';
 
   @override
-  String login_qrSignin_cameraPermissionText(String appName) {
-    return '$appName потребує доступу до камери для сканування QR-коду. Увімкніть його, щоб продовжити.';
-  }
+  String get login_qrSignin_cameraPermissionText =>
+      'Для сканування QR-коду потрібен доступ до камери. Увімкніть його, щоб продовжити.';
 
   @override
   String get login_qrSignin_allowCameraAccessButton => 'Надати доступ до камери';

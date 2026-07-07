@@ -491,6 +491,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'login_qrSignin_verifyingText' => login_qrSignin_verifyingText,
       'login_qrSignin_cameraPermissionTitle' =>
         login_qrSignin_cameraPermissionTitle,
+      'login_qrSignin_cameraPermissionText' =>
+        login_qrSignin_cameraPermissionText,
       'login_qrSignin_allowCameraAccessButton' =>
         login_qrSignin_allowCameraAccessButton,
       'login_qrSignin_openSettingsButton' => login_qrSignin_openSettingsButton,
@@ -1674,12 +1676,6 @@ extension AppLocalizationsExtension on AppLocalizations {
         ),
         _ => throw ArgumentError(
           'login_Text_signupVerifyPreDescriptionEmail requires 1 arguments',
-        ),
-      },
-      'login_qrSignin_cameraPermissionText' => switch (args) {
-        [final String appName] => login_qrSignin_cameraPermissionText(appName),
-        _ => throw ArgumentError(
-          'login_qrSignin_cameraPermissionText requires 1 arguments',
         ),
       },
       'logRecordsConsole_Text_recordsCountHint' => switch (args) {

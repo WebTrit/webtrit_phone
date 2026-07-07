@@ -908,14 +908,8 @@
   "@login_qrSignin_verifyingText": {},
   "login_qrSignin_cameraPermissionTitle": "การเข้าถึงกล้องถูกปิดอยู่",
   "@login_qrSignin_cameraPermissionTitle": {},
-  "login_qrSignin_cameraPermissionText": "{appName} ต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกนคิวอาร์โค้ด โปรดเปิดใช้งานเพื่อดำเนินการต่อ",
-  "@login_qrSignin_cameraPermissionText": {
-    "placeholders": {
-      "appName": {
-        "type": "String"
-      }
-    }
-  },
+  "login_qrSignin_cameraPermissionText": "ต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกนคิวอาร์โค้ด โปรดเปิดใช้งานเพื่อดำเนินการต่อ",
+  "@login_qrSignin_cameraPermissionText": {},
   "login_qrSignin_allowCameraAccessButton": "อนุญาตการเข้าถึงกล้อง",
   "@login_qrSignin_allowCameraAccessButton": {},
   "login_qrSignin_openSettingsButton": "เปิดการตั้งค่า",

@@ -908,14 +908,8 @@
   "@login_qrSignin_verifyingText": {},
   "login_qrSignin_cameraPermissionTitle": "Доступ до камери вимкнено",
   "@login_qrSignin_cameraPermissionTitle": {},
-  "login_qrSignin_cameraPermissionText": "{appName} потребує доступу до камери для сканування QR-коду. Увімкніть його, щоб продовжити.",
-  "@login_qrSignin_cameraPermissionText": {
-    "placeholders": {
-      "appName": {
-        "type": "String"
-      }
-    }
-  },
+  "login_qrSignin_cameraPermissionText": "Для сканування QR-коду потрібен доступ до камери. Увімкніть його, щоб продовжити.",
+  "@login_qrSignin_cameraPermissionText": {},
   "login_qrSignin_allowCameraAccessButton": "Надати доступ до камери",
   "@login_qrSignin_allowCameraAccessButton": {},
   "login_qrSignin_openSettingsButton": "Відкрити налаштування",

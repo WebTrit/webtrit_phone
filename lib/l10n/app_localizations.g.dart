@@ -1939,8 +1939,8 @@ abstract class AppLocalizations {
   /// No description provided for @login_qrSignin_cameraPermissionText.
   ///
   /// In en, this message translates to:
-  /// **'{appName} needs camera access to scan a QR code. Enable it to continue.'**
-  String login_qrSignin_cameraPermissionText(String appName);
+  /// **'Camera access is needed to scan a QR code. Enable it to continue.'**
+  String get login_qrSignin_cameraPermissionText;
 
   /// No description provided for @login_qrSignin_allowCameraAccessButton.
   ///

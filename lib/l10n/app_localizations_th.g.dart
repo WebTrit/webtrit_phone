@@ -1047,9 +1047,8 @@ class AppLocalizationsTh extends AppLocalizations {
   String get login_qrSignin_cameraPermissionTitle => 'การเข้าถึงกล้องถูกปิดอยู่';
 
   @override
-  String login_qrSignin_cameraPermissionText(String appName) {
-    return '$appName ต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกนคิวอาร์โค้ด โปรดเปิดใช้งานเพื่อดำเนินการต่อ';
-  }
+  String get login_qrSignin_cameraPermissionText =>
+      'ต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกนคิวอาร์โค้ด โปรดเปิดใช้งานเพื่อดำเนินการต่อ';
 
   @override
   String get login_qrSignin_allowCameraAccessButton => 'อนุญาตการเข้าถึงกล้อง';

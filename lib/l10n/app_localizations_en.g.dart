@@ -1055,9 +1055,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_qrSignin_cameraPermissionTitle => 'Camera access is off';
 
   @override
-  String login_qrSignin_cameraPermissionText(String appName) {
-    return '$appName needs camera access to scan a QR code. Enable it to continue.';
-  }
+  String get login_qrSignin_cameraPermissionText => 'Camera access is needed to scan a QR code. Enable it to continue.';
 
   @override
   String get login_qrSignin_allowCameraAccessButton => 'Allow camera access';

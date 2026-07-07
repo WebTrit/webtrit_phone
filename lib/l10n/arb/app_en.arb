@@ -908,14 +908,8 @@
   "@login_qrSignin_verifyingText": {},
   "login_qrSignin_cameraPermissionTitle": "Camera access is off",
   "@login_qrSignin_cameraPermissionTitle": {},
-  "login_qrSignin_cameraPermissionText": "{appName} needs camera access to scan a QR code. Enable it to continue.",
-  "@login_qrSignin_cameraPermissionText": {
-    "placeholders": {
-      "appName": {
-        "type": "String"
-      }
-    }
-  },
+  "login_qrSignin_cameraPermissionText": "Camera access is needed to scan a QR code. Enable it to continue.",
+  "@login_qrSignin_cameraPermissionText": {},
   "login_qrSignin_allowCameraAccessButton": "Allow camera access",
   "@login_qrSignin_allowCameraAccessButton": {},
   "login_qrSignin_openSettingsButton": "Open settings",

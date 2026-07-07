@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
@@ -182,7 +181,6 @@ class _PermissionRequiredView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final appName = context.read<PackageInfo>().appName;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -203,7 +201,7 @@ class _PermissionRequiredView extends StatelessWidget {
         ),
         const SizedBox(height: kInset / 2),
         Text(
-          context.l10n.login_qrSignin_cameraPermissionText(appName),
+          context.l10n.login_qrSignin_cameraPermissionText,
           textAlign: TextAlign.center,
           style: themeData.textTheme.bodyMedium,
         ),

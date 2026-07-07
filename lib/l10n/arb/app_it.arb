@@ -908,14 +908,8 @@
   "@login_qrSignin_verifyingText": {},
   "login_qrSignin_cameraPermissionTitle": "L'accesso alla fotocamera è disattivato",
   "@login_qrSignin_cameraPermissionTitle": {},
-  "login_qrSignin_cameraPermissionText": "{appName} ha bisogno dell'accesso alla fotocamera per scansionare un codice QR. Attivalo per continuare.",
-  "@login_qrSignin_cameraPermissionText": {
-    "placeholders": {
-      "appName": {
-        "type": "String"
-      }
-    }
-  },
+  "login_qrSignin_cameraPermissionText": "L'accesso alla fotocamera è necessario per scansionare un codice QR. Attivalo per continuare.",
+  "@login_qrSignin_cameraPermissionText": {},
   "login_qrSignin_allowCameraAccessButton": "Consenti l'accesso alla fotocamera",
   "@login_qrSignin_allowCameraAccessButton": {},
   "login_qrSignin_openSettingsButton": "Apri le impostazioni",
