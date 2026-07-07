@@ -4,6 +4,7 @@ export 'bloc_concurrency.dart';
 export 'buffer_transformer.dart';
 export 'connectivity_checker.dart';
 export 'core_support.dart';
+export 'crash_keys_writer.dart';
 export 'crashlytics_utils.dart';
 export 'debounce.dart';
 export 'debounce_map.dart';

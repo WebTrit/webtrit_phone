@@ -5,6 +5,18 @@ import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/utils.dart';
+
+class _RecordingCrashKeysWriter implements CrashKeysWriter {
+  final List<Map<String, Object?>> batches = [];
+  final Map<String, Object> singles = {};
+
+  @override
+  void setKeys(Map<String, Object?> keys) => batches.add(keys);
+
+  @override
+  void setKey(String key, Object value) => singles[key] = value;
+}
 
 class _MockAppMetadataProvider extends Mock implements AppMetadataProvider {}
 
@@ -36,7 +48,7 @@ void main() {
   late _MockVideoCapturingSettingsRepository videoCapturingSettingsRepository;
   late _MockIceSettingsRepository iceSettingsRepository;
   late _MockPeerConnectionSettingsRepository peerConnectionSettingsRepository;
-  late List<Map<String, Object?>> writes;
+  late _RecordingCrashKeysWriter crashKeysWriter;
   late CrashlyticsAppContext appContext;
 
   setUp(() {
@@ -48,7 +60,7 @@ void main() {
     videoCapturingSettingsRepository = _MockVideoCapturingSettingsRepository();
     iceSettingsRepository = _MockIceSettingsRepository();
     peerConnectionSettingsRepository = _MockPeerConnectionSettingsRepository();
-    writes = [];
+    crashKeysWriter = _RecordingCrashKeysWriter();
 
     appContext = CrashlyticsAppContext(
       metadataProvider: metadataProvider,
@@ -60,7 +72,7 @@ void main() {
       videoCapturingSettingsRepository: videoCapturingSettingsRepository,
       iceSettingsRepository: iceSettingsRepository,
       peerConnectionSettingsRepository: peerConnectionSettingsRepository,
-      writeKeys: (settings) => writes.add(settings),
+      crashKeysWriter: crashKeysWriter,
     );
   });
 
@@ -89,8 +101,8 @@ void main() {
     test('writes metadata labels, versions and user settings in one batch', () {
       appContext.logStartup(defaultPeerConnectionSettings: PeerConnectionSettings.blank());
 
-      expect(writes, hasLength(1));
-      final keys = writes.single;
+      expect(crashKeysWriter.batches, hasLength(1));
+      final keys = crashKeysWriter.batches.single;
       expect(keys['app'], 'WebTrit');
       expect(keys['appVersion'], '1.16.0+6');
       expect(keys['tenantId'], 'tenant-a');
@@ -101,13 +113,13 @@ void main() {
     test('drops the authorization label - AppBloc owns that key', () {
       appContext.logStartup(defaultPeerConnectionSettings: PeerConnectionSettings.blank());
 
-      expect(writes.single, isNot(contains('authorization')));
+      expect(crashKeysWriter.batches.single, isNot(contains('authorization')));
     });
 
     test('writes media settings keys with the default sentinel for an unset preset', () {
       appContext.logStartup(defaultPeerConnectionSettings: PeerConnectionSettings.blank());
 
-      final keys = writes.single;
+      final keys = crashKeysWriter.batches.single;
       expect(keys['encodingPreset'], 'default');
       expect(keys['encodingSettings'], EncodingSettings.blank().toString());
       expect(keys['audioProcessingSettings'], AudioProcessingSettings.blank().toString());
@@ -126,7 +138,7 @@ void main() {
 
       appContext.logStartup(defaultPeerConnectionSettings: PeerConnectionSettings.blank());
 
-      expect(writes.single['encodingPreset'], 'quality');
+      expect(crashKeysWriter.batches.single['encodingPreset'], 'quality');
     });
   });
 
@@ -134,8 +146,8 @@ void main() {
     test('writes the unset sentinel for absent overrides', () {
       appContext.logFeatureOverrides(const FeatureOverrides());
 
-      expect(writes, hasLength(1));
-      final keys = writes.single;
+      expect(crashKeysWriter.batches, hasLength(1));
+      final keys = crashKeysWriter.batches.single;
       expect(keys['feature_video_call_enabled'], 'unset');
       expect(keys['feature_system_notifications_enabled'], 'unset');
       expect(keys['feature_hybrid_presence_enabled'], 'unset');
@@ -158,7 +170,7 @@ void main() {
         ),
       );
 
-      final keys = writes.single;
+      final keys = crashKeysWriter.batches.single;
       expect(keys['feature_video_call_enabled'], true);
       expect(keys['feature_voicemail_enabled'], false);
       expect(keys['feature_monitor_check_interval_sec'], 45);
@@ -169,15 +181,15 @@ void main() {
       appContext.logFeatureOverrides(const FeatureOverrides(isVideoCallEnabled: true));
       appContext.logFeatureOverrides(const FeatureOverrides(isVideoCallEnabled: true));
 
-      expect(writes, hasLength(1));
+      expect(crashKeysWriter.batches, hasLength(1));
     });
 
     test('writes again when the overrides change', () {
       appContext.logFeatureOverrides(const FeatureOverrides(isVideoCallEnabled: true));
       appContext.logFeatureOverrides(const FeatureOverrides());
 
-      expect(writes, hasLength(2));
-      expect(writes.last['feature_video_call_enabled'], 'unset');
+      expect(crashKeysWriter.batches, hasLength(2));
+      expect(crashKeysWriter.batches.last['feature_video_call_enabled'], 'unset');
     });
   });
 }

@@ -14,19 +14,21 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     this._iceSettingsRepository,
     this._peerConnectionSettingsRepository,
     this._videoCapturingSettingsRepository,
-    this._encodingSettingsRepository,
-  ) : super(
-        MediaSettingsState(
-          encodingSettings: _encodingSettingsRepository.getEncodingSettings(),
-          encodingPreset: _encodingPresetRepository.getEncodingPreset(),
-          audioProcessingSettings: _audioProcessingSettingsRepository.getAudioProcessingSettings(),
-          videoCapturingSettings: _videoCapturingSettingsRepository.getVideoCapturingSettings(),
-          iceSettings: _iceSettingsRepository.getIceSettings(),
-          pearConnectionSettings: _peerConnectionSettingsRepository.getPeerConnectionSettings(
-            defaultValue: _defaultPeerConnectionSettings,
-          ),
-        ),
-      );
+    this._encodingSettingsRepository, {
+    CrashKeysWriter crashKeysWriter = const CrashlyticsKeysWriter(),
+  }) : _crashKeysWriter = crashKeysWriter,
+       super(
+         MediaSettingsState(
+           encodingSettings: _encodingSettingsRepository.getEncodingSettings(),
+           encodingPreset: _encodingPresetRepository.getEncodingPreset(),
+           audioProcessingSettings: _audioProcessingSettingsRepository.getAudioProcessingSettings(),
+           videoCapturingSettings: _videoCapturingSettingsRepository.getVideoCapturingSettings(),
+           iceSettings: _iceSettingsRepository.getIceSettings(),
+           pearConnectionSettings: _peerConnectionSettingsRepository.getPeerConnectionSettings(
+             defaultValue: _defaultPeerConnectionSettings,
+           ),
+         ),
+       );
 
   final PeerConnectionSettings _defaultPeerConnectionSettings;
   final AudioProcessingSettingsRepository _audioProcessingSettingsRepository;
@@ -35,6 +37,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   final PeerConnectionSettingsRepository _peerConnectionSettingsRepository;
   final VideoCapturingSettingsRepository _videoCapturingSettingsRepository;
   final EncodingSettingsRepository _encodingSettingsRepository;
+  final CrashKeysWriter _crashKeysWriter;
 
   void setEncodingSettings(EncodingSettings settings) {
     emit(state.copyWithEncodingSettings(settings));
@@ -73,7 +76,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   void onChange(Change<MediaSettingsState> change) {
     super.onChange(change);
     final next = change.nextState;
-    CrashlyticsUtils.logAppSettings(
+    _crashKeysWriter.setKeys(
       mediaSettingsCrashKeys(
         encodingPreset: next.encodingPreset,
         encodingSettings: next.encodingSettings,

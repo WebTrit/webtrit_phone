@@ -6,8 +6,8 @@ import 'app_metadata_provider.dart';
 
 /// Builds and writes the application-context Crashlytics custom keys, so
 /// crash reports carry the configuration they happened in. Lives outside the
-/// widget tree and takes the write sink as a dependency, so the produced keys
-/// are unit-testable without Firebase.
+/// widget tree and writes through the injected [CrashKeysWriter], so the
+/// produced keys are unit-testable without Firebase.
 ///
 /// Keys owned by a state lifecycle are NOT written here to keep a single
 /// writer per key: authorization/themeMode/locale belong to AppBloc, and
@@ -23,7 +23,7 @@ class CrashlyticsAppContext {
     required this.videoCapturingSettingsRepository,
     required this.iceSettingsRepository,
     required this.peerConnectionSettingsRepository,
-    this.writeKeys = CrashlyticsUtils.logAppSettings,
+    this.crashKeysWriter = const CrashlyticsKeysWriter(),
   });
 
   final AppMetadataProvider metadataProvider;
@@ -36,8 +36,7 @@ class CrashlyticsAppContext {
   final IceSettingsRepository iceSettingsRepository;
   final PeerConnectionSettingsRepository peerConnectionSettingsRepository;
 
-  /// Crashlytics write sink; injectable for tests.
-  final void Function(Map<String, Object?> settings) writeKeys;
+  final CrashKeysWriter crashKeysWriter;
 
   /// The last overrides written; [logFeatureOverrides] is driven by widget
   /// dependency changes that fire for unrelated reasons too, so unchanged
@@ -52,7 +51,7 @@ class CrashlyticsAppContext {
   void logStartup({required PeerConnectionSettings defaultPeerConnectionSettings}) {
     final labels = Map<String, Object?>.from(metadataProvider.logLabels)..remove('authorization');
 
-    writeKeys({
+    crashKeysWriter.setKeys({
       ...labels,
       'callkeepVersion': callkeepVersion,
       'incomingCallType': incomingCallTypeRepository.getIncomingCallType().name,
@@ -78,7 +77,7 @@ class CrashlyticsAppContext {
     if (overrides == _lastLoggedOverrides) return;
     _lastLoggedOverrides = overrides;
 
-    writeKeys({
+    crashKeysWriter.setKeys({
       'feature_video_call_enabled': overrides.isVideoCallEnabled ?? 'unset',
       'feature_system_notifications_enabled': overrides.isSystemNotificationsEnabled ?? 'unset',
       'feature_hybrid_presence_enabled': overrides.hybridPresenceSupport ?? 'unset',

@@ -37,6 +37,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.userSessionCleanupResolver,
     required this.systemInfoRepository,
     required this.appCompatibilityResolver,
+    this.crashKeysWriter = const CrashlyticsKeysWriter(),
   }) : super(
          AppState(
            session: sessionRepository.getCurrent(),
@@ -60,7 +61,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     // This bloc is the single writer of the session/user-settings Crashlytics
     // keys it owns: seed them from the initial state here, refresh them in the
     // corresponding handlers/transitions below.
-    CrashlyticsUtils.logAppSettings({
+    crashKeysWriter.setKeys({
       'authorization': state.session.isLoggedIn ? 'authorized' : 'unauthorized',
       'themeMode': state.themeMode.name,
       'locale': _localeCrashKeyValue(state.locale),
@@ -83,6 +84,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final UserSessionCleanupResolver userSessionCleanupResolver;
   final SystemInfoRepository systemInfoRepository;
   final AppCompatibilityResolver appCompatibilityResolver;
+  final CrashKeysWriter crashKeysWriter;
 
   StreamSubscription<WebtritSystemInfo>? _systemInfoSubscription;
 
@@ -135,10 +137,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     // Keep the owned Crashlytics keys in sync with the state, whatever path
     // changed it; the initial values are seeded in the constructor.
     if (change.currentState.themeMode != change.nextState.themeMode) {
-      CrashlyticsUtils.setKey('themeMode', change.nextState.themeMode.name);
+      crashKeysWriter.setKey('themeMode', change.nextState.themeMode.name);
     }
     if (change.currentState.locale != change.nextState.locale) {
-      CrashlyticsUtils.setKey('locale', _localeCrashKeyValue(change.nextState.locale));
+      crashKeysWriter.setKey('locale', _localeCrashKeyValue(change.nextState.locale));
     }
     super.onChange(change);
   }
@@ -157,7 +159,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onSessionLoggedIn(Session session) {
-    CrashlyticsUtils.setKey('authorization', 'authorized');
+    crashKeysWriter.setKey('authorization', 'authorized');
     unawaited(
       CrashlyticsUtils.logSession(
         userId: session.userId,
@@ -169,7 +171,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onSessionLoggedOut(Session session) {
-    CrashlyticsUtils.setKey('authorization', 'unauthorized');
+    crashKeysWriter.setKey('authorization', 'unauthorized');
     _logger.info('User logged out: ${session.userId}');
   }
 

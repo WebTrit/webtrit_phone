@@ -22,8 +22,10 @@ class NetworkCubit extends Cubit<NetworkState> {
     this._deviceInfo,
     this._incomingCallTypeRepository,
     this._onIncomingCallTypeChanged,
-    this._callkeepPermissions,
-  ) : super(NetworkState(smsFallbackEnabled: _callTriggerConfig.smsFallback.enabled)) {
+    this._callkeepPermissions, {
+    CrashKeysWriter crashKeysWriter = const CrashlyticsKeysWriter(),
+  }) : _crashKeysWriter = crashKeysWriter,
+       super(NetworkState(smsFallbackEnabled: _callTriggerConfig.smsFallback.enabled)) {
     _initializeActiveIncomingType();
   }
 
@@ -32,6 +34,7 @@ class NetworkCubit extends Cubit<NetworkState> {
   final IncomingCallTypeRepository _incomingCallTypeRepository;
   final Future<void> Function(IncomingCallType) _onIncomingCallTypeChanged;
   final WebtritCallkeepPermissions _callkeepPermissions;
+  final CrashKeysWriter _crashKeysWriter;
 
   bool get smsFallbackAvailable => _callTriggerConfig.smsFallback.available;
 
@@ -67,7 +70,7 @@ class NetworkCubit extends Cubit<NetworkState> {
   void onChange(Change<NetworkState> change) {
     super.onChange(change);
     if (change.currentState.incomingCallType != change.nextState.incomingCallType) {
-      CrashlyticsUtils.setKey('incomingCallType', change.nextState.incomingCallType.name);
+      _crashKeysWriter.setKey('incomingCallType', change.nextState.incomingCallType.name);
     }
   }
 
