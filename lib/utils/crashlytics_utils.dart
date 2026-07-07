@@ -25,35 +25,45 @@ class CrashlyticsUtils {
     return dbg?.isNotEmpty == true ? dbg! : 'isolate-${Isolate.current.hashCode}';
   }
 
-  /// Writes useful isolate/platform context into Crashlytics custom keys.
-  static Future<void> logIsolateInfo() async {
-    final label = currentIsolateLabel();
-    final dbg = kIsWeb ? null : Isolate.current.debugName;
-    final hash = kIsWeb ? null : Isolate.current.hashCode;
-
-    unawaited(crashlyticsSetCustomKey('isolate_label', label));
-    if (dbg != null) unawaited(crashlyticsSetCustomKey('isolate_debugName', dbg));
-    if (hash != null) unawaited(crashlyticsSetCustomKey('isolate_hash', hash));
+  /// Isolate/platform context as custom-key entries; null values (web) are
+  /// skipped by [logAppSettings].
+  static Map<String, Object?> isolateInfoKeys() {
+    return {
+      'isolate_label': currentIsolateLabel(),
+      'isolate_debugName': kIsWeb ? null : Isolate.current.debugName,
+      'isolate_hash': kIsWeb ? null : Isolate.current.hashCode,
+    };
   }
 
-  /// Sets Crashlytics user + common session keys.
-  /// Call this right after successful login.
-  static Future<void> logSession({
-    required String userId,
-    required String tenantId,
-    required String coreUrl,
-    required String sessionId,
-  }) async {
-    unawaited(crashlyticsSetUserIdentifier(userId));
-    unawaited(crashlyticsSetCustomKey('tenantId', tenantId));
-    unawaited(crashlyticsSetCustomKey('coreUrl', coreUrl));
-    unawaited(crashlyticsSetCustomKey('sessionId', sessionId));
-    await logIsolateInfo();
+  /// Writes useful isolate/platform context into Crashlytics custom keys.
+  static void logIsolateInfo() {
+    logAppSettings(isolateInfoKeys());
+  }
+
+  /// Binds crash reports to a user id; best-effort like the custom keys.
+  static void setUserIdentifier(String identifier) {
+    try {
+      unawaited(crashlyticsSetUserIdentifier(identifier).catchError((_) {}));
+    } catch (_) {
+      // Ignored, see _setSafeCustomKey.
+    }
+  }
+
+  /// Writes application configuration/settings into Crashlytics custom keys
+  /// so crash reports carry the context they happened in (versions, feature
+  /// flags, user settings). Null values are skipped, so for optional entries
+  /// (e.g. remote-config overrides) a missing key means "not set".
+  static void logAppSettings(Map<String, Object?> settings) {
+    for (final entry in settings.entries) {
+      final value = entry.value;
+      if (value == null) continue;
+      _setSafeCustomKey(entry.key, value);
+    }
   }
 
   /// Convenience wrappers
   static void setKey(String key, Object value) {
-    unawaited(crashlyticsSetCustomKey(key, value));
+    _setSafeCustomKey(key, value);
   }
 
   static void log(String message) {
@@ -109,11 +119,11 @@ class CrashlyticsUtils {
       crashlyticsLog('Diagnostics: $diagnostics');
     }
 
+    // Nulls are written as the literal 'null' (not skipped): a second report
+    // in the same session must overwrite the keys of the first, otherwise a
+    // field that became null would keep showing the earlier report's value.
     final allKeys = {...metadata, ...extras, ...diagnostics};
-
-    for (final entry in allKeys.entries) {
-      _setSafeCustomKey(entry.key, entry.value);
-    }
+    logAppSettings(allKeys.map((key, value) => MapEntry(key, value ?? 'null')));
 
     final exception = UserDiagnosticReportException(errorDescription);
     final syntheticStackTrace = StackTrace.fromString('#0      $errorGroup (user_diagnostic_report:1:1)');
@@ -130,7 +140,15 @@ class CrashlyticsUtils {
 
   static void _setSafeCustomKey(String key, dynamic value) {
     final safeValue = (value is String || value is num || value is bool) ? value : value.toString();
-    unawaited(crashlyticsSetCustomKey(key, safeValue));
+    // Context keys are best-effort: losing one must never take the app (or a
+    // unit test without an initialized Firebase app) down. The try/catch
+    // covers the synchronous throw (uninitialized Firebase), catchError the
+    // asynchronous one (platform-channel failure).
+    try {
+      unawaited(crashlyticsSetCustomKey(key, safeValue).catchError((_) {}));
+    } catch (_) {
+      // Ignored, see above.
+    }
   }
 }
 

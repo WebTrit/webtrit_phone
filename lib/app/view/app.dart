@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +17,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/resolvers/resolvers.dart';
 
@@ -135,7 +138,36 @@ class _AppState extends State<App> {
       initialTabResolver,
       featureAccess.checker,
     );
+
+    _crashlyticsAppContext = AppStartupCrashlyticsContext(
+      metadataProvider: context.read<AppMetadataProvider>(),
+      callkeepVersion: context.read<AppInfo>().callkeepVersion,
+      incomingCallTypeRepository: context.read<IncomingCallTypeRepository>(),
+      encodingPresetRepository: context.read<EncodingPresetRepository>(),
+      encodingSettingsRepository: context.read<EncodingSettingsRepository>(),
+      audioProcessingSettingsRepository: context.read<AudioProcessingSettingsRepository>(),
+      videoCapturingSettingsRepository: context.read<VideoCapturingSettingsRepository>(),
+      iceSettingsRepository: context.read<IceSettingsRepository>(),
+      peerConnectionSettingsRepository: context.read<PeerConnectionSettingsRepository>(),
+    )..logStartup(defaultPeerConnectionSettings: featureAccess.callConfig.peerConnection);
+
+    // The logout cleanup resets the settings repositories, and the cubits
+    // that own those Crashlytics keys only live while their screens are open,
+    // so re-seed the keys once the teardown lands in unauthenticated.
+    _crashlyticsReseedSubscription = appBloc.stream
+        .map((state) => state.status)
+        .distinct()
+        .where((status) => status == AppLifecycleStatus.unauthenticated)
+        .listen((_) {
+          if (!mounted) return;
+          _crashlyticsAppContext.logUserSettings(
+            defaultPeerConnectionSettings: context.read<FeatureAccess>().callConfig.peerConnection,
+          );
+        });
   }
+
+  late final AppStartupCrashlyticsContext _crashlyticsAppContext;
+  StreamSubscription<AppLifecycleStatus>? _crashlyticsReseedSubscription;
 
   @override
   void didChangeDependencies() {
@@ -144,6 +176,7 @@ class _AppState extends State<App> {
     final featureAccess = context.watch<FeatureAccess>();
 
     context.read<AppLogger>().applyConfig(featureAccess.loggingConfig);
+    _crashlyticsAppContext.logFeatureOverrides(featureAccess.overrides);
 
     final initialTabResolver = BottomMenuInitialTabResolver(
       config: featureAccess.bottomMenuConfig,
@@ -160,6 +193,7 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
+    _crashlyticsReseedSubscription?.cancel();
     _reevaluateListenable.dispose();
     _embeddedRouteInformationProvider?.dispose();
     appBloc.close();

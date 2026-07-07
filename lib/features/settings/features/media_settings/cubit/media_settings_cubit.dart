@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 import 'media_settings_state.dart';
 
@@ -13,19 +14,21 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     this._iceSettingsRepository,
     this._peerConnectionSettingsRepository,
     this._videoCapturingSettingsRepository,
-    this._encodingSettingsRepository,
-  ) : super(
-        MediaSettingsState(
-          encodingSettings: _encodingSettingsRepository.getEncodingSettings(),
-          encodingPreset: _encodingPresetRepository.getEncodingPreset(),
-          audioProcessingSettings: _audioProcessingSettingsRepository.getAudioProcessingSettings(),
-          videoCapturingSettings: _videoCapturingSettingsRepository.getVideoCapturingSettings(),
-          iceSettings: _iceSettingsRepository.getIceSettings(),
-          pearConnectionSettings: _peerConnectionSettingsRepository.getPeerConnectionSettings(
-            defaultValue: _defaultPeerConnectionSettings,
-          ),
-        ),
-      );
+    this._encodingSettingsRepository, {
+    MediaSettingsCrashlyticsContext crashlyticsContext = const MediaSettingsCrashlyticsContext(),
+  }) : _crashlyticsContext = crashlyticsContext,
+       super(
+         MediaSettingsState(
+           encodingSettings: _encodingSettingsRepository.getEncodingSettings(),
+           encodingPreset: _encodingPresetRepository.getEncodingPreset(),
+           audioProcessingSettings: _audioProcessingSettingsRepository.getAudioProcessingSettings(),
+           videoCapturingSettings: _videoCapturingSettingsRepository.getVideoCapturingSettings(),
+           iceSettings: _iceSettingsRepository.getIceSettings(),
+           pearConnectionSettings: _peerConnectionSettingsRepository.getPeerConnectionSettings(
+             defaultValue: _defaultPeerConnectionSettings,
+           ),
+         ),
+       );
 
   final PeerConnectionSettings _defaultPeerConnectionSettings;
   final AudioProcessingSettingsRepository _audioProcessingSettingsRepository;
@@ -34,6 +37,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   final PeerConnectionSettingsRepository _peerConnectionSettingsRepository;
   final VideoCapturingSettingsRepository _videoCapturingSettingsRepository;
   final EncodingSettingsRepository _encodingSettingsRepository;
+  final MediaSettingsCrashlyticsContext _crashlyticsContext;
 
   void setEncodingSettings(EncodingSettings settings) {
     emit(state.copyWithEncodingSettings(settings));
@@ -63,6 +67,23 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   void setPeerConnectionSettings(PeerConnectionSettings settings) {
     emit(state.copyWithPeerConnectionSettings(settings));
     _peerConnectionSettingsRepository.setPearConnectionSettings(settings);
+  }
+
+  /// Single sync point for the media-settings Crashlytics keys: fires for any
+  /// state change (every setter and reset), so new setters are covered
+  /// automatically. The startup seed lives in the App widget.
+  @override
+  void onChange(Change<MediaSettingsState> change) {
+    super.onChange(change);
+    final next = change.nextState;
+    _crashlyticsContext.logMediaSettings(
+      encodingPreset: next.encodingPreset,
+      encodingSettings: next.encodingSettings,
+      audioProcessingSettings: next.audioProcessingSettings,
+      videoCapturingSettings: next.videoCapturingSettings,
+      iceSettings: next.iceSettings,
+      peerConnectionSettings: next.pearConnectionSettings,
+    );
   }
 
   void reset() {
