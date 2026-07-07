@@ -36,17 +36,12 @@ class CrashlyticsUtils {
     if (hash != null) unawaited(crashlyticsSetCustomKey('isolate_hash', hash));
   }
 
-  /// Sets Crashlytics user + common session keys.
-  /// Call this right after successful login.
-  static Future<void> logSession({
-    required String userId,
-    required String tenantId,
-    required String coreUrl,
-    required String sessionId,
-  }) async {
+  /// Sets the Crashlytics user identifier + common session keys.
+  /// Call this right after successful login. The tenant/core scope keys are
+  /// owned by AppSessionCrashlyticsContext (they must be reset on logout),
+  /// so they are deliberately not written here.
+  static Future<void> logSession({required String userId, required String sessionId}) async {
     unawaited(crashlyticsSetUserIdentifier(userId));
-    unawaited(crashlyticsSetCustomKey('tenantId', tenantId));
-    unawaited(crashlyticsSetCustomKey('coreUrl', coreUrl));
     unawaited(crashlyticsSetCustomKey('sessionId', sessionId));
     await logIsolateInfo();
   }
@@ -121,7 +116,11 @@ class CrashlyticsUtils {
       crashlyticsLog('Diagnostics: $diagnostics');
     }
 
-    logAppSettings({...metadata, ...extras, ...diagnostics});
+    // Nulls are written as the literal 'null' (not skipped): a second report
+    // in the same session must overwrite the keys of the first, otherwise a
+    // field that became null would keep showing the earlier report's value.
+    final allKeys = {...metadata, ...extras, ...diagnostics};
+    logAppSettings(allKeys.map((key, value) => MapEntry(key, value ?? 'null')));
 
     final exception = UserDiagnosticReportException(errorDescription);
     final syntheticStackTrace = StackTrace.fromString('#0      $errorGroup (user_diagnostic_report:1:1)');
@@ -138,11 +137,14 @@ class CrashlyticsUtils {
 
   static void _setSafeCustomKey(String key, dynamic value) {
     final safeValue = (value is String || value is num || value is bool) ? value : value.toString();
+    // Context keys are best-effort: losing one must never take the app (or a
+    // unit test without an initialized Firebase app) down. The try/catch
+    // covers the synchronous throw (uninitialized Firebase), catchError the
+    // asynchronous one (platform-channel failure).
     try {
-      unawaited(crashlyticsSetCustomKey(key, safeValue));
+      unawaited(crashlyticsSetCustomKey(key, safeValue).catchError((_) {}));
     } catch (_) {
-      // Context keys are best-effort: losing one must never take the app (or a
-      // unit test without an initialized Firebase app) down.
+      // Ignored, see above.
     }
   }
 }

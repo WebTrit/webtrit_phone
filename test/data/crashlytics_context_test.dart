@@ -75,6 +75,16 @@ void main() {
       context.logLocale(LocaleExtension.defaultNull);
       expect(writer.singles['locale'], 'system');
     });
+
+    test('writes the session scope and resets it to unset on logout', () {
+      context.logSessionScope(tenantId: 'tenant-a', coreUrl: 'https://core.example.com');
+      expect(writer.singles['tenantId'], 'tenant-a');
+      expect(writer.singles['coreUrl'], 'https://core.example.com');
+
+      context.logSessionScope();
+      expect(writer.singles['tenantId'], 'unset');
+      expect(writer.singles['coreUrl'], 'unset');
+    });
   });
 
   group('NetworkCrashlyticsContext', () {
@@ -176,15 +186,16 @@ void main() {
       ).thenAnswer((invocation) => invocation.namedArguments[#defaultValue] as PeerConnectionSettings);
     });
 
-    test('seeds the metadata labels with the callkeep version and drops authorization', () {
+    test('seeds the metadata labels with the callkeep version and drops the session-scoped ones', () {
       context.logStartup(defaultPeerConnectionSettings: PeerConnectionSettings.blank());
 
       final labels = writer.batches.first;
       expect(labels['app'], 'WebTrit');
       expect(labels['appVersion'], '1.16.0+6');
-      expect(labels['tenantId'], 'tenant-a');
       expect(labels['callkeepVersion'], '1.3.0');
       expect(labels, isNot(contains('authorization')));
+      expect(labels, isNot(contains('tenantId')));
+      expect(labels, isNot(contains('coreUrl')));
     });
 
     test('delegates the current user settings to the feature contexts', () {
@@ -194,6 +205,17 @@ void main() {
       expect(writer.batches, hasLength(2));
       expect(writer.batches.last['encodingPreset'], 'default');
       expect(writer.batches.last['negotiationSettings'], PeerConnectionSettings.blank().negotiationSettings.toString());
+    });
+
+    test('logUserSettings re-reads the repositories, so a post-logout re-seed picks up the reset values', () {
+      when(
+        () => incomingCallTypeRepository.getIncomingCallType(defaultValue: any(named: 'defaultValue')),
+      ).thenReturn(IncomingCallType.pushNotification);
+
+      context.logUserSettings(defaultPeerConnectionSettings: PeerConnectionSettings.blank());
+
+      expect(writer.singles['incomingCallType'], 'pushNotification');
+      expect(writer.batches.single['encodingPreset'], 'default');
     });
 
     test('writes the unset sentinel for absent overrides', () {
@@ -230,8 +252,10 @@ void main() {
     });
 
     test('skips a re-write when the overrides did not change by value', () {
-      context.logFeatureOverrides(const FeatureOverrides(isVideoCallEnabled: true));
-      context.logFeatureOverrides(const FeatureOverrides(isVideoCallEnabled: true));
+      // Deliberately non-const: two const expressions would canonicalize to
+      // the identical instance and the test would pass on identity alone.
+      context.logFeatureOverrides(FeatureOverrides(isVideoCallEnabled: true)); // ignore: prefer_const_constructors
+      context.logFeatureOverrides(FeatureOverrides(isVideoCallEnabled: true)); // ignore: prefer_const_constructors
 
       expect(writer.batches, hasLength(1));
     });

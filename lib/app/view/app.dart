@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -147,9 +149,24 @@ class _AppState extends State<App> {
       iceSettingsRepository: context.read<IceSettingsRepository>(),
       peerConnectionSettingsRepository: context.read<PeerConnectionSettingsRepository>(),
     )..logStartup(defaultPeerConnectionSettings: featureAccess.callConfig.peerConnection);
+
+    // The logout cleanup resets the settings repositories, and the cubits
+    // that own those Crashlytics keys only live while their screens are open,
+    // so re-seed the keys once the teardown lands in unauthenticated.
+    _crashlyticsReseedSubscription = appBloc.stream
+        .map((state) => state.status)
+        .distinct()
+        .where((status) => status == AppLifecycleStatus.unauthenticated)
+        .listen((_) {
+          if (!mounted) return;
+          _crashlyticsAppContext.logUserSettings(
+            defaultPeerConnectionSettings: context.read<FeatureAccess>().callConfig.peerConnection,
+          );
+        });
   }
 
   late final AppStartupCrashlyticsContext _crashlyticsAppContext;
+  StreamSubscription<AppLifecycleStatus>? _crashlyticsReseedSubscription;
 
   @override
   void didChangeDependencies() {
@@ -175,6 +192,7 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
+    _crashlyticsReseedSubscription?.cancel();
     _reevaluateListenable.dispose();
     _embeddedRouteInformationProvider?.dispose();
     appBloc.close();

@@ -51,13 +51,24 @@ class AppStartupCrashlyticsContext extends CrashlyticsAppContext {
   /// Seeds the startup context: the app/device metadata labels (the real
   /// app_version - the store build version is 0.0.0 outside release builds),
   /// the callkeep version, and the user settings that shape call behavior.
-  /// The 'authorization' label is dropped: AppBloc owns that key and keeps it
-  /// truthful across login/logout.
+  /// The session-scoped labels (authorization/tenantId/coreUrl) are dropped:
+  /// AppBloc owns those keys and keeps them truthful across login/logout.
   void logStartup({required PeerConnectionSettings defaultPeerConnectionSettings}) {
-    final labels = Map<String, Object?>.from(metadataProvider.logLabels)..remove('authorization');
+    final labels = Map<String, Object?>.from(metadataProvider.logLabels)
+      ..remove('authorization')
+      ..remove('tenantId')
+      ..remove('coreUrl');
 
     setKeys({...labels, 'callkeepVersion': callkeepVersion});
+    logUserSettings(defaultPeerConnectionSettings: defaultPeerConnectionSettings);
+  }
 
+  /// Re-reads the user settings from the repositories and writes their keys,
+  /// delegating to the composed feature contexts. Besides startup, call this
+  /// after the logout cleanup resets the settings repositories - the cubits
+  /// that own these keys only live while their settings screens are open, so
+  /// nothing else would refresh the keys for the next session.
+  void logUserSettings({required PeerConnectionSettings defaultPeerConnectionSettings}) {
     _networkContext.logIncomingCallType(incomingCallTypeRepository.getIncomingCallType());
     _mediaSettingsContext.logMediaSettings(
       encodingPreset: encodingPresetRepository.getEncodingPreset(),
@@ -81,16 +92,16 @@ class AppStartupCrashlyticsContext extends CrashlyticsAppContext {
     _lastLoggedOverrides = overrides;
 
     setKeys({
-      'feature_video_call_enabled': overrides.isVideoCallEnabled ?? 'unset',
-      'feature_system_notifications_enabled': overrides.isSystemNotificationsEnabled ?? 'unset',
-      'feature_hybrid_presence_enabled': overrides.hybridPresenceSupport ?? 'unset',
-      'feature_voicemail_enabled': overrides.isVoicemailEnabled ?? 'unset',
-      'feature_call_history_enabled': overrides.isCallHistoryEnabled ?? 'unset',
-      'feature_call_pull_video_strategy': overrides.callPullVideoStrategy?.name ?? 'unset',
-      'feature_monitor_check_interval_sec': overrides.monitorCheckInterval?.inSeconds ?? 'unset',
-      'feature_log_level': overrides.logLevel?.name ?? 'unset',
-      'firebaseRemoteLogging': overrides.remoteLoggingEnabled ?? 'unset',
-      'feature_log_anonymization_enabled': overrides.isLogAnonymizationEnabled ?? 'unset',
+      FeatureOverridesFactory.videoCallEnabledKey: overrides.isVideoCallEnabled ?? 'unset',
+      FeatureOverridesFactory.systemNotificationsEnabledKey: overrides.isSystemNotificationsEnabled ?? 'unset',
+      FeatureOverridesFactory.hybridPresenceEnabledKey: overrides.hybridPresenceSupport ?? 'unset',
+      FeatureOverridesFactory.voicemailEnabledKey: overrides.isVoicemailEnabled ?? 'unset',
+      FeatureOverridesFactory.callHistoryEnabledKey: overrides.isCallHistoryEnabled ?? 'unset',
+      FeatureOverridesFactory.callPullVideoStrategyKey: overrides.callPullVideoStrategy?.name ?? 'unset',
+      FeatureOverridesFactory.monitorCheckIntervalKey: overrides.monitorCheckInterval?.inSeconds ?? 'unset',
+      FeatureOverridesFactory.logLevelKey: overrides.logLevel?.name ?? 'unset',
+      FeatureOverridesFactory.remoteLoggingEnabledKey: overrides.remoteLoggingEnabled ?? 'unset',
+      FeatureOverridesFactory.logAnonymizationEnabledKey: overrides.isLogAnonymizationEnabled ?? 'unset',
     });
   }
 }

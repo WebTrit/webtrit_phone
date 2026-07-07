@@ -63,6 +63,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     // corresponding handlers/transitions below.
     crashlyticsContext
       ..logAuthorization(authorized: state.session.isLoggedIn)
+      ..logSessionScope(
+        tenantId: state.session.isLoggedIn ? state.session.tenantId : null,
+        coreUrl: state.session.isLoggedIn ? state.session.coreUrl : null,
+      )
       ..logThemeMode(state.themeMode)
       ..logLocale(state.locale);
 
@@ -158,19 +162,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onSessionLoggedIn(Session session) {
-    crashlyticsContext.logAuthorization(authorized: true);
-    unawaited(
-      CrashlyticsUtils.logSession(
-        userId: session.userId,
-        tenantId: session.tenantId,
-        coreUrl: session.coreUrl!,
-        sessionId: appInfo.identifier,
-      ),
-    );
+    crashlyticsContext
+      ..logAuthorization(authorized: true)
+      ..logSessionScope(tenantId: session.tenantId, coreUrl: session.coreUrl);
+    unawaited(CrashlyticsUtils.logSession(userId: session.userId, sessionId: appInfo.identifier));
   }
 
   void _onSessionLoggedOut(Session session) {
-    crashlyticsContext.logAuthorization(authorized: false);
+    crashlyticsContext
+      ..logAuthorization(authorized: false)
+      ..logSessionScope();
     _logger.info('User logged out: ${session.userId}');
   }
 

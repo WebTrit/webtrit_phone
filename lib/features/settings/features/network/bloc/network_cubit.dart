@@ -58,8 +58,13 @@ class NetworkCubit extends Cubit<NetworkState> {
 
   Future<void> selectIncomingCallType(IncomingCallTypeModel selectedTypeModel) async {
     await _incomingCallTypeRepository.setIncomingCallType(selectedTypeModel.incomingCallType);
-    await _onIncomingCallTypeChanged(selectedTypeModel.incomingCallType);
-    _initializeActiveIncomingType();
+    try {
+      await _onIncomingCallTypeChanged(selectedTypeModel.incomingCallType);
+    } finally {
+      // The repository already holds the new type: re-emit the state (and so
+      // sync the Crashlytics key) even when the change callback throws.
+      _initializeActiveIncomingType();
+    }
   }
 
   /// Single sync point for the incomingCallType Crashlytics key, driven off

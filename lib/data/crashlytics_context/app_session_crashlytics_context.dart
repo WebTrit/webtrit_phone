@@ -13,6 +13,15 @@ class AppSessionCrashlyticsContext extends CrashlyticsAppContext {
     setKey('authorization', authorized ? 'authorized' : 'unauthorized');
   }
 
+  /// Writes the tenant/core scope of the active session. Crashlytics cannot
+  /// delete keys, so a missing value is written as the 'unset' sentinel -
+  /// otherwise a crash after logout (or a tenant switch) would be attributed
+  /// to the previous session's tenant/core.
+  void logSessionScope({String? tenantId, String? coreUrl}) {
+    setKey('tenantId', tenantId ?? 'unset');
+    setKey('coreUrl', coreUrl ?? 'unset');
+  }
+
   void logThemeMode(ThemeMode themeMode) {
     setKey('themeMode', themeMode.name);
   }
