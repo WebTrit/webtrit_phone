@@ -1,38 +1,9 @@
-import 'package:webtrit_phone/models/models.dart';
+import 'qr_signin_parse_result.dart';
+import 'qr_signin_payload_decoder.dart';
 
-/// Outcome of parsing a scanned QR payload.
-sealed class QrSigninParseResult {
-  const QrSigninParseResult();
-}
-
-/// Full credentials: the code carries both the user reference and the password.
-class QrSigninCredentials extends QrSigninParseResult {
-  const QrSigninCredentials({required this.userRef, required this.password});
-
-  final String userRef;
-  final String password;
-}
-
-/// The code carries only the user reference (password omitted or empty);
-/// the user finishes signing in on the password tab.
-class QrSigninUserRefOnly extends QrSigninParseResult {
-  const QrSigninUserRefOnly({required this.userRef});
-
-  final String userRef;
-}
-
-/// The payload is not a sign-in code this build accepts.
-class QrSigninParseFailure extends QrSigninParseResult {
-  const QrSigninParseFailure(this.error);
-
-  final QrSigninParseError error;
-}
-
-enum QrSigninParseError { unsupportedScheme, hostMismatch, unsupportedMethod, coreOverrideNotAllowed, malformed }
-
-/// Parses provisioning sign-in URIs of the form
+/// Decodes provisioning sign-in URIs of the form
 /// `scheme:userRef:password@host[?query]` (for example
-/// `csc:ph3142x777:Test%40777@DEE-CALL`).
+/// `csc:user123:p%40ssword@EXAMPLE`).
 ///
 /// The `userRef` and `password` segments are percent-encoded, so a literal
 /// `:` or `@` can only appear between them; this makes splitting at the last
@@ -43,10 +14,12 @@ enum QrSigninParseError { unsupportedScheme, hostMismatch, unsupportedMethod, co
 ///
 /// [Uri.parse] is not applicable here: without a `//` the URI has no authority
 /// component, so the userinfo/host parts would not be recognized.
-class QrSigninUriParser {
-  QrSigninUriParser(this.config);
+class UriQrSigninPayloadDecoder implements QrSigninPayloadDecoder {
+  UriQrSigninPayloadDecoder({required List<String> schemes, this.expectedHost})
+    : _schemes = schemes.map((s) => s.toLowerCase()).toList();
 
-  final QrSigninConfig config;
+  final List<String> _schemes;
+  final String? expectedHost;
 
   /// Query parameter selecting the sign-in method. Absent means password.
   static const _methodKey = 'm';
@@ -59,15 +32,13 @@ class QrSigninUriParser {
   /// Marker suffix of a test (non-approved) host in the generator portal.
   static const _testHostSuffix = '*';
 
-  QrSigninParseResult parse(String rawValue) {
-    final raw = rawValue.trim();
-
+  @override
+  QrSigninParseResult? decode(String raw) {
     final schemeEnd = raw.indexOf(':');
-    if (schemeEnd <= 0) return const QrSigninParseFailure(QrSigninParseError.unsupportedScheme);
+    if (schemeEnd <= 0) return null;
     final scheme = raw.substring(0, schemeEnd).toLowerCase();
-    if (!config.schemes.map((s) => s.toLowerCase()).contains(scheme)) {
-      return const QrSigninParseFailure(QrSigninParseError.unsupportedScheme);
-    }
+    // An unknown scheme is not this decoder's payload at all.
+    if (!_schemes.contains(scheme)) return null;
 
     var body = raw.substring(schemeEnd + 1);
     Map<String, String> query = const {};
@@ -97,7 +68,7 @@ class QrSigninUriParser {
     if (host.endsWith(_testHostSuffix)) host = host.substring(0, host.length - 1);
     if (host.isEmpty) return const QrSigninParseFailure(QrSigninParseError.malformed);
 
-    final expectedHost = config.expectedHost;
+    final expectedHost = this.expectedHost;
     if (expectedHost != null && host.toLowerCase() != expectedHost.toLowerCase()) {
       return const QrSigninParseFailure(QrSigninParseError.hostMismatch);
     }

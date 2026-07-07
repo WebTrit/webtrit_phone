@@ -5,7 +5,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
-import '../models/qr_signin_uri_parser.dart';
+import '../models/qr_signin_parse_result.dart';
 
 /// The scanning state of the QR sign-in tab: hint text, camera viewfinder and
 /// an inline line for the last rejection reason.

@@ -94,13 +94,22 @@ class AppConfigLogin with _$AppConfigLogin {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigLoginQr with _$AppConfigLoginQr {
-  const AppConfigLoginQr({this.enabled = false, this.schemes = const ['csc'], this.expectedHost});
+  const AppConfigLoginQr({
+    this.enabled = false,
+    this.formats = const ['uri', 'json'],
+    this.schemes = const ['csc'],
+    this.expectedHost,
+  });
 
   /// Whether the QR-code sign-in tab is available at all.
   @override
   final bool enabled;
 
-  /// Accepted URI scheme names, matched case-insensitively.
+  /// Accepted payload formats (`uri`, `json`), probed in this order.
+  @override
+  final List<String> formats;
+
+  /// Accepted URI scheme names of the `uri` format, matched case-insensitively.
   @override
   final List<String> schemes;
 

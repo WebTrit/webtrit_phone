@@ -397,7 +397,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigLoginQr {
 
- bool get enabled; List<String> get schemes; String? get expectedHost;
+ bool get enabled; List<String> get formats; List<String> get schemes; String? get expectedHost;
 /// Create a copy of AppConfigLoginQr
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -408,16 +408,16 @@ $AppConfigLoginQrCopyWith<AppConfigLoginQr> get copyWith => _$AppConfigLoginQrCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigLoginQr&&(identical(other.enabled, enabled) || other.enabled == enabled)&&const DeepCollectionEquality().equals(other.schemes, schemes)&&(identical(other.expectedHost, expectedHost) || other.expectedHost == expectedHost));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigLoginQr&&(identical(other.enabled, enabled) || other.enabled == enabled)&&const DeepCollectionEquality().equals(other.formats, formats)&&const DeepCollectionEquality().equals(other.schemes, schemes)&&(identical(other.expectedHost, expectedHost) || other.expectedHost == expectedHost));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,const DeepCollectionEquality().hash(schemes),expectedHost);
+int get hashCode => Object.hash(runtimeType,enabled,const DeepCollectionEquality().hash(formats),const DeepCollectionEquality().hash(schemes),expectedHost);
 
 @override
 String toString() {
-  return 'AppConfigLoginQr(enabled: $enabled, schemes: $schemes, expectedHost: $expectedHost)';
+  return 'AppConfigLoginQr(enabled: $enabled, formats: $formats, schemes: $schemes, expectedHost: $expectedHost)';
 }
 
 
@@ -428,7 +428,7 @@ abstract mixin class $AppConfigLoginQrCopyWith<$Res>  {
   factory $AppConfigLoginQrCopyWith(AppConfigLoginQr value, $Res Function(AppConfigLoginQr) _then) = _$AppConfigLoginQrCopyWithImpl;
 @useResult
 $Res call({
- bool enabled, List<String> schemes, String? expectedHost
+ bool enabled, List<String> formats, List<String> schemes, String? expectedHost
 });
 
 
@@ -445,10 +445,11 @@ class _$AppConfigLoginQrCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigLoginQr
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? schemes = null,Object? expectedHost = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? formats = null,Object? schemes = null,Object? expectedHost = freezed,}) {
   return _then(AppConfigLoginQr(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
-as bool,schemes: null == schemes ? _self.schemes : schemes // ignore: cast_nullable_to_non_nullable
+as bool,formats: null == formats ? _self.formats : formats // ignore: cast_nullable_to_non_nullable
+as List<String>,schemes: null == schemes ? _self.schemes : schemes // ignore: cast_nullable_to_non_nullable
 as List<String>,expectedHost: freezed == expectedHost ? _self.expectedHost : expectedHost // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

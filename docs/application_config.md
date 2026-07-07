@@ -33,6 +33,7 @@ The `loginConfig` section defines the app’s login screen behavior and embedded
     "signinOrder": ["passwordSignin", "otpSignin", "signup"],
     "qr": {
       "enabled": false,
+      "formats": ["uri", "json"],
       "schemes": ["csc"],
       "expectedHost": null
     },
@@ -74,7 +75,8 @@ format, scheme descriptions and screen behavior.
 | Field          | Type           | Default   | Description                                                                                   |
 |----------------|----------------|-----------|-----------------------------------------------------------------------------------------------|
 | `enabled`      | `bool`         | `false`   | Whether the QR sign-in tab is available. The tab also requires the backend to support password sign-in. |
-| `schemes`      | `List<String>` | `["csc"]` | Accepted URI scheme names, matched case-insensitively.                                         |
+| `formats`      | `List<String>` | `["uri", "json"]` | Accepted payload formats (decoder names), probed in this order.                        |
+| `schemes`      | `List<String>` | `["csc"]` | Accepted URI scheme names of the `uri` format, matched case-insensitively.                     |
 | `expectedHost` | `string?`      | `null`    | Expected host (cloud id) of the code; mismatching codes are rejected. `null` accepts any host. |
 
 ### Login Common

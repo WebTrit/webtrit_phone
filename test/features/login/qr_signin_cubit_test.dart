@@ -18,7 +18,7 @@ void main() {
     when(() => appPermissions.getCameraPermissionStatus()).thenAnswer((_) async => cameraStatus);
     return QrSigninCubit(
       appPermissions: appPermissions,
-      parser: QrSigninUriParser(QrSigninConfig(enabled: true, expectedHost: 'EXAMPLE')),
+      parser: QrSigninPayloadParser.fromConfig(QrSigninConfig(enabled: true, expectedHost: 'EXAMPLE')),
     );
   }
 
@@ -92,7 +92,7 @@ void main() {
         cubit.barcodeDetected('https://example.com');
 
         expect(cubit.state.detection, isNull);
-        expect(cubit.state.parseError, QrSigninParseError.unsupportedScheme);
+        expect(cubit.state.parseError, QrSigninParseError.unrecognized);
       });
 
       test('nothing is handled before the permission check completes', () async {

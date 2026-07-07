@@ -7,7 +7,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 
-import '../models/qr_signin_uri_parser.dart';
+import '../models/qr_signin_parse_result.dart';
+import '../models/qr_signin_payload_parser.dart';
 
 part 'qr_signin_cubit.freezed.dart';
 
@@ -27,7 +28,7 @@ class QrSigninCubit extends Cubit<QrSigninState> {
   }
 
   final AppPermissions appPermissions;
-  final QrSigninUriParser parser;
+  final QrSigninPayloadParser parser;
 
   /// How long an unrecognized code stays reported before scanning resumes,
   /// and repeated detections of the same payload are ignored.

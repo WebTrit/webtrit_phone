@@ -80,20 +80,23 @@ Map<String, dynamic> _$AppConfigLoginToJson(AppConfigLogin instance) =>
       'qr': instance.qr.toJson(),
     };
 
-AppConfigLoginQr _$AppConfigLoginQrFromJson(Map<String, dynamic> json) =>
-    AppConfigLoginQr(
-      enabled: json['enabled'] as bool? ?? false,
-      schemes:
-          (json['schemes'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const ['csc'],
-      expectedHost: json['expectedHost'] as String?,
-    );
+AppConfigLoginQr _$AppConfigLoginQrFromJson(
+  Map<String, dynamic> json,
+) => AppConfigLoginQr(
+  enabled: json['enabled'] as bool? ?? false,
+  formats:
+      (json['formats'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const ['uri', 'json'],
+  schemes:
+      (json['schemes'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const ['csc'],
+  expectedHost: json['expectedHost'] as String?,
+);
 
 Map<String, dynamic> _$AppConfigLoginQrToJson(AppConfigLoginQr instance) =>
     <String, dynamic>{
       'enabled': instance.enabled,
+      'formats': instance.formats,
       'schemes': instance.schemes,
       'expectedHost': instance.expectedHost,
     };

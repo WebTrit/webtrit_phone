@@ -16,7 +16,7 @@ class LoginQrSigninScreenPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => QrSigninCubit(
         appPermissions: context.read<AppPermissions>(),
-        parser: QrSigninUriParser(context.read<FeatureAccess>().loginConfig.qrSignin),
+        parser: QrSigninPayloadParser.fromConfig(context.read<FeatureAccess>().loginConfig.qrSignin),
       ),
       child: const LoginQrSigninScreen(),
     );

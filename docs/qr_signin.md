@@ -13,7 +13,9 @@ login is a single scan instead of typing credentials.
 
 ## Table of Contents
 
-- [QR Payload Format](#qr-payload-format)
+- [Payload Formats](#payload-formats)
+- [URI Format](#uri-format)
+- [JSON Format](#json-format)
 - [Supported Schemes](#supported-schemes)
 - [Configuration](#configuration)
 - [When the Tab Appears](#when-the-tab-appears)
@@ -23,7 +25,25 @@ login is a single scan instead of typing credentials.
 
 ---
 
-## QR Payload Format
+## Payload Formats
+
+Payloads are interpreted by a chain of format decoders (adapters), probed in the
+order set by `loginConfig.qr.formats`: the first decoder that RECOGNIZES the payload
+fully decides the outcome (including failures such as a host mismatch); when none
+does, the code is reported as "not a sign-in code". Supporting a new payload
+structure is one new decoder class
+(`lib/features/login/features/login_qr_signin/models/qr_signin_payload_decoder.dart`)
+plus its name in the `formats` list - the scanner, cubit and login flow are
+format-agnostic and stay untouched.
+
+Built-in formats:
+
+| Format | Shape                                          | Typical producer                          |
+|--------|--------------------------------------------------|---------------------------------------------|
+| `uri`  | `scheme:USER_REF:PASSWORD@HOST[?query]`          | Provisioning portals (Cloud Softphone QR generator) |
+| `json` | Marker-discriminated JSON object (`"t"` field)   | Reserved for WebTrit-issued codes            |
+
+## URI Format
 
 ```
 scheme:USER_REF:PASSWORD@HOST[?query]
@@ -58,9 +78,33 @@ Parsing rules:
   not fail: the user reference is prefilled on the password tab and the user finishes
   signing in manually.
 
-The parser lives in
-`lib/features/login/features/login_qr_signin/models/qr_signin_uri_parser.dart` and is
-covered by a unit-test matrix in `test/features/login/qr_signin_uri_parser_test.dart`.
+The decoder lives in
+`lib/features/login/features/login_qr_signin/models/uri_qr_signin_payload_decoder.dart`
+and is covered by a unit-test matrix in
+`test/features/login/qr_signin_payload_parser_test.dart`.
+
+## JSON Format
+
+```json
+{"t": "webtrit-signin", "v": 1, "user": "user123", "password": "p@ssword", "host": "EXAMPLE"}
+```
+
+| Field      | Required | Description                                                                                                   |
+|------------|----------|-----------------------------------------------------------------------------------------------------------------|
+| `t`        | yes      | Marker discriminator; must be `webtrit-signin`. Bare JSON has no scheme, so any other JSON falls through as unrecognized. |
+| `v`        | no       | Payload version; absent means `1`. Other versions are rejected as unsupported.                                    |
+| `user`     | yes      | Plain (not encoded) user reference.                                                                               |
+| `password` | no       | Plain password; missing or empty prefills the password tab instead of signing in.                                 |
+| `host`     | see note | Cloud/tenant identifier. When `expectedHost` is configured the field must be present and match; otherwise ignored. |
+
+Rules shared with the URI format: fields that would redirect the sign-in to another
+core (`core`, `tenant`, `core_url`, `tenant_id`) are rejected; unknown fields are
+ignored so the format can grow without breaking older builds. The JSON form is
+reserved for WebTrit-issued codes (nothing produces it yet); prefer the URI form for
+plain user+password codes - it makes a sparser, easier-to-scan QR.
+
+The decoder lives in
+`lib/features/login/features/login_qr_signin/models/json_qr_signin_payload_decoder.dart`.
 
 ## Supported Schemes
 
@@ -90,6 +134,7 @@ The feature is driven by the `qr` block of `loginConfig` in the application conf
     "signinOrder": ["passwordSignin", "otpSignin", "signup", "qrSignin"],
     "qr": {
       "enabled": true,
+      "formats": ["uri", "json"],
       "schemes": ["csc"],
       "expectedHost": "EXAMPLE"
     }
@@ -100,7 +145,8 @@ The feature is driven by the `qr` block of `loginConfig` in the application conf
 | Field          | Type           | Default   | Description                                                                                   |
 |----------------|----------------|-----------|-----------------------------------------------------------------------------------------------|
 | `enabled`      | `bool`         | `false`   | Whether the QR sign-in tab is available at all.                                                |
-| `schemes`      | `List<String>` | `["csc"]` | Accepted URI scheme names, matched case-insensitively.                                         |
+| `formats`      | `List<String>` | `["uri", "json"]` | Accepted payload formats (decoder names), probed in this order.                        |
+| `schemes`      | `List<String>` | `["csc"]` | Accepted URI scheme names of the `uri` format, matched case-insensitively.                     |
 | `expectedHost` | `string?`      | `null`    | Expected host (cloud id) of the code. When set, codes issued for a different host are rejected; `null` accepts any host. |
 
 The tab's position and default selection follow the regular `signinOrder` mechanism;

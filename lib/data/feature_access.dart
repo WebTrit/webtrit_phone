@@ -202,7 +202,12 @@ abstract final class LoginMapper {
       titleL10n: appConfig.loginConfig.modeSelect.greetingL10n,
       actions: List.unmodifiable(buttons),
       signinOrder: appConfig.loginConfig.signinOrder,
-      qrSignin: QrSigninConfig(enabled: qr.enabled, schemes: qr.schemes, expectedHost: qr.expectedHost),
+      qrSignin: QrSigninConfig(
+        enabled: qr.enabled,
+        formats: qr.formats,
+        schemes: qr.schemes,
+        expectedHost: qr.expectedHost,
+      ),
       launchLoginPage: embeddedData.firstWhereOrNull(
         (it) => it.id == appConfig.loginConfig.common.fullScreenLaunchEmbeddedResourceId,
       ),
