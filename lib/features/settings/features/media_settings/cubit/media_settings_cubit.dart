@@ -39,48 +39,48 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   void setEncodingSettings(EncodingSettings settings) {
     emit(state.copyWithEncodingSettings(settings));
     _encodingSettingsRepository.setEncodingSettings(settings);
-    _logCrashKeys();
   }
 
   void setEncodingPreset(EncodingPreset? preset) {
     emit(state.copyWithEncodingPresets(preset));
     _encodingPresetRepository.setEncodingPreset(preset);
-    _logCrashKeys();
   }
 
   void setAudioProcessingSettings(AudioProcessingSettings settings) {
     emit(state.copyWithAudioProcessingSettings(settings));
     _audioProcessingSettingsRepository.setAudioProcessingSettings(settings);
-    _logCrashKeys();
   }
 
   void setVideoCapturingSettings(VideoCapturingSettings settings) {
     emit(state.copyWithVideoCapturingSettings(settings));
     _videoCapturingSettingsRepository.setVideoCapturingSettings(settings);
-    _logCrashKeys();
   }
 
   void setIceSettings(IceSettings settings) {
     emit(state.copyWithIceSettings(settings));
     _iceSettingsRepository.setIceSettings(settings);
-    _logCrashKeys();
   }
 
   void setPeerConnectionSettings(PeerConnectionSettings settings) {
     emit(state.copyWithPeerConnectionSettings(settings));
     _peerConnectionSettingsRepository.setPearConnectionSettings(settings);
-    _logCrashKeys();
   }
 
-  void _logCrashKeys() {
+  /// Single sync point for the media-settings Crashlytics keys: fires for any
+  /// state change (every setter and reset), so new setters are covered
+  /// automatically. The startup seed lives in the App widget.
+  @override
+  void onChange(Change<MediaSettingsState> change) {
+    super.onChange(change);
+    final next = change.nextState;
     CrashlyticsUtils.logAppSettings(
       mediaSettingsCrashKeys(
-        encodingPreset: state.encodingPreset,
-        encodingSettings: state.encodingSettings,
-        audioProcessingSettings: state.audioProcessingSettings,
-        videoCapturingSettings: state.videoCapturingSettings,
-        iceSettings: state.iceSettings,
-        peerConnectionSettings: state.pearConnectionSettings,
+        encodingPreset: next.encodingPreset,
+        encodingSettings: next.encodingSettings,
+        audioProcessingSettings: next.audioProcessingSettings,
+        videoCapturingSettings: next.videoCapturingSettings,
+        iceSettings: next.iceSettings,
+        peerConnectionSettings: next.pearConnectionSettings,
       ),
     );
   }
@@ -103,6 +103,5 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     _videoCapturingSettingsRepository.setVideoCapturingSettings(VideoCapturingSettings.blank());
     _iceSettingsRepository.setIceSettings(IceSettings.blank());
     _peerConnectionSettingsRepository.setPearConnectionSettings(_defaultPeerConnectionSettings);
-    _logCrashKeys();
   }
 }

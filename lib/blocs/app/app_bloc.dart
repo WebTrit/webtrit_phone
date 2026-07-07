@@ -131,6 +131,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         change.nextState.status != AppLifecycleStatus.authenticated) {
       _onSessionLoggedOut(change.currentState.session);
     }
+
+    // Keep the owned Crashlytics keys in sync with the state, whatever path
+    // changed it; the initial values are seeded in the constructor.
+    if (change.currentState.themeMode != change.nextState.themeMode) {
+      CrashlyticsUtils.setKey('themeMode', change.nextState.themeMode.name);
+    }
+    if (change.currentState.locale != change.nextState.locale) {
+      CrashlyticsUtils.setKey('locale', _localeCrashKeyValue(change.nextState.locale));
+    }
     super.onChange(change);
   }
 
@@ -208,7 +217,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     } else {
       await themeModeRepository.setThemeMode(themeMode);
     }
-    CrashlyticsUtils.setKey('themeMode', themeMode.name);
     emit(state.copyWith(themeMode: themeMode));
   }
 
@@ -219,7 +227,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     } else {
       await localeRepository.setLocale(locale);
     }
-    CrashlyticsUtils.setKey('locale', _localeCrashKeyValue(locale));
     emit(state.copyWith(locale: locale));
   }
 

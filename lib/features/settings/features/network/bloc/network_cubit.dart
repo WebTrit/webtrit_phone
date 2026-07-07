@@ -56,9 +56,19 @@ class NetworkCubit extends Cubit<NetworkState> {
 
   Future<void> selectIncomingCallType(IncomingCallTypeModel selectedTypeModel) async {
     await _incomingCallTypeRepository.setIncomingCallType(selectedTypeModel.incomingCallType);
-    CrashlyticsUtils.setKey('incomingCallType', selectedTypeModel.incomingCallType.name);
     await _onIncomingCallTypeChanged(selectedTypeModel.incomingCallType);
     _initializeActiveIncomingType();
+  }
+
+  /// Single sync point for the incomingCallType Crashlytics key, driven off
+  /// the state so any change path is covered; the startup seed lives in the
+  /// App widget.
+  @override
+  void onChange(Change<NetworkState> change) {
+    super.onChange(change);
+    if (change.currentState.incomingCallType != change.nextState.incomingCallType) {
+      CrashlyticsUtils.setKey('incomingCallType', change.nextState.incomingCallType.name);
+    }
   }
 
   Future<bool> isSocketMissingBatteryExemption() async {
