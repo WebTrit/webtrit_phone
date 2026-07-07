@@ -8,6 +8,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/incoming_call_type/incoming_call_type_repository.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import '../models/models.dart';
 
@@ -55,6 +56,7 @@ class NetworkCubit extends Cubit<NetworkState> {
 
   Future<void> selectIncomingCallType(IncomingCallTypeModel selectedTypeModel) async {
     await _incomingCallTypeRepository.setIncomingCallType(selectedTypeModel.incomingCallType);
+    CrashlyticsUtils.setKey('incomingCallType', selectedTypeModel.incomingCallType.name);
     await _onIncomingCallTypeChanged(selectedTypeModel.incomingCallType);
     _initializeActiveIncomingType();
   }

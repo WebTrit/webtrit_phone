@@ -65,7 +65,7 @@ class CrashlyticsUtils {
 
   /// Convenience wrappers
   static void setKey(String key, Object value) {
-    unawaited(crashlyticsSetCustomKey(key, value));
+    _setSafeCustomKey(key, value);
   }
 
   static void log(String message) {
@@ -121,11 +121,7 @@ class CrashlyticsUtils {
       crashlyticsLog('Diagnostics: $diagnostics');
     }
 
-    final allKeys = {...metadata, ...extras, ...diagnostics};
-
-    for (final entry in allKeys.entries) {
-      _setSafeCustomKey(entry.key, entry.value);
-    }
+    logAppSettings({...metadata, ...extras, ...diagnostics});
 
     final exception = UserDiagnosticReportException(errorDescription);
     final syntheticStackTrace = StackTrace.fromString('#0      $errorGroup (user_diagnostic_report:1:1)');
@@ -142,7 +138,12 @@ class CrashlyticsUtils {
 
   static void _setSafeCustomKey(String key, dynamic value) {
     final safeValue = (value is String || value is num || value is bool) ? value : value.toString();
-    unawaited(crashlyticsSetCustomKey(key, safeValue));
+    try {
+      unawaited(crashlyticsSetCustomKey(key, safeValue));
+    } catch (_) {
+      // Context keys are best-effort: losing one must never take the app (or a
+      // unit test without an initialized Firebase app) down.
+    }
   }
 }
 

@@ -57,6 +57,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppCleanupRequested>(_onCleanupRequested, transformer: droppable());
     on<_AppCompatibilityUpdated>(_onAppCompatibilityUpdated);
 
+    // This bloc is the single writer of the session/user-settings Crashlytics
+    // keys it owns: seed them from the initial state here, refresh them in the
+    // corresponding handlers/transitions below.
+    CrashlyticsUtils.logAppSettings({
+      'authorization': state.session.isLoggedIn ? 'authorized' : 'unauthorized',
+      'themeMode': state.themeMode.name,
+      'locale': _localeCrashKeyValue(state.locale),
+    });
+
     // Resolve the gate once from any cached system-info so the flag is correct
     // before the first MainShell navigation, then keep it in sync via the stream.
     _resolveCachedAppCompatibility();
@@ -139,6 +148,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onSessionLoggedIn(Session session) {
+    CrashlyticsUtils.setKey('authorization', 'authorized');
     unawaited(
       CrashlyticsUtils.logSession(
         userId: session.userId,
@@ -150,6 +160,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onSessionLoggedOut(Session session) {
+    CrashlyticsUtils.setKey('authorization', 'unauthorized');
     _logger.info('User logged out: ${session.userId}');
   }
 
@@ -208,9 +219,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     } else {
       await localeRepository.setLocale(locale);
     }
-    CrashlyticsUtils.setKey('locale', locale == LocaleExtension.defaultNull ? 'system' : locale.toLanguageTag());
+    CrashlyticsUtils.setKey('locale', _localeCrashKeyValue(locale));
     emit(state.copyWith(locale: locale));
   }
+
+  static String _localeCrashKeyValue(Locale locale) =>
+      locale == LocaleExtension.defaultNull ? 'system' : locale.toLanguageTag();
 
   /// Handles unauthorized errors for the active session.
   /// Logs out only if the failing request used the current token,
