@@ -260,6 +260,64 @@ void main() {
       });
     });
 
+    group('stop()', () {
+      test('clears activeId, error and isLoading, stops the player and notifies', () async {
+        when(() => player.setAudioSource(any())).thenAnswer((_) async => null);
+        when(() => player.play()).thenAnswer((_) async {});
+        await controller.play(id: 'track1', uri: uri, isLocal: true);
+        expect(controller.activeId, 'track1');
+
+        var notified = false;
+        controller.addListener(() => notified = true);
+        await controller.stop();
+
+        expect(controller.activeId, isNull);
+        expect(controller.error, isNull);
+        expect(controller.isLoading, isFalse);
+        expect(notified, isTrue);
+        verify(() => player.stop()).called(1);
+      });
+
+      test('invalidates an in-flight play() chain', () {
+        fakeAsync((async) {
+          final completer = Completer<Duration?>();
+          when(() => player.setAudioSource(any())).thenAnswer((_) => completer.future);
+          when(() => player.play()).thenAnswer((_) async {});
+
+          unawaited(controller.play(id: 'track1', uri: uri, isLocal: true));
+          async.flushMicrotasks();
+
+          unawaited(controller.stop());
+          async.flushMicrotasks();
+          expect(controller.activeId, isNull);
+
+          // The stale chain resolves -- it must not resurrect the track or start playback.
+          completer.complete(null);
+          async.flushMicrotasks();
+
+          expect(controller.activeId, isNull);
+          verifyNever(() => player.play());
+        });
+      });
+
+      test('cancels a pending loading debounce', () {
+        fakeAsync((async) {
+          final completer = Completer<Duration?>();
+          when(() => player.setAudioSource(any())).thenAnswer((_) => completer.future);
+
+          unawaited(controller.play(id: 'track1', uri: uri, isLocal: true));
+          async.flushMicrotasks();
+
+          unawaited(controller.stop());
+          async.elapse(const Duration(milliseconds: 300));
+
+          expect(controller.isLoading, isFalse);
+
+          completer.complete(null);
+        });
+      });
+    });
+
     group('pause / resume / seek', () {
       test('pause() delegates to player.pause()', () async {
         when(() => player.pause()).thenAnswer((_) async {});
