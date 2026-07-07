@@ -1,19 +1,22 @@
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
-import 'app_metadata_provider.dart';
+import '../app_metadata_provider.dart';
+import 'crashlytics_app_context.dart';
+import 'media_settings_crashlytics_context.dart';
+import 'network_crashlytics_context.dart';
 
-/// Builds and writes the application-context Crashlytics custom keys, so
-/// crash reports carry the configuration they happened in. Lives outside the
-/// widget tree and writes through the injected [CrashKeysWriter], so the
-/// produced keys are unit-testable without Firebase.
+/// Seeds the application-wide Crashlytics context at startup and tracks the
+/// remote-config override keys. The heavy sibling of the per-feature
+/// contexts: it reads the current values from the repositories once and
+/// delegates the feature key vocabularies to the composed contexts, so each
+/// key family still has a single defining place.
 ///
 /// Keys owned by a state lifecycle are NOT written here to keep a single
 /// writer per key: authorization/themeMode/locale belong to AppBloc, and
 /// incomingCallType/media keys are refreshed by their settings cubits.
-class CrashlyticsAppContext {
-  CrashlyticsAppContext({
+class AppStartupCrashlyticsContext extends CrashlyticsAppContext {
+  AppStartupCrashlyticsContext({
     required this.metadataProvider,
     required this.callkeepVersion,
     required this.incomingCallTypeRepository,
@@ -23,8 +26,9 @@ class CrashlyticsAppContext {
     required this.videoCapturingSettingsRepository,
     required this.iceSettingsRepository,
     required this.peerConnectionSettingsRepository,
-    this.crashKeysWriter = const CrashlyticsKeysWriter(),
-  });
+    super.crashKeysWriter,
+  }) : _mediaSettingsContext = MediaSettingsCrashlyticsContext(crashKeysWriter: crashKeysWriter),
+       _networkContext = NetworkCrashlyticsContext(crashKeysWriter: crashKeysWriter);
 
   final AppMetadataProvider metadataProvider;
   final String callkeepVersion;
@@ -36,7 +40,8 @@ class CrashlyticsAppContext {
   final IceSettingsRepository iceSettingsRepository;
   final PeerConnectionSettingsRepository peerConnectionSettingsRepository;
 
-  final CrashKeysWriter crashKeysWriter;
+  final MediaSettingsCrashlyticsContext _mediaSettingsContext;
+  final NetworkCrashlyticsContext _networkContext;
 
   /// The last overrides written; [logFeatureOverrides] is driven by widget
   /// dependency changes that fire for unrelated reasons too, so unchanged
@@ -51,21 +56,19 @@ class CrashlyticsAppContext {
   void logStartup({required PeerConnectionSettings defaultPeerConnectionSettings}) {
     final labels = Map<String, Object?>.from(metadataProvider.logLabels)..remove('authorization');
 
-    crashKeysWriter.setKeys({
-      ...labels,
-      'callkeepVersion': callkeepVersion,
-      'incomingCallType': incomingCallTypeRepository.getIncomingCallType().name,
-      ...mediaSettingsCrashKeys(
-        encodingPreset: encodingPresetRepository.getEncodingPreset(),
-        encodingSettings: encodingSettingsRepository.getEncodingSettings(),
-        audioProcessingSettings: audioProcessingSettingsRepository.getAudioProcessingSettings(),
-        videoCapturingSettings: videoCapturingSettingsRepository.getVideoCapturingSettings(),
-        iceSettings: iceSettingsRepository.getIceSettings(),
-        peerConnectionSettings: peerConnectionSettingsRepository.getPeerConnectionSettings(
-          defaultValue: defaultPeerConnectionSettings,
-        ),
+    setKeys({...labels, 'callkeepVersion': callkeepVersion});
+
+    _networkContext.logIncomingCallType(incomingCallTypeRepository.getIncomingCallType());
+    _mediaSettingsContext.logMediaSettings(
+      encodingPreset: encodingPresetRepository.getEncodingPreset(),
+      encodingSettings: encodingSettingsRepository.getEncodingSettings(),
+      audioProcessingSettings: audioProcessingSettingsRepository.getAudioProcessingSettings(),
+      videoCapturingSettings: videoCapturingSettingsRepository.getVideoCapturingSettings(),
+      iceSettings: iceSettingsRepository.getIceSettings(),
+      peerConnectionSettings: peerConnectionSettingsRepository.getPeerConnectionSettings(
+        defaultValue: defaultPeerConnectionSettings,
       ),
-    });
+    );
   }
 
   /// Writes the remote-config override flags, keyed by their Remote Config
@@ -77,7 +80,7 @@ class CrashlyticsAppContext {
     if (overrides == _lastLoggedOverrides) return;
     _lastLoggedOverrides = overrides;
 
-    crashKeysWriter.setKeys({
+    setKeys({
       'feature_video_call_enabled': overrides.isVideoCallEnabled ?? 'unset',
       'feature_system_notifications_enabled': overrides.isSystemNotificationsEnabled ?? 'unset',
       'feature_hybrid_presence_enabled': overrides.hybridPresenceSupport ?? 'unset',

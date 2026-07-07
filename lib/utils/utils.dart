@@ -15,7 +15,6 @@ export 'fixed_delay_scheduler.dart';
 export 'gravatar.dart';
 export 'ice_checker.dart';
 export 'jitter.dart';
-export 'media_settings_crash_keys.dart';
 export 'multi_tap_trigger.dart';
 export 'og_preview.dart';
 export 'path_provider/path_provider.dart';

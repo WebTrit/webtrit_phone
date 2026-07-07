@@ -37,7 +37,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.userSessionCleanupResolver,
     required this.systemInfoRepository,
     required this.appCompatibilityResolver,
-    this.crashKeysWriter = const CrashlyticsKeysWriter(),
+    this.crashlyticsContext = const AppSessionCrashlyticsContext(),
   }) : super(
          AppState(
            session: sessionRepository.getCurrent(),
@@ -61,11 +61,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     // This bloc is the single writer of the session/user-settings Crashlytics
     // keys it owns: seed them from the initial state here, refresh them in the
     // corresponding handlers/transitions below.
-    crashKeysWriter.setKeys({
-      'authorization': state.session.isLoggedIn ? 'authorized' : 'unauthorized',
-      'themeMode': state.themeMode.name,
-      'locale': _localeCrashKeyValue(state.locale),
-    });
+    crashlyticsContext
+      ..logAuthorization(authorized: state.session.isLoggedIn)
+      ..logThemeMode(state.themeMode)
+      ..logLocale(state.locale);
 
     // Resolve the gate once from any cached system-info so the flag is correct
     // before the first MainShell navigation, then keep it in sync via the stream.
@@ -84,7 +83,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final UserSessionCleanupResolver userSessionCleanupResolver;
   final SystemInfoRepository systemInfoRepository;
   final AppCompatibilityResolver appCompatibilityResolver;
-  final CrashKeysWriter crashKeysWriter;
+  final AppSessionCrashlyticsContext crashlyticsContext;
 
   StreamSubscription<WebtritSystemInfo>? _systemInfoSubscription;
 
@@ -137,10 +136,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     // Keep the owned Crashlytics keys in sync with the state, whatever path
     // changed it; the initial values are seeded in the constructor.
     if (change.currentState.themeMode != change.nextState.themeMode) {
-      crashKeysWriter.setKey('themeMode', change.nextState.themeMode.name);
+      crashlyticsContext.logThemeMode(change.nextState.themeMode);
     }
     if (change.currentState.locale != change.nextState.locale) {
-      crashKeysWriter.setKey('locale', _localeCrashKeyValue(change.nextState.locale));
+      crashlyticsContext.logLocale(change.nextState.locale);
     }
     super.onChange(change);
   }
@@ -159,7 +158,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onSessionLoggedIn(Session session) {
-    crashKeysWriter.setKey('authorization', 'authorized');
+    crashlyticsContext.logAuthorization(authorized: true);
     unawaited(
       CrashlyticsUtils.logSession(
         userId: session.userId,
@@ -171,7 +170,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onSessionLoggedOut(Session session) {
-    crashKeysWriter.setKey('authorization', 'unauthorized');
+    crashlyticsContext.logAuthorization(authorized: false);
     _logger.info('User logged out: ${session.userId}');
   }
 
@@ -231,9 +230,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
     emit(state.copyWith(locale: locale));
   }
-
-  static String _localeCrashKeyValue(Locale locale) =>
-      locale == LocaleExtension.defaultNull ? 'system' : locale.toLanguageTag();
 
   /// Handles unauthorized errors for the active session.
   /// Logs out only if the failing request used the current token,

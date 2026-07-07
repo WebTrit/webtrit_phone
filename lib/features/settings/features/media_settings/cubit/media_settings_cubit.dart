@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 import 'media_settings_state.dart';
 
@@ -15,8 +15,8 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
     this._peerConnectionSettingsRepository,
     this._videoCapturingSettingsRepository,
     this._encodingSettingsRepository, {
-    CrashKeysWriter crashKeysWriter = const CrashlyticsKeysWriter(),
-  }) : _crashKeysWriter = crashKeysWriter,
+    MediaSettingsCrashlyticsContext crashlyticsContext = const MediaSettingsCrashlyticsContext(),
+  }) : _crashlyticsContext = crashlyticsContext,
        super(
          MediaSettingsState(
            encodingSettings: _encodingSettingsRepository.getEncodingSettings(),
@@ -37,7 +37,7 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   final PeerConnectionSettingsRepository _peerConnectionSettingsRepository;
   final VideoCapturingSettingsRepository _videoCapturingSettingsRepository;
   final EncodingSettingsRepository _encodingSettingsRepository;
-  final CrashKeysWriter _crashKeysWriter;
+  final MediaSettingsCrashlyticsContext _crashlyticsContext;
 
   void setEncodingSettings(EncodingSettings settings) {
     emit(state.copyWithEncodingSettings(settings));
@@ -76,15 +76,13 @@ class MediaSettingsCubit extends Cubit<MediaSettingsState> {
   void onChange(Change<MediaSettingsState> change) {
     super.onChange(change);
     final next = change.nextState;
-    _crashKeysWriter.setKeys(
-      mediaSettingsCrashKeys(
-        encodingPreset: next.encodingPreset,
-        encodingSettings: next.encodingSettings,
-        audioProcessingSettings: next.audioProcessingSettings,
-        videoCapturingSettings: next.videoCapturingSettings,
-        iceSettings: next.iceSettings,
-        peerConnectionSettings: next.pearConnectionSettings,
-      ),
+    _crashlyticsContext.logMediaSettings(
+      encodingPreset: next.encodingPreset,
+      encodingSettings: next.encodingSettings,
+      audioProcessingSettings: next.audioProcessingSettings,
+      videoCapturingSettings: next.videoCapturingSettings,
+      iceSettings: next.iceSettings,
+      peerConnectionSettings: next.pearConnectionSettings,
     );
   }
 

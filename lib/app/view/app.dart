@@ -136,7 +136,7 @@ class _AppState extends State<App> {
       featureAccess.checker,
     );
 
-    _crashlyticsAppContext = CrashlyticsAppContext(
+    _crashlyticsAppContext = AppStartupCrashlyticsContext(
       metadataProvider: context.read<AppMetadataProvider>(),
       callkeepVersion: context.read<AppInfo>().callkeepVersion,
       incomingCallTypeRepository: context.read<IncomingCallTypeRepository>(),
@@ -149,7 +149,7 @@ class _AppState extends State<App> {
     )..logStartup(defaultPeerConnectionSettings: featureAccess.callConfig.peerConnection);
   }
 
-  late final CrashlyticsAppContext _crashlyticsAppContext;
+  late final AppStartupCrashlyticsContext _crashlyticsAppContext;
 
   @override
   void didChangeDependencies() {

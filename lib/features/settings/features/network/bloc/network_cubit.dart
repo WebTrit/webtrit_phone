@@ -8,7 +8,6 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/iterable.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/incoming_call_type/incoming_call_type_repository.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 import '../models/models.dart';
 
@@ -23,8 +22,8 @@ class NetworkCubit extends Cubit<NetworkState> {
     this._incomingCallTypeRepository,
     this._onIncomingCallTypeChanged,
     this._callkeepPermissions, {
-    CrashKeysWriter crashKeysWriter = const CrashlyticsKeysWriter(),
-  }) : _crashKeysWriter = crashKeysWriter,
+    NetworkCrashlyticsContext crashlyticsContext = const NetworkCrashlyticsContext(),
+  }) : _crashlyticsContext = crashlyticsContext,
        super(NetworkState(smsFallbackEnabled: _callTriggerConfig.smsFallback.enabled)) {
     _initializeActiveIncomingType();
   }
@@ -34,7 +33,7 @@ class NetworkCubit extends Cubit<NetworkState> {
   final IncomingCallTypeRepository _incomingCallTypeRepository;
   final Future<void> Function(IncomingCallType) _onIncomingCallTypeChanged;
   final WebtritCallkeepPermissions _callkeepPermissions;
-  final CrashKeysWriter _crashKeysWriter;
+  final NetworkCrashlyticsContext _crashlyticsContext;
 
   bool get smsFallbackAvailable => _callTriggerConfig.smsFallback.available;
 
@@ -70,7 +69,7 @@ class NetworkCubit extends Cubit<NetworkState> {
   void onChange(Change<NetworkState> change) {
     super.onChange(change);
     if (change.currentState.incomingCallType != change.nextState.incomingCallType) {
-      _crashKeysWriter.setKey('incomingCallType', change.nextState.incomingCallType.name);
+      _crashlyticsContext.logIncomingCallType(change.nextState.incomingCallType);
     }
   }
 
