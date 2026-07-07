@@ -6,7 +6,6 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 
 class LoginQrSigninScreen extends StatefulWidget {
   const LoginQrSigninScreen({super.key});
@@ -86,14 +85,16 @@ class _LoginQrSigninScreenState extends State<LoginQrSigninScreen> with WidgetsB
           builder: (context, loginState) {
             return BlocBuilder<QrSigninCubit, QrSigninState>(
               builder: (context, state) {
-                if (loginState.processing) return const _VerifyingView();
+                if (loginState.processing) return const QrSigninVerifyingView();
 
                 return switch (state.status) {
                   QrSigninStatus.checkingPermission => const SizedBox.shrink(),
-                  QrSigninStatus.permissionRequired => _PermissionRequiredView(
+                  QrSigninStatus.permissionRequired => QrSigninPermissionView(
                     permanentlyDenied: state.cameraPermanentlyDenied,
+                    onRequestPermission: context.read<QrSigninCubit>().requestPermission,
+                    onOpenSettings: context.read<QrSigninCubit>().openAppSettings,
                   ),
-                  QrSigninStatus.scanning => _ScannerView(
+                  QrSigninStatus.scanning => QrScannerView(
                     controller: _scannerController,
                     onDetect: _onDetect,
                     parseError: state.parseError,
@@ -104,134 +105,6 @@ class _LoginQrSigninScreenState extends State<LoginQrSigninScreen> with WidgetsB
           },
         ),
       ),
-    );
-  }
-}
-
-class _ScannerView extends StatelessWidget {
-  const _ScannerView({required this.controller, required this.onDetect, this.parseError});
-
-  final MobileScannerController controller;
-  final ValueChanged<BarcodeCapture> onDetect;
-  final QrSigninParseError? parseError;
-
-  @override
-  Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(context.l10n.login_qrSignin_scanHint, textAlign: TextAlign.center, style: themeData.textTheme.bodyLarge),
-        const SizedBox(height: kInset),
-        Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 320, maxHeight: 320),
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(kInset),
-                // The neutral backdrop keeps the viewfinder shape visible while
-                // the camera initializes (the preview flickers in otherwise).
-                child: ColoredBox(
-                  color: themeData.colorScheme.surfaceContainerHighest,
-                  child: MobileScanner(
-                    controller: controller,
-                    onDetect: onDetect,
-                    placeholderBuilder: (context) => const SizedBox.expand(),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: kInset / 2),
-        // Reserve the line so the layout does not jump when an error appears.
-        Text(
-          parseError != null ? context.l10n.login_qrSignin_invalidCodeError : '',
-          textAlign: TextAlign.center,
-          style: themeData.textTheme.bodyMedium?.copyWith(color: themeData.colorScheme.error),
-        ),
-      ],
-    );
-  }
-}
-
-class _VerifyingView extends StatelessWidget {
-  const _VerifyingView();
-
-  @override
-  Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const Center(child: CircularProgressIndicator()),
-        const SizedBox(height: kInset),
-        Text(
-          context.l10n.login_qrSignin_verifyingTitle,
-          textAlign: TextAlign.center,
-          style: themeData.textTheme.titleLarge,
-        ),
-        const SizedBox(height: kInset / 2),
-        Text(
-          context.l10n.login_qrSignin_verifyingText,
-          textAlign: TextAlign.center,
-          style: themeData.textTheme.bodyMedium,
-        ),
-      ],
-    );
-  }
-}
-
-class _PermissionRequiredView extends StatelessWidget {
-  const _PermissionRequiredView({required this.permanentlyDenied});
-
-  final bool permanentlyDenied;
-
-  @override
-  Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Center(
-          child: CircleAvatar(
-            radius: 40,
-            backgroundColor: themeData.colorScheme.surfaceContainerHighest,
-            child: Icon(Icons.no_photography_outlined, size: 36, color: themeData.colorScheme.onSurfaceVariant),
-          ),
-        ),
-        const SizedBox(height: kInset),
-        Text(
-          context.l10n.login_qrSignin_cameraPermissionTitle,
-          textAlign: TextAlign.center,
-          style: themeData.textTheme.titleLarge,
-        ),
-        const SizedBox(height: kInset / 2),
-        Text(
-          context.l10n.login_qrSignin_cameraPermissionText,
-          textAlign: TextAlign.center,
-          style: themeData.textTheme.bodyMedium,
-        ),
-        const SizedBox(height: kInset),
-        // A single action: request while the OS still shows the dialog; once
-        // the denial is permanent, the settings screen is the only way left.
-        if (permanentlyDenied)
-          ElevatedButton(
-            onPressed: context.read<QrSigninCubit>().openAppSettings,
-            child: Text(context.l10n.login_qrSignin_openSettingsButton),
-          )
-        else
-          ElevatedButton(
-            onPressed: context.read<QrSigninCubit>().requestPermission,
-            child: Text(context.l10n.login_qrSignin_allowCameraAccessButton),
-          ),
-      ],
     );
   }
 }
