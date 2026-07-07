@@ -1,6 +1,7 @@
 export 'app_update_service.dart';
 export 'connectivity_lifecycle_service.dart';
 export 'connectivity_service.dart';
+export 'crashlytics_context/crashlytics_context.dart';
 export 'diagnostic/diagnostic.dart';
 export 'polling_service.dart';
 export 'remote_config_service.dart';

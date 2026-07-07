@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';

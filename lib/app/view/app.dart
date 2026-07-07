@@ -17,6 +17,7 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/resolvers/resolvers.dart';
 

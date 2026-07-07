@@ -2,7 +2,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
-import '../app_metadata_provider.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'crashlytics_app_context.dart';
 import 'media_settings_crashlytics_context.dart';
 import 'network_crashlytics_context.dart';
