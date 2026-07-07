@@ -16,7 +16,6 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/resolvers/resolvers.dart';
-import 'package:webtrit_phone/utils/utils.dart';
 
 part 'app_bloc.freezed.dart';
 
@@ -164,14 +163,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   void _onSessionLoggedIn(Session session) {
     crashlyticsContext
       ..logAuthorization(authorized: true)
-      ..logSessionScope(tenantId: session.tenantId, coreUrl: session.coreUrl);
-    unawaited(CrashlyticsUtils.logSession(userId: session.userId, sessionId: appInfo.identifier));
+      ..logSessionScope(tenantId: session.tenantId, coreUrl: session.coreUrl)
+      ..logUser(userId: session.userId, sessionId: appInfo.identifier);
   }
 
   void _onSessionLoggedOut(Session session) {
     crashlyticsContext
       ..logAuthorization(authorized: false)
-      ..logSessionScope();
+      ..logSessionScope()
+      ..logUser();
     _logger.info('User logged out: ${session.userId}');
   }
 

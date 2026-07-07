@@ -12,12 +12,16 @@ import 'package:webtrit_phone/utils/utils.dart';
 class _RecordingCrashKeysWriter implements CrashKeysWriter {
   final List<Map<String, Object?>> batches = [];
   final Map<String, Object> singles = {};
+  final List<String> userIdentifiers = [];
 
   @override
   void setKeys(Map<String, Object?> keys) => batches.add(keys);
 
   @override
   void setKey(String key, Object value) => singles[key] = value;
+
+  @override
+  void setUserIdentifier(String identifier) => userIdentifiers.add(identifier);
 }
 
 class _MockAppMetadataProvider extends Mock implements AppMetadataProvider {}
@@ -84,6 +88,16 @@ void main() {
       context.logSessionScope();
       expect(writer.singles['tenantId'], 'unset');
       expect(writer.singles['coreUrl'], 'unset');
+    });
+
+    test('binds the user identifier with the session id and clears it on logout', () {
+      context.logUser(userId: 'user-1', sessionId: 'install-1');
+      expect(writer.userIdentifiers, ['user-1']);
+      expect(writer.singles['sessionId'], 'install-1');
+
+      context.logUser();
+      expect(writer.userIdentifiers, ['user-1', '']);
+      expect(writer.singles['sessionId'], 'install-1');
     });
   });
 

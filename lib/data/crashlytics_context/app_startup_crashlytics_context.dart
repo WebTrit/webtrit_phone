@@ -1,5 +1,6 @@
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import '../app_metadata_provider.dart';
 import 'crashlytics_app_context.dart';
@@ -59,7 +60,7 @@ class AppStartupCrashlyticsContext extends CrashlyticsAppContext {
       ..remove('tenantId')
       ..remove('coreUrl');
 
-    setKeys({...labels, 'callkeepVersion': callkeepVersion});
+    setKeys({...labels, 'callkeepVersion': callkeepVersion, ...CrashlyticsUtils.isolateInfoKeys()});
     logUserSettings(defaultPeerConnectionSettings: defaultPeerConnectionSettings);
   }
 

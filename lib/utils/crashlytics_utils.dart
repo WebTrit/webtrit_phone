@@ -25,25 +25,28 @@ class CrashlyticsUtils {
     return dbg?.isNotEmpty == true ? dbg! : 'isolate-${Isolate.current.hashCode}';
   }
 
-  /// Writes useful isolate/platform context into Crashlytics custom keys.
-  static Future<void> logIsolateInfo() async {
-    final label = currentIsolateLabel();
-    final dbg = kIsWeb ? null : Isolate.current.debugName;
-    final hash = kIsWeb ? null : Isolate.current.hashCode;
-
-    unawaited(crashlyticsSetCustomKey('isolate_label', label));
-    if (dbg != null) unawaited(crashlyticsSetCustomKey('isolate_debugName', dbg));
-    if (hash != null) unawaited(crashlyticsSetCustomKey('isolate_hash', hash));
+  /// Isolate/platform context as custom-key entries; null values (web) are
+  /// skipped by [logAppSettings].
+  static Map<String, Object?> isolateInfoKeys() {
+    return {
+      'isolate_label': currentIsolateLabel(),
+      'isolate_debugName': kIsWeb ? null : Isolate.current.debugName,
+      'isolate_hash': kIsWeb ? null : Isolate.current.hashCode,
+    };
   }
 
-  /// Sets the Crashlytics user identifier + common session keys.
-  /// Call this right after successful login. The tenant/core scope keys are
-  /// owned by AppSessionCrashlyticsContext (they must be reset on logout),
-  /// so they are deliberately not written here.
-  static Future<void> logSession({required String userId, required String sessionId}) async {
-    unawaited(crashlyticsSetUserIdentifier(userId));
-    unawaited(crashlyticsSetCustomKey('sessionId', sessionId));
-    await logIsolateInfo();
+  /// Writes useful isolate/platform context into Crashlytics custom keys.
+  static void logIsolateInfo() {
+    logAppSettings(isolateInfoKeys());
+  }
+
+  /// Binds crash reports to a user id; best-effort like the custom keys.
+  static void setUserIdentifier(String identifier) {
+    try {
+      unawaited(crashlyticsSetUserIdentifier(identifier).catchError((_) {}));
+    } catch (_) {
+      // Ignored, see _setSafeCustomKey.
+    }
   }
 
   /// Writes application configuration/settings into Crashlytics custom keys
