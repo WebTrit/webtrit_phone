@@ -3,11 +3,37 @@ import 'models/error.dart';
 class RequestFailure implements Exception {
   RequestFailure({required this.url, this.statusCode, required this.requestId, this.token, this.error});
 
+  // package:http exposes no status-code constants; dart:io is not web-safe.
+  static const _requestTimeout = 408;
+  static const _tooEarly = 425;
+  static const _tooManyRequests = 429;
+
+  static const _transientStatusCodes = {_requestTimeout, _tooEarly, _tooManyRequests};
+
   final Uri url;
   final int? statusCode;
   final String requestId;
   final String? token;
   final ErrorResponse? error;
+
+  /// Whether the response is a client error (4xx).
+  bool get isClientError {
+    final statusCode = this.statusCode;
+    return statusCode != null && statusCode >= 400 && statusCode < 500;
+  }
+
+  /// Whether the response is a server error (5xx).
+  bool get isServerError {
+    final statusCode = this.statusCode;
+    return statusCode != null && statusCode >= 500 && statusCode < 600;
+  }
+
+  /// Whether the status is transient by HTTP semantics: the server asks to
+  /// retry the request.
+  bool get isTransient => _transientStatusCodes.contains(statusCode);
+
+  /// The backend-produced error code from the response body, if any.
+  String? get errorCode => error?.code;
 
   @override
   String toString() {
