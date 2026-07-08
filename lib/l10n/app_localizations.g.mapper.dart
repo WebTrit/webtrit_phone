@@ -420,6 +420,12 @@ extension AppLocalizationsExtension on AppLocalizations {
       'login_Button_signupVerifyRepeat' => login_Button_signupVerifyRepeat,
       'login_ButtonTooltip_signInToYourInstance' =>
         login_ButtonTooltip_signInToYourInstance,
+      'login_RequestFailureDeliveryChannelUnspecifiedError' =>
+        login_RequestFailureDeliveryChannelUnspecifiedError,
+      'login_RequestFailureDeliveryChannelUnspecifiedPhoneError' =>
+        login_RequestFailureDeliveryChannelUnspecifiedPhoneError,
+      'login_RequestFailureDeliveryChannelUnspecifiedEmailError' =>
+        login_RequestFailureDeliveryChannelUnspecifiedEmailError,
       'login_RequestFailureEmptyEmailError' =>
         login_RequestFailureEmptyEmailError,
       'login_RequestFailureIdentifierIsNotValid' =>
@@ -762,6 +768,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         permission_manufacturer_Text_xiaomi_tip1,
       'permission_manufacturer_Text_xiaomi_tip2' =>
         permission_manufacturer_Text_xiaomi_tip2,
+      'permission_manufacturer_Text_xiaomi_tip3' =>
+        permission_manufacturer_Text_xiaomi_tip3,
       'permission_Text_description' => permission_Text_description,
       'persistentConnectionReminderContent' =>
         persistentConnectionReminderContent,

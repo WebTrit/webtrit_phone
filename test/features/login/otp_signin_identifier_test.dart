@@ -1,10 +1,11 @@
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/login/login.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 LoginState _stateWithCustom(Map<String, dynamic>? custom) {
@@ -98,6 +99,48 @@ void main() {
 
     test('falls back to a text keyboard when nothing is advertised', () {
       expect(<OtpSigninIdentifier>[].userRefKeyboardType, TextInputType.text);
+    });
+  });
+
+  group('OtpSigninIdentifiersInput.deliveryChannelUnspecifiedMessage', () {
+    Future<BuildContext> pumpL10nContext(WidgetTester tester) async {
+      late BuildContext capturedContext;
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Builder(
+            builder: (context) {
+              capturedContext = context;
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+      return capturedContext;
+    }
+
+    testWidgets('names the phone number when phone is the only identifier', (tester) async {
+      final context = await pumpL10nContext(tester);
+      expect(
+        [OtpSigninIdentifier.phoneNumber].deliveryChannelUnspecifiedMessage(context),
+        context.l10n.login_RequestFailureDeliveryChannelUnspecifiedPhoneError,
+      );
+    });
+
+    testWidgets('names the email address when email is the only identifier', (tester) async {
+      final context = await pumpL10nContext(tester);
+      expect(
+        [OtpSigninIdentifier.email].deliveryChannelUnspecifiedMessage(context),
+        context.l10n.login_RequestFailureDeliveryChannelUnspecifiedEmailError,
+      );
+    });
+
+    testWidgets('stays generic when both or no identifiers are advertised', (tester) async {
+      final context = await pumpL10nContext(tester);
+      final generic = context.l10n.login_RequestFailureDeliveryChannelUnspecifiedError;
+      expect(OtpSigninIdentifier.values.deliveryChannelUnspecifiedMessage(context), generic);
+      expect(<OtpSigninIdentifier>[].deliveryChannelUnspecifiedMessage(context), generic);
     });
   });
 }

@@ -18,6 +18,17 @@ extension OtpSigninIdentifiersInput on List<OtpSigninIdentifier> {
     return l10n.login_TextFieldLabelText_otpSigninUserRef;
   }
 
+  /// Error message for `delivery_channel_unspecified` matching the advertised
+  /// OTP identifiers. The backend does not report which delivery channel the
+  /// account lacks, so the message names only what the user entered and stays
+  /// neutral about the missing contact method.
+  String deliveryChannelUnspecifiedMessage(BuildContext context) {
+    final l10n = context.l10n;
+    if (_hasPhone && !_hasEmail) return l10n.login_RequestFailureDeliveryChannelUnspecifiedPhoneError;
+    if (_hasEmail && !_hasPhone) return l10n.login_RequestFailureDeliveryChannelUnspecifiedEmailError;
+    return l10n.login_RequestFailureDeliveryChannelUnspecifiedError;
+  }
+
   /// Account references may be alphanumeric (for example `ph123x456`) even when
   /// the backend advertises phone as the only OTP identifier, so a phone-only
   /// dial pad would wrongly block letters. Use a text keyboard whenever email is
