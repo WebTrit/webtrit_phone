@@ -60,6 +60,7 @@ class AppConfigLogin with _$AppConfigLogin {
     this.common = const AppConfigLoginCommon(),
     this.modeSelect = const AppConfigLoginModeSelect(),
     this.signinOrder = const ['passwordSignin', 'otpSignin', 'signup'],
+    this.qr = const AppConfigLoginQr(),
   });
 
   @override
@@ -69,15 +70,75 @@ class AppConfigLogin with _$AppConfigLogin {
   final AppConfigLoginModeSelect modeSelect;
 
   /// Order of the sign-in tabs on the login switch screen, by login type name
-  /// (passwordSignin, otpSignin, signup). Only the types advertised by the
-  /// backend are shown; this controls their order and which one is selected by
-  /// default. Unknown or omitted names are placed last.
+  /// (passwordSignin, otpSignin, signup, qrSignin). Only the types advertised by
+  /// the backend are shown; this controls their order and which one is selected
+  /// by default. Unknown or omitted names are placed last.
   @override
   final List<String> signinOrder;
+
+  @override
+  final AppConfigLoginQr qr;
 
   factory AppConfigLogin.fromJson(Map<String, Object?> json) => _$AppConfigLoginFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigLoginToJson(this);
+}
+
+/// Configuration of the QR-code sign-in tab.
+///
+/// The QR code carries plain credentials in a provisioning URI (for example
+/// `csc:username:password@EXAMPLE` with percent-encoded segments); scanning it
+/// signs the user in through the regular password login. The tab appears only
+/// when [enabled] is true and the backend supports password sign-in; its
+/// position among the other tabs follows [AppConfigLogin.signinOrder].
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigLoginQr with _$AppConfigLoginQr {
+  const AppConfigLoginQr({
+    this.enabled = false,
+    this.formats = const [
+      AppConfigLoginQrFormat(type: 'uri', schemes: ['csc']),
+      AppConfigLoginQrFormat(type: 'json'),
+    ],
+    this.expectedHost,
+  });
+
+  /// Whether the QR-code sign-in tab is available at all.
+  @override
+  final bool enabled;
+
+  /// Accepted payload formats with their per-format options, probed in this
+  /// order.
+  @override
+  final List<AppConfigLoginQrFormat> formats;
+
+  /// Expected host (cloud id) of the code, shared by all formats. When set,
+  /// codes issued for a different host are rejected; null accepts any host.
+  @override
+  final String? expectedHost;
+
+  factory AppConfigLoginQr.fromJson(Map<String, Object?> json) => _$AppConfigLoginQrFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigLoginQrToJson(this);
+}
+
+/// One accepted QR payload format and its format-specific options.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigLoginQrFormat with _$AppConfigLoginQrFormat {
+  const AppConfigLoginQrFormat({required this.type, this.schemes});
+
+  /// Decoder name (`uri`, `json`).
+  @override
+  final String type;
+
+  /// `uri` only: accepted scheme names, matched case-insensitively.
+  @override
+  final List<String>? schemes;
+
+  factory AppConfigLoginQrFormat.fromJson(Map<String, Object?> json) => _$AppConfigLoginQrFormatFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigLoginQrFormatToJson(this);
 }
 
 @freezed

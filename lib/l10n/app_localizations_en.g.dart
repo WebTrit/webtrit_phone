@@ -1055,10 +1055,38 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get login_Text_qrSigninScanHint => 'Scan the QR code to log in.';
+
+  @override
+  String get login_Text_qrSigninVerifyingTitle => 'Signing you in...';
+
+  @override
+  String get login_Text_qrSigninVerifyingDescription => 'QR code scanned. Verifying with the server.';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionTitle => 'Camera access is off';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionDescription =>
+      'Camera access is needed to scan a QR code. Enable it to continue.';
+
+  @override
+  String get login_Button_qrSigninAllowCameraAccess => 'Allow camera access';
+
+  @override
+  String get login_Button_qrSigninOpenSettings => 'Open settings';
+
+  @override
+  String get login_Text_qrSigninInvalidCodeError => 'This QR code cannot be used to sign in.';
+
+  @override
   String get loginType_otpSignin => 'OTP sign in';
 
   @override
   String get loginType_passwordSignin => 'Password sign in';
+
+  @override
+  String get loginType_qrSignin => 'QR code';
 
   @override
   String get loginType_signup => 'Sign up';

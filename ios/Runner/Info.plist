@@ -61,7 +61,7 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This app requires permission to access the camera to make video calls</string>
+	<string>This app requires permission to access the camera to make video calls and scan QR codes</string>
 	<key>NSContactsUsageDescription</key>
 	<string>This app requires permission to access contacts to make calls within your address book</string>
 	<key>NSMicrophoneUsageDescription</key>

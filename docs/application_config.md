@@ -6,6 +6,8 @@ navigation structure, and screen-specific behaviors.
 ## Table of Contents
 
 - [Login Configuration](#login-configuration)
+  - [Sign-In Tab Order](#sign-in-tab-order)
+  - [Login QR Sign-In](#login-qr-sign-in)
   - [Login Common](#login-common)
   - [Login Mode Select](#login-mode-select)
 - [Main Configuration](#main-configuration)
@@ -28,6 +30,15 @@ The `loginConfig` section defines the app’s login screen behavior and embedded
 ```json
 {
   "loginConfig": {
+    "signinOrder": ["passwordSignin", "otpSignin", "signup"],
+    "qr": {
+      "enabled": false,
+      "formats": [
+        { "type": "uri", "schemes": ["csc"] },
+        { "type": "json" }
+      ],
+      "expectedHost": null
+    },
     "common": {
       "fullScreenLaunchEmbeddedResourceId": "1"
     },
@@ -50,6 +61,24 @@ The `loginConfig` section defines the app’s login screen behavior and embedded
   }
 }
 ```
+
+### Sign-In Tab Order
+
+| Field         | Type           | Default                                    | Description                                                                                                                    |
+|---------------|----------------|--------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| `signinOrder` | `List<String>` | `["passwordSignin", "otpSignin", "signup"]` | Order of the sign-in tabs on the login switch screen, by login type name (incl. `qrSignin`). Only the types actually available are shown; the first one is selected by default. Unknown or omitted names are placed last. |
+
+### Login QR Sign-In
+
+The `qr` block enables signing in by scanning a provisioning QR code
+(`scheme:user:password@host`). See [qr_signin.md](qr_signin.md) for the payload
+format, scheme descriptions and screen behavior.
+
+| Field          | Type           | Default   | Description                                                                                   |
+|----------------|----------------|-----------|-----------------------------------------------------------------------------------------------|
+| `enabled`      | `bool`         | `false`   | Whether the QR sign-in tab is available. The tab also requires the backend to support password sign-in. |
+| `formats`      | `List<Format>` | uri (csc) + json | Accepted payload formats (`{ "type": "uri" | "json", "schemes": [...] }`), probed in this order; `schemes` applies to `uri` only. |
+| `expectedHost` | `string?`      | `null`    | Expected host (cloud id) of the code, shared by all formats; mismatching codes are rejected. `null` accepts any host. |
 
 ### Login Common
 

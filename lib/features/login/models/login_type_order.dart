@@ -3,8 +3,14 @@ import 'package:webtrit_phone/features/login/models/login_type.dart';
 /// Built-in order applied when no explicit order is configured.
 ///
 /// When both are available the regular password login comes first: it is faster
-/// for frequent users, while OTP delivery takes a moment anyway.
-const kDefaultLoginTypeOrder = <LoginType>[LoginType.passwordSignin, LoginType.otpSignin, LoginType.signup];
+/// for frequent users, while OTP delivery takes a moment anyway. The QR tab is
+/// an optional companion of the password login, so by default it goes last.
+const kDefaultLoginTypeOrder = <LoginType>[
+  LoginType.passwordSignin,
+  LoginType.otpSignin,
+  LoginType.signup,
+  LoginType.qrSignin,
+];
 
 /// Returns [types] reordered deterministically on the client.
 ///

@@ -19,6 +19,7 @@
   ],
   "loginConfig": {
     "signinOrder": ["passwordSignin", "otpSignin", "signup"],
+    "qr": { "enabled": false, "formats": [{ "type": "uri", "schemes": ["csc"] }, { "type": "json" }], "expectedHost": null },
     "common": {
       "fullScreenLaunchEmbeddedResourceId": null
     },
