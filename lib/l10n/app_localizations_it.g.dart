@@ -922,7 +922,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get login_RequestFailureDeliveryChannelUnspecifiedError =>
-      'Questo account non ha un indirizzo email o un altro metodo di contatto per ricevere il codice di verifica';
+      'Questo account non ha alcun metodo di contatto configurato per ricevere il codice di verifica';
 
   @override
   String get login_RequestFailureDeliveryChannelUnspecifiedPhoneError =>

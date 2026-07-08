@@ -772,9 +772,9 @@
       }
     }
   },
-  "login_RequestFailureDeliveryChannelUnspecifiedError": "This account has no email address or other contact method to receive the verification code",
+  "login_RequestFailureDeliveryChannelUnspecifiedError": "This account has no contact method configured to receive the verification code",
   "@login_RequestFailureDeliveryChannelUnspecifiedError": {
-    "description": "Shown during OTP sign-in when the requested account has no configured delivery channel (such as an email address) to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+    "description": "Shown during OTP sign-in when the requested account has no configured delivery channel to receive the one-time verification code and the advertised sign-in identifiers do not allow a more specific wording. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
   },
   "login_RequestFailureDeliveryChannelUnspecifiedPhoneError": "The account with this phone number has no contact method configured to receive the verification code",
   "@login_RequestFailureDeliveryChannelUnspecifiedPhoneError": {

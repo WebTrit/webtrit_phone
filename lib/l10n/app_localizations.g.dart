@@ -1684,10 +1684,10 @@ abstract class AppLocalizations {
   /// **'Your app version is no longer supported, please update the application to continue (current: {actual}, minimum required: {minSupported})'**
   String login_AppVersionUnsupportedExceptionError(String actual, String minSupported);
 
-  /// Shown during OTP sign-in when the requested account has no configured delivery channel (such as an email address) to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account.
+  /// Shown during OTP sign-in when the requested account has no configured delivery channel to receive the one-time verification code and the advertised sign-in identifiers do not allow a more specific wording. Condition: the server rejects the OTP request because no delivery channel is set up for the account.
   ///
   /// In en, this message translates to:
-  /// **'This account has no email address or other contact method to receive the verification code'**
+  /// **'This account has no contact method configured to receive the verification code'**
   String get login_RequestFailureDeliveryChannelUnspecifiedError;
 
   /// Shown during OTP sign-in on deployments where users sign in with a phone number, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account.

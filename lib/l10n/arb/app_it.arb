@@ -772,9 +772,9 @@
       }
     }
   },
-  "login_RequestFailureDeliveryChannelUnspecifiedError": "Questo account non ha un indirizzo email o un altro metodo di contatto per ricevere il codice di verifica",
+  "login_RequestFailureDeliveryChannelUnspecifiedError": "Questo account non ha alcun metodo di contatto configurato per ricevere il codice di verifica",
   "@login_RequestFailureDeliveryChannelUnspecifiedError": {
-    "description": "Shown during OTP sign-in when the requested account has no configured delivery channel (such as an email address) to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+    "description": "Shown during OTP sign-in when the requested account has no configured delivery channel to receive the one-time verification code and the advertised sign-in identifiers do not allow a more specific wording. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
   },
   "login_RequestFailureDeliveryChannelUnspecifiedPhoneError": "L'account con questo numero di telefono non ha alcun metodo di contatto configurato per ricevere il codice di verifica",
   "@login_RequestFailureDeliveryChannelUnspecifiedPhoneError": {
