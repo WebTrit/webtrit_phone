@@ -10,9 +10,7 @@ class LoginSwitchScreenScreenshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final signinOrder =
-        context.watch<FeatureAccess?>()?.loginConfig.signinOrder ??
-        const <String>[];
+    final signinOrder = context.watch<FeatureAccess?>()?.loginConfig.signinOrder ?? const <String>[];
     final orderedLoginTypes = sortLoginTypes(const [
       LoginType.otpSignin,
       LoginType.passwordSignin,

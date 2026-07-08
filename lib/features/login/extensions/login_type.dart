@@ -13,6 +13,7 @@ extension LoginTypeL10n on LoginType {
       LoginType.otpSignin => context.l10n.loginType_otpSignin,
       LoginType.passwordSignin => context.l10n.loginType_passwordSignin,
       LoginType.signup => context.l10n.loginType_signup,
+      LoginType.qrSignin => context.l10n.loginType_qrSignin,
     };
   }
 }
@@ -23,6 +24,7 @@ extension LoginTypePageRouteInfo on LoginType {
       LoginType.otpSignin => const LoginOtpSigninRouterPageRoute(),
       LoginType.passwordSignin => const LoginPasswordSigninScreenPageRoute(),
       LoginType.signup => const LoginSignupRouterPageRoute(),
+      LoginType.qrSignin => const LoginQrSigninScreenPageRoute(),
     };
   }
 }
@@ -33,6 +35,7 @@ extension LoginTypeLoginSegmentKey on LoginType {
       LoginType.otpSignin => const Key('loginTypeSegment_otpSignin'),
       LoginType.passwordSignin => const Key('loginTypeSegment_passwordSignin'),
       LoginType.signup => const Key('loginTypeSegment_signup'),
+      LoginType.qrSignin => const Key('loginTypeSegment_qrSignin'),
     };
   }
 }

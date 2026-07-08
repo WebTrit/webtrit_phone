@@ -25,11 +25,7 @@ class LoginScreenshot extends StatefulWidget {
   const LoginScreenshot({
     super.key,
     this.initialLoginType,
-    this.supportedLoginTypes = const [
-      LoginType.otpSignin,
-      LoginType.passwordSignin,
-      LoginType.signup,
-    ],
+    this.supportedLoginTypes = const [LoginType.otpSignin, LoginType.passwordSignin, LoginType.signup],
   });
 
   final LoginType? initialLoginType;
@@ -51,28 +47,17 @@ class _LoginScreenshotState extends State<LoginScreenshot> {
 
     final featureAccess = context.watch<FeatureAccess?>();
     final embedded =
-        featureAccess?.loginConfig.actions.firstWhereOrNull(
-              (element) => element.flavor == LoginFlavor.embedded,
-            )
+        featureAccess?.loginConfig.actions.firstWhereOrNull((element) => element.flavor == LoginFlavor.embedded)
             as LoginEmbeddedModeButton?;
 
-    final signinOrder =
-        featureAccess?.loginConfig.signinOrder ?? const <String>[];
-    final orderedLoginTypes = sortLoginTypes(
-      widget.supportedLoginTypes,
-      orderConfig: signinOrder,
-    );
+    final signinOrder = featureAccess?.loginConfig.signinOrder ?? const <String>[];
+    final orderedLoginTypes = sortLoginTypes(widget.supportedLoginTypes, orderConfig: signinOrder);
     final currentType = _resolveCurrentType(orderedLoginTypes);
 
     return BlocProvider<LoginCubit>(
-      create: (context) => MockLoginCubit.loginSwitchScreen(
-        embedded: embedded?.customLoginFeature,
-      ),
+      create: (context) => MockLoginCubit.loginSwitchScreen(embedded: embedded?.customLoginFeature),
       child: LoginSwitchScreen(
-        appBar: AppBar(
-          leading: const ExtBackButton(disabled: false),
-          backgroundColor: Colors.transparent,
-        ),
+        appBar: AppBar(leading: const ExtBackButton(disabled: false), backgroundColor: Colors.transparent),
         header: Column(
           children: [
             ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
@@ -95,16 +80,14 @@ class _LoginScreenshotState extends State<LoginScreenshot> {
     return ordered.isNotEmpty ? ordered.first : LoginType.otpSignin;
   }
 
-  Widget _bodyFor(
-    BuildContext context,
-    LoginType type,
-    LoginEmbeddedModeButton? embedded,
-  ) {
+  Widget _bodyFor(BuildContext context, LoginType type, LoginEmbeddedModeButton? embedded) {
     switch (type) {
       case LoginType.otpSignin:
         return const LoginOtpSigninRequestScreen();
       case LoginType.passwordSignin:
         return const LoginPasswordSigninScreen();
+      case LoginType.qrSignin:
+        return const LoginQrSigninScreen();
       case LoginType.signup:
         return _signupBody(context, embedded);
     }
@@ -123,8 +106,7 @@ class _LoginScreenshotState extends State<LoginScreenshot> {
       mediaQueryMetricsData: null,
       deviceInfoData: null,
       pageInjectionStrategyBuilder: () => DefaultPayloadInjectionStrategy(),
-      connectivityRecoveryStrategyBuilder: () =>
-          NoneConnectivityRecoveryStrategy(),
+      connectivityRecoveryStrategyBuilder: () => NoneConnectivityRecoveryStrategy(),
     );
   }
 }

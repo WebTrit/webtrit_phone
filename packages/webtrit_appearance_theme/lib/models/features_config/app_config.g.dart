@@ -67,6 +67,9 @@ AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const ['passwordSignin', 'otpSignin', 'signup'],
+      qr: json['qr'] == null
+          ? const AppConfigLoginQr()
+          : AppConfigLoginQr.fromJson(json['qr'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AppConfigLoginToJson(AppConfigLogin instance) =>
@@ -74,7 +77,45 @@ Map<String, dynamic> _$AppConfigLoginToJson(AppConfigLogin instance) =>
       'common': instance.common.toJson(),
       'modeSelect': instance.modeSelect.toJson(),
       'signinOrder': instance.signinOrder,
+      'qr': instance.qr.toJson(),
     };
+
+AppConfigLoginQr _$AppConfigLoginQrFromJson(Map<String, dynamic> json) =>
+    AppConfigLoginQr(
+      enabled: json['enabled'] as bool? ?? false,
+      formats:
+          (json['formats'] as List<dynamic>?)
+              ?.map(
+                (e) =>
+                    AppConfigLoginQrFormat.fromJson(e as Map<String, dynamic>),
+              )
+              .toList() ??
+          const [
+            AppConfigLoginQrFormat(type: 'uri', schemes: ['csc']),
+            AppConfigLoginQrFormat(type: 'json'),
+          ],
+      expectedHost: json['expectedHost'] as String?,
+    );
+
+Map<String, dynamic> _$AppConfigLoginQrToJson(AppConfigLoginQr instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'formats': instance.formats.map((e) => e.toJson()).toList(),
+      'expectedHost': instance.expectedHost,
+    };
+
+AppConfigLoginQrFormat _$AppConfigLoginQrFormatFromJson(
+  Map<String, dynamic> json,
+) => AppConfigLoginQrFormat(
+  type: json['type'] as String,
+  schemes: (json['schemes'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
+);
+
+Map<String, dynamic> _$AppConfigLoginQrFormatToJson(
+  AppConfigLoginQrFormat instance,
+) => <String, dynamic>{'type': instance.type, 'schemes': instance.schemes};
 
 AppConfigLoginCommon _$AppConfigLoginCommonFromJson(
   Map<String, dynamic> json,

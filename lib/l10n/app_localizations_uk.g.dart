@@ -939,10 +939,38 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get login_Text_qrSigninScanHint => 'Відскануйте QR-код, щоб увійти.';
+
+  @override
+  String get login_Text_qrSigninVerifyingTitle => 'Виконуємо вхід...';
+
+  @override
+  String get login_Text_qrSigninVerifyingDescription => 'QR-код відскановано. Перевірка на сервері.';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionTitle => 'Доступ до камери вимкнено';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionDescription =>
+      'Для сканування QR-коду потрібен доступ до камери. Увімкніть його, щоб продовжити.';
+
+  @override
+  String get login_Button_qrSigninAllowCameraAccess => 'Надати доступ до камери';
+
+  @override
+  String get login_Button_qrSigninOpenSettings => 'Відкрити налаштування';
+
+  @override
+  String get login_Text_qrSigninInvalidCodeError => 'Цей QR-код не можна використати для входу.';
+
+  @override
   String get loginType_otpSignin => 'Увійти за OTP';
 
   @override
   String get loginType_passwordSignin => 'Вхід за паролем';
+
+  @override
+  String get loginType_qrSignin => 'QR-код';
 
   @override
   String get loginType_signup => 'Зареєструватися';

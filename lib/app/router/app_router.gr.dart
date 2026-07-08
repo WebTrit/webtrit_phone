@@ -859,6 +859,22 @@ class LoginPasswordSigninScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [LoginQrSigninScreenPage]
+class LoginQrSigninScreenPageRoute extends PageRouteInfo<void> {
+  const LoginQrSigninScreenPageRoute({List<PageRouteInfo>? children})
+    : super(LoginQrSigninScreenPageRoute.name, initialChildren: children);
+
+  static const String name = 'LoginQrSigninScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return LoginQrSigninScreenPage();
+    },
+  );
+}
+
+/// generated route for
 /// [LoginRouterPage]
 class LoginRouterPageRoute extends PageRouteInfo<LoginRouterPageRouteArgs> {
   LoginRouterPageRoute({

@@ -531,7 +531,9 @@
   "diagnosticNetworkTestItem_subtitle_publicIps": "Public: {ips}",
   "@diagnosticNetworkTestItem_subtitle_publicIps": {
     "placeholders": {
-      "ips": {"type": "String"}
+      "ips": {
+        "type": "String"
+      }
     }
   },
   "diagnosticNetworkTestItem_subtitle_stunBlocked": "STUN blocked · relay available",
@@ -780,10 +782,28 @@
       }
     }
   },
+  "login_Text_qrSigninScanHint": "Scan the QR code to log in.",
+  "@login_Text_qrSigninScanHint": {},
+  "login_Text_qrSigninVerifyingTitle": "Signing you in...",
+  "@login_Text_qrSigninVerifyingTitle": {},
+  "login_Text_qrSigninVerifyingDescription": "QR code scanned. Verifying with the server.",
+  "@login_Text_qrSigninVerifyingDescription": {},
+  "login_Text_qrSigninCameraPermissionTitle": "Camera access is off",
+  "@login_Text_qrSigninCameraPermissionTitle": {},
+  "login_Text_qrSigninCameraPermissionDescription": "Camera access is needed to scan a QR code. Enable it to continue.",
+  "@login_Text_qrSigninCameraPermissionDescription": {},
+  "login_Button_qrSigninAllowCameraAccess": "Allow camera access",
+  "@login_Button_qrSigninAllowCameraAccess": {},
+  "login_Button_qrSigninOpenSettings": "Open settings",
+  "@login_Button_qrSigninOpenSettings": {},
+  "login_Text_qrSigninInvalidCodeError": "This QR code cannot be used to sign in.",
+  "@login_Text_qrSigninInvalidCodeError": {},
   "loginType_otpSignin": "OTP sign in",
   "@loginType_otpSignin": {},
   "loginType_passwordSignin": "Password sign in",
   "@loginType_passwordSignin": {},
+  "loginType_qrSignin": "QR code",
+  "@loginType_qrSignin": {},
   "loginType_signup": "Sign up",
   "@loginType_signup": {},
   "login_validationCoreUrlError": "Please enter a valid URL",
@@ -2280,7 +2300,6 @@
   "cdr_disconnectReason_nextNodeIsUnreachable": "Next node is unreachable",
   "cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService": "Holst Telephony Service Provider Module (HTSPM) is out of service",
   "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL transit is not my node ID",
-
   "devTools_AppBarTitle": "Dev Tools",
   "@devTools_AppBarTitle": {},
   "devTools_signalingService_groupTitle": "Signaling Service",

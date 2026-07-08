@@ -20,8 +20,7 @@ part 'login_cubit.freezed.dart';
 
 part 'login_state.dart';
 
-typedef LoginSuccessCallback =
-    void Function(Session session, WebtritSystemInfo systemInfo);
+typedef LoginSuccessCallback = void Function(Session session, WebtritSystemInfo systemInfo);
 
 final _logger = Logger('LoginCubit');
 
@@ -31,7 +30,9 @@ class LoginCubit extends Cubit<LoginState> {
     required this.notificationsBloc,
     required this.onLoginSuccess,
     this.signinOrder = const [],
-  }) : super(const LoginState());
+    QrSigninConfig? qrSigninConfig,
+  }) : qrSigninConfig = qrSigninConfig ?? QrSigninConfig.disabled,
+       super(const LoginState());
 
   final AuthRepository authRepository;
 
@@ -42,11 +43,13 @@ class LoginCubit extends Cubit<LoginState> {
   /// Configured order of the sign-in tabs, by login type name (from app config).
   final List<String> signinOrder;
 
+  /// Configuration of the QR-code sign-in tab (from app config).
+  final QrSigninConfig qrSigninConfig;
+
   // Environment getters
   String? get coreUrlFromEnvironment => EnvironmentConfig.CORE_URL;
 
-  String? get credentialsRequestUrl =>
-      EnvironmentConfig.APP_CREDENTIALS_REQUEST_URL;
+  String? get credentialsRequestUrl => EnvironmentConfig.APP_CREDENTIALS_REQUEST_URL;
 
   String? get demoCoreUrlFromEnvironment => EnvironmentConfig.DEMO_CORE_URL;
 
@@ -81,15 +84,7 @@ class LoginCubit extends Cubit<LoginState> {
     final token = state.token!;
     final userId = state.userId!;
 
-    onLoginSuccess(
-      Session(
-        coreUrl: coreUrl,
-        tenantId: tenantId,
-        token: token,
-        userId: userId,
-      ),
-      systemInfo,
-    );
+    onLoginSuccess(Session(coreUrl: coreUrl, tenantId: tenantId, token: token, userId: userId), systemInfo);
   }
 
   void launchLinkableElement(LinkableElement link) async {
@@ -99,11 +94,7 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  Future<void> _processSystemInfo(
-    String coreUrl,
-    String tenantId, [
-    bool demo = false,
-  ]) async {
+  Future<void> _processSystemInfo(String coreUrl, String tenantId, [bool demo = false]) async {
     emit(state.copyWith(processing: true));
 
     try {
@@ -114,28 +105,25 @@ class LoginCubit extends Cubit<LoginState> {
       }
 
       final supportedFeatures = systemInfo.adapter?.supported ?? [];
-      final parsedLoginTypes = supportedFeatures
-          .where((f) => LoginType.values.map((e) => e.name).contains(f))
-          .map((f) => LoginType.values.byName(f))
-          .toList();
+      // Only these types are accepted from the backend; qrSignin is client-side
+      // (added below), so an adapter advertising it must not bypass the config
+      // gate or duplicate the tab.
+      const backendLoginTypes = [LoginType.otpSignin, LoginType.passwordSignin, LoginType.signup];
+      final parsedLoginTypes = backendLoginTypes.where((type) => supportedFeatures.contains(type.name)).toList();
+      // The QR tab is not a backend capability: the scanned code carries plain
+      // credentials, so it is offered whenever password sign-in is available
+      // and the app config enables it.
+      if (qrSigninConfig.enabled && parsedLoginTypes.contains(LoginType.passwordSignin)) {
+        parsedLoginTypes.add(LoginType.qrSignin);
+      }
       // Backend may list the options in an unstable order; impose a deterministic
       // client-side order (driven by app config) so the login tabs do not jump
       // around between requests.
-      final supportedLoginTypes = sortLoginTypes(
-        parsedLoginTypes,
-        orderConfig: signinOrder,
-      );
-      if (demo)
-        supportedLoginTypes.removeWhere(
-          (loginType) => loginType != LoginType.signup,
-        );
+      final supportedLoginTypes = sortLoginTypes(parsedLoginTypes, orderConfig: signinOrder);
+      if (demo) supportedLoginTypes.removeWhere((loginType) => loginType != LoginType.signup);
 
       if (supportedLoginTypes.isEmpty) {
-        notificationsBloc.add(
-          const NotificationsSubmitted(
-            SupportedLoginTypeMissedErrorNotification(),
-          ),
-        );
+        notificationsBloc.add(const NotificationsSubmitted(SupportedLoginTypeMissedErrorNotification()));
         emit(state.copyWith(processing: false));
         return;
       }
@@ -155,20 +143,14 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  Future<WebtritSystemInfo?> _loadAndValidateSystemInfo(
-    String coreUrl,
-    String tenantId,
-  ) async {
+  Future<WebtritSystemInfo?> _loadAndValidateSystemInfo(String coreUrl, String tenantId) async {
     final systemInfo = await authRepository.getSystemInfo(coreUrl, tenantId);
 
     final coreInfo = systemInfo.core;
     final isCoreSupported = coreInfo.verifyVersionStr(coreVersionConstraint);
 
     if (!isCoreSupported) {
-      final notification = CoreVersionUnsupportedErrorNotification(
-        coreInfo.version.toString(),
-        coreVersionConstraint,
-      );
+      final notification = CoreVersionUnsupportedErrorNotification(coreInfo.version.toString(), coreVersionConstraint);
       notificationsBloc.add(NotificationsSubmitted(notification));
       return null;
     }
@@ -184,17 +166,14 @@ class LoginCubit extends Cubit<LoginState> {
     final demo = mode == LoginMode.demoCore;
     final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
 
-    if (coreUrl != null)
-      await _processSystemInfo(coreUrl, defaultTenantId, demo);
+    if (coreUrl != null) await _processSystemInfo(coreUrl, defaultTenantId, demo);
   }
 
   void setEmbedded(EmbeddedData embedded) {
     emit(
       state.copyWith(
         embedded: embedded,
-        coreUrl: isDemoModeEnabled
-            ? demoCoreUrlFromEnvironment
-            : coreUrlFromEnvironment,
+        coreUrl: isDemoModeEnabled ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment,
       ),
     );
   }
@@ -276,10 +255,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(
         state.copyWith(
           processing: false,
-          otpSigninSessionOtpProvisionalWithDateTime: (
-            sessionOtpProvisional,
-            DateTime.now(),
-          ),
+          otpSigninSessionOtpProvisionalWithDateTime: (sessionOtpProvisional, DateTime.now()),
         ),
       );
     } catch (e, s) {
@@ -305,8 +281,7 @@ class LoginCubit extends Cubit<LoginState> {
       final sessionToken = await authRepository.verifyOtp(
         coreUrl: state.coreUrl!,
         tenantId: state.tenantId!,
-        sessionOtpProvisional:
-            state.otpSigninSessionOtpProvisionalWithDateTime!.$1,
+        sessionOtpProvisional: state.otpSigninSessionOtpProvisionalWithDateTime!.$1,
         code: state.otpSigninCodeInput.value,
       );
 
@@ -327,12 +302,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginOptSigninVerifyBack() async {
-    emit(
-      state.copyWith(
-        otpSigninSessionOtpProvisionalWithDateTime: null,
-        otpSigninCodeInput: const CodeInput.pure(),
-      ),
-    );
+    emit(state.copyWith(otpSigninSessionOtpProvisionalWithDateTime: null, otpSigninCodeInput: const CodeInput.pure()));
   }
 
   void loginOptSigninVerifyRepeat() {
@@ -346,26 +316,44 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void passwordSigninPasswordInputChanged(String value) {
-    emit(
-      state.copyWith(passwordSigninPasswordInput: PasswordInput.dirty(value)),
-    );
+    emit(state.copyWith(passwordSigninPasswordInput: PasswordInput.dirty(value)));
   }
 
   void passwordSigninPasswordInputObscureTextToggled() {
-    emit(
-      state.copyWith(
-        passwordSigninPasswordInputObscureText:
-            !state.passwordSigninPasswordInputObscureText,
-      ),
-    );
+    emit(state.copyWith(passwordSigninPasswordInputObscureText: !state.passwordSigninPasswordInputObscureText));
   }
 
   void loginPasswordSigninSubmitted() async {
-    if (state.processing ||
-        !state.passwordSigninUserRefInput.isValid ||
-        !state.passwordSigninPasswordInput.isValid) {
+    if (!state.passwordSigninUserRefInput.isValid || !state.passwordSigninPasswordInput.isValid) {
       return;
     }
+
+    await _submitPasswordLogin(
+      userRef: state.passwordSigninUserRefInput.value,
+      password: state.passwordSigninPasswordInput.value,
+      errorContext: 'LoginPasswordSigninSubmitted',
+    );
+  }
+
+  // LoginQrSignin
+
+  /// Signs in with credentials decoded from a scanned QR code.
+  ///
+  /// Follows the same session path as [loginPasswordSigninSubmitted]; the
+  /// credentials come from the scanner instead of the input fields. Completes
+  /// when the attempt is over so the caller can resume scanning on failure.
+  Future<void> loginQrSigninSubmitted({required String userRef, required String password}) {
+    return _submitPasswordLogin(userRef: userRef, password: password, errorContext: 'LoginQrSigninSubmitted');
+  }
+
+  /// Shared session-creation path of the password-based sign-ins (manual entry
+  /// and scanned QR credentials).
+  Future<void> _submitPasswordLogin({
+    required String userRef,
+    required String password,
+    required String errorContext,
+  }) async {
+    if (state.processing) return;
 
     emit(state.copyWith(processing: true));
 
@@ -373,8 +361,8 @@ class LoginCubit extends Cubit<LoginState> {
       final sessionToken = await authRepository.login(
         coreUrl: state.coreUrl!,
         tenantId: state.tenantId!,
-        userRef: state.passwordSigninUserRefInput.value,
-        password: state.passwordSigninPasswordInput.value,
+        userRef: userRef,
+        password: password,
       );
 
       // does not set processing to false to hold processing widgets state during navigation
@@ -382,7 +370,7 @@ class LoginCubit extends Cubit<LoginState> {
     } catch (e, s) {
       emit(state.copyWith(processing: false));
 
-      handleError(e, s, 'LoginSignupVerifySubmitted');
+      handleError(e, s, errorContext);
     }
   }
 
@@ -435,32 +423,22 @@ class LoginCubit extends Cubit<LoginState> {
     );
 
     try {
-      final tenantId =
-          extras?['tenant_id'] ?? state.tenantId ?? defaultTenantId;
+      final tenantId = extras?['tenant_id'] ?? state.tenantId ?? defaultTenantId;
 
       // In cases where the embedded page acts as the launch welcome screen,
       // the systemInfo might not be loaded yet. Perform an additional check
       // and attempt to load it if necessary.
-      final result = await authRepository.signup(
-        coreUrl: state.coreUrl!,
-        tenantId: tenantId,
-        extraPayload: extras,
-      );
+      final result = await authRepository.signup(coreUrl: state.coreUrl!, tenantId: tenantId, extraPayload: extras);
 
       if (state.systemInfo == null) {
         emit(state.copyWith(processing: true));
-        final systemInfo = await _loadAndValidateSystemInfo(
-          state.coreUrl!,
-          tenantId,
-        );
+        final systemInfo = await _loadAndValidateSystemInfo(state.coreUrl!, tenantId);
         emit(state.copyWith(systemInfo: systemInfo, processing: false));
       }
 
       // Executes optional post-login callback request if provided by embedded flow.
       if (result is SessionToken) {
-        final postRequest = embeddedCallbackData != null
-            ? RawHttpRequest.fromJson(embeddedCallbackData)
-            : null;
+        final postRequest = embeddedCallbackData != null ? RawHttpRequest.fromJson(embeddedCallbackData) : null;
         await authRepository.executePostLoginHttpRequest(postRequest);
       }
 
@@ -560,8 +538,7 @@ class LoginCubit extends Cubit<LoginState> {
       final sessionToken = await authRepository.verifyOtp(
         coreUrl: state.coreUrl!,
         tenantId: state.tenantId!,
-        sessionOtpProvisional:
-            state.signupSessionOtpProvisionalWithDateTime!.$1,
+        sessionOtpProvisional: state.signupSessionOtpProvisionalWithDateTime!.$1,
         code: state.signupCodeInput.value,
       );
 
@@ -581,12 +558,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginSignupVerifyBack() async {
-    emit(
-      state.copyWith(
-        signupSessionOtpProvisionalWithDateTime: null,
-        signupCodeInput: const CodeInput.pure(),
-      ),
-    );
+    emit(state.copyWith(signupSessionOtpProvisionalWithDateTime: null, signupCodeInput: const CodeInput.pure()));
   }
 
   void loginSignupVerifyRepeat() {
@@ -597,9 +569,7 @@ class LoginCubit extends Cubit<LoginState> {
     if (error is RequestFailure) {
       if (error is UserNotFoundException) {
         _logger.warning('Known login error occurred: $error', error);
-        notificationsBloc.add(
-          NotificationsSubmitted(const LoginUserNotFoundNotification()),
-        );
+        notificationsBloc.add(NotificationsSubmitted(const LoginUserNotFoundNotification()));
         return;
       }
 
@@ -608,18 +578,14 @@ class LoginCubit extends Cubit<LoginState> {
         'otp_not_found' => const LoginOtpNotFoundNotification(),
         'incorrect_otp_code' => const LoginIncorrectOtpCodeNotification(),
         'otp_expired' => const LoginOtpExpiredNotification(),
-        'otp_verification_attempts_exceeded' =>
-          const LoginOtpVerificationAttemptsExceededNotification(),
+        'otp_verification_attempts_exceeded' => const LoginOtpVerificationAttemptsExceededNotification(),
         'otp_already_verified' => const LoginOtpAlreadyVerifiedNotification(),
         'phone_not_found' => const LoginPhoneNotFoundNotification(),
-        'incorrect_credentials' =>
-          const LoginIncorrectCredentialsNotification(),
+        'incorrect_credentials' => const LoginIncorrectCredentialsNotification(),
         'user_not_found' => const LoginUserNotFoundNotification(),
-        'unconfigured_bundle_id' =>
-          const LoginUnconfiguredBundleIdNotification(),
+        'unconfigured_bundle_id' => const LoginUnconfiguredBundleIdNotification(),
         'validation_error' => const LoginValidationErrorNotification(),
-        'parameters_apply_issue' =>
-          const LoginParametersApplyIssueNotification(),
+        'parameters_apply_issue' => const LoginParametersApplyIssueNotification(),
         'empty_email' => const LoginEmptyEmailNotification(),
         _ => null,
       };
