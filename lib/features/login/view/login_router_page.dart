@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -13,7 +14,8 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 bool whenLoginRouterPageChange(LoginState previous, LoginState current) {
   return (previous.mode != current.mode) ||
-      (previous.coreUrl != current.coreUrl || previous.supportedLoginTypes != current.supportedLoginTypes) ||
+      (previous.coreUrl != current.coreUrl ||
+          previous.supportedLoginTypes != current.supportedLoginTypes) ||
       previous.embedded != current.embedded;
 }
 
@@ -32,7 +34,8 @@ bool whenLoginSwitchScreenPageActive(LoginState state) {
 @RoutePage()
 class LoginRouterPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const LoginRouterPage({EmbeddedData? launchEmbeddedData}) : _launchEmbeddedData = launchEmbeddedData;
+  const LoginRouterPage({EmbeddedData? launchEmbeddedData})
+    : _launchEmbeddedData = launchEmbeddedData;
 
   final EmbeddedData? _launchEmbeddedData;
 
@@ -42,20 +45,27 @@ class LoginRouterPage extends StatelessWidget {
       buildWhen: whenLoginRouterPageChange,
       builder: (context, state) {
         return AutoRouter.declarative(
-          navigatorObservers: () => [_HideCurrentSnackBarNavigatorObserver(context)],
+          navigatorObservers: () => [
+            _HideCurrentSnackBarNavigatorObserver(context),
+          ],
           routes: (handler) {
             return [
               // Embedded page was not provided as launch, so use the native UI.
-              if (_launchEmbeddedData == null) const LoginModeSelectScreenPageRoute(),
+              if (_launchEmbeddedData == null)
+                const LoginModeSelectScreenPageRoute(),
 
               // Open the core URL assignment screen (used in demo mode).
               // Note: this should be refactored to rely on a dedicated flag instead of demo mode.
-              if (whenLoginCoreUrlAssignScreenPageActive(state)) const LoginCoreUrlAssignScreenPageRoute(),
+              if (whenLoginCoreUrlAssignScreenPageActive(state))
+                const LoginCoreUrlAssignScreenPageRoute(),
 
               // After receiving server-provided login types (triggered from LoginModeSelectScreenPageRoute),
               // open the login switch screen.
-              if (_launchEmbeddedData == null && whenLoginSwitchScreenPageActive(state))
-                LoginSwitchScreenPageRoute(bodySafeAreaSides: const {SafeAreaSide.bottom}),
+              if (_launchEmbeddedData == null &&
+                  whenLoginSwitchScreenPageActive(state))
+                LoginSwitchScreenPageRoute(
+                  bodySafeAreaSides: const {SafeAreaSide.bottom},
+                ),
 
               // Embedded page was provided, so use the embedded UI via LoginSwitchScreenPageRoute.
               // Force a single login type to disable rendering of other tabs.
@@ -91,13 +101,18 @@ class LoginRouterPage extends StatelessWidget {
     final login = LoginCubit(
       notificationsBloc: context.read<NotificationsBloc>(),
       authRepository: context.read<AuthRepository>(),
-      onLoginSuccess: (session, systemInfo) =>
-          context.read<AppBloc>().add(AppLoggedIn(session: session, systemInfo: systemInfo)),
+      signinOrder: context.read<FeatureAccess>().loginConfig.signinOrder,
+      onLoginSuccess: (session, systemInfo) => context.read<AppBloc>().add(
+        AppLoggedIn(session: session, systemInfo: systemInfo),
+      ),
     );
     if (_launchEmbeddedData != null) {
       login.setEmbedded(_launchEmbeddedData);
     }
-    final provider = BlocProvider(create: (context) => login, child: declarativeAutoRouter);
+    final provider = BlocProvider(
+      create: (context) => login,
+      child: declarativeAutoRouter,
+    );
     return provider;
   }
 
