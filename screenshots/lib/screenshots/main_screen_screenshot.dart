@@ -159,6 +159,24 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
           ),
         );
       case MainFlavor.recents:
+        // Mirror the app's tab routing: with the callHistory adapter capability
+        // the recents tab shows remote CDRs instead of local recents.
+        final recentsTab = featureAccess?.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>();
+        if (recentsTab?.supportsCallHistory ?? false) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<FullRecentCdrsCubit>(create: (_) => MockFullRecentCdrsCubit.withCdrs()),
+              BlocProvider<MissedRecentCdrsCubit>(create: (_) => MockMissedRecentCdrsCubit.withRecords()),
+            ],
+            child: RecentCdrsScreen(
+              title: widget.title,
+              transferEnabled: false,
+              videoEnabled: true,
+              chatsEnabled: false,
+              smssEnabled: false,
+            ),
+          );
+        }
         return BlocProvider<RecentsBloc>(
           create: (_) => MockRecentsBloc.mainScreen(),
           child: RecentsScreen(
