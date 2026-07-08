@@ -14,17 +14,21 @@ import 'package:screenshots/mocks/mocks.dart';
 /// Single, parameterized and interactive login screenshot.
 ///
 /// Replaces the former one-screenshot-per-tab duplication: [initialLoginType]
-/// selects which tab is shown first, and tapping a tab actually switches the
-/// body when pointer interaction is enabled (snapshot mode just renders the
-/// initial tab).
+/// pins which tab is shown first (used by the per-tab snapshots); when it is
+/// null the first tab of the configured order is selected, so the interactive
+/// preview follows `signinOrder`. Tapping a tab actually switches the body when
+/// pointer interaction is enabled (snapshot mode just renders the initial tab).
+///
+/// The tab order itself always follows the app config `signinOrder` (read from
+/// [FeatureAccess]), mirroring the real app via [sortLoginTypes].
 class LoginScreenshot extends StatefulWidget {
   const LoginScreenshot({
     super.key,
-    this.initialLoginType = LoginType.otpSignin,
+    this.initialLoginType,
     this.supportedLoginTypes = const [LoginType.otpSignin, LoginType.passwordSignin, LoginType.signup],
   });
 
-  final LoginType initialLoginType;
+  final LoginType? initialLoginType;
   final List<LoginType> supportedLoginTypes;
 
   @override
@@ -32,18 +36,23 @@ class LoginScreenshot extends StatefulWidget {
 }
 
 class _LoginScreenshotState extends State<LoginScreenshot> {
-  late LoginType _type = widget.initialLoginType;
+  /// Set only once the user taps a tab in the interactive preview; keeps the
+  /// manual selection while the configured order drives the default otherwise.
+  LoginType? _userType;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final localStyle = themeData.extension<LoginSwitchScreenStyles>()?.primary;
 
+    final featureAccess = context.watch<FeatureAccess?>();
     final embedded =
-        context.watch<FeatureAccess?>()?.loginConfig.actions.firstWhereOrNull(
-              (element) => element.flavor == LoginFlavor.embedded,
-            )
+        featureAccess?.loginConfig.actions.firstWhereOrNull((element) => element.flavor == LoginFlavor.embedded)
             as LoginEmbeddedModeButton?;
+
+    final signinOrder = featureAccess?.loginConfig.signinOrder ?? const <String>[];
+    final orderedLoginTypes = sortLoginTypes(widget.supportedLoginTypes, orderConfig: signinOrder);
+    final currentType = _resolveCurrentType(orderedLoginTypes);
 
     return BlocProvider<LoginCubit>(
       create: (context) => MockLoginCubit.loginSwitchScreen(embedded: embedded?.customLoginFeature),
@@ -55,12 +64,20 @@ class _LoginScreenshotState extends State<LoginScreenshot> {
             const SizedBox(height: kInset),
           ],
         ),
-        body: _bodyFor(context, _type, embedded),
-        currentLoginType: _type,
-        supportedLoginTypes: widget.supportedLoginTypes,
-        onLoginTypeChanged: (type) => setState(() => _type = type),
+        body: _bodyFor(context, currentType, embedded),
+        currentLoginType: currentType,
+        supportedLoginTypes: orderedLoginTypes,
+        onLoginTypeChanged: (type) => setState(() => _userType = type),
       ),
     );
+  }
+
+  /// A manual tap wins (while still available); otherwise a pinned
+  /// [LoginScreenshot.initialLoginType] wins; otherwise the configured first tab.
+  LoginType _resolveCurrentType(List<LoginType> ordered) {
+    if (_userType != null && ordered.contains(_userType)) return _userType!;
+    if (widget.initialLoginType != null) return widget.initialLoginType!;
+    return ordered.isNotEmpty ? ordered.first : LoginType.otpSignin;
   }
 
   Widget _bodyFor(BuildContext context, LoginType type, LoginEmbeddedModeButton? embedded) {
@@ -69,6 +86,8 @@ class _LoginScreenshotState extends State<LoginScreenshot> {
         return const LoginOtpSigninRequestScreen();
       case LoginType.passwordSignin:
         return const LoginPasswordSigninScreen();
+      case LoginType.qrSignin:
+        return const LoginQrSigninScreen();
       case LoginType.signup:
         return _signupBody(context, embedded);
     }

@@ -26,9 +26,7 @@ EmbeddedResource createMockTermsResource() {
 
   when(() => resource.id).thenReturn('terms_id');
   when(() => resource.type).thenReturn(EmbeddedResourceType.terms);
-  when(
-    () => resource.uriOrNull,
-  ).thenReturn(Uri.parse('https://example.com/terms'));
+  when(() => resource.uriOrNull).thenReturn(Uri.parse('https://example.com/terms'));
   when(() => resource.uri).thenReturn('https://example.com/terms');
   when(() => resource.reconnectStrategy).thenReturn(null);
   when(() => resource.toolbar).thenReturn(toolbar);
@@ -61,12 +59,12 @@ AppConfig createMockAppConfig() {
 
   when(() => login.modeSelect).thenReturn(loginModeSelect);
   when(() => loginModeSelect.actions).thenReturn([]);
+  when(() => login.signinOrder).thenReturn(const ['passwordSignin', 'otpSignin', 'signup']);
   when(() => login.common).thenReturn(const AppConfigLoginCommon());
+  when(() => login.qr).thenReturn(const AppConfigLoginQr());
 
   when(() => main.bottomMenu).thenReturn(bottomMenu);
-  when(() => bottomMenu.tabs).thenReturn([
-    BottomMenuTabScheme.keypad(titleL10n: 'Keypad', icon: '0xe1ce'),
-  ]);
+  when(() => bottomMenu.tabs).thenReturn([BottomMenuTabScheme.keypad(titleL10n: 'Keypad', icon: '0xe1ce')]);
   // TODO: Migrate client configurations first before fully removing this property.
   // ignore: deprecated_member_use_from_same_package, deprecated_member_use
   when(() => main.systemNotificationsEnabled).thenReturn(false);
