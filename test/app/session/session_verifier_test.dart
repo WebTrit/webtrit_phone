@@ -63,7 +63,7 @@ void main() {
       expect(await verifier.verify(), isA<SessionVerdictDelegated>());
     });
 
-    test('resolves missed on an unmapped 4xx response', () async {
+    test('resolves missed on an unmapped 4xx response with a backend error code', () async {
       stubVerifyError(
         RequestFailure(
           url: _url,
@@ -74,6 +74,37 @@ void main() {
       );
 
       expect(await verifier.verify(), isA<SessionMissed>());
+    });
+
+    test('resolves unverifiable on a rate-limited 4xx even with a backend error code', () async {
+      stubVerifyError(
+        RequestFailure(
+          url: _url,
+          requestId: 'r1',
+          statusCode: 429,
+          error: const ErrorResponse(code: 'rate_limited'),
+        ),
+      );
+
+      expect(await verifier.verify(), isA<SessionUnverifiable>());
+    });
+
+    test('resolves unverifiable on a request-timeout 4xx', () async {
+      stubVerifyError(RequestFailure(url: _url, requestId: 'r1', statusCode: 408));
+
+      expect(await verifier.verify(), isA<SessionUnverifiable>());
+    });
+
+    test('resolves unverifiable on a too-early 4xx', () async {
+      stubVerifyError(RequestFailure(url: _url, requestId: 'r1', statusCode: 425));
+
+      expect(await verifier.verify(), isA<SessionUnverifiable>());
+    });
+
+    test('resolves unverifiable on a 4xx without a backend error code', () async {
+      stubVerifyError(RequestFailure(url: _url, requestId: 'r1', statusCode: 403));
+
+      expect(await verifier.verify(), isA<SessionUnverifiable>());
     });
 
     test('resolves unverifiable on a 5xx response', () async {
