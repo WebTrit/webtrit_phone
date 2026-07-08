@@ -181,10 +181,9 @@ class WebtritApiClient {
             );
           }
 
-          // If the server responds with 404 or 501, it may indicate that a specific private endpoint
-          // is not implemented by the current adapter (e.g., tenant-specific or backend version mismatch).
-          // In such case, throw a dedicated exception to handle unsupported endpoint scenarios gracefully.
-          if (httpResponse.statusCode == 404 || httpResponse.statusCode == 501) {
+          // For endpoints declared optional in the adapter contract, 404/501 means
+          // the adapter does not implement the endpoint.
+          if (responseOptions.optionalEndpoint && (httpResponse.statusCode == 404 || httpResponse.statusCode == 501)) {
             throw EndpointNotSupportedException(
               url: tenantUrl,
               requestId: xRequestId,
@@ -476,7 +475,13 @@ class WebtritApiClient {
   }
 
   Future<void> deleteUserInfo(String token, {RequestOptions options = const RequestOptions()}) async {
-    await _httpClientExecuteDelete([..._apiBasePathSegmentsV1, 'user'], null, token, requestOptions: options);
+    await _httpClientExecuteDelete(
+      [..._apiBasePathSegmentsV1, 'user'],
+      null,
+      token,
+      requestOptions: options,
+      responseOptions: const ResponseOptions(optionalEndpoint: true),
+    );
   }
 
   Future<AppStatus> getAppStatus(String token, {RequestOptions options = const RequestOptions()}) async {
@@ -593,6 +598,7 @@ class WebtritApiClient {
       token,
       {},
       requestOptions: options,
+      responseOptions: const ResponseOptions(optionalEndpoint: true),
     );
 
     return ExternalPageAccessToken.fromJson(responseJson);
@@ -608,6 +614,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
+      responseOptions: const ResponseOptions(optionalEndpoint: true),
     );
 
     return UserVoicemailListResponse.fromJson(responseJson);
@@ -624,6 +631,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
+      responseOptions: const ResponseOptions(optionalEndpoint: true),
     );
 
     return UserVoicemail.fromJson(responseJson);
@@ -640,6 +648,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
+      responseOptions: const ResponseOptions(optionalEndpoint: true),
     );
   }
 
@@ -658,6 +667,7 @@ class WebtritApiClient {
       token,
       requestJson,
       requestOptions: options,
+      responseOptions: const ResponseOptions(optionalEndpoint: true),
     );
   }
 
@@ -673,7 +683,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
-      responseOptions: ResponseOptions(responseType: ResponseType.bytes),
+      responseOptions: const ResponseOptions(responseType: ResponseType.bytes, optionalEndpoint: true),
     );
 
     return responseJson;
