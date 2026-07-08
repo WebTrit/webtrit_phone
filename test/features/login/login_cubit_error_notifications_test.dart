@@ -60,7 +60,23 @@ void main() {
     cubit.handleError(_requestFailure('delivery_channel_unspecified'), StackTrace.current, 'test');
     await pumpEventQueue();
 
-    expect(notificationsBloc.state.lastNotification, isA<LoginDeliveryChannelUnspecifiedNotification>());
+    final notification = notificationsBloc.state.lastNotification;
+    expect(notification, isA<LoginDeliveryChannelUnspecifiedNotification>());
+    // The OTP user reference input is untouched, so the error cannot be
+    // attributed to the OTP sign-in form and the message stays generic.
+    expect((notification as LoginDeliveryChannelUnspecifiedNotification).identifiers, isEmpty);
+  });
+
+  test('delivery_channel_unspecified carries the advertised identifiers when the OTP form was used', () async {
+    final cubit = buildCubit();
+    cubit.otpSigninUserRefInputChanged('380441234567');
+
+    cubit.handleError(_requestFailure('delivery_channel_unspecified'), StackTrace.current, 'test');
+    await pumpEventQueue();
+
+    final notification = notificationsBloc.state.lastNotification;
+    expect(notification, isA<LoginDeliveryChannelUnspecifiedNotification>());
+    expect((notification as LoginDeliveryChannelUnspecifiedNotification).identifiers, cubit.state.otpSigninIdentifiers);
   });
 
   test('maps empty_email to a visible notification', () async {

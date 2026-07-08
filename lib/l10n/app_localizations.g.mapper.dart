@@ -422,6 +422,10 @@ extension AppLocalizationsExtension on AppLocalizations {
         login_ButtonTooltip_signInToYourInstance,
       'login_RequestFailureDeliveryChannelUnspecifiedError' =>
         login_RequestFailureDeliveryChannelUnspecifiedError,
+      'login_RequestFailureDeliveryChannelUnspecifiedPhoneError' =>
+        login_RequestFailureDeliveryChannelUnspecifiedPhoneError,
+      'login_RequestFailureDeliveryChannelUnspecifiedEmailError' =>
+        login_RequestFailureDeliveryChannelUnspecifiedEmailError,
       'login_RequestFailureEmptyEmailError' =>
         login_RequestFailureEmptyEmailError,
       'login_RequestFailureIdentifierIsNotValid' =>

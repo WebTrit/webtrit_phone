@@ -930,6 +930,14 @@ class AppLocalizationsUk extends AppLocalizations {
       'До цього облікового запису не прив\'язано адресу електронної пошти чи інший спосіб зв\'язку для отримання коду підтвердження';
 
   @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedPhoneError =>
+      'Обліковий запис із цим номером телефону не має налаштованого способу зв\'язку для отримання коду підтвердження';
+
+  @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedEmailError =>
+      'Обліковий запис із цією адресою електронної пошти не має налаштованого способу зв\'язку для отримання коду підтвердження';
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'Не вдалося відправити код підтвердження';
 
   @override

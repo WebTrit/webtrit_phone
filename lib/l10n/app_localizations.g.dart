@@ -1690,6 +1690,18 @@ abstract class AppLocalizations {
   /// **'This account has no email address or other contact method to receive the verification code'**
   String get login_RequestFailureDeliveryChannelUnspecifiedError;
 
+  /// Shown during OTP sign-in on deployments where users sign in with a phone number, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account.
+  ///
+  /// In en, this message translates to:
+  /// **'The account with this phone number has no contact method configured to receive the verification code'**
+  String get login_RequestFailureDeliveryChannelUnspecifiedPhoneError;
+
+  /// Shown during OTP sign-in on deployments where users sign in with an email address, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account.
+  ///
+  /// In en, this message translates to:
+  /// **'The account with this email address has no contact method configured to receive the verification code'**
+  String get login_RequestFailureDeliveryChannelUnspecifiedEmailError;
+
   /// Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty.
   ///
   /// In en, this message translates to:

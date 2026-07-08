@@ -918,6 +918,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'This account has no email address or other contact method to receive the verification code';
 
   @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedPhoneError =>
+      'The account with this phone number has no contact method configured to receive the verification code';
+
+  @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedEmailError =>
+      'The account with this email address has no contact method configured to receive the verification code';
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
 
   @override

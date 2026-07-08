@@ -574,7 +574,13 @@ class LoginCubit extends Cubit<LoginState> {
         'validation_error' => const LoginValidationErrorNotification(),
         'parameters_apply_issue' => const LoginParametersApplyIssueNotification(),
         'empty_email' => const LoginEmptyEmailNotification(),
-        'delivery_channel_unspecified' => const LoginDeliveryChannelUnspecifiedNotification(),
+        // The identifier-specific wording only makes sense for the OTP sign-in
+        // form; a non-empty user reference input is the evidence the error came
+        // from there (the code is declared on otp-create only, but signup
+        // passes adapter 422 bodies through verbatim).
+        'delivery_channel_unspecified' => LoginDeliveryChannelUnspecifiedNotification(
+          state.otpSigninUserRefInput.value.isNotEmpty ? state.otpSigninIdentifiers : const [],
+        ),
         _ => null,
       };
       if (readableNotification != null) {

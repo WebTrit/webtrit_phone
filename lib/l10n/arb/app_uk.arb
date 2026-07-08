@@ -776,6 +776,14 @@
   "@login_RequestFailureDeliveryChannelUnspecifiedError": {
     "description": "Shown during OTP sign-in when the requested account has no configured delivery channel (such as an email address) to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
   },
+  "login_RequestFailureDeliveryChannelUnspecifiedPhoneError": "Обліковий запис із цим номером телефону не має налаштованого способу зв'язку для отримання коду підтвердження",
+  "@login_RequestFailureDeliveryChannelUnspecifiedPhoneError": {
+    "description": "Shown during OTP sign-in on deployments where users sign in with a phone number, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+  },
+  "login_RequestFailureDeliveryChannelUnspecifiedEmailError": "Обліковий запис із цією адресою електронної пошти не має налаштованого способу зв'язку для отримання коду підтвердження",
+  "@login_RequestFailureDeliveryChannelUnspecifiedEmailError": {
+    "description": "Shown during OTP sign-in on deployments where users sign in with an email address, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+  },
   "login_RequestFailureEmptyEmailError": "Не вдалося відправити код підтвердження",
   "@login_RequestFailureEmptyEmailError": {
     "description": "Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty."

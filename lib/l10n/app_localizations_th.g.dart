@@ -911,6 +911,14 @@ class AppLocalizationsTh extends AppLocalizations {
       'บัญชีนี้ไม่มีอีเมลหรือช่องทางติดต่ออื่นสำหรับรับรหัสยืนยัน';
 
   @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedPhoneError =>
+      'บัญชีที่ใช้หมายเลขโทรศัพท์นี้ไม่มีช่องทางติดต่อที่ตั้งค่าไว้สำหรับรับรหัสยืนยัน';
+
+  @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedEmailError =>
+      'บัญชีที่ใช้อีเมลนี้ไม่มีช่องทางติดต่อที่ตั้งค่าไว้สำหรับรับรหัสยืนยัน';
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'ไม่สามารถส่งรหัสยืนยันได้';
 
   @override
