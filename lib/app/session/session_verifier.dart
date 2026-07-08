@@ -44,11 +44,12 @@ class SessionUnverifiable extends SessionVerdict {
 
 /// Verifies over the REST API whether the account session is still valid.
 ///
-/// A logout requires positive evidence: transport failures and 5xx responses
-/// carry no verdict about the session and resolve to [SessionUnverifiable],
-/// so a backend outage never logs the user out. If the session is really
-/// gone, the signaling layer keeps reporting it and a later verification gets the
-/// definitive answer once the backend recovers.
+/// A logout requires positive evidence: transport failures, 5xx responses
+/// and 4xx responses produced by intermediaries (load balancers, proxies,
+/// WAFs) carry no verdict about the session and resolve to
+/// [SessionUnverifiable], so a backend outage never logs the user out. If
+/// the session is really gone, the signaling layer keeps reporting it and a
+/// later verification gets the definitive answer once the backend recovers.
 class SessionVerifier {
   SessionVerifier(this._userRepository);
 
@@ -71,12 +72,16 @@ class SessionVerifier {
       _logger.info('verify: session missing - verdict delegated to the session guard');
       return const SessionVerdictDelegated();
     } on RequestFailure catch (e) {
-      final statusCode = e.statusCode;
-      if (statusCode != null && statusCode >= 400 && statusCode < 500) {
-        _logger.warning('verify: session rejected with status $statusCode, code: ${e.error?.code}');
+      // A rejection counts as a verdict only when the backend itself produced
+      // it: a non-transient client error carrying a backend error code.
+      // Status-only responses come from intermediaries and say nothing about
+      // the session.
+      final isVerdict = e.isClientError && !e.isTransient && e.errorCode != null;
+      if (isVerdict) {
+        _logger.warning('verify: session rejected with status ${e.statusCode}, code: ${e.errorCode}');
         return const SessionMissed();
       }
-      _logger.warning('verify: backend failure with status $statusCode, code: ${e.error?.code} - no verdict');
+      _logger.warning('verify: no verdict from status ${e.statusCode}, code: ${e.errorCode}');
       return const SessionUnverifiable();
     } catch (e, st) {
       _logger.warning('verify: transport failure - no verdict', e, st);
