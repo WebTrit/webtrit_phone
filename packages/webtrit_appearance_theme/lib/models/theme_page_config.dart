@@ -374,8 +374,8 @@ class CallPageActionsConfig with _$CallPageActionsConfig {
   final ElevatedButtonWidgetConfig key;
 
   /// Text style for the digits typed on the in-call DTMF keypad (the value shown
-  /// above the keys). When unset the app falls back to the display text theme
-  /// colored with [ColorScheme.surface].
+  /// above the keys). When unset the app falls back to its default display text
+  /// style for the keypad input.
   @override
   final TextStyleConfig? keypadInputStyle;
 
