@@ -1,5 +1,6 @@
 enum AccountErrorCode {
-  passwordChangeRequired('password_change_required');
+  passwordChangeRequired('password_change_required'),
+  userNotFound('user_not_found');
 
   final String value;
 

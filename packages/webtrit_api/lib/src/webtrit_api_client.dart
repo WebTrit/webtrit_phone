@@ -187,7 +187,7 @@ class WebtritApiClient {
 
           // A 404 carrying the user_not_found code is a processed rejection:
           // the user behind the session no longer exists on the backend.
-          if (httpResponse.statusCode == 404 && error?.code == 'user_not_found') {
+          if (httpResponse.statusCode == 404 && error?.code == AccountErrorCode.userNotFound.value) {
             throw UserNotFoundException(url: tenantUrl, requestId: xRequestId, statusCode: httpResponse.statusCode);
           }
 
