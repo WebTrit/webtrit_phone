@@ -63,6 +63,12 @@ class WebtritApiClient {
        _logger = Logger('WebtritApiClient'),
        tenantUrl = buildTenantUrl(baseUrl, tenantId);
 
+  // Endpoint optional in the adapter contract, JSON response.
+  static const _optionalEndpoint = ResponseOptions(optionalEndpoint: true);
+
+  // Endpoint optional in the adapter contract, binary response.
+  static const _optionalEndpointBytes = ResponseOptions(responseType: ResponseType.bytes, optionalEndpoint: true);
+
   final Uri tenantUrl;
   final http.Client _httpClient;
   final bool isDebug;
@@ -181,10 +187,18 @@ class WebtritApiClient {
             );
           }
 
-          // If the server responds with 404 or 501, it may indicate that a specific private endpoint
-          // is not implemented by the current adapter (e.g., tenant-specific or backend version mismatch).
-          // In such case, throw a dedicated exception to handle unsupported endpoint scenarios gracefully.
-          if (httpResponse.statusCode == 404 || httpResponse.statusCode == 501) {
+          // A 404 carrying the user_not_found code is a processed rejection:
+          // the user behind the session no longer exists on the backend.
+          if (httpResponse.statusCode == 404 && error?.code == AccountErrorCode.userNotFound.value) {
+            throw UserNotFoundException(url: tenantUrl, requestId: xRequestId, statusCode: httpResponse.statusCode);
+          }
+
+          // For endpoints declared optional in the adapter contract, "not
+          // implemented" is a 501 or a 404 without a backend error code (absent
+          // route); a 404 carrying an error code is a domain rejection produced
+          // by a live endpoint.
+          if (responseOptions.optionalEndpoint &&
+              (httpResponse.statusCode == 501 || (httpResponse.statusCode == 404 && error?.code == null))) {
             throw EndpointNotSupportedException(
               url: tenantUrl,
               requestId: xRequestId,
@@ -226,7 +240,14 @@ class WebtritApiClient {
         }
       } catch (e) {
         if (e is! VoicemailNotConfiguredException && e is! EndpointNotSupportedException) {
-          _logger.severe('${method.toUpperCase()} failed for requestId: $xRequestId with error: $e');
+          final message = '${method.toUpperCase()} failed for requestId: $xRequestId with error: $e';
+          // A client error (4xx) is a rejection of this particular request;
+          // severe is reserved for server-side and transport failures.
+          if (e is RequestFailure && e.isClientError) {
+            _logger.warning(message);
+          } else {
+            _logger.severe(message);
+          }
         }
 
         // Do not retry for valid server responses with a defined HTTP status code.
@@ -476,7 +497,13 @@ class WebtritApiClient {
   }
 
   Future<void> deleteUserInfo(String token, {RequestOptions options = const RequestOptions()}) async {
-    await _httpClientExecuteDelete([..._apiBasePathSegmentsV1, 'user'], null, token, requestOptions: options);
+    await _httpClientExecuteDelete(
+      [..._apiBasePathSegmentsV1, 'user'],
+      null,
+      token,
+      requestOptions: options,
+      responseOptions: _optionalEndpoint,
+    );
   }
 
   Future<AppStatus> getAppStatus(String token, {RequestOptions options = const RequestOptions()}) async {
@@ -593,6 +620,7 @@ class WebtritApiClient {
       token,
       {},
       requestOptions: options,
+      responseOptions: _optionalEndpoint,
     );
 
     return ExternalPageAccessToken.fromJson(responseJson);
@@ -608,6 +636,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
+      responseOptions: _optionalEndpoint,
     );
 
     return UserVoicemailListResponse.fromJson(responseJson);
@@ -624,6 +653,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
+      responseOptions: _optionalEndpoint,
     );
 
     return UserVoicemail.fromJson(responseJson);
@@ -640,6 +670,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
+      responseOptions: _optionalEndpoint,
     );
   }
 
@@ -658,6 +689,7 @@ class WebtritApiClient {
       token,
       requestJson,
       requestOptions: options,
+      responseOptions: _optionalEndpoint,
     );
   }
 
@@ -673,7 +705,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
-      responseOptions: ResponseOptions(responseType: ResponseType.bytes),
+      responseOptions: _optionalEndpointBytes,
     );
 
     return responseJson;
