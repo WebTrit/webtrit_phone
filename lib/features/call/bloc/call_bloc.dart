@@ -85,7 +85,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// a suspicion, not a fact: the composition root owns the verification and
   /// the decision to log out (see `SessionSuspicionHandler`), so the bloc
   /// only reports and never dispatches a logout itself.
-  final Future<void> Function() onSessionMissedSuspected;
+  final Future<void> Function() onSessionMissedReported;
 
   final Callkeep callkeep;
   final CallkeepConnections callkeepConnections;
@@ -143,7 +143,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.presenceSettingsRepository,
     required this.queuedTerminationRequestsRepository,
     required this.resolveOutgoingFromNumber,
-    required this.onSessionMissedSuspected,
+    required this.onSessionMissedReported,
     required this.submitNotification,
     required this.callkeep,
     required this.callkeepConnections,
@@ -511,7 +511,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (code == SignalingDisconnectCode.sessionMissedError) {
         _logger.info('Signaling session listener: session is missing ${current.lastSignalingDisconnectCode}');
 
-        unawaited(onSessionMissedSuspected());
+        unawaited(onSessionMissedReported());
       }
     }
   }

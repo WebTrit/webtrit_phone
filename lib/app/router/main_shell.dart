@@ -558,7 +558,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                                 destination,
                               );
                         },
-                        onSessionMissedSuspected: SessionSuspicionHandler(
+                        onSessionMissedReported: SessionSuspicionHandler(
                           SessionVerifier(context.read<UserRepository>()),
                           performLogout: (rejection) => appBloc.add(
                             AppLogoutRequested(
