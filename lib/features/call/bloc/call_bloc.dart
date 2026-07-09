@@ -20,7 +20,6 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
-import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -50,23 +49,6 @@ final _logger = Logger('CallBloc');
 /// as parameters, allowing for detailed error logging or reporting.
 typedef OnDiagnosticReportRequested = void Function(String callId, CallkeepCallRequestError error);
 
-/// Why the signaling session was invalidated, so the application layer can pick
-/// a matching logout reason / user message without depending on app-level enums.
-enum SignalingSessionInvalidationReason {
-  /// Generic: the session was missing/expired (signaling error 4201) with no
-  /// more specific account cause detected.
-  sessionMissed,
-
-  /// The self-care password expired or was changed (403 password_change_required).
-  passwordChangeRequired,
-}
-
-/// Callback triggered when the signaling session is determined to be invalid
-/// (e.g., session revoked remotely, expired, or deleted), requiring a forced
-/// application-level logout to resolve the state. Carries the resolved
-/// [SignalingSessionInvalidationReason] so the caller can tailor the logout.
-typedef SignalingSessionInvalidatedCallback = void Function(SignalingSessionInvalidationReason reason);
-
 /// Resolves the final SIP `from` number for an outgoing call.
 ///
 /// [callerProvidedFromNumber] is whatever the UI passed via
@@ -84,7 +66,6 @@ const _getUserMediaPushKitTimeout = Duration(seconds: 8);
 class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver implements CallkeepDelegate {
   final CallLogsRepository callLogsRepository;
   final void Function(String callId, String callerName) _onMissedCall;
-  final SessionVerifier sessionVerifier;
   final LinesStateRepository linesStateRepository;
   final PresenceInfoRepository presenceInfoRepository;
   final DialogInfoRepository dialogInfoRepository;
@@ -99,10 +80,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// user toward app settings. When [null], no downgrade hint is raised.
   final Future<bool> Function()? isCameraPermissionGranted;
 
-  /// Callback invoked when the signaling client reports a critical session error
-  /// (e.g. [SignalingDisconnectCode.sessionMissedError]), indicating the
-  /// current session is no longer valid on the server.
-  final SignalingSessionInvalidatedCallback onSessionInvalidated;
+  /// Callback invoked when the signaling client reports a critical session
+  /// error (e.g. [SignalingDisconnectCode.sessionMissedError]). The report is
+  /// a suspicion, not a fact: the composition root owns the verification and
+  /// the decision to log out (see `SessionSuspicionHandler`), so the bloc
+  /// only reports and never dispatches a logout itself.
+  final Future<void> Function() onSessionMissedSuspected;
 
   final Callkeep callkeep;
   final CallkeepConnections callkeepConnections;
@@ -160,8 +143,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.presenceSettingsRepository,
     required this.queuedTerminationRequestsRepository,
     required this.resolveOutgoingFromNumber,
-    required this.onSessionInvalidated,
-    required this.sessionVerifier,
+    required this.onSessionMissedSuspected,
     required this.submitNotification,
     required this.callkeep,
     required this.callkeepConnections,
@@ -529,37 +511,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       if (code == SignalingDisconnectCode.sessionMissedError) {
         _logger.info('Signaling session listener: session is missing ${current.lastSignalingDisconnectCode}');
 
-        unawaited(_invalidateSession());
+        unawaited(onSessionMissedSuspected());
       }
-    }
-  }
-
-  /// Confirms the signaling session error over the REST API and triggers the
-  /// forced logout only on a backend-confirmed rejection, so a backend outage
-  /// (inconclusive check) or a false signaling report (session alive) keeps
-  /// the user logged in while the reconnect loop keeps retrying.
-  Future<void> _invalidateSession() async {
-    try {
-      final result = await sessionVerifier.verify();
-      switch (result) {
-        case SessionMissed():
-          onSessionInvalidated(SignalingSessionInvalidationReason.sessionMissed);
-        case SessionPasswordChangeRequired():
-          onSessionInvalidated(SignalingSessionInvalidationReason.passwordChangeRequired);
-        case SessionLogoutDelegated():
-          // The session guard wired into the user datasource dispatches its
-          // own, more specific logout - avoid a second, conflicting one.
-          _logger.info('Session invalidation delegated to the session guard');
-        case SessionAlive():
-          _logger.info('Session alive despite the signaling report - keeping the session');
-        case SessionUnverifiable():
-          _logger.info('Session state unverifiable (backend unavailable) - keeping the session');
-      }
-    } catch (e, st) {
-      // verify() resolves every Exception itself, so what lands here is a
-      // programming error from the verification or the logout dispatch.
-      _logger.severe('Session invalidation handling failed', e, st);
-      CrashlyticsUtils.recordError(e, stack: st, reason: 'CallBloc._invalidateSession');
     }
   }
 

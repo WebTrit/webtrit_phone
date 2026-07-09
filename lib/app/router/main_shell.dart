@@ -558,7 +558,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                                 destination,
                               );
                         },
-                        sessionVerifier: SessionVerifier(context.read<UserRepository>()),
+                        onSessionMissedSuspected: SessionSuspicionHandler(
+                          SessionVerifier(context.read<UserRepository>()),
+                          performLogout: (rejection) => appBloc.add(
+                            AppLogoutRequested(
+                              reason: rejection is SessionPasswordChangeRequired
+                                  ? AppLogoutReason.passwordChangeRequired
+                                  : AppLogoutReason.sessionMissed,
+                            ),
+                          ),
+                        ).onSessionSuspected,
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         isCameraPermissionGranted: () => appPermissions.isPermissionGranted(Permission.camera),
                         callkeep: _callkeep,
@@ -591,15 +600,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         signalingModule: _signalingModule,
                         peerConnectionManager: peerConnectionManager,
                         connectivityService: context.read<ConnectivityService>(),
-                        onSessionInvalidated: (reason) => appBloc.add(
-                          AppLogoutRequested(
-                            reason: switch (reason) {
-                              SignalingSessionInvalidationReason.passwordChangeRequired =>
-                                AppLogoutReason.passwordChangeRequired,
-                              SignalingSessionInvalidationReason.sessionMissed => AppLogoutReason.sessionMissed,
-                            },
-                          ),
-                        ),
                         foregroundCallPushSignal: RemotePushBroker.pendingCallForegroundPushs,
                       )..add(const CallStarted());
                     },
