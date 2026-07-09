@@ -37,7 +37,7 @@ void main() {
       final apiClient = clientAnswering(501);
 
       expect(
-        apiClient.getUserInfo(token, options: RequestOptions.withNoRetries()),
+        apiClient.getUserInfo(token),
         throwsA(isA<RequestFailure>().having((e) => e is EndpointNotSupportedException, 'is not typed', isFalse)),
       );
     });

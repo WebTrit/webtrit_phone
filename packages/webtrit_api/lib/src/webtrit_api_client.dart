@@ -63,6 +63,10 @@ class WebtritApiClient {
        _logger = Logger('WebtritApiClient'),
        tenantUrl = buildTenantUrl(baseUrl, tenantId);
 
+  // Declarations for endpoints that are optional in the adapter contract.
+  static const _optionalEndpoint = ResponseOptions(optionalEndpoint: true);
+  static const _optionalEndpointBytes = ResponseOptions(responseType: ResponseType.bytes, optionalEndpoint: true);
+
   final Uri tenantUrl;
   final http.Client _httpClient;
   final bool isDebug;
@@ -496,7 +500,7 @@ class WebtritApiClient {
       null,
       token,
       requestOptions: options,
-      responseOptions: const ResponseOptions(optionalEndpoint: true),
+      responseOptions: _optionalEndpoint,
     );
   }
 
@@ -614,7 +618,7 @@ class WebtritApiClient {
       token,
       {},
       requestOptions: options,
-      responseOptions: const ResponseOptions(optionalEndpoint: true),
+      responseOptions: _optionalEndpoint,
     );
 
     return ExternalPageAccessToken.fromJson(responseJson);
@@ -630,7 +634,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
-      responseOptions: const ResponseOptions(optionalEndpoint: true),
+      responseOptions: _optionalEndpoint,
     );
 
     return UserVoicemailListResponse.fromJson(responseJson);
@@ -647,7 +651,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
-      responseOptions: const ResponseOptions(optionalEndpoint: true),
+      responseOptions: _optionalEndpoint,
     );
 
     return UserVoicemail.fromJson(responseJson);
@@ -664,7 +668,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
-      responseOptions: const ResponseOptions(optionalEndpoint: true),
+      responseOptions: _optionalEndpoint,
     );
   }
 
@@ -683,7 +687,7 @@ class WebtritApiClient {
       token,
       requestJson,
       requestOptions: options,
-      responseOptions: const ResponseOptions(optionalEndpoint: true),
+      responseOptions: _optionalEndpoint,
     );
   }
 
@@ -699,7 +703,7 @@ class WebtritApiClient {
       locale != null ? {'Accept-Language': locale} : null,
       token,
       requestOptions: options,
-      responseOptions: const ResponseOptions(responseType: ResponseType.bytes, optionalEndpoint: true),
+      responseOptions: _optionalEndpointBytes,
     );
 
     return responseJson;
