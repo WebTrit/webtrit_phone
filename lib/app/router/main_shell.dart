@@ -558,16 +558,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                                 destination,
                               );
                         },
-                        onSessionMissedReported: SessionSuspicionHandler(
+                        onSessionMissedReported: SessionInvalidationHandler(
                           SessionVerifier(context.read<UserRepository>()),
-                          performLogout: (rejection) => appBloc.add(
+                          performLogout: (resolution) => appBloc.add(
                             AppLogoutRequested(
-                              reason: rejection is SessionPasswordChangeRequired
+                              reason: resolution is SessionPasswordChangeRequired
                                   ? AppLogoutReason.passwordChangeRequired
                                   : AppLogoutReason.sessionMissed,
                             ),
                           ),
-                        ).onSessionSuspected,
+                        ).onSessionMissedReported,
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         isCameraPermissionGranted: () => appPermissions.isPermissionGranted(Permission.camera),
                         callkeep: _callkeep,

@@ -6,19 +6,13 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 final _logger = Logger('SessionVerifier');
 
-/// Outcome of probing the account session over the REST API after the
-/// signaling layer reported the session as missing.
+/// Resolution of a session invalidation reported by the signaling layer.
 sealed class SessionVerificationResult {
   const SessionVerificationResult();
 }
 
-/// The REST API served the request with the current token, so the session is
-/// alive and the signaling report must not force a logout.
-class SessionAlive extends SessionVerificationResult {
-  const SessionAlive();
-}
-
-/// The backend rejected the session, so the app should log out.
+/// The session is gone with no more specific account cause detected, so the
+/// app should log out with the generic message.
 class SessionMissed extends SessionVerificationResult {
   const SessionMissed();
 }
@@ -36,20 +30,13 @@ class SessionLogoutDelegated extends SessionVerificationResult {
   const SessionLogoutDelegated();
 }
 
-/// The backend could not be reached or answered with a server-side failure.
-/// The check says nothing about the session, so the caller must keep it.
-class SessionUnverifiable extends SessionVerificationResult {
-  const SessionUnverifiable();
-}
-
-/// Verifies over the REST API whether the account session is still valid.
+/// Resolves the reason for a session invalidation reported by the signaling
+/// layer.
 ///
-/// A logout requires positive evidence: transport failures, 5xx responses
-/// and 4xx responses produced by intermediaries (load balancers, proxies,
-/// WAFs) say nothing about the session and resolve to
-/// [SessionUnverifiable], so a backend outage never logs the user out. If
-/// the session is really gone, the signaling layer keeps reporting it and a
-/// later verification gets the definitive answer once the backend recovers.
+/// The signaling report is trusted as final: the invalidation always ends in
+/// a logout, and the REST probe only refines the reason - the dedicated
+/// password-change message, a rejection already owned by the [SessionGuard],
+/// or the generic missed session.
 class SessionVerifier {
   SessionVerifier(this._userRepository);
 
@@ -58,7 +45,7 @@ class SessionVerifier {
   Future<SessionVerificationResult> verify() async {
     try {
       await _userRepository.getRemoteInfo();
-      return const SessionAlive();
+      return const SessionMissed();
     } on PasswordChangeRequiredException {
       _logger.info('verify: password change required');
       return const SessionPasswordChangeRequired();
@@ -72,20 +59,11 @@ class SessionVerifier {
       _logger.info('verify: session missing - logout delegated to the session guard');
       return const SessionLogoutDelegated();
     } on RequestFailure catch (e) {
-      // A rejection is conclusive only when the backend itself produced it:
-      // a non-transient client error carrying a backend error code.
-      // Status-only responses come from intermediaries and say nothing about
-      // the session.
-      final isBackendRejection = e.isClientError && !e.isTransient && e.errorCode != null;
-      if (isBackendRejection) {
-        _logger.warning('verify: session rejected with status ${e.statusCode}, code: ${e.errorCode}');
-        return const SessionMissed();
-      }
-      _logger.warning('verify: inconclusive status ${e.statusCode}, code: ${e.errorCode}');
-      return const SessionUnverifiable();
+      _logger.warning('verify: account error code: ${e.errorCode}');
+      return const SessionMissed();
     } on Exception catch (e, st) {
-      _logger.warning('verify: transport failure - inconclusive', e, st);
-      return const SessionUnverifiable();
+      _logger.warning('verify: request failed', e, st);
+      return const SessionMissed();
     }
   }
 }

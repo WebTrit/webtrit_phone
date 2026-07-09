@@ -81,10 +81,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final Future<bool> Function()? isCameraPermissionGranted;
 
   /// Callback invoked when the signaling client reports a critical session
-  /// error (e.g. [SignalingDisconnectCode.sessionMissedError]). The report is
-  /// a suspicion, not a fact: the composition root owns the verification and
-  /// the decision to log out (see `SessionSuspicionHandler`), so the bloc
-  /// only reports and never dispatches a logout itself.
+  /// error (e.g. [SignalingDisconnectCode.sessionMissedError]). The
+  /// composition root owns the resolution of the logout reason and the
+  /// logout dispatch (see `SessionInvalidationHandler`), so the bloc only
+  /// reports.
   final Future<void> Function() onSessionMissedReported;
 
   final Callkeep callkeep;

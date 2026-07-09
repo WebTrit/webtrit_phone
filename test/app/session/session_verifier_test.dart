@@ -33,10 +33,10 @@ void main() {
   }
 
   group('SessionVerifier', () {
-    test('resolves alive when the request succeeds', () async {
+    test('resolves missed when the request succeeds', () async {
       when(() => userRepository.getRemoteInfo()).thenAnswer((_) async => _testUser);
 
-      expect(await verifier.verify(), isA<SessionAlive>());
+      expect(await verifier.verify(), isA<SessionMissed>());
     });
 
     test('resolves password change required', () async {
@@ -63,7 +63,7 @@ void main() {
       expect(await verifier.verify(), isA<SessionLogoutDelegated>());
     });
 
-    test('resolves missed on an unmapped 4xx response with a backend error code', () async {
+    test('resolves missed on an unmapped 4xx response', () async {
       stubVerifyError(
         RequestFailure(
           url: _url,
@@ -76,38 +76,7 @@ void main() {
       expect(await verifier.verify(), isA<SessionMissed>());
     });
 
-    test('resolves unverifiable on a rate-limited 4xx even with a backend error code', () async {
-      stubVerifyError(
-        RequestFailure(
-          url: _url,
-          requestId: 'r1',
-          statusCode: 429,
-          error: const ErrorResponse(code: 'rate_limited'),
-        ),
-      );
-
-      expect(await verifier.verify(), isA<SessionUnverifiable>());
-    });
-
-    test('resolves unverifiable on a request-timeout 4xx', () async {
-      stubVerifyError(RequestFailure(url: _url, requestId: 'r1', statusCode: 408));
-
-      expect(await verifier.verify(), isA<SessionUnverifiable>());
-    });
-
-    test('resolves unverifiable on a too-early 4xx', () async {
-      stubVerifyError(RequestFailure(url: _url, requestId: 'r1', statusCode: 425));
-
-      expect(await verifier.verify(), isA<SessionUnverifiable>());
-    });
-
-    test('resolves unverifiable on a 4xx without a backend error code', () async {
-      stubVerifyError(RequestFailure(url: _url, requestId: 'r1', statusCode: 403));
-
-      expect(await verifier.verify(), isA<SessionUnverifiable>());
-    });
-
-    test('resolves unverifiable on a 5xx response', () async {
+    test('resolves missed on a 5xx response', () async {
       stubVerifyError(
         RequestFailure(
           url: _url,
@@ -117,25 +86,25 @@ void main() {
         ),
       );
 
-      expect(await verifier.verify(), isA<SessionUnverifiable>());
+      expect(await verifier.verify(), isA<SessionMissed>());
     });
 
-    test('resolves unverifiable on a response without a status code', () async {
+    test('resolves missed on a response without a status code', () async {
       stubVerifyError(RequestFailure(url: _url, requestId: 'r1', statusCode: null));
 
-      expect(await verifier.verify(), isA<SessionUnverifiable>());
+      expect(await verifier.verify(), isA<SessionMissed>());
     });
 
-    test('resolves unverifiable on a socket failure', () async {
+    test('resolves missed on a socket failure', () async {
       stubVerifyError(const SocketException('connection refused'));
 
-      expect(await verifier.verify(), isA<SessionUnverifiable>());
+      expect(await verifier.verify(), isA<SessionMissed>());
     });
 
-    test('resolves unverifiable on a timeout', () async {
+    test('resolves missed on a timeout', () async {
       stubVerifyError(TimeoutException('request timed out'));
 
-      expect(await verifier.verify(), isA<SessionUnverifiable>());
+      expect(await verifier.verify(), isA<SessionMissed>());
     });
 
     test('propagates a programming error instead of resolving it', () async {
