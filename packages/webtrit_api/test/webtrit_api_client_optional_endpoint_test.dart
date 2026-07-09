@@ -11,9 +11,9 @@ void main() {
   const authority = 'demo.webtrit.com';
   const token = 'token_1';
 
-  WebtritApiClient clientAnswering(int statusCode) {
+  WebtritApiClient clientAnswering(int statusCode, {String body = ''}) {
     Future<Response> handler(Request request) async {
-      return Response('', statusCode, request: request);
+      return Response(body, statusCode, request: request);
     }
 
     final httpClient = MockClient(expectAsync1(handler));
@@ -46,6 +46,37 @@ void main() {
       final apiClient = clientAnswering(404);
 
       expect(apiClient.getUserInfo(token), throwsA(isA<UserNotFoundException>()));
+    });
+
+    test('optional endpoint keeps EndpointNotSupportedException on 501 with a backend code', () {
+      final apiClient = clientAnswering(501, body: '{"code": "functionality_not_implemented"}');
+
+      expect(apiClient.getUserVoicemailList(token), throwsA(isA<EndpointNotSupportedException>()));
+    });
+
+    test('optional endpoint passes through a 404 carrying a backend code as plain RequestFailure', () {
+      final apiClient = clientAnswering(404, body: '{"code": "message_not_found"}');
+
+      expect(
+        apiClient.getUserVoicemail(token, 'message_1'),
+        throwsA(
+          isA<RequestFailure>()
+              .having((e) => e is EndpointNotSupportedException, 'is not typed', isFalse)
+              .having((e) => e.errorCode, 'errorCode', 'message_not_found'),
+        ),
+      );
+    });
+
+    test('optional endpoint throws UserNotFoundException on 404 with user_not_found', () {
+      final apiClient = clientAnswering(404, body: '{"code": "user_not_found"}');
+
+      expect(apiClient.deleteUserInfo(token), throwsA(isA<UserNotFoundException>()));
+    });
+
+    test('mandatory endpoint throws UserNotFoundException on 404 with user_not_found', () {
+      final apiClient = clientAnswering(404, body: '{"code": "user_not_found"}');
+
+      expect(apiClient.getUserContactList(token), throwsA(isA<UserNotFoundException>()));
     });
   });
 

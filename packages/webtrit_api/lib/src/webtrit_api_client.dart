@@ -181,9 +181,18 @@ class WebtritApiClient {
             );
           }
 
-          // For endpoints declared optional in the adapter contract, 404/501 means
-          // the adapter does not implement the endpoint.
-          if (responseOptions.optionalEndpoint && (httpResponse.statusCode == 404 || httpResponse.statusCode == 501)) {
+          // A 404 carrying the user_not_found code is a processed rejection:
+          // the user behind the session no longer exists on the backend.
+          if (httpResponse.statusCode == 404 && error?.code == 'user_not_found') {
+            throw UserNotFoundException(url: tenantUrl, requestId: xRequestId, statusCode: httpResponse.statusCode);
+          }
+
+          // For endpoints declared optional in the adapter contract, "not
+          // implemented" is a 501 or a 404 without a backend error code (absent
+          // route); a 404 carrying an error code is a domain rejection produced
+          // by a live endpoint.
+          if (responseOptions.optionalEndpoint &&
+              (httpResponse.statusCode == 501 || (httpResponse.statusCode == 404 && error?.code == null))) {
             throw EndpointNotSupportedException(
               url: tenantUrl,
               requestId: xRequestId,
