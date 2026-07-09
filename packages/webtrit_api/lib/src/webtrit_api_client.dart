@@ -63,8 +63,10 @@ class WebtritApiClient {
        _logger = Logger('WebtritApiClient'),
        tenantUrl = buildTenantUrl(baseUrl, tenantId);
 
-  // Declarations for endpoints that are optional in the adapter contract.
+  // Endpoint optional in the adapter contract, JSON response.
   static const _optionalEndpoint = ResponseOptions(optionalEndpoint: true);
+
+  // Endpoint optional in the adapter contract, binary response.
   static const _optionalEndpointBytes = ResponseOptions(responseType: ResponseType.bytes, optionalEndpoint: true);
 
   final Uri tenantUrl;
