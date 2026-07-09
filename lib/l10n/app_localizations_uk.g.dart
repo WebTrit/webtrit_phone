@@ -870,7 +870,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get locale_uk => 'Українська';
 
   @override
-  String get locale_th => 'тайська';
+  String get locale_th => 'Тайська';
 
   @override
   String get login_Button_coreUrlAssignProceed => 'Продовжити';
