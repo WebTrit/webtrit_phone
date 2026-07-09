@@ -13,26 +13,50 @@ part 'missed_recent_cdrs_state.dart';
 final _logger = Logger('MissedRecentCdrsCubit');
 
 class MissedRecentCdrsCubit extends Cubit<MissedRecentCdrsState> {
-  MissedRecentCdrsCubit(this._cdrsLocalRepository, this._cdrsRemoteRepository, {this.pageSize = 50})
-    : super(const MissedRecentCdrsState());
+  MissedRecentCdrsCubit(
+    this._cdrsLocalRepository,
+    this._cdrsRemoteRepository, {
+    this.pageSize = 50,
+    Future<void>? initialSyncDone,
+  }) : _initialSyncDone = initialSyncDone,
+       super(const MissedRecentCdrsState());
 
   final CdrsLocalRepository _cdrsLocalRepository;
   final CdrsRemoteRepository _cdrsRemoteRepository;
   final int pageSize;
+
+  /// Resolves when the first remote sync cycle has completed. Used to keep the
+  /// initial loading indicator visible until the first `/user/history` fetch
+  /// and the missed-calls scan have resolved, instead of flashing an empty list.
+  final Future<void>? _initialSyncDone;
+
   late final StreamSubscription _eventsSub;
 
   Future<void> init() async {
     _logger.info('Loading missed CDRs');
+    _eventsSub = _cdrsLocalRepository.events.listen(_handleEvent);
+
     final missedCdrs = await _cdrsLocalRepository.getHistory(
       status: CdrStatus.missed,
       direction: CallDirection.incoming,
       limit: pageSize,
     );
-    emit(state.copyWith(records: missedCdrs, isLoading: false));
-    _eventsSub = _cdrsLocalRepository.events.listen(_handleEvent);
 
-    // If we didn't load enough missed CDRs, try to scan more from remote
-    if (missedCdrs.length < pageSize) fetchHistory();
+    if (missedCdrs.isNotEmpty || _initialSyncDone == null) {
+      emit(state.copyWith(records: missedCdrs, isLoading: false));
+      // If we didn't load enough missed CDRs, try to scan more from remote
+      if (missedCdrs.length < pageSize) fetchHistory();
+      return;
+    }
+
+    // Local cache is empty: wait for the first remote sync so the initial page
+    // is available locally, then scan for missed calls, keeping the loader
+    // visible until the scan completes.
+    await _initialSyncDone;
+    if (isClosed) return;
+    await fetchHistory();
+    if (isClosed) return;
+    emit(state.copyWith(isLoading: false));
   }
 
   Future<void> fetchHistory() async {

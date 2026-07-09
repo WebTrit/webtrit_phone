@@ -13,19 +13,41 @@ part 'full_recent_cdrs_state.dart';
 final _logger = Logger('FullRecentCdrsCubit');
 
 class FullRecentCdrsCubit extends Cubit<FullRecentCdrsState> {
-  FullRecentCdrsCubit(this._cdrsLocalRepository, this._cdrsRemoteRepository, {this.pageSize = 50})
-    : super(const FullRecentCdrsState());
+  FullRecentCdrsCubit(
+    this._cdrsLocalRepository,
+    this._cdrsRemoteRepository, {
+    this.pageSize = 50,
+    Future<void>? initialSyncDone,
+  }) : _initialSyncDone = initialSyncDone,
+       super(const FullRecentCdrsState());
 
   final CdrsLocalRepository _cdrsLocalRepository;
   final CdrsRemoteRepository _cdrsRemoteRepository;
   final int pageSize;
+
+  /// Resolves when the first remote sync cycle has completed. Used to keep the
+  /// initial loading indicator visible until the first `/user/history` fetch
+  /// resolves, instead of flashing an empty list while it is still in flight.
+  final Future<void>? _initialSyncDone;
+
   late final StreamSubscription _eventsSub;
 
   Future<void> init() async {
     _logger.info('Loading recent CDRs');
-    final recentCdrs = await _cdrsLocalRepository.getHistory(limit: pageSize);
-    emit(state.copyWith(records: recentCdrs, isLoading: false));
     _eventsSub = _cdrsLocalRepository.events.listen(_handleEvent);
+
+    final recentCdrs = await _cdrsLocalRepository.getHistory(limit: pageSize);
+    if (recentCdrs.isNotEmpty || _initialSyncDone == null) {
+      emit(state.copyWith(records: recentCdrs, isLoading: false));
+      return;
+    }
+
+    // Local cache is empty: keep loading until the first remote sync resolves,
+    // then re-read whatever it stored (records also arrive live via events).
+    await _initialSyncDone;
+    if (isClosed) return;
+    final syncedCdrs = await _cdrsLocalRepository.getHistory(limit: pageSize);
+    emit(state.copyWith(records: syncedCdrs, isLoading: false));
   }
 
   Future<void> fetchHistory() async {

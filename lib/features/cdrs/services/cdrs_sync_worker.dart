@@ -23,6 +23,13 @@ class CdrsSyncWorker {
   final int pageSize;
   StreamSubscription? _syncSub;
 
+  final _initialSyncCompleter = Completer<void>();
+
+  /// Completes after the first sync cycle finishes (regardless of whether it
+  /// fetched any records or failed), so consumers can keep an initial loading
+  /// indicator until the first remote fetch has resolved.
+  Future<void> get initialSyncDone => _initialSyncCompleter.future;
+
   Future<void> init() async {
     // Uncomment to wipe local CDRs data on each start (for testing purposes)
     // await localRepo.wipeData();
@@ -66,6 +73,7 @@ class CdrsSyncWorker {
       } catch (e, s) {
         yield (e, s);
       } finally {
+        if (!_initialSyncCompleter.isCompleted) _initialSyncCompleter.complete();
         yield await Future.delayed(pollingInterval, () => _kRetryEventStub);
       }
     }

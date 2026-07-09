@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../cdrs.dart';
@@ -16,16 +17,23 @@ class RecentCdrsScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
+    final initialSyncDone = context.readOrNull<CdrsSyncWorker>()?.initialSyncDone;
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) =>
-              FullRecentCdrsCubit(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
+          create: (context) => FullRecentCdrsCubit(
+            context.read<CdrsLocalRepository>(),
+            context.read<CdrsRemoteRepository>(),
+            initialSyncDone: initialSyncDone,
+          )..init(),
         ),
         BlocProvider(
-          create: (context) =>
-              MissedRecentCdrsCubit(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
+          create: (context) => MissedRecentCdrsCubit(
+            context.read<CdrsLocalRepository>(),
+            context.read<CdrsRemoteRepository>(),
+            initialSyncDone: initialSyncDone,
+          )..init(),
         ),
       ],
       child: RecentCdrsScreen(
