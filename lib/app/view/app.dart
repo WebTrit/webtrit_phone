@@ -102,6 +102,7 @@ class _AppState extends State<App> {
       systemInfoRepository: context.read<SystemInfoRepository>(),
       appCompatibilityResolver: context.read<AppCompatibilityResolver>(),
       appInfo: context.read<AppInfo>(),
+      supportedLocales: featureAccess.localizationConfig.supportedLocales,
       userSessionCleanupResolver: RepositoryUserSessionCleanupResolver(
         systemInfoRepository: context.read<SystemInfoRepository>(),
         registerStatusRepository: context.read<RegisterStatusRepository>(),
