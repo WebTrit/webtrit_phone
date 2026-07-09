@@ -45,22 +45,22 @@ void main() {
       expect(await verifier.verify(), isA<SessionPasswordChangeRequired>());
     });
 
-    test('delegates the verdict on unauthorized', () async {
+    test('delegates the logout on unauthorized', () async {
       stubVerifyError(UnauthorizedException(url: _url, requestId: 'r1', statusCode: 401));
 
-      expect(await verifier.verify(), isA<SessionVerdictDelegated>());
+      expect(await verifier.verify(), isA<SessionLogoutDelegated>());
     });
 
-    test('delegates the verdict on user not found', () async {
+    test('delegates the logout on user not found', () async {
       stubVerifyError(UserNotFoundException(url: _url, requestId: 'r1', statusCode: 404));
 
-      expect(await verifier.verify(), isA<SessionVerdictDelegated>());
+      expect(await verifier.verify(), isA<SessionLogoutDelegated>());
     });
 
-    test('delegates the verdict on session missing', () async {
+    test('delegates the logout on session missing', () async {
       stubVerifyError(SessionMissingException(url: _url, requestId: 'r1', statusCode: 404));
 
-      expect(await verifier.verify(), isA<SessionVerdictDelegated>());
+      expect(await verifier.verify(), isA<SessionLogoutDelegated>());
     });
 
     test('resolves missed on an unmapped 4xx response with a backend error code', () async {

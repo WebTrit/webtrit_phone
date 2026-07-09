@@ -535,9 +535,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   /// Confirms the signaling session error over the REST API and triggers the
-  /// forced logout only on a positive verdict, so a backend outage (no
-  /// verdict) or a false signaling report (session alive) keeps the user
-  /// logged in while the reconnect loop keeps retrying.
+  /// forced logout only on a backend-confirmed rejection, so a backend outage
+  /// (inconclusive check) or a false signaling report (session alive) keeps
+  /// the user logged in while the reconnect loop keeps retrying.
   Future<void> _invalidateSession() async {
     try {
       final result = await sessionVerifier.verify();
@@ -546,7 +546,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           onSessionInvalidated(SignalingSessionInvalidationReason.sessionMissed);
         case SessionPasswordChangeRequired():
           onSessionInvalidated(SignalingSessionInvalidationReason.passwordChangeRequired);
-        case SessionVerdictDelegated():
+        case SessionLogoutDelegated():
           // The session guard wired into the user datasource dispatches its
           // own, more specific logout - avoid a second, conflicting one.
           _logger.info('Session invalidation delegated to the session guard');
