@@ -225,7 +225,14 @@ class WebtritApiClient {
         }
       } catch (e) {
         if (e is! VoicemailNotConfiguredException && e is! EndpointNotSupportedException) {
-          _logger.severe('${method.toUpperCase()} failed for requestId: $xRequestId with error: $e');
+          final message = '${method.toUpperCase()} failed for requestId: $xRequestId with error: $e';
+          // A client error (4xx) is a rejection of this particular request;
+          // severe is reserved for server-side and transport failures.
+          if (e is RequestFailure && e.isClientError) {
+            _logger.warning(message);
+          } else {
+            _logger.severe(message);
+          }
         }
 
         // Do not retry for valid server responses with a defined HTTP status code.
