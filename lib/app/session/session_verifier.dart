@@ -37,6 +37,11 @@ class SessionLogoutDelegated extends SessionVerificationResult {
 /// a logout, and the REST probe only refines the reason - the dedicated
 /// password-change message, a rejection already owned by the [SessionGuard],
 /// or the generic missed session.
+///
+/// Extension point: this is where the REST answer could gate the logout
+/// itself - keep the session when the backend is unreachable and only log out
+/// on a backend-confirmed rejection - so a backend outage never signs the user
+/// out. Deferred until spurious-logout reports justify the behavior change.
 class SessionVerifier {
   SessionVerifier(this._userRepository);
 
