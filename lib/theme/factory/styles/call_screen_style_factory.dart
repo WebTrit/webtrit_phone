@@ -204,6 +204,7 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
         baseBg: colors.surfaceContainerHigh,
         baseIcon: colors.onSurface,
       ),
+      keypadInputTextStyle: a.keypadInputStyle?.toTextStyle(defaultFontFamily: defaultFontFamily),
     );
   }
 

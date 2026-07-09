@@ -402,6 +402,11 @@ CallPageActionsConfig _$CallPageActionsConfigFromJson(
       : ElevatedButtonWidgetConfig.fromJson(
           json['key'] as Map<String, dynamic>,
         ),
+  keypadInputStyle: json['keypadInputStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(
+          json['keypadInputStyle'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$CallPageActionsConfigToJson(
@@ -416,6 +421,7 @@ Map<String, dynamic> _$CallPageActionsConfigToJson(
   'held': instance.held.toJson(),
   'swap': instance.swap.toJson(),
   'key': instance.key.toJson(),
+  'keypadInputStyle': instance.keypadInputStyle?.toJson(),
 };
 
 CallPageInfoConfig _$CallPageInfoConfigFromJson(Map<String, dynamic> json) =>
