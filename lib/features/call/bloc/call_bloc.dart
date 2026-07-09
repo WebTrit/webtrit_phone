@@ -556,7 +556,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           _logger.info('Session state unverifiable (backend unavailable) - keeping the session');
       }
     } catch (e, st) {
-      _logger.warning('Session invalidation handling failed', e, st);
+      // verify() resolves every Exception itself, so what lands here is a
+      // programming error from the verification or the logout dispatch.
+      _logger.severe('Session invalidation handling failed', e, st);
+      CrashlyticsUtils.recordError(e, stack: st, reason: 'CallBloc._invalidateSession');
     }
   }
 

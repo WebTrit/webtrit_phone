@@ -83,7 +83,7 @@ class SessionVerifier {
       }
       _logger.warning('verify: inconclusive status ${e.statusCode}, code: ${e.errorCode}');
       return const SessionUnverifiable();
-    } catch (e, st) {
+    } on Exception catch (e, st) {
       _logger.warning('verify: transport failure - inconclusive', e, st);
       return const SessionUnverifiable();
     }

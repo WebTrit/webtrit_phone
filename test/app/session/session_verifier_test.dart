@@ -137,5 +137,11 @@ void main() {
 
       expect(await verifier.verify(), isA<SessionUnverifiable>());
     });
+
+    test('propagates a programming error instead of resolving it', () async {
+      stubVerifyError(StateError('bug'));
+
+      expect(verifier.verify(), throwsStateError);
+    });
   });
 }
