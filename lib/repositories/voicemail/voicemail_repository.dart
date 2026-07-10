@@ -116,12 +116,33 @@ class VoicemailRepositoryImpl
   void _initialize() {
     _updatesController = StreamController<List<Voicemail>>.broadcast(onListen: _onListen, onCancel: _onCancel);
 
+    unawaited(_resetStaleTranscriptionProgress());
     unawaited(
       fetchVoicemails().catchError(
         (Object e) {},
         test: (e) => e is VoicemailNotConfiguredException || e is EndpointNotSupportedException,
       ),
     );
+  }
+
+  /// With transcription disabled nothing will ever finish rows left in
+  /// [TranscriptStatus.inProgress] by an interrupted run of a previous
+  /// configuration (or another platform), so the UI would show an eternal
+  /// progress state; reset them back to "not attempted". With transcription
+  /// enabled the sweep picks such rows up itself.
+  Future<void> _resetStaleTranscriptionProgress() async {
+    if (_transcriptionDataSource != null) return;
+
+    try {
+      final voicemails = await _appDatabase.voicemailDao.getAllVoicemails();
+      final stale = voicemails.where((voicemail) => voicemail.transcriptStatus == TranscriptStatus.inProgress.name);
+
+      for (final voicemail in stale) {
+        await _updateTranscript(voicemail.id, status: null);
+      }
+    } catch (e, st) {
+      _logger.warning('Failed to reset stale transcription progress', e, st);
+    }
   }
 
   void _onListen() {

@@ -456,6 +456,42 @@ void main() {
       expect(dataSource.calls, 0);
     });
 
+    test('resets stale inProgress rows when no datasource is configured', () async {
+      await transcriptionDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(
+          id: 'stale-1',
+          type: 'voice',
+          transcriptStatus: TranscriptStatus.inProgress.name,
+        ),
+      );
+
+      final client = _TranscriptionApiClient(items: [createVoicemailItem(id: 'stale-1')]);
+      createRepo(client, null);
+
+      final row = await waitForTranscriptStatus(transcriptionDatabase, 'stale-1', null);
+      expect(row.transcript, isNull);
+    });
+
+    test('keeps done transcripts when no datasource is configured', () async {
+      await transcriptionDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(
+          id: 'done-1',
+          type: 'voice',
+          transcript: 'kept',
+          transcriptStatus: TranscriptStatus.done.name,
+        ),
+      );
+
+      final client = _TranscriptionApiClient(items: [createVoicemailItem(id: 'done-1')]);
+      final repo = createRepo(client, null);
+      await repo.fetchVoicemails();
+      await pumpEventQueue();
+
+      final row = await transcriptionDatabase.voicemailDao.getVoicemailById('done-1');
+      expect(row!.transcript, 'kept');
+      expect(row.transcriptStatus, TranscriptStatus.done.name);
+    });
+
     test('leaves transcript columns untouched when no datasource is configured', () async {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
 
