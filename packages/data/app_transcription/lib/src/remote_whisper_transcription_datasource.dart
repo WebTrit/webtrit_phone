@@ -15,12 +15,14 @@ class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
     String model = 'whisper-1',
     String? defaultLanguage,
     http.Client? httpClient,
+    Duration timeout = const Duration(seconds: 60),
   }) : _endpoint = _resolveEndpoint(url),
        _apiKey = apiKey,
        _model = model,
        // An empty hint means "not set" (a blank dart-define), i.e. auto-detect.
        _defaultLanguage = (defaultLanguage == null || defaultLanguage.isEmpty) ? null : defaultLanguage,
-       _httpClient = httpClient ?? http.Client();
+       _httpClient = httpClient ?? http.Client(),
+       _timeout = timeout;
 
   static const _endpointSuffix = 'audio/transcriptions';
 
@@ -29,6 +31,11 @@ class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
   final String _model;
   final String? _defaultLanguage;
   final http.Client _httpClient;
+
+  /// Overall deadline for one transcription request. The consumer processes
+  /// voicemails sequentially, so a hung endpoint without a deadline would
+  /// stall every following message for the rest of the session.
+  final Duration _timeout;
 
   /// Accepts either the full `.../audio/transcriptions` endpoint or an API base
   /// (e.g. `https://host/v1`) to which the standard suffix is appended.
@@ -58,7 +65,7 @@ class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
 
     final http.Response response;
     try {
-      response = await http.Response.fromStream(await _httpClient.send(request));
+      response = await _httpClient.send(request).then(http.Response.fromStream).timeout(_timeout);
     } catch (e) {
       throw TranscriptionException('remote transcription request failed: $e', transient: true);
     }

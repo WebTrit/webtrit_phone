@@ -148,6 +148,22 @@ void main() {
       );
     });
 
+    test('throws a transient TranscriptionException when the request exceeds the timeout', () async {
+      final dataSource = RemoteWhisperTranscriptionDataSource(
+        url: Uri.parse('https://stt.example.com/v1'),
+        timeout: const Duration(milliseconds: 50),
+        httpClient: MockClient((request) async {
+          await Future<void>.delayed(const Duration(seconds: 2));
+          return http.Response('{"text": "late"}', 200);
+        }),
+      );
+
+      await expectLater(
+        dataSource.transcribe(audio),
+        throwsA(isA<TranscriptionException>().having((e) => e.transient, 'transient', isTrue)),
+      );
+    });
+
     test('throws a transient TranscriptionException when the transport fails', () async {
       final dataSource = RemoteWhisperTranscriptionDataSource(
         url: Uri.parse('https://stt.example.com/v1'),

@@ -123,6 +123,8 @@ dependencies:
   workmanager: ^0.9.0+3
 
   # Local path/workspace packages, sorted by name.
+  _http_client:
+    path: ./packages/_http_client
   app_database:
     path: ./packages/data/app_database
   app_transcription:
