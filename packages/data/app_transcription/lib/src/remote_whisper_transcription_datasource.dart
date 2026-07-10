@@ -18,7 +18,8 @@ class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
   }) : _endpoint = _resolveEndpoint(url),
        _apiKey = apiKey,
        _model = model,
-       _defaultLanguage = defaultLanguage,
+       // An empty hint means "not set" (a blank dart-define), i.e. auto-detect.
+       _defaultLanguage = (defaultLanguage == null || defaultLanguage.isEmpty) ? null : defaultLanguage,
        _httpClient = httpClient ?? http.Client();
 
   static const _endpointSuffix = 'audio/transcriptions';
@@ -45,8 +46,8 @@ class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
       ..fields['response_format'] = 'json'
       ..files.add(http.MultipartFile.fromBytes('file', audio, filename: 'voicemail.wav'));
 
-    final effectiveLanguage = language ?? _defaultLanguage;
-    if (effectiveLanguage != null && effectiveLanguage.isNotEmpty) {
+    final effectiveLanguage = (language != null && language.isNotEmpty) ? language : _defaultLanguage;
+    if (effectiveLanguage != null) {
       request.fields['language'] = effectiveLanguage;
     }
 
