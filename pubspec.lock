@@ -2178,7 +2178,7 @@ packages:
     source: hosted
     version: "3.23.5"
   whisper_ggml:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: whisper_ggml
       sha256: "71c2b5bf69b2b05f2f766b8e862111dcbb4b9e5ae844b7df6945c6584eb24ebd"

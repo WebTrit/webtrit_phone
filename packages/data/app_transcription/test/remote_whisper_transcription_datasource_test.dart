@@ -3,12 +3,10 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 
-// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
-// ignore: depend_on_referenced_packages
 import 'package:http/testing.dart';
 
-import 'package:webtrit_phone/data/data.dart';
+import 'package:app_transcription/app_transcription.dart';
 
 void main() {
   final audio = Uint8List.fromList(List.generate(64, (i) => i));
