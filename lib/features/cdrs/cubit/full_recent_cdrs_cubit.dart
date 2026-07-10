@@ -24,8 +24,23 @@ class FullRecentCdrsCubit extends Cubit<FullRecentCdrsState> {
   Future<void> init() async {
     _logger.info('Loading recent CDRs');
     final recentCdrs = await _cdrsLocalRepository.getHistory(limit: pageSize);
-    emit(state.copyWith(records: recentCdrs, isLoading: false));
+    // An empty cache only means "loading" while the initial remote sync has not
+    // completed yet (no sync cursor); after it, an empty list is genuinely empty.
+    final synced = await _cdrsLocalRepository.getSyncCursor() != null;
+    emit(state.copyWith(records: recentCdrs, isLoading: recentCdrs.isEmpty && !synced));
     _eventsSub = _cdrsLocalRepository.events.listen(_handleEvent);
+
+    // Close the race between the cursor read above and the subscription: if the
+    // initial sync completed in that window, resolve the loading state now.
+    if (state.isLoading && await _cdrsLocalRepository.getSyncCursor() != null) {
+      await _resolveInitialLoad();
+    }
+  }
+
+  Future<void> _resolveInitialLoad() async {
+    final recentCdrs = await _cdrsLocalRepository.getHistory(limit: pageSize);
+    if (isClosed) return;
+    emit(state.copyWith(records: recentCdrs, isLoading: false));
   }
 
   Future<void> fetchHistory() async {
@@ -64,7 +79,12 @@ class FullRecentCdrsCubit extends Cubit<FullRecentCdrsState> {
   void _handleEvent(CdrRecordsEvent event) {
     if (event is CdrRecordUpserted) {
       final recentCdrs = state.records.mergeWithUpdate(event.cdr).toList();
-      emit(state.copyWith(records: recentCdrs));
+      emit(state.copyWith(records: recentCdrs, isLoading: false));
+    }
+    if (event is CdrsInitialSyncCompleted && state.isLoading) {
+      // Re-read instead of just clearing the flag: records upserted before the
+      // subscription was attached would otherwise be missed.
+      _resolveInitialLoad();
     }
     if (event is CdrRecordsWiped) {
       emit(state.copyWith(records: const [], historyEndReached: false));

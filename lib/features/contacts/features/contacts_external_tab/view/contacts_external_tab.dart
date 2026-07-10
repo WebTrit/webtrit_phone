@@ -32,9 +32,7 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
 
     return BlocBuilder<ContactsExternalTabBloc, ContactsExternalTabState>(
       builder: (context, state) {
-        if (state.status == ContactsExternalTabStatus.initial) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state.contacts.isNotEmpty) {
+        if (state.contacts.isNotEmpty) {
           return RefreshIndicator(
             onRefresh: refreshContacts,
             child: ListView.builder(
@@ -51,21 +49,27 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
               },
             ),
           );
-        } else {
-          if (state.status == ContactsExternalTabStatus.failure) {
+        }
+
+        // No contacts to show yet: keep a loading indicator visible while the
+        // initial remote fetch is still in flight, so an empty list is not
+        // mistaken for "no data".
+        switch (state.status) {
+          case ContactsExternalTabStatus.initial:
+          case ContactsExternalTabStatus.inProgress:
+            return const Center(child: CircularProgressIndicator());
+          case ContactsExternalTabStatus.failure:
             return NoDataPlaceholder(content: Text(context.l10n.contacts_ExternalTabText_failure));
-          } else {
+          case ContactsExternalTabStatus.success:
             if (state.searching) {
               return NoDataPlaceholder(content: Text(context.l10n.contacts_ExternalTabText_emptyOnSearching));
-            } else {
-              return NoDataPlaceholder(
-                content: Text(context.l10n.contacts_ExternalTabText_empty),
-                actions: [
-                  TextButton(onPressed: refreshContacts, child: Text(context.l10n.contacts_ExternalTabButton_refresh)),
-                ],
-              );
             }
-          }
+            return NoDataPlaceholder(
+              content: Text(context.l10n.contacts_ExternalTabText_empty),
+              actions: [
+                TextButton(onPressed: refreshContacts, child: Text(context.l10n.contacts_ExternalTabButton_refresh)),
+              ],
+            );
         }
       },
     );

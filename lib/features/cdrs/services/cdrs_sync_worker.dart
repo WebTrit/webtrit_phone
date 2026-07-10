@@ -63,6 +63,10 @@ class CdrsSyncWorker {
             if (newCdrs.length < pageSize) break;
           }
         }
+
+        // Mark the cycle as completed (even when it fetched zero records), so
+        // consumers can tell a finished-but-empty sync from one still running.
+        await localRepo.setSyncCursor(DateTime.now());
       } catch (e, s) {
         yield (e, s);
       } finally {

@@ -21,15 +21,37 @@ class NumberCdrsLogCubit extends Cubit<NumberCdrsLogState> {
   final CdrsRemoteRepository _cdrsRemoteRepository;
   final int pageSize;
   late final StreamSubscription _eventsSub;
+  bool _initialScanStarted = false;
 
   Future<void> init() async {
     _logger.info('Loading number CDRs');
     final numberCdrs = await _cdrsLocalRepository.getHistory(number: number, limit: pageSize);
-    emit(state.copyWith(records: numberCdrs, isLoading: false));
+    // An empty cache only means "loading" while the initial remote sync has not
+    // completed yet (no sync cursor); after it, an empty list is genuinely empty.
+    final synced = await _cdrsLocalRepository.getSyncCursor() != null;
+    emit(state.copyWith(records: numberCdrs, isLoading: numberCdrs.isEmpty && !synced));
     _eventsSub = _cdrsLocalRepository.events.listen(_handleEvent);
 
-    // If we didn't load enough missed CDRs, try to scan more from remote
-    if (numberCdrs.length < pageSize) fetchHistory();
+    if (state.isLoading) {
+      // Close the race between the cursor read above and the subscription: if
+      // the initial sync completed in that window, run the scan now.
+      if (await _cdrsLocalRepository.getSyncCursor() != null) await _onInitialSyncCompleted();
+    } else {
+      _initialScanStarted = true;
+      // If we didn't load enough missed CDRs, try to scan more from remote
+      if (numberCdrs.length < pageSize) fetchHistory();
+    }
+  }
+
+  /// Runs once the initial remote sync has completed: the first history page is
+  /// in the local store, so scan for this number's calls and only then resolve
+  /// the loading state, keeping the loader visible for the whole first load.
+  Future<void> _onInitialSyncCompleted() async {
+    if (_initialScanStarted) return;
+    _initialScanStarted = true;
+    await fetchHistory();
+    if (isClosed) return;
+    emit(state.copyWith(isLoading: false));
   }
 
   Future<void> fetchHistory() async {
@@ -100,7 +122,10 @@ class NumberCdrsLogCubit extends Cubit<NumberCdrsLogState> {
   void _handleEvent(CdrRecordsEvent event) {
     if (event is CdrRecordUpserted && (event.cdr.callerNumber == number || event.cdr.calleeNumber == number)) {
       final recentCdrs = state.records.mergeWithUpdate(event.cdr).toList();
-      emit(state.copyWith(records: recentCdrs));
+      emit(state.copyWith(records: recentCdrs, isLoading: false));
+    }
+    if (event is CdrsInitialSyncCompleted) {
+      _onInitialSyncCompleted();
     }
   }
 

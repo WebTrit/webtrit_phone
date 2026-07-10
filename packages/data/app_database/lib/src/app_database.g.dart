@@ -14664,6 +14664,212 @@ class CdrRecordDataCompanion extends UpdateCompanion<CdrRecordData> {
   }
 }
 
+class $CdrSyncCursorTableTable extends CdrSyncCursorTable
+    with TableInfo<$CdrSyncCursorTableTable, CdrSyncCursorData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CdrSyncCursorTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _timestampUsecMeta = const VerificationMeta(
+    'timestampUsec',
+  );
+  @override
+  late final GeneratedColumn<int> timestampUsec = GeneratedColumn<int>(
+    'timestamp_usec',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, timestampUsec];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'cdr_sync_cursors';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CdrSyncCursorData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('timestamp_usec')) {
+      context.handle(
+        _timestampUsecMeta,
+        timestampUsec.isAcceptableOrUnknown(
+          data['timestamp_usec']!,
+          _timestampUsecMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_timestampUsecMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CdrSyncCursorData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CdrSyncCursorData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      timestampUsec: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}timestamp_usec'],
+      )!,
+    );
+  }
+
+  @override
+  $CdrSyncCursorTableTable createAlias(String alias) {
+    return $CdrSyncCursorTableTable(attachedDatabase, alias);
+  }
+}
+
+class CdrSyncCursorData extends DataClass
+    implements Insertable<CdrSyncCursorData> {
+  /// Always 0: the table stores a single global cursor row.
+  final int id;
+  final int timestampUsec;
+  const CdrSyncCursorData({required this.id, required this.timestampUsec});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['timestamp_usec'] = Variable<int>(timestampUsec);
+    return map;
+  }
+
+  CdrSyncCursorDataCompanion toCompanion(bool nullToAbsent) {
+    return CdrSyncCursorDataCompanion(
+      id: Value(id),
+      timestampUsec: Value(timestampUsec),
+    );
+  }
+
+  factory CdrSyncCursorData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CdrSyncCursorData(
+      id: serializer.fromJson<int>(json['id']),
+      timestampUsec: serializer.fromJson<int>(json['timestampUsec']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'timestampUsec': serializer.toJson<int>(timestampUsec),
+    };
+  }
+
+  CdrSyncCursorData copyWith({int? id, int? timestampUsec}) =>
+      CdrSyncCursorData(
+        id: id ?? this.id,
+        timestampUsec: timestampUsec ?? this.timestampUsec,
+      );
+  CdrSyncCursorData copyWithCompanion(CdrSyncCursorDataCompanion data) {
+    return CdrSyncCursorData(
+      id: data.id.present ? data.id.value : this.id,
+      timestampUsec: data.timestampUsec.present
+          ? data.timestampUsec.value
+          : this.timestampUsec,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CdrSyncCursorData(')
+          ..write('id: $id, ')
+          ..write('timestampUsec: $timestampUsec')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, timestampUsec);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CdrSyncCursorData &&
+          other.id == this.id &&
+          other.timestampUsec == this.timestampUsec);
+}
+
+class CdrSyncCursorDataCompanion extends UpdateCompanion<CdrSyncCursorData> {
+  final Value<int> id;
+  final Value<int> timestampUsec;
+  const CdrSyncCursorDataCompanion({
+    this.id = const Value.absent(),
+    this.timestampUsec = const Value.absent(),
+  });
+  CdrSyncCursorDataCompanion.insert({
+    this.id = const Value.absent(),
+    required int timestampUsec,
+  }) : timestampUsec = Value(timestampUsec);
+  static Insertable<CdrSyncCursorData> custom({
+    Expression<int>? id,
+    Expression<int>? timestampUsec,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (timestampUsec != null) 'timestamp_usec': timestampUsec,
+    });
+  }
+
+  CdrSyncCursorDataCompanion copyWith({
+    Value<int>? id,
+    Value<int>? timestampUsec,
+  }) {
+    return CdrSyncCursorDataCompanion(
+      id: id ?? this.id,
+      timestampUsec: timestampUsec ?? this.timestampUsec,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (timestampUsec.present) {
+      map['timestamp_usec'] = Variable<int>(timestampUsec.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CdrSyncCursorDataCompanion(')
+          ..write('id: $id, ')
+          ..write('timestampUsec: $timestampUsec')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -14731,6 +14937,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     this,
   );
   late final $CdrTableTable cdrTable = $CdrTableTable(this);
+  late final $CdrSyncCursorTableTable cdrSyncCursorTable =
+      $CdrSyncCursorTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao = ContactPhonesDao(
     this as AppDatabase,
@@ -14797,6 +15005,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     presenceInfoTable,
     dialogInfoTable,
     cdrTable,
+    cdrSyncCursorTable,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -27213,6 +27422,158 @@ typedef $$CdrTableTableProcessedTableManager =
       CdrRecordData,
       PrefetchHooks Function()
     >;
+typedef $$CdrSyncCursorTableTableCreateCompanionBuilder =
+    CdrSyncCursorDataCompanion Function({
+      Value<int> id,
+      required int timestampUsec,
+    });
+typedef $$CdrSyncCursorTableTableUpdateCompanionBuilder =
+    CdrSyncCursorDataCompanion Function({
+      Value<int> id,
+      Value<int> timestampUsec,
+    });
+
+class $$CdrSyncCursorTableTableFilterComposer
+    extends Composer<_$AppDatabase, $CdrSyncCursorTableTable> {
+  $$CdrSyncCursorTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get timestampUsec => $composableBuilder(
+    column: $table.timestampUsec,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CdrSyncCursorTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $CdrSyncCursorTableTable> {
+  $$CdrSyncCursorTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get timestampUsec => $composableBuilder(
+    column: $table.timestampUsec,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CdrSyncCursorTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CdrSyncCursorTableTable> {
+  $$CdrSyncCursorTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get timestampUsec => $composableBuilder(
+    column: $table.timestampUsec,
+    builder: (column) => column,
+  );
+}
+
+class $$CdrSyncCursorTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CdrSyncCursorTableTable,
+          CdrSyncCursorData,
+          $$CdrSyncCursorTableTableFilterComposer,
+          $$CdrSyncCursorTableTableOrderingComposer,
+          $$CdrSyncCursorTableTableAnnotationComposer,
+          $$CdrSyncCursorTableTableCreateCompanionBuilder,
+          $$CdrSyncCursorTableTableUpdateCompanionBuilder,
+          (
+            CdrSyncCursorData,
+            BaseReferences<
+              _$AppDatabase,
+              $CdrSyncCursorTableTable,
+              CdrSyncCursorData
+            >,
+          ),
+          CdrSyncCursorData,
+          PrefetchHooks Function()
+        > {
+  $$CdrSyncCursorTableTableTableManager(
+    _$AppDatabase db,
+    $CdrSyncCursorTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CdrSyncCursorTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CdrSyncCursorTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CdrSyncCursorTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> timestampUsec = const Value.absent(),
+              }) => CdrSyncCursorDataCompanion(
+                id: id,
+                timestampUsec: timestampUsec,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int timestampUsec,
+              }) => CdrSyncCursorDataCompanion.insert(
+                id: id,
+                timestampUsec: timestampUsec,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CdrSyncCursorTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CdrSyncCursorTableTable,
+      CdrSyncCursorData,
+      $$CdrSyncCursorTableTableFilterComposer,
+      $$CdrSyncCursorTableTableOrderingComposer,
+      $$CdrSyncCursorTableTableAnnotationComposer,
+      $$CdrSyncCursorTableTableCreateCompanionBuilder,
+      $$CdrSyncCursorTableTableUpdateCompanionBuilder,
+      (
+        CdrSyncCursorData,
+        BaseReferences<
+          _$AppDatabase,
+          $CdrSyncCursorTableTable,
+          CdrSyncCursorData
+        >,
+      ),
+      CdrSyncCursorData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -27337,4 +27698,6 @@ class $AppDatabaseManager {
       $$DialogInfoTableTableTableManager(_db, _db.dialogInfoTable);
   $$CdrTableTableTableManager get cdrTable =>
       $$CdrTableTableTableManager(_db, _db.cdrTable);
+  $$CdrSyncCursorTableTableTableManager get cdrSyncCursorTable =>
+      $$CdrSyncCursorTableTableTableManager(_db, _db.cdrSyncCursorTable);
 }
