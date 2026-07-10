@@ -5,15 +5,15 @@ import 'package:webtrit_phone/features/features.dart';
 
 import '../data/data.dart';
 
-class MockNumberCdrsLogCubit extends MockCubit<NumberCdrsLogState> implements NumberCdrsLogCubit {
+class MockNumberCdrsLogCubit extends MockCubit<CdrsListState> implements NumberCdrsLogCubit {
   MockNumberCdrsLogCubit();
 
   factory MockNumberCdrsLogCubit.withRecords() {
     final mock = MockNumberCdrsLogCubit();
     whenListen(
       mock,
-      const Stream<NumberCdrsLogState>.empty(),
-      initialState: NumberCdrsLogState(
+      const Stream<CdrsListState>.empty(),
+      initialState: CdrsListState(
         records: dMockCdrRecords.where((r) => r.callerNumber == '1234' || r.calleeNumber == '1234').toList(),
         isLoading: false,
       ),

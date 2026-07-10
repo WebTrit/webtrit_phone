@@ -180,4 +180,42 @@ void main() {
       await cubit.close();
     });
   });
+
+  group('NumberCdrsLogCubit.init', () {
+    setUp(() {
+      when(
+        () => local.getHistory(
+          number: any(named: 'number'),
+          destination: any(named: 'destination'),
+          status: any(named: 'status'),
+          direction: any(named: 'direction'),
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+          limit: any(named: 'limit'),
+        ),
+      ).thenAnswer((_) async => <CdrRecord>[]);
+      when(() => local.getFirstRecordTime()).thenAnswer((_) async => null);
+      when(() => local.upsertCdrs(any(), silent: any(named: 'silent'))).thenAnswer((_) async {});
+      when(
+        () => remote.getHistory(
+          to: any(named: 'to'),
+          limit: any(named: 'limit'),
+        ),
+      ).thenAnswer((_) async => <CdrRecord>[]);
+    });
+
+    test('empty cache without a sync cursor stays loading until the sync completes and the scan runs', () async {
+      final cubit = NumberCdrsLogCubit('2000', local, remote);
+      await cubit.init();
+
+      expect(cubit.state.isLoading, isTrue);
+
+      events.add(CdrsInitialSyncCompleted());
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+
+      expect(cubit.state.isLoading, isFalse);
+      expect(cubit.state.records, isEmpty);
+      await cubit.close();
+    });
+  });
 }
