@@ -469,6 +469,30 @@ void main() {
       expect(dataSource.calls, 0);
     });
 
+    test('a voicemail fetched mid-sweep is transcribed by a follow-up round', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem(id: 'a')]);
+      final gate = Completer<void>();
+      final dataSource = _CallbackTranscriptionDataSource((audio) async {
+        if (!gate.isCompleted) await gate.future;
+        return 'finished transcript';
+      });
+
+      final repo = createRepo(client, dataSource);
+      await waitFor(() => dataSource.calls == 1, 'first transcription started');
+
+      // A new voicemail arrives while the sweep is blocked on the first one;
+      // the fetch requests another sweep, which must not be dropped.
+      client.items.add(createVoicemailItem(id: 'b'));
+      await repo.fetchVoicemails();
+      gate.complete();
+
+      final rowA = await waitForTranscriptStatus(transcriptionDatabase, 'a', TranscriptStatus.done.name);
+      final rowB = await waitForTranscriptStatus(transcriptionDatabase, 'b', TranscriptStatus.done.name);
+      expect(rowA.transcript, 'finished transcript');
+      expect(rowB.transcript, 'finished transcript');
+      expect(dataSource.calls, 2);
+    });
+
     test('a refetch during transcription does not wipe the finished transcript', () async {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
       final gate = Completer<void>();
