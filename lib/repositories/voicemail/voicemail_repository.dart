@@ -256,22 +256,31 @@ class VoicemailRepositoryImpl
           break;
         }
       }
+    } catch (e, st) {
+      // The sweep runs unawaited; never let an error (e.g. a database closed
+      // by logout mid-sweep) escape to the zone as an unhandled async error.
+      _logger.warning('Voicemail transcription sweep aborted', e, st);
     } finally {
       _transcriptionRunning = false;
     }
   }
 
   Future<void> _transcribeVoicemail(TranscriptionDataSource transcriptionDataSource, String messageId) async {
-    await _updateTranscript(messageId, status: TranscriptStatus.inProgress);
-
     try {
+      await _updateTranscript(messageId, status: TranscriptStatus.inProgress);
+
       final audio = await _webtritApiClient.getUserVoicemailAttachment(_token, messageId, fileFormat: 'wav');
       final transcript = await transcriptionDataSource.transcribe(audio);
 
       await _updateTranscript(messageId, transcript: transcript, status: TranscriptStatus.done);
     } on UnauthorizedException {
-      // Roll back to "not attempted" so the next session retries the message.
-      await _updateTranscript(messageId, status: null);
+      // Roll back to "not attempted" so the next session retries the message;
+      // a failed rollback write must not mask the auth failure.
+      try {
+        await _updateTranscript(messageId, status: null);
+      } catch (e) {
+        _logger.warning('Failed to roll back transcript status for voicemail $messageId', e);
+      }
       rethrow;
     } catch (e, st) {
       final transient = _isTransientTranscriptionFailure(e);
@@ -280,7 +289,11 @@ class VoicemailRepositoryImpl
       // A transient failure rolls back to "not attempted" so the next sweep
       // retries the message (bounded to one attempt per fetch); only failures
       // that cannot succeed later are terminal.
-      await _updateTranscript(messageId, status: transient ? null : TranscriptStatus.unavailable);
+      try {
+        await _updateTranscript(messageId, status: transient ? null : TranscriptStatus.unavailable);
+      } catch (e) {
+        _logger.warning('Failed to store transcript status for voicemail $messageId', e);
+      }
     }
   }
 

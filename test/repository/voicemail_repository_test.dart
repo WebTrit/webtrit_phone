@@ -72,6 +72,19 @@ class _TranscriptionApiClient extends MockWebtritApiClient {
   }
 }
 
+class _CallbackTranscriptionDataSource implements TranscriptionDataSource {
+  _CallbackTranscriptionDataSource(this.handler);
+
+  final Future<String> Function(Uint8List audio) handler;
+  int calls = 0;
+
+  @override
+  Future<String> transcribe(Uint8List audio, {String? language}) {
+    calls++;
+    return handler(audio);
+  }
+}
+
 class _FakeTranscriptionDataSource implements TranscriptionDataSource {
   _FakeTranscriptionDataSource({this.result = 'hello world', this.error});
 
@@ -420,6 +433,23 @@ void main() {
       await pumpEventQueue();
 
       expect(dataSource.calls, 1);
+    });
+
+    test('survives the database closing mid-sweep without unhandled async errors', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
+      final dataSource = _CallbackTranscriptionDataSource((audio) async {
+        // Simulates logout tearing the storage down while transcription runs:
+        // the follow-up status write hits a closed database.
+        await transcriptionDatabase.close();
+        return 'hello world';
+      });
+
+      createRepo(client, dataSource);
+
+      await waitFor(() => dataSource.calls == 1, 'transcription attempted');
+      // Give the sweep time to hit the closed database; an unhandled async
+      // error would fail this test at the zone level.
+      await pumpEventQueue(times: 50);
     });
 
     test('skips fax messages', () async {
