@@ -16,7 +16,11 @@ class LanguageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final supportedLocales = context.read<FeatureAccess>().localizationConfig.supportedLocales;
-    final locales = [LocaleExtension.defaultNull, ...supportedLocales];
+    // With a single supported language there is nothing to follow the system to,
+    // so drop the "default" (follow-system) entry and offer that one language.
+    final locales = supportedLocales.length == 1
+        ? supportedLocales
+        : [LocaleExtension.defaultNull, ...supportedLocales];
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.settings_ListViewTileTitle_language), leading: const ExtBackButton()),
