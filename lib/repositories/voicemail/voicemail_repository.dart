@@ -89,6 +89,11 @@ class VoicemailRepositoryImpl
   /// (one voicemail at a time) to keep the on-device engine load sane.
   bool _transcriptionRunning = false;
 
+  /// Set when a sweep is requested while another one is running: the running
+  /// sweep iterates a snapshot that may predate the rows just fetched, so it
+  /// re-queries and runs one more round instead of dropping the request.
+  bool _transcriptionRerunRequested = false;
+
   // If the repository is disabled, the stream controller is not initialized.
   // In such cases, subscribers will receive an empty stream instead.
   StreamController<List<Voicemail>>? _updatesController;
@@ -236,34 +241,50 @@ class VoicemailRepositoryImpl
   /// the local database, so [watchVoicemails] listeners see every update live.
   Future<void> _transcribePendingVoicemails() async {
     final transcriptionDataSource = _transcriptionDataSource;
-    if (transcriptionDataSource == null || _transcriptionRunning) return;
+    if (transcriptionDataSource == null) return;
+
+    if (_transcriptionRunning) {
+      _transcriptionRerunRequested = true;
+      return;
+    }
 
     _transcriptionRunning = true;
     try {
-      final voicemails = await _appDatabase.voicemailDao.getAllVoicemails();
-      final pending = voicemails.where(
-        (voicemail) =>
-            voicemail.type == 'voice' &&
-            voicemail.transcript == null &&
-            voicemail.transcriptStatus != TranscriptStatus.unavailable.name,
-      );
+      var aborted = false;
 
-      for (final voicemail in pending) {
-        if (!_featureSupported) break;
+      do {
+        _transcriptionRerunRequested = false;
 
-        try {
-          await _transcribeVoicemail(transcriptionDataSource, voicemail.id);
-        } on UnauthorizedException catch (e) {
-          _sessionGuard.onUnauthorized(e);
-          break;
+        final voicemails = await _appDatabase.voicemailDao.getAllVoicemails();
+        final pending = voicemails.where(
+          (voicemail) =>
+              voicemail.type == 'voice' &&
+              voicemail.transcript == null &&
+              voicemail.transcriptStatus != TranscriptStatus.unavailable.name,
+        );
+
+        for (final voicemail in pending) {
+          if (!_featureSupported) {
+            aborted = true;
+            break;
+          }
+
+          try {
+            await _transcribeVoicemail(transcriptionDataSource, voicemail.id);
+          } on UnauthorizedException catch (e) {
+            _sessionGuard.onUnauthorized(e);
+            aborted = true;
+            break;
+          }
         }
-      }
+      } while (_transcriptionRerunRequested && !aborted);
     } catch (e, st) {
       // The sweep runs unawaited; never let an error (e.g. a database closed
       // by logout mid-sweep) escape to the zone as an unhandled async error.
       _logger.warning('Voicemail transcription sweep aborted', e, st);
     } finally {
       _transcriptionRunning = false;
+      _transcriptionRerunRequested = false;
     }
   }
 
