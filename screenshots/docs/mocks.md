@@ -63,9 +63,9 @@ This document lists all mocks in the `screenshots/` package, grouped by category
 |-----------------------------|----------------------------------------|---------------------------------------|
 | `MockCallBloc`              | `MockBloc<CallEvent, CallState>`       | `.mainScreen()`, `.callScreen(video)` |
 | `MockCallRoutingCubit`      | `MockCubit<CallRoutingState>`          | `.initial()`                          |
-| `MockFullRecentCdrsCubit`   | `MockCubit<FullRecentCdrsState>`       | `.withCdrs()`                         |
-| `MockMissedRecentCdrsCubit` | `MockCubit<MissedRecentCdrsState>`     | `.withRecords()`                      |
-| `MockNumberCdrsLogCubit`    | `MockCubit<NumberCdrsLogState>`        | `.withRecords()`                      |
+| `MockFullRecentCdrsCubit`   | `MockCubit<CdrsListState>`       | `.withCdrs()`                         |
+| `MockMissedRecentCdrsCubit` | `MockCubit<CdrsListState>`     | `.withRecords()`                      |
+| `MockNumberCdrsLogCubit`    | `MockCubit<CdrsListState>`        | `.withRecords()`                      |
 | `MockCallLogBloc`           | `MockBloc<CallLogEvent, CallLogState>` | `.withHistory()`                      |
 
 ### Settings
