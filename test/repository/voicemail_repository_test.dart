@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -454,6 +455,33 @@ void main() {
       expect(row, isNotNull);
       expect(row!.transcriptStatus, isNull);
       expect(dataSource.calls, 0);
+    });
+
+    test('a refetch during transcription does not wipe the finished transcript', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
+      final gate = Completer<void>();
+      final dataSource = _CallbackTranscriptionDataSource((audio) async {
+        await gate.future;
+        return 'finished transcript';
+      });
+
+      final repo = createRepo(client, dataSource);
+      await waitFor(() => dataSource.calls == 1, 'transcription started');
+
+      // The refetch upserts the transcript-less remote payload while the
+      // transcription of the same message is still running.
+      await repo.fetchVoicemails();
+      gate.complete();
+
+      final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
+      expect(row.transcript, 'finished transcript');
+
+      await repo.fetchVoicemails();
+      await pumpEventQueue();
+
+      final after = await transcriptionDatabase.voicemailDao.getVoicemailById('1');
+      expect(after!.transcript, 'finished transcript');
+      expect(after.transcriptStatus, TranscriptStatus.done.name);
     });
 
     test('resets stale inProgress rows when no datasource is configured', () async {

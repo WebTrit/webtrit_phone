@@ -34,24 +34,11 @@ void main() {
   );
 
   group('voicemailToDrift', () {
-    test('leaves transcript columns empty by default', () {
+    test('leaves transcript columns empty (transcripts are produced locally)', () {
       final data = mapper.voicemailToDrift(item, details, 'http://example/vm-1');
 
       expect(data.transcript, isNull);
       expect(data.transcriptStatus, isNull);
-    });
-
-    test('carries over the provided transcript state', () {
-      final data = mapper.voicemailToDrift(
-        item,
-        details,
-        'http://example/vm-1',
-        transcript: 'hello there',
-        transcriptStatus: TranscriptStatus.done.name,
-      );
-
-      expect(data.transcript, 'hello there');
-      expect(data.transcriptStatus, 'done');
     });
   });
 

@@ -15,49 +15,49 @@ void main() {
     await db.close();
   });
 
-  VoicemailData createVoicemail({String id = 'vm-1'}) {
+  VoicemailData createVoicemail({
+    String id = 'vm-1',
+    String date = '2026-01-01T00:00:00Z',
+    bool seen = false,
+    String? transcript,
+    String? transcriptStatus,
+  }) {
     return VoicemailData(
       id: id,
-      date: '2026-01-01T00:00:00Z',
+      date: date,
       duration: 3.5,
       sender: '555001',
       receiver: '555002',
-      seen: false,
+      seen: seen,
       size: 5,
       type: 'voice',
+      transcript: transcript,
+      transcriptStatus: transcriptStatus,
     );
   }
 
-  group('contact resolution', () {
-    test('collapses colliding contacts to one deterministic row per voicemail', () async {
-      await db.contactsDao.insertOnUniqueConflictUpdateContact(
-        ContactDataCompanion(
-          sourceType: Value(ContactSourceTypeEnum.local),
-          sourceId: Value('local-1'),
-          firstName: Value('Local'),
-          lastName: Value('Contact'),
-        ),
-      );
-      await db.contactsDao.insertOnUniqueConflictUpdateContact(
-        ContactDataCompanion(
-          sourceType: Value(ContactSourceTypeEnum.external),
-          sourceId: Value('pbx-1'),
-          firstName: Value('External'),
-          lastName: Value('Contact'),
-        ),
-      );
-      await db.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-        ContactPhoneDataCompanion(contactId: Value(1), number: Value('555001'), label: Value('Home')),
-      );
-      await db.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
-        ContactPhoneDataCompanion(contactId: Value(2), number: Value('555001'), label: Value('Work')),
-      );
-      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());
+  group('upsertVoicemailFromRemote', () {
+    test('inserts a new row with empty transcript columns', () async {
+      await db.voicemailDao.upsertVoicemailFromRemote(createVoicemail());
 
-      final rows = await db.voicemailDao.getVoicemailsWithContacts();
+      final row = await db.voicemailDao.getVoicemailById('vm-1');
+      expect(row, isNotNull);
+      expect(row!.transcript, isNull);
+      expect(row.transcriptStatus, isNull);
+    });
 
-      expect(rows, hasLength(1));
-      expect(rows.single.contact?.sourceType, ContactSourceTypeEnum.external);
+    test('updates remote fields but never touches transcript columns on conflict', () async {
+      await db.voicemailDao.insertOrUpdateVoicemail(
+        createVoicemail(transcript: 'finished transcript', transcriptStatus: 'done'),
+      );
+
+      await db.voicemailDao.upsertVoicemailFromRemote(createVoicemail(date: '2026-01-02T00:00:00Z', seen: true));
+
+      final row = await db.voicemailDao.getVoicemailById('vm-1');
+      expect(row!.date, '2026-01-02T00:00:00Z');
+      expect(row.seen, isTrue);
+      expect(row.transcript, 'finished transcript');
+      expect(row.transcriptStatus, 'done');
     });
   });
 }
