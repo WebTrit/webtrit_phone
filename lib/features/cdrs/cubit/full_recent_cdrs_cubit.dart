@@ -39,6 +39,7 @@ class FullRecentCdrsCubit extends CdrsListCubit {
         history = await remoteRepository.getHistory(to: oldestLocal, limit: pageSize);
         await localRepository.upsertCdrs(history, silent: true);
       }
+      if (isClosed) return;
       if (history.isEmpty) {
         emit(state.copyWith(fetchingHistory: false, historyEndReached: true));
       } else {
@@ -57,7 +58,7 @@ class FullRecentCdrsCubit extends CdrsListCubit {
           'currentCount: ${state.records.length.toString()}',
         ],
       );
-      emit(state.copyWith(fetchingHistory: false));
+      if (!isClosed) emit(state.copyWith(fetchingHistory: false));
     }
   }
 }

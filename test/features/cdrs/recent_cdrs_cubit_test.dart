@@ -116,6 +116,55 @@ void main() {
       expect(cubit.state.isLoading, isFalse);
       await cubit.close();
     });
+
+    test('a failed initial sync resolves loading to the empty state instead of spinning forever', () async {
+      when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => <CdrRecord>[]);
+
+      final cubit = FullRecentCdrsCubit(local, remote);
+      await cubit.init();
+      expect(cubit.state.isLoading, isTrue);
+
+      events.add(CdrsInitialSyncFailed());
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+
+      expect(cubit.state.isLoading, isFalse);
+      expect(cubit.state.records, isEmpty);
+      await cubit.close();
+    });
+
+    test('a sync success after an earlier failure still populates the list', () async {
+      when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => <CdrRecord>[]);
+
+      final cubit = FullRecentCdrsCubit(local, remote);
+      await cubit.init();
+
+      events.add(CdrsInitialSyncFailed());
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(cubit.state.isLoading, isFalse);
+
+      // The next successful cycle delivers records via the usual upsert events.
+      events.add(CdrRecordUpserted(_record('a')));
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+
+      expect(cubit.state.records, [_record('a')]);
+      await cubit.close();
+    });
+
+    test('closing the cubit while init is still in flight neither throws nor emits', () async {
+      when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async {
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        return <CdrRecord>[];
+      });
+
+      final cubit = FullRecentCdrsCubit(local, remote);
+      final initFuture = cubit.init();
+      await cubit.close();
+
+      // Must complete without StateError (emit after close) or
+      // LateInitializationError (cancelling a never-assigned subscription).
+      await initFuture;
+      expect(cubit.state.isLoading, isTrue); // no emit happened after close
+    });
   });
 
   group('MissedRecentCdrsCubit.init', () {
@@ -177,6 +226,37 @@ void main() {
 
       expect(cubit.state.isLoading, isFalse);
       expect(cubit.state.records, [_record('a', status: CdrStatus.missed)]);
+      await cubit.close();
+    });
+
+    test('a failed initial sync resolves loading; a later success still runs the scan', () async {
+      final cubit = MissedRecentCdrsCubit(local, remote);
+      await cubit.init();
+      expect(cubit.state.isLoading, isTrue);
+
+      events.add(CdrsInitialSyncFailed());
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+
+      // Failure resolves the endless spinner into the empty state...
+      expect(cubit.state.isLoading, isFalse);
+      verifyNever(
+        () => remote.getHistory(
+          to: any(named: 'to'),
+          limit: any(named: 'limit'),
+        ),
+      );
+
+      // ...but nothing is persisted, so the eventual success still triggers
+      // the one-shot missed-calls scan.
+      events.add(CdrsInitialSyncCompleted());
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+
+      verify(
+        () => remote.getHistory(
+          to: any(named: 'to'),
+          limit: any(named: 'limit'),
+        ),
+      ).called(greaterThan(0));
       await cubit.close();
     });
   });

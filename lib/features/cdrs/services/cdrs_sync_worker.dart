@@ -37,12 +37,22 @@ class CdrsSyncWorker {
     _syncSub = _syncStream().listen(_handleSyncEvent);
   }
 
+  /// Whether this worker has already recorded a completed cycle, so the sync
+  /// watermark is written (and failures reported) at most until the first
+  /// success per app run instead of on every polling cycle.
+  bool _syncMarked = false;
+
   Stream<dynamic> _syncStream() async* {
     while (!_disposed) {
       try {
         // Check connectivity before processing
         final connectivityResult = await connectivity.checkConnectivity();
-        if (connectivityResult.every((r) => r == ConnectivityResult.none)) continue;
+        if (connectivityResult.every((r) => r == ConnectivityResult.none)) {
+          // Cannot sync now: let consumers stop waiting on the initial sync
+          // (they would spin forever otherwise); the next poll self-heals.
+          await _notifyInitialSyncFailed();
+          continue;
+        }
 
         // Fetch last sync time
         final lastUpdate = await localRepo.getLastUpdate();
@@ -66,12 +76,26 @@ class CdrsSyncWorker {
 
         // Mark the cycle as completed (even when it fetched zero records), so
         // consumers can tell a finished-but-empty sync from one still running.
-        await localRepo.markSyncCompleted(DateTime.now());
+        if (!_syncMarked) {
+          await localRepo.markSyncCompleted(DateTime.now());
+          _syncMarked = true;
+        }
       } catch (e, s) {
+        await _notifyInitialSyncFailed();
         yield (e, s);
       } finally {
         yield await Future.delayed(pollingInterval, () => _kRetryEventStub);
       }
+    }
+  }
+
+  Future<void> _notifyInitialSyncFailed() async {
+    if (_syncMarked) return;
+    try {
+      await localRepo.notifyInitialSyncFailed();
+    } catch (e, s) {
+      // Never let the failure notification itself break the sync loop.
+      _logger.warning('notifyInitialSyncFailed', e, s);
     }
   }
 

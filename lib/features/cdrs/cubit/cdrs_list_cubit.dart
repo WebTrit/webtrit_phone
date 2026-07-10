@@ -25,7 +25,7 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
 
   late final Logger logger = Logger(runtimeType.toString());
 
-  late final StreamSubscription<CdrRecordsEvent> _eventsSub;
+  StreamSubscription<CdrRecordsEvent>? _eventsSub;
   bool _initialSyncHandled = false;
 
   /// Local query backing this list; [from] is the pagination watermark.
@@ -41,20 +41,30 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
 
   Future<void> init() async {
     logger.info('Loading CDRs');
-    final cached = await queryLocal();
-    // An empty cache only means "loading" while the initial remote sync has not
-    // completed yet; after it, an empty list is genuinely empty.
-    final synced = await localRepository.getLastSyncTime() != null;
-    emit(state.copyWith(records: cached, isLoading: cached.isEmpty && !synced));
-    _eventsSub = localRepository.events.listen(_handleEvent);
+    try {
+      final cached = await queryLocal();
+      if (isClosed) return;
+      // An empty cache only means "loading" while the initial remote sync has
+      // not completed yet; after it, an empty list is genuinely empty.
+      final synced = await localRepository.getLastSyncTime() != null;
+      if (isClosed) return;
+      emit(state.copyWith(records: cached, isLoading: cached.isEmpty && !synced));
+      _eventsSub = localRepository.events.listen(_handleEvent);
 
-    if (state.isLoading) {
-      // Close the race between the sync-time read above and the subscription:
-      // if the initial sync completed in that window, resolve now.
-      if (await localRepository.getLastSyncTime() != null) await _onInitialSyncCompleted();
-    } else {
-      _initialSyncHandled = true;
-      if (fetchesOnShortInit && cached.length < pageSize) fetchHistory();
+      if (state.isLoading) {
+        // Close the race between the sync-time read above and the subscription:
+        // if the initial sync completed in that window, resolve now.
+        final syncedNow = await localRepository.getLastSyncTime() != null;
+        if (isClosed) return;
+        if (syncedNow) await _onInitialSyncCompleted();
+      } else {
+        _initialSyncHandled = true;
+        if (fetchesOnShortInit && cached.length < pageSize) fetchHistory();
+      }
+    } catch (e, s) {
+      logger.severe('Failed to initialize', e, s);
+      // Resolve rather than spin forever on an unexpected local failure.
+      if (!isClosed) emit(state.copyWith(isLoading: false));
     }
   }
 
@@ -64,9 +74,21 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
   Future<void> _onInitialSyncCompleted() async {
     if (_initialSyncHandled) return;
     _initialSyncHandled = true;
-    await resolveInitialLoad();
+    try {
+      await resolveInitialLoad();
+    } catch (e, s) {
+      logger.severe('Failed to resolve the initial load', e, s);
+    }
     if (isClosed) return;
     emit(state.copyWith(isLoading: false));
+  }
+
+  /// Resolves the loading state when a sync cycle fails before the initial
+  /// sync ever completed, so a permanently failing or offline backend shows
+  /// the empty state instead of an endless spinner. Nothing is latched: the
+  /// eventual successful cycle still triggers [resolveInitialLoad] once.
+  void _onInitialSyncFailed() {
+    if (state.isLoading) emit(state.copyWith(isLoading: false));
   }
 
   /// Brings the list up to date after the initial sync. Defaults to
@@ -87,6 +109,7 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
     try {
       final oldestLocal = state.records.lastOrNull?.connectTime;
       List<CdrRecord> history = await queryLocal(from: oldestLocal);
+      if (isClosed) return;
       emit(state.copyWith(records: state.records.mergeWithHistory(history).toList()));
 
       if (history.length < pageSize) {
@@ -95,7 +118,7 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
         List<CdrRecord> scanResult = [];
         int scannedPages = 0;
 
-        while (scannedPages < 10 && scanResult.length < pageSize) {
+        while (!isClosed && scannedPages < 10 && scanResult.length < pageSize) {
           logger.info('Scanning remote CDRs iteration: $scannedPages time: $oldestSynced');
 
           final scanPage = await remoteRepository.getHistory(to: oldestSynced, limit: pageSize);
@@ -104,6 +127,7 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
             break;
           }
           await localRepository.upsertCdrs(scanPage, silent: true);
+          if (isClosed) return;
           oldestSynced = scanPage.last.connectTime;
           final matched = scanPage.where(matches);
           logger.info('Found matching CDRs: ${matched.length} in ${scanPage.length} scanned');
@@ -116,6 +140,7 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
 
         history.addAll(scanResult);
       }
+      if (isClosed) return;
       if (history.isEmpty) {
         emit(state.copyWith(fetchingHistory: false, historyEndReached: true));
       } else {
@@ -133,7 +158,7 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
           'currentCount: ${state.records.length.toString()}',
         ],
       );
-      emit(state.copyWith(fetchingHistory: false));
+      if (!isClosed) emit(state.copyWith(fetchingHistory: false));
     }
   }
 
@@ -145,6 +170,9 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
     if (event is CdrsInitialSyncCompleted) {
       _onInitialSyncCompleted();
     }
+    if (event is CdrsInitialSyncFailed) {
+      _onInitialSyncFailed();
+    }
     if (event is CdrRecordsWiped) {
       emit(state.copyWith(records: const [], historyEndReached: false));
     }
@@ -152,7 +180,7 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
 
   @override
   Future<void> close() async {
-    await _eventsSub.cancel();
+    await _eventsSub?.cancel();
     return super.close();
   }
 }
