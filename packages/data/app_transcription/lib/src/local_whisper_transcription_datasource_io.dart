@@ -113,9 +113,11 @@ class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
     try {
       await ensureModelReady();
     } catch (e) {
-      // Reset so the next attempt retries the download instead of replaying the failure.
+      // Reset so the next attempt retries the download instead of replaying
+      // the failure. Model preparation fails on network conditions, so it is
+      // always worth retrying later.
       _modelReady = null;
-      throw TranscriptionException('failed to prepare whisper model ${_model.modelName}: $e');
+      throw TranscriptionException('failed to prepare whisper model ${_model.modelName}: $e', transient: true);
     }
 
     final temporaryDirectory = await getTemporaryDirectory();

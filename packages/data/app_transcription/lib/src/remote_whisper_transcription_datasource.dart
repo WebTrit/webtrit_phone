@@ -59,11 +59,14 @@ class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
     try {
       response = await http.Response.fromStream(await _httpClient.send(request));
     } catch (e) {
-      throw TranscriptionException('remote transcription request failed: $e');
+      throw TranscriptionException('remote transcription request failed: $e', transient: true);
     }
 
     if (response.statusCode != 200) {
-      throw TranscriptionException('remote transcription failed: HTTP ${response.statusCode}');
+      throw TranscriptionException(
+        'remote transcription failed: HTTP ${response.statusCode}',
+        transient: _isTransientStatusCode(response.statusCode),
+      );
     }
 
     final Object? body;
@@ -79,5 +82,12 @@ class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
     }
 
     return text.trim();
+  }
+
+  /// Request timeout (408), too early (425), rate limiting (429) and server
+  /// errors are worth retrying later; other non-200s are permanent for this
+  /// payload.
+  static bool _isTransientStatusCode(int statusCode) {
+    return statusCode == 408 || statusCode == 425 || statusCode == 429 || statusCode >= 500;
   }
 }

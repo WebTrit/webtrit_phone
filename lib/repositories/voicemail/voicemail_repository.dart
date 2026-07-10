@@ -261,9 +261,23 @@ class VoicemailRepositoryImpl
       await _updateTranscript(messageId, status: null);
       rethrow;
     } catch (e, st) {
-      _logger.warning('Failed to transcribe voicemail $messageId', e, st);
-      await _updateTranscript(messageId, status: TranscriptStatus.unavailable);
+      final transient = _isTransientTranscriptionFailure(e);
+      _logger.warning('Failed to transcribe voicemail $messageId (transient: $transient)', e, st);
+
+      // A transient failure rolls back to "not attempted" so the next sweep
+      // retries the message (bounded to one attempt per fetch); only failures
+      // that cannot succeed later are terminal.
+      await _updateTranscript(messageId, status: transient ? null : TranscriptStatus.unavailable);
     }
+  }
+
+  static bool _isTransientTranscriptionFailure(Object error) {
+    if (error is TranscriptionException) return error.transient;
+    // Attachment download failures: retry on transport errors (no status),
+    // HTTP retry semantics and server errors; other 4xx are terminal.
+    if (error is RequestFailure) return error.statusCode == null || error.isTransient || error.isServerError;
+    // Unknown runtime errors: fail open toward retry, it is bounded anyway.
+    return true;
   }
 
   Future<void> _updateTranscript(String messageId, {String? transcript, TranscriptStatus? status}) {
