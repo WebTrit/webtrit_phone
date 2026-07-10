@@ -119,6 +119,7 @@ dependencies:
   validators: ^3.0.0
   webview_flutter: ^4.13.1
   webview_flutter_web: ^0.2.3+4
+  whisper_ggml: ^1.7.0
   workmanager: ^0.9.0+3
 
   # Local path/workspace packages, sorted by name.

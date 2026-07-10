@@ -2350,6 +2350,17 @@
   "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Funzionalità non supportata",
   "@voicemail_Title_notSupported": {},
+<<<<<<< HEAD
+=======
+  "voicemail_RecordsCache_description": "Copia locale dell'elenco dei messaggi vocali scaricato dal server (i file audio sono una sezione separata). La cancellazione rimuove i record locali; l'elenco viene scaricato di nuovo al prossimo aggiornamento.",
+  "@voicemail_RecordsCache_description": {},
+  "voicemail_RecordsCache_title": "Messaggi vocali",
+  "@voicemail_RecordsCache_title": {},
+  "voicemail_Transcript_inProgress": "Trascrizione in corso...",
+  "@voicemail_Transcript_inProgress": {},
+  "voicemail_Transcript_unavailable": "Trascrizione non disponibile",
+  "@voicemail_Transcript_unavailable": {},
+>>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
   "voicemail_Widget_screenTitle": "Segreteria telefonica",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",

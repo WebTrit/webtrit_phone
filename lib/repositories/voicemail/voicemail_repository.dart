@@ -7,6 +7,7 @@ import 'package:app_database/app_database.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/common/common.dart';
+import 'package:webtrit_phone/data/transcription/transcription.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/app/session/session.dart';
@@ -68,10 +69,12 @@ class VoicemailRepositoryImpl
     required String token,
     required AppDatabase appDatabase,
     SessionGuard? sessionGuard,
+    TranscriptionDataSource? transcriptionDataSource,
   }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
        _webtritApiClient = webtritApiClient,
        _token = token,
-       _appDatabase = appDatabase {
+       _appDatabase = appDatabase,
+       _transcriptionDataSource = transcriptionDataSource {
     _initialize();
   }
 
@@ -79,6 +82,12 @@ class VoicemailRepositoryImpl
   final String _token;
   final AppDatabase _appDatabase;
   final SessionGuard _sessionGuard;
+  final TranscriptionDataSource? _transcriptionDataSource;
+
+  /// Guards against overlapping transcription sweeps kicked off by
+  /// consecutive [fetchVoicemails] calls; the work is sequential on purpose
+  /// (one voicemail at a time) to keep the on-device engine load sane.
+  bool _transcriptionRunning = false;
 
   // If the repository is disabled, the stream controller is not initialized.
   // In such cases, subscribers will receive an empty stream instead.
@@ -167,12 +176,24 @@ class VoicemailRepositoryImpl
       for (final item in remoteItems.items) {
         final details = await _webtritApiClient.getUserVoicemail(_token, item.id, locale: localeCode);
 
+        // Transcripts are produced locally, so carry them over instead of
+        // wiping them with the transcript-less remote payload.
+        final existing = await _appDatabase.voicemailDao.getVoicemailById(item.id);
+
         await _appDatabase.voicemailDao.insertOrUpdateVoicemail(
-          voicemailToDrift(item, details, _webtritApiClient.getVoicemailAttachmentUrl(item.id)),
+          voicemailToDrift(
+            item,
+            details,
+            _webtritApiClient.getVoicemailAttachmentUrl(item.id),
+            transcript: existing?.transcript,
+            transcriptStatus: existing?.transcriptStatus,
+          ),
         );
       }
 
       _fetchingCompleter?.complete();
+
+      unawaited(_transcribePendingVoicemails());
     } on UnauthorizedException catch (e) {
       _sessionGuard.onUnauthorized(e);
       rethrow;
@@ -189,6 +210,70 @@ class VoicemailRepositoryImpl
     } finally {
       _fetchingCompleter = null;
     }
+  }
+
+  /// Transcribes voicemails that have no transcript yet, one at a time.
+  ///
+  /// Eligible are voice messages whose transcript is absent and whose status is
+  /// not [TranscriptStatus.unavailable] (a failed message is not retried
+  /// automatically; rows left in [TranscriptStatus.inProgress] by an
+  /// interrupted run are picked up again). Progress and results are written to
+  /// the local database, so [watchVoicemails] listeners see every update live.
+  Future<void> _transcribePendingVoicemails() async {
+    final transcriptionDataSource = _transcriptionDataSource;
+    if (transcriptionDataSource == null || _transcriptionRunning) return;
+
+    _transcriptionRunning = true;
+    try {
+      final voicemails = await _appDatabase.voicemailDao.getAllVoicemails();
+      final pending = voicemails.where(
+        (voicemail) =>
+            voicemail.type == 'voice' &&
+            voicemail.transcript == null &&
+            voicemail.transcriptStatus != TranscriptStatus.unavailable.name,
+      );
+
+      for (final voicemail in pending) {
+        if (!_featureSupported) break;
+
+        try {
+          await _transcribeVoicemail(transcriptionDataSource, voicemail.id);
+        } on UnauthorizedException catch (e) {
+          _sessionGuard.onUnauthorized(e);
+          break;
+        }
+      }
+    } finally {
+      _transcriptionRunning = false;
+    }
+  }
+
+  Future<void> _transcribeVoicemail(TranscriptionDataSource transcriptionDataSource, String messageId) async {
+    await _updateTranscript(messageId, status: TranscriptStatus.inProgress);
+
+    try {
+      final audio = await _webtritApiClient.getUserVoicemailAttachment(_token, messageId, fileFormat: 'wav');
+      final transcript = await transcriptionDataSource.transcribe(audio);
+
+      await _updateTranscript(messageId, transcript: transcript, status: TranscriptStatus.done);
+    } on UnauthorizedException {
+      // Roll back to "not attempted" so the next session retries the message.
+      await _updateTranscript(messageId, status: null);
+      rethrow;
+    } catch (e, st) {
+      _logger.warning('Failed to transcribe voicemail $messageId', e, st);
+      await _updateTranscript(messageId, status: TranscriptStatus.unavailable);
+    }
+  }
+
+  Future<void> _updateTranscript(String messageId, {String? transcript, TranscriptStatus? status}) {
+    return _appDatabase.voicemailDao.updateVoicemail(
+      VoicemailDataCompanion(
+        id: Value(messageId),
+        transcript: Value(transcript),
+        transcriptStatus: Value(status?.name),
+      ),
+    );
   }
 
   /// Retrieves local voicemails and pushes them to the stream controller.

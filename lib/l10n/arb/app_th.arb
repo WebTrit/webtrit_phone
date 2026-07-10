@@ -2353,6 +2353,17 @@
   "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "ไม่รองรับฟีเจอร์นี้",
   "@voicemail_Title_notSupported": {},
+<<<<<<< HEAD
+=======
+  "voicemail_RecordsCache_description": "สำเนารายการข้อความเสียงที่ดึงจากเซิร์ฟเวอร์ซึ่งเก็บไว้ในเครื่อง (ไฟล์เสียงเป็นส่วนแยกต่างหาก) การล้างจะลบรายการในเครื่อง และรายการจะถูกดาวน์โหลดใหม่เมื่อรีเฟรชครั้งถัดไป",
+  "@voicemail_RecordsCache_description": {},
+  "voicemail_RecordsCache_title": "ข้อความเสียงที่บันทึกไว้",
+  "@voicemail_RecordsCache_title": {},
+  "voicemail_Transcript_inProgress": "กำลังถอดเสียง...",
+  "@voicemail_Transcript_inProgress": {},
+  "voicemail_Transcript_unavailable": "ไม่มีข้อความถอดเสียง",
+  "@voicemail_Transcript_unavailable": {},
+>>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
   "voicemail_Widget_screenTitle": "ข้อความเสียง",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "ลองใหม่",

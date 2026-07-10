@@ -11067,6 +11067,28 @@ class $VoicemailTableTable extends VoicemailTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _transcriptMeta = const VerificationMeta(
+    'transcript',
+  );
+  @override
+  late final GeneratedColumn<String> transcript = GeneratedColumn<String>(
+    'transcript',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _transcriptStatusMeta = const VerificationMeta(
+    'transcriptStatus',
+  );
+  @override
+  late final GeneratedColumn<String> transcriptStatus = GeneratedColumn<String>(
+    'transcript_status',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -11078,6 +11100,8 @@ class $VoicemailTableTable extends VoicemailTable
     size,
     type,
     attachmentPath,
+    transcript,
+    transcriptStatus,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -11159,6 +11183,21 @@ class $VoicemailTableTable extends VoicemailTable
         ),
       );
     }
+    if (data.containsKey('transcript')) {
+      context.handle(
+        _transcriptMeta,
+        transcript.isAcceptableOrUnknown(data['transcript']!, _transcriptMeta),
+      );
+    }
+    if (data.containsKey('transcript_status')) {
+      context.handle(
+        _transcriptStatusMeta,
+        transcriptStatus.isAcceptableOrUnknown(
+          data['transcript_status']!,
+          _transcriptStatusMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -11204,6 +11243,14 @@ class $VoicemailTableTable extends VoicemailTable
         DriftSqlType.string,
         data['${effectivePrefix}attachment_path'],
       ),
+      transcript: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}transcript'],
+      ),
+      transcriptStatus: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}transcript_status'],
+      ),
     );
   }
 
@@ -11223,6 +11270,8 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
   final int size;
   final String type;
   final String? attachmentPath;
+  final String? transcript;
+  final String? transcriptStatus;
   const VoicemailData({
     required this.id,
     required this.date,
@@ -11233,6 +11282,8 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
     required this.size,
     required this.type,
     this.attachmentPath,
+    this.transcript,
+    this.transcriptStatus,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -11247,6 +11298,12 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
     map['type'] = Variable<String>(type);
     if (!nullToAbsent || attachmentPath != null) {
       map['attachment_path'] = Variable<String>(attachmentPath);
+    }
+    if (!nullToAbsent || transcript != null) {
+      map['transcript'] = Variable<String>(transcript);
+    }
+    if (!nullToAbsent || transcriptStatus != null) {
+      map['transcript_status'] = Variable<String>(transcriptStatus);
     }
     return map;
   }
@@ -11264,6 +11321,12 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       attachmentPath: attachmentPath == null && nullToAbsent
           ? const Value.absent()
           : Value(attachmentPath),
+      transcript: transcript == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transcript),
+      transcriptStatus: transcriptStatus == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transcriptStatus),
     );
   }
 
@@ -11282,6 +11345,8 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       size: serializer.fromJson<int>(json['size']),
       type: serializer.fromJson<String>(json['type']),
       attachmentPath: serializer.fromJson<String?>(json['attachmentPath']),
+      transcript: serializer.fromJson<String?>(json['transcript']),
+      transcriptStatus: serializer.fromJson<String?>(json['transcriptStatus']),
     );
   }
   @override
@@ -11297,6 +11362,8 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       'size': serializer.toJson<int>(size),
       'type': serializer.toJson<String>(type),
       'attachmentPath': serializer.toJson<String?>(attachmentPath),
+      'transcript': serializer.toJson<String?>(transcript),
+      'transcriptStatus': serializer.toJson<String?>(transcriptStatus),
     };
   }
 
@@ -11310,6 +11377,8 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
     int? size,
     String? type,
     Value<String?> attachmentPath = const Value.absent(),
+    Value<String?> transcript = const Value.absent(),
+    Value<String?> transcriptStatus = const Value.absent(),
   }) => VoicemailData(
     id: id ?? this.id,
     date: date ?? this.date,
@@ -11322,6 +11391,10 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
     attachmentPath: attachmentPath.present
         ? attachmentPath.value
         : this.attachmentPath,
+    transcript: transcript.present ? transcript.value : this.transcript,
+    transcriptStatus: transcriptStatus.present
+        ? transcriptStatus.value
+        : this.transcriptStatus,
   );
   VoicemailData copyWithCompanion(VoicemailDataCompanion data) {
     return VoicemailData(
@@ -11336,6 +11409,12 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       attachmentPath: data.attachmentPath.present
           ? data.attachmentPath.value
           : this.attachmentPath,
+      transcript: data.transcript.present
+          ? data.transcript.value
+          : this.transcript,
+      transcriptStatus: data.transcriptStatus.present
+          ? data.transcriptStatus.value
+          : this.transcriptStatus,
     );
   }
 
@@ -11350,7 +11429,9 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
           ..write('seen: $seen, ')
           ..write('size: $size, ')
           ..write('type: $type, ')
-          ..write('attachmentPath: $attachmentPath')
+          ..write('attachmentPath: $attachmentPath, ')
+          ..write('transcript: $transcript, ')
+          ..write('transcriptStatus: $transcriptStatus')
           ..write(')'))
         .toString();
   }
@@ -11366,6 +11447,8 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
     size,
     type,
     attachmentPath,
+    transcript,
+    transcriptStatus,
   );
   @override
   bool operator ==(Object other) =>
@@ -11379,7 +11462,9 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
           other.seen == this.seen &&
           other.size == this.size &&
           other.type == this.type &&
-          other.attachmentPath == this.attachmentPath);
+          other.attachmentPath == this.attachmentPath &&
+          other.transcript == this.transcript &&
+          other.transcriptStatus == this.transcriptStatus);
 }
 
 class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
@@ -11392,6 +11477,8 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
   final Value<int> size;
   final Value<String> type;
   final Value<String?> attachmentPath;
+  final Value<String?> transcript;
+  final Value<String?> transcriptStatus;
   final Value<int> rowid;
   const VoicemailDataCompanion({
     this.id = const Value.absent(),
@@ -11403,6 +11490,8 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     this.size = const Value.absent(),
     this.type = const Value.absent(),
     this.attachmentPath = const Value.absent(),
+    this.transcript = const Value.absent(),
+    this.transcriptStatus = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   VoicemailDataCompanion.insert({
@@ -11415,6 +11504,8 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     required int size,
     required String type,
     this.attachmentPath = const Value.absent(),
+    this.transcript = const Value.absent(),
+    this.transcriptStatus = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        date = Value(date),
@@ -11433,6 +11524,8 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     Expression<int>? size,
     Expression<String>? type,
     Expression<String>? attachmentPath,
+    Expression<String>? transcript,
+    Expression<String>? transcriptStatus,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -11445,6 +11538,8 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
       if (size != null) 'size': size,
       if (type != null) 'type': type,
       if (attachmentPath != null) 'attachment_path': attachmentPath,
+      if (transcript != null) 'transcript': transcript,
+      if (transcriptStatus != null) 'transcript_status': transcriptStatus,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -11459,6 +11554,8 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     Value<int>? size,
     Value<String>? type,
     Value<String?>? attachmentPath,
+    Value<String?>? transcript,
+    Value<String?>? transcriptStatus,
     Value<int>? rowid,
   }) {
     return VoicemailDataCompanion(
@@ -11471,6 +11568,8 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
       size: size ?? this.size,
       type: type ?? this.type,
       attachmentPath: attachmentPath ?? this.attachmentPath,
+      transcript: transcript ?? this.transcript,
+      transcriptStatus: transcriptStatus ?? this.transcriptStatus,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -11505,6 +11604,12 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     if (attachmentPath.present) {
       map['attachment_path'] = Variable<String>(attachmentPath.value);
     }
+    if (transcript.present) {
+      map['transcript'] = Variable<String>(transcript.value);
+    }
+    if (transcriptStatus.present) {
+      map['transcript_status'] = Variable<String>(transcriptStatus.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -11523,6 +11628,8 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
           ..write('size: $size, ')
           ..write('type: $type, ')
           ..write('attachmentPath: $attachmentPath, ')
+          ..write('transcript: $transcript, ')
+          ..write('transcriptStatus: $transcriptStatus, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -25343,6 +25450,8 @@ typedef $$VoicemailTableTableCreateCompanionBuilder =
       required int size,
       required String type,
       Value<String?> attachmentPath,
+      Value<String?> transcript,
+      Value<String?> transcriptStatus,
       Value<int> rowid,
     });
 typedef $$VoicemailTableTableUpdateCompanionBuilder =
@@ -25356,6 +25465,8 @@ typedef $$VoicemailTableTableUpdateCompanionBuilder =
       Value<int> size,
       Value<String> type,
       Value<String?> attachmentPath,
+      Value<String?> transcript,
+      Value<String?> transcriptStatus,
       Value<int> rowid,
     });
 
@@ -25410,6 +25521,16 @@ class $$VoicemailTableTableFilterComposer
 
   ColumnFilters<String> get attachmentPath => $composableBuilder(
     column: $table.attachmentPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get transcript => $composableBuilder(
+    column: $table.transcript,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get transcriptStatus => $composableBuilder(
+    column: $table.transcriptStatus,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -25467,6 +25588,16 @@ class $$VoicemailTableTableOrderingComposer
     column: $table.attachmentPath,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get transcript => $composableBuilder(
+    column: $table.transcript,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get transcriptStatus => $composableBuilder(
+    column: $table.transcriptStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$VoicemailTableTableAnnotationComposer
@@ -25504,6 +25635,16 @@ class $$VoicemailTableTableAnnotationComposer
 
   GeneratedColumn<String> get attachmentPath => $composableBuilder(
     column: $table.attachmentPath,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get transcript => $composableBuilder(
+    column: $table.transcript,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get transcriptStatus => $composableBuilder(
+    column: $table.transcriptStatus,
     builder: (column) => column,
   );
 }
@@ -25550,6 +25691,8 @@ class $$VoicemailTableTableTableManager
                 Value<int> size = const Value.absent(),
                 Value<String> type = const Value.absent(),
                 Value<String?> attachmentPath = const Value.absent(),
+                Value<String?> transcript = const Value.absent(),
+                Value<String?> transcriptStatus = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => VoicemailDataCompanion(
                 id: id,
@@ -25561,6 +25704,8 @@ class $$VoicemailTableTableTableManager
                 size: size,
                 type: type,
                 attachmentPath: attachmentPath,
+                transcript: transcript,
+                transcriptStatus: transcriptStatus,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -25574,6 +25719,8 @@ class $$VoicemailTableTableTableManager
                 required int size,
                 required String type,
                 Value<String?> attachmentPath = const Value.absent(),
+                Value<String?> transcript = const Value.absent(),
+                Value<String?> transcriptStatus = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => VoicemailDataCompanion.insert(
                 id: id,
@@ -25585,6 +25732,8 @@ class $$VoicemailTableTableTableManager
                 size: size,
                 type: type,
                 attachmentPath: attachmentPath,
+                transcript: transcript,
+                transcriptStatus: transcriptStatus,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

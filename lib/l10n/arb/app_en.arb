@@ -2365,6 +2365,17 @@
   "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Feature not supported",
   "@voicemail_Title_notSupported": {},
+<<<<<<< HEAD
+=======
+  "voicemail_RecordsCache_description": "Locally stored copy of the voicemail list fetched from the server (the audio files are a separate section). Clearing removes the local records; the list is downloaded again on the next refresh.",
+  "@voicemail_RecordsCache_description": {},
+  "voicemail_RecordsCache_title": "Voicemail messages",
+  "@voicemail_RecordsCache_title": {},
+  "voicemail_Transcript_inProgress": "Transcribing...",
+  "@voicemail_Transcript_inProgress": {},
+  "voicemail_Transcript_unavailable": "Transcript unavailable",
+  "@voicemail_Transcript_unavailable": {},
+>>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
   "voicemail_Widget_screenTitle": "Voicemail",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",

@@ -7,8 +7,10 @@ mixin VoicemailMapper {
   VoicemailData voicemailToDrift(
     UserVoicemailItem userVoicemailItem,
     UserVoicemail userVoicemailDetails,
-    String attachmentUrl,
-  ) {
+    String attachmentUrl, {
+    String? transcript,
+    String? transcriptStatus,
+  }) {
     final voicemail = VoicemailData(
       id: userVoicemailItem.id,
       date: userVoicemailItem.date,
@@ -19,6 +21,8 @@ mixin VoicemailMapper {
       size: userVoicemailItem.size,
       type: userVoicemailItem.type,
       attachmentPath: attachmentUrl,
+      transcript: transcript,
+      transcriptStatus: transcriptStatus,
     );
 
     return voicemail;
@@ -37,6 +41,8 @@ mixin VoicemailMapper {
       voicemailData.size,
       voicemailData.type,
       voicemailData.attachmentPath,
+      transcript: voicemailData.transcript,
+      transcriptStatus: TranscriptStatus.fromName(voicemailData.transcriptStatus),
     );
   }
 }
