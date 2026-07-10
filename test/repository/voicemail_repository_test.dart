@@ -101,6 +101,14 @@ Future<VoicemailData> waitForTranscriptStatus(AppDatabase appDatabase, String id
   fail('voicemail $id did not reach transcript status $status');
 }
 
+Future<void> waitFor(bool Function() condition, String description) async {
+  for (var attempt = 0; attempt < 200; attempt++) {
+    if (condition()) return;
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+  }
+  fail('condition not reached: $description');
+}
+
 void main() {
   late AppDatabase appDatabase;
   late VoicemailRepositoryImpl repo;
@@ -340,9 +348,9 @@ void main() {
       expect(row.transcript, isNull);
     });
 
-    test('marks the voicemail unavailable when the attachment download fails', () async {
+    test('marks the voicemail unavailable when the attachment download fails permanently', () async {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()])
-        ..attachmentError = api.RequestFailure(url: Uri.parse('http://example.com'), statusCode: 500, requestId: 'r1');
+        ..attachmentError = api.RequestFailure(url: Uri.parse('http://example.com'), statusCode: 404, requestId: 'r1');
       final dataSource = _FakeTranscriptionDataSource();
 
       createRepo(client, dataSource);
@@ -350,6 +358,39 @@ void main() {
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.unavailable.name);
       expect(row.transcript, isNull);
       expect(dataSource.calls, 0);
+    });
+
+    test('rolls back to not-attempted and retries on the next fetch after a server error', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem()])
+        ..attachmentError = api.RequestFailure(url: Uri.parse('http://example.com'), statusCode: 500, requestId: 'r1');
+      final dataSource = _FakeTranscriptionDataSource(result: 'hello world');
+
+      final repo = createRepo(client, dataSource);
+      await waitFor(() => client.requestedAttachmentFormats.length == 1, 'first attachment attempt');
+
+      // The failed attempt rolls the row back from inProgress to not-attempted.
+      var row = await waitForTranscriptStatus(transcriptionDatabase, '1', null);
+      expect(row.transcript, isNull);
+
+      client.attachmentError = null;
+      await repo.fetchVoicemails();
+
+      row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
+      expect(row.transcript, 'hello world');
+      expect(client.requestedAttachmentFormats.length, 2);
+    });
+
+    test('rolls back to not-attempted after a transient transcription failure', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
+      final dataSource = _FakeTranscriptionDataSource(
+        error: const TranscriptionException('rate limited', transient: true),
+      );
+
+      createRepo(client, dataSource);
+      await waitFor(() => dataSource.calls == 1, 'first transcription attempt');
+
+      final row = await waitForTranscriptStatus(transcriptionDatabase, '1', null);
+      expect(row.transcript, isNull);
     });
 
     test('preserves the transcript on refetch and does not transcribe twice', () async {

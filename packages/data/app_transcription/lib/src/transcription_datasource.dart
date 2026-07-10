@@ -15,9 +15,15 @@ abstract class TranscriptionDataSource {
 }
 
 class TranscriptionException implements Exception {
-  const TranscriptionException(this.message);
+  const TranscriptionException(this.message, {this.transient = false});
 
   final String message;
+
+  /// Whether retrying later may succeed (network failures, timeouts, server
+  /// 5xx) as opposed to a permanent failure for this audio (decode errors,
+  /// rejected payload). Callers use this to decide between re-queueing and
+  /// giving up on the message.
+  final bool transient;
 
   @override
   String toString() => 'TranscriptionException: $message';

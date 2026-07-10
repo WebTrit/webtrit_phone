@@ -85,13 +85,32 @@ void main() {
       expect(body, contains('it'));
     });
 
-    test('throws TranscriptionException on a non-200 response', () async {
-      final dataSource = RemoteWhisperTranscriptionDataSource(
-        url: Uri.parse('https://stt.example.com/v1'),
-        httpClient: MockClient((request) async => http.Response('nope', 503)),
-      );
+    test('throws a transient TranscriptionException on a retryable response', () async {
+      for (final statusCode in [408, 425, 429, 500, 503]) {
+        final dataSource = RemoteWhisperTranscriptionDataSource(
+          url: Uri.parse('https://stt.example.com/v1'),
+          httpClient: MockClient((request) async => http.Response('nope', statusCode)),
+        );
 
-      await expectLater(dataSource.transcribe(audio), throwsA(isA<TranscriptionException>()));
+        await expectLater(
+          dataSource.transcribe(audio),
+          throwsA(isA<TranscriptionException>().having((e) => e.transient, 'transient', isTrue)),
+        );
+      }
+    });
+
+    test('throws a permanent TranscriptionException on a non-retryable response', () async {
+      for (final statusCode in [400, 401, 404, 422]) {
+        final dataSource = RemoteWhisperTranscriptionDataSource(
+          url: Uri.parse('https://stt.example.com/v1'),
+          httpClient: MockClient((request) async => http.Response('nope', statusCode)),
+        );
+
+        await expectLater(
+          dataSource.transcribe(audio),
+          throwsA(isA<TranscriptionException>().having((e) => e.transient, 'transient', isFalse)),
+        );
+      }
     });
 
     test('throws TranscriptionException on a non-JSON payload', () async {
@@ -109,16 +128,22 @@ void main() {
         httpClient: MockClient((request) async => http.Response(jsonEncode({'result': 'oops'}), 200)),
       );
 
-      await expectLater(dataSource.transcribe(audio), throwsA(isA<TranscriptionException>()));
+      await expectLater(
+        dataSource.transcribe(audio),
+        throwsA(isA<TranscriptionException>().having((e) => e.transient, 'transient', isFalse)),
+      );
     });
 
-    test('throws TranscriptionException when the transport fails', () async {
+    test('throws a transient TranscriptionException when the transport fails', () async {
       final dataSource = RemoteWhisperTranscriptionDataSource(
         url: Uri.parse('https://stt.example.com/v1'),
         httpClient: MockClient((request) async => throw http.ClientException('connection refused')),
       );
 
-      await expectLater(dataSource.transcribe(audio), throwsA(isA<TranscriptionException>()));
+      await expectLater(
+        dataSource.transcribe(audio),
+        throwsA(isA<TranscriptionException>().having((e) => e.transient, 'transient', isTrue)),
+      );
     });
   });
 }
