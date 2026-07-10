@@ -18,6 +18,28 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
   Future<void> insertOrUpdateVoicemail(VoicemailData voicemail) =>
       into(voicemailTable).insertOnConflictUpdate(voicemail);
 
+  /// Upserts a voicemail coming from the remote payload without touching the
+  /// locally produced transcript columns on conflict: the remote payload never
+  /// carries transcripts, and a read-then-write merge would race concurrent
+  /// transcription writes and could overwrite a finished transcript.
+  Future<void> upsertVoicemailFromRemote(VoicemailData voicemail) {
+    return into(voicemailTable).insert(
+      voicemail,
+      onConflict: DoUpdate(
+        (old) => VoicemailDataCompanion(
+          date: Value(voicemail.date),
+          duration: Value(voicemail.duration),
+          sender: Value(voicemail.sender),
+          receiver: Value(voicemail.receiver),
+          seen: Value(voicemail.seen),
+          size: Value(voicemail.size),
+          type: Value(voicemail.type),
+          attachmentPath: Value(voicemail.attachmentPath),
+        ),
+      ),
+    );
+  }
+
   Future<void> updateVoicemail(VoicemailDataCompanion voicemail) {
     return (update(voicemailTable)..where((tbl) => tbl.id.equals(voicemail.id.value))).write(voicemail);
   }

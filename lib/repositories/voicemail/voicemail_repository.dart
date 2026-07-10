@@ -210,18 +210,12 @@ class VoicemailRepositoryImpl
       for (final item in remoteItems.items) {
         final details = await _webtritApiClient.getUserVoicemail(_token, item.id, locale: localeCode);
 
-        // Transcripts are produced locally, so carry them over instead of
-        // wiping them with the transcript-less remote payload.
-        final existing = await _appDatabase.voicemailDao.getVoicemailById(item.id);
-
-        await _appDatabase.voicemailDao.insertOrUpdateVoicemail(
-          voicemailToDrift(
-            item,
-            details,
-            _webtritApiClient.getVoicemailAttachmentUrl(item.id),
-            transcript: existing?.transcript,
-            transcriptStatus: existing?.transcriptStatus,
-          ),
+        // Transcripts are produced locally and the remote payload never
+        // carries them, so the upsert leaves the transcript columns untouched
+        // on update (a read-then-write merge here would race the background
+        // transcription sweep and could wipe a just-finished transcript).
+        await _appDatabase.voicemailDao.upsertVoicemailFromRemote(
+          voicemailToDrift(item, details, _webtritApiClient.getVoicemailAttachmentUrl(item.id)),
         );
       }
 
