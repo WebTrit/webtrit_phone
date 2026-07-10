@@ -2,11 +2,9 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/environment_config.dart';
+import 'package:app_transcription/app_transcription.dart';
 
-import 'local_whisper_transcription_datasource.dart';
-import 'remote_whisper_transcription_datasource.dart';
-import 'transcription_datasource.dart';
+import 'package:webtrit_phone/environment_config.dart';
 
 final _logger = Logger('TranscriptionDataSourceFactory');
 

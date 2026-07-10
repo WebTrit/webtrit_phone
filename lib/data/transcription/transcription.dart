@@ -1,4 +1,3 @@
-export 'local_whisper_transcription_datasource.dart';
-export 'remote_whisper_transcription_datasource.dart';
-export 'transcription_datasource.dart';
+export 'package:app_transcription/app_transcription.dart';
+
 export 'transcription_datasource_factory.dart';
