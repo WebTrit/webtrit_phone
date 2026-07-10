@@ -37,6 +37,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.userSessionCleanupResolver,
     required this.systemInfoRepository,
     required this.appCompatibilityResolver,
+    List<Locale> supportedLocales = const <Locale>[],
   }) : super(
          AppState(
            session: sessionRepository.getCurrent(),
@@ -44,7 +45,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
                ? AppLifecycleStatus.authenticated
                : AppLifecycleStatus.unauthenticated,
            themeMode: themeModeRepository.getThemeMode(),
-           locale: localeRepository.getLocale(),
+           locale: _resolveInitialLocale(localeRepository.getLocale(), supportedLocales),
            userAgreementStatus: userAgreementStatusRepository.getUserAgreementStatus(),
            contactsAgreementStatus: contactsAgreementStatusRepository.getContactsAgreementStatus(),
          ),
@@ -76,6 +77,24 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AppCompatibilityResolver appCompatibilityResolver;
 
   StreamSubscription<WebtritSystemInfo>? _systemInfoSubscription;
+
+  /// Reconciles the persisted locale against the currently supported locales.
+  ///
+  /// A build can narrow the set of selectable languages (the per-brand
+  /// allowlist), so a previously persisted choice may no longer be offered
+  /// after an update, leaving a stale value that matches nothing in the picker.
+  ///   - Empty [supportedLocales] means unrestricted, so the choice is kept.
+  ///   - A single supported language pins to that language: it is the only
+  ///     selectable option (the picker drops the follow-system "default" entry),
+  ///     so the effective locale must be that language.
+  ///   - Otherwise keep the persisted choice when it is still supported, and
+  ///     fall back to the default (follow-system) locale when it is not.
+  static Locale _resolveInitialLocale(Locale persisted, List<Locale> supportedLocales) {
+    if (supportedLocales.isEmpty) return persisted;
+    if (supportedLocales.length == 1) return supportedLocales.single;
+    if (persisted == LocaleExtension.defaultNull) return persisted;
+    return supportedLocales.contains(persisted) ? persisted : LocaleExtension.defaultNull;
+  }
 
   @override
   Future<void> close() async {
