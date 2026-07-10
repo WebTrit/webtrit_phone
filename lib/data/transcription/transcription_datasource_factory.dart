@@ -2,8 +2,10 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:logging/logging.dart';
 
+import 'package:_http_client/_http_client.dart';
 import 'package:app_transcription/app_transcription.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/environment_config.dart';
 
 final _logger = Logger('TranscriptionDataSourceFactory');
@@ -24,7 +26,12 @@ enum TranscriptionMode {
 
 /// Builds the voicemail transcription source configured via [EnvironmentConfig],
 /// or `null` when the feature is disabled or misconfigured for this platform.
-TranscriptionDataSource? createVoicemailTranscriptionDataSource() {
+///
+/// [certs] lets the remote source talk to self-hosted endpoints secured by
+/// the same trusted certificates the rest of the app uses.
+TranscriptionDataSource? createVoicemailTranscriptionDataSource({
+  TrustedCertificates certs = TrustedCertificates.empty,
+}) {
   final rawMode = EnvironmentConfig.VOICEMAIL_TRANSCRIPTION_MODE;
   final mode = TranscriptionMode.fromName(rawMode);
 
@@ -57,6 +64,7 @@ TranscriptionDataSource? createVoicemailTranscriptionDataSource() {
         apiKey: EnvironmentConfig.VOICEMAIL_TRANSCRIPTION_REMOTE_API_KEY,
         model: EnvironmentConfig.VOICEMAIL_TRANSCRIPTION_REMOTE_MODEL,
         defaultLanguage: EnvironmentConfig.VOICEMAIL_TRANSCRIPTION_LANGUAGE,
+        httpClient: createHttpClient(connectionTimeout: kApiClientConnectionTimeout, certs: certs),
       );
   }
 }

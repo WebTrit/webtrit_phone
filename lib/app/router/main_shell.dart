@@ -298,7 +298,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 webtritApiClient: context.read<WebtritApiClient>(),
                 token: context.read<AppBloc>().state.session.token!,
                 appDatabase: context.read<AppDatabase>(),
-                transcriptionDataSource: createVoicemailTranscriptionDataSource(),
+                transcriptionDataSource: createVoicemailTranscriptionDataSource(
+                  certs: appCertificates.trustedCertificates,
+                ),
               );
             } else {
               return const EmptyVoicemailRepository();
