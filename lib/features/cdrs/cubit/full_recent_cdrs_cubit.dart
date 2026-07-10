@@ -26,13 +26,13 @@ class FullRecentCdrsCubit extends Cubit<FullRecentCdrsState> {
     final recentCdrs = await _cdrsLocalRepository.getHistory(limit: pageSize);
     // An empty cache only means "loading" while the initial remote sync has not
     // completed yet (no sync cursor); after it, an empty list is genuinely empty.
-    final synced = await _cdrsLocalRepository.getSyncCursor() != null;
+    final synced = await _cdrsLocalRepository.getLastSyncTime() != null;
     emit(state.copyWith(records: recentCdrs, isLoading: recentCdrs.isEmpty && !synced));
     _eventsSub = _cdrsLocalRepository.events.listen(_handleEvent);
 
     // Close the race between the cursor read above and the subscription: if the
     // initial sync completed in that window, resolve the loading state now.
-    if (state.isLoading && await _cdrsLocalRepository.getSyncCursor() != null) {
+    if (state.isLoading && await _cdrsLocalRepository.getLastSyncTime() != null) {
       await _resolveInitialLoad();
     }
   }

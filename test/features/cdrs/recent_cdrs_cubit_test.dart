@@ -37,7 +37,7 @@ void main() {
     events = StreamController<CdrRecordsEvent>.broadcast();
 
     when(() => local.events).thenAnswer((_) => events.stream);
-    when(() => local.getSyncCursor()).thenAnswer((_) async => null);
+    when(() => local.getLastSyncTime()).thenAnswer((_) async => null);
   });
 
   tearDown(() => events.close());
@@ -64,7 +64,7 @@ void main() {
     });
 
     test('empty cache with an existing sync cursor resolves to the empty state immediately', () async {
-      when(() => local.getSyncCursor()).thenAnswer((_) async => DateTime(2026, 1, 1));
+      when(() => local.getLastSyncTime()).thenAnswer((_) async => DateTime(2026, 1, 1));
       when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => <CdrRecord>[]);
 
       final cubit = FullRecentCdrsCubit(local, remote);
@@ -104,7 +104,7 @@ void main() {
     test('cursor written between the read and the subscription is not missed', () async {
       // First cursor read (gate) returns null, second (race re-check) returns a value.
       var cursorCall = 0;
-      when(() => local.getSyncCursor()).thenAnswer((_) async {
+      when(() => local.getLastSyncTime()).thenAnswer((_) async {
         cursorCall++;
         return cursorCall == 1 ? null : DateTime(2026, 1, 1);
       });
@@ -156,7 +156,7 @@ void main() {
     });
 
     test('empty cache with an existing sync cursor resolves and scans immediately', () async {
-      when(() => local.getSyncCursor()).thenAnswer((_) async => DateTime(2026, 1, 1));
+      when(() => local.getLastSyncTime()).thenAnswer((_) async => DateTime(2026, 1, 1));
 
       final cubit = MissedRecentCdrsCubit(local, remote);
       await cubit.init();

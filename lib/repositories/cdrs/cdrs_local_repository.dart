@@ -42,13 +42,13 @@ abstract class CdrsLocalRepository {
   Future<DateTime?> getFirstRecordTime();
 
   /// Time of the last successfully completed remote sync cycle, or null if the
-  /// initial sync has never finished. Presence of the cursor distinguishes
-  /// "synced, genuinely empty" from "never synced yet" (still loading).
-  Future<DateTime?> getSyncCursor();
+  /// initial sync has never finished. Its presence distinguishes "synced,
+  /// genuinely empty" from "never synced yet" (still loading).
+  Future<DateTime?> getLastSyncTime();
 
-  /// Persists the remote-sync watermark. Emits [CdrsInitialSyncCompleted] on
-  /// [events] when this is the first cursor ever written.
-  Future<void> setSyncCursor(DateTime time);
+  /// Marks a remote sync cycle as completed. Emits [CdrsInitialSyncCompleted]
+  /// on [events] when it is the first completed cycle ever recorded.
+  Future<void> markSyncCompleted(DateTime time);
 
   /// Wipes all Call Detail Records (CDRs) data from the local database.
   Future<void> wipeData();
@@ -106,12 +106,12 @@ class CdrsLocalRepositoryDriftImpl with CdrDriftMapper implements CdrsLocalRepos
   }
 
   @override
-  Future<DateTime?> getSyncCursor() async {
+  Future<DateTime?> getLastSyncTime() async {
     return await _dao.getSyncCursor();
   }
 
   @override
-  Future<void> setSyncCursor(DateTime time) async {
+  Future<void> markSyncCompleted(DateTime time) async {
     final previous = await _dao.getSyncCursor();
     await _dao.setSyncCursor(time);
     if (previous == null) _eventBus.add(CdrsInitialSyncCompleted());

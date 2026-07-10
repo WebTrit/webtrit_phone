@@ -28,14 +28,14 @@ class NumberCdrsLogCubit extends Cubit<NumberCdrsLogState> {
     final numberCdrs = await _cdrsLocalRepository.getHistory(number: number, limit: pageSize);
     // An empty cache only means "loading" while the initial remote sync has not
     // completed yet (no sync cursor); after it, an empty list is genuinely empty.
-    final synced = await _cdrsLocalRepository.getSyncCursor() != null;
+    final synced = await _cdrsLocalRepository.getLastSyncTime() != null;
     emit(state.copyWith(records: numberCdrs, isLoading: numberCdrs.isEmpty && !synced));
     _eventsSub = _cdrsLocalRepository.events.listen(_handleEvent);
 
     if (state.isLoading) {
       // Close the race between the cursor read above and the subscription: if
       // the initial sync completed in that window, run the scan now.
-      if (await _cdrsLocalRepository.getSyncCursor() != null) await _onInitialSyncCompleted();
+      if (await _cdrsLocalRepository.getLastSyncTime() != null) await _onInitialSyncCompleted();
     } else {
       _initialScanStarted = true;
       // If we didn't load enough missed CDRs, try to scan more from remote
