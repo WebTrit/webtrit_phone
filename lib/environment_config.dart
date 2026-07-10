@@ -249,6 +249,57 @@ class EnvironmentConfig {
     SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME,
     const int.fromEnvironment(SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME, defaultValue: 300),
   );
+
+  /// Voicemail transcription source: empty (disabled), `local` (on-device
+  /// Whisper) or `remote` (OpenAI-compatible speech-to-text API).
+  static const VOICEMAIL_TRANSCRIPTION_MODE__NAME = 'WEBTRIT_APP_VOICEMAIL_TRANSCRIPTION_MODE';
+  static String get VOICEMAIL_TRANSCRIPTION_MODE => _env.string(
+    VOICEMAIL_TRANSCRIPTION_MODE__NAME,
+    const String.fromEnvironment(VOICEMAIL_TRANSCRIPTION_MODE__NAME, defaultValue: ''),
+  );
+
+  /// ISO 639-1 language hint for voicemail transcription; empty enables
+  /// automatic language detection.
+  static const VOICEMAIL_TRANSCRIPTION_LANGUAGE__NAME = 'WEBTRIT_APP_VOICEMAIL_TRANSCRIPTION_LANGUAGE';
+  static const String? _VOICEMAIL_TRANSCRIPTION_LANGUAGE_ENV =
+      bool.hasEnvironment(VOICEMAIL_TRANSCRIPTION_LANGUAGE__NAME)
+      ? String.fromEnvironment(VOICEMAIL_TRANSCRIPTION_LANGUAGE__NAME)
+      : null;
+  static String? get VOICEMAIL_TRANSCRIPTION_LANGUAGE =>
+      _env.stringOrNull(VOICEMAIL_TRANSCRIPTION_LANGUAGE__NAME, _VOICEMAIL_TRANSCRIPTION_LANGUAGE_ENV);
+
+  /// Whisper ggml model name used by the local mode (tiny/base/small/...).
+  static const VOICEMAIL_TRANSCRIPTION_LOCAL_MODEL__NAME = 'WEBTRIT_APP_VOICEMAIL_TRANSCRIPTION_LOCAL_MODEL';
+  static String get VOICEMAIL_TRANSCRIPTION_LOCAL_MODEL => _env.string(
+    VOICEMAIL_TRANSCRIPTION_LOCAL_MODEL__NAME,
+    const String.fromEnvironment(VOICEMAIL_TRANSCRIPTION_LOCAL_MODEL__NAME, defaultValue: 'base'),
+  );
+
+  /// OpenAI-compatible endpoint for the remote mode: either the full
+  /// `.../audio/transcriptions` URL or its API base (e.g. `https://host/v1`).
+  static const VOICEMAIL_TRANSCRIPTION_REMOTE_URL__NAME = 'WEBTRIT_APP_VOICEMAIL_TRANSCRIPTION_REMOTE_URL';
+  static const String? _VOICEMAIL_TRANSCRIPTION_REMOTE_URL_ENV =
+      bool.hasEnvironment(VOICEMAIL_TRANSCRIPTION_REMOTE_URL__NAME)
+      ? String.fromEnvironment(VOICEMAIL_TRANSCRIPTION_REMOTE_URL__NAME)
+      : null;
+  static String? get VOICEMAIL_TRANSCRIPTION_REMOTE_URL =>
+      _env.stringOrNull(VOICEMAIL_TRANSCRIPTION_REMOTE_URL__NAME, _VOICEMAIL_TRANSCRIPTION_REMOTE_URL_ENV);
+
+  /// API key for the remote mode; empty when the endpoint needs no auth.
+  static const VOICEMAIL_TRANSCRIPTION_REMOTE_API_KEY__NAME = 'WEBTRIT_APP_VOICEMAIL_TRANSCRIPTION_REMOTE_API_KEY';
+  static const String? _VOICEMAIL_TRANSCRIPTION_REMOTE_API_KEY_ENV =
+      bool.hasEnvironment(VOICEMAIL_TRANSCRIPTION_REMOTE_API_KEY__NAME)
+      ? String.fromEnvironment(VOICEMAIL_TRANSCRIPTION_REMOTE_API_KEY__NAME)
+      : null;
+  static String? get VOICEMAIL_TRANSCRIPTION_REMOTE_API_KEY =>
+      _env.stringOrNull(VOICEMAIL_TRANSCRIPTION_REMOTE_API_KEY__NAME, _VOICEMAIL_TRANSCRIPTION_REMOTE_API_KEY_ENV);
+
+  /// Model name sent to the remote OpenAI-compatible API.
+  static const VOICEMAIL_TRANSCRIPTION_REMOTE_MODEL__NAME = 'WEBTRIT_APP_VOICEMAIL_TRANSCRIPTION_REMOTE_MODEL';
+  static String get VOICEMAIL_TRANSCRIPTION_REMOTE_MODEL => _env.string(
+    VOICEMAIL_TRANSCRIPTION_REMOTE_MODEL__NAME,
+    const String.fromEnvironment(VOICEMAIL_TRANSCRIPTION_REMOTE_MODEL__NAME, defaultValue: 'whisper-1'),
+  );
 }
 
 /// Resolves dart-define values for [EnvironmentConfig], hiding the source from

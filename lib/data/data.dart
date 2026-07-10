@@ -18,3 +18,4 @@ export 'package_info.dart';
 export 'push_environment.dart';
 export 'secure_storage.dart';
 export 'session_cleanup_worker.dart';
+export 'transcription/transcription.dart';

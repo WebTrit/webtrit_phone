@@ -15,6 +15,7 @@ import 'package:app_database/src/migrations/generated/schema_v22.dart' as v22;
 import 'package:app_database/src/migrations/generated/schema_v23.dart' as v23;
 import 'package:app_database/src/migrations/generated/schema_v24.dart' as v24;
 import 'package:app_database/src/migrations/generated/schema_v25.dart' as v25;
+import 'package:app_database/src/migrations/generated/schema_v26.dart' as v26;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -431,6 +432,43 @@ void main() {
         final checkDb = v25.DatabaseAtV25(schema.newConnection());
         final rows = await checkDb.customSelect('SELECT id FROM cdr_sync_cursors').get();
         expect(rows, isEmpty);
+        await checkDb.close();
+      } finally {
+        schema.close();
+      }
+    });
+  });
+
+  group('migration v26 data integrity', () {
+    test('preserves voicemail rows and adds nullable transcript columns', () async {
+      final schema = await verifier.schemaAt(25);
+      try {
+        final oldDb = v25.DatabaseAtV25(schema.newConnection());
+        await oldDb.customStatement('''
+          INSERT INTO voicemails (id, date, duration, sender, receiver, seen, size, type)
+          VALUES ('vm-1', '2026-01-01T00:00:00Z', 3.5, '555001', '555002', 0, 5, 'voice')
+        ''');
+        await oldDb.close();
+
+        final appDatabase = AppDatabase(schema.newConnection());
+        await verifier.migrateAndValidate(appDatabase, 26);
+        await appDatabase.close();
+
+        final checkDb = v26.DatabaseAtV26(schema.newConnection());
+        final rows = await checkDb.customSelect('SELECT id, transcript, transcript_status FROM voicemails').get();
+        expect(rows, hasLength(1));
+        expect(rows.single.read<String>('id'), 'vm-1');
+        // The new columns exist and are null for rows migrated from v25.
+        expect(rows.single.data['transcript'], null);
+        expect(rows.single.data['transcript_status'], null);
+
+        await checkDb.customStatement('''
+          UPDATE voicemails SET transcript = 'hello there', transcript_status = 'done' WHERE id = 'vm-1'
+        ''');
+        final updated = await checkDb.customSelect('SELECT transcript, transcript_status FROM voicemails').get();
+        expect(updated.single.read<String>('transcript'), 'hello there');
+        expect(updated.single.read<String>('transcript_status'), 'done');
+
         await checkDb.close();
       } finally {
         schema.close();
