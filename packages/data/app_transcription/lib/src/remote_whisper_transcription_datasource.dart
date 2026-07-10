@@ -24,8 +24,6 @@ class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
        _httpClient = httpClient ?? http.Client(),
        _timeout = timeout;
 
-  static const _endpointSuffix = 'audio/transcriptions';
-
   final Uri _endpoint;
   final String? _apiKey;
   final String _model;
@@ -39,11 +37,16 @@ class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
 
   /// Accepts either the full `.../audio/transcriptions` endpoint or an API base
   /// (e.g. `https://host/v1`) to which the standard suffix is appended.
+  /// Trailing slashes are tolerated in both forms.
   static Uri _resolveEndpoint(Uri url) {
-    if (url.path.endsWith(_endpointSuffix)) return url;
+    final pathSegments = [...url.pathSegments.where((segment) => segment.isNotEmpty)];
 
-    final pathSegments = [...url.pathSegments.where((segment) => segment.isNotEmpty), 'audio', 'transcriptions'];
-    return url.replace(pathSegments: pathSegments);
+    final isFullEndpoint =
+        pathSegments.length >= 2 &&
+        pathSegments[pathSegments.length - 2] == 'audio' &&
+        pathSegments.last == 'transcriptions';
+
+    return url.replace(pathSegments: isFullEndpoint ? pathSegments : [...pathSegments, 'audio', 'transcriptions']);
   }
 
   @override

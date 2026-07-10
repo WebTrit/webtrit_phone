@@ -55,6 +55,30 @@ void main() {
       expect(captured.url.toString(), 'https://stt.example.com/openai/v1/audio/transcriptions');
     });
 
+    test('tolerates a trailing slash on a full endpoint URL', () async {
+      late http.Request captured;
+      final dataSource = RemoteWhisperTranscriptionDataSource(
+        url: Uri.parse('https://stt.example.com/v1/audio/transcriptions/'),
+        httpClient: okClient((request) => captured = request),
+      );
+
+      await dataSource.transcribe(audio);
+
+      expect(captured.url.toString(), 'https://stt.example.com/v1/audio/transcriptions');
+    });
+
+    test('tolerates a trailing slash on a base URL', () async {
+      late http.Request captured;
+      final dataSource = RemoteWhisperTranscriptionDataSource(
+        url: Uri.parse('https://stt.example.com/v1/'),
+        httpClient: okClient((request) => captured = request),
+      );
+
+      await dataSource.transcribe(audio);
+
+      expect(captured.url.toString(), 'https://stt.example.com/v1/audio/transcriptions');
+    });
+
     test('passes the language hint and omits the auth header without an api key', () async {
       late http.Request captured;
       final dataSource = RemoteWhisperTranscriptionDataSource(
