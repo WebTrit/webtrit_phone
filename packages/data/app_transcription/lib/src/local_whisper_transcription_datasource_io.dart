@@ -24,7 +24,8 @@ class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
     WhisperController? controller,
     http.Client? httpClient,
   }) : _model = WhisperModel.values.firstWhere((value) => value.modelName == model, orElse: () => WhisperModel.base),
-       _defaultLanguage = defaultLanguage,
+       // An empty hint means "not set" (a blank dart-define), i.e. auto-detect.
+       _defaultLanguage = (defaultLanguage == null || defaultLanguage.isEmpty) ? null : defaultLanguage,
        _controller = controller ?? WhisperController(),
        _httpClient = httpClient ?? http.Client();
 
@@ -133,10 +134,11 @@ class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
         throw const TranscriptionException('audio conversion to 16kHz wav failed');
       }
 
+      final languageHint = (language == null || language.isEmpty) ? null : language;
       final result = await _controller.transcribe(
         model: _model,
         audioPath: wavFile.path,
-        lang: language ?? _defaultLanguage ?? _autoLanguage,
+        lang: languageHint ?? _defaultLanguage ?? _autoLanguage,
       );
 
       final text = result?.transcription.text.trim();

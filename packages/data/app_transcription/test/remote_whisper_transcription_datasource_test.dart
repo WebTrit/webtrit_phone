@@ -71,6 +71,20 @@ void main() {
       expect(captured.headers.containsKey('Authorization'), isFalse);
     });
 
+    test('treats an empty default language as auto-detect (no language field)', () async {
+      late http.Request captured;
+      final dataSource = RemoteWhisperTranscriptionDataSource(
+        url: Uri.parse('https://stt.example.com/v1'),
+        defaultLanguage: '',
+        httpClient: okClient((request) => captured = request),
+      );
+
+      await dataSource.transcribe(audio);
+
+      final body = utf8.decode(captured.bodyBytes, allowMalformed: true);
+      expect(body, isNot(contains('name="language"')));
+    });
+
     test('per-call language overrides the default one', () async {
       late http.Request captured;
       final dataSource = RemoteWhisperTranscriptionDataSource(
