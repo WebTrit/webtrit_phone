@@ -36,7 +36,7 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                 IconButton(
                   icon: const Icon(Icons.storage),
                   tooltip: context.l10n.cacheManagement_Widget_screenTitle,
-                  onPressed: () => context.router.navigate(const CacheManagementScreenPageRoute()),
+                  onPressed: _onOpenCacheManagement,
                 ),
               Badge(
                 alignment: AlignmentDirectional.topCenter,
@@ -103,6 +103,13 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
 
   void _onRetryFetch() {
     context.read<VoicemailCubit>().fetchVoicemails();
+  }
+
+  /// Clearing the voicemail cache deletes files the player may hold open, so
+  /// playback stops before the cache management screen opens on top.
+  void _onOpenCacheManagement() {
+    unawaited(context.read<VoicemailPlaybackController>().stop());
+    context.router.navigate(const CacheManagementScreenPageRoute());
   }
 
   void _onDeleteAllVoicemails() async {
