@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/settings/features/cache_management/cache_management.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -82,7 +84,10 @@ void main() {
         child: StackRouterScope(
           controller: router,
           stateHash: 0,
-          child: CacheManagementScreen(sections: sections),
+          child: BlocProvider(
+            create: (_) => CacheManagementCubit(AppCacheManager(sections: sections)),
+            child: const CacheManagementScreen(),
+          ),
         ),
       ),
     );
@@ -124,11 +129,11 @@ void main() {
 
   group('formatBytes', () {
     test('formats each magnitude', () {
-      expect(CacheManagementScreen.formatBytes(0), '0 B');
-      expect(CacheManagementScreen.formatBytes(500), '500 B');
-      expect(CacheManagementScreen.formatBytes(2048), '2.0 KB');
-      expect(CacheManagementScreen.formatBytes(5 * 1024 * 1024), '5.0 MB');
-      expect(CacheManagementScreen.formatBytes(3 * 1024 * 1024 * 1024), '3.0 GB');
+      expect(formatBytes(0), '0 B');
+      expect(formatBytes(500), '500 B');
+      expect(formatBytes(2048), '2.0 KB');
+      expect(formatBytes(5 * 1024 * 1024), '5.0 MB');
+      expect(formatBytes(3 * 1024 * 1024 * 1024), '3.0 GB');
     });
   });
 }

@@ -1,92 +1,57 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import '../cubit/cache_management_cubit.dart';
+import '../cubit/cache_management_state.dart';
+import '../utils/cache_usage_formatter.dart';
+
 /// Central place to inspect and free the app's local caches.
 ///
-/// Renders one entry per registered [CacheSection] with its current on-disk
-/// size and a clear action; sizes are re-measured after clearing.
-class CacheManagementScreen extends StatefulWidget {
-  const CacheManagementScreen({required this.sections, super.key});
-
-  final List<CacheSection> sections;
-
-  /// Formats a byte count into a short human-readable size.
-  @visibleForTesting
-  static String formatBytes(int bytes) {
-    if (bytes < 1024) return '$bytes B';
-
-    const units = ['KB', 'MB', 'GB'];
-    var value = bytes.toDouble();
-    var unit = -1;
-    do {
-      value /= 1024;
-      unit++;
-    } while (value >= 1024 && unit < units.length - 1);
-
-    return '${value.toStringAsFixed(1)} ${units[unit]}';
-  }
-
-  @override
-  State<CacheManagementScreen> createState() => _CacheManagementScreenState();
-}
-
-class _CacheManagementScreenState extends State<CacheManagementScreen> {
-  late final Map<String, Future<CacheUsage>> _usages = {
-    for (final section in widget.sections) section.id: section.usage(),
-  };
-  final Set<String> _clearing = {};
-
-  Future<void> _onClear(CacheSection section) async {
-    setState(() => _clearing.add(section.id));
-    try {
-      await section.clear();
-    } finally {
-      if (mounted) {
-        setState(() {
-          _clearing.remove(section.id);
-          _usages[section.id] = section.usage();
-        });
-      }
-    }
-  }
+/// Renders one entry per registered cache section with its current usage and
+/// a clear action; measuring and clearing live in [CacheManagementCubit].
+class CacheManagementScreen extends StatelessWidget {
+  const CacheManagementScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.cacheManagement_Widget_screenTitle), leading: const ExtBackButton()),
-      body: widget.sections.isEmpty
-          ? Center(child: Text(context.l10n.cacheManagement_Label_empty))
-          : ListView(
-              children: [
-                for (final section in widget.sections) ...[
-                  _CacheSectionTile(
-                    section: section,
-                    usage: _usages[section.id]!,
-                    clearing: _clearing.contains(section.id),
-                    onClear: () => _onClear(section),
-                  ),
-                  const Divider(height: 1),
-                ],
+      body: BlocBuilder<CacheManagementCubit, CacheManagementState>(
+        builder: (context, state) {
+          if (state.sections.isEmpty) {
+            return Center(child: Text(context.l10n.cacheManagement_Label_empty));
+          }
+          return ListView(
+            children: [
+              for (final section in state.sections) ...[
+                _CacheSectionTile(
+                  section: section,
+                  onClear: () => context.read<CacheManagementCubit>().clearSection(section.id),
+                ),
+                const Divider(height: 1),
               ],
-            ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
 
 class _CacheSectionTile extends StatelessWidget {
-  const _CacheSectionTile({required this.section, required this.usage, required this.clearing, required this.onClear});
+  const _CacheSectionTile({required this.section, required this.onClear});
 
-  final CacheSection section;
-  final Future<CacheUsage> usage;
-  final bool clearing;
+  final CacheSectionState section;
   final VoidCallback onClear;
 
   String _formatUsage(BuildContext context, CacheUsage usage) {
     return switch (usage.unit) {
-      CacheUsageUnit.bytes => CacheManagementScreen.formatBytes(usage.amount),
+      CacheUsageUnit.bytes => formatBytes(usage.amount),
       CacheUsageUnit.items => context.l10n.cacheManagement_Label_itemsCount(usage.amount),
     };
   }
@@ -94,6 +59,7 @@ class _CacheSectionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final usage = section.usage;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,12 +68,9 @@ class _CacheSectionTile extends StatelessWidget {
           leading: const Icon(Icons.storage),
           title: Text(context.parseL10n(section.titleL10n)),
           subtitle: Text(context.parseL10n(section.descriptionL10n), style: theme.textTheme.bodySmall),
-          trailing: FutureBuilder<CacheUsage>(
-            future: usage,
-            builder: (context, snapshot) => snapshot.hasData
-                ? Text(_formatUsage(context, snapshot.data!), style: theme.textTheme.titleSmall)
-                : const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
-          ),
+          trailing: usage != null
+              ? Text(_formatUsage(context, usage), style: theme.textTheme.titleSmall)
+              : const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
         ),
         Align(
           alignment: Alignment.centerRight,
@@ -116,7 +79,7 @@ class _CacheSectionTile extends StatelessWidget {
             child: TextButton.icon(
               icon: const Icon(Icons.delete_outline, size: 18),
               label: Text(context.l10n.cacheManagement_Button_clear),
-              onPressed: clearing ? null : onClear,
+              onPressed: section.clearing ? null : onClear,
             ),
           ),
         ),

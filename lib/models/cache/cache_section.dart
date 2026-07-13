@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 /// One manageable slice of the app's local cache (e.g. voicemail audio).
 ///
 /// Features expose their disk caches through this contract so cache
@@ -23,13 +25,16 @@ abstract class CacheSection {
 
 /// Measured usage of a [CacheSection]: file-based caches report bytes on
 /// disk, database-backed ones report stored records.
-class CacheUsage {
+class CacheUsage extends Equatable {
   const CacheUsage.bytes(this.amount) : unit = CacheUsageUnit.bytes;
 
   const CacheUsage.items(this.amount) : unit = CacheUsageUnit.items;
 
   final int amount;
   final CacheUsageUnit unit;
+
+  @override
+  List<Object?> get props => [amount, unit];
 }
 
 enum CacheUsageUnit { bytes, items }
