@@ -2392,7 +2392,7 @@
   "@voicemail_TranscriptionModel_fastSubtitle": {},
   "voicemail_TranscriptionModel_fastTitle": "Fast",
   "@voicemail_TranscriptionModel_fastTitle": {},
-  "voicemail_TranscriptionModel_note": "Applies to new transcriptions. The model is downloaded on first use; existing transcripts are kept.",
+  "voicemail_TranscriptionModel_note": "Applies to all messages: the model is downloaded on first use and existing transcripts are regenerated with the new model.",
   "@voicemail_TranscriptionModel_note": {},
   "voicemail_TranscriptionModel_title": "Transcription model",
   "@voicemail_TranscriptionModel_title": {},

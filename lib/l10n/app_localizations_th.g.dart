@@ -2859,7 +2859,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get voicemail_TranscriptionModel_note =>
-      'มีผลกับการถอดเสียงใหม่ โมเดลจะถูกดาวน์โหลดเมื่อใช้งานครั้งแรก ข้อความถอดเสียงเดิมจะยังคงอยู่';
+      'มีผลกับข้อความทั้งหมด: โมเดลจะถูกดาวน์โหลดเมื่อใช้งานครั้งแรก และข้อความถอดเสียงเดิมจะถูกสร้างใหม่ด้วยโมเดลใหม่';
 
   @override
   String get voicemail_TranscriptionModel_title => 'โมเดลถอดเสียง';

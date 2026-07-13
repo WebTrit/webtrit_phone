@@ -2907,7 +2907,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get voicemail_TranscriptionModel_note =>
-      'Si applica alle nuove trascrizioni. Il modello viene scaricato al primo utilizzo; le trascrizioni esistenti vengono conservate.';
+      'Si applica a tutti i messaggi: il modello viene scaricato al primo utilizzo e le trascrizioni esistenti vengono rigenerate con il nuovo modello.';
 
   @override
   String get voicemail_TranscriptionModel_title => 'Modello di trascrizione';

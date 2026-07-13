@@ -2873,7 +2873,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voicemail_TranscriptionModel_note =>
-      'Applies to new transcriptions. The model is downloaded on first use; existing transcripts are kept.';
+      'Applies to all messages: the model is downloaded on first use and existing transcripts are regenerated with the new model.';
 
   @override
   String get voicemail_TranscriptionModel_title => 'Transcription model';
