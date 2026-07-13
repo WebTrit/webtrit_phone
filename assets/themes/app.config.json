@@ -114,10 +114,10 @@
     "sections": [
       {
         "titleL10n": "settings_ListViewTileTitle_features",
-        "enabled": false,
+        "enabled": true,
         "items": [
           {
-            "enabled": false,
+            "enabled": true,
             "type": "voicemail",
             "titleL10n": "settings_ListViewTileTitle_voicemail",
             "icon": "0xe6c1"
@@ -145,12 +145,6 @@
             "type": "mediaSettings",
             "titleL10n": "settings_ListViewTileTitle_mediaSettings",
             "icon": "0xf1cf"
-          },
-          {
-            "enabled": true,
-            "type": "cacheManagement",
-            "titleL10n": "settings_ListViewTileTitle_cacheManagement",
-            "icon": "0xe609"
           },
           {
             "enabled": true,
@@ -200,6 +194,12 @@
             "titleL10n": "settings_ListViewTileTitle_logRecordsConsole",
             "icon": "0xee79",
             "type": "log"
+          },
+          {
+            "enabled": true,
+            "type": "cacheManagement",
+            "titleL10n": "settings_ListViewTileTitle_cacheManagement",
+            "icon": "0xe609"
           },
           {
             "enabled": true,
