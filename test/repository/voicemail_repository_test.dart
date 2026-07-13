@@ -78,11 +78,17 @@ class _CallbackTranscriptionDataSource implements TranscriptionDataSource {
 
   final Future<String> Function(Uint8List audio) handler;
   int calls = 0;
+  int disposeCalls = 0;
 
   @override
   Future<String> transcribe(Uint8List audio, {String? language}) {
     calls++;
     return handler(audio);
+  }
+
+  @override
+  void dispose() {
+    disposeCalls++;
   }
 }
 
@@ -92,6 +98,7 @@ class _FakeTranscriptionDataSource implements TranscriptionDataSource {
   final String result;
   final Object? error;
   int calls = 0;
+  int disposeCalls = 0;
 
   @override
   Future<String> transcribe(Uint8List audio, {String? language}) async {
@@ -99,6 +106,11 @@ class _FakeTranscriptionDataSource implements TranscriptionDataSource {
     final error = this.error;
     if (error != null) throw error;
     return result;
+  }
+
+  @override
+  void dispose() {
+    disposeCalls++;
   }
 }
 
@@ -567,6 +579,48 @@ void main() {
       expect(row, isNotNull);
       expect(row!.transcript, isNull);
       expect(row.transcriptStatus, isNull);
+    });
+
+    test('applyTranscriptionModel swaps the source, disposes the old one and transcribes pending rows', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
+      final initial = _FakeTranscriptionDataSource(error: const TranscriptionException('down', transient: true));
+      final models = <String?>[];
+      final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
+
+      final repo = VoicemailRepositoryImpl(
+        webtritApiClient: client,
+        token: 'user_token',
+        appDatabase: transcriptionDatabase,
+        sessionGuard: const EmptySessionGuard(),
+        transcriptionDataSource: initial,
+        transcriptionDataSourceBuilder: (model) {
+          models.add(model);
+          return replacement;
+        },
+      );
+      await repo.fetchVoicemails();
+      await waitForTranscriptStatus(transcriptionDatabase, '1', null);
+
+      repo.applyTranscriptionModel('small');
+
+      final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
+      expect(row.transcript, 'from the new model');
+      expect(models, ['small']);
+      expect(initial.disposeCalls, 1);
+    });
+
+    test('applyTranscriptionModel is a no-op without a datasource builder', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
+      final dataSource = _FakeTranscriptionDataSource(result: 'hello world');
+
+      final repo = createRepo(client, dataSource);
+      await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
+
+      repo.applyTranscriptionModel('small');
+      await pumpEventQueue();
+
+      expect(dataSource.disposeCalls, 0);
+      expect(dataSource.calls, 1);
     });
   });
 }

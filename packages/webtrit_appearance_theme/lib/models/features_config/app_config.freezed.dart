@@ -5963,7 +5963,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigVoicemailTranscriptionLocal {
 
- String get model;
+ String get model; bool get userSelectable;
 /// Create a copy of AppConfigVoicemailTranscriptionLocal
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -5974,16 +5974,16 @@ $AppConfigVoicemailTranscriptionLocalCopyWith<AppConfigVoicemailTranscriptionLoc
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigVoicemailTranscriptionLocal&&(identical(other.model, model) || other.model == model));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigVoicemailTranscriptionLocal&&(identical(other.model, model) || other.model == model)&&(identical(other.userSelectable, userSelectable) || other.userSelectable == userSelectable));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,model);
+int get hashCode => Object.hash(runtimeType,model,userSelectable);
 
 @override
 String toString() {
-  return 'AppConfigVoicemailTranscriptionLocal(model: $model)';
+  return 'AppConfigVoicemailTranscriptionLocal(model: $model, userSelectable: $userSelectable)';
 }
 
 
@@ -5994,7 +5994,7 @@ abstract mixin class $AppConfigVoicemailTranscriptionLocalCopyWith<$Res>  {
   factory $AppConfigVoicemailTranscriptionLocalCopyWith(AppConfigVoicemailTranscriptionLocal value, $Res Function(AppConfigVoicemailTranscriptionLocal) _then) = _$AppConfigVoicemailTranscriptionLocalCopyWithImpl;
 @useResult
 $Res call({
- String model
+ String model, bool userSelectable
 });
 
 
@@ -6011,10 +6011,11 @@ class _$AppConfigVoicemailTranscriptionLocalCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigVoicemailTranscriptionLocal
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? model = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? model = null,Object? userSelectable = null,}) {
   return _then(AppConfigVoicemailTranscriptionLocal(
 model: null == model ? _self.model : model // ignore: cast_nullable_to_non_nullable
-as String,
+as String,userSelectable: null == userSelectable ? _self.userSelectable : userSelectable // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

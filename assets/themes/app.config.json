@@ -314,7 +314,9 @@
       "__language": "Expected voicemail language (ISO 639-1, e.g. 'en'); omit or leave empty to auto-detect per message.",
       "local": {
         "__model": "Whisper model tier downloaded to the device (tiny, base, small, ...); larger tiers transcribe better but cost more download size and CPU.",
-        "model": "base"
+        "model": "base",
+        "__userSelectable": "Whether the user may switch the model tier from the voicemail screen; 'model' stays the default until overridden there.",
+        "userSelectable": true
       },
       "remote": {
         "__url": "Base URL of an OpenAI-compatible speech-to-text service (e.g. 'https://stt.example.com/v1'); the 'audio/transcriptions' path is appended when not already present. The remote mode stays disabled while this is missing.",

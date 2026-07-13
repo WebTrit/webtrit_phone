@@ -17,6 +17,7 @@ class VoicemailTranscriptionConfig extends Equatable {
     this.mode = 'disabled',
     this.language,
     this.localModel = 'base',
+    this.localModelUserSelectable = true,
     this.remoteUrl,
     this.remoteApiKey,
     this.remoteModel = 'whisper-1',
@@ -32,6 +33,10 @@ class VoicemailTranscriptionConfig extends Equatable {
   /// Whisper model tier downloaded to the device in the `local` mode.
   final String localModel;
 
+  /// Whether the user may switch the local model tier from the voicemail
+  /// screen; [localModel] stays the default until overridden there.
+  final bool localModelUserSelectable;
+
   /// Base URL of an OpenAI-compatible speech-to-text service for the `remote` mode.
   final String? remoteUrl;
 
@@ -42,5 +47,13 @@ class VoicemailTranscriptionConfig extends Equatable {
   final String remoteModel;
 
   @override
-  List<Object?> get props => [mode, language, localModel, remoteUrl, remoteApiKey, remoteModel];
+  List<Object?> get props => [
+    mode,
+    language,
+    localModel,
+    localModelUserSelectable,
+    remoteUrl,
+    remoteApiKey,
+    remoteModel,
+  ];
 }

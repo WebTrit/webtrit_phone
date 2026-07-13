@@ -35,6 +35,11 @@ class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
   /// stall every following message for the rest of the session.
   final Duration _timeout;
 
+  @override
+  void dispose() {
+    _httpClient.close();
+  }
+
   /// Accepts either the full `.../audio/transcriptions` endpoint or an API base
   /// (e.g. `https://host/v1`) to which the standard suffix is appended.
   /// Trailing slashes are tolerated in both forms.

@@ -44,6 +44,14 @@ class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
 
   Future<void>? _modelReady;
 
+  /// Name of the whisper model tier this source runs.
+  String get modelName => _model.modelName;
+
+  @override
+  void dispose() {
+    _httpClient.close();
+  }
+
   static bool isValidModelFileHeader(List<int> header) {
     if (header.length < ggmlMagic.length) return false;
     for (var i = 0; i < ggmlMagic.length; i++) {

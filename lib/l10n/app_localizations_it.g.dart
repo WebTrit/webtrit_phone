@@ -2875,6 +2875,42 @@ class AppLocalizationsIt extends AppLocalizations {
   String get voicemail_RecordsCache_title => 'Messaggi vocali';
 
   @override
+  String get voicemail_Transcript_inProgress => 'Trascrizione in corso...';
+
+  @override
+  String get voicemail_Transcript_unavailable => 'Trascrizione non disponibile';
+
+  @override
+  String get voicemail_TranscriptionModel_accurateSubtitle =>
+      'Migliore precisione sul dispositivo, più lento (download del modello ~1,5 GB)';
+
+  @override
+  String get voicemail_TranscriptionModel_accurateTitle => 'Accurato';
+
+  @override
+  String get voicemail_TranscriptionModel_balancedSubtitle => 'Buona precisione (download del modello ~466 MB)';
+
+  @override
+  String get voicemail_TranscriptionModel_balancedTitle => 'Bilanciato';
+
+  @override
+  String get voicemail_TranscriptionModel_defaultLabel => 'Predefinito';
+
+  @override
+  String get voicemail_TranscriptionModel_fastSubtitle =>
+      'Risultati rapidi, precisione inferiore (download del modello ~142 MB)';
+
+  @override
+  String get voicemail_TranscriptionModel_fastTitle => 'Veloce';
+
+  @override
+  String get voicemail_TranscriptionModel_note =>
+      'Si applica alle nuove trascrizioni. Il modello viene scaricato al primo utilizzo; le trascrizioni esistenti vengono conservate.';
+
+  @override
+  String get voicemail_TranscriptionModel_title => 'Modello di trascrizione';
+
+  @override
   String get voicemail_Widget_screenTitle => 'Segreteria telefonica';
 
   @override

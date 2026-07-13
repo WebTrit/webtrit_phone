@@ -12,6 +12,11 @@ abstract class TranscriptionDataSource {
   ///
   /// Throws [TranscriptionException] when the transcript cannot be produced.
   Future<String> transcribe(Uint8List audio, {String? language});
+
+  /// Releases resources held by the source (e.g. HTTP clients) when it is
+  /// replaced; an in-flight [transcribe] may fail afterwards with a transient
+  /// [TranscriptionException].
+  void dispose() {}
 }
 
 class TranscriptionException implements Exception {

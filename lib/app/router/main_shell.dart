@@ -294,14 +294,22 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             final isVoicemailsEnabled = featureAccess.settingsConfig.voicemailsEnabled;
 
             if (isVoicemailsEnabled) {
+              TranscriptionDataSource? buildTranscriptionDataSource(String? localModelOverride) {
+                return createVoicemailTranscriptionDataSource(
+                  featureAccess.voicemailConfig.transcription,
+                  localModelOverride: localModelOverride,
+                  certs: appCertificates.trustedCertificates,
+                );
+              }
+
               return VoicemailRepositoryImpl(
                 webtritApiClient: context.read<WebtritApiClient>(),
                 token: context.read<AppBloc>().state.session.token!,
                 appDatabase: context.read<AppDatabase>(),
-                transcriptionDataSource: createVoicemailTranscriptionDataSource(
-                  featureAccess.voicemailConfig.transcription,
-                  certs: appCertificates.trustedCertificates,
+                transcriptionDataSource: buildTranscriptionDataSource(
+                  context.read<TranscriptionModelRepository>().getTranscriptionModel(),
                 ),
+                transcriptionDataSourceBuilder: buildTranscriptionDataSource,
               );
             } else {
               return const EmptyVoicemailRepository();

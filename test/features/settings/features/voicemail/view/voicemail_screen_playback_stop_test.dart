@@ -53,6 +53,8 @@ void main() {
     player = _MockAudioPlayer();
     playerStateController = StreamController<PlayerState>.broadcast(sync: true);
 
+    when(() => cubit.canSelectTranscriptionModel).thenReturn(false);
+
     when(() => player.playerStateStream).thenAnswer((_) => playerStateController.stream);
     when(() => player.playing).thenReturn(true);
     when(() => player.stop()).thenAnswer((_) async {});

@@ -2880,6 +2880,42 @@ class AppLocalizationsUk extends AppLocalizations {
   String get voicemail_RecordsCache_title => 'Повідомлення голосової пошти';
 
   @override
+  String get voicemail_Transcript_inProgress => 'Розшифровка...';
+
+  @override
+  String get voicemail_Transcript_unavailable => 'Розшифровка недоступна';
+
+  @override
+  String get voicemail_TranscriptionModel_accurateSubtitle =>
+      'Найкраща точність на пристрої, повільніше (завантаження моделі ~1,5 ГБ)';
+
+  @override
+  String get voicemail_TranscriptionModel_accurateTitle => 'Точна';
+
+  @override
+  String get voicemail_TranscriptionModel_balancedSubtitle => 'Хороша точність (завантаження моделі ~466 МБ)';
+
+  @override
+  String get voicemail_TranscriptionModel_balancedTitle => 'Збалансована';
+
+  @override
+  String get voicemail_TranscriptionModel_defaultLabel => 'За замовчуванням';
+
+  @override
+  String get voicemail_TranscriptionModel_fastSubtitle =>
+      'Швидкий результат, нижча точність (завантаження моделі ~142 МБ)';
+
+  @override
+  String get voicemail_TranscriptionModel_fastTitle => 'Швидка';
+
+  @override
+  String get voicemail_TranscriptionModel_note =>
+      'Діє для нових розшифровок. Модель завантажується при першому використанні; наявні розшифровки зберігаються.';
+
+  @override
+  String get voicemail_TranscriptionModel_title => 'Модель розшифровки';
+
+  @override
   String get voicemail_Widget_screenTitle => 'Голосова пошта';
 
   @override

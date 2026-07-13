@@ -64,7 +64,18 @@ abstract class VoicemailRepository implements Refreshable {
   /// Removes only the locally cached voicemail records; the server copy stays
   /// and the list is fetched again on the next refresh.
   Future<void> wipeLocalRecords();
+
+  /// Switches on-device transcription to [localModel] (null returns to the
+  /// app-config default tier) and re-runs transcription for pending messages.
+  /// No-op when the repository was created without a transcription source
+  /// builder (feature disabled or not local).
+  void applyTranscriptionModel(String? localModel);
 }
+
+/// Builds a transcription source for the given local model tier override
+/// (null keeps the configured default); returns null when the feature is
+/// disabled or misconfigured.
+typedef TranscriptionDataSourceBuilder = TranscriptionDataSource? Function(String? localModelOverride);
 
 final _logger = Logger('VoicemailRepository');
 
@@ -77,11 +88,13 @@ class VoicemailRepositoryImpl
     required AppDatabase appDatabase,
     SessionGuard? sessionGuard,
     TranscriptionDataSource? transcriptionDataSource,
+    TranscriptionDataSourceBuilder? transcriptionDataSourceBuilder,
   }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
        _webtritApiClient = webtritApiClient,
        _token = token,
        _appDatabase = appDatabase,
-       _transcriptionDataSource = transcriptionDataSource {
+       _transcriptionDataSource = transcriptionDataSource,
+       _transcriptionDataSourceBuilder = transcriptionDataSourceBuilder {
     _initialize();
   }
 
@@ -89,7 +102,8 @@ class VoicemailRepositoryImpl
   final String _token;
   final AppDatabase _appDatabase;
   final SessionGuard _sessionGuard;
-  final TranscriptionDataSource? _transcriptionDataSource;
+  final TranscriptionDataSourceBuilder? _transcriptionDataSourceBuilder;
+  TranscriptionDataSource? _transcriptionDataSource;
 
   /// Guards against overlapping transcription sweeps kicked off by
   /// consecutive [fetchVoicemails] calls; the work is sequential on purpose
@@ -253,8 +267,7 @@ class VoicemailRepositoryImpl
   /// interrupted run are picked up again). Progress and results are written to
   /// the local database, so [watchVoicemails] listeners see every update live.
   Future<void> _transcribePendingVoicemails() async {
-    final transcriptionDataSource = _transcriptionDataSource;
-    if (transcriptionDataSource == null) return;
+    if (_transcriptionDataSource == null) return;
 
     if (_transcriptionRunning) {
       _transcriptionRerunRequested = true;
@@ -277,7 +290,10 @@ class VoicemailRepositoryImpl
         );
 
         for (final voicemail in pending) {
-          if (!_featureSupported) {
+          // Re-read per message: applyTranscriptionModel may swap the source
+          // mid-sweep and the remaining messages should use the new one.
+          final transcriptionDataSource = _transcriptionDataSource;
+          if (!_featureSupported || transcriptionDataSource == null) {
             aborted = true;
             break;
           }
@@ -331,6 +347,20 @@ class VoicemailRepositoryImpl
         _logger.warning('Failed to store transcript status for voicemail $messageId', e);
       }
     }
+  }
+
+  @override
+  void applyTranscriptionModel(String? localModel) {
+    final builder = _transcriptionDataSourceBuilder;
+    if (builder == null) return;
+
+    final previous = _transcriptionDataSource;
+    _transcriptionDataSource = builder(localModel);
+    // A transcription in flight on the old source fails transiently and the
+    // rolled-back message is picked up again by the sweep kicked off below.
+    previous?.dispose();
+
+    unawaited(_transcribePendingVoicemails());
   }
 
   static bool _isTransientTranscriptionFailure(Object error) {
@@ -570,4 +600,7 @@ class EmptyVoicemailRepository implements VoicemailRepository {
 
   @override
   Future<void> wipeLocalRecords() => Future.value();
+
+  @override
+  void applyTranscriptionModel(String? localModel) {}
 }
