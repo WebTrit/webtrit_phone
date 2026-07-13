@@ -289,27 +289,35 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           ),
           dispose: disposeIfDisposable,
         ),
+        // The session-wide transcription source: any feature can transcribe
+        // media through it, and a user model change switches it for all of
+        // them at once. Voicemail is the first consumer.
+        RepositoryProvider<SwitchableTranscriptionSource>(
+          create: (context) {
+            TranscriptionDataSource? buildTranscriptionDataSource(String? localModelOverride) {
+              return createVoicemailTranscriptionDataSource(
+                featureAccess.voicemailConfig.transcription,
+                localModelOverride: localModelOverride,
+                certs: appCertificates.trustedCertificates,
+              );
+            }
+
+            return SwitchableTranscriptionSource(
+              buildTranscriptionDataSource,
+              initialLocalModel: context.read<TranscriptionModelRepository>().getTranscriptionModel(),
+            );
+          },
+        ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
             final isVoicemailsEnabled = featureAccess.settingsConfig.voicemailsEnabled;
 
             if (isVoicemailsEnabled) {
-              TranscriptionDataSource? buildTranscriptionDataSource(String? localModelOverride) {
-                return createVoicemailTranscriptionDataSource(
-                  featureAccess.voicemailConfig.transcription,
-                  localModelOverride: localModelOverride,
-                  certs: appCertificates.trustedCertificates,
-                );
-              }
-
               return VoicemailRepositoryImpl(
                 webtritApiClient: context.read<WebtritApiClient>(),
                 token: context.read<AppBloc>().state.session.token!,
                 appDatabase: context.read<AppDatabase>(),
-                transcription: SwitchableTranscriptionSource(
-                  buildTranscriptionDataSource,
-                  initialLocalModel: context.read<TranscriptionModelRepository>().getTranscriptionModel(),
-                ),
+                transcription: context.read<SwitchableTranscriptionSource>(),
               );
             } else {
               return const EmptyVoicemailRepository();
