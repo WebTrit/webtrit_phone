@@ -5,8 +5,11 @@ import 'package:app_transcription/app_transcription.dart';
 /// disabled or misconfigured.
 typedef TranscriptionDataSourceBuilder = TranscriptionDataSource? Function(String? localModelOverride);
 
-/// The active voicemail transcription source together with the ability to
-/// rebuild it when the user overrides the local model tier.
+/// The active transcription source together with the ability to rebuild it
+/// when the user overrides the local model tier.
+///
+/// Provided session-wide in the main shell: any feature can transcribe media
+/// through [current], and a model switch applies to all of them at once.
 class SwitchableTranscriptionSource {
   /// Builds the initial source for [initialLocalModel] and rebuilds it on
   /// every [switchLocalModel] call.
