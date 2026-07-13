@@ -2818,6 +2818,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get voicemail_Title_notSupported => 'ไม่รองรับฟีเจอร์นี้';
 
   @override
+  String get voicemail_RecordsCache_description =>
+      'สำเนารายการข้อความเสียงที่ดึงจากเซิร์ฟเวอร์ซึ่งเก็บไว้ในเครื่อง (ไฟล์เสียงเป็นส่วนแยกต่างหาก) การล้างจะลบรายการในเครื่อง และรายการจะถูกดาวน์โหลดใหม่เมื่อรีเฟรชครั้งถัดไป';
+
+  @override
+  String get voicemail_RecordsCache_title => 'ข้อความเสียงที่บันทึกไว้';
+
+  @override
   String get voicemail_Widget_screenTitle => 'ข้อความเสียง';
 
   @override

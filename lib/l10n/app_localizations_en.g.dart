@@ -2832,6 +2832,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voicemail_Title_notSupported => 'Feature not supported';
 
   @override
+  String get voicemail_RecordsCache_description =>
+      'Locally stored copy of the voicemail list fetched from the server (the audio files are a separate section). Clearing removes the local records; the list is downloaded again on the next refresh.';
+
+  @override
+  String get voicemail_RecordsCache_title => 'Voicemail messages';
+
+  @override
   String get voicemail_Widget_screenTitle => 'Voicemail';
 
   @override

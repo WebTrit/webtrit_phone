@@ -5209,6 +5209,18 @@ abstract class AppLocalizations {
   /// **'Feature not supported'**
   String get voicemail_Title_notSupported;
 
+  /// No description provided for @voicemail_RecordsCache_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Locally stored copy of the voicemail list fetched from the server (the audio files are a separate section). Clearing removes the local records; the list is downloaded again on the next refresh.'**
+  String get voicemail_RecordsCache_description;
+
+  /// No description provided for @voicemail_RecordsCache_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail messages'**
+  String get voicemail_RecordsCache_title;
+
   /// No description provided for @voicemail_Widget_screenTitle.
   ///
   /// In en, this message translates to:

@@ -2864,6 +2864,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get voicemail_Title_notSupported => 'Funzionalità non supportata';
 
   @override
+  String get voicemail_RecordsCache_description =>
+      'Copia locale dell\'elenco dei messaggi vocali scaricato dal server (i file audio sono una sezione separata). La cancellazione rimuove i record locali; l\'elenco viene scaricato di nuovo al prossimo aggiornamento.';
+
+  @override
+  String get voicemail_RecordsCache_title => 'Messaggi vocali';
+
+  @override
   String get voicemail_Widget_screenTitle => 'Segreteria telefonica';
 
   @override

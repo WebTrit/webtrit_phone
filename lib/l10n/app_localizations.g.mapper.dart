@@ -1356,6 +1356,9 @@ extension AppLocalizationsExtension on AppLocalizations {
       'voicemail_Label_retry' => voicemail_Label_retry,
       'voicemail_Snackbar_notConfigured' => voicemail_Snackbar_notConfigured,
       'voicemail_Title_notSupported' => voicemail_Title_notSupported,
+      'voicemail_RecordsCache_description' =>
+        voicemail_RecordsCache_description,
+      'voicemail_RecordsCache_title' => voicemail_RecordsCache_title,
       'voicemail_Widget_screenTitle' => voicemail_Widget_screenTitle,
       'webRegistration_ErrorAcknowledgeDialogActions_retry' =>
         webRegistration_ErrorAcknowledgeDialogActions_retry,

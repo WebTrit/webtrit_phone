@@ -2870,6 +2870,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get voicemail_Title_notSupported => 'Функція не підтримується';
 
   @override
+  String get voicemail_RecordsCache_description =>
+      'Локальна копія списку голосових повідомлень із сервера (аудіофайли - окрема секція). Очищення видаляє локальні записи; список завантажиться знову під час наступного оновлення.';
+
+  @override
+  String get voicemail_RecordsCache_title => 'Повідомлення голосової пошти';
+
+  @override
   String get voicemail_Widget_screenTitle => 'Голосова пошта';
 
   @override

@@ -377,6 +377,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     mediaCacheBasePath: appPath.mediaCacheBasePath,
                     temporaryPath: appPath.temporaryPath,
                   ),
+                if (featureAccess.settingsConfig.voicemailsEnabled)
+                  VoicemailRecordsCacheSection(context.read<AppDatabase>()),
                 if (callHistoryEnabled) CdrsCacheSection(context.read<CdrsLocalRepository>()),
               ],
             );
