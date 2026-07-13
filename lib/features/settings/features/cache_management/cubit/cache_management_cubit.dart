@@ -1,11 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-import 'cache_management_state.dart';
+part 'cache_management_state.dart';
+
+part 'cache_management_cubit.freezed.dart';
 
 final _logger = Logger('CacheManagementCubit');
 
@@ -33,7 +36,7 @@ class CacheManagementCubit extends Cubit<CacheManagementState> {
     final section = _cacheManager.section(id);
     if (section == null) return;
 
-    _emitSection(id, (it) => it.copyWith(clearing: true, remeasuring: true));
+    _emitSection(id, (it) => it.copyWith(clearing: true, usage: null));
     try {
       await section.clear();
     } catch (e, st) {

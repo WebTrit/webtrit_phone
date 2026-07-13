@@ -7,7 +7,6 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../cubit/cache_management_cubit.dart';
-import '../cubit/cache_management_state.dart';
 import '../utils/cache_usage_formatter.dart';
 
 /// Central place to inspect and free the app's local caches.

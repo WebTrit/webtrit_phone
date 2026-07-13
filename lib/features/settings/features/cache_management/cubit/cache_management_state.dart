@@ -1,10 +1,9 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:webtrit_phone/models/models.dart';
+part of 'cache_management_cubit.dart';
 
 /// Snapshot of one [CacheSection] for rendering: its static descriptors plus
 /// the last measured usage (null while measuring) and a clear-in-progress flag.
-class CacheSectionState extends Equatable {
+@freezed
+class CacheSectionState with _$CacheSectionState {
   const CacheSectionState({
     required this.id,
     required this.titleL10n,
@@ -13,29 +12,27 @@ class CacheSectionState extends Equatable {
     this.clearing = false,
   });
 
+  @override
   final String id;
-  final String titleL10n;
-  final String descriptionL10n;
-  final CacheUsage? usage;
-  final bool clearing;
-
-  CacheSectionState copyWith({CacheUsage? usage, bool? clearing, bool remeasuring = false}) {
-    return CacheSectionState(
-      id: id,
-      titleL10n: titleL10n,
-      descriptionL10n: descriptionL10n,
-      usage: remeasuring ? null : (usage ?? this.usage),
-      clearing: clearing ?? this.clearing,
-    );
-  }
 
   @override
-  List<Object?> get props => [id, titleL10n, descriptionL10n, usage, clearing];
+  final String titleL10n;
+
+  @override
+  final String descriptionL10n;
+
+  @override
+  final CacheUsage? usage;
+
+  @override
+  final bool clearing;
 }
 
-class CacheManagementState extends Equatable {
+@freezed
+class CacheManagementState with _$CacheManagementState {
   const CacheManagementState({this.sections = const []});
 
+  @override
   final List<CacheSectionState> sections;
 
   CacheManagementState copyWithSection(CacheSectionState section) {
@@ -46,7 +43,4 @@ class CacheManagementState extends Equatable {
       ],
     );
   }
-
-  @override
-  List<Object?> get props => [sections];
 }
