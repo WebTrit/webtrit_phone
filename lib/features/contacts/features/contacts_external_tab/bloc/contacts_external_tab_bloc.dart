@@ -64,12 +64,14 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
   }
 
   ContactsExternalTabStatus _mapExternalContactsSyncStateToStatus(ExternalContactsSyncState externalContactsSyncState) {
-    if (externalContactsSyncState is ExternalContactsSyncRefreshInProgress) {
-      return ContactsExternalTabStatus.inProgress;
-    } else if (externalContactsSyncState is ExternalContactsSyncSuccess) {
+    if (externalContactsSyncState is ExternalContactsSyncSuccess) {
       return ContactsExternalTabStatus.success;
-    } else {
+    } else if (externalContactsSyncState is ExternalContactsSyncFailure) {
       return ContactsExternalTabStatus.failure;
+    } else {
+      // Initial (sync not finished yet) and RefreshInProgress both mean the first
+      // remote fetch is still running, so keep the loading state until it resolves.
+      return ContactsExternalTabStatus.inProgress;
     }
   }
 }

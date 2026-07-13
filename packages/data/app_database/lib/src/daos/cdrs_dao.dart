@@ -3,7 +3,7 @@ import 'package:app_database/src/app_database.dart';
 
 part 'cdrs_dao.g.dart';
 
-@DriftAccessor(tables: [CdrTable])
+@DriftAccessor(tables: [CdrTable, CdrSyncCursorTable])
 class CdrsDao extends DatabaseAccessor<AppDatabase> with _$CdrsDaoMixin {
   CdrsDao(super.db);
 
@@ -50,9 +50,24 @@ class CdrsDao extends DatabaseAccessor<AppDatabase> with _$CdrsDaoMixin {
     return result?.connectTimeUsec != null ? DateTime.fromMicrosecondsSinceEpoch(result!.connectTimeUsec) : null;
   }
 
+  /// Time of the last successfully completed remote sync cycle, or null if the
+  /// initial sync has never finished (distinguishes it from a synced-but-empty
+  /// history, which keeps a cursor while having no records).
+  Future<DateTime?> getSyncCursor() async {
+    final result = await select(cdrSyncCursorTable).getSingleOrNull();
+    return result != null ? DateTime.fromMicrosecondsSinceEpoch(result.timestampUsec) : null;
+  }
+
+  Future<void> setSyncCursor(DateTime time) {
+    return into(
+      cdrSyncCursorTable,
+    ).insertOnConflictUpdate(CdrSyncCursorData(id: 0, timestampUsec: time.microsecondsSinceEpoch));
+  }
+
   Future<void> wipeData() async {
     await transaction(() async {
       await delete(cdrTable).go();
+      await delete(cdrSyncCursorTable).go();
     });
   }
 

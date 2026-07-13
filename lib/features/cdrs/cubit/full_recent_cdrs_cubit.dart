@@ -1,44 +1,45 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:logging/logging.dart';
-
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
-part 'full_recent_cdrs_state.dart';
+import 'cdrs_list_cubit.dart';
 
-final _logger = Logger('FullRecentCdrsCubit');
+class FullRecentCdrsCubit extends CdrsListCubit {
+  FullRecentCdrsCubit(super.localRepository, super.remoteRepository, {super.pageSize});
 
-class FullRecentCdrsCubit extends Cubit<FullRecentCdrsState> {
-  FullRecentCdrsCubit(this._cdrsLocalRepository, this._cdrsRemoteRepository, {this.pageSize = 50})
-    : super(const FullRecentCdrsState());
+  @override
+  Future<List<CdrRecord>> queryLocal({DateTime? from}) => localRepository.getHistory(from: from, limit: pageSize);
 
-  final CdrsLocalRepository _cdrsLocalRepository;
-  final CdrsRemoteRepository _cdrsRemoteRepository;
-  final int pageSize;
-  late final StreamSubscription _eventsSub;
+  @override
+  bool matches(CdrRecord cdr) => true;
 
-  Future<void> init() async {
-    _logger.info('Loading recent CDRs');
-    final recentCdrs = await _cdrsLocalRepository.getHistory(limit: pageSize);
-    emit(state.copyWith(records: recentCdrs, isLoading: false));
-    _eventsSub = _cdrsLocalRepository.events.listen(_handleEvent);
+  // The full list paginates on scroll; init never pre-fetches.
+  @override
+  bool get fetchesOnShortInit => false;
+
+  @override
+  Future<void> resolveInitialLoad() async {
+    // Re-read instead of just clearing the flag: records upserted before the
+    // subscription was attached would otherwise be missed.
+    final recentCdrs = await queryLocal();
+    if (isClosed) return;
+    emit(state.copyWith(records: recentCdrs));
   }
 
+  /// Scroll pagination: the next local page, falling back to one remote page
+  /// (persisted silently) when the local store runs out.
+  @override
   Future<void> fetchHistory() async {
     if (state.fetchingHistory || state.historyEndReached) return;
 
     emit(state.copyWith(fetchingHistory: true));
     try {
       final oldestLocal = state.records.lastOrNull?.connectTime;
-      var history = await _cdrsLocalRepository.getHistory(from: oldestLocal, limit: pageSize);
+      var history = await queryLocal(from: oldestLocal);
       if (history.isEmpty) {
-        history = await _cdrsRemoteRepository.getHistory(to: oldestLocal, limit: pageSize);
-        await _cdrsLocalRepository.upsertCdrs(history, silent: true);
+        history = await remoteRepository.getHistory(to: oldestLocal, limit: pageSize);
+        await localRepository.upsertCdrs(history, silent: true);
       }
+      if (isClosed) return;
       if (history.isEmpty) {
         emit(state.copyWith(fetchingHistory: false, historyEndReached: true));
       } else {
@@ -46,34 +47,18 @@ class FullRecentCdrsCubit extends Cubit<FullRecentCdrsState> {
         emit(state.copyWith(records: recentCdrs, fetchingHistory: false, historyEndReached: false));
       }
     } catch (e, s) {
-      _logger.severe('Failed to load CDRs', e, s);
+      logger.severe('Failed to load CDRs', e, s);
       CrashlyticsUtils.recordError(
         e,
         stack: s,
-        reason: 'FullRecentCdrsCubit.fetchHistory',
+        reason: '$runtimeType.fetchHistory',
         information: [
           'oldestLocal: ${state.records.isNotEmpty ? state.records.last.connectTime.toIso8601String() : 'none'}',
           'pageSize: ${pageSize.toString()}',
           'currentCount: ${state.records.length.toString()}',
         ],
       );
-      emit(state.copyWith(fetchingHistory: false));
+      if (!isClosed) emit(state.copyWith(fetchingHistory: false));
     }
-  }
-
-  void _handleEvent(CdrRecordsEvent event) {
-    if (event is CdrRecordUpserted) {
-      final recentCdrs = state.records.mergeWithUpdate(event.cdr).toList();
-      emit(state.copyWith(records: recentCdrs));
-    }
-    if (event is CdrRecordsWiped) {
-      emit(state.copyWith(records: const [], historyEndReached: false));
-    }
-  }
-
-  @override
-  Future<void> close() async {
-    await _eventsSub.cancel();
-    return super.close();
   }
 }

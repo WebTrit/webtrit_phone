@@ -41,6 +41,20 @@ abstract class CdrsLocalRepository {
   /// Retrieves the timestamp of the first record in the Call Detail Records (CDRs).
   Future<DateTime?> getFirstRecordTime();
 
+  /// Time of the last successfully completed remote sync cycle, or null if the
+  /// initial sync has never finished. Its presence distinguishes "synced,
+  /// genuinely empty" from "never synced yet" (still loading).
+  Future<DateTime?> getLastSyncTime();
+
+  /// Marks a remote sync cycle as completed. Emits [CdrsInitialSyncCompleted]
+  /// on [events] when it is the first completed cycle ever recorded.
+  Future<void> markSyncCompleted(DateTime time);
+
+  /// Reports a failed sync cycle. Emits [CdrsInitialSyncFailed] on [events]
+  /// when the initial sync has never completed yet (no-op afterwards);
+  /// persists nothing.
+  Future<void> notifyInitialSyncFailed();
+
   /// Wipes all Call Detail Records (CDRs) data from the local database.
   Future<void> wipeData();
 
@@ -97,6 +111,24 @@ class CdrsLocalRepositoryDriftImpl with CdrDriftMapper implements CdrsLocalRepos
   }
 
   @override
+  Future<DateTime?> getLastSyncTime() async {
+    return await _dao.getSyncCursor();
+  }
+
+  @override
+  Future<void> markSyncCompleted(DateTime time) async {
+    final previous = await _dao.getSyncCursor();
+    await _dao.setSyncCursor(time);
+    if (previous == null) _eventBus.add(CdrsInitialSyncCompleted());
+  }
+
+  @override
+  Future<void> notifyInitialSyncFailed() async {
+    final cursor = await _dao.getSyncCursor();
+    if (cursor == null) _eventBus.add(CdrsInitialSyncFailed());
+  }
+
+  @override
   Stream<CdrRecordsEvent> get events => _eventBus.stream;
 
   @override
@@ -120,3 +152,13 @@ class CdrRecordUpserted extends CdrRecordsEvent {
 /// All locally stored records were deleted (e.g. the call history cache was
 /// cleared); listeners holding records in memory should drop them.
 class CdrRecordsWiped extends CdrRecordsEvent {}
+
+/// Emitted once, when the very first remote sync cycle completes (the sync
+/// cursor transitions from absent to present) - even if it fetched no records.
+class CdrsInitialSyncCompleted extends CdrRecordsEvent {}
+
+/// Emitted when a sync cycle fails (error or offline) while the initial sync
+/// has never completed yet. Nothing is persisted: consumers may resolve their
+/// loading state to empty, and a later successful cycle still emits
+/// [CdrsInitialSyncCompleted] as usual.
+class CdrsInitialSyncFailed extends CdrRecordsEvent {}

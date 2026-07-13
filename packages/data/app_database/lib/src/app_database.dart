@@ -44,6 +44,7 @@ part 'app_database.g.dart';
     PresenceInfoTable,
     DialogInfoTable,
     CdrTable,
+    CdrSyncCursorTable,
   ],
   daos: [
     ContactsDao,
