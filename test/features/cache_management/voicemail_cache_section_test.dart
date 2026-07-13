@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:webtrit_phone/features/settings/features/voicemail/utils/voicemail_cache_section.dart';
+import 'package:webtrit_phone/features/settings/features/cache_management/sections/voicemail_cache_section.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 void main() {

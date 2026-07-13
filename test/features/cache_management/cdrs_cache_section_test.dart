@@ -5,7 +5,7 @@ import 'package:drift/native.dart';
 
 import 'package:app_database/app_database.dart';
 
-import 'package:webtrit_phone/features/cdrs/utils/cdrs_cache_section.dart';
+import 'package:webtrit_phone/features/settings/features/cache_management/sections/cdrs_cache_section.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
