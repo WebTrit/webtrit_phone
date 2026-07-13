@@ -2363,7 +2363,28 @@
   "@voicemail_Transcript_inProgress": {},
   "voicemail_Transcript_unavailable": "ไม่มีข้อความถอดเสียง",
   "@voicemail_Transcript_unavailable": {},
+<<<<<<< HEAD
 >>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
+=======
+  "voicemail_TranscriptionModel_accurateSubtitle": "ความแม่นยำสูงสุดบนอุปกรณ์ ช้ากว่า (ดาวน์โหลดโมเดล ~1.5 GB)",
+  "@voicemail_TranscriptionModel_accurateSubtitle": {},
+  "voicemail_TranscriptionModel_accurateTitle": "แม่นยำ",
+  "@voicemail_TranscriptionModel_accurateTitle": {},
+  "voicemail_TranscriptionModel_balancedSubtitle": "ความแม่นยำดี (ดาวน์โหลดโมเดล ~466 MB)",
+  "@voicemail_TranscriptionModel_balancedSubtitle": {},
+  "voicemail_TranscriptionModel_balancedTitle": "สมดุล",
+  "@voicemail_TranscriptionModel_balancedTitle": {},
+  "voicemail_TranscriptionModel_defaultLabel": "ค่าเริ่มต้น",
+  "@voicemail_TranscriptionModel_defaultLabel": {},
+  "voicemail_TranscriptionModel_fastSubtitle": "ผลลัพธ์เร็ว ความแม่นยำต่ำกว่า (ดาวน์โหลดโมเดล ~142 MB)",
+  "@voicemail_TranscriptionModel_fastSubtitle": {},
+  "voicemail_TranscriptionModel_fastTitle": "เร็ว",
+  "@voicemail_TranscriptionModel_fastTitle": {},
+  "voicemail_TranscriptionModel_note": "มีผลกับการถอดเสียงใหม่ โมเดลจะถูกดาวน์โหลดเมื่อใช้งานครั้งแรก ข้อความถอดเสียงเดิมจะยังคงอยู่",
+  "@voicemail_TranscriptionModel_note": {},
+  "voicemail_TranscriptionModel_title": "โมเดลถอดเสียง",
+  "@voicemail_TranscriptionModel_title": {},
+>>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
   "voicemail_Widget_screenTitle": "ข้อความเสียง",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "ลองใหม่",

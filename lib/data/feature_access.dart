@@ -751,6 +751,7 @@ abstract final class VoicemailMapper {
         mode: transcription.mode,
         language: transcription.language,
         localModel: transcription.local.model,
+        localModelUserSelectable: transcription.local.userSelectable,
         remoteUrl: transcription.remote.url,
         remoteApiKey: transcription.remote.apiKey,
         remoteModel: transcription.remote.model,

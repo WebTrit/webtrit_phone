@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/widgets.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -36,6 +37,12 @@ class VoicemailScreenPage extends StatelessWidget {
       mediaHeaders: mediaHeaders,
     );
 
+    final transcription = context.read<FeatureAccess>().voicemailConfig.transcription;
+    final transcriptionModelSelectable =
+        !kIsWeb &&
+        TranscriptionMode.fromName(transcription.mode) == TranscriptionMode.local &&
+        transcription.localModelUserSelectable;
+
     return MultiProvider(
       providers: [
         BlocProvider(
@@ -43,6 +50,10 @@ class VoicemailScreenPage extends StatelessWidget {
             repository: context.read<VoicemailRepository>(),
             onCallStarted: (number) => callBloc.add(CallControlEvent.started(number: number, video: false)),
             onSubmitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
+            transcriptionModelRepository: transcriptionModelSelectable
+                ? context.read<TranscriptionModelRepository>()
+                : null,
+            defaultTranscriptionModel: transcription.localModel,
           ),
         ),
         Provider<VoicemailScreenContext>(create: (_) => screenContext),

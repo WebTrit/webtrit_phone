@@ -28,10 +28,14 @@ enum TranscriptionMode {
 /// (`voicemail.transcription` of the app config), or `null` when the feature
 /// is disabled or misconfigured for this platform.
 ///
+/// [localModelOverride] replaces the configured local model tier with the
+/// user's choice from the voicemail screen; null keeps the config default.
+///
 /// [certs] lets the remote source talk to self-hosted endpoints secured by
 /// the same trusted certificates the rest of the app uses.
 TranscriptionDataSource? createVoicemailTranscriptionDataSource(
   VoicemailTranscriptionConfig config, {
+  String? localModelOverride,
   TrustedCertificates certs = TrustedCertificates.empty,
 }) {
   final mode = TranscriptionMode.fromName(config.mode);
@@ -49,7 +53,10 @@ TranscriptionDataSource? createVoicemailTranscriptionDataSource(
         _logger.warning('Local voicemail transcription is not supported on web; transcription disabled');
         return null;
       }
-      return LocalWhisperTranscriptionDataSource(model: config.localModel, defaultLanguage: config.language);
+      return LocalWhisperTranscriptionDataSource(
+        model: localModelOverride ?? config.localModel,
+        defaultLanguage: config.language,
+      );
 
     case TranscriptionMode.remote:
       final url = Uri.tryParse(config.remoteUrl ?? '');

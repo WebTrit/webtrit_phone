@@ -794,12 +794,17 @@ class AppConfigVoicemailTranscription with _$AppConfigVoicemailTranscription {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigVoicemailTranscriptionLocal with _$AppConfigVoicemailTranscriptionLocal {
-  const AppConfigVoicemailTranscriptionLocal({this.model = 'base'});
+  const AppConfigVoicemailTranscriptionLocal({this.model = 'base', this.userSelectable = true});
 
   /// Whisper model tier downloaded to the device (tiny, base, small, ...);
   /// larger tiers transcribe better but cost more download size and CPU.
   @override
   final String model;
+
+  /// Whether the user may switch the model tier from the voicemail screen;
+  /// [model] stays the default until overridden there.
+  @override
+  final bool userSelectable;
 
   factory AppConfigVoicemailTranscriptionLocal.fromJson(Map<String, Object?> json) =>
       _$AppConfigVoicemailTranscriptionLocalFromJson(json);

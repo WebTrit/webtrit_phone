@@ -1358,6 +1358,31 @@ extension AppLocalizationsExtension on AppLocalizations {
       'voicemail_Label_retry' => voicemail_Label_retry,
       'voicemail_Snackbar_notConfigured' => voicemail_Snackbar_notConfigured,
       'voicemail_Title_notSupported' => voicemail_Title_notSupported,
+<<<<<<< HEAD
+=======
+      'voicemail_RecordsCache_description' =>
+        voicemail_RecordsCache_description,
+      'voicemail_RecordsCache_title' => voicemail_RecordsCache_title,
+      'voicemail_Transcript_inProgress' => voicemail_Transcript_inProgress,
+      'voicemail_Transcript_unavailable' => voicemail_Transcript_unavailable,
+      'voicemail_TranscriptionModel_accurateSubtitle' =>
+        voicemail_TranscriptionModel_accurateSubtitle,
+      'voicemail_TranscriptionModel_accurateTitle' =>
+        voicemail_TranscriptionModel_accurateTitle,
+      'voicemail_TranscriptionModel_balancedSubtitle' =>
+        voicemail_TranscriptionModel_balancedSubtitle,
+      'voicemail_TranscriptionModel_balancedTitle' =>
+        voicemail_TranscriptionModel_balancedTitle,
+      'voicemail_TranscriptionModel_defaultLabel' =>
+        voicemail_TranscriptionModel_defaultLabel,
+      'voicemail_TranscriptionModel_fastSubtitle' =>
+        voicemail_TranscriptionModel_fastSubtitle,
+      'voicemail_TranscriptionModel_fastTitle' =>
+        voicemail_TranscriptionModel_fastTitle,
+      'voicemail_TranscriptionModel_note' => voicemail_TranscriptionModel_note,
+      'voicemail_TranscriptionModel_title' =>
+        voicemail_TranscriptionModel_title,
+>>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
       'voicemail_Widget_screenTitle' => voicemail_Widget_screenTitle,
       'webRegistration_ErrorAcknowledgeDialogActions_retry' =>
         webRegistration_ErrorAcknowledgeDialogActions_retry,

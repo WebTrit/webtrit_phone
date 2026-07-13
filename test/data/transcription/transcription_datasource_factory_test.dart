@@ -21,6 +21,23 @@ void main() {
       );
     });
 
+    test('uses the configured local model when no override is given', () {
+      final dataSource = createVoicemailTranscriptionDataSource(
+        const VoicemailTranscriptionConfig(mode: 'local', localModel: 'small'),
+      );
+
+      expect((dataSource! as LocalWhisperTranscriptionDataSource).modelName, 'small');
+    });
+
+    test('the local model override wins over the configured model', () {
+      final dataSource = createVoicemailTranscriptionDataSource(
+        const VoicemailTranscriptionConfig(mode: 'local', localModel: 'small'),
+        localModelOverride: 'medium',
+      );
+
+      expect((dataSource! as LocalWhisperTranscriptionDataSource).modelName, 'medium');
+    });
+
     test('returns null for the remote mode without a URL', () {
       expect(createVoicemailTranscriptionDataSource(const VoicemailTranscriptionConfig(mode: 'remote')), isNull);
     });
@@ -64,7 +81,7 @@ void main() {
           transcription: AppConfigVoicemailTranscription(
             mode: 'remote',
             language: 'en',
-            local: AppConfigVoicemailTranscriptionLocal(model: 'small'),
+            local: AppConfigVoicemailTranscriptionLocal(model: 'small', userSelectable: false),
             remote: AppConfigVoicemailTranscriptionRemote(
               url: 'https://stt.example.com/v1',
               apiKey: 'key',
@@ -79,6 +96,7 @@ void main() {
       expect(config.mode, 'remote');
       expect(config.language, 'en');
       expect(config.localModel, 'small');
+      expect(config.localModelUserSelectable, isFalse);
       expect(config.remoteUrl, 'https://stt.example.com/v1');
       expect(config.remoteApiKey, 'key');
       expect(config.remoteModel, 'large-v3');
@@ -90,6 +108,7 @@ void main() {
       expect(TranscriptionMode.fromName(config.mode), TranscriptionMode.disabled);
       expect(config.language, isNull);
       expect(config.localModel, 'base');
+      expect(config.localModelUserSelectable, isTrue);
       expect(config.remoteUrl, isNull);
     });
   });

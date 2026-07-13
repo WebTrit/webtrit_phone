@@ -2360,7 +2360,28 @@
   "@voicemail_Transcript_inProgress": {},
   "voicemail_Transcript_unavailable": "Розшифровка недоступна",
   "@voicemail_Transcript_unavailable": {},
+<<<<<<< HEAD
 >>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
+=======
+  "voicemail_TranscriptionModel_accurateSubtitle": "Найкраща точність на пристрої, повільніше (завантаження моделі ~1,5 ГБ)",
+  "@voicemail_TranscriptionModel_accurateSubtitle": {},
+  "voicemail_TranscriptionModel_accurateTitle": "Точна",
+  "@voicemail_TranscriptionModel_accurateTitle": {},
+  "voicemail_TranscriptionModel_balancedSubtitle": "Хороша точність (завантаження моделі ~466 МБ)",
+  "@voicemail_TranscriptionModel_balancedSubtitle": {},
+  "voicemail_TranscriptionModel_balancedTitle": "Збалансована",
+  "@voicemail_TranscriptionModel_balancedTitle": {},
+  "voicemail_TranscriptionModel_defaultLabel": "За замовчуванням",
+  "@voicemail_TranscriptionModel_defaultLabel": {},
+  "voicemail_TranscriptionModel_fastSubtitle": "Швидкий результат, нижча точність (завантаження моделі ~142 МБ)",
+  "@voicemail_TranscriptionModel_fastSubtitle": {},
+  "voicemail_TranscriptionModel_fastTitle": "Швидка",
+  "@voicemail_TranscriptionModel_fastTitle": {},
+  "voicemail_TranscriptionModel_note": "Діє для нових розшифровок. Модель завантажується при першому використанні; наявні розшифровки зберігаються.",
+  "@voicemail_TranscriptionModel_note": {},
+  "voicemail_TranscriptionModel_title": "Модель розшифровки",
+  "@voicemail_TranscriptionModel_title": {},
+>>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
   "voicemail_Widget_screenTitle": "Голосова пошта",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",

@@ -638,11 +638,15 @@ AppConfigVoicemailTranscriptionLocal
 _$AppConfigVoicemailTranscriptionLocalFromJson(Map<String, dynamic> json) =>
     AppConfigVoicemailTranscriptionLocal(
       model: json['model'] as String? ?? 'base',
+      userSelectable: json['userSelectable'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$AppConfigVoicemailTranscriptionLocalToJson(
   AppConfigVoicemailTranscriptionLocal instance,
-) => <String, dynamic>{'model': instance.model};
+) => <String, dynamic>{
+  'model': instance.model,
+  'userSelectable': instance.userSelectable,
+};
 
 AppConfigVoicemailTranscriptionRemote
 _$AppConfigVoicemailTranscriptionRemoteFromJson(Map<String, dynamic> json) =>

@@ -2360,7 +2360,28 @@
   "@voicemail_Transcript_inProgress": {},
   "voicemail_Transcript_unavailable": "Trascrizione non disponibile",
   "@voicemail_Transcript_unavailable": {},
+<<<<<<< HEAD
 >>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
+=======
+  "voicemail_TranscriptionModel_accurateSubtitle": "Migliore precisione sul dispositivo, più lento (download del modello ~1,5 GB)",
+  "@voicemail_TranscriptionModel_accurateSubtitle": {},
+  "voicemail_TranscriptionModel_accurateTitle": "Accurato",
+  "@voicemail_TranscriptionModel_accurateTitle": {},
+  "voicemail_TranscriptionModel_balancedSubtitle": "Buona precisione (download del modello ~466 MB)",
+  "@voicemail_TranscriptionModel_balancedSubtitle": {},
+  "voicemail_TranscriptionModel_balancedTitle": "Bilanciato",
+  "@voicemail_TranscriptionModel_balancedTitle": {},
+  "voicemail_TranscriptionModel_defaultLabel": "Predefinito",
+  "@voicemail_TranscriptionModel_defaultLabel": {},
+  "voicemail_TranscriptionModel_fastSubtitle": "Risultati rapidi, precisione inferiore (download del modello ~142 MB)",
+  "@voicemail_TranscriptionModel_fastSubtitle": {},
+  "voicemail_TranscriptionModel_fastTitle": "Veloce",
+  "@voicemail_TranscriptionModel_fastTitle": {},
+  "voicemail_TranscriptionModel_note": "Si applica alle nuove trascrizioni. Il modello viene scaricato al primo utilizzo; le trascrizioni esistenti vengono conservate.",
+  "@voicemail_TranscriptionModel_note": {},
+  "voicemail_TranscriptionModel_title": "Modello di trascrizione",
+  "@voicemail_TranscriptionModel_title": {},
+>>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
   "voicemail_Widget_screenTitle": "Segreteria telefonica",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",

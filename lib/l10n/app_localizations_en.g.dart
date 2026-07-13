@@ -2835,6 +2835,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voicemail_Title_notSupported => 'Feature not supported';
 
   @override
+<<<<<<< HEAD
+=======
+  String get voicemail_RecordsCache_description =>
+      'Locally stored copy of the voicemail list fetched from the server (the audio files are a separate section). Clearing removes the local records; the list is downloaded again on the next refresh.';
+
+  @override
+  String get voicemail_RecordsCache_title => 'Voicemail messages';
+
+  @override
+  String get voicemail_Transcript_inProgress => 'Transcribing...';
+
+  @override
+  String get voicemail_Transcript_unavailable => 'Transcript unavailable';
+
+  @override
+  String get voicemail_TranscriptionModel_accurateSubtitle =>
+      'Best on-device accuracy, slower (model download ~1.5 GB)';
+
+  @override
+  String get voicemail_TranscriptionModel_accurateTitle => 'Accurate';
+
+  @override
+  String get voicemail_TranscriptionModel_balancedSubtitle => 'Good accuracy (model download ~466 MB)';
+
+  @override
+  String get voicemail_TranscriptionModel_balancedTitle => 'Balanced';
+
+  @override
+  String get voicemail_TranscriptionModel_defaultLabel => 'Default';
+
+  @override
+  String get voicemail_TranscriptionModel_fastSubtitle => 'Quick results, lower accuracy (model download ~142 MB)';
+
+  @override
+  String get voicemail_TranscriptionModel_fastTitle => 'Fast';
+
+  @override
+  String get voicemail_TranscriptionModel_note =>
+      'Applies to new transcriptions. The model is downloaded on first use; existing transcripts are kept.';
+
+  @override
+  String get voicemail_TranscriptionModel_title => 'Transcription model';
+
+  @override
+>>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
   String get voicemail_Widget_screenTitle => 'Voicemail';
 
   @override

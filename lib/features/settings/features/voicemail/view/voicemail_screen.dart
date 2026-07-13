@@ -32,6 +32,12 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
           appBar: AppBar(
             title: Text(context.l10n.voicemail_Widget_screenTitle),
             actions: [
+              if (context.read<VoicemailCubit>().canSelectTranscriptionModel)
+                IconButton(
+                  icon: const Icon(Icons.tune),
+                  tooltip: context.l10n.voicemail_TranscriptionModel_title,
+                  onPressed: _onSelectTranscriptionModel,
+                ),
               if (context.read<AppCacheManager>().sections.isNotEmpty)
                 IconButton(
                   icon: const Icon(Icons.storage),
@@ -110,6 +116,20 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
   void _onOpenCacheManagement() {
     unawaited(context.read<VoicemailPlaybackController>().stop());
     context.router.navigate(const CacheManagementScreenPageRoute());
+  }
+
+  void _onSelectTranscriptionModel() {
+    final cubit = context.read<VoicemailCubit>();
+
+    showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      builder: (_) => TranscriptionModelSheet(
+        defaultModel: cubit.defaultTranscriptionModel,
+        selectedModel: cubit.selectedTranscriptionModel,
+        onSelected: (model) => cubit.setTranscriptionModel(model),
+      ),
+    );
   }
 
   void _onDeleteAllVoicemails() async {

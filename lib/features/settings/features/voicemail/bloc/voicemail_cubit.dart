@@ -24,7 +24,11 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     required VoicemailRepository repository,
     required this.onCallStarted,
     required this.onSubmitNotification,
+    TranscriptionModelRepository? transcriptionModelRepository,
+    String defaultTranscriptionModel = 'base',
   }) : _repository = repository,
+       _transcriptionModelRepository = transcriptionModelRepository,
+       _defaultTranscriptionModel = defaultTranscriptionModel,
        super(const VoicemailState()) {
     _initialize();
   }
@@ -32,6 +36,29 @@ class VoicemailCubit extends Cubit<VoicemailState> {
   final VoicemailRepository _repository;
   final ValueChanged<String> onCallStarted;
   final ValueChanged<Notification> onSubmitNotification;
+
+  /// Present only when the user may pick the on-device transcription model;
+  /// null hides the model selection entirely.
+  final TranscriptionModelRepository? _transcriptionModelRepository;
+  final String _defaultTranscriptionModel;
+
+  bool get canSelectTranscriptionModel => _transcriptionModelRepository != null;
+
+  String get defaultTranscriptionModel => _defaultTranscriptionModel;
+
+  String get selectedTranscriptionModel =>
+      _transcriptionModelRepository?.getTranscriptionModel() ?? _defaultTranscriptionModel;
+
+  /// Persists the picked model tier (the default tier clears the override)
+  /// and re-runs transcription for still-pending voicemails with it.
+  Future<void> setTranscriptionModel(String model) async {
+    final transcriptionModelRepository = _transcriptionModelRepository;
+    if (transcriptionModelRepository == null) return;
+
+    final override = model == _defaultTranscriptionModel ? null : model;
+    await transcriptionModelRepository.setTranscriptionModel(override);
+    _repository.applyTranscriptionModel(override);
+  }
 
   late final StreamSubscription<List<Voicemail>> _subscription;
 
