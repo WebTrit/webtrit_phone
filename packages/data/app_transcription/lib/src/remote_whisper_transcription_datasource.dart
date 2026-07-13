@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:_http_client/_http_client.dart';
 import 'package:http/http.dart' as http;
 
 import 'transcription_datasource.dart';
@@ -8,6 +9,10 @@ import 'transcription_datasource.dart';
 /// Remote transcription against an OpenAI-compatible speech-to-text API
 /// (`POST <base>/audio/transcriptions`), e.g. OpenAI itself or a self-hosted
 /// Whisper server (Speaches, faster-whisper-server, etc.).
+///
+/// Without an injected [httpClient] the source builds its own client with
+/// [connectionTimeout] and [certs], so self-hosted endpoints secured by the
+/// consumer's trusted certificates work out of the box.
 class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
   RemoteWhisperTranscriptionDataSource({
     required Uri url,
@@ -15,13 +20,15 @@ class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
     String model = 'whisper-1',
     String? defaultLanguage,
     http.Client? httpClient,
+    Duration? connectionTimeout,
+    TrustedCertificates certs = TrustedCertificates.empty,
     Duration timeout = const Duration(seconds: 60),
   }) : _endpoint = _resolveEndpoint(url),
        _apiKey = apiKey,
        _model = model,
        // An empty hint means "not set" (a blank dart-define), i.e. auto-detect.
        _defaultLanguage = (defaultLanguage == null || defaultLanguage.isEmpty) ? null : defaultLanguage,
-       _httpClient = httpClient ?? http.Client(),
+       _httpClient = httpClient ?? createHttpClient(connectionTimeout: connectionTimeout, certs: certs),
        _timeout = timeout;
 
   final Uri _endpoint;
