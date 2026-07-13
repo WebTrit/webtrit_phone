@@ -102,6 +102,15 @@ class AppLocalizationsTh extends AppLocalizations {
   String get callTileActions_message => 'ข้อความ';
 
   @override
+  String get cacheManagement_Button_clear => 'ล้าง';
+
+  @override
+  String get cacheManagement_Label_empty => 'ไม่มีข้อมูลในแคชบนอุปกรณ์นี้';
+
+  @override
+  String get cacheManagement_Widget_screenTitle => 'พื้นที่เก็บข้อมูลและแคช';
+
+  @override
   String get callTileActions_more => 'เพิ่มเติม';
 
   @override
@@ -2360,6 +2369,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'โคเดกการโทร';
 
   @override
+  String get settings_ListViewTileTitle_cacheManagement => 'พื้นที่เก็บข้อมูลและแคช';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'หมายเลขผู้โทร';
 
   @override
@@ -2730,6 +2742,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get validationBlankError => 'โปรดกรอกค่า';
+
+  @override
+  String get voicemail_Cache_description =>
+      'การเล่นข้อความเสียงจะเก็บสำเนาเสียงไว้ในเครื่องเพื่อเล่นซ้ำได้ทันที การล้างจะคืนพื้นที่ และเสียงจะถูกดาวน์โหลดใหม่เมื่อเล่นครั้งถัดไป';
+
+  @override
+  String get voicemail_Cache_title => 'เสียงข้อความเสียง';
 
   @override
   String get voicemail_Description_notSupported =>

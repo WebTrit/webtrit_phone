@@ -2,13 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/bloc.dart';
+import '../models/models.dart';
 import '../widgets/widgets.dart';
 
 class VoicemailScreen extends StatefulWidget {
@@ -29,6 +32,12 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
           appBar: AppBar(
             title: Text(context.l10n.voicemail_Widget_screenTitle),
             actions: [
+              if (context.read<VoicemailScreenContext>().cacheManagementAvailable)
+                IconButton(
+                  icon: const Icon(Icons.storage),
+                  tooltip: context.l10n.cacheManagement_Widget_screenTitle,
+                  onPressed: () => context.router.navigate(const CacheManagementScreenPageRoute()),
+                ),
               Badge(
                 alignment: AlignmentDirectional.topCenter,
                 isLabelVisible: state.isMultipleVoicemailsSelection,

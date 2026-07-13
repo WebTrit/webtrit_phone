@@ -5,6 +5,7 @@ export 'app_info.dart';
 export 'app_lifecycle.dart';
 export 'app_logger.dart';
 export 'app_metadata_provider.dart';
+export 'app_cache_manager.dart';
 export 'app_path.dart';
 export 'app_permissions.dart';
 export 'app_preferences.dart';

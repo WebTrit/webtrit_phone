@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
@@ -301,6 +302,21 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             } else {
               return const EmptyVoicemailRepository();
             }
+          },
+        ),
+        RepositoryProvider<AppCacheManager>(
+          create: (context) {
+            final appPath = context.read<AppPath>();
+
+            return AppCacheManager(
+              sections: [
+                if (!kIsWeb && featureAccess.settingsConfig.voicemailsEnabled)
+                  VoicemailCacheSection(
+                    mediaCacheBasePath: appPath.mediaCacheBasePath,
+                    temporaryPath: appPath.temporaryPath,
+                  ),
+              ],
+            );
           },
         ),
         RepositoryProvider<AppRepository>(

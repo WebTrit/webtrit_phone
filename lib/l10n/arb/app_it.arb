@@ -73,6 +73,12 @@
   "@callTileActions_message": {
     "description": "Label of the expanded call tile action that opens a chat with the contact."
   },
+  "cacheManagement_Button_clear": "Svuota",
+  "@cacheManagement_Button_clear": {},
+  "cacheManagement_Label_empty": "Nessun dato in cache su questo dispositivo",
+  "@cacheManagement_Label_empty": {},
+  "cacheManagement_Widget_screenTitle": "Archiviazione e cache",
+  "@cacheManagement_Widget_screenTitle": {},
   "callTileActions_more": "Altro",
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
@@ -1918,6 +1924,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_call_codecs": "Codec di chiamata",
   "@settings_ListViewTileTitle_call_codecs": {},
+  "settings_ListViewTileTitle_cacheManagement": "Archiviazione e cache",
+  "@settings_ListViewTileTitle_cacheManagement": {},
   "settings_ListViewTileTitle_callerId": "ID chiamante",
   "@settings_ListViewTileTitle_callerId": {},
   "settings_ListViewTileTitle_encoding": "Codifica multimediale",
@@ -2294,6 +2302,10 @@
   "@user_agreement_description": {},
   "validationBlankError": "Prego inserire un valore",
   "@validationBlankError": {},
+  "voicemail_Cache_description": "La riproduzione di un messaggio vocale conserva una copia locale dell'audio per riascolti immediati. Svuotare la cache libera spazio; l'audio viene scaricato di nuovo alla prossima riproduzione.",
+  "@voicemail_Cache_description": {},
+  "voicemail_Cache_title": "Audio dei messaggi vocali",
+  "@voicemail_Cache_title": {},
   "voicemail_Description_notSupported": "La funzione di segreteria telefonica non è supportata nel tuo sistema. Contatta l'amministratore per maggiori informazioni.",
   "@voicemail_Description_notSupported": {},
   "voicemail_Dialog_deleteSelectedContent": "I messaggi vocali selezionati verranno eliminati definitivamente. Vuoi continuare?",

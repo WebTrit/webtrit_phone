@@ -73,6 +73,12 @@
   "@callTileActions_message": {
     "description": "Label of the expanded call tile action that opens a chat with the contact."
   },
+  "cacheManagement_Button_clear": "Clear",
+  "@cacheManagement_Button_clear": {},
+  "cacheManagement_Label_empty": "Nothing is cached on this device",
+  "@cacheManagement_Label_empty": {},
+  "cacheManagement_Widget_screenTitle": "Storage & cache",
+  "@cacheManagement_Widget_screenTitle": {},
   "callTileActions_more": "More",
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
@@ -1933,6 +1939,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_call_codecs": "Call codecs",
   "@settings_ListViewTileTitle_call_codecs": {},
+  "settings_ListViewTileTitle_cacheManagement": "Storage & cache",
+  "@settings_ListViewTileTitle_cacheManagement": {},
   "settings_ListViewTileTitle_callerId": "Caller ID",
   "@settings_ListViewTileTitle_callerId": {},
   "settings_ListViewTileTitle_encoding": "Media encoding",
@@ -2309,6 +2317,10 @@
   "@user_agreement_description": {},
   "validationBlankError": "Please enter a value",
   "@validationBlankError": {},
+  "voicemail_Cache_description": "Playing a voicemail keeps a local copy of its audio for instant replays. Clearing frees up space; the audio is downloaded again the next time a message is played.",
+  "@voicemail_Cache_description": {},
+  "voicemail_Cache_title": "Voicemail audio",
+  "@voicemail_Cache_title": {},
   "voicemail_Description_notSupported": "Voicemail feature are not supported in your core. Please contact your administrator for more information.",
   "@voicemail_Description_notSupported": {},
   "voicemail_Dialog_deleteSelectedContent": "Selected voicemails will be permanently deleted. Do you want to continue?",

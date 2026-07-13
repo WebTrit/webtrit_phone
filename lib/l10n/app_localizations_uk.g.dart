@@ -111,6 +111,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callTileActions_message => 'Повідомлення';
 
   @override
+  String get cacheManagement_Button_clear => 'Очистити';
+
+  @override
+  String get cacheManagement_Label_empty => 'На цьому пристрої немає кешованих даних';
+
+  @override
+  String get cacheManagement_Widget_screenTitle => 'Сховище та кеш';
+
+  @override
   String get callTileActions_more => 'Більше';
 
   @override
@@ -2391,6 +2400,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
 
   @override
+  String get settings_ListViewTileTitle_cacheManagement => 'Сховище та кеш';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'Ідентифікатор абонента';
 
   @override
@@ -2774,6 +2786,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Будь ласка, введіть значення';
+
+  @override
+  String get voicemail_Cache_description =>
+      'Відтворення голосового повідомлення зберігає локальну копію аудіо для миттєвого повторного прослуховування. Очищення звільняє місце; аудіо завантажиться знову під час наступного відтворення.';
+
+  @override
+  String get voicemail_Cache_title => 'Аудіо голосової пошти';
 
   @override
   String get voicemail_Description_notSupported =>

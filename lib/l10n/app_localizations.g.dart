@@ -196,6 +196,24 @@ abstract class AppLocalizations {
   /// **'Message'**
   String get callTileActions_message;
 
+  /// No description provided for @cacheManagement_Button_clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get cacheManagement_Button_clear;
+
+  /// No description provided for @cacheManagement_Label_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is cached on this device'**
+  String get cacheManagement_Label_empty;
+
+  /// No description provided for @cacheManagement_Widget_screenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage & cache'**
+  String get cacheManagement_Widget_screenTitle;
+
   /// Label of the expanded call tile action that opens the full actions menu.
   ///
   /// In en, this message translates to:
@@ -4369,6 +4387,12 @@ abstract class AppLocalizations {
   /// **'Call codecs'**
   String get settings_ListViewTileTitle_call_codecs;
 
+  /// No description provided for @settings_ListViewTileTitle_cacheManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage & cache'**
+  String get settings_ListViewTileTitle_cacheManagement;
+
   /// No description provided for @settings_ListViewTileTitle_callerId.
   ///
   /// In en, this message translates to:
@@ -5052,6 +5076,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a value'**
   String get validationBlankError;
+
+  /// No description provided for @voicemail_Cache_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Playing a voicemail keeps a local copy of its audio for instant replays. Clearing frees up space; the audio is downloaded again the next time a message is played.'**
+  String get voicemail_Cache_description;
+
+  /// No description provided for @voicemail_Cache_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail audio'**
+  String get voicemail_Cache_title;
 
   /// No description provided for @voicemail_Description_notSupported.
   ///

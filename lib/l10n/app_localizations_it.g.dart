@@ -103,6 +103,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callTileActions_message => 'Messaggio';
 
   @override
+  String get cacheManagement_Button_clear => 'Svuota';
+
+  @override
+  String get cacheManagement_Label_empty => 'Nessun dato in cache su questo dispositivo';
+
+  @override
+  String get cacheManagement_Widget_screenTitle => 'Archiviazione e cache';
+
+  @override
   String get callTileActions_more => 'Altro';
 
   @override
@@ -2392,6 +2401,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Codec di chiamata';
 
   @override
+  String get settings_ListViewTileTitle_cacheManagement => 'Archiviazione e cache';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'ID chiamante';
 
   @override
@@ -2774,6 +2786,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Prego inserire un valore';
+
+  @override
+  String get voicemail_Cache_description =>
+      'La riproduzione di un messaggio vocale conserva una copia locale dell\'audio per riascolti immediati. Svuotare la cache libera spazio; l\'audio viene scaricato di nuovo alla prossima riproduzione.';
+
+  @override
+  String get voicemail_Cache_title => 'Audio dei messaggi vocali';
 
   @override
   String get voicemail_Description_notSupported =>

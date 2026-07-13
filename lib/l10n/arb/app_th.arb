@@ -73,6 +73,12 @@
   "@callTileActions_message": {
     "description": "Label of the expanded call tile action that opens a chat with the contact."
   },
+  "cacheManagement_Button_clear": "ล้าง",
+  "@cacheManagement_Button_clear": {},
+  "cacheManagement_Label_empty": "ไม่มีข้อมูลในแคชบนอุปกรณ์นี้",
+  "@cacheManagement_Label_empty": {},
+  "cacheManagement_Widget_screenTitle": "พื้นที่เก็บข้อมูลและแคช",
+  "@cacheManagement_Widget_screenTitle": {},
   "callTileActions_more": "เพิ่มเติม",
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
@@ -1921,6 +1927,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_call_codecs": "โคเดกการโทร",
   "@settings_ListViewTileTitle_call_codecs": {},
+  "settings_ListViewTileTitle_cacheManagement": "พื้นที่เก็บข้อมูลและแคช",
+  "@settings_ListViewTileTitle_cacheManagement": {},
   "settings_ListViewTileTitle_callerId": "หมายเลขผู้โทร",
   "@settings_ListViewTileTitle_callerId": {},
   "settings_ListViewTileTitle_encoding": "การเข้ารหัสสื่อ",
@@ -2297,6 +2305,10 @@
   "@user_agreement_description": {},
   "validationBlankError": "โปรดกรอกค่า",
   "@validationBlankError": {},
+  "voicemail_Cache_description": "การเล่นข้อความเสียงจะเก็บสำเนาเสียงไว้ในเครื่องเพื่อเล่นซ้ำได้ทันที การล้างจะคืนพื้นที่ และเสียงจะถูกดาวน์โหลดใหม่เมื่อเล่นครั้งถัดไป",
+  "@voicemail_Cache_description": {},
+  "voicemail_Cache_title": "เสียงข้อความเสียง",
+  "@voicemail_Cache_title": {},
   "voicemail_Description_notSupported": "core ของคุณไม่รองรับฟีเจอร์ข้อความเสียง โปรดติดต่อผู้ดูแลระบบของคุณเพื่อขอข้อมูลเพิ่มเติม",
   "@voicemail_Description_notSupported": {},
   "voicemail_Dialog_deleteSelectedContent": "ข้อความเสียงที่เลือกจะถูกลบอย่างถาวร คุณต้องการดำเนินการต่อหรือไม่?",

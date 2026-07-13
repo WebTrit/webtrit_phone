@@ -148,6 +148,12 @@
           },
           {
             "enabled": true,
+            "type": "cacheManagement",
+            "titleL10n": "settings_ListViewTileTitle_cacheManagement",
+            "icon": "0xe609"
+          },
+          {
+            "enabled": true,
             "type": "callerId",
             "titleL10n": "settings_ListViewTileTitle_callerId",
             "icon": "0xf26e"

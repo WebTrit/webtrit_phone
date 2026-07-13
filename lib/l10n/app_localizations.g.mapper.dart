@@ -40,6 +40,10 @@ extension AppLocalizationsExtension on AppLocalizations {
       'callTileActions_contact' => callTileActions_contact,
       'callTileActions_history' => callTileActions_history,
       'callTileActions_message' => callTileActions_message,
+      'cacheManagement_Button_clear' => cacheManagement_Button_clear,
+      'cacheManagement_Label_empty' => cacheManagement_Label_empty,
+      'cacheManagement_Widget_screenTitle' =>
+        cacheManagement_Widget_screenTitle,
       'callTileActions_more' => callTileActions_more,
       'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
       'call_CallActionsTooltip_accept_inviteToAttendedTransfer' =>
@@ -1132,6 +1136,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         settings_ListViewTileTitle_accountDelete,
       'settings_ListViewTileTitle_call_codecs' =>
         settings_ListViewTileTitle_call_codecs,
+      'settings_ListViewTileTitle_cacheManagement' =>
+        settings_ListViewTileTitle_cacheManagement,
       'settings_ListViewTileTitle_callerId' =>
         settings_ListViewTileTitle_callerId,
       'settings_ListViewTileTitle_encoding' =>
@@ -1323,6 +1329,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'user_agreement_agrement_link' => user_agreement_agrement_link,
       'user_agreement_button_text' => user_agreement_button_text,
       'validationBlankError' => validationBlankError,
+      'voicemail_Cache_description' => voicemail_Cache_description,
+      'voicemail_Cache_title' => voicemail_Cache_title,
       'voicemail_Description_notSupported' =>
         voicemail_Description_notSupported,
       'voicemail_Dialog_deleteSelectedContent' =>

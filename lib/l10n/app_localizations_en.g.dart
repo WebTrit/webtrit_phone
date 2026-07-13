@@ -102,6 +102,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callTileActions_message => 'Message';
 
   @override
+  String get cacheManagement_Button_clear => 'Clear';
+
+  @override
+  String get cacheManagement_Label_empty => 'Nothing is cached on this device';
+
+  @override
+  String get cacheManagement_Widget_screenTitle => 'Storage & cache';
+
+  @override
   String get callTileActions_more => 'More';
 
   @override
@@ -2366,6 +2375,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Call codecs';
 
   @override
+  String get settings_ListViewTileTitle_cacheManagement => 'Storage & cache';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'Caller ID';
 
   @override
@@ -2743,6 +2755,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Please enter a value';
+
+  @override
+  String get voicemail_Cache_description =>
+      'Playing a voicemail keeps a local copy of its audio for instant replays. Clearing frees up space; the audio is downloaded again the next time a message is played.';
+
+  @override
+  String get voicemail_Cache_title => 'Voicemail audio';
 
   @override
   String get voicemail_Description_notSupported =>
