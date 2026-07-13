@@ -24,7 +24,12 @@ mixin VoicemailMapper {
     return voicemail;
   }
 
-  Voicemail voicemailFromDrift(VoicemailData voicemailData, String? contactName, {ReadStatus? readStatus}) {
+  Voicemail voicemailFromDrift(
+    VoicemailData voicemailData,
+    String? contactName, {
+    TranscriptionData? transcription,
+    ReadStatus? readStatus,
+  }) {
     final currentReadStatus = readStatus ?? (voicemailData.seen ? ReadStatus.read : ReadStatus.unread);
     return Voicemail(
       voicemailData.id,
@@ -37,8 +42,8 @@ mixin VoicemailMapper {
       voicemailData.size,
       voicemailData.type,
       voicemailData.attachmentPath,
-      transcript: voicemailData.transcript,
-      transcriptStatus: TranscriptStatus.fromName(voicemailData.transcriptStatus),
+      transcript: transcription?.transcript,
+      transcriptStatus: TranscriptStatus.fromName(transcription?.status),
     );
   }
 }

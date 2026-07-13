@@ -150,6 +150,9 @@ class _RecordingDataSource implements TranscriptionDataSource {
   int disposeCalls = 0;
 
   @override
+  String get engine => 'recording';
+
+  @override
   Future<String> transcribe(Uint8List audio, {String? language}) async => '';
 
   @override

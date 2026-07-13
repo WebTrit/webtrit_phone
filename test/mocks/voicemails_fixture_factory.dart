@@ -12,8 +12,6 @@ class VoicemailsFixtureFactory {
     int size = 0,
     String type = '',
     String? attachmentPath,
-    String? transcript,
-    String? transcriptStatus,
   }) {
     return VoicemailData(
       id: id,
@@ -25,8 +23,6 @@ class VoicemailsFixtureFactory {
       size: size,
       type: type,
       attachmentPath: attachmentPath,
-      transcript: transcript,
-      transcriptStatus: transcriptStatus,
     );
   }
 }

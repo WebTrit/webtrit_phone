@@ -15,5 +15,8 @@ class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
   }
 
   @override
+  String get engine => 'unsupported';
+
+  @override
   void dispose() {}
 }

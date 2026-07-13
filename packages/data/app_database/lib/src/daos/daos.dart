@@ -14,4 +14,5 @@ export 'recents_dao.dart';
 export 'sms_dao.dart';
 export 'sip_subscriptions_dao.dart';
 export 'system_notifications_dao.dart';
+export 'transcriptions_dao.dart';
 export 'voicemail_dao.dart';

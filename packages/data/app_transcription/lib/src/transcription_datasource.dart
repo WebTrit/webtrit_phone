@@ -13,6 +13,10 @@ abstract class TranscriptionDataSource {
   /// Throws [TranscriptionException] when the transcript cannot be produced.
   Future<String> transcribe(Uint8List audio, {String? language});
 
+  /// Identity of the engine and model producing the transcripts
+  /// (e.g. 'whisper-ggml:base'), stored alongside each transcript.
+  String get engine;
+
   /// Releases resources held by the source (e.g. HTTP clients) when it is
   /// replaced; an in-flight [transcribe] may fail afterwards with a transient
   /// [TranscriptionException].
