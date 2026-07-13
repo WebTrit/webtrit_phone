@@ -34,7 +34,6 @@ class VoicemailScreenPage extends StatelessWidget {
       mediaCacheBasePath: appPath.mediaCacheBasePath,
       dateFormat: appTime.formatDateTime(true),
       mediaHeaders: mediaHeaders,
-      cacheManagementAvailable: context.read<AppCacheManager>().sections.isNotEmpty,
     );
 
     return MultiProvider(

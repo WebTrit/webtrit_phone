@@ -9,18 +9,10 @@ import 'package:intl/intl.dart';
 /// - [mediaCacheBasePath]: Local path for caching voicemail audio files.
 /// - [dateFormat]: Formatter for displaying timestamps.
 /// - [mediaHeaders]: Headers for authenticated media requests.
-/// - [cacheManagementAvailable]: Whether the app has manageable cache
-///   sections; shows the shortcut to the cache management screen.
 class VoicemailScreenContext {
-  VoicemailScreenContext({
-    required this.mediaCacheBasePath,
-    required this.dateFormat,
-    required this.mediaHeaders,
-    this.cacheManagementAvailable = false,
-  });
+  VoicemailScreenContext({required this.mediaCacheBasePath, required this.dateFormat, required this.mediaHeaders});
 
   final String mediaCacheBasePath;
   final DateFormat dateFormat;
   final Map<String, String> mediaHeaders;
-  final bool cacheManagementAvailable;
 }
