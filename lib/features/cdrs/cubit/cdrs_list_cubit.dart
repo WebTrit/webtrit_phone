@@ -174,7 +174,11 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
       _onInitialSyncFailed();
     }
     if (event is CdrRecordsWiped) {
-      emit(state.copyWith(records: const [], historyEndReached: false));
+      // A wipe clears the sync cursor as well, returning the store to its
+      // pre-initial-sync state: drop the in-memory records and re-arm the
+      // loading gate until the next sync cycle reports the fresh state.
+      _initialSyncHandled = false;
+      emit(state.copyWith(records: const [], isLoading: true, historyEndReached: false));
     }
   }
 

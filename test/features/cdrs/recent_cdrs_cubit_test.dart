@@ -150,6 +150,35 @@ void main() {
       await cubit.close();
     });
 
+    test('a cache wipe drops the records and re-arms the loading gate until the next sync', () async {
+      when(() => local.getLastSyncTime()).thenAnswer((_) async => DateTime(2026, 1, 1));
+      var call = 0;
+      when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async {
+        call++;
+        return call == 1 ? [_record('a')] : <CdrRecord>[];
+      });
+
+      final cubit = FullRecentCdrsCubit(local, remote);
+      await cubit.init();
+      expect(cubit.state.isLoading, isFalse);
+      expect(cubit.state.records, [_record('a')]);
+
+      events.add(CdrRecordsWiped());
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+
+      expect(cubit.state.records, isEmpty);
+      expect(cubit.state.isLoading, isTrue);
+
+      // The wiped cursor is rewritten by the next successful sync cycle,
+      // which resolves the gate with the fresh (here: empty) state.
+      events.add(CdrsInitialSyncCompleted());
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+
+      expect(cubit.state.isLoading, isFalse);
+      expect(cubit.state.records, isEmpty);
+      await cubit.close();
+    });
+
     test('closing the cubit while init is still in flight neither throws nor emits', () async {
       when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async {
         await Future<void>.delayed(const Duration(milliseconds: 20));

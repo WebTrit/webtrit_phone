@@ -22,12 +22,21 @@ class CdrsSyncWorker {
   final Duration pollingInterval;
   final int pageSize;
   StreamSubscription? _syncSub;
+  StreamSubscription? _eventsSub;
 
   Future<void> init() async {
     // Uncomment to wipe local CDRs data on each start (for testing purposes)
     // await localRepo.wipeData();
     _logger.info('Initializing CDRs sync worker');
+    _eventsSub = localRepo.events.listen(_handleRepoEvent);
     _syncSub = _syncStream().listen(_handleSyncEvent);
+  }
+
+  void _handleRepoEvent(CdrRecordsEvent event) {
+    // A wipe clears the sync cursor together with the records; re-arm so the
+    // next successful cycle rewrites it (and failures are reported again),
+    // exactly as after a fresh start.
+    if (event is CdrRecordsWiped) _syncMarked = false;
   }
 
   Future<void> forceSync(Duration? delay) async {
@@ -115,6 +124,7 @@ class CdrsSyncWorker {
   Future dispose() async {
     _logger.info('Disposing');
     await _syncSub?.cancel();
+    await _eventsSub?.cancel();
     _disposed = true;
   }
 }
