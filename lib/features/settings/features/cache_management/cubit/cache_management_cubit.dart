@@ -42,8 +42,10 @@ class CacheManagementCubit extends Cubit<CacheManagementState> {
     } catch (e, st) {
       _logger.warning('Failed to clear cache section $id', e, st);
     }
-    _emitSection(id, (it) => it.copyWith(clearing: false));
+    // Stay in the clearing state through the re-measure so the button cannot
+    // start a second concurrent clear while the new usage is still unknown.
     await _measure(section);
+    _emitSection(id, (it) => it.copyWith(clearing: false));
   }
 
   Future<void> _measure(CacheSection section) async {
