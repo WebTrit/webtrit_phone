@@ -114,10 +114,10 @@
     "sections": [
       {
         "titleL10n": "settings_ListViewTileTitle_features",
-        "enabled": false,
+        "enabled": true,
         "items": [
           {
-            "enabled": false,
+            "enabled": true,
             "type": "voicemail",
             "titleL10n": "settings_ListViewTileTitle_voicemail",
             "icon": "0xe6c1"

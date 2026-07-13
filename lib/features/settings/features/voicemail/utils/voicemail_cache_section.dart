@@ -29,7 +29,7 @@ class VoicemailCacheSection implements CacheSection {
   String get descriptionL10n => 'voicemail_Cache_description';
 
   @override
-  Future<int> totalSizeBytes() async {
+  Future<CacheUsage> usage() async {
     var total = 0;
 
     for (final directory in _directories) {
@@ -43,7 +43,7 @@ class VoicemailCacheSection implements CacheSection {
       }
     }
 
-    return total;
+    return CacheUsage.bytes(total);
   }
 
   /// Deletes all cached voicemail audio; the audio of a message is downloaded

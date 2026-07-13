@@ -108,6 +108,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cacheManagement_Label_empty => 'Nothing is cached on this device';
 
   @override
+  String cacheManagement_Label_itemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count records', one: '1 record');
+    return '$_temp0';
+  }
+
+  @override
   String get cacheManagement_Widget_screenTitle => 'Storage & cache';
 
   @override
@@ -350,6 +356,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get call_videoView_actionLabel_fit => 'Fit';
+
+  @override
+  String get cdrs_Cache_description =>
+      'Locally stored copy of the call history fetched from the server. Clearing removes the local records; the history is downloaded again on the next sync.';
+
+  @override
+  String get cdrs_Cache_title => 'Call history';
 
   @override
   String get cdrs_noMissedCalls_message => 'No missed calls';

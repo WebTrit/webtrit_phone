@@ -147,6 +147,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         call_videoBackground_actionLabel_enableBlur,
       'call_videoView_actionLabel_cover' => call_videoView_actionLabel_cover,
       'call_videoView_actionLabel_fit' => call_videoView_actionLabel_fit,
+      'cdrs_Cache_description' => cdrs_Cache_description,
+      'cdrs_Cache_title' => cdrs_Cache_title,
       'cdrs_noMissedCalls_message' => cdrs_noMissedCalls_message,
       'cdrs_noRecentCalls_message' => cdrs_noRecentCalls_message,
       'common_noInternetConnection_message' =>
@@ -1575,6 +1577,12 @@ extension AppLocalizationsExtension on AppLocalizations {
       'agoTicker_secondsAgo' => switch (args) {
         [final num seconds] => agoTicker_secondsAgo(seconds),
         _ => throw ArgumentError('agoTicker_secondsAgo requires 1 arguments'),
+      },
+      'cacheManagement_Label_itemsCount' => switch (args) {
+        [final int count] => cacheManagement_Label_itemsCount(count),
+        _ => throw ArgumentError(
+          'cacheManagement_Label_itemsCount requires 1 arguments',
+        ),
       },
       'call_CallList_header' => switch (args) {
         [final int count] => call_CallList_header(count),

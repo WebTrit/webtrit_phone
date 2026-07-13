@@ -304,21 +304,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             }
           },
         ),
-        RepositoryProvider<AppCacheManager>(
-          create: (context) {
-            final appPath = context.read<AppPath>();
-
-            return AppCacheManager(
-              sections: [
-                if (!kIsWeb && featureAccess.settingsConfig.voicemailsEnabled)
-                  VoicemailCacheSection(
-                    mediaCacheBasePath: appPath.mediaCacheBasePath,
-                    temporaryPath: appPath.temporaryPath,
-                  ),
-              ],
-            );
-          },
-        ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
@@ -378,6 +363,24 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             context.read<AppBloc>().state.session.token!,
             _sessionGuard,
           ),
+        ),
+        RepositoryProvider<AppCacheManager>(
+          create: (context) {
+            final appPath = context.read<AppPath>();
+            final callHistoryEnabled =
+                featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory == true;
+
+            return AppCacheManager(
+              sections: [
+                if (!kIsWeb && featureAccess.settingsConfig.voicemailsEnabled)
+                  VoicemailCacheSection(
+                    mediaCacheBasePath: appPath.mediaCacheBasePath,
+                    temporaryPath: appPath.temporaryPath,
+                  ),
+                if (callHistoryEnabled) CdrsCacheSection(context.read<CdrsLocalRepository>()),
+              ],
+            );
+          },
         ),
       ],
 

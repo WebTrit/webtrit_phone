@@ -117,6 +117,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get cacheManagement_Label_empty => 'На цьому пристрої немає кешованих даних';
 
   @override
+  String cacheManagement_Label_itemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count запису',
+      many: '$count записів',
+      few: '$count записи',
+      one: '$count запис',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get cacheManagement_Widget_screenTitle => 'Сховище та кеш';
 
   @override
@@ -362,6 +375,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get call_videoView_actionLabel_fit => 'Вмістити';
+
+  @override
+  String get cdrs_Cache_description =>
+      'Локальна копія історії дзвінків із сервера. Очищення видаляє локальні записи; історія завантажиться знову під час наступної синхронізації.';
+
+  @override
+  String get cdrs_Cache_title => 'Історія дзвінків';
 
   @override
   String get cdrs_noMissedCalls_message => 'Немає пропущених дзвінків';

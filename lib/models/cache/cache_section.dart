@@ -14,9 +14,22 @@ abstract class CacheSection {
   /// it means for the user.
   String get descriptionL10n;
 
-  /// Total size in bytes of the section's cached data.
-  Future<int> totalSizeBytes();
+  /// Measures the section's current cache usage.
+  Future<CacheUsage> usage();
 
   /// Deletes the section's cached data; it is rebuilt on demand.
   Future<void> clear();
 }
+
+/// Measured usage of a [CacheSection]: file-based caches report bytes on
+/// disk, database-backed ones report stored records.
+class CacheUsage {
+  const CacheUsage.bytes(this.amount) : unit = CacheUsageUnit.bytes;
+
+  const CacheUsage.items(this.amount) : unit = CacheUsageUnit.items;
+
+  final int amount;
+  final CacheUsageUnit unit;
+}
+
+enum CacheUsageUnit { bytes, items }

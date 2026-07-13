@@ -26,12 +26,35 @@ class _FakeCacheSection implements CacheSection {
   String get descriptionL10n => 'voicemail_Cache_description';
 
   @override
-  Future<int> totalSizeBytes() async => size;
+  Future<CacheUsage> usage() async => CacheUsage.bytes(size);
 
   @override
   Future<void> clear() async {
     clearCalls++;
     size = 0;
+  }
+}
+
+class _FakeItemsCacheSection implements CacheSection {
+  _FakeItemsCacheSection({this.count = 0});
+
+  int count;
+
+  @override
+  String get id => 'cdrs';
+
+  @override
+  String get titleL10n => 'cdrs_Cache_title';
+
+  @override
+  String get descriptionL10n => 'cdrs_Cache_description';
+
+  @override
+  Future<CacheUsage> usage() async => CacheUsage.items(count);
+
+  @override
+  Future<void> clear() async {
+    count = 0;
   }
 }
 
@@ -83,6 +106,14 @@ void main() {
 
     expect(section.clearCalls, 1);
     expect(find.text('0 B'), findsOneWidget);
+  });
+
+  testWidgets('renders an item-based section with its record count', (tester) async {
+    await tester.pumpWidget(wrap([_FakeItemsCacheSection(count: 128)]));
+    await tester.pump();
+
+    expect(find.text('Call history'), findsOneWidget);
+    expect(find.text('128 records'), findsOneWidget);
   });
 
   testWidgets('shows the empty label without sections', (tester) async {

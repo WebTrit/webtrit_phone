@@ -43,6 +43,9 @@ abstract class CdrsLocalRepository {
 
   /// Wipes all Call Detail Records (CDRs) data from the local database.
   Future<void> wipeData();
+
+  /// Number of Call Detail Records (CDRs) stored in the local database.
+  Future<int> recordsCount();
 }
 
 class CdrsLocalRepositoryDriftImpl with CdrDriftMapper implements CdrsLocalRepository {
@@ -100,6 +103,9 @@ class CdrsLocalRepositoryDriftImpl with CdrDriftMapper implements CdrsLocalRepos
   Future<void> wipeData() async {
     await _dao.wipeData();
   }
+
+  @override
+  Future<int> recordsCount() => _dao.recordsCount();
 }
 
 class CdrRecordsEvent {}

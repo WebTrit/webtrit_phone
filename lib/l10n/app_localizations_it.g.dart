@@ -109,6 +109,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get cacheManagement_Label_empty => 'Nessun dato in cache su questo dispositivo';
 
   @override
+  String cacheManagement_Label_itemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count record', one: '1 record');
+    return '$_temp0';
+  }
+
+  @override
   String get cacheManagement_Widget_screenTitle => 'Archiviazione e cache';
 
   @override
@@ -354,6 +360,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get call_videoView_actionLabel_fit => 'Adatta';
+
+  @override
+  String get cdrs_Cache_description =>
+      'Copia locale della cronologia chiamate scaricata dal server. La cancellazione rimuove i record locali; la cronologia viene scaricata di nuovo alla prossima sincronizzazione.';
+
+  @override
+  String get cdrs_Cache_title => 'Cronologia chiamate';
 
   @override
   String get cdrs_noMissedCalls_message => 'Nessuna chiamata persa';

@@ -108,6 +108,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get cacheManagement_Label_empty => 'ไม่มีข้อมูลในแคชบนอุปกรณ์นี้';
 
   @override
+  String cacheManagement_Label_itemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count รายการ');
+    return '$_temp0';
+  }
+
+  @override
   String get cacheManagement_Widget_screenTitle => 'พื้นที่เก็บข้อมูลและแคช';
 
   @override
@@ -349,6 +355,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get call_videoView_actionLabel_fit => 'พอดี';
+
+  @override
+  String get cdrs_Cache_description =>
+      'สำเนาประวัติการโทรที่ดึงจากเซิร์ฟเวอร์ซึ่งเก็บไว้ในเครื่อง การล้างจะลบรายการในเครื่อง และประวัติจะถูกดาวน์โหลดใหม่ในการซิงค์ครั้งถัดไป';
+
+  @override
+  String get cdrs_Cache_title => 'ประวัติการโทร';
 
   @override
   String get cdrs_noMissedCalls_message => 'ไม่มีสายที่ไม่ได้รับ';

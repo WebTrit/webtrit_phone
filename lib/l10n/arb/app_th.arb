@@ -77,6 +77,8 @@
   "@cacheManagement_Button_clear": {},
   "cacheManagement_Label_empty": "ไม่มีข้อมูลในแคชบนอุปกรณ์นี้",
   "@cacheManagement_Label_empty": {},
+  "cacheManagement_Label_itemsCount": "{count, plural, other{{count} รายการ}}",
+  "@cacheManagement_Label_itemsCount": {"placeholders": {"count": {"type": "int"}}},
   "cacheManagement_Widget_screenTitle": "พื้นที่เก็บข้อมูลและแคช",
   "@cacheManagement_Widget_screenTitle": {},
   "callTileActions_more": "เพิ่มเติม",
@@ -287,6 +289,10 @@
   "@call_videoView_actionLabel_fit": {
     "description": "Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode."
   },
+  "cdrs_Cache_description": "สำเนาประวัติการโทรที่ดึงจากเซิร์ฟเวอร์ซึ่งเก็บไว้ในเครื่อง การล้างจะลบรายการในเครื่อง และประวัติจะถูกดาวน์โหลดใหม่ในการซิงค์ครั้งถัดไป",
+  "@cdrs_Cache_description": {},
+  "cdrs_Cache_title": "ประวัติการโทร",
+  "@cdrs_Cache_title": {},
   "cdrs_noMissedCalls_message": "ไม่มีสายที่ไม่ได้รับ",
   "@cdrs_noMissedCalls_message": {},
   "cdrs_noRecentCalls_message": "ไม่มีการโทรล่าสุด",
