@@ -8,7 +8,9 @@ String formatBytes(int bytes) {
   do {
     value /= 1024;
     unit++;
-  } while (value >= 1024 && unit < units.length - 1);
+    // Sizes just below a boundary would round to a nonsensical '1024.0 KB';
+    // roll them over to the next unit instead.
+  } while (unit < units.length - 1 && double.parse(value.toStringAsFixed(1)) >= 1024);
 
   return '${value.toStringAsFixed(1)} ${units[unit]}';
 }

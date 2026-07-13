@@ -160,5 +160,11 @@ void main() {
       expect(formatBytes(5 * 1024 * 1024), '5.0 MB');
       expect(formatBytes(3 * 1024 * 1024 * 1024), '3.0 GB');
     });
+
+    test('rolls sizes just below a unit boundary over to the next unit', () {
+      expect(formatBytes(1048570), '1.0 MB');
+      expect(formatBytes(1024 * 1024 * 1024 - 1024), '1.0 GB');
+      expect(formatBytes(1023 * 1024), '1023.0 KB');
+    });
   });
 }
