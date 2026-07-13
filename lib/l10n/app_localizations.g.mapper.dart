@@ -42,6 +42,7 @@ extension AppLocalizationsExtension on AppLocalizations {
       'callTileActions_message' => callTileActions_message,
       'cacheManagement_Button_clear' => cacheManagement_Button_clear,
       'cacheManagement_Label_empty' => cacheManagement_Label_empty,
+      'cacheManagement_Label_unknown' => cacheManagement_Label_unknown,
       'cacheManagement_Widget_screenTitle' =>
         cacheManagement_Widget_screenTitle,
       'callTileActions_more' => callTileActions_more,

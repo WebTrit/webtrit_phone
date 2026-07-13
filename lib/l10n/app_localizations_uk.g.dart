@@ -130,6 +130,9 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get cacheManagement_Label_unknown => 'Невідомо';
+
+  @override
   String get cacheManagement_Widget_screenTitle => 'Сховище та кеш';
 
   @override

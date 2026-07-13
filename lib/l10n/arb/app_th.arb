@@ -79,6 +79,8 @@
   "@cacheManagement_Label_empty": {},
   "cacheManagement_Label_itemsCount": "{count, plural, other{{count} รายการ}}",
   "@cacheManagement_Label_itemsCount": {"placeholders": {"count": {"type": "int"}}},
+  "cacheManagement_Label_unknown": "ไม่ทราบ",
+  "@cacheManagement_Label_unknown": {},
   "cacheManagement_Widget_screenTitle": "พื้นที่เก็บข้อมูลและแคช",
   "@cacheManagement_Widget_screenTitle": {},
   "callTileActions_more": "เพิ่มเติม",

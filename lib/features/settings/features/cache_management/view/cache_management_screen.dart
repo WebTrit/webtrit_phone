@@ -69,6 +69,8 @@ class _CacheSectionTile extends StatelessWidget {
           subtitle: Text(context.parseL10n(section.descriptionL10n), style: theme.textTheme.bodySmall),
           trailing: usage != null
               ? Text(_formatUsage(context, usage), style: theme.textTheme.titleSmall)
+              : section.measureFailed
+              ? Text(context.l10n.cacheManagement_Label_unknown, style: theme.textTheme.titleSmall)
               : const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
         ),
         Align(

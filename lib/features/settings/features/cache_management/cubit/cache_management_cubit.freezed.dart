@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CacheSectionState {
 
- String get id; String get titleL10n; String get descriptionL10n; CacheUsage? get usage; bool get clearing;
+ String get id; String get titleL10n; String get descriptionL10n; CacheUsage? get usage; bool get measureFailed; bool get clearing;
 /// Create a copy of CacheSectionState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $CacheSectionStateCopyWith<CacheSectionState> get copyWith => _$CacheSectionStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CacheSectionState&&(identical(other.id, id) || other.id == id)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.descriptionL10n, descriptionL10n) || other.descriptionL10n == descriptionL10n)&&(identical(other.usage, usage) || other.usage == usage)&&(identical(other.clearing, clearing) || other.clearing == clearing));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CacheSectionState&&(identical(other.id, id) || other.id == id)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.descriptionL10n, descriptionL10n) || other.descriptionL10n == descriptionL10n)&&(identical(other.usage, usage) || other.usage == usage)&&(identical(other.measureFailed, measureFailed) || other.measureFailed == measureFailed)&&(identical(other.clearing, clearing) || other.clearing == clearing));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,titleL10n,descriptionL10n,usage,clearing);
+int get hashCode => Object.hash(runtimeType,id,titleL10n,descriptionL10n,usage,measureFailed,clearing);
 
 @override
 String toString() {
-  return 'CacheSectionState(id: $id, titleL10n: $titleL10n, descriptionL10n: $descriptionL10n, usage: $usage, clearing: $clearing)';
+  return 'CacheSectionState(id: $id, titleL10n: $titleL10n, descriptionL10n: $descriptionL10n, usage: $usage, measureFailed: $measureFailed, clearing: $clearing)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $CacheSectionStateCopyWith<$Res>  {
   factory $CacheSectionStateCopyWith(CacheSectionState value, $Res Function(CacheSectionState) _then) = _$CacheSectionStateCopyWithImpl;
 @useResult
 $Res call({
- String id, String titleL10n, String descriptionL10n, CacheUsage? usage, bool clearing
+ String id, String titleL10n, String descriptionL10n, CacheUsage? usage, bool measureFailed, bool clearing
 });
 
 
@@ -62,13 +62,14 @@ class _$CacheSectionStateCopyWithImpl<$Res>
 
 /// Create a copy of CacheSectionState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? titleL10n = null,Object? descriptionL10n = null,Object? usage = freezed,Object? clearing = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? titleL10n = null,Object? descriptionL10n = null,Object? usage = freezed,Object? measureFailed = null,Object? clearing = null,}) {
   return _then(CacheSectionState(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
 as String,descriptionL10n: null == descriptionL10n ? _self.descriptionL10n : descriptionL10n // ignore: cast_nullable_to_non_nullable
 as String,usage: freezed == usage ? _self.usage : usage // ignore: cast_nullable_to_non_nullable
-as CacheUsage?,clearing: null == clearing ? _self.clearing : clearing // ignore: cast_nullable_to_non_nullable
+as CacheUsage?,measureFailed: null == measureFailed ? _self.measureFailed : measureFailed // ignore: cast_nullable_to_non_nullable
+as bool,clearing: null == clearing ? _self.clearing : clearing // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

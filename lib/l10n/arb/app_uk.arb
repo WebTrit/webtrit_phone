@@ -79,6 +79,8 @@
   "@cacheManagement_Label_empty": {},
   "cacheManagement_Label_itemsCount": "{count, plural, one{{count} запис} few{{count} записи} many{{count} записів} other{{count} запису}}",
   "@cacheManagement_Label_itemsCount": {"placeholders": {"count": {"type": "int"}}},
+  "cacheManagement_Label_unknown": "Невідомо",
+  "@cacheManagement_Label_unknown": {},
   "cacheManagement_Widget_screenTitle": "Сховище та кеш",
   "@cacheManagement_Widget_screenTitle": {},
   "callTileActions_more": "Більше",

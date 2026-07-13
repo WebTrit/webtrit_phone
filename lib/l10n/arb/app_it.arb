@@ -79,6 +79,8 @@
   "@cacheManagement_Label_empty": {},
   "cacheManagement_Label_itemsCount": "{count, plural, one{1 record} other{{count} record}}",
   "@cacheManagement_Label_itemsCount": {"placeholders": {"count": {"type": "int"}}},
+  "cacheManagement_Label_unknown": "Sconosciuto",
+  "@cacheManagement_Label_unknown": {},
   "cacheManagement_Widget_screenTitle": "Archiviazione e cache",
   "@cacheManagement_Widget_screenTitle": {},
   "callTileActions_more": "Altro",

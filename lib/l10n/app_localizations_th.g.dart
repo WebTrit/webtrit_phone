@@ -114,6 +114,9 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
+  String get cacheManagement_Label_unknown => 'ไม่ทราบ';
+
+  @override
   String get cacheManagement_Widget_screenTitle => 'พื้นที่เก็บข้อมูลและแคช';
 
   @override

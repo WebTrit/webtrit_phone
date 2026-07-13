@@ -214,6 +214,12 @@ abstract class AppLocalizations {
   /// **'{count, plural, one{1 record} other{{count} records}}'**
   String cacheManagement_Label_itemsCount(int count);
 
+  /// No description provided for @cacheManagement_Label_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get cacheManagement_Label_unknown;
+
   /// No description provided for @cacheManagement_Widget_screenTitle.
   ///
   /// In en, this message translates to:

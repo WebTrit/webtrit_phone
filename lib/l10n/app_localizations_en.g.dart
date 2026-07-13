@@ -114,6 +114,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get cacheManagement_Label_unknown => 'Unknown';
+
+  @override
   String get cacheManagement_Widget_screenTitle => 'Storage & cache';
 
   @override

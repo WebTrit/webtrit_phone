@@ -60,6 +60,23 @@ class _FakeItemsCacheSection implements CacheSection {
   }
 }
 
+class _ThrowingCacheSection implements CacheSection {
+  @override
+  String get id => 'voicemail';
+
+  @override
+  String get titleL10n => 'voicemail_Cache_title';
+
+  @override
+  String get descriptionL10n => 'voicemail_Cache_description';
+
+  @override
+  Future<CacheUsage> usage() async => throw StateError('database closed');
+
+  @override
+  Future<void> clear() async {}
+}
+
 void main() {
   Widget wrap(List<CacheSection> sections) {
     final router = _MockStackRouter();
@@ -119,6 +136,14 @@ void main() {
 
     expect(find.text('Call history'), findsOneWidget);
     expect(find.text('128 records'), findsOneWidget);
+  });
+
+  testWidgets('shows an unknown usage when measuring fails', (tester) async {
+    await tester.pumpWidget(wrap([_ThrowingCacheSection()]));
+    await tester.pump();
+
+    expect(find.text('Unknown'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
   testWidgets('shows the empty label without sections', (tester) async {

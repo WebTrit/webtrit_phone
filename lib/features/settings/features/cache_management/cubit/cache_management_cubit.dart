@@ -49,10 +49,10 @@ class CacheManagementCubit extends Cubit<CacheManagementState> {
   Future<void> _measure(CacheSection section) async {
     try {
       final usage = await section.usage();
-      _emitSection(section.id, (it) => it.copyWith(usage: usage));
+      _emitSection(section.id, (it) => it.copyWith(usage: usage, measureFailed: false));
     } catch (e, st) {
       _logger.warning('Failed to measure cache section ${section.id}', e, st);
-      _emitSection(section.id, (it) => it.copyWith(usage: const CacheUsage.bytes(0)));
+      _emitSection(section.id, (it) => it.copyWith(usage: null, measureFailed: true));
     }
   }
 

@@ -1,7 +1,8 @@
 part of 'cache_management_cubit.dart';
 
 /// Snapshot of one [CacheSection] for rendering: its static descriptors plus
-/// the last measured usage (null while measuring) and a clear-in-progress flag.
+/// the last measured usage (null while measuring), a measure-failure flag and
+/// a clear-in-progress flag.
 @freezed
 class CacheSectionState with _$CacheSectionState {
   const CacheSectionState({
@@ -9,6 +10,7 @@ class CacheSectionState with _$CacheSectionState {
     required this.titleL10n,
     required this.descriptionL10n,
     this.usage,
+    this.measureFailed = false,
     this.clearing = false,
   });
 
@@ -23,6 +25,9 @@ class CacheSectionState with _$CacheSectionState {
 
   @override
   final CacheUsage? usage;
+
+  @override
+  final bool measureFailed;
 
   @override
   final bool clearing;

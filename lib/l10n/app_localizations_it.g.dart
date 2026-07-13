@@ -115,6 +115,9 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get cacheManagement_Label_unknown => 'Sconosciuto';
+
+  @override
   String get cacheManagement_Widget_screenTitle => 'Archiviazione e cache';
 
   @override
