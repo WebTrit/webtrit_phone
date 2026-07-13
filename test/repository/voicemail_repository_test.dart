@@ -609,6 +609,30 @@ void main() {
       expect(initial.disposeCalls, 1);
     });
 
+    test('applyTranscriptionModel re-transcribes voicemails that already hold a transcript', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
+      final initial = _FakeTranscriptionDataSource(result: 'from the old model');
+      final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
+
+      final repo = VoicemailRepositoryImpl(
+        webtritApiClient: client,
+        token: 'user_token',
+        appDatabase: transcriptionDatabase,
+        sessionGuard: const EmptySessionGuard(),
+        transcriptionDataSource: initial,
+        transcriptionDataSourceBuilder: (_) => replacement,
+      );
+      await repo.fetchVoicemails();
+      var row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
+      expect(row.transcript, 'from the old model');
+
+      repo.applyTranscriptionModel('small');
+
+      await waitFor(() => replacement.calls == 1, 're-transcription with the new model');
+      row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
+      expect(row.transcript, 'from the new model');
+    });
+
     test('applyTranscriptionModel is a no-op without a datasource builder', () async {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
       final dataSource = _FakeTranscriptionDataSource(result: 'hello world');

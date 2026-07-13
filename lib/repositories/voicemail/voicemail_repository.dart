@@ -66,7 +66,8 @@ abstract class VoicemailRepository implements Refreshable {
   Future<void> wipeLocalRecords();
 
   /// Switches on-device transcription to [localModel] (null returns to the
-  /// app-config default tier) and re-runs transcription for pending messages.
+  /// app-config default tier) and re-transcribes every voicemail with it,
+  /// including messages that already hold a transcript from the old model.
   /// No-op when the repository was created without a transcription source
   /// builder (feature disabled or not local).
   void applyTranscriptionModel(String? localModel);
@@ -360,7 +361,19 @@ class VoicemailRepositoryImpl
     // rolled-back message is picked up again by the sweep kicked off below.
     previous?.dispose();
 
-    unawaited(_transcribePendingVoicemails());
+    unawaited(_retranscribeAllVoicemails());
+  }
+
+  /// The new model has to produce the transcripts, so finished (and failed)
+  /// messages are reset to "not attempted" before the sweep instead of
+  /// keeping the text from the old model.
+  Future<void> _retranscribeAllVoicemails() async {
+    try {
+      await _appDatabase.voicemailDao.clearTranscripts();
+    } catch (e, st) {
+      _logger.warning('Failed to reset transcripts for re-transcription', e, st);
+    }
+    await _transcribePendingVoicemails();
   }
 
   static bool _isTransientTranscriptionFailure(Object error) {

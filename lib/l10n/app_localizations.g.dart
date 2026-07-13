@@ -5284,7 +5284,7 @@ abstract class AppLocalizations {
   /// No description provided for @voicemail_TranscriptionModel_note.
   ///
   /// In en, this message translates to:
-  /// **'Applies to new transcriptions. The model is downloaded on first use; existing transcripts are kept.'**
+  /// **'Applies to all messages: the model is downloaded on first use and existing transcripts are regenerated with the new model.'**
   String get voicemail_TranscriptionModel_note;
 
   /// No description provided for @voicemail_TranscriptionModel_title.

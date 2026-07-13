@@ -2372,7 +2372,7 @@
   "@voicemail_TranscriptionModel_fastSubtitle": {},
   "voicemail_TranscriptionModel_fastTitle": "Швидка",
   "@voicemail_TranscriptionModel_fastTitle": {},
-  "voicemail_TranscriptionModel_note": "Діє для нових розшифровок. Модель завантажується при першому використанні; наявні розшифровки зберігаються.",
+  "voicemail_TranscriptionModel_note": "Діє для всіх повідомлень: модель завантажується при першому використанні, а наявні розшифровки буде перегенеровано новою моделлю.",
   "@voicemail_TranscriptionModel_note": {},
   "voicemail_TranscriptionModel_title": "Модель розшифровки",
   "@voicemail_TranscriptionModel_title": {},

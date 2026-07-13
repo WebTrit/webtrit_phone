@@ -52,6 +52,14 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
 
   Future<int> deleteAllVoicemails() => delete(voicemailTable).go();
 
+  /// Resets transcript state on every row so the messages are transcribed
+  /// again (e.g. after the transcription model changes).
+  Future<int> clearTranscripts() {
+    return update(
+      voicemailTable,
+    ).write(const VoicemailDataCompanion(transcript: Value(null), transcriptStatus: Value(null)));
+  }
+
   Future<int> recordsCount() async {
     final query = selectOnly(voicemailTable)..addColumns([countAll()]);
     return query.map((row) => row.read(countAll()) ?? 0).getSingle();

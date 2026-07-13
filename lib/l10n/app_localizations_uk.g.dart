@@ -2910,7 +2910,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get voicemail_TranscriptionModel_note =>
-      'Діє для нових розшифровок. Модель завантажується при першому використанні; наявні розшифровки зберігаються.';
+      'Діє для всіх повідомлень: модель завантажується при першому використанні, а наявні розшифровки буде перегенеровано новою моделлю.';
 
   @override
   String get voicemail_TranscriptionModel_title => 'Модель розшифровки';

@@ -36,6 +36,23 @@ void main() {
     );
   }
 
+  group('clearTranscripts', () {
+    test('resets transcript state on every row', () async {
+      await db.voicemailDao.insertOrUpdateVoicemail(
+        createVoicemail(id: 'vm-1', transcript: 'finished', transcriptStatus: 'done'),
+      );
+      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail(id: 'vm-2', transcriptStatus: 'unavailable'));
+
+      await db.voicemailDao.clearTranscripts();
+
+      for (final id in ['vm-1', 'vm-2']) {
+        final row = await db.voicemailDao.getVoicemailById(id);
+        expect(row!.transcript, isNull);
+        expect(row.transcriptStatus, isNull);
+      }
+    });
+  });
+
   group('upsertVoicemailFromRemote', () {
     test('inserts a new row with empty transcript columns', () async {
       await db.voicemailDao.upsertVoicemailFromRemote(createVoicemail());

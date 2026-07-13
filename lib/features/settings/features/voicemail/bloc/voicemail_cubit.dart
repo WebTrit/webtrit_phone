@@ -50,7 +50,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       _transcriptionModelRepository?.getTranscriptionModel() ?? _defaultTranscriptionModel;
 
   /// Persists the picked model tier (the default tier clears the override)
-  /// and re-runs transcription for still-pending voicemails with it.
+  /// and re-transcribes the voicemails with it.
   Future<void> setTranscriptionModel(String model) async {
     final transcriptionModelRepository = _transcriptionModelRepository;
     if (transcriptionModelRepository == null) return;
