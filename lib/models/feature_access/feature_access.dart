@@ -20,3 +20,4 @@ export 'sip_presence_config.dart';
 export 'supported_feature.dart';
 export 'system_notifications_config.dart';
 export 'terms_config.dart';
+export 'voicemail_config.dart';
