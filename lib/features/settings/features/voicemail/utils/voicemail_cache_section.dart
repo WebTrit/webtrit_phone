@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('VoicemailCacheSection');
 
@@ -33,13 +34,8 @@ class VoicemailCacheSection implements CacheSection {
     var total = 0;
 
     for (final directory in _directories) {
-      if (!await directory.exists()) continue;
       try {
-        final sizes = <Future<int>>[];
-        await for (final entity in directory.list(recursive: true, followLinks: false)) {
-          if (entity is File) sizes.add(entity.length().catchError((Object _) => 0));
-        }
-        total += (await Future.wait(sizes)).fold(0, (sum, size) => sum + size);
+        total += await directorySizeBytes(directory);
       } catch (e) {
         _logger.warning('Failed to size cache directory ${directory.path}: $e');
       }
@@ -54,9 +50,8 @@ class VoicemailCacheSection implements CacheSection {
   @override
   Future<void> clear() async {
     for (final directory in _directories) {
-      if (!await directory.exists()) continue;
       try {
-        await directory.delete(recursive: true);
+        await deleteDirectoryRecursively(directory);
       } catch (e) {
         _logger.warning('Failed to clear cache directory ${directory.path}: $e');
       }

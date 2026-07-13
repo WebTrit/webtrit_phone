@@ -8,6 +8,7 @@ export 'crash_keys_writer.dart';
 export 'crashlytics_utils.dart';
 export 'debounce.dart';
 export 'debounce_map.dart';
+export 'directory_utils.dart';
 export 'transient_debouncer.dart';
 export 'equatable_prop_to_string.dart';
 export 'expiring_cache.dart';
