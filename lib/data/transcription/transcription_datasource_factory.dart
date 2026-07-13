@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:logging/logging.dart';
 
-import 'package:_http_client/_http_client.dart';
 import 'package:app_transcription/app_transcription.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
@@ -69,7 +68,8 @@ TranscriptionDataSource? createVoicemailTranscriptionDataSource(
         apiKey: config.remoteApiKey,
         model: config.remoteModel,
         defaultLanguage: config.language,
-        httpClient: createHttpClient(connectionTimeout: kApiClientConnectionTimeout, certs: certs),
+        connectionTimeout: kApiClientConnectionTimeout,
+        certs: certs,
       );
   }
 }

@@ -1,3 +1,5 @@
+export 'package:_http_client/_http_client.dart' show TrustedCertificates;
+
 export 'src/local_whisper_transcription_datasource.dart';
 export 'src/remote_whisper_transcription_datasource.dart';
 export 'src/transcription_datasource.dart';
