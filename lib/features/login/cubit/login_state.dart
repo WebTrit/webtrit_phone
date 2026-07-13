@@ -23,6 +23,7 @@ class LoginState with _$LoginState {
     this.embeddedCallbackData,
     this.embeddedRequestError,
     this.coreUrlInput = const UrlInput.pure(),
+    this.coreUrlAssignError,
     this.otpSigninUserRefInput = const UserRefInput.pure(),
     this.otpSigninCodeInput = const CodeInput.pure(),
     this.passwordSigninUserRefInput = const UserRefInput.pure(),
@@ -78,6 +79,11 @@ class LoginState with _$LoginState {
 
   @override
   final UrlInput coreUrlInput;
+
+  /// Failure of the last Core URL submit meaning the entered address does not
+  /// host a reachable WebTrit service; rendered inline under the URL field.
+  @override
+  final Object? coreUrlAssignError;
 
   @override
   final UserRefInput otpSigninUserRefInput;

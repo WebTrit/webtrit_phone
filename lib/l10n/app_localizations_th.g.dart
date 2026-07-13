@@ -1087,6 +1087,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get login_validationCoreUrlError => 'กรุณากรอก URL ที่ถูกต้อง';
 
   @override
+  String get login_validationCoreUrlUnreachableError => 'ไม่สามารถเชื่อมต่อกับบริการ WebTrit ตามที่อยู่นี้ได้';
+
+  @override
   String get login_validationEmailError => 'กรุณากรอกอีเมลที่ถูกต้อง';
 
   @override

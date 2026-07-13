@@ -510,6 +510,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'loginType_qrSignin' => loginType_qrSignin,
       'loginType_signup' => loginType_signup,
       'login_validationCoreUrlError' => login_validationCoreUrlError,
+      'login_validationCoreUrlUnreachableError' =>
+        login_validationCoreUrlUnreachableError,
       'login_validationEmailError' => login_validationEmailError,
       'login_validationPhoneError' => login_validationPhoneError,
       'login_validationUserRefError' => login_validationUserRefError,

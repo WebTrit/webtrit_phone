@@ -2008,6 +2008,12 @@ abstract class AppLocalizations {
   /// **'Please enter a valid URL'**
   String get login_validationCoreUrlError;
 
+  /// Shown inline under the WebTrit Cloud Backend URL field after submit. Condition: the entered address cannot be reached or does not respond like a WebTrit service (connection failure, non-JSON response, or an HTTP error without a WebTrit error payload).
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot reach WebTrit service at this address'**
+  String get login_validationCoreUrlUnreachableError;
+
   /// Shown when the user enters an invalid email address in the email field during login or signup. Condition: the input does not match the required email format.
   ///
   /// In en, this message translates to:
