@@ -73,6 +73,10 @@ class WebtritApiClient {
   final http.Client _httpClient;
   final bool isDebug;
 
+  /// Maximum number of characters of an unparsed error body carried into
+  /// [RequestFailure.rawBody].
+  static const _rawErrorBodyLimit = 256;
+
   void close() {
     _httpClient.close();
   }
@@ -128,7 +132,6 @@ class WebtritApiClient {
         final httpResponse = await http.Response.fromStream(await _httpClient.send(httpRequest));
 
         final responseData = httpResponse.body;
-        final responseDataJson = responseData.isEmpty ? {} : jsonDecode(responseData);
 
         _logger.info(
           '${method.toUpperCase()} response with status code: ${httpResponse.statusCode} for requestId: $xRequestId, response body: ${httpResponse.body}',
@@ -136,20 +139,35 @@ class WebtritApiClient {
 
         if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204 || httpResponse.statusCode == 304) {
           // Return response in the requested format depending on the response type:
-          // - JSON-decoded map for API data responses
+          // - JSON-decoded map for API data responses (a malformed body still
+          //   throws FormatException: the endpoint promised JSON and broke it)
           // - Raw bytes for binary downloads (e.g., files)
           // - Full http.Response object for advanced access (headers, status, etc.)
           return switch (responseOptions.responseType) {
-            ResponseType.json => responseDataJson,
+            ResponseType.json => responseData.isEmpty ? {} : jsonDecode(responseData),
             ResponseType.bytes => httpResponse.bodyBytes,
             ResponseType.raw => httpResponse,
           };
         } else {
-          final error = switch (responseDataJson) {
-            Map(isEmpty: true) => null,
-            {'errors': {'detail': _}} => null,
-            _ => ErrorResponse.fromJson(responseDataJson),
-          };
+          // An error status with a non-JSON body (e.g. a bare "404 page not found"
+          // from an ingress in front of a dead backend) is still a definitive
+          // server response: it must surface as RequestFailure with the real
+          // status code, not as a FormatException the retry loop below would
+          // treat as a transport error and pointlessly retry.
+          ErrorResponse? error;
+          String? rawErrorBody;
+          try {
+            final responseDataJson = responseData.isEmpty ? {} : jsonDecode(responseData);
+            error = switch (responseDataJson) {
+              Map(isEmpty: true) => null,
+              {'errors': {'detail': _}} => null,
+              _ => ErrorResponse.fromJson(responseDataJson),
+            };
+          } on FormatException {
+            rawErrorBody = responseData.length > _rawErrorBodyLimit
+                ? '${responseData.substring(0, _rawErrorBodyLimit)}...'
+                : responseData;
+          }
 
           // Handle session_missing specifically
           if (httpResponse.statusCode == 401 && error?.code == 'session_missing') {
@@ -236,6 +254,7 @@ class WebtritApiClient {
             requestId: xRequestId,
             token: token,
             error: error,
+            rawBody: rawErrorBody,
           );
         }
       } catch (e) {
