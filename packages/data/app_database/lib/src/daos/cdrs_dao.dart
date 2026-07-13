@@ -57,9 +57,7 @@ class CdrsDao extends DatabaseAccessor<AppDatabase> with _$CdrsDaoMixin {
   }
 
   Future<int> recordsCount() async {
-    final countExpression = cdrTable.callId.count();
-    final query = selectOnly(cdrTable)..addColumns([countExpression]);
-    final row = await query.getSingle();
-    return row.read(countExpression) ?? 0;
+    final query = selectOnly(cdrTable)..addColumns([countAll()]);
+    return query.map((row) => row.read(countAll()) ?? 0).getSingle();
   }
 }
