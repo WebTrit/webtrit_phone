@@ -299,6 +299,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 token: context.read<AppBloc>().state.session.token!,
                 appDatabase: context.read<AppDatabase>(),
                 transcriptionDataSource: createVoicemailTranscriptionDataSource(
+                  featureAccess.voicemailConfig.transcription,
                   certs: appCertificates.trustedCertificates,
                 ),
               );

@@ -32,6 +32,9 @@ AppConfig _$AppConfigFromJson(Map<String, dynamic> json) => AppConfig(
       : AppConfigLocalization.fromJson(
           json['localization'] as Map<String, dynamic>,
         ),
+  voicemail: json['voicemail'] == null
+      ? const AppConfigVoicemail()
+      : AppConfigVoicemail.fromJson(json['voicemail'] as Map<String, dynamic>),
   supported:
       (json['supported'] as List<dynamic>?)
           ?.map((e) => SupportedFeature.fromJson(e as Map<String, dynamic>))
@@ -47,6 +50,7 @@ Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
   'contacts': instance.contacts.toJson(),
   'messaging': instance.messaging.toJson(),
   'localization': instance.localization.toJson(),
+  'voicemail': instance.voicemail.toJson(),
   'supported': instance.supported.map((e) => e.toJson()).toList(),
 };
 
@@ -591,6 +595,70 @@ ChatContactInfo _$ChatContactInfoFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ChatContactInfoToJson(ChatContactInfo instance) =>
     <String, dynamic>{'showVideoButtonAction': instance.showVideoButtonAction};
+
+AppConfigVoicemail _$AppConfigVoicemailFromJson(Map<String, dynamic> json) =>
+    AppConfigVoicemail(
+      transcription: json['transcription'] == null
+          ? const AppConfigVoicemailTranscription()
+          : AppConfigVoicemailTranscription.fromJson(
+              json['transcription'] as Map<String, dynamic>,
+            ),
+    );
+
+Map<String, dynamic> _$AppConfigVoicemailToJson(AppConfigVoicemail instance) =>
+    <String, dynamic>{'transcription': instance.transcription.toJson()};
+
+AppConfigVoicemailTranscription _$AppConfigVoicemailTranscriptionFromJson(
+  Map<String, dynamic> json,
+) => AppConfigVoicemailTranscription(
+  mode: json['mode'] as String? ?? 'disabled',
+  language: json['language'] as String?,
+  local: json['local'] == null
+      ? const AppConfigVoicemailTranscriptionLocal()
+      : AppConfigVoicemailTranscriptionLocal.fromJson(
+          json['local'] as Map<String, dynamic>,
+        ),
+  remote: json['remote'] == null
+      ? const AppConfigVoicemailTranscriptionRemote()
+      : AppConfigVoicemailTranscriptionRemote.fromJson(
+          json['remote'] as Map<String, dynamic>,
+        ),
+);
+
+Map<String, dynamic> _$AppConfigVoicemailTranscriptionToJson(
+  AppConfigVoicemailTranscription instance,
+) => <String, dynamic>{
+  'mode': instance.mode,
+  'language': instance.language,
+  'local': instance.local.toJson(),
+  'remote': instance.remote.toJson(),
+};
+
+AppConfigVoicemailTranscriptionLocal
+_$AppConfigVoicemailTranscriptionLocalFromJson(Map<String, dynamic> json) =>
+    AppConfigVoicemailTranscriptionLocal(
+      model: json['model'] as String? ?? 'base',
+    );
+
+Map<String, dynamic> _$AppConfigVoicemailTranscriptionLocalToJson(
+  AppConfigVoicemailTranscriptionLocal instance,
+) => <String, dynamic>{'model': instance.model};
+
+AppConfigVoicemailTranscriptionRemote
+_$AppConfigVoicemailTranscriptionRemoteFromJson(Map<String, dynamic> json) =>
+    AppConfigVoicemailTranscriptionRemote(
+      url: json['url'] as String?,
+      apiKey: json['apiKey'] as String?,
+      model: json['model'] as String? ?? 'whisper-1',
+    );
+
+Map<String, dynamic> _$AppConfigVoicemailTranscriptionRemoteToJson(
+  AppConfigVoicemailTranscriptionRemote instance,
+) => <String, dynamic>{
+  'url': instance.url,
+  'apiKey': instance.apiKey,
+  'model': instance.model,
+};
 
 AppConfigLocalization _$AppConfigLocalizationFromJson(
   Map<String, dynamic> json,
