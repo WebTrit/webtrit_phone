@@ -60,7 +60,11 @@ class _LoginCoreUrlAssignScreenState extends State<LoginCoreUrlAssignScreen> {
                         key: coreUrlInputKey,
                         controller: _historyController,
                         initialValue: state.coreUrlInput.value,
-                        errorText: state.coreUrlInput.displayError?.l10n(context),
+                        errorText:
+                            state.coreUrlInput.displayError?.l10n(context) ??
+                            (state.coreUrlAssignError != null
+                                ? context.l10n.login_validationCoreUrlUnreachableError
+                                : null),
                         keyboardType: TextInputType.url,
                         textInputAction: TextInputAction.done,
                         autofillHints: const [AutofillHints.url],

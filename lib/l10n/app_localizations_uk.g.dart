@@ -1108,6 +1108,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get login_validationCoreUrlError => 'Будь ласка, введіть правильний URL';
 
   @override
+  String get login_validationCoreUrlUnreachableError => 'Не вдалося з\'єднатися з сервісом WebTrit за цією адресою';
+
+  @override
   String get login_validationEmailError => 'Будь ласка, введіть правильну електронну пошту';
 
   @override

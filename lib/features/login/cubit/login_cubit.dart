@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart' as http;
 import 'package:linkify/linkify.dart';
 import 'package:logging/logging.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -107,7 +109,12 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  Future<void> _processSystemInfo(String coreUrl, String tenantId, [bool demo = false]) async {
+  Future<void> _processSystemInfo(
+    String coreUrl,
+    String tenantId, {
+    bool demo = false,
+    void Function(Object error, StackTrace stackTrace)? onError,
+  }) async {
     emit(state.copyWith(processing: true));
 
     try {
@@ -151,7 +158,11 @@ class LoginCubit extends Cubit<LoginState> {
         ),
       );
     } catch (e, s) {
-      handleError(e, s, 'LoginOtpSigninRequestSubmitted');
+      if (onError != null) {
+        onError(e, s);
+      } else {
+        handleError(e, s, 'LoginOtpSigninRequestSubmitted');
+      }
       emit(state.copyWith(processing: false));
     }
   }
@@ -192,7 +203,7 @@ class LoginCubit extends Cubit<LoginState> {
     final demo = mode == LoginMode.demoCore;
     final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
 
-    if (coreUrl != null) await _processSystemInfo(coreUrl, defaultTenantId, demo);
+    if (coreUrl != null) await _processSystemInfo(coreUrl, defaultTenantId, demo: demo);
   }
 
   void setEmbedded(EmbeddedData embedded) {
@@ -207,7 +218,7 @@ class LoginCubit extends Cubit<LoginState> {
   // LoginCoreUrlAssign
 
   void coreUrlInputChanged(String value) {
-    emit(state.copyWith(coreUrlInput: UrlInput.dirty(value)));
+    emit(state.copyWith(coreUrlInput: UrlInput.dirty(value), coreUrlAssignError: null));
   }
 
   void loginCoreUrlAssignSubmitted() async {
@@ -220,11 +231,39 @@ class LoginCubit extends Cubit<LoginState> {
       coreUrlInputValue = 'https://$coreUrlInputValue';
     }
 
-    await _processSystemInfo(coreUrlInputValue, defaultTenantId);
+    emit(state.copyWith(coreUrlAssignError: null));
+
+    await _processSystemInfo(
+      coreUrlInputValue,
+      defaultTenantId,
+      onError: (error, stackTrace) {
+        // On this step an unreachable or non-WebTrit address is an expected
+        // user mistake: surface it inline under the URL field instead of the
+        // generic error path (which stays silent for such failures).
+        if (_isCoreUnreachableError(error)) {
+          _logger.warning('Core URL assign failed: $error');
+          emit(state.copyWith(coreUrlAssignError: error));
+        } else {
+          handleError(error, stackTrace, 'LoginCoreUrlAssignSubmitted');
+        }
+      },
+    );
+  }
+
+  /// Whether [error] means the entered address does not host a reachable
+  /// WebTrit service: a transport failure, a non-JSON payload, or an HTTP
+  /// error without a structured WebTrit error body (e.g. a bare ingress 404
+  /// while the backend restarts).
+  static bool _isCoreUnreachableError(Object error) {
+    if (error is RequestFailure) return error.error == null;
+    return error is SocketException ||
+        error is http.ClientException ||
+        error is TimeoutException ||
+        error is FormatException;
   }
 
   void loginCoreUrlAssignBack() async {
-    emit(state.copyWith(mode: null, coreUrlInput: const UrlInput.pure()));
+    emit(state.copyWith(mode: null, coreUrlInput: const UrlInput.pure(), coreUrlAssignError: null));
   }
 
   void credentialsRequestUrlAssignBack() async {

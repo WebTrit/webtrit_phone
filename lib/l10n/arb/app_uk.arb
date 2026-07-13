@@ -940,6 +940,10 @@
   "@login_validationCoreUrlError": {
     "description": "Shown when the user enters an invalid URL in the WebTrit Cloud Backend URL field during login or setup. Condition: the input does not match the required URL format."
   },
+  "login_validationCoreUrlUnreachableError": "Не вдалося з'єднатися з сервісом WebTrit за цією адресою",
+  "@login_validationCoreUrlUnreachableError": {
+    "description": "Shown inline under the WebTrit Cloud Backend URL field after submit. Condition: the entered address cannot be reached or does not respond like a WebTrit service (connection failure, non-JSON response, or an HTTP error without a WebTrit error payload)."
+  },
   "login_validationEmailError": "Будь ласка, введіть правильну електронну пошту",
   "@login_validationEmailError": {
     "description": "Shown when the user enters an invalid email address in the email field during login or signup. Condition: the input does not match the required email format."

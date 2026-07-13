@@ -1103,6 +1103,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get login_validationCoreUrlError => 'Prego inserisci un URL valido';
 
   @override
+  String get login_validationCoreUrlUnreachableError =>
+      'Impossibile raggiungere il servizio WebTrit a questo indirizzo';
+
+  @override
   String get login_validationEmailError => 'Inserire un indirizzo di email valido';
 
   @override
