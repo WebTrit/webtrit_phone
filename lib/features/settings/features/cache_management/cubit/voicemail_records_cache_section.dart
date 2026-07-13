@@ -1,6 +1,5 @@
-import 'package:app_database/app_database.dart';
-
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 /// The locally stored voicemail messages as a manageable [CacheSection].
 ///
@@ -8,9 +7,9 @@ import 'package:webtrit_phone/models/models.dart';
 /// files live in the separate voicemail audio section); clearing them only
 /// frees the local database, the list is fetched again on the next refresh.
 class VoicemailRecordsCacheSection implements CacheSection {
-  VoicemailRecordsCacheSection(this._appDatabase);
+  VoicemailRecordsCacheSection(this._voicemailRepository);
 
-  final AppDatabase _appDatabase;
+  final VoicemailRepository _voicemailRepository;
 
   @override
   String get id => 'voicemailRecords';
@@ -22,8 +21,8 @@ class VoicemailRecordsCacheSection implements CacheSection {
   String get descriptionL10n => 'voicemail_RecordsCache_description';
 
   @override
-  Future<CacheUsage> usage() async => CacheUsage.items(await _appDatabase.voicemailDao.recordsCount());
+  Future<CacheUsage> usage() async => CacheUsage.items(await _voicemailRepository.localRecordsCount());
 
   @override
-  Future<void> clear() => _appDatabase.voicemailDao.deleteAllVoicemails();
+  Future<void> clear() => _voicemailRepository.wipeLocalRecords();
 }

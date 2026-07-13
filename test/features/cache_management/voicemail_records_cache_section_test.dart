@@ -1,32 +1,28 @@
 import 'package:flutter_test/flutter_test.dart';
 
-// ignore: depend_on_referenced_packages
-import 'package:drift/native.dart';
-
-import 'package:app_database/app_database.dart';
-
-import 'package:webtrit_phone/features/settings/features/cache_management/view/voicemail_records_cache_section.dart';
+import 'package:webtrit_phone/features/settings/features/cache_management/cubit/voicemail_records_cache_section.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
-import '../../mocks/voicemails_fixture_factory.dart';
+class _FakeVoicemailRepository extends EmptyVoicemailRepository {
+  _FakeVoicemailRepository({this.records = 0});
+
+  int records;
+  int wipeCalls = 0;
+
+  @override
+  Future<int> localRecordsCount() async => records;
+
+  @override
+  Future<void> wipeLocalRecords() async {
+    wipeCalls++;
+    records = 0;
+  }
+}
 
 void main() {
-  late AppDatabase appDatabase;
-  late VoicemailRecordsCacheSection section;
-
-  setUp(() {
-    appDatabase = AppDatabase(NativeDatabase.memory());
-    section = VoicemailRecordsCacheSection(appDatabase);
-  });
-
-  tearDown(() async {
-    await appDatabase.close();
-  });
-
   test('reports the stored records count as items', () async {
-    for (final id in ['1', '2', '3']) {
-      await appDatabase.voicemailDao.insertOrUpdateVoicemail(VoicemailsFixtureFactory.createVoicemail(id: id));
-    }
+    final section = VoicemailRecordsCacheSection(_FakeVoicemailRepository(records: 3));
 
     final usage = await section.usage();
 
@@ -34,17 +30,13 @@ void main() {
     expect(usage.amount, 3);
   });
 
-  test('reports zero for an empty list', () async {
-    final usage = await section.usage();
-
-    expect(usage.amount, 0);
-  });
-
-  test('clear wipes the stored records', () async {
-    await appDatabase.voicemailDao.insertOrUpdateVoicemail(VoicemailsFixtureFactory.createVoicemail(id: '1'));
+  test('clear wipes only the local records through the repository', () async {
+    final repository = _FakeVoicemailRepository(records: 2);
+    final section = VoicemailRecordsCacheSection(repository);
 
     await section.clear();
 
+    expect(repository.wipeCalls, 1);
     expect((await section.usage()).amount, 0);
   });
 }
