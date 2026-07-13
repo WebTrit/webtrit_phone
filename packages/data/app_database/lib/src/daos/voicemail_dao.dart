@@ -52,14 +52,6 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
 
   Future<int> deleteAllVoicemails() => delete(voicemailTable).go();
 
-  /// Resets transcript state on every row so the messages are transcribed
-  /// again (e.g. after the transcription model changes).
-  Future<int> clearTranscripts() {
-    return update(
-      voicemailTable,
-    ).write(const VoicemailDataCompanion(transcript: Value(null), transcriptStatus: Value(null)));
-  }
-
   Future<int> recordsCount() async {
     final query = selectOnly(voicemailTable)..addColumns([countAll()]);
     return query.map((row) => row.read(countAll()) ?? 0).getSingle();
@@ -73,48 +65,46 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
 
   Future<List<VoicemailWithContact>> getVoicemailsWithContacts() async {
     final rows = await _voicemailsWithContactsQuery().get();
-    return _collapseVoicemailRows(rows);
+    return rows.map(_voicemailWithContactFromRow).toList();
   }
 
   Stream<List<VoicemailWithContact>> watchVoicemailsWithContacts() {
-    return _voicemailsWithContactsQuery().watch().map(_collapseVoicemailRows);
+    return _voicemailsWithContactsQuery().watch().map((rows) => rows.map(_voicemailWithContactFromRow).toList());
   }
 
   JoinedSelectStatement _voicemailsWithContactsQuery() {
     final voicemail = voicemailTable;
     final contactPhones = db.contactPhonesTable;
     final contacts = db.contactsTable;
+    final transcriptions = db.transcriptionTable;
 
     return select(voicemail).join([
-        leftOuterJoin(contactPhones, contactPhones.number.equalsExp(voicemail.sender)),
-        leftOuterJoin(contacts, contacts.id.equalsExp(contactPhones.contactId)),
-      ])
-      // The trailing source-priority term is a per-voicemail tie-break so a
-      // sender number shared by a local and an external (PBX) contact
-      // resolves to the external one (the first row kept by the collapse).
-      ..orderBy([OrderingTerm.asc(voicemail.rowId), ...contacts.sourcePriorityOrder()]);
+      leftOuterJoin(contactPhones, contactPhones.number.equalsExp(voicemail.sender)),
+      leftOuterJoin(contacts, contacts.id.equalsExp(contactPhones.contactId)),
+      leftOuterJoin(
+        transcriptions,
+        transcriptions.mediaType.equals(kVoicemailTranscriptionMediaType) &
+            transcriptions.mediaId.equalsExp(voicemail.id),
+      ),
+    ]);
   }
 
-  /// The contact join yields one row per matching contact; keep exactly one
-  /// entry per voicemail, letting the ordering above pick the winner.
-  List<VoicemailWithContact> _collapseVoicemailRows(List<TypedResult> rows) {
-    final byId = <String, VoicemailWithContact>{};
-
-    for (final row in rows) {
-      final voicemail = row.readTable(voicemailTable);
-      byId.putIfAbsent(
-        voicemail.id,
-        () => VoicemailWithContact(voicemail: voicemail, contact: row.readTableOrNull(db.contactsTable)),
-      );
-    }
-
-    return byId.values.toList();
+  VoicemailWithContact _voicemailWithContactFromRow(TypedResult row) {
+    return VoicemailWithContact(
+      voicemail: row.readTable(voicemailTable),
+      contact: row.readTableOrNull(db.contactsTable),
+      transcription: row.readTableOrNull(db.transcriptionTable),
+    );
   }
 }
+
+/// The [TranscriptionTable.mediaType] value owned by voicemails.
+const kVoicemailTranscriptionMediaType = 'voicemail';
 
 class VoicemailWithContact {
   final VoicemailData voicemail;
   final ContactData? contact;
+  final TranscriptionData? transcription;
 
-  VoicemailWithContact({required this.voicemail, this.contact});
+  VoicemailWithContact({required this.voicemail, this.contact, this.transcription});
 }

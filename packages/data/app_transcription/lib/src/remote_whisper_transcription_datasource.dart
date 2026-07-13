@@ -43,6 +43,9 @@ class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
   final Duration _timeout;
 
   @override
+  String get engine => 'openai-compatible:$_model';
+
+  @override
   void dispose() {
     _httpClient.close();
   }

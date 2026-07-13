@@ -11067,28 +11067,6 @@ class $VoicemailTableTable extends VoicemailTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _transcriptMeta = const VerificationMeta(
-    'transcript',
-  );
-  @override
-  late final GeneratedColumn<String> transcript = GeneratedColumn<String>(
-    'transcript',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _transcriptStatusMeta = const VerificationMeta(
-    'transcriptStatus',
-  );
-  @override
-  late final GeneratedColumn<String> transcriptStatus = GeneratedColumn<String>(
-    'transcript_status',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -11100,8 +11078,6 @@ class $VoicemailTableTable extends VoicemailTable
     size,
     type,
     attachmentPath,
-    transcript,
-    transcriptStatus,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -11183,21 +11159,6 @@ class $VoicemailTableTable extends VoicemailTable
         ),
       );
     }
-    if (data.containsKey('transcript')) {
-      context.handle(
-        _transcriptMeta,
-        transcript.isAcceptableOrUnknown(data['transcript']!, _transcriptMeta),
-      );
-    }
-    if (data.containsKey('transcript_status')) {
-      context.handle(
-        _transcriptStatusMeta,
-        transcriptStatus.isAcceptableOrUnknown(
-          data['transcript_status']!,
-          _transcriptStatusMeta,
-        ),
-      );
-    }
     return context;
   }
 
@@ -11243,14 +11204,6 @@ class $VoicemailTableTable extends VoicemailTable
         DriftSqlType.string,
         data['${effectivePrefix}attachment_path'],
       ),
-      transcript: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}transcript'],
-      ),
-      transcriptStatus: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}transcript_status'],
-      ),
     );
   }
 
@@ -11270,8 +11223,6 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
   final int size;
   final String type;
   final String? attachmentPath;
-  final String? transcript;
-  final String? transcriptStatus;
   const VoicemailData({
     required this.id,
     required this.date,
@@ -11282,8 +11233,6 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
     required this.size,
     required this.type,
     this.attachmentPath,
-    this.transcript,
-    this.transcriptStatus,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -11298,12 +11247,6 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
     map['type'] = Variable<String>(type);
     if (!nullToAbsent || attachmentPath != null) {
       map['attachment_path'] = Variable<String>(attachmentPath);
-    }
-    if (!nullToAbsent || transcript != null) {
-      map['transcript'] = Variable<String>(transcript);
-    }
-    if (!nullToAbsent || transcriptStatus != null) {
-      map['transcript_status'] = Variable<String>(transcriptStatus);
     }
     return map;
   }
@@ -11321,12 +11264,6 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       attachmentPath: attachmentPath == null && nullToAbsent
           ? const Value.absent()
           : Value(attachmentPath),
-      transcript: transcript == null && nullToAbsent
-          ? const Value.absent()
-          : Value(transcript),
-      transcriptStatus: transcriptStatus == null && nullToAbsent
-          ? const Value.absent()
-          : Value(transcriptStatus),
     );
   }
 
@@ -11345,8 +11282,6 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       size: serializer.fromJson<int>(json['size']),
       type: serializer.fromJson<String>(json['type']),
       attachmentPath: serializer.fromJson<String?>(json['attachmentPath']),
-      transcript: serializer.fromJson<String?>(json['transcript']),
-      transcriptStatus: serializer.fromJson<String?>(json['transcriptStatus']),
     );
   }
   @override
@@ -11362,8 +11297,6 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       'size': serializer.toJson<int>(size),
       'type': serializer.toJson<String>(type),
       'attachmentPath': serializer.toJson<String?>(attachmentPath),
-      'transcript': serializer.toJson<String?>(transcript),
-      'transcriptStatus': serializer.toJson<String?>(transcriptStatus),
     };
   }
 
@@ -11377,8 +11310,6 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
     int? size,
     String? type,
     Value<String?> attachmentPath = const Value.absent(),
-    Value<String?> transcript = const Value.absent(),
-    Value<String?> transcriptStatus = const Value.absent(),
   }) => VoicemailData(
     id: id ?? this.id,
     date: date ?? this.date,
@@ -11391,10 +11322,6 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
     attachmentPath: attachmentPath.present
         ? attachmentPath.value
         : this.attachmentPath,
-    transcript: transcript.present ? transcript.value : this.transcript,
-    transcriptStatus: transcriptStatus.present
-        ? transcriptStatus.value
-        : this.transcriptStatus,
   );
   VoicemailData copyWithCompanion(VoicemailDataCompanion data) {
     return VoicemailData(
@@ -11409,12 +11336,6 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
       attachmentPath: data.attachmentPath.present
           ? data.attachmentPath.value
           : this.attachmentPath,
-      transcript: data.transcript.present
-          ? data.transcript.value
-          : this.transcript,
-      transcriptStatus: data.transcriptStatus.present
-          ? data.transcriptStatus.value
-          : this.transcriptStatus,
     );
   }
 
@@ -11429,9 +11350,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
           ..write('seen: $seen, ')
           ..write('size: $size, ')
           ..write('type: $type, ')
-          ..write('attachmentPath: $attachmentPath, ')
-          ..write('transcript: $transcript, ')
-          ..write('transcriptStatus: $transcriptStatus')
+          ..write('attachmentPath: $attachmentPath')
           ..write(')'))
         .toString();
   }
@@ -11447,8 +11366,6 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
     size,
     type,
     attachmentPath,
-    transcript,
-    transcriptStatus,
   );
   @override
   bool operator ==(Object other) =>
@@ -11462,9 +11379,7 @@ class VoicemailData extends DataClass implements Insertable<VoicemailData> {
           other.seen == this.seen &&
           other.size == this.size &&
           other.type == this.type &&
-          other.attachmentPath == this.attachmentPath &&
-          other.transcript == this.transcript &&
-          other.transcriptStatus == this.transcriptStatus);
+          other.attachmentPath == this.attachmentPath);
 }
 
 class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
@@ -11477,8 +11392,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
   final Value<int> size;
   final Value<String> type;
   final Value<String?> attachmentPath;
-  final Value<String?> transcript;
-  final Value<String?> transcriptStatus;
   final Value<int> rowid;
   const VoicemailDataCompanion({
     this.id = const Value.absent(),
@@ -11490,8 +11403,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     this.size = const Value.absent(),
     this.type = const Value.absent(),
     this.attachmentPath = const Value.absent(),
-    this.transcript = const Value.absent(),
-    this.transcriptStatus = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   VoicemailDataCompanion.insert({
@@ -11504,8 +11415,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     required int size,
     required String type,
     this.attachmentPath = const Value.absent(),
-    this.transcript = const Value.absent(),
-    this.transcriptStatus = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        date = Value(date),
@@ -11524,8 +11433,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     Expression<int>? size,
     Expression<String>? type,
     Expression<String>? attachmentPath,
-    Expression<String>? transcript,
-    Expression<String>? transcriptStatus,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -11538,8 +11445,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
       if (size != null) 'size': size,
       if (type != null) 'type': type,
       if (attachmentPath != null) 'attachment_path': attachmentPath,
-      if (transcript != null) 'transcript': transcript,
-      if (transcriptStatus != null) 'transcript_status': transcriptStatus,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -11554,8 +11459,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     Value<int>? size,
     Value<String>? type,
     Value<String?>? attachmentPath,
-    Value<String?>? transcript,
-    Value<String?>? transcriptStatus,
     Value<int>? rowid,
   }) {
     return VoicemailDataCompanion(
@@ -11568,8 +11471,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
       size: size ?? this.size,
       type: type ?? this.type,
       attachmentPath: attachmentPath ?? this.attachmentPath,
-      transcript: transcript ?? this.transcript,
-      transcriptStatus: transcriptStatus ?? this.transcriptStatus,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -11604,12 +11505,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
     if (attachmentPath.present) {
       map['attachment_path'] = Variable<String>(attachmentPath.value);
     }
-    if (transcript.present) {
-      map['transcript'] = Variable<String>(transcript.value);
-    }
-    if (transcriptStatus.present) {
-      map['transcript_status'] = Variable<String>(transcriptStatus.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -11628,8 +11523,6 @@ class VoicemailDataCompanion extends UpdateCompanion<VoicemailData> {
           ..write('size: $size, ')
           ..write('type: $type, ')
           ..write('attachmentPath: $attachmentPath, ')
-          ..write('transcript: $transcript, ')
-          ..write('transcriptStatus: $transcriptStatus, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -14977,6 +14870,439 @@ class CdrSyncCursorDataCompanion extends UpdateCompanion<CdrSyncCursorData> {
   }
 }
 
+class $TranscriptionTableTable extends TranscriptionTable
+    with TableInfo<$TranscriptionTableTable, TranscriptionData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TranscriptionTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _mediaTypeMeta = const VerificationMeta(
+    'mediaType',
+  );
+  @override
+  late final GeneratedColumn<String> mediaType = GeneratedColumn<String>(
+    'media_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _mediaIdMeta = const VerificationMeta(
+    'mediaId',
+  );
+  @override
+  late final GeneratedColumn<String> mediaId = GeneratedColumn<String>(
+    'media_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _transcriptMeta = const VerificationMeta(
+    'transcript',
+  );
+  @override
+  late final GeneratedColumn<String> transcript = GeneratedColumn<String>(
+    'transcript',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _engineMeta = const VerificationMeta('engine');
+  @override
+  late final GeneratedColumn<String> engine = GeneratedColumn<String>(
+    'engine',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _updatedAtUsecMeta = const VerificationMeta(
+    'updatedAtUsec',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAtUsec = GeneratedColumn<int>(
+    'updated_at_usec',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    mediaType,
+    mediaId,
+    transcript,
+    status,
+    engine,
+    updatedAtUsec,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'transcriptions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TranscriptionData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('media_type')) {
+      context.handle(
+        _mediaTypeMeta,
+        mediaType.isAcceptableOrUnknown(data['media_type']!, _mediaTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_mediaTypeMeta);
+    }
+    if (data.containsKey('media_id')) {
+      context.handle(
+        _mediaIdMeta,
+        mediaId.isAcceptableOrUnknown(data['media_id']!, _mediaIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_mediaIdMeta);
+    }
+    if (data.containsKey('transcript')) {
+      context.handle(
+        _transcriptMeta,
+        transcript.isAcceptableOrUnknown(data['transcript']!, _transcriptMeta),
+      );
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    }
+    if (data.containsKey('engine')) {
+      context.handle(
+        _engineMeta,
+        engine.isAcceptableOrUnknown(data['engine']!, _engineMeta),
+      );
+    }
+    if (data.containsKey('updated_at_usec')) {
+      context.handle(
+        _updatedAtUsecMeta,
+        updatedAtUsec.isAcceptableOrUnknown(
+          data['updated_at_usec']!,
+          _updatedAtUsecMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {mediaType, mediaId};
+  @override
+  TranscriptionData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TranscriptionData(
+      mediaType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}media_type'],
+      )!,
+      mediaId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}media_id'],
+      )!,
+      transcript: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}transcript'],
+      ),
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      ),
+      engine: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}engine'],
+      ),
+      updatedAtUsec: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at_usec'],
+      ),
+    );
+  }
+
+  @override
+  $TranscriptionTableTable createAlias(String alias) {
+    return $TranscriptionTableTable(attachedDatabase, alias);
+  }
+}
+
+class TranscriptionData extends DataClass
+    implements Insertable<TranscriptionData> {
+  final String mediaType;
+  final String mediaId;
+  final String? transcript;
+  final String? status;
+
+  /// Identity of the engine/model that produced [transcript].
+  final String? engine;
+  final int? updatedAtUsec;
+  const TranscriptionData({
+    required this.mediaType,
+    required this.mediaId,
+    this.transcript,
+    this.status,
+    this.engine,
+    this.updatedAtUsec,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['media_type'] = Variable<String>(mediaType);
+    map['media_id'] = Variable<String>(mediaId);
+    if (!nullToAbsent || transcript != null) {
+      map['transcript'] = Variable<String>(transcript);
+    }
+    if (!nullToAbsent || status != null) {
+      map['status'] = Variable<String>(status);
+    }
+    if (!nullToAbsent || engine != null) {
+      map['engine'] = Variable<String>(engine);
+    }
+    if (!nullToAbsent || updatedAtUsec != null) {
+      map['updated_at_usec'] = Variable<int>(updatedAtUsec);
+    }
+    return map;
+  }
+
+  TranscriptionDataCompanion toCompanion(bool nullToAbsent) {
+    return TranscriptionDataCompanion(
+      mediaType: Value(mediaType),
+      mediaId: Value(mediaId),
+      transcript: transcript == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transcript),
+      status: status == null && nullToAbsent
+          ? const Value.absent()
+          : Value(status),
+      engine: engine == null && nullToAbsent
+          ? const Value.absent()
+          : Value(engine),
+      updatedAtUsec: updatedAtUsec == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAtUsec),
+    );
+  }
+
+  factory TranscriptionData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TranscriptionData(
+      mediaType: serializer.fromJson<String>(json['mediaType']),
+      mediaId: serializer.fromJson<String>(json['mediaId']),
+      transcript: serializer.fromJson<String?>(json['transcript']),
+      status: serializer.fromJson<String?>(json['status']),
+      engine: serializer.fromJson<String?>(json['engine']),
+      updatedAtUsec: serializer.fromJson<int?>(json['updatedAtUsec']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'mediaType': serializer.toJson<String>(mediaType),
+      'mediaId': serializer.toJson<String>(mediaId),
+      'transcript': serializer.toJson<String?>(transcript),
+      'status': serializer.toJson<String?>(status),
+      'engine': serializer.toJson<String?>(engine),
+      'updatedAtUsec': serializer.toJson<int?>(updatedAtUsec),
+    };
+  }
+
+  TranscriptionData copyWith({
+    String? mediaType,
+    String? mediaId,
+    Value<String?> transcript = const Value.absent(),
+    Value<String?> status = const Value.absent(),
+    Value<String?> engine = const Value.absent(),
+    Value<int?> updatedAtUsec = const Value.absent(),
+  }) => TranscriptionData(
+    mediaType: mediaType ?? this.mediaType,
+    mediaId: mediaId ?? this.mediaId,
+    transcript: transcript.present ? transcript.value : this.transcript,
+    status: status.present ? status.value : this.status,
+    engine: engine.present ? engine.value : this.engine,
+    updatedAtUsec: updatedAtUsec.present
+        ? updatedAtUsec.value
+        : this.updatedAtUsec,
+  );
+  TranscriptionData copyWithCompanion(TranscriptionDataCompanion data) {
+    return TranscriptionData(
+      mediaType: data.mediaType.present ? data.mediaType.value : this.mediaType,
+      mediaId: data.mediaId.present ? data.mediaId.value : this.mediaId,
+      transcript: data.transcript.present
+          ? data.transcript.value
+          : this.transcript,
+      status: data.status.present ? data.status.value : this.status,
+      engine: data.engine.present ? data.engine.value : this.engine,
+      updatedAtUsec: data.updatedAtUsec.present
+          ? data.updatedAtUsec.value
+          : this.updatedAtUsec,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TranscriptionData(')
+          ..write('mediaType: $mediaType, ')
+          ..write('mediaId: $mediaId, ')
+          ..write('transcript: $transcript, ')
+          ..write('status: $status, ')
+          ..write('engine: $engine, ')
+          ..write('updatedAtUsec: $updatedAtUsec')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    mediaType,
+    mediaId,
+    transcript,
+    status,
+    engine,
+    updatedAtUsec,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TranscriptionData &&
+          other.mediaType == this.mediaType &&
+          other.mediaId == this.mediaId &&
+          other.transcript == this.transcript &&
+          other.status == this.status &&
+          other.engine == this.engine &&
+          other.updatedAtUsec == this.updatedAtUsec);
+}
+
+class TranscriptionDataCompanion extends UpdateCompanion<TranscriptionData> {
+  final Value<String> mediaType;
+  final Value<String> mediaId;
+  final Value<String?> transcript;
+  final Value<String?> status;
+  final Value<String?> engine;
+  final Value<int?> updatedAtUsec;
+  final Value<int> rowid;
+  const TranscriptionDataCompanion({
+    this.mediaType = const Value.absent(),
+    this.mediaId = const Value.absent(),
+    this.transcript = const Value.absent(),
+    this.status = const Value.absent(),
+    this.engine = const Value.absent(),
+    this.updatedAtUsec = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TranscriptionDataCompanion.insert({
+    required String mediaType,
+    required String mediaId,
+    this.transcript = const Value.absent(),
+    this.status = const Value.absent(),
+    this.engine = const Value.absent(),
+    this.updatedAtUsec = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : mediaType = Value(mediaType),
+       mediaId = Value(mediaId);
+  static Insertable<TranscriptionData> custom({
+    Expression<String>? mediaType,
+    Expression<String>? mediaId,
+    Expression<String>? transcript,
+    Expression<String>? status,
+    Expression<String>? engine,
+    Expression<int>? updatedAtUsec,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (mediaType != null) 'media_type': mediaType,
+      if (mediaId != null) 'media_id': mediaId,
+      if (transcript != null) 'transcript': transcript,
+      if (status != null) 'status': status,
+      if (engine != null) 'engine': engine,
+      if (updatedAtUsec != null) 'updated_at_usec': updatedAtUsec,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TranscriptionDataCompanion copyWith({
+    Value<String>? mediaType,
+    Value<String>? mediaId,
+    Value<String?>? transcript,
+    Value<String?>? status,
+    Value<String?>? engine,
+    Value<int?>? updatedAtUsec,
+    Value<int>? rowid,
+  }) {
+    return TranscriptionDataCompanion(
+      mediaType: mediaType ?? this.mediaType,
+      mediaId: mediaId ?? this.mediaId,
+      transcript: transcript ?? this.transcript,
+      status: status ?? this.status,
+      engine: engine ?? this.engine,
+      updatedAtUsec: updatedAtUsec ?? this.updatedAtUsec,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (mediaType.present) {
+      map['media_type'] = Variable<String>(mediaType.value);
+    }
+    if (mediaId.present) {
+      map['media_id'] = Variable<String>(mediaId.value);
+    }
+    if (transcript.present) {
+      map['transcript'] = Variable<String>(transcript.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (engine.present) {
+      map['engine'] = Variable<String>(engine.value);
+    }
+    if (updatedAtUsec.present) {
+      map['updated_at_usec'] = Variable<int>(updatedAtUsec.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TranscriptionDataCompanion(')
+          ..write('mediaType: $mediaType, ')
+          ..write('mediaId: $mediaId, ')
+          ..write('transcript: $transcript, ')
+          ..write('status: $status, ')
+          ..write('engine: $engine, ')
+          ..write('updatedAtUsec: $updatedAtUsec, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -15046,6 +15372,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CdrTableTable cdrTable = $CdrTableTable(this);
   late final $CdrSyncCursorTableTable cdrSyncCursorTable =
       $CdrSyncCursorTableTable(this);
+  late final $TranscriptionTableTable transcriptionTable =
+      $TranscriptionTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao = ContactPhonesDao(
     this as AppDatabase,
@@ -15074,6 +15402,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final DialogInfoDao dialogInfoDao = DialogInfoDao(this as AppDatabase);
   late final CdrsDao cdrsDao = CdrsDao(this as AppDatabase);
+  late final TranscriptionsDao transcriptionsDao = TranscriptionsDao(
+    this as AppDatabase,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -15113,6 +15444,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     dialogInfoTable,
     cdrTable,
     cdrSyncCursorTable,
+    transcriptionTable,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -25450,8 +25782,6 @@ typedef $$VoicemailTableTableCreateCompanionBuilder =
       required int size,
       required String type,
       Value<String?> attachmentPath,
-      Value<String?> transcript,
-      Value<String?> transcriptStatus,
       Value<int> rowid,
     });
 typedef $$VoicemailTableTableUpdateCompanionBuilder =
@@ -25465,8 +25795,6 @@ typedef $$VoicemailTableTableUpdateCompanionBuilder =
       Value<int> size,
       Value<String> type,
       Value<String?> attachmentPath,
-      Value<String?> transcript,
-      Value<String?> transcriptStatus,
       Value<int> rowid,
     });
 
@@ -25521,16 +25849,6 @@ class $$VoicemailTableTableFilterComposer
 
   ColumnFilters<String> get attachmentPath => $composableBuilder(
     column: $table.attachmentPath,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get transcript => $composableBuilder(
-    column: $table.transcript,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get transcriptStatus => $composableBuilder(
-    column: $table.transcriptStatus,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -25588,16 +25906,6 @@ class $$VoicemailTableTableOrderingComposer
     column: $table.attachmentPath,
     builder: (column) => ColumnOrderings(column),
   );
-
-  ColumnOrderings<String> get transcript => $composableBuilder(
-    column: $table.transcript,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get transcriptStatus => $composableBuilder(
-    column: $table.transcriptStatus,
-    builder: (column) => ColumnOrderings(column),
-  );
 }
 
 class $$VoicemailTableTableAnnotationComposer
@@ -25635,16 +25943,6 @@ class $$VoicemailTableTableAnnotationComposer
 
   GeneratedColumn<String> get attachmentPath => $composableBuilder(
     column: $table.attachmentPath,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get transcript => $composableBuilder(
-    column: $table.transcript,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get transcriptStatus => $composableBuilder(
-    column: $table.transcriptStatus,
     builder: (column) => column,
   );
 }
@@ -25691,8 +25989,6 @@ class $$VoicemailTableTableTableManager
                 Value<int> size = const Value.absent(),
                 Value<String> type = const Value.absent(),
                 Value<String?> attachmentPath = const Value.absent(),
-                Value<String?> transcript = const Value.absent(),
-                Value<String?> transcriptStatus = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => VoicemailDataCompanion(
                 id: id,
@@ -25704,8 +26000,6 @@ class $$VoicemailTableTableTableManager
                 size: size,
                 type: type,
                 attachmentPath: attachmentPath,
-                transcript: transcript,
-                transcriptStatus: transcriptStatus,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -25719,8 +26013,6 @@ class $$VoicemailTableTableTableManager
                 required int size,
                 required String type,
                 Value<String?> attachmentPath = const Value.absent(),
-                Value<String?> transcript = const Value.absent(),
-                Value<String?> transcriptStatus = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => VoicemailDataCompanion.insert(
                 id: id,
@@ -25732,8 +26024,6 @@ class $$VoicemailTableTableTableManager
                 size: size,
                 type: type,
                 attachmentPath: attachmentPath,
-                transcript: transcript,
-                transcriptStatus: transcriptStatus,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -27723,6 +28013,242 @@ typedef $$CdrSyncCursorTableTableProcessedTableManager =
       CdrSyncCursorData,
       PrefetchHooks Function()
     >;
+typedef $$TranscriptionTableTableCreateCompanionBuilder =
+    TranscriptionDataCompanion Function({
+      required String mediaType,
+      required String mediaId,
+      Value<String?> transcript,
+      Value<String?> status,
+      Value<String?> engine,
+      Value<int?> updatedAtUsec,
+      Value<int> rowid,
+    });
+typedef $$TranscriptionTableTableUpdateCompanionBuilder =
+    TranscriptionDataCompanion Function({
+      Value<String> mediaType,
+      Value<String> mediaId,
+      Value<String?> transcript,
+      Value<String?> status,
+      Value<String?> engine,
+      Value<int?> updatedAtUsec,
+      Value<int> rowid,
+    });
+
+class $$TranscriptionTableTableFilterComposer
+    extends Composer<_$AppDatabase, $TranscriptionTableTable> {
+  $$TranscriptionTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get mediaType => $composableBuilder(
+    column: $table.mediaType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mediaId => $composableBuilder(
+    column: $table.mediaId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get transcript => $composableBuilder(
+    column: $table.transcript,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get engine => $composableBuilder(
+    column: $table.engine,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAtUsec => $composableBuilder(
+    column: $table.updatedAtUsec,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TranscriptionTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $TranscriptionTableTable> {
+  $$TranscriptionTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get mediaType => $composableBuilder(
+    column: $table.mediaType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mediaId => $composableBuilder(
+    column: $table.mediaId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get transcript => $composableBuilder(
+    column: $table.transcript,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get engine => $composableBuilder(
+    column: $table.engine,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAtUsec => $composableBuilder(
+    column: $table.updatedAtUsec,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TranscriptionTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TranscriptionTableTable> {
+  $$TranscriptionTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get mediaType =>
+      $composableBuilder(column: $table.mediaType, builder: (column) => column);
+
+  GeneratedColumn<String> get mediaId =>
+      $composableBuilder(column: $table.mediaId, builder: (column) => column);
+
+  GeneratedColumn<String> get transcript => $composableBuilder(
+    column: $table.transcript,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get engine =>
+      $composableBuilder(column: $table.engine, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAtUsec => $composableBuilder(
+    column: $table.updatedAtUsec,
+    builder: (column) => column,
+  );
+}
+
+class $$TranscriptionTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TranscriptionTableTable,
+          TranscriptionData,
+          $$TranscriptionTableTableFilterComposer,
+          $$TranscriptionTableTableOrderingComposer,
+          $$TranscriptionTableTableAnnotationComposer,
+          $$TranscriptionTableTableCreateCompanionBuilder,
+          $$TranscriptionTableTableUpdateCompanionBuilder,
+          (
+            TranscriptionData,
+            BaseReferences<
+              _$AppDatabase,
+              $TranscriptionTableTable,
+              TranscriptionData
+            >,
+          ),
+          TranscriptionData,
+          PrefetchHooks Function()
+        > {
+  $$TranscriptionTableTableTableManager(
+    _$AppDatabase db,
+    $TranscriptionTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TranscriptionTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TranscriptionTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TranscriptionTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> mediaType = const Value.absent(),
+                Value<String> mediaId = const Value.absent(),
+                Value<String?> transcript = const Value.absent(),
+                Value<String?> status = const Value.absent(),
+                Value<String?> engine = const Value.absent(),
+                Value<int?> updatedAtUsec = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TranscriptionDataCompanion(
+                mediaType: mediaType,
+                mediaId: mediaId,
+                transcript: transcript,
+                status: status,
+                engine: engine,
+                updatedAtUsec: updatedAtUsec,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String mediaType,
+                required String mediaId,
+                Value<String?> transcript = const Value.absent(),
+                Value<String?> status = const Value.absent(),
+                Value<String?> engine = const Value.absent(),
+                Value<int?> updatedAtUsec = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TranscriptionDataCompanion.insert(
+                mediaType: mediaType,
+                mediaId: mediaId,
+                transcript: transcript,
+                status: status,
+                engine: engine,
+                updatedAtUsec: updatedAtUsec,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TranscriptionTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TranscriptionTableTable,
+      TranscriptionData,
+      $$TranscriptionTableTableFilterComposer,
+      $$TranscriptionTableTableOrderingComposer,
+      $$TranscriptionTableTableAnnotationComposer,
+      $$TranscriptionTableTableCreateCompanionBuilder,
+      $$TranscriptionTableTableUpdateCompanionBuilder,
+      (
+        TranscriptionData,
+        BaseReferences<
+          _$AppDatabase,
+          $TranscriptionTableTable,
+          TranscriptionData
+        >,
+      ),
+      TranscriptionData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -27849,4 +28375,6 @@ class $AppDatabaseManager {
       $$CdrTableTableTableManager(_db, _db.cdrTable);
   $$CdrSyncCursorTableTableTableManager get cdrSyncCursorTable =>
       $$CdrSyncCursorTableTableTableManager(_db, _db.cdrSyncCursorTable);
+  $$TranscriptionTableTableTableManager get transcriptionTable =>
+      $$TranscriptionTableTableTableManager(_db, _db.transcriptionTable);
 }

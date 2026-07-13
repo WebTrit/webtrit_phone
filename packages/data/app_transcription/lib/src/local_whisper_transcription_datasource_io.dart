@@ -48,6 +48,9 @@ class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
   String get modelName => _model.modelName;
 
   @override
+  String get engine => 'whisper-ggml:${_model.modelName}';
+
+  @override
   void dispose() {
     _httpClient.close();
   }

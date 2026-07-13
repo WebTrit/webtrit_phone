@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_api/webtrit_api.dart' as api;
 
+import 'package:app_database/app_database.dart';
+
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 
@@ -34,25 +36,32 @@ void main() {
   );
 
   group('voicemailToDrift', () {
-    test('leaves transcript columns empty (transcripts are produced locally)', () {
+    test('maps only the remote fields (transcripts live in their own table)', () {
       final data = mapper.voicemailToDrift(item, details, 'http://example/vm-1');
 
-      expect(data.transcript, isNull);
-      expect(data.transcriptStatus, isNull);
+      expect(data.id, 'vm-1');
+      expect(data.sender, '555001');
+      expect(data.attachmentPath, 'http://example/vm-1');
     });
   });
 
   group('voicemailFromDrift', () {
-    test('maps a stored transcript and its status', () {
-      final data = VoicemailsFixtureFactory.createVoicemail(id: 'vm-1', transcript: 'hello', transcriptStatus: 'done');
+    test('maps a stored transcription row and its status', () {
+      final data = VoicemailsFixtureFactory.createVoicemail(id: 'vm-1');
+      const transcription = TranscriptionData(
+        mediaType: kVoicemailTranscriptionMediaType,
+        mediaId: 'vm-1',
+        transcript: 'hello',
+        status: 'done',
+      );
 
-      final voicemail = mapper.voicemailFromDrift(data, null);
+      final voicemail = mapper.voicemailFromDrift(data, null, transcription: transcription);
 
       expect(voicemail.transcript, 'hello');
       expect(voicemail.transcriptStatus, TranscriptStatus.done);
     });
 
-    test('maps a missing status to none', () {
+    test('maps a missing transcription to none', () {
       final data = VoicemailsFixtureFactory.createVoicemail(id: 'vm-1');
 
       final voicemail = mapper.voicemailFromDrift(data, null);
@@ -62,9 +71,14 @@ void main() {
     });
 
     test('maps an unknown status string to none', () {
-      final data = VoicemailsFixtureFactory.createVoicemail(id: 'vm-1', transcriptStatus: 'weird');
+      final data = VoicemailsFixtureFactory.createVoicemail(id: 'vm-1');
+      const transcription = TranscriptionData(
+        mediaType: kVoicemailTranscriptionMediaType,
+        mediaId: 'vm-1',
+        status: 'weird',
+      );
 
-      final voicemail = mapper.voicemailFromDrift(data, null);
+      final voicemail = mapper.voicemailFromDrift(data, null, transcription: transcription);
 
       expect(voicemail.transcriptStatus, TranscriptStatus.none);
     });

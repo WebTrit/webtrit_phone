@@ -57,8 +57,6 @@ abstract class VoicemailRepository implements Refreshable {
   /// or [EndpointNotSupportedException], indicating that voicemail is permanently
   /// unavailable for this session.
   bool get isFeatureSupported;
-<<<<<<< HEAD
-=======
 
   /// Number of voicemail records stored in the local database.
   Future<int> localRecordsCount();
@@ -73,7 +71,6 @@ abstract class VoicemailRepository implements Refreshable {
   /// No-op when the repository was created without a transcription source
   /// builder (feature disabled or not local).
   void applyTranscriptionModel(String? localModel);
->>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
 }
 
 final _logger = Logger('VoicemailRepository');
@@ -135,6 +132,15 @@ class VoicemailRepositoryImpl
   @override
   bool get isActive => _featureSupported;
 
+  @override
+  Future<int> localRecordsCount() => _appDatabase.voicemailDao.recordsCount();
+
+  @override
+  Future<void> wipeLocalRecords() async {
+    await _appDatabase.voicemailDao.deleteAllVoicemails();
+    await _appDatabase.transcriptionsDao.deleteAllForType(kVoicemailTranscriptionMediaType);
+  }
+
   void _initialize() {
     _updatesController = StreamController<List<Voicemail>>.broadcast(onListen: _onListen, onCancel: _onCancel);
 
@@ -156,11 +162,11 @@ class VoicemailRepositoryImpl
     if (_transcription?.current != null) return;
 
     try {
-      final voicemails = await _appDatabase.voicemailDao.getAllVoicemails();
-      final stale = voicemails.where((voicemail) => voicemail.transcriptStatus == TranscriptStatus.inProgress.name);
+      final transcriptions = await _appDatabase.transcriptionsDao.getAllForType(kVoicemailTranscriptionMediaType);
+      final stale = transcriptions.where((transcription) => transcription.status == TranscriptStatus.inProgress.name);
 
-      for (final voicemail in stale) {
-        await _updateTranscript(voicemail.id, status: null);
+      for (final transcription in stale) {
+        await _updateTranscript(transcription.mediaId, status: null);
       }
     } catch (e, st) {
       _logger.warning('Failed to reset stale transcription progress', e, st);
@@ -272,12 +278,18 @@ class VoicemailRepositoryImpl
         _transcriptionRerunRequested = false;
 
         final voicemails = await _appDatabase.voicemailDao.getAllVoicemails();
-        final pending = voicemails.where(
-          (voicemail) =>
-              voicemail.type == 'voice' &&
-              voicemail.transcript == null &&
-              voicemail.transcriptStatus != TranscriptStatus.unavailable.name,
-        );
+        final transcriptions = {
+          for (final transcription in await _appDatabase.transcriptionsDao.getAllForType(
+            kVoicemailTranscriptionMediaType,
+          ))
+            transcription.mediaId: transcription,
+        };
+        final pending = voicemails.where((voicemail) {
+          final transcription = transcriptions[voicemail.id];
+          return voicemail.type == 'voice' &&
+              transcription?.transcript == null &&
+              transcription?.status != TranscriptStatus.unavailable.name;
+        });
 
         for (final voicemail in pending) {
           // Re-read per message: applyTranscriptionModel may swap the source
@@ -351,7 +363,7 @@ class VoicemailRepositoryImpl
   /// keeping the text from the old model.
   Future<void> _retranscribeAllVoicemails() async {
     try {
-      await _appDatabase.voicemailDao.clearTranscripts();
+      await _appDatabase.transcriptionsDao.deleteAllForType(kVoicemailTranscriptionMediaType);
     } catch (e, st) {
       _logger.warning('Failed to reset transcripts for re-transcription', e, st);
     }
@@ -368,11 +380,14 @@ class VoicemailRepositoryImpl
   }
 
   Future<void> _updateTranscript(String messageId, {String? transcript, TranscriptStatus? status}) {
-    return _appDatabase.voicemailDao.updateVoicemail(
-      VoicemailDataCompanion(
-        id: Value(messageId),
-        transcript: Value(transcript),
-        transcriptStatus: Value(status?.name),
+    return _appDatabase.transcriptionsDao.upsertTranscription(
+      TranscriptionData(
+        mediaType: kVoicemailTranscriptionMediaType,
+        mediaId: messageId,
+        transcript: transcript,
+        status: status?.name,
+        engine: _transcription?.current?.engine,
+        updatedAtUsec: DateTime.now().microsecondsSinceEpoch,
       ),
     );
   }
@@ -414,6 +429,7 @@ class VoicemailRepositoryImpl
       );
 
       await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
+      await _appDatabase.transcriptionsDao.deleteByMedia(kVoicemailTranscriptionMediaType, messageId);
     } on UnauthorizedException catch (e) {
       _sessionGuard.onUnauthorized(e);
       rethrow;
@@ -445,6 +461,7 @@ class VoicemailRepositoryImpl
       try {
         await removeVoicemail(voicemail.id);
         await _appDatabase.voicemailDao.deleteVoicemailById(voicemail.id);
+        await _appDatabase.transcriptionsDao.deleteByMedia(kVoicemailTranscriptionMediaType, voicemail.id);
       } catch (e, st) {
         _logger.warning('Failed to remove voicemail with id ${voicemail.id}', e, st);
         rethrow;
@@ -521,7 +538,12 @@ class VoicemailRepositoryImpl
   Voicemail _voicemailFromDriftWithContact(VoicemailWithContact data, {ReadStatus? readStatus}) {
     final displayName = data.contact != null ? contactFromDrift(data.contact!).maybeName : null;
 
-    return voicemailFromDrift(data.voicemail, displayName ?? data.voicemail.sender, readStatus: readStatus);
+    return voicemailFromDrift(
+      data.voicemail,
+      displayName ?? data.voicemail.sender,
+      transcription: data.transcription,
+      readStatus: readStatus,
+    );
   }
 
   @override
@@ -539,6 +561,7 @@ class VoicemailRepositoryImpl
       try {
         await removeVoicemail(messageId);
         await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
+        await _appDatabase.transcriptionsDao.deleteByMedia(kVoicemailTranscriptionMediaType, messageId);
       } catch (e, st) {
         _logger.warning('Failed to remove voicemail with id $messageId', e, st);
         rethrow;
@@ -589,8 +612,6 @@ class EmptyVoicemailRepository implements VoicemailRepository {
 
   @override
   bool get isFeatureSupported => false;
-<<<<<<< HEAD
-=======
 
   @override
   Future<int> localRecordsCount() => Future.value(0);
@@ -600,5 +621,4 @@ class EmptyVoicemailRepository implements VoicemailRepository {
 
   @override
   void applyTranscriptionModel(String? localModel) {}
->>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
 }

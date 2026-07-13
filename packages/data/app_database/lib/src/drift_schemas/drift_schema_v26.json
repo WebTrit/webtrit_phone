@@ -2365,26 +2365,6 @@
             "default_dart": null,
             "default_client_dart": null,
             "dsl_features": []
-          },
-          {
-            "name": "transcript",
-            "getter_name": "transcript",
-            "moor_type": "string",
-            "nullable": true,
-            "customConstraints": "NULL",
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": []
-          },
-          {
-            "name": "transcript_status",
-            "getter_name": "transcriptStatus",
-            "moor_type": "string",
-            "nullable": true,
-            "customConstraints": "NULL",
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": []
           }
         ],
         "is_virtual": false,
@@ -3031,6 +3011,86 @@
     },
     {
       "id": 34,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "transcriptions",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "media_type",
+            "getter_name": "mediaType",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "media_id",
+            "getter_name": "mediaId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "transcript",
+            "getter_name": "transcript",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "status",
+            "getter_name": "status",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "engine",
+            "getter_name": "engine",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "updated_at_usec",
+            "getter_name": "updatedAtUsec",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "PRIMARY KEY(media_type, media_id)"
+        ],
+        "explicit_pk": [
+          "media_type",
+          "media_id"
+        ]
+      }
+    },
+    {
+      "id": 35,
       "references": [
         0
       ],
@@ -3045,7 +3105,7 @@
       }
     },
     {
-      "id": 35,
+      "id": 36,
       "references": [
         0
       ],
@@ -3060,7 +3120,7 @@
       }
     },
     {
-      "id": 36,
+      "id": 37,
       "references": [
         1
       ],
@@ -3075,7 +3135,7 @@
       }
     },
     {
-      "id": 37,
+      "id": 38,
       "references": [
         1
       ],
@@ -3090,7 +3150,7 @@
       }
     },
     {
-      "id": 38,
+      "id": 39,
       "references": [
         2
       ],
@@ -3105,7 +3165,7 @@
       }
     },
     {
-      "id": 39,
+      "id": 40,
       "references": [
         2
       ],
@@ -3369,7 +3429,7 @@
       "sql": [
         {
           "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"voicemails\" (\"id\" TEXT NOT NULL, \"date\" TEXT NOT NULL, \"duration\" REAL NOT NULL, \"sender\" TEXT NOT NULL, \"receiver\" TEXT NOT NULL, \"seen\" INTEGER NOT NULL DEFAULT 0 CHECK (seen IN (0, 1)), \"size\" INTEGER NOT NULL, \"type\" TEXT NOT NULL, \"attachment_path\" TEXT NULL, \"transcript\" TEXT NULL, \"transcript_status\" TEXT NULL, PRIMARY KEY(id));"
+          "sql": "CREATE TABLE IF NOT EXISTS \"voicemails\" (\"id\" TEXT NOT NULL, \"date\" TEXT NOT NULL, \"duration\" REAL NOT NULL, \"sender\" TEXT NOT NULL, \"receiver\" TEXT NOT NULL, \"seen\" INTEGER NOT NULL DEFAULT 0 CHECK (seen IN (0, 1)), \"size\" INTEGER NOT NULL, \"type\" TEXT NOT NULL, \"attachment_path\" TEXT NULL, PRIMARY KEY(id));"
         }
       ]
     },
@@ -3424,6 +3484,15 @@
         {
           "dialect": "sqlite",
           "sql": "CREATE TABLE IF NOT EXISTS \"cdr_sync_cursors\" (\"id\" INTEGER NOT NULL, \"timestamp_usec\" INTEGER NOT NULL, PRIMARY KEY(id));"
+        }
+      ]
+    },
+    {
+      "name": "transcriptions",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"transcriptions\" (\"media_type\" TEXT NOT NULL, \"media_id\" TEXT NOT NULL, \"transcript\" TEXT NULL, \"status\" TEXT NULL, \"engine\" TEXT NULL, \"updated_at_usec\" INTEGER NULL, PRIMARY KEY(media_type, media_id));"
         }
       ]
     },

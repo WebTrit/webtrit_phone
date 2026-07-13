@@ -15,13 +15,7 @@ void main() {
     await db.close();
   });
 
-  VoicemailData createVoicemail({
-    String id = 'vm-1',
-    String date = '2026-01-01T00:00:00Z',
-    bool seen = false,
-    String? transcript,
-    String? transcriptStatus,
-  }) {
+  VoicemailData createVoicemail({String id = 'vm-1', String date = '2026-01-01T00:00:00Z', bool seen = false}) {
     return VoicemailData(
       id: id,
       date: date,
@@ -31,50 +25,64 @@ void main() {
       seen: seen,
       size: 5,
       type: 'voice',
-      transcript: transcript,
-      transcriptStatus: transcriptStatus,
     );
   }
 
-  group('clearTranscripts', () {
-    test('resets transcript state on every row', () async {
-      await db.voicemailDao.insertOrUpdateVoicemail(
-        createVoicemail(id: 'vm-1', transcript: 'finished', transcriptStatus: 'done'),
-      );
-      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail(id: 'vm-2', transcriptStatus: 'unavailable'));
-
-      await db.voicemailDao.clearTranscripts();
-
-      for (final id in ['vm-1', 'vm-2']) {
-        final row = await db.voicemailDao.getVoicemailById(id);
-        expect(row!.transcript, isNull);
-        expect(row.transcriptStatus, isNull);
-      }
-    });
-  });
-
   group('upsertVoicemailFromRemote', () {
-    test('inserts a new row with empty transcript columns', () async {
+    test('inserts a new row', () async {
       await db.voicemailDao.upsertVoicemailFromRemote(createVoicemail());
 
       final row = await db.voicemailDao.getVoicemailById('vm-1');
       expect(row, isNotNull);
-      expect(row!.transcript, isNull);
-      expect(row.transcriptStatus, isNull);
+      expect(row!.sender, '555001');
     });
 
-    test('updates remote fields but never touches transcript columns on conflict', () async {
-      await db.voicemailDao.insertOrUpdateVoicemail(
-        createVoicemail(transcript: 'finished transcript', transcriptStatus: 'done'),
-      );
+    test('updates remote fields on conflict', () async {
+      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());
 
       await db.voicemailDao.upsertVoicemailFromRemote(createVoicemail(date: '2026-01-02T00:00:00Z', seen: true));
 
       final row = await db.voicemailDao.getVoicemailById('vm-1');
       expect(row!.date, '2026-01-02T00:00:00Z');
       expect(row.seen, isTrue);
-      expect(row.transcript, 'finished transcript');
-      expect(row.transcriptStatus, 'done');
+    });
+  });
+
+  group('voicemails with transcriptions', () {
+    test('joins the voicemail transcription row when present', () async {
+      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());
+      await db.transcriptionsDao.upsertTranscription(
+        const TranscriptionData(
+          mediaType: kVoicemailTranscriptionMediaType,
+          mediaId: 'vm-1',
+          transcript: 'hello',
+          status: 'done',
+        ),
+      );
+
+      final rows = await db.voicemailDao.getVoicemailsWithContacts();
+
+      expect(rows.single.transcription?.transcript, 'hello');
+      expect(rows.single.transcription?.status, 'done');
+    });
+
+    test('leaves the transcription empty when none is stored', () async {
+      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());
+
+      final rows = await db.voicemailDao.getVoicemailsWithContacts();
+
+      expect(rows.single.transcription, isNull);
+    });
+
+    test('ignores transcriptions of other media types', () async {
+      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());
+      await db.transcriptionsDao.upsertTranscription(
+        const TranscriptionData(mediaType: 'recording', mediaId: 'vm-1', transcript: 'other media'),
+      );
+
+      final rows = await db.voicemailDao.getVoicemailsWithContacts();
+
+      expect(rows.single.transcription, isNull);
     });
   });
 }

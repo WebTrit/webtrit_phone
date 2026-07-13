@@ -440,7 +440,7 @@ void main() {
   });
 
   group('migration v26 data integrity', () {
-    test('preserves voicemail rows and adds nullable transcript columns', () async {
+    test('preserves voicemail rows and creates the transcriptions table', () async {
       final schema = await verifier.schemaAt(25);
       try {
         final oldDb = v25.DatabaseAtV25(schema.newConnection());
@@ -455,19 +455,19 @@ void main() {
         await appDatabase.close();
 
         final checkDb = v26.DatabaseAtV26(schema.newConnection());
-        final rows = await checkDb.customSelect('SELECT id, transcript, transcript_status FROM voicemails').get();
+        final rows = await checkDb.customSelect('SELECT id FROM voicemails').get();
         expect(rows, hasLength(1));
         expect(rows.single.read<String>('id'), 'vm-1');
-        // The new columns exist and are null for rows migrated from v25.
-        expect(rows.single.data['transcript'], null);
-        expect(rows.single.data['transcript_status'], null);
 
+        // The new media-agnostic transcriptions table is usable right away.
         await checkDb.customStatement('''
-          UPDATE voicemails SET transcript = 'hello there', transcript_status = 'done' WHERE id = 'vm-1'
+          INSERT INTO transcriptions (media_type, media_id, transcript, status, engine)
+          VALUES ('voicemail', 'vm-1', 'hello there', 'done', 'whisper-ggml:base')
         ''');
-        final updated = await checkDb.customSelect('SELECT transcript, transcript_status FROM voicemails').get();
-        expect(updated.single.read<String>('transcript'), 'hello there');
-        expect(updated.single.read<String>('transcript_status'), 'done');
+        final transcriptions = await checkDb.customSelect('SELECT * FROM transcriptions').get();
+        expect(transcriptions.single.read<String>('transcript'), 'hello there');
+        expect(transcriptions.single.read<String>('status'), 'done');
+        expect(transcriptions.single.read<String>('engine'), 'whisper-ggml:base');
 
         await checkDb.close();
       } finally {

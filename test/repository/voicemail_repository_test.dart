@@ -81,6 +81,9 @@ class _CallbackTranscriptionDataSource implements TranscriptionDataSource {
   int disposeCalls = 0;
 
   @override
+  String get engine => 'callback';
+
+  @override
   Future<String> transcribe(Uint8List audio, {String? language}) {
     calls++;
     return handler(audio);
@@ -101,6 +104,9 @@ class _FakeTranscriptionDataSource implements TranscriptionDataSource {
   int disposeCalls = 0;
 
   @override
+  String get engine => 'fake';
+
+  @override
   Future<String> transcribe(Uint8List audio, {String? language}) async {
     calls++;
     final error = this.error;
@@ -118,13 +124,19 @@ api.UserVoicemailItem createVoicemailItem({String id = '1', String type = 'voice
   return api.UserVoicemailItem(id: id, date: '2026-01-01T00:00:00Z', duration: 3.5, seen: false, size: 5, type: type);
 }
 
-Future<VoicemailData> waitForTranscriptStatus(AppDatabase appDatabase, String id, String? status) async {
+Future<TranscriptionData?> waitForTranscriptStatus(AppDatabase appDatabase, String id, String? status) async {
   for (var attempt = 0; attempt < 200; attempt++) {
-    final row = await appDatabase.voicemailDao.getVoicemailById(id);
-    if (row != null && row.transcriptStatus == status) return row;
+    final voicemail = await appDatabase.voicemailDao.getVoicemailById(id);
+    final row = await appDatabase.transcriptionsDao.getByMedia(kVoicemailTranscriptionMediaType, id);
+    // "Not attempted" is either an absent row or one rolled back to a null
+    // status; the voicemail itself must exist so an empty database does not
+    // pass as a match.
+    if (voicemail != null && (row?.status == status)) return row;
     await Future<void>.delayed(const Duration(milliseconds: 10));
   }
-  fail('voicemail $id did not reach transcript status $status');
+  final lastRow = await appDatabase.transcriptionsDao.getByMedia(kVoicemailTranscriptionMediaType, id);
+  final lastVoicemail = await appDatabase.voicemailDao.getVoicemailById(id);
+  fail('voicemail $id did not reach transcript status $status; row=$lastRow voicemail=$lastVoicemail');
 }
 
 Future<void> waitFor(bool Function() condition, String description) async {
@@ -348,7 +360,7 @@ void main() {
       createRepo(client, dataSource);
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row.transcript, 'hello world');
+      expect(row!.transcript, 'hello world');
       expect(client.requestedAttachmentFormats, ['wav']);
     });
 
@@ -359,7 +371,7 @@ void main() {
       createRepo(client, dataSource);
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.unavailable.name);
-      expect(row.transcript, isNull);
+      expect(row!.transcript, isNull);
     });
 
     test('marks the voicemail unavailable when the attachment download fails permanently', () async {
@@ -370,7 +382,7 @@ void main() {
       createRepo(client, dataSource);
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.unavailable.name);
-      expect(row.transcript, isNull);
+      expect(row!.transcript, isNull);
       expect(dataSource.calls, 0);
     });
 
@@ -384,13 +396,13 @@ void main() {
 
       // The failed attempt rolls the row back from inProgress to not-attempted.
       var row = await waitForTranscriptStatus(transcriptionDatabase, '1', null);
-      expect(row.transcript, isNull);
+      expect(row!.transcript, isNull);
 
       client.attachmentError = null;
       await repo.fetchVoicemails();
 
       row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row.transcript, 'hello world');
+      expect(row!.transcript, 'hello world');
       expect(client.requestedAttachmentFormats.length, 2);
     });
 
@@ -404,7 +416,7 @@ void main() {
       await waitFor(() => dataSource.calls == 1, 'first transcription attempt');
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', null);
-      expect(row.transcript, isNull);
+      expect(row!.transcript, isNull);
     });
 
     test('preserves the transcript on refetch and does not transcribe twice', () async {
@@ -418,7 +430,7 @@ void main() {
       await pumpEventQueue();
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row.transcript, 'hello world');
+      expect(row!.transcript, 'hello world');
       expect(dataSource.calls, 1);
     });
 
@@ -465,7 +477,11 @@ void main() {
 
       final row = await transcriptionDatabase.voicemailDao.getVoicemailById('fax-1');
       expect(row, isNotNull);
-      expect(row!.transcriptStatus, isNull);
+      final transcription = await transcriptionDatabase.transcriptionsDao.getByMedia(
+        kVoicemailTranscriptionMediaType,
+        'fax-1',
+      );
+      expect(transcription, isNull);
       expect(dataSource.calls, 0);
     });
 
@@ -488,8 +504,8 @@ void main() {
 
       final rowA = await waitForTranscriptStatus(transcriptionDatabase, 'a', TranscriptStatus.done.name);
       final rowB = await waitForTranscriptStatus(transcriptionDatabase, 'b', TranscriptStatus.done.name);
-      expect(rowA.transcript, 'finished transcript');
-      expect(rowB.transcript, 'finished transcript');
+      expect(rowA!.transcript, 'finished transcript');
+      expect(rowB!.transcript, 'finished transcript');
       expect(dataSource.calls, 2);
     });
 
@@ -510,22 +526,25 @@ void main() {
       gate.complete();
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row.transcript, 'finished transcript');
+      expect(row!.transcript, 'finished transcript');
 
       await repo.fetchVoicemails();
       await pumpEventQueue();
 
-      final after = await transcriptionDatabase.voicemailDao.getVoicemailById('1');
+      final after = await transcriptionDatabase.transcriptionsDao.getByMedia(kVoicemailTranscriptionMediaType, '1');
       expect(after!.transcript, 'finished transcript');
-      expect(after.transcriptStatus, TranscriptStatus.done.name);
+      expect(after.status, TranscriptStatus.done.name);
     });
 
     test('resets stale inProgress rows when no datasource is configured', () async {
       await transcriptionDatabase.voicemailDao.insertOrUpdateVoicemail(
-        VoicemailsFixtureFactory.createVoicemail(
-          id: 'stale-1',
-          type: 'voice',
-          transcriptStatus: TranscriptStatus.inProgress.name,
+        VoicemailsFixtureFactory.createVoicemail(id: 'stale-1', type: 'voice'),
+      );
+      await transcriptionDatabase.transcriptionsDao.upsertTranscription(
+        TranscriptionData(
+          mediaType: kVoicemailTranscriptionMediaType,
+          mediaId: 'stale-1',
+          status: TranscriptStatus.inProgress.name,
         ),
       );
 
@@ -533,16 +552,19 @@ void main() {
       createRepo(client, null);
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, 'stale-1', null);
-      expect(row.transcript, isNull);
+      expect(row?.transcript, isNull);
     });
 
     test('keeps done transcripts when no datasource is configured', () async {
       await transcriptionDatabase.voicemailDao.insertOrUpdateVoicemail(
-        VoicemailsFixtureFactory.createVoicemail(
-          id: 'done-1',
-          type: 'voice',
+        VoicemailsFixtureFactory.createVoicemail(id: 'done-1', type: 'voice'),
+      );
+      await transcriptionDatabase.transcriptionsDao.upsertTranscription(
+        TranscriptionData(
+          mediaType: kVoicemailTranscriptionMediaType,
+          mediaId: 'done-1',
           transcript: 'kept',
-          transcriptStatus: TranscriptStatus.done.name,
+          status: TranscriptStatus.done.name,
         ),
       );
 
@@ -551,22 +573,20 @@ void main() {
       await repo.fetchVoicemails();
       await pumpEventQueue();
 
-      final row = await transcriptionDatabase.voicemailDao.getVoicemailById('done-1');
+      final row = await transcriptionDatabase.transcriptionsDao.getByMedia(kVoicemailTranscriptionMediaType, 'done-1');
       expect(row!.transcript, 'kept');
-      expect(row.transcriptStatus, TranscriptStatus.done.name);
+      expect(row.status, TranscriptStatus.done.name);
     });
 
-    test('leaves transcript columns untouched when no datasource is configured', () async {
+    test('stores no transcription rows when no datasource is configured', () async {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
 
       final repo = createRepo(client, null);
       await repo.fetchVoicemails();
       await pumpEventQueue();
 
-      final row = await transcriptionDatabase.voicemailDao.getVoicemailById('1');
-      expect(row, isNotNull);
-      expect(row!.transcript, isNull);
-      expect(row.transcriptStatus, isNull);
+      expect(await transcriptionDatabase.voicemailDao.getVoicemailById('1'), isNotNull);
+      expect(await transcriptionDatabase.transcriptionsDao.getAllForType(kVoicemailTranscriptionMediaType), isEmpty);
     });
 
     test('applyTranscriptionModel swaps the source, disposes the old one and transcribes pending rows', () async {
@@ -591,7 +611,7 @@ void main() {
       repo.applyTranscriptionModel('small');
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row.transcript, 'from the new model');
+      expect(row!.transcript, 'from the new model');
       expect(models, [null, 'small']);
       expect(initial.disposeCalls, 1);
     });
@@ -610,13 +630,13 @@ void main() {
       );
       await repo.fetchVoicemails();
       var row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row.transcript, 'from the old model');
+      expect(row!.transcript, 'from the old model');
 
       repo.applyTranscriptionModel('small');
 
       await waitFor(() => replacement.calls == 1, 're-transcription with the new model');
       row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row.transcript, 'from the new model');
+      expect(row!.transcript, 'from the new model');
     });
 
     test('applyTranscriptionModel is a no-op for a fixed transcription source', () async {

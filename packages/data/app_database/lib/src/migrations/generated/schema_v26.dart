@@ -2278,22 +2278,6 @@ class Voicemails extends Table with TableInfo {
     requiredDuringInsert: false,
     $customConstraints: 'NULL',
   );
-  late final GeneratedColumn<String> transcript = GeneratedColumn<String>(
-    'transcript',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    $customConstraints: 'NULL',
-  );
-  late final GeneratedColumn<String> transcriptStatus = GeneratedColumn<String>(
-    'transcript_status',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    $customConstraints: 'NULL',
-  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -2305,8 +2289,6 @@ class Voicemails extends Table with TableInfo {
     size,
     type,
     attachmentPath,
-    transcript,
-    transcriptStatus,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2973,6 +2955,93 @@ class CdrSyncCursors extends Table with TableInfo {
   bool get dontWriteConstraints => true;
 }
 
+class Transcriptions extends Table with TableInfo {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  Transcriptions(this.attachedDatabase, [this._alias]);
+  late final GeneratedColumn<String> mediaType = GeneratedColumn<String>(
+    'media_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  late final GeneratedColumn<String> mediaId = GeneratedColumn<String>(
+    'media_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  late final GeneratedColumn<String> transcript = GeneratedColumn<String>(
+    'transcript',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
+  late final GeneratedColumn<String> engine = GeneratedColumn<String>(
+    'engine',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
+  late final GeneratedColumn<int> updatedAtUsec = GeneratedColumn<int>(
+    'updated_at_usec',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NULL',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    mediaType,
+    mediaId,
+    transcript,
+    status,
+    engine,
+    updatedAtUsec,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'transcriptions';
+  @override
+  Set<GeneratedColumn> get $primaryKey => {mediaType, mediaId};
+  @override
+  Never map(Map<String, dynamic> data, {String? tablePrefix}) {
+    throw UnsupportedError('TableInfo.map in schema verification code');
+  }
+
+  @override
+  Transcriptions createAlias(String alias) {
+    return Transcriptions(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const [
+    'PRIMARY KEY(media_type, media_id)',
+  ];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
 class DatabaseAtV26 extends GeneratedDatabase {
   DatabaseAtV26(QueryExecutor e) : super(e);
   late final Contacts contacts = Contacts(this);
@@ -3024,6 +3093,7 @@ class DatabaseAtV26 extends GeneratedDatabase {
   late final DialogInfo dialogInfo = DialogInfo(this);
   late final Cdrs cdrs = Cdrs(this);
   late final CdrSyncCursors cdrSyncCursors = CdrSyncCursors(this);
+  late final Transcriptions transcriptions = Transcriptions(this);
   late final Trigger contactsAfterInsertTrigger = Trigger(
     'CREATE TRIGGER contacts_after_insert_trigger AFTER INSERT ON contacts BEGIN UPDATE contacts SET inserted_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id AND inserted_at IS NULL;UPDATE contacts SET updated_at = STRFTIME(\'%s\', \'NOW\') WHERE id = NEW.id;END',
     'contacts_after_insert_trigger',
@@ -3087,6 +3157,7 @@ class DatabaseAtV26 extends GeneratedDatabase {
     dialogInfo,
     cdrs,
     cdrSyncCursors,
+    transcriptions,
     contactsAfterInsertTrigger,
     contactsAfterUpdateTrigger,
     contactPhonesAfterInsertTrigger,
