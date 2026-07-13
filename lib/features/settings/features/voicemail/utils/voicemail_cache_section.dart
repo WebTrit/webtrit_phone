@@ -33,11 +33,13 @@ class VoicemailCacheSection implements CacheSection {
     var total = 0;
 
     for (final directory in _directories) {
-      if (!directory.existsSync()) continue;
+      if (!await directory.exists()) continue;
       try {
+        final sizes = <Future<int>>[];
         await for (final entity in directory.list(recursive: true, followLinks: false)) {
-          if (entity is File) total += await entity.length();
+          if (entity is File) sizes.add(entity.length().catchError((Object _) => 0));
         }
+        total += (await Future.wait(sizes)).fold(0, (sum, size) => sum + size);
       } catch (e) {
         _logger.warning('Failed to size cache directory ${directory.path}: $e');
       }
@@ -52,7 +54,7 @@ class VoicemailCacheSection implements CacheSection {
   @override
   Future<void> clear() async {
     for (final directory in _directories) {
-      if (!directory.existsSync()) continue;
+      if (!await directory.exists()) continue;
       try {
         await directory.delete(recursive: true);
       } catch (e) {
