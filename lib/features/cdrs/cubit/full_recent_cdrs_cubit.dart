@@ -33,7 +33,7 @@ class FullRecentCdrsCubit extends Cubit<FullRecentCdrsState> {
 
     emit(state.copyWith(fetchingHistory: true));
     try {
-      final oldestLocal = state.records.last.connectTime;
+      final oldestLocal = state.records.lastOrNull?.connectTime;
       var history = await _cdrsLocalRepository.getHistory(from: oldestLocal, limit: pageSize);
       if (history.isEmpty) {
         history = await _cdrsRemoteRepository.getHistory(to: oldestLocal, limit: pageSize);
@@ -65,6 +65,9 @@ class FullRecentCdrsCubit extends Cubit<FullRecentCdrsState> {
     if (event is CdrRecordUpserted) {
       final recentCdrs = state.records.mergeWithUpdate(event.cdr).toList();
       emit(state.copyWith(records: recentCdrs));
+    }
+    if (event is CdrRecordsWiped) {
+      emit(state.copyWith(records: const [], historyEndReached: false));
     }
   }
 

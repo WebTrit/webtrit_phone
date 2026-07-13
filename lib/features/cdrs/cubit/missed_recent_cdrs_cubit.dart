@@ -110,6 +110,9 @@ class MissedRecentCdrsCubit extends Cubit<MissedRecentCdrsState> {
       final recentCdrs = state.records.mergeWithUpdate(event.cdr).toList();
       emit(state.copyWith(records: recentCdrs));
     }
+    if (event is CdrRecordsWiped) {
+      emit(state.copyWith(records: const [], historyEndReached: false));
+    }
   }
 
   @override

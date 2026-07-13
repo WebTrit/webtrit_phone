@@ -11,11 +11,13 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 void main() {
   late AppDatabase appDatabase;
+  late CdrsLocalRepository repository;
   late CdrsCacheSection section;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
-    section = CdrsCacheSection(CdrsLocalRepositoryDriftImpl(appDatabase));
+    repository = CdrsLocalRepositoryDriftImpl(appDatabase);
+    section = CdrsCacheSection(repository);
   });
 
   tearDown(() async {
@@ -57,5 +59,14 @@ void main() {
     await section.clear();
 
     expect((await section.usage()).amount, 0);
+  });
+
+  test('clear notifies listeners holding records in memory', () async {
+    await appDatabase.cdrsDao.upsertCdrs([createCdr('1')]);
+    final events = expectLater(repository.events, emits(isA<CdrRecordsWiped>()));
+
+    await section.clear();
+
+    await events;
   });
 }

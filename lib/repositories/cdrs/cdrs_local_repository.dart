@@ -102,6 +102,7 @@ class CdrsLocalRepositoryDriftImpl with CdrDriftMapper implements CdrsLocalRepos
   @override
   Future<void> wipeData() async {
     await _dao.wipeData();
+    _eventBus.add(CdrRecordsWiped());
   }
 
   @override
@@ -115,3 +116,7 @@ class CdrRecordUpserted extends CdrRecordsEvent {
 
   final CdrRecord cdr;
 }
+
+/// All locally stored records were deleted (e.g. the call history cache was
+/// cleared); listeners holding records in memory should drop them.
+class CdrRecordsWiped extends CdrRecordsEvent {}
