@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'dart:typed_data';
+
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
@@ -74,6 +76,36 @@ void main() {
     });
   });
 
+  group('SwitchableTranscriptionSource', () {
+    test('builds the initial source and rebuilds it per switch, disposing the old one', () {
+      final built = <String?>[];
+      final sources = <_RecordingDataSource>[];
+      final switchable = SwitchableTranscriptionSource((model) {
+        built.add(model);
+        final source = _RecordingDataSource();
+        sources.add(source);
+        return source;
+      }, initialLocalModel: 'base');
+
+      expect(built, ['base']);
+      expect(switchable.current, sources.single);
+
+      expect(switchable.switchLocalModel('small'), isTrue);
+      expect(built, ['base', 'small']);
+      expect(switchable.current, sources.last);
+      expect(sources.first.disposeCalls, 1);
+    });
+
+    test('a fixed source reports switching as unsupported', () {
+      final source = _RecordingDataSource();
+      final switchable = SwitchableTranscriptionSource.fixed(source);
+
+      expect(switchable.switchLocalModel('small'), isFalse);
+      expect(switchable.current, source);
+      expect(source.disposeCalls, 0);
+    });
+  });
+
   group('VoicemailMapper', () {
     test('copies the transcription section from the app config', () {
       const appConfig = AppConfig(
@@ -112,4 +144,16 @@ void main() {
       expect(config.remoteUrl, isNull);
     });
   });
+}
+
+class _RecordingDataSource implements TranscriptionDataSource {
+  int disposeCalls = 0;
+
+  @override
+  Future<String> transcribe(Uint8List audio, {String? language}) async => '';
+
+  @override
+  void dispose() {
+    disposeCalls++;
+  }
 }

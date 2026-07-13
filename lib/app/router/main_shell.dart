@@ -306,10 +306,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 webtritApiClient: context.read<WebtritApiClient>(),
                 token: context.read<AppBloc>().state.session.token!,
                 appDatabase: context.read<AppDatabase>(),
-                transcriptionDataSource: buildTranscriptionDataSource(
-                  context.read<TranscriptionModelRepository>().getTranscriptionModel(),
+                transcription: SwitchableTranscriptionSource(
+                  buildTranscriptionDataSource,
+                  initialLocalModel: context.read<TranscriptionModelRepository>().getTranscriptionModel(),
                 ),
-                transcriptionDataSourceBuilder: buildTranscriptionDataSource,
               );
             } else {
               return const EmptyVoicemailRepository();

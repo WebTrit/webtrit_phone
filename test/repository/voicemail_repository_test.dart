@@ -337,7 +337,7 @@ void main() {
         token: 'user_token',
         appDatabase: transcriptionDatabase,
         sessionGuard: const EmptySessionGuard(),
-        transcriptionDataSource: dataSource,
+        transcription: SwitchableTranscriptionSource.fixed(dataSource),
       );
     }
 
@@ -580,11 +580,10 @@ void main() {
         token: 'user_token',
         appDatabase: transcriptionDatabase,
         sessionGuard: const EmptySessionGuard(),
-        transcriptionDataSource: initial,
-        transcriptionDataSourceBuilder: (model) {
+        transcription: SwitchableTranscriptionSource((model) {
           models.add(model);
-          return replacement;
-        },
+          return model == null ? initial : replacement;
+        }),
       );
       await repo.fetchVoicemails();
       await waitForTranscriptStatus(transcriptionDatabase, '1', null);
@@ -593,7 +592,7 @@ void main() {
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row.transcript, 'from the new model');
-      expect(models, ['small']);
+      expect(models, [null, 'small']);
       expect(initial.disposeCalls, 1);
     });
 
@@ -607,8 +606,7 @@ void main() {
         token: 'user_token',
         appDatabase: transcriptionDatabase,
         sessionGuard: const EmptySessionGuard(),
-        transcriptionDataSource: initial,
-        transcriptionDataSourceBuilder: (_) => replacement,
+        transcription: SwitchableTranscriptionSource((model) => model == null ? initial : replacement),
       );
       await repo.fetchVoicemails();
       var row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
@@ -621,7 +619,7 @@ void main() {
       expect(row.transcript, 'from the new model');
     });
 
-    test('applyTranscriptionModel is a no-op without a datasource builder', () async {
+    test('applyTranscriptionModel is a no-op for a fixed transcription source', () async {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
       final dataSource = _FakeTranscriptionDataSource(result: 'hello world');
 
