@@ -73,6 +73,16 @@
   "@callTileActions_message": {
     "description": "Label of the expanded call tile action that opens a chat with the contact."
   },
+  "cacheManagement_Button_clear": "Очистити",
+  "@cacheManagement_Button_clear": {},
+  "cacheManagement_Label_empty": "На цьому пристрої немає кешованих даних",
+  "@cacheManagement_Label_empty": {},
+  "cacheManagement_Label_itemsCount": "{count, plural, one{{count} запис} few{{count} записи} many{{count} записів} other{{count} запису}}",
+  "@cacheManagement_Label_itemsCount": {"placeholders": {"count": {"type": "int"}}},
+  "cacheManagement_Label_unknown": "Невідомо",
+  "@cacheManagement_Label_unknown": {},
+  "cacheManagement_Widget_screenTitle": "Сховище та кеш",
+  "@cacheManagement_Widget_screenTitle": {},
   "callTileActions_more": "Більше",
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
@@ -281,6 +291,10 @@
   "@call_videoView_actionLabel_fit": {
     "description": "Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode."
   },
+  "cdrs_Cache_description": "Локальна копія історії дзвінків із сервера. Очищення видаляє локальні записи; історія завантажиться знову під час наступної синхронізації.",
+  "@cdrs_Cache_description": {},
+  "cdrs_Cache_title": "Історія дзвінків",
+  "@cdrs_Cache_title": {},
   "cdrs_noMissedCalls_message": "Немає пропущених дзвінків",
   "@cdrs_noMissedCalls_message": {},
   "cdrs_noRecentCalls_message": "Немає останніх дзвінків",
@@ -1922,6 +1936,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_call_codecs": "Кодеки дзвінка",
   "@settings_ListViewTileTitle_call_codecs": {},
+  "settings_ListViewTileTitle_cacheManagement": "Сховище та кеш",
+  "@settings_ListViewTileTitle_cacheManagement": {},
   "settings_ListViewTileTitle_callerId": "Ідентифікатор абонента",
   "@settings_ListViewTileTitle_callerId": {},
   "settings_ListViewTileTitle_encoding": "Кодування медіа",
@@ -2298,6 +2314,10 @@
   "@user_agreement_description": {},
   "validationBlankError": "Будь ласка, введіть значення",
   "@validationBlankError": {},
+  "voicemail_Cache_description": "Відтворення голосового повідомлення зберігає локальну копію аудіо для миттєвого повторного прослуховування. Очищення звільняє місце; аудіо завантажиться знову під час наступного відтворення.",
+  "@voicemail_Cache_description": {},
+  "voicemail_Cache_title": "Аудіо голосової пошти",
+  "@voicemail_Cache_title": {},
   "voicemail_Description_notSupported": "Функція голосової пошти не підтримується у вашій системі. Зверніться до адміністратора для отримання додаткової інформації.",
   "@voicemail_Description_notSupported": {},
   "voicemail_Dialog_deleteSelectedContent": "Обрані голосові повідомлення будуть остаточно видалені. Чи хочете ви продовжити?",
@@ -2330,6 +2350,10 @@
   "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Функція не підтримується",
   "@voicemail_Title_notSupported": {},
+  "voicemail_RecordsCache_description": "Локальна копія списку голосових повідомлень із сервера (аудіофайли - окрема секція). Очищення видаляє локальні записи; список завантажиться знову під час наступного оновлення.",
+  "@voicemail_RecordsCache_description": {},
+  "voicemail_RecordsCache_title": "Повідомлення голосової пошти",
+  "@voicemail_RecordsCache_title": {},
   "voicemail_Widget_screenTitle": "Голосова пошта",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",

@@ -103,6 +103,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callTileActions_message => 'Messaggio';
 
   @override
+  String get cacheManagement_Button_clear => 'Svuota';
+
+  @override
+  String get cacheManagement_Label_empty => 'Nessun dato in cache su questo dispositivo';
+
+  @override
+  String cacheManagement_Label_itemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count record', one: '1 record');
+    return '$_temp0';
+  }
+
+  @override
+  String get cacheManagement_Label_unknown => 'Sconosciuto';
+
+  @override
+  String get cacheManagement_Widget_screenTitle => 'Archiviazione e cache';
+
+  @override
   String get callTileActions_more => 'Altro';
 
   @override
@@ -345,6 +363,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get call_videoView_actionLabel_fit => 'Adatta';
+
+  @override
+  String get cdrs_Cache_description =>
+      'Copia locale della cronologia chiamate scaricata dal server. La cancellazione rimuove i record locali; la cronologia viene scaricata di nuovo alla prossima sincronizzazione.';
+
+  @override
+  String get cdrs_Cache_title => 'Cronologia chiamate';
 
   @override
   String get cdrs_noMissedCalls_message => 'Nessuna chiamata persa';
@@ -2396,6 +2421,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Codec di chiamata';
 
   @override
+  String get settings_ListViewTileTitle_cacheManagement => 'Archiviazione e cache';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'ID chiamante';
 
   @override
@@ -2780,6 +2808,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get validationBlankError => 'Prego inserire un valore';
 
   @override
+  String get voicemail_Cache_description =>
+      'La riproduzione di un messaggio vocale conserva una copia locale dell\'audio per riascolti immediati. Svuotare la cache libera spazio; l\'audio viene scaricato di nuovo alla prossima riproduzione.';
+
+  @override
+  String get voicemail_Cache_title => 'Audio dei messaggi vocali';
+
+  @override
   String get voicemail_Description_notSupported =>
       'La funzione di segreteria telefonica non è supportata nel tuo sistema. Contatta l\'amministratore per maggiori informazioni.';
 
@@ -2831,6 +2866,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get voicemail_Title_notSupported => 'Funzionalità non supportata';
+
+  @override
+  String get voicemail_RecordsCache_description =>
+      'Copia locale dell\'elenco dei messaggi vocali scaricato dal server (i file audio sono una sezione separata). La cancellazione rimuove i record locali; l\'elenco viene scaricato di nuovo al prossimo aggiornamento.';
+
+  @override
+  String get voicemail_RecordsCache_title => 'Messaggi vocali';
 
   @override
   String get voicemail_Widget_screenTitle => 'Segreteria telefonica';

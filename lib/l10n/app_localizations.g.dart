@@ -196,6 +196,36 @@ abstract class AppLocalizations {
   /// **'Message'**
   String get callTileActions_message;
 
+  /// No description provided for @cacheManagement_Button_clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get cacheManagement_Button_clear;
+
+  /// No description provided for @cacheManagement_Label_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is cached on this device'**
+  String get cacheManagement_Label_empty;
+
+  /// No description provided for @cacheManagement_Label_itemsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 record} other{{count} records}}'**
+  String cacheManagement_Label_itemsCount(int count);
+
+  /// No description provided for @cacheManagement_Label_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get cacheManagement_Label_unknown;
+
+  /// No description provided for @cacheManagement_Widget_screenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage & cache'**
+  String get cacheManagement_Widget_screenTitle;
+
   /// Label of the expanded call tile action that opens the full actions menu.
   ///
   /// In en, this message translates to:
@@ -645,6 +675,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Fit'**
   String get call_videoView_actionLabel_fit;
+
+  /// No description provided for @cdrs_Cache_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Locally stored copy of the call history fetched from the server. Clearing removes the local records; the history is downloaded again on the next sync.'**
+  String get cdrs_Cache_description;
+
+  /// No description provided for @cdrs_Cache_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Call history'**
+  String get cdrs_Cache_title;
 
   /// No description provided for @cdrs_noMissedCalls_message.
   ///
@@ -4375,6 +4417,12 @@ abstract class AppLocalizations {
   /// **'Call codecs'**
   String get settings_ListViewTileTitle_call_codecs;
 
+  /// No description provided for @settings_ListViewTileTitle_cacheManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage & cache'**
+  String get settings_ListViewTileTitle_cacheManagement;
+
   /// No description provided for @settings_ListViewTileTitle_callerId.
   ///
   /// In en, this message translates to:
@@ -5059,6 +5107,18 @@ abstract class AppLocalizations {
   /// **'Please enter a value'**
   String get validationBlankError;
 
+  /// No description provided for @voicemail_Cache_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Playing a voicemail keeps a local copy of its audio for instant replays. Clearing frees up space; the audio is downloaded again the next time a message is played.'**
+  String get voicemail_Cache_description;
+
+  /// No description provided for @voicemail_Cache_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail audio'**
+  String get voicemail_Cache_title;
+
   /// No description provided for @voicemail_Description_notSupported.
   ///
   /// In en, this message translates to:
@@ -5154,6 +5214,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Feature not supported'**
   String get voicemail_Title_notSupported;
+
+  /// No description provided for @voicemail_RecordsCache_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Locally stored copy of the voicemail list fetched from the server (the audio files are a separate section). Clearing removes the local records; the list is downloaded again on the next refresh.'**
+  String get voicemail_RecordsCache_description;
+
+  /// No description provided for @voicemail_RecordsCache_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail messages'**
+  String get voicemail_RecordsCache_title;
 
   /// No description provided for @voicemail_Widget_screenTitle.
   ///

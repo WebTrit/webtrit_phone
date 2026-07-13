@@ -10,6 +10,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/settings/features/voicemail/bloc/bloc.dart';
 import 'package:webtrit_phone/features/settings/features/voicemail/models/models.dart';
 import 'package:webtrit_phone/features/settings/features/voicemail/view/voicemail_screen.dart';
@@ -75,6 +76,7 @@ void main() {
       home: MultiProvider(
         providers: [
           BlocProvider<VoicemailCubit>.value(value: cubit),
+          Provider<AppCacheManager>(create: (_) => AppCacheManager(sections: const [])),
           Provider<VoicemailScreenContext>(
             create: (_) => VoicemailScreenContext(
               mediaCacheBasePath: '/tmp/vm-cache',

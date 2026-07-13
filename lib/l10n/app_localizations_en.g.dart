@@ -102,6 +102,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callTileActions_message => 'Message';
 
   @override
+  String get cacheManagement_Button_clear => 'Clear';
+
+  @override
+  String get cacheManagement_Label_empty => 'Nothing is cached on this device';
+
+  @override
+  String cacheManagement_Label_itemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count records', one: '1 record');
+    return '$_temp0';
+  }
+
+  @override
+  String get cacheManagement_Label_unknown => 'Unknown';
+
+  @override
+  String get cacheManagement_Widget_screenTitle => 'Storage & cache';
+
+  @override
   String get callTileActions_more => 'More';
 
   @override
@@ -341,6 +359,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get call_videoView_actionLabel_fit => 'Fit';
+
+  @override
+  String get cdrs_Cache_description =>
+      'Locally stored copy of the call history fetched from the server. Clearing removes the local records; the history is downloaded again on the next sync.';
+
+  @override
+  String get cdrs_Cache_title => 'Call history';
 
   @override
   String get cdrs_noMissedCalls_message => 'No missed calls';
@@ -2369,6 +2394,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Call codecs';
 
   @override
+  String get settings_ListViewTileTitle_cacheManagement => 'Storage & cache';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'Caller ID';
 
   @override
@@ -2748,6 +2776,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get validationBlankError => 'Please enter a value';
 
   @override
+  String get voicemail_Cache_description =>
+      'Playing a voicemail keeps a local copy of its audio for instant replays. Clearing frees up space; the audio is downloaded again the next time a message is played.';
+
+  @override
+  String get voicemail_Cache_title => 'Voicemail audio';
+
+  @override
   String get voicemail_Description_notSupported =>
       'Voicemail feature are not supported in your core. Please contact your administrator for more information.';
 
@@ -2798,6 +2833,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voicemail_Title_notSupported => 'Feature not supported';
+
+  @override
+  String get voicemail_RecordsCache_description =>
+      'Locally stored copy of the voicemail list fetched from the server (the audio files are a separate section). Clearing removes the local records; the list is downloaded again on the next refresh.';
+
+  @override
+  String get voicemail_RecordsCache_title => 'Voicemail messages';
 
   @override
   String get voicemail_Widget_screenTitle => 'Voicemail';

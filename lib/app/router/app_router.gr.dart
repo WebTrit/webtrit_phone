@@ -121,6 +121,22 @@ class AutoprovisionScreenPageRouteArgs {
 }
 
 /// generated route for
+/// [CacheManagementScreenPage]
+class CacheManagementScreenPageRoute extends PageRouteInfo<void> {
+  const CacheManagementScreenPageRoute({List<PageRouteInfo>? children})
+    : super(CacheManagementScreenPageRoute.name, initialChildren: children);
+
+  static const String name = 'CacheManagementScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return CacheManagementScreenPage();
+    },
+  );
+}
+
+/// generated route for
 /// [CallLogScreenPage]
 class CallLogScreenPageRoute extends PageRouteInfo<CallLogScreenPageRouteArgs> {
   CallLogScreenPageRoute({

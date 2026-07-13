@@ -102,6 +102,24 @@ class AppLocalizationsTh extends AppLocalizations {
   String get callTileActions_message => 'ข้อความ';
 
   @override
+  String get cacheManagement_Button_clear => 'ล้าง';
+
+  @override
+  String get cacheManagement_Label_empty => 'ไม่มีข้อมูลในแคชบนอุปกรณ์นี้';
+
+  @override
+  String cacheManagement_Label_itemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count รายการ');
+    return '$_temp0';
+  }
+
+  @override
+  String get cacheManagement_Label_unknown => 'ไม่ทราบ';
+
+  @override
+  String get cacheManagement_Widget_screenTitle => 'พื้นที่เก็บข้อมูลและแคช';
+
+  @override
   String get callTileActions_more => 'เพิ่มเติม';
 
   @override
@@ -340,6 +358,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get call_videoView_actionLabel_fit => 'พอดี';
+
+  @override
+  String get cdrs_Cache_description =>
+      'สำเนาประวัติการโทรที่ดึงจากเซิร์ฟเวอร์ซึ่งเก็บไว้ในเครื่อง การล้างจะลบรายการในเครื่อง และประวัติจะถูกดาวน์โหลดใหม่ในการซิงค์ครั้งถัดไป';
+
+  @override
+  String get cdrs_Cache_title => 'ประวัติการโทร';
 
   @override
   String get cdrs_noMissedCalls_message => 'ไม่มีสายที่ไม่ได้รับ';
@@ -2363,6 +2388,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'โคเดกการโทร';
 
   @override
+  String get settings_ListViewTileTitle_cacheManagement => 'พื้นที่เก็บข้อมูลและแคช';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'หมายเลขผู้โทร';
 
   @override
@@ -2735,6 +2763,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get validationBlankError => 'โปรดกรอกค่า';
 
   @override
+  String get voicemail_Cache_description =>
+      'การเล่นข้อความเสียงจะเก็บสำเนาเสียงไว้ในเครื่องเพื่อเล่นซ้ำได้ทันที การล้างจะคืนพื้นที่ และเสียงจะถูกดาวน์โหลดใหม่เมื่อเล่นครั้งถัดไป';
+
+  @override
+  String get voicemail_Cache_title => 'เสียงข้อความเสียง';
+
+  @override
   String get voicemail_Description_notSupported =>
       'core ของคุณไม่รองรับฟีเจอร์ข้อความเสียง โปรดติดต่อผู้ดูแลระบบของคุณเพื่อขอข้อมูลเพิ่มเติม';
 
@@ -2784,6 +2819,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get voicemail_Title_notSupported => 'ไม่รองรับฟีเจอร์นี้';
+
+  @override
+  String get voicemail_RecordsCache_description =>
+      'สำเนารายการข้อความเสียงที่ดึงจากเซิร์ฟเวอร์ซึ่งเก็บไว้ในเครื่อง (ไฟล์เสียงเป็นส่วนแยกต่างหาก) การล้างจะลบรายการในเครื่อง และรายการจะถูกดาวน์โหลดใหม่เมื่อรีเฟรชครั้งถัดไป';
+
+  @override
+  String get voicemail_RecordsCache_title => 'ข้อความเสียงที่บันทึกไว้';
 
   @override
   String get voicemail_Widget_screenTitle => 'ข้อความเสียง';

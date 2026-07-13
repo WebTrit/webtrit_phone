@@ -56,6 +56,13 @@ abstract class VoicemailRepository implements Refreshable {
   /// or [EndpointNotSupportedException], indicating that voicemail is permanently
   /// unavailable for this session.
   bool get isFeatureSupported;
+
+  /// Number of voicemail records stored in the local database.
+  Future<int> localRecordsCount();
+
+  /// Removes only the locally cached voicemail records; the server copy stays
+  /// and the list is fetched again on the next refresh.
+  Future<void> wipeLocalRecords();
 }
 
 final _logger = Logger('VoicemailRepository');
@@ -103,6 +110,12 @@ class VoicemailRepositoryImpl
 
   @override
   bool get isActive => _featureSupported;
+
+  @override
+  Future<int> localRecordsCount() => _appDatabase.voicemailDao.recordsCount();
+
+  @override
+  Future<void> wipeLocalRecords() => _appDatabase.voicemailDao.deleteAllVoicemails();
 
   void _initialize() {
     _updatesController = StreamController<List<Voicemail>>.broadcast(onListen: _onListen, onCancel: _onCancel);
@@ -158,7 +171,7 @@ class VoicemailRepositoryImpl
     try {
       /// Do not emit unknown status to show updating state, because it leads to UI flicker on SettingsScreen
       /// especially on android if user checks status bar and app changes its lifecycle from innactive to resumed (WT-1424)
-      /// 
+      ///
       /// Add separate event if needed
       await _emitCachedVoicemails();
 
@@ -403,4 +416,10 @@ class EmptyVoicemailRepository implements VoicemailRepository {
 
   @override
   bool get isFeatureSupported => false;
+
+  @override
+  Future<int> localRecordsCount() => Future.value(0);
+
+  @override
+  Future<void> wipeLocalRecords() => Future.value();
 }

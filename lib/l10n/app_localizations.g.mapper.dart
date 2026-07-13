@@ -40,6 +40,11 @@ extension AppLocalizationsExtension on AppLocalizations {
       'callTileActions_contact' => callTileActions_contact,
       'callTileActions_history' => callTileActions_history,
       'callTileActions_message' => callTileActions_message,
+      'cacheManagement_Button_clear' => cacheManagement_Button_clear,
+      'cacheManagement_Label_empty' => cacheManagement_Label_empty,
+      'cacheManagement_Label_unknown' => cacheManagement_Label_unknown,
+      'cacheManagement_Widget_screenTitle' =>
+        cacheManagement_Widget_screenTitle,
       'callTileActions_more' => callTileActions_more,
       'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
       'call_CallActionsTooltip_accept_inviteToAttendedTransfer' =>
@@ -143,6 +148,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         call_videoBackground_actionLabel_enableBlur,
       'call_videoView_actionLabel_cover' => call_videoView_actionLabel_cover,
       'call_videoView_actionLabel_fit' => call_videoView_actionLabel_fit,
+      'cdrs_Cache_description' => cdrs_Cache_description,
+      'cdrs_Cache_title' => cdrs_Cache_title,
       'cdrs_noMissedCalls_message' => cdrs_noMissedCalls_message,
       'cdrs_noRecentCalls_message' => cdrs_noRecentCalls_message,
       'common_noInternetConnection_message' =>
@@ -1134,6 +1141,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         settings_ListViewTileTitle_accountDelete,
       'settings_ListViewTileTitle_call_codecs' =>
         settings_ListViewTileTitle_call_codecs,
+      'settings_ListViewTileTitle_cacheManagement' =>
+        settings_ListViewTileTitle_cacheManagement,
       'settings_ListViewTileTitle_callerId' =>
         settings_ListViewTileTitle_callerId,
       'settings_ListViewTileTitle_encoding' =>
@@ -1325,6 +1334,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'user_agreement_agrement_link' => user_agreement_agrement_link,
       'user_agreement_button_text' => user_agreement_button_text,
       'validationBlankError' => validationBlankError,
+      'voicemail_Cache_description' => voicemail_Cache_description,
+      'voicemail_Cache_title' => voicemail_Cache_title,
       'voicemail_Description_notSupported' =>
         voicemail_Description_notSupported,
       'voicemail_Dialog_deleteSelectedContent' =>
@@ -1347,6 +1358,9 @@ extension AppLocalizationsExtension on AppLocalizations {
       'voicemail_Label_retry' => voicemail_Label_retry,
       'voicemail_Snackbar_notConfigured' => voicemail_Snackbar_notConfigured,
       'voicemail_Title_notSupported' => voicemail_Title_notSupported,
+      'voicemail_RecordsCache_description' =>
+        voicemail_RecordsCache_description,
+      'voicemail_RecordsCache_title' => voicemail_RecordsCache_title,
       'voicemail_Widget_screenTitle' => voicemail_Widget_screenTitle,
       'webRegistration_ErrorAcknowledgeDialogActions_retry' =>
         webRegistration_ErrorAcknowledgeDialogActions_retry,
@@ -1569,6 +1583,12 @@ extension AppLocalizationsExtension on AppLocalizations {
       'agoTicker_secondsAgo' => switch (args) {
         [final num seconds] => agoTicker_secondsAgo(seconds),
         _ => throw ArgumentError('agoTicker_secondsAgo requires 1 arguments'),
+      },
+      'cacheManagement_Label_itemsCount' => switch (args) {
+        [final int count] => cacheManagement_Label_itemsCount(count),
+        _ => throw ArgumentError(
+          'cacheManagement_Label_itemsCount requires 1 arguments',
+        ),
       },
       'call_CallList_header' => switch (args) {
         [final int count] => call_CallList_header(count),

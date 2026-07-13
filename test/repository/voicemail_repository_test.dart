@@ -193,5 +193,17 @@ void main() {
       expect(voicemails.length, 1);
       expect(voicemails.first.id, '2');
     });
+
+    test('localRecordsCount and wipeLocalRecords cover only the local database', () async {
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(VoicemailsFixtureFactory.createVoicemail(id: '1'));
+      await appDatabase.voicemailDao.insertOrUpdateVoicemail(VoicemailsFixtureFactory.createVoicemail(id: '2'));
+
+      expect(await repo.localRecordsCount(), 2);
+
+      await repo.wipeLocalRecords();
+
+      expect(await repo.localRecordsCount(), 0);
+      expect(await appDatabase.voicemailDao.getAllVoicemails(), isEmpty);
+    });
   });
 }
