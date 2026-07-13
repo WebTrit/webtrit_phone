@@ -14,7 +14,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
 
-enum _VoicemailMenuAction { transcriptionModel, cacheManagement }
+enum _VoicemailMenuAction { delete, transcriptionModel, cacheManagement }
 
 class VoicemailScreen extends StatefulWidget {
   const VoicemailScreen({super.key});
@@ -38,18 +38,7 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                 alignment: AlignmentDirectional.topCenter,
                 isLabelVisible: state.isMultipleVoicemailsSelection,
                 label: Text(state.selectedVoicemailsIds.length.toString()),
-                child: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: state.items.isNotEmpty
-                      ? () => state.isMultipleVoicemailsSelection
-                            ? _onDeleteSelectedVoicemails()
-                            : _onDeleteAllVoicemails()
-                      : null,
-                ),
-              ),
-              if (context.read<VoicemailCubit>().canSelectTranscriptionModel ||
-                  context.read<AppCacheManager>().sections.isNotEmpty)
-                PopupMenuButton<_VoicemailMenuAction>(
+                child: PopupMenuButton<_VoicemailMenuAction>(
                   onSelected: _onMenuAction,
                   itemBuilder: (context) => [
                     if (context.read<VoicemailCubit>().canSelectTranscriptionModel)
@@ -68,8 +57,18 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                           title: Text(context.l10n.cacheManagement_Widget_screenTitle),
                         ),
                       ),
+                    PopupMenuItem(
+                      value: _VoicemailMenuAction.delete,
+                      enabled: state.items.isNotEmpty,
+                      child: ListTile(
+                        enabled: state.items.isNotEmpty,
+                        leading: const Icon(Icons.delete),
+                        title: Text(context.l10n.voicemail_Label_delete),
+                      ),
+                    ),
                   ],
                 ),
+              ),
             ],
           ),
           body: Builder(
@@ -126,6 +125,9 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
 
   void _onMenuAction(_VoicemailMenuAction action) {
     switch (action) {
+      case _VoicemailMenuAction.delete:
+        final state = context.read<VoicemailCubit>().state;
+        state.isMultipleVoicemailsSelection ? _onDeleteSelectedVoicemails() : _onDeleteAllVoicemails();
       case _VoicemailMenuAction.transcriptionModel:
         _onSelectTranscriptionModel();
       case _VoicemailMenuAction.cacheManagement:
