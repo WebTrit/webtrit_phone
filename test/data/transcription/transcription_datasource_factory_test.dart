@@ -6,6 +6,23 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
+class _NoopTranscriptionStore implements TranscriptionStore {
+  @override
+  Future<void> saveInProgress(String mediaType, String mediaId, String engine) async {}
+
+  @override
+  Future<void> saveTranscript(String mediaType, String mediaId, String transcript, String engine) async {}
+
+  @override
+  Future<bool> saveFailure(String mediaType, String mediaId, Object error, String engine) async => true;
+
+  @override
+  Future<void> remove(String mediaType, String mediaId) async {}
+
+  @override
+  Future<void> removeAll() async {}
+}
+
 void main() {
   group('createVoicemailTranscriptionDataSource', () {
     test('returns null for the default config', () {
@@ -76,32 +93,37 @@ void main() {
     });
   });
 
-  group('SwitchableTranscriptionSource', () {
+  group('TranscriptionService model switching', () {
     test('builds the initial source and rebuilds it per switch, disposing the old one', () {
       final built = <String?>[];
       final sources = <_RecordingDataSource>[];
-      final switchable = SwitchableTranscriptionSource((model) {
-        built.add(model);
-        final source = _RecordingDataSource();
-        sources.add(source);
-        return source;
-      }, initialLocalModel: 'base');
+      final service = TranscriptionService(
+        (model) {
+          built.add(model);
+          final source = _RecordingDataSource();
+          sources.add(source);
+          return source;
+        },
+        initialLocalModel: 'base',
+        store: _NoopTranscriptionStore(),
+      );
 
       expect(built, ['base']);
-      expect(switchable.current, sources.single);
+      expect(service.isEnabled, isTrue);
 
-      expect(switchable.switchLocalModel('small'), isTrue);
+      service.switchLocalModel('small');
       expect(built, ['base', 'small']);
-      expect(switchable.current, sources.last);
       expect(sources.first.disposeCalls, 1);
+      expect(sources.last.disposeCalls, 0);
     });
 
-    test('a fixed source reports switching as unsupported', () {
+    test('a fixed pool ignores model switches', () {
       final source = _RecordingDataSource();
-      final switchable = SwitchableTranscriptionSource.fixed(source);
+      final service = TranscriptionService.fixed(source, store: _NoopTranscriptionStore());
 
-      expect(switchable.switchLocalModel('small'), isFalse);
-      expect(switchable.current, source);
+      service.switchLocalModel('small');
+
+      expect(service.isEnabled, isTrue);
       expect(source.disposeCalls, 0);
     });
   });

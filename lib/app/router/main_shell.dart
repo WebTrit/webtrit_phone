@@ -289,10 +289,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           ),
           dispose: disposeIfDisposable,
         ),
-        // The session-wide transcription source: any feature can transcribe
-        // media through it, and a user model change switches it for all of
-        // them at once. Voicemail is the first consumer.
-        RepositoryProvider<SwitchableTranscriptionSource>(
+        // The session-wide fire-and-forget transcription pool: features hand
+        // media off through the MediaTranscriber contract and observe
+        // results in the database, and a user model change switches the
+        // engine for all of them at once. The pool knows nothing about the
+        // database - everything it processes goes to the store, which writes
+        // the drift transcriptions table. Voicemail is the first consumer.
+        RepositoryProvider<TranscriptionService>(
           create: (context) {
             TranscriptionDataSource? buildTranscriptionDataSource(String? localModelOverride) {
               return createVoicemailTranscriptionDataSource(
@@ -302,25 +305,17 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               );
             }
 
-            return SwitchableTranscriptionSource(
-              buildTranscriptionDataSource,
-              initialLocalModel: context.read<TranscriptionModelRepository>().getTranscriptionModel(),
-            );
-          },
-          dispose: (source) => source.dispose(),
-        ),
-        // The fire-and-forget transcription pool over the source above. The
-        // pool knows nothing about the database: everything it processes is
-        // handed to this store, which writes the drift transcriptions table.
-        RepositoryProvider<TranscriptionService>(
-          create: (context) {
             final store = DriftTranscriptionStore(
               appDatabase: context.read<AppDatabase>(),
               sessionGuard: _sessionGuard,
             );
             unawaited(store.resetStaleInProgress());
 
-            return TranscriptionService(source: context.read<SwitchableTranscriptionSource>(), store: store);
+            return TranscriptionService(
+              buildTranscriptionDataSource,
+              initialLocalModel: context.read<TranscriptionModelRepository>().getTranscriptionModel(),
+              store: store,
+            );
           },
           dispose: (service) => service.dispose(),
         ),
