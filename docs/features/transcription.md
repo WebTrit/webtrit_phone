@@ -71,7 +71,9 @@ Last reviewed: 2026-07-14
 Top-level `transcription` section of the white-label app config
 (`assets/themes/app.config.json`; theme models `AppConfigTranscription*` in
 `packages/webtrit_appearance_theme`, resolved by `FeatureAccess` into the
-package-owned `TranscriptionConfig`). Off by default.
+package-owned `TranscriptionConfig`). The stock config ships with the local
+engine enabled; an absent section falls back to `disabled` (the schema
+default), so white-label configs without it stay off.
 
 ```json
 "transcription": {

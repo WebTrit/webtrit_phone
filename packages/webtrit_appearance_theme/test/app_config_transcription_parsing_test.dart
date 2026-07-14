@@ -6,13 +6,13 @@ import 'helpers/helpers.dart';
 
 void main() {
   group('AppConfig.transcription parsing', () {
-    test('parses the bundled app config with transcription disabled by default', () async {
+    test('parses the bundled app config with the local engine enabled by default', () async {
       final json = await loadFixtureJson('../../assets/themes/app.config.json');
 
       final config = AppConfig.fromJson(json);
       final transcription = config.transcription;
 
-      expect(transcription.mode, 'disabled');
+      expect(transcription.mode, 'local');
       expect(transcription.language, isNull);
       expect(transcription.local.model, 'base');
       expect(transcription.remote.url, isNull);

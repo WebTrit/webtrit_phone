@@ -309,7 +309,7 @@
   },
   "transcription": {
     "__mode": "Transcription source: 'disabled', 'local' (on-device inference; the model is downloaded on first use) or 'remote' (OpenAI-compatible speech-to-text endpoint from 'remote'). Unknown values disable the feature. Voicemail is the first consumer.",
-    "mode": "disabled",
+    "mode": "local",
     "__language": "Expected audio language (ISO 639-1, e.g. 'en'); omit or leave empty to auto-detect per media item.",
     "local": {
       "__model": "Whisper model tier downloaded to the device (tiny, base, small, ...); larger tiers transcribe better but cost more download size and CPU. This is the default the user's in-app choice (transcription settings) falls back to.",
