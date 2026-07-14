@@ -366,8 +366,8 @@ void main() {
       await transcriptionDatabase.close();
     });
 
-    DriftTranscriptionStore createStore() {
-      final store = DriftTranscriptionStore(appDatabase: transcriptionDatabase);
+    TranscriptionStoreDriftImpl createStore() {
+      final store = TranscriptionStoreDriftImpl(appDatabase: transcriptionDatabase);
       unawaited(store.resetStaleInProgress());
       return store;
     }

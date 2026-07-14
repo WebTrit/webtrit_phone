@@ -40,7 +40,7 @@ export 'system_notifications/system_notifications_local_repository.dart';
 export 'system_notifications/system_notifications_remote_repository.dart';
 export 'sip_subscriptions/sip_subscriptions.dart';
 export 'theme_mode/theme_mode_repository.dart';
-export 'transcription/drift_transcription_store.dart';
+export 'transcription/transcription_store_drift_impl.dart';
 export 'transcription_model/transcription_model_repository.dart';
 export 'user_agreement_status/user_agreement_status_repository.dart';
 export 'user_info/user_info.dart';

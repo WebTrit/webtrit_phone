@@ -8,14 +8,14 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-final _logger = Logger('DriftTranscriptionStore');
+final _logger = Logger('TranscriptionStoreDriftImpl');
 
 /// [TranscriptionStore] over the drift transcriptions table - the only place
 /// where transcription pool results meet the database. Consumers watch that
 /// table (e.g. through their list joins) and never talk to the pool about
 /// results.
-class DriftTranscriptionStore implements TranscriptionStore {
-  DriftTranscriptionStore({required AppDatabase appDatabase, SessionGuard sessionGuard = const EmptySessionGuard()})
+class TranscriptionStoreDriftImpl implements TranscriptionStore {
+  TranscriptionStoreDriftImpl({required AppDatabase appDatabase, SessionGuard sessionGuard = const EmptySessionGuard()})
     : _appDatabase = appDatabase,
       _sessionGuard = sessionGuard;
 

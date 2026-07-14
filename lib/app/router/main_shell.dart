@@ -306,7 +306,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               );
             }
 
-            final store = DriftTranscriptionStore(
+            final store = TranscriptionStoreDriftImpl(
               appDatabase: context.read<AppDatabase>(),
               sessionGuard: _sessionGuard,
             );
