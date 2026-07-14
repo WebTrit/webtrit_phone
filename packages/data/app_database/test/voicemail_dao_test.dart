@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
 
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 
 import 'package:app_database/app_database.dart';
@@ -45,6 +46,39 @@ void main() {
       final row = await db.voicemailDao.getVoicemailById('vm-1');
       expect(row!.date, '2026-01-02T00:00:00Z');
       expect(row.seen, isTrue);
+    });
+  });
+
+  group('contact resolution', () {
+    test('collapses colliding contacts to one deterministic row per voicemail', () async {
+      await db.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          sourceId: Value('local-1'),
+          firstName: Value('Local'),
+          lastName: Value('Contact'),
+        ),
+      );
+      await db.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.external),
+          sourceId: Value('pbx-1'),
+          firstName: Value('External'),
+          lastName: Value('Contact'),
+        ),
+      );
+      await db.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+        ContactPhoneDataCompanion(contactId: Value(1), number: Value('555001'), label: Value('Home')),
+      );
+      await db.contactPhonesDao.insertOnUniqueConflictUpdateContactPhone(
+        ContactPhoneDataCompanion(contactId: Value(2), number: Value('555001'), label: Value('Work')),
+      );
+      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());
+
+      final rows = await db.voicemailDao.getVoicemailsWithContacts();
+
+      expect(rows, hasLength(1));
+      expect(rows.single.contact?.sourceType, ContactSourceTypeEnum.external);
     });
   });
 

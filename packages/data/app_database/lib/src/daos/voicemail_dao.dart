@@ -65,11 +65,11 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
 
   Future<List<VoicemailWithContact>> getVoicemailsWithContacts() async {
     final rows = await _voicemailsWithContactsQuery().get();
-    return rows.map(_voicemailWithContactFromRow).toList();
+    return _collapseVoicemailRows(rows);
   }
 
   Stream<List<VoicemailWithContact>> watchVoicemailsWithContacts() {
-    return _voicemailsWithContactsQuery().watch().map((rows) => rows.map(_voicemailWithContactFromRow).toList());
+    return _voicemailsWithContactsQuery().watch().map(_collapseVoicemailRows);
   }
 
   JoinedSelectStatement _voicemailsWithContactsQuery() {
@@ -79,22 +79,38 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
     final transcriptions = db.transcriptionTable;
 
     return select(voicemail).join([
-      leftOuterJoin(contactPhones, contactPhones.number.equalsExp(voicemail.sender)),
-      leftOuterJoin(contacts, contacts.id.equalsExp(contactPhones.contactId)),
-      leftOuterJoin(
-        transcriptions,
-        transcriptions.mediaType.equals(kVoicemailTranscriptionMediaType) &
-            transcriptions.mediaId.equalsExp(voicemail.id),
-      ),
-    ]);
+        leftOuterJoin(contactPhones, contactPhones.number.equalsExp(voicemail.sender)),
+        leftOuterJoin(contacts, contacts.id.equalsExp(contactPhones.contactId)),
+        leftOuterJoin(
+          transcriptions,
+          transcriptions.mediaType.equals(kVoicemailTranscriptionMediaType) &
+              transcriptions.mediaId.equalsExp(voicemail.id),
+        ),
+      ])
+      // The trailing source-priority term is a per-voicemail tie-break so a
+      // sender number shared by a local and an external (PBX) contact
+      // resolves to the external one (the first row kept by the collapse).
+      ..orderBy([OrderingTerm.asc(voicemail.rowId), ...contacts.sourcePriorityOrder()]);
   }
 
-  VoicemailWithContact _voicemailWithContactFromRow(TypedResult row) {
-    return VoicemailWithContact(
-      voicemail: row.readTable(voicemailTable),
-      contact: row.readTableOrNull(db.contactsTable),
-      transcription: row.readTableOrNull(db.transcriptionTable),
-    );
+  /// The contact join yields one row per matching contact; keep exactly one
+  /// entry per voicemail, letting the ordering above pick the winner.
+  List<VoicemailWithContact> _collapseVoicemailRows(List<TypedResult> rows) {
+    final byId = <String, VoicemailWithContact>{};
+
+    for (final row in rows) {
+      final voicemail = row.readTable(voicemailTable);
+      byId.putIfAbsent(
+        voicemail.id,
+        () => VoicemailWithContact(
+          voicemail: voicemail,
+          contact: row.readTableOrNull(db.contactsTable),
+          transcription: row.readTableOrNull(db.transcriptionTable),
+        ),
+      );
+    }
+
+    return byId.values.toList();
   }
 }
 
