@@ -325,11 +325,17 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             final isVoicemailsEnabled = featureAccess.settingsConfig.voicemailsEnabled;
 
             if (isVoicemailsEnabled) {
+              final transcriptionService = context.read<TranscriptionService>();
+
               return VoicemailRepositoryImpl(
                 webtritApiClient: context.read<WebtritApiClient>(),
                 token: context.read<AppBloc>().state.session.token!,
                 appDatabase: context.read<AppDatabase>(),
-                transcriptionService: context.read<TranscriptionService>(),
+                // The repository never sees the pool itself, only these
+                // fire-and-forget hand-offs; results come back as database
+                // updates.
+                transcribeMedia: transcriptionService.isEnabled ? transcriptionService.enqueue : null,
+                forgetTranscription: transcriptionService.forget,
               );
             } else {
               return const EmptyVoicemailRepository();

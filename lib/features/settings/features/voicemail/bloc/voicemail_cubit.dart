@@ -9,7 +9,6 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
-import 'package:webtrit_phone/data/transcription/transcription.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/crashlytics_utils.dart';
@@ -26,11 +25,11 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     required this.onCallStarted,
     required this.onSubmitNotification,
     TranscriptionModelRepository? transcriptionModelRepository,
-    TranscriptionService? transcriptionService,
+    ValueChanged<String?>? onTranscriptionModelChanged,
     String defaultTranscriptionModel = 'base',
   }) : _repository = repository,
        _transcriptionModelRepository = transcriptionModelRepository,
-       _transcriptionService = transcriptionService,
+       _onTranscriptionModelChanged = onTranscriptionModelChanged,
        _defaultTranscriptionModel = defaultTranscriptionModel,
        super(const VoicemailState()) {
     _initialize();
@@ -43,7 +42,10 @@ class VoicemailCubit extends Cubit<VoicemailState> {
   /// Present only when the user may pick the on-device transcription model;
   /// null hides the model selection entirely.
   final TranscriptionModelRepository? _transcriptionModelRepository;
-  final TranscriptionService? _transcriptionService;
+
+  /// Applies the picked model override (null = config default) to the
+  /// transcription pool; regeneration is observed through the database.
+  final ValueChanged<String?>? _onTranscriptionModelChanged;
   final String _defaultTranscriptionModel;
 
   bool get canSelectTranscriptionModel => _transcriptionModelRepository != null;
@@ -62,7 +64,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
 
     final override = model == _defaultTranscriptionModel ? null : model;
     await transcriptionModelRepository.setTranscriptionModel(override);
-    _transcriptionService?.switchLocalModel(override);
+    _onTranscriptionModelChanged?.call(override);
   }
 
   late final StreamSubscription<List<Voicemail>> _subscription;

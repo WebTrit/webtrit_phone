@@ -352,12 +352,15 @@ void main() {
       TranscriptionDataSource? dataSource, {
       TranscriptionService? service,
     }) {
+      final transcriptionService = service ?? createService(SwitchableTranscriptionSource.fixed(dataSource));
+
       return VoicemailRepositoryImpl(
         webtritApiClient: client,
         token: 'user_token',
         appDatabase: transcriptionDatabase,
         sessionGuard: const EmptySessionGuard(),
-        transcriptionService: service ?? createService(SwitchableTranscriptionSource.fixed(dataSource)),
+        transcribeMedia: transcriptionService.isEnabled ? transcriptionService.enqueue : null,
+        forgetTranscription: transcriptionService.forget,
       );
     }
 
