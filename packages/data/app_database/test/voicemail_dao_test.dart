@@ -1,6 +1,5 @@
 import 'package:test/test.dart';
 
-import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 
 import 'package:app_database/app_database.dart';

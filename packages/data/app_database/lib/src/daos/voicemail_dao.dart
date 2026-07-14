@@ -63,6 +63,28 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
     return (select(voicemailTable)..where((tbl) => tbl.id.equals(id))).watchSingleOrNull();
   }
 
+  /// Voice messages that still need a transcript: none is stored and the row
+  /// is not marked with [excludedStatus] (terminal failures are not retried
+  /// automatically; interrupted in-progress rows are picked up again).
+  Future<List<VoicemailData>> getVoicemailsPendingTranscription({required String excludedStatus}) {
+    final transcriptions = db.transcriptionTable;
+
+    final query =
+        select(voicemailTable).join([
+          leftOuterJoin(
+            transcriptions,
+            transcriptions.mediaType.equals(kVoicemailTranscriptionMediaType) &
+                transcriptions.mediaId.equalsExp(voicemailTable.id),
+          ),
+        ])..where(
+          voicemailTable.type.equals('voice') &
+              transcriptions.transcript.isNull() &
+              (transcriptions.status.isNull() | transcriptions.status.equals(excludedStatus).not()),
+        );
+
+    return query.map((row) => row.readTable(voicemailTable)).get();
+  }
+
   Future<List<VoicemailWithContact>> getVoicemailsWithContacts() async {
     final rows = await _voicemailsWithContactsQuery().get();
     return _collapseVoicemailRows(rows);

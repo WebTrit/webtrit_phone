@@ -343,13 +343,21 @@ void main() {
       await transcriptionDatabase.close();
     });
 
-    VoicemailRepositoryImpl createRepo(_TranscriptionApiClient client, TranscriptionDataSource? dataSource) {
+    TranscriptionService createService(SwitchableTranscriptionSource source) {
+      return TranscriptionService(appDatabase: transcriptionDatabase, source: source);
+    }
+
+    VoicemailRepositoryImpl createRepo(
+      _TranscriptionApiClient client,
+      TranscriptionDataSource? dataSource, {
+      TranscriptionService? service,
+    }) {
       return VoicemailRepositoryImpl(
         webtritApiClient: client,
         token: 'user_token',
         appDatabase: transcriptionDatabase,
         sessionGuard: const EmptySessionGuard(),
-        transcription: SwitchableTranscriptionSource.fixed(dataSource),
+        transcriptionService: service ?? createService(SwitchableTranscriptionSource.fixed(dataSource)),
       );
     }
 
@@ -361,6 +369,7 @@ void main() {
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'hello world');
+      expect(row.engine, 'fake');
       expect(client.requestedAttachmentFormats, ['wav']);
     });
 
@@ -589,26 +598,23 @@ void main() {
       expect(await transcriptionDatabase.transcriptionsDao.getAllForType(kVoicemailTranscriptionMediaType), isEmpty);
     });
 
-    test('applyTranscriptionModel swaps the source, disposes the old one and transcribes pending rows', () async {
+    test('switchLocalModel swaps the source, disposes the old one and transcribes pending rows', () async {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
       final initial = _FakeTranscriptionDataSource(error: const TranscriptionException('down', transient: true));
       final models = <String?>[];
       final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
 
-      final repo = VoicemailRepositoryImpl(
-        webtritApiClient: client,
-        token: 'user_token',
-        appDatabase: transcriptionDatabase,
-        sessionGuard: const EmptySessionGuard(),
-        transcription: SwitchableTranscriptionSource((model) {
+      final service = createService(
+        SwitchableTranscriptionSource((model) {
           models.add(model);
           return model == null ? initial : replacement;
         }),
       );
+      final repo = createRepo(client, null, service: service);
       await repo.fetchVoicemails();
       await waitForTranscriptStatus(transcriptionDatabase, '1', null);
 
-      repo.applyTranscriptionModel('small');
+      service.switchLocalModel('small');
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'from the new model');
@@ -616,41 +622,77 @@ void main() {
       expect(initial.disposeCalls, 1);
     });
 
-    test('applyTranscriptionModel re-transcribes voicemails that already hold a transcript', () async {
+    test('switchLocalModel re-transcribes voicemails that already hold a transcript', () async {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
       final initial = _FakeTranscriptionDataSource(result: 'from the old model');
       final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
 
-      final repo = VoicemailRepositoryImpl(
-        webtritApiClient: client,
-        token: 'user_token',
-        appDatabase: transcriptionDatabase,
-        sessionGuard: const EmptySessionGuard(),
-        transcription: SwitchableTranscriptionSource((model) => model == null ? initial : replacement),
-      );
+      final service = createService(SwitchableTranscriptionSource((model) => model == null ? initial : replacement));
+      final repo = createRepo(client, null, service: service);
       await repo.fetchVoicemails();
       var row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'from the old model');
 
-      repo.applyTranscriptionModel('small');
+      service.switchLocalModel('small');
 
       await waitFor(() => replacement.calls == 1, 're-transcription with the new model');
       row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'from the new model');
     });
 
-    test('applyTranscriptionModel is a no-op for a fixed transcription source', () async {
+    test('switchLocalModel is a no-op for a fixed transcription source', () async {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
       final dataSource = _FakeTranscriptionDataSource(result: 'hello world');
 
-      final repo = createRepo(client, dataSource);
+      final service = createService(SwitchableTranscriptionSource.fixed(dataSource));
+      createRepo(client, null, service: service);
       await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
 
-      repo.applyTranscriptionModel('small');
+      service.switchLocalModel('small');
       await pumpEventQueue();
 
       expect(dataSource.disposeCalls, 0);
       expect(dataSource.calls, 1);
+    });
+
+    test('a model switch mid-transcription discards the old model result', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
+      final gate = Completer<void>();
+      final initial = _CallbackTranscriptionDataSource((audio) async {
+        await gate.future;
+        return 'from the old model';
+      });
+      final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
+
+      final service = createService(SwitchableTranscriptionSource((model) => model == null ? initial : replacement));
+      createRepo(client, null, service: service);
+      await waitFor(() => initial.calls == 1, 'old model transcription started');
+
+      service.switchLocalModel('small');
+      gate.complete();
+
+      final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
+      expect(row!.transcript, 'from the new model');
+      expect(replacement.calls, 1);
+    });
+
+    test('a deleted voicemail is not resurrected by its in-flight transcription', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
+      final gate = Completer<void>();
+      final dataSource = _CallbackTranscriptionDataSource((audio) async {
+        await gate.future;
+        return 'too late';
+      });
+
+      final repo = createRepo(client, dataSource);
+      await waitFor(() => dataSource.calls == 1, 'transcription started');
+
+      await repo.removeVoicemail('1');
+      gate.complete();
+      await pumpEventQueue(times: 50);
+
+      expect(await transcriptionDatabase.voicemailDao.getVoicemailById('1'), isNull);
+      expect(await transcriptionDatabase.transcriptionsDao.getByMedia(kVoicemailTranscriptionMediaType, '1'), isNull);
     });
   });
 }

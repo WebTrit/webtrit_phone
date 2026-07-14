@@ -32,6 +32,14 @@ class TranscriptionsDao extends DatabaseAccessor<AppDatabase> with _$Transcripti
     );
   }
 
+  /// Resets rows holding [status] back to "not attempted" (status and engine
+  /// cleared); used to recover items left mid-lifecycle by an interrupted run.
+  Future<int> clearStatuses(String status) {
+    return (update(transcriptionTable)..where((tbl) => tbl.status.equals(status))).write(
+      const TranscriptionDataCompanion(status: Value(null), engine: Value(null)),
+    );
+  }
+
   Future<int> deleteByMedia(String mediaType, String mediaId) {
     return (delete(
       transcriptionTable,
@@ -41,4 +49,6 @@ class TranscriptionsDao extends DatabaseAccessor<AppDatabase> with _$Transcripti
   Future<int> deleteAllForType(String mediaType) {
     return (delete(transcriptionTable)..where((tbl) => tbl.mediaType.equals(mediaType))).go();
   }
+
+  Future<int> deleteAll() => delete(transcriptionTable).go();
 }

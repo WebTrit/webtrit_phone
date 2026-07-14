@@ -307,6 +307,18 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               initialLocalModel: context.read<TranscriptionModelRepository>().getTranscriptionModel(),
             );
           },
+          dispose: (source) => source.dispose(),
+        ),
+        // The fire-and-forget transcription pool over the source above:
+        // features enqueue media and the service writes results to the
+        // database itself.
+        RepositoryProvider<TranscriptionService>(
+          create: (context) => TranscriptionService(
+            appDatabase: context.read<AppDatabase>(),
+            source: context.read<SwitchableTranscriptionSource>(),
+            sessionGuard: _sessionGuard,
+          ),
+          dispose: (service) => service.dispose(),
         ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
@@ -317,7 +329,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 webtritApiClient: context.read<WebtritApiClient>(),
                 token: context.read<AppBloc>().state.session.token!,
                 appDatabase: context.read<AppDatabase>(),
-                transcription: context.read<SwitchableTranscriptionSource>(),
+                transcriptionService: context.read<TranscriptionService>(),
               );
             } else {
               return const EmptyVoicemailRepository();

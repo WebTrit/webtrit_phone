@@ -9,6 +9,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
+import 'package:webtrit_phone/data/transcription/transcription.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/crashlytics_utils.dart';
@@ -25,9 +26,11 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     required this.onCallStarted,
     required this.onSubmitNotification,
     TranscriptionModelRepository? transcriptionModelRepository,
+    TranscriptionService? transcriptionService,
     String defaultTranscriptionModel = 'base',
   }) : _repository = repository,
        _transcriptionModelRepository = transcriptionModelRepository,
+       _transcriptionService = transcriptionService,
        _defaultTranscriptionModel = defaultTranscriptionModel,
        super(const VoicemailState()) {
     _initialize();
@@ -40,6 +43,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
   /// Present only when the user may pick the on-device transcription model;
   /// null hides the model selection entirely.
   final TranscriptionModelRepository? _transcriptionModelRepository;
+  final TranscriptionService? _transcriptionService;
   final String _defaultTranscriptionModel;
 
   bool get canSelectTranscriptionModel => _transcriptionModelRepository != null;
@@ -50,14 +54,15 @@ class VoicemailCubit extends Cubit<VoicemailState> {
       _transcriptionModelRepository?.getTranscriptionModel() ?? _defaultTranscriptionModel;
 
   /// Persists the picked model tier (the default tier clears the override)
-  /// and re-transcribes the voicemails with it.
+  /// and switches the session-wide transcription pool to it, which wipes and
+  /// regenerates every stored transcription with the new model.
   Future<void> setTranscriptionModel(String model) async {
     final transcriptionModelRepository = _transcriptionModelRepository;
     if (transcriptionModelRepository == null) return;
 
     final override = model == _defaultTranscriptionModel ? null : model;
     await transcriptionModelRepository.setTranscriptionModel(override);
-    _repository.applyTranscriptionModel(override);
+    _transcriptionService?.switchLocalModel(override);
   }
 
   late final StreamSubscription<List<Voicemail>> _subscription;
