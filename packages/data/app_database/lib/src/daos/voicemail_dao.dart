@@ -85,6 +85,24 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
     return query.map((row) => row.readTable(voicemailTable)).get();
   }
 
+  /// Watches voice messages that have no transcription row at all: freshly
+  /// fetched ones and those whose rows were wiped for regeneration. Rows in
+  /// any lifecycle state (in progress, failed, done) are excluded, so acting
+  /// on emissions cannot loop on items already being handled.
+  Stream<List<VoicemailData>> watchVoicemailsMissingTranscription() {
+    final transcriptions = db.transcriptionTable;
+
+    final query = select(voicemailTable).join([
+      leftOuterJoin(
+        transcriptions,
+        transcriptions.mediaType.equals(kVoicemailTranscriptionMediaType) &
+            transcriptions.mediaId.equalsExp(voicemailTable.id),
+      ),
+    ])..where(voicemailTable.type.equals('voice') & transcriptions.mediaId.isNull());
+
+    return query.watch().map((rows) => rows.map((row) => row.readTable(voicemailTable)).toList());
+  }
+
   Future<List<VoicemailWithContact>> getVoicemailsWithContacts() async {
     final rows = await _voicemailsWithContactsQuery().get();
     return _collapseVoicemailRows(rows);

@@ -127,12 +127,19 @@ class VoicemailRepositoryImpl
   void _initialize() {
     _updatesController = StreamController<List<Voicemail>>.broadcast(onListen: _onListen, onCancel: _onCancel);
 
-    // A model switch wipes every stored transcription; re-enqueue our media
-    // so the new model regenerates the transcripts. The subscription ends
-    // with the service (its event stream closes on dispose).
-    _transcriptionService?.events.listen((event) {
-      if (event is TranscriptionsWiped) unawaited(_enqueuePendingTranscriptions());
-    });
+    // The database is the single feedback channel with the transcription
+    // pool: any voice message without a transcription row (freshly fetched,
+    // or wiped by a model switch) shows up on this watch and gets enqueued;
+    // the pool dedups repeats and its lifecycle writes take the row out of
+    // the watch, so emissions cannot loop.
+    if (_transcriptionService != null) {
+      _appDatabase.voicemailDao.watchVoicemailsMissingTranscription().listen(
+        _enqueueVoicemails,
+        onError: (Object e, StackTrace st) {
+          _logger.warning('Pending transcriptions watch failed', e, st);
+        },
+      );
+    }
 
     unawaited(
       fetchVoicemails().catchError(
@@ -229,9 +236,10 @@ class VoicemailRepositoryImpl
   /// service writes progress and results to the local database, so
   /// [watchVoicemails] listeners see every update live.
   ///
-  /// Eligible are messages whose transcript is absent and whose status is not
-  /// [TranscriptStatus.unavailable] (a failed message is not retried
-  /// automatically; the pool dedups items already queued or in flight).
+  /// The missing-transcription watch only covers rows that were never
+  /// attempted; this fetch-time pass additionally retries messages rolled
+  /// back to a null status by a transient failure (bounded to one attempt
+  /// per fetch). [TranscriptStatus.unavailable] stays terminal.
   Future<void> _enqueuePendingTranscriptions() async {
     final transcriptionService = _transcriptionService;
     if (transcriptionService == null || !transcriptionService.isEnabled) return;
@@ -240,18 +248,24 @@ class VoicemailRepositoryImpl
       final pending = await _appDatabase.voicemailDao.getVoicemailsPendingTranscription(
         excludedStatus: TranscriptStatus.unavailable.name,
       );
-
-      for (final voicemail in pending) {
-        transcriptionService.enqueue(
-          kVoicemailTranscriptionMediaType,
-          voicemail.id,
-          () => _webtritApiClient.getUserVoicemailAttachment(_token, voicemail.id, fileFormat: 'wav'),
-        );
-      }
+      _enqueueVoicemails(pending);
     } catch (e, st) {
       // Runs unawaited; never let an error (e.g. a database closed by logout)
       // escape to the zone as an unhandled async error.
       _logger.warning('Failed to enqueue pending voicemail transcriptions', e, st);
+    }
+  }
+
+  void _enqueueVoicemails(List<VoicemailData> voicemails) {
+    final transcriptionService = _transcriptionService;
+    if (transcriptionService == null || !transcriptionService.isEnabled) return;
+
+    for (final voicemail in voicemails) {
+      transcriptionService.enqueue(
+        kVoicemailTranscriptionMediaType,
+        voicemail.id,
+        () => _webtritApiClient.getUserVoicemailAttachment(_token, voicemail.id, fileFormat: 'wav'),
+      );
     }
   }
 

@@ -81,6 +81,34 @@ void main() {
     });
   });
 
+  group('watchVoicemailsMissingTranscription', () {
+    test('emits voice messages without a transcription row and drops them once one appears', () async {
+      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());
+      await db.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailData(
+          id: 'fax-1',
+          date: '2026-01-01T00:00:00Z',
+          duration: 1.0,
+          sender: '555001',
+          receiver: '555002',
+          seen: false,
+          size: 5,
+          type: 'fax',
+        ),
+      );
+
+      final first = await db.voicemailDao.watchVoicemailsMissingTranscription().first;
+      expect(first.map((voicemail) => voicemail.id), ['vm-1']);
+
+      await db.transcriptionsDao.upsertTranscription(
+        const TranscriptionData(mediaType: kVoicemailTranscriptionMediaType, mediaId: 'vm-1', status: 'inProgress'),
+      );
+
+      final second = await db.voicemailDao.watchVoicemailsMissingTranscription().first;
+      expect(second, isEmpty);
+    });
+  });
+
   group('voicemails with transcriptions', () {
     test('joins the voicemail transcription row when present', () async {
       await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());

@@ -19,12 +19,6 @@ final _logger = Logger('TranscriptionService');
 /// comes; lazy so queued items do not hold their payloads in memory.
 typedef TranscriptionAudioLoader = Future<Uint8List> Function();
 
-sealed class TranscriptionServiceEvent {}
-
-/// Every stored transcription was wiped (e.g. the model changed); consumers
-/// should re-enqueue the media they want transcribed.
-class TranscriptionsWiped extends TranscriptionServiceEvent {}
-
 /// Session-wide fire-and-forget transcription pool.
 ///
 /// Consumers enqueue media they want transcribed and walk away: the service
@@ -49,7 +43,6 @@ class TranscriptionService {
   final SwitchableTranscriptionSource _source;
   final SessionGuard _sessionGuard;
 
-  final _events = StreamController<TranscriptionServiceEvent>.broadcast();
   final _requests = <_TranscriptionRequest>[];
 
   /// The queued or in-flight request per media key. An entry removed or
@@ -60,8 +53,6 @@ class TranscriptionService {
   bool _draining = false;
   int _generation = 0;
   bool _disposed = false;
-
-  Stream<TranscriptionServiceEvent> get events => _events.stream;
 
   /// False while transcription is disabled or unsupported on this platform.
   bool get isEnabled => _source.current != null;
@@ -98,25 +89,25 @@ class TranscriptionService {
   }
 
   /// Switches the local model (null returns to the config default) and
-  /// regenerates everything: stored transcriptions are wiped, in-flight
-  /// results of the old model are invalidated, and [TranscriptionsWiped]
-  /// tells consumers to re-enqueue their media.
+  /// regenerates everything: stored transcriptions are wiped and in-flight
+  /// results of the old model are invalidated. Consumers observe the wipe
+  /// through the database (their media loses its transcription rows) and
+  /// re-enqueue what they want transcribed.
   void switchLocalModel(String? localModel) {
     if (!_source.switchLocalModel(localModel)) return;
 
     _generation++;
     _requests.clear();
     _active.clear();
-    unawaited(_wipeAndNotify());
+    unawaited(_wipeAll());
   }
 
-  Future<void> _wipeAndNotify() async {
+  Future<void> _wipeAll() async {
     try {
       await _appDatabase.transcriptionsDao.deleteAll();
     } catch (e, st) {
       _logger.warning('Failed to wipe transcriptions for regeneration', e, st);
     }
-    if (!_disposed) _events.add(TranscriptionsWiped());
   }
 
   /// Rows stuck in inProgress belong to a run that never finished (killed
@@ -226,12 +217,11 @@ class TranscriptionService {
 
   static String _mediaKey(String mediaType, String mediaId) => '$mediaType/$mediaId';
 
-  Future<void> dispose() async {
+  void dispose() {
     _disposed = true;
     _generation++;
     _requests.clear();
     _active.clear();
-    await _events.close();
   }
 }
 
