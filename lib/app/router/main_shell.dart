@@ -302,6 +302,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 featureAccess.transcriptionConfig,
                 localModelOverride: localModelOverride,
                 certs: appCertificates.trustedCertificates,
+                connectionTimeout: kApiClientConnectionTimeout,
               );
             }
 

@@ -10,7 +10,6 @@ import 'dart:typed_data';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/settings/features/transcription_settings/transcription_settings.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 

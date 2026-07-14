@@ -2,10 +2,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:logging/logging.dart';
 
-import 'package:app_transcription/app_transcription.dart';
+import 'package:_http_client/_http_client.dart' show TrustedCertificates;
 
-import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/models/models.dart';
+import 'local_whisper_transcription_datasource.dart';
+import 'remote_whisper_transcription_datasource.dart';
+import 'transcription_config.dart';
+import 'transcription_datasource.dart';
 
 final _logger = Logger('TranscriptionDataSourceFactory');
 
@@ -36,6 +38,7 @@ TranscriptionDataSource? createTranscriptionDataSource(
   TranscriptionConfig config, {
   String? localModelOverride,
   TrustedCertificates certs = TrustedCertificates.empty,
+  Duration? connectionTimeout,
 }) {
   final mode = TranscriptionMode.fromName(config.mode);
 
@@ -68,7 +71,7 @@ TranscriptionDataSource? createTranscriptionDataSource(
         apiKey: config.remoteApiKey,
         model: config.remoteModel,
         defaultLanguage: config.language,
-        connectionTimeout: kApiClientConnectionTimeout,
+        connectionTimeout: connectionTimeout,
         certs: certs,
       );
   }

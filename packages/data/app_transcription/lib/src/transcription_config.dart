@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
 
-/// Raw client-side media transcription settings resolved from the app
-/// config; parsing and validation happen when the transcription source is
-/// built from this config. Voicemail is the first consumer.
+/// Raw client-side media transcription settings (the resolved `transcription`
+/// section of the application config); parsing and validation happen when the
+/// transcription source is built from this config by
+/// `createTranscriptionDataSource`. Voicemail is the first consumer.
 class TranscriptionConfig extends Equatable {
   const TranscriptionConfig({
     this.mode = 'disabled',
