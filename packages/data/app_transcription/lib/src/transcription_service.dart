@@ -141,7 +141,24 @@ class TranscriptionService implements MediaTranscriber {
     final request = _TranscriptionRequest(mediaType, mediaId, loadAudio, language);
     _active[key] = request;
     _requests.add(request);
+    // Mark the item in progress right away: after a model-switch wipe the
+    // rows of everything still waiting in the queue would otherwise stay
+    // absent until a worker picks the item up, and the UI would show neither
+    // a transcript nor a status for most of the backlog.
+    unawaited(_markQueued(request, _generation, _current!.engine));
     _kickWorkers();
+  }
+
+  Future<void> _markQueued(_TranscriptionRequest request, int generation, String engine) async {
+    try {
+      await _saveGuardedProceed(
+        request,
+        generation,
+        () => _store.saveInProgress(request.mediaType, request.mediaId, engine),
+      );
+    } catch (e) {
+      _logger.warning('Failed to mark ${request.key} as queued', e);
+    }
   }
 
   /// The media was deleted: drops it from the pool, invalidates an in-flight

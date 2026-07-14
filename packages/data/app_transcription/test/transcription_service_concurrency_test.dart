@@ -24,8 +24,13 @@ class _GatedDataSource extends TranscriptionDataSource {
 }
 
 class _NoopTranscriptionStore implements TranscriptionStore {
+  final inProgressMarks = <String>[];
+
   @override
-  Future<bool> saveInProgress(String mediaType, String mediaId, String engine) async => true;
+  Future<bool> saveInProgress(String mediaType, String mediaId, String engine) async {
+    inProgressMarks.add(mediaId);
+    return true;
+  }
 
   @override
   Future<void> saveTranscript(String mediaType, String mediaId, String transcript, String engine) async {}
@@ -104,6 +109,29 @@ void main() {
 
     source.gates[1].complete('done');
     source.gates[2].complete('done');
+    await pumpEventQueue();
+  });
+
+  test('marks every queued item in progress immediately, not only when a worker starts it', () async {
+    final source = _GatedDataSource();
+    final store = _NoopTranscriptionStore();
+    final service = TranscriptionService.fixed(source, store: store);
+
+    service.enqueue('media', '1', loadAudio);
+    service.enqueue('media', '2', loadAudio);
+    service.enqueue('media', '3', loadAudio);
+    await pumpEventQueue();
+
+    // One item is in flight, but the whole backlog is already visible as
+    // in progress in the store.
+    expect(source.gates, hasLength(1));
+    expect(store.inProgressMarks.toSet(), {'1', '2', '3'});
+
+    for (final gate in [...source.gates]) {
+      gate.complete('done');
+      await pumpEventQueue();
+    }
+    source.gates.skip(1).forEach((gate) => gate.isCompleted ? null : gate.complete('done'));
     await pumpEventQueue();
   });
 

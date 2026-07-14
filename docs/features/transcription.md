@@ -118,7 +118,11 @@ Provided session-wide in the main shell. Consumers hand media off through
 
 - `enqueue(mediaType, mediaId, loadAudio, {language})` - fire-and-forget.
   The audio loader is lazy (queued items do not hold payloads). Duplicates of
-  a queued or in-flight item and calls while disabled are no-ops.
+  a queued or in-flight item and calls while disabled are no-ops. Every
+  queued item is marked in progress immediately (guarded, so a finished
+  transcript is never overwritten): after a model-switch wipe the whole
+  backlog shows "transcribing" instead of a blank list while the sequential
+  workers catch up.
 - `forget(mediaType, mediaId)` / `forgetAllForType(mediaType)` - the media
   was deleted: dequeues, invalidates in-flight results and removes stored
   rows through the store.
