@@ -48,7 +48,7 @@ Last reviewed: 2026-07-14
     - `lib/data/feature_access.dart` - `TranscriptionMapper` resolves the
       theme `AppConfigTranscription` into the package `TranscriptionConfig`.
     - `lib/repositories/transcription/drift_transcription_store.dart` -
-      `DriftTranscriptionStore`: the only place where pool output meets the
+      `TranscriptionStoreDriftImpl`: the only place where pool output meets the
       database; also classifies failures and handles 401.
     - `lib/repositories/transcription_model/transcription_model_repository.dart` -
       prefs persistence of the user's model override (`transcription-model`).
@@ -106,7 +106,7 @@ TranscriptionService (pool, session-wide)  <--- TranscriptionModelService
   | transcribe via TranscriptionDataSource           | persists override
   | lifecycle facts (TranscriptionStore)             v
   v                                            AppPreferences
-DriftTranscriptionStore -> transcriptions table (drift)
+TranscriptionStoreDriftImpl -> transcriptions table (drift)
                                 ^
         consumer queries / watches (list join, missing-row watch)
 ```
@@ -135,7 +135,7 @@ between the download and the inference so dead work is dropped before it
 burns network or CPU. The pool is storage-agnostic: every lifecycle fact goes
 to the injected `TranscriptionStore`.
 
-### The store - `DriftTranscriptionStore`
+### The store - `TranscriptionStoreDriftImpl`
 
 Implements the delegate over the `transcriptions` table:
 
