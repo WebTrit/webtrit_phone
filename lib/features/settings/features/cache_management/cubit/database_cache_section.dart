@@ -24,11 +24,12 @@ class DatabaseCacheSection implements CacheSection {
   String get descriptionL10n => 'database_Cache_description';
 
   @override
-  Future<CacheUsage> usage() async => CacheUsage.items(await _appDatabase.totalRecordsCount());
+  Future<CacheUsage> usage() async => CacheUsage.bytes(await _appDatabase.databaseSizeBytes());
 
   @override
   Future<void> clear() async {
     await _appDatabase.deleteEverything();
+    await _appDatabase.vacuum();
     // The recents cubits keep fetched records in memory and would re-upsert
     // them into the just-cleared database; wiping through the repository
     // emits the event that makes them drop those copies.

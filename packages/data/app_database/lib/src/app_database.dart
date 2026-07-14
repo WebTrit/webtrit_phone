@@ -68,15 +68,16 @@ part 'app_database.g.dart';
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
-  /// Total number of rows stored across all tables.
-  Future<int> totalRecordsCount() async {
-    var total = 0;
-    for (final table in allTables) {
-      final query = selectOnly(table)..addColumns([countAll()]);
-      total += await query.map((row) => row.read(countAll()) ?? 0).getSingle();
-    }
-    return total;
+  /// Size of the database in bytes (page count times page size).
+  Future<int> databaseSizeBytes() async {
+    final pageCount = await customSelect('PRAGMA page_count').getSingle();
+    final pageSize = await customSelect('PRAGMA page_size').getSingle();
+    return pageCount.read<int>('page_count') * pageSize.read<int>('page_size');
   }
+
+  /// Releases the pages freed by deletes back to the OS; without it the
+  /// database file keeps its old size after a wipe.
+  Future<void> vacuum() => customStatement('VACUUM');
 
   Future<void> deleteEverything() async {
     await customStatement('PRAGMA foreign_keys = OFF');

@@ -51,29 +51,23 @@ void main() {
     );
   }
 
-  test('reports the rows of every table as items', () async {
-    await appDatabase.cdrsDao.upsertCdrs([createCdr('1'), createCdr('2')]);
-    await appDatabase.voicemailDao.insertVoicemail(createVoicemail('vm-1'));
-
+  test('reports the database size as bytes', () async {
     final usage = await section.usage();
 
-    expect(usage.unit, CacheUsageUnit.items);
-    expect(usage.amount, 3);
+    expect(usage.unit, CacheUsageUnit.bytes);
+    expect(usage.amount, greaterThan(0));
   });
 
-  test('reports zero for an empty database', () async {
-    final usage = await section.usage();
-
-    expect(usage.amount, 0);
-  });
-
-  test('clear wipes every table', () async {
-    await appDatabase.cdrsDao.upsertCdrs([createCdr('1'), createCdr('2')]);
+  test('clear wipes every table and shrinks the database', () async {
+    await appDatabase.cdrsDao.upsertCdrs([for (var i = 0; i < 500; i++) createCdr('$i')]);
     await appDatabase.voicemailDao.insertVoicemail(createVoicemail('vm-1'));
+    final populatedSize = (await section.usage()).amount;
 
     await section.clear();
 
-    expect((await section.usage()).amount, 0);
+    expect(await appDatabase.cdrsDao.getHistory(), isEmpty);
+    expect(await appDatabase.voicemailDao.getAllVoicemails(), isEmpty);
+    expect((await section.usage()).amount, lessThan(populatedSize));
   });
 
   test('clear notifies listeners holding call history records in memory', () async {
