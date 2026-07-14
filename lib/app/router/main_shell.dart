@@ -325,7 +325,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
             if (isVoicemailsEnabled) {
               final transcriptionService = context.read<TranscriptionService>();
-              final transcriptionModelSelectable = isTranscriptionModelSelectable(featureAccess.transcriptionConfig);
 
               return VoicemailRepositoryImpl(
                 webtritApiClient: context.read<WebtritApiClient>(),
@@ -335,9 +334,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 // hand-off contract, never the pool itself; results come
                 // back as database updates.
                 transcriber: transcriptionService.isEnabled ? transcriptionService : null,
-                transcriptionModelRepository: transcriptionModelSelectable
-                    ? context.read<TranscriptionModelRepository>()
-                    : null,
+                transcriptionModelRepository: context.read<TranscriptionModelRepository>(),
               );
             } else {
               return const EmptyVoicemailRepository();

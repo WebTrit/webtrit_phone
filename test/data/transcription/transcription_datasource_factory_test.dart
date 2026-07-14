@@ -130,7 +130,7 @@ void main() {
         transcription: AppConfigTranscription(
           mode: 'remote',
           language: 'en',
-          local: AppConfigTranscriptionLocal(model: 'small', userSelectable: false),
+          local: AppConfigTranscriptionLocal(model: 'small'),
           remote: AppConfigTranscriptionRemote(url: 'https://stt.example.com/v1', apiKey: 'key', model: 'large-v3'),
         ),
       );
@@ -140,7 +140,6 @@ void main() {
       expect(config.mode, 'remote');
       expect(config.language, 'en');
       expect(config.localModel, 'small');
-      expect(config.localModelUserSelectable, isFalse);
       expect(config.remoteUrl, 'https://stt.example.com/v1');
       expect(config.remoteApiKey, 'key');
       expect(config.remoteModel, 'large-v3');
@@ -152,7 +151,6 @@ void main() {
       expect(TranscriptionMode.fromName(config.mode), TranscriptionMode.disabled);
       expect(config.language, isNull);
       expect(config.localModel, 'base');
-      expect(config.localModelUserSelectable, isTrue);
       expect(config.remoteUrl, isNull);
     });
   });

@@ -5777,7 +5777,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigTranscriptionLocal {
 
- String get model; bool get userSelectable;
+ String get model;
 /// Create a copy of AppConfigTranscriptionLocal
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -5788,16 +5788,16 @@ $AppConfigTranscriptionLocalCopyWith<AppConfigTranscriptionLocal> get copyWith =
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigTranscriptionLocal&&(identical(other.model, model) || other.model == model)&&(identical(other.userSelectable, userSelectable) || other.userSelectable == userSelectable));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigTranscriptionLocal&&(identical(other.model, model) || other.model == model));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,model,userSelectable);
+int get hashCode => Object.hash(runtimeType,model);
 
 @override
 String toString() {
-  return 'AppConfigTranscriptionLocal(model: $model, userSelectable: $userSelectable)';
+  return 'AppConfigTranscriptionLocal(model: $model)';
 }
 
 
@@ -5808,7 +5808,7 @@ abstract mixin class $AppConfigTranscriptionLocalCopyWith<$Res>  {
   factory $AppConfigTranscriptionLocalCopyWith(AppConfigTranscriptionLocal value, $Res Function(AppConfigTranscriptionLocal) _then) = _$AppConfigTranscriptionLocalCopyWithImpl;
 @useResult
 $Res call({
- String model, bool userSelectable
+ String model
 });
 
 
@@ -5825,11 +5825,10 @@ class _$AppConfigTranscriptionLocalCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigTranscriptionLocal
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? model = null,Object? userSelectable = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? model = null,}) {
   return _then(AppConfigTranscriptionLocal(
 model: null == model ? _self.model : model // ignore: cast_nullable_to_non_nullable
-as String,userSelectable: null == userSelectable ? _self.userSelectable : userSelectable // ignore: cast_nullable_to_non_nullable
-as bool,
+as String,
   ));
 }
 

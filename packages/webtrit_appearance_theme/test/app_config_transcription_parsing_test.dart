@@ -15,7 +15,6 @@ void main() {
       expect(transcription.mode, 'disabled');
       expect(transcription.language, isNull);
       expect(transcription.local.model, 'base');
-      expect(transcription.local.userSelectable, isTrue);
       expect(transcription.remote.url, isNull);
       expect(transcription.remote.apiKey, isNull);
       expect(transcription.remote.model, 'whisper-1');
@@ -26,7 +25,7 @@ void main() {
         'transcription': {
           'mode': 'remote',
           'language': 'en',
-          'local': {'model': 'small', 'userSelectable': false},
+          'local': {'model': 'small'},
           'remote': {'url': 'https://stt.example.com/v1', 'apiKey': 'key', 'model': 'large-v3'},
         },
       });
@@ -35,7 +34,6 @@ void main() {
       expect(transcription.mode, 'remote');
       expect(transcription.language, 'en');
       expect(transcription.local.model, 'small');
-      expect(transcription.local.userSelectable, isFalse);
       expect(transcription.remote.url, 'https://stt.example.com/v1');
       expect(transcription.remote.apiKey, 'key');
       expect(transcription.remote.model, 'large-v3');

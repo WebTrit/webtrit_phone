@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/data/data.dart';
@@ -13,8 +12,6 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class _MockVoicemailCubit extends MockCubit<VoicemailState> implements VoicemailCubit {}
-
-class _MockFeatureAccess extends Mock implements FeatureAccess {}
 
 class _FakeCacheSection implements CacheSection {
   @override
@@ -36,17 +33,13 @@ class _FakeCacheSection implements CacheSection {
 void main() {
   final overflowButton = find.byWidgetPredicate((widget) => widget is PopupMenuButton);
 
-  Widget host({required bool canSelectModel, required bool cacheAvailable}) {
+  Widget host({required bool cacheAvailable}) {
     final cubit = _MockVoicemailCubit();
     whenListen(
       cubit,
       const Stream<VoicemailState>.empty(),
       initialState: const VoicemailState(status: VoicemailStatus.loaded),
     );
-    final featureAccess = _MockFeatureAccess();
-    when(
-      () => featureAccess.transcriptionConfig,
-    ).thenReturn(TranscriptionConfig(mode: canSelectModel ? 'local' : 'disabled'));
 
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -54,7 +47,6 @@ void main() {
       home: MultiProvider(
         providers: [
           BlocProvider<VoicemailCubit>.value(value: cubit),
-          Provider<FeatureAccess>.value(value: featureAccess),
           Provider<AppCacheManager>(
             create: (_) => AppCacheManager(sections: cacheAvailable ? [_FakeCacheSection()] : const []),
           ),
@@ -65,7 +57,7 @@ void main() {
   }
 
   testWidgets('overflow menu offers delete, transcription model and cache management', (tester) async {
-    await tester.pumpWidget(host(canSelectModel: true, cacheAvailable: true));
+    await tester.pumpWidget(host(cacheAvailable: true));
 
     await tester.tap(overflowButton);
     await tester.pumpAndSettle();
@@ -75,24 +67,14 @@ void main() {
     expect(find.text('Storage & cache'), findsOneWidget);
   });
 
-  testWidgets('hides the model item when the model is not selectable', (tester) async {
-    await tester.pumpWidget(host(canSelectModel: false, cacheAvailable: true));
-
-    await tester.tap(overflowButton);
-    await tester.pumpAndSettle();
-
-    expect(find.text('Transcription model'), findsNothing);
-    expect(find.text('Storage & cache'), findsOneWidget);
-  });
-
-  testWidgets('keeps only delete when nothing else is available', (tester) async {
-    await tester.pumpWidget(host(canSelectModel: false, cacheAvailable: false));
+  testWidgets('hides only the cache item when no cache sections are registered', (tester) async {
+    await tester.pumpWidget(host(cacheAvailable: false));
 
     await tester.tap(overflowButton);
     await tester.pumpAndSettle();
 
     expect(find.text('Delete'), findsOneWidget);
-    expect(find.text('Transcription model'), findsNothing);
+    expect(find.text('Transcription model'), findsOneWidget);
     expect(find.text('Storage & cache'), findsNothing);
   });
 }
