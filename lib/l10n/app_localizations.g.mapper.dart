@@ -1363,23 +1363,23 @@ extension AppLocalizationsExtension on AppLocalizations {
       'voicemail_RecordsCache_title' => voicemail_RecordsCache_title,
       'voicemail_Transcript_inProgress' => voicemail_Transcript_inProgress,
       'voicemail_Transcript_unavailable' => voicemail_Transcript_unavailable,
-      'voicemail_TranscriptionModel_accurateSubtitle' =>
-        voicemail_TranscriptionModel_accurateSubtitle,
-      'voicemail_TranscriptionModel_accurateTitle' =>
-        voicemail_TranscriptionModel_accurateTitle,
-      'voicemail_TranscriptionModel_balancedSubtitle' =>
-        voicemail_TranscriptionModel_balancedSubtitle,
-      'voicemail_TranscriptionModel_balancedTitle' =>
-        voicemail_TranscriptionModel_balancedTitle,
-      'voicemail_TranscriptionModel_defaultLabel' =>
-        voicemail_TranscriptionModel_defaultLabel,
-      'voicemail_TranscriptionModel_fastSubtitle' =>
-        voicemail_TranscriptionModel_fastSubtitle,
-      'voicemail_TranscriptionModel_fastTitle' =>
-        voicemail_TranscriptionModel_fastTitle,
-      'voicemail_TranscriptionModel_note' => voicemail_TranscriptionModel_note,
-      'voicemail_TranscriptionModel_title' =>
-        voicemail_TranscriptionModel_title,
+      'transcriptionSettings_Model_accurateSubtitle' =>
+        transcriptionSettings_Model_accurateSubtitle,
+      'transcriptionSettings_Model_accurateTitle' =>
+        transcriptionSettings_Model_accurateTitle,
+      'transcriptionSettings_Model_balancedSubtitle' =>
+        transcriptionSettings_Model_balancedSubtitle,
+      'transcriptionSettings_Model_balancedTitle' =>
+        transcriptionSettings_Model_balancedTitle,
+      'transcriptionSettings_Model_defaultLabel' =>
+        transcriptionSettings_Model_defaultLabel,
+      'transcriptionSettings_Model_fastSubtitle' =>
+        transcriptionSettings_Model_fastSubtitle,
+      'transcriptionSettings_Model_fastTitle' =>
+        transcriptionSettings_Model_fastTitle,
+      'transcriptionSettings_Model_note' => transcriptionSettings_Model_note,
+      'transcriptionSettings_Widget_screenTitle' =>
+        transcriptionSettings_Widget_screenTitle,
       'voicemail_Widget_screenTitle' => voicemail_Widget_screenTitle,
       'webRegistration_ErrorAcknowledgeDialogActions_retry' =>
         webRegistration_ErrorAcknowledgeDialogActions_retry,

@@ -2881,34 +2881,34 @@ class AppLocalizationsIt extends AppLocalizations {
   String get voicemail_Transcript_unavailable => 'Trascrizione non disponibile';
 
   @override
-  String get voicemail_TranscriptionModel_accurateSubtitle =>
+  String get transcriptionSettings_Model_accurateSubtitle =>
       'Migliore precisione sul dispositivo, più lento (download del modello ~1,5 GB)';
 
   @override
-  String get voicemail_TranscriptionModel_accurateTitle => 'Accurato';
+  String get transcriptionSettings_Model_accurateTitle => 'Accurato';
 
   @override
-  String get voicemail_TranscriptionModel_balancedSubtitle => 'Buona precisione (download del modello ~466 MB)';
+  String get transcriptionSettings_Model_balancedSubtitle => 'Buona precisione (download del modello ~466 MB)';
 
   @override
-  String get voicemail_TranscriptionModel_balancedTitle => 'Bilanciato';
+  String get transcriptionSettings_Model_balancedTitle => 'Bilanciato';
 
   @override
-  String get voicemail_TranscriptionModel_defaultLabel => 'Predefinito';
+  String get transcriptionSettings_Model_defaultLabel => 'Predefinito';
 
   @override
-  String get voicemail_TranscriptionModel_fastSubtitle =>
+  String get transcriptionSettings_Model_fastSubtitle =>
       'Risultati rapidi, precisione inferiore (download del modello ~142 MB)';
 
   @override
-  String get voicemail_TranscriptionModel_fastTitle => 'Veloce';
+  String get transcriptionSettings_Model_fastTitle => 'Veloce';
 
   @override
-  String get voicemail_TranscriptionModel_note =>
+  String get transcriptionSettings_Model_note =>
       'Si applica a tutti i messaggi: il modello viene scaricato al primo utilizzo e le trascrizioni esistenti vengono rigenerate con il nuovo modello.';
 
   @override
-  String get voicemail_TranscriptionModel_title => 'Modello di trascrizione';
+  String get transcriptionSettings_Widget_screenTitle => 'Modello di trascrizione';
 
   @override
   String get voicemail_Widget_screenTitle => 'Segreteria telefonica';

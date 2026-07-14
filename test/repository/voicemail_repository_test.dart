@@ -12,6 +12,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 import '../mocks/mocks.dart';
 import '../mocks/voicemails_fixture_factory.dart';
@@ -22,6 +23,7 @@ class _TranscriptionApiClient extends MockWebtritApiClient {
   final List<api.UserVoicemailItem> items;
   final List<String?> requestedAttachmentFormats = [];
   Object? attachmentError;
+  Object? listError;
 
   @override
   Future<api.UserVoicemailListResponse> getUserVoicemailList(
@@ -29,6 +31,8 @@ class _TranscriptionApiClient extends MockWebtritApiClient {
     String? locale,
     api.RequestOptions options = const api.RequestOptions(),
   }) async {
+    final error = listError;
+    if (error != null) throw error;
     return api.UserVoicemailListResponse(hasNewMessages: false, items: items);
   }
 
@@ -103,8 +107,10 @@ class _FakeTranscriptionDataSource implements TranscriptionDataSource {
   int calls = 0;
   int disposeCalls = 0;
 
+  // Distinct per configured result, mirroring the real sources whose engine
+  // string embeds the model tier: the pool compares engines on a switch.
   @override
-  String get engine => 'fake';
+  String get engine => 'fake:$result';
 
   @override
   Future<String> transcribe(Uint8List audio, {String? language}) async {
@@ -406,7 +412,7 @@ void main() {
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'hello world');
-      expect(row.engine, 'fake');
+      expect(row.engine, 'fake:hello world');
       expect(client.requestedAttachmentFormats, ['wav']);
     });
 
@@ -509,6 +515,26 @@ void main() {
       // Give the sweep time to hit the closed database; an unhandled async
       // error would fail this test at the zone level.
       await pumpEventQueue(times: 50);
+    });
+
+    test('does not transcribe cached voicemails while voicemail is unsupported on the server', () async {
+      await transcriptionDatabase.voicemailDao.insertOrUpdateVoicemail(
+        VoicemailsFixtureFactory.createVoicemail(id: 'cached-1', type: 'voice'),
+      );
+      final client = _TranscriptionApiClient(items: [])
+        ..listError = api.VoicemailNotConfiguredException(
+          url: Uri.parse('http://example.com'),
+          requestId: 'r1',
+          statusCode: 404,
+        );
+      final dataSource = _FakeTranscriptionDataSource();
+
+      createRepo(client, dataSource);
+      await pumpEventQueue(times: 50);
+
+      // The cached message must stay retryable: no attempt, no terminal row.
+      expect(dataSource.calls, 0);
+      expect(await transcriptionDatabase.transcriptionsDao.getAllForType(kVoicemailTranscriptionMediaType), isEmpty);
     });
 
     test('skips fax messages', () async {
@@ -675,28 +701,26 @@ void main() {
       expect(row!.transcript, 'from the new model');
     });
 
-    test('setTranscriptionModel persists the override and regenerates through the pool', () async {
+    test('the model service persists the override and regenerates through the pool', () async {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
       final initial = _FakeTranscriptionDataSource(result: 'from the old model');
       final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
       final modelRepository = _FakeTranscriptionModelRepository();
 
       final service = createService((model) => model == null ? initial : replacement);
-      final repo = VoicemailRepositoryImpl(
-        webtritApiClient: client,
-        token: 'user_token',
-        appDatabase: transcriptionDatabase,
-        sessionGuard: const EmptySessionGuard(),
-        transcriber: service,
-        transcriptionModelRepository: modelRepository,
+      final modelService = TranscriptionModelService(
+        modelRepository: modelRepository,
+        transcriptionService: service,
+        transcriptionConfig: const TranscriptionConfig(mode: 'local', localModel: 'base'),
       );
+      final repo = createRepo(client, null, service: service);
       await repo.fetchVoicemails();
       var row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'from the old model');
 
-      await repo.setTranscriptionModel('small');
+      await modelService.setModel('small');
 
-      expect(repo.getTranscriptionModel(), 'small');
+      expect(modelRepository.value, 'small');
       row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'from the new model');
     });

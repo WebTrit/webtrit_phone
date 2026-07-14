@@ -32,10 +32,13 @@ abstract interface class MediaTranscriber {
   /// it.
   Future<void> forget(String mediaType, String mediaId);
 
+  /// [forget] for every media object of [mediaType] in one pass.
+  Future<void> forgetAllForType(String mediaType);
+
   /// Switches the local model (null returns to the config default) and
   /// regenerates everything already transcribed; see
   /// [TranscriptionService.switchLocalModel].
-  void switchLocalModel(String? localModel);
+  Future<void> switchLocalModel(String? localModel);
 }
 
 /// Fire-and-forget transcription pool.
@@ -108,38 +111,62 @@ class TranscriptionService implements MediaTranscriber {
     final key = _mediaKey(mediaType, mediaId);
     _requests.removeWhere((request) => request.key == key);
     _active.remove(key);
+    if (_disposed) return;
     await _store.remove(mediaType, mediaId);
   }
 
-  /// Switches the local model (null returns to the config default) and
-  /// regenerates everything: the source is rebuilt, in-flight results of the
-  /// old model are invalidated and the store removes every transcription.
-  /// Consumers observe the wipe through their storage and re-enqueue what
-  /// they want regenerated. No-op for a [TranscriptionService.fixed] pool.
+  /// Every media object of [mediaType] was deleted: drops them from the pool
+  /// in one pass and removes their stored transcriptions.
   @override
-  void switchLocalModel(String? localModel) {
+  Future<void> forgetAllForType(String mediaType) async {
+    _requests.removeWhere((request) => request.mediaType == mediaType);
+    _active.removeWhere((_, request) => request.mediaType == mediaType);
+    if (_disposed) return;
+    await _store.removeAllForType(mediaType);
+  }
+
+  /// Switches the local model (null returns to the config default) and
+  /// regenerates everything: the store removes every transcription, the
+  /// source is rebuilt and in-flight results of the old model are
+  /// invalidated. Consumers observe the wipe through their storage and
+  /// re-enqueue what they want regenerated.
+  ///
+  /// No-op when the replacement engine is identical to the active one (a
+  /// [TranscriptionService.fixed] pool, the same tier picked again, or a
+  /// remote source that ignores the local tier) - nothing is wiped then.
+  /// Throws when the wipe fails; the engine is not swapped in that case, so
+  /// the stored transcripts stay consistent with the engine that made them.
+  @override
+  Future<void> switchLocalModel(String? localModel) async {
+    if (_disposed) return;
     final builder = _builder;
     if (builder == null) return;
 
-    // Invalidate before touching the source: an item may still be
-    // transcribing on the previous engine and its result must not land.
+    // Build the replacement first: if it comes out byte-identical there is
+    // nothing to regenerate and the stored transcripts must survive.
+    final replacement = builder(localModel);
+    if (replacement?.engine == _current?.engine) {
+      replacement?.dispose();
+      return;
+    }
+
+    // Invalidate before wiping: an item may still be transcribing on the
+    // previous engine and its result must not land.
     _generation++;
     _requests.clear();
     _active.clear();
 
-    final previous = _current;
-    _current = builder(localModel);
-    previous?.dispose();
-
-    unawaited(_wipeAll());
-  }
-
-  Future<void> _wipeAll() async {
     try {
       await _store.removeAll();
     } catch (e, st) {
-      _logger.warning('Failed to wipe transcriptions for regeneration', e, st);
+      _logger.warning('Failed to wipe transcriptions for regeneration; keeping the current engine', e, st);
+      replacement?.dispose();
+      rethrow;
     }
+
+    final previous = _current;
+    _current = replacement;
+    previous?.dispose();
   }
 
   Future<void> _drain() async {
@@ -163,19 +190,24 @@ class TranscriptionService implements MediaTranscriber {
     final source = _current;
     if (source == null || _isStale(request, generation)) return;
 
+    final String transcript;
     try {
-      await _saveGuarded(
+      // The store may already hold a result for this media (a re-enqueue that
+      // raced its own completion); skip the expensive work then.
+      final proceed = await _saveGuardedProceed(
         request,
         generation,
         () => _store.saveInProgress(request.mediaType, request.mediaId, source.engine),
       );
+      if (!proceed) return;
+
+      // Re-check between the expensive steps: a forget or model switch that
+      // landed meanwhile makes the download and the inference dead work that
+      // would only delay the queue behind it.
+      if (_isStale(request, generation)) return;
       final audio = await request.loadAudio();
-      final transcript = await source.transcribe(audio, language: request.language);
-      await _saveGuarded(
-        request,
-        generation,
-        () => _store.saveTranscript(request.mediaType, request.mediaId, transcript, source.engine),
-      );
+      if (_isStale(request, generation)) return;
+      transcript = await source.transcribe(audio, language: request.language);
     } catch (e, st) {
       _logger.warning('Failed to transcribe ${request.key}', e, st);
       final keepGoing = await _saveFailureGuarded(request, generation, e, source.engine);
@@ -183,6 +215,20 @@ class TranscriptionService implements MediaTranscriber {
         _requests.clear();
         _active.clear();
       }
+      return;
+    }
+
+    // A failure to persist a successfully produced transcript is NOT a
+    // transcription failure: the row stays inProgress and is retried by the
+    // consumer's next pending pass instead of being classified terminal.
+    try {
+      await _saveGuarded(
+        request,
+        generation,
+        () => _store.saveTranscript(request.mediaType, request.mediaId, transcript, source.engine),
+      );
+    } catch (e) {
+      _logger.warning('Failed to store the transcript of ${request.key}', e);
     }
   }
 
@@ -195,6 +241,11 @@ class TranscriptionService implements MediaTranscriber {
   Future<void> _saveGuarded(_TranscriptionRequest request, int generation, Future<void> Function() save) async {
     if (_isStale(request, generation)) return;
     await save();
+  }
+
+  Future<bool> _saveGuardedProceed(_TranscriptionRequest request, int generation, Future<bool> Function() save) async {
+    if (_isStale(request, generation)) return false;
+    return save();
   }
 
   Future<bool> _saveFailureGuarded(_TranscriptionRequest request, int generation, Object error, String engine) async {

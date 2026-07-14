@@ -2886,34 +2886,34 @@ class AppLocalizationsUk extends AppLocalizations {
   String get voicemail_Transcript_unavailable => 'Розшифровка недоступна';
 
   @override
-  String get voicemail_TranscriptionModel_accurateSubtitle =>
+  String get transcriptionSettings_Model_accurateSubtitle =>
       'Найкраща точність на пристрої, повільніше (завантаження моделі ~1,5 ГБ)';
 
   @override
-  String get voicemail_TranscriptionModel_accurateTitle => 'Точна';
+  String get transcriptionSettings_Model_accurateTitle => 'Точна';
 
   @override
-  String get voicemail_TranscriptionModel_balancedSubtitle => 'Хороша точність (завантаження моделі ~466 МБ)';
+  String get transcriptionSettings_Model_balancedSubtitle => 'Хороша точність (завантаження моделі ~466 МБ)';
 
   @override
-  String get voicemail_TranscriptionModel_balancedTitle => 'Збалансована';
+  String get transcriptionSettings_Model_balancedTitle => 'Збалансована';
 
   @override
-  String get voicemail_TranscriptionModel_defaultLabel => 'За замовчуванням';
+  String get transcriptionSettings_Model_defaultLabel => 'За замовчуванням';
 
   @override
-  String get voicemail_TranscriptionModel_fastSubtitle =>
+  String get transcriptionSettings_Model_fastSubtitle =>
       'Швидкий результат, нижча точність (завантаження моделі ~142 МБ)';
 
   @override
-  String get voicemail_TranscriptionModel_fastTitle => 'Швидка';
+  String get transcriptionSettings_Model_fastTitle => 'Швидка';
 
   @override
-  String get voicemail_TranscriptionModel_note =>
+  String get transcriptionSettings_Model_note =>
       'Діє для всіх повідомлень: модель завантажується при першому використанні, а наявні розшифровки буде перегенеровано новою моделлю.';
 
   @override
-  String get voicemail_TranscriptionModel_title => 'Модель розшифровки';
+  String get transcriptionSettings_Widget_screenTitle => 'Модель розшифровки';
 
   @override
   String get voicemail_Widget_screenTitle => 'Голосова пошта';

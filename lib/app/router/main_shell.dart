@@ -319,6 +319,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           },
           dispose: (service) => service.dispose(),
         ),
+        // Session-wide owner of the transcription model choice: the settings
+        // page reads and writes the model through it, independent of any
+        // single consumer feature.
+        RepositoryProvider<TranscriptionModelService>(
+          create: (context) => TranscriptionModelService(
+            modelRepository: context.read<TranscriptionModelRepository>(),
+            transcriptionService: context.read<TranscriptionService>(),
+            transcriptionConfig: featureAccess.transcriptionConfig,
+          ),
+        ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
             final isVoicemailsEnabled = featureAccess.settingsConfig.voicemailsEnabled;
@@ -334,12 +344,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 // hand-off contract, never the pool itself; results come
                 // back as database updates.
                 transcriber: transcriptionService.isEnabled ? transcriptionService : null,
-                transcriptionModelRepository: context.read<TranscriptionModelRepository>(),
               );
             } else {
               return const EmptyVoicemailRepository();
             }
           },
+          dispose: disposeIfDisposable,
         ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(

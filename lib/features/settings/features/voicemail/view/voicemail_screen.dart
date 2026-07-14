@@ -9,6 +9,7 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/bloc.dart';
@@ -41,13 +42,16 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                 child: PopupMenuButton<_VoicemailMenuAction>(
                   onSelected: _onMenuAction,
                   itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: _VoicemailMenuAction.transcriptionModel,
-                      child: ListTile(
-                        leading: const Icon(Icons.tune),
-                        title: Text(context.l10n.voicemail_TranscriptionModel_title),
+                    // Purely functional gate: only the local engine has a
+                    // model tier to pick (there is no brand flag behind it).
+                    if (context.read<TranscriptionModelService>().canSelectModel)
+                      PopupMenuItem(
+                        value: _VoicemailMenuAction.transcriptionModel,
+                        child: ListTile(
+                          leading: const Icon(Icons.tune),
+                          title: Text(context.l10n.transcriptionSettings_Widget_screenTitle),
+                        ),
                       ),
-                    ),
                     if (context.read<AppCacheManager>().sections.isNotEmpty)
                       PopupMenuItem(
                         value: _VoicemailMenuAction.cacheManagement,

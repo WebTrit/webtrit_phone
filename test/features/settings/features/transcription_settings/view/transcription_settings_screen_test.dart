@@ -5,12 +5,49 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'dart:typed_data';
+
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/settings/features/transcription_settings/transcription_settings.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 class _MockStackRouter extends Mock implements StackRouter {}
+
+class _FakeTranscriptionDataSource implements TranscriptionDataSource {
+  _FakeTranscriptionDataSource(this.engine);
+
+  @override
+  final String engine;
+
+  @override
+  Future<String> transcribe(Uint8List audio, {String? language}) async => '';
+
+  @override
+  void dispose() {}
+}
+
+class _NoopTranscriptionStore implements TranscriptionStore {
+  @override
+  Future<bool> saveInProgress(String mediaType, String mediaId, String engine) async => true;
+
+  @override
+  Future<void> saveTranscript(String mediaType, String mediaId, String transcript, String engine) async {}
+
+  @override
+  Future<bool> saveFailure(String mediaType, String mediaId, Object error, String engine) async => true;
+
+  @override
+  Future<void> remove(String mediaType, String mediaId) async {}
+
+  @override
+  Future<void> removeAllForType(String mediaType) async {}
+
+  @override
+  Future<void> removeAll() async {}
+}
 
 class _FakeTranscriptionModelRepository implements TranscriptionModelRepository {
   String? value;
@@ -42,6 +79,16 @@ void main() {
     when(() => router.topPage).thenReturn(null);
     when(() => router.pagelessRoutesObserver).thenReturn(PagelessRoutesObserver());
 
+    final modelService = TranscriptionModelService(
+      modelRepository: modelRepository,
+      transcriptionService: TranscriptionService(
+        (model) => _FakeTranscriptionDataSource('fake:${model ?? defaultModel}'),
+        initialLocalModel: modelRepository.getTranscriptionModel(),
+        store: _NoopTranscriptionStore(),
+      ),
+      transcriptionConfig: TranscriptionConfig(mode: 'local', localModel: defaultModel),
+    );
+
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -54,10 +101,7 @@ void main() {
           controller: router,
           stateHash: 0,
           child: BlocProvider(
-            create: (_) => TranscriptionSettingsCubit(
-              modelRepository: modelRepository,
-              transcriptionConfig: TranscriptionConfig(mode: 'local', localModel: defaultModel),
-            ),
+            create: (_) => TranscriptionSettingsCubit(modelService: modelService),
             child: const TranscriptionSettingsScreen(),
           ),
         ),

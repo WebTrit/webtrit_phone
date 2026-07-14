@@ -34,8 +34,14 @@ class DriftTranscriptionStore implements TranscriptionStore {
   }
 
   @override
-  Future<void> saveInProgress(String mediaType, String mediaId, String engine) {
-    return _upsert(mediaType, mediaId, status: TranscriptStatus.inProgress, engine: engine);
+  Future<bool> saveInProgress(String mediaType, String mediaId, String engine) async {
+    // A re-enqueue may race its own completion: never overwrite a finished
+    // transcript (or a terminal failure) with an in-progress state.
+    final existing = await _appDatabase.transcriptionsDao.getByMedia(mediaType, mediaId);
+    if (existing?.transcript != null || existing?.status == TranscriptStatus.unavailable.name) return false;
+
+    await _upsert(mediaType, mediaId, status: TranscriptStatus.inProgress, engine: engine);
+    return true;
   }
 
   @override
@@ -65,6 +71,11 @@ class DriftTranscriptionStore implements TranscriptionStore {
   @override
   Future<void> remove(String mediaType, String mediaId) async {
     await _appDatabase.transcriptionsDao.deleteByMedia(mediaType, mediaId);
+  }
+
+  @override
+  Future<void> removeAllForType(String mediaType) async {
+    await _appDatabase.transcriptionsDao.deleteAllForType(mediaType);
   }
 
   @override

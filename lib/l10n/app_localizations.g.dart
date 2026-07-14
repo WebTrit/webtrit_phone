@@ -5239,59 +5239,59 @@ abstract class AppLocalizations {
   /// **'Transcript unavailable'**
   String get voicemail_Transcript_unavailable;
 
-  /// No description provided for @voicemail_TranscriptionModel_accurateSubtitle.
+  /// No description provided for @transcriptionSettings_Model_accurateSubtitle.
   ///
   /// In en, this message translates to:
   /// **'Best on-device accuracy, slower (model download ~1.5 GB)'**
-  String get voicemail_TranscriptionModel_accurateSubtitle;
+  String get transcriptionSettings_Model_accurateSubtitle;
 
-  /// No description provided for @voicemail_TranscriptionModel_accurateTitle.
+  /// No description provided for @transcriptionSettings_Model_accurateTitle.
   ///
   /// In en, this message translates to:
   /// **'Accurate'**
-  String get voicemail_TranscriptionModel_accurateTitle;
+  String get transcriptionSettings_Model_accurateTitle;
 
-  /// No description provided for @voicemail_TranscriptionModel_balancedSubtitle.
+  /// No description provided for @transcriptionSettings_Model_balancedSubtitle.
   ///
   /// In en, this message translates to:
   /// **'Good accuracy (model download ~466 MB)'**
-  String get voicemail_TranscriptionModel_balancedSubtitle;
+  String get transcriptionSettings_Model_balancedSubtitle;
 
-  /// No description provided for @voicemail_TranscriptionModel_balancedTitle.
+  /// No description provided for @transcriptionSettings_Model_balancedTitle.
   ///
   /// In en, this message translates to:
   /// **'Balanced'**
-  String get voicemail_TranscriptionModel_balancedTitle;
+  String get transcriptionSettings_Model_balancedTitle;
 
-  /// No description provided for @voicemail_TranscriptionModel_defaultLabel.
+  /// No description provided for @transcriptionSettings_Model_defaultLabel.
   ///
   /// In en, this message translates to:
   /// **'Default'**
-  String get voicemail_TranscriptionModel_defaultLabel;
+  String get transcriptionSettings_Model_defaultLabel;
 
-  /// No description provided for @voicemail_TranscriptionModel_fastSubtitle.
+  /// No description provided for @transcriptionSettings_Model_fastSubtitle.
   ///
   /// In en, this message translates to:
   /// **'Quick results, lower accuracy (model download ~142 MB)'**
-  String get voicemail_TranscriptionModel_fastSubtitle;
+  String get transcriptionSettings_Model_fastSubtitle;
 
-  /// No description provided for @voicemail_TranscriptionModel_fastTitle.
+  /// No description provided for @transcriptionSettings_Model_fastTitle.
   ///
   /// In en, this message translates to:
   /// **'Fast'**
-  String get voicemail_TranscriptionModel_fastTitle;
+  String get transcriptionSettings_Model_fastTitle;
 
-  /// No description provided for @voicemail_TranscriptionModel_note.
+  /// No description provided for @transcriptionSettings_Model_note.
   ///
   /// In en, this message translates to:
   /// **'Applies to all messages: the model is downloaded on first use and existing transcripts are regenerated with the new model.'**
-  String get voicemail_TranscriptionModel_note;
+  String get transcriptionSettings_Model_note;
 
-  /// No description provided for @voicemail_TranscriptionModel_title.
+  /// No description provided for @transcriptionSettings_Widget_screenTitle.
   ///
   /// In en, this message translates to:
   /// **'Transcription model'**
-  String get voicemail_TranscriptionModel_title;
+  String get transcriptionSettings_Widget_screenTitle;
 
   /// No description provided for @voicemail_Widget_screenTitle.
   ///

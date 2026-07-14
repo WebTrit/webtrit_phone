@@ -85,6 +85,18 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
     return query.map((row) => row.readTable(voicemailTable)).get();
   }
 
+  /// Deletes voicemail transcription rows whose voicemail no longer exists
+  /// (left behind by a deletion racing an in-flight transcription).
+  Future<int> deleteOrphanTranscriptions() {
+    final transcriptions = db.transcriptionTable;
+    final voicemailIds = db.selectOnly(voicemailTable)..addColumns([voicemailTable.id]);
+
+    return (db.delete(transcriptions)..where(
+          (tbl) => tbl.mediaType.equals(kVoicemailTranscriptionMediaType) & tbl.mediaId.isNotInQuery(voicemailIds),
+        ))
+        .go();
+  }
+
   /// Watches voice messages that have no transcription row at all: freshly
   /// fetched ones and those whose rows were wiped for regeneration. Rows in
   /// any lifecycle state (in progress, failed, done) are excluded, so acting
