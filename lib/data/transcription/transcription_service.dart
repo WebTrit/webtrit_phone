@@ -19,18 +19,19 @@ final _logger = Logger('TranscriptionService');
 /// comes; lazy so queued items do not hold their payloads in memory.
 typedef TranscriptionAudioLoader = Future<Uint8List> Function();
 
-/// Fire-and-forget request to transcribe a media object. The result is never
-/// returned to the caller - it arrives as an update of the transcriptions
-/// table, observed through the caller's own database queries. Consumers take
-/// this callback instead of depending on [TranscriptionService] itself;
-/// [TranscriptionService.enqueue] matches it as a tear-off.
-typedef TranscribeMedia =
-    void Function(String mediaType, String mediaId, TranscriptionAudioLoader loadAudio, {String? language});
+/// The narrow consumer-facing contract of the transcription pool: hand media
+/// off and forget deleted items. Nothing is ever returned or awaited by
+/// consumers - results and lifecycle states arrive as updates of the
+/// transcriptions table, observed through their own database queries.
+/// Consumers depend on this instead of [TranscriptionService] itself.
+abstract interface class MediaTranscriber {
+  /// Fire-and-forget request to transcribe a media object.
+  void enqueue(String mediaType, String mediaId, TranscriptionAudioLoader loadAudio, {String? language});
 
-/// The media object was deleted: pending or in-flight transcription work is
-/// invalidated and the stored row removed, so a late result cannot resurrect
-/// it. [TranscriptionService.forget] matches it as a tear-off.
-typedef ForgetMediaTranscription = Future<void> Function(String mediaType, String mediaId);
+  /// The media object was deleted: pending or in-flight work is invalidated
+  /// and the stored row removed, so a late result cannot resurrect it.
+  Future<void> forget(String mediaType, String mediaId);
+}
 
 /// Session-wide fire-and-forget transcription pool.
 ///
@@ -41,7 +42,7 @@ typedef ForgetMediaTranscription = Future<void> Function(String mediaType, Strin
 /// their own queries. Results are attributed to the engine that actually
 /// produced them, and writes are generation-guarded so a model switch or a
 /// deleted media item can never be resurrected by an in-flight transcription.
-class TranscriptionService {
+class TranscriptionService implements MediaTranscriber {
   TranscriptionService({
     required AppDatabase appDatabase,
     required SwitchableTranscriptionSource source,
@@ -74,6 +75,7 @@ class TranscriptionService {
   /// in-flight item and calls while the feature is disabled are no-ops.
   /// Media already holding a transcript (or marked unavailable) is skipped
   /// when its turn comes.
+  @override
   void enqueue(String mediaType, String mediaId, TranscriptionAudioLoader loadAudio, {String? language}) {
     if (_disposed || !isEnabled) return;
     final key = _mediaKey(mediaType, mediaId);
@@ -87,6 +89,7 @@ class TranscriptionService {
 
   /// The media was deleted: drops it from the pool, invalidates an in-flight
   /// result and removes its stored transcription.
+  @override
   Future<void> forget(String mediaType, String mediaId) async {
     final key = _mediaKey(mediaType, mediaId);
     _requests.removeWhere((request) => request.key == key);

@@ -371,8 +371,7 @@ void main() {
         token: 'user_token',
         appDatabase: transcriptionDatabase,
         sessionGuard: const EmptySessionGuard(),
-        transcribeMedia: transcriptionService.isEnabled ? transcriptionService.enqueue : null,
-        forgetTranscription: transcriptionService.forget,
+        transcriber: transcriptionService.isEnabled ? transcriptionService : null,
       );
     }
 

@@ -331,11 +331,10 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 webtritApiClient: context.read<WebtritApiClient>(),
                 token: context.read<AppBloc>().state.session.token!,
                 appDatabase: context.read<AppDatabase>(),
-                // The repository never sees the pool itself, only these
-                // fire-and-forget hand-offs; results come back as database
-                // updates.
-                transcribeMedia: transcriptionService.isEnabled ? transcriptionService.enqueue : null,
-                forgetTranscription: transcriptionService.forget,
+                // The repository sees only the narrow MediaTranscriber
+                // hand-off contract, never the pool itself; results come
+                // back as database updates.
+                transcriber: transcriptionService.isEnabled ? transcriptionService : null,
               );
             } else {
               return const EmptyVoicemailRepository();
