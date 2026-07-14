@@ -19,6 +19,19 @@ final _logger = Logger('TranscriptionService');
 /// comes; lazy so queued items do not hold their payloads in memory.
 typedef TranscriptionAudioLoader = Future<Uint8List> Function();
 
+/// Fire-and-forget request to transcribe a media object. The result is never
+/// returned to the caller - it arrives as an update of the transcriptions
+/// table, observed through the caller's own database queries. Consumers take
+/// this callback instead of depending on [TranscriptionService] itself;
+/// [TranscriptionService.enqueue] matches it as a tear-off.
+typedef TranscribeMedia =
+    void Function(String mediaType, String mediaId, TranscriptionAudioLoader loadAudio, {String? language});
+
+/// The media object was deleted: pending or in-flight transcription work is
+/// invalidated and the stored row removed, so a late result cannot resurrect
+/// it. [TranscriptionService.forget] matches it as a tear-off.
+typedef ForgetMediaTranscription = Future<void> Function(String mediaType, String mediaId);
+
 /// Session-wide fire-and-forget transcription pool.
 ///
 /// Consumers enqueue media they want transcribed and walk away: the service
@@ -79,13 +92,6 @@ class TranscriptionService {
     _requests.removeWhere((request) => request.key == key);
     _active.remove(key);
     await _appDatabase.transcriptionsDao.deleteByMedia(mediaType, mediaId);
-  }
-
-  /// Drops every queued item and stored transcription of [mediaType].
-  Future<void> forgetAllForType(String mediaType) async {
-    _requests.removeWhere((request) => request.mediaType == mediaType);
-    _active.removeWhere((_, request) => request.mediaType == mediaType);
-    await _appDatabase.transcriptionsDao.deleteAllForType(mediaType);
   }
 
   /// Switches the local model (null returns to the config default) and

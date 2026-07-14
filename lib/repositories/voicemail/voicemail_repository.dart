@@ -76,12 +76,14 @@ class VoicemailRepositoryImpl
     required String token,
     required AppDatabase appDatabase,
     SessionGuard? sessionGuard,
-    TranscriptionService? transcriptionService,
+    TranscribeMedia? transcribeMedia,
+    ForgetMediaTranscription? forgetTranscription,
   }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
        _webtritApiClient = webtritApiClient,
        _token = token,
        _appDatabase = appDatabase,
-       _transcriptionService = transcriptionService {
+       _transcribeMedia = transcribeMedia,
+       _forgetTranscription = forgetTranscription {
     _initialize();
   }
 
@@ -89,7 +91,12 @@ class VoicemailRepositoryImpl
   final String _token;
   final AppDatabase _appDatabase;
   final SessionGuard _sessionGuard;
-  final TranscriptionService? _transcriptionService;
+
+  /// Fire-and-forget hand-offs to the transcription pool; the repository
+  /// never observes the pool itself - results and lifecycle states arrive as
+  /// database updates. Null when transcription is disabled.
+  final TranscribeMedia? _transcribeMedia;
+  final ForgetMediaTranscription? _forgetTranscription;
 
   // If the repository is disabled, the stream controller is not initialized.
   // In such cases, subscribers will receive an empty stream instead.
@@ -120,8 +127,15 @@ class VoicemailRepositoryImpl
 
   @override
   Future<void> wipeLocalRecords() async {
+    final voicemails = await _appDatabase.voicemailDao.getAllVoicemails();
     await _appDatabase.voicemailDao.deleteAllVoicemails();
-    await _forgetAllTranscriptions();
+
+    // Per-item forget dequeues pending or in-flight pool work; the trailing
+    // sweep clears any row that no longer had a cached voicemail.
+    for (final voicemail in voicemails) {
+      await _forgetVoicemailTranscription(voicemail.id);
+    }
+    await _appDatabase.transcriptionsDao.deleteAllForType(kVoicemailTranscriptionMediaType);
   }
 
   void _initialize() {
@@ -132,7 +146,7 @@ class VoicemailRepositoryImpl
     // or wiped by a model switch) shows up on this watch and gets enqueued;
     // the pool dedups repeats and its lifecycle writes take the row out of
     // the watch, so emissions cannot loop.
-    if (_transcriptionService != null) {
+    if (_transcribeMedia != null) {
       _appDatabase.voicemailDao.watchVoicemailsMissingTranscription().listen(
         _enqueueVoicemails,
         onError: (Object e, StackTrace st) {
@@ -241,8 +255,7 @@ class VoicemailRepositoryImpl
   /// back to a null status by a transient failure (bounded to one attempt
   /// per fetch). [TranscriptStatus.unavailable] stays terminal.
   Future<void> _enqueuePendingTranscriptions() async {
-    final transcriptionService = _transcriptionService;
-    if (transcriptionService == null || !transcriptionService.isEnabled) return;
+    if (_transcribeMedia == null) return;
 
     try {
       final pending = await _appDatabase.voicemailDao.getVoicemailsPendingTranscription(
@@ -257,11 +270,11 @@ class VoicemailRepositoryImpl
   }
 
   void _enqueueVoicemails(List<VoicemailData> voicemails) {
-    final transcriptionService = _transcriptionService;
-    if (transcriptionService == null || !transcriptionService.isEnabled) return;
+    final transcribeMedia = _transcribeMedia;
+    if (transcribeMedia == null) return;
 
     for (final voicemail in voicemails) {
-      transcriptionService.enqueue(
+      transcribeMedia(
         kVoicemailTranscriptionMediaType,
         voicemail.id,
         () => _webtritApiClient.getUserVoicemailAttachment(_token, voicemail.id, fileFormat: 'wav'),
@@ -269,23 +282,15 @@ class VoicemailRepositoryImpl
     }
   }
 
-  /// Routes transcription cleanup through the pool when it exists so a queued
-  /// or in-flight item cannot resurrect the row of a deleted voicemail.
-  Future<void> _forgetTranscription(String messageId) async {
-    final transcriptionService = _transcriptionService;
-    if (transcriptionService != null) {
-      await transcriptionService.forget(kVoicemailTranscriptionMediaType, messageId);
+  /// Routes transcription cleanup through the pool when it is wired so a
+  /// queued or in-flight item cannot resurrect the row of a deleted
+  /// voicemail.
+  Future<void> _forgetVoicemailTranscription(String messageId) async {
+    final forgetTranscription = _forgetTranscription;
+    if (forgetTranscription != null) {
+      await forgetTranscription(kVoicemailTranscriptionMediaType, messageId);
     } else {
       await _appDatabase.transcriptionsDao.deleteByMedia(kVoicemailTranscriptionMediaType, messageId);
-    }
-  }
-
-  Future<void> _forgetAllTranscriptions() async {
-    final transcriptionService = _transcriptionService;
-    if (transcriptionService != null) {
-      await transcriptionService.forgetAllForType(kVoicemailTranscriptionMediaType);
-    } else {
-      await _appDatabase.transcriptionsDao.deleteAllForType(kVoicemailTranscriptionMediaType);
     }
   }
 
@@ -326,7 +331,7 @@ class VoicemailRepositoryImpl
       );
 
       await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
-      await _forgetTranscription(messageId);
+      await _forgetVoicemailTranscription(messageId);
     } on UnauthorizedException catch (e) {
       _sessionGuard.onUnauthorized(e);
       rethrow;
