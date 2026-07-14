@@ -76,14 +76,12 @@ class VoicemailRepositoryImpl
     required String token,
     required AppDatabase appDatabase,
     SessionGuard? sessionGuard,
-    TranscribeMedia? transcribeMedia,
-    ForgetMediaTranscription? forgetTranscription,
+    MediaTranscriber? transcriber,
   }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
        _webtritApiClient = webtritApiClient,
        _token = token,
        _appDatabase = appDatabase,
-       _transcribeMedia = transcribeMedia,
-       _forgetTranscription = forgetTranscription {
+       _transcriber = transcriber {
     _initialize();
   }
 
@@ -92,11 +90,10 @@ class VoicemailRepositoryImpl
   final AppDatabase _appDatabase;
   final SessionGuard _sessionGuard;
 
-  /// Fire-and-forget hand-offs to the transcription pool; the repository
+  /// Fire-and-forget hand-off to the transcription pool; the repository
   /// never observes the pool itself - results and lifecycle states arrive as
   /// database updates. Null when transcription is disabled.
-  final TranscribeMedia? _transcribeMedia;
-  final ForgetMediaTranscription? _forgetTranscription;
+  final MediaTranscriber? _transcriber;
 
   // If the repository is disabled, the stream controller is not initialized.
   // In such cases, subscribers will receive an empty stream instead.
@@ -146,7 +143,7 @@ class VoicemailRepositoryImpl
     // or wiped by a model switch) shows up on this watch and gets enqueued;
     // the pool dedups repeats and its lifecycle writes take the row out of
     // the watch, so emissions cannot loop.
-    if (_transcribeMedia != null) {
+    if (_transcriber != null) {
       _appDatabase.voicemailDao.watchVoicemailsMissingTranscription().listen(
         _enqueueVoicemails,
         onError: (Object e, StackTrace st) {
@@ -255,7 +252,7 @@ class VoicemailRepositoryImpl
   /// back to a null status by a transient failure (bounded to one attempt
   /// per fetch). [TranscriptStatus.unavailable] stays terminal.
   Future<void> _enqueuePendingTranscriptions() async {
-    if (_transcribeMedia == null) return;
+    if (_transcriber == null) return;
 
     try {
       final pending = await _appDatabase.voicemailDao.getVoicemailsPendingTranscription(
@@ -270,11 +267,11 @@ class VoicemailRepositoryImpl
   }
 
   void _enqueueVoicemails(List<VoicemailData> voicemails) {
-    final transcribeMedia = _transcribeMedia;
-    if (transcribeMedia == null) return;
+    final transcriber = _transcriber;
+    if (transcriber == null) return;
 
     for (final voicemail in voicemails) {
-      transcribeMedia(
+      transcriber.enqueue(
         kVoicemailTranscriptionMediaType,
         voicemail.id,
         () => _webtritApiClient.getUserVoicemailAttachment(_token, voicemail.id, fileFormat: 'wav'),
@@ -286,9 +283,9 @@ class VoicemailRepositoryImpl
   /// queued or in-flight item cannot resurrect the row of a deleted
   /// voicemail.
   Future<void> _forgetVoicemailTranscription(String messageId) async {
-    final forgetTranscription = _forgetTranscription;
-    if (forgetTranscription != null) {
-      await forgetTranscription(kVoicemailTranscriptionMediaType, messageId);
+    final transcriber = _transcriber;
+    if (transcriber != null) {
+      await transcriber.forget(kVoicemailTranscriptionMediaType, messageId);
     } else {
       await _appDatabase.transcriptionsDao.deleteByMedia(kVoicemailTranscriptionMediaType, messageId);
     }
