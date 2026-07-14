@@ -29,8 +29,7 @@ class DialogInfoDao extends DatabaseAccessor<AppDatabase> with _$DialogInfoDaoMi
   }
 
   Future<int> deleteDialogInfoByIdsAndNumber(List<String> ids, String number) {
-    final query = delete(dialogInfoTable)
-      ..where((tbl) => tbl.entityNumber.equals(number) & tbl.idKey.isIn(ids));
+    final query = delete(dialogInfoTable)..where((tbl) => tbl.entityNumber.equals(number) & tbl.idKey.isIn(ids));
     return query.go();
   }
 }
