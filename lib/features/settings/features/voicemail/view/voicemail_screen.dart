@@ -97,10 +97,14 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                 children: [
                   if (state.isRefreshing) const LinearProgressIndicator(minHeight: 1),
                   if (state.isVoicemailsExists)
-                    VoicemailListView(
-                      items: state.items,
-                      selectedVoicemailsIds: state.selectedVoicemailsIds,
-                      isMultipleVoicemailsSelection: state.isMultipleVoicemailsSelection,
+                    ValueListenableBuilder(
+                      valueListenable: context.read<TranscriptionModelService>().modelDownloadState,
+                      builder: (context, downloadState, _) => VoicemailListView(
+                        items: state.items,
+                        selectedVoicemailsIds: state.selectedVoicemailsIds,
+                        isMultipleVoicemailsSelection: state.isMultipleVoicemailsSelection,
+                        modelDownloading: downloadState is ModelDownloading,
+                      ),
                     ),
                 ],
               );
@@ -184,11 +188,15 @@ class VoicemailListView extends StatelessWidget {
     required this.items,
     required this.selectedVoicemailsIds,
     required this.isMultipleVoicemailsSelection,
+    this.modelDownloading = false,
   });
 
   final List<Voicemail> items;
   final List<String> selectedVoicemailsIds;
   final bool isMultipleVoicemailsSelection;
+
+  /// See [VoicemailTile.modelDownloading].
+  final bool modelDownloading;
 
   @override
   Widget build(BuildContext context) {
@@ -202,6 +210,7 @@ class VoicemailListView extends StatelessWidget {
         final item = items[index];
         return VoicemailTile(
           voicemail: item,
+          modelDownloading: modelDownloading,
           displayName: item.displaySender,
           selected: selectedVoicemailsIds.contains(item.id),
           onDeleted: (it) => _onDeleteVoicemail(context, it),

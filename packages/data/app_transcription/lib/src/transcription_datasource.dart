@@ -1,5 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier;
+
+import 'model_download_state.dart';
+
 /// Engine-agnostic contract for producing a text transcript from an audio payload.
 ///
 /// Implementations decide where the work happens (on-device model, remote
@@ -16,6 +20,17 @@ abstract class TranscriptionDataSource {
   /// Identity of the engine and model producing the transcripts
   /// (e.g. 'whisper-ggml:base'), stored alongside each transcript.
   String get engine;
+
+  /// Readiness of the engine assets this source needs (e.g. the local ggml
+  /// model file). Sources with nothing to download are always ready.
+  ValueListenable<ModelDownloadState> get downloadState => _alwaysReady;
+
+  static final _alwaysReady = ValueNotifier<ModelDownloadState>(const ModelDownloadReady());
+
+  /// Fetches the engine assets ahead of the first [transcribe] (e.g. starts
+  /// the model download right after the user picked a tier); progress is
+  /// observable through [downloadState]. No-op for sources that need none.
+  Future<void> prepareEngine() async {}
 
   /// Releases resources held by the source (e.g. HTTP clients) when it is
   /// replaced; an in-flight [transcribe] may fail afterwards with a transient

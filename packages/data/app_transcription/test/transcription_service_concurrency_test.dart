@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:app_transcription/app_transcription.dart';
 
-class _GatedDataSource implements TranscriptionDataSource {
+class _GatedDataSource extends TranscriptionDataSource {
   final gates = <Completer<String>>[];
 
   @override
@@ -42,8 +43,47 @@ class _NoopTranscriptionStore implements TranscriptionStore {
   Future<void> removeAll() async {}
 }
 
+class _NotifyingDataSource extends TranscriptionDataSource {
+  _NotifyingDataSource(this.engine);
+
+  @override
+  final String engine;
+
+  final state = ValueNotifier<ModelDownloadState>(const ModelDownloadIdle());
+
+  @override
+  ValueListenable<ModelDownloadState> get downloadState => state;
+
+  @override
+  Future<String> transcribe(Uint8List audio, {String? language}) async => '';
+}
+
 void main() {
   Future<Uint8List> loadAudio() async => Uint8List(0);
+
+  test('modelDownloadState mirrors the active source across switches', () async {
+    final first = _NotifyingDataSource('fake:base');
+    final second = _NotifyingDataSource('fake:small');
+    final service = TranscriptionService(
+      (model) => model == 'small' ? second : first,
+      store: _NoopTranscriptionStore(),
+    );
+
+    expect(service.modelDownloadState.value, isA<ModelDownloadIdle>());
+
+    first.state.value = const ModelDownloading(received: 1, total: 2);
+    expect(service.modelDownloadState.value, isA<ModelDownloading>());
+
+    await service.switchLocalModel('small');
+    expect(service.modelDownloadState.value, isA<ModelDownloadIdle>());
+
+    second.state.value = const ModelDownloadReady();
+    expect(service.modelDownloadState.value, isA<ModelDownloadReady>());
+
+    // The old source's notifier must be detached: mutating it is a no-op.
+    first.state.value = const ModelDownloadFailed('stale');
+    expect(service.modelDownloadState.value, isA<ModelDownloadReady>());
+  });
 
   test('processes up to concurrency items at once and feeds the rest as workers free up', () async {
     final source = _GatedDataSource();

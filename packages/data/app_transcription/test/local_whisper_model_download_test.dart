@@ -8,6 +8,7 @@ import 'package:http/testing.dart';
 import 'package:whisper_ggml/whisper_ggml.dart';
 
 import 'package:app_transcription/src/local_whisper_transcription_datasource_io.dart';
+import 'package:app_transcription/src/model_download_state.dart';
 import 'package:app_transcription/src/transcription_datasource.dart';
 
 class _FixedPathWhisperController extends WhisperController {
@@ -51,6 +52,71 @@ void main() {
       expect(LocalWhisperTranscriptionDataSource.isValidModelFileHeader('<html>'.codeUnits), isFalse);
       expect(LocalWhisperTranscriptionDataSource.isValidModelFileHeader(const []), isFalse);
       expect(LocalWhisperTranscriptionDataSource.isValidModelFileHeader(ggmlHeader.sublist(0, 2)), isFalse);
+    });
+  });
+
+  group('downloadState', () {
+    test('reports progress against the content length and ends ready', () async {
+      final dataSource = createDataSource(
+        MockClient.streaming((request, bodyStream) async {
+          return http.StreamedResponse(
+            Stream.fromIterable([validModelBytes.sublist(0, 4), validModelBytes.sublist(4)]),
+            200,
+            contentLength: validModelBytes.length,
+          );
+        }),
+      );
+      final states = <ModelDownloadState>[];
+      dataSource.downloadState.addListener(() => states.add(dataSource.downloadState.value));
+
+      await dataSource.ensureModelReady();
+
+      expect(states.first, isA<ModelDownloading>());
+      final downloading = states.whereType<ModelDownloading>().toList();
+      expect(downloading.last.received, validModelBytes.length);
+      expect(downloading.last.total, validModelBytes.length);
+      expect(downloading.last.progress, 1.0);
+      expect(dataSource.downloadState.value, isA<ModelDownloadReady>());
+    });
+
+    test('is ready without a download when a usable model is cached', () async {
+      File(modelPath).writeAsBytesSync(validModelBytes);
+      final dataSource = createDataSource(MockClient((request) async => http.Response('unused', 500)));
+
+      await dataSource.ensureModelReady();
+
+      expect(dataSource.downloadState.value, isA<ModelDownloadReady>());
+    });
+
+    test('reports the failure and lets prepareEngine retry', () async {
+      var requests = 0;
+      final dataSource = createDataSource(
+        MockClient((request) async {
+          requests++;
+          if (requests == 1) return http.Response('nope', 503);
+          return http.Response.bytes(validModelBytes, 200);
+        }),
+      );
+
+      await expectLater(dataSource.prepareEngine(), throwsA(isA<TranscriptionException>()));
+      expect(dataSource.downloadState.value, isA<ModelDownloadFailed>());
+
+      await dataSource.prepareEngine();
+      expect(dataSource.downloadState.value, isA<ModelDownloadReady>());
+    });
+  });
+
+  group('isModelDownloaded', () {
+    test('true only for a usable cached file', () async {
+      final controller = _FixedPathWhisperController(modelPath);
+
+      expect(await LocalWhisperTranscriptionDataSource.isModelDownloaded('base', controller: controller), isFalse);
+
+      File(modelPath).writeAsBytesSync(validModelBytes);
+      expect(await LocalWhisperTranscriptionDataSource.isModelDownloaded('base', controller: controller), isTrue);
+
+      File(modelPath).writeAsBytesSync('<html>error</html>'.codeUnits);
+      expect(await LocalWhisperTranscriptionDataSource.isModelDownloaded('base', controller: controller), isFalse);
     });
   });
 

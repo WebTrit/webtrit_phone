@@ -205,6 +205,25 @@ pending query - one attempt per fetch.
   clobber a newer successful selection. l10n keys live under
   `transcriptionSettings_*`.
 
+### Model download visibility
+
+The local model file is fetched by the datasource itself (streamed to a
+temporary file, ggml-validated), so download progress is first-class:
+
+- `ModelDownloadState` (`idle / downloading(received, total) / ready /
+  failed`) is exposed by every datasource (`downloadState`; trivially ready
+  for remote/stub) and mirrored session-wide by the pool
+  (`TranscriptionService.modelDownloadState`, stable across tier switches)
+  and the model service.
+- The settings page marks tiers whose file is already on disk
+  (`isModelDownloaded`: file + ggml magic), shows a progress bar with a
+  percentage for the running download and a retry action after a failure.
+- Picking a tier starts its download immediately
+  (`TranscriptionModelService.setModel` calls `prepareModel` after the
+  switch) instead of waiting for the first transcription.
+- The voicemail tile distinguishes "downloading transcription model" from
+  "transcribing" while the model is still fetching.
+
 ## Adding a new media consumer
 
 1. Pick a `media_type` constant (voicemail uses

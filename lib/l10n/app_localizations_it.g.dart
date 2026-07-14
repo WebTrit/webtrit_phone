@@ -2878,7 +2878,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get voicemail_Transcript_inProgress => 'Trascrizione in corso...';
 
   @override
+  String get voicemail_Transcript_modelDownloading => 'Download del modello di trascrizione...';
+
+  @override
   String get voicemail_Transcript_unavailable => 'Trascrizione non disponibile';
+
+  @override
+  String get transcriptionSettings_Download_failed => 'Download del modello non riuscito';
+
+  @override
+  String get transcriptionSettings_Download_inProgress => 'Download del modello in corso';
+
+  @override
+  String get transcriptionSettings_Download_retry => 'Riprova';
 
   @override
   String get transcriptionSettings_Model_accurateSubtitle =>
@@ -2895,6 +2907,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get transcriptionSettings_Model_defaultLabel => 'Predefinito';
+
+  @override
+  String get transcriptionSettings_Model_downloadedLabel => 'Scaricato';
 
   @override
   String get transcriptionSettings_Model_fastSubtitle =>

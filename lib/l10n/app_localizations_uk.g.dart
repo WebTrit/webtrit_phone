@@ -2883,7 +2883,19 @@ class AppLocalizationsUk extends AppLocalizations {
   String get voicemail_Transcript_inProgress => 'Розшифровка...';
 
   @override
+  String get voicemail_Transcript_modelDownloading => 'Завантажується модель розпізнавання...';
+
+  @override
   String get voicemail_Transcript_unavailable => 'Розшифровка недоступна';
+
+  @override
+  String get transcriptionSettings_Download_failed => 'Не вдалося завантажити модель';
+
+  @override
+  String get transcriptionSettings_Download_inProgress => 'Завантаження моделі';
+
+  @override
+  String get transcriptionSettings_Download_retry => 'Повторити';
 
   @override
   String get transcriptionSettings_Model_accurateSubtitle =>
@@ -2900,6 +2912,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get transcriptionSettings_Model_defaultLabel => 'За замовчуванням';
+
+  @override
+  String get transcriptionSettings_Model_downloadedLabel => 'Завантажено';
 
   @override
   String get transcriptionSettings_Model_fastSubtitle =>

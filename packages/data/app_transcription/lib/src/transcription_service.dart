@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier;
 import 'package:logging/logging.dart';
 
+import 'model_download_state.dart';
 import 'transcription_datasource.dart';
 import 'transcription_store.dart';
 
@@ -71,7 +73,9 @@ class TranscriptionService implements MediaTranscriber {
        _builder = builder,
        _store = store,
        _concurrency = concurrency,
-       _current = builder(initialLocalModel);
+       _current = builder(initialLocalModel) {
+    _observeSource(_current);
+  }
 
   /// A pool over a fixed source that cannot switch models.
   TranscriptionService.fixed(TranscriptionDataSource? source, {required TranscriptionStore store, int concurrency = 1})
@@ -101,6 +105,30 @@ class TranscriptionService implements MediaTranscriber {
 
   /// False while transcription is disabled or unsupported on this platform.
   bool get isEnabled => _current != null;
+
+  final _modelDownloadState = ValueNotifier<ModelDownloadState>(const ModelDownloadIdle());
+  TranscriptionDataSource? _observedSource;
+
+  /// Engine-asset readiness of the active source, stable across model
+  /// switches (the source's own notifier dies with the source).
+  ValueListenable<ModelDownloadState> get modelDownloadState => _modelDownloadState;
+
+  /// Fetches the active engine's assets ahead of the first transcription
+  /// (e.g. starts the model download right after the user picked a tier);
+  /// progress is observable through [modelDownloadState].
+  Future<void> prepareEngine() => _current?.prepareEngine() ?? Future.value();
+
+  void _observeSource(TranscriptionDataSource? source) {
+    _observedSource?.downloadState.removeListener(_onSourceDownloadState);
+    _observedSource = source;
+    source?.downloadState.addListener(_onSourceDownloadState);
+    _modelDownloadState.value = source?.downloadState.value ?? const ModelDownloadIdle();
+  }
+
+  void _onSourceDownloadState() {
+    final source = _observedSource;
+    if (source != null) _modelDownloadState.value = source.downloadState.value;
+  }
 
   /// Queues the media for transcription; duplicates of an already queued or
   /// in-flight item and calls while the feature is disabled are no-ops.
@@ -178,6 +206,9 @@ class TranscriptionService implements MediaTranscriber {
 
     final previous = _current;
     _current = replacement;
+    // Re-point the download-state mirror before the old source (and its
+    // notifier) is disposed.
+    _observeSource(replacement);
     previous?.dispose();
   }
 
@@ -286,8 +317,10 @@ class TranscriptionService implements MediaTranscriber {
     _generation++;
     _requests.clear();
     _active.clear();
+    _observeSource(null);
     _current?.dispose();
     _current = null;
+    _modelDownloadState.dispose();
   }
 }
 

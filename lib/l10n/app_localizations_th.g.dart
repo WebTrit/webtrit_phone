@@ -2831,7 +2831,19 @@ class AppLocalizationsTh extends AppLocalizations {
   String get voicemail_Transcript_inProgress => 'กำลังถอดเสียง...';
 
   @override
+  String get voicemail_Transcript_modelDownloading => 'กำลังดาวน์โหลดโมเดลถอดความ...';
+
+  @override
   String get voicemail_Transcript_unavailable => 'ไม่มีข้อความถอดเสียง';
+
+  @override
+  String get transcriptionSettings_Download_failed => 'ดาวน์โหลดโมเดลไม่สำเร็จ';
+
+  @override
+  String get transcriptionSettings_Download_inProgress => 'กำลังดาวน์โหลดโมเดล';
+
+  @override
+  String get transcriptionSettings_Download_retry => 'ลองอีกครั้ง';
 
   @override
   String get transcriptionSettings_Model_accurateSubtitle =>
@@ -2848,6 +2860,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get transcriptionSettings_Model_defaultLabel => 'ค่าเริ่มต้น';
+
+  @override
+  String get transcriptionSettings_Model_downloadedLabel => 'ดาวน์โหลดแล้ว';
 
   @override
   String get transcriptionSettings_Model_fastSubtitle => 'ผลลัพธ์เร็ว ความแม่นยำต่ำกว่า (ดาวน์โหลดโมเดล ~142 MB)';

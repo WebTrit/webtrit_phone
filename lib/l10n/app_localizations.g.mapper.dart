@@ -1362,7 +1362,15 @@ extension AppLocalizationsExtension on AppLocalizations {
         voicemail_RecordsCache_description,
       'voicemail_RecordsCache_title' => voicemail_RecordsCache_title,
       'voicemail_Transcript_inProgress' => voicemail_Transcript_inProgress,
+      'voicemail_Transcript_modelDownloading' =>
+        voicemail_Transcript_modelDownloading,
       'voicemail_Transcript_unavailable' => voicemail_Transcript_unavailable,
+      'transcriptionSettings_Download_failed' =>
+        transcriptionSettings_Download_failed,
+      'transcriptionSettings_Download_inProgress' =>
+        transcriptionSettings_Download_inProgress,
+      'transcriptionSettings_Download_retry' =>
+        transcriptionSettings_Download_retry,
       'transcriptionSettings_Model_accurateSubtitle' =>
         transcriptionSettings_Model_accurateSubtitle,
       'transcriptionSettings_Model_accurateTitle' =>
@@ -1373,6 +1381,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         transcriptionSettings_Model_balancedTitle,
       'transcriptionSettings_Model_defaultLabel' =>
         transcriptionSettings_Model_defaultLabel,
+      'transcriptionSettings_Model_downloadedLabel' =>
+        transcriptionSettings_Model_downloadedLabel,
       'transcriptionSettings_Model_fastSubtitle' =>
         transcriptionSettings_Model_fastSubtitle,
       'transcriptionSettings_Model_fastTitle' =>

@@ -13,7 +13,7 @@ import 'transcription_datasource.dart';
 /// Without an injected [httpClient] the source builds its own client with
 /// [connectionTimeout] and [certs], so self-hosted endpoints secured by the
 /// consumer's trusted certificates work out of the box.
-class RemoteWhisperTranscriptionDataSource implements TranscriptionDataSource {
+class RemoteWhisperTranscriptionDataSource extends TranscriptionDataSource {
   RemoteWhisperTranscriptionDataSource({
     required Uri url,
     String? apiKey,
