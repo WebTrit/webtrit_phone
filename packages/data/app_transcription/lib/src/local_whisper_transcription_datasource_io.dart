@@ -57,6 +57,12 @@ class LocalWhisperTranscriptionDataSource extends TranscriptionDataSource {
 
   Future<void>? _modelReady;
 
+  /// True only after a preparation COMPLETED successfully; distinguishes a
+  /// finished preparation (whose file may be deleted externally and must be
+  /// re-verified) from one still in flight (whose file is legitimately not
+  /// there yet and must not trigger a second concurrent download).
+  bool _modelPrepared = false;
+
   @override
   ValueListenable<ModelDownloadState> get downloadState => _downloadState;
 
@@ -89,11 +95,24 @@ class LocalWhisperTranscriptionDataSource extends TranscriptionDataSource {
   /// Files of every model tier: the downloaded ggml file and a possible
   /// stray partial download next to it.
   static Future<List<File>> _allModelFiles(WhisperController controller) async {
-    final files = <File>[];
+    final paths = <String>{};
+    final partialPrefixes = <String>[];
     for (final model in WhisperModel.values) {
       final path = await controller.getPath(model);
-      files.add(File(path));
-      files.add(File('$path.download'));
+      paths.add(path);
+      partialPrefixes.add('$path.download');
+    }
+    final files = [for (final path in paths) File(path)];
+    // Partial downloads carry a unique per-attempt suffix; scan the parent
+    // directories by prefix instead of guessing exact names.
+    final directories = {for (final file in files) file.parent.path: file.parent};
+    for (final directory in directories.values) {
+      if (!directory.existsSync()) continue;
+      for (final entry in directory.listSync()) {
+        if (entry is File && partialPrefixes.any((prefix) => entry.path.startsWith(prefix))) {
+          files.add(entry);
+        }
+      }
     }
     return files;
   }
@@ -122,17 +141,21 @@ class LocalWhisperTranscriptionDataSource extends TranscriptionDataSource {
   /// the next call retries the download instead of replaying the failure.
   @override
   Future<void> prepareEngine() async {
-    // A completed preparation can be invalidated externally (the cache
+    // A COMPLETED preparation can be invalidated externally (the cache
     // management section deletes the model files), so a cached success is
-    // re-verified against the disk instead of being trusted.
-    if (_modelReady != null && !await _isUsableModelFile(File(await _controller.getPath(_model)))) {
+    // re-verified against the disk. A preparation still in flight is left
+    // alone: its file is not on disk yet by definition, and resetting it
+    // would start a second concurrent download over the same data.
+    if (_modelPrepared && !await _isUsableModelFile(File(await _controller.getPath(_model)))) {
       _modelReady = null;
+      _modelPrepared = false;
       _downloadState.value = const ModelDownloadIdle();
     }
     try {
       await ensureModelReady();
     } catch (_) {
       _modelReady = null;
+      _modelPrepared = false;
       rethrow;
     }
   }
@@ -161,6 +184,7 @@ class LocalWhisperTranscriptionDataSource extends TranscriptionDataSource {
   Future<void> _prepareModel() async {
     try {
       await _downloadModelIfMissing();
+      _modelPrepared = true;
       _downloadState.value = const ModelDownloadReady();
     } catch (e) {
       _downloadState.value = ModelDownloadFailed(e);
@@ -204,7 +228,10 @@ class LocalWhisperTranscriptionDataSource extends TranscriptionDataSource {
       return chunk;
     });
 
-    final temporaryFile = File('${modelFile.path}.download');
+    // A unique name per attempt: two downloads of the same tier (e.g. two
+    // source instances after quick model switches) must never interleave
+    // writes into one file.
+    final temporaryFile = File('${modelFile.path}.download.${DateTime.now().microsecondsSinceEpoch}');
     try {
       final sink = temporaryFile.openWrite();
       try {
@@ -213,6 +240,11 @@ class LocalWhisperTranscriptionDataSource extends TranscriptionDataSource {
         await sink.close();
       }
 
+      // A truncated body would still pass the magic check (the header is at
+      // the start), so verify the length first when the server declared one.
+      if (total != null && received != total) {
+        throw TranscriptionException('model ${_model.modelName} download truncated: $received of $total bytes');
+      }
       if (!await _isUsableModelFile(temporaryFile)) {
         throw TranscriptionException('model ${_model.modelName} download returned an invalid ggml file');
       }

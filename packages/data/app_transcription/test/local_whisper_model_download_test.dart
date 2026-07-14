@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -35,6 +36,9 @@ void main() {
   tearDown(() {
     temporaryDirectory.deleteSync(recursive: true);
   });
+
+  List<File> partialFiles() =>
+      temporaryDirectory.listSync().whereType<File>().where((file) => file.path.contains('.download')).toList();
 
   LocalWhisperTranscriptionDataSource createDataSource(http.Client httpClient) {
     return LocalWhisperTranscriptionDataSource(
@@ -123,7 +127,7 @@ void main() {
 
       await expectLater(dataSource.prepareEngine(), throwsA(anything));
 
-      expect(File('$modelPath.download').existsSync(), isFalse);
+      expect(partialFiles(), isEmpty);
       expect(dataSource.downloadState.value, isA<ModelDownloadFailed>());
     });
 
@@ -132,7 +136,56 @@ void main() {
 
       await expectLater(dataSource.prepareEngine(), throwsA(isA<TranscriptionException>()));
 
-      expect(File('$modelPath.download').existsSync(), isFalse);
+      expect(partialFiles(), isEmpty);
+    });
+
+    test('rejects a truncated body even though the ggml header is intact', () async {
+      final dataSource = createDataSource(
+        MockClient.streaming((request, bodyStream) async {
+          // Valid header, but the declared length is never reached.
+          return http.StreamedResponse(
+            Stream.fromIterable([validModelBytes.sublist(0, 6)]),
+            200,
+            contentLength: validModelBytes.length,
+          );
+        }),
+      );
+
+      await expectLater(dataSource.prepareEngine(), throwsA(isA<TranscriptionException>()));
+      expect(partialFiles(), isEmpty);
+      expect(File(modelPath).existsSync(), isFalse);
+    });
+
+    test('a prepare call during an in-flight download does not start a second one', () async {
+      var requests = 0;
+      final firstResponseGate = Completer<void>();
+      final dataSource = createDataSource(
+        MockClient.streaming((request, bodyStream) async {
+          requests++;
+          return http.StreamedResponse(
+            () async* {
+              yield validModelBytes.sublist(0, 4);
+              await firstResponseGate.future;
+              yield validModelBytes.sublist(4);
+            }(),
+            200,
+            contentLength: validModelBytes.length,
+          );
+        }),
+      );
+
+      final first = dataSource.prepareEngine();
+      await Future<void>.delayed(Duration.zero);
+      final second = dataSource.prepareEngine();
+      await Future<void>.delayed(Duration.zero);
+
+      firstResponseGate.complete();
+      await first;
+      await second;
+
+      expect(requests, 1);
+      expect(File(modelPath).existsSync(), isTrue);
+      expect(dataSource.downloadState.value, isA<ModelDownloadReady>());
     });
   });
 
@@ -142,12 +195,11 @@ void main() {
       File(modelPath).writeAsBytesSync(validModelBytes);
       File('$modelPath.download').writeAsBytesSync([1, 2, 3]);
 
-      // The fixed-path controller maps every tier to the same file, so the
-      // sum counts it once per tier; assert against that arithmetic.
-      final tiers = WhisperModel.values.length;
+      // The fixed-path controller maps every tier to the same file; paths
+      // are deduplicated, so the file and its stray partial count once.
       expect(
         await LocalWhisperTranscriptionDataSource.downloadedModelsSizeBytes(controller: controller),
-        tiers * (validModelBytes.length + 3),
+        validModelBytes.length + 3,
       );
 
       await LocalWhisperTranscriptionDataSource.deleteDownloadedModels(controller: controller);
