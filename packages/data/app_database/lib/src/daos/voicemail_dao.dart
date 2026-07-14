@@ -52,11 +52,6 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
 
   Future<int> deleteAllVoicemails() => delete(voicemailTable).go();
 
-  Future<int> recordsCount() async {
-    final query = selectOnly(voicemailTable)..addColumns([countAll()]);
-    return query.map((row) => row.read(countAll()) ?? 0).getSingle();
-  }
-
   Stream<List<VoicemailData>> watchAllVoicemails() => select(voicemailTable).watch();
 
   Stream<VoicemailData?> watchVoicemailById(String id) {

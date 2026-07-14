@@ -1358,18 +1358,10 @@ extension AppLocalizationsExtension on AppLocalizations {
       'voicemail_Label_retry' => voicemail_Label_retry,
       'voicemail_Snackbar_notConfigured' => voicemail_Snackbar_notConfigured,
       'voicemail_Title_notSupported' => voicemail_Title_notSupported,
-<<<<<<< HEAD
-=======
-      'voicemail_RecordsCache_description' =>
-        voicemail_RecordsCache_description,
-      'voicemail_RecordsCache_title' => voicemail_RecordsCache_title,
       'voicemail_Transcript_inProgress' => voicemail_Transcript_inProgress,
       'voicemail_Transcript_modelDownloading' =>
         voicemail_Transcript_modelDownloading,
       'voicemail_Transcript_unavailable' => voicemail_Transcript_unavailable,
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
       'voicemail_TranscriptionModel_accurateSubtitle' =>
         voicemail_TranscriptionModel_accurateSubtitle,
       'voicemail_TranscriptionModel_accurateTitle' =>
@@ -1387,20 +1379,14 @@ extension AppLocalizationsExtension on AppLocalizations {
       'voicemail_TranscriptionModel_note' => voicemail_TranscriptionModel_note,
       'voicemail_TranscriptionModel_title' =>
         voicemail_TranscriptionModel_title,
->>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
-=======
-=======
-=======
       'transcription_Cache_description' => transcription_Cache_description,
       'transcription_Cache_title' => transcription_Cache_title,
->>>>>>> 0d7b94d0 (feat(transcription): clear downloaded models from the cache management page)
       'transcriptionSettings_Download_failed' =>
         transcriptionSettings_Download_failed,
       'transcriptionSettings_Download_inProgress' =>
         transcriptionSettings_Download_inProgress,
       'transcriptionSettings_Download_retry' =>
         transcriptionSettings_Download_retry,
->>>>>>> 43c130c8 (feat: surface transcription model download status and progress (WT-719) (#1511))
       'transcriptionSettings_Model_accurateSubtitle' =>
         transcriptionSettings_Model_accurateSubtitle,
       'transcriptionSettings_Model_accurateTitle' =>
@@ -1420,7 +1406,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'transcriptionSettings_Model_note' => transcriptionSettings_Model_note,
       'transcriptionSettings_Widget_screenTitle' =>
         transcriptionSettings_Widget_screenTitle,
->>>>>>> 2734df99 (fix(transcription): close the review backlog on pool, lifecycle and model flow)
       'voicemail_Widget_screenTitle' => voicemail_Widget_screenTitle,
       'webRegistration_ErrorAcknowledgeDialogActions_retry' =>
         webRegistration_ErrorAcknowledgeDialogActions_retry,

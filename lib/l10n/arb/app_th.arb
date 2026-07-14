@@ -2353,24 +2353,12 @@
   "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "ไม่รองรับฟีเจอร์นี้",
   "@voicemail_Title_notSupported": {},
-<<<<<<< HEAD
-=======
-  "voicemail_RecordsCache_description": "สำเนารายการข้อความเสียงที่ดึงจากเซิร์ฟเวอร์ซึ่งเก็บไว้ในเครื่อง (ไฟล์เสียงเป็นส่วนแยกต่างหาก) การล้างจะลบรายการในเครื่อง และรายการจะถูกดาวน์โหลดใหม่เมื่อรีเฟรชครั้งถัดไป",
-  "@voicemail_RecordsCache_description": {},
-  "voicemail_RecordsCache_title": "ข้อความเสียงที่บันทึกไว้",
-  "@voicemail_RecordsCache_title": {},
   "voicemail_Transcript_inProgress": "กำลังถอดเสียง...",
   "@voicemail_Transcript_inProgress": {},
   "voicemail_Transcript_modelDownloading": "กำลังดาวน์โหลดโมเดลถอดความ...",
   "@voicemail_Transcript_modelDownloading": {},
   "voicemail_Transcript_unavailable": "ไม่มีข้อความถอดเสียง",
   "@voicemail_Transcript_unavailable": {},
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
-=======
   "voicemail_TranscriptionModel_accurateSubtitle": "ความแม่นยำสูงสุดบนอุปกรณ์ ช้ากว่า (ดาวน์โหลดโมเดล ~1.5 GB)",
   "@voicemail_TranscriptionModel_accurateSubtitle": {},
   "voicemail_TranscriptionModel_accurateTitle": "แม่นยำ",
@@ -2389,22 +2377,16 @@
   "@voicemail_TranscriptionModel_note": {},
   "voicemail_TranscriptionModel_title": "โมเดลถอดเสียง",
   "@voicemail_TranscriptionModel_title": {},
->>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
-=======
-=======
-=======
   "transcription_Cache_description": "ไฟล์โมเดลแปลงเสียงเป็นข้อความที่ดาวน์โหลดไว้ โมเดลที่ใช้งานจะถูกดาวน์โหลดใหม่เมื่อจำเป็น",
   "@transcription_Cache_description": {},
   "transcription_Cache_title": "โมเดลถอดความ",
   "@transcription_Cache_title": {},
->>>>>>> 0d7b94d0 (feat(transcription): clear downloaded models from the cache management page)
   "transcriptionSettings_Download_failed": "ดาวน์โหลดโมเดลไม่สำเร็จ",
   "@transcriptionSettings_Download_failed": {},
   "transcriptionSettings_Download_inProgress": "กำลังดาวน์โหลดโมเดล",
   "@transcriptionSettings_Download_inProgress": {},
   "transcriptionSettings_Download_retry": "ลองอีกครั้ง",
   "@transcriptionSettings_Download_retry": {},
->>>>>>> 43c130c8 (feat: surface transcription model download status and progress (WT-719) (#1511))
   "transcriptionSettings_Model_accurateSubtitle": "ความแม่นยำสูงสุดบนอุปกรณ์ ช้ากว่า (ดาวน์โหลดโมเดล ~1.5 GB)",
   "@transcriptionSettings_Model_accurateSubtitle": {},
   "transcriptionSettings_Model_accurateTitle": "แม่นยำ",
@@ -2425,7 +2407,6 @@
   "@transcriptionSettings_Model_note": {},
   "transcriptionSettings_Widget_screenTitle": "โมเดลถอดเสียง",
   "@transcriptionSettings_Widget_screenTitle": {},
->>>>>>> 2734df99 (fix(transcription): close the review backlog on pool, lifecycle and model flow)
   "voicemail_Widget_screenTitle": "ข้อความเสียง",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "ลองใหม่",

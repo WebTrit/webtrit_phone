@@ -2350,24 +2350,12 @@
   "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Функція не підтримується",
   "@voicemail_Title_notSupported": {},
-<<<<<<< HEAD
-=======
-  "voicemail_RecordsCache_description": "Локальна копія списку голосових повідомлень із сервера (аудіофайли - окрема секція). Очищення видаляє локальні записи; список завантажиться знову під час наступного оновлення.",
-  "@voicemail_RecordsCache_description": {},
-  "voicemail_RecordsCache_title": "Повідомлення голосової пошти",
-  "@voicemail_RecordsCache_title": {},
   "voicemail_Transcript_inProgress": "Розшифровка...",
   "@voicemail_Transcript_inProgress": {},
   "voicemail_Transcript_modelDownloading": "Завантажується модель розпізнавання...",
   "@voicemail_Transcript_modelDownloading": {},
   "voicemail_Transcript_unavailable": "Розшифровка недоступна",
   "@voicemail_Transcript_unavailable": {},
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
-=======
   "voicemail_TranscriptionModel_accurateSubtitle": "Найкраща точність на пристрої, повільніше (завантаження моделі ~1,5 ГБ)",
   "@voicemail_TranscriptionModel_accurateSubtitle": {},
   "voicemail_TranscriptionModel_accurateTitle": "Точна",
@@ -2386,22 +2374,16 @@
   "@voicemail_TranscriptionModel_note": {},
   "voicemail_TranscriptionModel_title": "Модель розшифровки",
   "@voicemail_TranscriptionModel_title": {},
->>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
-=======
-=======
-=======
   "transcription_Cache_description": "Завантажені файли моделей розпізнавання мовлення; активна модель завантажиться знову за потреби",
   "@transcription_Cache_description": {},
   "transcription_Cache_title": "Моделі транскрипції",
   "@transcription_Cache_title": {},
->>>>>>> 0d7b94d0 (feat(transcription): clear downloaded models from the cache management page)
   "transcriptionSettings_Download_failed": "Не вдалося завантажити модель",
   "@transcriptionSettings_Download_failed": {},
   "transcriptionSettings_Download_inProgress": "Завантаження моделі",
   "@transcriptionSettings_Download_inProgress": {},
   "transcriptionSettings_Download_retry": "Повторити",
   "@transcriptionSettings_Download_retry": {},
->>>>>>> 43c130c8 (feat: surface transcription model download status and progress (WT-719) (#1511))
   "transcriptionSettings_Model_accurateSubtitle": "Найкраща точність на пристрої, повільніше (завантаження моделі ~1,5 ГБ)",
   "@transcriptionSettings_Model_accurateSubtitle": {},
   "transcriptionSettings_Model_accurateTitle": "Точна",
@@ -2422,7 +2404,6 @@
   "@transcriptionSettings_Model_note": {},
   "transcriptionSettings_Widget_screenTitle": "Модель розшифровки",
   "@transcriptionSettings_Widget_screenTitle": {},
->>>>>>> 2734df99 (fix(transcription): close the review backlog on pool, lifecycle and model flow)
   "voicemail_Widget_screenTitle": "Голосова пошта",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",

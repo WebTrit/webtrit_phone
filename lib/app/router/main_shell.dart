@@ -430,17 +430,11 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     mediaCacheBasePath: appPath.mediaCacheBasePath,
                     temporaryPath: appPath.temporaryPath,
                   ),
-<<<<<<< HEAD
                 DatabaseCacheSection(context.read<AppDatabase>(), context.read<CdrsLocalRepository>()),
-=======
-                if (featureAccess.settingsConfig.voicemailsEnabled)
-                  VoicemailRecordsCacheSection(context.read<VoicemailRepository>()),
                 // Model files may sit on disk even when the current mode is
                 // not local (a leftover from an earlier configuration), so
                 // the section is not gated by the transcription mode.
                 if (!kIsWeb) TranscriptionModelsCacheSection(),
-                if (callHistoryEnabled) CdrsCacheSection(context.read<CdrsLocalRepository>()),
->>>>>>> 0d7b94d0 (feat(transcription): clear downloaded models from the cache management page)
               ],
             );
           },

@@ -2873,15 +2873,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get voicemail_Title_notSupported => 'Функція не підтримується';
 
   @override
-<<<<<<< HEAD
-=======
-  String get voicemail_RecordsCache_description =>
-      'Локальна копія списку голосових повідомлень із сервера (аудіофайли - окрема секція). Очищення видаляє локальні записи; список завантажиться знову під час наступного оновлення.';
-
-  @override
-  String get voicemail_RecordsCache_title => 'Повідомлення голосової пошти';
-
-  @override
   String get voicemail_Transcript_inProgress => 'Розшифровка...';
 
   @override
@@ -2889,6 +2880,36 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get voicemail_Transcript_unavailable => 'Розшифровка недоступна';
+
+  @override
+  String get voicemail_TranscriptionModel_accurateSubtitle =>
+      'Найкраща точність на пристрої, повільніше (завантаження моделі ~1,5 ГБ)';
+
+  @override
+  String get voicemail_TranscriptionModel_accurateTitle => 'Точна';
+
+  @override
+  String get voicemail_TranscriptionModel_balancedSubtitle => 'Хороша точність (завантаження моделі ~466 МБ)';
+
+  @override
+  String get voicemail_TranscriptionModel_balancedTitle => 'Збалансована';
+
+  @override
+  String get voicemail_TranscriptionModel_defaultLabel => 'За замовчуванням';
+
+  @override
+  String get voicemail_TranscriptionModel_fastSubtitle =>
+      'Швидкий результат, нижча точність (завантаження моделі ~142 МБ)';
+
+  @override
+  String get voicemail_TranscriptionModel_fastTitle => 'Швидка';
+
+  @override
+  String get voicemail_TranscriptionModel_note =>
+      'Діє для всіх повідомлень: модель завантажується при першому використанні, а наявні розшифровки буде перегенеровано новою моделлю.';
+
+  @override
+  String get voicemail_TranscriptionModel_title => 'Модель розшифровки';
 
   @override
   String get transcription_Cache_description =>
@@ -2940,7 +2961,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get transcriptionSettings_Widget_screenTitle => 'Модель розшифровки';
 
   @override
->>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
   String get voicemail_Widget_screenTitle => 'Голосова пошта';
 
   @override

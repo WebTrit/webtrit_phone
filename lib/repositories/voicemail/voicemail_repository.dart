@@ -57,13 +57,6 @@ abstract class VoicemailRepository implements Refreshable {
   /// or [EndpointNotSupportedException], indicating that voicemail is permanently
   /// unavailable for this session.
   bool get isFeatureSupported;
-
-  /// Number of voicemail records stored in the local database.
-  Future<int> localRecordsCount();
-
-  /// Removes only the locally cached voicemail records; the server copy stays
-  /// and the list is fetched again on the next refresh.
-  Future<void> wipeLocalRecords();
 }
 
 final _logger = Logger('VoicemailRepository');
@@ -124,23 +117,6 @@ class VoicemailRepositoryImpl
 
   @override
   bool get isActive => _featureSupported;
-
-  @override
-  Future<int> localRecordsCount() => _appDatabase.voicemailDao.recordsCount();
-
-  @override
-  Future<void> wipeLocalRecords() async {
-    await _appDatabase.voicemailDao.deleteAllVoicemails();
-
-    // The pool dequeues and invalidates everything voicemail-owned in one
-    // pass and removes the stored rows through its store.
-    final transcriber = _transcriber;
-    if (transcriber != null) {
-      await transcriber.forgetAllForType(kVoicemailTranscriptionMediaType);
-    } else {
-      await _appDatabase.transcriptionsDao.deleteAllForType(kVoicemailTranscriptionMediaType);
-    }
-  }
 
   void _initialize() {
     _updatesController = StreamController<List<Voicemail>>.broadcast(onListen: _onListen, onCancel: _onCancel);
@@ -554,10 +530,4 @@ class EmptyVoicemailRepository implements VoicemailRepository, Disposable {
 
   @override
   bool get isFeatureSupported => false;
-
-  @override
-  Future<int> localRecordsCount() => Future.value(0);
-
-  @override
-  Future<void> wipeLocalRecords() => Future.value();
 }

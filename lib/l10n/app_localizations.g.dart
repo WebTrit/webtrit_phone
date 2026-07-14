@@ -5215,20 +5215,6 @@ abstract class AppLocalizations {
   /// **'Feature not supported'**
   String get voicemail_Title_notSupported;
 
-<<<<<<< HEAD
-=======
-  /// No description provided for @voicemail_RecordsCache_description.
-  ///
-  /// In en, this message translates to:
-  /// **'Locally stored copy of the voicemail list fetched from the server (the audio files are a separate section). Clearing removes the local records; the list is downloaded again on the next refresh.'**
-  String get voicemail_RecordsCache_description;
-
-  /// No description provided for @voicemail_RecordsCache_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Voicemail messages'**
-  String get voicemail_RecordsCache_title;
-
   /// No description provided for @voicemail_Transcript_inProgress.
   ///
   /// In en, this message translates to:
@@ -5246,6 +5232,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Transcript unavailable'**
   String get voicemail_Transcript_unavailable;
+
+  /// No description provided for @voicemail_TranscriptionModel_accurateSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Best on-device accuracy, slower (model download ~1.5 GB)'**
+  String get voicemail_TranscriptionModel_accurateSubtitle;
+
+  /// No description provided for @voicemail_TranscriptionModel_accurateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Accurate'**
+  String get voicemail_TranscriptionModel_accurateTitle;
+
+  /// No description provided for @voicemail_TranscriptionModel_balancedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Good accuracy (model download ~466 MB)'**
+  String get voicemail_TranscriptionModel_balancedSubtitle;
+
+  /// No description provided for @voicemail_TranscriptionModel_balancedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Balanced'**
+  String get voicemail_TranscriptionModel_balancedTitle;
+
+  /// No description provided for @voicemail_TranscriptionModel_defaultLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get voicemail_TranscriptionModel_defaultLabel;
+
+  /// No description provided for @voicemail_TranscriptionModel_fastSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick results, lower accuracy (model download ~142 MB)'**
+  String get voicemail_TranscriptionModel_fastSubtitle;
+
+  /// No description provided for @voicemail_TranscriptionModel_fastTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast'**
+  String get voicemail_TranscriptionModel_fastTitle;
+
+  /// No description provided for @voicemail_TranscriptionModel_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Applies to all messages: the model is downloaded on first use and existing transcripts are regenerated with the new model.'**
+  String get voicemail_TranscriptionModel_note;
+
+  /// No description provided for @voicemail_TranscriptionModel_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcription model'**
+  String get voicemail_TranscriptionModel_title;
 
   /// No description provided for @transcription_Cache_description.
   ///
@@ -5337,7 +5377,6 @@ abstract class AppLocalizations {
   /// **'Transcription model'**
   String get transcriptionSettings_Widget_screenTitle;
 
->>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
   /// No description provided for @voicemail_Widget_screenTitle.
   ///
   /// In en, this message translates to:

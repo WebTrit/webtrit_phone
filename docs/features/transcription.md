@@ -179,8 +179,9 @@ pending query - one attempt per fetch.
   not starve behind a dead network.
 - Deletion goes through `forget` (row removal + in-flight invalidation);
   orphan rows left by races are swept after each fetch
-  (`deleteOrphanTranscriptions`); the local cache wipe uses
-  `forgetAllForType`.
+  (`deleteOrphanTranscriptions`). The whole-database cache wipe clears the
+  transcriptions table with everything else; the missing-row watch re-feeds
+  the pool after the next fetch.
 - Only `type == 'voice'` messages are eligible (fax is skipped); refetches
   upsert remote fields with a conflict-limited companion and never touch
   transcription data.

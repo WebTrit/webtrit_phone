@@ -2350,24 +2350,12 @@
   "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Funzionalità non supportata",
   "@voicemail_Title_notSupported": {},
-<<<<<<< HEAD
-=======
-  "voicemail_RecordsCache_description": "Copia locale dell'elenco dei messaggi vocali scaricato dal server (i file audio sono una sezione separata). La cancellazione rimuove i record locali; l'elenco viene scaricato di nuovo al prossimo aggiornamento.",
-  "@voicemail_RecordsCache_description": {},
-  "voicemail_RecordsCache_title": "Messaggi vocali",
-  "@voicemail_RecordsCache_title": {},
   "voicemail_Transcript_inProgress": "Trascrizione in corso...",
   "@voicemail_Transcript_inProgress": {},
   "voicemail_Transcript_modelDownloading": "Download del modello di trascrizione...",
   "@voicemail_Transcript_modelDownloading": {},
   "voicemail_Transcript_unavailable": "Trascrizione non disponibile",
   "@voicemail_Transcript_unavailable": {},
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
-=======
   "voicemail_TranscriptionModel_accurateSubtitle": "Migliore precisione sul dispositivo, più lento (download del modello ~1,5 GB)",
   "@voicemail_TranscriptionModel_accurateSubtitle": {},
   "voicemail_TranscriptionModel_accurateTitle": "Accurato",
@@ -2386,22 +2374,16 @@
   "@voicemail_TranscriptionModel_note": {},
   "voicemail_TranscriptionModel_title": "Modello di trascrizione",
   "@voicemail_TranscriptionModel_title": {},
->>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
-=======
-=======
-=======
   "transcription_Cache_description": "File dei modelli di riconoscimento vocale scaricati; il modello attivo viene scaricato di nuovo quando serve",
   "@transcription_Cache_description": {},
   "transcription_Cache_title": "Modelli di trascrizione",
   "@transcription_Cache_title": {},
->>>>>>> 0d7b94d0 (feat(transcription): clear downloaded models from the cache management page)
   "transcriptionSettings_Download_failed": "Download del modello non riuscito",
   "@transcriptionSettings_Download_failed": {},
   "transcriptionSettings_Download_inProgress": "Download del modello in corso",
   "@transcriptionSettings_Download_inProgress": {},
   "transcriptionSettings_Download_retry": "Riprova",
   "@transcriptionSettings_Download_retry": {},
->>>>>>> 43c130c8 (feat: surface transcription model download status and progress (WT-719) (#1511))
   "transcriptionSettings_Model_accurateSubtitle": "Migliore precisione sul dispositivo, più lento (download del modello ~1,5 GB)",
   "@transcriptionSettings_Model_accurateSubtitle": {},
   "transcriptionSettings_Model_accurateTitle": "Accurato",
@@ -2422,7 +2404,6 @@
   "@transcriptionSettings_Model_note": {},
   "transcriptionSettings_Widget_screenTitle": "Modello di trascrizione",
   "@transcriptionSettings_Widget_screenTitle": {},
->>>>>>> 2734df99 (fix(transcription): close the review backlog on pool, lifecycle and model flow)
   "voicemail_Widget_screenTitle": "Segreteria telefonica",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",
