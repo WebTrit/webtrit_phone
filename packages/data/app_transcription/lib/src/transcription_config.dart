@@ -1,5 +1,11 @@
 import 'package:equatable/equatable.dart';
 
+/// Local Whisper model tiers offered to the user as presets (fast, balanced,
+/// accurate); UIs append the config default and the stored selection when
+/// those fall outside this list. The full tier vocabulary is the official
+/// Whisper model table (see `LocalWhisperTranscriptionDataSource`).
+const kTranscriptionModelPresets = ['base', 'small', 'medium'];
+
 /// Raw client-side media transcription settings (the resolved `transcription`
 /// section of the application config); parsing and validation happen when the
 /// transcription source is built from this config by

@@ -1364,7 +1364,10 @@ extension AppLocalizationsExtension on AppLocalizations {
         voicemail_RecordsCache_description,
       'voicemail_RecordsCache_title' => voicemail_RecordsCache_title,
       'voicemail_Transcript_inProgress' => voicemail_Transcript_inProgress,
+      'voicemail_Transcript_modelDownloading' =>
+        voicemail_Transcript_modelDownloading,
       'voicemail_Transcript_unavailable' => voicemail_Transcript_unavailable,
+<<<<<<< HEAD
 <<<<<<< HEAD
       'voicemail_TranscriptionModel_accurateSubtitle' =>
         voicemail_TranscriptionModel_accurateSubtitle,
@@ -1385,6 +1388,14 @@ extension AppLocalizationsExtension on AppLocalizations {
         voicemail_TranscriptionModel_title,
 >>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
 =======
+=======
+      'transcriptionSettings_Download_failed' =>
+        transcriptionSettings_Download_failed,
+      'transcriptionSettings_Download_inProgress' =>
+        transcriptionSettings_Download_inProgress,
+      'transcriptionSettings_Download_retry' =>
+        transcriptionSettings_Download_retry,
+>>>>>>> 43c130c8 (feat: surface transcription model download status and progress (WT-719) (#1511))
       'transcriptionSettings_Model_accurateSubtitle' =>
         transcriptionSettings_Model_accurateSubtitle,
       'transcriptionSettings_Model_accurateTitle' =>
@@ -1395,6 +1406,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         transcriptionSettings_Model_balancedTitle,
       'transcriptionSettings_Model_defaultLabel' =>
         transcriptionSettings_Model_defaultLabel,
+      'transcriptionSettings_Model_downloadedLabel' =>
+        transcriptionSettings_Model_downloadedLabel,
       'transcriptionSettings_Model_fastSubtitle' =>
         transcriptionSettings_Model_fastSubtitle,
       'transcriptionSettings_Model_fastTitle' =>

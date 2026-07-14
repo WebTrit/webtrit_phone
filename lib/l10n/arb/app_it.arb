@@ -2358,8 +2358,11 @@
   "@voicemail_RecordsCache_title": {},
   "voicemail_Transcript_inProgress": "Trascrizione in corso...",
   "@voicemail_Transcript_inProgress": {},
+  "voicemail_Transcript_modelDownloading": "Download del modello di trascrizione...",
+  "@voicemail_Transcript_modelDownloading": {},
   "voicemail_Transcript_unavailable": "Trascrizione non disponibile",
   "@voicemail_Transcript_unavailable": {},
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
@@ -2384,6 +2387,14 @@
   "@voicemail_TranscriptionModel_title": {},
 >>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
 =======
+=======
+  "transcriptionSettings_Download_failed": "Download del modello non riuscito",
+  "@transcriptionSettings_Download_failed": {},
+  "transcriptionSettings_Download_inProgress": "Download del modello in corso",
+  "@transcriptionSettings_Download_inProgress": {},
+  "transcriptionSettings_Download_retry": "Riprova",
+  "@transcriptionSettings_Download_retry": {},
+>>>>>>> 43c130c8 (feat: surface transcription model download status and progress (WT-719) (#1511))
   "transcriptionSettings_Model_accurateSubtitle": "Migliore precisione sul dispositivo, più lento (download del modello ~1,5 GB)",
   "@transcriptionSettings_Model_accurateSubtitle": {},
   "transcriptionSettings_Model_accurateTitle": "Accurato",
@@ -2394,6 +2405,8 @@
   "@transcriptionSettings_Model_balancedTitle": {},
   "transcriptionSettings_Model_defaultLabel": "Predefinito",
   "@transcriptionSettings_Model_defaultLabel": {},
+  "transcriptionSettings_Model_downloadedLabel": "Scaricato",
+  "@transcriptionSettings_Model_downloadedLabel": {},
   "transcriptionSettings_Model_fastSubtitle": "Risultati rapidi, precisione inferiore (download del modello ~142 MB)",
   "@transcriptionSettings_Model_fastSubtitle": {},
   "transcriptionSettings_Model_fastTitle": "Veloce",

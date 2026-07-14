@@ -1,12 +1,13 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier, visibleForTesting;
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:whisper_ggml/whisper_ggml.dart';
 
+import 'model_download_state.dart';
 import 'transcription_datasource.dart';
 
 final _logger = Logger('LocalWhisperTranscriptionDataSource');
@@ -17,7 +18,7 @@ final _logger = Logger('LocalWhisperTranscriptionDataSource');
 /// first transcription may take noticeably longer than the following ones.
 /// Incoming audio is converted to the 16 kHz mono WAV expected by Whisper
 /// before recognition (voicemail audio is telephony 8 kHz).
-class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
+class LocalWhisperTranscriptionDataSource extends TranscriptionDataSource {
   /// [model] selects the Whisper tier (`tiny`, `base`, `small`, `medium`,
   /// ...); unknown names fall back to `base`. The official model tables
   /// document the per-tier trade-offs:
@@ -52,7 +53,12 @@ class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
   final WhisperController _controller;
   final http.Client _httpClient;
 
+  final _downloadState = ValueNotifier<ModelDownloadState>(const ModelDownloadIdle());
+
   Future<void>? _modelReady;
+
+  @override
+  ValueListenable<ModelDownloadState> get downloadState => _downloadState;
 
   /// Name of the whisper model tier this source runs.
   String get modelName => _model.modelName;
@@ -63,6 +69,34 @@ class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
   @override
   void dispose() {
     _httpClient.close();
+    // The notifier is deliberately not disposed: a download that was in
+    // flight when the source got replaced still reports into it (harmless -
+    // the pool detached its listener before disposing the source), and a
+    // disposed ValueNotifier would assert on that late write instead.
+  }
+
+  /// Whether a usable ggml file for the [model] tier is already on disk;
+  /// lets the UI mark tiers that will not need a download.
+  static Future<bool> isModelDownloaded(String model, {WhisperController? controller}) async {
+    final whisperModel = WhisperModel.values.firstWhere(
+      (value) => value.modelName == model,
+      orElse: () => WhisperModel.base,
+    );
+    final file = File(await (controller ?? WhisperController()).getPath(whisperModel));
+    return _isUsableModelFile(file);
+  }
+
+  /// Fetches the model ahead of the first [transcribe]; progress is
+  /// observable through [downloadState]. A failed attempt is forgotten so
+  /// the next call retries the download instead of replaying the failure.
+  @override
+  Future<void> prepareEngine() async {
+    try {
+      await ensureModelReady();
+    } catch (_) {
+      _modelReady = null;
+      rethrow;
+    }
   }
 
   static bool isValidModelFileHeader(List<int> header) {
@@ -87,6 +121,16 @@ class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
   /// magic is validated both for pre-existing files (healing a corrupt cache)
   /// and for the fresh download before it is moved into place.
   Future<void> _prepareModel() async {
+    try {
+      await _downloadModelIfMissing();
+      _downloadState.value = const ModelDownloadReady();
+    } catch (e) {
+      _downloadState.value = ModelDownloadFailed(e);
+      rethrow;
+    }
+  }
+
+  Future<void> _downloadModelIfMissing() async {
     final modelFile = File(await _controller.getPath(_model));
 
     if (await _isUsableModelFile(modelFile)) return;
@@ -96,29 +140,60 @@ class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
       modelFile.deleteSync();
     }
 
+    _downloadState.value = const ModelDownloading(received: 0);
+
     final response = await _httpClient.send(http.Request('GET', _model.modelUri));
     if (response.statusCode != 200) {
       await response.stream.drain<void>();
       throw TranscriptionException('model ${_model.modelName} download failed: HTTP ${response.statusCode}');
     }
 
+    final total = response.contentLength;
+    var received = 0;
+    var lastReported = 0;
+    // Report roughly every percent (bounded), not every HTTP chunk: each
+    // report fans out through the pool mirror into UI rebuilds, and a
+    // 1.5 GB download arrives in tens of thousands of chunks.
+    var reportStep = total != null && total > 0 ? total ~/ 100 : 512 * 1024;
+    if (reportStep < 64 * 1024) reportStep = 64 * 1024;
+    _downloadState.value = ModelDownloading(received: 0, total: total);
+    final countedStream = response.stream.map((chunk) {
+      received += chunk.length;
+      if (received - lastReported >= reportStep || received == total) {
+        lastReported = received;
+        _downloadState.value = ModelDownloading(received: received, total: total);
+      }
+      return chunk;
+    });
+
     final temporaryFile = File('${modelFile.path}.download');
-    final sink = temporaryFile.openWrite();
     try {
-      await sink.addStream(response.stream);
-    } finally {
-      await sink.close();
-    }
+      final sink = temporaryFile.openWrite();
+      try {
+        await sink.addStream(countedStream);
+      } finally {
+        await sink.close();
+      }
 
-    if (!await _isUsableModelFile(temporaryFile)) {
-      temporaryFile.deleteSync();
-      throw TranscriptionException('model ${_model.modelName} download returned an invalid ggml file');
-    }
+      if (!await _isUsableModelFile(temporaryFile)) {
+        throw TranscriptionException('model ${_model.modelName} download returned an invalid ggml file');
+      }
 
-    temporaryFile.renameSync(modelFile.path);
+      temporaryFile.renameSync(modelFile.path);
+    } catch (_) {
+      // An aborted download (network drop, the source disposed by a model
+      // switch, an invalid payload) must not leave a multi-hundred-MB
+      // partial file behind.
+      try {
+        if (temporaryFile.existsSync()) temporaryFile.deleteSync();
+      } catch (e) {
+        _logger.warning('Failed to clean up partial model download ${temporaryFile.path}: $e');
+      }
+      rethrow;
+    }
   }
 
-  Future<bool> _isUsableModelFile(File file) async {
+  static Future<bool> _isUsableModelFile(File file) async {
     if (!file.existsSync()) return false;
 
     final randomAccessFile = await file.open();
@@ -133,12 +208,10 @@ class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
   @override
   Future<String> transcribe(Uint8List audio, {String? language}) async {
     try {
-      await ensureModelReady();
+      // Model preparation fails on network conditions, so it is always worth
+      // retrying later; prepareEngine forgets a failed attempt.
+      await prepareEngine();
     } catch (e) {
-      // Reset so the next attempt retries the download instead of replaying
-      // the failure. Model preparation fails on network conditions, so it is
-      // always worth retrying later.
-      _modelReady = null;
       throw TranscriptionException('failed to prepare whisper model ${_model.modelName}: $e', transient: true);
     }
 

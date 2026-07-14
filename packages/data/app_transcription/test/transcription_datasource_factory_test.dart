@@ -126,7 +126,7 @@ void main() {
   });
 }
 
-class _RecordingDataSource implements TranscriptionDataSource {
+class _RecordingDataSource extends TranscriptionDataSource {
   // The pool compares engines on a switch (the real sources embed the model
   // tier), so each built source carries a distinct engine.
   _RecordingDataSource({this.engine = 'recording'});

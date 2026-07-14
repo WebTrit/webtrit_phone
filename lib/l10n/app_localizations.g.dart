@@ -5235,11 +5235,35 @@ abstract class AppLocalizations {
   /// **'Transcribing...'**
   String get voicemail_Transcript_inProgress;
 
+  /// No description provided for @voicemail_Transcript_modelDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading transcription model...'**
+  String get voicemail_Transcript_modelDownloading;
+
   /// No description provided for @voicemail_Transcript_unavailable.
   ///
   /// In en, this message translates to:
   /// **'Transcript unavailable'**
   String get voicemail_Transcript_unavailable;
+
+  /// No description provided for @transcriptionSettings_Download_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Model download failed'**
+  String get transcriptionSettings_Download_failed;
+
+  /// No description provided for @transcriptionSettings_Download_inProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading model'**
+  String get transcriptionSettings_Download_inProgress;
+
+  /// No description provided for @transcriptionSettings_Download_retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get transcriptionSettings_Download_retry;
 
   /// No description provided for @transcriptionSettings_Model_accurateSubtitle.
   ///
@@ -5270,6 +5294,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Default'**
   String get transcriptionSettings_Model_defaultLabel;
+
+  /// No description provided for @transcriptionSettings_Model_downloadedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded'**
+  String get transcriptionSettings_Model_downloadedLabel;
 
   /// No description provided for @transcriptionSettings_Model_fastSubtitle.
   ///

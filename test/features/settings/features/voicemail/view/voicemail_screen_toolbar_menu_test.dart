@@ -40,6 +40,7 @@ void main() {
   Widget host({required bool cacheAvailable, bool canSelectModel = true}) {
     final modelService = _MockTranscriptionModelService();
     when(() => modelService.canSelectModel).thenReturn(canSelectModel);
+    when(() => modelService.modelDownloadState).thenReturn(ValueNotifier(const ModelDownloadIdle()));
 
     final cubit = _MockVoicemailCubit();
     whenListen(

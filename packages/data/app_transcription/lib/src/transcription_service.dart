@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier;
 import 'package:logging/logging.dart';
 
+import 'model_download_state.dart';
 import 'transcription_datasource.dart';
 import 'transcription_store.dart';
 
@@ -71,7 +73,9 @@ class TranscriptionService implements MediaTranscriber {
        _builder = builder,
        _store = store,
        _concurrency = concurrency,
-       _current = builder(initialLocalModel);
+       _current = builder(initialLocalModel) {
+    _observeSource(_current);
+  }
 
   /// A pool over a fixed source that cannot switch models.
   TranscriptionService.fixed(TranscriptionDataSource? source, {required TranscriptionStore store, int concurrency = 1})
@@ -79,7 +83,9 @@ class TranscriptionService implements MediaTranscriber {
       _builder = null,
       _store = store,
       _concurrency = concurrency,
-      _current = source;
+      _current = source {
+    _observeSource(_current);
+  }
 
   final TranscriptionDataSourceBuilder? _builder;
   final TranscriptionStore _store;
@@ -99,21 +105,69 @@ class TranscriptionService implements MediaTranscriber {
   int _generation = 0;
   bool _disposed = false;
 
+  /// True while [switchLocalModel] is between invalidating the old engine
+  /// and swapping the new one in; enqueues are dropped in that window (the
+  /// consumer's missing-row watch re-feeds them right after the wipe), so a
+  /// fresh item can never be transcribed by the outgoing engine.
+  bool _switching = false;
+
   /// False while transcription is disabled or unsupported on this platform.
   bool get isEnabled => _current != null;
 
+  final _modelDownloadState = ValueNotifier<ModelDownloadState>(const ModelDownloadIdle());
+  TranscriptionDataSource? _observedSource;
+
+  /// Engine-asset readiness of the active source, stable across model
+  /// switches (the source's own notifier dies with the source).
+  ValueListenable<ModelDownloadState> get modelDownloadState => _modelDownloadState;
+
+  /// Fetches the active engine's assets ahead of the first transcription
+  /// (e.g. starts the model download right after the user picked a tier);
+  /// progress is observable through [modelDownloadState].
+  Future<void> prepareEngine() => _current?.prepareEngine() ?? Future.value();
+
+  void _observeSource(TranscriptionDataSource? source) {
+    _observedSource?.downloadState.removeListener(_onSourceDownloadState);
+    _observedSource = source;
+    source?.downloadState.addListener(_onSourceDownloadState);
+    _modelDownloadState.value = source?.downloadState.value ?? const ModelDownloadIdle();
+  }
+
+  void _onSourceDownloadState() {
+    final source = _observedSource;
+    if (source != null) _modelDownloadState.value = source.downloadState.value;
+  }
+
   /// Queues the media for transcription; duplicates of an already queued or
-  /// in-flight item and calls while the feature is disabled are no-ops.
+  /// in-flight item and calls while the feature is disabled or a model
+  /// switch is in progress are no-ops.
   @override
   void enqueue(String mediaType, String mediaId, TranscriptionAudioLoader loadAudio, {String? language}) {
-    if (_disposed || !isEnabled) return;
+    if (_disposed || _switching || !isEnabled) return;
     final key = _mediaKey(mediaType, mediaId);
     if (_active.containsKey(key)) return;
 
     final request = _TranscriptionRequest(mediaType, mediaId, loadAudio, language);
     _active[key] = request;
     _requests.add(request);
+    // Mark the item in progress right away: after a model-switch wipe the
+    // rows of everything still waiting in the queue would otherwise stay
+    // absent until a worker picks the item up, and the UI would show neither
+    // a transcript nor a status for most of the backlog.
+    unawaited(_markQueued(request, _generation, _current!.engine));
     _kickWorkers();
+  }
+
+  Future<void> _markQueued(_TranscriptionRequest request, int generation, String engine) async {
+    try {
+      await _saveGuardedProceed(
+        request,
+        generation,
+        () => _store.saveInProgress(request.mediaType, request.mediaId, engine),
+      );
+    } catch (e) {
+      _logger.warning('Failed to mark ${request.key} as queued', e);
+    }
   }
 
   /// The media was deleted: drops it from the pool, invalidates an in-flight
@@ -123,7 +177,8 @@ class TranscriptionService implements MediaTranscriber {
     final key = _mediaKey(mediaType, mediaId);
     _requests.removeWhere((request) => request.key == key);
     _active.remove(key);
-    if (_disposed) return;
+    // The store outlives the pool (app-scoped storage), so the row removal
+    // must happen even when the deletion races session teardown.
     await _store.remove(mediaType, mediaId);
   }
 
@@ -133,7 +188,6 @@ class TranscriptionService implements MediaTranscriber {
   Future<void> forgetAllForType(String mediaType) async {
     _requests.removeWhere((request) => request.mediaType == mediaType);
     _active.removeWhere((_, request) => request.mediaType == mediaType);
-    if (_disposed) return;
     await _store.removeAllForType(mediaType);
   }
 
@@ -150,7 +204,9 @@ class TranscriptionService implements MediaTranscriber {
   /// the stored transcripts stay consistent with the engine that made them.
   @override
   Future<void> switchLocalModel(String? localModel) async {
-    if (_disposed) return;
+    // Throw rather than no-op: a silent return would let the caller persist
+    // an override that was never applied.
+    if (_disposed) throw StateError('switchLocalModel called on a disposed TranscriptionService');
     final builder = _builder;
     if (builder == null) return;
 
@@ -162,23 +218,31 @@ class TranscriptionService implements MediaTranscriber {
       return;
     }
 
-    // Invalidate before wiping: an item may still be transcribing on the
-    // previous engine and its result must not land.
-    _generation++;
-    _requests.clear();
-    _active.clear();
-
+    _switching = true;
     try {
-      await _store.removeAll();
-    } catch (e, st) {
-      _logger.warning('Failed to wipe transcriptions for regeneration; keeping the current engine', e, st);
-      replacement?.dispose();
-      rethrow;
-    }
+      // Invalidate before wiping: an item may still be transcribing on the
+      // previous engine and its result must not land.
+      _generation++;
+      _requests.clear();
+      _active.clear();
 
-    final previous = _current;
-    _current = replacement;
-    previous?.dispose();
+      try {
+        await _store.removeAll();
+      } catch (e, st) {
+        _logger.warning('Failed to wipe transcriptions for regeneration; keeping the current engine', e, st);
+        replacement?.dispose();
+        rethrow;
+      }
+
+      final previous = _current;
+      _current = replacement;
+      // Re-point the download-state mirror before the old source (and its
+      // notifier) is disposed.
+      _observeSource(replacement);
+      previous?.dispose();
+    } finally {
+      _switching = false;
+    }
   }
 
   /// Tops the worker count up to [_concurrency], never spawning more than
@@ -286,8 +350,10 @@ class TranscriptionService implements MediaTranscriber {
     _generation++;
     _requests.clear();
     _active.clear();
+    _observeSource(null);
     _current?.dispose();
     _current = null;
+    _modelDownloadState.dispose();
   }
 }
 

@@ -47,7 +47,7 @@ Last reviewed: 2026-07-14
 - App-side wiring:
     - `lib/data/feature_access.dart` - `TranscriptionMapper` resolves the
       theme `AppConfigTranscription` into the package `TranscriptionConfig`.
-    - `lib/repositories/transcription/drift_transcription_store.dart` -
+    - `lib/repositories/transcription/transcription_store_drift_impl.dart` -
       `TranscriptionStoreDriftImpl`: the only place where pool output meets the
       database; also classifies failures and handles 401.
     - `lib/repositories/transcription_model/transcription_model_repository.dart` -
@@ -118,7 +118,11 @@ Provided session-wide in the main shell. Consumers hand media off through
 
 - `enqueue(mediaType, mediaId, loadAudio, {language})` - fire-and-forget.
   The audio loader is lazy (queued items do not hold payloads). Duplicates of
-  a queued or in-flight item and calls while disabled are no-ops.
+  a queued or in-flight item and calls while disabled are no-ops. Every
+  queued item is marked in progress immediately (guarded, so a finished
+  transcript is never overwritten): after a model-switch wipe the whole
+  backlog shows "transcribing" instead of a blank list while the sequential
+  workers catch up.
 - `forget(mediaType, mediaId)` / `forgetAllForType(mediaType)` - the media
   was deleted: dequeues, invalidates in-flight results and removes stored
   rows through the store.
@@ -204,6 +208,25 @@ pending query - one attempt per fetch.
   the cubit's rollback is revision-guarded so an older failed attempt cannot
   clobber a newer successful selection. l10n keys live under
   `transcriptionSettings_*`.
+
+### Model download visibility
+
+The local model file is fetched by the datasource itself (streamed to a
+temporary file, ggml-validated), so download progress is first-class:
+
+- `ModelDownloadState` (`idle / downloading(received, total) / ready /
+  failed`) is exposed by every datasource (`downloadState`; trivially ready
+  for remote/stub) and mirrored session-wide by the pool
+  (`TranscriptionService.modelDownloadState`, stable across tier switches)
+  and the model service.
+- The settings page marks tiers whose file is already on disk
+  (`isModelDownloaded`: file + ggml magic), shows a progress bar with a
+  percentage for the running download and a retry action after a failure.
+- Picking a tier starts its download immediately
+  (`TranscriptionModelService.setModel` calls `prepareModel` after the
+  switch) instead of waiting for the first transcription.
+- The voicemail tile distinguishes "downloading transcription model" from
+  "transcribing" while the model is still fetching.
 
 ## Adding a new media consumer
 

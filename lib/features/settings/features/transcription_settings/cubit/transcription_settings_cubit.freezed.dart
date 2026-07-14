@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TranscriptionSettingsState {
 
- String get defaultModel; String get selectedModel;
+ String get defaultModel; String get selectedModel; Set<String> get downloadedModels; ModelDownloadState get downloadState;
 /// Create a copy of TranscriptionSettingsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TranscriptionSettingsStateCopyWith<TranscriptionSettingsState> get copyWith => 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TranscriptionSettingsState&&(identical(other.defaultModel, defaultModel) || other.defaultModel == defaultModel)&&(identical(other.selectedModel, selectedModel) || other.selectedModel == selectedModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TranscriptionSettingsState&&(identical(other.defaultModel, defaultModel) || other.defaultModel == defaultModel)&&(identical(other.selectedModel, selectedModel) || other.selectedModel == selectedModel)&&const DeepCollectionEquality().equals(other.downloadedModels, downloadedModels)&&(identical(other.downloadState, downloadState) || other.downloadState == downloadState));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,defaultModel,selectedModel);
+int get hashCode => Object.hash(runtimeType,defaultModel,selectedModel,const DeepCollectionEquality().hash(downloadedModels),downloadState);
 
 @override
 String toString() {
-  return 'TranscriptionSettingsState(defaultModel: $defaultModel, selectedModel: $selectedModel)';
+  return 'TranscriptionSettingsState(defaultModel: $defaultModel, selectedModel: $selectedModel, downloadedModels: $downloadedModels, downloadState: $downloadState)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TranscriptionSettingsStateCopyWith<$Res>  {
   factory $TranscriptionSettingsStateCopyWith(TranscriptionSettingsState value, $Res Function(TranscriptionSettingsState) _then) = _$TranscriptionSettingsStateCopyWithImpl;
 @useResult
 $Res call({
- String defaultModel, String selectedModel
+ String defaultModel, String selectedModel, Set<String> downloadedModels, ModelDownloadState downloadState
 });
 
 
@@ -62,11 +62,13 @@ class _$TranscriptionSettingsStateCopyWithImpl<$Res>
 
 /// Create a copy of TranscriptionSettingsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? defaultModel = null,Object? selectedModel = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? defaultModel = null,Object? selectedModel = null,Object? downloadedModels = null,Object? downloadState = null,}) {
   return _then(TranscriptionSettingsState(
 defaultModel: null == defaultModel ? _self.defaultModel : defaultModel // ignore: cast_nullable_to_non_nullable
 as String,selectedModel: null == selectedModel ? _self.selectedModel : selectedModel // ignore: cast_nullable_to_non_nullable
-as String,
+as String,downloadedModels: null == downloadedModels ? _self.downloadedModels : downloadedModels // ignore: cast_nullable_to_non_nullable
+as Set<String>,downloadState: null == downloadState ? _self.downloadState : downloadState // ignore: cast_nullable_to_non_nullable
+as ModelDownloadState,
   ));
 }
 

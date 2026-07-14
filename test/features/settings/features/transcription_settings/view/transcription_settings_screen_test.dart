@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -15,11 +16,16 @@ import 'package:webtrit_phone/services/services.dart';
 
 class _MockStackRouter extends Mock implements StackRouter {}
 
-class _FakeTranscriptionDataSource implements TranscriptionDataSource {
+class _FakeTranscriptionDataSource extends TranscriptionDataSource {
   _FakeTranscriptionDataSource(this.engine);
 
   @override
   final String engine;
+
+  final state = ValueNotifier<ModelDownloadState>(const ModelDownloadIdle());
+
+  @override
+  ValueListenable<ModelDownloadState> get downloadState => state;
 
   @override
   Future<String> transcribe(Uint8List audio, {String? language}) async => '';
@@ -29,6 +35,8 @@ class _FakeTranscriptionDataSource implements TranscriptionDataSource {
 }
 
 class _NoopTranscriptionStore implements TranscriptionStore {
+  Object? removeAllError;
+
   @override
   Future<bool> saveInProgress(String mediaType, String mediaId, String engine) async => true;
 
@@ -45,7 +53,10 @@ class _NoopTranscriptionStore implements TranscriptionStore {
   Future<void> removeAllForType(String mediaType) async {}
 
   @override
-  Future<void> removeAll() async {}
+  Future<void> removeAll() async {
+    final error = removeAllError;
+    if (error != null) throw error;
+  }
 }
 
 class _FakeTranscriptionModelRepository implements TranscriptionModelRepository {
@@ -66,6 +77,9 @@ class _FakeTranscriptionModelRepository implements TranscriptionModelRepository 
 }
 
 void main() {
+  late _FakeTranscriptionDataSource lastDataSource;
+  late _NoopTranscriptionStore lastStore;
+
   Widget wrap(_FakeTranscriptionModelRepository modelRepository, {String defaultModel = 'base'}) {
     final router = _MockStackRouter();
     when(
@@ -81,9 +95,9 @@ void main() {
     final modelService = TranscriptionModelService(
       modelRepository: modelRepository,
       transcriptionService: TranscriptionService(
-        (model) => _FakeTranscriptionDataSource('fake:${model ?? defaultModel}'),
+        (model) => lastDataSource = _FakeTranscriptionDataSource('fake:${model ?? defaultModel}'),
         initialLocalModel: modelRepository.getTranscriptionModel(),
-        store: _NoopTranscriptionStore(),
+        store: lastStore = _NoopTranscriptionStore(),
       ),
       transcriptionConfig: TranscriptionConfig(mode: 'local', localModel: defaultModel),
     );
@@ -136,6 +150,44 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(modelRepository.value, isNull);
+  });
+
+  testWidgets('shows the download progress of the active tier and a retry on failure', (tester) async {
+    await tester.pumpWidget(wrap(_FakeTranscriptionModelRepository()));
+
+    lastDataSource.state.value = const ModelDownloading(received: 50, total: 100);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LinearProgressIndicator), findsOneWidget);
+    expect(find.textContaining('(50%)'), findsOneWidget);
+
+    lastDataSource.state.value = const ModelDownloadFailed('boom');
+    await tester.pumpAndSettle();
+
+    expect(find.text('Model download failed'), findsOneWidget);
+    expect(find.text('Retry'), findsOneWidget);
+
+    lastDataSource.state.value = const ModelDownloadReady();
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LinearProgressIndicator), findsNothing);
+    expect(find.text('Model download failed'), findsNothing);
+  });
+
+  testWidgets('a failed selection rolls the checkmark back to the tier actually in effect', (tester) async {
+    final modelRepository = _FakeTranscriptionModelRepository();
+    await tester.pumpWidget(wrap(modelRepository));
+
+    // Make the wipe (and therefore the switch) fail from now on.
+    lastStore.removeAllError = Exception('database locked');
+
+    await tester.tap(find.text('Balanced'));
+    await tester.pumpAndSettle();
+
+    // Persisted override reverted and the selection back on the effective tier.
+    expect(modelRepository.value, isNull);
+    final radioGroup = tester.widget<RadioGroup<String>>(find.byType(RadioGroup<String>));
+    expect(radioGroup.groupValue, 'base');
   });
 
   testWidgets('a non-preset default appears as an extra option with its raw name', (tester) async {

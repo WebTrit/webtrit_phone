@@ -77,7 +77,7 @@ class _TranscriptionApiClient extends MockWebtritApiClient {
   }
 }
 
-class _CallbackTranscriptionDataSource implements TranscriptionDataSource {
+class _CallbackTranscriptionDataSource extends TranscriptionDataSource {
   _CallbackTranscriptionDataSource(this.handler);
 
   final Future<String> Function(Uint8List audio) handler;
@@ -99,7 +99,7 @@ class _CallbackTranscriptionDataSource implements TranscriptionDataSource {
   }
 }
 
-class _FakeTranscriptionDataSource implements TranscriptionDataSource {
+class _FakeTranscriptionDataSource extends TranscriptionDataSource {
   _FakeTranscriptionDataSource({this.result = 'hello world', this.error});
 
   final String result;
