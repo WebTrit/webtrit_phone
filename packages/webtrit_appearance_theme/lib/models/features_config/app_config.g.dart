@@ -626,17 +626,11 @@ Map<String, dynamic> _$AppConfigTranscriptionToJson(
 
 AppConfigTranscriptionLocal _$AppConfigTranscriptionLocalFromJson(
   Map<String, dynamic> json,
-) => AppConfigTranscriptionLocal(
-  model: json['model'] as String? ?? 'base',
-  userSelectable: json['userSelectable'] as bool? ?? true,
-);
+) => AppConfigTranscriptionLocal(model: json['model'] as String? ?? 'base');
 
 Map<String, dynamic> _$AppConfigTranscriptionLocalToJson(
   AppConfigTranscriptionLocal instance,
-) => <String, dynamic>{
-  'model': instance.model,
-  'userSelectable': instance.userSelectable,
-};
+) => <String, dynamic>{'model': instance.model};
 
 AppConfigTranscriptionRemote _$AppConfigTranscriptionRemoteFromJson(
   Map<String, dynamic> json,

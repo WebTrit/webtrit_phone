@@ -23,15 +23,6 @@ enum TranscriptionMode {
   }
 }
 
-/// True when the user may pick the on-device transcription model tier for
-/// [config]: the local mode on a non-web platform with the brand allowing
-/// the choice.
-bool isTranscriptionModelSelectable(TranscriptionConfig config) {
-  return !kIsWeb &&
-      TranscriptionMode.fromName(config.mode) == TranscriptionMode.local &&
-      config.localModelUserSelectable;
-}
-
 /// Builds the transcription source described by [config] (the `transcription`
 /// section of the app config), or `null` when the feature
 /// is disabled or misconfigured for this platform.

@@ -779,17 +779,13 @@ class AppConfigTranscription with _$AppConfigTranscription {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigTranscriptionLocal with _$AppConfigTranscriptionLocal {
-  const AppConfigTranscriptionLocal({this.model = 'base', this.userSelectable = true});
+  const AppConfigTranscriptionLocal({this.model = 'base'});
 
   /// Whisper model tier downloaded to the device (tiny, base, small, ...);
   /// larger tiers transcribe better but cost more download size and CPU.
+  /// This is the default the user's in-app model choice falls back to.
   @override
   final String model;
-
-  /// Whether the user may switch the model tier from the transcription settings;
-  /// [model] stays the default until overridden there.
-  @override
-  final bool userSelectable;
 
   factory AppConfigTranscriptionLocal.fromJson(Map<String, Object?> json) =>
       _$AppConfigTranscriptionLocalFromJson(json);

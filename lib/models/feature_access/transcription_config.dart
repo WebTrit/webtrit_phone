@@ -8,7 +8,6 @@ class TranscriptionConfig extends Equatable {
     this.mode = 'disabled',
     this.language,
     this.localModel = 'base',
-    this.localModelUserSelectable = true,
     this.remoteUrl,
     this.remoteApiKey,
     this.remoteModel = 'whisper-1',
@@ -21,12 +20,9 @@ class TranscriptionConfig extends Equatable {
   /// Expected audio language (ISO 639-1); null or empty means auto-detect.
   final String? language;
 
-  /// Whisper model tier downloaded to the device in the `local` mode.
+  /// Whisper model tier downloaded to the device in the `local` mode; the
+  /// default the user's in-app model choice falls back to.
   final String localModel;
-
-  /// Whether the user may switch the local model tier from the transcription
-  /// settings; [localModel] stays the default until overridden there.
-  final bool localModelUserSelectable;
 
   /// Base URL of an OpenAI-compatible speech-to-text service for the `remote` mode.
   final String? remoteUrl;
@@ -38,13 +34,5 @@ class TranscriptionConfig extends Equatable {
   final String remoteModel;
 
   @override
-  List<Object?> get props => [
-    mode,
-    language,
-    localModel,
-    localModelUserSelectable,
-    remoteUrl,
-    remoteApiKey,
-    remoteModel,
-  ];
+  List<Object?> get props => [mode, language, localModel, remoteUrl, remoteApiKey, remoteModel];
 }

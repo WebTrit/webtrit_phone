@@ -41,14 +41,13 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                 child: PopupMenuButton<_VoicemailMenuAction>(
                   onSelected: _onMenuAction,
                   itemBuilder: (context) => [
-                    if (isTranscriptionModelSelectable(context.read<FeatureAccess>().transcriptionConfig))
-                      PopupMenuItem(
-                        value: _VoicemailMenuAction.transcriptionModel,
-                        child: ListTile(
-                          leading: const Icon(Icons.tune),
-                          title: Text(context.l10n.voicemail_TranscriptionModel_title),
-                        ),
+                    PopupMenuItem(
+                      value: _VoicemailMenuAction.transcriptionModel,
+                      child: ListTile(
+                        leading: const Icon(Icons.tune),
+                        title: Text(context.l10n.voicemail_TranscriptionModel_title),
                       ),
+                    ),
                     if (context.read<AppCacheManager>().sections.isNotEmpty)
                       PopupMenuItem(
                         value: _VoicemailMenuAction.cacheManagement,
