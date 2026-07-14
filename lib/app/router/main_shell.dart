@@ -316,6 +316,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               buildTranscriptionDataSource,
               initialLocalModel: context.read<TranscriptionModelRepository>().getTranscriptionModel(),
               store: store,
+              // The local engine is compute-bound (parallel inference only
+              // multiplies memory pressure), the remote one is network-bound
+              // and benefits from a few concurrent requests.
+              concurrency:
+                  TranscriptionMode.fromName(featureAccess.transcriptionConfig.mode) == TranscriptionMode.remote
+                  ? 3
+                  : 1,
             );
           },
           dispose: (service) => service.dispose(),

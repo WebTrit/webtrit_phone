@@ -124,7 +124,10 @@ Provided session-wide in the main shell. Consumers hand media off through
   rows through the store.
 - `switchLocalModel(localModel)` - see Model choice.
 
-Internals: a sequential drain loop; an `_active` map (key -> request
+Internals: a small worker pool draining one queue (concurrency is injected
+per mode: 1 for the compute-bound local engine, where parallel inference only
+multiplies memory pressure, 3 for the network-bound remote one; with one
+worker processing is strictly sequential); an `_active` map (key -> request
 instance) whose identity check invalidates stale writes (a forget, switch or
 re-enqueue replaces the entry, so the old in-flight request no longer owns
 its key); a generation counter bumped by switches; staleness re-checks

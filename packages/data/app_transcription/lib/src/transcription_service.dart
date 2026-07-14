@@ -44,8 +44,9 @@ abstract interface class MediaTranscriber {
 /// Fire-and-forget transcription pool.
 ///
 /// Consumers enqueue media they want transcribed and walk away: the pool
-/// transcribes sequentially through the source it owns (built by the injected
-/// [TranscriptionDataSourceBuilder]) and hands every lifecycle fact
+/// transcribes through the source it owns (built by the injected
+/// [TranscriptionDataSourceBuilder]), processing up to `concurrency` items
+/// at once (strictly sequential by default), and hands every lifecycle fact
 /// (in progress, transcript, failure) to the [TranscriptionStore] the
 /// application wired in - the pool itself knows nothing about storage.
 /// Results are attributed to the engine that actually produced them, and
@@ -56,22 +57,33 @@ abstract interface class MediaTranscriber {
 class TranscriptionService implements MediaTranscriber {
   /// Builds the initial source for [initialLocalModel] and rebuilds it on
   /// every [switchLocalModel] call.
+  ///
+  /// [concurrency] caps how many items are processed at once. The default of
+  /// 1 (strictly sequential) suits a compute-bound local engine, where
+  /// parallel inference only multiplies memory; a network-bound remote
+  /// engine benefits from a few concurrent requests.
   TranscriptionService(
     TranscriptionDataSourceBuilder builder, {
     String? initialLocalModel,
     required TranscriptionStore store,
-  }) : _builder = builder,
+    int concurrency = 1,
+  }) : assert(concurrency >= 1),
+       _builder = builder,
        _store = store,
+       _concurrency = concurrency,
        _current = builder(initialLocalModel);
 
   /// A pool over a fixed source that cannot switch models.
-  TranscriptionService.fixed(TranscriptionDataSource? source, {required TranscriptionStore store})
-    : _builder = null,
+  TranscriptionService.fixed(TranscriptionDataSource? source, {required TranscriptionStore store, int concurrency = 1})
+    : assert(concurrency >= 1),
+      _builder = null,
       _store = store,
+      _concurrency = concurrency,
       _current = source;
 
   final TranscriptionDataSourceBuilder? _builder;
   final TranscriptionStore _store;
+  final int _concurrency;
 
   /// The source transcribing right now; null while transcription is disabled.
   TranscriptionDataSource? _current;
@@ -83,7 +95,7 @@ class TranscriptionService implements MediaTranscriber {
   /// pending store calls of the request that no longer owns its key.
   final _active = <String, _TranscriptionRequest>{};
 
-  bool _draining = false;
+  int _workers = 0;
   int _generation = 0;
   bool _disposed = false;
 
@@ -101,7 +113,7 @@ class TranscriptionService implements MediaTranscriber {
     final request = _TranscriptionRequest(mediaType, mediaId, loadAudio, language);
     _active[key] = request;
     _requests.add(request);
-    unawaited(_drain());
+    _kickWorkers();
   }
 
   /// The media was deleted: drops it from the pool, invalidates an in-flight
@@ -169,9 +181,18 @@ class TranscriptionService implements MediaTranscriber {
     previous?.dispose();
   }
 
-  Future<void> _drain() async {
-    if (_draining) return;
-    _draining = true;
+  /// Tops the worker count up to [_concurrency], never spawning more than
+  /// the queue can feed; each worker drains until the queue is empty.
+  void _kickWorkers() {
+    var spawn = _concurrency - _workers;
+    if (spawn > _requests.length) spawn = _requests.length;
+    while (spawn-- > 0) {
+      _workers++;
+      unawaited(_drainWorker());
+    }
+  }
+
+  Future<void> _drainWorker() async {
     try {
       while (_requests.isNotEmpty && !_disposed) {
         final request = _requests.removeAt(0);
@@ -181,7 +202,7 @@ class TranscriptionService implements MediaTranscriber {
         if (identical(_active[request.key], request)) _active.remove(request.key);
       }
     } finally {
-      _draining = false;
+      _workers--;
     }
   }
 
