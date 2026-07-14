@@ -19,6 +19,7 @@ navigation structure, and screen-specific behaviors.
 - [Settings Configuration](#settings-configuration)
   - [Settings Sections](#settings-sections)
   - [Settings Items](#settings-items)
+- [Transcription Configuration](#transcription-configuration)
 - [Embedded Pages](#embedded-pages)
 
 ---
@@ -412,6 +413,35 @@ Each settings item includes:
 - `type`: Setting type (network, encoding, embedded)
 - `titleL10n`: Localized name
 - `icon`: Item icon
+
+## Transcription Configuration
+
+The top-level `transcription` section configures client-side speech-to-text for media the app
+holds (voicemail transcripts today). The feature is off by default.
+
+```json
+"transcription": {
+  "mode": "local",
+  "language": "en",
+  "local": { "model": "base" },
+  "remote": { "url": "https://stt.example.com/v1", "apiKey": "optional", "model": "whisper-1" }
+}
+```
+
+- `mode`: Transcription source - `disabled`, `local` (on-device inference; the Whisper model is
+  downloaded on first use) or `remote` (an OpenAI-compatible speech-to-text endpoint from
+  `remote`). Unknown values disable the feature; `local` is unavailable on web.
+- `language`: Expected audio language (ISO 639-1); omit or leave empty to auto-detect per message.
+- `local.model`: Whisper model tier downloaded to the device (`tiny`, `base`, `small`, ...);
+  larger tiers transcribe better but cost more download size and CPU. This is the default of the
+  user's in-app choice on the transcription settings screen.
+- `remote.url`: Base URL of the speech-to-text service; the `audio/transcriptions` path is
+  appended when not already present. The remote mode stays disabled while it is missing.
+- `remote.apiKey`: Optional bearer token sent to the service.
+- `remote.model`: Model name passed to the service.
+
+See [features/transcription.md](features/transcription.md) for the architecture and runtime
+behavior behind this section.
 
 ## Embedded Pages
 
