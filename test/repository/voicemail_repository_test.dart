@@ -355,11 +355,14 @@ void main() {
       await transcriptionDatabase.close();
     });
 
-    TranscriptionService createService(SwitchableTranscriptionSource source) {
+    DriftTranscriptionStore createStore() {
       final store = DriftTranscriptionStore(appDatabase: transcriptionDatabase);
       unawaited(store.resetStaleInProgress());
+      return store;
+    }
 
-      return TranscriptionService(source: source, store: store);
+    TranscriptionService createService(TranscriptionDataSourceBuilder builder) {
+      return TranscriptionService(builder, store: createStore());
     }
 
     VoicemailRepositoryImpl createRepo(
@@ -367,7 +370,7 @@ void main() {
       TranscriptionDataSource? dataSource, {
       TranscriptionService? service,
     }) {
-      final transcriptionService = service ?? createService(SwitchableTranscriptionSource.fixed(dataSource));
+      final transcriptionService = service ?? TranscriptionService.fixed(dataSource, store: createStore());
 
       return VoicemailRepositoryImpl(
         webtritApiClient: client,
@@ -621,12 +624,10 @@ void main() {
       final models = <String?>[];
       final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
 
-      final service = createService(
-        SwitchableTranscriptionSource((model) {
-          models.add(model);
-          return model == null ? initial : replacement;
-        }),
-      );
+      final service = createService((model) {
+        models.add(model);
+        return model == null ? initial : replacement;
+      });
       final repo = createRepo(client, null, service: service);
       await repo.fetchVoicemails();
       await waitForTranscriptStatus(transcriptionDatabase, '1', null);
@@ -644,7 +645,7 @@ void main() {
       final initial = _FakeTranscriptionDataSource(result: 'from the old model');
       final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
 
-      final service = createService(SwitchableTranscriptionSource((model) => model == null ? initial : replacement));
+      final service = createService((model) => model == null ? initial : replacement);
       final repo = createRepo(client, null, service: service);
       await repo.fetchVoicemails();
       var row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
@@ -661,7 +662,7 @@ void main() {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
       final dataSource = _FakeTranscriptionDataSource(result: 'hello world');
 
-      final service = createService(SwitchableTranscriptionSource.fixed(dataSource));
+      final service = TranscriptionService.fixed(dataSource, store: createStore());
       createRepo(client, null, service: service);
       await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
 
@@ -681,7 +682,7 @@ void main() {
       });
       final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
 
-      final service = createService(SwitchableTranscriptionSource((model) => model == null ? initial : replacement));
+      final service = createService((model) => model == null ? initial : replacement);
       createRepo(client, null, service: service);
       await waitFor(() => initial.calls == 1, 'old model transcription started');
 
