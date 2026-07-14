@@ -133,8 +133,15 @@ class WebtritApiClient {
 
         final responseData = httpResponse.body;
 
+        // A successful non-JSON response (binary download, raw access) must not
+        // be JSON-decoded or logged as text; only json responses and error
+        // bodies (which the backend serves as JSON) go through jsonDecode.
+        final logBody =
+            responseOptions.responseType == ResponseType.json ||
+            !(httpResponse.statusCode == 200 || httpResponse.statusCode == 204 || httpResponse.statusCode == 304);
         _logger.info(
-          '${method.toUpperCase()} response with status code: ${httpResponse.statusCode} for requestId: $xRequestId, response body: ${httpResponse.body}',
+          '${method.toUpperCase()} response with status code: ${httpResponse.statusCode} for requestId: $xRequestId'
+          '${logBody ? ', response body: ${httpResponse.body}' : ', response bytes: ${httpResponse.bodyBytes.length}'}',
         );
 
         if (httpResponse.statusCode == 200 || httpResponse.statusCode == 204 || httpResponse.statusCode == 304) {
@@ -723,6 +730,7 @@ class WebtritApiClient {
       [..._apiBasePathSegmentsV1, 'user', 'voicemails', messageId, 'attachment'],
       locale != null ? {'Accept-Language': locale} : null,
       token,
+      queryParameters: fileFormat != null && fileFormat.isNotEmpty ? {'file_format': fileFormat} : null,
       requestOptions: options,
       responseOptions: _optionalEndpointBytes,
     );
