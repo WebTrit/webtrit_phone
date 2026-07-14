@@ -309,15 +309,19 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           },
           dispose: (source) => source.dispose(),
         ),
-        // The fire-and-forget transcription pool over the source above:
-        // features enqueue media and the service writes results to the
-        // database itself.
+        // The fire-and-forget transcription pool over the source above. The
+        // pool knows nothing about the database: everything it processes is
+        // handed to this store, which writes the drift transcriptions table.
         RepositoryProvider<TranscriptionService>(
-          create: (context) => TranscriptionService(
-            appDatabase: context.read<AppDatabase>(),
-            source: context.read<SwitchableTranscriptionSource>(),
-            sessionGuard: _sessionGuard,
-          ),
+          create: (context) {
+            final store = DriftTranscriptionStore(
+              appDatabase: context.read<AppDatabase>(),
+              sessionGuard: _sessionGuard,
+            );
+            unawaited(store.resetStaleInProgress());
+
+            return TranscriptionService(source: context.read<SwitchableTranscriptionSource>(), store: store);
+          },
           dispose: (service) => service.dispose(),
         ),
         RepositoryProvider<VoicemailRepository>(
