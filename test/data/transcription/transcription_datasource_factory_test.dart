@@ -24,33 +24,31 @@ class _NoopTranscriptionStore implements TranscriptionStore {
 }
 
 void main() {
-  group('createVoicemailTranscriptionDataSource', () {
+  group('createTranscriptionDataSource', () {
     test('returns null for the default config', () {
-      expect(createVoicemailTranscriptionDataSource(const VoicemailTranscriptionConfig()), isNull);
+      expect(createTranscriptionDataSource(const TranscriptionConfig()), isNull);
     });
 
     test('returns null for an unknown mode', () {
-      expect(createVoicemailTranscriptionDataSource(const VoicemailTranscriptionConfig(mode: 'cloud')), isNull);
+      expect(createTranscriptionDataSource(const TranscriptionConfig(mode: 'cloud')), isNull);
     });
 
     test('returns the local whisper source for the local mode', () {
       expect(
-        createVoicemailTranscriptionDataSource(const VoicemailTranscriptionConfig(mode: 'local')),
+        createTranscriptionDataSource(const TranscriptionConfig(mode: 'local')),
         isA<LocalWhisperTranscriptionDataSource>(),
       );
     });
 
     test('uses the configured local model when no override is given', () {
-      final dataSource = createVoicemailTranscriptionDataSource(
-        const VoicemailTranscriptionConfig(mode: 'local', localModel: 'small'),
-      );
+      final dataSource = createTranscriptionDataSource(const TranscriptionConfig(mode: 'local', localModel: 'small'));
 
       expect((dataSource! as LocalWhisperTranscriptionDataSource).modelName, 'small');
     });
 
     test('the local model override wins over the configured model', () {
-      final dataSource = createVoicemailTranscriptionDataSource(
-        const VoicemailTranscriptionConfig(mode: 'local', localModel: 'small'),
+      final dataSource = createTranscriptionDataSource(
+        const TranscriptionConfig(mode: 'local', localModel: 'small'),
         localModelOverride: 'medium',
       );
 
@@ -58,22 +56,20 @@ void main() {
     });
 
     test('returns null for the remote mode without a URL', () {
-      expect(createVoicemailTranscriptionDataSource(const VoicemailTranscriptionConfig(mode: 'remote')), isNull);
+      expect(createTranscriptionDataSource(const TranscriptionConfig(mode: 'remote')), isNull);
     });
 
     test('returns null for the remote mode with a scheme-less URL', () {
       expect(
-        createVoicemailTranscriptionDataSource(
-          const VoicemailTranscriptionConfig(mode: 'remote', remoteUrl: 'stt.example.com/v1'),
-        ),
+        createTranscriptionDataSource(const TranscriptionConfig(mode: 'remote', remoteUrl: 'stt.example.com/v1')),
         isNull,
       );
     });
 
     test('returns the remote whisper source for the remote mode with a URL', () {
       expect(
-        createVoicemailTranscriptionDataSource(
-          const VoicemailTranscriptionConfig(mode: 'remote', remoteUrl: 'https://stt.example.com/v1'),
+        createTranscriptionDataSource(
+          const TranscriptionConfig(mode: 'remote', remoteUrl: 'https://stt.example.com/v1'),
         ),
         isA<RemoteWhisperTranscriptionDataSource>(),
       );
@@ -128,24 +124,18 @@ void main() {
     });
   });
 
-  group('VoicemailMapper', () {
+  group('TranscriptionMapper', () {
     test('copies the transcription section from the app config', () {
       const appConfig = AppConfig(
-        voicemail: AppConfigVoicemail(
-          transcription: AppConfigVoicemailTranscription(
-            mode: 'remote',
-            language: 'en',
-            local: AppConfigVoicemailTranscriptionLocal(model: 'small', userSelectable: false),
-            remote: AppConfigVoicemailTranscriptionRemote(
-              url: 'https://stt.example.com/v1',
-              apiKey: 'key',
-              model: 'large-v3',
-            ),
-          ),
+        transcription: AppConfigTranscription(
+          mode: 'remote',
+          language: 'en',
+          local: AppConfigTranscriptionLocal(model: 'small', userSelectable: false),
+          remote: AppConfigTranscriptionRemote(url: 'https://stt.example.com/v1', apiKey: 'key', model: 'large-v3'),
         ),
       );
 
-      final config = VoicemailMapper.map(appConfig).transcription;
+      final config = TranscriptionMapper.map(appConfig);
 
       expect(config.mode, 'remote');
       expect(config.language, 'en');
@@ -157,7 +147,7 @@ void main() {
     });
 
     test('defaults to the disabled mode', () {
-      final config = VoicemailMapper.map(const AppConfig()).transcription;
+      final config = TranscriptionMapper.map(const AppConfig());
 
       expect(TranscriptionMode.fromName(config.mode), TranscriptionMode.disabled);
       expect(config.language, isNull);

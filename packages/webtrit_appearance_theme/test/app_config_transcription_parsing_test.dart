@@ -5,12 +5,12 @@ import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 import 'helpers/helpers.dart';
 
 void main() {
-  group('AppConfig.voicemail parsing', () {
+  group('AppConfig.transcription parsing', () {
     test('parses the bundled app config with transcription disabled by default', () async {
       final json = await loadFixtureJson('../../assets/themes/app.config.json');
 
       final config = AppConfig.fromJson(json);
-      final transcription = config.voicemail.transcription;
+      final transcription = config.transcription;
 
       expect(transcription.mode, 'disabled');
       expect(transcription.language, isNull);
@@ -23,16 +23,14 @@ void main() {
 
     test('parses a fully populated transcription section', () {
       final config = AppConfig.fromJson({
-        'voicemail': {
-          'transcription': {
-            'mode': 'remote',
-            'language': 'en',
-            'local': {'model': 'small', 'userSelectable': false},
-            'remote': {'url': 'https://stt.example.com/v1', 'apiKey': 'key', 'model': 'large-v3'},
-          },
+        'transcription': {
+          'mode': 'remote',
+          'language': 'en',
+          'local': {'model': 'small', 'userSelectable': false},
+          'remote': {'url': 'https://stt.example.com/v1', 'apiKey': 'key', 'model': 'large-v3'},
         },
       });
-      final transcription = config.voicemail.transcription;
+      final transcription = config.transcription;
 
       expect(transcription.mode, 'remote');
       expect(transcription.language, 'en');
@@ -45,7 +43,7 @@ void main() {
 
     test('falls back to defaults when the section is absent', () {
       final config = AppConfig.fromJson(const {});
-      final transcription = config.voicemail.transcription;
+      final transcription = config.transcription;
 
       expect(transcription.mode, 'disabled');
       expect(transcription.language, isNull);

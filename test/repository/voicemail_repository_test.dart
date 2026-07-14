@@ -693,7 +693,6 @@ void main() {
       await repo.fetchVoicemails();
       var row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'from the old model');
-      expect(repo.canSelectTranscriptionModel, isTrue);
 
       await repo.setTranscriptionModel('small');
 

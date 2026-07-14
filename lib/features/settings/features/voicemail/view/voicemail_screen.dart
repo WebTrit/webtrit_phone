@@ -41,7 +41,7 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                 child: PopupMenuButton<_VoicemailMenuAction>(
                   onSelected: _onMenuAction,
                   itemBuilder: (context) => [
-                    if (context.read<VoicemailCubit>().canSelectTranscriptionModel)
+                    if (isTranscriptionModelSelectable(context.read<FeatureAccess>().transcriptionConfig))
                       PopupMenuItem(
                         value: _VoicemailMenuAction.transcriptionModel,
                         child: ListTile(
@@ -129,10 +129,14 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
         final state = context.read<VoicemailCubit>().state;
         state.isMultipleVoicemailsSelection ? _onDeleteSelectedVoicemails() : _onDeleteAllVoicemails();
       case _VoicemailMenuAction.transcriptionModel:
-        _onSelectTranscriptionModel();
+        _onOpenTranscriptionSettings();
       case _VoicemailMenuAction.cacheManagement:
         _onOpenCacheManagement();
     }
+  }
+
+  void _onOpenTranscriptionSettings() {
+    context.router.navigate(const TranscriptionSettingsScreenPageRoute());
   }
 
   /// Clearing the voicemail cache deletes files the player may hold open, so
@@ -140,20 +144,6 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
   void _onOpenCacheManagement() {
     unawaited(context.read<VoicemailPlaybackController>().stop());
     context.router.navigate(const CacheManagementScreenPageRoute());
-  }
-
-  void _onSelectTranscriptionModel() {
-    final cubit = context.read<VoicemailCubit>();
-
-    showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      builder: (_) => TranscriptionModelSheet(
-        defaultModel: cubit.defaultTranscriptionModel,
-        selectedModel: cubit.selectedTranscriptionModel,
-        onSelected: (model) => cubit.setTranscriptionModel(model),
-      ),
-    );
   }
 
   void _onDeleteAllVoicemails() async {

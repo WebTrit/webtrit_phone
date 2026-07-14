@@ -1631,6 +1631,25 @@ class ThemeModeScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [TranscriptionSettingsScreenPage]
+class TranscriptionSettingsScreenPageRoute extends PageRouteInfo<void> {
+  const TranscriptionSettingsScreenPageRoute({List<PageRouteInfo>? children})
+    : super(
+        TranscriptionSettingsScreenPageRoute.name,
+        initialChildren: children,
+      );
+
+  static const String name = 'TranscriptionSettingsScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return TranscriptionSettingsScreenPage();
+    },
+  );
+}
+
+/// generated route for
 /// [UndefinedScreenPage]
 class UndefinedScreenPageRoute
     extends PageRouteInfo<UndefinedScreenPageRouteArgs> {

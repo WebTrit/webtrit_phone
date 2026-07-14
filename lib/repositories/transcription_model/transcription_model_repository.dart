@@ -1,6 +1,6 @@
 import 'package:webtrit_phone/data/app_preferences.dart';
 
-/// Stores the user's on-device voicemail transcription model choice;
+/// Stores the user's on-device transcription model choice;
 /// null means the app-config default tier is in effect.
 abstract interface class TranscriptionModelRepository {
   String? getTranscriptionModel();
@@ -14,7 +14,7 @@ class TranscriptionModelRepositoryPrefsImpl implements TranscriptionModelReposit
   TranscriptionModelRepositoryPrefsImpl(this._appPreferences);
 
   final AppPreferences _appPreferences;
-  final _prefsKey = 'voicemail-transcription-model';
+  final _prefsKey = 'transcription-model';
 
   @override
   String? getTranscriptionModel() => _appPreferences.getString(_prefsKey);

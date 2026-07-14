@@ -14,6 +14,8 @@ import 'package:webtrit_phone/models/models.dart';
 
 class _MockVoicemailCubit extends MockCubit<VoicemailState> implements VoicemailCubit {}
 
+class _MockFeatureAccess extends Mock implements FeatureAccess {}
+
 class _FakeCacheSection implements CacheSection {
   @override
   String get id => 'voicemail';
@@ -41,7 +43,10 @@ void main() {
       const Stream<VoicemailState>.empty(),
       initialState: const VoicemailState(status: VoicemailStatus.loaded),
     );
-    when(() => cubit.canSelectTranscriptionModel).thenReturn(canSelectModel);
+    final featureAccess = _MockFeatureAccess();
+    when(
+      () => featureAccess.transcriptionConfig,
+    ).thenReturn(TranscriptionConfig(mode: canSelectModel ? 'local' : 'disabled'));
 
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -49,6 +54,7 @@ void main() {
       home: MultiProvider(
         providers: [
           BlocProvider<VoicemailCubit>.value(value: cubit),
+          Provider<FeatureAccess>.value(value: featureAccess),
           Provider<AppCacheManager>(
             create: (_) => AppCacheManager(sections: cacheAvailable ? [_FakeCacheSection()] : const []),
           ),

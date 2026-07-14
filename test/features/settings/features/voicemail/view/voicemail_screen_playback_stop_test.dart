@@ -15,10 +15,13 @@ import 'package:webtrit_phone/features/settings/features/voicemail/bloc/bloc.dar
 import 'package:webtrit_phone/features/settings/features/voicemail/models/models.dart';
 import 'package:webtrit_phone/features/settings/features/voicemail/view/voicemail_screen.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/feature_access/transcription_config.dart';
 import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
 import 'package:webtrit_phone/utils/view_params/presence_view_params.dart';
 
 class _MockVoicemailCubit extends MockCubit<VoicemailState> implements VoicemailCubit {}
+
+class _MockFeatureAccess extends Mock implements FeatureAccess {}
 
 class _MockAudioPlayer extends Mock implements AudioPlayer {}
 
@@ -38,6 +41,12 @@ Voicemail _voicemail(String id) => Voicemail(
 VoicemailState _loadedState(List<Voicemail> items) =>
     const VoicemailState().copyWith(items: items, status: VoicemailStatus.loaded);
 
+FeatureAccess _featureAccessDisabled() {
+  final featureAccess = _MockFeatureAccess();
+  when(() => featureAccess.transcriptionConfig).thenReturn(const TranscriptionConfig());
+  return featureAccess;
+}
+
 void main() {
   setUpAll(() {
     registerFallbackValue(AudioSource.uri(Uri.parse('file:///fallback')));
@@ -52,8 +61,6 @@ void main() {
     cubit = _MockVoicemailCubit();
     player = _MockAudioPlayer();
     playerStateController = StreamController<PlayerState>.broadcast(sync: true);
-
-    when(() => cubit.canSelectTranscriptionModel).thenReturn(false);
 
     when(() => player.playerStateStream).thenAnswer((_) => playerStateController.stream);
     when(() => player.playing).thenReturn(true);
@@ -78,6 +85,7 @@ void main() {
       home: MultiProvider(
         providers: [
           BlocProvider<VoicemailCubit>.value(value: cubit),
+          Provider<FeatureAccess>.value(value: _featureAccessDisabled()),
           Provider<AppCacheManager>(create: (_) => AppCacheManager(sections: const [])),
           Provider<VoicemailScreenContext>(
             create: (_) => VoicemailScreenContext(

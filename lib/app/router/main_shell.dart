@@ -298,8 +298,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         RepositoryProvider<TranscriptionService>(
           create: (context) {
             TranscriptionDataSource? buildTranscriptionDataSource(String? localModelOverride) {
-              return createVoicemailTranscriptionDataSource(
-                featureAccess.voicemailConfig.transcription,
+              return createTranscriptionDataSource(
+                featureAccess.transcriptionConfig,
                 localModelOverride: localModelOverride,
                 certs: appCertificates.trustedCertificates,
               );
@@ -325,11 +325,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
 
             if (isVoicemailsEnabled) {
               final transcriptionService = context.read<TranscriptionService>();
-              final transcription = featureAccess.voicemailConfig.transcription;
-              final transcriptionModelSelectable =
-                  !kIsWeb &&
-                  TranscriptionMode.fromName(transcription.mode) == TranscriptionMode.local &&
-                  transcription.localModelUserSelectable;
+              final transcriptionModelSelectable = isTranscriptionModelSelectable(featureAccess.transcriptionConfig);
 
               return VoicemailRepositoryImpl(
                 webtritApiClient: context.read<WebtritApiClient>(),
@@ -342,7 +338,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 transcriptionModelRepository: transcriptionModelSelectable
                     ? context.read<TranscriptionModelRepository>()
                     : null,
-                defaultTranscriptionModel: transcription.localModel,
               );
             } else {
               return const EmptyVoicemailRepository();
