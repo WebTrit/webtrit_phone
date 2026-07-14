@@ -12,10 +12,12 @@ final _logger = Logger('TranscriptionModelService');
 /// Session-wide owner of the transcription model choice, shared by every
 /// transcription consumer (the settings page is the only writer today).
 ///
-/// A change switches the pool first and persists the override after: a
-/// failed switch (which throws) must not leave a persisted model that would
-/// silently apply on the next start. Changes are serialized so rapid
-/// re-selection cannot interleave the switch/persist pairs.
+/// A change persists the override first and then switches the pool; when the
+/// switch fails (it throws, including on a disposed pool) the persisted
+/// override is reverted best-effort, so the disk can never claim a tier the
+/// running pool refused while the pool itself stays on the old engine.
+/// Changes are serialized so rapid re-selection cannot interleave the
+/// persist/switch pairs.
 class TranscriptionModelService {
   TranscriptionModelService({
     required TranscriptionModelRepository modelRepository,
@@ -70,8 +72,19 @@ class TranscriptionModelService {
     final override = model == defaultModel ? null : model;
 
     final task = _queue.then((_) async {
-      await _transcriptionService.switchLocalModel(override);
+      final previousOverride = _modelRepository.getTranscriptionModel();
       await _modelRepository.setTranscriptionModel(override);
+      try {
+        await _transcriptionService.switchLocalModel(override);
+      } catch (e) {
+        // Best effort: the override must not survive a refused switch.
+        try {
+          await _modelRepository.setTranscriptionModel(previousOverride);
+        } catch (revertError) {
+          _logger.warning('Failed to revert the model override after a failed switch', revertError);
+        }
+        rethrow;
+      }
       // Start the download right away so the user watches the progress where
       // the choice was made instead of waiting for the first transcription.
       unawaited(prepareModel());

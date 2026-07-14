@@ -63,8 +63,75 @@ class _NotifyingDataSource extends TranscriptionDataSource {
   Future<String> transcribe(Uint8List audio, {String? language}) async => '';
 }
 
+class _BlockingRemoveAllStore extends _NoopTranscriptionStore {
+  final removeAllStarted = Completer<void>();
+  final removeAllGate = Completer<void>();
+  final removed = <String>[];
+
+  @override
+  Future<void> removeAll() async {
+    if (!removeAllStarted.isCompleted) removeAllStarted.complete();
+    await removeAllGate.future;
+  }
+
+  @override
+  Future<void> remove(String mediaType, String mediaId) async {
+    removed.add('$mediaType/$mediaId');
+  }
+}
+
 void main() {
   Future<Uint8List> loadAudio() async => Uint8List(0);
+
+  test('an enqueue landing during a model switch is dropped, never fed to the outgoing engine', () async {
+    final oldSource = _NotifyingDataSource('fake:base');
+    final newSource = _NotifyingDataSource('fake:small');
+    final store = _BlockingRemoveAllStore();
+    final service = TranscriptionService((model) => model == 'small' ? newSource : oldSource, store: store);
+
+    final switching = service.switchLocalModel('small');
+    await store.removeAllStarted.future;
+
+    // The wipe is in flight; the swap has not happened yet.
+    service.enqueue('media', '1', loadAudio);
+    await pumpEventQueue();
+    expect(store.inProgressMarks, isEmpty);
+
+    store.removeAllGate.complete();
+    await switching;
+    await pumpEventQueue();
+
+    // Nothing was processed by either engine; the consumer's missing-row
+    // watch re-enqueues after the wipe instead.
+    expect(store.inProgressMarks, isEmpty);
+  });
+
+  test('forget still removes the stored row after the pool is disposed', () async {
+    final store = _BlockingRemoveAllStore();
+    final service = TranscriptionService.fixed(_NotifyingDataSource('fake:base'), store: store);
+
+    service.dispose();
+    await service.forget('media', '1');
+
+    expect(store.removed, ['media/1']);
+  });
+
+  test('switchLocalModel throws on a disposed pool instead of silently no-opping', () async {
+    final service = TranscriptionService((model) => _NotifyingDataSource('fake:x'), store: _NoopTranscriptionStore());
+
+    service.dispose();
+
+    await expectLater(service.switchLocalModel('small'), throwsStateError);
+  });
+
+  test('a fixed pool mirrors its source download state too', () async {
+    final source = _NotifyingDataSource('fake:base');
+    final service = TranscriptionService.fixed(source, store: _NoopTranscriptionStore());
+
+    expect(service.modelDownloadState.value, isA<ModelDownloadIdle>());
+    source.state.value = const ModelDownloadReady();
+    expect(service.modelDownloadState.value, isA<ModelDownloadReady>());
+  });
 
   test('modelDownloadState mirrors the active source across switches', () async {
     final first = _NotifyingDataSource('fake:base');

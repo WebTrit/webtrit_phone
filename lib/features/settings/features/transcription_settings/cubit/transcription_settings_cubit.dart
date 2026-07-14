@@ -32,25 +32,32 @@ class TranscriptionSettingsCubit extends Cubit<TranscriptionSettingsState> {
 
   final TranscriptionModelService _modelService;
 
+  ModelDownloadState? _previousDownloadState;
+
   void _onDownloadState() {
     final downloadState = _modelService.modelDownloadState.value;
+    final previous = _previousDownloadState;
+    _previousDownloadState = downloadState;
     if (isClosed) return;
     emit(state.copyWith(downloadState: downloadState));
-    // A finished download makes one more tier local; refresh the badges.
-    if (downloadState is ModelDownloadReady) _refreshDownloadedModels();
+    // A finished download makes one more tier local; refresh the badges on
+    // the transition only (the constructor covers the initial pass).
+    if (downloadState is ModelDownloadReady && previous is! ModelDownloadReady) _refreshDownloadedModels();
   }
 
   Future<void> _refreshDownloadedModels() async {
     final tiers = {...kTranscriptionModelPresets, state.defaultModel, state.selectedModel};
-    final downloaded = <String>{};
-    for (final tier in tiers) {
-      try {
-        if (await _modelService.isModelDownloaded(tier)) downloaded.add(tier);
-      } catch (e) {
-        _logger.fine('Could not check the $tier model file: $e');
-      }
-    }
-    if (!isClosed) emit(state.copyWith(downloadedModels: downloaded));
+    final checks = await Future.wait(
+      tiers.map((tier) async {
+        try {
+          return await _modelService.isModelDownloaded(tier) ? tier : null;
+        } catch (e) {
+          _logger.fine('Could not check the $tier model file: $e');
+          return null;
+        }
+      }),
+    );
+    if (!isClosed) emit(state.copyWith(downloadedModels: checks.whereType<String>().toSet()));
   }
 
   /// Retries the failed model download of the current tier.
@@ -70,7 +77,9 @@ class TranscriptionSettingsCubit extends Cubit<TranscriptionSettingsState> {
       await _modelService.setModel(model);
     } catch (e, st) {
       _logger.warning('Failed to apply transcription model $model', e, st);
-      if (!isClosed && revision == _revision) emit(state.copyWith(selectedModel: previous));
+      // Roll back to what is actually in effect, not to the previous
+      // optimistic pick: an older selection may have failed too.
+      if (!isClosed && revision == _revision) emit(state.copyWith(selectedModel: _modelService.selectedModel));
     }
   }
 

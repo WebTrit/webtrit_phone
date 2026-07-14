@@ -83,7 +83,9 @@ class TranscriptionService implements MediaTranscriber {
       _builder = null,
       _store = store,
       _concurrency = concurrency,
-      _current = source;
+      _current = source {
+    _observeSource(_current);
+  }
 
   final TranscriptionDataSourceBuilder? _builder;
   final TranscriptionStore _store;
@@ -102,6 +104,12 @@ class TranscriptionService implements MediaTranscriber {
   int _workers = 0;
   int _generation = 0;
   bool _disposed = false;
+
+  /// True while [switchLocalModel] is between invalidating the old engine
+  /// and swapping the new one in; enqueues are dropped in that window (the
+  /// consumer's missing-row watch re-feeds them right after the wipe), so a
+  /// fresh item can never be transcribed by the outgoing engine.
+  bool _switching = false;
 
   /// False while transcription is disabled or unsupported on this platform.
   bool get isEnabled => _current != null;
@@ -131,10 +139,11 @@ class TranscriptionService implements MediaTranscriber {
   }
 
   /// Queues the media for transcription; duplicates of an already queued or
-  /// in-flight item and calls while the feature is disabled are no-ops.
+  /// in-flight item and calls while the feature is disabled or a model
+  /// switch is in progress are no-ops.
   @override
   void enqueue(String mediaType, String mediaId, TranscriptionAudioLoader loadAudio, {String? language}) {
-    if (_disposed || !isEnabled) return;
+    if (_disposed || _switching || !isEnabled) return;
     final key = _mediaKey(mediaType, mediaId);
     if (_active.containsKey(key)) return;
 
@@ -168,7 +177,8 @@ class TranscriptionService implements MediaTranscriber {
     final key = _mediaKey(mediaType, mediaId);
     _requests.removeWhere((request) => request.key == key);
     _active.remove(key);
-    if (_disposed) return;
+    // The store outlives the pool (app-scoped storage), so the row removal
+    // must happen even when the deletion races session teardown.
     await _store.remove(mediaType, mediaId);
   }
 
@@ -178,7 +188,6 @@ class TranscriptionService implements MediaTranscriber {
   Future<void> forgetAllForType(String mediaType) async {
     _requests.removeWhere((request) => request.mediaType == mediaType);
     _active.removeWhere((_, request) => request.mediaType == mediaType);
-    if (_disposed) return;
     await _store.removeAllForType(mediaType);
   }
 
@@ -195,7 +204,9 @@ class TranscriptionService implements MediaTranscriber {
   /// the stored transcripts stay consistent with the engine that made them.
   @override
   Future<void> switchLocalModel(String? localModel) async {
-    if (_disposed) return;
+    // Throw rather than no-op: a silent return would let the caller persist
+    // an override that was never applied.
+    if (_disposed) throw StateError('switchLocalModel called on a disposed TranscriptionService');
     final builder = _builder;
     if (builder == null) return;
 
@@ -207,26 +218,31 @@ class TranscriptionService implements MediaTranscriber {
       return;
     }
 
-    // Invalidate before wiping: an item may still be transcribing on the
-    // previous engine and its result must not land.
-    _generation++;
-    _requests.clear();
-    _active.clear();
-
+    _switching = true;
     try {
-      await _store.removeAll();
-    } catch (e, st) {
-      _logger.warning('Failed to wipe transcriptions for regeneration; keeping the current engine', e, st);
-      replacement?.dispose();
-      rethrow;
-    }
+      // Invalidate before wiping: an item may still be transcribing on the
+      // previous engine and its result must not land.
+      _generation++;
+      _requests.clear();
+      _active.clear();
 
-    final previous = _current;
-    _current = replacement;
-    // Re-point the download-state mirror before the old source (and its
-    // notifier) is disposed.
-    _observeSource(replacement);
-    previous?.dispose();
+      try {
+        await _store.removeAll();
+      } catch (e, st) {
+        _logger.warning('Failed to wipe transcriptions for regeneration; keeping the current engine', e, st);
+        replacement?.dispose();
+        rethrow;
+      }
+
+      final previous = _current;
+      _current = replacement;
+      // Re-point the download-state mirror before the old source (and its
+      // notifier) is disposed.
+      _observeSource(replacement);
+      previous?.dispose();
+    } finally {
+      _switching = false;
+    }
   }
 
   /// Tops the worker count up to [_concurrency], never spawning more than

@@ -47,7 +47,7 @@ Last reviewed: 2026-07-14
 - App-side wiring:
     - `lib/data/feature_access.dart` - `TranscriptionMapper` resolves the
       theme `AppConfigTranscription` into the package `TranscriptionConfig`.
-    - `lib/repositories/transcription/drift_transcription_store.dart` -
+    - `lib/repositories/transcription/transcription_store_drift_impl.dart` -
       `TranscriptionStoreDriftImpl`: the only place where pool output meets the
       database; also classifies failures and handles 401.
     - `lib/repositories/transcription_model/transcription_model_repository.dart` -

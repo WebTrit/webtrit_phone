@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show ValueListenable;
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -25,6 +27,32 @@ class VoicemailScreen extends StatefulWidget {
 }
 
 class _VoicemailScreenState extends State<VoicemailScreen> {
+  /// Boiled-down "the model is downloading" flag: the raw download state
+  /// ticks on every progress report, but the list only cares about the
+  /// boolean and must not rebuild every tile per tick.
+  late final ValueNotifier<bool> _modelDownloading;
+  late final ValueListenable<ModelDownloadState> _downloadState;
+  late final VoidCallback _downloadStateListener;
+
+  @override
+  void initState() {
+    super.initState();
+    _downloadState = context.read<TranscriptionModelService>().modelDownloadState;
+    _modelDownloading = ValueNotifier(_downloadState.value is ModelDownloading);
+    _downloadStateListener = () {
+      final downloading = _downloadState.value is ModelDownloading;
+      if (_modelDownloading.value != downloading) _modelDownloading.value = downloading;
+    };
+    _downloadState.addListener(_downloadStateListener);
+  }
+
+  @override
+  void dispose() {
+    _downloadState.removeListener(_downloadStateListener);
+    _modelDownloading.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<VoicemailCubit, VoicemailState>(
@@ -98,12 +126,12 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                   if (state.isRefreshing) const LinearProgressIndicator(minHeight: 1),
                   if (state.isVoicemailsExists)
                     ValueListenableBuilder(
-                      valueListenable: context.read<TranscriptionModelService>().modelDownloadState,
-                      builder: (context, downloadState, _) => VoicemailListView(
+                      valueListenable: _modelDownloading,
+                      builder: (context, modelDownloading, _) => VoicemailListView(
                         items: state.items,
                         selectedVoicemailsIds: state.selectedVoicemailsIds,
                         isMultipleVoicemailsSelection: state.isMultipleVoicemailsSelection,
-                        modelDownloading: downloadState is ModelDownloading,
+                        modelDownloading: modelDownloading,
                       ),
                     ),
                 ],

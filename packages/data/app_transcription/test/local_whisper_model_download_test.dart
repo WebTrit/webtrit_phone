@@ -106,6 +106,36 @@ void main() {
     });
   });
 
+  group('aborted download', () {
+    test('cleans up the partial temp file when the stream fails mid-way', () async {
+      final dataSource = createDataSource(
+        MockClient.streaming((request, bodyStream) async {
+          return http.StreamedResponse(
+            () async* {
+              yield validModelBytes.sublist(0, 4);
+              throw Exception('connection reset');
+            }(),
+            200,
+            contentLength: validModelBytes.length,
+          );
+        }),
+      );
+
+      await expectLater(dataSource.prepareEngine(), throwsA(anything));
+
+      expect(File('$modelPath.download').existsSync(), isFalse);
+      expect(dataSource.downloadState.value, isA<ModelDownloadFailed>());
+    });
+
+    test('cleans up the temp file when the payload is not a ggml model', () async {
+      final dataSource = createDataSource(MockClient((request) async => http.Response('<html>error</html>', 200)));
+
+      await expectLater(dataSource.prepareEngine(), throwsA(isA<TranscriptionException>()));
+
+      expect(File('$modelPath.download').existsSync(), isFalse);
+    });
+  });
+
   group('isModelDownloaded', () {
     test('true only for a usable cached file', () async {
       final controller = _FixedPathWhisperController(modelPath);

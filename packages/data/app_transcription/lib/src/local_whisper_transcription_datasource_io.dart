@@ -150,26 +150,47 @@ class LocalWhisperTranscriptionDataSource extends TranscriptionDataSource {
 
     final total = response.contentLength;
     var received = 0;
+    var lastReported = 0;
+    // Report roughly every percent (bounded), not every HTTP chunk: each
+    // report fans out through the pool mirror into UI rebuilds, and a
+    // 1.5 GB download arrives in tens of thousands of chunks.
+    var reportStep = total != null && total > 0 ? total ~/ 100 : 512 * 1024;
+    if (reportStep < 64 * 1024) reportStep = 64 * 1024;
+    _downloadState.value = ModelDownloading(received: 0, total: total);
     final countedStream = response.stream.map((chunk) {
       received += chunk.length;
-      _downloadState.value = ModelDownloading(received: received, total: total);
+      if (received - lastReported >= reportStep || received == total) {
+        lastReported = received;
+        _downloadState.value = ModelDownloading(received: received, total: total);
+      }
       return chunk;
     });
 
     final temporaryFile = File('${modelFile.path}.download');
-    final sink = temporaryFile.openWrite();
     try {
-      await sink.addStream(countedStream);
-    } finally {
-      await sink.close();
-    }
+      final sink = temporaryFile.openWrite();
+      try {
+        await sink.addStream(countedStream);
+      } finally {
+        await sink.close();
+      }
 
-    if (!await _isUsableModelFile(temporaryFile)) {
-      temporaryFile.deleteSync();
-      throw TranscriptionException('model ${_model.modelName} download returned an invalid ggml file');
-    }
+      if (!await _isUsableModelFile(temporaryFile)) {
+        throw TranscriptionException('model ${_model.modelName} download returned an invalid ggml file');
+      }
 
-    temporaryFile.renameSync(modelFile.path);
+      temporaryFile.renameSync(modelFile.path);
+    } catch (_) {
+      // An aborted download (network drop, the source disposed by a model
+      // switch, an invalid payload) must not leave a multi-hundred-MB
+      // partial file behind.
+      try {
+        if (temporaryFile.existsSync()) temporaryFile.deleteSync();
+      } catch (e) {
+        _logger.warning('Failed to clean up partial model download ${temporaryFile.path}: $e');
+      }
+      rethrow;
+    }
   }
 
   static Future<bool> _isUsableModelFile(File file) async {

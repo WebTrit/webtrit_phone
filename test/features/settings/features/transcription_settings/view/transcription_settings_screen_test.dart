@@ -35,6 +35,8 @@ class _FakeTranscriptionDataSource extends TranscriptionDataSource {
 }
 
 class _NoopTranscriptionStore implements TranscriptionStore {
+  Object? removeAllError;
+
   @override
   Future<bool> saveInProgress(String mediaType, String mediaId, String engine) async => true;
 
@@ -51,7 +53,10 @@ class _NoopTranscriptionStore implements TranscriptionStore {
   Future<void> removeAllForType(String mediaType) async {}
 
   @override
-  Future<void> removeAll() async {}
+  Future<void> removeAll() async {
+    final error = removeAllError;
+    if (error != null) throw error;
+  }
 }
 
 class _FakeTranscriptionModelRepository implements TranscriptionModelRepository {
@@ -73,6 +78,7 @@ class _FakeTranscriptionModelRepository implements TranscriptionModelRepository 
 
 void main() {
   late _FakeTranscriptionDataSource lastDataSource;
+  late _NoopTranscriptionStore lastStore;
 
   Widget wrap(_FakeTranscriptionModelRepository modelRepository, {String defaultModel = 'base'}) {
     final router = _MockStackRouter();
@@ -91,7 +97,7 @@ void main() {
       transcriptionService: TranscriptionService(
         (model) => lastDataSource = _FakeTranscriptionDataSource('fake:${model ?? defaultModel}'),
         initialLocalModel: modelRepository.getTranscriptionModel(),
-        store: _NoopTranscriptionStore(),
+        store: lastStore = _NoopTranscriptionStore(),
       ),
       transcriptionConfig: TranscriptionConfig(mode: 'local', localModel: defaultModel),
     );
@@ -166,6 +172,22 @@ void main() {
 
     expect(find.byType(LinearProgressIndicator), findsNothing);
     expect(find.text('Model download failed'), findsNothing);
+  });
+
+  testWidgets('a failed selection rolls the checkmark back to the tier actually in effect', (tester) async {
+    final modelRepository = _FakeTranscriptionModelRepository();
+    await tester.pumpWidget(wrap(modelRepository));
+
+    // Make the wipe (and therefore the switch) fail from now on.
+    lastStore.removeAllError = Exception('database locked');
+
+    await tester.tap(find.text('Balanced'));
+    await tester.pumpAndSettle();
+
+    // Persisted override reverted and the selection back on the effective tier.
+    expect(modelRepository.value, isNull);
+    final radioGroup = tester.widget<RadioGroup<String>>(find.byType(RadioGroup<String>));
+    expect(radioGroup.groupValue, 'base');
   });
 
   testWidgets('a non-preset default appears as an extra option with its raw name', (tester) async {
