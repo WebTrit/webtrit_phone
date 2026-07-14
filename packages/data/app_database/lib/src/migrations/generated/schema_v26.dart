@@ -3000,14 +3000,6 @@ class Transcriptions extends Table with TableInfo {
     requiredDuringInsert: false,
     $customConstraints: 'NULL',
   );
-  late final GeneratedColumn<int> updatedAtUsec = GeneratedColumn<int>(
-    'updated_at_usec',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    $customConstraints: 'NULL',
-  );
   @override
   List<GeneratedColumn> get $columns => [
     mediaType,
@@ -3015,7 +3007,6 @@ class Transcriptions extends Table with TableInfo {
     transcript,
     status,
     engine,
-    updatedAtUsec,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;

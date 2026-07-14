@@ -28,7 +28,6 @@ class TranscriptionsDao extends DatabaseAccessor<AppDatabase> with _$Transcripti
         transcript: Value(transcription.transcript),
         status: Value(transcription.status),
         engine: Value(transcription.engine),
-        updatedAtUsec: Value(transcription.updatedAtUsec),
       ),
     );
   }
