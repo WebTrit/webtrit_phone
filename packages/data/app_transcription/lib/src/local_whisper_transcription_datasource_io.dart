@@ -18,6 +18,16 @@ final _logger = Logger('LocalWhisperTranscriptionDataSource');
 /// Incoming audio is converted to the 16 kHz mono WAV expected by Whisper
 /// before recognition (voicemail audio is telephony 8 kHz).
 class LocalWhisperTranscriptionDataSource implements TranscriptionDataSource {
+  /// [model] selects the Whisper tier (`tiny`, `base`, `small`, `medium`,
+  /// ...); unknown names fall back to `base`. The official model tables
+  /// document the per-tier trade-offs:
+  ///
+  /// - https://github.com/openai/whisper#available-models-and-languages -
+  ///   parameters, required memory and relative speed of every tier;
+  /// - https://github.com/ggml-org/whisper.cpp/blob/master/models/README.md -
+  ///   the ggml conversions this source actually runs, with on-disk sizes;
+  /// - https://huggingface.co/ggerganov/whisper.cpp - the ggml model files
+  ///   downloaded on first use.
   LocalWhisperTranscriptionDataSource({
     String model = 'base',
     String? defaultLanguage,
