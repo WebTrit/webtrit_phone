@@ -64,13 +64,6 @@ abstract class VoicemailRepository implements Refreshable {
   /// Removes only the locally cached voicemail records; the server copy stays
   /// and the list is fetched again on the next refresh.
   Future<void> wipeLocalRecords();
-
-  /// Switches on-device transcription to [localModel] (null returns to the
-  /// app-config default tier) and re-transcribes every voicemail with it,
-  /// including messages that already hold a transcript from the old model.
-  /// No-op when the repository was created without a transcription source
-  /// builder (feature disabled or not local).
-  void applyTranscriptionModel(String? localModel);
 }
 
 final _logger = Logger('VoicemailRepository');
@@ -83,12 +76,12 @@ class VoicemailRepositoryImpl
     required String token,
     required AppDatabase appDatabase,
     SessionGuard? sessionGuard,
-    SwitchableTranscriptionSource? transcription,
+    TranscriptionService? transcriptionService,
   }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
        _webtritApiClient = webtritApiClient,
        _token = token,
        _appDatabase = appDatabase,
-       _transcription = transcription {
+       _transcriptionService = transcriptionService {
     _initialize();
   }
 
@@ -96,17 +89,7 @@ class VoicemailRepositoryImpl
   final String _token;
   final AppDatabase _appDatabase;
   final SessionGuard _sessionGuard;
-  final SwitchableTranscriptionSource? _transcription;
-
-  /// Guards against overlapping transcription sweeps kicked off by
-  /// consecutive [fetchVoicemails] calls; the work is sequential on purpose
-  /// (one voicemail at a time) to keep the on-device engine load sane.
-  bool _transcriptionRunning = false;
-
-  /// Set when a sweep is requested while another one is running: the running
-  /// sweep iterates a snapshot that may predate the rows just fetched, so it
-  /// re-queries and runs one more round instead of dropping the request.
-  bool _transcriptionRerunRequested = false;
+  final TranscriptionService? _transcriptionService;
 
   // If the repository is disabled, the stream controller is not initialized.
   // In such cases, subscribers will receive an empty stream instead.
@@ -138,39 +121,25 @@ class VoicemailRepositoryImpl
   @override
   Future<void> wipeLocalRecords() async {
     await _appDatabase.voicemailDao.deleteAllVoicemails();
-    await _appDatabase.transcriptionsDao.deleteAllForType(kVoicemailTranscriptionMediaType);
+    await _forgetAllTranscriptions();
   }
 
   void _initialize() {
     _updatesController = StreamController<List<Voicemail>>.broadcast(onListen: _onListen, onCancel: _onCancel);
 
-    unawaited(_resetStaleTranscriptionProgress());
+    // A model switch wipes every stored transcription; re-enqueue our media
+    // so the new model regenerates the transcripts. The subscription ends
+    // with the service (its event stream closes on dispose).
+    _transcriptionService?.events.listen((event) {
+      if (event is TranscriptionsWiped) unawaited(_enqueuePendingTranscriptions());
+    });
+
     unawaited(
       fetchVoicemails().catchError(
         (Object e) {},
         test: (e) => e is VoicemailNotConfiguredException || e is EndpointNotSupportedException,
       ),
     );
-  }
-
-  /// With transcription disabled nothing will ever finish rows left in
-  /// [TranscriptStatus.inProgress] by an interrupted run of a previous
-  /// configuration (or another platform), so the UI would show an eternal
-  /// progress state; reset them back to "not attempted". With transcription
-  /// enabled the sweep picks such rows up itself.
-  Future<void> _resetStaleTranscriptionProgress() async {
-    if (_transcription?.current != null) return;
-
-    try {
-      final transcriptions = await _appDatabase.transcriptionsDao.getAllForType(kVoicemailTranscriptionMediaType);
-      final stale = transcriptions.where((transcription) => transcription.status == TranscriptStatus.inProgress.name);
-
-      for (final transcription in stale) {
-        await _updateTranscript(transcription.mediaId, status: null);
-      }
-    } catch (e, st) {
-      _logger.warning('Failed to reset stale transcription progress', e, st);
-    }
   }
 
   void _onListen() {
@@ -236,7 +205,7 @@ class VoicemailRepositoryImpl
 
       _fetchingCompleter?.complete();
 
-      unawaited(_transcribePendingVoicemails());
+      unawaited(_enqueuePendingTranscriptions());
     } on UnauthorizedException catch (e) {
       _sessionGuard.onUnauthorized(e);
       rethrow;
@@ -255,140 +224,55 @@ class VoicemailRepositoryImpl
     }
   }
 
-  /// Transcribes voicemails that have no transcript yet, one at a time.
+  /// Enqueues voice messages that still need a transcript into the
+  /// session-wide [TranscriptionService] pool and returns immediately; the
+  /// service writes progress and results to the local database, so
+  /// [watchVoicemails] listeners see every update live.
   ///
-  /// Eligible are voice messages whose transcript is absent and whose status is
-  /// not [TranscriptStatus.unavailable] (a failed message is not retried
-  /// automatically; rows left in [TranscriptStatus.inProgress] by an
-  /// interrupted run are picked up again). Progress and results are written to
-  /// the local database, so [watchVoicemails] listeners see every update live.
-  Future<void> _transcribePendingVoicemails() async {
-    if (_transcription?.current == null) return;
+  /// Eligible are messages whose transcript is absent and whose status is not
+  /// [TranscriptStatus.unavailable] (a failed message is not retried
+  /// automatically; the pool dedups items already queued or in flight).
+  Future<void> _enqueuePendingTranscriptions() async {
+    final transcriptionService = _transcriptionService;
+    if (transcriptionService == null || !transcriptionService.isEnabled) return;
 
-    if (_transcriptionRunning) {
-      _transcriptionRerunRequested = true;
-      return;
-    }
-
-    _transcriptionRunning = true;
     try {
-      var aborted = false;
+      final pending = await _appDatabase.voicemailDao.getVoicemailsPendingTranscription(
+        excludedStatus: TranscriptStatus.unavailable.name,
+      );
 
-      do {
-        _transcriptionRerunRequested = false;
-
-        final voicemails = await _appDatabase.voicemailDao.getAllVoicemails();
-        final transcriptions = {
-          for (final transcription in await _appDatabase.transcriptionsDao.getAllForType(
-            kVoicemailTranscriptionMediaType,
-          ))
-            transcription.mediaId: transcription,
-        };
-        final pending = voicemails.where((voicemail) {
-          final transcription = transcriptions[voicemail.id];
-          return voicemail.type == 'voice' &&
-              transcription?.transcript == null &&
-              transcription?.status != TranscriptStatus.unavailable.name;
-        });
-
-        for (final voicemail in pending) {
-          // Re-read per message: applyTranscriptionModel may swap the source
-          // mid-sweep and the remaining messages should use the new one.
-          final transcriptionDataSource = _transcription?.current;
-          if (!_featureSupported || transcriptionDataSource == null) {
-            aborted = true;
-            break;
-          }
-
-          try {
-            await _transcribeVoicemail(transcriptionDataSource, voicemail.id);
-          } on UnauthorizedException catch (e) {
-            _sessionGuard.onUnauthorized(e);
-            aborted = true;
-            break;
-          }
-        }
-      } while (_transcriptionRerunRequested && !aborted);
-    } catch (e, st) {
-      // The sweep runs unawaited; never let an error (e.g. a database closed
-      // by logout mid-sweep) escape to the zone as an unhandled async error.
-      _logger.warning('Voicemail transcription sweep aborted', e, st);
-    } finally {
-      _transcriptionRunning = false;
-      _transcriptionRerunRequested = false;
-    }
-  }
-
-  Future<void> _transcribeVoicemail(TranscriptionDataSource transcriptionDataSource, String messageId) async {
-    try {
-      await _updateTranscript(messageId, status: TranscriptStatus.inProgress);
-
-      final audio = await _webtritApiClient.getUserVoicemailAttachment(_token, messageId, fileFormat: 'wav');
-      final transcript = await transcriptionDataSource.transcribe(audio);
-
-      await _updateTranscript(messageId, transcript: transcript, status: TranscriptStatus.done);
-    } on UnauthorizedException {
-      // Roll back to "not attempted" so the next session retries the message;
-      // a failed rollback write must not mask the auth failure.
-      try {
-        await _updateTranscript(messageId, status: null);
-      } catch (e) {
-        _logger.warning('Failed to roll back transcript status for voicemail $messageId', e);
+      for (final voicemail in pending) {
+        transcriptionService.enqueue(
+          kVoicemailTranscriptionMediaType,
+          voicemail.id,
+          () => _webtritApiClient.getUserVoicemailAttachment(_token, voicemail.id, fileFormat: 'wav'),
+        );
       }
-      rethrow;
     } catch (e, st) {
-      final transient = _isTransientTranscriptionFailure(e);
-      _logger.warning('Failed to transcribe voicemail $messageId (transient: $transient)', e, st);
-
-      // A transient failure rolls back to "not attempted" so the next sweep
-      // retries the message (bounded to one attempt per fetch); only failures
-      // that cannot succeed later are terminal.
-      try {
-        await _updateTranscript(messageId, status: transient ? null : TranscriptStatus.unavailable);
-      } catch (e) {
-        _logger.warning('Failed to store transcript status for voicemail $messageId', e);
-      }
+      // Runs unawaited; never let an error (e.g. a database closed by logout)
+      // escape to the zone as an unhandled async error.
+      _logger.warning('Failed to enqueue pending voicemail transcriptions', e, st);
     }
   }
 
-  @override
-  void applyTranscriptionModel(String? localModel) {
-    if (_transcription?.switchLocalModel(localModel) != true) return;
-
-    unawaited(_retranscribeAllVoicemails());
+  /// Routes transcription cleanup through the pool when it exists so a queued
+  /// or in-flight item cannot resurrect the row of a deleted voicemail.
+  Future<void> _forgetTranscription(String messageId) async {
+    final transcriptionService = _transcriptionService;
+    if (transcriptionService != null) {
+      await transcriptionService.forget(kVoicemailTranscriptionMediaType, messageId);
+    } else {
+      await _appDatabase.transcriptionsDao.deleteByMedia(kVoicemailTranscriptionMediaType, messageId);
+    }
   }
 
-  /// The new model has to produce the transcripts, so finished (and failed)
-  /// messages are reset to "not attempted" before the sweep instead of
-  /// keeping the text from the old model.
-  Future<void> _retranscribeAllVoicemails() async {
-    try {
+  Future<void> _forgetAllTranscriptions() async {
+    final transcriptionService = _transcriptionService;
+    if (transcriptionService != null) {
+      await transcriptionService.forgetAllForType(kVoicemailTranscriptionMediaType);
+    } else {
       await _appDatabase.transcriptionsDao.deleteAllForType(kVoicemailTranscriptionMediaType);
-    } catch (e, st) {
-      _logger.warning('Failed to reset transcripts for re-transcription', e, st);
     }
-    await _transcribePendingVoicemails();
-  }
-
-  static bool _isTransientTranscriptionFailure(Object error) {
-    if (error is TranscriptionException) return error.transient;
-    // Attachment download failures: retry on transport errors (no status),
-    // HTTP retry semantics and server errors; other 4xx are terminal.
-    if (error is RequestFailure) return error.statusCode == null || error.isTransient || error.isServerError;
-    // Unknown runtime errors: fail open toward retry, it is bounded anyway.
-    return true;
-  }
-
-  Future<void> _updateTranscript(String messageId, {String? transcript, TranscriptStatus? status}) {
-    return _appDatabase.transcriptionsDao.upsertTranscription(
-      TranscriptionData(
-        mediaType: kVoicemailTranscriptionMediaType,
-        mediaId: messageId,
-        transcript: transcript,
-        status: status?.name,
-        engine: _transcription?.current?.engine,
-      ),
-    );
   }
 
   /// Retrieves local voicemails and pushes them to the stream controller.
@@ -428,7 +312,7 @@ class VoicemailRepositoryImpl
       );
 
       await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
-      await _appDatabase.transcriptionsDao.deleteByMedia(kVoicemailTranscriptionMediaType, messageId);
+      await _forgetTranscription(messageId);
     } on UnauthorizedException catch (e) {
       _sessionGuard.onUnauthorized(e);
       rethrow;
@@ -458,9 +342,9 @@ class VoicemailRepositoryImpl
 
     for (final voicemail in allVoicemails) {
       try {
+        // removeVoicemail owns the local cleanup (voicemail row + queued or
+        // stored transcription).
         await removeVoicemail(voicemail.id);
-        await _appDatabase.voicemailDao.deleteVoicemailById(voicemail.id);
-        await _appDatabase.transcriptionsDao.deleteByMedia(kVoicemailTranscriptionMediaType, voicemail.id);
       } catch (e, st) {
         _logger.warning('Failed to remove voicemail with id ${voicemail.id}', e, st);
         rethrow;
@@ -558,9 +442,9 @@ class VoicemailRepositoryImpl
 
     for (final messageId in messagesIds) {
       try {
+        // removeVoicemail owns the local cleanup (voicemail row + queued or
+        // stored transcription).
         await removeVoicemail(messageId);
-        await _appDatabase.voicemailDao.deleteVoicemailById(messageId);
-        await _appDatabase.transcriptionsDao.deleteByMedia(kVoicemailTranscriptionMediaType, messageId);
       } catch (e, st) {
         _logger.warning('Failed to remove voicemail with id $messageId', e, st);
         rethrow;
@@ -617,7 +501,4 @@ class EmptyVoicemailRepository implements VoicemailRepository {
 
   @override
   Future<void> wipeLocalRecords() => Future.value();
-
-  @override
-  void applyTranscriptionModel(String? localModel) {}
 }

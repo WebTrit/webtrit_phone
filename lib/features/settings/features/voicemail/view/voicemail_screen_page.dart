@@ -53,6 +53,7 @@ class VoicemailScreenPage extends StatelessWidget {
             transcriptionModelRepository: transcriptionModelSelectable
                 ? context.read<TranscriptionModelRepository>()
                 : null,
+            transcriptionService: transcriptionModelSelectable ? context.read<TranscriptionService>() : null,
             defaultTranscriptionModel: transcription.localModel,
           ),
         ),

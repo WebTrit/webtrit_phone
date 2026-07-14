@@ -39,4 +39,11 @@ class SwitchableTranscriptionSource {
     previous?.dispose();
     return true;
   }
+
+  /// Releases the active source; [current] is null afterwards and the object
+  /// must not be used again.
+  void dispose() {
+    _current?.dispose();
+    _current = null;
+  }
 }
