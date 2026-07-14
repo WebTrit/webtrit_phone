@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AppConfig {
 
- AppConfigLogin get loginConfig; AppConfigMain get mainConfig; AppConfigSettings get settingsConfig; AppConfigCall get callConfig; AppConfigContacts get contacts; AppConfigMessaging get messaging; AppConfigLocalization get localization; AppConfigVoicemail get voicemail; List<SupportedFeature> get supported;
+ AppConfigLogin get loginConfig; AppConfigMain get mainConfig; AppConfigSettings get settingsConfig; AppConfigCall get callConfig; AppConfigContacts get contacts; AppConfigMessaging get messaging; AppConfigLocalization get localization; AppConfigTranscription get transcription; List<SupportedFeature> get supported;
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $AppConfigCopyWith<AppConfig> get copyWith => _$AppConfigCopyWithImpl<AppConfig>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfig&&(identical(other.loginConfig, loginConfig) || other.loginConfig == loginConfig)&&(identical(other.mainConfig, mainConfig) || other.mainConfig == mainConfig)&&(identical(other.settingsConfig, settingsConfig) || other.settingsConfig == settingsConfig)&&(identical(other.callConfig, callConfig) || other.callConfig == callConfig)&&(identical(other.contacts, contacts) || other.contacts == contacts)&&(identical(other.messaging, messaging) || other.messaging == messaging)&&(identical(other.localization, localization) || other.localization == localization)&&(identical(other.voicemail, voicemail) || other.voicemail == voicemail)&&const DeepCollectionEquality().equals(other.supported, supported));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfig&&(identical(other.loginConfig, loginConfig) || other.loginConfig == loginConfig)&&(identical(other.mainConfig, mainConfig) || other.mainConfig == mainConfig)&&(identical(other.settingsConfig, settingsConfig) || other.settingsConfig == settingsConfig)&&(identical(other.callConfig, callConfig) || other.callConfig == callConfig)&&(identical(other.contacts, contacts) || other.contacts == contacts)&&(identical(other.messaging, messaging) || other.messaging == messaging)&&(identical(other.localization, localization) || other.localization == localization)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&const DeepCollectionEquality().equals(other.supported, supported));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,loginConfig,mainConfig,settingsConfig,callConfig,contacts,messaging,localization,voicemail,const DeepCollectionEquality().hash(supported));
+int get hashCode => Object.hash(runtimeType,loginConfig,mainConfig,settingsConfig,callConfig,contacts,messaging,localization,transcription,const DeepCollectionEquality().hash(supported));
 
 @override
 String toString() {
-  return 'AppConfig(loginConfig: $loginConfig, mainConfig: $mainConfig, settingsConfig: $settingsConfig, callConfig: $callConfig, contacts: $contacts, messaging: $messaging, localization: $localization, voicemail: $voicemail, supported: $supported)';
+  return 'AppConfig(loginConfig: $loginConfig, mainConfig: $mainConfig, settingsConfig: $settingsConfig, callConfig: $callConfig, contacts: $contacts, messaging: $messaging, localization: $localization, transcription: $transcription, supported: $supported)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $AppConfigCopyWith<$Res>  {
   factory $AppConfigCopyWith(AppConfig value, $Res Function(AppConfig) _then) = _$AppConfigCopyWithImpl;
 @useResult
 $Res call({
- AppConfigLogin loginConfig, AppConfigMain mainConfig, AppConfigSettings settingsConfig, AppConfigCall callConfig, AppConfigContacts contacts, AppConfigMessaging messaging, AppConfigLocalization localization, AppConfigVoicemail voicemail, List<SupportedFeature> supported
+ AppConfigLogin loginConfig, AppConfigMain mainConfig, AppConfigSettings settingsConfig, AppConfigCall callConfig, AppConfigContacts contacts, AppConfigMessaging messaging, AppConfigLocalization localization, AppConfigTranscription transcription, List<SupportedFeature> supported
 });
 
 
@@ -63,7 +63,7 @@ class _$AppConfigCopyWithImpl<$Res>
 
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? loginConfig = null,Object? mainConfig = null,Object? settingsConfig = null,Object? callConfig = null,Object? contacts = null,Object? messaging = null,Object? localization = null,Object? voicemail = null,Object? supported = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? loginConfig = null,Object? mainConfig = null,Object? settingsConfig = null,Object? callConfig = null,Object? contacts = null,Object? messaging = null,Object? localization = null,Object? transcription = null,Object? supported = null,}) {
   return _then(AppConfig(
 loginConfig: null == loginConfig ? _self.loginConfig : loginConfig // ignore: cast_nullable_to_non_nullable
 as AppConfigLogin,mainConfig: null == mainConfig ? _self.mainConfig : mainConfig // ignore: cast_nullable_to_non_nullable
@@ -72,8 +72,8 @@ as AppConfigSettings,callConfig: null == callConfig ? _self.callConfig : callCon
 as AppConfigCall,contacts: null == contacts ? _self.contacts : contacts // ignore: cast_nullable_to_non_nullable
 as AppConfigContacts,messaging: null == messaging ? _self.messaging : messaging // ignore: cast_nullable_to_non_nullable
 as AppConfigMessaging,localization: null == localization ? _self.localization : localization // ignore: cast_nullable_to_non_nullable
-as AppConfigLocalization,voicemail: null == voicemail ? _self.voicemail : voicemail // ignore: cast_nullable_to_non_nullable
-as AppConfigVoicemail,supported: null == supported ? _self.supported : supported // ignore: cast_nullable_to_non_nullable
+as AppConfigLocalization,transcription: null == transcription ? _self.transcription : transcription // ignore: cast_nullable_to_non_nullable
+as AppConfigTranscription,supported: null == supported ? _self.supported : supported // ignore: cast_nullable_to_non_nullable
 as List<SupportedFeature>,
   ));
 }
@@ -5586,206 +5586,20 @@ case _:
 
 
 /// @nodoc
-mixin _$AppConfigVoicemail {
+mixin _$AppConfigTranscription {
 
- AppConfigVoicemailTranscription get transcription;
-/// Create a copy of AppConfigVoicemail
+ String get mode; String? get language; AppConfigTranscriptionLocal get local; AppConfigTranscriptionRemote get remote;
+/// Create a copy of AppConfigTranscription
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$AppConfigVoicemailCopyWith<AppConfigVoicemail> get copyWith => _$AppConfigVoicemailCopyWithImpl<AppConfigVoicemail>(this as AppConfigVoicemail, _$identity);
+$AppConfigTranscriptionCopyWith<AppConfigTranscription> get copyWith => _$AppConfigTranscriptionCopyWithImpl<AppConfigTranscription>(this as AppConfigTranscription, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigVoicemail&&(identical(other.transcription, transcription) || other.transcription == transcription));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,transcription);
-
-@override
-String toString() {
-  return 'AppConfigVoicemail(transcription: $transcription)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $AppConfigVoicemailCopyWith<$Res>  {
-  factory $AppConfigVoicemailCopyWith(AppConfigVoicemail value, $Res Function(AppConfigVoicemail) _then) = _$AppConfigVoicemailCopyWithImpl;
-@useResult
-$Res call({
- AppConfigVoicemailTranscription transcription
-});
-
-
-
-
-}
-/// @nodoc
-class _$AppConfigVoicemailCopyWithImpl<$Res>
-    implements $AppConfigVoicemailCopyWith<$Res> {
-  _$AppConfigVoicemailCopyWithImpl(this._self, this._then);
-
-  final AppConfigVoicemail _self;
-  final $Res Function(AppConfigVoicemail) _then;
-
-/// Create a copy of AppConfigVoicemail
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? transcription = null,}) {
-  return _then(AppConfigVoicemail(
-transcription: null == transcription ? _self.transcription : transcription // ignore: cast_nullable_to_non_nullable
-as AppConfigVoicemailTranscription,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [AppConfigVoicemail].
-extension AppConfigVoicemailPatterns on AppConfigVoicemail {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-
-}
-
-
-/// @nodoc
-mixin _$AppConfigVoicemailTranscription {
-
- String get mode; String? get language; AppConfigVoicemailTranscriptionLocal get local; AppConfigVoicemailTranscriptionRemote get remote;
-/// Create a copy of AppConfigVoicemailTranscription
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$AppConfigVoicemailTranscriptionCopyWith<AppConfigVoicemailTranscription> get copyWith => _$AppConfigVoicemailTranscriptionCopyWithImpl<AppConfigVoicemailTranscription>(this as AppConfigVoicemailTranscription, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigVoicemailTranscription&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.language, language) || other.language == language)&&(identical(other.local, local) || other.local == local)&&(identical(other.remote, remote) || other.remote == remote));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigTranscription&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.language, language) || other.language == language)&&(identical(other.local, local) || other.local == local)&&(identical(other.remote, remote) || other.remote == remote));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -5794,18 +5608,18 @@ int get hashCode => Object.hash(runtimeType,mode,language,local,remote);
 
 @override
 String toString() {
-  return 'AppConfigVoicemailTranscription(mode: $mode, language: $language, local: $local, remote: $remote)';
+  return 'AppConfigTranscription(mode: $mode, language: $language, local: $local, remote: $remote)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $AppConfigVoicemailTranscriptionCopyWith<$Res>  {
-  factory $AppConfigVoicemailTranscriptionCopyWith(AppConfigVoicemailTranscription value, $Res Function(AppConfigVoicemailTranscription) _then) = _$AppConfigVoicemailTranscriptionCopyWithImpl;
+abstract mixin class $AppConfigTranscriptionCopyWith<$Res>  {
+  factory $AppConfigTranscriptionCopyWith(AppConfigTranscription value, $Res Function(AppConfigTranscription) _then) = _$AppConfigTranscriptionCopyWithImpl;
 @useResult
 $Res call({
- String mode, String? language, AppConfigVoicemailTranscriptionLocal local, AppConfigVoicemailTranscriptionRemote remote
+ String mode, String? language, AppConfigTranscriptionLocal local, AppConfigTranscriptionRemote remote
 });
 
 
@@ -5813,30 +5627,30 @@ $Res call({
 
 }
 /// @nodoc
-class _$AppConfigVoicemailTranscriptionCopyWithImpl<$Res>
-    implements $AppConfigVoicemailTranscriptionCopyWith<$Res> {
-  _$AppConfigVoicemailTranscriptionCopyWithImpl(this._self, this._then);
+class _$AppConfigTranscriptionCopyWithImpl<$Res>
+    implements $AppConfigTranscriptionCopyWith<$Res> {
+  _$AppConfigTranscriptionCopyWithImpl(this._self, this._then);
 
-  final AppConfigVoicemailTranscription _self;
-  final $Res Function(AppConfigVoicemailTranscription) _then;
+  final AppConfigTranscription _self;
+  final $Res Function(AppConfigTranscription) _then;
 
-/// Create a copy of AppConfigVoicemailTranscription
+/// Create a copy of AppConfigTranscription
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? mode = null,Object? language = freezed,Object? local = null,Object? remote = null,}) {
-  return _then(AppConfigVoicemailTranscription(
+  return _then(AppConfigTranscription(
 mode: null == mode ? _self.mode : mode // ignore: cast_nullable_to_non_nullable
 as String,language: freezed == language ? _self.language : language // ignore: cast_nullable_to_non_nullable
 as String?,local: null == local ? _self.local : local // ignore: cast_nullable_to_non_nullable
-as AppConfigVoicemailTranscriptionLocal,remote: null == remote ? _self.remote : remote // ignore: cast_nullable_to_non_nullable
-as AppConfigVoicemailTranscriptionRemote,
+as AppConfigTranscriptionLocal,remote: null == remote ? _self.remote : remote // ignore: cast_nullable_to_non_nullable
+as AppConfigTranscriptionRemote,
   ));
 }
 
 }
 
 
-/// Adds pattern-matching-related methods to [AppConfigVoicemailTranscription].
-extension AppConfigVoicemailTranscriptionPatterns on AppConfigVoicemailTranscription {
+/// Adds pattern-matching-related methods to [AppConfigTranscription].
+extension AppConfigTranscriptionPatterns on AppConfigTranscription {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -5961,20 +5775,20 @@ case _:
 
 
 /// @nodoc
-mixin _$AppConfigVoicemailTranscriptionLocal {
+mixin _$AppConfigTranscriptionLocal {
 
  String get model; bool get userSelectable;
-/// Create a copy of AppConfigVoicemailTranscriptionLocal
+/// Create a copy of AppConfigTranscriptionLocal
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$AppConfigVoicemailTranscriptionLocalCopyWith<AppConfigVoicemailTranscriptionLocal> get copyWith => _$AppConfigVoicemailTranscriptionLocalCopyWithImpl<AppConfigVoicemailTranscriptionLocal>(this as AppConfigVoicemailTranscriptionLocal, _$identity);
+$AppConfigTranscriptionLocalCopyWith<AppConfigTranscriptionLocal> get copyWith => _$AppConfigTranscriptionLocalCopyWithImpl<AppConfigTranscriptionLocal>(this as AppConfigTranscriptionLocal, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigVoicemailTranscriptionLocal&&(identical(other.model, model) || other.model == model)&&(identical(other.userSelectable, userSelectable) || other.userSelectable == userSelectable));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigTranscriptionLocal&&(identical(other.model, model) || other.model == model)&&(identical(other.userSelectable, userSelectable) || other.userSelectable == userSelectable));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -5983,15 +5797,15 @@ int get hashCode => Object.hash(runtimeType,model,userSelectable);
 
 @override
 String toString() {
-  return 'AppConfigVoicemailTranscriptionLocal(model: $model, userSelectable: $userSelectable)';
+  return 'AppConfigTranscriptionLocal(model: $model, userSelectable: $userSelectable)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $AppConfigVoicemailTranscriptionLocalCopyWith<$Res>  {
-  factory $AppConfigVoicemailTranscriptionLocalCopyWith(AppConfigVoicemailTranscriptionLocal value, $Res Function(AppConfigVoicemailTranscriptionLocal) _then) = _$AppConfigVoicemailTranscriptionLocalCopyWithImpl;
+abstract mixin class $AppConfigTranscriptionLocalCopyWith<$Res>  {
+  factory $AppConfigTranscriptionLocalCopyWith(AppConfigTranscriptionLocal value, $Res Function(AppConfigTranscriptionLocal) _then) = _$AppConfigTranscriptionLocalCopyWithImpl;
 @useResult
 $Res call({
  String model, bool userSelectable
@@ -6002,17 +5816,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$AppConfigVoicemailTranscriptionLocalCopyWithImpl<$Res>
-    implements $AppConfigVoicemailTranscriptionLocalCopyWith<$Res> {
-  _$AppConfigVoicemailTranscriptionLocalCopyWithImpl(this._self, this._then);
+class _$AppConfigTranscriptionLocalCopyWithImpl<$Res>
+    implements $AppConfigTranscriptionLocalCopyWith<$Res> {
+  _$AppConfigTranscriptionLocalCopyWithImpl(this._self, this._then);
 
-  final AppConfigVoicemailTranscriptionLocal _self;
-  final $Res Function(AppConfigVoicemailTranscriptionLocal) _then;
+  final AppConfigTranscriptionLocal _self;
+  final $Res Function(AppConfigTranscriptionLocal) _then;
 
-/// Create a copy of AppConfigVoicemailTranscriptionLocal
+/// Create a copy of AppConfigTranscriptionLocal
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? model = null,Object? userSelectable = null,}) {
-  return _then(AppConfigVoicemailTranscriptionLocal(
+  return _then(AppConfigTranscriptionLocal(
 model: null == model ? _self.model : model // ignore: cast_nullable_to_non_nullable
 as String,userSelectable: null == userSelectable ? _self.userSelectable : userSelectable // ignore: cast_nullable_to_non_nullable
 as bool,
@@ -6022,8 +5836,8 @@ as bool,
 }
 
 
-/// Adds pattern-matching-related methods to [AppConfigVoicemailTranscriptionLocal].
-extension AppConfigVoicemailTranscriptionLocalPatterns on AppConfigVoicemailTranscriptionLocal {
+/// Adds pattern-matching-related methods to [AppConfigTranscriptionLocal].
+extension AppConfigTranscriptionLocalPatterns on AppConfigTranscriptionLocal {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -6148,20 +5962,20 @@ case _:
 
 
 /// @nodoc
-mixin _$AppConfigVoicemailTranscriptionRemote {
+mixin _$AppConfigTranscriptionRemote {
 
  String? get url; String? get apiKey; String get model;
-/// Create a copy of AppConfigVoicemailTranscriptionRemote
+/// Create a copy of AppConfigTranscriptionRemote
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$AppConfigVoicemailTranscriptionRemoteCopyWith<AppConfigVoicemailTranscriptionRemote> get copyWith => _$AppConfigVoicemailTranscriptionRemoteCopyWithImpl<AppConfigVoicemailTranscriptionRemote>(this as AppConfigVoicemailTranscriptionRemote, _$identity);
+$AppConfigTranscriptionRemoteCopyWith<AppConfigTranscriptionRemote> get copyWith => _$AppConfigTranscriptionRemoteCopyWithImpl<AppConfigTranscriptionRemote>(this as AppConfigTranscriptionRemote, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigVoicemailTranscriptionRemote&&(identical(other.url, url) || other.url == url)&&(identical(other.apiKey, apiKey) || other.apiKey == apiKey)&&(identical(other.model, model) || other.model == model));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigTranscriptionRemote&&(identical(other.url, url) || other.url == url)&&(identical(other.apiKey, apiKey) || other.apiKey == apiKey)&&(identical(other.model, model) || other.model == model));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -6170,15 +5984,15 @@ int get hashCode => Object.hash(runtimeType,url,apiKey,model);
 
 @override
 String toString() {
-  return 'AppConfigVoicemailTranscriptionRemote(url: $url, apiKey: $apiKey, model: $model)';
+  return 'AppConfigTranscriptionRemote(url: $url, apiKey: $apiKey, model: $model)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $AppConfigVoicemailTranscriptionRemoteCopyWith<$Res>  {
-  factory $AppConfigVoicemailTranscriptionRemoteCopyWith(AppConfigVoicemailTranscriptionRemote value, $Res Function(AppConfigVoicemailTranscriptionRemote) _then) = _$AppConfigVoicemailTranscriptionRemoteCopyWithImpl;
+abstract mixin class $AppConfigTranscriptionRemoteCopyWith<$Res>  {
+  factory $AppConfigTranscriptionRemoteCopyWith(AppConfigTranscriptionRemote value, $Res Function(AppConfigTranscriptionRemote) _then) = _$AppConfigTranscriptionRemoteCopyWithImpl;
 @useResult
 $Res call({
  String? url, String? apiKey, String model
@@ -6189,17 +6003,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$AppConfigVoicemailTranscriptionRemoteCopyWithImpl<$Res>
-    implements $AppConfigVoicemailTranscriptionRemoteCopyWith<$Res> {
-  _$AppConfigVoicemailTranscriptionRemoteCopyWithImpl(this._self, this._then);
+class _$AppConfigTranscriptionRemoteCopyWithImpl<$Res>
+    implements $AppConfigTranscriptionRemoteCopyWith<$Res> {
+  _$AppConfigTranscriptionRemoteCopyWithImpl(this._self, this._then);
 
-  final AppConfigVoicemailTranscriptionRemote _self;
-  final $Res Function(AppConfigVoicemailTranscriptionRemote) _then;
+  final AppConfigTranscriptionRemote _self;
+  final $Res Function(AppConfigTranscriptionRemote) _then;
 
-/// Create a copy of AppConfigVoicemailTranscriptionRemote
+/// Create a copy of AppConfigTranscriptionRemote
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? url = freezed,Object? apiKey = freezed,Object? model = null,}) {
-  return _then(AppConfigVoicemailTranscriptionRemote(
+  return _then(AppConfigTranscriptionRemote(
 url: freezed == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
 as String?,apiKey: freezed == apiKey ? _self.apiKey : apiKey // ignore: cast_nullable_to_non_nullable
 as String?,model: null == model ? _self.model : model // ignore: cast_nullable_to_non_nullable
@@ -6210,8 +6024,8 @@ as String,
 }
 
 
-/// Adds pattern-matching-related methods to [AppConfigVoicemailTranscriptionRemote].
-extension AppConfigVoicemailTranscriptionRemotePatterns on AppConfigVoicemailTranscriptionRemote {
+/// Adds pattern-matching-related methods to [AppConfigTranscriptionRemote].
+extension AppConfigTranscriptionRemotePatterns on AppConfigTranscriptionRemote {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

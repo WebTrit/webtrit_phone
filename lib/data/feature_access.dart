@@ -65,7 +65,7 @@ class FeatureAccess extends Equatable {
     this.coreSupport,
     this.overrides,
     this.loggingConfig,
-    this.voicemailConfig,
+    this.transcriptionConfig,
   );
 
   final EmbeddedConfig embeddedConfig;
@@ -79,7 +79,7 @@ class FeatureAccess extends Equatable {
   final SystemNotificationsConfig systemNotificationsConfig;
   final SipPresenceConfig sipPresenceConfig;
   final LoggingConfig loggingConfig;
-  final VoicemailConfig voicemailConfig;
+  final TranscriptionConfig transcriptionConfig;
 
   /// Locales the app exposes for selection and auto-resolution, resolved from
   /// the app config's language allowlist intersected with the bundled locales.
@@ -124,7 +124,7 @@ class FeatureAccess extends Equatable {
       final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupport, appConfig, featureOverrides);
       final sipPresenceConfig = SipPresenceMapper.map(systemInfo, appConfig, featureOverrides);
       final loggingConfig = LoggingMapper.map(appConfig, featureOverrides);
-      final voicemailConfig = VoicemailMapper.map(appConfig);
+      final transcriptionConfig = TranscriptionMapper.map(appConfig);
 
       final supportedConfig = SupportedMapper.map(appConfig.supported);
       final localizationConfig = LocalizationMapper.map(appConfig);
@@ -145,7 +145,7 @@ class FeatureAccess extends Equatable {
         coreSupport,
         featureOverrides,
         loggingConfig,
-        voicemailConfig,
+        transcriptionConfig,
       );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
@@ -166,7 +166,7 @@ class FeatureAccess extends Equatable {
     systemNotificationsConfig,
     sipPresenceConfig,
     loggingConfig,
-    voicemailConfig,
+    transcriptionConfig,
     supportedConfig,
     localizationConfig,
     coreSupport,
@@ -741,21 +741,19 @@ abstract final class LoggingMapper {
   }
 }
 
-/// Mapper responsible for constructing [VoicemailConfig] from application configuration.
-abstract final class VoicemailMapper {
-  static VoicemailConfig map(AppConfig appConfig) {
-    final transcription = appConfig.voicemail.transcription;
+/// Mapper responsible for constructing [TranscriptionConfig] from application configuration.
+abstract final class TranscriptionMapper {
+  static TranscriptionConfig map(AppConfig appConfig) {
+    final transcription = appConfig.transcription;
 
-    return VoicemailConfig(
-      transcription: VoicemailTranscriptionConfig(
-        mode: transcription.mode,
-        language: transcription.language,
-        localModel: transcription.local.model,
-        localModelUserSelectable: transcription.local.userSelectable,
-        remoteUrl: transcription.remote.url,
-        remoteApiKey: transcription.remote.apiKey,
-        remoteModel: transcription.remote.model,
-      ),
+    return TranscriptionConfig(
+      mode: transcription.mode,
+      language: transcription.language,
+      localModel: transcription.local.model,
+      localModelUserSelectable: transcription.local.userSelectable,
+      remoteUrl: transcription.remote.url,
+      remoteApiKey: transcription.remote.apiKey,
+      remoteModel: transcription.remote.model,
     );
   }
 }

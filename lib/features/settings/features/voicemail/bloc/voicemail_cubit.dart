@@ -33,20 +33,6 @@ class VoicemailCubit extends Cubit<VoicemailState> {
   final ValueChanged<String> onCallStarted;
   final ValueChanged<Notification> onSubmitNotification;
 
-  bool get canSelectTranscriptionModel => _repository.canSelectTranscriptionModel;
-
-  String get defaultTranscriptionModel => _repository.defaultTranscriptionModel;
-
-  String get selectedTranscriptionModel => _repository.getTranscriptionModel() ?? _repository.defaultTranscriptionModel;
-
-  /// Persists the picked model tier (the default tier clears the override);
-  /// the repository switches the transcription pool, which regenerates every
-  /// stored transcription with the new model.
-  Future<void> setTranscriptionModel(String model) {
-    final override = model == _repository.defaultTranscriptionModel ? null : model;
-    return _repository.setTranscriptionModel(override);
-  }
-
   late final StreamSubscription<List<Voicemail>> _subscription;
 
   void _initialize() async {

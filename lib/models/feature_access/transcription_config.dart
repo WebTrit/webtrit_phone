@@ -1,19 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-/// Configuration of the voicemail feature resolved from the app config.
-class VoicemailConfig extends Equatable {
-  const VoicemailConfig({this.transcription = const VoicemailTranscriptionConfig()});
-
-  final VoicemailTranscriptionConfig transcription;
-
-  @override
-  List<Object?> get props => [transcription];
-}
-
-/// Raw client-side voicemail transcription settings; parsing and validation
-/// happen when the transcription source is built from this config.
-class VoicemailTranscriptionConfig extends Equatable {
-  const VoicemailTranscriptionConfig({
+/// Raw client-side media transcription settings resolved from the app
+/// config; parsing and validation happen when the transcription source is
+/// built from this config. Voicemail is the first consumer.
+class TranscriptionConfig extends Equatable {
+  const TranscriptionConfig({
     this.mode = 'disabled',
     this.language,
     this.localModel = 'base',
@@ -27,14 +18,14 @@ class VoicemailTranscriptionConfig extends Equatable {
   /// values disable the feature.
   final String mode;
 
-  /// Expected voicemail language (ISO 639-1); null or empty means auto-detect.
+  /// Expected audio language (ISO 639-1); null or empty means auto-detect.
   final String? language;
 
   /// Whisper model tier downloaded to the device in the `local` mode.
   final String localModel;
 
-  /// Whether the user may switch the local model tier from the voicemail
-  /// screen; [localModel] stays the default until overridden there.
+  /// Whether the user may switch the local model tier from the transcription
+  /// settings; [localModel] stays the default until overridden there.
   final bool localModelUserSelectable;
 
   /// Base URL of an OpenAI-compatible speech-to-text service for the `remote` mode.

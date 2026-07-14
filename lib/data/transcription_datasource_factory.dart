@@ -9,7 +9,7 @@ import 'package:webtrit_phone/models/models.dart';
 
 final _logger = Logger('TranscriptionDataSourceFactory');
 
-/// Source selector for voicemail transcription.
+/// Source selector for media transcription.
 enum TranscriptionMode {
   disabled,
   local,
@@ -23,24 +23,33 @@ enum TranscriptionMode {
   }
 }
 
-/// Builds the voicemail transcription source described by [config]
-/// (`voicemail.transcription` of the app config), or `null` when the feature
+/// True when the user may pick the on-device transcription model tier for
+/// [config]: the local mode on a non-web platform with the brand allowing
+/// the choice.
+bool isTranscriptionModelSelectable(TranscriptionConfig config) {
+  return !kIsWeb &&
+      TranscriptionMode.fromName(config.mode) == TranscriptionMode.local &&
+      config.localModelUserSelectable;
+}
+
+/// Builds the transcription source described by [config] (the `transcription`
+/// section of the app config), or `null` when the feature
 /// is disabled or misconfigured for this platform.
 ///
 /// [localModelOverride] replaces the configured local model tier with the
-/// user's choice from the voicemail screen; null keeps the config default.
+/// user's choice from the transcription settings; null keeps the config default.
 ///
 /// [certs] lets the remote source talk to self-hosted endpoints secured by
 /// the same trusted certificates the rest of the app uses.
-TranscriptionDataSource? createVoicemailTranscriptionDataSource(
-  VoicemailTranscriptionConfig config, {
+TranscriptionDataSource? createTranscriptionDataSource(
+  TranscriptionConfig config, {
   String? localModelOverride,
   TrustedCertificates certs = TrustedCertificates.empty,
 }) {
   final mode = TranscriptionMode.fromName(config.mode);
 
   if (config.mode.isNotEmpty && mode == TranscriptionMode.disabled && config.mode != TranscriptionMode.disabled.name) {
-    _logger.warning('Unknown voicemail transcription mode "${config.mode}"; transcription disabled');
+    _logger.warning('Unknown transcription mode "${config.mode}"; transcription disabled');
   }
 
   switch (mode) {
@@ -49,7 +58,7 @@ TranscriptionDataSource? createVoicemailTranscriptionDataSource(
 
     case TranscriptionMode.local:
       if (kIsWeb) {
-        _logger.warning('Local voicemail transcription is not supported on web; transcription disabled');
+        _logger.warning('Local transcription is not supported on web; transcription disabled');
         return null;
       }
       return LocalWhisperTranscriptionDataSource(
@@ -60,7 +69,7 @@ TranscriptionDataSource? createVoicemailTranscriptionDataSource(
     case TranscriptionMode.remote:
       final url = Uri.tryParse(config.remoteUrl ?? '');
       if (url == null || !url.hasScheme) {
-        _logger.warning('Voicemail transcription remote URL is missing or invalid; transcription disabled');
+        _logger.warning('Transcription remote URL is missing or invalid; transcription disabled');
         return null;
       }
       return RemoteWhisperTranscriptionDataSource(
