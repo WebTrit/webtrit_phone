@@ -2839,6 +2839,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get voicemail_Transcript_unavailable => 'ไม่มีข้อความถอดเสียง';
 
   @override
+  String get transcription_Cache_description =>
+      'ไฟล์โมเดลแปลงเสียงเป็นข้อความที่ดาวน์โหลดไว้ โมเดลที่ใช้งานจะถูกดาวน์โหลดใหม่เมื่อจำเป็น';
+
+  @override
+  String get transcription_Cache_title => 'โมเดลถอดความ';
+
+  @override
   String get transcriptionSettings_Download_failed => 'ดาวน์โหลดโมเดลไม่สำเร็จ';
 
   @override

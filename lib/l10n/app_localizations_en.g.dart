@@ -2853,6 +2853,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voicemail_Transcript_unavailable => 'Transcript unavailable';
 
   @override
+  String get transcription_Cache_description =>
+      'Downloaded speech-to-text model files; the active model is downloaded again when needed';
+
+  @override
+  String get transcription_Cache_title => 'Transcription models';
+
+  @override
   String get transcriptionSettings_Download_failed => 'Model download failed';
 
   @override

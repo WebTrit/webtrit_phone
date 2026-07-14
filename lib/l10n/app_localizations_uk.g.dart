@@ -2891,6 +2891,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get voicemail_Transcript_unavailable => 'Розшифровка недоступна';
 
   @override
+  String get transcription_Cache_description =>
+      'Завантажені файли моделей розпізнавання мовлення; активна модель завантажиться знову за потреби';
+
+  @override
+  String get transcription_Cache_title => 'Моделі транскрипції';
+
+  @override
   String get transcriptionSettings_Download_failed => 'Не вдалося завантажити модель';
 
   @override

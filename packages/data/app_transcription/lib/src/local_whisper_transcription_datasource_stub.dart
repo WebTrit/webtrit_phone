@@ -20,6 +20,11 @@ class LocalWhisperTranscriptionDataSource extends TranscriptionDataSource {
   /// Local models never exist on platforms without FFI support.
   static Future<bool> isModelDownloaded(String model) async => false;
 
+  /// No model files can exist on platforms without FFI support.
+  static Future<int> downloadedModelsSizeBytes() async => 0;
+
+  static Future<void> deleteDownloadedModels() async {}
+
   @override
   void dispose() {}
 }

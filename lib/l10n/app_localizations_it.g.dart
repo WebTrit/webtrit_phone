@@ -2886,6 +2886,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get voicemail_Transcript_unavailable => 'Trascrizione non disponibile';
 
   @override
+  String get transcription_Cache_description =>
+      'File dei modelli di riconoscimento vocale scaricati; il modello attivo viene scaricato di nuovo quando serve';
+
+  @override
+  String get transcription_Cache_title => 'Modelli di trascrizione';
+
+  @override
   String get transcriptionSettings_Download_failed => 'Download del modello non riuscito';
 
   @override

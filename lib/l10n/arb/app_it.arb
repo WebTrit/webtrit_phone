@@ -2365,6 +2365,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
 =======
   "voicemail_TranscriptionModel_accurateSubtitle": "Migliore precisione sul dispositivo, più lento (download del modello ~1,5 GB)",
@@ -2388,6 +2389,12 @@
 >>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
 =======
 =======
+=======
+  "transcription_Cache_description": "File dei modelli di riconoscimento vocale scaricati; il modello attivo viene scaricato di nuovo quando serve",
+  "@transcription_Cache_description": {},
+  "transcription_Cache_title": "Modelli di trascrizione",
+  "@transcription_Cache_title": {},
+>>>>>>> 0d7b94d0 (feat(transcription): clear downloaded models from the cache management page)
   "transcriptionSettings_Download_failed": "Download del modello non riuscito",
   "@transcriptionSettings_Download_failed": {},
   "transcriptionSettings_Download_inProgress": "Download del modello in corso",

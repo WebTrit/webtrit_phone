@@ -2368,6 +2368,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
 =======
   "voicemail_TranscriptionModel_accurateSubtitle": "ความแม่นยำสูงสุดบนอุปกรณ์ ช้ากว่า (ดาวน์โหลดโมเดล ~1.5 GB)",
@@ -2391,6 +2392,12 @@
 >>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
 =======
 =======
+=======
+  "transcription_Cache_description": "ไฟล์โมเดลแปลงเสียงเป็นข้อความที่ดาวน์โหลดไว้ โมเดลที่ใช้งานจะถูกดาวน์โหลดใหม่เมื่อจำเป็น",
+  "@transcription_Cache_description": {},
+  "transcription_Cache_title": "โมเดลถอดความ",
+  "@transcription_Cache_title": {},
+>>>>>>> 0d7b94d0 (feat(transcription): clear downloaded models from the cache management page)
   "transcriptionSettings_Download_failed": "ดาวน์โหลดโมเดลไม่สำเร็จ",
   "@transcriptionSettings_Download_failed": {},
   "transcriptionSettings_Download_inProgress": "กำลังดาวน์โหลดโมเดล",

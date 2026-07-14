@@ -136,6 +136,49 @@ void main() {
     });
   });
 
+  group('model cache management', () {
+    test('sizes and deletes downloaded model files including stray partials', () async {
+      final controller = _FixedPathWhisperController(modelPath);
+      File(modelPath).writeAsBytesSync(validModelBytes);
+      File('$modelPath.download').writeAsBytesSync([1, 2, 3]);
+
+      // The fixed-path controller maps every tier to the same file, so the
+      // sum counts it once per tier; assert against that arithmetic.
+      final tiers = WhisperModel.values.length;
+      expect(
+        await LocalWhisperTranscriptionDataSource.downloadedModelsSizeBytes(controller: controller),
+        tiers * (validModelBytes.length + 3),
+      );
+
+      await LocalWhisperTranscriptionDataSource.deleteDownloadedModels(controller: controller);
+
+      expect(File(modelPath).existsSync(), isFalse);
+      expect(File('$modelPath.download').existsSync(), isFalse);
+      expect(await LocalWhisperTranscriptionDataSource.downloadedModelsSizeBytes(controller: controller), 0);
+    });
+
+    test('prepareEngine re-downloads after the model file was deleted externally', () async {
+      var requests = 0;
+      final dataSource = createDataSource(
+        MockClient((request) async {
+          requests++;
+          return http.Response.bytes(validModelBytes, 200);
+        }),
+      );
+
+      await dataSource.prepareEngine();
+      expect(requests, 1);
+
+      // Cache management wipes the files behind the source's back.
+      File(modelPath).deleteSync();
+
+      await dataSource.prepareEngine();
+      expect(requests, 2);
+      expect(File(modelPath).existsSync(), isTrue);
+      expect(dataSource.downloadState.value, isA<ModelDownloadReady>());
+    });
+  });
+
   group('isModelDownloaded', () {
     test('true only for a usable cached file', () async {
       final controller = _FixedPathWhisperController(modelPath);

@@ -5247,6 +5247,18 @@ abstract class AppLocalizations {
   /// **'Transcript unavailable'**
   String get voicemail_Transcript_unavailable;
 
+  /// No description provided for @transcription_Cache_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded speech-to-text model files; the active model is downloaded again when needed'**
+  String get transcription_Cache_description;
+
+  /// No description provided for @transcription_Cache_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcription models'**
+  String get transcription_Cache_title;
+
   /// No description provided for @transcriptionSettings_Download_failed.
   ///
   /// In en, this message translates to:

@@ -1369,6 +1369,7 @@ extension AppLocalizationsExtension on AppLocalizations {
       'voicemail_Transcript_unavailable' => voicemail_Transcript_unavailable,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       'voicemail_TranscriptionModel_accurateSubtitle' =>
         voicemail_TranscriptionModel_accurateSubtitle,
       'voicemail_TranscriptionModel_accurateTitle' =>
@@ -1389,6 +1390,10 @@ extension AppLocalizationsExtension on AppLocalizations {
 >>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
 =======
 =======
+=======
+      'transcription_Cache_description' => transcription_Cache_description,
+      'transcription_Cache_title' => transcription_Cache_title,
+>>>>>>> 0d7b94d0 (feat(transcription): clear downloaded models from the cache management page)
       'transcriptionSettings_Download_failed' =>
         transcriptionSettings_Download_failed,
       'transcriptionSettings_Download_inProgress' =>

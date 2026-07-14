@@ -251,8 +251,11 @@ temporary file, ggml-validated), so download progress is first-class:
 - `whisper_ggml` pulls `ffmpeg_kit_flutter_new_min` (app size cost); the
   engine sits behind `TranscriptionDataSource`, so swapping it (e.g.
   sherpa-onnx) is a single-class change.
-- Whisper model files are cached by the engine and are not yet visible in
-  the Storage & cache page.
+- Whisper model files are a section of the Storage & cache page
+  (`TranscriptionModelsCacheSection`): their total size is shown and they can
+  be cleared; the active model is downloaded again on the next transcription
+  (the source re-verifies the file instead of trusting a cached
+  preparation).
 
 ## Tests
 

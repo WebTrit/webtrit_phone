@@ -86,11 +86,49 @@ class LocalWhisperTranscriptionDataSource extends TranscriptionDataSource {
     return _isUsableModelFile(file);
   }
 
+  /// Files of every model tier: the downloaded ggml file and a possible
+  /// stray partial download next to it.
+  static Future<List<File>> _allModelFiles(WhisperController controller) async {
+    final files = <File>[];
+    for (final model in WhisperModel.values) {
+      final path = await controller.getPath(model);
+      files.add(File(path));
+      files.add(File('$path.download'));
+    }
+    return files;
+  }
+
+  /// Total on-disk size of the downloaded ggml model files (including stray
+  /// partial downloads); feeds the cache management section.
+  static Future<int> downloadedModelsSizeBytes({WhisperController? controller}) async {
+    var total = 0;
+    for (final file in await _allModelFiles(controller ?? WhisperController())) {
+      if (file.existsSync()) total += file.lengthSync();
+    }
+    return total;
+  }
+
+  /// Deletes every downloaded model file; the active model is downloaded
+  /// again on the next transcription ([prepareEngine] re-verifies the file
+  /// instead of trusting a cached preparation).
+  static Future<void> deleteDownloadedModels({WhisperController? controller}) async {
+    for (final file in await _allModelFiles(controller ?? WhisperController())) {
+      if (file.existsSync()) file.deleteSync();
+    }
+  }
+
   /// Fetches the model ahead of the first [transcribe]; progress is
   /// observable through [downloadState]. A failed attempt is forgotten so
   /// the next call retries the download instead of replaying the failure.
   @override
   Future<void> prepareEngine() async {
+    // A completed preparation can be invalidated externally (the cache
+    // management section deletes the model files), so a cached success is
+    // re-verified against the disk instead of being trusted.
+    if (_modelReady != null && !await _isUsableModelFile(File(await _controller.getPath(_model)))) {
+      _modelReady = null;
+      _downloadState.value = const ModelDownloadIdle();
+    }
     try {
       await ensureModelReady();
     } catch (_) {
