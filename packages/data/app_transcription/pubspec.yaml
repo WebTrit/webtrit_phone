@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   _http_client:
     path: ../../_http_client
+  equatable: ^2.0.7
   http: ^1.6.0
   logging: ^1.3.0
   path_provider: ^2.1.5

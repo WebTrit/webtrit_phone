@@ -29,6 +29,11 @@ Last reviewed: 2026-07-14
       (see below), and `MediaTranscriber`, the narrow consumer contract.
     - `src/transcription_store.dart` - `TranscriptionStore`, the storage
       delegate the application implements.
+    - `src/transcription_config.dart` + `src/transcription_datasource_factory.dart` -
+      `TranscriptionConfig` (the resolved config vocabulary) and
+      `createTranscriptionDataSource(config)`: config -> engine mapping lives
+      in the package; the app only resolves the white-label config into
+      `TranscriptionConfig` and supplies certificates and timeouts.
 - `packages/data/app_database/` - persistence:
     - `src/tables/transcription_table.dart` - the `transcriptions` table
       (schema v26): PK `(media_type, media_id)`, `transcript`, `status`,
@@ -40,9 +45,8 @@ Last reviewed: 2026-07-14
       join with transcriptions, `getVoicemailsPendingTranscription`,
       `watchVoicemailsMissingTranscription`, `deleteOrphanTranscriptions`.
 - App-side wiring:
-    - `lib/data/transcription_datasource_factory.dart` -
-      `createTranscriptionDataSource(config)`: maps the white-label config to
-      a datasource (or null when disabled/misconfigured/web-local).
+    - `lib/data/feature_access.dart` - `TranscriptionMapper` resolves the
+      theme `AppConfigTranscription` into the package `TranscriptionConfig`.
     - `lib/repositories/transcription/drift_transcription_store.dart` -
       `DriftTranscriptionStore`: the only place where pool output meets the
       database; also classifies failures and handles 401.
@@ -66,8 +70,8 @@ Last reviewed: 2026-07-14
 
 Top-level `transcription` section of the white-label app config
 (`assets/themes/app.config.json`; theme models `AppConfigTranscription*` in
-`packages/webtrit_appearance_theme`, resolved by `FeatureAccess` into
-`TranscriptionConfig`). Off by default.
+`packages/webtrit_appearance_theme`, resolved by `FeatureAccess` into the
+package-owned `TranscriptionConfig`). Off by default.
 
 ```json
 "transcription": {

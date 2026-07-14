@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 /// Session-wide owner of the transcription model choice, shared by every
