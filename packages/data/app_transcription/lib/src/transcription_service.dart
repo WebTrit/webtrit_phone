@@ -31,6 +31,11 @@ abstract interface class MediaTranscriber {
   /// and the stored transcription removed, so a late result cannot resurrect
   /// it.
   Future<void> forget(String mediaType, String mediaId);
+
+  /// Switches the local model (null returns to the config default) and
+  /// regenerates everything already transcribed; see
+  /// [TranscriptionService.switchLocalModel].
+  void switchLocalModel(String? localModel);
 }
 
 /// Fire-and-forget transcription pool.
@@ -111,6 +116,7 @@ class TranscriptionService implements MediaTranscriber {
   /// old model are invalidated and the store removes every transcription.
   /// Consumers observe the wipe through their storage and re-enqueue what
   /// they want regenerated. No-op for a [TranscriptionService.fixed] pool.
+  @override
   void switchLocalModel(String? localModel) {
     final builder = _builder;
     if (builder == null) return;

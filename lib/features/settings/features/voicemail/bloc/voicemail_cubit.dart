@@ -24,13 +24,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     required VoicemailRepository repository,
     required this.onCallStarted,
     required this.onSubmitNotification,
-    TranscriptionModelRepository? transcriptionModelRepository,
-    ValueChanged<String?>? onTranscriptionModelChanged,
-    String defaultTranscriptionModel = 'base',
   }) : _repository = repository,
-       _transcriptionModelRepository = transcriptionModelRepository,
-       _onTranscriptionModelChanged = onTranscriptionModelChanged,
-       _defaultTranscriptionModel = defaultTranscriptionModel,
        super(const VoicemailState()) {
     _initialize();
   }
@@ -39,32 +33,18 @@ class VoicemailCubit extends Cubit<VoicemailState> {
   final ValueChanged<String> onCallStarted;
   final ValueChanged<Notification> onSubmitNotification;
 
-  /// Present only when the user may pick the on-device transcription model;
-  /// null hides the model selection entirely.
-  final TranscriptionModelRepository? _transcriptionModelRepository;
+  bool get canSelectTranscriptionModel => _repository.canSelectTranscriptionModel;
 
-  /// Applies the picked model override (null = config default) to the
-  /// transcription pool; regeneration is observed through the database.
-  final ValueChanged<String?>? _onTranscriptionModelChanged;
-  final String _defaultTranscriptionModel;
+  String get defaultTranscriptionModel => _repository.defaultTranscriptionModel;
 
-  bool get canSelectTranscriptionModel => _transcriptionModelRepository != null;
+  String get selectedTranscriptionModel => _repository.getTranscriptionModel() ?? _repository.defaultTranscriptionModel;
 
-  String get defaultTranscriptionModel => _defaultTranscriptionModel;
-
-  String get selectedTranscriptionModel =>
-      _transcriptionModelRepository?.getTranscriptionModel() ?? _defaultTranscriptionModel;
-
-  /// Persists the picked model tier (the default tier clears the override)
-  /// and switches the session-wide transcription pool to it, which wipes and
-  /// regenerates every stored transcription with the new model.
-  Future<void> setTranscriptionModel(String model) async {
-    final transcriptionModelRepository = _transcriptionModelRepository;
-    if (transcriptionModelRepository == null) return;
-
-    final override = model == _defaultTranscriptionModel ? null : model;
-    await transcriptionModelRepository.setTranscriptionModel(override);
-    _onTranscriptionModelChanged?.call(override);
+  /// Persists the picked model tier (the default tier clears the override);
+  /// the repository switches the transcription pool, which regenerates every
+  /// stored transcription with the new model.
+  Future<void> setTranscriptionModel(String model) {
+    final override = model == _repository.defaultTranscriptionModel ? null : model;
+    return _repository.setTranscriptionModel(override);
   }
 
   late final StreamSubscription<List<Voicemail>> _subscription;
