@@ -19,18 +19,18 @@ class TranscriptionSettingsScreen extends StatelessWidget {
 
   String _titleFor(BuildContext context, String model) {
     return switch (model) {
-      'base' => context.l10n.voicemail_TranscriptionModel_fastTitle,
-      'small' => context.l10n.voicemail_TranscriptionModel_balancedTitle,
-      'medium' => context.l10n.voicemail_TranscriptionModel_accurateTitle,
+      'base' => context.l10n.transcriptionSettings_Model_fastTitle,
+      'small' => context.l10n.transcriptionSettings_Model_balancedTitle,
+      'medium' => context.l10n.transcriptionSettings_Model_accurateTitle,
       _ => model,
     };
   }
 
   String? _subtitleFor(BuildContext context, String model) {
     return switch (model) {
-      'base' => context.l10n.voicemail_TranscriptionModel_fastSubtitle,
-      'small' => context.l10n.voicemail_TranscriptionModel_balancedSubtitle,
-      'medium' => context.l10n.voicemail_TranscriptionModel_accurateSubtitle,
+      'base' => context.l10n.transcriptionSettings_Model_fastSubtitle,
+      'small' => context.l10n.transcriptionSettings_Model_balancedSubtitle,
+      'medium' => context.l10n.transcriptionSettings_Model_accurateSubtitle,
       _ => null,
     };
   }
@@ -45,7 +45,10 @@ class TranscriptionSettingsScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.voicemail_TranscriptionModel_title), leading: const ExtBackButton()),
+      appBar: AppBar(
+        title: Text(context.l10n.transcriptionSettings_Widget_screenTitle),
+        leading: const ExtBackButton(),
+      ),
       body: BlocBuilder<TranscriptionSettingsCubit, TranscriptionSettingsState>(
         builder: (context, state) {
           final options = [..._presetTiers];
@@ -66,7 +69,7 @@ class TranscriptionSettingsScreen extends StatelessWidget {
                         value: model,
                         title: Text(
                           model == state.defaultModel
-                              ? '${_titleFor(context, model)} (${context.l10n.voicemail_TranscriptionModel_defaultLabel})'
+                              ? '${_titleFor(context, model)} (${context.l10n.transcriptionSettings_Model_defaultLabel})'
                               : _titleFor(context, model),
                         ),
                         subtitle: _subtitleFor(context, model) != null ? Text(_subtitleFor(context, model)!) : null,
@@ -76,7 +79,7 @@ class TranscriptionSettingsScreen extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                child: Text(context.l10n.voicemail_TranscriptionModel_note, style: theme.textTheme.bodySmall),
+                child: Text(context.l10n.transcriptionSettings_Model_note, style: theme.textTheme.bodySmall),
               ),
             ],
           );

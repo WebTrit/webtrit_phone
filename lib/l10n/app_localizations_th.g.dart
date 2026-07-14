@@ -2836,33 +2836,33 @@ class AppLocalizationsTh extends AppLocalizations {
   String get voicemail_Transcript_unavailable => 'ไม่มีข้อความถอดเสียง';
 
   @override
-  String get voicemail_TranscriptionModel_accurateSubtitle =>
+  String get transcriptionSettings_Model_accurateSubtitle =>
       'ความแม่นยำสูงสุดบนอุปกรณ์ ช้ากว่า (ดาวน์โหลดโมเดล ~1.5 GB)';
 
   @override
-  String get voicemail_TranscriptionModel_accurateTitle => 'แม่นยำ';
+  String get transcriptionSettings_Model_accurateTitle => 'แม่นยำ';
 
   @override
-  String get voicemail_TranscriptionModel_balancedSubtitle => 'ความแม่นยำดี (ดาวน์โหลดโมเดล ~466 MB)';
+  String get transcriptionSettings_Model_balancedSubtitle => 'ความแม่นยำดี (ดาวน์โหลดโมเดล ~466 MB)';
 
   @override
-  String get voicemail_TranscriptionModel_balancedTitle => 'สมดุล';
+  String get transcriptionSettings_Model_balancedTitle => 'สมดุล';
 
   @override
-  String get voicemail_TranscriptionModel_defaultLabel => 'ค่าเริ่มต้น';
+  String get transcriptionSettings_Model_defaultLabel => 'ค่าเริ่มต้น';
 
   @override
-  String get voicemail_TranscriptionModel_fastSubtitle => 'ผลลัพธ์เร็ว ความแม่นยำต่ำกว่า (ดาวน์โหลดโมเดล ~142 MB)';
+  String get transcriptionSettings_Model_fastSubtitle => 'ผลลัพธ์เร็ว ความแม่นยำต่ำกว่า (ดาวน์โหลดโมเดล ~142 MB)';
 
   @override
-  String get voicemail_TranscriptionModel_fastTitle => 'เร็ว';
+  String get transcriptionSettings_Model_fastTitle => 'เร็ว';
 
   @override
-  String get voicemail_TranscriptionModel_note =>
+  String get transcriptionSettings_Model_note =>
       'มีผลกับข้อความทั้งหมด: โมเดลจะถูกดาวน์โหลดเมื่อใช้งานครั้งแรก และข้อความถอดเสียงเดิมจะถูกสร้างใหม่ด้วยโมเดลใหม่';
 
   @override
-  String get voicemail_TranscriptionModel_title => 'โมเดลถอดเสียง';
+  String get transcriptionSettings_Widget_screenTitle => 'โมเดลถอดเสียง';
 
   @override
 >>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)

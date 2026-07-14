@@ -8,7 +8,7 @@ import 'package:webtrit_phone/theme/theme.dart';
 
 class _NoopTranscriptionStore implements TranscriptionStore {
   @override
-  Future<void> saveInProgress(String mediaType, String mediaId, String engine) async {}
+  Future<bool> saveInProgress(String mediaType, String mediaId, String engine) async => true;
 
   @override
   Future<void> saveTranscript(String mediaType, String mediaId, String transcript, String engine) async {}
@@ -18,6 +18,9 @@ class _NoopTranscriptionStore implements TranscriptionStore {
 
   @override
   Future<void> remove(String mediaType, String mediaId) async {}
+
+  @override
+  Future<void> removeAllForType(String mediaType) async {}
 
   @override
   Future<void> removeAll() async {}
@@ -90,13 +93,13 @@ void main() {
   });
 
   group('TranscriptionService model switching', () {
-    test('builds the initial source and rebuilds it per switch, disposing the old one', () {
+    test('builds the initial source and rebuilds it per switch, disposing the old one', () async {
       final built = <String?>[];
       final sources = <_RecordingDataSource>[];
       final service = TranscriptionService(
         (model) {
           built.add(model);
-          final source = _RecordingDataSource();
+          final source = _RecordingDataSource(engine: 'recording:$model');
           sources.add(source);
           return source;
         },
@@ -107,17 +110,17 @@ void main() {
       expect(built, ['base']);
       expect(service.isEnabled, isTrue);
 
-      service.switchLocalModel('small');
+      await service.switchLocalModel('small');
       expect(built, ['base', 'small']);
       expect(sources.first.disposeCalls, 1);
       expect(sources.last.disposeCalls, 0);
     });
 
-    test('a fixed pool ignores model switches', () {
+    test('a fixed pool ignores model switches', () async {
       final source = _RecordingDataSource();
       final service = TranscriptionService.fixed(source, store: _NoopTranscriptionStore());
 
-      service.switchLocalModel('small');
+      await service.switchLocalModel('small');
 
       expect(service.isEnabled, isTrue);
       expect(source.disposeCalls, 0);
@@ -157,10 +160,14 @@ void main() {
 }
 
 class _RecordingDataSource implements TranscriptionDataSource {
+  // The pool compares engines on a switch (the real sources embed the model
+  // tier), so each built source carries a distinct engine.
+  _RecordingDataSource({this.engine = 'recording'});
+
   int disposeCalls = 0;
 
   @override
-  String get engine => 'recording';
+  final String engine;
 
   @override
   Future<String> transcribe(Uint8List audio, {String? language}) async => '';

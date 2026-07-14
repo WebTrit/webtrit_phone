@@ -10,13 +10,9 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/transcription_model/transcription_model_repository.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 
-/// Voicemail owns its transcription: the repository is also the
-/// [TranscriptionModelRepository] of the voicemail transcription model, so
-/// consumers deal with a single object.
-abstract class VoicemailRepository implements Refreshable, TranscriptionModelRepository {
+abstract class VoicemailRepository implements Refreshable {
   /// Fetches voicemails from the remote server and updates the local database.
   ///
   /// If [localeCode] is provided, it will be used to localize the request.
@@ -74,20 +70,18 @@ final _logger = Logger('VoicemailRepository');
 
 class VoicemailRepositoryImpl
     with DialogInfoDriftMapper, PresenceInfoDriftMapper, ContactsDriftMapper, VoicemailMapper
-    implements VoicemailRepository {
+    implements VoicemailRepository, Disposable {
   VoicemailRepositoryImpl({
     required WebtritApiClient webtritApiClient,
     required String token,
     required AppDatabase appDatabase,
     SessionGuard? sessionGuard,
     MediaTranscriber? transcriber,
-    TranscriptionModelRepository? transcriptionModelRepository,
   }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
        _webtritApiClient = webtritApiClient,
        _token = token,
        _appDatabase = appDatabase,
-       _transcriber = transcriber,
-       _transcriptionModelRepository = transcriptionModelRepository {
+       _transcriber = transcriber {
     _initialize();
   }
 
@@ -101,31 +95,16 @@ class VoicemailRepositoryImpl
   /// database updates. Null when transcription is disabled.
   final MediaTranscriber? _transcriber;
 
-  /// Persists the user's model override; null when the model is not user
-  /// selectable (feature disabled, not local, or pinned by the brand).
-  final TranscriptionModelRepository? _transcriptionModelRepository;
-
-  @override
-  String? getTranscriptionModel() => _transcriptionModelRepository?.getTranscriptionModel();
-
-  /// Persists the override (null returns to the config default) and switches
-  /// the transcription pool to it, which regenerates every transcript.
-  @override
-  Future<void> setTranscriptionModel(String? value) async {
-    final transcriptionModelRepository = _transcriptionModelRepository;
-    if (transcriptionModelRepository == null) return;
-
-    await transcriptionModelRepository.setTranscriptionModel(value);
-    _transcriber?.switchLocalModel(value);
-  }
-
-  @override
-  Future<void> clear() => setTranscriptionModel(null);
-
   // If the repository is disabled, the stream controller is not initialized.
   // In such cases, subscribers will receive an empty stream instead.
   StreamController<List<Voicemail>>? _updatesController;
   StreamSubscription? _databaseSubscription;
+  StreamSubscription? _pendingTranscriptionsSubscription;
+
+  /// Set after the first successful fetch: before that the server-side
+  /// support is unknown and cached voicemails must not be transcribed (their
+  /// audio download would fail terminally when voicemail is not configured).
+  bool _remoteConfirmed = false;
 
   /// A [Completer] used to coordinate access to the ongoing [fetchVoicemails] operation.
   ///
@@ -151,15 +130,16 @@ class VoicemailRepositoryImpl
 
   @override
   Future<void> wipeLocalRecords() async {
-    final voicemails = await _appDatabase.voicemailDao.getAllVoicemails();
     await _appDatabase.voicemailDao.deleteAllVoicemails();
 
-    // Per-item forget dequeues pending or in-flight pool work; the trailing
-    // sweep clears any row that no longer had a cached voicemail.
-    for (final voicemail in voicemails) {
-      await _forgetVoicemailTranscription(voicemail.id);
+    // The pool dequeues and invalidates everything voicemail-owned in one
+    // pass and removes the stored rows through its store.
+    final transcriber = _transcriber;
+    if (transcriber != null) {
+      await transcriber.forgetAllForType(kVoicemailTranscriptionMediaType);
+    } else {
+      await _appDatabase.transcriptionsDao.deleteAllForType(kVoicemailTranscriptionMediaType);
     }
-    await _appDatabase.transcriptionsDao.deleteAllForType(kVoicemailTranscriptionMediaType);
   }
 
   void _initialize() {
@@ -171,7 +151,7 @@ class VoicemailRepositoryImpl
     // the pool dedups repeats and its lifecycle writes take the row out of
     // the watch, so emissions cannot loop.
     if (_transcriber != null) {
-      _appDatabase.voicemailDao.watchVoicemailsMissingTranscription().listen(
+      _pendingTranscriptionsSubscription = _appDatabase.voicemailDao.watchVoicemailsMissingTranscription().listen(
         _enqueueVoicemails,
         onError: (Object e, StackTrace st) {
           _logger.warning('Pending transcriptions watch failed', e, st);
@@ -185,6 +165,16 @@ class VoicemailRepositoryImpl
         test: (e) => e is VoicemailNotConfiguredException || e is EndpointNotSupportedException,
       ),
     );
+  }
+
+  /// The database is app-scoped while this repository is session-scoped: the
+  /// watches must not outlive the session (each leaked one would keep
+  /// re-running its query on every table change and feed a dead pool).
+  @override
+  Future<void> dispose() async {
+    await _pendingTranscriptionsSubscription?.cancel();
+    await _databaseSubscription?.cancel();
+    await _updatesController?.close();
   }
 
   void _onListen() {
@@ -250,6 +240,8 @@ class VoicemailRepositoryImpl
 
       _fetchingCompleter?.complete();
 
+      _remoteConfirmed = true;
+      unawaited(_sweepTranscriptionOrphans());
       unawaited(_enqueuePendingTranscriptions());
     } on UnauthorizedException catch (e) {
       _sessionGuard.onUnauthorized(e);
@@ -261,6 +253,12 @@ class VoicemailRepositoryImpl
 
       /// Revert to the actual cached status from database on failure
       await _emitCachedVoicemails();
+
+      // Messages rolled back by a transient failure wait for this pass, so
+      // retry them even when the refresh itself failed (a dead network must
+      // not starve them until the next successful fetch); the gate inside
+      // skips it while support is unknown or lost.
+      unawaited(_enqueuePendingTranscriptions());
 
       _fetchingCompleter?.completeError(e, st);
       rethrow;
@@ -293,9 +291,24 @@ class VoicemailRepositoryImpl
     }
   }
 
+  /// Removes transcription rows whose voicemail is gone (left by a deletion
+  /// racing an in-flight transcription); runs unawaited after each fetch.
+  Future<void> _sweepTranscriptionOrphans() async {
+    try {
+      await _appDatabase.voicemailDao.deleteOrphanTranscriptions();
+    } catch (e, st) {
+      _logger.warning('Failed to sweep orphan transcriptions', e, st);
+    }
+  }
+
   void _enqueueVoicemails(List<VoicemailData> voicemails) {
     final transcriber = _transcriber;
     if (transcriber == null) return;
+
+    // Transcribe only while the server side is known to be alive: while
+    // voicemail is unsupported (or not yet confirmed) every audio download
+    // would fail and mark cached messages terminally unavailable.
+    if (!_featureSupported || !_remoteConfirmed) return;
 
     for (final voicemail in voicemails) {
       transcriber.enqueue(
@@ -506,8 +519,11 @@ class VoicemailRepositoryImpl
 /// attempt to interact with the [VoicemailRepository] interface, even if the feature
 /// is not enabled.
 
-class EmptyVoicemailRepository implements VoicemailRepository {
+class EmptyVoicemailRepository implements VoicemailRepository, Disposable {
   const EmptyVoicemailRepository();
+
+  @override
+  Future<void> dispose() => Future.value();
 
   @override
   bool get isActive => false;
@@ -544,13 +560,4 @@ class EmptyVoicemailRepository implements VoicemailRepository {
 
   @override
   Future<void> wipeLocalRecords() => Future.value();
-
-  @override
-  String? getTranscriptionModel() => null;
-
-  @override
-  Future<void> setTranscriptionModel(String? value) => Future.value();
-
-  @override
-  Future<void> clear() => Future.value();
 }

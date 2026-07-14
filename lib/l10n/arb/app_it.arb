@@ -2361,6 +2361,7 @@
   "voicemail_Transcript_unavailable": "Trascrizione non disponibile",
   "@voicemail_Transcript_unavailable": {},
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 9dca7044 (feat(voicemail): on-device and remote whisper transcription of voicemails)
 =======
   "voicemail_TranscriptionModel_accurateSubtitle": "Migliore precisione sul dispositivo, più lento (download del modello ~1,5 GB)",
@@ -2382,6 +2383,26 @@
   "voicemail_TranscriptionModel_title": "Modello di trascrizione",
   "@voicemail_TranscriptionModel_title": {},
 >>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
+=======
+  "transcriptionSettings_Model_accurateSubtitle": "Migliore precisione sul dispositivo, più lento (download del modello ~1,5 GB)",
+  "@transcriptionSettings_Model_accurateSubtitle": {},
+  "transcriptionSettings_Model_accurateTitle": "Accurato",
+  "@transcriptionSettings_Model_accurateTitle": {},
+  "transcriptionSettings_Model_balancedSubtitle": "Buona precisione (download del modello ~466 MB)",
+  "@transcriptionSettings_Model_balancedSubtitle": {},
+  "transcriptionSettings_Model_balancedTitle": "Bilanciato",
+  "@transcriptionSettings_Model_balancedTitle": {},
+  "transcriptionSettings_Model_defaultLabel": "Predefinito",
+  "@transcriptionSettings_Model_defaultLabel": {},
+  "transcriptionSettings_Model_fastSubtitle": "Risultati rapidi, precisione inferiore (download del modello ~142 MB)",
+  "@transcriptionSettings_Model_fastSubtitle": {},
+  "transcriptionSettings_Model_fastTitle": "Veloce",
+  "@transcriptionSettings_Model_fastTitle": {},
+  "transcriptionSettings_Model_note": "Si applica a tutti i messaggi: il modello viene scaricato al primo utilizzo e le trascrizioni esistenti vengono rigenerate con il nuovo modello.",
+  "@transcriptionSettings_Model_note": {},
+  "transcriptionSettings_Widget_screenTitle": "Modello di trascrizione",
+  "@transcriptionSettings_Widget_screenTitle": {},
+>>>>>>> 2734df99 (fix(transcription): close the review backlog on pool, lifecycle and model flow)
   "voicemail_Widget_screenTitle": "Segreteria telefonica",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",

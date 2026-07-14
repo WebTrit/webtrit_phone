@@ -7,7 +7,12 @@
 /// the pool.
 abstract interface class TranscriptionStore {
   /// The media entered processing on [engine].
-  Future<void> saveInProgress(String mediaType, String mediaId, String engine);
+  ///
+  /// Returns false when the stored state says there is nothing left to do
+  /// (a transcript already exists or the media is marked terminally
+  /// unavailable): the pool then skips the work instead of redoing or
+  /// overwriting it.
+  Future<bool> saveInProgress(String mediaType, String mediaId, String engine);
 
   /// Processing produced [transcript] on [engine].
   Future<void> saveTranscript(String mediaType, String mediaId, String transcript, String engine);
@@ -24,6 +29,10 @@ abstract interface class TranscriptionStore {
   /// The media was deleted and forgotten by the pool: remove its stored
   /// transcription.
   Future<void> remove(String mediaType, String mediaId);
+
+  /// Every media object of [mediaType] was deleted: remove their stored
+  /// transcriptions.
+  Future<void> removeAllForType(String mediaType);
 
   /// A model switch invalidated every stored transcription: remove them all
   /// so consumers re-enqueue what they want regenerated.

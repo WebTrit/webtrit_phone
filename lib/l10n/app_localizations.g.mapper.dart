@@ -1365,6 +1365,7 @@ extension AppLocalizationsExtension on AppLocalizations {
       'voicemail_RecordsCache_title' => voicemail_RecordsCache_title,
       'voicemail_Transcript_inProgress' => voicemail_Transcript_inProgress,
       'voicemail_Transcript_unavailable' => voicemail_Transcript_unavailable,
+<<<<<<< HEAD
       'voicemail_TranscriptionModel_accurateSubtitle' =>
         voicemail_TranscriptionModel_accurateSubtitle,
       'voicemail_TranscriptionModel_accurateTitle' =>
@@ -1383,6 +1384,25 @@ extension AppLocalizationsExtension on AppLocalizations {
       'voicemail_TranscriptionModel_title' =>
         voicemail_TranscriptionModel_title,
 >>>>>>> 1e1b5ba0 (feat(voicemail): user-selectable on-device transcription model)
+=======
+      'transcriptionSettings_Model_accurateSubtitle' =>
+        transcriptionSettings_Model_accurateSubtitle,
+      'transcriptionSettings_Model_accurateTitle' =>
+        transcriptionSettings_Model_accurateTitle,
+      'transcriptionSettings_Model_balancedSubtitle' =>
+        transcriptionSettings_Model_balancedSubtitle,
+      'transcriptionSettings_Model_balancedTitle' =>
+        transcriptionSettings_Model_balancedTitle,
+      'transcriptionSettings_Model_defaultLabel' =>
+        transcriptionSettings_Model_defaultLabel,
+      'transcriptionSettings_Model_fastSubtitle' =>
+        transcriptionSettings_Model_fastSubtitle,
+      'transcriptionSettings_Model_fastTitle' =>
+        transcriptionSettings_Model_fastTitle,
+      'transcriptionSettings_Model_note' => transcriptionSettings_Model_note,
+      'transcriptionSettings_Widget_screenTitle' =>
+        transcriptionSettings_Widget_screenTitle,
+>>>>>>> 2734df99 (fix(transcription): close the review backlog on pool, lifecycle and model flow)
       'voicemail_Widget_screenTitle' => voicemail_Widget_screenTitle,
       'webRegistration_ErrorAcknowledgeDialogActions_retry' =>
         webRegistration_ErrorAcknowledgeDialogActions_retry,
