@@ -367,8 +367,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         RepositoryProvider<AppCacheManager>(
           create: (context) {
             final appPath = context.read<AppPath>();
-            final callHistoryEnabled =
-                featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory == true;
 
             return AppCacheManager(
               sections: [
@@ -377,9 +375,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     mediaCacheBasePath: appPath.mediaCacheBasePath,
                     temporaryPath: appPath.temporaryPath,
                   ),
-                if (featureAccess.settingsConfig.voicemailsEnabled)
-                  VoicemailRecordsCacheSection(context.read<VoicemailRepository>()),
-                if (callHistoryEnabled) CdrsCacheSection(context.read<CdrsLocalRepository>()),
+                DatabaseCacheSection(context.read<AppDatabase>(), context.read<CdrsLocalRepository>()),
               ],
             );
           },

@@ -43,13 +43,13 @@ class _FakeItemsCacheSection implements CacheSection {
   int count;
 
   @override
-  String get id => 'cdrs';
+  String get id => 'database';
 
   @override
-  String get titleL10n => 'cdrs_Cache_title';
+  String get titleL10n => 'database_Cache_title';
 
   @override
-  String get descriptionL10n => 'cdrs_Cache_description';
+  String get descriptionL10n => 'database_Cache_description';
 
   @override
   Future<CacheUsage> usage() async => CacheUsage.items(count);
@@ -134,7 +134,7 @@ void main() {
     await tester.pumpWidget(wrap([_FakeItemsCacheSection(count: 128)]));
     await tester.pump();
 
-    expect(find.text('Call history'), findsOneWidget);
+    expect(find.text('Local database'), findsOneWidget);
     expect(find.text('128 records'), findsOneWidget);
   });
 

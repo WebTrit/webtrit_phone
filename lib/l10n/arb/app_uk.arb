@@ -291,10 +291,6 @@
   "@call_videoView_actionLabel_fit": {
     "description": "Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode."
   },
-  "cdrs_Cache_description": "Локальна копія історії дзвінків із сервера. Очищення видаляє локальні записи; історія завантажиться знову під час наступної синхронізації.",
-  "@cdrs_Cache_description": {},
-  "cdrs_Cache_title": "Історія дзвінків",
-  "@cdrs_Cache_title": {},
   "cdrs_noMissedCalls_message": "Немає пропущених дзвінків",
   "@cdrs_noMissedCalls_message": {},
   "cdrs_noRecentCalls_message": "Немає останніх дзвінків",
@@ -373,6 +369,10 @@
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Скопіювати в буфер обміну",
   "@copyToClipboard_popupMenuItem": {},
+  "database_Cache_description": "Локальна копія даних із сервера: історія дзвінків, список голосових повідомлень, чати й контакти. Очищення видаляє всі локальні записи; дані завантажаться знову під час наступної синхронізації.",
+  "@database_Cache_description": {},
+  "database_Cache_title": "Локальна база даних",
+  "@database_Cache_title": {},
   "default_CannotRemoveOwnerMessagingSocketException": "Неможливо видалити власника",
   "@default_CannotRemoveOwnerMessagingSocketException": {
     "description": "Shown when a user tries to remove the owner from a chat or group. The system does not allow removing the owner."
@@ -2350,10 +2350,6 @@
   "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Функція не підтримується",
   "@voicemail_Title_notSupported": {},
-  "voicemail_RecordsCache_description": "Локальна копія списку голосових повідомлень із сервера (аудіофайли - окрема секція). Очищення видаляє локальні записи; список завантажиться знову під час наступного оновлення.",
-  "@voicemail_RecordsCache_description": {},
-  "voicemail_RecordsCache_title": "Повідомлення голосової пошти",
-  "@voicemail_RecordsCache_title": {},
   "voicemail_Widget_screenTitle": "Голосова пошта",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",

@@ -676,18 +676,6 @@ abstract class AppLocalizations {
   /// **'Fit'**
   String get call_videoView_actionLabel_fit;
 
-  /// No description provided for @cdrs_Cache_description.
-  ///
-  /// In en, this message translates to:
-  /// **'Locally stored copy of the call history fetched from the server. Clearing removes the local records; the history is downloaded again on the next sync.'**
-  String get cdrs_Cache_description;
-
-  /// No description provided for @cdrs_Cache_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Call history'**
-  String get cdrs_Cache_title;
-
   /// No description provided for @cdrs_noMissedCalls_message.
   ///
   /// In en, this message translates to:
@@ -891,6 +879,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy to clipboard'**
   String get copyToClipboard_popupMenuItem;
+
+  /// No description provided for @database_Cache_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Locally stored copy of the data fetched from the server: call history, voicemail list, chats and contacts. Clearing removes all local records; every feature downloads its data again on the next sync.'**
+  String get database_Cache_description;
+
+  /// No description provided for @database_Cache_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Local database'**
+  String get database_Cache_title;
 
   /// Shown when a user tries to remove the owner from a chat or group. The system does not allow removing the owner.
   ///
@@ -5214,18 +5214,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Feature not supported'**
   String get voicemail_Title_notSupported;
-
-  /// No description provided for @voicemail_RecordsCache_description.
-  ///
-  /// In en, this message translates to:
-  /// **'Locally stored copy of the voicemail list fetched from the server (the audio files are a separate section). Clearing removes the local records; the list is downloaded again on the next refresh.'**
-  String get voicemail_RecordsCache_description;
-
-  /// No description provided for @voicemail_RecordsCache_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Voicemail messages'**
-  String get voicemail_RecordsCache_title;
 
   /// No description provided for @voicemail_Widget_screenTitle.
   ///

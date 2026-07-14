@@ -70,9 +70,4 @@ class CdrsDao extends DatabaseAccessor<AppDatabase> with _$CdrsDaoMixin {
       await delete(cdrSyncCursorTable).go();
     });
   }
-
-  Future<int> recordsCount() async {
-    final query = selectOnly(cdrTable)..addColumns([countAll()]);
-    return query.map((row) => row.read(countAll()) ?? 0).getSingle();
-  }
 }

@@ -361,13 +361,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_videoView_actionLabel_fit => 'Fit';
 
   @override
-  String get cdrs_Cache_description =>
-      'Locally stored copy of the call history fetched from the server. Clearing removes the local records; the history is downloaded again on the next sync.';
-
-  @override
-  String get cdrs_Cache_title => 'Call history';
-
-  @override
   String get cdrs_noMissedCalls_message => 'No missed calls';
 
   @override
@@ -476,6 +469,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get copyToClipboard_popupMenuItem => 'Copy to clipboard';
+
+  @override
+  String get database_Cache_description =>
+      'Locally stored copy of the data fetched from the server: call history, voicemail list, chats and contacts. Clearing removes all local records; every feature downloads its data again on the next sync.';
+
+  @override
+  String get database_Cache_title => 'Local database';
 
   @override
   String get default_CannotRemoveOwnerMessagingSocketException => 'Cannot remove owner';
@@ -2833,13 +2833,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voicemail_Title_notSupported => 'Feature not supported';
-
-  @override
-  String get voicemail_RecordsCache_description =>
-      'Locally stored copy of the voicemail list fetched from the server (the audio files are a separate section). Clearing removes the local records; the list is downloaded again on the next refresh.';
-
-  @override
-  String get voicemail_RecordsCache_title => 'Voicemail messages';
 
   @override
   String get voicemail_Widget_screenTitle => 'Voicemail';
