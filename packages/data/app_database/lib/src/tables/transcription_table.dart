@@ -23,6 +23,4 @@ class TranscriptionTable extends Table {
 
   /// Identity of the engine/model that produced [transcript].
   TextColumn get engine => text().nullable()();
-
-  IntColumn get updatedAtUsec => integer().nullable()();
 }

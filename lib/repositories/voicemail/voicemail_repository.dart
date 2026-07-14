@@ -387,7 +387,6 @@ class VoicemailRepositoryImpl
         transcript: transcript,
         status: status?.name,
         engine: _transcription?.current?.engine,
-        updatedAtUsec: DateTime.now().microsecondsSinceEpoch,
       ),
     );
   }

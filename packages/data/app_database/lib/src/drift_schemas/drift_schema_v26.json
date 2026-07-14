@@ -3066,16 +3066,6 @@
             "default_dart": null,
             "default_client_dart": null,
             "dsl_features": []
-          },
-          {
-            "name": "updated_at_usec",
-            "getter_name": "updatedAtUsec",
-            "moor_type": "int",
-            "nullable": true,
-            "customConstraints": "NULL",
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": []
           }
         ],
         "is_virtual": false,
@@ -3492,7 +3482,7 @@
       "sql": [
         {
           "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"transcriptions\" (\"media_type\" TEXT NOT NULL, \"media_id\" TEXT NOT NULL, \"transcript\" TEXT NULL, \"status\" TEXT NULL, \"engine\" TEXT NULL, \"updated_at_usec\" INTEGER NULL, PRIMARY KEY(media_type, media_id));"
+          "sql": "CREATE TABLE IF NOT EXISTS \"transcriptions\" (\"media_type\" TEXT NOT NULL, \"media_id\" TEXT NOT NULL, \"transcript\" TEXT NULL, \"status\" TEXT NULL, \"engine\" TEXT NULL, PRIMARY KEY(media_type, media_id));"
         }
       ]
     },

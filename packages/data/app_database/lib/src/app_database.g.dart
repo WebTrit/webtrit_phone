@@ -14927,17 +14927,6 @@ class $TranscriptionTableTable extends TranscriptionTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _updatedAtUsecMeta = const VerificationMeta(
-    'updatedAtUsec',
-  );
-  @override
-  late final GeneratedColumn<int> updatedAtUsec = GeneratedColumn<int>(
-    'updated_at_usec',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-  );
   @override
   List<GeneratedColumn> get $columns => [
     mediaType,
@@ -14945,7 +14934,6 @@ class $TranscriptionTableTable extends TranscriptionTable
     transcript,
     status,
     engine,
-    updatedAtUsec,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -14993,15 +14981,6 @@ class $TranscriptionTableTable extends TranscriptionTable
         engine.isAcceptableOrUnknown(data['engine']!, _engineMeta),
       );
     }
-    if (data.containsKey('updated_at_usec')) {
-      context.handle(
-        _updatedAtUsecMeta,
-        updatedAtUsec.isAcceptableOrUnknown(
-          data['updated_at_usec']!,
-          _updatedAtUsecMeta,
-        ),
-      );
-    }
     return context;
   }
 
@@ -15031,10 +15010,6 @@ class $TranscriptionTableTable extends TranscriptionTable
         DriftSqlType.string,
         data['${effectivePrefix}engine'],
       ),
-      updatedAtUsec: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}updated_at_usec'],
-      ),
     );
   }
 
@@ -15053,14 +15028,12 @@ class TranscriptionData extends DataClass
 
   /// Identity of the engine/model that produced [transcript].
   final String? engine;
-  final int? updatedAtUsec;
   const TranscriptionData({
     required this.mediaType,
     required this.mediaId,
     this.transcript,
     this.status,
     this.engine,
-    this.updatedAtUsec,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -15075,9 +15048,6 @@ class TranscriptionData extends DataClass
     }
     if (!nullToAbsent || engine != null) {
       map['engine'] = Variable<String>(engine);
-    }
-    if (!nullToAbsent || updatedAtUsec != null) {
-      map['updated_at_usec'] = Variable<int>(updatedAtUsec);
     }
     return map;
   }
@@ -15095,9 +15065,6 @@ class TranscriptionData extends DataClass
       engine: engine == null && nullToAbsent
           ? const Value.absent()
           : Value(engine),
-      updatedAtUsec: updatedAtUsec == null && nullToAbsent
-          ? const Value.absent()
-          : Value(updatedAtUsec),
     );
   }
 
@@ -15112,7 +15079,6 @@ class TranscriptionData extends DataClass
       transcript: serializer.fromJson<String?>(json['transcript']),
       status: serializer.fromJson<String?>(json['status']),
       engine: serializer.fromJson<String?>(json['engine']),
-      updatedAtUsec: serializer.fromJson<int?>(json['updatedAtUsec']),
     );
   }
   @override
@@ -15124,7 +15090,6 @@ class TranscriptionData extends DataClass
       'transcript': serializer.toJson<String?>(transcript),
       'status': serializer.toJson<String?>(status),
       'engine': serializer.toJson<String?>(engine),
-      'updatedAtUsec': serializer.toJson<int?>(updatedAtUsec),
     };
   }
 
@@ -15134,16 +15099,12 @@ class TranscriptionData extends DataClass
     Value<String?> transcript = const Value.absent(),
     Value<String?> status = const Value.absent(),
     Value<String?> engine = const Value.absent(),
-    Value<int?> updatedAtUsec = const Value.absent(),
   }) => TranscriptionData(
     mediaType: mediaType ?? this.mediaType,
     mediaId: mediaId ?? this.mediaId,
     transcript: transcript.present ? transcript.value : this.transcript,
     status: status.present ? status.value : this.status,
     engine: engine.present ? engine.value : this.engine,
-    updatedAtUsec: updatedAtUsec.present
-        ? updatedAtUsec.value
-        : this.updatedAtUsec,
   );
   TranscriptionData copyWithCompanion(TranscriptionDataCompanion data) {
     return TranscriptionData(
@@ -15154,9 +15115,6 @@ class TranscriptionData extends DataClass
           : this.transcript,
       status: data.status.present ? data.status.value : this.status,
       engine: data.engine.present ? data.engine.value : this.engine,
-      updatedAtUsec: data.updatedAtUsec.present
-          ? data.updatedAtUsec.value
-          : this.updatedAtUsec,
     );
   }
 
@@ -15167,21 +15125,14 @@ class TranscriptionData extends DataClass
           ..write('mediaId: $mediaId, ')
           ..write('transcript: $transcript, ')
           ..write('status: $status, ')
-          ..write('engine: $engine, ')
-          ..write('updatedAtUsec: $updatedAtUsec')
+          ..write('engine: $engine')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-    mediaType,
-    mediaId,
-    transcript,
-    status,
-    engine,
-    updatedAtUsec,
-  );
+  int get hashCode =>
+      Object.hash(mediaType, mediaId, transcript, status, engine);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -15190,8 +15141,7 @@ class TranscriptionData extends DataClass
           other.mediaId == this.mediaId &&
           other.transcript == this.transcript &&
           other.status == this.status &&
-          other.engine == this.engine &&
-          other.updatedAtUsec == this.updatedAtUsec);
+          other.engine == this.engine);
 }
 
 class TranscriptionDataCompanion extends UpdateCompanion<TranscriptionData> {
@@ -15200,7 +15150,6 @@ class TranscriptionDataCompanion extends UpdateCompanion<TranscriptionData> {
   final Value<String?> transcript;
   final Value<String?> status;
   final Value<String?> engine;
-  final Value<int?> updatedAtUsec;
   final Value<int> rowid;
   const TranscriptionDataCompanion({
     this.mediaType = const Value.absent(),
@@ -15208,7 +15157,6 @@ class TranscriptionDataCompanion extends UpdateCompanion<TranscriptionData> {
     this.transcript = const Value.absent(),
     this.status = const Value.absent(),
     this.engine = const Value.absent(),
-    this.updatedAtUsec = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TranscriptionDataCompanion.insert({
@@ -15217,7 +15165,6 @@ class TranscriptionDataCompanion extends UpdateCompanion<TranscriptionData> {
     this.transcript = const Value.absent(),
     this.status = const Value.absent(),
     this.engine = const Value.absent(),
-    this.updatedAtUsec = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : mediaType = Value(mediaType),
        mediaId = Value(mediaId);
@@ -15227,7 +15174,6 @@ class TranscriptionDataCompanion extends UpdateCompanion<TranscriptionData> {
     Expression<String>? transcript,
     Expression<String>? status,
     Expression<String>? engine,
-    Expression<int>? updatedAtUsec,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -15236,7 +15182,6 @@ class TranscriptionDataCompanion extends UpdateCompanion<TranscriptionData> {
       if (transcript != null) 'transcript': transcript,
       if (status != null) 'status': status,
       if (engine != null) 'engine': engine,
-      if (updatedAtUsec != null) 'updated_at_usec': updatedAtUsec,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -15247,7 +15192,6 @@ class TranscriptionDataCompanion extends UpdateCompanion<TranscriptionData> {
     Value<String?>? transcript,
     Value<String?>? status,
     Value<String?>? engine,
-    Value<int?>? updatedAtUsec,
     Value<int>? rowid,
   }) {
     return TranscriptionDataCompanion(
@@ -15256,7 +15200,6 @@ class TranscriptionDataCompanion extends UpdateCompanion<TranscriptionData> {
       transcript: transcript ?? this.transcript,
       status: status ?? this.status,
       engine: engine ?? this.engine,
-      updatedAtUsec: updatedAtUsec ?? this.updatedAtUsec,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -15279,9 +15222,6 @@ class TranscriptionDataCompanion extends UpdateCompanion<TranscriptionData> {
     if (engine.present) {
       map['engine'] = Variable<String>(engine.value);
     }
-    if (updatedAtUsec.present) {
-      map['updated_at_usec'] = Variable<int>(updatedAtUsec.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -15296,7 +15236,6 @@ class TranscriptionDataCompanion extends UpdateCompanion<TranscriptionData> {
           ..write('transcript: $transcript, ')
           ..write('status: $status, ')
           ..write('engine: $engine, ')
-          ..write('updatedAtUsec: $updatedAtUsec, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -28020,7 +27959,6 @@ typedef $$TranscriptionTableTableCreateCompanionBuilder =
       Value<String?> transcript,
       Value<String?> status,
       Value<String?> engine,
-      Value<int?> updatedAtUsec,
       Value<int> rowid,
     });
 typedef $$TranscriptionTableTableUpdateCompanionBuilder =
@@ -28030,7 +27968,6 @@ typedef $$TranscriptionTableTableUpdateCompanionBuilder =
       Value<String?> transcript,
       Value<String?> status,
       Value<String?> engine,
-      Value<int?> updatedAtUsec,
       Value<int> rowid,
     });
 
@@ -28065,11 +28002,6 @@ class $$TranscriptionTableTableFilterComposer
 
   ColumnFilters<String> get engine => $composableBuilder(
     column: $table.engine,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get updatedAtUsec => $composableBuilder(
-    column: $table.updatedAtUsec,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -28107,11 +28039,6 @@ class $$TranscriptionTableTableOrderingComposer
     column: $table.engine,
     builder: (column) => ColumnOrderings(column),
   );
-
-  ColumnOrderings<int> get updatedAtUsec => $composableBuilder(
-    column: $table.updatedAtUsec,
-    builder: (column) => ColumnOrderings(column),
-  );
 }
 
 class $$TranscriptionTableTableAnnotationComposer
@@ -28139,11 +28066,6 @@ class $$TranscriptionTableTableAnnotationComposer
 
   GeneratedColumn<String> get engine =>
       $composableBuilder(column: $table.engine, builder: (column) => column);
-
-  GeneratedColumn<int> get updatedAtUsec => $composableBuilder(
-    column: $table.updatedAtUsec,
-    builder: (column) => column,
-  );
 }
 
 class $$TranscriptionTableTableTableManager
@@ -28191,7 +28113,6 @@ class $$TranscriptionTableTableTableManager
                 Value<String?> transcript = const Value.absent(),
                 Value<String?> status = const Value.absent(),
                 Value<String?> engine = const Value.absent(),
-                Value<int?> updatedAtUsec = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TranscriptionDataCompanion(
                 mediaType: mediaType,
@@ -28199,7 +28120,6 @@ class $$TranscriptionTableTableTableManager
                 transcript: transcript,
                 status: status,
                 engine: engine,
-                updatedAtUsec: updatedAtUsec,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -28209,7 +28129,6 @@ class $$TranscriptionTableTableTableManager
                 Value<String?> transcript = const Value.absent(),
                 Value<String?> status = const Value.absent(),
                 Value<String?> engine = const Value.absent(),
-                Value<int?> updatedAtUsec = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TranscriptionDataCompanion.insert(
                 mediaType: mediaType,
@@ -28217,7 +28136,6 @@ class $$TranscriptionTableTableTableManager
                 transcript: transcript,
                 status: status,
                 engine: engine,
-                updatedAtUsec: updatedAtUsec,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
