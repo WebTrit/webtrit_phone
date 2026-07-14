@@ -120,6 +120,23 @@ class _FakeTranscriptionDataSource implements TranscriptionDataSource {
   }
 }
 
+class _FakeTranscriptionModelRepository implements TranscriptionModelRepository {
+  String? value;
+
+  @override
+  String? getTranscriptionModel() => value;
+
+  @override
+  Future<void> setTranscriptionModel(String? newValue) async {
+    value = newValue;
+  }
+
+  @override
+  Future<void> clear() async {
+    value = null;
+  }
+}
+
 api.UserVoicemailItem createVoicemailItem({String id = '1', String type = 'voice'}) {
   return api.UserVoicemailItem(id: id, date: '2026-01-01T00:00:00Z', duration: 3.5, seen: false, size: 5, type: type);
 }
@@ -654,6 +671,33 @@ void main() {
       service.switchLocalModel('small');
 
       await waitFor(() => replacement.calls == 1, 're-transcription with the new model');
+      row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
+      expect(row!.transcript, 'from the new model');
+    });
+
+    test('setTranscriptionModel persists the override and regenerates through the pool', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
+      final initial = _FakeTranscriptionDataSource(result: 'from the old model');
+      final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
+      final modelRepository = _FakeTranscriptionModelRepository();
+
+      final service = createService((model) => model == null ? initial : replacement);
+      final repo = VoicemailRepositoryImpl(
+        webtritApiClient: client,
+        token: 'user_token',
+        appDatabase: transcriptionDatabase,
+        sessionGuard: const EmptySessionGuard(),
+        transcriber: service,
+        transcriptionModelRepository: modelRepository,
+      );
+      await repo.fetchVoicemails();
+      var row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
+      expect(row!.transcript, 'from the old model');
+      expect(repo.canSelectTranscriptionModel, isTrue);
+
+      await repo.setTranscriptionModel('small');
+
+      expect(repo.getTranscriptionModel(), 'small');
       row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'from the new model');
     });

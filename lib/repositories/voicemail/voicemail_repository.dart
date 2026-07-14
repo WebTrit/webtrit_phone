@@ -10,9 +10,13 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/transcription_model/transcription_model_repository.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 
-abstract class VoicemailRepository implements Refreshable {
+/// Voicemail owns its transcription: the repository is also the
+/// [TranscriptionModelRepository] of the voicemail transcription model, so
+/// consumers deal with a single object.
+abstract class VoicemailRepository implements Refreshable, TranscriptionModelRepository {
   /// Fetches voicemails from the remote server and updates the local database.
   ///
   /// If [localeCode] is provided, it will be used to localize the request.
@@ -64,6 +68,13 @@ abstract class VoicemailRepository implements Refreshable {
   /// Removes only the locally cached voicemail records; the server copy stays
   /// and the list is fetched again on the next refresh.
   Future<void> wipeLocalRecords();
+
+  /// True when the user may pick the on-device transcription model; false
+  /// hides the model selection entirely.
+  bool get canSelectTranscriptionModel;
+
+  /// The app-config default model tier the override falls back to.
+  String get defaultTranscriptionModel;
 }
 
 final _logger = Logger('VoicemailRepository');
@@ -77,11 +88,15 @@ class VoicemailRepositoryImpl
     required AppDatabase appDatabase,
     SessionGuard? sessionGuard,
     MediaTranscriber? transcriber,
+    TranscriptionModelRepository? transcriptionModelRepository,
+    String defaultTranscriptionModel = 'base',
   }) : _sessionGuard = sessionGuard ?? const EmptySessionGuard(),
        _webtritApiClient = webtritApiClient,
        _token = token,
        _appDatabase = appDatabase,
-       _transcriber = transcriber {
+       _transcriber = transcriber,
+       _transcriptionModelRepository = transcriptionModelRepository,
+       _defaultTranscriptionModel = defaultTranscriptionModel {
     _initialize();
   }
 
@@ -94,6 +109,34 @@ class VoicemailRepositoryImpl
   /// never observes the pool itself - results and lifecycle states arrive as
   /// database updates. Null when transcription is disabled.
   final MediaTranscriber? _transcriber;
+
+  /// Persists the user's model override; null when the model is not user
+  /// selectable (feature disabled, not local, or pinned by the brand).
+  final TranscriptionModelRepository? _transcriptionModelRepository;
+  final String _defaultTranscriptionModel;
+
+  @override
+  bool get canSelectTranscriptionModel => _transcriptionModelRepository != null && _transcriber != null;
+
+  @override
+  String get defaultTranscriptionModel => _defaultTranscriptionModel;
+
+  @override
+  String? getTranscriptionModel() => _transcriptionModelRepository?.getTranscriptionModel();
+
+  /// Persists the override (null returns to the config default) and switches
+  /// the transcription pool to it, which regenerates every transcript.
+  @override
+  Future<void> setTranscriptionModel(String? value) async {
+    final transcriptionModelRepository = _transcriptionModelRepository;
+    if (transcriptionModelRepository == null) return;
+
+    await transcriptionModelRepository.setTranscriptionModel(value);
+    _transcriber?.switchLocalModel(value);
+  }
+
+  @override
+  Future<void> clear() => setTranscriptionModel(null);
 
   // If the repository is disabled, the stream controller is not initialized.
   // In such cases, subscribers will receive an empty stream instead.
@@ -517,4 +560,19 @@ class EmptyVoicemailRepository implements VoicemailRepository {
 
   @override
   Future<void> wipeLocalRecords() => Future.value();
+
+  @override
+  bool get canSelectTranscriptionModel => false;
+
+  @override
+  String get defaultTranscriptionModel => 'base';
+
+  @override
+  String? getTranscriptionModel() => null;
+
+  @override
+  Future<void> setTranscriptionModel(String? value) => Future.value();
+
+  @override
+  Future<void> clear() => Future.value();
 }
