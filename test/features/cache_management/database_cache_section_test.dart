@@ -5,19 +5,19 @@ import 'package:drift/native.dart';
 
 import 'package:app_database/app_database.dart';
 
-import 'package:webtrit_phone/features/settings/features/cache_management/cubit/cdrs_cache_section.dart';
+import 'package:webtrit_phone/features/settings/features/cache_management/cubit/database_cache_section.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 void main() {
   late AppDatabase appDatabase;
-  late CdrsLocalRepository repository;
-  late CdrsCacheSection section;
+  late CdrsLocalRepository cdrsRepository;
+  late DatabaseCacheSection section;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
-    repository = CdrsLocalRepositoryDriftImpl(appDatabase);
-    section = CdrsCacheSection(repository);
+    cdrsRepository = CdrsLocalRepositoryDriftImpl(appDatabase);
+    section = DatabaseCacheSection(appDatabase, cdrsRepository);
   });
 
   tearDown(() async {
@@ -38,8 +38,22 @@ void main() {
     );
   }
 
-  test('reports the stored records count as items', () async {
-    await appDatabase.cdrsDao.upsertCdrs([createCdr('1'), createCdr('2'), createCdr('3')]);
+  VoicemailData createVoicemail(String id) {
+    return VoicemailData(
+      id: id,
+      date: '2026-07-14',
+      duration: 5.0,
+      sender: '555002',
+      receiver: '555001',
+      seen: false,
+      size: 100,
+      type: 'audio/wav',
+    );
+  }
+
+  test('reports the rows of every table as items', () async {
+    await appDatabase.cdrsDao.upsertCdrs([createCdr('1'), createCdr('2')]);
+    await appDatabase.voicemailDao.insertVoicemail(createVoicemail('vm-1'));
 
     final usage = await section.usage();
 
@@ -47,23 +61,24 @@ void main() {
     expect(usage.amount, 3);
   });
 
-  test('reports zero for an empty history', () async {
+  test('reports zero for an empty database', () async {
     final usage = await section.usage();
 
     expect(usage.amount, 0);
   });
 
-  test('clear wipes the stored records', () async {
+  test('clear wipes every table', () async {
     await appDatabase.cdrsDao.upsertCdrs([createCdr('1'), createCdr('2')]);
+    await appDatabase.voicemailDao.insertVoicemail(createVoicemail('vm-1'));
 
     await section.clear();
 
     expect((await section.usage()).amount, 0);
   });
 
-  test('clear notifies listeners holding records in memory', () async {
+  test('clear notifies listeners holding call history records in memory', () async {
     await appDatabase.cdrsDao.upsertCdrs([createCdr('1')]);
-    final events = expectLater(repository.events, emits(isA<CdrRecordsWiped>()));
+    final events = expectLater(cdrsRepository.events, emits(isA<CdrRecordsWiped>()));
 
     await section.clear();
 

@@ -148,8 +148,6 @@ extension AppLocalizationsExtension on AppLocalizations {
         call_videoBackground_actionLabel_enableBlur,
       'call_videoView_actionLabel_cover' => call_videoView_actionLabel_cover,
       'call_videoView_actionLabel_fit' => call_videoView_actionLabel_fit,
-      'cdrs_Cache_description' => cdrs_Cache_description,
-      'cdrs_Cache_title' => cdrs_Cache_title,
       'cdrs_noMissedCalls_message' => cdrs_noMissedCalls_message,
       'cdrs_noRecentCalls_message' => cdrs_noRecentCalls_message,
       'common_noInternetConnection_message' =>
@@ -197,6 +195,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         contacts_ContactScreen_dialogsViaSipBlf_tooltip,
       'copyToClipboard_floatingSnackBar' => copyToClipboard_floatingSnackBar,
       'copyToClipboard_popupMenuItem' => copyToClipboard_popupMenuItem,
+      'database_Cache_description' => database_Cache_description,
+      'database_Cache_title' => database_Cache_title,
       'default_CannotRemoveOwnerMessagingSocketException' =>
         default_CannotRemoveOwnerMessagingSocketException,
       'default_ChatMemberNotFoundMessagingSocketException' =>
@@ -1358,9 +1358,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'voicemail_Label_retry' => voicemail_Label_retry,
       'voicemail_Snackbar_notConfigured' => voicemail_Snackbar_notConfigured,
       'voicemail_Title_notSupported' => voicemail_Title_notSupported,
-      'voicemail_RecordsCache_description' =>
-        voicemail_RecordsCache_description,
-      'voicemail_RecordsCache_title' => voicemail_RecordsCache_title,
       'voicemail_Widget_screenTitle' => voicemail_Widget_screenTitle,
       'webRegistration_ErrorAcknowledgeDialogActions_retry' =>
         webRegistration_ErrorAcknowledgeDialogActions_retry,

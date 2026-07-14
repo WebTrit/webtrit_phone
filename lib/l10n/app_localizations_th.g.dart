@@ -360,13 +360,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get call_videoView_actionLabel_fit => 'พอดี';
 
   @override
-  String get cdrs_Cache_description =>
-      'สำเนาประวัติการโทรที่ดึงจากเซิร์ฟเวอร์ซึ่งเก็บไว้ในเครื่อง การล้างจะลบรายการในเครื่อง และประวัติจะถูกดาวน์โหลดใหม่ในการซิงค์ครั้งถัดไป';
-
-  @override
-  String get cdrs_Cache_title => 'ประวัติการโทร';
-
-  @override
   String get cdrs_noMissedCalls_message => 'ไม่มีสายที่ไม่ได้รับ';
 
   @override
@@ -475,6 +468,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get copyToClipboard_popupMenuItem => 'คัดลอกไปยังคลิปบอร์ด';
+
+  @override
+  String get database_Cache_description =>
+      'สำเนาข้อมูลที่ดึงจากเซิร์ฟเวอร์ซึ่งเก็บไว้ในเครื่อง: ประวัติการโทร รายการข้อความเสียง แชท และรายชื่อผู้ติดต่อ การล้างจะลบข้อมูลในเครื่องทั้งหมด และข้อมูลจะถูกดาวน์โหลดใหม่ในการซิงค์ครั้งถัดไป';
+
+  @override
+  String get database_Cache_title => 'ฐานข้อมูลในเครื่อง';
 
   @override
   String get default_CannotRemoveOwnerMessagingSocketException => 'ไม่สามารถลบเจ้าของได้';
@@ -2819,13 +2819,6 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get voicemail_Title_notSupported => 'ไม่รองรับฟีเจอร์นี้';
-
-  @override
-  String get voicemail_RecordsCache_description =>
-      'สำเนารายการข้อความเสียงที่ดึงจากเซิร์ฟเวอร์ซึ่งเก็บไว้ในเครื่อง (ไฟล์เสียงเป็นส่วนแยกต่างหาก) การล้างจะลบรายการในเครื่อง และรายการจะถูกดาวน์โหลดใหม่เมื่อรีเฟรชครั้งถัดไป';
-
-  @override
-  String get voicemail_RecordsCache_title => 'ข้อความเสียงที่บันทึกไว้';
 
   @override
   String get voicemail_Widget_screenTitle => 'ข้อความเสียง';

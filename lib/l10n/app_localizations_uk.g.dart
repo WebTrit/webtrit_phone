@@ -380,13 +380,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_videoView_actionLabel_fit => 'Вмістити';
 
   @override
-  String get cdrs_Cache_description =>
-      'Локальна копія історії дзвінків із сервера. Очищення видаляє локальні записи; історія завантажиться знову під час наступної синхронізації.';
-
-  @override
-  String get cdrs_Cache_title => 'Історія дзвінків';
-
-  @override
   String get cdrs_noMissedCalls_message => 'Немає пропущених дзвінків';
 
   @override
@@ -495,6 +488,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get copyToClipboard_popupMenuItem => 'Скопіювати в буфер обміну';
+
+  @override
+  String get database_Cache_description =>
+      'Локальна копія даних із сервера: історія дзвінків, список голосових повідомлень, чати й контакти. Очищення видаляє всі локальні записи; дані завантажаться знову під час наступної синхронізації.';
+
+  @override
+  String get database_Cache_title => 'Локальна база даних';
 
   @override
   String get default_CannotRemoveOwnerMessagingSocketException => 'Неможливо видалити власника';
@@ -2871,13 +2871,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get voicemail_Title_notSupported => 'Функція не підтримується';
-
-  @override
-  String get voicemail_RecordsCache_description =>
-      'Локальна копія списку голосових повідомлень із сервера (аудіофайли - окрема секція). Очищення видаляє локальні записи; список завантажиться знову під час наступного оновлення.';
-
-  @override
-  String get voicemail_RecordsCache_title => 'Повідомлення голосової пошти';
 
   @override
   String get voicemail_Widget_screenTitle => 'Голосова пошта';

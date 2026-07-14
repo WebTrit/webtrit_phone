@@ -68,6 +68,16 @@ part 'app_database.g.dart';
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
+  /// Total number of rows stored across all tables.
+  Future<int> totalRecordsCount() async {
+    var total = 0;
+    for (final table in allTables) {
+      final query = selectOnly(table)..addColumns([countAll()]);
+      total += await query.map((row) => row.read(countAll()) ?? 0).getSingle();
+    }
+    return total;
+  }
+
   Future<void> deleteEverything() async {
     await customStatement('PRAGMA foreign_keys = OFF');
     try {

@@ -291,10 +291,6 @@
   "@call_videoView_actionLabel_fit": {
     "description": "Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode."
   },
-  "cdrs_Cache_description": "Copia locale della cronologia chiamate scaricata dal server. La cancellazione rimuove i record locali; la cronologia viene scaricata di nuovo alla prossima sincronizzazione.",
-  "@cdrs_Cache_description": {},
-  "cdrs_Cache_title": "Cronologia chiamate",
-  "@cdrs_Cache_title": {},
   "cdrs_noMissedCalls_message": "Nessuna chiamata persa",
   "@cdrs_noMissedCalls_message": {},
   "cdrs_noRecentCalls_message": "Nessuna chiamata recente",
@@ -373,6 +369,10 @@
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Copia negli appunti",
   "@copyToClipboard_popupMenuItem": {},
+  "database_Cache_description": "Copia locale dei dati scaricati dal server: cronologia chiamate, elenco dei messaggi vocali, chat e contatti. La cancellazione rimuove tutti i record locali; i dati vengono scaricati di nuovo alla prossima sincronizzazione.",
+  "@database_Cache_description": {},
+  "database_Cache_title": "Database locale",
+  "@database_Cache_title": {},
   "default_CannotRemoveOwnerMessagingSocketException": "Impossibile rimuovere il proprietario",
   "@default_CannotRemoveOwnerMessagingSocketException": {
     "description": "Shown when a user tries to remove the owner from a chat or group. The system does not allow removing the owner."
@@ -2350,10 +2350,6 @@
   "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Funzionalità non supportata",
   "@voicemail_Title_notSupported": {},
-  "voicemail_RecordsCache_description": "Copia locale dell'elenco dei messaggi vocali scaricato dal server (i file audio sono una sezione separata). La cancellazione rimuove i record locali; l'elenco viene scaricato di nuovo al prossimo aggiornamento.",
-  "@voicemail_RecordsCache_description": {},
-  "voicemail_RecordsCache_title": "Messaggi vocali",
-  "@voicemail_RecordsCache_title": {},
   "voicemail_Widget_screenTitle": "Segreteria telefonica",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",

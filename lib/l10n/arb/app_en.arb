@@ -291,10 +291,6 @@
   "@call_videoView_actionLabel_fit": {
     "description": "Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode."
   },
-  "cdrs_Cache_description": "Locally stored copy of the call history fetched from the server. Clearing removes the local records; the history is downloaded again on the next sync.",
-  "@cdrs_Cache_description": {},
-  "cdrs_Cache_title": "Call history",
-  "@cdrs_Cache_title": {},
   "cdrs_noMissedCalls_message": "No missed calls",
   "@cdrs_noMissedCalls_message": {},
   "cdrs_noRecentCalls_message": "No recent calls",
@@ -373,6 +369,10 @@
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Copy to clipboard",
   "@copyToClipboard_popupMenuItem": {},
+  "database_Cache_description": "Locally stored copy of the data fetched from the server: call history, voicemail list, chats and contacts. Clearing removes all local records; every feature downloads its data again on the next sync.",
+  "@database_Cache_description": {},
+  "database_Cache_title": "Local database",
+  "@database_Cache_title": {},
   "default_CannotRemoveOwnerMessagingSocketException": "Cannot remove owner",
   "@default_CannotRemoveOwnerMessagingSocketException": {
     "description": "Shown when a user tries to remove the owner from a chat or group. The system does not allow removing the owner."
@@ -2365,10 +2365,6 @@
   "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Feature not supported",
   "@voicemail_Title_notSupported": {},
-  "voicemail_RecordsCache_description": "Locally stored copy of the voicemail list fetched from the server (the audio files are a separate section). Clearing removes the local records; the list is downloaded again on the next refresh.",
-  "@voicemail_RecordsCache_description": {},
-  "voicemail_RecordsCache_title": "Voicemail messages",
-  "@voicemail_RecordsCache_title": {},
   "voicemail_Widget_screenTitle": "Voicemail",
   "@voicemail_Widget_screenTitle": {},
   "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",

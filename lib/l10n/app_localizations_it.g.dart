@@ -365,13 +365,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_videoView_actionLabel_fit => 'Adatta';
 
   @override
-  String get cdrs_Cache_description =>
-      'Copia locale della cronologia chiamate scaricata dal server. La cancellazione rimuove i record locali; la cronologia viene scaricata di nuovo alla prossima sincronizzazione.';
-
-  @override
-  String get cdrs_Cache_title => 'Cronologia chiamate';
-
-  @override
   String get cdrs_noMissedCalls_message => 'Nessuna chiamata persa';
 
   @override
@@ -481,6 +474,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get copyToClipboard_popupMenuItem => 'Copia negli appunti';
+
+  @override
+  String get database_Cache_description =>
+      'Copia locale dei dati scaricati dal server: cronologia chiamate, elenco dei messaggi vocali, chat e contatti. La cancellazione rimuove tutti i record locali; i dati vengono scaricati di nuovo alla prossima sincronizzazione.';
+
+  @override
+  String get database_Cache_title => 'Database locale';
 
   @override
   String get default_CannotRemoveOwnerMessagingSocketException => 'Impossibile rimuovere il proprietario';
@@ -2866,13 +2866,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get voicemail_Title_notSupported => 'Funzionalità non supportata';
-
-  @override
-  String get voicemail_RecordsCache_description =>
-      'Copia locale dell\'elenco dei messaggi vocali scaricato dal server (i file audio sono una sezione separata). La cancellazione rimuove i record locali; l\'elenco viene scaricato di nuovo al prossimo aggiornamento.';
-
-  @override
-  String get voicemail_RecordsCache_title => 'Messaggi vocali';
 
   @override
   String get voicemail_Widget_screenTitle => 'Segreteria telefonica';
