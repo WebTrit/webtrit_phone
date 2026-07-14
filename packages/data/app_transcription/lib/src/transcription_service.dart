@@ -1,0 +1,193 @@
+import 'dart:async';
+import 'dart:typed_data';
+
+import 'package:logging/logging.dart';
+
+import 'switchable_transcription_source.dart';
+import 'transcription_store.dart';
+
+final _logger = Logger('TranscriptionService');
+
+/// Produces the audio bytes of a media object when its turn in the pool
+/// comes; lazy so queued items do not hold their payloads in memory.
+typedef TranscriptionAudioLoader = Future<Uint8List> Function();
+
+/// The narrow consumer-facing contract of the transcription pool: hand media
+/// off and forget deleted items. Nothing is ever returned or awaited by
+/// consumers - results and lifecycle states land in the application's
+/// [TranscriptionStore], observed through the consumer's own storage
+/// queries. Consumers depend on this instead of [TranscriptionService]
+/// itself.
+abstract interface class MediaTranscriber {
+  /// Fire-and-forget request to transcribe a media object.
+  void enqueue(String mediaType, String mediaId, TranscriptionAudioLoader loadAudio, {String? language});
+
+  /// The media object was deleted: pending or in-flight work is invalidated
+  /// and the stored transcription removed, so a late result cannot resurrect
+  /// it.
+  Future<void> forget(String mediaType, String mediaId);
+}
+
+/// Fire-and-forget transcription pool.
+///
+/// Consumers enqueue media they want transcribed and walk away: the pool
+/// transcribes sequentially through the shared [SwitchableTranscriptionSource]
+/// and hands every lifecycle fact (in progress, transcript, failure) to the
+/// [TranscriptionStore] the application wired in - the pool itself knows
+/// nothing about storage. Results are attributed to the engine that actually
+/// produced them, and store calls are invalidated when the item was forgotten
+/// or the model switched mid-flight, so a stale result can never resurrect a
+/// removed or regenerating item.
+class TranscriptionService implements MediaTranscriber {
+  TranscriptionService({required SwitchableTranscriptionSource source, required TranscriptionStore store})
+    : _source = source,
+      _store = store;
+
+  final SwitchableTranscriptionSource _source;
+  final TranscriptionStore _store;
+
+  final _requests = <_TranscriptionRequest>[];
+
+  /// The queued or in-flight request per media key. An entry removed or
+  /// replaced mid-work (forget, model switch, re-enqueue) invalidates the
+  /// pending store calls of the request that no longer owns its key.
+  final _active = <String, _TranscriptionRequest>{};
+
+  bool _draining = false;
+  int _generation = 0;
+  bool _disposed = false;
+
+  /// False while transcription is disabled or unsupported on this platform.
+  bool get isEnabled => _source.current != null;
+
+  /// Queues the media for transcription; duplicates of an already queued or
+  /// in-flight item and calls while the feature is disabled are no-ops.
+  @override
+  void enqueue(String mediaType, String mediaId, TranscriptionAudioLoader loadAudio, {String? language}) {
+    if (_disposed || !isEnabled) return;
+    final key = _mediaKey(mediaType, mediaId);
+    if (_active.containsKey(key)) return;
+
+    final request = _TranscriptionRequest(mediaType, mediaId, loadAudio, language);
+    _active[key] = request;
+    _requests.add(request);
+    unawaited(_drain());
+  }
+
+  /// The media was deleted: drops it from the pool, invalidates an in-flight
+  /// result and removes its stored transcription through the store.
+  @override
+  Future<void> forget(String mediaType, String mediaId) async {
+    final key = _mediaKey(mediaType, mediaId);
+    _requests.removeWhere((request) => request.key == key);
+    _active.remove(key);
+    await _store.remove(mediaType, mediaId);
+  }
+
+  /// Switches the local model (null returns to the config default) and
+  /// regenerates everything: in-flight results of the old model are
+  /// invalidated and the store removes every transcription. Consumers
+  /// observe the wipe through their storage and re-enqueue what they want
+  /// regenerated.
+  void switchLocalModel(String? localModel) {
+    if (!_source.switchLocalModel(localModel)) return;
+
+    _generation++;
+    _requests.clear();
+    _active.clear();
+    unawaited(_wipeAll());
+  }
+
+  Future<void> _wipeAll() async {
+    try {
+      await _store.removeAll();
+    } catch (e, st) {
+      _logger.warning('Failed to wipe transcriptions for regeneration', e, st);
+    }
+  }
+
+  Future<void> _drain() async {
+    if (_draining) return;
+    _draining = true;
+    try {
+      while (_requests.isNotEmpty && !_disposed) {
+        final request = _requests.removeAt(0);
+        await _process(request);
+        // Only release the key if this request still owns it: a forget or
+        // model switch may have replaced it with a re-enqueued successor.
+        if (identical(_active[request.key], request)) _active.remove(request.key);
+      }
+    } finally {
+      _draining = false;
+    }
+  }
+
+  Future<void> _process(_TranscriptionRequest request) async {
+    final generation = _generation;
+    final source = _source.current;
+    if (source == null || _isStale(request, generation)) return;
+
+    try {
+      await _saveGuarded(
+        request,
+        generation,
+        () => _store.saveInProgress(request.mediaType, request.mediaId, source.engine),
+      );
+      final audio = await request.loadAudio();
+      final transcript = await source.transcribe(audio, language: request.language);
+      await _saveGuarded(
+        request,
+        generation,
+        () => _store.saveTranscript(request.mediaType, request.mediaId, transcript, source.engine),
+      );
+    } catch (e, st) {
+      _logger.warning('Failed to transcribe ${request.key}', e, st);
+      final keepGoing = await _saveFailureGuarded(request, generation, e, source.engine);
+      if (!keepGoing) {
+        _requests.clear();
+        _active.clear();
+      }
+    }
+  }
+
+  /// True when the world changed while the work ran: a model switch or a
+  /// forget must not be overwritten by a stale result.
+  bool _isStale(_TranscriptionRequest request, int generation) {
+    return _disposed || generation != _generation || !identical(_active[request.key], request);
+  }
+
+  Future<void> _saveGuarded(_TranscriptionRequest request, int generation, Future<void> Function() save) async {
+    if (_isStale(request, generation)) return;
+    await save();
+  }
+
+  Future<bool> _saveFailureGuarded(_TranscriptionRequest request, int generation, Object error, String engine) async {
+    if (_isStale(request, generation)) return true;
+    try {
+      return await _store.saveFailure(request.mediaType, request.mediaId, error, engine);
+    } catch (e) {
+      _logger.warning('Failed to store transcription failure for ${request.key}', e);
+      return true;
+    }
+  }
+
+  static String _mediaKey(String mediaType, String mediaId) => '$mediaType/$mediaId';
+
+  void dispose() {
+    _disposed = true;
+    _generation++;
+    _requests.clear();
+    _active.clear();
+  }
+}
+
+class _TranscriptionRequest {
+  _TranscriptionRequest(this.mediaType, this.mediaId, this.loadAudio, this.language);
+
+  final String mediaType;
+  final String mediaId;
+  final TranscriptionAudioLoader loadAudio;
+  final String? language;
+
+  String get key => TranscriptionService._mediaKey(mediaType, mediaId);
+}

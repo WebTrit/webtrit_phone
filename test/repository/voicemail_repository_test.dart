@@ -344,7 +344,10 @@ void main() {
     });
 
     TranscriptionService createService(SwitchableTranscriptionSource source) {
-      return TranscriptionService(appDatabase: transcriptionDatabase, source: source);
+      final store = DriftTranscriptionStore(appDatabase: transcriptionDatabase);
+      unawaited(store.resetStaleInProgress());
+
+      return TranscriptionService(source: source, store: store);
     }
 
     VoicemailRepositoryImpl createRepo(

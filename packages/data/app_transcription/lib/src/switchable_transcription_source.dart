@@ -1,4 +1,4 @@
-import 'package:app_transcription/app_transcription.dart';
+import 'transcription_datasource.dart';
 
 /// Builds a transcription source for the given local model tier override
 /// (null keeps the configured default); returns null when the feature is

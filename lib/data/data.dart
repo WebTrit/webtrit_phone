@@ -1,4 +1,5 @@
 export 'package:app_database/app_database.dart';
+export 'package:app_transcription/app_transcription.dart';
 
 export 'app_certificates.dart';
 export 'app_info.dart';
@@ -18,4 +19,4 @@ export 'package_info.dart';
 export 'push_environment.dart';
 export 'secure_storage.dart';
 export 'session_cleanup_worker.dart';
-export 'transcription/transcription.dart';
+export 'transcription_datasource_factory.dart';
