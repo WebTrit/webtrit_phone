@@ -19,10 +19,6 @@ final _logger = Logger('TranscriptionSettingsCubit');
 /// stored override, any other tier is persisted as the override. The
 /// session-wide [TranscriptionModelService] switches the transcription pool,
 /// which regenerates every stored transcript.
-/// Model tiers offered as presets; the config default and the stored
-/// selection are appended when they fall outside this list.
-const kTranscriptionModelPresets = ['base', 'small', 'medium'];
-
 class TranscriptionSettingsCubit extends Cubit<TranscriptionSettingsState> {
   TranscriptionSettingsCubit({required TranscriptionModelService modelService})
     : _modelService = modelService,
