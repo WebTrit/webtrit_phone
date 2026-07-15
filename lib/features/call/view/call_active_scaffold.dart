@@ -355,14 +355,19 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                             })
                                                     : null,
                                                 // TODO (Serdun): Simplify complex condition in the widget tree.
+                                                // The submit acts on the consultation call (the derived
+                                                // `current`), not the focused one: focus may sit on the
+                                                // held original call being transferred (an incoming call
+                                                // grabs the selection at ring time), and using it as the
+                                                // replace target would produce a self-referential REFER.
                                                 onAttendedTransferSubmitted: widget.callConfig.isAttendedTransferEnabled
-                                                    ? (!focusedCall.wasAccepted || focusedTransfer != null
+                                                    ? (!activeCall.wasAccepted || focusedTransfer != null
                                                           ? null
                                                           : (ActiveCall referorCall) {
                                                               _callBloc.add(
                                                                 CallControlEvent.attendedTransferSubmitted(
                                                                   referorCall: referorCall,
-                                                                  replaceCall: focusedCall,
+                                                                  replaceCall: activeCall,
                                                                 ),
                                                               );
                                                             })
