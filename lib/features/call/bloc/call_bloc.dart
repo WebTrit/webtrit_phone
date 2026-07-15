@@ -2772,10 +2772,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     // A self-referential transfer (a REFER whose Replaces points at its own
     // dialog) is never valid and the backend rejects it; drop the request
-    // instead of sending it.
+    // instead of sending it, but surface it the same way a rejected request
+    // would be so a wiring regression never looks like a dead button.
     if (referorCall.callId == replaceCall.callId) {
-      _logger.warning(
-        '__onMutationControlAttendedTransfer: referorCall == replaceCall (${referorCall.callId}), skipping',
+      callErrorReporter.handle(
+        StateError('attended transfer: referorCall == replaceCall (${referorCall.callId})'),
+        StackTrace.current,
+        '__onMutationControlAttendedTransfer request error:',
       );
       return;
     }
