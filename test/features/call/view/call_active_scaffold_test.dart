@@ -32,6 +32,7 @@ ActiveCall _makeCall({
   DateTime? acceptedTime,
   String? displayName,
   bool videoPermissionDenied = false,
+  String? consultationForCallId,
 }) {
   return ActiveCall(
     callId: callId,
@@ -45,6 +46,7 @@ ActiveCall _makeCall({
     acceptedTime: acceptedTime,
     displayName: displayName,
     videoPermissionDenied: videoPermissionDenied,
+    consultationForCallId: consultationForCallId,
   );
 }
 
@@ -263,6 +265,7 @@ void main() {
       direction: CallDirection.outgoing,
       acceptedTime: DateTime(2024),
       displayName: 'Boris Klein',
+      consultationForCallId: 'original',
     );
 
     Future<void> openTransferMenu(WidgetTester tester) async {
@@ -297,6 +300,7 @@ void main() {
         callId: 'consultation',
         direction: CallDirection.outgoing,
         displayName: 'Boris Klein',
+        consultationForCallId: 'original',
       );
       await tester.pumpWidget(
         _buildSubject(callBloc, activeCalls: [original, ringingConsultation], focusedCall: original),
@@ -305,6 +309,33 @@ void main() {
       await openTransferMenu(tester);
 
       expect(find.byKey(callActionsTransferMenuNumberKey), findsNothing);
+      await _teardown(tester);
+    });
+
+    testWidgets('an unrelated third call is never offered or used as the replace target', (tester) async {
+      // A third, unrelated call answered mid-transfer becomes `current` (the
+      // only non-held call) and auto-holds the consultation call - so neither
+      // the focused call nor `current` can be trusted to identify the real
+      // consultation call. Only the explicit consultationForCallId link can.
+      final thirdParty = _makeCall(callId: 'third-party', acceptedTime: DateTime(2024), displayName: 'Dario Rossi');
+      final heldConsultation = consultation.copyWith(held: true);
+      await tester.pumpWidget(
+        _buildSubject(callBloc, activeCalls: [original, heldConsultation, thirdParty], focusedCall: original),
+      );
+
+      await openTransferMenu(tester);
+      // Only `original` has a live pairing (with heldConsultation) - the
+      // unrelated thirdParty call must not appear as a transfer candidate.
+      expect(find.byKey(callActionsTransferMenuNumberKey), findsOneWidget);
+
+      await tester.tap(find.byKey(callActionsTransferMenuNumberKey));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => callBloc.add(
+          CallControlEvent.attendedTransferSubmitted(referorCall: original, replaceCall: heldConsultation),
+        ),
+      ).called(1);
       await _teardown(tester);
     });
   });
