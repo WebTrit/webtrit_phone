@@ -55,11 +55,12 @@ extension TransferPatterns on Transfer {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( BlindTransferInitiated value)?  blindTransferInitiated,TResult Function( BlindTransferTransferSubmitted value)?  blindTransferTransferSubmitted,TResult Function( AttendedTransferTransferSubmitted value)?  attendedTransferTransferSubmitted,TResult Function( Transfering value)?  transfering,TResult Function( AttendedTransferConfirmationRequested value)?  attendedTransferConfirmationRequested,TResult Function( InviteToAttendedTransfer value)?  inviteToAttendedTransfer,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( BlindTransferInitiated value)?  blindTransferInitiated,TResult Function( AttendedTransferInitiated value)?  attendedTransferInitiated,TResult Function( BlindTransferTransferSubmitted value)?  blindTransferTransferSubmitted,TResult Function( AttendedTransferTransferSubmitted value)?  attendedTransferTransferSubmitted,TResult Function( Transfering value)?  transfering,TResult Function( AttendedTransferConfirmationRequested value)?  attendedTransferConfirmationRequested,TResult Function( InviteToAttendedTransfer value)?  inviteToAttendedTransfer,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case BlindTransferInitiated() when blindTransferInitiated != null:
-return blindTransferInitiated(_that);case BlindTransferTransferSubmitted() when blindTransferTransferSubmitted != null:
+return blindTransferInitiated(_that);case AttendedTransferInitiated() when attendedTransferInitiated != null:
+return attendedTransferInitiated(_that);case BlindTransferTransferSubmitted() when blindTransferTransferSubmitted != null:
 return blindTransferTransferSubmitted(_that);case AttendedTransferTransferSubmitted() when attendedTransferTransferSubmitted != null:
 return attendedTransferTransferSubmitted(_that);case Transfering() when transfering != null:
 return transfering(_that);case AttendedTransferConfirmationRequested() when attendedTransferConfirmationRequested != null:
@@ -82,11 +83,12 @@ return inviteToAttendedTransfer(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( BlindTransferInitiated value)  blindTransferInitiated,required TResult Function( BlindTransferTransferSubmitted value)  blindTransferTransferSubmitted,required TResult Function( AttendedTransferTransferSubmitted value)  attendedTransferTransferSubmitted,required TResult Function( Transfering value)  transfering,required TResult Function( AttendedTransferConfirmationRequested value)  attendedTransferConfirmationRequested,required TResult Function( InviteToAttendedTransfer value)  inviteToAttendedTransfer,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( BlindTransferInitiated value)  blindTransferInitiated,required TResult Function( AttendedTransferInitiated value)  attendedTransferInitiated,required TResult Function( BlindTransferTransferSubmitted value)  blindTransferTransferSubmitted,required TResult Function( AttendedTransferTransferSubmitted value)  attendedTransferTransferSubmitted,required TResult Function( Transfering value)  transfering,required TResult Function( AttendedTransferConfirmationRequested value)  attendedTransferConfirmationRequested,required TResult Function( InviteToAttendedTransfer value)  inviteToAttendedTransfer,}){
 final _that = this;
 switch (_that) {
 case BlindTransferInitiated():
-return blindTransferInitiated(_that);case BlindTransferTransferSubmitted():
+return blindTransferInitiated(_that);case AttendedTransferInitiated():
+return attendedTransferInitiated(_that);case BlindTransferTransferSubmitted():
 return blindTransferTransferSubmitted(_that);case AttendedTransferTransferSubmitted():
 return attendedTransferTransferSubmitted(_that);case Transfering():
 return transfering(_that);case AttendedTransferConfirmationRequested():
@@ -108,11 +110,12 @@ return inviteToAttendedTransfer(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( BlindTransferInitiated value)?  blindTransferInitiated,TResult? Function( BlindTransferTransferSubmitted value)?  blindTransferTransferSubmitted,TResult? Function( AttendedTransferTransferSubmitted value)?  attendedTransferTransferSubmitted,TResult? Function( Transfering value)?  transfering,TResult? Function( AttendedTransferConfirmationRequested value)?  attendedTransferConfirmationRequested,TResult? Function( InviteToAttendedTransfer value)?  inviteToAttendedTransfer,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( BlindTransferInitiated value)?  blindTransferInitiated,TResult? Function( AttendedTransferInitiated value)?  attendedTransferInitiated,TResult? Function( BlindTransferTransferSubmitted value)?  blindTransferTransferSubmitted,TResult? Function( AttendedTransferTransferSubmitted value)?  attendedTransferTransferSubmitted,TResult? Function( Transfering value)?  transfering,TResult? Function( AttendedTransferConfirmationRequested value)?  attendedTransferConfirmationRequested,TResult? Function( InviteToAttendedTransfer value)?  inviteToAttendedTransfer,}){
 final _that = this;
 switch (_that) {
 case BlindTransferInitiated() when blindTransferInitiated != null:
-return blindTransferInitiated(_that);case BlindTransferTransferSubmitted() when blindTransferTransferSubmitted != null:
+return blindTransferInitiated(_that);case AttendedTransferInitiated() when attendedTransferInitiated != null:
+return attendedTransferInitiated(_that);case BlindTransferTransferSubmitted() when blindTransferTransferSubmitted != null:
 return blindTransferTransferSubmitted(_that);case AttendedTransferTransferSubmitted() when attendedTransferTransferSubmitted != null:
 return attendedTransferTransferSubmitted(_that);case Transfering() when transfering != null:
 return transfering(_that);case AttendedTransferConfirmationRequested() when attendedTransferConfirmationRequested != null:
@@ -134,10 +137,11 @@ return inviteToAttendedTransfer(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  blindTransferInitiated,TResult Function( String toNumber)?  blindTransferTransferSubmitted,TResult Function( String replaceCallId)?  attendedTransferTransferSubmitted,TResult Function( bool fromAttendedTransfer,  bool fromBlindTransfer,  String? toNumber)?  transfering,TResult Function( String referId,  String referTo,  String referredBy)?  attendedTransferConfirmationRequested,TResult Function( String replaceCallId,  String referredBy)?  inviteToAttendedTransfer,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  blindTransferInitiated,TResult Function()?  attendedTransferInitiated,TResult Function( String toNumber)?  blindTransferTransferSubmitted,TResult Function( String replaceCallId)?  attendedTransferTransferSubmitted,TResult Function( bool fromAttendedTransfer,  bool fromBlindTransfer,  String? toNumber)?  transfering,TResult Function( String referId,  String referTo,  String referredBy)?  attendedTransferConfirmationRequested,TResult Function( String replaceCallId,  String referredBy)?  inviteToAttendedTransfer,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case BlindTransferInitiated() when blindTransferInitiated != null:
-return blindTransferInitiated();case BlindTransferTransferSubmitted() when blindTransferTransferSubmitted != null:
+return blindTransferInitiated();case AttendedTransferInitiated() when attendedTransferInitiated != null:
+return attendedTransferInitiated();case BlindTransferTransferSubmitted() when blindTransferTransferSubmitted != null:
 return blindTransferTransferSubmitted(_that.toNumber);case AttendedTransferTransferSubmitted() when attendedTransferTransferSubmitted != null:
 return attendedTransferTransferSubmitted(_that.replaceCallId);case Transfering() when transfering != null:
 return transfering(_that.fromAttendedTransfer,_that.fromBlindTransfer,_that.toNumber);case AttendedTransferConfirmationRequested() when attendedTransferConfirmationRequested != null:
@@ -160,10 +164,11 @@ return inviteToAttendedTransfer(_that.replaceCallId,_that.referredBy);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  blindTransferInitiated,required TResult Function( String toNumber)  blindTransferTransferSubmitted,required TResult Function( String replaceCallId)  attendedTransferTransferSubmitted,required TResult Function( bool fromAttendedTransfer,  bool fromBlindTransfer,  String? toNumber)  transfering,required TResult Function( String referId,  String referTo,  String referredBy)  attendedTransferConfirmationRequested,required TResult Function( String replaceCallId,  String referredBy)  inviteToAttendedTransfer,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  blindTransferInitiated,required TResult Function()  attendedTransferInitiated,required TResult Function( String toNumber)  blindTransferTransferSubmitted,required TResult Function( String replaceCallId)  attendedTransferTransferSubmitted,required TResult Function( bool fromAttendedTransfer,  bool fromBlindTransfer,  String? toNumber)  transfering,required TResult Function( String referId,  String referTo,  String referredBy)  attendedTransferConfirmationRequested,required TResult Function( String replaceCallId,  String referredBy)  inviteToAttendedTransfer,}) {final _that = this;
 switch (_that) {
 case BlindTransferInitiated():
-return blindTransferInitiated();case BlindTransferTransferSubmitted():
+return blindTransferInitiated();case AttendedTransferInitiated():
+return attendedTransferInitiated();case BlindTransferTransferSubmitted():
 return blindTransferTransferSubmitted(_that.toNumber);case AttendedTransferTransferSubmitted():
 return attendedTransferTransferSubmitted(_that.replaceCallId);case Transfering():
 return transfering(_that.fromAttendedTransfer,_that.fromBlindTransfer,_that.toNumber);case AttendedTransferConfirmationRequested():
@@ -185,10 +190,11 @@ return inviteToAttendedTransfer(_that.replaceCallId,_that.referredBy);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  blindTransferInitiated,TResult? Function( String toNumber)?  blindTransferTransferSubmitted,TResult? Function( String replaceCallId)?  attendedTransferTransferSubmitted,TResult? Function( bool fromAttendedTransfer,  bool fromBlindTransfer,  String? toNumber)?  transfering,TResult? Function( String referId,  String referTo,  String referredBy)?  attendedTransferConfirmationRequested,TResult? Function( String replaceCallId,  String referredBy)?  inviteToAttendedTransfer,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  blindTransferInitiated,TResult? Function()?  attendedTransferInitiated,TResult? Function( String toNumber)?  blindTransferTransferSubmitted,TResult? Function( String replaceCallId)?  attendedTransferTransferSubmitted,TResult? Function( bool fromAttendedTransfer,  bool fromBlindTransfer,  String? toNumber)?  transfering,TResult? Function( String referId,  String referTo,  String referredBy)?  attendedTransferConfirmationRequested,TResult? Function( String replaceCallId,  String referredBy)?  inviteToAttendedTransfer,}) {final _that = this;
 switch (_that) {
 case BlindTransferInitiated() when blindTransferInitiated != null:
-return blindTransferInitiated();case BlindTransferTransferSubmitted() when blindTransferTransferSubmitted != null:
+return blindTransferInitiated();case AttendedTransferInitiated() when attendedTransferInitiated != null:
+return attendedTransferInitiated();case BlindTransferTransferSubmitted() when blindTransferTransferSubmitted != null:
 return blindTransferTransferSubmitted(_that.toNumber);case AttendedTransferTransferSubmitted() when attendedTransferTransferSubmitted != null:
 return attendedTransferTransferSubmitted(_that.replaceCallId);case Transfering() when transfering != null:
 return transfering(_that.fromAttendedTransfer,_that.fromBlindTransfer,_that.toNumber);case AttendedTransferConfirmationRequested() when attendedTransferConfirmationRequested != null:
@@ -225,6 +231,38 @@ int get hashCode => runtimeType.hashCode;
 @override
 String toString() {
   return 'Transfer.blindTransferInitiated()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class AttendedTransferInitiated extends Transfer {
+  const AttendedTransferInitiated(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendedTransferInitiated);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'Transfer.attendedTransferInitiated()';
 }
 
 

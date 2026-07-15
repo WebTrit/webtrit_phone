@@ -283,6 +283,7 @@ class ActiveCall with _$ActiveCall implements CallEntry {
     this.fromReferId,
     this.fromReplaces,
     this.fromNumber,
+    this.consultationForCallId,
     this.acceptedTime,
     this.hungUpTime,
     this.transfer,
@@ -356,6 +357,16 @@ class ActiveCall with _$ActiveCall implements CallEntry {
 
   @override
   final String? fromNumber;
+
+  /// The callId of the call this one was dialed as an attended-transfer
+  /// consultation for, if any. Stamped once, at creation, from the referor
+  /// call's [Transfer.attendedTransferInitiated] marker (see
+  /// `__onMutationControlStart`). Lets the transfer UI resolve the correct
+  /// referor<->consultation pair by explicit link rather than by a
+  /// positional heuristic (e.g. "the current live call"), which breaks once
+  /// a third, unrelated call is concurrently active.
+  @override
+  final String? consultationForCallId;
 
   @override
   final DateTime? acceptedTime;

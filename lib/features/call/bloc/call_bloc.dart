@@ -1601,7 +1601,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     var newState = state.copyWith(minimized: true);
 
     newState = newState.copyWithMappedActiveCall(event.callId, (activeCall) {
-      return activeCall.copyWith(speakerOnBeforeMinimize: isSpeakerOn);
+      return activeCall.copyWith(
+        speakerOnBeforeMinimize: isSpeakerOn,
+        // Marks this call as the referor so the next outgoing call (the
+        // consultation call the user is about to dial) links back to it -
+        // see [ActiveCall.consultationForCallId] and __onMutationControlStart.
+        transfer: const Transfer.attendedTransferInitiated(),
+      );
     });
 
     emit(newState);
@@ -2438,6 +2444,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     final contactName = (await contactResolver.resolve(e.handle.value))?.maybeName;
     final displayName = contactName ?? e.displayName;
 
+    // If an attended transfer was just initiated, this outgoing call is its
+    // consultation call - link it back to the referor (see
+    // [ActiveCall.consultationForCallId]) and clear the referor's marker,
+    // consuming it so a later, unrelated call is never mistaken for the pair.
+    final attendedTransferReferorCall = state.activeCalls.firstWhereOrNull(
+      (call) => call.transfer is AttendedTransferInitiated,
+    );
+
     final newCall = ActiveCall(
       direction: CallDirection.outgoing,
       line: line,
@@ -2447,10 +2461,18 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       video: e.video,
       fromNumber: e.fromNumber,
       fromReplaces: e.fromReplaces,
+      consultationForCallId: attendedTransferReferorCall?.callId,
       createdTime: clock.now(),
       processingStatus: CallProcessingStatus.outgoingCreated,
     );
-    emit(state.copyWithPushActiveCall(newCall).copyWith(minimized: false));
+    var newState = state.copyWithPushActiveCall(newCall).copyWith(minimized: false);
+    if (attendedTransferReferorCall != null) {
+      newState = newState.copyWithMappedActiveCall(
+        attendedTransferReferorCall.callId,
+        (activeCall) => activeCall.copyWith(transfer: null),
+      );
+    }
+    emit(newState);
 
     final callkeepError = await callkeep.startCall(
       callId,

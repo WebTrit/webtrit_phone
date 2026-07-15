@@ -9,6 +9,14 @@ class Transfer with _$Transfer {
   /// such as picking the contact or entering the number
   const factory Transfer.blindTransferInitiated() = BlindTransferInitiated;
 
+  /// Marks the call the user started an attended transfer from, before the
+  /// consultation call has been dialed. Consumed once - when the next
+  /// outgoing call is placed, that call is linked back to this one (see
+  /// [ActiveCall.consultationForCallId]) and this marker is cleared, so the
+  /// correct referor<->consultation pair can be resolved later even with
+  /// other, unrelated calls concurrently active.
+  const factory Transfer.attendedTransferInitiated() = AttendedTransferInitiated;
+
   /// Represents state after the user has successfully submitted
   /// blind transfer and before the transfer picked up for
   /// processing by the server

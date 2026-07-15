@@ -183,6 +183,16 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final activeCall = activeCalls.current;
     final heldCalls = activeCalls.nonCurrent;
 
+    // Only offer a held call as an attended-transfer referor when it has an
+    // established consultation pairing (see [ActiveCall.consultationForCallId])
+    // whose call has been answered. This is an explicit link, not a
+    // positional guess (e.g. "the current live call"), so it stays correct
+    // even with other, unrelated calls concurrently active.
+    final attendedTransferCandidates = heldCalls.where((call) {
+      final consultationCall = activeCalls.firstWhereOrNull((c) => c.consultationForCallId == call.callId);
+      return consultationCall != null && consultationCall.wasAccepted;
+    }).toList();
+
     final incomingRingingCalls = activeCalls.where((call) => call.isIncoming && call.wasAccepted == false).toList();
     final nonIncomingRingingCalls = activeCalls.whereNot((call) => incomingRingingCalls.contains(call)).toList();
     final nonIncomingRingingCanBeHolded = nonIncomingRingingCalls.where((call) => call.wasAccepted == true).toList();
@@ -330,7 +340,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                     CallControlEvent.audioDeviceSet(focusedCall.callId, device),
                                                   );
                                                 },
-                                                transferableCalls: heldCalls,
+                                                transferableCalls: attendedTransferCandidates,
                                                 onBlindTransferInitiated: widget.callConfig.isBlindTransferEnabled
                                                     ? (!focusedCall.wasAccepted || focusedTransfer != null
                                                           ? null
@@ -355,19 +365,24 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                             })
                                                     : null,
                                                 // TODO (Serdun): Simplify complex condition in the widget tree.
-                                                // The submit acts on the consultation call (the derived
-                                                // `current`), not the focused one: focus may sit on the
-                                                // held original call being transferred (an incoming call
-                                                // grabs the selection at ring time), and using it as the
-                                                // replace target would produce a self-referential REFER.
+                                                // The replace target is resolved per referor via the
+                                                // explicit consultationForCallId link (attendedTransferCandidates
+                                                // already guarantees a match exists), not the focused or
+                                                // current call - either can point at an unrelated call and
+                                                // would produce a self-referential or wrong-party REFER.
                                                 onAttendedTransferSubmitted: widget.callConfig.isAttendedTransferEnabled
-                                                    ? (!activeCall.wasAccepted || focusedTransfer != null
+                                                    ? (focusedTransfer != null
                                                           ? null
                                                           : (ActiveCall referorCall) {
+                                                              final replaceCall = activeCalls.firstWhereOrNull(
+                                                                (call) =>
+                                                                    call.consultationForCallId == referorCall.callId,
+                                                              );
+                                                              if (replaceCall == null) return;
                                                               _callBloc.add(
                                                                 CallControlEvent.attendedTransferSubmitted(
                                                                   referorCall: referorCall,
-                                                                  replaceCall: activeCall,
+                                                                  replaceCall: replaceCall,
                                                                 ),
                                                               );
                                                             })
