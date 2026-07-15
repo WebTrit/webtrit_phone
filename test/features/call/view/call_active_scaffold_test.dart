@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call/view/call_active_scaffold.dart';
@@ -251,6 +252,72 @@ void main() {
       await tester.pump();
 
       verify(() => appPermissions.toAppSettings()).called(1);
+      await _teardown(tester);
+    });
+  });
+
+  group('CallActiveScaffold - attended transfer submit', () {
+    final original = _makeCall(callId: 'original', acceptedTime: DateTime(2024), held: true, displayName: 'Clara Diaz');
+    final consultation = _makeCall(
+      callId: 'consultation',
+      direction: CallDirection.outgoing,
+      acceptedTime: DateTime(2024),
+      displayName: 'Boris Klein',
+    );
+
+    Future<void> openTransferMenu(WidgetTester tester) async {
+      await tester.tap(find.byKey(callActionsTransferMenuKey));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('submit targets the consultation call when it is focused', (tester) async {
+      await tester.pumpWidget(
+        _buildSubject(callBloc, activeCalls: [original, consultation], focusedCall: consultation),
+      );
+
+      await openTransferMenu(tester);
+      await tester.tap(find.byKey(callActionsTransferMenuNumberKey));
+      await tester.pumpAndSettle();
+
+      verify(
+        () =>
+            callBloc.add(CallControlEvent.attendedTransferSubmitted(referorCall: original, replaceCall: consultation)),
+      ).called(1);
+      await _teardown(tester);
+    });
+
+    testWidgets('submit still targets the consultation call when the held original call is focused', (tester) async {
+      // An incoming call grabs the selection at ring time and keeps it, so the
+      // held original call stays focused through the whole transfer flow. The
+      // replace target must be the consultation call regardless of focus - a
+      // self-referential transfer (referor == replace) is rejected by the
+      // backend.
+      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [original, consultation], focusedCall: original));
+
+      await openTransferMenu(tester);
+      await tester.tap(find.byKey(callActionsTransferMenuNumberKey));
+      await tester.pumpAndSettle();
+
+      verify(
+        () =>
+            callBloc.add(CallControlEvent.attendedTransferSubmitted(referorCall: original, replaceCall: consultation)),
+      ).called(1);
+      await _teardown(tester);
+    });
+
+    testWidgets('attended item is absent while the consultation call is not yet accepted', (tester) async {
+      final ringingConsultation = _makeCall(
+        callId: 'consultation',
+        direction: CallDirection.outgoing,
+        displayName: 'Boris Klein',
+      );
+      await tester.pumpWidget(
+        _buildSubject(callBloc, activeCalls: [original, ringingConsultation], focusedCall: original),
+      );
+
+      await openTransferMenu(tester);
+
+      expect(find.byKey(callActionsTransferMenuNumberKey), findsNothing);
       await _teardown(tester);
     });
   });
