@@ -270,40 +270,27 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('submit targets the consultation call when it is focused', (tester) async {
-      await tester.pumpWidget(
-        _buildSubject(callBloc, activeCalls: [original, consultation], focusedCall: consultation),
-      );
+    // The replace target must always be the consultation call, regardless of
+    // which row is focused - an incoming call grabs the selection at ring
+    // time and keeps it, so the held original call may stay focused through
+    // the whole transfer flow. A self-referential transfer (referor ==
+    // replace) is rejected by the backend.
+    for (final focused in [consultation, original]) {
+      testWidgets('submit targets the consultation call when ${focused.callId} is focused', (tester) async {
+        await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [original, consultation], focusedCall: focused));
 
-      await openTransferMenu(tester);
-      await tester.tap(find.byKey(callActionsTransferMenuNumberKey));
-      await tester.pumpAndSettle();
+        await openTransferMenu(tester);
+        await tester.tap(find.byKey(callActionsTransferMenuNumberKey));
+        await tester.pumpAndSettle();
 
-      verify(
-        () =>
-            callBloc.add(CallControlEvent.attendedTransferSubmitted(referorCall: original, replaceCall: consultation)),
-      ).called(1);
-      await _teardown(tester);
-    });
-
-    testWidgets('submit still targets the consultation call when the held original call is focused', (tester) async {
-      // An incoming call grabs the selection at ring time and keeps it, so the
-      // held original call stays focused through the whole transfer flow. The
-      // replace target must be the consultation call regardless of focus - a
-      // self-referential transfer (referor == replace) is rejected by the
-      // backend.
-      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [original, consultation], focusedCall: original));
-
-      await openTransferMenu(tester);
-      await tester.tap(find.byKey(callActionsTransferMenuNumberKey));
-      await tester.pumpAndSettle();
-
-      verify(
-        () =>
-            callBloc.add(CallControlEvent.attendedTransferSubmitted(referorCall: original, replaceCall: consultation)),
-      ).called(1);
-      await _teardown(tester);
-    });
+        verify(
+          () => callBloc.add(
+            CallControlEvent.attendedTransferSubmitted(referorCall: original, replaceCall: consultation),
+          ),
+        ).called(1);
+        await _teardown(tester);
+      });
+    }
 
     testWidgets('attended item is absent while the consultation call is not yet accepted', (tester) async {
       final ringingConsultation = _makeCall(
