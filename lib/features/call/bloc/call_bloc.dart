@@ -2555,12 +2555,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
 
     if (callkeepError != null) {
-      if (callkeepError == CallkeepCallRequestError.emergencyNumber) {
-        // Self-managed phone accounts cannot place emergency calls. Explain why
-        // and offer to hand the number off to the system dialer, instead of
-        // silently switching to it.
-        submitNotification(EmergencyNumberNotification(e.handle.value));
-      } else if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
+      if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
         CrashlyticsUtils.recordError(
           'CallBloc - __onMutationControlStart selfManagedPhoneAccountNotRegistered',
           information: ['callId: $callId', 'handle: ${e.handle.value}'],
