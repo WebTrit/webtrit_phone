@@ -48,6 +48,18 @@ void main() {
     });
   });
 
+  group('ordering', () {
+    test('returns voicemails newest first', () async {
+      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail(id: 'vm-old', date: '2026-01-01T00:00:00Z'));
+      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail(id: 'vm-new', date: '2026-01-03T00:00:00Z'));
+      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail(id: 'vm-mid', date: '2026-01-02T00:00:00Z'));
+
+      final rows = await db.voicemailDao.getVoicemailsWithContacts();
+
+      expect(rows.map((row) => row.voicemail.id), ['vm-new', 'vm-mid', 'vm-old']);
+    });
+  });
+
   group('contact resolution', () {
     test('collapses colliding contacts to one deterministic row per voicemail', () async {
       await db.contactsDao.insertOnUniqueConflictUpdateContact(
