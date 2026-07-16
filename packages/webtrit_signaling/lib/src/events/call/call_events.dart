@@ -15,6 +15,8 @@ export 'progress_event.dart';
 export 'resuming_event.dart';
 export 'ringing_event.dart';
 export 'subscription_state.dart';
+export 'transfer_accepted_event.dart';
+export 'transfer_failed_event.dart';
 export 'transferring_event.dart';
 export 'updated_event.dart';
 export 'updating_call_event.dart';

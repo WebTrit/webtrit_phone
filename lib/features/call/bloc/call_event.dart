@@ -210,6 +210,12 @@ sealed class _CallSignalingEvent extends CallEvent {
   const factory _CallSignalingEvent.transferring({required int? line, required String callId}) =
       _CallSignalingEventTransferring;
 
+  const factory _CallSignalingEvent.transferAccepted({required int? line, required String callId}) =
+      _CallSignalingEventTransferAccepted;
+
+  const factory _CallSignalingEvent.transferFailed({required int? line, required String callId, int? code}) =
+      _CallSignalingEventTransferFailed;
+
   const factory _CallSignalingEvent.notifyRefer({
     required int? line,
     required String callId,
@@ -464,6 +470,27 @@ class _CallSignalingEventTransferring extends _CallSignalingEvent {
 
   @override
   List<Object?> get props => [line, callId];
+}
+
+class _CallSignalingEventTransferAccepted extends _CallSignalingEvent {
+  const _CallSignalingEventTransferAccepted({required this.line, required this.callId});
+
+  final int? line;
+  final String callId;
+
+  @override
+  List<Object?> get props => [line, callId];
+}
+
+class _CallSignalingEventTransferFailed extends _CallSignalingEvent {
+  const _CallSignalingEventTransferFailed({required this.line, required this.callId, this.code});
+
+  final int? line;
+  final String callId;
+  final int? code;
+
+  @override
+  List<Object?> get props => [line, callId, code];
 }
 
 class _CallSignalingEventNotifyRefer extends _CallSignalingEvent {
