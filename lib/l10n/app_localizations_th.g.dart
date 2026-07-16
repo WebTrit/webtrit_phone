@@ -1088,7 +1088,7 @@ class AppLocalizationsTh extends AppLocalizations {
       'ต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกนคิวอาร์โค้ด โปรดเปิดใช้งานเพื่อดำเนินการต่อ';
 
   @override
-  String get login_Button_qrSigninAllowCameraAccess => 'อนุญาตการเข้าถึงกล้อง';
+  String get login_Button_qrSigninAllowCameraAccess => 'ดำเนินการต่อ';
 
   @override
   String get login_Button_qrSigninOpenSettings => 'เปิดการตั้งค่า';

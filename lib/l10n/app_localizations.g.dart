@@ -2005,7 +2005,7 @@ abstract class AppLocalizations {
   /// No description provided for @login_Button_qrSigninAllowCameraAccess.
   ///
   /// In en, this message translates to:
-  /// **'Allow camera access'**
+  /// **'Continue'**
   String get login_Button_qrSigninAllowCameraAccess;
 
   /// No description provided for @login_Button_qrSigninOpenSettings.
