@@ -936,7 +936,7 @@
   "@login_Text_qrSigninCameraPermissionTitle": {},
   "login_Text_qrSigninCameraPermissionDescription": "ต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกนคิวอาร์โค้ด โปรดเปิดใช้งานเพื่อดำเนินการต่อ",
   "@login_Text_qrSigninCameraPermissionDescription": {},
-  "login_Button_qrSigninAllowCameraAccess": "อนุญาตการเข้าถึงกล้อง",
+  "login_Button_qrSigninAllowCameraAccess": "ดำเนินการต่อ",
   "@login_Button_qrSigninAllowCameraAccess": {},
   "login_Button_qrSigninOpenSettings": "เปิดการตั้งค่า",
   "@login_Button_qrSigninOpenSettings": {},
