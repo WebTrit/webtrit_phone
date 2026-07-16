@@ -183,4 +183,34 @@ void main() {
     expect(callLogs.length, equals(1));
     expect((callLogs.first as CallEventLog).callEvent, isA<IncomingCallEvent>());
   });
+
+  test('$StateHandshake fromJson skips a call_log entry with a malformed envelope (not just an unknown type)', () {
+    final jsonWithMalformedCallLogEnvelope =
+        json.decode('''
+    {
+      "handshake": "state",
+      "keepalive_interval": 30000,
+      "timestamp": 1662114679648,
+      "registration": {"status": "registered"},
+      "lines": [
+        {
+          "call_id": "qwertyuiopasdfghjklzxcvbnm",
+          "call_logs": [
+            [1662114479751, {"event": "incoming_call", "transaction": "transaction-1", "callee": "123", "caller": "456"}],
+            [null, {"event": "ringing", "transaction": "transaction-2"}]
+          ]
+        },
+        null
+      ]
+    }
+    ''')
+            as Map<String, dynamic>;
+
+    expect(() => StateHandshake.fromJson(jsonWithMalformedCallLogEnvelope), returnsNormally);
+
+    final result = StateHandshake.fromJson(jsonWithMalformedCallLogEnvelope);
+    final callLogs = result.lines.first!.callLogs;
+    expect(callLogs.length, equals(1));
+    expect((callLogs.first as CallEventLog).callEvent, isA<IncomingCallEvent>());
+  });
 }

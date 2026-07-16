@@ -179,12 +179,12 @@ class StateHandshake extends Handshake {
 List<CallLog> _parseCallLogs(List<dynamic> callLogsJson, {required int? line, required String callId}) {
   final callLogs = <CallLog>[];
   for (final callLogJson in callLogsJson) {
-    final timestamp = callLogJson[0] as int;
-    final requestOrResponseOrEventJson = callLogJson[1] as Map<String, dynamic>;
-    requestOrResponseOrEventJson['line'] = line; // inject line to apply universal fromJson methods
-    requestOrResponseOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
-
     try {
+      final timestamp = callLogJson[0] as int;
+      final requestOrResponseOrEventJson = callLogJson[1] as Map<String, dynamic>;
+      requestOrResponseOrEventJson['line'] = line; // inject line to apply universal fromJson methods
+      requestOrResponseOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
+
       if (requestOrResponseOrEventJson.containsKey(Request.typeKey)) {
         callLogs.add(
           CallRequestLog(timestamp: timestamp, callRequest: CallRequest.fromJson(requestOrResponseOrEventJson)),
