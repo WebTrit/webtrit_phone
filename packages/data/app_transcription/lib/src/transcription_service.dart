@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier;
 import 'package:logging/logging.dart';
 
 import 'model_download_state.dart';
+import 'transcription_config.dart';
 import 'transcription_datasource.dart';
 import 'transcription_store.dart';
 
@@ -14,10 +15,10 @@ final _logger = Logger('TranscriptionService');
 /// comes; lazy so queued items do not hold their payloads in memory.
 typedef TranscriptionAudioLoader = Future<Uint8List> Function();
 
-/// Builds a transcription source for the given local model tier override
-/// (null keeps the configured default); returns null when the feature is
-/// disabled or misconfigured.
-typedef TranscriptionDataSourceBuilder = TranscriptionDataSource? Function(String? localModelOverride);
+/// Builds a transcription source for the given local model override (null
+/// keeps the configured default); returns null when the feature is disabled,
+/// misconfigured or the selection is [LocalTranscriptionModelOff].
+typedef TranscriptionDataSourceBuilder = TranscriptionDataSource? Function(LocalTranscriptionModel? localModelOverride);
 
 /// The narrow consumer-facing contract of the transcription pool: hand media
 /// off and forget deleted items. Nothing is ever returned or awaited by
@@ -40,7 +41,7 @@ abstract interface class MediaTranscriber {
   /// Switches the local model (null returns to the config default) and
   /// regenerates everything already transcribed; see
   /// [TranscriptionService.switchLocalModel].
-  Future<void> switchLocalModel(String? localModel);
+  Future<void> switchLocalModel(LocalTranscriptionModel? localModel);
 }
 
 /// Fire-and-forget transcription pool.
@@ -66,7 +67,7 @@ class TranscriptionService implements MediaTranscriber {
   /// engine benefits from a few concurrent requests.
   TranscriptionService(
     TranscriptionDataSourceBuilder builder, {
-    String? initialLocalModel,
+    LocalTranscriptionModel? initialLocalModel,
     required TranscriptionStore store,
     int concurrency = 1,
   }) : assert(concurrency >= 1),
@@ -203,7 +204,7 @@ class TranscriptionService implements MediaTranscriber {
   /// Throws when the wipe fails; the engine is not swapped in that case, so
   /// the stored transcripts stay consistent with the engine that made them.
   @override
-  Future<void> switchLocalModel(String? localModel) async {
+  Future<void> switchLocalModel(LocalTranscriptionModel? localModel) async {
     // Throw rather than no-op: a silent return would let the caller persist
     // an override that was never applied.
     if (_disposed) throw StateError('switchLocalModel called on a disposed TranscriptionService');

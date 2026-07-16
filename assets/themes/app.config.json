@@ -312,8 +312,8 @@
     "mode": "local",
     "__language": "Expected audio language (ISO 639-1, e.g. 'en'); omit or leave empty to auto-detect per media item.",
     "local": {
-      "__model": "Whisper model tier downloaded to the device (tiny, base, small, ...); larger tiers transcribe better but cost more download size and CPU. This is the default the user's in-app choice (transcription settings) falls back to.",
-      "model": "base"
+      "__model": "'off' (no default model - the user opts in from the transcription settings) or a Whisper model tier downloaded to the device (tiny, base, small, ...); larger tiers transcribe better but cost more download size and CPU. This is the default the user's in-app choice (transcription settings) falls back to.",
+      "model": "off"
     },
     "remote": {
       "__url": "Base URL of an OpenAI-compatible speech-to-text service (e.g. 'https://stt.example.com/v1'); the 'audio/transcriptions' path is appended when not already present. The remote mode stays disabled while this is missing.",

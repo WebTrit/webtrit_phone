@@ -15,8 +15,8 @@ final _logger = Logger('TranscriptionSettingsCubit');
 /// Manages the on-device transcription model choice; the view only renders
 /// [TranscriptionSettingsState].
 ///
-/// The brand default tier comes from the app config; picking it clears the
-/// stored override, any other tier is persisted as the override. The
+/// The brand default selection comes from the app config; picking it clears
+/// the stored override, any other selection is persisted as the override. The
 /// session-wide [TranscriptionModelService] switches the transcription pool,
 /// which regenerates every stored transcript.
 class TranscriptionSettingsCubit extends Cubit<TranscriptionSettingsState> {
@@ -46,7 +46,11 @@ class TranscriptionSettingsCubit extends Cubit<TranscriptionSettingsState> {
   }
 
   Future<void> _refreshDownloadedModels() async {
-    final tiers = {...kTranscriptionModelPresets, state.defaultModel, state.selectedModel};
+    final tiers = {
+      ...kTranscriptionModelPresets,
+      for (final selection in [state.defaultModel, state.selectedModel])
+        if (selection is LocalTranscriptionModelTier) selection.name,
+    };
     final checks = await Future.wait(
       tiers.map((tier) async {
         try {
@@ -67,7 +71,7 @@ class TranscriptionSettingsCubit extends Cubit<TranscriptionSettingsState> {
   /// an older failed attempt cannot clobber a later successful one.
   int _revision = 0;
 
-  Future<void> setModel(String model) async {
+  Future<void> setModel(LocalTranscriptionModel model) async {
     final previous = state.selectedModel;
     if (model == previous) return;
 

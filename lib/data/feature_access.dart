@@ -749,7 +749,7 @@ abstract final class TranscriptionMapper {
     return TranscriptionConfig(
       mode: transcription.mode,
       language: transcription.language,
-      localModel: transcription.local.model,
+      localModel: LocalTranscriptionModel.parse(transcription.local.model),
       remoteUrl: transcription.remote.url,
       remoteApiKey: transcription.remote.apiKey,
       remoteModel: transcription.remote.model,

@@ -2917,6 +2917,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Applies to all messages: the model is downloaded on first use and existing transcripts are regenerated with the new model.';
 
   @override
+  String get transcriptionSettings_Model_offSubtitle => 'Voicemails are not transcribed';
+
+  @override
+  String get transcriptionSettings_Model_offTitle => 'Off';
+
+  @override
   String get transcriptionSettings_Widget_screenTitle => 'Transcription model';
 
   @override

@@ -127,13 +127,13 @@ class _FakeTranscriptionDataSource extends TranscriptionDataSource {
 }
 
 class _FakeTranscriptionModelRepository implements TranscriptionModelRepository {
-  String? value;
+  LocalTranscriptionModel? value;
 
   @override
-  String? getTranscriptionModel() => value;
+  LocalTranscriptionModel? getTranscriptionModel() => value;
 
   @override
-  Future<void> setTranscriptionModel(String? newValue) async {
+  Future<void> setTranscriptionModel(LocalTranscriptionModel? newValue) async {
     value = newValue;
   }
 
@@ -388,7 +388,11 @@ void main() {
         token: 'user_token',
         appDatabase: transcriptionDatabase,
         sessionGuard: const EmptySessionGuard(),
-        transcriber: transcriptionService.isEnabled ? transcriptionService : null,
+        // Wired unconditionally, matching the real DI wiring: gating this on
+        // an isEnabled snapshot would freeze the repository's transcriber out
+        // forever the moment the pool starts disabled/off, even after a later
+        // switch turns it on.
+        transcriber: transcriptionService,
       );
     }
 
@@ -652,7 +656,7 @@ void main() {
     test('switchLocalModel swaps the source, disposes the old one and transcribes pending rows', () async {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
       final initial = _FakeTranscriptionDataSource(error: const TranscriptionException('down', transient: true));
-      final models = <String?>[];
+      final models = <LocalTranscriptionModel?>[];
       final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
 
       final service = createService((model) {
@@ -663,11 +667,11 @@ void main() {
       await repo.fetchVoicemails();
       await waitForTranscriptStatus(transcriptionDatabase, '1', null);
 
-      service.switchLocalModel('small');
+      service.switchLocalModel(const LocalTranscriptionModelTier('small'));
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'from the new model');
-      expect(models, [null, 'small']);
+      expect(models, [null, const LocalTranscriptionModelTier('small')]);
       expect(initial.disposeCalls, 1);
     });
 
@@ -682,7 +686,7 @@ void main() {
       var row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'from the old model');
 
-      service.switchLocalModel('small');
+      service.switchLocalModel(const LocalTranscriptionModelTier('small'));
 
       await waitFor(() => replacement.calls == 1, 're-transcription with the new model');
       row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
@@ -699,16 +703,16 @@ void main() {
       final modelService = TranscriptionModelService(
         modelRepository: modelRepository,
         transcriptionService: service,
-        transcriptionConfig: const TranscriptionConfig(mode: 'local', localModel: 'base'),
+        transcriptionConfig: const TranscriptionConfig(mode: 'local', localModel: LocalTranscriptionModelTier('base')),
       );
       final repo = createRepo(client, null, service: service);
       await repo.fetchVoicemails();
       var row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'from the old model');
 
-      await modelService.setModel('small');
+      await modelService.setModel(const LocalTranscriptionModelTier('small'));
 
-      expect(modelRepository.value, 'small');
+      expect(modelRepository.value, const LocalTranscriptionModelTier('small'));
       row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'from the new model');
     });
@@ -721,11 +725,35 @@ void main() {
       createRepo(client, null, service: service);
       await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
 
-      service.switchLocalModel('small');
+      service.switchLocalModel(const LocalTranscriptionModelTier('small'));
       await pumpEventQueue();
 
       expect(dataSource.disposeCalls, 0);
       expect(dataSource.calls, 1);
+    });
+
+    test('a voicemail fetched while off transcribes once a tier is switched on later', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
+      final replacement = _FakeTranscriptionDataSource(result: 'from the enabled model');
+
+      // Starts off: the builder returns null (no engine) for the off
+      // selection, exactly like createTranscriptionDataSource does for
+      // LocalTranscriptionModelOff.
+      final service = createService((model) => model is LocalTranscriptionModelTier ? replacement : null);
+      expect(service.isEnabled, isFalse);
+
+      final repo = createRepo(client, null, service: service);
+      await repo.fetchVoicemails();
+      await pumpEventQueue();
+
+      // Nothing is transcribed yet - the pool is off, so no row exists at all.
+      expect(await transcriptionDatabase.transcriptionsDao.getAllForType(kVoicemailTranscriptionMediaType), isEmpty);
+
+      // The user turns transcription on from settings.
+      await service.switchLocalModel(const LocalTranscriptionModelTier('small'));
+
+      final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
+      expect(row!.transcript, 'from the enabled model');
     });
 
     test('a model switch mid-transcription discards the old model result', () async {
@@ -741,7 +769,7 @@ void main() {
       createRepo(client, null, service: service);
       await waitFor(() => initial.calls == 1, 'old model transcription started');
 
-      service.switchLocalModel('small');
+      service.switchLocalModel(const LocalTranscriptionModelTier('small'));
       gate.complete();
 
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);

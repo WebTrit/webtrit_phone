@@ -19,18 +19,18 @@ void main() {
 
       expect(config.mode, 'remote');
       expect(config.language, 'en');
-      expect(config.localModel, 'small');
+      expect(config.localModel, const LocalTranscriptionModelTier('small'));
       expect(config.remoteUrl, 'https://stt.example.com/v1');
       expect(config.remoteApiKey, 'key');
       expect(config.remoteModel, 'large-v3');
     });
 
-    test('defaults to the disabled mode', () {
+    test('defaults to the disabled mode with no local model selected', () {
       final config = TranscriptionMapper.map(const AppConfig());
 
       expect(TranscriptionMode.fromName(config.mode), TranscriptionMode.disabled);
       expect(config.language, isNull);
-      expect(config.localModel, 'base');
+      expect(config.localModel, const LocalTranscriptionModelOff());
       expect(config.remoteUrl, isNull);
     });
   });

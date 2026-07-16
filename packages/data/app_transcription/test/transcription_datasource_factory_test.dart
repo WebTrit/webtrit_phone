@@ -34,26 +34,43 @@ void main() {
       expect(createTranscriptionDataSource(const TranscriptionConfig(mode: 'cloud')), isNull);
     });
 
-    test('returns the local whisper source for the local mode', () {
+    test('returns null for the local mode when no tier is selected (off)', () {
+      expect(createTranscriptionDataSource(const TranscriptionConfig(mode: 'local')), isNull);
+    });
+
+    test('returns the local whisper source for the local mode with a tier', () {
       expect(
-        createTranscriptionDataSource(const TranscriptionConfig(mode: 'local')),
+        createTranscriptionDataSource(
+          const TranscriptionConfig(mode: 'local', localModel: LocalTranscriptionModelTier('base')),
+        ),
         isA<LocalWhisperTranscriptionDataSource>(),
       );
     });
 
     test('uses the configured local model when no override is given', () {
-      final dataSource = createTranscriptionDataSource(const TranscriptionConfig(mode: 'local', localModel: 'small'));
+      final dataSource = createTranscriptionDataSource(
+        const TranscriptionConfig(mode: 'local', localModel: LocalTranscriptionModelTier('small')),
+      );
 
       expect((dataSource! as LocalWhisperTranscriptionDataSource).modelName, 'small');
     });
 
     test('the local model override wins over the configured model', () {
       final dataSource = createTranscriptionDataSource(
-        const TranscriptionConfig(mode: 'local', localModel: 'small'),
-        localModelOverride: 'medium',
+        const TranscriptionConfig(mode: 'local', localModel: LocalTranscriptionModelTier('small')),
+        localModelOverride: const LocalTranscriptionModelTier('medium'),
       );
 
       expect((dataSource! as LocalWhisperTranscriptionDataSource).modelName, 'medium');
+    });
+
+    test('an off override wins over a configured tier', () {
+      final dataSource = createTranscriptionDataSource(
+        const TranscriptionConfig(mode: 'local', localModel: LocalTranscriptionModelTier('small')),
+        localModelOverride: const LocalTranscriptionModelOff(),
+      );
+
+      expect(dataSource, isNull);
     });
 
     test('returns null for the remote mode without a URL', () {
@@ -92,33 +109,50 @@ void main() {
 
   group('TranscriptionService model switching', () {
     test('builds the initial source and rebuilds it per switch, disposing the old one', () async {
-      final built = <String?>[];
+      final built = <LocalTranscriptionModel?>[];
       final sources = <_RecordingDataSource>[];
       final service = TranscriptionService(
         (model) {
           built.add(model);
-          final source = _RecordingDataSource(engine: 'recording:$model');
+          final source = _RecordingDataSource(engine: 'recording:${model?.toRawValue()}');
           sources.add(source);
           return source;
         },
-        initialLocalModel: 'base',
+        initialLocalModel: const LocalTranscriptionModelTier('base'),
         store: _NoopTranscriptionStore(),
       );
 
-      expect(built, ['base']);
+      expect(built, [const LocalTranscriptionModelTier('base')]);
       expect(service.isEnabled, isTrue);
 
-      await service.switchLocalModel('small');
-      expect(built, ['base', 'small']);
+      await service.switchLocalModel(const LocalTranscriptionModelTier('small'));
+      expect(built, [const LocalTranscriptionModelTier('base'), const LocalTranscriptionModelTier('small')]);
       expect(sources.first.disposeCalls, 1);
       expect(sources.last.disposeCalls, 0);
+    });
+
+    test('switching to off disables the pool without disposing via a rebuilt source', () async {
+      final built = <LocalTranscriptionModel?>[];
+      final service = TranscriptionService(
+        (model) {
+          built.add(model);
+          return model is LocalTranscriptionModelTier ? _RecordingDataSource(engine: 'recording:${model.name}') : null;
+        },
+        initialLocalModel: const LocalTranscriptionModelTier('base'),
+        store: _NoopTranscriptionStore(),
+      );
+
+      await service.switchLocalModel(const LocalTranscriptionModelOff());
+
+      expect(built, [const LocalTranscriptionModelTier('base'), const LocalTranscriptionModelOff()]);
+      expect(service.isEnabled, isFalse);
     });
 
     test('a fixed pool ignores model switches', () async {
       final source = _RecordingDataSource();
       final service = TranscriptionService.fixed(source, store: _NoopTranscriptionStore());
 
-      await service.switchLocalModel('small');
+      await service.switchLocalModel(const LocalTranscriptionModelTier('small'));
 
       expect(service.isEnabled, isTrue);
       expect(source.disposeCalls, 0);

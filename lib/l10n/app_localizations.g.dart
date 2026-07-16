@@ -5371,6 +5371,18 @@ abstract class AppLocalizations {
   /// **'Applies to all messages: the model is downloaded on first use and existing transcripts are regenerated with the new model.'**
   String get transcriptionSettings_Model_note;
 
+  /// No description provided for @transcriptionSettings_Model_offSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemails are not transcribed'**
+  String get transcriptionSettings_Model_offSubtitle;
+
+  /// No description provided for @transcriptionSettings_Model_offTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get transcriptionSettings_Model_offTitle;
+
   /// No description provided for @transcriptionSettings_Widget_screenTitle.
   ///
   /// In en, this message translates to:

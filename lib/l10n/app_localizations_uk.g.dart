@@ -2958,6 +2958,12 @@ class AppLocalizationsUk extends AppLocalizations {
       'Діє для всіх повідомлень: модель завантажується при першому використанні, а наявні розшифровки буде перегенеровано новою моделлю.';
 
   @override
+  String get transcriptionSettings_Model_offSubtitle => 'Голосові повідомлення не транскрибуються';
+
+  @override
+  String get transcriptionSettings_Model_offTitle => 'Вимкнено';
+
+  @override
   String get transcriptionSettings_Widget_screenTitle => 'Модель розшифровки';
 
   @override

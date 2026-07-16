@@ -2904,6 +2904,12 @@ class AppLocalizationsTh extends AppLocalizations {
       'มีผลกับข้อความทั้งหมด: โมเดลจะถูกดาวน์โหลดเมื่อใช้งานครั้งแรก และข้อความถอดเสียงเดิมจะถูกสร้างใหม่ด้วยโมเดลใหม่';
 
   @override
+  String get transcriptionSettings_Model_offSubtitle => 'จะไม่มีการถอดเสียงข้อความเสียง';
+
+  @override
+  String get transcriptionSettings_Model_offTitle => 'ปิด';
+
+  @override
   String get transcriptionSettings_Widget_screenTitle => 'โมเดลถอดเสียง';
 
   @override

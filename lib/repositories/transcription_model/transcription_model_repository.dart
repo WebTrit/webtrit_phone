@@ -1,11 +1,13 @@
+import 'package:app_transcription/app_transcription.dart';
+
 import 'package:webtrit_phone/data/app_preferences.dart';
 
 /// Stores the user's on-device transcription model choice;
-/// null means the app-config default tier is in effect.
+/// null means the app-config default is in effect.
 abstract interface class TranscriptionModelRepository {
-  String? getTranscriptionModel();
+  LocalTranscriptionModel? getTranscriptionModel();
 
-  Future<void> setTranscriptionModel(String? value);
+  Future<void> setTranscriptionModel(LocalTranscriptionModel? value);
 
   Future<void> clear();
 }
@@ -17,12 +19,15 @@ class TranscriptionModelRepositoryPrefsImpl implements TranscriptionModelReposit
   final _prefsKey = 'transcription-model';
 
   @override
-  String? getTranscriptionModel() => _appPreferences.getString(_prefsKey);
+  LocalTranscriptionModel? getTranscriptionModel() {
+    final raw = _appPreferences.getString(_prefsKey);
+    return raw != null ? LocalTranscriptionModel.parse(raw) : null;
+  }
 
   @override
-  Future<void> setTranscriptionModel(String? value) {
+  Future<void> setTranscriptionModel(LocalTranscriptionModel? value) {
     if (value != null) {
-      return _appPreferences.setString(_prefsKey, value);
+      return _appPreferences.setString(_prefsKey, value.toRawValue());
     } else {
       return clear();
     }

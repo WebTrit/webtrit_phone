@@ -50,5 +50,16 @@ class TranscriptionsDao extends DatabaseAccessor<AppDatabase> with _$Transcripti
     return (delete(transcriptionTable)..where((tbl) => tbl.mediaType.equals(mediaType))).go();
   }
 
-  Future<int> deleteAll() => delete(transcriptionTable).go();
+  /// Wipes every transcription for regeneration (a model switch). Callers
+  /// rely on watchers of [TranscriptionTable] (e.g. the missing-transcription
+  /// join) re-running right after this to re-enqueue - but drift only
+  /// notifies watchers when a write actually changes rows, so a switch that
+  /// starts from an empty table (nothing was ever transcribed, e.g. coming
+  /// from an "off" selection) would otherwise leave those watchers silent
+  /// forever. [markTablesUpdated] forces the notification unconditionally.
+  Future<int> deleteAll() async {
+    final deleted = await delete(transcriptionTable).go();
+    markTablesUpdated({transcriptionTable});
+    return deleted;
+  }
 }

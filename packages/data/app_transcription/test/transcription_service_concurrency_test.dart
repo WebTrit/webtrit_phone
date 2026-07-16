@@ -87,9 +87,12 @@ void main() {
     final oldSource = _NotifyingDataSource('fake:base');
     final newSource = _NotifyingDataSource('fake:small');
     final store = _BlockingRemoveAllStore();
-    final service = TranscriptionService((model) => model == 'small' ? newSource : oldSource, store: store);
+    final service = TranscriptionService(
+      (model) => model == const LocalTranscriptionModelTier('small') ? newSource : oldSource,
+      store: store,
+    );
 
-    final switching = service.switchLocalModel('small');
+    final switching = service.switchLocalModel(const LocalTranscriptionModelTier('small'));
     await store.removeAllStarted.future;
 
     // The wipe is in flight; the swap has not happened yet.
@@ -121,7 +124,7 @@ void main() {
 
     service.dispose();
 
-    await expectLater(service.switchLocalModel('small'), throwsStateError);
+    await expectLater(service.switchLocalModel(const LocalTranscriptionModelTier('small')), throwsStateError);
   });
 
   test('a fixed pool mirrors its source download state too', () async {
@@ -137,7 +140,7 @@ void main() {
     final first = _NotifyingDataSource('fake:base');
     final second = _NotifyingDataSource('fake:small');
     final service = TranscriptionService(
-      (model) => model == 'small' ? second : first,
+      (model) => model == const LocalTranscriptionModelTier('small') ? second : first,
       store: _NoopTranscriptionStore(),
     );
 
@@ -146,7 +149,7 @@ void main() {
     first.state.value = const ModelDownloading(received: 1, total: 2);
     expect(service.modelDownloadState.value, isA<ModelDownloading>());
 
-    await service.switchLocalModel('small');
+    await service.switchLocalModel(const LocalTranscriptionModelTier('small'));
     expect(service.modelDownloadState.value, isA<ModelDownloadIdle>());
 
     second.state.value = const ModelDownloadReady();
