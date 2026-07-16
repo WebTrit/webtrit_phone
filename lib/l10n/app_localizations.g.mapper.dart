@@ -1404,6 +1404,10 @@ extension AppLocalizationsExtension on AppLocalizations {
       'transcriptionSettings_Model_fastTitle' =>
         transcriptionSettings_Model_fastTitle,
       'transcriptionSettings_Model_note' => transcriptionSettings_Model_note,
+      'transcriptionSettings_Model_offSubtitle' =>
+        transcriptionSettings_Model_offSubtitle,
+      'transcriptionSettings_Model_offTitle' =>
+        transcriptionSettings_Model_offTitle,
       'transcriptionSettings_Widget_screenTitle' =>
         transcriptionSettings_Widget_screenTitle,
       'voicemail_Widget_screenTitle' => voicemail_Widget_screenTitle,
