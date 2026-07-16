@@ -166,6 +166,7 @@ class CallScreenActionsStyle with Diagnosticable {
     this.held,
     this.swap,
     this.key,
+    this.keypadInputTextStyle,
   });
 
   final ButtonStyle? callStart;
@@ -178,6 +179,9 @@ class CallScreenActionsStyle with Diagnosticable {
   final ButtonStyle? swap;
   final ButtonStyle? key;
 
+  /// Text style for the digits typed on the in-call DTMF keypad.
+  final TextStyle? keypadInputTextStyle;
+
   CallScreenActionsStyle copyWith({
     ButtonStyle? callStart,
     ButtonStyle? hangup,
@@ -188,6 +192,7 @@ class CallScreenActionsStyle with Diagnosticable {
     ButtonStyle? held,
     ButtonStyle? swap,
     ButtonStyle? key,
+    TextStyle? keypadInputTextStyle,
   }) {
     return CallScreenActionsStyle(
       callStart: callStart ?? this.callStart,
@@ -199,6 +204,7 @@ class CallScreenActionsStyle with Diagnosticable {
       held: held ?? this.held,
       swap: swap ?? this.swap,
       key: key ?? this.key,
+      keypadInputTextStyle: keypadInputTextStyle ?? this.keypadInputTextStyle,
     );
   }
 
@@ -207,6 +213,11 @@ class CallScreenActionsStyle with Diagnosticable {
     if (other == null) return this;
 
     ButtonStyle? mergeButtonStyle(ButtonStyle? a, ButtonStyle? b) {
+      if (a == null) return b;
+      return a.merge(b);
+    }
+
+    TextStyle? mergeTextStyle(TextStyle? a, TextStyle? b) {
       if (a == null) return b;
       return a.merge(b);
     }
@@ -221,6 +232,7 @@ class CallScreenActionsStyle with Diagnosticable {
       held: mergeButtonStyle(held, other.held),
       swap: mergeButtonStyle(swap, other.swap),
       key: mergeButtonStyle(key, other.key),
+      keypadInputTextStyle: mergeTextStyle(keypadInputTextStyle, other.keypadInputTextStyle),
     );
   }
 
@@ -236,6 +248,7 @@ class CallScreenActionsStyle with Diagnosticable {
       held: ButtonStyle.lerp(a?.held, b?.held, t),
       swap: ButtonStyle.lerp(a?.swap, b?.swap, t),
       key: ButtonStyle.lerp(a?.key, b?.key, t),
+      keypadInputTextStyle: TextStyle.lerp(a?.keypadInputTextStyle, b?.keypadInputTextStyle, t),
     );
   }
 
@@ -251,6 +264,7 @@ class CallScreenActionsStyle with Diagnosticable {
       ..add(DiagnosticsProperty<ButtonStyle?>('speaker', speaker))
       ..add(DiagnosticsProperty<ButtonStyle?>('held', held))
       ..add(DiagnosticsProperty<ButtonStyle?>('swap', swap))
-      ..add(DiagnosticsProperty<ButtonStyle?>('key', key));
+      ..add(DiagnosticsProperty<ButtonStyle?>('key', key))
+      ..add(DiagnosticsProperty<TextStyle?>('keypadInputTextStyle', keypadInputTextStyle));
   }
 }

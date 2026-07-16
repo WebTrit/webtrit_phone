@@ -500,9 +500,9 @@
   "@diagnostic_callingMode_tile_title": {},
   "diagnostic_callingMode_standalone_title": "Обмежений режим дзвінків",
   "@diagnostic_callingMode_standalone_title": {},
-  "diagnostic_callingMode_standalone_caption": "Standalone — можлива затримка доставки",
+  "diagnostic_callingMode_standalone_caption": "Standalone — можливі обмеження сповіщення про дзвінок і вибору гарнітури",
   "@diagnostic_callingMode_standalone_caption": {},
-  "diagnostic_callingMode_standalone_description": "Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вихідні дзвінки, утримання та вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступні.",
+  "diagnostic_callingMode_standalone_description": "Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступний.",
   "@diagnostic_callingMode_standalone_description": {},
   "diagnostic_permission_camera_description": "Цей застосунок потребує дозволу на доступ до камери для здійснення відеодзвінків.",
   "@diagnostic_permission_camera_description": {},
@@ -1606,10 +1606,6 @@
   },
   "sessionStatus_pushNotificationServiceProblem": "Проблема з налаштуванням служби пуш-сповіщень",
   "@sessionStatus_pushNotificationServiceProblem": {},
-  "sessionStatus_issue_limitedStandaloneCallMode_title": "Обмежений режим дзвінків",
-  "@sessionStatus_issue_limitedStandaloneCallMode_title": {},
-  "sessionStatus_issue_limitedStandaloneCallMode_caption": "Standalone — можлива затримка доставки",
-  "@sessionStatus_issue_limitedStandaloneCallMode_caption": {},
   "session_Teardown_progressText": "Вихід із системи...",
   "@session_Teardown_progressText": {
     "description": "Status message displayed while the application is performing cleanup during the logout process."

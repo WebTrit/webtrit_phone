@@ -500,9 +500,9 @@
   "@diagnostic_callingMode_tile_title": {},
   "diagnostic_callingMode_standalone_title": "Limited call mode",
   "@diagnostic_callingMode_standalone_title": {},
-  "diagnostic_callingMode_standalone_caption": "Standalone - delivery may be delayed",
+  "diagnostic_callingMode_standalone_caption": "Standalone - ringing and headset selection may be limited",
   "@diagnostic_callingMode_standalone_caption": {},
-  "diagnostic_callingMode_standalone_description": "This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Outgoing calls, hold and Bluetooth or wired headset selection are not available in this mode.",
+  "diagnostic_callingMode_standalone_description": "This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Bluetooth and wired headset selection is not available in this mode.",
   "@diagnostic_callingMode_standalone_description": {},
   "diagnostic_permission_camera_description": "This app requires permission to access the camera to make video calls.",
   "@diagnostic_permission_camera_description": {},
@@ -1609,10 +1609,6 @@
   },
   "sessionStatus_pushNotificationServiceProblem": "Problem with configuration push notification service",
   "@sessionStatus_pushNotificationServiceProblem": {},
-  "sessionStatus_issue_limitedStandaloneCallMode_title": "Limited call mode",
-  "@sessionStatus_issue_limitedStandaloneCallMode_title": {},
-  "sessionStatus_issue_limitedStandaloneCallMode_caption": "Standalone - delivery may be delayed",
-  "@sessionStatus_issue_limitedStandaloneCallMode_caption": {},
   "session_Teardown_progressText": "Signing out...",
   "@session_Teardown_progressText": {
     "description": "Status message displayed while the application is performing cleanup during the logout process."

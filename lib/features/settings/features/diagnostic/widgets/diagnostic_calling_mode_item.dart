@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 /// Diagnostic row shown only when the device runs in the limited standalone
-/// call mode (no Android Telecom). Warns the user that incoming-call delivery
-/// may be delayed; tapping opens the details sheet.
+/// call mode (no Android Telecom). Warns the user that ringing presentation
+/// and headset selection may be limited; tapping opens the details sheet.
 class DiagnosticCallingModeItem extends StatelessWidget {
   const DiagnosticCallingModeItem({super.key, required this.onTap});
 

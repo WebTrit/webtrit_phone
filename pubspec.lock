@@ -2002,16 +2002,16 @@ packages:
     description:
       path: webtrit_callkeep
       ref: "1.3.0"
-      resolved-ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
-    version: "1.3.0+0"
+    version: "1.3.0+1"
   webtrit_callkeep_android:
     dependency: transitive
     description:
       path: webtrit_callkeep_android
-      ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
-      resolved-ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.0.0+0"
@@ -2019,8 +2019,8 @@ packages:
     dependency: transitive
     description:
       path: webtrit_callkeep_ios
-      ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
-      resolved-ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.0.0+0"
@@ -2028,8 +2028,8 @@ packages:
     dependency: transitive
     description:
       path: webtrit_callkeep_linux
-      ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
-      resolved-ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.1.0+1"
@@ -2037,8 +2037,8 @@ packages:
     dependency: transitive
     description:
       path: webtrit_callkeep_macos
-      ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
-      resolved-ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.1.0+1"
@@ -2046,8 +2046,8 @@ packages:
     dependency: transitive
     description:
       path: webtrit_callkeep_platform_interface
-      ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
-      resolved-ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.0.0+0"
@@ -2055,8 +2055,8 @@ packages:
     dependency: transitive
     description:
       path: webtrit_callkeep_web
-      ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
-      resolved-ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.0.0+0"
@@ -2064,8 +2064,8 @@ packages:
     dependency: transitive
     description:
       path: webtrit_callkeep_windows
-      ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
-      resolved-ref: "11c1b97be8259267689c90e5cd0953a0c0b8d564"
+      ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
+      resolved-ref: b7006b6522ae590ae29d1c1b41bc035034dfd411
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.1.0+1"

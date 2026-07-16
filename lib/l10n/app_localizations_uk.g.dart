@@ -594,11 +594,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnostic_callingMode_standalone_title => 'Обмежений режим дзвінків';
 
   @override
-  String get diagnostic_callingMode_standalone_caption => 'Standalone — можлива затримка доставки';
+  String get diagnostic_callingMode_standalone_caption =>
+      'Standalone — можливі обмеження сповіщення про дзвінок і вибору гарнітури';
 
   @override
   String get diagnostic_callingMode_standalone_description =>
-      'Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вихідні дзвінки, утримання та вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступні.';
+      'Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступний.';
 
   @override
   String get diagnostic_permission_camera_description =>
@@ -1900,12 +1901,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
-
-  @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_title => 'Обмежений режим дзвінків';
-
-  @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_caption => 'Standalone — можлива затримка доставки';
 
   @override
   String get session_Teardown_progressText => 'Вихід із системи...';
