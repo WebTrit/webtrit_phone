@@ -589,11 +589,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get diagnostic_callingMode_standalone_title => 'Modalità chiamate limitata';
 
   @override
-  String get diagnostic_callingMode_standalone_caption => 'Standalone - possibile ritardo nella consegna';
+  String get diagnostic_callingMode_standalone_caption =>
+      'Standalone - squillo e selezione dell\'auricolare possono essere limitati';
 
   @override
   String get diagnostic_callingMode_standalone_description =>
-      'Questo dispositivo non supporta il framework di chiamata di sistema (Telecom), quindi le chiamate in arrivo usano un servizio in background limitato. Le chiamate possono essere ritardate o perse quando il sistema limita le app in background. In questa modalità non sono disponibili le chiamate in uscita, la messa in attesa e la selezione dell\'auricolare Bluetooth o cablato.';
+      'Questo dispositivo non supporta il framework di chiamata di sistema (Telecom), quindi le chiamate in arrivo usano un servizio in background limitato. Le chiamate possono essere ritardate o perse quando il sistema limita le app in background. In questa modalità non è disponibile la selezione dell\'auricolare Bluetooth o cablato.';
 
   @override
   String get diagnostic_permission_camera_description =>
@@ -1017,10 +1018,38 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get login_Text_qrSigninScanHint => 'Scansiona il codice QR per accedere.';
+
+  @override
+  String get login_Text_qrSigninVerifyingTitle => 'Accesso in corso...';
+
+  @override
+  String get login_Text_qrSigninVerifyingDescription => 'Codice QR scansionato. Verifica con il server in corso.';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionTitle => 'L\'accesso alla fotocamera è disattivato';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionDescription =>
+      'L\'accesso alla fotocamera è necessario per scansionare un codice QR. Attivalo per continuare.';
+
+  @override
+  String get login_Button_qrSigninAllowCameraAccess => 'Continua';
+
+  @override
+  String get login_Button_qrSigninOpenSettings => 'Apri le impostazioni';
+
+  @override
+  String get login_Text_qrSigninInvalidCodeError => 'Questo codice QR non può essere utilizzato per accedere.';
+
+  @override
   String get loginType_otpSignin => 'Accesso con OTP';
 
   @override
   String get loginType_passwordSignin => 'Accesso con password';
+
+  @override
+  String get loginType_qrSignin => 'Codice QR';
 
   @override
   String get loginType_signup => 'Iscrizione';
@@ -1899,12 +1928,6 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get sessionStatus_pushNotificationServiceProblem =>
       'Problema con la configurazione del servizio di notifiche push';
-
-  @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_title => 'Modalità chiamate limitata';
-
-  @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_caption => 'Standalone - possibile ritardo nella consegna';
 
   @override
   String get session_Teardown_progressText => 'Disconnessione in corso...';

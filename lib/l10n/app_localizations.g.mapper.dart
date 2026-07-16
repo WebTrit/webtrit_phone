@@ -468,8 +468,22 @@ extension AppLocalizationsExtension on AppLocalizations {
         login_Text_signupRequestPreDescriptionDemo,
       'login_Text_signupVerifyPostDescriptionGeneral' =>
         login_Text_signupVerifyPostDescriptionGeneral,
+      'login_Text_qrSigninScanHint' => login_Text_qrSigninScanHint,
+      'login_Text_qrSigninVerifyingTitle' => login_Text_qrSigninVerifyingTitle,
+      'login_Text_qrSigninVerifyingDescription' =>
+        login_Text_qrSigninVerifyingDescription,
+      'login_Text_qrSigninCameraPermissionTitle' =>
+        login_Text_qrSigninCameraPermissionTitle,
+      'login_Text_qrSigninCameraPermissionDescription' =>
+        login_Text_qrSigninCameraPermissionDescription,
+      'login_Button_qrSigninAllowCameraAccess' =>
+        login_Button_qrSigninAllowCameraAccess,
+      'login_Button_qrSigninOpenSettings' => login_Button_qrSigninOpenSettings,
+      'login_Text_qrSigninInvalidCodeError' =>
+        login_Text_qrSigninInvalidCodeError,
       'loginType_otpSignin' => loginType_otpSignin,
       'loginType_passwordSignin' => loginType_passwordSignin,
+      'loginType_qrSignin' => loginType_qrSignin,
       'loginType_signup' => loginType_signup,
       'login_validationCoreUrlError' => login_validationCoreUrlError,
       'login_validationEmailError' => login_validationEmailError,
@@ -853,10 +867,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'sessionStatus_AppBar_connecting' => sessionStatus_AppBar_connecting,
       'sessionStatus_pushNotificationServiceProblem' =>
         sessionStatus_pushNotificationServiceProblem,
-      'sessionStatus_issue_limitedStandaloneCallMode_title' =>
-        sessionStatus_issue_limitedStandaloneCallMode_title,
-      'sessionStatus_issue_limitedStandaloneCallMode_caption' =>
-        sessionStatus_issue_limitedStandaloneCallMode_caption,
       'session_Teardown_progressText' => session_Teardown_progressText,
       'settings_AboutText_ApplicationEmbeddedLinks' =>
         settings_AboutText_ApplicationEmbeddedLinks,

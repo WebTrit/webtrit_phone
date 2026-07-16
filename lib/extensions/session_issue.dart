@@ -22,7 +22,8 @@ extension SessionIssueL10n on SessionIssue {
   String title(BuildContext context) {
     switch (id) {
       case SessionIssueId.limitedStandaloneCallMode:
-        return context.l10n.sessionStatus_issue_limitedStandaloneCallMode_title;
+        // Same warning as the diagnostic calling-mode row - reuse its strings.
+        return context.l10n.diagnostic_callingMode_standalone_title;
     }
   }
 
@@ -30,7 +31,7 @@ extension SessionIssueL10n on SessionIssue {
   String caption(BuildContext context) {
     switch (id) {
       case SessionIssueId.limitedStandaloneCallMode:
-        return context.l10n.sessionStatus_issue_limitedStandaloneCallMode_caption;
+        return context.l10n.diagnostic_callingMode_standalone_caption;
     }
   }
 

@@ -583,11 +583,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnostic_callingMode_standalone_title => 'Limited call mode';
 
   @override
-  String get diagnostic_callingMode_standalone_caption => 'Standalone - delivery may be delayed';
+  String get diagnostic_callingMode_standalone_caption => 'Standalone - ringing and headset selection may be limited';
 
   @override
   String get diagnostic_callingMode_standalone_description =>
-      'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Outgoing calls, hold and Bluetooth or wired headset selection are not available in this mode.';
+      'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Bluetooth and wired headset selection is not available in this mode.';
 
   @override
   String get diagnostic_permission_camera_description =>
@@ -1010,10 +1010,38 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get login_Text_qrSigninScanHint => 'Scan the QR code to log in.';
+
+  @override
+  String get login_Text_qrSigninVerifyingTitle => 'Signing you in...';
+
+  @override
+  String get login_Text_qrSigninVerifyingDescription => 'QR code scanned. Verifying with the server.';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionTitle => 'Camera access is off';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionDescription =>
+      'Camera access is needed to scan a QR code. Enable it to continue.';
+
+  @override
+  String get login_Button_qrSigninAllowCameraAccess => 'Continue';
+
+  @override
+  String get login_Button_qrSigninOpenSettings => 'Open settings';
+
+  @override
+  String get login_Text_qrSigninInvalidCodeError => 'This QR code cannot be used to sign in.';
+
+  @override
   String get loginType_otpSignin => 'OTP sign in';
 
   @override
   String get loginType_passwordSignin => 'Password sign in';
+
+  @override
+  String get loginType_qrSignin => 'QR code';
 
   @override
   String get loginType_signup => 'Sign up';
@@ -1876,12 +1904,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sessionStatus_pushNotificationServiceProblem => 'Problem with configuration push notification service';
-
-  @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_title => 'Limited call mode';
-
-  @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_caption => 'Standalone - delivery may be delayed';
 
   @override
   String get session_Teardown_progressText => 'Signing out...';

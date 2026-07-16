@@ -594,11 +594,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get diagnostic_callingMode_standalone_title => 'Обмежений режим дзвінків';
 
   @override
-  String get diagnostic_callingMode_standalone_caption => 'Standalone — можлива затримка доставки';
+  String get diagnostic_callingMode_standalone_caption =>
+      'Standalone — можливі обмеження сповіщення про дзвінок і вибору гарнітури';
 
   @override
   String get diagnostic_callingMode_standalone_description =>
-      'Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вихідні дзвінки, утримання та вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступні.';
+      'Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступний.';
 
   @override
   String get diagnostic_permission_camera_description =>
@@ -1022,10 +1023,38 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get login_Text_qrSigninScanHint => 'Відскануйте QR-код, щоб увійти.';
+
+  @override
+  String get login_Text_qrSigninVerifyingTitle => 'Виконуємо вхід...';
+
+  @override
+  String get login_Text_qrSigninVerifyingDescription => 'QR-код відскановано. Перевірка на сервері.';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionTitle => 'Доступ до камери вимкнено';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionDescription =>
+      'Для сканування QR-коду потрібен доступ до камери. Увімкніть його, щоб продовжити.';
+
+  @override
+  String get login_Button_qrSigninAllowCameraAccess => 'Продовжити';
+
+  @override
+  String get login_Button_qrSigninOpenSettings => 'Відкрити налаштування';
+
+  @override
+  String get login_Text_qrSigninInvalidCodeError => 'Цей QR-код не можна використати для входу.';
+
+  @override
   String get loginType_otpSignin => 'Увійти за OTP';
 
   @override
   String get loginType_passwordSignin => 'Вхід за паролем';
+
+  @override
+  String get loginType_qrSignin => 'QR-код';
 
   @override
   String get loginType_signup => 'Зареєструватися';
@@ -1900,12 +1929,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
-
-  @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_title => 'Обмежений режим дзвінків';
-
-  @override
-  String get sessionStatus_issue_limitedStandaloneCallMode_caption => 'Standalone — можлива затримка доставки';
 
   @override
   String get session_Teardown_progressText => 'Вихід із системи...';

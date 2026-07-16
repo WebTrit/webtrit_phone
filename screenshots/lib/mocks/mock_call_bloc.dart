@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_signaling/webtrit_signaling.dart' show Registration, RegistrationStatus;
 
 import 'package:screenshots/data/data.dart';
 
@@ -38,7 +39,12 @@ class MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {
       mock,
       const Stream<CallState>.empty(),
       initialState: CallState(
-        callServiceState: const CallServiceState(signalingClientStatus: SignalingClientStatus.connect),
+        // Registered signaling -> CallStatus.ready, so the active call renders as
+        // connected instead of a perpetual "Connecting..." state.
+        callServiceState: const CallServiceState(
+          signalingClientStatus: SignalingClientStatus.connect,
+          registration: Registration(status: RegistrationStatus.registered),
+        ),
         activeCalls: [if (video) dVideoActiveCall else dAudioActiveCall],
       ),
     );

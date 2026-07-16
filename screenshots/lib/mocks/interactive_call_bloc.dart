@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_signaling/webtrit_signaling.dart' show Registration, RegistrationStatus;
 
 import 'package:screenshots/data/data.dart';
 
@@ -20,7 +21,13 @@ class InteractiveCallBloc extends Cubit<CallState> implements CallBloc {
     : _callId = (video ? dVideoActiveCall : dAudioActiveCall).callId,
       super(
         CallState(
-          callServiceState: const CallServiceState(signalingClientStatus: SignalingClientStatus.connect),
+          // A registered signaling client yields CallStatus.ready, which the call
+          // screen requires to enable keypad/hold/transfer actions. Without it the
+          // status stays inProgress ("Connecting...") and those buttons are disabled.
+          callServiceState: const CallServiceState(
+            signalingClientStatus: SignalingClientStatus.connect,
+            registration: Registration(status: RegistrationStatus.registered),
+          ),
           activeCalls: [if (video) dVideoActiveCall else dAudioActiveCall],
           // Built-in earpiece + speaker so the speaker toggle renders and can switch.
           audioDevice: _earpiece,

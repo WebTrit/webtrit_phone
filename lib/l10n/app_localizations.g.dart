@@ -1098,13 +1098,13 @@ abstract class AppLocalizations {
   /// No description provided for @diagnostic_callingMode_standalone_caption.
   ///
   /// In en, this message translates to:
-  /// **'Standalone - delivery may be delayed'**
+  /// **'Standalone - ringing and headset selection may be limited'**
   String get diagnostic_callingMode_standalone_caption;
 
   /// No description provided for @diagnostic_callingMode_standalone_description.
   ///
   /// In en, this message translates to:
-  /// **'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Outgoing calls, hold and Bluetooth or wired headset selection are not available in this mode.'**
+  /// **'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Bluetooth and wired headset selection is not available in this mode.'**
   String get diagnostic_callingMode_standalone_description;
 
   /// No description provided for @diagnostic_permission_camera_description.
@@ -1851,6 +1851,54 @@ abstract class AppLocalizations {
   /// **'A one-time verification code was sent to {email}.'**
   String login_Text_signupVerifyPreDescriptionEmail(String email);
 
+  /// No description provided for @login_Text_qrSigninScanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan the QR code to log in.'**
+  String get login_Text_qrSigninScanHint;
+
+  /// No description provided for @login_Text_qrSigninVerifyingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing you in...'**
+  String get login_Text_qrSigninVerifyingTitle;
+
+  /// No description provided for @login_Text_qrSigninVerifyingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code scanned. Verifying with the server.'**
+  String get login_Text_qrSigninVerifyingDescription;
+
+  /// No description provided for @login_Text_qrSigninCameraPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is off'**
+  String get login_Text_qrSigninCameraPermissionTitle;
+
+  /// No description provided for @login_Text_qrSigninCameraPermissionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is needed to scan a QR code. Enable it to continue.'**
+  String get login_Text_qrSigninCameraPermissionDescription;
+
+  /// No description provided for @login_Button_qrSigninAllowCameraAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get login_Button_qrSigninAllowCameraAccess;
+
+  /// No description provided for @login_Button_qrSigninOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get login_Button_qrSigninOpenSettings;
+
+  /// No description provided for @login_Text_qrSigninInvalidCodeError.
+  ///
+  /// In en, this message translates to:
+  /// **'This QR code cannot be used to sign in.'**
+  String get login_Text_qrSigninInvalidCodeError;
+
   /// No description provided for @loginType_otpSignin.
   ///
   /// In en, this message translates to:
@@ -1862,6 +1910,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Password sign in'**
   String get loginType_passwordSignin;
+
+  /// No description provided for @loginType_qrSignin.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code'**
+  String get loginType_qrSignin;
 
   /// No description provided for @loginType_signup.
   ///
@@ -3461,18 +3515,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Problem with configuration push notification service'**
   String get sessionStatus_pushNotificationServiceProblem;
-
-  /// No description provided for @sessionStatus_issue_limitedStandaloneCallMode_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Limited call mode'**
-  String get sessionStatus_issue_limitedStandaloneCallMode_title;
-
-  /// No description provided for @sessionStatus_issue_limitedStandaloneCallMode_caption.
-  ///
-  /// In en, this message translates to:
-  /// **'Standalone - delivery may be delayed'**
-  String get sessionStatus_issue_limitedStandaloneCallMode_caption;
 
   /// Status message displayed while the application is performing cleanup during the logout process.
   ///
