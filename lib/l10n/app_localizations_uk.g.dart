@@ -955,7 +955,7 @@ class AppLocalizationsUk extends AppLocalizations {
       'Для сканування QR-коду потрібен доступ до камери. Увімкніть його, щоб продовжити.';
 
   @override
-  String get login_Button_qrSigninAllowCameraAccess => 'Надати доступ до камери';
+  String get login_Button_qrSigninAllowCameraAccess => 'Продовжити';
 
   @override
   String get login_Button_qrSigninOpenSettings => 'Відкрити налаштування';
