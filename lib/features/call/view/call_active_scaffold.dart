@@ -364,6 +364,16 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 // held original call being transferred (an incoming call
                                                 // grabs the selection at ring time), and using it as the
                                                 // replace target would produce a self-referential REFER.
+                                                //
+                                                // KNOWN LIMITATION: `current` is still a positional guess
+                                                // ("the live non-held call"), which breaks once a third,
+                                                // unrelated call is concurrently active - it can point at
+                                                // that call instead of the real consultation call. Left out
+                                                // of scope here: the server caps concurrent lines at 4, and
+                                                // this heuristic is unchanged from pre-1.16.0 behavior (not
+                                                // a new regression). A proper fix needs an explicit
+                                                // referor<->consultation link, not a positional guess -
+                                                // see git history for a prior (closed) attempt.
                                                 onAttendedTransferSubmitted: widget.callConfig.isAttendedTransferEnabled
                                                     ? (!activeCall.wasAccepted || focusedTransfer != null
                                                           ? null
