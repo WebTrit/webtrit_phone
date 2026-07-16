@@ -8,33 +8,37 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../cubit/transcription_settings_cubit.dart';
 
-/// Central place to manage the on-device transcription: the model tier list.
+/// Central place to manage the on-device transcription: off, or the model
+/// tier to use.
 ///
-/// Offers the fast/balanced/accurate presets plus, when the app-config
-/// default (or the stored selection) is a tier outside the presets, that
-/// tier as an extra option so the current state is always visible.
+/// Offers "off" plus the fast/balanced/accurate presets, and - when the
+/// app-config default (or the stored selection) is a tier outside the
+/// presets - that tier as an extra option so the current state is always
+/// visible.
 class TranscriptionSettingsScreen extends StatelessWidget {
   const TranscriptionSettingsScreen({super.key});
 
-  String _titleFor(BuildContext context, String model) {
+  String _titleFor(BuildContext context, LocalTranscriptionModel model) {
     return switch (model) {
-      'base' => context.l10n.transcriptionSettings_Model_fastTitle,
-      'small' => context.l10n.transcriptionSettings_Model_balancedTitle,
-      'medium' => context.l10n.transcriptionSettings_Model_accurateTitle,
-      _ => model,
+      LocalTranscriptionModelOff() => context.l10n.transcriptionSettings_Model_offTitle,
+      LocalTranscriptionModelTier(name: 'base') => context.l10n.transcriptionSettings_Model_fastTitle,
+      LocalTranscriptionModelTier(name: 'small') => context.l10n.transcriptionSettings_Model_balancedTitle,
+      LocalTranscriptionModelTier(name: 'medium') => context.l10n.transcriptionSettings_Model_accurateTitle,
+      LocalTranscriptionModelTier(:final name) => name,
     };
   }
 
-  String? _subtitleFor(BuildContext context, String model) {
+  String? _subtitleFor(BuildContext context, LocalTranscriptionModel model) {
     return switch (model) {
-      'base' => context.l10n.transcriptionSettings_Model_fastSubtitle,
-      'small' => context.l10n.transcriptionSettings_Model_balancedSubtitle,
-      'medium' => context.l10n.transcriptionSettings_Model_accurateSubtitle,
-      _ => null,
+      LocalTranscriptionModelOff() => context.l10n.transcriptionSettings_Model_offSubtitle,
+      LocalTranscriptionModelTier(name: 'base') => context.l10n.transcriptionSettings_Model_fastSubtitle,
+      LocalTranscriptionModelTier(name: 'small') => context.l10n.transcriptionSettings_Model_balancedSubtitle,
+      LocalTranscriptionModelTier(name: 'medium') => context.l10n.transcriptionSettings_Model_accurateSubtitle,
+      LocalTranscriptionModelTier() => null,
     };
   }
 
-  void _onChanged(BuildContext context, String? model) {
+  void _onChanged(BuildContext context, LocalTranscriptionModel? model) {
     if (model == null) return;
     context.read<TranscriptionSettingsCubit>().setModel(model);
   }
@@ -50,21 +54,24 @@ class TranscriptionSettingsScreen extends StatelessWidget {
       ),
       body: BlocBuilder<TranscriptionSettingsCubit, TranscriptionSettingsState>(
         builder: (context, state) {
-          final options = [...kTranscriptionModelPresets];
+          final options = <LocalTranscriptionModel>[
+            const LocalTranscriptionModelOff(),
+            ...kTranscriptionModelPresets.map(LocalTranscriptionModelTier.new),
+          ];
           for (final extra in [state.defaultModel, state.selectedModel]) {
             if (!options.contains(extra)) options.add(extra);
           }
 
           return ListView(
             children: [
-              RadioGroup<String>(
+              RadioGroup<LocalTranscriptionModel>(
                 groupValue: state.selectedModel,
                 onChanged: (model) => _onChanged(context, model),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     for (final model in options)
-                      RadioListTile<String>(
+                      RadioListTile<LocalTranscriptionModel>(
                         value: model,
                         title: Text(
                           model == state.defaultModel
@@ -72,7 +79,7 @@ class TranscriptionSettingsScreen extends StatelessWidget {
                               : _titleFor(context, model),
                         ),
                         subtitle: _subtitleFor(context, model) != null ? Text(_subtitleFor(context, model)!) : null,
-                        secondary: state.downloadedModels.contains(model)
+                        secondary: model is LocalTranscriptionModelTier && state.downloadedModels.contains(model.name)
                             ? Tooltip(
                                 message: context.l10n.transcriptionSettings_Model_downloadedLabel,
                                 child: const Icon(Icons.download_done),

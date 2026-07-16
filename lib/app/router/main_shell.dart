@@ -297,7 +297,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         // the drift transcriptions table. Voicemail is the first consumer.
         RepositoryProvider<TranscriptionService>(
           create: (context) {
-            TranscriptionDataSource? buildTranscriptionDataSource(String? localModelOverride) {
+            TranscriptionDataSource? buildTranscriptionDataSource(LocalTranscriptionModel? localModelOverride) {
               return createTranscriptionDataSource(
                 featureAccess.transcriptionConfig,
                 localModelOverride: localModelOverride,

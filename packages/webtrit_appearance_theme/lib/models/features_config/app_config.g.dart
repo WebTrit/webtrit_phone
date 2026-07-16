@@ -626,7 +626,7 @@ Map<String, dynamic> _$AppConfigTranscriptionToJson(
 
 AppConfigTranscriptionLocal _$AppConfigTranscriptionLocalFromJson(
   Map<String, dynamic> json,
-) => AppConfigTranscriptionLocal(model: json['model'] as String? ?? 'base');
+) => AppConfigTranscriptionLocal(model: json['model'] as String? ?? 'off');
 
 Map<String, dynamic> _$AppConfigTranscriptionLocalToJson(
   AppConfigTranscriptionLocal instance,

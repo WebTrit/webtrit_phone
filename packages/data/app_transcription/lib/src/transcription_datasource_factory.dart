@@ -29,14 +29,15 @@ enum TranscriptionMode {
 /// section of the app config), or `null` when the feature
 /// is disabled or misconfigured for this platform.
 ///
-/// [localModelOverride] replaces the configured local model tier with the
-/// user's choice from the transcription settings; null keeps the config default.
+/// [localModelOverride] replaces the configured local model selection with
+/// the user's choice from the transcription settings; null keeps the config
+/// default.
 ///
 /// [certs] lets the remote source talk to self-hosted endpoints secured by
 /// the same trusted certificates the rest of the app uses.
 TranscriptionDataSource? createTranscriptionDataSource(
   TranscriptionConfig config, {
-  String? localModelOverride,
+  LocalTranscriptionModel? localModelOverride,
   TrustedCertificates certs = TrustedCertificates.empty,
   Duration? connectionTimeout,
 }) {
@@ -55,10 +56,13 @@ TranscriptionDataSource? createTranscriptionDataSource(
         _logger.warning('Local transcription is not supported on web; transcription disabled');
         return null;
       }
-      return LocalWhisperTranscriptionDataSource(
-        model: localModelOverride ?? config.localModel,
-        defaultLanguage: config.language,
-      );
+      return switch (localModelOverride ?? config.localModel) {
+        LocalTranscriptionModelOff() => null,
+        LocalTranscriptionModelTier(:final name) => LocalWhisperTranscriptionDataSource(
+          model: name,
+          defaultLanguage: config.language,
+        ),
+      };
 
     case TranscriptionMode.remote:
       final url = Uri.tryParse(config.remoteUrl ?? '');

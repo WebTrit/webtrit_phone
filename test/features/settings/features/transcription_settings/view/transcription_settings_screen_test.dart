@@ -60,13 +60,13 @@ class _NoopTranscriptionStore implements TranscriptionStore {
 }
 
 class _FakeTranscriptionModelRepository implements TranscriptionModelRepository {
-  String? value;
+  LocalTranscriptionModel? value;
 
   @override
-  String? getTranscriptionModel() => value;
+  LocalTranscriptionModel? getTranscriptionModel() => value;
 
   @override
-  Future<void> setTranscriptionModel(String? newValue) async {
+  Future<void> setTranscriptionModel(LocalTranscriptionModel? newValue) async {
     value = newValue;
   }
 
@@ -77,10 +77,13 @@ class _FakeTranscriptionModelRepository implements TranscriptionModelRepository 
 }
 
 void main() {
-  late _FakeTranscriptionDataSource lastDataSource;
+  late _FakeTranscriptionDataSource? lastDataSource;
   late _NoopTranscriptionStore lastStore;
 
-  Widget wrap(_FakeTranscriptionModelRepository modelRepository, {String defaultModel = 'base'}) {
+  Widget wrap(
+    _FakeTranscriptionModelRepository modelRepository, {
+    LocalTranscriptionModel defaultModel = const LocalTranscriptionModelTier('base'),
+  }) {
     final router = _MockStackRouter();
     when(
       () => router.canPop(
@@ -95,7 +98,15 @@ void main() {
     final modelService = TranscriptionModelService(
       modelRepository: modelRepository,
       transcriptionService: TranscriptionService(
-        (model) => lastDataSource = _FakeTranscriptionDataSource('fake:${model ?? defaultModel}'),
+        (model) {
+          final selection = model ?? defaultModel;
+          return switch (selection) {
+            LocalTranscriptionModelOff() => null,
+            LocalTranscriptionModelTier() => lastDataSource = _FakeTranscriptionDataSource(
+              'fake:${selection.toRawValue()}',
+            ),
+          };
+        },
         initialLocalModel: modelRepository.getTranscriptionModel(),
         store: lastStore = _NoopTranscriptionStore(),
       ),
@@ -122,9 +133,14 @@ void main() {
     );
   }
 
-  testWidgets('lists the preset tiers and marks the default one', (tester) async {
+  setUp(() {
+    lastDataSource = null;
+  });
+
+  testWidgets('lists off and the preset tiers, marking the default one', (tester) async {
     await tester.pumpWidget(wrap(_FakeTranscriptionModelRepository()));
 
+    expect(find.text('Off'), findsOneWidget);
     expect(find.text('Fast (Default)'), findsOneWidget);
     expect(find.text('Balanced'), findsOneWidget);
     expect(find.text('Accurate'), findsOneWidget);
@@ -137,13 +153,29 @@ void main() {
     await tester.tap(find.text('Balanced'));
     await tester.pumpAndSettle();
 
-    expect(modelRepository.value, 'small');
-    final radioGroup = tester.widget<RadioGroup<String>>(find.byType(RadioGroup<String>));
-    expect(radioGroup.groupValue, 'small');
+    expect(modelRepository.value, const LocalTranscriptionModelTier('small'));
+    final radioGroup = tester.widget<RadioGroup<LocalTranscriptionModel>>(
+      find.byType(RadioGroup<LocalTranscriptionModel>),
+    );
+    expect(radioGroup.groupValue, const LocalTranscriptionModelTier('small'));
+  });
+
+  testWidgets('selecting off persists it and disables the pool', (tester) async {
+    final modelRepository = _FakeTranscriptionModelRepository();
+    await tester.pumpWidget(wrap(modelRepository));
+
+    await tester.tap(find.text('Off'));
+    await tester.pumpAndSettle();
+
+    expect(modelRepository.value, const LocalTranscriptionModelOff());
+    final radioGroup = tester.widget<RadioGroup<LocalTranscriptionModel>>(
+      find.byType(RadioGroup<LocalTranscriptionModel>),
+    );
+    expect(radioGroup.groupValue, const LocalTranscriptionModelOff());
   });
 
   testWidgets('picking the default tier clears the override', (tester) async {
-    final modelRepository = _FakeTranscriptionModelRepository()..value = 'small';
+    final modelRepository = _FakeTranscriptionModelRepository()..value = const LocalTranscriptionModelTier('small');
     await tester.pumpWidget(wrap(modelRepository));
 
     await tester.tap(find.text('Fast (Default)'));
@@ -155,19 +187,19 @@ void main() {
   testWidgets('shows the download progress of the active tier and a retry on failure', (tester) async {
     await tester.pumpWidget(wrap(_FakeTranscriptionModelRepository()));
 
-    lastDataSource.state.value = const ModelDownloading(received: 50, total: 100);
+    lastDataSource!.state.value = const ModelDownloading(received: 50, total: 100);
     await tester.pumpAndSettle();
 
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
     expect(find.textContaining('(50%)'), findsOneWidget);
 
-    lastDataSource.state.value = const ModelDownloadFailed('boom');
+    lastDataSource!.state.value = const ModelDownloadFailed('boom');
     await tester.pumpAndSettle();
 
     expect(find.text('Model download failed'), findsOneWidget);
     expect(find.text('Retry'), findsOneWidget);
 
-    lastDataSource.state.value = const ModelDownloadReady();
+    lastDataSource!.state.value = const ModelDownloadReady();
     await tester.pumpAndSettle();
 
     expect(find.byType(LinearProgressIndicator), findsNothing);
@@ -186,15 +218,21 @@ void main() {
 
     // Persisted override reverted and the selection back on the effective tier.
     expect(modelRepository.value, isNull);
-    final radioGroup = tester.widget<RadioGroup<String>>(find.byType(RadioGroup<String>));
-    expect(radioGroup.groupValue, 'base');
+    final radioGroup = tester.widget<RadioGroup<LocalTranscriptionModel>>(
+      find.byType(RadioGroup<LocalTranscriptionModel>),
+    );
+    expect(radioGroup.groupValue, const LocalTranscriptionModelTier('base'));
   });
 
   testWidgets('a non-preset default appears as an extra option with its raw name', (tester) async {
-    await tester.pumpWidget(wrap(_FakeTranscriptionModelRepository(), defaultModel: 'tiny.en'));
+    await tester.pumpWidget(
+      wrap(_FakeTranscriptionModelRepository(), defaultModel: const LocalTranscriptionModelTier('tiny.en')),
+    );
 
     expect(find.text('tiny.en (Default)'), findsOneWidget);
-    final radioGroup = tester.widget<RadioGroup<String>>(find.byType(RadioGroup<String>));
-    expect(radioGroup.groupValue, 'tiny.en');
+    final radioGroup = tester.widget<RadioGroup<LocalTranscriptionModel>>(
+      find.byType(RadioGroup<LocalTranscriptionModel>),
+    );
+    expect(radioGroup.groupValue, const LocalTranscriptionModelTier('tiny.en'));
   });
 }

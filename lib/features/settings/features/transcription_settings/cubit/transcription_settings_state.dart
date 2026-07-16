@@ -1,6 +1,6 @@
 part of 'transcription_settings_cubit.dart';
 
-/// The brand default model tier, the currently effective selection, which
+/// The brand default selection, the currently effective selection, which
 /// tiers already have a model file on disk and the live download state.
 @freezed
 class TranscriptionSettingsState with _$TranscriptionSettingsState {
@@ -11,14 +11,14 @@ class TranscriptionSettingsState with _$TranscriptionSettingsState {
     this.downloadState = const ModelDownloadIdle(),
   });
 
-  /// Brand default tier from the app config; marked in the list and used to
-  /// clear the user override when picked.
+  /// Brand default selection from the app config; marked in the list and
+  /// used to clear the user override when picked.
   @override
-  final String defaultModel;
+  final LocalTranscriptionModel defaultModel;
 
-  /// Currently effective tier.
+  /// Currently effective selection.
   @override
-  final String selectedModel;
+  final LocalTranscriptionModel selectedModel;
 
   /// Tiers whose model file is already on disk (no download needed).
   @override

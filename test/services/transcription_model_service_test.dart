@@ -42,23 +42,26 @@ class _Store implements TranscriptionStore {
 }
 
 class _FakeModelRepo implements TranscriptionModelRepository {
-  String? value;
+  LocalTranscriptionModel? value;
 
   @override
-  String? getTranscriptionModel() => value;
+  LocalTranscriptionModel? getTranscriptionModel() => value;
 
   @override
-  Future<void> setTranscriptionModel(String? newValue) async => value = newValue;
+  Future<void> setTranscriptionModel(LocalTranscriptionModel? newValue) async => value = newValue;
 
   @override
   Future<void> clear() async => value = null;
 }
 
 void main() {
-  const config = TranscriptionConfig(mode: 'local', localModel: 'base');
+  const config = TranscriptionConfig(mode: 'local', localModel: LocalTranscriptionModelTier('base'));
 
   TranscriptionService createPool(_Store store) {
-    return TranscriptionService((model) => _Source('whisper-ggml:${model ?? 'base'}'), store: store);
+    return TranscriptionService(
+      (model) => _Source('whisper-ggml:${(model ?? config.localModel).toRawValue()}'),
+      store: store,
+    );
   }
 
   test('setModel persists the override and switches the pool', () async {
@@ -69,10 +72,24 @@ void main() {
       transcriptionConfig: config,
     );
 
-    await service.setModel('small');
+    await service.setModel(const LocalTranscriptionModelTier('small'));
 
-    expect(modelRepo.value, 'small');
-    expect(service.selectedModel, 'small');
+    expect(modelRepo.value, const LocalTranscriptionModelTier('small'));
+    expect(service.selectedModel, const LocalTranscriptionModelTier('small'));
+  });
+
+  test('setModel(off) persists off and disables the pool', () async {
+    final modelRepo = _FakeModelRepo();
+    final service = TranscriptionModelService(
+      modelRepository: modelRepo,
+      transcriptionService: createPool(_Store()),
+      transcriptionConfig: config,
+    );
+
+    await service.setModel(const LocalTranscriptionModelOff());
+
+    expect(modelRepo.value, const LocalTranscriptionModelOff());
+    expect(service.selectedModel, const LocalTranscriptionModelOff());
   });
 
   test('a refused switch reverts the persisted override', () async {
@@ -84,11 +101,11 @@ void main() {
       transcriptionConfig: config,
     );
 
-    await expectLater(service.setModel('small'), throwsA(anything));
+    await expectLater(service.setModel(const LocalTranscriptionModelTier('small')), throwsA(anything));
 
     // The wipe failed, the pool kept the old engine - the disk must agree.
     expect(modelRepo.value, isNull);
-    expect(service.selectedModel, 'base');
+    expect(service.selectedModel, const LocalTranscriptionModelTier('base'));
   });
 
   test('a switch on a disposed pool never persists the override', () async {
@@ -102,7 +119,31 @@ void main() {
 
     pool.dispose();
 
-    await expectLater(service.setModel('small'), throwsStateError);
+    await expectLater(service.setModel(const LocalTranscriptionModelTier('small')), throwsStateError);
     expect(modelRepo.value, isNull);
+  });
+
+  group('canSelectModel', () {
+    test('true in local mode even when the effective selection is off', () async {
+      final modelRepo = _FakeModelRepo();
+      final service = TranscriptionModelService(
+        modelRepository: modelRepo,
+        transcriptionService: createPool(_Store()),
+        transcriptionConfig: const TranscriptionConfig(mode: 'local', localModel: LocalTranscriptionModelOff()),
+      );
+
+      expect(service.canSelectModel, isTrue);
+    });
+
+    test('false outside local mode', () async {
+      final modelRepo = _FakeModelRepo();
+      final service = TranscriptionModelService(
+        modelRepository: modelRepo,
+        transcriptionService: createPool(_Store()),
+        transcriptionConfig: const TranscriptionConfig(),
+      );
+
+      expect(service.canSelectModel, isFalse);
+    });
   });
 }

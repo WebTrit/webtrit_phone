@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart' show ValueListenable;
+import 'package:flutter/foundation.dart' show ValueListenable, kIsWeb;
 
 import 'package:logging/logging.dart';
 
@@ -33,26 +33,26 @@ class TranscriptionModelService {
 
   Future<void> _queue = Future.value();
 
-  /// True when picking a model tier has an effect: the pool transcribes and
-  /// runs the local engine (the remote mode ignores the tier entirely).
-  /// There is no brand flag behind this - the config only sets the default
-  /// tier; the gate is purely functional.
+  /// True when the transcription settings screen has something to offer: the
+  /// pool runs the local engine in this mode (the remote mode ignores the
+  /// tier entirely). Independent of whether the *currently effective*
+  /// selection happens to be [LocalTranscriptionModelOff] - the user must
+  /// still be able to reach the screen to turn it on.
   bool get canSelectModel =>
-      _transcriptionService.isEnabled &&
-      TranscriptionMode.fromName(_transcriptionConfig.mode) == TranscriptionMode.local;
+      !kIsWeb && TranscriptionMode.fromName(_transcriptionConfig.mode) == TranscriptionMode.local;
 
-  /// The config default tier the user's override falls back to.
-  String get defaultModel => _transcriptionConfig.localModel;
+  /// The config default the user's override falls back to.
+  LocalTranscriptionModel get defaultModel => _transcriptionConfig.localModel;
 
-  /// The currently effective tier.
-  String get selectedModel => _modelRepository.getTranscriptionModel() ?? defaultModel;
+  /// The currently effective selection.
+  LocalTranscriptionModel get selectedModel => _modelRepository.getTranscriptionModel() ?? defaultModel;
 
   /// Download/readiness state of the active engine's model, mirrored from
   /// the pool (stable across tier switches).
   ValueListenable<ModelDownloadState> get modelDownloadState => _transcriptionService.modelDownloadState;
 
-  /// Whether a usable model file for [model] is already on disk.
-  Future<bool> isModelDownloaded(String model) => LocalWhisperTranscriptionDataSource.isModelDownloaded(model);
+  /// Whether a usable model file for the [tier] is already on disk.
+  Future<bool> isModelDownloaded(String tier) => LocalWhisperTranscriptionDataSource.isModelDownloaded(tier);
 
   /// Starts (or retries) the active model download without waiting for the
   /// first transcription; failures land in [modelDownloadState] and are only
@@ -68,7 +68,7 @@ class TranscriptionModelService {
   /// Applies [model] ([defaultModel] clears the override): switches the pool
   /// (regenerating every stored transcript) and persists the choice. Throws
   /// when the switch fails; nothing is persisted then.
-  Future<void> setModel(String model) {
+  Future<void> setModel(LocalTranscriptionModel model) {
     final override = model == defaultModel ? null : model;
 
     final task = _queue.then((_) async {

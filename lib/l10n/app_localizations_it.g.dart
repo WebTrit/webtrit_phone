@@ -2953,6 +2953,12 @@ class AppLocalizationsIt extends AppLocalizations {
       'Si applica a tutti i messaggi: il modello viene scaricato al primo utilizzo e le trascrizioni esistenti vengono rigenerate con il nuovo modello.';
 
   @override
+  String get transcriptionSettings_Model_offSubtitle => 'I messaggi vocali non vengono trascritti';
+
+  @override
+  String get transcriptionSettings_Model_offTitle => 'Disattivato';
+
+  @override
   String get transcriptionSettings_Widget_screenTitle => 'Modello di trascrizione';
 
   @override

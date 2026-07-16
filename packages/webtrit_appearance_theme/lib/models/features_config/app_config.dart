@@ -779,11 +779,12 @@ class AppConfigTranscription with _$AppConfigTranscription {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigTranscriptionLocal with _$AppConfigTranscriptionLocal {
-  const AppConfigTranscriptionLocal({this.model = 'base'});
+  const AppConfigTranscriptionLocal({this.model = 'off'});
 
-  /// Whisper model tier downloaded to the device (tiny, base, small, ...);
-  /// larger tiers transcribe better but cost more download size and CPU.
-  /// This is the default the user's in-app model choice falls back to.
+  /// `off` (no default model - the user opts in from the transcription
+  /// settings) or a Whisper model tier downloaded to the device (tiny, base,
+  /// small, ...); larger tiers transcribe better but cost more download size
+  /// and CPU. This is the default the user's in-app choice falls back to.
   @override
   final String model;
 
