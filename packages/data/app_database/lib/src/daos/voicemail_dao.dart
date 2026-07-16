@@ -134,10 +134,11 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
               transcriptions.mediaId.equalsExp(voicemail.id),
         ),
       ])
-      // The trailing source-priority term is a per-voicemail tie-break so a
-      // sender number shared by a local and an external (PBX) contact
-      // resolves to the external one (the first row kept by the collapse).
-      ..orderBy([OrderingTerm.asc(voicemail.rowId), ...contacts.sourcePriorityOrder()]);
+      // Newest voicemail first; the trailing source-priority term is a
+      // per-voicemail tie-break so a sender number shared by a local and an
+      // external (PBX) contact resolves to the external one (the first row
+      // kept by the collapse).
+      ..orderBy([OrderingTerm.desc(voicemail.date), ...contacts.sourcePriorityOrder()]);
   }
 
   /// The contact join yields one row per matching contact; keep exactly one
