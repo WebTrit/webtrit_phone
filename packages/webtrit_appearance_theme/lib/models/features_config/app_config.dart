@@ -747,7 +747,7 @@ class ChatContactInfo with _$ChatContactInfo {
 @JsonSerializable(explicitToJson: true)
 class AppConfigTranscription with _$AppConfigTranscription {
   const AppConfigTranscription({
-    this.mode = 'disabled',
+    this.mode = 'local',
     this.language,
     this.local = const AppConfigTranscriptionLocal(),
     this.remote = const AppConfigTranscriptionRemote(),

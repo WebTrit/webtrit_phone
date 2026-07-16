@@ -25,10 +25,10 @@ void main() {
       expect(config.remoteModel, 'large-v3');
     });
 
-    test('defaults to the disabled mode with no local model selected', () {
+    test('defaults to the local mode with no local model selected', () {
       final config = TranscriptionMapper.map(const AppConfig());
 
-      expect(TranscriptionMode.fromName(config.mode), TranscriptionMode.disabled);
+      expect(TranscriptionMode.fromName(config.mode), TranscriptionMode.local);
       expect(config.language, isNull);
       expect(config.localModel, const LocalTranscriptionModelOff());
       expect(config.remoteUrl, isNull);
