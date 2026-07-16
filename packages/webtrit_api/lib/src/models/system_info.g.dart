@@ -19,6 +19,7 @@ SystemInfo _$SystemInfoFromJson(Map<String, dynamic> json) => SystemInfo(
       ? null
       : GorushInfo.fromJson(json['gorush'] as Map<String, dynamic>),
   minSupportedAppVersion: json['min_supported_app_version'] as String?,
+  bundleVersion: json['bundle_version'] as String?,
 );
 
 Map<String, dynamic> _$SystemInfoToJson(SystemInfo instance) =>
@@ -29,6 +30,7 @@ Map<String, dynamic> _$SystemInfoToJson(SystemInfo instance) =>
       'janus': instance.janus?.toJson(),
       'gorush': instance.gorush?.toJson(),
       'min_supported_app_version': instance.minSupportedAppVersion,
+      'bundle_version': instance.bundleVersion,
     };
 
 CoreInfo _$CoreInfoFromJson(Map<String, dynamic> json) => CoreInfo(

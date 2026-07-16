@@ -120,6 +120,160 @@ void main() {
     });
   });
 
+  group('watchAllContacts search with regex metacharacters', () {
+    // Regression for the "contacts search invalid regex" bug: the raw search
+    // string is interpolated into the SQL REGEXP pattern, so metacharacters
+    // must be escaped or the query throws / matches the wrong rows.
+    setUp(() async {
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          sourceId: Value('source-meta-1'),
+          firstName: Value(''),
+          lastName: Value('Acme (HQ)'),
+          aliasName: Value(''),
+        ),
+      );
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          sourceId: Value('source-meta-2'),
+          firstName: Value(''),
+          lastName: Value('C++ Developer'),
+          aliasName: Value(''),
+        ),
+      );
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          sourceId: Value('source-meta-3'),
+          firstName: Value(''),
+          lastName: Value('Cxx Developer'),
+          aliasName: Value(''),
+        ),
+      );
+    });
+
+    test('unbalanced "(" does not throw and matches literally', () async {
+      // Before the fix, RegExp('.*(.*') is an invalid pattern and the query throws.
+      final contacts = await database.contactsDao.watchAllContacts(['(']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, 'Acme (HQ)');
+    });
+
+    test('"(HQ)" matches the literal parentheses', () async {
+      final contacts = await database.contactsDao.watchAllContacts(['(HQ)']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, 'Acme (HQ)');
+    });
+
+    test('"+" is treated as a literal, not a quantifier', () async {
+      // Escaped "C\+\+" matches "C++ Developer" but not "Cxx Developer".
+      final contacts = await database.contactsDao.watchAllContacts(['C++']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, 'C++ Developer');
+    });
+  });
+
+  group('watchAllContacts CJK and Thai search', () {
+    setUp(() async {
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          sourceId: Value('source-cjk'),
+          firstName: Value(''),
+          lastName: Value('王小明'),
+          aliasName: Value(''),
+        ),
+      );
+      await database.contactsDao.insertOnUniqueConflictUpdateContact(
+        ContactDataCompanion(
+          sourceType: Value(ContactSourceTypeEnum.local),
+          sourceId: Value('source-thai'),
+          firstName: Value(''),
+          lastName: Value('สมชาย'),
+          aliasName: Value(''),
+        ),
+      );
+    });
+
+    test('matches a CJK (Chinese/Taiwanese) substring', () async {
+      final contacts = await database.contactsDao.watchAllContacts(['小明']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, '王小明');
+    });
+
+    test('matches a full CJK name', () async {
+      final contacts = await database.contactsDao.watchAllContacts(['王小明']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, '王小明');
+    });
+
+    test('matches a Thai substring', () async {
+      final contacts = await database.contactsDao.watchAllContacts(['ชาย']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, 'สมชาย');
+    });
+  });
+
+  group('watchAllContacts regex injection is neutralized', () {
+    // The seed data has two contacts ("Тарас Шевченко", "Шевченко Кобзар"),
+    // both sharing phone number "1234567890". A crafted search must be treated
+    // as a literal string, never as an active pattern that over-matches.
+
+    test('".*" does not act as a wildcard and matches nothing', () async {
+      // Unescaped, ".*" makes REGEXP match every row (full contact-list leak).
+      final contacts = await database.contactsDao.watchAllContacts(['.*']).first;
+
+      expect(contacts, isEmpty);
+    });
+
+    test('alternation "Тарас|Кобзар" is literal and matches nothing', () async {
+      // Unescaped, "|" would match either alternative and return both contacts.
+      final contacts = await database.contactsDao.watchAllContacts(['Тарас|Кобзар']).first;
+
+      expect(contacts, isEmpty);
+    });
+
+    test('"\\d" does not match digits in the phone number', () async {
+      // Unescaped, "\d" would match the "1234567890" phone of both contacts.
+      final contacts = await database.contactsDao.watchAllContacts([r'\d']).first;
+
+      expect(contacts, isEmpty);
+    });
+
+    test('".*" still works as a plain prefix on a real query', () async {
+      // Sanity: escaping the injection must not break normal substring search.
+      final contacts = await database.contactsDao.watchAllContacts(['Тарас']).first;
+
+      expect(contacts.length, 1);
+      expect(contacts.single.contact.lastName, 'Тарас Шевченко');
+    });
+  });
+
+  group('getContactByPhoneMatchedEnding regex escaping', () {
+    // Both seed contacts share phone "1234567890".
+    test('a metacharacter-bearing number does not throw and matches nothing', () async {
+      // Unescaped, "+99" makes the pattern '.*+99' which Dart RegExp rejects.
+      final contact = await database.contactsDao.getContactByPhoneMatchedEnding('+99');
+
+      expect(contact, isNull);
+    });
+
+    test('a plain ending still matches', () async {
+      final contact = await database.contactsDao.getContactByPhoneMatchedEnding('7890');
+
+      expect(contact, isNotNull);
+      expect(contact!.phones.first.number, '1234567890');
+    });
+  });
+
   group('getContactByPhoneNumber', () {
     test('should return contact for existing phone number', () async {
       final fetchedContact = await database.contactsDao.getContactByPhoneNumber('1234567890');

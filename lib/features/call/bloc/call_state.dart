@@ -289,6 +289,7 @@ class ActiveCall with _$ActiveCall implements CallEntry {
     this.failure,
     this.localStream,
     this.remoteStream,
+    this.remoteCameraEnabled,
     this.speakerOnBeforeMinimize,
     this.iceCandidates = const [],
     this.iceConnectionIssue,
@@ -374,6 +375,14 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   @override
   final MediaStream? remoteStream;
 
+  /// Last known remote camera state, delivered via the media_state signaling
+  /// event. `null` until the remote side reports anything. Soft mute keeps
+  /// the negotiated video track alive (black frames), so the track presence
+  /// alone cannot tell whether the remote camera is actually on - this flag
+  /// can.
+  @override
+  final bool? remoteCameraEnabled;
+
   @override
   final bool? speakerOnBeforeMinimize;
 
@@ -404,12 +413,21 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   ///
   /// Returns `true` when the remote stream contains at least one video track
   /// (confirmed by WebRTC). Falls back to the logical [video] flag when the
-  /// stream is absent or audio-only — this covers the window between the SDP
+  /// stream is absent or audio-only. Note [video] is the LOCAL camera intent
+  /// (see its doc), used here only as a provisional proxy until the remote
+  /// tracks confirm; the authoritative remote signal is [remoteCameraEnabled].
+  /// The fallback covers the window between the SDP
   /// negotiation completing and the first video frame arriving, which is
   /// especially common after a glare-resolution rollback where [onAddStream]
   /// does not re-fire for the updated stream and only [onAddTrack] signals the
   /// new video track.
-  bool get remoteVideo => (remoteStream?.getVideoTracks().isNotEmpty ?? false) || video;
+  /// An explicit remote camera-off report ([remoteCameraEnabled] == false)
+  /// overrides both: a soft-muted remote track keeps delivering black frames,
+  /// which must not present the call as a video call.
+  bool get remoteVideo {
+    if (remoteCameraEnabled == false) return false;
+    return (remoteStream?.getVideoTracks().isNotEmpty ?? false) || video;
+  }
 
   /// Indicates whether the [localStream] contains at least one video track.
   ///

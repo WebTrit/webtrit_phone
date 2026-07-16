@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/data/app_permissions.dart';
+import 'package:webtrit_phone/data/device_info.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 import '../models/models.dart';
@@ -19,9 +20,12 @@ part 'diagnostic_cubit.freezed.dart';
 final _logger = Logger('DiagnosticCubit');
 
 class DiagnosticCubit extends Cubit<DiagnosticState> {
-  DiagnosticCubit({required PushTokensBloc pushTokensBloc, required AppPermissions appPermissions})
-    : _appPermissions = appPermissions,
-      super(const DiagnosticState()) {
+  DiagnosticCubit({
+    required PushTokensBloc pushTokensBloc,
+    required AppPermissions appPermissions,
+    required DeviceInfo deviceInfo,
+  }) : _appPermissions = appPermissions,
+       super(DiagnosticState(isXiaomiDevice: _isXiaomiDevice(deviceInfo))) {
     fetchStatuses();
     _onPushTokensChanged(pushTokensBloc.state);
 
@@ -29,6 +33,15 @@ class DiagnosticCubit extends Cubit<DiagnosticState> {
   }
 
   final AppPermissions _appPermissions;
+
+  /// Whether [deviceInfo] belongs to the Xiaomi/HyperOS family (MIUI, Redmi,
+  /// Poco), which share the same lock-screen restriction. Mirrors the
+  /// substring match used natively by `PermissionsHelper.isXiaomiFamily` and
+  /// by `PermissionsCubit._checkManufacturer`.
+  static bool _isXiaomiDevice(DeviceInfo deviceInfo) {
+    final manufacturer = deviceInfo.manufacturer.toLowerCase();
+    return manufacturer.contains('xiaomi') || manufacturer.contains('redmi') || manufacturer.contains('poco');
+  }
 
   late final StreamSubscription<PushTokensState> _pushTokensSubscription;
 
@@ -55,6 +68,8 @@ class DiagnosticCubit extends Cubit<DiagnosticState> {
     await _fetchPermissionsStatus();
     await _fetchBatteryModeStatus();
     await _fetchCallDeliveryModeStatus();
+    await _fetchBackgroundActivityStartStatus();
+    await _fetchShowWhenLockedStatus();
   }
 
   Future<void> _fetchPermissionsStatus() async {
@@ -87,6 +102,32 @@ class DiagnosticCubit extends Cubit<DiagnosticState> {
     } catch (e) {
       _logger.warning('fetchCallDeliveryModeStatus', e);
     }
+  }
+
+  Future<void> _fetchBackgroundActivityStartStatus() async {
+    try {
+      final status = await _appPermissions.backgroundActivityStartStatus();
+      emit(state.copyWith(backgroundActivityStartStatus: status));
+    } catch (e) {
+      _logger.warning('fetchBackgroundActivityStartStatus', e);
+    }
+  }
+
+  Future<void> openBackgroundActivityStartSettings() async {
+    await _appPermissions.toBackgroundActivityStartSettings();
+  }
+
+  Future<void> _fetchShowWhenLockedStatus() async {
+    try {
+      final status = await _appPermissions.showOnLockscreenStatus();
+      emit(state.copyWith(showWhenLockedStatus: status));
+    } catch (e) {
+      _logger.warning('fetchShowWhenLockedStatus', e);
+    }
+  }
+
+  Future<void> openShowWhenLockedSettings() async {
+    await _appPermissions.toShowOnLockscreenSettings();
   }
 
   Future<void> handleRequestPermission(PermissionWithStatus permission) async {

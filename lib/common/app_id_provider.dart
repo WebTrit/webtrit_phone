@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:firebase_app_installations/firebase_app_installations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
@@ -28,7 +30,11 @@ class FirebaseAppIdProvider implements AppIdProvider {
   @override
   Future<String> getId() async {
     try {
-      final id = await FirebaseInstallations.instance.getId();
+      final future = FirebaseInstallations.instance.getId();
+      // On web a misconfigured Installations promise can never settle, which would
+      // hang bootstrap forever (the catch below never fires). Bound it so we fall
+      // back to a locally generated id instead of blocking startup.
+      final id = await (kIsWeb ? future.timeout(const Duration(seconds: 5)) : future);
       await _saveIdToSharedPreferences(id);
       return id;
     } catch (e) {
@@ -41,11 +47,13 @@ class FirebaseAppIdProvider implements AppIdProvider {
   Stream<String> get onIdChange => _idChangeController.stream;
 
   void _initializeIdListener() {
+    // Persist a rotated installation id and republish it to listeners; onError
+    // keeps a transient stream error from escaping to the zone.
     FirebaseInstallations.instance.onIdChange.listen((id) async {
       await _saveIdToSharedPreferences(id);
       _idChangeController.add(id);
       _logger.info('Firebase ID changed: $id');
-    });
+    }, onError: (Object e, StackTrace s) => _logger.warning('Firebase onIdChange stream error', e, s));
   }
 
   Future<void> _saveIdToSharedPreferences(String id) async {
@@ -55,6 +63,14 @@ class FirebaseAppIdProvider implements AppIdProvider {
 
   Future<String> _generateFallbackId() async {
     final prefs = await SharedPreferences.getInstance();
+
+    // Reuse a previously stored id so the fallback identifier stays stable across
+    // restarts/reloads (important on web, where getId() may keep timing out);
+    // generate a fresh one only on first use.
+    final existing = prefs.getString(_appIdKey);
+    if (existing != null && existing.isNotEmpty) {
+      return existing;
+    }
 
     final newId = _generateRandomId();
     await prefs.setString(_appIdKey, newId);

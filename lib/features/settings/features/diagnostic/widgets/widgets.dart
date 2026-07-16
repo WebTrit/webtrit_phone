@@ -9,3 +9,5 @@ export 'diagnostic_permisstion_details.dart';
 export 'diagnostic_push_details.dart';
 export 'diagnostic_network_test_details.dart';
 export 'diagnostic_network_test_item.dart';
+export 'diagnostic_xiaomi_permission_details.dart';
+export 'diagnostic_xiaomi_permission_item.dart';

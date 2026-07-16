@@ -10,12 +10,17 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 final _logger = Logger('CallPullCubit');
 
 class CallPullCubit extends Cubit<List<DialogInfo>> {
-  CallPullCubit({required this.userRepository, required this.dialogInfoRepository, required this.linesStateRepository})
-    : super([]);
+  CallPullCubit({
+    required this.userRepository,
+    required this.dialogInfoRepository,
+    required this.linesStateRepository,
+    required this.callPullVideoStrategy,
+  }) : super([]);
 
   final UserRepository userRepository;
   final DialogInfoRepository dialogInfoRepository;
   final LinesStateRepository linesStateRepository;
+  final CallPullVideoStrategy callPullVideoStrategy;
   final _activeCallIdsTtl = Duration(minutes: 5);
   final LruMap<String, DateTime> _activeCallIds = LruMap<String, DateTime>(maximumSize: 50);
   StreamSubscription? _userSub;
@@ -102,7 +107,11 @@ class CallPullCubit extends Cubit<List<DialogInfo>> {
     // Show only pullable for this feature
     // because showing other states have more troubles than advantages
     // e.g log dublicates on call forking, ghost calls on app restart and state sync gapps
-    final pullable = otherDevices.where((e) => e.pullable).toList();
+    //
+    // Under the hide-video strategy, also exclude known-video dialogs from the pull
+    // list (the soft-mute strategy keeps them pullable; see CallPullVideoStrategy).
+    final hideVideo = callPullVideoStrategy == CallPullVideoStrategy.hideVideo;
+    final pullable = otherDevices.where((e) => e.pullable && !(hideVideo && e.hasVideo == true)).toList();
 
     _logger.info(
       'Computed: '

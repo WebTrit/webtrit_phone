@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.g.dart';
 import 'app_localizations_it.g.dart';
+import 'app_localizations_th.g.dart';
 import 'app_localizations_uk.g.dart';
 
 // ignore_for_file: type=lint
@@ -91,7 +92,7 @@ abstract class AppLocalizations {
   ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('it'), Locale('uk')];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('it'), Locale('th'), Locale('uk')];
 
   /// Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted.
   ///
@@ -1209,6 +1210,60 @@ abstract class AppLocalizations {
   /// **'Restricted Access'**
   String get diagnostic_permissionStatus_restricted;
 
+  /// No description provided for @diagnostic_specialPermissionStatus_denied.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Denied'**
+  String get diagnostic_specialPermissionStatus_denied;
+
+  /// No description provided for @diagnostic_specialPermissionStatus_granted.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Granted'**
+  String get diagnostic_specialPermissionStatus_granted;
+
+  /// No description provided for @diagnostic_specialPermissionStatus_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get diagnostic_specialPermissionStatus_unknown;
+
+  /// No description provided for @diagnostic_xiaomi_backgroundActivityStart_description.
+  ///
+  /// In en, this message translates to:
+  /// **'MIUI/HyperOS restricts showing the incoming-call screen while the app runs in the background unless the \"Display pop-up windows while running in background\" permission is granted for this app.'**
+  String get diagnostic_xiaomi_backgroundActivityStart_description;
+
+  /// No description provided for @diagnostic_xiaomi_backgroundActivityStart_tile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Display pop-up windows while running in background'**
+  String get diagnostic_xiaomi_backgroundActivityStart_tile_title;
+
+  /// No description provided for @diagnostic_xiaomi_groupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Xiaomi permissions'**
+  String get diagnostic_xiaomi_groupTitle;
+
+  /// No description provided for @diagnostic_xiaomi_navigate_section.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to the lock screen permissions section'**
+  String get diagnostic_xiaomi_navigate_section;
+
+  /// No description provided for @diagnostic_xiaomi_showWhenLocked_description.
+  ///
+  /// In en, this message translates to:
+  /// **'MIUI/HyperOS restricts showing the incoming-call screen over the lock screen unless the \"Show on Lock screen\" permission is granted for this app.'**
+  String get diagnostic_xiaomi_showWhenLocked_description;
+
+  /// No description provided for @diagnostic_xiaomi_showWhenLocked_tile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Show on lock screen'**
+  String get diagnostic_xiaomi_showWhenLocked_tile_title;
+
   /// No description provided for @diagnosticPushDetails_configuration_title.
   ///
   /// In en, this message translates to:
@@ -1532,6 +1587,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ukrainian'**
   String get locale_uk;
+
+  /// No description provided for @locale_th.
+  ///
+  /// In en, this message translates to:
+  /// **'Thai'**
+  String get locale_th;
 
   /// No description provided for @login_Button_coreUrlAssignProceed.
   ///
@@ -2004,11 +2065,23 @@ abstract class AppLocalizations {
   /// **'Your app version is no longer supported. Please update the application to continue.'**
   String get main_AppUpdateRequiredDialog_description;
 
-  /// Label above the running app version on the update-required prompt.
+  /// Label above the running app's internal app_version on the update-required prompt.
   ///
   /// In en, this message translates to:
-  /// **'Current version'**
+  /// **'App version'**
   String get main_AppUpdateRequiredDialog_currentVersionLabel;
+
+  /// Label above the per-client build version+code (native versionName+versionCode) on the update-required prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Build version'**
+  String get main_AppUpdateRequiredDialog_buildVersionLabel;
+
+  /// Composed current-version value on version-gate surfaces: the internal app_version leads, the per-client build (store distribution) version follows in parentheses.
+  ///
+  /// In en, this message translates to:
+  /// **'{appVersion} (build {storeVersion})'**
+  String main_AppUpdateRequiredDialog_currentVersionValue(String storeVersion, String appVersion);
 
   /// Label above the minimum supported app version on the update-required prompt.
   ///
@@ -2883,14 +2956,20 @@ abstract class AppLocalizations {
   /// No description provided for @permission_manufacturer_Text_xiaomi_tip1.
   ///
   /// In en, this message translates to:
-  /// **'Go to \"App settings\" → \"Notifications\".'**
+  /// **'Open this app\'s \"Other permissions\" screen using the button below.'**
   String get permission_manufacturer_Text_xiaomi_tip1;
 
   /// No description provided for @permission_manufacturer_Text_xiaomi_tip2.
   ///
   /// In en, this message translates to:
-  /// **'Find and turn on \"Lockscreen notifications\".'**
+  /// **'Turn on \"Display pop-up windows while running in background\" so incoming calls can appear while the app is in the background.'**
   String get permission_manufacturer_Text_xiaomi_tip2;
+
+  /// No description provided for @permission_manufacturer_Text_xiaomi_tip3.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on \"Show on lock screen\" so incoming calls can appear over the lock screen.'**
+  String get permission_manufacturer_Text_xiaomi_tip3;
 
   /// No description provided for @permission_Text_description.
   ///
@@ -3491,6 +3570,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'App Version'**
   String get settings_AboutText_AppVersion;
+
+  /// No description provided for @settings_AboutText_BundleVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Bundle version'**
+  String get settings_AboutText_BundleVersion;
 
   /// No description provided for @settings_AboutText_CallkeepVersion.
   ///
@@ -5674,7 +5759,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'it', 'uk'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'it', 'th', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -5687,6 +5772,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEn();
     case 'it':
       return AppLocalizationsIt();
+    case 'th':
+      return AppLocalizationsTh();
     case 'uk':
       return AppLocalizationsUk();
   }

@@ -1,5 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:drift/wasm.dart';
+import 'package:logging/logging.dart';
+
+final _logger = Logger('AppDatabase.web');
 
 /// Not supported on Web — [DriftIsolate] server spawning is a native-only feature.
 QueryExecutor createAppDatabaseNative(
@@ -32,6 +35,22 @@ DatabaseConnection createAppDatabaseConnection(
         sqlite3Uri: Uri.parse('sqlite3.wasm'),
         driftWorkerUri: Uri.parse('drift_worker.js'),
       );
+
+      // drift transparently downgrades the storage tier (OPFS -> IndexedDB ->
+      // in-memory). The in-memory fallback (e.g. private/incognito mode or a
+      // browser without OPFS/IndexedDB) is NOT persistent: all local data is
+      // lost on reload. Surface it instead of failing silently.
+      if (result.chosenImplementation == WasmStorageImplementation.inMemory) {
+        _logger.warning(
+          'Web database has no persistent storage (in-memory fallback) - local data '
+          'will be lost on reload. missingFeatures: ${result.missingFeatures}',
+        );
+      } else {
+        _logger.info(
+          'Web database storage: ${result.chosenImplementation}'
+          '${result.missingFeatures.isEmpty ? '' : ' (missing: ${result.missingFeatures})'}',
+        );
+      }
 
       return result.resolvedExecutor;
     }),

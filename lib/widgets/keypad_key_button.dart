@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use_from_same_package
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'keypad_key_style.dart';
@@ -8,7 +9,7 @@ import 'keypad_key_styles.dart';
 export 'keypad_key_style.dart';
 export 'keypad_key_styles.dart';
 
-class KeypadKeyButton extends StatelessWidget {
+class KeypadKeyButton extends StatefulWidget {
   const KeypadKeyButton({
     super.key,
     required this.text,
@@ -44,45 +45,73 @@ class KeypadKeyButton extends StatelessWidget {
   final double? subtextFontSize;
 
   @override
+  State<KeypadKeyButton> createState() => _KeypadKeyButtonState();
+}
+
+class _KeypadKeyButtonState extends State<KeypadKeyButton> {
+  DateTime? _pointerDownAt;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final themed = theme.extension<KeypadKeyStyles>()?.primary;
 
-    final merged = KeypadKeyStyle.merge(themed, style);
+    final merged = KeypadKeyStyle.merge(themed, widget.style);
 
     final textStyle = (merged.textStyle ?? theme.textTheme.headlineLarge)?.copyWith(
-      fontSize: textFontSize ?? merged.textStyle?.fontSize,
-      color: textColor ?? merged.textStyle?.color,
+      fontSize: widget.textFontSize ?? merged.textStyle?.fontSize,
+      color: widget.textColor ?? merged.textStyle?.color,
       height: 1.0,
     );
 
     // Derive subtext color from text color with reduced opacity if not set.
     Color? derivedSubColor = textStyle?.color;
     if (derivedSubColor != null) {
-      var a = derivedSubColor.a - _subtextAlphaReduction;
-      if (a < _minAlphaValue) a = _minAlphaValue;
+      var a = derivedSubColor.a - KeypadKeyButton._subtextAlphaReduction;
+      if (a < KeypadKeyButton._minAlphaValue) a = KeypadKeyButton._minAlphaValue;
       derivedSubColor = derivedSubColor.withValues(alpha: a);
     }
 
     final subStyle = (merged.subtextStyle ?? theme.textTheme.bodyMedium)?.copyWith(
-      fontSize: subtextFontSize ?? merged.subtextStyle?.fontSize,
+      fontSize: widget.subtextFontSize ?? merged.subtextStyle?.fontSize,
       color: merged.subtextStyle?.color ?? derivedSubColor,
       height: 1.0,
     );
 
-    return TextButton(
-      onPressed: () => onKeyPressed(text),
-      onLongPress: subtext.length != 1 ? null : () => onKeyPressed(subtext),
-      style: merged.buttonStyle,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(text, style: textStyle),
-          Padding(
-            padding: _subextPadding,
-            child: Text(subtext, style: subStyle),
-          ),
-        ],
+    final hasLongPress = widget.subtext.length == 1;
+
+    // Custom tap recognition used to avoid input throttling on low-end devices (see WT-1436)
+    // somehow TextButton's built-in onPressed not fired after pointer up while animation is present
+    // maybe later will be fixed on Flutter side, but for now we use Listener to handle pointer events directly
+    return Listener(
+      key: Key(widget.text),
+      onPointerDown: (_) {
+        _pointerDownAt = DateTime.now();
+        if (!hasLongPress) widget.onKeyPressed(widget.text);
+      },
+      onPointerUp: hasLongPress
+          ? (_) {
+              final downAt = _pointerDownAt;
+              if (downAt == null) return;
+              if (DateTime.now().difference(downAt) < kLongPressTimeout) {
+                widget.onKeyPressed(widget.text);
+              }
+            }
+          : null,
+      child: TextButton(
+        onPressed: () {},
+        onLongPress: hasLongPress ? () => widget.onKeyPressed(widget.subtext) : null,
+        style: merged.buttonStyle,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(widget.text, style: textStyle),
+            Padding(
+              padding: KeypadKeyButton._subextPadding,
+              child: Text(widget.subtext, style: subStyle),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -19,6 +19,7 @@ class SignalingDialogInfo extends Equatable {
     this.remoteDisplayName,
     required this.arrivalVersion,
     required this.arrivalTime,
+    this.hasVideo,
   });
 
   final String id;
@@ -34,6 +35,7 @@ class SignalingDialogInfo extends Equatable {
   final String? remoteDisplayName;
   final String arrivalVersion;
   final DateTime arrivalTime;
+  final bool? hasVideo;
 
   factory SignalingDialogInfo.fromJson(Map<String, dynamic> json) {
     return SignalingDialogInfo(
@@ -52,6 +54,7 @@ class SignalingDialogInfo extends Equatable {
       remoteDisplayName: json['remote_display_name'],
       arrivalVersion: json['arrival_version'],
       arrivalTime: DateTime.parse(json['arrival_time'] as String),
+      hasVideo: json['has_video'] as bool?,
     );
   }
 
@@ -70,11 +73,12 @@ class SignalingDialogInfo extends Equatable {
     remoteDisplayName,
     arrivalVersion,
     arrivalTime,
+    hasVideo,
   ];
 
   @override
   String toString() {
-    return 'SignalingDialogInfo{id: $id, entityNumber: $entityNumber, state: $state, callId: $callId, direction: $direction, localTag: $localTag, localNumber: $localNumber, localDisplayName: $localDisplayName, remoteTag: $remoteTag, remoteNumber: $remoteNumber, remoteDisplayName: $remoteDisplayName, arrivalVersion: $arrivalVersion, arrivalTime: $arrivalTime}';
+    return 'SignalingDialogInfo{id: $id, entityNumber: $entityNumber, state: $state, callId: $callId, direction: $direction, localTag: $localTag, localNumber: $localNumber, localDisplayName: $localDisplayName, remoteTag: $remoteTag, remoteNumber: $remoteNumber, remoteDisplayName: $remoteDisplayName, arrivalVersion: $arrivalVersion, arrivalTime: $arrivalTime, hasVideo: $hasVideo}';
   }
 
   Map<String, dynamic> toJson() => {
@@ -91,5 +95,6 @@ class SignalingDialogInfo extends Equatable {
     if (remoteDisplayName != null) 'remote_display_name': remoteDisplayName,
     'arrival_version': arrivalVersion,
     'arrival_time': arrivalTime.toIso8601String(),
+    if (hasVideo != null) 'has_video': hasVideo,
   };
 }

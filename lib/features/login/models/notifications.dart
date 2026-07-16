@@ -172,13 +172,25 @@ final class CoreVersionUnsupportedErrorNotification extends MessageNotification 
 }
 
 final class AppVersionUnsupportedErrorNotification extends MessageNotification {
-  const AppVersionUnsupportedErrorNotification(this.actual, this.minSupported);
+  const AppVersionUnsupportedErrorNotification({
+    required this.appVersion,
+    required this.minSupported,
+    required this.storeVersion,
+  });
 
-  final String actual;
+  /// Internal app_version the gate compared against [minSupported].
+  final String appVersion;
   final String minSupported;
+
+  /// Per-client build version+code of the installed build (versionName +
+  /// versionCode, e.g. "4.4.9+449000002"); shown in parentheses so users and
+  /// support can match the numbers from the store console (debug/sideload
+  /// builds carry the literal 0.0.0+0 placeholder).
+  final String storeVersion;
 
   @override
   String l10n(BuildContext context) {
+    final actual = context.l10n.main_AppUpdateRequiredDialog_currentVersionValue(storeVersion, appVersion);
     return context.l10n.login_AppVersionUnsupportedExceptionError(actual, minSupported);
   }
 }

@@ -98,6 +98,7 @@ AppConfig createMockAppConfig() {
   when(() => appConfig.callConfig).thenReturn(call);
   when(() => appConfig.contacts).thenReturn(contacts);
   when(() => appConfig.messaging).thenReturn(messaging);
+  when(() => appConfig.localization).thenReturn(const AppConfigLocalization());
   when(() => appConfig.supported).thenReturn([]);
 
   return appConfig;

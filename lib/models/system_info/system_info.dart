@@ -25,6 +25,7 @@ class WebtritSystemInfo with EquatableMixin {
     this.janus,
     this.gorush,
     this.minSupportedAppVersion,
+    this.bundleVersion,
   });
 
   final CoreInfo core;
@@ -36,6 +37,11 @@ class WebtritSystemInfo with EquatableMixin {
   /// Minimum app version the backend declares it supports. `null` = the
   /// backend does not enforce a minimum.
   final Version? minSupportedAppVersion;
+
+  /// Version of the deployment bundle (e.g. the Add-on Mart package version).
+  /// `null` = not configured on the backend. Raw string: the bundle version
+  /// format is not guaranteed to be semver.
+  final String? bundleVersion;
 
   /// Whether [appVersion] satisfies the backend-declared minimum supported app
   /// version. This is the inverse of the core-compatibility check: here the
@@ -54,7 +60,7 @@ class WebtritSystemInfo with EquatableMixin {
   }
 
   @override
-  List<Object?> get props => [core, postgres, adapter, janus, gorush, minSupportedAppVersion];
+  List<Object?> get props => [core, postgres, adapter, janus, gorush, minSupportedAppVersion, bundleVersion];
 
   @override
   bool get stringify => true;

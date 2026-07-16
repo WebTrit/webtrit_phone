@@ -292,6 +292,23 @@ extension AppLocalizationsExtension on AppLocalizations {
         diagnostic_permissionStatus_provisional,
       'diagnostic_permissionStatus_restricted' =>
         diagnostic_permissionStatus_restricted,
+      'diagnostic_specialPermissionStatus_denied' =>
+        diagnostic_specialPermissionStatus_denied,
+      'diagnostic_specialPermissionStatus_granted' =>
+        diagnostic_specialPermissionStatus_granted,
+      'diagnostic_specialPermissionStatus_unknown' =>
+        diagnostic_specialPermissionStatus_unknown,
+      'diagnostic_xiaomi_backgroundActivityStart_description' =>
+        diagnostic_xiaomi_backgroundActivityStart_description,
+      'diagnostic_xiaomi_backgroundActivityStart_tile_title' =>
+        diagnostic_xiaomi_backgroundActivityStart_tile_title,
+      'diagnostic_xiaomi_groupTitle' => diagnostic_xiaomi_groupTitle,
+      'diagnostic_xiaomi_navigate_section' =>
+        diagnostic_xiaomi_navigate_section,
+      'diagnostic_xiaomi_showWhenLocked_description' =>
+        diagnostic_xiaomi_showWhenLocked_description,
+      'diagnostic_xiaomi_showWhenLocked_tile_title' =>
+        diagnostic_xiaomi_showWhenLocked_tile_title,
       'diagnosticPushDetails_configuration_title' =>
         diagnosticPushDetails_configuration_title,
       'diagnosticPushDetails_errorMessage_intro' =>
@@ -386,6 +403,7 @@ extension AppLocalizationsExtension on AppLocalizations {
       'locale_en' => locale_en,
       'locale_it' => locale_it,
       'locale_uk' => locale_uk,
+      'locale_th' => locale_th,
       'login_Button_coreUrlAssignProceed' => login_Button_coreUrlAssignProceed,
       'login_Button_otpSigninRequestProceed' =>
         login_Button_otpSigninRequestProceed,
@@ -507,6 +525,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         main_AppUpdateRequiredDialog_description,
       'main_AppUpdateRequiredDialog_currentVersionLabel' =>
         main_AppUpdateRequiredDialog_currentVersionLabel,
+      'main_AppUpdateRequiredDialog_buildVersionLabel' =>
+        main_AppUpdateRequiredDialog_buildVersionLabel,
       'main_AppUpdateRequiredDialog_minimumVersionLabel' =>
         main_AppUpdateRequiredDialog_minimumVersionLabel,
       'messaging_ActionBtn_retry' => messaging_ActionBtn_retry,
@@ -861,6 +881,7 @@ extension AppLocalizationsExtension on AppLocalizations {
       'settings_AboutText_AppSessionIdentifier' =>
         settings_AboutText_AppSessionIdentifier,
       'settings_AboutText_AppVersion' => settings_AboutText_AppVersion,
+      'settings_AboutText_BundleVersion' => settings_AboutText_BundleVersion,
       'settings_AboutText_CallkeepVersion' =>
         settings_AboutText_CallkeepVersion,
       'settings_AboutText_CoreVersion' => settings_AboutText_CoreVersion,
@@ -1660,6 +1681,16 @@ extension AppLocalizationsExtension on AppLocalizations {
             'main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError requires 2 arguments',
           ),
         },
+      'main_AppUpdateRequiredDialog_currentVersionValue' => switch (args) {
+        [final String storeVersion, final String appVersion] =>
+          main_AppUpdateRequiredDialog_currentVersionValue(
+            storeVersion,
+            appVersion,
+          ),
+        _ => throw ArgumentError(
+          'main_AppUpdateRequiredDialog_currentVersionValue requires 2 arguments',
+        ),
+      },
       'messaging_ConversationBuilders_contactExtension' => switch (args) {
         [final String extension] =>
           messaging_ConversationBuilders_contactExtension(extension),

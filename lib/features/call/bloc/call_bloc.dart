@@ -117,6 +117,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   final ContactResolver contactResolver;
   final CallErrorReporter callErrorReporter;
   final bool sendPresenceSettings;
+  final CallPullVideoStrategy callPullVideoStrategy;
+
+  /// Whether the remote core supports the `peer_message` side channel.
+  ///
+  /// An older core rejects an unknown `peer_message` request by closing the
+  /// signaling socket (code 4600), so [_sendMediaState] is suppressed unless
+  /// this is `true`.
+  final bool peerMessageSupported;
   final VoidCallback? onCallEnded;
   final OnDiagnosticReportRequested onDiagnosticReportRequested;
 
@@ -143,8 +151,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   late final HandshakeProcessor _handshakeProcessor;
   final ConnectivityService _connectivityService;
 
-  final _callkeepSound = WebtritCallkeepSound();
-
   CallBloc({
     required this.callLogsRepository,
     required void Function(String callId, String callerName) onMissedCall,
@@ -163,6 +169,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     required this.contactResolver,
     required this.callErrorReporter,
     required this.sendPresenceSettings,
+    required this.callPullVideoStrategy,
+    required this.peerMessageSupported,
     required this.onDiagnosticReportRequested,
     this.isCameraPermissionGranted,
     this.sdpMunger,
@@ -279,7 +287,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     await _signalingSubscription.cancel();
 
-    await _stopRingbackSound();
+    await _mediaManager.stopRingbackSound();
 
     for (final activeCall in state.activeCalls) {
       await _releaseLocalStream(activeCall.localStream);
@@ -719,7 +727,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _iceRestartDebounce.cancel(event.callId);
     _slowlinkDebounce.cancel(event.callId);
     _slowlinkHits.remove(event.callId);
-    await _stopRingbackSound();
+    await _mediaManager.stopRingbackSound();
 
     try {
       emit(
@@ -986,8 +994,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallSignalingEventUpdating() => __onCallSignalingEventUpdating(event, emit),
       _CallSignalingEventCallUpdating() => __onCallSignalingEventCallUpdating(event, emit),
       _CallSignalingEventUpdated() => __onCallSignalingEventUpdated(event, emit),
+      _CallSignalingEventPeerMediaState() => __onCallSignalingEventPeerMediaState(event, emit),
       _CallSignalingEventTransfer() => __onCallSignalingEventTransfer(event, emit),
       _CallSignalingEventTransferring() => __onCallSignalingEventTransfering(event, emit),
+      _CallSignalingEventTransferAccepted() => __onCallSignalingEventTransferAccepted(event, emit),
+      _CallSignalingEventTransferFailed() => __onCallSignalingEventTransferFailed(event, emit),
       _CallSignalingEventNotifyRefer() => __onCallSignalingEventNotifyRefer(event, emit),
       _CallSignalingEventNotifyUnknown() => __onCallSignalingEventNotifyUnknown(event, emit),
       _CallSignalingEventRegistration() => __onCallSignalingEventRegistration(event, emit),
@@ -1119,18 +1130,55 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // no early media - play ringtone
   Future<void> __onCallSignalingEventRinging(_CallSignalingEventRinging event, Emitter<CallState> emit) async {
-    await _playRingbackSound();
+    await _mediaManager.playRingbackSound();
 
     emit(
       state.copyWithMappedActiveCall(event.callId, (call) {
         return call.copyWith(processingStatus: CallProcessingStatus.outgoingRinging);
       }),
     );
+
+    _maybeSendPendingMediaState(event.callId);
+  }
+
+  /// Best-effort informational signal so the remote side can reflect the
+  /// camera state without SDP renegotiation - the only channel that works
+  /// while the call is still ringing.
+  void _sendMediaState(ActiveCall call, {required bool video}) {
+    // An older core does not know the peer_message request and would tear down
+    // the whole signaling socket (code 4600) in response, so skip the signal
+    // entirely when the core does not advertise support.
+    if (!peerMessageSupported) {
+      _logger.fine('_sendMediaState: skipped (core does not support peer_message) for call ${call.callId}');
+      return;
+    }
+
+    final transaction = WebtritSignalingClient.generateTransactionId();
+    _signalingModule
+        .execute(
+          MediaStatePeerMessageRequest(transaction: transaction, line: call.line, callId: call.callId, video: video),
+        )
+        ?.catchError((Object e) => _logger.info('_sendMediaState: $e'));
+  }
+
+  /// A media_state sent before the first provisional response is rejected
+  /// upstream (no early dialog to route it yet), so once 180/183 arrives
+  /// re-send the current camera state. Covers both directions: camera turned
+  /// off on a video call and a video track added to an audio call. Idempotent
+  /// payload, so repeating the offer's own state is harmless.
+  void _maybeSendPendingMediaState(String callId) {
+    final call = state.retrieveActiveCall(callId);
+    if (call == null || call.wasAccepted) return;
+
+    final videoTrack = call.localStream?.getVideoTracks().firstOrNull;
+    if (videoTrack != null) {
+      _sendMediaState(call, video: videoTrack.enabled);
+    }
   }
 
   // early media - set specified session description
   Future<void> __onCallSignalingEventProgress(_CallSignalingEventProgress event, Emitter<CallState> emit) async {
-    await _stopRingbackSound();
+    await _mediaManager.stopRingbackSound();
 
     final jsep = event.jsep;
     if (jsep != null) {
@@ -1145,6 +1193,43 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     } else {
       _logger.warning('__onCallSignalingEventProgress: jsep must not be null');
     }
+
+    _maybeSendPendingMediaState(event.callId);
+  }
+
+  /// Informational media state from the remote side (e.g. the caller turned
+  /// the camera off while this incoming call is still ringing). Carries no
+  /// SDP, so no renegotiation is involved - only the video flag and the
+  /// native call UI are updated.
+  Future<void> __onCallSignalingEventPeerMediaState(
+    _CallSignalingEventPeerMediaState event,
+    Emitter<CallState> emit,
+  ) async {
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall == null) return;
+
+    final video = event.video;
+
+    if (!activeCall.isIncoming) {
+      _logger.info('__onCallSignalingEventPeerMediaState: ignoring for ${activeCall.direction.name}');
+      return;
+    }
+
+    if (activeCall.wasAccepted) {
+      // In-call: only the remote camera state changes. The negotiated track
+      // keeps flowing (soft mute = black frames), so without this flag the UI
+      // would keep presenting a video call; `video` stays untouched - it is
+      // the LOCAL camera intent.
+      emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(remoteCameraEnabled: video)));
+      return;
+    }
+
+    // Pre-answer: the flag drives both the incoming-call UI and the answer
+    // default (a call downgraded to audio is answered as an audio call).
+    emit(
+      state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(video: video, remoteCameraEnabled: video)),
+    );
+    await callkeep.reportUpdateCall(event.callId, hasVideo: video);
   }
 
   /// Event fired when the call is accepted by any! user or call update request aplied.
@@ -1291,6 +1376,44 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final callUpdate = call.copyWith(transfer: transfer);
     emit(state.copyWithMappedActiveCall(event.callId, (_) => callUpdate));
+  }
+
+  /// The transfer completed - the backend hangs up both of the transferor's
+  /// legs right after this, so there is nothing to roll back here. Clears
+  /// the transient [Transfer] state defensively in case that hangup is
+  /// delayed, so the UI never gets stuck showing "Transferring...".
+  Future<void> __onCallSignalingEventTransferAccepted(
+    _CallSignalingEventTransferAccepted event,
+    Emitter<CallState> emit,
+  ) async {
+    final call = state.retrieveActiveCall(event.callId);
+    if (call == null || call.transfer == null) return;
+
+    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) => activeCall.copyWith(transfer: null)));
+  }
+
+  /// The backend rejected the transfer (e.g. a self-referential REFER, or the
+  /// consultation party is unreachable). Unlike [TransferringEvent] the call
+  /// is NOT hung up automatically, so roll back the transient [Transfer]
+  /// state, un-hold the call so the user can keep talking or retry, and
+  /// surface a notification - mirroring how [ReferFailed] already recovers a
+  /// blind transfer rejected mid-flight.
+  Future<void> __onCallSignalingEventTransferFailed(
+    _CallSignalingEventTransferFailed event,
+    Emitter<CallState> emit,
+  ) async {
+    final call = state.retrieveActiveCall(event.callId);
+    if (call == null) return;
+
+    _logger.warning('__onCallSignalingEventTransferFailed: transfer failed (code=${event.code}) for ${event.callId}');
+
+    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) => activeCall.copyWith(transfer: null)));
+    await callkeep.setHeld(event.callId, onHold: false);
+    // The wording ("Transfer failed, returning to active call") is generic
+    // enough for both flavors - `transfer_failed` fires the same way for
+    // blind and attended transfer, and a dedicated notification/l10n key
+    // isn't worth it just to rename this for the attended case.
+    submitNotification(BlindTransferFailedNotification());
   }
 
   Future<void> __onGlobalEventNumberPresenceUpdate(
@@ -1955,6 +2078,23 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       final peerConnection = await _createPeerConnection(event.callId, activeCall.line);
       await Future.wait(localStream.getTracks().map((track) => peerConnection.addTrack(track, localStream)));
 
+      // A pull (Replaces) takes over an existing call whose remote answer keeps its
+      // original video m-line. Under the soft-mute strategy, add a recvonly video
+      // m-line to the pull offer so the offer/answer media layouts match (otherwise
+      // setRemoteDescription rejects the answer "order of m-lines ..."). recvonly
+      // adds the m-line WITHOUT opening the camera, so an audio pull on a camera-
+      // denied / camera-less device is unaffected. Under the hide-video strategy
+      // video calls are not pullable at all; under the mirror strategy a video pull
+      // already carries a real (camera-backed) video track from the started event's
+      // video flag - so in both cases the recvonly m-line is not needed here.
+      if (activeCall.fromReplaces != null && callPullVideoStrategy == CallPullVideoStrategy.softMute) {
+        await peerConnectionPolicyApplier?.apply(
+          peerConnection,
+          hasRemoteVideo: true,
+          strategy: VideoOfferStrategy.recvonly,
+        );
+      }
+
       final localDescription = await peerConnection.createOffer({});
       sdpMunger?.apply(localDescription);
       _logger.infoPretty(localDescription.sdp, tag: '__onMutationPerformStart');
@@ -1988,7 +2128,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // Handles exceptions during the outgoing call perform event, sends a notification, stops the ringtone, and completes the peer connection with an error.
       // The specific error "Error setting ICE locally" indicates an issue with ICE (Interactive Connectivity Establishment) negotiation in the WebRTC signaling process.
       callErrorReporter.handle(e, stackTrace, '__onMutationPerformStart error:');
-      await _stopRingbackSound();
+      await _mediaManager.stopRingbackSound();
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
       add(_ResetStateEvent.completeCall(event.callId));
     }
@@ -2050,7 +2190,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
       final offer = call.incomingOffer!;
 
-      _logger.info('__onMutationPerformAnswer: processing offer, hasVideo=${offer.hasVideo}');
+      _logger.info('__onMutationPerformAnswer: processing offer, hasVideo=${offer.hasVideo}, callVideo=${call.video}');
 
       emit(
         state.copyWithMappedActiveCall(event.callId, (call) {
@@ -2058,8 +2198,15 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         }),
       );
 
+      // The camera follows the state the call PRESENTS, not the raw offer:
+      // after a soft-mute downgrade the offer still advertises m=video, and
+      // answering with the camera on would silently put the user on air in a
+      // call their UI shows as audio. `call.video` carries the offer value
+      // updated by media_state; the explicit remoteCameraEnabled check also
+      // survives incoming-event replays that reset `video` from the jsep.
+      final answerWithVideo = call.video && call.remoteCameraEnabled != false;
       final localStream = await userMediaBuilder
-          .build(video: offer.hasVideo, frontCamera: call.frontCamera, allowAudioFallback: true)
+          .build(video: answerWithVideo, frontCamera: call.frontCamera, allowAudioFallback: true)
           .timeout(_getUserMediaPushKitTimeout, onTimeout: _onGetUserMediaPushKitTimeout);
       final peerConnection = await _createPeerConnection(event.callId, call.line);
       await Future.forEach(localStream.getTracks(), (t) => peerConnection.addTrack(t, localStream));
@@ -2198,7 +2345,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> __onMutationPerformEnd(_CallMutationEventPerformEnd event, Emitter<CallState> emit) async {
     try {
-      await _stopRingbackSound();
+      await _mediaManager.stopRingbackSound();
 
       emit(
         state.copyWithMappedActiveCall(event.callId, (activeCall) {
@@ -2408,12 +2555,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
 
     if (callkeepError != null) {
-      if (callkeepError == CallkeepCallRequestError.emergencyNumber) {
-        // Self-managed phone accounts cannot place emergency calls. Explain why
-        // and offer to hand the number off to the system dialer, instead of
-        // silently switching to it.
-        submitNotification(EmergencyNumberNotification(e.handle.value));
-      } else if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
+      if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
         CrashlyticsUtils.recordError(
           'CallBloc - __onMutationControlStart selfManagedPhoneAccountNotRegistered',
           information: ['callId: $callId', 'handle: ${e.handle.value}'],
@@ -2513,6 +2655,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(
         state.copyWithMappedActiveCall(callId, (call) => call.copyWith(video: e.enabled, videoPermissionDenied: false)),
       );
+      // Soft mute changes no SDP, so the remote side cannot learn about the
+      // camera state from the media plane - signal it explicitly (matters
+      // most while the call is still ringing on the other end).
+      _sendMediaState(activeCall, video: e.enabled);
       if (e.enabled) {
         await _mediaManager.onVideoEnabled(e.callId, speakerDevice: state.availableAudioDevices.getSpeaker);
       } else {
@@ -2557,6 +2703,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       emit(
         state.copyWithMappedActiveCall(e.callId, (call) => call.copyWith(video: true, videoPermissionDenied: false)),
       );
+      // The added track reaches the remote side only after renegotiation
+      // completes (post-answer for a ringing call) - signal the camera state
+      // explicitly so the remote UI can reflect the upgrade right away.
+      _sendMediaState(activeCall, video: true);
       await _mediaManager.onVideoEnabled(e.callId, speakerDevice: state.availableAudioDevices.getSpeaker);
       await callkeep.reportUpdateCall(e.callId, hasVideo: true);
     } on UserMediaError catch (e) {
@@ -2654,6 +2804,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   ) async {
     final referorCall = e.referorCall;
     final replaceCall = e.replaceCall;
+
+    // A self-referential transfer (a REFER whose Replaces points at its own
+    // dialog) is never valid and the backend rejects it; drop the request
+    // instead of sending it, but surface it the same way a rejected request
+    // would be so a wiring regression never looks like a dead button.
+    if (referorCall.callId == replaceCall.callId) {
+      callErrorReporter.handle(
+        StateError('attended transfer: referorCall == replaceCall (${referorCall.callId})'),
+        StackTrace.current,
+        '__onMutationControlAttendedTransfer request error:',
+      );
+      return;
+    }
 
     try {
       final transferRequest = TransferRequest(
@@ -2874,7 +3037,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       call = call.copyWith(processingStatus: CallProcessingStatus.connected, acceptedTime: clock.now());
 
       if (outgoing) {
-        await _stopRingbackSound();
+        await _mediaManager.stopRingbackSound();
         await callkeep.reportConnectedOutgoingCall(event.callId);
       }
     } else {
@@ -2903,10 +3066,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         return;
       }
 
-      _logger.info(
-        '__onMutationSignalingAccepted answer SDP (callId=${event.callId}, initialAccept=$initialAccept):\n'
-        '${remoteDescription.sdp}',
-      );
+      _logger.info('__onMutationSignalingAccepted answer SDP (callId=${event.callId}, initialAccept=$initialAccept)');
+      _logger.infoPretty(remoteDescription.sdp, tag: '__onMutationSignalingAccepted answer SDP');
 
       try {
         await peerConnection.setRemoteDescription(remoteDescription);
@@ -2926,7 +3087,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onMutationSignalingHangup(_CallMutationEventSignalingHangup event, Emitter<CallState> emit) async {
-    _stopRingbackSound().ignore();
+    _mediaManager.stopRingbackSound().ignore();
     _signalingModule.cancelRequestsByCallId(event.callId);
 
     ActiveCall? call = state.retrieveActiveCall(event.callId);
@@ -2958,12 +3119,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       }
     }
 
-    await _peerConnectionManager.disposePeerConnection(event.callId).catchError((e) {
-      _logger.warning('__onMutationSignalingHangup: disposePeerConnection error $e');
-    });
-
+    // Invoke _releaseLocalStream before disposePeerConnection to ensure that the local media tracks are stopped and released properly.
+    // or there might be a record indicator stuck after call
     await _releaseLocalStream(call.localStream).catchError((e) {
       _logger.warning('__onMutationSignalingHangup: _releaseLocalStream error $e');
+    });
+    await _peerConnectionManager.disposePeerConnection(event.callId).catchError((e) {
+      _logger.warning('__onMutationSignalingHangup: disposePeerConnection error $e');
     });
 
     emit(state.copyWithPopActiveCall(event.callId));
@@ -3041,6 +3203,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
                 hasRemoteVideo: jsep.hasVideo,
                 localStream: localStream,
                 frontCamera: activeCall.frontCamera,
+                strategy: VideoOfferStrategy.inactiveSendrecv,
               );
             }
 
@@ -4030,6 +4193,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(_CallSignalingEvent.updating(line: event.line, callId: event.callId));
     } else if (event is UpdatedEvent) {
       add(_CallSignalingEvent.updated(line: event.line, callId: event.callId));
+    } else if (event is PeerMessageEvent) {
+      switch (event) {
+        case MediaStatePeerMessageEvent e:
+          add(_CallSignalingEvent.peerMediaState(line: e.line, callId: e.callId, video: e.video));
+        case UnknownPeerMessageEvent e:
+          _logger.info('[SIG] PeerMessageEvent: ignoring unknown type "${e.type}"');
+      }
     } else if (event is TransferEvent) {
       add(
         _CallSignalingEvent.transfer(
@@ -4075,6 +4245,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(const _CallSignalingEvent.registration(RegistrationStatus.unregistered));
     } else if (event is TransferringEvent) {
       add(_CallSignalingEvent.transferring(line: event.line, callId: event.callId));
+    } else if (event is TransferAcceptedEvent) {
+      add(_CallSignalingEvent.transferAccepted(line: event.line, callId: event.callId));
+    } else if (event is TransferFailedEvent) {
+      add(_CallSignalingEvent.transferFailed(line: event.line, callId: event.callId, code: event.code));
     } else if (event is GlobalEvent) {
       add(switch (event) {
         NumberPresenceUpdate event => _GlobalEvent.numberPresenceUpdate(
@@ -4394,10 +4568,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
     callLogsRepository.add(call);
   }
-
-  Future<void> _playRingbackSound() => _callkeepSound.playRingbackSound();
-
-  Future<void> _stopRingbackSound() => _callkeepSound.stopRingbackSound();
 
   Future<void> _releaseLocalStream(MediaStream? stream) async {
     if (stream == null) return;

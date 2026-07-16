@@ -51,10 +51,11 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
     try {
       final systemInfo = await infoRepository.getSystemInfo();
       final coreVersion = systemInfo?.core.version;
+      final bundleVersion = systemInfo?.bundleVersion;
 
       if (emit.isDone) return;
 
-      emit(state.copyWith(progress: false, coreVersion: coreVersion));
+      emit(state.copyWith(progress: false, coreVersion: coreVersion, bundleVersion: bundleVersion));
     } catch (e, stackTrace) {
       _logger.warning('_onStarted', e, stackTrace);
 

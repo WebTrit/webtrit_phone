@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:drift/drift.dart';
 import 'package:app_database/src/app_database.dart';
 
@@ -62,6 +60,17 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     ContactSourceTypeEnum sourceType,
     String sourceId,
   ) => (select(contactsTable)..where((t) => t.sourceType.equalsValue(sourceType) & t.sourceId.equals(sourceId)));
+
+  // Returns a subquery that resolves a phone number to a single winning contact ID,
+  // respecting external-over-local source priority.
+  BaseSelectStatement _contactIdSubqueryByPhone(String number) {
+    return selectOnly(contactsTable)
+      ..addColumns([contactsTable.id])
+      ..join([innerJoin(contactPhonesTable, contactPhonesTable.contactId.equalsExp(contactsTable.id))])
+      ..where(contactPhonesTable.number.equals(number))
+      ..orderBy(contactsTable.sourcePriorityOrder())
+      ..limit(1);
+  }
 
   FullContactData? _gatherSingleContact(List<TypedResult> rows) {
     if (rows.isEmpty) return null;
@@ -171,12 +180,9 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
     ]);
   }
 
-  Future<FullContactData?> getContactByPhoneNumber(String number) async {
+  Future<FullContactData?> getContactByPhoneNumber(String number) {
     final query = _joinFullData(select(contactsTable))
-      ..where(contactPhonesTable.number.equals(number))
-      ..orderBy(contactsTable.sourcePriorityOrder())
-      ..limit(1);
-
+      ..where(contactsTable.id.isInQuery(_contactIdSubqueryByPhone(number)));
     return query.get().then(_gatherSingleContact);
   }
 
@@ -198,16 +204,13 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Stream<FullContactData?> watchContactByPhoneNumber(String number) {
     final query = _joinFullData(select(contactsTable))
-      ..where(contactPhonesTable.number.equals(number))
-      ..orderBy(contactsTable.sourcePriorityOrder())
-      ..limit(1);
-
+      ..where(contactsTable.id.isInQuery(_contactIdSubqueryByPhone(number)));
     return query.watch().map(_gatherSingleContact);
   }
 
   Future<FullContactData?> getContactByPhoneMatchedEnding(String number) {
     final query = _joinFullData(select(contactsTable));
-    query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
+    query.where(contactPhonesTable.number.regexp('.*${_escapeRegExp(number)}', caseSensitive: false));
     query.orderBy(contactsTable.sourcePriorityOrder());
     query.limit(1);
 
@@ -216,7 +219,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
 
   Stream<FullContactData?> watchContactByPhoneMatchedEnding(String number) {
     final query = _joinFullData(select(contactsTable));
-    query.where(contactPhonesTable.number.regexp('.*$number', caseSensitive: false));
+    query.where(contactPhonesTable.number.regexp('.*${_escapeRegExp(number)}', caseSensitive: false));
     query.orderBy(contactsTable.sourcePriorityOrder());
     query.limit(1);
 
@@ -249,7 +252,7 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
                 contactsTable.aliasName,
                 contactPhonesTable.number,
                 contactEmailsTable.address,
-              ].map((c) => c.regexp('.*$searchBit.*', caseSensitive: false)).reduce((v, e) => v | e);
+              ].map((c) => c.regexp('.*${_escapeRegExp(searchBit)}.*', caseSensitive: false)).reduce((v, e) => v | e);
             })
             .reduce((v, e) => v | e),
       );
@@ -327,3 +330,11 @@ class ContactsDao extends DatabaseAccessor<AppDatabase> with _$ContactsDaoMixin 
         .go();
   }
 }
+
+final _regExpMetaChars = RegExp(r'[\\^$.|?*+()[\]{}]');
+
+/// Escapes regular-expression metacharacters so a raw, user-typed search string
+/// can be safely interpolated into the pattern passed to the SQL `REGEXP`
+/// operator (backed by Dart's [RegExp]). Without this, characters such as
+/// `( [ * +` would produce an invalid pattern and break the contacts search.
+String _escapeRegExp(String input) => input.replaceAllMapped(_regExpMetaChars, (match) => '\\${match[0]}');

@@ -8,6 +8,7 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -60,6 +61,7 @@ class FeatureAccess extends Equatable {
     this.systemNotificationsConfig,
     this.sipPresenceConfig,
     this.supportedConfig,
+    this.localizationConfig,
     this.coreSupport,
     this.overrides,
     this.loggingConfig,
@@ -76,6 +78,10 @@ class FeatureAccess extends Equatable {
   final SystemNotificationsConfig systemNotificationsConfig;
   final SipPresenceConfig sipPresenceConfig;
   final LoggingConfig loggingConfig;
+
+  /// Locales the app exposes for selection and auto-resolution, resolved from
+  /// the app config's language allowlist intersected with the bundled locales.
+  final LocalizationConfig localizationConfig;
 
   /// Represents the set of features explicitly supported and configured within the application's static [AppConfig].
   /// This includes features like theme mode and video call capabilities as defined in the application's build-time configuration.
@@ -110,7 +116,7 @@ class FeatureAccess extends Equatable {
       final loginConfig = LoginMapper.map(appConfig, embeddedConfig.embeddedResources);
       final bottomMenuConfig = BottomMenuMapper.map(appConfig, embeddedConfig, coreSupport, featureOverrides);
       final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupport, termsConfig);
-      final callConfig = CallMapper.map(appConfig, featureOverrides);
+      final callConfig = CallMapper.map(appConfig, featureOverrides, systemInfo);
       final messagingConfig = MessagingMapper.map(appConfig, coreSupport);
       final contactsConfig = ContactsMapper.map(appConfig);
       final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupport, appConfig, featureOverrides);
@@ -118,6 +124,7 @@ class FeatureAccess extends Equatable {
       final loggingConfig = LoggingMapper.map(appConfig, featureOverrides);
 
       final supportedConfig = SupportedMapper.map(appConfig.supported);
+      final localizationConfig = LocalizationMapper.map(appConfig);
 
       return FeatureAccess._(
         embeddedConfig,
@@ -131,6 +138,7 @@ class FeatureAccess extends Equatable {
         systemNotificationsConfig,
         sipPresenceConfig,
         supportedConfig,
+        localizationConfig,
         coreSupport,
         featureOverrides,
         loggingConfig,
@@ -155,6 +163,7 @@ class FeatureAccess extends Equatable {
     sipPresenceConfig,
     loggingConfig,
     supportedConfig,
+    localizationConfig,
     coreSupport,
     overrides,
   ];
@@ -381,7 +390,7 @@ abstract final class SettingsMapper {
 /// and environment settings.
 abstract final class CallMapper {
   /// Maps [AppConfig] to [CallCapabilitiesConfig].
-  static CallConfig map(AppConfig appConfig, FeatureOverrides featureOverrides) {
+  static CallConfig map(AppConfig appConfig, FeatureOverrides featureOverrides, WebtritSystemInfo? systemInfo) {
     final rawCallConfig = appConfig.callConfig;
     final transferConfig = rawCallConfig.transfer;
     final encodingConfig = rawCallConfig.encoding;
@@ -396,13 +405,27 @@ abstract final class CallMapper {
     // Apply remote overrides
     final isVideoEnabled = featureOverrides.isVideoCallEnabled ?? rawCallConfig.videoEnabled;
 
+    // Call Pull video strategy: Remote Config override wins, else the configurator
+    // default (SupportedFeature.callPull), else soft-mute.
+    final configuratorCallPullStrategy = CallPullVideoStrategy.tryParse(
+      appConfig.supported.whereType<SupportedCallPull>().firstOrNull?.videoStrategy,
+    );
+    final callPullVideoStrategy =
+        featureOverrides.callPullVideoStrategy ?? configuratorCallPullStrategy ?? CallPullVideoStrategy.softMute;
+
+    // Version-gated: the in-call peer_message side channel is only safe to use
+    // when the remote core understands the request (see CoreInfo.supportsPeerMessage).
+    final isPeerMessageEnabled = systemInfo?.core.supportsPeerMessage ?? false;
+
     return CallConfig(
       capabilities: CallCapabilitiesConfig(
         isVideoCallEnabled: isVideoEnabled,
         isBlindTransferEnabled: transferConfig.enableBlindTransfer,
         isAttendedTransferEnabled: transferConfig.enableAttendedTransfer,
+        callPullVideoStrategy: callPullVideoStrategy,
+        isPeerMessageEnabled: isPeerMessageEnabled,
       ),
-      triggerConfig: const CallTriggerConfig(
+      triggerConfig: CallTriggerConfig(
         smsFallback: SmsFallbackTriggerConfig(
           enabled: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS,
           available: EnvironmentConfig.CALL_TRIGGER_MECHANISM_SMS,
@@ -624,6 +647,48 @@ abstract final class SupportedMapper {
     };
 
     return SupportedConfig(themeMode: configThemeMode, isVideoCallEnabled: videoCallFeature.enabled);
+  }
+}
+
+/// Mapper responsible for resolving the app's selectable locales from the
+/// language allowlist in [AppConfig], intersected with the locales the app
+/// actually bundles ([AppLocalizations.supportedLocales]).
+abstract final class LocalizationMapper {
+  static LocalizationConfig map(AppConfig appConfig) {
+    final enabledLanguages = appConfig.localization.enabledLanguages;
+    final bundled = AppLocalizations.supportedLocales;
+
+    // Diagnose misconfiguration without throwing: a bad code in a per-brand
+    // config must never brick the app (this feeds MaterialApp.supportedLocales),
+    // so unknown codes are logged and ignored, and resolve() keeps at least the
+    // full bundled set.
+    if (enabledLanguages.isNotEmpty) {
+      final bundledCodes = bundled.map((l) => l.languageCode.toLowerCase()).toSet();
+      final unknown = enabledLanguages
+          .map((code) => code.trim().toLowerCase())
+          .where((code) => code.isNotEmpty && !bundledCodes.contains(code))
+          .toList(growable: false);
+      if (unknown.isNotEmpty) {
+        _logger.warning(
+          'localization.enabledLanguages contains code(s) not bundled in the app '
+          '$unknown; ignoring them. Bundled: ${bundledCodes.toList()}',
+        );
+      }
+    }
+
+    final supportedLocales = LocalizationConfig.resolve(bundled, enabledLanguages);
+    if (enabledLanguages.isNotEmpty && supportedLocales.length == bundled.length) {
+      final requested = enabledLanguages.map((c) => c.trim().toLowerCase()).where((c) => c.isNotEmpty).toSet();
+      final anyValid = bundled.any((l) => requested.contains(l.languageCode.toLowerCase()));
+      if (!anyValid) {
+        _logger.warning(
+          'localization.enabledLanguages ($enabledLanguages) matched no bundled '
+          'language; falling back to all bundled languages.',
+        );
+      }
+    }
+
+    return LocalizationConfig(supportedLocales: supportedLocales);
   }
 }
 

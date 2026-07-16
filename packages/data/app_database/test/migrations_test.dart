@@ -13,6 +13,7 @@ import 'package:app_database/src/migrations/generated/schema_v19.dart' as v19;
 import 'package:app_database/src/migrations/generated/schema_v20.dart' as v20;
 import 'package:app_database/src/migrations/generated/schema_v22.dart' as v22;
 import 'package:app_database/src/migrations/generated/schema_v23.dart' as v23;
+import 'package:app_database/src/migrations/generated/schema_v24.dart' as v24;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -311,6 +312,71 @@ void main() {
               call_id, direction, status, callee, caller,
               connect_time_usec, disconnect_time_usec, disconnect_reason, duration_seconds
             ) VALUES ('call-1', 'outgoing', 'declined', 'X', 'Y', 1, 2, 'normal', 1)
+          '''),
+          throwsA(anything),
+        );
+
+        await checkDb.close();
+      } finally {
+        schema.close();
+      }
+    });
+  });
+
+  group('migration v24 data integrity', () {
+    test('preserves dialog_info rows and adds a nullable has_video column', () async {
+      final schema = await verifier.schemaAt(23);
+      try {
+        final oldDb = v23.DatabaseAtV23(schema.newConnection());
+        await oldDb.customStatement('''
+          INSERT INTO dialog_info (
+            id_key, entity_number, state, arrival_version, arrival_time_usec
+          ) VALUES ('dlg-1', '111000333', 'confirmed', '1', 1000)
+        ''');
+        await oldDb.close();
+
+        final appDatabase = AppDatabase(schema.newConnection());
+        await verifier.migrateAndValidate(appDatabase, 24);
+        await appDatabase.close();
+
+        final checkDb = v24.DatabaseAtV24(schema.newConnection());
+        final rows = await checkDb.customSelect('SELECT id_key, has_video FROM dialog_info').get();
+        expect(rows, hasLength(1));
+        expect(rows.single.read<String>('id_key'), 'dlg-1');
+        // The new column exists and is null for rows migrated from v23.
+        // (matcher's `isNull` clashes with drift's SQL `isNull`, so compare to the literal.)
+        expect(rows.single.data['has_video'], null);
+
+        await checkDb.close();
+      } finally {
+        schema.close();
+      }
+    });
+
+    test('has_video accepts null/0/1 and rejects other values after migration', () async {
+      final schema = await verifier.schemaAt(23);
+      try {
+        final appDatabase = AppDatabase(schema.newConnection());
+        await verifier.migrateAndValidate(appDatabase, 24);
+        await appDatabase.close();
+
+        final checkDb = v24.DatabaseAtV24(schema.newConnection());
+
+        // null and 0/1 are allowed by `NULL CHECK (has_video IN (0, 1))`.
+        await checkDb.customStatement('''
+          INSERT INTO dialog_info (id_key, entity_number, state, arrival_version, arrival_time_usec, has_video)
+          VALUES ('dlg-null', '1', 'confirmed', '1', 1, NULL)
+        ''');
+        await checkDb.customStatement('''
+          INSERT INTO dialog_info (id_key, entity_number, state, arrival_version, arrival_time_usec, has_video)
+          VALUES ('dlg-true', '1', 'confirmed', '1', 1, 1)
+        ''');
+
+        // Any other value violates the CHECK constraint.
+        await expectLater(
+          checkDb.customStatement('''
+            INSERT INTO dialog_info (id_key, entity_number, state, arrival_version, arrival_time_usec, has_video)
+            VALUES ('dlg-bad', '1', 'confirmed', '1', 1, 2)
           '''),
           throwsA(anything),
         );

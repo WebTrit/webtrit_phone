@@ -6,6 +6,7 @@ import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/mappers/mappers.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -33,7 +34,7 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMap
 
   String get _identifier => appInfo.identifier;
 
-  String get _bundleId => packageInfo.packageName;
+  String get _bundleId => EnvironmentConfig.resolveBundleId(packageInfo.packageName);
 
   WebtritApiClient _apiClient(String coreUrl, String tenantId) {
     return WebtritApiClient(Uri.parse(coreUrl), tenantId, connectionTimeout: kApiClientConnectionTimeout);

@@ -12,6 +12,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
@@ -49,13 +50,10 @@ Future<AppContext> bootstrap() async {
     featureAccess,
   );
 
-  final appBloc = MockAppBloc.allScreen(
-    themeSettings: appThemes.values.first.settings,
-    themeMode: ThemeMode.light,
-    locale: const Locale('en'),
-  );
+  final appBloc = MockAppBloc.allScreen(themeMode: ThemeMode.light, locale: const Locale('en'));
 
   final providers = [
+    Provider<ThemeSettings>.value(value: appThemes.values.first.settings),
     Provider<FeatureAccess>.value(value: featureAccess),
     Provider<PackageInfo>.value(value: packageInfo),
     Provider<DeviceInfo>.value(value: deviceInfo),

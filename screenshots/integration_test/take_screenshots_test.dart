@@ -87,25 +87,25 @@ void main() {
     takeScreenshotTestWidgets('main_screen__favorites', () {
       return ScreenshotApp(
         appBloc: appContext.appBloc,
-        child: const MainScreenScreenshot(MainFlavor.favorites, Text(EnvironmentConfig.APP_NAME)),
+        child: MainScreenScreenshot(MainFlavor.favorites, Text(EnvironmentConfig.APP_NAME)),
       );
     });
     takeScreenshotTestWidgets('main_screen__recents', () {
       return ScreenshotApp(
         appBloc: appContext.appBloc,
-        child: const MainScreenScreenshot(MainFlavor.recents, Text(EnvironmentConfig.APP_NAME)),
+        child: MainScreenScreenshot(MainFlavor.recents, Text(EnvironmentConfig.APP_NAME)),
       );
     });
     takeScreenshotTestWidgets('main_screen__keypad', () {
       return ScreenshotApp(
         appBloc: appContext.appBloc,
-        child: const MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME)),
+        child: MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME)),
       );
     });
     takeScreenshotTestWidgets('main_screen__keypad_dialing', () {
       return ScreenshotApp(
         appBloc: appContext.appBloc,
-        child: const MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME), keypadDialing: true),
+        child: MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME), keypadDialing: true),
       );
     });
   });

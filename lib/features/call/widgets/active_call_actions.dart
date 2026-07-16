@@ -130,7 +130,9 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
 
   void computeDimensions() {
     _inputDecorations = _themeData.extension<InputDecorations>();
-    _textStyle = _themeData.textTheme.displaySmall?.copyWith(color: _themeData.colorScheme.surface);
+    final baseKeypadInputStyle = _themeData.textTheme.displaySmall?.copyWith(color: _themeData.colorScheme.surface);
+    final configuredKeypadInputStyle = widget.style?.keypadInputTextStyle;
+    _textStyle = baseKeypadInputStyle?.merge(configuredKeypadInputStyle) ?? configuredKeypadInputStyle;
 
     _iconSize = _themeData.textTheme.headlineLarge?.fontSize;
 

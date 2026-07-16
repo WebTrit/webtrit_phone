@@ -31,6 +31,7 @@ class LoginCubit extends Cubit<LoginState> {
     required this.authRepository,
     required this.notificationsBloc,
     required this.appInfo,
+    required this.packageInfo,
     required this.appCompatibilityResolver,
     required this.onLoginSuccess,
     this.signinOrder = const [],
@@ -43,6 +44,8 @@ class LoginCubit extends Cubit<LoginState> {
   final NotificationsBloc notificationsBloc;
 
   final AppInfo appInfo;
+
+  final PackageInfo packageInfo;
 
   final AppCompatibilityResolver appCompatibilityResolver;
 
@@ -158,8 +161,9 @@ class LoginCubit extends Cubit<LoginState> {
         return null;
       case AppVersionTooOld(:final appVersion, :final minSupportedVersion):
         final notification = AppVersionUnsupportedErrorNotification(
-          appVersion.toString(),
-          minSupportedVersion.toString(),
+          appVersion: appVersion.toString(),
+          minSupported: minSupportedVersion.toString(),
+          storeVersion: packageInfo.fullVersion,
         );
         notificationsBloc.add(NotificationsSubmitted(notification));
         return null;

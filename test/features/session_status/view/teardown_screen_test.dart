@@ -15,7 +15,6 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/features/session_status/view/teardown_screen.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/theme/theme.dart';
 
 // ---------------------------------------------------------------------------
 // Fakes / Mocks
@@ -23,13 +22,8 @@ import 'package:webtrit_phone/theme/theme.dart';
 
 class _MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
 
-/// [AppState] requires a [ThemeSettings], but [TeardownScreen.build] never reads
-/// it (only [AppState.logoutReason]), so a fake placeholder is enough.
-class _FakeThemeSettings extends Fake implements ThemeSettings {}
-
 AppState _appState({AppLogoutReason? logoutReason}) => AppState(
   logoutReason: logoutReason,
-  themeSettings: _FakeThemeSettings(),
   themeMode: ThemeMode.system,
   locale: const Locale('en'),
   userAgreementStatus: AgreementStatus.accepted,

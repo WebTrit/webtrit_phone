@@ -8,6 +8,7 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
@@ -20,46 +21,41 @@ class ScreenshotApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget widgetsApp = BlocBuilder<AppBloc, AppState>(
-      buildWhen: (previous, current) => previous.themeSettings != current.themeSettings,
-      builder: (context, state) {
-        return ThemeProvider(
-          settings: state.themeSettings,
-          lightDynamic: null,
-          darkDynamic: null,
-          child: BlocBuilder<AppBloc, AppState>(
-            buildWhen: (previous, current) =>
-                previous.effectiveLocale != current.effectiveLocale ||
-                previous.effectiveThemeMode != current.effectiveThemeMode,
-            builder: (context, state) {
-              final themeProvider = ThemeProvider.of(context);
+    final themeSettings = context.watch<ThemeSettings>();
+    Widget widgetsApp = ThemeProvider(
+      settings: themeSettings,
+      lightDynamic: null,
+      darkDynamic: null,
+      child: BlocBuilder<AppBloc, AppState>(
+        buildWhen: (previous, current) =>
+            previous.effectiveLocale != current.effectiveLocale || previous.themeMode != current.themeMode,
+        builder: (context, state) {
+          final themeProvider = ThemeProvider.of(context);
 
-              final effectiveThemeMode = state.effectiveThemeMode;
-              final ThemeData themeData;
+          final effectiveThemeMode = themeSettings.effectiveThemeMode(state.themeMode);
+          final ThemeData themeData;
 
-              if (effectiveThemeMode == ThemeMode.dark) {
-                themeData = themeProvider.dark();
-              } else {
-                themeData = themeProvider.light();
-              }
+          if (effectiveThemeMode == ThemeMode.dark) {
+            themeData = themeProvider.dark();
+          } else {
+            themeData = themeProvider.light();
+          }
 
-              return WidgetsApp.router(
-                locale: state.effectiveLocale,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                supportedLocales: AppLocalizations.supportedLocales,
-                title: EnvironmentConfig.APP_NAME,
-                color: themeData.primaryColor,
-                debugShowCheckedModeBanner: false,
-                routerDelegate: ScreenshotRouterDelegate(child),
-                routeInformationParser: const _NoOpRouteInformationParser(),
-                builder: (context, child) {
-                  return Theme(data: themeData, child: child!);
-                },
-              );
+          return WidgetsApp.router(
+            locale: state.effectiveLocale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            title: EnvironmentConfig.APP_NAME,
+            color: themeData.primaryColor,
+            debugShowCheckedModeBanner: false,
+            routerDelegate: ScreenshotRouterDelegate(child),
+            routeInformationParser: const _NoOpRouteInformationParser(),
+            builder: (context, child) {
+              return Theme(data: themeData, child: child!);
             },
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
 
     if (ignorePointer) {
