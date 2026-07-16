@@ -153,4 +153,34 @@ void main() {
     final result = StateHandshake.fromJson(jsonWithNull);
     expect(result.dialogInfos.first.state, equals(SignalingDialogState.unknown));
   });
+
+  test('$StateHandshake fromJson skips an unparseable call_log entry instead of throwing', () {
+    final jsonWithUnknownCallLogEvent =
+        json.decode('''
+    {
+      "handshake": "state",
+      "keepalive_interval": 30000,
+      "timestamp": 1662114679648,
+      "registration": {"status": "registered"},
+      "lines": [
+        {
+          "call_id": "qwertyuiopasdfghjklzxcvbnm",
+          "call_logs": [
+            [1662114479751, {"event": "incoming_call", "transaction": "transaction-1", "callee": "123", "caller": "456"}],
+            [1662114479999, {"event": "some_future_event", "transaction": "transaction-2"}]
+          ]
+        },
+        null
+      ]
+    }
+    ''')
+            as Map<String, dynamic>;
+
+    expect(() => StateHandshake.fromJson(jsonWithUnknownCallLogEvent), returnsNormally);
+
+    final result = StateHandshake.fromJson(jsonWithUnknownCallLogEvent);
+    final callLogs = result.lines.first!.callLogs;
+    expect(callLogs.length, equals(1));
+    expect((callLogs.first as CallEventLog).callEvent, isA<IncomingCallEvent>());
+  });
 }

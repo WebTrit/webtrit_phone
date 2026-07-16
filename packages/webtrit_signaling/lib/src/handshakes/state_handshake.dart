@@ -1,9 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:logging/logging.dart';
 
 import '../events/events.dart';
 import '../requests/requests.dart';
 import '../responses/responses.dart';
 import 'handshake.dart';
+
+final _logger = Logger('StateHandshake');
 
 enum RegistrationStatus {
   registering,
@@ -131,33 +134,7 @@ class StateHandshake extends Handshake {
             return null;
           }
 
-          final callLogs = (lineJson['call_logs'] as List<dynamic>)
-              .map<CallLog>((callLogJson) {
-                final timestamp = callLogJson[0] as int;
-                final requestOrResponseOrEventJson = callLogJson[1];
-                requestOrResponseOrEventJson['line'] = lineIndex; // inject line to apply universal fromJson methods
-                requestOrResponseOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
-                if (requestOrResponseOrEventJson.containsKey(Request.typeKey)) {
-                  return CallRequestLog(
-                    timestamp: timestamp,
-                    callRequest: CallRequest.fromJson(requestOrResponseOrEventJson),
-                  );
-                } else if (requestOrResponseOrEventJson.containsKey(Response.typeKey)) {
-                  return ResponseLog(timestamp: timestamp, response: Response.fromJson(requestOrResponseOrEventJson));
-                } else if (requestOrResponseOrEventJson.containsKey(Event.typeKey)) {
-                  return CallEventLog(
-                    timestamp: timestamp,
-                    callEvent: CallEvent.fromJson(requestOrResponseOrEventJson),
-                  );
-                } else {
-                  throw ArgumentError.value(
-                    requestOrResponseOrEventJson,
-                    'requestOrResponseOrEventJson',
-                    'Active call\'s logs incorrect',
-                  );
-                }
-              })
-              .toList(growable: false);
+          final callLogs = _parseCallLogs(lineJson['call_logs'] as List<dynamic>, line: lineIndex, callId: callId);
 
           return Line(callId: callId, callLogs: callLogs);
         })
@@ -174,30 +151,7 @@ class StateHandshake extends Handshake {
     if (guestLineJson != null) {
       final callId = guestLineJson['call_id'] as String?;
       if (callId != null) {
-        final callLogs = (guestLineJson['call_logs'] as List<dynamic>)
-            .map<CallLog>((callLogJson) {
-              final timestamp = callLogJson[0] as int;
-              final requestOrResponseOrEventJson = callLogJson[1];
-              requestOrResponseOrEventJson['line'] = null; // inject line to apply universal fromJson methods
-              requestOrResponseOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
-              if (requestOrResponseOrEventJson.containsKey(Request.typeKey)) {
-                return CallRequestLog(
-                  timestamp: timestamp,
-                  callRequest: CallRequest.fromJson(requestOrResponseOrEventJson),
-                );
-              } else if (requestOrResponseOrEventJson.containsKey(Response.typeKey)) {
-                return ResponseLog(timestamp: timestamp, response: Response.fromJson(requestOrResponseOrEventJson));
-              } else if (requestOrResponseOrEventJson.containsKey(Event.typeKey)) {
-                return CallEventLog(timestamp: timestamp, callEvent: CallEvent.fromJson(requestOrResponseOrEventJson));
-              } else {
-                throw ArgumentError.value(
-                  requestOrResponseOrEventJson,
-                  'requestOrResponseOrEventJson',
-                  'Guest line\'s logs incorrect',
-                );
-              }
-            })
-            .toList(growable: false);
+        final callLogs = _parseCallLogs(guestLineJson['call_logs'] as List<dynamic>, line: null, callId: callId);
 
         guestLine = Line(callId: callId, callLogs: callLogs);
       }
@@ -213,4 +167,38 @@ class StateHandshake extends Handshake {
       guestLine: guestLine,
     );
   }
+}
+
+/// Parses one line's `call_logs` array into [CallLog] entries, skipping (and
+/// logging) any entry this client version cannot parse - most commonly an
+/// event type the server added after this client shipped. A single
+/// unparseable entry must not fail the whole handshake: [StateHandshake] is
+/// replayed on every reconnect, so letting one bad entry throw here would
+/// turn into a reconnect loop for as long as the call carrying it stays
+/// alive, instead of just losing that one log entry.
+List<CallLog> _parseCallLogs(List<dynamic> callLogsJson, {required int? line, required String callId}) {
+  final callLogs = <CallLog>[];
+  for (final callLogJson in callLogsJson) {
+    final timestamp = callLogJson[0] as int;
+    final requestOrResponseOrEventJson = callLogJson[1] as Map<String, dynamic>;
+    requestOrResponseOrEventJson['line'] = line; // inject line to apply universal fromJson methods
+    requestOrResponseOrEventJson['call_id'] = callId; // inject call_id to apply universal fromJson methods
+
+    try {
+      if (requestOrResponseOrEventJson.containsKey(Request.typeKey)) {
+        callLogs.add(
+          CallRequestLog(timestamp: timestamp, callRequest: CallRequest.fromJson(requestOrResponseOrEventJson)),
+        );
+      } else if (requestOrResponseOrEventJson.containsKey(Response.typeKey)) {
+        callLogs.add(ResponseLog(timestamp: timestamp, response: Response.fromJson(requestOrResponseOrEventJson)));
+      } else if (requestOrResponseOrEventJson.containsKey(Event.typeKey)) {
+        callLogs.add(CallEventLog(timestamp: timestamp, callEvent: CallEvent.fromJson(requestOrResponseOrEventJson)));
+      } else {
+        throw ArgumentError.value(requestOrResponseOrEventJson, 'requestOrResponseOrEventJson', 'call_log incorrect');
+      }
+    } catch (error, stackTrace) {
+      _logger.warning('_parseCallLogs: skipping unparseable call_log entry for call $callId', error, stackTrace);
+    }
+  }
+  return callLogs;
 }
