@@ -890,7 +890,7 @@
   "@login_Text_qrSigninCameraPermissionTitle": {},
   "login_Text_qrSigninCameraPermissionDescription": "Для сканування QR-коду потрібен доступ до камери. Увімкніть його, щоб продовжити.",
   "@login_Text_qrSigninCameraPermissionDescription": {},
-  "login_Button_qrSigninAllowCameraAccess": "Надати доступ до камери",
+  "login_Button_qrSigninAllowCameraAccess": "Продовжити",
   "@login_Button_qrSigninAllowCameraAccess": {},
   "login_Button_qrSigninOpenSettings": "Відкрити налаштування",
   "@login_Button_qrSigninOpenSettings": {},

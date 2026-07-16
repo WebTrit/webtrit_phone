@@ -1026,7 +1026,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Camera access is needed to scan a QR code. Enable it to continue.';
 
   @override
-  String get login_Button_qrSigninAllowCameraAccess => 'Allow camera access';
+  String get login_Button_qrSigninAllowCameraAccess => 'Continue';
 
   @override
   String get login_Button_qrSigninOpenSettings => 'Open settings';

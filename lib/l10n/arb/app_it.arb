@@ -890,7 +890,7 @@
   "@login_Text_qrSigninCameraPermissionTitle": {},
   "login_Text_qrSigninCameraPermissionDescription": "L'accesso alla fotocamera è necessario per scansionare un codice QR. Attivalo per continuare.",
   "@login_Text_qrSigninCameraPermissionDescription": {},
-  "login_Button_qrSigninAllowCameraAccess": "Consenti l'accesso alla fotocamera",
+  "login_Button_qrSigninAllowCameraAccess": "Continua",
   "@login_Button_qrSigninAllowCameraAccess": {},
   "login_Button_qrSigninOpenSettings": "Apri le impostazioni",
   "@login_Button_qrSigninOpenSettings": {},

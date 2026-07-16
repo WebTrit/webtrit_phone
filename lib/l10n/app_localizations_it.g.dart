@@ -1034,7 +1034,7 @@ class AppLocalizationsIt extends AppLocalizations {
       'L\'accesso alla fotocamera è necessario per scansionare un codice QR. Attivalo per continuare.';
 
   @override
-  String get login_Button_qrSigninAllowCameraAccess => 'Consenti l\'accesso alla fotocamera';
+  String get login_Button_qrSigninAllowCameraAccess => 'Continua';
 
   @override
   String get login_Button_qrSigninOpenSettings => 'Apri le impostazioni';
