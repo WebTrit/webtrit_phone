@@ -601,7 +601,7 @@ Map<String, dynamic> _$ChatContactInfoToJson(ChatContactInfo instance) =>
 AppConfigTranscription _$AppConfigTranscriptionFromJson(
   Map<String, dynamic> json,
 ) => AppConfigTranscription(
-  mode: json['mode'] as String? ?? 'disabled',
+  mode: json['mode'] as String? ?? 'local',
   language: json['language'] as String?,
   local: json['local'] == null
       ? const AppConfigTranscriptionLocal()
