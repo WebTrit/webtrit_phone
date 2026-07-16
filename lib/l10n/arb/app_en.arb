@@ -792,7 +792,7 @@
   "@login_Text_qrSigninCameraPermissionTitle": {},
   "login_Text_qrSigninCameraPermissionDescription": "Camera access is needed to scan a QR code. Enable it to continue.",
   "@login_Text_qrSigninCameraPermissionDescription": {},
-  "login_Button_qrSigninAllowCameraAccess": "Allow camera access",
+  "login_Button_qrSigninAllowCameraAccess": "Continue",
   "@login_Button_qrSigninAllowCameraAccess": {},
   "login_Button_qrSigninOpenSettings": "Open settings",
   "@login_Button_qrSigninOpenSettings": {},
