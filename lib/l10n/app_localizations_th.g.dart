@@ -2821,6 +2821,98 @@ class AppLocalizationsTh extends AppLocalizations {
   String get voicemail_Title_notSupported => 'ไม่รองรับฟีเจอร์นี้';
 
   @override
+  String get voicemail_Transcript_inProgress => 'กำลังถอดเสียง...';
+
+  @override
+  String get voicemail_Transcript_modelDownloading => 'กำลังดาวน์โหลดโมเดลถอดความ...';
+
+  @override
+  String get voicemail_Transcript_unavailable => 'ไม่มีข้อความถอดเสียง';
+
+  @override
+  String get voicemail_TranscriptionModel_accurateSubtitle =>
+      'ความแม่นยำสูงสุดบนอุปกรณ์ ช้ากว่า (ดาวน์โหลดโมเดล ~1.5 GB)';
+
+  @override
+  String get voicemail_TranscriptionModel_accurateTitle => 'แม่นยำ';
+
+  @override
+  String get voicemail_TranscriptionModel_balancedSubtitle => 'ความแม่นยำดี (ดาวน์โหลดโมเดล ~466 MB)';
+
+  @override
+  String get voicemail_TranscriptionModel_balancedTitle => 'สมดุล';
+
+  @override
+  String get voicemail_TranscriptionModel_defaultLabel => 'ค่าเริ่มต้น';
+
+  @override
+  String get voicemail_TranscriptionModel_fastSubtitle => 'ผลลัพธ์เร็ว ความแม่นยำต่ำกว่า (ดาวน์โหลดโมเดล ~142 MB)';
+
+  @override
+  String get voicemail_TranscriptionModel_fastTitle => 'เร็ว';
+
+  @override
+  String get voicemail_TranscriptionModel_note =>
+      'มีผลกับข้อความทั้งหมด: โมเดลจะถูกดาวน์โหลดเมื่อใช้งานครั้งแรก และข้อความถอดเสียงเดิมจะถูกสร้างใหม่ด้วยโมเดลใหม่';
+
+  @override
+  String get voicemail_TranscriptionModel_title => 'โมเดลถอดเสียง';
+
+  @override
+  String get transcription_Cache_description =>
+      'ไฟล์โมเดลแปลงเสียงเป็นข้อความที่ดาวน์โหลดไว้ โมเดลที่ใช้งานจะถูกดาวน์โหลดใหม่เมื่อจำเป็น';
+
+  @override
+  String get transcription_Cache_title => 'โมเดลถอดความ';
+
+  @override
+  String get transcriptionSettings_Download_failed => 'ดาวน์โหลดโมเดลไม่สำเร็จ';
+
+  @override
+  String get transcriptionSettings_Download_inProgress => 'กำลังดาวน์โหลดโมเดล';
+
+  @override
+  String get transcriptionSettings_Download_retry => 'ลองอีกครั้ง';
+
+  @override
+  String get transcriptionSettings_Model_accurateSubtitle =>
+      'ความแม่นยำสูงสุดบนอุปกรณ์ ช้ากว่า (ดาวน์โหลดโมเดล ~1.5 GB)';
+
+  @override
+  String get transcriptionSettings_Model_accurateTitle => 'แม่นยำ';
+
+  @override
+  String get transcriptionSettings_Model_balancedSubtitle => 'ความแม่นยำดี (ดาวน์โหลดโมเดล ~466 MB)';
+
+  @override
+  String get transcriptionSettings_Model_balancedTitle => 'สมดุล';
+
+  @override
+  String get transcriptionSettings_Model_defaultLabel => 'ค่าเริ่มต้น';
+
+  @override
+  String get transcriptionSettings_Model_downloadedLabel => 'ดาวน์โหลดแล้ว';
+
+  @override
+  String get transcriptionSettings_Model_fastSubtitle => 'ผลลัพธ์เร็ว ความแม่นยำต่ำกว่า (ดาวน์โหลดโมเดล ~142 MB)';
+
+  @override
+  String get transcriptionSettings_Model_fastTitle => 'เร็ว';
+
+  @override
+  String get transcriptionSettings_Model_note =>
+      'มีผลกับข้อความทั้งหมด: โมเดลจะถูกดาวน์โหลดเมื่อใช้งานครั้งแรก และข้อความถอดเสียงเดิมจะถูกสร้างใหม่ด้วยโมเดลใหม่';
+
+  @override
+  String get transcriptionSettings_Model_offSubtitle => 'จะไม่มีการถอดเสียงข้อความเสียง';
+
+  @override
+  String get transcriptionSettings_Model_offTitle => 'ปิด';
+
+  @override
+  String get transcriptionSettings_Widget_screenTitle => 'โมเดลถอดเสียง';
+
+  @override
   String get voicemail_Widget_screenTitle => 'ข้อความเสียง';
 
   @override

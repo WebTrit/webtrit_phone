@@ -65,6 +65,7 @@ class FeatureAccess extends Equatable {
     this.coreSupport,
     this.overrides,
     this.loggingConfig,
+    this.transcriptionConfig,
   );
 
   final EmbeddedConfig embeddedConfig;
@@ -78,6 +79,7 @@ class FeatureAccess extends Equatable {
   final SystemNotificationsConfig systemNotificationsConfig;
   final SipPresenceConfig sipPresenceConfig;
   final LoggingConfig loggingConfig;
+  final TranscriptionConfig transcriptionConfig;
 
   /// Locales the app exposes for selection and auto-resolution, resolved from
   /// the app config's language allowlist intersected with the bundled locales.
@@ -122,6 +124,7 @@ class FeatureAccess extends Equatable {
       final systemNotificationsConfig = SystemNotificationsMapper.map(coreSupport, appConfig, featureOverrides);
       final sipPresenceConfig = SipPresenceMapper.map(systemInfo, appConfig, featureOverrides);
       final loggingConfig = LoggingMapper.map(appConfig, featureOverrides);
+      final transcriptionConfig = TranscriptionMapper.map(appConfig);
 
       final supportedConfig = SupportedMapper.map(appConfig.supported);
       final localizationConfig = LocalizationMapper.map(appConfig);
@@ -142,6 +145,7 @@ class FeatureAccess extends Equatable {
         coreSupport,
         featureOverrides,
         loggingConfig,
+        transcriptionConfig,
       );
     } catch (e, stackTrace) {
       _logger.severe('Failed to initialize FeatureAccess', e, stackTrace);
@@ -162,6 +166,7 @@ class FeatureAccess extends Equatable {
     systemNotificationsConfig,
     sipPresenceConfig,
     loggingConfig,
+    transcriptionConfig,
     supportedConfig,
     localizationConfig,
     coreSupport,
@@ -732,6 +737,22 @@ abstract final class LoggingMapper {
       monitorCheckInterval: overrides.monitorCheckInterval ?? _defaultInterval,
       remoteLoggingEnabled: overrides.remoteLoggingEnabled ?? _defaultRemoteLoggingEnabled,
       anonymizationEnabled: overrides.isLogAnonymizationEnabled ?? true,
+    );
+  }
+}
+
+/// Mapper responsible for constructing [TranscriptionConfig] from application configuration.
+abstract final class TranscriptionMapper {
+  static TranscriptionConfig map(AppConfig appConfig) {
+    final transcription = appConfig.transcription;
+
+    return TranscriptionConfig(
+      mode: transcription.mode,
+      language: transcription.language,
+      localModel: LocalTranscriptionModel.parse(transcription.local.model),
+      remoteUrl: transcription.remote.url,
+      remoteApiKey: transcription.remote.apiKey,
+      remoteModel: transcription.remote.model,
     );
   }
 }

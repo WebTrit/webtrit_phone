@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/settings/features/voicemail/bloc/bloc.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/features/settings/features/voicemail/models/models.dart';
 import 'package:webtrit_phone/features/settings/features/voicemail/view/voicemail_screen.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -19,6 +20,8 @@ import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
 import 'package:webtrit_phone/utils/view_params/presence_view_params.dart';
 
 class _MockVoicemailCubit extends MockCubit<VoicemailState> implements VoicemailCubit {}
+
+class _MockTranscriptionModelService extends Mock implements TranscriptionModelService {}
 
 class _MockAudioPlayer extends Mock implements AudioPlayer {}
 
@@ -37,6 +40,13 @@ Voicemail _voicemail(String id) => Voicemail(
 
 VoicemailState _loadedState(List<Voicemail> items) =>
     const VoicemailState().copyWith(items: items, status: VoicemailStatus.loaded);
+
+TranscriptionModelService _modelService() {
+  final modelService = _MockTranscriptionModelService();
+  when(() => modelService.canSelectModel).thenReturn(false);
+  when(() => modelService.modelDownloadState).thenReturn(ValueNotifier(const ModelDownloadIdle()));
+  return modelService;
+}
 
 void main() {
   setUpAll(() {
@@ -76,6 +86,7 @@ void main() {
       home: MultiProvider(
         providers: [
           BlocProvider<VoicemailCubit>.value(value: cubit),
+          Provider<TranscriptionModelService>.value(value: _modelService()),
           Provider<AppCacheManager>(create: (_) => AppCacheManager(sections: const [])),
           Provider<VoicemailScreenContext>(
             create: (_) => VoicemailScreenContext(
