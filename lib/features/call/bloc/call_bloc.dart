@@ -988,6 +988,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       _CallSignalingEventUpdated() => __onCallSignalingEventUpdated(event, emit),
       _CallSignalingEventTransfer() => __onCallSignalingEventTransfer(event, emit),
       _CallSignalingEventTransferring() => __onCallSignalingEventTransfering(event, emit),
+      _CallSignalingEventTransferAccepted() => __onCallSignalingEventTransferAccepted(event, emit),
+      _CallSignalingEventTransferFailed() => __onCallSignalingEventTransferFailed(event, emit),
       _CallSignalingEventNotifyRefer() => __onCallSignalingEventNotifyRefer(event, emit),
       _CallSignalingEventNotifyUnknown() => __onCallSignalingEventNotifyUnknown(event, emit),
       _CallSignalingEventRegistration() => __onCallSignalingEventRegistration(event, emit),
@@ -1291,6 +1293,44 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     final callUpdate = call.copyWith(transfer: transfer);
     emit(state.copyWithMappedActiveCall(event.callId, (_) => callUpdate));
+  }
+
+  /// The transfer completed - the backend hangs up both of the transferor's
+  /// legs right after this, so there is nothing to roll back here. Clears
+  /// the transient [Transfer] state defensively in case that hangup is
+  /// delayed, so the UI never gets stuck showing "Transferring...".
+  Future<void> __onCallSignalingEventTransferAccepted(
+    _CallSignalingEventTransferAccepted event,
+    Emitter<CallState> emit,
+  ) async {
+    final call = state.retrieveActiveCall(event.callId);
+    if (call == null || call.transfer == null) return;
+
+    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) => activeCall.copyWith(transfer: null)));
+  }
+
+  /// The backend rejected the transfer (e.g. a self-referential REFER, or the
+  /// consultation party is unreachable). Unlike [TransferringEvent] the call
+  /// is NOT hung up automatically, so roll back the transient [Transfer]
+  /// state, un-hold the call so the user can keep talking or retry, and
+  /// surface a notification - mirroring how [ReferFailed] already recovers a
+  /// blind transfer rejected mid-flight.
+  Future<void> __onCallSignalingEventTransferFailed(
+    _CallSignalingEventTransferFailed event,
+    Emitter<CallState> emit,
+  ) async {
+    final call = state.retrieveActiveCall(event.callId);
+    if (call == null) return;
+
+    _logger.warning('__onCallSignalingEventTransferFailed: transfer failed (code=${event.code}) for ${event.callId}');
+
+    emit(state.copyWithMappedActiveCall(event.callId, (activeCall) => activeCall.copyWith(transfer: null)));
+    await callkeep.setHeld(event.callId, onHold: false);
+    // The wording ("Transfer failed, returning to active call") is generic
+    // enough for both flavors - `transfer_failed` fires the same way for
+    // blind and attended transfer, and a dedicated notification/l10n key
+    // isn't worth it just to rename this for the attended case.
+    submitNotification(BlindTransferFailedNotification());
   }
 
   Future<void> __onGlobalEventNumberPresenceUpdate(
@@ -2408,12 +2448,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
 
     if (callkeepError != null) {
-      if (callkeepError == CallkeepCallRequestError.emergencyNumber) {
-        // Self-managed phone accounts cannot place emergency calls. Explain why
-        // and offer to hand the number off to the system dialer, instead of
-        // silently switching to it.
-        submitNotification(EmergencyNumberNotification(e.handle.value));
-      } else if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
+      if (callkeepError == CallkeepCallRequestError.selfManagedPhoneAccountNotRegistered) {
         CrashlyticsUtils.recordError(
           'CallBloc - __onMutationControlStart selfManagedPhoneAccountNotRegistered',
           information: ['callId: $callId', 'handle: ${e.handle.value}'],
@@ -4088,6 +4123,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       add(const _CallSignalingEvent.registration(RegistrationStatus.unregistered));
     } else if (event is TransferringEvent) {
       add(_CallSignalingEvent.transferring(line: event.line, callId: event.callId));
+    } else if (event is TransferAcceptedEvent) {
+      add(_CallSignalingEvent.transferAccepted(line: event.line, callId: event.callId));
+    } else if (event is TransferFailedEvent) {
+      add(_CallSignalingEvent.transferFailed(line: event.line, callId: event.callId, code: event.code));
     } else if (event is GlobalEvent) {
       add(switch (event) {
         NumberPresenceUpdate event => _GlobalEvent.numberPresenceUpdate(
