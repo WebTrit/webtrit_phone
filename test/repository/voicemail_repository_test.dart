@@ -388,7 +388,11 @@ void main() {
         token: 'user_token',
         appDatabase: transcriptionDatabase,
         sessionGuard: const EmptySessionGuard(),
-        transcriber: transcriptionService.isEnabled ? transcriptionService : null,
+        // Wired unconditionally, matching the real DI wiring: gating this on
+        // an isEnabled snapshot would freeze the repository's transcriber out
+        // forever the moment the pool starts disabled/off, even after a later
+        // switch turns it on.
+        transcriber: transcriptionService,
       );
     }
 
@@ -726,6 +730,30 @@ void main() {
 
       expect(dataSource.disposeCalls, 0);
       expect(dataSource.calls, 1);
+    });
+
+    test('a voicemail fetched while off transcribes once a tier is switched on later', () async {
+      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
+      final replacement = _FakeTranscriptionDataSource(result: 'from the enabled model');
+
+      // Starts off: the builder returns null (no engine) for the off
+      // selection, exactly like createTranscriptionDataSource does for
+      // LocalTranscriptionModelOff.
+      final service = createService((model) => model is LocalTranscriptionModelTier ? replacement : null);
+      expect(service.isEnabled, isFalse);
+
+      final repo = createRepo(client, null, service: service);
+      await repo.fetchVoicemails();
+      await pumpEventQueue();
+
+      // Nothing is transcribed yet - the pool is off, so no row exists at all.
+      expect(await transcriptionDatabase.transcriptionsDao.getAllForType(kVoicemailTranscriptionMediaType), isEmpty);
+
+      // The user turns transcription on from settings.
+      await service.switchLocalModel(const LocalTranscriptionModelTier('small'));
+
+      final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
+      expect(row!.transcript, 'from the enabled model');
     });
 
     test('a model switch mid-transcription discards the old model result', () async {

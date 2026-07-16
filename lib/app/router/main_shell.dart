@@ -342,16 +342,19 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             final isVoicemailsEnabled = featureAccess.settingsConfig.voicemailsEnabled;
 
             if (isVoicemailsEnabled) {
-              final transcriptionService = context.read<TranscriptionService>();
-
               return VoicemailRepositoryImpl(
                 webtritApiClient: context.read<WebtritApiClient>(),
                 token: context.read<AppBloc>().state.session.token!,
                 appDatabase: context.read<AppDatabase>(),
                 // The repository sees only the narrow MediaTranscriber
                 // hand-off contract, never the pool itself; results come
-                // back as database updates.
-                transcriber: transcriptionService.isEnabled ? transcriptionService : null,
+                // back as database updates. Always wired, even while the
+                // pool's current selection is off/unconfigured: enqueue()
+                // already no-ops then, and the pool can become enabled later
+                // (the user picks a tier) - gating this on a one-time
+                // isEnabled snapshot would freeze it out for the rest of the
+                // session.
+                transcriber: context.read<TranscriptionService>(),
               );
             } else {
               return const EmptyVoicemailRepository();
