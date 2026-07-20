@@ -522,6 +522,7 @@ class AppRouter extends RootStackRouter {
       // External deep-links from outside the application
       HandleCall(deepLink, this),
       HandleAutoprovision(deepLink),
+      HandleSettings(deepLink, this),
       HandleNotDefinedPath(deepLink, this),
     ];
 

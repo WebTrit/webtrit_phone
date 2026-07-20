@@ -88,7 +88,7 @@ class _MessageBodyState extends State<MessageBody> {
           crossFadeState: preview != null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
         ),
         ParsedText(
-          parse: TextMatchers.matchers(style, quoteDecoration),
+          parse: TextMatchers.matchers(style, quoteDecoration, context),
           regexOptions: const RegexOptions(multiLine: true, dotAll: true),
           style: style.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
           text: widget.text,

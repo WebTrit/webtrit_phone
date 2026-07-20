@@ -7,6 +7,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/undefined/undefined.dart';
 
 import '../constants.dart';
+import 'settings_deep_link.dart';
 
 final _logger = Logger('DeepLinkHandler');
 
@@ -68,6 +69,35 @@ class HandleAutoprovision implements DeepLinkHandler {
   }
 
   bool get _isAutoprovision => deepLink.path.startsWith(kAutoprovisionRout);
+}
+
+/// Handles deep links to `/settings` and its declared sub-screens (e.g. `/settings/voicemail`),
+/// resolved via [SettingsDeepLink] — an unrecognised sub-screen is left unhandled so
+/// [HandleNotDefinedPath] can report it as an invalid deep link, rather than silently falling
+/// back to the settings root.
+class HandleSettings implements DeepLinkHandler {
+  HandleSettings(this.deepLink, this.router);
+
+  final PlatformDeepLink deepLink;
+  final AppRouter? router;
+
+  @override
+  DeepLink? handle() {
+    if (!SettingsDeepLink.matches(deepLink.uri)) return null;
+
+    final settingsRoute = SettingsDeepLink.resolve(deepLink.uri);
+    if (settingsRoute == null) return null;
+
+    // MainShellRoute is already on the stack: push onto it in place rather than
+    // replacing the whole app stack and losing the user's current position.
+    if (_isMainShellActive) return DeepLink([settingsRoute], navigate: false);
+
+    return DeepLink([
+      MainShellRoute(children: [settingsRoute]),
+    ]);
+  }
+
+  bool get _isMainShellActive => router?.isRouteActive(MainShellRoute.name) == true;
 }
 
 class HandleNotDefinedPath implements DeepLinkHandler {
