@@ -10,5 +10,4 @@ export 'network/network.dart';
 export 'presence/presence.dart';
 export 'self_config/self_config.dart';
 export 'theme_mode/theme_mode.dart';
-export 'transcription_settings/transcription_settings.dart';
 export 'voicemail/voicemail.dart';

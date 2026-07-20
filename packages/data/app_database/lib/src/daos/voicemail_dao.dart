@@ -18,28 +18,6 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
   Future<void> insertOrUpdateVoicemail(VoicemailData voicemail) =>
       into(voicemailTable).insertOnConflictUpdate(voicemail);
 
-  /// Upserts a voicemail coming from the remote payload without touching the
-  /// locally produced transcript columns on conflict: the remote payload never
-  /// carries transcripts, and a read-then-write merge would race concurrent
-  /// transcription writes and could overwrite a finished transcript.
-  Future<void> upsertVoicemailFromRemote(VoicemailData voicemail) {
-    return into(voicemailTable).insert(
-      voicemail,
-      onConflict: DoUpdate(
-        (old) => VoicemailDataCompanion(
-          date: Value(voicemail.date),
-          duration: Value(voicemail.duration),
-          sender: Value(voicemail.sender),
-          receiver: Value(voicemail.receiver),
-          seen: Value(voicemail.seen),
-          size: Value(voicemail.size),
-          type: Value(voicemail.type),
-          attachmentPath: Value(voicemail.attachmentPath),
-        ),
-      ),
-    );
-  }
-
   Future<void> updateVoicemail(VoicemailDataCompanion voicemail) {
     return (update(voicemailTable)..where((tbl) => tbl.id.equals(voicemail.id.value))).write(voicemail);
   }
@@ -58,58 +36,6 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
     return (select(voicemailTable)..where((tbl) => tbl.id.equals(id))).watchSingleOrNull();
   }
 
-  /// Voice messages that still need a transcript: none is stored and the row
-  /// is not marked with [excludedStatus] (terminal failures are not retried
-  /// automatically; interrupted in-progress rows are picked up again).
-  Future<List<VoicemailData>> getVoicemailsPendingTranscription({required String excludedStatus}) {
-    final transcriptions = db.transcriptionTable;
-
-    final query =
-        select(voicemailTable).join([
-          leftOuterJoin(
-            transcriptions,
-            transcriptions.mediaType.equals(kVoicemailTranscriptionMediaType) &
-                transcriptions.mediaId.equalsExp(voicemailTable.id),
-          ),
-        ])..where(
-          voicemailTable.type.equals('voice') &
-              transcriptions.transcript.isNull() &
-              (transcriptions.status.isNull() | transcriptions.status.equals(excludedStatus).not()),
-        );
-
-    return query.map((row) => row.readTable(voicemailTable)).get();
-  }
-
-  /// Deletes voicemail transcription rows whose voicemail no longer exists
-  /// (left behind by a deletion racing an in-flight transcription).
-  Future<int> deleteOrphanTranscriptions() {
-    final transcriptions = db.transcriptionTable;
-    final voicemailIds = db.selectOnly(voicemailTable)..addColumns([voicemailTable.id]);
-
-    return (db.delete(transcriptions)..where(
-          (tbl) => tbl.mediaType.equals(kVoicemailTranscriptionMediaType) & tbl.mediaId.isNotInQuery(voicemailIds),
-        ))
-        .go();
-  }
-
-  /// Watches voice messages that have no transcription row at all: freshly
-  /// fetched ones and those whose rows were wiped for regeneration. Rows in
-  /// any lifecycle state (in progress, failed, done) are excluded, so acting
-  /// on emissions cannot loop on items already being handled.
-  Stream<List<VoicemailData>> watchVoicemailsMissingTranscription() {
-    final transcriptions = db.transcriptionTable;
-
-    final query = select(voicemailTable).join([
-      leftOuterJoin(
-        transcriptions,
-        transcriptions.mediaType.equals(kVoicemailTranscriptionMediaType) &
-            transcriptions.mediaId.equalsExp(voicemailTable.id),
-      ),
-    ])..where(voicemailTable.type.equals('voice') & transcriptions.mediaId.isNull());
-
-    return query.watch().map((rows) => rows.map((row) => row.readTable(voicemailTable)).toList());
-  }
-
   Future<List<VoicemailWithContact>> getVoicemailsWithContacts() async {
     final rows = await _voicemailsWithContactsQuery().get();
     return _collapseVoicemailRows(rows);
@@ -123,22 +49,15 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
     final voicemail = voicemailTable;
     final contactPhones = db.contactPhonesTable;
     final contacts = db.contactsTable;
-    final transcriptions = db.transcriptionTable;
 
     return select(voicemail).join([
         leftOuterJoin(contactPhones, contactPhones.number.equalsExp(voicemail.sender)),
         leftOuterJoin(contacts, contacts.id.equalsExp(contactPhones.contactId)),
-        leftOuterJoin(
-          transcriptions,
-          transcriptions.mediaType.equals(kVoicemailTranscriptionMediaType) &
-              transcriptions.mediaId.equalsExp(voicemail.id),
-        ),
       ])
-      // Newest voicemail first; the trailing source-priority term is a
-      // per-voicemail tie-break so a sender number shared by a local and an
-      // external (PBX) contact resolves to the external one (the first row
-      // kept by the collapse).
-      ..orderBy([OrderingTerm.desc(voicemail.date), ...contacts.sourcePriorityOrder()]);
+      // The trailing source-priority term is a per-voicemail tie-break so a
+      // sender number shared by a local and an external (PBX) contact
+      // resolves to the external one (the first row kept by the collapse).
+      ..orderBy([OrderingTerm.asc(voicemail.rowId), ...contacts.sourcePriorityOrder()]);
   }
 
   /// The contact join yields one row per matching contact; keep exactly one
@@ -150,11 +69,7 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
       final voicemail = row.readTable(voicemailTable);
       byId.putIfAbsent(
         voicemail.id,
-        () => VoicemailWithContact(
-          voicemail: voicemail,
-          contact: row.readTableOrNull(db.contactsTable),
-          transcription: row.readTableOrNull(db.transcriptionTable),
-        ),
+        () => VoicemailWithContact(voicemail: voicemail, contact: row.readTableOrNull(db.contactsTable)),
       );
     }
 
@@ -162,13 +77,9 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
   }
 }
 
-/// The [TranscriptionTable.mediaType] value owned by voicemails.
-const kVoicemailTranscriptionMediaType = 'voicemail';
-
 class VoicemailWithContact {
   final VoicemailData voicemail;
   final ContactData? contact;
-  final TranscriptionData? transcription;
 
-  VoicemailWithContact({required this.voicemail, this.contact, this.transcription});
+  VoicemailWithContact({required this.voicemail, this.contact});
 }

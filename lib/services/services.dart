@@ -5,4 +5,3 @@ export 'crashlytics_context/crashlytics_context.dart';
 export 'diagnostic/diagnostic.dart';
 export 'polling_service.dart';
 export 'remote_config_service.dart';
-export 'transcription_model_service.dart';

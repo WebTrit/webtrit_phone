@@ -32,11 +32,6 @@ AppConfig _$AppConfigFromJson(Map<String, dynamic> json) => AppConfig(
       : AppConfigLocalization.fromJson(
           json['localization'] as Map<String, dynamic>,
         ),
-  transcription: json['transcription'] == null
-      ? const AppConfigTranscription()
-      : AppConfigTranscription.fromJson(
-          json['transcription'] as Map<String, dynamic>,
-        ),
   supported:
       (json['supported'] as List<dynamic>?)
           ?.map((e) => SupportedFeature.fromJson(e as Map<String, dynamic>))
@@ -52,7 +47,6 @@ Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
   'contacts': instance.contacts.toJson(),
   'messaging': instance.messaging.toJson(),
   'localization': instance.localization.toJson(),
-  'transcription': instance.transcription.toJson(),
   'supported': instance.supported.map((e) => e.toJson()).toList(),
 };
 
@@ -597,56 +591,6 @@ ChatContactInfo _$ChatContactInfoFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ChatContactInfoToJson(ChatContactInfo instance) =>
     <String, dynamic>{'showVideoButtonAction': instance.showVideoButtonAction};
-
-AppConfigTranscription _$AppConfigTranscriptionFromJson(
-  Map<String, dynamic> json,
-) => AppConfigTranscription(
-  mode: json['mode'] as String? ?? 'local',
-  language: json['language'] as String?,
-  local: json['local'] == null
-      ? const AppConfigTranscriptionLocal()
-      : AppConfigTranscriptionLocal.fromJson(
-          json['local'] as Map<String, dynamic>,
-        ),
-  remote: json['remote'] == null
-      ? const AppConfigTranscriptionRemote()
-      : AppConfigTranscriptionRemote.fromJson(
-          json['remote'] as Map<String, dynamic>,
-        ),
-);
-
-Map<String, dynamic> _$AppConfigTranscriptionToJson(
-  AppConfigTranscription instance,
-) => <String, dynamic>{
-  'mode': instance.mode,
-  'language': instance.language,
-  'local': instance.local.toJson(),
-  'remote': instance.remote.toJson(),
-};
-
-AppConfigTranscriptionLocal _$AppConfigTranscriptionLocalFromJson(
-  Map<String, dynamic> json,
-) => AppConfigTranscriptionLocal(model: json['model'] as String? ?? 'off');
-
-Map<String, dynamic> _$AppConfigTranscriptionLocalToJson(
-  AppConfigTranscriptionLocal instance,
-) => <String, dynamic>{'model': instance.model};
-
-AppConfigTranscriptionRemote _$AppConfigTranscriptionRemoteFromJson(
-  Map<String, dynamic> json,
-) => AppConfigTranscriptionRemote(
-  url: json['url'] as String?,
-  apiKey: json['apiKey'] as String?,
-  model: json['model'] as String? ?? 'whisper-1',
-);
-
-Map<String, dynamic> _$AppConfigTranscriptionRemoteToJson(
-  AppConfigTranscriptionRemote instance,
-) => <String, dynamic>{
-  'url': instance.url,
-  'apiKey': instance.apiKey,
-  'model': instance.model,
-};
 
 AppConfigLocalization _$AppConfigLocalizationFromJson(
   Map<String, dynamic> json,
