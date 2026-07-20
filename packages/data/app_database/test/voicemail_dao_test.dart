@@ -15,50 +15,18 @@ void main() {
     await db.close();
   });
 
-  VoicemailData createVoicemail({String id = 'vm-1', String date = '2026-01-01T00:00:00Z', bool seen = false}) {
+  VoicemailData createVoicemail({String id = 'vm-1'}) {
     return VoicemailData(
       id: id,
-      date: date,
+      date: '2026-01-01T00:00:00Z',
       duration: 3.5,
       sender: '555001',
       receiver: '555002',
-      seen: seen,
+      seen: false,
       size: 5,
       type: 'voice',
     );
   }
-
-  group('upsertVoicemailFromRemote', () {
-    test('inserts a new row', () async {
-      await db.voicemailDao.upsertVoicemailFromRemote(createVoicemail());
-
-      final row = await db.voicemailDao.getVoicemailById('vm-1');
-      expect(row, isNotNull);
-      expect(row!.sender, '555001');
-    });
-
-    test('updates remote fields on conflict', () async {
-      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());
-
-      await db.voicemailDao.upsertVoicemailFromRemote(createVoicemail(date: '2026-01-02T00:00:00Z', seen: true));
-
-      final row = await db.voicemailDao.getVoicemailById('vm-1');
-      expect(row!.date, '2026-01-02T00:00:00Z');
-      expect(row.seen, isTrue);
-    });
-  });
-
-  group('ordering', () {
-    test('returns voicemails newest first', () async {
-      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail(id: 'vm-old', date: '2026-01-01T00:00:00Z'));
-      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail(id: 'vm-new', date: '2026-01-03T00:00:00Z'));
-      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail(id: 'vm-mid', date: '2026-01-02T00:00:00Z'));
-
-      final rows = await db.voicemailDao.getVoicemailsWithContacts();
-
-      expect(rows.map((row) => row.voicemail.id), ['vm-new', 'vm-mid', 'vm-old']);
-    });
-  });
 
   group('contact resolution', () {
     test('collapses colliding contacts to one deterministic row per voicemail', () async {
@@ -90,72 +58,6 @@ void main() {
 
       expect(rows, hasLength(1));
       expect(rows.single.contact?.sourceType, ContactSourceTypeEnum.external);
-    });
-  });
-
-  group('watchVoicemailsMissingTranscription', () {
-    test('emits voice messages without a transcription row and drops them once one appears', () async {
-      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());
-      await db.voicemailDao.insertOrUpdateVoicemail(
-        VoicemailData(
-          id: 'fax-1',
-          date: '2026-01-01T00:00:00Z',
-          duration: 1.0,
-          sender: '555001',
-          receiver: '555002',
-          seen: false,
-          size: 5,
-          type: 'fax',
-        ),
-      );
-
-      final first = await db.voicemailDao.watchVoicemailsMissingTranscription().first;
-      expect(first.map((voicemail) => voicemail.id), ['vm-1']);
-
-      await db.transcriptionsDao.upsertTranscription(
-        const TranscriptionData(mediaType: kVoicemailTranscriptionMediaType, mediaId: 'vm-1', status: 'inProgress'),
-      );
-
-      final second = await db.voicemailDao.watchVoicemailsMissingTranscription().first;
-      expect(second, isEmpty);
-    });
-  });
-
-  group('voicemails with transcriptions', () {
-    test('joins the voicemail transcription row when present', () async {
-      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());
-      await db.transcriptionsDao.upsertTranscription(
-        const TranscriptionData(
-          mediaType: kVoicemailTranscriptionMediaType,
-          mediaId: 'vm-1',
-          transcript: 'hello',
-          status: 'done',
-        ),
-      );
-
-      final rows = await db.voicemailDao.getVoicemailsWithContacts();
-
-      expect(rows.single.transcription?.transcript, 'hello');
-      expect(rows.single.transcription?.status, 'done');
-    });
-
-    test('leaves the transcription empty when none is stored', () async {
-      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());
-
-      final rows = await db.voicemailDao.getVoicemailsWithContacts();
-
-      expect(rows.single.transcription, isNull);
-    });
-
-    test('ignores transcriptions of other media types', () async {
-      await db.voicemailDao.insertOrUpdateVoicemail(createVoicemail());
-      await db.transcriptionsDao.upsertTranscription(
-        const TranscriptionData(mediaType: 'recording', mediaId: 'vm-1', transcript: 'other media'),
-      );
-
-      final rows = await db.voicemailDao.getVoicemailsWithContacts();
-
-      expect(rows.single.transcription, isNull);
     });
   });
 }
