@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:webtrit_phone/app/router/settings_deep_link.dart';
+import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/utils/regexes.dart';
 
 class TextMatchers {
-  static List<MatchText> matchers(TextStyle style, BoxDecoration? quoteDecoration) {
+  static List<MatchText> matchers(TextStyle style, BoxDecoration? quoteDecoration, BuildContext context) {
     return [
       TextMatchers.quoteMatcher(style: style, quoteDecoration: quoteDecoration),
       TextMatchers.mailToMatcher(
@@ -14,6 +17,7 @@ class TextMatchers {
       ),
       TextMatchers.urlMatcher(
         style: style.copyWith(decoration: TextDecoration.underline, color: style.color?.withAlpha(100)),
+        context: context,
       ),
       TextMatchers.boldMatcher(style: style.copyWith(fontWeight: FontWeight.bold)),
       TextMatchers.italicMatcher(style: style.copyWith(fontStyle: FontStyle.italic)),
@@ -107,7 +111,7 @@ class TextMatchers {
     );
   }
 
-  static MatchText urlMatcher({final TextStyle? style, final bool tapEnabled = true}) {
+  static MatchText urlMatcher({final TextStyle? style, final bool tapEnabled = true, BuildContext? context}) {
     return MatchText(
       onTap: tapEnabled
           ? (urlText) async {
@@ -117,7 +121,19 @@ class TextMatchers {
               }
 
               final url = Uri.tryParse(urlText);
-              if (url != null && await canLaunchUrl(url)) {
+              if (url == null) return;
+
+              // Links pointing at the app's own domain (e.g. shared in chat or a system
+              // notification) are handled in-app instead of being sent to an external browser.
+              if (context != null && url.host == EnvironmentConfig.APP_LINK_DOMAIN) {
+                final settingsRoute = SettingsDeepLink.resolve(url);
+                if (settingsRoute != null) {
+                  if (context.mounted) context.router.push(settingsRoute);
+                  return;
+                }
+              }
+
+              if (await canLaunchUrl(url)) {
                 await launchUrl(url, mode: LaunchMode.externalApplication);
               }
             }
