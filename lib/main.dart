@@ -208,7 +208,6 @@ class RootApp extends StatelessWidget {
           final encodingSettingsRepository = EncodingSettingsRepositoryPrefsImpl(prefs);
           final localeRepository = LocaleRepositoryPrefsImpl(prefs);
           final themeModeRepository = ThemeModeRepositoryPrefsImpl(prefs);
-          final transcriptionModelRepository = TranscriptionModelRepositoryPrefsImpl(prefs);
           final autocompleteHistoryRepository = AutocompleteHistoryRepositoryPrefsImpl(
             prefs,
             presets: {'recent_core_urls': EnvironmentConfig.PREDEFINED_CORE_URLS},
@@ -247,7 +246,6 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<EncodingSettingsRepository>.value(value: encodingSettingsRepository),
               RepositoryProvider<LocaleRepository>.value(value: localeRepository),
               RepositoryProvider<ThemeModeRepository>.value(value: themeModeRepository),
-              RepositoryProvider<TranscriptionModelRepository>.value(value: transcriptionModelRepository),
               RepositoryProvider<AutocompleteHistoryRepository>.value(value: autocompleteHistoryRepository),
               RepositoryProvider<SystemInfoRepository>(
                 create: (_) => instanceRegistry.get(),

@@ -31,5 +31,4 @@ export 'sip_subscriptions_table.dart';
 export 'system_notifications_outbox_table.dart';
 export 'system_notifications_table.dart';
 export 'user_sms_numbers_table.dart';
-export 'transcription_table.dart';
 export 'voicemail_table.dart';
