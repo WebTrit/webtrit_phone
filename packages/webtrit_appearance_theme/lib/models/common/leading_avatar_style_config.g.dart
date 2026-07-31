@@ -41,6 +41,11 @@ LeadingAvatarStyleConfig _$LeadingAvatarStyleConfigFromJson(
       : PresenceBadgeStyleConfig.fromJson(
           json['presenceBadge'] as Map<String, dynamic>,
         ),
+  nameColors: json['nameColors'] == null
+      ? null
+      : NameColorsStyleConfig.fromJson(
+          json['nameColors'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$LeadingAvatarStyleConfigToJson(
@@ -54,6 +59,23 @@ Map<String, dynamic> _$LeadingAvatarStyleConfigToJson(
   'smartIndicator': instance.smartIndicator?.toJson(),
   'registeredBadge': instance.registeredBadge?.toJson(),
   'presenceBadge': instance.presenceBadge?.toJson(),
+  'nameColors': instance.nameColors?.toJson(),
+};
+
+NameColorsStyleConfig _$NameColorsStyleConfigFromJson(
+  Map<String, dynamic> json,
+) => NameColorsStyleConfig(
+  enabled: json['enabled'] as bool? ?? true,
+  palette: (json['palette'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
+);
+
+Map<String, dynamic> _$NameColorsStyleConfigToJson(
+  NameColorsStyleConfig instance,
+) => <String, dynamic>{
+  'enabled': instance.enabled,
+  'palette': instance.palette,
 };
 
 LoadingOverlayStyleConfig _$LoadingOverlayStyleConfigFromJson(

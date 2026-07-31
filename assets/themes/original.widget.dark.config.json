@@ -117,6 +117,10 @@
         "availableColor": null,
         "unavailableColor": null,
         "sizeFactor": 0.325
+      },
+      "nameColors": {
+        "enabled": true,
+        "palette": null
       }
     }
   },

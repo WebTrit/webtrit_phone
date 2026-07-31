@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LeadingAvatarStyleConfig {
 
- String? get backgroundColor; double? get radius; TextStyleConfig? get initialsTextStyle; IconDataConfig? get placeholderIcon; LoadingOverlayStyleConfig? get loading; SmartIndicatorStyleConfig? get smartIndicator; RegisteredBadgeStyleConfig? get registeredBadge; PresenceBadgeStyleConfig? get presenceBadge;
+ String? get backgroundColor; double? get radius; TextStyleConfig? get initialsTextStyle; IconDataConfig? get placeholderIcon; LoadingOverlayStyleConfig? get loading; SmartIndicatorStyleConfig? get smartIndicator; RegisteredBadgeStyleConfig? get registeredBadge; PresenceBadgeStyleConfig? get presenceBadge; NameColorsStyleConfig? get nameColors;
 /// Create a copy of LeadingAvatarStyleConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $LeadingAvatarStyleConfigCopyWith<LeadingAvatarStyleConfig> get copyWith => _$Le
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeadingAvatarStyleConfig&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.radius, radius) || other.radius == radius)&&(identical(other.initialsTextStyle, initialsTextStyle) || other.initialsTextStyle == initialsTextStyle)&&(identical(other.placeholderIcon, placeholderIcon) || other.placeholderIcon == placeholderIcon)&&(identical(other.loading, loading) || other.loading == loading)&&(identical(other.smartIndicator, smartIndicator) || other.smartIndicator == smartIndicator)&&(identical(other.registeredBadge, registeredBadge) || other.registeredBadge == registeredBadge)&&(identical(other.presenceBadge, presenceBadge) || other.presenceBadge == presenceBadge));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LeadingAvatarStyleConfig&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.radius, radius) || other.radius == radius)&&(identical(other.initialsTextStyle, initialsTextStyle) || other.initialsTextStyle == initialsTextStyle)&&(identical(other.placeholderIcon, placeholderIcon) || other.placeholderIcon == placeholderIcon)&&(identical(other.loading, loading) || other.loading == loading)&&(identical(other.smartIndicator, smartIndicator) || other.smartIndicator == smartIndicator)&&(identical(other.registeredBadge, registeredBadge) || other.registeredBadge == registeredBadge)&&(identical(other.presenceBadge, presenceBadge) || other.presenceBadge == presenceBadge)&&(identical(other.nameColors, nameColors) || other.nameColors == nameColors));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,backgroundColor,radius,initialsTextStyle,placeholderIcon,loading,smartIndicator,registeredBadge,presenceBadge);
+int get hashCode => Object.hash(runtimeType,backgroundColor,radius,initialsTextStyle,placeholderIcon,loading,smartIndicator,registeredBadge,presenceBadge,nameColors);
 
 @override
 String toString() {
-  return 'LeadingAvatarStyleConfig(backgroundColor: $backgroundColor, radius: $radius, initialsTextStyle: $initialsTextStyle, placeholderIcon: $placeholderIcon, loading: $loading, smartIndicator: $smartIndicator, registeredBadge: $registeredBadge, presenceBadge: $presenceBadge)';
+  return 'LeadingAvatarStyleConfig(backgroundColor: $backgroundColor, radius: $radius, initialsTextStyle: $initialsTextStyle, placeholderIcon: $placeholderIcon, loading: $loading, smartIndicator: $smartIndicator, registeredBadge: $registeredBadge, presenceBadge: $presenceBadge, nameColors: $nameColors)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $LeadingAvatarStyleConfigCopyWith<$Res>  {
   factory $LeadingAvatarStyleConfigCopyWith(LeadingAvatarStyleConfig value, $Res Function(LeadingAvatarStyleConfig) _then) = _$LeadingAvatarStyleConfigCopyWithImpl;
 @useResult
 $Res call({
- String? backgroundColor, double? radius, TextStyleConfig? initialsTextStyle, IconDataConfig? placeholderIcon, LoadingOverlayStyleConfig? loading, SmartIndicatorStyleConfig? smartIndicator, RegisteredBadgeStyleConfig? registeredBadge, PresenceBadgeStyleConfig? presenceBadge
+ String? backgroundColor, double? radius, TextStyleConfig? initialsTextStyle, IconDataConfig? placeholderIcon, LoadingOverlayStyleConfig? loading, SmartIndicatorStyleConfig? smartIndicator, RegisteredBadgeStyleConfig? registeredBadge, PresenceBadgeStyleConfig? presenceBadge, NameColorsStyleConfig? nameColors
 });
 
 
@@ -63,7 +63,7 @@ class _$LeadingAvatarStyleConfigCopyWithImpl<$Res>
 
 /// Create a copy of LeadingAvatarStyleConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? backgroundColor = freezed,Object? radius = freezed,Object? initialsTextStyle = freezed,Object? placeholderIcon = freezed,Object? loading = freezed,Object? smartIndicator = freezed,Object? registeredBadge = freezed,Object? presenceBadge = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? backgroundColor = freezed,Object? radius = freezed,Object? initialsTextStyle = freezed,Object? placeholderIcon = freezed,Object? loading = freezed,Object? smartIndicator = freezed,Object? registeredBadge = freezed,Object? presenceBadge = freezed,Object? nameColors = freezed,}) {
   return _then(LeadingAvatarStyleConfig(
 backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
 as String?,radius: freezed == radius ? _self.radius : radius // ignore: cast_nullable_to_non_nullable
@@ -73,7 +73,8 @@ as IconDataConfig?,loading: freezed == loading ? _self.loading : loading // igno
 as LoadingOverlayStyleConfig?,smartIndicator: freezed == smartIndicator ? _self.smartIndicator : smartIndicator // ignore: cast_nullable_to_non_nullable
 as SmartIndicatorStyleConfig?,registeredBadge: freezed == registeredBadge ? _self.registeredBadge : registeredBadge // ignore: cast_nullable_to_non_nullable
 as RegisteredBadgeStyleConfig?,presenceBadge: freezed == presenceBadge ? _self.presenceBadge : presenceBadge // ignore: cast_nullable_to_non_nullable
-as PresenceBadgeStyleConfig?,
+as PresenceBadgeStyleConfig?,nameColors: freezed == nameColors ? _self.nameColors : nameColors // ignore: cast_nullable_to_non_nullable
+as NameColorsStyleConfig?,
   ));
 }
 
@@ -82,6 +83,193 @@ as PresenceBadgeStyleConfig?,
 
 /// Adds pattern-matching-related methods to [LeadingAvatarStyleConfig].
 extension LeadingAvatarStyleConfigPatterns on LeadingAvatarStyleConfig {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
+
+/// @nodoc
+mixin _$NameColorsStyleConfig {
+
+ bool get enabled; List<String>? get palette;
+/// Create a copy of NameColorsStyleConfig
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$NameColorsStyleConfigCopyWith<NameColorsStyleConfig> get copyWith => _$NameColorsStyleConfigCopyWithImpl<NameColorsStyleConfig>(this as NameColorsStyleConfig, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NameColorsStyleConfig&&(identical(other.enabled, enabled) || other.enabled == enabled)&&const DeepCollectionEquality().equals(other.palette, palette));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,enabled,const DeepCollectionEquality().hash(palette));
+
+@override
+String toString() {
+  return 'NameColorsStyleConfig(enabled: $enabled, palette: $palette)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $NameColorsStyleConfigCopyWith<$Res>  {
+  factory $NameColorsStyleConfigCopyWith(NameColorsStyleConfig value, $Res Function(NameColorsStyleConfig) _then) = _$NameColorsStyleConfigCopyWithImpl;
+@useResult
+$Res call({
+ bool enabled, List<String>? palette
+});
+
+
+
+
+}
+/// @nodoc
+class _$NameColorsStyleConfigCopyWithImpl<$Res>
+    implements $NameColorsStyleConfigCopyWith<$Res> {
+  _$NameColorsStyleConfigCopyWithImpl(this._self, this._then);
+
+  final NameColorsStyleConfig _self;
+  final $Res Function(NameColorsStyleConfig) _then;
+
+/// Create a copy of NameColorsStyleConfig
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? palette = freezed,}) {
+  return _then(NameColorsStyleConfig(
+enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
+as bool,palette: freezed == palette ? _self.palette : palette // ignore: cast_nullable_to_non_nullable
+as List<String>?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [NameColorsStyleConfig].
+extension NameColorsStyleConfigPatterns on NameColorsStyleConfig {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
