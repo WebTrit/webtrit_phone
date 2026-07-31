@@ -26,6 +26,7 @@ class CallActiveScaffold extends StatefulWidget {
     required this.callConfig,
     required this.localePlaceholderBuilder,
     required this.remotePlaceholderBuilder,
+    this.contactResolver,
   });
 
   final CallStatus callStatus;
@@ -39,6 +40,10 @@ class CallActiveScaffold extends StatefulWidget {
   final CallCapabilitiesConfig callConfig;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
+
+  /// Resolves the remote number to a contact so the avatar shown in place of the
+  /// video can use the contact photo; without it the avatar falls back to initials.
+  final ContactResolver? contactResolver;
 
   @override
   CallActiveScaffoldState createState() => CallActiveScaffoldState();
@@ -298,6 +303,16 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                 style: style?.callInfo,
                                                 processingStatus: focusedCall.processingStatus,
                                               ),
+                                            // Nothing to render in the video area (audio-only call,
+                                            // remote camera off, or a held call): the remote party's
+                                            // avatar takes its place, between the info block and the
+                                            // action area.
+                                            if (!_hasRenderableRemoteFrame)
+                                              CallRemoteAvatar(
+                                                activeCall: activeCall,
+                                                radius: _avatarRadius(mediaQueryData),
+                                                contactResolver: widget.contactResolver,
+                                              ),
                                             if (!focusedIsRinging)
                                               ActiveCallActions(
                                                 style: style?.actions,
@@ -466,6 +481,12 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
         ),
       ),
     );
+  }
+
+  /// Radius of the avatar shown in place of the remote video, derived from the screen:
+  /// the call layout sits inside a `FittedBox`, so local constraints are unbounded there.
+  double _avatarRadius(MediaQueryData mediaQueryData) {
+    return (mediaQueryData.size.shortestSide * 0.30).clamp(24.0, 150.0);
   }
 
   /// Generates the list of menu items for the call options popup.

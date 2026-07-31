@@ -147,6 +147,14 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
               switchInCurve: Curves.easeInOut,
               switchOutCurve: Curves.easeInOut,
               transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
+              // The default layout builder stacks the children loosely, which lets an image
+              // size itself to its intrinsic pixels and float in the middle of the circle
+              // instead of covering it; expand so the content always fills the avatar.
+              layoutBuilder: (currentChild, previousChildren) => Stack(
+                fit: StackFit.expand,
+                alignment: Alignment.center,
+                children: [...previousChildren, ?currentChild],
+              ),
               child: _buildAvatarContent(_diameter, _style),
             ),
           ),

@@ -309,6 +309,24 @@ void main() {
     });
   });
 
+  group('CallActiveScaffold - avatar in the video area', () {
+    testWidgets('audio-only call shows the remote avatar instead of the video overlay', (tester) async {
+      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [active], focusedCall: active));
+
+      expect(find.byType(CallRemoteAvatar), findsOneWidget);
+      expect(find.byType(RemoteVideoViewOverlay), findsNothing);
+      await _teardown(tester);
+    });
+
+    testWidgets('falls back to the initials of the remote display name', (tester) async {
+      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [active], focusedCall: active));
+      await tester.pump();
+
+      expect(find.descendant(of: find.byType(CallRemoteAvatar), matching: find.text('BK')), findsOneWidget);
+      await _teardown(tester);
+    });
+  });
+
   group('CallActiveScaffold - 3 calls (held + active + incoming)', () {
     testWidgets('three rows, ringing focus keeps two buttons and the hint', (tester) async {
       final held = _makeCall(callId: 'held', acceptedTime: DateTime(2024), held: true, displayName: 'Clara Diaz');
