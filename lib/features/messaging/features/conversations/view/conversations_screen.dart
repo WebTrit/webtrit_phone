@@ -257,24 +257,34 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
             child: Column(children: [?tabBar, search]),
           ),
         ),
-        body: MessagingStateWrapper(
-          child: TabBarView(
-            controller: _tabController,
-            children: [for (final tab in _tabs) ConversationsList(selectedTab: tab)], // TODO: wtf
-          ),
-        ),
-        floatingActionButton: Builder(
-          builder: (context) {
-            return FloatingActionButton(
-              backgroundColor: colorScheme.primary,
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
-              onPressed: switch (_tabs[_currentIndex]) {
-                TabType.chat => onNewChatConversation,
-                TabType.sms => onNewSmsConversation,
-              },
-              child: Icon(Icons.add, color: colorScheme.onPrimary),
-            );
-          },
+        body: Stack(
+          children: [
+            MessagingStateWrapper(
+              child: TabBarView(
+                controller: _tabController,
+                children: [for (final tab in _tabs) ConversationsList(selectedTab: tab)], // TODO: wtf
+              ),
+            ),
+            Positioned(
+              bottom: 16 + mediaQueryData.padding.bottom,
+              right: 16,
+              child: Builder(
+                builder: (context) {
+                  final tabType = _tabs[_currentIndex];
+                  final onPressed = switch (tabType) {
+                    TabType.chat => onNewChatConversation,
+                    TabType.sms => onNewSmsConversation,
+                  };
+                  return FloatingActionButton(
+                    backgroundColor: colorScheme.primary,
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
+                    onPressed: onPressed,
+                    child: Icon(Icons.add, color: colorScheme.onPrimary),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
