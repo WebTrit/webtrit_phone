@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webtrit_phone/features/settings/features/about/view/about_screen_styles.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/encoding_settings.dart';
@@ -27,13 +28,27 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
     final colorScheme = theme.colorScheme;
     final l10n = context.l10n;
 
-    final contentPadding = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8);
+    final localStyle = theme.extension<AboutScreenStyles>()?.primary;
+    final mediaQuery = MediaQuery.of(context);
+
+    final topPadding = mediaQuery.padding.top;
+    final bottomPadding = mediaQuery.padding.bottom;
+
+    final contentPadding = EdgeInsets.only(
+      left: 16.0,
+      right: 16.0,
+      top: kToolbarHeight + topPadding + 8.0,
+      bottom: bottomPadding + 8.0,
+    );
+    final sectionPadding = const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0);
     final borderRadius = BorderRadius.circular(12.0);
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(l10n.settings_ListViewTileTitle_mediaSettings),
         leading: const ExtBackButton(),
+        flexibleSpace: BlurredSurface.fromStyle(localStyle?.appBarBlurredSurface),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_backup_restore),
@@ -61,7 +76,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                   selected: isExpanded,
                 ),
                 body: Padding(
-                  padding: contentPadding,
+                  padding: sectionPadding,
                   child: Column(
                     children: [
                       const EncodingPresetContent(),
@@ -87,7 +102,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                   icon: const Icon(Icons.multitrack_audio),
                   selected: isExpanded,
                 ),
-                body: Padding(padding: contentPadding, child: AudioProcessingContent()),
+                body: Padding(padding: sectionPadding, child: AudioProcessingContent()),
               ),
               ExpansionPanelRadio(
                 value: 2,
@@ -98,7 +113,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                   icon: const Icon(Icons.video_settings_rounded),
                   selected: isExpanded,
                 ),
-                body: Padding(padding: contentPadding, child: VideoCapturingContent()),
+                body: Padding(padding: sectionPadding, child: VideoCapturingContent()),
               ),
               ExpansionPanelRadio(
                 value: 3,
@@ -109,7 +124,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                   icon: const Icon(Icons.bubble_chart),
                   selected: isExpanded,
                 ),
-                body: Padding(padding: contentPadding, child: IceSettingsContent()),
+                body: Padding(padding: sectionPadding, child: IceSettingsContent()),
               ),
               ExpansionPanelRadio(
                 value: 4,
@@ -120,7 +135,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
                   icon: const Icon(Icons.sync_alt),
                   selected: isExpanded,
                 ),
-                body: Padding(padding: contentPadding, child: PeerConnectionSettingsContent()),
+                body: Padding(padding: sectionPadding, child: PeerConnectionSettingsContent()),
               ),
             ],
           ),

@@ -34,7 +34,7 @@ class LoginModeSelectScreenStyleFactory implements ThemeStyleFactory<LoginModeSe
         background: backgroundStyle,
         contentThemeOverride: config?.themeOverride.mode.toThemeMode(),
         applyToAppBar: config?.themeOverride.applyToAppBar,
-        systemUiOverlayStyle: config?.systemUiOverlayStyle?.toSystemUiOverlayStyle(),
+        systemUiOverlayStyle: config?.systemUiOverlayStyle?.toSystemUiOverlayStyle(colors.brightness),
         pictureLogoStyle: pictureLogoStyle,
         onboardingTextStyle: ExtendedTextStyle(textStyle: textStyle, decoration: backgroundDecoration),
         signInTypeButton: config?.buttonSignupStyleType,

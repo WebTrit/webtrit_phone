@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
@@ -231,6 +232,14 @@ class _AppState extends State<App> {
               (forcedMode == ThemeMode.system ? themeSettings.effectiveThemeMode(state.themeMode) : forcedMode);
 
           return MaterialApp.router(
+            // App-wide floor for the system bars. An AppBar publishes its own
+            // AnnotatedRegion, but a screen without one publishes nothing - and the
+            // engine keeps the previously set value for every field it is not given,
+            // so the bars would otherwise keep the look of the screen shown before.
+            builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(
+              value: systemOverlayStyleOf(Theme.of(context).brightness),
+              child: child ?? const SizedBox.shrink(),
+            ),
             locale: state.effectiveLocale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: featureAccess.localizationConfig.supportedLocales,

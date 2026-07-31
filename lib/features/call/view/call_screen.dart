@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../call.dart';
@@ -82,6 +83,11 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
       },
     );
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(value: style ?? SystemUiOverlayStyle.light, child: scaffold);
+    // Not SystemUiOverlayStyle.light: that constant hardcodes an opaque black
+    // navigation bar, which the app no longer uses. The call screen is always dark,
+    // hence the fixed brightness.
+    final overlayStyle = style ?? systemOverlayStyleOf(Brightness.dark);
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(value: overlayStyle, child: scaffold);
   }
 }

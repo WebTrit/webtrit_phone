@@ -56,6 +56,10 @@ class MainScreenPage extends StatelessWidget {
             ? MainScreen(
                 body: child,
                 bottomNavigationBar: BottomNavigationBar(
+                  elevation: 0,
+                  backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor?.withAlpha(200),
+                  useLegacyColorScheme: false,
+                  enableFeedback: true,
                   type: BottomNavigationBarType.fixed,
                   selectedLabelStyle: theme.textTheme.bodySmall,
                   unselectedLabelStyle: theme.textTheme.bodySmall,

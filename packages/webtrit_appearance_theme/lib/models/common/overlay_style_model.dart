@@ -23,6 +23,11 @@ class OverlayStyleModel with _$OverlayStyleModel {
   });
 
   /// System navigation bar background color.
+  ///
+  /// Ignored by the app: Android 15+ enforces edge-to-edge, where the platform drops
+  /// this color entirely, so the navigation bar is always transparent and the app
+  /// paints its own surfaces behind it. Kept only so existing theme configs that still
+  /// carry the field keep deserializing.
   @override
   final String? systemNavigationBarColor;
 
