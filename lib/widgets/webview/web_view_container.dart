@@ -145,11 +145,14 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetStateMix
       return widget.builder != null ? widget.builder!(context, webViewWidget) : webViewWidget;
     }
 
-    final content = WebViewContent(
-      hasWebViewError: hasWebViewError,
-      errorBuilder: errorPlaceholderBuilder,
-      successBuilder: successBuilder,
-      progressStream: _progressStreamController.stream,
+    final content = Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      child: WebViewContent(
+        hasWebViewError: hasWebViewError,
+        errorBuilder: errorPlaceholderBuilder,
+        successBuilder: successBuilder,
+        progressStream: _progressStreamController.stream,
+      ),
     );
 
     if (widget.showToolbar) {
