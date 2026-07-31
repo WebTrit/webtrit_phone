@@ -32,6 +32,10 @@ class _MessageTextFieldState extends State<MessageTextField> {
             children: [
               Expanded(
                 child: TextFormField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 4,
+                  minLines: 1,
+                  textInputAction: .newline,
                   controller: widget.controller,
                   onFieldSubmitted: (_) {
                     if (value.isNotEmpty) widget.onSend();

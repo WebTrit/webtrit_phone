@@ -26,7 +26,11 @@ class ExchangeBar extends StatelessWidget {
               Icon(icon, color: Colors.white),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(text, style: const TextStyle(color: Colors.white)),
+                child: Text(
+                  text,
+                  style: const TextStyle(color: Colors.white),
+                  overflow: .ellipsis,
+                ),
               ),
               if (onConfirm != null) ...[
                 const SizedBox(width: 8),

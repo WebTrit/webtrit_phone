@@ -166,7 +166,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
           TypingIndicator(userId: widget.userId, typingNumbers: context.watch<SmsTypingCubit>().state),
           ...viewEntries.map((entry) {
             if (entry is _MessageViewEntry) {
-              return FadeIn(
+              return SizedBox(
                 key: Key(entry.message?.idKey ?? entry.outboxEntry!.idKey),
                 child: SmsMessageView(
                   userNumber: widget.userNumber,

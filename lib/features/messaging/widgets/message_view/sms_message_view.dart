@@ -74,15 +74,19 @@ class _SmsMessageViewState extends State<SmsMessageView> {
     final RenderBox renderBox = bodyKey.currentContext!.findRenderObject()! as RenderBox;
     final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
     late Offset offset = const Offset(0, 0);
-    return RelativeRect.fromRect(
-      Rect.fromPoints(
-        renderBox.localToGlobal(offset, ancestor: overlay),
-        isMine
-            ? renderBox.localToGlobal(renderBox.size.bottomRight(Offset.zero) + offset, ancestor: overlay)
-            : renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero) + offset, ancestor: overlay),
-      ),
-      Offset.zero & overlay.size,
-    );
+
+    Offset a = renderBox.localToGlobal(offset, ancestor: overlay);
+
+    // For body that extended beyond app bar
+    if (a.dy < MediaQuery.of(context).padding.top) {
+      a = Offset(a.dx, MediaQuery.of(context).padding.top + 12);
+    }
+
+    Offset b = isMine
+        ? renderBox.localToGlobal(renderBox.size.bottomRight(Offset.zero) + offset, ancestor: overlay)
+        : renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero) + offset, ancestor: overlay);
+
+    return RelativeRect.fromRect(Rect.fromPoints(a, b), Offset.zero & overlay.size);
   }
 
   @override
@@ -109,6 +113,8 @@ class _SmsMessageViewState extends State<SmsMessageView> {
 
     if (isSended && membersReadedUntil != null) isViewedByMembers = !message.createdAt.isAfter(membersReadedUntil);
     if (isSended && userReadedUntil != null) isViewedByUser = !message.createdAt.isAfter(userReadedUntil);
+
+    final playFadeForNewMessage = isSended && !isViewedByUser && !isViewedByMembers;
 
     final popupItems = [
       if (hasContent)
@@ -163,41 +169,46 @@ class _SmsMessageViewState extends State<SmsMessageView> {
               if (widget.avatarViewMode == AvatarViewMode.space) const SizedBox(width: 48),
             ],
             Flexible(
-              child: Container(
-                decoration: theme.messageDecoration(isMine, isViewedByUser),
-                padding: const EdgeInsets.all(12),
-                child: IntrinsicWidth(
-                  child: Column(
-                    key: bodyKey,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (widget.nameViewMode == NameViewMode.show) ...[
-                        Text(senderNumber ?? '', style: theme.userNameStyle),
-                        const SizedBox(height: 4),
-                      ],
-                      if (!isDeleted) ...[MessageBody(text: content, isMine: isMine, style: theme.contentStyle)],
-                      if (isDeleted) ...[
-                        Text(context.l10n.messaging_MessageView_deleted, style: theme.subContentStyle),
-                      ],
-                      const SizedBox(height: 4),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          if (isMine && isSended) ...[
-                            Text(message.sendingStatus.nameL10n(context), style: theme.subContentStyle),
-                            const SizedBox(width: 2),
-                          ],
-                          if (isMine && !isSended)
-                            CircularProgressTemplate(color: colorScheme.onSurface, size: 12, width: 1),
-                          if (isMine && isSended && !isViewedByMembers)
-                            Icon(Icons.done, color: colorScheme.tertiary, size: 12),
-                          if (isMine && isViewedByMembers) Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),
-                          const SizedBox(width: 2),
-                          if (message?.createdAt != null) Text(message!.createdAt.toHHmm, style: theme.subContentStyle),
+              child: FadeIn(
+                duration: playFadeForNewMessage ? const Duration(milliseconds: 300) : Duration.zero,
+                child: Container(
+                  decoration: theme.messageDecoration(isMine, isViewedByUser),
+                  padding: const EdgeInsets.all(12),
+                  child: IntrinsicWidth(
+                    child: Column(
+                      key: bodyKey,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (widget.nameViewMode == NameViewMode.show) ...[
+                          Text(senderNumber ?? '', style: theme.userNameStyle),
+                          const SizedBox(height: 4),
                         ],
-                      ),
-                    ],
+                        if (!isDeleted) ...[MessageBody(text: content, isMine: isMine, style: theme.contentStyle)],
+                        if (isDeleted) ...[
+                          Text(context.l10n.messaging_MessageView_deleted, style: theme.subContentStyle),
+                        ],
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            if (isMine && isSended) ...[
+                              Text(message.sendingStatus.nameL10n(context), style: theme.subContentStyle),
+                              const SizedBox(width: 2),
+                            ],
+                            if (isMine && !isSended)
+                              CircularProgressTemplate(color: colorScheme.onSurface, size: 12, width: 1),
+                            if (isMine && isSended && !isViewedByMembers)
+                              Icon(Icons.done, color: colorScheme.tertiary, size: 12),
+                            if (isMine && isViewedByMembers)
+                              Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),
+                            const SizedBox(width: 2),
+                            if (message?.createdAt != null)
+                              Text(message!.createdAt.toHHmm, style: theme.subContentStyle),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
