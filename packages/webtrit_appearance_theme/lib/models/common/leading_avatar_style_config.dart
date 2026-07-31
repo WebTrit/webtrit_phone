@@ -39,6 +39,9 @@ class LeadingAvatarStyleConfig with _$LeadingAvatarStyleConfig {
 
     /// Presence badge appearance.
     this.presenceBadge,
+
+    /// Per-name pseudorandom color appearance.
+    this.nameColors,
   });
 
   /// Circle background color. Defaults to theme.secondaryContainer when null.
@@ -73,9 +76,44 @@ class LeadingAvatarStyleConfig with _$LeadingAvatarStyleConfig {
   @override
   final PresenceBadgeStyleConfig? presenceBadge;
 
+  /// Per-name pseudorandom color appearance.
+  @override
+  final NameColorsStyleConfig? nameColors;
+
   factory LeadingAvatarStyleConfig.fromJson(Map<String, Object?> json) => _$LeadingAvatarStyleConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$LeadingAvatarStyleConfigToJson(this);
+}
+
+/// Pseudorandom, name-derived avatar colors.
+///
+/// When enabled, an avatar without a photo gets a background deterministically derived from
+/// the displayed name instead of the static [LeadingAvatarStyleConfig.backgroundColor].
+@freezed
+@JsonSerializable()
+class NameColorsStyleConfig with _$NameColorsStyleConfig {
+  /// Creates a [NameColorsStyleConfig].
+  const NameColorsStyleConfig({
+    /// Whether name-derived colors are used at all.
+    this.enabled = true,
+
+    /// Optional fixed palette to pick from; when null/empty the color is generated from the
+    /// name hash (hue) so the number of distinct colors is unbounded.
+    this.palette,
+  });
+
+  /// Whether name-derived colors are used at all.
+  @override
+  final bool enabled;
+
+  /// Optional fixed palette to pick from; when null/empty the color is generated from the
+  /// name hash (hue) so the number of distinct colors is unbounded.
+  @override
+  final List<String>? palette;
+
+  factory NameColorsStyleConfig.fromJson(Map<String, Object?> json) => _$NameColorsStyleConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$NameColorsStyleConfigToJson(this);
 }
 
 /// Loading overlay style shown while avatar data is unavailable.
