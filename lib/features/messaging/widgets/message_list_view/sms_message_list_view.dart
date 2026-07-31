@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -121,12 +123,14 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Stack(
       children: [
         list(),
         Positioned(top: MediaQuery.of(context).padding.top, left: 0, right: 0, child: const MessagingStateBar()),
         Positioned(
-          bottom: MediaQuery.of(context).padding.bottom,
+          bottom: 0,
           left: 0,
           right: 0,
           child: Column(
@@ -137,10 +141,23 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
                 child: ScrollToBottomButton(scrolledAway, scrollToBottom),
               ),
               const SizedBox(height: 24),
-              MessageTextField(
-                controller: inputController,
-                onSend: handleSend,
-                onChanged: (value) => context.read<SmsTypingCubit>().sendTyping(),
+              ClipRRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Column(
+                    children: [
+                      MessageTextField(
+                        controller: inputController,
+                        onSend: handleSend,
+                        onChanged: (value) => context.read<SmsTypingCubit>().sendTyping(),
+                      ),
+                      Container(
+                        height: MediaQuery.of(context).padding.bottom,
+                        color: colorScheme.surface.withAlpha(200),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

@@ -225,7 +225,11 @@ class ThemeStyleFactoryProvider {
   }
 
   AppBarTheme createAppBarTheme() {
-    return AppBarThemeDataFactory(widgetConfig.bar.appBarConfig, defaultTextTheme.bodyMedium?.fontFamily).create();
+    return AppBarThemeDataFactory(
+      widgetConfig.bar.appBarConfig,
+      defaultTextTheme.bodyMedium?.fontFamily,
+      colorScheme.brightness,
+    ).create();
   }
 
   InputDecorationTheme createInputDecorationTheme() {

@@ -25,7 +25,6 @@
       "systemUiOverlayStyle": {
         "statusBarIconBrightness": "light",
         "statusBarBrightness": "dark",
-        "systemNavigationBarColor": "#0A1219",
         "systemNavigationBarIconBrightness": "light"
       },
       "mainLogo": {
@@ -175,7 +174,6 @@
     "systemUiOverlayStyle": {
       "statusBarIconBrightness": "light",
       "statusBarBrightness": "dark",
-      "systemNavigationBarColor": "#000000",
       "systemNavigationBarIconBrightness": "light"
     },
     "appBarStyle": {
