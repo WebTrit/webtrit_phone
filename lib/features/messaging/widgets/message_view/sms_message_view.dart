@@ -74,15 +74,19 @@ class _SmsMessageViewState extends State<SmsMessageView> {
     final RenderBox renderBox = bodyKey.currentContext!.findRenderObject()! as RenderBox;
     final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
     late Offset offset = const Offset(0, 0);
-    return RelativeRect.fromRect(
-      Rect.fromPoints(
-        renderBox.localToGlobal(offset, ancestor: overlay),
-        isMine
-            ? renderBox.localToGlobal(renderBox.size.bottomRight(Offset.zero) + offset, ancestor: overlay)
-            : renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero) + offset, ancestor: overlay),
-      ),
-      Offset.zero & overlay.size,
-    );
+
+    Offset a = renderBox.localToGlobal(offset, ancestor: overlay);
+
+    // For body that extended beyond app bar
+    if (a.dy < MediaQuery.of(context).padding.top) {
+      a = Offset(a.dx, MediaQuery.of(context).padding.top + 12);
+    }
+
+    Offset b = isMine
+        ? renderBox.localToGlobal(renderBox.size.bottomRight(Offset.zero) + offset, ancestor: overlay)
+        : renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero) + offset, ancestor: overlay);
+
+    return RelativeRect.fromRect(Rect.fromPoints(a, b), Offset.zero & overlay.size);
   }
 
   @override
