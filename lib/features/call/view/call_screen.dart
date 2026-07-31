@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -45,6 +46,11 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
   Widget build(BuildContext context) {
     final callBloc = context.read<CallBloc>();
 
+    final contactResolver = DefaultContactResolver(
+      contactsRepository: context.read<ContactsRepository>(),
+      userRepository: context.read<UserRepository>(),
+    );
+
     final style = Theme.of(context).extension<CallScreenStyles>()?.primary?.systemUiOverlayStyle;
 
     final scaffold = BlocConsumer<CallBloc, CallState>(
@@ -76,6 +82,7 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
             callConfig: widget.callConfig,
             localePlaceholderBuilder: widget.localePlaceholderBuilder,
             remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
+            contactResolver: contactResolver,
           );
         } else {
           return const CallInitScaffold();
