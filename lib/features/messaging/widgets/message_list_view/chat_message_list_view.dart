@@ -225,7 +225,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
           TypingIndicator(userId: widget.userId, typingUsers: context.watch<ChatTypingCubit>().state),
           ...viewEntries.map((entry) {
             if (entry is _MessageViewEntry) {
-              return FadeIn(
+              return SizedBox(
                 key: Key(entry.message?.idKey ?? entry.outboxMessage!.idKey),
                 child: ChatMessageView(
                   userId: widget.userId,

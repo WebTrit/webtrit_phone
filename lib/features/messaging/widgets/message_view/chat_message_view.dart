@@ -132,6 +132,8 @@ class _ChatMessageViewState extends State<ChatMessageView> {
     if (isSended && membersReadedUntil != null) isViewedByMembers = !message.createdAt.isAfter(membersReadedUntil);
     if (isSended && userReadedUntil != null) isViewedByUser = !message.createdAt.isAfter(userReadedUntil);
 
+    final playFadeForNewMessage = isSended && !isViewedByUser && !isViewedByMembers;
+
     final popupItems = [
       if (hasContent)
         PopupMenuItem(
@@ -224,58 +226,63 @@ class _ChatMessageViewState extends State<ChatMessageView> {
               if (widget.avatarViewMode == AvatarViewMode.space) const SizedBox(width: 48),
             ],
             Flexible(
-              child: Container(
-                decoration: theme.messageDecoration(isMine, isViewedByUser),
-                padding: const EdgeInsets.all(8),
-                child: IntrinsicWidth(
-                  child: Column(
-                    key: bodyKey,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (widget.nameViewMode == NameViewMode.show) ...[
-                        ParticipantName(
-                          senderId: senderId,
-                          userId: widget.userId,
-                          key: Key(senderId),
-                          style: theme.userNameStyle,
-                        ),
-                        const SizedBox(height: 4),
-                      ],
-                      if (isReply) ...[
-                        ReplyQuote(userId: widget.userId, message: message!, isMine: isMine),
-                        const SizedBox(height: 4),
-                      ],
-                      if (isForward) ...[
-                        ForwartQuote(context: context, userId: widget.userId, msg: message!, isMine: isMine),
-                      ],
-                      if (!isForward && !isDeleted) ...[
-                        MessageBody(text: content, isMine: isMine, style: theme.contentStyle),
-                      ],
-                      if (isEdited && !isDeleted) ...[
-                        const SizedBox(height: 4),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(context.l10n.messaging_MessageView_edited, style: theme.subContentStyle),
-                        ),
-                      ],
-                      if (isDeleted) ...[
-                        Text(context.l10n.messaging_MessageView_deleted, style: theme.subContentStyle),
-                      ],
-                      const SizedBox(height: 4),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          if (isMine && isSended == false)
-                            CircularProgressTemplate(color: colorScheme.onSurface, size: 12, width: 1),
-                          if (isMine && isSended && !isViewedByMembers)
-                            Icon(Icons.done, color: colorScheme.tertiary, size: 12),
-                          if (isMine && isViewedByMembers) Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),
-                          const SizedBox(width: 2),
-                          if (message?.createdAt != null) Text(message!.createdAt.toHHmm, style: theme.subContentStyle),
+              child: FadeIn(
+                duration: playFadeForNewMessage ? const Duration(milliseconds: 300) : Duration.zero,
+                child: Container(
+                  decoration: theme.messageDecoration(isMine, isViewedByUser),
+                  padding: const EdgeInsets.all(8),
+                  child: IntrinsicWidth(
+                    child: Column(
+                      key: bodyKey,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (widget.nameViewMode == NameViewMode.show) ...[
+                          ParticipantName(
+                            senderId: senderId,
+                            userId: widget.userId,
+                            key: Key(senderId),
+                            style: theme.userNameStyle,
+                          ),
+                          const SizedBox(height: 4),
                         ],
-                      ),
-                    ],
+                        if (isReply) ...[
+                          ReplyQuote(userId: widget.userId, message: message!, isMine: isMine),
+                          const SizedBox(height: 4),
+                        ],
+                        if (isForward) ...[
+                          ForwartQuote(context: context, userId: widget.userId, msg: message!, isMine: isMine),
+                        ],
+                        if (!isForward && !isDeleted) ...[
+                          MessageBody(text: content, isMine: isMine, style: theme.contentStyle),
+                        ],
+                        if (isEdited && !isDeleted) ...[
+                          const SizedBox(height: 4),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(context.l10n.messaging_MessageView_edited, style: theme.subContentStyle),
+                          ),
+                        ],
+                        if (isDeleted) ...[
+                          Text(context.l10n.messaging_MessageView_deleted, style: theme.subContentStyle),
+                        ],
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            if (isMine && isSended == false)
+                              CircularProgressTemplate(color: colorScheme.onSurface, size: 12, width: 1),
+                            if (isMine && isSended && !isViewedByMembers)
+                              Icon(Icons.done, color: colorScheme.tertiary, size: 12),
+                            if (isMine && isViewedByMembers)
+                              Icon(Icons.done_all, color: colorScheme.tertiary, size: 12),
+                            const SizedBox(width: 2),
+                            if (message?.createdAt != null)
+                              Text(message!.createdAt.toHHmm, style: theme.subContentStyle),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
