@@ -37,8 +37,8 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   CallState? _lastCallState;
   CallkeepAndroidCallDeliveryMode _callDeliveryMode = CallkeepAndroidCallDeliveryMode.unknown;
 
-  final Debounce _downgradeDebounce = Debounce(kSignalingStatusDebounce);
-  SessionStatusState? _pendingDowngrade;
+  final Debounce _transientDebounce = Debounce(kSignalingStatusDebounce);
+  SessionStatusState? _pendingTransient;
 
   void _onPushTokensChanged(PushTokensState pushTokens) {
     _lastPushTokensState = pushTokens;
@@ -94,40 +94,52 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     );
   }
 
-  /// Holds back a downgrade from ready to a transient reconnecting state for
-  /// [kSignalingStatusDebounce]: the re-register blip after a network recovery
-  /// returns to ready before the window elapses and never reaches the UI.
-  /// Losing the network entirely, an unregistered session and every transition
-  /// not starting from ready show immediately.
+  /// Smooths the transient reconnecting states so a reconnect cycle does not
+  /// flicker the UI. Hard states (ready, no network, unregistered) always show
+  /// immediately; a transient state is held back for [kSignalingStatusDebounce]
+  /// and only surfaces if the episode outlives the window:
   ///
-  /// The window is scheduled once per downgrade episode (not reset by further
+  /// - from ready the previous status stays on screen, so the re-register blip
+  ///   after a recovery never reaches the UI;
+  /// - from a hard non-ready state (e.g. the network just came back) a calm
+  ///   "connecting" shows right away instead of the real derived state, which
+  ///   at that moment still carries a stale connect error from the outage;
+  /// - transient-to-transient changes only update the pending state.
+  ///
+  /// The window is scheduled once per transient episode (not reset by further
   /// transient changes): during a prolonged outage the reconnect cycle keeps
   /// oscillating between transient states, and re-scheduling on each of them
-  /// would keep the stale ready on screen forever.
+  /// would postpone the real status forever.
   void _emitDebounced(SessionStatusState next) {
-    final isTransientDowngrade =
-        state.status.signalingStatus == CallStatus.ready && next.status.signalingStatus.isTransientReconnecting;
-
-    if (isTransientDowngrade) {
-      if (_pendingDowngrade == null) {
-        _downgradeDebounce.schedule(() {
-          final pending = _pendingDowngrade;
-          _pendingDowngrade = null;
-          if (pending != null && !isClosed) emit(pending);
-        });
-      }
-      _pendingDowngrade = next;
+    if (!next.status.signalingStatus.isTransientReconnecting) {
+      _pendingTransient = null;
+      _transientDebounce.cancel();
+      emit(next);
       return;
     }
 
-    _pendingDowngrade = null;
-    _downgradeDebounce.cancel();
-    emit(next);
+    if (_pendingTransient == null) {
+      _transientDebounce.schedule(() {
+        final pending = _pendingTransient;
+        _pendingTransient = null;
+        if (pending != null && !isClosed) emit(pending);
+      });
+    }
+    _pendingTransient = next;
+
+    final displayed = state.status.signalingStatus;
+    if (displayed == CallStatus.ready || displayed.isTransientReconnecting) return;
+
+    emit(
+      next.copyWith(
+        status: SessionStatus(signalingStatus: CallStatus.inProgress, pushTokenError: next.status.pushTokenError),
+      ),
+    );
   }
 
   @override
   Future<void> close() {
-    _downgradeDebounce.dispose();
+    _transientDebounce.dispose();
     _callSubscription.cancel();
     _pushTokensSubscription.cancel();
     return super.close();

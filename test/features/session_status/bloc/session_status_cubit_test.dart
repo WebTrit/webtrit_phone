@@ -69,20 +69,64 @@ void main() {
       });
     });
 
-    test('emits status on every callStatus change while not ready', () {
+    test('debounces changes between transient states and shows ready immediately', () {
       fakeAsync((async) {
         final callController = StreamController<CallState>(sync: true);
 
         final cubit = buildCubit(initialCallState: _cs(CallStatus.inProgress), callStream: callController.stream);
 
         callController.add(_cs(CallStatus.connectIssue));
-        expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
+        expect(cubit.state.status, _statusFor(CallStatus.inProgress), reason: 'transient flips are held back');
 
-        callController.add(_cs(CallStatus.connectError));
-        expect(cubit.state.status, _statusFor(CallStatus.connectError));
+        async.elapse(kSignalingStatusDebounce);
+        expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
 
         callController.add(_cs(CallStatus.ready));
         expect(cubit.state.status, _statusFor(CallStatus.ready));
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('recovering the network shows connecting at once, never the stale connect error', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.connectivityNone), callStream: callController.stream);
+
+        // The network is back, but the derived state still carries the connect
+        // error recorded during the outage (DNS failure on the last attempt).
+        callController.add(_cs(CallStatus.connectError));
+        expect(
+          cubit.state.status,
+          _statusFor(CallStatus.inProgress),
+          reason: 'the stale error must be shown as connecting, not flashed',
+        );
+
+        callController.add(_cs(CallStatus.inProgress));
+        callController.add(_cs(CallStatus.ready));
+        expect(cubit.state.status, _statusFor(CallStatus.ready));
+
+        async.elapse(kSignalingStatusDebounce * 2);
+        expect(cubit.state.status, _statusFor(CallStatus.ready), reason: 'nothing pending may fire later');
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('a connect error that persists past the window does surface', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.connectivityNone), callStream: callController.stream);
+
+        callController.add(_cs(CallStatus.connectError));
+        expect(cubit.state.status, _statusFor(CallStatus.inProgress));
+
+        async.elapse(kSignalingStatusDebounce);
+        expect(cubit.state.status, _statusFor(CallStatus.connectError));
 
         callController.close();
         unawaited(cubit.close());
