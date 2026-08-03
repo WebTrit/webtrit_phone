@@ -1697,6 +1697,26 @@
   },
   "sessionStatus_pushNotificationServiceProblem": "Problem with configuration push notification service",
   "@sessionStatus_pushNotificationServiceProblem": {},
+  "sessionStatus_subtitle_connectivityNone": "Check Wi-Fi or mobile data",
+  "@sessionStatus_subtitle_connectivityNone": {
+    "description": "Subtitle of the connection status row on the account screen when the device has no internet access. Tells the user where to look for the cause."
+  },
+  "sessionStatus_subtitle_diagnostic": "Tap for diagnostics",
+  "@sessionStatus_subtitle_diagnostic": {
+    "description": "Subtitle of the connection status row when the cause is not obvious from the status itself (connection error, connection issue, push notification problem). Points the user to the diagnostic screen."
+  },
+  "sessionStatus_subtitle_inProgress": "Connecting to the server...",
+  "@sessionStatus_subtitle_inProgress": {
+    "description": "Subtitle of the connection status row while the app is establishing a connection to the server."
+  },
+  "sessionStatus_subtitle_ready": "Calls can reach this account",
+  "@sessionStatus_subtitle_ready": {
+    "description": "Subtitle of the connection status row when the app is connected and the account can be called."
+  },
+  "sessionStatus_subtitle_registrationOff": "Registration is off",
+  "@sessionStatus_subtitle_registrationOff": {
+    "description": "Subtitle of the connection status row when the account is unregistered because the user turned the registration setting off, as opposed to a connection problem."
+  },
   "session_Teardown_progressText": "Signing out...",
   "@session_Teardown_progressText": {
     "description": "Status message displayed while the application is performing cleanup during the logout process."
@@ -1945,6 +1965,26 @@
   "@settings_iceSettings_Section_trfilter_skipUdp": {},
   "settings_iceSettings_Section_trfilter_title": "Transport protocol",
   "@settings_iceSettings_Section_trfilter_title": {},
+  "settings_ListViewTileSubtitle_registeredNeedsConnection": "Needs connection",
+  "@settings_ListViewTileSubtitle_registeredNeedsConnection": {
+    "description": "Subtitle of the account registration toggle while the server is out of reach, so the setting cannot be read or changed."
+  },
+  "settings_ListViewTileSubtitle_registeredOff": "Incoming calls are rejected",
+  "@settings_ListViewTileSubtitle_registeredOff": {
+    "description": "Subtitle of the account registration toggle when it is switched off, explaining that incoming calls are rejected."
+  },
+  "settings_ListViewTileSubtitle_registeredOn": "Account can receive calls",
+  "@settings_ListViewTileSubtitle_registeredOn": {
+    "description": "Subtitle of the account registration toggle when it is switched on, explaining that the account can receive calls."
+  },
+  "settings_ListViewTileSubtitle_registeredUpdating": "Updating...",
+  "@settings_ListViewTileSubtitle_registeredUpdating": {
+    "description": "Subtitle of the account registration toggle while the change is being sent to the server."
+  },
+  "settings_ListViewTileSubtitle_registeredWaitingForConnection": "Waiting for connection...",
+  "@settings_ListViewTileSubtitle_registeredWaitingForConnection": {
+    "description": "Subtitle of the account registration toggle while the app is still connecting, so the setting is not confirmed yet."
+  },
   "settings_ListViewTileTitle_about": "About",
   "@settings_ListViewTileTitle_about": {},
   "settings_ListViewTileTitle_accountDelete": "Delete account",
@@ -2014,6 +2054,14 @@
   "settings_network_smsFallback_toggle": "SMS as a backup channel",
   "@settings_network_smsFallback_toggle": {
     "description": "Toggle label for enabling SMS fallback"
+  },
+  "settings_registerStatusSnackBar_requestFailed": "Could not reach the server - please try again",
+  "@settings_registerStatusSnackBar_requestFailed": {
+    "description": "Shown in an error snackbar when a register-status request fails: an explicit refresh of the account registration setting, or a change of it (in which case the switch also rolls back to its previous value)."
+  },
+  "settings_registerStatusSnackBar_unavailable": "No connection to the server - this setting can't be changed now",
+  "@settings_registerStatusSnackBar_unavailable": {
+    "description": "Shown in a snackbar when the user taps the account registration toggle while the server is out of reach. Offers a shortcut to the diagnostic screen."
   },
   "settings_videoCapturing_Section_framerate_prefix": "frames: ",
   "@settings_videoCapturing_Section_framerate_prefix": {},

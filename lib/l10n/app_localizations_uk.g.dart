@@ -2025,6 +2025,21 @@ class AppLocalizationsUk extends AppLocalizations {
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
 
   @override
+  String get sessionStatus_subtitle_connectivityNone => 'Перевірте Wi-Fi або мобільні дані';
+
+  @override
+  String get sessionStatus_subtitle_diagnostic => 'Торкніться для діагностики';
+
+  @override
+  String get sessionStatus_subtitle_inProgress => 'З\'єднуємося з сервером...';
+
+  @override
+  String get sessionStatus_subtitle_ready => 'Дзвінки надходять на цей акаунт';
+
+  @override
+  String get sessionStatus_subtitle_registrationOff => 'Реєстрацію вимкнено';
+
+  @override
   String get session_Teardown_progressText => 'Вихід із системи...';
 
   @override
@@ -2417,6 +2432,21 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_iceSettings_Section_trfilter_title => 'Транспортний протокол';
 
   @override
+  String get settings_ListViewTileSubtitle_registeredNeedsConnection => 'Потрібен зв\'язок';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredOff => 'Вхідні дзвінки відхиляються';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredOn => 'Акаунт приймає дзвінки';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredUpdating => 'Оновлюємо...';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredWaitingForConnection => 'Очікуємо зв\'язок...';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Про застосунок';
 
   @override
@@ -2515,6 +2545,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_network_smsFallback_toggle => 'SMS як резервний канал';
+
+  @override
+  String get settings_registerStatusSnackBar_requestFailed => 'Не вдалося зв\'язатися з сервером - спробуйте ще раз';
+
+  @override
+  String get settings_registerStatusSnackBar_unavailable =>
+      'Немає зв\'язку з сервером - це налаштування зараз не змінити';
 
   @override
   String get settings_videoCapturing_Section_framerate_prefix => 'кадрів: ';

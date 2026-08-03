@@ -2018,6 +2018,21 @@ class AppLocalizationsIt extends AppLocalizations {
       'Problema con la configurazione del servizio di notifiche push';
 
   @override
+  String get sessionStatus_subtitle_connectivityNone => 'Controlla Wi-Fi o dati mobili';
+
+  @override
+  String get sessionStatus_subtitle_diagnostic => 'Tocca per la diagnostica';
+
+  @override
+  String get sessionStatus_subtitle_inProgress => 'Connessione al server...';
+
+  @override
+  String get sessionStatus_subtitle_ready => 'Le chiamate raggiungono questo account';
+
+  @override
+  String get sessionStatus_subtitle_registrationOff => 'Registrazione disattivata';
+
+  @override
   String get session_Teardown_progressText => 'Disconnessione in corso...';
 
   @override
@@ -2412,6 +2427,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_iceSettings_Section_trfilter_title => 'Protocollo di trasporto';
 
   @override
+  String get settings_ListViewTileSubtitle_registeredNeedsConnection => 'Richiede connessione';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredOff => 'Chiamate in arrivo rifiutate';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredOn => 'L\'account riceve le chiamate';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredUpdating => 'Aggiornamento...';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredWaitingForConnection => 'In attesa di connessione...';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Riguardo a';
 
   @override
@@ -2510,6 +2540,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_network_smsFallback_toggle => 'SMS come canale di riserva';
+
+  @override
+  String get settings_registerStatusSnackBar_requestFailed => 'Impossibile raggiungere il server - riprova';
+
+  @override
+  String get settings_registerStatusSnackBar_unavailable =>
+      'Nessuna connessione al server - impossibile modificare ora';
 
   @override
   String get settings_videoCapturing_Section_framerate_prefix => 'cornici: ';
