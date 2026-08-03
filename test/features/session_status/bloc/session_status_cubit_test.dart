@@ -68,23 +68,91 @@ void main() {
       });
     });
 
-    test('emits status on every callStatus change', () {
+    test('emits status on every callStatus change while not ready', () {
       fakeAsync((async) {
         final callController = StreamController<CallState>(sync: true);
 
-        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.inProgress), callStream: callController.stream);
 
         callController.add(_cs(CallStatus.connectIssue));
         expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
-
-        callController.add(_cs(CallStatus.inProgress));
-        expect(cubit.state.status, _statusFor(CallStatus.inProgress));
 
         callController.add(_cs(CallStatus.connectError));
         expect(cubit.state.status, _statusFor(CallStatus.connectError));
 
         callController.add(_cs(CallStatus.ready));
         expect(cubit.state.status, _statusFor(CallStatus.ready));
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('drops a downgrade blip that returns to ready within the debounce window', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
+
+        // The re-register blip after a reconnect: ready -> inProgress -> ready.
+        callController.add(_cs(CallStatus.inProgress));
+        expect(cubit.state.status, _statusFor(CallStatus.ready), reason: 'the downgrade must be held back');
+
+        async.elapse(kSessionStatusDowngradeDebounce ~/ 2);
+        callController.add(_cs(CallStatus.ready));
+        expect(cubit.state.status, _statusFor(CallStatus.ready));
+
+        async.elapse(kSessionStatusDowngradeDebounce * 2);
+        expect(cubit.state.status, _statusFor(CallStatus.ready), reason: 'the dropped blip must not fire later');
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('shows a downgrade that outlives the debounce window', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
+
+        callController.add(_cs(CallStatus.connectIssue));
+        expect(cubit.state.status, _statusFor(CallStatus.ready));
+
+        async.elapse(kSessionStatusDowngradeDebounce);
+        expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('shows the latest downgrade when several arrive within one window', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
+
+        callController.add(_cs(CallStatus.inProgress));
+        callController.add(_cs(CallStatus.connectError));
+        expect(cubit.state.status, _statusFor(CallStatus.ready));
+
+        async.elapse(kSessionStatusDowngradeDebounce);
+        expect(cubit.state.status, _statusFor(CallStatus.connectError));
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('shows losing the network immediately, without the debounce', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
+
+        callController.add(_cs(CallStatus.connectivityNone));
+        expect(cubit.state.status, _statusFor(CallStatus.connectivityNone));
 
         callController.close();
         unawaited(cubit.close());

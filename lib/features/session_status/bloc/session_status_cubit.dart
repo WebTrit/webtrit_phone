@@ -15,6 +15,13 @@ part 'session_status_cubit.freezed.dart';
 
 final _logger = Logger('SessionStatusCubit');
 
+/// How long a downgrade from [CallStatus.ready] is held back before it is
+/// shown. Reconnects re-register the session, which drops the derived status
+/// to a transient non-ready state for well under this window; without the
+/// hold the whole account screen flickers established -> connecting ->
+/// established on every network recovery.
+const kSessionStatusDowngradeDebounce = Duration(seconds: 2);
+
 class SessionStatusCubit extends Cubit<SessionStatusState> {
   SessionStatusCubit({required PushTokensBloc pushTokensBloc, required CallBloc callBloc})
     : super(const SessionStatusState()) {
@@ -33,6 +40,9 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   PushTokensState? _lastPushTokensState;
   CallState? _lastCallState;
   CallkeepAndroidCallDeliveryMode _callDeliveryMode = CallkeepAndroidCallDeliveryMode.unknown;
+
+  Timer? _downgradeTimer;
+  SessionStatusState? _pendingDowngrade;
 
   void _onPushTokensChanged(PushTokensState pushTokens) {
     _lastPushTokensState = pushTokens;
@@ -80,7 +90,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     final pushTokenError = (pushTokens.pushToken == null && pushTokens.errorMessage != null)
         ? pushTokens.errorMessage
         : null;
-    emit(
+    _emitDebounced(
       state.copyWith(
         status: SessionStatus(signalingStatus: call.status, pushTokenError: pushTokenError),
         issues: _buildIssues(),
@@ -88,8 +98,36 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     );
   }
 
+  /// Holds back a downgrade from ready to a transient state for
+  /// [kSessionStatusDowngradeDebounce]: a reconnect blip returns to ready
+  /// before the timer fires and never reaches the UI. Losing the network
+  /// entirely and every other transition show immediately.
+  void _emitDebounced(SessionStatusState next) {
+    final isTransientDowngrade =
+        state.status.signalingStatus == CallStatus.ready &&
+        next.status.signalingStatus != CallStatus.ready &&
+        next.status.signalingStatus != CallStatus.connectivityNone;
+
+    if (isTransientDowngrade) {
+      _pendingDowngrade = next;
+      _downgradeTimer ??= Timer(kSessionStatusDowngradeDebounce, () {
+        _downgradeTimer = null;
+        final pending = _pendingDowngrade;
+        _pendingDowngrade = null;
+        if (pending != null && !isClosed) emit(pending);
+      });
+      return;
+    }
+
+    _downgradeTimer?.cancel();
+    _downgradeTimer = null;
+    _pendingDowngrade = null;
+    emit(next);
+  }
+
   @override
   Future<void> close() {
+    _downgradeTimer?.cancel();
     _callSubscription.cancel();
     _pushTokensSubscription.cancel();
     return super.close();
