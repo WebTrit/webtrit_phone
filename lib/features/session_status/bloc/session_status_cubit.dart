@@ -37,8 +37,20 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   CallState? _lastCallState;
   CallkeepAndroidCallDeliveryMode _callDeliveryMode = CallkeepAndroidCallDeliveryMode.unknown;
 
+  /// Times the hold window of a transient episode (see [_emitDebounced]).
+  /// Scheduled once when the episode starts and cancelled by any hard state,
+  /// so oscillating reconnect attempts do not keep postponing the real status.
   final Debounce _transientDebounce = Debounce(kSignalingStatusDebounce);
+
+  /// The latest combined state withheld during a transient episode. Updated on
+  /// every transient change and emitted as-is when the window elapses; a hard
+  /// state discards it. Non-null exactly while an episode is in progress.
   SessionStatusState? _pendingTransient;
+
+  /// Whether the first combined state has been emitted. The constructor's
+  /// default state was never computed from the real sources, so the first
+  /// emission bypasses the smoothing instead of mistaking that default for
+  /// something already on screen.
   bool _bootstrapped = false;
 
   void _onPushTokensChanged(PushTokensState pushTokens) {
