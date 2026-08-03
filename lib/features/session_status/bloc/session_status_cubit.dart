@@ -6,21 +6,17 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/extensions/call_status.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 part 'session_status_state.dart';
 
 part 'session_status_cubit.freezed.dart';
 
 final _logger = Logger('SessionStatusCubit');
-
-/// How long a downgrade from [CallStatus.ready] is held back before it is
-/// shown. Reconnects re-register the session, which drops the derived status
-/// to a transient non-ready state for well under this window; without the
-/// hold the whole account screen flickers established -> connecting ->
-/// established on every network recovery.
-const kSessionStatusDowngradeDebounce = Duration(seconds: 2);
 
 class SessionStatusCubit extends Cubit<SessionStatusState> {
   SessionStatusCubit({required PushTokensBloc pushTokensBloc, required CallBloc callBloc})
@@ -41,7 +37,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   CallState? _lastCallState;
   CallkeepAndroidCallDeliveryMode _callDeliveryMode = CallkeepAndroidCallDeliveryMode.unknown;
 
-  Timer? _downgradeTimer;
+  final Debounce _downgradeDebounce = Debounce(kSignalingStatusDebounce);
   SessionStatusState? _pendingDowngrade;
 
   void _onPushTokensChanged(PushTokensState pushTokens) {
@@ -98,36 +94,40 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     );
   }
 
-  /// Holds back a downgrade from ready to a transient state for
-  /// [kSessionStatusDowngradeDebounce]: a reconnect blip returns to ready
-  /// before the timer fires and never reaches the UI. Losing the network
-  /// entirely and every other transition show immediately.
+  /// Holds back a downgrade from ready to a transient reconnecting state for
+  /// [kSignalingStatusDebounce]: the re-register blip after a network recovery
+  /// returns to ready before the window elapses and never reaches the UI.
+  /// Losing the network entirely, an unregistered session and every transition
+  /// not starting from ready show immediately.
+  ///
+  /// The window is scheduled once per downgrade episode (not reset by further
+  /// transient changes): during a prolonged outage the reconnect cycle keeps
+  /// oscillating between transient states, and re-scheduling on each of them
+  /// would keep the stale ready on screen forever.
   void _emitDebounced(SessionStatusState next) {
     final isTransientDowngrade =
-        state.status.signalingStatus == CallStatus.ready &&
-        next.status.signalingStatus != CallStatus.ready &&
-        next.status.signalingStatus != CallStatus.connectivityNone;
+        state.status.signalingStatus == CallStatus.ready && next.status.signalingStatus.isTransientReconnecting;
 
     if (isTransientDowngrade) {
+      if (_pendingDowngrade == null) {
+        _downgradeDebounce.schedule(() {
+          final pending = _pendingDowngrade;
+          _pendingDowngrade = null;
+          if (pending != null && !isClosed) emit(pending);
+        });
+      }
       _pendingDowngrade = next;
-      _downgradeTimer ??= Timer(kSessionStatusDowngradeDebounce, () {
-        _downgradeTimer = null;
-        final pending = _pendingDowngrade;
-        _pendingDowngrade = null;
-        if (pending != null && !isClosed) emit(pending);
-      });
       return;
     }
 
-    _downgradeTimer?.cancel();
-    _downgradeTimer = null;
     _pendingDowngrade = null;
+    _downgradeDebounce.cancel();
     emit(next);
   }
 
   @override
   Future<void> close() {
-    _downgradeTimer?.cancel();
+    _downgradeDebounce.dispose();
     _callSubscription.cancel();
     _pushTokensSubscription.cancel();
     return super.close();

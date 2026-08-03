@@ -8,6 +8,7 @@ import 'package:webtrit_signaling/webtrit_signaling.dart' as ws;
 
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/push_tokens/bloc/push_tokens_bloc.dart';
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/session_status/bloc/session_status_cubit.dart';
 import 'package:webtrit_phone/models/models.dart';
 
@@ -98,11 +99,11 @@ void main() {
         callController.add(_cs(CallStatus.inProgress));
         expect(cubit.state.status, _statusFor(CallStatus.ready), reason: 'the downgrade must be held back');
 
-        async.elapse(kSessionStatusDowngradeDebounce ~/ 2);
+        async.elapse(kSignalingStatusDebounce ~/ 2);
         callController.add(_cs(CallStatus.ready));
         expect(cubit.state.status, _statusFor(CallStatus.ready));
 
-        async.elapse(kSessionStatusDowngradeDebounce * 2);
+        async.elapse(kSignalingStatusDebounce * 2);
         expect(cubit.state.status, _statusFor(CallStatus.ready), reason: 'the dropped blip must not fire later');
 
         callController.close();
@@ -119,7 +120,7 @@ void main() {
         callController.add(_cs(CallStatus.connectIssue));
         expect(cubit.state.status, _statusFor(CallStatus.ready));
 
-        async.elapse(kSessionStatusDowngradeDebounce);
+        async.elapse(kSignalingStatusDebounce);
         expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
 
         callController.close();
@@ -137,7 +138,7 @@ void main() {
         callController.add(_cs(CallStatus.connectError));
         expect(cubit.state.status, _statusFor(CallStatus.ready));
 
-        async.elapse(kSessionStatusDowngradeDebounce);
+        async.elapse(kSignalingStatusDebounce);
         expect(cubit.state.status, _statusFor(CallStatus.connectError));
 
         callController.close();
