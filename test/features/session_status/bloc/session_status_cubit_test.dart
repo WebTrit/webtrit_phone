@@ -6,9 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart' as ws;
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/push_tokens/bloc/push_tokens_bloc.dart';
-import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/session_status/bloc/session_status_cubit.dart';
 import 'package:webtrit_phone/models/models.dart';
 
@@ -65,6 +65,19 @@ void main() {
         final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: const Stream.empty());
 
         expect(cubit.state.status, _statusFor(CallStatus.ready));
+        unawaited(cubit.close());
+      });
+    });
+
+    test('the first combined state bypasses the smoothing even when transient', () {
+      fakeAsync((async) {
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.connectError), callStream: const Stream.empty());
+
+        expect(
+          cubit.state.status,
+          _statusFor(CallStatus.connectError),
+          reason: 'the default state was never on screen, so there is nothing to hold',
+        );
         unawaited(cubit.close());
       });
     });
@@ -186,6 +199,51 @@ void main() {
         expect(cubit.state.status, _statusFor(CallStatus.connectError));
 
         callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('a signaling hiccup while unregistered is held back, not amplified', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.appUnregistered), callStream: callController.stream);
+
+        // A sub-second blip: connectIssue and back. Nothing may reach the UI.
+        callController.add(_cs(CallStatus.connectIssue));
+        expect(cubit.state.status, _statusFor(CallStatus.appUnregistered));
+
+        callController.add(_cs(CallStatus.appUnregistered));
+        expect(cubit.state.status, _statusFor(CallStatus.appUnregistered));
+
+        async.elapse(kSignalingStatusDebounce * 2);
+        expect(cubit.state.status, _statusFor(CallStatus.appUnregistered));
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('a push token error rides through immediately while a transient is held', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+        final pushController = StreamController<PushTokensState>(sync: true);
+
+        final cubit = buildCubit(
+          initialCallState: _cs(CallStatus.ready),
+          callStream: callController.stream,
+          pushStream: pushController.stream,
+        );
+
+        callController.add(_cs(CallStatus.inProgress));
+        expect(cubit.state.status, _statusFor(CallStatus.ready), reason: 'the downgrade itself is held');
+
+        pushController.add(const PushTokensState(errorMessage: 'token failed'));
+        expect(cubit.state.status.hasPushTokenError, isTrue, reason: 'orthogonal fields must not wait for the window');
+        expect(cubit.state.status.signalingStatus, CallStatus.ready);
+
+        callController.close();
+        pushController.close();
         unawaited(cubit.close());
       });
     });

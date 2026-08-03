@@ -39,6 +39,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
 
   final Debounce _transientDebounce = Debounce(kSignalingStatusDebounce);
   SessionStatusState? _pendingTransient;
+  bool _bootstrapped = false;
 
   void _onPushTokensChanged(PushTokensState pushTokens) {
     _lastPushTokensState = pushTokens;
@@ -95,22 +96,35 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   }
 
   /// Smooths the transient reconnecting states so a reconnect cycle does not
-  /// flicker the UI. Hard states (ready, no network, unregistered) always show
-  /// immediately; a transient state is held back for [kSignalingStatusDebounce]
-  /// and only surfaces if the episode outlives the window:
+  /// flicker the UI. Only the signaling-status dimension is held back: the
+  /// push token error and the side issues are orthogonal to it and always ride
+  /// through immediately. Hard states (ready, no network, unregistered) show
+  /// immediately; a transient signaling status is held for
+  /// [kSignalingStatusDebounce] and only surfaces if the episode outlives the
+  /// window:
   ///
-  /// - from ready the previous status stays on screen, so the re-register blip
-  ///   after a recovery never reaches the UI;
-  /// - from a hard non-ready state (e.g. the network just came back) a calm
-  ///   "connecting" shows right away instead of the real derived state, which
-  ///   at that moment still carries a stale connect error from the outage;
+  /// - from ready and from unregistered the previous status stays on screen,
+  ///   so the re-register blip after a recovery (or a sub-second signaling
+  ///   hiccup) never reaches the UI;
+  /// - from no-network a calm "connecting" shows right away: the network just
+  ///   came back and deserves instant feedback, but the real derived state
+  ///   still carries a stale connect error recorded during the outage;
   /// - transient-to-transient changes only update the pending state.
   ///
   /// The window is scheduled once per transient episode (not reset by further
   /// transient changes): during a prolonged outage the reconnect cycle keeps
   /// oscillating between transient states, and re-scheduling on each of them
-  /// would postpone the real status forever.
+  /// would postpone the real status forever. The very first combined state
+  /// bypasses the smoothing entirely - the default constructor state was never
+  /// computed from the real sources and must not be mistaken for something
+  /// already on screen.
   void _emitDebounced(SessionStatusState next) {
+    if (!_bootstrapped) {
+      _bootstrapped = true;
+      emit(next);
+      return;
+    }
+
     if (!next.status.signalingStatus.isTransientReconnecting) {
       _pendingTransient = null;
       _transientDebounce.cancel();
@@ -128,11 +142,10 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     _pendingTransient = next;
 
     final displayed = state.status.signalingStatus;
-    if (displayed == CallStatus.ready || displayed.isTransientReconnecting) return;
-
+    final shownStatus = displayed == CallStatus.connectivityNone ? CallStatus.inProgress : displayed;
     emit(
       next.copyWith(
-        status: SessionStatus(signalingStatus: CallStatus.inProgress, pushTokenError: next.status.pushTokenError),
+        status: SessionStatus(signalingStatus: shownStatus, pushTokenError: next.status.pushTokenError),
       ),
     );
   }
