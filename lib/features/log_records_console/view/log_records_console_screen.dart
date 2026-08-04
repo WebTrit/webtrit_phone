@@ -35,7 +35,6 @@ class LogRecordsConsoleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.logRecordsConsole_AppBarTitle),
@@ -48,11 +47,10 @@ class LogRecordsConsoleScreen extends StatelessWidget {
                     ? SizedCircularProgressIndicator(
                         size: 20,
                         outerSize: 24,
-                        color: colorScheme.onSurface,
+                        color: IconTheme.of(context).color,
                         strokeWidth: 2,
                       )
                     : const Icon(Icons.share),
-                style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
                 onPressed: switch (state) {
                   LogRecordsConsoleStateSuccess(:final logRecords, isSharing: false) when logRecords.isNotEmpty => () {
                     context.read<LogRecordsConsoleCubit>().share();
@@ -68,7 +66,6 @@ class LogRecordsConsoleScreen extends StatelessWidget {
               final hasRecords = state is LogRecordsConsoleStateSuccess && state.logRecords.isNotEmpty;
               return PopupMenuButton<_LogConsoleMenuAction>(
                 icon: const Icon(Icons.more_vert),
-                iconColor: colorScheme.onSurface,
                 position: PopupMenuPosition.under,
                 enabled: canInteract,
                 onSelected: (action) => _onMenuSelected(context, action, state as LogRecordsConsoleStateSuccess),

@@ -29,7 +29,6 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final colorScheme = themeData.colorScheme;
     final effectiveStyle = style ?? themeData.extension<SettingsScreenStyles>()?.primary;
 
     final showSeparators = effectiveStyle?.showSeparators ?? true;
@@ -46,13 +45,7 @@ class SettingsScreen extends StatelessWidget {
         leading: const AutoLeadingButton(),
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
         flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
-            onPressed: () => _onRefreshTap(context),
-          ),
-        ],
+        actions: [IconButton(icon: const Icon(Icons.refresh), onPressed: () => _onRefreshTap(context))],
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {

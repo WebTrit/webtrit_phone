@@ -226,9 +226,9 @@ class ThemeStyleFactoryProvider {
 
   AppBarTheme createAppBarTheme() {
     return AppBarThemeDataFactory(
+      colorScheme,
       widgetConfig.bar.appBarConfig,
       defaultTextTheme.bodyMedium?.fontFamily,
-      colorScheme.brightness,
     ).create();
   }
 
