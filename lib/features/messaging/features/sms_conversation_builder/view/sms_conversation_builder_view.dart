@@ -147,24 +147,22 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
   }
 
   AppBar buildAppBar(bool isValidNumberInField) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final actionColor = theme.appBarTheme.foregroundColor ?? theme.colorScheme.primary;
 
     return AppBar(
       title: Text(context.l10n.messaging_ConversationBuilders_title_new),
       automaticallyImplyLeading: false,
       leading: TextButton(
         onPressed: () => Navigator.of(context).pop(),
-        child: Text(context.l10n.messaging_ConversationBuilders_cancel, style: TextStyle(color: colorScheme.primary)),
+        child: Text(context.l10n.messaging_ConversationBuilders_cancel, style: TextStyle(color: actionColor)),
       ),
       leadingWidth: 100,
       actions: [
         if (isValidNumberInField)
           TextButton(
             onPressed: builderCubit.onConfirmByParsedNumber,
-            child: Text(
-              context.l10n.messaging_ConversationBuilders_create,
-              style: TextStyle(color: colorScheme.primary),
-            ),
+            child: Text(context.l10n.messaging_ConversationBuilders_create, style: TextStyle(color: actionColor)),
           ),
       ],
     );

@@ -22,10 +22,10 @@ class CallInitScaffold extends StatelessWidget {
         children: [
           SafeArea(
             child: AppBar(
-              leading: const ExtBackButton(),
-              backgroundColor: Colors.transparent,
-              foregroundColor: surfaceColor,
-              primary: false,
+              leading: style?.appBar?.showBackButton == false ? null : const ExtBackButton(),
+              backgroundColor: style?.appBar?.backgroundColor,
+              foregroundColor: style?.appBar?.foregroundColor,
+              primary: style?.appBar?.primary ?? false,
             ),
           ),
           Center(

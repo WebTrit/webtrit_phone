@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/widgets/blurred_surface.dart';
 import 'package:webtrit_phone/widgets/fade_id.dart';
 import 'package:webtrit_phone/widgets/no_data_placeholder.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -42,8 +41,6 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return BlocProvider(
       create: (context) => SmsTypingCubit(messagingBloc.state.client),
       child: BlocConsumer<SmsConversationCubit, SmsConversationState>(
@@ -71,13 +68,7 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
                 extendBodyBehindAppBar: true,
                 appBar: AppBar(
                   centerTitle: true,
-                  backgroundColor: theme.canvasColor.withAlpha(150),
-                  flexibleSpace: ClipRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(color: theme.canvasColor.withAlpha(150)),
-                    ),
-                  ),
+                  flexibleSpace: const BlurredSurface(sigmaX: 10, sigmaY: 10),
                   title: Builder(
                     builder: (context) {
                       if (recipientNumber != null) {

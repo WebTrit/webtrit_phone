@@ -74,7 +74,7 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(backgroundColor: theme.canvasColor.withAlpha(0)),
+      appBar: AppBar(),
       body: Stack(
         children: [
           BlocBuilder<NumberCdrsLogCubit, CdrsListState>(
