@@ -59,6 +59,12 @@ void main() {
       expect(await adaptiveFor(tester, null), isNotNull);
     });
 
+    testWidgets('carries a semi-opaque surface tint so a transparent bar stays visible', (tester) async {
+      final surface = await adaptiveFor(tester, const Color(0x00000000));
+      expect(surface?.color, isNotNull);
+      expect(surface!.color!.a, closeTo(0x96 / 255, 0.01));
+    });
+
     testWidgets('stays solid when the themed bar background is opaque', (tester) async {
       expect(await adaptiveFor(tester, const Color(0xFF14284B)), isNull);
     });

@@ -27,10 +27,20 @@ class BlurredSurface extends StatelessWidget {
   /// i.e. while content actually shows through the bar. On an opaque bar a
   /// backdrop blur has nothing to reveal and only smears the bar edges with
   /// the colors around it, so `null` is returned and the bar stays solid.
+  ///
+  /// The overlay carries a semi-opaque surface tint - the same recipe the
+  /// shipped page styles use for the tab bars - because on a transparent bar
+  /// the tint is what makes the bar visible at all: a pure blur vanishes over
+  /// a uniform background.
   static BlurredSurface? adaptive(BuildContext context, {double sigmaX = 10, double sigmaY = 10}) {
-    final barColor = Theme.of(context).appBarTheme.backgroundColor;
+    final theme = Theme.of(context);
+    final barColor = theme.appBarTheme.backgroundColor;
     if (barColor != null && barColor.a >= 1.0) return null;
-    return BlurredSurface(sigmaX: sigmaX, sigmaY: sigmaY);
+    return BlurredSurface(
+      color: theme.colorScheme.surface.withValues(alpha: 0x96 / 255),
+      sigmaX: sigmaX,
+      sigmaY: sigmaY,
+    );
   }
 
   final Color? color;
