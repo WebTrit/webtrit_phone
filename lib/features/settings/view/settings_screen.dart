@@ -45,7 +45,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         leading: const AutoLeadingButton(),
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
-        flexibleSpace: BlurredSurface.resolve(context, effectiveStyle?.appBarBlurredSurface),
+        flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
         actions: [IconButton(icon: const Icon(Icons.refresh), onPressed: () => _onRefreshTap(context))],
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(

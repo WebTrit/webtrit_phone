@@ -7,9 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/features/embedded/view/embedded_screen_styles.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/embedded/view/embedded_screen_styles.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/embedded/embedded_data.dart';
 import 'package:webtrit_phone/models/embedded/embedded_payload_data.dart';
@@ -121,7 +121,7 @@ class EmbeddedTabPage extends StatelessWidget {
     return MainAppBar(
       title: Text(context.parseL10n(titleL10n)),
       context: context,
-      flexibleSpace: BlurredSurface.resolve(context, style?.appBarBlurredSurface),
+      flexibleSpace: BlurredSurface.fromStyle(style?.appBarBlurredSurface),
     );
   }
 

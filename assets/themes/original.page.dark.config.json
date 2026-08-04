@@ -196,7 +196,7 @@
     },
     "appBarStyle": {
       "backgroundColor": "#00000000",
-      "foregroundColor": "#111315",
+      "foregroundColor": "#E2E2E2",
       "primary": false
     },
     "callInfo": {

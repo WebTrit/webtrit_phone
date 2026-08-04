@@ -55,6 +55,9 @@ class _SystemNotificationsScreenState extends State<SystemNotificationsScreen> {
       appBar: AppBar(
         title: Text(context.l10n.system_notifications_screen_title),
         flexibleSpace: BlurredSurface.adaptive(context),
+        // Themes that configure no bar color keep the historic translucent bar
+        // (the adaptive frost on top), instead of the opaque framework default.
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor ?? Colors.transparent,
       ),
       body: BlocBuilder<SystemNotificationsScreenCubit, SystemNotificationScreenState>(
         builder: (context, state) {

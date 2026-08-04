@@ -134,7 +134,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       appBar: MainAppBar(
         title: widget.title,
         context: context,
-        flexibleSpace: BlurredSurface.resolve(context, effectiveStyle?.appBarBlurredSurface),
+        flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
       ),
       floatingActionButton: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {

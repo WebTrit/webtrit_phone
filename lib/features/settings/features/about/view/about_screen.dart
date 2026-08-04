@@ -60,7 +60,7 @@ class _AboutScreenState extends State<AboutScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(context.l10n.settings_ListViewTileTitle_about),
-        flexibleSpace: BlurredSurface.resolve(context, localStyle?.appBarBlurredSurface),
+        flexibleSpace: BlurredSurface.fromStyle(localStyle?.appBarBlurredSurface),
       ),
       body: BlocBuilder<AboutBloc, AboutState>(
         builder: (context, state) {

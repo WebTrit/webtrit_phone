@@ -21,12 +21,6 @@ class BlurredSurface extends StatelessWidget {
     return BlurredSurface(color: style.color, sigmaX: style.sigmaX ?? 10, sigmaY: style.sigmaY ?? 10);
   }
 
-  /// The uniform app bar surface resolution: the configured page blur when
-  /// present, otherwise the [adaptive] frosted fallback.
-  static BlurredSurface? resolve(BuildContext context, BlurredSurfaceStyle? style) {
-    return fromStyle(style) ?? adaptive(context);
-  }
-
   /// Frosted-glass fallback for app bars that have no configured blur style.
   ///
   /// Returns the blur only while the themed app bar background is translucent,

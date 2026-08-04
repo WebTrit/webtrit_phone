@@ -48,7 +48,7 @@ class EmbeddedScreenStyle extends BaseScreenStyle with Diagnosticable {
   static EmbeddedScreenStyle lerp(EmbeddedScreenStyle? a, EmbeddedScreenStyle? b, double t) {
     return EmbeddedScreenStyle(
       background: BaseScreenStyle.lerp(a?.background, b?.background, t),
-      appBarBlurredSurface: t < 0.5 ? a?.appBarBlurredSurface : b?.appBarBlurredSurface,
+      appBarBlurredSurface: BlurredSurfaceStyle.lerp(a?.appBarBlurredSurface, b?.appBarBlurredSurface, t),
       appBarTheme: AppBarTheme.lerp(a?.appBarTheme, b?.appBarTheme, t),
       contentThemeOverride: t < 0.5 ? a?.contentThemeOverride : b?.contentThemeOverride,
       applyToAppBar: t < 0.5 ? a?.applyToAppBar : b?.applyToAppBar,

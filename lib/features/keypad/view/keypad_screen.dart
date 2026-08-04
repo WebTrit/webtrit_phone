@@ -30,7 +30,7 @@ class KeypadScreen extends StatelessWidget {
       appBar: MainAppBar(
         title: title,
         context: context,
-        flexibleSpace: BlurredSurface.resolve(context, effectiveStyle?.appBarBlurredSurface),
+        flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
       ),
       body: Padding(
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),

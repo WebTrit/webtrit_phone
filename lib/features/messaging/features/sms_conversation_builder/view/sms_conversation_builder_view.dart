@@ -147,8 +147,8 @@ class _SmsConversationBuilderViewState extends State<SmsConversationBuilderView>
   }
 
   AppBar buildAppBar(bool isValidNumberInField) {
-    final theme = Theme.of(context);
-    final actionColor = theme.appBarTheme.foregroundColor ?? theme.colorScheme.primary;
+    // Accent-colored on purpose: these are modal-sheet actions, not bar chrome.
+    final actionColor = Theme.of(context).colorScheme.primary;
 
     return AppBar(
       title: Text(context.l10n.messaging_ConversationBuilders_title_new),

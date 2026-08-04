@@ -128,7 +128,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
         appBar: MainAppBar(
           title: widget.title,
           context: context,
-          flexibleSpace: BlurredSurface.resolve(context, effectiveStyle?.appBarBlurredSurface),
+          flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,

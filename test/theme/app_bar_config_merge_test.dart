@@ -33,6 +33,23 @@ void main() {
       expect(merged.titleTextStyle?.fontSize, 18);
     });
 
+    test('nested styles merge field-wise, not wholesale', () {
+      const brandGlobal = AppBarConfig(
+        iconTheme: IconThemeDataConfig(color: '#AA0000'),
+        titleTextStyle: TextStyleConfig(fontSize: 18, color: '#00AA00'),
+      );
+      const page = AppBarConfig(
+        iconTheme: IconThemeDataConfig(size: 20),
+        titleTextStyle: TextStyleConfig(fontSize: 22),
+      );
+      final merged = page.mergeOver(brandGlobal);
+
+      expect(merged.iconTheme?.size, 20);
+      expect(merged.iconTheme?.color, '#AA0000');
+      expect(merged.titleTextStyle?.fontSize, 22);
+      expect(merged.titleTextStyle?.color, '#00AA00');
+    });
+
     test('merged config resolves title color through the page foreground', () {
       const page = AppBarConfig(foregroundColor: '#EEF3F6');
       final colorScheme = ColorScheme.fromSeed(seedColor: Colors.blue);

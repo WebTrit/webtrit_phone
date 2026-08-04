@@ -156,14 +156,13 @@ class ThemedScaffold extends StatelessWidget {
       restorationId: restorationId,
     );
 
-    // CASE B: Apply override to the entire Scaffold (Body + AppBar + Drawers),
-    // layering the page-level app bar theme on top of whichever theme governs
-    // the bar.
+    // CASE B: Apply override to the entire Scaffold (Body + AppBar + Drawers).
+    // The page-level [appBarTheme] is NOT layered here: it was baked against
+    // the ambient brightness's color scheme, so putting it on top of the
+    // opposite-brightness override would paint wrong-brightness bar colors.
+    // The override theme carries its own bar theme instead.
     if (overrideTheme != null && applyToAppBar) {
-      scaffold = Theme(
-        data: appBarTheme == null ? overrideTheme : overrideTheme.copyWith(appBarTheme: appBarTheme),
-        child: scaffold,
-      );
+      scaffold = Theme(data: overrideTheme, child: scaffold);
     } else if (appBarTheme != null) {
       scaffold = Theme(
         data: Theme.of(context).copyWith(appBarTheme: appBarTheme),

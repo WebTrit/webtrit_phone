@@ -69,6 +69,9 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
                 appBar: AppBar(
                   centerTitle: true,
                   flexibleSpace: BlurredSurface.adaptive(context),
+                  // Themes that configure no bar color keep the historic translucent bar
+                  // (the adaptive frost on top), instead of the opaque framework default.
+                  backgroundColor: Theme.of(context).appBarTheme.backgroundColor ?? Colors.transparent,
                   title: Builder(
                     builder: (context) {
                       if (recipientNumber != null) {

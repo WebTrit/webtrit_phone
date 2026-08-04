@@ -93,9 +93,9 @@ class ThemeStyleFactoryProvider {
       loginPageScheme.modeSelect,
       colorScheme,
       defaultFontFamily,
-      appBarTheme: _pageAppBarTheme(
-        // Transparent by design over the branding background; themes may override.
-        loginPageScheme.modeSelect.appBarStyle ?? const AppBarConfig(backgroundColor: '#00000000'),
+      appBarTheme: _pageAppBarThemeWithDefault(
+        loginPageScheme.modeSelect.appBarStyle,
+        const AppBarConfig(backgroundColor: '#00000000'),
       ),
     );
     final leadingAvatarStyleFactory = LeadingAvatarStyleFactory(
@@ -136,8 +136,9 @@ class ThemeStyleFactoryProvider {
       loginPageScheme.switchPage,
       colorScheme,
       defaultFontFamily,
-      appBarTheme: _pageAppBarTheme(
-        loginPageScheme.switchPage.appBarStyle ?? const AppBarConfig(backgroundColor: '#00000000'),
+      appBarTheme: _pageAppBarThemeWithDefault(
+        loginPageScheme.switchPage.appBarStyle,
+        const AppBarConfig(backgroundColor: '#00000000'),
       ),
     );
     final loginOtpSigninPageStyleFactory = LoginOtpSigninPageStyleFactory(
@@ -188,15 +189,17 @@ class ThemeStyleFactoryProvider {
       pageConfig.numberCdrs,
       // A deliberately chrome-less screen: when the theme does not configure
       // this page's bar, default to a transparent one.
-      appBarTheme: _pageAppBarTheme(
-        pageConfig.numberCdrs.appBarStyle ?? const AppBarConfig(backgroundColor: '#00000000'),
+      appBarTheme: _pageAppBarThemeWithDefault(
+        pageConfig.numberCdrs.appBarStyle,
+        const AppBarConfig(backgroundColor: '#00000000'),
       ),
     );
     final loginCoreUrlAssignScreenStyleFactory = LoginCoreUrlAssignScreenStyleFactory(
       loginPageScheme.coreUrlAssign,
       colorScheme,
-      appBarTheme: _pageAppBarTheme(
-        loginPageScheme.coreUrlAssign.appBarStyle ?? const AppBarConfig(backgroundColor: '#00000000'),
+      appBarTheme: _pageAppBarThemeWithDefault(
+        loginPageScheme.coreUrlAssign.appBarStyle,
+        const AppBarConfig(backgroundColor: '#00000000'),
       ),
     );
 
@@ -246,6 +249,12 @@ class ThemeStyleFactoryProvider {
       pageStyle.mergeOver(widgetConfig.bar.appBarConfig),
       defaultTextTheme.bodyMedium?.fontFamily,
     ).create();
+  }
+
+  /// Like [_pageAppBarTheme], but a screen's design default sits UNDER the
+  /// page style, so a partial page override keeps the default's other fields.
+  AppBarTheme? _pageAppBarThemeWithDefault(AppBarConfig? pageStyle, AppBarConfig designDefault) {
+    return _pageAppBarTheme(pageStyle == null ? designDefault : pageStyle.mergeOver(designDefault));
   }
 
   ElevatedButtonThemeData createElevatedButtonThemeData() {

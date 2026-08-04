@@ -82,6 +82,9 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
             extendBodyBehindAppBar: true,
             appBar: AppBar(
               flexibleSpace: BlurredSurface.adaptive(context),
+              // Themes that configure no bar color keep the historic translucent bar
+              // (the adaptive frost on top), instead of the opaque framework default.
+              backgroundColor: Theme.of(context).appBarTheme.backgroundColor ?? Colors.transparent,
               centerTitle: true,
               title: FadeIn(
                 child: Builder(
