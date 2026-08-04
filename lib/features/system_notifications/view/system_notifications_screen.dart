@@ -54,7 +54,7 @@ class _SystemNotificationsScreenState extends State<SystemNotificationsScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(context.l10n.system_notifications_screen_title),
-        flexibleSpace: const BlurredSurface(sigmaX: 10, sigmaY: 10),
+        flexibleSpace: BlurredSurface.adaptive(context),
       ),
       body: BlocBuilder<SystemNotificationsScreenCubit, SystemNotificationScreenState>(
         builder: (context, state) {

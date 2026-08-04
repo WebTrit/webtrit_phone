@@ -81,7 +81,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
           return Scaffold(
             extendBodyBehindAppBar: true,
             appBar: AppBar(
-              flexibleSpace: const BlurredSurface(sigmaX: 10, sigmaY: 10),
+              flexibleSpace: BlurredSurface.adaptive(context),
               centerTitle: true,
               title: FadeIn(
                 child: Builder(

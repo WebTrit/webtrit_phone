@@ -29,4 +29,38 @@ void main() {
       expect(widget!.color, Colors.red);
     });
   });
+
+  group('BlurredSurface.adaptive', () {
+    Future<BlurredSurface?> adaptiveFor(WidgetTester tester, Color? appBarBackground) async {
+      BlurredSurface? result;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(appBarTheme: AppBarTheme(backgroundColor: appBarBackground)),
+          home: Builder(
+            builder: (context) {
+              result = BlurredSurface.adaptive(context);
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      return result;
+    }
+
+    testWidgets('blurs when the themed bar background is fully transparent', (tester) async {
+      expect(await adaptiveFor(tester, const Color(0x00000000)), isNotNull);
+    });
+
+    testWidgets('blurs when the themed bar background is semi-transparent', (tester) async {
+      expect(await adaptiveFor(tester, const Color(0x9614284B)), isNotNull);
+    });
+
+    testWidgets('blurs when no bar background is configured', (tester) async {
+      expect(await adaptiveFor(tester, null), isNotNull);
+    });
+
+    testWidgets('stays solid when the themed bar background is opaque', (tester) async {
+      expect(await adaptiveFor(tester, const Color(0xFF14284B)), isNull);
+    });
+  });
 }

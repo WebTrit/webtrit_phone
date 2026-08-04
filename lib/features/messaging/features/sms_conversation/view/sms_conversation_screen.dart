@@ -68,7 +68,7 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
                 extendBodyBehindAppBar: true,
                 appBar: AppBar(
                   centerTitle: true,
-                  flexibleSpace: const BlurredSurface(sigmaX: 10, sigmaY: 10),
+                  flexibleSpace: BlurredSurface.adaptive(context),
                   title: Builder(
                     builder: (context) {
                       if (recipientNumber != null) {
