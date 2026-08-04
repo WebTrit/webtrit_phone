@@ -44,9 +44,10 @@ class LoginModeSelectScreen extends StatelessWidget {
           background: localStyle?.background,
           contentThemeOverride: localStyle?.contentThemeOverride,
           applyToAppBar: localStyle?.applyToAppBar ?? true,
+          appBarTheme: localStyle?.appBarTheme,
           extendBodyBehindAppBar: true,
           appBar: AppBar(
-            backgroundColor: Colors.transparent,
+            flexibleSpace: BlurredSurface.fromStyle(localStyle?.appBarBlurredSurface),
             systemOverlayStyle: localStyle?.systemUiOverlayStyle,
             actions: isDemoModeEnabled
                 ? [

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/blurred_surface.dart';
 import 'package:webtrit_phone/widgets/extended_text_style.dart';
 
 class LoginModeSelectScreenStyle with Diagnosticable {
@@ -15,6 +16,8 @@ class LoginModeSelectScreenStyle with Diagnosticable {
     this.onboardingTextStyle,
     this.contentThemeOverride,
     this.applyToAppBar,
+    this.appBarBlurredSurface,
+    this.appBarTheme,
   });
 
   final BackgroundStyle? background;
@@ -25,6 +28,8 @@ class LoginModeSelectScreenStyle with Diagnosticable {
   final ExtendedTextStyle? onboardingTextStyle;
   final ThemeMode? contentThemeOverride;
   final bool? applyToAppBar;
+  final BlurredSurfaceStyle? appBarBlurredSurface;
+  final AppBarTheme? appBarTheme;
 
   LoginModeSelectScreenStyle copyWith({
     BackgroundStyle? background,
@@ -35,6 +40,8 @@ class LoginModeSelectScreenStyle with Diagnosticable {
     ExtendedTextStyle? onboardingTextStyle,
     ThemeMode? contentThemeOverride,
     bool? applyToAppBar,
+    BlurredSurfaceStyle? appBarBlurredSurface,
+    AppBarTheme? appBarTheme,
   }) {
     return LoginModeSelectScreenStyle(
       background: background ?? this.background,
@@ -45,6 +52,8 @@ class LoginModeSelectScreenStyle with Diagnosticable {
       onboardingTextStyle: onboardingTextStyle ?? this.onboardingTextStyle,
       contentThemeOverride: contentThemeOverride ?? this.contentThemeOverride,
       applyToAppBar: applyToAppBar ?? this.applyToAppBar,
+      appBarBlurredSurface: appBarBlurredSurface ?? this.appBarBlurredSurface,
+      appBarTheme: appBarTheme ?? this.appBarTheme,
     );
   }
 
@@ -61,6 +70,8 @@ class LoginModeSelectScreenStyle with Diagnosticable {
       onboardingTextStyle: ExtendedTextStyle.merge(a.onboardingTextStyle, b.onboardingTextStyle),
       contentThemeOverride: b.contentThemeOverride ?? a.contentThemeOverride,
       applyToAppBar: b.applyToAppBar ?? a.applyToAppBar,
+      appBarBlurredSurface: b.appBarBlurredSurface ?? a.appBarBlurredSurface,
+      appBarTheme: b.appBarTheme ?? a.appBarTheme,
     );
   }
 
@@ -74,6 +85,8 @@ class LoginModeSelectScreenStyle with Diagnosticable {
       onboardingTextStyle: ExtendedTextStyle.lerp(a?.onboardingTextStyle, b?.onboardingTextStyle, t),
       contentThemeOverride: t < 0.5 ? a?.contentThemeOverride : b?.contentThemeOverride,
       applyToAppBar: t < 0.5 ? a?.applyToAppBar : b?.applyToAppBar,
+      appBarBlurredSurface: t < 0.5 ? a?.appBarBlurredSurface : b?.appBarBlurredSurface,
+      appBarTheme: AppBarTheme.lerp(a?.appBarTheme, b?.appBarTheme, t),
     );
   }
 
@@ -88,5 +101,7 @@ class LoginModeSelectScreenStyle with Diagnosticable {
     properties.add(DiagnosticsProperty<ExtendedTextStyle?>('onboardingTextStyle', onboardingTextStyle));
     properties.add(EnumProperty<ThemeMode?>('contentThemeOverride', contentThemeOverride));
     properties.add(DiagnosticsProperty<bool?>('applyToAppBar', applyToAppBar));
+    properties.add(DiagnosticsProperty<BlurredSurfaceStyle?>('appBarBlurredSurface', appBarBlurredSurface));
+    properties.add(DiagnosticsProperty<AppBarTheme?>('appBarTheme', appBarTheme));
   }
 }

@@ -27,17 +27,24 @@ class _LoginCoreUrlAssignScreenState extends State<LoginCoreUrlAssignScreen> {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
 
-    // TODO: Add separate style for this screen
+    // The logo is still borrowed from the switch screen style; the bar and
+    // status bar are owned by this screen's own style.
     final LoginSwitchScreenStyles? loginPageStyles = themeData.extension<LoginSwitchScreenStyles>();
     final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
+    final ownStyle = themeData.extension<LoginCoreUrlAssignScreenStyles>()?.primary;
 
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => whenLoginCoreUrlAssignScreenPageActive(current),
       builder: (context, state) => LoginScaffold(
+        contentThemeOverride: ownStyle?.contentThemeOverride,
+        applyToAppBar: ownStyle?.applyToAppBar,
+        appBarTheme: ownStyle?.appBarTheme,
         appBar: AppBar(
           leading: ExtBackButton(disabled: state.processing),
-          backgroundColor: Colors.transparent,
-          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          flexibleSpace: BlurredSurface.fromStyle(ownStyle?.appBarBlurredSurface),
+          // Themes saved before this screen had its own style get the historic
+          // dark status icons over the light login background.
+          systemOverlayStyle: ownStyle?.systemUiOverlayStyle ?? SystemUiOverlayStyle.dark,
         ),
         body: SafeArea(
           top: false,

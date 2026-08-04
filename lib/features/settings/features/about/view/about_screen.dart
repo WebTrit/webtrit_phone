@@ -55,11 +55,12 @@ class _AboutScreenState extends State<AboutScreen> {
     final bottomPadding = mediaQuery.padding.bottom;
 
     return ThemedScaffold(
+      appBarTheme: localStyle?.appBarTheme,
       background: localStyle?.background,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(context.l10n.settings_ListViewTileTitle_about),
-        flexibleSpace: BlurredSurface.fromStyle(localStyle?.appBarBlurredSurface),
+        flexibleSpace: BlurredSurface.resolve(context, localStyle?.appBarBlurredSurface),
       ),
       body: BlocBuilder<AboutBloc, AboutState>(
         builder: (context, state) {

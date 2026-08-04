@@ -15,6 +15,7 @@ class ThemedScaffold extends StatelessWidget {
     this.background,
     this.contentThemeOverride = ThemeMode.system,
     this.applyToAppBar = true,
+    this.appBarTheme,
     this.appBar,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
@@ -52,6 +53,11 @@ class ThemedScaffold extends StatelessWidget {
   /// If true, the [contentThemeOverride] is applied to the entire Scaffold (including [appBar]).
   /// If false, it is applied only to the [body], allowing the [appBar] to retain the global theme.
   final bool applyToAppBar;
+
+  /// The page-level app bar theme (the page's bar override cascaded over the
+  /// global bar config). When set, every [AppBar] under this scaffold resolves
+  /// against it instead of the global [ThemeData.appBarTheme].
+  final AppBarTheme? appBarTheme;
 
   final PreferredSizeWidget? appBar;
   final Widget? floatingActionButton;
@@ -150,9 +156,19 @@ class ThemedScaffold extends StatelessWidget {
       restorationId: restorationId,
     );
 
-    // CASE B: Apply override to the entire Scaffold (Body + AppBar + Drawers)
+    // CASE B: Apply override to the entire Scaffold (Body + AppBar + Drawers),
+    // layering the page-level app bar theme on top of whichever theme governs
+    // the bar.
     if (overrideTheme != null && applyToAppBar) {
-      scaffold = Theme(data: overrideTheme, child: scaffold);
+      scaffold = Theme(
+        data: appBarTheme == null ? overrideTheme : overrideTheme.copyWith(appBarTheme: appBarTheme),
+        child: scaffold,
+      );
+    } else if (appBarTheme != null) {
+      scaffold = Theme(
+        data: Theme.of(context).copyWith(appBarTheme: appBarTheme),
+        child: scaffold,
+      );
     }
 
     return scaffold;

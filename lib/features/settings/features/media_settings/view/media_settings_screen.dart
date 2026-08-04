@@ -47,7 +47,7 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
       appBar: AppBar(
         title: Text(l10n.settings_ListViewTileTitle_mediaSettings),
         leading: const ExtBackButton(),
-        flexibleSpace: BlurredSurface.fromStyle(localStyle?.appBarBlurredSurface),
+        flexibleSpace: BlurredSurface.resolve(context, localStyle?.appBarBlurredSurface),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_backup_restore),

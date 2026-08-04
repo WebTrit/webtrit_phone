@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/widgets/blurred_surface.dart';
 
@@ -12,13 +13,17 @@ export 'background_style.dart';
 /// managing shared attributes such as [BackgroundStyle].
 abstract class BaseScreenStyle with Diagnosticable {
   /// Creates a base screen style.
-  const BaseScreenStyle({this.background, this.appBarBlurredSurface});
+  const BaseScreenStyle({this.background, this.appBarBlurredSurface, this.appBarTheme});
 
   /// The background style configuration for the screen.
   final BackgroundStyle? background;
 
   /// Style for the AppBar's BlurredSurface flexibleSpace.
   final BlurredSurfaceStyle? appBarBlurredSurface;
+
+  /// The page-level app bar theme: the page's bar override already cascaded
+  /// over the global bar config. Null when the page defines no override.
+  final AppBarTheme? appBarTheme;
 
   /// Linearly interpolates between two [BackgroundStyle]s.
   ///
@@ -32,5 +37,6 @@ abstract class BaseScreenStyle with Diagnosticable {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<BackgroundStyle?>('background', background));
     properties.add(DiagnosticsProperty<BlurredSurfaceStyle?>('appBarBlurredSurface', appBarBlurredSurface));
+    properties.add(DiagnosticsProperty<AppBarTheme?>('appBarTheme', appBarTheme));
   }
 }

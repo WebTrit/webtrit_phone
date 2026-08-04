@@ -122,12 +122,13 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
       child: ThemedScaffold(
         background: effectiveStyle?.background,
         contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
-        applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+        applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
+        appBarTheme: effectiveStyle?.appBarTheme,
         extendBodyBehindAppBar: true,
         appBar: MainAppBar(
           title: widget.title,
           context: context,
-          flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
+          flexibleSpace: BlurredSurface.resolve(context, effectiveStyle?.appBarBlurredSurface),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,

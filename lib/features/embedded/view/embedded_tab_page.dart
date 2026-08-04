@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/features/embedded/view/embedded_screen_styles.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -116,7 +117,12 @@ class EmbeddedTabPage extends StatelessWidget {
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context, String titleL10n) {
-    return MainAppBar(title: Text(context.parseL10n(titleL10n)), context: context);
+    final style = Theme.of(context).extension<EmbeddedScreenStyles>()?.primary;
+    return MainAppBar(
+      title: Text(context.parseL10n(titleL10n)),
+      context: context,
+      flexibleSpace: BlurredSurface.resolve(context, style?.appBarBlurredSurface),
+    );
   }
 
   PageInjectionStrategy _defaultPageInjectionStrategy(Map<String, dynamic>? payload) {

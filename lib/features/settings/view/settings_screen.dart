@@ -40,11 +40,12 @@ class SettingsScreen extends StatelessWidget {
       background: effectiveStyle?.background,
       contentThemeOverride: effectiveStyle?.contentThemeOverride,
       applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
+      appBarTheme: effectiveStyle?.appBarTheme,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: const AutoLeadingButton(),
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
-        flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
+        flexibleSpace: BlurredSurface.resolve(context, effectiveStyle?.appBarBlurredSurface),
         actions: [IconButton(icon: const Icon(Icons.refresh), onPressed: () => _onRefreshTap(context))],
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(

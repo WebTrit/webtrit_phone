@@ -129,12 +129,13 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
     return ThemedScaffold(
       background: effectiveStyle?.background,
       contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
-      applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+      applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
+      appBarTheme: effectiveStyle?.appBarTheme,
       extendBodyBehindAppBar: true,
       appBar: MainAppBar(
         title: widget.title,
         context: context,
-        flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
+        flexibleSpace: BlurredSurface.resolve(context, effectiveStyle?.appBarBlurredSurface),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(
