@@ -23,8 +23,10 @@ class CallInitScaffold extends StatelessWidget {
           SafeArea(
             child: AppBar(
               leading: style?.appBar?.showBackButton == false ? null : const ExtBackButton(),
-              backgroundColor: style?.appBar?.backgroundColor,
-              foregroundColor: style?.appBar?.foregroundColor,
+              // Fallbacks keep the bar transparent with a light foreground over
+              // the dark call gradient even when the call style is absent.
+              backgroundColor: style?.appBar?.backgroundColor ?? Colors.transparent,
+              foregroundColor: style?.appBar?.foregroundColor ?? surfaceColor,
               primary: style?.appBar?.primary ?? false,
             ),
           ),

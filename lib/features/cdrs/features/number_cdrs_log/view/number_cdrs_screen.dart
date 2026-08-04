@@ -74,7 +74,9 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(),
+      // Deliberately chrome-less: the bar only floats the back button over the
+      // number header card, so it must not paint the themed bar color.
+      appBar: AppBar(backgroundColor: Colors.transparent),
       body: Stack(
         children: [
           BlocBuilder<NumberCdrsLogCubit, CdrsListState>(
