@@ -24,10 +24,10 @@ class AppBarThemeDataFactory implements ThemeStyleFactory<AppBarTheme> {
       leadingWidth: config.leadingWidth,
       toolbarHeight: config.toolbarHeight,
       centerTitle: config.centerTitle,
-      iconTheme: config.iconTheme?.toIconThemeData(),
-      actionsIconTheme: config.actionsIconTheme?.toIconThemeData(),
-      titleTextStyle: _titleTextStyle(),
-      toolbarTextStyle: config.toolbarTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily),
+      iconTheme: _iconTheme(config.iconTheme, colorScheme.onSurface),
+      actionsIconTheme: _iconTheme(config.actionsIconTheme, colorScheme.onSurfaceVariant),
+      titleTextStyle: _textStyle(config.titleTextStyle),
+      toolbarTextStyle: _textStyle(config.toolbarTextStyle),
       // Always non-null: an AppBar wraps itself in an AnnotatedRegion, and the engine
       // keeps the previously set value for every null field, so a partial style would
       // leave the bars looking like the screen shown before this one.
@@ -37,12 +37,20 @@ class AppBarThemeDataFactory implements ThemeStyleFactory<AppBarTheme> {
     );
   }
 
-  // Once the config carries a title style, AppBar takes it verbatim and never
-  // falls back to foregroundColor, so the color chain has to be completed here:
-  // explicit title color -> configured foreground -> scheme default.
-  TextStyle? _titleTextStyle() {
-    final titleTextStyle = config.titleTextStyle?.toTextStyle(defaultFontFamily: defaultFontFamily);
-    if (titleTextStyle == null || titleTextStyle.color != null) return titleTextStyle;
-    return titleTextStyle.copyWith(color: config.foregroundColor?.toColor() ?? colorScheme.onSurface);
+  // Once the config carries a style, AppBar takes it verbatim and never falls
+  // back to foregroundColor, so the color chain has to be completed here:
+  // explicit color -> configured foreground -> scheme default.
+  TextStyle? _textStyle(TextStyleConfig? styleConfig) {
+    final style = styleConfig?.toTextStyle(defaultFontFamily: defaultFontFamily);
+    if (style == null || style.color != null) return style;
+    return style.copyWith(color: config.foregroundColor?.toColor() ?? colorScheme.onSurface);
+  }
+
+  // Same chain for icon themes; the scheme default mirrors the framework's
+  // (onSurface for leading, onSurfaceVariant for actions).
+  IconThemeData? _iconTheme(IconThemeDataConfig? iconConfig, Color schemeDefault) {
+    final iconTheme = iconConfig?.toIconThemeData();
+    if (iconTheme == null || iconTheme.color != null) return iconTheme;
+    return iconTheme.copyWith(color: config.foregroundColor?.toColor() ?? schemeDefault);
   }
 }
