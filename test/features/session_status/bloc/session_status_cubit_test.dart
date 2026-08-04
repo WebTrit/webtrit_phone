@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart' as ws;
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/push_tokens/bloc/push_tokens_bloc.dart';
 import 'package:webtrit_phone/features/session_status/bloc/session_status_cubit.dart';
@@ -68,23 +69,193 @@ void main() {
       });
     });
 
-    test('emits status on every callStatus change', () {
+    test('the first combined state bypasses the smoothing even when transient', () {
+      fakeAsync((async) {
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.connectError), callStream: const Stream.empty());
+
+        expect(
+          cubit.state.status,
+          _statusFor(CallStatus.connectError),
+          reason: 'the default state was never on screen, so there is nothing to hold',
+        );
+        unawaited(cubit.close());
+      });
+    });
+
+    test('debounces changes between transient states and shows ready immediately', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.inProgress), callStream: callController.stream);
+
+        callController.add(_cs(CallStatus.connectIssue));
+        expect(cubit.state.status, _statusFor(CallStatus.inProgress), reason: 'transient flips are held back');
+
+        async.elapse(kSignalingStatusDebounce);
+        expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
+
+        callController.add(_cs(CallStatus.ready));
+        expect(cubit.state.status, _statusFor(CallStatus.ready));
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('recovering the network shows connecting at once, never the stale connect error', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.connectivityNone), callStream: callController.stream);
+
+        // The network is back, but the derived state still carries the connect
+        // error recorded during the outage (DNS failure on the last attempt).
+        callController.add(_cs(CallStatus.connectError));
+        expect(
+          cubit.state.status,
+          _statusFor(CallStatus.inProgress),
+          reason: 'the stale error must be shown as connecting, not flashed',
+        );
+
+        callController.add(_cs(CallStatus.inProgress));
+        callController.add(_cs(CallStatus.ready));
+        expect(cubit.state.status, _statusFor(CallStatus.ready));
+
+        async.elapse(kSignalingStatusDebounce * 2);
+        expect(cubit.state.status, _statusFor(CallStatus.ready), reason: 'nothing pending may fire later');
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('a connect error that persists past the window does surface', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.connectivityNone), callStream: callController.stream);
+
+        callController.add(_cs(CallStatus.connectError));
+        expect(cubit.state.status, _statusFor(CallStatus.inProgress));
+
+        async.elapse(kSignalingStatusDebounce);
+        expect(cubit.state.status, _statusFor(CallStatus.connectError));
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('drops a downgrade blip that returns to ready within the debounce window', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
+
+        // The re-register blip after a reconnect: ready -> inProgress -> ready.
+        callController.add(_cs(CallStatus.inProgress));
+        expect(cubit.state.status, _statusFor(CallStatus.ready), reason: 'the downgrade must be held back');
+
+        async.elapse(kSignalingStatusDebounce ~/ 2);
+        callController.add(_cs(CallStatus.ready));
+        expect(cubit.state.status, _statusFor(CallStatus.ready));
+
+        async.elapse(kSignalingStatusDebounce * 2);
+        expect(cubit.state.status, _statusFor(CallStatus.ready), reason: 'the dropped blip must not fire later');
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('shows a downgrade that outlives the debounce window', () {
       fakeAsync((async) {
         final callController = StreamController<CallState>(sync: true);
 
         final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
 
         callController.add(_cs(CallStatus.connectIssue));
+        expect(cubit.state.status, _statusFor(CallStatus.ready));
+
+        async.elapse(kSignalingStatusDebounce);
         expect(cubit.state.status, _statusFor(CallStatus.connectIssue));
 
-        callController.add(_cs(CallStatus.inProgress));
-        expect(cubit.state.status, _statusFor(CallStatus.inProgress));
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
 
+    test('shows the latest downgrade when several arrive within one window', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
+
+        callController.add(_cs(CallStatus.inProgress));
         callController.add(_cs(CallStatus.connectError));
+        expect(cubit.state.status, _statusFor(CallStatus.ready));
+
+        async.elapse(kSignalingStatusDebounce);
         expect(cubit.state.status, _statusFor(CallStatus.connectError));
 
-        callController.add(_cs(CallStatus.ready));
-        expect(cubit.state.status, _statusFor(CallStatus.ready));
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('a signaling hiccup while unregistered is held back, not amplified', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.appUnregistered), callStream: callController.stream);
+
+        // A sub-second blip: connectIssue and back. Nothing may reach the UI.
+        callController.add(_cs(CallStatus.connectIssue));
+        expect(cubit.state.status, _statusFor(CallStatus.appUnregistered));
+
+        callController.add(_cs(CallStatus.appUnregistered));
+        expect(cubit.state.status, _statusFor(CallStatus.appUnregistered));
+
+        async.elapse(kSignalingStatusDebounce * 2);
+        expect(cubit.state.status, _statusFor(CallStatus.appUnregistered));
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('a push token error rides through immediately while a transient is held', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+        final pushController = StreamController<PushTokensState>(sync: true);
+
+        final cubit = buildCubit(
+          initialCallState: _cs(CallStatus.ready),
+          callStream: callController.stream,
+          pushStream: pushController.stream,
+        );
+
+        callController.add(_cs(CallStatus.inProgress));
+        expect(cubit.state.status, _statusFor(CallStatus.ready), reason: 'the downgrade itself is held');
+
+        pushController.add(const PushTokensState(errorMessage: 'token failed'));
+        expect(cubit.state.status.hasPushTokenError, isTrue, reason: 'orthogonal fields must not wait for the window');
+        expect(cubit.state.status.signalingStatus, CallStatus.ready);
+
+        callController.close();
+        pushController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('shows losing the network immediately, without the debounce', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
+
+        callController.add(_cs(CallStatus.connectivityNone));
+        expect(cubit.state.status, _statusFor(CallStatus.connectivityNone));
 
         callController.close();
         unawaited(cubit.close());

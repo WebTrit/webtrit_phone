@@ -103,8 +103,6 @@ class _ChatMessageViewState extends State<ChatMessageView> {
         ? renderBox.localToGlobal(renderBox.size.bottomRight(Offset.zero) + offset, ancestor: overlay)
         : renderBox.localToGlobal(renderBox.size.bottomLeft(Offset.zero) + offset, ancestor: overlay);
 
-    print('RenderBox- a: $a, b: $b, renderBox.size: ${renderBox.size}, overlay.size: ${overlay.size}');
-
     return RelativeRect.fromRect(Rect.fromPoints(a, b), Offset.zero & overlay.size);
   }
 

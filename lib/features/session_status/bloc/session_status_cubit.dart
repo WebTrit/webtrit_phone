@@ -6,8 +6,11 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/extensions/call_status.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 part 'session_status_state.dart';
 
@@ -33,6 +36,22 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   PushTokensState? _lastPushTokensState;
   CallState? _lastCallState;
   CallkeepAndroidCallDeliveryMode _callDeliveryMode = CallkeepAndroidCallDeliveryMode.unknown;
+
+  /// Times the hold window of a transient episode (see [_emitDebounced]).
+  /// Scheduled once when the episode starts and cancelled by any hard state,
+  /// so oscillating reconnect attempts do not keep postponing the real status.
+  final Debounce _transientDebounce = Debounce(kSignalingStatusDebounce);
+
+  /// The latest combined state withheld during a transient episode. Updated on
+  /// every transient change and emitted as-is when the window elapses; a hard
+  /// state discards it. Non-null exactly while an episode is in progress.
+  SessionStatusState? _pendingTransient;
+
+  /// Whether the first combined state has been emitted. The constructor's
+  /// default state was never computed from the real sources, so the first
+  /// emission bypasses the smoothing instead of mistaking that default for
+  /// something already on screen.
+  bool _bootstrapped = false;
 
   void _onPushTokensChanged(PushTokensState pushTokens) {
     _lastPushTokensState = pushTokens;
@@ -80,7 +99,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     final pushTokenError = (pushTokens.pushToken == null && pushTokens.errorMessage != null)
         ? pushTokens.errorMessage
         : null;
-    emit(
+    _emitDebounced(
       state.copyWith(
         status: SessionStatus(signalingStatus: call.status, pushTokenError: pushTokenError),
         issues: _buildIssues(),
@@ -88,8 +107,64 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     );
   }
 
+  /// Smooths the transient reconnecting states so a reconnect cycle does not
+  /// flicker the UI. Only the signaling-status dimension is held back: the
+  /// push token error and the side issues are orthogonal to it and always ride
+  /// through immediately. Hard states (ready, no network, unregistered) show
+  /// immediately; a transient signaling status is held for
+  /// [kSignalingStatusDebounce] and only surfaces if the episode outlives the
+  /// window:
+  ///
+  /// - from ready and from unregistered the previous status stays on screen,
+  ///   so the re-register blip after a recovery (or a sub-second signaling
+  ///   hiccup) never reaches the UI;
+  /// - from no-network a calm "connecting" shows right away: the network just
+  ///   came back and deserves instant feedback, but the real derived state
+  ///   still carries a stale connect error recorded during the outage;
+  /// - transient-to-transient changes only update the pending state.
+  ///
+  /// The window is scheduled once per transient episode (not reset by further
+  /// transient changes): during a prolonged outage the reconnect cycle keeps
+  /// oscillating between transient states, and re-scheduling on each of them
+  /// would postpone the real status forever. The very first combined state
+  /// bypasses the smoothing entirely - the default constructor state was never
+  /// computed from the real sources and must not be mistaken for something
+  /// already on screen.
+  void _emitDebounced(SessionStatusState next) {
+    if (!_bootstrapped) {
+      _bootstrapped = true;
+      emit(next);
+      return;
+    }
+
+    if (!next.status.signalingStatus.isTransientReconnecting) {
+      _pendingTransient = null;
+      _transientDebounce.cancel();
+      emit(next);
+      return;
+    }
+
+    if (_pendingTransient == null) {
+      _transientDebounce.schedule(() {
+        final pending = _pendingTransient;
+        _pendingTransient = null;
+        if (pending != null && !isClosed) emit(pending);
+      });
+    }
+    _pendingTransient = next;
+
+    final displayed = state.status.signalingStatus;
+    final shownStatus = displayed == CallStatus.connectivityNone ? CallStatus.inProgress : displayed;
+    emit(
+      next.copyWith(
+        status: SessionStatus(signalingStatus: shownStatus, pushTokenError: next.status.pushTokenError),
+      ),
+    );
+  }
+
   @override
   Future<void> close() {
+    _transientDebounce.dispose();
     _callSubscription.cancel();
     _pushTokensSubscription.cancel();
     return super.close();
