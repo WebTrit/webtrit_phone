@@ -69,7 +69,7 @@ class RemoteWhisperTranscriptionDataSource extends TranscriptionDataSource {
     final request = http.MultipartRequest('POST', _endpoint)
       ..fields['model'] = _model
       ..fields['response_format'] = 'json'
-      ..files.add(http.MultipartFile.fromBytes('file', audio, filename: 'voicemail.wav'));
+      ..files.add(http.MultipartFile.fromBytes('file', audio, filename: 'audio.${_extensionOf(audio)}'));
 
     final effectiveLanguage = (language != null && language.isNotEmpty) ? language : _defaultLanguage;
     if (effectiveLanguage != null) {
@@ -108,6 +108,33 @@ class RemoteWhisperTranscriptionDataSource extends TranscriptionDataSource {
     }
 
     return text.trim();
+  }
+
+  /// Container of the payload, from its magic bytes.
+  ///
+  /// OpenAI-compatible services read the format off the uploaded file name, so
+  /// a wrong extension is rejected as a corrupt file. The caller only hands
+  /// over bytes (and the media backend may answer with a different container
+  /// than the one asked for), so the name is derived from the payload instead
+  /// of assumed. Anything unrecognized is offered as wav, historically the
+  /// telephony default.
+  static String _extensionOf(Uint8List audio) {
+    bool startsWith(List<int> magic, {int offset = 0}) {
+      if (audio.length < offset + magic.length) return false;
+      for (var i = 0; i < magic.length; i++) {
+        if (audio[offset + i] != magic[i]) return false;
+      }
+      return true;
+    }
+
+    if (startsWith([0x52, 0x49, 0x46, 0x46])) return 'wav'; // RIFF
+    if (startsWith([0x49, 0x44, 0x33])) return 'mp3'; // ID3
+    // MPEG audio frame sync (11 set bits), covering mp3 without an ID3 tag.
+    if (audio.length >= 2 && audio[0] == 0xFF && (audio[1] & 0xE0) == 0xE0) return 'mp3';
+    if (startsWith([0x4F, 0x67, 0x67, 0x53])) return 'ogg'; // OggS
+    if (startsWith([0x66, 0x4C, 0x61, 0x43])) return 'flac'; // fLaC
+    if (startsWith([0x66, 0x74, 0x79, 0x70], offset: 4)) return 'm4a'; // ....ftyp
+    return 'wav';
   }
 
   /// Request timeout (408), too early (425), rate limiting (429) and server

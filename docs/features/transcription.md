@@ -1,13 +1,12 @@
 # Transcription
 
-Client-side speech-to-text for media the app holds: audio is transcribed by a
-Whisper engine (on-device or an OpenAI-compatible endpoint) through a
-session-wide fire-and-forget pool, results land in a media-agnostic database
-table, and consumers observe them through their own queries. Voicemail is the
-first consumer; call recordings or chat voice notes can plug into the same
-pipeline without schema or engine changes.
+Speech-to-text for media the app holds: audio is sent to an OpenAI-compatible
+transcription service through a session-wide fire-and-forget pool, results land
+in a media-agnostic database table, and consumers observe them through their own
+queries. Voicemail is the first consumer; call recordings or chat voice notes
+can plug into the same pipeline without schema or engine changes.
 
-Last reviewed: 2026-07-14
+Last reviewed: 2026-08-05
 
 ## Where it lives
 
@@ -15,16 +14,12 @@ Last reviewed: 2026-07-14
   engine package:
     - `src/transcription_datasource.dart` - `TranscriptionDataSource`
       contract: bytes -> text, an `engine` id string, `dispose()`.
-    - `src/local_whisper_transcription_datasource*.dart` - on-device
-      whisper.cpp via `whisper_ggml` (io implementation + web stub behind a
-      conditional import); converts input to 16 kHz mono WAV with the bundled
-      ffmpeg, downloads the ggml model on first use, engine id
-      `whisper-ggml:<model>`.
     - `src/remote_whisper_transcription_datasource.dart` - any
       OpenAI-compatible `POST .../audio/transcriptions` endpoint; accepts a
       full URL or its `/v1` base, optional Bearer key, engine id
       `openai-compatible:<model>`. Builds its own HTTP client internally
-      (`_http_client` stays a package detail).
+      (`_http_client` stays a package detail). Pure Dart: the package carries
+      no native dependency at all.
     - `src/transcription_service.dart` - `TranscriptionService`, the pool
       (see below), and `MediaTranscriber`, the narrow consumer contract.
     - `src/transcription_store.dart` - `TranscriptionStore`, the storage
@@ -46,68 +41,61 @@ Last reviewed: 2026-07-14
       `watchVoicemailsMissingTranscription`, `deleteOrphanTranscriptions`.
 - App-side wiring:
     - `lib/data/feature_access.dart` - `TranscriptionMapper` resolves the
-      theme `AppConfigTranscription` into the package `TranscriptionConfig`.
+      theme `AppConfigTranscription` into the package `TranscriptionConfig`
+      and picks the service credential up from the environment.
     - `lib/repositories/transcription/transcription_store_drift_impl.dart` -
       `TranscriptionStoreDriftImpl`: the only place where pool output meets the
       database; also classifies failures and handles 401.
-    - `lib/repositories/transcription_model/transcription_model_repository.dart` -
-      prefs persistence of the user's model override (`transcription-model`).
-    - `lib/services/transcription_model_service.dart` -
-      `TranscriptionModelService`: session-wide owner of the model choice.
-    - `lib/app/router/main_shell.dart` - providers: the pool
-      (`TranscriptionService` over the datasource builder and the drift
-      store) and the model service; the voicemail repository receives the
-      pool as `MediaTranscriber`.
+    - `lib/app/router/main_shell.dart` - provides the pool
+      (`TranscriptionService` over the datasource and the drift store); the
+      voicemail repository receives it as `MediaTranscriber`.
 - Consumers (voicemail today):
     - `lib/repositories/voicemail/voicemail_repository.dart` - enqueues
       pending voice messages, forgets deleted ones, sweeps orphans.
     - `lib/features/settings/features/voicemail/` - the list UI
-      (`VoicemailTile` renders the transcript states) and the overflow menu.
-    - `lib/features/settings/features/transcription_settings/` - the model
-      selection page (route `settings/transcription-settings`).
+      (`VoicemailTile` renders the transcript states).
 
 ## Configuration
 
 Top-level `transcription` section of the white-label app config
 (`assets/themes/app.config.json`; theme models `AppConfigTranscription*` in
 `packages/webtrit_appearance_theme`, resolved by `FeatureAccess` into the
-package-owned `TranscriptionConfig`). The stock config ships with the local
-engine enabled; an absent section falls back to `disabled` (the schema
-default), so white-label configs without it stay off.
+package-owned `TranscriptionConfig`).
 
 ```json
 "transcription": {
-  "mode": "disabled | local | remote",
+  "mode": "remote | disabled",
   "language": "optional ISO 639-1 hint; omit to auto-detect",
-  "local": { "model": "base" },
-  "remote": { "url": "https://stt.example.com/v1", "apiKey": "optional", "model": "whisper-1" }
+  "remote": { "url": "https://api.groq.com/openai/v1", "model": "whisper-large-v3-turbo" }
 }
 ```
 
-- `mode` - source selector; unknown values disable the feature. `local` is
-  not available on web (FFI) and quietly disables itself there.
-- `language` - passed to the engine as a hint; empty means auto-detect per
+- `mode` - `remote` or `disabled` (which keeps a configured endpoint in place
+  while the feature is off); unknown values disable the feature.
+- `language` - passed to the service as a hint; empty means auto-detect per
   message.
-- `local.model` - the Whisper tier downloaded to the device (`tiny`, `base`,
-  `small`, ...). This is only the predefined default: the user may switch the
-  tier at runtime (see Model choice), there is no brand pinning flag.
 - `remote.url` - the endpoint base; `audio/transcriptions` is appended when
-  not already present. The remote mode stays disabled while it is missing or
-  invalid.
+  not already present. Transcription stays off while it is missing or invalid,
+  which is what the stock config ships with.
+- `remote.model` - the model name the service expects.
 
-The configurator still edits the pre-promotion `voicemail.transcription`
-path and needs a follow-up for this section.
+The credential is NOT part of this section. It is billed per request, so it
+comes from the build-time `WEBTRIT_APP_TRANSCRIPTION_API_KEY` dart-define
+instead of travelling with the theme, and it is simply left unset for endpoints
+that authenticate by network placement or client certificates (the datasource
+also trusts the app's configured certificates, so a self-hosted service behind a
+private CA works out of the box).
 
 ## Architecture
 
 ```
-consumer (voicemail repository)                    settings page
-  | enqueue / forget (MediaTranscriber)              | setModel
-  v                                                  v
-TranscriptionService (pool, session-wide)  <--- TranscriptionModelService
-  | transcribe via TranscriptionDataSource           | persists override
-  | lifecycle facts (TranscriptionStore)             v
-  v                                            AppPreferences
+consumer (voicemail repository)
+  | enqueue / forget (MediaTranscriber)
+  v
+TranscriptionService (pool, session-wide)
+  | transcribe via TranscriptionDataSource (HTTP multipart)
+  | lifecycle facts (TranscriptionStore)
+  v
 TranscriptionStoreDriftImpl -> transcriptions table (drift)
                                 ^
         consumer queries / watches (list join, missing-row watch)
@@ -122,24 +110,19 @@ Provided session-wide in the main shell. Consumers hand media off through
   The audio loader is lazy (queued items do not hold payloads). Duplicates of
   a queued or in-flight item and calls while disabled are no-ops. Every
   queued item is marked in progress immediately (guarded, so a finished
-  transcript is never overwritten): after a model-switch wipe the whole
-  backlog shows "transcribing" instead of a blank list while the sequential
-  workers catch up.
+  transcript is never overwritten), so the whole backlog shows "transcribing"
+  instead of a blank list while the workers catch up.
 - `forget(mediaType, mediaId)` / `forgetAllForType(mediaType)` - the media
   was deleted: dequeues, invalidates in-flight results and removes stored
   rows through the store.
-- `switchLocalModel(localModel)` - see Model choice.
 
-Internals: a small worker pool draining one queue (concurrency is injected
-per mode: 1 for the compute-bound local engine, where parallel inference only
-multiplies memory pressure, 3 for the network-bound remote one; with one
-worker processing is strictly sequential); an `_active` map (key -> request
-instance) whose identity check invalidates stale writes (a forget, switch or
-re-enqueue replaces the entry, so the old in-flight request no longer owns
-its key); a generation counter bumped by switches; staleness re-checks
-between the download and the inference so dead work is dropped before it
-burns network or CPU. The pool is storage-agnostic: every lifecycle fact goes
-to the injected `TranscriptionStore`.
+Internals: a small worker pool draining one queue (concurrency 3 in the app -
+the work is network-bound); an `_active` map (key -> request instance) whose
+identity check invalidates stale writes (a forget or re-enqueue replaces the
+entry, so the old in-flight request no longer owns its key); staleness
+re-checks between the download and the request so dead work is dropped before
+it burns network. The pool is storage-agnostic: every lifecycle fact goes to
+the injected `TranscriptionStore`.
 
 ### The store - `TranscriptionStoreDriftImpl`
 
@@ -164,11 +147,11 @@ There is no event stream between the pool and its consumers. The voicemail
 list joins the transcriptions table (`VoicemailTile` renders
 transcript/progress/unavailable from the joined row), and re-enqueue is
 driven by data: `watchVoicemailsMissingTranscription` emits voice messages
-with no transcription row at all (freshly fetched or wiped for
-regeneration), and the pool's own lifecycle writes take rows out of that
-watch, so emissions cannot loop. Rows rolled back to a null status (transient
-failures) are excluded from the watch and retried only by the fetch-time
-pending query - one attempt per fetch.
+with no transcription row at all (freshly fetched or wiped by a cache clear),
+and the pool's own lifecycle writes take rows out of that watch, so emissions
+cannot loop. Rows rolled back to a null status (transient failures) are
+excluded from the watch and retried only by the fetch-time pending query - one
+attempt per fetch.
 
 ### Consumer rules (voicemail)
 
@@ -188,49 +171,6 @@ pending query - one attempt per fetch.
 - The repository implements `Disposable` and cancels its database watches
   with the session (the database itself is app-scoped).
 
-### Model choice
-
-`TranscriptionModelService` (session-wide) owns the user's tier choice:
-
-- `canSelectModel` - a purely functional gate: the pool is enabled AND the
-  mode is `local` (the remote mode ignores the tier). The voicemail overflow
-  menu shows the "Transcription model" entry only then.
-- `setModel` switches the pool first and persists the prefs override after
-  (a failed switch must not leave an override that silently applies on next
-  start); rapid re-selection is serialized.
-- The pool's `switchLocalModel` builds the replacement source first and
-  no-ops when its engine id equals the current one (same tier re-picked, or
-  a remote source that ignores the tier) - nothing is wiped then. A real
-  engine change wipes the whole transcriptions table, which re-feeds the
-  missing-row watch and regenerates every message with the new engine; when
-  the wipe fails the current engine is kept and the error surfaces to the
-  settings page.
-- UI: `TranscriptionSettingsScreen` (pattern of the cache management page)
-  lists Fast (`base`, ~142 MB), Balanced (`small`, ~466 MB), Accurate
-  (`medium`, ~1.5 GB) plus the brand default when it is a different tier;
-  the cubit's rollback is revision-guarded so an older failed attempt cannot
-  clobber a newer successful selection. l10n keys live under
-  `transcriptionSettings_*`.
-
-### Model download visibility
-
-The local model file is fetched by the datasource itself (streamed to a
-temporary file, ggml-validated), so download progress is first-class:
-
-- `ModelDownloadState` (`idle / downloading(received, total) / ready /
-  failed`) is exposed by every datasource (`downloadState`; trivially ready
-  for remote/stub) and mirrored session-wide by the pool
-  (`TranscriptionService.modelDownloadState`, stable across tier switches)
-  and the model service.
-- The settings page marks tiers whose file is already on disk
-  (`isModelDownloaded`: file + ggml magic), shows a progress bar with a
-  percentage for the running download and a retry action after a failure.
-- Picking a tier starts its download immediately
-  (`TranscriptionModelService.setModel` calls `prepareModel` after the
-  switch) instead of waiting for the first transcription.
-- The voicemail tile distinguishes "downloading transcription model" from
-  "transcribing" while the model is still fetching.
-
 ## Adding a new media consumer
 
 1. Pick a `media_type` constant (voicemail uses
@@ -242,34 +182,29 @@ temporary file, ggml-validated), so download progress is first-class:
 3. Query/watch the transcriptions table joined to your media for rendering,
    and drive re-enqueue from your own "missing a row" watch plus a pending
    query for transient retries (mirror the voicemail DAO queries).
-4. Regeneration after a model switch comes for free: the wipe empties the
-   table and your missing-row watch re-feeds the pool.
 
 ## Limitations / future work
 
 - Transcription runs only while the app is alive (triggered by fetch or
   refresh); there is no background/push pipeline.
-- `whisper_ggml` pulls `ffmpeg_kit_flutter_new_min` (app size cost); the
-  engine sits behind `TranscriptionDataSource`, so swapping it (e.g.
-  sherpa-onnx) is a single-class change.
-- Whisper model files are a section of the Storage & cache page
-  (`TranscriptionModelsCacheSection`): their total size is shown and they can
-  be cleared; the active model is downloaded again on the next transcription
-  (the source re-verifies the file instead of trusting a cached
-  preparation).
+- The transcript is produced per install: two devices of the same user each
+  send the audio and pay for it. Moving the work behind our own service (so
+  one transcript is shared and no credential ships in the build) is the
+  natural next step; the client change would be limited to the datasource.
+- The credential lives in the build. It is not extractable-proof - prefer a
+  brand-owned key with a spend cap, or an endpoint that needs no key at all.
 
 ## Tests
 
 - `packages/data/app_transcription/test/` - datasource contract tests
-  (remote request shape, endpoint resolution, auth, language, error mapping;
-  local model validation).
+  (remote request shape, endpoint resolution, auth, language, error mapping)
+  and the pool (concurrency, immediate in-progress marking, forget after
+  dispose).
 - `packages/data/app_database/test/` - transcriptions dao (upsert null
   semantics, scoping, deletes), voicemail dao (join, missing-row watch,
   contact collapse), migration v26.
 - `test/repository/voicemail_repository_test.dart` - the pool through the
   repository: success, failures transient/terminal, refetch idempotency,
-  fax skip, model switch and regeneration, mid-flight switch discard,
-  deleted-message race, unsupported-server gate.
-- `test/data/transcription/` - factory mode switching and the pool's switch
-  semantics; `test/features/settings/features/transcription_settings/` - the
-  settings page.
+  fax skip, deleted-message race, unsupported-server gate.
+- `test/mappers/transcription_mapper_test.dart` - config resolution and the
+  credential coming from the environment rather than the theme.

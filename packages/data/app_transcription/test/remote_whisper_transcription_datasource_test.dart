@@ -18,6 +18,41 @@ void main() {
     });
   }
 
+  group('RemoteWhisperTranscriptionDataSource upload naming', () {
+    Future<String> uploadedFilename(List<int> payload) async {
+      late http.Request captured;
+      final dataSource = RemoteWhisperTranscriptionDataSource(
+        url: Uri.parse('https://stt.example.com/v1'),
+        httpClient: okClient((request) => captured = request),
+      );
+
+      await dataSource.transcribe(Uint8List.fromList(payload));
+
+      final body = utf8.decode(captured.bodyBytes, allowMalformed: true);
+      return RegExp('filename="([^"]+)"').firstMatch(body)!.group(1)!;
+    }
+
+    test('names a RIFF payload as wav', () async {
+      expect(await uploadedFilename([0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0]), 'audio.wav');
+    });
+
+    test('names an ID3-tagged payload as mp3', () async {
+      expect(await uploadedFilename([0x49, 0x44, 0x33, 0x03, 0, 0, 0, 0]), 'audio.mp3');
+    });
+
+    test('names a bare MPEG frame payload as mp3', () async {
+      expect(await uploadedFilename([0xFF, 0xFB, 0x90, 0x00]), 'audio.mp3');
+    });
+
+    test('names an ftyp payload as m4a', () async {
+      expect(await uploadedFilename([0, 0, 0, 0x20, 0x66, 0x74, 0x79, 0x70]), 'audio.m4a');
+    });
+
+    test('falls back to wav for an unrecognized container', () async {
+      expect(await uploadedFilename([1, 2, 3, 4, 5, 6, 7, 8]), 'audio.wav');
+    });
+  });
+
   group('RemoteWhisperTranscriptionDataSource', () {
     test('posts multipart request to the resolved endpoint and returns trimmed text', () async {
       late http.Request captured;

@@ -251,7 +251,6 @@ class AppRouter extends RootStackRouter {
                 AutoRoute(page: NetworkScreenPageRoute.page, path: 'network'),
                 AutoRoute(page: MediaSettingsScreenPageRoute.page, path: 'media-settings'),
                 AutoRoute(page: CacheManagementScreenPageRoute.page, path: 'cache-management'),
-                AutoRoute(page: TranscriptionSettingsScreenPageRoute.page, path: 'transcription-settings'),
                 AutoRoute(page: SelfConfigScreenPageRoute.page, path: 'self_config'),
                 AutoRoute(page: ThemeModeScreenPageRoute.page, path: 'theme-mode'),
                 AutoRoute(page: DevToolsScreenPageRoute.page, path: 'dev-tools'),

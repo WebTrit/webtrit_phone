@@ -741,21 +741,20 @@ class ChatContactInfo with _$ChatContactInfo {
 /// Client-side media transcription settings; voicemail is the first consumer.
 ///
 /// Transcripts are produced by the app itself (not received from the backend):
-/// either on the device or through an OpenAI-compatible speech-to-text endpoint,
-/// depending on [mode].
+/// the audio is sent to the OpenAI-compatible speech-to-text endpoint from
+/// [remote]. Without an endpoint the feature stays off.
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigTranscription with _$AppConfigTranscription {
   const AppConfigTranscription({
-    this.mode = 'local',
+    this.mode = 'remote',
     this.language,
-    this.local = const AppConfigTranscriptionLocal(),
     this.remote = const AppConfigTranscriptionRemote(),
   });
 
-  /// Transcription source: `disabled`, `local` (on-device inference) or
-  /// `remote` (OpenAI-compatible endpoint from [remote]). Unknown values
-  /// disable the feature.
+  /// Transcription source: `remote` (the OpenAI-compatible endpoint from
+  /// [remote]) or `disabled`, which keeps a configured endpoint in place
+  /// while the feature is off. Unknown values disable the feature.
   @override
   final String mode;
 
@@ -765,9 +764,6 @@ class AppConfigTranscription with _$AppConfigTranscription {
   final String? language;
 
   @override
-  final AppConfigTranscriptionLocal local;
-
-  @override
   final AppConfigTranscriptionRemote remote;
 
   factory AppConfigTranscription.fromJson(Map<String, Object?> json) => _$AppConfigTranscriptionFromJson(json);
@@ -775,40 +771,21 @@ class AppConfigTranscription with _$AppConfigTranscription {
   Map<String, Object?> toJson() => _$AppConfigTranscriptionToJson(this);
 }
 
-/// Options of the `local` transcription mode.
-@freezed
-@JsonSerializable(explicitToJson: true)
-class AppConfigTranscriptionLocal with _$AppConfigTranscriptionLocal {
-  const AppConfigTranscriptionLocal({this.model = 'off'});
-
-  /// `off` (no default model - the user opts in from the transcription
-  /// settings) or a Whisper model tier downloaded to the device (tiny, base,
-  /// small, ...); larger tiers transcribe better but cost more download size
-  /// and CPU. This is the default the user's in-app choice falls back to.
-  @override
-  final String model;
-
-  factory AppConfigTranscriptionLocal.fromJson(Map<String, Object?> json) =>
-      _$AppConfigTranscriptionLocalFromJson(json);
-
-  Map<String, Object?> toJson() => _$AppConfigTranscriptionLocalToJson(this);
-}
-
-/// Options of the `remote` transcription mode.
+/// The speech-to-text service transcripts are requested from.
+///
+/// The credential is deliberately absent here: it is billed per request and
+/// belongs to whoever builds the brand, so it comes from the build-time
+/// environment instead of the theme.
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigTranscriptionRemote with _$AppConfigTranscriptionRemote {
-  const AppConfigTranscriptionRemote({this.url, this.apiKey, this.model = 'whisper-1'});
+  const AppConfigTranscriptionRemote({this.url, this.model = 'whisper-1'});
 
   /// Base URL of an OpenAI-compatible speech-to-text service; the
   /// `audio/transcriptions` path is appended when not already present.
-  /// The `remote` mode is disabled while this is missing or invalid.
+  /// Transcription stays off while this is missing or invalid.
   @override
   final String? url;
-
-  /// Optional bearer token sent to the service.
-  @override
-  final String? apiKey;
 
   /// Model name passed to the service.
   @override

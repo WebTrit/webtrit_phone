@@ -290,22 +290,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           dispose: disposeIfDisposable,
         ),
         // The session-wide fire-and-forget transcription pool: features hand
-        // media off through the MediaTranscriber contract and observe
-        // results in the database, and a user model change switches the
-        // engine for all of them at once. The pool knows nothing about the
-        // database - everything it processes goes to the store, which writes
-        // the drift transcriptions table. Voicemail is the first consumer.
+        // media off through the MediaTranscriber contract and observe results
+        // in the database. The pool knows nothing about the database -
+        // everything it processes goes to the store, which writes the drift
+        // transcriptions table. Voicemail is the first consumer.
         RepositoryProvider<TranscriptionService>(
           create: (context) {
-            TranscriptionDataSource? buildTranscriptionDataSource(LocalTranscriptionModel? localModelOverride) {
-              return createTranscriptionDataSource(
-                featureAccess.transcriptionConfig,
-                localModelOverride: localModelOverride,
-                certs: appCertificates.trustedCertificates,
-                connectionTimeout: kApiClientConnectionTimeout,
-              );
-            }
-
             final store = TranscriptionStoreDriftImpl(
               appDatabase: context.read<AppDatabase>(),
               sessionGuard: _sessionGuard,
@@ -313,29 +303,18 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             unawaited(store.resetStaleInProgress());
 
             return TranscriptionService(
-              buildTranscriptionDataSource,
-              initialLocalModel: context.read<TranscriptionModelRepository>().getTranscriptionModel(),
+              createTranscriptionDataSource(
+                featureAccess.transcriptionConfig,
+                certs: appCertificates.trustedCertificates,
+                connectionTimeout: kApiClientConnectionTimeout,
+              ),
               store: store,
-              // The local engine is compute-bound (parallel inference only
-              // multiplies memory pressure), the remote one is network-bound
-              // and benefits from a few concurrent requests.
-              concurrency:
-                  TranscriptionMode.fromName(featureAccess.transcriptionConfig.mode) == TranscriptionMode.remote
-                  ? 3
-                  : 1,
+              // The transcription service is network-bound, so a few
+              // concurrent requests shorten the backlog noticeably.
+              concurrency: 3,
             );
           },
           dispose: (service) => service.dispose(),
-        ),
-        // Session-wide owner of the transcription model choice: the settings
-        // page reads and writes the model through it, independent of any
-        // single consumer feature.
-        RepositoryProvider<TranscriptionModelService>(
-          create: (context) => TranscriptionModelService(
-            modelRepository: context.read<TranscriptionModelRepository>(),
-            transcriptionService: context.read<TranscriptionService>(),
-            transcriptionConfig: featureAccess.transcriptionConfig,
-          ),
         ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
@@ -348,12 +327,9 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 appDatabase: context.read<AppDatabase>(),
                 // The repository sees only the narrow MediaTranscriber
                 // hand-off contract, never the pool itself; results come
-                // back as database updates. Always wired, even while the
-                // pool's current selection is off/unconfigured: enqueue()
-                // already no-ops then, and the pool can become enabled later
-                // (the user picks a tier) - gating this on a one-time
-                // isEnabled snapshot would freeze it out for the rest of the
-                // session.
+                // back as database updates. Always wired, even while
+                // transcription is disabled or unconfigured: enqueue() already
+                // no-ops then.
                 transcriber: context.read<TranscriptionService>(),
               );
             } else {
@@ -434,10 +410,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                     temporaryPath: appPath.temporaryPath,
                   ),
                 DatabaseCacheSection(context.read<AppDatabase>(), context.read<CdrsLocalRepository>()),
-                // Model files may sit on disk even when the current mode is
-                // not local (a leftover from an earlier configuration), so
-                // the section is not gated by the transcription mode.
-                if (!kIsWeb) TranscriptionModelsCacheSection(),
               ],
             );
           },

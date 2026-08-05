@@ -1,11 +1,8 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier;
 import 'package:logging/logging.dart';
 
-import 'model_download_state.dart';
-import 'transcription_config.dart';
 import 'transcription_datasource.dart';
 import 'transcription_store.dart';
 
@@ -14,11 +11,6 @@ final _logger = Logger('TranscriptionService');
 /// Produces the audio bytes of a media object when its turn in the pool
 /// comes; lazy so queued items do not hold their payloads in memory.
 typedef TranscriptionAudioLoader = Future<Uint8List> Function();
-
-/// Builds a transcription source for the given local model override (null
-/// keeps the configured default); returns null when the feature is disabled,
-/// misconfigured or the selection is [LocalTranscriptionModelOff].
-typedef TranscriptionDataSourceBuilder = TranscriptionDataSource? Function(LocalTranscriptionModel? localModelOverride);
 
 /// The narrow consumer-facing contract of the transcription pool: hand media
 /// off and forget deleted items. Nothing is ever returned or awaited by
@@ -37,58 +29,27 @@ abstract interface class MediaTranscriber {
 
   /// [forget] for every media object of [mediaType] in one pass.
   Future<void> forgetAllForType(String mediaType);
-
-  /// Switches the local model (null returns to the config default) and
-  /// regenerates everything already transcribed; see
-  /// [TranscriptionService.switchLocalModel].
-  Future<void> switchLocalModel(LocalTranscriptionModel? localModel);
 }
 
 /// Fire-and-forget transcription pool.
 ///
 /// Consumers enqueue media they want transcribed and walk away: the pool
-/// transcribes through the source it owns (built by the injected
-/// [TranscriptionDataSourceBuilder]), processing up to `concurrency` items
-/// at once (strictly sequential by default), and hands every lifecycle fact
-/// (in progress, transcript, failure) to the [TranscriptionStore] the
-/// application wired in - the pool itself knows nothing about storage.
-/// Results are attributed to the engine that actually produced them, and
-/// store calls are invalidated when the item was forgotten or the model
-/// switched mid-flight, so a stale result can never resurrect a removed or
-/// regenerating item. A user model change ([switchLocalModel]) swaps the
-/// engine for every consumer at once.
+/// transcribes through the source it owns, processing up to `concurrency`
+/// items at once, and hands every lifecycle fact (in progress, transcript,
+/// failure) to the [TranscriptionStore] the application wired in - the pool
+/// itself knows nothing about storage. Results are attributed to the engine
+/// that actually produced them, and store calls are invalidated when the item
+/// was forgotten mid-flight, so a stale result can never resurrect a removed
+/// item.
 class TranscriptionService implements MediaTranscriber {
-  /// Builds the initial source for [initialLocalModel] and rebuilds it on
-  /// every [switchLocalModel] call.
-  ///
-  /// [concurrency] caps how many items are processed at once. The default of
-  /// 1 (strictly sequential) suits a compute-bound local engine, where
-  /// parallel inference only multiplies memory; a network-bound remote
-  /// engine benefits from a few concurrent requests.
-  TranscriptionService(
-    TranscriptionDataSourceBuilder builder, {
-    LocalTranscriptionModel? initialLocalModel,
-    required TranscriptionStore store,
-    int concurrency = 1,
-  }) : assert(concurrency >= 1),
-       _builder = builder,
-       _store = store,
-       _concurrency = concurrency,
-       _current = builder(initialLocalModel) {
-    _observeSource(_current);
-  }
-
-  /// A pool over a fixed source that cannot switch models.
-  TranscriptionService.fixed(TranscriptionDataSource? source, {required TranscriptionStore store, int concurrency = 1})
+  /// [concurrency] caps how many items are processed at once; a
+  /// network-bound source benefits from a few concurrent requests.
+  TranscriptionService(TranscriptionDataSource? source, {required TranscriptionStore store, int concurrency = 1})
     : assert(concurrency >= 1),
-      _builder = null,
       _store = store,
       _concurrency = concurrency,
-      _current = source {
-    _observeSource(_current);
-  }
+      _current = source;
 
-  final TranscriptionDataSourceBuilder? _builder;
   final TranscriptionStore _store;
   final int _concurrency;
 
@@ -106,55 +67,24 @@ class TranscriptionService implements MediaTranscriber {
   int _generation = 0;
   bool _disposed = false;
 
-  /// True while [switchLocalModel] is between invalidating the old engine
-  /// and swapping the new one in; enqueues are dropped in that window (the
-  /// consumer's missing-row watch re-feeds them right after the wipe), so a
-  /// fresh item can never be transcribed by the outgoing engine.
-  bool _switching = false;
-
-  /// False while transcription is disabled or unsupported on this platform.
+  /// False while transcription is disabled or misconfigured.
   bool get isEnabled => _current != null;
 
-  final _modelDownloadState = ValueNotifier<ModelDownloadState>(const ModelDownloadIdle());
-  TranscriptionDataSource? _observedSource;
-
-  /// Engine-asset readiness of the active source, stable across model
-  /// switches (the source's own notifier dies with the source).
-  ValueListenable<ModelDownloadState> get modelDownloadState => _modelDownloadState;
-
-  /// Fetches the active engine's assets ahead of the first transcription
-  /// (e.g. starts the model download right after the user picked a tier);
-  /// progress is observable through [modelDownloadState].
-  Future<void> prepareEngine() => _current?.prepareEngine() ?? Future.value();
-
-  void _observeSource(TranscriptionDataSource? source) {
-    _observedSource?.downloadState.removeListener(_onSourceDownloadState);
-    _observedSource = source;
-    source?.downloadState.addListener(_onSourceDownloadState);
-    _modelDownloadState.value = source?.downloadState.value ?? const ModelDownloadIdle();
-  }
-
-  void _onSourceDownloadState() {
-    final source = _observedSource;
-    if (source != null) _modelDownloadState.value = source.downloadState.value;
-  }
-
   /// Queues the media for transcription; duplicates of an already queued or
-  /// in-flight item and calls while the feature is disabled or a model
-  /// switch is in progress are no-ops.
+  /// in-flight item and calls while the feature is disabled are no-ops.
   @override
   void enqueue(String mediaType, String mediaId, TranscriptionAudioLoader loadAudio, {String? language}) {
-    if (_disposed || _switching || !isEnabled) return;
+    if (_disposed || !isEnabled) return;
     final key = _mediaKey(mediaType, mediaId);
     if (_active.containsKey(key)) return;
 
     final request = _TranscriptionRequest(mediaType, mediaId, loadAudio, language);
     _active[key] = request;
     _requests.add(request);
-    // Mark the item in progress right away: after a model-switch wipe the
-    // rows of everything still waiting in the queue would otherwise stay
-    // absent until a worker picks the item up, and the UI would show neither
-    // a transcript nor a status for most of the backlog.
+    // Mark the item in progress right away: the rows of everything still
+    // waiting in the queue would otherwise stay absent until a worker picks
+    // the item up, and the UI would show neither a transcript nor a status
+    // for most of the backlog.
     unawaited(_markQueued(request, _generation, _current!.engine));
     _kickWorkers();
   }
@@ -190,60 +120,6 @@ class TranscriptionService implements MediaTranscriber {
     _requests.removeWhere((request) => request.mediaType == mediaType);
     _active.removeWhere((_, request) => request.mediaType == mediaType);
     await _store.removeAllForType(mediaType);
-  }
-
-  /// Switches the local model (null returns to the config default) and
-  /// regenerates everything: the store removes every transcription, the
-  /// source is rebuilt and in-flight results of the old model are
-  /// invalidated. Consumers observe the wipe through their storage and
-  /// re-enqueue what they want regenerated.
-  ///
-  /// No-op when the replacement engine is identical to the active one (a
-  /// [TranscriptionService.fixed] pool, the same tier picked again, or a
-  /// remote source that ignores the local tier) - nothing is wiped then.
-  /// Throws when the wipe fails; the engine is not swapped in that case, so
-  /// the stored transcripts stay consistent with the engine that made them.
-  @override
-  Future<void> switchLocalModel(LocalTranscriptionModel? localModel) async {
-    // Throw rather than no-op: a silent return would let the caller persist
-    // an override that was never applied.
-    if (_disposed) throw StateError('switchLocalModel called on a disposed TranscriptionService');
-    final builder = _builder;
-    if (builder == null) return;
-
-    // Build the replacement first: if it comes out byte-identical there is
-    // nothing to regenerate and the stored transcripts must survive.
-    final replacement = builder(localModel);
-    if (replacement?.engine == _current?.engine) {
-      replacement?.dispose();
-      return;
-    }
-
-    _switching = true;
-    try {
-      // Invalidate before wiping: an item may still be transcribing on the
-      // previous engine and its result must not land.
-      _generation++;
-      _requests.clear();
-      _active.clear();
-
-      try {
-        await _store.removeAll();
-      } catch (e, st) {
-        _logger.warning('Failed to wipe transcriptions for regeneration; keeping the current engine', e, st);
-        replacement?.dispose();
-        rethrow;
-      }
-
-      final previous = _current;
-      _current = replacement;
-      // Re-point the download-state mirror before the old source (and its
-      // notifier) is disposed.
-      _observeSource(replacement);
-      previous?.dispose();
-    } finally {
-      _switching = false;
-    }
   }
 
   /// Tops the worker count up to [_concurrency], never spawning more than
@@ -287,9 +163,9 @@ class TranscriptionService implements MediaTranscriber {
       );
       if (!proceed) return;
 
-      // Re-check between the expensive steps: a forget or model switch that
-      // landed meanwhile makes the download and the inference dead work that
-      // would only delay the queue behind it.
+      // Re-check between the expensive steps: a forget that landed meanwhile
+      // makes the download and the inference dead work that would only delay
+      // the queue behind it.
       if (_isStale(request, generation)) return;
       final audio = await request.loadAudio();
       if (_isStale(request, generation)) return;
@@ -318,8 +194,8 @@ class TranscriptionService implements MediaTranscriber {
     }
   }
 
-  /// True when the world changed while the work ran: a model switch or a
-  /// forget must not be overwritten by a stale result.
+  /// True when the world changed while the work ran: a forget must not be
+  /// overwritten by a stale result.
   bool _isStale(_TranscriptionRequest request, int generation) {
     return _disposed || generation != _generation || !identical(_active[request.key], request);
   }
@@ -351,10 +227,8 @@ class TranscriptionService implements MediaTranscriber {
     _generation++;
     _requests.clear();
     _active.clear();
-    _observeSource(null);
     _current?.dispose();
     _current = null;
-    _modelDownloadState.dispose();
   }
 }
 

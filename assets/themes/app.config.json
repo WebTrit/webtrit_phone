@@ -308,17 +308,12 @@
     "enabledLanguages": ["en", "it", "th", "uk"]
   },
   "transcription": {
-    "__mode": "Transcription source: 'disabled', 'local' (on-device inference; the model is downloaded on first use) or 'remote' (OpenAI-compatible speech-to-text endpoint from 'remote'). Unknown values disable the feature. Voicemail is the first consumer.",
-    "mode": "local",
+    "__mode": "Transcription source: 'remote' (the OpenAI-compatible speech-to-text endpoint from 'remote') or 'disabled', which keeps a configured endpoint in place while the feature is off. Unknown values disable the feature. Voicemail is the first consumer.",
+    "mode": "remote",
     "__language": "Expected audio language (ISO 639-1, e.g. 'en'); omit or leave empty to auto-detect per media item.",
-    "local": {
-      "__model": "'off' (no default model - the user opts in from the transcription settings) or a Whisper model tier downloaded to the device (tiny, base, small, ...); larger tiers transcribe better but cost more download size and CPU. This is the default the user's in-app choice (transcription settings) falls back to.",
-      "model": "off"
-    },
     "remote": {
-      "__url": "Base URL of an OpenAI-compatible speech-to-text service (e.g. 'https://stt.example.com/v1'); the 'audio/transcriptions' path is appended when not already present. The remote mode stays disabled while this is missing.",
-      "__apiKey": "Optional bearer token sent to the service.",
-      "__model": "Model name passed to the service.",
+      "__url": "Base URL of an OpenAI-compatible speech-to-text service (e.g. 'https://api.groq.com/openai/v1'); the 'audio/transcriptions' path is appended when not already present. Transcription stays off while this is missing.",
+      "__model": "Model name passed to the service (e.g. 'whisper-large-v3-turbo' on Groq, 'whisper-1' on OpenAI).",
       "model": "whisper-1"
     }
   }

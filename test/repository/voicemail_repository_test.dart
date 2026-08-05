@@ -12,7 +12,6 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/services/services.dart';
 
 import '../mocks/mocks.dart';
 import '../mocks/voicemails_fixture_factory.dart';
@@ -123,23 +122,6 @@ class _FakeTranscriptionDataSource extends TranscriptionDataSource {
   @override
   void dispose() {
     disposeCalls++;
-  }
-}
-
-class _FakeTranscriptionModelRepository implements TranscriptionModelRepository {
-  LocalTranscriptionModel? value;
-
-  @override
-  LocalTranscriptionModel? getTranscriptionModel() => value;
-
-  @override
-  Future<void> setTranscriptionModel(LocalTranscriptionModel? newValue) async {
-    value = newValue;
-  }
-
-  @override
-  Future<void> clear() async {
-    value = null;
   }
 }
 
@@ -372,16 +354,12 @@ void main() {
       return store;
     }
 
-    TranscriptionService createService(TranscriptionDataSourceBuilder builder) {
-      return TranscriptionService(builder, store: createStore());
-    }
-
     VoicemailRepositoryImpl createRepo(
       _TranscriptionApiClient client,
       TranscriptionDataSource? dataSource, {
       TranscriptionService? service,
     }) {
-      final transcriptionService = service ?? TranscriptionService.fixed(dataSource, store: createStore());
+      final transcriptionService = service ?? TranscriptionService(dataSource, store: createStore());
 
       return VoicemailRepositoryImpl(
         webtritApiClient: client,
@@ -396,7 +374,7 @@ void main() {
       );
     }
 
-    test('transcribes a fetched voicemail from its wav attachment and stores the result', () async {
+    test('transcribes a fetched voicemail from its audio attachment and stores the result', () async {
       final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
       final dataSource = _FakeTranscriptionDataSource(result: 'hello world');
 
@@ -405,7 +383,7 @@ void main() {
       final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
       expect(row!.transcript, 'hello world');
       expect(row.engine, 'fake:hello world');
-      expect(client.requestedAttachmentFormats, ['wav']);
+      expect(client.requestedAttachmentFormats, ['mp3']);
     });
 
     test('marks the voicemail unavailable when transcription fails', () async {
@@ -651,130 +629,6 @@ void main() {
 
       expect(await transcriptionDatabase.voicemailDao.getVoicemailById('1'), isNotNull);
       expect(await transcriptionDatabase.transcriptionsDao.getAllForType(kVoicemailTranscriptionMediaType), isEmpty);
-    });
-
-    test('switchLocalModel swaps the source, disposes the old one and transcribes pending rows', () async {
-      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
-      final initial = _FakeTranscriptionDataSource(error: const TranscriptionException('down', transient: true));
-      final models = <LocalTranscriptionModel?>[];
-      final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
-
-      final service = createService((model) {
-        models.add(model);
-        return model == null ? initial : replacement;
-      });
-      final repo = createRepo(client, null, service: service);
-      await repo.fetchVoicemails();
-      await waitForTranscriptStatus(transcriptionDatabase, '1', null);
-
-      service.switchLocalModel(const LocalTranscriptionModelTier('small'));
-
-      final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row!.transcript, 'from the new model');
-      expect(models, [null, const LocalTranscriptionModelTier('small')]);
-      expect(initial.disposeCalls, 1);
-    });
-
-    test('switchLocalModel re-transcribes voicemails that already hold a transcript', () async {
-      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
-      final initial = _FakeTranscriptionDataSource(result: 'from the old model');
-      final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
-
-      final service = createService((model) => model == null ? initial : replacement);
-      final repo = createRepo(client, null, service: service);
-      await repo.fetchVoicemails();
-      var row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row!.transcript, 'from the old model');
-
-      service.switchLocalModel(const LocalTranscriptionModelTier('small'));
-
-      await waitFor(() => replacement.calls == 1, 're-transcription with the new model');
-      row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row!.transcript, 'from the new model');
-    });
-
-    test('the model service persists the override and regenerates through the pool', () async {
-      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
-      final initial = _FakeTranscriptionDataSource(result: 'from the old model');
-      final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
-      final modelRepository = _FakeTranscriptionModelRepository();
-
-      final service = createService((model) => model == null ? initial : replacement);
-      final modelService = TranscriptionModelService(
-        modelRepository: modelRepository,
-        transcriptionService: service,
-        transcriptionConfig: const TranscriptionConfig(mode: 'local', localModel: LocalTranscriptionModelTier('base')),
-      );
-      final repo = createRepo(client, null, service: service);
-      await repo.fetchVoicemails();
-      var row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row!.transcript, 'from the old model');
-
-      await modelService.setModel(const LocalTranscriptionModelTier('small'));
-
-      expect(modelRepository.value, const LocalTranscriptionModelTier('small'));
-      row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row!.transcript, 'from the new model');
-    });
-
-    test('switchLocalModel is a no-op for a fixed transcription source', () async {
-      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
-      final dataSource = _FakeTranscriptionDataSource(result: 'hello world');
-
-      final service = TranscriptionService.fixed(dataSource, store: createStore());
-      createRepo(client, null, service: service);
-      await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-
-      service.switchLocalModel(const LocalTranscriptionModelTier('small'));
-      await pumpEventQueue();
-
-      expect(dataSource.disposeCalls, 0);
-      expect(dataSource.calls, 1);
-    });
-
-    test('a voicemail fetched while off transcribes once a tier is switched on later', () async {
-      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
-      final replacement = _FakeTranscriptionDataSource(result: 'from the enabled model');
-
-      // Starts off: the builder returns null (no engine) for the off
-      // selection, exactly like createTranscriptionDataSource does for
-      // LocalTranscriptionModelOff.
-      final service = createService((model) => model is LocalTranscriptionModelTier ? replacement : null);
-      expect(service.isEnabled, isFalse);
-
-      final repo = createRepo(client, null, service: service);
-      await repo.fetchVoicemails();
-      await pumpEventQueue();
-
-      // Nothing is transcribed yet - the pool is off, so no row exists at all.
-      expect(await transcriptionDatabase.transcriptionsDao.getAllForType(kVoicemailTranscriptionMediaType), isEmpty);
-
-      // The user turns transcription on from settings.
-      await service.switchLocalModel(const LocalTranscriptionModelTier('small'));
-
-      final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row!.transcript, 'from the enabled model');
-    });
-
-    test('a model switch mid-transcription discards the old model result', () async {
-      final client = _TranscriptionApiClient(items: [createVoicemailItem()]);
-      final gate = Completer<void>();
-      final initial = _CallbackTranscriptionDataSource((audio) async {
-        await gate.future;
-        return 'from the old model';
-      });
-      final replacement = _FakeTranscriptionDataSource(result: 'from the new model');
-
-      final service = createService((model) => model == null ? initial : replacement);
-      createRepo(client, null, service: service);
-      await waitFor(() => initial.calls == 1, 'old model transcription started');
-
-      service.switchLocalModel(const LocalTranscriptionModelTier('small'));
-      gate.complete();
-
-      final row = await waitForTranscriptStatus(transcriptionDatabase, '1', TranscriptStatus.done.name);
-      expect(row!.transcript, 'from the new model');
-      expect(replacement.calls, 1);
     });
 
     test('a deleted voicemail is not resurrected by its in-flight transcription', () async {

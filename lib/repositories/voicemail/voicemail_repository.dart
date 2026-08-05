@@ -290,7 +290,10 @@ class VoicemailRepositoryImpl
       transcriber.enqueue(
         kVoicemailTranscriptionMediaType,
         voicemail.id,
-        () => _webtritApiClient.getUserVoicemailAttachment(_token, voicemail.id, fileFormat: 'wav'),
+        // Compressed audio: the transcription service decodes it anyway, and
+        // a telephony message is roughly ten times smaller as mp3 than as
+        // wav - it is the user's mobile data being spent on the upload.
+        () => _webtritApiClient.getUserVoicemailAttachment(_token, voicemail.id, fileFormat: 'mp3'),
       );
     }
   }

@@ -28,7 +28,6 @@ class VoicemailTile extends StatelessWidget {
     required this.onTap,
     this.thumbnail,
     this.thumbnailUrl,
-    this.modelDownloading = false,
   });
 
   final Voicemail voicemail;
@@ -42,11 +41,6 @@ class VoicemailTile extends StatelessWidget {
   final void Function(Voicemail) onToggleSeenStatus;
   final void Function(Voicemail) onLongPress;
   final void Function(Voicemail)? onTap;
-
-  /// True while the transcription model file is still downloading: the
-  /// progress row then says so instead of pretending the audio is being
-  /// transcribed.
-  final bool modelDownloading;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +64,7 @@ class VoicemailTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AudioView(path: voicemail.url!, cacheKey: voicemail.id, onPlaybackStarted: _onPlaybackStarted),
-            _VoicemailTranscript(voicemail: voicemail, modelDownloading: modelDownloading),
+            _VoicemailTranscript(voicemail: voicemail),
           ],
         ),
         trailing: PopupMenuButton<_VoicemailMenuAction>(
@@ -181,9 +175,7 @@ class _VoicemailSubtitle extends StatelessWidget {
 /// transcript is being produced, or an "unavailable" note when it failed.
 /// Nothing is rendered when transcription is disabled.
 class _VoicemailTranscript extends StatefulWidget {
-  const _VoicemailTranscript({required this.voicemail, this.modelDownloading = false});
-
-  final bool modelDownloading;
+  const _VoicemailTranscript({required this.voicemail});
 
   final Voicemail voicemail;
 
@@ -221,12 +213,7 @@ class _VoicemailTranscriptState extends State<_VoicemailTranscript> {
         children: [
           SizedCircularProgressIndicator(size: 10, outerSize: 12, color: colorScheme.tertiary, strokeWidth: 1),
           const SizedBox(width: 8),
-          Text(
-            widget.modelDownloading
-                ? context.l10n.voicemail_Transcript_modelDownloading
-                : context.l10n.voicemail_Transcript_inProgress,
-            style: textStyle,
-          ),
+          Text(context.l10n.voicemail_Transcript_inProgress, style: textStyle),
         ],
       );
     } else if (voicemail.transcriptStatus.isUnavailable) {

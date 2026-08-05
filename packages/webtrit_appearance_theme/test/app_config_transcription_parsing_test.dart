@@ -6,17 +6,15 @@ import 'helpers/helpers.dart';
 
 void main() {
   group('AppConfig.transcription parsing', () {
-    test('parses the bundled app config with the local engine enabled by default', () async {
+    test('parses the bundled app config, which ships without an endpoint', () async {
       final json = await loadFixtureJson('../../assets/themes/app.config.json');
 
       final config = AppConfig.fromJson(json);
       final transcription = config.transcription;
 
-      expect(transcription.mode, 'local');
+      expect(transcription.mode, 'remote');
       expect(transcription.language, isNull);
-      expect(transcription.local.model, 'base');
       expect(transcription.remote.url, isNull);
-      expect(transcription.remote.apiKey, isNull);
       expect(transcription.remote.model, 'whisper-1');
     });
 
@@ -25,17 +23,14 @@ void main() {
         'transcription': {
           'mode': 'remote',
           'language': 'en',
-          'local': {'model': 'small'},
-          'remote': {'url': 'https://stt.example.com/v1', 'apiKey': 'key', 'model': 'large-v3'},
+          'remote': {'url': 'https://stt.example.com/v1', 'model': 'large-v3'},
         },
       });
       final transcription = config.transcription;
 
       expect(transcription.mode, 'remote');
       expect(transcription.language, 'en');
-      expect(transcription.local.model, 'small');
       expect(transcription.remote.url, 'https://stt.example.com/v1');
-      expect(transcription.remote.apiKey, 'key');
       expect(transcription.remote.model, 'large-v3');
     });
 
@@ -43,10 +38,10 @@ void main() {
       final config = AppConfig.fromJson(const {});
       final transcription = config.transcription;
 
-      expect(transcription.mode, 'disabled');
+      expect(transcription.mode, 'remote');
       expect(transcription.language, isNull);
-      expect(transcription.local.model, 'base');
       expect(transcription.remote.url, isNull);
+      expect(transcription.remote.model, 'whisper-1');
     });
   });
 }

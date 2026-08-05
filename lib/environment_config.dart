@@ -229,6 +229,17 @@ class EnvironmentConfig {
     const int.fromEnvironment(VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME, defaultValue: 300),
   );
 
+  /// Bearer token of the speech-to-text service configured in the application
+  /// config (`transcription.remote`). Kept out of that config on purpose: the
+  /// service is billed per request, so the credential is supplied by whoever
+  /// builds the brand rather than by whoever edits its theme.
+  static const TRANSCRIPTION_API_KEY__NAME = 'WEBTRIT_APP_TRANSCRIPTION_API_KEY';
+  static const String? _TRANSCRIPTION_API_KEY_ENV = bool.hasEnvironment(TRANSCRIPTION_API_KEY__NAME)
+      ? String.fromEnvironment(TRANSCRIPTION_API_KEY__NAME)
+      : null;
+  static String? get TRANSCRIPTION_API_KEY =>
+      _env.stringOrNull(TRANSCRIPTION_API_KEY__NAME, _TRANSCRIPTION_API_KEY_ENV);
+
   static const CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME =
       'WEBTRIT_APP_CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS';
   static int get CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS => _pollingSeconds(

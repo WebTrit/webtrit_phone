@@ -31,6 +31,8 @@
   "__WEBTRIT_CALL_TRIGGER_MECHANISM_SMS_REGEX_PATTERN_DESCRIPTION": "ICU-compatible regex pattern to extract callId, handle, displayName and hasVideo from the SMS body",
   "__WEBTRIT_APP_CONNECTIVITY_CHECK_URL": "http://192.168.10.100:4000/api/v1/system-info",
   "__WEBTRIT_APP_CONNECTIVITY_CHECK_URL_DESCRIPTION": "Used to verify internet connectivity via HTTP GET request. Should point to a lightweight, always-available endpoint (e.g. /system-info or /generate_204). Must return 2xx response on success.",
+  "_WEBTRIT_APP_TRANSCRIPTION_API_KEY": "",
+  "__WEBTRIT_APP_TRANSCRIPTION_API_KEY_DESCRIPTION": "Bearer token of the speech-to-text service configured in the application config ('transcription.remote'). Kept out of that config because the service is billed per request, so the credential is supplied by the build rather than by the theme. Leave disabled (leading underscore) for endpoints that need no token, e.g. a self-hosted service reachable only inside the operator network.",
   "WEBTRIT_APP_USER_REPOSITORY_POLLING_INTERVAL_SECONDS": 10,
   "WEBTRIT_APP_SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS": 300,
   "WEBTRIT_APP_EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS": 60,

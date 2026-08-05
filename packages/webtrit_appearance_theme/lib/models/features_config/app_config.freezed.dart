@@ -5588,7 +5588,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigTranscription {
 
- String get mode; String? get language; AppConfigTranscriptionLocal get local; AppConfigTranscriptionRemote get remote;
+ String get mode; String? get language; AppConfigTranscriptionRemote get remote;
 /// Create a copy of AppConfigTranscription
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -5599,16 +5599,16 @@ $AppConfigTranscriptionCopyWith<AppConfigTranscription> get copyWith => _$AppCon
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigTranscription&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.language, language) || other.language == language)&&(identical(other.local, local) || other.local == local)&&(identical(other.remote, remote) || other.remote == remote));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigTranscription&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.language, language) || other.language == language)&&(identical(other.remote, remote) || other.remote == remote));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,mode,language,local,remote);
+int get hashCode => Object.hash(runtimeType,mode,language,remote);
 
 @override
 String toString() {
-  return 'AppConfigTranscription(mode: $mode, language: $language, local: $local, remote: $remote)';
+  return 'AppConfigTranscription(mode: $mode, language: $language, remote: $remote)';
 }
 
 
@@ -5619,7 +5619,7 @@ abstract mixin class $AppConfigTranscriptionCopyWith<$Res>  {
   factory $AppConfigTranscriptionCopyWith(AppConfigTranscription value, $Res Function(AppConfigTranscription) _then) = _$AppConfigTranscriptionCopyWithImpl;
 @useResult
 $Res call({
- String mode, String? language, AppConfigTranscriptionLocal local, AppConfigTranscriptionRemote remote
+ String mode, String? language, AppConfigTranscriptionRemote remote
 });
 
 
@@ -5636,12 +5636,11 @@ class _$AppConfigTranscriptionCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigTranscription
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? mode = null,Object? language = freezed,Object? local = null,Object? remote = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? mode = null,Object? language = freezed,Object? remote = null,}) {
   return _then(AppConfigTranscription(
 mode: null == mode ? _self.mode : mode // ignore: cast_nullable_to_non_nullable
 as String,language: freezed == language ? _self.language : language // ignore: cast_nullable_to_non_nullable
-as String?,local: null == local ? _self.local : local // ignore: cast_nullable_to_non_nullable
-as AppConfigTranscriptionLocal,remote: null == remote ? _self.remote : remote // ignore: cast_nullable_to_non_nullable
+as String?,remote: null == remote ? _self.remote : remote // ignore: cast_nullable_to_non_nullable
 as AppConfigTranscriptionRemote,
   ));
 }
@@ -5775,195 +5774,9 @@ case _:
 
 
 /// @nodoc
-mixin _$AppConfigTranscriptionLocal {
-
- String get model;
-/// Create a copy of AppConfigTranscriptionLocal
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$AppConfigTranscriptionLocalCopyWith<AppConfigTranscriptionLocal> get copyWith => _$AppConfigTranscriptionLocalCopyWithImpl<AppConfigTranscriptionLocal>(this as AppConfigTranscriptionLocal, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigTranscriptionLocal&&(identical(other.model, model) || other.model == model));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,model);
-
-@override
-String toString() {
-  return 'AppConfigTranscriptionLocal(model: $model)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $AppConfigTranscriptionLocalCopyWith<$Res>  {
-  factory $AppConfigTranscriptionLocalCopyWith(AppConfigTranscriptionLocal value, $Res Function(AppConfigTranscriptionLocal) _then) = _$AppConfigTranscriptionLocalCopyWithImpl;
-@useResult
-$Res call({
- String model
-});
-
-
-
-
-}
-/// @nodoc
-class _$AppConfigTranscriptionLocalCopyWithImpl<$Res>
-    implements $AppConfigTranscriptionLocalCopyWith<$Res> {
-  _$AppConfigTranscriptionLocalCopyWithImpl(this._self, this._then);
-
-  final AppConfigTranscriptionLocal _self;
-  final $Res Function(AppConfigTranscriptionLocal) _then;
-
-/// Create a copy of AppConfigTranscriptionLocal
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? model = null,}) {
-  return _then(AppConfigTranscriptionLocal(
-model: null == model ? _self.model : model // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [AppConfigTranscriptionLocal].
-extension AppConfigTranscriptionLocalPatterns on AppConfigTranscriptionLocal {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-
-}
-
-
-/// @nodoc
 mixin _$AppConfigTranscriptionRemote {
 
- String? get url; String? get apiKey; String get model;
+ String? get url; String get model;
 /// Create a copy of AppConfigTranscriptionRemote
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -5974,16 +5787,16 @@ $AppConfigTranscriptionRemoteCopyWith<AppConfigTranscriptionRemote> get copyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigTranscriptionRemote&&(identical(other.url, url) || other.url == url)&&(identical(other.apiKey, apiKey) || other.apiKey == apiKey)&&(identical(other.model, model) || other.model == model));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigTranscriptionRemote&&(identical(other.url, url) || other.url == url)&&(identical(other.model, model) || other.model == model));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,url,apiKey,model);
+int get hashCode => Object.hash(runtimeType,url,model);
 
 @override
 String toString() {
-  return 'AppConfigTranscriptionRemote(url: $url, apiKey: $apiKey, model: $model)';
+  return 'AppConfigTranscriptionRemote(url: $url, model: $model)';
 }
 
 
@@ -5994,7 +5807,7 @@ abstract mixin class $AppConfigTranscriptionRemoteCopyWith<$Res>  {
   factory $AppConfigTranscriptionRemoteCopyWith(AppConfigTranscriptionRemote value, $Res Function(AppConfigTranscriptionRemote) _then) = _$AppConfigTranscriptionRemoteCopyWithImpl;
 @useResult
 $Res call({
- String? url, String? apiKey, String model
+ String? url, String model
 });
 
 
@@ -6011,10 +5824,9 @@ class _$AppConfigTranscriptionRemoteCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigTranscriptionRemote
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? url = freezed,Object? apiKey = freezed,Object? model = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? url = freezed,Object? model = null,}) {
   return _then(AppConfigTranscriptionRemote(
 url: freezed == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
-as String?,apiKey: freezed == apiKey ? _self.apiKey : apiKey // ignore: cast_nullable_to_non_nullable
 as String?,model: null == model ? _self.model : model // ignore: cast_nullable_to_non_nullable
 as String,
   ));

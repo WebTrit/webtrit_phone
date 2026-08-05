@@ -601,13 +601,8 @@ Map<String, dynamic> _$ChatContactInfoToJson(ChatContactInfo instance) =>
 AppConfigTranscription _$AppConfigTranscriptionFromJson(
   Map<String, dynamic> json,
 ) => AppConfigTranscription(
-  mode: json['mode'] as String? ?? 'local',
+  mode: json['mode'] as String? ?? 'remote',
   language: json['language'] as String?,
-  local: json['local'] == null
-      ? const AppConfigTranscriptionLocal()
-      : AppConfigTranscriptionLocal.fromJson(
-          json['local'] as Map<String, dynamic>,
-        ),
   remote: json['remote'] == null
       ? const AppConfigTranscriptionRemote()
       : AppConfigTranscriptionRemote.fromJson(
@@ -620,33 +615,19 @@ Map<String, dynamic> _$AppConfigTranscriptionToJson(
 ) => <String, dynamic>{
   'mode': instance.mode,
   'language': instance.language,
-  'local': instance.local.toJson(),
   'remote': instance.remote.toJson(),
 };
-
-AppConfigTranscriptionLocal _$AppConfigTranscriptionLocalFromJson(
-  Map<String, dynamic> json,
-) => AppConfigTranscriptionLocal(model: json['model'] as String? ?? 'off');
-
-Map<String, dynamic> _$AppConfigTranscriptionLocalToJson(
-  AppConfigTranscriptionLocal instance,
-) => <String, dynamic>{'model': instance.model};
 
 AppConfigTranscriptionRemote _$AppConfigTranscriptionRemoteFromJson(
   Map<String, dynamic> json,
 ) => AppConfigTranscriptionRemote(
   url: json['url'] as String?,
-  apiKey: json['apiKey'] as String?,
   model: json['model'] as String? ?? 'whisper-1',
 );
 
 Map<String, dynamic> _$AppConfigTranscriptionRemoteToJson(
   AppConfigTranscriptionRemote instance,
-) => <String, dynamic>{
-  'url': instance.url,
-  'apiKey': instance.apiKey,
-  'model': instance.model,
-};
+) => <String, dynamic>{'url': instance.url, 'model': instance.model};
 
 AppConfigLocalization _$AppConfigLocalizationFromJson(
   Map<String, dynamic> json,

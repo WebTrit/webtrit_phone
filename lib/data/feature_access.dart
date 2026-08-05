@@ -742,6 +742,10 @@ abstract final class LoggingMapper {
 }
 
 /// Mapper responsible for constructing [TranscriptionConfig] from application configuration.
+///
+/// Everything but the credential comes from the application config; the
+/// service token is a build-time value, so it is picked up from the
+/// environment here.
 abstract final class TranscriptionMapper {
   static TranscriptionConfig map(AppConfig appConfig) {
     final transcription = appConfig.transcription;
@@ -749,9 +753,8 @@ abstract final class TranscriptionMapper {
     return TranscriptionConfig(
       mode: transcription.mode,
       language: transcription.language,
-      localModel: LocalTranscriptionModel.parse(transcription.local.model),
       remoteUrl: transcription.remote.url,
-      remoteApiKey: transcription.remote.apiKey,
+      remoteApiKey: EnvironmentConfig.TRANSCRIPTION_API_KEY,
       remoteModel: transcription.remote.model,
     );
   }

@@ -15,8 +15,6 @@ dependencies:
   equatable: ^2.0.7
   http: ^1.6.0
   logging: ^1.3.0
-  path_provider: ^2.1.5
-  whisper_ggml: ^1.7.0
 
 dev_dependencies:
   flutter_test:

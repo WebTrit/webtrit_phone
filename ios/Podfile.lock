@@ -1,27 +1,18 @@
 PODS:
   - device_region (0.0.1):
     - Flutter
-  - ffmpeg_kit_flutter_new_min (7.1.1):
-    - ffmpeg_kit_flutter_new_min/min (= 7.1.1)
-    - Flutter
-  - ffmpeg_kit_flutter_new_min/min (7.1.1):
-    - Flutter
   - Flutter (1.0.0)
   - flutter_webrtc (1.4.0):
     - Flutter
     - WebRTC-SDK (= 144.7559.04)
   - WebRTC-SDK (144.7559.04)
-  - whisper_ggml (1.0.1):
-    - Flutter
   - workmanager_apple (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - device_region (from `.symlinks/plugins/device_region/ios`)
-  - ffmpeg_kit_flutter_new_min (from `.symlinks/plugins/ffmpeg_kit_flutter_new_min/ios`)
   - Flutter (from `Flutter`)
   - flutter_webrtc (from `.symlinks/plugins/flutter_webrtc/ios`)
-  - whisper_ggml (from `.symlinks/plugins/whisper_ggml/ios`)
   - workmanager_apple (from `.symlinks/plugins/workmanager_apple/ios`)
 
 SPEC REPOS:
@@ -31,26 +22,20 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   device_region:
     :path: ".symlinks/plugins/device_region/ios"
-  ffmpeg_kit_flutter_new_min:
-    :path: ".symlinks/plugins/ffmpeg_kit_flutter_new_min/ios"
   Flutter:
     :path: Flutter
   flutter_webrtc:
     :path: ".symlinks/plugins/flutter_webrtc/ios"
-  whisper_ggml:
-    :path: ".symlinks/plugins/whisper_ggml/ios"
   workmanager_apple:
     :path: ".symlinks/plugins/workmanager_apple/ios"
 
 SPEC CHECKSUMS:
   device_region: ba5fcd31baab2323f50b73a33850490df4d082a8
-  ffmpeg_kit_flutter_new_min: 85493896be79f45e846b5c9b23a3bf73eb284c4a
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_webrtc: 3cea548ace6c8cdefc98a898fe0c177d680080b7
   WebRTC-SDK: ac5965a3cc2c258973466e3b1739ab0308bab0d0
-  whisper_ggml: 383283d526f6c91024c16bf65b707cc08568a685
   workmanager_apple: 904529ae31e97fc5be632cf628507652294a0778
 
-PODFILE CHECKSUM: 1c6b4d5b25c84536981b5e6b464aeb335278fbd8
+PODFILE CHECKSUM: 0ccf022bc53e29cf2e8916562f03e4c505e4c2da
 
 COCOAPODS: 1.16.2
