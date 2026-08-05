@@ -1,4 +1,5 @@
 export 'about/about.dart';
+export 'cache_management/cache_management.dart';
 export 'caller_id/caller_id.dart';
 export 'dev_tools/dev_tools.dart';
 export 'diagnostic/diagnostic.dart';

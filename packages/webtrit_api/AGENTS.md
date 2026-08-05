@@ -27,9 +27,11 @@ WebtritApiClient(Uri baseUrl, String tenantId, {
 
 ## Request/Response Options
 
-- `WebtritApiRequestOptions` — retry count + delay. Factories: `withNoRetries()`,
+- `RequestOptions` — retry count + delay. Factories: `withNoRetries()`,
   `withDefaultRetries()` (3 retries, 1s delay), `withExtraRetries()`.
-- `WebtritApiResponseOptions` — decoding: `json` (default), `bytes`, or `raw`.
+- `ResponseOptions` — decoding: `json` (default), `bytes`, or `raw`; plus
+  `optionalEndpoint` (default `false`) marking the endpoint as optional in the
+  adapter contract. Constructed inside the client methods, not caller-supplied.
 
 ## Models
 
@@ -49,14 +51,22 @@ Never edit `.freezed.dart` / `.g.dart` — re-run `build_runner`.
 
 ## Exceptions
 
-All extend `RequestFailure`:
+All extend `RequestFailure`, which carries the status code, the parsed error
+body, and classification getters: `isClientError` (4xx), `isServerError` (5xx),
+`isTransient` (408/425/429), `errorCode` (backend error code from the body).
 
 | Exception | Trigger |
 |-----------|---------|
-| `EndpointNotSupportedException` | 404 or 501 |
-| `UserNotFoundException` | 404 on user endpoint |
-| `UnauthorizedException` | 422 with `refresh_token_invalid` |
 | `SessionMissingException` | 401 with `session_missing` |
+| `UnauthorizedException` | 401 with `token_invalid`; 422 with `refresh_token_invalid` |
+| `UserNotFoundException` | 404 with `user_not_found` (any endpoint); any 404 from `getUserInfo` / `createSessionOtp` |
+| `EndpointNotSupportedException` | methods declared `ResponseOptions(optionalEndpoint: true)` only: 501, or 404 without a backend error code |
+| `VoicemailNotConfiguredException` | `voicemail_not_configured` |
+| `PasswordChangeRequiredException` | `password_change_required` |
+
+Failure log level: client errors (4xx) log as `warning`; `severe` is reserved
+for server-side (5xx) and transport failures. `EndpointNotSupportedException`
+and `VoicemailNotConfiguredException` are not logged.
 
 ## Dependencies
 

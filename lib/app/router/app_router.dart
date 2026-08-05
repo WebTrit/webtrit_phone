@@ -111,6 +111,7 @@ class AppRouter extends RootStackRouter {
                   ],
                 ),
                 AutoRoute(page: LoginPasswordSigninScreenPageRoute.page, maintainState: false),
+                AutoRoute(page: LoginQrSigninScreenPageRoute.page, maintainState: false),
                 AutoRoute(
                   page: LoginSignupRouterPageRoute.page,
                   maintainState: false,
@@ -249,6 +250,7 @@ class AppRouter extends RootStackRouter {
                 AutoRoute(page: LanguageScreenPageRoute.page, path: 'language'),
                 AutoRoute(page: NetworkScreenPageRoute.page, path: 'network'),
                 AutoRoute(page: MediaSettingsScreenPageRoute.page, path: 'media-settings'),
+                AutoRoute(page: CacheManagementScreenPageRoute.page, path: 'cache-management'),
                 AutoRoute(page: SelfConfigScreenPageRoute.page, path: 'self_config'),
                 AutoRoute(page: ThemeModeScreenPageRoute.page, path: 'theme-mode'),
                 AutoRoute(page: DevToolsScreenPageRoute.page, path: 'dev-tools'),

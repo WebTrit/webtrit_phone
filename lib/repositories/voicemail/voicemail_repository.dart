@@ -158,7 +158,7 @@ class VoicemailRepositoryImpl
     try {
       /// Do not emit unknown status to show updating state, because it leads to UI flicker on SettingsScreen
       /// especially on android if user checks status bar and app changes its lifecycle from innactive to resumed (WT-1424)
-      /// 
+      ///
       /// Add separate event if needed
       await _emitCachedVoicemails();
 

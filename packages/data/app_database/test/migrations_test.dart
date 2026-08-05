@@ -14,6 +14,7 @@ import 'package:app_database/src/migrations/generated/schema_v20.dart' as v20;
 import 'package:app_database/src/migrations/generated/schema_v22.dart' as v22;
 import 'package:app_database/src/migrations/generated/schema_v23.dart' as v23;
 import 'package:app_database/src/migrations/generated/schema_v24.dart' as v24;
+import 'package:app_database/src/migrations/generated/schema_v25.dart' as v25;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -381,6 +382,55 @@ void main() {
           throwsA(anything),
         );
 
+        await checkDb.close();
+      } finally {
+        schema.close();
+      }
+    });
+  });
+
+  group('migration v25 data integrity', () {
+    test('backfills the sync cursor from the newest record when CDRs exist', () async {
+      final schema = await verifier.schemaAt(24);
+      try {
+        final oldDb = v24.DatabaseAtV24(schema.newConnection());
+        await oldDb.customStatement('''
+          INSERT INTO cdrs (call_id, direction, status, callee, callee_number, caller, caller_number,
+            connect_time_usec, disconnect_time_usec, disconnect_reason, duration_seconds)
+          VALUES ('call-1', 'incoming', 'accepted', '1000', '1000', '2000', '2000', 100, 200, 'normal', 10)
+        ''');
+        await oldDb.customStatement('''
+          INSERT INTO cdrs (call_id, direction, status, callee, callee_number, caller, caller_number,
+            connect_time_usec, disconnect_time_usec, disconnect_reason, duration_seconds)
+          VALUES ('call-2', 'outgoing', 'accepted', '2000', '2000', '1000', '1000', 300, 400, 'normal', 10)
+        ''');
+        await oldDb.close();
+
+        final appDatabase = AppDatabase(schema.newConnection());
+        await verifier.migrateAndValidate(appDatabase, 25);
+        await appDatabase.close();
+
+        final checkDb = v25.DatabaseAtV25(schema.newConnection());
+        final rows = await checkDb.customSelect('SELECT id, timestamp_usec FROM cdr_sync_cursors').get();
+        expect(rows.length, 1);
+        expect(rows.single.data['id'], 0);
+        expect(rows.single.data['timestamp_usec'], 300);
+        await checkDb.close();
+      } finally {
+        schema.close();
+      }
+    });
+
+    test('leaves no sync cursor when CDR history is empty', () async {
+      final schema = await verifier.schemaAt(24);
+      try {
+        final appDatabase = AppDatabase(schema.newConnection());
+        await verifier.migrateAndValidate(appDatabase, 25);
+        await appDatabase.close();
+
+        final checkDb = v25.DatabaseAtV25(schema.newConnection());
+        final rows = await checkDb.customSelect('SELECT id FROM cdr_sync_cursors').get();
+        expect(rows, isEmpty);
         await checkDb.close();
       } finally {
         schema.close();

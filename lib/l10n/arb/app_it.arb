@@ -73,6 +73,16 @@
   "@callTileActions_message": {
     "description": "Label of the expanded call tile action that opens a chat with the contact."
   },
+  "cacheManagement_Button_clear": "Svuota",
+  "@cacheManagement_Button_clear": {},
+  "cacheManagement_Label_empty": "Nessun dato in cache su questo dispositivo",
+  "@cacheManagement_Label_empty": {},
+  "cacheManagement_Label_itemsCount": "{count, plural, one{1 record} other{{count} record}}",
+  "@cacheManagement_Label_itemsCount": {"placeholders": {"count": {"type": "int"}}},
+  "cacheManagement_Label_unknown": "Sconosciuto",
+  "@cacheManagement_Label_unknown": {},
+  "cacheManagement_Widget_screenTitle": "Archiviazione e cache",
+  "@cacheManagement_Widget_screenTitle": {},
   "callTileActions_more": "Altro",
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
@@ -359,6 +369,10 @@
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Copia negli appunti",
   "@copyToClipboard_popupMenuItem": {},
+  "database_Cache_description": "Copia locale dei dati scaricati dal server: cronologia chiamate, elenco dei messaggi vocali, chat e contatti. La cancellazione rimuove tutti i record locali; i dati vengono scaricati di nuovo alla prossima sincronizzazione.",
+  "@database_Cache_description": {},
+  "database_Cache_title": "Database locale",
+  "@database_Cache_title": {},
   "default_CannotRemoveOwnerMessagingSocketException": "Impossibile rimuovere il proprietario",
   "@default_CannotRemoveOwnerMessagingSocketException": {
     "description": "Shown when a user tries to remove the owner from a chat or group. The system does not allow removing the owner."
@@ -635,7 +649,9 @@
   "diagnosticNetworkTestItem_subtitle_publicIps": "Pubblica: {ips}",
   "@diagnosticNetworkTestItem_subtitle_publicIps": {
     "placeholders": {
-      "ips": {"type": "String"}
+      "ips": {
+        "type": "String"
+      }
     }
   },
   "diagnosticNetworkTestItem_subtitle_stunBlocked": "STUN bloccato · relay disponibile",
@@ -772,6 +788,18 @@
       }
     }
   },
+  "login_RequestFailureDeliveryChannelUnspecifiedError": "Questo account non ha alcun metodo di contatto configurato per ricevere il codice di verifica",
+  "@login_RequestFailureDeliveryChannelUnspecifiedError": {
+    "description": "Shown during OTP sign-in when the requested account has no configured delivery channel to receive the one-time verification code and the advertised sign-in identifiers do not allow a more specific wording. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+  },
+  "login_RequestFailureDeliveryChannelUnspecifiedPhoneError": "L'account con questo numero di telefono non ha alcun metodo di contatto configurato per ricevere il codice di verifica",
+  "@login_RequestFailureDeliveryChannelUnspecifiedPhoneError": {
+    "description": "Shown during OTP sign-in on deployments where users sign in with a phone number, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+  },
+  "login_RequestFailureDeliveryChannelUnspecifiedEmailError": "L'account con questo indirizzo email non ha alcun metodo di contatto configurato per ricevere il codice di verifica",
+  "@login_RequestFailureDeliveryChannelUnspecifiedEmailError": {
+    "description": "Shown during OTP sign-in on deployments where users sign in with an email address, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+  },
   "login_RequestFailureEmptyEmailError": "Impossibile inviare il codice di verifica",
   "@login_RequestFailureEmptyEmailError": {
     "description": "Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty."
@@ -898,15 +926,37 @@
       }
     }
   },
+  "login_Text_qrSigninScanHint": "Scansiona il codice QR per accedere.",
+  "@login_Text_qrSigninScanHint": {},
+  "login_Text_qrSigninVerifyingTitle": "Accesso in corso...",
+  "@login_Text_qrSigninVerifyingTitle": {},
+  "login_Text_qrSigninVerifyingDescription": "Codice QR scansionato. Verifica con il server in corso.",
+  "@login_Text_qrSigninVerifyingDescription": {},
+  "login_Text_qrSigninCameraPermissionTitle": "L'accesso alla fotocamera è disattivato",
+  "@login_Text_qrSigninCameraPermissionTitle": {},
+  "login_Text_qrSigninCameraPermissionDescription": "L'accesso alla fotocamera è necessario per scansionare un codice QR. Attivalo per continuare.",
+  "@login_Text_qrSigninCameraPermissionDescription": {},
+  "login_Button_qrSigninAllowCameraAccess": "Continua",
+  "@login_Button_qrSigninAllowCameraAccess": {},
+  "login_Button_qrSigninOpenSettings": "Apri le impostazioni",
+  "@login_Button_qrSigninOpenSettings": {},
+  "login_Text_qrSigninInvalidCodeError": "Questo codice QR non può essere utilizzato per accedere.",
+  "@login_Text_qrSigninInvalidCodeError": {},
   "loginType_otpSignin": "Accesso con OTP",
   "@loginType_otpSignin": {},
   "loginType_passwordSignin": "Accesso con password",
   "@loginType_passwordSignin": {},
+  "loginType_qrSignin": "Codice QR",
+  "@loginType_qrSignin": {},
   "loginType_signup": "Iscrizione",
   "@loginType_signup": {},
   "login_validationCoreUrlError": "Prego inserisci un URL valido",
   "@login_validationCoreUrlError": {
     "description": "Shown when the user enters an invalid URL in the WebTrit Cloud Backend URL field during login or setup. Condition: the input does not match the required URL format."
+  },
+  "login_validationCoreUrlUnreachableError": "Impossibile raggiungere il servizio WebTrit a questo indirizzo",
+  "@login_validationCoreUrlUnreachableError": {
+    "description": "Shown inline under the WebTrit Cloud Backend URL field after submit. Condition: the entered address cannot be reached or does not respond like a WebTrit service (connection failure, non-JSON response, or an HTTP error without a WebTrit error payload)."
   },
   "login_validationEmailError": "Inserire un indirizzo di email valido",
   "@login_validationEmailError": {
@@ -928,7 +978,7 @@
   "@logRecordsConsole_Text_failure": {
     "description": "Shown in the Log Console screen when an unexpected error occurs while loading or displaying log records."
   },
-  "logRecordsConsole_Text_recordsCountHint": "{count, plural, one{Visualizzazione dell\u2019ultimo {count} record. Usa Condividi per esportare il log completo.} other{Visualizzazione degli ultimi {count} record. Usa Condividi per esportare il log completo.}}",
+  "logRecordsConsole_Text_recordsCountHint": "{count, plural, one{Visualizzazione dell’ultimo {count} record. Usa Condividi per esportare il log completo.} other{Visualizzazione degli ultimi {count} record. Usa Condividi per esportare il log completo.}}",
   "@logRecordsConsole_Text_recordsCountHint": {
     "description": "Shown in the info dialog to inform the user that only the most recent records are displayed and the share button exports the complete log.",
     "placeholders": {
@@ -1886,6 +1936,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_call_codecs": "Codec di chiamata",
   "@settings_ListViewTileTitle_call_codecs": {},
+  "settings_ListViewTileTitle_cacheManagement": "Archiviazione e cache",
+  "@settings_ListViewTileTitle_cacheManagement": {},
   "settings_ListViewTileTitle_callerId": "ID chiamante",
   "@settings_ListViewTileTitle_callerId": {},
   "settings_ListViewTileTitle_encoding": "Codifica multimediale",
@@ -2262,6 +2314,10 @@
   "@user_agreement_description": {},
   "validationBlankError": "Prego inserire un valore",
   "@validationBlankError": {},
+  "voicemail_Cache_description": "La riproduzione di un messaggio vocale conserva una copia locale dell'audio per riascolti immediati. Svuotare la cache libera spazio; l'audio viene scaricato di nuovo alla prossima riproduzione.",
+  "@voicemail_Cache_description": {},
+  "voicemail_Cache_title": "Audio dei messaggi vocali",
+  "@voicemail_Cache_title": {},
   "voicemail_Description_notSupported": "La funzione di segreteria telefonica non è supportata nel tuo sistema. Contatta l'amministratore per maggiori informazioni.",
   "@voicemail_Description_notSupported": {},
   "voicemail_Dialog_deleteSelectedContent": "I messaggi vocali selezionati verranno eliminati definitivamente. Vuoi continuare?",

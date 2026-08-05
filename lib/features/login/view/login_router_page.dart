@@ -96,6 +96,7 @@ class LoginRouterPage extends StatelessWidget {
       packageInfo: context.read<PackageInfo>(),
       appCompatibilityResolver: context.read<AppCompatibilityResolver>(),
       signinOrder: context.read<FeatureAccess>().loginConfig.signinOrder,
+      qrSigninConfig: context.read<FeatureAccess>().loginConfig.qrSignin,
       onLoginSuccess: (session, systemInfo) =>
           context.read<AppBloc>().add(AppLoggedIn(session: session, systemInfo: systemInfo)),
     );

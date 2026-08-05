@@ -73,6 +73,16 @@
   "@callTileActions_message": {
     "description": "Label of the expanded call tile action that opens a chat with the contact."
   },
+  "cacheManagement_Button_clear": "ล้าง",
+  "@cacheManagement_Button_clear": {},
+  "cacheManagement_Label_empty": "ไม่มีข้อมูลในแคชบนอุปกรณ์นี้",
+  "@cacheManagement_Label_empty": {},
+  "cacheManagement_Label_itemsCount": "{count, plural, other{{count} รายการ}}",
+  "@cacheManagement_Label_itemsCount": {"placeholders": {"count": {"type": "int"}}},
+  "cacheManagement_Label_unknown": "ไม่ทราบ",
+  "@cacheManagement_Label_unknown": {},
+  "cacheManagement_Widget_screenTitle": "พื้นที่เก็บข้อมูลและแคช",
+  "@cacheManagement_Widget_screenTitle": {},
   "callTileActions_more": "เพิ่มเติม",
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
@@ -359,6 +369,10 @@
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "คัดลอกไปยังคลิปบอร์ด",
   "@copyToClipboard_popupMenuItem": {},
+  "database_Cache_description": "สำเนาข้อมูลที่ดึงจากเซิร์ฟเวอร์ซึ่งเก็บไว้ในเครื่อง: ประวัติการโทร รายการข้อความเสียง แชท และรายชื่อผู้ติดต่อ การล้างจะลบข้อมูลในเครื่องทั้งหมด และข้อมูลจะถูกดาวน์โหลดใหม่ในการซิงค์ครั้งถัดไป",
+  "@database_Cache_description": {},
+  "database_Cache_title": "ฐานข้อมูลในเครื่อง",
+  "@database_Cache_title": {},
   "default_CannotRemoveOwnerMessagingSocketException": "ไม่สามารถลบเจ้าของได้",
   "@default_CannotRemoveOwnerMessagingSocketException": {
     "description": "Shown when a user tries to remove the owner from a chat or group. The system does not allow removing the owner."
@@ -774,6 +788,18 @@
       }
     }
   },
+  "login_RequestFailureDeliveryChannelUnspecifiedError": "บัญชีนี้ไม่มีช่องทางติดต่อที่ตั้งค่าไว้สำหรับรับรหัสยืนยัน",
+  "@login_RequestFailureDeliveryChannelUnspecifiedError": {
+    "description": "Shown during OTP sign-in when the requested account has no configured delivery channel to receive the one-time verification code and the advertised sign-in identifiers do not allow a more specific wording. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+  },
+  "login_RequestFailureDeliveryChannelUnspecifiedPhoneError": "บัญชีที่ใช้หมายเลขโทรศัพท์นี้ไม่มีช่องทางติดต่อที่ตั้งค่าไว้สำหรับรับรหัสยืนยัน",
+  "@login_RequestFailureDeliveryChannelUnspecifiedPhoneError": {
+    "description": "Shown during OTP sign-in on deployments where users sign in with a phone number, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+  },
+  "login_RequestFailureDeliveryChannelUnspecifiedEmailError": "บัญชีที่ใช้อีเมลนี้ไม่มีช่องทางติดต่อที่ตั้งค่าไว้สำหรับรับรหัสยืนยัน",
+  "@login_RequestFailureDeliveryChannelUnspecifiedEmailError": {
+    "description": "Shown during OTP sign-in on deployments where users sign in with an email address, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+  },
   "login_RequestFailureEmptyEmailError": "ไม่สามารถส่งรหัสยืนยันได้",
   "@login_RequestFailureEmptyEmailError": {
     "description": "Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty."
@@ -900,15 +926,37 @@
       }
     }
   },
+  "login_Text_qrSigninScanHint": "สแกนคิวอาร์โค้ดเพื่อเข้าสู่ระบบ",
+  "@login_Text_qrSigninScanHint": {},
+  "login_Text_qrSigninVerifyingTitle": "กำลังเข้าสู่ระบบ...",
+  "@login_Text_qrSigninVerifyingTitle": {},
+  "login_Text_qrSigninVerifyingDescription": "สแกนคิวอาร์โค้ดแล้ว กำลังตรวจสอบกับเซิร์ฟเวอร์",
+  "@login_Text_qrSigninVerifyingDescription": {},
+  "login_Text_qrSigninCameraPermissionTitle": "การเข้าถึงกล้องถูกปิดอยู่",
+  "@login_Text_qrSigninCameraPermissionTitle": {},
+  "login_Text_qrSigninCameraPermissionDescription": "ต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกนคิวอาร์โค้ด โปรดเปิดใช้งานเพื่อดำเนินการต่อ",
+  "@login_Text_qrSigninCameraPermissionDescription": {},
+  "login_Button_qrSigninAllowCameraAccess": "ดำเนินการต่อ",
+  "@login_Button_qrSigninAllowCameraAccess": {},
+  "login_Button_qrSigninOpenSettings": "เปิดการตั้งค่า",
+  "@login_Button_qrSigninOpenSettings": {},
+  "login_Text_qrSigninInvalidCodeError": "คิวอาร์โค้ดนี้ใช้เข้าสู่ระบบไม่ได้",
+  "@login_Text_qrSigninInvalidCodeError": {},
   "loginType_otpSignin": "เข้าสู่ระบบด้วย OTP",
   "@loginType_otpSignin": {},
   "loginType_passwordSignin": "เข้าสู่ระบบด้วยรหัสผ่าน",
   "@loginType_passwordSignin": {},
+  "loginType_qrSignin": "คิวอาร์โค้ด",
+  "@loginType_qrSignin": {},
   "loginType_signup": "สมัครสมาชิก",
   "@loginType_signup": {},
   "login_validationCoreUrlError": "กรุณากรอก URL ที่ถูกต้อง",
   "@login_validationCoreUrlError": {
     "description": "Shown when the user enters an invalid URL in the WebTrit Cloud Backend URL field during login or setup. Condition: the input does not match the required URL format."
+  },
+  "login_validationCoreUrlUnreachableError": "ไม่สามารถเชื่อมต่อกับบริการ WebTrit ตามที่อยู่นี้ได้",
+  "@login_validationCoreUrlUnreachableError": {
+    "description": "Shown inline under the WebTrit Cloud Backend URL field after submit. Condition: the entered address cannot be reached or does not respond like a WebTrit service (connection failure, non-JSON response, or an HTTP error without a WebTrit error payload)."
   },
   "login_validationEmailError": "กรุณากรอกอีเมลที่ถูกต้อง",
   "@login_validationEmailError": {
@@ -1891,6 +1939,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_call_codecs": "โคเดกการโทร",
   "@settings_ListViewTileTitle_call_codecs": {},
+  "settings_ListViewTileTitle_cacheManagement": "พื้นที่เก็บข้อมูลและแคช",
+  "@settings_ListViewTileTitle_cacheManagement": {},
   "settings_ListViewTileTitle_callerId": "หมายเลขผู้โทร",
   "@settings_ListViewTileTitle_callerId": {},
   "settings_ListViewTileTitle_encoding": "การเข้ารหัสสื่อ",
@@ -2267,6 +2317,10 @@
   "@user_agreement_description": {},
   "validationBlankError": "โปรดกรอกค่า",
   "@validationBlankError": {},
+  "voicemail_Cache_description": "การเล่นข้อความเสียงจะเก็บสำเนาเสียงไว้ในเครื่องเพื่อเล่นซ้ำได้ทันที การล้างจะคืนพื้นที่ และเสียงจะถูกดาวน์โหลดใหม่เมื่อเล่นครั้งถัดไป",
+  "@voicemail_Cache_description": {},
+  "voicemail_Cache_title": "เสียงข้อความเสียง",
+  "@voicemail_Cache_title": {},
   "voicemail_Description_notSupported": "core ของคุณไม่รองรับฟีเจอร์ข้อความเสียง โปรดติดต่อผู้ดูแลระบบของคุณเพื่อขอข้อมูลเพิ่มเติม",
   "@voicemail_Description_notSupported": {},
   "voicemail_Dialog_deleteSelectedContent": "ข้อความเสียงที่เลือกจะถูกลบอย่างถาวร คุณต้องการดำเนินการต่อหรือไม่?",

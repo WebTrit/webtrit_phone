@@ -49,40 +49,40 @@ class FeatureOverrides extends Equatable {
 }
 
 abstract final class FeatureOverridesFactory {
-  static const _kVideoCallEnabledKey = 'feature_video_call_enabled';
-  static const _kSystemNotificationsEnabledKey = 'feature_system_notifications_enabled';
-  static const _kHybridPresenceEnabledKey = 'feature_hybrid_presence_enabled';
-  static const _kVoicemailEnabledKey = 'feature_voicemail_enabled';
-  static const _kCallHistoryEnabledKey = 'feature_call_history_enabled';
-  static const _kCallPullVideoStrategyKey = 'feature_call_pull_video_strategy';
-  static const _kMonitorCheckIntervalKey = 'feature_monitor_check_interval_sec';
-  static const _kLogLevelKey = 'feature_log_level';
-  static const _kRemoteLoggingEnabledKey = 'firebaseRemoteLogging';
-  static const _kLogAnonymizationEnabledKey = 'feature_log_anonymization_enabled';
+  static const videoCallEnabledKey = 'feature_video_call_enabled';
+  static const systemNotificationsEnabledKey = 'feature_system_notifications_enabled';
+  static const hybridPresenceEnabledKey = 'feature_hybrid_presence_enabled';
+  static const voicemailEnabledKey = 'feature_voicemail_enabled';
+  static const callHistoryEnabledKey = 'feature_call_history_enabled';
+  static const callPullVideoStrategyKey = 'feature_call_pull_video_strategy';
+  static const monitorCheckIntervalKey = 'feature_monitor_check_interval_sec';
+  static const logLevelKey = 'feature_log_level';
+  static const remoteLoggingEnabledKey = 'firebaseRemoteLogging';
+  static const logAnonymizationEnabledKey = 'feature_log_anonymization_enabled';
 
   static FeatureOverrides create(RemoteConfigSnapshot snapshot) {
-    final monitorIntervalSec = int.tryParse(snapshot.getString(_kMonitorCheckIntervalKey) ?? '');
+    final monitorIntervalSec = int.tryParse(snapshot.getString(monitorCheckIntervalKey) ?? '');
     Duration? monitorCheckInterval;
     if (monitorIntervalSec != null) {
       monitorCheckInterval = Duration(seconds: monitorIntervalSec);
     }
 
-    final logLevelName = snapshot.getString(_kLogLevelKey);
+    final logLevelName = snapshot.getString(logLevelKey);
     final logLevel = logLevelName != null ? Level.LEVELS.where((l) => l.name == logLevelName).firstOrNull : null;
 
-    final callPullVideoStrategy = CallPullVideoStrategy.tryParse(snapshot.getString(_kCallPullVideoStrategyKey));
+    final callPullVideoStrategy = CallPullVideoStrategy.tryParse(snapshot.getString(callPullVideoStrategyKey));
 
     return FeatureOverrides(
-      isVideoCallEnabled: snapshot.getBool(_kVideoCallEnabledKey),
-      isSystemNotificationsEnabled: snapshot.getBool(_kSystemNotificationsEnabledKey),
-      hybridPresenceSupport: snapshot.getBool(_kHybridPresenceEnabledKey),
-      isVoicemailEnabled: snapshot.getBool(_kVoicemailEnabledKey),
-      isCallHistoryEnabled: snapshot.getBool(_kCallHistoryEnabledKey),
+      isVideoCallEnabled: snapshot.getBool(videoCallEnabledKey),
+      isSystemNotificationsEnabled: snapshot.getBool(systemNotificationsEnabledKey),
+      hybridPresenceSupport: snapshot.getBool(hybridPresenceEnabledKey),
+      isVoicemailEnabled: snapshot.getBool(voicemailEnabledKey),
+      isCallHistoryEnabled: snapshot.getBool(callHistoryEnabledKey),
       callPullVideoStrategy: callPullVideoStrategy,
       monitorCheckInterval: monitorCheckInterval,
       logLevel: logLevel,
-      remoteLoggingEnabled: snapshot.getBool(_kRemoteLoggingEnabledKey),
-      isLogAnonymizationEnabled: snapshot.getBool(_kLogAnonymizationEnabledKey),
+      remoteLoggingEnabled: snapshot.getBool(remoteLoggingEnabledKey),
+      isLogAnonymizationEnabled: snapshot.getBool(logAnonymizationEnabledKey),
     );
   }
 }

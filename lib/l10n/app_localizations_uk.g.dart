@@ -111,6 +111,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callTileActions_message => 'Повідомлення';
 
   @override
+  String get cacheManagement_Button_clear => 'Очистити';
+
+  @override
+  String get cacheManagement_Label_empty => 'На цьому пристрої немає кешованих даних';
+
+  @override
+  String cacheManagement_Label_itemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count запису',
+      many: '$count записів',
+      few: '$count записи',
+      one: '$count запис',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cacheManagement_Label_unknown => 'Невідомо';
+
+  @override
+  String get cacheManagement_Widget_screenTitle => 'Сховище та кеш';
+
+  @override
   String get callTileActions_more => 'Більше';
 
   @override
@@ -463,6 +488,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get copyToClipboard_popupMenuItem => 'Скопіювати в буфер обміну';
+
+  @override
+  String get database_Cache_description =>
+      'Локальна копія даних із сервера: історія дзвінків, список голосових повідомлень, чати й контакти. Очищення видаляє всі локальні записи; дані завантажаться знову під час наступної синхронізації.';
+
+  @override
+  String get database_Cache_title => 'Локальна база даних';
 
   @override
   String get default_CannotRemoveOwnerMessagingSocketException => 'Неможливо видалити власника';
@@ -926,6 +958,18 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedError =>
+      'Цей обліковий запис не має налаштованого способу зв\'язку для отримання коду підтвердження';
+
+  @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedPhoneError =>
+      'Обліковий запис із цим номером телефону не має налаштованого способу зв\'язку для отримання коду підтвердження';
+
+  @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedEmailError =>
+      'Обліковий запис із цією адресою електронної пошти не має налаштованого способу зв\'язку для отримання коду підтвердження';
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'Не вдалося відправити код підтвердження';
 
   @override
@@ -1056,16 +1100,47 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get login_Text_qrSigninScanHint => 'Відскануйте QR-код, щоб увійти.';
+
+  @override
+  String get login_Text_qrSigninVerifyingTitle => 'Виконуємо вхід...';
+
+  @override
+  String get login_Text_qrSigninVerifyingDescription => 'QR-код відскановано. Перевірка на сервері.';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionTitle => 'Доступ до камери вимкнено';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionDescription =>
+      'Для сканування QR-коду потрібен доступ до камери. Увімкніть його, щоб продовжити.';
+
+  @override
+  String get login_Button_qrSigninAllowCameraAccess => 'Продовжити';
+
+  @override
+  String get login_Button_qrSigninOpenSettings => 'Відкрити налаштування';
+
+  @override
+  String get login_Text_qrSigninInvalidCodeError => 'Цей QR-код не можна використати для входу.';
+
+  @override
   String get loginType_otpSignin => 'Увійти за OTP';
 
   @override
   String get loginType_passwordSignin => 'Вхід за паролем';
 
   @override
+  String get loginType_qrSignin => 'QR-код';
+
+  @override
   String get loginType_signup => 'Зареєструватися';
 
   @override
   String get login_validationCoreUrlError => 'Будь ласка, введіть правильний URL';
+
+  @override
+  String get login_validationCoreUrlUnreachableError => 'Не вдалося з\'єднатися з сервісом WebTrit за цією адресою';
 
   @override
   String get login_validationEmailError => 'Будь ласка, введіть правильну електронну пошту';
@@ -2351,6 +2426,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Кодеки дзвінка';
 
   @override
+  String get settings_ListViewTileTitle_cacheManagement => 'Сховище та кеш';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'Ідентифікатор абонента';
 
   @override
@@ -2734,6 +2812,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Будь ласка, введіть значення';
+
+  @override
+  String get voicemail_Cache_description =>
+      'Відтворення голосового повідомлення зберігає локальну копію аудіо для миттєвого повторного прослуховування. Очищення звільняє місце; аудіо завантажиться знову під час наступного відтворення.';
+
+  @override
+  String get voicemail_Cache_title => 'Аудіо голосової пошти';
 
   @override
   String get voicemail_Description_notSupported =>

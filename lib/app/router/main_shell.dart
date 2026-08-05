@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
@@ -363,6 +364,22 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             _sessionGuard,
           ),
         ),
+        RepositoryProvider<AppCacheManager>(
+          create: (context) {
+            final appPath = context.read<AppPath>();
+
+            return AppCacheManager(
+              sections: [
+                if (!kIsWeb && featureAccess.settingsConfig.voicemailsEnabled)
+                  VoicemailCacheSection(
+                    mediaCacheBasePath: appPath.mediaCacheBasePath,
+                    temporaryPath: appPath.temporaryPath,
+                  ),
+                DatabaseCacheSection(context.read<AppDatabase>(), context.read<CdrsLocalRepository>()),
+              ],
+            );
+          },
+        ),
       ],
 
       /// Bridge layers for background/periodic tasks between repositories and Blocs
@@ -558,7 +575,16 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                                 destination,
                               );
                         },
-                        userRepository: context.read<UserRepository>(),
+                        onSessionMissedReported: SessionInvalidationHandler(
+                          SessionVerifier(context.read<UserRepository>()),
+                          performLogout: (resolution) => appBloc.add(
+                            AppLogoutRequested(
+                              reason: resolution is SessionPasswordChangeRequired
+                                  ? AppLogoutReason.passwordChangeRequired
+                                  : AppLogoutReason.sessionMissed,
+                            ),
+                          ),
+                        ).onSessionMissedReported,
                         submitNotification: (n) => notificationsBloc.add(NotificationsSubmitted(n)),
                         isCameraPermissionGranted: () => appPermissions.isPermissionGranted(Permission.camera),
                         callkeep: _callkeep,
@@ -591,15 +617,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         signalingModule: _signalingModule,
                         peerConnectionManager: peerConnectionManager,
                         connectivityService: context.read<ConnectivityService>(),
-                        onSessionInvalidated: (reason) => appBloc.add(
-                          AppLogoutRequested(
-                            reason: switch (reason) {
-                              SignalingSessionInvalidationReason.passwordChangeRequired =>
-                                AppLogoutReason.passwordChangeRequired,
-                              SignalingSessionInvalidationReason.sessionMissed => AppLogoutReason.sessionMissed,
-                            },
-                          ),
-                        ),
                         foregroundCallPushSignal: RemotePushBroker.pendingCallForegroundPushs,
                       )..add(const CallStarted());
                     },

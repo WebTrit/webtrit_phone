@@ -1,6 +1,7 @@
 export 'agreement_status.dart';
 export 'audio_processing_settings.dart';
 export 'auth/auth.dart';
+export 'cache/cache_section.dart';
 export 'call/call.dart';
 export 'call_direction.dart';
 export 'call_log_entry.dart';

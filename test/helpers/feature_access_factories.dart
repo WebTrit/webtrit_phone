@@ -61,6 +61,7 @@ AppConfig createMockAppConfig() {
   when(() => loginModeSelect.actions).thenReturn([]);
   when(() => login.signinOrder).thenReturn(const ['passwordSignin', 'otpSignin', 'signup']);
   when(() => login.common).thenReturn(const AppConfigLoginCommon());
+  when(() => login.qr).thenReturn(const AppConfigLoginQr());
 
   when(() => main.bottomMenu).thenReturn(bottomMenu);
   when(() => bottomMenu.tabs).thenReturn([BottomMenuTabScheme.keypad(titleL10n: 'Keypad', icon: '0xe1ce')]);

@@ -73,6 +73,16 @@
   "@callTileActions_message": {
     "description": "Label of the expanded call tile action that opens a chat with the contact."
   },
+  "cacheManagement_Button_clear": "Clear",
+  "@cacheManagement_Button_clear": {},
+  "cacheManagement_Label_empty": "Nothing is cached on this device",
+  "@cacheManagement_Label_empty": {},
+  "cacheManagement_Label_itemsCount": "{count, plural, one{1 record} other{{count} records}}",
+  "@cacheManagement_Label_itemsCount": {"placeholders": {"count": {"type": "int"}}},
+  "cacheManagement_Label_unknown": "Unknown",
+  "@cacheManagement_Label_unknown": {},
+  "cacheManagement_Widget_screenTitle": "Storage & cache",
+  "@cacheManagement_Widget_screenTitle": {},
   "callTileActions_more": "More",
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
@@ -359,6 +369,10 @@
   "@copyToClipboard_floatingSnackBar": {},
   "copyToClipboard_popupMenuItem": "Copy to clipboard",
   "@copyToClipboard_popupMenuItem": {},
+  "database_Cache_description": "Locally stored copy of the data fetched from the server: call history, voicemail list, chats and contacts. Clearing removes all local records; every feature downloads its data again on the next sync.",
+  "@database_Cache_description": {},
+  "database_Cache_title": "Local database",
+  "@database_Cache_title": {},
   "default_CannotRemoveOwnerMessagingSocketException": "Cannot remove owner",
   "@default_CannotRemoveOwnerMessagingSocketException": {
     "description": "Shown when a user tries to remove the owner from a chat or group. The system does not allow removing the owner."
@@ -635,7 +649,9 @@
   "diagnosticNetworkTestItem_subtitle_publicIps": "Public: {ips}",
   "@diagnosticNetworkTestItem_subtitle_publicIps": {
     "placeholders": {
-      "ips": {"type": "String"}
+      "ips": {
+        "type": "String"
+      }
     }
   },
   "diagnosticNetworkTestItem_subtitle_stunBlocked": "STUN blocked · relay available",
@@ -772,6 +788,18 @@
       }
     }
   },
+  "login_RequestFailureDeliveryChannelUnspecifiedError": "This account has no contact method configured to receive the verification code",
+  "@login_RequestFailureDeliveryChannelUnspecifiedError": {
+    "description": "Shown during OTP sign-in when the requested account has no configured delivery channel to receive the one-time verification code and the advertised sign-in identifiers do not allow a more specific wording. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+  },
+  "login_RequestFailureDeliveryChannelUnspecifiedPhoneError": "The account with this phone number has no contact method configured to receive the verification code",
+  "@login_RequestFailureDeliveryChannelUnspecifiedPhoneError": {
+    "description": "Shown during OTP sign-in on deployments where users sign in with a phone number, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+  },
+  "login_RequestFailureDeliveryChannelUnspecifiedEmailError": "The account with this email address has no contact method configured to receive the verification code",
+  "@login_RequestFailureDeliveryChannelUnspecifiedEmailError": {
+    "description": "Shown during OTP sign-in on deployments where users sign in with an email address, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account."
+  },
   "login_RequestFailureEmptyEmailError": "Cannot send the verification code",
   "@login_RequestFailureEmptyEmailError": {
     "description": "Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty."
@@ -898,15 +926,37 @@
       }
     }
   },
+  "login_Text_qrSigninScanHint": "Scan the QR code to log in.",
+  "@login_Text_qrSigninScanHint": {},
+  "login_Text_qrSigninVerifyingTitle": "Signing you in...",
+  "@login_Text_qrSigninVerifyingTitle": {},
+  "login_Text_qrSigninVerifyingDescription": "QR code scanned. Verifying with the server.",
+  "@login_Text_qrSigninVerifyingDescription": {},
+  "login_Text_qrSigninCameraPermissionTitle": "Camera access is off",
+  "@login_Text_qrSigninCameraPermissionTitle": {},
+  "login_Text_qrSigninCameraPermissionDescription": "Camera access is needed to scan a QR code. Enable it to continue.",
+  "@login_Text_qrSigninCameraPermissionDescription": {},
+  "login_Button_qrSigninAllowCameraAccess": "Continue",
+  "@login_Button_qrSigninAllowCameraAccess": {},
+  "login_Button_qrSigninOpenSettings": "Open settings",
+  "@login_Button_qrSigninOpenSettings": {},
+  "login_Text_qrSigninInvalidCodeError": "This QR code cannot be used to sign in.",
+  "@login_Text_qrSigninInvalidCodeError": {},
   "loginType_otpSignin": "OTP sign in",
   "@loginType_otpSignin": {},
   "loginType_passwordSignin": "Password sign in",
   "@loginType_passwordSignin": {},
+  "loginType_qrSignin": "QR code",
+  "@loginType_qrSignin": {},
   "loginType_signup": "Sign up",
   "@loginType_signup": {},
   "login_validationCoreUrlError": "Please enter a valid URL",
   "@login_validationCoreUrlError": {
     "description": "Shown when the user enters an invalid URL in the WebTrit Cloud Backend URL field during login or setup. Condition: the input does not match the required URL format."
+  },
+  "login_validationCoreUrlUnreachableError": "Cannot reach WebTrit service at this address",
+  "@login_validationCoreUrlUnreachableError": {
+    "description": "Shown inline under the WebTrit Cloud Backend URL field after submit. Condition: the entered address cannot be reached or does not respond like a WebTrit service (connection failure, non-JSON response, or an HTTP error without a WebTrit error payload)."
   },
   "login_validationEmailError": "Please enter a valid email",
   "@login_validationEmailError": {
@@ -1901,6 +1951,8 @@
   "@settings_ListViewTileTitle_accountDelete": {},
   "settings_ListViewTileTitle_call_codecs": "Call codecs",
   "@settings_ListViewTileTitle_call_codecs": {},
+  "settings_ListViewTileTitle_cacheManagement": "Storage & cache",
+  "@settings_ListViewTileTitle_cacheManagement": {},
   "settings_ListViewTileTitle_callerId": "Caller ID",
   "@settings_ListViewTileTitle_callerId": {},
   "settings_ListViewTileTitle_encoding": "Media encoding",
@@ -2277,6 +2329,10 @@
   "@user_agreement_description": {},
   "validationBlankError": "Please enter a value",
   "@validationBlankError": {},
+  "voicemail_Cache_description": "Playing a voicemail keeps a local copy of its audio for instant replays. Clearing frees up space; the audio is downloaded again the next time a message is played.",
+  "@voicemail_Cache_description": {},
+  "voicemail_Cache_title": "Voicemail audio",
+  "@voicemail_Cache_title": {},
   "voicemail_Description_notSupported": "Voicemail feature are not supported in your core. Please contact your administrator for more information.",
   "@voicemail_Description_notSupported": {},
   "voicemail_Dialog_deleteSelectedContent": "Selected voicemails will be permanently deleted. Do you want to continue?",
@@ -2461,7 +2517,6 @@
   "cdr_disconnectReason_nextNodeIsUnreachable": "Next node is unreachable",
   "cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService": "Holst Telephony Service Provider Module (HTSPM) is out of service",
   "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL transit is not my node ID",
-
   "devTools_AppBarTitle": "Dev Tools",
   "@devTools_AppBarTitle": {},
   "devTools_signalingService_groupTitle": "Signaling Service",

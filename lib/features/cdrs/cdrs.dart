@@ -1,3 +1,4 @@
+export 'cubit/cdrs_list_cubit.dart';
 export 'cubit/full_recent_cdrs_cubit.dart';
 export 'cubit/missed_recent_cdrs_cubit.dart';
 export 'features/features.dart';

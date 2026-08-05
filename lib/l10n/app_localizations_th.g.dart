@@ -102,6 +102,24 @@ class AppLocalizationsTh extends AppLocalizations {
   String get callTileActions_message => 'ข้อความ';
 
   @override
+  String get cacheManagement_Button_clear => 'ล้าง';
+
+  @override
+  String get cacheManagement_Label_empty => 'ไม่มีข้อมูลในแคชบนอุปกรณ์นี้';
+
+  @override
+  String cacheManagement_Label_itemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count รายการ');
+    return '$_temp0';
+  }
+
+  @override
+  String get cacheManagement_Label_unknown => 'ไม่ทราบ';
+
+  @override
+  String get cacheManagement_Widget_screenTitle => 'พื้นที่เก็บข้อมูลและแคช';
+
+  @override
   String get callTileActions_more => 'เพิ่มเติม';
 
   @override
@@ -450,6 +468,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get copyToClipboard_popupMenuItem => 'คัดลอกไปยังคลิปบอร์ด';
+
+  @override
+  String get database_Cache_description =>
+      'สำเนาข้อมูลที่ดึงจากเซิร์ฟเวอร์ซึ่งเก็บไว้ในเครื่อง: ประวัติการโทร รายการข้อความเสียง แชท และรายชื่อผู้ติดต่อ การล้างจะลบข้อมูลในเครื่องทั้งหมด และข้อมูลจะถูกดาวน์โหลดใหม่ในการซิงค์ครั้งถัดไป';
+
+  @override
+  String get database_Cache_title => 'ฐานข้อมูลในเครื่อง';
 
   @override
   String get default_CannotRemoveOwnerMessagingSocketException => 'ไม่สามารถลบเจ้าของได้';
@@ -907,6 +932,18 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedError =>
+      'บัญชีนี้ไม่มีช่องทางติดต่อที่ตั้งค่าไว้สำหรับรับรหัสยืนยัน';
+
+  @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedPhoneError =>
+      'บัญชีที่ใช้หมายเลขโทรศัพท์นี้ไม่มีช่องทางติดต่อที่ตั้งค่าไว้สำหรับรับรหัสยืนยัน';
+
+  @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedEmailError =>
+      'บัญชีที่ใช้อีเมลนี้ไม่มีช่องทางติดต่อที่ตั้งค่าไว้สำหรับรับรหัสยืนยัน';
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'ไม่สามารถส่งรหัสยืนยันได้';
 
   @override
@@ -1035,16 +1072,47 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
+  String get login_Text_qrSigninScanHint => 'สแกนคิวอาร์โค้ดเพื่อเข้าสู่ระบบ';
+
+  @override
+  String get login_Text_qrSigninVerifyingTitle => 'กำลังเข้าสู่ระบบ...';
+
+  @override
+  String get login_Text_qrSigninVerifyingDescription => 'สแกนคิวอาร์โค้ดแล้ว กำลังตรวจสอบกับเซิร์ฟเวอร์';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionTitle => 'การเข้าถึงกล้องถูกปิดอยู่';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionDescription =>
+      'ต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกนคิวอาร์โค้ด โปรดเปิดใช้งานเพื่อดำเนินการต่อ';
+
+  @override
+  String get login_Button_qrSigninAllowCameraAccess => 'ดำเนินการต่อ';
+
+  @override
+  String get login_Button_qrSigninOpenSettings => 'เปิดการตั้งค่า';
+
+  @override
+  String get login_Text_qrSigninInvalidCodeError => 'คิวอาร์โค้ดนี้ใช้เข้าสู่ระบบไม่ได้';
+
+  @override
   String get loginType_otpSignin => 'เข้าสู่ระบบด้วย OTP';
 
   @override
   String get loginType_passwordSignin => 'เข้าสู่ระบบด้วยรหัสผ่าน';
 
   @override
+  String get loginType_qrSignin => 'คิวอาร์โค้ด';
+
+  @override
   String get loginType_signup => 'สมัครสมาชิก';
 
   @override
   String get login_validationCoreUrlError => 'กรุณากรอก URL ที่ถูกต้อง';
+
+  @override
+  String get login_validationCoreUrlUnreachableError => 'ไม่สามารถเชื่อมต่อกับบริการ WebTrit ตามที่อยู่นี้ได้';
 
   @override
   String get login_validationEmailError => 'กรุณากรอกอีเมลที่ถูกต้อง';
@@ -2320,6 +2388,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'โคเดกการโทร';
 
   @override
+  String get settings_ListViewTileTitle_cacheManagement => 'พื้นที่เก็บข้อมูลและแคช';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'หมายเลขผู้โทร';
 
   @override
@@ -2690,6 +2761,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get validationBlankError => 'โปรดกรอกค่า';
+
+  @override
+  String get voicemail_Cache_description =>
+      'การเล่นข้อความเสียงจะเก็บสำเนาเสียงไว้ในเครื่องเพื่อเล่นซ้ำได้ทันที การล้างจะคืนพื้นที่ และเสียงจะถูกดาวน์โหลดใหม่เมื่อเล่นครั้งถัดไป';
+
+  @override
+  String get voicemail_Cache_title => 'เสียงข้อความเสียง';
 
   @override
   String get voicemail_Description_notSupported =>

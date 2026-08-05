@@ -40,6 +40,11 @@ extension AppLocalizationsExtension on AppLocalizations {
       'callTileActions_contact' => callTileActions_contact,
       'callTileActions_history' => callTileActions_history,
       'callTileActions_message' => callTileActions_message,
+      'cacheManagement_Button_clear' => cacheManagement_Button_clear,
+      'cacheManagement_Label_empty' => cacheManagement_Label_empty,
+      'cacheManagement_Label_unknown' => cacheManagement_Label_unknown,
+      'cacheManagement_Widget_screenTitle' =>
+        cacheManagement_Widget_screenTitle,
       'callTileActions_more' => callTileActions_more,
       'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
       'call_CallActionsTooltip_accept_inviteToAttendedTransfer' =>
@@ -190,6 +195,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         contacts_ContactScreen_dialogsViaSipBlf_tooltip,
       'copyToClipboard_floatingSnackBar' => copyToClipboard_floatingSnackBar,
       'copyToClipboard_popupMenuItem' => copyToClipboard_popupMenuItem,
+      'database_Cache_description' => database_Cache_description,
+      'database_Cache_title' => database_Cache_title,
       'default_CannotRemoveOwnerMessagingSocketException' =>
         default_CannotRemoveOwnerMessagingSocketException,
       'default_ChatMemberNotFoundMessagingSocketException' =>
@@ -420,6 +427,12 @@ extension AppLocalizationsExtension on AppLocalizations {
       'login_Button_signupVerifyRepeat' => login_Button_signupVerifyRepeat,
       'login_ButtonTooltip_signInToYourInstance' =>
         login_ButtonTooltip_signInToYourInstance,
+      'login_RequestFailureDeliveryChannelUnspecifiedError' =>
+        login_RequestFailureDeliveryChannelUnspecifiedError,
+      'login_RequestFailureDeliveryChannelUnspecifiedPhoneError' =>
+        login_RequestFailureDeliveryChannelUnspecifiedPhoneError,
+      'login_RequestFailureDeliveryChannelUnspecifiedEmailError' =>
+        login_RequestFailureDeliveryChannelUnspecifiedEmailError,
       'login_RequestFailureEmptyEmailError' =>
         login_RequestFailureEmptyEmailError,
       'login_RequestFailureIdentifierIsNotValid' =>
@@ -486,10 +499,26 @@ extension AppLocalizationsExtension on AppLocalizations {
         login_Text_signupRequestPreDescriptionDemo,
       'login_Text_signupVerifyPostDescriptionGeneral' =>
         login_Text_signupVerifyPostDescriptionGeneral,
+      'login_Text_qrSigninScanHint' => login_Text_qrSigninScanHint,
+      'login_Text_qrSigninVerifyingTitle' => login_Text_qrSigninVerifyingTitle,
+      'login_Text_qrSigninVerifyingDescription' =>
+        login_Text_qrSigninVerifyingDescription,
+      'login_Text_qrSigninCameraPermissionTitle' =>
+        login_Text_qrSigninCameraPermissionTitle,
+      'login_Text_qrSigninCameraPermissionDescription' =>
+        login_Text_qrSigninCameraPermissionDescription,
+      'login_Button_qrSigninAllowCameraAccess' =>
+        login_Button_qrSigninAllowCameraAccess,
+      'login_Button_qrSigninOpenSettings' => login_Button_qrSigninOpenSettings,
+      'login_Text_qrSigninInvalidCodeError' =>
+        login_Text_qrSigninInvalidCodeError,
       'loginType_otpSignin' => loginType_otpSignin,
       'loginType_passwordSignin' => loginType_passwordSignin,
+      'loginType_qrSignin' => loginType_qrSignin,
       'loginType_signup' => loginType_signup,
       'login_validationCoreUrlError' => login_validationCoreUrlError,
+      'login_validationCoreUrlUnreachableError' =>
+        login_validationCoreUrlUnreachableError,
       'login_validationEmailError' => login_validationEmailError,
       'login_validationPhoneError' => login_validationPhoneError,
       'login_validationUserRefError' => login_validationUserRefError,
@@ -762,6 +791,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         permission_manufacturer_Text_xiaomi_tip1,
       'permission_manufacturer_Text_xiaomi_tip2' =>
         permission_manufacturer_Text_xiaomi_tip2,
+      'permission_manufacturer_Text_xiaomi_tip3' =>
+        permission_manufacturer_Text_xiaomi_tip3,
       'permission_Text_description' => permission_Text_description,
       'persistentConnectionReminderContent' =>
         persistentConnectionReminderContent,
@@ -1110,6 +1141,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         settings_ListViewTileTitle_accountDelete,
       'settings_ListViewTileTitle_call_codecs' =>
         settings_ListViewTileTitle_call_codecs,
+      'settings_ListViewTileTitle_cacheManagement' =>
+        settings_ListViewTileTitle_cacheManagement,
       'settings_ListViewTileTitle_callerId' =>
         settings_ListViewTileTitle_callerId,
       'settings_ListViewTileTitle_encoding' =>
@@ -1301,6 +1334,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'user_agreement_agrement_link' => user_agreement_agrement_link,
       'user_agreement_button_text' => user_agreement_button_text,
       'validationBlankError' => validationBlankError,
+      'voicemail_Cache_description' => voicemail_Cache_description,
+      'voicemail_Cache_title' => voicemail_Cache_title,
       'voicemail_Description_notSupported' =>
         voicemail_Description_notSupported,
       'voicemail_Dialog_deleteSelectedContent' =>
@@ -1545,6 +1580,12 @@ extension AppLocalizationsExtension on AppLocalizations {
       'agoTicker_secondsAgo' => switch (args) {
         [final num seconds] => agoTicker_secondsAgo(seconds),
         _ => throw ArgumentError('agoTicker_secondsAgo requires 1 arguments'),
+      },
+      'cacheManagement_Label_itemsCount' => switch (args) {
+        [final int count] => cacheManagement_Label_itemsCount(count),
+        _ => throw ArgumentError(
+          'cacheManagement_Label_itemsCount requires 1 arguments',
+        ),
       },
       'call_CallList_header' => switch (args) {
         [final int count] => call_CallList_header(count),

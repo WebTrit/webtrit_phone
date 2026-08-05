@@ -5,6 +5,9 @@ import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/app/notifications/models/notification.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
+import '../extensions/otp_signin_identifier.dart';
+import 'otp_signin_identifier.dart';
+
 @Deprecated.instantiate('will be removed, (see [app/notifications/models/notification.dart] for details)')
 final class LoginErrorNotification extends DefaultErrorNotification {
   LoginErrorNotification(super.error);
@@ -23,6 +26,8 @@ final class LoginErrorNotification extends DefaultErrorNotification {
           return context.l10n.login_RequestFailurePhoneNotFoundError;
         case 'empty_email':
           return context.l10n.login_RequestFailureEmptyEmailError;
+        case 'delivery_channel_unspecified':
+          return context.l10n.login_RequestFailureDeliveryChannelUnspecifiedError;
         case 'validation_error':
           return context.l10n.login_RequestFailureIdentifierIsNotValid;
         // sessionOtpVerify
@@ -147,6 +152,20 @@ final class LoginEmptyEmailNotification extends MessageNotification {
   @override
   String l10n(BuildContext context) {
     return context.l10n.login_RequestFailureEmptyEmailError;
+  }
+}
+
+final class LoginDeliveryChannelUnspecifiedNotification extends MessageNotification {
+  const LoginDeliveryChannelUnspecifiedNotification([this.identifiers = const []]);
+
+  /// Advertised OTP sign-in identifiers at the moment of the failure; an empty
+  /// list keeps the message generic (e.g. when the error did not come from the
+  /// OTP sign-in form).
+  final List<OtpSigninIdentifier> identifiers;
+
+  @override
+  String l10n(BuildContext context) {
+    return identifiers.deliveryChannelUnspecifiedMessage(context);
   }
 }
 

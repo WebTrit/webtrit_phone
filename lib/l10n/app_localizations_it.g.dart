@@ -103,6 +103,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callTileActions_message => 'Messaggio';
 
   @override
+  String get cacheManagement_Button_clear => 'Svuota';
+
+  @override
+  String get cacheManagement_Label_empty => 'Nessun dato in cache su questo dispositivo';
+
+  @override
+  String cacheManagement_Label_itemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count record', one: '1 record');
+    return '$_temp0';
+  }
+
+  @override
+  String get cacheManagement_Label_unknown => 'Sconosciuto';
+
+  @override
+  String get cacheManagement_Widget_screenTitle => 'Archiviazione e cache';
+
+  @override
   String get callTileActions_more => 'Altro';
 
   @override
@@ -456,6 +474,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get copyToClipboard_popupMenuItem => 'Copia negli appunti';
+
+  @override
+  String get database_Cache_description =>
+      'Copia locale dei dati scaricati dal server: cronologia chiamate, elenco dei messaggi vocali, chat e contatti. La cancellazione rimuove tutti i record locali; i dati vengono scaricati di nuovo alla prossima sincronizzazione.';
+
+  @override
+  String get database_Cache_title => 'Database locale';
 
   @override
   String get default_CannotRemoveOwnerMessagingSocketException => 'Impossibile rimuovere il proprietario';
@@ -921,6 +946,18 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedError =>
+      'Questo account non ha alcun metodo di contatto configurato per ricevere il codice di verifica';
+
+  @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedPhoneError =>
+      'L\'account con questo numero di telefono non ha alcun metodo di contatto configurato per ricevere il codice di verifica';
+
+  @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedEmailError =>
+      'L\'account con questo indirizzo email non ha alcun metodo di contatto configurato per ricevere il codice di verifica';
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'Impossibile inviare il codice di verifica';
 
   @override
@@ -1051,16 +1088,48 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get login_Text_qrSigninScanHint => 'Scansiona il codice QR per accedere.';
+
+  @override
+  String get login_Text_qrSigninVerifyingTitle => 'Accesso in corso...';
+
+  @override
+  String get login_Text_qrSigninVerifyingDescription => 'Codice QR scansionato. Verifica con il server in corso.';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionTitle => 'L\'accesso alla fotocamera è disattivato';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionDescription =>
+      'L\'accesso alla fotocamera è necessario per scansionare un codice QR. Attivalo per continuare.';
+
+  @override
+  String get login_Button_qrSigninAllowCameraAccess => 'Continua';
+
+  @override
+  String get login_Button_qrSigninOpenSettings => 'Apri le impostazioni';
+
+  @override
+  String get login_Text_qrSigninInvalidCodeError => 'Questo codice QR non può essere utilizzato per accedere.';
+
+  @override
   String get loginType_otpSignin => 'Accesso con OTP';
 
   @override
   String get loginType_passwordSignin => 'Accesso con password';
 
   @override
+  String get loginType_qrSignin => 'Codice QR';
+
+  @override
   String get loginType_signup => 'Iscrizione';
 
   @override
   String get login_validationCoreUrlError => 'Prego inserisci un URL valido';
+
+  @override
+  String get login_validationCoreUrlUnreachableError =>
+      'Impossibile raggiungere il servizio WebTrit a questo indirizzo';
 
   @override
   String get login_validationEmailError => 'Inserire un indirizzo di email valido';
@@ -2352,6 +2421,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Codec di chiamata';
 
   @override
+  String get settings_ListViewTileTitle_cacheManagement => 'Archiviazione e cache';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'ID chiamante';
 
   @override
@@ -2734,6 +2806,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Prego inserire un valore';
+
+  @override
+  String get voicemail_Cache_description =>
+      'La riproduzione di un messaggio vocale conserva una copia locale dell\'audio per riascolti immediati. Svuotare la cache libera spazio; l\'audio viene scaricato di nuovo alla prossima riproduzione.';
+
+  @override
+  String get voicemail_Cache_title => 'Audio dei messaggi vocali';
 
   @override
   String get voicemail_Description_notSupported =>

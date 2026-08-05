@@ -245,4 +245,19 @@ class AppPermissions {
     final status = await Permission.contacts.request();
     return status.isGranted;
   }
+
+  /// Full camera permission status (unlike the boolean helpers, callers need
+  /// to distinguish a permanent denial to offer the settings screen instead
+  /// of a pointless request).
+  Future<PermissionStatus> getCameraPermissionStatus() async {
+    if (!_isPermissionSupported(Permission.camera)) return PermissionStatus.denied;
+    return Permission.camera.status;
+  }
+
+  Future<PermissionStatus> requestCameraPermission() async {
+    if (!_isPermissionSupported(Permission.camera)) return PermissionStatus.denied;
+    final status = await Permission.camera.request();
+    _logger.info('Camera permission request result: $status');
+    return status;
+  }
 }

@@ -92,5 +92,43 @@ void main() {
       expect(logString, contains(reason));
       expect(logString, contains(requestId));
     });
+
+    group('classification getters', () {
+      RequestFailure failure({int? statusCode, String? code}) => RequestFailure(
+        url: Uri.parse('$baseUri/user'),
+        statusCode: statusCode,
+        requestId: 'req-classification',
+        error: code != null ? ErrorResponse(code: code) : null,
+      );
+
+      test('isClientError is true only for 4xx', () {
+        expect(failure(statusCode: 400).isClientError, isTrue);
+        expect(failure(statusCode: 499).isClientError, isTrue);
+        expect(failure(statusCode: 399).isClientError, isFalse);
+        expect(failure(statusCode: 500).isClientError, isFalse);
+        expect(failure(statusCode: null).isClientError, isFalse);
+      });
+
+      test('isServerError is true only for 5xx', () {
+        expect(failure(statusCode: 500).isServerError, isTrue);
+        expect(failure(statusCode: 599).isServerError, isTrue);
+        expect(failure(statusCode: 499).isServerError, isFalse);
+        expect(failure(statusCode: null).isServerError, isFalse);
+      });
+
+      test('isTransient is true only for 408, 425 and 429', () {
+        expect(failure(statusCode: 408).isTransient, isTrue);
+        expect(failure(statusCode: 425).isTransient, isTrue);
+        expect(failure(statusCode: 429).isTransient, isTrue);
+        expect(failure(statusCode: 422).isTransient, isFalse);
+        expect(failure(statusCode: 503).isTransient, isFalse);
+        expect(failure(statusCode: null).isTransient, isFalse);
+      });
+
+      test('errorCode exposes the backend error code when present', () {
+        expect(failure(statusCode: 422, code: 'some_code').errorCode, 'some_code');
+        expect(failure(statusCode: 422).errorCode, isNull);
+      });
+    });
   });
 }

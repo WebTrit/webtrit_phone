@@ -5,15 +5,15 @@ import 'package:webtrit_phone/models/models.dart';
 
 import '../data/data.dart';
 
-class MockMissedRecentCdrsCubit extends MockCubit<MissedRecentCdrsState> implements MissedRecentCdrsCubit {
+class MockMissedRecentCdrsCubit extends MockCubit<CdrsListState> implements MissedRecentCdrsCubit {
   MockMissedRecentCdrsCubit();
 
   factory MockMissedRecentCdrsCubit.withRecords() {
     final mock = MockMissedRecentCdrsCubit();
     whenListen(
       mock,
-      const Stream<MissedRecentCdrsState>.empty(),
-      initialState: MissedRecentCdrsState(
+      const Stream<CdrsListState>.empty(),
+      initialState: CdrsListState(
         records: dMockCdrRecords.where((r) => r.status == CdrStatus.missed).toList(),
         isLoading: false,
       ),

@@ -34,6 +34,11 @@ void main() {
       if (!kIsWeb && kDebugMode) {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
         await FirebaseCrashlytics.instance.deleteUnsentReports();
+      } else if (!kIsWeb) {
+        // setCrashlyticsCollectionEnabled(false) PERSISTS for the install: a
+        // release build over an install that ever ran a debug build would
+        // silently report nothing. Re-enable explicitly outside debug.
+        FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
       }
 
       FlutterError.onError = (details) {

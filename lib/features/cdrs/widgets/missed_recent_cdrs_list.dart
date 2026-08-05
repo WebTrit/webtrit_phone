@@ -100,7 +100,7 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MissedRecentCdrsCubit, MissedRecentCdrsState>(
+    return BlocBuilder<MissedRecentCdrsCubit, CdrsListState>(
       builder: (context, state) {
         if (state.isLoading) {
           return const Center(child: CircularProgressIndicator());

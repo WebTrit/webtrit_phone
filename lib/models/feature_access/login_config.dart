@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import '../embedded/embedded_data.dart';
 import 'login_mode_action.dart';
+import 'qr_signin_config.dart';
 
 /// Configuration for the login feature, defining UI titles and available login actions.
 class LoginConfig extends Equatable {
@@ -10,8 +11,10 @@ class LoginConfig extends Equatable {
     required this.titleL10n,
     required this.launchLoginPage,
     List<String> signinOrder = const [],
+    QrSigninConfig? qrSignin,
   }) : _actions = List.unmodifiable(actions),
-       signinOrder = List.unmodifiable(signinOrder);
+       signinOrder = List.unmodifiable(signinOrder),
+       qrSignin = qrSignin ?? QrSigninConfig.disabled;
 
   /// The key to use to look up the localized title.
   final String? titleL10n;
@@ -19,6 +22,9 @@ class LoginConfig extends Equatable {
   /// Order of the sign-in tabs (login switch screen) by login type name.
   /// Empty falls back to the built-in default at the consumption site.
   final List<String> signinOrder;
+
+  /// Configuration of the QR-code sign-in tab.
+  final QrSigninConfig qrSignin;
 
   final List<LoginModeAction> _actions;
 
@@ -38,5 +44,5 @@ class LoginConfig extends Equatable {
   List<LoginModeAction> get launchButtons => _actions.toList();
 
   @override
-  List<Object?> get props => [titleL10n, _actions, launchLoginPage, signinOrder];
+  List<Object?> get props => [titleL10n, _actions, launchLoginPage, signinOrder, qrSignin];
 }

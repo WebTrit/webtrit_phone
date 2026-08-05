@@ -77,7 +77,7 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
       appBar: AppBar(backgroundColor: theme.canvasColor.withAlpha(0)),
       body: Stack(
         children: [
-          BlocBuilder<NumberCdrsLogCubit, NumberCdrsLogState>(
+          BlocBuilder<NumberCdrsLogCubit, CdrsListState>(
             builder: (context, state) {
               if (state.isLoading) {
                 return const Center(child: CircularProgressIndicator());

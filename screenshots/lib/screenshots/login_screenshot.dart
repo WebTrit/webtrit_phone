@@ -86,6 +86,8 @@ class _LoginScreenshotState extends State<LoginScreenshot> {
         return const LoginOtpSigninRequestScreen();
       case LoginType.passwordSignin:
         return const LoginPasswordSigninScreen();
+      case LoginType.qrSignin:
+        return const LoginQrSigninScreen();
       case LoginType.signup:
         return _signupBody(context, embedded);
     }

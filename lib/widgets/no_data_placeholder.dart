@@ -104,14 +104,7 @@ class NoDataPlaceholder extends StatelessWidget {
     }
 
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ?iconWidget,
-          ?contentWidget,
-          ?actionsWidget,
-        ],
-      ),
+      child: Column(mainAxisSize: MainAxisSize.min, children: [?iconWidget, ?contentWidget, ?actionsWidget]),
     );
   }
 }

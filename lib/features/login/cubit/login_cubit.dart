@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart' as http;
 import 'package:linkify/linkify.dart';
 import 'package:logging/logging.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -35,7 +37,9 @@ class LoginCubit extends Cubit<LoginState> {
     required this.appCompatibilityResolver,
     required this.onLoginSuccess,
     this.signinOrder = const [],
-  }) : super(const LoginState());
+    QrSigninConfig? qrSigninConfig,
+  }) : qrSigninConfig = qrSigninConfig ?? QrSigninConfig.disabled,
+       super(const LoginState());
 
   final AuthRepository authRepository;
 
@@ -51,6 +55,9 @@ class LoginCubit extends Cubit<LoginState> {
 
   /// Configured order of the sign-in tabs, by login type name (from app config).
   final List<String> signinOrder;
+
+  /// Configuration of the QR-code sign-in tab (from app config).
+  final QrSigninConfig qrSigninConfig;
 
   // Environment getters
   String? get coreUrlFromEnvironment => EnvironmentConfig.CORE_URL;
@@ -102,7 +109,12 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  Future<void> _processSystemInfo(String coreUrl, String tenantId, [bool demo = false]) async {
+  Future<void> _processSystemInfo(
+    String coreUrl,
+    String tenantId, {
+    bool demo = false,
+    void Function(Object error, StackTrace stackTrace)? onError,
+  }) async {
     emit(state.copyWith(processing: true));
 
     try {
@@ -113,10 +125,17 @@ class LoginCubit extends Cubit<LoginState> {
       }
 
       final supportedFeatures = systemInfo.adapter?.supported ?? [];
-      final parsedLoginTypes = supportedFeatures
-          .where((f) => LoginType.values.map((e) => e.name).contains(f))
-          .map((f) => LoginType.values.byName(f))
-          .toList();
+      // Only these types are accepted from the backend; qrSignin is client-side
+      // (added below), so an adapter advertising it must not bypass the config
+      // gate or duplicate the tab.
+      const backendLoginTypes = [LoginType.otpSignin, LoginType.passwordSignin, LoginType.signup];
+      final parsedLoginTypes = backendLoginTypes.where((type) => supportedFeatures.contains(type.name)).toList();
+      // The QR tab is not a backend capability: the scanned code carries plain
+      // credentials, so it is offered whenever password sign-in is available
+      // and the app config enables it.
+      if (qrSigninConfig.enabled && parsedLoginTypes.contains(LoginType.passwordSignin)) {
+        parsedLoginTypes.add(LoginType.qrSignin);
+      }
       // Backend may list the options in an unstable order; impose a deterministic
       // client-side order (driven by app config) so the login tabs do not jump
       // around between requests.
@@ -139,7 +158,11 @@ class LoginCubit extends Cubit<LoginState> {
         ),
       );
     } catch (e, s) {
-      handleError(e, s, 'LoginOtpSigninRequestSubmitted');
+      if (onError != null) {
+        onError(e, s);
+      } else {
+        handleError(e, s, 'LoginOtpSigninRequestSubmitted');
+      }
       emit(state.copyWith(processing: false));
     }
   }
@@ -180,7 +203,7 @@ class LoginCubit extends Cubit<LoginState> {
     final demo = mode == LoginMode.demoCore;
     final coreUrl = demo ? demoCoreUrlFromEnvironment : coreUrlFromEnvironment;
 
-    if (coreUrl != null) await _processSystemInfo(coreUrl, defaultTenantId, demo);
+    if (coreUrl != null) await _processSystemInfo(coreUrl, defaultTenantId, demo: demo);
   }
 
   void setEmbedded(EmbeddedData embedded) {
@@ -195,7 +218,7 @@ class LoginCubit extends Cubit<LoginState> {
   // LoginCoreUrlAssign
 
   void coreUrlInputChanged(String value) {
-    emit(state.copyWith(coreUrlInput: UrlInput.dirty(value)));
+    emit(state.copyWith(coreUrlInput: UrlInput.dirty(value), coreUrlAssignError: null));
   }
 
   void loginCoreUrlAssignSubmitted() async {
@@ -208,11 +231,39 @@ class LoginCubit extends Cubit<LoginState> {
       coreUrlInputValue = 'https://$coreUrlInputValue';
     }
 
-    await _processSystemInfo(coreUrlInputValue, defaultTenantId);
+    emit(state.copyWith(coreUrlAssignError: null));
+
+    await _processSystemInfo(
+      coreUrlInputValue,
+      defaultTenantId,
+      onError: (error, stackTrace) {
+        // On this step an unreachable or non-WebTrit address is an expected
+        // user mistake: surface it inline under the URL field instead of the
+        // generic error path (which stays silent for such failures).
+        if (_isCoreUnreachableError(error)) {
+          _logger.warning('Core URL assign failed: $error');
+          emit(state.copyWith(coreUrlAssignError: error));
+        } else {
+          handleError(error, stackTrace, 'LoginCoreUrlAssignSubmitted');
+        }
+      },
+    );
+  }
+
+  /// Whether [error] means the entered address does not host a reachable
+  /// WebTrit service: a transport failure, a non-JSON payload, or an HTTP
+  /// error without a structured WebTrit error body (e.g. a bare ingress 404
+  /// while the backend restarts).
+  static bool _isCoreUnreachableError(Object error) {
+    if (error is RequestFailure) return error.error == null;
+    return error is SocketException ||
+        error is http.ClientException ||
+        error is TimeoutException ||
+        error is FormatException;
   }
 
   void loginCoreUrlAssignBack() async {
-    emit(state.copyWith(mode: null, coreUrlInput: const UrlInput.pure()));
+    emit(state.copyWith(mode: null, coreUrlInput: const UrlInput.pure(), coreUrlAssignError: null));
   }
 
   void credentialsRequestUrlAssignBack() async {
@@ -338,9 +389,36 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginPasswordSigninSubmitted() async {
-    if (state.processing || !state.passwordSigninUserRefInput.isValid || !state.passwordSigninPasswordInput.isValid) {
+    if (!state.passwordSigninUserRefInput.isValid || !state.passwordSigninPasswordInput.isValid) {
       return;
     }
+
+    await _submitPasswordLogin(
+      userRef: state.passwordSigninUserRefInput.value,
+      password: state.passwordSigninPasswordInput.value,
+      errorContext: 'LoginPasswordSigninSubmitted',
+    );
+  }
+
+  // LoginQrSignin
+
+  /// Signs in with credentials decoded from a scanned QR code.
+  ///
+  /// Follows the same session path as [loginPasswordSigninSubmitted]; the
+  /// credentials come from the scanner instead of the input fields. Completes
+  /// when the attempt is over so the caller can resume scanning on failure.
+  Future<void> loginQrSigninSubmitted({required String userRef, required String password}) {
+    return _submitPasswordLogin(userRef: userRef, password: password, errorContext: 'LoginQrSigninSubmitted');
+  }
+
+  /// Shared session-creation path of the password-based sign-ins (manual entry
+  /// and scanned QR credentials).
+  Future<void> _submitPasswordLogin({
+    required String userRef,
+    required String password,
+    required String errorContext,
+  }) async {
+    if (state.processing) return;
 
     emit(state.copyWith(processing: true));
 
@@ -348,8 +426,8 @@ class LoginCubit extends Cubit<LoginState> {
       final sessionToken = await authRepository.login(
         coreUrl: state.coreUrl!,
         tenantId: state.tenantId!,
-        userRef: state.passwordSigninUserRefInput.value,
-        password: state.passwordSigninPasswordInput.value,
+        userRef: userRef,
+        password: password,
       );
 
       // does not set processing to false to hold processing widgets state during navigation
@@ -357,7 +435,7 @@ class LoginCubit extends Cubit<LoginState> {
     } catch (e, s) {
       emit(state.copyWith(processing: false));
 
-      handleError(e, s, 'LoginSignupVerifySubmitted');
+      handleError(e, s, errorContext);
     }
   }
 
@@ -574,6 +652,13 @@ class LoginCubit extends Cubit<LoginState> {
         'validation_error' => const LoginValidationErrorNotification(),
         'parameters_apply_issue' => const LoginParametersApplyIssueNotification(),
         'empty_email' => const LoginEmptyEmailNotification(),
+        // The identifier-specific wording only makes sense for the OTP sign-in
+        // form; a non-empty user reference input is the evidence the error came
+        // from there (the code is declared on otp-create only, but signup
+        // passes adapter 422 bodies through verbatim).
+        'delivery_channel_unspecified' => LoginDeliveryChannelUnspecifiedNotification(
+          state.otpSigninUserRefInput.value.isNotEmpty ? state.otpSigninIdentifiers : const [],
+        ),
         _ => null,
       };
       if (readableNotification != null) {

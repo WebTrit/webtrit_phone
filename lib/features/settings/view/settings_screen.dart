@@ -207,6 +207,8 @@ class SettingsScreen extends StatelessWidget {
         _onDeleteAccountTap(context);
       case SettingsFlavor.mediaSettings:
         context.router.navigate(const MediaSettingsScreenPageRoute());
+      case SettingsFlavor.cacheManagement:
+        context.router.navigate(const CacheManagementScreenPageRoute());
       case SettingsFlavor.voicemail:
         context.router.navigate(const VoicemailScreenPageRoute());
       case SettingsFlavor.callerId:

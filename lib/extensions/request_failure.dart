@@ -7,7 +7,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 
 extension RequestFailureExension on RequestFailure {
   List<ErrorFieldModel> errorFields(BuildContext context) {
-    final message = error?.message;
+    final message = error?.message ?? rawBody;
     final detailsReason = error?.details?.reason;
     final detailsPath = error?.details?.path;
 

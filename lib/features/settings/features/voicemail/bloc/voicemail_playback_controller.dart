@@ -110,6 +110,19 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
     }
   }
 
+  /// Stops playback and clears the active track. Used when the active
+  /// voicemail disappears from the list (deleted locally or remotely) --
+  /// the player is screen-scoped, so nothing else would stop it.
+  Future<void> stop() async {
+    _generation++;
+    _loadingDebounce.cancel();
+    _activeId = null;
+    _error = null;
+    _isLoading = false;
+    notifyListeners();
+    await _player.stop();
+  }
+
   Future<void> pause() => _player.pause();
 
   Future<void> resume() => _player.play();

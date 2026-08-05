@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
 
-import 'package:ssl_certificates/ssl_certificates.dart';
+import 'package:ssl_certificates/ssl_certificates.dart' show TrustedCertificates;
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';

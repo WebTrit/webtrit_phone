@@ -9,6 +9,7 @@ enum SettingsFlavor {
   deleteAccount,
   embedded,
   mediaSettings,
+  cacheManagement,
   voicemail,
   callerId,
   presence,

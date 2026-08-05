@@ -102,6 +102,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callTileActions_message => 'Message';
 
   @override
+  String get cacheManagement_Button_clear => 'Clear';
+
+  @override
+  String get cacheManagement_Label_empty => 'Nothing is cached on this device';
+
+  @override
+  String cacheManagement_Label_itemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count records', one: '1 record');
+    return '$_temp0';
+  }
+
+  @override
+  String get cacheManagement_Label_unknown => 'Unknown';
+
+  @override
+  String get cacheManagement_Widget_screenTitle => 'Storage & cache';
+
+  @override
   String get callTileActions_more => 'More';
 
   @override
@@ -451,6 +469,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get copyToClipboard_popupMenuItem => 'Copy to clipboard';
+
+  @override
+  String get database_Cache_description =>
+      'Locally stored copy of the data fetched from the server: call history, voicemail list, chats and contacts. Clearing removes all local records; every feature downloads its data again on the next sync.';
+
+  @override
+  String get database_Cache_title => 'Local database';
 
   @override
   String get default_CannotRemoveOwnerMessagingSocketException => 'Cannot remove owner';
@@ -914,6 +939,18 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedError =>
+      'This account has no contact method configured to receive the verification code';
+
+  @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedPhoneError =>
+      'The account with this phone number has no contact method configured to receive the verification code';
+
+  @override
+  String get login_RequestFailureDeliveryChannelUnspecifiedEmailError =>
+      'The account with this email address has no contact method configured to receive the verification code';
+
+  @override
   String get login_RequestFailureEmptyEmailError => 'Cannot send the verification code';
 
   @override
@@ -1043,16 +1080,47 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get login_Text_qrSigninScanHint => 'Scan the QR code to log in.';
+
+  @override
+  String get login_Text_qrSigninVerifyingTitle => 'Signing you in...';
+
+  @override
+  String get login_Text_qrSigninVerifyingDescription => 'QR code scanned. Verifying with the server.';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionTitle => 'Camera access is off';
+
+  @override
+  String get login_Text_qrSigninCameraPermissionDescription =>
+      'Camera access is needed to scan a QR code. Enable it to continue.';
+
+  @override
+  String get login_Button_qrSigninAllowCameraAccess => 'Continue';
+
+  @override
+  String get login_Button_qrSigninOpenSettings => 'Open settings';
+
+  @override
+  String get login_Text_qrSigninInvalidCodeError => 'This QR code cannot be used to sign in.';
+
+  @override
   String get loginType_otpSignin => 'OTP sign in';
 
   @override
   String get loginType_passwordSignin => 'Password sign in';
 
   @override
+  String get loginType_qrSignin => 'QR code';
+
+  @override
   String get loginType_signup => 'Sign up';
 
   @override
   String get login_validationCoreUrlError => 'Please enter a valid URL';
+
+  @override
+  String get login_validationCoreUrlUnreachableError => 'Cannot reach WebTrit service at this address';
 
   @override
   String get login_validationEmailError => 'Please enter a valid email';
@@ -2326,6 +2394,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_ListViewTileTitle_call_codecs => 'Call codecs';
 
   @override
+  String get settings_ListViewTileTitle_cacheManagement => 'Storage & cache';
+
+  @override
   String get settings_ListViewTileTitle_callerId => 'Caller ID';
 
   @override
@@ -2703,6 +2774,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get validationBlankError => 'Please enter a value';
+
+  @override
+  String get voicemail_Cache_description =>
+      'Playing a voicemail keeps a local copy of its audio for instant replays. Clearing frees up space; the audio is downloaded again the next time a message is played.';
+
+  @override
+  String get voicemail_Cache_title => 'Voicemail audio';
 
   @override
   String get voicemail_Description_notSupported =>

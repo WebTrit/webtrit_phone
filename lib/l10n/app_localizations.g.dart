@@ -196,6 +196,36 @@ abstract class AppLocalizations {
   /// **'Message'**
   String get callTileActions_message;
 
+  /// No description provided for @cacheManagement_Button_clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get cacheManagement_Button_clear;
+
+  /// No description provided for @cacheManagement_Label_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is cached on this device'**
+  String get cacheManagement_Label_empty;
+
+  /// No description provided for @cacheManagement_Label_itemsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 record} other{{count} records}}'**
+  String cacheManagement_Label_itemsCount(int count);
+
+  /// No description provided for @cacheManagement_Label_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get cacheManagement_Label_unknown;
+
+  /// No description provided for @cacheManagement_Widget_screenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage & cache'**
+  String get cacheManagement_Widget_screenTitle;
+
   /// Label of the expanded call tile action that opens the full actions menu.
   ///
   /// In en, this message translates to:
@@ -849,6 +879,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy to clipboard'**
   String get copyToClipboard_popupMenuItem;
+
+  /// No description provided for @database_Cache_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Locally stored copy of the data fetched from the server: call history, voicemail list, chats and contacts. Clearing removes all local records; every feature downloads its data again on the next sync.'**
+  String get database_Cache_description;
+
+  /// No description provided for @database_Cache_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Local database'**
+  String get database_Cache_title;
 
   /// Shown when a user tries to remove the owner from a chat or group. The system does not allow removing the owner.
   ///
@@ -1684,6 +1726,24 @@ abstract class AppLocalizations {
   /// **'Your app version is no longer supported, please update the application to continue (current: {actual}, minimum required: {minSupported})'**
   String login_AppVersionUnsupportedExceptionError(String actual, String minSupported);
 
+  /// Shown during OTP sign-in when the requested account has no configured delivery channel to receive the one-time verification code and the advertised sign-in identifiers do not allow a more specific wording. Condition: the server rejects the OTP request because no delivery channel is set up for the account.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has no contact method configured to receive the verification code'**
+  String get login_RequestFailureDeliveryChannelUnspecifiedError;
+
+  /// Shown during OTP sign-in on deployments where users sign in with a phone number, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account.
+  ///
+  /// In en, this message translates to:
+  /// **'The account with this phone number has no contact method configured to receive the verification code'**
+  String get login_RequestFailureDeliveryChannelUnspecifiedPhoneError;
+
+  /// Shown during OTP sign-in on deployments where users sign in with an email address, when the matched account has no configured delivery channel to receive the one-time verification code. Condition: the server rejects the OTP request because no delivery channel is set up for the account.
+  ///
+  /// In en, this message translates to:
+  /// **'The account with this email address has no contact method configured to receive the verification code'**
+  String get login_RequestFailureDeliveryChannelUnspecifiedEmailError;
+
   /// Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty.
   ///
   /// In en, this message translates to:
@@ -1912,6 +1972,54 @@ abstract class AppLocalizations {
   /// **'A one-time verification code was sent to {email}.'**
   String login_Text_signupVerifyPreDescriptionEmail(String email);
 
+  /// No description provided for @login_Text_qrSigninScanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan the QR code to log in.'**
+  String get login_Text_qrSigninScanHint;
+
+  /// No description provided for @login_Text_qrSigninVerifyingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing you in...'**
+  String get login_Text_qrSigninVerifyingTitle;
+
+  /// No description provided for @login_Text_qrSigninVerifyingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code scanned. Verifying with the server.'**
+  String get login_Text_qrSigninVerifyingDescription;
+
+  /// No description provided for @login_Text_qrSigninCameraPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is off'**
+  String get login_Text_qrSigninCameraPermissionTitle;
+
+  /// No description provided for @login_Text_qrSigninCameraPermissionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is needed to scan a QR code. Enable it to continue.'**
+  String get login_Text_qrSigninCameraPermissionDescription;
+
+  /// No description provided for @login_Button_qrSigninAllowCameraAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get login_Button_qrSigninAllowCameraAccess;
+
+  /// No description provided for @login_Button_qrSigninOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get login_Button_qrSigninOpenSettings;
+
+  /// No description provided for @login_Text_qrSigninInvalidCodeError.
+  ///
+  /// In en, this message translates to:
+  /// **'This QR code cannot be used to sign in.'**
+  String get login_Text_qrSigninInvalidCodeError;
+
   /// No description provided for @loginType_otpSignin.
   ///
   /// In en, this message translates to:
@@ -1924,6 +2032,12 @@ abstract class AppLocalizations {
   /// **'Password sign in'**
   String get loginType_passwordSignin;
 
+  /// No description provided for @loginType_qrSignin.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code'**
+  String get loginType_qrSignin;
+
   /// No description provided for @loginType_signup.
   ///
   /// In en, this message translates to:
@@ -1935,6 +2049,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a valid URL'**
   String get login_validationCoreUrlError;
+
+  /// Shown inline under the WebTrit Cloud Backend URL field after submit. Condition: the entered address cannot be reached or does not respond like a WebTrit service (connection failure, non-JSON response, or an HTTP error without a WebTrit error payload).
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot reach WebTrit service at this address'**
+  String get login_validationCoreUrlUnreachableError;
 
   /// Shown when the user enters an invalid email address in the email field during login or signup. Condition: the input does not match the required email format.
   ///
@@ -4297,6 +4417,12 @@ abstract class AppLocalizations {
   /// **'Call codecs'**
   String get settings_ListViewTileTitle_call_codecs;
 
+  /// No description provided for @settings_ListViewTileTitle_cacheManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage & cache'**
+  String get settings_ListViewTileTitle_cacheManagement;
+
   /// No description provided for @settings_ListViewTileTitle_callerId.
   ///
   /// In en, this message translates to:
@@ -4980,6 +5106,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a value'**
   String get validationBlankError;
+
+  /// No description provided for @voicemail_Cache_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Playing a voicemail keeps a local copy of its audio for instant replays. Clearing frees up space; the audio is downloaded again the next time a message is played.'**
+  String get voicemail_Cache_description;
+
+  /// No description provided for @voicemail_Cache_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail audio'**
+  String get voicemail_Cache_title;
 
   /// No description provided for @voicemail_Description_notSupported.
   ///

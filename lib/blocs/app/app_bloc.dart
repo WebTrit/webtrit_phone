@@ -16,7 +16,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/resolvers/resolvers.dart';
-import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 part 'app_bloc.freezed.dart';
 
@@ -38,6 +38,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.systemInfoRepository,
     required this.appCompatibilityResolver,
     List<Locale> supportedLocales = const <Locale>[],
+    this.crashlyticsContext = const AppSessionCrashlyticsContext(),
   }) : super(
          AppState(
            session: sessionRepository.getCurrent(),
@@ -58,6 +59,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppCleanupRequested>(_onCleanupRequested, transformer: droppable());
     on<_AppCompatibilityUpdated>(_onAppCompatibilityUpdated);
 
+    // This bloc is the single writer of the session/user-settings Crashlytics
+    // keys it owns: seed them from the initial state here, refresh them in the
+    // corresponding handlers/transitions below.
+    crashlyticsContext
+      ..logAuthorization(authorized: state.session.isLoggedIn)
+      ..logSessionScope(
+        tenantId: state.session.isLoggedIn ? state.session.tenantId : null,
+        coreUrl: state.session.isLoggedIn ? state.session.coreUrl : null,
+      )
+      ..logThemeMode(state.themeMode)
+      ..logLocale(state.locale);
+
     // Resolve the gate once from any cached system-info so the flag is correct
     // before the first MainShell navigation, then keep it in sync via the stream.
     _resolveCachedAppCompatibility();
@@ -75,6 +88,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final UserSessionCleanupResolver userSessionCleanupResolver;
   final SystemInfoRepository systemInfoRepository;
   final AppCompatibilityResolver appCompatibilityResolver;
+  final AppSessionCrashlyticsContext crashlyticsContext;
 
   StreamSubscription<WebtritSystemInfo>? _systemInfoSubscription;
 
@@ -141,6 +155,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         change.nextState.status != AppLifecycleStatus.authenticated) {
       _onSessionLoggedOut(change.currentState.session);
     }
+
+    // Keep the owned Crashlytics keys in sync with the state, whatever path
+    // changed it; the initial values are seeded in the constructor.
+    if (change.currentState.themeMode != change.nextState.themeMode) {
+      crashlyticsContext.logThemeMode(change.nextState.themeMode);
+    }
+    if (change.currentState.locale != change.nextState.locale) {
+      crashlyticsContext.logLocale(change.nextState.locale);
+    }
     super.onChange(change);
   }
 
@@ -158,17 +181,17 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onSessionLoggedIn(Session session) {
-    unawaited(
-      CrashlyticsUtils.logSession(
-        userId: session.userId,
-        tenantId: session.tenantId,
-        coreUrl: session.coreUrl!,
-        sessionId: appInfo.identifier,
-      ),
-    );
+    crashlyticsContext
+      ..logAuthorization(authorized: true)
+      ..logSessionScope(tenantId: session.tenantId, coreUrl: session.coreUrl)
+      ..logUser(userId: session.userId, sessionId: appInfo.identifier);
   }
 
   void _onSessionLoggedOut(Session session) {
+    crashlyticsContext
+      ..logAuthorization(authorized: false)
+      ..logSessionScope()
+      ..logUser();
     _logger.info('User logged out: ${session.userId}');
   }
 
