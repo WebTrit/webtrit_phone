@@ -1,4 +1,7 @@
 export 'package:app_database/app_database.dart';
+// TrustedCertificates is deliberately not re-exported app-wide: consumers
+// that need it state the ssl_certificates dependency explicitly.
+export 'package:app_transcription/app_transcription.dart' hide TrustedCertificates;
 
 export 'app_certificates.dart';
 export 'app_info.dart';

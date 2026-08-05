@@ -14870,6 +14870,378 @@ class CdrSyncCursorDataCompanion extends UpdateCompanion<CdrSyncCursorData> {
   }
 }
 
+class $TranscriptionTableTable extends TranscriptionTable
+    with TableInfo<$TranscriptionTableTable, TranscriptionData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TranscriptionTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _mediaTypeMeta = const VerificationMeta(
+    'mediaType',
+  );
+  @override
+  late final GeneratedColumn<String> mediaType = GeneratedColumn<String>(
+    'media_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _mediaIdMeta = const VerificationMeta(
+    'mediaId',
+  );
+  @override
+  late final GeneratedColumn<String> mediaId = GeneratedColumn<String>(
+    'media_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _transcriptMeta = const VerificationMeta(
+    'transcript',
+  );
+  @override
+  late final GeneratedColumn<String> transcript = GeneratedColumn<String>(
+    'transcript',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _engineMeta = const VerificationMeta('engine');
+  @override
+  late final GeneratedColumn<String> engine = GeneratedColumn<String>(
+    'engine',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    mediaType,
+    mediaId,
+    transcript,
+    status,
+    engine,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'transcriptions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TranscriptionData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('media_type')) {
+      context.handle(
+        _mediaTypeMeta,
+        mediaType.isAcceptableOrUnknown(data['media_type']!, _mediaTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_mediaTypeMeta);
+    }
+    if (data.containsKey('media_id')) {
+      context.handle(
+        _mediaIdMeta,
+        mediaId.isAcceptableOrUnknown(data['media_id']!, _mediaIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_mediaIdMeta);
+    }
+    if (data.containsKey('transcript')) {
+      context.handle(
+        _transcriptMeta,
+        transcript.isAcceptableOrUnknown(data['transcript']!, _transcriptMeta),
+      );
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    }
+    if (data.containsKey('engine')) {
+      context.handle(
+        _engineMeta,
+        engine.isAcceptableOrUnknown(data['engine']!, _engineMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {mediaType, mediaId};
+  @override
+  TranscriptionData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TranscriptionData(
+      mediaType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}media_type'],
+      )!,
+      mediaId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}media_id'],
+      )!,
+      transcript: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}transcript'],
+      ),
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      ),
+      engine: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}engine'],
+      ),
+    );
+  }
+
+  @override
+  $TranscriptionTableTable createAlias(String alias) {
+    return $TranscriptionTableTable(attachedDatabase, alias);
+  }
+}
+
+class TranscriptionData extends DataClass
+    implements Insertable<TranscriptionData> {
+  final String mediaType;
+  final String mediaId;
+  final String? transcript;
+  final String? status;
+
+  /// Identity of the engine/model that produced [transcript].
+  final String? engine;
+  const TranscriptionData({
+    required this.mediaType,
+    required this.mediaId,
+    this.transcript,
+    this.status,
+    this.engine,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['media_type'] = Variable<String>(mediaType);
+    map['media_id'] = Variable<String>(mediaId);
+    if (!nullToAbsent || transcript != null) {
+      map['transcript'] = Variable<String>(transcript);
+    }
+    if (!nullToAbsent || status != null) {
+      map['status'] = Variable<String>(status);
+    }
+    if (!nullToAbsent || engine != null) {
+      map['engine'] = Variable<String>(engine);
+    }
+    return map;
+  }
+
+  TranscriptionDataCompanion toCompanion(bool nullToAbsent) {
+    return TranscriptionDataCompanion(
+      mediaType: Value(mediaType),
+      mediaId: Value(mediaId),
+      transcript: transcript == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transcript),
+      status: status == null && nullToAbsent
+          ? const Value.absent()
+          : Value(status),
+      engine: engine == null && nullToAbsent
+          ? const Value.absent()
+          : Value(engine),
+    );
+  }
+
+  factory TranscriptionData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TranscriptionData(
+      mediaType: serializer.fromJson<String>(json['mediaType']),
+      mediaId: serializer.fromJson<String>(json['mediaId']),
+      transcript: serializer.fromJson<String?>(json['transcript']),
+      status: serializer.fromJson<String?>(json['status']),
+      engine: serializer.fromJson<String?>(json['engine']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'mediaType': serializer.toJson<String>(mediaType),
+      'mediaId': serializer.toJson<String>(mediaId),
+      'transcript': serializer.toJson<String?>(transcript),
+      'status': serializer.toJson<String?>(status),
+      'engine': serializer.toJson<String?>(engine),
+    };
+  }
+
+  TranscriptionData copyWith({
+    String? mediaType,
+    String? mediaId,
+    Value<String?> transcript = const Value.absent(),
+    Value<String?> status = const Value.absent(),
+    Value<String?> engine = const Value.absent(),
+  }) => TranscriptionData(
+    mediaType: mediaType ?? this.mediaType,
+    mediaId: mediaId ?? this.mediaId,
+    transcript: transcript.present ? transcript.value : this.transcript,
+    status: status.present ? status.value : this.status,
+    engine: engine.present ? engine.value : this.engine,
+  );
+  TranscriptionData copyWithCompanion(TranscriptionDataCompanion data) {
+    return TranscriptionData(
+      mediaType: data.mediaType.present ? data.mediaType.value : this.mediaType,
+      mediaId: data.mediaId.present ? data.mediaId.value : this.mediaId,
+      transcript: data.transcript.present
+          ? data.transcript.value
+          : this.transcript,
+      status: data.status.present ? data.status.value : this.status,
+      engine: data.engine.present ? data.engine.value : this.engine,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TranscriptionData(')
+          ..write('mediaType: $mediaType, ')
+          ..write('mediaId: $mediaId, ')
+          ..write('transcript: $transcript, ')
+          ..write('status: $status, ')
+          ..write('engine: $engine')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(mediaType, mediaId, transcript, status, engine);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TranscriptionData &&
+          other.mediaType == this.mediaType &&
+          other.mediaId == this.mediaId &&
+          other.transcript == this.transcript &&
+          other.status == this.status &&
+          other.engine == this.engine);
+}
+
+class TranscriptionDataCompanion extends UpdateCompanion<TranscriptionData> {
+  final Value<String> mediaType;
+  final Value<String> mediaId;
+  final Value<String?> transcript;
+  final Value<String?> status;
+  final Value<String?> engine;
+  final Value<int> rowid;
+  const TranscriptionDataCompanion({
+    this.mediaType = const Value.absent(),
+    this.mediaId = const Value.absent(),
+    this.transcript = const Value.absent(),
+    this.status = const Value.absent(),
+    this.engine = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TranscriptionDataCompanion.insert({
+    required String mediaType,
+    required String mediaId,
+    this.transcript = const Value.absent(),
+    this.status = const Value.absent(),
+    this.engine = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : mediaType = Value(mediaType),
+       mediaId = Value(mediaId);
+  static Insertable<TranscriptionData> custom({
+    Expression<String>? mediaType,
+    Expression<String>? mediaId,
+    Expression<String>? transcript,
+    Expression<String>? status,
+    Expression<String>? engine,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (mediaType != null) 'media_type': mediaType,
+      if (mediaId != null) 'media_id': mediaId,
+      if (transcript != null) 'transcript': transcript,
+      if (status != null) 'status': status,
+      if (engine != null) 'engine': engine,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TranscriptionDataCompanion copyWith({
+    Value<String>? mediaType,
+    Value<String>? mediaId,
+    Value<String?>? transcript,
+    Value<String?>? status,
+    Value<String?>? engine,
+    Value<int>? rowid,
+  }) {
+    return TranscriptionDataCompanion(
+      mediaType: mediaType ?? this.mediaType,
+      mediaId: mediaId ?? this.mediaId,
+      transcript: transcript ?? this.transcript,
+      status: status ?? this.status,
+      engine: engine ?? this.engine,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (mediaType.present) {
+      map['media_type'] = Variable<String>(mediaType.value);
+    }
+    if (mediaId.present) {
+      map['media_id'] = Variable<String>(mediaId.value);
+    }
+    if (transcript.present) {
+      map['transcript'] = Variable<String>(transcript.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (engine.present) {
+      map['engine'] = Variable<String>(engine.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TranscriptionDataCompanion(')
+          ..write('mediaType: $mediaType, ')
+          ..write('mediaId: $mediaId, ')
+          ..write('transcript: $transcript, ')
+          ..write('status: $status, ')
+          ..write('engine: $engine, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -14939,6 +15311,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CdrTableTable cdrTable = $CdrTableTable(this);
   late final $CdrSyncCursorTableTable cdrSyncCursorTable =
       $CdrSyncCursorTableTable(this);
+  late final $TranscriptionTableTable transcriptionTable =
+      $TranscriptionTableTable(this);
   late final ContactsDao contactsDao = ContactsDao(this as AppDatabase);
   late final ContactPhonesDao contactPhonesDao = ContactPhonesDao(
     this as AppDatabase,
@@ -14967,6 +15341,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final DialogInfoDao dialogInfoDao = DialogInfoDao(this as AppDatabase);
   late final CdrsDao cdrsDao = CdrsDao(this as AppDatabase);
+  late final TranscriptionsDao transcriptionsDao = TranscriptionsDao(
+    this as AppDatabase,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -15006,6 +15383,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     dialogInfoTable,
     cdrTable,
     cdrSyncCursorTable,
+    transcriptionTable,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -27574,6 +27952,221 @@ typedef $$CdrSyncCursorTableTableProcessedTableManager =
       CdrSyncCursorData,
       PrefetchHooks Function()
     >;
+typedef $$TranscriptionTableTableCreateCompanionBuilder =
+    TranscriptionDataCompanion Function({
+      required String mediaType,
+      required String mediaId,
+      Value<String?> transcript,
+      Value<String?> status,
+      Value<String?> engine,
+      Value<int> rowid,
+    });
+typedef $$TranscriptionTableTableUpdateCompanionBuilder =
+    TranscriptionDataCompanion Function({
+      Value<String> mediaType,
+      Value<String> mediaId,
+      Value<String?> transcript,
+      Value<String?> status,
+      Value<String?> engine,
+      Value<int> rowid,
+    });
+
+class $$TranscriptionTableTableFilterComposer
+    extends Composer<_$AppDatabase, $TranscriptionTableTable> {
+  $$TranscriptionTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get mediaType => $composableBuilder(
+    column: $table.mediaType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mediaId => $composableBuilder(
+    column: $table.mediaId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get transcript => $composableBuilder(
+    column: $table.transcript,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get engine => $composableBuilder(
+    column: $table.engine,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TranscriptionTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $TranscriptionTableTable> {
+  $$TranscriptionTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get mediaType => $composableBuilder(
+    column: $table.mediaType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mediaId => $composableBuilder(
+    column: $table.mediaId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get transcript => $composableBuilder(
+    column: $table.transcript,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get engine => $composableBuilder(
+    column: $table.engine,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TranscriptionTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TranscriptionTableTable> {
+  $$TranscriptionTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get mediaType =>
+      $composableBuilder(column: $table.mediaType, builder: (column) => column);
+
+  GeneratedColumn<String> get mediaId =>
+      $composableBuilder(column: $table.mediaId, builder: (column) => column);
+
+  GeneratedColumn<String> get transcript => $composableBuilder(
+    column: $table.transcript,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get engine =>
+      $composableBuilder(column: $table.engine, builder: (column) => column);
+}
+
+class $$TranscriptionTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TranscriptionTableTable,
+          TranscriptionData,
+          $$TranscriptionTableTableFilterComposer,
+          $$TranscriptionTableTableOrderingComposer,
+          $$TranscriptionTableTableAnnotationComposer,
+          $$TranscriptionTableTableCreateCompanionBuilder,
+          $$TranscriptionTableTableUpdateCompanionBuilder,
+          (
+            TranscriptionData,
+            BaseReferences<
+              _$AppDatabase,
+              $TranscriptionTableTable,
+              TranscriptionData
+            >,
+          ),
+          TranscriptionData,
+          PrefetchHooks Function()
+        > {
+  $$TranscriptionTableTableTableManager(
+    _$AppDatabase db,
+    $TranscriptionTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TranscriptionTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TranscriptionTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TranscriptionTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> mediaType = const Value.absent(),
+                Value<String> mediaId = const Value.absent(),
+                Value<String?> transcript = const Value.absent(),
+                Value<String?> status = const Value.absent(),
+                Value<String?> engine = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TranscriptionDataCompanion(
+                mediaType: mediaType,
+                mediaId: mediaId,
+                transcript: transcript,
+                status: status,
+                engine: engine,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String mediaType,
+                required String mediaId,
+                Value<String?> transcript = const Value.absent(),
+                Value<String?> status = const Value.absent(),
+                Value<String?> engine = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TranscriptionDataCompanion.insert(
+                mediaType: mediaType,
+                mediaId: mediaId,
+                transcript: transcript,
+                status: status,
+                engine: engine,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TranscriptionTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TranscriptionTableTable,
+      TranscriptionData,
+      $$TranscriptionTableTableFilterComposer,
+      $$TranscriptionTableTableOrderingComposer,
+      $$TranscriptionTableTableAnnotationComposer,
+      $$TranscriptionTableTableCreateCompanionBuilder,
+      $$TranscriptionTableTableUpdateCompanionBuilder,
+      (
+        TranscriptionData,
+        BaseReferences<
+          _$AppDatabase,
+          $TranscriptionTableTable,
+          TranscriptionData
+        >,
+      ),
+      TranscriptionData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -27700,4 +28293,6 @@ class $AppDatabaseManager {
       $$CdrTableTableTableManager(_db, _db.cdrTable);
   $$CdrSyncCursorTableTableTableManager get cdrSyncCursorTable =>
       $$CdrSyncCursorTableTableTableManager(_db, _db.cdrSyncCursorTable);
+  $$TranscriptionTableTableTableManager get transcriptionTable =>
+      $$TranscriptionTableTableTableManager(_db, _db.transcriptionTable);
 }

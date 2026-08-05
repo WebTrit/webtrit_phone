@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show ValueListenable;
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -9,10 +11,13 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
+
+enum _VoicemailMenuAction { delete, transcriptionModel, cacheManagement }
 
 class VoicemailScreen extends StatefulWidget {
   const VoicemailScreen({super.key});
@@ -22,6 +27,32 @@ class VoicemailScreen extends StatefulWidget {
 }
 
 class _VoicemailScreenState extends State<VoicemailScreen> {
+  /// Boiled-down "the model is downloading" flag: the raw download state
+  /// ticks on every progress report, but the list only cares about the
+  /// boolean and must not rebuild every tile per tick.
+  late final ValueNotifier<bool> _modelDownloading;
+  late final ValueListenable<ModelDownloadState> _downloadState;
+  late final VoidCallback _downloadStateListener;
+
+  @override
+  void initState() {
+    super.initState();
+    _downloadState = context.read<TranscriptionModelService>().modelDownloadState;
+    _modelDownloading = ValueNotifier(_downloadState.value is ModelDownloading);
+    _downloadStateListener = () {
+      final downloading = _downloadState.value is ModelDownloading;
+      if (_modelDownloading.value != downloading) _modelDownloading.value = downloading;
+    };
+    _downloadState.addListener(_downloadStateListener);
+  }
+
+  @override
+  void dispose() {
+    _downloadState.removeListener(_downloadStateListener);
+    _modelDownloading.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<VoicemailCubit, VoicemailState>(
@@ -32,23 +63,41 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
           appBar: AppBar(
             title: Text(context.l10n.voicemail_Widget_screenTitle),
             actions: [
-              if (context.read<AppCacheManager>().sections.isNotEmpty)
-                IconButton(
-                  icon: const Icon(Icons.storage),
-                  tooltip: context.l10n.cacheManagement_Widget_screenTitle,
-                  onPressed: _onOpenCacheManagement,
-                ),
               Badge(
                 alignment: AlignmentDirectional.topCenter,
                 isLabelVisible: state.isMultipleVoicemailsSelection,
                 label: Text(state.selectedVoicemailsIds.length.toString()),
-                child: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: state.items.isNotEmpty
-                      ? () => state.isMultipleVoicemailsSelection
-                            ? _onDeleteSelectedVoicemails()
-                            : _onDeleteAllVoicemails()
-                      : null,
+                child: PopupMenuButton<_VoicemailMenuAction>(
+                  onSelected: _onMenuAction,
+                  itemBuilder: (context) => [
+                    // Purely functional gate: only the local engine has a
+                    // model tier to pick (there is no brand flag behind it).
+                    if (context.read<TranscriptionModelService>().canSelectModel)
+                      PopupMenuItem(
+                        value: _VoicemailMenuAction.transcriptionModel,
+                        child: ListTile(
+                          leading: const Icon(Icons.tune),
+                          title: Text(context.l10n.transcriptionSettings_Widget_screenTitle),
+                        ),
+                      ),
+                    if (context.read<AppCacheManager>().sections.isNotEmpty)
+                      PopupMenuItem(
+                        value: _VoicemailMenuAction.cacheManagement,
+                        child: ListTile(
+                          leading: const Icon(Icons.storage),
+                          title: Text(context.l10n.cacheManagement_Widget_screenTitle),
+                        ),
+                      ),
+                    PopupMenuItem(
+                      value: _VoicemailMenuAction.delete,
+                      enabled: state.items.isNotEmpty,
+                      child: ListTile(
+                        enabled: state.items.isNotEmpty,
+                        leading: const Icon(Icons.delete),
+                        title: Text(context.l10n.voicemail_Label_delete),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -76,10 +125,14 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                 children: [
                   if (state.isRefreshing) const LinearProgressIndicator(minHeight: 1),
                   if (state.isVoicemailsExists)
-                    VoicemailListView(
-                      items: state.items,
-                      selectedVoicemailsIds: state.selectedVoicemailsIds,
-                      isMultipleVoicemailsSelection: state.isMultipleVoicemailsSelection,
+                    ValueListenableBuilder(
+                      valueListenable: _modelDownloading,
+                      builder: (context, modelDownloading, _) => VoicemailListView(
+                        items: state.items,
+                        selectedVoicemailsIds: state.selectedVoicemailsIds,
+                        isMultipleVoicemailsSelection: state.isMultipleVoicemailsSelection,
+                        modelDownloading: modelDownloading,
+                      ),
                     ),
                 ],
               );
@@ -103,6 +156,22 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
 
   void _onRetryFetch() {
     context.read<VoicemailCubit>().fetchVoicemails();
+  }
+
+  void _onMenuAction(_VoicemailMenuAction action) {
+    switch (action) {
+      case _VoicemailMenuAction.delete:
+        final state = context.read<VoicemailCubit>().state;
+        state.isMultipleVoicemailsSelection ? _onDeleteSelectedVoicemails() : _onDeleteAllVoicemails();
+      case _VoicemailMenuAction.transcriptionModel:
+        _onOpenTranscriptionSettings();
+      case _VoicemailMenuAction.cacheManagement:
+        _onOpenCacheManagement();
+    }
+  }
+
+  void _onOpenTranscriptionSettings() {
+    context.router.navigate(const TranscriptionSettingsScreenPageRoute());
   }
 
   /// Clearing the voicemail cache deletes files the player may hold open, so
@@ -147,11 +216,15 @@ class VoicemailListView extends StatelessWidget {
     required this.items,
     required this.selectedVoicemailsIds,
     required this.isMultipleVoicemailsSelection,
+    this.modelDownloading = false,
   });
 
   final List<Voicemail> items;
   final List<String> selectedVoicemailsIds;
   final bool isMultipleVoicemailsSelection;
+
+  /// See [VoicemailTile.modelDownloading].
+  final bool modelDownloading;
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +238,7 @@ class VoicemailListView extends StatelessWidget {
         final item = items[index];
         return VoicemailTile(
           voicemail: item,
+          modelDownloading: modelDownloading,
           displayName: item.displaySender,
           selected: selectedVoicemailsIds.contains(item.id),
           onDeleted: (it) => _onDeleteVoicemail(context, it),
