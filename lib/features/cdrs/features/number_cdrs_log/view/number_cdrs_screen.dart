@@ -65,6 +65,7 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final outlinedButtonStyles = theme.extension<OutlinedButtonStyles>();
+    final style = theme.extension<NumberCdrsScreenStyles>()?.primary;
     final topPadding = MediaQuery.paddingOf(context).top;
 
     final RenderBox? headerBox = headerKey.currentContext?.findRenderObject() as RenderBox?;
@@ -72,9 +73,13 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
 
     final number = cubit.number;
 
-    return Scaffold(
+    // The default page style keeps this bar chrome-less: it only floats the
+    // back button over the number header card.
+    return ThemedScaffold(
+      background: style?.background,
+      appBarTheme: style?.appBarTheme,
       extendBodyBehindAppBar: true,
-      appBar: AppBar(backgroundColor: theme.canvasColor.withAlpha(0)),
+      appBar: AppBar(flexibleSpace: BlurredSurface.fromStyle(style?.appBarBlurredSurface)),
       body: Stack(
         children: [
           BlocBuilder<NumberCdrsLogCubit, CdrsListState>(

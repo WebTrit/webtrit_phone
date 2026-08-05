@@ -7,11 +7,12 @@ import '../theme_style_factory.dart';
 import 'theme_image_style.dart';
 
 class LoginSwitchScreenStyleFactory implements ThemeStyleFactory<LoginSwitchScreenStyles> {
-  LoginSwitchScreenStyleFactory(this.config, this.colors, this.defaultFontFamily);
+  LoginSwitchScreenStyleFactory(this.config, this.colors, this.defaultFontFamily, {this.appBarTheme});
 
   final LoginSwitchPageConfig? config;
   final ColorScheme colors;
   final String? defaultFontFamily;
+  final AppBarTheme? appBarTheme;
 
   @override
   LoginSwitchScreenStyles create() {
@@ -23,6 +24,8 @@ class LoginSwitchScreenStyleFactory implements ThemeStyleFactory<LoginSwitchScre
         applyToAppBar: config?.themeOverride.applyToAppBar,
         pictureLogoStyle: pictureLogoStyle,
         segmentButtonStyle: config?.segmentButtonStyle?.toButtonStyle(defaultFontFamily: defaultFontFamily),
+        appBarBlurredSurface: config?.appBarBlurredSurface?.toStyle(),
+        appBarTheme: appBarTheme,
       ),
     );
   }

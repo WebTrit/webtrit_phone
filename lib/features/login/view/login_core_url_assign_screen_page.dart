@@ -4,6 +4,9 @@ import 'package:auto_route/auto_route.dart';
 
 import 'login_core_url_assign_screen.dart';
 
+export 'login_core_url_assign_screen_style.dart';
+export 'login_core_url_assign_screen_styles.dart';
+
 @RoutePage()
 class LoginCoreUrlAssignScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors

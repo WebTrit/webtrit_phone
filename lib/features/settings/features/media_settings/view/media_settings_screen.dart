@@ -23,8 +23,6 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
     final l10n = context.l10n;
 
     final contentPadding = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8);
@@ -39,7 +37,6 @@ class _MediaSettingsScreenState extends State<MediaSettingsScreen> {
             icon: const Icon(Icons.settings_backup_restore),
             tooltip: l10n.settings_encoding_AppBar_reset_tooltip,
             onPressed: () => cubit.reset(),
-            color: colorScheme.onSurface,
           ),
         ],
       ),

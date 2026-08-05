@@ -90,7 +90,8 @@ class _EmbeddedScreenState extends State<EmbeddedScreen> {
     return ThemedScaffold(
       background: effectiveStyle?.background,
       contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
-      applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+      applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
+      appBarTheme: effectiveStyle?.appBarTheme,
       appBar: widget.appBar,
       body: BlocConsumer<EmbeddedCubit, EmbeddedState>(
         builder: (context, state) {

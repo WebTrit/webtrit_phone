@@ -116,7 +116,7 @@ class _ContactScreenState extends State<ContactScreen> {
                         actions: [
                           if (widget.enableAppBarChat && contact.canMessage)
                             IconButton(
-                              icon: Icon(Icons.message, color: colorScheme.onSurface),
+                              icon: const Icon(Icons.message),
                               onPressed: () => _navigateToChatConversation(contact),
                             ),
                         ],

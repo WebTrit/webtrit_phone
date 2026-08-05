@@ -1,21 +1,24 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/blurred_surface.dart';
 
 class AboutScreenStyle extends BaseScreenStyle with Diagnosticable {
-  const AboutScreenStyle({super.background, super.appBarBlurredSurface, this.pictureLogoStyle});
+  const AboutScreenStyle({super.background, super.appBarBlurredSurface, super.appBarTheme, this.pictureLogoStyle});
 
   final ThemeImageStyle? pictureLogoStyle;
 
   AboutScreenStyle copyWith({
     BackgroundStyle? background,
     BlurredSurfaceStyle? appBarBlurredSurface,
+    AppBarTheme? appBarTheme,
     ThemeImageStyle? pictureLogoStyle,
   }) {
     return AboutScreenStyle(
       background: background ?? this.background,
       appBarBlurredSurface: appBarBlurredSurface ?? this.appBarBlurredSurface,
+      appBarTheme: appBarTheme ?? this.appBarTheme,
       pictureLogoStyle: pictureLogoStyle ?? this.pictureLogoStyle,
     );
   }
@@ -27,6 +30,7 @@ class AboutScreenStyle extends BaseScreenStyle with Diagnosticable {
     return AboutScreenStyle(
       background: b.background ?? a.background,
       appBarBlurredSurface: BlurredSurfaceStyle.merge(a.appBarBlurredSurface, b.appBarBlurredSurface),
+      appBarTheme: b.appBarTheme ?? a.appBarTheme,
       pictureLogoStyle: ThemeImageStyle.merge(a.pictureLogoStyle, b.pictureLogoStyle),
     );
   }
@@ -39,6 +43,7 @@ class AboutScreenStyle extends BaseScreenStyle with Diagnosticable {
     return AboutScreenStyle(
       background: BaseScreenStyle.lerp(a?.background, b?.background, t),
       appBarBlurredSurface: BlurredSurfaceStyle.lerp(a?.appBarBlurredSurface, b?.appBarBlurredSurface, t),
+      appBarTheme: AppBarTheme.lerp(a?.appBarTheme, b?.appBarTheme, t),
       pictureLogoStyle: ThemeImageStyle.lerp(a?.pictureLogoStyle, b?.pictureLogoStyle, t),
     );
   }

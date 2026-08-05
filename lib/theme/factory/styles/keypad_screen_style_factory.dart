@@ -14,12 +14,19 @@ import 'action_pad_style_factory.dart';
 import 'keypad_style_factory.dart';
 
 class KeypadScreenStyleFactory implements ThemeStyleFactory<KeypadScreenStyles> {
-  KeypadScreenStyleFactory(this.colors, this.defaultFontFamily, {required this.config, required this.textTheme});
+  KeypadScreenStyleFactory(
+    this.colors,
+    this.defaultFontFamily, {
+    required this.config,
+    required this.textTheme,
+    this.appBarTheme,
+  });
 
   final ColorScheme colors;
   final KeypadPageConfig config;
   final TextTheme textTheme;
   final String? defaultFontFamily;
+  final AppBarTheme? appBarTheme;
 
   @override
   KeypadScreenStyles create() {
@@ -31,6 +38,7 @@ class KeypadScreenStyleFactory implements ThemeStyleFactory<KeypadScreenStyles> 
         appBarBlurredSurface: config.appBarBlurredSurface?.toStyle(),
         contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
+        appBarTheme: appBarTheme,
         inputField: config.textField?.toStyle(colors: colors, defaultFontFamily: defaultFontFamily),
         contactNameField: config.contactName?.toStyle(
           colors: colors,

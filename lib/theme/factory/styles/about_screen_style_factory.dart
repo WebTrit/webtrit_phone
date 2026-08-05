@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'package:webtrit_appearance_theme/models/models.dart';
 
 import 'package:webtrit_phone/features/features.dart';
@@ -7,9 +9,10 @@ import '../theme_style_factory.dart';
 import 'theme_image_style.dart';
 
 class AboutScreenStyleFactory implements ThemeStyleFactory<AboutScreenStyles> {
-  AboutScreenStyleFactory(this.config);
+  AboutScreenStyleFactory(this.config, {this.appBarTheme});
 
   final AboutPageConfig? config;
+  final AppBarTheme? appBarTheme;
 
   @override
   AboutScreenStyles create() {
@@ -21,6 +24,7 @@ class AboutScreenStyleFactory implements ThemeStyleFactory<AboutScreenStyles> {
         pictureLogoStyle: pictureLogoStyle,
         background: backgroundStyle,
         appBarBlurredSurface: config?.appBarBlurredSurface?.toStyle(),
+        appBarTheme: appBarTheme,
       ),
     );
   }
