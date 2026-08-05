@@ -62,7 +62,12 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                       Flexible(
                         child: Text(
                           status.appBarl10n(context),
-                          style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700),
+                          // Colored as a title: the status line replaces the title, so it has
+                          // to follow the app bar's configured title color, not the typography.
+                          style: theme.textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: DefaultTextStyle.of(context).style.color,
+                          ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
@@ -120,49 +125,61 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                         height: kMinInteractiveDimension,
                       ),
                       padding: const EdgeInsets.all(2),
-                      icon: Stack(
-                        clipBehavior: Clip.none,
-                        children: <Widget>[
-                          LeadingAvatar(
-                            username: info?.name ?? info?.numbers.main,
-                            thumbnailUrl: gravatarThumbnailUrl(info?.email),
-                            radius: kMinInteractiveDimension / 2,
-                            showLoading: true,
-                          ),
-                          BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
-                            builder: (context, microphoneStatusState) {
-                              return Visibility(
-                                visible:
-                                    microphoneStatusState.microphonePermissionGranted != null &&
-                                    !microphoneStatusState.microphonePermissionGranted!,
-                                child: Positioned(
-                                  right: -8,
-                                  top: -2,
-                                  child: Container(
-                                    padding: EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.error,
-                                      shape: BoxShape.circle,
+                      // The avatar keeps its own palette: without this reset the app bar
+                      // pushes its foreground color into the subtree and tints it.
+                      icon: IconTheme(
+                        data: theme.iconTheme,
+                        child: DefaultTextStyle(
+                          style: theme.textTheme.bodyMedium!,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: <Widget>[
+                              LeadingAvatar(
+                                username: info?.name ?? info?.numbers.main,
+                                thumbnailUrl: gravatarThumbnailUrl(info?.email),
+                                radius: kMinInteractiveDimension / 2,
+                                showLoading: true,
+                              ),
+                              BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
+                                builder: (context, microphoneStatusState) {
+                                  return Visibility(
+                                    visible:
+                                        microphoneStatusState.microphonePermissionGranted != null &&
+                                        !microphoneStatusState.microphonePermissionGranted!,
+                                    child: Positioned(
+                                      right: -8,
+                                      top: -2,
+                                      child: Container(
+                                        padding: EdgeInsets.all(3),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.error,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.mic_off,
+                                          color: Theme.of(context).colorScheme.onError,
+                                          size: 14,
+                                        ),
+                                      ),
                                     ),
-                                    child: Icon(Icons.mic_off, color: Colors.white, size: 14),
-                                  ),
-                                ),
-                              );
-                            },
+                                  );
+                                },
+                              ),
+                              BlocBuilder<SessionStatusCubit, SessionStatusState>(
+                                buildWhen: (previous, current) => previous.topIssue != current.topIssue,
+                                builder: (context, sessionState) {
+                                  final topIssue = sessionState.topIssue;
+                                  if (topIssue == null) return const SizedBox.shrink();
+                                  return Positioned(
+                                    right: -2,
+                                    bottom: -2,
+                                    child: SessionIssueBadge(color: topIssue.color(context), size: 12),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
-                          BlocBuilder<SessionStatusCubit, SessionStatusState>(
-                            buildWhen: (previous, current) => previous.topIssue != current.topIssue,
-                            builder: (context, sessionState) {
-                              final topIssue = sessionState.topIssue;
-                              if (topIssue == null) return const SizedBox.shrink();
-                              return Positioned(
-                                right: -2,
-                                bottom: -2,
-                                child: SessionIssueBadge(color: topIssue.color(context), size: 12),
-                              );
-                            },
-                          ),
-                        ],
+                        ),
                       ),
                       onPressed: () {
                         FocusScope.of(context).unfocus();

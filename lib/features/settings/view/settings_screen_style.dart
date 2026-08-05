@@ -15,6 +15,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   const SettingScreenStyle({
     super.background,
     super.appBarBlurredSurface,
+    super.appBarTheme,
     this.contentThemeOverride,
     this.applyToAppBar,
     this.leadingIconsColor,
@@ -57,6 +58,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
   SettingScreenStyle copyWith({
     BackgroundStyle? background,
     BlurredSurfaceStyle? appBarBlurredSurface,
+    AppBarTheme? appBarTheme,
     ThemeMode? contentThemeOverride,
     bool? applyToAppBar,
     Color? leadingIconsColor,
@@ -71,6 +73,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     return SettingScreenStyle(
       background: background ?? this.background,
       appBarBlurredSurface: appBarBlurredSurface ?? this.appBarBlurredSurface,
+      appBarTheme: appBarTheme ?? this.appBarTheme,
       contentThemeOverride: contentThemeOverride ?? this.contentThemeOverride,
       applyToAppBar: applyToAppBar ?? this.applyToAppBar,
       leadingIconsColor: leadingIconsColor ?? this.leadingIconsColor,
@@ -91,6 +94,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     return SettingScreenStyle(
       background: b.background ?? a.background,
       appBarBlurredSurface: BlurredSurfaceStyle.merge(a.appBarBlurredSurface, b.appBarBlurredSurface),
+      appBarTheme: b.appBarTheme ?? a.appBarTheme,
       contentThemeOverride: b.contentThemeOverride ?? a.contentThemeOverride,
       applyToAppBar: b.applyToAppBar ?? a.applyToAppBar,
       leadingIconsColor: b.leadingIconsColor ?? a.leadingIconsColor,
@@ -108,6 +112,7 @@ class SettingScreenStyle extends BaseScreenStyle with Diagnosticable {
     return SettingScreenStyle(
       background: BaseScreenStyle.lerp(a?.background, b?.background, t),
       appBarBlurredSurface: BlurredSurfaceStyle.lerp(a?.appBarBlurredSurface, b?.appBarBlurredSurface, t),
+      appBarTheme: AppBarTheme.lerp(a?.appBarTheme, b?.appBarTheme, t),
       contentThemeOverride: t < 0.5 ? a?.contentThemeOverride : b?.contentThemeOverride,
       applyToAppBar: t < 0.5 ? a?.applyToAppBar : b?.applyToAppBar,
       leadingIconsColor: Color.lerp(a?.leadingIconsColor, b?.leadingIconsColor, t),

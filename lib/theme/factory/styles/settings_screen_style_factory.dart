@@ -10,11 +10,12 @@ import '../theme_style_factory.dart';
 import 'group_title_list_styles.dart';
 
 class SettingsScreenStyleFactory implements ThemeStyleFactory<SettingsScreenStyles> {
-  SettingsScreenStyleFactory(this.colors, this.config, this.defaultFontFamily);
+  SettingsScreenStyleFactory(this.colors, this.config, this.defaultFontFamily, {this.appBarTheme});
 
   final ColorScheme colors;
   final SettingsPageConfig? config;
   final String? defaultFontFamily;
+  final AppBarTheme? appBarTheme;
 
   @override
   SettingsScreenStyles create() {
@@ -50,6 +51,7 @@ class SettingsScreenStyleFactory implements ThemeStyleFactory<SettingsScreenStyl
         appBarBlurredSurface: config?.appBarBlurredSurface?.toStyle(),
         contentThemeOverride: contentThemeOverride,
         applyToAppBar: applyToAppBar,
+        appBarTheme: appBarTheme,
         leadingIconsColor: leadingIconsColor,
         userIconColor: userIconColor,
         logoutIconColor: logoutIconColor,

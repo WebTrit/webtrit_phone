@@ -49,7 +49,7 @@ class LoginSwitchScreenPage extends StatelessWidget {
               appBar: isAppBarVisible
                   ? AppBar(
                       leading: ExtBackButton(disabled: state.processing),
-                      backgroundColor: Colors.transparent,
+                      flexibleSpace: BlurredSurface.fromStyle(localStyle?.appBarBlurredSurface),
                     )
                   : null,
               header: isLogoVisible

@@ -24,7 +24,8 @@ class KeypadScreen extends StatelessWidget {
     return ThemedScaffold(
       background: effectiveStyle?.background,
       contentThemeOverride: effectiveStyle?.contentThemeOverride,
-      applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+      applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
+      appBarTheme: effectiveStyle?.appBarTheme,
       extendBodyBehindAppBar: true,
       appBar: MainAppBar(
         title: title,

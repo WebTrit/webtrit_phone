@@ -41,6 +41,11 @@ ThemePageConfig _$ThemePageConfigFromJson(
   recents: json['recents'] == null
       ? const RecentsPageConfig()
       : RecentsPageConfig.fromJson(json['recents'] as Map<String, dynamic>),
+  numberCdrs: json['numberCdrs'] == null
+      ? const NumberCdrsPageConfig()
+      : NumberCdrsPageConfig.fromJson(
+          json['numberCdrs'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$ThemePageConfigToJson(ThemePageConfig instance) =>
@@ -55,6 +60,7 @@ Map<String, dynamic> _$ThemePageConfigToJson(ThemePageConfig instance) =>
       'favorites': instance.favorites.toJson(),
       'conversations': instance.conversations.toJson(),
       'recents': instance.recents.toJson(),
+      'numberCdrs': instance.numberCdrs.toJson(),
     };
 
 ThemeOverrideConfig _$ThemeOverrideConfigFromJson(Map<String, dynamic> json) =>
@@ -110,6 +116,11 @@ LoginPageConfig _$LoginPageConfigFromJson(Map<String, dynamic> json) =>
           : LoginSignupVerifyScreenPageConfig.fromJson(
               json['signupVerify'] as Map<String, dynamic>,
             ),
+      coreUrlAssign: json['coreUrlAssign'] == null
+          ? const LoginCoreUrlAssignPageConfig()
+          : LoginCoreUrlAssignPageConfig.fromJson(
+              json['coreUrlAssign'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$LoginPageConfigToJson(LoginPageConfig instance) =>
@@ -120,6 +131,7 @@ Map<String, dynamic> _$LoginPageConfigToJson(LoginPageConfig instance) =>
       'passwordSignin': instance.passwordSignin.toJson(),
       'otpSigninVerify': instance.otpSigninVerify.toJson(),
       'signupVerify': instance.signupVerify.toJson(),
+      'coreUrlAssign': instance.coreUrlAssign.toJson(),
     };
 
 LoginOtpSigninPageConfig _$LoginOtpSigninPageConfigFromJson(
@@ -221,6 +233,9 @@ LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(
       : BlurredSurfaceConfig.fromJson(
           json['appBarBlurredSurface'] as Map<String, dynamic>,
         ),
+  appBarStyle: json['appBarStyle'] == null
+      ? null
+      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$LoginModeSelectPageConfigToJson(
@@ -236,6 +251,7 @@ Map<String, dynamic> _$LoginModeSelectPageConfigToJson(
   'background': instance.background?.toJson(),
   'greetingTextStyle': instance.greetingTextStyle?.toJson(),
   'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
 };
 
 const _$ElevatedButtonStyleTypeEnumMap = {
@@ -269,6 +285,9 @@ LoginSwitchPageConfig _$LoginSwitchPageConfigFromJson(
       : BlurredSurfaceConfig.fromJson(
           json['appBarBlurredSurface'] as Map<String, dynamic>,
         ),
+  appBarStyle: json['appBarStyle'] == null
+      ? null
+      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$LoginSwitchPageConfigToJson(
@@ -279,6 +298,7 @@ Map<String, dynamic> _$LoginSwitchPageConfigToJson(
   'background': instance.background?.toJson(),
   'segmentButtonStyle': instance.segmentButtonStyle?.toJson(),
   'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
 };
 
 AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) =>
@@ -297,6 +317,9 @@ AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) =>
           : BlurredSurfaceConfig.fromJson(
               json['appBarBlurredSurface'] as Map<String, dynamic>,
             ),
+      appBarStyle: json['appBarStyle'] == null
+          ? null
+          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AboutPageConfigToJson(AboutPageConfig instance) =>
@@ -305,6 +328,7 @@ Map<String, dynamic> _$AboutPageConfigToJson(AboutPageConfig instance) =>
       'metadata': instance.metadata.toJson(),
       'background': instance.background?.toJson(),
       'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+      'appBarStyle': instance.appBarStyle?.toJson(),
     };
 
 CallPageConfig _$CallPageConfigFromJson(
@@ -524,6 +548,9 @@ KeypadPageConfig _$KeypadPageConfigFromJson(Map<String, dynamic> json) =>
           : BlurredSurfaceConfig.fromJson(
               json['appBarBlurredSurface'] as Map<String, dynamic>,
             ),
+      appBarStyle: json['appBarStyle'] == null
+          ? null
+          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$KeypadPageConfigToJson(KeypadPageConfig instance) =>
@@ -536,6 +563,7 @@ Map<String, dynamic> _$KeypadPageConfigToJson(KeypadPageConfig instance) =>
       'background': instance.background?.toJson(),
       'themeOverride': instance.themeOverride.toJson(),
       'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+      'appBarStyle': instance.appBarStyle?.toJson(),
     };
 
 ActionPadWidgetConfig _$ActionPadWidgetConfigFromJson(
@@ -598,6 +626,9 @@ SettingsPageConfig _$SettingsPageConfigFromJson(Map<String, dynamic> json) =>
           : BlurredSurfaceConfig.fromJson(
               json['appBarBlurredSurface'] as Map<String, dynamic>,
             ),
+      appBarStyle: json['appBarStyle'] == null
+          ? null
+          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SettingsPageConfigToJson(SettingsPageConfig instance) =>
@@ -612,6 +643,7 @@ Map<String, dynamic> _$SettingsPageConfigToJson(SettingsPageConfig instance) =>
       'background': instance.background?.toJson(),
       'itemTextStyle': instance.itemTextStyle?.toJson(),
       'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+      'appBarStyle': instance.appBarStyle?.toJson(),
     };
 
 ContactsPageConfig _$ContactsPageConfigFromJson(Map<String, dynamic> json) =>
@@ -629,6 +661,9 @@ ContactsPageConfig _$ContactsPageConfigFromJson(Map<String, dynamic> json) =>
           : BlurredSurfaceConfig.fromJson(
               json['appBarBlurredSurface'] as Map<String, dynamic>,
             ),
+      appBarStyle: json['appBarStyle'] == null
+          ? null
+          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ContactsPageConfigToJson(ContactsPageConfig instance) =>
@@ -636,6 +671,7 @@ Map<String, dynamic> _$ContactsPageConfigToJson(ContactsPageConfig instance) =>
       'themeOverride': instance.themeOverride.toJson(),
       'background': instance.background?.toJson(),
       'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+      'appBarStyle': instance.appBarStyle?.toJson(),
     };
 
 EmbeddedPageConfig _$EmbeddedPageConfigFromJson(Map<String, dynamic> json) =>
@@ -653,6 +689,9 @@ EmbeddedPageConfig _$EmbeddedPageConfigFromJson(Map<String, dynamic> json) =>
           : BlurredSurfaceConfig.fromJson(
               json['appBarBlurredSurface'] as Map<String, dynamic>,
             ),
+      appBarStyle: json['appBarStyle'] == null
+          ? null
+          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$EmbeddedPageConfigToJson(EmbeddedPageConfig instance) =>
@@ -660,6 +699,7 @@ Map<String, dynamic> _$EmbeddedPageConfigToJson(EmbeddedPageConfig instance) =>
       'themeOverride': instance.themeOverride.toJson(),
       'background': instance.background?.toJson(),
       'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+      'appBarStyle': instance.appBarStyle?.toJson(),
     };
 
 FavoritesPageConfig _$FavoritesPageConfigFromJson(Map<String, dynamic> json) =>
@@ -677,6 +717,9 @@ FavoritesPageConfig _$FavoritesPageConfigFromJson(Map<String, dynamic> json) =>
           : BlurredSurfaceConfig.fromJson(
               json['appBarBlurredSurface'] as Map<String, dynamic>,
             ),
+      appBarStyle: json['appBarStyle'] == null
+          ? null
+          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$FavoritesPageConfigToJson(
@@ -685,6 +728,7 @@ Map<String, dynamic> _$FavoritesPageConfigToJson(
   'themeOverride': instance.themeOverride.toJson(),
   'background': instance.background?.toJson(),
   'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
 };
 
 ConversationsPageConfig _$ConversationsPageConfigFromJson(
@@ -703,6 +747,9 @@ ConversationsPageConfig _$ConversationsPageConfigFromJson(
       : BlurredSurfaceConfig.fromJson(
           json['appBarBlurredSurface'] as Map<String, dynamic>,
         ),
+  appBarStyle: json['appBarStyle'] == null
+      ? null
+      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$ConversationsPageConfigToJson(
@@ -711,6 +758,7 @@ Map<String, dynamic> _$ConversationsPageConfigToJson(
   'themeOverride': instance.themeOverride.toJson(),
   'background': instance.background?.toJson(),
   'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
 };
 
 RecentsPageConfig _$RecentsPageConfigFromJson(Map<String, dynamic> json) =>
@@ -728,6 +776,9 @@ RecentsPageConfig _$RecentsPageConfigFromJson(Map<String, dynamic> json) =>
           : BlurredSurfaceConfig.fromJson(
               json['appBarBlurredSurface'] as Map<String, dynamic>,
             ),
+      appBarStyle: json['appBarStyle'] == null
+          ? null
+          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$RecentsPageConfigToJson(RecentsPageConfig instance) =>
@@ -735,4 +786,65 @@ Map<String, dynamic> _$RecentsPageConfigToJson(RecentsPageConfig instance) =>
       'themeOverride': instance.themeOverride.toJson(),
       'background': instance.background?.toJson(),
       'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+      'appBarStyle': instance.appBarStyle?.toJson(),
     };
+
+LoginCoreUrlAssignPageConfig _$LoginCoreUrlAssignPageConfigFromJson(
+  Map<String, dynamic> json,
+) => LoginCoreUrlAssignPageConfig(
+  themeOverride: json['themeOverride'] == null
+      ? const ThemeOverrideConfig()
+      : ThemeOverrideConfig.fromJson(
+          json['themeOverride'] as Map<String, dynamic>,
+        ),
+  systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
+      ? null
+      : OverlayStyleModel.fromJson(
+          json['systemUiOverlayStyle'] as Map<String, dynamic>,
+        ),
+  background: json['background'] == null
+      ? null
+      : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  appBarBlurredSurface: json['appBarBlurredSurface'] == null
+      ? null
+      : BlurredSurfaceConfig.fromJson(
+          json['appBarBlurredSurface'] as Map<String, dynamic>,
+        ),
+  appBarStyle: json['appBarStyle'] == null
+      ? null
+      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$LoginCoreUrlAssignPageConfigToJson(
+  LoginCoreUrlAssignPageConfig instance,
+) => <String, dynamic>{
+  'themeOverride': instance.themeOverride.toJson(),
+  'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
+  'background': instance.background?.toJson(),
+  'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
+};
+
+NumberCdrsPageConfig _$NumberCdrsPageConfigFromJson(
+  Map<String, dynamic> json,
+) => NumberCdrsPageConfig(
+  background: json['background'] == null
+      ? null
+      : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  appBarBlurredSurface: json['appBarBlurredSurface'] == null
+      ? null
+      : BlurredSurfaceConfig.fromJson(
+          json['appBarBlurredSurface'] as Map<String, dynamic>,
+        ),
+  appBarStyle: json['appBarStyle'] == null
+      ? null
+      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$NumberCdrsPageConfigToJson(
+  NumberCdrsPageConfig instance,
+) => <String, dynamic>{
+  'background': instance.background?.toJson(),
+  'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
+};

@@ -8,6 +8,7 @@ class FavoritesScreenStyle extends BaseScreenStyle with Diagnosticable {
   const FavoritesScreenStyle({
     super.background,
     super.appBarBlurredSurface,
+    super.appBarTheme,
     this.contentThemeOverride,
     this.applyToAppBar,
   });
@@ -18,12 +19,14 @@ class FavoritesScreenStyle extends BaseScreenStyle with Diagnosticable {
   FavoritesScreenStyle copyWith({
     BackgroundStyle? background,
     BlurredSurfaceStyle? appBarBlurredSurface,
+    AppBarTheme? appBarTheme,
     ThemeMode? contentThemeOverride,
     bool? applyToAppBar,
   }) {
     return FavoritesScreenStyle(
       background: background ?? this.background,
       appBarBlurredSurface: appBarBlurredSurface ?? this.appBarBlurredSurface,
+      appBarTheme: appBarTheme ?? this.appBarTheme,
       contentThemeOverride: contentThemeOverride ?? this.contentThemeOverride,
       applyToAppBar: applyToAppBar ?? this.applyToAppBar,
     );
@@ -36,6 +39,7 @@ class FavoritesScreenStyle extends BaseScreenStyle with Diagnosticable {
     return FavoritesScreenStyle(
       background: b.background ?? a.background,
       appBarBlurredSurface: BlurredSurfaceStyle.merge(a.appBarBlurredSurface, b.appBarBlurredSurface),
+      appBarTheme: b.appBarTheme ?? a.appBarTheme,
       contentThemeOverride: b.contentThemeOverride ?? a.contentThemeOverride,
       applyToAppBar: b.applyToAppBar ?? a.applyToAppBar,
     );
@@ -45,6 +49,7 @@ class FavoritesScreenStyle extends BaseScreenStyle with Diagnosticable {
     return FavoritesScreenStyle(
       background: BaseScreenStyle.lerp(a?.background, b?.background, t),
       appBarBlurredSurface: BlurredSurfaceStyle.lerp(a?.appBarBlurredSurface, b?.appBarBlurredSurface, t),
+      appBarTheme: AppBarTheme.lerp(a?.appBarTheme, b?.appBarTheme, t),
       contentThemeOverride: t < 0.5 ? a?.contentThemeOverride : b?.contentThemeOverride,
       applyToAppBar: t < 0.5 ? a?.applyToAppBar : b?.applyToAppBar,
     );

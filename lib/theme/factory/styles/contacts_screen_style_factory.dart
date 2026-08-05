@@ -8,10 +8,11 @@ import 'package:webtrit_phone/theme/extension/extension.dart';
 import '../theme_style_factory.dart';
 
 class ContactsScreenStyleFactory implements ThemeStyleFactory<ContactsScreenStyles> {
-  ContactsScreenStyleFactory(this.colors, this.config);
+  ContactsScreenStyleFactory(this.colors, this.config, {this.appBarTheme});
 
   final ColorScheme colors;
   final ContactsPageConfig config;
+  final AppBarTheme? appBarTheme;
 
   @override
   ContactsScreenStyles create() {
@@ -23,6 +24,7 @@ class ContactsScreenStyleFactory implements ThemeStyleFactory<ContactsScreenStyl
         appBarBlurredSurface: config.appBarBlurredSurface?.toStyle(),
         contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
+        appBarTheme: appBarTheme,
       ),
     );
   }

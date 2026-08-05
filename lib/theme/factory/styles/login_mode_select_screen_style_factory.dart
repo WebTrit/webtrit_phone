@@ -8,11 +8,12 @@ import '../theme_style_factory.dart';
 import 'theme_image_style.dart';
 
 class LoginModeSelectScreenStyleFactory implements ThemeStyleFactory<LoginModeSelectScreenStyles> {
-  LoginModeSelectScreenStyleFactory(this.config, this.colors, this.defaultFontFamily);
+  LoginModeSelectScreenStyleFactory(this.config, this.colors, this.defaultFontFamily, {this.appBarTheme});
 
   final LoginModeSelectPageConfig? config;
   final ColorScheme colors;
   final String? defaultFontFamily;
+  final AppBarTheme? appBarTheme;
 
   @override
   LoginModeSelectScreenStyles create() {
@@ -39,6 +40,8 @@ class LoginModeSelectScreenStyleFactory implements ThemeStyleFactory<LoginModeSe
         onboardingTextStyle: ExtendedTextStyle(textStyle: textStyle, decoration: backgroundDecoration),
         signInTypeButton: config?.buttonSignupStyleType,
         signUpTypeButton: config?.buttonLoginStyleType,
+        appBarBlurredSurface: config?.appBarBlurredSurface?.toStyle(),
+        appBarTheme: appBarTheme,
       ),
     );
   }

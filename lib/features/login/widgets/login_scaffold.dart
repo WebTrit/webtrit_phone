@@ -10,6 +10,7 @@ class LoginScaffold extends StatelessWidget {
     this.body,
     this.contentThemeOverride,
     this.applyToAppBar,
+    this.appBarTheme,
     this.systemUiOverlayStyle,
   });
 
@@ -17,6 +18,7 @@ class LoginScaffold extends StatelessWidget {
   final Widget? body;
   final ThemeMode? contentThemeOverride;
   final bool? applyToAppBar;
+  final AppBarTheme? appBarTheme;
   final SystemUiOverlayStyle? systemUiOverlayStyle;
 
   @override
@@ -24,6 +26,7 @@ class LoginScaffold extends StatelessWidget {
     return ThemedScaffold(
       contentThemeOverride: contentThemeOverride,
       applyToAppBar: applyToAppBar ?? true,
+      appBarTheme: appBarTheme,
       extendBodyBehindAppBar: true,
       appBar: appBar,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
