@@ -53,24 +53,21 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
       ScreenshotApp(appBloc: appBloc, child: const LoginSignUpVerifyScreenshot()),
       ScreenshotApp(
         appBloc: appBloc,
-        child: const MainScreenScreenshot(MainFlavor.favorites, Text(EnvironmentConfig.APP_NAME)),
+        child: MainScreenScreenshot(MainFlavor.favorites, Text(EnvironmentConfig.APP_NAME)),
       ),
       ScreenshotApp(
         appBloc: appBloc,
-        child: const MainScreenScreenshot(MainFlavor.recents, Text(EnvironmentConfig.APP_NAME)),
+        child: MainScreenScreenshot(MainFlavor.recents, Text(EnvironmentConfig.APP_NAME)),
       ),
+      ScreenshotApp(appBloc: appBloc, child: MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME))),
       ScreenshotApp(
         appBloc: appBloc,
-        child: const MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME)),
-      ),
-      ScreenshotApp(
-        appBloc: appBloc,
-        child: const MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME), keypadDialing: true),
+        child: MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME), keypadDialing: true),
       ),
       ScreenshotApp(
         appBloc: appBloc,
         child: Builder(
-          builder: (context) => const MainScreenScreenshot(MainFlavor.messaging, Text(EnvironmentConfig.APP_NAME)),
+          builder: (context) => MainScreenScreenshot(MainFlavor.messaging, Text(EnvironmentConfig.APP_NAME)),
         ),
       ),
       ScreenshotApp(appBloc: appBloc, child: const SettingScreenScreenshot()),

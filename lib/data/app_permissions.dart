@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -17,6 +19,12 @@ class AppPermissions {
 
   /// The list of all possible permissions that the app may request.
   static const _fullPermissions = [..._requiredPermissions, Permission.camera, Permission.contacts, Permission.sms];
+
+  /// Permissions supported by permission_handler's web implementation. Requesting
+  /// or querying any other permission on web throws UnsupportedError, so on web
+  /// the requested set is restricted to these. (contacts/sms are not available on
+  /// web; camera + microphone cover the call use case.)
+  static const _webSupportedPermissions = [Permission.microphone, Permission.camera];
 
   /// A list of special permissions that are absolutely required for the app to function correctly.
   static const _requiredSpecialPermissions = [CallkeepSpecialPermissions.fullScreenIntent];
@@ -51,10 +59,19 @@ class AppPermissions {
   }
 
   AppPermissions._(this._excludePermissions, this._webtritCallkeepPermissions) {
-    _permissionsCache = ExpiringCache(
-      ttl: _cacheTTL,
-      compute: () => _fullPermissions.where((p) => !_excludePermissions().contains(p)).toList(),
-    );
+    _permissionsCache = ExpiringCache(ttl: _cacheTTL, compute: _computePermissions);
+  }
+
+  /// Whether [permission] can be queried or requested on the current platform.
+  /// On web, permission_handler only implements [_webSupportedPermissions];
+  /// querying or requesting anything else throws UnsupportedError.
+  static bool _isPermissionSupported(Permission permission) => !kIsWeb || _webSupportedPermissions.contains(permission);
+
+  /// The non-excluded permissions to request. On web, permissions the platform
+  /// cannot handle are dropped - otherwise request()/status throw UnsupportedError.
+  List<Permission> _computePermissions() {
+    final excluded = _excludePermissions();
+    return _fullPermissions.where((p) => !excluded.contains(p)).where(_isPermissionSupported).toList();
   }
 
   /// Manages permissions related to `webtrit_callkeep` plugin.
@@ -172,6 +189,26 @@ class AppPermissions {
   /// Opens the app settings page.
   Future<void> toAppSettings() => openAppSettings();
 
+  /// Status of the OEM "display pop-up windows while running in background"
+  /// capability (MIUI/HyperOS), which gates showing the incoming-call UI over
+  /// the lock screen. Reports granted where the capability does not apply.
+  Future<CallkeepSpecialPermissionStatus> backgroundActivityStartStatus() =>
+      _webtritCallkeepPermissions.getBackgroundActivityStartPermissionStatus();
+
+  /// Opens the OEM permissions screen hosting the "display pop-up windows while
+  /// running in background" toggle (falls back to app settings natively).
+  Future<void> toBackgroundActivityStartSettings() => _webtritCallkeepPermissions.openBackgroundActivityStartSettings();
+
+  /// Status of the OEM "show on lock screen" capability (MIUI/HyperOS), which
+  /// gates showing the incoming-call UI over the lock screen. Reports granted
+  /// where the capability does not apply.
+  Future<CallkeepSpecialPermissionStatus> showOnLockscreenStatus() =>
+      _webtritCallkeepPermissions.getShowWhenLockedPermissionStatus();
+
+  /// Opens the OEM permissions screen hosting the "show on lock screen"
+  /// toggle (falls back to app settings natively).
+  Future<void> toShowOnLockscreenSettings() => _webtritCallkeepPermissions.openShowWhenLockedSettings();
+
   /// Attempts to open the settings screen for the given special permission.
   ///
   /// If the specific permission screen (e.g., full screen intent) is not supported
@@ -180,10 +217,13 @@ class AppPermissions {
   /// are typically located outside the standard app settings.
   Future<void> toSpecialPermissionsSetting(CallkeepSpecialPermissions permission) async {
     try {
-      if (permission == CallkeepSpecialPermissions.fullScreenIntent) {
-        await _webtritCallkeepPermissions.openFullScreenIntentSettings();
-      } else {
-        await _webtritCallkeepPermissions.openSettings();
+      switch (permission) {
+        case CallkeepSpecialPermissions.fullScreenIntent:
+          await _webtritCallkeepPermissions.openFullScreenIntentSettings();
+        // Not reached via the current flow (backgroundActivityStart is not in
+        // _specialPermissions); the live trigger is toBackgroundActivityStartSettings().
+        case CallkeepSpecialPermissions.backgroundActivityStart:
+          await _webtritCallkeepPermissions.openBackgroundActivityStartSettings();
       }
     } catch (e) {
       await _webtritCallkeepPermissions.openSettings();
@@ -196,10 +236,12 @@ class AppPermissions {
   }
 
   Future<bool> isContactPermissionGranted() async {
+    if (!_isPermissionSupported(Permission.contacts)) return false;
     return isPermissionGranted(Permission.contacts);
   }
 
   Future<bool> requestContactPermission() async {
+    if (!_isPermissionSupported(Permission.contacts)) return false;
     final status = await Permission.contacts.request();
     return status.isGranted;
   }

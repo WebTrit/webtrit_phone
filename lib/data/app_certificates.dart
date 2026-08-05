@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
+import 'package:logging/logging.dart';
 import 'package:path/path.dart';
 
 import 'package:ssl_certificates/ssl_certificates.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
+
+final _logger = Logger('AppCertificates');
 
 class AppCertificates {
   AppCertificates._(this._trustedCertificates);
@@ -16,15 +19,26 @@ class AppCertificates {
   /// Returns the list of ssl certificates and their passwords.
   TrustedCertificates get trustedCertificates => _trustedCertificates;
 
-  /// Initialize the AppCerts instance with the certificates
+  /// Initialize the AppCerts instance with the certificates.
+  ///
+  /// Returns [TrustedCertificates.empty] when the certificate assets are not
+  /// bundled — e.g. when the app runs embedded inside another host (the theme
+  /// configurator's realtime preview) whose asset bundle does not include this
+  /// package's `assets/certificates/...`. Custom CA pinning is then unavailable
+  /// and the platform trust store is used instead.
   static Future<AppCertificates> init() async {
-    final certificatePaths = Assets.certificates.values.where((it) => it != Assets.certificates.credentials);
-    final credentialsPath = Assets.certificates.credentials;
+    try {
+      final certificatePaths = Assets.certificates.values.where((it) => it != Assets.certificates.credentials);
+      final credentialsPath = Assets.certificates.credentials;
 
-    final credentials = await _loadCredentials(credentialsPath);
-    final certificates = await Future.wait(certificatePaths.map((it) => _prepareCertificate(it, credentials)));
+      final credentials = await _loadCredentials(credentialsPath);
+      final certificates = await Future.wait(certificatePaths.map((it) => _prepareCertificate(it, credentials)));
 
-    return AppCertificates._(TrustedCertificates(certificates: certificates));
+      return AppCertificates._(TrustedCertificates(certificates: certificates));
+    } catch (e, s) {
+      _logger.warning('Trusted certificate assets unavailable; continuing without custom CA certificates', e, s);
+      return AppCertificates._(TrustedCertificates.empty);
+    }
   }
 
   /// Loads certificate bytes from assets using the provided path and credentials.

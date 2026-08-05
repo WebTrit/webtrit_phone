@@ -26,7 +26,7 @@ class ContactsScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final widget = ContactsScreen(
-      title: const Text(EnvironmentConfig.APP_NAME),
+      title: Text(EnvironmentConfig.APP_NAME),
       sourceTypes: sourceTypes,
       sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
     );

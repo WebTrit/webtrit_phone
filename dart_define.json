@@ -1,7 +1,5 @@
 {
-  "WEBTRIT_APP_DEBUG_LEVEL": "ALL",
   "WEBTRIT_APP_DATABASE_LOG_STATEMENTS": false,
-  "WEBTRIT_APP_PERIODIC_POLLING": true,
   "_WEBTRIT_APP_CORE_URL": "",
   "WEBTRIT_APP_DEMO_CORE_URL": "http://192.168.10.100:4000",
   "_WEBTRIT_APP_PREDEFINED_CORE_URLS": "",
@@ -10,6 +8,8 @@
   "WEBTRIT_APP_LINK_DOMAIN": "app.webtrit.com",
   "__WEBTRIT_APP_LINK_DOMAIN_DESCRIPTION": "If provided, enables Android App Links integration via intent-filter. Must match assetlinks.json configuration on the target domain. This functionality is configured via Android flavors — if the value is non-empty, the 'deeplinks' flavor is selected automatically.",
   "WEBTRIT_APP_NAME": "WebTrit",
+  "_WEBTRIT_APP_WEB_BUNDLE_ID": "",
+  "__WEBTRIT_APP_WEB_BUNDLE_ID_DESCRIPTION": "Web only. Overrides the bundle_id sent in the session (login) and autoprovision requests on web, where there is no platform bundle identifier (packageInfo.packageName resolves to the pubspec name and the backend rejects it with 'unconfigured_bundle_id'). Disabled by default (leading underscore). To enable for a web build, remove the leading underscore and set this to a bundle_id that is registered on the server for the 'web' app type. Ignored on Android/iOS. Left disabled, web falls back to packageInfo.packageName.",
   "_WEBTRIT_APP_ABOUT_URL": "",
   "WEBTRIT_APP_SALES_EMAIL": "sales@webtrit.com",
   "_WEBTRIT_APP_FCM_VAPID_KEY": "",

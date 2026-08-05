@@ -27,6 +27,11 @@ AppConfig _$AppConfigFromJson(Map<String, dynamic> json) => AppConfig(
   messaging: json['messaging'] == null
       ? const AppConfigMessaging()
       : AppConfigMessaging.fromJson(json['messaging'] as Map<String, dynamic>),
+  localization: json['localization'] == null
+      ? const AppConfigLocalization()
+      : AppConfigLocalization.fromJson(
+          json['localization'] as Map<String, dynamic>,
+        ),
   supported:
       (json['supported'] as List<dynamic>?)
           ?.map((e) => SupportedFeature.fromJson(e as Map<String, dynamic>))
@@ -41,6 +46,7 @@ Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
   'callConfig': instance.callConfig.toJson(),
   'contacts': instance.contacts.toJson(),
   'messaging': instance.messaging.toJson(),
+  'localization': instance.localization.toJson(),
   'supported': instance.supported.map((e) => e.toJson()).toList(),
 };
 
@@ -544,6 +550,20 @@ ChatContactInfo _$ChatContactInfoFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ChatContactInfoToJson(ChatContactInfo instance) =>
     <String, dynamic>{'showVideoButtonAction': instance.showVideoButtonAction};
+
+AppConfigLocalization _$AppConfigLocalizationFromJson(
+  Map<String, dynamic> json,
+) => AppConfigLocalization(
+  enabledLanguages:
+      (json['enabledLanguages'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      const [],
+);
+
+Map<String, dynamic> _$AppConfigLocalizationToJson(
+  AppConfigLocalization instance,
+) => <String, dynamic>{'enabledLanguages': instance.enabledLanguages};
 
 FavoritesTabScheme _$FavoritesTabSchemeFromJson(Map<String, dynamic> json) =>
     FavoritesTabScheme(

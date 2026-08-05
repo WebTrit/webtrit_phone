@@ -1,5 +1,26 @@
 import 'package:webtrit_phone/models/models.dart';
 
+// Fixed timestamp so the presence-driven screenshots stay deterministic.
+final _presenceAt = DateTime.utc(2024, 1, 1);
+
+PresenceInfo _presence(String number, {required bool available, List<PresenceActivity> activities = const []}) {
+  return PresenceInfo(
+    id: number,
+    number: number,
+    available: available,
+    note: '',
+    statusIcon: null,
+    device: null,
+    timeOffsetMin: null,
+    timestamp: _presenceAt,
+    activities: activities,
+    source: PresenceInfoSource.sip,
+    arrivalTime: _presenceAt,
+  );
+}
+
+// Each favorite carries a distinct presence so the preview showcases the
+// available/unavailable colors and the activity icons rendered on top of them.
 final dFavorites = <FavoriteWithContact>[
   (
     favorite: Favorite(number: '1234', sourceType: FavoriteSourceType.device, sourceId: '1', label: 'ext', position: 0),
@@ -10,6 +31,7 @@ final dFavorites = <FavoriteWithContact>[
       sourceId: '1',
       registered: true,
       aliasName: 'Thomas Anderson',
+      presenceInfo: [_presence('1234', available: true)],
     ),
   ),
   (
@@ -21,6 +43,7 @@ final dFavorites = <FavoriteWithContact>[
       sourceId: '2',
       registered: false,
       aliasName: 'Anna Collins',
+      presenceInfo: [_presence('2345', available: false)],
     ),
   ),
   (
@@ -32,6 +55,9 @@ final dFavorites = <FavoriteWithContact>[
       sourceId: '3',
       registered: true,
       aliasName: 'Lawrence Brown',
+      presenceInfo: [
+        _presence('3456', available: true, activities: [PresenceActivity.onThePhone]),
+      ],
     ),
   ),
   (
@@ -41,8 +67,11 @@ final dFavorites = <FavoriteWithContact>[
       sourceType: ContactSourceType.external,
       kind: ContactKind.visible,
       sourceId: '4',
-      registered: false,
+      registered: true,
       aliasName: 'Ruth Jenkins',
+      presenceInfo: [
+        _presence('4567', available: true, activities: [PresenceActivity.doNotDisturb]),
+      ],
     ),
   ),
   (
@@ -54,6 +83,9 @@ final dFavorites = <FavoriteWithContact>[
       sourceId: '5',
       registered: true,
       aliasName: 'Beverly Nelson',
+      presenceInfo: [
+        _presence('5678', available: true, activities: [PresenceActivity.meeting]),
+      ],
     ),
   ),
   (
@@ -65,6 +97,9 @@ final dFavorites = <FavoriteWithContact>[
       sourceId: '6',
       registered: false,
       aliasName: 'Randy Jones',
+      presenceInfo: [
+        _presence('6789', available: false, activities: [PresenceActivity.away]),
+      ],
     ),
   ),
 ];

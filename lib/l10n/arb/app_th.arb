@@ -1,0 +1,2468 @@
+{
+  "@@locale": "th",
+  "account_selfCarePasswordExpired_message": "รหัสผ่าน self-care ของคุณหมดอายุแล้ว กรุณาอัปเดตผ่าน self-care ของคุณ\nจนกว่าจะเปลี่ยนรหัสผ่าน การเข้าถึงบริการจะถูกจำกัด",
+  "@account_selfCarePasswordExpired_message": {
+    "description": "Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted."
+  },
+  "agoTicker_daysAgo": "{days, plural, zero{} one{{days} วันที่แล้ว} other{{days} วันที่แล้ว}}",
+  "@agoTicker_daysAgo": {
+    "description": "Elapsed time relative to now, shown in days.",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_hoursAgo": "{hours, plural, zero{} one{{hours} ชั่วโมงที่แล้ว} other{{hours} ชั่วโมงที่แล้ว}}",
+  "@agoTicker_hoursAgo": {
+    "description": "Elapsed time relative to now, shown in hours.",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_minutesAgo": "{minutes, plural, zero{} one{{minutes} นาทีที่แล้ว} other{{minutes} นาทีที่แล้ว}}",
+  "@agoTicker_minutesAgo": {
+    "description": "Elapsed time relative to now, shown in minutes.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "agoTicker_secondsAgo": "{seconds, plural, zero{เมื่อสักครู่} one{{seconds} วินาทีที่แล้ว} other{{seconds} วินาทีที่แล้ว}}",
+  "@agoTicker_secondsAgo": {
+    "description": "Elapsed time relative to now, shown in seconds.",
+    "placeholders": {
+      "seconds": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "alertDialogActions_no": "ไม่",
+  "@alertDialogActions_no": {},
+  "alertDialogActions_ok": "ตกลง",
+  "@alertDialogActions_ok": {},
+  "alertDialogActions_yes": "ใช่",
+  "@alertDialogActions_yes": {},
+  "autoprovision_errorSnackBar_invalidToken": "ข้อมูลรับรองการตั้งค่าอัตโนมัติถูกปฏิเสธโดยเซิร์ฟเวอร์ โปรดขอลิงก์การตั้งค่าใหม่",
+  "@autoprovision_errorSnackBar_invalidToken": {
+    "description": "Shown when a user opens an autoprovisioning link that contains an invalid or expired token. The server rejects the credentials and the user must request a new configuration link."
+  },
+  "autoprovision_ReloginDialog_confirm": "ยืนยัน",
+  "@autoprovision_ReloginDialog_confirm": {},
+  "autoprovision_ReloginDialog_decline": "ปฏิเสธ",
+  "@autoprovision_ReloginDialog_decline": {},
+  "autoprovision_ReloginDialog_text": "คุณต้องการใช้ข้อมูลรับรองการยืนยันตัวตนใหม่ที่ให้มาในลิงก์หรือไม่? คุณจะถูกออกจากระบบของเซสชันปัจจุบัน",
+  "@autoprovision_ReloginDialog_text": {},
+  "autoprovision_ReloginDialog_title": "ยืนยันการเข้าสู่ระบบใหม่",
+  "@autoprovision_ReloginDialog_title": {},
+  "autoprovision_successSnackBar_used": "ดึงการตั้งค่าของคุณสำเร็จแล้ว แอปพร้อมใช้งาน",
+  "@autoprovision_successSnackBar_used": {},
+  "callTileActions_contact": "รายชื่อติดต่อ",
+  "@callTileActions_contact": {
+    "description": "Label of the expanded call tile action that opens the contact details screen."
+  },
+  "callTileActions_history": "ประวัติ",
+  "@callTileActions_history": {
+    "description": "Label of the expanded call tile action that opens the call history for the number."
+  },
+  "callTileActions_message": "ข้อความ",
+  "@callTileActions_message": {
+    "description": "Label of the expanded call tile action that opens a chat with the contact."
+  },
+  "callTileActions_more": "เพิ่มเติม",
+  "@callTileActions_more": {
+    "description": "Label of the expanded call tile action that opens the full actions menu."
+  },
+  "call_CallActionsTooltip_accept": "รับสาย",
+  "@call_CallActionsTooltip_accept": {},
+  "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "รับการโอนสาย",
+  "@call_CallActionsTooltip_accept_inviteToAttendedTransfer": {},
+  "call_CallActionsTooltip_attended_transfer": "โอนสายแบบรอรับ",
+  "@call_CallActionsTooltip_attended_transfer": {},
+  "call_CallActionsTooltip_changeAudioDevice": "เปลี่ยนอุปกรณ์เสียง",
+  "@call_CallActionsTooltip_changeAudioDevice": {},
+  "call_CallActionsTooltip_decline_inviteToAttendedTransfer": "ปฏิเสธการโอนสาย",
+  "@call_CallActionsTooltip_decline_inviteToAttendedTransfer": {},
+  "call_CallActionsTooltip_device_bluetooth": "บลูทูธ",
+  "@call_CallActionsTooltip_device_bluetooth": {},
+  "call_CallActionsTooltip_device_earpiece": "หูฟังโทรศัพท์",
+  "@call_CallActionsTooltip_device_earpiece": {},
+  "call_CallActionsTooltip_device_speaker": "ลำโพง",
+  "@call_CallActionsTooltip_device_speaker": {},
+  "call_CallActionsTooltip_device_streaming": "กำลังสตรีม",
+  "@call_CallActionsTooltip_device_streaming": {},
+  "call_CallActionsTooltip_device_unknown": "อุปกรณ์ที่ไม่รู้จัก",
+  "@call_CallActionsTooltip_device_unknown": {},
+  "call_CallActionsTooltip_device_wiredHeadset": "หูฟังแบบมีสาย",
+  "@call_CallActionsTooltip_device_wiredHeadset": {},
+  "call_CallActionsTooltip_disableCamera": "ปิดกล้อง",
+  "@call_CallActionsTooltip_disableCamera": {},
+  "call_CallActionsTooltip_disableSpeaker": "ปิดลำโพง",
+  "@call_CallActionsTooltip_disableSpeaker": {},
+  "call_CallActionsTooltip_enableCamera": "เปิดกล้อง",
+  "@call_CallActionsTooltip_enableCamera": {},
+  "call_CallActionsTooltip_cameraPermissionDenied": "ถูกปฏิเสธสิทธิ์การใช้กล้อง แตะเพื่อเปิดการตั้งค่า",
+  "@call_CallActionsTooltip_cameraPermissionDenied": {},
+  "call_CallActionsTooltip_enableSpeaker": "เปิดลำโพง",
+  "@call_CallActionsTooltip_enableSpeaker": {},
+  "call_CallActionsTooltip_hangup": "วางสาย",
+  "@call_CallActionsTooltip_hangup": {},
+  "call_CallActionsTooltip_hideKeypad": "ซ่อนแป้นกด",
+  "@call_CallActionsTooltip_hideKeypad": {},
+  "call_CallActionsTooltip_hold": "พักสาย",
+  "@call_CallActionsTooltip_hold": {},
+  "call_CallActionsTooltip_mute": "ปิดไมโครโฟน",
+  "@call_CallActionsTooltip_mute": {},
+  "call_CallActionsTooltip_showKeypad": "แสดงแป้นกด",
+  "@call_CallActionsTooltip_showKeypad": {},
+  "call_CallActionsTooltip_transfer": "โอนสาย",
+  "@call_CallActionsTooltip_transfer": {},
+  "call_CallActionsTooltip_transfer_choose": "เลือกหมายเลข",
+  "@call_CallActionsTooltip_transfer_choose": {},
+  "call_CallActionsTooltip_unattended_transfer": "โอนสายแบบไม่รอรับ",
+  "@call_CallActionsTooltip_unattended_transfer": {},
+  "call_CallActionsTooltip_unhold": "ยกเลิกการพักสาย",
+  "@call_CallActionsTooltip_unhold": {},
+  "call_CallActionsTooltip_unmute": "เปิดเสียงไมโครโฟน",
+  "@call_CallActionsTooltip_unmute": {},
+  "call_CallList_incoming": "สายเข้า",
+  "@call_CallList_incoming": {
+    "description": "Trailing label on a ringing incoming row in the call list."
+  },
+  "call_CallList_outgoing": "โทรออก",
+  "@call_CallList_outgoing": {
+    "description": "Trailing label on a ringing outgoing row in the call list."
+  },
+  "call_CallList_header": "{count, plural, one{{count} สาย - แตะเพื่อเลือก} other{{count} สาย - แตะเพื่อเลือก}}",
+  "@call_CallList_header": {
+    "description": "Header above the call list on the call screen when more than one call is in progress.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "call_CallList_statusOnCall": "กำลังสนทนา",
+  "@call_CallList_statusOnCall": {
+    "description": "Status badge in the call list for an answered, not held call."
+  },
+  "call_FocusedActionHint_actingOn": "กำลังดำเนินการกับ: {name}",
+  "@call_FocusedActionHint_actingOn": {
+    "description": "Hint above the call action buttons naming the focused call the actions apply to.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_FocusedActionHint_willBeEnded": "{name} จะถูกวางสาย",
+  "@call_FocusedActionHint_willBeEnded": {
+    "description": "Side-effect line under the acting-on hint: the named call will be ended on answer.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_FocusedActionHint_willBeHeld": "{name} จะถูกพักสาย",
+  "@call_FocusedActionHint_willBeHeld": {
+    "description": "Side-effect line under the acting-on hint: the named call will be put on hold on answer.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "call_ToolbarStatus_connecting": "กำลังเชื่อมต่อ...",
+  "@call_ToolbarStatus_connecting": {
+    "description": "Toolbar status line while the very first signaling connection is being established (turns into Reconnecting once a connection has existed)."
+  },
+  "call_ToolbarStatus_reconnecting": "กำลังเชื่อมต่อใหม่...",
+  "@call_ToolbarStatus_reconnecting": {
+    "description": "Suffix on the call screen toolbar status line while the signaling connection is being re-established."
+  },
+  "call_description_held": "พักสาย",
+  "@call_description_held": {},
+  "call_description_incoming": "สายเรียกเข้า",
+  "@call_description_incoming": {},
+  "call_description_inviteToAttendedTransfer": "คุณได้รับเชิญให้เข้าร่วมการโอนสายแบบมีผู้รับสาย",
+  "@call_description_inviteToAttendedTransfer": {},
+  "call_description_outgoing": "สายโทรออก",
+  "@call_description_outgoing": {},
+  "call_description_requestToAttendedTransfer": "คำขอโอนสาย",
+  "@call_description_requestToAttendedTransfer": {},
+  "call_description_transferProcessing": "กำลังโอนสาย",
+  "@call_description_transferProcessing": {},
+  "call_errorRegisteringSelfManagedPhoneAccount": "เกิดปัญหาในการลงทะเบียนบัญชีโทรศัพท์ที่จัดการเอง",
+  "@call_errorRegisteringSelfManagedPhoneAccount": {
+    "description": "Shown when the app fails to register a self-managed phone account with the system."
+  },
+  "call_FailureAcknowledgeDialog_title": "ล้มเหลว",
+  "@call_FailureAcknowledgeDialog_title": {},
+  "callProcessingStatus_answering": "กำลังรับสาย โปรดรอสักครู่…",
+  "@callProcessingStatus_answering": {},
+  "callProcessingStatus_disconnecting": "กำลังวางสาย โปรดรอสักครู่…",
+  "@callProcessingStatus_disconnecting": {},
+  "callProcessingStatus_init_media": "กำลังเริ่มต้นอุปกรณ์สื่อ",
+  "@callProcessingStatus_init_media": {},
+  "callProcessingStatus_invite": "กำลังสร้างเซสชัน SIP",
+  "@callProcessingStatus_invite": {},
+  "callProcessingStatus_preparing": "กำลังเตรียม",
+  "@callProcessingStatus_preparing": {},
+  "callProcessingStatus_ringing": "กำลังเรียก",
+  "@callProcessingStatus_ringing": {},
+  "callProcessingStatus_routing": "กำลังกำหนดเส้นทางการโทร",
+  "@callProcessingStatus_routing": {},
+  "callProcessingStatus_signaling_connecting": "กำลังเชื่อมต่อกับเซิร์ฟเวอร์ระยะไกล",
+  "@callProcessingStatus_signaling_connecting": {},
+  "iceConnectionIssue_iceFail": "การเชื่อมต่อสื่อล้มเหลว ตรวจสอบเครือข่ายของคุณ",
+  "@iceConnectionIssue_iceFail": {},
+  "iceConnectionIssue_iceFailNoIcePath": "การเชื่อมต่อสื่อล้มเหลว ลองเปลี่ยนไปใช้เครือข่ายอื่น",
+  "@iceConnectionIssue_iceFailNoIcePath": {},
+  "iceConnectionIssue_iceFailNoIcePathViaVpn": "VPN อาจกำลังบล็อกการโทร ลองปิดการใช้งาน",
+  "@iceConnectionIssue_iceFailNoIcePathViaVpn": {},
+  "callNetworkQuality_yourAudioWeak": "สัญญาณเสียงของคุณอ่อน",
+  "@callNetworkQuality_yourAudioWeak": {},
+  "callNetworkQuality_yourVideoWeak": "วิดีโอของคุณสัญญาณอ่อน",
+  "@callNetworkQuality_yourVideoWeak": {},
+  "callNetworkQuality_theirAudioWeak": "เสียงของอีกฝ่ายอ่อน",
+  "@callNetworkQuality_theirAudioWeak": {},
+  "callNetworkQuality_theirVideoWeak": "วิดีโอของอีกฝ่ายสัญญาณอ่อน",
+  "@callNetworkQuality_theirVideoWeak": {},
+  "callPullBadge_dialogTitle": "สายที่ดึงได้",
+  "@callPullBadge_dialogTitle": {},
+  "callPullBadge_pickupButtonTitle": "รับสาย",
+  "@callPullBadge_pickupButtonTitle": {},
+  "call_settings_additional_options": "ตัวเลือกเพิ่มเติม",
+  "@call_settings_additional_options": {},
+  "callStatus_appUnregistered": "ยังไม่ได้ลงทะเบียน",
+  "@callStatus_appUnregistered": {
+    "description": "Shown when the application is not registered with the signaling/core servers (for example due to network connectivity problems, session/authentication issues, or server-side unavailability). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists."
+  },
+  "callStatus_connectError": "เกิดข้อผิดพลาดในการเชื่อมต่อ",
+  "@callStatus_connectError": {
+    "description": "Shown when the app cannot establish or maintain a connection to the signaling/core servers (for example network connectivity problems, server downtime, or transient transport errors). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists."
+  },
+  "callStatus_connectIssue": "ปัญหาการเชื่อมต่อ",
+  "@callStatus_connectIssue": {
+    "description": "Shown when the app detects an intermittent or degraded connection to the signaling/core servers (for example transient network issues, high latency, or packet loss). Suggest the user check their internet connection, retry the action, toggle the app's online status in settings, restart the app, and contact their administrator or support if the problem persists."
+  },
+  "callStatus_connectivityNone": "ไม่มีการเชื่อมต่ออินเทอร์เน็ต",
+  "@callStatus_connectivityNone": {
+    "description": "Shown when the device has no internet connectivity. Suggest the user check Wi‑Fi or mobile data, try switching networks or toggling airplane mode, restart the app or device, and contact their administrator or support if the problem persists."
+  },
+  "callStatus_inProgress": "กำลังเชื่อมต่อ",
+  "@callStatus_inProgress": {},
+  "callStatus_ready": "เชื่อมต่อสำเร็จแล้ว",
+  "@callStatus_ready": {},
+  "call_SystemErrorDialog_description": "หากต้องการโทรต่อ จำเป็นต้องรีสตาร์ทโทรศัพท์ ซึ่งจะแก้ไขข้อผิดพลาดชั่วคราวของระบบ",
+  "@call_SystemErrorDialog_description": {},
+  "call_SystemErrorDialog_title": "ข้อผิดพลาดของระบบ",
+  "@call_SystemErrorDialog_title": {},
+  "call_ThumbnailAvatar_currentlyNoActiveCall": "ขณะนี้ไม่มีสายที่ใช้งานอยู่",
+  "@call_ThumbnailAvatar_currentlyNoActiveCall": {},
+  "call_videoBackground_actionLabel_disableBlur": "ปิดการเบลอ",
+  "@call_videoBackground_actionLabel_disableBlur": {
+    "description": "Button label shown when the video background is currently blurred. Clicking this will turn off the blur effect."
+  },
+  "call_videoBackground_actionLabel_enableBlur": "เปิดเบลอ",
+  "@call_videoBackground_actionLabel_enableBlur": {
+    "description": "Button label shown when the video background is normal (no blur). Clicking this will turn on the blur effect."
+  },
+  "call_videoView_actionLabel_cover": "เต็มพื้นที่",
+  "@call_videoView_actionLabel_cover": {
+    "description": "Button label to switch the video view mode to 'Cover' (fills the entire area, potentially cropping edges). Shown when the video is currently in 'Fit' mode."
+  },
+  "call_videoView_actionLabel_fit": "พอดี",
+  "@call_videoView_actionLabel_fit": {
+    "description": "Button label to switch the video view mode to 'Fit' (shows the full video without cropping, potentially adding black bars). Shown when the video is currently in 'Cover' mode."
+  },
+  "cdrs_noMissedCalls_message": "ไม่มีสายที่ไม่ได้รับ",
+  "@cdrs_noMissedCalls_message": {},
+  "cdrs_noRecentCalls_message": "ไม่มีการโทรล่าสุด",
+  "@cdrs_noRecentCalls_message": {},
+  "common_noInternetConnection_message": "ดูเหมือนว่าคุณไม่ได้เชื่อมต่ออินเทอร์เน็ต กรุณาตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง",
+  "@common_noInternetConnection_message": {},
+  "common_noInternetConnection_retryButton": "ลองอีกครั้ง",
+  "@common_noInternetConnection_retryButton": {},
+  "common_noInternetConnection_title": "ไม่มีการเชื่อมต่ออินเทอร์เน็ต",
+  "@common_noInternetConnection_title": {},
+  "common_problemWithLoadingPage": "เกิดปัญหาในการโหลดหน้า",
+  "@common_problemWithLoadingPage": {},
+  "contacts_agreement_button_text": "ดำเนินการต่อ",
+  "@contacts_agreement_button_text": {},
+  "contacts_agreement_checkbox_text": "ฉันยินยอมให้แอปเข้าถึงรายชื่อผู้ติดต่อของฉันเพื่อยกระดับประสบการณ์การใช้งาน",
+  "@contacts_agreement_checkbox_text": {},
+  "contacts_agreement_description": "แอปนี้ต้องการสิทธิ์เข้าถึงรายชื่อผู้ติดต่อของคุณ เพื่อแสดงผู้ติดต่อในแท็บผู้ติดต่อของแอป \n\nข้อมูลผู้ติดต่อจะถูกจัดเก็บไว้ชั่วคราวในเครื่องของคุณ เพื่อเปิดใช้คุณสมบัติต่าง ๆ เช่น การโทรออกจากแอปได้โดยตรง \n\nข้อมูลนี้จะไม่ถูกเก็บรวบรวม ส่งต่อ หรือแชร์ออกไปนอกแอป",
+  "@contacts_agreement_description": {},
+  "contacts_agreement_title": "การเก็บรวบรวมข้อมูล",
+  "@contacts_agreement_title": {},
+  "contacts_ExternalTabButton_refresh": "รีเฟรช",
+  "@contacts_ExternalTabButton_refresh": {},
+  "contacts_ExternalTabText_empty": "ไม่มีรายชื่อติดต่อ",
+  "@contacts_ExternalTabText_empty": {},
+  "contacts_ExternalTabText_emptyOnSearching": "ไม่พบรายชื่อติดต่อ",
+  "@contacts_ExternalTabText_emptyOnSearching": {},
+  "contacts_ExternalTabText_failure": "ไม่สามารถดึงรายชื่อจาก PBX บนคลาวด์ได้",
+  "@contacts_ExternalTabText_failure": {
+    "description": "Shown when loading cloud PBX contacts fails (e.g. invalid/expired token, no network connection, or other API errors)."
+  },
+  "contacts_LocalTabButton_contactsAgreement": "เปิดการตั้งค่า",
+  "@contacts_LocalTabButton_contactsAgreement": {},
+  "contacts_LocalTabButton_openAppSettings": "ให้สิทธิ์เข้าถึงรายชื่อติดต่อในโทรศัพท์ของคุณ",
+  "@contacts_LocalTabButton_openAppSettings": {},
+  "contacts_LocalTabButton_refresh": "รีเฟรช",
+  "@contacts_LocalTabButton_refresh": {},
+  "contacts_LocalTabText_contactsAgreementFailure": "หากต้องการซิงค์รายชื่อในเครื่อง คุณต้องยอมรับข้อตกลงในการตั้งค่า",
+  "@contacts_LocalTabText_contactsAgreementFailure": {},
+  "contacts_LocalTabText_empty": "ไม่มีผู้ติดต่อ",
+  "@contacts_LocalTabText_empty": {},
+  "contacts_LocalTabText_emptyOnSearching": "ไม่พบรายชื่อติดต่อ",
+  "@contacts_LocalTabText_emptyOnSearching": {},
+  "contacts_LocalTabText_failure": "ไม่สามารถดึงรายชื่อติดต่อในโทรศัพท์ของคุณได้",
+  "@contacts_LocalTabText_failure": {
+    "description": "Shown when the app cannot load contacts from the device. Common reasons: user denied contacts permission, the feature is disabled or required agreement not accepted, no network (if a refresh requires it), or a general sync/read error from the OS or storage."
+  },
+  "contacts_LocalTabText_permissionFailure": "ไม่มีสิทธิ์ในการเข้าถึงรายชื่อติดต่อในโทรศัพท์ของคุณ",
+  "@contacts_LocalTabText_permissionFailure": {
+    "description": "Shown when the app cannot access local phone contacts because the user has not granted the required permission (e.g. Contacts permission denied in system settings)."
+  },
+  "contactsSourceExternal": "Cloud PBX",
+  "@contactsSourceExternal": {},
+  "contactsSourceLocal": "โทรศัพท์ของคุณ",
+  "@contactsSourceLocal": {},
+  "contacts_Text_blingTransferInitiated": "กำลังโอนสายแบบไม่แจ้ง",
+  "@contacts_Text_blingTransferInitiated": {},
+  "contacts_DialogsInfoView_title": "ข้อมูลการโทร (BLF):",
+  "@contacts_DialogsInfoView_title": {},
+  "contacts_ContactTile_inCall": "อยู่ในสาย: {destination}",
+  "@contacts_ContactTile_inCall": {
+    "placeholders": {
+      "destination": {}
+    }
+  },
+  "contacts_ContactScreen_options": "ตัวเลือก:",
+  "@contacts_ContactScreen_options": {},
+  "contacts_ContactScreen_presenceViaSip": "ติดตามสถานะผู้ใช้ผ่าน SIP (Presence)",
+  "@contacts_ContactScreen_presenceViaSip": {},
+  "contacts_ContactScreen_presenceViaSip_tooltip": "นอกเหนือจากการแลกเปลี่ยนข้อมูลโดยตรง (แอปถึงแอป) ฟีเจอร์การติดตามผ่าน SIP-Presence ช่วยให้สามารถรวบรวมข้อมูลสถานะการมีตัวตนจากตัวแทนผู้ใช้รายอื่น (โทรศัพท์ตั้งโต๊ะ ซอฟต์โฟนแบบสแตนด์อโลน ฯลฯ) แนะนำให้เปิดใช้งานเฉพาะเมื่อผู้ติดต่อของคุณนิยมใช้ตัวแทนผู้ใช้แบบเดิม และคุณต้องการเห็นสถานะการมีตัวตนของพวกเขาในทุกอุปกรณ์",
+  "@contacts_ContactScreen_presenceViaSip_tooltip": {},
+  "contacts_ContactScreen_dialogsViaSipBlf": "ติดตามสายที่กำลังใช้งานผ่าน SIP (BLF/Dialogs)",
+  "@contacts_ContactScreen_dialogsViaSipBlf": {},
+  "contacts_ContactScreen_dialogsViaSipBlf_tooltip": "นอกเหนือจากการแลกเปลี่ยนข้อมูลโดยตรง (แอปถึงแอป) แล้ว ฟีเจอร์การติดตามผ่าน SIP-Dialogs ยังช่วยรวบรวมข้อมูลสถานะการโทรจากผู้ใช้รายอื่น (โทรศัพท์ตั้งโต๊ะ ซอฟต์โฟนแบบสแตนด์อโลน ฯลฯ) แนะนำให้เปิดใช้งานเฉพาะเมื่อผู้ติดต่อของคุณนิยมใช้ผู้ใช้แบบเก่า และคุณต้องการเห็นสถานะการโทรของพวกเขาในทุกอุปกรณ์",
+  "@contacts_ContactScreen_dialogsViaSipBlf_tooltip": {},
+  "copyToClipboard_floatingSnackBar": "คัดลอกข้อความแล้ว",
+  "@copyToClipboard_floatingSnackBar": {},
+  "copyToClipboard_popupMenuItem": "คัดลอกไปยังคลิปบอร์ด",
+  "@copyToClipboard_popupMenuItem": {},
+  "default_CannotRemoveOwnerMessagingSocketException": "ไม่สามารถลบเจ้าของได้",
+  "@default_CannotRemoveOwnerMessagingSocketException": {
+    "description": "Shown when a user tries to remove the owner from a chat or group. The system does not allow removing the owner."
+  },
+  "default_ChatMemberNotFoundMessagingSocketException": "ไม่พบสมาชิกแชท",
+  "@default_ChatMemberNotFoundMessagingSocketException": {
+    "description": "Shown when an action is attempted on a chat member who does not exist in the current chat or group."
+  },
+  "default_ChatNotFoundMessagingSocketException": "ไม่พบแชท",
+  "@default_ChatNotFoundMessagingSocketException": {
+    "description": "Shown when an action is attempted on a chat that does not exist or has been deleted."
+  },
+  "default_ClientExceptionError": "เกิดปัญหาเกี่ยวกับ HTTP client",
+  "@default_ClientExceptionError": {
+    "description": "Shown when an HTTP client error occurs during a network request, such as connection failure, timeout, or unexpected server response."
+  },
+  "default_ErrorDetails": "รายละเอียด",
+  "@default_ErrorDetails": {
+    "description": "Label for a section or field displaying detailed error information in error dialogs or screens."
+  },
+  "default_ErrorMessage": "ข้อความแสดงข้อผิดพลาด",
+  "@default_ErrorMessage": {
+    "description": "Label or heading for displaying a generic error message in dialogs, alerts, or error screens."
+  },
+  "default_ErrorPath": "เส้นทางข้อผิดพลาด",
+  "@default_ErrorPath": {
+    "description": "Label for displaying the path associated with an error in error dialogs or screens."
+  },
+  "default_ErrorTransactionId": "รหัสธุรกรรม",
+  "@default_ErrorTransactionId": {
+    "description": "Label for displaying the transaction ID associated with an error in error dialogs or screens."
+  },
+  "default_ForbiddenMessagingSocketException": "คำขอถูกปฏิเสธ",
+  "@default_ForbiddenMessagingSocketException": {
+    "description": "Label for displaying a forbidden request error when a messaging socket operation is not permitted due to access restrictions or insufficient permissions."
+  },
+  "default_FormatExceptionError": "เกิดปัญหาเกี่ยวกับรูปแบบการตอบกลับ",
+  "@default_FormatExceptionError": {
+    "description": "Label for displaying an error when a response format issue occurs, such as invalid or unexpected data format in network responses."
+  },
+  "default_InternalErrorMessagingSocketException": "เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์",
+  "@default_InternalErrorMessagingSocketException": {
+    "description": "Label for displaying an internal server error when a messaging socket operation fails due to a server-side issue."
+  },
+  "default_InvalidChatTypeMessagingSocketException": "ประเภทแชทไม่ถูกต้อง",
+  "@default_InvalidChatTypeMessagingSocketException": {
+    "description": "Label for displaying an error when an invalid chat type is encountered during a messaging socket operation."
+  },
+  "default_JoinCrashedMessagingSocketException": "เกิดข้อผิดพลาดขณะเข้าร่วมการสนทนา",
+  "@default_JoinCrashedMessagingSocketException": {
+    "description": "Label for displaying an error when a messaging socket operation fails while joining a conversation."
+  },
+  "default_MessagingSocketException": "เกิดข้อผิดพลาดขณะประมวลผลคำขอ",
+  "@default_MessagingSocketException": {
+    "description": "Label for displaying a generic error when a messaging socket operation fails for an unspecified reason."
+  },
+  "default_RequestFailureError": "เกิดข้อผิดพลาดที่เซิร์ฟเวอร์",
+  "@default_RequestFailureError": {
+    "description": "Label for displaying an error when a server failure occurs during a network request."
+  },
+  "default_SelfAuthorityAssignmentForbiddenMessagingSocketException": "ไม่อนุญาตให้กำหนดสิทธิ์ให้ตนเอง",
+  "@default_SelfAuthorityAssignmentForbiddenMessagingSocketException": {
+    "description": "Label for displaying an error when a user attempts to assign authority to themselves in a chat or group, which is not permitted."
+  },
+  "default_SelfRemovalForbiddenMessagingSocketException": "ไม่อนุญาตให้ลบตัวเอง",
+  "@default_SelfRemovalForbiddenMessagingSocketException": {
+    "description": "Label for displaying an error when a user attempts to remove themselves from a chat or group, which is not permitted."
+  },
+  "default_SmsConversationNotFoundMessagingSocketException": "ไม่พบบทสนทนา SMS",
+  "@default_SmsConversationNotFoundMessagingSocketException": {
+    "description": "Label for displaying an error when an SMS conversation cannot be found, such as when the requested conversation does not exist or has been deleted."
+  },
+  "default_TimeoutExceptionError": "เซิร์ฟเวอร์หมดเวลาตอบสนอง",
+  "@default_TimeoutExceptionError": {
+    "description": "Label for displaying an error when a server timeout occurs during a network request."
+  },
+  "default_TimeoutMessagingSocketException": "คำขอหมดเวลา",
+  "@default_TimeoutMessagingSocketException": {
+    "description": "Label for displaying an error when a messaging socket request times out, indicating that the operation did not complete within the expected time frame."
+  },
+  "default_TlsExceptionError": "เกิดปัญหาเกี่ยวกับโปรโตคอลเครือข่ายที่ปลอดภัย (TLS/SSL)",
+  "@default_TlsExceptionError": {
+    "description": "Label for displaying an error when a secure network protocol (TLS/SSL) issue occurs during a network request."
+  },
+  "default_TypeErrorError": "เกิดปัญหาเกี่ยวกับการตอบกลับ",
+  "@default_TypeErrorError": {
+    "description": "Label for displaying an error when a type issue occurs in a response, such as receiving unexpected or mismatched data types during a network request."
+  },
+  "default_UnauthorizedMessagingSocketException": "คำขอที่ไม่ได้รับอนุญาต",
+  "@default_UnauthorizedMessagingSocketException": {
+    "description": "Label for displaying an error when a messaging socket operation fails due to unauthorized access or insufficient permissions."
+  },
+  "default_UnauthorizedRequestFailureError": "คำขอไม่ได้รับอนุญาต",
+  "@default_UnauthorizedRequestFailureError": {
+    "description": "Displayed to users when a network request fails due to unauthorized access (e.g., missing/invalid credentials, insufficient permissions). Typically shown after login attempts or when accessing restricted features."
+  },
+  "default_UnknownExceptionError": "เกิดปัญหาที่ไม่ทราบสาเหตุ: {error}",
+  "@default_UnknownExceptionError": {
+    "description": "Displayed to users when an unexpected error occurs that does not fit into predefined categories. The placeholder {error} can be used to provide additional context or details about the unknown issue.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "default_UserAlreadyInChatMessagingSocketException": "ผู้ใช้อยู่ในแชทอยู่แล้ว",
+  "@default_UserAlreadyInChatMessagingSocketException": {
+    "description": "Shown in messaging screens when a user tries to join a chat but is already a member. Condition: join request for a chat where the user is already present."
+  },
+  "diagnostic_AppBar_title": "การวินิจฉัย",
+  "@diagnostic_AppBar_title": {},
+  "diagnostic_battery_groupTitle": "แบตเตอรี่",
+  "@diagnostic_battery_groupTitle": {},
+  "diagnostic_batteryMode_optimized_description": "ระบบจัดการการทำงานเบื้องหลังของแอปเพื่อประหยัดแบตเตอรี่ ซึ่งอาจทำให้สายเรียกเข้าที่เกิดจากการแจ้งเตือนแบบพุชทำงานไม่ถูกต้อง",
+  "@diagnostic_batteryMode_optimized_description": {},
+  "diagnostic_batteryMode_optimized_title": "ปรับให้เหมาะสม",
+  "@diagnostic_batteryMode_optimized_title": {},
+  "diagnostic_batteryMode_restricted_description": "กิจกรรมเบื้องหลังของแอปถูกจำกัดอย่างมากเพื่อประหยัดแบตเตอรี่ อาจพลาดสายเรียกเข้าได้",
+  "@diagnostic_batteryMode_restricted_description": {},
+  "diagnostic_batteryMode_restricted_title": "ถูกจำกัด",
+  "@diagnostic_batteryMode_restricted_title": {},
+  "diagnostic_batteryMode_unknown_description": "ไม่ทราบสถานะโหมดแบตเตอรี่ แอปอาจทำงานไม่เป็นไปตามที่คาด",
+  "@diagnostic_batteryMode_unknown_description": {
+    "description": "Shown in the Diagnostics > Battery section when the app cannot determine the current battery mode. Condition: system does not provide battery mode info, which may lead to unpredictable app behavior."
+  },
+  "diagnostic_batteryMode_unknown_title": "ไม่ทราบ",
+  "@diagnostic_batteryMode_unknown_title": {},
+  "diagnostic_batteryMode_unrestricted_description": "แอปสามารถทำงานเบื้องหลังได้อย่างเต็มที่โดยไม่มีข้อจำกัด",
+  "@diagnostic_batteryMode_unrestricted_description": {},
+  "diagnostic_batteryMode_unrestricted_title": "ไม่จำกัด",
+  "@diagnostic_batteryMode_unrestricted_title": {},
+  "diagnostic_battery_navigate_section": "ไปที่ส่วนแบตเตอรี่",
+  "@diagnostic_battery_navigate_section": {},
+  "diagnostic_battery_tile_title": "โหมดแบตเตอรี่",
+  "@diagnostic_battery_tile_title": {},
+  "diagnostic_callingMode_groupTitle": "โหมดการโทร",
+  "@diagnostic_callingMode_groupTitle": {},
+  "diagnostic_callingMode_tile_title": "โหมดการโทร",
+  "@diagnostic_callingMode_tile_title": {},
+  "diagnostic_callingMode_standalone_title": "โหมดโทรแบบจำกัด",
+  "@diagnostic_callingMode_standalone_title": {},
+  "diagnostic_callingMode_standalone_caption": "แบบสแตนด์อโลน - การแจ้งสายเรียกเข้าและการเลือกหูฟังอาจถูกจำกัด",
+  "@diagnostic_callingMode_standalone_caption": {},
+  "diagnostic_callingMode_standalone_description": "อุปกรณ์นี้ไม่รองรับเฟรมเวิร์กการโทรของระบบ (Telecom) ดังนั้นสายเรียกเข้าจะใช้บริการเบื้องหลังแบบจำกัด สายอาจล่าช้าหรือพลาดเมื่อระบบจำกัดแอปที่ทำงานเบื้องหลัง การเลือกหูฟังบลูทูธหรือแบบมีสายไม่สามารถใช้งานได้ในโหมดนี้",
+  "@diagnostic_callingMode_standalone_description": {},
+  "diagnostic_permission_camera_description": "แอปนี้ต้องการสิทธิ์เข้าถึงกล้องเพื่อโทรแบบวิดีโอ",
+  "@diagnostic_permission_camera_description": {},
+  "diagnostic_permission_camera_title": "กล้อง",
+  "@diagnostic_permission_camera_title": {},
+  "diagnostic_permission_contacts_description": "แอปนี้ต้องการสิทธิ์ในการเข้าถึงรายชื่อติดต่อเพื่อโทรหาคนในสมุดที่อยู่ของคุณ",
+  "@diagnostic_permission_contacts_description": {},
+  "diagnostic_permission_contacts_title": "รายชื่อติดต่อ",
+  "@diagnostic_permission_contacts_title": {},
+  "diagnosticPermissionDetails_button_managePermission": "จัดการสิทธิ์",
+  "@diagnosticPermissionDetails_button_managePermission": {},
+  "diagnosticPermissionDetails_button_requestPermission": "ขอสิทธิ์",
+  "@diagnosticPermissionDetails_button_requestPermission": {},
+  "diagnosticPermissionDetails_title_statusPermission": "สิทธิ์สถานะ",
+  "@diagnosticPermissionDetails_title_statusPermission": {},
+  "diagnostic_permission_microphone_description": "แอปนี้ต้องการสิทธิ์เข้าถึงไมโครโฟนเพื่อโทรด้วยเสียง",
+  "@diagnostic_permission_microphone_description": {},
+  "diagnostic_permission_microphone_title": "ไมโครโฟน",
+  "@diagnostic_permission_microphone_title": {},
+  "diagnostic_permission_notification_description": "ช่วยให้แอปสามารถแสดงสายเรียกเข้าได้",
+  "@diagnostic_permission_notification_description": {},
+  "diagnostic_permission_notification_title": "การแจ้งเตือน",
+  "@diagnostic_permission_notification_title": {},
+  "diagnostic_permissionStatus_denied": "การเข้าถึงถูกปฏิเสธ",
+  "@diagnostic_permissionStatus_denied": {},
+  "diagnostic_permissionStatus_granted": "ได้รับสิทธิ์การเข้าถึงแล้ว",
+  "@diagnostic_permissionStatus_granted": {},
+  "diagnostic_permissionStatus_limited": "การเข้าถึงแบบจำกัด",
+  "@diagnostic_permissionStatus_limited": {},
+  "diagnostic_permissionStatus_permanentlyDenied": "ถูกปฏิเสธการเข้าถึงอย่างถาวร",
+  "@diagnostic_permissionStatus_permanentlyDenied": {},
+  "diagnostic_permissionStatus_provisional": "การเข้าถึงชั่วคราว",
+  "@diagnostic_permissionStatus_provisional": {},
+  "diagnostic_permissionStatus_restricted": "การเข้าถึงถูกจำกัด",
+  "@diagnostic_permissionStatus_restricted": {},
+  "diagnostic_specialPermissionStatus_denied": "การเข้าถึงถูกปฏิเสธ",
+  "@diagnostic_specialPermissionStatus_denied": {},
+  "diagnostic_specialPermissionStatus_granted": "ได้รับสิทธิ์การเข้าถึงแล้ว",
+  "@diagnostic_specialPermissionStatus_granted": {},
+  "diagnostic_specialPermissionStatus_unknown": "ไม่ทราบ",
+  "@diagnostic_specialPermissionStatus_unknown": {},
+  "diagnostic_xiaomi_backgroundActivityStart_description": "MIUI/HyperOS จำกัดการแสดงหน้าจอสายเรียกเข้าขณะที่แอปทำงานอยู่เบื้องหลัง หากไม่ได้เปิดสิทธิ์ \"แสดงหน้าต่างป๊อปอัปขณะทำงานอยู่เบื้องหลัง\" ให้กับแอปนี้",
+  "@diagnostic_xiaomi_backgroundActivityStart_description": {},
+  "diagnostic_xiaomi_backgroundActivityStart_tile_title": "แสดงหน้าต่างป๊อปอัปขณะทำงานอยู่เบื้องหลัง",
+  "@diagnostic_xiaomi_backgroundActivityStart_tile_title": {},
+  "diagnostic_xiaomi_groupTitle": "สิทธิ์ของ Xiaomi",
+  "@diagnostic_xiaomi_groupTitle": {},
+  "diagnostic_xiaomi_navigate_section": "ไปที่ส่วนสิทธิ์หน้าจอล็อก",
+  "@diagnostic_xiaomi_navigate_section": {},
+  "diagnostic_xiaomi_showWhenLocked_description": "MIUI/HyperOS จำกัดการแสดงหน้าจอสายเรียกเข้าบนหน้าจอล็อก หากไม่ได้เปิดสิทธิ์ \"แสดงบนหน้าจอล็อก\" ให้กับแอปนี้",
+  "@diagnostic_xiaomi_showWhenLocked_description": {},
+  "diagnostic_xiaomi_showWhenLocked_tile_title": "แสดงบนหน้าจอล็อก",
+  "@diagnostic_xiaomi_showWhenLocked_tile_title": {},
+  "diagnosticPushDetails_configuration_title": "การกำหนดค่าบริการแจ้งเตือนแบบพุช",
+  "@diagnosticPushDetails_configuration_title": {},
+  "diagnosticPushDetails_errorMessage_intro": "ขั้นตอนบางอย่างที่ควรลอง:\n",
+  "@diagnosticPushDetails_errorMessage_intro": {},
+  "diagnosticPushDetails_errorMessage_step1": "1. ตรวจสอบว่าโทรศัพท์ของคุณเชื่อมต่ออินเทอร์เน็ตอยู่\n",
+  "@diagnosticPushDetails_errorMessage_step1": {},
+  "diagnosticPushDetails_errorMessage_step2": "2. หากเชื่อมต่อแล้ว ตรวจสอบว่าโทรศัพท์ของคุณเข้าถึงบริการของ Google ได้โดยลองเข้าเว็บไซต์\n",
+  "@diagnosticPushDetails_errorMessage_step2": {},
+  "diagnosticPushDetails_errorMessage_step3": "3. รอสักครู่แล้วลองใหม่ – เซิร์ฟเวอร์ messaging ของ Firebase อาจขัดข้องชั่วคราว\n",
+  "@diagnosticPushDetails_errorMessage_step3": {},
+  "diagnosticPushDetails_errorMessage_step4": "4. รีสตาร์ท Google Play services เพื่อให้แน่ใจว่าทำงานได้อย่างถูกต้อง\n",
+  "@diagnosticPushDetails_errorMessage_step4": {},
+  "diagnosticPushDetails_errorMessage_step5": "5. ตรวจสอบว่าได้ติดตั้ง Google Play services บนอุปกรณ์ของคุณแล้ว\n",
+  "@diagnosticPushDetails_errorMessage_step5": {},
+  "diagnosticPushDetails_successMessage": "ตั้งค่าบริการแจ้งเตือนสำเร็จแล้วและพร้อมใช้งานสำหรับรับข้อความและจัดการสายเรียกเข้า",
+  "@diagnosticPushDetails_successMessage": {},
+  "diagnostic_pushTokenStatusType_progress": "กำลังดำเนินการ",
+  "@diagnostic_pushTokenStatusType_progress": {},
+  "diagnostic_pushTokenStatusType_success": "ตั้งค่าบริการสำเร็จ",
+  "@diagnostic_pushTokenStatusType_success": {},
+  "diagnosticReportDialogAddNoteExpansionTileTitle": "เพิ่มหมายเหตุ (ไม่บังคับ)",
+  "@diagnosticReportDialogAddNoteExpansionTileTitle": {
+    "description": "Title for the expandable section where users can add manual comments."
+  },
+  "diagnosticReportDialogCancelButtonLabel": "ยกเลิก",
+  "@diagnosticReportDialogCancelButtonLabel": {
+    "description": "Label for the button that closes the dialog without action."
+  },
+  "diagnosticReportDialogCommentTextFieldHintText": "อธิบายสิ่งที่เกิดขึ้น...",
+  "@diagnosticReportDialogCommentTextFieldHintText": {
+    "description": "Placeholder hint text displayed inside the comment text field."
+  },
+  "diagnosticReportDialogContent": "รายงานนี้มีรายละเอียดทางเทคนิคเพื่อช่วยให้เราระบุปัญหาการเชื่อมต่อ",
+  "@diagnosticReportDialogContent": {
+    "description": "The main body text explaining what the diagnostic report is for."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": "ต้องใช้สิทธิ์เพิ่มเติม",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileSubtitle": {
+    "description": "Subtitle text under the system logs switch indicating permission requirements."
+  },
+  "diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": "รวมบันทึกระบบ",
+  "@diagnosticReportDialogIncludeSystemLogsSwitchTileTitle": {
+    "description": "The label for the switch toggle that allows the user to attach system logs."
+  },
+  "diagnosticReportDialogSendReportButtonLabel": "ส่งรายงาน",
+  "@diagnosticReportDialogSendReportButtonLabel": {
+    "description": "Label for the button that submits the diagnostic report."
+  },
+  "diagnosticReportDialogTitle": "ส่งรายงานการวินิจฉัย",
+  "@diagnosticReportDialogTitle": {
+    "description": "The title shown at the top of the diagnostic report dialog."
+  },
+  "diagnosticScreen_contacts_agreement_description": "อนุญาตให้แอปเข้าถึงรายชื่อติดต่อของฉันเพื่อปรับปรุงประสบการณ์การใช้งาน",
+  "@diagnosticScreen_contacts_agreement_description": {},
+  "diagnosticScreen_contacts_agreement_group_title": "ข้อตกลง",
+  "@diagnosticScreen_contacts_agreement_group_title": {},
+  "diagnosticScreen_contacts_agreement_title": "ข้อตกลงเกี่ยวกับรายชื่อติดต่อ",
+  "@diagnosticScreen_contacts_agreement_title": {},
+  "diagnosticScreen_permissionsGroup_title": "สิทธิ์การเข้าถึง",
+  "@diagnosticScreen_permissionsGroup_title": {},
+  "diagnosticScreen_pushNotificationService_title": "บริการการแจ้งเตือนแบบพุช",
+  "@diagnosticScreen_pushNotificationService_title": {},
+  "diagnostic_network_groupTitle": "เครือข่าย",
+  "@diagnostic_network_groupTitle": {},
+  "diagnosticNetworkTest_status_offline": "ออฟไลน์",
+  "@diagnosticNetworkTest_status_offline": {},
+  "diagnosticNetworkTest_status_reachable": "เข้าถึงได้",
+  "@diagnosticNetworkTest_status_reachable": {},
+  "diagnosticNetworkTest_status_restricted": "ถูกจำกัด",
+  "@diagnosticNetworkTest_status_restricted": {},
+  "diagnosticNetworkTest_status_checking": "กำลังตรวจสอบ…",
+  "@diagnosticNetworkTest_status_checking": {},
+  "diagnosticNetworkTest_status_unreachable": "เข้าถึงไม่ได้",
+  "@diagnosticNetworkTest_status_unreachable": {},
+  "diagnosticNetworkTestItem_subtitle_noNetwork": "ไม่มีการเชื่อมต่อเครือข่าย",
+  "@diagnosticNetworkTestItem_subtitle_noNetwork": {},
+  "diagnosticNetworkTestItem_subtitle_publicIps": "สาธารณะ: {ips}",
+  "@diagnosticNetworkTestItem_subtitle_publicIps": {
+    "placeholders": {
+      "ips": {
+        "type": "String"
+      }
+    }
+  },
+  "diagnosticNetworkTestItem_subtitle_stunBlocked": "STUN ถูกบล็อก · ใช้ relay ได้",
+  "@diagnosticNetworkTestItem_subtitle_stunBlocked": {},
+  "diagnosticNetworkTestItem_subtitle_stunUnreachable": "ไม่สามารถเข้าถึง STUN · ภายในเครือข่ายเท่านั้น",
+  "@diagnosticNetworkTestItem_subtitle_stunUnreachable": {},
+  "diagnosticNetworkTestItem_subtitle_noCandidates": "ไม่พบ ICE candidate",
+  "@diagnosticNetworkTestItem_subtitle_noCandidates": {},
+  "diagnosticNetworkTestItem_network_wifi": "WiFi",
+  "@diagnosticNetworkTestItem_network_wifi": {},
+  "diagnosticNetworkTestItem_network_mobile": "มือถือ",
+  "@diagnosticNetworkTestItem_network_mobile": {},
+  "diagnosticNetworkTestItem_network_ethernet": "อีเทอร์เน็ต",
+  "@diagnosticNetworkTestItem_network_ethernet": {},
+  "diagnosticNetworkTestItem_network_vpn": "VPN",
+  "@diagnosticNetworkTestItem_network_vpn": {},
+  "diagnosticNetworkTestDetails_title": "การเข้าถึงเครือข่าย",
+  "@diagnosticNetworkTestDetails_title": {},
+  "diagnosticNetworkTestDetails_description": "ตรวจสอบว่าอุปกรณ์ของคุณสามารถโทรออกและรับสายผ่านอินเทอร์เน็ตได้หรือไม่ โดยการตรวจสอบการเชื่อมต่อเครือข่าย\nผู้สมัคร Server-reflexive (srflx) ยืนยันว่าสามารถเข้าถึง IP สาธารณะได้ผ่าน STUN ผู้สมัคร Relay หมายความว่าการเข้าถึงโดยตรงถูกบล็อกและต้องใช้เซิร์ฟเวอร์ TURN ส่วน Host-only หมายความว่าไม่สามารถเข้าถึง STUN ได้และทำได้เฉพาะการเชื่อมต่อภายในเครื่องเท่านั้น",
+  "@diagnosticNetworkTestDetails_description": {},
+  "diagnosticNetworkTestDetails_status": "สถานะ",
+  "@diagnosticNetworkTestDetails_status": {},
+  "diagnosticNetworkTestDetails_candidates": "Candidates",
+  "@diagnosticNetworkTestDetails_candidates": {},
+  "diagnosticNetworkTestDetails_noNetwork": "ไม่มีการเชื่อมต่อเครือข่าย",
+  "@diagnosticNetworkTestDetails_noNetwork": {},
+  "diagnosticNetworkTestDetails_noCandidates": "ไม่พบ ICE candidate",
+  "@diagnosticNetworkTestDetails_noCandidates": {},
+  "favorites_BodyCenter_empty": "ขณะนี้คุณยังไม่มีหมายเลขโปรด\nเพิ่มรายการโปรดจากผู้ติดต่อโดยใช้ไอคอนรูปดาว",
+  "@favorites_BodyCenter_empty": {},
+  "favorites_DeleteConfirmDialog_content": "คุณแน่ใจหรือไม่ว่าต้องการลบหมายเลขโปรดปัจจุบัน?",
+  "@favorites_DeleteConfirmDialog_content": {},
+  "favorites_DeleteConfirmDialog_title": "ยืนยันการลบ",
+  "@favorites_DeleteConfirmDialog_title": {},
+  "favorites_SnackBar_deleted": "ลบ {name} แล้ว",
+  "@favorites_SnackBar_deleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "favorites_Text_blingTransferInitiated": "กำลังโอนสายแบบไม่แจ้ง",
+  "@favorites_Text_blingTransferInitiated": {},
+  "formatPhone": "{style, select, full{{main} (ต่อ: {ext})} simple{{main}} only_ext{ต่อ: {ext}} empty{ไม่มีหมายเลขโทรศัพท์} other{{main}}}",
+  "@formatPhone": {
+    "description": "Formats phone number based on presence of main number and extension, covering four scenarios: both, main only, extension only, and neither.",
+    "placeholders": {
+      "style": {
+        "type": "String",
+        "example": "full"
+      },
+      "main": {
+        "type": "String",
+        "example": "+15551234567"
+      },
+      "ext": {
+        "type": "String",
+        "example": "101"
+      }
+    }
+  },
+  "locale_default": "ค่าเริ่มต้น",
+  "@locale_default": {},
+  "locale_en": "อังกฤษ",
+  "@locale_en": {},
+  "locale_it": "อิตาลี",
+  "@locale_it": {},
+  "locale_uk": "ยูเครน",
+  "@locale_uk": {},
+  "locale_th": "ไทย",
+  "@locale_th": {},
+  "login_Button_coreUrlAssignProceed": "ดำเนินการต่อ",
+  "@login_Button_coreUrlAssignProceed": {},
+  "login_Button_otpSigninRequestProceed": "ดำเนินการต่อ",
+  "@login_Button_otpSigninRequestProceed": {},
+  "login_Button_otpSigninVerifyProceed": "ยืนยัน",
+  "@login_Button_otpSigninVerifyProceed": {},
+  "login_Button_otpSigninVerifyRepeat": "ส่งรหัสอีกครั้ง",
+  "@login_Button_otpSigninVerifyRepeat": {},
+  "login_Button_otpSigninVerifyRepeatInterval": "ส่งรหัสอีกครั้ง ({seconds} วิ)",
+  "@login_Button_otpSigninVerifyRepeatInterval": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "login_Button_passwordSigninProceed": "ดำเนินการต่อ",
+  "@login_Button_passwordSigninProceed": {},
+  "login_Button_signIn": "เข้าสู่ระบบ",
+  "@login_Button_signIn": {},
+  "login_Button_signupRequestProceed": "ดำเนินการต่อ",
+  "@login_Button_signupRequestProceed": {},
+  "login_Button_signUpToDemoInstance": "สมัคร / เข้าสู่ระบบ",
+  "@login_Button_signUpToDemoInstance": {
+    "description": "Button that allows the user to sign up or sign in to a demo environment. Note: for non-demo installations, use the 'loginType_signup' key instead."
+  },
+  "login_Button_signupVerifyProceed": "ยืนยัน",
+  "@login_Button_signupVerifyProceed": {},
+  "login_Button_signupVerifyRepeat": "ส่งรหัสอีกครั้ง",
+  "@login_Button_signupVerifyRepeat": {},
+  "login_Button_signupVerifyRepeatInterval": "ส่งรหัสอีกครั้ง ({seconds} วินาที)",
+  "@login_Button_signupVerifyRepeatInterval": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "login_ButtonTooltip_signInToYourInstance": "เข้าสู่ระบบ WebTrit Cloud Backend ของคุณ",
+  "@login_ButtonTooltip_signInToYourInstance": {},
+  "login_CoreVersionUnsupportedExceptionError": "เวอร์ชันอินสแตนซ์ที่ระบุไม่รองรับ โปรดติดต่อผู้ดูแลระบบของคุณ (ปัจจุบัน: {actual}, ที่รองรับ: {supportedConstraint})",
+  "@login_CoreVersionUnsupportedExceptionError": {
+    "description": "Shown during login when the app detects that the backend instance version is incompatible. Context: user tries to sign in. Condition: provided backend version does not match the supported version range (actual: {actual}, supported: {supportedConstraint}).",
+    "placeholders": {
+      "actual": {
+        "type": "String"
+      },
+      "supportedConstraint": {
+        "type": "String"
+      }
+    }
+  },
+  "login_AppVersionUnsupportedExceptionError": "เวอร์ชันแอปของคุณไม่รองรับอีกต่อไป กรุณาอัปเดตแอปพลิเคชันเพื่อใช้งานต่อ (ปัจจุบัน: {actual}, ขั้นต่ำที่ต้องใช้: {minSupported})",
+  "@login_AppVersionUnsupportedExceptionError": {
+    "description": "Shown during login when the backend declares a minimum supported app version that is newer than this build. Context: user tries to sign in. Condition: app version is older than min_supported_app_version (current: {actual}, minimum required: {minSupported}).",
+    "placeholders": {
+      "actual": {
+        "type": "String"
+      },
+      "minSupported": {
+        "type": "String"
+      }
+    }
+  },
+  "login_RequestFailureEmptyEmailError": "ไม่สามารถส่งรหัสยืนยันได้",
+  "@login_RequestFailureEmptyEmailError": {
+    "description": "Shown during login or signup when the user tries to request a verification code but has not entered an email address. Condition: email field is empty."
+  },
+  "login_RequestFailureIdentifierIsNotValid": "ตัวระบุไม่ถูกต้องหรือไม่มีอยู่",
+  "@login_RequestFailureIdentifierIsNotValid": {
+    "description": "Shown during login or signup when the user provides an identifier (such as email or phone number) that is invalid or does not exist in the system. Condition: identifier is not recognized or fails validation."
+  },
+  "login_RequestFailureIncorrectOtpCodeError": "รหัสยืนยันไม่ถูกต้อง",
+  "@login_RequestFailureIncorrectOtpCodeError": {
+    "description": "Shown during login or signup when the user enters an incorrect one-time password (OTP) verification code. Condition: the provided OTP does not match the expected value."
+  },
+  "login_RequestFailureOtpAlreadyVerifiedError": "ยืนยันแล้ว",
+  "@login_RequestFailureOtpAlreadyVerifiedError": {
+    "description": "Shown during login or signup when the user tries to verify an OTP code that has already been successfully verified. Condition: the OTP verification process was already completed for this code."
+  },
+  "login_RequestFailureOtpExpiredError": "การยืนยันหมดอายุ",
+  "@login_RequestFailureOtpExpiredError": {
+    "description": "Shown during login or signup when the user tries to verify an OTP code that has expired. Condition: the OTP verification code is no longer valid due to time expiration."
+  },
+  "login_RequestFailureOtpNotFoundError": "ไม่พบการยืนยัน",
+  "@login_RequestFailureOtpNotFoundError": {
+    "description": "Shown during login or signup when the user tries to verify an OTP code that cannot be found. Condition: the provided OTP does not exist or is not recognized by the system."
+  },
+  "login_RequestFailureOtpVerificationAttemptsExceededError": "เกินจำนวนครั้งในการยืนยัน",
+  "@login_RequestFailureOtpVerificationAttemptsExceededError": {
+    "description": "Shown during login or signup when the user has exceeded the maximum number of allowed OTP verification attempts. Condition: too many incorrect OTP entries, further attempts are blocked for security reasons."
+  },
+  "login_RequestFailureParametersApplyIssueError": "ไม่สามารถประมวลผลข้อมูลที่ระบุได้",
+  "@login_RequestFailureParametersApplyIssueError": {
+    "description": "Shown during login or signup when the provided data cannot be processed by the server. Condition: input parameters are invalid, incomplete, or do not meet the required format for the operation."
+  },
+  "login_RequestFailurePhoneNotFoundError": "ไม่พบหมายเลขโทรศัพท์",
+  "@login_RequestFailurePhoneNotFoundError": {
+    "description": "Shown during login or signup when the user provides a phone number that cannot be found in the system. Condition: the entered phone number does not exist or is not recognized by the backend."
+  },
+  "login_RequestFailureIncorrectCredentialsError": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+  "@login_RequestFailureIncorrectCredentialsError": {
+    "description": "Shown during password login when the provided username or password is incorrect. Condition: the backend returns incorrect_credentials in response to POST /session."
+  },
+  "login_RequestFailureUserNotFoundError": "ไม่พบผู้ใช้",
+  "@login_RequestFailureUserNotFoundError": {
+    "description": "Shown during password login when the provided user reference does not exist. Condition: the backend returns user_not_found in response to POST /session."
+  },
+  "login_RequestFailureUnconfiguredBundleIdError": "WebTrit Cloud Backend ของคุณไม่รองรับแอปนี้",
+  "@login_RequestFailureUnconfiguredBundleIdError": {
+    "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."
+  },
+  "login_SupportedLoginTypeMissedExceptionError": "WebTrit Cloud Backend ปัจจุบันไม่รองรับประเภทการเข้าสู่ระบบใด ๆ ที่ใช้งานได้กับแอปนี้",
+  "@login_SupportedLoginTypeMissedExceptionError": {
+    "description": "Shown during login or signup when the WebTrit Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods."
+  },
+  "login_Text_coreUrlAssignPostDescription": "หากคุณยังไม่มี WebTrit Cloud Backend ของคุณเอง โปรดติดต่อทีมขาย {email}",
+  "@login_Text_coreUrlAssignPostDescription": {},
+  "login_Text_coreUrlAssignPreDescription": "หากต้องการโทรผ่านระบบ VoIP ของคุณเอง โปรดป้อน URL ของ WebTrit Cloud Backend (ตามที่ผู้จัดการบัญชีของคุณให้มา) ด้านล่าง",
+  "@login_Text_coreUrlAssignPreDescription": {},
+  "login_TextFieldLabelText_coreUrlAssign": "ป้อน URL ของ WebTrit Cloud Backend ของคุณ",
+  "@login_TextFieldLabelText_coreUrlAssign": {},
+  "login_TextFieldLabelText_otpSigninCode": "กรอกรหัสยืนยัน",
+  "@login_TextFieldLabelText_otpSigninCode": {},
+  "login_TextFieldLabelText_otpSigninUserRef": "กรอกหมายเลขโทรศัพท์หรืออีเมลของคุณ",
+  "@login_TextFieldLabelText_otpSigninUserRef": {},
+  "login_TextFieldLabelText_otpSigninUserRefPhone": "ป้อนหมายเลขโทรศัพท์ของคุณ",
+  "@login_TextFieldLabelText_otpSigninUserRefPhone": {},
+  "login_TextFieldLabelText_otpSigninUserRefEmail": "กรอกอีเมลของคุณ",
+  "@login_TextFieldLabelText_otpSigninUserRefEmail": {},
+  "login_TextFieldLabelText_passwordSigninPassword": "กรอกรหัสผ่านของคุณ",
+  "@login_TextFieldLabelText_passwordSigninPassword": {},
+  "login_TextFieldLabelText_passwordSigninUserRef": "กรอกหมายเลขโทรศัพท์หรืออีเมลของคุณ",
+  "@login_TextFieldLabelText_passwordSigninUserRef": {},
+  "login_TextFieldLabelText_signupCode": "กรอกรหัสยืนยัน",
+  "@login_TextFieldLabelText_signupCode": {},
+  "login_TextFieldLabelText_signupEmail": "กรอกอีเมลของคุณ",
+  "@login_TextFieldLabelText_signupEmail": {},
+  "login_Text_otpSigninRequestPostDescription": "",
+  "@login_Text_otpSigninRequestPostDescription": {},
+  "login_Text_otpSigninRequestPreDescription": "",
+  "@login_Text_otpSigninRequestPreDescription": {},
+  "login_Text_otpSigninVerifyPostDescriptionFromEmail": "หากคุณไม่เห็นอีเมลที่มีรหัสยืนยันจาก {email} ในกล่องจดหมายของคุณ โปรดตรวจสอบโฟลเดอร์สแปม",
+  "@login_Text_otpSigninVerifyPostDescriptionFromEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "login_Text_otpSigninVerifyPostDescriptionGeneral": "หากคุณไม่พบอีเมลที่มีรหัสยืนยันในกล่องจดหมาย โปรดตรวจสอบในโฟลเดอร์สแปม",
+  "@login_Text_otpSigninVerifyPostDescriptionGeneral": {},
+  "login_Text_otpSigninVerifyPreDescriptionUserRef": "รหัสยืนยันแบบใช้ครั้งเดียวถูกส่งไปยังอีเมลที่เชื่อมโยงกับหมายเลขโทรศัพท์หรืออีเมลที่ระบุ",
+  "@login_Text_otpSigninVerifyPreDescriptionUserRef": {
+    "placeholders": {
+      "userRef": {
+        "type": "String"
+      }
+    }
+  },
+  "login_Text_passwordSigninPostDescription": "",
+  "@login_Text_passwordSigninPostDescription": {},
+  "login_Text_passwordSigninPreDescription": "",
+  "@login_Text_passwordSigninPreDescription": {},
+  "login_Text_signupRequestPostDescription": "",
+  "@login_Text_signupRequestPostDescription": {},
+  "login_Text_signupRequestPostDescriptionDemo": "หากคุณยังไม่มีบัญชี ระบบจะสร้างให้คุณโดยอัตโนมัติ",
+  "@login_Text_signupRequestPostDescriptionDemo": {},
+  "login_Text_signupRequestPreDescription": "",
+  "@login_Text_signupRequestPreDescription": {},
+  "login_Text_signupRequestPreDescriptionDemo": "",
+  "@login_Text_signupRequestPreDescriptionDemo": {},
+  "login_Text_signupVerifyPostDescriptionFromEmail": "หากคุณไม่พบอีเมลที่มีรหัสยืนยันจาก {email} ในกล่องจดหมาย กรุณาตรวจสอบในโฟลเดอร์สแปม",
+  "@login_Text_signupVerifyPostDescriptionFromEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "login_Text_signupVerifyPostDescriptionGeneral": "หากคุณไม่เห็นอีเมลที่มีรหัสยืนยันในกล่องจดหมายของคุณ โปรดตรวจสอบโฟลเดอร์สแปม",
+  "@login_Text_signupVerifyPostDescriptionGeneral": {},
+  "login_Text_signupVerifyPreDescriptionEmail": "ส่งรหัสยืนยันแบบใช้ครั้งเดียวไปยัง {email} แล้ว",
+  "@login_Text_signupVerifyPreDescriptionEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "loginType_otpSignin": "เข้าสู่ระบบด้วย OTP",
+  "@loginType_otpSignin": {},
+  "loginType_passwordSignin": "เข้าสู่ระบบด้วยรหัสผ่าน",
+  "@loginType_passwordSignin": {},
+  "loginType_signup": "สมัครสมาชิก",
+  "@loginType_signup": {},
+  "login_validationCoreUrlError": "กรุณากรอก URL ที่ถูกต้อง",
+  "@login_validationCoreUrlError": {
+    "description": "Shown when the user enters an invalid URL in the WebTrit Cloud Backend URL field during login or setup. Condition: the input does not match the required URL format."
+  },
+  "login_validationEmailError": "กรุณากรอกอีเมลที่ถูกต้อง",
+  "@login_validationEmailError": {
+    "description": "Shown when the user enters an invalid email address in the email field during login or signup. Condition: the input does not match the required email format."
+  },
+  "login_validationPhoneError": "โปรดกรอกหมายเลขโทรศัพท์ที่ถูกต้อง",
+  "@login_validationPhoneError": {
+    "description": "Shown when the user enters an invalid phone number in the phone number field during login or signup. Condition: the input does not match the required phone number format."
+  },
+  "login_validationUserRefError": "โปรดป้อนหมายเลขโทรศัพท์หรืออีเมลที่ถูกต้อง",
+  "@login_validationUserRefError": {
+    "description": "Shown when the user enters an invalid value in the phone number or email field during login or signup. Condition: the input does not match the required format for either phone number or email."
+  },
+  "logRecordsConsole_AppBarTitle": "คอนโซลบันทึก",
+  "@logRecordsConsole_AppBarTitle": {},
+  "logRecordsConsole_Button_failureRefresh": "รีเฟรช",
+  "@logRecordsConsole_Button_failureRefresh": {},
+  "logRecordsConsole_Text_failure": "เกิดข้อผิดพลาดที่ไม่คาดคิด",
+  "@logRecordsConsole_Text_failure": {
+    "description": "Shown in the Log Console screen when an unexpected error occurs while loading or displaying log records."
+  },
+  "logRecordsConsole_Text_recordsCountHint": "กำลังแสดง {count, plural, one{{count} รายการล่าสุด} other{{count} รายการล่าสุด}} ใช้การแชร์เพื่อส่งออกบันทึกทั้งหมด",
+  "@logRecordsConsole_Text_recordsCountHint": {
+    "description": "Shown in the info dialog to inform the user that only the most recent records are displayed and the share button exports the complete log.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "logRecordsConsole_Button_infoClose": "เข้าใจแล้ว",
+  "@logRecordsConsole_Button_infoClose": {},
+  "logRecordsConsole_PopupMenuItem_info": "ข้อมูล",
+  "@logRecordsConsole_PopupMenuItem_info": {},
+  "logRecordsConsole_PopupMenuItem_clear": "ล้าง",
+  "@logRecordsConsole_PopupMenuItem_clear": {},
+  "main_BottomNavigationBarItemLabel_chats": "แชท",
+  "@main_BottomNavigationBarItemLabel_chats": {},
+  "main_BottomNavigationBarItemLabel_contacts": "รายชื่อ",
+  "@main_BottomNavigationBarItemLabel_contacts": {},
+  "main_BottomNavigationBarItemLabel_favorites": "รายการโปรด",
+  "@main_BottomNavigationBarItemLabel_favorites": {},
+  "main_BottomNavigationBarItemLabel_keypad": "แป้นกด",
+  "@main_BottomNavigationBarItemLabel_keypad": {},
+  "main_BottomNavigationBarItemLabel_recents": "ล่าสุด",
+  "@main_BottomNavigationBarItemLabel_recents": {},
+  "main_CompatibilityIssueDialogActions_logout": "ออกจากระบบ",
+  "@main_CompatibilityIssueDialogActions_logout": {},
+  "main_CompatibilityIssueDialogActions_update": "อัปเดต",
+  "@main_CompatibilityIssueDialogActions_update": {},
+  "main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": "เวอร์ชัน WebTrit Cloud Backend ไม่รองรับ กรุณาติดต่อผู้ดูแลระบบของคุณ\n\nเวอร์ชันของอินสแตนซ์:\n{actual}\n\nเวอร์ชันที่รองรับ:\n{supportedConstraint}",
+  "@main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": {
+    "description": "Shown in the compatibility issue dialog when the app detects that the WebTrit Cloud Backend version is incompatible. Condition: the actual backend version does not match the supported version range. Placeholders: {actual} for the current instance version, {supportedConstraint} for the supported version range.",
+    "placeholders": {
+      "actual": {
+        "type": "String"
+      },
+      "supportedConstraint": {
+        "type": "String"
+      }
+    }
+  },
+  "main_CompatibilityIssueDialog_title": "ปัญหาความเข้ากันได้",
+  "@main_CompatibilityIssueDialog_title": {},
+  "main_AppUpdateRequiredDialog_title": "ต้องอัปเดต",
+  "@main_AppUpdateRequiredDialog_title": {},
+  "main_AppUpdateRequiredDialog_description": "เวอร์ชันแอปของคุณไม่ได้รับการสนับสนุนอีกต่อไป กรุณาอัปเดตแอปพลิเคชันเพื่อใช้งานต่อ",
+  "@main_AppUpdateRequiredDialog_description": {
+    "description": "Body text of the full-screen update-required prompt, shown when the running app is older than the backend-declared minimum supported app version."
+  },
+  "main_AppUpdateRequiredDialog_currentVersionLabel": "เวอร์ชันแอป",
+  "@main_AppUpdateRequiredDialog_currentVersionLabel": {
+    "description": "Label above the running app version on the update-required prompt."
+  },
+  "main_AppUpdateRequiredDialog_buildVersionLabel": "เวอร์ชันบิลด์",
+  "@main_AppUpdateRequiredDialog_buildVersionLabel": {},
+  "main_AppUpdateRequiredDialog_currentVersionValue": "{appVersion} (บิลด์ {storeVersion})",
+  "@main_AppUpdateRequiredDialog_currentVersionValue": {},
+  "main_AppUpdateRequiredDialog_minimumVersionLabel": "เวอร์ชันขั้นต่ำที่ต้องการ",
+  "@main_AppUpdateRequiredDialog_minimumVersionLabel": {
+    "description": "Label above the minimum supported app version on the update-required prompt."
+  },
+  "messaging_ActionBtn_retry": "ลองใหม่",
+  "@messaging_ActionBtn_retry": {},
+  "messaging_ChooseContact_cancel": "ยกเลิก",
+  "@messaging_ChooseContact_cancel": {},
+  "messaging_ChooseContact_empty": "ไม่พบรายชื่อติดต่อ",
+  "@messaging_ChooseContact_empty": {},
+  "messaging_ChooseContact_title": "เลือกรายชื่อติดต่อ:",
+  "@messaging_ChooseContact_title": {},
+  "messaging_ConfirmDialog_ask": "คุณแน่ใจหรือไม่?",
+  "@messaging_ConfirmDialog_ask": {},
+  "messaging_ConfirmDialog_cancel": "ไม่",
+  "@messaging_ConfirmDialog_cancel": {},
+  "messaging_ConfirmDialog_confirm": "ใช่",
+  "@messaging_ConfirmDialog_confirm": {},
+  "messaging_ConversationBuilders_back": "ย้อนกลับ",
+  "@messaging_ConversationBuilders_back": {},
+  "messaging_ConversationBuilders_cancel": "ยกเลิก",
+  "@messaging_ConversationBuilders_cancel": {},
+  "messaging_ConversationBuilders_contactExtension": "เบอร์ต่อ: {extension}",
+  "@messaging_ConversationBuilders_contactExtension": {
+    "description": "Label for a contact's extension number in the contact list.",
+    "placeholders": {
+      "extension": {
+        "type": "String",
+        "example": "101"
+      }
+    }
+  },
+  "messaging_ConversationBuilders_contactOrNumberSearch_hint": "ป้อนชื่อหรือหมายเลขโทรศัพท์",
+  "@messaging_ConversationBuilders_contactOrNumberSearch_hint": {},
+  "messaging_ConversationBuilders_contactSearch_hint": "ค้นหารายชื่อติดต่อ",
+  "@messaging_ConversationBuilders_contactSearch_hint": {},
+  "messaging_ConversationBuilders_create": "สร้าง",
+  "@messaging_ConversationBuilders_create": {},
+  "messaging_ConversationBuilders_createGroup": "สร้างกลุ่ม",
+  "@messaging_ConversationBuilders_createGroup": {},
+  "messaging_ConversationBuilders_externalContacts_heading": "รายชื่อติดต่อ Cloud PBX",
+  "@messaging_ConversationBuilders_externalContacts_heading": {},
+  "messaging_ConversationBuilders_invalidNumber_message1": "รายชื่อนี้มีหมายเลขโทรศัพท์ไม่ถูกต้อง ควรอยู่ในรูปแบบ ",
+  "@messaging_ConversationBuilders_invalidNumber_message1": {},
+  "messaging_ConversationBuilders_invalidNumber_message2": ". กรุณาแก้ไขในสมุดโทรศัพท์ของคุณ",
+  "@messaging_ConversationBuilders_invalidNumber_message2": {},
+  "messaging_ConversationBuilders_invalidNumber_ok": "ปิด",
+  "@messaging_ConversationBuilders_invalidNumber_ok": {},
+  "messaging_ConversationBuilders_invalidNumber_title": "หมายเลขโทรศัพท์ไม่ถูกต้อง",
+  "@messaging_ConversationBuilders_invalidNumber_title": {
+    "description": "Shown as the title of a dialog or message when a contact has an invalid phone number. Condition: the phone number does not match the required format during contact selection or group creation."
+  },
+  "messaging_ConversationBuilders_invite_heading": "เชิญผู้ใช้:",
+  "@messaging_ConversationBuilders_invite_heading": {
+    "description": "Shown as the heading for the section where users can invite other participants to a conversation or group during the creation or editing process."
+  },
+  "messaging_ConversationBuilders_localContacts_heading": "ผู้ติดต่อในเครื่อง",
+  "@messaging_ConversationBuilders_localContacts_heading": {},
+  "messaging_ConversationBuilders_membersHeadline": "สมาชิก",
+  "@messaging_ConversationBuilders_membersHeadline": {},
+  "messaging_ConversationBuilders_nameFieldEmpty": "โปรดกรอกชื่อกลุ่ม",
+  "@messaging_ConversationBuilders_nameFieldEmpty": {
+    "description": "Shown when the user tries to create a group but leaves the group name field empty. Condition: group name input is required but not provided."
+  },
+  "messaging_ConversationBuilders_nameFieldLabel": "ชื่อกลุ่ม",
+  "@messaging_ConversationBuilders_nameFieldLabel": {},
+  "messaging_ConversationBuilders_nameFieldShort": "ชื่อกลุ่มต้องมีอย่างน้อย 3 ตัวอักษร",
+  "@messaging_ConversationBuilders_nameFieldShort": {},
+  "messaging_ConversationBuilders_next_action": "ถัดไป",
+  "@messaging_ConversationBuilders_next_action": {},
+  "messaging_ConversationBuilders_noContacts": "ไม่มีรายชื่อติดต่อที่ตรงกับผลการค้นหา",
+  "@messaging_ConversationBuilders_noContacts": {
+    "description": "Shown when the user searches for contacts in the conversation builder and no contacts match the search result. Condition: the search query returns an empty list."
+  },
+  "messaging_ConversationBuilders_numberFormatExample": "+ [รหัสประเทศ] [รหัสพื้นที่/ผู้ให้บริการ] [หมายเลขผู้ใช้]",
+  "@messaging_ConversationBuilders_numberFormatExample": {},
+  "messaging_ConversationBuilders_numberSearch_errorError": "หมายเลขโทรศัพท์ที่กรอกไม่ถูกต้อง ควรกรอกในรูปแบบ: ",
+  "@messaging_ConversationBuilders_numberSearch_errorError": {
+    "description": "Shown when the user enters an invalid phone number in the conversation builder's number search field. Condition: the input does not match the required phone number format."
+  },
+  "messaging_ConversationBuilders_numberSearch_errorHint": "รูปแบบหมายเลขโทรศัพท์: ",
+  "@messaging_ConversationBuilders_numberSearch_errorHint": {},
+  "messaging_ConversationBuilders_title_group": "สร้างกลุ่ม",
+  "@messaging_ConversationBuilders_title_group": {},
+  "messaging_ConversationBuilders_title_new": "แชทใหม่",
+  "@messaging_ConversationBuilders_title_new": {},
+  "messaging_Conversation_failure": "เกิดข้อผิดพลาดในการโหลดการสนทนา",
+  "@messaging_Conversation_failure": {
+    "description": "Shown when a conversation fails to load in the messaging screen. Condition: an error occurs while retrieving or displaying conversation data."
+  },
+  "messaging_ConversationScreen_titleAvailable": "ออนไลน์อยู่",
+  "@messaging_ConversationScreen_titleAvailable": {},
+  "messaging_ConversationScreen_titlePrefix": "แชท:",
+  "@messaging_ConversationScreen_titlePrefix": {},
+  "messaging_ConversationsScreen_chatsSearch_hint": "กรอกชื่อแชทหรือชื่อผู้ใช้",
+  "@messaging_ConversationsScreen_chatsSearch_hint": {},
+  "messaging_ConversationsScreen_empty": "ยังไม่มีการสนทนา",
+  "@messaging_ConversationsScreen_empty": {},
+  "messaging_ConversationsScreen_messages_title": "ข้อความ",
+  "@messaging_ConversationsScreen_messages_title": {},
+  "messaging_ConversationsScreen_noNumberAlert_text": "คุณต้องมีหมายเลขโทรศัพท์ที่เชื่อมโยงกับบัญชีของคุณเพื่อส่งข้อความ SMS",
+  "@messaging_ConversationsScreen_noNumberAlert_text": {},
+  "messaging_ConversationsScreen_noNumberAlert_title": "ไม่มีหมายเลขโทรศัพท์",
+  "@messaging_ConversationsScreen_noNumberAlert_title": {},
+  "messaging_ConversationsScreen_selectNumberSheet_title": "เลือกหมายเลข",
+  "@messaging_ConversationsScreen_selectNumberSheet_title": {},
+  "messaging_ConversationsScreen_smses_title": "SMS",
+  "@messaging_ConversationsScreen_smses_title": {},
+  "messaging_ConversationsScreen_smssSearch_hint": "กรอกหมายเลขโทรศัพท์",
+  "@messaging_ConversationsScreen_smssSearch_hint": {},
+  "messaging_ConversationsScreen_unsupported": "ระบบปลายทางไม่รองรับการรับส่งข้อความ โปรดติดต่อผู้ดูแลระบบเพื่อเปิดใช้งาน",
+  "@messaging_ConversationsScreen_unsupported": {},
+  "messaging_Conversations_tile_empty": "ยังไม่มีข้อความ",
+  "@messaging_Conversations_tile_empty": {},
+  "messaging_Conversations_tile_you": "คุณ",
+  "@messaging_Conversations_tile_you": {},
+  "messaging_DialogInfo_deleteAsk": "คุณแน่ใจหรือไม่ว่าต้องการลบบทสนทนานี้?",
+  "@messaging_DialogInfo_deleteAsk": {},
+  "messaging_DialogInfo_deleteBtn": "ลบบทสนทนา",
+  "@messaging_DialogInfo_deleteBtn": {},
+  "messaging_DialogInfo_title": "ข้อมูลผู้ติดต่อ",
+  "@messaging_DialogInfo_title": {},
+  "messaging_GroupAuthorities_moderator": "ผู้ดูแล",
+  "@messaging_GroupAuthorities_moderator": {},
+  "messaging_GroupAuthorities_noauthorities": "สมาชิก",
+  "@messaging_GroupAuthorities_noauthorities": {},
+  "messaging_GroupAuthorities_owner": "เจ้าของ",
+  "@messaging_GroupAuthorities_owner": {},
+  "messaging_GroupInfo_addUserBtnText": "เพิ่มผู้ใช้",
+  "@messaging_GroupInfo_addUserBtnText": {},
+  "messaging_GroupInfo_deleteLeaveBtnText": "ลบและออกจากกลุ่ม",
+  "@messaging_GroupInfo_deleteLeaveBtnText": {},
+  "messaging_GroupInfo_groupMembersHeadline": "สมาชิกกลุ่ม",
+  "@messaging_GroupInfo_groupMembersHeadline": {},
+  "messaging_GroupInfo_leaveAndDeleteAsk": "คุณแน่ใจหรือไม่ว่าต้องการออกและลบกลุ่มนี้?",
+  "@messaging_GroupInfo_leaveAndDeleteAsk": {},
+  "messaging_GroupInfo_leaveAsk": "คุณแน่ใจหรือไม่ว่าต้องการออกจากกลุ่มนี้?",
+  "@messaging_GroupInfo_leaveAsk": {},
+  "messaging_GroupInfo_leaveBtnText": "ออกจากกลุ่ม",
+  "@messaging_GroupInfo_leaveBtnText": {},
+  "messaging_GroupInfo_makeModeratorAsk": "คุณแน่ใจหรือไม่ว่าต้องการให้ผู้ใช้นี้เป็นผู้ดูแล?",
+  "@messaging_GroupInfo_makeModeratorAsk": {},
+  "messaging_GroupInfo_makeModeratorBtnText": "ตั้งเป็นผู้ดูแล",
+  "@messaging_GroupInfo_makeModeratorBtnText": {},
+  "messaging_GroupInfo_removeModeratorAsk": "คุณแน่ใจหรือไม่ว่าต้องการถอดผู้ใช้นี้ออกจากผู้ดูแล?",
+  "@messaging_GroupInfo_removeModeratorAsk": {},
+  "messaging_GroupInfo_removeUserAsk": "คุณแน่ใจหรือไม่ว่าต้องการลบผู้ใช้นี้ออกจากกลุ่ม?",
+  "@messaging_GroupInfo_removeUserAsk": {},
+  "messaging_GroupInfo_removeUserBtnText": "ลบออก",
+  "@messaging_GroupInfo_removeUserBtnText": {},
+  "messaging_GroupInfo_title": "ข้อมูลกลุ่ม",
+  "@messaging_GroupInfo_title": {},
+  "messaging_GroupInfo_titlePrefix": "กลุ่ม:",
+  "@messaging_GroupInfo_titlePrefix": {},
+  "messaging_GroupInfo_unmakeModeratorBtnText": "ยกเลิกการเป็นผู้ดูแล",
+  "@messaging_GroupInfo_unmakeModeratorBtnText": {
+    "description": "Button text shown when removing moderator status from a user in a group chat. Condition: user is currently a moderator and can be demoted to a regular member."
+  },
+  "messaging_MessageField_hint": "พิมพ์ข้อความ",
+  "@messaging_MessageField_hint": {},
+  "messaging_MessageListView_typingTrail": "กำลังพิมพ์...",
+  "@messaging_MessageListView_typingTrail": {},
+  "messaging_MessageView_delete": "ลบ",
+  "@messaging_MessageView_delete": {},
+  "messaging_MessageView_deleted": "[ลบแล้ว]",
+  "@messaging_MessageView_deleted": {},
+  "messaging_MessageView_edit": "แก้ไข",
+  "@messaging_MessageView_edit": {},
+  "messaging_MessageView_edited": "[แก้ไขแล้ว]",
+  "@messaging_MessageView_edited": {},
+  "messaging_MessageView_forward": "ส่งต่อ",
+  "@messaging_MessageView_forward": {},
+  "messaging_MessageView_reply": "ตอบกลับ",
+  "@messaging_MessageView_reply": {},
+  "messaging_MessageView_textcopy": "คัดลอกไปยังคลิปบอร์ด",
+  "@messaging_MessageView_textcopy": {},
+  "messaging_MessageView_today": "วันนี้",
+  "@messaging_MessageView_today": {},
+  "messaging_MessageView_yesterday": "เมื่อวาน",
+  "@messaging_MessageView_yesterday": {},
+  "messaging_ParticipantName_unknown": "ผู้ใช้ที่ไม่รู้จัก",
+  "@messaging_ParticipantName_unknown": {
+    "description": "Shown when a participant in a conversation does not have a known or available name. Condition: the user's name is missing or cannot be retrieved."
+  },
+  "messaging_ParticipantName_you": "คุณ",
+  "@messaging_ParticipantName_you": {},
+  "messaging_SmsSendingStatus_delivered": "ส่งแล้ว",
+  "@messaging_SmsSendingStatus_delivered": {},
+  "messaging_SmsSendingStatus_failed": "ล้มเหลว",
+  "@messaging_SmsSendingStatus_failed": {
+    "description": "Shown as the status for an SMS message that failed to send or deliver. Condition: the message could not be transmitted due to network, server, or recipient issues."
+  },
+  "messaging_SmsSendingStatus_sent": "ส่งแล้ว",
+  "@messaging_SmsSendingStatus_sent": {},
+  "messaging_SmsSendingStatus_waiting": "กำลังรอ",
+  "@messaging_SmsSendingStatus_waiting": {},
+  "messaging_StateBar_connecting": "กำลังเชื่อมต่อ",
+  "@messaging_StateBar_connecting": {},
+  "messaging_StateBar_error": "ถูกตัดการเชื่อมต่อ",
+  "@messaging_StateBar_error": {
+    "description": "Shown in the messaging state bar when the app is disconnected from the messaging server. Condition: connection lost or unable to establish a connection."
+  },
+  "messaging_StateBar_initializing": "กำลังเริ่มต้น",
+  "@messaging_StateBar_initializing": {},
+  "notifications_errorSnackBarAction_callSdpConfiguration": "การกำหนดค่า SDP ไม่ถูกต้อง",
+  "@notifications_errorSnackBarAction_callSdpConfiguration": {
+    "description": "Shown in a notification or snackbar when a call fails due to an invalid SDP (Session Description Protocol) configuration. Condition: the app encounters an SDP error during call setup or media negotiation."
+  },
+  "notifications_errorSnackBarAction_callUserMedia": "ตรวจสอบ",
+  "@notifications_errorSnackBarAction_callUserMedia": {},
+  "notifications_messageSnackBar_callVideoDowngraded": "รับสายโดยปิดกล้อง - ไม่ได้รับอนุญาตให้ใช้กล้อง",
+  "@notifications_messageSnackBar_callVideoDowngraded": {
+    "description": "Shown when an incoming video call is answered audio-only because camera permission was denied. Offers a shortcut to app settings."
+  },
+  "notifications_messageSnackBarAction_callVideoDowngraded": "การตั้งค่า",
+  "@notifications_messageSnackBarAction_callVideoDowngraded": {},
+  "notifications_errorSnackBar_activeLineBlindTransferWarning": "คุณกำลังอยู่ในสายกับผู้รับที่คุณพยายามโอนสายแบบไม่รอรับอยู่แล้ว",
+  "@notifications_errorSnackBar_activeLineBlindTransferWarning": {
+    "description": "Shown in a notification or snackbar when a user tries to perform a blind transfer to a recipient they are already on the line with. Condition: the active call is with the same recipient as the blind transfer target."
+  },
+  "notifications_errorSnackBar_blindTransferFailed": "การโอนสายล้มเหลว กำลังกลับสู่สายที่ใช้งานอยู่",
+  "@notifications_errorSnackBar_blindTransferFailed": {
+    "description": "Shown when a blind transfer fails because the transfer target declined. The original call is restored and the user is returned to the active call screen."
+  },
+  "notifications_errorSnackBar_appOffline": "ขณะนี้แอปพลิเคชันของคุณออฟไลน์",
+  "@notifications_errorSnackBar_appOffline": {
+    "description": "Shown in a notification or snackbar when the application is offline. Condition: the app loses connection to the server or network and cannot perform online actions."
+  },
+  "notifications_errorSnackBar_appOnline": "แอปพลิเคชันของคุณออนไลน์แล้ว",
+  "@notifications_errorSnackBar_appOnline": {
+    "description": "Shown in a notification or snackbar when the application successfully reconnects and is online. Condition: the app transitions from offline/disconnected to an online state."
+  },
+  "notifications_errorSnackBar_appUnregistered": "ขออภัย ขณะนี้แอปพลิเคชันของคุณถูกตัดการเชื่อมต่อจากเซิร์ฟเวอร์หลักของ WebTrit จึงไม่สามารถโทรออกได้ในตอนนี้ กรุณาไปที่หน้าตั้งค่า แล้วปิดและเปิดสวิตช์สถานะออนไลน์อีกครั้งเพื่อเชื่อมต่อใหม่",
+  "@notifications_errorSnackBar_appUnregistered": {
+    "description": "Shown in a notification or snackbar (call screen or global) when the app is disconnected from the WebTrit core servers and cannot place calls. Condition: registration with the core is lost due to network/connectivity issues, authentication failure (e.g. SIP 401 Unauthorized), signaling timeout (e.g. SIP 408 Request Timeout) or server-side errors (e.g. SIP 503 Service Unavailable); user may need to reauthenticate or toggle the online status in settings."
+  },
+  "notifications_errorSnackBar_callConnect": "เชื่อมต่อกับ core ล้มเหลว กำลังพยายามเชื่อมต่อใหม่",
+  "@notifications_errorSnackBar_callConnect": {
+    "description": "Shown in a notification or snackbar (call screen or global) when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Condition: signaling connection to the core could not be established due to network issues, server unreachability, or transient backend problems; user may need to check network or backend availability."
+  },
+  "notifications_errorSnackBar_callNegotiationTimeout": "ไม่สามารถเชื่อมต่อสายได้ กรุณาลองใหม่อีกครั้งภายหลัง",
+  "@notifications_errorSnackBar_callNegotiationTimeout": {
+    "description": "Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server."
+  },
+  "notifications_errorSnackBar_generalUnableToCall": "ไม่สามารถเชื่อมต่อการโทรได้ กรุณาลองอีกครั้งภายหลัง",
+  "@notifications_errorSnackBar_generalUnableToCall": {
+    "description": "Shown in a notification or snackbar when call setup fails because media/signaling negotiation timed out. Context: occurs during SDP/ICE or signaling exchange when negotiation does not complete in time; typical causes include network connectivity problems, ICE or DTLS failures, incompatible SDP codecs, or an unresponsive remote endpoint or signaling server."
+  },
+  "notifications_errorSnackBar_callServiceBusyLine": "ไม่สามารถโทรออกได้ในขณะนี้เนื่องจากสายไม่ว่าง โปรดลองอีกครั้งในภายหลัง",
+  "@notifications_errorSnackBar_callServiceBusyLine": {
+    "description": "Shown in a notification or snackbar when the user tries to start a call but the selected line is already busy. Context: occurs at call initiation when no free channel is available on the current line or account; advise the user to wait and retry."
+  },
+  "notifications_errorSnackBar_callSignalingClientNotConnect": "ไม่สามารถเริ่มการโทรได้ โปรดตรวจสอบสถานะการเชื่อมต่อ",
+  "@notifications_errorSnackBar_callSignalingClientNotConnect": {
+    "description": "Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the WebTrit core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability."
+  },
+  "notifications_errorSnackBar_callSignalingClientSessionMissed": "เกิดข้อผิดพลาดในการยืนยันตัวตน กรุณาเข้าสู่ระบบใหม่",
+  "@notifications_errorSnackBar_callSignalingClientSessionMissed": {
+    "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closed the session."
+  },
+  "notifications_errorSnackBar_callUndefinedLine": "ไม่มีสายว่างสำหรับเริ่มการโทร",
+  "@notifications_errorSnackBar_callUndefinedLine": {
+    "description": "Shown in a snackbar when the user attempts to start a call but there is no outbound line available. Context: occurs at call initiation when no SIP/VoIP line is assigned or registered, all lines are disabled or busy, or the line was removed/disabled by an administrator; typical causes: unassigned or unregistered SIP line, account/line disabled, or concurrent channel limits."
+  },
+  "notifications_errorSnackBar_callMediaTrackSetup": "การตั้งค่าการโทรล้มเหลว โปรดลองอีกครั้ง",
+  "@notifications_errorSnackBar_callMediaTrackSetup": {
+    "description": "Shown when a call fails due to an internal media track error, not a permission denial. Typical cause: a native audio/video track reference was invalidated after a previous call was cleaned up. No action to open Settings."
+  },
+  "notifications_errorSnackBar_callUserMedia": "ไม่สามารถเข้าถึงอุปกรณ์รับสื่อ โปรดตรวจสอบสิทธิ์ของแอป",
+  "@notifications_errorSnackBar_callUserMedia": {
+    "description": "Shown in a notification or snackbar when the app cannot access camera or microphone required for a call. Context: occurs when getUserMedia or platform permission check fails; typical causes include the user denying camera/microphone permission, OS-level restriction or revoked permission, missing runtime permission (Android), or the device hardware being busy or unavailable."
+  },
+  "notifications_errorSnackBar_callWhileOffline": "ไม่สามารถเริ่มการโทรได้ กรุณาตรวจสอบสถานะการเชื่อมต่อ",
+  "@notifications_errorSnackBar_callWhileOffline": {
+    "description": "Shown in a notification or snackbar when the user attempts to start a call while the app or device is offline. Context: occurs at call initiation when there is no network connectivity (airplane mode, Wi‑Fi or cellular disabled, weak signal, or captive portal) or when network restrictions/firewall/VPN prevent reaching the signaling/core server. Typical causes: no internet, temporary carrier/Wi‑Fi outage, or network policies blocking signaling; suggest the user check their connection and retry."
+  },
+  "notifications_errorSnackBar_callWhileUnregistered": "ขณะนี้คุณไม่สามารถโทรออกได้ โปรดตรวจสอบสถานะบัญชีของคุณหรือติดต่อฝ่ายสนับสนุน",
+  "@notifications_errorSnackBar_callWhileUnregistered": {
+    "description": "Shown in a notification or snackbar when the user attempts to place a call but their account is not registered or allowed to make outbound calls. Context: appears at call initiation or dialing when the backend reports the account is unregistered, suspended, or lacks outbound permissions. Typical causes: account disabled or suspended by an administrator, missing/expired subscription or license, provisioning or routing issues on the backend, or temporary account-related server errors; advise the user to check account status in settings or contact support."
+  },
+  "notifications_errorSnackBar_sessionExpired": "เซสชันของคุณหมดอายุแล้ว กรุณาเข้าสู่ระบบอีกครั้ง",
+  "@notifications_errorSnackBar_sessionExpired": {
+    "description": "Shown in a notification or snackbar when the user's authentication session has expired and re-authentication is required. Typical causes: access or refresh token expiration/revocation, failed token refresh, or the backend invalidating the session. Advise the user to sign in again to restore full functionality."
+  },
+  "notifications_errorSnackBar_accountNotFound": "ไม่พบบัญชีของคุณ อาจถูกปิดใช้งานหรือถูกลบ กรุณาติดต่อผู้ดูแลระบบของคุณ",
+  "@notifications_errorSnackBar_accountNotFound": {
+    "description": "Shown in a notification or snackbar when the backend returns 404 (user not found) for the current account, e.g. it was deactivated or removed on the server. The user is logged out; advise them to contact their administrator."
+  },
+  "notifications_errorSnackBar_SignalingConnectFailed": "การเชื่อมต่อกับ core ล้มเหลว กำลังพยายามเชื่อมต่อใหม่",
+  "@notifications_errorSnackBar_SignalingConnectFailed": {
+    "description": "Shown in a notification or snackbar when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Context: occurs when the signaling/WebSocket connection cannot be established due to network outages, server unreachability, TLS/handshake failures, authentication errors (expired/invalid tokens), or firewall/VPN restrictions. Suggest the user check their network, retry, or reauthenticate if the problem persists."
+  },
+  "notifications_errorSnackBar_signalingDisconnectWithCodeName": "ถูกตัดการเชื่อมต่อจาก core ด้วยรหัส: {codeName}",
+  "@notifications_errorSnackBar_signalingDisconnectWithCodeName": {
+    "description": "Shown in a notification or snackbar when the app is disconnected from the WebTrit core and a disconnect code is available. Context: occurs when the signaling/WebSocket connection is closed with a known reason (e.g. protocol error, auth failure, server-initiated disconnect). Suggest the user check their network or reauthenticate if the issue persists.",
+    "placeholders": {
+      "codeName": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBar_signalingDisconnectWithSystemReason": "ตัดการเชื่อมต่อจาก core เนื่องจากสาเหตุต่อไปนี้: {reason}",
+  "@notifications_errorSnackBar_signalingDisconnectWithSystemReason": {
+    "description": "Shown in a notification or snackbar when the app is disconnected from the WebTrit core and a system-provided reason string is available. Context: occurs when the signaling/WebSocket connection is closed with a system-level reason (e.g. network error, TLS/handshake failure, server-initiated disconnect). Advise the user to check their network, retry, or reauthenticate if the problem persists.",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBar_emergencyNumber": "{number} เป็นหมายเลขฉุกเฉินและไม่สามารถโทรออกจากแอปได้",
+  "@notifications_errorSnackBar_emergencyNumber": {
+    "description": "Shown in a snackbar when the user tries to call a number the device recognizes as an emergency number (e.g. 999, 112, 911). The app cannot place emergency calls itself, so it offers to open the system phone dialer instead. The action button label is notifications_errorSnackBarAction_emergencyNumber.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBarAction_emergencyNumber": "เปิดแป้นโทร",
+  "@notifications_errorSnackBarAction_emergencyNumber": {
+    "description": "Action button on the emergency-number snackbar. Tapping it opens the system phone dialer pre-filled with the emergency number so the user can place the call there."
+  },
+  "notifications_errorSnackBar_SignalingSessionMissed": "เกิดข้อผิดพลาดในการยืนยันตัวตน โปรดเข้าสู่ระบบใหม่",
+  "@notifications_errorSnackBar_SignalingSessionMissed": {
+    "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality."
+  },
+  "notifications_errorSnackBar_sipRegistrationFailed_Unavailable": "การลงทะเบียนกับระบบ VoIP ระยะไกลล้มเหลว บริการไม่พร้อมใช้งาน",
+  "@notifications_errorSnackBar_sipRegistrationFailed_Unavailable": {
+    "description": "Shown in a notification or snackbar when registration with the remote VoIP/SIP system fails because the service is unavailable (e.g. SIP 503, maintenance, or backend outage). Typical causes: remote service maintenance, server-side outage, or transient network issues. Suggest the user retry later or contact their administrator if the problem persists."
+  },
+  "notifications_errorSnackBar_sipRegistrationFailed_Unexpected": "การลงทะเบียนกับระบบ VoIP ระยะไกลล้มเหลวเนื่องจากข้อผิดพลาดที่ไม่คาดคิด",
+  "@notifications_errorSnackBar_sipRegistrationFailed_Unexpected": {
+    "description": "Shown in a notification or snackbar when registration with the remote VoIP/SIP system fails due to an unexpected error. Context: occurs during SIP/VoIP registration when the server returns an unexpected response, a protocol error occurs, or a transient backend/network failure happens. Suggest the user retry, check network connectivity, and contact their administrator or support if the problem persists."
+  },
+  "notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason": "การลงทะเบียนกับระบบ VoIP ปลายทางล้มเหลวด้วยเหตุผลต่อไปนี้: {reason}",
+  "@notifications_errorSnackBar_sipRegistrationFailed_WithSystemReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "notifications_errorSnackBar_sipServiceUnavailable": "เกิดข้อผิดพลาดในการยืนยันตัวตนกับระบบ VoIP ระยะไกล",
+  "@notifications_errorSnackBar_sipServiceUnavailable": {
+    "description": "Shown in a notification or snackbar when authentication with the remote VoIP/SIP system fails or the service is unavailable. Typical causes: authentication rejection (invalid/expired credentials), remote service maintenance or outage, or transient network/TLS issues. Advise the user to verify account credentials, retry later, and contact their administrator or support if the problem persists."
+  },
+  "notifications_messageSnackBar_appOffline": "แอปพลิเคชันของคุณออฟไลน์อยู่ในขณะนี้",
+  "@notifications_messageSnackBar_appOffline": {
+    "description": "Shown in a non-error informational snackbar when the app transitions to offline. Typical causes: loss of network connectivity (airplane mode, Wi‑Fi or cellular drop), captive portal, or temporary carrier/Wi‑Fi outage. Suggest the user check their connection and retry."
+  },
+  "notifications_successSnackBar_appOnline": "แอปพลิเคชันของคุณออนไลน์อยู่",
+  "@notifications_successSnackBar_appOnline": {},
+  "notifications_missedCall_title": "สายที่ไม่ได้รับ",
+  "@notifications_missedCall_title": {},
+  "notifications_missedCall_unknownCaller": "ไม่ทราบ",
+  "@notifications_missedCall_unknownCaller": {},
+  "numberActions_audioCall": "โทรด้วยเสียง",
+  "@numberActions_audioCall": {},
+  "numberActions_callFrom": "โทรจาก {number}",
+  "@numberActions_callFrom": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "numberActions_callLog": "ดูประวัติการโทร",
+  "@numberActions_callLog": {},
+  "numberActions_chat": "ส่งข้อความแชท",
+  "@numberActions_chat": {},
+  "numberActions_copyCallId": "คัดลอกรหัสสาย",
+  "@numberActions_copyCallId": {},
+  "numberActions_copyNumber": "คัดลอกหมายเลข",
+  "@numberActions_copyNumber": {},
+  "numberActions_delete": "ลบ",
+  "@numberActions_delete": {},
+  "numberActions_sendSms": "ส่งข้อความ SMS",
+  "@numberActions_sendSms": {},
+  "numberActions_transfer": "โอนสายปัจจุบัน",
+  "@numberActions_transfer": {},
+  "numberActions_videoCall": "วิดีโอคอล",
+  "@numberActions_videoCall": {},
+  "numberActions_viewContact": "ดูรายชื่อติดต่อ",
+  "@numberActions_viewContact": {},
+  "permission_Button_request": "ดำเนินการต่อ",
+  "@permission_Button_request": {},
+  "permission_manageFullScreenNotificationInstructions_step1": "ไปที่การตั้งค่าของโทรศัพท์",
+  "@permission_manageFullScreenNotificationInstructions_step1": {},
+  "permission_manageFullScreenNotificationInstructions_step2": "ไปที่ 'Special App Access' ในส่วน 'Apps & notifications'",
+  "@permission_manageFullScreenNotificationInstructions_step2": {},
+  "permission_manageFullScreenNotificationInstructions_step3": "ค้นหาและแตะที่ 'จัดการ intent แบบเต็มหน้าจอ'",
+  "@permission_manageFullScreenNotificationInstructions_step3": {},
+  "permission_manageFullScreenNotificationInstructions_step4": "เลือกแอปที่คุณต้องการจัดการการแจ้งเตือนแบบเต็มหน้าจอ",
+  "@permission_manageFullScreenNotificationInstructions_step4": {},
+  "permission_manageFullScreenNotificationInstructions_step5": "สลับสิทธิ์เพื่อเปิดหรือปิดการแจ้งเตือนแบบเต็มหน้าจอสำหรับแอปนั้น",
+  "@permission_manageFullScreenNotificationInstructions_step5": {},
+  "permission_manageFullScreenNotificationPermissions": "จัดการสิทธิ์การแจ้งเตือนแบบเต็มหน้าจอ",
+  "@permission_manageFullScreenNotificationPermissions": {},
+  "permission_manufacturer_Button_gotIt": "เข้าใจแล้ว",
+  "@permission_manufacturer_Button_gotIt": {},
+  "permission_manufacturer_Button_toSettings": "เปิดการตั้งค่าแอป",
+  "@permission_manufacturer_Button_toSettings": {},
+  "permission_manufacturer_Text_heading": "เพื่อมอบประสบการณ์การใช้งานที่ดีที่สุด แอปจำเป็นต้องได้รับอนุญาตสิทธิ์ต่อไปนี้ด้วยตนเอง:",
+  "@permission_manufacturer_Text_heading": {},
+  "permission_manufacturer_Text_trailing": "สามารถเปลี่ยนสิทธิ์ได้ทุกเมื่อในอนาคต",
+  "@permission_manufacturer_Text_trailing": {},
+  "permission_manufacturer_Text_xiaomi_tip1": "ไปที่ \"การตั้งค่าแอป\" → \"การแจ้งเตือน\"",
+  "@permission_manufacturer_Text_xiaomi_tip1": {},
+  "permission_manufacturer_Text_xiaomi_tip2": "ค้นหาและเปิดใช้งาน \"Lockscreen notifications\"",
+  "@permission_manufacturer_Text_xiaomi_tip2": {},
+  "permission_manufacturer_Text_xiaomi_tip3": "เปิดใช้งาน \"แสดงบนหน้าจอล็อก\" เพื่อให้สายเรียกเข้าแสดงบนหน้าจอล็อกได้",
+  "@permission_manufacturer_Text_xiaomi_tip3": {},
+  "permission_Text_description": "เพื่อมอบประสบการณ์การใช้งานที่ดีที่สุด แอปจำเป็นต้องได้รับสิทธิ์ต่อไปนี้: ไมโครโฟนสำหรับการโทรด้วยเสียง กล้องสำหรับการโทรวิดีโอ และรายชื่อติดต่อเพื่อให้ติดต่อได้ง่ายจากแอป\n\nคุณสามารถเปลี่ยนสิทธิ์เหล่านี้ได้ตลอดเวลาในภายหลัง",
+  "@permission_Text_description": {},
+  "persistentConnectionReminderContent": "คุณต้องเปิดแอปด้วยตนเองอย่างน้อยหนึ่งครั้งหลังจากที่โทรศัพท์รีสตาร์ท เพื่อสร้างการเชื่อมต่อถาวรขึ้นใหม่และรับสายเรียกเข้า",
+  "@persistentConnectionReminderContent": {
+    "type": "text",
+    "description": "Content of a dialog explaining that the app must be manually opened after reboot to keep receiving calls using persistent connection."
+  },
+  "persistentConnectionReminderTitle": "การแจ้งเตือนสำคัญ",
+  "@persistentConnectionReminderTitle": {
+    "type": "text",
+    "description": "Title of a dialog shown when the user selects persistent connection on Android 14+"
+  },
+  "batteryOptimizationWarningTitle": "การปรับแต่งแบตเตอรี่กำลังทำงาน",
+  "@batteryOptimizationWarningTitle": {
+    "type": "text",
+    "description": "Title of dialog warning the user about battery optimization being active when persistent connection is selected"
+  },
+  "batteryOptimizationWarningContent": "การปรับแต่งแบตเตอรี่กำลังทำงานอยู่บนอุปกรณ์นี้ ซึ่งอาจทำให้พลาดสายเมื่อหน้าจอดับ ปิดการตั้งค่านี้เพื่อรักษาการเชื่อมต่อให้คงอยู่ตลอด",
+  "@batteryOptimizationWarningContent": {
+    "type": "text",
+    "description": "Content of dialog warning the user about battery optimization when persistent connection is selected"
+  },
+  "batteryOptimizationWarningOpenSettings": "เปิดการตั้งค่า",
+  "@batteryOptimizationWarningOpenSettings": {
+    "type": "text",
+    "description": "Button label to open battery settings from the battery optimization warning dialog"
+  },
+  "presence_activity_appointment_name": "อยู่ในนัดหมาย",
+  "@presence_activity_appointment_name": {},
+  "presence_activity_away_name": "ไม่อยู่",
+  "@presence_activity_away_name": {},
+  "presence_activity_busy_name": "ไม่ว่าง",
+  "@presence_activity_busy_name": {},
+  "presence_activity_doNotDisturb_name": "ห้ามรบกวน",
+  "@presence_activity_doNotDisturb_name": {},
+  "presence_activity_inTransit_name": "อยู่ระหว่างเดินทาง",
+  "@presence_activity_inTransit_name": {},
+  "presence_activity_meal_name": "กำลังรับประทานอาหาร",
+  "@presence_activity_meal_name": {},
+  "presence_activity_meeting_name": "อยู่ในการประชุม",
+  "@presence_activity_meeting_name": {},
+  "presence_activity_none_name": "ไม่มี",
+  "@presence_activity_none_name": {},
+  "presence_activity_onThePhone_name": "กำลังคุยสาย",
+  "@presence_activity_onThePhone_name": {},
+  "presence_activity_permanentAbsence_name": "ไม่อยู่ถาวร",
+  "@presence_activity_permanentAbsence_name": {},
+  "presence_activity_sleeping_name": "กำลังนอนหลับ",
+  "@presence_activity_sleeping_name": {},
+  "presence_activity_travel_name": "กำลังเดินทาง",
+  "@presence_activity_travel_name": {},
+  "presence_activity_vacation_name": "ลาพักร้อน",
+  "@presence_activity_vacation_name": {},
+  "presence_infoView_activity": "กิจกรรม:",
+  "@presence_infoView_activity": {},
+  "presence_infoView_available": "พร้อมใช้งาน:",
+  "@presence_infoView_available": {},
+  "presence_infoView_available_false": "ติดต่อไม่ได้",
+  "@presence_infoView_available_false": {},
+  "presence_infoView_available_true": "ว่าง",
+  "@presence_infoView_available_true": {},
+  "presence_infoView_client": "ไคลเอนต์:",
+  "@presence_infoView_client": {},
+  "presence_infoView_device": "อุปกรณ์:",
+  "@presence_infoView_device": {},
+  "presence_infoView_localTime": "เวลาท้องถิ่น:",
+  "@presence_infoView_localTime": {},
+  "presence_infoView_note": "หมายเหตุ:",
+  "@presence_infoView_note": {},
+  "presence_infoView_statusIcon": "ไอคอนสถานะ:",
+  "@presence_infoView_statusIcon": {},
+  "presence_infoView_timeZone": "เขตเวลา:",
+  "@presence_infoView_timeZone": {},
+  "presence_infoView_title": "ข้อมูลสถานะการแสดงตน:",
+  "@presence_infoView_title": {},
+  "presence_infoView_updated": "อัปเดตเมื่อ:",
+  "@presence_infoView_updated": {},
+  "presence_infoView_source": "แหล่งที่มา: {source}",
+  "@presence_infoView_source": {
+    "placeholders": {
+      "source": {}
+    }
+  },
+  "presence_infoView_source_direct": "โดยตรง",
+  "@presence_infoView_source_direct": {},
+  "presence_infoView_source_sip": "sip",
+  "@presence_infoView_source_sip": {},
+  "presence_infoView_source_sipAndDirect": "sip และ direct",
+  "@presence_infoView_source_sipAndDirect": {},
+  "presence_preset_absent_name": "ไม่อยู่",
+  "@presence_preset_absent_name": {},
+  "presence_preset_absent_note": "ไม่อยู่",
+  "@presence_preset_absent_note": {},
+  "presence_preset_appointment_name": "นัดหมาย",
+  "@presence_preset_appointment_name": {},
+  "presence_preset_appointment_note": "มีนัดหมาย",
+  "@presence_preset_appointment_note": {},
+  "presence_preset_available_name": "ว่าง",
+  "@presence_preset_available_name": {},
+  "presence_preset_away_name": "ไม่อยู่",
+  "@presence_preset_away_name": {},
+  "presence_preset_away_note": "ไม่อยู่",
+  "@presence_preset_away_note": {},
+  "presence_preset_dnd_name": "ห้ามรบกวน",
+  "@presence_preset_dnd_name": {},
+  "presence_preset_dnd_note": "ห้ามรบกวน",
+  "@presence_preset_dnd_note": {},
+  "presence_preset_inTransit_name": "เดินทาง",
+  "@presence_preset_inTransit_name": {},
+  "presence_preset_inTransit_note": "อยู่ระหว่างเดินทาง",
+  "@presence_preset_inTransit_note": {},
+  "presence_preset_meal_name": "มื้ออาหาร",
+  "@presence_preset_meal_name": {},
+  "presence_preset_meal_note": "กำลังรับประทานอาหาร",
+  "@presence_preset_meal_note": {},
+  "presence_preset_meeting_name": "ประชุม",
+  "@presence_preset_meeting_name": {},
+  "presence_preset_meeting_note": "อยู่ในการประชุม",
+  "@presence_preset_meeting_note": {},
+  "presence_preset_sleeping_name": "กำลังนอนหลับ",
+  "@presence_preset_sleeping_name": {},
+  "presence_preset_sleeping_note": "กำลังนอนหลับ",
+  "@presence_preset_sleeping_note": {},
+  "presence_preset_travel_name": "กำลังเดินทาง",
+  "@presence_preset_travel_name": {},
+  "presence_preset_travel_note": "กำลังเดินทาง",
+  "@presence_preset_travel_note": {},
+  "presence_preset_unavailable_name": "ไม่ว่าง",
+  "@presence_preset_unavailable_name": {},
+  "presence_preset_vacation_name": "ลาพักร้อน",
+  "@presence_preset_vacation_name": {},
+  "presence_preset_vacation_note": "ลาพักร้อน",
+  "@presence_preset_vacation_note": {},
+  "presence_settings_activity_label": "กิจกรรม",
+  "@presence_settings_activity_label": {},
+  "presence_settings_activity_tooltip": "อธิบายกิจกรรมปัจจุบันโดยละเอียดยิ่งขึ้น ใช้องค์ประกอบ \"activities\" ของส่วนขยาย SIP \"RPID\" ในเนื้อหา pidf (ดู RFC 4480)",
+  "@presence_settings_activity_tooltip": {},
+  "presence_settings_availability_title": "สถานะความพร้อม:",
+  "@presence_settings_availability_title": {},
+  "presence_settings_availability_tooltip": "แสดงสถานะความพร้อมในการสื่อสารทั่วไปภายในบริการ SIP โดยใช้องค์ประกอบ \"Status\" ของ SIP ในเนื้อหา pidf ด้วยค่า \"open/closed\" (ดู RFC 3863)",
+  "@presence_settings_availability_tooltip": {},
+  "presence_settings_config_title": "การกำหนดค่า:",
+  "@presence_settings_config_title": {},
+  "presence_settings_dnd_title": "ปฏิเสธสาย (DND)",
+  "@presence_settings_dnd_title": {},
+  "presence_settings_dnd_tooltip": "เมื่อเปิดใช้งาน สายเรียกเข้าทั้งหมดจะถูกปฏิเสธโดยอัตโนมัติจากเซิร์ฟเวอร์ด้วยการตอบกลับ \"603 Declined\"",
+  "@presence_settings_dnd_tooltip": {},
+  "presence_settings_note_label": "หมายเหตุ",
+  "@presence_settings_note_label": {},
+  "presence_settings_note_tooltip": "ข้อความสั้น ๆ ที่อธิบายรายละเอียดสถานะปัจจุบัน ใช้องค์ประกอบ \"note\" ของ SIP ในเนื้อหา pidf (ดู RFC 3863)",
+  "@presence_settings_note_tooltip": {},
+  "presence_settings_presets_label": "เลือกค่าที่ตั้งไว้ล่วงหน้า",
+  "@presence_settings_presets_label": {},
+  "presence_settings_presets_label_custom": "กำหนดเอง",
+  "@presence_settings_presets_label_custom": {},
+  "presence_settings_presets_title": "ค่าที่ตั้งไว้ล่วงหน้า:",
+  "@presence_settings_presets_title": {},
+  "presence_settings_statusIcon_none": "ไม่มี",
+  "@presence_settings_statusIcon_none": {},
+  "presence_settings_statusIcon_title": "ไอคอนสถานะ:",
+  "@presence_settings_statusIcon_title": {},
+  "recents_BodyCenter_empty": "ขณะนี้คุณไม่มี{filter}สายที่โทรล่าสุด",
+  "@recents_BodyCenter_empty": {},
+  "recents_DeleteConfirmDialog_content": "คุณแน่ใจหรือไม่ว่าต้องการลบประวัติการโทรปัจจุบัน?",
+  "@recents_DeleteConfirmDialog_content": {},
+  "recents_DeleteConfirmDialog_title": "ยืนยันการลบ",
+  "@recents_DeleteConfirmDialog_title": {},
+  "recents_HistoryTile_missedCallText": "ไม่ได้รับ",
+  "@recents_HistoryTile_missedCallText": {},
+  "recents_snackBar_deleted": "ลบ {name} แล้ว",
+  "@recents_snackBar_deleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recents_Text_blingTransferInitiated": "กำลังโอนสายแบบไม่รอรับ",
+  "@recents_Text_blingTransferInitiated": {},
+  "recentsVisibilityFilter_all": "ทั้งหมด",
+  "@recentsVisibilityFilter_all": {},
+  "recentsVisibilityFilter_all_preposit": "ทั้งหมด",
+  "@recentsVisibilityFilter_all_preposit": {},
+  "recentsVisibilityFilter_incoming": "สายเข้า",
+  "@recentsVisibilityFilter_incoming": {},
+  "recentsVisibilityFilter_incoming_preposit": "สายเข้า",
+  "@recentsVisibilityFilter_incoming_preposit": {},
+  "recentsVisibilityFilter_missed": "สายที่ไม่ได้รับ",
+  "@recentsVisibilityFilter_missed": {},
+  "recentsVisibilityFilter_missed_preposit": "สายที่ไม่ได้รับ",
+  "@recentsVisibilityFilter_missed_preposit": {},
+  "recentsVisibilityFilter_outgoing": "สายโทรออก",
+  "@recentsVisibilityFilter_outgoing": {},
+  "recentsVisibilityFilter_outgoing_preposit": "โทรออก",
+  "@recentsVisibilityFilter_outgoing_preposit": {},
+  "recentTimeAfterMidnight": "{time}",
+  "@recentTimeAfterMidnight": {
+    "placeholders": {
+      "time": {
+        "type": "DateTime",
+        "format": "yMd"
+      }
+    }
+  },
+  "recentTimeBeforeMidnight": "{time}",
+  "@recentTimeBeforeMidnight": {
+    "placeholders": {
+      "time": {
+        "type": "DateTime",
+        "format": "Hm"
+      }
+    }
+  },
+  "request_Id": "รหัสคำขอ",
+  "@request_Id": {},
+  "request_StatusCode": "รหัสสถานะ",
+  "@request_StatusCode": {},
+  "request_StatusName": "ชื่อสถานะ",
+  "@request_StatusName": {},
+  "sessionStatus_AppBar_waitingForNetwork": "กำลังรอเครือข่าย...",
+  "@sessionStatus_AppBar_waitingForNetwork": {
+    "description": "Shown in the main app bar when the device has no internet connectivity and the app is waiting for network access."
+  },
+  "sessionStatus_AppBar_waitingForConnection": "กำลังรอการเชื่อมต่อ...",
+  "@sessionStatus_AppBar_waitingForConnection": {
+    "description": "Shown in the main app bar when the app is trying to establish or restore a connection to backend services."
+  },
+  "sessionStatus_AppBar_disconnected": "ตัดการเชื่อมต่อแล้ว",
+  "@sessionStatus_AppBar_disconnected": {
+    "description": "Shown in the main app bar when the app is disconnected from backend services."
+  },
+  "sessionStatus_AppBar_connecting": "กำลังเชื่อมต่อ...",
+  "@sessionStatus_AppBar_connecting": {
+    "description": "Shown in the main app bar while the app is actively connecting to backend services."
+  },
+  "sessionStatus_pushNotificationServiceProblem": "เกิดปัญหากับการตั้งค่าบริการ push notification",
+  "@sessionStatus_pushNotificationServiceProblem": {},
+  "session_Teardown_progressText": "กำลังออกจากระบบ...",
+  "@session_Teardown_progressText": {
+    "description": "Status message displayed while the application is performing cleanup during the logout process."
+  },
+  "settings_AboutText_ApplicationEmbeddedLinks": "ลิงก์ที่ฝังในแอปพลิเคชัน",
+  "@settings_AboutText_ApplicationEmbeddedLinks": {},
+  "settings_AboutText_ThirdPartyLicenses": "ใบอนุญาตของบุคคลที่สาม",
+  "@settings_AboutText_ThirdPartyLicenses": {},
+  "settings_AboutText_AppSessionIdentifier": "ตัวระบุเซสชันของแอปพลิเคชัน",
+  "@settings_AboutText_AppSessionIdentifier": {},
+  "settings_AboutText_AppVersion": "เวอร์ชันแอป",
+  "@settings_AboutText_AppVersion": {},
+  "settings_AboutText_BundleVersion": "เวอร์ชันบันเดิล",
+  "@settings_AboutText_BundleVersion": {},
+  "settings_AboutText_CallkeepVersion": "เวอร์ชัน CallKeep",
+  "@settings_AboutText_CallkeepVersion": {},
+  "settings_AboutText_CoreVersion": "เวอร์ชัน WebTrit Cloud Backend",
+  "@settings_AboutText_CoreVersion": {},
+  "settings_AboutText_CoreVersionUndefined": "?.?.?",
+  "@settings_AboutText_CoreVersionUndefined": {},
+  "settings_AboutText_FCMPushNotificationToken": "โทเค็นการแจ้งเตือนแบบพุช FCM",
+  "@settings_AboutText_FCMPushNotificationToken": {},
+  "settings_AboutText_StoreVersion": "เวอร์ชันบิลด์ในสโตร์",
+  "@settings_AboutText_StoreVersion": {},
+  "settings_AccountDeleteConfirmDialog_content": "คุณแน่ใจหรือไม่ว่าต้องการลบบัญชี?",
+  "@settings_AccountDeleteConfirmDialog_content": {},
+  "settings_AccountDeleteConfirmDialog_title": "ยืนยันการลบบัญชี",
+  "@settings_AccountDeleteConfirmDialog_title": {},
+  "settings_AccountDeleteNotSupported_message": "ขออภัย ผลิตภัณฑ์ของคุณไม่รองรับการลบบัญชี",
+  "@settings_AccountDeleteNotSupported_message": {},
+  "settings_AppBarTitle_myAccount": "บัญชีของฉัน",
+  "@settings_AppBarTitle_myAccount": {},
+  "settings_audioProcessing_Section_AGC_title": "ปรับระดับเสียงอัตโนมัติ",
+  "@settings_audioProcessing_Section_AGC_title": {},
+  "settings_audioProcessing_Section_AM_title": "การสะท้อนเสียง",
+  "@settings_audioProcessing_Section_AM_title": {},
+  "settings_audioProcessing_Section_EC_title": "การตัดเสียงสะท้อน",
+  "@settings_audioProcessing_Section_EC_title": {},
+  "settings_audioProcessing_Section_HPF_title": "ตัวกรองความถี่สูงผ่าน",
+  "@settings_audioProcessing_Section_HPF_title": {},
+  "settings_audioProcessing_Section_NS_title": "การลดเสียงรบกวน",
+  "@settings_audioProcessing_Section_NS_title": {},
+  "settings_audioProcessing_Section_title": "การประมวลผลเสียงเบื้องต้น",
+  "@settings_audioProcessing_Section_title": {},
+  "settings_audioProcessing_Section_tooltip": "สามารถใช้เพื่อปรับคุณภาพเสียงสำหรับความต้องการหรือสภาพแวดล้อมเฉพาะ เช่น การบันทึกในสตูดิโอ หรือไมโครโฟนภายนอก \n\nข้ามการประมวลผลเสียง - สั่งให้ระบบไม่ใช้การประมวลผลเสียงด้วยฮาร์ดแวร์ (ต้องรีสตาร์ทแอป)",
+  "@settings_audioProcessing_Section_tooltip": {},
+  "settings_audioProcessing_Section_VP_title": "ข้ามการประมวลผลเสียง",
+  "@settings_audioProcessing_Section_VP_title": {},
+  "settings_call_codecs_preferred_audio_default": "อัตโนมัติ",
+  "@settings_call_codecs_preferred_audio_default": {},
+  "settings_call_codecs_preferred_audio_tip": "โคเดกเสียงที่ต้องการจะถูกใช้สำหรับการโทรด้วยเสียง หากอุปกรณ์ไม่รองรับโคเดกนี้ สายจะถูกเชื่อมต่อด้วยโคเดกถัดไปที่ใช้ได้",
+  "@settings_call_codecs_preferred_audio_tip": {},
+  "settings_call_codecs_preferred_audio_title": "โคเดกเสียงที่ต้องการ",
+  "@settings_call_codecs_preferred_audio_title": {},
+  "settings_call_codecs_preferred_video_default": "อัตโนมัติ",
+  "@settings_call_codecs_preferred_video_default": {},
+  "settings_call_codecs_preferred_video_tip": "codec วิดีโอที่ต้องการจะใช้สำหรับการโทรแบบวิดีโอ หากอุปกรณ์ไม่รองรับ codec นี้ การโทรจะใช้ codec ถัดไปที่ใช้งานได้",
+  "@settings_call_codecs_preferred_video_tip": {},
+  "settings_call_codecs_preferred_video_title": "โคเดกวิดีโอที่ต้องการ",
+  "@settings_call_codecs_preferred_video_title": {},
+  "settings_callerId_cancel_button": "ยกเลิก",
+  "@settings_callerId_cancel_button": {},
+  "settings_callerId_defaultTitle": "Caller ID เริ่มต้น",
+  "@settings_callerId_defaultTitle": {},
+  "settings_callerId_dialcode": "รหัสโทรออก:",
+  "@settings_callerId_dialcode": {},
+  "settings_callerId_dialCodeMatching_title": "การจับคู่รหัสโทร",
+  "@settings_callerId_dialCodeMatching_title": {},
+  "settings_callerId_duplicate_dialcode_error": "โปรดเลือกรหัสโทรอื่น รหัสนี้ถูกใช้งานแล้ว",
+  "@settings_callerId_duplicate_dialcode_error": {},
+  "settings_callerId_number": "หมายเลข:",
+  "@settings_callerId_number": {},
+  "settings_callerId_number_hint": "เลือกหมายเลข",
+  "@settings_callerId_number_hint": {},
+  "settings_callerId_save_button": "บันทึก",
+  "@settings_callerId_save_button": {},
+  "settings_connectionSection_title": "การเชื่อมต่อและพฤติกรรมการโทร",
+  "@settings_connectionSection_title": {},
+  "settings_connectionSection_tooltip": "กำหนดค่าวิธีที่อุปกรณ์ของคุณจัดการการตั้งค่าการเชื่อมต่อ การเจรจาสื่อ และการอัปเดตสายระหว่างการสื่อสารแบบ peer-to-peer",
+  "@settings_connectionSection_tooltip": {},
+  "settings_encoding_AppBar_reset_tooltip": "รีเซ็ตเป็นค่าเริ่มต้น",
+  "@settings_encoding_AppBar_reset_tooltip": {},
+  "settings_encoding_Section_audio_ptime": "ptime เป้าหมายของเสียง: ",
+  "@settings_encoding_Section_audio_ptime": {},
+  "settings_encoding_Section_audio_ptime_limit": "ขีดจำกัด ptime ของเสียง: ",
+  "@settings_encoding_Section_audio_ptime_limit": {},
+  "settings_encoding_Section_bandwidth_prefix": "อัตราการสุ่มตัวอย่าง: ",
+  "@settings_encoding_Section_bandwidth_prefix": {},
+  "settings_encoding_Section_bitrate_prefix": "บิตเรต: ",
+  "@settings_encoding_Section_bitrate_prefix": {},
+  "settings_encoding_Section_bitrate_title": "การตั้งค่าบิตเรตของโคเดก",
+  "@settings_encoding_Section_bitrate_title": {},
+  "settings_encoding_Section_bitrate_tooltip": "ปรับการตั้งค่าบิตเรตสำหรับโคเดกเสียงและวิดีโอ ค่าที่ต่ำลงจะลดการใช้แบนด์วิดท์แต่กระทบต่อคุณภาพ ค่าที่สูงขึ้นจะเพิ่มคุณภาพแต่ก็เพิ่มการใช้แบนด์วิดท์ด้วย",
+  "@settings_encoding_Section_bitrate_tooltip": {},
+  "settings_encoding_Section_extra_sdp_mod_removeREMBFeedback": "ลบ REMB feedback",
+  "@settings_encoding_Section_extra_sdp_mod_removeREMBFeedback": {},
+  "settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip": "ลบบรรทัด goog-remb RTCP feedback ออกจาก SDP ปิดการประเมินแบนด์วิดท์ฝั่งผู้รับบนบางอุปกรณ์",
+  "@settings_encoding_Section_extra_sdp_mod_removeREMBFeedback_tooltip": {},
+  "settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback": "ลบ TWCC feedback",
+  "@settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback": {},
+  "settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip": "ลบ transport-cc RTCP feedback และ transport-wide-cc extmap ออกจาก SDP ปิดการควบคุมความแออัดแบบ transport-wide",
+  "@settings_encoding_Section_extra_sdp_mod_removeTWCCFeedback_tooltip": {},
+  "settings_encoding_Section_rtp_extensions_title": "ส่วนขยาย RTP",
+  "@settings_encoding_Section_rtp_extensions_title": {},
+  "settings_encoding_Section_rtp_extensions_tooltip": "ปิดใช้ RTP header extensions แต่ละรายการจากการเจรจา SDP",
+  "@settings_encoding_Section_rtp_extensions_tooltip": {},
+  "settings_encoding_Section_extra_sdp_mod_removeExtmap_twcc": "TWCC",
+  "@settings_encoding_Section_extra_sdp_mod_removeExtmap_twcc": {},
+  "settings_encoding_Section_extra_sdp_mod_removeExtmap_absSendTime": "Abs-Send-Time",
+  "@settings_encoding_Section_extra_sdp_mod_removeExtmap_absSendTime": {},
+  "settings_encoding_Section_extra_sdp_mod_removeExtmap_playoutDelay": "Playout-Delay",
+  "@settings_encoding_Section_extra_sdp_mod_removeExtmap_playoutDelay": {},
+  "settings_encoding_Section_extra_sdp_mod_removeExtmap_videoContentType": "Video-Content-Type",
+  "@settings_encoding_Section_extra_sdp_mod_removeExtmap_videoContentType": {},
+  "settings_encoding_Section_extra_sdp_mod_removeExtmap_videoTiming": "Video-Timing",
+  "@settings_encoding_Section_extra_sdp_mod_removeExtmap_videoTiming": {},
+  "settings_encoding_Section_extra_sdp_mod_removeExtmap_colorSpace": "Color-Space",
+  "@settings_encoding_Section_extra_sdp_mod_removeExtmap_colorSpace": {},
+  "settings_encoding_Section_extra_sdp_mod_removeExtmap_audioLevel": "Audio-Level",
+  "@settings_encoding_Section_extra_sdp_mod_removeExtmap_audioLevel": {},
+  "settings_encoding_Section_extra_sdp_mod_removeExtmap_tOffset": "TOffset",
+  "@settings_encoding_Section_extra_sdp_mod_removeExtmap_tOffset": {},
+  "settings_encoding_Section_extra_sdp_mod_removeExtmap_videoOrientation": "Video-Orientation",
+  "@settings_encoding_Section_extra_sdp_mod_removeExtmap_videoOrientation": {},
+  "settings_encoding_Section_extra_sdp_mod_removeExtmap_rtpStreamId": "RTP-Stream-ID",
+  "@settings_encoding_Section_extra_sdp_mod_removeExtmap_rtpStreamId": {},
+  "settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId": "Repaired-RTP-Stream-ID",
+  "@settings_encoding_Section_extra_sdp_mod_removeExtmap_repairedRtpStreamId": {},
+  "settings_encoding_Section_extra_sdp_mod_remapTE8": "รีแมปรหัส TE_8k เป็น 101",
+  "@settings_encoding_Section_extra_sdp_mod_remapTE8": {},
+  "settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip": "เปลี่ยนประเภท payload TE8 เป็น 101 ใน SDP เพื่อความเข้ากันได้ที่ดีขึ้นกับ SIP endpoint บางตัว",
+  "@settings_encoding_Section_extra_sdp_mod_remapTE8_tooltip": {},
+  "settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps": "ลบบรรทัด rtpmap แบบสแตติก",
+  "@settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps": {},
+  "settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip": "ลบบรรทัด static RTP map สำหรับโคเดกเสียง (เช่น PCMU, PCMA) ออกจาก SDP เพื่อลดขนาด SDP อาจช่วยแก้ปัญหาการแยกส่วน MTU บน SIP endpoint บางตัว",
+  "@settings_encoding_Section_extra_sdp_mod_removeStaticRtpmaps_tooltip": {},
+  "settings_encoding_Section_extra_sdp_mod_title": "การปรับแต่ง SDP เพิ่มเติม",
+  "@settings_encoding_Section_extra_sdp_mod_title": {},
+  "settings_encoding_Section_measure_hz": "Hz",
+  "@settings_encoding_Section_measure_hz": {},
+  "settings_encoding_Section_measure_kbps": "Kbps",
+  "@settings_encoding_Section_measure_kbps": {},
+  "settings_encoding_Section_measure_ms": "มิลลิวินาที",
+  "@settings_encoding_Section_measure_ms": {},
+  "settings_encoding_Section_opus_bandwidth": "กำหนดแบนด์วิดท์เอง: ",
+  "@settings_encoding_Section_opus_bandwidth": {},
+  "settings_encoding_Section_opus_bitrate": "แทนที่อัตราบิต: ",
+  "@settings_encoding_Section_opus_bitrate": {},
+  "settings_encoding_Section_opus_channels": "แทนที่โหมดช่องสัญญาณ: ",
+  "@settings_encoding_Section_opus_channels": {},
+  "settings_encoding_Section_opus_dtx": "การแทนที่โหมด DTX: ",
+  "@settings_encoding_Section_opus_dtx": {},
+  "settings_encoding_Section_opus_samplingRate": "แทนที่อัตราการสุ่มตัวอย่าง: ",
+  "@settings_encoding_Section_opus_samplingRate": {},
+  "settings_encoding_Section_opus_title": "การปรับแต่งโคเดก Opus",
+  "@settings_encoding_Section_opus_title": {},
+  "settings_encoding_Section_opus_tooltip": "ปรับการตั้งค่า codec เฉพาะของ opus สามารถใช้เพื่อลดการใช้แบนด์วิดท์หรือปรับปรุงคุณภาพเสียง",
+  "@settings_encoding_Section_opus_tooltip": {},
+  "settings_encoding_Section_packetization_title": "การแบ่งแพ็กเก็ตเสียง",
+  "@settings_encoding_Section_packetization_title": {},
+  "settings_encoding_Section_packetization_tooltip": "ปรับเวลาการแบ่งแพ็กเก็ตเสียงเป็นมิลลิวินาที สามารถใช้เพื่อลดความหน่วงของเสียงหรือแก้ปัญหาขนาด MTU ของเครือข่าย",
+  "@settings_encoding_Section_packetization_tooltip": {},
+  "settings_encoding_Section_packetization_warning_title": "คำเตือน:",
+  "@settings_encoding_Section_packetization_warning_title": {},
+  "settings_encoding_Section_packetization_warning_message": "โคเดกบางตัวอาจมีปัญหากับค่า ptime ที่ไม่ใช่ค่าเริ่มต้น ทำให้เกิดเสียงผิดเพี้ยนหรือเงียบ ใช้เฉพาะเมื่อคุณรู้ว่ากำลังทำอะไรอยู่",
+  "@settings_encoding_Section_packetization_warning_message": {},
+  "settings_encoding_Section_preset": "ค่าที่กำหนดไว้ล่วงหน้า",
+  "@settings_encoding_Section_preset": {},
+  "settings_encoding_Section_preset_balance": "สมดุล",
+  "@settings_encoding_Section_preset_balance": {},
+  "settings_encoding_Section_preset_balance_tooltip": "ปรับสมดุลระหว่างคุณภาพสายกับการใช้ข้อมูล",
+  "@settings_encoding_Section_preset_balance_tooltip": {},
+  "settings_encoding_Section_preset_eco": "แบนด์วิดท์ต่ำ",
+  "@settings_encoding_Section_preset_eco": {},
+  "settings_encoding_Section_preset_eco_tooltip": "ใช้ข้อมูลอินเทอร์เน็ตน้อยลงและทำงานได้ดีกว่าบนการเชื่อมต่อที่ช้าหรือไม่เสถียร",
+  "@settings_encoding_Section_preset_eco_tooltip": {},
+  "settings_encoding_Section_preset_custom": "กำหนดเอง",
+  "@settings_encoding_Section_preset_custom": {},
+  "settings_encoding_Section_preset_custom_tooltip": "ปรับแต่งการตั้งค่าคุณภาพสายด้วยตนเอง",
+  "@settings_encoding_Section_preset_custom_tooltip": {},
+  "settings_encoding_Section_preset_default": "แนะนำ",
+  "@settings_encoding_Section_preset_default": {},
+  "settings_encoding_Section_preset_default_tooltip": "การตั้งค่าคุณภาพสื่อเริ่มต้นที่เลือกไว้สำหรับแอปพลิเคชันนี้ ใช้ได้ดีกับการโทรส่วนใหญ่",
+  "@settings_encoding_Section_preset_default_tooltip": {},
+  "settings_encoding_Section_preset_bypass": "โหมดความเข้ากันได้",
+  "@settings_encoding_Section_preset_bypass": {},
+  "settings_encoding_Section_preset_bypass_tooltip": "ข้ามการใช้การตั้งค่าคุณภาพสื่อ และใช้การตั้งค่าการโทรแบบไม่แก้ไข ช่วยแก้ปัญหาความเข้ากันได้",
+  "@settings_encoding_Section_preset_bypass_tooltip": {},
+  "settings_encoding_Section_preset_full_flex": "Full Flex",
+  "@settings_encoding_Section_preset_full_flex": {},
+  "settings_encoding_Section_preset_quality": "คุณภาพดีที่สุด",
+  "@settings_encoding_Section_preset_quality": {},
+  "settings_encoding_Section_preset_quality_tooltip": "ให้คุณภาพเสียงและวิดีโอที่ดีที่สุด ต้องใช้การเชื่อมต่ออินเทอร์เน็ตที่รวดเร็วและเสถียร",
+  "@settings_encoding_Section_preset_quality_tooltip": {},
+  "settings_encoding_Section_preset_title": "การตั้งค่าการเข้ารหัสสื่อ",
+  "@settings_encoding_Section_preset_title": {},
+  "settings_encoding_Section_preset_tooltip": "ค่าพรีเซ็ตการปรับแต่งสำหรับ codec เสียงและวิดีโอ ค่าที่ต่ำกว่าจะลดการใช้แบนด์วิดท์แต่กระทบคุณภาพ ค่าที่สูงกว่าจะเพิ่มคุณภาพแต่ก็เพิ่มการใช้แบนด์วิดท์ด้วย พรีเซ็ต Default คือการตั้งค่าที่แนะนำโดยผู้ให้บริการของคุณตามความเหมาะสมของสภาพแวดล้อม",
+  "@settings_encoding_Section_preset_tooltip": {},
+  "settings_encoding_Section_ptime_prefix": "Ptime: ",
+  "@settings_encoding_Section_ptime_prefix": {},
+  "settings_encoding_Section_rtp_override_audio": "การแทนที่โปรไฟล์เสียง",
+  "@settings_encoding_Section_rtp_override_audio": {},
+  "settings_encoding_Section_rtp_override_title": "เปิด/ปิดและจัดลำดับโปรไฟล์ RTP ใหม่",
+  "@settings_encoding_Section_rtp_override_title": {},
+  "settings_encoding_Section_rtp_override_tooltip": "สามารถใช้เพื่อกำหนดลำดับความสำคัญของโปรไฟล์ rtp เสียงและวิดีโอใหม่ หรือยกเว้นบางโปรไฟล์จากรายการเจรจา SDP ซึ่งสามารถใช้เพื่อบังคับใช้โคเดกเฉพาะ หรือยกเว้นโคเดกบางตัวหากอุปกรณ์ เครือข่าย หรือระบบปลายทางรองรับได้ไม่ดี",
+  "@settings_encoding_Section_rtp_override_tooltip": {},
+  "settings_encoding_Section_rtp_override_video": "แทนที่โปรไฟล์วิดีโอ",
+  "@settings_encoding_Section_rtp_override_video": {},
+  "settings_encoding_Section_rtp_override_warning_message": "การแทนที่อาจส่งผลต่อความเข้ากันได้กับอุปกรณ์หรือระบบสื่ออื่น และทำให้เกิดข้อผิดพลาดในการโทร ใช้เฉพาะเมื่อคุณรู้ว่ากำลังทำอะไรอยู่",
+  "@settings_encoding_Section_rtp_override_warning_message": {},
+  "settings_encoding_Section_rtp_override_warning_title": "คำเตือน:",
+  "@settings_encoding_Section_rtp_override_warning_title": {},
+  "settings_encoding_Section_target_audio_bitrate": "บิตเรตเสียงเป้าหมาย: ",
+  "@settings_encoding_Section_target_audio_bitrate": {},
+  "settings_encoding_Section_target_video_bitrate": "บิตเรตวิดีโอเป้าหมาย: ",
+  "@settings_encoding_Section_target_video_bitrate": {},
+  "settings_encoding_Section_value_auto": "อัตโนมัติ",
+  "@settings_encoding_Section_value_auto": {},
+  "settings_encoding_Section_value_disable": "ปิด",
+  "@settings_encoding_Section_value_disable": {},
+  "settings_encoding_Section_value_enable": "เปิดใช้งาน",
+  "@settings_encoding_Section_value_enable": {},
+  "settings_encoding_Section_value_mono": "โมโน",
+  "@settings_encoding_Section_value_mono": {},
+  "settings_encoding_Section_value_off": "ปิด",
+  "@settings_encoding_Section_value_off": {},
+  "settings_encoding_Section_value_on": "เปิด",
+  "@settings_encoding_Section_value_on": {},
+  "settings_encoding_Section_value_stereo": "สเตอริโอ",
+  "@settings_encoding_Section_value_stereo": {},
+  "settings_iceSettings_Section_netfilter_skipv4": "ข้าม IPv4 candidate",
+  "@settings_iceSettings_Section_netfilter_skipv4": {},
+  "settings_iceSettings_Section_netfilter_skipv6": "ข้าม candidates แบบ IPv6",
+  "@settings_iceSettings_Section_netfilter_skipv6": {},
+  "settings_iceSettings_Section_netfilter_title": "โปรโตคอลเครือข่าย",
+  "@settings_iceSettings_Section_netfilter_title": {},
+  "settings_iceSettings_Section_noskip": "ไม่กรอง",
+  "@settings_iceSettings_Section_noskip": {},
+  "settings_iceSettings_Section_title": "การกรองตัวเลือก ICE",
+  "@settings_iceSettings_Section_title": {},
+  "settings_iceSettings_Section_tooltip": "การกรองตัวเลือก ICE ตามการตั้งค่าเครือข่ายอาจช่วยหลีกเลี่ยงปัญหาเครือข่ายได้",
+  "@settings_iceSettings_Section_tooltip": {},
+  "settings_iceSettings_Section_trfilter_skipTcp": "ข้าม TCP candidates",
+  "@settings_iceSettings_Section_trfilter_skipTcp": {},
+  "settings_iceSettings_Section_trfilter_skipUdp": "ข้าม UDP candidates",
+  "@settings_iceSettings_Section_trfilter_skipUdp": {},
+  "settings_iceSettings_Section_trfilter_title": "โปรโตคอลการขนส่ง",
+  "@settings_iceSettings_Section_trfilter_title": {},
+  "settings_ListViewTileTitle_about": "เกี่ยวกับ",
+  "@settings_ListViewTileTitle_about": {},
+  "settings_ListViewTileTitle_accountDelete": "ลบบัญชี",
+  "@settings_ListViewTileTitle_accountDelete": {},
+  "settings_ListViewTileTitle_call_codecs": "โคเดกการโทร",
+  "@settings_ListViewTileTitle_call_codecs": {},
+  "settings_ListViewTileTitle_callerId": "หมายเลขผู้โทร",
+  "@settings_ListViewTileTitle_callerId": {},
+  "settings_ListViewTileTitle_encoding": "การเข้ารหัสสื่อ",
+  "@settings_ListViewTileTitle_encoding": {},
+  "settings_ListViewTileTitle_features": "บริการ",
+  "@settings_ListViewTileTitle_features": {},
+  "settings_ListViewTileTitle_help": "ช่วยเหลือ",
+  "@settings_ListViewTileTitle_help": {},
+  "settings_ListViewTileTitle_language": "ภาษา",
+  "@settings_ListViewTileTitle_language": {},
+  "settings_ListViewTileTitle_logout": "ออกจากระบบ",
+  "@settings_ListViewTileTitle_logout": {},
+  "settings_ListViewTileTitle_logRecordsConsole": "คอนโซลบันทึกล็อก",
+  "@settings_ListViewTileTitle_logRecordsConsole": {},
+  "settings_ListViewTileTitle_mediaSettings": "การตั้งค่าสื่อ",
+  "@settings_ListViewTileTitle_mediaSettings": {},
+  "settings_ListViewTileTitle_network": "การตั้งค่าเครือข่าย",
+  "@settings_ListViewTileTitle_network": {},
+  "settings_ListViewTileTitle_presence": "SIP Presence",
+  "@settings_ListViewTileTitle_presence": {},
+  "settings_ListViewTileTitle_registered": "ออนไลน์",
+  "@settings_ListViewTileTitle_registered": {},
+  "settings_ListViewTileTitle_self_config": "หน้าตั้งค่าด้วยตนเอง",
+  "@settings_ListViewTileTitle_self_config": {},
+  "settings_ListViewTileTitle_settings": "การตั้งค่า",
+  "@settings_ListViewTileTitle_settings": {},
+  "settings_ListViewTileTitle_termsConditions": "ข้อกำหนดและเงื่อนไข",
+  "@settings_ListViewTileTitle_termsConditions": {},
+  "settings_ListViewTileTitle_themeMode": "โหมดธีม",
+  "@settings_ListViewTileTitle_themeMode": {},
+  "settings_ListViewTileTitle_toolbox": "กล่องเครื่องมือ",
+  "@settings_ListViewTileTitle_toolbox": {},
+  "settings_ListViewTileTitle_voicemail": "ข้อความเสียง",
+  "@settings_ListViewTileTitle_voicemail": {},
+  "settings_LogoutConfirmDialog_content": "คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?",
+  "@settings_LogoutConfirmDialog_content": {},
+  "settings_LogoutConfirmDialog_title": "ยืนยันการออกจากระบบ",
+  "@settings_LogoutConfirmDialog_title": {},
+  "settings_missingMicrophoneIndicator_title": "ไม่มีสิทธิ์ใช้ไมโครโฟน ไม่สามารถโทรออกได้",
+  "@settings_missingMicrophoneIndicator_title": {},
+  "settings_network_fallbackCalls_description": "หากไม่ได้รับการแจ้งเตือนแบบพุชเกี่ยวกับสาย แอปจะรับ SMS พิเศษและแสดงหน้าจอสายเรียกเข้า",
+  "@settings_network_fallbackCalls_description": {
+    "description": "Tooltip description for fallback SMS-based call trigger"
+  },
+  "settings_network_fallbackCalls_title": "สายเรียกเข้าสำรอง",
+  "@settings_network_fallbackCalls_title": {
+    "description": "Title for fallback incoming calls section"
+  },
+  "settings_network_incomingCallType_pushNotification_description": "เมื่อไม่ได้ใช้งานแอป แอปจะหยุดทำงานและใช้ทรัพยากรน้อยที่สุด ซึ่งช่วยประหยัดแบตเตอรี่ ระหว่างที่มีสายเรียกเข้า เซิร์ฟเวอร์จะส่ง push notification ไปยังโทรศัพท์ เพื่อให้ระบบปฏิบัติการมือถือเปิดแอปขึ้นมารับสาย อย่างไรก็ตาม วิธีนี้ไม่รับประกันว่าจะได้รับทุกสาย หากโทรศัพท์ไม่ได้ใช้งานเป็นเวลานาน Android บางเวอร์ชันอาจจำกัด push notification ซึ่งอาจทำให้คุณพลาดสายเรียกเข้าได้",
+  "@settings_network_incomingCallType_pushNotification_description": {},
+  "settings_network_incomingCallType_pushNotification_title": "การแจ้งเตือนแบบพุช",
+  "@settings_network_incomingCallType_pushNotification_title": {},
+  "settings_network_incomingCallType_socket_description": "แอปจะทำงานต่อในเบื้องหลังและรักษาการเชื่อมต่อกับเซิร์ฟเวอร์ไว้เสมอ ซึ่งจะเพิ่มโอกาสในการรับสายเรียกเข้า แต่อาจทำให้แบตเตอรี่หมดเร็วขึ้น",
+  "@settings_network_incomingCallType_socket_description": {},
+  "settings_network_incomingCallType_socket_title": "การเชื่อมต่อถาวรกับเซิร์ฟเวอร์",
+  "@settings_network_incomingCallType_socket_title": {},
+  "settings_network_incomingCallType_title": "การส่งสายเรียกเข้า",
+  "@settings_network_incomingCallType_title": {},
+  "settings_network_smsFallback_toggle": "SMS เป็นช่องทางสำรอง",
+  "@settings_network_smsFallback_toggle": {
+    "description": "Toggle label for enabling SMS fallback"
+  },
+  "settings_videoCapturing_Section_framerate_prefix": "เฟรม: ",
+  "@settings_videoCapturing_Section_framerate_prefix": {},
+  "settings_videoCapturing_Section_framerate_title": "อัตราเฟรมของภาพ",
+  "@settings_videoCapturing_Section_framerate_title": {},
+  "settings_videoCapturing_Section_resolution_prefix": "จุดแนวตั้ง: ",
+  "@settings_videoCapturing_Section_resolution_prefix": {},
+  "settings_videoCapturing_Section_resolution_title": "ความละเอียดของภาพ",
+  "@settings_videoCapturing_Section_resolution_title": {},
+  "settings_videoCapturing_Section_title": "การจับภาพวิดีโอ",
+  "@settings_videoCapturing_Section_title": {},
+  "settings_videoCapturing_Section_tooltip": "สามารถใช้เพื่อปรับคุณภาพวิดีโอให้เหมาะกับความต้องการหรือสภาพแวดล้อมเฉพาะ",
+  "@settings_videoCapturing_Section_tooltip": {},
+  "settings_videoOffer_option_ignore": "ตอบรับโดยไม่ใช้วิดีโอ\nจะไม่มีการเพิ่มแทร็กจนกว่าจะมีการเจรจาภายหลัง",
+  "@settings_videoOffer_option_ignore": {},
+  "settings_videoOffer_option_includeInactive": "รวมแทร็กวิดีโอที่ไม่ได้ใช้งาน\nช่วยให้เข้ากันได้กับวิดีโอ offer สำหรับการเปิดใช้งานในอนาคต",
+  "@settings_videoOffer_option_includeInactive": {},
+  "settings_videoOffer_title": "กำหนดวิธีที่อุปกรณ์นี้ตอบสนองต่อข้อเสนอที่มีวิดีโอรวมอยู่ด้วย",
+  "@settings_videoOffer_title": {},
+  "signalingResponseCode_ambiguousRequest": "เราไม่สามารถเข้าใจคำขอของคุณได้",
+  "@signalingResponseCode_ambiguousRequest": {
+    "description": "Shown when the signaling/core server cannot understand the client's request (e.g. malformed or ambiguous signaling payload, missing required fields, or protocol mismatch). Suggest the user retry the action, ensure the app is up to date, check network connectivity, and contact their administrator or support with details if the problem persists."
+  },
+  "signalingResponseCode_busyEverywhere": "ผู้ใช้ที่คุณพยายามติดต่อกำลังสายไม่ว่าง กรุณาลองใหม่อีกครั้งภายหลัง",
+  "@signalingResponseCode_busyEverywhere": {
+    "description": "Shown when the remote user is busy on all devices (busy everywhere). Suggest the user try again later, call from a different line or device, leave a voicemail if available, and contact their administrator or the recipient if the problem persists."
+  },
+  "signalingResponseCode_callNotExist": "คำขอที่ไม่ตรงกับบทสนทนาหรือธุรกรรมใด ๆ\n",
+  "@signalingResponseCode_callNotExist": {
+    "description": "Shown when the signaling/core server receives a request referring to a call or transaction that does not exist (e.g. stale dialog ID, already finished call, or invalid reference). Suggest the user refresh the call list, retry the action, and contact their administrator or the recipient with details if the problem persists."
+  },
+  "signalingResponseCode_declineCall": "สายถูกปฏิเสธ",
+  "@signalingResponseCode_declineCall": {
+    "description": "Shown when the remote party explicitly declined the call. Suggest the user try calling again later, use a different line or contact the recipient by other means; if the problem persists, contact the administrator."
+  },
+  "signalingResponseCode_errorAttachingPlugin": "เราพบปัญหาในการเชื่อมต่อฟีเจอร์หนึ่ง โปรดลองใหม่อีกครั้งภายหลัง",
+  "@signalingResponseCode_errorAttachingPlugin": {
+    "description": "Shown when Janus or the signaling server cannot attach a plugin (e.g. missing plugin, resource allocation failure, or protocol mismatch). Typical cause: misconfigured plugin, server error, or unsupported request."
+  },
+  "signalingResponseCode_errorDetachingPlugin": "เราพบปัญหาในการยกเลิกการเชื่อมต่อคุณสมบัติหนึ่ง กรุณาลองใหม่ภายหลัง",
+  "@signalingResponseCode_errorDetachingPlugin": {
+    "description": "Shown when Janus or the signaling server fails to detach a plugin. Typical causes: plugin not found, session already closed, or internal server error."
+  },
+  "signalingResponseCode_errorSendingMessage": "เราไม่สามารถส่งข้อความของคุณได้ ตรวจสอบเครือข่ายของคุณแล้วลองอีกครั้ง",
+  "@signalingResponseCode_errorSendingMessage": {
+    "description": "Shown when the app cannot send a signaling or media message via WebRTC/Janus. Conditions: network interruption, invalid session handle, or transport layer failure."
+  },
+  "signalingResponseCode_exchangeRoutingError": "เราไม่พบเส้นทางในการดำเนินการตามคำขอของคุณ โปรดลองอีกครั้งในภายหลัง",
+  "@signalingResponseCode_exchangeRoutingError": {
+    "description": "Shown when the signaling backend cannot determine a valid routing path for the call or message. Typical cause: no available trunk/route, misconfigured PBX, or backend reply without routes."
+  },
+  "signalingResponseCode_handleNotFound": "เราไม่พบสิ่งที่คุณกำลังค้นหา โปรดลองอีกครั้ง",
+  "@signalingResponseCode_handleNotFound": {
+    "description": "Shown when the referenced Janus handle or session does not exist (e.g. invalid handle ID, already destroyed session)."
+  },
+  "signalingResponseCode_incompatibleDestination": "ปลายทางที่คุณพยายามติดต่อไม่เข้ากัน",
+  "@signalingResponseCode_incompatibleDestination": {
+    "description": "Shown when the remote endpoint cannot accept the session due to incompatible codecs, media types, or unsupported feature. SIP equivalent: 488 Not Acceptable Here."
+  },
+  "signalingResponseCode_invalidElementType": "มีบางอย่างไม่ถูกต้อง โปรดลองอีกครั้ง",
+  "@signalingResponseCode_invalidElementType": {
+    "description": "Shown when a request contains an unsupported or invalid element type in signaling payload. Typical cause: malformed API request."
+  },
+  "signalingResponseCode_invalidJson": "เกิดข้อผิดพลาดในการประมวลผลข้อมูลของคุณ กรุณาลองใหม่อีกครั้ง",
+  "@signalingResponseCode_invalidJson": {
+    "description": "Shown when the signaling server cannot parse the JSON payload. Cause: malformed JSON or protocol violation."
+  },
+  "signalingResponseCode_invalidJsonObject": "ข้อมูลบางส่วนที่ระบุไม่ถูกต้อง กรุณาตรวจสอบอีกครั้งแล้วลองใหม่",
+  "@signalingResponseCode_invalidJsonObject": {
+    "description": "Shown when a JSON object in the request is syntactically valid but contains invalid fields or values (e.g. wrong types or missing mandatory keys)."
+  },
+  "signalingResponseCode_invalidNumberFormat": "รูปแบบหมายเลขไม่ถูกต้อง",
+  "@signalingResponseCode_invalidNumberFormat": {
+    "description": "Shown when a dialed phone number is not in a valid format. Typical cause: non-numeric input, missing country code, or format not supported by SIP/PBX."
+  },
+  "signalingResponseCode_invalidPath": "การกระทำที่ร้องขอไม่พร้อมใช้งาน โปรดลองตัวเลือกอื่น",
+  "@signalingResponseCode_invalidPath": {
+    "description": "Shown when the signaling request points to an invalid or unsupported path/endpoint in the server."
+  },
+  "signalingResponseCode_invalidSdp": "เราพบข้อผิดพลาดทางเทคนิค กรุณาลองใหม่ภายหลัง",
+  "@signalingResponseCode_invalidSdp": {
+    "description": "Shown when the Session Description Protocol (SDP) in an offer/answer is invalid or not supported. Common in WebRTC/SIP interop failures."
+  },
+  "signalingResponseCode_invalidStream": "สตรีมที่ร้องขอไม่พร้อมใช้งาน โปรดลองอีกครั้ง",
+  "@signalingResponseCode_invalidStream": {
+    "description": "Shown when the specified media stream cannot be found or is not available (e.g. stream ID mismatch or closed track)."
+  },
+  "signalingResponseCode_loopDetected": "เราตรวจพบลูปในการโทร โปรดลองอีกครั้ง",
+  "@signalingResponseCode_loopDetected": {
+    "description": "Shown when the signaling server detects a routing loop (call requests bouncing back). SIP equivalent: 482 Loop Detected."
+  },
+  "signalingResponseCode_missingMandatoryElement": "ข้อมูลที่จำเป็นขาดหายไป โปรดกรอกข้อมูลที่จำเป็นทั้งหมด",
+  "@signalingResponseCode_missingMandatoryElement": {
+    "description": "Shown when a signaling request lacks a mandatory parameter or field. Typical cause: client bug or malformed request."
+  },
+  "signalingResponseCode_missingRequest": "เกิดข้อผิดพลาดกับคำขอของคุณ กรุณาลองอีกครั้ง",
+  "@signalingResponseCode_missingRequest": {
+    "description": "Shown when the server expects a request object but none is provided. Cause: client-side error or protocol violation."
+  },
+  "signalingResponseCode_normalUnspecified": "เกิดข้อผิดพลาด โปรดลองอีกครั้งในภายหลัง",
+  "@signalingResponseCode_normalUnspecified": {
+    "description": "Generic error when no specific cause is indicated by signaling or hangup. FreeSWITCH cause: NORMAL_UNSPECIFIED."
+  },
+  "signalingResponseCode_notAcceptable": "สายนี้ถูกทำเครื่องหมายว่าไม่สามารถยอมรับได้ กรุณาตรวจสอบเส้นทางการโทรออกของคุณ!",
+  "@signalingResponseCode_notAcceptable": {
+    "description": "Shown when the remote endpoint or server refuses the session due to unsupported media or policy. SIP 488 Not Acceptable Here."
+  },
+  "signalingResponseCode_notAcceptingNewSessions": "เราไม่สามารถเริ่มเซสชันใหม่ได้ในขณะนี้ กรุณาลองใหม่ภายหลัง",
+  "@signalingResponseCode_notAcceptingNewSessions": {
+    "description": "Shown when the signaling server temporarily rejects new sessions. Cause: server overload, maintenance, or resource limits."
+  },
+  "signalingResponseCode_notFoundRoutesInReplyFromBE": "เราไม่พบเส้นทางสำหรับดำเนินการตามคำขอของคุณ โปรดลองอีกครั้งในภายหลัง",
+  "@signalingResponseCode_notFoundRoutesInReplyFromBE": {
+    "description": "Shown when the backend does not return any routing information for the request. Condition: misconfigured routing tables or no available trunks."
+  },
+  "signalingResponseCode_pluginNotFound": "ส่วนประกอบที่จำเป็นหายไป โปรดลองรีสตาร์ทแอป",
+  "@signalingResponseCode_pluginNotFound": {
+    "description": "Shown when the requested Janus plugin is not found or unavailable. Cause: wrong plugin name, not loaded on server, or removed."
+  },
+  "signalingResponseCode_rejected": "สายถูกปฏิเสธ",
+  "@signalingResponseCode_rejected": {
+    "description": "Shown when the call request is rejected by an intermediary (e.g. proxy, SBC, or policy server) before reaching the recipient. SIP 603 Decline or similar."
+  },
+  "signalingResponseCode_requestTerminated": "คำขอของคุณถูกยกเลิก โปรดลองอีกครั้ง",
+  "@signalingResponseCode_requestTerminated": {
+    "description": "Shown when a signaling request was terminated prematurely. SIP 487 Request Terminated, often due to caller cancelling before answer."
+  },
+  "signalingResponseCode_sessionIdInUse": "เซสชันนี้กำลังใช้งานอยู่แล้ว โปรดลองใช้เซสชันอื่น",
+  "@signalingResponseCode_sessionIdInUse": {
+    "description": "Shown when trying to create or reuse a session ID that is already active. Condition: duplicate session identifiers."
+  },
+  "signalingResponseCode_sessionNotFound": "ไม่พบเซสชันของคุณ โปรดเข้าสู่ระบบและลองอีกครั้ง",
+  "@signalingResponseCode_sessionNotFound": {
+    "description": "Shown when the server cannot locate the referenced session. Cause: expired session, invalid ID, or user logged out."
+  },
+  "signalingResponseCode_tokenNotFound": "โทเค็นการเข้าถึงของคุณหายไปหรือไม่ถูกต้อง กรุณาเข้าสู่ระบบอีกครั้ง",
+  "@signalingResponseCode_tokenNotFound": {
+    "description": "Shown when the request is missing a valid authentication token. Cause: expired or invalid token."
+  },
+  "signalingResponseCode_transportSpecificError": "เกิดปัญหาในการเชื่อมต่อ โปรดตรวจสอบเครือข่ายของคุณและลองอีกครั้ง",
+  "@signalingResponseCode_transportSpecificError": {
+    "description": "Shown when a transport-level error occurs (e.g. WebSocket disconnect, DTLS failure, or ICE transport issue)."
+  },
+  "signalingResponseCodeType_callHangup": "สายถูกวางแล้ว",
+  "@signalingResponseCodeType_callHangup": {
+    "description": "Category for errors where the call is terminated. Causes include normal hangup, busy, declined, or signaling errors."
+  },
+  "signalingResponseCodeType_plugin": "ฟีเจอร์ที่จำเป็นทำงานไม่ถูกต้อง ลองรีสตาร์ทแอป",
+  "@signalingResponseCodeType_plugin": {
+    "description": "Category for errors related to Janus plugins (attach, detach, plugin not found)."
+  },
+  "signalingResponseCodeType_request": "มีปัญหากับคำขอของคุณ โปรดลองอีกครั้ง",
+  "@signalingResponseCodeType_request": {
+    "description": "Category for errors caused by malformed or unsupported requests in signaling."
+  },
+  "signalingResponseCodeType_session": "เกิดปัญหากับเซสชันของคุณ โปรดลงชื่อเข้าใช้ใหม่หรือรีสตาร์ทแอป",
+  "@signalingResponseCodeType_session": {
+    "description": "Category for errors related to sessions (session not found, session ID in use)."
+  },
+  "signalingResponseCodeType_token": "โทเค็นการเข้าถึงของคุณไม่ถูกต้อง กรุณาเข้าสู่ระบบอีกครั้ง",
+  "@signalingResponseCodeType_token": {
+    "description": "Category for authentication token errors (missing, expired, or invalid)."
+  },
+  "signalingResponseCodeType_transport": "เรากำลังมีปัญหาในการสื่อสารกับเซิร์ฟเวอร์ โปรดตรวจสอบการเชื่อมต่อของคุณแล้วลองอีกครั้ง",
+  "@signalingResponseCodeType_transport": {
+    "description": "Category for transport-level errors (network, WebSocket, ICE, DTLS)."
+  },
+  "signalingResponseCodeType_unauthorized": "คุณไม่มีสิทธิ์ที่เหมาะสม โปรดเข้าสู่ระบบหรือติดต่อฝ่ายสนับสนุน",
+  "@signalingResponseCodeType_unauthorized": {
+    "description": "Category for unauthorized requests. Cause: missing/invalid credentials or insufficient permissions."
+  },
+  "signalingResponseCodeType_unknown": "เกิดปัญหาที่ไม่คาดคิด โปรดลองอีกครั้งในภายหลัง",
+  "@signalingResponseCodeType_unknown": {
+    "description": "Category for unknown or unspecified signaling errors."
+  },
+  "signalingResponseCodeType_webrtc": "เกิดปัญหากับการเชื่อมต่อสาย กรุณาวางสายแล้วลองอีกครั้ง",
+  "@signalingResponseCodeType_webrtc": {
+    "description": "Category for WebRTC-specific errors (SDP, ICE, DTLS, media negotiation)."
+  },
+  "signalingResponseCode_unauthorizedAccess": "คุณไม่มีสิทธิ์เข้าถึงฟีเจอร์นี้ หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดติดต่อฝ่ายสนับสนุน",
+  "@signalingResponseCode_unauthorizedAccess": {
+    "description": "Shown when user lacks permission for a specific feature or action. Equivalent to SIP 403 Forbidden."
+  },
+  "signalingResponseCode_unauthorizedRequest": "ไม่สามารถอนุญาตคำขอของคุณได้ กรุณาลองเข้าสู่ระบบอีกครั้ง",
+  "@signalingResponseCode_unauthorizedRequest": {
+    "description": "Shown when a request fails authorization. Cause: invalid token, expired session, or insufficient rights."
+  },
+  "signalingResponseCode_unexpectedAnswer": "เราได้รับการตอบกลับที่ไม่คาดคิด กรุณาลองอีกครั้ง",
+  "@signalingResponseCode_unexpectedAnswer": {
+    "description": "Shown when the server receives a response it did not expect (e.g. wrong transaction state)."
+  },
+  "signalingResponseCode_unknownError": "เกิดข้อผิดพลาดที่ไม่คาดคิด โปรดลองอีกครั้งในภายหลัง",
+  "@signalingResponseCode_unknownError": {
+    "description": "Generic catch-all error for unexpected signaling issues with no specific classification."
+  },
+  "signalingResponseCode_unknownRequest": "เราไม่รู้จักคำขอนั้น โปรดลองอีกครั้งหรือติดต่อฝ่ายสนับสนุน",
+  "@signalingResponseCode_unknownRequest": {
+    "description": "Shown when the signaling server cannot recognize the request type. Cause: unsupported or unknown request."
+  },
+  "signalingResponseCode_unsupportedJsepType": "การตั้งค่าปัจจุบันของคุณไม่รองรับการดำเนินการนี้",
+  "@signalingResponseCode_unsupportedJsepType": {
+    "description": "Shown when a JSEP (SDP offer/answer) type is not supported by the signaling/WebRTC stack. Cause: unsupported media action."
+  },
+  "signalingResponseCode_unwanted": "ผู้รับทำเครื่องหมายว่าการโทรนี้ไม่พึงประสงค์",
+  "@signalingResponseCode_unwanted": {
+    "description": "Shown when the call is flagged as unwanted by the recipient or network. SIP 607 Unwanted."
+  },
+  "signalingResponseCode_userBusy": "ผู้ใช้ไม่ว่าง",
+  "@signalingResponseCode_userBusy": {
+    "description": "Shown when the callee is busy (SIP 486 Busy Here)."
+  },
+  "signalingResponseCode_userNotExist": "ไม่มีผู้ใช้นี้",
+  "@signalingResponseCode_userNotExist": {
+    "description": "Shown when the dialed user is not registered or does not exist in the PBX. SIP 404 Not Found."
+  },
+  "signalingResponseCode_unableToComplete": "ไม่สามารถดำเนินการโทรให้เสร็จสมบูรณ์ได้",
+  "@signalingResponseCode_unableToComplete": {
+    "description": "Generic neutral fallback shown when an outgoing call fails for an unrecognized reason."
+  },
+  "signalingResponseCode_wrongWebrtcState": "เกิดข้อผิดพลาดเกี่ยวกับการโทร โปรดวางสายและลองอีกครั้ง",
+  "@signalingResponseCode_wrongWebrtcState": {
+    "description": "Shown when a WebRTC operation is attempted in an invalid state (e.g. sending media before offer/answer exchange)."
+  },
+  "socketError_connectionRefused": "การเชื่อมต่อถูกปฏิเสธ",
+  "@socketError_connectionRefused": {
+    "description": "Shown when a socket connection attempt is explicitly refused by the server. Context: initial connection setup. Typical causes: server not running, port closed, or firewall rejecting the request."
+  },
+  "socketError_connectionRefusedDescription": "เซิร์ฟเวอร์ปฏิเสธการเชื่อมต่อ เซิร์ฟเวอร์อาจหยุดทำงานหรือปฏิเสธคำขอ กรุณาลองใหม่ภายหลัง",
+  "@socketError_connectionRefusedDescription": {
+    "description": "Extended explanation for Connection Refused. Helps user understand that the issue is likely on the server side (down, rejecting, or blocked)."
+  },
+  "socketError_connectionReset": "การเชื่อมต่อถูกรีเซ็ต",
+  "@socketError_connectionReset": {
+    "description": "Shown when an established connection is forcibly closed by the remote server. Typical causes: server restart, protocol mismatch, or network interruption."
+  },
+  "socketError_connectionResetDescription": "การเชื่อมต่อถูกรีเซ็ตโดยเซิร์ฟเวอร์ โปรดลองอีกครั้ง",
+  "@socketError_connectionResetDescription": {
+    "description": "Extended explanation for Connection Reset. Informs user that the session was dropped by the server or network mid-communication."
+  },
+  "socketError_connectionTimedOut": "หมดเวลาการเชื่อมต่อ",
+  "@socketError_connectionTimedOut": {
+    "description": "Shown when a connection attempt takes too long without response. Typical causes: unstable internet, blocked ports, or server overload."
+  },
+  "socketError_connectionTimedOutDescription": "การเชื่อมต่อหมดเวลา ซึ่งอาจเกิดจากการเชื่อมต่ออินเทอร์เน็ตที่ช้าหรือไม่เสถียร โปรดตรวจสอบการเชื่อมต่อของคุณแล้วลองอีกครั้ง",
+  "@socketError_connectionTimedOutDescription": {
+    "description": "Extended explanation for Connection Timed Out. User-facing guidance to check internet connection and retry."
+  },
+  "socketError_default": "ข้อผิดพลาดเครือข่าย",
+  "@socketError_default": {
+    "description": "Generic socket/network error message shown when no specific error mapping is available."
+  },
+  "socketError_defaultDescription": "เกิดข้อผิดพลาดเครือข่ายที่ไม่คาดคิด (รหัสข้อผิดพลาด: {errorCode}) อาจเกิดจากปัญหาเครือข่ายหรือปัญหาเซิร์ฟเวอร์ โปรดลองอีกครั้งในภายหลัง",
+  "@socketError_defaultDescription": {
+    "description": "Extended explanation for generic network error with an error code placeholder. Helps support/debugging.",
+    "placeholders": {
+      "errorCode": {
+        "type": "int?",
+        "description": "Numeric error code from the socket layer for diagnostics."
+      }
+    }
+  },
+  "socketError_networkUnreachable": "เข้าถึงเครือข่ายไม่ได้",
+  "@socketError_networkUnreachable": {
+    "description": "Shown when the device cannot reach any network. Typical causes: no active internet connection, airplane mode, firewall, or DNS misconfiguration."
+  },
+  "socketError_networkUnreachableDescription": "ไม่สามารถเข้าถึงเครือข่ายได้ อาจเกิดจากการเชื่อมต่ออินเทอร์เน็ตที่อ่อน ข้อจำกัดของเครือข่ายเช่นไฟร์วอลล์ หรือการตั้งค่า DNS ที่ไม่ถูกต้อง หากคุณอยู่ในเครือข่ายของที่ทำงานหรือเครือข่ายที่ถูกจำกัด โปรดติดต่อผู้ดูแลระบบเครือข่ายของคุณ หรือลองใช้เครือข่ายอื่น",
+  "@socketError_networkUnreachableDescription": {
+    "description": "Extended explanation for Network Unreachable. User guidance for common scenarios (weak Wi-Fi, firewall, DNS issues)."
+  },
+  "socketError_serverUnreachable": "ไม่สามารถเข้าถึงเซิร์ฟเวอร์ได้เนื่องจากปัญหาเครือข่าย",
+  "@socketError_serverUnreachable": {
+    "description": "Shown when the client can reach the internet but not the specific server. Typical causes: server downtime, incorrect server address, or blocked route."
+  },
+  "socketError_serverUnreachableDescription": "ไม่สามารถเข้าถึงเซิร์ฟเวอร์ได้ อาจเกิดจากไม่มีการเชื่อมต่ออินเทอร์เน็ตหรือเซิร์ฟเวอร์อยู่ระหว่างการบำรุงรักษา กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณแล้วลองใหม่",
+  "@socketError_serverUnreachableDescription": {
+    "description": "Extended explanation for Server Unreachable. Suggests user verify internet connectivity and server status."
+  },
+  "system_notifications_screen_list_empty": "ยังไม่มีการแจ้งเตือน",
+  "@system_notifications_screen_list_empty": {},
+  "system_notifications_screen_title": "การแจ้งเตือน",
+  "@system_notifications_screen_title": {},
+  "themeMode_dark": "มืด",
+  "@themeMode_dark": {},
+  "themeMode_light": "สว่าง",
+  "@themeMode_light": {},
+  "themeMode_system": "ระบบ",
+  "@themeMode_system": {},
+  "undefined_autoprovision_invalidToken": "ข้อมูลรับรองการตั้งค่าอัตโนมัติถูกปฏิเสธโดยเซิร์ฟเวอร์ โปรดขอลิงก์การตั้งค่าใหม่",
+  "@undefined_autoprovision_invalidToken": {
+    "description": "Shown during autoprovisioning when the provided configuration token is invalid or expired. The server rejects the request, and the user must obtain a new configuration link."
+  },
+  "undefined_autoprovision_invalidToken_title": "การกำหนดค่าไม่ถูกต้อง",
+  "@undefined_autoprovision_invalidToken_title": {
+    "description": "Dialog title displayed when autoprovisioning fails due to an invalid or expired configuration token."
+  },
+  "undefined_stackScreenNotSupported": "ไม่รองรับฟีเจอร์นี้ โปรดติดต่อผู้ดูแลระบบ",
+  "@undefined_stackScreenNotSupported": {
+    "description": "Shown when the app attempts to open a stack screen or feature that is not supported in the current build or environment. Suggests contacting the administrator for clarification."
+  },
+  "undefined_stackScreenNotSupported_title": "ไม่รองรับฟีเจอร์นี้",
+  "@undefined_stackScreenNotSupported_title": {
+    "description": "Dialog title displayed when a requested feature or stack screen is not supported in the current app configuration."
+  },
+  "user_agreement_agrement_link": "ข้อกำหนดและเงื่อนไขของข้อตกลง",
+  "@user_agreement_agrement_link": {
+    "description": "Using in agreement checkbox as a mask for the URL"
+  },
+  "user_agreement_button_text": "ดำเนินการต่อ",
+  "@user_agreement_button_text": {},
+  "user_agreement_checkbox_text": "ฉันได้อ่าน {url} และยอมรับเงื่อนไขแล้ว",
+  "@user_agreement_checkbox_text": {},
+  "user_agreement_description": "ยินดีต้อนรับสู่ {appName}",
+  "@user_agreement_description": {},
+  "validationBlankError": "โปรดกรอกค่า",
+  "@validationBlankError": {},
+  "voicemail_Description_notSupported": "core ของคุณไม่รองรับฟีเจอร์ข้อความเสียง โปรดติดต่อผู้ดูแลระบบของคุณเพื่อขอข้อมูลเพิ่มเติม",
+  "@voicemail_Description_notSupported": {},
+  "voicemail_Dialog_deleteSelectedContent": "ข้อความเสียงที่เลือกจะถูกลบอย่างถาวร คุณต้องการดำเนินการต่อหรือไม่?",
+  "@voicemail_Dialog_deleteSelectedContent": {},
+  "voicemail_Dialog_deleteSelectedTitle": "ลบข้อความเสียงที่เลือกหรือไม่?",
+  "@voicemail_Dialog_deleteSelectedTitle": {},
+  "voicemail_Dialog_deleteSingleContent": "ข้อความเสียงนี้จะถูกลบอย่างถาวร คุณต้องการดำเนินการต่อหรือไม่?",
+  "@voicemail_Dialog_deleteSingleContent": {},
+  "voicemail_Dialog_deleteSingleTitle": "ลบข้อความเสียง?",
+  "@voicemail_Dialog_deleteSingleTitle": {},
+  "voicemail_Label_call": "โทร",
+  "@voicemail_Label_call": {},
+  "voicemail_Label_delete": "ลบ",
+  "@voicemail_Label_delete": {},
+  "voicemail_Label_deleteAll": "ลบข้อความเสียงทั้งหมดหรือไม่",
+  "@voicemail_Label_deleteAll": {},
+  "voicemail_Label_deleteAllDescription": "การดำเนินการนี้จะลบข้อความเสียงทั้งหมดของคุณอย่างถาวร ไม่สามารถยกเลิกได้",
+  "@voicemail_Label_deleteAllDescription": {},
+  "voicemail_Label_empty": "ไม่มีข้อความเสียง",
+  "@voicemail_Label_empty": {},
+  "voicemail_Label_markAsHeard": "ทำเครื่องหมายว่าฟังแล้ว",
+  "@voicemail_Label_markAsHeard": {},
+  "voicemail_Label_markAsNew": "ทำเครื่องหมายว่าใหม่",
+  "@voicemail_Label_markAsNew": {},
+  "voicemail_Label_playbackError": "เล่นไม่สำเร็จ",
+  "@voicemail_Label_playbackError": {},
+  "voicemail_Label_retry": "ลองอีกครั้ง",
+  "@voicemail_Label_retry": {},
+  "voicemail_Snackbar_notConfigured": "ติดต่อผู้ดูแลระบบของคุณเพื่อเปิดใช้งานข้อความเสียง",
+  "@voicemail_Snackbar_notConfigured": {},
+  "voicemail_Title_notSupported": "ไม่รองรับฟีเจอร์นี้",
+  "@voicemail_Title_notSupported": {},
+  "voicemail_Widget_screenTitle": "ข้อความเสียง",
+  "@voicemail_Widget_screenTitle": {},
+  "webRegistration_ErrorAcknowledgeDialogActions_retry": "ลองใหม่",
+  "@webRegistration_ErrorAcknowledgeDialogActions_retry": {
+    "description": "Button label shown in the Web Registration error dialog to let the user attempt the registration or loading process again after a failure."
+  },
+  "webRegistration_ErrorAcknowledgeDialogActions_skip": "ข้าม",
+  "@webRegistration_ErrorAcknowledgeDialogActions_skip": {
+    "description": "Button label shown in the Web Registration error dialog to let the user skip the failed step and continue without retrying."
+  },
+  "webRegistration_ErrorAcknowledgeDialog_title": "ข้อผิดพลาดของทรัพยากรเว็บ",
+  "@webRegistration_ErrorAcknowledgeDialog_title": {
+    "description": "Title of the dialog shown when an error occurs while loading or registering with a required web resource (e.g. invalid link, unreachable server, or failed provisioning)."
+  },
+  "webview_defaultError_details": "{description} (รหัส: {code})",
+  "@webview_defaultError_details": {
+    "description": "Error description with numeric code for the generic WebView error screen.",
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "example": "net::ERR_CONNECTION_TIMED_OUT"
+      },
+      "code": {
+        "type": "int",
+        "example": "-2"
+      }
+    }
+  },
+  "webview_defaultError_reload": "โหลดใหม่",
+  "@webview_defaultError_reload": {
+    "description": "Button label to reload the WebView after a generic error."
+  },
+  "webview_defaultError_title": "เกิดข้อผิดพลาดบางอย่าง",
+  "@webview_defaultError_title": {
+    "description": "Title shown on the generic WebView error screen."
+  },
+  "webview_sslError_details": "รายละเอียด",
+  "@webview_sslError_details": {
+    "description": "Secondary action button label to open SSL details bottom sheet."
+  },
+  "webview_sslError_details_type": "ประเภท",
+  "@webview_sslError_details_type": {
+    "description": "Label for SSL error type in the details sheet."
+  },
+  "webview_sslError_details_url": "URL",
+  "@webview_sslError_details_url": {
+    "description": "Label for failing URL in the details sheet."
+  },
+  "webview_sslError_message": "ใบรับรองของไซต์นี้ไม่น่าเชื่อถือ ไม่สามารถแสดงหน้านี้ได้",
+  "@webview_sslError_message": {
+    "description": "Body message for SSL authentication error."
+  },
+  "webview_sslError_title": "การเชื่อมต่อของคุณไม่เป็นส่วนตัว",
+  "@webview_sslError_title": {
+    "description": "Title for SSL authentication error screen."
+  },
+  "webview_sslError_tryAgain": "ลองใหม่",
+  "@webview_sslError_tryAgain": {
+    "description": "Primary action button label on SSL error screen."
+  },
+  "cdr_disconnectReason_unknown": "ไม่ทราบ",
+  "cdr_disconnectReason_validCauseCodeNotYetReceived": "ยังไม่ได้รับรหัสสาเหตุที่ถูกต้อง",
+  "cdr_disconnectReason_unallocatedNumber": "หมายเลขที่ไม่ได้จัดสรร (ไม่ได้กำหนด)",
+  "cdr_disconnectReason_noRouteToSpecifiedTransitNetworkWan": "ไม่มีเส้นทางไปยังเครือข่ายทรานสิตที่ระบุ (WAN)",
+  "cdr_disconnectReason_noRouteToDestination": "ไม่มีเส้นทางไปยังปลายทาง",
+  "cdr_disconnectReason_sendSpecialInformationTone": "ส่งสัญญาณเสียงแจ้งข้อมูลพิเศษ",
+  "cdr_disconnectReason_misdialledTrunkPrefix": "กดรหัสนำหน้าทรังก์ผิด",
+  "cdr_disconnectReason_channelUnacceptable": "ช่องสัญญาณไม่สามารถยอมรับได้",
+  "cdr_disconnectReason_callAwardedAndBeingDeliveredInAnEstablishedChannel": "สายได้รับการจัดสรรและกำลังส่งในช่องสัญญาณที่สร้างไว้แล้ว",
+  "cdr_disconnectReason_prefix0DialedButNotAllowedPreemption": "กดรหัสนำหน้า 0 แต่ไม่ได้รับอนุญาต (Preemption)",
+  "cdr_disconnectReason_prefix1DialedButNotAllowedPreemptionReserved": "กดรหัสนำหน้า 1 แต่ไม่ได้รับอนุญาต (สงวนสำหรับการแย่งใช้สาย)",
+  "cdr_disconnectReason_prefix1DialedButNotRequired": "กดรหัสนำหน้า 1 แต่ไม่จำเป็น",
+  "cdr_disconnectReason_moreDigitsReceivedThanAllowedCallIsProceeding": "ได้รับตัวเลขมากกว่าที่อนุญาต การโทรกำลังดำเนินต่อ",
+  "cdr_disconnectReason_normalCallClearing": "วางสายตามปกติ",
+  "cdr_disconnectReason_userBusy": "ผู้ใช้ไม่ว่าง",
+  "cdr_disconnectReason_noUserResponding": "ไม่มีผู้ใช้ตอบรับ",
+  "cdr_disconnectReason_noAnswerFromUser": "ผู้ใช้ไม่รับสาย",
+  "cdr_disconnectReason_subscriberIsAbsent": "ไม่พบผู้ใช้บริการ",
+  "cdr_disconnectReason_callRejected": "สายถูกปฏิเสธ",
+  "cdr_disconnectReason_numberChanged": "หมายเลขถูกเปลี่ยน",
+  "cdr_disconnectReason_reverseChargingRejected": "การเรียกเก็บเงินปลายทางถูกปฏิเสธ",
+  "cdr_disconnectReason_callSuspended": "การโทรถูกระงับ",
+  "cdr_disconnectReason_callResumed": "การโทรกลับมาดำเนินต่อ",
+  "cdr_disconnectReason_nonSelectedUserClearing": "ผู้ใช้ที่ไม่ได้ถูกเลือกวางสาย",
+  "cdr_disconnectReason_destinationOutOfOrder": "ปลายทางใช้งานไม่ได้",
+  "cdr_disconnectReason_invalidNumberFormatIncompleteNumber": "รูปแบบหมายเลขไม่ถูกต้อง (หมายเลขไม่ครบ)",
+  "cdr_disconnectReason_facilityRejected": "บริการถูกปฏิเสธ",
+  "cdr_disconnectReason_responseToStatusEnquiry": "การตอบกลับต่อ STATUS ENQUIRY",
+  "cdr_disconnectReason_normalUnspecified": "ปกติ ไม่ระบุ",
+  "cdr_disconnectReason_circuitOutOfOrder": "วงจรขัดข้อง",
+  "cdr_disconnectReason_noCircuitChannelAvailable": "ไม่มีวงจร/ช่องสัญญาณที่ว่าง",
+  "cdr_disconnectReason_destinationUnattainableRequireVpciVciIsNotAvailable": "ไม่สามารถเข้าถึงปลายทางได้ (VPCI VCI ที่ต้องการไม่พร้อมใช้งาน)",
+  "cdr_disconnectReason_vpciVciAssignmentFailure": "การกำหนด VPCI VCI ล้มเหลว",
+  "cdr_disconnectReason_degradedServiceCallRateIsnNotValid": "บริการลดประสิทธิภาพ (อัตราการโทรไม่ถูกต้อง)",
+  "cdr_disconnectReason_networkWanOutOfOrder": "เครือข่าย (WAN) ใช้งานไม่ได้",
+  "cdr_disconnectReason_transitDelayRangeCannotBeAchievedPermanentFrameModeIsOutOfService": "ไม่สามารถบรรลุช่วงการหน่วงเวลาส่งผ่านได้ (โหมดเฟรมถาวรไม่พร้อมให้บริการ)",
+  "cdr_disconnectReason_throughputRangeCannotBeAchievedPermanentFrameModeIsOperational": "ไม่สามารถทำให้อยู่ในช่วงปริมาณงานที่กำหนดได้ (โหมดเฟรมถาวรกำลังทำงาน)",
+  "cdr_disconnectReason_temporaryFailure": "ข้อขัดข้องชั่วคราว",
+  "cdr_disconnectReason_switchingEquipmentCongestion": "อุปกรณ์สลับสายหนาแน่น",
+  "cdr_disconnectReason_accessInformationDiscarded": "ข้อมูลการเข้าถึงถูกละทิ้ง",
+  "cdr_disconnectReason_requestedCircuitChannelNotAvailable": "วงจรช่องสัญญาณที่ร้องขอไม่พร้อมใช้งาน",
+  "cdr_disconnectReason_preEmptedNoVpciVciIsAvailable": "ถูกแย่งใช้งาน (ไม่มี VPCI VCI ที่พร้อมใช้งาน)",
+  "cdr_disconnectReason_precedenceCallBlocked": "การโทรลำดับความสำคัญถูกบล็อก",
+  "cdr_disconnectReason_resourceUnavailableUnspecified": "ทรัพยากรไม่พร้อมใช้งาน - ไม่ระบุ",
+  "cdr_disconnectReason_dspError": "ข้อผิดพลาด DSP",
+  "cdr_disconnectReason_qualityOfServiceUnavailable": "ไม่มีคุณภาพการบริการ",
+  "cdr_disconnectReason_requestedFacilityNotSubscribed": "บริการที่ร้องขอยังไม่ได้สมัครใช้งาน",
+  "cdr_disconnectReason_reverseChargingNotAllowed": "ไม่อนุญาตให้เรียกเก็บเงินย้อนกลับ",
+  "cdr_disconnectReason_outgoingCallsBarred": "การโทรออกถูกระงับ",
+  "cdr_disconnectReason_outgoingCallsBarredWithinCug": "การโทรออกถูกระงับภายใน CUG",
+  "cdr_disconnectReason_incomingCallsBarred": "สายเรียกเข้าถูกระงับ",
+  "cdr_disconnectReason_incomingCallsBarredWithinCug": "สายเรียกเข้าถูกระงับภายใน CUG",
+  "cdr_disconnectReason_callWaitingNotSubscribed": "ไม่ได้สมัครใช้บริการสายเรียกซ้อน",
+  "cdr_disconnectReason_bearerCapabilityNotAuthorized": "ไม่ได้รับอนุญาตสำหรับความสามารถของช่องสัญญาณ",
+  "cdr_disconnectReason_bearerCapabilityNotPresentlyAvailable": "ความสามารถของช่องสัญญาณไม่พร้อมใช้งานในขณะนี้",
+  "cdr_disconnectReason_inconsistancyInTheInformationAndClass": "ข้อมูลและคลาสไม่สอดคล้องกัน",
+  "cdr_disconnectReason_serviceOrOptionNotAvailableUnspecified": "บริการหรือตัวเลือกไม่พร้อมใช้งาน ไม่ระบุสาเหตุ",
+  "cdr_disconnectReason_bearerServiceNotImplemented": "ไม่ได้ติดตั้ง bearer service",
+  "cdr_disconnectReason_channelTypeNotImplemented": "ไม่รองรับประเภทช่องสัญญาณ",
+  "cdr_disconnectReason_transitNetworkSelectionNotImplemented": "ไม่ได้ติดตั้งการเลือกเครือข่ายส่งผ่าน",
+  "cdr_disconnectReason_messageNotImplemented": "ข้อความไม่ได้ถูกใช้งาน",
+  "cdr_disconnectReason_requestedFacilityNotImplemented": "ฟังก์ชันที่ร้องขอยังไม่ได้ถูกนำมาใช้",
+  "cdr_disconnectReason_onlyRestrictedDigitalInformationBearerCapabilityIsAvailable": "มีเฉพาะความสามารถ bearer ข้อมูลดิจิทัลแบบจำกัดเท่านั้น",
+  "cdr_disconnectReason_serviceOrOptionNotImplementedUnspecified": "ยังไม่ได้นำบริการหรือตัวเลือกมาใช้งาน ไม่ระบุ",
+  "cdr_disconnectReason_invalidCallReferenceValue": "ค่าอ้างอิงการโทรไม่ถูกต้อง",
+  "cdr_disconnectReason_identifiedChannelDoesNotExist": "ช่องสัญญาณที่ระบุไม่มีอยู่",
+  "cdr_disconnectReason_aSuspendedCallExistsButThisCallIdentityDoesNot": "มีสายที่ถูกพักอยู่ แต่ข้อมูลระบุสายนี้ไม่มีอยู่",
+  "cdr_disconnectReason_callIdentityInUse": "รหัสประจำสายกำลังถูกใช้งาน",
+  "cdr_disconnectReason_noCallSuspended": "ไม่มีสายที่พักไว้",
+  "cdr_disconnectReason_callHavingTheRequestedCallIdentityHasBeenCleared": "สายที่มีรหัสสายที่ร้องขอถูกยกเลิกแล้ว",
+  "cdr_disconnectReason_calledUserNotMemberOfCug": "ผู้ใช้ที่ถูกเรียกไม่ได้เป็นสมาชิกของ CUG",
+  "cdr_disconnectReason_incompatibleDestination": "ปลายทางไม่เข้ากัน",
+  "cdr_disconnectReason_nonExistentAbbreviatedAddressEntry": "ไม่มีรายการที่อยู่แบบย่อนี้",
+  "cdr_disconnectReason_destinationAddressMissingAndDirectCallNotSubscribed": "ไม่มีที่อยู่ปลายทาง และไม่ได้สมัครใช้การโทรตรง",
+  "cdr_disconnectReason_invalidTransitNetworkSelectionNationalUse": "การเลือกเครือข่ายทรานซิตไม่ถูกต้อง (ใช้ภายในประเทศ)",
+  "cdr_disconnectReason_invalidFacilityParameter": "พารามิเตอร์ facility ไม่ถูกต้อง",
+  "cdr_disconnectReason_mandatoryInformationElementIsMissingAalParameterIsNotSupported": "ขาดองค์ประกอบข้อมูลที่จำเป็น (ไม่รองรับพารามิเตอร์ AAL)",
+  "cdr_disconnectReason_invalidMessageUnspecified": "ข้อความไม่ถูกต้อง ไม่ระบุสาเหตุ",
+  "cdr_disconnectReason_mandatoryInformationElementIsMissing": "ขาดองค์ประกอบข้อมูลที่จำเป็น",
+  "cdr_disconnectReason_messageTypeNonExistentOrNotImplemented": "ประเภทข้อความไม่มีอยู่หรือไม่ได้ติดตั้ง",
+  "cdr_disconnectReason_messageNotCompatibleWithCallStateOrMessageTypeNonExistentOrNotImplemented": "ข้อความไม่เข้ากันกับสถานะการโทร หรือประเภทข้อความไม่มีอยู่หรือไม่ได้ถูกใช้งาน",
+  "cdr_disconnectReason_informationElementNonexistantOrNotImplemented": "ไม่มี information element อยู่หรือยังไม่ได้ถูกนำมาใช้",
+  "cdr_disconnectReason_invalidInformationElementContents": "เนื้อหาขององค์ประกอบข้อมูลไม่ถูกต้อง",
+  "cdr_disconnectReason_messageNotCompatibleWithCallState": "ข้อความไม่เข้ากันกับสถานะการโทร",
+  "cdr_disconnectReason_recoveryOnTimerExpiry": "กู้คืนเมื่อตัวจับเวลาหมดอายุ",
+  "cdr_disconnectReason_parameterNonExistentOrNotImplementedPassedOn": "พารามิเตอร์ไม่มีอยู่หรือไม่ได้ใช้งาน - ส่งต่อไป",
+  "cdr_disconnectReason_urecognizedParameterMessageDiscarded": "พารามิเตอร์ที่ไม่รู้จัก ข้อความถูกละทิ้ง",
+  "cdr_disconnectReason_protocolErrorUnspecified": "ข้อผิดพลาดโปรโตคอล ไม่ระบุสาเหตุ",
+  "cdr_disconnectReason_internetworkingUnspecified": "การเชื่อมโยงระหว่างเครือข่าย ไม่ระบุ",
+  "cdr_disconnectReason_nextNodeIsUnreachable": "ไม่สามารถเข้าถึงโหนดถัดไปได้",
+  "cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService": "โมดูลผู้ให้บริการโทรศัพท์ Holst (HTSPM) ไม่อยู่ในสถานะให้บริการ",
+  "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL transit ไม่ใช่ node ID ของฉัน",
+  "devTools_AppBarTitle": "เครื่องมือนักพัฒนา",
+  "@devTools_AppBarTitle": {},
+  "devTools_signalingService_groupTitle": "บริการส่งสัญญาณ",
+  "@devTools_signalingService_groupTitle": {},
+  "devTools_signalingService_simulateKill_title": "จำลองการปิดบริการ",
+  "@devTools_signalingService_simulateKill_title": {},
+  "devTools_signalingService_simulateKill_subtitle": "หยุดบริการเบื้องหน้าโดยไม่ตัดการเชื่อมต่ออย่างถูกต้อง",
+  "@devTools_signalingService_simulateKill_subtitle": {},
+  "devTools_signalingService_simulateKill_confirmMessage": "บริการสัญญาณจะหยุดทำงานทันที และจะเริ่มทำงานใหม่โดยอัตโนมัติหากข้อมูลรับรองถูกต้อง",
+  "@devTools_signalingService_simulateKill_confirmMessage": {},
+  "devTools_signalingService_simulateKill_confirm": "หยุดการทำงาน",
+  "@devTools_signalingService_simulateKill_confirm": {},
+  "devTools_signalingService_simulateKill_cancel": "ยกเลิก",
+  "@devTools_signalingService_simulateKill_cancel": {}
+}

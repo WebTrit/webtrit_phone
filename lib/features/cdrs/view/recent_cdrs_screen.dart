@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/constants.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/features/recents/view/recents_screen_styles.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -48,14 +49,17 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
     final l10n = context.l10n;
 
     final themeData = Theme.of(context);
+    final effectiveStyle = themeData.extension<RecentsScreenStyles>()?.primary;
 
-    return Scaffold(
+    return ThemedScaffold(
+      background: effectiveStyle?.background,
+      contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
+      applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
       extendBodyBehindAppBar: true,
       appBar: MainAppBar(
         title: widget.title,
         context: context,
-        backgroundColor: themeData.canvasColor.withAlpha(150),
-        flexibleSpace: const BlurredSurface(sigmaX: 10, sigmaY: 10),
+        flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
           child: Padding(

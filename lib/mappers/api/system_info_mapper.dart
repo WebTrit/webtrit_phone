@@ -12,6 +12,7 @@ mixin SystemInfoApiMapper {
       janus: systemInfo.janus != null ? janusInfoFromApi(systemInfo.janus!) : null,
       gorush: systemInfo.gorush != null ? gorushInfoFromApi(systemInfo.gorush!) : null,
       minSupportedAppVersion: tryParseVersion(systemInfo.minSupportedAppVersion),
+      bundleVersion: systemInfo.bundleVersion,
     );
   }
 

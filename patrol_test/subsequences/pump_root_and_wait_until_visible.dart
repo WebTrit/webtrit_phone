@@ -6,6 +6,6 @@ import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/main.dart';
 
 Future<void> pumpRootAndWaitUntilVisible(InstanceRegistry instanceRegistry, PatrolIntegrationTester $) async {
-  await $.pumpWidgetAndSettle(RootApp(instanceRegistry: instanceRegistry));
+  await $.pumpWidgetAndSettle(RootApp.standalone(instanceRegistry));
   await $.waitUntilVisible($(AppShell));
 }

@@ -18,7 +18,7 @@ class KeypadScreenPage extends StatelessWidget {
     final featureAccess = context.read<FeatureAccess>();
 
     final widget = KeypadScreen(
-      title: const Text(EnvironmentConfig.APP_NAME),
+      title: Text(EnvironmentConfig.APP_NAME),
       videoEnabled: featureAccess.callConfig.capabilities.isVideoCallEnabled,
       transferEnabled: featureAccess.callConfig.capabilities.isBlindTransferEnabled,
     );

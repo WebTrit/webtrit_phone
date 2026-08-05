@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AboutState {
 
- bool get progress; List<String> get embeddedLinks; String get packageName; String get appIdentifier; Uri get coreUrl; String get userAgent; String get appInfo; String get deviceInfo; String get callkeepVersion; String? get fcmPushToken; Version? get coreVersion;
+ bool get progress; List<String> get embeddedLinks; String get packageName; String get appIdentifier; Uri get coreUrl; String get userAgent; String get appInfo; String get deviceInfo; String get callkeepVersion; String? get fcmPushToken; Version? get coreVersion; String? get bundleVersion;
 /// Create a copy of AboutState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AboutStateCopyWith<AboutState> get copyWith => _$AboutStateCopyWithImpl<AboutSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AboutState&&(identical(other.progress, progress) || other.progress == progress)&&const DeepCollectionEquality().equals(other.embeddedLinks, embeddedLinks)&&(identical(other.packageName, packageName) || other.packageName == packageName)&&(identical(other.appIdentifier, appIdentifier) || other.appIdentifier == appIdentifier)&&(identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl)&&(identical(other.userAgent, userAgent) || other.userAgent == userAgent)&&(identical(other.appInfo, appInfo) || other.appInfo == appInfo)&&(identical(other.deviceInfo, deviceInfo) || other.deviceInfo == deviceInfo)&&(identical(other.callkeepVersion, callkeepVersion) || other.callkeepVersion == callkeepVersion)&&(identical(other.fcmPushToken, fcmPushToken) || other.fcmPushToken == fcmPushToken)&&(identical(other.coreVersion, coreVersion) || other.coreVersion == coreVersion));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AboutState&&(identical(other.progress, progress) || other.progress == progress)&&const DeepCollectionEquality().equals(other.embeddedLinks, embeddedLinks)&&(identical(other.packageName, packageName) || other.packageName == packageName)&&(identical(other.appIdentifier, appIdentifier) || other.appIdentifier == appIdentifier)&&(identical(other.coreUrl, coreUrl) || other.coreUrl == coreUrl)&&(identical(other.userAgent, userAgent) || other.userAgent == userAgent)&&(identical(other.appInfo, appInfo) || other.appInfo == appInfo)&&(identical(other.deviceInfo, deviceInfo) || other.deviceInfo == deviceInfo)&&(identical(other.callkeepVersion, callkeepVersion) || other.callkeepVersion == callkeepVersion)&&(identical(other.fcmPushToken, fcmPushToken) || other.fcmPushToken == fcmPushToken)&&(identical(other.coreVersion, coreVersion) || other.coreVersion == coreVersion)&&(identical(other.bundleVersion, bundleVersion) || other.bundleVersion == bundleVersion));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,progress,const DeepCollectionEquality().hash(embeddedLinks),packageName,appIdentifier,coreUrl,userAgent,appInfo,deviceInfo,callkeepVersion,fcmPushToken,coreVersion);
+int get hashCode => Object.hash(runtimeType,progress,const DeepCollectionEquality().hash(embeddedLinks),packageName,appIdentifier,coreUrl,userAgent,appInfo,deviceInfo,callkeepVersion,fcmPushToken,coreVersion,bundleVersion);
 
 @override
 String toString() {
-  return 'AboutState(progress: $progress, embeddedLinks: $embeddedLinks, packageName: $packageName, appIdentifier: $appIdentifier, coreUrl: $coreUrl, userAgent: $userAgent, appInfo: $appInfo, deviceInfo: $deviceInfo, callkeepVersion: $callkeepVersion, fcmPushToken: $fcmPushToken, coreVersion: $coreVersion)';
+  return 'AboutState(progress: $progress, embeddedLinks: $embeddedLinks, packageName: $packageName, appIdentifier: $appIdentifier, coreUrl: $coreUrl, userAgent: $userAgent, appInfo: $appInfo, deviceInfo: $deviceInfo, callkeepVersion: $callkeepVersion, fcmPushToken: $fcmPushToken, coreVersion: $coreVersion, bundleVersion: $bundleVersion)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AboutStateCopyWith<$Res>  {
   factory $AboutStateCopyWith(AboutState value, $Res Function(AboutState) _then) = _$AboutStateCopyWithImpl;
 @useResult
 $Res call({
- bool progress, List<String> embeddedLinks, String packageName, String appIdentifier, Uri coreUrl, String userAgent, String appInfo, String deviceInfo, String callkeepVersion, String? fcmPushToken, Version? coreVersion
+ bool progress, List<String> embeddedLinks, String packageName, String appIdentifier, Uri coreUrl, String userAgent, String appInfo, String deviceInfo, String callkeepVersion, String? fcmPushToken, Version? coreVersion, String? bundleVersion
 });
 
 
@@ -62,7 +62,7 @@ class _$AboutStateCopyWithImpl<$Res>
 
 /// Create a copy of AboutState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? progress = null,Object? embeddedLinks = null,Object? packageName = null,Object? appIdentifier = null,Object? coreUrl = null,Object? userAgent = null,Object? appInfo = null,Object? deviceInfo = null,Object? callkeepVersion = null,Object? fcmPushToken = freezed,Object? coreVersion = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? progress = null,Object? embeddedLinks = null,Object? packageName = null,Object? appIdentifier = null,Object? coreUrl = null,Object? userAgent = null,Object? appInfo = null,Object? deviceInfo = null,Object? callkeepVersion = null,Object? fcmPushToken = freezed,Object? coreVersion = freezed,Object? bundleVersion = freezed,}) {
   return _then(AboutState(
 progress: null == progress ? _self.progress : progress // ignore: cast_nullable_to_non_nullable
 as bool,embeddedLinks: null == embeddedLinks ? _self.embeddedLinks : embeddedLinks // ignore: cast_nullable_to_non_nullable
@@ -75,7 +75,8 @@ as String,deviceInfo: null == deviceInfo ? _self.deviceInfo : deviceInfo // igno
 as String,callkeepVersion: null == callkeepVersion ? _self.callkeepVersion : callkeepVersion // ignore: cast_nullable_to_non_nullable
 as String,fcmPushToken: freezed == fcmPushToken ? _self.fcmPushToken : fcmPushToken // ignore: cast_nullable_to_non_nullable
 as String?,coreVersion: freezed == coreVersion ? _self.coreVersion : coreVersion // ignore: cast_nullable_to_non_nullable
-as Version?,
+as Version?,bundleVersion: freezed == bundleVersion ? _self.bundleVersion : bundleVersion // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

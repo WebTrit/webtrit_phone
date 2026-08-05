@@ -37,7 +37,20 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     final missingSpecialPermissions = await _getDeniedSpecialPermissions();
     _logger.info('Denied special permissions: $missingSpecialPermissions');
 
-    emit(state.copyWith(isPermanentlyDenied: isDenied, missingSpecialPermissions: missingSpecialPermissions));
+    final manufacturerTip = await _resolveManufacturerTip();
+    _logger.info('Manufacturer tip: $manufacturerTip');
+
+    // checkPermissions() is fire-and-forget on every resume and emits after
+    // several awaits; bail out if the cubit was closed in the meantime.
+    if (isClosed) return;
+
+    emit(
+      state.copyWith(
+        isPermanentlyDenied: isDenied,
+        missingSpecialPermissions: missingSpecialPermissions,
+        manufacturerTip: manufacturerTip,
+      ),
+    );
   }
 
   /// Executes the comprehensive permission request sequence:
@@ -65,10 +78,7 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       final missingSpecialPermissions = await _getDeniedSpecialPermissions();
       _logger.info('Denied special permissions: $missingSpecialPermissions');
 
-      final manufacturer = _checkManufacturer();
-      _logger.info('Manufacturer: $manufacturer');
-
-      final manufacturerTip = _getManufacturerTip(manufacturer, missingSpecialPermissions);
+      final manufacturerTip = await _resolveManufacturerTip();
       _logger.info('Manufacturer tip: $manufacturerTip');
 
       final isDenied = await appPermissions.isDenied;
@@ -94,15 +104,24 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     }
   }
 
-  ManufacturerTip? _getManufacturerTip(
-    Manufacturer? manufacturer,
-    List<CallkeepSpecialPermissions> specialPermissions,
-  ) {
-    final hasManufacturer = manufacturer != null;
-    final currentTip = state.manufacturerTip;
+  /// Resolves manufacturer-specific guidance for reliable lock-screen calls.
+  ///
+  /// On Xiaomi/HyperOS the incoming-call UI cannot cover the lock screen unless
+  /// the OEM "display pop-up windows while running in background" and "show on
+  /// lock screen" capabilities are granted, which the standard Android
+  /// permissions do not cover. The tip is surfaced while either capability is
+  /// missing, so it clears itself once the user enables both and returns to
+  /// the app. A dismissed tip is preserved.
+  Future<ManufacturerTip?> _resolveManufacturerTip() async {
+    final manufacturer = _checkManufacturer();
+    _logger.info('Manufacturer: $manufacturer');
+    if (manufacturer == null) return null;
 
-    // Determine if we need to set or keep the manufacturer tip
-    return currentTip ?? (hasManufacturer ? ManufacturerTip(manufacturer: manufacturer) : null);
+    final backgroundStartDenied = (await appPermissions.backgroundActivityStartStatus()).isDenied;
+    final showWhenLockedDenied = (await appPermissions.showOnLockscreenStatus()).isDenied;
+    if (!backgroundStartDenied && !showWhenLockedDenied) return null;
+
+    return state.manufacturerTip ?? ManufacturerTip(manufacturer: manufacturer);
   }
 
   Future<void> _requestFirebaseMessagingPermission() async {
@@ -127,7 +146,15 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   /// This is used to provide manufacturer-specific instructions or tips for enabling permissions.
   /// Returns `null` if the manufacturer is not in the predefined list.
   Manufacturer? _checkManufacturer() {
-    return Manufacturer.values.asNameMap()[deviceInfo.manufacturer.toLowerCase()];
+    final manufacturer = deviceInfo.manufacturer.toLowerCase();
+    // Xiaomi sub-brands (Redmi/Poco) report their own manufacturer string but
+    // share the same MIUI/HyperOS lock-screen restriction. Match the same family
+    // the native side (PermissionsHelper.isXiaomiFamily) uses, so guidance shows
+    // on every affected device rather than only the literal "xiaomi".
+    if (manufacturer.contains('xiaomi') || manufacturer.contains('redmi') || manufacturer.contains('poco')) {
+      return Manufacturer.xiaomi;
+    }
+    return Manufacturer.values.asNameMap()[manufacturer];
   }
 
   void dismissError() {
@@ -140,6 +167,15 @@ class PermissionsCubit extends Cubit<PermissionsState> {
 
   void openAppSettings() {
     appPermissions.toAppSettings();
+  }
+
+  /// Opens the OEM permissions screen hosting both the "display pop-up windows
+  /// while running in background" and "show on lock screen" toggles
+  /// (Xiaomi/HyperOS), with a native fallback. Both toggles live on the same
+  /// MIUI "Other permissions" screen, so either entry point lands the user
+  /// there.
+  void openManufacturerCallPermissionSettings() {
+    appPermissions.toBackgroundActivityStartSettings();
   }
 
   void openAppSpecialPermissionSettings(CallkeepSpecialPermissions permission) {

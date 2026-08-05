@@ -18,6 +18,7 @@ class SignalingDialogInfoMapper {
       remoteDisplayName: data.remoteDisplayName,
       arrivalVersion: data.arrivalVersion,
       arrivalTime: data.arrivalTime,
+      hasVideo: data.hasVideo,
     );
   }
 }

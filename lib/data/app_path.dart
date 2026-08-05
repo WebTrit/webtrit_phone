@@ -1,7 +1,15 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:path_provider/path_provider.dart';
 
 class AppPath {
   static Future<AppPath> init() async {
+    if (kIsWeb) {
+      // TODO(web): no filesystem on web; path_provider is unimplemented there.
+      // Paths stay empty - the drift WasmDatabase ignores the db path and
+      // file-based logging is disabled on web (see bootstrap).
+      return AppPath._('', '');
+    }
     final appDocDir = await getApplicationDocumentsDirectory();
     final tempDir = await getTemporaryDirectory();
     return AppPath._(appDocDir.path, tempDir.path);

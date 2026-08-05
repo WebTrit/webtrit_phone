@@ -10,6 +10,11 @@
     },
     {
       "type": "hybridPresence"
+    },
+    {
+      "type": "callPull",
+      "__videoStrategy": "How Call Pull handles a video call. Must match a 'CallPullVideoStrategy' enum name: 'softMute' (no backend, default; recvonly video, camera off), 'hideVideo' (excludes video dialogs from the pull list, needs backend has_video), or 'mirror' (pulls a video dialog as a video call with the camera on, needs backend has_video). If omitted or invalid, defaults to 'softMute'.",
+      "videoStrategy": "softMute"
     }
   ],
   "loginConfig": {
@@ -290,6 +295,10 @@
         "showVideoButtonAction": true
       }
     }
+  },
+  "localization": {
+    "__enabledLanguages": "Allowlist of language codes (ISO 639-1) exposed by the app. Intersected with the languages the app bundles, so only ones present in both are selectable and used for auto-resolution. Defaults to every bundled language; remove entries to restrict a build (e.g. keep only [\"en\"] to ship English). An empty list also means no restriction (all bundled languages).",
+    "enabledLanguages": ["en", "it", "th", "uk"]
   }
 }
 

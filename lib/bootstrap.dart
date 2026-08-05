@@ -31,6 +31,7 @@ import 'package:webtrit_phone/features/call/call.dart'
 
 import 'package:drift/isolate.dart';
 
+import 'app/firebase_integration.dart';
 import 'app/session/session.dart';
 import 'firebase_options.dart';
 import 'services/services.dart';
@@ -39,20 +40,21 @@ import 'services/services.dart';
 // Dart isolates do not share memory -- each background isolate gets its own instance.
 IsolateContext? _isolateContext;
 
-Future<InstanceRegistry> bootstrap() async {
+Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const FirebaseIntegrationEnabled()}) async {
   final registry = InstanceRegistry();
 
-  // External SDKs (Side effects only, don't need registration)
-  await _initFirebaseApp();
-  await _initFirebaseMessaging();
-  await _initLocalPushs();
+  // External SDKs (side effects only, don't need registration). The [firebase]
+  // strategy decides whether these run: standalone wires Firebase, while an
+  // embedder that owns the default Firebase app (e.g. the theme configurator's
+  // realtime preview) passes a disabled strategy so the app runs Firebase-free.
+  await firebase.initPlatform();
 
   // Initialize Components
 
   // App Info & Device Data
 
   final packageInfo = await PackageInfoFactory.init();
-  final appInfo = await AppInfo.init(FirebaseAppIdProvider());
+  final appInfo = await AppInfo.init(firebase.appIdProvider);
   final deviceInfo = await DeviceInfoFactory.init();
 
   // Storages
@@ -88,7 +90,7 @@ Future<InstanceRegistry> bootstrap() async {
     apiClientFactory: apiClientFactory,
     systemInfoRemoteDatasource: systemInfoRemoteDatasource,
     appIdentifier: appInfo.identifier,
-    appBundleId: packageInfo.packageName,
+    appBundleId: EnvironmentConfig.resolveBundleId(packageInfo.packageName),
   );
 
   final sessionRepository = SessionRepositoryImpl(
@@ -97,9 +99,12 @@ Future<InstanceRegistry> bootstrap() async {
     apiClientFactory: apiClientFactory,
   );
 
-  // Remote configuration
+  // Remote configuration. The Firebase-backed service needs the Firebase app, so
+  // the strategy resolves it (with a local-cache fallback); a disabled strategy
+  // just uses the local cache (DefaultRemoteCacheConfigService also implements
+  // RemoteConfigService).
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
-  final cachedRemoteConfigService = await CachedRemoteConfigService.init(remoteCacheConfigService);
+  final cachedRemoteConfigService = await firebase.remoteConfig(remoteCacheConfigService);
 
   final featureAccessStreamFactory = FeatureAccessStreamFactory(
     appThemes: appThemes,
@@ -118,8 +123,15 @@ Future<InstanceRegistry> bootstrap() async {
   // Spawn the shared DriftIsolate database server. All isolates (FCM background,
   // WorkManager) connect to this single server via IsolateNameServer, eliminating
   // write-write SQLite contention.
-  final driftIsolate = await IsolateDatabase.spawnServer(directoryPath: appPath.applicationDocumentsPath);
-  registry.register<DriftIsolate>(driftIsolate);
+  if (kIsWeb) {
+    // TODO(web): dart:isolate is unsupported on web, so there is no DriftIsolate
+    // server. The drift WasmDatabase is opened lazily on first access in main.dart
+    // (see AppDatabaseLifecycleHolder); nothing to register here.
+    Logger('bootstrap').warning('DriftIsolate server skipped on web; using lazy WasmDatabase connection');
+  } else {
+    final driftIsolate = await IsolateDatabase.spawnServer(directoryPath: appPath.applicationDocumentsPath);
+    registry.register<DriftIsolate>(driftIsolate);
+  }
 
   final appPermissions = await _createAppPermissions(featureAccess, contactsAgreementStatusRepository);
   final appTime = await AppTime.init();
@@ -137,8 +149,18 @@ Future<InstanceRegistry> bootstrap() async {
     LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled),
     () => appLabels.logLabels,
   );
-  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: true, logFilePath: appPath.logFilePath)
+  // File-based log storage uses dart:io and is unavailable on web; fall back to
+  // the in-memory log repository there. TODO(web): persistent web logging.
+  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: !kIsWeb, logFilePath: appPath.logFilePath)
     ..attachToLogger(Logger.root);
+
+  if (kIsWeb && EnvironmentConfig.WEB_BUNDLE_ID == null) {
+    Logger('bootstrap').warning(
+      'Web build has no WEBTRIT_APP_WEB_BUNDLE_ID dart-define; falling back to '
+      'packageInfo.packageName ("${packageInfo.packageName}") as bundle_id, which the '
+      'server will likely reject with unconfigured_bundle_id (login/autoprovision fail).',
+    );
+  }
   final nativeLogForwarder = NativeLogForwarder(
     nativeLogFilePath: appPath.nativeLogFilePath,
     logger: Logger('callkeep'),
@@ -147,7 +169,12 @@ Future<InstanceRegistry> bootstrap() async {
   // it for Android/Linux (inotify), Windows, and macOS (FSEvents). Calling it on
   // iOS throws FileSystemException("File system watching is not supported on this
   // platform"). The Callkeep native log file also only exists on Android.
-  if (Platform.isAndroid) nativeLogForwarder.start();
+  if (kIsWeb) {
+    // TODO(web): the native callkeep log file does not exist on web; nothing to forward.
+    Logger('bootstrap').info('NativeLogForwarder not started on web');
+  } else if (Platform.isAndroid) {
+    nativeLogForwarder.start();
+  }
 
   final appLifecycle = await AppLifecycle.initMaster();
 
@@ -199,12 +226,44 @@ Future<InstanceRegistry> bootstrap() async {
   registry.register<WebtritApiClientFactory>(apiClientFactory);
   registry.register<RemoteConfigService>(cachedRemoteConfigService);
   registry.register<ConnectivityService>(connectivityService);
+  registry.register<AppAnalyticsRepository>(firebase.analytics);
 
   // Final side-effect initializations that rely on registered components
   await _initCallkeep(featureAccess);
   await _initWorkManager();
 
   return registry;
+}
+
+/// Standalone integration: real Firebase platform init, the Firebase id provider,
+/// Firebase Remote Config (with a local-cache fallback) and Firebase Analytics.
+/// This is the default [bootstrap] strategy. Lives here so it can reuse the
+/// private Firebase init functions below.
+class FirebaseIntegrationEnabled implements FirebaseIntegration {
+  const FirebaseIntegrationEnabled();
+
+  @override
+  Future<void> initPlatform() async {
+    await _initFirebaseApp();
+    await _initFirebaseMessaging();
+    await _initLocalPushs();
+  }
+
+  @override
+  AppIdProvider get appIdProvider => FirebaseAppIdProvider();
+
+  @override
+  Future<RemoteConfigService> remoteConfig(DefaultRemoteCacheConfigService cache) async {
+    try {
+      return await CachedRemoteConfigService.init(cache);
+    } catch (e, s) {
+      Logger('bootstrap').warning('Firebase Remote Config init failed; using local cache fallback', e, s);
+      return cache;
+    }
+  }
+
+  @override
+  AppAnalyticsRepository get analytics => FirebaseAppAnalyticsRepository();
 }
 
 /// Creates the platform [ConnectivityChecker] used by [ConnectivityService]
@@ -251,13 +310,19 @@ Future<void> _initCallkeep(FeatureAccess featureAccess) async {
   // instance. Must be a top-level function annotated @pragma('vm:entry-point').
   // iOS: stored in memory, called directly in start(). Android: also persisted to
   // SharedPreferences for deserialization in the background isolate.
+  // Required on every platform - web/iOS run the signaling in the main isolate
+  // (WebtritSignalingServiceDirect) and start() throws without a registered factory.
   try {
     await WebtritSignalingService.setModuleFactory(createSignalingModule);
   } catch (e, s) {
-    logger.severe('setModuleFactory failed -- signaling may not work in background isolate', e, s);
+    logger.severe('signaling module factory registration failed -- signaling may not work', e, s);
   }
 
-  if (!Platform.isAndroid) return;
+  // The remaining callkeep services (Android background push isolate,
+  // persistent-mode call-event handler, SMS triggers) are Android-only; web has
+  // no background isolates and iOS does not use them. kIsWeb short-circuits before
+  // the dart:io Platform check (which is unavailable on web).
+  if (kIsWeb || !Platform.isAndroid) return;
 
   // Registers the top-level callback that the native Android side invokes when a push
   // notification arrives in the background. Bootstraps the push isolate and delegates
@@ -306,6 +371,13 @@ Future<void> _initFirebaseApp() async {
 
 Future<void> _initFirebaseMessaging() async {
   final logger = Logger('FirebaseMessaging');
+
+  if (kIsWeb) {
+    // TODO(web): wire FCM web (service worker + onMessage) when push support on
+    // web is in scope. Skipped for now - several APIs below are mobile-only.
+    logger.info('Firebase messaging init skipped on web');
+    return;
+  }
 
   FirebaseMessaging.instance.setDeliveryMetricsExportToBigQuery(true);
 
@@ -369,7 +441,7 @@ Future<void> _handleBackgroundMessage(RemoteMessage message, Logger logger) asyn
 
   logger.info('onBackgroundMessage: ${message.toMap()}');
 
-  if (appPush is PendingCallPush && Platform.isAndroid) {
+  if (!kIsWeb && appPush is PendingCallPush && Platform.isAndroid) {
     // Known issue: [SqliteException] with code 5 (database is locked) may occur
     // due to concurrent database access from multiple isolates.
     final displayName = await _resolveContactDisplayNameWithFallback(appPush, logger);
@@ -440,6 +512,12 @@ CallkeepIncomingCallError? _onReportIncomingCallTimeout(Logger logger) {
 }
 
 Future _initLocalPushs() async {
+  if (kIsWeb) {
+    // TODO(web): flutter_local_notifications has no web platform; local push
+    // channels are skipped on web.
+    Logger('bootstrap').info('Local notifications init skipped on web');
+    return;
+  }
   await FlutterLocalNotificationsPlugin().initialize(
     settings: const InitializationSettings(
       iOS: DarwinInitializationSettings(
@@ -476,6 +554,12 @@ Future<void> _initAndroidNotificationChannel() async {
 }
 
 Future<void> _initWorkManager() async {
+  if (kIsWeb) {
+    // TODO(web): workmanager has no web platform; background system-notification
+    // polling is not available on web.
+    Logger('bootstrap').info('WorkManager init skipped on web');
+    return;
+  }
   Workmanager().initialize(workManagerDispatcher);
 }
 

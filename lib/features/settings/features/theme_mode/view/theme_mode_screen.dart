@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../widgets/widgets.dart';
@@ -15,15 +16,16 @@ class ThemeModeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const themeModes = ThemeMode.values;
+    final themeSettings = context.watch<ThemeSettings>();
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.settings_ListViewTileTitle_themeMode), leading: const ExtBackButton()),
       body: BlocBuilder<AppBloc, AppState>(
         builder: (context, state) {
           return RadioGroup<ThemeMode>(
-            groupValue: state.effectiveThemeMode,
+            groupValue: themeSettings.effectiveThemeMode(state.themeMode),
             onChanged: (ThemeMode? value) {
-              if (!state.isThemeModeSupported || value == null) return;
+              if (!themeSettings.isThemeModeSupported || value == null) return;
               context.read<AppBloc>().add(AppThemeModeChanged(value));
             },
             child: ListView.separated(
@@ -34,7 +36,7 @@ class ThemeModeScreen extends StatelessWidget {
                 return RadioListTile<ThemeMode>(
                   value: themeMode,
                   title: Text(themeMode.l10n(context)),
-                  enabled: state.isThemeModeSupported,
+                  enabled: themeSettings.isThemeModeSupported,
                 );
               },
             ),

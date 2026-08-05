@@ -13,6 +13,7 @@ navigation structure, and screen-specific behaviors.
   - [Tab Variants](#tab-variants)
 - [Call Configuration](#call-configuration)
   - [Transfer Configuration](#transfer-configuration)
+  - [Call Pull Video Strategy](#call-pull-video-strategy)
 - [Settings Configuration](#settings-configuration)
   - [Settings Sections](#settings-sections)
   - [Settings Items](#settings-items)
@@ -293,6 +294,50 @@ Embedded web resource tab.
 
 - `enableBlindTransfer`: Enables blind call transfer.
 - `enableAttendedTransfer`: Enables attended call transfer.
+
+### Call Pull Video Strategy
+
+Call Pull lets a user take over (pull) a call that is active on another of their
+devices. Pulling a **video** call used to fail: the pull offer was audio-only, so
+the server's answer kept the original `m=video` and `setRemoteDescription` rejected
+it ("order of m-lines in answer doesn't match order in offer"). The behaviour is
+controlled by a strategy configured under the top-level `supported` array:
+
+```json
+{
+  "supported": [
+    {
+      "type": "callPull",
+      "videoStrategy": "softMute"
+    }
+  ]
+}
+```
+
+`videoStrategy` must match a `CallPullVideoStrategy` enum name. If the entry is
+omitted or the value is invalid, it defaults to `softMute`.
+
+| Strategy | Pull offer | Local camera | Needs backend `has_video` | Video-call result |
+|----------|------------|--------------|---------------------------|-------------------|
+| `softMute` (default) | recvonly video m-line | stays off | no | remote video is received, camera off; user can enable it afterwards |
+| `hideVideo` | no video m-line | stays off | yes | known-video dialogs are excluded from the pull list |
+| `mirror` | `video = has_video` | on for a video pull | yes | a video dialog is pulled as a full video call |
+
+- `softMute`: the offer carries a `recvonly` video m-line (no camera opened), so the
+  offer/answer media layouts match without any backend change. This is the safe
+  default and works where dialog-info carries no media-type flag (e.g. PortaSwitch).
+- `hideVideo`: video dialogs are dropped from the pull list, so only audio calls are
+  pullable. Requires the backend to report media type via dialog-info `has_video`.
+- `mirror`: the pull mirrors the real media - a video dialog is pulled through the
+  normal video-call path (camera-backed video m-line) and an audio dialog as audio.
+  Requires `has_video` and a server that answers a matching video answer; it opens
+  the local camera on a video pull.
+
+**Runtime override.** The strategy can also be set via the Firebase Remote Config
+key `feature_call_pull_video_strategy`, which takes precedence over the configurator
+default (resolution order: Remote Config override > configurator default >
+`softMute`). On web the realtime Remote Config stream is skipped (see `web.md`), so a
+change there applies on the next startup rather than live.
 
 ## Settings Configuration
 

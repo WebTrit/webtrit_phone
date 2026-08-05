@@ -16,7 +16,7 @@ class AboutScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const appAboutUrl = EnvironmentConfig.APP_ABOUT_URL;
+    final appAboutUrl = EnvironmentConfig.APP_ABOUT_URL;
     final appMetadataProvider = context.read<AppMetadataProvider>();
     final appInfo = context.read<AppInfo>();
 

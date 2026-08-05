@@ -35,6 +35,10 @@ SupportedFeature _$SupportedFeatureFromJson(
           return SupportedHybridPresence.fromJson(
             json
           );
+                case 'callPull':
+          return SupportedCallPull.fromJson(
+            json
+          );
         
           default:
             throw CheckedFromJsonException(
@@ -93,7 +97,7 @@ extension SupportedFeaturePatterns on SupportedFeature {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SupportedThemeMode value)?  themeMode,TResult Function( SupportedVideoCall value)?  videoCall,TResult Function( SupportedLoggingConfig value)?  loggingConfig,TResult Function( SupportedSystemNotifications value)?  systemNotifications,TResult Function( SupportedHybridPresence value)?  hybridPresence,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SupportedThemeMode value)?  themeMode,TResult Function( SupportedVideoCall value)?  videoCall,TResult Function( SupportedLoggingConfig value)?  loggingConfig,TResult Function( SupportedSystemNotifications value)?  systemNotifications,TResult Function( SupportedHybridPresence value)?  hybridPresence,TResult Function( SupportedCallPull value)?  callPull,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
@@ -101,7 +105,8 @@ return themeMode(_that);case SupportedVideoCall() when videoCall != null:
 return videoCall(_that);case SupportedLoggingConfig() when loggingConfig != null:
 return loggingConfig(_that);case SupportedSystemNotifications() when systemNotifications != null:
 return systemNotifications(_that);case SupportedHybridPresence() when hybridPresence != null:
-return hybridPresence(_that);case _:
+return hybridPresence(_that);case SupportedCallPull() when callPull != null:
+return callPull(_that);case _:
   return orElse();
 
 }
@@ -119,7 +124,7 @@ return hybridPresence(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SupportedThemeMode value)  themeMode,required TResult Function( SupportedVideoCall value)  videoCall,required TResult Function( SupportedLoggingConfig value)  loggingConfig,required TResult Function( SupportedSystemNotifications value)  systemNotifications,required TResult Function( SupportedHybridPresence value)  hybridPresence,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SupportedThemeMode value)  themeMode,required TResult Function( SupportedVideoCall value)  videoCall,required TResult Function( SupportedLoggingConfig value)  loggingConfig,required TResult Function( SupportedSystemNotifications value)  systemNotifications,required TResult Function( SupportedHybridPresence value)  hybridPresence,required TResult Function( SupportedCallPull value)  callPull,}){
 final _that = this;
 switch (_that) {
 case SupportedThemeMode():
@@ -127,7 +132,8 @@ return themeMode(_that);case SupportedVideoCall():
 return videoCall(_that);case SupportedLoggingConfig():
 return loggingConfig(_that);case SupportedSystemNotifications():
 return systemNotifications(_that);case SupportedHybridPresence():
-return hybridPresence(_that);}
+return hybridPresence(_that);case SupportedCallPull():
+return callPull(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -141,7 +147,7 @@ return hybridPresence(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SupportedThemeMode value)?  themeMode,TResult? Function( SupportedVideoCall value)?  videoCall,TResult? Function( SupportedLoggingConfig value)?  loggingConfig,TResult? Function( SupportedSystemNotifications value)?  systemNotifications,TResult? Function( SupportedHybridPresence value)?  hybridPresence,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SupportedThemeMode value)?  themeMode,TResult? Function( SupportedVideoCall value)?  videoCall,TResult? Function( SupportedLoggingConfig value)?  loggingConfig,TResult? Function( SupportedSystemNotifications value)?  systemNotifications,TResult? Function( SupportedHybridPresence value)?  hybridPresence,TResult? Function( SupportedCallPull value)?  callPull,}){
 final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
@@ -149,7 +155,8 @@ return themeMode(_that);case SupportedVideoCall() when videoCall != null:
 return videoCall(_that);case SupportedLoggingConfig() when loggingConfig != null:
 return loggingConfig(_that);case SupportedSystemNotifications() when systemNotifications != null:
 return systemNotifications(_that);case SupportedHybridPresence() when hybridPresence != null:
-return hybridPresence(_that);case _:
+return hybridPresence(_that);case SupportedCallPull() when callPull != null:
+return callPull(_that);case _:
   return null;
 
 }
@@ -166,14 +173,15 @@ return hybridPresence(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)?  loggingConfig,TResult Function( bool enabled)?  systemNotifications,TResult Function( bool enabled)?  hybridPresence,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)?  loggingConfig,TResult Function( bool enabled)?  systemNotifications,TResult Function( bool enabled)?  hybridPresence,TResult Function( String videoStrategy)?  callPull,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
 return videoCall(_that.enabled);case SupportedLoggingConfig() when loggingConfig != null:
 return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled);case SupportedSystemNotifications() when systemNotifications != null:
 return systemNotifications(_that.enabled);case SupportedHybridPresence() when hybridPresence != null:
-return hybridPresence(_that.enabled);case _:
+return hybridPresence(_that.enabled);case SupportedCallPull() when callPull != null:
+return callPull(_that.videoStrategy);case _:
   return orElse();
 
 }
@@ -191,14 +199,15 @@ return hybridPresence(_that.enabled);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,required TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)  loggingConfig,required TResult Function( bool enabled)  systemNotifications,required TResult Function( bool enabled)  hybridPresence,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,required TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)  loggingConfig,required TResult Function( bool enabled)  systemNotifications,required TResult Function( bool enabled)  hybridPresence,required TResult Function( String videoStrategy)  callPull,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode():
 return themeMode(_that.mode);case SupportedVideoCall():
 return videoCall(_that.enabled);case SupportedLoggingConfig():
 return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled);case SupportedSystemNotifications():
 return systemNotifications(_that.enabled);case SupportedHybridPresence():
-return hybridPresence(_that.enabled);}
+return hybridPresence(_that.enabled);case SupportedCallPull():
+return callPull(_that.videoStrategy);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -212,14 +221,15 @@ return hybridPresence(_that.enabled);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,TResult? Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)?  loggingConfig,TResult? Function( bool enabled)?  systemNotifications,TResult? Function( bool enabled)?  hybridPresence,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,TResult? Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)?  loggingConfig,TResult? Function( bool enabled)?  systemNotifications,TResult? Function( bool enabled)?  hybridPresence,TResult? Function( String videoStrategy)?  callPull,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
 return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
 return videoCall(_that.enabled);case SupportedLoggingConfig() when loggingConfig != null:
 return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled);case SupportedSystemNotifications() when systemNotifications != null:
 return systemNotifications(_that.enabled);case SupportedHybridPresence() when hybridPresence != null:
-return hybridPresence(_that.enabled);case _:
+return hybridPresence(_that.enabled);case SupportedCallPull() when callPull != null:
+return callPull(_that.videoStrategy);case _:
   return null;
 
 }
@@ -590,6 +600,79 @@ class _$SupportedHybridPresenceCopyWithImpl<$Res>
   return _then(SupportedHybridPresence(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,
+  ));
+}
+
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class SupportedCallPull implements SupportedFeature {
+  const SupportedCallPull({this.videoStrategy = 'softMute', final  String? $type}): $type = $type ?? 'callPull';
+  factory SupportedCallPull.fromJson(Map<String, dynamic> json) => _$SupportedCallPullFromJson(json);
+
+@JsonKey() final  String videoStrategy;
+
+@JsonKey(name: 'type')
+final String $type;
+
+
+/// Create a copy of SupportedFeature
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SupportedCallPullCopyWith<SupportedCallPull> get copyWith => _$SupportedCallPullCopyWithImpl<SupportedCallPull>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$SupportedCallPullToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedCallPull&&(identical(other.videoStrategy, videoStrategy) || other.videoStrategy == videoStrategy));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,videoStrategy);
+
+@override
+String toString() {
+  return 'SupportedFeature.callPull(videoStrategy: $videoStrategy)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SupportedCallPullCopyWith<$Res> implements $SupportedFeatureCopyWith<$Res> {
+  factory $SupportedCallPullCopyWith(SupportedCallPull value, $Res Function(SupportedCallPull) _then) = _$SupportedCallPullCopyWithImpl;
+@useResult
+$Res call({
+ String videoStrategy
+});
+
+
+
+
+}
+/// @nodoc
+class _$SupportedCallPullCopyWithImpl<$Res>
+    implements $SupportedCallPullCopyWith<$Res> {
+  _$SupportedCallPullCopyWithImpl(this._self, this._then);
+
+  final SupportedCallPull _self;
+  final $Res Function(SupportedCallPull) _then;
+
+/// Create a copy of SupportedFeature
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? videoStrategy = null,}) {
+  return _then(SupportedCallPull(
+videoStrategy: null == videoStrategy ? _self.videoStrategy : videoStrategy // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

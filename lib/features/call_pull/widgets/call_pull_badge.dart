@@ -55,10 +55,19 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
     if (remoteNumber == null || callId == null) return;
     if (localTag == null || remoteTag == null) return;
 
+    // Under the mirror strategy the pull mirrors the real media: a known-video
+    // dialog is pulled as a video call (camera on), so the offer carries a real
+    // video m-line. Otherwise the local camera stays off (video: false) and, under
+    // soft-mute, the call bloc adds a recvonly video m-line to the pull offer so its
+    // media layout matches the server's answer for a video call, avoiding the
+    // setRemoteDescription m-line mismatch; the user can enable the camera
+    // afterwards. See CallPullVideoStrategy.
+    final mirrorVideo = callBloc.callPullVideoStrategy == CallPullVideoStrategy.mirror && dialog.hasVideo == true;
+
     callBloc.add(
       CallControlEvent.started(
         number: remoteNumber,
-        video: false,
+        video: mirrorVideo,
         replaces: '$callId;from-tag=$localTag;to-tag=$remoteTag',
         displayName: remoteDisplayName,
       ),

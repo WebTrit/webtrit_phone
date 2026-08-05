@@ -30,6 +30,7 @@ abstract class CallRequest extends LineRequest {
     HangupRequest.typeValue: HangupRequest.fromJson,
     HoldRequest.typeValue: HoldRequest.fromJson,
     OutgoingCallRequest.typeValue: OutgoingCallRequest.fromJson,
+    PeerMessageRequest.typeValue: PeerMessageRequest.fromJson,
     TransferRequest.typeValue: TransferRequest.fromJson,
     UnholdRequest.typeValue: UnholdRequest.fromJson,
     UpdateRequest.typeValue: UpdateRequest.fromJson,

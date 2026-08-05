@@ -19,6 +19,7 @@ class DialogInfo extends Equatable {
     required this.remoteDisplayName,
     required this.arrivalVersion,
     required this.arrivalTime,
+    this.hasVideo,
   });
 
   final String id;
@@ -35,11 +36,20 @@ class DialogInfo extends Equatable {
   final String arrivalVersion;
   final DateTime arrivalTime;
 
+  /// Whether the dialog currently has an active video stream. Null when the
+  /// backend does not report media type yet (treated as unknown, not audio).
+  final bool? hasVideo;
+
   String? get displayName => remoteDisplayName ?? remoteNumber;
 
   bool get pullable {
     if (state != DialogState.confirmed) return false;
     if (remoteNumber == null || callId == null || localTag == null || remoteTag == null) return false;
+    // This getter stays media-agnostic: video calls are pullable as well, and
+    // whether a video dialog is offered is decided downstream by the configured
+    // CallPullVideoStrategy (see CallPullCubit, which reads `hasVideo`). Under the
+    // soft-mute strategy the pull offer carries a video m-line so it matches the
+    // server's video answer (no setRemoteDescription m-line mismatch).
     return true;
   }
 
@@ -58,10 +68,11 @@ class DialogInfo extends Equatable {
     remoteDisplayName,
     arrivalVersion,
     arrivalTime,
+    hasVideo,
   ];
 
   @override
   String toString() {
-    return 'DialogInfo{id: $id, entityNumber: $entityNumber, state: $state, callId: $callId, direction: $direction, localTag: $localTag, localNumber: $localNumber, localDisplayName: $localDisplayName, remoteTag: $remoteTag, remoteNumber: $remoteNumber, remoteDisplayName: $remoteDisplayName, arrivalVersion: $arrivalVersion, arrivalTime: $arrivalTime}';
+    return 'DialogInfo{id: $id, entityNumber: $entityNumber, state: $state, callId: $callId, direction: $direction, localTag: $localTag, localNumber: $localNumber, localDisplayName: $localDisplayName, remoteTag: $remoteTag, remoteNumber: $remoteNumber, remoteDisplayName: $remoteDisplayName, arrivalVersion: $arrivalVersion, arrivalTime: $arrivalTime, hasVideo: $hasVideo}';
   }
 }

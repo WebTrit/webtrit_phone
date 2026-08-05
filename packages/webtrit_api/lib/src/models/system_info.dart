@@ -17,6 +17,7 @@ class SystemInfo with _$SystemInfo {
     this.janus,
     this.gorush,
     this.minSupportedAppVersion,
+    this.bundleVersion,
   });
 
   @override
@@ -40,6 +41,13 @@ class SystemInfo with _$SystemInfo {
   /// transport; the domain mapper parses it into a [Version].
   @override
   final String? minSupportedAppVersion;
+
+  /// Optional version of the deployment bundle (JSON key `bundle_version`),
+  /// e.g. the Add-on Mart package version. `null` = not configured on the
+  /// backend. Kept as a raw string: the bundle version format is not
+  /// guaranteed to be semver.
+  @override
+  final String? bundleVersion;
 
   factory SystemInfo.fromJson(Map<String, Object?> json) => _$SystemInfoFromJson(json);
 

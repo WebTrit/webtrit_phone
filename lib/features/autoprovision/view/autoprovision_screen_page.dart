@@ -34,11 +34,11 @@ class AutoprovisionScreenPage extends StatelessWidget {
     final tenantId = this.tenantId ?? '';
     final oldTenant = context.read<AppBloc>().state.session.tenantId;
 
-    const defaultCoreUrl = EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL;
+    final defaultCoreUrl = EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL;
     final coreUrl = this.coreUrl;
     final oldCoreUrl = context.read<AppBloc>().state.session.coreUrl;
 
-    const coreVersionConstraint = EnvironmentConfig.CORE_VERSION_CONSTRAINT;
+    final coreVersionConstraint = EnvironmentConfig.CORE_VERSION_CONSTRAINT;
     final config = AutoprovisionConfig(
       configToken: configToken,
       oldToken: oldToken,

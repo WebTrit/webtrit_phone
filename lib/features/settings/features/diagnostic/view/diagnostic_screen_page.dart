@@ -22,6 +22,7 @@ class DiagnosticScreenPage extends StatelessWidget {
     final pushTokensBloc = context.read<PushTokensBloc>();
     final featureAccess = context.read<FeatureAccess>();
     final appPermissions = context.read<AppPermissions>();
+    final deviceInfo = context.read<DeviceInfo>();
 
     final contactTab = featureAccess.bottomMenuConfig.getTabEnabled<ContactsBottomMenuTab>();
 
@@ -32,7 +33,8 @@ class DiagnosticScreenPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<DiagnosticCubit>(
-          create: (context) => DiagnosticCubit(pushTokensBloc: pushTokensBloc, appPermissions: appPermissions),
+          create: (context) =>
+              DiagnosticCubit(pushTokensBloc: pushTokensBloc, appPermissions: appPermissions, deviceInfo: deviceInfo),
         ),
         BlocProvider<NetworkTesterCubit>(
           create: (context) => NetworkTesterCubit(iceChecker: IceCheckerFlutterWebrtcImpl()),

@@ -128,6 +128,28 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
     );
   }
 
+  /// Resolves the in-call keypad input text style so it can be merged over the
+  /// widget's base [TextTheme.displaySmall]. [TextStyleConfig.toTextStyle]
+  /// always emits a non-null fontWeight/fontStyle, which would override the base
+  /// during the merge; keep them only when the config sets them, so unset fields
+  /// inherit the base weight/style instead of being forced to normal.
+  TextStyle? _resolveKeypadInputTextStyle(TextStyleConfig? config) {
+    if (config == null) return null;
+    final resolved = config.toTextStyle(defaultFontFamily: defaultFontFamily);
+    return TextStyle(
+      fontFamily: resolved.fontFamily,
+      fontSize: resolved.fontSize,
+      fontWeight: config.fontWeight != null ? resolved.fontWeight : null,
+      fontStyle: config.fontStyle != null ? resolved.fontStyle : null,
+      color: resolved.color,
+      letterSpacing: resolved.letterSpacing,
+      wordSpacing: resolved.wordSpacing,
+      height: resolved.height,
+      decoration: resolved.decoration,
+      backgroundColor: resolved.backgroundColor,
+    );
+  }
+
   CallScreenActionsStyle? _resolveActionsStyle({
     CallPageActionsConfig? fromPage,
     // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
@@ -204,6 +226,7 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
         baseBg: colors.surfaceContainerHigh,
         baseIcon: colors.onSurface,
       ),
+      keypadInputTextStyle: _resolveKeypadInputTextStyle(a.keypadInputStyle),
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../call/call_trigger_config.dart';
+import 'call_pull_video_strategy.dart';
 import '../peer_connection_settings.dart';
 import 'encoding_config.dart';
 
@@ -38,6 +39,8 @@ class CallCapabilitiesConfig extends Equatable {
     this.isAudioToVideoSwitchEnabled = true,
     this.isBlindTransferEnabled = true,
     this.isAttendedTransferEnabled = true,
+    this.callPullVideoStrategy = CallPullVideoStrategy.softMute,
+    this.isPeerMessageEnabled = false,
   });
 
   /// Whether the UI should show video call functionality.
@@ -60,11 +63,23 @@ class CallCapabilitiesConfig extends Equatable {
   /// If `true`, the user can talk to the recipient before transferring the call.
   final bool isAttendedTransferEnabled;
 
+  /// How the pull of a video call is handled (soft-mute by default).
+  final CallPullVideoStrategy callPullVideoStrategy;
+
+  /// Whether the remote core supports the `peer_message` app-to-app side channel.
+  ///
+  /// Gated by the core version: an older core rejects an unknown `peer_message`
+  /// request by tearing down the whole signaling socket (code 4600), so the
+  /// in-call media_state signal must only be sent when this is `true`.
+  final bool isPeerMessageEnabled;
+
   @override
   List<Object?> get props => [
     isVideoCallEnabled,
     isAudioToVideoSwitchEnabled,
     isBlindTransferEnabled,
     isAttendedTransferEnabled,
+    callPullVideoStrategy,
+    isPeerMessageEnabled,
   ];
 }

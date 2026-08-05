@@ -343,6 +343,7 @@ class CallPageActionsConfig with _$CallPageActionsConfig {
     this.held = const ElevatedButtonWidgetConfig(),
     this.swap = const ElevatedButtonWidgetConfig(),
     this.key = const ElevatedButtonWidgetConfig(),
+    this.keypadInputStyle,
   });
 
   @override
@@ -371,6 +372,12 @@ class CallPageActionsConfig with _$CallPageActionsConfig {
 
   @override
   final ElevatedButtonWidgetConfig key;
+
+  /// Text style for the digits typed on the in-call DTMF keypad (the value shown
+  /// above the keys). When unset the app falls back to its default display text
+  /// style for the keypad input.
+  @override
+  final TextStyleConfig? keypadInputStyle;
 
   factory CallPageActionsConfig.fromJson(Map<String, Object?> json) => _$CallPageActionsConfigFromJson(json);
 

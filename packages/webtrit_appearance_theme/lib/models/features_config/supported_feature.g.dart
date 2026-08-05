@@ -74,3 +74,15 @@ SupportedHybridPresence _$SupportedHybridPresenceFromJson(
 Map<String, dynamic> _$SupportedHybridPresenceToJson(
   SupportedHybridPresence instance,
 ) => <String, dynamic>{'enabled': instance.enabled, 'type': instance.$type};
+
+SupportedCallPull _$SupportedCallPullFromJson(Map<String, dynamic> json) =>
+    SupportedCallPull(
+      videoStrategy: json['videoStrategy'] as String? ?? 'softMute',
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$SupportedCallPullToJson(SupportedCallPull instance) =>
+    <String, dynamic>{
+      'videoStrategy': instance.videoStrategy,
+      'type': instance.$type,
+    };

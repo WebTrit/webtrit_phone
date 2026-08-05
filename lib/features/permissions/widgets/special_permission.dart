@@ -35,6 +35,15 @@ class SpecialPermission extends StatelessWidget {
           onGoToAppSettings: onGoToAppSettings,
           onPop: onPop,
         ),
+        // backgroundActivityStart is surfaced through ManufacturerPermission, not
+        // this pipeline (it is not in AppPermissions._specialPermissions), so this
+        // arm is currently unreachable and exists only to keep the switch exhaustive.
+        CallkeepSpecialPermissions.backgroundActivityStart => PermissionTips(
+          title: context.l10n.permission_manufacturer_Text_heading,
+          instruction: specialPermissions.tips(context),
+          onGoToAppSettings: onGoToAppSettings,
+          onPop: onPop,
+        ),
       },
     );
   }

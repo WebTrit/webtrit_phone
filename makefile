@@ -142,6 +142,9 @@ generate-launcher-icons-config:
 	@echo "  min_sdk_android: 23" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  adaptive_icon_background: \"$${ICON_BACKGROUND_COLOR:-$(ICON_BACKGROUND_COLOR)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  adaptive_icon_foreground: \"$${LAUNCHER_ICON_FOREGROUND:-$(LAUNCHER_ICON_FOREGROUND)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
+# The configurator export already bakes the adaptive safe-zone padding into the
+# foreground PNG; the package default inset of 16% would shrink the logo twice.
+	@echo "  adaptive_icon_foreground_inset: 0" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  ios: true" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  background_color_ios: \"$${ICON_BACKGROUND_COLOR:-$(ICON_BACKGROUND_COLOR)}\"" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)
 	@echo "  remove_alpha_ios: true" >> $(FLUTTER_LAUNCHER_ICONS_CONFIG)

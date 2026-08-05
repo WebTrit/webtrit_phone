@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -14,7 +15,12 @@ class LanguageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locales = [LocaleExtension.defaultNull, ...AppLocalizations.supportedLocales];
+    final supportedLocales = context.read<FeatureAccess>().localizationConfig.supportedLocales;
+    // With a single supported language there is nothing to follow the system to,
+    // so drop the "default" (follow-system) entry and offer that one language.
+    final locales = supportedLocales.length == 1
+        ? supportedLocales
+        : [LocaleExtension.defaultNull, ...supportedLocales];
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.settings_ListViewTileTitle_language), leading: const ExtBackButton()),

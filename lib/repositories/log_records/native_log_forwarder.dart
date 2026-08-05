@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/common/disposable.dart';
@@ -11,11 +13,13 @@ class NativeLogForwarder implements Disposable {
     required String nativeLogFilePath,
     required Logger logger,
     Level Function(String line)? levelParser,
-  }) : _file = File(nativeLogFilePath),
+    // dart:io File is unavailable on web; this forwarder is only start()ed on
+    // Android, so the file stays null and unused elsewhere.
+  }) : _file = kIsWeb ? null : File(nativeLogFilePath),
        _logger = logger,
        _levelParser = levelParser ?? _callkeepLevelParser;
 
-  final File _file;
+  final File? _file;
   final Logger _logger;
   final Level Function(String line) _levelParser;
   int _readOffset = 0;
@@ -24,11 +28,13 @@ class NativeLogForwarder implements Disposable {
   Future<void>? _pendingForward;
 
   void start() {
+    final file = _file;
+    if (file == null) return; // never started on web
     _watchSubscription?.cancel();
-    _readOffset = _file.existsSync() ? _file.lengthSync() : 0;
+    _readOffset = file.existsSync() ? file.lengthSync() : 0;
     _remainder = '';
-    final absolutePath = _file.absolute.path;
-    _watchSubscription = _file.parent
+    final absolutePath = file.absolute.path;
+    _watchSubscription = file.parent
         .watch()
         .where((e) => File(e.path).absolute.path == absolutePath)
         .listen(_onFileEvent);
@@ -44,14 +50,16 @@ class NativeLogForwarder implements Disposable {
   }
 
   Future<void> _forwardNewBytes() async {
-    if (!_file.existsSync()) {
+    final file = _file;
+    if (file == null) return; // never reached on web (watch is not started)
+    if (!file.existsSync()) {
       _readOffset = 0;
       _remainder = '';
       return;
     }
     RandomAccessFile? raf;
     try {
-      raf = await _file.open();
+      raf = await file.open();
       final length = await raf.length();
       if (length < _readOffset) {
         // file was rotated or truncated
@@ -72,7 +80,7 @@ class NativeLogForwarder implements Disposable {
         _logger.log(_levelParser(trimmed), trimmed);
       }
     } catch (e, st) {
-      _logger.warning('NativeLogForwarder: failed to read ${_file.path}', e, st);
+      _logger.warning('NativeLogForwarder: failed to read ${file.path}', e, st);
     } finally {
       await raf?.close();
     }

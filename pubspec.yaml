@@ -22,16 +22,17 @@ workspace:
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
 #   - <Pre-release>: optional, series of dot-separated identifiers, decided by the developer
-#   - <Build>: non-negative integer computed as follows:
-#       <Major> * 1000000 + <Minor> * 10000 + <Patch> * 100 + <published build iteration for Major.Minor.Patch combination>
-# Note: <Minor>, <Patch>, and <Build> should be within the range of 0 to 99.
-version: 0.0.0+0000000
+#   - <Build>: non-negative integer; a monotonic counter incremented by one on
+#       each published build for a given client/platform. It is NOT derived from
+#       <Major>.<Minor>.<Patch> and has no per-part range limit (only the platform
+#       store maximum applies, e.g. Android versionCode).
+version: 0.0.0+0
 
 # Version format for app_version: <Major>.<Minor>.<Patch>
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
 # app_version represents tasks and fixed bugs, which is different from the build version that is specific to each client
-app_version: 1.16.0+6
+app_version: 1.16.1+6
 
 environment:
   sdk: ^3.12.0
@@ -79,6 +80,7 @@ dependencies:
   gravatar_utils: ^1.0.0
   html: ^0.15.6
   http: ^1.6.0
+  image: ^4.0.0
   icon_decoration: ^2.1.0
   in_app_update: ^4.2.5
   intl: any
@@ -99,7 +101,15 @@ dependencies:
   pub_semver: ^2.2.0
   quiver: ^3.2.2
   rxdart: ^0.28.0
-  sdp_transform: ^0.3.2
+  # Temporary git pin: forked sdp_transform that restores the lossless guard in
+  # toIntIfInt (the published parser coerces numeric/hex ICE ufrags to int and
+  # corrupts them, e.g. 0X48 -> 72, breaking the local answer).
+  # TODO: move this fork off a personal account onto a corporate/org account, and
+  # re-pin to a stable commit or tag once the upstream parser fix is merged.
+  sdp_transform:
+    git:
+      url: https://github.com/SERDUN/dart-sdp-transform.git
+      ref: fix/ufrag-numeric-coercion
   share_plus: ^13.1.0
   shared_preferences: ^2.5.5
   stream_transform: ^2.1.1
@@ -126,10 +136,12 @@ dependencies:
   webtrit_appearance_theme:
     path: ./packages/webtrit_appearance_theme
   webtrit_callkeep:
-    # Release branches pin callkeep to a published tag (see docs/release_versioning.md).
+    # develop tracks the local working copy of callkeep for co-development.
+    # On release branches this is pinned to a callkeep tag (see docs/release_versioning.md).
+    # Never back-merge a git ref onto develop - keep this a path here (enforced by callkeep-path-guard).
     git:
       url: https://github.com/WebTrit/webtrit_callkeep.git
-      ref: 1.3.0
+      ref: 1.3.1
       path: webtrit_callkeep
   webtrit_phone_number:
     path: ./packages/webtrit_phone_number

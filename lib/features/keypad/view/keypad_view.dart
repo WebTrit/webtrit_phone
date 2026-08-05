@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,8 +37,16 @@ class KeypadViewState extends State<KeypadView> {
   late final _setValueDebounce = Debounce(Duration(milliseconds: 128));
 
   final _keypadTextFieldKey = GlobalKey();
-  EditableTextState? get _keypadTextFieldEditableTextState =>
-      (_keypadTextFieldKey.currentState as TextSelectionGestureDetectorBuilderDelegate).editableTextKey.currentState;
+  EditableTextState? get _keypadTextFieldEditableTextState {
+    // Guard the cast: currentState is null while the field is detached/rebuilt under the key
+    // (e.g. a theme swap reparenting the subtree in the same frame). A hard cast would throw a
+    // _TypeError there; return null instead so `?.showToolbar()` skips gracefully.
+    final delegate = _keypadTextFieldKey.currentState;
+    if (delegate is! TextSelectionGestureDetectorBuilderDelegate) return null;
+    // The `is` guard covers both null and wrong-type; promotion does not apply here because the
+    // delegate mixin is not a subtype of State, so an explicit (now safe) cast is still needed.
+    return (delegate as TextSelectionGestureDetectorBuilderDelegate).editableTextKey.currentState;
+  }
 
   @override
   void initState() {
@@ -71,39 +80,48 @@ class KeypadViewState extends State<KeypadView> {
     return Column(
       children: [
         Expanded(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: scaledInset),
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  key: _keypadTextFieldKey,
-                  controller: _textController,
-                  focusNode: _focusNode,
-                  decoration: inputField?.decoration ?? baseInputDecorations?.keypad,
-                  style: inputField?.textStyle ?? themeData.textTheme.headlineLarge,
-                  textAlign: inputField?.textAlign ?? TextAlign.center,
-                  showCursor: inputField?.showCursor ?? true,
-                  keyboardType: inputField?.keyboardType ?? TextInputType.none,
-                  cursorColor: inputField?.cursorColor,
-                  inputFormatters: [PhoneNormalizingFormatter()],
-                ),
-                RepaintBoundary(
-                  child: BlocBuilder<KeypadCubit, KeypadState>(
-                    buildWhen: (p, c) {
-                      final pName = p.contact?.maybeName ?? '';
-                      final cName = c.contact?.maybeName ?? '';
-                      return pName != cName;
-                    },
-                    builder: (context, state) => Text(
-                      state.contact?.maybeName ?? '',
-                      style: contactField?.textStyle ?? themeData.textTheme.bodyMedium,
-                      textAlign: contactField?.textAlign ?? TextAlign.center,
+          // The input is intentionally invisible (blends with the background), so its own hit
+          // target is a tiny box in the center. Catch long-presses across the whole upper region
+          // and surface the input's context menu (paste/copy) from anywhere on the background.
+          // Translucent (not opaque) so pointers still reach the field's own gesture handlers
+          // instead of being fully absorbed by this background detector.
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onLongPress: _showInputContextMenu,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: scaledInset),
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    key: _keypadTextFieldKey,
+                    controller: _textController,
+                    focusNode: _focusNode,
+                    decoration: inputField?.decoration ?? baseInputDecorations?.keypad,
+                    style: inputField?.textStyle ?? themeData.textTheme.headlineLarge,
+                    textAlign: inputField?.textAlign ?? TextAlign.center,
+                    showCursor: inputField?.showCursor ?? true,
+                    keyboardType: inputField?.keyboardType ?? TextInputType.none,
+                    cursorColor: inputField?.cursorColor,
+                    inputFormatters: [PhoneNormalizingFormatter()],
+                  ),
+                  RepaintBoundary(
+                    child: BlocBuilder<KeypadCubit, KeypadState>(
+                      buildWhen: (p, c) {
+                        final pName = p.contact?.maybeName ?? '';
+                        final cName = c.contact?.maybeName ?? '';
+                        return pName != cName;
+                      },
+                      builder: (context, state) => Text(
+                        state.contact?.maybeName ?? '',
+                        style: contactField?.textStyle ?? themeData.textTheme.bodyMedium,
+                        textAlign: contactField?.textAlign ?? TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -153,6 +171,29 @@ class KeypadViewState extends State<KeypadView> {
         SizedBox(height: scaledInset),
       ],
     );
+  }
+
+  Future<void> _showInputContextMenu() async {
+    // Decide whether there is anything to show BEFORE taking focus. The keypad input is
+    // paste-oriented: an empty field has nothing selected to copy, so the toolbar is only
+    // meaningful when the clipboard holds text. Guarding first also avoids focusing the hidden
+    // input on a long-press that would surface nothing (which would leave a stray blinking
+    // cursor and shift caret/toolbar timing for later key presses).
+    final hasSelection = !_textController.selection.isCollapsed;
+    final clipboard = await Clipboard.getData(Clipboard.kTextPlain);
+    final hasPasteableText = (clipboard?.text ?? '').isNotEmpty;
+    if (!mounted || (!hasSelection && !hasPasteableText)) return;
+
+    _focusNode.requestFocus();
+    // Defer so the just-requested focus / input connection is established before showToolbar(),
+    // which is a no-op on an unfocused/unconnected field.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (!_textController.selection.isValid) {
+        _textController.selection = TextSelection.collapsed(offset: _textController.text.length);
+      }
+      _keypadTextFieldEditableTextState?.showToolbar();
+    });
   }
 
   String _popNumber() {

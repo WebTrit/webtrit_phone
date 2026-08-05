@@ -4,6 +4,22 @@ import 'package:webtrit_phone/models/models.dart';
 
 import 'clock.dart';
 
+PresenceInfo _presence(String number, {required bool available, List<PresenceActivity> activities = const []}) {
+  return PresenceInfo(
+    id: number,
+    number: number,
+    available: available,
+    note: '',
+    statusIcon: null,
+    device: null,
+    timeOffsetMin: null,
+    timestamp: dFixedTime,
+    activities: activities,
+    source: PresenceInfoSource.sip,
+    arrivalTime: dFixedTime,
+  );
+}
+
 /// Mock chats for `MockChatsRepository`
 final dChatsMockChatsRepository = [
   Chat(
@@ -72,6 +88,9 @@ final dContactsRepository = [
     sourceId: 'user_1',
     firstName: 'Alice',
     lastName: 'Johnson',
+    presenceInfo: [
+      _presence('1001', available: true, activities: [PresenceActivity.meeting]),
+    ],
     aliasName: 'AJ',
     registered: true,
     userRegistered: true,
@@ -91,6 +110,7 @@ final dContactsRepository = [
     sourceId: 'user_2',
     firstName: 'Bob',
     lastName: 'Smith',
+    presenceInfo: [_presence('+1987654321', available: false)],
     aliasName: null,
     registered: false,
     userRegistered: false,

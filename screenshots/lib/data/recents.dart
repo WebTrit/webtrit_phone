@@ -3,6 +3,25 @@ import 'package:clock/clock.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/models/models.dart';
 
+// Fixed timestamp so the presence-driven screenshots stay deterministic.
+final _presenceAt = DateTime.utc(2024, 1, 1);
+
+PresenceInfo _presence(String number, {required bool available, List<PresenceActivity> activities = const []}) {
+  return PresenceInfo(
+    id: number,
+    number: number,
+    available: available,
+    note: '',
+    statusIcon: null,
+    device: null,
+    timeOffsetMin: null,
+    timestamp: _presenceAt,
+    activities: activities,
+    source: PresenceInfoSource.sip,
+    arrivalTime: _presenceAt,
+  );
+}
+
 /// 🔹 Mock recent call history data for testing call logs & contact integration
 final dMockRecentCallHistory = [
   Recent(
@@ -20,6 +39,7 @@ final dMockRecentCallHistory = [
       sourceId: '1',
       firstName: 'Thomas',
       lastName: 'Anderson',
+      presenceInfo: [_presence('1234', available: true)],
     ),
   ),
   Recent(
@@ -39,6 +59,9 @@ final dMockRecentCallHistory = [
       sourceId: '2',
       firstName: 'Thomas',
       lastName: 'Anderson',
+      presenceInfo: [
+        _presence('1234', available: true, activities: [PresenceActivity.onThePhone]),
+      ],
     ),
   ),
   Recent(
@@ -58,6 +81,9 @@ final dMockRecentCallHistory = [
       sourceId: '3',
       firstName: 'Dion',
       lastName: 'Dames',
+      presenceInfo: [
+        _presence('3344', available: true, activities: [PresenceActivity.meeting]),
+      ],
     ),
   ),
   Recent(
@@ -77,6 +103,7 @@ final dMockRecentCallHistory = [
       sourceId: '4',
       firstName: 'Stuart',
       lastName: 'Peterson',
+      presenceInfo: [_presence('1234', available: false)],
     ),
   ),
   Recent(
@@ -96,6 +123,9 @@ final dMockRecentCallHistory = [
       sourceId: '5',
       firstName: 'Alex',
       lastName: 'Bloom',
+      presenceInfo: [
+        _presence('1234', available: false, activities: [PresenceActivity.away]),
+      ],
     ),
   ),
 ];

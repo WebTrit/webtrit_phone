@@ -112,7 +112,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   // In other statuses except of updating an success it will stop retrying.
   @visibleForTesting
   Future<void> retrieveAndStoreFcmToken() async {
-    const vapidKey = EnvironmentConfig.FCM_VAPID_KEY;
+    final vapidKey = EnvironmentConfig.FCM_VAPID_KEY;
 
     final initialStatus = await pushEnvironment.getAvailability();
 

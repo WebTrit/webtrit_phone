@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'dart:math' as math;
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
+import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
@@ -48,10 +45,7 @@ class CallActiveScaffold extends StatefulWidget {
 }
 
 class CallActiveScaffoldState extends State<CallActiveScaffold> {
-  static const Duration _remoteFrameProbeInterval = Duration(seconds: 1);
-  static const int _remoteFrameMaxSamples = 1200;
-  static const int _blackLumaThreshold = 16;
-  static const double _blackFrameRatioThreshold = 0.98;
+  static const Duration _remoteFrameProbeDelay = Duration(seconds: 1);
 
   /// Cached `CallBloc` obtained in `initState`.
   /// Avoids unsafe `context.read` during widget deactivation (e.g., navigation pop).
@@ -72,8 +66,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   VideoBackgroundMode _backgroundMode = VideoBackgroundMode.blur;
 
   Timer? _remoteFrameWatcher;
-  bool _remoteFrameProbeInProgress = false;
   bool _hasRenderableRemoteFrame = false;
+  late final FrameAnalysisWorker _frameAnalysisWorker;
 
   static const Duration _debounceDuration = Duration(seconds: 2);
   DateTime? _debounceReleaseTime;
@@ -88,7 +82,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
     // Synchronize the auto-hide logic with the initial call list configuration.
     _compactController = CompactAutoResetController(initiallyActive: widget.activeCalls.shouldAutoCompact);
-    _remoteFrameWatcher = Timer.periodic(_remoteFrameProbeInterval, (_) => _probeRemoteFrame());
+    _frameAnalysisWorker = FrameAnalysisWorker()..start();
+    _scheduleNextProbe(Duration.zero);
 
     // Dispatch interaction debounce whenever any call is in updating state
     // to prevent user race conditions e.g hold or upgrade to video when the call is updating from remote side.
@@ -111,6 +106,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   @override
   void dispose() {
     _disposeRemoteFrameWatcher();
+    _frameAnalysisWorker.dispose();
     _compactController.removeListener(_onCompactChanged);
     _compactController.dispose();
     _debounceByStateSubscription?.cancel();
@@ -359,14 +355,29 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                                             })
                                                     : null,
                                                 // TODO (Serdun): Simplify complex condition in the widget tree.
+                                                // The submit acts on the consultation call (the derived
+                                                // `current`), not the focused one: focus may sit on the
+                                                // held original call being transferred (an incoming call
+                                                // grabs the selection at ring time), and using it as the
+                                                // replace target would produce a self-referential REFER.
+                                                //
+                                                // KNOWN LIMITATION: `current` is still a positional guess
+                                                // ("the live non-held call"), which breaks once a third,
+                                                // unrelated call is concurrently active - it can point at
+                                                // that call instead of the real consultation call. Left out
+                                                // of scope here: the server caps concurrent lines at 4, and
+                                                // this heuristic is unchanged from pre-1.16.0 behavior (not
+                                                // a new regression). A proper fix needs an explicit
+                                                // referor<->consultation link, not a positional guess -
+                                                // see git history for a prior (closed) attempt.
                                                 onAttendedTransferSubmitted: widget.callConfig.isAttendedTransferEnabled
-                                                    ? (!focusedCall.wasAccepted || focusedTransfer != null
+                                                    ? (!activeCall.wasAccepted || focusedTransfer != null
                                                           ? null
                                                           : (ActiveCall referorCall) {
                                                               _callBloc.add(
                                                                 CallControlEvent.attendedTransferSubmitted(
                                                                   referorCall: referorCall,
-                                                                  replaceCall: focusedCall,
+                                                                  replaceCall: activeCall,
                                                                 ),
                                                               );
                                                             })
@@ -498,95 +509,37 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     return tracks.first;
   }
 
+  void _scheduleNextProbe(Duration delay) {
+    if (!mounted) return;
+    _remoteFrameWatcher = Timer(delay, _probeRemoteFrame);
+  }
+
   Future<void> _probeRemoteFrame() async {
-    if (_remoteFrameProbeInProgress || mounted == false) return;
+    if (!mounted) return;
 
     final track = _currentRemoteVideoTrack;
-    if (track == null) return;
+    if (track == null) {
+      _scheduleNextProbe(_remoteFrameProbeDelay);
+      return;
+    }
 
-    _remoteFrameProbeInProgress = true;
     final startTime = DateTime.now();
     try {
-      final isBlackOrEmpty = await _isTrackFrameBlackOrEmpty(track).timeout(const Duration(seconds: 5));
+      final isBlackOrEmpty = await _isTrackFrameBlackOrEmpty(track).timeout(const Duration(seconds: 10));
       _setHasRenderableRemoteFrame(!isBlackOrEmpty);
     } catch (_) {
       // In case of any errors during frame capture or analysis, we optimistically assume that the remote frame is renderable.
       _setHasRenderableRemoteFrame(true);
     } finally {
-      _remoteFrameProbeInProgress = false;
       final elapsed = DateTime.now().difference(startTime);
       _logger.fine('Remote frame probe completed in ${elapsed.inMilliseconds}ms, $_hasRenderableRemoteFrame');
+      _scheduleNextProbe(_remoteFrameProbeDelay);
     }
   }
 
   Future<bool> _isTrackFrameBlackOrEmpty(MediaStreamTrack track) async {
     final capturedFrame = await track.captureFrame();
-    final framePngBytes = capturedFrame.asUint8List();
-
-    if (framePngBytes.isEmpty) {
-      return true;
-    }
-
-    final codec = await ui.instantiateImageCodec(framePngBytes);
-    try {
-      final nextFrame = await codec.getNextFrame();
-      final image = nextFrame.image;
-      try {
-        final frameRgbaBytes = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
-
-        if (frameRgbaBytes == null || frameRgbaBytes.lengthInBytes == 0) {
-          return true;
-        }
-
-        final rgbaBytes = frameRgbaBytes.buffer.asUint8List(frameRgbaBytes.offsetInBytes, frameRgbaBytes.lengthInBytes);
-
-        return _isMostlyBlackRgbaFrame(rgbaBytes);
-      } finally {
-        image.dispose();
-      }
-    } finally {
-      codec.dispose();
-    }
-  }
-
-  bool _isMostlyBlackRgbaFrame(Uint8List rgbaBytes) {
-    final totalPixels = rgbaBytes.length ~/ 4;
-
-    if (totalPixels == 0) {
-      return true;
-    }
-
-    final step = math.max(1, totalPixels ~/ _remoteFrameMaxSamples);
-    var sampledPixels = 0;
-    var opaquePixels = 0;
-    var blackPixels = 0;
-
-    for (var pixelIndex = 0; pixelIndex < totalPixels; pixelIndex += step) {
-      final offset = pixelIndex * 4;
-      final red = rgbaBytes[offset];
-      final green = rgbaBytes[offset + 1];
-      final blue = rgbaBytes[offset + 2];
-      final alpha = rgbaBytes[offset + 3];
-
-      sampledPixels++;
-
-      if (alpha == 0) {
-        continue;
-      }
-
-      opaquePixels++;
-
-      final luma = ((red * 299) + (green * 587) + (blue * 114)) ~/ 1000;
-      if (luma <= _blackLumaThreshold) {
-        blackPixels++;
-      }
-    }
-
-    if (sampledPixels == 0 || opaquePixels == 0) {
-      return true;
-    }
-
-    return blackPixels / opaquePixels >= _blackFrameRatioThreshold;
+    return _frameAnalysisWorker.analyzeFrame(capturedFrame.asUint8List());
   }
 
   void _setHasRenderableRemoteFrame(bool value) {
