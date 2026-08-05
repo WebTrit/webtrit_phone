@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/features/register_status/register_status.dart';
 import 'package:webtrit_phone/features/user_info/user_info.dart';
@@ -72,26 +73,20 @@ class SettingsScreen extends StatelessWidget {
                       builder: (context, sessionState) => SessionStatusListTile(
                         status: sessionState.status,
                         topIssue: sessionState.topIssue,
+                        registered: context.select<RegisterStatusCubit, bool>((cubit) => cubit.state.value),
+                        updating: context.select<RegisterStatusCubit, bool>((cubit) => cubit.state.isUpdating),
                         onTap: () => _onDiagnosticTap(context),
                       ),
                     ),
                     if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
                     BlocBuilder<RegisterStatusCubit, RegisterStatus>(
-                      builder: (context, registerState) => SwitchListTile(
-                        title: Text(
-                          context.l10n.settings_ListViewTileTitle_registered,
-                          style: effectiveStyle?.itemTextStyle,
-                        ),
-                        value: registerState.value,
-                        onChanged: registerState.isUpdating
-                            ? null
-                            : (value) => _onRegisterStatusChanged(context, value),
-                        secondary: registerState.isUpdating
-                            ? const SizedCircularProgressIndicator(size: 24, strokeWidth: 2)
-                            : Icon(
-                                Icons.account_circle_outlined,
-                                color: effectiveStyle?.userIconColor ?? effectiveStyle?.leadingIconsColor,
-                              ),
+                      builder: (context, registerState) => RegisterStatusListTile(
+                        sessionStatus: context.select<SessionStatusCubit, SessionStatus>((cubit) => cubit.state.status),
+                        registerStatus: registerState,
+                        onChanged: (value) => _onRegisterStatusChanged(context, value),
+                        onUnavailableTap: () => _onRegisterStatusUnavailableTap(context),
+                        textStyle: effectiveStyle?.itemTextStyle,
+                        iconColor: effectiveStyle?.userIconColor ?? effectiveStyle?.leadingIconsColor,
                       ),
                     ),
                     if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
@@ -173,12 +168,28 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _onRefreshTap(BuildContext context) => context.read<RegisterStatusCubit>().fetchStatus();
+  Future<void> _onRefreshTap(BuildContext context) async {
+    final succeeded = await context.read<RegisterStatusCubit>().fetchStatus();
+    if (!succeeded && context.mounted) {
+      context.showErrorSnackBar(context.l10n.settings_registerStatusSnackBar_requestFailed);
+    }
+  }
 
   void _onDiagnosticTap(BuildContext context) => context.router.navigate(const DiagnosticScreenPageRoute());
 
-  void _onRegisterStatusChanged(BuildContext context, bool value) =>
-      context.read<RegisterStatusCubit>().setStatus(value);
+  /// A failure rolls the switch back, so it must be explained: without a
+  /// message the flip-back reads as the app ignoring the tap.
+  Future<void> _onRegisterStatusChanged(BuildContext context, bool value) async {
+    final succeeded = await context.read<RegisterStatusCubit>().setStatus(value);
+    if (!succeeded && context.mounted) {
+      context.showErrorSnackBar(context.l10n.settings_registerStatusSnackBar_requestFailed);
+    }
+  }
+
+  void _onRegisterStatusUnavailableTap(BuildContext context) => context.showSnackBar(
+    context.l10n.settings_registerStatusSnackBar_unavailable,
+    action: SnackBarAction(label: context.l10n.diagnostic_AppBar_title, onPressed: () => _onDiagnosticTap(context)),
+  );
 
   void _onItemTap(BuildContext context, SettingItem item) {
     switch (item.flavor) {

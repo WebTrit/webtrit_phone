@@ -1989,6 +1989,21 @@ class AppLocalizationsTh extends AppLocalizations {
   String get sessionStatus_pushNotificationServiceProblem => 'เกิดปัญหากับการตั้งค่าบริการ push notification';
 
   @override
+  String get sessionStatus_subtitle_connectivityNone => 'ตรวจสอบ Wi-Fi หรือเน็ตมือถือ';
+
+  @override
+  String get sessionStatus_subtitle_diagnostic => 'แตะเพื่อวินิจฉัย';
+
+  @override
+  String get sessionStatus_subtitle_inProgress => 'กำลังเชื่อมต่อกับเซิร์ฟเวอร์...';
+
+  @override
+  String get sessionStatus_subtitle_ready => 'สายเรียกเข้าถึงบัญชีนี้ได้';
+
+  @override
+  String get sessionStatus_subtitle_registrationOff => 'ปิดการลงทะเบียนแล้ว';
+
+  @override
   String get session_Teardown_progressText => 'กำลังออกจากระบบ...';
 
   @override
@@ -2379,6 +2394,21 @@ class AppLocalizationsTh extends AppLocalizations {
   String get settings_iceSettings_Section_trfilter_title => 'โปรโตคอลการขนส่ง';
 
   @override
+  String get settings_ListViewTileSubtitle_registeredNeedsConnection => 'ต้องมีการเชื่อมต่อ';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredOff => 'สายเรียกเข้าจะถูกปฏิเสธ';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredOn => 'บัญชีรับสายได้';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredUpdating => 'กำลังอัปเดต...';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredWaitingForConnection => 'กำลังรอการเชื่อมต่อ...';
+
+  @override
   String get settings_ListViewTileTitle_about => 'เกี่ยวกับ';
 
   @override
@@ -2476,6 +2506,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get settings_network_smsFallback_toggle => 'SMS เป็นช่องทางสำรอง';
+
+  @override
+  String get settings_registerStatusSnackBar_requestFailed => 'ไม่สามารถติดต่อเซิร์ฟเวอร์ได้ - โปรดลองอีกครั้ง';
+
+  @override
+  String get settings_registerStatusSnackBar_unavailable =>
+      'ไม่มีการเชื่อมต่อกับเซิร์ฟเวอร์ - เปลี่ยนการตั้งค่านี้ไม่ได้';
 
   @override
   String get settings_videoCapturing_Section_framerate_prefix => 'เฟรม: ';

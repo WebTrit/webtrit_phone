@@ -1993,6 +1993,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sessionStatus_pushNotificationServiceProblem => 'Problem with configuration push notification service';
 
   @override
+  String get sessionStatus_subtitle_connectivityNone => 'Check Wi-Fi or mobile data';
+
+  @override
+  String get sessionStatus_subtitle_diagnostic => 'Tap for diagnostics';
+
+  @override
+  String get sessionStatus_subtitle_inProgress => 'Connecting to the server...';
+
+  @override
+  String get sessionStatus_subtitle_ready => 'Calls can reach this account';
+
+  @override
+  String get sessionStatus_subtitle_registrationOff => 'Registration is off';
+
+  @override
   String get session_Teardown_progressText => 'Signing out...';
 
   @override
@@ -2385,6 +2400,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_iceSettings_Section_trfilter_title => 'Transport protocol';
 
   @override
+  String get settings_ListViewTileSubtitle_registeredNeedsConnection => 'Needs connection';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredOff => 'Incoming calls are rejected';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredOn => 'Account can receive calls';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredUpdating => 'Updating...';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredWaitingForConnection => 'Waiting for connection...';
+
+  @override
   String get settings_ListViewTileTitle_about => 'About';
 
   @override
@@ -2482,6 +2512,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_network_smsFallback_toggle => 'SMS as a backup channel';
+
+  @override
+  String get settings_registerStatusSnackBar_requestFailed => 'Could not reach the server - please try again';
+
+  @override
+  String get settings_registerStatusSnackBar_unavailable =>
+      'No connection to the server - this setting can\'t be changed now';
 
   @override
   String get settings_videoCapturing_Section_framerate_prefix => 'frames: ';

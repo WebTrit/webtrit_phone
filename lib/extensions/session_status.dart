@@ -30,6 +30,29 @@ extension SessionStatusL10n on SessionStatus {
   }
 }
 
+extension SessionStatusSubtitleL10n on SessionStatus {
+  /// One line explaining what the primary status means for the user.
+  ///
+  /// [registered] is the last known server-side account setting. It tells an
+  /// unregistered session the user asked for apart from one caused elsewhere,
+  /// so the subtitle never claims a reason it cannot know. [updating] marks a
+  /// registration change in flight: right after the user flips registration on
+  /// the session is still unregistered, which is a normal transition and not a
+  /// fault, so it must not read as one.
+  String subtitleL10n(BuildContext context, {required bool registered, bool updating = false}) {
+    if (hasPushTokenError) return context.l10n.sessionStatus_subtitle_diagnostic;
+    return switch (signalingStatus) {
+      CallStatus.connectivityNone => context.l10n.sessionStatus_subtitle_connectivityNone,
+      CallStatus.connectError || CallStatus.connectIssue => context.l10n.sessionStatus_subtitle_diagnostic,
+      CallStatus.appUnregistered when !registered => context.l10n.sessionStatus_subtitle_registrationOff,
+      CallStatus.appUnregistered when updating => context.l10n.sessionStatus_subtitle_inProgress,
+      CallStatus.appUnregistered => context.l10n.sessionStatus_subtitle_diagnostic,
+      CallStatus.inProgress => context.l10n.sessionStatus_subtitle_inProgress,
+      CallStatus.ready => context.l10n.sessionStatus_subtitle_ready,
+    };
+  }
+}
+
 extension SessionStatusColor on SessionStatus {
   Color color(BuildContext context) {
     final themeData = Theme.of(context);

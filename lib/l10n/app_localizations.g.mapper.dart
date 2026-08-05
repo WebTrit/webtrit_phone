@@ -904,6 +904,13 @@ extension AppLocalizationsExtension on AppLocalizations {
       'sessionStatus_AppBar_connecting' => sessionStatus_AppBar_connecting,
       'sessionStatus_pushNotificationServiceProblem' =>
         sessionStatus_pushNotificationServiceProblem,
+      'sessionStatus_subtitle_connectivityNone' =>
+        sessionStatus_subtitle_connectivityNone,
+      'sessionStatus_subtitle_diagnostic' => sessionStatus_subtitle_diagnostic,
+      'sessionStatus_subtitle_inProgress' => sessionStatus_subtitle_inProgress,
+      'sessionStatus_subtitle_ready' => sessionStatus_subtitle_ready,
+      'sessionStatus_subtitle_registrationOff' =>
+        sessionStatus_subtitle_registrationOff,
       'session_Teardown_progressText' => session_Teardown_progressText,
       'settings_AboutText_ApplicationEmbeddedLinks' =>
         settings_AboutText_ApplicationEmbeddedLinks,
@@ -1136,6 +1143,16 @@ extension AppLocalizationsExtension on AppLocalizations {
         settings_iceSettings_Section_trfilter_skipUdp,
       'settings_iceSettings_Section_trfilter_title' =>
         settings_iceSettings_Section_trfilter_title,
+      'settings_ListViewTileSubtitle_registeredNeedsConnection' =>
+        settings_ListViewTileSubtitle_registeredNeedsConnection,
+      'settings_ListViewTileSubtitle_registeredOff' =>
+        settings_ListViewTileSubtitle_registeredOff,
+      'settings_ListViewTileSubtitle_registeredOn' =>
+        settings_ListViewTileSubtitle_registeredOn,
+      'settings_ListViewTileSubtitle_registeredUpdating' =>
+        settings_ListViewTileSubtitle_registeredUpdating,
+      'settings_ListViewTileSubtitle_registeredWaitingForConnection' =>
+        settings_ListViewTileSubtitle_registeredWaitingForConnection,
       'settings_ListViewTileTitle_about' => settings_ListViewTileTitle_about,
       'settings_ListViewTileTitle_accountDelete' =>
         settings_ListViewTileTitle_accountDelete,
@@ -1197,6 +1214,10 @@ extension AppLocalizationsExtension on AppLocalizations {
         settings_network_incomingCallType_title,
       'settings_network_smsFallback_toggle' =>
         settings_network_smsFallback_toggle,
+      'settings_registerStatusSnackBar_requestFailed' =>
+        settings_registerStatusSnackBar_requestFailed,
+      'settings_registerStatusSnackBar_unavailable' =>
+        settings_registerStatusSnackBar_unavailable,
       'settings_videoCapturing_Section_framerate_prefix' =>
         settings_videoCapturing_Section_framerate_prefix,
       'settings_videoCapturing_Section_framerate_title' =>

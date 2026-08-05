@@ -15,6 +15,22 @@ class SessionStatus {
   /// regardless of push notification delivery issues.
   bool get isReady => signalingStatus == CallStatus.ready;
 
+  /// A request for a server-side account setting has a chance of succeeding.
+  ///
+  /// Only two signaling states rule it out: the device has no network at all,
+  /// and the session is connecting (the cached value is about to be confirmed
+  /// or corrected, so a change would race the fetch; SessionStatusCubit also
+  /// deliberately presents the first moments after a network recovery as
+  /// connecting while the derived state still carries a stale error). A
+  /// connect error or issue that actually persisted onto the screen does not:
+  /// those describe the signaling channel, while the settings travel over HTTP
+  /// independently of it, so the attempt is allowed and its failure is
+  /// reported to the user instead of being pre-empted here.
+  ///
+  /// Evaluate this on the smoothed status published by SessionStatusCubit, so
+  /// the toggle availability always agrees with the status text next to it.
+  bool get mayReachServer => signalingStatus != CallStatus.connectivityNone && signalingStatus != CallStatus.inProgress;
+
   /// App is actively trying to establish connection — show a progress indicator.
   /// Push token error is excluded because it is surfaced separately via the
   /// avatar ring color, matching previous behavior where pushTokenError overrode

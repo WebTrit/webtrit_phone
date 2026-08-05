@@ -3661,6 +3661,36 @@ abstract class AppLocalizations {
   /// **'Problem with configuration push notification service'**
   String get sessionStatus_pushNotificationServiceProblem;
 
+  /// Subtitle of the connection status row on the account screen when the device has no internet access. Tells the user where to look for the cause.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Wi-Fi or mobile data'**
+  String get sessionStatus_subtitle_connectivityNone;
+
+  /// Subtitle of the connection status row when the cause is not obvious from the status itself (connection error, connection issue, push notification problem). Points the user to the diagnostic screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap for diagnostics'**
+  String get sessionStatus_subtitle_diagnostic;
+
+  /// Subtitle of the connection status row while the app is establishing a connection to the server.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to the server...'**
+  String get sessionStatus_subtitle_inProgress;
+
+  /// Subtitle of the connection status row when the app is connected and the account can be called.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls can reach this account'**
+  String get sessionStatus_subtitle_ready;
+
+  /// Subtitle of the connection status row when the account is unregistered because the user turned the registration setting off, as opposed to a connection problem.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration is off'**
+  String get sessionStatus_subtitle_registrationOff;
+
   /// Status message displayed while the application is performing cleanup during the logout process.
   ///
   /// In en, this message translates to:
@@ -4399,6 +4429,36 @@ abstract class AppLocalizations {
   /// **'Transport protocol'**
   String get settings_iceSettings_Section_trfilter_title;
 
+  /// Subtitle of the account registration toggle while the server is out of reach, so the setting cannot be read or changed.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs connection'**
+  String get settings_ListViewTileSubtitle_registeredNeedsConnection;
+
+  /// Subtitle of the account registration toggle when it is switched off, explaining that incoming calls are rejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming calls are rejected'**
+  String get settings_ListViewTileSubtitle_registeredOff;
+
+  /// Subtitle of the account registration toggle when it is switched on, explaining that the account can receive calls.
+  ///
+  /// In en, this message translates to:
+  /// **'Account can receive calls'**
+  String get settings_ListViewTileSubtitle_registeredOn;
+
+  /// Subtitle of the account registration toggle while the change is being sent to the server.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating...'**
+  String get settings_ListViewTileSubtitle_registeredUpdating;
+
+  /// Subtitle of the account registration toggle while the app is still connecting, so the setting is not confirmed yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for connection...'**
+  String get settings_ListViewTileSubtitle_registeredWaitingForConnection;
+
   /// No description provided for @settings_ListViewTileTitle_about.
   ///
   /// In en, this message translates to:
@@ -4590,6 +4650,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'SMS as a backup channel'**
   String get settings_network_smsFallback_toggle;
+
+  /// Shown in an error snackbar when a register-status request fails: an explicit refresh of the account registration setting, or a change of it (in which case the switch also rolls back to its previous value).
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server - please try again'**
+  String get settings_registerStatusSnackBar_requestFailed;
+
+  /// Shown in a snackbar when the user taps the account registration toggle while the server is out of reach. Offers a shortcut to the diagnostic screen.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection to the server - this setting can\'t be changed now'**
+  String get settings_registerStatusSnackBar_unavailable;
 
   /// No description provided for @settings_videoCapturing_Section_framerate_prefix.
   ///

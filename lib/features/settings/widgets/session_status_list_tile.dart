@@ -13,6 +13,8 @@ class SessionStatusListTile extends StatelessWidget {
   const SessionStatusListTile({
     super.key,
     required this.status,
+    required this.registered,
+    this.updating = false,
     this.topIssue,
     this.info,
     this.onTap,
@@ -21,7 +23,16 @@ class SessionStatusListTile extends StatelessWidget {
 
   final SessionStatus status;
 
-  /// Most severe active side issue, surfaced as a warning subtitle. Null hides it.
+  /// Last known server-side registration setting; feeds the status subtitle so
+  /// a deliberately unregistered session is not described as a fault.
+  final bool registered;
+
+  /// A registration change is in flight, so an unregistered session is a
+  /// normal transition rather than a problem.
+  final bool updating;
+
+  /// Most severe active side issue, surfaced as a warning subtitle. It outranks
+  /// the descriptive status subtitle, which is hidden while an issue is shown.
   final SessionIssue? topIssue;
   final UserInfo? info;
   final VoidCallback? onTap;
@@ -45,12 +56,22 @@ class SessionStatusListTile extends StatelessWidget {
                   child: CircleAvatar(radius: 4, backgroundColor: status.color(context)),
                 ),
                 title: Text(status.l10n(context), key: status.key, style: themeData.textTheme.labelLarge),
-                subtitle: topIssue == null
-                    ? null
-                    : Text(
-                        topIssue!.caption(context),
-                        style: themeData.textTheme.bodySmall?.copyWith(color: topIssue!.color(context)),
-                      ),
+                // A single subtitle line in every state: the row must keep its
+                // height when the status changes, or the whole list below jumps.
+                subtitle: switch (topIssue) {
+                  final SessionIssue issue => Text(
+                    issue.caption(context),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: themeData.textTheme.bodySmall?.copyWith(color: issue.color(context)),
+                  ),
+                  null => Text(
+                    status.subtitleL10n(context, registered: registered, updating: updating),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: themeData.textTheme.bodySmall?.copyWith(color: themeData.colorScheme.onSurfaceVariant),
+                  ),
+                },
                 trailing: const Icon(Icons.arrow_right),
               ),
               BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
