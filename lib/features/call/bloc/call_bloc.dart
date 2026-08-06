@@ -125,15 +125,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// events escalate severity). Cleared when the indicator is hidden.
   final Map<String, int> _slowlinkHits = {};
 
-  /// Holds the local ringback back for a moment after the first ringing answer.
-  ///
-  /// A switch that is about to stream its own ringback announces the call as
-  /// ringing first and only then sends the media, so starting the bundled tone
-  /// right away makes it audible for a blink before the network takes over.
-  /// Waiting out that gap keeps such calls on a single tone; where no media
-  /// follows, the tone simply starts once the wait is over. Keyed by callId, so
-  /// one line never delays or cancels another.
-  final _ringbackStartDebounce = DebounceMap<String>(kOutgoingRingbackStartDelay);
+  /// Owns when the app's own ringback tone is heard on an outgoing call: the
+  /// wait for possible network audio, and every reason to go silent again.
+  late final _ringback = OutgoingRingbackController(
+    play: _mediaManager.playRingbackSound,
+    stop: _mediaManager.stopRingbackSound,
+  );
 
   late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
@@ -277,11 +274,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _slowlinkDebounce.dispose();
     _slowlinkHits.clear();
 
-    _ringbackStartDebounce.dispose();
-
     await _signalingSubscription.cancel();
 
-    await _mediaManager.stopRingbackSound();
+    await _ringback.stopAll();
 
     for (final activeCall in state.activeCalls) {
       await _releaseLocalStream(activeCall.localStream);
@@ -685,8 +680,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _iceRestartDebounce.cancel(event.callId);
     _slowlinkDebounce.cancel(event.callId);
     _slowlinkHits.remove(event.callId);
-    _ringbackStartDebounce.cancel(event.callId);
-    await _mediaManager.stopRingbackSound();
+    await _ringback.stop(event.callId);
 
     try {
       emit(
@@ -1099,7 +1093,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         'flowing (callId: ${event.callId})',
       );
     } else {
-      _scheduleLocalRingback(event.callId);
+      _ringback.ringing(event.callId, stillWanted: () => _localRingbackStillWanted(event.callId));
     }
 
     emit(
@@ -1111,20 +1105,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _maybeSendPendingMediaState(event.callId);
   }
 
-  /// Starts the local ringback after [kOutgoingRingbackStartDelay], unless the
-  /// call meanwhile gets its audio from the network, is answered or ends.
-  ///
-  /// The state is re-read when the wait is over, so a call that moved on in the
-  /// meantime never gets a tone it no longer needs.
-  void _scheduleLocalRingback(String callId) {
-    _ringbackStartDebounce.schedule(callId, () {
-      final call = state.retrieveActiveCall(callId);
-      if (call == null || call.wasAccepted || call.wasHungUp || !call.shouldPlayLocalRingback) {
-        _logger.info('_scheduleLocalRingback: skipped, call moved on (callId: $callId)');
-        return;
-      }
-      _mediaManager.playRingbackSound().ignore();
-    });
+  /// Whether the local ringback is still wanted for [callId] once the
+  /// controller's wait is over - the call may have been answered, ended or
+  /// picked up audio from the network in the meantime.
+  bool _localRingbackStillWanted(String callId) {
+    final call = state.retrieveActiveCall(callId);
+    return call != null && !call.wasAccepted && !call.wasHungUp && call.shouldPlayLocalRingback;
   }
 
   /// Best-effort informational signal so the remote side can reflect the
@@ -1164,8 +1150,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // early media - set specified session description
   Future<void> __onCallSignalingEventProgress(_CallSignalingEventProgress event, Emitter<CallState> emit) async {
-    _ringbackStartDebounce.cancel(event.callId);
-    await _mediaManager.stopRingbackSound();
+    await _ringback.stop(event.callId);
 
     final jsep = event.jsep;
     if (jsep != null) {
@@ -2124,7 +2109,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       // Handles exceptions during the outgoing call perform event, sends a notification, stops the ringtone, and completes the peer connection with an error.
       // The specific error "Error setting ICE locally" indicates an issue with ICE (Interactive Connectivity Establishment) negotiation in the WebRTC signaling process.
       callErrorReporter.handle(e, stackTrace, '__onMutationPerformStart error:');
-      await _mediaManager.stopRingbackSound();
+      await _ringback.stop(event.callId);
       _peerConnectionManager.completeError(event.callId, e, stackTrace);
       add(_ResetStateEvent.completeCall(event.callId));
     }
@@ -2341,7 +2326,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> __onMutationPerformEnd(_CallMutationEventPerformEnd event, Emitter<CallState> emit) async {
     try {
-      await _mediaManager.stopRingbackSound();
+      await _ringback.stop(event.callId);
 
       emit(
         state.copyWithMappedActiveCall(event.callId, (activeCall) {
@@ -3033,7 +3018,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       call = call.copyWith(processingStatus: CallProcessingStatus.connected, acceptedTime: clock.now());
 
       if (outgoing) {
-        await _mediaManager.stopRingbackSound();
+        await _ringback.stop(event.callId);
         await callkeep.reportConnectedOutgoingCall(event.callId);
       }
     } else {
@@ -3083,7 +3068,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   }
 
   Future<void> __onMutationSignalingHangup(_CallMutationEventSignalingHangup event, Emitter<CallState> emit) async {
-    _mediaManager.stopRingbackSound().ignore();
+    _ringback.stopUnawaited(event.callId);
     _signalingModule.cancelRequestsByCallId(event.callId);
 
     ActiveCall? call = state.retrieveActiveCall(event.callId);
