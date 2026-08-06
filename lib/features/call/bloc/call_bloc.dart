@@ -1074,9 +1074,20 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
   }
 
-  // no early media - play ringtone
+  // ringing - play the local ringtone unless the remote side already sends its own
   Future<void> __onCallSignalingEventRinging(_CallSignalingEventRinging event, Emitter<CallState> emit) async {
-    await _mediaManager.playRingbackSound();
+    // Some switches keep answering with plain ringing after they already started
+    // streaming their own ringback, and restarting the bundled tone then plays
+    // both at once.
+    final activeCall = state.retrieveActiveCall(event.callId);
+    if (activeCall != null && !activeCall.shouldPlayLocalRingback) {
+      _logger.info(
+        '__onCallSignalingEventRinging: local ringback suppressed, early media already '
+        'flowing (callId: ${event.callId})',
+      );
+    } else {
+      await _mediaManager.playRingbackSound();
+    }
 
     emit(
       state.copyWithMappedActiveCall(event.callId, (call) {
@@ -1134,7 +1145,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       } else {
         final remoteDescription = jsep.toDescription();
         sdpSanitizer?.apply(remoteDescription);
-        await peerConnection.setRemoteDescription(remoteDescription);
+        try {
+          await peerConnection.setRemoteDescription(remoteDescription);
+          // Only now is the remote audio really wired up, so only now may the
+          // local ringback stay off for the rest of the call setup. A switch
+          // that repeats its description would otherwise fail here and leave
+          // the call silent.
+          emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(earlyMedia: true)));
+        } catch (e) {
+          _logger.warning('__onCallSignalingEventProgress: setRemoteDescription failed ($e)');
+        }
       }
     } else {
       _logger.warning('__onCallSignalingEventProgress: jsep must not be null');
