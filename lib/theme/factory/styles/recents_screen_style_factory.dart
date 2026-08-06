@@ -9,10 +9,11 @@ import 'package:webtrit_phone/theme/extension/extension.dart';
 import '../theme_style_factory.dart';
 
 class RecentsScreenStyleFactory implements ThemeStyleFactory<RecentsScreenStyles> {
-  RecentsScreenStyleFactory(this.colors, this.config);
+  RecentsScreenStyleFactory(this.colors, this.config, {this.appBarTheme});
 
   final ColorScheme colors;
   final RecentsPageConfig config;
+  final AppBarTheme? appBarTheme;
 
   @override
   RecentsScreenStyles create() {
@@ -24,6 +25,7 @@ class RecentsScreenStyleFactory implements ThemeStyleFactory<RecentsScreenStyles
         appBarBlurredSurface: config.appBarBlurredSurface?.toStyle(),
         contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
+        appBarTheme: appBarTheme,
       ),
     );
   }

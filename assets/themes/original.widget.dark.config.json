@@ -55,8 +55,7 @@
         "fontSize": 18,
         "fontWeight": {
           "weight": 600
-        },
-        "color": "#E2E2E2"
+        }
       }
     },
     "__tabBarConfig": "Tab bar styling including indicator, labels, alignment, and animation.",

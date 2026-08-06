@@ -88,9 +88,8 @@ class _ChatConversationBuilderViewState extends State<ChatConversationBuilderVie
 
   AppBar buildAppBar(ChatCBState state) {
     final theme = Theme.of(context);
-    final actionButtonStyle = TextButton.styleFrom(
-      foregroundColor: theme.appBarTheme.foregroundColor ?? theme.colorScheme.primary,
-    );
+    // Accent-colored on purpose: these are modal-sheet actions, not bar chrome.
+    final actionButtonStyle = TextButton.styleFrom(foregroundColor: theme.colorScheme.primary);
 
     if (state is ChatCBGroupContactsSelection || state is ChatCBGroupFillInfo) {
       return AppBar(

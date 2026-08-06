@@ -54,6 +54,7 @@ class _AboutScreenState extends State<AboutScreen> {
     final topPadding = kToolbarHeight + mediaQuery.padding.top;
 
     return ThemedScaffold(
+      appBarTheme: localStyle?.appBarTheme,
       background: localStyle?.background,
       extendBodyBehindAppBar: true,
       appBar: AppBar(

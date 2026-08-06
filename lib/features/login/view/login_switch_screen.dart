@@ -30,6 +30,7 @@ class LoginSwitchScreen extends StatelessWidget {
     return LoginScaffold(
       contentThemeOverride: localStyle?.contentThemeOverride,
       applyToAppBar: localStyle?.applyToAppBar,
+      appBarTheme: localStyle?.appBarTheme,
       systemUiOverlayStyle: localStyle?.systemUiOverlayStyle,
       appBar: appBar,
       body: Column(

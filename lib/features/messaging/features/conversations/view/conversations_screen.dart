@@ -245,6 +245,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
         background: effectiveStyle?.background,
         contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
         applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
+        appBarTheme: effectiveStyle?.appBarTheme,
         extendBodyBehindAppBar: true,
         appBar: MainAppBar(
           title: widget.title,

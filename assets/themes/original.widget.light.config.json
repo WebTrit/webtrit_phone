@@ -55,8 +55,7 @@
         "fontSize": 18,
         "fontWeight": {
           "weight": 600
-        },
-        "color": "#30302F"
+        }
       },
       "systemOverlayStyle": {
         "statusBarIconBrightness": "dark",

@@ -9,10 +9,11 @@ import 'package:webtrit_phone/theme/extension/extension.dart';
 import '../theme_style_factory.dart';
 
 class EmbeddedScreenStyleFactory implements ThemeStyleFactory<EmbeddedScreenStyles> {
-  EmbeddedScreenStyleFactory(this.colors, this.config);
+  EmbeddedScreenStyleFactory(this.colors, this.config, {this.appBarTheme});
 
   final ColorScheme colors;
   final EmbeddedPageConfig config;
+  final AppBarTheme? appBarTheme;
 
   @override
   EmbeddedScreenStyles create() {
@@ -21,8 +22,10 @@ class EmbeddedScreenStyleFactory implements ThemeStyleFactory<EmbeddedScreenStyl
     return EmbeddedScreenStyles(
       primary: EmbeddedScreenStyle(
         background: backgroundStyle,
+        appBarBlurredSurface: config.appBarBlurredSurface?.toStyle(),
         contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
+        appBarTheme: appBarTheme,
       ),
     );
   }
