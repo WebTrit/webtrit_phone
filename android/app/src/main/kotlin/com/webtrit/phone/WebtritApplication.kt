@@ -1,4 +1,4 @@
-package com.webtrit.app
+package com.webtrit.phone
 
 import android.app.Application
 import com.webtrit.callkeep.WebtritCallkeep
