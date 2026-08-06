@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AppPushToken {
 
- AppPushTokenType get type; String get value;
+ AppPushTokenType get type; String get value; AppPushTokenEnv? get env;
 /// Create a copy of AppPushToken
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $AppPushTokenCopyWith<AppPushToken> get copyWith => _$AppPushTokenCopyWithImpl<A
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppPushToken&&(identical(other.type, type) || other.type == type)&&(identical(other.value, value) || other.value == value));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppPushToken&&(identical(other.type, type) || other.type == type)&&(identical(other.value, value) || other.value == value)&&(identical(other.env, env) || other.env == env));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,type,value);
+int get hashCode => Object.hash(runtimeType,type,value,env);
 
 @override
 String toString() {
-  return 'AppPushToken(type: $type, value: $value)';
+  return 'AppPushToken(type: $type, value: $value, env: $env)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $AppPushTokenCopyWith<$Res>  {
   factory $AppPushTokenCopyWith(AppPushToken value, $Res Function(AppPushToken) _then) = _$AppPushTokenCopyWithImpl;
 @useResult
 $Res call({
- AppPushTokenType type, String value
+ AppPushTokenType type, String value, AppPushTokenEnv? env
 });
 
 
@@ -63,11 +63,12 @@ class _$AppPushTokenCopyWithImpl<$Res>
 
 /// Create a copy of AppPushToken
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? type = null,Object? value = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? type = null,Object? value = null,Object? env = freezed,}) {
   return _then(AppPushToken(
 type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as AppPushTokenType,value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
-as String,
+as String,env: freezed == env ? _self.env : env // ignore: cast_nullable_to_non_nullable
+as AppPushTokenEnv?,
   ));
 }
 

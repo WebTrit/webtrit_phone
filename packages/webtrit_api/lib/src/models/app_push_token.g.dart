@@ -9,12 +9,14 @@ part of 'app_push_token.dart';
 AppPushToken _$AppPushTokenFromJson(Map<String, dynamic> json) => AppPushToken(
   type: $enumDecode(_$AppPushTokenTypeEnumMap, json['type']),
   value: json['value'] as String,
+  env: $enumDecodeNullable(_$AppPushTokenEnvEnumMap, json['env']),
 );
 
 Map<String, dynamic> _$AppPushTokenToJson(AppPushToken instance) =>
     <String, dynamic>{
       'type': _$AppPushTokenTypeEnumMap[instance.type]!,
       'value': instance.value,
+      'env': _$AppPushTokenEnvEnumMap[instance.env],
     };
 
 const _$AppPushTokenTypeEnumMap = {
@@ -22,4 +24,9 @@ const _$AppPushTokenTypeEnumMap = {
   AppPushTokenType.hms: 'hms',
   AppPushTokenType.apns: 'apns',
   AppPushTokenType.apkvoip: 'apkvoip',
+};
+
+const _$AppPushTokenEnvEnumMap = {
+  AppPushTokenEnv.dev: 'dev',
+  AppPushTokenEnv.prod: 'prod',
 };
