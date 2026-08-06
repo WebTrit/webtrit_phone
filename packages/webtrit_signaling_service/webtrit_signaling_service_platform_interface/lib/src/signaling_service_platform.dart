@@ -39,7 +39,11 @@ abstract class SignalingServicePlatform extends PlatformInterface {
   ///   in the main isolate and is not persistent.
   /// - [SignalingServiceMode.pushBound] -- service stops when the app Activity
   ///   is closed, allowing the next push to start a fresh instance.
-  Future<void> start(SignalingServiceConfig config, {SignalingServiceMode mode = SignalingServiceMode.persistent});
+  Future<void> start(
+    SignalingServiceConfig config, {
+    SignalingServiceMode mode = SignalingServiceMode.persistent,
+    bool reregister = false,
+  });
 
   /// Sends [request] to the server via the active connection.
   Future<void> execute(Request request);

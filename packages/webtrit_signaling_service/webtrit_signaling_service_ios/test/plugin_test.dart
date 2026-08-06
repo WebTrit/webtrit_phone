@@ -73,7 +73,7 @@ class _FakeSignalingModule implements SignalingModule {
   bool get isConnected => _isConnected;
 
   @override
-  void connect() {
+  void connect({bool reregister = false}) {
     if (_disposed) return;
     _buffer.clear();
     _emit(SignalingConnecting());
@@ -188,7 +188,7 @@ class _FailingSignalingModule implements SignalingModule {
   bool get isConnected => false;
 
   @override
-  void connect() {
+  void connect({bool reregister = false}) {
     if (_disposed) return;
     _buffer.clear();
     _emit(SignalingConnecting());

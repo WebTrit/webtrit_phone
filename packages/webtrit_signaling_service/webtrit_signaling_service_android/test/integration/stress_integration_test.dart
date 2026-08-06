@@ -33,6 +33,7 @@ typedef _SignalingClientFactory =
       required Duration connectionTimeout,
       required TrustedCertificates certs,
       required bool force,
+      required bool reregister,
     });
 
 // ---------------------------------------------------------------------------
@@ -78,7 +79,7 @@ class _SignalingModule implements SignalingModule {
   bool get isConnected => _client != null;
 
   @override
-  void connect() {
+  void connect({bool reregister = false}) {
     if (_disposed) return;
     unawaited(_connectAsync());
   }
@@ -132,6 +133,7 @@ class _SignalingModule implements SignalingModule {
         connectionTimeout: const Duration(seconds: 10),
         certs: trustedCertificates,
         force: true,
+        reregister: false,
       );
       if (_disposed) {
         try {
@@ -308,6 +310,7 @@ _SignalingClientFactory _fakeFactory(_FakeSignalingClient client) =>
       required Duration connectionTimeout,
       required TrustedCertificates certs,
       required bool force,
+      required bool reregister,
     }) async => client;
 
 Future<({_SignalingModule module, SignalingHub hub, _FakeSignalingClient fakeClient})> _buildServerSide() async {
@@ -562,6 +565,7 @@ void main() {
               required Duration connectionTimeout,
               required TrustedCertificates certs,
               required bool force,
+              required bool reregister,
             }) async => _FakeSignalingClient(),
       );
       addTearDown(module.dispose);
@@ -597,6 +601,7 @@ void main() {
               required Duration connectionTimeout,
               required TrustedCertificates certs,
               required bool force,
+              required bool reregister,
             }) async {
               final c = _FakeSignalingClient();
               lastCreated = c;
@@ -633,6 +638,7 @@ void main() {
               required Duration connectionTimeout,
               required TrustedCertificates certs,
               required bool force,
+              required bool reregister,
             }) async {
               final c = _FakeSignalingClient();
               clients.add(c);
@@ -693,6 +699,7 @@ void main() {
               required Duration connectionTimeout,
               required TrustedCertificates certs,
               required bool force,
+              required bool reregister,
             }) async => _fakeClientToggle == 0 ? fakeClient1 : fakeClient2,
       );
 

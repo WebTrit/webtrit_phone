@@ -73,7 +73,7 @@ class SignalingHubModule implements SignalingModule {
   /// The resulting [SignalingConnected] event arrives on [events] once the
   /// connection is established.
   @override
-  void connect() => _hubClient.sendConnect();
+  void connect({bool reregister = false}) => _hubClient.sendConnect(reregister: reregister);
 
   /// Asks the hub to disconnect the background WebSocket.
   ///

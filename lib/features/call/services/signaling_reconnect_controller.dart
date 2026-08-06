@@ -66,7 +66,11 @@ class SignalingReconnectController {
     void Function(bool isAvailable)? onConnectionPresenceChanged,
     int notifyAfterConsecutiveFailures = 2,
     bool reconnectEnabled = true,
+    Duration rebuildSessionAfter = const Duration(minutes: 5),
+    int maxSessionRebuildsPerEpisode = 2,
   }) : assert(notifyAfterConsecutiveFailures >= 1, 'notifyAfterConsecutiveFailures must be >= 1'),
+       _rebuildSessionAfter = rebuildSessionAfter,
+       _maxSessionRebuilds = maxSessionRebuildsPerEpisode,
        _module = signalingModule,
        _onConnectionFailed = onConnectionFailed,
        _onConnectionPresenceChanged = onConnectionPresenceChanged,
@@ -81,6 +85,22 @@ class SignalingReconnectController {
   final int _notifyThreshold;
   final bool _reconnectEnabled;
 
+  /// How long the SIP registration must keep failing before a reconnect asks the
+  /// server to rebuild the session.
+  ///
+  /// Core reads the address and credentials it registers with once, when it
+  /// creates the session, and refreshes them only on its own reconnect. When an
+  /// operator changes them, the session keeps trying the old ones and never
+  /// registers again - and reconnecting does not help, because the socket
+  /// re-attaches to that same session. Asking for a rebuild is what a relogin
+  /// does, without the user having to know that (WT-1766).
+  final Duration _rebuildSessionAfter;
+
+  /// A rebuild drops the server-side session, so a registrar outage must not
+  /// turn every client into a session churner: give up after this many attempts
+  /// until the registration succeeds again.
+  final int _maxSessionRebuilds;
+
   late final StreamSubscription<SignalingModuleEvent> _subscription;
 
   /// Tracks whether a connection was successfully established in the current session.
@@ -93,6 +113,14 @@ class SignalingReconnectController {
   bool _networkActive = true;
   bool _hasActiveCalls = false;
   bool _disposed = false;
+
+  // The elapsed time is measured by the timer below rather than by comparing
+  // wall-clock stamps: a device clock correction must not make a fresh failure
+  // look old, or an old one look fresh.
+  bool _registrationFailing = false;
+  int _sessionRebuilds = 0;
+  bool _rebuildOnNextConnect = false;
+  Timer? _rebuildTimer;
 
   // Set to true by notifyNetworkAvailable and consumed by the first timer that
   // fires after it. Allows a one-shot opportunistic reconnect when the network
@@ -223,6 +251,9 @@ class SignalingReconnectController {
   void notifyNetworkUnavailable() {
     _logger.info('notifyNetworkUnavailable: isConnected=${_module.isConnected}');
     _networkActive = false;
+    // Time spent offline says nothing about the credentials - keep it out of the
+    // failure clock, or a subway ride would look like a broken registration.
+    _clearRegistrationFailure();
     _disconnect();
     _emitPresence(false);
   }
@@ -233,6 +264,16 @@ class SignalingReconnectController {
 
   void _onEvent(SignalingModuleEvent event) {
     switch (event) {
+      case SignalingHandshakeReceived(:final handshake):
+        _trackRegistration(handshake.registration.status);
+
+      case SignalingProtocolEvent(:final event):
+        if (event is RegisteredEvent) {
+          _trackRegistration(RegistrationStatus.registered);
+        } else if (event is RegistrationFailedEvent) {
+          _trackRegistration(RegistrationStatus.registration_failed);
+        }
+
       case SignalingConnected():
         _logger.fine('_onEvent: connected - resetting failure counter');
         _wasConnected = true;
@@ -341,9 +382,87 @@ class SignalingReconnectController {
         return;
       }
 
-      _logger.info('_scheduleReconnect: calling connect (force=$force isConnected=${_module.isConnected})');
-      _module.connect();
+      // Consumed and counted before the attempt: the server acts on the request
+      // as soon as it reads the URL, so a connect that then fails must not be
+      // free to ask again on the very next retry.
+      final reregister = _rebuildOnNextConnect && !_hasActiveCalls;
+      if (_rebuildOnNextConnect) {
+        _rebuildOnNextConnect = false;
+        if (reregister) _sessionRebuilds++;
+      }
+
+      _logger.info(
+        '_scheduleReconnect: calling connect (force=$force isConnected=${_module.isConnected} '
+        'reregister=$reregister)',
+      );
+      _module.connect(reregister: reregister);
     });
+  }
+
+  /// Follows how long the registration has been failing and, once that stops
+  /// looking transient, schedules the reconnect that carries the rebuild request.
+  ///
+  /// Nothing else would schedule it: a failed registration is a SIP-level
+  /// answer, the socket stays up, so without this the recovery would depend on
+  /// an unrelated disconnect happening to come along.
+  void _trackRegistration(RegistrationStatus status) {
+    switch (status) {
+      case RegistrationStatus.registration_failed:
+        if (_registrationFailing) return;
+        if (_sessionRebuilds >= _maxSessionRebuilds) {
+          _logger.info('registration still failing, but the session rebuild budget is spent');
+          return;
+        }
+        _logger.info('registration failed - arming the session rebuild in $_rebuildSessionAfter');
+        _registrationFailing = true;
+        _rebuildTimer?.cancel();
+        _rebuildTimer = Timer(_rebuildSessionAfter, _onRegistrationFailingTooLong);
+
+      case RegistrationStatus.registered:
+        if (_registrationFailing || _sessionRebuilds > 0) {
+          _logger.info('registration recovered - clearing the session rebuild state');
+        }
+        _clearRegistrationFailure();
+
+      // Registering / unregistering / unregistered are steps of their own, not a
+      // verdict on the credentials: leave whatever is armed as it is.
+      case RegistrationStatus.registering:
+      case RegistrationStatus.unregistering:
+      case RegistrationStatus.unregistered:
+        break;
+    }
+  }
+
+  void _clearRegistrationFailure() {
+    _registrationFailing = false;
+    _sessionRebuilds = 0;
+    _rebuildOnNextConnect = false;
+    _rebuildTimer?.cancel();
+    _rebuildTimer = null;
+  }
+
+  void _onRegistrationFailingTooLong() {
+    if (_disposed || !_registrationFailing) return;
+
+    // A rebuild tears the server-side session down, and any call it carries with
+    // it, so a call in progress always wins over the recovery.
+    if (_hasActiveCalls) {
+      _logger.info('session rebuild postponed - a call is in progress');
+      _rebuildTimer = Timer(_rebuildSessionAfter, _onRegistrationFailingTooLong);
+      return;
+    }
+    if (!_networkActive) {
+      _logger.info('session rebuild postponed - no network');
+      _rebuildTimer = Timer(_rebuildSessionAfter, _onRegistrationFailingTooLong);
+      return;
+    }
+
+    _logger.warning(
+      'registration has been failing for $_rebuildSessionAfter - '
+      'reconnecting with a session rebuild (attempt ${_sessionRebuilds + 1} of $_maxSessionRebuilds)',
+    );
+    _rebuildOnNextConnect = true;
+    _scheduleReconnect(Duration.zero, force: true);
   }
 
   void _disconnect() {
@@ -366,6 +485,7 @@ class SignalingReconnectController {
   void dispose() {
     _disposed = true;
     _reconnectTimer?.cancel();
+    _rebuildTimer?.cancel();
     _subscription.cancel().ignore();
   }
 }

@@ -98,6 +98,7 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
     SignalingServiceConfig config, {
     // ignore: avoid_unused_parameters
     SignalingServiceMode mode = SignalingServiceMode.pushBound,
+    bool reregister = false,
   }) async {
     _isStopped = false;
     final myToken = _startToken = Object();
@@ -141,7 +142,7 @@ class WebtritSignalingServiceDirect extends SignalingServicePlatform {
       },
     );
     _module = module;
-    module.connect();
+    module.connect(reregister: reregister);
   }
 
   @override

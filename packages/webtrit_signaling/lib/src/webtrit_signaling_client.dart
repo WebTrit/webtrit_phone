@@ -25,6 +25,18 @@ class WebtritSignalingClient {
   static const _callIdChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
   @visibleForTesting
+  /// The signaling endpoint the client opens, including the connect flags.
+  ///
+  /// Kept separate from [connect] so the wire contract with the server can be
+  /// asserted without opening a socket.
+  static Uri buildSignalingUrl(Uri baseUrl, String tenantId, String token, bool force, {bool reregister = false}) {
+    final tenantUrl = buildTenantUrl(baseUrl, tenantId);
+    return tenantUrl.replace(
+      pathSegments: [...tenantUrl.pathSegments, 'signaling', 'v1'],
+      queryParameters: {'token': token, 'force': force.toString(), if (reregister) 'reregister': 'true'},
+    );
+  }
+
   static Uri buildTenantUrl(Uri baseUrl, String tenantId) {
     if (tenantId.isEmpty) {
       return baseUrl;
@@ -79,21 +91,27 @@ class WebtritSignalingClient {
 
   final _transactions = <String, Transaction>{};
 
+  /// Opens a signaling connection.
+  ///
+  /// [force] takes the session over from another socket of the same app.
+  ///
+  /// [reregister] additionally asks the server to rebuild the session from
+  /// scratch instead of attaching to the one it already keeps for this app.
+  /// Everything the server cached for that session - among it the address and
+  /// credentials it registers with - is read anew, which is the only way a
+  /// client can recover from a session that keeps failing to register with
+  /// data that has since changed on the operator's side. It costs a full
+  /// re-registration, so use it as a last resort, never as the normal path.
   static Future<WebtritSignalingClient> connect(
     Uri baseUrl,
     String tenantId,
     String token,
     bool force, {
+    bool reregister = false,
     Duration? connectionTimeout,
     TrustedCertificates certs = TrustedCertificates.empty,
   }) async {
-    final tenantUrl = buildTenantUrl(baseUrl, tenantId);
-    final signalingUrl = tenantUrl
-        .replace(
-          pathSegments: [...tenantUrl.pathSegments, 'signaling', 'v1'],
-          queryParameters: {'token': token, 'force': force.toString()},
-        )
-        .toString();
+    final signalingUrl = buildSignalingUrl(baseUrl, tenantId, token, force, reregister: reregister).toString();
 
     final ws = await connectWebSocket(
       signalingUrl,

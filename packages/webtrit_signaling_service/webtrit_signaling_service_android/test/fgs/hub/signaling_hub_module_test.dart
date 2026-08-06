@@ -30,7 +30,7 @@ class _FakeHubClient extends Fake implements SignalingHubClient {
   void start() => started = true;
 
   @override
-  void sendConnect() => connectSent = true;
+  void sendConnect({bool reregister = false}) => connectSent = true;
 
   @override
   void sendDisconnect() => disconnectSent = true;

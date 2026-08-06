@@ -43,7 +43,11 @@ sealed class SignalingHubCommand {
           );
         case _tagConnect:
           if (wire.length < 2) return null;
-          return SignalingHubConnectCommand(consumerId: wire[1] as String);
+          return SignalingHubConnectCommand(
+            consumerId: wire[1] as String,
+            // Older senders omit the flag; absent means a plain connect.
+            reregister: wire.length > 2 && wire[2] == true,
+          );
         case _tagDisconnect:
           if (wire.length < 2) return null;
           return SignalingHubDisconnectCommand(consumerId: wire[1] as String);
@@ -127,10 +131,15 @@ class SignalingHubExecuteCommand extends SignalingHubCommand {
 /// Sent by [SignalingHubModule.connect] so the main isolate can trigger a
 /// connection attempt without owning the WebSocket directly.
 class SignalingHubConnectCommand extends SignalingHubCommand {
-  const SignalingHubConnectCommand({required String consumerId}) : super(consumerId);
+  const SignalingHubConnectCommand({required String consumerId, this.reregister = false}) : super(consumerId);
+
+  /// Ask the server to rebuild the session instead of attaching to the existing
+  /// one. Decided by the reconnect policy in the main isolate; the hub only
+  /// carries it across.
+  final bool reregister;
 
   @override
-  List<Object?> encode() => [_tagConnect, consumerId];
+  List<Object?> encode() => [_tagConnect, consumerId, reregister];
 }
 
 /// Asks the hub to call [SignalingModule.disconnect] on the background WebSocket.

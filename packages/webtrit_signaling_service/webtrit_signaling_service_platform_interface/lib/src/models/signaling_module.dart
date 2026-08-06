@@ -27,7 +27,14 @@ abstract interface class SignalingModule {
   /// Initiates a new connection attempt. Fire-and-forget.
   ///
   /// On [SignalingHubModule] this is a no-op -- the hub owns the connection.
-  void connect();
+  /// Opens a connection.
+  ///
+  /// [reregister] additionally asks the server to rebuild the session it keeps
+  /// for this app instead of attaching to the existing one, which is the only
+  /// way a client can recover from a session whose registration data went stale
+  /// on the server. It costs a full re-registration, so the decision belongs to
+  /// the reconnect policy, never to this layer.
+  void connect({bool reregister = false});
 
   /// Gracefully closes the current connection.
   ///

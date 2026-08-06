@@ -124,6 +124,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
   Future<void> start(
     SignalingServiceConfig config, {
     SignalingServiceMode mode = SignalingServiceMode.persistent,
+    bool reregister = false,
   }) async {
     _isStopped = false;
     _currentConfig = config;
@@ -132,7 +133,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
 
     _logger.info('start effectiveMode=$effectiveMode tenantId=${config.tenantId}');
 
-    await _startService(config, effectiveMode);
+    await _startService(config, effectiveMode, reregister: reregister);
   }
 
   @override
@@ -296,7 +297,11 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
     }
   }
 
-  Future<void> _startService(SignalingServiceConfig config, SignalingServiceMode mode) async {
+  Future<void> _startService(
+    SignalingServiceConfig config,
+    SignalingServiceMode mode, {
+    bool reregister = false,
+  }) async {
     if (mode == SignalingServiceMode.pushBound) {
       _logger.fine('_startService mode=pushBound -- delegating to direct service');
       final myToken = _startServiceToken = Object();
@@ -309,7 +314,7 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
       // Start the direct service first so SignalingConnecting is emitted and
       // buffered before we subscribe -- this clears any stale events from a
       // previous session and guarantees the replay on subscribe is fresh.
-      await _directService.start(config, mode: mode);
+      await _directService.start(config, mode: mode, reregister: reregister);
 
       if (_isStopped) {
         _logger.fine('_startService: aborted — stopped during direct start');
@@ -331,6 +336,15 @@ class WebtritSignalingServiceAndroid extends SignalingServicePlatform {
           if (!_eventsController.isClosed) _eventsController.addError(e, st);
         },
       );
+      return;
+    }
+
+    // A running hub already owns a session, so the rebuild request has to reach
+    // the isolate as a command; a hub that is still starting builds a fresh
+    // session anyway and needs nothing.
+    if (reregister && _hubManager.isConnected) {
+      _logger.info('_startService: asking the hub to reconnect with a session rebuild');
+      _hubManager.connect(reregister: true);
       return;
     }
 

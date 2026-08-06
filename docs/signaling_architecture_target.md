@@ -226,8 +226,36 @@ SignalingReconnectController({
   void Function(bool isAvailable)? onConnectionPresenceChanged,
   int notifyAfterConsecutiveFailures = 2,  // notify after this many consecutive failures
   bool reconnectEnabled = true,
+  Duration rebuildSessionAfter = const Duration(minutes: 5),  // see "Recovering a stuck registration"
+  int maxSessionRebuildsPerEpisode = 2,
 })
 ```
+
+### Recovering a stuck registration
+
+The server keeps one session per app and reads the SIP address and credentials
+into it once, when it creates it. If those change on the operator's side, the
+session keeps registering with the old ones and never succeeds again — and
+reconnecting does not help, because the socket re-attaches to that same session.
+Until now the only way out was for the user to log out and back in.
+
+The controller watches the registration status carried by the handshake and the
+session events. Once a failure has lasted `rebuildSessionAfter`, it schedules a
+reconnect itself — nothing else would, since a failed registration leaves the
+socket up — and that connect is made with `reregister: true`, which asks the
+server to build the session from scratch instead of attaching to it.
+
+Three things bound the damage: a call in progress always wins (a rebuild drops
+the session and the call with it, so the attempt is postponed), the flag is
+counted before the attempt rather than after a successful one, and only
+`maxSessionRebuildsPerEpisode` attempts are made until a registration succeeds,
+so a registrar-wide outage cannot turn every client into a session churner.
+Losing the network clears the failure clock: offline time says nothing about
+whether the credentials are still valid.
+
+The flag travels with the connect request and is not remembered anywhere:
+`SignalingModule.connect(reregister:)` → the platform's `start(..., reregister:)`
+→ the direct service or, on the Android hub path, `SignalingHubConnectCommand`.
 
 **Lifecycle / connectivity notification API:**
 

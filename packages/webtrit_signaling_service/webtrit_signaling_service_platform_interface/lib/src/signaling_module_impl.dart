@@ -24,6 +24,7 @@ typedef SignalingClientFactory =
       required Duration connectionTimeout,
       required TrustedCertificates certs,
       required bool force,
+      required bool reregister,
     });
 
 Uri _coreUrlToSignalingUrl(String coreUrl) {
@@ -38,12 +39,14 @@ Future<WebtritSignalingClient> _defaultClientFactory({
   required Duration connectionTimeout,
   required TrustedCertificates certs,
   required bool force,
+  required bool reregister,
 }) {
   return WebtritSignalingClient.connect(
     url,
     tenantId,
     token,
     force,
+    reregister: reregister,
     connectionTimeout: connectionTimeout,
     certs: certs,
   );
@@ -211,7 +214,7 @@ class SignalingModuleImpl implements SignalingModule {
   /// Initiates a connection. Fire-and-forget -- result arrives via [events].
   /// Clears the session buffer on each call.
   @override
-  void connect() {
+  void connect({bool reregister = false}) {
     if (_disposed) {
       _logger.fine('connect: skipped — disposed');
       return;
@@ -220,10 +223,10 @@ class SignalingModuleImpl implements SignalingModule {
       _logger.info('connect: skipped — already connecting or connected (connectToken set)');
       return;
     }
-    _logger.info('connect: starting new connect attempt (isConnected=$isConnected)');
+    _logger.info('connect: starting new connect attempt (isConnected=$isConnected reregister=$reregister)');
     final token = _connectToken = Object();
     _eventBuffer.clear();
-    unawaited(_connectAsync(token));
+    unawaited(_connectAsync(token, reregister: reregister));
   }
 
   @override
@@ -277,7 +280,7 @@ class SignalingModuleImpl implements SignalingModule {
   // Internal
   // ---------------------------------------------------------------------------
 
-  Future<void> _connectAsync(Object connectToken) async {
+  Future<void> _connectAsync(Object connectToken, {bool reregister = false}) async {
     try {
       final existing = _client;
       if (existing != null) {
@@ -306,6 +309,7 @@ class SignalingModuleImpl implements SignalingModule {
           connectionTimeout: connectionTimeout,
           certs: trustedCertificates,
           force: true,
+          reregister: reregister,
         );
 
         if (_connectToken != connectToken || _disposed) {

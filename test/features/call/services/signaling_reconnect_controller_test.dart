@@ -17,6 +17,7 @@ class _FakeSignalingModule implements SignalingModule {
 
   int connectCalls = 0;
   int disconnectCalls = 0;
+  final List<bool> reregisterFlags = [];
 
   @override
   bool isConnected = false;
@@ -27,7 +28,10 @@ class _FakeSignalingModule implements SignalingModule {
   void emit(SignalingModuleEvent event) => _controller.add(event);
 
   @override
-  void connect() => connectCalls++;
+  void connect({bool reregister = false}) {
+    connectCalls++;
+    reregisterFlags.add(reregister);
+  }
 
   @override
   Future<void> disconnect() async => disconnectCalls++;
@@ -1167,6 +1171,120 @@ void main() {
         module.emit(_lost());
 
         expect(presence, [false, true, false]);
+      });
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Recovering a registration that will never succeed on its own (WT-1766)
+  // -------------------------------------------------------------------------
+
+  group('session rebuild after a persistent registration failure', () {
+    StateHandshake handshakeWith(RegistrationStatus status) => StateHandshake(
+      keepaliveInterval: const Duration(seconds: 30),
+      timestamp: 0,
+      registration: Registration(status: status),
+      lines: const [null],
+      presenceInfos: const [],
+      dialogInfos: const [],
+      guestLine: null,
+    );
+
+    SignalingReconnectController build(_FakeSignalingModule module) =>
+        SignalingReconnectController(signalingModule: module, rebuildSessionAfter: const Duration(minutes: 5));
+
+    test('a failure that outlasts the threshold reconnects and asks for a rebuild', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final controller = build(module);
+        addTearDown(controller.dispose);
+
+        module.emit(SignalingHandshakeReceived(handshake: handshakeWith(RegistrationStatus.registration_failed)));
+        async.elapse(const Duration(minutes: 5, seconds: 1));
+
+        expect(module.reregisterFlags, [true], reason: 'nothing else reconnects on a registration failure');
+      });
+    });
+
+    test('a failure shorter than the threshold is left alone', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final controller = build(module);
+        addTearDown(controller.dispose);
+
+        module.emit(SignalingHandshakeReceived(handshake: handshakeWith(RegistrationStatus.registration_failed)));
+        async.elapse(const Duration(minutes: 4));
+
+        expect(module.reregisterFlags, isEmpty);
+      });
+    });
+
+    test('a registration that recovers cancels the rebuild', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final controller = build(module);
+        addTearDown(controller.dispose);
+
+        module.emit(SignalingHandshakeReceived(handshake: handshakeWith(RegistrationStatus.registration_failed)));
+        async.elapse(const Duration(minutes: 4));
+        module.emit(SignalingProtocolEvent(event: RegisteredEvent()));
+        async.elapse(const Duration(minutes: 10));
+
+        expect(module.reregisterFlags, isEmpty);
+      });
+    });
+
+    test('a call in progress postpones the rebuild instead of dropping the call', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final controller = build(module);
+        addTearDown(controller.dispose);
+
+        controller.notifyHasActiveCalls(hasActiveCalls: true);
+        module.emit(SignalingHandshakeReceived(handshake: handshakeWith(RegistrationStatus.registration_failed)));
+        async.elapse(const Duration(minutes: 6));
+
+        expect(module.reregisterFlags.where((flag) => flag), isEmpty, reason: 'a live call outranks the recovery');
+      });
+    });
+
+    test('losing the network does not age the failure clock', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final controller = build(module);
+        addTearDown(controller.dispose);
+
+        module.emit(SignalingHandshakeReceived(handshake: handshakeWith(RegistrationStatus.registration_failed)));
+        async.elapse(const Duration(minutes: 2));
+        controller.notifyNetworkUnavailable();
+        async.elapse(const Duration(minutes: 30));
+        controller.notifyNetworkAvailable();
+        async.elapse(const Duration(minutes: 1));
+
+        expect(
+          module.reregisterFlags.where((flag) => flag),
+          isEmpty,
+          reason: 'offline time is not a failing registration',
+        );
+      });
+    });
+
+    test('the rebuild budget is spent, not repeated forever', () {
+      fakeAsync((async) {
+        final module = _FakeSignalingModule();
+        final controller = SignalingReconnectController(
+          signalingModule: module,
+          rebuildSessionAfter: const Duration(minutes: 5),
+          maxSessionRebuildsPerEpisode: 1,
+        );
+        addTearDown(controller.dispose);
+
+        for (var i = 0; i < 4; i++) {
+          module.emit(SignalingHandshakeReceived(handshake: handshakeWith(RegistrationStatus.registration_failed)));
+          async.elapse(const Duration(minutes: 6));
+        }
+
+        expect(module.reregisterFlags.where((flag) => flag).length, 1);
       });
     });
   });

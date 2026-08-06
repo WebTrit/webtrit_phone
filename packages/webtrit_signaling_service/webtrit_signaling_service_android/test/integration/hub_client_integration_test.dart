@@ -31,6 +31,7 @@ typedef _SignalingClientFactory =
       required Duration connectionTimeout,
       required TrustedCertificates certs,
       required bool force,
+      required bool reregister,
     });
 
 // ---------------------------------------------------------------------------
@@ -76,7 +77,7 @@ class _SignalingModule implements SignalingModule {
   bool get isConnected => _client != null;
 
   @override
-  void connect() {
+  void connect({bool reregister = false}) {
     if (_disposed) return;
     unawaited(_connectAsync());
   }
@@ -130,6 +131,7 @@ class _SignalingModule implements SignalingModule {
         connectionTimeout: const Duration(seconds: 10),
         certs: trustedCertificates,
         force: true,
+        reregister: false,
       );
       if (_disposed) {
         try {
@@ -273,6 +275,7 @@ _SignalingClientFactory _fakeFactory(_FakeSignalingClient client) =>
       required Duration connectionTimeout,
       required TrustedCertificates certs,
       required bool force,
+      required bool reregister,
     }) async => client;
 
 _SignalingModule _buildModule(_FakeSignalingClient client) => _SignalingModule(

@@ -86,6 +86,12 @@ class HubConnectionManager {
 
   Future<void> disconnect() => _module?.disconnect() ?? Future.value();
 
+  /// Asks the background isolate to (re)connect.
+  ///
+  /// Only used when the reconnect policy needs the session rebuilt; the plain
+  /// reconnect path is driven by the isolate itself.
+  void connect({bool reregister = false}) => _module?.connect(reregister: reregister);
+
   /// Starts or restarts the hub-init polling loop.
   ///
   /// No-op if a module is already wired up. Increments the generation so
