@@ -125,6 +125,16 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// events escalate severity). Cleared when the indicator is hidden.
   final Map<String, int> _slowlinkHits = {};
 
+  /// Holds the local ringback back for a moment after the first ringing answer.
+  ///
+  /// A switch that is about to stream its own ringback announces the call as
+  /// ringing first and only then sends the media, so starting the bundled tone
+  /// right away makes it audible for a blink before the network takes over.
+  /// Waiting out that gap keeps such calls on a single tone; where no media
+  /// follows, the tone simply starts once the wait is over. Keyed by callId, so
+  /// one line never delays or cancels another.
+  final _ringbackStartDebounce = DebounceMap<String>(kOutgoingRingbackStartDelay);
+
   late final SignalingModule _signalingModule;
   late final StreamSubscription<SignalingModuleEvent> _signalingSubscription;
   late final SignalingReconnectController _reconnectController;
@@ -266,6 +276,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _slowlinkDebounce.dispose();
     _slowlinkHits.clear();
+
+    _ringbackStartDebounce.dispose();
 
     await _signalingSubscription.cancel();
 
@@ -673,6 +685,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _iceRestartDebounce.cancel(event.callId);
     _slowlinkDebounce.cancel(event.callId);
     _slowlinkHits.remove(event.callId);
+    _ringbackStartDebounce.cancel(event.callId);
     await _mediaManager.stopRingbackSound();
 
     try {
@@ -1086,7 +1099,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         'flowing (callId: ${event.callId})',
       );
     } else {
-      await _mediaManager.playRingbackSound();
+      _scheduleLocalRingback(event.callId);
     }
 
     emit(
@@ -1096,6 +1109,22 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
 
     _maybeSendPendingMediaState(event.callId);
+  }
+
+  /// Starts the local ringback after [kOutgoingRingbackStartDelay], unless the
+  /// call meanwhile gets its audio from the network, is answered or ends.
+  ///
+  /// The state is re-read when the wait is over, so a call that moved on in the
+  /// meantime never gets a tone it no longer needs.
+  void _scheduleLocalRingback(String callId) {
+    _ringbackStartDebounce.schedule(callId, () {
+      final call = state.retrieveActiveCall(callId);
+      if (call == null || call.wasAccepted || call.wasHungUp || !call.shouldPlayLocalRingback) {
+        _logger.info('_scheduleLocalRingback: skipped, call moved on (callId: $callId)');
+        return;
+      }
+      _mediaManager.playRingbackSound().ignore();
+    });
   }
 
   /// Best-effort informational signal so the remote side can reflect the
@@ -1135,6 +1164,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // early media - set specified session description
   Future<void> __onCallSignalingEventProgress(_CallSignalingEventProgress event, Emitter<CallState> emit) async {
+    _ringbackStartDebounce.cancel(event.callId);
     await _mediaManager.stopRingbackSound();
 
     final jsep = event.jsep;
