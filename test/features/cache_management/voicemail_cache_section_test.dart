@@ -1,15 +1,19 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:app_transcription/app_transcription.dart';
 
 import 'package:webtrit_phone/features/settings/features/cache_management/cubit/voicemail_cache_section.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 void main() {
   late Directory root;
+  late _RecordingTranscriber transcriber;
 
   setUp(() {
     root = Directory.systemTemp.createTempSync('voicemail_cache_test');
+    transcriber = _RecordingTranscriber();
   });
 
   tearDown(() {
@@ -17,7 +21,11 @@ void main() {
   });
 
   VoicemailCacheSection createSection() {
-    return VoicemailCacheSection(mediaCacheBasePath: '${root.path}/media_cache', temporaryPath: root.path);
+    return VoicemailCacheSection(
+      mediaCacheBasePath: '${root.path}/media_cache',
+      temporaryPath: root.path,
+      transcriber: transcriber,
+    );
   }
 
   File writeFile(String relativePath, int size) {
@@ -54,11 +62,28 @@ void main() {
     expect(Directory('${root.path}/media_cache').existsSync(), isFalse);
     expect(Directory('${root.path}/just_audio_cache').existsSync(), isFalse);
     expect(await measure(section), 0);
+    expect(transcriber.forgottenTypes, ['voicemail']);
   });
 
   test('clear is a no-op when nothing is cached yet', () async {
     await createSection().clear();
 
     expect(await measure(createSection()), 0);
+    expect(transcriber.forgottenTypes, ['voicemail']);
   });
+}
+
+class _RecordingTranscriber implements MediaTranscriber {
+  final forgottenTypes = <String>[];
+
+  @override
+  void enqueue(String mediaType, String mediaId, Future<Uint8List> Function() loadAudio, {String? language}) {}
+
+  @override
+  Future<void> forget(String mediaType, String mediaId) async {}
+
+  @override
+  Future<void> forgetAllForType(String mediaType) async {
+    forgottenTypes.add(mediaType);
+  }
 }

@@ -408,6 +408,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                   VoicemailCacheSection(
                     mediaCacheBasePath: appPath.mediaCacheBasePath,
                     temporaryPath: appPath.temporaryPath,
+                    transcriber: context.read<TranscriptionService>(),
                   ),
                 DatabaseCacheSection(context.read<AppDatabase>(), context.read<CdrsLocalRepository>()),
               ],

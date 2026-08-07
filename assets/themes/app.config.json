@@ -313,9 +313,9 @@
     "__language": "Expected audio language (ISO 639-1, e.g. 'en'); omit or leave empty to auto-detect per media item.",
     "remote": {
       "__url": "Base URL of an OpenAI-compatible speech-to-text service (e.g. 'https://api.groq.com/openai/v1'); the 'audio/transcriptions' path is appended when not already present. Transcription stays off while this is missing.",
-      "__model": "Model name passed to the service (e.g. 'whisper-large-v3-turbo' on Groq, 'whisper-1' on OpenAI).",
-      "model": "whisper-1"
+      "__model": "Model name passed to the service. OpenAI transcription models supported by this client: 'gpt-4o-transcribe' (default, higher accuracy), 'gpt-4o-mini-transcribe' (lower cost), and 'whisper-1' (legacy). Other OpenAI-compatible services may provide their own models, e.g. 'whisper-large-v3-turbo' on Groq.",
+      "url": "https://api.openai.com/v1",
+      "model": "gpt-4o-transcribe"
     }
   }
 }
-

@@ -5182,7 +5182,7 @@ abstract class AppLocalizations {
   /// No description provided for @voicemail_Cache_description.
   ///
   /// In en, this message translates to:
-  /// **'Playing a voicemail keeps a local copy of its audio for instant replays. Clearing frees up space; the audio is downloaded again the next time a message is played.'**
+  /// **'Voicemail audio and transcripts are stored locally. Clearing frees space and retries transcription with the current settings; audio downloads again when needed.'**
   String get voicemail_Cache_description;
 
   /// No description provided for @voicemail_Cache_title.
