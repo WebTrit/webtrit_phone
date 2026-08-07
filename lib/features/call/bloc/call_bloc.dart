@@ -1109,11 +1109,26 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// short and the tone plays right away; a 183 promises nothing yet - the
   /// wait for possible early media stays on.
   Future<void> __onCallSignalingEventProceeding(_CallSignalingEventProceeding event, Emitter<CallState> emit) async {
-    if (event.code == 180) {
-      _ringback.startNow(
-        event.callId,
-        stillWanted: () => state.retrieveActiveCall(event.callId)?.shouldPlayLocalRingback ?? false,
-      );
+    switch (event.code) {
+      case 180:
+        _logger.info(
+          '__onCallSignalingEventProceeding: 180 - no early media expected, '
+          'starting the local ringback now (callId: ${event.callId})',
+        );
+        _ringback.startNow(
+          event.callId,
+          stillWanted: () => state.retrieveActiveCall(event.callId)?.shouldPlayLocalRingback ?? false,
+        );
+      case 183:
+        _logger.info(
+          '__onCallSignalingEventProceeding: 183 - early media may follow, '
+          'keeping the local ringback on hold (callId: ${event.callId})',
+        );
+      default:
+        _logger.info(
+          '__onCallSignalingEventProceeding: ${event.code} - not a ringing indication, '
+          'the local ringback is left as is (callId: ${event.callId})',
+        );
     }
   }
 
