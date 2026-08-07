@@ -117,11 +117,51 @@ UI: CallController.createCall(number, video)
   → Signaling: AcceptedEvent (remote answer) → setRemoteDescription → connected
 ```
 
-Ringback tone: all start/stop rules live in `OutgoingRingbackController`
-(`features/call/utils/`). A ringing answer arms a short delayed start (in case
-the network sends early media right after), a proceeding 180 releases it
-immediately, early media or answer silences it, and since the tone is one per
-application it goes quiet only when the last call that switched it on stops.
+### Ringback: whose tone the caller hears
+
+All start/stop rules live in `OutgoingRingbackController`
+(`features/call/utils/`). The app cannot know upfront whether the network will
+play a ringback of its own, so a ringing answer only ARMS a short delayed start
+and the following signals decide:
+
+| Signal | Meaning | Effect on the tone |
+|--------|---------|--------------------|
+| `RingingEvent` | 180 or 183 without a session description | arms the delayed start (repeats keep the first deadline) |
+| `ProceedingEvent` 180 | plain alerting, no network audio coming | starts the tone right away |
+| `ProceedingEvent` 183 | the switch is still working on it | keeps the wait |
+| `ProgressEvent` | early media (a description arrived) | `ActiveCall.earlyMedia = true`, tone silenced for the rest of the setup |
+| answer / hangup / failure | the ringing phase is over | tone silenced, pending start dropped |
+
+Whatever fires last, the controller asks
+[ActiveCall.shouldPlayLocalRingback] again at the moment it would actually
+play, so a call that was answered, ended or picked up network audio in the
+meantime stays silent.
+
+Network plays its own ringback (the interesting case - a switch may report
+plain ringing AFTER it already started streaming, which used to put both tones
+on top of each other):
+
+```
++1.4s  RingingEvent            → start armed (+1s)
++1.4s  ProceedingEvent 183     → wait kept
++2.2s  ProgressEvent           → setRemoteDescription → earlyMedia = true
+                                 → tone silenced, armed start dropped
++2.3s  RingingEvent            → start armed again
++2.3s  ProceedingEvent 180     → start now → shouldPlayLocalRingback == false
+                                 → suppressed; only the network tone is heard
+```
+
+No network ringback (the ordinary call):
+
+```
++1.2s  RingingEvent            → start armed (+1s)
++1.24s ProceedingEvent 180     → start now → the app's own tone plays
++18s   AcceptedEvent           → tone silenced, media flows
+```
+
+The ~40 ms gap between the two events is why an ordinary call does not wait out
+the full second. A backend that sends no `ProceedingEvent` at all falls back to
+the armed deadline - one second of silence, then the tone.
 
 ## Isolates
 
