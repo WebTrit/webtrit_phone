@@ -20,7 +20,10 @@ final _logger = Logger('WebtritSignalingServiceDirect');
 ///
 /// Manages the [SignalingModule] lifecycle entirely in the calling isolate —
 /// no Foreground Service, no background isolate. Used as-is on iOS and as
-/// the pushBound delegate on Android.
+/// the pushBound delegate on Android — i.e. this is the DEFAULT signaling
+/// path; events reach consumers as live objects, with no serialization
+/// (unlike the opt-in persistent/FGS mode, where every event crosses the
+/// isolate boundary through the hub codec as JSON).
 ///
 /// ## Module rotation
 ///

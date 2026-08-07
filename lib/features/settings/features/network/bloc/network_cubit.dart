@@ -49,6 +49,11 @@ class NetworkCubit extends Cubit<NetworkState> {
     return IncomingCallType.values.map((type) => IncomingCallTypeModel(type, type == currentType)).toList();
   }
 
+  // The socket type relies on a foreground service holding a persistent
+  // WebSocket, which the OS only lets us run reliably under the Android 14+
+  // foreground-service type rules - so the option simply is not offered below
+  // that. Everywhere else the list is empty and the app stays on the default
+  // push-notification type.
   List<IncomingCallType> _buildIncomingCallTypesRemainder() {
     return _isAndroid14OrAbove() ? [IncomingCallType.socket] : <IncomingCallType>[];
   }
