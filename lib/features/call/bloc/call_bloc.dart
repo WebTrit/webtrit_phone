@@ -1167,7 +1167,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     }
   }
 
-  // early media - set specified session description
+  /// Early media: the remote side sends audio before the call is answered -
+  /// a network ringback, an announcement, an IVR prompt.
+  ///
+  /// The gateway raises this only for a provisional answer that CARRIES A
+  /// SESSION DESCRIPTION (a 183, or a 180 that comes with one); the same codes
+  /// without a description arrive as plain ringing instead, and other
+  /// provisional answers never reach the app at all. So the code itself does
+  /// not matter here - the description is the whole signal.
+  ///
+  /// Applying it wires the remote audio up, which is also what puts the app's
+  /// own tone away for the rest of the call setup. A repeat of the same
+  /// description arrives without one (the gateway sends it once per call), and
+  /// is simply ignored - the call already knows it has network audio.
   Future<void> __onCallSignalingEventProgress(_CallSignalingEventProgress event, Emitter<CallState> emit) async {
     // The local tone is silenced only once the network audio is really wired
     // up; on any failure below the tone path stays alive (a pending start keeps
