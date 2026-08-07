@@ -1156,8 +1156,9 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   // early media - set specified session description
   Future<void> __onCallSignalingEventProgress(_CallSignalingEventProgress event, Emitter<CallState> emit) async {
-    await _ringback.stop(event.callId);
-
+    // The local tone is silenced only once the network audio is really wired
+    // up; on any failure below the tone path stays alive (a pending start keeps
+    // its deadline), so the caller is never left in total silence.
     final jsep = event.jsep;
     if (jsep != null) {
       final peerConnection = await _peerConnectionManager.retrieve(event.callId);
@@ -1168,13 +1169,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
         sdpSanitizer?.apply(remoteDescription);
         try {
           await peerConnection.setRemoteDescription(remoteDescription);
-          // Only now is the remote audio really wired up, so only now may the
-          // local ringback stay off for the rest of the call setup. A switch
-          // that repeats its description would otherwise fail here and leave
-          // the call silent.
           emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(earlyMedia: true)));
-        } catch (e) {
-          _logger.warning('__onCallSignalingEventProgress: setRemoteDescription failed ($e)');
+          await _ringback.stop(event.callId);
+        } catch (e, stackTrace) {
+          callErrorReporter.handle(e, stackTrace, '__onCallSignalingEventProgress');
         }
       }
     } else {
