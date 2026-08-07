@@ -73,7 +73,8 @@ outgoingInitializingMedia getting mic/camera
 outgoingRestoringMedia    call restored after reconnect; re-establishing ICE via renegotiation
 outgoingOfferPreparing    creating RTCPeerConnection + offer
 outgoingOfferSent         OutgoingCallRequest sent
-outgoingRinging           remote side ringing (RingingEvent received, no early media)
+outgoingRinging           remote side ringing (RingingEvent; the local ringback
+                          is governed by OutgoingRingbackController - see below)
 ─────────────────────────────────────────────────────────────
 connected                 media flowing (both directions)
 disconnecting             hangup sent, cleanup in progress
@@ -108,9 +109,19 @@ UI: CallController.createCall(number, video)
   → _CallPerformEvent.started
   → wait signaling ready → get user media → RTCPeerConnection
   → createOffer → OutgoingCallRequest to signaling
-  → Signaling: RingingEvent → outgoingRinging (ringback played)
+  → Signaling: RingingEvent → outgoingRinging (local tone start SCHEDULED, not played)
+  → Signaling: ProceedingEvent (SIP code): 180 → no early media coming, tone starts now;
+      183 → the switch may follow with its own audio, the short wait stays on
+  → Signaling: ProgressEvent (early media) → setRemoteDescription →
+      ActiveCall.earlyMedia = true, local tone stays off for the rest of setup
   → Signaling: AcceptedEvent (remote answer) → setRemoteDescription → connected
 ```
+
+Ringback tone: all start/stop rules live in `OutgoingRingbackController`
+(`features/call/utils/`). A ringing answer arms a short delayed start (in case
+the network sends early media right after), a proceeding 180 releases it
+immediately, early media or answer silences it, and since the tone is one per
+application it goes quiet only when the last call that switched it on stops.
 
 ## Isolates
 
