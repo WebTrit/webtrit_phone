@@ -1086,10 +1086,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> __onCallSignalingEventRinging(_CallSignalingEventRinging event, Emitter<CallState> emit) async {
     // The controller waits a moment in case the network is about to send audio
     // of its own; a proceeding answer with a plain alerting code cuts the wait
-    // short (see [__onCallSignalingEventProceeding]). [_localRingbackStillWanted]
-    // keeps the tone off once early media flows - including the trailing plain
-    // ringing some switches send after it.
-    _ringback.ringing(event.callId, stillWanted: () => _localRingbackStillWanted(event.callId));
+    // short (see [__onCallSignalingEventProceeding]). The current state is
+    // re-read when the wait is over - the call may have moved on, including the
+    // trailing plain ringing some switches send after their early media.
+    _ringback.ringing(
+      event.callId,
+      stillWanted: () => state.retrieveActiveCall(event.callId)?.shouldPlayLocalRingback ?? false,
+    );
 
     emit(
       state.copyWithMappedActiveCall(event.callId, (call) {
@@ -1107,16 +1110,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// wait for possible early media stays on.
   Future<void> __onCallSignalingEventProceeding(_CallSignalingEventProceeding event, Emitter<CallState> emit) async {
     if (event.code == 180) {
-      _ringback.startNow(event.callId, stillWanted: () => _localRingbackStillWanted(event.callId));
+      _ringback.startNow(
+        event.callId,
+        stillWanted: () => state.retrieveActiveCall(event.callId)?.shouldPlayLocalRingback ?? false,
+      );
     }
-  }
-
-  /// Whether the local ringback is still wanted for [callId] once the
-  /// controller's wait is over - the call may have been answered, ended or
-  /// picked up audio from the network in the meantime.
-  bool _localRingbackStillWanted(String callId) {
-    final call = state.retrieveActiveCall(callId);
-    return call != null && !call.wasAccepted && !call.wasHungUp && call.shouldPlayLocalRingback;
   }
 
   /// Best-effort informational signal so the remote side can reflect the

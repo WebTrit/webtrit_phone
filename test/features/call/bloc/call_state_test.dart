@@ -1665,6 +1665,14 @@ void main() {
       expect(call.shouldPlayLocalRingback, isFalse);
     });
 
+    test('an answered or ended call does not want the tone', () {
+      final answered = _makeCall(direction: CallDirection.outgoing, acceptedTime: DateTime(2024));
+      expect(answered.shouldPlayLocalRingback, isFalse);
+
+      final ended = _makeCall(direction: CallDirection.outgoing, hungUpTime: DateTime(2024));
+      expect(ended.shouldPlayLocalRingback, isFalse);
+    });
+
     test('other calls are unaffected - the flag is per call', () {
       final withEarlyMedia = _makeCall(callId: 'c1', direction: CallDirection.outgoing).copyWith(earlyMedia: true);
       final plain = _makeCall(callId: 'c2', direction: CallDirection.outgoing);

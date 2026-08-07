@@ -2,11 +2,12 @@ import '../bloc/call_bloc.dart';
 import '../models/models.dart';
 
 extension ActiveCallRingback on ActiveCall {
-  /// Whether the app may start its own ringback tone for this call.
+  /// Whether this call still wants the app's own ringback tone.
   ///
   /// Once the remote side streams audio of its own, the bundled tone would play
-  /// on top of it, so it stays off for the rest of the call setup.
-  bool get shouldPlayLocalRingback => !earlyMedia;
+  /// on top of it, so it stays off for the rest of the call setup; a call that
+  /// was answered or ended does not want it either.
+  bool get shouldPlayLocalRingback => !earlyMedia && !wasAccepted && !wasHungUp;
 }
 
 extension ActiveCallListAutoCompact on List<ActiveCall> {
