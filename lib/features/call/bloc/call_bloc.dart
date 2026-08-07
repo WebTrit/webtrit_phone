@@ -130,6 +130,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   late final _ringback = OutgoingRingbackController(
     play: _mediaManager.playRingbackSound,
     stop: _mediaManager.stopRingbackSound,
+    isWanted: (callId) => state.retrieveActiveCall(callId)?.shouldPlayLocalRingback ?? false,
   );
 
   late final SignalingModule _signalingModule;
@@ -267,6 +268,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
     _reconnectController.dispose();
 
+    // First, so nothing below can leave a pending start behind or the tone on.
+    await _ringback.stopAll().catchError((Object e) {
+      _logger.warning('close: stopping the ringback failed', e);
+    });
+
     _presenceInfoSyncTimer?.cancel();
 
     _iceRestartDebounce.dispose();
@@ -275,8 +281,6 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     _slowlinkHits.clear();
 
     await _signalingSubscription.cancel();
-
-    await _ringback.stopAll();
 
     for (final activeCall in state.activeCalls) {
       await _releaseLocalStream(activeCall.localStream);
@@ -668,6 +672,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
   Future<void> __onResetStateEventCompleteCalls(_ResetStateEventCompleteCalls event, Emitter<CallState> emit) async {
     _logger.warning('__onResetStateEventCompleteCalls: ${state.activeCalls}');
+
+    // Everything is going away, and the per-call teardowns below are droppable -
+    // silence the tone once, here, instead of relying on each of them arriving.
+    await _ringback.stopAll();
 
     for (var element in state.activeCalls) {
       add(_ResetStateEvent.completeCall(element.callId));
@@ -1089,10 +1097,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     // short (see [__onCallSignalingEventProceeding]). The current state is
     // re-read when the wait is over - the call may have moved on, including the
     // trailing plain ringing some switches send after their early media.
-    _ringback.ringing(
-      event.callId,
-      stillWanted: () => state.retrieveActiveCall(event.callId)?.shouldPlayLocalRingback ?? false,
-    );
+    _ringback.ringing(event.callId);
 
     emit(
       state.copyWithMappedActiveCall(event.callId, (call) {
@@ -1115,10 +1120,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           '__onCallSignalingEventProceeding: 180 - no early media expected, '
           'starting the local ringback now (callId: ${event.callId})',
         );
-        _ringback.startNow(
-          event.callId,
-          stillWanted: () => state.retrieveActiveCall(event.callId)?.shouldPlayLocalRingback ?? false,
-        );
+        _ringback.startNow(event.callId);
       case 183:
         _logger.info(
           '__onCallSignalingEventProceeding: 183 - early media may follow, '
@@ -1181,14 +1183,19 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   /// description arrives without one (the gateway sends it once per call), and
   /// is simply ignored - the call already knows it has network audio.
   Future<void> __onCallSignalingEventProgress(_CallSignalingEventProgress event, Emitter<CallState> emit) async {
-    // The local tone is silenced only once the network audio is really wired
-    // up; on any failure below the tone path stays alive (a pending start keeps
-    // its deadline), so the caller is never left in total silence.
+    // Wiring the remote audio up takes a moment (the peer connection may still
+    // be under construction), and the tone must not start during that window -
+    // yet it must come back if the wiring fails, or the caller would be left in
+    // total silence. So the pending start is held here and re-armed on failure,
+    // while the tone itself is silenced only once the audio is really in place.
+    _ringback.holdPending(event.callId);
+
     final jsep = event.jsep;
     if (jsep != null) {
       final peerConnection = await _peerConnectionManager.retrieve(event.callId);
       if (peerConnection == null) {
         _logger.warning('__onCallSignalingEventProgress: peerConnection is null - most likely some permissions issue');
+        _ringback.ringing(event.callId);
       } else {
         final remoteDescription = jsep.toDescription();
         sdpSanitizer?.apply(remoteDescription);
@@ -1198,10 +1205,12 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
           await _ringback.stop(event.callId);
         } catch (e, stackTrace) {
           callErrorReporter.handle(e, stackTrace, '__onCallSignalingEventProgress');
+          _ringback.ringing(event.callId);
         }
       }
     } else {
       _logger.warning('__onCallSignalingEventProgress: jsep must not be null');
+      _ringback.ringing(event.callId);
     }
 
     _maybeSendPendingMediaState(event.callId);
@@ -1249,6 +1258,11 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
   Future<void> __onCallSignalingEventAccepted(_CallSignalingEventAccepted event, Emitter<CallState> emit) async {
     final call = state.retrieveActiveCall(event.callId);
     if (call == null) return;
+
+    // The mutation below may sit behind other queued mutations, and until it
+    // runs the call still looks unanswered - silence the tone right here so it
+    // cannot start over an already connected conversation.
+    _ringback.stopUnawaited(event.callId);
 
     add(_CallMutationEvent.signalingAccepted(callId: event.callId, jsep: event.jsep));
   }
@@ -3117,6 +3131,10 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     if (call.wasHungUp == false) {
       call = call.copyWith(hungUpTime: clock.now());
       _addToRecents(call);
+      // Publish it before the teardown awaits below: until the call is popped
+      // the state is what every other queue reads, and a provisional event
+      // arriving meanwhile must not treat this call as still ringing.
+      emit(state.copyWithMappedActiveCall(event.callId, (_) => call!));
     }
 
     final code = SignalingResponseCode.values.byCode(event.code);

@@ -1652,6 +1652,10 @@ void main() {
       expect(_makeCall(direction: CallDirection.outgoing).shouldPlayLocalRingback, isTrue);
     });
 
+    test('an incoming call never wants it - it has its own ringtone', () {
+      expect(_makeCall(direction: CallDirection.incoming).shouldPlayLocalRingback, isFalse);
+    });
+
     test('stays off once the network sends its own audio', () {
       final call = _makeCall(direction: CallDirection.outgoing).copyWith(earlyMedia: true);
       expect(call.shouldPlayLocalRingback, isFalse);

@@ -163,6 +163,17 @@ The ~40 ms gap between the two events is why an ordinary call does not wait out
 the full second. A backend that sends no `ProceedingEvent` at all falls back to
 the armed deadline - one second of silence, then the tone.
 
+#### Redesign / in progress
+
+Forked calls with mixed answers are not settled yet. When a switch alerts
+several branches under one call id, a plain 180 from the first branch starts
+the tone even if another branch already answered 183 and is about to send early
+media - the tone then plays until that early media arrives and silences it. It
+is not the double-tone the rework was about (the two never overlap), but the
+tone sounds where it arguably should not. The candidate rule is to let a 183
+seen for a call make it cautious for the rest of the setup, so a later 180
+keeps waiting instead of starting immediately.
+
 ## Isolates
 
 Two background isolate managers handle calls when the app is not in the foreground.
