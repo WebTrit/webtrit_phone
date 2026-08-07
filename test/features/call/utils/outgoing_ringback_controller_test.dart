@@ -8,8 +8,12 @@ const _kDelay = Duration(seconds: 1);
 class _Sound {
   int played = 0;
   int stopped = 0;
+  bool playThrows = false;
 
-  Future<void> play() async => played++;
+  Future<void> play() async {
+    played++;
+    if (playThrows) throw StateError('audio focus denied');
+  }
 
   Future<void> stop() async => stopped++;
 }
@@ -97,16 +101,66 @@ void main() {
       });
     });
 
-    test('a repeated ringing answer does not queue a second start', () {
+    test('a repeated ringing answer keeps the original deadline', () {
       fakeAsync((async) {
         final sound = _Sound();
         final controller = _controller(sound);
         controller.ringing('call-1', stillWanted: () => true);
         async.elapse(const Duration(milliseconds: 500));
         controller.ringing('call-1', stillWanted: () => true);
+        controller.ringing('call-1', stillWanted: () => true);
+
+        async.elapse(const Duration(milliseconds: 500));
+        expect(sound.played, 1, reason: 'the tone must fire at the FIRST deadline, not be pushed out');
 
         async.elapse(_kDelay * 2);
         expect(sound.played, 1);
+      });
+    });
+
+    test('the tone survives another call stopping', () {
+      fakeAsync((async) {
+        final sound = _Sound();
+        final controller = _controller(sound);
+        controller.startNow('call-1', stillWanted: () => true);
+        expect(sound.played, 1);
+
+        // A held call on another line ends - the ringing line keeps its tone.
+        controller.stop('call-2');
+        expect(sound.stopped, 0);
+
+        controller.stop('call-1');
+        expect(sound.stopped, 1);
+      });
+    });
+
+    test('the tone goes silent only when its last owner stops', () {
+      fakeAsync((async) {
+        final sound = _Sound();
+        final controller = _controller(sound);
+        controller.startNow('call-1', stillWanted: () => true);
+        controller.startNow('call-2', stillWanted: () => true);
+
+        controller.stop('call-1');
+        expect(sound.stopped, 0);
+
+        controller.stop('call-2');
+        expect(sound.stopped, 1);
+      });
+    });
+
+    test('a failing player is logged away, not thrown', () {
+      fakeAsync((async) {
+        final sound = _Sound()..playThrows = true;
+        final controller = _controller(sound);
+        controller.startNow('call-1', stillWanted: () => true);
+        async.elapse(Duration.zero);
+        expect(sound.played, 1);
+
+        sound.playThrows = false;
+        controller.startNow('call-1', stillWanted: () => true);
+        async.elapse(Duration.zero);
+        expect(sound.played, 2, reason: 'a later start must still work');
       });
     });
 
