@@ -158,6 +158,9 @@ sealed class _CallSignalingEvent extends CallEvent {
 
   const factory _CallSignalingEvent.ringing({required int? line, required String callId}) = _CallSignalingEventRinging;
 
+  const factory _CallSignalingEvent.proceeding({required int? line, required String callId, required int code}) =
+      _CallSignalingEventProceeding;
+
   const factory _CallSignalingEvent.progress({
     required int? line,
     required String callId,
@@ -315,6 +318,21 @@ class _CallSignalingEventRinging extends _CallSignalingEvent {
 
   @override
   List<Object?> get props => [line, callId];
+}
+
+class _CallSignalingEventProceeding extends _CallSignalingEvent {
+  const _CallSignalingEventProceeding({required this.line, required this.callId, required this.code});
+
+  final int? line;
+
+  final String callId;
+
+  /// SIP code of the provisional answer: 180 - plain alerting, no media will
+  /// follow for now; 183 - the switch is still working, early media may follow.
+  final int code;
+
+  @override
+  List<Object?> get props => [line, callId, code];
 }
 
 class _CallSignalingEventProgress extends _CallSignalingEvent {

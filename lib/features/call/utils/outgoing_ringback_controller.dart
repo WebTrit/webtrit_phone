@@ -37,16 +37,30 @@ class OutgoingRingbackController {
 
   /// A ringing answer arrived for [callId].
   ///
-  /// [stillWanted] is evaluated when the delay elapses, not now, so it must read
-  /// the current call state rather than a captured copy.
+  /// [stillWanted] is evaluated when the delay elapses, not now, so it must
+  /// read the current call state rather than a captured copy - it is what keeps
+  /// the tone off once the network already streams audio of its own.
   void ringing(String callId, {required bool Function() stillWanted}) {
     _pendingStart.schedule(callId, () {
       if (!stillWanted()) {
-        _logger.info('ringing: start skipped, the call moved on (callId: $callId)');
+        _logger.info('ringing: local ringback suppressed (callId: $callId)');
         return;
       }
       _play().ignore();
     });
+  }
+
+  /// The network ruled out audio of its own for [callId] - a plain alerting
+  /// answer arrived. Fires the pending start right away instead of waiting out
+  /// the rest of the window; [stillWanted] still has the last word, which is
+  /// what keeps the tone off when a trailing plain answer follows early media.
+  void startNow(String callId, {required bool Function() stillWanted}) {
+    _pendingStart.cancel(callId);
+    if (!stillWanted()) {
+      _logger.info('startNow: local ringback suppressed (callId: $callId)');
+      return;
+    }
+    _play().ignore();
   }
 
   /// The ringing phase of [callId] is over: network audio took over, the call was

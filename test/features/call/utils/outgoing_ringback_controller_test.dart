@@ -42,6 +42,46 @@ void main() {
       });
     });
 
+    test('startNow cuts the wait short when the network rules out its audio', () {
+      fakeAsync((async) {
+        final sound = _Sound();
+        final controller = _controller(sound);
+        controller.ringing('call-1', stillWanted: () => true);
+
+        async.elapse(const Duration(milliseconds: 40));
+        controller.startNow('call-1', stillWanted: () => true);
+        expect(sound.played, 1);
+
+        async.elapse(_kDelay * 2);
+        expect(sound.played, 1, reason: 'no delayed start may be left pending');
+      });
+    });
+
+    test('startNow still respects the call state (trailing plain answer)', () {
+      fakeAsync((async) {
+        final sound = _Sound();
+        // The network already streams its own audio - a late plain alerting
+        // answer must not bring the local tone back.
+        _controller(sound).startNow('call-1', stillWanted: () => false);
+
+        async.elapse(_kDelay * 2);
+        expect(sound.played, 0);
+      });
+    });
+
+    test('startNow of one call leaves the wait of another untouched', () {
+      fakeAsync((async) {
+        final sound = _Sound();
+        final controller = _controller(sound);
+        controller.ringing('call-1', stillWanted: () => true);
+        controller.startNow('call-2', stillWanted: () => true);
+        expect(sound.played, 1);
+
+        async.elapse(_kDelay);
+        expect(sound.played, 2, reason: 'call-1 keeps its own delayed start');
+      });
+    });
+
     test('a stop during the wait drops the pending start', () {
       fakeAsync((async) {
         final sound = _Sound();

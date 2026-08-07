@@ -941,6 +941,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     return switch (event) {
       _CallSignalingEventIncoming() => __onCallSignalingEventIncoming(event, emit),
       _CallSignalingEventRinging() => __onCallSignalingEventRinging(event, emit),
+      _CallSignalingEventProceeding() => __onCallSignalingEventProceeding(event, emit),
       _CallSignalingEventProgress() => __onCallSignalingEventProgress(event, emit),
       _CallSignalingEventAccepted() => __onCallSignalingEventAccepted(event, emit),
       _CallSignalingEventHangup() => __onCallSignalingEventHangup(event, emit),
@@ -1081,20 +1082,14 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
   }
 
-  // ringing - play the local ringtone unless the remote side already sends its own
+  // ringing - the tone start decision belongs to the ringback controller
   Future<void> __onCallSignalingEventRinging(_CallSignalingEventRinging event, Emitter<CallState> emit) async {
-    // Some switches keep answering with plain ringing after they already started
-    // streaming their own ringback, and restarting the bundled tone then plays
-    // both at once.
-    final activeCall = state.retrieveActiveCall(event.callId);
-    if (activeCall != null && !activeCall.shouldPlayLocalRingback) {
-      _logger.info(
-        '__onCallSignalingEventRinging: local ringback suppressed, early media already '
-        'flowing (callId: ${event.callId})',
-      );
-    } else {
-      _ringback.ringing(event.callId, stillWanted: () => _localRingbackStillWanted(event.callId));
-    }
+    // The controller waits a moment in case the network is about to send audio
+    // of its own; a proceeding answer with a plain alerting code cuts the wait
+    // short (see [__onCallSignalingEventProceeding]). [_localRingbackStillWanted]
+    // keeps the tone off once early media flows - including the trailing plain
+    // ringing some switches send after it.
+    _ringback.ringing(event.callId, stillWanted: () => _localRingbackStillWanted(event.callId));
 
     emit(
       state.copyWithMappedActiveCall(event.callId, (call) {
@@ -1103,6 +1098,17 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     );
 
     _maybeSendPendingMediaState(event.callId);
+  }
+
+  /// The SIP code of a provisional answer travels in its own event right behind
+  /// the matching ringing one. A plain 180 says the network will not send audio
+  /// of its own for now, so the wait started by the ringing handler is cut
+  /// short and the tone plays right away; a 183 promises nothing yet - the
+  /// wait for possible early media stays on.
+  Future<void> __onCallSignalingEventProceeding(_CallSignalingEventProceeding event, Emitter<CallState> emit) async {
+    if (event.code == 180) {
+      _ringback.startNow(event.callId, stillWanted: () => _localRingbackStillWanted(event.callId));
+    }
   }
 
   /// Whether the local ringback is still wanted for [callId] once the
@@ -4135,6 +4141,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       );
     } else if (event is RingingEvent) {
       add(_CallSignalingEvent.ringing(line: event.line, callId: event.callId));
+    } else if (event is ProceedingEvent) {
+      add(_CallSignalingEvent.proceeding(line: event.line, callId: event.callId, code: event.code));
     } else if (event is ProgressEvent) {
       add(
         _CallSignalingEvent.progress(
