@@ -347,6 +347,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'Per riprendere a effettuare chiamate, è necessario riavviare il telefono. Questo risolverà un errore temporaneo di sistema.';
 
   @override
+  String get callStatus_serviceUnavailable => 'Servizio temporaneamente non disponibile';
+
+  @override
   String get call_SystemErrorDialog_title => 'Errore di sistema';
 
   @override
@@ -2014,6 +2017,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get sessionStatus_AppBar_connecting => 'Connessione in corso...';
 
   @override
+  String get sessionStatus_AppBar_serviceUnavailable => 'Servizio temporaneamente non disponibile';
+
+  @override
   String get sessionStatus_pushNotificationServiceProblem =>
       'Problema con la configurazione del servizio di notifiche push';
 
@@ -2031,6 +2037,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get sessionStatus_subtitle_registrationOff => 'Registrazione disattivata';
+
+  @override
+  String get sessionStatus_subtitle_serviceUnavailable => 'La connessione è a posto, tocca per i dettagli';
 
   @override
   String get session_Teardown_progressText => 'Disconnessione in corso...';

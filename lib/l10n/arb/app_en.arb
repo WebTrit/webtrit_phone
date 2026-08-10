@@ -270,6 +270,10 @@
   "callStatus_ready": "Connection established",
   "@callStatus_ready": {},
   "call_SystemErrorDialog_description": "To resume making calls, a phone restart is required. This will resolve a temporary system error.",
+  "callStatus_serviceUnavailable": "Service temporarily unavailable",
+  "@callStatus_serviceUnavailable": {
+    "description": "Shown when the phone system answered the registration attempt and refused to serve it, so the device and its network are working correctly and only the calling service is unavailable. Tell the user the outage is on the service side and expected to be temporary, and that no action on their device will speed it up."
+  },
   "@call_SystemErrorDialog_description": {},
   "call_SystemErrorDialog_title": "System Error",
   "@call_SystemErrorDialog_title": {},
@@ -1695,6 +1699,10 @@
   "@sessionStatus_AppBar_connecting": {
     "description": "Shown in the main app bar while the app is actively connecting to backend services."
   },
+  "sessionStatus_AppBar_serviceUnavailable": "Service temporarily unavailable",
+  "@sessionStatus_AppBar_serviceUnavailable": {
+    "description": "App bar line shown while the phone system is refusing to register the account. Keep it short: it shares the bar with a progress indicator and is truncated on narrow screens."
+  },
   "sessionStatus_pushNotificationServiceProblem": "Problem with configuration push notification service",
   "@sessionStatus_pushNotificationServiceProblem": {},
   "sessionStatus_subtitle_connectivityNone": "Check Wi-Fi or mobile data",
@@ -1716,6 +1724,10 @@
   "sessionStatus_subtitle_registrationOff": "Registration is off",
   "@sessionStatus_subtitle_registrationOff": {
     "description": "Subtitle of the connection status row when the account is unregistered because the user turned the registration setting off, as opposed to a connection problem."
+  },
+  "sessionStatus_subtitle_serviceUnavailable": "Your connection is fine, tap for details",
+  "@sessionStatus_subtitle_serviceUnavailable": {
+    "description": "One-line explanation under the service-unavailable status. Reassures the user that their internet connection is not the cause, and points to the diagnostics screen for details."
   },
   "session_Teardown_progressText": "Signing out...",
   "@session_Teardown_progressText": {

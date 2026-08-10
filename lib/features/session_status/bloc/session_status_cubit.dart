@@ -101,7 +101,11 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
         : null;
     _emitDebounced(
       state.copyWith(
-        status: SessionStatus(signalingStatus: call.status, pushTokenError: pushTokenError),
+        status: SessionStatus(
+          signalingStatus: call.status,
+          pushTokenError: pushTokenError,
+          registrationRejection: call.callServiceState.registrationRejection,
+        ),
         issues: _buildIssues(),
       ),
     );
@@ -157,7 +161,14 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     final shownStatus = displayed == CallStatus.connectivityNone ? CallStatus.inProgress : displayed;
     emit(
       next.copyWith(
-        status: SessionStatus(signalingStatus: shownStatus, pushTokenError: next.status.pushTokenError),
+        status: SessionStatus(
+          signalingStatus: shownStatus,
+          pushTokenError: next.status.pushTokenError,
+          // The refusal explains the status being shown, so it stays with it:
+          // pairing a held-back status with the incoming reason would describe
+          // a state that is not on screen.
+          registrationRejection: state.status.registrationRejection,
+        ),
       ),
     );
   }

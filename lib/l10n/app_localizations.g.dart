@@ -640,6 +640,12 @@ abstract class AppLocalizations {
   /// **'To resume making calls, a phone restart is required. This will resolve a temporary system error.'**
   String get call_SystemErrorDialog_description;
 
+  /// Shown when the phone system answered the registration attempt and refused to serve it, so the device and its network are working correctly and only the calling service is unavailable. Tell the user the outage is on the service side and expected to be temporary, and that no action on their device will speed it up.
+  ///
+  /// In en, this message translates to:
+  /// **'Service temporarily unavailable'**
+  String get callStatus_serviceUnavailable;
+
   /// No description provided for @call_SystemErrorDialog_title.
   ///
   /// In en, this message translates to:
@@ -3655,6 +3661,12 @@ abstract class AppLocalizations {
   /// **'Connecting...'**
   String get sessionStatus_AppBar_connecting;
 
+  /// App bar line shown while the phone system is refusing to register the account. Keep it short: it shares the bar with a progress indicator and is truncated on narrow screens.
+  ///
+  /// In en, this message translates to:
+  /// **'Service temporarily unavailable'**
+  String get sessionStatus_AppBar_serviceUnavailable;
+
   /// No description provided for @sessionStatus_pushNotificationServiceProblem.
   ///
   /// In en, this message translates to:
@@ -3690,6 +3702,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Registration is off'**
   String get sessionStatus_subtitle_registrationOff;
+
+  /// One-line explanation under the service-unavailable status. Reassures the user that their internet connection is not the cause, and points to the diagnostics screen for details.
+  ///
+  /// In en, this message translates to:
+  /// **'Your connection is fine, tap for details'**
+  String get sessionStatus_subtitle_serviceUnavailable;
 
   /// Status message displayed while the application is performing cleanup during the logout process.
   ///

@@ -1,12 +1,23 @@
 import 'call/call_status.dart';
+import 'call/registration_rejection.dart';
 
 class SessionStatus {
-  const SessionStatus({required this.signalingStatus, this.pushTokenError});
+  const SessionStatus({
+    required this.signalingStatus,
+    this.pushTokenError,
+    this.registrationRejection = RegistrationRejection.unspecified,
+  });
 
   final CallStatus signalingStatus;
 
   /// Non-null when the push token registration failed. Independent of [signalingStatus].
   final String? pushTokenError;
+
+  /// Refines what [signalingStatus] is told to the user when the phone system
+  /// refused the registration for a reason we recognise. It never promotes or
+  /// demotes the status itself, so a harder state - no network above all -
+  /// keeps its own wording.
+  final RegistrationRejection registrationRejection;
 
   bool get hasPushTokenError => pushTokenError != null;
 
@@ -41,11 +52,16 @@ class SessionStatus {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SessionStatus && signalingStatus == other.signalingStatus && pushTokenError == other.pushTokenError;
+      other is SessionStatus &&
+          signalingStatus == other.signalingStatus &&
+          pushTokenError == other.pushTokenError &&
+          registrationRejection == other.registrationRejection;
 
   @override
-  int get hashCode => Object.hash(signalingStatus, pushTokenError);
+  int get hashCode => Object.hash(signalingStatus, pushTokenError, registrationRejection);
 
   @override
-  String toString() => 'SessionStatus(signalingStatus: $signalingStatus, pushTokenError: $pushTokenError)';
+  String toString() =>
+      'SessionStatus(signalingStatus: $signalingStatus, pushTokenError: $pushTokenError, '
+      'registrationRejection: $registrationRejection)';
 }

@@ -342,6 +342,9 @@ class AppLocalizationsTh extends AppLocalizations {
       'หากต้องการโทรต่อ จำเป็นต้องรีสตาร์ทโทรศัพท์ ซึ่งจะแก้ไขข้อผิดพลาดชั่วคราวของระบบ';
 
   @override
+  String get callStatus_serviceUnavailable => 'บริการไม่พร้อมใช้งานชั่วคราว';
+
+  @override
   String get call_SystemErrorDialog_title => 'ข้อผิดพลาดของระบบ';
 
   @override
@@ -1986,6 +1989,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get sessionStatus_AppBar_connecting => 'กำลังเชื่อมต่อ...';
 
   @override
+  String get sessionStatus_AppBar_serviceUnavailable => 'บริการไม่พร้อมใช้งานชั่วคราว';
+
+  @override
   String get sessionStatus_pushNotificationServiceProblem => 'เกิดปัญหากับการตั้งค่าบริการ push notification';
 
   @override
@@ -2002,6 +2008,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get sessionStatus_subtitle_registrationOff => 'ปิดการลงทะเบียนแล้ว';
+
+  @override
+  String get sessionStatus_subtitle_serviceUnavailable => 'การเชื่อมต่อของคุณปกติ แตะเพื่อดูรายละเอียด';
 
   @override
   String get session_Teardown_progressText => 'กำลังออกจากระบบ...';
