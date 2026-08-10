@@ -8,6 +8,7 @@ export 'compact_auto_reset_controller.dart';
 export 'contact_resolver.dart';
 export 'ice_filter.dart';
 export 'logging_rtp_traffic_monitor_delegate.dart';
+export 'outgoing_ringback_controller.dart';
 export 'peer_connection_factory.dart';
 export 'peer_connection_manager.dart';
 export 'peer_connection_policy_applier.dart';

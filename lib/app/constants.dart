@@ -20,6 +20,15 @@ const kSignalingClientFastReconnectDelay = Duration(seconds: 1);
 /// so one full reconnect cycle is absorbed before the UI updates.
 const kSignalingStatusDebounce = Duration(seconds: _kSignalingClientReconnectDelaySeconds, milliseconds: 500);
 
+/// How long the local ringback waits after the first ringing answer of an
+/// outgoing call, in case the network is about to send a ringback of its own.
+///
+/// Operators that play their own tone announce the call as ringing first and
+/// send the media right after; on a customer trace that gap was about 0.8 s, so
+/// the window is a touch wider. Calls where no network audio follows simply
+/// start the tone once it elapses.
+const kOutgoingRingbackStartDelay = Duration(seconds: 1);
+
 /// How long [WebtritSignalingService.connect] waits for a terminal event
 /// (Connected / Disconnected / ConnectionFailed) before resetting
 /// [_startPending] and retrying. Covers the case where the background isolate
