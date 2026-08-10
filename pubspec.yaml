@@ -215,9 +215,9 @@ flutter_gen:
 patrol:
   app_name: Webtrit
   android:
-    package_name: com.webtrit.app
+    package_name: com.webtrit.phone
   ios:
-    bundle_id: com.webtrit.app
+    bundle_id: com.webtrit.phone
 
 melos:
   useRootAsPackage: true

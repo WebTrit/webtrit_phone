@@ -1,4 +1,4 @@
-package com.webtrit.app; 
+package com.webtrit.phone;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.Test;
