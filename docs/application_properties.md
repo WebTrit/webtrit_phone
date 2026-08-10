@@ -54,7 +54,7 @@ If you prefer to use `package_rename` manually, follow these steps:
      android:
        app_name: "New App"
        package_name: com.webtrit.newapp
-       override_old_package: com.webtrit.app # N
+       override_old_package: com.webtrit.phone # N
        lang: kotlin
      ios:
        app_name: "New App"

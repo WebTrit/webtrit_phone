@@ -123,7 +123,7 @@ generate-package-config:
 	@echo "  android:" >>$(FLUTTER_RENAME_PACKAGE_CONFIG)
 	@echo "    app_name: $(ANDROID_APP_NAME)" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
 	@echo "    package_name: $(PACKAGE_NAME)" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
-	@echo "    override_old_package: com.webtrit.app" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
+	@echo "    override_old_package: com.webtrit.phone" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
 	@echo "    lang: kotlin" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
 	@echo "  ios:" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
 	@echo "    app_name: $(IOS_APP_NAME)" >> $(FLUTTER_RENAME_PACKAGE_CONFIG)
