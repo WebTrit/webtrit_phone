@@ -69,9 +69,14 @@ while [ $# -gt 0 ]; do
 done
 
 if [ "$DO_BUILD" = 1 ]; then
-  echo "building $BUILD_MODE apk, flavor $FLAVOR ..."
+  # The committed version: stays 0.0.0+0 by convention; stamp the apk with
+  # app_version + an hourly date code so uploads are distinguishable in App Live.
+  BUILD_NAME="$(grep -E '^app_version:' "$REPO_ROOT/pubspec.yaml" | cut -d ' ' -f2 | cut -d '+' -f1)"
+  BUILD_NUMBER="$(date -u +%y%m%d%H)"
+  echo "building $BUILD_MODE apk, flavor $FLAVOR, version ${BUILD_NAME:-0.0.0}+$BUILD_NUMBER ..."
   (cd "$REPO_ROOT" && flutter build apk --dart-define-from-file=dart_define.json \
-    --no-tree-shake-icons "$BUILD_MODE" --flavor "$FLAVOR")
+    --no-tree-shake-icons "$BUILD_MODE" --flavor "$FLAVOR" \
+    ${BUILD_NAME:+--build-name="$BUILD_NAME"} --build-number="$BUILD_NUMBER")
 fi
 
 if [ -z "$APP_FILE" ]; then
