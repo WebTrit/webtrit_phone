@@ -396,6 +396,13 @@ melos:
       description: Configure Xcode project without building.
       run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons --config-only
 
+    browserstack:upload:
+      description: >-
+        Upload an apk to BrowserStack App Live for manual testing on real devices.
+        Reads BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY from .env.
+        Set BS_ARGS for extra flags (e.g. --build, --list, a file path).
+      run: tool/scripts/browserstack_upload.sh ${BS_ARGS:-}
+
     # ===========================
     # Clean - melos run clean | clean:git
     # ===========================
