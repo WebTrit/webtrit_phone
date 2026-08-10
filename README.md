@@ -59,6 +59,10 @@ Integration tests are located in the `patrol_test` folder.
 
 - **Coverage**: See [Integration Test Coverage](docs/integration_test_coverage.md) for a description of every test file and its steps.
 
+### Manual testing on real devices
+
+- **BrowserStack App Live**: See [BrowserStack App Live Upload](docs/browserstack_upload.md) for uploading builds to BrowserStack and testing them manually on real devices.
+
 ## Contributing
 
 We welcome contributions from the community! Please follow our contribution guidelines when submitting pull requests.
