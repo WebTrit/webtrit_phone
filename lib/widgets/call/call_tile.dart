@@ -14,10 +14,9 @@ class TileMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return SemanticAction(
+    return SemanticAction.button(
       label: context.l10n.callTileActions_more,
       identifier: callTileMenuId,
-      button: true,
       child: GestureDetector(
         onTap: onTap,
         child: Container(
@@ -71,8 +70,7 @@ class _CallTileAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return SemanticAction(
-      button: true,
+    return SemanticAction.button(
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: onTap,
