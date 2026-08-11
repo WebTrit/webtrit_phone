@@ -123,6 +123,16 @@ class AppLocalizationsTh extends AppLocalizations {
   String get callTileActions_more => 'เพิ่มเติม';
 
   @override
+  String callTile_SemanticsLabel_call(String name) {
+    return 'โทรหา $name';
+  }
+
+  @override
+  String callTile_SemanticsLabel_videoCall(String name) {
+    return 'วิดีโอคอลหา $name';
+  }
+
+  @override
   String get call_CallActionsTooltip_accept => 'รับสาย';
 
   @override

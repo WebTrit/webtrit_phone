@@ -87,6 +87,16 @@
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
   },
+  "callTile_SemanticsLabel_call": "Подзвонити {name}",
+  "@callTile_SemanticsLabel_call": {
+    "description": "Accessibility name of the call button in a call history or contact row.",
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "callTile_SemanticsLabel_videoCall": "Відеодзвінок {name}",
+  "@callTile_SemanticsLabel_videoCall": {
+    "description": "Accessibility name of the video call button in a call history or contact row.",
+    "placeholders": {"name": {"type": "String"}}
+  },
   "call_CallActionsTooltip_accept": "Прийняти",
   "@call_CallActionsTooltip_accept": {},
   "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "Прийняти переадресацію",

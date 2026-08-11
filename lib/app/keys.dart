@@ -93,6 +93,10 @@ const callActionsTransferMenuNumberKey = Key(callActionsTransferMenuNumberId);
 const String callFrontCameraPreviewId = 'callFrontCameraPreview';
 const callFrontCameraPreviewKey = Key(callFrontCameraPreviewId);
 
+// Identifier-only entries: controls that have no widget-test key.
+const String callTileDialId = 'callTileDial';
+const String callTileMenuId = 'callTileMenu';
+
 const String contactsExtContactTileId = 'contactsExtContactTile';
 const contactsExtContactTileKey = Key(contactsExtContactTileId);
 const String contactsLocalContactTileId = 'contactsLocalContactTile';

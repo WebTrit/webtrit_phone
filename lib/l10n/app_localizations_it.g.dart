@@ -124,6 +124,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callTileActions_more => 'Altro';
 
   @override
+  String callTile_SemanticsLabel_call(String name) {
+    return 'Chiama $name';
+  }
+
+  @override
+  String callTile_SemanticsLabel_videoCall(String name) {
+    return 'Videochiamata a $name';
+  }
+
+  @override
   String get call_CallActionsTooltip_accept => 'Accetta chiamata';
 
   @override
