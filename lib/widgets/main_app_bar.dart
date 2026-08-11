@@ -119,8 +119,10 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: BlocBuilder<UserInfoCubit, UserInfoState>(
                   builder: (context, userinfoState) {
                     final info = userinfoState.userInfo;
+                    final displayName = info?.name ?? info?.numbers.main;
+                    final myAccount = context.l10n.settings_AppBarTitle_myAccount;
                     return SemanticAction(
-                      label: context.l10n.settings_AppBarTitle_myAccount,
+                      label: displayName == null ? myAccount : '$myAccount, $displayName',
                       identifier: mainAppBarId,
                       child: IconButton(
                         key: mainAppBarKey,

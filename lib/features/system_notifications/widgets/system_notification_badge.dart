@@ -52,8 +52,9 @@ class _SystemNotificationsBadgeState extends State<SystemNotificationsBadge> wit
           final colorScheme = theme.colorScheme;
           final hasUnseen = unseenCount > 0;
 
+          final title = context.l10n.system_notifications_screen_title;
           return SemanticAction.button(
-            label: context.l10n.system_notifications_screen_title,
+            label: hasUnseen ? '$title, $unseenCount' : title,
             identifier: systemNotificationsBadgeId,
             child: SizedBox(
               width: kMinInteractiveDimension,
@@ -83,13 +84,17 @@ class _SystemNotificationsBadgeState extends State<SystemNotificationsBadge> wit
                           ),
                           if (hasUnseen)
                             Center(
-                              child: Text(
-                                unseenCount.toString(),
-                                style: TextStyle(
-                                  color: colorScheme.onPrimary,
-                                  fontSize: 8,
-                                  fontWeight: FontWeight.bold,
-                                  height: 1,
+                              // The raw digit is visual-only; the count is
+                              // spoken as part of the button's label.
+                              child: ExcludeSemantics(
+                                child: Text(
+                                  unseenCount.toString(),
+                                  style: TextStyle(
+                                    color: colorScheme.onPrimary,
+                                    fontSize: 8,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1,
+                                  ),
                                 ),
                               ),
                             ),

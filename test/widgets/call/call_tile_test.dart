@@ -24,6 +24,7 @@ void main() {
     bool gesturesEnabled = true,
     VoidCallback? onDialPressed,
     IconData? dialIcon,
+    bool dialIsVideo = false,
     VoidCallback? onAudioCallPressed,
     VoidCallback? onVideoCallPressed,
     VoidCallback? onChatPressed,
@@ -42,6 +43,7 @@ void main() {
       gesturesEnabled: gesturesEnabled,
       onDialPressed: onDialPressed,
       dialIcon: dialIcon,
+      dialIsVideo: dialIsVideo,
       onAudioCallPressed: onAudioCallPressed,
       onVideoCallPressed: onVideoCallPressed,
       onChatPressed: onChatPressed,
@@ -187,6 +189,7 @@ void main() {
             expanded: true,
             onDialPressed: () {},
             dialIcon: Icons.videocam,
+            dialIsVideo: true,
             onAudioCallPressed: () {},
             onVideoCallPressed: () {},
           ),
@@ -276,7 +279,9 @@ void main() {
     testWidgets('video dial button is announced as "Video call <name>"', (tester) async {
       final handle = tester.ensureSemantics();
 
-      await tester.pumpWidget(buildTestable(buildTile(onDialPressed: () {}, dialIcon: Icons.videocam)));
+      await tester.pumpWidget(
+        buildTestable(buildTile(onDialPressed: () {}, dialIcon: Icons.videocam, dialIsVideo: true)),
+      );
       await tester.pumpAndSettle();
 
       expectTapTargetSemantics(
@@ -303,6 +308,19 @@ void main() {
         identifier: callTileMenuId,
         isButton: true,
       );
+
+      handle.dispose();
+    });
+
+    testWidgets('dial button fires its callback when activated through semantics', (tester) async {
+      final handle = tester.ensureSemantics();
+
+      var called = false;
+      await tester.pumpWidget(buildTestable(buildTile(onDialPressed: () => called = true)));
+      await tester.pumpAndSettle();
+
+      await tapViaSemantics(tester, find.bySemanticsIdentifier(callTileDialId));
+      expect(called, isTrue);
 
       handle.dispose();
     });

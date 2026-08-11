@@ -110,11 +110,25 @@ void main() {
     final overflow = find.bySemanticsIdentifier(actionPadOverflowId);
     expectTapTargetSemantics(tester, overflow, identifier: actionPadOverflowId, isButton: true);
 
-    await tester.tap(overflow);
+    // Activate through the semantics node - the path assistive technology
+    // takes; a pointer tap can pass while this path hits a no-op.
+    await tapViaSemantics(tester, overflow);
     await tester.pumpAndSettle();
 
     expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Video call'), findsOneWidget);
     expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Transfer current call'), findsOneWidget);
+
+    handle.dispose();
+  });
+
+  testWidgets('call button fires its callback when activated through semantics', (tester) async {
+    final handle = tester.ensureSemantics();
+
+    var called = false;
+    await tester.pumpWidget(buildTestable(onAudioCallPressed: () => called = true, onBackspacePressed: () {}));
+
+    await tapViaSemantics(tester, find.bySemanticsIdentifier(actionPadVoiceCallId));
+    expect(called, isTrue);
 
     handle.dispose();
   });

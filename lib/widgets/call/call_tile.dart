@@ -104,6 +104,7 @@ class CallTile extends StatefulWidget {
     this.expanded = false,
     this.onDialPressed,
     this.dialIcon,
+    this.dialIsVideo = false,
     this.gesturesEnabled = true,
     this.dismissible = false,
     this.dismissibleObject,
@@ -135,6 +136,11 @@ class CallTile extends StatefulWidget {
   final bool expanded;
   final VoidCallback? onDialPressed;
   final IconData? dialIcon;
+
+  /// Whether the trailing dial shortcut places a video call; drives both the
+  /// spoken name of the button and which inline call action it supersedes.
+  final bool dialIsVideo;
+
   final bool gesturesEnabled;
 
   final bool dismissible;
@@ -217,7 +223,7 @@ class _CallTileState extends State<CallTile> {
     // duplicate it; the dial button stays visible and keeps that action.
     final suppressedInlineIcon = widget.onDialPressed == null
         ? null
-        : (widget.dialIcon == Icons.videocam ? Icons.videocam_outlined : Icons.call_outlined);
+        : (widget.dialIsVideo ? Icons.videocam_outlined : Icons.call_outlined);
     final primaryActions = actions
         .where((action) => action.primary)
         .where((action) => !(widget.expanded && action.icon == suppressedInlineIcon))
@@ -309,7 +315,7 @@ class _CallTileState extends State<CallTile> {
                     if (widget.gesturesEnabled)
                       if (widget.onDialPressed != null)
                         SemanticAction(
-                          label: widget.dialIcon == Icons.videocam
+                          label: widget.dialIsVideo
                               ? context.l10n.callTile_SemanticsLabel_videoCall(widget.name)
                               : context.l10n.callTile_SemanticsLabel_call(widget.name),
                           identifier: callTileDialId,
