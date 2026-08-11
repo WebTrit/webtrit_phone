@@ -139,6 +139,7 @@ extension AppLocalizationsExtension on AppLocalizations {
       'callStatus_ready' => callStatus_ready,
       'call_SystemErrorDialog_description' =>
         call_SystemErrorDialog_description,
+      'callStatus_serviceUnavailable' => callStatus_serviceUnavailable,
       'call_SystemErrorDialog_title' => call_SystemErrorDialog_title,
       'call_ThumbnailAvatar_currentlyNoActiveCall' =>
         call_ThumbnailAvatar_currentlyNoActiveCall,
@@ -902,6 +903,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         sessionStatus_AppBar_waitingForConnection,
       'sessionStatus_AppBar_disconnected' => sessionStatus_AppBar_disconnected,
       'sessionStatus_AppBar_connecting' => sessionStatus_AppBar_connecting,
+      'sessionStatus_AppBar_serviceUnavailable' =>
+        sessionStatus_AppBar_serviceUnavailable,
       'sessionStatus_pushNotificationServiceProblem' =>
         sessionStatus_pushNotificationServiceProblem,
       'sessionStatus_subtitle_connectivityNone' =>
@@ -911,6 +914,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'sessionStatus_subtitle_ready' => sessionStatus_subtitle_ready,
       'sessionStatus_subtitle_registrationOff' =>
         sessionStatus_subtitle_registrationOff,
+      'sessionStatus_subtitle_serviceUnavailable' =>
+        sessionStatus_subtitle_serviceUnavailable,
       'session_Teardown_progressText' => session_Teardown_progressText,
       'settings_AboutText_ApplicationEmbeddedLinks' =>
         settings_AboutText_ApplicationEmbeddedLinks,

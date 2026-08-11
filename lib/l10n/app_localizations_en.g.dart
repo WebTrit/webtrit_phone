@@ -343,6 +343,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'To resume making calls, a phone restart is required. This will resolve a temporary system error.';
 
   @override
+  String get callStatus_serviceUnavailable => 'Service temporarily unavailable';
+
+  @override
   String get call_SystemErrorDialog_title => 'System Error';
 
   @override
@@ -1990,6 +1993,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sessionStatus_AppBar_connecting => 'Connecting...';
 
   @override
+  String get sessionStatus_AppBar_serviceUnavailable => 'Service temporarily unavailable';
+
+  @override
   String get sessionStatus_pushNotificationServiceProblem => 'Problem with configuration push notification service';
 
   @override
@@ -2006,6 +2012,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sessionStatus_subtitle_registrationOff => 'Registration is off';
+
+  @override
+  String get sessionStatus_subtitle_serviceUnavailable => 'Your connection is fine, tap for details';
 
   @override
   String get session_Teardown_progressText => 'Signing out...';

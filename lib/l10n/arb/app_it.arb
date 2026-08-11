@@ -270,6 +270,10 @@
   "callStatus_ready": "Connessione stabilita",
   "@callStatus_ready": {},
   "call_SystemErrorDialog_description": "Per riprendere a effettuare chiamate, è necessario riavviare il telefono. Questo risolverà un errore temporaneo di sistema.",
+  "callStatus_serviceUnavailable": "Servizio temporaneamente non disponibile",
+  "@callStatus_serviceUnavailable": {
+    "description": "Shown when the phone system answered the registration attempt and refused to serve it, so the device and its network are working correctly and only the calling service is unavailable. Tell the user the outage is on the service side and expected to be temporary, and that no action on their device will speed it up."
+  },
   "@call_SystemErrorDialog_description": {},
   "call_SystemErrorDialog_title": "Errore di sistema",
   "@call_SystemErrorDialog_title": {},
@@ -1680,6 +1684,10 @@
   "@sessionStatus_AppBar_connecting": {
     "description": "Shown in the main app bar while the app is actively connecting to backend services."
   },
+  "sessionStatus_AppBar_serviceUnavailable": "Servizio temporaneamente non disponibile",
+  "@sessionStatus_AppBar_serviceUnavailable": {
+    "description": "App bar line shown while the phone system is refusing to register the account. Keep it short: it shares the bar with a progress indicator and is truncated on narrow screens."
+  },
   "sessionStatus_pushNotificationServiceProblem": "Problema con la configurazione del servizio di notifiche push",
   "@sessionStatus_pushNotificationServiceProblem": {},
   "sessionStatus_subtitle_connectivityNone": "Controlla Wi-Fi o dati mobili",
@@ -1692,6 +1700,10 @@
   "@sessionStatus_subtitle_ready": {},
   "sessionStatus_subtitle_registrationOff": "Registrazione disattivata",
   "@sessionStatus_subtitle_registrationOff": {},
+  "sessionStatus_subtitle_serviceUnavailable": "La connessione è a posto, tocca per i dettagli",
+  "@sessionStatus_subtitle_serviceUnavailable": {
+    "description": "One-line explanation under the service-unavailable status. Reassures the user that their internet connection is not the cause, and points to the diagnostics screen for details."
+  },
   "session_Teardown_progressText": "Disconnessione in corso...",
   "@session_Teardown_progressText": {
     "description": "Status message displayed while the application is performing cleanup during the logout process."

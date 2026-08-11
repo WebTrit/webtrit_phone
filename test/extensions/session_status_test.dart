@@ -32,6 +32,28 @@ void main() {
     return caption;
   }
 
+  Future<({String title, String caption, String appBar})> textsOf(WidgetTester tester, SessionStatus status) async {
+    late String title;
+    late String caption;
+    late String appBar;
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) {
+            l10n = AppLocalizations.of(context)!;
+            title = status.l10n(context);
+            caption = status.subtitleL10n(context, registered: true);
+            appBar = status.appBarl10n(context);
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+    return (title: title, caption: caption, appBar: appBar);
+  }
+
   testWidgets('a session the user turned off names that reason', (tester) async {
     const status = SessionStatus(signalingStatus: CallStatus.appUnregistered);
 
@@ -60,6 +82,62 @@ void main() {
     const status = SessionStatus(signalingStatus: CallStatus.ready, pushTokenError: 'boom');
 
     expect(await captionOf(tester, status, registered: true), l10n.sessionStatus_subtitle_diagnostic);
+  });
+
+  group('a phone system that refuses to serve the account', () {
+    const refused = SessionStatus(
+      signalingStatus: CallStatus.connectIssue,
+      registrationRejection: RegistrationRejection.platformUnavailable,
+    );
+
+    testWidgets('is named as the service being down, not as a connection problem', (tester) async {
+      final texts = await textsOf(tester, refused);
+
+      expect(texts.title, l10n.callStatus_serviceUnavailable);
+      expect(texts.appBar, l10n.sessionStatus_AppBar_serviceUnavailable);
+    });
+
+    testWidgets('tells the user their own connection is not at fault', (tester) async {
+      final texts = await textsOf(tester, refused);
+
+      expect(texts.caption, l10n.sessionStatus_subtitle_serviceUnavailable);
+    });
+
+    testWidgets('an unrecognised refusal keeps the generic wording', (tester) async {
+      const status = SessionStatus(signalingStatus: CallStatus.connectIssue);
+
+      final texts = await textsOf(tester, status);
+
+      expect(texts.title, l10n.callStatus_connectIssue);
+      expect(texts.appBar, l10n.sessionStatus_AppBar_waitingForConnection);
+      expect(texts.caption, l10n.sessionStatus_subtitle_diagnostic);
+    });
+
+    // The refusal is remembered on the state, so it must not leak into a state
+    // that describes something else entirely.
+    testWidgets('a lost network still names the network', (tester) async {
+      const status = SessionStatus(
+        signalingStatus: CallStatus.connectivityNone,
+        registrationRejection: RegistrationRejection.platformUnavailable,
+      );
+
+      final texts = await textsOf(tester, status);
+
+      expect(texts.title, l10n.callStatus_connectivityNone);
+      expect(texts.appBar, l10n.sessionStatus_AppBar_waitingForNetwork);
+    });
+
+    testWidgets('a transport failure still reads as a connection error', (tester) async {
+      const status = SessionStatus(
+        signalingStatus: CallStatus.connectError,
+        registrationRejection: RegistrationRejection.platformUnavailable,
+      );
+
+      final texts = await textsOf(tester, status);
+
+      expect(texts.title, l10n.callStatus_connectError);
+      expect(texts.appBar, l10n.sessionStatus_AppBar_waitingForConnection);
+    });
   });
 
   test('only a missing network or a session still connecting rule out a server request', () {

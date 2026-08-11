@@ -5,13 +5,20 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
 extension SessionStatusL10n on SessionStatus {
+  /// A recognised refusal is only allowed to reword the state that actually
+  /// describes it. A connect error is the transport failing, and no network
+  /// outranks everything, so both keep their own wording even when the last
+  /// known refusal is still remembered.
   String l10n(BuildContext context) {
     if (hasPushTokenError) return context.l10n.sessionStatus_pushNotificationServiceProblem;
     return switch (signalingStatus) {
       CallStatus.connectivityNone => context.l10n.callStatus_connectivityNone,
       CallStatus.connectError => context.l10n.callStatus_connectError,
       CallStatus.appUnregistered => context.l10n.callStatus_appUnregistered,
-      CallStatus.connectIssue => context.l10n.callStatus_connectIssue,
+      CallStatus.connectIssue => switch (registrationRejection) {
+        RegistrationRejection.platformUnavailable => context.l10n.callStatus_serviceUnavailable,
+        RegistrationRejection.unspecified => context.l10n.callStatus_connectIssue,
+      },
       CallStatus.inProgress => context.l10n.callStatus_inProgress,
       CallStatus.ready => context.l10n.callStatus_ready,
     };
@@ -22,7 +29,11 @@ extension SessionStatusL10n on SessionStatus {
   String appBarl10n(BuildContext context) {
     return switch (signalingStatus) {
       CallStatus.connectivityNone => context.l10n.sessionStatus_AppBar_waitingForNetwork,
-      CallStatus.connectError || CallStatus.connectIssue => context.l10n.sessionStatus_AppBar_waitingForConnection,
+      CallStatus.connectError => context.l10n.sessionStatus_AppBar_waitingForConnection,
+      CallStatus.connectIssue => switch (registrationRejection) {
+        RegistrationRejection.platformUnavailable => context.l10n.sessionStatus_AppBar_serviceUnavailable,
+        RegistrationRejection.unspecified => context.l10n.sessionStatus_AppBar_waitingForConnection,
+      },
       CallStatus.appUnregistered => context.l10n.sessionStatus_AppBar_disconnected,
       CallStatus.inProgress => context.l10n.sessionStatus_AppBar_connecting,
       CallStatus.ready => '_',
@@ -43,7 +54,11 @@ extension SessionStatusSubtitleL10n on SessionStatus {
     if (hasPushTokenError) return context.l10n.sessionStatus_subtitle_diagnostic;
     return switch (signalingStatus) {
       CallStatus.connectivityNone => context.l10n.sessionStatus_subtitle_connectivityNone,
-      CallStatus.connectError || CallStatus.connectIssue => context.l10n.sessionStatus_subtitle_diagnostic,
+      CallStatus.connectError => context.l10n.sessionStatus_subtitle_diagnostic,
+      CallStatus.connectIssue => switch (registrationRejection) {
+        RegistrationRejection.platformUnavailable => context.l10n.sessionStatus_subtitle_serviceUnavailable,
+        RegistrationRejection.unspecified => context.l10n.sessionStatus_subtitle_diagnostic,
+      },
       CallStatus.appUnregistered when !registered => context.l10n.sessionStatus_subtitle_registrationOff,
       CallStatus.appUnregistered when updating => context.l10n.sessionStatus_subtitle_inProgress,
       CallStatus.appUnregistered => context.l10n.sessionStatus_subtitle_diagnostic,

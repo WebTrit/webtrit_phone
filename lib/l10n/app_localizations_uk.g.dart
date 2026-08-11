@@ -362,6 +362,9 @@ class AppLocalizationsUk extends AppLocalizations {
       'Щоб відновити можливість здійснювати дзвінки, необхідно перезавантажити телефон. Це виправить тимчасову системну помилку.';
 
   @override
+  String get callStatus_serviceUnavailable => 'Сервіс тимчасово недоступний';
+
+  @override
   String get call_SystemErrorDialog_title => 'Системна помилка';
 
   @override
@@ -2022,6 +2025,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get sessionStatus_AppBar_connecting => 'Підключення...';
 
   @override
+  String get sessionStatus_AppBar_serviceUnavailable => 'Сервіс тимчасово недоступний';
+
+  @override
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
 
   @override
@@ -2038,6 +2044,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get sessionStatus_subtitle_registrationOff => 'Реєстрацію вимкнено';
+
+  @override
+  String get sessionStatus_subtitle_serviceUnavailable => 'Зі зʼєднанням усе гаразд, натисніть для деталей';
 
   @override
   String get session_Teardown_progressText => 'Вихід із системи...';

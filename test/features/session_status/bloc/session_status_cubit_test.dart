@@ -37,6 +37,16 @@ CallState _cs(CallStatus target) => switch (target) {
   ),
 };
 
+CallState _refused() => CallState(
+  callServiceState: const CallServiceState(
+    registration: ws.Registration(
+      status: ws.RegistrationStatus.registration_failed,
+      code: 503,
+      reason: 'No target nodes for callid abc',
+    ),
+  ),
+);
+
 void main() {
   group('SessionStatusCubit', () {
     late _MockCallBloc callBloc;
@@ -96,6 +106,44 @@ void main() {
 
         callController.add(_cs(CallStatus.ready));
         expect(cubit.state.status, _statusFor(CallStatus.ready));
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    test('a refused registration reaches the UI with its reason', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.inProgress), callStream: callController.stream);
+
+        callController.add(_refused());
+        async.elapse(kSignalingStatusDebounce);
+
+        expect(cubit.state.status.signalingStatus, CallStatus.connectIssue);
+        expect(cubit.state.status.registrationRejection, RegistrationRejection.platformUnavailable);
+
+        callController.close();
+        unawaited(cubit.close());
+      });
+    });
+
+    // While a transient episode is held back the previous status stays on
+    // screen; the reason has to stay with it, or the UI would pair the status
+    // it is showing with an explanation of a state it is not.
+    test('the reason travels with the status that is on screen, not the one held back', () {
+      fakeAsync((async) {
+        final callController = StreamController<CallState>(sync: true);
+
+        final cubit = buildCubit(initialCallState: _cs(CallStatus.ready), callStream: callController.stream);
+
+        callController.add(_refused());
+        expect(cubit.state.status.signalingStatus, CallStatus.ready, reason: 'the flip is still held back');
+        expect(cubit.state.status.registrationRejection, RegistrationRejection.unspecified);
+
+        async.elapse(kSignalingStatusDebounce);
+        expect(cubit.state.status.registrationRejection, RegistrationRejection.platformUnavailable);
 
         callController.close();
         unawaited(cubit.close());
