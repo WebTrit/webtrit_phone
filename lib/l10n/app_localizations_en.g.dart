@@ -13,6 +13,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.';
 
   @override
+  String get actionpad_SemanticsLabel_backspace => 'Backspace';
+
+  @override
   String agoTicker_daysAgo(int days) {
     String _temp0 = intl.Intl.pluralLogic(
       days,

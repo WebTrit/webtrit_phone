@@ -13,6 +13,9 @@ class AppLocalizationsUk extends AppLocalizations {
       'Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.';
 
   @override
+  String get actionpad_SemanticsLabel_backspace => 'Стерти';
+
+  @override
   String agoTicker_daysAgo(int days) {
     String _temp0 = intl.Intl.pluralLogic(
       days,

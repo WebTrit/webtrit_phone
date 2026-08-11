@@ -4,6 +4,10 @@
   "@account_selfCarePasswordExpired_message": {
     "description": "Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted."
   },
+  "actionpad_SemanticsLabel_backspace": "Cancella",
+  "@actionpad_SemanticsLabel_backspace": {
+    "description": "Accessibility name of the keypad backspace button."
+  },
   "agoTicker_daysAgo": "{days, plural, zero{} one{{days} giorno fa} other{{days} giorni fa}}",
   "@agoTicker_daysAgo": {
     "description": "Elapsed time relative to now, shown in days.",

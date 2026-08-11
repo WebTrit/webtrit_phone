@@ -94,6 +94,9 @@ const String callFrontCameraPreviewId = 'callFrontCameraPreview';
 const callFrontCameraPreviewKey = Key(callFrontCameraPreviewId);
 
 // Identifier-only entries: controls that have no widget-test key.
+const String actionPadOverflowId = 'actionPadOverflow';
+const String actionPadTransferId = 'actionPadTransfer';
+const String actionPadVoiceCallId = 'actionPadVoiceCall';
 const String callTileDialId = 'callTileDial';
 const String callTileMenuId = 'callTileMenu';
 const String systemNotificationsBadgeId = 'systemNotificationsBadge';

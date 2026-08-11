@@ -13,6 +13,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l\'accesso al servizio sarà limitato.';
 
   @override
+  String get actionpad_SemanticsLabel_backspace => 'Cancella';
+
+  @override
   String agoTicker_daysAgo(int days) {
     String _temp0 = intl.Intl.pluralLogic(
       days,

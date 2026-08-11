@@ -58,26 +58,29 @@ class Actionpad extends StatelessWidget {
             visible: onInitiatedTransferPressed == null,
             child: Transform.scale(
               scale: localStyle?.secondary?.scale ?? 1.0,
-              child: TextButton(
-                onPressed: actionsEnabled ? () {} : null,
-                style: localStyle?.secondary?.style,
-                child: PopupMenuButton(
-                  enabled: actionsEnabled,
-                  child: Icon(Icons.more_vert, size: iconSize),
-                  itemBuilder: (context) {
-                    return [
-                      if (onVideoCallPressed != null)
-                        PopupMenuItem(onTap: onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
-                      if (onTransferPressed != null)
-                        PopupMenuItem(onTap: onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
-                      if (callNumbers.length > 1)
-                        for (final number in callNumbers)
-                          PopupMenuItem(
-                            onTap: () => onCallFrom?.call(number),
-                            child: Text(context.l10n.numberActions_callFrom(number)),
-                          ),
-                    ];
-                  },
+              child: SemanticAction(
+                identifier: actionPadOverflowId,
+                child: TextButton(
+                  onPressed: actionsEnabled ? () {} : null,
+                  style: localStyle?.secondary?.style,
+                  child: PopupMenuButton(
+                    enabled: actionsEnabled,
+                    child: Icon(Icons.more_vert, size: iconSize),
+                    itemBuilder: (context) {
+                      return [
+                        if (onVideoCallPressed != null)
+                          PopupMenuItem(onTap: onVideoCallPressed, child: Text(context.l10n.numberActions_videoCall)),
+                        if (onTransferPressed != null)
+                          PopupMenuItem(onTap: onTransferPressed, child: Text(context.l10n.numberActions_transfer)),
+                        if (callNumbers.length > 1)
+                          for (final number in callNumbers)
+                            PopupMenuItem(
+                              onTap: () => onCallFrom?.call(number),
+                              child: Text(context.l10n.numberActions_callFrom(number)),
+                            ),
+                      ];
+                    },
+                  ),
                 ),
               ),
             ),
@@ -87,40 +90,56 @@ class Actionpad extends StatelessWidget {
             visible: onInitiatedTransferPressed == null && onVideoCallPressed != null,
             child: Transform.scale(
               scale: localStyle?.secondary?.scale ?? 1.0,
-              child: TextButton(
-                key: actionPadVideoCallKey,
-                onPressed: actionsEnabled ? onVideoCallPressed : null,
-                style: localStyle?.secondary?.style,
-                child: Icon(Icons.videocam, size: iconSize),
+              child: SemanticAction(
+                label: context.l10n.numberActions_videoCall,
+                identifier: actionPadVideoCallId,
+                child: TextButton(
+                  key: actionPadVideoCallKey,
+                  onPressed: actionsEnabled ? onVideoCallPressed : null,
+                  style: localStyle?.secondary?.style,
+                  child: Icon(Icons.videocam, size: iconSize),
+                ),
               ),
             ),
           ),
         if (onInitiatedTransferPressed != null)
           Transform.scale(
             scale: localStyle?.primary?.scale ?? 1.0,
-            child: TextButton(
-              onPressed: actionsEnabled ? onInitiatedTransferPressed : null,
-              style: localStyle?.primary?.style,
-              child: Icon(Icons.phone_forwarded, size: iconSize),
+            child: SemanticAction(
+              label: context.l10n.numberActions_transfer,
+              identifier: actionPadTransferId,
+              child: TextButton(
+                onPressed: actionsEnabled ? onInitiatedTransferPressed : null,
+                style: localStyle?.primary?.style,
+                child: Icon(Icons.phone_forwarded, size: iconSize),
+              ),
             ),
           )
         else
           Transform.scale(
             scale: localStyle?.primary?.scale ?? 1.0,
-            child: TextButton(
-              onPressed: actionsEnabled ? onAudioCallPressed : null,
-              style: localStyle?.primary?.style,
-              child: Icon(Icons.call, size: iconSize),
+            child: SemanticAction(
+              label: context.l10n.numberActions_audioCall,
+              identifier: actionPadVoiceCallId,
+              child: TextButton(
+                onPressed: actionsEnabled ? onAudioCallPressed : null,
+                style: localStyle?.primary?.style,
+                child: Icon(Icons.call, size: iconSize),
+              ),
             ),
           ),
         Transform.scale(
           scale: localStyle?.backspace?.scale ?? 1.0,
-          child: TextButton(
-            key: actionPadBackspaceKey,
-            onPressed: actionsEnabled ? onBackspacePressed : null,
-            onLongPress: actionsEnabled ? onBackspaceLongPress : null,
-            style: localStyle?.backspace?.style,
-            child: const Icon(Icons.backspace_outlined),
+          child: SemanticAction(
+            label: context.l10n.actionpad_SemanticsLabel_backspace,
+            identifier: actionPadBackspaceId,
+            child: TextButton(
+              key: actionPadBackspaceKey,
+              onPressed: actionsEnabled ? onBackspacePressed : null,
+              onLongPress: actionsEnabled ? onBackspaceLongPress : null,
+              style: localStyle?.backspace?.style,
+              child: const Icon(Icons.backspace_outlined),
+            ),
           ),
         ),
       ],
