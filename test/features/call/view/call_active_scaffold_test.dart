@@ -13,6 +13,7 @@ import 'package:webtrit_phone/features/call/view/call_active_scaffold.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/keypad_key_button.dart';
 
 // ---------------------------------------------------------------------------
 // Mocks / helpers
@@ -323,6 +324,32 @@ void main() {
       await tester.pump();
 
       expect(find.descendant(of: find.byType(CallRemoteAvatar), matching: find.text('BK')), findsOneWidget);
+      await _teardown(tester);
+    });
+
+    testWidgets('the open in-call keypad hides the avatar and keeps the keys full size', (tester) async {
+      // The in-call keypad opens only in portrait orientation.
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [active], focusedCall: active));
+      expect(find.byType(CallRemoteAvatar), findsOneWidget);
+
+      await tester.tap(find.byKey(callActionsKeypadKey));
+      await tester.pumpAndSettle();
+
+      // The avatar makes way for the keypad, and the keys render at their
+      // natural size (screen shortest side / 5) - never scaled down.
+      expect(find.byType(CallRemoteAvatar), findsNothing);
+      final keySize = tester.getSize(find.byType(KeypadKeyButton).first);
+      expect(keySize.width, greaterThanOrEqualTo(360 / 5));
+
+      await tester.tap(find.byTooltip('Hide keypad'));
+      await tester.pumpAndSettle();
+      expect(find.byType(KeypadKeyButton), findsNothing);
+      expect(find.byType(CallRemoteAvatar), findsOneWidget);
+
       await _teardown(tester);
     });
   });

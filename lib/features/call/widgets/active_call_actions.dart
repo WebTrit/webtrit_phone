@@ -40,6 +40,8 @@ class ActiveCallActions extends StatefulWidget {
     this.onHeldChanged,
     this.onHangupPressed,
     this.onKeyPressed,
+    this.keypadShown = false,
+    this.onKeypadToggle,
     this.style,
   });
 
@@ -73,6 +75,14 @@ class ActiveCallActions extends StatefulWidget {
   final void Function()? onHangupPressed;
   final void Function(String value)? onKeyPressed;
 
+  /// Whether the in-call keypad is shown. The state is owned by the parent:
+  /// the surrounding layout renders differently around the open keypad (the
+  /// avatar hides), so a single owner keeps the two in sync.
+  final bool keypadShown;
+
+  /// Requests the in-call keypad to be shown or hidden.
+  final ValueChanged<bool>? onKeypadToggle;
+
   final CallScreenActionsStyle? style;
 
   @override
@@ -80,8 +90,6 @@ class ActiveCallActions extends StatefulWidget {
 }
 
 class _ActiveCallActionsState extends State<ActiveCallActions> {
-  bool _keypadShow = false;
-
   final _keypadTextFieldKey = GlobalKey();
 
   EditableTextState? get _keypadTextFieldEditableTextState =>
@@ -146,7 +154,6 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
       _actionsDelimiterDimension = _dimension / 9;
       _hangupDelimiterDimension = _actionsDelimiterDimension;
       _horizontalPadding = _dimension * 3;
-      if (_keypadShow) _keypadShow = false;
     }
     if (mounted) setState(() {});
   }
@@ -202,7 +209,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     final TextButtonsTable buttonsTable;
 
     late List<Widget> actions;
-    if (_keypadShow) {
+    if (widget.keypadShown) {
       actions = KeypadKey.numbers.indexed
           .map((e) {
             final (i, k) = e;
@@ -458,13 +465,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
           key: callActionsKeypadKey,
           message: context.l10n.call_CallActionsTooltip_showKeypad,
           child: TextButton(
-            onPressed: onKeyPressed == null || !_isOrientationPortrait
-                ? null
-                : () {
-                    setState(() {
-                      _keypadShow = true;
-                    });
-                  },
+            onPressed: onKeyPressed == null || !_isOrientationPortrait ? null : () => widget.onKeypadToggle?.call(true),
             style: widget.style?.key,
             child: Icon(Icons.dialpad, size: actionPadIconSize),
           ),
@@ -493,16 +494,13 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
             child: Icon(Icons.call_end, size: actionPadIconSize),
           ),
         ),
-        _keypadShow
+        widget.keypadShown
             ? Tooltip(
                 message: context.l10n.call_CallActionsTooltip_hideKeypad,
                 child: TextButton(
                   onPressed: () {
                     _keypadTextEditingController.clear();
-
-                    setState(() {
-                      _keypadShow = false;
-                    });
+                    widget.onKeypadToggle?.call(false);
                   },
                   style: widget.style?.key,
                   child: Icon(Icons.dialpad, size: actionPadIconSize),
@@ -518,7 +516,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         data: IconThemeData(size: _iconSize),
         child: Column(
           children: [
-            if (_keypadShow) ...[
+            if (widget.keypadShown) ...[
               TextField(
                 key: _keypadTextFieldKey,
                 controller: _keypadTextEditingController,
