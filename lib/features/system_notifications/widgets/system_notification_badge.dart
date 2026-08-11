@@ -52,10 +52,9 @@ class _SystemNotificationsBadgeState extends State<SystemNotificationsBadge> wit
           final colorScheme = theme.colorScheme;
           final hasUnseen = unseenCount > 0;
 
-          return SemanticAction(
+          return SemanticAction.button(
             label: context.l10n.system_notifications_screen_title,
             identifier: systemNotificationsBadgeId,
-            button: true,
             child: SizedBox(
               width: kMinInteractiveDimension,
               height: kMinInteractiveDimension,
