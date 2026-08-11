@@ -4,6 +4,10 @@
   "@account_selfCarePasswordExpired_message": {
     "description": "Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted."
   },
+  "actionpad_SemanticsLabel_backspace": "Backspace",
+  "@actionpad_SemanticsLabel_backspace": {
+    "description": "Accessibility name of the keypad backspace button."
+  },
   "agoTicker_daysAgo": "{days, plural, zero{} one{{days} day ago} other{{days} days ago}}",
   "@agoTicker_daysAgo": {
     "description": "Elapsed time relative to now, shown in days.",
@@ -86,6 +90,16 @@
   "callTileActions_more": "More",
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
+  },
+  "callTile_SemanticsLabel_call": "Call {name}",
+  "@callTile_SemanticsLabel_call": {
+    "description": "Accessibility name of the call button in a call history or contact row.",
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "callTile_SemanticsLabel_videoCall": "Video call {name}",
+  "@callTile_SemanticsLabel_videoCall": {
+    "description": "Accessibility name of the video call button in a call history or contact row.",
+    "placeholders": {"name": {"type": "String"}}
   },
   "call_CallActionsTooltip_accept": "Accept",
   "@call_CallActionsTooltip_accept": {},

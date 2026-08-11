@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/widgets/call/call_tile.dart';
+
+import '../../helpers/helpers.dart';
 
 void main() {
   Widget buildTestable(Widget child) {
@@ -21,6 +24,7 @@ void main() {
     bool gesturesEnabled = true,
     VoidCallback? onDialPressed,
     IconData? dialIcon,
+    bool dialIsVideo = false,
     VoidCallback? onAudioCallPressed,
     VoidCallback? onVideoCallPressed,
     VoidCallback? onChatPressed,
@@ -39,6 +43,7 @@ void main() {
       gesturesEnabled: gesturesEnabled,
       onDialPressed: onDialPressed,
       dialIcon: dialIcon,
+      dialIsVideo: dialIsVideo,
       onAudioCallPressed: onAudioCallPressed,
       onVideoCallPressed: onVideoCallPressed,
       onChatPressed: onChatPressed,
@@ -184,6 +189,7 @@ void main() {
             expanded: true,
             onDialPressed: () {},
             dialIcon: Icons.videocam,
+            dialIsVideo: true,
             onAudioCallPressed: () {},
             onVideoCallPressed: () {},
           ),
@@ -249,6 +255,90 @@ void main() {
 
       expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Audio call'), findsOneWidget);
       expect(find.widgetWithText(PopupMenuItem<dynamic>, 'Copy number'), findsOneWidget);
+    });
+  });
+
+  group('CallTile accessibility', () {
+    testWidgets('dial button is announced as "Call <name>" and is targetable by id', (tester) async {
+      final handle = tester.ensureSemantics();
+
+      await tester.pumpWidget(buildTestable(buildTile(onDialPressed: () {})));
+      await tester.pumpAndSettle();
+
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(callTileDialId),
+        label: 'Call John Doe',
+        identifier: callTileDialId,
+        isButton: true,
+      );
+
+      handle.dispose();
+    });
+
+    testWidgets('video dial button is announced as "Video call <name>"', (tester) async {
+      final handle = tester.ensureSemantics();
+
+      await tester.pumpWidget(
+        buildTestable(buildTile(onDialPressed: () {}, dialIcon: Icons.videocam, dialIsVideo: true)),
+      );
+      await tester.pumpAndSettle();
+
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(callTileDialId),
+        label: 'Video call John Doe',
+        identifier: callTileDialId,
+        isButton: true,
+      );
+
+      handle.dispose();
+    });
+
+    testWidgets('trailing menu button is announced as "More"', (tester) async {
+      final handle = tester.ensureSemantics();
+
+      await tester.pumpWidget(buildTestable(buildTile(onAudioCallPressed: () {})));
+      await tester.pumpAndSettle();
+
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(callTileMenuId),
+        label: 'More',
+        identifier: callTileMenuId,
+        isButton: true,
+      );
+
+      handle.dispose();
+    });
+
+    testWidgets('dial button fires its callback when activated through semantics', (tester) async {
+      final handle = tester.ensureSemantics();
+
+      var called = false;
+      await tester.pumpWidget(buildTestable(buildTile(onDialPressed: () => called = true)));
+      await tester.pumpAndSettle();
+
+      await tapViaSemantics(tester, find.bySemanticsIdentifier(callTileDialId));
+      expect(called, isTrue);
+
+      handle.dispose();
+    });
+
+    testWidgets('inline actions expose their visible label on the tappable node', (tester) async {
+      final handle = tester.ensureSemantics();
+
+      await tester.pumpWidget(buildTestable(buildTile(expanded: true, onVideoCallPressed: () {})));
+      await tester.pumpAndSettle();
+
+      expectTapTargetSemantics(
+        tester,
+        find.descendant(of: find.byType(CallTileActionsBar), matching: find.text('Video call')),
+        label: 'Video call',
+        isButton: true,
+      );
+
+      handle.dispose();
     });
   });
 }

@@ -100,6 +100,12 @@ abstract class AppLocalizations {
   /// **'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.'**
   String get account_selfCarePasswordExpired_message;
 
+  /// Accessibility name of the keypad backspace button.
+  ///
+  /// In en, this message translates to:
+  /// **'Backspace'**
+  String get actionpad_SemanticsLabel_backspace;
+
   /// Elapsed time relative to now, shown in days.
   ///
   /// In en, this message translates to:
@@ -231,6 +237,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More'**
   String get callTileActions_more;
+
+  /// Accessibility name of the call button in a call history or contact row.
+  ///
+  /// In en, this message translates to:
+  /// **'Call {name}'**
+  String callTile_SemanticsLabel_call(String name);
+
+  /// Accessibility name of the video call button in a call history or contact row.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call {name}'**
+  String callTile_SemanticsLabel_videoCall(String name);
 
   /// No description provided for @call_CallActionsTooltip_accept.
   ///

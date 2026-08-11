@@ -13,6 +13,9 @@ class AppLocalizationsTh extends AppLocalizations {
       'รหัสผ่าน self-care ของคุณหมดอายุแล้ว กรุณาอัปเดตผ่าน self-care ของคุณ\nจนกว่าจะเปลี่ยนรหัสผ่าน การเข้าถึงบริการจะถูกจำกัด';
 
   @override
+  String get actionpad_SemanticsLabel_backspace => 'ลบ';
+
+  @override
   String agoTicker_daysAgo(int days) {
     String _temp0 = intl.Intl.pluralLogic(
       days,
@@ -121,6 +124,16 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get callTileActions_more => 'เพิ่มเติม';
+
+  @override
+  String callTile_SemanticsLabel_call(String name) {
+    return 'โทรหา $name';
+  }
+
+  @override
+  String callTile_SemanticsLabel_videoCall(String name) {
+    return 'วิดีโอคอลหา $name';
+  }
 
   @override
   String get call_CallActionsTooltip_accept => 'รับสาย';
