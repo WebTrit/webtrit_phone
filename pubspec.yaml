@@ -159,7 +159,7 @@ dependencies:
   flutter_webrtc:
     git:
       url: https://github.com/WebTrit/flutter-webrtc.git
-      ref: main_ext_rebase_06.05.26
+      ref: main_ext_rebase_11.08.26
 
 dev_dependencies:
   integration_test:
