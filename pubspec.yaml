@@ -397,6 +397,57 @@ melos:
       run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons --config-only
 
     # ===========================
+    # Fastlane - melos run fastlane:ios:build | fastlane:android:upload
+    # ===========================
+
+    fastlane:install:
+      description: Install fastlane if it is missing (brew on macOS, gem elsewhere).
+      run: |
+        set -eo pipefail
+        if command -v fastlane >/dev/null 2>&1; then
+          echo "fastlane already installed: $(fastlane --version | tail -n 1)"
+        elif [ "$(uname -s)" = "Darwin" ]; then
+          brew install fastlane
+        else
+          gem install fastlane
+        fi
+
+    fastlane:ios:build:
+      description: >
+        Build and sign the iOS ipa via ios/fastlane. Reads IOS_CERTIFICATE_PATH,
+        IOS_PROVISIONING_PROFILE_PATH, IOS_CODE_SIGNING_IDENTITY, IOS_TEAM_ID, IOS_BUILD_NAME,
+        IOS_BUILD_NUMBER, IOS_BUILD_FILE_NAME from the environment.
+      steps:
+        - fastlane:install
+        - cd ios && fastlane ios build
+
+    fastlane:ios:upload:
+      description: >
+        Upload the built ipa to TestFlight. Reads IOS_APP_STORE_CONNECT_API_KEY_ID,
+        IOS_APP_STORE_CONNECT_API_KEY_ISSUER_ID, IOS_APP_STORE_CONNECT_API_KEY_P8_PATH,
+        IOS_BUILD_FILE_NAME from the environment.
+      steps:
+        - fastlane:install
+        - cd ios && fastlane ios upload
+
+    fastlane:android:build:
+      description: >
+        Build the Android app bundle via android/fastlane. Reads ANDROID_BUILD_TARGET,
+        ANDROID_FLAVOR, ANDROID_BUILD_NAME, ANDROID_BUILD_NUMBER from the environment.
+      steps:
+        - fastlane:install
+        - cd android && fastlane android build
+
+    fastlane:android:upload:
+      description: >
+        Upload the built aab to Google Play. Reads ANDROID_PLAY_STORE_TRACK,
+        ANDROID_PLAY_STORE_RELEASE_STATUS, ANDROID_PLAY_STORE_JSON_KEY_PATH,
+        ANDROID_PLAY_STORE_PACKAGE_NAME, ANDROID_AAB_PATH from the environment.
+      steps:
+        - fastlane:install
+        - cd android && fastlane android upload
+
+    # ===========================
     # Clean - melos run clean | clean:git
     # ===========================
 

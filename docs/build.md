@@ -1,8 +1,11 @@
 # Build & Development Process Overview
 
-This documentation describes how to build and run the WebTrit Phone project.
-It includes melos script usage, flavor configuration, Flutter SDK version management, and tips
-for local development.
+How to build, run, sign, and ship the WebTrit Phone project.
+
+Last reviewed: 2026-08-11
+
+It includes melos script usage, flavor configuration, signed release builds and store uploads via
+fastlane, Flutter SDK version management, and tips for local development.
 
 For all available melos scripts, see [Melos Commands](make_file.md).
 For how a release pins its `webtrit_callkeep` version, see [Release Versioning](release_versioning.md).
@@ -76,6 +79,104 @@ FLUTTER_FLAGS="--build-name=1.2.3 --build-number=42 --release" melos run build:a
 ```
 
 All build commands read configuration from `dart_define.json` automatically.
+
+The `build:*` scripts produce **unsigned / debug-signed** artifacts for local use. For signed
+release artifacts and store uploads, use the fastlane scripts below.
+
+---
+
+## Signed Builds & Store Uploads (fastlane)
+
+Signing and store submission live in two Fastfiles - `ios/fastlane/Fastfile` and
+`android/fastlane/Fastfile` - wrapped by melos scripts so they are invoked the same way from a
+laptop and from CI.
+
+| Command                             | Description                                          |
+|-------------------------------------|------------------------------------------------------|
+| `melos run fastlane:install`        | Install fastlane if missing (brew on macOS, gem else) |
+| `melos run fastlane:ios:build`      | Build and sign the iOS ipa                           |
+| `melos run fastlane:ios:upload`     | Upload the ipa to TestFlight                         |
+| `melos run fastlane:android:build`  | Build the signed Android app bundle                  |
+| `melos run fastlane:android:upload` | Upload the aab to Google Play                        |
+
+Every build/upload script runs `fastlane:install` first, so a fresh machine provisions itself.
+All inputs come from the environment, prefixed per platform (`IOS_` / `ANDROID_`) so the two
+platforms can define same-named values side by side without collisions.
+
+### iOS
+
+`melos run fastlane:ios:build` creates a throwaway keychain, imports the certificate and
+provisioning profile, stamps the version into `Runner.xcodeproj`, disables automatic signing,
+builds via `build_app`, then deletes the keychain.
+
+| Variable                                    | Purpose                                            |
+|---------------------------------------------|----------------------------------------------------|
+| `IOS_CERTIFICATE_PATH`                      | Signing certificate to import                      |
+| `IOS_PROVISIONING_PROFILE_PATH`             | Provisioning profile to install and apply          |
+| `IOS_CODE_SIGNING_IDENTITY`                 | Identity for signing and `signingCertificate`      |
+| `IOS_TEAM_ID`                               | Development team / export team                     |
+| `IOS_BUILD_NAME`                             | Marketing version (`CFBundleShortVersionString`)   |
+| `IOS_BUILD_NUMBER`                          | Build number (`CFBundleVersion`)                   |
+| `IOS_BUILD_FILE_NAME`                       | Output ipa name, also the upload input             |
+| `IOS_BUILD_SDK`                             | Optional `sdk` override for `build_app`            |
+| `IOS_APP_STORE_CONNECT_API_KEY_ID`          | App Store Connect API key id (upload)              |
+| `IOS_APP_STORE_CONNECT_API_KEY_ISSUER_ID`   | App Store Connect issuer id (upload)               |
+| `IOS_APP_STORE_CONNECT_API_KEY_P8_PATH`     | Path to the `.p8` private key (upload)             |
+
+The upload lane authenticates with an App Store Connect API key - no Apple ID password or 2FA
+session - and skips waiting for build processing.
+
+> The `.p8` path variable is deliberately prefixed. Unprefixed, pilot would pick
+> `APP_STORE_CONNECT_API_KEY_PATH` up as its own `api_key_path` option, which expects a **JSON**
+> key file, and fail while parsing the PEM.
+
+### Android
+
+`melos run fastlane:android:build` drives the flutter tool
+(`flutter build appbundle --dart-define-from-file=dart_define.json --no-tree-shake-icons`) so
+dart-defines, flavor selection, and version stamping behave exactly as in the `build:*` scripts.
+
+| Variable                              | Default                | Purpose                                |
+|---------------------------------------|------------------------|----------------------------------------|
+| `ANDROID_BUILD_TARGET`                | `appbundle`            | `appbundle` or `apk`                   |
+| `ANDROID_FLAVOR`                      | `deeplinkssmsReceiver` | Flavor combinator (see [Flavors](flavors.md)) |
+| `ANDROID_BUILD_NAME`                  | -                      | Marketing version                      |
+| `ANDROID_BUILD_NUMBER`                | -                      | Version code                           |
+| `ANDROID_AAB_PATH`                    | -                      | Bundle to upload                       |
+| `ANDROID_PLAY_STORE_JSON_KEY_PATH`    | -                      | Play service account JSON              |
+| `ANDROID_PLAY_STORE_PACKAGE_NAME`     | -                      | Application id to publish under        |
+| `ANDROID_PLAY_STORE_TRACK`            | `internal`             | Play track                             |
+| `ANDROID_PLAY_STORE_RELEASE_STATUS`   | `draft`                | Play release status                    |
+
+Release signing needs no fastlane input: `android/app/build.gradle` builds the release
+`signingConfig` from `upload-keystore-metadata.json` in the keystore directory pointed at by the
+`WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH` dart-define. Watch the build log for
+`Release signing NOT configured` if that path is wrong.
+
+The upload lane pushes the bundle only - metadata, images, screenshots, and changelogs are skipped.
+
+### Examples
+
+```bash
+# Keep the values in the gitignored .env and export them all at once
+source .env
+melos run fastlane:ios:build
+
+# Or pass them inline
+IOS_TEAM_ID=ABCDE12345 \
+IOS_CERTIFICATE_PATH=certs/dist.p12 \
+IOS_PROVISIONING_PROFILE_PATH=certs/app.mobileprovision \
+IOS_CODE_SIGNING_IDENTITY="Apple Distribution" \
+IOS_BUILD_NAME=1.2.3 IOS_BUILD_NUMBER=42 IOS_BUILD_FILE_NAME=build.ipa \
+  melos run fastlane:ios:build
+
+ANDROID_BUILD_NAME=1.2.3 ANDROID_BUILD_NUMBER=42 \
+  melos run fastlane:android:build
+```
+
+The lanes can also be invoked directly from the platform directory - `cd ios && fastlane ios build`
+- which is what the melos scripts do. Both platform directories carry a `Gemfile`, so prefer
+`bundle exec fastlane ...` when running by hand to pin the fastlane version.
 
 ---
 
