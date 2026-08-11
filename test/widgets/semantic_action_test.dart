@@ -18,10 +18,9 @@ void main() {
     var tapped = false;
     await tester.pumpWidget(
       wrap(
-        SemanticAction(
+        SemanticAction.button(
           label: 'Play',
           identifier: 'voicemailPlay',
-          button: true,
           child: GestureDetector(
             onTap: () => tapped = true,
             child: const SizedBox(width: 48, height: 48, child: Icon(Icons.play_arrow)),
@@ -96,10 +95,9 @@ void main() {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SemanticAction(
+            SemanticAction.button(
               label: 'Play',
               identifier: 'voicemailPlay',
-              button: true,
               child: GestureDetector(
                 onTap: () {},
                 child: const SizedBox(width: 48, height: 48, child: Icon(Icons.play_arrow)),

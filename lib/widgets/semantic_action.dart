@@ -14,11 +14,16 @@ import 'package:flutter/material.dart';
 /// [child] must contain exactly one interactive control: merging a subtree
 /// with several tappable descendants would collapse them into a single node.
 ///
-/// Set [button] for tap targets that are not built from button widgets
-/// (`GestureDetector`, `InkWell`), so assistive technology announces a role;
-/// controls that already are buttons keep their role through the merge.
+/// Pick the constructor by what [child] is built from: the default one for
+/// controls that already announce their own role (`IconButton`, `TextButton`,
+/// ...), [SemanticAction.button] for tap targets that carry no semantic role
+/// of their own (`GestureDetector`, `InkWell`) so the role gets added.
 class SemanticAction extends StatelessWidget {
-  const SemanticAction({super.key, this.label, this.identifier, this.button = false, required this.child});
+  /// Names a control that already announces its own role.
+  const SemanticAction({super.key, this.label, this.identifier, required this.child}) : _button = false;
+
+  /// Names a bare tap target and adds the button role to the merged node.
+  const SemanticAction.button({super.key, this.label, this.identifier, required this.child}) : _button = true;
 
   /// Spoken name of the control; omit when the control already exposes a
   /// proper visible or semantic label of its own.
@@ -28,15 +33,14 @@ class SemanticAction extends StatelessWidget {
   /// id); use the `...Id` constant paired with the control's widget key.
   final String? identifier;
 
-  /// Whether to add the button role to the merged node.
-  final bool button;
+  final bool _button;
 
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return MergeSemantics(
-      child: Semantics(label: label, identifier: identifier, button: button ? true : null, child: child),
+      child: Semantics(label: label, identifier: identifier, button: _button ? true : null, child: child),
     );
   }
 }
