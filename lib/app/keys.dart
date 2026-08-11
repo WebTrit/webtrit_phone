@@ -1,61 +1,113 @@
 import 'package:flutter/foundation.dart';
 
-const loginModeScreenSignUpButtonKey = Key('loginModeScreenSignUpButton');
-const loginModeScreenUrlButtonKey = Key('loginModeScreenUrlButton');
+// Each widget key is paired with a String constant that doubles as the
+// accessibility identifier (`Semantics.identifier`) of the same control.
+// The key is always built from the constant, so the widget-test anchor and
+// the accessibility tree anchor cannot drift apart.
 
-const coreUrlInputKey = Key('coreUrlInput');
-const coreUrlButtonKey = Key('coreUrlButton');
+const String loginModeScreenSignUpButtonId = 'loginModeScreenSignUpButton';
+const loginModeScreenSignUpButtonKey = Key(loginModeScreenSignUpButtonId);
+const String loginModeScreenUrlButtonId = 'loginModeScreenUrlButton';
+const loginModeScreenUrlButtonKey = Key(loginModeScreenUrlButtonId);
 
-const signupEmailInputKey = Key('signupEmailInput');
-const signupVerifyInputKey = Key('signupVerifyInput');
-const signupEmailButtonKey = Key('signupEmailButton');
-const signupVerifyButtonKey = Key('signupVerifyButton');
+const String coreUrlInputId = 'coreUrlInput';
+const coreUrlInputKey = Key(coreUrlInputId);
+const String coreUrlButtonId = 'coreUrlButton';
+const coreUrlButtonKey = Key(coreUrlButtonId);
 
-const optInputKey = Key('otpInput');
-const otpVerifyInputKey = Key('otpVerifyInput');
-const otpButtonKey = Key('otpButton');
-const otpVerifyButtonKey = Key('otpVerifyButton');
+const String signupEmailInputId = 'signupEmailInput';
+const signupEmailInputKey = Key(signupEmailInputId);
+const String signupVerifyInputId = 'signupVerifyInput';
+const signupVerifyInputKey = Key(signupVerifyInputId);
+const String signupEmailButtonId = 'signupEmailButton';
+const signupEmailButtonKey = Key(signupEmailButtonId);
+const String signupVerifyButtonId = 'signupVerifyButton';
+const signupVerifyButtonKey = Key(signupVerifyButtonId);
 
-const passwordUserInputKey = Key('passwordUserInput');
-const passwordPasswordInputKey = Key('passwordPasswordInput');
-const passwordButtonKey = Key('passwordButton');
+const String optInputId = 'otpInput';
+const optInputKey = Key(optInputId);
+const String otpVerifyInputId = 'otpVerifyInput';
+const otpVerifyInputKey = Key(otpVerifyInputId);
+const String otpButtonId = 'otpButton';
+const otpButtonKey = Key(otpButtonId);
+const String otpVerifyButtonId = 'otpVerifyButton';
+const otpVerifyButtonKey = Key(otpVerifyButtonId);
 
-const contactsAgreementCheckboxKey = Key('contactsAgreementCheckbox');
-const contactsAgreementAcceptButtonKey = Key('contactsAgreementAcceptButton');
+const String passwordUserInputId = 'passwordUserInput';
+const passwordUserInputKey = Key(passwordUserInputId);
+const String passwordPasswordInputId = 'passwordPasswordInput';
+const passwordPasswordInputKey = Key(passwordPasswordInputId);
+const String passwordButtonId = 'passwordButton';
+const passwordButtonKey = Key(passwordButtonId);
 
-const userAgreementCheckboxKey = Key('userAgreementCheckbox');
-const userAgreementAcceptButtonKey = Key('userAgreementAcceptButton');
+const String contactsAgreementCheckboxId = 'contactsAgreementCheckbox';
+const contactsAgreementCheckboxKey = Key(contactsAgreementCheckboxId);
+const String contactsAgreementAcceptButtonId = 'contactsAgreementAcceptButton';
+const contactsAgreementAcceptButtonKey = Key(contactsAgreementAcceptButtonId);
 
-const permissionsInitButtonKey = Key('permissionsProcessButton');
-const permissionTipsButtonKey = Key('permissionTipsButton');
+const String userAgreementCheckboxId = 'userAgreementCheckbox';
+const userAgreementCheckboxKey = Key(userAgreementCheckboxId);
+const String userAgreementAcceptButtonId = 'userAgreementAcceptButton';
+const userAgreementAcceptButtonKey = Key(userAgreementAcceptButtonId);
 
-const mainAppBarKey = Key('mainAppBar');
-const settingsLogoutButtonKey = Key('settingsLogoutButton');
+const String permissionsInitButtonId = 'permissionsProcessButton';
+const permissionsInitButtonKey = Key(permissionsInitButtonId);
+const String permissionTipsButtonId = 'permissionTipsButton';
+const permissionTipsButtonKey = Key(permissionTipsButtonId);
 
-const confirmDialogYesButtonKey = Key('confirmDialogYesButton');
-const confirmDialogNoButtonKey = Key('confirmDialogNoButton');
+const String mainAppBarId = 'mainAppBar';
+const mainAppBarKey = Key(mainAppBarId);
+const String settingsLogoutButtonId = 'settingsLogoutButton';
+const settingsLogoutButtonKey = Key(settingsLogoutButtonId);
 
-const actionPadVideoCallKey = Key('actionPadVideoCall');
-const actionPadBackspaceKey = Key('actionPadBackspace');
+const String confirmDialogYesButtonId = 'confirmDialogYesButton';
+const confirmDialogYesButtonKey = Key(confirmDialogYesButtonId);
+const String confirmDialogNoButtonId = 'confirmDialogNoButton';
+const confirmDialogNoButtonKey = Key(confirmDialogNoButtonId);
 
-const callActionsMuteKey = Key('callActionsMute');
-const callActionsVideoCallKey = Key('callActionsVideoCall');
-const callActionsSpeakerKey = Key('callActionsSpeaker');
-const callActionsHoldKey = Key('callActionsHold');
-const callActionsKeypadKey = Key('callActionsKeypad');
-const callActionsHangupKey = Key('callActionsHangup');
-const callActionsTransferMenuKey = Key('callActionsTransferMenu');
-const callActionsTransferMenuBlindInitKey = Key('callActionsTransferMenuBlindInit');
-const callActionsTransferMenuAttendedInitKey = Key('callActionsTransferMenuAttendedInit');
-const callActionsTransferMenuNumberKey = Key('callActionsTransferAttendedNumber');
-const callFrontCameraPreviewKey = Key('callFrontCameraPreview');
+const String actionPadVideoCallId = 'actionPadVideoCall';
+const actionPadVideoCallKey = Key(actionPadVideoCallId);
+const String actionPadBackspaceId = 'actionPadBackspace';
+const actionPadBackspaceKey = Key(actionPadBackspaceId);
 
-const contactsExtContactTileKey = Key('contactsExtContactTile');
-const contactsLocalContactTileKey = Key('contactsLocalContactTile');
-const contactsTabExtKey = Key('contactsTabExt');
-const contactsTabLocalKey = Key('contactsTabLocal');
-const contactsSerchInputKey = Key('contactsSearchInput');
-const contactsSerchInputClearKey = Key('contactsSearchInputClear');
-const contactPhoneTileKey = Key('contactPhoneTile');
-const contactPhoneTileFavIconKey = Key('contactPhoneTileFavIcon');
-const contactEmailTileKey = Key('contactEmailTile');
+const String callActionsMuteId = 'callActionsMute';
+const callActionsMuteKey = Key(callActionsMuteId);
+const String callActionsVideoCallId = 'callActionsVideoCall';
+const callActionsVideoCallKey = Key(callActionsVideoCallId);
+const String callActionsSpeakerId = 'callActionsSpeaker';
+const callActionsSpeakerKey = Key(callActionsSpeakerId);
+const String callActionsHoldId = 'callActionsHold';
+const callActionsHoldKey = Key(callActionsHoldId);
+const String callActionsKeypadId = 'callActionsKeypad';
+const callActionsKeypadKey = Key(callActionsKeypadId);
+const String callActionsHangupId = 'callActionsHangup';
+const callActionsHangupKey = Key(callActionsHangupId);
+const String callActionsTransferMenuId = 'callActionsTransferMenu';
+const callActionsTransferMenuKey = Key(callActionsTransferMenuId);
+const String callActionsTransferMenuBlindInitId = 'callActionsTransferMenuBlindInit';
+const callActionsTransferMenuBlindInitKey = Key(callActionsTransferMenuBlindInitId);
+const String callActionsTransferMenuAttendedInitId = 'callActionsTransferMenuAttendedInit';
+const callActionsTransferMenuAttendedInitKey = Key(callActionsTransferMenuAttendedInitId);
+const String callActionsTransferMenuNumberId = 'callActionsTransferAttendedNumber';
+const callActionsTransferMenuNumberKey = Key(callActionsTransferMenuNumberId);
+const String callFrontCameraPreviewId = 'callFrontCameraPreview';
+const callFrontCameraPreviewKey = Key(callFrontCameraPreviewId);
+
+const String contactsExtContactTileId = 'contactsExtContactTile';
+const contactsExtContactTileKey = Key(contactsExtContactTileId);
+const String contactsLocalContactTileId = 'contactsLocalContactTile';
+const contactsLocalContactTileKey = Key(contactsLocalContactTileId);
+const String contactsTabExtId = 'contactsTabExt';
+const contactsTabExtKey = Key(contactsTabExtId);
+const String contactsTabLocalId = 'contactsTabLocal';
+const contactsTabLocalKey = Key(contactsTabLocalId);
+const String contactsSerchInputId = 'contactsSearchInput';
+const contactsSerchInputKey = Key(contactsSerchInputId);
+const String contactsSerchInputClearId = 'contactsSearchInputClear';
+const contactsSerchInputClearKey = Key(contactsSerchInputClearId);
+const String contactPhoneTileId = 'contactPhoneTile';
+const contactPhoneTileKey = Key(contactPhoneTileId);
+const String contactPhoneTileFavIconId = 'contactPhoneTileFavIcon';
+const contactPhoneTileFavIconKey = Key(contactPhoneTileFavIconId);
+const String contactEmailTileId = 'contactEmailTile';
+const contactEmailTileKey = Key(contactEmailTileId);
