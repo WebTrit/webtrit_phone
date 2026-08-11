@@ -2861,7 +2861,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get voicemail_Cache_description =>
-      'Відтворення голосового повідомлення зберігає локальну копію аудіо для миттєвого повторного прослуховування. Очищення звільняє місце; аудіо завантажиться знову під час наступного відтворення.';
+      'Аудіо та транскрипції голосових повідомлень зберігаються локально. Очищення звільняє місце й повторює транскрипцію з поточними налаштуваннями; аудіо завантажиться знову за потреби.';
 
   @override
   String get voicemail_Cache_title => 'Аудіо голосової пошти';
@@ -2917,6 +2917,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get voicemail_Title_notSupported => 'Функція не підтримується';
+
+  @override
+  String get voicemail_Transcript_inProgress => 'Розшифровка...';
+
+  @override
+  String get voicemail_Transcript_unavailable => 'Розшифровка недоступна';
 
   @override
   String get voicemail_Widget_screenTitle => 'Голосова пошта';

@@ -19,6 +19,7 @@ class AppConfig with _$AppConfig {
     this.contacts = const AppConfigContacts(),
     this.messaging = const AppConfigMessaging(),
     this.localization = const AppConfigLocalization(),
+    this.transcription = const AppConfigTranscription(),
 
     /// List of enabled features and global app configurations.
     this.supported = const [],
@@ -44,6 +45,9 @@ class AppConfig with _$AppConfig {
 
   @override
   final AppConfigLocalization localization;
+
+  @override
+  final AppConfigTranscription transcription;
 
   @override
   final List<SupportedFeature> supported;
@@ -732,6 +736,65 @@ class ChatContactInfo with _$ChatContactInfo {
   factory ChatContactInfo.fromJson(Map<String, Object?> json) => _$ChatContactInfoFromJson(json);
 
   Map<String, Object?> toJson() => _$ChatContactInfoToJson(this);
+}
+
+/// Client-side media transcription settings; voicemail is the first consumer.
+///
+/// Transcripts are produced by the app itself (not received from the backend):
+/// the audio is sent to the OpenAI-compatible speech-to-text endpoint from
+/// [remote]. Without an endpoint the feature stays off.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigTranscription with _$AppConfigTranscription {
+  const AppConfigTranscription({
+    this.mode = 'remote',
+    this.language,
+    this.remote = const AppConfigTranscriptionRemote(),
+  });
+
+  /// Transcription source: `remote` (the OpenAI-compatible endpoint from
+  /// [remote]) or `disabled`, which keeps a configured endpoint in place
+  /// while the feature is off. Unknown values disable the feature.
+  @override
+  final String mode;
+
+  /// Expected audio language (ISO 639-1, e.g. 'en'); null or empty lets
+  /// the engine auto-detect per media item.
+  @override
+  final String? language;
+
+  @override
+  final AppConfigTranscriptionRemote remote;
+
+  factory AppConfigTranscription.fromJson(Map<String, Object?> json) => _$AppConfigTranscriptionFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigTranscriptionToJson(this);
+}
+
+/// The speech-to-text service transcripts are requested from.
+///
+/// The credential is deliberately absent here: it is billed per request and
+/// belongs to whoever builds the brand, so it comes from the build-time
+/// environment instead of the theme.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class AppConfigTranscriptionRemote with _$AppConfigTranscriptionRemote {
+  const AppConfigTranscriptionRemote({this.url, this.model = 'whisper-1'});
+
+  /// Base URL of an OpenAI-compatible speech-to-text service; the
+  /// `audio/transcriptions` path is appended when not already present.
+  /// Transcription stays off while this is missing or invalid.
+  @override
+  final String? url;
+
+  /// Model name passed to the service.
+  @override
+  final String model;
+
+  factory AppConfigTranscriptionRemote.fromJson(Map<String, Object?> json) =>
+      _$AppConfigTranscriptionRemoteFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppConfigTranscriptionRemoteToJson(this);
 }
 
 @freezed

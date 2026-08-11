@@ -10,3 +10,4 @@ under "Documentation".
 |------------------------------------|-------------------------------------------------|--------------------------------------------------|
 | App update / version compatibility | [Overview](app-update.md)                       | Active - force-update (app side) and iOS pending |
 | Call                               | [UX](call_ux.md) / [Architecture](call_arch.md) | Active - UI redesign in progress                 |
+| Transcription                      | [Overview](transcription.md)                    | In review - device PoC of the local engine pending |

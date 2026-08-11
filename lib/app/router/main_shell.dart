@@ -289,6 +289,33 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           ),
           dispose: disposeIfDisposable,
         ),
+        // The session-wide fire-and-forget transcription pool: features hand
+        // media off through the MediaTranscriber contract and observe results
+        // in the database. The pool knows nothing about the database -
+        // everything it processes goes to the store, which writes the drift
+        // transcriptions table. Voicemail is the first consumer.
+        RepositoryProvider<TranscriptionService>(
+          create: (context) {
+            final store = TranscriptionStoreDriftImpl(
+              appDatabase: context.read<AppDatabase>(),
+              sessionGuard: _sessionGuard,
+            );
+            unawaited(store.resetStaleInProgress());
+
+            return TranscriptionService(
+              createTranscriptionDataSource(
+                featureAccess.transcriptionConfig,
+                certs: appCertificates.trustedCertificates,
+                connectionTimeout: kApiClientConnectionTimeout,
+              ),
+              store: store,
+              // The transcription service is network-bound, so a few
+              // concurrent requests shorten the backlog noticeably.
+              concurrency: 3,
+            );
+          },
+          dispose: (service) => service.dispose(),
+        ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
             final isVoicemailsEnabled = featureAccess.settingsConfig.voicemailsEnabled;
@@ -298,11 +325,18 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                 webtritApiClient: context.read<WebtritApiClient>(),
                 token: context.read<AppBloc>().state.session.token!,
                 appDatabase: context.read<AppDatabase>(),
+                // The repository sees only the narrow MediaTranscriber
+                // hand-off contract, never the pool itself; results come
+                // back as database updates. Always wired, even while
+                // transcription is disabled or unconfigured: enqueue() already
+                // no-ops then.
+                transcriber: context.read<TranscriptionService>(),
               );
             } else {
               return const EmptyVoicemailRepository();
             }
           },
+          dispose: disposeIfDisposable,
         ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
@@ -374,6 +408,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                   VoicemailCacheSection(
                     mediaCacheBasePath: appPath.mediaCacheBasePath,
                     temporaryPath: appPath.temporaryPath,
+                    transcriber: context.read<TranscriptionService>(),
                   ),
                 DatabaseCacheSection(context.read<AppDatabase>(), context.read<CdrsLocalRepository>()),
               ],

@@ -45,6 +45,7 @@ part 'app_database.g.dart';
     DialogInfoTable,
     CdrTable,
     CdrSyncCursorTable,
+    TranscriptionTable,
   ],
   daos: [
     ContactsDao,
@@ -63,6 +64,7 @@ part 'app_database.g.dart';
     PresenceInfoDao,
     DialogInfoDao,
     CdrsDao,
+    TranscriptionsDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {

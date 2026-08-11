@@ -12,6 +12,7 @@ workspace:
   - packages/webtrit_appearance_theme
   - packages/device_auto_rotate
   - packages/data/app_database
+  - packages/data/app_transcription
   - packages/_http_client
   - packages/_web_socket_channel
   - packages/_tcp_proxy
@@ -124,6 +125,8 @@ dependencies:
   # Local path/workspace packages, sorted by name.
   app_database:
     path: ./packages/data/app_database
+  app_transcription:
+    path: ./packages/data/app_transcription
   device_auto_rotate:
     path: ./packages/device_auto_rotate
   pjsua_companion:

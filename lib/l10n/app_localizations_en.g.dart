@@ -2823,7 +2823,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voicemail_Cache_description =>
-      'Playing a voicemail keeps a local copy of its audio for instant replays. Clearing frees up space; the audio is downloaded again the next time a message is played.';
+      'Voicemail audio and transcripts are stored locally. Clearing frees space and retries transcription with the current settings; audio downloads again when needed.';
 
   @override
   String get voicemail_Cache_title => 'Voicemail audio';
@@ -2879,6 +2879,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voicemail_Title_notSupported => 'Feature not supported';
+
+  @override
+  String get voicemail_Transcript_inProgress => 'Transcribing...';
+
+  @override
+  String get voicemail_Transcript_unavailable => 'Transcript unavailable';
 
   @override
   String get voicemail_Widget_screenTitle => 'Voicemail';

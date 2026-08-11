@@ -19,6 +19,7 @@ navigation structure, and screen-specific behaviors.
 - [Settings Configuration](#settings-configuration)
   - [Settings Sections](#settings-sections)
   - [Settings Items](#settings-items)
+- [Transcription Configuration](#transcription-configuration)
 - [Embedded Pages](#embedded-pages)
 
 ---
@@ -412,6 +413,36 @@ Each settings item includes:
 - `type`: Setting type (network, encoding, embedded)
 - `titleL10n`: Localized name
 - `icon`: Item icon
+
+## Transcription Configuration
+
+The top-level `transcription` section configures speech-to-text for media the app holds
+(voicemail transcripts today). The audio is sent to an OpenAI-compatible speech-to-text
+service, so the feature stays off until an endpoint is configured.
+
+```json
+"transcription": {
+  "mode": "remote",
+  "language": "en",
+  "remote": { "url": "https://api.groq.com/openai/v1", "model": "whisper-large-v3-turbo" }
+}
+```
+
+- `mode`: `remote` (the endpoint from `remote`) or `disabled`, which keeps a configured endpoint
+  in place while the feature is off. Unknown values disable the feature.
+- `language`: Expected audio language (ISO 639-1); omit or leave empty to auto-detect per message.
+- `remote.url`: Base URL of the speech-to-text service; the `audio/transcriptions` path is
+  appended when not already present. Transcription stays off while it is missing.
+- `remote.model`: Model name passed to the service (for example `whisper-large-v3-turbo` on Groq
+  or `whisper-1` on OpenAI).
+
+The service credential is deliberately not part of this section: it is billed per request, so it
+is supplied at build time through the `WEBTRIT_APP_TRANSCRIPTION_API_KEY` dart-define instead of
+travelling with the theme. Leave it unset for endpoints that authenticate by network placement or
+client certificates.
+
+See [features/transcription.md](features/transcription.md) for the architecture and runtime
+behavior behind this section.
 
 ## Embedded Pages
 

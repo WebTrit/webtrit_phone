@@ -5200,7 +5200,7 @@ abstract class AppLocalizations {
   /// No description provided for @voicemail_Cache_description.
   ///
   /// In en, this message translates to:
-  /// **'Playing a voicemail keeps a local copy of its audio for instant replays. Clearing frees up space; the audio is downloaded again the next time a message is played.'**
+  /// **'Voicemail audio and transcripts are stored locally. Clearing frees space and retries transcription with the current settings; audio downloads again when needed.'**
   String get voicemail_Cache_description;
 
   /// No description provided for @voicemail_Cache_title.
@@ -5304,6 +5304,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Feature not supported'**
   String get voicemail_Title_notSupported;
+
+  /// No description provided for @voicemail_Transcript_inProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcribing...'**
+  String get voicemail_Transcript_inProgress;
+
+  /// No description provided for @voicemail_Transcript_unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcript unavailable'**
+  String get voicemail_Transcript_unavailable;
 
   /// No description provided for @voicemail_Widget_screenTitle.
   ///

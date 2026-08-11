@@ -14,6 +14,8 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
 
+enum _VoicemailMenuAction { delete, cacheManagement }
+
 class VoicemailScreen extends StatefulWidget {
   const VoicemailScreen({super.key});
 
@@ -32,23 +34,31 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
           appBar: AppBar(
             title: Text(context.l10n.voicemail_Widget_screenTitle),
             actions: [
-              if (context.read<AppCacheManager>().sections.isNotEmpty)
-                IconButton(
-                  icon: const Icon(Icons.storage),
-                  tooltip: context.l10n.cacheManagement_Widget_screenTitle,
-                  onPressed: _onOpenCacheManagement,
-                ),
               Badge(
                 alignment: AlignmentDirectional.topCenter,
                 isLabelVisible: state.isMultipleVoicemailsSelection,
                 label: Text(state.selectedVoicemailsIds.length.toString()),
-                child: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: state.items.isNotEmpty
-                      ? () => state.isMultipleVoicemailsSelection
-                            ? _onDeleteSelectedVoicemails()
-                            : _onDeleteAllVoicemails()
-                      : null,
+                child: PopupMenuButton<_VoicemailMenuAction>(
+                  onSelected: _onMenuAction,
+                  itemBuilder: (context) => [
+                    if (context.read<AppCacheManager>().sections.isNotEmpty)
+                      PopupMenuItem(
+                        value: _VoicemailMenuAction.cacheManagement,
+                        child: ListTile(
+                          leading: const Icon(Icons.storage),
+                          title: Text(context.l10n.cacheManagement_Widget_screenTitle),
+                        ),
+                      ),
+                    PopupMenuItem(
+                      value: _VoicemailMenuAction.delete,
+                      enabled: state.items.isNotEmpty,
+                      child: ListTile(
+                        enabled: state.items.isNotEmpty,
+                        leading: const Icon(Icons.delete),
+                        title: Text(context.l10n.voicemail_Label_delete),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -103,6 +113,16 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
 
   void _onRetryFetch() {
     context.read<VoicemailCubit>().fetchVoicemails();
+  }
+
+  void _onMenuAction(_VoicemailMenuAction action) {
+    switch (action) {
+      case _VoicemailMenuAction.delete:
+        final state = context.read<VoicemailCubit>().state;
+        state.isMultipleVoicemailsSelection ? _onDeleteSelectedVoicemails() : _onDeleteAllVoicemails();
+      case _VoicemailMenuAction.cacheManagement:
+        _onOpenCacheManagement();
+    }
   }
 
   /// Clearing the voicemail cache deletes files the player may hold open, so

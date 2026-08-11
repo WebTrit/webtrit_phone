@@ -306,6 +306,16 @@
   "localization": {
     "__enabledLanguages": "Allowlist of language codes (ISO 639-1) exposed by the app. Intersected with the languages the app bundles, so only ones present in both are selectable and used for auto-resolution. Defaults to every bundled language; remove entries to restrict a build (e.g. keep only [\"en\"] to ship English). An empty list also means no restriction (all bundled languages).",
     "enabledLanguages": ["en", "it", "th", "uk"]
+  },
+  "transcription": {
+    "__mode": "Transcription source: 'remote' (the OpenAI-compatible speech-to-text endpoint from 'remote') or 'disabled', which keeps a configured endpoint in place while the feature is off. Unknown values disable the feature. Voicemail is the first consumer.",
+    "mode": "remote",
+    "__language": "Expected audio language (ISO 639-1, e.g. 'en'); omit or leave empty to auto-detect per media item.",
+    "remote": {
+      "__url": "Base URL of an OpenAI-compatible speech-to-text service (e.g. 'https://api.groq.com/openai/v1'); the 'audio/transcriptions' path is appended when not already present. Transcription stays off while this is missing.",
+      "__model": "Model name passed to the service. OpenAI transcription models supported by this client: 'gpt-4o-transcribe' (default, higher accuracy), 'gpt-4o-mini-transcribe' (lower cost), and 'whisper-1' (legacy). Other OpenAI-compatible services may provide their own models, e.g. 'whisper-large-v3-turbo' on Groq.",
+      "url": "https://api.openai.com/v1",
+      "model": "gpt-4o-transcribe"
+    }
   }
 }
-

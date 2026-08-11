@@ -59,7 +59,14 @@ class VoicemailTile extends StatelessWidget {
         leading: LeadingAvatar(username: displayName, thumbnail: thumbnail, thumbnailUrl: thumbnailUrl),
         title: Text(voicemail.displaySender),
         subtitle: _VoicemailSubtitle(voicemail: voicemail, dateFormat: dateFormat),
-        bottom: AudioView(path: voicemail.url!, cacheKey: voicemail.id, onPlaybackStarted: _onPlaybackStarted),
+        bottom: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AudioView(path: voicemail.url!, cacheKey: voicemail.id, onPlaybackStarted: _onPlaybackStarted),
+            _VoicemailTranscript(voicemail: voicemail),
+          ],
+        ),
         trailing: PopupMenuButton<_VoicemailMenuAction>(
           padding: EdgeInsets.zero,
           position: PopupMenuPosition.under,
@@ -160,6 +167,67 @@ class _VoicemailSubtitle extends StatelessWidget {
         Text(dateFormat.format(DateTime.parse(voicemail.date).toLocal())),
       ],
     );
+  }
+}
+
+/// Renders the voicemail transcript below the audio player: the text itself
+/// (collapsed to a few lines, tap to expand), a progress hint while the
+/// transcript is being produced, or an "unavailable" note when it failed.
+/// Nothing is rendered when transcription is disabled.
+class _VoicemailTranscript extends StatefulWidget {
+  const _VoicemailTranscript({required this.voicemail});
+
+  final Voicemail voicemail;
+
+  @override
+  State<_VoicemailTranscript> createState() => _VoicemailTranscriptState();
+}
+
+class _VoicemailTranscriptState extends State<_VoicemailTranscript> {
+  static const _collapsedMaxLines = 3;
+
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant);
+
+    final voicemail = widget.voicemail;
+    final transcript = voicemail.transcript;
+
+    final Widget? content;
+    if (voicemail.transcriptStatus.isDone && transcript != null && transcript.isNotEmpty) {
+      content = GestureDetector(
+        onTap: () => setState(() => _expanded = !_expanded),
+        child: Text(
+          transcript,
+          style: textStyle,
+          maxLines: _expanded ? null : _collapsedMaxLines,
+          overflow: _expanded ? null : TextOverflow.ellipsis,
+        ),
+      );
+    } else if (voicemail.transcriptStatus.isInProgress) {
+      content = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedCircularProgressIndicator(size: 10, outerSize: 12, color: colorScheme.tertiary, strokeWidth: 1),
+          const SizedBox(width: 8),
+          Text(context.l10n.voicemail_Transcript_inProgress, style: textStyle),
+        ],
+      );
+    } else if (voicemail.transcriptStatus.isUnavailable) {
+      content = Text(
+        context.l10n.voicemail_Transcript_unavailable,
+        style: textStyle?.copyWith(fontStyle: FontStyle.italic),
+      );
+    } else {
+      content = null;
+    }
+
+    if (content == null) return const SizedBox.shrink();
+
+    return Padding(padding: const EdgeInsets.only(top: 8), child: content);
   }
 }
 

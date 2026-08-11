@@ -2810,7 +2810,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get voicemail_Cache_description =>
-      'การเล่นข้อความเสียงจะเก็บสำเนาเสียงไว้ในเครื่องเพื่อเล่นซ้ำได้ทันที การล้างจะคืนพื้นที่ และเสียงจะถูกดาวน์โหลดใหม่เมื่อเล่นครั้งถัดไป';
+      'ระบบจัดเก็บเสียงและข้อความถอดเสียงของข้อความเสียงไว้ในเครื่อง การล้างจะคืนพื้นที่และลองถอดเสียงอีกครั้งด้วยการตั้งค่าปัจจุบัน โดยจะดาวน์โหลดเสียงใหม่เมื่อจำเป็น';
 
   @override
   String get voicemail_Cache_title => 'เสียงข้อความเสียง';
@@ -2865,6 +2865,12 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get voicemail_Title_notSupported => 'ไม่รองรับฟีเจอร์นี้';
+
+  @override
+  String get voicemail_Transcript_inProgress => 'กำลังถอดเสียง...';
+
+  @override
+  String get voicemail_Transcript_unavailable => 'ไม่มีข้อความถอดเสียง';
 
   @override
   String get voicemail_Widget_screenTitle => 'ข้อความเสียง';

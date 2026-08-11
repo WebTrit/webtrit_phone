@@ -2855,7 +2855,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get voicemail_Cache_description =>
-      'La riproduzione di un messaggio vocale conserva una copia locale dell\'audio per riascolti immediati. Svuotare la cache libera spazio; l\'audio viene scaricato di nuovo alla prossima riproduzione.';
+      'L\'audio e le trascrizioni dei messaggi vocali vengono salvati localmente. Svuotare la cache libera spazio e riprova la trascrizione con le impostazioni correnti; l\'audio viene scaricato di nuovo quando necessario.';
 
   @override
   String get voicemail_Cache_title => 'Audio dei messaggi vocali';
@@ -2912,6 +2912,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get voicemail_Title_notSupported => 'Funzionalità non supportata';
+
+  @override
+  String get voicemail_Transcript_inProgress => 'Trascrizione in corso...';
+
+  @override
+  String get voicemail_Transcript_unavailable => 'Trascrizione non disponibile';
 
   @override
   String get voicemail_Widget_screenTitle => 'Segreteria telefonica';
