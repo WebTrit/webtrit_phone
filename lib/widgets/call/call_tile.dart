@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/call/number_actions.dart';
+import 'package:webtrit_phone/widgets/semantic_action.dart';
 
 class TileMenuButton extends StatelessWidget {
   const TileMenuButton({super.key, required this.onTap});
@@ -13,16 +15,21 @@ class TileMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 32,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: themeData.colorScheme.surface.withAlpha(1),
-          borderRadius: BorderRadius.circular(16),
+    return SemanticAction(
+      label: context.l10n.callTileActions_more,
+      identifier: callTileMenuId,
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 32,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: themeData.colorScheme.surface.withAlpha(1),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Icon(Icons.more_vert, size: 20, color: themeData.textTheme.labelMedium?.color),
         ),
-        child: Icon(Icons.more_vert, size: 20, color: themeData.textTheme.labelMedium?.color),
       ),
     );
   }
@@ -65,18 +72,21 @@ class _CallTileAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return InkWell(
-      borderRadius: BorderRadius.circular(12),
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 22, color: themeData.colorScheme.primary),
-            const SizedBox(height: 2),
-            Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: themeData.textTheme.labelSmall),
-          ],
+    return SemanticAction(
+      button: true,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 22, color: themeData.colorScheme.primary),
+              const SizedBox(height: 2),
+              Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: themeData.textTheme.labelSmall),
+            ],
+          ),
         ),
       ),
     );
@@ -301,9 +311,15 @@ class _CallTileState extends State<CallTile> {
                     const SizedBox(width: 4),
                     if (widget.gesturesEnabled)
                       if (widget.onDialPressed != null)
-                        IconButton(
-                          onPressed: widget.onDialPressed,
-                          icon: Icon(widget.dialIcon ?? Icons.call, color: colorScheme.primary),
+                        SemanticAction(
+                          label: widget.dialIcon == Icons.videocam
+                              ? context.l10n.callTile_SemanticsLabel_videoCall(widget.name)
+                              : context.l10n.callTile_SemanticsLabel_call(widget.name),
+                          identifier: callTileDialId,
+                          child: IconButton(
+                            onPressed: widget.onDialPressed,
+                            icon: Icon(widget.dialIcon ?? Icons.call, color: colorScheme.primary),
+                          ),
                         )
                       else if (actions.isNotEmpty)
                         TileMenuButton(onTap: () => showMenuPopup()),

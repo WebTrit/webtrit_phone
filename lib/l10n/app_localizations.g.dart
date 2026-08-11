@@ -232,6 +232,18 @@ abstract class AppLocalizations {
   /// **'More'**
   String get callTileActions_more;
 
+  /// Accessibility name of the call button in a call history or contact row.
+  ///
+  /// In en, this message translates to:
+  /// **'Call {name}'**
+  String callTile_SemanticsLabel_call(String name);
+
+  /// Accessibility name of the video call button in a call history or contact row.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call {name}'**
+  String callTile_SemanticsLabel_videoCall(String name);
+
   /// No description provided for @call_CallActionsTooltip_accept.
   ///
   /// In en, this message translates to:

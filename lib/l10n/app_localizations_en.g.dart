@@ -123,6 +123,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callTileActions_more => 'More';
 
   @override
+  String callTile_SemanticsLabel_call(String name) {
+    return 'Call $name';
+  }
+
+  @override
+  String callTile_SemanticsLabel_videoCall(String name) {
+    return 'Video call $name';
+  }
+
+  @override
   String get call_CallActionsTooltip_accept => 'Accept';
 
   @override
