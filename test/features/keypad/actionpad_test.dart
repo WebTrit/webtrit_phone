@@ -98,9 +98,7 @@ void main() {
     handle.dispose();
   });
 
-  testWidgets('overflow menu trigger keeps its localized name and gains an id, and still opens the menu', (
-    tester,
-  ) async {
+  testWidgets('overflow menu trigger is named, gains an id, and still opens the menu', (tester) async {
     final handle = tester.ensureSemantics();
 
     await tester.pumpWidget(
@@ -108,7 +106,7 @@ void main() {
     );
 
     final overflow = find.bySemanticsIdentifier(actionPadOverflowId);
-    expectTapTargetSemantics(tester, overflow, identifier: actionPadOverflowId, isButton: true);
+    expectTapTargetSemantics(tester, overflow, label: 'More', identifier: actionPadOverflowId, isButton: true);
 
     // Activate through the semantics node - the path assistive technology
     // takes; a pointer tap can pass while this path hits a no-op.

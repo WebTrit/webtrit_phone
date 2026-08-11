@@ -97,9 +97,25 @@ const callFrontCameraPreviewKey = Key(callFrontCameraPreviewId);
 const String actionPadOverflowId = 'actionPadOverflow';
 const String actionPadTransferId = 'actionPadTransfer';
 const String actionPadVoiceCallId = 'actionPadVoiceCall';
+const String callActionsAcceptId = 'callActionsAccept';
+const String callActionsAudioDeviceId = 'callActionsAudioDevice';
+const String callActionsHideKeypadId = 'callActionsHideKeypad';
+const String callActionsOptionsId = 'callActionsOptions';
 const String callTileDialId = 'callTileDial';
 const String callTileMenuId = 'callTileMenu';
 const String systemNotificationsBadgeId = 'systemNotificationsBadge';
+
+// Keypad keys: keypadKey1..keypadKey0 for the digits, plus the two symbols.
+const String keypadKeyIdPrefix = 'keypadKey';
+const String keypadKeyStarId = '${keypadKeyIdPrefix}Star';
+const String keypadKeyPoundId = '${keypadKeyIdPrefix}Pound';
+
+/// Stable automation id of the keypad key showing [text].
+String keypadKeyId(String text) => switch (text) {
+  '*' => keypadKeyStarId,
+  '#' => keypadKeyPoundId,
+  final digit => '$keypadKeyIdPrefix$digit',
+};
 
 const String contactsExtContactTileId = 'contactsExtContactTile';
 const contactsExtContactTileKey = Key(contactsExtContactTileId);

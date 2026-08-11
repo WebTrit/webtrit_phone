@@ -88,6 +88,7 @@ class _IncomingCallActionsState extends State<IncomingCallActions> {
     final buttons = [
       CallActionButton(
         key: callActionsHangupKey,
+        identifier: callActionsHangupId,
         label: widget.inviteToAttendedTransfer
             ? context.l10n.call_CallActionsTooltip_decline_inviteToAttendedTransfer
             : context.l10n.call_CallActionsTooltip_hangup,
@@ -97,6 +98,7 @@ class _IncomingCallActionsState extends State<IncomingCallActions> {
       ),
       if (widget.onAcceptPressed != null)
         CallActionButton(
+          identifier: callActionsAcceptId,
           label: widget.inviteToAttendedTransfer
               ? context.l10n.call_CallActionsTooltip_accept_inviteToAttendedTransfer
               : context.l10n.call_CallActionsTooltip_accept,

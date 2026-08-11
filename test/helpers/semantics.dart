@@ -10,11 +10,22 @@ import 'package:flutter_test/flutter_test.dart';
 /// id lives on a different node than its action fails this matcher even
 /// though it may look correct on screen.
 ///
+/// The node's tooltip is asserted to be [tooltip] - empty by default, because
+/// a stray tooltip merged in from a nested widget is spoken on top of the
+/// label (appended to it on iOS) and is easy to miss otherwise.
+///
 /// Call within a `tester.ensureSemantics()` scope.
-void expectTapTargetSemantics(WidgetTester tester, Finder finder, {String? label, String? identifier, bool? isButton}) {
+void expectTapTargetSemantics(
+  WidgetTester tester,
+  Finder finder, {
+  String? label,
+  String? identifier,
+  bool? isButton,
+  String tooltip = '',
+}) {
   expect(
     tester.getSemantics(finder),
-    isSemantics(label: label, identifier: identifier, hasTapAction: true, isButton: isButton),
+    isSemantics(label: label, identifier: identifier, tooltip: tooltip, hasTapAction: true, isButton: isButton),
   );
 }
 
