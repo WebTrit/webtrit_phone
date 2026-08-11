@@ -96,6 +96,7 @@ const callFrontCameraPreviewKey = Key(callFrontCameraPreviewId);
 // Identifier-only entries: controls that have no widget-test key.
 const String callTileDialId = 'callTileDial';
 const String callTileMenuId = 'callTileMenu';
+const String systemNotificationsBadgeId = 'systemNotificationsBadge';
 
 const String contactsExtContactTileId = 'contactsExtContactTile';
 const contactsExtContactTileKey = Key(contactsExtContactTileId);

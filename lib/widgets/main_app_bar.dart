@@ -9,6 +9,7 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -118,73 +119,81 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: BlocBuilder<UserInfoCubit, UserInfoState>(
                   builder: (context, userinfoState) {
                     final info = userinfoState.userInfo;
-                    return IconButton(
-                      key: mainAppBarKey,
-                      constraints: const BoxConstraints.tightFor(
-                        width: kMinInteractiveDimension,
-                        height: kMinInteractiveDimension,
-                      ),
-                      padding: const EdgeInsets.all(2),
-                      // The avatar keeps its own palette: without this reset the app bar
-                      // pushes its foreground color into the subtree and tints it.
-                      icon: IconTheme(
-                        data: theme.iconTheme,
-                        child: DefaultTextStyle(
-                          style: theme.textTheme.bodyMedium!,
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: <Widget>[
-                              LeadingAvatar(
-                                username: info?.name ?? info?.numbers.main,
-                                thumbnailUrl: gravatarThumbnailUrl(info?.email),
-                                radius: kMinInteractiveDimension / 2,
-                                showLoading: true,
-                              ),
-                              BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
-                                builder: (context, microphoneStatusState) {
-                                  return Visibility(
-                                    visible:
-                                        microphoneStatusState.microphonePermissionGranted != null &&
-                                        !microphoneStatusState.microphonePermissionGranted!,
-                                    child: Positioned(
-                                      right: -8,
-                                      top: -2,
-                                      child: Container(
-                                        padding: EdgeInsets.all(3),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.error,
-                                          shape: BoxShape.circle,
+                    return SemanticAction(
+                      label: context.l10n.settings_AppBarTitle_myAccount,
+                      identifier: mainAppBarId,
+                      child: IconButton(
+                        key: mainAppBarKey,
+                        constraints: const BoxConstraints.tightFor(
+                          width: kMinInteractiveDimension,
+                          height: kMinInteractiveDimension,
+                        ),
+                        padding: const EdgeInsets.all(2),
+                        // The avatar's initials and status badges are visual-only here; the
+                        // button announces itself with a fixed name instead.
+                        icon: ExcludeSemantics(
+                          // The avatar keeps its own palette: without this reset the app bar
+                          // pushes its foreground color into the subtree and tints it.
+                          child: IconTheme(
+                            data: theme.iconTheme,
+                            child: DefaultTextStyle(
+                              style: theme.textTheme.bodyMedium!,
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                children: <Widget>[
+                                  LeadingAvatar(
+                                    username: info?.name ?? info?.numbers.main,
+                                    thumbnailUrl: gravatarThumbnailUrl(info?.email),
+                                    radius: kMinInteractiveDimension / 2,
+                                    showLoading: true,
+                                  ),
+                                  BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
+                                    builder: (context, microphoneStatusState) {
+                                      return Visibility(
+                                        visible:
+                                            microphoneStatusState.microphonePermissionGranted != null &&
+                                            !microphoneStatusState.microphonePermissionGranted!,
+                                        child: Positioned(
+                                          right: -8,
+                                          top: -2,
+                                          child: Container(
+                                            padding: EdgeInsets.all(3),
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context).colorScheme.error,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Icon(
+                                              Icons.mic_off,
+                                              color: Theme.of(context).colorScheme.onError,
+                                              size: 14,
+                                            ),
+                                          ),
                                         ),
-                                        child: Icon(
-                                          Icons.mic_off,
-                                          color: Theme.of(context).colorScheme.onError,
-                                          size: 14,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
+                                      );
+                                    },
+                                  ),
+                                  BlocBuilder<SessionStatusCubit, SessionStatusState>(
+                                    buildWhen: (previous, current) => previous.topIssue != current.topIssue,
+                                    builder: (context, sessionState) {
+                                      final topIssue = sessionState.topIssue;
+                                      if (topIssue == null) return const SizedBox.shrink();
+                                      return Positioned(
+                                        right: -2,
+                                        bottom: -2,
+                                        child: SessionIssueBadge(color: topIssue.color(context), size: 12),
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
-                              BlocBuilder<SessionStatusCubit, SessionStatusState>(
-                                buildWhen: (previous, current) => previous.topIssue != current.topIssue,
-                                builder: (context, sessionState) {
-                                  final topIssue = sessionState.topIssue;
-                                  if (topIssue == null) return const SizedBox.shrink();
-                                  return Positioned(
-                                    right: -2,
-                                    bottom: -2,
-                                    child: SessionIssueBadge(color: topIssue.color(context), size: 12),
-                                  );
-                                },
-                              ),
-                            ],
+                            ),
                           ),
                         ),
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+                          context.router.navigate(const SettingsRouterPageRoute());
+                        },
                       ),
-                      onPressed: () {
-                        FocusScope.of(context).unfocus();
-                        context.router.navigate(const SettingsRouterPageRoute());
-                      },
                     );
                   },
                 ),

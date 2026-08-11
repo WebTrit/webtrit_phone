@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../system_notifications.dart';
 
@@ -49,45 +52,50 @@ class _SystemNotificationsBadgeState extends State<SystemNotificationsBadge> wit
           final colorScheme = theme.colorScheme;
           final hasUnseen = unseenCount > 0;
 
-          return SizedBox(
-            width: kMinInteractiveDimension,
-            height: kMinInteractiveDimension,
-            child: ClipOval(
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {
-                    controller.reset();
-                    FocusScope.of(context).unfocus();
-                    context.router.navigate(const SystemNotificationsPageRoute());
-                  },
-                  child: SizedBox(
-                    child: Stack(
-                      children: [
-                        RotationTransition(
-                          turns: controller.drive(
-                            Tween<double>(begin: 0, end: 1).chain(CurveTween(curve: Curves.elasticInOut)),
-                          ),
-                          child: Center(
-                            child: Icon(
-                              hasUnseen ? Icons.notifications : Icons.notifications_outlined,
-                              color: hasUnseen ? colorScheme.tertiary : colorScheme.secondary,
+          return SemanticAction(
+            label: context.l10n.system_notifications_screen_title,
+            identifier: systemNotificationsBadgeId,
+            button: true,
+            child: SizedBox(
+              width: kMinInteractiveDimension,
+              height: kMinInteractiveDimension,
+              child: ClipOval(
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      controller.reset();
+                      FocusScope.of(context).unfocus();
+                      context.router.navigate(const SystemNotificationsPageRoute());
+                    },
+                    child: SizedBox(
+                      child: Stack(
+                        children: [
+                          RotationTransition(
+                            turns: controller.drive(
+                              Tween<double>(begin: 0, end: 1).chain(CurveTween(curve: Curves.elasticInOut)),
                             ),
-                          ),
-                        ),
-                        if (hasUnseen)
-                          Center(
-                            child: Text(
-                              unseenCount.toString(),
-                              style: TextStyle(
-                                color: colorScheme.onPrimary,
-                                fontSize: 8,
-                                fontWeight: FontWeight.bold,
-                                height: 1,
+                            child: Center(
+                              child: Icon(
+                                hasUnseen ? Icons.notifications : Icons.notifications_outlined,
+                                color: hasUnseen ? colorScheme.tertiary : colorScheme.secondary,
                               ),
                             ),
                           ),
-                      ],
+                          if (hasUnseen)
+                            Center(
+                              child: Text(
+                                unseenCount.toString(),
+                                style: TextStyle(
+                                  color: colorScheme.onPrimary,
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
