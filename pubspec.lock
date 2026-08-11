@@ -807,11 +807,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "main_ext_rebase_06.05.26"
-      resolved-ref: "2c1964a0c96470ef67771983e775b7648fab8257"
+      ref: "main_ext_rebase_11.08.26"
+      resolved-ref: "42b105ddab9db3859decf649c4cb49e91b926261"
       url: "https://github.com/WebTrit/flutter-webrtc.git"
     source: git
-    version: "1.4.1"
+    version: "1.6.0"
   formz:
     dependency: "direct main"
     description:
