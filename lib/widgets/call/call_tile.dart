@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/widgets/call/number_actions.dart';
-import 'package:webtrit_phone/widgets/semantic_action.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class TileMenuButton extends StatelessWidget {
   const TileMenuButton({super.key, required this.onTap});
