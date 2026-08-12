@@ -866,6 +866,14 @@
   "@login_RequestFailureUnconfiguredBundleIdError": {
     "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."
   },
+  "login_SemanticsLabel_hidePassword": "Nascondi la password",
+  "@login_SemanticsLabel_hidePassword": {
+    "description": "Accessibility name of the button that hides the typed password again."
+  },
+  "login_SemanticsLabel_showPassword": "Mostra la password",
+  "@login_SemanticsLabel_showPassword": {
+    "description": "Accessibility name of the button that reveals the typed password."
+  },
   "login_SupportedLoginTypeMissedExceptionError": "L'attuale Backend Cloud di WebTrit non supporta nessun tipo di accesso compatibile con questa app",
   "@login_SupportedLoginTypeMissedExceptionError": {
     "description": "Shown during login or signup when the WebTrit Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods."

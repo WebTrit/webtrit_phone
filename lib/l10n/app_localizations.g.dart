@@ -1840,6 +1840,18 @@ abstract class AppLocalizations {
   /// **'The app is not supported by your WebTrit Cloud Backend'**
   String get login_RequestFailureUnconfiguredBundleIdError;
 
+  /// Accessibility name of the button that hides the typed password again.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get login_SemanticsLabel_hidePassword;
+
+  /// Accessibility name of the button that reveals the typed password.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get login_SemanticsLabel_showPassword;
+
   /// Shown during login or signup when the WebTrit Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods.
   ///
   /// In en, this message translates to:

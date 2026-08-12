@@ -98,6 +98,15 @@ const callActionsTransferMenuNumberKey = Key(callActionsTransferMenuNumberId);
 const String callFrontCameraPreviewId = 'callFrontCameraPreview';
 const callFrontCameraPreviewKey = Key(callFrontCameraPreviewId);
 
+// Screen anchors: identify the screen itself, so a flow can tell where it is
+// before touching a control. Login needs them because the visible captions
+// repeat - "Proceed" names the button on four different screens.
+const String loginCoreUrlScreenId = 'loginCoreUrlScreen';
+const String loginModeScreenId = 'loginModeScreen';
+const String loginOtpRequestScreenId = 'loginOtpRequestScreen';
+const String loginOtpVerifyScreenId = 'loginOtpVerifyScreen';
+const String loginPasswordScreenId = 'loginPasswordScreen';
+
 // Identifier-only entries: controls that have no widget-test key.
 const String actionPadOverflowId = 'actionPadOverflow';
 const String actionPadTransferId = 'actionPadTransfer';
@@ -108,6 +117,9 @@ const String callActionsHideKeypadId = 'callActionsHideKeypad';
 const String callActionsOptionsId = 'callActionsOptions';
 const String callTileDialId = 'callTileDial';
 const String callTileMenuId = 'callTileMenu';
+const String otpVerifyResendButtonId = 'otpVerifyResendButton';
+const String passwordObscureToggleId = 'passwordObscureToggle';
+const String permissionsSettingsButtonId = 'permissionsSettingsButton';
 const String systemNotificationsBadgeId = 'systemNotificationsBadge';
 const String voicemailMenuId = 'voicemailMenu';
 const String voicemailPlaybackId = 'voicemailPlayback';

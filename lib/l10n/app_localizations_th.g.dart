@@ -996,6 +996,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get login_RequestFailureUnconfiguredBundleIdError => 'WebTrit Cloud Backend ของคุณไม่รองรับแอปนี้';
 
   @override
+  String get login_SemanticsLabel_hidePassword => 'ซ่อนรหัสผ่าน';
+
+  @override
+  String get login_SemanticsLabel_showPassword => 'แสดงรหัสผ่าน';
+
+  @override
   String get login_SupportedLoginTypeMissedExceptionError =>
       'WebTrit Cloud Backend ปัจจุบันไม่รองรับประเภทการเข้าสู่ระบบใด ๆ ที่ใช้งานได้กับแอปนี้';
 

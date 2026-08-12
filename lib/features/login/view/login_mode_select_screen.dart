@@ -51,74 +51,97 @@ class LoginModeSelectScreen extends StatelessWidget {
             systemOverlayStyle: localStyle?.systemUiOverlayStyle,
             actions: isDemoModeEnabled
                 ? [
-                    IconButton(
-                      key: loginModeScreenUrlButtonKey,
-                      icon: Icon(
-                        Icons.link,
-                        // color set here because of https://github.com/flutter/flutter/issues/110878
-                        color: themeData.colorScheme.onPrimary,
+                    // The tooltip alone does not name the button: it lands in a
+                    // separate semantics property, so the control still
+                    // announces as an anonymous icon and cannot be targeted.
+                    SemanticAction(
+                      label: context.l10n.login_ButtonTooltip_signInToYourInstance,
+                      identifier: loginModeScreenUrlButtonId,
+                      // The tooltip keeps its long-press hint but stays out of
+                      // the semantics, otherwise the merged node would carry
+                      // the same sentence twice.
+                      child: Tooltip(
+                        message: context.l10n.login_ButtonTooltip_signInToYourInstance,
+                        excludeFromSemantics: true,
+                        child: IconButton(
+                          key: loginModeScreenUrlButtonKey,
+                          icon: Icon(
+                            Icons.link,
+                            // color set here because of https://github.com/flutter/flutter/issues/110878
+                            color: themeData.colorScheme.onPrimary,
+                          ),
+                          onPressed: state.processing ? null : () => _onCustomCoreLogin(context),
+                        ),
                       ),
-                      tooltip: context.l10n.login_ButtonTooltip_signInToYourInstance,
-                      onPressed: state.processing ? null : () => _onCustomCoreLogin(context),
                     ),
                   ]
                 : null,
           ),
-          body: Container(
-            padding: const EdgeInsets.fromLTRB(kInset, 0, kInset, kInset),
-            child: SafeArea(
-              top: false,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Spacer(),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
-                      if (appGreetingL10n != null) ...[
-                        SizedBox(height: dividerHeight),
-                        ExtendedText(
-                          context.parseL10n(appGreetingL10n!),
-                          extendedStyle: onboardingStyle?.copyWith(textStyle: titleStyle),
-                          textAlign: TextAlign.center,
-                        ),
+          body: SemanticId(
+            identifier: loginModeScreenId,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(kInset, 0, kInset, kInset),
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Spacer(),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
+                        if (appGreetingL10n != null) ...[
+                          SizedBox(height: dividerHeight),
+                          ExtendedText(
+                            context.parseL10n(appGreetingL10n!),
+                            extendedStyle: onboardingStyle?.copyWith(textStyle: titleStyle),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ],
-                    ],
-                  ),
-                  const Spacer(),
-                  const Spacer(),
-                  ...launchButtons.map<Widget>((button) {
-                    final shouldProcess = state.processing;
+                    ),
+                    const Spacer(),
+                    const Spacer(),
+                    ...launchButtons.map<Widget>((button) {
+                      final shouldProcess = state.processing;
 
-                    // Determine if the button should show a loading state:
-                    // - If the app is processing:
-                    //   - For non-embedded buttons: show loading only when no embedded switch is active
-                    //   - For embedded buttons: show loading only if the active embedded config matches this button
-                    final processing =
-                        shouldProcess &&
-                        switch (button) {
-                          LoginEmbeddedModeButton(:final customLoginFeature) => state.embedded == customLoginFeature,
-                          _ => state.embedded == null,
-                        };
+                      // Determine if the button should show a loading state:
+                      // - If the app is processing:
+                      //   - For non-embedded buttons: show loading only when no embedded switch is active
+                      //   - For embedded buttons: show loading only if the active embedded config matches this button
+                      final processing =
+                          shouldProcess &&
+                          switch (button) {
+                            LoginEmbeddedModeButton(:final customLoginFeature) => state.embedded == customLoginFeature,
+                            _ => state.embedded == null,
+                          };
 
-                    // Use a stable key for integration tests:
-                    // - assign the dedicated test key for the sign-up flavor
-                    // - otherwise generate a unique ValueKey from the button
-                    final buttonKey = button.flavor == LoginFlavor.login
-                        ? loginModeScreenSignUpButtonKey
-                        : ValueKey(button.hashCode);
+                      // Use a stable key for integration tests:
+                      // - assign the dedicated test key for the sign-up flavor
+                      // - otherwise generate a unique ValueKey from the button
+                      final buttonKey = button.flavor == LoginFlavor.login
+                          ? loginModeScreenSignUpButtonKey
+                          : ValueKey(button.hashCode);
 
-                    return LoginModeActionButton(
-                      key: buttonKey,
-                      processing: processing,
-                      isDemoModeEnabled: isDemoModeEnabled,
-                      onPressed: shouldProcess ? null : () => _onActionPressed(context, button),
-                      style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
-                      title: context.parseL10n(button.titleL10n),
-                    );
-                  }),
-                ],
+                      final actionButton = LoginModeActionButton(
+                        key: buttonKey,
+                        processing: processing,
+                        isDemoModeEnabled: isDemoModeEnabled,
+                        onPressed: shouldProcess ? null : () => _onActionPressed(context, button),
+                        style: elevatedButtonStyles?.getStyle(localStyle?.signUpTypeButton),
+                        title: context.parseL10n(button.titleL10n),
+                      );
+
+                      // Only the sign-up flavor has a stable anchor; the rest are
+                      // configured per brand and their ids would not survive a
+                      // config change.
+                      return button.flavor == LoginFlavor.login
+                          ? SemanticAction(identifier: loginModeScreenSignUpButtonId, child: actionButton)
+                          : actionButton;
+                    }),
+                  ],
+                ),
               ),
             ),
           ),
