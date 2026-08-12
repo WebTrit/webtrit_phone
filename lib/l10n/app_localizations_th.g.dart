@@ -382,6 +382,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get cdrs_noRecentCalls_message => 'ไม่มีการโทรล่าสุด';
 
   @override
+  String get common_SemanticsLabel_loading => 'กำลังโหลด';
+
+  @override
   String get common_noInternetConnection_message =>
       'ดูเหมือนว่าคุณไม่ได้เชื่อมต่ออินเทอร์เน็ต กรุณาตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง';
 

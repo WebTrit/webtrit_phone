@@ -313,6 +313,10 @@
   "@cdrs_noMissedCalls_message": {},
   "cdrs_noRecentCalls_message": "Nessuna chiamata recente",
   "@cdrs_noRecentCalls_message": {},
+  "common_SemanticsLabel_loading": "Caricamento",
+  "@common_SemanticsLabel_loading": {
+    "description": "Accessibility name announced while a screen waits for a request to finish."
+  },
   "common_noInternetConnection_message": "Sembra che tu non sia connesso a Internet. Controlla la tua connessione e riprova.",
   "@common_noInternetConnection_message": {},
   "common_noInternetConnection_retryButton": "Riprova",

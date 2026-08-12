@@ -115,6 +115,7 @@ class LoginOtpSigninVerifyScreen extends StatelessWidget {
                                 size: 16,
                                 strokeWidth: 2,
                                 color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                                semanticsLabel: context.l10n.common_SemanticsLabel_loading,
                               ),
                       ),
                     ),

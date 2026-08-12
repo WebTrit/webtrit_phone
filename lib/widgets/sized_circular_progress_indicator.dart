@@ -5,7 +5,14 @@ import 'package:flutter/material.dart';
 /// Allows defining distinct dimensions for the indicator itself and its
 /// layout footprint.
 class SizedCircularProgressIndicator extends StatelessWidget {
-  const SizedCircularProgressIndicator({super.key, required this.size, this.outerSize, this.color, this.strokeWidth});
+  const SizedCircularProgressIndicator({
+    super.key,
+    required this.size,
+    this.outerSize,
+    this.color,
+    this.strokeWidth,
+    this.semanticsLabel,
+  });
 
   /// The diameter of the actual progress indicator spinner.
   final double size;
@@ -24,14 +31,21 @@ class SizedCircularProgressIndicator extends StatelessWidget {
 
   final double? strokeWidth;
 
+  /// What the wait is about, for assistive technology.
+  ///
+  /// Worth passing wherever the indicator replaces the caption of a control:
+  /// without it the spinner contributes no semantics at all, and the control
+  /// goes nameless for as long as it is busy.
+  final String? semanticsLabel;
+
   @override
   Widget build(BuildContext context) {
     final strokeWidth = this.strokeWidth;
     final result = SizedBox.fromSize(
       size: Size.square(size),
       child: strokeWidth == null
-          ? CircularProgressIndicator(color: color)
-          : CircularProgressIndicator(color: color, strokeWidth: strokeWidth),
+          ? CircularProgressIndicator(color: color, semanticsLabel: semanticsLabel)
+          : CircularProgressIndicator(color: color, strokeWidth: strokeWidth, semanticsLabel: semanticsLabel),
     );
 
     final outerSize = this.outerSize;
