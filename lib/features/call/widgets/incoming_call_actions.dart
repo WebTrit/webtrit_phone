@@ -86,27 +86,23 @@ class _IncomingCallActionsState extends State<IncomingCallActions> {
     final TextButtonsTable buttonsTable;
 
     final buttons = [
-      Tooltip(
-        message: widget.inviteToAttendedTransfer
+      CallActionButton(
+        key: callActionsHangupKey,
+        label: widget.inviteToAttendedTransfer
             ? context.l10n.call_CallActionsTooltip_decline_inviteToAttendedTransfer
             : context.l10n.call_CallActionsTooltip_hangup,
-        child: TextButton(
-          key: callActionsHangupKey,
-          onPressed: onHangupPressed,
-          style: widget.style?.hangup,
-          child: Icon(Icons.call_end, size: actionPadIconSize),
-        ),
+        onPressed: onHangupPressed,
+        style: widget.style?.hangup,
+        child: Icon(Icons.call_end, size: actionPadIconSize),
       ),
       if (widget.onAcceptPressed != null)
-        Tooltip(
-          message: widget.inviteToAttendedTransfer
+        CallActionButton(
+          label: widget.inviteToAttendedTransfer
               ? context.l10n.call_CallActionsTooltip_accept_inviteToAttendedTransfer
               : context.l10n.call_CallActionsTooltip_accept,
-          child: TextButton(
-            onPressed: onAcceptPressed,
-            style: widget.style?.callStart,
-            child: Icon(widget.remoteVideo ? Icons.videocam : Icons.call, size: actionPadIconSize),
-          ),
+          onPressed: onAcceptPressed,
+          style: widget.style?.callStart,
+          child: Icon(widget.remoteVideo ? Icons.videocam : Icons.call, size: actionPadIconSize),
         ),
     ];
 
