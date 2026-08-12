@@ -162,7 +162,7 @@ class _SystemNotificationListTileState extends State<SystemNotificationListTile>
               border: Border(left: BorderSide(color: colorScheme.primaryFixed, width: 2)),
             ),
           ),
-          regexOptions: const RegexOptions(multiLine: true, dotAll: true),
+          regexOptions: const RegexOptions(multiLine: true, dotAll: true, caseSensitive: false),
           style: style.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily),
           textWidthBasis: TextWidthBasis.longestLine,
         ),
