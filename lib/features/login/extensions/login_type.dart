@@ -31,8 +31,8 @@ extension LoginTypePageRouteInfo on LoginType {
 }
 
 extension LoginTypeLoginSegmentKey on LoginType {
-  /// Derived from the id so the two cannot drift apart, the way two
-  /// hand-written switches over the same enum would.
+  /// Derived from the id so the widget-test anchor and the accessibility one
+  /// cannot drift apart, the way two hand-written switches would.
   Key toLoginSegmentKey() => Key(toLoginSegmentId());
 
   String toLoginSegmentId() {

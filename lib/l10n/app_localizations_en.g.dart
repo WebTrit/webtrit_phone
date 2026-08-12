@@ -1003,6 +1003,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_RequestFailureUnconfiguredBundleIdError => 'The app is not supported by your WebTrit Cloud Backend';
 
   @override
+  String get login_SemanticsLabel_hidePassword => 'Hide password';
+
+  @override
+  String get login_SemanticsLabel_showPassword => 'Show password';
+
+  @override
   String get login_SupportedLoginTypeMissedExceptionError =>
       'The current WebTrit Cloud Backend does not support any login types compatible with this app';
 

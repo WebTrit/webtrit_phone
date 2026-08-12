@@ -31,6 +31,7 @@ export 'safe_network_image.dart';
 export 'scroll_to_bottom.dart';
 export 'scroll_to_top.dart';
 export 'semantic_action.dart';
+export 'semantic_id.dart';
 export 'shimmer.dart';
 export 'sip_presence_indicator.dart';
 export 'sized_circular_progress_indicator.dart';
