@@ -52,7 +52,7 @@ class _ContactsAgreementScreenState extends State<ContactsAgreementScreen> {
                           const Spacer(),
                           const SizedBox(height: kInset),
                           AgreementCheckbox(
-                            key: contactsAgreementCheckboxKey,
+                            checkboxKey: contactsAgreementCheckboxKey,
                             agreementAccepted: agreementStatus.isAccepted,
                             onChanged: _handleAgreementStatusChange,
                             text: context.l10n.contacts_agreement_checkbox_text,

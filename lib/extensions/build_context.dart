@@ -18,9 +18,7 @@ extension BuildContextSnackBar on BuildContext {
     SnackBarAction? action,
     Duration duration = const Duration(seconds: 3),
   }) {
-    return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(
-      SnackBar(content: Text(data), action: action, duration: duration, persist: false),
-    );
+    return _show(content: data, action: action, duration: duration);
   }
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackBar(
@@ -31,14 +29,11 @@ extension BuildContextSnackBar on BuildContext {
     final themeData = Theme.of(this);
     final callStatusStyles = themeData.extension<SnackBarStyles>()?.primary;
 
-    return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(
-      SnackBar(
-        content: Text(data),
-        action: action,
-        backgroundColor: callStatusStyles?.errorBackgroundColor ?? themeData.colorScheme.error,
-        duration: duration,
-        persist: false,
-      ),
+    return _show(
+      content: data,
+      action: action,
+      duration: duration,
+      backgroundColor: callStatusStyles?.errorBackgroundColor ?? themeData.colorScheme.error,
     );
   }
 
@@ -47,15 +42,7 @@ extension BuildContextSnackBar on BuildContext {
     SnackBarAction? action,
     Duration duration = const Duration(seconds: 1),
   }) {
-    return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(
-      SnackBar(
-        content: Text(data),
-        behavior: SnackBarBehavior.floating,
-        action: action,
-        duration: duration,
-        persist: false,
-      ),
-    );
+    return _show(content: data, action: action, duration: duration, behavior: SnackBarBehavior.floating);
   }
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSuccessSnackBar(
@@ -66,13 +53,34 @@ extension BuildContextSnackBar on BuildContext {
     final themeData = Theme.of(this);
     final callStatusStyles = themeData.extension<SnackBarStyles>()?.primary;
 
+    return _show(
+      content: data,
+      action: action,
+      duration: duration,
+      backgroundColor: callStatusStyles?.successBackgroundColor ?? themeData.colorScheme.tertiary,
+    );
+  }
+
+  /// Shows the one snack bar the app has, so every message behaves the same.
+  ///
+  /// A message that offers something to do waits for the answer instead of
+  /// timing out, and gets a close button so it can always be dismissed: three
+  /// seconds is not enough to notice an action, let alone reach it.
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _show({
+    required String content,
+    required SnackBarAction? action,
+    required Duration duration,
+    Color? backgroundColor,
+    SnackBarBehavior? behavior,
+  }) {
     return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(
       SnackBar(
-        content: Text(data),
+        content: Text(content),
         action: action,
-        backgroundColor: callStatusStyles?.successBackgroundColor ?? themeData.colorScheme.tertiary,
+        backgroundColor: backgroundColor,
+        behavior: behavior,
         duration: duration,
-        persist: false,
+        showCloseIcon: action != null,
       ),
     );
   }

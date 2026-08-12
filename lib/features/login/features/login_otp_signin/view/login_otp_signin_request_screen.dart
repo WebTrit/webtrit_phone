@@ -91,7 +91,7 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
                 const SizedBox(height: kInset / 2),
               ],
               ExtendedTextFormField(
-                key: optInputKey,
+                key: otpInputKey,
                 includePrefixInData: refStyle?.inputValue?.includePrefixInData ?? false,
                 enabled: !state.processing,
                 initialValue: state.otpSigninUserRefInput.value,
