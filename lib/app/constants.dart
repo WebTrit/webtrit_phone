@@ -75,6 +75,8 @@ const initialMainRout = '/main';
 
 const kAutoprovisionRout = '/autoprovision';
 
+const kSettingsRout = '/settings';
+
 const kSmsMessagingFeatureFlag = 'smsMessaging';
 const kChatMessagingFeatureFlag = 'internalMessaging';
 const kVoicemailFeatureFlag = 'voicemail';
