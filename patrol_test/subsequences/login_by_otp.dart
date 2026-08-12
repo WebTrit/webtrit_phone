@@ -6,7 +6,7 @@ import 'package:webtrit_phone/features/features.dart';
 
 Future<void> loginByOtp(PatrolIntegrationTester $, String otpCredential, String otpVerifyCredential) async {
   final otpSegmentButton = $(LoginType.otpSignin.toLoginSegmentKey());
-  final otpInput = $(optInputKey);
+  final otpInput = $(otpInputKey);
   final otpButton = $(otpButtonKey);
   final otpVerifyInput = $(otpVerifyInputKey);
   final otpVerifyButton = $(otpVerifyButtonKey);

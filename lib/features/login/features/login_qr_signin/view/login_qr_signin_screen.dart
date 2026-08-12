@@ -8,6 +8,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class LoginQrSigninScreen extends StatefulWidget {
   const LoginQrSigninScreen({super.key});
@@ -114,7 +115,11 @@ class _LoginQrSigninScreenState extends State<LoginQrSigninScreen> with WidgetsB
                 if (loginState.processing) return const QrSigninVerifyingView();
 
                 return switch (state.status) {
-                  QrSigninStatus.checkingPermission => const SizedBox.shrink(),
+                  // An empty box would leave the tab with nothing on it at all
+                  // while the check runs - no sign that anything is happening.
+                  QrSigninStatus.checkingPermission => const Center(
+                    child: SizedCircularProgressIndicator(size: 24, strokeWidth: 2),
+                  ),
                   QrSigninStatus.permissionRequired => QrSigninPermissionView(
                     permanentlyDenied: state.cameraPermanentlyDenied,
                     onRequestPermission: context.read<QrSigninCubit>().requestPermission,

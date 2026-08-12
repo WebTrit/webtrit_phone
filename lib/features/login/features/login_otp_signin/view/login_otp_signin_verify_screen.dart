@@ -79,19 +79,17 @@ class LoginOtpSigninVerifyScreen extends StatelessWidget {
                     start: state.otpSigninSessionOtpProvisionalWithDateTime!.$2,
                     interval: countdownRepeatIntervalSeconds,
                     builder: (context, seconds) {
-                      if (seconds == 0) {
-                        return OutlinedButton(
-                          onPressed: state.processing ? null : () => _onRepeat(context),
-                          style: outlinedButtonStyles?.neutral,
-                          child: Text(context.l10n.login_Button_otpSigninVerifyRepeat),
-                        );
-                      } else {
-                        return OutlinedButton(
-                          onPressed: null,
-                          style: outlinedButtonStyles?.neutral,
-                          child: Text(context.l10n.login_Button_otpSigninVerifyRepeatInterval(seconds)),
-                        );
-                      }
+                      final waiting = seconds > 0;
+
+                      return OutlinedButton(
+                        onPressed: waiting || state.processing ? null : () => _onRepeat(context),
+                        style: outlinedButtonStyles?.neutral,
+                        child: Text(
+                          waiting
+                              ? context.l10n.login_Button_otpSigninVerifyRepeatInterval(seconds)
+                              : context.l10n.login_Button_otpSigninVerifyRepeat,
+                        ),
+                      );
                     },
                   ),
                   const SizedBox(height: kInset / 4),

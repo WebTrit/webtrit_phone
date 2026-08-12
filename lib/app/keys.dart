@@ -24,8 +24,8 @@ const signupEmailButtonKey = Key(signupEmailButtonId);
 const String signupVerifyButtonId = 'signupVerifyButton';
 const signupVerifyButtonKey = Key(signupVerifyButtonId);
 
-const String optInputId = 'otpInput';
-const optInputKey = Key(optInputId);
+const String otpInputId = 'otpInput';
+const otpInputKey = Key(otpInputId);
 const String otpVerifyInputId = 'otpVerifyInput';
 const otpVerifyInputKey = Key(otpVerifyInputId);
 const String otpButtonId = 'otpButton';
@@ -39,6 +39,11 @@ const String passwordPasswordInputId = 'passwordPasswordInput';
 const passwordPasswordInputKey = Key(passwordPasswordInputId);
 const String passwordButtonId = 'passwordButton';
 const passwordButtonKey = Key(passwordButtonId);
+
+const String loginTypeSegmentOtpSigninId = 'loginTypeSegmentOtpSignin';
+const String loginTypeSegmentPasswordSigninId = 'loginTypeSegmentPasswordSignin';
+const String loginTypeSegmentSignupId = 'loginTypeSegmentSignup';
+const String loginTypeSegmentQrSigninId = 'loginTypeSegmentQrSignin';
 
 const String contactsAgreementCheckboxId = 'contactsAgreementCheckbox';
 const contactsAgreementCheckboxKey = Key(contactsAgreementCheckboxId);
