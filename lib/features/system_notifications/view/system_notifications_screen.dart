@@ -75,11 +75,12 @@ class _SystemNotificationsScreenState extends State<SystemNotificationsScreen> {
             child: ListView.builder(
               controller: scrollController,
               reverse: true,
-              // TODO: migrate to scrollCacheExtent (deprecated after Flutter 3.41.0-0.0.pre)
-              // ignore: deprecated_member_use
-              cacheExtent: 500,
+              scrollCacheExtent: .viewport(2),
               shrinkWrap: true,
-              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 16, bottom: 16),
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top + 16,
+                bottom: MediaQuery.of(context).padding.bottom + 16,
+              ),
               itemCount: state.notifications.length + 1,
               itemBuilder: (context, index) {
                 final historyIndicatorPosition = state.notifications.length;
@@ -87,14 +88,12 @@ class _SystemNotificationsScreenState extends State<SystemNotificationsScreen> {
                 final notifiaction = state.notifications[index];
                 final pendingSeen = state.outboxEntries.hasSeen(notifiaction.id);
 
-                return FadeIn(
-                  child: SizedBox(
-                    key: Key(notifiaction.id.toString()),
-                    child: SystemNotificationListTile(
-                      notifiaction,
-                      seenPending: pendingSeen,
-                      onSeen: () => markAsSeen(notifiaction),
-                    ),
+                return SizedBox(
+                  key: Key(notifiaction.id.toString()),
+                  child: SystemNotificationListTile(
+                    notifiaction,
+                    seenPending: pendingSeen,
+                    onSeen: () => markAsSeen(notifiaction),
                   ),
                 );
               },
