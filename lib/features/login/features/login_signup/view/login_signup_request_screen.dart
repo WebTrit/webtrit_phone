@@ -26,50 +26,59 @@ class LoginSignupRequestScreen extends StatelessWidget {
             ? context.l10n.login_Text_signupRequestPostDescription
             : context.l10n.login_Text_signupRequestPostDescriptionDemo;
 
-        return Container(
-          padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
-          color: themeData.scaffoldBackgroundColor,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (signupRequestPreDescriptionText.isNotEmpty) ...[
-                Description(text: signupRequestPreDescriptionText),
-                const SizedBox(height: kInset / 2),
-              ],
-              TextFormField(
-                key: signupEmailInputKey,
-                enabled: !state.processing,
-                initialValue: state.signupEmailInput.value,
-                decoration: InputDecoration(
-                  labelText: context.l10n.login_TextFieldLabelText_signupEmail,
-                  helperText: '', // reserve space for validator message
-                  errorText: state.signupEmailInput.displayError?.l10n(context),
-                  errorMaxLines: 3,
+        return SemanticId(
+          identifier: loginSignupRequestScreenId,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
+            color: themeData.scaffoldBackgroundColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (signupRequestPreDescriptionText.isNotEmpty) ...[
+                  Description(text: signupRequestPreDescriptionText),
+                  const SizedBox(height: kInset / 2),
+                ],
+                SemanticId(
+                  identifier: signupEmailInputId,
+                  child: TextFormField(
+                    key: signupEmailInputKey,
+                    enabled: !state.processing,
+                    initialValue: state.signupEmailInput.value,
+                    decoration: InputDecoration(
+                      labelText: context.l10n.login_TextFieldLabelText_signupEmail,
+                      helperText: '', // reserve space for validator message
+                      errorText: state.signupEmailInput.displayError?.l10n(context),
+                      errorMaxLines: 3,
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    autofillHints: const [AutofillHints.email],
+                    onChanged: context.read<LoginCubit>().signupEmailInputChanged,
+                    onFieldSubmitted: !state.signupEmailInput.isValid ? null : (_) => _onSubmitted(context),
+                  ),
                 ),
-                keyboardType: TextInputType.emailAddress,
-                autofillHints: const [AutofillHints.email],
-                onChanged: context.read<LoginCubit>().signupEmailInputChanged,
-                onFieldSubmitted: !state.signupEmailInput.isValid ? null : (_) => _onSubmitted(context),
-              ),
-              if (signupRequestPostDescriptionText.isNotEmpty) ...[
-                const SizedBox(height: kInset / 2),
-                Description(text: signupRequestPostDescriptionText),
+                if (signupRequestPostDescriptionText.isNotEmpty) ...[
+                  const SizedBox(height: kInset / 2),
+                  Description(text: signupRequestPostDescriptionText),
+                ],
+                const Spacer(),
+                const SizedBox(height: kInset),
+                SemanticAction(
+                  identifier: signupEmailButtonId,
+                  child: ElevatedButton(
+                    key: signupEmailButtonKey,
+                    onPressed: state.processing || !state.signupEmailInput.isValid ? null : () => _onSubmitted(context),
+                    style: elevatedButtonStyles?.primary,
+                    child: !state.processing
+                        ? Text(context.l10n.login_Button_signupRequestProceed)
+                        : SizedCircularProgressIndicator(
+                            size: 16,
+                            strokeWidth: 2,
+                            color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                          ),
+                  ),
+                ),
               ],
-              const Spacer(),
-              const SizedBox(height: kInset),
-              ElevatedButton(
-                key: signupEmailButtonKey,
-                onPressed: state.processing || !state.signupEmailInput.isValid ? null : () => _onSubmitted(context),
-                style: elevatedButtonStyles?.primary,
-                child: !state.processing
-                    ? Text(context.l10n.login_Button_signupRequestProceed)
-                    : SizedCircularProgressIndicator(
-                        size: 16,
-                        strokeWidth: 2,
-                        color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                      ),
-              ),
-            ],
+            ),
           ),
         );
       },

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 /// The no-camera-permission state of the QR sign-in tab.
 ///
@@ -49,11 +51,20 @@ class QrSigninPermissionView extends StatelessWidget {
         ),
         const SizedBox(height: kInset),
         if (permanentlyDenied)
-          ElevatedButton(onPressed: onOpenSettings, child: Text(context.l10n.login_Button_qrSigninOpenSettings))
+          SemanticAction(
+            identifier: loginQrOpenSettingsButtonId,
+            child: ElevatedButton(
+              onPressed: onOpenSettings,
+              child: Text(context.l10n.login_Button_qrSigninOpenSettings),
+            ),
+          )
         else
-          ElevatedButton(
-            onPressed: onRequestPermission,
-            child: Text(context.l10n.login_Button_qrSigninAllowCameraAccess),
+          SemanticAction(
+            identifier: loginQrAllowCameraButtonId,
+            child: ElevatedButton(
+              onPressed: onRequestPermission,
+              child: Text(context.l10n.login_Button_qrSigninAllowCameraAccess),
+            ),
           ),
       ],
     );

@@ -387,6 +387,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get cdrs_noRecentCalls_message => 'Nessuna chiamata recente';
 
   @override
+  String get common_SemanticsLabel_loading => 'Caricamento';
+
+  @override
   String get common_noInternetConnection_message =>
       'Sembra che tu non sia connesso a Internet. Controlla la tua connessione e riprova.';
 

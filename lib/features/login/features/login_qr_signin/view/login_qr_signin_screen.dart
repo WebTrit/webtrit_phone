@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class LoginQrSigninScreen extends StatefulWidget {
@@ -104,36 +106,43 @@ class _LoginQrSigninScreenState extends State<LoginQrSigninScreen> with WidgetsB
     return BlocListener<QrSigninCubit, QrSigninState>(
       listenWhen: (previous, current) => previous.detection != current.detection && current.detection != null,
       listener: (context, state) => _onDetectionReported(context, state.detection!),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
-        color: Theme.of(context).scaffoldBackgroundColor,
-        child: BlocBuilder<LoginCubit, LoginState>(
-          buildWhen: (previous, current) => previous.processing != current.processing,
-          builder: (context, loginState) {
-            return BlocBuilder<QrSigninCubit, QrSigninState>(
-              builder: (context, state) {
-                if (loginState.processing) return const QrSigninVerifyingView();
+      child: SemanticId(
+        identifier: loginQrScreenId,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: BlocBuilder<LoginCubit, LoginState>(
+            buildWhen: (previous, current) => previous.processing != current.processing,
+            builder: (context, loginState) {
+              return BlocBuilder<QrSigninCubit, QrSigninState>(
+                builder: (context, state) {
+                  if (loginState.processing) return const QrSigninVerifyingView();
 
-                return switch (state.status) {
-                  // An empty box would leave the tab with nothing on it at all
-                  // while the check runs - no sign that anything is happening.
-                  QrSigninStatus.checkingPermission => const Center(
-                    child: SizedCircularProgressIndicator(size: 24, strokeWidth: 2),
-                  ),
-                  QrSigninStatus.permissionRequired => QrSigninPermissionView(
-                    permanentlyDenied: state.cameraPermanentlyDenied,
-                    onRequestPermission: context.read<QrSigninCubit>().requestPermission,
-                    onOpenSettings: context.read<QrSigninCubit>().openAppSettings,
-                  ),
-                  QrSigninStatus.scanning => QrScannerView(
-                    controller: _scannerController,
-                    onDetect: _onDetect,
-                    parseError: state.parseError,
-                  ),
-                };
-              },
-            );
-          },
+                  return switch (state.status) {
+                    // An empty box would leave the tab with nothing in the tree
+                    // at all: no screen reader focus and nothing to wait for.
+                    QrSigninStatus.checkingPermission => Center(
+                      child: Semantics(
+                        label: context.l10n.common_SemanticsLabel_loading,
+                        liveRegion: true,
+                        child: const SizedCircularProgressIndicator(size: 24, strokeWidth: 2),
+                      ),
+                    ),
+                    QrSigninStatus.permissionRequired => QrSigninPermissionView(
+                      permanentlyDenied: state.cameraPermanentlyDenied,
+                      onRequestPermission: context.read<QrSigninCubit>().requestPermission,
+                      onOpenSettings: context.read<QrSigninCubit>().openAppSettings,
+                    ),
+                    QrSigninStatus.scanning => QrScannerView(
+                      controller: _scannerController,
+                      onDetect: _onDetect,
+                      parseError: state.parseError,
+                    ),
+                  };
+                },
+              );
+            },
+          ),
         ),
       ),
     );

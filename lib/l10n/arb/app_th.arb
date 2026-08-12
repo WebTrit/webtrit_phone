@@ -313,6 +313,10 @@
   "@cdrs_noMissedCalls_message": {},
   "cdrs_noRecentCalls_message": "ไม่มีการโทรล่าสุด",
   "@cdrs_noRecentCalls_message": {},
+  "common_SemanticsLabel_loading": "กำลังโหลด",
+  "@common_SemanticsLabel_loading": {
+    "description": "Accessibility name announced while a screen waits for a request to finish."
+  },
   "common_noInternetConnection_message": "ดูเหมือนว่าคุณไม่ได้เชื่อมต่ออินเทอร์เน็ต กรุณาตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง",
   "@common_noInternetConnection_message": {},
   "common_noInternetConnection_retryButton": "ลองอีกครั้ง",

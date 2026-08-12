@@ -712,6 +712,12 @@ abstract class AppLocalizations {
   /// **'No recent calls'**
   String get cdrs_noRecentCalls_message;
 
+  /// Accessibility name announced while a screen waits for a request to finish.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get common_SemanticsLabel_loading;
+
   /// No description provided for @common_noInternetConnection_message.
   ///
   /// In en, this message translates to:
