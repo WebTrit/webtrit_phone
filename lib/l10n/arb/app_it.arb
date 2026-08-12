@@ -2396,6 +2396,22 @@
   "@voicemail_Label_playbackError": {},
   "voicemail_Label_retry": "Riprova",
   "@voicemail_Label_retry": {},
+  "voicemail_SemanticsLabel_loading": "Caricamento",
+  "@voicemail_SemanticsLabel_loading": {
+    "description": "Announced while a voicemail is being prepared for playback."
+  },
+  "voicemail_SemanticsLabel_moreActions": "Altro",
+  "@voicemail_SemanticsLabel_moreActions": {
+    "description": "Accessibility name of the button that opens the actions menu of a voicemail."
+  },
+  "voicemail_SemanticsLabel_pause": "Pausa",
+  "@voicemail_SemanticsLabel_pause": {
+    "description": "Accessibility name of the button that pauses voicemail playback."
+  },
+  "voicemail_SemanticsLabel_play": "Riproduci",
+  "@voicemail_SemanticsLabel_play": {
+    "description": "Accessibility name of the button that starts or resumes voicemail playback."
+  },
   "voicemail_Snackbar_notConfigured": "Contatta il tuo amministratore per attivare la segreteria telefonica.",
   "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "Funzionalità non supportata",

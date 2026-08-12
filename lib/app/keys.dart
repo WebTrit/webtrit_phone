@@ -100,6 +100,9 @@ const String actionPadVoiceCallId = 'actionPadVoiceCall';
 const String callTileDialId = 'callTileDial';
 const String callTileMenuId = 'callTileMenu';
 const String systemNotificationsBadgeId = 'systemNotificationsBadge';
+const String voicemailMenuId = 'voicemailMenu';
+const String voicemailPlaybackId = 'voicemailPlayback';
+const String voicemailRetryId = 'voicemailRetry';
 
 const String contactsExtContactTileId = 'contactsExtContactTile';
 const contactsExtContactTileKey = Key(contactsExtContactTileId);

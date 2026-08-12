@@ -2888,6 +2888,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voicemail_Label_retry => 'Try again';
 
   @override
+  String get voicemail_SemanticsLabel_loading => 'Loading';
+
+  @override
+  String get voicemail_SemanticsLabel_moreActions => 'More';
+
+  @override
+  String get voicemail_SemanticsLabel_pause => 'Pause';
+
+  @override
+  String get voicemail_SemanticsLabel_play => 'Play';
+
+  @override
   String get voicemail_Snackbar_notConfigured => 'Contact your administrator to activate voicemail';
 
   @override
