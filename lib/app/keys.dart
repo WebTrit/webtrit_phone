@@ -117,6 +117,7 @@ const String loginSignupVerifyScreenId = 'loginSignupVerifyScreen';
 
 // Identifier-only entries: controls that have no widget-test key.
 const String actionPadOverflowId = 'actionPadOverflow';
+const String appSnackBarId = 'appSnackBar';
 const String actionPadTransferId = 'actionPadTransfer';
 const String actionPadVoiceCallId = 'actionPadVoiceCall';
 const String callActionsAcceptId = 'callActionsAccept';
