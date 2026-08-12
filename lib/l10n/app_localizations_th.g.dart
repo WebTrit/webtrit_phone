@@ -2874,6 +2874,18 @@ class AppLocalizationsTh extends AppLocalizations {
   String get voicemail_Label_retry => 'ลองอีกครั้ง';
 
   @override
+  String get voicemail_SemanticsLabel_loading => 'กำลังโหลด';
+
+  @override
+  String get voicemail_SemanticsLabel_moreActions => 'เพิ่มเติม';
+
+  @override
+  String get voicemail_SemanticsLabel_pause => 'หยุดชั่วคราว';
+
+  @override
+  String get voicemail_SemanticsLabel_play => 'เล่น';
+
+  @override
   String get voicemail_Snackbar_notConfigured => 'ติดต่อผู้ดูแลระบบของคุณเพื่อเปิดใช้งานข้อความเสียง';
 
   @override

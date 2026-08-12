@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -60,12 +61,26 @@ class VoicemailTile extends StatelessWidget {
         title: Text(voicemail.displaySender),
         subtitle: _VoicemailSubtitle(voicemail: voicemail, dateFormat: dateFormat),
         bottom: AudioView(path: voicemail.url!, cacheKey: voicemail.id, onPlaybackStarted: _onPlaybackStarted),
-        trailing: PopupMenuButton<_VoicemailMenuAction>(
-          padding: EdgeInsets.zero,
-          position: PopupMenuPosition.under,
-          onSelected: _onPopupMenuSelected,
-          itemBuilder: (context) => _buildMenuItems(context, colorScheme),
-          icon: Icon(Icons.more_vert, color: colorScheme.onSurface),
+        trailing: SemanticAction(
+          label: context.l10n.voicemail_SemanticsLabel_moreActions,
+          identifier: voicemailMenuId,
+          // The button's own tooltip is replaced rather than removed: it says
+          // "Show menu", which a screen reader reads on top of the name above
+          // (appended to it on iOS), and dropping it outright would take the
+          // long press with it - the row's long press would then fire instead
+          // and silently start selecting messages.
+          child: Tooltip(
+            message: context.l10n.voicemail_SemanticsLabel_moreActions,
+            excludeFromSemantics: true,
+            child: PopupMenuButton<_VoicemailMenuAction>(
+              padding: EdgeInsets.zero,
+              position: PopupMenuPosition.under,
+              tooltip: '',
+              onSelected: _onPopupMenuSelected,
+              itemBuilder: (context) => _buildMenuItems(context, colorScheme),
+              icon: Icon(Icons.more_vert, color: colorScheme.onSurface),
+            ),
+          ),
         ),
       ),
     );

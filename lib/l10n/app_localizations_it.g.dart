@@ -2920,6 +2920,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get voicemail_Label_retry => 'Riprova';
 
   @override
+  String get voicemail_SemanticsLabel_loading => 'Caricamento';
+
+  @override
+  String get voicemail_SemanticsLabel_moreActions => 'Altro';
+
+  @override
+  String get voicemail_SemanticsLabel_pause => 'Pausa';
+
+  @override
+  String get voicemail_SemanticsLabel_play => 'Riproduci';
+
+  @override
   String get voicemail_Snackbar_notConfigured =>
       'Contatta il tuo amministratore per attivare la segreteria telefonica.';
 

@@ -5311,6 +5311,30 @@ abstract class AppLocalizations {
   /// **'Try again'**
   String get voicemail_Label_retry;
 
+  /// Announced while a voicemail is being prepared for playback.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get voicemail_SemanticsLabel_loading;
+
+  /// Accessibility name of the button that opens the actions menu of a voicemail.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get voicemail_SemanticsLabel_moreActions;
+
+  /// Accessibility name of the button that pauses voicemail playback.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get voicemail_SemanticsLabel_pause;
+
+  /// Accessibility name of the button that starts or resumes voicemail playback.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get voicemail_SemanticsLabel_play;
+
   /// No description provided for @voicemail_Snackbar_notConfigured.
   ///
   /// In en, this message translates to:
