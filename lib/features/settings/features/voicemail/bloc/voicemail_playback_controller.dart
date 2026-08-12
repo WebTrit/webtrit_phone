@@ -31,6 +31,7 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
   StreamSubscription<PlayerState>? _playerStateSub;
 
   String? _activeId;
+  bool _lastPlaying = false;
   bool _isLoading = false;
   Object? _error;
   final _loadingDebounce = Debounce(const Duration(milliseconds: 200));
@@ -168,6 +169,13 @@ class VoicemailPlaybackController extends ChangeNotifier with WidgetsBindingObse
     if (state.processingState == ProcessingState.completed) {
       _player.stop();
       _player.seek(Duration.zero);
+    }
+    // The play/pause control reads `isPlaying`, and pause() / resume() alone
+    // rebuild nothing: without this the button keeps offering the action it
+    // has already performed until some other event repaints it.
+    if (state.playing != _lastPlaying) {
+      _lastPlaying = state.playing;
+      notifyListeners();
     }
   }
 

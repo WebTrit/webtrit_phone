@@ -11,6 +11,7 @@ import '../bloc/bloc.dart';
 import '../models/models.dart';
 import 'audio_player_interface.dart';
 import 'audio_slider.dart';
+import 'playback_button.dart';
 
 class AudioView extends StatelessWidget {
   const AudioView({required this.path, super.key, this.cacheKey, this.onPlaybackStarted});
@@ -76,18 +77,9 @@ class _InactiveAudioView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       children: [
-        GestureDetector(
-          onTap: onPlay,
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: colorScheme.primary),
-            child: Icon(Icons.play_arrow, color: colorScheme.onPrimary, size: 24),
-          ),
-        ),
+        PlaybackButton(playing: false, onPressed: onPlay),
         const SizedBox(width: 16),
         Expanded(
           child: IgnorePointer(
