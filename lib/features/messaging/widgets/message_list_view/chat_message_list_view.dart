@@ -12,6 +12,7 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.mapper.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+import 'package:webtrit_phone/app/constants.dart';
 
 import 'exchange_bar.dart';
 import 'message_text_field.dart';
@@ -359,6 +360,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                 controller: inputController,
                 onSend: handleSend,
                 onChanged: (value) => context.read<ChatTypingCubit>().sendTyping(),
+                maxLength: kAppMessagingMaxLength,
               ),
           ],
         );
