@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
 
 class CallPopupMenuButton<T> extends StatelessWidget {
-  const CallPopupMenuButton({super.key, this.onSelected, this.child, this.offset = Offset.zero, required this.items});
+  const CallPopupMenuButton({
+    super.key,
+    this.menuKey,
+    this.enabled = true,
+    this.onSelected,
+    this.child,
+    this.offset = Offset.zero,
+    required this.items,
+  });
+
+  /// Key of the inner [PopupMenuButton]; lets the caller open the menu
+  /// programmatically via [PopupMenuButtonState.showButtonMenu].
+  final GlobalKey<PopupMenuButtonState<T>>? menuKey;
+
+  /// Whether the trigger reacts at all. Disabling it also drops the tap action
+  /// from the accessibility tree, so assistive technology does not announce an
+  /// action that would open nothing.
+  final bool enabled;
 
   final PopupMenuItemSelected<T>? onSelected;
   final Widget? child;
@@ -18,6 +35,14 @@ class CallPopupMenuButton<T> extends StatelessWidget {
         splashFactory: NoSplash.splashFactory,
       ),
       child: PopupMenuButton<T>(
+        key: menuKey,
+        enabled: enabled,
+        // Without this the button brings its own "Show menu" tooltip: it is
+        // read by screen readers on top of the caller's name (appended to the
+        // spoken label on iOS) and it wins the long-press gesture over any
+        // tooltip the caller wraps around this widget. An empty message makes
+        // the tooltip build its child bare, leaving both to the caller.
+        tooltip: '',
         onSelected: onSelected,
         offset: offset,
         elevation: 4,

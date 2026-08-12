@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -272,9 +274,13 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                                 ),
                                 actions: [
                                   if (activeCalls.shouldAutoCompact)
-                                    CallPopupMenuButton<void>(
-                                      items: _buildPopupMenuItems,
-                                      child: const Icon(Icons.more_vert),
+                                    SemanticAction.button(
+                                      label: context.l10n.call_settings_additional_options,
+                                      identifier: callActionsOptionsId,
+                                      child: CallPopupMenuButton<void>(
+                                        items: _buildPopupMenuItems,
+                                        child: const Icon(Icons.more_vert),
+                                      ),
                                     ),
                                 ],
                               ),

@@ -3,6 +3,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
+
 import 'keypad_key_style.dart';
 import 'keypad_key_styles.dart';
 
@@ -80,37 +82,47 @@ class _KeypadKeyButtonState extends State<KeypadKeyButton> {
 
     final hasLongPress = widget.subtext.length == 1;
 
-    // Custom tap recognition used to avoid input throttling on low-end devices (see WT-1436)
-    // somehow TextButton's built-in onPressed not fired after pointer up while animation is present
-    // maybe later will be fixed on Flutter side, but for now we use Listener to handle pointer events directly
-    return Listener(
-      key: Key(widget.text),
-      onPointerDown: (_) {
-        _pointerDownAt = DateTime.now();
-        if (!hasLongPress) widget.onKeyPressed(widget.text);
-      },
-      onPointerUp: hasLongPress
-          ? (_) {
-              final downAt = _pointerDownAt;
-              if (downAt == null) return;
-              if (DateTime.now().difference(downAt) < kLongPressTimeout) {
-                widget.onKeyPressed(widget.text);
+    // The pointer input stays on the Listener below; this node carries the
+    // accessibility contract for the key. The subtree is excluded so the
+    // decorative TextButton's no-op handler and the raw glyph texts do not
+    // form nodes of their own - assistive-technology activation must reach
+    // the same input path as a finger.
+    return Semantics(
+      identifier: keypadKeyId(widget.text),
+      label: widget.subtext.isEmpty ? widget.text : '${widget.text} ${widget.subtext}',
+      button: true,
+      excludeSemantics: true,
+      onTap: () => widget.onKeyPressed(widget.text),
+      onLongPress: hasLongPress ? () => widget.onKeyPressed(widget.subtext) : null,
+      child: Listener(
+        key: Key(widget.text),
+        onPointerDown: (_) {
+          _pointerDownAt = DateTime.now();
+          if (!hasLongPress) widget.onKeyPressed(widget.text);
+        },
+        onPointerUp: hasLongPress
+            ? (_) {
+                final downAt = _pointerDownAt;
+                if (downAt == null) return;
+                if (DateTime.now().difference(downAt) < kLongPressTimeout) {
+                  widget.onKeyPressed(widget.text);
+                }
               }
-            }
-          : null,
-      child: TextButton(
-        onPressed: () {},
-        onLongPress: hasLongPress ? () => widget.onKeyPressed(widget.subtext) : null,
-        style: merged.buttonStyle,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(widget.text, style: textStyle),
-            Padding(
-              padding: KeypadKeyButton._subextPadding,
-              child: Text(widget.subtext, style: subStyle),
-            ),
-          ],
+            : null,
+        child: TextButton(
+          onPressed: () {},
+          onLongPress: hasLongPress ? () => widget.onKeyPressed(widget.subtext) : null,
+          style: merged.buttonStyle,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(widget.text, style: textStyle),
+              Padding(
+                padding: KeypadKeyButton._subextPadding,
+                child: Text(widget.subtext, style: subStyle),
+              ),
+            ],
+          ),
         ),
       ),
     );

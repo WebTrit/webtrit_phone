@@ -163,14 +163,23 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
   // lives here.
 
   /// Appends the pressed key to the DTMF display and forwards it upstream.
+  ///
+  /// Sending a tone is signaling-dependent: while interactions are blocked the
+  /// press is ignored whole, so the display never shows a digit the other side
+  /// did not receive. The keypad can stay open across such a window (e.g. a
+  /// renegotiation), which is why the guard lives here and not only on the
+  /// button that opens it.
   void _enterKeypadKey(String key) {
+    if (!widget.enableInteractions) return;
+    final onKeyPressed = widget.onKeyPressed;
+    if (onKeyPressed == null) return;
+
     final newText = _keypadTextEditingController.text + key;
     final newSelection = TextSelection.collapsed(offset: newText.length);
     final value = _keypadTextEditingController.value.copyWith(text: newText, selection: newSelection);
     _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
 
-    final onKeyPressed = widget.enableInteractions ? widget.onKeyPressed : null;
-    onKeyPressed!(key);
+    onKeyPressed(key);
   }
 
   /// Closes the in-call keypad, dropping the collected DTMF input.
@@ -231,8 +240,10 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     // The keypad opens only in portrait and only when DTMF input is wired.
     final canShowKeypad = onKeyPressed != null && _isOrientationPortrait;
 
-    // With no transfer intent wired the trigger renders disabled.
+    // With no transfer intent wired the trigger renders disabled; each branch
+    // of the menu has its own set of items, so each has its own condition.
     final transferInitAvailable = onBlindTransferInitiated != null || onAttendedTransferInitiated != null;
+    final transferToCallAvailable = onBlindTransferInitiated != null || widget.onAttendedTransferSubmitted != null;
 
     // Icons
     final actionPadIconSize = themeData.textTheme.headlineMedium!.fontSize;
@@ -266,6 +277,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         // row
         CallActionButton(
           key: callActionsMuteKey,
+          identifier: callActionsMuteId,
           label: widget.mutedValue
               ? context.l10n.call_CallActionsTooltip_unmute
               : context.l10n.call_CallActionsTooltip_mute,
@@ -276,6 +288,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         ),
         CallActionButton(
           key: callActionsVideoCallKey,
+          identifier: callActionsVideoCallId,
           label: widget.cameraPermissionDenied
               ? context.l10n.call_CallActionsTooltip_cameraPermissionDenied
               : widget.cameraValue
@@ -289,6 +302,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         if (widget.availableAudioDevices.onlyBuiltIn)
           CallActionButton(
             key: callActionsSpeakerKey,
+            identifier: callActionsSpeakerId,
             label: speakerOn
                 ? context.l10n.call_CallActionsTooltip_disableSpeaker
                 : context.l10n.call_CallActionsTooltip_enableSpeaker,
@@ -299,6 +313,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
           ),
         if (!widget.availableAudioDevices.onlyBuiltIn)
           CallActionMenuButton<CallAudioDevice>(
+            identifier: callActionsAudioDeviceId,
             label: context.l10n.call_CallActionsTooltip_changeAudioDevice,
             offset: Offset(_dimension + 8, 0),
             statesController: _speakerStatesController..update(WidgetState.selected, isAudioSelected),
@@ -321,7 +336,9 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         if (widget.transferableCalls.isNotEmpty)
           CallActionMenuButton(
             key: callActionsTransferMenuKey,
+            identifier: callActionsTransferMenuId,
             label: context.l10n.call_CallActionsTooltip_transfer,
+            enabled: transferToCallAvailable,
             offset: Offset(_dimension + 8, 0),
             style: widget.style?.transfer,
             items: _buildTransferToCallItems(themeData),
@@ -330,6 +347,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         if (widget.transferableCalls.isEmpty)
           CallActionMenuButton(
             key: callActionsTransferMenuKey,
+            identifier: callActionsTransferMenuId,
             label: context.l10n.call_CallActionsTooltip_transfer,
             enabled: transferInitAvailable,
             offset: Offset(_dimension + 8, 0),
@@ -339,6 +357,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
           ),
         CallActionButton(
           key: callActionsHoldKey,
+          identifier: callActionsHoldId,
           label: widget.heldValue
               ? context.l10n.call_CallActionsTooltip_unhold
               : context.l10n.call_CallActionsTooltip_hold,
@@ -349,6 +368,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         ),
         CallActionButton(
           key: callActionsKeypadKey,
+          identifier: callActionsKeypadId,
           label: context.l10n.call_CallActionsTooltip_showKeypad,
           onPressed: canShowKeypad ? () => widget.onKeypadToggle?.call(true) : null,
           style: widget.style?.key,
@@ -371,6 +391,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         const SizedBox(),
         CallActionButton(
           key: callActionsHangupKey,
+          identifier: callActionsHangupId,
           label: context.l10n.call_CallActionsTooltip_hangup,
           onPressed: onHangupPressed,
           style: widget.style?.hangup,
@@ -378,6 +399,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         ),
         widget.keypadShown
             ? CallActionButton(
+                identifier: callActionsHideKeypadId,
                 label: context.l10n.call_CallActionsTooltip_hideKeypad,
                 onPressed: _hideKeypad,
                 style: widget.style?.key,

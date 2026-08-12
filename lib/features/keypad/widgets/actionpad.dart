@@ -168,6 +168,7 @@ class _OverflowMenuButtonState extends State<_OverflowMenuButton> {
   @override
   Widget build(BuildContext context) {
     return SemanticAction(
+      label: context.l10n.callTileActions_more,
       identifier: actionPadOverflowId,
       child: TextButton(
         onPressed: widget.enabled ? () => _menuKey.currentState?.showButtonMenu() : null,
@@ -175,6 +176,9 @@ class _OverflowMenuButtonState extends State<_OverflowMenuButton> {
         child: PopupMenuButton(
           key: _menuKey,
           enabled: widget.enabled,
+          // The default "Show menu" tooltip would be read on top of the label
+          // above (appended to it on iOS); the button is named there instead.
+          tooltip: '',
           itemBuilder: widget.itemBuilder,
           child: Icon(Icons.more_vert, size: widget.iconSize),
         ),
