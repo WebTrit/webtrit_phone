@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -114,6 +116,48 @@ void main() {
       expect(changes, isEmpty);
     });
 
+    testWidgets('the row stays readable: the switch keeps its state and the row explains itself', (tester) async {
+      final handle = tester.ensureSemantics();
+
+      await tester.pumpWidget(
+        buildTestable(signalingStatus: CallStatus.connectivityNone, registerStatus: const RegisterStatus(value: true)),
+      );
+
+      // The whole tile used to sit behind an IgnorePointer, which took the
+      // switch out of the accessibility tree: a screen reader was left with an
+      // unnamed strip that said neither the state nor why it cannot be changed.
+      final l10n = l10nOf(tester);
+      final row = tester.getSemantics(find.byType(ListTile)).getSemanticsData();
+      expect(
+        row.label,
+        '${l10n.settings_ListViewTileTitle_registered}\n'
+        '${l10n.settings_ListViewTileSubtitle_registeredNeedsConnection}',
+      );
+      expect(row.hasAction(ui.SemanticsAction.tap), isTrue, reason: 'the reason has to be reachable');
+
+      // One node for the whole row: the value rides on the same node as the
+      // wording, so nobody lands on a switch that says "on" without saying
+      // what is on.
+      expect(
+        tester.getSemantics(find.byType(RegisterStatusListTile)),
+        isSemantics(
+          hasToggledState: true,
+          isToggled: true,
+          hasTapAction: true,
+          hasFocusAction: true,
+          isFocusable: true,
+          hasEnabledState: true,
+          isEnabled: true,
+          isButton: true,
+          label: row.label,
+        ),
+        reason: 'the last known value stays readable on the same node as the wording',
+      );
+      expect(find.byType(Switch), findsOneWidget, reason: 'and it is still drawn as a switch');
+
+      handle.dispose();
+    });
+
     testWidgets('while connecting the subtitle says the app is waiting, not that it failed', (tester) async {
       await tester.pumpWidget(
         buildTestable(signalingStatus: CallStatus.inProgress, registerStatus: const RegisterStatus(value: true)),
@@ -122,6 +166,21 @@ void main() {
       final l10n = l10nOf(tester);
       expect(find.text(l10n.settings_ListViewTileSubtitle_registeredWaitingForConnection), findsOneWidget);
       expect(tester.widget<Switch>(find.byType(Switch)).onChanged, isNull);
+    });
+
+    testWidgets('without a white-label colour the row still looks unavailable', (tester) async {
+      await tester.pumpWidget(
+        buildTestable(signalingStatus: CallStatus.connectivityNone, registerStatus: const RegisterStatus(value: true)),
+      );
+
+      // A ListTile only dims itself when it is disabled, and disabling it would
+      // take away the tap that carries the explanation - so without this the
+      // row looked exactly like a working one apart from the grey switch.
+      final tile = tester.widget<ListTile>(find.byType(ListTile));
+      final disabled = Theme.of(tester.element(find.byType(ListTile))).disabledColor;
+
+      expect(tile.textColor, disabled);
+      expect(tile.iconColor, disabled);
     });
 
     testWidgets('explicit theme colors are dimmed once, since Material cannot reach them', (tester) async {

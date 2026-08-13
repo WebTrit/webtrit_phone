@@ -68,19 +68,29 @@ class DiagnosticNetworkTestItem extends StatelessWidget {
           onTap: onTap,
           title: Row(
             children: [
-              Text(title),
+              // Flexible so a long status at large text sizes ellipsizes
+              // instead of pushing the button off the row.
+              Flexible(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis)),
               const SizedBox(width: 4),
-              if (gathering)
-                const SizedBox.square(dimension: 12, child: CircularProgressIndicator(strokeWidth: 3))
-              else
-                GestureDetector(
-                  onTap: () => context.read<NetworkTesterCubit>().refresh(),
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.grey.withAlpha(1)),
-                    child: const Icon(Icons.refresh, size: 16),
-                  ),
-                ),
+              // One slot of the same size in both states: the check swaps a
+              // spinner for a button, and a slot that changes size makes the
+              // row - and the list under it - jump on every re-test.
+              SizedBox.square(
+                dimension: kMinInteractiveDimension,
+                child: gathering
+                    ? const Center(
+                        child: SizedBox.square(dimension: 12, child: CircularProgressIndicator(strokeWidth: 3)),
+                      )
+                    // A button rather than a bare gesture area: the icon is 16
+                    // pixels across, so the thing to press was a third of the
+                    // size a finger needs, and it offered no ripple to say it
+                    // was one.
+                    : IconButton(
+                        onPressed: () => context.read<NetworkTesterCubit>().refresh(),
+                        icon: const Icon(Icons.refresh, size: 16),
+                        padding: EdgeInsets.zero,
+                      ),
+              ),
             ],
           ),
           subtitle: Text(subtitleParts.join(' · ')),

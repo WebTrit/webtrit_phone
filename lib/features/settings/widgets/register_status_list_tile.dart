@@ -49,6 +49,7 @@ class RegisterStatusListTile extends StatelessWidget {
     final effectiveIconColor = available || iconColor == null
         ? iconColor
         : iconColor!.withValues(alpha: _disabledOpacity);
+    final disabledColor = Theme.of(context).disabledColor;
 
     // TODO(Serdun): Rename the label to the action it controls, e.g. "Accept
     // calls", as proposed in the design. The English "Online" reads as the
@@ -72,20 +73,37 @@ class RegisterStatusListTile extends StatelessWidget {
       );
     }
 
-    final tile = SwitchListTile(
-      title: title,
-      subtitle: subtitle(_subtitle(context, available: available)),
-      value: registerStatus.value,
-      onChanged: available ? onChanged : null,
-      secondary: icon,
-    );
+    if (available) {
+      return SwitchListTile(
+        title: title,
+        subtitle: subtitle(_subtitle(context, available: available)),
+        value: registerStatus.value,
+        onChanged: onChanged,
+        secondary: icon,
+      );
+    }
 
-    if (available) return tile;
-
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onUnavailableTap,
-      child: IgnorePointer(child: tile),
+    // Out of reach of the server: the row keeps the last known value but shows
+    // it as a disabled switch, and the row itself takes the tap that explains
+    // why. It used to be the whole tile behind an IgnorePointer, which took
+    // the switch out of the accessibility tree altogether - leaving an
+    // unnamed tappable strip that said nothing about the state or the reason.
+    // One node for the row: the wording, the value and the tap that explains
+    // why it cannot be changed belong together, or a screen reader lands on a
+    // switch that says "on" without saying what is on.
+    return MergeSemantics(
+      child: ListTile(
+        onTap: onUnavailableTap,
+        leading: icon,
+        // A ListTile only dims itself when it is disabled, and disabling it
+        // would take away the tap that carries the explanation - so the row
+        // wears the Material disabled treatment by hand.
+        iconColor: effectiveIconColor ?? disabledColor,
+        textColor: textStyle?.color == null ? disabledColor : null,
+        title: title,
+        subtitle: subtitle(_subtitle(context, available: available)),
+        trailing: Switch(value: registerStatus.value, onChanged: null),
+      ),
     );
   }
 
