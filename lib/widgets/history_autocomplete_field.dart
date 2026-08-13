@@ -103,7 +103,14 @@ class _HistoryAutocompleteFieldState extends State<HistoryAutocompleteField> {
       widget.controller?._attach(_saveToHistory);
     }
 
-    if (widget.initialValue != oldWidget.initialValue && widget.initialValue != _controller.text) {
+    // Only while nobody is typing. The screen feeds this field from state that
+    // it updates on every keystroke, so it is always a frame behind: without
+    // the focus check a fast typist (or a paste) gets the field rewound to an
+    // older value with the caret thrown to the end, and the characters typed
+    // meanwhile land in the wrong place.
+    if (!_focusNode.hasFocus &&
+        widget.initialValue != oldWidget.initialValue &&
+        widget.initialValue != _controller.text) {
       final newText = widget.initialValue ?? '';
       _controller.text = newText;
       _controller.selection = TextSelection.fromPosition(TextPosition(offset: newText.length));

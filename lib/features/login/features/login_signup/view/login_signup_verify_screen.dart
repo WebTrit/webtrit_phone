@@ -86,19 +86,17 @@ class LoginSignupVerifyScreen extends StatelessWidget {
                       start: state.signupSessionOtpProvisionalWithDateTime!.$2,
                       interval: countdownRepeatIntervalSeconds,
                       builder: (context, seconds) {
-                        if (seconds == 0) {
-                          return OutlinedButton(
-                            onPressed: state.processing ? null : () => _onRepeat(context),
-                            style: outlinedButtonStyles?.neutral,
-                            child: Text(context.l10n.login_Button_signupVerifyRepeat),
-                          );
-                        } else {
-                          return OutlinedButton(
-                            onPressed: null,
-                            style: outlinedButtonStyles?.neutral,
-                            child: Text(context.l10n.login_Button_signupVerifyRepeatInterval(seconds)),
-                          );
-                        }
+                        final waiting = seconds > 0;
+
+                        return OutlinedButton(
+                          onPressed: waiting || state.processing ? null : () => _onRepeat(context),
+                          style: outlinedButtonStyles?.neutral,
+                          child: Text(
+                            waiting
+                                ? context.l10n.login_Button_signupVerifyRepeatInterval(seconds)
+                                : context.l10n.login_Button_signupVerifyRepeat,
+                          ),
+                        );
                       },
                     ),
                     const SizedBox(height: kInset / 4),
