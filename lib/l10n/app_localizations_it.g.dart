@@ -3317,5 +3317,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get devTools_signalingService_simulateKill_cancel => 'Cancel';
 
   @override
+  String get common_SemanticsLabel_refresh => 'Aggiorna';
+
+  @override
+  String get common_SemanticsLabel_scrollToBottom => 'Scorri in fondo';
+
+  @override
+  String get common_SemanticsLabel_scrollToTop => 'Scorri in cima';
+
+  @override
   String get contacts_SemanticsLabel_clearSearch => 'Cancella la ricerca';
 }

@@ -6037,6 +6037,24 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get devTools_signalingService_simulateKill_cancel;
 
+  /// Accessibility name of a button that reloads the content of the screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get common_SemanticsLabel_refresh;
+
+  /// Accessibility name of the button that jumps to the end of a long list.
+  ///
+  /// In en, this message translates to:
+  /// **'Scroll to bottom'**
+  String get common_SemanticsLabel_scrollToBottom;
+
+  /// Accessibility name of the button that jumps to the beginning of a long list.
+  ///
+  /// In en, this message translates to:
+  /// **'Scroll to top'**
+  String get common_SemanticsLabel_scrollToTop;
+
   /// Accessibility name of the button that empties the contact search field.
   ///
   /// In en, this message translates to:

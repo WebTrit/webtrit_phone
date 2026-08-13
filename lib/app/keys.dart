@@ -138,6 +138,12 @@ const String voicemailMenuId = 'voicemailMenu';
 const String voicemailPlaybackId = 'voicemailPlayback';
 const String voicemailRetryId = 'voicemailRetry';
 
+const String scrollToBottomId = 'scrollToBottomButton';
+const scrollToBottomKey = Key(scrollToBottomId);
+const String scrollToTopId = 'scrollToTopButton';
+const scrollToTopKey = Key(scrollToTopId);
+const String webViewReloadId = 'webViewReload';
+
 // Rows of a list of choices: the visible titles are translated, so the option
 // itself has to be identified by what it stands for.
 const String settingsLanguageOptionIdPrefix = 'settingsLanguageOption';

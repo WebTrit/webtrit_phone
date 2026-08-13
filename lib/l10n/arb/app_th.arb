@@ -94,12 +94,20 @@
   "callTile_SemanticsLabel_call": "โทรหา {name}",
   "@callTile_SemanticsLabel_call": {
     "description": "Accessibility name of the call button in a call history or contact row.",
-    "placeholders": {"name": {"type": "String"}}
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "callTile_SemanticsLabel_videoCall": "วิดีโอคอลหา {name}",
   "@callTile_SemanticsLabel_videoCall": {
     "description": "Accessibility name of the video call button in a call history or contact row.",
-    "placeholders": {"name": {"type": "String"}}
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "call_CallActionsTooltip_accept": "รับสาย",
   "@call_CallActionsTooltip_accept": {},
@@ -2597,6 +2605,18 @@
   "@devTools_signalingService_simulateKill_confirm": {},
   "devTools_signalingService_simulateKill_cancel": "ยกเลิก",
   "@devTools_signalingService_simulateKill_cancel": {},
+  "common_SemanticsLabel_refresh": "รีเฟรช",
+  "@common_SemanticsLabel_refresh": {
+    "description": "Accessibility name of a button that reloads the content of the screen."
+  },
+  "common_SemanticsLabel_scrollToBottom": "เลื่อนไปด้านล่าง",
+  "@common_SemanticsLabel_scrollToBottom": {
+    "description": "Accessibility name of the button that jumps to the end of a long list."
+  },
+  "common_SemanticsLabel_scrollToTop": "เลื่อนขึ้นบนสุด",
+  "@common_SemanticsLabel_scrollToTop": {
+    "description": "Accessibility name of the button that jumps to the beginning of a long list."
+  },
   "contacts_SemanticsLabel_clearSearch": "ล้างการค้นหา",
   "@contacts_SemanticsLabel_clearSearch": {
     "description": "Accessibility name of the button that empties the contact search field."
