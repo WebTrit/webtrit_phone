@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:webtrit_phone/app/keys.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,7 +37,16 @@ class LanguageScreen extends StatelessWidget {
               separatorBuilder: (context, index) => const ListTileSeparator(),
               itemBuilder: (context, index) {
                 final locale = locales[index];
-                return RadioListTile<Locale?>(value: locale, title: Text(locale.l10n(context)));
+                // The visible title is translated, so the row is identified by
+                // the language it selects; the "system default" entry is a
+                // sentinel locale rather than a real language.
+                return SemanticAction(
+                  identifier: settingsOptionId(
+                    settingsLanguageOptionIdPrefix,
+                    locale.isDefaultNull ? 'system' : locale.languageCode,
+                  ),
+                  child: RadioListTile<Locale?>(value: locale, title: Text(locale.l10n(context))),
+                );
               },
             ),
           );

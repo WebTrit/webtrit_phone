@@ -138,6 +138,18 @@ const String voicemailMenuId = 'voicemailMenu';
 const String voicemailPlaybackId = 'voicemailPlayback';
 const String voicemailRetryId = 'voicemailRetry';
 
+// Rows of a list of choices: the visible titles are translated, so the option
+// itself has to be identified by what it stands for.
+const String settingsLanguageOptionIdPrefix = 'settingsLanguageOption';
+const String settingsThemeModeOptionIdPrefix = 'settingsThemeModeOption';
+const String settingsIncomingCallTypeOptionIdPrefix = 'settingsIncomingCallTypeOption';
+
+/// Stable automation id of an option row, built from what the option means
+/// rather than from its position or its translated title.
+String settingsOptionId(String prefix, String value) => '$prefix${_capitalize(value)}';
+
+String _capitalize(String value) => value.isEmpty ? value : value[0].toUpperCase() + value.substring(1);
+
 // Keypad keys: keypadKey1..keypadKey0 for the digits, plus the two symbols.
 const String keypadKeyIdPrefix = 'keypadKey';
 const String keypadKeyStarId = '${keypadKeyIdPrefix}Star';

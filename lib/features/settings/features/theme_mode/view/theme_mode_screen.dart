@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:webtrit_phone/app/keys.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,10 +34,13 @@ class ThemeModeScreen extends StatelessWidget {
               separatorBuilder: (context, index) => const ListTileSeparator(),
               itemBuilder: (context, index) {
                 final themeMode = themeModes[index];
-                return RadioListTile<ThemeMode>(
-                  value: themeMode,
-                  title: Text(themeMode.l10n(context)),
-                  enabled: themeSettings.isThemeModeSupported,
+                return SemanticAction(
+                  identifier: settingsOptionId(settingsThemeModeOptionIdPrefix, themeMode.name),
+                  child: RadioListTile<ThemeMode>(
+                    value: themeMode,
+                    title: Text(themeMode.l10n(context)),
+                    enabled: themeSettings.isThemeModeSupported,
+                  ),
                 );
               },
             ),
