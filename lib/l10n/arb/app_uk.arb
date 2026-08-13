@@ -2020,6 +2020,8 @@
   "@settings_ListViewTileTitle_registered": {},
   "settings_ListViewTileTitle_self_config": "Сторінка спец-налаштувань",
   "@settings_ListViewTileTitle_self_config": {},
+  "settings_ListViewTileTitle_sessions": "Сесії",
+  "@settings_ListViewTileTitle_sessions": {},
   "settings_ListViewTileTitle_settings": "НАЛАШТУВАННЯ",
   "@settings_ListViewTileTitle_settings": {},
   "settings_ListViewTileTitle_termsConditions": "Умови та положення",

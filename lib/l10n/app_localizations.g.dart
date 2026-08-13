@@ -3751,6 +3751,138 @@ abstract class AppLocalizations {
   /// **'Signing out...'**
   String get session_Teardown_progressText;
 
+  /// Title of the screen listing the devices the account is currently signed in on.
+  ///
+  /// In en, this message translates to:
+  /// **'Active sessions'**
+  String get sessions_AppBar_title;
+
+  /// No description provided for @sessions_AppType_android.
+  ///
+  /// In en, this message translates to:
+  /// **'Android app'**
+  String get sessions_AppType_android;
+
+  /// No description provided for @sessions_AppType_ios.
+  ///
+  /// In en, this message translates to:
+  /// **'iOS app'**
+  String get sessions_AppType_ios;
+
+  /// No description provided for @sessions_AppType_linux.
+  ///
+  /// In en, this message translates to:
+  /// **'Linux app'**
+  String get sessions_AppType_linux;
+
+  /// No description provided for @sessions_AppType_macos.
+  ///
+  /// In en, this message translates to:
+  /// **'macOS app'**
+  String get sessions_AppType_macos;
+
+  /// No description provided for @sessions_AppType_smart.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart device'**
+  String get sessions_AppType_smart;
+
+  /// Session row title used when the backend did not report which kind of app the session belongs to.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown device'**
+  String get sessions_AppType_unknown;
+
+  /// No description provided for @sessions_AppType_web.
+  ///
+  /// In en, this message translates to:
+  /// **'Web app'**
+  String get sessions_AppType_web;
+
+  /// No description provided for @sessions_AppType_windows.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows app'**
+  String get sessions_AppType_windows;
+
+  /// No description provided for @sessions_Button_retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get sessions_Button_retry;
+
+  /// Action that revokes every session except the one on this device.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out other sessions'**
+  String get sessions_Button_revokeAllOthers;
+
+  /// No description provided for @sessions_Placeholder_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No active sessions'**
+  String get sessions_Placeholder_empty;
+
+  /// No description provided for @sessions_Placeholder_failure.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the active sessions'**
+  String get sessions_Placeholder_failure;
+
+  /// No description provided for @sessions_RevokeAllConfirmDialog_content.
+  ///
+  /// In en, this message translates to:
+  /// **'The other devices signed in with this account will be signed out.'**
+  String get sessions_RevokeAllConfirmDialog_content;
+
+  /// No description provided for @sessions_RevokeAllConfirmDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out other sessions?'**
+  String get sessions_RevokeAllConfirmDialog_title;
+
+  /// No description provided for @sessions_RevokeConfirmDialog_content.
+  ///
+  /// In en, this message translates to:
+  /// **'This device will be signed out of the account.'**
+  String get sessions_RevokeConfirmDialog_content;
+
+  /// No description provided for @sessions_RevokeConfirmDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out this session?'**
+  String get sessions_RevokeConfirmDialog_title;
+
+  /// No description provided for @sessions_SnackBar_revokeFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not sign out the session'**
+  String get sessions_SnackBar_revokeFailed;
+
+  /// Session row detail with the formatted date and time the session was created.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in {time}'**
+  String sessions_Tile_created(String time);
+
+  /// Badge marking the session the app itself is signed in with, which cannot be revoked here.
+  ///
+  /// In en, this message translates to:
+  /// **'This device'**
+  String get sessions_Tile_currentSession;
+
+  /// Session row detail with the formatted date and time of the last recorded activity.
+  ///
+  /// In en, this message translates to:
+  /// **'Last used {time}'**
+  String sessions_Tile_lastActivity(String time);
+
+  /// No description provided for @sessions_Tile_revokeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get sessions_Tile_revokeTooltip;
+
   /// No description provided for @settings_AboutText_ApplicationEmbeddedLinks.
   ///
   /// In en, this message translates to:
@@ -4608,6 +4740,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Self-config page'**
   String get settings_ListViewTileTitle_self_config;
+
+  /// No description provided for @settings_ListViewTileTitle_sessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Sessions'**
+  String get settings_ListViewTileTitle_sessions;
 
   /// No description provided for @settings_ListViewTileTitle_settings.
   ///

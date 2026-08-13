@@ -24,6 +24,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'localeName' => localeName,
       'account_selfCarePasswordExpired_message' =>
         account_selfCarePasswordExpired_message,
+      'actionpad_SemanticsLabel_backspace' =>
+        actionpad_SemanticsLabel_backspace,
       'alertDialogActions_no' => alertDialogActions_no,
       'alertDialogActions_ok' => alertDialogActions_ok,
       'alertDialogActions_yes' => alertDialogActions_yes,
@@ -151,6 +153,7 @@ extension AppLocalizationsExtension on AppLocalizations {
       'call_videoView_actionLabel_fit' => call_videoView_actionLabel_fit,
       'cdrs_noMissedCalls_message' => cdrs_noMissedCalls_message,
       'cdrs_noRecentCalls_message' => cdrs_noRecentCalls_message,
+      'common_SemanticsLabel_loading' => common_SemanticsLabel_loading,
       'common_noInternetConnection_message' =>
         common_noInternetConnection_message,
       'common_noInternetConnection_retryButton' =>
@@ -458,6 +461,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         login_RequestFailureUserNotFoundError,
       'login_RequestFailureUnconfiguredBundleIdError' =>
         login_RequestFailureUnconfiguredBundleIdError,
+      'login_SemanticsLabel_hidePassword' => login_SemanticsLabel_hidePassword,
+      'login_SemanticsLabel_showPassword' => login_SemanticsLabel_showPassword,
       'login_SupportedLoginTypeMissedExceptionError' =>
         login_SupportedLoginTypeMissedExceptionError,
       'login_Text_coreUrlAssignPreDescription' =>
@@ -917,6 +922,30 @@ extension AppLocalizationsExtension on AppLocalizations {
       'sessionStatus_subtitle_serviceUnavailable' =>
         sessionStatus_subtitle_serviceUnavailable,
       'session_Teardown_progressText' => session_Teardown_progressText,
+      'sessions_AppBar_title' => sessions_AppBar_title,
+      'sessions_AppType_android' => sessions_AppType_android,
+      'sessions_AppType_ios' => sessions_AppType_ios,
+      'sessions_AppType_linux' => sessions_AppType_linux,
+      'sessions_AppType_macos' => sessions_AppType_macos,
+      'sessions_AppType_smart' => sessions_AppType_smart,
+      'sessions_AppType_unknown' => sessions_AppType_unknown,
+      'sessions_AppType_web' => sessions_AppType_web,
+      'sessions_AppType_windows' => sessions_AppType_windows,
+      'sessions_Button_retry' => sessions_Button_retry,
+      'sessions_Button_revokeAllOthers' => sessions_Button_revokeAllOthers,
+      'sessions_Placeholder_empty' => sessions_Placeholder_empty,
+      'sessions_Placeholder_failure' => sessions_Placeholder_failure,
+      'sessions_RevokeAllConfirmDialog_content' =>
+        sessions_RevokeAllConfirmDialog_content,
+      'sessions_RevokeAllConfirmDialog_title' =>
+        sessions_RevokeAllConfirmDialog_title,
+      'sessions_RevokeConfirmDialog_content' =>
+        sessions_RevokeConfirmDialog_content,
+      'sessions_RevokeConfirmDialog_title' =>
+        sessions_RevokeConfirmDialog_title,
+      'sessions_SnackBar_revokeFailed' => sessions_SnackBar_revokeFailed,
+      'sessions_Tile_currentSession' => sessions_Tile_currentSession,
+      'sessions_Tile_revokeTooltip' => sessions_Tile_revokeTooltip,
       'settings_AboutText_ApplicationEmbeddedLinks' =>
         settings_AboutText_ApplicationEmbeddedLinks,
       'settings_AboutText_ThirdPartyLicenses' =>
@@ -1187,6 +1216,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         settings_ListViewTileTitle_registered,
       'settings_ListViewTileTitle_self_config' =>
         settings_ListViewTileTitle_self_config,
+      'settings_ListViewTileTitle_sessions' =>
+        settings_ListViewTileTitle_sessions,
       'settings_ListViewTileTitle_settings' =>
         settings_ListViewTileTitle_settings,
       'settings_ListViewTileTitle_termsConditions' =>
@@ -1382,6 +1413,11 @@ extension AppLocalizationsExtension on AppLocalizations {
       'voicemail_Label_markAsNew' => voicemail_Label_markAsNew,
       'voicemail_Label_playbackError' => voicemail_Label_playbackError,
       'voicemail_Label_retry' => voicemail_Label_retry,
+      'voicemail_SemanticsLabel_loading' => voicemail_SemanticsLabel_loading,
+      'voicemail_SemanticsLabel_moreActions' =>
+        voicemail_SemanticsLabel_moreActions,
+      'voicemail_SemanticsLabel_pause' => voicemail_SemanticsLabel_pause,
+      'voicemail_SemanticsLabel_play' => voicemail_SemanticsLabel_play,
       'voicemail_Snackbar_notConfigured' => voicemail_Snackbar_notConfigured,
       'voicemail_Title_notSupported' => voicemail_Title_notSupported,
       'voicemail_Widget_screenTitle' => voicemail_Widget_screenTitle,
@@ -1613,6 +1649,18 @@ extension AppLocalizationsExtension on AppLocalizations {
           'cacheManagement_Label_itemsCount requires 1 arguments',
         ),
       },
+      'callTile_SemanticsLabel_call' => switch (args) {
+        [final String name] => callTile_SemanticsLabel_call(name),
+        _ => throw ArgumentError(
+          'callTile_SemanticsLabel_call requires 1 arguments',
+        ),
+      },
+      'callTile_SemanticsLabel_videoCall' => switch (args) {
+        [final String name] => callTile_SemanticsLabel_videoCall(name),
+        _ => throw ArgumentError(
+          'callTile_SemanticsLabel_videoCall requires 1 arguments',
+        ),
+      },
       'call_CallList_header' => switch (args) {
         [final int count] => call_CallList_header(count),
         _ => throw ArgumentError('call_CallList_header requires 1 arguments'),
@@ -1835,6 +1883,16 @@ extension AppLocalizationsExtension on AppLocalizations {
         [final DateTime time] => recentTimeBeforeMidnight(time),
         _ => throw ArgumentError(
           'recentTimeBeforeMidnight requires 1 arguments',
+        ),
+      },
+      'sessions_Tile_created' => switch (args) {
+        [final String time] => sessions_Tile_created(time),
+        _ => throw ArgumentError('sessions_Tile_created requires 1 arguments'),
+      },
+      'sessions_Tile_lastActivity' => switch (args) {
+        [final String time] => sessions_Tile_lastActivity(time),
+        _ => throw ArgumentError(
+          'sessions_Tile_lastActivity requires 1 arguments',
         ),
       },
       'socketError_defaultDescription' => switch (args) {

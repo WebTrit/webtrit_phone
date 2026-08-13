@@ -1759,6 +1759,72 @@
   "@session_Teardown_progressText": {
     "description": "Status message displayed while the application is performing cleanup during the logout process."
   },
+  "sessions_AppBar_title": "Active sessions",
+  "@sessions_AppBar_title": {
+    "description": "Title of the screen listing the devices the account is currently signed in on."
+  },
+  "sessions_AppType_android": "Android app",
+  "@sessions_AppType_android": {},
+  "sessions_AppType_ios": "iOS app",
+  "@sessions_AppType_ios": {},
+  "sessions_AppType_linux": "Linux app",
+  "@sessions_AppType_linux": {},
+  "sessions_AppType_macos": "macOS app",
+  "@sessions_AppType_macos": {},
+  "sessions_AppType_smart": "Smart device",
+  "@sessions_AppType_smart": {},
+  "sessions_AppType_unknown": "Unknown device",
+  "@sessions_AppType_unknown": {
+    "description": "Session row title used when the backend did not report which kind of app the session belongs to."
+  },
+  "sessions_AppType_web": "Web app",
+  "@sessions_AppType_web": {},
+  "sessions_AppType_windows": "Windows app",
+  "@sessions_AppType_windows": {},
+  "sessions_Button_retry": "Try again",
+  "@sessions_Button_retry": {},
+  "sessions_Button_revokeAllOthers": "Sign out other sessions",
+  "@sessions_Button_revokeAllOthers": {
+    "description": "Action that revokes every session except the one on this device."
+  },
+  "sessions_Placeholder_empty": "No active sessions",
+  "@sessions_Placeholder_empty": {},
+  "sessions_Placeholder_failure": "Could not load the active sessions",
+  "@sessions_Placeholder_failure": {},
+  "sessions_RevokeAllConfirmDialog_content": "The other devices signed in with this account will be signed out.",
+  "@sessions_RevokeAllConfirmDialog_content": {},
+  "sessions_RevokeAllConfirmDialog_title": "Sign out other sessions?",
+  "@sessions_RevokeAllConfirmDialog_title": {},
+  "sessions_RevokeConfirmDialog_content": "This device will be signed out of the account.",
+  "@sessions_RevokeConfirmDialog_content": {},
+  "sessions_RevokeConfirmDialog_title": "Sign out this session?",
+  "@sessions_RevokeConfirmDialog_title": {},
+  "sessions_SnackBar_revokeFailed": "Could not sign out the session",
+  "@sessions_SnackBar_revokeFailed": {},
+  "sessions_Tile_created": "Signed in {time}",
+  "@sessions_Tile_created": {
+    "description": "Session row detail with the formatted date and time the session was created.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "sessions_Tile_currentSession": "This device",
+  "@sessions_Tile_currentSession": {
+    "description": "Badge marking the session the app itself is signed in with, which cannot be revoked here."
+  },
+  "sessions_Tile_lastActivity": "Last used {time}",
+  "@sessions_Tile_lastActivity": {
+    "description": "Session row detail with the formatted date and time of the last recorded activity.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "sessions_Tile_revokeTooltip": "Sign out",
+  "@sessions_Tile_revokeTooltip": {},
   "settings_AboutText_ApplicationEmbeddedLinks": "Application embedded links",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AboutText_ThirdPartyLicenses": "Third-party licenses",
@@ -2055,6 +2121,8 @@
   "@settings_ListViewTileTitle_registered": {},
   "settings_ListViewTileTitle_self_config": "Self-config page",
   "@settings_ListViewTileTitle_self_config": {},
+  "settings_ListViewTileTitle_sessions": "Sessions",
+  "@settings_ListViewTileTitle_sessions": {},
   "settings_ListViewTileTitle_settings": "SETTINGS",
   "@settings_ListViewTileTitle_settings": {},
   "settings_ListViewTileTitle_termsConditions": "Terms and conditions",

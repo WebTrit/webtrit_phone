@@ -2067,6 +2067,77 @@ class AppLocalizationsIt extends AppLocalizations {
   String get session_Teardown_progressText => 'Disconnessione in corso...';
 
   @override
+  String get sessions_AppBar_title => 'Active sessions';
+
+  @override
+  String get sessions_AppType_android => 'Android app';
+
+  @override
+  String get sessions_AppType_ios => 'iOS app';
+
+  @override
+  String get sessions_AppType_linux => 'Linux app';
+
+  @override
+  String get sessions_AppType_macos => 'macOS app';
+
+  @override
+  String get sessions_AppType_smart => 'Smart device';
+
+  @override
+  String get sessions_AppType_unknown => 'Unknown device';
+
+  @override
+  String get sessions_AppType_web => 'Web app';
+
+  @override
+  String get sessions_AppType_windows => 'Windows app';
+
+  @override
+  String get sessions_Button_retry => 'Try again';
+
+  @override
+  String get sessions_Button_revokeAllOthers => 'Sign out other sessions';
+
+  @override
+  String get sessions_Placeholder_empty => 'No active sessions';
+
+  @override
+  String get sessions_Placeholder_failure => 'Could not load the active sessions';
+
+  @override
+  String get sessions_RevokeAllConfirmDialog_content =>
+      'The other devices signed in with this account will be signed out.';
+
+  @override
+  String get sessions_RevokeAllConfirmDialog_title => 'Sign out other sessions?';
+
+  @override
+  String get sessions_RevokeConfirmDialog_content => 'This device will be signed out of the account.';
+
+  @override
+  String get sessions_RevokeConfirmDialog_title => 'Sign out this session?';
+
+  @override
+  String get sessions_SnackBar_revokeFailed => 'Could not sign out the session';
+
+  @override
+  String sessions_Tile_created(String time) {
+    return 'Signed in $time';
+  }
+
+  @override
+  String get sessions_Tile_currentSession => 'This device';
+
+  @override
+  String sessions_Tile_lastActivity(String time) {
+    return 'Last used $time';
+  }
+
+  @override
+  String get sessions_Tile_revokeTooltip => 'Sign out';
+
+  @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Collegamenti incorporati dell\'applicazione';
 
   @override
@@ -2519,6 +2590,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_self_config => 'Self-config pagina';
+
+  @override
+  String get settings_ListViewTileTitle_sessions => 'Sessioni';
 
   @override
   String get settings_ListViewTileTitle_settings => 'IMPOSTAZIONI';
