@@ -89,7 +89,7 @@ class _MessageBodyState extends State<MessageBody> {
         ),
         ParsedText(
           parse: TextMatchers.matchers(style, quoteDecoration),
-          regexOptions: const RegexOptions(multiLine: true, dotAll: true),
+          regexOptions: const RegexOptions(multiLine: true, dotAll: true, caseSensitive: false),
           style: style.copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily, overflow: .ellipsis),
           softWrap: true,
           text: widget.text,

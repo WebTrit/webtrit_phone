@@ -128,3 +128,10 @@ const kContactSmsLabel = 'sms';
 
 /// Represents any additional phone number or contact method.
 const kContactAdditionalLabel = 'additional';
+
+/// For reference: Telegram 4 096, Discord 2 000, Signal ~2 000, WhatsApp 65 536.
+const kAppMessagingMaxLength = 4096;
+
+/// 160 * 10 de-facto segment/segments cap, but better to make it configurable from system-info
+/// TODO: Make this variable configurable based on sms provider capabilities
+const kSmsMessagingMaxLength = 1600;

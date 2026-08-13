@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 class MessageTextField extends StatefulWidget {
-  const MessageTextField({required this.controller, required this.onSend, this.onChanged, super.key});
+  const MessageTextField({required this.controller, required this.onSend, this.onChanged, this.maxLength, super.key});
 
   final TextEditingController controller;
   final Function() onSend;
   final void Function(String)? onChanged;
+  final int? maxLength;
 
   @override
   State<MessageTextField> createState() => _MessageTextFieldState();
@@ -31,6 +32,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
                 keyboardType: TextInputType.multiline,
                 maxLines: 4,
                 minLines: 1,
+                maxLength: widget.maxLength,
                 textInputAction: .newline,
                 controller: widget.controller,
                 onFieldSubmitted: (_) {
@@ -45,6 +47,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   isDense: true,
                   isCollapsed: true,
+                  counterText: '',
                   border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(16)),
                 ),
               ),
