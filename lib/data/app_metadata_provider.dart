@@ -80,10 +80,19 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
     };
   }
 
-  @override
-  String get userAgent {
-    return '${_packageInfo.appName}/${_appInfo.version} (${_deviceInfo.model}; ${_deviceInfo.systemName}: ${_deviceInfo.systemVersion})';
+  /// Builds the [userAgent] value without an instance, for the places that need
+  /// it before the provider exists - the API client factory is created in
+  /// `bootstrap` earlier than the provider.
+  ///
+  /// Kept as the single source of the format, so the `User-Agent` header the
+  /// backend stores on a session matches the device name shown in presence.
+  static String buildUserAgent(PackageInfo packageInfo, AppInfo appInfo, DeviceInfo deviceInfo) {
+    return '${packageInfo.appName}/${appInfo.version} '
+        '(${deviceInfo.model}; ${deviceInfo.systemName}: ${deviceInfo.systemVersion})';
   }
+
+  @override
+  String get userAgent => buildUserAgent(_packageInfo, _appInfo, _deviceInfo);
 
   @override
   String get appInfo {

@@ -175,6 +175,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
               appBloc.state.session.tenantId,
               connectionTimeout: kApiClientConnectionTimeout,
               certs: appCertificates.trustedCertificates,
+              userAgent: context.read<AppMetadataProvider>().userAgent,
             );
           },
         ),
@@ -253,6 +254,13 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           create: (context) => ExternalContactsRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
             token: context.read<AppBloc>().state.session.token!,
+          ),
+        ),
+        RepositoryProvider<SessionsRepository>(
+          create: (context) => SessionsRepositoryApiImpl(
+            context.read<WebtritApiClient>(),
+            context.read<AppBloc>().state.session.token!,
+            _sessionGuard,
           ),
         ),
         RepositoryProvider<UserRepository>(
