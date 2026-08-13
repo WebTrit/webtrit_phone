@@ -1011,6 +1011,12 @@ class AppLocalizationsIt extends AppLocalizations {
       'Errore di configurazione del backend dell\'app - avvisare il proprio fornitore di servizi';
 
   @override
+  String get login_SemanticsLabel_hidePassword => 'Nascondi la password';
+
+  @override
+  String get login_SemanticsLabel_showPassword => 'Mostra la password';
+
+  @override
   String get login_SupportedLoginTypeMissedExceptionError =>
       'L\'attuale Backend Cloud di WebTrit non supporta nessun tipo di accesso compatibile con questa app';
 

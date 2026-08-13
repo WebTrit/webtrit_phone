@@ -80,58 +80,67 @@ class _LoginOtpSigninRequestScreenState extends State<LoginOtpSigninRequestScree
           fallback: identifiers.userRefLabel(context),
         );
 
-        return Container(
-          padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
-          color: themeData.scaffoldBackgroundColor,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (otpSigninRequestPreDescriptionText.isNotEmpty) ...[
-                Description(text: otpSigninRequestPreDescriptionText),
-                const SizedBox(height: kInset / 2),
-              ],
-              ExtendedTextFormField(
-                key: otpInputKey,
-                includePrefixInData: refStyle?.inputValue?.includePrefixInData ?? false,
-                enabled: !state.processing,
-                initialValue: state.otpSigninUserRefInput.value,
-                decoration: refDecoration.copyWith(
-                  labelText: decorationLabelText,
-                  helperText: '',
-                  // reserve space for validator message
-                  errorText: state.otpSigninUserRefInput.displayError?.l10n(context),
-                  errorMaxLines: 3,
-                  hintText: refDecoration.hintText ?? maskConfig?.pattern,
+        return SemanticId(
+          identifier: loginOtpRequestScreenId,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
+            color: themeData.scaffoldBackgroundColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (otpSigninRequestPreDescriptionText.isNotEmpty) ...[
+                  Description(text: otpSigninRequestPreDescriptionText),
+                  const SizedBox(height: kInset / 2),
+                ],
+                SemanticId(
+                  identifier: otpInputId,
+                  child: ExtendedTextFormField(
+                    key: otpInputKey,
+                    includePrefixInData: refStyle?.inputValue?.includePrefixInData ?? false,
+                    enabled: !state.processing,
+                    initialValue: state.otpSigninUserRefInput.value,
+                    decoration: refDecoration.copyWith(
+                      labelText: decorationLabelText,
+                      helperText: '',
+                      // reserve space for validator message
+                      errorText: state.otpSigninUserRefInput.displayError?.l10n(context),
+                      errorMaxLines: 3,
+                      hintText: refDecoration.hintText ?? maskConfig?.pattern,
+                    ),
+                    inputFormatters: maskConfig != null ? [_maskFormatter] : [],
+                    style: refStyle?.textStyle,
+                    textAlign: refStyle?.textAlign ?? TextAlign.start,
+                    keyboardType: refStyle?.keyboardType ?? identifiers.userRefKeyboardType,
+                    autofillHints: identifiers.userRefAutofillHints,
+                    onChanged: context.read<LoginCubit>().otpSigninUserRefInputChanged,
+                    onFieldSubmitted: !state.otpSigninUserRefInput.isValid ? null : (_) => _onSubmitted(context),
+                  ),
                 ),
-                inputFormatters: maskConfig != null ? [_maskFormatter] : [],
-                style: refStyle?.textStyle,
-                textAlign: refStyle?.textAlign ?? TextAlign.start,
-                keyboardType: refStyle?.keyboardType ?? identifiers.userRefKeyboardType,
-                autofillHints: identifiers.userRefAutofillHints,
-                onChanged: context.read<LoginCubit>().otpSigninUserRefInputChanged,
-                onFieldSubmitted: !state.otpSigninUserRefInput.isValid ? null : (_) => _onSubmitted(context),
-              ),
-              if (otpSigninRequestPostDescriptionText.isNotEmpty) ...[
-                const SizedBox(height: kInset / 2),
-                Description(text: otpSigninRequestPostDescriptionText),
+                if (otpSigninRequestPostDescriptionText.isNotEmpty) ...[
+                  const SizedBox(height: kInset / 2),
+                  Description(text: otpSigninRequestPostDescriptionText),
+                ],
+                const Spacer(),
+                const SizedBox(height: kInset),
+                SemanticAction(
+                  identifier: otpButtonId,
+                  child: ElevatedButton(
+                    key: otpButtonKey,
+                    onPressed: state.processing || !state.otpSigninUserRefInput.isValid
+                        ? null
+                        : () => _onSubmitted(context),
+                    style: elevatedButtonStyles?.primary,
+                    child: !state.processing
+                        ? Text(context.l10n.login_Button_otpSigninRequestProceed)
+                        : SizedCircularProgressIndicator(
+                            size: 16,
+                            strokeWidth: 2,
+                            color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                          ),
+                  ),
+                ),
               ],
-              const Spacer(),
-              const SizedBox(height: kInset),
-              ElevatedButton(
-                key: otpButtonKey,
-                onPressed: state.processing || !state.otpSigninUserRefInput.isValid
-                    ? null
-                    : () => _onSubmitted(context),
-                style: elevatedButtonStyles?.primary,
-                child: !state.processing
-                    ? Text(context.l10n.login_Button_otpSigninRequestProceed)
-                    : SizedCircularProgressIndicator(
-                        size: 16,
-                        strokeWidth: 2,
-                        color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                      ),
-              ),
-            ],
+            ),
           ),
         );
       },

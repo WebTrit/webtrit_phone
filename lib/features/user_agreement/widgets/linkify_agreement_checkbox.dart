@@ -26,11 +26,20 @@ class LinkifyAgreementCheckbox extends StatelessWidget {
       children: [
         Transform.translate(
           offset: const Offset(-8, 0),
-          child: Checkbox(
-            key: userAgreementCheckboxKey,
-            value: userAgreementAccepted,
-            onChanged: (value) => onChanged(value ?? false),
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          // Unlike the plain [AgreementCheckbox], this row cannot be merged
+          // into a single control: the sentence hosts a link, and merging
+          // would swallow the link's own activation. So the sentence keeps its
+          // node and the box repeats it as its name - otherwise the box would
+          // announce as a bare "checkbox" with nothing to agree to.
+          child: SemanticAction(
+            label: context.l10n.user_agreement_checkbox_text(context.l10n.user_agreement_agrement_link),
+            identifier: userAgreementCheckboxId,
+            child: Checkbox(
+              key: userAgreementCheckboxKey,
+              value: userAgreementAccepted,
+              onChanged: (value) => onChanged(value ?? false),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
           ),
         ),
         Expanded(

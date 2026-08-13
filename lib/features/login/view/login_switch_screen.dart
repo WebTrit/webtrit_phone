@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class LoginSwitchScreen extends StatelessWidget {
   const LoginSwitchScreen({
@@ -43,11 +44,17 @@ class LoginSwitchScreen extends StatelessWidget {
                   .map(
                     (loginType) => ButtonSegment(
                       value: loginType,
-                      label: Text(
-                        key: loginType.toLoginSegmentKey(),
-                        loginType.l10n(context),
-                        softWrap: false,
-                        overflow: TextOverflow.fade,
+                      // The segment merges its label with its own node, so the
+                      // id lands next to the selected state and the tap action
+                      // instead of forming a node of its own.
+                      label: SemanticId(
+                        identifier: loginType.toLoginSegmentId(),
+                        child: Text(
+                          key: loginType.toLoginSegmentKey(),
+                          loginType.l10n(context),
+                          softWrap: false,
+                          overflow: TextOverflow.fade,
+                        ),
                       ),
                     ),
                   )

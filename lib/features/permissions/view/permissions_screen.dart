@@ -95,18 +95,24 @@ class _PermissionsScreenState extends State<PermissionsScreen> with WidgetsBindi
                   const Spacer(),
                   const SizedBox(height: kInset),
                   if (!state.isPermanentlyDenied)
-                    OutlinedButton(
-                      key: permissionsInitButtonKey,
-                      onPressed: _onRequestPermissions(context, isRequesting, isFlowCompleted),
-                      style: elevatedButtonStyles?.primary,
-                      child: button,
+                    SemanticAction(
+                      identifier: permissionsInitButtonId,
+                      child: OutlinedButton(
+                        key: permissionsInitButtonKey,
+                        onPressed: _onRequestPermissions(context, isRequesting, isFlowCompleted),
+                        style: elevatedButtonStyles?.primary,
+                        child: button,
+                      ),
                     ),
 
                   if (state.isPermanentlyDenied)
-                    OutlinedButton(
-                      onPressed: context.read<PermissionsCubit>().openAppSettings,
-                      style: elevatedButtonStyles?.neutral,
-                      child: Text(context.l10n.permission_manufacturer_Button_toSettings),
+                    SemanticAction(
+                      identifier: permissionsSettingsButtonId,
+                      child: OutlinedButton(
+                        onPressed: context.read<PermissionsCubit>().openAppSettings,
+                        style: elevatedButtonStyles?.neutral,
+                        child: Text(context.l10n.permission_manufacturer_Button_toSettings),
+                      ),
                     ),
                 ],
               ),

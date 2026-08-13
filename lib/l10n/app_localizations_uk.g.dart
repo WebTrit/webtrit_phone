@@ -1023,6 +1023,12 @@ class AppLocalizationsUk extends AppLocalizations {
       'Помилка конфігурації сервера застосунку - сповістіть свого постачальника послуг';
 
   @override
+  String get login_SemanticsLabel_hidePassword => 'Сховати пароль';
+
+  @override
+  String get login_SemanticsLabel_showPassword => 'Показати пароль';
+
+  @override
   String get login_SupportedLoginTypeMissedExceptionError =>
       'Поточний WebTrit Cloud Backend не підтримує жодного типу входу, сумісного з цим застосунком';
 
