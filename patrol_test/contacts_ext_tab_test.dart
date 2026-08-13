@@ -51,17 +51,17 @@ void main() {
     );
 
     // Check if search with a query matching multiple contacts returns more than one result.
-    await $(contactsSerchInputKey).enterText(multiSearchQuery);
+    await $(contactsSearchInputKey).enterText(multiSearchQuery);
     await pumpFor(const Duration(seconds: 1), $);
     expect(
       $(contactsExtContactTileKey),
       findsAtLeastNWidgets(2),
       reason: '$multiSearchQuery should match multiple contacts with same name part',
     );
-    await $(contactsSerchInputClearKey).tap();
+    await $(contactsSearchInputClearKey).tap();
 
     // Check if search of contactAUniqueName returns exactly one result, then verify number in detail.
-    await $(contactsSerchInputKey).enterText(contactAUniqueName);
+    await $(contactsSearchInputKey).enterText(contactAUniqueName);
     await pumpFor(const Duration(seconds: 1), $);
     expect(
       $(contactsExtContactTileKey).containing(RegExp(contactAUniqueName)),
@@ -81,10 +81,10 @@ void main() {
       reason: '$contactAUniqueNumber should be visible in $contactAUniqueName detail',
     );
     await $(BackButtonIcon).tap();
-    await $(contactsSerchInputClearKey).tap();
+    await $(contactsSearchInputClearKey).tap();
 
     // Check if search of contactAUniqueNumber returns exactly one result, then verify name in result.
-    await $(contactsSerchInputKey).enterText(contactAUniqueNumber);
+    await $(contactsSearchInputKey).enterText(contactAUniqueNumber);
     await pumpFor(const Duration(seconds: 1), $);
     expect(
       $(contactsExtContactTileKey).containing(RegExp(contactAUniqueName)),
@@ -96,10 +96,10 @@ void main() {
       findsNothing,
       reason: '$contactBUniqueName shouldnt present if number match',
     );
-    await $(contactsSerchInputClearKey).tap();
+    await $(contactsSearchInputClearKey).tap();
 
     // Check if search of contactBUniqueName returns exactly one result, then verify number in detail.
-    await $(contactsSerchInputKey).enterText(contactBUniqueName);
+    await $(contactsSearchInputKey).enterText(contactBUniqueName);
     await pumpFor(const Duration(seconds: 1), $);
     expect(
       $(contactsExtContactTileKey).containing(RegExp(contactBUniqueName)),
@@ -119,10 +119,10 @@ void main() {
       reason: '$contactBUniqueNumber should be visible in $contactBUniqueName detail',
     );
     await $(BackButtonIcon).tap();
-    await $(contactsSerchInputClearKey).tap();
+    await $(contactsSearchInputClearKey).tap();
 
     // Check if search of contactBUniqueNumber returns exactly one result, then verify name in result.
-    await $(contactsSerchInputKey).enterText(contactBUniqueNumber);
+    await $(contactsSearchInputKey).enterText(contactBUniqueNumber);
     await pumpFor(const Duration(seconds: 1), $);
     expect(
       $(contactsExtContactTileKey).containing(RegExp(contactBUniqueName)),
@@ -134,7 +134,7 @@ void main() {
       findsNothing,
       reason: '$contactAUniqueName shouldnt present if number match',
     );
-    await $(contactsSerchInputClearKey).tap();
+    await $(contactsSearchInputClearKey).tap();
 
     // Teardowning
     await logout($);
