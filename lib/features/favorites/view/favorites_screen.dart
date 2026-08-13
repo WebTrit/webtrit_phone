@@ -17,6 +17,12 @@ import '../favorites.dart';
 import 'favorites_screen_style.dart';
 import 'favorites_screen_styles.dart';
 
+/// Rearranging is offered from two favorites up. The screen used to ask for
+/// three, which locked out the one case where rearranging IS the whole task -
+/// swapping a pair. Named because two places depend on it: the button, and
+/// leaving the mode when the list drops below it.
+const _reorderMinimum = 2;
+
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({
     super.key,
@@ -108,13 +114,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     draggingIndex = index;
   }
 
+  /// Clears the drag marker. The move itself is sent from the list's
+  /// `onReorder` callback, which fires for a finished drag and for the move
+  /// actions the list offers to a screen reader alike, so both take one path.
   void onReorderEnd(int index) {
-    if (draggingIndex == null) return;
-    if (index > draggingIndex!) index -= 1;
-    final favorites = context.read<FavoritesBloc>().state.favorites;
-    final favorite = favorites?[draggingIndex!].favorite;
-    if (favorite == null) return;
-    context.read<FavoritesBloc>().add(FavoritesShifted(favorite: favorite, position: index));
     draggingIndex = null;
   }
 
@@ -139,21 +142,37 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       floatingActionButton: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
           final favorites = state.favorites;
-          if (favorites == null || favorites.length < 3) {
+          if (favorites == null || favorites.length < _reorderMinimum) {
             return const SizedBox.shrink();
           }
-          return FloatingActionButton(
-            shape: const CircleBorder(),
-            onPressed: toggleReorderMode,
-            child: Icon(isReorderMode ? Icons.check : Icons.edit_note_outlined),
+          // The padding is what makes the button pressable at all: the tab bar
+          // of the main screen floats over the page, and without it the button
+          // is drawn underneath - invisible, and every tap goes to the bar.
+          return Padding(
+            // Exactly the room the bar takes, whatever the device: the shell
+            // reports it to the page as bottom padding (its own height plus
+            // the system inset underneath). Scaffold does not apply it to the
+            // button, so the page does - adding the bar height on top of it
+            // would push the button a bar's height too high.
+            padding: EdgeInsets.only(bottom: mediaQueryData.padding.bottom),
+            child: FloatingActionButton(
+              shape: const CircleBorder(),
+              onPressed: toggleReorderMode,
+              child: Icon(isReorderMode ? Icons.check : Icons.edit_note_outlined),
+            ),
           );
         },
       ),
       body: BlocConsumer<FavoritesBloc, FavoritesState>(
         listenWhen: (previous, current) => previous.favorites != current.favorites,
         listener: (context, state) {
-          // Exit reorder mode if favorites were updated while reordering
-          if (draggingIndex != null) {
+          // Two reasons to leave the rearranging mode, both about a list that
+          // changed underneath: a move that landed while a row was being
+          // dragged, and a list that became too short to rearrange - the
+          // button is the only way out of the mode and it is not offered
+          // below the minimum, so the rows would stay locked.
+          final tooShortToReorder = (state.favorites?.length ?? 0) < _reorderMinimum;
+          if (draggingIndex != null || (isReorderMode && tooShortToReorder)) {
             setState(() {
               isReorderMode = false;
               draggingIndex = null;
@@ -188,7 +207,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                               itemCount: favorites.length,
                               // TODO: migrate to onReorderItem (deprecated after Flutter 3.41.0-0.0.pre)
                               // ignore: deprecated_member_use
-                              onReorder: (oldIndex, newIndex) {},
+                              onReorder: (oldIndex, newIndex) =>
+                                  reorder(favorites: favorites, oldIndex: oldIndex, newIndex: newIndex),
                               onReorderStart: onReorderStart,
                               onReorderEnd: onReorderEnd,
                               buildDefaultDragHandles: false,
