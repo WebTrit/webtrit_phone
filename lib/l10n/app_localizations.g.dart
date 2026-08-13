@@ -6186,6 +6186,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get devTools_signalingService_simulateKill_cancel;
+
+  /// Accessibility name of the button that empties the contact search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get contacts_SemanticsLabel_clearSearch;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

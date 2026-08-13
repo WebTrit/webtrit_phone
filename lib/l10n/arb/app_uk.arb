@@ -2645,5 +2645,9 @@
   "cdr_disconnectReason_internetworkingUnspecified": "Взаємодія мереж (internetworking), не уточнено",
   "cdr_disconnectReason_nextNodeIsUnreachable": "Наступний вузол недосяжний",
   "cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService": "Модуль постачальника телефонних послуг Holst (HTSPM) поза сервісом",
-  "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL-транзит не відповідає моєму ID вузла"
+  "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL-транзит не відповідає моєму ID вузла",
+  "contacts_SemanticsLabel_clearSearch": "Очистити пошук",
+  "@contacts_SemanticsLabel_clearSearch": {
+    "description": "Accessibility name of the button that empties the contact search field."
+  }
 }
