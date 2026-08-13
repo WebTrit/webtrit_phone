@@ -15,7 +15,10 @@ class CallScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
 
-    final widget = CallScreen(callConfig: featureAccess.callConfig.capabilities);
+    final widget = CallScreen(
+      callConfig: featureAccess.callConfig.capabilities,
+      contactResolver: context.read<ContactResolver>(),
+    );
     return widget;
   }
 }

@@ -16,12 +16,16 @@ import 'call_init_scaffold.dart';
 class CallScreen extends StatefulWidget {
   const CallScreen({
     super.key,
+    required this.contactResolver,
     this.localePlaceholderBuilder,
     this.remotePlaceholderBuilder,
     this.callConfig = const CallCapabilitiesConfig(),
   });
 
   final CallCapabilitiesConfig callConfig;
+
+  /// Resolves the remote party to a contact for its name and avatar.
+  final ContactResolver contactResolver;
 
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
@@ -44,8 +48,6 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
   @override
   Widget build(BuildContext context) {
     final callBloc = context.read<CallBloc>();
-
-    final contactResolver = context.read<ContactResolver>();
 
     final style = Theme.of(context).extension<CallScreenStyles>()?.primary?.systemUiOverlayStyle;
 
@@ -78,7 +80,7 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
             callConfig: widget.callConfig,
             localePlaceholderBuilder: widget.localePlaceholderBuilder,
             remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
-            contactResolver: contactResolver,
+            contactResolver: widget.contactResolver,
           );
         } else {
           return const CallInitScaffold();

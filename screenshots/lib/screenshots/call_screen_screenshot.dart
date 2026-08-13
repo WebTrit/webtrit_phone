@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 
@@ -29,6 +28,8 @@ class CallScreenScreenshot extends StatefulWidget {
 }
 
 class _CallScreenScreenshotState extends State<CallScreenScreenshot> {
+  final _contactResolver = MockContactResolver(MockContactsRepository());
+
   @override
   void initState() {
     super.initState();
@@ -42,22 +43,20 @@ class _CallScreenScreenshotState extends State<CallScreenScreenshot> {
         context,
         PageRouteBuilder(
           pageBuilder: (context, _, _) {
-            return MultiProvider(
-              providers: [Provider<ContactResolver>(create: (_) => MockContactResolver(MockContactsRepository()))],
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider<CallBloc>(
-                    create: (context) => widget.interactive
-                        ? InteractiveCallBloc(video: widget.video)
-                        : MockCallBloc.callScreen(widget.video),
-                  ),
-                ],
-                child: CallScreen(
-                  localePlaceholderBuilder: (context) =>
-                      Image.network(widget.localePlaceholderImageUrl, fit: BoxFit.fitHeight),
-                  remotePlaceholderBuilder: (context) =>
-                      Image.network(widget.remotePlaceholderImageUrl, fit: BoxFit.cover),
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<CallBloc>(
+                  create: (context) => widget.interactive
+                      ? InteractiveCallBloc(video: widget.video)
+                      : MockCallBloc.callScreen(widget.video),
                 ),
+              ],
+              child: CallScreen(
+                contactResolver: _contactResolver,
+                localePlaceholderBuilder: (context) =>
+                    Image.network(widget.localePlaceholderImageUrl, fit: BoxFit.fitHeight),
+                remotePlaceholderBuilder: (context) =>
+                    Image.network(widget.remotePlaceholderImageUrl, fit: BoxFit.cover),
               ),
             );
           },
