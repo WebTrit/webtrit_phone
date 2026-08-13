@@ -144,6 +144,7 @@ const String voicemailRetryId = 'voicemailRetry';
 const String settingsLanguageOptionIdPrefix = 'settingsLanguageOption';
 const String settingsThemeModeOptionIdPrefix = 'settingsThemeModeOption';
 const String settingsIncomingCallTypeOptionIdPrefix = 'settingsIncomingCallTypeOption';
+const String mediaSettingsOptionIdPrefix = 'mediaSettingsOption';
 
 /// Stable automation id of an option row, built from what the option means
 /// rather than from its position or its translated title.
