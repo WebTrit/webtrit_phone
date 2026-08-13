@@ -3273,4 +3273,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get devTools_signalingService_simulateKill_cancel => 'Cancel';
+
+  @override
+  String get contacts_SemanticsLabel_clearSearch => 'Clear search';
 }

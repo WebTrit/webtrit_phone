@@ -2632,5 +2632,9 @@
   "devTools_signalingService_simulateKill_confirm": "Kill",
   "@devTools_signalingService_simulateKill_confirm": {},
   "devTools_signalingService_simulateKill_cancel": "Cancel",
-  "@devTools_signalingService_simulateKill_cancel": {}
+  "@devTools_signalingService_simulateKill_cancel": {},
+  "contacts_SemanticsLabel_clearSearch": "Clear search",
+  "@contacts_SemanticsLabel_clearSearch": {
+    "description": "Accessibility name of the button that empties the contact search field."
+  }
 }

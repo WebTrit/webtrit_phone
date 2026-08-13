@@ -2596,5 +2596,9 @@
   "devTools_signalingService_simulateKill_confirm": "หยุดการทำงาน",
   "@devTools_signalingService_simulateKill_confirm": {},
   "devTools_signalingService_simulateKill_cancel": "ยกเลิก",
-  "@devTools_signalingService_simulateKill_cancel": {}
+  "@devTools_signalingService_simulateKill_cancel": {},
+  "contacts_SemanticsLabel_clearSearch": "ล้างการค้นหา",
+  "@contacts_SemanticsLabel_clearSearch": {
+    "description": "Accessibility name of the button that empties the contact search field."
+  }
 }
