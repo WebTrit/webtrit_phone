@@ -8,6 +8,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/call_routing.dart';
 import 'package:webtrit_phone/features/favorites/favorites.dart';
@@ -18,6 +19,8 @@ import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+
+import '../../helpers/helpers.dart';
 
 class _MockFavoritesBloc extends MockBloc<FavoritesEvent, FavoritesState> implements FavoritesBloc {}
 
@@ -131,6 +134,33 @@ void main() {
     );
     await tester.pump();
   }
+
+  testWidgets('the rearrange button says what it will do', (tester) async {
+    final handle = tester.ensureSemantics();
+
+    await pumpScreen(tester);
+
+    // Only the icon carried this before, and the icon means two different
+    // things depending on whether rearranging is already under way.
+    expectTapTargetSemantics(
+      tester,
+      find.bySemanticsIdentifier(favoritesReorderId),
+      label: 'Reorder favorites',
+      identifier: favoritesReorderId,
+    );
+
+    await tapViaSemantics(tester, find.bySemanticsIdentifier(favoritesReorderId));
+    await tester.pump();
+
+    expectTapTargetSemantics(
+      tester,
+      find.bySemanticsIdentifier(favoritesReorderId),
+      label: 'Finish reordering',
+      identifier: favoritesReorderId,
+    );
+
+    handle.dispose();
+  });
 
   testWidgets('the rearrange button stays clear of the tab bar', (tester) async {
     await pumpScreen(tester);

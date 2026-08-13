@@ -870,6 +870,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favorites_DeleteConfirmDialog_title => 'Confirm deleting';
 
   @override
+  String get favorites_SemanticsLabel_reorderDone => 'Finish reordering';
+
+  @override
+  String get favorites_SemanticsLabel_reorder => 'Reorder favorites';
+
+  @override
   String favorites_SnackBar_deleted(String name) {
     return '$name deleted';
   }

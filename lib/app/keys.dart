@@ -126,6 +126,7 @@ const String callActionsHideKeypadId = 'callActionsHideKeypad';
 const String callActionsOptionsId = 'callActionsOptions';
 const String callTileDialId = 'callTileDial';
 const String callTileMenuId = 'callTileMenu';
+const String favoritesReorderId = 'favoritesReorder';
 const String loginQrAllowCameraButtonId = 'loginQrAllowCameraButton';
 const String loginQrOpenSettingsButtonId = 'loginQrOpenSettingsButton';
 const String loginSignupEmbeddedRetryButtonId = 'loginSignupEmbeddedRetryButton';

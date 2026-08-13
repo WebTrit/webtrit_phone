@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:webtrit_phone/app/keys.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -155,10 +156,18 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             // button, so the page does - adding the bar height on top of it
             // would push the button a bar's height too high.
             padding: EdgeInsets.only(bottom: mediaQueryData.padding.bottom),
-            child: FloatingActionButton(
-              shape: const CircleBorder(),
-              onPressed: toggleReorderMode,
-              child: Icon(isReorderMode ? Icons.check : Icons.edit_note_outlined),
+            // Only the icon said what this does, and it says two different
+            // things depending on whether rearranging is already under way.
+            child: SemanticAction(
+              label: isReorderMode
+                  ? context.l10n.favorites_SemanticsLabel_reorderDone
+                  : context.l10n.favorites_SemanticsLabel_reorder,
+              identifier: favoritesReorderId,
+              child: FloatingActionButton(
+                shape: const CircleBorder(),
+                onPressed: toggleReorderMode,
+                child: Icon(isReorderMode ? Icons.check : Icons.edit_note_outlined),
+              ),
             ),
           );
         },
