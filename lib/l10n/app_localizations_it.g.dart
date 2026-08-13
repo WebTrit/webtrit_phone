@@ -2067,75 +2067,75 @@ class AppLocalizationsIt extends AppLocalizations {
   String get session_Teardown_progressText => 'Disconnessione in corso...';
 
   @override
-  String get sessions_AppBar_title => 'Active sessions';
+  String get sessions_AppBar_title => 'Sessioni attive';
 
   @override
-  String get sessions_AppType_android => 'Android app';
+  String get sessions_AppType_android => 'App Android';
 
   @override
-  String get sessions_AppType_ios => 'iOS app';
+  String get sessions_AppType_ios => 'App iOS';
 
   @override
-  String get sessions_AppType_linux => 'Linux app';
+  String get sessions_AppType_linux => 'App Linux';
 
   @override
-  String get sessions_AppType_macos => 'macOS app';
+  String get sessions_AppType_macos => 'App macOS';
 
   @override
-  String get sessions_AppType_smart => 'Smart device';
+  String get sessions_AppType_smart => 'Dispositivo smart';
 
   @override
-  String get sessions_AppType_unknown => 'Unknown device';
+  String get sessions_AppType_unknown => 'Dispositivo sconosciuto';
 
   @override
-  String get sessions_AppType_web => 'Web app';
+  String get sessions_AppType_web => 'App web';
 
   @override
-  String get sessions_AppType_windows => 'Windows app';
+  String get sessions_AppType_windows => 'App Windows';
 
   @override
-  String get sessions_Button_retry => 'Try again';
+  String get sessions_Button_retry => 'Riprova';
 
   @override
-  String get sessions_Button_revokeAllOthers => 'Sign out other sessions';
+  String get sessions_Button_revokeAllOthers => 'Disconnetti le altre sessioni';
 
   @override
-  String get sessions_Placeholder_empty => 'No active sessions';
+  String get sessions_Placeholder_empty => 'Nessuna sessione attiva';
 
   @override
-  String get sessions_Placeholder_failure => 'Could not load the active sessions';
+  String get sessions_Placeholder_failure => 'Impossibile caricare le sessioni attive';
 
   @override
   String get sessions_RevokeAllConfirmDialog_content =>
-      'The other devices signed in with this account will be signed out.';
+      'Gli altri dispositivi collegati a questo account verranno disconnessi.';
 
   @override
-  String get sessions_RevokeAllConfirmDialog_title => 'Sign out other sessions?';
+  String get sessions_RevokeAllConfirmDialog_title => 'Disconnettere le altre sessioni?';
 
   @override
-  String get sessions_RevokeConfirmDialog_content => 'This device will be signed out of the account.';
+  String get sessions_RevokeConfirmDialog_content => 'Questo dispositivo verra\' disconnesso dall\'account.';
 
   @override
-  String get sessions_RevokeConfirmDialog_title => 'Sign out this session?';
+  String get sessions_RevokeConfirmDialog_title => 'Disconnettere questa sessione?';
 
   @override
-  String get sessions_SnackBar_revokeFailed => 'Could not sign out the session';
+  String get sessions_SnackBar_revokeFailed => 'Impossibile disconnettere la sessione';
 
   @override
   String sessions_Tile_created(String time) {
-    return 'Signed in $time';
+    return 'Accesso il $time';
   }
 
   @override
-  String get sessions_Tile_currentSession => 'This device';
+  String get sessions_Tile_currentSession => 'Questo dispositivo';
 
   @override
   String sessions_Tile_lastActivity(String time) {
-    return 'Last used $time';
+    return 'Ultimo utilizzo $time';
   }
 
   @override
-  String get sessions_Tile_revokeTooltip => 'Sign out';
+  String get sessions_Tile_revokeTooltip => 'Disconnetti';
 
   @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Collegamenti incorporati dell\'applicazione';

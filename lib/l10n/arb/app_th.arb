@@ -1737,6 +1737,62 @@
   "@session_Teardown_progressText": {
     "description": "Status message displayed while the application is performing cleanup during the logout process."
   },
+  "sessions_AppBar_title": "เซสชันที่ใช้งานอยู่",
+  "@sessions_AppBar_title": {},
+  "sessions_AppType_android": "แอป Android",
+  "@sessions_AppType_android": {},
+  "sessions_AppType_ios": "แอป iOS",
+  "@sessions_AppType_ios": {},
+  "sessions_AppType_linux": "แอป Linux",
+  "@sessions_AppType_linux": {},
+  "sessions_AppType_macos": "แอป macOS",
+  "@sessions_AppType_macos": {},
+  "sessions_AppType_smart": "อุปกรณ์สมาร์ท",
+  "@sessions_AppType_smart": {},
+  "sessions_AppType_unknown": "อุปกรณ์ที่ไม่รู้จัก",
+  "@sessions_AppType_unknown": {},
+  "sessions_AppType_web": "เว็บแอป",
+  "@sessions_AppType_web": {},
+  "sessions_AppType_windows": "แอป Windows",
+  "@sessions_AppType_windows": {},
+  "sessions_Button_retry": "ลองอีกครั้ง",
+  "@sessions_Button_retry": {},
+  "sessions_Button_revokeAllOthers": "ออกจากระบบเซสชันอื่น",
+  "@sessions_Button_revokeAllOthers": {},
+  "sessions_Placeholder_empty": "ไม่มีเซสชันที่ใช้งานอยู่",
+  "@sessions_Placeholder_empty": {},
+  "sessions_Placeholder_failure": "ไม่สามารถโหลดเซสชันที่ใช้งานอยู่ได้",
+  "@sessions_Placeholder_failure": {},
+  "sessions_RevokeAllConfirmDialog_content": "อุปกรณ์อื่นที่ลงชื่อเข้าใช้ด้วยบัญชีนี้จะถูกออกจากระบบ",
+  "@sessions_RevokeAllConfirmDialog_content": {},
+  "sessions_RevokeAllConfirmDialog_title": "ออกจากระบบเซสชันอื่นหรือไม่",
+  "@sessions_RevokeAllConfirmDialog_title": {},
+  "sessions_RevokeConfirmDialog_content": "อุปกรณ์นี้จะถูกออกจากระบบของบัญชี",
+  "@sessions_RevokeConfirmDialog_content": {},
+  "sessions_RevokeConfirmDialog_title": "ออกจากระบบเซสชันนี้หรือไม่",
+  "@sessions_RevokeConfirmDialog_title": {},
+  "sessions_SnackBar_revokeFailed": "ไม่สามารถออกจากระบบเซสชันได้",
+  "@sessions_SnackBar_revokeFailed": {},
+  "sessions_Tile_created": "ลงชื่อเข้าใช้ {time}",
+  "@sessions_Tile_created": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "sessions_Tile_currentSession": "อุปกรณ์นี้",
+  "@sessions_Tile_currentSession": {},
+  "sessions_Tile_lastActivity": "ใช้ล่าสุด {time}",
+  "@sessions_Tile_lastActivity": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "sessions_Tile_revokeTooltip": "ออกจากระบบ",
+  "@sessions_Tile_revokeTooltip": {},
   "settings_AboutText_ApplicationEmbeddedLinks": "ลิงก์ที่ฝังในแอปพลิเคชัน",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AboutText_ThirdPartyLicenses": "ใบอนุญาตของบุคคลที่สาม",
