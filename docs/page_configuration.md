@@ -18,7 +18,11 @@ back to sensible in-app defaults.
 - [Call page (Dialing)](#call-page-dialing)
     - [App bar](#app-bar)
     - [Call info](#call-info)
+    - [Call list](#call-list)
+    - [Acting on hint](#acting-on-hint)
+    - [Call actions](#call-actions)
 - [Keypad page](#keypad-page)
+    - [Action pad](#action-pad)
 - [Common page fields](#common-page-fields)
 - [Common object formats](#common-object-formats)
 
@@ -224,11 +228,16 @@ Top-level keys inside `"about"`:
 
 Top-level keys inside `"dialing"`:
 
-| Key                    | Type   | Description                                                  |
-|------------------------|--------|--------------------------------------------------------------|
-| `systemUiOverlayStyle` | object | Status/navigation bars styling.                              |
-| `appBarStyle`          | object | App bar styling (background/foreground/primary/back button). |
-| `callInfo`             | object | Text styles for username/number/status.                      |
+| Key                    | Type   | Description                                                                    |
+|------------------------|--------|--------------------------------------------------------------------------------|
+| `systemUiOverlayStyle` | object | Status/navigation bars styling.                                                |
+| `appBarStyle`          | object | App bar styling (background/foreground/primary/back button).                   |
+| `appBarBlurredSurface` | object | Blurred surface behind the app bar. See [Common page fields](#common-page-fields). |
+| `background`           | object | Page background (solid color, gradient or image).                              |
+| `callInfo`             | object | Text styles for username/number/status.                                        |
+| `callList`             | object | Row colors of the multi-call list and its per-state status dots.               |
+| `actingOnHint`         | object | Colors of the "Acting on" pill shown above the actions with several calls.     |
+| `actions`              | object | Styles of the call action buttons (call, hangup, mute, transfer, ...).         |
 
 **Compact example:**
 
@@ -329,9 +338,98 @@ Top-level keys inside `"dialing"`:
 }
 ```
 
-The styles for call action buttons are defined globally in the `Action Pad Configuration` section of
-the `widgets_configuration.md` document. This allows for a consistent look and feel across the
-application, including the main call screen and the keypad.
+### Call list
+
+`dialing.callList` colors the list shown when more than one call is up: the rows themselves and the
+small dot that marks each call's state.
+
+```json
+{
+  "dialing": {
+    "callList": {
+      "rowBackgroundColor": "#1AFFFFFF",
+      "rowFocusedBackgroundColor": "#42FFFFFF",
+      "rowFocusedBorderColor": "#8CFFFFFF",
+      "dotRingingColor": "#FFD54F",
+      "dotOnCallColor": "#9CCC65",
+      "dotHeldColor": "#8CFFFFFF"
+    }
+  }
+}
+```
+
+---
+
+### Acting on hint
+
+`dialing.actingOnHint` colors the pill above the action buttons that tells the user which call the
+buttons will act on.
+
+```json
+{
+  "dialing": {
+    "actingOnHint": {
+      "backgroundColor": "#40000000",
+      "affectedNameColor": "#FFE082"
+    }
+  }
+}
+```
+
+---
+
+### Call actions
+
+`dialing.actions` styles the round buttons at the bottom of the call screen. Each key is one button
+and takes a button style object (the same shape as every other button in the theme, see
+[Button Configuration](widgets_configuration.md#button-configuration)):
+
+| Key         | Button                                  |
+|-------------|-----------------------------------------|
+| `callStart` | Answer / place the call.                |
+| `hangup`    | End the call.                           |
+| `transfer`  | Transfer the call.                      |
+| `swap`      | Switch between two calls.               |
+| `key`       | Open the in-call keypad.                |
+| `camera`    | Camera on/off (toggle).                 |
+| `muted`     | Microphone on/off (toggle).             |
+| `speaker`   | Speaker / audio device (toggle).        |
+| `held`      | Hold / resume (toggle).                 |
+
+`keypadInputStyle` (text style) sets how the digits typed on the in-call keypad look.
+
+The buttons carry icons only, so `foregroundColor` and `iconColor` both end up on the icon, and
+there is no button text to color.
+
+**States.** You can set the resting colors and the disabled colors:
+
+```json
+{
+  "dialing": {
+    "actions": {
+      "hangup": {
+        "backgroundColor": "#E74C3C",
+        "foregroundColor": "#FFFFFF",
+        "iconColor": "#FFFFFF",
+        "disabledBackgroundColor": "#66DDE0E3",
+        "disabledForegroundColor": "#848581",
+        "disabledIconColor": "#848581"
+      },
+      "muted": {
+        "backgroundColor": "#66FFFFFF",
+        "iconColor": "#FFFFFF"
+      }
+    }
+  }
+}
+```
+
+The four toggles also have an "on" look (mute engaged, camera on, call held). That one is **not**
+configurable yet: it is derived from the color scheme, so it follows the brand colors but cannot be
+set per button in the theme file.
+
+Anything you leave out falls back to the color scheme, and a missing disabled color falls back to a
+40% translucent version of the resting one.
 
 ---
 
@@ -345,8 +443,8 @@ Top-level keys inside `"keypad"`:
 | `systemUiOverlayStyle`   | object | Status/navigation bars styling.                                                                                        |
 | `textField`              | object | Number input field style (top of page).                                                                                |
 | `contactName`            | object | Resolved contact name style (under input).                                                                             |
-| `keypad`                 | object | Numeric keypad layout (digits, spacing, padding).                                                                      |
-| `actionpad`              | object | Layout for action buttons (call, backspace, etc.). Button styles are taken from the global `Action Pad Configuration`. |
+| `keypad`                 | object | Numeric keypad (digit text styles, spacing, padding).                                                                  |
+| `actionpad`              | object | Styles of the three buttons under the keypad. See [Action pad](#action-pad).                                           |
 
 **Minimal example:**
 
@@ -380,6 +478,40 @@ Top-level keys inside `"keypad"`:
   }
 }
 ```
+
+---
+
+### Action pad
+
+`keypad.actionpad` styles the buttons under the numeric keypad. There are three, and each takes a
+button style object (see
+[Button Configuration](widgets_configuration.md#button-configuration)):
+
+| Key                | Button                                                    |
+|--------------------|-----------------------------------------------------------|
+| `callStart`        | Place the call (the large one).                           |
+| `callTransfer`     | Transfer the call.                                        |
+| `backspacePressed` | Backspace. The name is historical: it is the button style, not a pressed state. |
+
+```json
+{
+  "keypad": {
+    "actionpad": {
+      "callStart": {
+        "backgroundColor": "#75B943",
+        "foregroundColor": "#FFFFFF",
+        "iconColor": "#FFFFFF"
+      },
+      "backspacePressed": {
+        "backgroundColor": "#00000000",
+        "iconColor": "#494949"
+      }
+    }
+  }
+}
+```
+
+The digits themselves are not buttons here - their text styles live in `keypad.keypad`.
 
 ---
 
@@ -553,7 +685,6 @@ and the backspace button uses the `backspace` style.
 ### Notes & tips
 
 - If a section is omitted, in-app defaults apply.
-- For toggleable call actions (`muted`, `speaker`, `camera`, `held`), the UI can switch visuals when
-  the control is selected—ensure the widget sets the selected state so your
-  enabled/disabled/selected colors are respected.
+- For toggleable call actions (`muted`, `speaker`, `camera`, `held`) the theme file sets the resting
+  and disabled looks; the "on" look is taken from the color scheme and cannot be set per button.
 - Prefer ARGB with partial alpha for layered UIs (e.g., translucent buttons over gradients).

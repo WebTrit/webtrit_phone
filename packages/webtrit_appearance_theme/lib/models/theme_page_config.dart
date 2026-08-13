@@ -359,44 +359,44 @@ class CallPageConfig with _$CallPageConfig implements BasePageConfig {
 @JsonSerializable(explicitToJson: true)
 class CallPageActionsConfig with _$CallPageActionsConfig {
   const CallPageActionsConfig({
-    this.callStart = const ElevatedButtonWidgetConfig(),
-    this.hangup = const ElevatedButtonWidgetConfig(),
-    this.transfer = const ElevatedButtonWidgetConfig(),
-    this.camera = const ElevatedButtonWidgetConfig(),
-    this.muted = const ElevatedButtonWidgetConfig(),
-    this.speaker = const ElevatedButtonWidgetConfig(),
-    this.held = const ElevatedButtonWidgetConfig(),
-    this.swap = const ElevatedButtonWidgetConfig(),
-    this.key = const ElevatedButtonWidgetConfig(),
+    this.callStart = const ButtonStyleConfig(),
+    this.hangup = const ButtonStyleConfig(),
+    this.transfer = const ButtonStyleConfig(),
+    this.camera = const ButtonStyleConfig(),
+    this.muted = const ButtonStyleConfig(),
+    this.speaker = const ButtonStyleConfig(),
+    this.held = const ButtonStyleConfig(),
+    this.swap = const ButtonStyleConfig(),
+    this.key = const ButtonStyleConfig(),
     this.keypadInputStyle,
   });
 
   @override
-  final ElevatedButtonWidgetConfig callStart;
+  final ButtonStyleConfig callStart;
 
   @override
-  final ElevatedButtonWidgetConfig hangup;
+  final ButtonStyleConfig hangup;
 
   @override
-  final ElevatedButtonWidgetConfig transfer;
+  final ButtonStyleConfig transfer;
 
   @override
-  final ElevatedButtonWidgetConfig camera;
+  final ButtonStyleConfig camera;
 
   @override
-  final ElevatedButtonWidgetConfig muted;
+  final ButtonStyleConfig muted;
 
   @override
-  final ElevatedButtonWidgetConfig speaker;
+  final ButtonStyleConfig speaker;
 
   @override
-  final ElevatedButtonWidgetConfig held;
+  final ButtonStyleConfig held;
 
   @override
-  final ElevatedButtonWidgetConfig swap;
+  final ButtonStyleConfig swap;
 
   @override
-  final ElevatedButtonWidgetConfig key;
+  final ButtonStyleConfig key;
 
   /// Text style for the digits typed on the in-call DTMF keypad (the value shown
   /// above the keys). When unset the app falls back to its default display text

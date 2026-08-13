@@ -2103,7 +2103,7 @@ case _:
 /// @nodoc
 mixin _$CallPageActionsConfig {
 
- ElevatedButtonWidgetConfig get callStart; ElevatedButtonWidgetConfig get hangup; ElevatedButtonWidgetConfig get transfer; ElevatedButtonWidgetConfig get camera; ElevatedButtonWidgetConfig get muted; ElevatedButtonWidgetConfig get speaker; ElevatedButtonWidgetConfig get held; ElevatedButtonWidgetConfig get swap; ElevatedButtonWidgetConfig get key; TextStyleConfig? get keypadInputStyle;
+ ButtonStyleConfig get callStart; ButtonStyleConfig get hangup; ButtonStyleConfig get transfer; ButtonStyleConfig get camera; ButtonStyleConfig get muted; ButtonStyleConfig get speaker; ButtonStyleConfig get held; ButtonStyleConfig get swap; ButtonStyleConfig get key; TextStyleConfig? get keypadInputStyle;
 /// Create a copy of CallPageActionsConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -2134,7 +2134,7 @@ abstract mixin class $CallPageActionsConfigCopyWith<$Res>  {
   factory $CallPageActionsConfigCopyWith(CallPageActionsConfig value, $Res Function(CallPageActionsConfig) _then) = _$CallPageActionsConfigCopyWithImpl;
 @useResult
 $Res call({
- ElevatedButtonWidgetConfig callStart, ElevatedButtonWidgetConfig hangup, ElevatedButtonWidgetConfig transfer, ElevatedButtonWidgetConfig camera, ElevatedButtonWidgetConfig muted, ElevatedButtonWidgetConfig speaker, ElevatedButtonWidgetConfig held, ElevatedButtonWidgetConfig swap, ElevatedButtonWidgetConfig key, TextStyleConfig? keypadInputStyle
+ ButtonStyleConfig callStart, ButtonStyleConfig hangup, ButtonStyleConfig transfer, ButtonStyleConfig camera, ButtonStyleConfig muted, ButtonStyleConfig speaker, ButtonStyleConfig held, ButtonStyleConfig swap, ButtonStyleConfig key, TextStyleConfig? keypadInputStyle
 });
 
 
@@ -2154,15 +2154,15 @@ class _$CallPageActionsConfigCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? callStart = null,Object? hangup = null,Object? transfer = null,Object? camera = null,Object? muted = null,Object? speaker = null,Object? held = null,Object? swap = null,Object? key = null,Object? keypadInputStyle = freezed,}) {
   return _then(CallPageActionsConfig(
 callStart: null == callStart ? _self.callStart : callStart // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,hangup: null == hangup ? _self.hangup : hangup // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,transfer: null == transfer ? _self.transfer : transfer // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,camera: null == camera ? _self.camera : camera // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,muted: null == muted ? _self.muted : muted // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,speaker: null == speaker ? _self.speaker : speaker // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,held: null == held ? _self.held : held // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,swap: null == swap ? _self.swap : swap // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,key: null == key ? _self.key : key // ignore: cast_nullable_to_non_nullable
-as ElevatedButtonWidgetConfig,keypadInputStyle: freezed == keypadInputStyle ? _self.keypadInputStyle : keypadInputStyle // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,hangup: null == hangup ? _self.hangup : hangup // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,transfer: null == transfer ? _self.transfer : transfer // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,camera: null == camera ? _self.camera : camera // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,muted: null == muted ? _self.muted : muted // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,speaker: null == speaker ? _self.speaker : speaker // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,held: null == held ? _self.held : held // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,swap: null == swap ? _self.swap : swap // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,key: null == key ? _self.key : key // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,keypadInputStyle: freezed == keypadInputStyle ? _self.keypadInputStyle : keypadInputStyle // ignore: cast_nullable_to_non_nullable
 as TextStyleConfig?,
   ));
 }

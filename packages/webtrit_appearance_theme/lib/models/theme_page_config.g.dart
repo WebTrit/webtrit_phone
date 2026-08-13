@@ -382,50 +382,32 @@ CallPageActionsConfig _$CallPageActionsConfigFromJson(
   Map<String, dynamic> json,
 ) => CallPageActionsConfig(
   callStart: json['callStart'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['callStart'] as Map<String, dynamic>,
-        ),
+      ? const ButtonStyleConfig()
+      : ButtonStyleConfig.fromJson(json['callStart'] as Map<String, dynamic>),
   hangup: json['hangup'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['hangup'] as Map<String, dynamic>,
-        ),
+      ? const ButtonStyleConfig()
+      : ButtonStyleConfig.fromJson(json['hangup'] as Map<String, dynamic>),
   transfer: json['transfer'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['transfer'] as Map<String, dynamic>,
-        ),
+      ? const ButtonStyleConfig()
+      : ButtonStyleConfig.fromJson(json['transfer'] as Map<String, dynamic>),
   camera: json['camera'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['camera'] as Map<String, dynamic>,
-        ),
+      ? const ButtonStyleConfig()
+      : ButtonStyleConfig.fromJson(json['camera'] as Map<String, dynamic>),
   muted: json['muted'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['muted'] as Map<String, dynamic>,
-        ),
+      ? const ButtonStyleConfig()
+      : ButtonStyleConfig.fromJson(json['muted'] as Map<String, dynamic>),
   speaker: json['speaker'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['speaker'] as Map<String, dynamic>,
-        ),
+      ? const ButtonStyleConfig()
+      : ButtonStyleConfig.fromJson(json['speaker'] as Map<String, dynamic>),
   held: json['held'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['held'] as Map<String, dynamic>,
-        ),
+      ? const ButtonStyleConfig()
+      : ButtonStyleConfig.fromJson(json['held'] as Map<String, dynamic>),
   swap: json['swap'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['swap'] as Map<String, dynamic>,
-        ),
+      ? const ButtonStyleConfig()
+      : ButtonStyleConfig.fromJson(json['swap'] as Map<String, dynamic>),
   key: json['key'] == null
-      ? const ElevatedButtonWidgetConfig()
-      : ElevatedButtonWidgetConfig.fromJson(
-          json['key'] as Map<String, dynamic>,
-        ),
+      ? const ButtonStyleConfig()
+      : ButtonStyleConfig.fromJson(json['key'] as Map<String, dynamic>),
   keypadInputStyle: json['keypadInputStyle'] == null
       ? null
       : TextStyleConfig.fromJson(
