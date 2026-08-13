@@ -55,28 +55,31 @@ class SessionTile extends StatelessWidget {
             Row(
               mainAxisSize: .min,
               children: [
-                Text(_titleOf(l10n, session.appType)),
+                if (session.current) Text(l10n.sessions_Tile_currentSession) else Text(_titleOf(l10n, session.appType)),
                 SizedBox(width: 8),
                 Icon(_iconOf(session.appType), size: 18),
               ],
             ),
             for (final detail in details) Text(detail, style: themeData.textTheme.bodySmall),
             SizedBox(height: 4),
-            SizedBox(
-              height: 24,
-              child: TextButton.icon(
-                icon: revoking ? const SizedCircularProgressIndicator(size: 20, strokeWidth: 2) : null,
-                label: Text(l10n.sessions_Tile_revokeTooltip),
-                onPressed: () => onRevoke(session),
-                style: TextButton.styleFrom(
-                  foregroundColor: colorScheme.onPrimary,
-                  backgroundColor: colorScheme.primary,
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  minimumSize: Size(100, 16),
-                  visualDensity: VisualDensity.compact,
+            // Signing THIS device out is what logout in settings is for, so the
+            // current session is listed but not revocable from here.
+            if (!session.current)
+              SizedBox(
+                height: 24,
+                child: TextButton.icon(
+                  icon: revoking ? const SizedCircularProgressIndicator(size: 20, strokeWidth: 2) : null,
+                  label: Text(l10n.sessions_Tile_revokeTooltip),
+                  onPressed: revoking ? null : () => onRevoke(session),
+                  style: TextButton.styleFrom(
+                    foregroundColor: colorScheme.onPrimary,
+                    backgroundColor: colorScheme.primary,
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    minimumSize: Size(100, 16),
+                    visualDensity: VisualDensity.compact,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),

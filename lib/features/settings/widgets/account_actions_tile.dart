@@ -87,6 +87,9 @@ class AccountActionsTile extends StatelessWidget {
                 ],
                 SizedBox(width: 16),
                 TextButton(
+                  // The Patrol logout subsequence taps this key; it has to be on
+                  // whichever branch renders, not just the sessions-less one.
+                  key: settingsLogoutButtonKey,
                   onPressed: onLogoutTap,
                   style: TextButton.styleFrom(
                     foregroundColor: colorScheme.onPrimary,

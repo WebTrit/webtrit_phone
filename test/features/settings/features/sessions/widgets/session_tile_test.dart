@@ -38,7 +38,7 @@ void main() {
     await tester.pumpWidget(wrap(const ActiveSession(id: 'a', current: true, appType: AppType.android)));
 
     expect(find.text('This device'), findsOneWidget);
-    expect(find.byIcon(Icons.logout), findsNothing);
+    expect(find.text('Sign out'), findsNothing);
   });
 
   testWidgets('reports the session to revoke when its action is tapped', (tester) async {
@@ -46,7 +46,7 @@ void main() {
     final revoked = <ActiveSession>[];
     await tester.pumpWidget(wrap(session, onRevoke: revoked.add));
 
-    await tester.tap(find.byIcon(Icons.logout));
+    await tester.tap(find.text('Sign out'));
 
     expect(revoked, equals([session]));
   });
@@ -57,7 +57,7 @@ void main() {
     );
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    expect(find.byIcon(Icons.logout), findsNothing);
+    expect(tester.widget<TextButton>(find.byType(TextButton)).onPressed, isNull);
   });
 
   testWidgets('shows when the session was last used and created', (tester) async {
