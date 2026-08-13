@@ -78,7 +78,7 @@ Future<void> _verifyContactDetails(
 }) async {
   final searchWasUsed = !$(contactsExtContactTileKey).containing(RegExp(contactName)).visible;
   if (searchWasUsed) {
-    await $(contactsSerchInputKey).enterText(contactName);
+    await $(contactsSearchInputKey).enterText(contactName);
     await pumpFor(const Duration(seconds: 1), $);
   }
   await $(contactsExtContactTileKey).containing(RegExp(contactName)).tap();
@@ -127,5 +127,5 @@ Future<void> _verifyContactDetails(
   }
 
   await $(BackButtonIcon).tap();
-  if (searchWasUsed) await $(contactsSerchInputClearKey).tap();
+  if (searchWasUsed) await $(contactsSearchInputClearKey).tap();
 }

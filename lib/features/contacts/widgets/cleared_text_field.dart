@@ -51,7 +51,7 @@ class ClearedTextFieldState extends State<ClearedTextField> {
           suffixIcon: _isEmpty
               ? null
               : IconButton(
-                  key: contactsSerchInputClearKey,
+                  key: contactsSearchInputClearKey,
                   icon: const Icon(Icons.close),
                   onPressed: () {
                     setState(() {
@@ -71,7 +71,7 @@ class ClearedTextFieldState extends State<ClearedTextField> {
           });
           widget.onChanged?.call(value);
         },
-        onSubmitted: (value) => widget.onSubmitted,
+        onSubmitted: (value) => widget.onSubmitted?.call(value),
       ),
     );
   }
