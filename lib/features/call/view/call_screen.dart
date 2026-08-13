@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -20,19 +19,12 @@ class CallScreen extends StatefulWidget {
     this.localePlaceholderBuilder,
     this.remotePlaceholderBuilder,
     this.callConfig = const CallCapabilitiesConfig(),
-    this.contactResolver,
   });
 
   final CallCapabilitiesConfig callConfig;
 
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
-
-  /// Resolves the remote party to a contact for the name and the avatar.
-  ///
-  /// Defaults to [DefaultContactResolver] built from the surrounding repositories;
-  /// pass an own one where those repositories are not available.
-  final ContactResolver? contactResolver;
 
   @override
   State<CallScreen> createState() => _CallScreenState();
@@ -53,12 +45,7 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
   Widget build(BuildContext context) {
     final callBloc = context.read<CallBloc>();
 
-    final contactResolver =
-        widget.contactResolver ??
-        DefaultContactResolver(
-          contactsRepository: context.read<ContactsRepository>(),
-          userRepository: context.read<UserRepository>(),
-        );
+    final contactResolver = context.read<ContactResolver>();
 
     final style = Theme.of(context).extension<CallScreenStyles>()?.primary?.systemUiOverlayStyle;
 

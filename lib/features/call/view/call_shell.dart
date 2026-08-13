@@ -8,8 +8,6 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/orientations/orientations.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/repositories/contacts/contacts_repository.dart';
-import 'package:webtrit_phone/repositories/user_info/user_repository.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/app/constants.dart';
 
@@ -157,10 +155,7 @@ class _CallShellState extends State<CallShell> {
     final blfViaSipSupport = PresenceViewParams.of(context).blfViaSipSupport;
     final presenceViaSipSupport = PresenceViewParams.of(context).presenceViaSipSupport;
     final callBloc = context.read<CallBloc>();
-    final contactResolver = DefaultContactResolver(
-      contactsRepository: context.read<ContactsRepository>(),
-      userRepository: context.read<UserRepository>(),
-    );
+    final contactResolver = context.read<ContactResolver>();
 
     _thumbnailManager.show(
       context,
