@@ -94,12 +94,20 @@
   "callTile_SemanticsLabel_call": "Подзвонити {name}",
   "@callTile_SemanticsLabel_call": {
     "description": "Accessibility name of the call button in a call history or contact row.",
-    "placeholders": {"name": {"type": "String"}}
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "callTile_SemanticsLabel_videoCall": "Відеодзвінок {name}",
   "@callTile_SemanticsLabel_videoCall": {
     "description": "Accessibility name of the video call button in a call history or contact row.",
-    "placeholders": {"name": {"type": "String"}}
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "call_CallActionsTooltip_accept": "Прийняти",
   "@call_CallActionsTooltip_accept": {},
@@ -2646,6 +2654,18 @@
   "cdr_disconnectReason_nextNodeIsUnreachable": "Наступний вузол недосяжний",
   "cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService": "Модуль постачальника телефонних послуг Holst (HTSPM) поза сервісом",
   "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL-транзит не відповідає моєму ID вузла",
+  "common_SemanticsLabel_refresh": "Оновити",
+  "@common_SemanticsLabel_refresh": {
+    "description": "Accessibility name of a button that reloads the content of the screen."
+  },
+  "common_SemanticsLabel_scrollToBottom": "Прокрутити донизу",
+  "@common_SemanticsLabel_scrollToBottom": {
+    "description": "Accessibility name of the button that jumps to the end of a long list."
+  },
+  "common_SemanticsLabel_scrollToTop": "Прокрутити догори",
+  "@common_SemanticsLabel_scrollToTop": {
+    "description": "Accessibility name of the button that jumps to the beginning of a long list."
+  },
   "contacts_SemanticsLabel_clearSearch": "Очистити пошук",
   "@contacts_SemanticsLabel_clearSearch": {
     "description": "Accessibility name of the button that empties the contact search field."
