@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 extension BuildContextSnackBar on BuildContext {
   void removeCurrentSnackBar() {
@@ -61,11 +63,13 @@ extension BuildContextSnackBar on BuildContext {
     );
   }
 
-  /// Shows the one snack bar the app has, so every message behaves the same.
+  /// Shows the one snack bar the app has, so every message is announced the
+  /// same way and can be found by the same id.
   ///
   /// A message that offers something to do waits for the answer instead of
-  /// timing out, and gets a close button so it can always be dismissed: three
-  /// seconds is not enough to notice an action, let alone reach it.
+  /// timing out (and gets a close button, so it can always be dismissed):
+  /// three seconds is not enough to notice an action, let alone to reach it
+  /// with a screen reader.
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _show({
     required String content,
     required SnackBarAction? action,
@@ -75,7 +79,7 @@ extension BuildContextSnackBar on BuildContext {
   }) {
     return (ScaffoldMessenger.of(this)..removeCurrentSnackBar()).showSnackBar(
       SnackBar(
-        content: Text(content),
+        content: SemanticId(identifier: appSnackBarId, child: Text(content)),
         action: action,
         backgroundColor: backgroundColor,
         behavior: behavior,

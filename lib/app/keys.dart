@@ -41,9 +41,13 @@ const String passwordButtonId = 'passwordButton';
 const passwordButtonKey = Key(passwordButtonId);
 
 const String loginTypeSegmentOtpSigninId = 'loginTypeSegmentOtpSignin';
+const loginTypeSegmentOtpSigninKey = Key(loginTypeSegmentOtpSigninId);
 const String loginTypeSegmentPasswordSigninId = 'loginTypeSegmentPasswordSignin';
+const loginTypeSegmentPasswordSigninKey = Key(loginTypeSegmentPasswordSigninId);
 const String loginTypeSegmentSignupId = 'loginTypeSegmentSignup';
+const loginTypeSegmentSignupKey = Key(loginTypeSegmentSignupId);
 const String loginTypeSegmentQrSigninId = 'loginTypeSegmentQrSignin';
+const loginTypeSegmentQrSigninKey = Key(loginTypeSegmentQrSigninId);
 
 const String contactsAgreementCheckboxId = 'contactsAgreementCheckbox';
 const contactsAgreementCheckboxKey = Key(contactsAgreementCheckboxId);
@@ -106,9 +110,14 @@ const String loginModeScreenId = 'loginModeScreen';
 const String loginOtpRequestScreenId = 'loginOtpRequestScreen';
 const String loginOtpVerifyScreenId = 'loginOtpVerifyScreen';
 const String loginPasswordScreenId = 'loginPasswordScreen';
+const String loginQrScreenId = 'loginQrScreen';
+const String loginSignupEmbeddedErrorScreenId = 'loginSignupEmbeddedErrorScreen';
+const String loginSignupRequestScreenId = 'loginSignupRequestScreen';
+const String loginSignupVerifyScreenId = 'loginSignupVerifyScreen';
 
 // Identifier-only entries: controls that have no widget-test key.
 const String actionPadOverflowId = 'actionPadOverflow';
+const String appSnackBarId = 'appSnackBar';
 const String actionPadTransferId = 'actionPadTransfer';
 const String actionPadVoiceCallId = 'actionPadVoiceCall';
 const String callActionsAcceptId = 'callActionsAccept';
@@ -117,9 +126,13 @@ const String callActionsHideKeypadId = 'callActionsHideKeypad';
 const String callActionsOptionsId = 'callActionsOptions';
 const String callTileDialId = 'callTileDial';
 const String callTileMenuId = 'callTileMenu';
+const String loginQrAllowCameraButtonId = 'loginQrAllowCameraButton';
+const String loginQrOpenSettingsButtonId = 'loginQrOpenSettingsButton';
+const String loginSignupEmbeddedRetryButtonId = 'loginSignupEmbeddedRetryButton';
 const String otpVerifyResendButtonId = 'otpVerifyResendButton';
 const String passwordObscureToggleId = 'passwordObscureToggle';
 const String permissionsSettingsButtonId = 'permissionsSettingsButton';
+const String signupVerifyResendButtonId = 'signupVerifyResendButton';
 const String systemNotificationsBadgeId = 'systemNotificationsBadge';
 const String voicemailMenuId = 'voicemailMenu';
 const String voicemailPlaybackId = 'voicemailPlayback';

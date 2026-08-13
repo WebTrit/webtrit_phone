@@ -402,6 +402,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get cdrs_noRecentCalls_message => 'Немає останніх дзвінків';
 
   @override
+  String get common_SemanticsLabel_loading => 'Завантаження';
+
+  @override
   String get common_noInternetConnection_message =>
       'Схоже, ви не підключені до Інтернету. Перевірте своє підключення і спробуйте ще раз.';
 

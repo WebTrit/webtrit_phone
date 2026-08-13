@@ -313,6 +313,10 @@
   "@cdrs_noMissedCalls_message": {},
   "cdrs_noRecentCalls_message": "Немає останніх дзвінків",
   "@cdrs_noRecentCalls_message": {},
+  "common_SemanticsLabel_loading": "Завантаження",
+  "@common_SemanticsLabel_loading": {
+    "description": "Accessibility name announced while a screen waits for a request to finish."
+  },
   "common_noInternetConnection_message": "Схоже, ви не підключені до Інтернету. Перевірте своє підключення і спробуйте ще раз.",
   "@common_noInternetConnection_message": {},
   "common_noInternetConnection_retryButton": "Спробуйте ще раз",

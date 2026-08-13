@@ -383,6 +383,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cdrs_noRecentCalls_message => 'No recent calls';
 
   @override
+  String get common_SemanticsLabel_loading => 'Loading';
+
+  @override
   String get common_noInternetConnection_message =>
       'It seems you are not connected to the internet. Please check your connection and try again.';
 

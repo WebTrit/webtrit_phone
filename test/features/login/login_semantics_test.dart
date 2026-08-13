@@ -117,6 +117,24 @@ void main() {
       handle.dispose();
     });
 
+    testWidgets('the submit button says it is busy instead of going nameless', (tester) async {
+      final handle = tester.ensureSemantics();
+
+      await tester.pumpWidget(wrap(const LoginPasswordSigninScreen()));
+      cubit.emit(cubit.state.copyWith(processing: true));
+      await tester.pump();
+
+      // The spinner replaces the caption while the request is in flight; with
+      // nothing said in its place the button is a node with no name at all,
+      // and the wait has no observable end.
+      expect(
+        tester.getSemantics(find.bySemanticsIdentifier(passwordButtonId)),
+        isSemantics(label: 'Loading', identifier: passwordButtonId),
+      );
+
+      handle.dispose();
+    });
+
     testWidgets('the field keeps its own node so the toggle stays reachable', (tester) async {
       final handle = tester.ensureSemantics();
 
