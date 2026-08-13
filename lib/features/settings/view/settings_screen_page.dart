@@ -29,7 +29,7 @@ class SettingsScreenPage extends StatelessWidget {
           appPermissions: context.read<AppPermissions>(),
         );
       },
-      child: SettingsScreen(sections: settingsFeature.sections),
+      child: SettingsScreen(sections: settingsFeature.sections, sessionsEnabled: settingsFeature.sessionsEnabled),
     );
   }
 }

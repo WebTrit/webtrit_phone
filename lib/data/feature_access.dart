@@ -115,7 +115,7 @@ class FeatureAccess extends Equatable {
 
       final loginConfig = LoginMapper.map(appConfig, embeddedConfig.embeddedResources);
       final bottomMenuConfig = BottomMenuMapper.map(appConfig, embeddedConfig, coreSupport, featureOverrides);
-      final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupport, termsConfig);
+      final settingsConfig = SettingsMapper.map(appConfig, embeddedResources, coreSupport, termsConfig, systemInfo);
       final callConfig = CallMapper.map(appConfig, featureOverrides, systemInfo);
       final messagingConfig = MessagingMapper.map(appConfig, coreSupport);
       final contactsConfig = ContactsMapper.map(appConfig);
@@ -320,6 +320,7 @@ abstract final class SettingsMapper {
     List<EmbeddedResource> embeddedResources,
     CoreSupport coreSupport,
     TermsConfig termsConfig,
+    WebtritSystemInfo? systemInfo,
   ) {
     final settingSections = <SettingsSection>[];
     bool hasVoicemail = false;
@@ -353,7 +354,14 @@ abstract final class SettingsMapper {
       }
     }
 
-    return SettingsConfig(voicemailsEnabled: hasVoicemail, sections: List.unmodifiable(settingSections));
+    return SettingsConfig(
+      voicemailsEnabled: hasVoicemail,
+      // Listing and revoking sessions is a core endpoint with no adapter
+      // involvement, so there is no capability flag for it: the core version
+      // decides. The row is not configurable, so nothing else gates it.
+      sessionsEnabled: systemInfo?.core.supportsSessionTracking ?? false,
+      sections: List.unmodifiable(settingSections),
+    );
   }
 
   // TODO (Serdun): Move platform-specific configuration to a separate config file.

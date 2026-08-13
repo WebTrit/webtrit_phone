@@ -39,4 +39,12 @@ void main() {
     expect(CoreInfo(version: Version(0, 34, 5)).supportsPeerMessage, true);
     expect(CoreInfo(version: Version(2, 0, 0)).supportsPeerMessage, false);
   });
+
+  test('supportsSessionTracking', () {
+    expect(CoreInfo(version: Version(0, 34, 0)).supportsSessionTracking, false);
+    expect(CoreInfo(version: Version(0, 35, 0, pre: 'alpha')).supportsSessionTracking, true);
+    expect(CoreInfo(version: Version(0, 35, 0)).supportsSessionTracking, true);
+    expect(CoreInfo(version: Version(0, 36, 2)).supportsSessionTracking, true);
+    expect(CoreInfo(version: Version(2, 0, 0)).supportsSessionTracking, false);
+  });
 }

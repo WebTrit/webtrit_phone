@@ -2080,6 +2080,77 @@ class AppLocalizationsUk extends AppLocalizations {
   String get session_Teardown_progressText => 'Вихід із системи...';
 
   @override
+  String get sessions_AppBar_title => 'Активні сесії';
+
+  @override
+  String get sessions_AppType_android => 'Застосунок Android';
+
+  @override
+  String get sessions_AppType_ios => 'Застосунок iOS';
+
+  @override
+  String get sessions_AppType_linux => 'Застосунок Linux';
+
+  @override
+  String get sessions_AppType_macos => 'Застосунок macOS';
+
+  @override
+  String get sessions_AppType_smart => 'Розумний пристрій';
+
+  @override
+  String get sessions_AppType_unknown => 'Невідомий пристрій';
+
+  @override
+  String get sessions_AppType_web => 'Вебзастосунок';
+
+  @override
+  String get sessions_AppType_windows => 'Застосунок Windows';
+
+  @override
+  String get sessions_Button_retry => 'Спробувати ще раз';
+
+  @override
+  String get sessions_Button_revokeAllOthers => 'Вийти з інших сесій';
+
+  @override
+  String get sessions_Placeholder_empty => 'Немає активних сесій';
+
+  @override
+  String get sessions_Placeholder_failure => 'Не вдалося завантажити активні сесії';
+
+  @override
+  String get sessions_RevokeAllConfirmDialog_content =>
+      'Інші пристрої, у яких виконано вхід із цим акаунтом, буде відключено.';
+
+  @override
+  String get sessions_RevokeAllConfirmDialog_title => 'Вийти з інших сесій?';
+
+  @override
+  String get sessions_RevokeConfirmDialog_content => 'Цей пристрій буде відключено від акаунта.';
+
+  @override
+  String get sessions_RevokeConfirmDialog_title => 'Вийти з цієї сесії?';
+
+  @override
+  String get sessions_SnackBar_revokeFailed => 'Не вдалося завершити сесію';
+
+  @override
+  String sessions_Tile_created(String time) {
+    return 'Вхід $time';
+  }
+
+  @override
+  String get sessions_Tile_currentSession => 'Цей пристрій';
+
+  @override
+  String sessions_Tile_lastActivity(String time) {
+    return 'Останнє використання $time';
+  }
+
+  @override
+  String get sessions_Tile_revokeTooltip => 'Вийти';
+
+  @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Вбудовані посилання застосунку';
 
   @override
@@ -2530,6 +2601,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_self_config => 'Сторінка спец-налаштувань';
+
+  @override
+  String get settings_ListViewTileTitle_sessions => 'Сесії';
 
   @override
   String get settings_ListViewTileTitle_settings => 'НАЛАШТУВАННЯ';

@@ -1742,6 +1742,62 @@
   "@session_Teardown_progressText": {
     "description": "Status message displayed while the application is performing cleanup during the logout process."
   },
+  "sessions_AppBar_title": "Активні сесії",
+  "@sessions_AppBar_title": {},
+  "sessions_AppType_android": "Застосунок Android",
+  "@sessions_AppType_android": {},
+  "sessions_AppType_ios": "Застосунок iOS",
+  "@sessions_AppType_ios": {},
+  "sessions_AppType_linux": "Застосунок Linux",
+  "@sessions_AppType_linux": {},
+  "sessions_AppType_macos": "Застосунок macOS",
+  "@sessions_AppType_macos": {},
+  "sessions_AppType_smart": "Розумний пристрій",
+  "@sessions_AppType_smart": {},
+  "sessions_AppType_unknown": "Невідомий пристрій",
+  "@sessions_AppType_unknown": {},
+  "sessions_AppType_web": "Вебзастосунок",
+  "@sessions_AppType_web": {},
+  "sessions_AppType_windows": "Застосунок Windows",
+  "@sessions_AppType_windows": {},
+  "sessions_Button_retry": "Спробувати ще раз",
+  "@sessions_Button_retry": {},
+  "sessions_Button_revokeAllOthers": "Вийти з інших сесій",
+  "@sessions_Button_revokeAllOthers": {},
+  "sessions_Placeholder_empty": "Немає активних сесій",
+  "@sessions_Placeholder_empty": {},
+  "sessions_Placeholder_failure": "Не вдалося завантажити активні сесії",
+  "@sessions_Placeholder_failure": {},
+  "sessions_RevokeAllConfirmDialog_content": "Інші пристрої, у яких виконано вхід із цим акаунтом, буде відключено.",
+  "@sessions_RevokeAllConfirmDialog_content": {},
+  "sessions_RevokeAllConfirmDialog_title": "Вийти з інших сесій?",
+  "@sessions_RevokeAllConfirmDialog_title": {},
+  "sessions_RevokeConfirmDialog_content": "Цей пристрій буде відключено від акаунта.",
+  "@sessions_RevokeConfirmDialog_content": {},
+  "sessions_RevokeConfirmDialog_title": "Вийти з цієї сесії?",
+  "@sessions_RevokeConfirmDialog_title": {},
+  "sessions_SnackBar_revokeFailed": "Не вдалося завершити сесію",
+  "@sessions_SnackBar_revokeFailed": {},
+  "sessions_Tile_created": "Вхід {time}",
+  "@sessions_Tile_created": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "sessions_Tile_currentSession": "Цей пристрій",
+  "@sessions_Tile_currentSession": {},
+  "sessions_Tile_lastActivity": "Останнє використання {time}",
+  "@sessions_Tile_lastActivity": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "sessions_Tile_revokeTooltip": "Вийти",
+  "@sessions_Tile_revokeTooltip": {},
   "settings_AboutText_ApplicationEmbeddedLinks": "Вбудовані посилання застосунку",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AboutText_ThirdPartyLicenses": "Ліцензії третіх сторін",
@@ -2028,6 +2084,8 @@
   "@settings_ListViewTileTitle_registered": {},
   "settings_ListViewTileTitle_self_config": "Сторінка спец-налаштувань",
   "@settings_ListViewTileTitle_self_config": {},
+  "settings_ListViewTileTitle_sessions": "Сесії",
+  "@settings_ListViewTileTitle_sessions": {},
   "settings_ListViewTileTitle_settings": "НАЛАШТУВАННЯ",
   "@settings_ListViewTileTitle_settings": {},
   "settings_ListViewTileTitle_termsConditions": "Умови та положення",

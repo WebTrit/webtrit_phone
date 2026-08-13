@@ -145,6 +145,34 @@ void main() {
     });
   });
 
+  group('user agent', () {
+    test('is sent with every request when the app provides one', () {
+      const userAgent = 'WebTrit/1.8.2 (iPhone14,3; iOS: 17.4)';
+
+      Future<Response> handler(Request request) async {
+        expect(request.headers['user-agent'], equals(userAgent));
+        return Response(jsonEncode({'register': true}), 200, request: request);
+      }
+
+      final httpClient = MockClient(expectAsync1(handler));
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient, userAgent: userAgent);
+
+      expect(apiClient.getAppStatus(token), completion(anything));
+    });
+
+    test('is left to the platform default when the app provides none', () {
+      Future<Response> handler(Request request) async {
+        expect(request.headers.containsKey('user-agent'), isFalse);
+        return Response(jsonEncode({'register': true}), 200, request: request);
+      }
+
+      final httpClient = MockClient(expectAsync1(handler));
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+
+      expect(apiClient.getAppStatus(token), completion(anything));
+    });
+  });
+
   group('session', () {
     test('create user with otp provisional result', () {
       Future<Response> handler1(Request request) async {
@@ -603,6 +631,130 @@ void main() {
       final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
 
       expect(apiClient.deleteUserInfo(token), completion(anything));
+    });
+  });
+
+  group('user sessions', () {
+    const sessionId = '3f1a2b7c-0000-4000-8000-000000000001';
+
+    test('get sessions', () {
+      Future<Response> handler(Request request) async {
+        expect(request.method, equalsIgnoringCase('get'));
+        expect(request.url.toString(), equals('https://$authority/api/v1/user/sessions'));
+        expect(request.headers['authorization'], endsWith(token));
+        return Response(
+          jsonEncode({
+            'items': [
+              {
+                'id': sessionId,
+                'current': true,
+                'status': 'active',
+                'user_agent': 'WebTrit/1.8.2 (ios; iOS 17.4; iPhone14,3)',
+                'ip': '192.0.2.1',
+                'location': 'US',
+                'last_activity_ip': '198.51.100.7',
+                'last_activity_location': 'PL',
+                'app_type': 'ios',
+                'app_identifier': 'app_identifier_1',
+                'app_bundle_id': 'com.webtrit.phone',
+                'created_at': '2026-08-01T10:00:00Z',
+                'last_activity_at': '2026-08-12T18:30:00Z',
+              },
+              {'id': '3f1a2b7c-0000-4000-8000-000000000002', 'current': false, 'status': 'active'},
+            ],
+          }),
+          200,
+          request: request,
+        );
+      }
+
+      final httpClient = MockClient(expectAsync1(handler));
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+
+      expect(
+        apiClient.getUserSessions(token),
+        completion(
+          equals([
+            UserSession(
+              id: sessionId,
+              current: true,
+              status: UserSessionStatus.active,
+              userAgent: 'WebTrit/1.8.2 (ios; iOS 17.4; iPhone14,3)',
+              ip: '192.0.2.1',
+              location: 'US',
+              lastActivityIp: '198.51.100.7',
+              lastActivityLocation: 'PL',
+              appType: AppType.ios,
+              appIdentifier: 'app_identifier_1',
+              appBundleId: 'com.webtrit.phone',
+              createdAt: DateTime.utc(2026, 8, 1, 10),
+              lastActivityAt: DateTime.utc(2026, 8, 12, 18, 30),
+            ),
+            UserSession(id: '3f1a2b7c-0000-4000-8000-000000000002', current: false, status: UserSessionStatus.active),
+          ]),
+        ),
+      );
+    });
+
+    test('get sessions decodes an unknown status without failing', () {
+      Future<Response> handler(Request request) async {
+        return Response(
+          jsonEncode({
+            'items': [
+              {'id': sessionId, 'current': false, 'status': 'suspended_by_admin'},
+            ],
+          }),
+          200,
+          request: request,
+        );
+      }
+
+      final httpClient = MockClient(expectAsync1(handler));
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+
+      expect(
+        apiClient.getUserSessions(token),
+        completion(equals([UserSession(id: sessionId, current: false, status: UserSessionStatus.unknown)])),
+      );
+    });
+
+    test('delete session', () {
+      Future<Response> handler(Request request) async {
+        expect(request.method, equalsIgnoringCase('delete'));
+        expect(request.url.toString(), equals('https://$authority/api/v1/user/sessions/$sessionId'));
+        expect(request.headers['authorization'], endsWith(token));
+        return Response('', 204, request: request);
+      }
+
+      final httpClient = MockClient(expectAsync1(handler));
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+
+      expect(apiClient.deleteUserSession(token, sessionId), completion(anything));
+    });
+
+    test('delete session reports a missing session as a request failure', () {
+      Future<Response> handler(Request request) async {
+        return Response(
+          jsonEncode({
+            'code': 'session_not_found',
+            'details': {'reason': 'session not found'},
+          }),
+          404,
+          request: request,
+        );
+      }
+
+      final httpClient = MockClient(expectAsync1(handler));
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+
+      expect(
+        apiClient.deleteUserSession(token, sessionId),
+        throwsA(
+          isA<RequestFailure>()
+              .having((e) => e.statusCode, 'statusCode', 404)
+              .having((e) => e.errorCode, 'errorCode', 'session_not_found'),
+        ),
+      );
     });
   });
 

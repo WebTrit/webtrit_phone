@@ -2044,6 +2044,76 @@ class AppLocalizationsTh extends AppLocalizations {
   String get session_Teardown_progressText => 'กำลังออกจากระบบ...';
 
   @override
+  String get sessions_AppBar_title => 'เซสชันที่ใช้งานอยู่';
+
+  @override
+  String get sessions_AppType_android => 'แอป Android';
+
+  @override
+  String get sessions_AppType_ios => 'แอป iOS';
+
+  @override
+  String get sessions_AppType_linux => 'แอป Linux';
+
+  @override
+  String get sessions_AppType_macos => 'แอป macOS';
+
+  @override
+  String get sessions_AppType_smart => 'อุปกรณ์สมาร์ท';
+
+  @override
+  String get sessions_AppType_unknown => 'อุปกรณ์ที่ไม่รู้จัก';
+
+  @override
+  String get sessions_AppType_web => 'เว็บแอป';
+
+  @override
+  String get sessions_AppType_windows => 'แอป Windows';
+
+  @override
+  String get sessions_Button_retry => 'ลองอีกครั้ง';
+
+  @override
+  String get sessions_Button_revokeAllOthers => 'ออกจากระบบเซสชันอื่น';
+
+  @override
+  String get sessions_Placeholder_empty => 'ไม่มีเซสชันที่ใช้งานอยู่';
+
+  @override
+  String get sessions_Placeholder_failure => 'ไม่สามารถโหลดเซสชันที่ใช้งานอยู่ได้';
+
+  @override
+  String get sessions_RevokeAllConfirmDialog_content => 'อุปกรณ์อื่นที่ลงชื่อเข้าใช้ด้วยบัญชีนี้จะถูกออกจากระบบ';
+
+  @override
+  String get sessions_RevokeAllConfirmDialog_title => 'ออกจากระบบเซสชันอื่นหรือไม่';
+
+  @override
+  String get sessions_RevokeConfirmDialog_content => 'อุปกรณ์นี้จะถูกออกจากระบบของบัญชี';
+
+  @override
+  String get sessions_RevokeConfirmDialog_title => 'ออกจากระบบเซสชันนี้หรือไม่';
+
+  @override
+  String get sessions_SnackBar_revokeFailed => 'ไม่สามารถออกจากระบบเซสชันได้';
+
+  @override
+  String sessions_Tile_created(String time) {
+    return 'ลงชื่อเข้าใช้ $time';
+  }
+
+  @override
+  String get sessions_Tile_currentSession => 'อุปกรณ์นี้';
+
+  @override
+  String sessions_Tile_lastActivity(String time) {
+    return 'ใช้ล่าสุด $time';
+  }
+
+  @override
+  String get sessions_Tile_revokeTooltip => 'ออกจากระบบ';
+
+  @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'ลิงก์ที่ฝังในแอปพลิเคชัน';
 
   @override
@@ -2492,6 +2562,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_self_config => 'หน้าตั้งค่าด้วยตนเอง';
+
+  @override
+  String get settings_ListViewTileTitle_sessions => 'เซสชัน';
 
   @override
   String get settings_ListViewTileTitle_settings => 'การตั้งค่า';

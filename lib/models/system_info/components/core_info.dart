@@ -38,6 +38,11 @@ class CoreInfo with EquatableMixin {
     return verifyVersionStr('>=0.28.0-alpha.1 <2.0.0');
   }
 
+  bool get supportsSessionTracking {
+    // Listing and revoking the account's sessions was added in 0.35.0
+    return verifyVersionStr('>=0.35.0-alpha <2.0.0');
+  }
+
   bool get supportsPeerMessage {
     // peer_message app-to-app side channel was added in 0.33.0
     return verifyVersionStr('>=0.33.0-alpha <2.0.0');

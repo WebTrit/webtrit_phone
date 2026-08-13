@@ -1742,6 +1742,62 @@
   "@session_Teardown_progressText": {
     "description": "Status message displayed while the application is performing cleanup during the logout process."
   },
+  "sessions_AppBar_title": "Sessioni attive",
+  "@sessions_AppBar_title": {},
+  "sessions_AppType_android": "App Android",
+  "@sessions_AppType_android": {},
+  "sessions_AppType_ios": "App iOS",
+  "@sessions_AppType_ios": {},
+  "sessions_AppType_linux": "App Linux",
+  "@sessions_AppType_linux": {},
+  "sessions_AppType_macos": "App macOS",
+  "@sessions_AppType_macos": {},
+  "sessions_AppType_smart": "Dispositivo smart",
+  "@sessions_AppType_smart": {},
+  "sessions_AppType_unknown": "Dispositivo sconosciuto",
+  "@sessions_AppType_unknown": {},
+  "sessions_AppType_web": "App web",
+  "@sessions_AppType_web": {},
+  "sessions_AppType_windows": "App Windows",
+  "@sessions_AppType_windows": {},
+  "sessions_Button_retry": "Riprova",
+  "@sessions_Button_retry": {},
+  "sessions_Button_revokeAllOthers": "Disconnetti le altre sessioni",
+  "@sessions_Button_revokeAllOthers": {},
+  "sessions_Placeholder_empty": "Nessuna sessione attiva",
+  "@sessions_Placeholder_empty": {},
+  "sessions_Placeholder_failure": "Impossibile caricare le sessioni attive",
+  "@sessions_Placeholder_failure": {},
+  "sessions_RevokeAllConfirmDialog_content": "Gli altri dispositivi collegati a questo account verranno disconnessi.",
+  "@sessions_RevokeAllConfirmDialog_content": {},
+  "sessions_RevokeAllConfirmDialog_title": "Disconnettere le altre sessioni?",
+  "@sessions_RevokeAllConfirmDialog_title": {},
+  "sessions_RevokeConfirmDialog_content": "Questo dispositivo verra' disconnesso dall'account.",
+  "@sessions_RevokeConfirmDialog_content": {},
+  "sessions_RevokeConfirmDialog_title": "Disconnettere questa sessione?",
+  "@sessions_RevokeConfirmDialog_title": {},
+  "sessions_SnackBar_revokeFailed": "Impossibile disconnettere la sessione",
+  "@sessions_SnackBar_revokeFailed": {},
+  "sessions_Tile_created": "Accesso il {time}",
+  "@sessions_Tile_created": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "sessions_Tile_currentSession": "Questo dispositivo",
+  "@sessions_Tile_currentSession": {},
+  "sessions_Tile_lastActivity": "Ultimo utilizzo {time}",
+  "@sessions_Tile_lastActivity": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "sessions_Tile_revokeTooltip": "Disconnetti",
+  "@sessions_Tile_revokeTooltip": {},
   "settings_AboutText_ApplicationEmbeddedLinks": "Collegamenti incorporati dell'applicazione",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AboutText_ThirdPartyLicenses": "Licenze di terze parti",
@@ -2028,6 +2084,8 @@
   "@settings_ListViewTileTitle_registered": {},
   "settings_ListViewTileTitle_self_config": "Self-config pagina",
   "@settings_ListViewTileTitle_self_config": {},
+  "settings_ListViewTileTitle_sessions": "Sessioni",
+  "@settings_ListViewTileTitle_sessions": {},
   "settings_ListViewTileTitle_settings": "IMPOSTAZIONI",
   "@settings_ListViewTileTitle_settings": {},
   "settings_ListViewTileTitle_termsConditions": "Termini e condizioni",

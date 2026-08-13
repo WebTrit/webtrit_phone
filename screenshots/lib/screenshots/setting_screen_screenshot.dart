@@ -44,7 +44,9 @@ class _SettingScreenScreenshotState extends State<SettingScreenScreenshot> {
                 BlocProvider<SessionStatusCubit>(create: (context) => MockSessionStatusCubit.initial()),
                 BlocProvider<UserInfoCubit>(create: (context) => MockUserInfoCubit.initial()),
               ],
-              child: SettingsScreen(sections: sections),
+              // The sessions row needs a live SessionsCubit, which this harness
+              // does not provide.
+              child: SettingsScreen(sections: sections, sessionsEnabled: false),
             );
           },
           transitionDuration: Duration.zero,

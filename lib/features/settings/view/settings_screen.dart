@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
@@ -22,9 +21,14 @@ export 'settings_screen_style.dart';
 export 'settings_screen_styles.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key, required this.sections, this.style});
+  const SettingsScreen({super.key, required this.sections, required this.sessionsEnabled, this.style});
 
   final List<SettingsSection> sections;
+
+  /// Whether the backend can list and revoke sessions; the row is not part of
+  /// [sections] because it is not configurable.
+  final bool sessionsEnabled;
+
   final SettingScreenStyle? style;
 
   @override
@@ -90,15 +94,17 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                     if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
-                    SettingsTile(
-                      key: settingsLogoutButtonKey,
-                      title: context.l10n.settings_ListViewTileTitle_logout,
-                      icon: Icons.logout,
-                      iconColor: effectiveStyle?.logoutIconColor ?? effectiveStyle?.leadingIconsColor,
+                    AccountActionsTile(
+                      sessionsCount: sessionsEnabled
+                          ? context.select<SessionsCubit, int>((cubit) => cubit.state.sessions.length)
+                          : null,
+                      logoutIconColor: effectiveStyle?.logoutIconColor ?? effectiveStyle?.leadingIconsColor,
+                      sessionsIconColor: effectiveStyle?.leadingIconsColor,
                       textStyle: effectiveStyle?.itemTextStyle,
                       showSeparator: showSeparators,
                       separatorColor: effectiveStyle?.separatorColor,
-                      onTap: () => _onLogoutTap(context),
+                      onLogoutTap: () => _onLogoutTap(context),
+                      onSessionsTap: () => _onSessionsTap(context),
                     ),
                     for (final section in sections) ...[
                       GroupTitleListTile(
@@ -176,6 +182,8 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void _onDiagnosticTap(BuildContext context) => context.router.navigate(const DiagnosticScreenPageRoute());
+
+  void _onSessionsTap(BuildContext context) => context.router.navigate(const SessionsScreenPageRoute());
 
   /// A failure rolls the switch back, so it must be explained: without a
   /// message the flip-back reads as the app ignoring the tap.

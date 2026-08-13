@@ -55,6 +55,7 @@ class AutoprovisionScreenPage extends StatelessWidget {
         appInfo: context.read<AppInfo>(),
         packageInfo: context.read<PackageInfo>(),
         appCompatibilityResolver: context.read<AppCompatibilityResolver>(),
+        userAgent: context.read<AppMetadataProvider>().userAgent,
         config: config,
       ),
       child: const AutoprovisionScreen(),

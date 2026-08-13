@@ -45,11 +45,13 @@ class WebtritApiClient {
     Duration? connectionTimeout,
     TrustedCertificates certs = TrustedCertificates.empty,
     bool isDebug = false,
+    String? userAgent,
   }) : this.inner(
          baseUrl,
          tenantId,
          httpClient: createHttpClient(connectionTimeout: connectionTimeout, certs: certs),
          isDebug: isDebug,
+         userAgent: userAgent,
        );
 
   @visibleForTesting
@@ -59,6 +61,7 @@ class WebtritApiClient {
     required http.Client httpClient,
     Logger? logger,
     this.isDebug = false,
+    this.userAgent,
   }) : _httpClient = httpClient,
        _logger = Logger('WebtritApiClient'),
        tenantUrl = buildTenantUrl(baseUrl, tenantId);
@@ -72,6 +75,14 @@ class WebtritApiClient {
   final Uri tenantUrl;
   final http.Client _httpClient;
   final bool isDebug;
+
+  /// Value sent as the `User-Agent` request header, identifying the app build
+  /// and device. The backend stores it on the session it creates, so the user
+  /// can recognize their devices in the active-sessions list.
+  ///
+  /// `null` leaves the header to the platform (browsers forbid setting it, so
+  /// on web it is always the browser's own value).
+  final String? userAgent;
 
   /// Maximum number of characters of an unparsed error body carried into
   /// [RequestFailure.rawBody].
@@ -103,6 +114,7 @@ class WebtritApiClient {
       'content-type': 'application/json; charset=utf-8',
       'accept': 'application/json',
       'x-request-id': xRequestId,
+      'user-agent': ?userAgent,
       if (token != null) 'authorization': 'Bearer $token',
     };
 
@@ -520,6 +532,32 @@ class WebtritApiClient {
       requestOptions: options,
     );
     return UserContact.fromJson(responseJson as Map<String, dynamic>);
+  }
+
+  Future<List<UserSession>> getUserSessions(String token, {RequestOptions options = const RequestOptions()}) async {
+    final responseJson = await _httpClientExecuteGet(
+      [..._apiBasePathSegmentsV1, 'user', 'sessions'],
+      null,
+      token,
+      requestOptions: options,
+    );
+
+    return (responseJson['items'] as List<dynamic>).map((e) {
+      return UserSession.fromJson(e as Map<String, dynamic>);
+    }).toList();
+  }
+
+  Future<void> deleteUserSession(
+    String token,
+    String sessionId, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    await _httpClientExecuteDelete(
+      [..._apiBasePathSegmentsV1, 'user', 'sessions', sessionId],
+      null,
+      token,
+      requestOptions: options,
+    );
   }
 
   Future<void> deleteUserInfo(String token, {RequestOptions options = const RequestOptions()}) async {

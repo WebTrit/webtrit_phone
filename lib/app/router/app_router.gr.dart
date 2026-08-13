@@ -1430,6 +1430,22 @@ class SelfConfigScreenPageRouteArgs {
 }
 
 /// generated route for
+/// [SessionsScreenPage]
+class SessionsScreenPageRoute extends PageRouteInfo<void> {
+  const SessionsScreenPageRoute({List<PageRouteInfo>? children})
+    : super(SessionsScreenPageRoute.name, initialChildren: children);
+
+  static const String name = 'SessionsScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SessionsScreenPage();
+    },
+  );
+}
+
+/// generated route for
 /// [SettingsRouterPage]
 class SettingsRouterPageRoute extends PageRouteInfo<void> {
   const SettingsRouterPageRoute({List<PageRouteInfo>? children})

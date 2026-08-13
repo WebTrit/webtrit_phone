@@ -2073,6 +2073,77 @@ class AppLocalizationsIt extends AppLocalizations {
   String get session_Teardown_progressText => 'Disconnessione in corso...';
 
   @override
+  String get sessions_AppBar_title => 'Sessioni attive';
+
+  @override
+  String get sessions_AppType_android => 'App Android';
+
+  @override
+  String get sessions_AppType_ios => 'App iOS';
+
+  @override
+  String get sessions_AppType_linux => 'App Linux';
+
+  @override
+  String get sessions_AppType_macos => 'App macOS';
+
+  @override
+  String get sessions_AppType_smart => 'Dispositivo smart';
+
+  @override
+  String get sessions_AppType_unknown => 'Dispositivo sconosciuto';
+
+  @override
+  String get sessions_AppType_web => 'App web';
+
+  @override
+  String get sessions_AppType_windows => 'App Windows';
+
+  @override
+  String get sessions_Button_retry => 'Riprova';
+
+  @override
+  String get sessions_Button_revokeAllOthers => 'Disconnetti le altre sessioni';
+
+  @override
+  String get sessions_Placeholder_empty => 'Nessuna sessione attiva';
+
+  @override
+  String get sessions_Placeholder_failure => 'Impossibile caricare le sessioni attive';
+
+  @override
+  String get sessions_RevokeAllConfirmDialog_content =>
+      'Gli altri dispositivi collegati a questo account verranno disconnessi.';
+
+  @override
+  String get sessions_RevokeAllConfirmDialog_title => 'Disconnettere le altre sessioni?';
+
+  @override
+  String get sessions_RevokeConfirmDialog_content => 'Questo dispositivo verra\' disconnesso dall\'account.';
+
+  @override
+  String get sessions_RevokeConfirmDialog_title => 'Disconnettere questa sessione?';
+
+  @override
+  String get sessions_SnackBar_revokeFailed => 'Impossibile disconnettere la sessione';
+
+  @override
+  String sessions_Tile_created(String time) {
+    return 'Accesso il $time';
+  }
+
+  @override
+  String get sessions_Tile_currentSession => 'Questo dispositivo';
+
+  @override
+  String sessions_Tile_lastActivity(String time) {
+    return 'Ultimo utilizzo $time';
+  }
+
+  @override
+  String get sessions_Tile_revokeTooltip => 'Disconnetti';
+
+  @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Collegamenti incorporati dell\'applicazione';
 
   @override
@@ -2525,6 +2596,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_self_config => 'Self-config pagina';
+
+  @override
+  String get settings_ListViewTileTitle_sessions => 'Sessioni';
 
   @override
   String get settings_ListViewTileTitle_settings => 'IMPOSTAZIONI';
