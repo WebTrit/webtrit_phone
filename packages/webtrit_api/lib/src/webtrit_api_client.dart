@@ -522,6 +522,32 @@ class WebtritApiClient {
     return UserContact.fromJson(responseJson as Map<String, dynamic>);
   }
 
+  Future<List<UserSession>> getUserSessions(String token, {RequestOptions options = const RequestOptions()}) async {
+    final responseJson = await _httpClientExecuteGet(
+      [..._apiBasePathSegmentsV1, 'user', 'sessions'],
+      null,
+      token,
+      requestOptions: options,
+    );
+
+    return (responseJson['items'] as List<dynamic>).map((e) {
+      return UserSession.fromJson(e as Map<String, dynamic>);
+    }).toList();
+  }
+
+  Future<void> deleteUserSession(
+    String token,
+    String sessionId, {
+    RequestOptions options = const RequestOptions(),
+  }) async {
+    await _httpClientExecuteDelete(
+      [..._apiBasePathSegmentsV1, 'user', 'sessions', sessionId],
+      null,
+      token,
+      requestOptions: options,
+    );
+  }
+
   Future<void> deleteUserInfo(String token, {RequestOptions options = const RequestOptions()}) async {
     await _httpClientExecuteDelete(
       [..._apiBasePathSegmentsV1, 'user'],
