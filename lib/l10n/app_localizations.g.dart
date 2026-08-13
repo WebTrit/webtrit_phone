@@ -1618,6 +1618,18 @@ abstract class AppLocalizations {
   /// **'Confirm deleting'**
   String get favorites_DeleteConfirmDialog_title;
 
+  /// Accessibility name of the same button once rearranging is under way.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish reordering'**
+  String get favorites_SemanticsLabel_reorderDone;
+
+  /// Accessibility name of the button that starts rearranging the favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder favorites'**
+  String get favorites_SemanticsLabel_reorder;
+
   /// No description provided for @favorites_SnackBar_deleted.
   ///
   /// In en, this message translates to:

@@ -863,6 +863,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get favorites_DeleteConfirmDialog_title => 'ยืนยันการลบ';
 
   @override
+  String get favorites_SemanticsLabel_reorderDone => 'เสร็จสิ้นการจัดเรียง';
+
+  @override
+  String get favorites_SemanticsLabel_reorder => 'จัดเรียงรายการโปรด';
+
+  @override
   String favorites_SnackBar_deleted(String name) {
     return 'ลบ $name แล้ว';
   }

@@ -889,6 +889,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get favorites_DeleteConfirmDialog_title => 'Підтвердити видалення';
 
   @override
+  String get favorites_SemanticsLabel_reorderDone => 'Завершити впорядкування';
+
+  @override
+  String get favorites_SemanticsLabel_reorder => 'Змінити порядок обраних';
+
+  @override
   String favorites_SnackBar_deleted(String name) {
     return '$name видалено';
   }

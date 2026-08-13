@@ -708,6 +708,14 @@
   "@favorites_DeleteConfirmDialog_content": {},
   "favorites_DeleteConfirmDialog_title": "Підтвердити видалення",
   "@favorites_DeleteConfirmDialog_title": {},
+  "favorites_SemanticsLabel_reorderDone": "Завершити впорядкування",
+  "@favorites_SemanticsLabel_reorderDone": {
+    "description": "Accessibility name of the same button once rearranging is under way."
+  },
+  "favorites_SemanticsLabel_reorder": "Змінити порядок обраних",
+  "@favorites_SemanticsLabel_reorder": {
+    "description": "Accessibility name of the button that starts rearranging the favorites."
+  },
   "favorites_SnackBar_deleted": "{name} видалено",
   "@favorites_SnackBar_deleted": {
     "placeholders": {
