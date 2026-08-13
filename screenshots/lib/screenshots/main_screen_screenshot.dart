@@ -199,7 +199,7 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
       case MainFlavor.keypad:
         return BlocProvider<KeypadCubit>(
           create: (context) => widget.interactive
-              ? KeypadCubit(_ScreenshotContactResolver(context.read<ContactsRepository>()))
+              ? KeypadCubit(MockContactResolver(context.read<ContactsRepository>()))
               : (widget.keypadDialing ? MockKeypadCubit.dialing() : MockKeypadCubit.mainScreen()),
           child: Builder(
             // CallControllerScope is only read when a call action is tapped; provide it so the
@@ -255,25 +255,6 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
           create: (_) => MockContactsExternalTabBloc.mainScreen(),
           child: const ContactsExternalTab(),
         );
-    }
-  }
-}
-
-/// Resolves contacts through the (mock) [ContactsRepository] for interactive
-/// keypad previews. Skips the self-number check of [DefaultContactResolver],
-/// which needs a [UserRepository] the screenshot harness does not provide.
-class _ScreenshotContactResolver implements ContactResolver {
-  _ScreenshotContactResolver(this._contactsRepository);
-
-  final ContactsRepository _contactsRepository;
-
-  @override
-  Future<Contact?> resolve(String? number) async {
-    if (number == null || number.isEmpty) return null;
-    try {
-      return await _contactsRepository.getContactByPhoneNumber(number);
-    } catch (_) {
-      return null;
     }
   }
 }
