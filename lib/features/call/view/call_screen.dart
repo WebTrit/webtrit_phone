@@ -20,12 +20,19 @@ class CallScreen extends StatefulWidget {
     this.localePlaceholderBuilder,
     this.remotePlaceholderBuilder,
     this.callConfig = const CallCapabilitiesConfig(),
+    this.contactResolver,
   });
 
   final CallCapabilitiesConfig callConfig;
 
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
+
+  /// Resolves the remote party to a contact for the name and the avatar.
+  ///
+  /// Defaults to [DefaultContactResolver] built from the surrounding repositories;
+  /// pass an own one where those repositories are not available.
+  final ContactResolver? contactResolver;
 
   @override
   State<CallScreen> createState() => _CallScreenState();
@@ -46,10 +53,12 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
   Widget build(BuildContext context) {
     final callBloc = context.read<CallBloc>();
 
-    final contactResolver = DefaultContactResolver(
-      contactsRepository: context.read<ContactsRepository>(),
-      userRepository: context.read<UserRepository>(),
-    );
+    final contactResolver =
+        widget.contactResolver ??
+        DefaultContactResolver(
+          contactsRepository: context.read<ContactsRepository>(),
+          userRepository: context.read<UserRepository>(),
+        );
 
     final style = Theme.of(context).extension<CallScreenStyles>()?.primary?.systemUiOverlayStyle;
 

@@ -10,6 +10,7 @@ export 'mock_chat_conversations_cubit.dart';
 export 'mock_chat_typing_cubit.dart';
 export 'mock_chats_forwarding_cubit.dart';
 export 'mock_contact_bloc.dart';
+export 'mock_contact_resolver.dart';
 export 'mock_contacts_external_tab_bloc.dart';
 export 'mock_contacts_local_tab_bloc.dart';
 export 'mock_contacts_search_bloc.dart';
