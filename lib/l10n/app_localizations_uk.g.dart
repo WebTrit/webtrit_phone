@@ -3429,4 +3429,16 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get contacts_SemanticsLabel_clearSearch => 'Очистити пошук';
+
+  @override
+  String get messaging_SemanticsLabel_newChat => 'Start a new chat';
+
+  @override
+  String get messaging_SemanticsLabel_newSms => 'Write a new message';
+
+  @override
+  String get messaging_SemanticsLabel_call => 'Call';
+
+  @override
+  String get messaging_SemanticsLabel_videoCall => 'Video call';
 }

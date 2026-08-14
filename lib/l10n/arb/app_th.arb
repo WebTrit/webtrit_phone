@@ -2700,5 +2700,21 @@
   "contacts_SemanticsLabel_clearSearch": "ล้างการค้นหา",
   "@contacts_SemanticsLabel_clearSearch": {
     "description": "Accessibility name of the button that empties the contact search field."
+  },
+  "messaging_SemanticsLabel_newChat": "Start a new chat",
+  "@messaging_SemanticsLabel_newChat": {
+    "description": "Accessibility name of the button that starts a new chat conversation."
+  },
+  "messaging_SemanticsLabel_newSms": "Write a new message",
+  "@messaging_SemanticsLabel_newSms": {
+    "description": "Accessibility name of the button that starts a new SMS conversation."
+  },
+  "messaging_SemanticsLabel_call": "Call",
+  "@messaging_SemanticsLabel_call": {
+    "description": "Accessibility name of the button that calls the person the chat is with."
+  },
+  "messaging_SemanticsLabel_videoCall": "Video call",
+  "@messaging_SemanticsLabel_videoCall": {
+    "description": "Accessibility name of the button that starts a video call with the person the chat is with."
   }
 }

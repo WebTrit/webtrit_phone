@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
@@ -178,16 +179,24 @@ class _DialogChatInfoState extends State<DialogChatInfo> {
   List<Widget> _buildCallActions(ContactPhone contactPhone, Contact contact) {
     return [
       if (widget.isAudioCallEnabled)
-        IconButton(
-          splashRadius: 24,
-          icon: const Icon(Icons.call),
-          onPressed: () => _onCall(contactPhone, contact, false),
+        SemanticAction(
+          label: context.l10n.messaging_SemanticsLabel_call,
+          identifier: chatInfoCallId,
+          child: IconButton(
+            splashRadius: 24,
+            icon: const Icon(Icons.call),
+            onPressed: () => _onCall(contactPhone, contact, false),
+          ),
         ),
       if (widget.isVideoCallEnabled)
-        IconButton(
-          splashRadius: 24,
-          icon: const Icon(Icons.videocam),
-          onPressed: () => _onCall(contactPhone, contact, true),
+        SemanticAction(
+          label: context.l10n.messaging_SemanticsLabel_videoCall,
+          identifier: chatInfoVideoCallId,
+          child: IconButton(
+            splashRadius: 24,
+            icon: const Icon(Icons.videocam),
+            onPressed: () => _onCall(contactPhone, contact, true),
+          ),
         ),
     ];
   }

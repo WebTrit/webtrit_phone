@@ -6252,6 +6252,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear search'**
   String get contacts_SemanticsLabel_clearSearch;
+
+  /// Accessibility name of the button that starts a new chat conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a new chat'**
+  String get messaging_SemanticsLabel_newChat;
+
+  /// Accessibility name of the button that starts a new SMS conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a new message'**
+  String get messaging_SemanticsLabel_newSms;
+
+  /// Accessibility name of the button that calls the person the chat is with.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get messaging_SemanticsLabel_call;
+
+  /// Accessibility name of the button that starts a video call with the person the chat is with.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call'**
+  String get messaging_SemanticsLabel_videoCall;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
