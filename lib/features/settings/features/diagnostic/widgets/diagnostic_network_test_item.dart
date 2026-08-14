@@ -2,7 +2,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import '../bloc/network_tester_cubit.dart';
@@ -64,37 +66,47 @@ class DiagnosticNetworkTestItem extends StatelessWidget {
             l10n.diagnosticNetworkTestItem_subtitle_noCandidates,
         ];
 
-        return ListTile(
-          onTap: onTap,
-          title: Row(
-            children: [
-              // Flexible so a long status at large text sizes ellipsizes
-              // instead of pushing the button off the row.
-              Flexible(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis)),
-              const SizedBox(width: 4),
-              // One slot of the same size in both states: the check swaps a
-              // spinner for a button, and a slot that changes size makes the
-              // row - and the list under it - jump on every re-test.
-              SizedBox.square(
-                dimension: kMinInteractiveDimension,
-                child: gathering
-                    ? const Center(
-                        child: SizedBox.square(dimension: 12, child: CircularProgressIndicator(strokeWidth: 3)),
-                      )
-                    // A button rather than a bare gesture area: the icon is 16
-                    // pixels across, so the thing to press was a third of the
-                    // size a finger needs, and it offered no ripple to say it
-                    // was one.
-                    : IconButton(
-                        onPressed: () => context.read<NetworkTesterCubit>().refresh(),
-                        icon: const Icon(Icons.refresh, size: 16),
-                        padding: EdgeInsets.zero,
-                      ),
-              ),
-            ],
+        // An anchor, not a merged control: this row holds two things to press -
+        // itself, which opens the details, and the button that runs the check
+        // again. Merging them would leave one node and hide the button.
+        return SemanticId(
+          identifier: diagnosticNetworkTestId,
+          child: ListTile(
+            onTap: onTap,
+            title: Row(
+              children: [
+                // Flexible so a long status at large text sizes ellipsizes
+                // instead of pushing the button off the row.
+                Flexible(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis)),
+                const SizedBox(width: 4),
+                // One slot of the same size in both states: the check swaps a
+                // spinner for a button, and a slot that changes size makes the
+                // row - and the list under it - jump on every re-test.
+                SizedBox.square(
+                  dimension: kMinInteractiveDimension,
+                  child: gathering
+                      ? const Center(
+                          child: SizedBox.square(dimension: 12, child: CircularProgressIndicator(strokeWidth: 3)),
+                        )
+                      // A button rather than a bare gesture area: the icon is 16
+                      // pixels across, so the thing to press was a third of the
+                      // size a finger needs, and it offered no ripple to say it
+                      // was one.
+                      : SemanticAction(
+                          label: l10n.diagnosticNetworkTest_SemanticsLabel_refresh,
+                          identifier: diagnosticNetworkTestRefreshId,
+                          child: IconButton(
+                            onPressed: () => context.read<NetworkTesterCubit>().refresh(),
+                            icon: const Icon(Icons.refresh, size: 16),
+                            padding: EdgeInsets.zero,
+                          ),
+                        ),
+                ),
+              ],
+            ),
+            subtitle: Text(subtitleParts.join(' · ')),
+            trailing: Icon(icon, color: color),
           ),
-          subtitle: Text(subtitleParts.join(' · ')),
-          trailing: Icon(icon, color: color),
         );
       },
     );

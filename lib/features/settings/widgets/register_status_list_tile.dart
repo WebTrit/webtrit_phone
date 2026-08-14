@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/register_status/register_status.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -73,13 +74,19 @@ class RegisterStatusListTile extends StatelessWidget {
       );
     }
 
+    // The id sits on the row in both states: a test looks for one control
+    // whether or not the server can be reached, and the row is what carries
+    // the state and the reason.
     if (available) {
-      return SwitchListTile(
-        title: title,
-        subtitle: subtitle(_subtitle(context, available: available)),
-        value: registerStatus.value,
-        onChanged: onChanged,
-        secondary: icon,
+      return SemanticAction(
+        identifier: registerStatusSwitchId,
+        child: SwitchListTile(
+          title: title,
+          subtitle: subtitle(_subtitle(context, available: available)),
+          value: registerStatus.value,
+          onChanged: onChanged,
+          secondary: icon,
+        ),
       );
     }
 
@@ -91,7 +98,8 @@ class RegisterStatusListTile extends StatelessWidget {
     // One node for the row: the wording, the value and the tap that explains
     // why it cannot be changed belong together, or a screen reader lands on a
     // switch that says "on" without saying what is on.
-    return MergeSemantics(
+    return SemanticAction(
+      identifier: registerStatusSwitchId,
       child: ListTile(
         onTap: onUnavailableTap,
         leading: icon,

@@ -6276,6 +6276,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Video call'**
   String get messaging_SemanticsLabel_videoCall;
+
+  /// Accessibility name of the button that repeats the network check on the diagnostics screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Run the network test again'**
+  String get diagnosticNetworkTest_SemanticsLabel_refresh;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
