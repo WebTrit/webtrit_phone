@@ -641,6 +641,22 @@ class AppLocalizationsIt extends AppLocalizations {
       'Questo dispositivo non supporta il framework di chiamata di sistema (Telecom), quindi le chiamate in arrivo usano un servizio in background limitato. Le chiamate possono essere ritardate o perse quando il sistema limita le app in background. In questa modalità non è disponibile la selezione dell\'auricolare Bluetooth o cablato.';
 
   @override
+  String get diagnostic_fullScreenIntent_tile_title => 'Chiamate a schermo intero';
+
+  @override
+  String get diagnostic_fullScreenIntent_navigate_section => 'Vai alla sezione Notifiche a schermo intero';
+
+  @override
+  String get diagnostic_fullScreenIntent_groupTitle => 'Chiamate sulla schermata di blocco';
+
+  @override
+  String get diagnostic_fullScreenIntent_caption => 'Le chiamate arrivano come notifica, non a schermo intero';
+
+  @override
+  String get diagnostic_fullScreenIntent_description =>
+      'Consente a una chiamata in arrivo di aprirsi a schermo intero sulla schermata di blocco e di essere accettata da li. Senza questa autorizzazione la chiamata arriva come notifica e, per rispondere da una schermata di blocco protetta da PIN, sequenza o impronta, viene chiesto di sbloccare il telefono.';
+
+  @override
   String get diagnostic_permission_camera_description =>
       'Questa app richiede il permesso di accedere alla fotocamera per effettuare videochiamate.';
 

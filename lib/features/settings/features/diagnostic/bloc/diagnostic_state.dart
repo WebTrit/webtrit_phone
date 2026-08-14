@@ -10,6 +10,7 @@ class DiagnosticState with _$DiagnosticState {
     this.isXiaomiDevice = false,
     this.backgroundActivityStartStatus = CallkeepSpecialPermissionStatus.unknown,
     this.showWhenLockedStatus = CallkeepSpecialPermissionStatus.unknown,
+    this.fullScreenIntentStatus = CallkeepSpecialPermissionStatus.unknown,
   });
 
   @override
@@ -39,6 +40,12 @@ class DiagnosticState with _$DiagnosticState {
   /// gates showing the incoming-call UI over the lock screen.
   @override
   final CallkeepSpecialPermissionStatus showWhenLockedStatus;
+
+  /// Status of the permission that lets an incoming call take over the lock screen.
+  /// Denied only costs the full-screen call UI - the call still arrives as a
+  /// notification - so this is the place where the user can turn it on later.
+  @override
+  final CallkeepSpecialPermissionStatus fullScreenIntentStatus;
 
   List<PermissionWithStatus> filterPermissionsByAgreement({List<Permission> exclude = const []}) {
     return permissions.where((permission) {

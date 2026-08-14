@@ -123,17 +123,40 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                         ),
                       ),
                     ),
+                if (androidTarget) ...[
+                  GroupTitleListTile(titleData: context.l10n.diagnostic_fullScreenIntent_groupTitle),
+                  DiagnosticSpecialPermissionItem(
+                    title: context.l10n.diagnostic_fullScreenIntent_tile_title,
+                    status: state.fullScreenIntentStatus,
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) => DiagnosticSpecialPermissionDetails(
+                          title: context.l10n.diagnostic_fullScreenIntent_tile_title,
+                          description: context.l10n.diagnostic_fullScreenIntent_description,
+                          navigationHint: context.l10n.diagnostic_fullScreenIntent_navigate_section,
+                          status: state.fullScreenIntentStatus,
+                          onTap: () {
+                            _openFullScreenIntentSettings();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ],
                 if (androidTarget && state.isXiaomiDevice) ...[
                   GroupTitleListTile(titleData: context.l10n.diagnostic_xiaomi_groupTitle),
-                  DiagnosticXiaomiPermissionItem(
+                  DiagnosticSpecialPermissionItem(
                     title: context.l10n.diagnostic_xiaomi_backgroundActivityStart_tile_title,
                     status: state.backgroundActivityStartStatus,
                     onTap: () {
                       showModalBottomSheet(
                         context: context,
-                        builder: (BuildContext context) => DiagnosticXiaomiPermissionDetails(
+                        builder: (BuildContext context) => DiagnosticSpecialPermissionDetails(
                           title: context.l10n.diagnostic_xiaomi_backgroundActivityStart_tile_title,
                           description: context.l10n.diagnostic_xiaomi_backgroundActivityStart_description,
+                          navigationHint: context.l10n.diagnostic_xiaomi_navigate_section,
                           status: state.backgroundActivityStartStatus,
                           onTap: () {
                             _openBackgroundActivityStartSettings();
@@ -143,15 +166,16 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
                       );
                     },
                   ),
-                  DiagnosticXiaomiPermissionItem(
+                  DiagnosticSpecialPermissionItem(
                     title: context.l10n.diagnostic_xiaomi_showWhenLocked_tile_title,
                     status: state.showWhenLockedStatus,
                     onTap: () {
                       showModalBottomSheet(
                         context: context,
-                        builder: (BuildContext context) => DiagnosticXiaomiPermissionDetails(
+                        builder: (BuildContext context) => DiagnosticSpecialPermissionDetails(
                           title: context.l10n.diagnostic_xiaomi_showWhenLocked_tile_title,
                           description: context.l10n.diagnostic_xiaomi_showWhenLocked_description,
+                          navigationHint: context.l10n.diagnostic_xiaomi_navigate_section,
                           status: state.showWhenLockedStatus,
                           onTap: () {
                             _openShowWhenLockedSettings();
@@ -222,5 +246,9 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
 
   void _openBackgroundActivityStartSettings() {
     context.read<DiagnosticCubit>().openBackgroundActivityStartSettings();
+  }
+
+  void _openFullScreenIntentSettings() {
+    context.read<DiagnosticCubit>().openFullScreenIntentSettings();
   }
 }

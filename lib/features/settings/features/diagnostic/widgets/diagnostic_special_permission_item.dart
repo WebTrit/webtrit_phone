@@ -4,8 +4,8 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import '../extensions/extensions.dart';
 
-class DiagnosticXiaomiPermissionItem extends StatelessWidget {
-  const DiagnosticXiaomiPermissionItem({super.key, required this.title, required this.status, required this.onTap});
+class DiagnosticSpecialPermissionItem extends StatelessWidget {
+  const DiagnosticSpecialPermissionItem({super.key, required this.title, required this.status, required this.onTap});
 
   final String title;
   final CallkeepSpecialPermissionStatus status;

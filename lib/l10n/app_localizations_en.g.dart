@@ -634,6 +634,22 @@ class AppLocalizationsEn extends AppLocalizations {
       'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Bluetooth and wired headset selection is not available in this mode.';
 
   @override
+  String get diagnostic_fullScreenIntent_tile_title => 'Full-screen calls';
+
+  @override
+  String get diagnostic_fullScreenIntent_navigate_section => 'Navigate to the Full-screen notifications section';
+
+  @override
+  String get diagnostic_fullScreenIntent_groupTitle => 'Lock screen calls';
+
+  @override
+  String get diagnostic_fullScreenIntent_caption => 'Calls arrive as a notification, not full screen';
+
+  @override
+  String get diagnostic_fullScreenIntent_description =>
+      'Lets an incoming call open full screen over the lock screen and be answered right there. Without it the call arrives as a notification, and answering from a locked screen protected by a PIN, pattern or fingerprint asks to unlock the phone first.';
+
+  @override
   String get diagnostic_permission_camera_description =>
       'This app requires permission to access the camera to make video calls.';
 

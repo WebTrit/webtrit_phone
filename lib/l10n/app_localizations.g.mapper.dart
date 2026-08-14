@@ -269,6 +269,16 @@ extension AppLocalizationsExtension on AppLocalizations {
         diagnostic_callingMode_standalone_caption,
       'diagnostic_callingMode_standalone_description' =>
         diagnostic_callingMode_standalone_description,
+      'diagnostic_fullScreenIntent_tile_title' =>
+        diagnostic_fullScreenIntent_tile_title,
+      'diagnostic_fullScreenIntent_navigate_section' =>
+        diagnostic_fullScreenIntent_navigate_section,
+      'diagnostic_fullScreenIntent_groupTitle' =>
+        diagnostic_fullScreenIntent_groupTitle,
+      'diagnostic_fullScreenIntent_caption' =>
+        diagnostic_fullScreenIntent_caption,
+      'diagnostic_fullScreenIntent_description' =>
+        diagnostic_fullScreenIntent_description,
       'diagnostic_permission_camera_description' =>
         diagnostic_permission_camera_description,
       'diagnostic_permission_camera_title' =>

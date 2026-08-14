@@ -24,6 +24,8 @@ extension SessionIssueL10n on SessionIssue {
       case SessionIssueId.limitedStandaloneCallMode:
         // Same warning as the diagnostic calling-mode row - reuse its strings.
         return context.l10n.diagnostic_callingMode_standalone_title;
+      case SessionIssueId.fullScreenCallsUnavailable:
+        return context.l10n.diagnostic_fullScreenIntent_tile_title;
     }
   }
 
@@ -32,6 +34,8 @@ extension SessionIssueL10n on SessionIssue {
     switch (id) {
       case SessionIssueId.limitedStandaloneCallMode:
         return context.l10n.diagnostic_callingMode_standalone_caption;
+      case SessionIssueId.fullScreenCallsUnavailable:
+        return context.l10n.diagnostic_fullScreenIntent_caption;
     }
   }
 

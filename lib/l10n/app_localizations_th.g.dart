@@ -632,6 +632,22 @@ class AppLocalizationsTh extends AppLocalizations {
       'อุปกรณ์นี้ไม่รองรับเฟรมเวิร์กการโทรของระบบ (Telecom) ดังนั้นสายเรียกเข้าจะใช้บริการเบื้องหลังแบบจำกัด สายอาจล่าช้าหรือพลาดเมื่อระบบจำกัดแอปที่ทำงานเบื้องหลัง การเลือกหูฟังบลูทูธหรือแบบมีสายไม่สามารถใช้งานได้ในโหมดนี้';
 
   @override
+  String get diagnostic_fullScreenIntent_tile_title => 'สายเรียกเข้าแบบเต็มหน้าจอ';
+
+  @override
+  String get diagnostic_fullScreenIntent_navigate_section => 'ไปที่ส่วนการแจ้งเตือนแบบเต็มหน้าจอ';
+
+  @override
+  String get diagnostic_fullScreenIntent_groupTitle => 'สายเรียกเข้าบนหน้าจอล็อก';
+
+  @override
+  String get diagnostic_fullScreenIntent_caption => 'สายเรียกเข้าจะมาถึงเป็นการแจ้งเตือน ไม่ใช่เต็มหน้าจอ';
+
+  @override
+  String get diagnostic_fullScreenIntent_description =>
+      'ให้สายเรียกเข้าเปิดแบบเต็มหน้าจอบนหน้าจอล็อกและรับสายได้จากตรงนั้น หากไม่มีสิทธิ์นี้ สายจะมาถึงในรูปแบบการแจ้งเตือน และการรับสายจากหน้าจอล็อกที่ป้องกันด้วย PIN รูปแบบ หรือลายนิ้วมือ จะขอให้ปลดล็อกโทรศัพท์ก่อน';
+
+  @override
   String get diagnostic_permission_camera_description => 'แอปนี้ต้องการสิทธิ์เข้าถึงกล้องเพื่อโทรแบบวิดีโอ';
 
   @override
