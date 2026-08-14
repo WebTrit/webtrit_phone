@@ -3061,11 +3061,23 @@ abstract class AppLocalizations {
   /// **'View Contact'**
   String get numberActions_viewContact;
 
+  /// No description provided for @permission_Button_notNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get permission_Button_notNow;
+
   /// No description provided for @permission_Button_request.
   ///
   /// In en, this message translates to:
   /// **'Continue'**
   String get permission_Button_request;
+
+  /// No description provided for @permission_fullScreenNotification_Text_optional.
+  ///
+  /// In en, this message translates to:
+  /// **'You can continue without this. Incoming calls will arrive as a notification instead of opening full screen, and if your phone is locked with a PIN, pattern or fingerprint, you will have to unlock it to answer from the lock screen.'**
+  String get permission_fullScreenNotification_Text_optional;
 
   /// No description provided for @permission_manageFullScreenNotificationInstructions_step1.
   ///

@@ -23,11 +23,13 @@ class PermissionsState with _$PermissionsState {
     /// requests, which can lead to platform exceptions.
     this.isRequesting = false,
 
-    /// A list of special permissions (e.g., Full Screen Intent, Overlay) that are currently denied.
+    /// A list of special permissions (e.g., Full Screen Intent, Overlay) that are denied
+    /// and still have to be brought to the user's attention.
     ///
     /// Unlike standard permissions, these cannot always be requested via a system modal
     /// and often require the user to manually navigate to specific settings screens.
-    /// The UI uses this list to trigger dedicated instruction screens.
+    /// The UI uses this list to trigger dedicated instruction screens. An optional
+    /// permission leaves the list once the user skips it.
     this.missingSpecialPermissions = const [],
 
     /// Manufacturer-specific guidance for ensuring reliable background execution.

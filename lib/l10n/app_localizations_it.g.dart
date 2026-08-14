@@ -1689,7 +1689,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get numberActions_viewContact => 'Visualizza contatto';
 
   @override
+  String get permission_Button_notNow => 'Non ora';
+
+  @override
   String get permission_Button_request => 'Continua';
+
+  @override
+  String get permission_fullScreenNotification_Text_optional =>
+      'Puoi continuare senza. Le chiamate in arrivo arriveranno come notifica invece di aprirsi a schermo intero e, se il telefono e protetto da PIN, sequenza o impronta, dovrai sbloccarlo per rispondere dalla schermata di blocco.';
 
   @override
   String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';

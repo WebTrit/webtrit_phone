@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
 class PermissionsScreenPage extends StatelessWidget {
@@ -15,8 +16,11 @@ class PermissionsScreenPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const widget = PermissionsScreen();
     final provider = BlocProvider(
-      create: (context) =>
-          PermissionsCubit(appPermissions: context.read<AppPermissions>(), deviceInfo: context.read<DeviceInfo>()),
+      create: (context) => PermissionsCubit(
+        appPermissions: context.read<AppPermissions>(),
+        deviceInfo: context.read<DeviceInfo>(),
+        specialPermissionsRepository: context.read<SpecialPermissionsRepository>(),
+      ),
       child: widget,
     );
     return provider;

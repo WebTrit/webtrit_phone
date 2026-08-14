@@ -212,6 +212,7 @@ class RootApp extends StatelessWidget {
           final iceSettingsRepository = IceSettingsRepositoryPrefsImpl(prefs);
           final incomingCallTypeRepository = IncomingCallTypeRepositoryPrefsImpl(prefs);
           final peerConnectionSettingsRepository = PeerConnectionSettingsRepositoryPrefsImpl(prefs);
+          final specialPermissionsRepository = SpecialPermissionsRepositoryPrefsImpl(prefs);
           final videoCapturingSettingsRepository = VideoCapturingSettingsRepositoryPrefsImpl(prefs);
           final encodingSettingsRepository = EncodingSettingsRepositoryPrefsImpl(prefs);
           final localeRepository = LocaleRepositoryPrefsImpl(prefs);
@@ -250,6 +251,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<IceSettingsRepository>.value(value: iceSettingsRepository),
               RepositoryProvider<IncomingCallTypeRepository>.value(value: incomingCallTypeRepository),
               RepositoryProvider<PeerConnectionSettingsRepository>.value(value: peerConnectionSettingsRepository),
+              RepositoryProvider<SpecialPermissionsRepository>.value(value: specialPermissionsRepository),
               RepositoryProvider<VideoCapturingSettingsRepository>.value(value: videoCapturingSettingsRepository),
               RepositoryProvider<EncodingSettingsRepository>.value(value: encodingSettingsRepository),
               RepositoryProvider<LocaleRepository>.value(value: localeRepository),

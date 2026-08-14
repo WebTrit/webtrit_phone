@@ -408,6 +408,9 @@ extension AppLocalizationsExtension on AppLocalizations {
         favorites_DeleteConfirmDialog_content,
       'favorites_DeleteConfirmDialog_title' =>
         favorites_DeleteConfirmDialog_title,
+      'favorites_SemanticsLabel_reorderDone' =>
+        favorites_SemanticsLabel_reorderDone,
+      'favorites_SemanticsLabel_reorder' => favorites_SemanticsLabel_reorder,
       'favorites_Text_blingTransferInitiated' =>
         favorites_Text_blingTransferInitiated,
       'locale_default' => locale_default,
@@ -772,7 +775,10 @@ extension AppLocalizationsExtension on AppLocalizations {
       'numberActions_transfer' => numberActions_transfer,
       'numberActions_videoCall' => numberActions_videoCall,
       'numberActions_viewContact' => numberActions_viewContact,
+      'permission_Button_notNow' => permission_Button_notNow,
       'permission_Button_request' => permission_Button_request,
+      'permission_fullScreenNotification_Text_optional' =>
+        permission_fullScreenNotification_Text_optional,
       'permission_manageFullScreenNotificationInstructions_step1' =>
         permission_manageFullScreenNotificationInstructions_step1,
       'permission_manageFullScreenNotificationInstructions_step2' =>

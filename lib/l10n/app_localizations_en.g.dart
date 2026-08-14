@@ -1666,7 +1666,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get numberActions_viewContact => 'View Contact';
 
   @override
+  String get permission_Button_notNow => 'Not now';
+
+  @override
   String get permission_Button_request => 'Continue';
+
+  @override
+  String get permission_fullScreenNotification_Text_optional =>
+      'You can continue without this. Incoming calls will arrive as a notification instead of opening full screen, and if your phone is locked with a PIN, pattern or fingerprint, you will have to unlock it to answer from the lock screen.';
 
   @override
   String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';

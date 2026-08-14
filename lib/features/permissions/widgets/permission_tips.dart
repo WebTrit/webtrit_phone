@@ -13,12 +13,21 @@ class PermissionTips extends StatelessWidget {
     required this.instruction,
     required this.onGoToAppSettings,
     required this.onPop,
+    this.note,
+    this.dismissLabel,
   });
 
   final String title;
   final List<String> instruction;
   final VoidCallback onGoToAppSettings;
   final VoidCallback? onPop;
+
+  /// What the user is choosing when they move on without granting the permission.
+  /// Omitted where there is nothing to choose.
+  final String? note;
+
+  /// Label of the button that leaves the screen. Defaults to acknowledging the tips.
+  final String? dismissLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +70,10 @@ class PermissionTips extends StatelessWidget {
             textAlign: TextAlign.center,
             style: themeData.textTheme.labelMedium,
           ),
+          if (note != null) ...[
+            const SizedBox(height: kInset / 2),
+            Text(note!, textAlign: TextAlign.center, style: themeData.textTheme.labelMedium),
+          ],
           const Spacer(),
           const SizedBox(height: kInset),
           OutlinedButton(
@@ -73,7 +86,7 @@ class PermissionTips extends StatelessWidget {
             key: permissionTipsButtonKey,
             onPressed: onPop,
             style: elevatedButtonStyles?.primary,
-            child: Text(context.l10n.permission_manufacturer_Button_gotIt),
+            child: Text(dismissLabel ?? context.l10n.permission_manufacturer_Button_gotIt),
           ),
         ],
       ),
