@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 
 class DialogChatInfo extends StatefulWidget {
@@ -134,7 +135,7 @@ class _DialogChatInfoState extends State<DialogChatInfo> {
                                       trailing: IconButton(
                                         splashRadius: 24,
                                         icon: const Icon(Icons.email),
-                                        onPressed: () {},
+                                        onPressed: () => _onEmail(contactEmail),
                                       ),
                                     ),
                                 ],
@@ -165,6 +166,13 @@ class _DialogChatInfoState extends State<DialogChatInfo> {
       },
     );
   }
+
+  /// Opens the mail app on the address shown next to the button.
+  ///
+  /// The button has been on this screen with an empty callback: it looked like
+  /// a way to write to the contact and did nothing at all. Same route as the
+  /// contact card takes.
+  Future<void> _onEmail(ContactEmail contactEmail) => launchMailTo(contactEmail.address);
 
   /// Returns a list of call action buttons based on provided configuration.
   List<Widget> _buildCallActions(ContactPhone contactPhone, Contact contact) {
