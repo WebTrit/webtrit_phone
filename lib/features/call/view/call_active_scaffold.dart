@@ -228,306 +228,301 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
         extendBodyBehindAppBar: true,
         body: OrientationBuilder(
           builder: (context, orientation) {
-            return GestureDetector(
-              child: Stack(
-                children: [
-                  if (_hasRenderableRemoteFrame)
-                    RemoteVideoViewOverlay(
-                      activeCallWasAccepted: activeCall.wasAccepted,
-                      remoteStream: activeCall.remoteStream,
-                      videoFit: _videoFit,
-                      onTap: _compactController.toggle,
-                      remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
-                      backgroundMode: _backgroundMode,
-                      hasRenderableRemoteFrame: _hasRenderableRemoteFrame,
-                      // Its important to hide video if held to avoid showing frozen/last frames when held,
-                      // and especially for case when both sides turn on hold and after one side unholds video started to show for another 'holded' side.
-                      hideVideo: activeCall.held,
-                    ),
-                  AnimatedBuilder(
-                    animation: _compactController,
-                    builder: (context, _) => Positioned.fill(
-                      left: mediaQueryData.padding.left,
-                      right: mediaQueryData.padding.right,
-                      top: mediaQueryData.padding.top,
-                      bottom: mediaQueryData.padding.bottom,
-                      child: AnimatedOpacity(
-                        opacity: _compactController.compact ? 0 : 1,
-                        duration: kThemeAnimationDuration,
-                        child: IgnorePointer(
-                          ignoring: _compactController.compact,
-                          child: Column(
-                            children: [
-                              AppBar(
-                                leading: style?.appBar?.showBackButton == false ? null : const ExtBackButton(),
-                                backgroundColor: style?.appBar?.backgroundColor,
-                                foregroundColor: style?.appBar?.foregroundColor,
-                                primary: style?.appBar?.primary ?? false,
-                                // Global status line: signaling state, media
-                                // failure or the worst stream quality across calls.
-                                centerTitle: true,
-                                title: CallToolbarStatus(
-                                  callStatus: widget.callStatus,
-                                  networkQuality: activeCalls.worstNetworkQuality,
-                                  iceConnectionIssue: activeCalls.firstIceConnectionIssue,
-                                  style: style?.callInfo,
-                                ),
-                                actions: [
-                                  if (activeCalls.shouldAutoCompact)
-                                    SemanticAction.button(
-                                      label: context.l10n.call_settings_additional_options,
-                                      identifier: callActionsOptionsId,
-                                      child: CallPopupMenuButton<void>(
-                                        items: _buildPopupMenuItems,
-                                        child: const Icon(Icons.more_vert),
-                                      ),
-                                    ),
-                                ],
+            return Stack(
+              children: [
+                if (_hasRenderableRemoteFrame)
+                  RemoteVideoViewOverlay(
+                    activeCallWasAccepted: activeCall.wasAccepted,
+                    remoteStream: activeCall.remoteStream,
+                    videoFit: _videoFit,
+                    onTap: _compactController.toggle,
+                    remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
+                    backgroundMode: _backgroundMode,
+                    hasRenderableRemoteFrame: _hasRenderableRemoteFrame,
+                    // Its important to hide video if held to avoid showing frozen/last frames when held,
+                    // and especially for case when both sides turn on hold and after one side unholds video started to show for another 'holded' side.
+                    hideVideo: activeCall.held,
+                  ),
+                AnimatedBuilder(
+                  animation: _compactController,
+                  builder: (context, _) => Positioned.fill(
+                    left: mediaQueryData.padding.left,
+                    right: mediaQueryData.padding.right,
+                    top: mediaQueryData.padding.top,
+                    bottom: mediaQueryData.padding.bottom,
+                    child: AnimatedOpacity(
+                      opacity: _compactController.compact ? 0 : 1,
+                      duration: kThemeAnimationDuration,
+                      child: IgnorePointer(
+                        ignoring: _compactController.compact,
+                        child: Column(
+                          children: [
+                            AppBar(
+                              leading: style?.appBar?.showBackButton == false ? null : const ExtBackButton(),
+                              backgroundColor: style?.appBar?.backgroundColor,
+                              foregroundColor: style?.appBar?.foregroundColor,
+                              primary: style?.appBar?.primary ?? false,
+                              // Global status line: signaling state, media
+                              // failure or the worst stream quality across calls.
+                              centerTitle: true,
+                              title: CallToolbarStatus(
+                                callStatus: widget.callStatus,
+                                networkQuality: activeCalls.worstNetworkQuality,
+                                iceConnectionIssue: activeCalls.firstIceConnectionIssue,
+                                style: style?.callInfo,
                               ),
-                              Expanded(
-                                child: LayoutBuilder(
-                                  builder: (context, constraints) {
-                                    final isPortrait = mediaQueryData.orientation == Orientation.portrait;
-                                    final content = Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        // List-based call screen: with more than one call every
-                                        // call is a tappable row, and the info block + action
-                                        // area below act on the focused call.
-                                        if (activeCalls.length > 1)
-                                          CallList(
-                                            calls: activeCalls,
-                                            focusedCallId: focusedCall.callId,
-                                            style: style?.callInfo,
-                                            listStyle: style?.list,
-                                            onCallTap: (callId) {
-                                              _callBloc.add(CallControlEvent.callSelected(callId));
-                                            },
-                                          ),
-                                        // With multiple calls the list rows carry the per-call
-                                        // info, so the central info block is single-call only.
-                                        if (activeCalls.length == 1)
-                                          CallInfo(
-                                            transfering: focusedTransfer is Transfering,
-                                            requestToAttendedTransfer: false,
-                                            inviteToAttendedTransfer: focusedTransfer is InviteToAttendedTransfer,
-                                            isIncoming: focusedCall.isIncoming,
-                                            held: focusedCall.held,
-                                            number: focusedCall.handle.value,
-                                            username: focusedCall.displayName,
-                                            acceptedTime: focusedCall.acceptedTime,
-                                            style: style?.callInfo,
-                                            processingStatus: focusedCall.processingStatus,
-                                          ),
-                                        // Nothing to render in the video area (audio-only call,
-                                        // remote camera off, or a held call): the remote party's
-                                        // avatar takes its place, between the info block and the
-                                        // action area. The avatar takes only the height LEFT OVER
-                                        // by the info block and the action area and scales itself
-                                        // down into it - so growing content (e.g. the open in-call
-                                        // keypad) shrinks the avatar, never the controls.
-                                        if (!_hasRenderableRemoteFrame && !_inCallKeypadShown)
-                                          if (isPortrait)
-                                            Flexible(
-                                              child: Center(
-                                                child: FittedBox(
-                                                  fit: BoxFit.scaleDown,
-                                                  child: CallRemoteAvatar(
-                                                    activeCall: activeCall,
-                                                    radius: _avatarRadius(mediaQueryData),
-                                                    contactResolver: widget.contactResolver,
-                                                  ),
+                              actions: [
+                                if (activeCalls.shouldAutoCompact)
+                                  SemanticAction.button(
+                                    label: context.l10n.call_settings_additional_options,
+                                    identifier: callActionsOptionsId,
+                                    child: CallPopupMenuButton<void>(
+                                      items: _buildPopupMenuItems,
+                                      child: const Icon(Icons.more_vert),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            Expanded(
+                              child: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  final isPortrait = mediaQueryData.orientation == Orientation.portrait;
+                                  final content = Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // List-based call screen: with more than one call every
+                                      // call is a tappable row, and the info block + action
+                                      // area below act on the focused call.
+                                      if (activeCalls.length > 1)
+                                        CallList(
+                                          calls: activeCalls,
+                                          focusedCallId: focusedCall.callId,
+                                          style: style?.callInfo,
+                                          listStyle: style?.list,
+                                          onCallTap: (callId) {
+                                            _callBloc.add(CallControlEvent.callSelected(callId));
+                                          },
+                                        ),
+                                      // With multiple calls the list rows carry the per-call
+                                      // info, so the central info block is single-call only.
+                                      if (activeCalls.length == 1)
+                                        CallInfo(
+                                          transfering: focusedTransfer is Transfering,
+                                          requestToAttendedTransfer: false,
+                                          inviteToAttendedTransfer: focusedTransfer is InviteToAttendedTransfer,
+                                          isIncoming: focusedCall.isIncoming,
+                                          held: focusedCall.held,
+                                          number: focusedCall.handle.value,
+                                          username: focusedCall.displayName,
+                                          acceptedTime: focusedCall.acceptedTime,
+                                          style: style?.callInfo,
+                                          processingStatus: focusedCall.processingStatus,
+                                        ),
+                                      // Nothing to render in the video area (audio-only call,
+                                      // remote camera off, or a held call): the remote party's
+                                      // avatar takes its place, between the info block and the
+                                      // action area. The avatar takes only the height LEFT OVER
+                                      // by the info block and the action area and scales itself
+                                      // down into it - so growing content (e.g. the open in-call
+                                      // keypad) shrinks the avatar, never the controls.
+                                      if (!_hasRenderableRemoteFrame && !_inCallKeypadShown)
+                                        if (isPortrait)
+                                          Flexible(
+                                            child: Center(
+                                              child: FittedBox(
+                                                fit: BoxFit.scaleDown,
+                                                child: CallRemoteAvatar(
+                                                  activeCall: activeCall,
+                                                  radius: _avatarRadius(mediaQueryData),
+                                                  contactResolver: widget.contactResolver,
                                                 ),
                                               ),
-                                            )
-                                          else
-                                            CallRemoteAvatar(
-                                              activeCall: activeCall,
-                                              radius: _avatarRadius(mediaQueryData),
-                                              contactResolver: widget.contactResolver,
                                             ),
-                                        if (!focusedIsRinging)
-                                          ActiveCallActions(
-                                            style: style?.actions,
-                                            keypadShown: _inCallKeypadShown,
-                                            onKeypadToggle: (shown) => setState(() => _inCallKeypadShown = shown),
-                                            // Blocks signaling-dependent actions (hold, transfer, camera).
-                                            // False during: interaction debounce, signaling not ready, SDP renegotiation.
-                                            enableInteractions:
-                                                interactionsDebounceActive == false &&
-                                                widget.callStatus == CallStatus.ready &&
-                                                activeCalls.any((call) => call.updating) == false,
-                                            isIncoming: focusedCall.isIncoming,
-                                            wasAccepted: focusedCall.wasAccepted,
-                                            wasHungUp: focusedCall.wasHungUp,
-                                            cameraValue: focusedCall.isCameraActive,
-                                            cameraPermissionDenied:
-                                                widget.callConfig.isVideoCallEnabled &&
-                                                focusedCall.videoPermissionDenied,
-                                            onCameraPermissionDeniedPressed: _onCameraPermissionDeniedPressed,
-                                            inviteToAttendedTransfer: focusedTransfer is InviteToAttendedTransfer,
-                                            onCameraChanged: widget.callConfig.isVideoCallEnabled
-                                                ? _toggleFocusedCamera
-                                                : null,
-                                            mutedValue: focusedCall.muted,
-                                            onMutedChanged: (bool value) {
-                                              _callBloc.add(CallControlEvent.setMuted(focusedCall.callId, value));
-                                            },
-                                            audioDevice: widget.audioDevice,
-                                            availableAudioDevices: widget.availableAudioDevices,
-                                            onAudioDeviceChanged: (CallAudioDevice device) {
-                                              _callBloc.add(
-                                                CallControlEvent.audioDeviceSet(focusedCall.callId, device),
-                                              );
-                                            },
-                                            transferableCalls: heldCalls,
-                                            onBlindTransferInitiated: widget.callConfig.isBlindTransferEnabled
-                                                ? (!focusedCall.wasAccepted || focusedTransfer != null
-                                                      ? null
-                                                      : () {
-                                                          _callBloc.add(
-                                                            CallControlEvent.blindTransferInitiated(focusedCall.callId),
-                                                          );
-                                                        })
-                                                : null,
-                                            // TODO (Serdun): Simplify complex condition in the widget tree.
-                                            onAttendedTransferInitiated: widget.callConfig.isAttendedTransferEnabled
-                                                ? (!focusedCall.wasAccepted || focusedTransfer != null
-                                                      ? null
-                                                      : () {
-                                                          _callBloc.add(
-                                                            CallControlEvent.attendedTransferInitiated(
-                                                              focusedCall.callId,
-                                                            ),
-                                                          );
-                                                        })
-                                                : null,
-                                            // TODO (Serdun): Simplify complex condition in the widget tree.
-                                            // The submit acts on the consultation call (the derived
-                                            // `current`), not the focused one: focus may sit on the
-                                            // held original call being transferred (an incoming call
-                                            // grabs the selection at ring time), and using it as the
-                                            // replace target would produce a self-referential REFER.
-                                            //
-                                            // KNOWN LIMITATION: `current` is still a positional guess
-                                            // ("the live non-held call"), which breaks once a third,
-                                            // unrelated call is concurrently active - it can point at
-                                            // that call instead of the real consultation call. Left out
-                                            // of scope here: server config typically caps concurrent
-                                            // lines at 3 (not hardcoded in the app - see linesCount),
-                                            // and this heuristic is unchanged from pre-1.16.0 behavior (not
-                                            // a new regression). A proper fix needs an explicit
-                                            // referor<->consultation link, not a positional guess -
-                                            // see git history for a prior (closed) attempt.
-                                            onAttendedTransferSubmitted: widget.callConfig.isAttendedTransferEnabled
-                                                ? (!activeCall.wasAccepted || focusedTransfer != null
-                                                      ? null
-                                                      : (ActiveCall referorCall) {
-                                                          _callBloc.add(
-                                                            CallControlEvent.attendedTransferSubmitted(
-                                                              referorCall: referorCall,
-                                                              replaceCall: activeCall,
-                                                            ),
-                                                          );
-                                                        })
-                                                : null,
-                                            heldValue: focusedCall.held,
-                                            // Hold pauses just the focused call; Resume brings it
-                                            // back as the only live one (the other live calls are
-                                            // put on hold first). Switching lines = focus the other
-                                            // row and press Resume - there is no separate swap.
-                                            onHeldChanged: _toggleFocusedHeld,
-                                            onHangupPressed: _hangupFocused,
-
-                                            onKeyPressed: (value) {
-                                              _callBloc.add(CallControlEvent.sentDTMF(focusedCall.callId, value));
-                                            },
                                           )
                                         else
-                                          // Decline / Answer for the focused ringing call -
-                                          // always two buttons. Answering holds the answered
-                                          // calls (or ends the non-holdable ones); the hint
-                                          // names the focused call and spells the side effect.
-                                          // The hint and the buttons are one column child so
-                                          // the spaceBetween layout keeps them glued together
-                                          // at the bottom.
-                                          // Edge-cases (covered by the call list above):
-                                          // - two incoming ringing calls
-                                          // - one outgoing ringing + one incoming ringing
-                                          Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              if (activeCalls.length > 1)
-                                                FocusedActionHint(
-                                                  focusedName: focusedCall.displayName ?? focusedCall.handle.value,
-                                                  willBeHeldNames: nonIncomingRingingCanBeHolded.isEmpty
-                                                      ? const []
-                                                      : [
-                                                          for (final call in nonIncomingRingingCanBeHolded)
-                                                            if (!call.held) call.displayName ?? call.handle.value,
-                                                        ],
-                                                  willBeEndedNames: nonIncomingRingingCanBeHolded.isNotEmpty
-                                                      ? const []
-                                                      : [
-                                                          for (final call in nonIncomingRingingCalls)
-                                                            call.displayName ?? call.handle.value,
-                                                        ],
-                                                  style: style?.callInfo,
-                                                  hintStyle: style?.hint,
-                                                ),
-                                              IncomingCallActions(
-                                                style: style?.actions,
-                                                inviteToAttendedTransfer: false,
-                                                remoteVideo: focusedCall.remoteVideo && focusedCall.held == false,
-                                                onHangupPressed: _hangupFocused,
-                                                // Answering with other calls present mutates them
-                                                // (hold/end), so it is gated by the interactions
-                                                // debounce like any signaling-dependent action.
-                                                onAcceptPressed:
-                                                    nonIncomingRingingCalls.isNotEmpty &&
-                                                        (interactionsDebounceActive ||
-                                                            widget.callStatus != CallStatus.ready ||
-                                                            activeCalls.any((call) => call.updating))
-                                                    ? null
-                                                    : _answerFocused,
-                                              ),
-                                            ],
+                                          CallRemoteAvatar(
+                                            activeCall: activeCall,
+                                            radius: _avatarRadius(mediaQueryData),
+                                            contactResolver: widget.contactResolver,
                                           ),
-                                      ],
-                                    );
+                                      if (!focusedIsRinging)
+                                        ActiveCallActions(
+                                          style: style?.actions,
+                                          keypadShown: _inCallKeypadShown,
+                                          onKeypadToggle: (shown) => setState(() => _inCallKeypadShown = shown),
+                                          // Blocks signaling-dependent actions (hold, transfer, camera).
+                                          // False during: interaction debounce, signaling not ready, SDP renegotiation.
+                                          enableInteractions:
+                                              interactionsDebounceActive == false &&
+                                              widget.callStatus == CallStatus.ready &&
+                                              activeCalls.any((call) => call.updating) == false,
+                                          isIncoming: focusedCall.isIncoming,
+                                          wasAccepted: focusedCall.wasAccepted,
+                                          wasHungUp: focusedCall.wasHungUp,
+                                          cameraValue: focusedCall.isCameraActive,
+                                          cameraPermissionDenied:
+                                              widget.callConfig.isVideoCallEnabled && focusedCall.videoPermissionDenied,
+                                          onCameraPermissionDeniedPressed: _onCameraPermissionDeniedPressed,
+                                          inviteToAttendedTransfer: focusedTransfer is InviteToAttendedTransfer,
+                                          onCameraChanged: widget.callConfig.isVideoCallEnabled
+                                              ? _toggleFocusedCamera
+                                              : null,
+                                          mutedValue: focusedCall.muted,
+                                          onMutedChanged: (bool value) {
+                                            _callBloc.add(CallControlEvent.setMuted(focusedCall.callId, value));
+                                          },
+                                          audioDevice: widget.audioDevice,
+                                          availableAudioDevices: widget.availableAudioDevices,
+                                          onAudioDeviceChanged: (CallAudioDevice device) {
+                                            _callBloc.add(CallControlEvent.audioDeviceSet(focusedCall.callId, device));
+                                          },
+                                          transferableCalls: heldCalls,
+                                          onBlindTransferInitiated: widget.callConfig.isBlindTransferEnabled
+                                              ? (!focusedCall.wasAccepted || focusedTransfer != null
+                                                    ? null
+                                                    : () {
+                                                        _callBloc.add(
+                                                          CallControlEvent.blindTransferInitiated(focusedCall.callId),
+                                                        );
+                                                      })
+                                              : null,
+                                          // TODO (Serdun): Simplify complex condition in the widget tree.
+                                          onAttendedTransferInitiated: widget.callConfig.isAttendedTransferEnabled
+                                              ? (!focusedCall.wasAccepted || focusedTransfer != null
+                                                    ? null
+                                                    : () {
+                                                        _callBloc.add(
+                                                          CallControlEvent.attendedTransferInitiated(
+                                                            focusedCall.callId,
+                                                          ),
+                                                        );
+                                                      })
+                                              : null,
+                                          // TODO (Serdun): Simplify complex condition in the widget tree.
+                                          // The submit acts on the consultation call (the derived
+                                          // `current`), not the focused one: focus may sit on the
+                                          // held original call being transferred (an incoming call
+                                          // grabs the selection at ring time), and using it as the
+                                          // replace target would produce a self-referential REFER.
+                                          //
+                                          // KNOWN LIMITATION: `current` is still a positional guess
+                                          // ("the live non-held call"), which breaks once a third,
+                                          // unrelated call is concurrently active - it can point at
+                                          // that call instead of the real consultation call. Left out
+                                          // of scope here: server config typically caps concurrent
+                                          // lines at 3 (not hardcoded in the app - see linesCount),
+                                          // and this heuristic is unchanged from pre-1.16.0 behavior (not
+                                          // a new regression). A proper fix needs an explicit
+                                          // referor<->consultation link, not a positional guess -
+                                          // see git history for a prior (closed) attempt.
+                                          onAttendedTransferSubmitted: widget.callConfig.isAttendedTransferEnabled
+                                              ? (!activeCall.wasAccepted || focusedTransfer != null
+                                                    ? null
+                                                    : (ActiveCall referorCall) {
+                                                        _callBloc.add(
+                                                          CallControlEvent.attendedTransferSubmitted(
+                                                            referorCall: referorCall,
+                                                            replaceCall: activeCall,
+                                                          ),
+                                                        );
+                                                      })
+                                              : null,
+                                          heldValue: focusedCall.held,
+                                          // Hold pauses just the focused call; Resume brings it
+                                          // back as the only live one (the other live calls are
+                                          // put on hold first). Switching lines = focus the other
+                                          // row and press Resume - there is no separate swap.
+                                          onHeldChanged: _toggleFocusedHeld,
+                                          onHangupPressed: _hangupFocused,
 
-                                    // Portrait has the room: controls render at natural size and
-                                    // the avatar flexes into what is left. Landscape keeps the
-                                    // legacy scale-to-fit of the whole block - heights there are
-                                    // too small for the natural layout.
-                                    if (isPortrait) {
-                                      return SizedBox(
-                                        width: constraints.maxWidth,
-                                        height: constraints.maxHeight,
-                                        child: content,
-                                      );
-                                    }
-                                    return FittedBox(
-                                      child: ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                          maxWidth: constraints.maxWidth,
-                                          minHeight: constraints.minHeight,
+                                          onKeyPressed: (value) {
+                                            _callBloc.add(CallControlEvent.sentDTMF(focusedCall.callId, value));
+                                          },
+                                        )
+                                      else
+                                        // Decline / Answer for the focused ringing call -
+                                        // always two buttons. Answering holds the answered
+                                        // calls (or ends the non-holdable ones); the hint
+                                        // names the focused call and spells the side effect.
+                                        // The hint and the buttons are one column child so
+                                        // the spaceBetween layout keeps them glued together
+                                        // at the bottom.
+                                        // Edge-cases (covered by the call list above):
+                                        // - two incoming ringing calls
+                                        // - one outgoing ringing + one incoming ringing
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            if (activeCalls.length > 1)
+                                              FocusedActionHint(
+                                                focusedName: focusedCall.displayName ?? focusedCall.handle.value,
+                                                willBeHeldNames: nonIncomingRingingCanBeHolded.isEmpty
+                                                    ? const []
+                                                    : [
+                                                        for (final call in nonIncomingRingingCanBeHolded)
+                                                          if (!call.held) call.displayName ?? call.handle.value,
+                                                      ],
+                                                willBeEndedNames: nonIncomingRingingCanBeHolded.isNotEmpty
+                                                    ? const []
+                                                    : [
+                                                        for (final call in nonIncomingRingingCalls)
+                                                          call.displayName ?? call.handle.value,
+                                                      ],
+                                                style: style?.callInfo,
+                                                hintStyle: style?.hint,
+                                              ),
+                                            IncomingCallActions(
+                                              style: style?.actions,
+                                              inviteToAttendedTransfer: false,
+                                              remoteVideo: focusedCall.remoteVideo && focusedCall.held == false,
+                                              onHangupPressed: _hangupFocused,
+                                              // Answering with other calls present mutates them
+                                              // (hold/end), so it is gated by the interactions
+                                              // debounce like any signaling-dependent action.
+                                              onAcceptPressed:
+                                                  nonIncomingRingingCalls.isNotEmpty &&
+                                                      (interactionsDebounceActive ||
+                                                          widget.callStatus != CallStatus.ready ||
+                                                          activeCalls.any((call) => call.updating))
+                                                  ? null
+                                                  : _answerFocused,
+                                            ),
+                                          ],
                                         ),
-                                        child: content,
-                                      ),
+                                    ],
+                                  );
+
+                                  // Portrait has the room: controls render at natural size and
+                                  // the avatar flexes into what is left. Landscape keeps the
+                                  // legacy scale-to-fit of the whole block - heights there are
+                                  // too small for the natural layout.
+                                  if (isPortrait) {
+                                    return SizedBox(
+                                      width: constraints.maxWidth,
+                                      height: constraints.maxHeight,
+                                      child: content,
                                     );
-                                  },
-                                ),
+                                  }
+                                  return FittedBox(
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxWidth: constraints.maxWidth,
+                                        minHeight: constraints.minHeight,
+                                      ),
+                                      child: content,
+                                    ),
+                                  );
+                                },
                               ),
-                              const SizedBox(height: 20),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 20),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           },
         ),
