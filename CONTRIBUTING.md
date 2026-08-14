@@ -66,3 +66,10 @@ Hooks run automatically:
 - **pre-push** — validates branch name, runs `flutter analyze` and `flutter test`
 
 For installation details, manual execution, and troubleshooting see [docs/development.md](docs/development.md).
+
+## Accessibility
+
+Any UI change ships accessibility coverage: every interactive control gets a spoken name and,
+where automation has to reach it, a stable identifier, plus a semantics test for the screen.
+See [docs/accessibility.md](docs/accessibility.md) for what to attach, how to verify it, and the
+traps that a passing widget test does not catch.

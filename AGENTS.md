@@ -36,6 +36,28 @@ dart run bin/create_new_schema_dump_and_test_migration.dart   # after Drift tabl
   5. `package:webtrit_phone/...`
   6. Relative
 
+## Accessibility
+
+Mandatory for any UI you add or touch - a control shipped without this is a defect.
+Full guide, wrapper choice and the traps: [`docs/accessibility.md`](docs/accessibility.md).
+
+- Every interactive control carries a name and, where automation must reach it, a stable
+  identifier: wrap it in `SemanticAction` (`.button` for a bare `GestureDetector`/`InkWell`),
+  or in `SemanticId` for a screen anchor or a text field. Never wrap a tap target in a plain
+  `Semantics(identifier: ...)` - the id then lands on a node above the one carrying the action
+  (a raw `Semantics` that declares name, id and action itself is fine, but only with
+  `excludeSemantics: true`, or the tappable widgets below keep their own nameless nodes). In-call buttons go
+  through `CallActionButton`; `context.showSnackBar` already anchors the snackbar itself.
+- Identifiers come from `lib/app/keys.dart` as a `const String ...Id` (paired with a widget `Key`
+  built from it when a widget test needs that anchor too); names come from l10n (`<bloc>_SemanticsLabel_<control>`, all four arb files), never a
+  hardcoded string. Omit a name only when the framework already provides one (the Android back
+  button does) - a second one is announced twice.
+- Every screen with controls has a `*_semantics_test.dart`: `expectTapTargetSemantics` per
+  control, activation via `tapViaSemantics` (never `tester.tap` - a pointer tap passes while the
+  semantics path is broken), and `meetsGuideline(labeledTapTargetGuideline)` over the screen.
+- After renaming anything in `keys.dart`, grep `patrol_test/` and `integration_test/`:
+  `patrol_test/**` is excluded from analysis, so `analyze` stays green and the E2E run breaks.
+
 ## Architecture
 
 ```
