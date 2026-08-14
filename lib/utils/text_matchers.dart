@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'mail_to.dart';
+
 import 'package:webtrit_phone/utils/regexes.dart';
 
 class TextMatchers {
@@ -95,16 +97,7 @@ class TextMatchers {
   }
 
   static MatchText mailToMatcher({final TextStyle? style, final bool tapEnabled = true}) {
-    return MatchText(
-      onTap: tapEnabled
-          ? (mail) async {
-              final url = Uri(scheme: 'mailto', path: mail);
-              if (await canLaunchUrl(url)) await launchUrl(url);
-            }
-          : null,
-      pattern: emailRegex,
-      style: style,
-    );
+    return MatchText(onTap: tapEnabled ? (mail) => launchMailTo(mail) : null, pattern: emailRegex, style: style);
   }
 
   static MatchText urlMatcher({final TextStyle? style, final bool tapEnabled = true}) {
