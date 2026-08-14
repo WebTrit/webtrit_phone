@@ -3355,5 +3355,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get devTools_signalingService_simulateKill_cancel => 'Cancel';
 
   @override
+  String get common_SemanticsLabel_refresh => 'Refresh';
+
+  @override
+  String get common_SemanticsLabel_scrollToBottom => 'Scroll to bottom';
+
+  @override
+  String get common_SemanticsLabel_scrollToTop => 'Scroll to top';
+
+  @override
   String get contacts_SemanticsLabel_clearSearch => 'Clear search';
 }

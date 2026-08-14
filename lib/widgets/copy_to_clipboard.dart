@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 
 import 'package:webtrit_phone/extensions/build_context.dart';
@@ -17,33 +18,47 @@ class CopyToClipboard extends StatelessWidget {
       return child;
     } else {
       final themeData = Theme.of(context);
-      return GestureDetector(
-        onLongPressStart: (details) async {
-          HapticFeedback.mediumImpact();
-          final copy = await showMenu<bool>(
-            context: context,
-            position: RelativeRect.fromLTRB(
-              details.globalPosition.dx,
-              details.globalPosition.dy,
-              details.globalPosition.dx,
-              details.globalPosition.dy,
-            ),
-            items: [
-              PopupMenuItem<bool>(
-                enabled: false,
-                labelTextStyle: WidgetStatePropertyAll(themeData.textTheme.bodyLarge),
-                child: Text(data),
-              ),
-              PopupMenuItem<bool>(value: true, child: Text(context.l10n.copyToClipboard_popupMenuItem)),
-            ],
-          );
-          if (context.mounted && copy == true) {
-            context.showFloatingSnackBar(context.l10n.copyToClipboard_floatingSnackBar);
-            Clipboard.setData(ClipboardData(text: data));
-          }
+      // The copy hides behind a long press, which assistive technology cannot
+      // discover on its own; offer it as an action of its own as well.
+      return Semantics(
+        customSemanticsActions: {
+          CustomSemanticsAction(label: context.l10n.copyToClipboard_popupMenuItem): () => _copy(context, data),
         },
-        child: child,
+        child: GestureDetector(
+          onLongPressStart: (details) async {
+            HapticFeedback.mediumImpact();
+            final copy = await showMenu<bool>(
+              context: context,
+              position: RelativeRect.fromLTRB(
+                details.globalPosition.dx,
+                details.globalPosition.dy,
+                details.globalPosition.dx,
+                details.globalPosition.dy,
+              ),
+              items: [
+                PopupMenuItem<bool>(
+                  enabled: false,
+                  labelTextStyle: WidgetStatePropertyAll(themeData.textTheme.bodyLarge),
+                  child: Text(data),
+                ),
+                PopupMenuItem<bool>(value: true, child: Text(context.l10n.copyToClipboard_popupMenuItem)),
+              ],
+            );
+            if (context.mounted && copy == true) {
+              context.showFloatingSnackBar(context.l10n.copyToClipboard_floatingSnackBar);
+              Clipboard.setData(ClipboardData(text: data));
+            }
+          },
+          child: child,
+        ),
       );
     }
+  }
+
+  void _copy(BuildContext context, String data) {
+    if (!context.mounted) return;
+
+    context.showFloatingSnackBar(context.l10n.copyToClipboard_floatingSnackBar);
+    Clipboard.setData(ClipboardData(text: data));
   }
 }

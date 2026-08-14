@@ -3396,5 +3396,14 @@ class AppLocalizationsUk extends AppLocalizations {
   String get devTools_signalingService_simulateKill_cancel => 'Cancel';
 
   @override
+  String get common_SemanticsLabel_refresh => 'Оновити';
+
+  @override
+  String get common_SemanticsLabel_scrollToBottom => 'Прокрутити донизу';
+
+  @override
+  String get common_SemanticsLabel_scrollToTop => 'Прокрутити догори';
+
+  @override
   String get contacts_SemanticsLabel_clearSearch => 'Очистити пошук';
 }

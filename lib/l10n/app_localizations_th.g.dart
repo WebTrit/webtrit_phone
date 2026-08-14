@@ -3340,5 +3340,14 @@ class AppLocalizationsTh extends AppLocalizations {
   String get devTools_signalingService_simulateKill_cancel => 'ยกเลิก';
 
   @override
+  String get common_SemanticsLabel_refresh => 'รีเฟรช';
+
+  @override
+  String get common_SemanticsLabel_scrollToBottom => 'เลื่อนไปด้านล่าง';
+
+  @override
+  String get common_SemanticsLabel_scrollToTop => 'เลื่อนขึ้นบนสุด';
+
+  @override
   String get contacts_SemanticsLabel_clearSearch => 'ล้างการค้นหา';
 }

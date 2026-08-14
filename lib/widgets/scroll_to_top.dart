@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/semantic_action.dart';
+
 class ScrollToTopOverlay extends StatelessWidget {
   const ScrollToTopOverlay({required this.child, required this.scrolledAway, required this.onScrollToTop, super.key});
 
@@ -53,11 +57,15 @@ class ScrollToTopButton extends StatelessWidget {
                 ],
               ),
               margin: const EdgeInsets.all(8),
-              child: IconButton(
-                key: const Key('scrollToTopButton'),
-                onPressed: onTap,
-                icon: const Icon(Icons.arrow_circle_up_outlined),
-                padding: const EdgeInsets.all(0),
+              child: SemanticAction(
+                label: context.l10n.common_SemanticsLabel_scrollToTop,
+                identifier: scrollToTopId,
+                child: IconButton(
+                  key: scrollToTopKey,
+                  onPressed: onTap,
+                  icon: const Icon(Icons.arrow_circle_up_outlined),
+                  padding: const EdgeInsets.all(0),
+                ),
               ),
             )
           : const SizedBox(),
