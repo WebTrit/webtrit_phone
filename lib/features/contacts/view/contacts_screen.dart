@@ -105,7 +105,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
           builder: (context, state) {
             final contactsSearchBloc = context.read<ContactsBloc>();
             return ClearedTextField(
-              key: contactsSerchInputKey,
+              key: contactsSearchInputKey,
               initialValue: state.search,
               onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
               onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
