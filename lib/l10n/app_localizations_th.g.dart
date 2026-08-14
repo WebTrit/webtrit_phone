@@ -3385,4 +3385,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get messaging_SemanticsLabel_videoCall => 'Video call';
+
+  @override
+  String get diagnosticNetworkTest_SemanticsLabel_refresh => 'Run the network test again';
 }

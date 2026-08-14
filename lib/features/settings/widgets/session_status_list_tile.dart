@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -50,32 +51,35 @@ class SessionStatusListTile extends StatelessWidget {
             // The row is the button. It used to be a bare gesture detector
             // wrapped around the whole column, which answered a tap without
             // ever saying it could be pressed - and gave no ripple either.
-            ListTile(
-              onTap: onTap,
-              contentPadding: contentPadding,
-              leading: CircleAvatar(
-                radius: 12,
-                backgroundColor: themeData.colorScheme.surface.withValues(alpha: 0.5),
-                child: CircleAvatar(radius: 4, backgroundColor: status.color(context)),
+            SemanticAction(
+              identifier: sessionStatusTileId,
+              child: ListTile(
+                onTap: onTap,
+                contentPadding: contentPadding,
+                leading: CircleAvatar(
+                  radius: 12,
+                  backgroundColor: themeData.colorScheme.surface.withValues(alpha: 0.5),
+                  child: CircleAvatar(radius: 4, backgroundColor: status.color(context)),
+                ),
+                title: Text(status.l10n(context), key: status.key, style: themeData.textTheme.labelLarge),
+                // A single subtitle line in every state: the row must keep its
+                // height when the status changes, or the whole list below jumps.
+                subtitle: switch (topIssue) {
+                  final SessionIssue issue => Text(
+                    issue.caption(context),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: themeData.textTheme.bodySmall?.copyWith(color: issue.color(context)),
+                  ),
+                  null => Text(
+                    status.subtitleL10n(context, registered: registered, updating: updating),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: themeData.textTheme.bodySmall?.copyWith(color: themeData.colorScheme.onSurfaceVariant),
+                  ),
+                },
+                trailing: const Icon(Icons.arrow_right),
               ),
-              title: Text(status.l10n(context), key: status.key, style: themeData.textTheme.labelLarge),
-              // A single subtitle line in every state: the row must keep its
-              // height when the status changes, or the whole list below jumps.
-              subtitle: switch (topIssue) {
-                final SessionIssue issue => Text(
-                  issue.caption(context),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: themeData.textTheme.bodySmall?.copyWith(color: issue.color(context)),
-                ),
-                null => Text(
-                  status.subtitleL10n(context, registered: registered, updating: updating),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: themeData.textTheme.bodySmall?.copyWith(color: themeData.colorScheme.onSurfaceVariant),
-                ),
-              },
-              trailing: const Icon(Icons.arrow_right),
             ),
             BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
               builder: (context, microphoneStatusState) {

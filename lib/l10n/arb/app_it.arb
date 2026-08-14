@@ -2699,5 +2699,9 @@
   "messaging_SemanticsLabel_videoCall": "Video call",
   "@messaging_SemanticsLabel_videoCall": {
     "description": "Accessibility name of the button that starts a video call with the person the chat is with."
+  },
+  "diagnosticNetworkTest_SemanticsLabel_refresh": "Run the network test again",
+  "@diagnosticNetworkTest_SemanticsLabel_refresh": {
+    "description": "Accessibility name of the button that repeats the network check on the diagnostics screen."
   }
 }
