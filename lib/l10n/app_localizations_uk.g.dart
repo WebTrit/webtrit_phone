@@ -1698,7 +1698,14 @@ class AppLocalizationsUk extends AppLocalizations {
   String get numberActions_viewContact => 'Переглянути контакт';
 
   @override
+  String get permission_Button_notNow => 'Не зараз';
+
+  @override
   String get permission_Button_request => 'Продовжити';
+
+  @override
+  String get permission_fullScreenNotification_Text_optional =>
+      'Можна продовжити без цього. Вхідні дзвінки приходитимуть сповіщенням, а не на весь екран, і якщо телефон захищено PIN-кодом, графічним ключем або відбитком, для відповіді з заблокованого екрана його доведеться спершу розблокувати.';
 
   @override
   String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';

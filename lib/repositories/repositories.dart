@@ -36,6 +36,7 @@ export 'recents/recents_repository.dart';
 export 'register_status/register_status_repository.dart';
 export 'route_state/route_state.dart';
 export 'sessions/sessions_repository.dart';
+export 'special_permissions/special_permissions_repository.dart';
 export 'system_info/system_info.dart';
 export 'system_notifications/system_notifications_local_repository.dart';
 export 'system_notifications/system_notifications_remote_repository.dart';

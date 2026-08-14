@@ -1664,7 +1664,14 @@ class AppLocalizationsTh extends AppLocalizations {
   String get numberActions_viewContact => 'ดูรายชื่อติดต่อ';
 
   @override
+  String get permission_Button_notNow => 'ยังไม่ใช่ตอนนี้';
+
+  @override
   String get permission_Button_request => 'ดำเนินการต่อ';
+
+  @override
+  String get permission_fullScreenNotification_Text_optional =>
+      'คุณสามารถดำเนินการต่อได้โดยไม่ต้องใช้สิทธิ์นี้ สายเรียกเข้าจะมาถึงในรูปแบบการแจ้งเตือนแทนที่จะเปิดแบบเต็มหน้าจอ และหากโทรศัพท์ล็อกด้วย PIN รูปแบบ หรือลายนิ้วมือ คุณจะต้องปลดล็อกก่อนจึงจะรับสายจากหน้าจอล็อกได้';
 
   @override
   String get permission_manageFullScreenNotificationInstructions_step1 => 'ไปที่การตั้งค่าของโทรศัพท์';
