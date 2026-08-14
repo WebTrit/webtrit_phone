@@ -9,10 +9,17 @@ class ScrollToTopOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // The tab bar of the main screen floats over the lists this button belongs
+    // to; pinned to the bottom the button is drawn underneath it, where nothing
+    // can press it. The shell reports the room the bar takes - its own height
+    // plus the system inset below it - as the page's bottom padding, so that is
+    // exactly what has to be left free.
+    final barAndInset = MediaQuery.paddingOf(context).bottom;
+
     return Stack(
       children: [
         child,
-        Positioned(bottom: 16, right: 16, child: ScrollToTopButton(scrolledAway, onScrollToTop)),
+        Positioned(bottom: 16 + barAndInset, right: 16, child: ScrollToTopButton(scrolledAway, onScrollToTop)),
       ],
     );
   }
