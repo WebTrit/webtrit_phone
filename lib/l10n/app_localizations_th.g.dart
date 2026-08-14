@@ -3338,4 +3338,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get devTools_signalingService_simulateKill_cancel => 'ยกเลิก';
+
+  @override
+  String get contacts_SemanticsLabel_clearSearch => 'ล้างการค้นหา';
 }

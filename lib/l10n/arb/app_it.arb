@@ -2645,5 +2645,9 @@
   "cdr_disconnectReason_internetworkingUnspecified": "Interworking, non specificato",
   "cdr_disconnectReason_nextNodeIsUnreachable": "Nodo successivo irraggiungibile",
   "cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService": "Modulo fornitore servizio telefonico Holst (HTSPM) fuori servizio",
-  "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "Il transito DTL non corrisponde al mio ID nodo"
+  "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "Il transito DTL non corrisponde al mio ID nodo",
+  "contacts_SemanticsLabel_clearSearch": "Cancella la ricerca",
+  "@contacts_SemanticsLabel_clearSearch": {
+    "description": "Accessibility name of the button that empties the contact search field."
+  }
 }
