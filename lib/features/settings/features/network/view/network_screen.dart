@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:webtrit_phone/app/keys.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -57,10 +58,16 @@ class _NetworkScreenState extends State<NetworkScreen> {
                     itemCount: state.incomingCallTypeModels.length,
                     itemBuilder: (context, index) {
                       final item = state.incomingCallTypeModels[index];
-                      return RadioListTile<IncomingCallTypeModel?>(
-                        value: item,
-                        title: Text(item.incomingCallType.titleL10n(context)),
-                        secondary: InfoTooltip(message: item.incomingCallType.descriptionL10n(context)),
+                      return SemanticAction(
+                        identifier: settingsOptionId(
+                          settingsIncomingCallTypeOptionIdPrefix,
+                          item.incomingCallType.name,
+                        ),
+                        child: RadioListTile<IncomingCallTypeModel?>(
+                          value: item,
+                          title: Text(item.incomingCallType.titleL10n(context)),
+                          secondary: InfoTooltip(message: item.incomingCallType.descriptionL10n(context)),
+                        ),
                       );
                     },
                   ),
