@@ -10,6 +10,7 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -227,6 +228,10 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
       ),
       child: IgnoreUnfocuser(
         child: ClearedTextField(
+          key: conversationsSearchInputKey,
+          identifier: conversationsSearchInputId,
+          clearButtonKey: conversationsSearchInputClearKey,
+          clearButtonIdentifier: conversationsSearchInputClearId,
           onChanged: (value) {
             context.readOrNull<ChatConversationsCubit>()?.updateSearch(value);
             context.readOrNull<SmsConversationsCubit>()?.updateSearch(value);
@@ -276,11 +281,10 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                     TabType.chat => onNewChatConversation,
                     TabType.sms => onNewSmsConversation,
                   };
-                  return FloatingActionButton(
-                    backgroundColor: colorScheme.primary,
-                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
+                  return ConversationsNewButton(
+                    tabType: tabType,
                     onPressed: onPressed,
-                    child: Icon(Icons.add, color: colorScheme.onPrimary),
+                    backgroundColor: colorScheme.primary,
                   );
                 },
               ),
