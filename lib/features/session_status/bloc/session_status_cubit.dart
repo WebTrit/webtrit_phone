@@ -28,6 +28,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
 
     _emitCombinedStatus();
     _fetchCallDeliveryMode();
+    refreshFullScreenIntentStatus();
   }
 
   late final StreamSubscription<PushTokensState> _pushTokensSubscription;
@@ -36,6 +37,7 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
   PushTokensState? _lastPushTokensState;
   CallState? _lastCallState;
   CallkeepAndroidCallDeliveryMode _callDeliveryMode = CallkeepAndroidCallDeliveryMode.unknown;
+  CallkeepSpecialPermissionStatus _fullScreenIntentStatus = CallkeepSpecialPermissionStatus.unknown;
 
   /// Times the hold window of a transient episode (see [_emitDebounced]).
   /// Scheduled once when the episode starts and cancelled by any hard state,
@@ -74,6 +76,20 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     }
   }
 
+  /// Re-reads whether an incoming call may take over the lock screen. Unlike the
+  /// call-delivery mode this is a permission granted on a system screen, so it
+  /// changes behind the app's back - callers refresh it when the user is in a
+  /// place where the answer is shown.
+  Future<void> refreshFullScreenIntentStatus() async {
+    try {
+      _fullScreenIntentStatus = await WebtritCallkeepPermissions().getFullScreenIntentPermissionStatus();
+      if (isClosed) return;
+      _emitCombinedStatus();
+    } catch (e) {
+      _logger.warning('fetchFullScreenIntentStatus', e);
+    }
+  }
+
   /// Builds the generic side-issue list from the known sources. Add a source
   /// here to surface a new issue; the UI consumes the list generically.
   List<SessionIssue> _buildIssues() {
@@ -81,6 +97,13 @@ class SessionStatusCubit extends Cubit<SessionStatusState> {
     if (_callDeliveryMode == CallkeepAndroidCallDeliveryMode.standalone) {
       issues.add(
         const SessionIssue(id: SessionIssueId.limitedStandaloneCallMode, severity: SessionIssueSeverity.warning),
+      );
+    }
+    // Calls still arrive without this permission, they just cannot cover the lock
+    // screen - worth mentioning next to the account status, not worth alarming.
+    if (_fullScreenIntentStatus.isDenied) {
+      issues.add(
+        const SessionIssue(id: SessionIssueId.fullScreenCallsUnavailable, severity: SessionIssueSeverity.info),
       );
     }
     return issues;

@@ -179,6 +179,11 @@ class AppPermissions {
   /// Opens the app settings page.
   Future<void> toAppSettings() => openAppSettings();
 
+  /// Status of the permission that lets an incoming call take over the lock screen.
+  /// Reports granted where it does not apply (Android below 14, iOS, web).
+  Future<CallkeepSpecialPermissionStatus> fullScreenIntentStatus() =>
+      _webtritCallkeepPermissions.getFullScreenIntentPermissionStatus();
+
   /// Status of the OEM "display pop-up windows while running in background"
   /// capability (MIUI/HyperOS), which gates showing the incoming-call UI over
   /// the lock screen. Reports granted where the capability does not apply.

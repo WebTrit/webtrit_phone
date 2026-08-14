@@ -1180,6 +1180,36 @@ abstract class AppLocalizations {
   /// **'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Bluetooth and wired headset selection is not available in this mode.'**
   String get diagnostic_callingMode_standalone_description;
 
+  /// No description provided for @diagnostic_fullScreenIntent_tile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Full-screen calls'**
+  String get diagnostic_fullScreenIntent_tile_title;
+
+  /// No description provided for @diagnostic_fullScreenIntent_navigate_section.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to the Full-screen notifications section'**
+  String get diagnostic_fullScreenIntent_navigate_section;
+
+  /// No description provided for @diagnostic_fullScreenIntent_groupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock screen calls'**
+  String get diagnostic_fullScreenIntent_groupTitle;
+
+  /// No description provided for @diagnostic_fullScreenIntent_caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls arrive as a notification, not full screen'**
+  String get diagnostic_fullScreenIntent_caption;
+
+  /// No description provided for @diagnostic_fullScreenIntent_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets an incoming call open full screen over the lock screen and be answered right there. Without it the call arrives as a notification, and answering from a locked screen protected by a PIN, pattern or fingerprint asks to unlock the phone first.'**
+  String get diagnostic_fullScreenIntent_description;
+
   /// No description provided for @diagnostic_permission_camera_description.
   ///
   /// In en, this message translates to:

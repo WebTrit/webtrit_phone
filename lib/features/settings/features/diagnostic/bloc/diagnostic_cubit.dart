@@ -70,6 +70,7 @@ class DiagnosticCubit extends Cubit<DiagnosticState> {
     await _fetchCallDeliveryModeStatus();
     await _fetchBackgroundActivityStartStatus();
     await _fetchShowWhenLockedStatus();
+    await _fetchFullScreenIntentStatus();
   }
 
   Future<void> _fetchPermissionsStatus() async {
@@ -128,6 +129,19 @@ class DiagnosticCubit extends Cubit<DiagnosticState> {
 
   Future<void> openShowWhenLockedSettings() async {
     await _appPermissions.toShowOnLockscreenSettings();
+  }
+
+  Future<void> _fetchFullScreenIntentStatus() async {
+    try {
+      final status = await _appPermissions.fullScreenIntentStatus();
+      emit(state.copyWith(fullScreenIntentStatus: status));
+    } catch (e) {
+      _logger.warning('fetchFullScreenIntentStatus', e);
+    }
+  }
+
+  Future<void> openFullScreenIntentSettings() async {
+    await _appPermissions.toSpecialPermissionsSetting(CallkeepSpecialPermissions.fullScreenIntent);
   }
 
   Future<void> handleRequestPermission(PermissionWithStatus permission) async {

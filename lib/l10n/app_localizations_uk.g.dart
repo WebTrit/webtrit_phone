@@ -653,6 +653,22 @@ class AppLocalizationsUk extends AppLocalizations {
       'Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступний.';
 
   @override
+  String get diagnostic_fullScreenIntent_tile_title => 'Повноекранні дзвінки';
+
+  @override
+  String get diagnostic_fullScreenIntent_navigate_section => 'Перейдіть до розділу повноекранних сповіщень';
+
+  @override
+  String get diagnostic_fullScreenIntent_groupTitle => 'Дзвінки на заблокованому екрані';
+
+  @override
+  String get diagnostic_fullScreenIntent_caption => 'Дзвінки приходять сповіщенням, а не на весь екран';
+
+  @override
+  String get diagnostic_fullScreenIntent_description =>
+      'Дозволяє вхідному дзвінку відкриватися на весь екран поверх заблокованого екрана і відповідати просто там. Без цього дзвінок приходить сповіщенням, а відповідь із захищеного заблокованого екрана спершу просить розблокувати телефон.';
+
+  @override
   String get diagnostic_permission_camera_description =>
       'Цей застосунок потребує дозволу на доступ до камери для здійснення відеодзвінків.';
 

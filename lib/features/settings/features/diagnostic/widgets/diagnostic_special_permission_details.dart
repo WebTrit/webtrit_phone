@@ -6,18 +6,24 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 
 import '../extensions/extensions.dart';
 
-class DiagnosticXiaomiPermissionDetails extends StatelessWidget {
-  const DiagnosticXiaomiPermissionDetails({
+class DiagnosticSpecialPermissionDetails extends StatelessWidget {
+  const DiagnosticSpecialPermissionDetails({
     super.key,
     required this.title,
     required this.description,
     required this.status,
+    required this.navigationHint,
     this.onTap,
   });
 
   final String title;
   final String description;
   final CallkeepSpecialPermissionStatus status;
+
+  /// Where the settings button lands the user, since these permissions live on
+  /// system screens outside the app's own settings page.
+  final String navigationHint;
+
   final Function()? onTap;
 
   @override
@@ -43,7 +49,7 @@ class DiagnosticXiaomiPermissionDetails extends StatelessWidget {
               context.l10n.diagnosticPermissionDetails_button_managePermission,
               style: textTheme.bodyMedium?.copyWith(color: colorScheme.primary),
             ),
-            subtitle: Text(context.l10n.diagnostic_xiaomi_navigate_section, style: textTheme.bodySmall),
+            subtitle: Text(navigationHint, style: textTheme.bodySmall),
             trailing: const Icon(Icons.keyboard_arrow_right),
             onTap: onTap,
           ),
