@@ -28,6 +28,7 @@ export 'plain_list_tile.dart';
 export 'presence_info_builder.dart';
 export 'progress_overlay.dart';
 export 'safe_network_image.dart';
+export 'screen_reader_builder.dart';
 export 'scroll_to_bottom.dart';
 export 'scroll_to_top.dart';
 export 'semantic_action.dart';
