@@ -142,6 +142,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callTileActions_more => 'Більше';
 
   @override
+  String get callCameraPreview_SemanticsLabel_switchCamera => 'Перемкнути камеру';
+
+  @override
+  String get callThumbnail_SemanticsLabel_returnToCall => 'Повернутися до дзвінка';
+
+  @override
   String callTile_SemanticsLabel_call(String name) {
     return 'Подзвонити $name';
   }

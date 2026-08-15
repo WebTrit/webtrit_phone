@@ -101,6 +101,7 @@ const String callActionsTransferMenuNumberId = 'callActionsTransferAttendedNumbe
 const callActionsTransferMenuNumberKey = Key(callActionsTransferMenuNumberId);
 const String callFrontCameraPreviewId = 'callFrontCameraPreview';
 const callFrontCameraPreviewKey = Key(callFrontCameraPreviewId);
+const String callActiveThumbnailId = 'callActiveThumbnail';
 
 // Screen anchors: identify the screen itself, so a flow can tell where it is
 // before touching a control. Login needs them because the visible captions

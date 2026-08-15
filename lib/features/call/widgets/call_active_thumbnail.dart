@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -130,6 +132,10 @@ class _CallActiveThumbnailState extends State<CallActiveThumbnail> {
       orientation: widget.orientation,
       smallerSide: widget.smallerSide,
       onTap: widget.onTap,
+      // It is the only way back into a call once the user has moved on, so it
+      // says where it leads rather than what it shows.
+      label: context.l10n.callThumbnail_SemanticsLabel_returnToCall,
+      identifier: callActiveThumbnailId,
       raised: true,
       child: Stack(
         fit: StackFit.expand,

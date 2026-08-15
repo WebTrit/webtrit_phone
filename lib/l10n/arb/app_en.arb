@@ -91,6 +91,14 @@
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
   },
+  "callCameraPreview_SemanticsLabel_switchCamera": "Switch camera",
+  "@callCameraPreview_SemanticsLabel_switchCamera": {
+    "description": "Accessibility name of the self-view floating over the call screen; pressing it switches between the front and the rear camera."
+  },
+  "callThumbnail_SemanticsLabel_returnToCall": "Return to the call",
+  "@callThumbnail_SemanticsLabel_returnToCall": {
+    "description": "Accessibility name of the small window that floats over the app during a call and leads back to the call screen."
+  },
   "callTile_SemanticsLabel_call": "Call {name}",
   "@callTile_SemanticsLabel_call": {
     "description": "Accessibility name of the call button in a call history or contact row.",

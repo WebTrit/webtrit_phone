@@ -238,6 +238,18 @@ abstract class AppLocalizations {
   /// **'More'**
   String get callTileActions_more;
 
+  /// Accessibility name of the self-view floating over the call screen; pressing it switches between the front and the rear camera.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch camera'**
+  String get callCameraPreview_SemanticsLabel_switchCamera;
+
+  /// Accessibility name of the small window that floats over the app during a call and leads back to the call screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Return to the call'**
+  String get callThumbnail_SemanticsLabel_returnToCall;
+
   /// Accessibility name of the call button in a call history or contact row.
   ///
   /// In en, this message translates to:
