@@ -11,6 +11,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../bloc/call_bloc.dart';
 import '../utils/utils.dart';
 import 'stream_thumbnail.dart';
+import 'thumbnail_frame.dart';
 
 final _logger = Logger('CallActiveThumbnail');
 
@@ -102,7 +103,6 @@ class _CallActiveThumbnailState extends State<CallActiveThumbnail> {
 
   @override
   Widget build(BuildContext context) {
-    final frameSize = ThumbnailLayout.calcFrameSize(orientation: widget.orientation, smallerSide: widget.smallerSide);
     final hasRemoteVideo = widget.activeCall.remoteStream?.getVideoTracks().isNotEmpty ?? false;
 
     // Hide video when held to avoid showing frozen/last frames, and also when the
@@ -126,25 +126,20 @@ class _CallActiveThumbnailState extends State<CallActiveThumbnail> {
         ? colorScheme.surface.withValues(alpha: baseAlpha)
         : colorScheme.surface.withValues(alpha: highlightAlpha);
 
-    return Card(
-      child: SizedBox.fromSize(
-        size: frameSize,
-        child: GestureDetector(
-          onTap: widget.onTap,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Shimmer(duration: duration, baseColor: baseColor, highlightColor: highlightColor),
-                if (displayStream)
-                  StreamThumbnail(stream: widget.activeCall.remoteStream)
-                else
-                  _AvatarOverlay(activeCall: widget.activeCall, contactResolver: widget.contactResolver),
-              ],
-            ),
-          ),
-        ),
+    return ThumbnailFrame(
+      orientation: widget.orientation,
+      smallerSide: widget.smallerSide,
+      onTap: widget.onTap,
+      raised: true,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Shimmer(duration: duration, baseColor: baseColor, highlightColor: highlightColor),
+          if (displayStream)
+            StreamThumbnail(stream: widget.activeCall.remoteStream)
+          else
+            _AvatarOverlay(activeCall: widget.activeCall, contactResolver: widget.contactResolver),
+        ],
       ),
     );
   }
