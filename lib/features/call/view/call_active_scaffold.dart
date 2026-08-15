@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -248,8 +250,13 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     // never see a tap on the toolbar, which paints over it and swallows it.
     // The controls themselves keep their own taps - a child that handles a tap
     // wins it before this one does.
+    //
+    // It says nothing to assistive technology: a stop the size of the screen
+    // wrapped around every control would be announced before all of them. The
+    // same gesture is offered separately below, as a node of its own.
     return GestureDetector(
       onTap: _toggleControls,
+      excludeFromSemantics: true,
       child: ThemedScaffold(
         background: style?.background,
         extendBodyBehindAppBar: true,
@@ -269,6 +276,38 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     // Its important to hide video if held to avoid showing frozen/last frames when held,
                     // and especially for case when both sides turn on hold and after one side unholds video started to show for another 'holded' side.
                     hideVideo: activeCall.held,
+                  ),
+                // The same gesture for anyone navigating by name rather than
+                // by sight, as a node with a name of its own. It is offered
+                // only while it changes something: with the controls pinned
+                // there is nothing to put away, and announcing an action that
+                // does nothing is worse than announcing none.
+                if (!widget.keepControlsVisible)
+                  AnimatedBuilder(
+                    animation: _compactController,
+                    builder: (context, _) => Positioned.fill(
+                      child: Semantics(
+                        // A node of its own, not an annotation merged into
+                        // whatever sits above: without this the label and the
+                        // id land on an ancestor, and on a device that
+                        // ancestor is not exposed at all.
+                        container: true,
+                        button: true,
+                        identifier: callControlsToggleId,
+                        label: _compactController.compact
+                            ? context.l10n.call_SemanticsLabel_showControls
+                            : context.l10n.call_SemanticsLabel_hideControls,
+                        onTap: _toggleControls,
+                        // Nothing below may form a node of its own: the name,
+                        // the id and the action have to stay on this one. The
+                        // child is empty today, and this keeps it that way for
+                        // whoever puts something in it later.
+                        excludeSemantics: true,
+                        // Draws nothing and takes no touches: the gesture above
+                        // already covers the screen for anyone tapping it.
+                        child: const SizedBox.expand(),
+                      ),
+                    ),
                   ),
                 // The controls are handed to the builder rather than built
                 // inside it: showing and hiding them is a property of the layer

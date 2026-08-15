@@ -91,6 +91,10 @@
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
   },
+  "call_SemanticsLabel_hideControls": "Nascondi i comandi della chiamata",
+  "@call_SemanticsLabel_hideControls": {},
+  "call_SemanticsLabel_showControls": "Mostra i comandi della chiamata",
+  "@call_SemanticsLabel_showControls": {},
   "callCameraPreview_SemanticsLabel_switchCamera": "Cambia fotocamera",
   "@callCameraPreview_SemanticsLabel_switchCamera": {},
   "callThumbnail_SemanticsLabel_returnToCall": "Torna alla chiamata",

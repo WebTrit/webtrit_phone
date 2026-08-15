@@ -238,6 +238,18 @@ abstract class AppLocalizations {
   /// **'More'**
   String get callTileActions_more;
 
+  /// Accessibility name of the whole-screen tap during a video call while the controls are on screen; pressing it puts them away so the picture is not covered.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide call controls'**
+  String get call_SemanticsLabel_hideControls;
+
+  /// Accessibility name of the whole-screen tap during a video call while the controls are hidden; pressing it brings them back.
+  ///
+  /// In en, this message translates to:
+  /// **'Show call controls'**
+  String get call_SemanticsLabel_showControls;
+
   /// Accessibility name of the self-view floating over the call screen; pressing it switches between the front and the rear camera.
   ///
   /// In en, this message translates to:

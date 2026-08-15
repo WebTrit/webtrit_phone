@@ -91,6 +91,14 @@
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
   },
+  "call_SemanticsLabel_hideControls": "Hide call controls",
+  "@call_SemanticsLabel_hideControls": {
+    "description": "Accessibility name of the whole-screen tap during a video call while the controls are on screen; pressing it puts them away so the picture is not covered."
+  },
+  "call_SemanticsLabel_showControls": "Show call controls",
+  "@call_SemanticsLabel_showControls": {
+    "description": "Accessibility name of the whole-screen tap during a video call while the controls are hidden; pressing it brings them back."
+  },
   "callCameraPreview_SemanticsLabel_switchCamera": "Switch camera",
   "@callCameraPreview_SemanticsLabel_switchCamera": {
     "description": "Accessibility name of the self-view floating over the call screen; pressing it switches between the front and the rear camera."

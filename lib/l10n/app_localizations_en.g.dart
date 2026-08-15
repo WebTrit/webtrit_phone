@@ -126,6 +126,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callTileActions_more => 'More';
 
   @override
+  String get call_SemanticsLabel_hideControls => 'Hide call controls';
+
+  @override
+  String get call_SemanticsLabel_showControls => 'Show call controls';
+
+  @override
   String get callCameraPreview_SemanticsLabel_switchCamera => 'Switch camera';
 
   @override

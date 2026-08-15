@@ -126,6 +126,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get callTileActions_more => 'เพิ่มเติม';
 
   @override
+  String get call_SemanticsLabel_hideControls => 'ซ่อนตัวควบคุมการโทร';
+
+  @override
+  String get call_SemanticsLabel_showControls => 'แสดงตัวควบคุมการโทร';
+
+  @override
   String get callCameraPreview_SemanticsLabel_switchCamera => 'สลับกล้อง';
 
   @override

@@ -31,7 +31,7 @@ extension ActiveCallListAutoCompact on List<ActiveCall> {
   ///
   /// Never when something demands they stay visible - hidden controls leave the
   /// accessibility tree, so hanging up, muting and going back stop existing,
-  /// and what remains is a tap area over the whole screen that announces
-  /// nothing. What counts as such a demand is up to the caller.
+  /// and all that is left is the screen-wide way of bringing them back. What
+  /// counts as such a demand is up to the caller.
   bool shouldAutoHideControls({required bool keepControlsVisible}) => !keepControlsVisible && shouldAutoCompact;
 }
