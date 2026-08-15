@@ -44,9 +44,9 @@ class CallActiveScaffold extends StatefulWidget {
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
 
-  /// Whether the call controls have to stay on screen: it stops both the
-  /// idle timer and the tap on the picture from taking them away. Why they
-  /// have to is decided by the caller.
+  /// Whether the call controls have to stay on screen: it stops both the idle
+  /// timer and the tap that hides them from taking them away. Why they have to
+  /// is decided by the caller.
   final bool keepControlsVisible;
 
   /// Resolves the remote number to a contact so the avatar shown in place of the
@@ -142,8 +142,9 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     if (widget.keepControlsVisible) _compactController.setCompact(false, reason: reason);
   }
 
-  /// Shows or hides the call controls on a tap on the picture, or only ever
-  /// shows them while they are required to stay.
+  /// Shows or hides the call controls on a tap anywhere on the call screen -
+  /// the picture, the bare toolbar, the space around the controls - or only
+  /// ever shows them while they are required to stay.
   void _toggleControls() {
     if (widget.keepControlsVisible) {
       _compactController.setCompact(false, reason: 'the controls are required to stay');
@@ -247,9 +248,13 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
     final style = themeData.extension<CallScreenStyles>()?.primary;
 
+    // One gesture owns showing and hiding the controls, and it wraps the whole
+    // screen rather than sitting inside it: a layer under the controls would
+    // never see a tap on the toolbar, which paints over it and swallows it.
+    // The controls themselves keep their own taps - a child that handles a tap
+    // wins it before this one does.
     return GestureDetector(
       onTap: _toggleControls,
-
       child: ThemedScaffold(
         background: style?.background,
         extendBodyBehindAppBar: true,
@@ -259,10 +264,8 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
               children: [
                 if (_hasRenderableRemoteFrame)
                   RemoteVideoViewOverlay(
-                    activeCallWasAccepted: activeCall.wasAccepted,
                     remoteStream: activeCall.remoteStream,
                     videoFit: _videoFit,
-                    onTap: _toggleControls,
                     remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
                     backgroundMode: _backgroundMode,
                     hasRenderableRemoteFrame: _hasRenderableRemoteFrame,
