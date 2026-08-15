@@ -152,6 +152,18 @@ void main() {
   });
 
   group('ActiveCallListAutoCompact Extension', () {
+    test('A demand to keep the controls refuses the auto-hide whatever the call is', () {
+      final List<ActiveCall> videoCall = [MockActiveCall(isCameraActive: true, remoteVideo: true)];
+
+      expect(videoCall.shouldAutoHideControls(keepControlsVisible: false), isTrue);
+      // Hidden controls drop out of the accessibility tree, so once they are
+      // required to stay there is no hiding them.
+      expect(videoCall.shouldAutoHideControls(keepControlsVisible: true), isFalse);
+
+      final List<ActiveCall> audioCall = [MockActiveCall()];
+      expect(audioCall.shouldAutoHideControls(keepControlsVisible: false), isFalse);
+    });
+
     test('Returns false for empty list', () {
       final List<ActiveCall> calls = [];
       expect(calls.shouldAutoCompact, isFalse);

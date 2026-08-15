@@ -15,6 +15,8 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/keypad_key_button.dart';
 
+import '../../../helpers/helpers.dart';
+
 // ---------------------------------------------------------------------------
 // Mocks / helpers
 // ---------------------------------------------------------------------------
@@ -33,6 +35,7 @@ ActiveCall _makeCall({
   DateTime? acceptedTime,
   String? displayName,
   bool videoPermissionDenied = false,
+  bool video = false,
 }) {
   return ActiveCall(
     callId: callId,
@@ -40,7 +43,7 @@ ActiveCall _makeCall({
     line: 0,
     handle: _kHandle,
     createdTime: DateTime(2024),
-    video: false,
+    video: video,
     processingStatus: processingStatus,
     held: held,
     acceptedTime: acceptedTime,
@@ -49,11 +52,58 @@ ActiveCall _makeCall({
   );
 }
 
+/// A connected two-way video call - the only kind whose controls hide
+/// themselves after a few idle seconds.
+///
+/// Both flags are getters over live media streams, so they are answered here
+/// instead of being assembled out of fake tracks.
+class _VideoCall extends ActiveCall {
+  _VideoCall()
+    : super(
+        callId: 'video',
+        direction: CallDirection.incoming,
+        line: 0,
+        handle: _kHandle,
+        createdTime: DateTime(2024),
+        video: true,
+        processingStatus: CallProcessingStatus.connected,
+        acceptedTime: DateTime(2024),
+        displayName: 'Anna Marchenko',
+      );
+
+  @override
+  bool get isCameraActive => true;
+
+  @override
+  bool get remoteVideo => true;
+}
+
+/// How visible the block that holds every call control currently is: 1 while it
+/// is on screen, 0 once it has hidden itself.
+double _controlsOpacity(WidgetTester tester) {
+  final opacity = find.ancestor(of: find.byType(ActiveCallActions), matching: find.byType(AnimatedOpacity));
+  return tester.widget<AnimatedOpacity>(opacity.first).opacity;
+}
+
+/// The hangup control stands for the whole block below - they hide and come
+/// back together.
+final _hangup = find.bySemanticsIdentifier(callActionsHangupId);
+
+/// The controls a screen reader can reach, in the order it would step through
+/// them.
+///
+/// Hiding the block draws it at zero opacity, and that drops the whole subtree
+/// out of this list while every widget stays where it was - so a widget finder
+/// proves nothing about it, and these tests read the traversal instead.
+Iterable<String> _reachableControls(WidgetTester tester) =>
+    tester.semantics.simulatedAccessibilityTraversal().map((node) => node.getSemanticsData().identifier);
+
 Widget _buildSubject(
   _MockCallBloc callBloc, {
   required List<ActiveCall> activeCalls,
   required ActiveCall focusedCall,
   AppPermissions? appPermissions,
+  bool keepControlsVisible = false,
 }) {
   Widget scaffold = BlocProvider<CallBloc>.value(
     value: callBloc,
@@ -66,6 +116,7 @@ Widget _buildSubject(
       callConfig: const CallCapabilitiesConfig(),
       localePlaceholderBuilder: null,
       remotePlaceholderBuilder: null,
+      keepControlsVisible: keepControlsVisible,
     ),
   );
   // Only the camera permission-denied tap reads AppPermissions; provide it on demand.
@@ -368,6 +419,84 @@ void main() {
         find.text(context.l10n.call_FocusedActionHint_willBeHeld('Boris Klein'), findRichText: true),
         findsOneWidget,
       );
+      await _teardown(tester);
+    });
+  });
+
+  group('CallActiveScaffold - hiding the controls in a video call', () {
+    // The block is dropped from the accessibility tree the moment it is hidden,
+    // which is why a caller can demand that it stays - `CallScreen` does so
+    // while a screen reader is in use, see ScreenReaderBuilder.
+    const idleDelay = Duration(seconds: 8);
+
+    testWidgets('on their own they hide once the call is left alone', (tester) async {
+      final semantics = tester.ensureSemantics();
+      final call = _VideoCall();
+      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [call], focusedCall: call));
+
+      expect(_controlsOpacity(tester), 1);
+      expect(_reachableControls(tester), contains(callActionsHangupId));
+
+      await tester.pump(idleDelay);
+      // The block fades out rather than blinks, and it leaves the accessibility
+      // tree only once it is fully transparent.
+      await tester.pump(kThemeAnimationDuration);
+      expect(_controlsOpacity(tester), 0);
+      expect(
+        _reachableControls(tester),
+        isNot(contains(callActionsHangupId)),
+        reason: 'hidden controls leave the accessibility tree, so there is no way left to end the call',
+      );
+      await _teardown(tester);
+      semantics.dispose();
+    });
+
+    testWidgets('a demand to keep them survives the same wait', (tester) async {
+      final semantics = tester.ensureSemantics();
+      final call = _VideoCall();
+      await tester.pumpWidget(
+        _buildSubject(callBloc, activeCalls: [call], focusedCall: call, keepControlsVisible: true),
+      );
+
+      await tester.pump(idleDelay);
+      expect(_controlsOpacity(tester), 1);
+      expect(_reachableControls(tester), contains(callActionsHangupId));
+      expectTapTargetSemantics(tester, _hangup, label: 'Hangup', identifier: callActionsHangupId);
+
+      // Reachable is not the same as working: activate it the way assistive
+      // technology does and see the call actually end.
+      await tapViaSemantics(tester, _hangup);
+      verify(() => callBloc.add(const CallControlEvent.ended('video'))).called(1);
+      await _teardown(tester);
+      semantics.dispose();
+    });
+
+    testWidgets('a tap on the picture cannot hide them while they are required to stay', (tester) async {
+      final semantics = tester.ensureSemantics();
+      final call = _VideoCall();
+      await tester.pumpWidget(
+        _buildSubject(callBloc, activeCalls: [call], focusedCall: call, keepControlsVisible: true),
+      );
+
+      await tester.tapAt(const Offset(20, 400));
+      await tester.pump(kThemeAnimationDuration);
+      expect(_controlsOpacity(tester), 1);
+      expect(_reachableControls(tester), contains(callActionsHangupId));
+      await _teardown(tester);
+      semantics.dispose();
+    });
+
+    testWidgets('the demand arriving over hidden controls brings them back', (tester) async {
+      final call = _VideoCall();
+      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [call], focusedCall: call));
+      await tester.pump(idleDelay);
+      expect(_controlsOpacity(tester), 0);
+
+      await tester.pumpWidget(
+        _buildSubject(callBloc, activeCalls: [call], focusedCall: call, keepControlsVisible: true),
+      );
+      await tester.pump(kThemeAnimationDuration);
+      expect(_controlsOpacity(tester), 1);
       await _teardown(tester);
     });
   });

@@ -28,6 +28,7 @@ class CallActiveScaffold extends StatefulWidget {
     required this.callConfig,
     required this.localePlaceholderBuilder,
     required this.remotePlaceholderBuilder,
+    required this.keepControlsVisible,
     this.contactResolver,
   });
 
@@ -42,6 +43,11 @@ class CallActiveScaffold extends StatefulWidget {
   final CallCapabilitiesConfig callConfig;
   final WidgetBuilder? localePlaceholderBuilder;
   final WidgetBuilder? remotePlaceholderBuilder;
+
+  /// Whether the call controls have to stay on screen: it stops both the
+  /// idle timer and the tap on the picture from taking them away. Why they
+  /// have to is decided by the caller.
+  final bool keepControlsVisible;
 
   /// Resolves the remote number to a contact so the avatar shown in place of the
   /// video can use the contact photo; without it the avatar falls back to initials.
@@ -92,8 +98,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     // Cache the CallBloc reference to avoid context lookups in callbacks.
     _callBloc = context.read<CallBloc>();
 
-    // Synchronize the auto-hide logic with the initial call list configuration.
-    _compactController = CompactAutoResetController(initiallyActive: widget.activeCalls.shouldAutoCompact);
+    _compactController = CompactAutoResetController(initiallyActive: _autoHide);
     _frameAnalysisWorker = FrameAnalysisWorker()..start();
     _scheduleNextProbe(Duration.zero);
 
@@ -111,8 +116,9 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   @override
   void didUpdateWidget(covariant CallActiveScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Synchronize the auto-hide logic with the latest call list configuration.
-    _compactController.setActive(widget.activeCalls.shouldAutoCompact, reason: 'didUpdateWidget');
+    // Covers both a change of the call itself and a change of the demand to
+    // keep the controls, which arrives as a new value from above.
+    _syncAutoHide(reason: 'didUpdateWidget');
   }
 
   @override
@@ -122,6 +128,27 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     // (a rebuild follows this callback, so no setState is needed).
     if (MediaQuery.of(context).orientation != Orientation.portrait) {
       _inCallKeypadShown = false;
+    }
+  }
+
+  /// Whether the controls may hide themselves as things stand.
+  bool get _autoHide => widget.activeCalls.shouldAutoHideControls(keepControlsVisible: widget.keepControlsVisible);
+
+  /// Turns the auto-hide of the call controls on or off.
+  void _syncAutoHide({required String reason}) {
+    _compactController.setActive(_autoHide, reason: reason);
+    // Controls that must stay visible and are already hidden have to come back:
+    // the controller expands on its own only when the auto-hide changes state.
+    if (widget.keepControlsVisible) _compactController.setCompact(false, reason: reason);
+  }
+
+  /// Shows or hides the call controls on a tap on the picture, or only ever
+  /// shows them while they are required to stay.
+  void _toggleControls() {
+    if (widget.keepControlsVisible) {
+      _compactController.setCompact(false, reason: 'the controls are required to stay');
+    } else {
+      _compactController.toggle();
     }
   }
 
@@ -221,7 +248,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     final style = themeData.extension<CallScreenStyles>()?.primary;
 
     return GestureDetector(
-      onTap: _compactController.toggle,
+      onTap: _toggleControls,
 
       child: ThemedScaffold(
         background: style?.background,
@@ -235,7 +262,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     activeCallWasAccepted: activeCall.wasAccepted,
                     remoteStream: activeCall.remoteStream,
                     videoFit: _videoFit,
-                    onTap: _compactController.toggle,
+                    onTap: _toggleControls,
                     remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
                     backgroundMode: _backgroundMode,
                     hasRenderableRemoteFrame: _hasRenderableRemoteFrame,

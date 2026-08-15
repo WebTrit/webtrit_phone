@@ -26,4 +26,12 @@ extension ActiveCallListAutoCompact on List<ActiveCall> {
 
     return activeCall.isCameraActive && activeCall.remoteVideo;
   }
+
+  /// Whether the call controls may hide themselves after a few idle seconds.
+  ///
+  /// Never when something demands they stay visible - hidden controls leave the
+  /// accessibility tree, so hanging up, muting and going back stop existing,
+  /// and what remains is a tap area on the picture that announces nothing. What
+  /// counts as such a demand is up to the caller.
+  bool shouldAutoHideControls({required bool keepControlsVisible}) => !keepControlsVisible && shouldAutoCompact;
 }
