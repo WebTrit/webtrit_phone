@@ -2,6 +2,7 @@ export 'incoming_call_actions.dart';
 export 'active_call_actions.dart';
 export 'call_action_button.dart';
 export 'call_active_thumbnail.dart';
+export 'call_controls.dart';
 export 'call_info.dart';
 export 'call_remote_avatar.dart';
 export 'call_list.dart';

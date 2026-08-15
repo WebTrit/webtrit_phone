@@ -15,6 +15,7 @@ export 'embedded_request_error.dart';
 export 'extended_text.dart';
 export 'extended_text_form_field.dart';
 export 'fade_id.dart';
+export 'hideable_layer.dart';
 export 'history_autocomplete_field.dart';
 export 'history_fetch_indicator.dart';
 export 'inert_safe_area.dart';
