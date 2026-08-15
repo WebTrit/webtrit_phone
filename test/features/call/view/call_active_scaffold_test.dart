@@ -80,8 +80,8 @@ class _VideoCall extends ActiveCall {
 
 /// How visible the block that holds every call control currently is: 1 while it
 /// is on screen, 0 once it has hidden itself.
-double _controlsOpacity(WidgetTester tester) {
-  final opacity = find.ancestor(of: find.byType(ActiveCallActions), matching: find.byType(AnimatedOpacity));
+double _controlsOpacity(WidgetTester tester, {Type of = ActiveCallActions}) {
+  final opacity = find.ancestor(of: find.byType(of), matching: find.byType(AnimatedOpacity));
   return tester.widget<AnimatedOpacity>(opacity.first).opacity;
 }
 
@@ -484,6 +484,43 @@ void main() {
       expect(_reachableControls(tester), contains(callActionsHangupId));
       await _teardown(tester);
       semantics.dispose();
+    });
+
+    testWidgets('a tap anywhere shows and hides them again', (tester) async {
+      final call = _VideoCall();
+      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [call], focusedCall: call));
+
+      await tester.tapAt(const Offset(20, 400));
+      await tester.pump(kThemeAnimationDuration);
+      expect(_controlsOpacity(tester), 0);
+
+      await tester.tapAt(const Offset(20, 400));
+      await tester.pump(kThemeAnimationDuration);
+      expect(_controlsOpacity(tester), 1);
+      await _teardown(tester);
+    });
+
+    testWidgets('the tap works the same with no video to tap on', (tester) async {
+      // An audio call has no video layer at all, and a ringing one is not even
+      // connected - the tap still belongs to the whole screen.
+      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [ringing], focusedCall: ringing));
+
+      await tester.tapAt(const Offset(20, 400));
+      await tester.pump(kThemeAnimationDuration);
+      expect(_controlsOpacity(tester, of: IncomingCallActions), 0);
+      await _teardown(tester);
+    });
+
+    testWidgets('the bare toolbar counts as anywhere too', (tester) async {
+      // The toolbar carries the status line and nothing else to press, so a tap
+      // on it belongs to the same gesture as a tap on the picture.
+      final call = _VideoCall();
+      await tester.pumpWidget(_buildSubject(callBloc, activeCalls: [call], focusedCall: call));
+
+      await tester.tapAt(tester.getCenter(find.byType(AppBar)));
+      await tester.pump(kThemeAnimationDuration);
+      expect(_controlsOpacity(tester), 0);
+      await _teardown(tester);
     });
 
     testWidgets('the demand arriving over hidden controls brings them back', (tester) async {

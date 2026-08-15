@@ -27,16 +27,14 @@ enum VideoBackgroundMode {
 
 /// A remote video stream overlay that fills the entire call screen.
 ///
-/// This widget manages the display of the remote participant's video, including
-/// gesture handling for toggling UI controls and rendering ambient backgrounds
-/// when the video aspect ratio does not match the screen.
+/// This widget only draws: the tap that shows and hides the call controls
+/// belongs to a layer of its own above it, so that one gesture covers the whole
+/// screen instead of just the picture.
 class RemoteVideoViewOverlay extends StatelessWidget {
   /// Creates a [RemoteVideoViewOverlay].
   const RemoteVideoViewOverlay({
-    required this.activeCallWasAccepted,
     required this.remoteStream,
     required this.videoFit,
-    required this.onTap,
     super.key,
     this.remotePlaceholderBuilder,
     this.backgroundMode = VideoBackgroundMode.blur,
@@ -44,19 +42,11 @@ class RemoteVideoViewOverlay extends StatelessWidget {
     this.hideVideo = false,
   });
 
-  /// Whether the call has been accepted and is currently active.
-  ///
-  /// Interaction is disabled if the call is not yet accepted.
-  final bool activeCallWasAccepted;
-
   /// The WebRTC media stream received from the remote participant.
   final MediaStream? remoteStream;
 
   /// How the video should fit within the bounds of the screen.
   final RTCVideoViewObjectFit videoFit;
-
-  /// Callback triggered when the user taps the video overlay.
-  final VoidCallback onTap;
 
   /// Optional builder for a placeholder widget while the stream is initializing.
   final WidgetBuilder? remotePlaceholderBuilder;
@@ -87,16 +77,12 @@ class RemoteVideoViewOverlay extends StatelessWidget {
     final stream = hasRenderableRemoteFrame ? remoteStream : null;
 
     return Positioned.fill(
-      child: GestureDetector(
-        onTap: activeCallWasAccepted ? onTap : null,
-        behavior: HitTestBehavior.translucent,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            if (_shouldRenderBackground) _BackgroundLayer(stream: stream, mode: backgroundMode),
-            if (!hideVideo) RTCStreamView(stream: stream, placeholderBuilder: remotePlaceholderBuilder, fit: videoFit),
-          ],
-        ),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (_shouldRenderBackground) _BackgroundLayer(stream: stream, mode: backgroundMode),
+          if (!hideVideo) RTCStreamView(stream: stream, placeholderBuilder: remotePlaceholderBuilder, fit: videoFit),
+        ],
       ),
     );
   }
