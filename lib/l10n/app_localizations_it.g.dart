@@ -127,6 +127,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callTileActions_more => 'Altro';
 
   @override
+  String get call_SemanticsLabel_hideControls => 'Nascondi i comandi della chiamata';
+
+  @override
+  String get call_SemanticsLabel_showControls => 'Mostra i comandi della chiamata';
+
+  @override
   String get callCameraPreview_SemanticsLabel_switchCamera => 'Cambia fotocamera';
 
   @override

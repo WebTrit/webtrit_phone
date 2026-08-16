@@ -91,6 +91,10 @@
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
   },
+  "call_SemanticsLabel_hideControls": "Сховати керування дзвінком",
+  "@call_SemanticsLabel_hideControls": {},
+  "call_SemanticsLabel_showControls": "Показати керування дзвінком",
+  "@call_SemanticsLabel_showControls": {},
   "callCameraPreview_SemanticsLabel_switchCamera": "Перемкнути камеру",
   "@callCameraPreview_SemanticsLabel_switchCamera": {},
   "callThumbnail_SemanticsLabel_returnToCall": "Повернутися до дзвінка",

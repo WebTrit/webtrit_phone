@@ -68,5 +68,64 @@ void main() {
       await teardownCallScaffold(tester);
       semantics.dispose();
     });
+
+    testWidgets('the gesture that puts them away is a named node of its own', (tester) async {
+      final semantics = tester.ensureSemantics();
+      final call = VideoCall();
+      await tester.pumpWidget(buildCallScaffold(callBloc, activeCalls: [call], focusedCall: call));
+
+      final toggle = find.bySemanticsIdentifier(callControlsToggleId);
+      expectTapTargetSemantics(
+        tester,
+        toggle,
+        label: 'Hide call controls',
+        identifier: callControlsToggleId,
+        isButton: true,
+      );
+
+      await tapViaSemantics(tester, toggle);
+      await tester.pump(kThemeAnimationDuration);
+      expect(reachableControls(tester), isNot(contains(callActionsHangupId)));
+      // The same node now offers the way back, and says so.
+      expectTapTargetSemantics(
+        tester,
+        toggle,
+        label: 'Show call controls',
+        identifier: callControlsToggleId,
+        isButton: true,
+      );
+
+      await tapViaSemantics(tester, toggle);
+      await tester.pump(kThemeAnimationDuration);
+      expect(reachableControls(tester), contains(callActionsHangupId));
+      await teardownCallScaffold(tester);
+      semantics.dispose();
+    });
+
+    testWidgets('with the controls pinned there is no such node at all', (tester) async {
+      final semantics = tester.ensureSemantics();
+      final call = VideoCall();
+      await tester.pumpWidget(
+        buildCallScaffold(callBloc, activeCalls: [call], focusedCall: call, keepControlsVisible: true),
+      );
+
+      // Nothing to put away, so the screen-sized stop would only stand between
+      // a screen reader and the controls.
+      expect(find.bySemanticsIdentifier(callControlsToggleId), findsNothing);
+      await teardownCallScaffold(tester);
+      semantics.dispose();
+    });
+
+    testWidgets('nothing on the screen offers a press without saying what it does', (tester) async {
+      final semantics = tester.ensureSemantics();
+      final call = VideoCall();
+      await tester.pumpWidget(buildCallScaffold(callBloc, activeCalls: [call], focusedCall: call));
+
+      // The whole screen at once, controls and all: every target that can be
+      // pressed has to carry a name.
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      await teardownCallScaffold(tester);
+      semantics.dispose();
+    });
   });
 }
