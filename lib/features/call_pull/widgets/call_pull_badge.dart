@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_pull/call_pull.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class CallPullBadge extends StatefulWidget {
   const CallPullBadge({required this.pullableCallDialogs, super.key});
@@ -113,72 +115,88 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
         final colorScheme = theme.colorScheme;
         final contentColor = colorScheme.onPrimary;
 
-        return Material(
-          color: colorScheme.tertiary,
-          clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: InkWell(
-            onTap: onTap,
-            child: Container(
-              // The badge stands among the icon buttons of the app bar and was
-              // half their size, which is under what a finger needs.
-              constraints: const BoxConstraints(minHeight: kMinInteractiveDimension),
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  RotationTransition(
-                    turns: controller.drive(
-                      Tween<double>(begin: 0, end: 1).chain(CurveTween(curve: Curves.elasticInOut)),
-                    ),
-                    child: Stack(
-                      children: [
-                        Icon(Icons.call_outlined, size: 16, color: contentColor),
-                        if (widget.pullableCallDialogs.length > 1)
-                          Positioned(
-                            right: 1,
-                            top: 0,
-                            child: Text(
-                              widget.pullableCallDialogs.length.toString(),
-                              style: TextStyle(
-                                fontSize: 8,
-                                color: contentColor,
-                                fontWeight: FontWeight.bold,
-                                height: 1,
+        final calls = widget.pullableCallDialogs;
+        // What it says depends on how many calls are waiting: with one, whose
+        // call it is; with several, how many there are to choose from. On the
+        // screen that difference is a digit drawn over the icon.
+        final label = calls.length > 1
+            ? context.l10n.callPull_SemanticsLabel_badgeSeveral(calls.length)
+            : context.l10n.callPull_SemanticsLabel_badge(calls.first.displayName ?? '');
+
+        return SemanticAction.button(
+          label: label,
+          identifier: callPullBadgeId,
+          child: Material(
+            color: colorScheme.tertiary,
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: InkWell(
+              onTap: onTap,
+              // The drawing repeats what the name already says - the caller,
+              // or a digit for how many calls are waiting.
+              child: ExcludeSemantics(
+                child: Container(
+                  // The badge stands among the icon buttons of the app bar and
+                  // was half their size, under what a finger needs.
+                  constraints: const BoxConstraints(minHeight: kMinInteractiveDimension),
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      RotationTransition(
+                        turns: controller.drive(
+                          Tween<double>(begin: 0, end: 1).chain(CurveTween(curve: Curves.elasticInOut)),
+                        ),
+                        child: Stack(
+                          children: [
+                            Icon(Icons.call_outlined, size: 16, color: contentColor),
+                            if (widget.pullableCallDialogs.length > 1)
+                              Positioned(
+                                right: 1,
+                                top: 0,
+                                child: Text(
+                                  widget.pullableCallDialogs.length.toString(),
+                                  style: TextStyle(
+                                    fontSize: 8,
+                                    color: contentColor,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1,
+                                  ),
+                                ),
+                              )
+                            else
+                              Positioned(
+                                right: 1,
+                                top: 1,
+                                child: switch (widget.pullableCallDialogs.first.direction) {
+                                  DialogDirection.initiator => Icon(Icons.call_made, size: 8, color: contentColor),
+                                  DialogDirection.recipient => Icon(Icons.call_received, size: 8, color: contentColor),
+                                  _ => SizedBox.shrink(),
+                                },
                               ),
-                            ),
-                          )
-                        else
-                          Positioned(
-                            right: 1,
-                            top: 1,
-                            child: switch (widget.pullableCallDialogs.first.direction) {
-                              DialogDirection.initiator => Icon(Icons.call_made, size: 8, color: contentColor),
-                              DialogDirection.recipient => Icon(Icons.call_received, size: 8, color: contentColor),
-                              _ => SizedBox.shrink(),
-                            },
-                          ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  if (widget.pullableCallDialogs.length > 1)
-                    LimitedBox(
-                      maxWidth: 100,
-                      child: Text(
-                        widget.pullableCallDialogs.map((e) => e.displayName?.split(' ').first ?? 'N/A').join(', '),
-                        style: TextStyle(fontSize: 12, color: contentColor),
-                        overflow: TextOverflow.ellipsis,
+                          ],
+                        ),
                       ),
-                    )
-                  else
-                    Text(
-                      widget.pullableCallDialogs.first.displayName ?? 'N/A',
-                      style: TextStyle(fontSize: 12, color: contentColor),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                ],
+                      const SizedBox(width: 4),
+                      if (widget.pullableCallDialogs.length > 1)
+                        LimitedBox(
+                          maxWidth: 100,
+                          child: Text(
+                            widget.pullableCallDialogs.map((e) => e.displayName?.split(' ').first ?? 'N/A').join(', '),
+                            style: TextStyle(fontSize: 12, color: contentColor),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      else
+                        Text(
+                          widget.pullableCallDialogs.first.displayName ?? 'N/A',
+                          style: TextStyle(fontSize: 12, color: contentColor),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -214,42 +232,46 @@ class _PullableCallsDialogState extends State<PullableCallsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: BlocListener<CallBloc, CallState>(
-        bloc: widget.callBloc,
-        listenWhen: (previous, current) {
-          return previous.activeCalls.length != current.activeCalls.length;
-        },
-        listener: (context, callBlocState) {
-          maybeClose();
-        },
-        child: BlocConsumer<CallPullCubit, List<DialogInfo>>(
-          bloc: widget.callPullCubit,
-          listener: (context, pullableCallDialogs) {
-            if (pullableCallDialogs.isEmpty) maybeClose();
+    // Anchor of the list: a flow can wait for it before pressing anything.
+    return SemanticId(
+      identifier: callPullDialogId,
+      child: Dialog(
+        child: BlocListener<CallBloc, CallState>(
+          bloc: widget.callBloc,
+          listenWhen: (previous, current) {
+            return previous.activeCalls.length != current.activeCalls.length;
           },
-          builder: (context, pullableCallDialogs) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 8,
-                children: [
-                  Text(
-                    context.l10n.callPullBadge_dialogTitle,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  for (final dialog in pullableCallDialogs) ...[callTile(dialog)],
-                ],
-              ),
-            );
+          listener: (context, callBlocState) {
+            maybeClose();
           },
+          child: BlocConsumer<CallPullCubit, List<DialogInfo>>(
+            bloc: widget.callPullCubit,
+            listener: (context, pullableCallDialogs) {
+              if (pullableCallDialogs.isEmpty) maybeClose();
+            },
+            builder: (context, pullableCallDialogs) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 8,
+                  children: [
+                    Text(
+                      context.l10n.callPullBadge_dialogTitle,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    for (final (index, dialog) in pullableCallDialogs.indexed) ...[callTile(dialog, index)],
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
   }
 
-  Widget callTile(DialogInfo dialog) {
+  Widget callTile(DialogInfo dialog, int index) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Row(
@@ -271,21 +293,31 @@ class _PullableCallsDialogState extends State<PullableCallsDialog> {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        Material(
-          color: colorScheme.tertiary.withAlpha(dialog.pullable ? 255 : 128),
-          clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: InkWell(
-            // A call that cannot be picked up yet used to look faded and still
-            // take the press, doing nothing with it.
-            onTap: dialog.pullable ? () => onPickUp(dialog) : null,
-            child: Container(
-              constraints: const BoxConstraints(minHeight: kMinInteractiveDimension),
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                context.l10n.callPullBadge_pickupButtonTitle,
-                style: TextStyle(fontSize: 14, color: colorScheme.onPrimary),
+        // Every row offers the same word, so the name is what tells the
+        // buttons apart; the id is numbered the way the rows are counted.
+        SemanticAction.button(
+          label: context.l10n.callPull_SemanticsLabel_pickup(dialog.displayName ?? ''),
+          identifier: numberedId(callPullPickupId, index),
+          child: Material(
+            color: colorScheme.tertiary.withAlpha(dialog.pullable ? 255 : 128),
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: InkWell(
+              // A call that cannot be picked up yet used to look faded and
+              // still take the press, doing nothing with it.
+              onTap: dialog.pullable ? () => onPickUp(dialog) : null,
+              child: Container(
+                constraints: const BoxConstraints(minHeight: kMinInteractiveDimension),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                // The word on the button is the first half of the name the
+                // node already carries; read as well it comes out twice.
+                child: ExcludeSemantics(
+                  child: Text(
+                    context.l10n.callPullBadge_pickupButtonTitle,
+                    style: TextStyle(fontSize: 14, color: colorScheme.onPrimary),
+                  ),
+                ),
               ),
             ),
           ),

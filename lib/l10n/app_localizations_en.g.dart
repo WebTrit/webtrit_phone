@@ -3496,5 +3496,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_SemanticsLabel_sendForward => 'Forward the message';
 
   @override
+  String callPull_SemanticsLabel_badge(String name) {
+    return 'Take over the call with $name';
+  }
+
+  @override
+  String callPull_SemanticsLabel_badgeSeveral(int count) {
+    return 'Take over one of $count calls';
+  }
+
+  @override
+  String callPull_SemanticsLabel_pickup(String name) {
+    return 'Pick up the call with $name';
+  }
+
+  @override
   String get diagnosticNetworkTest_SemanticsLabel_refresh => 'Run the network test again';
 }

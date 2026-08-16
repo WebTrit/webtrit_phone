@@ -2900,6 +2900,33 @@
   "@messaging_SemanticsLabel_sendForward": {
     "description": "Accessibility name of the tick that passes the message on to this conversation."
   },
+  "callPull_SemanticsLabel_badge": "Take over the call with {name}",
+  "@callPull_SemanticsLabel_badge": {
+    "description": "Accessibility name of the badge in the top bar that opens the list of calls in progress elsewhere, when there is one such call.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callPull_SemanticsLabel_badgeSeveral": "Take over one of {count} calls",
+  "@callPull_SemanticsLabel_badgeSeveral": {
+    "description": "Accessibility name of the same badge when several calls are in progress elsewhere.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "callPull_SemanticsLabel_pickup": "Pick up the call with {name}",
+  "@callPull_SemanticsLabel_pickup": {
+    "description": "Accessibility name of the button that takes over one call from the list; the name keeps the rows apart.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "diagnosticNetworkTest_SemanticsLabel_refresh": "Run the network test again",
   "@diagnosticNetworkTest_SemanticsLabel_refresh": {
     "description": "Accessibility name of the button that repeats the network check on the diagnostics screen."
