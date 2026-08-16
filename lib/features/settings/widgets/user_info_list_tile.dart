@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/models/models.dart';
-
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/session_status/session_status.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -91,7 +92,12 @@ class UserInfoListTile extends StatelessWidget {
                 ],
               ),
             ),
-            if (onEditPressed != null) IconButton(icon: const Icon(Icons.edit_outlined), onPressed: onEditPressed),
+            if (onEditPressed != null)
+              SemanticAction(
+                label: context.l10n.settings_SemanticsLabel_editAccount,
+                identifier: settingsUserInfoEditId,
+                child: IconButton(icon: const Icon(Icons.edit_outlined), onPressed: onEditPressed),
+              ),
           ],
         ),
       ),

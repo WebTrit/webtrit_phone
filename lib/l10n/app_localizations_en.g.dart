@@ -172,6 +172,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get callerId_SemanticsLabel_addMatch => 'Add a dial code match';
+
+  @override
+  String callerId_SemanticsLabel_removeMatch(String dialCode) {
+    return 'Remove the match for $dialCode';
+  }
+
+  @override
   String get call_CallActionsTooltip_accept => 'Accept';
 
   @override
@@ -2244,6 +2252,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_AppBarTitle_myAccount => 'My account';
+
+  @override
+  String get settings_SemanticsLabel_editAccount => 'Edit account details';
+
+  @override
+  String get settings_SemanticsLabel_refresh => 'Refresh account status';
 
   @override
   String get settings_audioProcessing_Section_AGC_title => 'Auto gain control';

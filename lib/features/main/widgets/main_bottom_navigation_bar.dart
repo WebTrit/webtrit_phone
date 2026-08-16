@@ -5,6 +5,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 /// Bottom navigation of the main screen: one entry per configured section.
 class MainBottomNavigationBar extends StatelessWidget {
@@ -35,10 +36,16 @@ class MainBottomNavigationBar extends StatelessWidget {
     );
   }
 
-  /// Key of the entry. Every embedded section used to take the one key of its
-  /// kind, and two of them in the same bar brought the build down with a
-  /// duplicate key, so an embedded entry is keyed by the id it is configured
-  /// with.
+  /// Id of the entry: the fixed sections have one each, while an embedded
+  /// section is told apart by the id it is configured with - an install can
+  /// carry more than one of them.
+  String _identifier(BottomMenuTab tab) => switch (tab) {
+    EmbeddedBottomMenuTab(:final id) => embeddedNavBarId(id),
+    _ => tab.flavor.toNavBarId(),
+  };
+
+  /// The widget key follows the same rule, and for the same reason: two
+  /// embedded sections in one bar used to collide on a single key.
   Key _key(BottomMenuTab tab) => switch (tab) {
     EmbeddedBottomMenuTab(:final id) => embeddedNavBarKey(id),
     _ => tab.flavor.toNavBarKey(),
@@ -54,7 +61,7 @@ class MainBottomNavigationBar extends StatelessWidget {
       key: _key(tab),
       // The bar builds the node that carries the caption and the press, so the
       // id has to be handed to that node rather than declared on one of ours.
-      icon: icon,
+      icon: SemanticIdOfAncestor(identifier: _identifier(tab), child: icon),
       label: context.parseL10n(tab.titleL10n),
     );
   }

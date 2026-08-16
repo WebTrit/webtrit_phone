@@ -1,14 +1,33 @@
 import 'package:flutter/foundation.dart';
+
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/models/main_flavor.dart';
 
 extension LoginTypeLoginSegmentKey on MainFlavor {
+  /// Stable automation id of the bottom navigation entry that opens this
+  /// section; the visible caption is configured per install and translated.
+  ///
+  /// An embedded section is not named here: there can be several of them, and
+  /// they are told apart by the id each is configured with, so their entries
+  /// take [embeddedNavBarId] instead.
+  String toNavBarId() {
+    return switch (this) {
+      MainFlavor.favorites => favoritesNavBarId,
+      MainFlavor.recents => recentsNavBarId,
+      MainFlavor.contacts => contactsNavBarId,
+      MainFlavor.keypad => keypadNavBarId,
+      MainFlavor.messaging => messagingNavBarId,
+      MainFlavor.embedded => embeddedNavBarIdPrefix,
+    };
+  }
+
   Key toNavBarKey() {
     return switch (this) {
-      MainFlavor.favorites => const Key('favoritesNavBarKey'),
-      MainFlavor.recents => const Key('recentsNavBarKey'),
-      MainFlavor.contacts => const Key('contactsNavBarKey'),
-      MainFlavor.keypad => const Key('keypadNavBarKey'),
-      MainFlavor.messaging => const Key('messagingNavBarKey'),
+      MainFlavor.favorites => favoritesNavBarKey,
+      MainFlavor.recents => recentsNavBarKey,
+      MainFlavor.contacts => contactsNavBarKey,
+      MainFlavor.keypad => keypadNavBarKey,
+      MainFlavor.messaging => messagingNavBarKey,
       // An embedded tab carries no key of its kind: several sections can be
       // configured at once, and each entry is keyed by its section id via
       // embeddedNavBarKey(id) in lib/app/keys.dart.

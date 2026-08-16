@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
@@ -51,7 +52,13 @@ class SettingsScreen extends StatelessWidget {
         leading: const AutoLeadingButton(),
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
         flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
-        actions: [IconButton(icon: const Icon(Icons.refresh), onPressed: () => _onRefreshTap(context))],
+        actions: [
+          SemanticAction(
+            label: context.l10n.settings_SemanticsLabel_refresh,
+            identifier: settingsRefreshId,
+            child: IconButton(icon: const Icon(Icons.refresh), onPressed: () => _onRefreshTap(context)),
+          ),
+        ],
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
