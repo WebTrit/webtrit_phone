@@ -8,6 +8,7 @@ class AgreementCheckbox extends StatelessWidget {
     this.checkboxKey,
     this.identifier,
     required this.text,
+    this.textStyle,
     required this.agreementAccepted,
     required this.onChanged,
   });
@@ -19,6 +20,10 @@ class AgreementCheckbox extends StatelessWidget {
   final String? identifier;
 
   final String text;
+
+  /// Style of the sentence; defaults to the surrounding text style.
+  final TextStyle? textStyle;
+
   final bool agreementAccepted;
   final ValueChanged<bool> onChanged;
 
@@ -46,7 +51,7 @@ class AgreementCheckbox extends StatelessWidget {
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ),
-            Expanded(child: Text(text)),
+            Expanded(child: Text(text, style: textStyle)),
           ],
         ),
       ),

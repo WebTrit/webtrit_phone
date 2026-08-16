@@ -10,7 +10,6 @@ class ContactPhoneTile extends StatelessWidget {
     required this.label,
     required this.favorite,
     required this.callNumbers,
-    this.onTap,
     this.onFavoriteChanged,
     this.onAudioPressed,
     this.onVideoPressed,
@@ -26,8 +25,6 @@ class ContactPhoneTile extends StatelessWidget {
   final String label;
   final bool favorite;
   final List<String> callNumbers;
-
-  final GestureTapCallback? onTap;
 
   final ValueChanged<bool>? onFavoriteChanged;
   final VoidCallback? onAudioPressed;
@@ -45,7 +42,6 @@ class ContactPhoneTile extends StatelessWidget {
       contentPadding: const EdgeInsets.only(left: 16.0),
       title: Text(number),
       subtitle: Text(label),
-      onTap: onTap,
       trailing: Row(mainAxisSize: MainAxisSize.min, children: [..._buildActionIcons(), _buildMoreMenuButton(context)]),
     );
   }

@@ -82,6 +82,10 @@ class Contact extends Equatable {
       .map((phone) => phone.number)
       .toList();
 
+  /// Whether the user is subscribed to updates of the given [type] for this
+  /// contact.
+  bool hasSipSubscription(SipSubscriptionType type) => sipSubscriptions.any((sub) => sub.type == type);
+
   /// Computed name of the contact in a single string if possible.
   ///
   /// Returns a [String] representing the name of the contact

@@ -57,7 +57,6 @@ class _ContactScreenState extends State<ContactScreen> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final colorScheme = themeData.colorScheme;
     final l10n = context.l10n;
     final presenceParams = PresenceViewParams.of(context);
 
@@ -74,6 +73,12 @@ class _ContactScreenState extends State<ContactScreen> {
             final contactSmsNumbers = contact.smsNumbers;
             final presenseInfo = contact.presenceInfo;
             final dialogInfo = contact.dialogInfo;
+
+            // Sending needs a number on both sides: without one of the user's
+            // own the message has no sender, and the action would be offered
+            // only to do nothing when pressed.
+            bool canSendSmsTo(String number) =>
+                widget.enableTileSms && userSmsNumbers.isNotEmpty && contactSmsNumbers.contains(number);
 
             return BlocBuilder<CallBloc, CallState>(
               buildWhen: (previous, current) =>
@@ -145,7 +150,7 @@ class _ContactScreenState extends State<ContactScreen> {
                               displayLabel: entry.displayLabel,
                               favorite: entry.displayFavorite,
                               callNumbers: callRoutingState?.allNumbers ?? [],
-                              isSmsEnabled: widget.enableTileSms && contactSmsNumbers.contains(entry.phone.number),
+                              isSmsEnabled: canSendSmsTo(entry.phone.number),
                               isMessageEnabled: widget.enableTileChat && contact.canMessage,
                               enableTileFavorite: widget.enableTileFavorite,
                               enableTileVoiceCall: widget.enableTileVoiceCall,
@@ -184,100 +189,20 @@ class _ContactScreenState extends State<ContactScreen> {
                                     style: themeData.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                                   ),
                                   if (presenceSipSubAvaliable)
-                                    Builder(
-                                      builder: (context) {
-                                        final hasPresenceSubscription = contact.sipSubscriptions.any(
-                                          (sub) => sub.type == SipSubscriptionType.presence,
-                                        );
-                                        return Row(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                context.read<ContactBloc>().add(
-                                                  ContactSipSubscriptionToggled(
-                                                    !hasPresenceSubscription,
-                                                    SipSubscriptionType.presence,
-                                                  ),
-                                                );
-                                              },
-                                              child: Icon(
-                                                hasPresenceSubscription
-                                                    ? Icons.check_box
-                                                    : Icons.check_box_outline_blank,
-                                                color: hasPresenceSubscription
-                                                    ? colorScheme.primary
-                                                    : colorScheme.onSurface,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                                child: Text(
-                                                  l10n.contacts_ContactScreen_presenceViaSip,
-                                                  style: themeData.textTheme.labelMedium,
-                                                  softWrap: true,
-                                                ),
-                                              ),
-                                            ),
-                                            Tooltip(
-                                              message: l10n.contacts_ContactScreen_presenceViaSip_tooltip,
-                                              triggerMode: TooltipTriggerMode.tap,
-                                              showDuration: const Duration(seconds: 10),
-                                              textStyle: themeData.textTheme.labelSmall?.copyWith(
-                                                color: colorScheme.onSecondary,
-                                              ),
-                                              child: const Icon(Icons.info_outline),
-                                            ),
-                                          ],
-                                        );
-                                      },
+                                    ContactSipSubscriptionOption(
+                                      text: l10n.contacts_ContactScreen_presenceViaSip,
+                                      info: l10n.contacts_ContactScreen_presenceViaSip_tooltip,
+                                      subscribed: contact.hasSipSubscription(SipSubscriptionType.presence),
+                                      onChanged: (subscribed) =>
+                                          _onSipSubscriptionChanged(subscribed, SipSubscriptionType.presence),
                                     ),
                                   if (dialogSipSubAvaliable)
-                                    Builder(
-                                      builder: (context) {
-                                        final hasDialogSubscription = contact.sipSubscriptions.any(
-                                          (sub) => sub.type == SipSubscriptionType.blf,
-                                        );
-                                        return Row(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                context.read<ContactBloc>().add(
-                                                  ContactSipSubscriptionToggled(
-                                                    !hasDialogSubscription,
-                                                    SipSubscriptionType.blf,
-                                                  ),
-                                                );
-                                              },
-                                              child: Icon(
-                                                hasDialogSubscription ? Icons.check_box : Icons.check_box_outline_blank,
-                                                color: hasDialogSubscription
-                                                    ? colorScheme.primary
-                                                    : colorScheme.onSurface,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                                child: Text(
-                                                  l10n.contacts_ContactScreen_dialogsViaSipBlf,
-                                                  style: themeData.textTheme.labelMedium,
-                                                  softWrap: true,
-                                                ),
-                                              ),
-                                            ),
-                                            Tooltip(
-                                              message: l10n.contacts_ContactScreen_dialogsViaSipBlf_tooltip,
-                                              triggerMode: TooltipTriggerMode.tap,
-                                              showDuration: const Duration(seconds: 10),
-                                              textStyle: themeData.textTheme.labelSmall?.copyWith(
-                                                color: colorScheme.onSecondary,
-                                              ),
-                                              child: const Icon(Icons.info_outline),
-                                            ),
-                                          ],
-                                        );
-                                      },
+                                    ContactSipSubscriptionOption(
+                                      text: l10n.contacts_ContactScreen_dialogsViaSipBlf,
+                                      info: l10n.contacts_ContactScreen_dialogsViaSipBlf_tooltip,
+                                      subscribed: contact.hasSipSubscription(SipSubscriptionType.blf),
+                                      onChanged: (subscribed) =>
+                                          _onSipSubscriptionChanged(subscribed, SipSubscriptionType.blf),
                                     ),
                                 ],
                               ),
@@ -305,6 +230,10 @@ class _ContactScreenState extends State<ContactScreen> {
     } else {
       context.read<ContactBloc>().add(ContactRemovedFromFavorites(contactPhone, contact));
     }
+  }
+
+  void _onSipSubscriptionChanged(bool subscribed, SipSubscriptionType type) {
+    context.read<ContactBloc>().add(ContactSipSubscriptionToggled(subscribed, type));
   }
 
   void _onAudioPressed(ContactPhone phone, Contact contact) {
