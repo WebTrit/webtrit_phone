@@ -141,6 +141,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callCameraPreview_SemanticsLabel_switchCamera => 'Switch camera';
 
   @override
+  String get callThumbnail_SemanticsAction_moveTopLeft => 'Move to the top left';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveTopRight => 'Move to the top right';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveMiddleLeft => 'Move to the middle left';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveMiddleRight => 'Move to the middle right';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveBottomLeft => 'Move to the bottom left';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveBottomRight => 'Move to the bottom right';
+
+  @override
   String get callThumbnail_SemanticsLabel_returnToCall => 'Return to the call';
 
   @override

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../utils/utils.dart';
+import 'draggable_thumbnail.dart';
 
 /// The frame both call thumbnails share: the small rounded window that floats
 /// over the app while a call is up.
@@ -68,7 +69,13 @@ class ThumbnailFrame extends StatelessWidget {
     );
 
     if (onTap != null) {
-      window = SemanticAction.button(label: label, identifier: identifier, child: window);
+      // The ways of moving the window ride on the same node as its name: an
+      // action announced apart from the thing it acts on is a riddle.
+      window = SemanticAction.button(
+        label: label,
+        identifier: identifier,
+        child: Semantics(customSemanticsActions: ThumbnailMoveScope.of(context), child: window),
+      );
     }
 
     final frame = SizedBox.fromSize(

@@ -142,6 +142,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get callCameraPreview_SemanticsLabel_switchCamera => 'Cambia fotocamera';
 
   @override
+  String get callThumbnail_SemanticsAction_moveTopLeft => 'Sposta in alto a sinistra';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveTopRight => 'Sposta in alto a destra';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveMiddleLeft => 'Sposta a sinistra al centro';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveMiddleRight => 'Sposta a destra al centro';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveBottomLeft => 'Sposta in basso a sinistra';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveBottomRight => 'Sposta in basso a destra';
+
+  @override
   String get callThumbnail_SemanticsLabel_returnToCall => 'Torna alla chiamata';
 
   @override

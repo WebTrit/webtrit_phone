@@ -141,6 +141,24 @@ class AppLocalizationsTh extends AppLocalizations {
   String get callCameraPreview_SemanticsLabel_switchCamera => 'สลับกล้อง';
 
   @override
+  String get callThumbnail_SemanticsAction_moveTopLeft => 'ย้ายไปมุมบนซ้าย';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveTopRight => 'ย้ายไปมุมบนขวา';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveMiddleLeft => 'ย้ายไปกลางซ้าย';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveMiddleRight => 'ย้ายไปกลางขวา';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveBottomLeft => 'ย้ายไปมุมล่างซ้าย';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveBottomRight => 'ย้ายไปมุมล่างขวา';
+
+  @override
   String get callThumbnail_SemanticsLabel_returnToCall => 'กลับไปที่สายสนทนา';
 
   @override

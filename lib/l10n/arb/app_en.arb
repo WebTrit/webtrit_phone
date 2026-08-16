@@ -111,6 +111,30 @@
   "@callCameraPreview_SemanticsLabel_switchCamera": {
     "description": "Accessibility name of the self-view floating over the call screen; pressing it switches between the front and the rear camera."
   },
+  "callThumbnail_SemanticsAction_moveTopLeft": "Move to the top left",
+  "@callThumbnail_SemanticsAction_moveTopLeft": {
+    "description": "Accessibility action of the small window that floats over the app during a call: moves it to the top left corner."
+  },
+  "callThumbnail_SemanticsAction_moveTopRight": "Move to the top right",
+  "@callThumbnail_SemanticsAction_moveTopRight": {
+    "description": "Accessibility action of the floating call window: moves it to the top right corner."
+  },
+  "callThumbnail_SemanticsAction_moveMiddleLeft": "Move to the middle left",
+  "@callThumbnail_SemanticsAction_moveMiddleLeft": {
+    "description": "Accessibility action of the floating call window: moves it to the left edge, halfway down."
+  },
+  "callThumbnail_SemanticsAction_moveMiddleRight": "Move to the middle right",
+  "@callThumbnail_SemanticsAction_moveMiddleRight": {
+    "description": "Accessibility action of the floating call window: moves it to the right edge, halfway down."
+  },
+  "callThumbnail_SemanticsAction_moveBottomLeft": "Move to the bottom left",
+  "@callThumbnail_SemanticsAction_moveBottomLeft": {
+    "description": "Accessibility action of the floating call window: moves it to the bottom left corner."
+  },
+  "callThumbnail_SemanticsAction_moveBottomRight": "Move to the bottom right",
+  "@callThumbnail_SemanticsAction_moveBottomRight": {
+    "description": "Accessibility action of the floating call window: moves it to the bottom right corner."
+  },
   "callThumbnail_SemanticsLabel_returnToCall": "Return to the call",
   "@callThumbnail_SemanticsLabel_returnToCall": {
     "description": "Accessibility name of the small window that floats over the app during a call and leads back to the call screen."

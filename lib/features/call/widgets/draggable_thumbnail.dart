@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
+
+import 'package:webtrit_phone/l10n/l10n.dart';
 
 /// Defines the horizontal side of the screen that the thumbnail should snap to
 /// when it is released.
@@ -6,6 +9,13 @@ import 'package:flutter/material.dart';
 /// - [StickySide.left] snaps the thumbnail to the left edge of the screen.
 /// - [StickySide.right] snaps the thumbnail to the right edge of the screen.
 enum StickySide { left, right }
+
+/// Where along the edge the thumbnail can be sent to rest.
+///
+/// A drag leaves it wherever the finger let go; without a finger it is offered
+/// these three heights on either side, which is enough to get it off whatever
+/// it happens to be covering.
+enum StickySpot { top, middle, bottom }
 
 /// A widget that enables its [child] to be dragged freely within the safe
 /// area and snaps horizontally to the nearest screen edge upon release.
@@ -231,9 +241,66 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
             _dragging = false;
           });
         },
-        child: widget.child,
+        // The drag says nothing of its own. The framework turns a pan into
+        // four scroll actions on a nameless node, which is both unreachable
+        // (a scroll-only node is not focused) and beside the point now that
+        // the same movement is offered by name below.
+        excludeFromSemantics: true,
+        // The six places are handed down rather than wrapped around the
+        // window: they have to land on the node that carries the window's
+        // name, and only the window itself knows whether it has one. A window
+        // that cannot be pressed stays silent, and silent means silent - not a
+        // nameless stop with six actions on it.
+        child: ThumbnailMoveScope(moves: _moveActions(context), child: widget.child),
       ),
     );
+  }
+
+  /// The six resting places the window can be sent to, as actions.
+  ///
+  /// A place is offered rather than a direction because a direction would need
+  /// a notion of how far, and the window has only ever rested against an edge.
+  Map<CustomSemanticsAction, VoidCallback> _moveActions(BuildContext context) {
+    final l10n = context.l10n;
+    return {
+      CustomSemanticsAction(label: l10n.callThumbnail_SemanticsAction_moveTopLeft): () =>
+          _moveTo(StickySide.left, StickySpot.top),
+      CustomSemanticsAction(label: l10n.callThumbnail_SemanticsAction_moveTopRight): () =>
+          _moveTo(StickySide.right, StickySpot.top),
+      CustomSemanticsAction(label: l10n.callThumbnail_SemanticsAction_moveMiddleLeft): () =>
+          _moveTo(StickySide.left, StickySpot.middle),
+      CustomSemanticsAction(label: l10n.callThumbnail_SemanticsAction_moveMiddleRight): () =>
+          _moveTo(StickySide.right, StickySpot.middle),
+      CustomSemanticsAction(label: l10n.callThumbnail_SemanticsAction_moveBottomLeft): () =>
+          _moveTo(StickySide.left, StickySpot.bottom),
+      CustomSemanticsAction(label: l10n.callThumbnail_SemanticsAction_moveBottomRight): () =>
+          _moveTo(StickySide.right, StickySpot.bottom),
+    };
+  }
+
+  /// Puts the window against one edge of the area it may rest in, at one of
+  /// three heights.
+  ///
+  /// The side is remembered the way a drag remembers it, so the window returns
+  /// to the same edge after a rotation; the height is not remembered - it is
+  /// kept inside the new bounds, exactly as a dragged window is.
+  void _moveTo(StickySide side, StickySpot spot) {
+    final size = _thumbnailKey.currentContext?.size;
+    if (size == null || size.isEmpty) return;
+
+    _lastStickySide = side;
+    final left = side == StickySide.left ? _stickyRect.left : _stickyRect.right - size.width;
+    final top = switch (spot) {
+      StickySpot.top => _stickyRect.top,
+      StickySpot.middle => _stickyRect.center.dy - size.height / 2,
+      StickySpot.bottom => _stickyRect.bottom - size.height,
+    };
+
+    final offset = Offset(left, top);
+    widget.onOffsetUpdate?.call(offset);
+    setState(() {
+      _offset = offset;
+    });
   }
 
   Rect _findThumbnailRect() {
@@ -289,4 +356,25 @@ class _DraggableThumbnailState extends State<DraggableThumbnail> {
       return 0;
     }
   }
+}
+
+/// Carries the ways a floating window can be moved down to the window itself.
+///
+/// The movement belongs to [DraggableThumbnail], which wraps the window, but
+/// the actions have to be announced on the same node as the window's name -
+/// and whether there is a name at all is known only inside the window. So the
+/// actions travel down and are picked up by whatever draws it.
+class ThumbnailMoveScope extends InheritedWidget {
+  const ThumbnailMoveScope({required this.moves, required super.child, super.key});
+
+  /// Named places the window can be sent to.
+  final Map<CustomSemanticsAction, VoidCallback> moves;
+
+  /// The moves offered above [context], or an empty map where a window is
+  /// drawn outside a draggable overlay.
+  static Map<CustomSemanticsAction, VoidCallback> of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ThumbnailMoveScope>()?.moves ?? const {};
+
+  @override
+  bool updateShouldNotify(ThumbnailMoveScope oldWidget) => oldWidget.moves != moves;
 }

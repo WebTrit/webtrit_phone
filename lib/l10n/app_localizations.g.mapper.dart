@@ -54,6 +54,18 @@ extension AppLocalizationsExtension on AppLocalizations {
       'keypad_SemanticsAction_paste' => keypad_SemanticsAction_paste,
       'callCameraPreview_SemanticsLabel_switchCamera' =>
         callCameraPreview_SemanticsLabel_switchCamera,
+      'callThumbnail_SemanticsAction_moveTopLeft' =>
+        callThumbnail_SemanticsAction_moveTopLeft,
+      'callThumbnail_SemanticsAction_moveTopRight' =>
+        callThumbnail_SemanticsAction_moveTopRight,
+      'callThumbnail_SemanticsAction_moveMiddleLeft' =>
+        callThumbnail_SemanticsAction_moveMiddleLeft,
+      'callThumbnail_SemanticsAction_moveMiddleRight' =>
+        callThumbnail_SemanticsAction_moveMiddleRight,
+      'callThumbnail_SemanticsAction_moveBottomLeft' =>
+        callThumbnail_SemanticsAction_moveBottomLeft,
+      'callThumbnail_SemanticsAction_moveBottomRight' =>
+        callThumbnail_SemanticsAction_moveBottomRight,
       'callThumbnail_SemanticsLabel_returnToCall' =>
         callThumbnail_SemanticsLabel_returnToCall,
       'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
