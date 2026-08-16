@@ -22,9 +22,14 @@ class MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {}
 class MockCallRoutingCubit extends MockCubit<CallRoutingState?> implements CallRoutingCubit {}
 
 /// Builds a contact the way the screen receives it from the backend.
+///
+/// [numbers] carry the labels the card sorts by, so passing more than one is
+/// how a card with several rows is built.
 Contact buildContact({
   String number = '1001',
   String label = 'ext',
+  List<ContactPhone> numbers = const [],
+  bool favorite = false,
   List<ContactEmail> emails = const [],
   List<SipSubscription> sipSubscriptions = const [],
   ContactSourceType sourceType = ContactSourceType.external,
@@ -38,7 +43,7 @@ Contact buildContact({
     isCurrentUser: false,
     firstName: 'Anna',
     lastName: 'Marchenko',
-    phones: [ContactPhone(id: 1, number: number, label: label, favorite: false)],
+    phones: numbers.isNotEmpty ? numbers : [ContactPhone(id: 1, number: number, label: label, favorite: favorite)],
     emails: emails,
     sipSubscriptions: sipSubscriptions,
   );
@@ -59,6 +64,22 @@ class ContactScreenHarness {
   final callBloc = MockCallBloc();
   final callRoutingCubit = MockCallRoutingCubit();
 
+  /// Puts a call on the line with a blind transfer already started, which is
+  /// what turns the call buttons of a row into the transfer shortcut.
+  void withBlindTransferUnderWay() {
+    final call = ActiveCall(
+      callId: 'call-1',
+      direction: CallDirection.outgoing,
+      line: 0,
+      handle: const CallkeepHandle.number('1001'),
+      createdTime: DateTime(2024),
+      video: false,
+      processingStatus: CallProcessingStatus.connected,
+      transfer: const Transfer.blindTransferInitiated(),
+    );
+    when(() => callBloc.state).thenReturn(CallState(activeCalls: [call]));
+  }
+
   /// Numbers the account itself can send an SMS from.
   void withUserSmsNumbers(List<String> numbers) {
     when(() => userInfoCubit.state).thenReturn(
@@ -75,6 +96,7 @@ class ContactScreenHarness {
     bool dialogsViaSip = false,
     bool enableTileSms = true,
     bool enableTileEmail = true,
+    bool enableTileTransfer = false,
   }) async {
     whenListen(contactBloc, const Stream<ContactState>.empty(), initialState: ContactState(contact: contact));
 
@@ -103,7 +125,7 @@ class ContactScreenHarness {
                 enableTileVideoCall: true,
                 enableTileSms: enableTileSms,
                 enableTileChat: true,
-                enableTileTransfer: false,
+                enableTileTransfer: enableTileTransfer,
                 enableTileCallLog: true,
                 enableTileEmail: enableTileEmail,
                 useCdrsForHistory: false,

@@ -430,6 +430,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get common_problemWithLoadingPage => 'Виникла проблема з завантаженням сторінки.';
 
   @override
+  String contact_SemanticsLabel_addFavorite(String number) {
+    return 'Додати $number до обраних';
+  }
+
+  @override
+  String contact_SemanticsLabel_optionInfo(String option) {
+    return 'Що означає $option';
+  }
+
+  @override
+  String contact_SemanticsLabel_removeFavorite(String number) {
+    return 'Прибрати $number з обраних';
+  }
+
+  @override
+  String contact_SemanticsLabel_sendEmail(String address) {
+    return 'Написати листа на $address';
+  }
+
+  @override
+  String contact_SemanticsLabel_transfer(String number) {
+    return 'Перевести поточний дзвінок на $number';
+  }
+
+  @override
   String get contacts_agreement_button_text => 'Продовжити';
 
   @override

@@ -48,6 +48,12 @@ extension AppLocalizationsExtension on AppLocalizations {
       'cacheManagement_Widget_screenTitle' =>
         cacheManagement_Widget_screenTitle,
       'callTileActions_more' => callTileActions_more,
+      'call_SemanticsLabel_hideControls' => call_SemanticsLabel_hideControls,
+      'call_SemanticsLabel_showControls' => call_SemanticsLabel_showControls,
+      'callCameraPreview_SemanticsLabel_switchCamera' =>
+        callCameraPreview_SemanticsLabel_switchCamera,
+      'callThumbnail_SemanticsLabel_returnToCall' =>
+        callThumbnail_SemanticsLabel_returnToCall,
       'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
       'call_CallActionsTooltip_accept_inviteToAttendedTransfer' =>
         call_CallActionsTooltip_accept_inviteToAttendedTransfer,
@@ -1643,6 +1649,19 @@ extension AppLocalizationsExtension on AppLocalizations {
         devTools_signalingService_simulateKill_confirm,
       'devTools_signalingService_simulateKill_cancel' =>
         devTools_signalingService_simulateKill_cancel,
+      'common_SemanticsLabel_refresh' => common_SemanticsLabel_refresh,
+      'common_SemanticsLabel_scrollToBottom' =>
+        common_SemanticsLabel_scrollToBottom,
+      'common_SemanticsLabel_scrollToTop' => common_SemanticsLabel_scrollToTop,
+      'contacts_SemanticsLabel_clearSearch' =>
+        contacts_SemanticsLabel_clearSearch,
+      'messaging_SemanticsLabel_newChat' => messaging_SemanticsLabel_newChat,
+      'messaging_SemanticsLabel_newSms' => messaging_SemanticsLabel_newSms,
+      'messaging_SemanticsLabel_call' => messaging_SemanticsLabel_call,
+      'messaging_SemanticsLabel_videoCall' =>
+        messaging_SemanticsLabel_videoCall,
+      'diagnosticNetworkTest_SemanticsLabel_refresh' =>
+        diagnosticNetworkTest_SemanticsLabel_refresh,
       'agoTicker_daysAgo' => switch (args) {
         [final int days] => agoTicker_daysAgo(days),
         _ => throw ArgumentError('agoTicker_daysAgo requires 1 arguments'),
@@ -1697,6 +1716,36 @@ extension AppLocalizationsExtension on AppLocalizations {
         [final String name] => call_FocusedActionHint_willBeHeld(name),
         _ => throw ArgumentError(
           'call_FocusedActionHint_willBeHeld requires 1 arguments',
+        ),
+      },
+      'contact_SemanticsLabel_addFavorite' => switch (args) {
+        [final String number] => contact_SemanticsLabel_addFavorite(number),
+        _ => throw ArgumentError(
+          'contact_SemanticsLabel_addFavorite requires 1 arguments',
+        ),
+      },
+      'contact_SemanticsLabel_optionInfo' => switch (args) {
+        [final String option] => contact_SemanticsLabel_optionInfo(option),
+        _ => throw ArgumentError(
+          'contact_SemanticsLabel_optionInfo requires 1 arguments',
+        ),
+      },
+      'contact_SemanticsLabel_removeFavorite' => switch (args) {
+        [final String number] => contact_SemanticsLabel_removeFavorite(number),
+        _ => throw ArgumentError(
+          'contact_SemanticsLabel_removeFavorite requires 1 arguments',
+        ),
+      },
+      'contact_SemanticsLabel_sendEmail' => switch (args) {
+        [final String address] => contact_SemanticsLabel_sendEmail(address),
+        _ => throw ArgumentError(
+          'contact_SemanticsLabel_sendEmail requires 1 arguments',
+        ),
+      },
+      'contact_SemanticsLabel_transfer' => switch (args) {
+        [final String number] => contact_SemanticsLabel_transfer(number),
+        _ => throw ArgumentError(
+          'contact_SemanticsLabel_transfer requires 1 arguments',
         ),
       },
       'contacts_ContactTile_inCall' => switch (args) {

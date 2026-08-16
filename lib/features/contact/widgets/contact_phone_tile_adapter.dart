@@ -11,6 +11,7 @@ class ContactPhoneTileAdapter extends StatelessWidget {
     required this.displayLabel,
     required this.favorite,
     required this.callNumbers,
+    this.index = 0,
     required this.isSmsEnabled,
     required this.isMessageEnabled,
     required this.enableTileFavorite,
@@ -38,6 +39,9 @@ class ContactPhoneTileAdapter extends StatelessWidget {
 
   final bool favorite;
   final List<String> callNumbers;
+
+  /// Position of the number on the card; see [ContactPhoneTile.index].
+  final int index;
 
   /// Whether this number is eligible for SMS (pre-computed by the caller).
   final bool isSmsEnabled;
@@ -79,6 +83,7 @@ class ContactPhoneTileAdapter extends StatelessWidget {
         key: contactPhoneTileKey,
         number: number,
         label: displayLabel,
+        index: index,
         favorite: favorite,
         callNumbers: callNumbers,
         onFavoriteChanged: favoriteCallback,

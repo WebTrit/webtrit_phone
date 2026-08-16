@@ -341,6 +341,51 @@
   "@common_noInternetConnection_title": {},
   "common_problemWithLoadingPage": "เกิดปัญหาในการโหลดหน้า",
   "@common_problemWithLoadingPage": {},
+  "contact_SemanticsLabel_addFavorite": "เพิ่ม {number} ในรายการโปรด",
+  "@contact_SemanticsLabel_addFavorite": {
+    "description": "Accessibility name of the star that adds a number of the contact card to favorites.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "contact_SemanticsLabel_optionInfo": "{option} คืออะไร",
+  "@contact_SemanticsLabel_optionInfo": {
+    "description": "Accessibility name of the button that explains an option of the contact card; the caption of the option keeps the two buttons apart.",
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    }
+  },
+  "contact_SemanticsLabel_removeFavorite": "นำ {number} ออกจากรายการโปรด",
+  "@contact_SemanticsLabel_removeFavorite": {
+    "description": "Accessibility name of the star that removes a number of the contact card from favorites.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "contact_SemanticsLabel_sendEmail": "ส่งอีเมลถึง {address}",
+  "@contact_SemanticsLabel_sendEmail": {
+    "description": "Accessibility name of the button that opens the mail app on the address of the contact card.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "contact_SemanticsLabel_transfer": "โอนสายปัจจุบันไปที่ {number}",
+  "@contact_SemanticsLabel_transfer": {
+    "description": "Accessibility name of the transfer shortcut on a number of the contact card; the number is what the call is transferred to.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "contacts_agreement_button_text": "ดำเนินการต่อ",
   "@contacts_agreement_button_text": {},
   "contacts_agreement_checkbox_text": "ฉันยินยอมให้แอปเข้าถึงรายชื่อผู้ติดต่อของฉันเพื่อยกระดับประสบการณ์การใช้งาน",

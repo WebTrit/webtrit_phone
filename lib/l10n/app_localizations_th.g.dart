@@ -410,6 +410,31 @@ class AppLocalizationsTh extends AppLocalizations {
   String get common_problemWithLoadingPage => 'เกิดปัญหาในการโหลดหน้า';
 
   @override
+  String contact_SemanticsLabel_addFavorite(String number) {
+    return 'เพิ่ม $number ในรายการโปรด';
+  }
+
+  @override
+  String contact_SemanticsLabel_optionInfo(String option) {
+    return '$option คืออะไร';
+  }
+
+  @override
+  String contact_SemanticsLabel_removeFavorite(String number) {
+    return 'นำ $number ออกจากรายการโปรด';
+  }
+
+  @override
+  String contact_SemanticsLabel_sendEmail(String address) {
+    return 'ส่งอีเมลถึง $address';
+  }
+
+  @override
+  String contact_SemanticsLabel_transfer(String number) {
+    return 'โอนสายปัจจุบันไปที่ $number';
+  }
+
+  @override
   String get contacts_agreement_button_text => 'ดำเนินการต่อ';
 
   @override
