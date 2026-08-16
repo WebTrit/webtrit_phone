@@ -1674,6 +1674,24 @@ extension AppLocalizationsExtension on AppLocalizations {
       'messaging_SemanticsLabel_call' => messaging_SemanticsLabel_call,
       'messaging_SemanticsLabel_videoCall' =>
         messaging_SemanticsLabel_videoCall,
+      'messaging_SemanticsLabel_message' => messaging_SemanticsLabel_message,
+      'messaging_SemanticsLabel_send' => messaging_SemanticsLabel_send,
+      'messaging_SemanticsLabel_conversationDetails' =>
+        messaging_SemanticsLabel_conversationDetails,
+      'messaging_SemanticsLabel_conversationOptions' =>
+        messaging_SemanticsLabel_conversationOptions,
+      'messaging_SemanticsLabel_replying' => messaging_SemanticsLabel_replying,
+      'messaging_SemanticsLabel_editing' => messaging_SemanticsLabel_editing,
+      'messaging_SemanticsLabel_forwarding' =>
+        messaging_SemanticsLabel_forwarding,
+      'messaging_SemanticsLabel_stopReplying' =>
+        messaging_SemanticsLabel_stopReplying,
+      'messaging_SemanticsLabel_stopEditing' =>
+        messaging_SemanticsLabel_stopEditing,
+      'messaging_SemanticsLabel_stopForwarding' =>
+        messaging_SemanticsLabel_stopForwarding,
+      'messaging_SemanticsLabel_sendForward' =>
+        messaging_SemanticsLabel_sendForward,
       'diagnosticNetworkTest_SemanticsLabel_refresh' =>
         diagnosticNetworkTest_SemanticsLabel_refresh,
       'agoTicker_daysAgo' => switch (args) {

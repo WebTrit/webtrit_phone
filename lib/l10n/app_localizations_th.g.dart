@@ -3448,5 +3448,38 @@ class AppLocalizationsTh extends AppLocalizations {
   String get messaging_SemanticsLabel_videoCall => 'Video call';
 
   @override
+  String get messaging_SemanticsLabel_message => 'Message';
+
+  @override
+  String get messaging_SemanticsLabel_send => 'Send';
+
+  @override
+  String get messaging_SemanticsLabel_conversationDetails => 'Conversation details';
+
+  @override
+  String get messaging_SemanticsLabel_conversationOptions => 'Conversation options';
+
+  @override
+  String get messaging_SemanticsLabel_replying => 'Replying to';
+
+  @override
+  String get messaging_SemanticsLabel_editing => 'Editing';
+
+  @override
+  String get messaging_SemanticsLabel_forwarding => 'Forwarding';
+
+  @override
+  String get messaging_SemanticsLabel_stopReplying => 'Stop replying';
+
+  @override
+  String get messaging_SemanticsLabel_stopEditing => 'Stop editing';
+
+  @override
+  String get messaging_SemanticsLabel_stopForwarding => 'Stop forwarding';
+
+  @override
+  String get messaging_SemanticsLabel_sendForward => 'Forward the message';
+
+  @override
   String get diagnosticNetworkTest_SemanticsLabel_refresh => 'Run the network test again';
 }

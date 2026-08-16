@@ -2786,6 +2786,50 @@
   "@messaging_SemanticsLabel_videoCall": {
     "description": "Accessibility name of the button that starts a video call with the person the chat is with."
   },
+  "messaging_SemanticsLabel_message": "Message",
+  "@messaging_SemanticsLabel_message": {
+    "description": "Accessibility name of the field a message is written in; the hint disappears as soon as something is typed."
+  },
+  "messaging_SemanticsLabel_send": "Send",
+  "@messaging_SemanticsLabel_send": {
+    "description": "Accessibility name of the arrow that sends the written message."
+  },
+  "messaging_SemanticsLabel_conversationDetails": "Conversation details",
+  "@messaging_SemanticsLabel_conversationDetails": {
+    "description": "Accessibility name of the button that opens who the chat is with, or the members of a group."
+  },
+  "messaging_SemanticsLabel_conversationOptions": "Conversation options",
+  "@messaging_SemanticsLabel_conversationOptions": {
+    "description": "Accessibility name of the button that opens what can be done with a text conversation."
+  },
+  "messaging_SemanticsLabel_replying": "Replying to",
+  "@messaging_SemanticsLabel_replying": {
+    "description": "Read before the quoted message in the bar above the field, when a reply is being written."
+  },
+  "messaging_SemanticsLabel_editing": "Editing",
+  "@messaging_SemanticsLabel_editing": {
+    "description": "Read before the quoted message in the bar above the field, when a sent message is being changed."
+  },
+  "messaging_SemanticsLabel_forwarding": "Forwarding",
+  "@messaging_SemanticsLabel_forwarding": {
+    "description": "Read before the quoted message in the bar above the field, when a message is being passed on to someone else."
+  },
+  "messaging_SemanticsLabel_stopReplying": "Stop replying",
+  "@messaging_SemanticsLabel_stopReplying": {
+    "description": "Accessibility name of the cross that drops the message being replied to."
+  },
+  "messaging_SemanticsLabel_stopEditing": "Stop editing",
+  "@messaging_SemanticsLabel_stopEditing": {
+    "description": "Accessibility name of the cross that leaves a sent message as it was."
+  },
+  "messaging_SemanticsLabel_stopForwarding": "Stop forwarding",
+  "@messaging_SemanticsLabel_stopForwarding": {
+    "description": "Accessibility name of the cross that drops the message being passed on."
+  },
+  "messaging_SemanticsLabel_sendForward": "Forward the message",
+  "@messaging_SemanticsLabel_sendForward": {
+    "description": "Accessibility name of the tick that passes the message on to this conversation."
+  },
   "diagnosticNetworkTest_SemanticsLabel_refresh": "Run the network test again",
   "@diagnosticNetworkTest_SemanticsLabel_refresh": {
     "description": "Accessibility name of the button that repeats the network check on the diagnostics screen."
