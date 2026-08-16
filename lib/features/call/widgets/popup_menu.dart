@@ -63,19 +63,28 @@ class CallPopupMenuItem<T> extends PopupMenuItem<T> {
     super.onTap,
     super.enabled = true,
     super.textStyle,
+    String? identifier,
     required String text,
     required Widget icon,
   }) : super(
-         child: Row(
-           children: [
-             Padding(padding: const EdgeInsets.all(8), child: icon),
-             Flexible(
-               child: Padding(
-                 padding: const EdgeInsets.symmetric(horizontal: 4),
-                 child: Text(text, overflow: TextOverflow.ellipsis, maxLines: 2),
-               ),
+         // The entry is read out by what it says, so it needs no name of its
+         // own - only a stable id, merged onto the row that answers the press
+         // rather than left on a node beside it.
+         child: MergeSemantics(
+           child: Semantics(
+             identifier: identifier,
+             child: Row(
+               children: [
+                 Padding(padding: const EdgeInsets.all(8), child: icon),
+                 Flexible(
+                   child: Padding(
+                     padding: const EdgeInsets.symmetric(horizontal: 4),
+                     child: Text(text, overflow: TextOverflow.ellipsis, maxLines: 2),
+                   ),
+                 ),
+               ],
              ),
-           ],
+           ),
          ),
          height: 0,
          padding: EdgeInsets.zero,

@@ -38,6 +38,7 @@ void main() {
     VoidCallback? onBlindTransferInitiated,
     VoidCallback? onAttendedTransferInitiated,
     List<ActiveCall> transferableCalls = const [],
+    ValueChanged<ActiveCall>? onAttendedTransferSubmitted,
     void Function(String)? onKeyPressed,
     bool mutedValue = false,
     bool keypadShown = false,
@@ -63,7 +64,7 @@ void main() {
       transferableCalls: transferableCalls,
       onBlindTransferInitiated: onBlindTransferInitiated,
       onAttendedTransferInitiated: onAttendedTransferInitiated,
-      onAttendedTransferSubmitted: null,
+      onAttendedTransferSubmitted: onAttendedTransferSubmitted,
       heldValue: false,
       onHeldChanged: onHeldChanged,
       onHangupPressed: onHangupPressed,
@@ -132,6 +133,71 @@ void main() {
 
       expect(find.text('Unattended transfer'), findsOneWidget);
       expect(find.text('Attended transfer'), findsOneWidget);
+
+      handle.dispose();
+    });
+
+    testWidgets('each way of transferring can be told apart by id and pressed through it', (tester) async {
+      final handle = tester.ensureSemantics();
+      var blind = 0;
+      var attended = 0;
+
+      await tester.pumpWidget(
+        wrap(buildActive(onBlindTransferInitiated: () => blind++, onAttendedTransferInitiated: () => attended++)),
+      );
+      await tapViaSemantics(tester, find.bySemanticsIdentifier(callActionsTransferMenuId));
+      await tester.pumpAndSettle();
+
+      // The entries are read out by what they say, so what they need is an id -
+      // the two look alike and sit one under the other.
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(callActionsTransferMenuBlindInitId),
+        label: 'Unattended transfer',
+        identifier: callActionsTransferMenuBlindInitId,
+      );
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(callActionsTransferMenuAttendedInitId),
+        label: 'Attended transfer',
+        identifier: callActionsTransferMenuAttendedInitId,
+      );
+
+      await tapViaSemantics(tester, find.bySemanticsIdentifier(callActionsTransferMenuAttendedInitId));
+      await tester.pumpAndSettle();
+      expect(attended, 1);
+      expect(blind, 0);
+
+      handle.dispose();
+    });
+
+    testWidgets('the calls a transfer can go to are numbered by position', (tester) async {
+      final handle = tester.ensureSemantics();
+      final submitted = <ActiveCall>[];
+
+      await tester.pumpWidget(
+        wrap(
+          buildActive(
+            transferableCalls: [_transferableCall],
+            onAttendedTransferSubmitted: submitted.add,
+            onBlindTransferInitiated: () {},
+          ),
+        ),
+      );
+      await tapViaSemantics(tester, find.bySemanticsIdentifier(callActionsTransferMenuId));
+      await tester.pumpAndSettle();
+
+      // One call to hand over to, so it keeps the plain id; a second would be
+      // numbered from two, the way the call list does it.
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(callActionsTransferMenuNumberId),
+        identifier: callActionsTransferMenuNumberId,
+      );
+
+      await tapViaSemantics(tester, find.bySemanticsIdentifier(callActionsTransferMenuNumberId));
+      await tester.pumpAndSettle();
+      expect(submitted, [_transferableCall]);
 
       handle.dispose();
     });
