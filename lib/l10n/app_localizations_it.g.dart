@@ -133,6 +133,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get call_SemanticsLabel_showControls => 'Mostra i comandi della chiamata';
 
   @override
+  String get keypad_SemanticsAction_paste => 'Incolla un numero';
+
+  @override
   String get callCameraPreview_SemanticsLabel_switchCamera => 'Cambia fotocamera';
 
   @override

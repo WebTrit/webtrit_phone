@@ -148,6 +148,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get call_SemanticsLabel_showControls => 'Показати керування дзвінком';
 
   @override
+  String get keypad_SemanticsAction_paste => 'Вставити номер';
+
+  @override
   String get callCameraPreview_SemanticsLabel_switchCamera => 'Перемкнути камеру';
 
   @override

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/call_routing.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/debounce.dart';
 
@@ -85,8 +87,15 @@ class KeypadViewState extends State<KeypadView> {
           // and surface the input's context menu (paste/copy) from anywhere on the background.
           // Translucent (not opaque) so pointers still reach the field's own gesture handlers
           // instead of being fully absorbed by this background detector.
+          //
+          // It says nothing to assistive technology: an unnamed long press on an
+          // invisible half of the screen is not something anyone can find, and
+          // its annotation merged into the field below, stretching that field
+          // over the whole region. The same thing is offered on the field
+          // itself, as an action with a name.
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
+            excludeFromSemantics: true,
             onLongPress: _showInputContextMenu,
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: scaledInset),
@@ -94,17 +103,27 @@ class KeypadViewState extends State<KeypadView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextField(
-                    key: _keypadTextFieldKey,
-                    controller: _textController,
-                    focusNode: _focusNode,
-                    decoration: inputField?.decoration ?? baseInputDecorations?.keypad,
-                    style: inputField?.textStyle ?? themeData.textTheme.headlineLarge,
-                    textAlign: inputField?.textAlign ?? TextAlign.center,
-                    showCursor: inputField?.showCursor ?? true,
-                    keyboardType: inputField?.keyboardType ?? TextInputType.none,
-                    cursorColor: inputField?.cursorColor,
-                    inputFormatters: [PhoneNormalizingFormatter()],
+                  // The action is merged onto the field's own node rather than
+                  // added beside it: an action that sits on a node of its own
+                  // is announced apart from the thing it acts on.
+                  MergeSemantics(
+                    child: Semantics(
+                      customSemanticsActions: {
+                        CustomSemanticsAction(label: context.l10n.keypad_SemanticsAction_paste): _pasteNumber,
+                      },
+                      child: TextField(
+                        key: _keypadTextFieldKey,
+                        controller: _textController,
+                        focusNode: _focusNode,
+                        decoration: inputField?.decoration ?? baseInputDecorations?.keypad,
+                        style: inputField?.textStyle ?? themeData.textTheme.headlineLarge,
+                        textAlign: inputField?.textAlign ?? TextAlign.center,
+                        showCursor: inputField?.showCursor ?? true,
+                        keyboardType: inputField?.keyboardType ?? TextInputType.none,
+                        cursorColor: inputField?.cursorColor,
+                        inputFormatters: [PhoneNormalizingFormatter()],
+                      ),
+                    ),
                   ),
                   RepaintBoundary(
                     child: BlocBuilder<KeypadCubit, KeypadState>(
@@ -194,6 +213,40 @@ class KeypadViewState extends State<KeypadView> {
       }
       _keypadTextFieldEditableTextState?.showToolbar();
     });
+  }
+
+  /// Puts whatever number is on the clipboard into the field.
+  ///
+  /// The same thing a long press offers through the field's own context menu,
+  /// as an action of its own: a long press on an invisible area is not
+  /// something assistive technology can be expected to find. Nothing happens
+  /// when the clipboard holds no text - the action has to be declared while the
+  /// screen is built, and what the clipboard holds can only be asked later.
+  Future<void> _pasteNumber() async {
+    final clipboard = await Clipboard.getData(Clipboard.kTextPlain);
+    final pasted = clipboard?.text ?? '';
+    if (!mounted || pasted.isEmpty) return;
+
+    if (!_textController.selection.isValid) {
+      _textController.selection = TextSelection.collapsed(offset: _textController.text.length);
+    }
+
+    final textBefore = _textController.selection.textBefore(_textController.text);
+    final textAfter = _textController.selection.textAfter(_textController.text);
+    final sanitized = PhoneNormalizingFormatter.sanitize(pasted);
+
+    final value = _textController.value.copyWith(
+      text: textBefore + sanitized + textAfter,
+      selection: TextSelection.collapsed(offset: textBefore.length + sanitized.length),
+    );
+    // Through the field itself where it is attached, so the number lands the
+    // same way a key press does; straight onto the controller otherwise.
+    final field = _keypadTextFieldEditableTextState;
+    if (field != null) {
+      field.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
+    } else {
+      _textController.value = value;
+    }
   }
 
   String _popNumber() {
