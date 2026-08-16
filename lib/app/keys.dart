@@ -181,6 +181,7 @@ String settingsOptionId(String prefix, String value) => '$prefix${_capitalize(va
 String _capitalize(String value) => value.isEmpty ? value : value[0].toUpperCase() + value.substring(1);
 
 // Keypad keys: keypadKey1..keypadKey0 for the digits, plus the two symbols.
+const String keypadNumberInputId = 'keypadNumberInput';
 const String keypadKeyIdPrefix = 'keypadKey';
 const String keypadKeyStarId = '${keypadKeyIdPrefix}Star';
 const String keypadKeyPoundId = '${keypadKeyIdPrefix}Pound';

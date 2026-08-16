@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/call_routing.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -103,11 +104,15 @@ class KeypadViewState extends State<KeypadView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // The action is merged onto the field's own node rather than
-                  // added beside it: an action that sits on a node of its own
-                  // is announced apart from the thing it acts on.
+                  // Name, id and action are merged onto the field's own node:
+                  // an identifier makes a boundary of its own, and anything
+                  // sitting beside the field would be announced apart from it.
+                  // The number itself needs no naming - the field publishes
+                  // what it holds as its value.
                   MergeSemantics(
                     child: Semantics(
+                      label: context.l10n.keypad_SemanticsLabel_number,
+                      identifier: keypadNumberInputId,
                       customSemanticsActions: {
                         CustomSemanticsAction(label: context.l10n.keypad_SemanticsAction_paste): _pasteNumber,
                       },

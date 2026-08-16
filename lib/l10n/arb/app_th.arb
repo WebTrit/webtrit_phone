@@ -95,6 +95,8 @@
   "@call_SemanticsLabel_hideControls": {},
   "call_SemanticsLabel_showControls": "แสดงตัวควบคุมการโทร",
   "@call_SemanticsLabel_showControls": {},
+  "keypad_SemanticsLabel_number": "หมายเลขโทรศัพท์",
+  "@keypad_SemanticsLabel_number": {},
   "keypad_SemanticsAction_paste": "วางหมายเลข",
   "@keypad_SemanticsAction_paste": {},
   "callCameraPreview_SemanticsLabel_switchCamera": "สลับกล้อง",

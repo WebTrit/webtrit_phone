@@ -99,6 +99,10 @@
   "@call_SemanticsLabel_showControls": {
     "description": "Accessibility name of the whole-screen tap during a video call while the controls are hidden; pressing it brings them back."
   },
+  "keypad_SemanticsLabel_number": "Phone number",
+  "@keypad_SemanticsLabel_number": {
+    "description": "Accessibility name of the field on the keypad that holds the number being dialled; it looks like plain text on the screen and needs a name of its own."
+  },
   "keypad_SemanticsAction_paste": "Paste a number",
   "@keypad_SemanticsAction_paste": {
     "description": "Accessibility action on the keypad number field that puts the copied number into it; for everyone else the same thing happens on a long press."

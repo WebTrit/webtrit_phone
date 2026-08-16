@@ -132,6 +132,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get call_SemanticsLabel_showControls => 'Show call controls';
 
   @override
+  String get keypad_SemanticsLabel_number => 'Phone number';
+
+  @override
   String get keypad_SemanticsAction_paste => 'Paste a number';
 
   @override

@@ -50,6 +50,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'callTileActions_more' => callTileActions_more,
       'call_SemanticsLabel_hideControls' => call_SemanticsLabel_hideControls,
       'call_SemanticsLabel_showControls' => call_SemanticsLabel_showControls,
+      'keypad_SemanticsLabel_number' => keypad_SemanticsLabel_number,
+      'keypad_SemanticsAction_paste' => keypad_SemanticsAction_paste,
       'callCameraPreview_SemanticsLabel_switchCamera' =>
         callCameraPreview_SemanticsLabel_switchCamera,
       'callThumbnail_SemanticsLabel_returnToCall' =>
