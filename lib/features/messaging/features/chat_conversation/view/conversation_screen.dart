@@ -23,6 +23,13 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
   late final conversationCubit = context.read<ConversationCubit>();
   late final userId = messagingBloc.state.userId;
 
+  /// Whether there is anything behind the menu yet.
+  ///
+  /// A group chat only knows it is one after it has loaded, and until then the
+  /// menu had nothing to open - it was a button that did nothing when pressed.
+  bool canOpenInfo(ConversationState state) =>
+      state.credentials.participantId != null || (state is CVSReady && state.chat?.type == ChatType.group);
+
   void onMenuTap() {
     final state = conversationCubit.state;
     final isDialog = state.credentials.participantId != null;
@@ -103,7 +110,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
                   },
                 ),
               ),
-              actions: [IconButton(onPressed: onMenuTap, icon: const Icon(Icons.menu))],
+              actions: [IconButton(onPressed: canOpenInfo(state) ? onMenuTap : null, icon: const Icon(Icons.menu))],
             ),
             body: Builder(
               builder: (context) {
