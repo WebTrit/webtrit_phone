@@ -99,6 +99,10 @@
   "@call_SemanticsLabel_showControls": {
     "description": "Accessibility name of the whole-screen tap during a video call while the controls are hidden; pressing it brings them back."
   },
+  "keypad_SemanticsAction_paste": "Paste a number",
+  "@keypad_SemanticsAction_paste": {
+    "description": "Accessibility action on the keypad number field that puts the copied number into it; for everyone else the same thing happens on a long press."
+  },
   "callCameraPreview_SemanticsLabel_switchCamera": "Switch camera",
   "@callCameraPreview_SemanticsLabel_switchCamera": {
     "description": "Accessibility name of the self-view floating over the call screen; pressing it switches between the front and the rear camera."

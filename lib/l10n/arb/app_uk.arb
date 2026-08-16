@@ -95,6 +95,8 @@
   "@call_SemanticsLabel_hideControls": {},
   "call_SemanticsLabel_showControls": "Показати керування дзвінком",
   "@call_SemanticsLabel_showControls": {},
+  "keypad_SemanticsAction_paste": "Вставити номер",
+  "@keypad_SemanticsAction_paste": {},
   "callCameraPreview_SemanticsLabel_switchCamera": "Перемкнути камеру",
   "@callCameraPreview_SemanticsLabel_switchCamera": {},
   "callThumbnail_SemanticsLabel_returnToCall": "Повернутися до дзвінка",

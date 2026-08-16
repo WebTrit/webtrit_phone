@@ -250,6 +250,12 @@ abstract class AppLocalizations {
   /// **'Show call controls'**
   String get call_SemanticsLabel_showControls;
 
+  /// Accessibility action on the keypad number field that puts the copied number into it; for everyone else the same thing happens on a long press.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste a number'**
+  String get keypad_SemanticsAction_paste;
+
   /// Accessibility name of the self-view floating over the call screen; pressing it switches between the front and the rear camera.
   ///
   /// In en, this message translates to:
