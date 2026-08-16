@@ -103,6 +103,7 @@ const String callFrontCameraPreviewId = 'callFrontCameraPreview';
 const callFrontCameraPreviewKey = Key(callFrontCameraPreviewId);
 const String callActiveThumbnailId = 'callActiveThumbnail';
 const String callControlsToggleId = 'callControlsToggle';
+const String callRowId = 'callRow';
 
 // Screen anchors: identify the screen itself, so a flow can tell where it is
 // before touching a control. Login needs them because the visible captions
@@ -202,3 +203,11 @@ const String contactPhoneTileFavIconId = 'contactPhoneTileFavIcon';
 const contactPhoneTileFavIconKey = Key(contactPhoneTileFavIconId);
 const String contactEmailTileId = 'contactEmailTile';
 const contactEmailTileKey = Key(contactEmailTileId);
+
+/// Id of the [index]th control in a list of identical ones: the first keeps the
+/// plain id, the rest are numbered from two, the way a person would count them.
+///
+/// A row of a list cannot use the identifier of the thing it shows - a call id
+/// is generated at call time and a test cannot know it in advance - so position
+/// is what is left to address it by.
+String numberedId(String id, int index) => index == 0 ? id : '$id${index + 1}';

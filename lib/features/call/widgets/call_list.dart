@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 import 'package:clock/clock.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/call_bloc.dart';
 import '../view/call_screen_style.dart';
@@ -46,14 +48,20 @@ class CallList extends StatelessWidget {
               style: (style?.callStatus ?? const TextStyle()).copyWith(fontSize: 11, letterSpacing: 1.2),
             ),
           ),
-        for (final call in calls)
-          CallRow(
-            key: ValueKey('CallRow-${call.callId}'),
-            call: call,
-            focused: call.callId == focusedCallId,
-            onTap: () => onCallTap(call.callId),
-            style: style,
-            listStyle: listStyle,
+        // Each row is one control: the badge, the name and the duration are
+        // its content, and the id is numbered because there are several of
+        // them and a call id is not something a test can know in advance.
+        for (final (index, call) in calls.indexed)
+          SemanticAction.button(
+            identifier: numberedId(callRowId, index),
+            child: CallRow(
+              key: ValueKey('CallRow-${call.callId}'),
+              call: call,
+              focused: call.callId == focusedCallId,
+              onTap: () => onCallTap(call.callId),
+              style: style,
+              listStyle: listStyle,
+            ),
           ),
       ],
     );
