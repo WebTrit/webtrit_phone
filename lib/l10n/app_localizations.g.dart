@@ -268,6 +268,42 @@ abstract class AppLocalizations {
   /// **'Switch camera'**
   String get callCameraPreview_SemanticsLabel_switchCamera;
 
+  /// Accessibility action of the small window that floats over the app during a call: moves it to the top left corner.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to the top left'**
+  String get callThumbnail_SemanticsAction_moveTopLeft;
+
+  /// Accessibility action of the floating call window: moves it to the top right corner.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to the top right'**
+  String get callThumbnail_SemanticsAction_moveTopRight;
+
+  /// Accessibility action of the floating call window: moves it to the left edge, halfway down.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to the middle left'**
+  String get callThumbnail_SemanticsAction_moveMiddleLeft;
+
+  /// Accessibility action of the floating call window: moves it to the right edge, halfway down.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to the middle right'**
+  String get callThumbnail_SemanticsAction_moveMiddleRight;
+
+  /// Accessibility action of the floating call window: moves it to the bottom left corner.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to the bottom left'**
+  String get callThumbnail_SemanticsAction_moveBottomLeft;
+
+  /// Accessibility action of the floating call window: moves it to the bottom right corner.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to the bottom right'**
+  String get callThumbnail_SemanticsAction_moveBottomRight;
+
   /// Accessibility name of the small window that floats over the app during a call and leads back to the call screen.
   ///
   /// In en, this message translates to:

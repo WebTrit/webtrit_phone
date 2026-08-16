@@ -157,6 +157,24 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callCameraPreview_SemanticsLabel_switchCamera => 'Перемкнути камеру';
 
   @override
+  String get callThumbnail_SemanticsAction_moveTopLeft => 'Перемістити у верхній лівий кут';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveTopRight => 'Перемістити у верхній правий кут';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveMiddleLeft => 'Перемістити ліворуч по центру';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveMiddleRight => 'Перемістити праворуч по центру';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveBottomLeft => 'Перемістити у нижній лівий кут';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveBottomRight => 'Перемістити у нижній правий кут';
+
+  @override
   String get callThumbnail_SemanticsLabel_returnToCall => 'Повернутися до дзвінка';
 
   @override
