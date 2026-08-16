@@ -132,6 +132,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get call_SemanticsLabel_showControls => 'แสดงตัวควบคุมการโทร';
 
   @override
+  String get keypad_SemanticsLabel_number => 'หมายเลขโทรศัพท์';
+
+  @override
   String get keypad_SemanticsAction_paste => 'วางหมายเลข';
 
   @override

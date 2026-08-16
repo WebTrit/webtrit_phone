@@ -250,6 +250,12 @@ abstract class AppLocalizations {
   /// **'Show call controls'**
   String get call_SemanticsLabel_showControls;
 
+  /// Accessibility name of the field on the keypad that holds the number being dialled; it looks like plain text on the screen and needs a name of its own.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get keypad_SemanticsLabel_number;
+
   /// Accessibility action on the keypad number field that puts the copied number into it; for everyone else the same thing happens on a long press.
   ///
   /// In en, this message translates to:

@@ -95,6 +95,8 @@
   "@call_SemanticsLabel_hideControls": {},
   "call_SemanticsLabel_showControls": "Mostra i comandi della chiamata",
   "@call_SemanticsLabel_showControls": {},
+  "keypad_SemanticsLabel_number": "Numero di telefono",
+  "@keypad_SemanticsLabel_number": {},
   "keypad_SemanticsAction_paste": "Incolla un numero",
   "@keypad_SemanticsAction_paste": {},
   "callCameraPreview_SemanticsLabel_switchCamera": "Cambia fotocamera",
