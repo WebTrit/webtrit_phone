@@ -367,7 +367,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   /// The list always includes the video fit toggle. The background mode toggle
   /// is conditionally added only when the video is in 'contain' mode, as the
   /// background is not visible in 'cover' mode.
-  List<PopupMenuItem<void>> get _buildPopupMenuItems {
+  List<PopupMenuEntry<void>> get _buildPopupMenuItems {
     final iconColor = Theme.of(context).colorScheme.onSurface;
 
     return [
