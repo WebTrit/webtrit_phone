@@ -2860,5 +2860,74 @@
   "diagnosticNetworkTest_SemanticsLabel_refresh": "Run the network test again",
   "@diagnosticNetworkTest_SemanticsLabel_refresh": {
     "description": "Accessibility name of the button that repeats the network check on the diagnostics screen."
+  },
+  "presence_settings_statusIcon_searchHint": "Search icons",
+  "@presence_settings_statusIcon_searchHint": {
+    "description": "Hint of the field that searches the icons in the status icon picker."
+  },
+  "presenceSettings_SemanticsLabel_optionInfo": "What {option} means",
+  "@presenceSettings_SemanticsLabel_optionInfo": {
+    "description": "Accessibility name of the button that explains one option of the presence status.",
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    }
+  },
+  "presenceSettings_SemanticsLabel_preset": "Status preset",
+  "@presenceSettings_SemanticsLabel_preset": {
+    "description": "Accessibility name of the control that picks a ready-made presence status."
+  },
+  "presenceSettings_SemanticsLabel_pickStatusIcon": "Choose a status icon",
+  "@presenceSettings_SemanticsLabel_pickStatusIcon": {
+    "description": "Accessibility name of the button that opens the icon picker of the presence status."
+  },
+  "presenceSettings_SemanticsLabel_clearStatusIcon": "Remove the status icon",
+  "@presenceSettings_SemanticsLabel_clearStatusIcon": {
+    "description": "Accessibility name of the button that takes the icon off the presence status."
+  },
+  "presenceSettings_SemanticsLabel_searchIcons": "Search icons",
+  "@presenceSettings_SemanticsLabel_searchIcons": {
+    "description": "Accessibility name of the button that opens the search of the icon picker."
+  },
+  "presenceSettings_SemanticsLabel_stopSearchingIcons": "Stop searching icons",
+  "@presenceSettings_SemanticsLabel_stopSearchingIcons": {
+    "description": "Accessibility name of the button that leaves the search of the icon picker."
+  },
+  "presenceSettings_SemanticsLabel_iconCategoryRecent": "Recently used",
+  "@presenceSettings_SemanticsLabel_iconCategoryRecent": {
+    "description": "Accessibility name of the recently used category of the icon picker."
+  },
+  "presenceSettings_SemanticsLabel_iconCategorySmileys": "Smileys and people",
+  "@presenceSettings_SemanticsLabel_iconCategorySmileys": {
+    "description": "Accessibility name of the smileys category of the icon picker."
+  },
+  "presenceSettings_SemanticsLabel_iconCategoryAnimals": "Animals and nature",
+  "@presenceSettings_SemanticsLabel_iconCategoryAnimals": {
+    "description": "Accessibility name of the animals category of the icon picker."
+  },
+  "presenceSettings_SemanticsLabel_iconCategoryFoods": "Food and drink",
+  "@presenceSettings_SemanticsLabel_iconCategoryFoods": {
+    "description": "Accessibility name of the food category of the icon picker."
+  },
+  "presenceSettings_SemanticsLabel_iconCategoryActivities": "Activities",
+  "@presenceSettings_SemanticsLabel_iconCategoryActivities": {
+    "description": "Accessibility name of the activities category of the icon picker."
+  },
+  "presenceSettings_SemanticsLabel_iconCategoryTravel": "Travel and places",
+  "@presenceSettings_SemanticsLabel_iconCategoryTravel": {
+    "description": "Accessibility name of the travel category of the icon picker."
+  },
+  "presenceSettings_SemanticsLabel_iconCategoryObjects": "Objects",
+  "@presenceSettings_SemanticsLabel_iconCategoryObjects": {
+    "description": "Accessibility name of the objects category of the icon picker."
+  },
+  "presenceSettings_SemanticsLabel_iconCategorySymbols": "Symbols",
+  "@presenceSettings_SemanticsLabel_iconCategorySymbols": {
+    "description": "Accessibility name of the symbols category of the icon picker."
+  },
+  "presenceSettings_SemanticsLabel_iconCategoryFlags": "Flags",
+  "@presenceSettings_SemanticsLabel_iconCategoryFlags": {
+    "description": "Accessibility name of the flags category of the icon picker."
   }
 }

@@ -28,7 +28,7 @@ void main() {
 
       // Titled with the option it explains, so the four rows that carry the
       // same glyph cannot be confused.
-      expect(find.widgetWithText(AlertDialog, 'Availability:'), findsOneWidget);
+      expect(find.widgetWithText(AlertDialog, 'Availability'), findsOneWidget);
       final explanation = find.textContaining('Represents general availability');
       expect(explanation, findsOneWidget);
 

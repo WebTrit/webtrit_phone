@@ -1694,6 +1694,36 @@ extension AppLocalizationsExtension on AppLocalizations {
         messaging_SemanticsLabel_sendForward,
       'diagnosticNetworkTest_SemanticsLabel_refresh' =>
         diagnosticNetworkTest_SemanticsLabel_refresh,
+      'presence_settings_statusIcon_searchHint' =>
+        presence_settings_statusIcon_searchHint,
+      'presenceSettings_SemanticsLabel_preset' =>
+        presenceSettings_SemanticsLabel_preset,
+      'presenceSettings_SemanticsLabel_pickStatusIcon' =>
+        presenceSettings_SemanticsLabel_pickStatusIcon,
+      'presenceSettings_SemanticsLabel_clearStatusIcon' =>
+        presenceSettings_SemanticsLabel_clearStatusIcon,
+      'presenceSettings_SemanticsLabel_searchIcons' =>
+        presenceSettings_SemanticsLabel_searchIcons,
+      'presenceSettings_SemanticsLabel_stopSearchingIcons' =>
+        presenceSettings_SemanticsLabel_stopSearchingIcons,
+      'presenceSettings_SemanticsLabel_iconCategoryRecent' =>
+        presenceSettings_SemanticsLabel_iconCategoryRecent,
+      'presenceSettings_SemanticsLabel_iconCategorySmileys' =>
+        presenceSettings_SemanticsLabel_iconCategorySmileys,
+      'presenceSettings_SemanticsLabel_iconCategoryAnimals' =>
+        presenceSettings_SemanticsLabel_iconCategoryAnimals,
+      'presenceSettings_SemanticsLabel_iconCategoryFoods' =>
+        presenceSettings_SemanticsLabel_iconCategoryFoods,
+      'presenceSettings_SemanticsLabel_iconCategoryActivities' =>
+        presenceSettings_SemanticsLabel_iconCategoryActivities,
+      'presenceSettings_SemanticsLabel_iconCategoryTravel' =>
+        presenceSettings_SemanticsLabel_iconCategoryTravel,
+      'presenceSettings_SemanticsLabel_iconCategoryObjects' =>
+        presenceSettings_SemanticsLabel_iconCategoryObjects,
+      'presenceSettings_SemanticsLabel_iconCategorySymbols' =>
+        presenceSettings_SemanticsLabel_iconCategorySymbols,
+      'presenceSettings_SemanticsLabel_iconCategoryFlags' =>
+        presenceSettings_SemanticsLabel_iconCategoryFlags,
       'agoTicker_daysAgo' => switch (args) {
         [final int days] => agoTicker_daysAgo(days),
         _ => throw ArgumentError('agoTicker_daysAgo requires 1 arguments'),
@@ -2033,6 +2063,14 @@ extension AppLocalizationsExtension on AppLocalizations {
         [final String name] => callPull_SemanticsLabel_pickup(name),
         _ => throw ArgumentError(
           'callPull_SemanticsLabel_pickup requires 1 arguments',
+        ),
+      },
+      'presenceSettings_SemanticsLabel_optionInfo' => switch (args) {
+        [final String option] => presenceSettings_SemanticsLabel_optionInfo(
+          option,
+        ),
+        _ => throw ArgumentError(
+          'presenceSettings_SemanticsLabel_optionInfo requires 1 arguments',
         ),
       },
       _ => null,
