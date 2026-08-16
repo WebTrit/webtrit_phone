@@ -174,11 +174,12 @@ void main() {
     testWidgets('the calls a transfer can go to are numbered by position', (tester) async {
       final handle = tester.ensureSemantics();
       final submitted = <ActiveCall>[];
+      final secondCall = _transferableCall.copyWith(callId: 'second', handle: const CallkeepHandle.number('1003'));
 
       await tester.pumpWidget(
         wrap(
           buildActive(
-            transferableCalls: [_transferableCall],
+            transferableCalls: [_transferableCall, secondCall],
             onAttendedTransferSubmitted: submitted.add,
             onBlindTransferInitiated: () {},
           ),
@@ -187,17 +188,21 @@ void main() {
       await tapViaSemantics(tester, find.bySemanticsIdentifier(callActionsTransferMenuId));
       await tester.pumpAndSettle();
 
-      // One call to hand over to, so it keeps the plain id; a second would be
-      // numbered from two, the way the call list does it.
+      // Two calls to hand over to: the first keeps the plain id and the second
+      // is numbered from two, the way the call list numbers its rows.
+      final second = numberedId(callActionsTransferMenuNumberId, 1);
       expectTapTargetSemantics(
         tester,
         find.bySemanticsIdentifier(callActionsTransferMenuNumberId),
+        label: _transferableCall.handle.value,
         identifier: callActionsTransferMenuNumberId,
       );
+      expectTapTargetSemantics(tester, find.bySemanticsIdentifier(second), label: '1003', identifier: second);
 
-      await tapViaSemantics(tester, find.bySemanticsIdentifier(callActionsTransferMenuNumberId));
+      // The second row hands the call to the second call, not to the first.
+      await tapViaSemantics(tester, find.bySemanticsIdentifier(second));
       await tester.pumpAndSettle();
-      expect(submitted, [_transferableCall]);
+      expect(submitted, [secondCall]);
 
       handle.dispose();
     });

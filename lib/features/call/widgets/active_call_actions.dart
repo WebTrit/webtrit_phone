@@ -462,7 +462,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
   }
 
   /// Menu items of the audio-device picker, one per available device.
-  List<PopupMenuItem<CallAudioDevice>> _buildAudioDeviceItems(ThemeData themeData) {
+  List<PopupMenuEntry<CallAudioDevice>> _buildAudioDeviceItems(ThemeData themeData) {
     return widget.availableAudioDevices
         .map((device) {
           final CallAudioDevice(:name, :type, :id) = device;
@@ -496,15 +496,18 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
 
   /// Menu items of the transfer popup while other calls can be transfer
   /// targets: one per transferable call, plus the free-number option.
-  List<PopupMenuItem<dynamic>> _buildTransferToCallItems(ThemeData themeData) {
+  List<PopupMenuEntry<dynamic>> _buildTransferToCallItems(ThemeData themeData) {
     final popupMenuIconSize = themeData.textTheme.bodyLarge!.fontSize;
     final onAttendedTransferSubmitted = widget.onAttendedTransferSubmitted;
     return [
-      for (final call in widget.transferableCalls)
+      // Numbered by position rather than by looking the call up: a call
+      // compares by value across all of its fields, so a search would be both
+      // slow and wrong the day two calls happen to look alike.
+      for (final (index, call) in widget.transferableCalls.indexed)
         if (onAttendedTransferSubmitted != null)
           CallPopupMenuItem(
             key: callActionsTransferMenuNumberKey,
-            identifier: numberedId(callActionsTransferMenuNumberId, widget.transferableCalls.indexOf(call)),
+            identifier: numberedId(callActionsTransferMenuNumberId, index),
             // Transfer is signaling-dependent, disable during renegotiation.
             enabled: widget.enableInteractions,
             onTap: () => onAttendedTransferSubmitted.call(call),
@@ -516,6 +519,9 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
             ),
             textStyle: themeData.textTheme.bodyMedium,
           ),
+      // The same id as the entry that starts an unattended transfer when there
+      // is nothing to transfer to: it is the same action, offered in the other
+      // shape of this menu, and the two shapes never appear together.
       if (widget.onBlindTransferInitiated != null)
         CallPopupMenuItem(
           identifier: callActionsTransferMenuBlindInitId,
@@ -535,7 +541,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
 
   /// Menu items of the transfer popup with no other calls around: start an
   /// unattended or an attended transfer.
-  List<PopupMenuItem<dynamic>> _buildTransferInitItems(ThemeData themeData) {
+  List<PopupMenuEntry<dynamic>> _buildTransferInitItems(ThemeData themeData) {
     final popupMenuIconSize = themeData.textTheme.bodyLarge!.fontSize;
     return [
       if (widget.onBlindTransferInitiated != null)

@@ -73,7 +73,7 @@ class CallControls extends StatelessWidget {
 
   /// The view options offered in the toolbar; they belong to the screen, which
   /// owns how the video is fitted and what is behind it.
-  final List<PopupMenuItem<void>> popupMenuItems;
+  final List<PopupMenuEntry<void>> popupMenuItems;
 
   final bool keypadShown;
 

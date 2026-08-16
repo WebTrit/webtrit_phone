@@ -79,7 +79,7 @@ class CallActionMenuButton<T> extends StatefulWidget {
   /// an empty menu opens nothing, so it must not announce an action either.
   final bool enabled;
 
-  final List<PopupMenuItem<T>> items;
+  final List<PopupMenuEntry<T>> items;
   final PopupMenuItemSelected<T>? onSelected;
   final Offset offset;
   final WidgetStatesController? statesController;
