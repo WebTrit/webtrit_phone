@@ -23,11 +23,36 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
   late final callPullCubit = context.read<CallPullCubit>();
   late final callBloc = context.read<CallBloc>();
 
+  bool _wobbles = false;
+  bool _wobbling = false;
+
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // The badge shakes itself every few seconds for as long as there is a call
+    // to pick up. Someone who has asked the phone to stop moving things gets a
+    // badge that sits still instead.
+    final wobbles = !MediaQuery.disableAnimationsOf(context);
+    if (wobbles == _wobbles) return;
+
+    _wobbles = wobbles;
+    if (wobbles) {
+      _wobble();
+    } else {
+      controller.stop();
+      controller.value = 0;
+    }
+  }
+
+  void _wobble() {
+    if (_wobbling) return;
+
+    _wobbling = true;
     Future.doWhile(() async {
-      if (!mounted) return false;
+      if (!mounted || !_wobbles) {
+        _wobbling = false;
+        return false;
+      }
       controller.repeat(max: 0.38, reverse: true, count: 4);
       await Future.delayed(Duration(seconds: 1 + Random().nextInt(5)));
       return true;
@@ -88,7 +113,11 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: InkWell(
             onTap: onTap,
-            child: Padding(
+            child: Container(
+              // The badge stands among the icon buttons of the app bar and was
+              // half their size, which is under what a finger needs.
+              constraints: const BoxConstraints(minHeight: kMinInteractiveDimension),
+              alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -241,11 +270,13 @@ class _PullableCallsDialogState extends State<PullableCallsDialog> {
           clipBehavior: Clip.antiAlias,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: InkWell(
-            onTap: () {
-              if (dialog.pullable) onPickUp(dialog);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+            // A call that cannot be picked up yet used to look faded and still
+            // take the press, doing nothing with it.
+            onTap: dialog.pullable ? () => onPickUp(dialog) : null,
+            child: Container(
+              constraints: const BoxConstraints(minHeight: kMinInteractiveDimension),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
                 context.l10n.callPullBadge_pickupButtonTitle,
                 style: TextStyle(fontSize: 14, color: colorScheme.onPrimary),
