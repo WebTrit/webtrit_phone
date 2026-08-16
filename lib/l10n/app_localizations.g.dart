@@ -6379,6 +6379,72 @@ abstract class AppLocalizations {
   /// **'Video call'**
   String get messaging_SemanticsLabel_videoCall;
 
+  /// Accessibility name of the field a message is written in; the hint disappears as soon as something is typed.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get messaging_SemanticsLabel_message;
+
+  /// Accessibility name of the arrow that sends the written message.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get messaging_SemanticsLabel_send;
+
+  /// Accessibility name of the button that opens who the chat is with, or the members of a group.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation details'**
+  String get messaging_SemanticsLabel_conversationDetails;
+
+  /// Accessibility name of the button that opens what can be done with a text conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation options'**
+  String get messaging_SemanticsLabel_conversationOptions;
+
+  /// Read before the quoted message in the bar above the field, when a reply is being written.
+  ///
+  /// In en, this message translates to:
+  /// **'Replying to'**
+  String get messaging_SemanticsLabel_replying;
+
+  /// Read before the quoted message in the bar above the field, when a sent message is being changed.
+  ///
+  /// In en, this message translates to:
+  /// **'Editing'**
+  String get messaging_SemanticsLabel_editing;
+
+  /// Read before the quoted message in the bar above the field, when a message is being passed on to someone else.
+  ///
+  /// In en, this message translates to:
+  /// **'Forwarding'**
+  String get messaging_SemanticsLabel_forwarding;
+
+  /// Accessibility name of the cross that drops the message being replied to.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop replying'**
+  String get messaging_SemanticsLabel_stopReplying;
+
+  /// Accessibility name of the cross that leaves a sent message as it was.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop editing'**
+  String get messaging_SemanticsLabel_stopEditing;
+
+  /// Accessibility name of the cross that drops the message being passed on.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop forwarding'**
+  String get messaging_SemanticsLabel_stopForwarding;
+
+  /// Accessibility name of the tick that passes the message on to this conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Forward the message'**
+  String get messaging_SemanticsLabel_sendForward;
+
   /// Accessibility name of the button that repeats the network check on the diagnostics screen.
   ///
   /// In en, this message translates to:

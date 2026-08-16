@@ -170,6 +170,10 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
 
   Widget list() {
     return GestureDetector(
+      // A tap anywhere puts the keyboard away. It is a convenience for a
+      // finger and nothing a screen reader should be taken to - left in the
+      // tree it turns the whole screen into one nameless stop.
+      excludeFromSemantics: true,
       onTap: () => FocusScope.of(context).unfocus(),
       child: ListView(
         controller: scrollController,

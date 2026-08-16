@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 /// The message input with the send arrow that appears next to it.
 ///
@@ -70,22 +73,32 @@ class _MessageTextFieldState extends State<MessageTextField> {
         child: Row(
           children: [
             Expanded(
-              child: TextFormField(
-                keyboardType: TextInputType.multiline,
-                maxLines: 4,
-                minLines: 1,
-                maxLength: widget.maxLength,
-                textInputAction: .newline,
-                controller: widget.controller,
-                onFieldSubmitted: (_) => _send(),
-                onChanged: widget.onChanged,
-                decoration: InputDecoration(
-                  hintText: context.l10n.messaging_MessageField_hint,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  isDense: true,
-                  isCollapsed: true,
-                  counterText: '',
-                  border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(16)),
+              // The hint is the only name the field has, and it is gone as
+              // soon as there is something to read out. Merged, so the name
+              // and the id land on the field itself rather than on a wrapper
+              // above it - nothing in the decoration can be pressed.
+              child: MergeSemantics(
+                child: Semantics(
+                  label: context.l10n.messaging_SemanticsLabel_message,
+                  identifier: messageInputId,
+                  child: TextFormField(
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 4,
+                    minLines: 1,
+                    maxLength: widget.maxLength,
+                    textInputAction: .newline,
+                    controller: widget.controller,
+                    onFieldSubmitted: (_) => _send(),
+                    onChanged: widget.onChanged,
+                    decoration: InputDecoration(
+                      hintText: context.l10n.messaging_MessageField_hint,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      isDense: true,
+                      isCollapsed: true,
+                      counterText: '',
+                      border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(16)),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -98,12 +111,16 @@ class _MessageTextFieldState extends State<MessageTextField> {
               firstChild: const SizedBox(width: 8, height: _sendSide),
               secondChild: Padding(
                 padding: const EdgeInsets.only(left: 8),
-                child: IconButton(
-                  onPressed: _send,
-                  // A bare arrow was a target of half this.
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(minWidth: _sendSide, minHeight: _sendSide),
-                  icon: Icon(Icons.send, size: 24, color: colorScheme.primary),
+                child: SemanticAction(
+                  label: context.l10n.messaging_SemanticsLabel_send,
+                  identifier: messageSendId,
+                  child: IconButton(
+                    onPressed: _send,
+                    // A bare arrow was a target of half this.
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(minWidth: _sendSide, minHeight: _sendSide),
+                    icon: Icon(Icons.send, size: 24, color: colorScheme.primary),
+                  ),
                 ),
               ),
               crossFadeState: _hasMessage ? CrossFadeState.showSecond : CrossFadeState.showFirst,

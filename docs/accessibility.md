@@ -88,6 +88,20 @@ where merging is wrong:
   activation of whatever its decoration hosts, such as the password visibility
   toggle.
 
+A text field whose decoration hosts nothing pressable and whose only name is a
+hint is the one exception: a hint disappears with the first letter typed, so the
+field ends up with no name at all, and `SemanticId` cannot add one - a name put
+on a node above the field leaves the value and the editing actions on the node
+below, which is the same split this whole section is about. Merge it instead
+(`MergeSemantics` around `Semantics(label:, identifier:)`), the way the keypad
+number (`lib/features/keypad/view/keypad_view.dart`) and the message field
+(`lib/features/messaging/widgets/message_list_view/message_text_field.dart`) do.
+Check the merge in a test by asserting the value on the same node as the name:
+`isSemantics(label: ..., identifier: ..., value: 'hello', isTextField: true)`.
+One more thing to know before reaching for a device to confirm it: the name of a
+text field arrives on Android as the HINT, so `uiautomator dump` shows an empty
+`content-desc` and Maestro cannot match it - address fields by id there.
+
 **Never wrap a tap target in a plain `Semantics(identifier: ...)`.** An identifier
 forces its own semantics boundary, so the id ends up on a node above the one
 carrying the action: the screen reader announces an unnamed button and automation

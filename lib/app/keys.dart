@@ -108,6 +108,7 @@ const String callRowId = 'callRow';
 // Screen anchors: identify the screen itself, so a flow can tell where it is
 // before touching a control. Login needs them because the visible captions
 // repeat - "Proceed" names the button on four different screens.
+const String chatConversationScreenId = 'chatConversationScreen';
 const String contactScreenId = 'contactScreen';
 const String loginCoreUrlScreenId = 'loginCoreUrlScreen';
 const String loginModeScreenId = 'loginModeScreen';
@@ -118,6 +119,21 @@ const String loginQrScreenId = 'loginQrScreen';
 const String loginSignupEmbeddedErrorScreenId = 'loginSignupEmbeddedErrorScreen';
 const String loginSignupRequestScreenId = 'loginSignupRequestScreen';
 const String loginSignupVerifyScreenId = 'loginSignupVerifyScreen';
+const String smsConversationScreenId = 'smsConversationScreen';
+
+// The bottom of a conversation: the field a message is written in, the arrow
+// that sends it, and the bar that appears above them while a message is being
+// replied to, changed or passed on. The bar carries the id of what it is for,
+// because that is the only thing about it that a flow can rely on - its text
+// is the message it quotes.
+const String messageInputId = 'messageInput';
+const String messageSendId = 'messageSend';
+const String messageEditBarId = 'messageEditBar';
+const String messageForwardBarId = 'messageForwardBar';
+const String messageReplyBarId = 'messageReplyBar';
+const String messageExchangeCancelId = 'messageExchangeCancel';
+const String messageExchangeConfirmId = 'messageExchangeConfirm';
+const String conversationMenuId = 'conversationMenu';
 
 // Identifier-only entries: controls that have no widget-test key.
 const String actionPadOverflowId = 'actionPadOverflow';

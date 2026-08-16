@@ -54,6 +54,7 @@ void main() {
     final controller = await pump(tester);
     await tester.enterText(find.byType(TextFormField), 'hello');
     await settle(tester);
+    expect(sendIcon(), findsOneWidget);
 
     controller.text = '';
     await settle(tester);
