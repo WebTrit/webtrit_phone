@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../utils/utils.dart';
@@ -61,6 +62,8 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
       orientation: orientation,
       smallerSide: smallerSide,
       onTap: isSwitchEnabled ? onSwitchCameraPressed : null,
+      label: context.l10n.callCameraPreview_SemanticsLabel_switchCamera,
+      identifier: callFrontCameraPreviewId,
       child: Stack(
         fit: StackFit.expand,
         children: [

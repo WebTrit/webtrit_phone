@@ -126,6 +126,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get callTileActions_more => 'เพิ่มเติม';
 
   @override
+  String get callCameraPreview_SemanticsLabel_switchCamera => 'สลับกล้อง';
+
+  @override
+  String get callThumbnail_SemanticsLabel_returnToCall => 'กลับไปที่สายสนทนา';
+
+  @override
   String callTile_SemanticsLabel_call(String name) {
     return 'โทรหา $name';
   }

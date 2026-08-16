@@ -126,6 +126,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get callTileActions_more => 'More';
 
   @override
+  String get callCameraPreview_SemanticsLabel_switchCamera => 'Switch camera';
+
+  @override
+  String get callThumbnail_SemanticsLabel_returnToCall => 'Return to the call';
+
+  @override
   String callTile_SemanticsLabel_call(String name) {
     return 'Call $name';
   }

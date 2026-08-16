@@ -91,6 +91,10 @@
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
   },
+  "callCameraPreview_SemanticsLabel_switchCamera": "Cambia fotocamera",
+  "@callCameraPreview_SemanticsLabel_switchCamera": {},
+  "callThumbnail_SemanticsLabel_returnToCall": "Torna alla chiamata",
+  "@callThumbnail_SemanticsLabel_returnToCall": {},
   "callTile_SemanticsLabel_call": "Chiama {name}",
   "@callTile_SemanticsLabel_call": {
     "description": "Accessibility name of the call button in a call history or contact row.",
