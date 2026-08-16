@@ -504,6 +504,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         if (onAttendedTransferSubmitted != null)
           CallPopupMenuItem(
             key: callActionsTransferMenuNumberKey,
+            identifier: numberedId(callActionsTransferMenuNumberId, widget.transferableCalls.indexOf(call)),
             // Transfer is signaling-dependent, disable during renegotiation.
             enabled: widget.enableInteractions,
             onTap: () => onAttendedTransferSubmitted.call(call),
@@ -517,6 +518,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
           ),
       if (widget.onBlindTransferInitiated != null)
         CallPopupMenuItem(
+          identifier: callActionsTransferMenuBlindInitId,
           // Transfer is signaling-dependent, disable during renegotiation.
           enabled: widget.enableInteractions,
           onTap: widget.onBlindTransferInitiated,
@@ -539,6 +541,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
       if (widget.onBlindTransferInitiated != null)
         CallPopupMenuItem(
           key: callActionsTransferMenuBlindInitKey,
+          identifier: callActionsTransferMenuBlindInitId,
           // Transfer is signaling-dependent, disable during renegotiation.
           enabled: widget.enableInteractions,
           onTap: widget.onBlindTransferInitiated,
@@ -553,6 +556,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
       if (widget.onAttendedTransferInitiated != null)
         CallPopupMenuItem(
           key: callActionsTransferMenuAttendedInitKey,
+          identifier: callActionsTransferMenuAttendedInitId,
           // Transfer is signaling-dependent, disable during renegotiation.
           enabled: widget.enableInteractions,
           onTap: widget.onAttendedTransferInitiated,
