@@ -43,40 +43,32 @@ class ContactSipSubscriptionOption extends StatelessWidget {
             ),
           ),
         ),
-        _OptionInfoButton(message: info),
+        _OptionInfoButton(option: text, message: info),
       ],
     );
   }
 }
 
-/// Info button of an option: a press shows the explanation, which used to
-/// answer only a tap on the glyph itself and was not offered as a control at
-/// all - so nothing announced it and nothing could activate it.
-class _OptionInfoButton extends StatefulWidget {
-  const _OptionInfoButton({required this.message});
+/// Info button of an option: a press opens the explanation.
+///
+/// The explanation is a paragraph, and it used to be a tooltip: it answered a
+/// tap on the glyph alone, was not offered as a control at all, showed for ten
+/// seconds and then took itself away with no way to bring it back. A dialog
+/// stays until it is dismissed, can be re-read, and is ordinary content for a
+/// screen reader.
+class _OptionInfoButton extends StatelessWidget {
+  const _OptionInfoButton({required this.option, required this.message});
+
+  /// Caption of the option, which titles the explanation.
+  final String option;
 
   final String message;
 
   @override
-  State<_OptionInfoButton> createState() => _OptionInfoButtonState();
-}
-
-class _OptionInfoButtonState extends State<_OptionInfoButton> {
-  final _tooltipKey = GlobalKey<TooltipState>();
-
-  @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    return Tooltip(
-      key: _tooltipKey,
-      message: widget.message,
-      triggerMode: TooltipTriggerMode.manual,
-      showDuration: const Duration(seconds: 10),
-      textStyle: themeData.textTheme.labelSmall?.copyWith(color: themeData.colorScheme.onSecondary),
-      child: IconButton(
-        icon: const Icon(Icons.info_outline),
-        onPressed: () => _tooltipKey.currentState?.ensureTooltipVisible(),
-      ),
+    return IconButton(
+      icon: const Icon(Icons.info_outline),
+      onPressed: () => AcknowledgeDialog.show(context, title: option, content: message),
     );
   }
 }

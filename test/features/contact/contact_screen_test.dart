@@ -94,13 +94,23 @@ void main() {
       expect(tester.getSize(find.byType(AgreementCheckbox)).height, greaterThanOrEqualTo(48));
     });
 
-    testWidgets('the info button explains the option', (tester) async {
+    testWidgets('the info button opens the explanation and keeps it up', (tester) async {
       await harness.pump(tester, contact: buildContact(), presenceViaSip: true);
 
       await tester.tap(find.byIcon(Icons.info_outline));
       await tester.pumpAndSettle();
 
+      // The explanation used to be a tooltip that took itself away after ten
+      // seconds; it now waits to be dismissed, and says which option it is about.
+      expect(find.text('Subscribe to user status via SIP (Presence)'), findsWidgets);
       expect(find.textContaining('subscribe via SIP-Presence'), findsOneWidget);
+
+      await tester.pump(const Duration(seconds: 30));
+      expect(find.textContaining('subscribe via SIP-Presence'), findsOneWidget);
+
+      await tester.tap(find.text('Ok'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('subscribe via SIP-Presence'), findsNothing);
     });
   });
 }
