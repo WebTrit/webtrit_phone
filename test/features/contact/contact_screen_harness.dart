@@ -59,6 +59,22 @@ class ContactScreenHarness {
   final callBloc = MockCallBloc();
   final callRoutingCubit = MockCallRoutingCubit();
 
+  /// Puts a call on the line with a blind transfer already started, which is
+  /// what turns the call buttons of a row into the transfer shortcut.
+  void withBlindTransferUnderWay() {
+    final call = ActiveCall(
+      callId: 'call-1',
+      direction: CallDirection.outgoing,
+      line: 0,
+      handle: const CallkeepHandle.number('1001'),
+      createdTime: DateTime(2024),
+      video: false,
+      processingStatus: CallProcessingStatus.connected,
+      transfer: const Transfer.blindTransferInitiated(),
+    );
+    when(() => callBloc.state).thenReturn(CallState(activeCalls: [call]));
+  }
+
   /// Numbers the account itself can send an SMS from.
   void withUserSmsNumbers(List<String> numbers) {
     when(() => userInfoCubit.state).thenReturn(
@@ -75,6 +91,7 @@ class ContactScreenHarness {
     bool dialogsViaSip = false,
     bool enableTileSms = true,
     bool enableTileEmail = true,
+    bool enableTileTransfer = false,
   }) async {
     whenListen(contactBloc, const Stream<ContactState>.empty(), initialState: ContactState(contact: contact));
 
@@ -103,7 +120,7 @@ class ContactScreenHarness {
                 enableTileVideoCall: true,
                 enableTileSms: enableTileSms,
                 enableTileChat: true,
-                enableTileTransfer: false,
+                enableTileTransfer: enableTileTransfer,
                 enableTileCallLog: true,
                 enableTileEmail: enableTileEmail,
                 useCdrsForHistory: false,

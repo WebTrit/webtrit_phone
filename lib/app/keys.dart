@@ -108,6 +108,7 @@ const String callRowId = 'callRow';
 // Screen anchors: identify the screen itself, so a flow can tell where it is
 // before touching a control. Login needs them because the visible captions
 // repeat - "Proceed" names the button on four different screens.
+const String contactScreenId = 'contactScreen';
 const String loginCoreUrlScreenId = 'loginCoreUrlScreen';
 const String loginModeScreenId = 'loginModeScreen';
 const String loginOtpRequestScreenId = 'loginOtpRequestScreen';
@@ -131,6 +132,17 @@ const String callTileDialId = 'callTileDial';
 const String callTileMenuId = 'callTileMenu';
 const String chatInfoCallId = 'chatInfoCall';
 const String chatInfoVideoCallId = 'chatInfoVideoCall';
+const String contactChatId = 'contactChat';
+const String contactDialogsSubscriptionId = 'contactDialogsSubscription';
+const String contactDialogsSubscriptionInfoId = 'contactDialogsSubscriptionInfo';
+const String contactEmailSendId = 'contactEmailSend';
+const String contactPhoneChatId = 'contactPhoneChat';
+const String contactPhoneMenuId = 'contactPhoneMenu';
+const String contactPhoneTransferId = 'contactPhoneTransfer';
+const String contactPhoneVideoCallId = 'contactPhoneVideoCall';
+const String contactPhoneVoiceCallId = 'contactPhoneVoiceCall';
+const String contactPresenceSubscriptionId = 'contactPresenceSubscription';
+const String contactPresenceSubscriptionInfoId = 'contactPresenceSubscriptionInfo';
 const String conversationsNewId = 'conversationsNew';
 const String diagnosticNetworkTestId = 'diagnosticNetworkTest';
 const String diagnosticNetworkTestRefreshId = 'diagnosticNetworkTestRefresh';

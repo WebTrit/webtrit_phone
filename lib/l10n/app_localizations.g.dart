@@ -766,6 +766,30 @@ abstract class AppLocalizations {
   /// **'There was an issue loading the page.'**
   String get common_problemWithLoadingPage;
 
+  /// Accessibility name of the star that adds a number of the contact card to favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Add {number} to favorites'**
+  String contact_SemanticsLabel_addFavorite(String number);
+
+  /// Accessibility name of the button that explains an option of the contact card.
+  ///
+  /// In en, this message translates to:
+  /// **'What this option does'**
+  String get contact_SemanticsLabel_optionInfo;
+
+  /// Accessibility name of the star that removes a number of the contact card from favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {number} from favorites'**
+  String contact_SemanticsLabel_removeFavorite(String number);
+
+  /// Accessibility name of the button that opens the mail app on the address of the contact card.
+  ///
+  /// In en, this message translates to:
+  /// **'Send an email to {address}'**
+  String contact_SemanticsLabel_sendEmail(String address);
+
   /// No description provided for @contacts_agreement_button_text.
   ///
   /// In en, this message translates to:

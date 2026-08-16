@@ -415,6 +415,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get common_problemWithLoadingPage => 'Si è verificato un problema durante il caricamento della pagina.';
 
   @override
+  String contact_SemanticsLabel_addFavorite(String number) {
+    return 'Aggiungi $number ai preferiti';
+  }
+
+  @override
+  String get contact_SemanticsLabel_optionInfo => 'Che cosa fa questa opzione';
+
+  @override
+  String contact_SemanticsLabel_removeFavorite(String number) {
+    return 'Rimuovi $number dai preferiti';
+  }
+
+  @override
+  String contact_SemanticsLabel_sendEmail(String address) {
+    return 'Invia un\'email a $address';
+  }
+
+  @override
   String get contacts_agreement_button_text => 'Continue';
 
   @override

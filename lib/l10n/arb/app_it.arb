@@ -341,6 +341,37 @@
   "@common_noInternetConnection_title": {},
   "common_problemWithLoadingPage": "Si è verificato un problema durante il caricamento della pagina.",
   "@common_problemWithLoadingPage": {},
+  "contact_SemanticsLabel_addFavorite": "Aggiungi {number} ai preferiti",
+  "@contact_SemanticsLabel_addFavorite": {
+    "description": "Accessibility name of the star that adds a number of the contact card to favorites.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "contact_SemanticsLabel_optionInfo": "Che cosa fa questa opzione",
+  "@contact_SemanticsLabel_optionInfo": {
+    "description": "Accessibility name of the button that explains an option of the contact card."
+  },
+  "contact_SemanticsLabel_removeFavorite": "Rimuovi {number} dai preferiti",
+  "@contact_SemanticsLabel_removeFavorite": {
+    "description": "Accessibility name of the star that removes a number of the contact card from favorites.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "contact_SemanticsLabel_sendEmail": "Invia un'email a {address}",
+  "@contact_SemanticsLabel_sendEmail": {
+    "description": "Accessibility name of the button that opens the mail app on the address of the contact card.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
   "contacts_agreement_button_text": "Continue",
   "@contacts_agreement_button_text": {},
   "contacts_agreement_checkbox_text": "I agree to allow the app to access my contacts to enhance my user experience.",
