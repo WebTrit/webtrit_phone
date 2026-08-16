@@ -420,7 +420,9 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get contact_SemanticsLabel_optionInfo => 'Che cosa fa questa opzione';
+  String contact_SemanticsLabel_optionInfo(String option) {
+    return 'Che cosa significa $option';
+  }
 
   @override
   String contact_SemanticsLabel_removeFavorite(String number) {
@@ -430,6 +432,11 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String contact_SemanticsLabel_sendEmail(String address) {
     return 'Invia un\'email a $address';
+  }
+
+  @override
+  String contact_SemanticsLabel_transfer(String number) {
+    return 'Trasferisci la chiamata corrente a $number';
   }
 
   @override

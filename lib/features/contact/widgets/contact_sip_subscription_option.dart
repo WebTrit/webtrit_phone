@@ -69,7 +69,9 @@ class ContactSipSubscriptionOption extends StatelessWidget {
 class _OptionInfoButton extends StatelessWidget {
   const _OptionInfoButton({required this.option, required this.message, required this.identifier});
 
-  /// Caption of the option, which titles the explanation.
+  /// Caption of the option this button explains: it titles the explanation,
+  /// and both options carry the same button, so it is also what keeps the two
+  /// apart when they are read out.
   final String option;
 
   final String message;
@@ -80,7 +82,7 @@ class _OptionInfoButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SemanticAction(
-      label: context.l10n.contact_SemanticsLabel_optionInfo,
+      label: context.l10n.contact_SemanticsLabel_optionInfo(option),
       identifier: identifier,
       child: IconButton(
         icon: const Icon(Icons.info_outline),

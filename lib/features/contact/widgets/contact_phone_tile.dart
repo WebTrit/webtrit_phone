@@ -11,6 +11,7 @@ class ContactPhoneTile extends StatelessWidget {
     required this.label,
     required this.favorite,
     required this.callNumbers,
+    this.index = 0,
     this.onFavoriteChanged,
     this.onAudioPressed,
     this.onVideoPressed,
@@ -26,6 +27,11 @@ class ContactPhoneTile extends StatelessWidget {
   final String label;
   final bool favorite;
   final List<String> callNumbers;
+
+  /// Position of the number on the card. A contact can carry several numbers
+  /// and every row offers the same actions, so the ids are numbered by it -
+  /// otherwise a test asking for "the call button" finds more than one.
+  final int index;
 
   final ValueChanged<bool>? onFavoriteChanged;
   final VoidCallback? onAudioPressed;
@@ -60,7 +66,7 @@ class ContactPhoneTile extends StatelessWidget {
           label: favorite
               ? l10n.contact_SemanticsLabel_removeFavorite(number)
               : l10n.contact_SemanticsLabel_addFavorite(number),
-          identifier: contactPhoneTileFavIconId,
+          identifier: numberedId(contactPhoneTileFavIconId, index),
           child: IconButton(
             key: contactPhoneTileFavIconKey,
             splashRadius: 24,
@@ -74,8 +80,8 @@ class ContactPhoneTile extends StatelessWidget {
     if (onInitiatedTransferPressed != null) {
       icons.add(
         SemanticAction(
-          label: l10n.numberActions_transfer,
-          identifier: contactPhoneTransferId,
+          label: l10n.contact_SemanticsLabel_transfer(number),
+          identifier: numberedId(contactPhoneTransferId, index),
           child: IconButton(
             splashRadius: 24,
             icon: const Icon(Icons.phone_forwarded),
@@ -88,7 +94,7 @@ class ContactPhoneTile extends StatelessWidget {
         icons.add(
           SemanticAction(
             label: l10n.callTile_SemanticsLabel_call(number),
-            identifier: contactPhoneVoiceCallId,
+            identifier: numberedId(contactPhoneVoiceCallId, index),
             child: IconButton(splashRadius: 24, icon: const Icon(Icons.call), onPressed: onAudioPressed),
           ),
         );
@@ -97,7 +103,7 @@ class ContactPhoneTile extends StatelessWidget {
         icons.add(
           SemanticAction(
             label: l10n.callTile_SemanticsLabel_videoCall(number),
-            identifier: contactPhoneVideoCallId,
+            identifier: numberedId(contactPhoneVideoCallId, index),
             child: IconButton(splashRadius: 24, icon: const Icon(Icons.videocam), onPressed: onVideoPressed),
           ),
         );
@@ -108,7 +114,7 @@ class ContactPhoneTile extends StatelessWidget {
       icons.add(
         SemanticAction(
           label: l10n.numberActions_chat,
-          identifier: contactPhoneChatId,
+          identifier: numberedId(contactPhoneChatId, index),
           child: IconButton(splashRadius: 24, icon: const Icon(Icons.message), onPressed: onMessagePressed),
         ),
       );
@@ -120,7 +126,7 @@ class ContactPhoneTile extends StatelessWidget {
   Widget _buildMoreMenuButton(BuildContext context) {
     return SemanticAction(
       label: context.l10n.callTileActions_more,
-      identifier: contactPhoneMenuId,
+      identifier: numberedId(contactPhoneMenuId, index),
       child: PopupMenuButton(
         icon: const Icon(Icons.more_vert),
         // The stock tooltip would be spoken on top of the name above.

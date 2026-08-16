@@ -152,9 +152,10 @@ class _ContactScreenState extends State<ContactScreen> {
                               textAlign: TextAlign.center,
                             ),
                             const Divider(height: 16),
-                            for (final entry in contact.displayPhoneEntries)
+                            for (final (index, entry) in contact.displayPhoneEntries.indexed)
                               ContactPhoneTileAdapter(
                                 number: entry.phone.number,
+                                index: index,
                                 displayLabel: entry.displayLabel,
                                 favorite: entry.displayFavorite,
                                 callNumbers: callRoutingState?.allNumbers ?? [],
@@ -176,9 +177,10 @@ class _ContactScreenState extends State<ContactScreen> {
                                 onMessagePressed: () => _navigateToChatConversation(contact),
                                 onCallFromPressed: (fromNumber) => _onCallFromPressed(entry.phone, contact, fromNumber),
                               ),
-                            for (final contactEmail in contact.emails)
+                            for (final (index, contactEmail) in contact.emails.indexed)
                               ContactEmailTile(
                                 key: contactEmailTileKey,
+                                index: index,
                                 address: contactEmail.address,
                                 label: contactEmail.label,
                                 onEmailPressed: widget.enableTileEmail ? () => _onEmailPressed(contactEmail) : null,

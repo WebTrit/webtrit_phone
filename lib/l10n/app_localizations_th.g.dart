@@ -415,7 +415,9 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get contact_SemanticsLabel_optionInfo => 'ตัวเลือกนี้ทำอะไร';
+  String contact_SemanticsLabel_optionInfo(String option) {
+    return '$option คืออะไร';
+  }
 
   @override
   String contact_SemanticsLabel_removeFavorite(String number) {
@@ -425,6 +427,11 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String contact_SemanticsLabel_sendEmail(String address) {
     return 'ส่งอีเมลถึง $address';
+  }
+
+  @override
+  String contact_SemanticsLabel_transfer(String number) {
+    return 'โอนสายปัจจุบันไปที่ $number';
   }
 
   @override

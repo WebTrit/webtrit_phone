@@ -350,9 +350,14 @@
       }
     }
   },
-  "contact_SemanticsLabel_optionInfo": "ตัวเลือกนี้ทำอะไร",
+  "contact_SemanticsLabel_optionInfo": "{option} คืออะไร",
   "@contact_SemanticsLabel_optionInfo": {
-    "description": "Accessibility name of the button that explains an option of the contact card."
+    "description": "Accessibility name of the button that explains an option of the contact card; the caption of the option keeps the two buttons apart.",
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    }
   },
   "contact_SemanticsLabel_removeFavorite": "นำ {number} ออกจากรายการโปรด",
   "@contact_SemanticsLabel_removeFavorite": {
@@ -368,6 +373,15 @@
     "description": "Accessibility name of the button that opens the mail app on the address of the contact card.",
     "placeholders": {
       "address": {
+        "type": "String"
+      }
+    }
+  },
+  "contact_SemanticsLabel_transfer": "โอนสายปัจจุบันไปที่ {number}",
+  "@contact_SemanticsLabel_transfer": {
+    "description": "Accessibility name of the transfer shortcut on a number of the contact card; the number is what the call is transferred to.",
+    "placeholders": {
+      "number": {
         "type": "String"
       }
     }

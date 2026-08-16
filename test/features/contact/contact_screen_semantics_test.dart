@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mocktail/mocktail.dart';
@@ -15,6 +17,15 @@ void main() {
   setUp(() => harness = ContactScreenHarness());
 
   const email = ContactEmail(id: 1, address: 'anna@example.com', label: 'work');
+  const secondEmail = ContactEmail(id: 2, address: 'anna@work.example', label: 'office');
+
+  const twoNumbers = [
+    ContactPhone(id: 1, number: '1001', label: 'ext', favorite: false),
+    ContactPhone(id: 2, number: '2002', label: 'number', favorite: false),
+  ];
+
+  const presenceLabel = 'Subscribe to user status via SIP (Presence)';
+  const dialogsLabel = 'Subscribe to active calls via SIP (BLF/Dialogs)';
 
   group('the phone row of the contact card', () {
     testWidgets('every action says what it does and can be reached by id', (tester) async {
@@ -59,21 +70,53 @@ void main() {
       handle.dispose();
     });
 
+    testWidgets('a second number gets ids of its own', (tester) async {
+      final handle = tester.ensureSemantics();
+
+      // Every row offers the same actions, so without numbering the card hands
+      // out the same id several times and nothing can be addressed at all.
+      await harness.pump(tester, contact: buildContact(numbers: twoNumbers));
+
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(numberedId(contactPhoneVoiceCallId, 1)),
+        label: 'Call 2002',
+        identifier: numberedId(contactPhoneVoiceCallId, 1),
+      );
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(numberedId(contactPhoneVideoCallId, 1)),
+        label: 'Video call 2002',
+        identifier: numberedId(contactPhoneVideoCallId, 1),
+      );
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(numberedId(contactPhoneTileFavIconId, 1)),
+        label: 'Add 2002 to favorites',
+        identifier: numberedId(contactPhoneTileFavIconId, 1),
+      );
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(numberedId(contactPhoneMenuId, 1)),
+        label: 'More',
+        identifier: numberedId(contactPhoneMenuId, 1),
+      );
+
+      // The first row keeps the plain id, and both rows stay separate nodes.
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(contactPhoneVoiceCallId),
+        label: 'Call 1001',
+        identifier: contactPhoneVoiceCallId,
+      );
+
+      handle.dispose();
+    });
+
     testWidgets('the star says which way it will go', (tester) async {
       final handle = tester.ensureSemantics();
 
-      final favorite = Contact(
-        id: 1,
-        sourceType: ContactSourceType.external,
-        kind: ContactKind.visible,
-        sourceId: 'user-1',
-        userRegistered: true,
-        isCurrentUser: false,
-        firstName: 'Anna',
-        phones: const [ContactPhone(id: 1, number: '1001', label: 'ext', favorite: true)],
-      );
-
-      await harness.pump(tester, contact: favorite);
+      await harness.pump(tester, contact: buildContact(favorite: true));
 
       expectTapTargetSemantics(
         tester,
@@ -98,17 +141,23 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('the transfer shortcut is named while a call is being transferred', (tester) async {
+    testWidgets('each transfer shortcut names the number it hands the call to', (tester) async {
       final handle = tester.ensureSemantics();
       harness.withBlindTransferUnderWay();
 
-      await harness.pump(tester, contact: buildContact(), enableTileTransfer: true);
+      await harness.pump(tester, contact: buildContact(numbers: twoNumbers), enableTileTransfer: true);
 
       expectTapTargetSemantics(
         tester,
         find.bySemanticsIdentifier(contactPhoneTransferId),
-        label: 'Transfer current call',
+        label: 'Transfer current call to 1001',
         identifier: contactPhoneTransferId,
+      );
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(numberedId(contactPhoneTransferId, 1)),
+        label: 'Transfer current call to 2002',
+        identifier: numberedId(contactPhoneTransferId, 1),
       );
 
       handle.dispose();
@@ -131,16 +180,22 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('the address row offers a named way to write', (tester) async {
+    testWidgets('each address row offers a named way to write', (tester) async {
       final handle = tester.ensureSemantics();
 
-      await harness.pump(tester, contact: buildContact(emails: const [email]));
+      await harness.pump(tester, contact: buildContact(emails: const [email, secondEmail]));
 
       expectTapTargetSemantics(
         tester,
         find.bySemanticsIdentifier(contactEmailSendId),
         label: 'Send an email to anna@example.com',
         identifier: contactEmailSendId,
+      );
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(numberedId(contactEmailSendId, 1)),
+        label: 'Send an email to anna@work.example',
+        identifier: numberedId(contactEmailSendId, 1),
       );
 
       handle.dispose();
@@ -166,13 +221,13 @@ void main() {
       expectTapTargetSemantics(
         tester,
         find.bySemanticsIdentifier(contactPresenceSubscriptionId),
-        label: 'Subscribe to user status via SIP (Presence)',
+        label: presenceLabel,
         identifier: contactPresenceSubscriptionId,
       );
       expectTapTargetSemantics(
         tester,
         find.bySemanticsIdentifier(contactDialogsSubscriptionId),
-        label: 'Subscribe to active calls via SIP (BLF/Dialogs)',
+        label: dialogsLabel,
         identifier: contactDialogsSubscriptionId,
       );
 
@@ -188,25 +243,54 @@ void main() {
         () => harness.contactBloc.add(const ContactSipSubscriptionToggled(true, SipSubscriptionType.blf)),
       ).called(1);
 
+      await tapViaSemantics(tester, find.bySemanticsIdentifier(contactPresenceSubscriptionId));
+      verify(
+        () => harness.contactBloc.add(const ContactSipSubscriptionToggled(true, SipSubscriptionType.presence)),
+      ).called(1);
+
       handle.dispose();
     });
 
-    testWidgets('the explanation is a named button of its own', (tester) async {
+    testWidgets('each explanation is a button that names the option it explains', (tester) async {
+      final handle = tester.ensureSemantics();
+
+      // Both buttons look the same and sit one under the other, so the caption
+      // of the option is the only thing that tells them apart by ear.
+      await harness.pump(tester, contact: buildContact(), dialogsViaSip: true, presenceViaSip: true);
+
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(contactPresenceSubscriptionInfoId),
+        label: 'What $presenceLabel means',
+        identifier: contactPresenceSubscriptionInfoId,
+      );
+      expectTapTargetSemantics(
+        tester,
+        find.bySemanticsIdentifier(contactDialogsSubscriptionInfoId),
+        label: 'What $dialogsLabel means',
+        identifier: contactDialogsSubscriptionInfoId,
+      );
+
+      handle.dispose();
+    });
+
+    testWidgets('the explanation opens through the node and is there to be read', (tester) async {
       final handle = tester.ensureSemantics();
 
       await harness.pump(tester, contact: buildContact(), dialogsViaSip: true);
 
-      expectTapTargetSemantics(
-        tester,
-        find.bySemanticsIdentifier(contactDialogsSubscriptionInfoId),
-        label: 'What this option does',
-        identifier: contactDialogsSubscriptionInfoId,
-      );
-
       await tapViaSemantics(tester, find.bySemanticsIdentifier(contactDialogsSubscriptionInfoId));
       await tester.pumpAndSettle();
 
+      // The explanation is content now, not a tooltip: a screen reader reaches
+      // the paragraph itself, and the way out of it is a named button.
       expect(find.textContaining('SIP-Dialogs'), findsOneWidget);
+      expect(tester.getSemantics(find.textContaining('SIP-Dialogs')).getSemanticsData().label, contains('SIP-Dialogs'));
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+
+      await tapViaSemantics(tester, find.widgetWithText(TextButton, 'Ok'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('SIP-Dialogs'), findsNothing);
 
       handle.dispose();
     });
@@ -216,7 +300,12 @@ void main() {
     final handle = tester.ensureSemantics();
     harness.withUserSmsNumbers(['2002']);
 
-    await harness.pump(tester, contact: buildContact(emails: const [email]), dialogsViaSip: true, presenceViaSip: true);
+    await harness.pump(
+      tester,
+      contact: buildContact(numbers: twoNumbers, emails: const [email, secondEmail]),
+      dialogsViaSip: true,
+      presenceViaSip: true,
+    );
 
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 

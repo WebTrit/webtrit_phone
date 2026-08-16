@@ -772,11 +772,11 @@ abstract class AppLocalizations {
   /// **'Add {number} to favorites'**
   String contact_SemanticsLabel_addFavorite(String number);
 
-  /// Accessibility name of the button that explains an option of the contact card.
+  /// Accessibility name of the button that explains an option of the contact card; the caption of the option keeps the two buttons apart.
   ///
   /// In en, this message translates to:
-  /// **'What this option does'**
-  String get contact_SemanticsLabel_optionInfo;
+  /// **'What {option} means'**
+  String contact_SemanticsLabel_optionInfo(String option);
 
   /// Accessibility name of the star that removes a number of the contact card from favorites.
   ///
@@ -789,6 +789,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send an email to {address}'**
   String contact_SemanticsLabel_sendEmail(String address);
+
+  /// Accessibility name of the transfer shortcut on a number of the contact card; the number is what the call is transferred to.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer current call to {number}'**
+  String contact_SemanticsLabel_transfer(String number);
 
   /// No description provided for @contacts_agreement_button_text.
   ///

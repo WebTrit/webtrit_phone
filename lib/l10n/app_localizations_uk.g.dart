@@ -435,7 +435,9 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get contact_SemanticsLabel_optionInfo => 'Що робить цей параметр';
+  String contact_SemanticsLabel_optionInfo(String option) {
+    return 'Що означає $option';
+  }
 
   @override
   String contact_SemanticsLabel_removeFavorite(String number) {
@@ -445,6 +447,11 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String contact_SemanticsLabel_sendEmail(String address) {
     return 'Написати листа на $address';
+  }
+
+  @override
+  String contact_SemanticsLabel_transfer(String number) {
+    return 'Перевести поточний дзвінок на $number';
   }
 
   @override

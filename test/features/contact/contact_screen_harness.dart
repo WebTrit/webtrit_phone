@@ -22,9 +22,14 @@ class MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {}
 class MockCallRoutingCubit extends MockCubit<CallRoutingState?> implements CallRoutingCubit {}
 
 /// Builds a contact the way the screen receives it from the backend.
+///
+/// [numbers] carry the labels the card sorts by, so passing more than one is
+/// how a card with several rows is built.
 Contact buildContact({
   String number = '1001',
   String label = 'ext',
+  List<ContactPhone> numbers = const [],
+  bool favorite = false,
   List<ContactEmail> emails = const [],
   List<SipSubscription> sipSubscriptions = const [],
   ContactSourceType sourceType = ContactSourceType.external,
@@ -38,7 +43,7 @@ Contact buildContact({
     isCurrentUser: false,
     firstName: 'Anna',
     lastName: 'Marchenko',
-    phones: [ContactPhone(id: 1, number: number, label: label, favorite: false)],
+    phones: numbers.isNotEmpty ? numbers : [ContactPhone(id: 1, number: number, label: label, favorite: favorite)],
     emails: emails,
     sipSubscriptions: sipSubscriptions,
   );

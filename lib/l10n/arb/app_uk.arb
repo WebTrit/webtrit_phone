@@ -350,9 +350,14 @@
       }
     }
   },
-  "contact_SemanticsLabel_optionInfo": "Що робить цей параметр",
+  "contact_SemanticsLabel_optionInfo": "Що означає {option}",
   "@contact_SemanticsLabel_optionInfo": {
-    "description": "Accessibility name of the button that explains an option of the contact card."
+    "description": "Accessibility name of the button that explains an option of the contact card; the caption of the option keeps the two buttons apart.",
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    }
   },
   "contact_SemanticsLabel_removeFavorite": "Прибрати {number} з обраних",
   "@contact_SemanticsLabel_removeFavorite": {
@@ -368,6 +373,15 @@
     "description": "Accessibility name of the button that opens the mail app on the address of the contact card.",
     "placeholders": {
       "address": {
+        "type": "String"
+      }
+    }
+  },
+  "contact_SemanticsLabel_transfer": "Перевести поточний дзвінок на {number}",
+  "@contact_SemanticsLabel_transfer": {
+    "description": "Accessibility name of the transfer shortcut on a number of the contact card; the number is what the call is transferred to.",
+    "placeholders": {
+      "number": {
         "type": "String"
       }
     }
