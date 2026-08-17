@@ -241,6 +241,14 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   registry.register<ConnectivityService>(connectivityService);
   registry.register<AppAnalyticsRepository>(firebase.analytics);
 
+  // Call-integration handles of the authenticated shell, registered here so
+  // widgets receive them from the composition root instead of constructing
+  // them inline (widget tests substitute them by providing their own above
+  // the shell). Both are process-wide singletons behind their factory
+  // constructors.
+  registry.register<Callkeep>(Callkeep());
+  registry.register<CallkeepConnections>(CallkeepConnections());
+
   // Final side-effect initializations that rely on registered components
   await _initCallkeep(featureAccess);
   await _initWorkManager();

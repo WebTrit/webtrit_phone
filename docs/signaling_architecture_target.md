@@ -351,7 +351,8 @@ bootstrap.dart
   └── WebtritSignalingService().setIncomingCallHandler(onSignalingBackgroundIncomingCall)
 
 MainShellState.initState()
-  └── WebtritSignalingService(config, mode)
+  └── SignalingServiceFactory.create(config, mode)   // lib/utils/signaling_service_factory.dart
+         │  default: WebtritSignalingService(config, mode, startPendingTimeout)
          │  implements SignalingModule directly
          │  delegates events/execute/connect to platform instance
          │

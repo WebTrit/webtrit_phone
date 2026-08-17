@@ -9,11 +9,9 @@ import 'package:provider/provider.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-import 'package:webtrit_signaling_service/webtrit_signaling_service.dart'
-    show SignalingModule, SignalingServiceConfig, WebtritSignalingService;
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart' show SignalingModule, SignalingServiceConfig;
 
 import 'package:webtrit_phone/app/assets.gen.dart';
-import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/main_shell_blocs.dart';
 import 'package:webtrit_phone/app/router/main_shell_repositories.dart';
@@ -38,8 +36,11 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
-  late final Callkeep _callkeep = Callkeep();
-  late final CallkeepConnections _callkeepConnections = CallkeepConnections();
+  /// From the composition root (see bootstrap), like every other dependency;
+  /// fields so each keeps one identity for the shell's lifetime ([dispose]
+  /// still needs the callkeep instance after the context is gone).
+  late final Callkeep _callkeep = context.read<Callkeep>();
+  late final CallkeepConnections _callkeepConnections = context.read<CallkeepConnections>();
 
   /// The [SessionGuard] instance that handles session expiration and logout.
   late final SessionGuard _sessionGuard;
@@ -59,6 +60,8 @@ class _MainShellState extends State<MainShell> {
   late final SignalingModule _signalingModule;
 
   /// Drives the native Play Core update prompt; checked once on startup. No-op outside Android.
+  /// Constructed here on purpose - per session, so a fresh login checks (and
+  /// may re-prompt) anew; tests substitute behavior via its constructor handles.
   final AppUpdateService _appUpdateService = AppUpdateService();
 
   /// Lazily initialised on first [build] once [CallBloc], [CallRoutingCubit],
@@ -94,7 +97,7 @@ class _MainShellState extends State<MainShell> {
 
     _appBloc = context.read<AppBloc>();
     final session = _appBloc.state.session;
-    _signalingModule = WebtritSignalingService(
+    _signalingModule = context.read<SignalingServiceFactory>().create(
       config: SignalingServiceConfig(
         coreUrl: session.coreUrl!,
         tenantId: session.tenantId,
@@ -102,7 +105,6 @@ class _MainShellState extends State<MainShell> {
         trustedCertificates: context.read<AppCertificates>().trustedCertificates,
       ),
       mode: context.read<IncomingCallTypeRepository>().getIncomingCallType().toSignalingServiceMode(),
-      startPendingTimeout: kSignalingStartPendingTimeout,
     )..connect();
 
     _notificationsBloc = context.read<NotificationsBloc>();
