@@ -40,8 +40,12 @@ class CallActiveThumbnail extends StatefulWidget {
 class _CallActiveThumbnailState extends State<CallActiveThumbnail> {
   static const Duration _remoteFrameProbeDelay = Duration(seconds: 1);
 
+  /// Where frames cannot be analysed there is nothing to wait for, so the remote
+  /// video is shown without a probe confirming it first.
+  static const bool _showsRemoteVideoUnprobed = !FrameAnalysisWorker.isSupported;
+
   Timer? _remoteFrameWatcher;
-  bool _hasRenderableRemoteFrame = false;
+  bool _hasRenderableRemoteFrame = _showsRemoteVideoUnprobed;
   late final FrameAnalysisWorker _frameAnalysisWorker;
 
   @override
@@ -56,7 +60,7 @@ class _CallActiveThumbnailState extends State<CallActiveThumbnail> {
     super.didUpdateWidget(oldWidget);
     // Reset when the remote stream changes so we don't flash stale content.
     if (oldWidget.activeCall.remoteStream != widget.activeCall.remoteStream) {
-      _setHasRenderableRemoteFrame(false);
+      _setHasRenderableRemoteFrame(_showsRemoteVideoUnprobed);
     }
   }
 
@@ -73,7 +77,7 @@ class _CallActiveThumbnailState extends State<CallActiveThumbnail> {
   }
 
   void _scheduleNextProbe(Duration delay) {
-    if (!mounted) return;
+    if (!mounted || !FrameAnalysisWorker.isSupported) return;
     _remoteFrameWatcher = Timer(delay, _probeRemoteFrame);
   }
 
