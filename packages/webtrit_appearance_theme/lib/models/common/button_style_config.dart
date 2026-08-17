@@ -64,6 +64,15 @@ class ButtonStyleConfig with _$ButtonStyleConfig {
     /// The duration of animated changes in milliseconds.
     this.animationDuration,
 
+    /// The button's background fill color in hex format while it is switched on.
+    this.selectedBackgroundColor,
+
+    /// The color for the text/icon descendants in hex format while the button is switched on.
+    this.selectedForegroundColor,
+
+    /// The icon's color in hex format while the button is switched on.
+    this.selectedIconColor,
+
     /// The button's background fill color in hex format when the button is disabled.
     this.disabledBackgroundColor,
 
@@ -88,6 +97,21 @@ class ButtonStyleConfig with _$ButtonStyleConfig {
   /// The color for the button's text/icon descendants in hex format.
   @override
   final String? foregroundColor;
+
+  /// The button's background fill color in hex format while it is switched on.
+  ///
+  /// Only reaches the screen for a control that can be on or off - a mute or a
+  /// camera button. Left empty, the switched-on look comes from the palette.
+  @override
+  final String? selectedBackgroundColor;
+
+  /// The color for the text/icon descendants in hex format while the button is switched on.
+  @override
+  final String? selectedForegroundColor;
+
+  /// The icon's color in hex format while the button is switched on.
+  @override
+  final String? selectedIconColor;
 
   /// The button's background fill color in hex format when the button is disabled.
   @override

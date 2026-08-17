@@ -25,13 +25,17 @@ import 'package:webtrit_phone/theme/factory/styles/call_screen_style_factory.dar
 /// makes brightness irrelevant to these buttons - the factory picks the same
 /// roles either way - so one snapshot covers both themes.
 ///
-/// The `selected` rows are the ones no theme can influence today: they always
-/// come from the color scheme.
+/// A `selected` row follows the theme when it names a switched-on color, and
+/// the palette when it does not - both cases are below. A `sel+dis` row is a
+/// control that is switched on and unavailable at once: it dims its
+/// switched-on look rather than dropping back to the resting one.
 ///
 /// `camera` is the toggle that sets a resting background, so its disabled row
 /// is where the dimming rule shows: a button fades its own color, not the one
 /// the palette would have given it, and a color that is already translucent
-/// keeps fading instead of being snapped to a fixed alpha.
+/// keeps fading instead of being snapped to a fixed alpha. `muted` is the
+/// toggle that colors its switched-on look, so its selected row shows the theme
+/// winning over the palette.
 const _themeJson = '''
 {
   "dialing": {
@@ -50,6 +54,10 @@ const _themeJson = '''
       "camera": {
         "backgroundColor": "#66FFFFFF",
         "iconColor": "#FF102030"
+      },
+      "muted": {
+        "selectedBackgroundColor": "#FF0B6E4F",
+        "selectedIconColor": "#FFFFFFFF"
       }
     }
   }
@@ -157,21 +165,21 @@ camera
   normal   bg=#66FFFFFF fg=#FF30302F icon=#FF102030
   selected bg=#FFEEF3F6 fg=#FF30302F icon=#FF848581
   disabled bg=#29FFFFFF fg=#6630302F icon=#66EEF3F6
-  sel+dis  bg=#29FFFFFF fg=#6630302F icon=#66EEF3F6
+  sel+dis  bg=#66EEF3F6 fg=#6630302F icon=#66EEF3F6
 muted
   normal   bg=#FFDCE3E8 fg=#FF30302F icon=#FF30302F
-  selected bg=#FFEEF3F6 fg=#FF30302F icon=#FF848581
+  selected bg=#FF0B6E4F fg=#FF30302F icon=#FFFFFFFF
   disabled bg=#66DCE3E8 fg=#6630302F icon=#66EEF3F6
-  sel+dis  bg=#66DCE3E8 fg=#6630302F icon=#66EEF3F6
+  sel+dis  bg=#660B6E4F fg=#6630302F icon=#66EEF3F6
 speaker
   normal   bg=#FFDCE3E8 fg=#FF30302F icon=#FF30302F
   selected bg=#FFEEF3F6 fg=#FF30302F icon=#FF848581
   disabled bg=#66DCE3E8 fg=#6630302F icon=#66EEF3F6
-  sel+dis  bg=#66DCE3E8 fg=#6630302F icon=#66EEF3F6
+  sel+dis  bg=#66EEF3F6 fg=#6630302F icon=#66EEF3F6
 held
   normal   bg=#FFDCE3E8 fg=#FF30302F icon=#FF30302F
   selected bg=#FFEEF3F6 fg=#FF30302F icon=#FF848581
   disabled bg=#66DCE3E8 fg=#6630302F icon=#66EEF3F6
-  sel+dis  bg=#66DCE3E8 fg=#6630302F icon=#66EEF3F6''');
+  sel+dis  bg=#66EEF3F6 fg=#6630302F icon=#66EEF3F6''');
   });
 }
