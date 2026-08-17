@@ -8,6 +8,7 @@ import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/app/router/session_feature_access.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -41,11 +42,17 @@ final _logger = Logger('MainShell');
 class MainShellBlocs extends StatelessWidget {
   const MainShellBlocs({
     super.key,
+    required this.featureAccess,
     required this.callkeep,
     required this.callkeepConnections,
     required this.signalingModule,
     required this.child,
   });
+
+  /// The mount-time configuration snapshot this layer builds from - typed
+  /// [SessionFeatureAccess] on purpose, so a runtime update cannot reshape
+  /// the layer under the navigator.
+  final SessionFeatureAccess featureAccess;
 
   final Callkeep callkeep;
   final CallkeepConnections callkeepConnections;
@@ -58,7 +65,7 @@ class MainShellBlocs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final featureAccess = context.watch<FeatureAccess>();
+    final featureAccess = this.featureAccess.value;
     final appTime = context.read<AppTime>();
 
     return MultiBlocProvider(
@@ -116,17 +123,23 @@ class MainShellBlocs extends StatelessWidget {
             return bloc;
           },
         ),
-        if (featureAccess.coreSupport.supportsExtensions)
-          BlocProvider<ExternalContactsSyncBloc>(
-            lazy: false,
-            create: (context) {
-              return ExternalContactsSyncBloc(
-                userRepository: context.read<UserRepository>(),
-                externalContactsRepository: context.read<ExternalContactsRepository>(),
-                contactsRepository: context.read<ContactsRepository>(),
-              )..add(const ExternalContactsSyncStarted());
-            },
-          ),
+        // Always present so the tree keeps one shape whatever the backend
+        // advertises; without extensions support the bloc simply is never
+        // started and stays inert.
+        BlocProvider<ExternalContactsSyncBloc>(
+          lazy: false,
+          create: (context) {
+            final bloc = ExternalContactsSyncBloc(
+              userRepository: context.read<UserRepository>(),
+              externalContactsRepository: context.read<ExternalContactsRepository>(),
+              contactsRepository: context.read<ContactsRepository>(),
+            );
+            if (featureAccess.coreSupport.supportsExtensions) {
+              bloc.add(const ExternalContactsSyncStarted());
+            }
+            return bloc;
+          },
+        ),
         BlocProvider<CallBloc>(
           create: (context) {
             final appBloc = context.read<AppBloc>();

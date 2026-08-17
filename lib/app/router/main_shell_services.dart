@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:webtrit_phone/app/router/session_feature_access.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
@@ -15,14 +16,18 @@ import 'package:webtrit_phone/services/services.dart';
 /// Extracted from [MainShell] as a widget of its own so the layer reads as one
 /// unit and can be composed (or replaced) on its own in tests.
 class MainShellServices extends StatelessWidget {
-  const MainShellServices({super.key, required this.child});
+  const MainShellServices({super.key, required this.featureAccess, required this.child});
+
+  /// The mount-time configuration snapshot this layer builds from - typed
+  /// [SessionFeatureAccess] on purpose, so a runtime update cannot reshape
+  /// the layer under the navigator.
+  final SessionFeatureAccess featureAccess;
 
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    final featureAccess = context.watch<FeatureAccess>();
-
+    final featureAccess = this.featureAccess.value;
     return MultiProvider(
       providers: [
         Provider(
@@ -68,8 +73,8 @@ class MainShellServices extends StatelessWidget {
   /// This method centralizes the polling configuration, so changes in polling logic or intervals
   /// can be made here without touching the [Provider] or [PollingService] setup.
   List<PollingRegistration> _pollingRegistrations(BuildContext context) {
-    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.voicemailsEnabled;
-    final supportsExtensions = context.read<FeatureAccess>().coreSupport.supportsExtensions;
+    final isVoicemailsEnabled = featureAccess.value.settingsConfig.voicemailsEnabled;
+    final supportsExtensions = featureAccess.value.coreSupport.supportsExtensions;
     final cliSettingsRepository = context.read<CallerIdSettingsRepository>();
     final favoritesRepository = context.read<FavoritesRepository>();
     final sipSubscriptionsRepository = context.read<SipSubscriptionsRepository>();
@@ -124,7 +129,7 @@ class MainShellServices extends StatelessWidget {
   /// This method centralizes the connectivity recovery configuration, so changes in
   /// registration logic can be made here without touching the [Provider] or service setup.
   List<ConnectivityRecoveryRegistration> _connectivityRecoveryRegistrations(BuildContext context) {
-    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.voicemailsEnabled;
+    final isVoicemailsEnabled = featureAccess.value.settingsConfig.voicemailsEnabled;
 
     return [if (isVoicemailsEnabled) ConnectivityRecoveryRegistration.refreshable(context.read<VoicemailRepository>())];
   }

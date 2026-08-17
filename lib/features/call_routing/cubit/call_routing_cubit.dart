@@ -31,6 +31,9 @@ class CallRoutingCubit extends Cubit<CallRoutingState?> {
   Future<void> _init() async {
     _connectivitySub = _connectivityService.connectionStream.listen(_onConnectionChanged);
     final connected = await _connectivityService.checkConnection();
+    // The cubit may have been closed while the check was in flight; starting
+    // the subscription then would feed emit() on a closed cubit forever.
+    if (isClosed) return;
     if (connected) _startInfoSubscription();
   }
 
@@ -41,6 +44,7 @@ class CallRoutingCubit extends Cubit<CallRoutingState?> {
   }
 
   void _startInfoSubscription() {
+    if (isClosed) return;
     _infoSub = _userRepository
         .getAndListen()
         .combineLatest(_linesStateRepository.getStateAndListen(), _combineInfo)

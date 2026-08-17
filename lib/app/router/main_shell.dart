@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -16,6 +15,7 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/main_shell_blocs.dart';
 import 'package:webtrit_phone/app/router/main_shell_repositories.dart';
 import 'package:webtrit_phone/app/router/main_shell_services.dart';
+import 'package:webtrit_phone/app/router/session_feature_access.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -69,6 +69,11 @@ class _MainShellState extends State<MainShell> {
   /// assignment guarantees a single instance for the lifetime of this [State],
   /// preventing consumers from holding stale references across rebuilds.
   CallController? _callController;
+
+  /// The feature configuration the provider layers build from, snapshotted at
+  /// mount and handed to each layer (see [SessionFeatureAccess] for why the
+  /// graph must not follow runtime updates).
+  late final SessionFeatureAccess _sessionFeatureAccess = SessionFeatureAccess(context.read<FeatureAccess>());
 
   @override
   void initState() {
@@ -153,9 +158,12 @@ class _MainShellState extends State<MainShell> {
     final featureAccess = context.watch<FeatureAccess>();
 
     return MainShellRepositories(
+      featureAccess: _sessionFeatureAccess,
       sessionGuard: _sessionGuard,
       child: MainShellServices(
+        featureAccess: _sessionFeatureAccess,
         child: MainShellBlocs(
+          featureAccess: _sessionFeatureAccess,
           callkeep: _callkeep,
           callkeepConnections: _callkeepConnections,
           signalingModule: _signalingModule,
