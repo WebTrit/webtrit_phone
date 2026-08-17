@@ -8,9 +8,12 @@ import 'package:drift/drift.dart';
 import 'package:drift/isolate.dart';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/app.dart';
 import 'package:webtrit_phone/bootstrap.dart';
@@ -183,6 +186,18 @@ class RootApp extends StatelessWidget {
         Provider<AppMetadataProvider>(create: (_) => instanceRegistry.get()),
         Provider<WebtritApiClientFactory>(create: (_) => instanceRegistry.get()),
         Provider<PushEnvironment>(create: (_) => instanceRegistry.get()),
+        // Platform-backed collaborators of the main shell (see bootstrap), so
+        // the shell reads them like every other dependency instead of
+        // constructing them inline.
+        Provider<Callkeep>(create: (_) => instanceRegistry.get()),
+        Provider<CallkeepConnections>(create: (_) => instanceRegistry.get()),
+        Provider<SignalingServiceFactory>(create: (_) => instanceRegistry.get()),
+        // Deliberately NOT in the bootstrap registry: resolving the messaging
+        // singleton requires a live default Firebase app, which a Firebase-free
+        // host (the configurator preview) only guarantees at its own pace.
+        // A lazy provider resolves it on first read - the same moment the
+        // direct call used to happen - so nothing changes for either host.
+        Provider<FirebaseMessaging>(create: (_) => FirebaseMessaging.instance),
         // Provides a lifecycle-aware holder that attaches a WidgetsBindingObserver and owns the DB instance.
         // This provider may stay lazy; it will be created when `AppDatabase` is first requested.
         Provider<AppDatabaseLifecycleHolder>(

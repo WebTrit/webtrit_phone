@@ -31,8 +31,7 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
   late final autoprovisionCubit = context.read<AutoprovisionCubit>();
   late final router = context.router;
 
-  // TODO(Serdun): Add Callkeep to the provider and access it using context.read<Callkeep>() for consistency.
-  final callkeep = Callkeep();
+  late final callkeep = context.read<Callkeep>();
 
   Future navigateBack() async {
     if (router.canPop(ignorePagelessRoutes: true)) {

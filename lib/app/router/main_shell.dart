@@ -9,11 +9,9 @@ import 'package:provider/provider.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-import 'package:webtrit_signaling_service/webtrit_signaling_service.dart'
-    show SignalingModule, SignalingServiceConfig, WebtritSignalingService;
+import 'package:webtrit_signaling_service/webtrit_signaling_service.dart' show SignalingModule, SignalingServiceConfig;
 
 import 'package:webtrit_phone/app/assets.gen.dart';
-import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/main_shell_blocs.dart';
 import 'package:webtrit_phone/app/router/main_shell_repositories.dart';
@@ -21,6 +19,7 @@ import 'package:webtrit_phone/app/router/main_shell_services.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -38,8 +37,9 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
-  late final Callkeep _callkeep = Callkeep();
-  late final CallkeepConnections _callkeepConnections = CallkeepConnections();
+  /// From the composition root (see bootstrap), like every other dependency;
+  /// held as a field because [dispose] needs it after the context is gone.
+  late final Callkeep _callkeep = context.read<Callkeep>();
 
   /// The [SessionGuard] instance that handles session expiration and logout.
   late final SessionGuard _sessionGuard;
@@ -59,7 +59,9 @@ class _MainShellState extends State<MainShell> {
   late final SignalingModule _signalingModule;
 
   /// Drives the native Play Core update prompt; checked once on startup. No-op outside Android.
-  final AppUpdateService _appUpdateService = AppUpdateService();
+  /// Per-session on purpose - a fresh login checks (and may re-prompt) anew;
+  /// a host or test can substitute it by providing one above the shell.
+  late final AppUpdateService _appUpdateService = context.readOrNull<AppUpdateService>() ?? AppUpdateService();
 
   /// Lazily initialised on first [build] once [CallBloc], [CallRoutingCubit],
   /// and [NotificationsBloc] are available in the widget tree. The `??=`
@@ -94,7 +96,7 @@ class _MainShellState extends State<MainShell> {
 
     _appBloc = context.read<AppBloc>();
     final session = _appBloc.state.session;
-    _signalingModule = WebtritSignalingService(
+    _signalingModule = context.read<SignalingServiceFactory>().create(
       config: SignalingServiceConfig(
         coreUrl: session.coreUrl!,
         tenantId: session.tenantId,
@@ -102,7 +104,6 @@ class _MainShellState extends State<MainShell> {
         trustedCertificates: context.read<AppCertificates>().trustedCertificates,
       ),
       mode: context.read<IncomingCallTypeRepository>().getIncomingCallType().toSignalingServiceMode(),
-      startPendingTimeout: kSignalingStartPendingTimeout,
     )..connect();
 
     _notificationsBloc = context.read<NotificationsBloc>();
@@ -155,7 +156,7 @@ class _MainShellState extends State<MainShell> {
       child: MainShellServices(
         child: MainShellBlocs(
           callkeep: _callkeep,
-          callkeepConnections: _callkeepConnections,
+          callkeepConnections: context.read<CallkeepConnections>(),
           signalingModule: _signalingModule,
 
           /// The shell chrome: call, messaging and notification overlays around
