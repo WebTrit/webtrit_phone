@@ -84,7 +84,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   bool _inCallKeypadShown = false;
 
   Timer? _remoteFrameWatcher;
-  bool _hasRenderableRemoteFrame = false;
+
+  /// Where frames cannot be analysed there is nothing to wait for, so the remote
+  /// video starts out visible instead of staying hidden for the whole call.
+  bool _hasRenderableRemoteFrame = !FrameAnalysisWorker.isSupported;
   late final FrameAnalysisWorker _frameAnalysisWorker;
 
   static const Duration _debounceDuration = Duration(seconds: 2);
@@ -405,7 +408,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   }
 
   void _scheduleNextProbe(Duration delay) {
-    if (!mounted) return;
+    if (!mounted || !FrameAnalysisWorker.isSupported) return;
     _remoteFrameWatcher = Timer(delay, _probeRemoteFrame);
   }
 
