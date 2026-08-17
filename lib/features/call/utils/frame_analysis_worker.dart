@@ -69,7 +69,7 @@ class FrameAnalysisWorker {
   late final Future<void> _ready;
 
   void start() {
-    _ready = _init();
+    _ready = kIsWeb ? Future<void>.value() : _init();
   }
 
   Future<void> _init() async {
@@ -101,11 +101,23 @@ class FrameAnalysisWorker {
 
   /// Returns `true` when the frame is black or empty, `false` when it has
   /// visible content. Awaits isolate startup if [start] hasn't finished yet.
+  ///
+  /// On web `dart:isolate` is unavailable, so the analysis runs inline.
   Future<bool> analyzeFrame(Uint8List frameBytes) async {
+    if (kIsWeb) return _analyzeInline(frameBytes);
+
     await _ready;
     final completer = Completer<bool>();
     _pendingAnalysis = completer;
     _sendPort!.send(frameBytes);
     return completer.future;
+  }
+
+  bool _analyzeInline(Uint8List frameBytes) {
+    try {
+      return analyzeFrameInIsolate(frameBytes);
+    } catch (_) {
+      return false;
+    }
   }
 }
