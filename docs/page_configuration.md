@@ -398,8 +398,13 @@ and takes a button style object (the same shape as every other button in the the
 
 `keypadInputStyle` (text style) sets how the digits typed on the in-call keypad look.
 
-The buttons carry icons only, so `foregroundColor` and `iconColor` both end up on the icon, and
-there is no button text to color.
+**Only the color fields are read here.** A button style can also carry a shape, a size, padding, an
+elevation and a text style. The call screen draws these buttons at a fixed size and ignores those
+fields; setting them does no harm, it simply changes nothing.
+
+The buttons carry an icon and no text, so `iconColor` is the one you see. `foregroundColor` is still
+read - on the always-on buttons it tints the press ripple - but it never colors the glyph: leaving
+`iconColor` out falls the icon back to the color scheme, not to `foregroundColor`.
 
 **States.** You can set the resting colors and the disabled colors:
 
@@ -424,12 +429,20 @@ there is no button text to color.
 }
 ```
 
-The four toggles also have an "on" look (mute engaged, camera on, call held). That one is **not**
-configurable yet: it is derived from the color scheme, so it follows the brand colors but cannot be
-set per button in the theme file.
+All four toggles - `camera`, `muted`, `speaker` and `held` - also have an "on" look. That one is
+**not** configurable yet: it is derived from the color scheme, so it follows the brand colors but
+cannot be set per button in the theme file.
 
-Anything you leave out falls back to the color scheme, and a missing disabled color falls back to a
-40% translucent version of the resting one.
+**What a color you leave out falls back to:**
+
+| Left out                                              | Always-on buttons                                                | Toggles                                                     |
+|-------------------------------------------------------|------------------------------------------------------------------|--------------------------------------------------------------|
+| `backgroundColor`, `foregroundColor`, `iconColor`      | the color-scheme role of that button                             | the color-scheme role of that button                        |
+| `disabledBackgroundColor`, `disabledForegroundColor`   | 40% of the resting color, whether it came from the theme or the scheme | 40% of the color-scheme role, even when the theme sets a resting color |
+| `disabledIconColor`                                    | 40% of the scheme surface color                                  | 40% of the scheme surface color                             |
+
+So a toggle that only sets `backgroundColor` keeps a scheme-derived disabled look; give it
+`disabledBackgroundColor` too if it should dim to its own color.
 
 ---
 
