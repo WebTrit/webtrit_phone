@@ -227,7 +227,6 @@
       "callStart": {
         "backgroundColor": "#75B943",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#66DDE0E3",
         "disabledForegroundColor": "#848581",
@@ -236,7 +235,6 @@
       "hangup": {
         "backgroundColor": "#E74C3C",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#66DDE0E3",
         "disabledForegroundColor": "#848581",
@@ -245,7 +243,6 @@
       "transfer": {
         "backgroundColor": "#123752",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#66DDE0E3",
         "disabledForegroundColor": "#848581",
@@ -254,7 +251,6 @@
       "camera": {
         "backgroundColor": "#66FFFFFF",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",
@@ -263,7 +259,6 @@
       "muted": {
         "backgroundColor": "#66FFFFFF",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",
@@ -272,7 +267,6 @@
       "speaker": {
         "backgroundColor": "#66FFFFFF",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",
@@ -281,7 +275,6 @@
       "held": {
         "backgroundColor": "#66FFFFFF",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",
@@ -290,7 +283,6 @@
       "swap": {
         "backgroundColor": "#66FFFFFF",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",
@@ -299,7 +291,6 @@
       "key": {
         "backgroundColor": "#66FFFFFF",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",

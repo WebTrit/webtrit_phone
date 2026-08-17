@@ -304,7 +304,7 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
   }
 
   ButtonStyle buildFixedButtonStyle(
-    ElevatedButtonWidgetConfig cfg, {
+    ButtonStyleConfig cfg, {
     required ColorScheme colors,
     required Color fg,
     required Color bg,
@@ -337,7 +337,7 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
   }
 
   ButtonStyle buildToggleButtonStyle(
-    ElevatedButtonWidgetConfig cfg, {
+    ButtonStyleConfig cfg, {
     required ColorScheme colors,
     required Color baseFg,
     required Color baseBg,
