@@ -8,12 +8,21 @@ signaling, permissions, bundle_id, call/callkeep), which then merges to `develop
 ## Run / build
 
 ```bash
-# dev
+# dev - debug, no icon tree-shaking, no extra flag needed
 flutter run -d chrome --dart-define-from-file=dart_define.json
 
 # release build (use the configured web bundle_id - see below)
-flutter build web --dart-define=WEBTRIT_APP_WEB_BUNDLE_ID=<bundle-id-registered-on-the-server>
+flutter build web --no-tree-shake-icons \
+  --dart-define=WEBTRIT_APP_WEB_BUNDLE_ID=<bundle-id-registered-on-the-server>
+
+# compile verification only (defaults from dart_define.json)
+flutter build web --dart-define-from-file=dart_define.json --no-tree-shake-icons
 ```
+
+`--no-tree-shake-icons` is mandatory for any web build: `flutter build web` is release by default,
+and the icon tree-shaker rejects the runtime `IconData` built by `String.toIconData()`. It fails
+only after the full Dart compile (~4 min), so leaving it out costs a whole build cycle - see
+[Verifying a Change Compiles](build_verification.md).
 
 A bare `flutter build web` leaves the `${WEBTRIT_APP_NAME}` placeholder
 unsubstituted and lacks the real web Firebase config; use the project's flavored
