@@ -524,7 +524,7 @@ button style object (see
 |--------------------|-----------------------------------------------------------|
 | `callStart`        | Place the call (the large one).                           |
 | `callTransfer`     | Transfer the call.                                        |
-| `backspacePressed` | Backspace. The name is historical: it is the button style, not a pressed state. |
+| `backspace`        | Backspace.                                                |
 
 ```json
 {
@@ -535,7 +535,7 @@ button style object (see
         "foregroundColor": "#FFFFFF",
         "iconColor": "#FFFFFF"
       },
-      "backspacePressed": {
+      "backspace": {
         "backgroundColor": "#00000000",
         "iconColor": "#494949"
       }
@@ -545,6 +545,11 @@ button style object (see
 ```
 
 The digits themselves are not buttons here - their text styles live in `keypad.keypad`.
+
+`backspace` used to be called `backspacePressed`, which read like a pressed state although it was
+always just the button. Themes saved under the old name are still read, and a saved theme carries
+both names with the same value, so an app built from an older release line keeps finding the one it
+knows. The old name goes away in a future major release.
 
 ---
 

@@ -3055,11 +3055,10 @@ case _:
 
 }
 
-
 /// @nodoc
 mixin _$ActionPadWidgetConfig {
 
- ButtonStyleConfig get callStart; ButtonStyleConfig get callTransfer; ButtonStyleConfig get backspacePressed;
+ ButtonStyleConfig get callStart; ButtonStyleConfig get callTransfer; ButtonStyleConfig get backspace;
 /// Create a copy of ActionPadWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -3070,16 +3069,16 @@ $ActionPadWidgetConfigCopyWith<ActionPadWidgetConfig> get copyWith => _$ActionPa
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActionPadWidgetConfig&&(identical(other.callStart, callStart) || other.callStart == callStart)&&(identical(other.callTransfer, callTransfer) || other.callTransfer == callTransfer)&&(identical(other.backspacePressed, backspacePressed) || other.backspacePressed == backspacePressed));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActionPadWidgetConfig&&(identical(other.callStart, callStart) || other.callStart == callStart)&&(identical(other.callTransfer, callTransfer) || other.callTransfer == callTransfer)&&(identical(other.backspace, backspace) || other.backspace == backspace));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
-int get hashCode => Object.hash(runtimeType,callStart,callTransfer,backspacePressed);
+int get hashCode => Object.hash(runtimeType,callStart,callTransfer,backspace);
 
 @override
 String toString() {
-  return 'ActionPadWidgetConfig(callStart: $callStart, callTransfer: $callTransfer, backspacePressed: $backspacePressed)';
+  return 'ActionPadWidgetConfig(callStart: $callStart, callTransfer: $callTransfer, backspace: $backspace)';
 }
 
 
@@ -3090,7 +3089,7 @@ abstract mixin class $ActionPadWidgetConfigCopyWith<$Res>  {
   factory $ActionPadWidgetConfigCopyWith(ActionPadWidgetConfig value, $Res Function(ActionPadWidgetConfig) _then) = _$ActionPadWidgetConfigCopyWithImpl;
 @useResult
 $Res call({
- ButtonStyleConfig callStart, ButtonStyleConfig callTransfer, ButtonStyleConfig backspacePressed
+ ButtonStyleConfig callStart, ButtonStyleConfig callTransfer, ButtonStyleConfig backspace
 });
 
 
@@ -3107,11 +3106,11 @@ class _$ActionPadWidgetConfigCopyWithImpl<$Res>
 
 /// Create a copy of ActionPadWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? callStart = null,Object? callTransfer = null,Object? backspacePressed = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? callStart = null,Object? callTransfer = null,Object? backspace = null,}) {
   return _then(ActionPadWidgetConfig(
 callStart: null == callStart ? _self.callStart : callStart // ignore: cast_nullable_to_non_nullable
 as ButtonStyleConfig,callTransfer: null == callTransfer ? _self.callTransfer : callTransfer // ignore: cast_nullable_to_non_nullable
-as ButtonStyleConfig,backspacePressed: null == backspacePressed ? _self.backspacePressed : backspacePressed // ignore: cast_nullable_to_non_nullable
+as ButtonStyleConfig,backspace: null == backspace ? _self.backspace : backspace // ignore: cast_nullable_to_non_nullable
 as ButtonStyleConfig,
   ));
 }

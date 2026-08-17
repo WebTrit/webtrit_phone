@@ -548,7 +548,7 @@ class ActionPadWidgetConfig with _$ActionPadWidgetConfig {
   const ActionPadWidgetConfig({
     this.callStart = const ButtonStyleConfig(),
     this.callTransfer = const ButtonStyleConfig(),
-    this.backspacePressed = const ButtonStyleConfig(),
+    this.backspace = const ButtonStyleConfig(),
   });
 
   @override
@@ -557,12 +557,32 @@ class ActionPadWidgetConfig with _$ActionPadWidgetConfig {
   @override
   final ButtonStyleConfig callTransfer;
 
+  /// Style of the backspace key under the dial pad.
   @override
-  final ButtonStyleConfig backspacePressed;
+  final ButtonStyleConfig backspace;
 
-  factory ActionPadWidgetConfig.fromJson(Map<String, Object?> json) => _$ActionPadWidgetConfigFromJson(json);
+  /// The retired name of [backspace], read and written for as long as themes
+  /// and app builds from before the rename are around.
+  static const _legacyBackspaceKey = 'backspacePressed';
 
-  Map<String, Object?> toJson() => _$ActionPadWidgetConfigToJson(this);
+  // TODO(Serdun): Remove the two `_legacyBackspaceKey` blocks below, and the key
+  // itself, once no stored theme carries it and every supported release line
+  // reads `backspace`. Migrating the stored themes is what closes this out -
+  // carrying both names forever is not the plan.
+  factory ActionPadWidgetConfig.fromJson(Map<String, Object?> json) {
+    // A theme saved before the rename only has the old name.
+    if (json['backspace'] == null && json[_legacyBackspaceKey] != null) {
+      json = {...json, 'backspace': json[_legacyBackspaceKey]};
+    }
+    return _$ActionPadWidgetConfigFromJson(json);
+  }
+
+  Map<String, Object?> toJson() {
+    final json = _$ActionPadWidgetConfigToJson(this);
+    // An app built from an older release line only looks for the old name, so a
+    // theme saved here would otherwise lose this button's colors on it.
+    return {...json, _legacyBackspaceKey: json['backspace']};
+  }
 }
 
 @freezed

@@ -559,11 +559,9 @@ ActionPadWidgetConfig _$ActionPadWidgetConfigFromJson(
       : ButtonStyleConfig.fromJson(
           json['callTransfer'] as Map<String, dynamic>,
         ),
-  backspacePressed: json['backspacePressed'] == null
+  backspace: json['backspace'] == null
       ? const ButtonStyleConfig()
-      : ButtonStyleConfig.fromJson(
-          json['backspacePressed'] as Map<String, dynamic>,
-        ),
+      : ButtonStyleConfig.fromJson(json['backspace'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$ActionPadWidgetConfigToJson(
@@ -571,7 +569,7 @@ Map<String, dynamic> _$ActionPadWidgetConfigToJson(
 ) => <String, dynamic>{
   'callStart': instance.callStart.toJson(),
   'callTransfer': instance.callTransfer.toJson(),
-  'backspacePressed': instance.backspacePressed.toJson(),
+  'backspace': instance.backspace.toJson(),
 };
 
 SettingsPageConfig _$SettingsPageConfigFromJson(Map<String, dynamic> json) =>
