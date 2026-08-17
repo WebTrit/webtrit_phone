@@ -64,21 +64,29 @@ class SessionStatusListTile extends StatelessWidget {
                 title: Text(status.l10n(context), key: status.key, style: themeData.textTheme.labelLarge),
                 // A single subtitle line in every state: the row must keep its
                 // height when the status changes, or the whole list below jumps.
+                // The plain caption takes the list default so it reads exactly
+                // like the supporting line of the row below it; a warning only
+                // recolors that same style, or the two rows drift apart in size.
+                // Both are captions the reader needs in full - a warning most
+                // of all - so what does not fit is shown by sliding rather than
+                // dropped behind an ellipsis.
                 subtitle: switch (topIssue) {
-                  final SessionIssue issue => Text(
-                    issue.caption(context),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: themeData.textTheme.bodySmall?.copyWith(color: issue.color(context)),
+                  final SessionIssue issue => OverflowMarquee(
+                    child: Text(
+                      issue.caption(context),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: themeData.textTheme.bodyMedium?.copyWith(color: issue.color(context)),
+                    ),
                   ),
-                  null => Text(
-                    status.subtitleL10n(context, registered: registered, updating: updating),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: themeData.textTheme.bodySmall?.copyWith(color: themeData.colorScheme.onSurfaceVariant),
+                  null => OverflowMarquee(
+                    child: Text(
+                      status.subtitleL10n(context, registered: registered, updating: updating),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 },
-                trailing: const Icon(Icons.arrow_right),
               ),
             ),
             BlocBuilder<MicrophoneStatusBloc, MicrophoneStatusState>(
