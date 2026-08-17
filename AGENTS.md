@@ -19,6 +19,21 @@ dart run build_runner build --delete-conflicting-outputs      # codegen
 dart run bin/create_new_schema_dump_and_test_migration.dart   # after Drift table changes
 ```
 
+Every build needs `--dart-define-from-file=dart_define.json` **and** `--no-tree-shake-icons`
+(`String.toIconData()` builds `IconData` at runtime, which the icon tree-shaker rejects in release
+mode — and every `flutter build` is release by default). The failure lands only after the full
+Dart compile, so a missing flag costs a whole build cycle: measured 256 s to fail, 381 s for a
+successful web build. The `melos run build:*` scripts already pass both flags; web has no script
+yet, so type them:
+
+```bash
+flutter build web --dart-define-from-file=dart_define.json --no-tree-shake-icons
+```
+
+Before any build, run the cheap checks — `dart format` → `analyze` → `test`. Which check for which
+change, measured costs, and how to drive a long build without wasted retries:
+[`docs/build_verification.md`](docs/build_verification.md).
+
 ## Code Standards
 
 - No Cyrillic in source, comments, logs, strings, or keys, except translation values in localization ARB files (`lib/l10n/arb/*.arb`).
