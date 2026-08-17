@@ -31,7 +31,9 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
   late final autoprovisionCubit = context.read<AutoprovisionCubit>();
   late final router = context.router;
 
-  late final callkeep = context.read<Callkeep>();
+  // Resolved eagerly in [initState]: its first use sits past awaits that can
+  // outlive this screen, when reading the context is no longer safe.
+  late final Callkeep callkeep;
 
   Future navigateBack() async {
     if (router.canPop(ignorePagelessRoutes: true)) {
@@ -103,6 +105,7 @@ class _AutoprovisionScreenState extends State<AutoprovisionScreen> {
   @override
   initState() {
     super.initState();
+    callkeep = context.read<Callkeep>();
     WidgetsBinding.instance.addPostFrameCallback((_) => autoprovisionCubit.init());
   }
 
