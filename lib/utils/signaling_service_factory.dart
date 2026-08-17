@@ -5,8 +5,9 @@ import 'package:webtrit_phone/app/constants.dart';
 
 /// Builds the [SignalingModule] the main shell connects with.
 ///
-/// Provided from the composition root so a host (or a test) can substitute
-/// its own module instead of the platform-backed [WebtritSignalingService].
+/// Provided from the composition root so a widget test pumping the shell can
+/// substitute its own module instead of the platform-backed
+/// [WebtritSignalingService].
 ///
 /// Not to be confused with the signaling package's `SignalingModuleFactory`
 /// typedef: that one is the low-level hook the background isolate registers

@@ -186,17 +186,22 @@ class RootApp extends StatelessWidget {
         Provider<AppMetadataProvider>(create: (_) => instanceRegistry.get()),
         Provider<WebtritApiClientFactory>(create: (_) => instanceRegistry.get()),
         Provider<PushEnvironment>(create: (_) => instanceRegistry.get()),
-        // Platform-backed collaborators of the main shell (see bootstrap), so
-        // the shell reads them like every other dependency instead of
-        // constructing them inline.
+        // Platform-backed collaborators of the main shell, so the shell reads
+        // them like every other dependency instead of constructing them
+        // inline. The substitution seam this opens is for widget tests that
+        // pump the shell under their own providers; a host embedding RootApp
+        // still gets the production set.
         Provider<Callkeep>(create: (_) => instanceRegistry.get()),
         Provider<CallkeepConnections>(create: (_) => instanceRegistry.get()),
-        Provider<SignalingServiceFactory>(create: (_) => instanceRegistry.get()),
-        // Deliberately NOT in the bootstrap registry: resolving the messaging
-        // singleton requires a live default Firebase app, which a Firebase-free
-        // host (the configurator preview) only guarantees at its own pace.
-        // A lazy provider resolves it on first read - the same moment the
-        // direct call used to happen - so nothing changes for either host.
+        // Const and stateless, so no bootstrap registration needed (the
+        // AppCompatibilityResolver precedent above).
+        Provider<SignalingServiceFactory>(create: (_) => const SignalingServiceFactory()),
+        // Not in the bootstrap registry: resolving the messaging singleton
+        // requires the default Firebase app, so it stays lazy and resolves on
+        // first read - the moment the direct call used to happen. Note the
+        // provider caches a throwing create for its lifetime, so this relies
+        // on both hosts initializing Firebase before the shell mounts (both
+        // do today).
         Provider<FirebaseMessaging>(create: (_) => FirebaseMessaging.instance),
         // Provides a lifecycle-aware holder that attaches a WidgetsBindingObserver and owns the DB instance.
         // This provider may stay lazy; it will be created when `AppDatabase` is first requested.
