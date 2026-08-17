@@ -7,7 +7,7 @@ class MainScreen extends StatelessWidget {
     : super(key: key ?? const ValueKey<String>('MainScreen'));
 
   final Widget body;
-  final BottomNavigationBar bottomNavigationBar;
+  final Widget bottomNavigationBar;
 
   @override
   Widget build(BuildContext context) {
