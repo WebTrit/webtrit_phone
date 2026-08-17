@@ -15,11 +15,7 @@ import 'package:webtrit_phone/services/services.dart';
 /// Extracted from [MainShell] as a widget of its own so the layer reads as one
 /// unit and can be composed (or replaced) on its own in tests.
 class MainShellServices extends StatelessWidget {
-  const MainShellServices({super.key, required this.onPollingServiceCreated, required this.child});
-
-  /// Hands the created [PollingService] back to the shell state, which
-  /// forwards app lifecycle changes to it.
-  final ValueChanged<PollingService> onPollingServiceCreated;
+  const MainShellServices({super.key, required this.child});
 
   final Widget child;
 
@@ -38,14 +34,10 @@ class MainShellServices extends StatelessWidget {
           lazy: false,
         ),
         Provider<PollingService>(
-          create: (context) {
-            final service = PollingService(
-              connectivityService: context.read<ConnectivityService>(),
-              registrations: _pollingRegistrations(context),
-            );
-            onPollingServiceCreated(service);
-            return service;
-          },
+          create: (context) => PollingService(
+            connectivityService: context.read<ConnectivityService>(),
+            registrations: _pollingRegistrations(context),
+          ),
           dispose: (context, service) => service.dispose(),
           lazy: false,
         ),

@@ -37,7 +37,7 @@ class MainShell extends StatefulWidget {
   State<MainShell> createState() => _MainShellState();
 }
 
-class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
+class _MainShellState extends State<MainShell> {
   late final Callkeep _callkeep = Callkeep();
   late final CallkeepConnections _callkeepConnections = CallkeepConnections();
 
@@ -58,9 +58,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   /// events via the replay stream.
   late final SignalingModule _signalingModule;
 
-  /// The [PollingService] instance that handles periodic polling of repositories.
-  late PollingService? _polling;
-
   /// Drives the native Play Core update prompt; checked once on startup. No-op outside Android.
   final AppUpdateService _appUpdateService = AppUpdateService();
 
@@ -73,7 +70,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     _callkeep.setUp(
       CallkeepOptions(
         ios: CallkeepIOSOptions(
@@ -138,7 +134,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
     _disposeSessionGuard();
     _callkeep.tearDown();
     unawaited(_tearDownSignaling());
-    WidgetsBinding.instance.removeObserver(this);
     _callController?.dispose();
     super.dispose();
   }
@@ -152,16 +147,12 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) => _polling?.didChangeAppLifecycleState(state);
-
-  @override
   Widget build(BuildContext context) {
     final featureAccess = context.watch<FeatureAccess>();
 
     return MainShellRepositories(
       sessionGuard: _sessionGuard,
       child: MainShellServices(
-        onPollingServiceCreated: (service) => _polling = service,
         child: MainShellBlocs(
           callkeep: _callkeep,
           callkeepConnections: _callkeepConnections,
