@@ -27,6 +27,11 @@ import 'package:webtrit_phone/theme/factory/styles/call_screen_style_factory.dar
 ///
 /// The `selected` rows are the ones no theme can influence today: they always
 /// come from the color scheme.
+///
+/// `camera` is the toggle that sets a resting background, so its disabled row
+/// is where the dimming rule shows: a button fades its own color, not the one
+/// the palette would have given it, and a color that is already translucent
+/// keeps fading instead of being snapped to a fixed alpha.
 const _themeJson = '''
 {
   "dialing": {
@@ -151,8 +156,8 @@ key
 camera
   normal   bg=#66FFFFFF fg=#FF30302F icon=#FF102030
   selected bg=#FFEEF3F6 fg=#FF30302F icon=#FF848581
-  disabled bg=#66D5DDE3 fg=#6630302F icon=#66EEF3F6
-  sel+dis  bg=#66D5DDE3 fg=#6630302F icon=#66EEF3F6
+  disabled bg=#29FFFFFF fg=#6630302F icon=#66EEF3F6
+  sel+dis  bg=#29FFFFFF fg=#6630302F icon=#66EEF3F6
 muted
   normal   bg=#FFDCE3E8 fg=#FF30302F icon=#FF30302F
   selected bg=#FFEEF3F6 fg=#FF30302F icon=#FF848581

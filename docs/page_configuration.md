@@ -435,14 +435,15 @@ cannot be set per button in the theme file.
 
 **What a color you leave out falls back to:**
 
-| Left out                                              | Always-on buttons                                                | Toggles                                                     |
-|-------------------------------------------------------|------------------------------------------------------------------|--------------------------------------------------------------|
-| `backgroundColor`, `foregroundColor`, `iconColor`      | the color-scheme role of that button                             | the color-scheme role of that button                        |
-| `disabledBackgroundColor`, `disabledForegroundColor`   | 40% of the resting color, whether it came from the theme or the scheme | 40% of the color-scheme role, even when the theme sets a resting color |
-| `disabledIconColor`                                    | 40% of the scheme surface color                                  | 40% of the scheme surface color                             |
+| Left out                                             | Falls back to                                                          |
+|------------------------------------------------------|-------------------------------------------------------------------------|
+| `backgroundColor`, `foregroundColor`, `iconColor`     | the color-scheme role of that button                                   |
+| `disabledBackgroundColor`, `disabledForegroundColor`  | 40% of the resting color, whether that came from the theme or the scheme |
+| `disabledIconColor`                                   | 40% of the scheme surface color                                        |
 
-So a toggle that only sets `backgroundColor` keeps a scheme-derived disabled look; give it
-`disabledBackgroundColor` too if it should dim to its own color.
+So a button whose background or foreground you color yourself dims to your own color, and one you
+leave alone dims to the palette's. The icon is the exception in the table above: it always dims to
+the scheme surface unless you set `disabledIconColor`.
 
 ---
 
