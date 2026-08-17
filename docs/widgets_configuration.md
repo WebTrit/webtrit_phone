@@ -55,6 +55,8 @@ under the dial pad. Every field is optional; whatever you leave out keeps the ap
 
 - `backgroundColor`, `foregroundColor`, `iconColor` - the resting look. `foregroundColor` is the
   text color, and the icon color too unless `iconColor` overrides it.
+- `selectedBackgroundColor`, `selectedForegroundColor`, `selectedIconColor` - the same three while
+  a button that can be on or off is switched on. Ignored by buttons that have no such state.
 - `disabledBackgroundColor`, `disabledForegroundColor`, `disabledIconColor` - the same three while
   the button is unavailable.
 - `overlayColor` - the ripple shown on press/hover/focus.

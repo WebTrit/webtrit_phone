@@ -406,7 +406,8 @@ The buttons carry an icon and no text, so `iconColor` is the one you see. `foreg
 read - on the always-on buttons it tints the press ripple - but it never colors the glyph: leaving
 `iconColor` out falls the icon back to the color scheme, not to `foregroundColor`.
 
-**States.** You can set the resting colors and the disabled colors:
+**States.** You can set the resting colors, the switched-on colors of a toggle, and the disabled
+colors:
 
 ```json
 {
@@ -429,15 +430,33 @@ read - on the always-on buttons it tints the press ripple - but it never colors 
 }
 ```
 
-All four toggles - `camera`, `muted`, `speaker` and `held` - also have an "on" look. That one is
-**not** configurable yet: it is derived from the color scheme, so it follows the brand colors but
-cannot be set per button in the theme file.
+All four toggles - `camera`, `muted`, `speaker` and `held` - also have an "on" look, for when the
+mute is engaged, the camera is running or the call is on hold. Set it with `selectedBackgroundColor`,
+`selectedForegroundColor` and `selectedIconColor`; leave a slot out and that part of the on look
+still comes from the color scheme. On the always-on buttons these keys are ignored - those buttons
+are never switched on.
+
+```json
+{
+  "dialing": {
+    "actions": {
+      "muted": {
+        "backgroundColor": "#66FFFFFF",
+        "iconColor": "#FFFFFF",
+        "selectedBackgroundColor": "#0B6E4F",
+        "selectedIconColor": "#FFFFFF"
+      }
+    }
+  }
+}
+```
 
 **What a color you leave out falls back to:**
 
 | Left out                                             | Falls back to                                                          |
 |------------------------------------------------------|-------------------------------------------------------------------------|
 | `backgroundColor`, `foregroundColor`, `iconColor`     | the color-scheme role of that button                                   |
+| `selectedBackgroundColor`, `selectedForegroundColor`, `selectedIconColor` | the color-scheme's switched-on roles           |
 | `disabledBackgroundColor`, `disabledForegroundColor`  | 40% of the resting color, whether that came from the theme or the scheme |
 | `disabledIconColor`                                   | 40% of the scheme surface color                                        |
 
@@ -699,6 +718,6 @@ and the backspace button uses the `backspace` style.
 ### Notes & tips
 
 - If a section is omitted, in-app defaults apply.
-- For toggleable call actions (`muted`, `speaker`, `camera`, `held`) the theme file sets the resting
-  and disabled looks; the "on" look is taken from the color scheme and cannot be set per button.
+- For toggleable call actions (`muted`, `speaker`, `camera`, `held`) the theme file sets the resting,
+  switched-on and disabled looks; see [Call actions](#call-actions).
 - Prefer ARGB with partial alpha for layered UIs (e.g., translucent buttons over gradients).

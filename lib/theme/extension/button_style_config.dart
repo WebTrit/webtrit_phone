@@ -47,6 +47,7 @@ extension ButtonStyleConfigExtension on ButtonStyleConfig {
     final resolvedForeground = _resolveColor(
       foregroundColor,
       disabledForegroundColor,
+      selected: selectedForegroundColor,
       fallback: fallback,
       restingFallback: fallback?.foreground,
       selectedFallback: fallback?.selectedForeground,
@@ -59,6 +60,7 @@ extension ButtonStyleConfigExtension on ButtonStyleConfig {
       backgroundColor: _resolveColor(
         backgroundColor,
         disabledBackgroundColor,
+        selected: selectedBackgroundColor,
         fallback: fallback,
         restingFallback: fallback?.background,
         selectedFallback: fallback?.selectedBackground,
@@ -80,6 +82,7 @@ extension ButtonStyleConfigExtension on ButtonStyleConfig {
       iconColor: _resolveColor(
         iconColor,
         disabledIconColor,
+        selected: selectedIconColor,
         fallback: fallback,
         restingFallback: fallback?.icon,
         selectedFallback: fallback?.selectedIcon,
@@ -102,26 +105,43 @@ extension ButtonStyleConfigExtension on ButtonStyleConfig {
   WidgetStateProperty<Color?>? _resolveColor(
     String? resting,
     String? disabled, {
+    String? selected,
     ButtonStyleFallback? fallback,
     Color? restingFallback,
     Color? selectedFallback,
     Color? disabledFallback,
   }) {
     if (fallback == null) {
+      // Without a fallback the answer for an unset state has to be null, and a
+      // null answer does not mean "keep what you had": composition happens per
+      // property, so the whole property would be replaced and the base color
+      // lost. A style that names only a switched-on color therefore stays out
+      // of the way here - it takes a fallback for that color to mean anything.
       if (resting == null && disabled == null) return null;
       return WidgetStateProperty.resolveWith(
-        (states) => _pickColor(states, resting: resting?.toColor(), disabled: disabled?.toColor()),
+        (states) => _pickColor(
+          states,
+          resting: resting?.toColor(),
+          selected: selected?.toColor(),
+          disabled: disabled?.toColor(),
+          selectedDisabled: disabled?.toColor(),
+        ),
       );
     }
 
     final restingColor = resting?.toColor() ?? restingFallback;
+    final selectedColor = selected?.toColor() ?? selectedFallback ?? restingColor;
+    final statedDisabled = disabled?.toColor() ?? disabledFallback;
 
     return WidgetStateProperty.resolveWith(
       (states) => _pickColor(
         states,
         resting: restingColor,
-        selected: selectedFallback ?? restingColor,
-        disabled: disabled?.toColor() ?? disabledFallback ?? _faded(restingColor, fallback.disabledOpacity),
+        selected: selectedColor,
+        disabled: statedDisabled ?? _faded(restingColor, fallback.disabledOpacity),
+        // A switched-on control that becomes unavailable keeps reading as on,
+        // only dimmed - otherwise the state silently disappears.
+        selectedDisabled: statedDisabled ?? _faded(selectedColor, fallback.disabledOpacity),
       ),
     );
   }
@@ -132,10 +152,19 @@ extension ButtonStyleConfigExtension on ButtonStyleConfig {
   }
 }
 
-/// Which color a state asks for. Unavailable wins over switched-on: a control
-/// that is both has to read as unavailable first.
-Color? _pickColor(Set<WidgetState> states, {Color? resting, Color? selected, Color? disabled}) {
-  if (states.contains(WidgetState.disabled)) return disabled;
+/// Which color a state asks for. Unavailable wins over switched-on, but a
+/// control that is both gets its own answer, so the switched-on look survives
+/// as a dimmed version of itself.
+Color? _pickColor(
+  Set<WidgetState> states, {
+  Color? resting,
+  Color? selected,
+  Color? disabled,
+  Color? selectedDisabled,
+}) {
+  if (states.contains(WidgetState.disabled)) {
+    return states.contains(WidgetState.selected) ? selectedDisabled ?? disabled : disabled;
+  }
   if (states.contains(WidgetState.selected)) return selected ?? resting;
   return resting;
 }
