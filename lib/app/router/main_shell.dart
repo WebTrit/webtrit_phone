@@ -15,7 +15,6 @@ import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/router/main_shell_blocs.dart';
 import 'package:webtrit_phone/app/router/main_shell_repositories.dart';
 import 'package:webtrit_phone/app/router/main_shell_services.dart';
-import 'package:webtrit_phone/app/router/session_feature_access.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -70,10 +69,17 @@ class _MainShellState extends State<MainShell> {
   /// preventing consumers from holding stale references across rebuilds.
   CallController? _callController;
 
-  /// The feature configuration the provider layers build from, snapshotted at
-  /// mount and handed to each layer (see [SessionFeatureAccess] for why the
-  /// graph must not follow runtime updates).
-  late final SessionFeatureAccess _sessionFeatureAccess = SessionFeatureAccess(context.read<FeatureAccess>());
+  /// The feature configuration for this authenticated session, snapshotted at
+  /// mount and shadowing the reactive provider for everything below the shell.
+  ///
+  /// Runtime configuration updates must not reach the session subtree: they
+  /// used to reshape the provider graph under the live navigator, closing the
+  /// session blocs that open screens still held - calls then died silently
+  /// until an app restart. With the whole subtree reading one snapshot, the
+  /// graph, the tabs and the screens always agree; configuration changes take
+  /// effect on the next login. Widgets outside the shell (login and friends)
+  /// keep following runtime updates as before.
+  late final FeatureAccess _sessionFeatureAccess = context.read<FeatureAccess>();
 
   @override
   void initState() {
@@ -155,46 +161,44 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    final featureAccess = context.watch<FeatureAccess>();
+    return Provider<FeatureAccess>.value(
+      value: _sessionFeatureAccess,
+      child: MainShellRepositories(
+        sessionGuard: _sessionGuard,
+        child: MainShellServices(
+          child: MainShellBlocs(
+            callkeep: _callkeep,
+            callkeepConnections: _callkeepConnections,
+            signalingModule: _signalingModule,
 
-    return MainShellRepositories(
-      featureAccess: _sessionFeatureAccess,
-      sessionGuard: _sessionGuard,
-      child: MainShellServices(
-        featureAccess: _sessionFeatureAccess,
-        child: MainShellBlocs(
-          featureAccess: _sessionFeatureAccess,
-          callkeep: _callkeep,
-          callkeepConnections: _callkeepConnections,
-          signalingModule: _signalingModule,
-
-          /// The shell chrome: call, messaging and notification overlays around
-          /// the nested [AutoRouter], with a [MainShellNavigatorObserver] attached.
-          child: Builder(
-            builder: (context) {
-              final sipPresenceFeature = featureAccess.sipPresenceConfig;
-              return CallControllerScope(
-                controller: _callController ??= CallController(callBloc: context.read<CallBloc>()),
-                child: PresenceViewParams(
-                  hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
-                  blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
-                  presenceViaSipSupport: sipPresenceFeature.presenceViaSipSupport,
-                  child: CallConfigSynchronizer(
-                    child: CallShell(
-                      child: MessagingShell(
-                        child: SystemNotificationsShell(
-                          child: AutoRouter(
-                            navigatorObservers: () => [
-                              MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                            ],
+            /// The shell chrome: call, messaging and notification overlays around
+            /// the nested [AutoRouter], with a [MainShellNavigatorObserver] attached.
+            child: Builder(
+              builder: (context) {
+                final sipPresenceFeature = _sessionFeatureAccess.sipPresenceConfig;
+                return CallControllerScope(
+                  controller: _callController ??= CallController(callBloc: context.read<CallBloc>()),
+                  child: PresenceViewParams(
+                    hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
+                    blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
+                    presenceViaSipSupport: sipPresenceFeature.presenceViaSipSupport,
+                    child: CallConfigSynchronizer(
+                      child: CallShell(
+                        child: MessagingShell(
+                          child: SystemNotificationsShell(
+                            child: AutoRouter(
+                              navigatorObservers: () => [
+                                MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),

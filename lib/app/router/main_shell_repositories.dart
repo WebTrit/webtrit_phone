@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/app/router/session_feature_access.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/common/common.dart';
@@ -23,17 +22,7 @@ import 'package:webtrit_phone/services/services.dart';
 /// so the layer reads as one unit and can be composed (or replaced) on its
 /// own in tests.
 class MainShellRepositories extends StatelessWidget {
-  const MainShellRepositories({
-    super.key,
-    required this.featureAccess,
-    required this.sessionGuard,
-    required this.child,
-  });
-
-  /// The mount-time configuration snapshot this layer builds from - typed
-  /// [SessionFeatureAccess] on purpose, so a runtime update cannot reshape
-  /// the layer under the navigator.
-  final SessionFeatureAccess featureAccess;
+  const MainShellRepositories({super.key, required this.sessionGuard, required this.child});
 
   /// Handles session expiration reported by the remote datasources; owned by
   /// the shell state so it stays alive across rebuilds of this layer.
@@ -43,7 +32,9 @@ class MainShellRepositories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final featureAccess = this.featureAccess.value;
+    // Resolves the session snapshot the shell shadows above (see [MainShell]):
+    // one configuration for the whole session, so the graph never reshapes.
+    final featureAccess = context.read<FeatureAccess>();
     final appCertificates = context.read<AppCertificates>();
 
     return MultiRepositoryProvider(

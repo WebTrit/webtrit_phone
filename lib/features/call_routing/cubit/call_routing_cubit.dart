@@ -28,12 +28,16 @@ class CallRoutingCubit extends Cubit<CallRoutingState?> {
   StreamSubscription? _infoSub;
   late final StreamSubscription<bool> _connectivitySub;
 
+  /// Set at the very start of [close], before its awaits: [isClosed] flips
+  /// only inside `super.close()`, so on its own it leaves a window in which
+  /// the initialization (parked on the connectivity check) could still create
+  /// the subscription after [close] has already cancelled - and it would then
+  /// feed emit() on a closed cubit forever.
+  bool _closing = false;
+
   Future<void> _init() async {
     _connectivitySub = _connectivityService.connectionStream.listen(_onConnectionChanged);
     final connected = await _connectivityService.checkConnection();
-    // The cubit may have been closed while the check was in flight; starting
-    // the subscription then would feed emit() on a closed cubit forever.
-    if (isClosed) return;
     if (connected) _startInfoSubscription();
   }
 
@@ -44,7 +48,7 @@ class CallRoutingCubit extends Cubit<CallRoutingState?> {
   }
 
   void _startInfoSubscription() {
-    if (isClosed) return;
+    if (_closing || isClosed) return;
     _infoSub = _userRepository
         .getAndListen()
         .combineLatest(_linesStateRepository.getStateAndListen(), _combineInfo)
@@ -103,6 +107,7 @@ class CallRoutingCubit extends Cubit<CallRoutingState?> {
 
   @override
   Future<void> close() async {
+    _closing = true;
     await _infoSub?.cancel();
     await _connectivitySub.cancel();
     return super.close();

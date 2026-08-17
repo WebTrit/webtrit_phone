@@ -49,11 +49,13 @@ void main() {
       connectivity,
     );
 
-    // Close while _init is still awaiting the connectivity check...
-    await cubit.close();
-    // ...then let the check complete on the already-closed cubit.
+    // Close while _init is still awaiting the connectivity check, and let the
+    // check complete while close() is still in flight - the narrowest window:
+    // isClosed only flips inside super.close(), after close()'s own awaits.
+    final closing = cubit.close();
     connectivity.completer.complete(true);
     await pumpEventQueue();
+    await closing;
 
     // Feed the streams the subscription would listen to. On a correctly
     // torn-down cubit nothing happens; on the broken one emit() throws
