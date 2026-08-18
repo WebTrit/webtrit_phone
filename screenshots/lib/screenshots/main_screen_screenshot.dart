@@ -69,7 +69,9 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
         child: Builder(
           builder: (context) {
             final flavorIndex = tabs.indexWhere((tab) => tab.flavor == widget.flavor);
-            final selectedIndex = _selectedIndex ?? (flavorIndex < 0 ? 0 : flavorIndex);
+            // Clamped rather than trusted: the remembered position can outlive
+            // a config change that shrank the tabs list.
+            final selectedIndex = (_selectedIndex ?? (flavorIndex < 0 ? 0 : flavorIndex)).clamp(0, tabs.length - 1);
             return MainScreen(
               body: AppBarParams(
                 systemNotificationsEnabled: true,

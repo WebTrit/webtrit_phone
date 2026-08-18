@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -12,9 +13,19 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 @RoutePage()
-class MainScreenPage extends StatelessWidget {
+class MainScreenPage extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
   const MainScreenPage();
+
+  @override
+  State<MainScreenPage> createState() => _MainScreenPageState();
+}
+
+class _MainScreenPageState extends State<MainScreenPage> {
+  /// The tab set and the active tab's path as of the last frame - what a
+  /// configuration reload is detected against.
+  List<BottomMenuTab>? _lastTabs;
+  String? _lastActivePath;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +48,8 @@ class MainScreenPage extends StatelessWidget {
       duration: Duration.zero,
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
+
+        _restoreActiveTabAfterConfigChange(tabsRouter, tabs);
 
         if (callToActionsEnabled) {
           final isRouteActive = context.router.isRouteActive(MainScreenPageRoute.name);
@@ -90,6 +103,29 @@ class MainScreenPage extends StatelessWidget {
     );
   }
 
+  /// When its routes are replaced on a configuration reload, the tabs router
+  /// re-matches the active tab by route name, and every embedded section
+  /// shares one - the user landed on the first of them whichever was open.
+  /// Reactivate the tab that was open, identified by its path, once the
+  /// frame settles.
+  void _restoreActiveTabAfterConfigChange(TabsRouter tabsRouter, List<BottomMenuTab> tabs) {
+    final index = BottomMenuTabHandler.reactivationIndex(
+      previousTabs: _lastTabs,
+      previousPath: _lastActivePath,
+      tabs: tabs,
+      activeIndex: tabsRouter.activeIndex,
+    );
+    _lastTabs = tabs;
+    if (index != null) {
+      _lastActivePath = tabs[index].routePath;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) tabsRouter.setActiveIndex(index);
+      });
+    } else if (tabsRouter.activeIndex < tabs.length) {
+      _lastActivePath = tabs[tabsRouter.activeIndex].routePath;
+    }
+  }
+
   List<PageRouteInfo> _buildRoutePages(List<BottomMenuTab> tabs) {
     return tabs.map<PageRouteInfo<dynamic>>((tab) {
       switch (tab) {
@@ -127,5 +163,24 @@ abstract final class BottomMenuTabHandler {
 
     // Update the actual UI state via AutoRoute
     tabsRouter.setActiveIndex(index);
+  }
+
+  /// Index of the tab to reactivate after the configured tab set changed, or
+  /// null when the current activation needs no correction.
+  ///
+  /// The correction applies only when the tab set really changed, the tab
+  /// that was open (identified by [previousPath]) is still configured, and
+  /// the router did not land on it by itself.
+  static int? reactivationIndex({
+    required List<BottomMenuTab>? previousTabs,
+    required String? previousPath,
+    required List<BottomMenuTab> tabs,
+    required int activeIndex,
+  }) {
+    if (previousTabs == null || previousPath == null) return null;
+    if (listEquals(previousTabs, tabs)) return null;
+    final index = tabs.indexWhere((tab) => tab.routePath == previousPath);
+    if (index < 0 || index == activeIndex) return null;
+    return index;
   }
 }

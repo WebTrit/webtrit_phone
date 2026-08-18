@@ -35,7 +35,7 @@ class BottomMenuConfig extends Equatable {
   /// kind-only fallback covers a value saved by an older build and an
   /// embedded section that is no longer configured.
   BottomMenuTab findInitialTab(String? savedPath) {
-    final savedFlavor = savedPath?.split('/').first;
+    final savedFlavor = savedPath == null ? null : BottomMenuTab.flavorSegmentOf(savedPath);
     return _tabs.firstWhereOrNull((tab) => tab.routePath == savedPath) ??
         _tabs.firstWhereOrNull((tab) => tab.flavor.name == savedFlavor) ??
         _tabs.firstWhereOrNull((tab) => tab.initial) ??

@@ -57,5 +57,42 @@ void main() {
       const bare = BottomMenuConfig(tabs: [recents, help]);
       expect(bare.findInitialTab(null), same(recents));
     });
+
+    // The recents tab is the one fixed tab whose path grows a segment with a
+    // capability, so a saved value can stop matching exactly when the
+    // capability flips between runs - the kind fallback has to catch both
+    // directions.
+    test('a saved cdrs path still restores recents after the capability went away', () {
+      expect(config.findInitialTab('recents/cdrs'), same(recents));
+    });
+
+    test('a saved plain recents path still restores recents after cdrs appeared', () {
+      const cdrsRecents = RecentsBottomMenuTab(
+        supportsCallHistory: true,
+        enabled: true,
+        initial: false,
+        titleL10n: 'main_BottomNavigationBarItemLabel_recents',
+        icon: Icons.history,
+      );
+      const cdrsConfig = BottomMenuConfig(tabs: [keypad, cdrsRecents, help]);
+      expect(cdrsConfig.findInitialTab('recents'), same(cdrsRecents));
+    });
+  });
+
+  group('routePath and flavorSegmentOf', () {
+    test('the decoder recovers the kind from every tab\'s encoded path', () {
+      const cdrsRecents = RecentsBottomMenuTab(
+        supportsCallHistory: true,
+        enabled: true,
+        initial: false,
+        titleL10n: 'main_BottomNavigationBarItemLabel_recents',
+        icon: Icons.history,
+      );
+      // Every tab kind, including the two whose paths carry an extra segment;
+      // this is the contract findInitialTab's fallback matching relies on.
+      for (final tab in [keypad, recents, cdrsRecents, help, shop]) {
+        expect(BottomMenuTab.flavorSegmentOf(tab.routePath), tab.flavor.name, reason: tab.routePath);
+      }
+    });
   });
 }

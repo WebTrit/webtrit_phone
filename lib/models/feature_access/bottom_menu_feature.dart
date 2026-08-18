@@ -30,6 +30,12 @@ sealed class BottomMenuTab extends Equatable {
     (flavor: final f, embeddedId: final id) => '$f/$id',
   };
 
+  /// The kind segment of a stored [routePath] value - the decoder side of the
+  /// encoding above, kept next to it so the two cannot drift apart. Subclasses
+  /// may append their own segments (see [RecentsBottomMenuTab.routePath]), so
+  /// only the first segment names the kind.
+  static String flavorSegmentOf(String routePath) => routePath.split('/').first;
+
   @override
   List<Object?> get props => [enabled, initial, titleL10n, icon, data, flavor];
 }
