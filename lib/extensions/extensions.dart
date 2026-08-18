@@ -1,6 +1,7 @@
 export 'agreement.dart';
 export 'app_database.dart';
 export 'audio_player_extension.dart';
+export 'bottom_menu_tab.dart';
 export 'build_context.dart';
 export 'call_line_logs_extension.dart';
 export 'call_status.dart';

@@ -4,23 +4,11 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/models/main_flavor.dart';
 
 extension LoginTypeLoginSegmentKey on MainFlavor {
-  /// Stable automation id of the bottom navigation entry that opens this
-  /// section; the visible caption is configured per install and translated.
-  ///
-  /// An embedded section is not named here: there can be several of them, and
-  /// they are told apart by the id each is configured with, so their entries
-  /// take [embeddedNavBarId] instead.
-  String toNavBarId() {
-    return switch (this) {
-      MainFlavor.favorites => favoritesNavBarId,
-      MainFlavor.recents => recentsNavBarId,
-      MainFlavor.contacts => contactsNavBarId,
-      MainFlavor.keypad => keypadNavBarId,
-      MainFlavor.messaging => messagingNavBarId,
-      MainFlavor.embedded => embeddedNavBarIdPrefix,
-    };
-  }
-
+  /// Widget key of the bottom navigation entry of a KNOWN fixed section -
+  /// the way the E2E flows address them by constant. Code that walks a
+  /// configured tab list must use the total `tab.navBarKey` instead: an
+  /// embedded section has no key of its kind (an install can carry several),
+  /// so that arm can only throw.
   Key toNavBarKey() {
     return switch (this) {
       MainFlavor.favorites => favoritesNavBarKey,

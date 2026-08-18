@@ -72,6 +72,8 @@ class _MainScreenPageState extends State<MainScreenPage> {
             ? MainScreen(
                 body: child,
                 tabs: tabs,
+                // The shell above provides the unread state this reads.
+                decorateTabIcon: MessagingFlavorOverlay.forTab,
                 // Be aware to use activeIndex from tabsRouter, not from bottomMenuManager
                 // to handle navigation changes correctly, especially when the user navigates by url.
                 // e.g router.navigate(const MainScreenPageRoute(['favorites']));

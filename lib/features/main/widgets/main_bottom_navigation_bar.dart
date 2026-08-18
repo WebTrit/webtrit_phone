@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+/// Decorates a tab's icon in the bottom navigation bar (badges and the
+/// like). A host passes one only when it also provides the state the
+/// decoration reads - the bar itself takes no part in that.
+typedef TabIconDecorator = Widget Function(BottomMenuTab tab, Widget icon);
+
 /// Bottom navigation of the main screen: one entry per configured section.
 class MainBottomNavigationBar extends StatelessWidget {
-  const MainBottomNavigationBar({super.key, required this.tabs, required this.currentIndex, required this.onTap});
+  const MainBottomNavigationBar({
+    super.key,
+    required this.tabs,
+    required this.currentIndex,
+    required this.onTap,
+    this.decorateIcon,
+  });
 
   final List<BottomMenuTab> tabs;
 
@@ -17,6 +26,9 @@ class MainBottomNavigationBar extends StatelessWidget {
 
   /// Null renders the bar inert - a static preview shows it without wiring.
   final ValueChanged<int>? onTap;
+
+  /// Null draws icons bare; see [TabIconDecorator].
+  final TabIconDecorator? decorateIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -36,32 +48,15 @@ class MainBottomNavigationBar extends StatelessWidget {
     );
   }
 
-  /// Id of the entry: the fixed sections have one each, while an embedded
-  /// section is told apart by the id it is configured with - an install can
-  /// carry more than one of them.
-  String _identifier(BottomMenuTab tab) => switch (tab) {
-    EmbeddedBottomMenuTab(:final id) => embeddedNavBarId(id),
-    _ => tab.flavor.toNavBarId(),
-  };
-
-  /// The widget key follows the same rule, and for the same reason: two
-  /// embedded sections in one bar used to collide on a single key.
-  Key _key(BottomMenuTab tab) => switch (tab) {
-    EmbeddedBottomMenuTab(:final id) => embeddedNavBarKey(id),
-    _ => tab.flavor.toNavBarKey(),
-  };
-
   BottomNavigationBarItem _item(BuildContext context, BottomMenuTab tab) {
-    final flavor = tab.flavor;
-
     Widget icon = Icon(tab.icon);
-    if (flavor == MainFlavor.messaging) icon = MessagingFlavorOverlay(child: icon);
+    icon = decorateIcon?.call(tab, icon) ?? icon;
 
     return BottomNavigationBarItem(
-      key: _key(tab),
+      key: tab.navBarKey,
       // The bar builds the node that carries the caption and the press, so the
       // id has to be handed to that node rather than declared on one of ours.
-      icon: SemanticIdOfAncestor(identifier: _identifier(tab), child: icon),
+      icon: SemanticIdOfAncestor(identifier: tab.navBarId, child: icon),
       label: context.parseL10n(tab.titleL10n),
     );
   }

@@ -73,6 +73,9 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
             // a config change that shrank the tabs list.
             final selectedIndex = (_selectedIndex ?? (flavorIndex < 0 ? 0 : flavorIndex)).clamp(0, tabs.length - 1);
             return MainScreen(
+              // The mock unread state below backs this the way the shell does
+              // in the app.
+              decorateTabIcon: MessagingFlavorOverlay.forTab,
               body: AppBarParams(
                 systemNotificationsEnabled: true,
                 pullableCallDialogs: widget.pullableCallDialogs,

@@ -66,16 +66,27 @@ void main() {
     when(() => unreadCountCubit.state).thenReturn(UnreadCountState.initial());
   });
 
-  Widget wrap({required ValueChanged<int> onTap, int currentIndex = 1, List<BottomMenuTab>? menu}) {
+  Widget wrap({
+    required ValueChanged<int> onTap,
+    int currentIndex = 1,
+    List<BottomMenuTab>? menu,
+    TabIconDecorator? decorateIcon,
+    bool provideUnreadState = true,
+  }) {
+    final scaffold = Scaffold(
+      bottomNavigationBar: MainBottomNavigationBar(
+        tabs: menu ?? tabs,
+        currentIndex: currentIndex,
+        onTap: onTap,
+        decorateIcon: decorateIcon,
+      ),
+    );
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: BlocProvider<UnreadCountCubit>.value(
-        value: unreadCountCubit,
-        child: Scaffold(
-          bottomNavigationBar: MainBottomNavigationBar(tabs: menu ?? tabs, currentIndex: currentIndex, onTap: onTap),
-        ),
-      ),
+      home: provideUnreadState
+          ? BlocProvider<UnreadCountCubit>.value(value: unreadCountCubit, child: scaffold)
+          : scaffold,
     );
   }
 
@@ -119,7 +130,7 @@ void main() {
     // The embedded entry is keyed by the section it opens rather than by its
     // kind, so it is checked with the pair below instead.
     for (final tab in tabs.where((tab) => tab is! EmbeddedBottomMenuTab)) {
-      expect(find.byKey(tab.flavor.toNavBarKey()), findsOneWidget, reason: tab.titleL10n);
+      expect(find.byKey(tab.navBarKey), findsOneWidget, reason: tab.titleL10n);
     }
     expect(find.byKey(embeddedNavBarKey('help')), findsOneWidget);
   });
@@ -131,5 +142,32 @@ void main() {
     await tester.tap(find.text('Contacts'));
 
     expect(pressed, [2]);
+  });
+
+  testWidgets('a bare bar renders a messaging tab with no messaging state around', (tester) async {
+    // The badge used to be built into the bar, which made every host owe it
+    // an UnreadCountCubit; a host that forgot one compiled clean and
+    // red-screened at build time.
+    await tester.pumpWidget(wrap(onTap: (_) {}, provideUnreadState: false));
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(MessagingFlavorOverlay), findsNothing);
+  });
+
+  testWidgets('the injected decoration overlays exactly the messaging entry', (tester) async {
+    await tester.pumpWidget(wrap(onTap: (_) {}, decorateIcon: MessagingFlavorOverlay.forTab));
+
+    expect(find.byType(MessagingFlavorOverlay), findsOneWidget);
+  });
+
+  testWidgets('the decoration without its state degrades to a bare icon, not a crash', (tester) async {
+    // A future host can copy the decoration without copying the provider; the
+    // ornament must not be able to take the navigation down.
+    await tester.pumpWidget(
+      wrap(onTap: (_) {}, decorateIcon: MessagingFlavorOverlay.forTab, provideUnreadState: false),
+    );
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(BottomNavigationBar), findsOneWidget);
   });
 }
