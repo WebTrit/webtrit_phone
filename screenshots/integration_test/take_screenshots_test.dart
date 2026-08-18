@@ -96,6 +96,16 @@ void main() {
         child: MainScreenScreenshot(MainFlavor.recents, Text(EnvironmentConfig.APP_NAME)),
       );
     });
+    takeScreenshotTestWidgets('main_screen__recents_call_pull', () {
+      return ScreenshotApp(
+        appBloc: appContext.appBloc,
+        child: MainScreenScreenshot(
+          MainFlavor.recents,
+          Text(EnvironmentConfig.APP_NAME),
+          pullableCallDialogs: dPullableCallDialogs,
+        ),
+      );
+    });
     takeScreenshotTestWidgets('main_screen__keypad', () {
       return ScreenshotApp(
         appBloc: appContext.appBloc,
