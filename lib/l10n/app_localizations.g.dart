@@ -6468,6 +6468,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Run the network test again'**
   String get diagnosticNetworkTest_SemanticsLabel_refresh;
+
+  /// Hint of the field that searches the icons in the status icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Search icons'**
+  String get presence_settings_statusIcon_searchHint;
+
+  /// Accessibility name of the button that explains one option of the presence status.
+  ///
+  /// In en, this message translates to:
+  /// **'What {option} means'**
+  String presenceSettings_SemanticsLabel_optionInfo(String option);
+
+  /// Accessibility name of the control that picks a ready-made presence status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status preset'**
+  String get presenceSettings_SemanticsLabel_preset;
+
+  /// Accessibility name of the button that opens the icon picker of the presence status.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a status icon'**
+  String get presenceSettings_SemanticsLabel_pickStatusIcon;
+
+  /// Accessibility name of the button that takes the icon off the presence status.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the status icon'**
+  String get presenceSettings_SemanticsLabel_clearStatusIcon;
+
+  /// Accessibility name of the button that opens the search of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Search icons'**
+  String get presenceSettings_SemanticsLabel_searchIcons;
+
+  /// Accessibility name of the button that leaves the search of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop searching icons'**
+  String get presenceSettings_SemanticsLabel_stopSearchingIcons;
+
+  /// Accessibility name of the recently used category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently used'**
+  String get presenceSettings_SemanticsLabel_iconCategoryRecent;
+
+  /// Accessibility name of the smileys category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Smileys and people'**
+  String get presenceSettings_SemanticsLabel_iconCategorySmileys;
+
+  /// Accessibility name of the animals category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Animals and nature'**
+  String get presenceSettings_SemanticsLabel_iconCategoryAnimals;
+
+  /// Accessibility name of the food category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Food and drink'**
+  String get presenceSettings_SemanticsLabel_iconCategoryFoods;
+
+  /// Accessibility name of the activities category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities'**
+  String get presenceSettings_SemanticsLabel_iconCategoryActivities;
+
+  /// Accessibility name of the travel category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel and places'**
+  String get presenceSettings_SemanticsLabel_iconCategoryTravel;
+
+  /// Accessibility name of the objects category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Objects'**
+  String get presenceSettings_SemanticsLabel_iconCategoryObjects;
+
+  /// Accessibility name of the symbols category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Symbols'**
+  String get presenceSettings_SemanticsLabel_iconCategorySymbols;
+
+  /// Accessibility name of the flags category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Flags'**
+  String get presenceSettings_SemanticsLabel_iconCategoryFlags;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -3553,4 +3553,54 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get diagnosticNetworkTest_SemanticsLabel_refresh => 'Run the network test again';
+
+  @override
+  String get presence_settings_statusIcon_searchHint => 'Search icons';
+
+  @override
+  String presenceSettings_SemanticsLabel_optionInfo(String option) {
+    return 'What $option means';
+  }
+
+  @override
+  String get presenceSettings_SemanticsLabel_preset => 'Status preset';
+
+  @override
+  String get presenceSettings_SemanticsLabel_pickStatusIcon => 'Choose a status icon';
+
+  @override
+  String get presenceSettings_SemanticsLabel_clearStatusIcon => 'Remove the status icon';
+
+  @override
+  String get presenceSettings_SemanticsLabel_searchIcons => 'Search icons';
+
+  @override
+  String get presenceSettings_SemanticsLabel_stopSearchingIcons => 'Stop searching icons';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryRecent => 'Recently used';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategorySmileys => 'Smileys and people';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryAnimals => 'Animals and nature';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryFoods => 'Food and drink';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryActivities => 'Activities';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryTravel => 'Travel and places';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryObjects => 'Objects';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategorySymbols => 'Symbols';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryFlags => 'Flags';
 }

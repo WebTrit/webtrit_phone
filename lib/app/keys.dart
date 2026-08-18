@@ -172,9 +172,26 @@ const String loginSignupEmbeddedRetryButtonId = 'loginSignupEmbeddedRetryButton'
 const String otpVerifyResendButtonId = 'otpVerifyResendButton';
 const String passwordObscureToggleId = 'passwordObscureToggle';
 const String permissionsSettingsButtonId = 'permissionsSettingsButton';
+const String presenceSettingsActivityId = 'presenceSettingsActivity';
+const String presenceSettingsActivityInfoId = 'presenceSettingsActivityInfo';
+const String presenceSettingsAvailabilityId = 'presenceSettingsAvailability';
+const String presenceSettingsAvailabilityInfoId = 'presenceSettingsAvailabilityInfo';
+const String presenceSettingsConfigSectionId = 'presenceSettingsConfigSection';
+const String presenceSettingsDndId = 'presenceSettingsDnd';
+const String presenceSettingsDndInfoId = 'presenceSettingsDndInfo';
+const String presenceSettingsNoteId = 'presenceSettingsNote';
+const String presenceSettingsNoteInfoId = 'presenceSettingsNoteInfo';
+const String presenceSettingsPresetId = 'presenceSettingsPreset';
+const String presenceSettingsScreenId = 'presenceSettingsScreen';
+const String presenceSettingsStatusIconClearId = 'presenceSettingsStatusIconClear';
+const String presenceSettingsStatusIconPickId = 'presenceSettingsStatusIconPick';
 const String registerStatusSwitchId = 'registerStatusSwitch';
 const String sessionStatusTileId = 'sessionStatusTile';
 const String signupVerifyResendButtonId = 'signupVerifyResendButton';
+const String statusIconPickerId = 'statusIconPicker';
+const String statusIconPickerSearchId = 'statusIconPickerSearch';
+const String statusIconPickerSearchCloseId = 'statusIconPickerSearchClose';
+const String statusIconPickerSearchInputId = 'statusIconPickerSearchInput';
 const String systemNotificationsBadgeId = 'systemNotificationsBadge';
 const String voicemailMenuId = 'voicemailMenu';
 const String voicemailPlaybackId = 'voicemailPlayback';
@@ -192,6 +209,10 @@ const String settingsLanguageOptionIdPrefix = 'settingsLanguageOption';
 const String settingsThemeModeOptionIdPrefix = 'settingsThemeModeOption';
 const String settingsIncomingCallTypeOptionIdPrefix = 'settingsIncomingCallTypeOption';
 const String mediaSettingsOptionIdPrefix = 'mediaSettingsOption';
+
+// Category tabs of the status icon picker: the tabs are bare icons, so the id
+// is built from the category each one stands for.
+const String statusIconPickerCategoryIdPrefix = 'statusIconPickerCategory';
 
 /// Stable automation id of an option row, built from what the option means
 /// rather than from its position or its translated title.
