@@ -2017,6 +2017,24 @@ extension AppLocalizationsExtension on AppLocalizations {
           'webview_defaultError_details requires 2 arguments',
         ),
       },
+      'callPull_SemanticsLabel_badge' => switch (args) {
+        [final String name] => callPull_SemanticsLabel_badge(name),
+        _ => throw ArgumentError(
+          'callPull_SemanticsLabel_badge requires 1 arguments',
+        ),
+      },
+      'callPull_SemanticsLabel_badgeSeveral' => switch (args) {
+        [final int count] => callPull_SemanticsLabel_badgeSeveral(count),
+        _ => throw ArgumentError(
+          'callPull_SemanticsLabel_badgeSeveral requires 1 arguments',
+        ),
+      },
+      'callPull_SemanticsLabel_pickup' => switch (args) {
+        [final String name] => callPull_SemanticsLabel_pickup(name),
+        _ => throw ArgumentError(
+          'callPull_SemanticsLabel_pickup requires 1 arguments',
+        ),
+      },
       _ => null,
     };
   }

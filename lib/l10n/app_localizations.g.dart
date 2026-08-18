@@ -6445,6 +6445,24 @@ abstract class AppLocalizations {
   /// **'Forward the message'**
   String get messaging_SemanticsLabel_sendForward;
 
+  /// Accessibility name of the badge in the top bar that opens the list of calls in progress elsewhere, when there is one such call.
+  ///
+  /// In en, this message translates to:
+  /// **'Take over the call with {name}'**
+  String callPull_SemanticsLabel_badge(String name);
+
+  /// Accessibility name of the same badge when several calls are in progress elsewhere.
+  ///
+  /// In en, this message translates to:
+  /// **'Take over one of {count} calls'**
+  String callPull_SemanticsLabel_badgeSeveral(int count);
+
+  /// Accessibility name of the button that takes over one call from the list; the name keeps the rows apart.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up the call with {name}'**
+  String callPull_SemanticsLabel_pickup(String name);
+
   /// Accessibility name of the button that repeats the network check on the diagnostics screen.
   ///
   /// In en, this message translates to:
