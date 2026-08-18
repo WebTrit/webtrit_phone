@@ -58,7 +58,9 @@ class MainShellBlocs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final featureAccess = context.watch<FeatureAccess>();
+    // Resolves the session snapshot the shell shadows above (see [MainShell]):
+    // one configuration for the whole session, so the graph never reshapes.
+    final featureAccess = context.read<FeatureAccess>();
     final appTime = context.read<AppTime>();
 
     return MultiBlocProvider(

@@ -21,8 +21,9 @@ class MainShellServices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final featureAccess = context.watch<FeatureAccess>();
-
+    // Resolves the session snapshot the shell shadows above (see [MainShell]):
+    // one configuration for the whole session, so the graph never reshapes.
+    final featureAccess = context.read<FeatureAccess>();
     return MultiProvider(
       providers: [
         Provider(
@@ -68,8 +69,9 @@ class MainShellServices extends StatelessWidget {
   /// This method centralizes the polling configuration, so changes in polling logic or intervals
   /// can be made here without touching the [Provider] or [PollingService] setup.
   List<PollingRegistration> _pollingRegistrations(BuildContext context) {
-    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.voicemailsEnabled;
-    final supportsExtensions = context.read<FeatureAccess>().coreSupport.supportsExtensions;
+    final featureAccess = context.read<FeatureAccess>();
+    final isVoicemailsEnabled = featureAccess.settingsConfig.voicemailsEnabled;
+    final supportsExtensions = featureAccess.coreSupport.supportsExtensions;
     final cliSettingsRepository = context.read<CallerIdSettingsRepository>();
     final favoritesRepository = context.read<FavoritesRepository>();
     final sipSubscriptionsRepository = context.read<SipSubscriptionsRepository>();

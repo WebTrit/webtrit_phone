@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_api/webtrit_api.dart';
@@ -69,6 +68,18 @@ class _MainShellState extends State<MainShell> {
   /// assignment guarantees a single instance for the lifetime of this [State],
   /// preventing consumers from holding stale references across rebuilds.
   CallController? _callController;
+
+  /// The feature configuration for this authenticated session, snapshotted at
+  /// mount and shadowing the reactive provider for everything below the shell.
+  ///
+  /// Runtime configuration updates must not reach the session subtree: they
+  /// used to reshape the provider graph under the live navigator, closing the
+  /// session blocs that open screens still held - calls then died silently
+  /// until an app restart. With the whole subtree reading one snapshot, the
+  /// graph, the tabs and the screens always agree; configuration changes take
+  /// effect on the next login. Widgets outside the shell (login and friends)
+  /// keep following runtime updates as before.
+  late final FeatureAccess _sessionFeatureAccess = context.read<FeatureAccess>();
 
   @override
   void initState() {
@@ -150,43 +161,47 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    final featureAccess = context.watch<FeatureAccess>();
+    // Pins the session to one configuration: everything below reads the
+    // mount-time snapshot instead of the reactive stream (see
+    // [_sessionFeatureAccess]).
+    return Provider<FeatureAccess>.value(
+      value: _sessionFeatureAccess,
+      child: MainShellRepositories(
+        sessionGuard: _sessionGuard,
+        child: MainShellServices(
+          child: MainShellBlocs(
+            callkeep: _callkeep,
+            callkeepConnections: _callkeepConnections,
+            signalingModule: _signalingModule,
 
-    return MainShellRepositories(
-      sessionGuard: _sessionGuard,
-      child: MainShellServices(
-        child: MainShellBlocs(
-          callkeep: _callkeep,
-          callkeepConnections: _callkeepConnections,
-          signalingModule: _signalingModule,
-
-          /// The shell chrome: call, messaging and notification overlays around
-          /// the nested [AutoRouter], with a [MainShellNavigatorObserver] attached.
-          child: Builder(
-            builder: (context) {
-              final sipPresenceFeature = featureAccess.sipPresenceConfig;
-              return CallControllerScope(
-                controller: _callController ??= CallController(callBloc: context.read<CallBloc>()),
-                child: PresenceViewParams(
-                  hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
-                  blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
-                  presenceViaSipSupport: sipPresenceFeature.presenceViaSipSupport,
-                  child: CallConfigSynchronizer(
-                    child: CallShell(
-                      child: MessagingShell(
-                        child: SystemNotificationsShell(
-                          child: AutoRouter(
-                            navigatorObservers: () => [
-                              MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                            ],
+            /// The shell chrome: call, messaging and notification overlays around
+            /// the nested [AutoRouter], with a [MainShellNavigatorObserver] attached.
+            child: Builder(
+              builder: (context) {
+                final sipPresenceFeature = _sessionFeatureAccess.sipPresenceConfig;
+                return CallControllerScope(
+                  controller: _callController ??= CallController(callBloc: context.read<CallBloc>()),
+                  child: PresenceViewParams(
+                    hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
+                    blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
+                    presenceViaSipSupport: sipPresenceFeature.presenceViaSipSupport,
+                    child: CallConfigSynchronizer(
+                      child: CallShell(
+                        child: MessagingShell(
+                          child: SystemNotificationsShell(
+                            child: AutoRouter(
+                              navigatorObservers: () => [
+                                MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),

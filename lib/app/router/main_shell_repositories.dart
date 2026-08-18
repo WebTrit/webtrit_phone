@@ -32,7 +32,9 @@ class MainShellRepositories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final featureAccess = context.watch<FeatureAccess>();
+    // Resolves the session snapshot the shell shadows above (see [MainShell]):
+    // one configuration for the whole session, so the graph never reshapes.
+    final featureAccess = context.read<FeatureAccess>();
     final appCertificates = context.read<AppCertificates>();
 
     return MultiRepositoryProvider(
@@ -100,7 +102,7 @@ class MainShellRepositories extends StatelessWidget {
 
             final token = context.read<AppBloc>().state.session.token!;
 
-            final supportsExtensions = context.read<FeatureAccess>().coreSupport.supportsExtensions;
+            final supportsExtensions = featureAccess.coreSupport.supportsExtensions;
             final contactsRemoteDataSource = supportsExtensions
                 ? ContactsRemoteDataSourceImpl(webtritApiClient, token)
                 : null;
