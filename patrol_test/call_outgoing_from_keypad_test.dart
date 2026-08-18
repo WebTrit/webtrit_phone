@@ -78,4 +78,3 @@ void main() {
     await logout($);
   }, skip: hasCredsToRunThisTest == false);
 }
-
