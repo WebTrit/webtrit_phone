@@ -5,6 +5,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/main/main.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
@@ -106,6 +107,9 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.byType(BottomNavigationBar), findsOneWidget);
+    // Both per-id keys really are distinct - a shared key is exactly the bug.
+    expect(find.byKey(embeddedNavBarKey('help')), findsOneWidget);
+    expect(find.byKey(embeddedNavBarKey('shop')), findsOneWidget);
   });
 
   testWidgets('the bar shows one entry per configured section', (tester) async {
@@ -115,9 +119,9 @@ void main() {
     // The embedded entry is keyed by the section it opens rather than by its
     // kind, so it is checked with the pair below instead.
     for (final tab in tabs.where((tab) => tab is! EmbeddedBottomMenuTab)) {
-      expect(find.byKey(tab.flavor.toNavBarKey()), findsWidgets, reason: tab.titleL10n);
+      expect(find.byKey(tab.flavor.toNavBarKey()), findsOneWidget, reason: tab.titleL10n);
     }
-    expect(find.byKey(const Key('embeddedNavBarKey_help')), findsWidgets);
+    expect(find.byKey(embeddedNavBarKey('help')), findsOneWidget);
   });
 
   testWidgets('a press reports the entry that was pressed', (tester) async {
