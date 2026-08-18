@@ -1,8 +1,5 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'dart:ui';
-
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/extensions/iterable.dart';
@@ -14,6 +11,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../cubit/presence_settings_cubit.dart';
 import '../models/presence_settings_preset.dart';
+import '../widgets/widgets.dart';
 
 class PresenceSettingsScreen extends StatefulWidget {
   const PresenceSettingsScreen({super.key});
@@ -165,13 +163,9 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                     ),
                                   ),
                                   SizedBox(width: 16),
-                                  Tooltip(
+                                  PresenceOptionInfoButton(
+                                    option: l10n.presence_settings_availability_title,
                                     message: l10n.presence_settings_availability_tooltip,
-                                    triggerMode: TooltipTriggerMode.tap,
-                                    padding: const EdgeInsets.all(16),
-                                    margin: const EdgeInsets.all(16),
-                                    showDuration: const Duration(seconds: 10),
-                                    child: const Icon(Icons.info_outline),
                                   ),
                                 ],
                               ),
@@ -193,13 +187,9 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                   ),
                                 ),
                                 SizedBox(width: 16),
-                                Tooltip(
+                                PresenceOptionInfoButton(
+                                  option: l10n.presence_settings_note_label,
                                   message: l10n.presence_settings_note_tooltip,
-                                  triggerMode: TooltipTriggerMode.tap,
-                                  padding: const EdgeInsets.all(16),
-                                  margin: const EdgeInsets.all(16),
-                                  showDuration: const Duration(seconds: 10),
-                                  child: const Icon(Icons.info_outline),
                                 ),
                               ],
                             ),
@@ -275,13 +265,9 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                   ),
                                 ),
                                 SizedBox(width: 16),
-                                Tooltip(
+                                PresenceOptionInfoButton(
+                                  option: l10n.presence_settings_activity_label,
                                   message: l10n.presence_settings_activity_tooltip,
-                                  triggerMode: TooltipTriggerMode.tap,
-                                  padding: const EdgeInsets.all(16),
-                                  margin: const EdgeInsets.all(16),
-                                  showDuration: const Duration(seconds: 10),
-                                  child: const Icon(Icons.info_outline),
                                 ),
                               ],
                             ),
@@ -303,13 +289,9 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                   ),
                                 ),
                                 SizedBox(width: 16),
-                                Tooltip(
+                                PresenceOptionInfoButton(
+                                  option: l10n.presence_settings_dnd_title,
                                   message: l10n.presence_settings_dnd_tooltip,
-                                  triggerMode: TooltipTriggerMode.tap,
-                                  padding: const EdgeInsets.all(16),
-                                  margin: const EdgeInsets.all(16),
-                                  showDuration: const Duration(seconds: 10),
-                                  child: const Icon(Icons.info_outline),
                                 ),
                               ],
                             ),
@@ -323,44 +305,10 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                 Text(state.statusIcon ?? l10n.presence_settings_statusIcon_none, style: contentStyle),
                                 Spacer(),
                                 IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return BackdropFilter(
-                                          filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                                          child: Dialog(
-                                            shadowColor: Colors.black,
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(12),
-                                                color: Colors.white,
-                                              ),
-                                              clipBehavior: Clip.hardEdge,
-                                              width: 300,
-                                              height: 300,
-                                              child: OverflowBox(
-                                                alignment: Alignment.topCenter,
-                                                maxHeight: 350,
-                                                minHeight: 350,
-                                                child: EmojiPicker(
-                                                  config: Config(
-                                                    emojiViewConfig: EmojiViewConfig(
-                                                      backgroundColor: Colors.white,
-                                                      emojiSizeMax: 20,
-                                                    ),
-                                                  ),
-                                                  onEmojiSelected: (category, emoji) {
-                                                    cubit.setPresenceSettings(state.copyWithStatusIcon(emoji.emoji));
-                                                    Navigator.pop(context);
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
+                                  onPressed: () async {
+                                    final statusIcon = await StatusIconPickerDialog.show(context);
+                                    if (statusIcon == null) return;
+                                    cubit.setPresenceSettings(cubit.state.copyWithStatusIcon(statusIcon));
                                   },
                                   icon: Icon(Icons.search),
                                 ),
