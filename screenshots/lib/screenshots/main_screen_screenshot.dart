@@ -89,7 +89,13 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
     return [
       BlocProvider<CallBloc>(create: (_) => MockCallBloc.mainScreen()),
       BlocProvider<CallRoutingCubit>(create: (_) => MockCallRoutingCubit.initial()),
-      BlocProvider<SessionStatusCubit>(create: (_) => MockSessionStatusCubit.initial()),
+      // The app bar renders the call pull badge only on a ready session, so the
+      // badge preview needs a connected one; the other states keep the default
+      // "Connecting..." look.
+      BlocProvider<SessionStatusCubit>(
+        create: (_) =>
+            widget.pullableCallDialogs.isNotEmpty ? MockSessionStatusCubit.ready() : MockSessionStatusCubit.initial(),
+      ),
       BlocProvider<UserInfoCubit>(create: (_) => MockUserInfoCubit.initial()),
       BlocProvider<SystemNotificationsCounterCubit>(create: (_) => MockSystemNotificationCounterCubit.withDefaults()),
       BlocProvider<MicrophoneStatusBloc>(create: (_) => MockMicrophoneStatusBloc.initial(isGranted: true)),
