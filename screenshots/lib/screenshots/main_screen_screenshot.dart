@@ -57,7 +57,11 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
     final featureAccess = context.read<FeatureAccess?>();
 
     final configTabs = featureAccess?.bottomMenuConfig.tabs;
-    final tabs = (configTabs != null && configTabs.length >= 2) ? configTabs : _defaultTabs(context);
+    // Demo tabs stand in only when there is no configuration to show at all.
+    // A real config keeps its own tabs whatever their count: substituting the
+    // demo menu for a one-tab config made the preview show five sections the
+    // app would never render.
+    final tabs = (configTabs != null && configTabs.isNotEmpty) ? configTabs : _defaultTabs(context);
 
     Widget screen = MultiProvider(
       providers: [
@@ -72,15 +76,19 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
             // Clamped rather than trusted: the remembered position can outlive
             // a config change that shrank the tabs list.
             final selectedIndex = (_selectedIndex ?? (flavorIndex < 0 ? 0 : flavorIndex)).clamp(0, tabs.length - 1);
+            final body = AppBarParams(
+              systemNotificationsEnabled: true,
+              pullableCallDialogs: widget.pullableCallDialogs,
+              child: _buildFlavorWidget(context, tabs[selectedIndex].flavor, featureAccess),
+            );
+            // The app shows no bar for a single-section menu, and so does the
+            // preview - the one screen there is, full-bleed.
+            if (tabs.length < 2) return body;
             return MainScreen(
               // The mock unread state below backs this the way the shell does
               // in the app.
               decorateTabIcon: MessagingFlavorOverlay.forTab,
-              body: AppBarParams(
-                systemNotificationsEnabled: true,
-                pullableCallDialogs: widget.pullableCallDialogs,
-                child: _buildFlavorWidget(context, tabs[selectedIndex].flavor, featureAccess),
-              ),
+              body: body,
               tabs: tabs,
               currentIndex: selectedIndex,
               onTabSelected: widget.interactive ? _selectTab : null,
