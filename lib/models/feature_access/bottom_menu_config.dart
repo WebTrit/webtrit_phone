@@ -2,8 +2,6 @@ import 'package:equatable/equatable.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 
-import '../main_flavor.dart';
-
 import 'bottom_menu_feature.dart';
 
 /// Static configuration for the bottom navigation menu.
@@ -29,9 +27,17 @@ class BottomMenuConfig extends Equatable {
     return embeddedTabs.firstWhere((tab) => tab.id == id);
   }
 
-  /// Finds the initial tab to be selected based on the saved flavor or the initial flag.
-  BottomMenuTab findInitialTab(MainFlavor? savedFlavor) {
-    return _tabs.firstWhereOrNull((tab) => tab.flavor == savedFlavor) ??
+  /// Finds the tab to open first: the saved one if it is still configured,
+  /// or a tab of the same kind, or the one the configuration marks initial.
+  ///
+  /// [savedPath] is a tab's [BottomMenuTab.routePath]. Matching by path is
+  /// what keeps several embedded sections apart across a restart; the
+  /// kind-only fallback covers a value saved by an older build and an
+  /// embedded section that is no longer configured.
+  BottomMenuTab findInitialTab(String? savedPath) {
+    final savedFlavor = savedPath == null ? null : BottomMenuTab.flavorSegmentOf(savedPath);
+    return _tabs.firstWhereOrNull((tab) => tab.routePath == savedPath) ??
+        _tabs.firstWhereOrNull((tab) => tab.flavor.name == savedFlavor) ??
         _tabs.firstWhereOrNull((tab) => tab.initial) ??
         _tabs.first;
   }

@@ -20,7 +20,7 @@ class RepositoryUserSessionCleanupResolver implements UserSessionCleanupResolver
     required this.registerStatusRepository,
     required this.presenceSettingsRepository,
     required this.queuedTerminationRequestsRepository,
-    required this.activeMainFlavorRepository,
+    required this.activeMainTabRepository,
     required this.activeRecentsVisibilityFilterRepository,
     required this.activeContactSourceTypeRepository,
     required this.audioProcessingSettingsRepository,
@@ -40,7 +40,7 @@ class RepositoryUserSessionCleanupResolver implements UserSessionCleanupResolver
   final RegisterStatusRepository registerStatusRepository;
   final PresenceSettingsRepository presenceSettingsRepository;
   final QueuedTerminationRequestsRepository queuedTerminationRequestsRepository;
-  final ActiveMainFlavorRepository activeMainFlavorRepository;
+  final ActiveMainTabRepository activeMainTabRepository;
   final ActiveRecentsVisibilityFilterRepository activeRecentsVisibilityFilterRepository;
   final ActiveContactSourceTypeRepository activeContactSourceTypeRepository;
   final AudioProcessingSettingsRepository audioProcessingSettingsRepository;
@@ -66,7 +66,7 @@ class RepositoryUserSessionCleanupResolver implements UserSessionCleanupResolver
       registerStatusRepository.clear().suppressError('registerStatusRepository'),
       presenceSettingsRepository.clear().suppressError('presenceSettingsRepository'),
       queuedTerminationRequestsRepository.clear().suppressError('queuedTerminationRequestsRepository'),
-      activeMainFlavorRepository.clear().suppressError('activeMainFlavorRepository'),
+      activeMainTabRepository.clear().suppressError('activeMainTabRepository'),
       activeRecentsVisibilityFilterRepository.clear().suppressError('activeRecentsVisibilityFilterRepository'),
       activeContactSourceTypeRepository.clear().suppressError('activeContactSourceTypeRepository'),
       audioProcessingSettingsRepository.clear().suppressError('audioProcessingSettingsRepository'),

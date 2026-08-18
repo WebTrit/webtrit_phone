@@ -45,7 +45,10 @@ class MainScreenScreenshot extends StatefulWidget {
 }
 
 class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
-  late MainFlavor _flavor = widget.flavor;
+  /// Selected by position, not by kind: two embedded sections share one
+  /// flavor, and remembering the flavor would highlight the first of them
+  /// whichever one was pressed.
+  int? _selectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -65,16 +68,19 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
         providers: _createMockBlocProviders(),
         child: Builder(
           builder: (context) {
-            final selectedIndex = tabs.indexWhere((tab) => tab.flavor == _flavor);
+            final flavorIndex = tabs.indexWhere((tab) => tab.flavor == widget.flavor);
+            // Clamped rather than trusted: the remembered position can outlive
+            // a config change that shrank the tabs list.
+            final selectedIndex = (_selectedIndex ?? (flavorIndex < 0 ? 0 : flavorIndex)).clamp(0, tabs.length - 1);
             return MainScreen(
               body: AppBarParams(
                 systemNotificationsEnabled: true,
                 pullableCallDialogs: widget.pullableCallDialogs,
-                child: _buildFlavorWidget(context, _flavor, featureAccess),
+                child: _buildFlavorWidget(context, tabs[selectedIndex].flavor, featureAccess),
               ),
               tabs: tabs,
-              currentIndex: selectedIndex < 0 ? 0 : selectedIndex,
-              onTabSelected: widget.interactive ? (index) => _selectTab(tabs[index].flavor) : null,
+              currentIndex: selectedIndex,
+              onTabSelected: widget.interactive ? _selectTab : null,
             );
           },
         ),
@@ -152,9 +158,9 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
     ];
   }
 
-  void _selectTab(MainFlavor flavor) {
-    if (flavor == _flavor) return;
-    setState(() => _flavor = flavor);
+  void _selectTab(int index) {
+    if (index == _selectedIndex) return;
+    setState(() => _selectedIndex = index);
   }
 
   Widget _buildFlavorWidget(BuildContext context, MainFlavor flavor, FeatureAccess? featureAccess) {

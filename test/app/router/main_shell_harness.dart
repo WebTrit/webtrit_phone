@@ -251,7 +251,7 @@ class MainShellHarness {
   late final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(appPreferences);
   late final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(appPreferences, 'webtrit-test');
   late final queuedTerminationRequestsRepository = QueuedTerminationRequestsRepositoryPrefsImpl(appPreferences);
-  late final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
+  late final activeMainTabRepository = ActiveMainTabRepositoryPrefsImpl(appPreferences);
   late final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(appPreferences);
   late final activeContactSourceTypeRepository = ActiveContactSourceTypeRepositoryPrefsImpl(appPreferences);
   late final audioProcessingSettingsRepository = AudioProcessingSettingsRepositoryPrefsImpl(appPreferences);
@@ -270,7 +270,7 @@ class MainShellHarness {
     systemInfoRepository,
     null,
     initialFeatureAccess.bottomMenuConfig,
-    BottomMenuInitialTabResolver(config: initialFeatureAccess.bottomMenuConfig, repository: activeMainFlavorRepository),
+    BottomMenuInitialTabResolver(config: initialFeatureAccess.bottomMenuConfig, repository: activeMainTabRepository),
     initialFeatureAccess.checker,
   );
 
@@ -312,7 +312,7 @@ class MainShellHarness {
         RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
         RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
         RepositoryProvider<QueuedTerminationRequestsRepository>.value(value: queuedTerminationRequestsRepository),
-        RepositoryProvider<ActiveMainFlavorRepository>.value(value: activeMainFlavorRepository),
+        RepositoryProvider<ActiveMainTabRepository>.value(value: activeMainTabRepository),
         RepositoryProvider<ActiveRecentsVisibilityFilterRepository>.value(
           value: activeRecentsVisibilityFilterRepository,
         ),
