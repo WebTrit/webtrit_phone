@@ -3,7 +3,7 @@
 How interactive controls are exposed to screen readers and to UI automation, and
 what every feature has to do about it before it ships.
 
-Last reviewed: 2026-08-14
+Last reviewed: 2026-08-17
 
 ## Why this exists
 
@@ -59,7 +59,7 @@ flow against the screen.
 
 ## Attaching it: pick the wrapper
 
-Both wrappers are exported from `lib/widgets/widgets.dart`; import the barrel.
+All three wrappers are exported from `lib/widgets/widgets.dart`; import the barrel.
 
 **`SemanticAction`** - a tap target. It merges the subtree into a single node, so
 name, identifier and action cannot drift apart. Use the default constructor for
@@ -109,6 +109,24 @@ cannot activate what it just found by id. The in-call buttons were announced as 
 bare "button" for exactly this reason before they were fixed - their name sat on a
 node split off from the one that could be activated.
 
+**`SemanticIdOfAncestor`** - an identifier for a control whose node is built by a
+widget we do not own and cannot wrap. The entries of a `BottomNavigationBar` are
+the case it was written for: the bar itself builds the node that carries the
+caption, the selected state and the press, and nothing we pass in can become
+that node. Wrapping the icon in `Semantics(identifier: ...)` does not help - an
+identifier implicitly introduces a node of its own (framework `basic.dart`), so
+the id lands on an empty node inside the entry, with no name to announce and no
+action to press. This widget contributes the id to the description the ancestor
+compiles instead of declaring a node, so it ends up on the entry itself.
+
+Reach for it only when the id cannot be declared on the control: it depends on
+who builds the node above, which is not visible from the call site. Where the
+subtree can be wrapped, `SemanticAction` is the answer.
+
+Note that a widget that merges its subtree needs none of this - `getSemanticsData`
+picks an identifier up from a merged child, which is why an id inside a `Tab` or a
+segment of a `SegmentedButton` lands on the merged node (see Traps).
+
 A raw `Semantics` is still the right tool in two situations. One is a node that
 declares the name, the identifier **and** the action itself, which is how the
 keypad keys are done (`lib/widgets/keypad_key_button.dart`): the key takes pointer
@@ -125,8 +143,8 @@ not a control at all: a status or progress message published with
 Reach for these before writing anything new; each one carries a rule that is easy
 to get wrong on your own.
 
-- **`SemanticAction`, `SemanticId`** (`lib/widgets/`) - the two wrappers above,
-  exported from the widgets barrel.
+- **`SemanticAction`, `SemanticId`, `SemanticIdOfAncestor`** (`lib/widgets/`) - the
+  three wrappers above, exported from the widgets barrel.
 - **`CallActionButton`, `CallActionMenuButton`**
   (`lib/features/call/widgets/call_action_button.dart`) - every in-call action
   button. They take the `label` and the `identifier`, and keep the visual
@@ -208,9 +226,12 @@ test.
 2. **Do not merge a row that contains a link.** Merging kills the link's
    activation. Keep the name on the control and leave the text as its own node,
    even at the cost of the sentence being read twice.
-3. **A child's identifier survives a merge.** `getSemanticsData()` picks it up
-   when the parent has none, so an id on a segment's label lands on the same node
-   that carries selection and the tap. No extra per-segment id is needed.
+3. **A child's identifier survives a merge, and only a merge.** `getSemanticsData()`
+   picks it up when the parent has none, so an id on a segment's label lands on the
+   same node that carries selection and the tap; `TabBar` merges each tab the same
+   way, and `ExtTab` relies on it. A parent that only opens a container without
+   merging - `BottomNavigationBar` does that per entry - picks up nothing, and the
+   id sits on a node of its own instead: that is what `SemanticIdOfAncestor` is for.
 4. **`opacity: 0`, `Offstage` and friends remove the subtree from semantics
    entirely.** Controls that fade out or auto-hide stop existing for a screen
    reader, not just visually. Keep them reachable while a screen reader is on -

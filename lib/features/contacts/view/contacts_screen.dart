@@ -68,6 +68,16 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
     }
   }
 
+  /// Tab of one contact source, addressable by the id of that source.
+  ExtTab _tab(BuildContext context, ContactSourceType sourceType) {
+    final (key, identifier) = switch (sourceType) {
+      ContactSourceType.local => (contactsTabLocalKey, contactsTabLocalId),
+      ContactSourceType.external => (contactsTabExtKey, contactsTabExtId),
+    };
+
+    return ExtTab(key: key, identifier: identifier, text: sourceType.l10n(context));
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
@@ -82,15 +92,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
               controller: _tabController,
               width: mediaQueryData.size.width * 0.75,
               height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
-              tabs: widget.sourceTypes.map((sourceType) {
-                return Tab(
-                  key: switch (sourceType) {
-                    ContactSourceType.local => contactsTabLocalKey,
-                    ContactSourceType.external => contactsTabExtKey,
-                  },
-                  text: sourceType.l10n(context),
-                );
-              }).toList(),
+              tabs: [for (final sourceType in widget.sourceTypes) _tab(context, sourceType)],
             ),
           );
 

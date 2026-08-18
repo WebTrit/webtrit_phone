@@ -133,6 +133,19 @@
       }
     }
   },
+  "callerId_SemanticsLabel_addMatch": "Add a dial code match",
+  "@callerId_SemanticsLabel_addMatch": {
+    "description": "Accessibility name of the button that opens the form for a new dial code match on the caller ID screen."
+  },
+  "callerId_SemanticsLabel_removeMatch": "Remove the match for {dialCode}",
+  "@callerId_SemanticsLabel_removeMatch": {
+    "description": "Accessibility name of the button that deletes one dial code match on the caller ID screen.",
+    "placeholders": {
+      "dialCode": {
+        "type": "String"
+      }
+    }
+  },
   "call_CallActionsTooltip_accept": "รับสาย",
   "@call_CallActionsTooltip_accept": {},
   "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "รับการโอนสาย",
@@ -1920,6 +1933,14 @@
   "@settings_AccountDeleteNotSupported_message": {},
   "settings_AppBarTitle_myAccount": "บัญชีของฉัน",
   "@settings_AppBarTitle_myAccount": {},
+  "settings_SemanticsLabel_editAccount": "Edit account details",
+  "@settings_SemanticsLabel_editAccount": {
+    "description": "Accessibility name of the pencil button next to the account details on the settings screen."
+  },
+  "settings_SemanticsLabel_refresh": "Refresh account status",
+  "@settings_SemanticsLabel_refresh": {
+    "description": "Accessibility name of the refresh button in the app bar of the settings screen."
+  },
   "settings_audioProcessing_Section_AGC_title": "ปรับระดับเสียงอัตโนมัติ",
   "@settings_audioProcessing_Section_AGC_title": {},
   "settings_audioProcessing_Section_AM_title": "การสะท้อนเสียง",

@@ -322,6 +322,18 @@ abstract class AppLocalizations {
   /// **'Video call {name}'**
   String callTile_SemanticsLabel_videoCall(String name);
 
+  /// Accessibility name of the button that opens the form for a new dial code match on the caller ID screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a dial code match'**
+  String get callerId_SemanticsLabel_addMatch;
+
+  /// Accessibility name of the button that deletes one dial code match on the caller ID screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the match for {dialCode}'**
+  String callerId_SemanticsLabel_removeMatch(String dialCode);
+
   /// No description provided for @call_CallActionsTooltip_accept.
   ///
   /// In en, this message translates to:
@@ -4122,6 +4134,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My account'**
   String get settings_AppBarTitle_myAccount;
+
+  /// Accessibility name of the pencil button next to the account details on the settings screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit account details'**
+  String get settings_SemanticsLabel_editAccount;
+
+  /// Accessibility name of the refresh button in the app bar of the settings screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh account status'**
+  String get settings_SemanticsLabel_refresh;
 
   /// No description provided for @settings_audioProcessing_Section_AGC_title.
   ///

@@ -105,9 +105,36 @@ const String callActiveThumbnailId = 'callActiveThumbnail';
 const String callControlsToggleId = 'callControlsToggle';
 const String callRowId = 'callRow';
 
+// Bottom navigation of the main screen: which tabs are there and what they are
+// called both come from the server-side menu configuration, so the entry is
+// addressed by the section it opens.
+const String favoritesNavBarId = 'favoritesNavBar';
+const favoritesNavBarKey = Key(favoritesNavBarId);
+const String recentsNavBarId = 'recentsNavBar';
+const recentsNavBarKey = Key(recentsNavBarId);
+const String contactsNavBarId = 'contactsNavBar';
+const contactsNavBarKey = Key(contactsNavBarId);
+const String keypadNavBarId = 'keypadNavBar';
+const keypadNavBarKey = Key(keypadNavBarId);
+const String messagingNavBarId = 'messagingNavBar';
+const messagingNavBarKey = Key(messagingNavBarId);
+const String embeddedNavBarIdPrefix = 'embeddedNavBar';
+
+/// Id of the bottom navigation entry that opens the embedded section [id].
+///
+/// There can be several embedded sections, all of them announced by whatever
+/// caption the install configures, so the id they are configured with is the
+/// only thing that tells one entry from another.
+String embeddedNavBarId(String id) => '$embeddedNavBarIdPrefix${_capitalize(id)}';
+
+/// Key of the same entry, built from [embeddedNavBarId] so the widget-test
+/// anchor and the accessibility anchor cannot drift apart.
+Key embeddedNavBarKey(String id) => Key(embeddedNavBarId(id));
+
 // Screen anchors: identify the screen itself, so a flow can tell where it is
 // before touching a control. Login needs them because the visible captions
 // repeat - "Proceed" names the button on four different screens.
+const String callerIdScreenId = 'callerIdScreen';
 const String chatConversationScreenId = 'chatConversationScreen';
 const String contactScreenId = 'contactScreen';
 const String loginCoreUrlScreenId = 'loginCoreUrlScreen';
@@ -147,6 +174,8 @@ const String callActionsOptionsId = 'callActionsOptions';
 const String callPullBadgeId = 'callPullBadge';
 const String callPullDialogId = 'callPullDialog';
 const String callPullPickupId = 'callPullPickup';
+const String callerIdAddMatchId = 'callerIdAddMatch';
+const String callerIdRemoveMatchId = 'callerIdRemoveMatch';
 const String callTileDialId = 'callTileDial';
 const String callTileMenuId = 'callTileMenu';
 const String chatInfoCallId = 'chatInfoCall';
@@ -187,6 +216,8 @@ const String presenceSettingsStatusIconClearId = 'presenceSettingsStatusIconClea
 const String presenceSettingsStatusIconPickId = 'presenceSettingsStatusIconPick';
 const String registerStatusSwitchId = 'registerStatusSwitch';
 const String sessionStatusTileId = 'sessionStatusTile';
+const String settingsRefreshId = 'settingsRefresh';
+const String settingsUserInfoEditId = 'settingsUserInfoEdit';
 const String signupVerifyResendButtonId = 'signupVerifyResendButton';
 const String statusIconPickerId = 'statusIconPicker';
 const String statusIconPickerSearchId = 'statusIconPickerSearch';
@@ -256,13 +287,6 @@ const String contactPhoneTileFavIconId = 'contactPhoneTileFavIcon';
 const contactPhoneTileFavIconKey = Key(contactPhoneTileFavIconId);
 const String contactEmailTileId = 'contactEmailTile';
 const contactEmailTileKey = Key(contactEmailTileId);
-
-/// Key of the bottom-navigation entry of the embedded section [id].
-///
-/// Several embedded sections can be configured at once, so the entry cannot
-/// take one key of its kind - two entries with one key bring the build down.
-const String embeddedNavBarKeyPrefix = 'embeddedNavBarKey_';
-Key embeddedNavBarKey(String id) => Key('$embeddedNavBarKeyPrefix$id');
 
 /// Id of the [index]th control in a list of identical ones: the first keeps the
 /// plain id, the rest are numbered from two, the way a person would count them.

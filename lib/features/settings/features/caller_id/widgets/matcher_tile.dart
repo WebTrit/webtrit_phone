@@ -4,13 +4,20 @@ import 'package:country_code_picker/country_code_picker.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/models/caller_id_settings.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/settings/features/caller_id/caller_id.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/caller_id_settings.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class MatcherTile extends StatelessWidget {
-  const MatcherTile({required this.matcher, super.key});
+  const MatcherTile({required this.matcher, required this.index, super.key});
 
   final PrefixMatcher matcher;
+
+  /// Position of the row among the rules; the automation id is built from it,
+  /// because a rule is identified by a dial code the test cannot know upfront.
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +45,15 @@ class MatcherTile extends StatelessWidget {
           ),
           Text('=>  ${matcher.number}'),
           const Spacer(),
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              context.read<CallerIdSettingsCubit>().removePrefixMatcher(matcher.prefix);
-            },
+          SemanticAction(
+            label: context.l10n.callerId_SemanticsLabel_removeMatch(matcher.prefix),
+            identifier: numberedId(callerIdRemoveMatchId, index),
+            child: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                context.read<CallerIdSettingsCubit>().removePrefixMatcher(matcher.prefix);
+              },
+            ),
           ),
         ],
       ),

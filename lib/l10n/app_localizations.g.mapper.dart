@@ -68,6 +68,7 @@ extension AppLocalizationsExtension on AppLocalizations {
         callThumbnail_SemanticsAction_moveBottomRight,
       'callThumbnail_SemanticsLabel_returnToCall' =>
         callThumbnail_SemanticsLabel_returnToCall,
+      'callerId_SemanticsLabel_addMatch' => callerId_SemanticsLabel_addMatch,
       'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
       'call_CallActionsTooltip_accept_inviteToAttendedTransfer' =>
         call_CallActionsTooltip_accept_inviteToAttendedTransfer,
@@ -1005,6 +1006,9 @@ extension AppLocalizationsExtension on AppLocalizations {
       'settings_AccountDeleteNotSupported_message' =>
         settings_AccountDeleteNotSupported_message,
       'settings_AppBarTitle_myAccount' => settings_AppBarTitle_myAccount,
+      'settings_SemanticsLabel_editAccount' =>
+        settings_SemanticsLabel_editAccount,
+      'settings_SemanticsLabel_refresh' => settings_SemanticsLabel_refresh,
       'settings_audioProcessing_Section_AGC_title' =>
         settings_audioProcessing_Section_AGC_title,
       'settings_audioProcessing_Section_AM_title' =>
@@ -1756,6 +1760,14 @@ extension AppLocalizationsExtension on AppLocalizations {
         [final String name] => callTile_SemanticsLabel_videoCall(name),
         _ => throw ArgumentError(
           'callTile_SemanticsLabel_videoCall requires 1 arguments',
+        ),
+      },
+      'callerId_SemanticsLabel_removeMatch' => switch (args) {
+        [final String dialCode] => callerId_SemanticsLabel_removeMatch(
+          dialCode,
+        ),
+        _ => throw ArgumentError(
+          'callerId_SemanticsLabel_removeMatch requires 1 arguments',
         ),
       },
       'call_CallList_header' => switch (args) {
