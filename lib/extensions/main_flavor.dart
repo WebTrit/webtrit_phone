@@ -7,9 +7,11 @@ extension LoginTypeLoginSegmentKey on MainFlavor {
   /// Stable automation id of the bottom navigation entry that opens this
   /// section; the visible caption is configured per install and translated.
   ///
+  /// For a KNOWN fixed section only (the way the E2E flows address them).
   /// An embedded section is not named here: there can be several of them, and
-  /// they are told apart by the id each is configured with, so their entries
-  /// take [embeddedNavBarId] instead.
+  /// they are told apart by the id each is configured with. Code that walks a
+  /// configured tab list must use the total `tab.navBarId` / `tab.navBarKey`
+  /// instead of this - here the embedded arms are dead ends.
   String toNavBarId() {
     return switch (this) {
       MainFlavor.favorites => favoritesNavBarId,

@@ -3,11 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 class MessagingFlavorOverlay extends StatefulWidget {
   const MessagingFlavorOverlay({required this.child, super.key});
 
   final Widget child;
+
+  /// Bottom-bar icon decoration: overlays the unread counter on the
+  /// messaging tab and leaves every other tab untouched. Hand it to the bar
+  /// from a host that provides an [UnreadCountCubit] - the bar itself does
+  /// not require one.
+  static Widget forTab(BottomMenuTab tab, Widget icon) {
+    return tab.flavor == MainFlavor.messaging ? MessagingFlavorOverlay(child: icon) : icon;
+  }
 
   @override
   State<MessagingFlavorOverlay> createState() => _MessagingFlavorOverlayState();
