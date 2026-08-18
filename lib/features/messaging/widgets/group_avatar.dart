@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/theme/styles/styles.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 class GroupAvatar extends StatelessWidget {
   const GroupAvatar({super.key, required this.name, this.size = 24, this.style});
@@ -15,8 +16,19 @@ class GroupAvatar extends StatelessWidget {
     final themeStyle = theme.extension<LeadingAvatarStyles>()?.primary;
     final effectiveStyle = LeadingAvatarStyle.merge(themeStyle, style);
 
-    final backgroundColor = effectiveStyle.backgroundColor ?? theme.colorScheme.secondaryContainer;
-    final initialsStyle = effectiveStyle.initialsTextStyle;
+    // Absent config means on: only an explicit `enabled: false` opts out.
+    final nameColors = effectiveStyle.nameColors ?? const NameColorsStyle();
+    final nameBackgroundColor = nameColors.enabled
+        ? AvatarColors.background(name, theme.brightness, palette: nameColors.palette)
+        : null;
+
+    final backgroundColor =
+        nameBackgroundColor ?? effectiveStyle.backgroundColor ?? theme.colorScheme.secondaryContainer;
+    final initialsStyle = nameBackgroundColor != null
+        ? effectiveStyle.initialsTextStyle?.copyWith(
+            color: AvatarColors.foreground(nameBackgroundColor, theme.brightness),
+          )
+        : effectiveStyle.initialsTextStyle;
 
     return SizedBox(
       width: size * 2,

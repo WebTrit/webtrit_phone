@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/isolate.dart';
 
@@ -28,6 +29,13 @@ void main() {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+
+      // Android 15+ enforces edge-to-edge, but on older versions the engine leaves the
+      // view inset above the navigation bar - the app then paints nothing there and the
+      // Android window background (`?android:colorBackground`, a light color) shows
+      // through the transparent bar. Requesting the mode explicitly keeps one behavior
+      // on every version: the app's own surfaces paint behind the system bars.
+      if (!kIsWeb) await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
       final instanceRegistry = await bootstrap();
 

@@ -25,6 +25,7 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
         smartIndicator: _mapSmart(config?.smartIndicator),
         registeredBadge: _mapRegistered(config?.registeredBadge),
         presenceBadge: _mapPresence(config?.presenceBadge),
+        nameColors: _mapNameColors(config?.nameColors),
       ),
     );
   }
@@ -64,6 +65,13 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
       unregisteredColor: c.unregisteredColor?.toColor(),
       sizeFactor: c.sizeFactor,
     );
+  }
+
+  /// Name-derived colors are on by default: a theme without a `nameColors` block still gets them,
+  /// only an explicit `"enabled": false` turns them off.
+  NameColorsStyle _mapNameColors(NameColorsStyleConfig? c) {
+    if (c == null) return const NameColorsStyle();
+    return NameColorsStyle(enabled: c.enabled, palette: c.palette?.map((hex) => hex.toColor()).toList());
   }
 
   PresenceBadgeStyle? _mapPresence(PresenceBadgeStyleConfig? c) {

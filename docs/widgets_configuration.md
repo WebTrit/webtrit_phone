@@ -183,6 +183,12 @@ smart badges, and registration status markers.
 - **Loading overlay** — loader visibility, padding, stroke width.
 - **Smart indicator** — top-left badge with background color, icon, and size factor.
 - **Registered badge** — bottom-right badge with colors for registered/unregistered and size factor.
+- **Name colors** — pseudorandom, name-derived colors for avatars without a photo:
+    - **enabled** — when `true` (default), the circle background and initials color are derived
+      deterministically from the displayed name, so the same contact/chat/group always gets the
+      same color; set to `false` to keep the static `backgroundColor` / `initialsTextStyle.color`.
+    - **palette** — optional list of hex colors to pick from; when `null` or empty the color is
+      generated from the name hash (unbounded number of hues, tuned per light/dark theme).
 
 **Example:**
 
@@ -227,6 +233,10 @@ smart badges, and registration status markers.
       "registeredColor": null,
       "unregisteredColor": null,
       "sizeFactor": 0.2
+    },
+    "nameColors": {
+      "enabled": true,
+      "palette": null
     }
   }
 }

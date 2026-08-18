@@ -28,6 +28,8 @@ class CallScreenScreenshot extends StatefulWidget {
 }
 
 class _CallScreenScreenshotState extends State<CallScreenScreenshot> {
+  final _contactResolver = MockContactResolver(MockContactsRepository());
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +52,7 @@ class _CallScreenScreenshotState extends State<CallScreenScreenshot> {
                 ),
               ],
               child: CallScreen(
+                contactResolver: _contactResolver,
                 localePlaceholderBuilder: (context) =>
                     Image.network(widget.localePlaceholderImageUrl, fit: BoxFit.fitHeight),
                 remotePlaceholderBuilder: (context) =>

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -184,12 +186,14 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Stack(
       children: [
         list(),
         Positioned(top: MediaQuery.of(context).padding.top, left: 0, right: 0, child: const MessagingStateBar()),
         Positioned(
-          bottom: MediaQuery.of(context).padding.bottom,
+          bottom: 0,
           left: 0,
           right: 0,
           child: Column(
@@ -200,7 +204,20 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
                 child: ScrollToBottomButton(scrolledAway, scrollToBottom),
               ),
               const SizedBox(height: 24),
-              field(),
+              ClipRRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Column(
+                    children: [
+                      field(),
+                      Container(
+                        height: MediaQuery.of(context).padding.bottom,
+                        color: colorScheme.surface.withAlpha(200),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -225,7 +242,7 @@ class _ChatMessageListViewState extends State<ChatMessageListView> {
           TypingIndicator(userId: widget.userId, typingUsers: context.watch<ChatTypingCubit>().state),
           ...viewEntries.map((entry) {
             if (entry is _MessageViewEntry) {
-              return FadeIn(
+              return SizedBox(
                 key: Key(entry.message?.idKey ?? entry.outboxMessage!.idKey),
                 child: ChatMessageView(
                   userId: widget.userId,

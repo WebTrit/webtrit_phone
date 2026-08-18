@@ -112,15 +112,30 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     );
   }
 
+  /// Name-derived background, or null when disabled / not applicable (photo shown, no name).
+  Color? _nameBackgroundColor(BuildContext context) {
+    // Absent config means on: only an explicit `enabled: false` opts out.
+    final nameColors = _style.nameColors ?? const NameColorsStyle();
+    if (!nameColors.enabled) return null;
+    if (widget.thumbnail != null || widget.thumbnailUrl != null) return null;
+
+    return AvatarColors.background(widget.username, Theme.of(context).brightness, palette: nameColors.palette);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final presenceParams = PresenceViewParams.of(context);
+    final nameBackgroundColor = _nameBackgroundColor(context);
 
     return Container(
       width: _diameter,
       height: _diameter,
-      decoration: BoxDecoration(shape: BoxShape.circle, color: _style.backgroundColor ?? scheme.secondaryContainer),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: nameBackgroundColor ?? _style.backgroundColor ?? scheme.secondaryContainer,
+      ),
       child: Stack(
         alignment: Alignment.center,
         fit: StackFit.loose,
@@ -132,6 +147,14 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
               switchInCurve: Curves.easeInOut,
               switchOutCurve: Curves.easeInOut,
               transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
+              // The default layout builder stacks the children loosely, which lets an image
+              // size itself to its intrinsic pixels and float in the middle of the circle
+              // instead of covering it; expand so the content always fills the avatar.
+              layoutBuilder: (currentChild, previousChildren) => Stack(
+                fit: StackFit.expand,
+                alignment: Alignment.center,
+                children: [...previousChildren, ?currentChild],
+              ),
               child: _buildAvatarContent(_diameter, _style),
             ),
           ),
@@ -208,7 +231,11 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   Widget _placeholder(double diameter, LeadingAvatarStyle style) {
     final username = widget.username;
     final icon = style.placeholderIcon ?? widget.placeholderIcon;
-    final color = style.initialsTextStyle?.color;
+    final brightness = Theme.of(context).brightness;
+    final nameBackgroundColor = _nameBackgroundColor(context);
+    final color = nameBackgroundColor != null
+        ? AvatarColors.foreground(nameBackgroundColor, brightness)
+        : style.initialsTextStyle?.color;
 
     if (username != null) {
       final defaultTs = TextStyle(fontSize: diameter * 0.35, fontWeight: FontWeight.bold);
@@ -219,7 +246,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
           softWrap: false,
           overflow: TextOverflow.fade,
           textAlign: TextAlign.center,
-          style: defaultTs.merge(style.initialsTextStyle),
+          style: defaultTs.merge(style.initialsTextStyle).copyWith(color: color),
         ),
       );
     }

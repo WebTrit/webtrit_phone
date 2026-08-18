@@ -52,6 +52,7 @@ class _AboutScreenState extends State<AboutScreen> {
     final delimiterHeight = themeData.textTheme.titleLarge!.fontSize!;
     final mediaQuery = MediaQuery.of(context);
     final topPadding = kToolbarHeight + mediaQuery.padding.top;
+    final bottomPadding = mediaQuery.padding.bottom;
 
     return ThemedScaffold(
       background: localStyle?.background,
@@ -158,6 +159,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   ),
                 ),
               ),
+              SizedBox(height: bottomPadding),
             ],
           );
         },

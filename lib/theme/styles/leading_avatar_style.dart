@@ -17,6 +17,7 @@ class LeadingAvatarStyle with Diagnosticable {
     this.smartIndicator,
     this.registeredBadge,
     this.presenceBadge,
+    this.nameColors,
   });
 
   /// Circle background; falls back to ColorScheme.secondaryContainer when null.
@@ -43,6 +44,9 @@ class LeadingAvatarStyle with Diagnosticable {
   /// Presence badge (bottom-right).
   final PresenceBadgeStyle? presenceBadge;
 
+  /// Pseudorandom, name-derived background/initials colors.
+  final NameColorsStyle? nameColors;
+
   static LeadingAvatarStyle merge(LeadingAvatarStyle? base, LeadingAvatarStyle? override) {
     if (base == null && override == null) return const LeadingAvatarStyle();
     base ??= const LeadingAvatarStyle();
@@ -60,6 +64,7 @@ class LeadingAvatarStyle with Diagnosticable {
       smartIndicator: SmartIndicatorStyle.merge(base.smartIndicator, override.smartIndicator),
       registeredBadge: RegisteredBadgeStyle.merge(base.registeredBadge, override.registeredBadge),
       presenceBadge: PresenceBadgeStyle.merge(base.presenceBadge, override.presenceBadge),
+      nameColors: NameColorsStyle.merge(base.nameColors, override.nameColors),
     );
   }
 
@@ -76,6 +81,7 @@ class LeadingAvatarStyle with Diagnosticable {
       smartIndicator: SmartIndicatorStyle.lerp(a?.smartIndicator, b?.smartIndicator, t),
       registeredBadge: RegisteredBadgeStyle.lerp(a?.registeredBadge, b?.registeredBadge, t),
       presenceBadge: PresenceBadgeStyle.lerp(a?.presenceBadge, b?.presenceBadge, t),
+      nameColors: t < 0.5 ? (a?.nameColors ?? b?.nameColors) : (b?.nameColors ?? a?.nameColors),
     );
   }
 
@@ -90,7 +96,35 @@ class LeadingAvatarStyle with Diagnosticable {
       ..add(DiagnosticsProperty<LoadingOverlayStyle?>('loadingOverlay', loadingOverlay))
       ..add(DiagnosticsProperty<SmartIndicatorStyle?>('smartIndicator', smartIndicator))
       ..add(DiagnosticsProperty<RegisteredBadgeStyle?>('registeredBadge', registeredBadge))
-      ..add(DiagnosticsProperty<PresenceBadgeStyle?>('presenceBadge', presenceBadge));
+      ..add(DiagnosticsProperty<PresenceBadgeStyle?>('presenceBadge', presenceBadge))
+      ..add(DiagnosticsProperty<NameColorsStyle?>('nameColors', nameColors));
+  }
+}
+
+/// Pseudorandom, name-derived avatar colors (see `AvatarColors`).
+class NameColorsStyle with Diagnosticable {
+  const NameColorsStyle({this.enabled = true, this.palette});
+
+  /// Whether the background/initials colors are derived from the name.
+  final bool enabled;
+
+  /// Optional fixed palette; when null/empty the color is generated from the name hash.
+  final List<Color>? palette;
+
+  static NameColorsStyle? merge(NameColorsStyle? base, NameColorsStyle? override) {
+    if (base == null && override == null) return null;
+    if (base == null) return override;
+    if (override == null) return base;
+
+    return NameColorsStyle(enabled: override.enabled, palette: override.palette ?? base.palette);
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(FlagProperty('enabled', value: enabled, ifTrue: 'enabled'))
+      ..add(IterableProperty<Color>('palette', palette));
   }
 }
 

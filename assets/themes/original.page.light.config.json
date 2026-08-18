@@ -25,8 +25,7 @@
       "systemUiOverlayStyle": {
         "statusBarIconBrightness": "dark",
         "statusBarBrightness": "light",
-        "systemNavigationBarColor": "#000000",
-        "systemNavigationBarIconBrightness": "light"
+        "systemNavigationBarIconBrightness": "dark"
       },
       "mainLogo": {
         "uri": "asset://assets/images/primary_onboarding_logo.svg",
@@ -169,8 +168,7 @@
     "systemUiOverlayStyle": {
       "statusBarIconBrightness": "dark",
       "statusBarBrightness": "light",
-      "systemNavigationBarColor": "#000000",
-      "systemNavigationBarIconBrightness": "light"
+      "systemNavigationBarIconBrightness": "dark"
     },
     "appBarStyle": {
       "backgroundColor": null,

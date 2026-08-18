@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatelessWidget {
@@ -9,6 +11,12 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: body, bottomNavigationBar: bottomNavigationBar);
+    return Scaffold(
+      extendBody: true,
+      body: body,
+      bottomNavigationBar: ClipRRect(
+        child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), child: bottomNavigationBar),
+      ),
+    );
   }
 }
