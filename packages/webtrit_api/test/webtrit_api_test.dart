@@ -861,7 +861,7 @@ void main() {
         expect(request.method, equalsIgnoringCase('post'));
         expect(request.url.toString(), equals('https://$authority/api/v1/app/push-tokens'));
         expect(request.headers['authorization'], endsWith(token));
-        expect(jsonDecode(request.body), equals({'type': 'fcm', 'value': 'push_token_value'}));
+        expect(jsonDecode(request.body), equals({'type': 'fcm', 'value': 'push_token_value', 'env': null}));
         return Response('', 200, request: request);
       }
 
@@ -870,6 +870,24 @@ void main() {
 
       expect(
         apiClient.createAppPushToken(token, AppPushToken(type: AppPushTokenType.fcm, value: 'push_token_value')),
+        completion(anything),
+      );
+    });
+
+    test('create push token carries the push environment', () {
+      Future<Response> handler(Request request) async {
+        expect(jsonDecode(request.body), equals({'type': 'apns', 'value': 'push_token_value', 'env': 'dev'}));
+        return Response('', 200, request: request);
+      }
+
+      final httpClient = MockClient(expectAsync1(handler));
+      final apiClient = WebtritApiClient.inner(Uri.https(authority), '', httpClient: httpClient);
+
+      expect(
+        apiClient.createAppPushToken(
+          token,
+          AppPushToken(type: AppPushTokenType.apns, value: 'push_token_value', env: AppPushTokenEnv.dev),
+        ),
         completion(anything),
       );
     });
