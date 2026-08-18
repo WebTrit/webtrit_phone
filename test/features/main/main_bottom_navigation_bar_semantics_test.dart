@@ -76,7 +76,15 @@ void main() {
       home: BlocProvider<UnreadCountCubit>.value(
         value: unreadCountCubit,
         child: Scaffold(
-          bottomNavigationBar: MainBottomNavigationBar(tabs: menu ?? tabs, currentIndex: currentIndex, onTap: onTap),
+          // The decorated shape is what production renders: both hosts hand
+          // the messaging badge in, so the semantics contract is asserted on
+          // the bar WITH it.
+          bottomNavigationBar: MainBottomNavigationBar(
+            tabs: menu ?? tabs,
+            currentIndex: currentIndex,
+            onTap: onTap,
+            decorateIcon: MessagingFlavorOverlay.forTab,
+          ),
         ),
       ),
     );
@@ -132,6 +140,19 @@ void main() {
     await tapViaSemantics(tester, find.bySemanticsIdentifier(contactsNavBarId));
 
     expect(tapped, 2);
+
+    handle.dispose();
+  });
+
+  testWidgets('with unread messages on screen the entry still carries its id and press', (tester) async {
+    // A zero count renders no badge at all, so only this state puts the
+    // counter glyph into the tree next to the caption and the id.
+    final handle = tester.ensureSemantics();
+    when(() => unreadCountCubit.state).thenReturn(UnreadCountState.fromCountPerChat({1: 3}, {}));
+
+    await tester.pumpWidget(wrap(onTap: (_) {}));
+
+    expectTapTargetSemantics(tester, find.bySemanticsIdentifier(messagingNavBarId), identifier: messagingNavBarId);
 
     handle.dispose();
   });

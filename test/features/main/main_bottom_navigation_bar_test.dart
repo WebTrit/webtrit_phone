@@ -66,16 +66,27 @@ void main() {
     when(() => unreadCountCubit.state).thenReturn(UnreadCountState.initial());
   });
 
-  Widget wrap({required ValueChanged<int> onTap, int currentIndex = 1, List<BottomMenuTab>? menu}) {
+  Widget wrap({
+    required ValueChanged<int> onTap,
+    int currentIndex = 1,
+    List<BottomMenuTab>? menu,
+    TabIconDecorator? decorateIcon,
+    bool provideUnreadState = true,
+  }) {
+    final scaffold = Scaffold(
+      bottomNavigationBar: MainBottomNavigationBar(
+        tabs: menu ?? tabs,
+        currentIndex: currentIndex,
+        onTap: onTap,
+        decorateIcon: decorateIcon,
+      ),
+    );
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: BlocProvider<UnreadCountCubit>.value(
-        value: unreadCountCubit,
-        child: Scaffold(
-          bottomNavigationBar: MainBottomNavigationBar(tabs: menu ?? tabs, currentIndex: currentIndex, onTap: onTap),
-        ),
-      ),
+      home: provideUnreadState
+          ? BlocProvider<UnreadCountCubit>.value(value: unreadCountCubit, child: scaffold)
+          : scaffold,
     );
   }
 
@@ -137,39 +148,26 @@ void main() {
     // The badge used to be built into the bar, which made every host owe it
     // an UnreadCountCubit; a host that forgot one compiled clean and
     // red-screened at build time.
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Scaffold(
-          bottomNavigationBar: MainBottomNavigationBar(tabs: tabs, currentIndex: 1, onTap: (_) {}),
-        ),
-      ),
-    );
+    await tester.pumpWidget(wrap(onTap: (_) {}, provideUnreadState: false));
 
     expect(tester.takeException(), isNull);
     expect(find.byType(MessagingFlavorOverlay), findsNothing);
   });
 
   testWidgets('the injected decoration overlays exactly the messaging entry', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: BlocProvider<UnreadCountCubit>.value(
-          value: unreadCountCubit,
-          child: Scaffold(
-            bottomNavigationBar: MainBottomNavigationBar(
-              tabs: tabs,
-              currentIndex: 1,
-              onTap: (_) {},
-              decorateIcon: MessagingFlavorOverlay.forTab,
-            ),
-          ),
-        ),
-      ),
-    );
+    await tester.pumpWidget(wrap(onTap: (_) {}, decorateIcon: MessagingFlavorOverlay.forTab));
 
     expect(find.byType(MessagingFlavorOverlay), findsOneWidget);
+  });
+
+  testWidgets('the decoration without its state degrades to a bare icon, not a crash', (tester) async {
+    // A future host can copy the decoration without copying the provider; the
+    // ornament must not be able to take the navigation down.
+    await tester.pumpWidget(
+      wrap(onTap: (_) {}, decorateIcon: MessagingFlavorOverlay.forTab, provideUnreadState: false),
+    );
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(BottomNavigationBar), findsOneWidget);
   });
 }

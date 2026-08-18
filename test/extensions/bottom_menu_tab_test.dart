@@ -17,30 +17,48 @@ void main() {
       titleL10n: 'Help',
       icon: Icons.help,
     );
-    final expectations = <BottomMenuTab, Key>{
-      const FavoritesBottomMenuTab(enabled: true, initial: false, titleL10n: 'f', icon: Icons.star): favoritesNavBarKey,
+    final expectations = <BottomMenuTab, (String, Key)>{
+      const FavoritesBottomMenuTab(enabled: true, initial: false, titleL10n: 'f', icon: Icons.star): (
+        favoritesNavBarId,
+        favoritesNavBarKey,
+      ),
       const RecentsBottomMenuTab(
         supportsCallHistory: true,
         enabled: true,
         initial: false,
         titleL10n: 'r',
         icon: Icons.history,
-      ): recentsNavBarKey,
+      ): (
+        recentsNavBarId,
+        recentsNavBarKey,
+      ),
       ContactsBottomMenuTab(
         contactSourceTypes: const [],
         enabled: true,
         initial: false,
         titleL10n: 'c',
         icon: Icons.people,
-      ): contactsNavBarKey,
-      const KeypadBottomMenuTab(enabled: true, initial: true, titleL10n: 'k', icon: Icons.dialpad): keypadNavBarKey,
-      const MessagingBottomMenuTab(enabled: true, initial: false, titleL10n: 'm', icon: Icons.chat): messagingNavBarKey,
-      embedded: embeddedNavBarKey('help'),
+      ): (
+        contactsNavBarId,
+        contactsNavBarKey,
+      ),
+      const KeypadBottomMenuTab(enabled: true, initial: true, titleL10n: 'k', icon: Icons.dialpad): (
+        keypadNavBarId,
+        keypadNavBarKey,
+      ),
+      const MessagingBottomMenuTab(enabled: true, initial: false, titleL10n: 'm', icon: Icons.chat): (
+        messagingNavBarId,
+        messagingNavBarKey,
+      ),
+      embedded: (embeddedNavBarId('help'), embeddedNavBarKey('help')),
     };
 
-    for (final MapEntry(key: tab, value: expectedKey) in expectations.entries) {
+    for (final MapEntry(key: tab, value: (expectedId, expectedKey)) in expectations.entries) {
+      // The id string and the key are pinned each against its own keys.dart
+      // declaration - asserting one through the other would hold by
+      // construction and guard nothing.
+      expect(tab.navBarId, expectedId, reason: tab.titleL10n);
       expect(tab.navBarKey, expectedKey, reason: tab.titleL10n);
-      expect(Key(tab.navBarId), expectedKey, reason: tab.titleL10n);
     }
   });
 }

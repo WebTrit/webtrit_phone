@@ -28,10 +28,8 @@ class MainScreen extends StatelessWidget {
   /// Null renders the bar inert - a static preview shows it without wiring.
   final ValueChanged<int>? onTabSelected;
 
-  /// Decorates a tab's icon in the bar (badges and the like); null draws
-  /// icons bare. A host passes a decoration only when it also provides the
-  /// state that decoration reads.
-  final Widget Function(BottomMenuTab tab, Widget icon)? decorateTabIcon;
+  /// Null draws icons bare; see [TabIconDecorator].
+  final TabIconDecorator? decorateTabIcon;
 
   @override
   Widget build(BuildContext context) {

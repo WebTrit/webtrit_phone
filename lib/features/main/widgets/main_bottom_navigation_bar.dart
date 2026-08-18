@@ -5,6 +5,11 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+/// Decorates a tab's icon in the bottom navigation bar (badges and the
+/// like). A host passes one only when it also provides the state the
+/// decoration reads - the bar itself takes no part in that.
+typedef TabIconDecorator = Widget Function(BottomMenuTab tab, Widget icon);
+
 /// Bottom navigation of the main screen: one entry per configured section.
 class MainBottomNavigationBar extends StatelessWidget {
   const MainBottomNavigationBar({
@@ -22,10 +27,8 @@ class MainBottomNavigationBar extends StatelessWidget {
   /// Null renders the bar inert - a static preview shows it without wiring.
   final ValueChanged<int>? onTap;
 
-  /// Decorates an entry's icon (badges and the like); null draws icons bare.
-  /// Injected rather than built in, so a badge's state dependencies stay
-  /// with the host that owns them instead of binding every host of the bar.
-  final Widget Function(BottomMenuTab tab, Widget icon)? decorateIcon;
+  /// Null draws icons bare; see [TabIconDecorator].
+  final TabIconDecorator? decorateIcon;
 
   @override
   Widget build(BuildContext context) {
