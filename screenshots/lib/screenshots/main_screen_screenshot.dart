@@ -22,10 +22,15 @@ class MainScreenScreenshot extends StatefulWidget {
     super.key,
     this.keypadDialing = false,
     this.interactive = false,
+    this.pullableCallDialogs = const [],
   });
 
   final MainFlavor flavor;
   final Widget? title;
+
+  /// Calls active on other devices; a non-empty list puts the call pull badge
+  /// into the app bar.
+  final List<DialogInfo> pullableCallDialogs;
 
   /// When the keypad flavor is shown, pre-fill it with a dialed number and resolved contact.
   /// Ignored when [interactive] is true (the live keypad starts empty and reacts to input).
@@ -51,7 +56,7 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
     final configTabs = featureAccess?.bottomMenuConfig.tabs;
     final tabs = (configTabs != null && configTabs.length >= 2) ? configTabs : _defaultTabs(context);
 
-    return MultiProvider(
+    Widget screen = MultiProvider(
       providers: [
         // TODO(Vladislav): Replace workaround with ContactsRepository in _ContactInfoBuilderState.
         Provider<ContactsRepository>(create: (c) => MockContactsRepository()),
@@ -62,7 +67,7 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
           builder: (context) => MainScreen(
             body: AppBarParams(
               systemNotificationsEnabled: true,
-              pullableCallDialogs: const [],
+              pullableCallDialogs: widget.pullableCallDialogs,
               child: _buildFlavorWidget(context, _flavor, featureAccess),
             ),
             bottomNavigationBar: _buildBottomNavigationBar(context, tabs),
@@ -70,13 +75,27 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
         ),
       ),
     );
+
+    if (widget.pullableCallDialogs.isNotEmpty) {
+      // The call pull badge wobbles on a timer, which a snapshot cannot capture
+      // deterministically; the badge holds still when animations are disabled.
+      screen = MediaQuery(data: MediaQuery.of(context).copyWith(disableAnimations: true), child: screen);
+    }
+
+    return screen;
   }
 
   List<BlocProvider> _createMockBlocProviders() {
     return [
       BlocProvider<CallBloc>(create: (_) => MockCallBloc.mainScreen()),
       BlocProvider<CallRoutingCubit>(create: (_) => MockCallRoutingCubit.initial()),
-      BlocProvider<SessionStatusCubit>(create: (_) => MockSessionStatusCubit.initial()),
+      // The app bar renders the call pull badge only on a ready session, so the
+      // badge preview needs a connected one; the other states keep the default
+      // "Connecting..." look.
+      BlocProvider<SessionStatusCubit>(
+        create: (_) =>
+            widget.pullableCallDialogs.isNotEmpty ? MockSessionStatusCubit.ready() : MockSessionStatusCubit.initial(),
+      ),
       BlocProvider<UserInfoCubit>(create: (_) => MockUserInfoCubit.initial()),
       BlocProvider<SystemNotificationsCounterCubit>(create: (_) => MockSystemNotificationCounterCubit.withDefaults()),
       BlocProvider<MicrophoneStatusBloc>(create: (_) => MockMicrophoneStatusBloc.initial(isGranted: true)),

@@ -5,6 +5,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 
+import 'package:screenshots/data/data.dart';
 import 'package:screenshots/screenshots/screenshots.dart';
 import 'package:screenshots/widgets/widgets.dart';
 
@@ -58,6 +59,14 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
       ScreenshotApp(
         appBloc: appBloc,
         child: MainScreenScreenshot(MainFlavor.recents, Text(EnvironmentConfig.APP_NAME)),
+      ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: MainScreenScreenshot(
+          MainFlavor.recents,
+          Text(EnvironmentConfig.APP_NAME),
+          pullableCallDialogs: dPullableCallDialogs,
+        ),
       ),
       ScreenshotApp(appBloc: appBloc, child: MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME))),
       ScreenshotApp(
