@@ -161,6 +161,9 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
+    // Pins the session to one configuration: everything below reads the
+    // mount-time snapshot instead of the reactive stream (see
+    // [_sessionFeatureAccess]).
     return Provider<FeatureAccess>.value(
       value: _sessionFeatureAccess,
       child: MainShellRepositories(
