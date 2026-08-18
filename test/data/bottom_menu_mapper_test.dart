@@ -132,4 +132,62 @@ void main() {
       expect(tab!.contactSourceTypes, [ContactSourceType.external]);
     });
   });
+
+  // Two entries of one identity render with one widget key and bring the bar
+  // down with a duplicate-key crash, so a config that repeats a section must
+  // keep only its first entry.
+  group('BottomMenuMapper duplicate sections', () {
+    BottomMenuConfig mapTabs(List<BottomMenuTabScheme> tabs) {
+      return BottomMenuMapper.map(
+        AppConfig(
+          mainConfig: AppConfigMain(bottomMenu: AppConfigBottomMenu(tabs: tabs)),
+        ),
+        emptyEmbedded,
+        CoreSupportImpl(const []),
+        const FeatureOverrides(),
+      );
+    }
+
+    BottomMenuTabScheme embedded(String id, {String? title}) {
+      return BottomMenuTabScheme.embedded(titleL10n: title ?? id, icon: '0xe2ce', embeddedResourceId: id);
+    }
+
+    test('a repeated embedded id keeps only its first entry', () {
+      final config = mapTabs([
+        const BottomMenuTabScheme.keypad(titleL10n: 'keypad', icon: '0xe1ce'),
+        embedded('help', title: 'first'),
+        embedded('help', title: 'second'),
+      ]);
+
+      final embeddedTabs = config.embeddedTabs;
+      expect(embeddedTabs, hasLength(1));
+      expect(embeddedTabs.single.titleL10n, 'first');
+    });
+
+    test('embedded sections with distinct ids all stay', () {
+      final config = mapTabs([embedded('help'), embedded('shop')]);
+
+      expect(config.embeddedTabs.map((tab) => tab.id), ['help', 'shop']);
+    });
+
+    test('a repeated fixed section keeps only its first entry', () {
+      final config = mapTabs([
+        const BottomMenuTabScheme.keypad(titleL10n: 'first', icon: '0xe1ce'),
+        const BottomMenuTabScheme.keypad(titleL10n: 'second', icon: '0xe1ce'),
+        embedded('help'),
+      ]);
+
+      expect(config.tabs, hasLength(2));
+      expect(config.getTabEnabled<KeypadBottomMenuTab>()!.titleL10n, 'first');
+    });
+
+    test('an embedded id spelled like a fixed kind is not mistaken for it', () {
+      final config = mapTabs([
+        const BottomMenuTabScheme.keypad(titleL10n: 'keypad', icon: '0xe1ce'),
+        embedded('keypad'),
+      ]);
+
+      expect(config.tabs, hasLength(2));
+    });
+  });
 }

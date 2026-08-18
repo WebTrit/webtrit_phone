@@ -236,10 +236,21 @@ abstract final class BottomMenuMapper {
       throw Exception('Bottom menu configuration is missing or empty');
     }
 
+    final seenIdentities = <Object>{};
     final bottomMenuTabs = bottomMenu.tabs
         .where((tab) => tab.enabled)
         .map((tab) => _createBottomMenuTab(tab, embeddedConfig, coreSupport, overrides))
         .where((tab) => !(tab is ContactsBottomMenuTab && tab.contactSourceTypes.isEmpty))
+        // Two entries of one identity would render with one widget key and
+        // bring the bar down with a duplicate-key crash: fixed sections are
+        // keyed by their kind, embedded ones by the id they are configured
+        // with. A config that repeats a section keeps only its first entry.
+        .where(
+          (tab) => seenIdentities.add(switch (tab) {
+            EmbeddedBottomMenuTab(:final id) => id,
+            _ => tab.flavor,
+          }),
+        )
         .toList();
 
     if (bottomMenuTabs.isEmpty) {
