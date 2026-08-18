@@ -8,7 +8,12 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:screenshots/mocks/mocks.dart';
 
 class PresenceSettingsScreenScreenshot extends StatefulWidget {
-  const PresenceSettingsScreenScreenshot({super.key});
+  const PresenceSettingsScreenScreenshot({super.key, this.interactive = false});
+
+  /// Wires the real cubit over an in-memory store, so the option explanations,
+  /// the status fields and the icon picker respond to input instead of being a
+  /// single static snapshot.
+  final bool interactive;
 
   @override
   State<PresenceSettingsScreenScreenshot> createState() => _PresenceSettingsScreenScreenshotState();
@@ -27,7 +32,9 @@ class _PresenceSettingsScreenScreenshotState extends State<PresenceSettingsScree
         PageRouteBuilder(
           pageBuilder: (context, _, _) {
             return BlocProvider<PresenceSettingsCubit>(
-              create: (_) => MockPresenceSettingsCubit.initial(),
+              create: (_) => widget.interactive
+                  ? PresenceSettingsCubit(MockPresenceSettingsRepository())
+                  : MockPresenceSettingsCubit.initial(),
               child: const PresenceSettingsScreen(),
             );
           },
