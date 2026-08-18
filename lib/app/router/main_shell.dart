@@ -265,6 +265,14 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
             localDatasource: context.read<UserLocalDatasource>(),
           ),
         ),
+        // Resolves a phone number to a contact (and its display name) for the call
+        // and keypad screens; previews override it with their own resolver.
+        RepositoryProvider<ContactResolver>(
+          create: (context) => DefaultContactResolver(
+            contactsRepository: context.read<ContactsRepository>(),
+            userRepository: context.read<UserRepository>(),
+          ),
+        ),
         RepositoryProvider<CallerIdSettingsRepository>(
           create: (context) {
             final core = context.read<SystemInfoRepository>().getLocalSystemInfo().core;
@@ -535,12 +543,8 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
                         peerConnectionConfig,
                         userMediaBuilder,
                       );
-                      // Initialize contact resolver with app-specific contact repository
                       // Used to resolve the contact (and its display name) of the caller
-                      final contactResolver = DefaultContactResolver(
-                        contactsRepository: context.read<ContactsRepository>(),
-                        userRepository: context.read<UserRepository>(),
-                      );
+                      final contactResolver = context.read<ContactResolver>();
 
                       // Try to get CDRs sync worker to trigger immediate sync after call ends
                       // If CDRs feature is disabled, the worker will be null and no sync will be performed
