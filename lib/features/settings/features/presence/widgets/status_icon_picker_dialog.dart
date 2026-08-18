@@ -30,7 +30,12 @@ class StatusIconPickerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     // The picker package defaults every surface to its own light palette, so
     // without this the sheet stays white inside a dark theme.
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    // The theme draws the tab indicator as a filled pill, so the selected
+    // icon has to use the color the theme pairs with it - the same primary as
+    // the pill would dissolve the icon completely.
+    final selectedTabColor = theme.tabBarTheme.labelColor ?? colorScheme.onPrimary;
 
     return Padding(
       // Keeps the sheet above the keyboard while the icon search is typing.
@@ -45,7 +50,7 @@ class StatusIconPickerDialog extends StatelessWidget {
               tabBarHeight: _categoryTabSize,
               backgroundColor: colorScheme.surface,
               iconColor: colorScheme.onSurfaceVariant,
-              iconColorSelected: colorScheme.primary,
+              iconColorSelected: selectedTabColor,
               indicatorColor: colorScheme.primary,
               dividerColor: colorScheme.outlineVariant,
               customCategoryView: (config, state, tabController, pageController) =>
