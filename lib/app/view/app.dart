@@ -109,7 +109,7 @@ class _AppState extends State<App> {
         registerStatusRepository: context.read<RegisterStatusRepository>(),
         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
         queuedTerminationRequestsRepository: context.read<QueuedTerminationRequestsRepository>(),
-        activeMainFlavorRepository: context.read<ActiveMainFlavorRepository>(),
+        activeMainTabRepository: context.read<ActiveMainTabRepository>(),
         activeRecentsVisibilityFilterRepository: context.read<ActiveRecentsVisibilityFilterRepository>(),
         activeContactSourceTypeRepository: context.read<ActiveContactSourceTypeRepository>(),
         audioProcessingSettingsRepository: context.read<AudioProcessingSettingsRepository>(),
@@ -128,7 +128,7 @@ class _AppState extends State<App> {
 
     final initialTabResolver = BottomMenuInitialTabResolver(
       config: featureAccess.bottomMenuConfig,
-      repository: context.read<ActiveMainFlavorRepository>(),
+      repository: context.read<ActiveMainTabRepository>(),
     );
 
     appRouter = AppRouter(
@@ -182,7 +182,7 @@ class _AppState extends State<App> {
 
     final initialTabResolver = BottomMenuInitialTabResolver(
       config: featureAccess.bottomMenuConfig,
-      repository: context.read<ActiveMainFlavorRepository>(),
+      repository: context.read<ActiveMainTabRepository>(),
     );
 
     appRouter.updateConfiguration(

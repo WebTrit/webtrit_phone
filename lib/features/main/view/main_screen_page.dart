@@ -121,8 +121,9 @@ abstract final class BottomMenuTabHandler {
   }) {
     final tappedTab = tabs[index];
 
-    // Persist the selection to the repository
-    context.read<ActiveMainFlavorRepository>().setActiveMainFlavor(tappedTab.flavor);
+    // Persist the selection by the tab's path: with several embedded sections
+    // in the menu the kind alone cannot say which of them to restore.
+    context.read<ActiveMainTabRepository>().setActiveTabPath(tappedTab.routePath);
 
     // Update the actual UI state via AutoRoute
     tabsRouter.setActiveIndex(index);
