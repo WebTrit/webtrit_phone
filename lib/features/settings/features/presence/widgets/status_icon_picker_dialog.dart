@@ -19,22 +19,41 @@ class StatusIconPickerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // The picker package defaults every surface to its own light palette, so
+    // without this the sheet stays white inside a dark theme.
+    final colorScheme = Theme.of(context).colorScheme;
+
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
       child: Dialog(
         shadowColor: Colors.black,
         child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.white),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: colorScheme.surface),
           clipBehavior: Clip.hardEdge,
           width: 300,
           height: 300,
           child: EmojiPicker(
             config: Config(
-              emojiViewConfig: const EmojiViewConfig(backgroundColor: Colors.white, emojiSizeMax: 20),
+              emojiViewConfig: EmojiViewConfig(backgroundColor: colorScheme.surface, emojiSizeMax: 20),
               categoryViewConfig: CategoryViewConfig(
                 tabBarHeight: _categoryTabSize,
+                backgroundColor: colorScheme.surface,
+                iconColor: colorScheme.onSurfaceVariant,
+                iconColorSelected: colorScheme.primary,
+                indicatorColor: colorScheme.primary,
+                dividerColor: colorScheme.outlineVariant,
                 customCategoryView: (config, state, tabController, pageController) =>
                     StatusIconCategoryView(config, state, tabController, pageController),
+              ),
+              searchViewConfig: SearchViewConfig(
+                backgroundColor: colorScheme.surface,
+                buttonIconColor: colorScheme.onSurfaceVariant,
+                inputTextStyle: TextStyle(color: colorScheme.onSurface),
+                hintTextStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+              ),
+              skinToneConfig: SkinToneConfig(
+                dialogBackgroundColor: colorScheme.surfaceContainerHigh,
+                indicatorColor: colorScheme.onSurfaceVariant,
               ),
               // The bar along the bottom of the picker offers a backspace
               // button wired to a text field this sheet does not have, so
