@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -7,14 +5,25 @@ import 'package:flutter/material.dart';
 /// than this cannot be hit reliably.
 const double _categoryTabSize = kMinInteractiveDimension;
 
-/// The sheet that picks the icon shown next to the presence status.
+/// Height of the picker itself; the sheet takes no more than this.
+const double _pickerHeight = 300;
+
+/// The modal bottom sheet that picks the icon shown next to the presence
+/// status.
 ///
 /// Closes with the chosen emoji, or with nothing when it is dismissed.
 class StatusIconPickerDialog extends StatelessWidget {
   const StatusIconPickerDialog({super.key});
 
   static Future<String?> show(BuildContext context) {
-    return showDialog<String>(context: context, builder: (context) => const StatusIconPickerDialog());
+    return showModalBottomSheet<String>(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      clipBehavior: Clip.hardEdge,
+      builder: (context) => const StatusIconPickerDialog(),
+    );
   }
 
   @override
@@ -23,46 +32,42 @@ class StatusIconPickerDialog extends StatelessWidget {
     // without this the sheet stays white inside a dark theme.
     final colorScheme = Theme.of(context).colorScheme;
 
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-      child: Dialog(
-        shadowColor: Colors.black,
-        child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: colorScheme.surface),
-          clipBehavior: Clip.hardEdge,
-          width: 300,
-          height: 300,
-          child: EmojiPicker(
-            config: Config(
-              emojiViewConfig: EmojiViewConfig(backgroundColor: colorScheme.surface, emojiSizeMax: 20),
-              categoryViewConfig: CategoryViewConfig(
-                tabBarHeight: _categoryTabSize,
-                backgroundColor: colorScheme.surface,
-                iconColor: colorScheme.onSurfaceVariant,
-                iconColorSelected: colorScheme.primary,
-                indicatorColor: colorScheme.primary,
-                dividerColor: colorScheme.outlineVariant,
-                customCategoryView: (config, state, tabController, pageController) =>
-                    StatusIconCategoryView(config, state, tabController, pageController),
-              ),
-              searchViewConfig: SearchViewConfig(
-                backgroundColor: colorScheme.surface,
-                buttonIconColor: colorScheme.onSurfaceVariant,
-                inputTextStyle: TextStyle(color: colorScheme.onSurface),
-                hintTextStyle: TextStyle(color: colorScheme.onSurfaceVariant),
-              ),
-              skinToneConfig: SkinToneConfig(
-                dialogBackgroundColor: colorScheme.surfaceContainerHigh,
-                indicatorColor: colorScheme.onSurfaceVariant,
-              ),
-              // The bar along the bottom of the picker offers a backspace
-              // button wired to a text field this sheet does not have, so
-              // pressing it does nothing; the way to search is offered next to
-              // the categories instead.
-              bottomActionBarConfig: const BottomActionBarConfig(enabled: false),
+    return Padding(
+      // Keeps the sheet above the keyboard while the icon search is typing.
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      child: SizedBox(
+        width: double.infinity,
+        height: _pickerHeight,
+        child: EmojiPicker(
+          config: Config(
+            emojiViewConfig: EmojiViewConfig(backgroundColor: colorScheme.surface, emojiSizeMax: 20),
+            categoryViewConfig: CategoryViewConfig(
+              tabBarHeight: _categoryTabSize,
+              backgroundColor: colorScheme.surface,
+              iconColor: colorScheme.onSurfaceVariant,
+              iconColorSelected: colorScheme.primary,
+              indicatorColor: colorScheme.primary,
+              dividerColor: colorScheme.outlineVariant,
+              customCategoryView: (config, state, tabController, pageController) =>
+                  StatusIconCategoryView(config, state, tabController, pageController),
             ),
-            onEmojiSelected: (category, emoji) => Navigator.pop(context, emoji.emoji),
+            searchViewConfig: SearchViewConfig(
+              backgroundColor: colorScheme.surface,
+              buttonIconColor: colorScheme.onSurfaceVariant,
+              inputTextStyle: TextStyle(color: colorScheme.onSurface),
+              hintTextStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+            ),
+            skinToneConfig: SkinToneConfig(
+              dialogBackgroundColor: colorScheme.surfaceContainerHigh,
+              indicatorColor: colorScheme.onSurfaceVariant,
+            ),
+            // The bar along the bottom of the picker offers a backspace
+            // button wired to a text field this sheet does not have, so
+            // pressing it does nothing; the way to search is offered next to
+            // the categories instead.
+            bottomActionBarConfig: const BottomActionBarConfig(enabled: false),
           ),
+          onEmojiSelected: (category, emoji) => Navigator.pop(context, emoji.emoji),
         ),
       ),
     );
