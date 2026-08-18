@@ -9,7 +9,10 @@ extension LoginTypeLoginSegmentKey on MainFlavor {
       MainFlavor.contacts => const Key('contactsNavBarKey'),
       MainFlavor.keypad => const Key('keypadNavBarKey'),
       MainFlavor.messaging => const Key('messagingNavBarKey'),
-      MainFlavor.embedded => const Key('embeddedNavBarKey'),
+      // An embedded tab carries no key of its kind: several sections can be
+      // configured at once, and each entry is keyed by its section id via
+      // embeddedNavBarKey(id) in lib/app/keys.dart.
+      MainFlavor.embedded => throw UnsupportedError('embedded tabs are keyed by section id: use embeddedNavBarKey(id)'),
     };
   }
 }

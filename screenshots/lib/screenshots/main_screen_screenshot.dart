@@ -64,14 +64,19 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
       child: MultiBlocProvider(
         providers: _createMockBlocProviders(),
         child: Builder(
-          builder: (context) => MainScreen(
-            body: AppBarParams(
-              systemNotificationsEnabled: true,
-              pullableCallDialogs: widget.pullableCallDialogs,
-              child: _buildFlavorWidget(context, _flavor, featureAccess),
-            ),
-            bottomNavigationBar: _buildBottomNavigationBar(context, tabs),
-          ),
+          builder: (context) {
+            final selectedIndex = tabs.indexWhere((tab) => tab.flavor == _flavor);
+            return MainScreen(
+              body: AppBarParams(
+                systemNotificationsEnabled: true,
+                pullableCallDialogs: widget.pullableCallDialogs,
+                child: _buildFlavorWidget(context, _flavor, featureAccess),
+              ),
+              tabs: tabs,
+              currentIndex: selectedIndex < 0 ? 0 : selectedIndex,
+              onTabSelected: widget.interactive ? (index) => _selectTab(tabs[index].flavor) : null,
+            );
+          },
         ),
       ),
     );
@@ -99,6 +104,14 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
       BlocProvider<UserInfoCubit>(create: (_) => MockUserInfoCubit.initial()),
       BlocProvider<SystemNotificationsCounterCubit>(create: (_) => MockSystemNotificationCounterCubit.withDefaults()),
       BlocProvider<MicrophoneStatusBloc>(create: (_) => MockMicrophoneStatusBloc.initial(isGranted: true)),
+      // One unread-count cubit serves both the bar's badge and the messaging
+      // body, the way production provides it; the messaging preview carries
+      // real counts, every other one stays badge-free.
+      BlocProvider<UnreadCountCubit>(
+        create: (_) => widget.flavor == MainFlavor.messaging
+            ? MockUnreadCountCubit.withUnreadMessages()
+            : MockUnreadCountCubit.initial(),
+      ),
     ];
   }
 
@@ -137,23 +150,6 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
         icon: Icons.messenger_outline,
       ),
     ];
-  }
-
-  BottomNavigationBar _buildBottomNavigationBar(BuildContext context, List<BottomMenuTab> tabs) {
-    final textTheme = Theme.of(context).textTheme;
-
-    final selectedIndex = tabs.indexWhere((tab) => tab.flavor == _flavor);
-
-    return BottomNavigationBar(
-      currentIndex: selectedIndex < 0 ? 0 : selectedIndex,
-      type: BottomNavigationBarType.fixed,
-      selectedLabelStyle: textTheme.bodySmall,
-      unselectedLabelStyle: textTheme.bodySmall,
-      onTap: widget.interactive ? (index) => _selectTab(tabs[index].flavor) : null,
-      items: tabs
-          .map((tab) => BottomNavigationBarItem(icon: Icon(tab.icon), label: context.parseL10n(tab.titleL10n)))
-          .toList(),
-    );
   }
 
   void _selectTab(MainFlavor flavor) {
@@ -248,7 +244,6 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
             BlocProvider<MessagingBloc>(create: (_) => MockMessagingBloc.initial()),
             BlocProvider<ChatConversationsCubit>(create: (_) => MockChatConversationsCubit.withMockData()),
             BlocProvider<SmsConversationsCubit>(create: (_) => MockSmsConversationsCubit.withConversations()),
-            BlocProvider<UnreadCountCubit>(create: (_) => MockUnreadCountCubit.withUnreadMessages()),
           ],
           child: ConversationsScreen(
             title: Text(EnvironmentConfig.APP_NAME),

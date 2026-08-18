@@ -6,9 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -20,7 +18,6 @@ class MainScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final mainScreenRouteStateRepository = context.read<MainScreenRouteStateRepository>();
 
     final featureAccess = context.read<FeatureAccess>();
@@ -43,7 +40,11 @@ class MainScreenPage extends StatelessWidget {
 
         if (callToActionsEnabled) {
           final isRouteActive = context.router.isRouteActive(MainScreenPageRoute.name);
-          final flavor = MainFlavor.values[tabsRouter.activeIndex];
+          // The flavor belongs to the active tab, not to the position: the tab
+          // set is configured per install, so an index into the enum points at
+          // the wrong flavor and walks off it once more tabs are configured
+          // than the enum has values.
+          final flavor = tabs[tabsRouter.activeIndex].flavor;
 
           context.read<CallToActionsCubit>()
             ..getActions(flavor)
@@ -55,23 +56,13 @@ class MainScreenPage extends StatelessWidget {
         return bottomMenuManager.tabs.length > 1
             ? MainScreen(
                 body: child,
-                bottomNavigationBar: BottomNavigationBar(
-                  elevation: 0,
-                  backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor?.withAlpha(200),
-                  useLegacyColorScheme: false,
-                  enableFeedback: true,
-                  type: BottomNavigationBarType.fixed,
-                  selectedLabelStyle: theme.textTheme.bodySmall,
-                  unselectedLabelStyle: theme.textTheme.bodySmall,
-                  // Be aware to use activeIndex from tabsRouter, not from bottomMenuManager
-                  // to handle navigation changes correctly, especially when the user navigates by url.
-                  // e.g router.navigate(const MainScreenPageRoute(['favorites']));
-                  currentIndex: tabsRouter.activeIndex,
-                  items: _buildNavBarItems(context, tabs),
-                  onTap: (index) =>
-                      BottomMenuTabHandler.handleTap(context, index: index, tabs: tabs, tabsRouter: tabsRouter),
-                  // items: navBarItems,
-                ),
+                tabs: tabs,
+                // Be aware to use activeIndex from tabsRouter, not from bottomMenuManager
+                // to handle navigation changes correctly, especially when the user navigates by url.
+                // e.g router.navigate(const MainScreenPageRoute(['favorites']));
+                currentIndex: tabsRouter.activeIndex,
+                onTabSelected: (index) =>
+                    BottomMenuTabHandler.handleTap(context, index: index, tabs: tabs, tabsRouter: tabsRouter),
               )
             : child;
       },
@@ -115,16 +106,6 @@ class MainScreenPage extends StatelessWidget {
         case EmbeddedBottomMenuTab():
           return EmbeddedTabPageRoute(id: tab.id);
       }
-    }).toList();
-  }
-
-  List<BottomNavigationBarItem> _buildNavBarItems(BuildContext context, List<BottomMenuTab> tabs) {
-    return tabs.map((tab) {
-      final flavor = tab.flavor;
-      Widget icon = Icon(tab.icon);
-      String label = context.parseL10n(tab.titleL10n);
-      if (flavor == MainFlavor.messaging) icon = MessagingFlavorOverlay(child: icon);
-      return BottomNavigationBarItem(key: flavor.toNavBarKey(), icon: icon, label: label);
     }).toList();
   }
 }
