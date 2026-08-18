@@ -4,7 +4,7 @@ Which check to run for a given change, what each one costs, and the flags a buil
 Written to stop the common waste pattern: launching a multi-minute build, having it fail on a
 known-mandatory flag, and launching it again.
 
-Last reviewed: 2026-08-17
+Last reviewed: 2026-08-18
 
 For build/run commands, flavors, signing and SDK pinning see [Build & Development](build.md).
 For what works on web and the web-specific dart-defines see [Flutter web support](web.md).
@@ -61,6 +61,46 @@ What makes this expensive:
 The `melos run build:*` and `fastlane:*` scripts already pass both flags (`pubspec.yaml`,
 `tool/scripts/browserstack_upload.sh`). A hand-written `flutter build ...` command is the only
 place they go missing - prefer the melos script.
+
+Android builds need one more flag on top of these - see the next section.
+
+## Android builds and flavors
+
+Android declares two flavor dimensions (`deeplinks` x `smsReceiver`,
+`android/app/build.gradle`), so every `flutter build apk` / `appbundle` needs a combined
+`--flavor` - one value per dimension, concatenated:
+
+| Dart define (`dart_define.json`)     | Value           | Flavor part           |
+|--------------------------------------|-----------------|-----------------------|
+| `WEBTRIT_APP_LINK_DOMAIN`            | non-empty       | `deeplinks`           |
+|                                      | empty/missing   | `deeplinksDisabled`   |
+| `WEBTRIT_CALL_TRIGGER_MECHANISM_SMS` | `"true"`        | `smsReceiver`         |
+|                                      | anything else   | `smsReceiverDisabled` |
+
+`melos run build:apk` / `build:appbundle` resolve the flavor automatically from
+`dart_define.json` (`tool/scripts/android_flavor.sh`, same rule as `makefile.shared`) - prefer
+them. A hand-typed command must pass the flag itself:
+
+```bash
+flutter build apk --debug --flavor deeplinkssmsReceiverDisabled \
+  --dart-define-from-file=dart_define.json --no-tree-shake-icons
+```
+
+What a missing `--flavor` costs: Gradle assembles ALL four flavor combinations (measured 569 s
+for a debug build) and the Flutter tool then fails with the misleading
+
+```
+Gradle build failed to produce an .apk file. It's likely that this file was generated
+under .../build, but the tool couldn't find it.
+```
+
+The build actually succeeded - all four APKs are in `build/app/outputs/flutter-apk/` under
+flavor-suffixed names (e.g. `app-deeplinkssmsreceiver-debug.apk`). Take the one you need from
+there instead of re-running the build.
+
+The "flavor is selected automatically" note in the `WEBTRIT_APP_LINK_DOMAIN` dart-define
+description refers to the `makefile.shared` build path (Makefile/fastlane), not to a plain
+`flutter build`. Flavor background: [flavors.md](flavors.md).
 
 ## Web builds
 

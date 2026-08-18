@@ -381,12 +381,12 @@ melos:
     # ===========================
 
     build:apk:
-      description: Build Android APK. Set FLUTTER_FLAGS for extra flags (e.g. --release).
-      run: flutter build apk --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
+      description: Build Android APK. Flavor is resolved from dart_define.json. Set FLUTTER_FLAGS for extra flags (e.g. --release).
+      run: flutter build apk --flavor "$(tool/scripts/android_flavor.sh)" --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
 
     build:appbundle:
-      description: Build Android App Bundle. Set FLUTTER_FLAGS for extra flags.
-      run: flutter build appbundle --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
+      description: Build Android App Bundle. Flavor is resolved from dart_define.json. Set FLUTTER_FLAGS for extra flags.
+      run: flutter build appbundle --flavor "$(tool/scripts/android_flavor.sh)" --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
 
     build:ios:
       description: Build iOS app. Set FLUTTER_FLAGS for extra flags (e.g. --release --no-codesign).
