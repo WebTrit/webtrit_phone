@@ -56,8 +56,10 @@ class _MainScreenPageState extends State<MainScreenPage> {
           // The flavor belongs to the active tab, not to the position: the tab
           // set is configured per install, so an index into the enum points at
           // the wrong flavor and walks off it once more tabs are configured
-          // than the enum has values.
-          final flavor = tabs[tabsRouter.activeIndex].flavor;
+          // than the enum has values. Looked up softly: a configuration
+          // reload can shrink the tab set while the router still reports the
+          // old index for a frame, and the cubit accepts a null flavor.
+          final flavor = tabs.elementAtOrNull(tabsRouter.activeIndex)?.flavor;
 
           context.read<CallToActionsCubit>()
             ..getActions(flavor)
@@ -73,7 +75,9 @@ class _MainScreenPageState extends State<MainScreenPage> {
                 // Be aware to use activeIndex from tabsRouter, not from bottomMenuManager
                 // to handle navigation changes correctly, especially when the user navigates by url.
                 // e.g router.navigate(const MainScreenPageRoute(['favorites']));
-                currentIndex: tabsRouter.activeIndex,
+                // Clamped for the same one-frame window as the flavor above:
+                // the bar asserts its index is within the entries it draws.
+                currentIndex: tabsRouter.activeIndex.clamp(0, tabs.length - 1),
                 onTabSelected: (index) =>
                     BottomMenuTabHandler.handleTap(context, index: index, tabs: tabs, tabsRouter: tabsRouter),
               )

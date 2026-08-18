@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
@@ -236,21 +237,25 @@ abstract final class BottomMenuMapper {
       throw Exception('Bottom menu configuration is missing or empty');
     }
 
-    final seenIdentities = <Object>{};
+    final seenIdentities = <String>{};
     final bottomMenuTabs = bottomMenu.tabs
         .where((tab) => tab.enabled)
         .map((tab) => _createBottomMenuTab(tab, embeddedConfig, coreSupport, overrides))
         .where((tab) => !(tab is ContactsBottomMenuTab && tab.contactSourceTypes.isEmpty))
         // Two entries of one identity would render with one widget key and
-        // bring the bar down with a duplicate-key crash: fixed sections are
-        // keyed by their kind, embedded ones by the id they are configured
-        // with. A config that repeats a section keeps only its first entry.
-        .where(
-          (tab) => seenIdentities.add(switch (tab) {
-            EmbeddedBottomMenuTab(:final id) => id,
-            _ => tab.flavor,
-          }),
-        )
+        // bring the bar down with a duplicate-key crash. A config that
+        // repeats a section keeps only its first entry, every property of
+        // the dropped one included - a duplicate carrying the initial flag
+        // does not hand it to the survivor. This filter has to stay AFTER
+        // the two above: an entry they drop must not claim an identity.
+        .where((tab) {
+          final identity = _widgetIdentity(tab);
+          final first = seenIdentities.add(identity);
+          if (!first) {
+            _logger.warning('Bottom menu repeats section "$identity"; keeping only its first entry');
+          }
+          return first;
+        })
         .toList();
 
     if (bottomMenuTabs.isEmpty) {
@@ -258,6 +263,19 @@ abstract final class BottomMenuMapper {
     }
 
     return BottomMenuConfig(tabs: List.unmodifiable(bottomMenuTabs));
+  }
+
+  /// The identity the bar keys its entries by: fixed sections by their kind,
+  /// embedded ones by [embeddedNavBarId] of the configured id - the SAME
+  /// normalization the widget key applies, so two entries pass this filter
+  /// only if their keys really differ. Built on [BottomMenuTab.pathParts]
+  /// rather than on the tab's type, so a future id-carrying kind is deduped
+  /// by its id the moment it declares one.
+  static String _widgetIdentity(BottomMenuTab tab) {
+    return switch (tab.pathParts) {
+      (flavor: final flavor, embeddedId: null) => flavor,
+      (flavor: _, embeddedId: final String embeddedId) => embeddedNavBarId(embeddedId),
+    };
   }
 
   static BottomMenuTab _createBottomMenuTab(

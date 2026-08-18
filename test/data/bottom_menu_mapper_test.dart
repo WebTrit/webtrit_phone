@@ -10,31 +10,35 @@ import 'package:webtrit_phone/utils/core_support.dart';
 void main() {
   final emptyEmbedded = EmbeddedMapper.map(const []);
 
-  group('BottomMenuMapper recents call history gated by local flag AND callHistory capability', () {
-    AppConfig appConfigWithRecents({required bool supportsCallHistory}) {
-      return AppConfig(
-        mainConfig: AppConfigMain(
-          bottomMenu: AppConfigBottomMenu(
-            tabs: [
-              BottomMenuTabScheme.recents(
-                enabled: true,
-                titleL10n: 'recents',
-                icon: '0xe03a',
-                supportsCallHistory: supportsCallHistory,
-              ),
-              const BottomMenuTabScheme.keypad(enabled: true, titleL10n: 'keypad', icon: '0xe1ce'),
-            ],
-          ),
-        ),
-      );
-    }
+  BottomMenuConfig mapTabs(
+    List<BottomMenuTabScheme> tabs, {
+    List<String> flags = const [],
+    FeatureOverrides overrides = const FeatureOverrides(),
+  }) {
+    return BottomMenuMapper.map(
+      AppConfig(
+        mainConfig: AppConfigMain(bottomMenu: AppConfigBottomMenu(tabs: tabs)),
+      ),
+      emptyEmbedded,
+      CoreSupportImpl(flags),
+      overrides,
+    );
+  }
 
+  group('BottomMenuMapper recents call history gated by local flag AND callHistory capability', () {
     bool? resolvedSupportsCallHistory({required bool localFlag, required List<String> flags, bool? firebaseOverride}) {
-      final config = BottomMenuMapper.map(
-        appConfigWithRecents(supportsCallHistory: localFlag),
-        emptyEmbedded,
-        CoreSupportImpl(flags),
-        FeatureOverrides(isCallHistoryEnabled: firebaseOverride),
+      final config = mapTabs(
+        [
+          BottomMenuTabScheme.recents(
+            enabled: true,
+            titleL10n: 'recents',
+            icon: '0xe03a',
+            supportsCallHistory: localFlag,
+          ),
+          const BottomMenuTabScheme.keypad(enabled: true, titleL10n: 'keypad', icon: '0xe1ce'),
+        ],
+        flags: flags,
+        overrides: FeatureOverrides(isCallHistoryEnabled: firebaseOverride),
       );
       return config.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory;
     }
@@ -82,51 +86,45 @@ void main() {
   });
 
   group('BottomMenuMapper external contact source gating by the extensions capability', () {
-    AppConfig appConfigWithContacts({required List<String> sources}) {
-      return AppConfig(
-        mainConfig: AppConfigMain(
-          bottomMenu: AppConfigBottomMenu(
-            tabs: [
-              BottomMenuTabScheme.contacts(
-                enabled: true,
-                titleL10n: 'contacts',
-                icon: '0xee35',
-                contactSourceTypes: sources,
-              ),
-              const BottomMenuTabScheme.keypad(enabled: true, titleL10n: 'keypad', icon: '0xe1ce'),
-            ],
-          ),
-        ),
+    BottomMenuTabScheme contactsScheme(List<String> sources) {
+      return BottomMenuTabScheme.contacts(
+        enabled: true,
+        titleL10n: 'contacts',
+        icon: '0xee35',
+        contactSourceTypes: sources,
       );
     }
 
-    ContactsBottomMenuTab? contactsTab(AppConfig appConfig, List<String> flags) {
-      final config = BottomMenuMapper.map(appConfig, emptyEmbedded, CoreSupportImpl(flags), const FeatureOverrides());
+    ContactsBottomMenuTab? contactsTab(List<String> sources, List<String> flags) {
+      final config = mapTabs([
+        contactsScheme(sources),
+        const BottomMenuTabScheme.keypad(enabled: true, titleL10n: 'keypad', icon: '0xe1ce'),
+      ], flags: flags);
       return config.getTabEnabled<ContactsBottomMenuTab>();
     }
 
     test('keeps external source when extensions is advertised', () {
-      final tab = contactsTab(appConfigWithContacts(sources: ['local', 'external']), [kExtensionsFeatureFlag]);
+      final tab = contactsTab(['local', 'external'], [kExtensionsFeatureFlag]);
 
       expect(tab, isNotNull);
       expect(tab!.contactSourceTypes, containsAll([ContactSourceType.local, ContactSourceType.external]));
     });
 
     test('drops external source when extensions is not advertised', () {
-      final tab = contactsTab(appConfigWithContacts(sources: ['local', 'external']), const []);
+      final tab = contactsTab(['local', 'external'], const []);
 
       expect(tab, isNotNull);
       expect(tab!.contactSourceTypes, [ContactSourceType.local]);
     });
 
     test('drops the whole contacts tab when only external is configured and unsupported', () {
-      final tab = contactsTab(appConfigWithContacts(sources: ['external']), const []);
+      final tab = contactsTab(['external'], const []);
 
       expect(tab, isNull);
     });
 
     test('keeps an external-only contacts tab when extensions is advertised', () {
-      final tab = contactsTab(appConfigWithContacts(sources: ['external']), [kExtensionsFeatureFlag]);
+      final tab = contactsTab(['external'], [kExtensionsFeatureFlag]);
 
       expect(tab, isNotNull);
       expect(tab!.contactSourceTypes, [ContactSourceType.external]);
@@ -137,17 +135,6 @@ void main() {
   // down with a duplicate-key crash, so a config that repeats a section must
   // keep only its first entry.
   group('BottomMenuMapper duplicate sections', () {
-    BottomMenuConfig mapTabs(List<BottomMenuTabScheme> tabs) {
-      return BottomMenuMapper.map(
-        AppConfig(
-          mainConfig: AppConfigMain(bottomMenu: AppConfigBottomMenu(tabs: tabs)),
-        ),
-        emptyEmbedded,
-        CoreSupportImpl(const []),
-        const FeatureOverrides(),
-      );
-    }
-
     BottomMenuTabScheme embedded(String id, {String? title}) {
       return BottomMenuTabScheme.embedded(titleL10n: title ?? id, icon: '0xe2ce', embeddedResourceId: id);
     }
@@ -188,6 +175,48 @@ void main() {
       ]);
 
       expect(config.tabs, hasLength(2));
+    });
+
+    test('ids differing only in first-letter case dedupe: the widget key capitalizes them into one', () {
+      final config = mapTabs([embedded('help'), embedded('Help')]);
+
+      expect(config.embeddedTabs, hasLength(1));
+    });
+
+    test('a disabled duplicate does not claim the identity', () {
+      // The dedup filter runs after the enabled filter; were the order
+      // flipped, the disabled first entry would swallow the enabled one.
+      final config = mapTabs([
+        const BottomMenuTabScheme.keypad(enabled: false, titleL10n: 'off', icon: '0xe1ce'),
+        const BottomMenuTabScheme.keypad(titleL10n: 'on', icon: '0xe1ce'),
+      ]);
+
+      expect(config.tabs.whereType<KeypadBottomMenuTab>().single.titleL10n, 'on');
+    });
+
+    test('an entry dropped for having no contact sources does not claim the identity', () {
+      // Same order dependency against the empty-contacts filter: without the
+      // extensions capability the external-only entry is dropped first, so
+      // the local one must survive the dedup.
+      final config = mapTabs([
+        const BottomMenuTabScheme.keypad(titleL10n: 'keypad', icon: '0xe1ce'),
+        const BottomMenuTabScheme.contacts(titleL10n: 'external', icon: '0xee35', contactSourceTypes: ['external']),
+        const BottomMenuTabScheme.contacts(titleL10n: 'local', icon: '0xee35', contactSourceTypes: ['local']),
+      ]);
+
+      final contacts = config.tabs.whereType<ContactsBottomMenuTab>().single;
+      expect(contacts.titleL10n, 'local');
+      expect(contacts.contactSourceTypes, [ContactSourceType.local]);
+    });
+
+    test('the survivor keeps its own flags: a dropped duplicate does not hand over initial', () {
+      final config = mapTabs([
+        const BottomMenuTabScheme.messaging(titleL10n: 'chats', icon: '0xe155'),
+        const BottomMenuTabScheme.keypad(titleL10n: 'keypad', icon: '0xe1ce'),
+        const BottomMenuTabScheme.keypad(initial: true, titleL10n: 'landing', icon: '0xe1ce'),
+      ]);
+
+      expect(config.tabs.whereType<KeypadBottomMenuTab>().single.initial, isFalse);
     });
   });
 }
