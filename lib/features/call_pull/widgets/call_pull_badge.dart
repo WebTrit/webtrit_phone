@@ -23,7 +23,13 @@ class _CallPullBadgeState extends State<CallPullBadge> with TickerProviderStateM
   late final callPullCubit = context.read<CallPullCubit>();
   late final callBloc = context.read<CallBloc>();
 
+  /// Whether the badge is allowed to wobble at all: mirrors the system
+  /// "disable animations" accessibility setting. Flipping it to false also
+  /// tells a loop already in flight to stop.
   bool _wobbles = false;
+
+  /// Whether a wobble loop is currently running. Guards [_wobble] against
+  /// starting a second concurrent loop when dependencies change repeatedly.
   bool _wobbling = false;
 
   @override
