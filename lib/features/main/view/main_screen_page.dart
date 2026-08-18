@@ -40,7 +40,11 @@ class MainScreenPage extends StatelessWidget {
 
         if (callToActionsEnabled) {
           final isRouteActive = context.router.isRouteActive(MainScreenPageRoute.name);
-          final flavor = MainFlavor.values[tabsRouter.activeIndex];
+          // The flavor belongs to the active tab, not to the position: the tab
+          // set is configured per install, so an index into the enum points at
+          // the wrong flavor and walks off it once more tabs are configured
+          // than the enum has values.
+          final flavor = tabs[tabsRouter.activeIndex].flavor;
 
           context.read<CallToActionsCubit>()
             ..getActions(flavor)
