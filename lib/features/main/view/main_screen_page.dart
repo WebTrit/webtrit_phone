@@ -56,15 +56,13 @@ class MainScreenPage extends StatelessWidget {
         return bottomMenuManager.tabs.length > 1
             ? MainScreen(
                 body: child,
-                bottomNavigationBar: MainBottomNavigationBar(
-                  tabs: tabs,
-                  // Be aware to use activeIndex from tabsRouter, not from bottomMenuManager
-                  // to handle navigation changes correctly, especially when the user navigates by url.
-                  // e.g router.navigate(const MainScreenPageRoute(['favorites']));
-                  currentIndex: tabsRouter.activeIndex,
-                  onTap: (index) =>
-                      BottomMenuTabHandler.handleTap(context, index: index, tabs: tabs, tabsRouter: tabsRouter),
-                ),
+                tabs: tabs,
+                // Be aware to use activeIndex from tabsRouter, not from bottomMenuManager
+                // to handle navigation changes correctly, especially when the user navigates by url.
+                // e.g router.navigate(const MainScreenPageRoute(['favorites']));
+                currentIndex: tabsRouter.activeIndex,
+                onTabSelected: (index) =>
+                    BottomMenuTabHandler.handleTap(context, index: index, tabs: tabs, tabsRouter: tabsRouter),
               )
             : child;
       },

@@ -2,12 +2,24 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/features/main/widgets/widgets.dart';
+import 'package:webtrit_phone/models/models.dart';
+
 class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key, required this.body, required this.bottomNavigationBar})
+  const MainScreen({Key? key, required this.body, required this.tabs, required this.currentIndex, this.onTabSelected})
     : super(key: key ?? const ValueKey<String>('MainScreen'));
 
   final Widget body;
-  final Widget bottomNavigationBar;
+
+  // The screen owns its navigation bar: hosts hand over the configured tabs
+  // and the selection instead of a bar-shaped widget, so every host - the app
+  // and the previews - shows the real control.
+  final List<BottomMenuTab> tabs;
+
+  final int currentIndex;
+
+  /// Null renders the bar inert - a static preview shows it without wiring.
+  final ValueChanged<int>? onTabSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +27,10 @@ class MainScreen extends StatelessWidget {
       extendBody: true,
       body: body,
       bottomNavigationBar: ClipRRect(
-        child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), child: bottomNavigationBar),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+          child: MainBottomNavigationBar(tabs: tabs, currentIndex: currentIndex, onTap: onTabSelected),
+        ),
       ),
     );
   }

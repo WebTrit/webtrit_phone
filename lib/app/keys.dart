@@ -257,6 +257,13 @@ const contactPhoneTileFavIconKey = Key(contactPhoneTileFavIconId);
 const String contactEmailTileId = 'contactEmailTile';
 const contactEmailTileKey = Key(contactEmailTileId);
 
+/// Key of the bottom-navigation entry of the embedded section [id].
+///
+/// Several embedded sections can be configured at once, so the entry cannot
+/// take one key of its kind - two entries with one key bring the build down.
+const String embeddedNavBarKeyPrefix = 'embeddedNavBarKey_';
+Key embeddedNavBarKey(String id) => Key('$embeddedNavBarKeyPrefix$id');
+
 /// Id of the [index]th control in a list of identical ones: the first keeps the
 /// plain id, the rest are numbered from two, the way a person would count them.
 ///

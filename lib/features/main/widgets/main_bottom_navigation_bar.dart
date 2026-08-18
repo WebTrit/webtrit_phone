@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
@@ -13,7 +14,8 @@ class MainBottomNavigationBar extends StatelessWidget {
 
   final int currentIndex;
 
-  final ValueChanged<int> onTap;
+  /// Null renders the bar inert - a static preview shows it without wiring.
+  final ValueChanged<int>? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class MainBottomNavigationBar extends StatelessWidget {
   /// duplicate key, so an embedded entry is keyed by the id it is configured
   /// with.
   Key _key(BottomMenuTab tab) => switch (tab) {
-    EmbeddedBottomMenuTab(:final id) => Key('embeddedNavBarKey_$id'),
+    EmbeddedBottomMenuTab(:final id) => embeddedNavBarKey(id),
     _ => tab.flavor.toNavBarKey(),
   };
 
