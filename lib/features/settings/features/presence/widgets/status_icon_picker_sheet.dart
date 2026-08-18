@@ -16,8 +16,8 @@ const double _pickerHeight = 300;
 /// status.
 ///
 /// Closes with the chosen emoji, or with nothing when it is dismissed.
-class StatusIconPickerDialog extends StatelessWidget {
-  const StatusIconPickerDialog({super.key});
+class StatusIconPickerSheet extends StatelessWidget {
+  const StatusIconPickerSheet({super.key});
 
   static Future<String?> show(BuildContext context) {
     return showModalBottomSheet<String>(
@@ -26,7 +26,7 @@ class StatusIconPickerDialog extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       clipBehavior: Clip.hardEdge,
-      builder: (context) => const StatusIconPickerDialog(),
+      builder: (context) => const StatusIconPickerSheet(),
     );
   }
 

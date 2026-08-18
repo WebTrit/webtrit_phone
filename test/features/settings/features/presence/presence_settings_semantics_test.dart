@@ -191,7 +191,7 @@ void main() {
       await tapViaSemantics(tester, pick);
       await tester.pumpAndSettle();
       expect(find.bySemanticsIdentifier(statusIconPickerId), findsOneWidget);
-      Navigator.of(tester.element(find.byType(StatusIconPickerDialog))).pop();
+      Navigator.of(tester.element(find.byType(StatusIconPickerSheet))).pop();
       await tester.pumpAndSettle();
 
       await tapViaSemantics(tester, clear);

@@ -347,7 +347,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                     identifier: presenceSettingsStatusIconPickId,
                                     child: IconButton(
                                       onPressed: () async {
-                                        final statusIcon = await StatusIconPickerDialog.show(context);
+                                        final statusIcon = await StatusIconPickerSheet.show(context);
                                         if (statusIcon == null) return;
                                         cubit.setPresenceSettings(cubit.state.copyWithStatusIcon(statusIcon));
                                       },
