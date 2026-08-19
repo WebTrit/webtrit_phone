@@ -8,13 +8,16 @@ import 'package:logging_appenders/logging_appenders.dart';
 
 import 'package:webtrit_phone/common/disposable.dart';
 
-abstract class LogRecordsRepository {
+/// Implements [Disposable] so every implementation can be torn down through
+/// [disposeIfDisposable] - the in-memory one (web log storage) included.
+abstract class LogRecordsRepository implements Disposable {
   Future<void> attachToLogger(Logger logger);
 
   Future<void> clear();
 
   Future<void> log(LogRecord record);
 
+  @override
   Future<void> dispose();
 
   Future<void> cancelSubscriptions();
@@ -80,7 +83,7 @@ class LogRecordsMemoryRepositoryImpl implements LogRecordsRepository {
   }
 }
 
-class LogRecordsFileRepositoryImpl implements LogRecordsRepository, Disposable {
+class LogRecordsFileRepositoryImpl implements LogRecordsRepository {
   LogRecordsFileRepositoryImpl(String logFilePath)
     : appender = ReadableRotatingFileAppender(
         baseFilePath: logFilePath,
