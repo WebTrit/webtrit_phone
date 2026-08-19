@@ -7,7 +7,7 @@ import 'package:webtrit_phone/models/models.dart';
 
 final _logger = Logger('AppLogger');
 
-class AppLogger {
+class AppLogger implements Disposable {
   static Future<AppLogger> init(
     LoggingConfig config,
     RemoteLoggingService? remoteLoggingService,
@@ -47,5 +47,15 @@ class AppLogger {
   void updateRemoteLabels() {
     _remoteLoggingService?.dispose();
     _remoteLoggingService?.initialize(_getLabels());
+  }
+
+  /// Releases the remote logging appender.
+  ///
+  /// The console appender attached in [init] is left in place on purpose: the
+  /// root logger is shared with whatever process the app runs in, and clearing
+  /// it here would silence a host that keeps running.
+  @override
+  Future<void> dispose() async {
+    _remoteLoggingService?.dispose();
   }
 }

@@ -104,9 +104,11 @@ packages/   → shared libs (must NOT import from lib/)
   when the closure is evaluated lazily (after construction). Do NOT call `context.l10n` synchronously
   inside `BlocProvider.create` — it uses `dependOnInheritedWidgetOfExactType` which throws
   "Tried to listen to InheritedWidget in a life-cycle that will never be called again" there.
-- Dependency lifetime: `bootstrap()` owns everything process-long and is the only place allowed to
-  release it; a provider disposes only what its own `create:` built (`main_shell_services.dart` is the
-  reference) and never performs a process-wide teardown. See `docs/dependency_ownership.md`.
+- Dependency lifetime: everything process-long is built by `bootstrap()`, registered in the
+  `InstanceRegistry` (register after whatever it was built from - release walks it in reverse) and
+  released only by `InstanceRegistry.dispose()`, which `RootApp` runs when it leaves the tree. A
+  provider disposes only what its own `create:` built (`main_shell_services.dart` is the reference)
+  and never performs a process-wide teardown. See `docs/dependency_ownership.md`.
 - DB: DAOs only — never `AppDatabase` directly; Drift-generated classes stay in repo layer.
 - Theme: never raw `Colors.xxx` or `TextStyle` in widgets; `Theme.of(context).extension<T>()`.
 - Widgets: `StatelessWidget` always (not helper methods); dumb widgets in `features/*/view/widgets/`.

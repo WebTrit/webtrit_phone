@@ -1,14 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 final _logger = Logger('SessionCleanupWorker');
 
-class SessionCleanupWorker {
+class SessionCleanupWorker implements Disposable {
   static SessionCleanupWorker init(WebtritApiClientFactory apiClientFactory) {
     final requestStorage = RequestStorage();
     return SessionCleanupWorker._(requestStorage, apiClientFactory);
@@ -21,8 +23,10 @@ class SessionCleanupWorker {
   final RequestStorage _requestStorage;
   final WebtritApiClientFactory apiClientFactory;
 
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
+
   void _initConnectivityListener() {
-    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) async {
+    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> results) async {
       for (final result in results) {
         if (result == ConnectivityResult.wifi || result == ConnectivityResult.mobile) {
           if ((await _requestStorage.getRequestKeys()).isNotEmpty) {
@@ -74,6 +78,14 @@ class SessionCleanupWorker {
       sessionData[RequestStorage.attemptsKey] = (sessionData[RequestStorage.attemptsKey] as int) + 1;
       await _requestStorage.updateFailedSession(key, sessionData);
     }
+  }
+
+  /// Stops listening for connectivity changes, so a retired worker no longer
+  /// retries stored sessions on its own.
+  @override
+  Future<void> dispose() async {
+    await _connectivitySubscription?.cancel();
+    _connectivitySubscription = null;
   }
 }
 

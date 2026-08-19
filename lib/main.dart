@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:drift/drift.dart';
-import 'package:drift/isolate.dart';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -90,7 +87,7 @@ void _onRootLogRecord(LogRecord record) {
 /// re-created provider must be able to listen again without throwing or going stale.
 typedef ConfigSource<T> = ({T initial, Stream<T> Function() updates});
 
-class RootApp extends StatelessWidget {
+class RootApp extends StatefulWidget {
   const RootApp({
     super.key,
     required this.instanceRegistry,
@@ -141,21 +138,42 @@ class RootApp extends StatelessWidget {
   final bool ownsBrowserHistory;
 
   @override
+  State<RootApp> createState() => _RootAppState();
+}
+
+/// One mounted [RootApp] is one running application: it is handed the
+/// dependencies its bootstrap built, and it releases them when it goes away.
+/// A standalone run never gets there - the process ends first - while a host
+/// that embeds the app (the theme configurator's live preview, which relaunches
+/// it on every configuration edit) gets the shutdown for free, by taking the
+/// widget down. One bootstrap therefore belongs to one [RootApp].
+class _RootAppState extends State<RootApp> {
+  @override
+  void dispose() {
+    widget.instanceRegistry.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Providers that only hand out an instance built by the composition root
+    // never dispose it: those live as long as the process and are released by
+    // the startup teardown. A provider disposes what its own `create` built -
+    // see `docs/dependency_ownership.md`.
     return MultiProvider(
       providers: [
-        Provider<AppInfo>(create: (_) => instanceRegistry.get()),
+        Provider<AppInfo>(create: (_) => widget.instanceRegistry.get()),
         // The active theme, provided down the tree as an inherited value so the
         // app consumes it directly (see App.build) instead of holding it in
         // AppState. The source is supplied by the caller (see [themeSettings]).
         StreamProvider<ThemeSettings>(
-          initialData: themeSettings.initial,
-          create: (_) => themeSettings.updates(),
+          initialData: widget.themeSettings.initial,
+          create: (_) => widget.themeSettings.updates(),
           updateShouldNotify: (previous, next) => previous != next,
         ),
         // Optional host theme-mode override (see [themeMode]); always provided as
         // a nullable value so App can read it, null in a standalone run.
-        if (themeMode case final source?)
+        if (widget.themeMode case final source?)
           StreamProvider<ThemeMode?>(
             initialData: source.initial,
             create: (_) => source.updates(),
@@ -163,36 +181,36 @@ class RootApp extends StatelessWidget {
           )
         else
           Provider<ThemeMode?>.value(value: null),
-        Provider<PackageInfo>(create: (_) => instanceRegistry.get()),
+        Provider<PackageInfo>(create: (_) => widget.instanceRegistry.get()),
         // Stateless version-compatibility policy shared by the login gate and the
         // in-app force-update gate; const, so no bootstrap registration needed.
         Provider<AppCompatibilityResolver>(create: (_) => const DefaultAppCompatibilityResolver()),
-        Provider<DeviceInfo>(create: (_) => instanceRegistry.get()),
-        Provider<AppPreferences>(create: (_) => instanceRegistry.get()),
+        Provider<DeviceInfo>(create: (_) => widget.instanceRegistry.get()),
+        Provider<AppPreferences>(create: (_) => widget.instanceRegistry.get()),
         // Reactive [FeatureAccess]; the source is supplied by the caller (see
         // [featureAccess]). Standalone it is the bootstrap stream synchronized
         // with SystemInfoRepository and RemoteConfigService.
         StreamProvider<FeatureAccess>(
-          initialData: featureAccess.initial,
-          create: (_) => featureAccess.updates(),
+          initialData: widget.featureAccess.initial,
+          create: (_) => widget.featureAccess.updates(),
           updateShouldNotify: (previous, next) => previous != next,
         ),
-        Provider<SecureStorage>(create: (_) => instanceRegistry.get()),
-        Provider<AppPermissions>(create: (_) => instanceRegistry.get()),
-        Provider<AppLogger>(create: (_) => instanceRegistry.get()),
-        Provider<AppTime>(create: (_) => instanceRegistry.get()),
-        Provider<AppPath>(create: (_) => instanceRegistry.get()),
-        Provider<AppCertificates>(create: (_) => instanceRegistry.get()),
-        Provider<AppMetadataProvider>(create: (_) => instanceRegistry.get()),
-        Provider<WebtritApiClientFactory>(create: (_) => instanceRegistry.get()),
-        Provider<PushEnvironment>(create: (_) => instanceRegistry.get()),
+        Provider<SecureStorage>(create: (_) => widget.instanceRegistry.get()),
+        Provider<AppPermissions>(create: (_) => widget.instanceRegistry.get()),
+        Provider<AppLogger>(create: (_) => widget.instanceRegistry.get()),
+        Provider<AppTime>(create: (_) => widget.instanceRegistry.get()),
+        Provider<AppPath>(create: (_) => widget.instanceRegistry.get()),
+        Provider<AppCertificates>(create: (_) => widget.instanceRegistry.get()),
+        Provider<AppMetadataProvider>(create: (_) => widget.instanceRegistry.get()),
+        Provider<WebtritApiClientFactory>(create: (_) => widget.instanceRegistry.get()),
+        Provider<PushEnvironment>(create: (_) => widget.instanceRegistry.get()),
         // Platform-backed collaborators of the main shell, so the shell reads
         // them like every other dependency instead of constructing them
         // inline. The substitution seam this opens is for widget tests that
         // pump the shell under their own providers; a host embedding RootApp
         // still gets the production set.
-        Provider<Callkeep>(create: (_) => instanceRegistry.get()),
-        Provider<CallkeepConnections>(create: (_) => instanceRegistry.get()),
+        Provider<Callkeep>(create: (_) => widget.instanceRegistry.get()),
+        Provider<CallkeepConnections>(create: (_) => widget.instanceRegistry.get()),
         // Const and stateless, so no bootstrap registration needed (the
         // AppCompatibilityResolver precedent above).
         Provider<SignalingServiceFactory>(create: (_) => const SignalingServiceFactory()),
@@ -212,7 +230,7 @@ class RootApp extends StatelessWidget {
         // Provides `AppDatabase` by reading it from `AppDatabaseLifecycleHolder`.
         // When this provider is read, it triggers creation of the holder first (provider is lazy).
         Provider<AppDatabase>(create: (context) => context.read<AppDatabaseLifecycleHolder>().db),
-        Provider<ConnectivityService>(create: (_) => instanceRegistry.get(), dispose: _disposeConnectivityService),
+        Provider<ConnectivityService>(create: (_) => widget.instanceRegistry.get()),
       ],
       child: Builder(
         builder: (context) {
@@ -244,29 +262,23 @@ class RootApp extends StatelessWidget {
 
           return MultiRepositoryProvider(
             providers: [
-              RepositoryProvider<LogRecordsRepository>(
-                create: (_) => instanceRegistry.get(),
-                dispose: disposeIfDisposable,
-              ),
-              RepositoryProvider<NativeLogForwarder>(
-                create: (_) => instanceRegistry.get(),
-                dispose: disposeIfDisposable,
-              ),
+              RepositoryProvider<LogRecordsRepository>(create: (_) => widget.instanceRegistry.get()),
+              RepositoryProvider<NativeLogForwarder>(create: (_) => widget.instanceRegistry.get()),
               // Built by bootstrap's Firebase integration strategy: the Firebase-backed
               // repository standalone, a no-op one when Firebase is disabled.
-              RepositoryProvider<AppAnalyticsRepository>(create: (_) => instanceRegistry.get()),
+              RepositoryProvider<AppAnalyticsRepository>(create: (_) => widget.instanceRegistry.get()),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
               RepositoryProvider<QueuedTerminationRequestsRepository>.value(value: queuedTerminationRequestsRepository),
               RepositoryProvider<ActiveMainTabRepository>.value(value: activeMainTabRepository),
-              RepositoryProvider<SessionRepository>.value(value: instanceRegistry.get<SessionRepository>()),
+              RepositoryProvider<SessionRepository>.value(value: widget.instanceRegistry.get<SessionRepository>()),
               RepositoryProvider<UserAgreementStatusRepository>.value(value: userAgreementStatusRepository),
               RepositoryProvider<ActiveRecentsVisibilityFilterRepository>.value(
                 value: activeRecentsVisibilityFilterRepository,
               ),
               RepositoryProvider<ActiveContactSourceTypeRepository>.value(value: activeContactSourceTypeRepository),
               RepositoryProvider<AudioProcessingSettingsRepository>.value(value: audioProcessingSettingsRepository),
-              RepositoryProvider<ContactsAgreementStatusRepository>.value(value: instanceRegistry.get()),
+              RepositoryProvider<ContactsAgreementStatusRepository>.value(value: widget.instanceRegistry.get()),
               RepositoryProvider<EncodingPresetRepository>.value(value: encodingPresetRepository),
               RepositoryProvider<IceSettingsRepository>.value(value: iceSettingsRepository),
               RepositoryProvider<IncomingCallTypeRepository>.value(value: incomingCallTypeRepository),
@@ -277,14 +289,11 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<LocaleRepository>.value(value: localeRepository),
               RepositoryProvider<ThemeModeRepository>.value(value: themeModeRepository),
               RepositoryProvider<AutocompleteHistoryRepository>.value(value: autocompleteHistoryRepository),
-              RepositoryProvider<SystemInfoRepository>(
-                create: (_) => instanceRegistry.get(),
-                dispose: disposeIfDisposable,
-              ),
-              RepositoryProvider<UserLocalDatasource>(create: (_) => instanceRegistry.get()),
-              RepositoryProvider<AuthRepository>(create: (_) => instanceRegistry.get()),
+              RepositoryProvider<SystemInfoRepository>(create: (_) => widget.instanceRegistry.get()),
+              RepositoryProvider<UserLocalDatasource>(create: (_) => widget.instanceRegistry.get()),
+              RepositoryProvider<AuthRepository>(create: (_) => widget.instanceRegistry.get()),
             ],
-            child: App(ownsBrowserHistory: ownsBrowserHistory),
+            child: App(ownsBrowserHistory: widget.ownsBrowserHistory),
           );
         },
       ),
@@ -295,29 +304,29 @@ class RootApp extends StatelessWidget {
     if (kIsWeb) {
       // TODO(web): no DriftIsolate server on web; open the WasmDatabase directly.
       final db = IsolateDatabase.openWeb();
-      return AppDatabaseLifecycleHolder(db, null)..attach();
+      return AppDatabaseLifecycleHolder(db)..attach();
     }
-    final driftIsolate = instanceRegistry.get<DriftIsolate>();
     // Establish the connection; the IPC handshake to the server isolate starts when this Future is created.
-    final db = AppDatabase(DatabaseConnection.delayed(driftIsolate.connect()));
-    return AppDatabaseLifecycleHolder(db, driftIsolate)..attach();
+    final db = AppDatabase(widget.instanceRegistry.get<DatabaseServer>().connect());
+    return AppDatabaseLifecycleHolder(db)..attach();
   }
 
   Future<void> _disposeAppDatabaseLifecycleHolder(BuildContext _, AppDatabaseLifecycleHolder holder) async {
     await holder.dispose();
   }
-
-  void _disposeConnectivityService(BuildContext _, ConnectivityService value) {
-    value.dispose();
-  }
 }
 
+/// Owns the connection this app instance opened to the database, and closes it
+/// when the widget owning it goes away or the app is detached.
+///
+/// The database server itself (the drift isolate and its name-server mapping)
+/// belongs to the startup path and is shut down by the startup teardown - a
+/// widget going away must not take it down with it, because the background
+/// isolates find the database through that same mapping.
 class AppDatabaseLifecycleHolder with WidgetsBindingObserver {
-  AppDatabaseLifecycleHolder(this.db, this._driftIsolate);
+  AppDatabaseLifecycleHolder(this.db);
 
   final AppDatabase db;
-  // Null on web - there is no DriftIsolate server (dart:isolate spawning is unsupported).
-  final DriftIsolate? _driftIsolate;
 
   void attach() => WidgetsBinding.instance.addObserver(this);
 
@@ -326,11 +335,6 @@ class AppDatabaseLifecycleHolder with WidgetsBindingObserver {
   Future<void> dispose() async {
     detach();
     await db.close();
-    if (!kIsWeb) {
-      // dart:ui IsolateNameServer and DriftIsolate are native-only.
-      IsolateNameServer.removePortNameMapping(IsolateDatabase.kDbPortName);
-      _driftIsolate?.shutdownAll();
-    }
   }
 
   @override

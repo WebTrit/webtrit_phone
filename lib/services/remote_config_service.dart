@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
+import 'package:webtrit_phone/common/common.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
@@ -68,7 +69,7 @@ abstract class RemoteCacheConfigService {
 }
 
 /// Implementation of [RemoteConfigService] using Firebase Remote Config.
-class CachedRemoteConfigService implements RemoteConfigService {
+class CachedRemoteConfigService implements RemoteConfigService, Disposable {
   CachedRemoteConfigService(this._cacheService, this._remoteConfig) {
     // Firebase Remote Config realtime updates are not available on web: the
     // stream cannot connect and emits `remoteconfig/stream-error` continuously.
@@ -195,9 +196,10 @@ class CachedRemoteConfigService implements RemoteConfigService {
     }
   }
 
-  void dispose() {
-    _onConfigUpdatedSubscription?.cancel();
-    _controller.close();
+  @override
+  Future<void> dispose() async {
+    await _onConfigUpdatedSubscription?.cancel();
+    await _controller.close();
   }
 
   static bool _handleFetchError(Object error) {

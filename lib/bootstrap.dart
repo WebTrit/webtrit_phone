@@ -29,8 +29,6 @@ import 'package:webtrit_phone/features/system_notifications/services/services.da
 import 'package:webtrit_phone/features/call/call.dart'
     show onPushNotificationSyncCallback, onSignalingBackgroundCallEvent;
 
-import 'package:drift/isolate.dart';
-
 import 'app/firebase_integration.dart';
 import 'app/session/session.dart';
 import 'firebase_options.dart';
@@ -142,7 +140,10 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
     Logger('bootstrap').warning('DriftIsolate server skipped on web; using lazy WasmDatabase connection');
   } else {
     final driftIsolate = await IsolateDatabase.spawnServer(directoryPath: appPath.applicationDocumentsPath);
-    registry.register<DriftIsolate>(driftIsolate);
+    // The server isolate and its name-server mapping are process-wide - the
+    // background isolates find the database through that mapping - so the
+    // registry owns them and widgets only take client connections.
+    registry.register<DatabaseServer>(DatabaseServer(driftIsolate));
   }
 
   final appPermissions = await _createAppPermissions(featureAccess, contactsAgreementStatusRepository);
@@ -188,10 +189,10 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
     nativeLogForwarder.start();
   }
 
-  // Side effect only: in master mode the instance adds itself as a
-  // WidgetsBindingObserver, so the binding holds it for the process lifetime and
-  // nothing else needs a reference. Background isolates build their own via initSlave.
-  await AppLifecycle.initMaster();
+  // In master mode the instance adds itself as a WidgetsBindingObserver; it is
+  // registered below so the registry takes it back off when it is released.
+  // Background isolates build their own via initSlave.
+  final appLifecycle = await AppLifecycle.initMaster();
 
   // ConnectivityService - owns the `Connectivity()` plugin subscription used by
   // the call subsystem (other features still keep their own direct subscriptions).
@@ -203,7 +204,10 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
     connectivityChecker: _createConnectivityChecker(apiClientFactory),
   );
 
-  // Register instances into the Registry
+  // Register instances into the Registry.
+  //
+  // Registration order matters: the registry releases in reverse, so a
+  // dependency must be registered AFTER whatever it was built from.
 
   // Configuration & Info
   registry.register<AppThemes>(appThemes);
@@ -218,9 +222,11 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   // Repositories & Storage
   registry.register<AppPreferences>(appPreferences);
   registry.register<SecureStorage>(secureStorage);
+  registry.register<RemoteConfigService>(cachedRemoteConfigService);
   registry.register<SystemInfoRepository>(systemInfoRepository);
   registry.register<AuthRepository>(authRepository);
   registry.register<ContactsAgreementStatusRepository>(contactsAgreementStatusRepository);
+  registry.register<SessionCleanupWorker>(sessionCleanupWorker);
   registry.register<SessionRepository>(sessionRepository);
   registry.register<UserLocalDatasource>(UserLocalDatasourcePrefsImpl(appPreferences));
 
@@ -233,6 +239,7 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   registry.register<AppLogger>(appLogger);
   registry.register<LogRecordsRepository>(appLoggerRepository);
   registry.register<NativeLogForwarder>(nativeLogForwarder);
+  registry.register<AppLifecycle>(appLifecycle);
 
   // Network clients
   registry.register<WebtritApiClientFactory>(apiClientFactory);
