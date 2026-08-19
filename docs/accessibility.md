@@ -397,11 +397,11 @@ with no trace.
 - Identifiers are camelCase, mirroring the `keys.dart` constants. That is a
   deliberate deviation from the snake_case scheme QA proposed, and the convention
   is still to be confirmed with them.
-- Refreshing the account screen is a pull on the list and nothing else, so it
-  is out of reach of a screen reader and of the UI test runner. That is a
-  deliberate exception, recorded in
-  [`data_refresh.md`](data_refresh.md); it is the only place where an action
-  has no named entry point.
+- Refreshing a list is a pull and nothing else, so it is out of reach of a
+  screen reader and of the UI test runner. On the account screen that is a
+  deliberate choice, taken when the refresh button was removed; the sessions
+  screen and the contacts tabs have been that way for longer. Which screen
+  refreshes how is in [`data_refresh.md`](data_refresh.md).
 - Everything above was verified on Android, with TalkBack and with Android UI
   automation. VoiceOver has not been run over these screens yet, so iOS-specific
   wording (a tooltip is appended to the label there) rests on the framework

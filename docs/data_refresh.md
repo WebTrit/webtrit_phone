@@ -16,6 +16,10 @@ streams, and a failed fetch is reported with a snack bar. The list sits behind
 a translucent app bar, so the indicator is pushed down by the same offset the
 list is padded with (`edgeOffset`), otherwise the spinner appears under the bar.
 
+A Material list ignores a drag from a mouse, so the list is configured to
+accept every pointer kind; on the web build a mouse is the only pointer there
+is, and without that the screen could not be refreshed at all.
+
 The screen used to carry a refresh button in the app bar. It was removed
 together with its semantics identifier, and the gesture is deliberately the
 only entry point: a pull is not part of the accessibility tree, so this refresh

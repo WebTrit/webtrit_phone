@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -59,72 +60,90 @@ class SettingsScreen extends StatelessWidget {
               SafeArea(
                 top: false,
                 bottom: false,
-                // The list starts at the very top of the screen, under the
-                // translucent app bar, so the spinner has to start below it.
-                child: RefreshIndicator(
-                  onRefresh: () => _onRefresh(context),
-                  edgeOffset: topPadding,
-                  child: ListView(
-                    padding: (effectiveStyle?.listViewPadding ?? const EdgeInsets.only(top: 16)).add(
-                      EdgeInsets.only(top: topPadding, bottom: mediaQuery.padding.bottom),
-                    ),
-                    children: [
-                      BlocBuilder<UserInfoCubit, UserInfoState>(
-                        builder: (context, state) => UserInfoListTile(
-                          info: state.userInfo,
-                          topIssue: context.watch<SessionStatusCubit>().state.topIssue,
-                        ),
+                // Refreshing is a pull and nothing else, so the list has to
+                // take a drag from a mouse too - on the web build that is the
+                // only pointer there is.
+                child: ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context).copyWith(dragDevices: PointerDeviceKind.values.toSet()),
+                  // The list starts at the very top of the screen, under the
+                  // translucent app bar, so the spinner has to start below it.
+                  child: RefreshIndicator(
+                    onRefresh: () => _onRefresh(context),
+                    edgeOffset: topPadding,
+                    child: ListView(
+                      padding: (effectiveStyle?.listViewPadding ?? const EdgeInsets.only(top: 16)).add(
+                        EdgeInsets.only(top: topPadding, bottom: mediaQuery.padding.bottom),
                       ),
-                      BlocBuilder<SessionStatusCubit, SessionStatusState>(
-                        buildWhen: (previous, current) =>
-                            previous.status != current.status || previous.topIssue != current.topIssue,
-                        builder: (context, sessionState) => SessionStatusListTile(
-                          status: sessionState.status,
-                          topIssue: sessionState.topIssue,
-                          registered: context.select<RegisterStatusCubit, bool>((cubit) => cubit.state.value),
-                          updating: context.select<RegisterStatusCubit, bool>((cubit) => cubit.state.isUpdating),
-                          onTap: () => _onDiagnosticTap(context),
-                        ),
-                      ),
-                      if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
-                      BlocBuilder<RegisterStatusCubit, RegisterStatus>(
-                        builder: (context, registerState) => RegisterStatusListTile(
-                          sessionStatus: context.select<SessionStatusCubit, SessionStatus>(
-                            (cubit) => cubit.state.status,
+                      children: [
+                        BlocBuilder<UserInfoCubit, UserInfoState>(
+                          builder: (context, state) => UserInfoListTile(
+                            info: state.userInfo,
+                            topIssue: context.watch<SessionStatusCubit>().state.topIssue,
                           ),
-                          registerStatus: registerState,
-                          onChanged: (value) => _onRegisterStatusChanged(context, value),
-                          onUnavailableTap: () => _onRegisterStatusUnavailableTap(context),
+                        ),
+                        BlocBuilder<SessionStatusCubit, SessionStatusState>(
+                          buildWhen: (previous, current) =>
+                              previous.status != current.status || previous.topIssue != current.topIssue,
+                          builder: (context, sessionState) => SessionStatusListTile(
+                            status: sessionState.status,
+                            topIssue: sessionState.topIssue,
+                            registered: context.select<RegisterStatusCubit, bool>((cubit) => cubit.state.value),
+                            updating: context.select<RegisterStatusCubit, bool>((cubit) => cubit.state.isUpdating),
+                            onTap: () => _onDiagnosticTap(context),
+                          ),
+                        ),
+                        if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
+                        BlocBuilder<RegisterStatusCubit, RegisterStatus>(
+                          builder: (context, registerState) => RegisterStatusListTile(
+                            sessionStatus: context.select<SessionStatusCubit, SessionStatus>(
+                              (cubit) => cubit.state.status,
+                            ),
+                            registerStatus: registerState,
+                            onChanged: (value) => _onRegisterStatusChanged(context, value),
+                            onUnavailableTap: () => _onRegisterStatusUnavailableTap(context),
+                            textStyle: effectiveStyle?.itemTextStyle,
+                            iconColor: effectiveStyle?.userIconColor ?? effectiveStyle?.leadingIconsColor,
+                          ),
+                        ),
+                        if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
+                        AccountActionsTile(
+                          sessionsCount: sessionsEnabled
+                              ? context.select<SessionsCubit, int>((cubit) => cubit.state.sessions.length)
+                              : null,
+                          logoutIconColor: effectiveStyle?.logoutIconColor ?? effectiveStyle?.leadingIconsColor,
+                          sessionsIconColor: effectiveStyle?.leadingIconsColor,
                           textStyle: effectiveStyle?.itemTextStyle,
-                          iconColor: effectiveStyle?.userIconColor ?? effectiveStyle?.leadingIconsColor,
+                          showSeparator: showSeparators,
+                          separatorColor: effectiveStyle?.separatorColor,
+                          onLogoutTap: () => _onLogoutTap(context),
+                          onSessionsTap: () => _onSessionsTap(context),
                         ),
-                      ),
-                      if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
-                      AccountActionsTile(
-                        sessionsCount: sessionsEnabled
-                            ? context.select<SessionsCubit, int>((cubit) => cubit.state.sessions.length)
-                            : null,
-                        logoutIconColor: effectiveStyle?.logoutIconColor ?? effectiveStyle?.leadingIconsColor,
-                        sessionsIconColor: effectiveStyle?.leadingIconsColor,
-                        textStyle: effectiveStyle?.itemTextStyle,
-                        showSeparator: showSeparators,
-                        separatorColor: effectiveStyle?.separatorColor,
-                        onLogoutTap: () => _onLogoutTap(context),
-                        onSessionsTap: () => _onSessionsTap(context),
-                      ),
-                      for (final section in sections) ...[
-                        GroupTitleListTile(
-                          titleData: context.parseL10n(section.titleL10n),
-                          style: effectiveStyle?.groupTitleListStyle,
-                        ),
-                        for (final item in section.items) ...[
-                          if (item.flavor == SettingsFlavor.callerId)
-                            BlocBuilder<CallRoutingCubit, CallRoutingState?>(
-                              builder: (context, routingState) {
-                                if (routingState == null || routingState.additionalNumbers.isEmpty) {
-                                  return const SizedBox.shrink();
-                                }
-                                return SettingsTile(
+                        for (final section in sections) ...[
+                          GroupTitleListTile(
+                            titleData: context.parseL10n(section.titleL10n),
+                            style: effectiveStyle?.groupTitleListStyle,
+                          ),
+                          for (final item in section.items) ...[
+                            if (item.flavor == SettingsFlavor.callerId)
+                              BlocBuilder<CallRoutingCubit, CallRoutingState?>(
+                                builder: (context, routingState) {
+                                  if (routingState == null || routingState.additionalNumbers.isEmpty) {
+                                    return const SizedBox.shrink();
+                                  }
+                                  return SettingsTile(
+                                    title: context.parseL10n(item.titleL10n),
+                                    icon: item.icon,
+                                    iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
+                                    textStyle: effectiveStyle?.itemTextStyle,
+                                    showSeparator: showSeparators,
+                                    separatorColor: effectiveStyle?.separatorColor,
+                                    onTap: () => _onItemTap(context, item),
+                                  );
+                                },
+                              )
+                            else if (item.flavor == SettingsFlavor.presence) ...[
+                              if (PresenceViewParams.of(context).hybridPresenceSupport)
+                                SettingsTile(
                                   title: context.parseL10n(item.titleL10n),
                                   icon: item.icon,
                                   iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
@@ -132,11 +151,24 @@ class SettingsScreen extends StatelessWidget {
                                   showSeparator: showSeparators,
                                   separatorColor: effectiveStyle?.separatorColor,
                                   onTap: () => _onItemTap(context, item),
-                                );
-                              },
-                            )
-                          else if (item.flavor == SettingsFlavor.presence) ...[
-                            if (PresenceViewParams.of(context).hybridPresenceSupport)
+                                ),
+                            ] else if (item.flavor == SettingsFlavor.voicemail) ...[
+                              SettingsTile(
+                                title: context.parseL10n(item.titleL10n),
+                                icon: item.icon,
+                                iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
+                                trailing: state.unreadVoicemailCount > 0
+                                    ? CountBadge(count: state.unreadVoicemailCount, size: 32)
+                                    : null,
+                                trailingValue: state.unreadVoicemailCount > 0
+                                    ? context.l10n.common_SemanticsValue_unreadCount(state.unreadVoicemailCount)
+                                    : null,
+                                textStyle: effectiveStyle?.itemTextStyle,
+                                showSeparator: showSeparators,
+                                separatorColor: effectiveStyle?.separatorColor,
+                                onTap: () => _onItemTap(context, item),
+                              ),
+                            ] else
                               SettingsTile(
                                 title: context.parseL10n(item.titleL10n),
                                 icon: item.icon,
@@ -146,35 +178,10 @@ class SettingsScreen extends StatelessWidget {
                                 separatorColor: effectiveStyle?.separatorColor,
                                 onTap: () => _onItemTap(context, item),
                               ),
-                          ] else if (item.flavor == SettingsFlavor.voicemail) ...[
-                            SettingsTile(
-                              title: context.parseL10n(item.titleL10n),
-                              icon: item.icon,
-                              iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
-                              trailing: state.unreadVoicemailCount > 0
-                                  ? CountBadge(count: state.unreadVoicemailCount, size: 32)
-                                  : null,
-                              trailingValue: state.unreadVoicemailCount > 0
-                                  ? context.l10n.common_SemanticsValue_unreadCount(state.unreadVoicemailCount)
-                                  : null,
-                              textStyle: effectiveStyle?.itemTextStyle,
-                              showSeparator: showSeparators,
-                              separatorColor: effectiveStyle?.separatorColor,
-                              onTap: () => _onItemTap(context, item),
-                            ),
-                          ] else
-                            SettingsTile(
-                              title: context.parseL10n(item.titleL10n),
-                              icon: item.icon,
-                              iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
-                              textStyle: effectiveStyle?.itemTextStyle,
-                              showSeparator: showSeparators,
-                              separatorColor: effectiveStyle?.separatorColor,
-                              onTap: () => _onItemTap(context, item),
-                            ),
+                          ],
                         ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
               ),

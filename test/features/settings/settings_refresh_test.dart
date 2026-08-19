@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -111,8 +112,8 @@ void main() {
     );
   }
 
-  Future<void> pullDown(WidgetTester tester) async {
-    await tester.fling(find.byType(ListView), const Offset(0, 400), 1000);
+  Future<void> pullDown(WidgetTester tester, {PointerDeviceKind kind = PointerDeviceKind.touch}) async {
+    await tester.fling(find.byType(ListView), const Offset(0, 400), 1000, deviceKind: kind);
     await tester.pumpAndSettle();
   }
 
@@ -130,6 +131,16 @@ void main() {
     // The gesture replaced the button: an app bar action here would mean two
     // ways to do the same thing.
     expect(find.descendant(of: find.byType(AppBar), matching: find.byType(IconButton)), findsNothing);
+  });
+
+  testWidgets('the list can be pulled with a mouse as well', (tester) async {
+    // Material lists ignore a mouse drag by default, and on the web build a
+    // mouse is the only pointer there is - the refresh would be unreachable.
+    await tester.pumpWidget(wrapScreen());
+
+    await pullDown(tester, kind: PointerDeviceKind.mouse);
+
+    verify(() => registerStatusCubit.fetchStatus()).called(1);
   });
 
   testWidgets('a failed refresh explains itself', (tester) async {
