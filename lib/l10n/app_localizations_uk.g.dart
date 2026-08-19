@@ -1380,15 +1380,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_ChooseContact_title => 'Виберіть контакт:';
 
   @override
-  String get messaging_ConfirmDialog_ask => 'Ви впевнені?';
-
-  @override
-  String get messaging_ConfirmDialog_cancel => 'Ні';
-
-  @override
-  String get messaging_ConfirmDialog_confirm => 'Так';
-
-  @override
   String get messaging_ConversationBuilders_back => 'Назад';
 
   @override
@@ -1514,6 +1505,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_Conversations_tile_you => 'Ви';
 
   @override
+  String get messaging_DeleteConversationDialog_content =>
+      'Її буде прибрано і з цього пристрою, і з облікового запису.';
+
+  @override
+  String get messaging_DeleteConversationDialog_title => 'Видалити цю розмову?';
+
+  @override
   String get messaging_DialogInfo_deleteAsk => 'Ви впевнені, що хочете видалити цей діалог?';
 
   @override
@@ -1539,6 +1537,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get messaging_GroupInfo_groupMembersHeadline => 'Члени групи';
+
+  @override
+  String get messaging_LeaveGroupDialog_content =>
+      'Ви більше не отримуватимете її повідомлень. Для інших розмова залишиться.';
+
+  @override
+  String get messaging_LeaveGroupDialog_title => 'Вийти з цієї групи?';
 
   @override
   String get messaging_GroupInfo_leaveAndDeleteAsk => 'Ви впевнені, що бажаєте вийти та видалити цю групу?';

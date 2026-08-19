@@ -1214,12 +1214,6 @@
   "@messaging_ChooseContact_empty": {},
   "messaging_ChooseContact_title": "Scegli il contatto:",
   "@messaging_ChooseContact_title": {},
-  "messaging_ConfirmDialog_ask": "SÌ?",
-  "@messaging_ConfirmDialog_ask": {},
-  "messaging_ConfirmDialog_cancel": "No",
-  "@messaging_ConfirmDialog_cancel": {},
-  "messaging_ConfirmDialog_confirm": "SÌ",
-  "@messaging_ConfirmDialog_confirm": {},
   "messaging_ConversationBuilders_back": "Dopo",
   "@messaging_ConversationBuilders_back": {},
   "messaging_ConversationBuilders_cancel": "Cancellare",
@@ -1318,6 +1312,14 @@
   "@messaging_Conversations_tile_empty": {},
   "messaging_Conversations_tile_you": "Voi",
   "@messaging_Conversations_tile_you": {},
+  "messaging_DeleteConversationDialog_content": "Sarà rimossa da questo dispositivo e dall'account.",
+  "@messaging_DeleteConversationDialog_content": {
+    "description": "What deleting a conversation from the list actually does, shown under the title."
+  },
+  "messaging_DeleteConversationDialog_title": "Eliminare questa conversazione?",
+  "@messaging_DeleteConversationDialog_title": {
+    "description": "Title of the confirmation shown when a conversation is swiped away in the list."
+  },
   "messaging_DialogInfo_deleteAsk": "Sei sicuro di voler eliminare questa finestra di dialogo?",
   "@messaging_DialogInfo_deleteAsk": {},
   "messaging_DialogInfo_deleteBtn": "Elimina dialogo",
@@ -1336,6 +1338,14 @@
   "@messaging_GroupInfo_deleteLeaveBtnText": {},
   "messaging_GroupInfo_groupMembersHeadline": "Membri del gruppo",
   "@messaging_GroupInfo_groupMembersHeadline": {},
+  "messaging_LeaveGroupDialog_content": "Non riceverai piu i suoi messaggi. La conversazione resta per gli altri.",
+  "@messaging_LeaveGroupDialog_content": {
+    "description": "What leaving a group actually does, as opposed to deleting the conversation."
+  },
+  "messaging_LeaveGroupDialog_title": "Uscire da questo gruppo?",
+  "@messaging_LeaveGroupDialog_title": {
+    "description": "Title of the confirmation shown when a group conversation is swiped away by someone who does not own it."
+  },
   "messaging_GroupInfo_leaveAndDeleteAsk": "Vuoi davvero uscire ed eliminare questo gruppo?",
   "@messaging_GroupInfo_leaveAndDeleteAsk": {},
   "messaging_GroupInfo_leaveAsk": "Sei sicuro di voler abbandonare questo gruppo?",

@@ -12,7 +12,7 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/text_matchers.dart';
-import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class SmsConversationsTile extends StatefulWidget {
   const SmsConversationsTile({required this.conversation, required this.lastMessage, required this.userId, super.key});
@@ -36,8 +36,12 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
   }
 
   Future<bool> onDismiss(_) async {
-    final conformation = await showDialog(context: context, builder: (_) => const ConfirmDialog());
-    if (conformation != true) return false;
+    final confirmed = await ConfirmDialog.showDangerous(
+      context,
+      title: context.l10n.messaging_DeleteConversationDialog_title,
+      content: context.l10n.messaging_DeleteConversationDialog_content,
+    );
+    if (confirmed != true) return false;
     if (!mounted) return false;
     return context.read<SmsConversationsCubit>().deleteConversation(widget.conversation.id);
   }

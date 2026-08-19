@@ -9,7 +9,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/view_params/view_params.dart';
-import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class GroupChatInfo extends StatefulWidget {
   const GroupChatInfo(this.userId, {super.key});
@@ -24,10 +24,7 @@ class _GroupChatInfoState extends State<GroupChatInfo> {
   late final contactsRepository = context.read<ContactsRepository>();
 
   Future<void> onLeaveGroup() async {
-    final askResult = await showDialog<bool>(
-      context: context,
-      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_GroupInfo_leaveAsk),
-    );
+    final askResult = await ConfirmDialog.show(context, title: context.l10n.messaging_GroupInfo_leaveAsk);
 
     if (!mounted) return;
     if (askResult != true) return;
@@ -36,10 +33,7 @@ class _GroupChatInfoState extends State<GroupChatInfo> {
   }
 
   Future<void> onDeleteGroup() async {
-    final askResult = await showDialog<bool>(
-      context: context,
-      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_GroupInfo_leaveAndDeleteAsk),
-    );
+    final askResult = await ConfirmDialog.show(context, title: context.l10n.messaging_GroupInfo_leaveAndDeleteAsk);
 
     if (!mounted) return;
     if (askResult != true) return;
@@ -87,10 +81,7 @@ class _GroupChatInfoState extends State<GroupChatInfo> {
   Future<void> onRemoveUser(String userId) async {
     String askText = context.l10n.messaging_GroupInfo_removeUserAsk;
 
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => ConfirmDialog(askText: askText),
-    );
+    final result = await ConfirmDialog.show(context, title: askText);
     if (!mounted) return;
     if (result == true) await conversationCubit.removeGroupMember(userId);
   }
@@ -103,10 +94,7 @@ class _GroupChatInfoState extends State<GroupChatInfo> {
       askText = context.l10n.messaging_GroupInfo_removeModeratorAsk;
     }
 
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => ConfirmDialog(askText: askText),
-    );
+    final result = await ConfirmDialog.show(context, title: askText);
 
     if (!mounted) return;
     if (result == true) await conversationCubit.setGroupModerator(userId, isModerator);
