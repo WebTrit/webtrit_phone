@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/messaging/features/conversations/widgets/unread_badge.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -8,19 +9,26 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../helpers/helpers.dart';
 
 void main() {
-  Widget wrap({required TabController controller}) {
+  /// The shape the four main screens build: the app bar reserves a row, the
+  /// gap sits under it, and the strip takes the rest.
+  Widget wrap({required TabController controller, List<Widget>? tabs}) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(36),
-            child: ExtTabBar(
-              controller: controller,
-              height: 36,
-              tabs: const [
-                ExtTab(identifier: contactsTabLocalId, text: 'Phone'),
-                ExtTab(identifier: contactsTabExtId, text: 'Directory'),
-              ],
+            preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: kMainAppBarBottomPaddingGap),
+              child: ExtTabBar(
+                controller: controller,
+                height: kMainAppBarBottomControlHeight,
+                tabs:
+                    tabs ??
+                    const [
+                      ExtTab(identifier: contactsTabLocalId, text: 'Phone'),
+                      ExtTab(identifier: contactsTabExtId, text: 'Directory'),
+                    ],
+              ),
             ),
           ),
         ),
@@ -70,6 +78,21 @@ void main() {
     handle.dispose();
   });
 
+  testWidgets('a tab of the app bar strip is big enough to be hit', (tester) async {
+    final controller = TabController(length: 2, vsync: const TestVSync());
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(wrap(controller: controller));
+
+    // The ink well is what answers the press. The merged semantics node
+    // inherits the whole subtree's rectangle and would measure large even if
+    // the pressable area shrank (Trap 1 of docs/accessibility.md), and the
+    // Tab widget reports its own preferred height, which is neither.
+    final press = tester.getSize(find.descendant(of: find.byType(ExtTabBar), matching: find.byType(InkWell)).first);
+    expect(press.height, greaterThanOrEqualTo(kMinInteractiveDimension));
+    expect(press.width, greaterThanOrEqualTo(kMinInteractiveDimension));
+  });
+
   testWidgets('a tab that draws a badge keeps the count out of its name', (tester) async {
     // The conversations tabs put an unread badge beside the caption. Inside
     // the merged tab node a raw glyph is read out as part of the name, so it
@@ -79,36 +102,25 @@ void main() {
     addTearDown(controller.dispose);
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          appBar: AppBar(
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(36),
-              child: ExtTabBar(
-                controller: controller,
-                height: 36,
-                tabs: [
-                  ExtTab.child(
-                    identifier: conversationsTabChatId,
-                    value: '3 unread conversations',
-                    // The shape the conversations screen builds: caption plus
-                    // the badge, which keeps itself out of what is spoken.
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text('Chats'),
-                        const SizedBox(width: 4),
-                        UnreadBadge(count: 3, isActive: true, colorScheme: ThemeData().colorScheme),
-                      ],
-                    ),
-                  ),
-                  const ExtTab(identifier: conversationsTabSmsId, text: 'Messages'),
-                ],
-              ),
+      wrap(
+        controller: controller,
+        tabs: [
+          ExtTab.child(
+            identifier: conversationsTabChatId,
+            value: '3 unread conversations',
+            // The shape the conversations screen builds: caption plus the
+            // badge, which keeps itself out of what is spoken.
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Chats'),
+                const SizedBox(width: 4),
+                UnreadBadge(count: 3, isActive: true, colorScheme: ThemeData().colorScheme),
+              ],
             ),
           ),
-          body: TabBarView(controller: controller, children: const [Text('chats'), Text('sms')]),
-        ),
+          const ExtTab(identifier: conversationsTabSmsId, text: 'Messages'),
+        ],
       ),
     );
 

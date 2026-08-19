@@ -244,6 +244,14 @@ than that. Two things take it away silently:
   compact `visualDensity` for linux/macOS/windows, which a desktop browser
   reports for the web build - the same checkbox lands at 32.
 
+A third way is not Material's at all: a parent that hands its child a fixed
+height. An `AppBar.bottom` reserves a row through `PreferredSize`, and whatever
+the row spends on padding comes out of the control inside it - so a strip
+declared 42 with a 6 gap leaves tabs of 36, and the button inside a search
+field declared the same way ends up 42. Pass the control its own height
+(`kMainAppBarBottomControlHeight`) and let the row be that plus the gap, rather
+than the other way round.
+
 Shrinking is fine when something larger around the control answers the same
 tap - a merged row, a `ListTile` - and only then. When the control is the only
 target the row offers, state `MaterialTapTargetSize.padded` rather than

@@ -55,37 +55,39 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
     final themeData = Theme.of(context);
     final effectiveStyle = themeData.extension<RecentsScreenStyles>()?.primary;
 
+    // The bar states its own height; deriving the inset from anything else is
+    // how the body ends up sitting eight points below where the bar ends.
+    final appBar = MainAppBar(
+      title: widget.title,
+      context: context,
+      flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: kMainAppBarBottomPaddingGap),
+          child: ExtTabBar(
+            width: mediaQueryData.size.width * 0.75,
+            height: kMainAppBarBottomControlHeight,
+            tabs: [
+              for (final filter in _filters)
+                ExtTab(key: filter.tabKey, identifier: filter.tabId, text: filter.l10n(context)),
+            ],
+            controller: _tabController,
+          ),
+        ),
+      ),
+    );
+
     return ThemedScaffold(
       background: effectiveStyle?.background,
       contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
       applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
       appBarTheme: effectiveStyle?.appBarTheme,
       extendBodyBehindAppBar: true,
-      appBar: MainAppBar(
-        title: widget.title,
-        context: context,
-        flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: kMainAppBarBottomPaddingGap),
-            child: ExtTabBar(
-              width: mediaQueryData.size.width * 0.75,
-              height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
-              tabs: [
-                for (final filter in _filters)
-                  ExtTab(key: filter.tabKey, identifier: filter.tabId, text: filter.l10n(context)),
-              ],
-              controller: _tabController,
-            ),
-          ),
-        ),
-      ),
+      appBar: appBar,
       body: MediaQuery(
         data: mediaQueryData.copyWith(
-          padding: mediaQueryData.padding.copyWith(
-            top: mediaQueryData.padding.top + kToolbarHeight + kMainAppBarBottomTabHeight,
-          ),
+          padding: mediaQueryData.padding.copyWith(top: mediaQueryData.padding.top + appBar.preferredSize.height),
         ),
         child: TabBarView(controller: _tabController, children: [for (final filter in _filters) _listOf(filter)]),
       ),

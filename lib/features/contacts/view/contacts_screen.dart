@@ -91,7 +91,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
             child: ExtTabBar(
               controller: _tabController,
               width: mediaQueryData.size.width * 0.75,
-              height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
+              height: kMainAppBarBottomControlHeight,
               tabs: [for (final sourceType in widget.sourceTypes) _tab(context, sourceType)],
             ),
           );
@@ -115,14 +115,26 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
               onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
               onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
               iconConstraints: const BoxConstraints.expand(
-                width: kMainAppBarBottomSearchHeight - kMainAppBarBottomPaddingGap,
-                height: kMainAppBarBottomSearchHeight - kMainAppBarBottomPaddingGap,
+                width: kMainAppBarBottomControlHeight,
+                height: kMainAppBarBottomControlHeight,
               ),
             );
           },
         ),
       ),
     );
+    final appBar = MainAppBar(
+      title: widget.title,
+      context: context,
+      flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(
+          (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
+        ),
+        child: Column(children: [?tabBar, search]),
+      ),
+    );
+
     return Unfocuser(
       child: ThemedScaffold(
         background: effectiveStyle?.background,
@@ -130,17 +142,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
         applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
         appBarTheme: effectiveStyle?.appBarTheme,
         extendBodyBehindAppBar: true,
-        appBar: MainAppBar(
-          title: widget.title,
-          context: context,
-          flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(
-              (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
-            ),
-            child: Column(children: [?tabBar, search]),
-          ),
-        ),
+        appBar: appBar,
         body: MediaQuery(
           data: mediaQueryData.copyWith(
             padding: mediaQueryData.padding.copyWith(
