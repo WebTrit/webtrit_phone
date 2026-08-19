@@ -128,10 +128,13 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
       BlocProvider<SystemNotificationsCounterCubit>(create: (_) => MockSystemNotificationCounterCubit.withDefaults()),
       BlocProvider<MicrophoneStatusBloc>(create: (_) => MockMicrophoneStatusBloc.initial(isGranted: true)),
       // One unread-count cubit serves both the bar's badge and the messaging
-      // body, the way production provides it; the messaging preview carries
-      // real counts, every other one stays badge-free.
+      // body, the way production provides it. The static messaging capture
+      // carries real counts and the other captures stay badge-free, but the
+      // interactive preview always has them: it is created with whatever tab
+      // is first, and the messaging screen the user taps into afterwards must
+      // demonstrate its counters, not a menu that happens to be empty.
       BlocProvider<UnreadCountCubit>(
-        create: (_) => widget.flavor == MainFlavor.messaging
+        create: (_) => widget.interactive || widget.flavor == MainFlavor.messaging
             ? MockUnreadCountCubit.withUnreadMessages()
             : MockUnreadCountCubit.initial(),
       ),
