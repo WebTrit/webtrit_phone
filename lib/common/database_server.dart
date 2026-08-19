@@ -13,6 +13,10 @@ import 'disposable.dart';
 /// Process-long by nature - the background isolates depend on that mapping - so
 /// it belongs to the composition root and is released with it. Widgets take a
 /// client connection from [connect] and close only that.
+///
+/// Native only: there is no server on the web, where the database is opened
+/// directly, so nothing constructs this there. Constructing it on the web would
+/// compile but fail on release, because the web name server throws.
 class DatabaseServer implements Disposable {
   DatabaseServer(this._isolate);
 
