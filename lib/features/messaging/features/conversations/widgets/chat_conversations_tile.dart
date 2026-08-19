@@ -211,12 +211,13 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
             final count = state.unreadCountForChatConversation(widget.conversation.id);
             if (count == 0) return const SizedBox();
 
-            // The badge is silent by itself; the tile it merges into speaks
-            // the count as its state, after the name of the conversation.
+            // The badge is silent by itself; the count is said here, on the
+            // last thing the tile draws, so it lands after the name of the
+            // conversation rather than inside it.
             return Padding(
               padding: const EdgeInsets.only(left: 8),
               child: Semantics(
-                value: context.l10n.common_SemanticsValue_unreadCount(count),
+                label: context.l10n.common_SemanticsValue_unreadCount(count),
                 child: CountBadge(count: count),
               ),
             );

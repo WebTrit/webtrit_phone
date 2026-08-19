@@ -209,10 +209,6 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                     return ExtTab.child(
                       key: tabKey,
                       identifier: tabIdentifier,
-                      // The badge draws a glyph and says nothing (it excludes
-                      // itself); what it counts is spoken as the tab's state,
-                      // after the tab's name.
-                      value: count > 0 ? context.l10n.common_SemanticsValue_unreadCount(count) : null,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -223,7 +219,13 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                           Flexible(child: Text(title, overflow: TextOverflow.ellipsis)),
                           if (count > 0) ...[
                             const SizedBox(width: 4),
-                            CountBadge(count: count, size: 14, onAccent: isActive),
+                            // The badge says nothing of its own; what it counts
+                            // is said here, on the node drawn after the caption,
+                            // so the tab is named before its count is given.
+                            Semantics(
+                              label: context.l10n.common_SemanticsValue_unreadCount(count),
+                              child: CountBadge(count: count, size: 14, onAccent: isActive),
+                            ),
                           ],
                         ],
                       ),

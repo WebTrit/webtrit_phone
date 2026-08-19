@@ -196,20 +196,38 @@ are needed - a count fixed in two of them still reads wrong.
 wraps its glyph in `ExcludeSemantics` itself, so no host can forget. A host that
 has to remember is a host that will not.
 
-**Which node speaks, and how.** That depends on who names the node the badge
-merges into:
+**Which node speaks, and where the phrase goes.** The count belongs to the NAME
+of the thing it decorates, placed after it, and the way to get it there is to say
+it from something drawn later than the name:
 
-- **The control names itself** (the notification bell): put the count in its own
-  label, after the name - `SemanticAction.button(label: '$title, $unseenCount')`.
-- **Someone else names the node** (an entry of `BottomNavigationBar`, a tab of a
-  `TabBar`, the trailing slot of a `ListTile`): put the phrase in
-  `Semantics(value: ...)`, never in a label. A merged label is concatenated in
-  render-tree order, and a badge drawn in the icon slot is built before the
-  caption - so a label would be spoken BEFORE the name it belongs to
-  ("1 unread conversation, Chats"). A value is announced after the name whatever
-  the order, which is how both platforms speak a native tab badge. Leave
-  `container: true` off, or the node stops merging and becomes its own nameless
-  focus stop beside the control. See `MessagingFlavorOverlay`.
+- **The control names itself** (the notification bell, the delete button of the
+  voicemail screen): put the count in its own label, after the name -
+  `SemanticAction(label: '$title, $selectedCount')`.
+- **Someone else names the node** (a tab of a `TabBar`, the trailing slot of a
+  `ListTile`, a row wrapped in one `InkWell`): put a plain
+  `Semantics(label: ...)` on the badge itself. A merged name is assembled in the
+  order its parts are drawn, and the badge is drawn after the caption - which is
+  exactly what lands the count behind the name. Two ways to get this wrong: a
+  label given to the tile or row instead of to the badge is assembled before
+  everything inside it, and `container: true` stops the node merging at all and
+  leaves a nameless focus stop beside the control.
+
+**Not the node's value**, even though a count is state and `value` is what state
+is for. Android composes what it speaks as value, then label, then hint
+(`AccessibilityBridge.getValueLabelHint` in the engine), so a value is always
+read out AHEAD of the name it belongs to - "3 unread, Voicemail". iOS speaks the
+name first, so this is invisible in a simulator and on a Mac; it was found by
+dumping the tree on a device. A count in the name reads correctly on both.
+
+The price of putting it in the name is real: a screen reader announces a changed
+value on its own, and a changed name it does not. We take that trade because the
+complaint that started this was about position.
+
+**When the name is not ours.** An entry of a `BottomNavigationBar` takes its name
+from what it displays and draws it after the slot we decorate, so there is
+nothing of ours drawn later to hang the phrase on - and adding to the caption
+would change what is on screen. That one case keeps `Semantics(value: ...)`,
+which at least says what the number means; see `MessagingFlavorOverlay`.
 
 **What it says.** Three shared keys cover every count in the app, and each of
 them is a MEANING rather than a place, which is what keeps their number from

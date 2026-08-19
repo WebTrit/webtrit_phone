@@ -43,13 +43,18 @@ class _MessagingFlavorOverlayState extends State<MessagingFlavorOverlay> {
             // Skip rendering if there are no unread messages
             if (count == 0) return const SizedBox();
 
-            // The badge draws a glyph and says nothing of its own. Merged into
-            // the tab entry it used to be spoken as a bare number, and - since
-            // the icon slot is built before the caption - ahead of the tab's
-            // own name. The count travels as the entry's VALUE instead: a
-            // value is announced after the name it belongs to, whatever the
-            // render order, which is how both platforms speak a native tab
-            // badge.
+            // The badge draws a glyph and says nothing of its own; the count
+            // travels as the entry's VALUE.
+            //
+            // Everywhere else in the app a count is part of the name, drawn
+            // after it, because Android composes what it speaks as value, then
+            // label - so a value is read out ahead of the name it belongs to.
+            // Here that is not available: the caption belongs to the bar, which
+            // draws it after this slot and takes it from what is displayed, so
+            // there is nothing of ours drawn later to hang the phrase on and no
+            // way to add to the caption without changing what is on screen. A
+            // value at least says what the number means; its position is the
+            // price. See docs/accessibility.md, "Counting things".
             //
             // Deliberately no `container: true`: the node must merge into the
             // entry the bar builds, the one that carries the name, the id and
