@@ -86,7 +86,7 @@ void main() {
     when(() => sessionsCubit.state).thenReturn(SessionsState());
   });
 
-  Widget wrapScreen({bool sessionsEnabled = false, int sessions = 0}) {
+  Widget wrapScreen({bool sessionsEnabled = false, int sessions = 0, SettingScreenStyle? style}) {
     when(() => sessionsCubit.state).thenReturn(
       SessionsState(
         sessions: [for (var i = 0; i < sessions; i++) ActiveSession(id: '$i', current: i == 0)],
@@ -119,7 +119,7 @@ void main() {
                 BlocProvider<RegisterStatusCubit>.value(value: registerStatusCubit),
                 BlocProvider<SessionsCubit>.value(value: sessionsCubit),
               ],
-              child: _presence(SettingsScreen(sections: const [], sessionsEnabled: sessionsEnabled)),
+              child: _presence(SettingsScreen(sections: const [], sessionsEnabled: sessionsEnabled, style: style)),
             ),
           ),
         ),
@@ -179,6 +179,18 @@ void main() {
     await tester.pumpWidget(wrapScreen());
 
     expect(tester.widget<IconButton>(find.byKey(settingsLogoutButtonKey)).onPressed, isNull);
+  });
+
+  testWidgets('the icon takes its colour from the bar, like every other action', (tester) async {
+    // A colour of its own would ignore both the color scheme and whatever the
+    // page config sets for this bar.
+    await tester.pumpWidget(wrapScreen(style: const SettingScreenStyle(logoutIconColor: Color(0xFFAA0000))));
+
+    final icon = tester.widget<Icon>(
+      find.descendant(of: find.byKey(settingsLogoutButtonKey), matching: find.byType(Icon)),
+    );
+
+    expect(icon.color, isNull);
   });
 
   testWidgets('the list no longer carries a logout row', (tester) async {

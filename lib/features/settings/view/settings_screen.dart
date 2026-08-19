@@ -70,7 +70,9 @@ class SettingsScreen extends StatelessWidget {
                 child: IconButton(
                   // The Patrol logout subsequence taps this key.
                   key: settingsLogoutButtonKey,
-                  icon: Icon(Icons.logout, color: effectiveStyle?.logoutIconColor),
+                  // No colour of its own: it takes the bar's, the way every
+                  // other app bar action does.
+                  icon: const Icon(Icons.logout),
                   onPressed: busy ? null : () => _onLogoutTap(context),
                 ),
               ),
