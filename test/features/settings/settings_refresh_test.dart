@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -6,19 +7,15 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/microphone_status/microphone_status.dart';
 import 'package:webtrit_phone/features/register_status/register_status.dart';
 import 'package:webtrit_phone/features/session_status/session_status.dart';
 import 'package:webtrit_phone/features/settings/settings.dart';
-import 'package:webtrit_phone/features/settings/widgets/user_info_list_tile.dart';
 import 'package:webtrit_phone/features/user_info/user_info.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
-
-import '../../helpers/helpers.dart';
 
 class _MockSettingsBloc extends MockBloc<SettingsEvent, SettingsState> implements SettingsBloc {}
 
@@ -33,8 +30,6 @@ class _MockRegisterStatusCubit extends MockCubit<RegisterStatus> implements Regi
 
 class _MockStackRouter extends Mock implements StackRouter {}
 
-/// The screen keeps the ordinary back button of the app bar, which asks the
-/// router whether there is anywhere to go back to.
 StackRouter _router() {
   final router = _MockStackRouter();
   when(
@@ -83,12 +78,6 @@ void main() {
     when(() => registerStatusCubit.fetchStatus()).thenAnswer((_) async => true);
   });
 
-  Widget wrap(Widget child) => MaterialApp(
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
-    supportedLocales: AppLocalizations.supportedLocales,
-    home: Scaffold(body: _presence(child)),
-  );
-
   Widget wrapScreen() {
     final router = _router();
     return ThemeProvider(
@@ -123,53 +112,44 @@ void main() {
     );
   }
 
-  testWidgets('the pencil next to the account says what it edits', (tester) async {
-    final handle = tester.ensureSemantics();
+  Future<void> pullDown(WidgetTester tester, {PointerDeviceKind kind = PointerDeviceKind.touch}) async {
+    await tester.fling(find.byType(ListView), const Offset(0, 400), 1000, deviceKind: kind);
+    await tester.pumpAndSettle();
+  }
 
-    await tester.pumpWidget(wrap(UserInfoListTile(info: info, onEditPressed: () {})));
+  testWidgets('pulling the account list down asks the server for the status again', (tester) async {
+    await tester.pumpWidget(wrapScreen());
 
-    // The row shows a name, a number and a balance, so a bare pencil beside
-    // them is announced as "button" with nothing to say what it changes.
-    expectTapTargetSemantics(
-      tester,
-      find.bySemanticsIdentifier(settingsUserInfoEditId),
-      label: 'Edit account details',
-      identifier: settingsUserInfoEditId,
-    );
+    await pullDown(tester);
 
-    handle.dispose();
+    verify(() => registerStatusCubit.fetchStatus()).called(1);
   });
 
-  testWidgets('pressing the pencil through semantics starts the edit', (tester) async {
-    final handle = tester.ensureSemantics();
+  testWidgets('the account screen has no refresh control left in its app bar', (tester) async {
+    await tester.pumpWidget(wrapScreen());
 
-    var pressed = false;
-    await tester.pumpWidget(wrap(UserInfoListTile(info: info, onEditPressed: () => pressed = true)));
-
-    await tapViaSemantics(tester, find.bySemanticsIdentifier(settingsUserInfoEditId));
-
-    expect(pressed, isTrue);
-
-    handle.dispose();
+    // The gesture replaced the button: an app bar action here would mean two
+    // ways to do the same thing.
+    expect(find.descendant(of: find.byType(AppBar), matching: find.byType(IconButton)), findsNothing);
   });
 
-  testWidgets('the account row leaves no unnamed press target behind', (tester) async {
-    final handle = tester.ensureSemantics();
+  testWidgets('the list can be pulled with a mouse as well', (tester) async {
+    // Material lists ignore a mouse drag by default, and on the web build a
+    // mouse is the only pointer there is - the refresh would be unreachable.
+    await tester.pumpWidget(wrapScreen());
 
-    await tester.pumpWidget(wrap(UserInfoListTile(info: info, onEditPressed: () {})));
+    await pullDown(tester, kind: PointerDeviceKind.mouse);
 
-    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
-
-    handle.dispose();
+    verify(() => registerStatusCubit.fetchStatus()).called(1);
   });
 
-  testWidgets('the account screen leaves no unnamed press target behind', (tester) async {
-    final handle = tester.ensureSemantics();
+  testWidgets('a failed refresh explains itself', (tester) async {
+    when(() => registerStatusCubit.fetchStatus()).thenAnswer((_) async => false);
 
     await tester.pumpWidget(wrapScreen());
 
-    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+    await pullDown(tester);
 
-    handle.dispose();
+    expect(find.byType(SnackBar), findsOneWidget);
   });
 }
