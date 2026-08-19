@@ -37,7 +37,7 @@ void main() {
     );
   }
 
-  PresenceInfo presence({required bool available}) {
+  PresenceInfo presence({required bool available, List<PresenceActivity> activities = const []}) {
     return PresenceInfo(
       id: 'id',
       number: 'number',
@@ -47,7 +47,7 @@ void main() {
       device: null,
       timeOffsetMin: null,
       timestamp: null,
-      activities: const [],
+      activities: activities,
       source: PresenceInfoSource.sip,
       arrivalTime: DateTime(2026),
     );
@@ -102,7 +102,39 @@ void main() {
       );
 
       expect(find.byType(SipPresenceIndicator), findsOneWidget);
-      expect(tester.getSize(find.byType(SipPresenceIndicator)), const Size(diameter * 0.325, diameter * 0.325));
+      expect(tester.getSize(find.byType(SipPresenceIndicator)), const Size(diameter * 0.5, diameter * 0.5));
+    });
+
+    testWidgets('sits the mark on the avatar edge with the glyph inside it', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(
+            presenceInfo: [
+              presence(available: true, activities: const [PresenceActivity.busy]),
+            ],
+          ),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      final avatar = tester.getRect(find.byType(AvatarStatusBadge));
+      final dot = tester.getRect(find.byType(SipPresenceIndicator));
+      final icon = tester.getRect(find.descendant(of: find.byType(SipPresenceIndicator), matching: find.byType(Icon)));
+
+      // The mark's centre sits ON the avatar's edge, so half of it hangs
+      // outside the silhouette instead of covering the face; the glyph lives
+      // inside the mark, because an icon laid over it would cut into the
+      // outline and make the mark read smaller than it is.
+      final avatarCentre = avatar.center;
+      final radius = avatar.width / 2;
+      final reach = (dot.center - avatarCentre).distance;
+      expect(reach, closeTo(radius, 0.01));
+      expect(dot.width, avatar.width * 0.5);
+      expect(dot.right, greaterThan(avatar.right));
+      expect(icon.left, greaterThanOrEqualTo(dot.left));
+      expect(icon.top, greaterThanOrEqualTo(dot.top));
+      expect(icon.right, lessThanOrEqualTo(dot.right));
+      expect(icon.bottom, lessThanOrEqualTo(dot.bottom));
     });
 
     testWidgets('ignores registration data', (tester) async {

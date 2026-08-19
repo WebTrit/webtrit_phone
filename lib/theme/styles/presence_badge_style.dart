@@ -4,12 +4,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class PresenceBadgeStyle with Diagnosticable {
-  const PresenceBadgeStyle({this.availableColor, this.unavailableColor, this.sizeFactor});
+  const PresenceBadgeStyle({this.availableColor, this.unavailableColor, this.iconColor, this.sizeFactor});
 
   final Color? availableColor;
   final Color? unavailableColor;
 
-  /// Relative to avatar diameter (widget ~0.325).
+  /// Color of the activity glyph drawn inside the badge.
+  final Color? iconColor;
+
+  /// Relative to avatar diameter; the app's own value lives in
+  /// [LeadingAvatarStyle.defaults].
   final double? sizeFactor;
 
   static PresenceBadgeStyle merge(PresenceBadgeStyle? base, PresenceBadgeStyle? override) {
@@ -19,6 +23,7 @@ class PresenceBadgeStyle with Diagnosticable {
     return PresenceBadgeStyle(
       availableColor: override.availableColor ?? base.availableColor,
       unavailableColor: override.unavailableColor ?? base.unavailableColor,
+      iconColor: override.iconColor ?? base.iconColor,
       sizeFactor: override.sizeFactor ?? base.sizeFactor,
     );
   }
@@ -30,6 +35,7 @@ class PresenceBadgeStyle with Diagnosticable {
     return PresenceBadgeStyle(
       availableColor: Color.lerp(a?.availableColor, b?.availableColor, t),
       unavailableColor: Color.lerp(a?.unavailableColor, b?.unavailableColor, t),
+      iconColor: Color.lerp(a?.iconColor, b?.iconColor, t),
       sizeFactor: lerpDouble(a?.sizeFactor, b?.sizeFactor, t),
     );
   }
@@ -40,6 +46,7 @@ class PresenceBadgeStyle with Diagnosticable {
     properties
       ..add(ColorProperty('availableColor', availableColor))
       ..add(ColorProperty('unavailableColor', unavailableColor))
+      ..add(ColorProperty('iconColor', iconColor))
       ..add(DoubleProperty('sizeFactor', sizeFactor));
   }
 }

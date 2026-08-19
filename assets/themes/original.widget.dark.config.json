@@ -72,7 +72,24 @@
     "defaultPlaceholderImage": {
       "uri": "asset://assets/images/secondary_onboarding_logo.svg"
     },
+    "__leadingAvatarStyle": "Contact avatar and the status marks drawn on it. A key written here pins that value for this theme for good; a key left out follows the app and improves with it. The `_`-prefixed entries inside are disabled examples: they show what can be set and the value the app uses today - drop the underscore to take one over.",
     "leadingAvatarStyle": {
+      "_radius": 20.0,
+      "_presenceBadge": {
+        "availableColor": null,
+        "unavailableColor": null,
+        "iconColor": null,
+        "sizeFactor": 0.5
+      },
+      "_registeredBadge": {
+        "registeredColor": null,
+        "unregisteredColor": null,
+        "sizeFactor": 0.2
+      },
+      "_nameColors": {
+        "enabled": true,
+        "palette": null
+      },
       "backgroundColor": "#3C4750",
       "initialsTextStyle": {
         "fontFamily": "Montserrat",
@@ -88,6 +105,8 @@
         "matchTextDirection": false
       },
       "loading": {
+        "_showByDefault": false,
+        "_strokeWidth": 1.0,
         "padding": {
           "left": 2.0,
           "top": 2.0,
@@ -97,6 +116,7 @@
       },
       "smartIndicator": {
         "backgroundColor": "#1D2022",
+        "_sizeFactor": 0.4,
         "icon": {
           "codePoint": "0xe491",
           "fontFamily": "MaterialIcons",

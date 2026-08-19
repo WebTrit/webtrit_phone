@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:icon_decoration/icon_decoration.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
@@ -24,28 +23,25 @@ class SipPresenceIndicator extends StatelessWidget {
 
     final activityIcon = _activityIcon(presenceInfo, dialogInfo);
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
-            border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 2),
-          ),
-        ),
-        if (activityIcon != null)
-          Positioned(
-            top: -_presenceRect.width * 0.2,
-            right: 0,
-            child: DecoratedIcon(
-              decoration: IconDecoration(
-                border: IconBorder(color: Theme.of(context).scaffoldBackgroundColor, width: 2.5),
-              ),
-              icon: Icon(activityIcon, color: color, size: _presenceRect.width * 0.6),
+    // The glyph sits inside the mark rather than on top of it: an icon laid
+    // over the dot cuts into its outline and the mark reads as smaller and
+    // busier than it is. Ring and glyph are proportional to the mark, so the
+    // availability colour keeps the same share of it at every size - this
+    // widget is also rendered at 16 px in the presence pickers, where a fixed
+    // ring plus a fixed glyph would leave the colour a sliver.
+    final side = _presenceRect.width;
+
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: side * 0.1),
+      ),
+      child: activityIcon == null
+          ? null
+          : Center(
+              child: Icon(activityIcon, color: badge.iconColor, size: side * 0.55),
             ),
-          ),
-      ],
     );
   }
 
