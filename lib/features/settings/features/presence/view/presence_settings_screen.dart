@@ -71,71 +71,86 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                           child: SemanticAction(
                             label: l10n.presenceSettings_SemanticsLabel_preset,
                             identifier: presenceSettingsPresetId,
-                            child: DropdownMenu<PresenceSettingsPreset?>(
-                              key: ValueKey('${equalKey}preset'),
-                              controller: TextEditingController(),
-                              dropdownMenuEntries: presets
-                                  .map(
-                                    (e) => DropdownMenuEntry(
-                                      value: e,
-                                      label: e.name,
-                                      labelWidget: Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 16,
-                                            height: 16,
-                                            child: SipPresenceIndicator(
-                                              presenceInfo: [
-                                                PresenceInfo(
-                                                  id: 'id',
-                                                  number: 'number',
-                                                  available: e.available,
-                                                  note: e.note,
-                                                  activities: [if (e.activity != null) e.activity!],
-                                                  statusIcon: null,
-                                                  device: 'device',
-                                                  timeOffsetMin: 0,
-                                                  timestamp: DateTime.now(),
-                                                  source: PresenceInfoSource.direct,
-                                                  arrivalTime: DateTime.now(),
-                                                ),
-                                              ],
-                                              presenceRect: Rect.fromLTWH(0, 0, 16, 16),
-                                              dialogInfo: [],
+                            // The chosen preset is spoken here rather than left
+                            // to the field inside the chooser: on the web the
+                            // framework drops that field from the tree, and the
+                            // choice would go silent with it.
+                            child: Semantics(
+                              value: isBlank
+                                  ? l10n.presence_settings_presets_label
+                                  : selectedPreset?.name ?? l10n.presence_settings_presets_label_custom,
+                              child: DropdownMenu<PresenceSettingsPreset?>(
+                                // The chooser offers a list and nothing else: it
+                                // is not a field to type into, and off mobile it
+                                // would otherwise become one.
+                                selectOnly: true,
+                                key: ValueKey('${equalKey}preset'),
+                                controller: TextEditingController(),
+                                dropdownMenuEntries: presets
+                                    .map(
+                                      (e) => DropdownMenuEntry(
+                                        value: e,
+                                        label: e.name,
+                                        labelWidget: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 16,
+                                              height: 16,
+                                              child: SipPresenceIndicator(
+                                                presenceInfo: [
+                                                  PresenceInfo(
+                                                    id: 'id',
+                                                    number: 'number',
+                                                    available: e.available,
+                                                    note: e.note,
+                                                    activities: [if (e.activity != null) e.activity!],
+                                                    statusIcon: null,
+                                                    device: 'device',
+                                                    timeOffsetMin: 0,
+                                                    timestamp: DateTime.now(),
+                                                    source: PresenceInfoSource.direct,
+                                                    arrivalTime: DateTime.now(),
+                                                  ),
+                                                ],
+                                                presenceRect: Rect.fromLTWH(0, 0, 16, 16),
+                                                dialogInfo: [],
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(width: 8),
-                                          Flexible(
-                                            child: Text(
-                                              e.name,
-                                              style: TextStyle(fontSize: 14),
-                                              overflow: TextOverflow.ellipsis,
+                                            SizedBox(width: 8),
+                                            Flexible(
+                                              child: Text(
+                                                e.name,
+                                                style: TextStyle(fontSize: 14),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                  .toList(),
-                              initialSelection: selectedPreset,
-                              onSelected: (value) {
-                                if (value == null) return;
-                                final update = state
-                                    .copyWithAvailable(value.available)
-                                    .copyWithNote(value.note)
-                                    .copyWithActivity(value.activity)
-                                    .copyWithDndMode(value.dndMode);
-                                cubit.setPresenceSettings(update);
-                                setState(() => equalKey = DateTime.now().microsecondsSinceEpoch.toString());
-                              },
-                              label: isBlank
-                                  ? Text(l10n.presence_settings_presets_label)
-                                  : Text(l10n.presence_settings_presets_label_custom),
-                              menuStyle: MenuStyle(backgroundColor: WidgetStateProperty.all(colorScheme.surfaceBright)),
-                              inputDecorationTheme: InputDecorationTheme(
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                                isCollapsed: true,
+                                    )
+                                    .toList(),
+                                initialSelection: selectedPreset,
+                                onSelected: (value) {
+                                  if (value == null) return;
+                                  final update = state
+                                      .copyWithAvailable(value.available)
+                                      .copyWithNote(value.note)
+                                      .copyWithActivity(value.activity)
+                                      .copyWithDndMode(value.dndMode);
+                                  cubit.setPresenceSettings(update);
+                                  setState(() => equalKey = DateTime.now().microsecondsSinceEpoch.toString());
+                                },
+                                label: isBlank
+                                    ? Text(l10n.presence_settings_presets_label)
+                                    : Text(l10n.presence_settings_presets_label_custom),
+                                menuStyle: MenuStyle(
+                                  backgroundColor: WidgetStateProperty.all(colorScheme.surfaceBright),
+                                ),
+                                inputDecorationTheme: InputDecorationTheme(
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                  isCollapsed: true,
+                                ),
                               ),
                             ),
                           ),

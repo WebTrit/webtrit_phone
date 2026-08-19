@@ -40,6 +40,7 @@ class DefaultNumberForm extends StatelessWidget {
             identifier: callerIdDefaultNumberId,
             child: NumberDropdown<String?>(
               initialSelection: state.settings.defaultNumber,
+              value: state.settings.defaultNumber ?? state.mainNumber,
               entries: [
                 if (state.mainNumber != null) DropdownMenuEntry<String?>(value: null, label: state.mainNumber!),
                 for (final n in state.additionalNumbers) DropdownMenuEntry<String?>(value: n, label: n),

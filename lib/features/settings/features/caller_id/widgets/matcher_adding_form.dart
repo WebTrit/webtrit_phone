@@ -96,6 +96,7 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
                   child: NumberDropdown<String>(
                     width: double.infinity,
                     hintText: l10n.settings_callerId_number_hint,
+                    value: number.isEmpty ? null : number,
                     entries: [for (final n in widget.numbers) DropdownMenuEntry<String>(value: n, label: n)],
                     onSelected: (value) => setState(() => number = value ?? ''),
                   ),
