@@ -159,6 +159,9 @@ to get wrong on your own.
   nothing: `UnreadBadge` already excludes itself, and what it counts goes in the
   tab's `value`, which is announced after the tab's name. Never wrap the tab in a
   plain `Semantics(identifier: ...)`.
+- **`CountBadge`** (`lib/widgets/count_badge.dart`) - every number drawn in a
+  filled shape. See "Counting things" for the three parts of the standard it is
+  one of.
 - **`context.showSnackBar`** (`lib/extensions/build_context.dart`) - already wraps
   the message in a `SemanticId`, so a flow can wait for the snackbar by id, and
   keeps a snackbar that carries an action on screen until it is dismissed:
@@ -178,15 +181,28 @@ of "Call button" is spoken as "Call button, button".
 
 Keep identity in the label when the control is one of many identical ones (the
 call button in a list row, an account badge), and exclude the decorative piece
-that would otherwise be read as a bare number or letter: an avatar initial or an
-unread count is announced as "1" and collides with everything else on screen.
-Keep the raw glyph out of the tree with `ExcludeSemantics` and say what the
-number means - where it is said depends on who owns the node:
+that would otherwise be read as a bare number or letter: an avatar initial is
+announced as a stray letter and collides with everything else on screen. A count
+has a standard of its own - see below.
+
+## Counting things
+
+A count is drawn as a bare glyph almost everywhere in this app, and a bare glyph
+merged into a row is spoken as a number with nothing attached to it: "Voicemail,
+3", "Alice, 10:32, see you then, 2". The standard has three parts, and all three
+are needed - a count fixed in two of them still reads wrong.
+
+**Who stays silent.** The widget that draws the number owns its own silence: it
+wraps its glyph in `ExcludeSemantics` itself, so no host can forget. A host that
+has to remember is a host that will not.
+
+**Which node speaks, and how.** That depends on who names the node the badge
+merges into:
 
 - **The control names itself** (the notification bell): put the count in its own
   label, after the name - `SemanticAction.button(label: '$title, $unseenCount')`.
-- **Someone else names the node** the badge merges into (an entry of
-  `BottomNavigationBar`, a tab of a `TabBar`): put the phrase in
+- **Someone else names the node** (an entry of `BottomNavigationBar`, a tab of a
+  `TabBar`, the trailing slot of a `ListTile`): put the phrase in
   `Semantics(value: ...)`, never in a label. A merged label is concatenated in
   render-tree order, and a badge drawn in the icon slot is built before the
   caption - so a label would be spoken BEFORE the name it belongs to
@@ -194,6 +210,46 @@ number means - where it is said depends on who owns the node:
   the order, which is how both platforms speak a native tab badge. Leave
   `container: true` off, or the node stops merging and becomes its own nameless
   focus stop beside the control. See `MessagingFlavorOverlay`.
+
+**What it says.** Three shared keys cover every count in the app, and each of
+them is a MEANING rather than a place, which is what keeps their number from
+growing with the screens:
+
+- `common_SemanticsValue_unreadCount` - "3 unread". How much of this is new:
+  unread messages in a chat tile, unread voicemail, an unread tab.
+- `common_SemanticsValue_totalCount` - "5 total". How many there are of it:
+  active sessions, members of a group.
+- `common_SemanticsValue_selectedCount` - "3 selected". How many a control would
+  act on: the delete button while voicemail is being picked out.
+
+Neither phrase names what is being counted, and that is the whole point of the
+standard. The noun is already spoken - it is the name of the node the value is
+attached to ("Voicemail, 3 unread"), so repeating it only makes the phrase longer
+and the key single-use. It also cannot be a placeholder: in the app's languages a
+noun does not survive being pasted next to a numeral - Ukrainian declines it
+after the number, and declines it differently after two than after five - which
+is exactly why a key that carries the noun has to be reinvented per screen. The
+translations are picked to have nothing to agree with either: Ukrainian takes the
+impersonal phrasing, which has neither gender nor case, and Thai has a single
+form regardless of the number.
+
+So a new count anywhere costs no localization work at all: decide which of the
+three meanings it is, and pass it. A count that fits none of them needs a new key
+that is a meaning too - generic and noun-free, usable by any screen. A key named
+after the screen that happened to need it first is how the app ended up with a
+count phrase per screen in the first place.
+
+**The badge itself.** `CountBadge` (`lib/widgets/`) draws every count in the app.
+It excludes itself from the tree, caps what it draws (`maxCount`, "99+") without
+touching what is spoken, and swaps its pair of colours for a badge drawn on the
+accent rather than on the surface (`onAccent`). It has no opinion about zero: a
+host decides whether there is anything to show, which it has to decide anyway to
+know whether to speak the count.
+
+**Not Flutter's `Badge`.** It performs no semantics of its own - not a merge, not
+an exclusion - so its label survives as a separate, nameless node reading a bare
+digit next to a control that says nothing about it. Draw the count with
+`CountBadge` instead.
 
 ## Verifying it
 

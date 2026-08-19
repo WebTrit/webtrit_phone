@@ -11,6 +11,7 @@ export 'configurable_theme_image.dart';
 export 'confirm_dialog.dart';
 export 'contact_info_builder.dart';
 export 'copy_to_clipboard.dart';
+export 'count_badge.dart';
 export 'diagnostic_report_dialog.dart';
 export 'embedded_request_error.dart';
 export 'extended_text.dart';

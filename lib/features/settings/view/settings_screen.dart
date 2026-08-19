@@ -152,7 +152,12 @@ class SettingsScreen extends StatelessWidget {
                             title: context.parseL10n(item.titleL10n),
                             icon: item.icon,
                             iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
-                            trailing: UnreadBadge(count: state.unreadVoicemailCount),
+                            trailing: state.unreadVoicemailCount > 0
+                                ? CountBadge(count: state.unreadVoicemailCount, size: 32)
+                                : null,
+                            trailingValue: state.unreadVoicemailCount > 0
+                                ? context.l10n.common_SemanticsValue_unreadCount(state.unreadVoicemailCount)
+                                : null,
                             textStyle: effectiveStyle?.itemTextStyle,
                             showSeparator: showSeparators,
                             separatorColor: effectiveStyle?.separatorColor,

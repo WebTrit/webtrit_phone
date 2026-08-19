@@ -38,17 +38,36 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                   tooltip: context.l10n.cacheManagement_Widget_screenTitle,
                   onPressed: _onOpenCacheManagement,
                 ),
-              Badge(
-                alignment: AlignmentDirectional.topCenter,
-                isLabelVisible: state.isMultipleVoicemailsSelection,
-                label: Text(state.selectedVoicemailsIds.length.toString()),
-                child: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: state.items.isNotEmpty
-                      ? () => state.isMultipleVoicemailsSelection
-                            ? _onDeleteSelectedVoicemails()
-                            : _onDeleteAllVoicemails()
-                      : null,
+              // The button names itself, so in selection mode it says how much
+              // it would delete as part of that name - a count of its own would
+              // become a second, nameless stop next to it. The badge draws the
+              // number and stays silent.
+              SemanticAction(
+                label: state.isMultipleVoicemailsSelection
+                    ? '${context.l10n.voicemail_Label_delete}, '
+                          '${context.l10n.common_SemanticsValue_selectedCount(state.selectedVoicemailsIds.length)}'
+                    : context.l10n.voicemail_Label_delete,
+                child: Stack(
+                  alignment: AlignmentDirectional.topCenter,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: state.items.isNotEmpty
+                          ? () => state.isMultipleVoicemailsSelection
+                                ? _onDeleteSelectedVoicemails()
+                                : _onDeleteAllVoicemails()
+                          : null,
+                    ),
+                    if (state.isMultipleVoicemailsSelection)
+                      CountBadge(
+                        count: state.selectedVoicemailsIds.length,
+                        size: 16,
+                        // The count belongs to a destructive action, not to the
+                        // accent every other badge carries.
+                        color: Theme.of(context).colorScheme.error,
+                        onColor: Theme.of(context).colorScheme.onError,
+                      ),
+                  ],
                 ),
               ),
             ],

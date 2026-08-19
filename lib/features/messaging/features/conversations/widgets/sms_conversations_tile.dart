@@ -12,7 +12,7 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/text_matchers.dart';
-import 'package:webtrit_phone/widgets/leading_avatar.dart';
+import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 
 class SmsConversationsTile extends StatefulWidget {
   const SmsConversationsTile({required this.conversation, required this.lastMessage, required this.userId, super.key});
@@ -133,14 +133,14 @@ class _SmsConversationsTileState extends State<SmsConversationsTile> {
             final count = state.unreadCountForSmsConversation(widget.conversation.id);
             if (count == 0) return const SizedBox();
 
-            return Container(
-              margin: const EdgeInsets.only(left: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(12),
+            // The badge is silent by itself; the tile it merges into speaks
+            // the count as its state, after the name of the conversation.
+            return Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Semantics(
+                value: context.l10n.common_SemanticsValue_unreadCount(count),
+                child: CountBadge(count: count),
               ),
-              child: Text('$count', style: const TextStyle(color: Colors.white, fontSize: 12)),
             );
           },
         ),

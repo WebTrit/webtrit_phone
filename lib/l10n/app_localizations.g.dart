@@ -6391,6 +6391,24 @@ abstract class AppLocalizations {
   /// **'Scroll to top'**
   String get common_SemanticsLabel_scrollToTop;
 
+  /// Spoken after the name of whatever carries an unread counter - a tab, a settings row, a conversation. Names no noun on purpose: the name of that thing was just spoken.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} unread'**
+  String common_SemanticsValue_unreadCount(int count);
+
+  /// Spoken after the name of whatever carries a plain counter - active sessions, members of a group. Names no noun on purpose: the name of that thing was just spoken.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} total'**
+  String common_SemanticsValue_totalCount(int count);
+
+  /// Spoken after the name of a control that acts on a selection - how many items it would act on. Names no noun on purpose: the name of that control was just spoken.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String common_SemanticsValue_selectedCount(int count);
+
   /// Accessibility name of the button that empties the contact search field.
   ///
   /// In en, this message translates to:
@@ -6480,12 +6498,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stop forwarding'**
   String get messaging_SemanticsLabel_stopForwarding;
-
-  /// Spoken as the value of the Chats tab - after its name - instead of the raw badge digit.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, one{1 unread conversation} other{{count} unread conversations}}'**
-  String messaging_SemanticsLabel_unreadTab(int count);
 
   /// Accessibility name of the tick that passes the message on to this conversation.
   ///

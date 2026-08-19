@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class MessagingFlavorOverlay extends StatefulWidget {
   const MessagingFlavorOverlay({required this.child, super.key});
@@ -42,28 +43,19 @@ class _MessagingFlavorOverlayState extends State<MessagingFlavorOverlay> {
             // Skip rendering if there are no unread messages
             if (count == 0) return const SizedBox();
 
-            var overlay = Container(
-              width: 14,
-              height: 14,
-              padding: const EdgeInsets.symmetric(horizontal: 1),
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.tertiary, shape: BoxShape.circle),
-              child: FittedBox(
-                child: Text(count.toString(), style: const TextStyle(color: Colors.white)),
-              ),
-            );
-
-            // The raw digit is visual-only: merged into the tab entry it was
-            // spoken as a bare number, and - since the icon slot is built
-            // before the caption - ahead of the tab's own name. The count
-            // travels as the entry's VALUE instead: a value is announced
-            // after the name it belongs to, whatever the render order, which
-            // is how both platforms speak a native tab badge.
+            // The badge draws a glyph and says nothing of its own. Merged into
+            // the tab entry it used to be spoken as a bare number, and - since
+            // the icon slot is built before the caption - ahead of the tab's
+            // own name. The count travels as the entry's VALUE instead: a
+            // value is announced after the name it belongs to, whatever the
+            // render order, which is how both platforms speak a native tab
+            // badge.
             //
             // Deliberately no `container: true`: the node must merge into the
             // entry the bar builds, the one that carries the name, the id and
             // the press.
             final spokenCount = context.parseL10n(
-              'messaging_SemanticsLabel_unreadTab',
+              'common_SemanticsValue_unreadCount',
               arguments: [count],
               // A host without the app's translations still gets a working
               // bar; the badge simply stays silent rather than red-screening
@@ -75,7 +67,7 @@ class _MessagingFlavorOverlayState extends State<MessagingFlavorOverlay> {
               bottom: 0,
               child: Semantics(
                 value: spokenCount,
-                child: ExcludeSemantics(child: overlay),
+                child: CountBadge(count: count, size: 14),
               ),
             );
           },

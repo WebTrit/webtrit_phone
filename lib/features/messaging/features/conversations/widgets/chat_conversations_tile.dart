@@ -211,14 +211,14 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
             final count = state.unreadCountForChatConversation(widget.conversation.id);
             if (count == 0) return const SizedBox();
 
-            return Container(
-              margin: const EdgeInsets.only(left: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(12),
+            // The badge is silent by itself; the tile it merges into speaks
+            // the count as its state, after the name of the conversation.
+            return Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Semantics(
+                value: context.l10n.common_SemanticsValue_unreadCount(count),
+                child: CountBadge(count: count),
               ),
-              child: Text('$count', style: const TextStyle(color: Colors.white, fontSize: 12)),
             );
           },
         ),

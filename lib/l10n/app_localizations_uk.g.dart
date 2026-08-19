@@ -3514,6 +3514,21 @@ class AppLocalizationsUk extends AppLocalizations {
   String get common_SemanticsLabel_scrollToTop => 'Прокрутити догори';
 
   @override
+  String common_SemanticsValue_unreadCount(int count) {
+    return 'непрочитано $count';
+  }
+
+  @override
+  String common_SemanticsValue_totalCount(int count) {
+    return 'усього $count';
+  }
+
+  @override
+  String common_SemanticsValue_selectedCount(int count) {
+    return 'вибрано $count';
+  }
+
+  @override
   String get contacts_SemanticsLabel_clearSearch => 'Очистити пошук';
 
   @override
@@ -3557,17 +3572,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get messaging_SemanticsLabel_stopForwarding => 'Stop forwarding';
-
-  @override
-  String messaging_SemanticsLabel_unreadTab(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count unread conversations',
-      one: '1 unread conversation',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get messaging_SemanticsLabel_sendForward => 'Forward the message';

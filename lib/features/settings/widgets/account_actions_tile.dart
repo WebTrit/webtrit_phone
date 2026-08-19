@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'list_tile_separator.dart';
-import 'unread_badge.dart';
 
 class AccountActionsTile extends StatelessWidget {
   const AccountActionsTile({
@@ -77,7 +77,13 @@ class AccountActionsTile extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(width: 16),
-                            UnreadBadge(count: sessionsCount),
+                            // The badge is silent by itself; the row it merges
+                            // into speaks the count after its own name.
+                            if (sessionsCount > 0)
+                              Semantics(
+                                value: l10n.common_SemanticsValue_totalCount(sessionsCount),
+                                child: CountBadge(count: sessionsCount, size: 32),
+                              ),
                           ],
                         ),
                       ),

@@ -2874,6 +2874,33 @@
   "@common_SemanticsLabel_scrollToTop": {
     "description": "Accessibility name of the button that jumps to the beginning of a long list."
   },
+  "common_SemanticsValue_unreadCount": "{count} unread",
+  "@common_SemanticsValue_unreadCount": {
+    "description": "Spoken after the name of whatever carries an unread counter - a tab, a settings row, a conversation. Names no noun on purpose: the name of that thing was just spoken.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "common_SemanticsValue_totalCount": "{count} total",
+  "@common_SemanticsValue_totalCount": {
+    "description": "Spoken after the name of whatever carries a plain counter - active sessions, members of a group. Names no noun on purpose: the name of that thing was just spoken.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "common_SemanticsValue_selectedCount": "{count} selected",
+  "@common_SemanticsValue_selectedCount": {
+    "description": "Spoken after the name of a control that acts on a selection - how many items it would act on. Names no noun on purpose: the name of that control was just spoken.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "contacts_SemanticsLabel_clearSearch": "Clear search",
   "@contacts_SemanticsLabel_clearSearch": {
     "description": "Accessibility name of the button that empties the contact search field."
@@ -2933,15 +2960,6 @@
   "messaging_SemanticsLabel_stopForwarding": "Stop forwarding",
   "@messaging_SemanticsLabel_stopForwarding": {
     "description": "Accessibility name of the cross that drops the message being passed on."
-  },
-  "messaging_SemanticsLabel_unreadTab": "{count, plural, one{1 unread conversation} other{{count} unread conversations}}",
-  "@messaging_SemanticsLabel_unreadTab": {
-    "description": "Spoken as the value of the Chats tab - after its name - instead of the raw badge digit.",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
   },
   "messaging_SemanticsLabel_sendForward": "Forward the message",
   "@messaging_SemanticsLabel_sendForward": {
