@@ -108,7 +108,15 @@ void main() {
     final chooser = tester.widget<NumberDropdown<String?>>(find.byType(NumberDropdown<String?>));
     expect(chooser.value, '440', reason: 'the main number is what a fresh account calls from');
 
-    expect(tester.getSemantics(find.bySemanticsIdentifier(callerIdDefaultNumberId)).getSemanticsData().value, '440');
+    // Asserting the value on the merged node would prove nothing here: off the
+    // web the field inside supplies one too. What is checked instead is the node
+    // this widget adds - the one that survives the field being dropped.
+    expect(
+      find.byWidgetPredicate(
+        (widget) => widget is Semantics && widget.properties.value == '440' && widget.child is DropdownMenu<String?>,
+      ),
+      findsOneWidget,
+    );
 
     handle.dispose();
   });
