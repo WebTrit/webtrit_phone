@@ -189,7 +189,10 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
     nativeLogForwarder.start();
   }
 
-  final appLifecycle = await AppLifecycle.initMaster();
+  // Side effect only: in master mode the instance adds itself as a
+  // WidgetsBindingObserver, so the binding holds it for the process lifetime and
+  // nothing else needs a reference. Background isolates build their own via initSlave.
+  await AppLifecycle.initMaster();
 
   // ConnectivityService - owns the `Connectivity()` plugin subscription used by
   // the call subsystem (other features still keep their own direct subscriptions).
@@ -232,12 +235,9 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   registry.register<AppLogger>(appLogger);
   registry.register<LogRecordsRepository>(appLoggerRepository);
   registry.register<NativeLogForwarder>(nativeLogForwarder);
-  registry.register<AppLifecycle>(appLifecycle);
-  registry.register<SessionCleanupWorker>(sessionCleanupWorker);
 
   // Network clients
   registry.register<WebtritApiClientFactory>(apiClientFactory);
-  registry.register<RemoteConfigService>(cachedRemoteConfigService);
   registry.register<ConnectivityService>(connectivityService);
   registry.register<AppAnalyticsRepository>(firebase.analytics);
 
