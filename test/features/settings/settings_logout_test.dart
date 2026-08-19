@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,12 +9,16 @@ import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_phone/features/microphone_status/microphone_status.dart';
 import 'package:webtrit_phone/features/register_status/register_status.dart';
 import 'package:webtrit_phone/features/session_status/session_status.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/settings/settings.dart';
 import 'package:webtrit_phone/features/user_info/user_info.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
+
+import '../../helpers/helpers.dart';
 
 class _MockSettingsBloc extends MockBloc<SettingsEvent, SettingsState> implements SettingsBloc {}
 
@@ -27,6 +30,8 @@ class _MockUserInfoCubit extends MockCubit<UserInfoState> implements UserInfoCub
 class _MockSessionStatusCubit extends MockCubit<SessionStatusState> implements SessionStatusCubit {}
 
 class _MockRegisterStatusCubit extends MockCubit<RegisterStatus> implements RegisterStatusCubit {}
+
+class _MockSessionsCubit extends MockCubit<SessionsState> implements SessionsCubit {}
 
 class _MockStackRouter extends Mock implements StackRouter {}
 
@@ -62,6 +67,7 @@ void main() {
   late _MockUserInfoCubit userInfoCubit;
   late _MockSessionStatusCubit sessionStatusCubit;
   late _MockRegisterStatusCubit registerStatusCubit;
+  late _MockSessionsCubit sessionsCubit;
 
   setUp(() {
     settingsBloc = _MockSettingsBloc();
@@ -69,6 +75,7 @@ void main() {
     userInfoCubit = _MockUserInfoCubit();
     sessionStatusCubit = _MockSessionStatusCubit();
     registerStatusCubit = _MockRegisterStatusCubit();
+    sessionsCubit = _MockSessionsCubit();
 
     when(() => settingsBloc.state).thenReturn(const SettingsState(progress: false));
     when(() => microphoneStatusBloc.state).thenReturn(const MicrophoneStatusState());
@@ -76,9 +83,16 @@ void main() {
     when(() => sessionStatusCubit.state).thenReturn(const SessionStatusState());
     when(() => registerStatusCubit.state).thenReturn(const RegisterStatus(value: true));
     when(() => registerStatusCubit.fetchStatus()).thenAnswer((_) async => true);
+    when(() => sessionsCubit.state).thenReturn(SessionsState());
   });
 
-  Widget wrapScreen() {
+  Widget wrapScreen({bool sessionsEnabled = false, int sessions = 0}) {
+    when(() => sessionsCubit.state).thenReturn(
+      SessionsState(
+        sessions: [for (var i = 0; i < sessions; i++) ActiveSession(id: '\$i', current: i == 0)],
+      ),
+    );
+
     final router = _router();
     return ThemeProvider(
       settings: const ThemeSettings(),
@@ -103,8 +117,9 @@ void main() {
                 BlocProvider<UserInfoCubit>.value(value: userInfoCubit),
                 BlocProvider<SessionStatusCubit>.value(value: sessionStatusCubit),
                 BlocProvider<RegisterStatusCubit>.value(value: registerStatusCubit),
+                BlocProvider<SessionsCubit>.value(value: sessionsCubit),
               ],
-              child: _presence(const SettingsScreen(sections: [], sessionsEnabled: false)),
+              child: _presence(SettingsScreen(sections: const [], sessionsEnabled: sessionsEnabled)),
             ),
           ),
         ),
@@ -112,44 +127,60 @@ void main() {
     );
   }
 
-  Future<void> pullDown(WidgetTester tester, {PointerDeviceKind kind = PointerDeviceKind.touch}) async {
-    await tester.fling(find.byType(ListView), const Offset(0, 400), 1000, deviceKind: kind);
+  testWidgets('the app bar offers logout by name', (tester) async {
+    final handle = tester.ensureSemantics();
+
+    await tester.pumpWidget(wrapScreen());
+
+    // A bare door-with-an-arrow icon says nothing on its own, and this one
+    // ends the session.
+    expectTapTargetSemantics(
+      tester,
+      find.bySemanticsIdentifier(settingsLogoutButtonId),
+      label: 'Logout',
+      identifier: settingsLogoutButtonId,
+    );
+
+    handle.dispose();
+  });
+
+  testWidgets('pressing logout through semantics asks before ending the session', (tester) async {
+    final handle = tester.ensureSemantics();
+
+    await tester.pumpWidget(wrapScreen());
+
+    await tapViaSemantics(tester, find.bySemanticsIdentifier(settingsLogoutButtonId));
     await tester.pumpAndSettle();
-  }
 
-  testWidgets('pulling the account list down asks the server for the status again', (tester) async {
-    await tester.pumpWidget(wrapScreen());
+    // Logging out is not undoable, so the icon opens the question instead of
+    // ending the session on the spot.
+    expect(find.byType(ConfirmDialog), findsOneWidget);
+    verifyNever(() => settingsBloc.add(const SettingsLogouted()));
 
-    await pullDown(tester);
-
-    verify(() => registerStatusCubit.fetchStatus()).called(1);
+    handle.dispose();
   });
 
-  testWidgets('the account screen has no refresh control left in its app bar', (tester) async {
+  testWidgets('the list no longer carries a logout row', (tester) async {
     await tester.pumpWidget(wrapScreen());
 
-    // The gesture replaced the button: a refresh action here would mean two
-    // ways to do the same thing.
-    expect(find.descendant(of: find.byType(AppBar), matching: find.byIcon(Icons.refresh)), findsNothing);
+    expect(find.descendant(of: find.byType(ListView), matching: find.byIcon(Icons.logout)), findsNothing);
   });
 
-  testWidgets('the list can be pulled with a mouse as well', (tester) async {
-    // Material lists ignore a mouse drag by default, and on the web build a
-    // mouse is the only pointer there is - the refresh would be unreachable.
-    await tester.pumpWidget(wrapScreen());
+  testWidgets('the sessions row stays in the list and says how many there are', (tester) async {
+    final handle = tester.ensureSemantics();
 
-    await pullDown(tester, kind: PointerDeviceKind.mouse);
+    await tester.pumpWidget(wrapScreen(sessionsEnabled: true, sessions: 3));
 
-    verify(() => registerStatusCubit.fetchStatus()).called(1);
+    expect(find.text('Sessions'), findsOneWidget);
+    // The badge is silent by itself; the row speaks the count after its name.
+    expect(tester.getSemantics(find.text('Sessions')).label, contains('3'));
+
+    handle.dispose();
   });
 
-  testWidgets('a failed refresh explains itself', (tester) async {
-    when(() => registerStatusCubit.fetchStatus()).thenAnswer((_) async => false);
-
+  testWidgets('no sessions row when the backend cannot list them', (tester) async {
     await tester.pumpWidget(wrapScreen());
 
-    await pullDown(tester);
-
-    expect(find.byType(SnackBar), findsOneWidget);
+    expect(find.text('Sessions'), findsNothing);
   });
 }
