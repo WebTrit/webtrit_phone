@@ -16,12 +16,7 @@ class ConfirmDialog extends StatelessWidget {
   // screen is hosted inside another navigator (the configurator preview), where the
   // root navigator belongs to the host and the dialog would otherwise escape its
   // surface and lose the phone's Localizations.
-  static Future<bool?> show(
-    BuildContext context, {
-    required String title,
-    required String content,
-    ConfirmDialogStyle? style,
-  }) {
+  static Future<bool?> show(BuildContext context, {required String title, String? content, ConfirmDialogStyle? style}) {
     return showDialog<bool?>(
       context: context,
       useRootNavigator: false,
@@ -34,7 +29,7 @@ class ConfirmDialog extends StatelessWidget {
   static Future<bool?> showDangerous(
     BuildContext context, {
     required String title,
-    required String content,
+    String? content,
     ConfirmDialogStyle? style,
   }) {
     return showDialog<bool?>(
@@ -46,16 +41,23 @@ class ConfirmDialog extends StatelessWidget {
     );
   }
 
-  const ConfirmDialog._({this.dangerous = false, required this.title, required this.content, required this.style});
+  const ConfirmDialog._({this.dangerous = false, required this.title, this.content, required this.style});
 
   final bool dangerous;
   final String title;
-  final String content;
+
+  /// What the confirmation is about, under the question.
+  ///
+  /// Optional because some questions are complete on their own - "Leave this
+  /// group?" says everything - and a dialog that repeats its title in smaller
+  /// type reads worse than one without.
+  final String? content;
 
   final ConfirmDialogStyle? style;
 
   @override
   Widget build(BuildContext context) {
+    final content = this.content;
     final localStyle = ConfirmDialogStyle.merge(style, Theme.of(context).extension<ConfirmDialogStyles>()?.primary);
 
     return AlertDialog(
@@ -66,7 +68,7 @@ class ConfirmDialog extends StatelessWidget {
       titleTextStyle: localStyle.titleTextStyle,
       contentTextStyle: localStyle.contentTextStyle,
       title: Text(title),
-      content: Text(content),
+      content: content == null ? null : Text(content),
       actions: [
         TextButton(
           key: confirmDialogNoButtonKey,

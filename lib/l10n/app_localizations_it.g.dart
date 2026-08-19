@@ -1367,15 +1367,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_ChooseContact_title => 'Scegli il contatto:';
 
   @override
-  String get messaging_ConfirmDialog_ask => 'SÌ?';
-
-  @override
-  String get messaging_ConfirmDialog_cancel => 'No';
-
-  @override
-  String get messaging_ConfirmDialog_confirm => 'SÌ';
-
-  @override
   String get messaging_ConversationBuilders_back => 'Dopo';
 
   @override
@@ -1502,6 +1493,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_Conversations_tile_you => 'Voi';
 
   @override
+  String get messaging_DeleteConversationDialog_content => 'Sarà rimossa da questo dispositivo e dall\'account.';
+
+  @override
+  String get messaging_DeleteConversationDialog_title => 'Eliminare questa conversazione?';
+
+  @override
   String get messaging_DialogInfo_deleteAsk => 'Sei sicuro di voler eliminare questa finestra di dialogo?';
 
   @override
@@ -1527,6 +1524,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get messaging_GroupInfo_groupMembersHeadline => 'Membri del gruppo';
+
+  @override
+  String get messaging_LeaveGroupDialog_content =>
+      'Non riceverai piu i suoi messaggi. La conversazione resta per gli altri.';
+
+  @override
+  String get messaging_LeaveGroupDialog_title => 'Uscire da questo gruppo?';
 
   @override
   String get messaging_GroupInfo_leaveAndDeleteAsk => 'Vuoi davvero uscire ed eliminare questo gruppo?';

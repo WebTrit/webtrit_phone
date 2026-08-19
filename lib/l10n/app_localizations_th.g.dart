@@ -1350,15 +1350,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get messaging_ChooseContact_title => 'เลือกรายชื่อติดต่อ:';
 
   @override
-  String get messaging_ConfirmDialog_ask => 'คุณแน่ใจหรือไม่?';
-
-  @override
-  String get messaging_ConfirmDialog_cancel => 'ไม่';
-
-  @override
-  String get messaging_ConfirmDialog_confirm => 'ใช่';
-
-  @override
   String get messaging_ConversationBuilders_back => 'ย้อนกลับ';
 
   @override
@@ -1483,6 +1474,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get messaging_Conversations_tile_you => 'คุณ';
 
   @override
+  String get messaging_DeleteConversationDialog_content => 'ระบบจะลบออกจากอุปกรณ์นี้และจากบัญชี';
+
+  @override
+  String get messaging_DeleteConversationDialog_title => 'ลบการสนทนานี้หรือไม่';
+
+  @override
   String get messaging_DialogInfo_deleteAsk => 'คุณแน่ใจหรือไม่ว่าต้องการลบบทสนทนานี้?';
 
   @override
@@ -1508,6 +1505,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get messaging_GroupInfo_groupMembersHeadline => 'สมาชิกกลุ่ม';
+
+  @override
+  String get messaging_LeaveGroupDialog_content =>
+      'คุณจะไม่ได้รับข้อความของกลุ่มอีกต่อไป การสนทนายังคงอยู่สำหรับคนอื่น';
+
+  @override
+  String get messaging_LeaveGroupDialog_title => 'ออกจากกลุ่มนี้หรือไม่';
 
   @override
   String get messaging_GroupInfo_leaveAndDeleteAsk => 'คุณแน่ใจหรือไม่ว่าต้องการออกและลบกลุ่มนี้?';

@@ -606,9 +606,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'messaging_ChooseContact_cancel' => messaging_ChooseContact_cancel,
       'messaging_ChooseContact_empty' => messaging_ChooseContact_empty,
       'messaging_ChooseContact_title' => messaging_ChooseContact_title,
-      'messaging_ConfirmDialog_ask' => messaging_ConfirmDialog_ask,
-      'messaging_ConfirmDialog_cancel' => messaging_ConfirmDialog_cancel,
-      'messaging_ConfirmDialog_confirm' => messaging_ConfirmDialog_confirm,
       'messaging_ConversationBuilders_back' =>
         messaging_ConversationBuilders_back,
       'messaging_ConversationBuilders_cancel' =>
@@ -683,6 +680,10 @@ extension AppLocalizationsExtension on AppLocalizations {
       'messaging_Conversations_tile_empty' =>
         messaging_Conversations_tile_empty,
       'messaging_Conversations_tile_you' => messaging_Conversations_tile_you,
+      'messaging_DeleteConversationDialog_content' =>
+        messaging_DeleteConversationDialog_content,
+      'messaging_DeleteConversationDialog_title' =>
+        messaging_DeleteConversationDialog_title,
       'messaging_DialogInfo_deleteAsk' => messaging_DialogInfo_deleteAsk,
       'messaging_DialogInfo_deleteBtn' => messaging_DialogInfo_deleteBtn,
       'messaging_DialogInfo_title' => messaging_DialogInfo_title,
@@ -697,6 +698,9 @@ extension AppLocalizationsExtension on AppLocalizations {
         messaging_GroupInfo_deleteLeaveBtnText,
       'messaging_GroupInfo_groupMembersHeadline' =>
         messaging_GroupInfo_groupMembersHeadline,
+      'messaging_LeaveGroupDialog_content' =>
+        messaging_LeaveGroupDialog_content,
+      'messaging_LeaveGroupDialog_title' => messaging_LeaveGroupDialog_title,
       'messaging_GroupInfo_leaveAndDeleteAsk' =>
         messaging_GroupInfo_leaveAndDeleteAsk,
       'messaging_GroupInfo_leaveAsk' => messaging_GroupInfo_leaveAsk,

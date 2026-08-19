@@ -2455,24 +2455,6 @@ abstract class AppLocalizations {
   /// **'Choose contact:'**
   String get messaging_ChooseContact_title;
 
-  /// No description provided for @messaging_ConfirmDialog_ask.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure?'**
-  String get messaging_ConfirmDialog_ask;
-
-  /// No description provided for @messaging_ConfirmDialog_cancel.
-  ///
-  /// In en, this message translates to:
-  /// **'No'**
-  String get messaging_ConfirmDialog_cancel;
-
-  /// No description provided for @messaging_ConfirmDialog_confirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Yes'**
-  String get messaging_ConfirmDialog_confirm;
-
   /// No description provided for @messaging_ConversationBuilders_back.
   ///
   /// In en, this message translates to:
@@ -2707,6 +2689,18 @@ abstract class AppLocalizations {
   /// **'You'**
   String get messaging_Conversations_tile_you;
 
+  /// What deleting a conversation from the list actually does, shown under the title.
+  ///
+  /// In en, this message translates to:
+  /// **'It will be removed from this device and from the account.'**
+  String get messaging_DeleteConversationDialog_content;
+
+  /// Title of the confirmation shown when a conversation is swiped away in the list.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this conversation?'**
+  String get messaging_DeleteConversationDialog_title;
+
   /// No description provided for @messaging_DialogInfo_deleteAsk.
   ///
   /// In en, this message translates to:
@@ -2760,6 +2754,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Group members'**
   String get messaging_GroupInfo_groupMembersHeadline;
+
+  /// What leaving a group actually does, as opposed to deleting the conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'You will stop receiving its messages. The conversation stays for everyone else.'**
+  String get messaging_LeaveGroupDialog_content;
+
+  /// Title of the confirmation shown when a group conversation is swiped away by someone who does not own it.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave this group?'**
+  String get messaging_LeaveGroupDialog_title;
 
   /// No description provided for @messaging_GroupInfo_leaveAndDeleteAsk.
   ///

@@ -1214,12 +1214,6 @@
   "@messaging_ChooseContact_empty": {},
   "messaging_ChooseContact_title": "Виберіть контакт:",
   "@messaging_ChooseContact_title": {},
-  "messaging_ConfirmDialog_ask": "Ви впевнені?",
-  "@messaging_ConfirmDialog_ask": {},
-  "messaging_ConfirmDialog_cancel": "Ні",
-  "@messaging_ConfirmDialog_cancel": {},
-  "messaging_ConfirmDialog_confirm": "Так",
-  "@messaging_ConfirmDialog_confirm": {},
   "messaging_ConversationBuilders_back": "Назад",
   "@messaging_ConversationBuilders_back": {},
   "messaging_ConversationBuilders_cancel": "Скасувати",
@@ -1318,6 +1312,14 @@
   "@messaging_Conversations_tile_empty": {},
   "messaging_Conversations_tile_you": "Ви",
   "@messaging_Conversations_tile_you": {},
+  "messaging_DeleteConversationDialog_content": "Її буде прибрано і з цього пристрою, і з облікового запису.",
+  "@messaging_DeleteConversationDialog_content": {
+    "description": "What deleting a conversation from the list actually does, shown under the title."
+  },
+  "messaging_DeleteConversationDialog_title": "Видалити цю розмову?",
+  "@messaging_DeleteConversationDialog_title": {
+    "description": "Title of the confirmation shown when a conversation is swiped away in the list."
+  },
   "messaging_DialogInfo_deleteAsk": "Ви впевнені, що хочете видалити цей діалог?",
   "@messaging_DialogInfo_deleteAsk": {},
   "messaging_DialogInfo_deleteBtn": "Видалити діалог",
@@ -1336,6 +1338,14 @@
   "@messaging_GroupInfo_deleteLeaveBtnText": {},
   "messaging_GroupInfo_groupMembersHeadline": "Члени групи",
   "@messaging_GroupInfo_groupMembersHeadline": {},
+  "messaging_LeaveGroupDialog_content": "Ви більше не отримуватимете її повідомлень. Для інших розмова залишиться.",
+  "@messaging_LeaveGroupDialog_content": {
+    "description": "What leaving a group actually does, as opposed to deleting the conversation."
+  },
+  "messaging_LeaveGroupDialog_title": "Вийти з цієї групи?",
+  "@messaging_LeaveGroupDialog_title": {
+    "description": "Title of the confirmation shown when a group conversation is swiped away by someone who does not own it."
+  },
   "messaging_GroupInfo_leaveAndDeleteAsk": "Ви впевнені, що бажаєте вийти та видалити цю групу?",
   "@messaging_GroupInfo_leaveAndDeleteAsk": {},
   "messaging_GroupInfo_leaveAsk": "Ви впевнені, що бажаєте залишити цю групу?",

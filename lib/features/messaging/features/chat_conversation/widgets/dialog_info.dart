@@ -9,7 +9,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
-import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class DialogChatInfo extends StatefulWidget {
   const DialogChatInfo(
@@ -34,10 +34,7 @@ class _DialogChatInfoState extends State<DialogChatInfo> {
   late final _callController = CallControllerScope.of(context);
 
   Future<void> onDeleteDialog() async {
-    final askResult = await showDialog<bool>(
-      context: context,
-      builder: (context) => ConfirmDialog(askText: context.l10n.messaging_DialogInfo_deleteAsk),
-    );
+    final askResult = await ConfirmDialog.show(context, title: context.l10n.messaging_DialogInfo_deleteAsk);
 
     if (!mounted) return;
     if (askResult != true) return;
