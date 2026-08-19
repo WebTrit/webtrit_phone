@@ -74,7 +74,6 @@
     },
     "leadingAvatarStyle": {
       "backgroundColor": "#3C4750",
-      "radius": 20.0,
       "initialsTextStyle": {
         "fontFamily": "Montserrat",
         "fontSize": 16,
@@ -89,14 +88,12 @@
         "matchTextDirection": false
       },
       "loading": {
-        "showByDefault": false,
         "padding": {
           "left": 2.0,
           "top": 2.0,
           "right": 2.0,
           "bottom": 2.0
-        },
-        "strokeWidth": 1.0
+        }
       },
       "smartIndicator": {
         "backgroundColor": "#1D2022",
@@ -104,22 +101,7 @@
           "codePoint": "0xe491",
           "fontFamily": "MaterialIcons",
           "matchTextDirection": false
-        },
-        "sizeFactor": 0.4
-      },
-      "registeredBadge": {
-        "registeredColor": null,
-        "unregisteredColor": null,
-        "sizeFactor": 0.2
-      },
-      "presenceBadge": {
-        "availableColor": null,
-        "unavailableColor": null,
-        "sizeFactor": 0.325
-      },
-      "nameColors": {
-        "enabled": true,
-        "palette": null
+        }
       }
     }
   },

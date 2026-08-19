@@ -185,6 +185,13 @@ Configurable properties:
 
 #### Leading Avatar Style Configuration
 
+> **A theme lists only what it wants different.** Every value below has an app-side default
+> (`LeadingAvatarStyle.defaults`); a key present in the theme is a deliberate override and pins that
+> value for good, a key left out follows the app and changes with the next build. So do not restate
+> a default here - that is exactly what stops an app-wide appearance change from reaching this
+> deployment. The shipped `original.widget.*.config.json` files follow the same rule and therefore
+> mention only the values that differ from the app.
+
 The **Leading Avatar** component is a circular profile/avatar element commonly used in lists, call
 screens, and contact details.  
 It can display a user’s photo, initials, or a placeholder icon, and supports additional visual
@@ -207,13 +214,13 @@ smart badges, and registration status markers.
     - **palette** — optional list of hex colors to pick from; when `null` or empty the color is
       generated from the name hash (unbounded number of hues, tuned per light/dark theme).
 
-**Example:**
+**Example** (only the values this brand wants different; badge sizes, name colors and the avatar
+radius are left to the app):
 
 ```json
 {
   "leadingAvatarStyle": {
     "backgroundColor": "#EEF3F6",
-    "radius": 20.0,
     "initialsTextStyle": {
       "fontFamily": "Montserrat",
       "fontSize": null,
@@ -228,14 +235,12 @@ smart badges, and registration status markers.
       "matchTextDirection": false
     },
     "loading": {
-      "showByDefault": false,
       "padding": {
         "left": 2.0,
         "top": 2.0,
         "right": 2.0,
         "bottom": 2.0
-      },
-      "strokeWidth": 1.0
+      }
     },
     "smartIndicator": {
       "backgroundColor": "#F8FBFD",
@@ -243,17 +248,7 @@ smart badges, and registration status markers.
         "codePoint": "0xe491",
         "fontFamily": "MaterialIcons",
         "matchTextDirection": false
-      },
-      "sizeFactor": 0.4
-    },
-    "registeredBadge": {
-      "registeredColor": null,
-      "unregisteredColor": null,
-      "sizeFactor": 0.2
-    },
-    "nameColors": {
-      "enabled": true,
-      "palette": null
+      }
     }
   }
 }
