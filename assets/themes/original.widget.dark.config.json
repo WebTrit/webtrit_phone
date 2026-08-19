@@ -78,7 +78,8 @@
       "_presenceBadge": {
         "availableColor": null,
         "unavailableColor": null,
-        "sizeFactor": 0.4
+        "iconColor": null,
+        "sizeFactor": 0.5
       },
       "_registeredBadge": {
         "registeredColor": null,

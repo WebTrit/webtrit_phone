@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:icon_decoration/icon_decoration.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/models/models.dart';
@@ -103,10 +102,10 @@ void main() {
       );
 
       expect(find.byType(SipPresenceIndicator), findsOneWidget);
-      expect(tester.getSize(find.byType(SipPresenceIndicator)), const Size(diameter * 0.4, diameter * 0.4));
+      expect(tester.getSize(find.byType(SipPresenceIndicator)), const Size(diameter * 0.5, diameter * 0.5));
     });
 
-    testWidgets('keeps the badge and its activity icon inside the avatar', (tester) async {
+    testWidgets('keeps the glyph inside the badge and the badge inside the avatar', (tester) async {
       await tester.pumpWidget(
         wrap(
           AvatarStatusBadge(
@@ -120,15 +119,18 @@ void main() {
 
       final avatar = tester.getRect(find.byType(AvatarStatusBadge));
       final dot = tester.getRect(find.byType(SipPresenceIndicator));
-      final icon = tester.getRect(find.byType(DecoratedIcon));
+      final icon = tester.getRect(find.descendant(of: find.byType(SipPresenceIndicator), matching: find.byType(Icon)));
 
-      // The dot sits flush in the bottom-right corner and the activity icon
-      // floats up into the avatar - neither may spill over the edge, which is
-      // what would clip in a dense list.
+      // The dot sits flush in the bottom-right corner of the avatar, and the
+      // activity glyph lives inside the dot - an icon laid over it would cut
+      // into the outline and make the mark read smaller than it is.
       expect(dot.right, avatar.right);
       expect(dot.bottom, avatar.bottom);
-      expect(icon.right, lessThanOrEqualTo(avatar.right));
-      expect(icon.top, greaterThanOrEqualTo(avatar.top));
+      expect(dot.width, avatar.width * 0.5);
+      expect(icon.left, greaterThanOrEqualTo(dot.left));
+      expect(icon.top, greaterThanOrEqualTo(dot.top));
+      expect(icon.right, lessThanOrEqualTo(dot.right));
+      expect(icon.bottom, lessThanOrEqualTo(dot.bottom));
     });
 
     testWidgets('ignores registration data', (tester) async {
