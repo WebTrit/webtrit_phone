@@ -1951,10 +1951,6 @@
   "@settings_SemanticsLabel_editAccount": {
     "description": "Accessibility name of the pencil button next to the account details on the settings screen."
   },
-  "settings_SemanticsLabel_refresh": "Refresh account status",
-  "@settings_SemanticsLabel_refresh": {
-    "description": "Accessibility name of the refresh button in the app bar of the settings screen."
-  },
   "settings_audioProcessing_Section_AGC_title": "Автоматичне регулювання посилення",
   "@settings_audioProcessing_Section_AGC_title": {},
   "settings_audioProcessing_Section_AM_title": "Віддзеркалення аудіо",

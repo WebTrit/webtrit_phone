@@ -1012,7 +1012,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'settings_AppBarTitle_myAccount' => settings_AppBarTitle_myAccount,
       'settings_SemanticsLabel_editAccount' =>
         settings_SemanticsLabel_editAccount,
-      'settings_SemanticsLabel_refresh' => settings_SemanticsLabel_refresh,
       'settings_audioProcessing_Section_AGC_title' =>
         settings_audioProcessing_Section_AGC_title,
       'settings_audioProcessing_Section_AM_title' =>
