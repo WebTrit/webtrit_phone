@@ -141,7 +141,7 @@ class _NumberCdrsScreenState extends State<NumberCdrsScreen> {
                             username: title,
                             thumbnail: contact?.thumbnail,
                             thumbnailUrl: gravatarThumbnailUrl(email),
-                            registered: contact?.registered,
+                            badge: AvatarStatusBadge(registered: contact?.registered),
                             radius: 50,
                           ),
                         ),

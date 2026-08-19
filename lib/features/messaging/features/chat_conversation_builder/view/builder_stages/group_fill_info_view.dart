@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/messaging/widgets/group_avatar.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/widgets/leading_avatar.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../chat_conversation_builder.dart';
 
@@ -89,7 +89,7 @@ class _GroupFillInfoViewState extends State<GroupFillInfoView> {
                           username: contact.displayTitle,
                           thumbnail: contact.thumbnail,
                           thumbnailUrl: contact.thumbnailUrl,
-                          registered: contact.registered,
+                          badge: AvatarStatusBadge(registered: contact.registered),
                           radius: 24,
                         ),
                         title: Text(contact.displayTitle),

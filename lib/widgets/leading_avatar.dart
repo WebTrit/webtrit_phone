@@ -3,9 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
-import 'package:webtrit_phone/widgets/sip_presence_indicator.dart';
 
 import '../utils/utils.dart';
 import 'safe_network_image.dart';
@@ -17,28 +15,27 @@ class LeadingAvatar extends StatefulWidget {
     this.thumbnail,
     this.thumbnailUrl,
     this.placeholderIcon = Icons.person_outline,
-    this.registered,
     this.smart = false,
     this.radius, // value of private _defaultRadius variable in CircleAvatar class
     this.showLoading = false,
     this.loadingPadding,
     this.style,
-    this.presenceInfo,
-    this.dialogInfo,
+    this.badge,
   });
 
   final String? username;
   final Uint8List? thumbnail;
   final Uri? thumbnailUrl;
   final IconData placeholderIcon;
-  final bool? registered;
   final bool smart;
   final double? radius;
   final bool showLoading;
   final EdgeInsets? loadingPadding;
   final LeadingAvatarStyle? style;
-  final List<PresenceInfo>? presenceInfo;
-  final List<DialogInfo>? dialogInfo;
+
+  /// Status badge overlay (e.g. [AvatarStatusBadge]); it receives the whole
+  /// avatar square and positions itself within it.
+  final Widget? badge;
 
   @override
   State<LeadingAvatar> createState() => _LeadingAvatarState();
@@ -48,8 +45,6 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   late LeadingAvatarStyle _style;
   late double _radius;
   late double _diameter;
-  late Rect _registeredRect;
-  late Rect _presenceRect;
   late Rect _smartRect;
 
   @override
@@ -73,11 +68,8 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     if (oldWidget.style != widget.style ||
         oldWidget.radius != widget.radius ||
         oldWidget.smart != widget.smart ||
-        oldWidget.registered != widget.registered ||
         oldWidget.thumbnailUrl != widget.thumbnailUrl ||
         oldWidget.thumbnail != widget.thumbnail ||
-        oldWidget.presenceInfo != widget.presenceInfo ||
-        oldWidget.dialogInfo != widget.dialogInfo ||
         oldWidget.username != widget.username) {
       _recompute();
     }
@@ -96,13 +88,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   }
 
   void _updateBadgeRects() {
-    final registeredSizeFactor = _style.registeredBadge?.sizeFactor ?? 0.2;
     final smartSizeFactor = _style.smartIndicator?.sizeFactor ?? 0.4;
-    final presenceSizeFactor = _style.presenceBadge?.sizeFactor ?? 0.325;
-
-    _registeredRect = BadgeLayout.bottomRightSquare(size: _diameter, sizeFactor: registeredSizeFactor);
-
-    _presenceRect = BadgeLayout.bottomRightSquare(size: _diameter, sizeFactor: presenceSizeFactor);
 
     _smartRect = BadgeLayout.topLeftSquare(
       size: _diameter,
@@ -126,7 +112,6 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final presenceParams = PresenceViewParams.of(context);
     final nameBackgroundColor = _nameBackgroundColor(context);
 
     return Container(
@@ -158,26 +143,12 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
               child: _buildAvatarContent(_diameter, _style),
             ),
           ),
-          if (!presenceParams.hybridPresenceSupport && widget.registered != null)
-            Positioned.fromRect(rect: _registeredRect, child: _registeredIndicator(_style)),
-          if (presenceParams.hybridPresenceSupport && widget.presenceInfo != null)
-            Positioned.fromRect(
-              rect: _presenceRect,
-              child: _buildPresenceIndicator(_style, widget.presenceInfo!, widget.dialogInfo ?? []),
-            ),
+          if (widget.badge != null) Positioned.fill(child: widget.badge!),
           if (widget.smart) Positioned.fromRect(rect: _smartRect, child: _smartIndicator(_diameter, _style, scheme)),
           if (widget.showLoading) _buildLoadingOverlay(_style),
         ],
       ),
     );
-  }
-
-  Widget _buildPresenceIndicator(
-    LeadingAvatarStyle style,
-    List<PresenceInfo> presenceInfo,
-    List<DialogInfo> dialogInfo,
-  ) {
-    return SipPresenceIndicator(presenceInfo: presenceInfo, presenceRect: _presenceRect, dialogInfo: dialogInfo);
   }
 
   Widget _buildAvatarContent(double diameter, LeadingAvatarStyle style) {
@@ -252,19 +223,6 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     }
 
     return Icon(icon, size: diameter * 0.5, color: color);
-  }
-
-  Widget _registeredIndicator(LeadingAvatarStyle style) {
-    final registered = widget.registered!;
-    final rs = Theme.of(context).extension<RegisteredStatusStyles>()?.primary;
-
-    final color = registered
-        ? (style.registeredBadge?.registeredColor ?? rs?.registered)
-        : (style.registeredBadge?.unregisteredColor ?? rs?.unregistered);
-
-    return Container(
-      decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-    );
   }
 
   Widget _smartIndicator(double diameter, LeadingAvatarStyle style, ColorScheme scheme) {

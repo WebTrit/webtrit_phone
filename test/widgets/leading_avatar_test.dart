@@ -19,14 +19,7 @@ void main() {
           ),
         ],
       ),
-      home: Scaffold(
-        body: PresenceViewParams(
-          hybridPresenceSupport: false,
-          blfViaSipSupport: false,
-          presenceViaSipSupport: false,
-          child: child,
-        ),
-      ),
+      home: Scaffold(body: child),
     );
   }
 
@@ -85,6 +78,29 @@ void main() {
       await tester.pumpWidget(wrap(const LeadingAvatar(username: null), nameColors: const NameColorsStyle()));
 
       expect(backgroundOf(tester), const Color(0xFFEEF3F6));
+    });
+  });
+
+  group('LeadingAvatar badge slot', () {
+    testWidgets('renders the injected badge over the avatar', (tester) async {
+      const badgeKey = Key('badge');
+
+      await tester.pumpWidget(
+        wrap(
+          const LeadingAvatar(
+            username: 'John Doe',
+            badge: SizedBox(key: badgeKey),
+          ),
+        ),
+      );
+
+      expect(find.descendant(of: find.byType(LeadingAvatar), matching: find.byKey(badgeKey)), findsOneWidget);
+    });
+
+    testWidgets('renders nothing extra without a badge', (tester) async {
+      await tester.pumpWidget(wrap(const LeadingAvatar(username: 'John Doe')));
+
+      expect(find.byKey(const Key('badge')), findsNothing);
     });
   });
 }

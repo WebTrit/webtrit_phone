@@ -41,7 +41,7 @@ class CallLogScreen extends StatelessWidget {
                   username: title,
                   thumbnail: contact?.thumbnail,
                   thumbnailUrl: gravatarThumbnailUrl(email),
-                  registered: contact?.registered,
+                  badge: AvatarStatusBadge(registered: contact?.registered),
                   radius: 50,
                 ),
               ),
