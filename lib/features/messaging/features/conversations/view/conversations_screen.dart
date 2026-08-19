@@ -190,7 +190,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                 return ExtTabBar(
                   controller: _tabController,
                   width: mediaQueryData.size.width * 0.75,
-                  height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
+                  height: kMainAppBarBottomControlHeight,
                   tabs: _tabs.map((tabType) {
                     final title = switch (tabType) {
                       TabType.chat => context.l10n.messaging_ConversationsScreen_messages_title,
@@ -248,8 +248,8 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
           },
           onSubmitted: (value) => {},
           iconConstraints: const BoxConstraints.expand(
-            width: kMainAppBarBottomSearchHeight - kMainAppBarBottomPaddingGap,
-            height: kMainAppBarBottomSearchHeight - kMainAppBarBottomPaddingGap,
+            width: kMainAppBarBottomControlHeight,
+            height: kMainAppBarBottomControlHeight,
           ),
         ),
       ),

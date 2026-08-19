@@ -48,12 +48,18 @@ const kInset = kMinInteractiveDimension / 2;
 
 const kMainAppBarBottomPaddingGap = 6.0;
 
-/// Height the app bar gives its tab strip: a full-size tap target for the
-/// tabs themselves plus the gap below them. The strip used to be 42, which
-/// left each tab 36 high - two thirds of what it takes to hit one reliably,
-/// while the search field in the same app bar was already full size.
-const kMainAppBarBottomTabHeight = kMinInteractiveDimension + kMainAppBarBottomPaddingGap;
-const kMainAppBarBottomSearchHeight = kMinInteractiveDimension;
+/// Height of a control the app bar carries in its bottom rows - a tab, the
+/// search field, the button that clears it.
+///
+/// Every one of them is a tap target, so this is the floor: pass it to the
+/// control directly. Deriving a control's height from the row that holds it
+/// is what leaves it short, because the row also carries the gap below.
+const kMainAppBarBottomControlHeight = kMinInteractiveDimension;
+
+/// What the app bar reserves for such a row: the control plus the gap that
+/// separates it from what follows.
+const kMainAppBarBottomTabHeight = kMainAppBarBottomControlHeight + kMainAppBarBottomPaddingGap;
+const kMainAppBarBottomSearchHeight = kMainAppBarBottomControlHeight + kMainAppBarBottomPaddingGap;
 
 /// Standard vertical padding (in logical pixels) used around Material list items.
 ///
