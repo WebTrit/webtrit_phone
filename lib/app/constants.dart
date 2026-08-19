@@ -46,9 +46,14 @@ const kDefaultCountdownRepeatIntervalSeconds = Duration(seconds: 30);
 
 const kInset = kMinInteractiveDimension / 2;
 
-const kMainAppBarBottomTabHeight = 42.0;
-const kMainAppBarBottomSearchHeight = kMinInteractiveDimension;
 const kMainAppBarBottomPaddingGap = 6.0;
+
+/// Height the app bar gives its tab strip: a full-size tap target for the
+/// tabs themselves plus the gap below them. The strip used to be 42, which
+/// left each tab 36 high - two thirds of what it takes to hit one reliably,
+/// while the search field in the same app bar was already full size.
+const kMainAppBarBottomTabHeight = kMinInteractiveDimension + kMainAppBarBottomPaddingGap;
+const kMainAppBarBottomSearchHeight = kMinInteractiveDimension;
 
 /// Standard vertical padding (in logical pixels) used around Material list items.
 ///

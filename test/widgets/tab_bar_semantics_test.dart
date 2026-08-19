@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/messaging/features/conversations/widgets/unread_badge.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -67,6 +68,46 @@ void main() {
 
     expect(controller.index, 1);
 
+    handle.dispose();
+  });
+
+  testWidgets('a tab of the app bar strip is big enough to be hit', (tester) async {
+    // The strip is sized by the app bar, not by the tab: kMainAppBarBottomTabHeight
+    // minus the gap below it is what every tab gets, on all four screens that
+    // carry one.
+    final controller = TabController(length: 2, vsync: const TestVSync());
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: kMainAppBarBottomPaddingGap),
+                child: ExtTabBar(
+                  controller: controller,
+                  height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
+                  tabs: const [
+                    ExtTab(identifier: contactsTabLocalId, text: 'Phone'),
+                    ExtTab(identifier: contactsTabExtId, text: 'Directory'),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          body: TabBarView(controller: controller, children: const [Text('local'), Text('external')]),
+        ),
+      ),
+    );
+
+    // The node the platform is told about is the merged one that answers the
+    // press - the Tab widget itself reports its own preferred height, which
+    // is not what a finger has to hit.
+    final handle = tester.ensureSemantics();
+    final tab = tester.getSemantics(find.bySemanticsIdentifier(contactsTabLocalId));
+    expect(tab.rect.height, greaterThanOrEqualTo(kMinInteractiveDimension));
     handle.dispose();
   });
 
