@@ -50,6 +50,54 @@ void main() {
     handle.dispose();
   });
 
+  testWidgets('the default number chooser is named by the caption beside it', (tester) async {
+    final handle = tester.ensureSemantics();
+
+    stub();
+    await tester.pumpWidget(wrap());
+
+    // On its own the chooser announces the number it shows and nothing else -
+    // the caption next to it is what says which number that is. Name, id and
+    // the field itself have to be ONE node: a caption sitting on a node above
+    // the field leaves the field nameless, which is what a screen reader
+    // actually reads out.
+    final chooser = tester.getSemantics(find.bySemanticsIdentifier(callerIdDefaultNumberId)).getSemanticsData();
+    expect(chooser.label, contains('Number'));
+    expect(chooser.identifier, callerIdDefaultNumberId);
+    expect(chooser.flagsCollection.isTextField, isTrue, reason: 'the named node IS the chooser');
+
+    handle.dispose();
+  });
+
+  testWidgets('the halves of a new rule say what each of them chooses', (tester) async {
+    final handle = tester.ensureSemantics();
+
+    stub();
+    await tester.pumpWidget(wrap());
+    await tapViaSemantics(tester, find.bySemanticsIdentifier(callerIdAddMatchId));
+    await tester.pumpAndSettle();
+
+    // The number chooser is named by a hint that disappears the moment a
+    // number is picked, and the country picker announces only the code it
+    // currently shows - neither says what it is for.
+    final number = tester.getSemantics(find.bySemanticsIdentifier(callerIdMatchNumberId)).getSemanticsData();
+    expect(number.label, contains('Number to show for this dial code'));
+    expect(number.identifier, callerIdMatchNumberId);
+    expect(number.flagsCollection.isTextField, isTrue, reason: 'the named node IS the chooser');
+
+    // The picker is a button; its name has to sit on the node that answers
+    // the press, not on one above it.
+    expectTapTargetSemantics(
+      tester,
+      find.bySemanticsIdentifier(callerIdMatchPrefixId),
+      identifier: callerIdMatchPrefixId,
+    );
+    final prefix = tester.getSemantics(find.bySemanticsIdentifier(callerIdMatchPrefixId)).getSemanticsData();
+    expect(prefix.label, contains('Dial code to match'));
+
+    handle.dispose();
+  });
+
   testWidgets('the button that adds a rule says what it does', (tester) async {
     final handle = tester.ensureSemantics();
 

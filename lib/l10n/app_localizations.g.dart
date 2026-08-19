@@ -328,6 +328,18 @@ abstract class AppLocalizations {
   /// **'Add a dial code match'**
   String get callerId_SemanticsLabel_addMatch;
 
+  /// Accessibility name of the number chooser in the form that adds a dial code rule; its hint disappears once a number is picked.
+  ///
+  /// In en, this message translates to:
+  /// **'Number to show for this dial code'**
+  String get callerId_SemanticsLabel_matchNumber;
+
+  /// Accessibility name of the country chooser in the form that adds a dial code rule; on its own it announces only the code it currently shows.
+  ///
+  /// In en, this message translates to:
+  /// **'Dial code to match'**
+  String get callerId_SemanticsLabel_matchPrefix;
+
   /// Accessibility name of the button that deletes one dial code match on the caller ID screen.
   ///
   /// In en, this message translates to:

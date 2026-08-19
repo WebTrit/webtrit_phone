@@ -175,6 +175,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get callerId_SemanticsLabel_addMatch => 'Add a dial code match';
 
   @override
+  String get callerId_SemanticsLabel_matchNumber => 'Number to show for this dial code';
+
+  @override
+  String get callerId_SemanticsLabel_matchPrefix => 'Dial code to match';
+
+  @override
   String callerId_SemanticsLabel_removeMatch(String dialCode) {
     return 'Remove the match for $dialCode';
   }
