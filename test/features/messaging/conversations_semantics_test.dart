@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
-import 'package:webtrit_phone/features/messaging/features/conversations/view/conversations_screen.dart';
 import 'package:webtrit_phone/features/messaging/features/conversations/widgets/conversations_new_button.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 import '../../helpers/helpers.dart';
 
 void main() {
-  Future<void> pump(WidgetTester tester, TabType tabType, {VoidCallback? onPressed}) async {
+  Future<void> pump(WidgetTester tester, ConversationsTab tab, {VoidCallback? onPressed}) async {
     await tester.pumpWidget(
       MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
-          body: ConversationsNewButton(tabType: tabType, onPressed: onPressed ?? () {}),
+          body: ConversationsNewButton(tab: tab, onPressed: onPressed ?? () {}),
         ),
       ),
     );
@@ -24,7 +24,7 @@ void main() {
   testWidgets('on the chat tab it offers to start a chat', (tester) async {
     final handle = tester.ensureSemantics();
 
-    await pump(tester, TabType.chat);
+    await pump(tester, ConversationsTab.chat);
 
     // The icon is a plus sign: it says nothing on its own, and it means two
     // different things depending on the tab it sits on.
@@ -41,7 +41,7 @@ void main() {
   testWidgets('on the messages tab it offers to write a message', (tester) async {
     final handle = tester.ensureSemantics();
 
-    await pump(tester, TabType.sms);
+    await pump(tester, ConversationsTab.sms);
 
     expectTapTargetSemantics(
       tester,
@@ -57,7 +57,7 @@ void main() {
     final handle = tester.ensureSemantics();
     var pressed = 0;
 
-    await pump(tester, TabType.chat, onPressed: () => pressed++);
+    await pump(tester, ConversationsTab.chat, onPressed: () => pressed++);
     await tapViaSemantics(tester, find.bySemanticsIdentifier(conversationsNewId));
 
     expect(pressed, 1);
@@ -68,7 +68,7 @@ void main() {
   testWidgets('the screen it lives on has no unlabelled tap targets left', (tester) async {
     final handle = tester.ensureSemantics();
 
-    await pump(tester, TabType.chat);
+    await pump(tester, ConversationsTab.chat);
 
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
