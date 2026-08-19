@@ -63,6 +63,20 @@ void main() {
     expect(find.text('0'), findsNothing);
   });
 
+  testWidgets('says how many sessions there are, after naming the row', (tester) async {
+    // The row merges into one node, so the badge digit used to be read out
+    // inside its name ("Sessions, 2"). It travels as the row's state instead.
+    final handle = tester.ensureSemantics();
+
+    await tester.pumpWidget(buildTestable(sessionsCount: 2));
+
+    final data = tester.getSemantics(find.bySemanticsLabel('Sessions')).getSemanticsData();
+    expect(data.label, 'Sessions');
+    expect(data.value, '2 total');
+
+    handle.dispose();
+  });
+
   testWidgets('keeps logout alone when sessions are unavailable', (tester) async {
     await tester.pumpWidget(buildTestable(sessionsCount: null));
 

@@ -159,6 +159,9 @@ to get wrong on your own.
   nothing: `UnreadBadge` already excludes itself, and what it counts goes in the
   tab's `value`, which is announced after the tab's name. Never wrap the tab in a
   plain `Semantics(identifier: ...)`.
+- **`CountBadge`** (`lib/widgets/count_badge.dart`) - every number drawn in a
+  filled shape. See "Counting things" for the three parts of the standard it is
+  one of.
 - **`context.showSnackBar`** (`lib/extensions/build_context.dart`) - already wraps
   the message in a `SemanticId`, so a flow can wait for the snackbar by id, and
   keeps a snackbar that carries an action on screen until it is dismissed:
@@ -208,13 +211,16 @@ merges into:
   `container: true` off, or the node stops merging and becomes its own nameless
   focus stop beside the control. See `MessagingFlavorOverlay`.
 
-**What it says.** Two shared keys cover every count in the app, and a third one
-is not to be added:
+**What it says.** Three shared keys cover every count in the app, and each of
+them is a MEANING rather than a place, which is what keeps their number from
+growing with the screens:
 
 - `common_SemanticsValue_unreadCount` - "3 unread". How much of this is new:
   unread messages in a chat tile, unread voicemail, an unread tab.
 - `common_SemanticsValue_totalCount` - "5 total". How many there are of it:
   active sessions, members of a group.
+- `common_SemanticsValue_selectedCount` - "3 selected". How many a control would
+  act on: the delete button while voicemail is being picked out.
 
 Neither phrase names what is being counted, and that is the whole point of the
 standard. The noun is already spoken - it is the name of the node the value is
@@ -228,13 +234,22 @@ impersonal phrasing, which has neither gender nor case, and Thai has a single
 form regardless of the number.
 
 So a new count anywhere costs no localization work at all: decide which of the
-two meanings it is, and pass it. If a count seems to fit neither, it is worth
-asking whether the number belongs on screen at all before writing a third key.
+three meanings it is, and pass it. A count that fits none of them needs a new key
+that is a meaning too - generic and noun-free, usable by any screen. A key named
+after the screen that happened to need it first is how the app ended up with a
+count phrase per screen in the first place.
+
+**The badge itself.** `CountBadge` (`lib/widgets/`) draws every count in the app.
+It excludes itself from the tree, caps what it draws (`maxCount`, "99+") without
+touching what is spoken, and swaps its pair of colours for a badge drawn on the
+accent rather than on the surface (`onAccent`). It has no opinion about zero: a
+host decides whether there is anything to show, which it has to decide anyway to
+know whether to speak the count.
 
 **Not Flutter's `Badge`.** It performs no semantics of its own - not a merge, not
 an exclusion - so its label survives as a separate, nameless node reading a bare
-digit next to a control that says nothing about it. Draw the count with the app's
-own badge instead.
+digit next to a control that says nothing about it. Draw the count with
+`CountBadge` instead.
 
 ## Verifying it
 

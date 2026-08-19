@@ -162,7 +162,7 @@ void main() {
     final spoken = messagingAnnouncement(tester);
     expect(spoken.name, startsWith('Chats'), reason: 'the tab names itself before anything else');
     expect(spoken.name, isNot(contains('unread')), reason: 'the count is a value, not part of the name');
-    expect(spoken.value, '1 unread conversation');
+    expect(spoken.value, '1 unread');
     // The entry stays one addressable, pressable node with the badge on it.
     expectTapTargetSemantics(tester, find.bySemanticsIdentifier(messagingNavBarId), identifier: messagingNavBarId);
 
@@ -170,14 +170,13 @@ void main() {
   });
 
   testWidgets('several unread conversations are counted in the value', (tester) async {
-    // The plural branch that actually interpolates the number - the singular
-    // one spells "1" out in the translation.
+    // Conversations of both kinds add up into the one number the entry speaks.
     final handle = tester.ensureSemantics();
     when(() => unreadCountCubit.state).thenReturn(UnreadCountState.fromCountPerChat({1: 2, 2: 1}, {3: 5}));
 
     await tester.pumpWidget(wrap(onTap: (_) {}));
 
-    expect(messagingAnnouncement(tester).value, '3 unread conversations');
+    expect(messagingAnnouncement(tester).value, '3 unread');
 
     handle.dispose();
   });
