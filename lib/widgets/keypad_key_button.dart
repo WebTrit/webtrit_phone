@@ -54,8 +54,11 @@ class _KeypadKeyButtonState extends State<KeypadKeyButton> {
   /// one finger at a time, and each strike owes its own character.
   final _activePointers = <int>{};
 
-  /// Whether the strike in progress has already entered the subtext.
-  bool _subtextEntered = false;
+  /// Pointers whose strike has already entered the subtext, so their release
+  /// must stay silent. Tracked per pointer rather than as one flag for the
+  /// whole key: a finger that lands while another is still holding the
+  /// subtext down is a strike of its own and still owes a text.
+  final _subtextPointers = <int>{};
 
   @override
   Widget build(BuildContext context) {
@@ -105,27 +108,31 @@ class _KeypadKeyButtonState extends State<KeypadKeyButton> {
             widget.onKeyPressed(widget.text);
             return;
           }
-          if (_activePointers.isEmpty) _subtextEntered = false;
           _activePointers.add(event.pointer);
         },
         // The subtext is entered by the long press below, which always fires
         // while the finger is still down. So a release already knows whether
-        // this strike produced one, and enters the text whenever it did not -
-        // including when sliding off the key cancelled the long press.
+        // its own strike produced one, and enters the text whenever it did
+        // not - including when sliding off the key cancelled the long press.
         onPointerUp: hasLongPress
             ? (event) {
                 if (!_activePointers.remove(event.pointer)) return;
-                if (!_subtextEntered) widget.onKeyPressed(widget.text);
+                if (!_subtextPointers.remove(event.pointer)) widget.onKeyPressed(widget.text);
               }
             : null,
         // A press the platform takes away never reaches a release and enters
         // nothing; it still has to let go of the pointer it holds here.
-        onPointerCancel: hasLongPress ? (event) => _activePointers.remove(event.pointer) : null,
+        onPointerCancel: hasLongPress
+            ? (event) {
+                _activePointers.remove(event.pointer);
+                _subtextPointers.remove(event.pointer);
+              }
+            : null,
         child: TextButton(
           onPressed: () {},
           onLongPress: hasLongPress
               ? () {
-                  _subtextEntered = true;
+                  _subtextPointers.addAll(_activePointers);
                   widget.onKeyPressed(widget.subtext);
                 }
               : null,

@@ -157,6 +157,20 @@ void main() {
       expect(entered, ['0']);
     });
 
+    testWidgets('a finger landing while the plus is held enters its own zero', (tester) async {
+      final entered = await pumpZeroKey(tester);
+
+      final held = await tester.pressOn(zeroKey, pointer: 1);
+      await held.hold(pastThePlus);
+
+      final second = await tester.pressOn(zeroKey, pointer: 2);
+      await second.hold(beforeThePlus);
+      await second.lift();
+      await held.lift();
+
+      expect(entered, ['+', '0']);
+    });
+
     testWidgets('two strikes that overlap enter two zeros', (tester) async {
       final entered = await pumpZeroKey(tester);
 
