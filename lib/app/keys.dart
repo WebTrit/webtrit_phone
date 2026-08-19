@@ -174,6 +174,15 @@ const String callActionsOptionsId = 'callActionsOptions';
 const String callPullBadgeId = 'callPullBadge';
 const String callPullDialogId = 'callPullDialog';
 const String callPullPickupId = 'callPullPickup';
+
+/// The number a call goes out with unless a dial code rule says otherwise.
+const String callerIdDefaultNumberId = 'callerIdDefaultNumber';
+
+/// The two halves of a new dial code rule: which code it matches, and the
+/// number to show for it.
+const String callerIdMatchPrefixId = 'callerIdMatchPrefix';
+const String callerIdMatchNumberId = 'callerIdMatchNumber';
+
 const String callerIdAddMatchId = 'callerIdAddMatch';
 const String callerIdRemoveMatchId = 'callerIdRemoveMatch';
 const String callTileDialId = 'callTileDial';

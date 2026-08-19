@@ -161,6 +161,23 @@
   "@callerId_SemanticsLabel_addMatch": {
     "description": "Accessibility name of the button that opens the form for a new dial code match on the caller ID screen."
   },
+  "callerId_SemanticsLabel_matchNumber": "Number to show for this dial code",
+  "@callerId_SemanticsLabel_matchNumber": {
+    "description": "Accessibility name of the number chooser in the form that adds a dial code rule; its hint disappears once a number is picked."
+  },
+  "callerId_SemanticsLabel_defaultNumber": "Number to call from by default",
+  "@callerId_SemanticsLabel_defaultNumber": {
+    "description": "Accessibility name of the chooser of the number outgoing calls show; the caption beside it is a node of its own."
+  },
+  "callerId_SemanticsLabel_matchPrefix": "Dial code to match, currently {country}",
+  "@callerId_SemanticsLabel_matchPrefix": {
+    "description": "Accessibility name of the country chooser in the form that adds a dial code rule; on its own it announces only the dial code, never which country was picked.",
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
   "callerId_SemanticsLabel_removeMatch": "Remove the match for {dialCode}",
   "@callerId_SemanticsLabel_removeMatch": {
     "description": "Accessibility name of the button that deletes one dial code match on the caller ID screen.",

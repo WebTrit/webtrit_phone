@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/settings/features/caller_id/caller_id.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class DefaultNumberForm extends StatelessWidget {
   const DefaultNumberForm({required this.state, super.key});
@@ -27,28 +29,36 @@ class DefaultNumberForm extends StatelessWidget {
         children: [
           Expanded(child: Text(l10n.settings_callerId_number)),
           const SizedBox(width: 8),
-          DropdownMenu<String?>(
-            initialSelection: state.settings.defaultNumber,
-            menuStyle: MenuStyle(
-              backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceContainerLow),
-              shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-              padding: WidgetStateProperty.all(EdgeInsets.zero),
+          // The chooser announces the number it shows and nothing that says
+          // what the number is for: the caption beside it is a node of its
+          // own, and merging the whole row would claim a press target the
+          // width of the row while only the chooser answers a press.
+          SemanticAction(
+            label: l10n.callerId_SemanticsLabel_defaultNumber,
+            identifier: callerIdDefaultNumberId,
+            child: DropdownMenu<String?>(
+              initialSelection: state.settings.defaultNumber,
+              menuStyle: MenuStyle(
+                backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceContainerLow),
+                shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
+                padding: WidgetStateProperty.all(EdgeInsets.zero),
+              ),
+              textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14),
+              inputDecorationTheme: InputDecorationTheme(
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                filled: true,
+                fillColor: Theme.of(context).colorScheme.surfaceContainerLow,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                isCollapsed: true,
+              ),
+              dropdownMenuEntries: [
+                if (state.mainNumber != null) DropdownMenuEntry<String?>(value: null, label: state.mainNumber!),
+                for (final n in state.additionalNumbers) DropdownMenuEntry<String>(value: n, label: n),
+              ],
+              onSelected: (value) {
+                context.read<CallerIdSettingsCubit>().setDefaultNumber(value);
+              },
             ),
-            textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14),
-            inputDecorationTheme: InputDecorationTheme(
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-              filled: true,
-              fillColor: Theme.of(context).colorScheme.surfaceContainerLow,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              isCollapsed: true,
-            ),
-            dropdownMenuEntries: [
-              if (state.mainNumber != null) DropdownMenuEntry<String?>(value: null, label: state.mainNumber!),
-              for (final n in state.additionalNumbers) DropdownMenuEntry<String>(value: n, label: n),
-            ],
-            onSelected: (value) {
-              context.read<CallerIdSettingsCubit>().setDefaultNumber(value);
-            },
           ),
         ],
       ),

@@ -50,6 +50,72 @@ void main() {
     handle.dispose();
   });
 
+  testWidgets('the default number chooser is named by the caption beside it', (tester) async {
+    final handle = tester.ensureSemantics();
+
+    stub();
+    await tester.pumpWidget(wrap());
+
+    // On its own the chooser announces the number it shows and nothing else.
+    // The name, the id and the field itself have to be ONE node: a name
+    // sitting on a node above the field leaves the field nameless, which is
+    // what a screen reader actually reads out.
+    final chooser = tester.getSemantics(find.bySemanticsIdentifier(callerIdDefaultNumberId)).getSemanticsData();
+    expect(chooser.label, 'Number to call from by default');
+    expect(chooser.identifier, callerIdDefaultNumberId);
+    expect(chooser.value, '440', reason: 'and it says which number is chosen');
+    expect(chooser.flagsCollection.isTextField, isTrue, reason: 'the named node IS the chooser');
+
+    handle.dispose();
+  });
+
+  testWidgets('the halves of a new rule say what each of them chooses', (tester) async {
+    final handle = tester.ensureSemantics();
+
+    stub();
+    await tester.pumpWidget(wrap());
+    await tapViaSemantics(tester, find.bySemanticsIdentifier(callerIdAddMatchId));
+    await tester.pumpAndSettle();
+
+    // The number chooser is named by a hint that disappears the moment a
+    // number is picked, and the country picker announces only the code it
+    // currently shows - neither says what it is for.
+    final number = tester.getSemantics(find.bySemanticsIdentifier(callerIdMatchNumberId)).getSemanticsData();
+    expect(number.label, startsWith('Number to show for this dial code'));
+    expect(number.identifier, callerIdMatchNumberId);
+    expect(number.flagsCollection.isTextField, isTrue, reason: 'the named node IS the chooser');
+
+    // The picker is a button: its name, its id and the press it answers have
+    // to be on one node, and the name has to say which country was picked -
+    // the picker itself shows a flag and a dial code and says neither.
+    expectTapTargetSemantics(
+      tester,
+      find.bySemanticsIdentifier(callerIdMatchPrefixId),
+      label: 'Dial code to match, currently United States\n+1',
+      identifier: callerIdMatchPrefixId,
+    );
+
+    handle.dispose();
+  });
+
+  testWidgets('choosing a country through semantics renames the picker after it', (tester) async {
+    final handle = tester.ensureSemantics();
+
+    stub();
+    await tester.pumpWidget(wrap());
+    await tapViaSemantics(tester, find.bySemanticsIdentifier(callerIdAddMatchId));
+    await tester.pumpAndSettle();
+
+    // Opening the picker is the only way to change the rule's dial code, so
+    // the press has to work through semantics and not only through a pointer.
+    await tapViaSemantics(tester, find.bySemanticsIdentifier(callerIdMatchPrefixId));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(Dialog), findsOneWidget, reason: 'the country list opened');
+
+    handle.dispose();
+  });
+
   testWidgets('the button that adds a rule says what it does', (tester) async {
     final handle = tester.ensureSemantics();
 
@@ -115,6 +181,19 @@ void main() {
     await tapViaSemantics(tester, find.bySemanticsIdentifier(numberedId(callerIdRemoveMatchId, 1)));
 
     verify(() => cubit.removePrefixMatcher('+44')).called(1);
+
+    handle.dispose();
+  });
+
+  testWidgets('the form that adds a rule leaves no unnamed press target behind', (tester) async {
+    final handle = tester.ensureSemantics();
+
+    stub();
+    await tester.pumpWidget(wrap());
+    await tapViaSemantics(tester, find.bySemanticsIdentifier(callerIdAddMatchId));
+    await tester.pumpAndSettle();
+
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
     handle.dispose();
   });
