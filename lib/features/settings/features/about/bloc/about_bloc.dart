@@ -32,7 +32,7 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
            packageName: packageInfo.packageName,
            appIdentifier: appInfo.identifier,
            fcmPushToken: secureStorage.readFCMPushToken(),
-           embeddedLinks: embeddedConfig.embeddedResources.map((e) => e.uri.toString()).toList(),
+           embeddedResources: embeddedConfig.embeddedResources,
            coreUrl: infoRepository.getCoreUrl(),
            userAgent: appMetadataProvider.userAgent,
            appInfo: appMetadataProvider.appInfo,

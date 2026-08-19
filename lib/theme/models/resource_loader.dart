@@ -24,6 +24,16 @@ abstract class ResourceLoader {
     throw ArgumentError('Unsupported resource scheme: ${uri.scheme}');
   }
 
+  /// Whether [ResourceLoader.fromUri] can build a loader for [uri].
+  ///
+  /// [ResourceLoader.fromUri] throws on an unknown scheme, and callers that
+  /// resolve a resource while building a widget cannot catch that. Ask this
+  /// first to decide whether the resource is openable at all.
+  static bool supportsUri(Uri uri) =>
+      NetworkResourceLoader.supportedSchemes.contains(uri.scheme) ||
+      AssetResourceLoader.supportedSchemes.contains(uri.scheme) ||
+      MemoryResourceLoader.supportedSchemes.contains(uri.scheme);
+
   /// Loads the content of the resource (network, asset, or memory).
   Future<String> loadContent();
 }
