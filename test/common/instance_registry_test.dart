@@ -35,6 +35,25 @@ class _Slow implements Disposable {
 class _Plain {}
 
 void main() {
+  group('InstanceRegistry lookup', () {
+    test('refuses a second instance of the same type', () {
+      final registry = InstanceRegistry()..register<_Plain>(_Plain());
+
+      expect(() => registry.register<_Plain>(_Plain()), throwsStateError);
+    });
+
+    test('refuses to invent an instance that was never registered', () {
+      expect(() => InstanceRegistry().get<_Plain>(), throwsStateError);
+    });
+
+    test('hands back exactly what was registered', () {
+      final instance = _Plain();
+      final registry = InstanceRegistry()..register<_Plain>(instance);
+
+      expect(registry.get<_Plain>(), same(instance));
+    });
+  });
+
   group('InstanceRegistry.dispose', () {
     test('releases in reverse order of registration', () async {
       final released = <String>[];
@@ -46,6 +65,10 @@ void main() {
       await registry.dispose();
 
       expect(released, ['slow', 'first']);
+    });
+
+    test('an empty registry releases without complaint', () async {
+      await expectLater(InstanceRegistry().dispose(), completes);
     });
 
     test('skips instances that hold no resources', () async {
