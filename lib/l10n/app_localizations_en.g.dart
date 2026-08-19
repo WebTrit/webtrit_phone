@@ -2268,9 +2268,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_SemanticsLabel_editAccount => 'Edit account details';
 
   @override
-  String get settings_SemanticsLabel_refresh => 'Refresh account status';
-
-  @override
   String get settings_audioProcessing_Section_AGC_title => 'Auto gain control';
 
   @override

@@ -11,7 +11,8 @@ Last reviewed: 2026-08-13
     - `cubit/sessions_cubit.dart` - `SessionsCubit` + `SessionsState`.
     - `view/sessions_screen_page.dart` - `@RoutePage`; refreshes the shared
       cubit on open and passes the `DateFormat` taken from `AppTime`.
-    - `view/sessions_screen.dart` - app bar, pull-to-refresh list, placeholders.
+    - `view/sessions_screen.dart` - app bar, pull-to-refresh list, placeholders
+      (how every list refreshes: [`../data_refresh.md`](../data_refresh.md)).
     - `widgets/session_tile.dart` - one session row.
 - `lib/features/settings/view/settings_router_page.dart` - owns the
   `SessionsCubit`, above both the settings screen and the sessions screen.

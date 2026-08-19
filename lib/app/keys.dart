@@ -225,7 +225,6 @@ const String presenceSettingsStatusIconClearId = 'presenceSettingsStatusIconClea
 const String presenceSettingsStatusIconPickId = 'presenceSettingsStatusIconPick';
 const String registerStatusSwitchId = 'registerStatusSwitch';
 const String sessionStatusTileId = 'sessionStatusTile';
-const String settingsRefreshId = 'settingsRefresh';
 const String settingsUserInfoEditId = 'settingsUserInfoEdit';
 const String signupVerifyResendButtonId = 'signupVerifyResendButton';
 const String statusIconPickerId = 'statusIconPicker';

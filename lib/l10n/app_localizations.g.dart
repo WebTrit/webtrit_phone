@@ -4159,12 +4159,6 @@ abstract class AppLocalizations {
   /// **'Edit account details'**
   String get settings_SemanticsLabel_editAccount;
 
-  /// Accessibility name of the refresh button in the app bar of the settings screen.
-  ///
-  /// In en, this message translates to:
-  /// **'Refresh account status'**
-  String get settings_SemanticsLabel_refresh;
-
   /// No description provided for @settings_audioProcessing_Section_AGC_title.
   ///
   /// In en, this message translates to:
