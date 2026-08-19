@@ -77,11 +77,12 @@ class AccountActionsTile extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(width: 16),
-                            // The badge is silent by itself; the row it merges
-                            // into speaks the count after its own name.
+                            // The badge is silent by itself; the count is
+                            // said here, after the row has named itself, because
+                            // a merged name follows the order things are drawn.
                             if (sessionsCount > 0)
                               Semantics(
-                                value: l10n.common_SemanticsValue_totalCount(sessionsCount),
+                                label: l10n.common_SemanticsValue_totalCount(sessionsCount),
                                 child: CountBadge(count: sessionsCount, size: 32),
                               ),
                           ],

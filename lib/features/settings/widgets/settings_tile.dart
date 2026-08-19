@@ -14,7 +14,7 @@ class SettingsTile extends StatelessWidget {
     required this.onTap,
     this.iconColor,
     this.trailing,
-    this.trailingValue,
+    this.trailingLabel,
     this.textStyle,
     this.showSeparator = true,
     this.separatorColor,
@@ -28,10 +28,13 @@ class SettingsTile extends StatelessWidget {
   final Color? iconColor;
   final Widget? trailing;
 
-  /// State of the row, spoken after its title - what a badge in [trailing]
-  /// stands for, say. A tile merges into a single node, so anything the
-  /// trailing widget draws by itself would be read out inside the title.
-  final String? trailingValue;
+  /// What a badge in [trailing] stands for, spoken after the row's title.
+  ///
+  /// A tile merges into a single node whose name is assembled in the order its
+  /// parts are drawn, and the trailing slot is drawn last - which is what puts
+  /// this behind the title instead of ahead of it. Anything the trailing widget
+  /// draws by itself would be read out inside the title.
+  final String? trailingLabel;
 
   final TextStyle? textStyle;
   final bool showSeparator;
@@ -42,19 +45,24 @@ class SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final trailingValue = this.trailingValue;
+    final trailingLabel = this.trailingLabel;
+    final trailing = this.trailing;
+
+    // On the trailing widget rather than around the tile: a name given to the
+    // tile itself would be assembled before everything the tile draws, and so
+    // spoken ahead of the title it is meant to follow.
+    final spokenTrailing = trailingLabel == null || trailing == null
+        ? trailing
+        : Semantics(label: trailingLabel, child: trailing);
 
     final tile = Opacity(
       opacity: opacity,
-      child: Semantics(
-        value: trailingValue,
-        child: ListTile(
-          leading: Icon(icon, color: iconColor),
-          title: Text(title, style: textStyle),
-          trailing: trailing,
-          onTap: onTap,
-          enabled: enabled,
-        ),
+      child: ListTile(
+        leading: Icon(icon, color: iconColor),
+        title: Text(title, style: textStyle),
+        trailing: spokenTrailing,
+        onTap: onTap,
+        enabled: enabled,
       ),
     );
 
