@@ -73,6 +73,13 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
         child: Builder(
           builder: (context) {
             final flavorIndex = tabs.indexWhere((tab) => tab.flavor == widget.flavor);
+            // A capture asks for a section by name; silently substituting
+            // another would produce differently-named screenshots of one and
+            // the same screen. An interactive preview may start anywhere.
+            assert(
+              widget.interactive || flavorIndex >= 0,
+              'the configured menu has no ${widget.flavor} section to capture',
+            );
             // Clamped rather than trusted: the remembered position can outlive
             // a config change that shrank the tabs list.
             final selectedIndex = (_selectedIndex ?? (flavorIndex < 0 ? 0 : flavorIndex)).clamp(0, tabs.length - 1);
@@ -81,9 +88,8 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
               pullableCallDialogs: widget.pullableCallDialogs,
               child: _buildFlavorWidget(context, tabs[selectedIndex].flavor, featureAccess),
             );
-            // The app shows no bar for a single-section menu, and so does the
-            // preview - the one screen there is, full-bleed.
-            if (tabs.length < 2) return body;
+            // MainScreen itself drops the bar for a single-section menu - the
+            // preview inherits the rule instead of restating it.
             return MainScreen(
               // The mock unread state below backs this the way the shell does
               // in the app.
