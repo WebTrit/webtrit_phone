@@ -212,6 +212,20 @@ the tree.
   pointer tap on a device showed it. A screen reader activates through the
   semantics action and never notices.
 
+## The push gate
+
+`tool/scripts/semantics-gate.sh` runs on every push, before the analyzer. It looks only at
+lines ADDED since the merge-base with `origin/develop`, in hand-written `lib/` sources, and
+fails the push when a diff introduces a raw `GestureDetector`, `InkWell`, `InkResponse` or
+`IconButton` in a file whose added lines wire no semantics at all (no `SemanticAction`,
+`SemanticId`, `Semantics(`, `CallActionButton`, `semanticLabel` or `tooltip:`). The scope is
+deliberately narrow so the gate stays quiet on refactors; it is a tripwire for the common
+miss, not a proof of correctness - the semantics tests remain the real check.
+
+A control that genuinely needs no name (rare - see the exceptions above) takes a trailing
+`// semantics-exempt: <reason>` on its line. The reason lands in the diff, so the reviewer
+sees the decision.
+
 ## Traps
 
 Learned the hard way; none of these is caught by the analyzer or by a pointer
