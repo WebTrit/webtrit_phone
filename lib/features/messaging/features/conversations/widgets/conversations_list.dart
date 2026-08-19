@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ConversationsList extends StatefulWidget {
   const ConversationsList({required this.selectedTab, super.key});
 
-  final TabType selectedTab;
+  final ConversationsTab selectedTab;
 
   @override
   State<ConversationsList> createState() => _ConversationsListState();
@@ -71,11 +72,11 @@ class _ConversationsListState extends State<ConversationsList> {
       switchInCurve: Curves.easeOutExpo,
       switchOutCurve: Curves.easeInExpo,
       child: switch (widget.selectedTab) {
-        TabType.chat => chats,
-        TabType.sms => smses,
+        ConversationsTab.chat => chats,
+        ConversationsTab.sms => smses,
       },
       transitionBuilder: (child, animation) {
-        final reverse = widget.selectedTab == TabType.sms;
+        final reverse = widget.selectedTab == ConversationsTab.sms;
 
         final begin = Offset(reverse ? 1.0 : -1.0, 0);
         const end = Offset(0, 0);

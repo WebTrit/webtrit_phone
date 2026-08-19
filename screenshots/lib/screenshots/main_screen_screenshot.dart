@@ -276,8 +276,8 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
             // Dual tabs expose the chat/sms tab bar (its TabController is local, so switching
             // works) for the interactive preview; the snapshot stays chat-only.
             initialTabsState: widget.interactive
-                ? const DualTabState(TabType.chat, true)
-                : const SingleTabState(TabType.chat, true),
+                ? const DualTabState(ConversationsTab.chat, true)
+                : const SingleTabState(ConversationsTab.chat, true),
           ),
         );
     }

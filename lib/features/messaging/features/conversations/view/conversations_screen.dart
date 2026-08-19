@@ -19,34 +19,32 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import 'conversations_screen_style.dart';
 import 'conversations_screen_styles.dart';
 
-enum TabType { chat, sms }
-
 sealed class TabsState {
   const TabsState(this.groupChatsEnabled);
 
   final bool groupChatsEnabled;
 
-  TabType get loogingAtTab;
+  ConversationsTab get loogingAtTab;
 }
 
 final class SingleTabState extends TabsState {
   const SingleTabState(this.tab, super.groupChatsEnabled);
 
-  final TabType tab;
+  final ConversationsTab tab;
 
   @override
-  TabType get loogingAtTab => tab;
+  ConversationsTab get loogingAtTab => tab;
 }
 
 final class DualTabState extends TabsState {
   const DualTabState(this.selectedTab, super.groupChatsEnabled);
 
-  final TabType selectedTab;
+  final ConversationsTab selectedTab;
 
   @override
-  TabType get loogingAtTab => selectedTab;
+  ConversationsTab get loogingAtTab => selectedTab;
 
-  DualTabState copyWith({TabType? selectedTab}) {
+  DualTabState copyWith({ConversationsTab? selectedTab}) {
     return DualTabState(selectedTab ?? this.selectedTab, groupChatsEnabled);
   }
 }
@@ -70,7 +68,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
   late final notificationsBloc = context.read<NotificationsBloc>();
 
   late TabController _tabController;
-  late final List<TabType> _tabs;
+  late final List<ConversationsTab> _tabs;
   late int _currentIndex;
 
   @override
@@ -80,7 +78,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
 
     _tabs = switch (initialTabsState) {
       SingleTabState s => [s.tab],
-      DualTabState _ => [TabType.chat, TabType.sms],
+      DualTabState _ => [ConversationsTab.chat, ConversationsTab.sms],
     };
 
     final initialIndex = _tabs.indexOf(initialTabsState.loogingAtTab);
@@ -191,24 +189,13 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                   controller: _tabController,
                   width: mediaQueryData.size.width * 0.75,
                   height: kMainAppBarBottomControlHeight,
-                  tabs: _tabs.map((tabType) {
-                    final title = switch (tabType) {
-                      TabType.chat => context.l10n.messaging_ConversationsScreen_messages_title,
-                      TabType.sms => context.l10n.messaging_ConversationsScreen_smses_title,
-                    };
-                    final count = switch (tabType) {
-                      TabType.chat => unreadCountState.chatsWithUnreadCount,
-                      TabType.sms => unreadCountState.smsConversationsWithUnreadCount,
-                    };
-                    final isActive = _currentIndex == _tabs.indexOf(tabType);
-                    final (tabKey, tabIdentifier) = switch (tabType) {
-                      TabType.chat => (conversationsTabChatKey, conversationsTabChatId),
-                      TabType.sms => (conversationsTabSmsKey, conversationsTabSmsId),
-                    };
+                  tabs: _tabs.map((tab) {
+                    final count = tab.unreadCount(unreadCountState);
+                    final isActive = _currentIndex == _tabs.indexOf(tab);
 
                     return ExtTab.child(
-                      key: tabKey,
-                      identifier: tabIdentifier,
+                      key: tab.tabKey,
+                      identifier: tab.tabId,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -216,7 +203,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                           // The strip is a fixed share of the screen width, so
                           // a long caption next to a badge has to give way
                           // rather than overflow the tab it sits in.
-                          Flexible(child: Text(title, overflow: TextOverflow.ellipsis)),
+                          Flexible(child: Text(tab.l10n(context.l10n), overflow: TextOverflow.ellipsis)),
                           if (count > 0) ...[
                             const SizedBox(width: 4),
                             // The badge says nothing of its own; what it counts
@@ -292,16 +279,12 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
               right: 16,
               child: Builder(
                 builder: (context) {
-                  final tabType = _tabs[_currentIndex];
-                  final onPressed = switch (tabType) {
-                    TabType.chat => onNewChatConversation,
-                    TabType.sms => onNewSmsConversation,
+                  final tab = _tabs[_currentIndex];
+                  final onPressed = switch (tab) {
+                    ConversationsTab.chat => onNewChatConversation,
+                    ConversationsTab.sms => onNewSmsConversation,
                   };
-                  return ConversationsNewButton(
-                    tabType: tabType,
-                    onPressed: onPressed,
-                    backgroundColor: colorScheme.primary,
-                  );
+                  return ConversationsNewButton(tab: tab, onPressed: onPressed, backgroundColor: colorScheme.primary);
                 },
               ),
             ),
