@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
@@ -52,6 +53,32 @@ class SettingsScreen extends StatelessWidget {
         leading: const AutoLeadingButton(),
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
         flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
+        actions: [
+          // The busy overlay covers the body only, and the bar is outside it -
+          // so an action up here has to refuse the press by itself while
+          // something else is already running against the account.
+          BlocSelector<SettingsBloc, SettingsState, bool>(
+            selector: (state) => state.progress,
+            builder: (context, busy) => SemanticAction(
+              label: context.l10n.settings_ListViewTileTitle_logout,
+              identifier: settingsLogoutButtonId,
+              // The tooltip stays for the long press but keeps quiet: spoken on
+              // top of the name it would say the same thing twice.
+              child: Tooltip(
+                message: context.l10n.settings_ListViewTileTitle_logout,
+                excludeFromSemantics: true,
+                child: IconButton(
+                  // The Patrol logout subsequence taps this key.
+                  key: settingsLogoutButtonKey,
+                  // No colour of its own: it takes the bar's, the way every
+                  // other app bar action does.
+                  icon: const Icon(Icons.logout),
+                  onPressed: busy ? null : () => _onLogoutTap(context),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
@@ -106,18 +133,27 @@ class SettingsScreen extends StatelessWidget {
                           ),
                         ),
                         if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
-                        AccountActionsTile(
-                          sessionsCount: sessionsEnabled
-                              ? context.select<SessionsCubit, int>((cubit) => cubit.state.sessions.length)
-                              : null,
-                          logoutIconColor: effectiveStyle?.logoutIconColor ?? effectiveStyle?.leadingIconsColor,
-                          sessionsIconColor: effectiveStyle?.leadingIconsColor,
-                          textStyle: effectiveStyle?.itemTextStyle,
-                          showSeparator: showSeparators,
-                          separatorColor: effectiveStyle?.separatorColor,
-                          onLogoutTap: () => _onLogoutTap(context),
-                          onSessionsTap: () => _onSessionsTap(context),
-                        ),
+                        if (sessionsEnabled)
+                          Builder(
+                            builder: (context) {
+                              final sessionsCount = context.select<SessionsCubit, int>(
+                                (cubit) => cubit.state.sessions.length,
+                              );
+                              return SettingsTile(
+                                title: context.l10n.settings_ListViewTileTitle_sessions,
+                                icon: Icons.devices,
+                                iconColor: effectiveStyle?.leadingIconsColor,
+                                trailing: sessionsCount > 0 ? CountBadge(count: sessionsCount, size: 32) : null,
+                                trailingLabel: sessionsCount > 0
+                                    ? context.l10n.common_SemanticsValue_totalCount(sessionsCount)
+                                    : null,
+                                textStyle: effectiveStyle?.itemTextStyle,
+                                showSeparator: showSeparators,
+                                separatorColor: effectiveStyle?.separatorColor,
+                                onTap: () => _onSessionsTap(context),
+                              );
+                            },
+                          ),
                         for (final section in sections) ...[
                           GroupTitleListTile(
                             titleData: context.parseL10n(section.titleL10n),

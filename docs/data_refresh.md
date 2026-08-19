@@ -20,6 +20,9 @@ A Material list ignores a drag from a mouse, so the list is configured to
 accept every pointer kind; on the web build a mouse is the only pointer there
 is, and without that the screen could not be refreshed at all.
 
+The app bar carries the logout action instead; refreshing has no button of its
+own there.
+
 The screen used to carry a refresh button in the app bar. It was removed
 together with its semantics identifier, and the gesture is deliberately the
 only entry point: a pull is not part of the accessibility tree, so this refresh
