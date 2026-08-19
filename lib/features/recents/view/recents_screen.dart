@@ -52,16 +52,22 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
     setState(() => _expandedRecentId = _expandedRecentId == callLogEntryId ? null : callLogEntryId);
   }
 
+  /// Filters this screen shows, one tab each. Deduplicated: a tab is keyed by
+  /// the filter behind it, and two tabs of one filter would collide on that
+  /// key and bring the screen down - a configuration that repeats a filter
+  /// gets one tab for it, the way the bottom menu treats a repeated section.
+  late final List<RecentsVisibilityFilter> _filters = widget.recentsFilters.toSet().toList(growable: false);
+
   @override
   void initState() {
     super.initState();
 
     final activeFilter = context.read<RecentsBloc>().state.filter;
-    final initialRecentsFiltersIndex = widget.recentsFilters.indexOf(activeFilter);
+    final initialRecentsFiltersIndex = _filters.indexOf(activeFilter);
 
     _tabController = TabController(
       initialIndex: initialRecentsFiltersIndex == -1 ? 0 : initialRecentsFiltersIndex,
-      length: widget.recentsFilters.length,
+      length: _filters.length,
       vsync: this,
     );
     _tabController.addListener(_tabControllerListener);
@@ -76,7 +82,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
 
   void _tabControllerListener() {
     if (!_tabController.indexIsChanging) {
-      final filter = widget.recentsFilters[_tabController.index];
+      final filter = _filters[_tabController.index];
       context.read<RecentsBloc>().add(RecentsFiltered(filter));
     }
   }
@@ -143,7 +149,10 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
             child: ExtTabBar(
               width: mediaQueryData.size.width * 0.75,
               height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
-              tabs: [for (final recentsFilter in widget.recentsFilters) Tab(text: recentsFilter.l10n(context))],
+              tabs: [
+                for (final recentsFilter in _filters)
+                  ExtTab(key: recentsFilter.tabKey, identifier: recentsFilter.tabId, text: recentsFilter.l10n(context)),
+              ],
               controller: _tabController,
             ),
           ),

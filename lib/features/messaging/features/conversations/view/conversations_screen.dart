@@ -201,8 +201,18 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                       TabType.sms => unreadCountState.smsConversationsWithUnreadCount,
                     };
                     final isActive = _currentIndex == _tabs.indexOf(tabType);
+                    final (tabKey, tabIdentifier) = switch (tabType) {
+                      TabType.chat => (conversationsTabChatKey, conversationsTabChatId),
+                      TabType.sms => (conversationsTabSmsKey, conversationsTabSmsId),
+                    };
 
-                    return Tab(
+                    return ExtTab.child(
+                      key: tabKey,
+                      identifier: tabIdentifier,
+                      // The badge draws a glyph and says nothing (it excludes
+                      // itself); what it counts is spoken as the tab's state,
+                      // after the tab's name.
+                      value: count > 0 ? context.l10n.messaging_SemanticsLabel_unreadTab(count) : null,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

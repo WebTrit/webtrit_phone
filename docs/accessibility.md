@@ -151,6 +151,14 @@ to get wrong on your own.
   long-press tooltip with `excludeFromSemantics: true` so it is not spoken on top
   of the name. In the menu flavor the styling button opens the menu itself,
   because after the merge its handler is what the node's tap action runs.
+- **`ExtTab`, `ExtTabBar`** (`lib/widgets/tab_bar.dart`) - the tabs of a screen's
+  tab bar. The bar merges a tab with the ink well that answers the press, so the
+  id is declared INSIDE the tab (a `Semantics` of its own around it would land
+  beside the press) - `ExtTab(identifier: ..., text: ...)`. A tab that draws more
+  than a caption takes `ExtTab.child`, and anything decorative in that child says
+  nothing: `UnreadBadge` already excludes itself, and what it counts goes in the
+  tab's `value`, which is announced after the tab's name. Never wrap the tab in a
+  plain `Semantics(identifier: ...)`.
 - **`context.showSnackBar`** (`lib/extensions/build_context.dart`) - already wraps
   the message in a `SemanticId`, so a flow can wait for the snackbar by id, and
   keeps a snackbar that carries an action on screen until it is dismissed:

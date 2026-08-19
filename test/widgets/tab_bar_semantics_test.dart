@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/features/messaging/features/conversations/widgets/unread_badge.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../helpers/helpers.dart';
@@ -65,6 +66,62 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(controller.index, 1);
+
+    handle.dispose();
+  });
+
+  testWidgets('a tab that draws a badge keeps the count out of its name', (tester) async {
+    // The conversations tabs put an unread badge beside the caption. Inside
+    // the merged tab node a raw glyph is read out as part of the name, so it
+    // is excluded and what it stood for is spoken as the tab's state.
+    final handle = tester.ensureSemantics();
+    final controller = TabController(length: 2, vsync: const TestVSync());
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(36),
+              child: ExtTabBar(
+                controller: controller,
+                height: 36,
+                tabs: [
+                  ExtTab.child(
+                    identifier: conversationsTabChatId,
+                    value: '3 unread conversations',
+                    // The shape the conversations screen builds: caption plus
+                    // the badge, which keeps itself out of what is spoken.
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Chats'),
+                        const SizedBox(width: 4),
+                        UnreadBadge(count: 3, isActive: true, colorScheme: ThemeData().colorScheme),
+                      ],
+                    ),
+                  ),
+                  const ExtTab(identifier: conversationsTabSmsId, text: 'Messages'),
+                ],
+              ),
+            ),
+          ),
+          body: TabBarView(controller: controller, children: const [Text('chats'), Text('sms')]),
+        ),
+      ),
+    );
+
+    // The whole spoken name, not a containment check: a caption that drifted
+    // onto a node above the press would still "contain" the word.
+    expectTapTargetSemantics(
+      tester,
+      find.bySemanticsIdentifier(conversationsTabChatId),
+      label: 'Tab 1 of 2\nChats',
+      identifier: conversationsTabChatId,
+    );
+    final chats = tester.getSemantics(find.bySemanticsIdentifier(conversationsTabChatId)).getSemanticsData();
+    expect(chats.value, '3 unread conversations', reason: 'the count is state, spoken after the name');
 
     handle.dispose();
   });
