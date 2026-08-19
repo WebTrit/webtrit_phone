@@ -89,7 +89,7 @@ void main() {
   Widget wrapScreen({bool sessionsEnabled = false, int sessions = 0}) {
     when(() => sessionsCubit.state).thenReturn(
       SessionsState(
-        sessions: [for (var i = 0; i < sessions; i++) ActiveSession(id: '\$i', current: i == 0)],
+        sessions: [for (var i = 0; i < sessions; i++) ActiveSession(id: '$i', current: i == 0)],
       ),
     );
 
@@ -158,6 +158,27 @@ void main() {
     verifyNever(() => settingsBloc.add(const SettingsLogouted()));
 
     handle.dispose();
+  });
+
+  testWidgets('confirming the question logs out', (tester) async {
+    await tester.pumpWidget(wrapScreen());
+
+    await tester.tap(find.byKey(settingsLogoutButtonKey));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(confirmDialogYesButtonKey));
+    await tester.pumpAndSettle();
+
+    verify(() => settingsBloc.add(const SettingsLogouted())).called(1);
+  });
+
+  testWidgets('logout refuses the press while the account is busy', (tester) async {
+    // The busy overlay covers the list only; an action in the bar would stay
+    // live on top of it and could tear the session down mid-request.
+    when(() => settingsBloc.state).thenReturn(const SettingsState(progress: true));
+
+    await tester.pumpWidget(wrapScreen());
+
+    expect(tester.widget<IconButton>(find.byKey(settingsLogoutButtonKey)).onPressed, isNull);
   });
 
   testWidgets('the list no longer carries a logout row', (tester) async {

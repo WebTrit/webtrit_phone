@@ -54,19 +54,25 @@ class SettingsScreen extends StatelessWidget {
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
         flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
         actions: [
-          SemanticAction(
-            label: context.l10n.settings_ListViewTileTitle_logout,
-            identifier: settingsLogoutButtonId,
-            // The tooltip stays for the long press but keeps quiet: spoken on
-            // top of the name it would say the same thing twice.
-            child: Tooltip(
-              message: context.l10n.settings_ListViewTileTitle_logout,
-              excludeFromSemantics: true,
-              child: IconButton(
-                // The Patrol logout subsequence taps this key.
-                key: settingsLogoutButtonKey,
-                icon: Icon(Icons.logout, color: effectiveStyle?.logoutIconColor),
-                onPressed: () => _onLogoutTap(context),
+          // The busy overlay covers the body only, and the bar is outside it -
+          // so an action up here has to refuse the press by itself while
+          // something else is already running against the account.
+          BlocSelector<SettingsBloc, SettingsState, bool>(
+            selector: (state) => state.progress,
+            builder: (context, busy) => SemanticAction(
+              label: context.l10n.settings_ListViewTileTitle_logout,
+              identifier: settingsLogoutButtonId,
+              // The tooltip stays for the long press but keeps quiet: spoken on
+              // top of the name it would say the same thing twice.
+              child: Tooltip(
+                message: context.l10n.settings_ListViewTileTitle_logout,
+                excludeFromSemantics: true,
+                child: IconButton(
+                  // The Patrol logout subsequence taps this key.
+                  key: settingsLogoutButtonKey,
+                  icon: Icon(Icons.logout, color: effectiveStyle?.logoutIconColor),
+                  onPressed: busy ? null : () => _onLogoutTap(context),
+                ),
               ),
             ),
           ),

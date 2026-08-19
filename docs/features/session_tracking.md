@@ -72,11 +72,12 @@ name there, so the value is dropped rather than sent.
 
 ## Entry point and version gate
 
-The row sits in the fixed group at the top of the settings screen, directly
-above logout, and is deliberately NOT a configurable settings item: there is no
-`sessions` type in `app.config.json` and no `SettingsFlavor` for it. It carries
-an `UnreadBadge` with the number of active sessions, which stays blank until the
-list has loaded.
+The row sits in the fixed group at the top of the settings screen and is
+deliberately NOT a configurable settings item: there is no `sessions` type in
+`app.config.json` and no `SettingsFlavor` for it. It carries a `CountBadge` with
+the number of active sessions, which stays blank until the list has loaded, and
+the count is spoken after the row's own name. Logging out is not next to it any
+more - it is an action in the app bar of that screen.
 
 Both endpoints are core endpoints with no adapter involvement, so there is no
 capability flag to advertise them. Availability is decided by the core version
