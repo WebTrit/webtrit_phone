@@ -17,13 +17,10 @@ class SipPresenceIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final style = Theme.of(context).extension<LeadingAvatarStyles>()?.primary ?? LeadingAvatarStyle();
+    final badge = LeadingAvatarStyles.of(context).presenceBadge!;
 
     final anyAvailable = presenceInfo.anyAvailable;
-    final color = anyAvailable
-        ? (style.presenceBadge?.availableColor ?? colorScheme.tertiary)
-        : (style.presenceBadge?.unavailableColor ?? colorScheme.onSurfaceVariant);
+    final color = anyAvailable ? badge.availableColor : badge.unavailableColor;
 
     final activityIcon = _activityIcon(presenceInfo, dialogInfo);
 

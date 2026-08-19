@@ -39,7 +39,7 @@ class AvatarStatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final presenceParams = PresenceViewParams.of(context);
-    final style = Theme.of(context).extension<LeadingAvatarStyles>()?.primary;
+    final style = LeadingAvatarStyles.of(context);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -49,7 +49,7 @@ class AvatarStatusBadge extends StatelessWidget {
           final presenceInfo = this.presenceInfo;
           if (presenceInfo == null) return const SizedBox.shrink();
 
-          final rect = BadgeLayout.bottomRightSquare(size: size, sizeFactor: style?.presenceBadge?.sizeFactor ?? 0.325);
+          final rect = BadgeLayout.bottomRightSquare(size: size, sizeFactor: style.presenceBadge!.sizeFactor!);
           return Stack(
             clipBehavior: Clip.none,
             children: [
@@ -68,7 +68,7 @@ class AvatarStatusBadge extends StatelessWidget {
         final registered = this.registered;
         if (registered == null) return const SizedBox.shrink();
 
-        final rect = BadgeLayout.bottomRightSquare(size: size, sizeFactor: style?.registeredBadge?.sizeFactor ?? 0.2);
+        final rect = BadgeLayout.bottomRightSquare(size: size, sizeFactor: style.registeredBadge!.sizeFactor!);
         return Stack(
           clipBehavior: Clip.none,
           children: [
@@ -87,15 +87,16 @@ class _RegisteredDot extends StatelessWidget {
   const _RegisteredDot({required this.registered, required this.style});
 
   final bool registered;
-  final LeadingAvatarStyle? style;
+  final LeadingAvatarStyle style;
 
   @override
   Widget build(BuildContext context) {
     final rs = Theme.of(context).extension<RegisteredStatusStyles>()?.primary;
 
+    final badge = style.registeredBadge!;
     final color = registered
-        ? (style?.registeredBadge?.registeredColor ?? rs?.registered)
-        : (style?.registeredBadge?.unregisteredColor ?? rs?.unregistered);
+        ? (badge.registeredColor ?? rs?.registered)
+        : (badge.unregisteredColor ?? rs?.unregistered);
 
     return Container(
       decoration: BoxDecoration(shape: BoxShape.circle, color: color),
