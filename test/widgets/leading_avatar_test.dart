@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/theme/styles/styles.dart';
 import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/widgets/avatar_status_badge.dart';
 import 'package:webtrit_phone/widgets/leading_avatar.dart';
 
 void main() {
@@ -97,10 +98,29 @@ void main() {
       expect(find.descendant(of: find.byType(LeadingAvatar), matching: find.byKey(badgeKey)), findsOneWidget);
     });
 
-    testWidgets('renders nothing extra without a badge', (tester) async {
-      await tester.pumpWidget(wrap(const LeadingAvatar(username: 'John Doe')));
+    testWidgets('hands the status badge the avatar diameter', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: PresenceViewParams(
+              hybridPresenceSupport: false,
+              blfViaSipSupport: false,
+              presenceViaSipSupport: false,
+              child: Center(
+                child: LeadingAvatar(
+                  username: 'John Doe',
+                  radius: 20,
+                  badge: AvatarStatusBadge.maybe(registered: true),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
 
-      expect(find.byKey(const Key('badge')), findsNothing);
+      final dot = find.descendant(of: find.byType(AvatarStatusBadge), matching: find.byType(Container));
+      expect(tester.getSize(dot), const Size(8, 8));
+      expect(tester.getRect(dot).bottomRight, tester.getRect(find.byType(LeadingAvatar)).bottomRight);
     });
   });
 }

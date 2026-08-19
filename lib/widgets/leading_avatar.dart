@@ -33,7 +33,7 @@ class LeadingAvatar extends StatefulWidget {
   final EdgeInsets? loadingPadding;
   final LeadingAvatarStyle? style;
 
-  /// Status badge overlay (e.g. [AvatarStatusBadge]); it receives the whole
+  /// Status badge overlay (e.g. `AvatarStatusBadge`); it receives the whole
   /// avatar square and positions itself within it.
   final Widget? badge;
 
@@ -45,7 +45,6 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   late LeadingAvatarStyle _style;
   late double _radius;
   late double _diameter;
-  late Rect _smartRect;
 
   @override
   void initState() {
@@ -53,7 +52,6 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     _style = const LeadingAvatarStyle();
     _radius = widget.radius ?? _style.radius ?? 20;
     _diameter = _radius * 2;
-    _updateBadgeRects();
   }
 
   @override
@@ -65,12 +63,7 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   @override
   void didUpdateWidget(covariant LeadingAvatar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.style != widget.style ||
-        oldWidget.radius != widget.radius ||
-        oldWidget.smart != widget.smart ||
-        oldWidget.thumbnailUrl != widget.thumbnailUrl ||
-        oldWidget.thumbnail != widget.thumbnail ||
-        oldWidget.username != widget.username) {
+    if (oldWidget.style != widget.style || oldWidget.radius != widget.radius) {
       _recompute();
     }
   }
@@ -83,19 +76,6 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
 
     _radius = widget.radius ?? _style.radius ?? 20;
     _diameter = _radius * 2;
-
-    _updateBadgeRects();
-  }
-
-  void _updateBadgeRects() {
-    final smartSizeFactor = _style.smartIndicator?.sizeFactor ?? 0.4;
-
-    _smartRect = BadgeLayout.topLeftSquare(
-      size: _diameter,
-      sizeFactor: smartSizeFactor,
-      dxFactor: -0.1,
-      dyFactor: -0.1,
-    );
   }
 
   /// Name-derived background, or null when disabled / not applicable (photo shown, no name).
@@ -144,7 +124,16 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
             ),
           ),
           if (widget.badge != null) Positioned.fill(child: widget.badge!),
-          if (widget.smart) Positioned.fromRect(rect: _smartRect, child: _smartIndicator(_diameter, _style, scheme)),
+          if (widget.smart)
+            Positioned.fromRect(
+              rect: BadgeLayout.topLeftSquare(
+                size: _diameter,
+                sizeFactor: _style.smartIndicator?.sizeFactor ?? 0.4,
+                dxFactor: -0.1,
+                dyFactor: -0.1,
+              ),
+              child: _smartIndicator(_diameter, _style, scheme),
+            ),
           if (widget.showLoading) _buildLoadingOverlay(_style),
         ],
       ),

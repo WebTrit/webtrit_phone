@@ -72,7 +72,7 @@ class CdrTile extends StatelessWidget {
         username: name,
         thumbnail: contact?.thumbnail,
         thumbnailUrl: contact?.thumbnailUrl,
-        badge: AvatarStatusBadge(
+        badge: AvatarStatusBadge.maybe(
           registered: contact?.registered,
           presenceInfo: contact?.presenceInfo,
           dialogInfo: contact?.dialogInfo,

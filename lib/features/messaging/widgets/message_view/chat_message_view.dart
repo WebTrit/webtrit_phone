@@ -220,7 +220,10 @@ class _ChatMessageViewState extends State<ChatMessageView> {
                       thumbnail: contact?.thumbnail,
                       thumbnailUrl: contact?.thumbnailUrl,
                       radius: 20,
-                      badge: AvatarStatusBadge(registered: contact?.registered, presenceInfo: contact?.presenceInfo),
+                      badge: AvatarStatusBadge.maybe(
+                        registered: contact?.registered,
+                        presenceInfo: contact?.presenceInfo,
+                      ),
                     );
                   },
                 ),

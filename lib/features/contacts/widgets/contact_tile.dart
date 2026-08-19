@@ -94,7 +94,7 @@ class ContactTile extends StatelessWidget {
         thumbnail: thumbnail,
         thumbnailUrl: thumbnailUrl,
         smart: smart,
-        badge: AvatarStatusBadge(registered: registered, presenceInfo: presenceInfo, dialogInfo: dialogInfo),
+        badge: AvatarStatusBadge.maybe(registered: registered, presenceInfo: presenceInfo, dialogInfo: dialogInfo),
       ),
       name: title,
       subName: subName,

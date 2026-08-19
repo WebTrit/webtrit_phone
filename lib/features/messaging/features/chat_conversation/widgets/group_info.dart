@@ -285,7 +285,7 @@ class _GroupChatInfoState extends State<GroupChatInfo> {
               username: contact?.displayTitle,
               thumbnail: contact?.thumbnail,
               thumbnailUrl: contact?.thumbnailUrl,
-              badge: AvatarStatusBadge(registered: contact?.registered),
+              badge: AvatarStatusBadge.maybe(registered: contact?.registered),
               radius: 20,
             ),
             title: ParticipantName(senderId: member.userId, userId: widget.userId),

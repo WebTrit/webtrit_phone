@@ -42,17 +42,23 @@ Independently of the hybrid path, a contact record still carries the legacy
 
 ## Avatar badges: two systems plus one indicator
 
-`lib/widgets/leading_avatar.dart` (`LeadingAvatar`) hosts up to three
-overlays on the avatar circle; badge rects come from
-`lib/utils/badge_layout.dart` as `avatar diameter * sizeFactor` squares.
-Which bottom-right badge renders is decided by
-`PresenceViewParams.hybridPresenceSupport` - the two are mutually exclusive:
+`lib/widgets/leading_avatar.dart` (`LeadingAvatar`) knows nothing about
+presence: it exposes a `badge` slot that receives the whole avatar square.
+The status badge is a separate widget,
+`lib/widgets/avatar_status_badge.dart` (`AvatarStatusBadge`) - call sites
+build it via `AvatarStatusBadge.maybe(...)`, which returns `null` (no badge
+mounted) when there is no status data at all. The badge sizes and anchors
+itself via `lib/utils/badge_layout.dart` as an
+`avatar diameter * sizeFactor` square, and decides which bottom-right badge
+renders by `PresenceViewParams.hybridPresenceSupport` - the two are
+mutually exclusive. The top-left smart-contact indicator is still drawn by
+`LeadingAvatar` itself:
 
 | Overlay | Widget | Anchor | Default sizeFactor | Shown when |
 |---|---|---|---|---|
-| Registered dot (legacy) | `_registeredIndicator` | bottom-right | 0.2 | hybrid presence OFF and `registered != null` |
+| Registered dot (legacy) | `_RegisteredDot` (avatar_status_badge.dart) | bottom-right | 0.2 | hybrid presence OFF and `registered != null` |
 | Presence badge | `lib/widgets/sip_presence_indicator.dart` | bottom-right | 0.325 | hybrid presence ON and `presenceInfo != null` |
-| Smart-contact indicator | `_smartIndicator` | top-left | 0.4 | `smart: true` (unrelated to presence) |
+| Smart-contact indicator | `_smartIndicator` (leading_avatar.dart) | top-left | 0.4 | `smart: true` (unrelated to presence) |
 
 The default avatar radius is 20 (diameter 40), so the presence badge is
 ~13 dp and the legacy dot ~8 dp at defaults. All sizeFactors are themable
@@ -150,7 +156,11 @@ periodic send is driven from `CallBloc`.
 
 ## Test coverage
 
+`test/widgets/avatar_status_badge_test.dart` pins the badge contract: which
+generation renders under `hybridPresenceSupport`, the default 0.2/0.325
+sizes, the legacy dot colors and the no-data cases (including
+`AvatarStatusBadge.maybe` returning `null`).
 `test/widgets/leading_avatar_test.dart` covers name-derived avatar colors
-only and builds with all `PresenceViewParams` flags off; no test currently
-asserts badge size or colors, and there are no golden tests for these
+and the badge slot, including a composition test asserting the slot hands
+the badge exactly the avatar diameter. There are no golden tests for these
 widgets.

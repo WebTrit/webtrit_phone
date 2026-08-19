@@ -89,7 +89,7 @@ class _GroupFillInfoViewState extends State<GroupFillInfoView> {
                           username: contact.displayTitle,
                           thumbnail: contact.thumbnail,
                           thumbnailUrl: contact.thumbnailUrl,
-                          badge: AvatarStatusBadge(registered: contact.registered),
+                          badge: AvatarStatusBadge.maybe(registered: contact.registered),
                           radius: 24,
                         ),
                         title: Text(contact.displayTitle),

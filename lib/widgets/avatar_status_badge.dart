@@ -6,7 +6,7 @@ import 'package:webtrit_phone/theme/styles/styles.dart';
 import '../utils/utils.dart';
 import 'sip_presence_indicator.dart';
 
-/// Contact status badge for the [LeadingAvatar] badge slot.
+/// Contact status badge for the `LeadingAvatar` badge slot.
 ///
 /// Owns the choice between the two status generations - the legacy
 /// SIP-registration dot and the hybrid presence indicator - based on
@@ -15,6 +15,13 @@ import 'sip_presence_indicator.dart';
 /// given, matching the avatar's bottom-right badge geometry.
 class AvatarStatusBadge extends StatelessWidget {
   const AvatarStatusBadge({super.key, this.registered, this.presenceInfo, this.dialogInfo});
+
+  /// The badge for the given data, or `null` when there is no status data at
+  /// all - so the avatar mounts nothing instead of an empty badge.
+  static AvatarStatusBadge? maybe({bool? registered, List<PresenceInfo>? presenceInfo, List<DialogInfo>? dialogInfo}) {
+    if (registered == null && presenceInfo == null && dialogInfo == null) return null;
+    return AvatarStatusBadge(registered: registered, presenceInfo: presenceInfo, dialogInfo: dialogInfo);
+  }
 
   /// SIP registration state feeding the legacy dot; `null` means the state
   /// is unknown, and without hybrid presence support no badge is shown.

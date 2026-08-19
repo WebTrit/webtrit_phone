@@ -83,6 +83,18 @@ void main() {
     });
   });
 
+  group('AvatarStatusBadge.maybe', () {
+    test('is null when there is no status data', () {
+      expect(AvatarStatusBadge.maybe(), isNull);
+    });
+
+    test('is a badge when any input is present', () {
+      expect(AvatarStatusBadge.maybe(registered: false), isA<AvatarStatusBadge>());
+      expect(AvatarStatusBadge.maybe(presenceInfo: const []), isA<AvatarStatusBadge>());
+      expect(AvatarStatusBadge.maybe(dialogInfo: const []), isA<AvatarStatusBadge>());
+    });
+  });
+
   group('AvatarStatusBadge with hybrid presence', () {
     testWidgets('shows the presence indicator at the hybrid size', (tester) async {
       await tester.pumpWidget(

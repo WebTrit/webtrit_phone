@@ -92,7 +92,7 @@ class _DialogChatInfoState extends State<DialogChatInfo> {
                             username: contact?.displayTitle,
                             thumbnail: contact?.thumbnail,
                             thumbnailUrl: contact?.thumbnailUrl,
-                            badge: AvatarStatusBadge(
+                            badge: AvatarStatusBadge.maybe(
                               registered: contact?.registered,
                               presenceInfo: contact?.presenceInfo,
                               dialogInfo: contact?.dialogInfo,
