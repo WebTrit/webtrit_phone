@@ -187,6 +187,18 @@
       }
     }
   },
+  "callerId_SemanticsLabel_matchRule": "Calls to {dialCode} show {number}",
+  "@callerId_SemanticsLabel_matchRule": {
+    "description": "The whole caller id rule read as one sentence: which dial code it matches and which number is shown for it.",
+    "placeholders": {
+      "dialCode": {
+        "type": "String"
+      },
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "call_CallActionsTooltip_accept": "Accept",
   "@call_CallActionsTooltip_accept": {},
   "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "Accept transfer",

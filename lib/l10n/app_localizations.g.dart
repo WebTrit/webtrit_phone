@@ -352,6 +352,12 @@ abstract class AppLocalizations {
   /// **'Remove the match for {dialCode}'**
   String callerId_SemanticsLabel_removeMatch(String dialCode);
 
+  /// The whole caller id rule read as one sentence: which dial code it matches and which number is shown for it.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls to {dialCode} show {number}'**
+  String callerId_SemanticsLabel_matchRule(String dialCode, String number);
+
   /// No description provided for @call_CallActionsTooltip_accept.
   ///
   /// In en, this message translates to:

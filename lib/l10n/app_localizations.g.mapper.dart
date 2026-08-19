@@ -1779,6 +1779,13 @@ extension AppLocalizationsExtension on AppLocalizations {
           'callerId_SemanticsLabel_removeMatch requires 1 arguments',
         ),
       },
+      'callerId_SemanticsLabel_matchRule' => switch (args) {
+        [final String dialCode, final String number] =>
+          callerId_SemanticsLabel_matchRule(dialCode, number),
+        _ => throw ArgumentError(
+          'callerId_SemanticsLabel_matchRule requires 2 arguments',
+        ),
+      },
       'call_CallList_header' => switch (args) {
         [final int count] => call_CallList_header(count),
         _ => throw ArgumentError('call_CallList_header requires 1 arguments'),

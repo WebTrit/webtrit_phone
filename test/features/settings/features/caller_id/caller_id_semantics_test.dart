@@ -69,6 +69,32 @@ void main() {
     handle.dispose();
   });
 
+  testWidgets('an existing rule reads as the sentence it states, not as three fragments', (tester) async {
+    // The row draws a flag with a dial code, an arrow and a number. Left to
+    // themselves each was announced separately, the arrow as the glyph it is:
+    // "+1", "button, disabled", "=>  441". None of the three answers a press.
+    final handle = tester.ensureSemantics();
+    stub(matchers: matchers);
+
+    await tester.pumpWidget(wrap());
+    await tester.pumpAndSettle();
+
+    expect(find.bySemanticsLabel('Calls to +1 show 441'), findsOneWidget);
+    expect(find.bySemanticsLabel('Calls to +44 show 442'), findsOneWidget);
+    expect(find.bySemanticsLabel(RegExp(r'=>')), findsNothing, reason: 'the arrow is a glyph, not a word');
+    expect(find.bySemanticsLabel('+1'), findsNothing, reason: 'the dial code is spoken inside the sentence');
+
+    // The one control of the row keeps its own name and its own node.
+    expectTapTargetSemantics(
+      tester,
+      find.bySemanticsIdentifier(numberedId(callerIdRemoveMatchId, 0)),
+      label: 'Remove the match for +1',
+      identifier: numberedId(callerIdRemoveMatchId, 0),
+    );
+
+    handle.dispose();
+  });
+
   testWidgets('the halves of a new rule say what each of them chooses', (tester) async {
     final handle = tester.ensureSemantics();
 

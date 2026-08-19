@@ -191,6 +191,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String callerId_SemanticsLabel_matchRule(String dialCode, String number) {
+    return 'Calls to $dialCode show $number';
+  }
+
+  @override
   String get call_CallActionsTooltip_accept => 'Accept';
 
   @override

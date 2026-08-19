@@ -33,17 +33,32 @@ class MatcherTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CountryCodePicker(
-            initialSelection: matcher.prefix,
-            showFlag: true,
-            showFlagDialog: true,
-            showCountryOnly: false,
-            showOnlyCountryWhenClosed: false,
-            onChanged: (code) {},
-            enabled: false,
-            padding: EdgeInsets.zero,
+          // The rule is drawn as three pieces - a flag with a dial code, an
+          // arrow, a number - and each of them used to be announced on its own,
+          // the arrow as the glyph it is. None of the three is interactive
+          // here, so the whole thing is read as the one sentence it states.
+          MergeSemantics(
+            child: Semantics(
+              label: context.l10n.callerId_SemanticsLabel_matchRule(matcher.prefix, matcher.number),
+              child: ExcludeSemantics(
+                child: Row(
+                  children: [
+                    CountryCodePicker(
+                      initialSelection: matcher.prefix,
+                      showFlag: true,
+                      showFlagDialog: true,
+                      showCountryOnly: false,
+                      showOnlyCountryWhenClosed: false,
+                      onChanged: (code) {},
+                      enabled: false,
+                      padding: EdgeInsets.zero,
+                    ),
+                    Text('=>  ${matcher.number}'),
+                  ],
+                ),
+              ),
+            ),
           ),
-          Text('=>  ${matcher.number}'),
           const Spacer(),
           SemanticAction(
             label: context.l10n.callerId_SemanticsLabel_removeMatch(matcher.prefix),
