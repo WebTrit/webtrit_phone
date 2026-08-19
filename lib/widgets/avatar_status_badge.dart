@@ -16,8 +16,17 @@ import 'sip_presence_indicator.dart';
 class AvatarStatusBadge extends StatelessWidget {
   const AvatarStatusBadge({super.key, this.registered, this.presenceInfo, this.dialogInfo});
 
+  /// SIP registration state feeding the legacy dot; `null` means the state
+  /// is unknown, and without hybrid presence support no badge is shown.
   final bool? registered;
+
+  /// Presence states feeding the hybrid indicator; `null` means presence is
+  /// not tracked for this contact, and with hybrid presence support no badge
+  /// is shown.
   final List<PresenceInfo>? presenceInfo;
+
+  /// BLF dialog states of the contact; a non-empty list marks the contact as
+  /// on a call via the activity icon of the hybrid indicator.
   final List<DialogInfo>? dialogInfo;
 
   @override
