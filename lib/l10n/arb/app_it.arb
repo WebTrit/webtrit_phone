@@ -163,6 +163,18 @@
       }
     }
   },
+  "callerId_SemanticsLabel_matchRule": "Le chiamate verso {dialCode} mostrano {number}",
+  "@callerId_SemanticsLabel_matchRule": {
+    "description": "The whole caller id rule read as one sentence: which dial code it matches and which number is shown for it.",
+    "placeholders": {
+      "dialCode": {
+        "type": "String"
+      },
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "call_CallActionsTooltip_accept": "Accetta chiamata",
   "@call_CallActionsTooltip_accept": {},
   "call_CallActionsTooltip_accept_inviteToAttendedTransfer": "Accetta trasferimento",

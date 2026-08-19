@@ -7,6 +7,8 @@ import 'package:webtrit_phone/features/settings/features/caller_id/caller_id.dar
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import 'number_dropdown.dart';
+
 class DefaultNumberForm extends StatelessWidget {
   const DefaultNumberForm({required this.state, super.key});
 
@@ -36,24 +38,11 @@ class DefaultNumberForm extends StatelessWidget {
           SemanticAction(
             label: l10n.callerId_SemanticsLabel_defaultNumber,
             identifier: callerIdDefaultNumberId,
-            child: DropdownMenu<String?>(
+            child: NumberDropdown<String?>(
               initialSelection: state.settings.defaultNumber,
-              menuStyle: MenuStyle(
-                backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceContainerLow),
-                shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-                padding: WidgetStateProperty.all(EdgeInsets.zero),
-              ),
-              textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14),
-              inputDecorationTheme: InputDecorationTheme(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.surfaceContainerLow,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                isCollapsed: true,
-              ),
-              dropdownMenuEntries: [
+              entries: [
                 if (state.mainNumber != null) DropdownMenuEntry<String?>(value: null, label: state.mainNumber!),
-                for (final n in state.additionalNumbers) DropdownMenuEntry<String>(value: n, label: n),
+                for (final n in state.additionalNumbers) DropdownMenuEntry<String?>(value: n, label: n),
               ],
               onSelected: (value) {
                 context.read<CallerIdSettingsCubit>().setDefaultNumber(value);

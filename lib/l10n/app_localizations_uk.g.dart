@@ -207,6 +207,11 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String callerId_SemanticsLabel_matchRule(String dialCode, String number) {
+    return 'Дзвінки на $dialCode показують $number';
+  }
+
+  @override
   String get call_CallActionsTooltip_accept => 'Прийняти';
 
   @override

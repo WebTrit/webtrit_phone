@@ -6,6 +6,8 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+import 'number_dropdown.dart';
+
 class MatcherAddingForm extends StatefulWidget {
   const MatcherAddingForm({
     required this.numbers,
@@ -91,25 +93,10 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
                 child: SemanticAction(
                   label: l10n.callerId_SemanticsLabel_matchNumber,
                   identifier: callerIdMatchNumberId,
-                  child: DropdownMenu<String>(
+                  child: NumberDropdown<String>(
                     width: double.infinity,
                     hintText: l10n.settings_callerId_number_hint,
-                    menuStyle: MenuStyle(
-                      backgroundColor: WidgetStateProperty.all(colorScheme.surfaceContainerLow),
-                      shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-                      padding: WidgetStateProperty.all(EdgeInsets.zero),
-                    ),
-                    textStyle: TextStyle(color: colorScheme.onSurface, fontSize: 14),
-                    inputDecorationTheme: InputDecorationTheme(
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                      filled: true,
-                      fillColor: colorScheme.surfaceContainerLow,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      isCollapsed: true,
-                    ),
-                    dropdownMenuEntries: [
-                      for (final n in widget.numbers) DropdownMenuEntry<String>(value: n, label: n),
-                    ],
+                    entries: [for (final n in widget.numbers) DropdownMenuEntry<String>(value: n, label: n)],
                     onSelected: (value) => setState(() => number = value ?? ''),
                   ),
                 ),
