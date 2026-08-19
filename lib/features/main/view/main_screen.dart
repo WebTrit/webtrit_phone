@@ -33,6 +33,12 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // The screen is the one home of the bar-visibility rule for every host,
+    // the previews included: a menu of one section shows no bar - there is
+    // nothing to switch to - and the section's own scaffolding fills the
+    // screen.
+    if (tabs.length < 2) return body;
+
     return Scaffold(
       extendBody: true,
       body: body,

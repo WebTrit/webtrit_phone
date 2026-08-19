@@ -43,4 +43,32 @@ void main() {
 
     expect(find.byKey(marker), findsOneWidget);
   });
+
+  testWidgets('a menu of one section shows the body alone, with no bar', (tester) async {
+    // The rule lives in the screen itself so the app and every preview agree
+    // by construction - their disagreement over a one-tab menu was a bug.
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: MainScreen(
+          body: const Scaffold(body: SizedBox.shrink()),
+          tabs: [tabs.first],
+          currentIndex: 0,
+        ),
+      ),
+    );
+
+    expect(find.byType(MainBottomNavigationBar), findsNothing);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: MainScreen(body: const SizedBox.shrink(), tabs: tabs, currentIndex: 0),
+      ),
+    );
+
+    expect(find.byType(MainBottomNavigationBar), findsOneWidget);
+  });
 }

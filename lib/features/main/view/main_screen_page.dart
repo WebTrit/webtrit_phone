@@ -67,23 +67,22 @@ class _MainScreenPageState extends State<MainScreenPage> {
         }
 
         // Tabs are guaranteed to be non-empty due to validation during the bootstrap phase.
-        // Therefore, we only check if there's more than one tab to determine the layout.
-        return bottomMenuManager.tabs.length > 1
-            ? MainScreen(
-                body: child,
-                tabs: tabs,
-                // The shell above provides the unread state this reads.
-                decorateTabIcon: MessagingFlavorOverlay.forTab,
-                // Be aware to use activeIndex from tabsRouter, not from bottomMenuManager
-                // to handle navigation changes correctly, especially when the user navigates by url.
-                // e.g router.navigate(const MainScreenPageRoute(['favorites']));
-                // Clamped for the same one-frame window as the flavor above:
-                // the bar asserts its index is within the entries it draws.
-                currentIndex: tabsRouter.activeIndex.clamp(0, tabs.length - 1),
-                onTabSelected: (index) =>
-                    BottomMenuTabHandler.handleTap(context, index: index, tabs: tabs, tabsRouter: tabsRouter),
-              )
-            : child;
+        // The screen itself decides whether a bar is drawn at all - the
+        // single-section rule lives there, shared with the previews.
+        return MainScreen(
+          body: child,
+          tabs: tabs,
+          // The shell above provides the unread state this reads.
+          decorateTabIcon: MessagingFlavorOverlay.forTab,
+          // Be aware to use activeIndex from tabsRouter, not from bottomMenuManager
+          // to handle navigation changes correctly, especially when the user navigates by url.
+          // e.g router.navigate(const MainScreenPageRoute(['favorites']));
+          // Clamped for the same one-frame window as the flavor above:
+          // the bar asserts its index is within the entries it draws.
+          currentIndex: tabsRouter.activeIndex.clamp(0, tabs.length - 1),
+          onTabSelected: (index) =>
+              BottomMenuTabHandler.handleTap(context, index: index, tabs: tabs, tabsRouter: tabsRouter),
+        );
       },
       navigatorObservers: () => [MainScreenNavigatorObserver(mainScreenRouteStateRepository)],
     );
