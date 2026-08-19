@@ -232,6 +232,33 @@ number means - where it is said depends on who owns the node:
   pointer tap on a device showed it. A screen reader activates through the
   semantics action and never notices.
 
+## Size of a tap target
+
+`kMinInteractiveDimension` is the floor, and Material only reaches it by
+padding a control: `Checkbox`, `Radio` and `Switch` draw a glyph far smaller
+than that. Two things take it away silently:
+
+- `materialTapTargetSize: MaterialTapTargetSize.shrinkWrap` - that is
+  literally `kMinInteractiveDimension - 8`, so a checkbox drops to 40;
+- the platform default off mobile. `ThemeData` picks `shrinkWrap` AND a
+  compact `visualDensity` for linux/macOS/windows, which a desktop browser
+  reports for the web build - the same checkbox lands at 32.
+
+Shrinking is fine when something larger around the control answers the same
+tap - a merged row, a `ListTile` - and only then. When the control is the only
+target the row offers, state `MaterialTapTargetSize.padded` rather than
+leaning on the default, and pin the size in the test
+(`greaterThanOrEqualTo(kMinInteractiveDimension)`), including one case with a
+desktop-class `ThemeData(platform: ...)`: widget tests run as Android and see
+the friendly branch.
+
+**A row that cannot be merged owes nothing extra to the finger.** Where a
+sentence hosts a link, the row stays unmerged (Trap 2) - and the sentence must
+NOT take a tap of its own either: a link's hit area follows its glyphs, not the
+line box, so a tap that misses it by a few pixels would land on the row's own
+handler. On a consent row that means agreeing, or silently taking an agreement
+back. Let the control carry the interaction and make the control big enough.
+
 ## The push gate
 
 `tool/scripts/semantics-gate.sh` runs on every push, before the analyzer. It looks only at
