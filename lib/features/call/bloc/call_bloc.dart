@@ -365,7 +365,8 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
     ///
     /// This scenario is particularly relevant when a call is triggered before the app
     /// is fully active, such as via [CallkeepDelegate.continueStartCallIntent]
-    /// (e.g., from phone recents).
+    /// (e.g., from phone recents). That callback is delivered on iOS only - Android
+    /// has no equivalent, so the scenario cannot arise there.
 
     final newRegistration = change.nextState.callServiceState.registration;
     final previousRegistration = change.currentState.callServiceState.registration;
