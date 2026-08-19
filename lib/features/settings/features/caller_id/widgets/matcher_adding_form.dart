@@ -53,7 +53,7 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surfaceBright,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [BoxShadow(color: colorScheme.shadow.withAlpha(25), blurRadius: 32, offset: const Offset(8, 8))],
       ),
@@ -110,7 +110,7 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
               padding: const EdgeInsets.only(top: 8),
               child: Text(
                 l10n.settings_callerId_duplicate_dialcode_error,
-                style: const TextStyle(color: Colors.red, fontSize: 12),
+                style: TextStyle(color: colorScheme.error, fontSize: 12),
               ),
             ),
           Row(

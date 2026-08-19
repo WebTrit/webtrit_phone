@@ -23,7 +23,7 @@ class DefaultNumberForm extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surfaceBright,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [BoxShadow(color: colorScheme.shadow.withAlpha(25), blurRadius: 32, offset: const Offset(4, 4))],
       ),
