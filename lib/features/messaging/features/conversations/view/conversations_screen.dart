@@ -214,9 +214,13 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                       // after the tab's name.
                       value: count > 0 ? context.l10n.common_SemanticsValue_unreadCount(count) : null,
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(title),
+                          // The strip is a fixed share of the screen width, so
+                          // a long caption next to a badge has to give way
+                          // rather than overflow the tab it sits in.
+                          Flexible(child: Text(title, overflow: TextOverflow.ellipsis)),
                           if (count > 0) ...[
                             const SizedBox(width: 4),
                             CountBadge(count: count, size: 14, onAccent: isActive),
