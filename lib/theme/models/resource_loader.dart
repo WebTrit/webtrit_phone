@@ -26,13 +26,22 @@ abstract class ResourceLoader {
 
   /// Whether [ResourceLoader.fromUri] can build a loader for [uri].
   ///
-  /// [ResourceLoader.fromUri] throws on an unknown scheme, and callers that
-  /// resolve a resource while building a widget cannot catch that. Ask this
-  /// first to decide whether the resource is openable at all.
-  static bool supportsUri(Uri uri) =>
-      NetworkResourceLoader.supportedSchemes.contains(uri.scheme) ||
-      AssetResourceLoader.supportedSchemes.contains(uri.scheme) ||
-      MemoryResourceLoader.supportedSchemes.contains(uri.scheme);
+  /// [ResourceLoader.fromUri] throws, and callers that resolve a resource while
+  /// building a widget cannot catch that. Ask this first to decide whether the
+  /// resource can be opened at all.
+  ///
+  /// Answered by building the loader rather than by listing the schemes again:
+  /// a claimed scheme is not enough on its own, since a loader may also reject
+  /// the rest of the URI - [MemoryResourceLoader] decodes its payload eagerly.
+  /// Deriving the answer this way also keeps it true for a loader added later.
+  static bool supportsUri(Uri uri) {
+    try {
+      ResourceLoader.fromUri(uri.toString());
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
 
   /// Loads the content of the resource (network, asset, or memory).
   Future<String> loadContent();

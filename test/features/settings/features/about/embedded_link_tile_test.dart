@@ -114,13 +114,48 @@ void main() {
   });
 
   testWidgets('a resource bundled with the app opens as well', (tester) async {
+    // The scheme is written the way every bundled resource in the themes is
+    // written; the single-colon spelling reaches the bundle with the scheme
+    // still glued to the path and finds nothing.
+    const address = 'asset://assets/themes/app.config.json';
     final opened = <EmbeddedData>[];
-    final resource = _resource('asset:assets/login/terms.html');
+    final resource = _resource(address);
 
     await tester.pumpWidget(wrap(resource, opened.add));
-    await tester.tap(find.text('asset:assets/login/terms.html'));
+    await tester.tap(find.text(address));
     await tester.pump();
 
     expect(opened, [resource]);
+  });
+
+  // A resource can name a scheme the app knows and still be unopenable, because
+  // a loader may reject the rest of the address too. The row must go by whether
+  // the resource can actually be loaded, not by the scheme alone.
+  group('a resource whose scheme is known but whose address is not loadable', () {
+    // Held inline rather than fetched, and decoded the moment it is resolved.
+    // Both spellings below fail that decode: a URI lowercases what follows
+    // '//', and the single-colon form is handed to the decoder scheme and all.
+    for (final spelling in ['memory://SGVsbG8gd29ybGQ=', 'memory:SGVsbG8gd29ybGQ=']) {
+      // The row shows the address as the URI renders it, which is not always
+      // what the configuration spelled.
+      final resource = _resource(spelling);
+      final shown = resource.uri.toString();
+
+      testWidgets('$spelling does not open on tap', (tester) async {
+        final opened = <EmbeddedData>[];
+
+        await tester.pumpWidget(wrap(resource, opened.add));
+        await tester.tap(find.text(shown));
+        await tester.pump();
+
+        expect(opened, isEmpty);
+      });
+
+      testWidgets('$spelling is not dressed as a link', (tester) async {
+        await tester.pumpWidget(wrap(resource, (_) {}));
+
+        expect(styleOf(tester, shown).decoration, isNot(TextDecoration.underline));
+      });
+    }
   });
 }
