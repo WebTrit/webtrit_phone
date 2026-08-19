@@ -219,7 +219,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                           Text(title),
                           if (count > 0) ...[
                             const SizedBox(width: 4),
-                            CountBadge(count: count, diameter: 14, maxCount: 9, onAccent: isActive),
+                            CountBadge(count: count, size: 14, onAccent: isActive),
                           ],
                         ],
                       ),

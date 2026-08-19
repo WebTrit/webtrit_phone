@@ -16,16 +16,17 @@ import 'package:flutter/material.dart';
 /// host is the one that has to make that decision anyway to know whether to
 /// speak the count.
 class CountBadge extends StatelessWidget {
-  const CountBadge({super.key, required this.count, this.diameter, this.onAccent = false, this.maxCount = 99});
+  const CountBadge({super.key, required this.count, this.size = 20, this.onAccent = false, this.maxCount = 99});
 
   final int count;
 
-  /// Size of a badge that has to fit a slot of its own - the corner of a
-  /// bottom-bar icon, say. Left out, the badge takes the width of its number.
+  /// Height of the badge, and the width it keeps while the number is short.
   ///
-  /// A fixed size cannot grow with the digits, so it shrinks them instead;
-  /// pick [maxCount] small enough that the number stays legible at this size.
-  final double? diameter;
+  /// A short number leaves the badge a circle of this size; a longer one
+  /// stretches it sideways instead of shrinking the digits into the shape, so
+  /// the badge stays as tall as the slot it was given and stays legible
+  /// whatever it counts.
+  final double size;
 
   /// Whether the badge is drawn on top of the accent colour rather than on the
   /// surface - the selected tab of a tab bar, say. The pair of colours is the
@@ -45,27 +46,28 @@ class CountBadge extends StatelessWidget {
     final background = onAccent ? colorScheme.onPrimary : colorScheme.primary;
     final foreground = onAccent ? colorScheme.primary : colorScheme.onPrimary;
 
-    final label = Text(
-      count > maxCount ? '$maxCount+' : '$count',
-      style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.bold, color: foreground),
-    );
-
-    final diameter = this.diameter;
-
     return ExcludeSemantics(
-      child: diameter == null
-          ? Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-              decoration: ShapeDecoration(color: background, shape: const StadiumBorder()),
-              child: label,
-            )
-          : Container(
-              width: diameter,
-              height: diameter,
-              padding: const EdgeInsets.symmetric(horizontal: 1),
-              decoration: BoxDecoration(color: background, shape: BoxShape.circle),
-              child: FittedBox(child: label),
+      // The minimum width is what keeps a short number a circle. It is set from
+      // the outside rather than by giving the box an alignment: an aligned box
+      // grows to whatever room it is offered, which in a list tile is the whole
+      // row.
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minWidth: size),
+        child: Container(
+          height: size,
+          padding: EdgeInsets.symmetric(horizontal: size / 8),
+          decoration: ShapeDecoration(color: background, shape: const StadiumBorder()),
+          child: FittedBox(
+            // Shrink only, and only what a badge given a small slot cannot fit:
+            // scaling up would blow a single digit out to fill the whole circle.
+            fit: BoxFit.scaleDown,
+            child: Text(
+              count > maxCount ? '$maxCount+' : '$count',
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.bold, color: foreground),
             ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -57,7 +57,7 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                           : null,
                     ),
                     if (state.isMultipleVoicemailsSelection)
-                      CountBadge(count: state.selectedVoicemailsIds.length, diameter: 16, maxCount: 9),
+                      CountBadge(count: state.selectedVoicemailsIds.length, size: 16),
                   ],
                 ),
               ),

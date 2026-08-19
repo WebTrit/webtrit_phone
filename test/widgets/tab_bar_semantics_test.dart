@@ -111,11 +111,7 @@ void main() {
             // badge, which keeps itself out of what is spoken.
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Chats'),
-                const SizedBox(width: 4),
-                CountBadge(count: 3, diameter: 14, maxCount: 9, onAccent: true),
-              ],
+              children: [const Text('Chats'), const SizedBox(width: 4), CountBadge(count: 3, size: 14, onAccent: true)],
             ),
           ),
           const ExtTab(identifier: conversationsTabSmsId, text: 'Messages'),

@@ -82,7 +82,7 @@ class AccountActionsTile extends StatelessWidget {
                             if (sessionsCount > 0)
                               Semantics(
                                 value: l10n.common_SemanticsValue_totalCount(sessionsCount),
-                                child: CountBadge(count: sessionsCount),
+                                child: CountBadge(count: sessionsCount, size: 32),
                               ),
                           ],
                         ),

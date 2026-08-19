@@ -67,7 +67,7 @@ class _MessagingFlavorOverlayState extends State<MessagingFlavorOverlay> {
               bottom: 0,
               child: Semantics(
                 value: spokenCount,
-                child: CountBadge(count: count, diameter: 14, maxCount: 9),
+                child: CountBadge(count: count, size: 14),
               ),
             );
           },

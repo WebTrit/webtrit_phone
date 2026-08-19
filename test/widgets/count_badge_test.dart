@@ -55,7 +55,7 @@ void main() {
             container: true,
             label: 'Voicemail',
             value: '128 unread',
-            child: const CountBadge(count: 128, maxCount: 9),
+            child: const CountBadge(count: 128, maxCount: 9, size: 14),
           ),
         ),
       ),
@@ -67,9 +67,10 @@ void main() {
     handle.dispose();
   });
 
-  testWidgets('a badge given a size keeps it whatever the number', (tester) async {
-    // The corner of a bottom-bar icon has room for one badge and no more; a
-    // badge that grew with its number would push the icon around.
+  testWidgets('a short number leaves the badge a circle, a longer one stretches it sideways', (tester) async {
+    // The badge keeps the height of the slot it was given whatever it counts;
+    // what grows is its width, so the digits stay the size they were drawn at
+    // instead of shrinking into the shape.
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
@@ -77,8 +78,9 @@ void main() {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CountBadge(count: 1, diameter: 14, maxCount: 9),
-                CountBadge(count: 128, diameter: 14, maxCount: 9),
+                CountBadge(count: 7, size: 20),
+                CountBadge(count: 42, size: 20),
+                CountBadge(count: 128, size: 20),
               ],
             ),
           ),
@@ -86,8 +88,19 @@ void main() {
       ),
     );
 
-    expect(tester.getSize(find.byType(CountBadge).first), const Size(14, 14));
-    expect(tester.getSize(find.byType(CountBadge).last), const Size(14, 14));
+    final short = tester.getSize(find.byType(CountBadge).first);
+    final twoDigits = tester.getSize(find.byType(CountBadge).at(1));
+    final long = tester.getSize(find.byType(CountBadge).last);
+
+    // How many digits still fit the circle is a question about the real font -
+    // the test one draws every glyph as a square - so what is pinned here is the
+    // rule itself: never narrower than tall, and wider only when the number
+    // needs it.
+    expect(short, const Size(20, 20), reason: 'a short number stays a circle');
+    expect(twoDigits.height, 20);
+    expect(twoDigits.width, greaterThanOrEqualTo(20), reason: 'the badge is never narrower than it is tall');
+    expect(long.height, 20, reason: 'the badge keeps the height of its slot');
+    expect(long.width, greaterThan(twoDigits.width), reason: 'it grows sideways rather than shrinking the number');
   });
 
   testWidgets('a badge drawn on the accent swaps its colours instead of vanishing into it', (tester) async {
