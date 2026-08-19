@@ -131,31 +131,46 @@ void main() {
   // A resource can name a scheme the app knows and still be unopenable, because
   // a loader may reject the rest of the address too. The row must go by whether
   // the resource can actually be loaded, not by the scheme alone.
-  group('a resource whose scheme is known but whose address is not loadable', () {
-    // Held inline rather than fetched, and decoded the moment it is resolved.
-    // Both spellings below fail that decode: a URI lowercases what follows
-    // '//', and the single-colon form is handed to the decoder scheme and all.
-    for (final spelling in ['memory://SGVsbG8gd29ybGQ=', 'memory:SGVsbG8gd29ybGQ=']) {
-      // The row shows the address as the URI renders it, which is not always
-      // what the configuration spelled.
-      final resource = _resource(spelling);
-      final shown = resource.uri.toString();
+  group('a resource that carries its content inside the address', () {
+    // The row must go by whether the content can actually be read, not by the
+    // scheme: both spellings below name a scheme the app knows, and only one of
+    // them survives being read as an address.
+    final readable = _resource('memory:SGVsbG8gd29ybGQ=');
 
-      testWidgets('$spelling does not open on tap', (tester) async {
-        final opened = <EmbeddedData>[];
+    // What follows '//' is lowercased while the address is parsed, so the
+    // content is already ruined by the time anything can act on it.
+    final ruined = _resource('memory://SGVsbG8gd29ybGQ=');
 
-        await tester.pumpWidget(wrap(resource, opened.add));
-        await tester.tap(find.text(shown));
-        await tester.pump();
+    // The row shows the address as the URI renders it, which is not always what
+    // the configuration spelled.
+    String shown(EmbeddedData resource) => resource.uri.toString();
 
-        expect(opened, isEmpty);
-      });
+    testWidgets('opens when its content survived the address', (tester) async {
+      final opened = <EmbeddedData>[];
 
-      testWidgets('$spelling is not dressed as a link', (tester) async {
-        await tester.pumpWidget(wrap(resource, (_) {}));
+      await tester.pumpWidget(wrap(readable, opened.add));
+      await tester.tap(find.text(shown(readable)));
+      await tester.pump();
 
-        expect(styleOf(tester, shown).decoration, isNot(TextDecoration.underline));
-      });
-    }
+      expect(opened, [readable]);
+    });
+
+    testWidgets('does not open when its content was ruined by the address', (tester) async {
+      final opened = <EmbeddedData>[];
+
+      await tester.pumpWidget(wrap(ruined, opened.add));
+      await tester.tap(find.text(shown(ruined)));
+      await tester.pump();
+
+      expect(opened, isEmpty);
+    });
+
+    testWidgets('is dressed as a link only in the case that opens', (tester) async {
+      await tester.pumpWidget(wrap(readable, (_) {}));
+      expect(styleOf(tester, shown(readable)).decoration, TextDecoration.underline);
+
+      await tester.pumpWidget(wrap(ruined, (_) {}));
+      expect(styleOf(tester, shown(ruined)).decoration, isNot(TextDecoration.underline));
+    });
   });
 }
