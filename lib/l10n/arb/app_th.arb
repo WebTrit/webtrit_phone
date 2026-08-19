@@ -2847,6 +2847,15 @@
   "@messaging_SemanticsLabel_stopForwarding": {
     "description": "Accessibility name of the cross that drops the message being passed on."
   },
+  "messaging_SemanticsLabel_unreadTab": "{count, plural, one{1 unread conversation} other{{count} unread conversations}}",
+  "@messaging_SemanticsLabel_unreadTab": {
+    "description": "Spoken as the value of the Chats tab - after its name - instead of the raw badge digit.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "messaging_SemanticsLabel_sendForward": "Forward the message",
   "@messaging_SemanticsLabel_sendForward": {
     "description": "Accessibility name of the tick that passes the message on to this conversation."

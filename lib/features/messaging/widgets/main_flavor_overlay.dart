@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class MessagingFlavorOverlay extends StatefulWidget {
@@ -51,7 +52,32 @@ class _MessagingFlavorOverlayState extends State<MessagingFlavorOverlay> {
               ),
             );
 
-            return Positioned(right: 0, bottom: 0, child: overlay);
+            // The raw digit is visual-only: merged into the tab entry it was
+            // spoken as a bare number, and - since the icon slot is built
+            // before the caption - ahead of the tab's own name. The count
+            // travels as the entry's VALUE instead: a value is announced
+            // after the name it belongs to, whatever the render order, which
+            // is how both platforms speak a native tab badge.
+            //
+            // Deliberately no `container: true`: the node must merge into the
+            // entry the bar builds, the one that carries the name, the id and
+            // the press.
+            final spokenCount = context.parseL10n(
+              'messaging_SemanticsLabel_unreadTab',
+              arguments: [count],
+              // A host without the app's translations still gets a working
+              // bar; the badge simply stays silent rather than red-screening
+              // the navigation.
+              fallback: '',
+            );
+            return Positioned(
+              right: 0,
+              bottom: 0,
+              child: Semantics(
+                value: spokenCount,
+                child: ExcludeSemantics(child: overlay),
+              ),
+            );
           },
         ),
       ],
