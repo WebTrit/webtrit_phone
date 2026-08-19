@@ -22,6 +22,8 @@ pre-push:
   commands:
     branch-name-check:
       run: bash tool/scripts/branch-name-check.sh
+    semantics-gate:
+      run: bash tool/scripts/semantics-gate.sh
     analyze:
       run: flutter analyze
     test:

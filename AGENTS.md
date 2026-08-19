@@ -79,6 +79,10 @@ Full guide, wrapper choice and the traps: [`docs/accessibility.md`](docs/accessi
 - Every screen with controls has a `*_semantics_test.dart`: `expectTapTargetSemantics` per
   control, activation via `tapViaSemantics` (never `tester.tap` - a pointer tap passes while the
   semantics path is broken), and `meetsGuideline(labeledTapTargetGuideline)` over the screen.
+- A pre-push gate (`tool/scripts/semantics-gate.sh`) fails the push when a diff adds a raw
+  `GestureDetector`/`InkWell`/`InkResponse`/`IconButton` in a file whose added lines wire no
+  semantics at all. A control that genuinely needs none takes a trailing
+  `// semantics-exempt: <reason>` - an opt-out is a review item, not a loophole.
 - After renaming anything in `keys.dart`, grep `patrol_test/` and `integration_test/`:
   `patrol_test/**` is excluded from analysis, so `analyze` stays green and the E2E run breaks.
 
