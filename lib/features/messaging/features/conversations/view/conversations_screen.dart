@@ -209,21 +209,17 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                     return ExtTab.child(
                       key: tabKey,
                       identifier: tabIdentifier,
-                      // The badge is a glyph: inside the merged tab node the
-                      // raw digit is read out as part of the tab's name. What
-                      // it counts is spoken as the tab's state instead.
-                      value: count > 0
-                          ? context.parseL10n('messaging_SemanticsLabel_unreadTab', arguments: [count], fallback: '')
-                          : null,
+                      // The badge draws a glyph and says nothing (it excludes
+                      // itself); what it counts is spoken as the tab's state,
+                      // after the tab's name.
+                      value: count > 0 ? context.l10n.messaging_SemanticsLabel_unreadTab(count) : null,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(title),
                           if (count > 0) ...[
                             const SizedBox(width: 4),
-                            ExcludeSemantics(
-                              child: UnreadBadge(count: count, isActive: isActive, colorScheme: colorScheme),
-                            ),
+                            UnreadBadge(count: count, isActive: isActive, colorScheme: colorScheme),
                           ],
                         ],
                       ),

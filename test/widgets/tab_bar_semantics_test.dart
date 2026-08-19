@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/features/messaging/features/conversations/widgets/unread_badge.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../helpers/helpers.dart';
@@ -90,12 +91,14 @@ void main() {
                   ExtTab.child(
                     identifier: conversationsTabChatId,
                     value: '3 unread conversations',
+                    // The shape the conversations screen builds: caption plus
+                    // the badge, which keeps itself out of what is spoken.
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text('Chats'),
-                        SizedBox(width: 4),
-                        ExcludeSemantics(child: Text('3')),
+                      children: [
+                        const Text('Chats'),
+                        const SizedBox(width: 4),
+                        UnreadBadge(count: 3, isActive: true, colorScheme: ThemeData().colorScheme),
                       ],
                     ),
                   ),
@@ -109,16 +112,16 @@ void main() {
       ),
     );
 
-    final chats = tester.getSemantics(find.bySemanticsIdentifier(conversationsTabChatId)).getSemanticsData();
-    expect(chats.label, isNot(contains('3')), reason: 'the digit is a glyph, not part of the name');
-    expect(chats.label, contains('Chats'));
-    expect(chats.value, '3 unread conversations');
-    // Still one addressable, pressable node - the badge did not split it.
+    // The whole spoken name, not a containment check: a caption that drifted
+    // onto a node above the press would still "contain" the word.
     expectTapTargetSemantics(
       tester,
       find.bySemanticsIdentifier(conversationsTabChatId),
+      label: 'Tab 1 of 2\nChats',
       identifier: conversationsTabChatId,
     );
+    final chats = tester.getSemantics(find.bySemanticsIdentifier(conversationsTabChatId)).getSemanticsData();
+    expect(chats.value, '3 unread conversations', reason: 'the count is state, spoken after the name');
 
     handle.dispose();
   });
