@@ -69,6 +69,10 @@ extension AppLocalizationsExtension on AppLocalizations {
       'callThumbnail_SemanticsLabel_returnToCall' =>
         callThumbnail_SemanticsLabel_returnToCall,
       'callerId_SemanticsLabel_addMatch' => callerId_SemanticsLabel_addMatch,
+      'callerId_SemanticsLabel_matchNumber' =>
+        callerId_SemanticsLabel_matchNumber,
+      'callerId_SemanticsLabel_defaultNumber' =>
+        callerId_SemanticsLabel_defaultNumber,
       'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
       'call_CallActionsTooltip_accept_inviteToAttendedTransfer' =>
         call_CallActionsTooltip_accept_inviteToAttendedTransfer,
@@ -1762,6 +1766,12 @@ extension AppLocalizationsExtension on AppLocalizations {
           'callTile_SemanticsLabel_videoCall requires 1 arguments',
         ),
       },
+      'callerId_SemanticsLabel_matchPrefix' => switch (args) {
+        [final String country] => callerId_SemanticsLabel_matchPrefix(country),
+        _ => throw ArgumentError(
+          'callerId_SemanticsLabel_matchPrefix requires 1 arguments',
+        ),
+      },
       'callerId_SemanticsLabel_removeMatch' => switch (args) {
         [final String dialCode] => callerId_SemanticsLabel_removeMatch(
           dialCode,
@@ -2059,10 +2069,22 @@ extension AppLocalizationsExtension on AppLocalizations {
           'webview_defaultError_details requires 2 arguments',
         ),
       },
-      'messaging_SemanticsLabel_unreadTab' => switch (args) {
-        [final int count] => messaging_SemanticsLabel_unreadTab(count),
+      'common_SemanticsValue_unreadCount' => switch (args) {
+        [final int count] => common_SemanticsValue_unreadCount(count),
         _ => throw ArgumentError(
-          'messaging_SemanticsLabel_unreadTab requires 1 arguments',
+          'common_SemanticsValue_unreadCount requires 1 arguments',
+        ),
+      },
+      'common_SemanticsValue_totalCount' => switch (args) {
+        [final int count] => common_SemanticsValue_totalCount(count),
+        _ => throw ArgumentError(
+          'common_SemanticsValue_totalCount requires 1 arguments',
+        ),
+      },
+      'common_SemanticsValue_selectedCount' => switch (args) {
+        [final int count] => common_SemanticsValue_selectedCount(count),
+        _ => throw ArgumentError(
+          'common_SemanticsValue_selectedCount requires 1 arguments',
         ),
       },
       'callPull_SemanticsLabel_badge' => switch (args) {

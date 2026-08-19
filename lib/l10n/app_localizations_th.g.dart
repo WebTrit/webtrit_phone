@@ -3458,6 +3458,21 @@ class AppLocalizationsTh extends AppLocalizations {
   String get common_SemanticsLabel_scrollToTop => 'เลื่อนขึ้นบนสุด';
 
   @override
+  String common_SemanticsValue_unreadCount(int count) {
+    return 'ยังไม่ได้อ่าน $count';
+  }
+
+  @override
+  String common_SemanticsValue_totalCount(int count) {
+    return 'ทั้งหมด $count';
+  }
+
+  @override
+  String common_SemanticsValue_selectedCount(int count) {
+    return 'เลือกแล้ว $count';
+  }
+
+  @override
   String get contacts_SemanticsLabel_clearSearch => 'ล้างการค้นหา';
 
   @override
@@ -3501,17 +3516,6 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get messaging_SemanticsLabel_stopForwarding => 'Stop forwarding';
-
-  @override
-  String messaging_SemanticsLabel_unreadTab(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count unread conversations',
-      one: '1 unread conversation',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get messaging_SemanticsLabel_sendForward => 'Forward the message';

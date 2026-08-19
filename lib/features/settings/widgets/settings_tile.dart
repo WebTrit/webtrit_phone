@@ -14,6 +14,7 @@ class SettingsTile extends StatelessWidget {
     required this.onTap,
     this.iconColor,
     this.trailing,
+    this.trailingValue,
     this.textStyle,
     this.showSeparator = true,
     this.separatorColor,
@@ -26,6 +27,12 @@ class SettingsTile extends StatelessWidget {
   final IconData icon;
   final Color? iconColor;
   final Widget? trailing;
+
+  /// State of the row, spoken after its title - what a badge in [trailing]
+  /// stands for, say. A tile merges into a single node, so anything the
+  /// trailing widget draws by itself would be read out inside the title.
+  final String? trailingValue;
+
   final TextStyle? textStyle;
   final bool showSeparator;
   final Color? separatorColor;
@@ -35,14 +42,19 @@ class SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final trailingValue = this.trailingValue;
+
     final tile = Opacity(
       opacity: opacity,
-      child: ListTile(
-        leading: Icon(icon, color: iconColor),
-        title: Text(title, style: textStyle),
-        trailing: trailing,
-        onTap: onTap,
-        enabled: enabled,
+      child: Semantics(
+        value: trailingValue,
+        child: ListTile(
+          leading: Icon(icon, color: iconColor),
+          title: Text(title, style: textStyle),
+          trailing: trailing,
+          onTap: onTap,
+          enabled: enabled,
+        ),
       ),
     );
 

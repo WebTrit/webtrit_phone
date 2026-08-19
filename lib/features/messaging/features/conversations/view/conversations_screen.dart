@@ -212,14 +212,14 @@ class _ConversationsScreenState extends State<ConversationsScreen> with SingleTi
                       // The badge draws a glyph and says nothing (it excludes
                       // itself); what it counts is spoken as the tab's state,
                       // after the tab's name.
-                      value: count > 0 ? context.l10n.messaging_SemanticsLabel_unreadTab(count) : null,
+                      value: count > 0 ? context.l10n.common_SemanticsValue_unreadCount(count) : null,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(title),
                           if (count > 0) ...[
                             const SizedBox(width: 4),
-                            UnreadBadge(count: count, isActive: isActive, colorScheme: colorScheme),
+                            CountBadge(count: count, diameter: 14, maxCount: 9, onAccent: isActive),
                           ],
                         ],
                       ),

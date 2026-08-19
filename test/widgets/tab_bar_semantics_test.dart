@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
-import 'package:webtrit_phone/features/messaging/features/conversations/widgets/unread_badge.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../helpers/helpers.dart';
@@ -115,7 +114,7 @@ void main() {
               children: [
                 const Text('Chats'),
                 const SizedBox(width: 4),
-                UnreadBadge(count: 3, isActive: true, colorScheme: ThemeData().colorScheme),
+                CountBadge(count: 3, diameter: 14, maxCount: 9, onAccent: true),
               ],
             ),
           ),
