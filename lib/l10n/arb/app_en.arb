@@ -2919,9 +2919,11 @@
   },
   "messaging_SemanticsLabel_unreadTab": "{count, plural, one{1 unread conversation} other{{count} unread conversations}}",
   "@messaging_SemanticsLabel_unreadTab": {
-    "description": "Spoken as part of the Chats tab name instead of the raw badge digit.",
+    "description": "Spoken as the value of the Chats tab - after its name - instead of the raw badge digit.",
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "messaging_SemanticsLabel_sendForward": "Forward the message",

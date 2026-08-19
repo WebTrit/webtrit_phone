@@ -172,8 +172,20 @@ Keep identity in the label when the control is one of many identical ones (the
 call button in a list row, an account badge), and exclude the decorative piece
 that would otherwise be read as a bare number or letter: an avatar initial or an
 unread count is announced as "1" and collides with everything else on screen.
-Merge the count into the label ("Notifications, 3") and keep the raw glyph out of
-the tree.
+Keep the raw glyph out of the tree with `ExcludeSemantics` and say what the
+number means - where it is said depends on who owns the node:
+
+- **The control names itself** (the notification bell): put the count in its own
+  label, after the name - `SemanticAction.button(label: '$title, $unseenCount')`.
+- **Someone else names the node** the badge merges into (an entry of
+  `BottomNavigationBar`, a tab of a `TabBar`): put the phrase in
+  `Semantics(value: ...)`, never in a label. A merged label is concatenated in
+  render-tree order, and a badge drawn in the icon slot is built before the
+  caption - so a label would be spoken BEFORE the name it belongs to
+  ("1 unread conversation, Chats"). A value is announced after the name whatever
+  the order, which is how both platforms speak a native tab badge. Leave
+  `container: true` off, or the node stops merging and becomes its own nameless
+  focus stop beside the control. See `MessagingFlavorOverlay`.
 
 ## Verifying it
 

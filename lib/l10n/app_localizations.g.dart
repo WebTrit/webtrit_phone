@@ -6463,11 +6463,11 @@ abstract class AppLocalizations {
   /// **'Stop forwarding'**
   String get messaging_SemanticsLabel_stopForwarding;
 
-  /// Spoken as part of the Chats tab name instead of the raw badge digit.
+  /// Spoken as the value of the Chats tab - after its name - instead of the raw badge digit.
   ///
   /// In en, this message translates to:
   /// **'{count, plural, one{1 unread conversation} other{{count} unread conversations}}'**
-  String messaging_SemanticsLabel_unreadTab(num count);
+  String messaging_SemanticsLabel_unreadTab(int count);
 
   /// Accessibility name of the tick that passes the message on to this conversation.
   ///

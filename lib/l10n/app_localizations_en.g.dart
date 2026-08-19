@@ -3507,7 +3507,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_SemanticsLabel_stopForwarding => 'Stop forwarding';
 
   @override
-  String messaging_SemanticsLabel_unreadTab(num count) {
+  String messaging_SemanticsLabel_unreadTab(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,

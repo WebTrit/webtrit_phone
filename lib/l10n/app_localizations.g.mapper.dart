@@ -2060,7 +2060,7 @@ extension AppLocalizationsExtension on AppLocalizations {
         ),
       },
       'messaging_SemanticsLabel_unreadTab' => switch (args) {
-        [final num count] => messaging_SemanticsLabel_unreadTab(count),
+        [final int count] => messaging_SemanticsLabel_unreadTab(count),
         _ => throw ArgumentError(
           'messaging_SemanticsLabel_unreadTab requires 1 arguments',
         ),

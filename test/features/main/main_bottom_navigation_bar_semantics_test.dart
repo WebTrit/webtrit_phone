@@ -144,22 +144,54 @@ void main() {
     handle.dispose();
   });
 
-  testWidgets('with unread messages the entry says what the number means', (tester) async {
-    // A zero count renders no badge at all, so only this state puts the
-    // counter into the tree. The raw digit used to merge into the entry as a
-    // bare number before the caption ("1, Chats"); the spoken name now
-    // carries a phrase instead.
+  /// What a screen reader would read out for the messaging entry: its name
+  /// first, then its value - the order the platforms speak a tab badge in.
+  ({String name, String value}) messagingAnnouncement(WidgetTester tester) {
+    final data = tester.getSemantics(find.bySemanticsIdentifier(messagingNavBarId)).getSemanticsData();
+    return (name: data.label, value: data.value);
+  }
+
+  testWidgets('an unread count is spoken after the tab name, not before it', (tester) async {
+    // The raw digit used to merge into the entry as a bare number ahead of
+    // the caption ("1, Chats, Tab 5 of 6") - the icon slot is built first.
     final handle = tester.ensureSemantics();
     when(() => unreadCountCubit.state).thenReturn(UnreadCountState.fromCountPerChat({1: 3}, {}));
 
     await tester.pumpWidget(wrap(onTap: (_) {}));
 
-    expectTapTargetSemantics(
-      tester,
-      find.bySemanticsIdentifier(messagingNavBarId),
-      identifier: messagingNavBarId,
-      label: '1 unread conversation\nChats\nTab 5 of 6',
-    );
+    final spoken = messagingAnnouncement(tester);
+    expect(spoken.name, startsWith('Chats'), reason: 'the tab names itself before anything else');
+    expect(spoken.name, isNot(contains('unread')), reason: 'the count is a value, not part of the name');
+    expect(spoken.value, '1 unread conversation');
+    // The entry stays one addressable, pressable node with the badge on it.
+    expectTapTargetSemantics(tester, find.bySemanticsIdentifier(messagingNavBarId), identifier: messagingNavBarId);
+
+    handle.dispose();
+  });
+
+  testWidgets('several unread conversations are counted in the value', (tester) async {
+    // The plural branch that actually interpolates the number - the singular
+    // one spells "1" out in the translation.
+    final handle = tester.ensureSemantics();
+    when(() => unreadCountCubit.state).thenReturn(UnreadCountState.fromCountPerChat({1: 2, 2: 1}, {3: 5}));
+
+    await tester.pumpWidget(wrap(onTap: (_) {}));
+
+    expect(messagingAnnouncement(tester).value, '3 unread conversations');
+
+    handle.dispose();
+  });
+
+  testWidgets('with nothing unread the entry says nothing about it', (tester) async {
+    // The badge is not drawn at zero; announcing "0 unread conversations" on
+    // every launch would be worse than the bug this replaced.
+    final handle = tester.ensureSemantics();
+
+    await tester.pumpWidget(wrap(onTap: (_) {}));
+
+    final spoken = messagingAnnouncement(tester);
+    expect(spoken.value, isEmpty);
+    expect(spoken.name, isNot(contains('unread')));
 
     handle.dispose();
   });
@@ -169,6 +201,12 @@ void main() {
 
     await tester.pumpWidget(wrap(onTap: (_) {}));
 
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+
+    // Again with the badge in the tree: a decoration that stopped merging
+    // would sit beside the entry as its own unnamed node.
+    when(() => unreadCountCubit.state).thenReturn(UnreadCountState.fromCountPerChat({1: 3}, {}));
+    await tester.pumpWidget(wrap(onTap: (_) {}));
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
     handle.dispose();

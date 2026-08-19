@@ -52,15 +52,29 @@ class _MessagingFlavorOverlayState extends State<MessagingFlavorOverlay> {
               ),
             );
 
-            // The raw digit is visual-only: merged into the tab entry it used
-            // to be spoken as a bare number before the caption. What merges
-            // into the entry's name instead is a phrase that says what the
-            // number means.
+            // The raw digit is visual-only: merged into the tab entry it was
+            // spoken as a bare number, and - since the icon slot is built
+            // before the caption - ahead of the tab's own name. The count
+            // travels as the entry's VALUE instead: a value is announced
+            // after the name it belongs to, whatever the render order, which
+            // is how both platforms speak a native tab badge.
+            //
+            // Deliberately no `container: true`: the node must merge into the
+            // entry the bar builds, the one that carries the name, the id and
+            // the press.
+            final spokenCount = context.parseL10n(
+              'messaging_SemanticsLabel_unreadTab',
+              arguments: [count],
+              // A host without the app's translations still gets a working
+              // bar; the badge simply stays silent rather than red-screening
+              // the navigation.
+              fallback: '',
+            );
             return Positioned(
               right: 0,
               bottom: 0,
               child: Semantics(
-                label: context.l10n.messaging_SemanticsLabel_unreadTab(count),
+                value: spokenCount,
                 child: ExcludeSemantics(child: overlay),
               ),
             );

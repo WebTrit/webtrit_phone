@@ -3548,13 +3548,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get messaging_SemanticsLabel_stopForwarding => 'Stop forwarding';
 
   @override
-  String messaging_SemanticsLabel_unreadTab(num count) {
+  String messaging_SemanticsLabel_unreadTab(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count непрочитаних розмов',
-      few: '$count непрочитані розмови',
-      one: '$count непрочитана розмова',
+      other: '$count unread conversations',
+      one: '1 unread conversation',
     );
     return '$_temp0';
   }
