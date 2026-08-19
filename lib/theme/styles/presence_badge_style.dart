@@ -9,7 +9,8 @@ class PresenceBadgeStyle with Diagnosticable {
   final Color? availableColor;
   final Color? unavailableColor;
 
-  /// Relative to avatar diameter (widget ~0.325).
+  /// Relative to avatar diameter; the app's own value lives in
+  /// [LeadingAvatarStyle.defaults].
   final double? sizeFactor;
 
   static PresenceBadgeStyle merge(PresenceBadgeStyle? base, PresenceBadgeStyle? override) {

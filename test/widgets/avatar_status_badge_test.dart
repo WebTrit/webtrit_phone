@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:icon_decoration/icon_decoration.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/models/models.dart';
@@ -37,7 +38,7 @@ void main() {
     );
   }
 
-  PresenceInfo presence({required bool available}) {
+  PresenceInfo presence({required bool available, List<PresenceActivity> activities = const []}) {
     return PresenceInfo(
       id: 'id',
       number: 'number',
@@ -47,7 +48,7 @@ void main() {
       device: null,
       timeOffsetMin: null,
       timestamp: null,
-      activities: const [],
+      activities: activities,
       source: PresenceInfoSource.sip,
       arrivalTime: DateTime(2026),
     );
@@ -102,7 +103,32 @@ void main() {
       );
 
       expect(find.byType(SipPresenceIndicator), findsOneWidget);
-      expect(tester.getSize(find.byType(SipPresenceIndicator)), const Size(diameter * 0.325, diameter * 0.325));
+      expect(tester.getSize(find.byType(SipPresenceIndicator)), const Size(diameter * 0.4, diameter * 0.4));
+    });
+
+    testWidgets('keeps the badge and its activity icon inside the avatar', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(
+            presenceInfo: [
+              presence(available: true, activities: const [PresenceActivity.busy]),
+            ],
+          ),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      final avatar = tester.getRect(find.byType(AvatarStatusBadge));
+      final dot = tester.getRect(find.byType(SipPresenceIndicator));
+      final icon = tester.getRect(find.byType(DecoratedIcon));
+
+      // The dot sits flush in the bottom-right corner and the activity icon
+      // floats up into the avatar - neither may spill over the edge, which is
+      // what would clip in a dense list.
+      expect(dot.right, avatar.right);
+      expect(dot.bottom, avatar.bottom);
+      expect(icon.right, lessThanOrEqualTo(avatar.right));
+      expect(icon.top, greaterThanOrEqualTo(avatar.top));
     });
 
     testWidgets('ignores registration data', (tester) async {
