@@ -13,6 +13,11 @@ class LinkifyAgreementCheckbox extends StatelessWidget {
     required this.onAgreementLinkTap,
   });
 
+  /// Everything Material puts around the box to reach a reliable tap target.
+  /// Pulling the box back by it lines the drawn square up with the text and
+  /// the button below instead of indenting it by its own padding.
+  static const _boxPadding = (kMinInteractiveDimension - Checkbox.width) / 2;
+
   final String agreementLink;
   final bool userAgreementAccepted;
   final Function(bool) onChanged;
@@ -25,12 +30,17 @@ class LinkifyAgreementCheckbox extends StatelessWidget {
     return Row(
       children: [
         Transform.translate(
-          offset: const Offset(-8, 0),
+          offset: const Offset(-_boxPadding, 0),
           // Unlike the plain [AgreementCheckbox], this row cannot be merged
           // into a single control: the sentence hosts a link, and merging
           // would swallow the link's own activation. So the sentence keeps its
           // node and the box repeats it as its name - otherwise the box would
           // announce as a bare "checkbox" with nothing to agree to.
+          //
+          // It also leaves the box as the only way to agree by touch. The
+          // sentence cannot take a tap of its own: a tap that misses the link
+          // by a few pixels - its hit area follows the glyphs, not the line -
+          // would toggle a consent instead of opening the terms.
           child: SemanticAction(
             label: context.l10n.user_agreement_checkbox_text(context.l10n.user_agreement_agrement_link),
             identifier: userAgreementCheckboxId,
@@ -38,7 +48,10 @@ class LinkifyAgreementCheckbox extends StatelessWidget {
               key: userAgreementCheckboxKey,
               value: userAgreementAccepted,
               onChanged: (value) => onChanged(value ?? false),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              // Stated rather than left to the default: off mobile Material
+              // shrinks the target below the size it takes to hit it, and
+              // here that target is the only one the row offers.
+              materialTapTargetSize: MaterialTapTargetSize.padded,
             ),
           ),
         ),
