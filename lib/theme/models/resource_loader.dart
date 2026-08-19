@@ -60,7 +60,24 @@ class MemoryResourceLoader extends ResourceLoader {
 
   final Uint8List bytes;
 
-  MemoryResourceLoader(super.resourceUri) : bytes = base64Decode(resourceUri.removeScheme().toString());
+  /// Carries its content inline, so it must be written as `memory:<base64>`.
+  ///
+  /// The `memory://<base64>` spelling cannot work and is rejected rather than
+  /// decoded: everything after `//` is the authority, which is case-folded when
+  /// the URI is parsed, so the payload arrives here already ruined. Refusing it
+  /// keeps the damage visible instead of decoding it into silent nonsense.
+  MemoryResourceLoader(super.resourceUri) : bytes = base64Decode(_payloadOf(resourceUri));
+
+  static String _payloadOf(Uri resourceUri) {
+    if (resourceUri.hasAuthority) {
+      throw ArgumentError.value(
+        resourceUri.toString(),
+        'resourceUri',
+        'inline content must follow a single colon, as its capitals are lost after "//"',
+      );
+    }
+    return resourceUri.removeScheme().toString();
+  }
 
   @override
   Future<String> loadContent() async {
