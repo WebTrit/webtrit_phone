@@ -334,11 +334,17 @@ abstract class AppLocalizations {
   /// **'Number to show for this dial code'**
   String get callerId_SemanticsLabel_matchNumber;
 
-  /// Accessibility name of the country chooser in the form that adds a dial code rule; on its own it announces only the code it currently shows.
+  /// Accessibility name of the chooser of the number outgoing calls show; the caption beside it is a node of its own.
   ///
   /// In en, this message translates to:
-  /// **'Dial code to match'**
-  String get callerId_SemanticsLabel_matchPrefix;
+  /// **'Number to call from by default'**
+  String get callerId_SemanticsLabel_defaultNumber;
+
+  /// Accessibility name of the country chooser in the form that adds a dial code rule; on its own it announces only the dial code, never which country was picked.
+  ///
+  /// In en, this message translates to:
+  /// **'Dial code to match, currently {country}'**
+  String callerId_SemanticsLabel_matchPrefix(String country);
 
   /// Accessibility name of the button that deletes one dial code match on the caller ID screen.
   ///

@@ -194,7 +194,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get callerId_SemanticsLabel_matchNumber => 'Number to show for this dial code';
 
   @override
-  String get callerId_SemanticsLabel_matchPrefix => 'Dial code to match';
+  String get callerId_SemanticsLabel_defaultNumber => 'Number to call from by default';
+
+  @override
+  String callerId_SemanticsLabel_matchPrefix(String country) {
+    return 'Dial code to match, currently $country';
+  }
 
   @override
   String callerId_SemanticsLabel_removeMatch(String dialCode) {

@@ -25,17 +25,18 @@ class DefaultNumberForm extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [BoxShadow(color: colorScheme.shadow.withAlpha(25), blurRadius: 32, offset: const Offset(4, 4))],
       ),
-      // The caption beside the chooser is what names it, so the row is merged
-      // into one node: the chooser alone would announce nothing but the
-      // number it currently shows.
-      child: SemanticAction(
-        identifier: callerIdDefaultNumberId,
-        child: Row(
-          children: [
-            Expanded(child: Text(l10n.settings_callerId_number)),
-            const SizedBox(width: 8),
-            DropdownMenu<String?>(
-              key: callerIdDefaultNumberKey,
+      child: Row(
+        children: [
+          Expanded(child: Text(l10n.settings_callerId_number)),
+          const SizedBox(width: 8),
+          // The chooser announces the number it shows and nothing that says
+          // what the number is for: the caption beside it is a node of its
+          // own, and merging the whole row would claim a press target the
+          // width of the row while only the chooser answers a press.
+          SemanticAction(
+            label: l10n.callerId_SemanticsLabel_defaultNumber,
+            identifier: callerIdDefaultNumberId,
+            child: DropdownMenu<String?>(
               initialSelection: state.settings.defaultNumber,
               menuStyle: MenuStyle(
                 backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceContainerLow),
@@ -58,8 +59,8 @@ class DefaultNumberForm extends StatelessWidget {
                 context.read<CallerIdSettingsCubit>().setDefaultNumber(value);
               },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

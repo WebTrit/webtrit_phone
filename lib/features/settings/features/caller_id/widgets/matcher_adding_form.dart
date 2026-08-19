@@ -28,6 +28,18 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
   String prefix = '';
   String number = '';
 
+  /// Country behind [prefix]. The picker shows a flag and a dial code, so
+  /// this is the only thing that can tell a screen reader which country the
+  /// rule ended up on.
+  String country = '';
+
+  void _onCountryChanged(CountryCode? value) {
+    setState(() {
+      prefix = value?.dialCode ?? '';
+      country = value?.name ?? '';
+    });
+  }
+
   bool get prefixInUse => widget.addedPrefixes.contains(prefix);
   bool get isValid => prefix.isNotEmpty && number.isNotEmpty && !prefixInUse;
 
@@ -56,16 +68,19 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
                 // On its own the picker announces nothing but the code it
                 // currently shows - the name says what choosing one does.
                 child: SemanticAction(
-                  label: l10n.callerId_SemanticsLabel_matchPrefix,
+                  label: l10n.callerId_SemanticsLabel_matchPrefix(country),
                   identifier: callerIdMatchPrefixId,
                   child: CountryCodePicker(
-                    key: callerIdMatchPrefixKey,
                     padding: EdgeInsets.zero,
                     margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     boxDecoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
                     initialSelection: 'US',
-                    onChanged: (country) => setState(() => prefix = country.dialCode ?? ''),
-                    onInit: (value) => prefix = value?.dialCode ?? '',
+                    onChanged: _onCountryChanged,
+                    // The picker reports its starting country while the form
+                    // is still building, so the rebuild waits for the frame.
+                    onInit: (value) => WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) _onCountryChanged(value);
+                    }),
                   ),
                 ),
               ),
@@ -77,7 +92,6 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
                   label: l10n.callerId_SemanticsLabel_matchNumber,
                   identifier: callerIdMatchNumberId,
                   child: DropdownMenu<String>(
-                    key: callerIdMatchNumberKey,
                     width: double.infinity,
                     hintText: l10n.settings_callerId_number_hint,
                     menuStyle: MenuStyle(

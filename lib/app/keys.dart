@@ -177,14 +177,11 @@ const String callPullPickupId = 'callPullPickup';
 
 /// The number a call goes out with unless a dial code rule says otherwise.
 const String callerIdDefaultNumberId = 'callerIdDefaultNumber';
-const callerIdDefaultNumberKey = Key(callerIdDefaultNumberId);
 
 /// The two halves of a new dial code rule: which code it matches, and the
 /// number to show for it.
 const String callerIdMatchPrefixId = 'callerIdMatchPrefix';
-const callerIdMatchPrefixKey = Key(callerIdMatchPrefixId);
 const String callerIdMatchNumberId = 'callerIdMatchNumber';
-const callerIdMatchNumberKey = Key(callerIdMatchNumberId);
 
 const String callerIdAddMatchId = 'callerIdAddMatch';
 const String callerIdRemoveMatchId = 'callerIdRemoveMatch';
