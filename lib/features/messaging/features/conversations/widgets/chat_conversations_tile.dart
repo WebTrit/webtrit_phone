@@ -101,9 +101,11 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
             thumbnail: contact?.thumbnail,
             thumbnailUrl: contact?.thumbnailUrl,
             radius: 20,
-            registered: contact?.registered,
-            presenceInfo: contact?.presenceInfo,
-            dialogInfo: contact?.dialogInfo,
+            badge: AvatarStatusBadge.maybe(
+              registered: contact?.registered,
+              presenceInfo: contact?.presenceInfo,
+              dialogInfo: contact?.dialogInfo,
+            ),
           ),
           title: Row(
             children: [

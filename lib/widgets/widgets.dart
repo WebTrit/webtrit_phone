@@ -3,6 +3,7 @@ export 'call/call.dart';
 export 'ago_ticker.dart';
 export 'agreement_checkbox.dart';
 export 'app_icon.dart';
+export 'avatar_status_badge.dart';
 export 'back_button.dart';
 export 'blurred_surface.dart';
 export 'circular_progress_template.dart';
