@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/constants.dart';
 
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/features/recents/view/recents_screen_styles.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../widgets/missed_recent_cdrs_list.dart';
@@ -69,8 +71,18 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
               width: mediaQueryData.size.width * 0.75,
               height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
               tabs: [
-                Tab(text: l10n.recentsVisibilityFilter_all),
-                Tab(text: l10n.recentsVisibilityFilter_missed),
+                // The same two filters the local-recents screen offers, under
+                // the same ids: only one of the two screens exists per build.
+                ExtTab(
+                  key: RecentsVisibilityFilter.all.tabKey,
+                  identifier: RecentsVisibilityFilter.all.tabId,
+                  text: l10n.recentsVisibilityFilter_all,
+                ),
+                ExtTab(
+                  key: RecentsVisibilityFilter.missed.tabKey,
+                  identifier: RecentsVisibilityFilter.missed.tabId,
+                  text: l10n.recentsVisibilityFilter_missed,
+                ),
               ],
               controller: _tabController,
             ),

@@ -143,7 +143,10 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
             child: ExtTabBar(
               width: mediaQueryData.size.width * 0.75,
               height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
-              tabs: [for (final recentsFilter in widget.recentsFilters) Tab(text: recentsFilter.l10n(context))],
+              tabs: [
+                for (final recentsFilter in widget.recentsFilters)
+                  ExtTab(key: recentsFilter.tabKey, identifier: recentsFilter.tabId, text: recentsFilter.l10n(context)),
+              ],
               controller: _tabController,
             ),
           ),

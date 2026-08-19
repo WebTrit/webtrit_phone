@@ -268,6 +268,27 @@ const String contactsExtContactTileId = 'contactsExtContactTile';
 const contactsExtContactTileKey = Key(contactsExtContactTileId);
 const String contactsLocalContactTileId = 'contactsLocalContactTile';
 const contactsLocalContactTileKey = Key(contactsLocalContactTileId);
+
+/// Tabs of the recents section. The same ids serve the local-recents screen
+/// and the server-CDRs one: a configuration enables exactly one of them, they
+/// draw the same filters under the same captions, and a flow that opens "the
+/// missed calls tab" should not have to know which backend answered.
+const String recentsTabAllId = 'recentsTabAll';
+const recentsTabAllKey = Key(recentsTabAllId);
+const String recentsTabMissedId = 'recentsTabMissed';
+const recentsTabMissedKey = Key(recentsTabMissedId);
+const String recentsTabIncomingId = 'recentsTabIncoming';
+const recentsTabIncomingKey = Key(recentsTabIncomingId);
+const String recentsTabOutgoingId = 'recentsTabOutgoing';
+const recentsTabOutgoingKey = Key(recentsTabOutgoingId);
+
+/// Tabs of the conversations screen; which of them exist depends on what the
+/// backend supports, and both carry the same caption style.
+const String conversationsTabChatId = 'conversationsTabChat';
+const conversationsTabChatKey = Key(conversationsTabChatId);
+const String conversationsTabSmsId = 'conversationsTabSms';
+const conversationsTabSmsKey = Key(conversationsTabSmsId);
+
 const String contactsTabExtId = 'contactsTabExt';
 const contactsTabExtKey = Key(contactsTabExtId);
 const String contactsTabLocalId = 'contactsTabLocal';
