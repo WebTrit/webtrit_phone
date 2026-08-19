@@ -3,7 +3,7 @@
 How the app learns other users' presence (available / activities / on a call)
 and where it shows it, most visibly as the status badge on contact avatars.
 
-Last reviewed: 2026-08-18
+Last reviewed: 2026-08-19
 
 ## State model
 
@@ -54,30 +54,51 @@ renders by `PresenceViewParams.hybridPresenceSupport` - the two are
 mutually exclusive. The top-left smart-contact indicator is still drawn by
 `LeadingAvatar` itself:
 
-| Overlay | Widget | Anchor | Default sizeFactor | Shown when |
+| Overlay | Widget | Placement | Default sizeFactor | Shown when |
 |---|---|---|---|---|
-| Registered dot (legacy) | `_RegisteredDot` (avatar_status_badge.dart) | bottom-right | 0.2 | hybrid presence OFF and `registered != null` |
-| Presence badge | `lib/widgets/sip_presence_indicator.dart` | bottom-right | 0.325 | hybrid presence ON and `presenceInfo != null` |
+| Registered dot (legacy) | `_RegisteredDot` (avatar_status_badge.dart) | bottom-right, inside the box | 0.2 | hybrid presence OFF and `registered != null` |
+| Presence mark | `lib/widgets/sip_presence_indicator.dart` | centre ON the avatar's edge (`BadgeLayout.onCircleEdgeSquare`) | 0.5 | hybrid presence ON and `presenceInfo != null` |
 | Smart-contact indicator | `_smartIndicator` (leading_avatar.dart) | top-left | 0.4 | `smart: true` (unrelated to presence) |
 
-The default avatar radius is 20 (diameter 40), so the presence badge is
-~13 dp and the legacy dot ~8 dp at defaults. All sizeFactors are themable
-per deployment (see below).
+The default avatar radius is 20 (diameter 40), so the presence mark is 20 dp
+across and the legacy dot 8 dp. All sizeFactors are themable per deployment
+(see below).
+
+The presence mark is placed by its CENTRE on the circle inscribed in the
+avatar box, so about a tenth of the avatar diameter hangs outside the
+silhouette. That is deliberate: centred inside, a mark this size covers the
+face or the initials underneath. Consequences worth knowing:
+
+- the overhang is paint-only - the avatar keeps its size, no row reflows, and
+  the part that sticks out lives in the gap that already separated the avatar
+  from the text;
+- nothing above the badge may clip: `LeadingAvatar` and `AvatarStatusBadge`
+  both use `clipBehavior: Clip.none`, and no current host wraps the avatar in
+  a clip. A new host that does would cut the mark;
+- the overhanging part is NOT hit-testable (Flutter does not hit-test outside
+  a box), which is fine while the mark is not interactive;
+- on a large avatar the mark scales with it, so leave room below: the chat
+  profile screen (`radius: 50`) keeps 16 dp before the name for exactly this.
+
+The legacy registration dot deliberately stays INSIDE the box: it carries no
+ring, so half of it on the row background would read as a partial dot.
 
 `SipPresenceIndicator` renders:
 
-- a colored dot - the color is BINARY: `presenceInfo.anyAvailable` picks
+- a colored disc - the color is BINARY: `presenceInfo.anyAvailable` picks
   `availableColor`, otherwise `unavailableColor`. Activities and BLF state
   do NOT change the color;
-- an optional activity icon floating above the dot (`clipBehavior:
-  Clip.none`, negative top offset, icon size `rect.width * 0.6` - about
-  8 dp at defaults). Icon choice: any `dialogInfo` entry present ->
-  `phone_in_talk` (note: the list is not filtered by `DialogState`, so a
-  ringing or just-terminated dialog lights it too), else the icon for
+- an optional activity glyph INSIDE the disc, in `iconColor`. Icon choice:
+  any `dialogInfo` entry present -> `phone_in_talk` (note: the list is not
+  filtered by `DialogState`, so a ringing dialog lights it too - in
+  production `early` is the most common state), else the icon for
   `presenceInfo.primaryActivity`;
-- both the dot and the icon are outlined with
-  `Theme.scaffoldBackgroundColor`, which can mismatch on surfaces that are
-  not the scaffold background.
+- the ring around the disc (`Theme.scaffoldBackgroundColor`, which can
+  mismatch on surfaces that are not the scaffold background) and the glyph
+  are a SHARE of the mark - 0.1 and 0.55 of its side. They have to be:
+  the same widget is rendered at a fixed 16x16 in the presence pickers
+  (`presence_settings_screen.dart`, `presence_info_view.dart`), where a fixed
+  ring plus a fixed glyph would leave the availability colour a sliver.
 
 The emoji `statusIcon` and the `note` never reach the badge - contact tiles
 append them to the title/subtitle text instead
@@ -89,17 +110,20 @@ the subtitle to remote-party info there.
 The presence badge style flows through the standard theme pipeline:
 
 - theme JSONs `assets/themes/original.widget.{light,dark}.config.json` ->
-  `presenceBadge` (`sizeFactor`, `availableColor`, `unavailableColor`) and
+  `presenceBadge` (`sizeFactor`, `availableColor`, `unavailableColor`,
+  `iconColor`) and
   `registeredBadge` (`sizeFactor`, `registeredColor`, `unregisteredColor`);
 - parsed by `PresenceBadgeStyleConfig` in
   `packages/webtrit_appearance_theme/lib/models/common/leading_avatar_style_config.dart`;
 - mapped in `lib/theme/factory/styles/leading_avatar_style_factory.dart`
   into `PresenceBadgeStyle` (`lib/theme/styles/presence_badge_style.dart`).
 
-In the shipped themes both presence colors are `null`, so the effective
-colors are the fallbacks: `colorScheme.tertiary` (available) and
-`colorScheme.onSurfaceVariant` (unavailable). There is no per-activity or
-busy/on-call color role today.
+The shipped themes name none of these: the app's own values live in
+`LeadingAvatarStyle.defaults` - `colorScheme.tertiary` (available),
+`colorScheme.onSurfaceVariant` (unavailable), `colorScheme.surface` (glyph)
+and the sizes above. A theme that writes one of them pins it for good, so the
+shipped files carry them only as disabled `_`-prefixed examples. There is no
+per-activity or busy/on-call color role today.
 
 The legacy dot resolves its colors from `RegisteredStatusStyles`
 (`lib/theme/factory/styles/registered_status_style_factory.dart`, fed by
@@ -157,10 +181,14 @@ periodic send is driven from `CallBloc`.
 ## Test coverage
 
 `test/widgets/avatar_status_badge_test.dart` pins the badge contract: which
-generation renders under `hybridPresenceSupport`, the default 0.2/0.325
-sizes, the legacy dot colors and the no-data cases (including
+generation renders under `hybridPresenceSupport`, the default 0.2/0.5 sizes,
+the legacy dot colors, the mark's centre sitting on the avatar's edge with
+the glyph inside it, and the no-data cases (including
 `AvatarStatusBadge.maybe` returning `null`).
+`test/theme/leading_avatar_style_defaults_test.dart` pins that a theme is
+read as overrides only - what it leaves out comes from the app values.
 `test/widgets/leading_avatar_test.dart` covers name-derived avatar colors
 and the badge slot, including a composition test asserting the slot hands
 the badge exactly the avatar diameter. There are no golden tests for these
-widgets.
+widgets, and `BadgeLayout` has no test of its own - its geometry is covered
+through the widgets.
