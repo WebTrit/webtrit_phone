@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class MessagingFlavorOverlay extends StatefulWidget {
@@ -51,7 +52,18 @@ class _MessagingFlavorOverlayState extends State<MessagingFlavorOverlay> {
               ),
             );
 
-            return Positioned(right: 0, bottom: 0, child: overlay);
+            // The raw digit is visual-only: merged into the tab entry it used
+            // to be spoken as a bare number before the caption. What merges
+            // into the entry's name instead is a phrase that says what the
+            // number means.
+            return Positioned(
+              right: 0,
+              bottom: 0,
+              child: Semantics(
+                label: context.l10n.messaging_SemanticsLabel_unreadTab(count),
+                child: ExcludeSemantics(child: overlay),
+              ),
+            );
           },
         ),
       ],

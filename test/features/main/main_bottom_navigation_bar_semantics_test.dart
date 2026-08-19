@@ -144,15 +144,22 @@ void main() {
     handle.dispose();
   });
 
-  testWidgets('with unread messages on screen the entry still carries its id and press', (tester) async {
+  testWidgets('with unread messages the entry says what the number means', (tester) async {
     // A zero count renders no badge at all, so only this state puts the
-    // counter glyph into the tree next to the caption and the id.
+    // counter into the tree. The raw digit used to merge into the entry as a
+    // bare number before the caption ("1, Chats"); the spoken name now
+    // carries a phrase instead.
     final handle = tester.ensureSemantics();
     when(() => unreadCountCubit.state).thenReturn(UnreadCountState.fromCountPerChat({1: 3}, {}));
 
     await tester.pumpWidget(wrap(onTap: (_) {}));
 
-    expectTapTargetSemantics(tester, find.bySemanticsIdentifier(messagingNavBarId), identifier: messagingNavBarId);
+    expectTapTargetSemantics(
+      tester,
+      find.bySemanticsIdentifier(messagingNavBarId),
+      identifier: messagingNavBarId,
+      label: '1 unread conversation\nChats\nTab 5 of 6',
+    );
 
     handle.dispose();
   });

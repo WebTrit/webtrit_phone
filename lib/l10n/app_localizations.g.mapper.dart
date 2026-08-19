@@ -2059,6 +2059,12 @@ extension AppLocalizationsExtension on AppLocalizations {
           'webview_defaultError_details requires 2 arguments',
         ),
       },
+      'messaging_SemanticsLabel_unreadTab' => switch (args) {
+        [final num count] => messaging_SemanticsLabel_unreadTab(count),
+        _ => throw ArgumentError(
+          'messaging_SemanticsLabel_unreadTab requires 1 arguments',
+        ),
+      },
       'callPull_SemanticsLabel_badge' => switch (args) {
         [final String name] => callPull_SemanticsLabel_badge(name),
         _ => throw ArgumentError(

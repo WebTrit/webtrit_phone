@@ -2830,6 +2830,13 @@
   "@messaging_SemanticsLabel_stopForwarding": {
     "description": "Accessibility name of the cross that drops the message being passed on."
   },
+  "messaging_SemanticsLabel_unreadTab": "{count, plural, one{{count} непрочитана розмова} few{{count} непрочитані розмови} other{{count} непрочитаних розмов}}",
+  "@messaging_SemanticsLabel_unreadTab": {
+    "description": "Spoken as part of the Chats tab name instead of the raw badge digit.",
+    "placeholders": {
+      "count": {}
+    }
+  },
   "messaging_SemanticsLabel_sendForward": "Forward the message",
   "@messaging_SemanticsLabel_sendForward": {
     "description": "Accessibility name of the tick that passes the message on to this conversation."
