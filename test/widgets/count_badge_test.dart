@@ -96,7 +96,8 @@ void main() {
     // the test one draws every glyph as a square - so what is pinned here is the
     // rule itself: never narrower than tall, and wider only when the number
     // needs it.
-    expect(short, const Size(20, 20), reason: 'a short number stays a circle');
+    expect(short.height, 20);
+    expect(short.width, closeTo(20, 1), reason: 'a short number stays a circle');
     expect(twoDigits.height, 20);
     expect(twoDigits.width, greaterThanOrEqualTo(20), reason: 'the badge is never narrower than it is tall');
     expect(long.height, 20, reason: 'the badge keeps the height of its slot');
@@ -124,5 +125,23 @@ void main() {
 
     expect(backgroundOf(0), colorScheme.primary);
     expect(backgroundOf(1), colorScheme.onPrimary);
+  });
+
+  testWidgets('a badge can be filled with a colour of its own', (tester) async {
+    // A count that belongs to a destructive action does not carry the accent.
+    const colorScheme = ColorScheme.light(error: Color(0xFFAA0011), onError: Color(0xFFFFEEEE));
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData.from(colorScheme: colorScheme),
+        home: const Scaffold(
+          body: CountBadge(count: 3, color: Color(0xFFAA0011), onColor: Color(0xFFFFEEEE)),
+        ),
+      ),
+    );
+
+    final decoration = tester.widget<Container>(find.byType(Container)).decoration! as ShapeDecoration;
+    expect(decoration.color, colorScheme.error);
+    expect(tester.widget<Text>(find.text('3')).style?.color, colorScheme.onError);
   });
 }

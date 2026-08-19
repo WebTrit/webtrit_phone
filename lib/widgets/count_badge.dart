@@ -16,7 +16,15 @@ import 'package:flutter/material.dart';
 /// host is the one that has to make that decision anyway to know whether to
 /// speak the count.
 class CountBadge extends StatelessWidget {
-  const CountBadge({super.key, required this.count, this.size = 20, this.onAccent = false, this.maxCount = 99});
+  const CountBadge({
+    super.key,
+    required this.count,
+    this.size = 20,
+    this.onAccent = false,
+    this.maxCount = 99,
+    this.color,
+    this.onColor,
+  });
 
   final int count;
 
@@ -40,11 +48,20 @@ class CountBadge extends StatelessWidget {
   /// "128 unread".
   final int maxCount;
 
+  /// What the badge is filled with, when the accent is not what this count
+  /// means - what a delete button is about to remove, say. Take it from the
+  /// colour scheme rather than naming a colour, and pass [onColor] with it so
+  /// the number stays readable on the fill.
+  final Color? color;
+
+  /// Colour of the number, for a badge that sets its own [color].
+  final Color? onColor;
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final background = onAccent ? colorScheme.onPrimary : colorScheme.primary;
-    final foreground = onAccent ? colorScheme.primary : colorScheme.onPrimary;
+    final background = color ?? (onAccent ? colorScheme.onPrimary : colorScheme.primary);
+    final foreground = onColor ?? (onAccent ? colorScheme.primary : colorScheme.onPrimary);
 
     return ExcludeSemantics(
       // The minimum width is what keeps a short number a circle. It is set from
@@ -55,7 +72,7 @@ class CountBadge extends StatelessWidget {
         constraints: BoxConstraints(minWidth: size),
         child: Container(
           height: size,
-          padding: EdgeInsets.symmetric(horizontal: size / 8),
+          padding: EdgeInsets.symmetric(horizontal: size / 5),
           decoration: ShapeDecoration(color: background, shape: const StadiumBorder()),
           child: FittedBox(
             // Shrink only, and only what a badge given a small slot cannot fit:

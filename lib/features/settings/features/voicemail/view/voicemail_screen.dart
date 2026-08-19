@@ -59,7 +59,14 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                           : null,
                     ),
                     if (state.isMultipleVoicemailsSelection)
-                      CountBadge(count: state.selectedVoicemailsIds.length, size: 16),
+                      CountBadge(
+                        count: state.selectedVoicemailsIds.length,
+                        size: 16,
+                        // The count belongs to a destructive action, not to the
+                        // accent every other badge carries.
+                        color: Theme.of(context).colorScheme.error,
+                        onColor: Theme.of(context).colorScheme.onError,
+                      ),
                   ],
                 ),
               ),
