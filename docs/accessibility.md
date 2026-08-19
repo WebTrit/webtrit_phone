@@ -402,6 +402,16 @@ test.
 9. **A custom semantics action can cost more than it adds.** Adding one to a list
    row can break the row's node apart and take away the move actions the list
    itself provides. Prefer the action the framework already exposes.
+10. **A `DropdownMenu` goes silent about its value on the web.** The framework
+    wraps the field it is built from in `ExcludeSemantics(excluding: isButton &&
+    kIsWeb)` (`dropdown_menu.dart`), so on the web the chooser announces what it
+    is for and never what it holds. Say the chosen value from a node of our own
+    around it, as `NumberDropdown` and the presence chooser do. Two things this
+    trap teaches beyond itself: a widget test always runs off the web, so it
+    cannot see the branch at all - this one was confirmed by building for the
+    web and reading the DOM - and the same `isButton` decides whether the
+    chooser is a button or a text field a person can type into, which is why
+    both pass `selectOnly: true`.
 
 ## Third-party widgets
 

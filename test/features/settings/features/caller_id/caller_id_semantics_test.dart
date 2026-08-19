@@ -7,6 +7,7 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/settings/features/caller_id/caller_id.dart';
+import 'package:webtrit_phone/features/settings/features/caller_id/widgets/widgets.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/caller_id_settings.dart';
 
@@ -90,6 +91,31 @@ void main() {
       find.bySemanticsIdentifier(numberedId(callerIdRemoveMatchId, 0)),
       label: 'Remove the match for +1',
       identifier: numberedId(callerIdRemoveMatchId, 0),
+    );
+
+    handle.dispose();
+  });
+
+  testWidgets('the default number chooser says what is chosen, not only what it is for', (tester) async {
+    // The value is put there by us, not by the field inside the chooser: on the
+    // web the framework drops that field from the tree, and the chosen number
+    // would go with it. A widget test always runs off the web, so what is
+    // pinned here is that our own node carries it.
+    final handle = tester.ensureSemantics();
+
+    await tester.pumpWidget(wrap());
+
+    final chooser = tester.widget<NumberDropdown<String?>>(find.byType(NumberDropdown<String?>));
+    expect(chooser.value, '440', reason: 'the main number is what a fresh account calls from');
+
+    // Asserting the value on the merged node would prove nothing here: off the
+    // web the field inside supplies one too. What is checked instead is the node
+    // this widget adds - the one that survives the field being dropped.
+    expect(
+      find.byWidgetPredicate(
+        (widget) => widget is Semantics && widget.properties.value == '440' && widget.child is DropdownMenu<String?>,
+      ),
+      findsOneWidget,
     );
 
     handle.dispose();
