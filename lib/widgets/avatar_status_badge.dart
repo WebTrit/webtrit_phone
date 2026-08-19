@@ -68,7 +68,10 @@ class AvatarStatusBadge extends StatelessWidget {
         final registered = this.registered;
         if (registered == null) return const SizedBox.shrink();
 
-        final rect = BadgeLayout.onCircleEdgeSquare(size: size, sizeFactor: style.registeredBadge!.sizeFactor!);
+        // The legacy registration dot stays tucked inside the avatar: unlike the
+        // presence mark it carries no ring, so on the row background half of it
+        // would read as a partial dot.
+        final rect = BadgeLayout.bottomRightSquare(size: size, sizeFactor: style.registeredBadge!.sizeFactor!);
         return Stack(
           clipBehavior: Clip.none,
           children: [

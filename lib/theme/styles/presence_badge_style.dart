@@ -46,6 +46,7 @@ class PresenceBadgeStyle with Diagnosticable {
     properties
       ..add(ColorProperty('availableColor', availableColor))
       ..add(ColorProperty('unavailableColor', unavailableColor))
+      ..add(ColorProperty('iconColor', iconColor))
       ..add(DoubleProperty('sizeFactor', sizeFactor));
   }
 }

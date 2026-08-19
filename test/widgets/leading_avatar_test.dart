@@ -121,10 +121,10 @@ void main() {
       final dot = find.descendant(of: find.byType(AvatarStatusBadge), matching: find.byType(Container));
       final avatar = tester.getRect(find.byType(LeadingAvatar));
 
-      // The slot hands over the whole avatar square: the mark is sized from it
-      // and centred on its edge, which is only possible if it knows the size.
+      // The slot hands over the whole avatar square: the dot is sized from it
+      // and placed in its corner, which is only possible if it knows the size.
       expect(tester.getSize(dot), const Size(8, 8));
-      expect((tester.getRect(dot).center - avatar.center).distance, closeTo(avatar.width / 2, 0.01));
+      expect(tester.getRect(dot).bottomRight, avatar.bottomRight);
     });
   });
 }

@@ -99,7 +99,9 @@ class _DialogChatInfoState extends State<DialogChatInfo> {
                             ),
                             radius: 50,
                           ),
-                          const SizedBox(height: 8),
+                          // The status mark straddles the avatar's edge, so it
+                          // reaches below it; keep the name clear of it.
+                          const SizedBox(height: 16),
                           Text(
                             contact?.displayTitle ?? context.l10n.messaging_ParticipantName_unknown,
                             style: theme.textTheme.headlineSmall?.copyWith(
