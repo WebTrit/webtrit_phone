@@ -47,14 +47,6 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   late double _diameter;
 
   @override
-  void initState() {
-    super.initState();
-    _style = const LeadingAvatarStyle();
-    _radius = widget.radius ?? _style.radius ?? 20;
-    _diameter = _radius * 2;
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _recompute();
@@ -68,20 +60,18 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     }
   }
 
+  // The resolved style always carries the app's own values underneath, so the
+  // fields it fills are read without a fallback of their own here.
   void _recompute() {
-    final theme = Theme.of(context);
-    final themeStyle = theme.extension<LeadingAvatarStyles>()?.primary;
+    _style = LeadingAvatarStyle.merge(LeadingAvatarStyles.of(context), widget.style);
 
-    _style = LeadingAvatarStyle.merge(themeStyle, widget.style);
-
-    _radius = widget.radius ?? _style.radius ?? 20;
+    _radius = widget.radius ?? _style.radius!;
     _diameter = _radius * 2;
   }
 
   /// Name-derived background, or null when disabled / not applicable (photo shown, no name).
   Color? _nameBackgroundColor(BuildContext context) {
-    // Absent config means on: only an explicit `enabled: false` opts out.
-    final nameColors = _style.nameColors ?? const NameColorsStyle();
+    final nameColors = _style.nameColors!;
     if (!nameColors.enabled) return null;
     if (widget.thumbnail != null || widget.thumbnailUrl != null) return null;
 
@@ -90,17 +80,12 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
     final nameBackgroundColor = _nameBackgroundColor(context);
 
     return Container(
       width: _diameter,
       height: _diameter,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: nameBackgroundColor ?? _style.backgroundColor ?? scheme.secondaryContainer,
-      ),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: nameBackgroundColor ?? _style.backgroundColor),
       child: Stack(
         alignment: Alignment.center,
         fit: StackFit.loose,
@@ -128,11 +113,11 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
             Positioned.fromRect(
               rect: BadgeLayout.topLeftSquare(
                 size: _diameter,
-                sizeFactor: _style.smartIndicator?.sizeFactor ?? 0.4,
+                sizeFactor: _style.smartIndicator!.sizeFactor!,
                 dxFactor: -0.1,
                 dyFactor: -0.1,
               ),
-              child: _smartIndicator(_diameter, _style, scheme),
+              child: _smartIndicator(_diameter, _style),
             ),
           if (widget.showLoading) _buildLoadingOverlay(_style),
         ],
@@ -153,8 +138,8 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   Widget _buildLoadingOverlay(LeadingAvatarStyle style) {
     final hasAvatarData = widget.username != null || (widget.thumbnail != null || widget.thumbnailUrl != null);
 
-    final padding = widget.loadingPadding ?? style.loadingOverlay?.padding ?? EdgeInsets.zero;
-    final strokeWidth = style.loadingOverlay?.strokeWidth ?? 1.0;
+    final padding = widget.loadingPadding ?? style.loadingOverlay!.padding!;
+    final strokeWidth = style.loadingOverlay!.strokeWidth!;
     final color = style.initialsTextStyle?.color;
 
     return AnimatedSwitcher(
@@ -214,10 +199,11 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     return Icon(icon, size: diameter * 0.5, color: color);
   }
 
-  Widget _smartIndicator(double diameter, LeadingAvatarStyle style, ColorScheme scheme) {
-    final bg = style.smartIndicator?.backgroundColor ?? scheme.surfaceContainerLowest;
-    final icon = style.smartIndicator?.icon ?? Icons.person;
-    final sizeFactor = style.smartIndicator?.sizeFactor ?? 0.4;
+  Widget _smartIndicator(double diameter, LeadingAvatarStyle style) {
+    final smart = style.smartIndicator!;
+    final bg = smart.backgroundColor;
+    final icon = smart.icon;
+    final sizeFactor = smart.sizeFactor!;
     final color = style.initialsTextStyle?.color;
 
     return CircleAvatar(

@@ -13,17 +13,14 @@ class GroupAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final themeStyle = theme.extension<LeadingAvatarStyles>()?.primary;
-    final effectiveStyle = LeadingAvatarStyle.merge(themeStyle, style);
+    final effectiveStyle = LeadingAvatarStyle.merge(LeadingAvatarStyles.of(context), style);
 
-    // Absent config means on: only an explicit `enabled: false` opts out.
-    final nameColors = effectiveStyle.nameColors ?? const NameColorsStyle();
+    final nameColors = effectiveStyle.nameColors!;
     final nameBackgroundColor = nameColors.enabled
         ? AvatarColors.background(name, theme.brightness, palette: nameColors.palette)
         : null;
 
-    final backgroundColor =
-        nameBackgroundColor ?? effectiveStyle.backgroundColor ?? theme.colorScheme.secondaryContainer;
+    final backgroundColor = nameBackgroundColor ?? effectiveStyle.backgroundColor;
     final initialsStyle = nameBackgroundColor != null
         ? effectiveStyle.initialsTextStyle?.copyWith(
             color: AvatarColors.foreground(nameBackgroundColor, theme.brightness),
