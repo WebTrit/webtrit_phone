@@ -91,7 +91,6 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
 
   // Repositories
   final contactsAgreementStatusRepository = ContactsAgreementStatusRepositoryPrefsImpl(appPreferences);
-  final activeMainTabRepository = ActiveMainTabRepositoryPrefsImpl(appPreferences);
   final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
   final systemInfoRemoteDatasource = SystemInfoRemoteDatasource(apiClientFactory);
   final systemInfoRepository = SystemInfoRepositoryImpl(
@@ -220,7 +219,6 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   registry.register<AppPreferences>(appPreferences);
   registry.register<SecureStorage>(secureStorage);
   registry.register<SystemInfoRepository>(systemInfoRepository);
-  registry.register<ActiveMainTabRepository>(activeMainTabRepository);
   registry.register<AuthRepository>(authRepository);
   registry.register<ContactsAgreementStatusRepository>(contactsAgreementStatusRepository);
   registry.register<SessionRepository>(sessionRepository);
