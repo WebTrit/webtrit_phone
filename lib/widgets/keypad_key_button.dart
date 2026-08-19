@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use_from_same_package
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
@@ -51,7 +50,12 @@ class KeypadKeyButton extends StatefulWidget {
 }
 
 class _KeypadKeyButtonState extends State<KeypadKeyButton> {
-  DateTime? _pointerDownAt;
+  /// Pointers currently pressing this key. A key can be struck by more than
+  /// one finger at a time, and each strike owes its own character.
+  final _activePointers = <int>{};
+
+  /// Whether the strike in progress has already entered the subtext.
+  bool _subtextEntered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -96,22 +100,35 @@ class _KeypadKeyButtonState extends State<KeypadKeyButton> {
       onLongPress: hasLongPress ? () => widget.onKeyPressed(widget.subtext) : null,
       child: Listener(
         key: Key(widget.text),
-        onPointerDown: (_) {
-          _pointerDownAt = DateTime.now();
-          if (!hasLongPress) widget.onKeyPressed(widget.text);
+        onPointerDown: (event) {
+          if (!hasLongPress) {
+            widget.onKeyPressed(widget.text);
+            return;
+          }
+          if (_activePointers.isEmpty) _subtextEntered = false;
+          _activePointers.add(event.pointer);
         },
+        // The subtext is entered by the long press below, which always fires
+        // while the finger is still down. So a release already knows whether
+        // this strike produced one, and enters the text whenever it did not -
+        // including when sliding off the key cancelled the long press.
         onPointerUp: hasLongPress
-            ? (_) {
-                final downAt = _pointerDownAt;
-                if (downAt == null) return;
-                if (DateTime.now().difference(downAt) < kLongPressTimeout) {
-                  widget.onKeyPressed(widget.text);
-                }
+            ? (event) {
+                if (!_activePointers.remove(event.pointer)) return;
+                if (!_subtextEntered) widget.onKeyPressed(widget.text);
               }
             : null,
+        // A press the platform takes away never reaches a release and enters
+        // nothing; it still has to let go of the pointer it holds here.
+        onPointerCancel: hasLongPress ? (event) => _activePointers.remove(event.pointer) : null,
         child: TextButton(
           onPressed: () {},
-          onLongPress: hasLongPress ? () => widget.onKeyPressed(widget.subtext) : null,
+          onLongPress: hasLongPress
+              ? () {
+                  _subtextEntered = true;
+                  widget.onKeyPressed(widget.subtext);
+                }
+              : null,
           style: merged.buttonStyle,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

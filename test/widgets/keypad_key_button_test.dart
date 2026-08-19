@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -76,5 +77,112 @@ void main() {
     expectTapTargetSemantics(tester, find.bySemanticsIdentifier(keypadKeyPoundId), label: '#', isButton: true);
 
     handle.dispose();
+  });
+
+  group('zero key pointer input', () {
+    Future<TestGesture> pressZero(WidgetTester tester, List<String> entered) async {
+      await tester.pumpWidget(wrap(KeypadKeyButton(text: '0', subtext: '+', onKeyPressed: entered.add)));
+      return tester.startGesture(tester.getCenter(find.byType(KeypadKeyButton)));
+    }
+
+    testWidgets('a quick tap enters the zero', (tester) async {
+      final entered = <String>[];
+      final press = await pressZero(tester, entered);
+      await tester.pump(const Duration(milliseconds: 50));
+      await press.up();
+      await tester.pumpAndSettle();
+
+      expect(entered, ['0']);
+    });
+
+    testWidgets('holding for the plus enters the plus and nothing else', (tester) async {
+      final entered = <String>[];
+      final press = await pressZero(tester, entered);
+      await tester.pump(kLongPressTimeout + const Duration(milliseconds: 100));
+      await press.up();
+      await tester.pumpAndSettle();
+
+      expect(entered, ['+']);
+    });
+
+    testWidgets('sliding off the key before the plus fires still enters the zero', (tester) async {
+      final entered = <String>[];
+      final press = await pressZero(tester, entered);
+      await tester.pump(const Duration(milliseconds: 300));
+      await press.moveBy(const Offset(60, 0));
+      await tester.pump(kLongPressTimeout);
+      await press.up();
+      await tester.pumpAndSettle();
+
+      expect(entered, ['0']);
+    });
+
+    testWidgets('sliding off after the plus fired adds nothing', (tester) async {
+      final entered = <String>[];
+      final press = await pressZero(tester, entered);
+      await tester.pump(kLongPressTimeout + const Duration(milliseconds: 100));
+      await press.moveBy(const Offset(60, 0));
+      await tester.pump(const Duration(milliseconds: 50));
+      await press.up();
+      await tester.pumpAndSettle();
+
+      expect(entered, ['+']);
+    });
+
+    testWidgets('a press taken away by the platform enters nothing', (tester) async {
+      final entered = <String>[];
+      final press = await pressZero(tester, entered);
+      await tester.pump(const Duration(milliseconds: 50));
+      await press.cancel();
+      await tester.pumpAndSettle();
+
+      expect(entered, isEmpty);
+    });
+
+    testWidgets('a press taken away leaves the next one working', (tester) async {
+      final entered = <String>[];
+      final taken = await pressZero(tester, entered);
+      await tester.pump(const Duration(milliseconds: 50));
+      await taken.cancel();
+      await tester.pumpAndSettle();
+
+      final press = await tester.startGesture(tester.getCenter(find.byType(KeypadKeyButton)));
+      await tester.pump(const Duration(milliseconds: 50));
+      await press.up();
+      await tester.pumpAndSettle();
+
+      expect(entered, ['0']);
+    });
+
+    testWidgets('two strikes that overlap enter two zeros', (tester) async {
+      final entered = <String>[];
+      final first = await pressZero(tester, entered);
+      await tester.pump(const Duration(milliseconds: 8));
+      final second = await tester.startGesture(
+        tester.getCenter(find.byType(KeypadKeyButton)).translate(2, 2),
+        pointer: 2,
+      );
+      await tester.pump(const Duration(milliseconds: 8));
+      await first.up();
+      await tester.pump(const Duration(milliseconds: 8));
+      await second.up();
+      await tester.pumpAndSettle();
+
+      expect(entered, ['0', '0']);
+    });
+  });
+
+  testWidgets('a digit key is entered even when the strike slides off it', (tester) async {
+    final entered = <String>[];
+    await tester.pumpWidget(wrap(KeypadKeyButton(text: '5', subtext: 'J K L', onKeyPressed: entered.add)));
+
+    final press = await tester.startGesture(tester.getCenter(find.byType(KeypadKeyButton)));
+    await tester.pump(const Duration(milliseconds: 16));
+    await press.moveBy(const Offset(60, 0));
+    await tester.pump(const Duration(milliseconds: 16));
+    await press.up();
+    await tester.pumpAndSettle();
+
+    expect(entered, ['5']);
   });
 }
