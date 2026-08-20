@@ -44,6 +44,11 @@ resolution but do not wait for it. A request still pending after five seconds
 emits a warning and continues in the background; a later result is routed
 through the notification broker and buffered until its consumer is ready.
 
+Firebase core and Firebase Messaging form one ordered startup branch. Local
+notification plugin and Android channel setup form an independent branch and
+start with Firebase core. Bootstrap waits for both branches; if both fail, the
+Firebase error is reported first so startup failure attribution is stable.
+
 ## Baseline procedure
 
 Use a profile build; debug timings are not representative and release builds

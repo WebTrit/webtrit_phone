@@ -33,6 +33,7 @@ import 'package:webtrit_phone/features/call/call.dart'
 import 'app/app_dependencies.dart';
 import 'app/firebase_integration.dart';
 import 'app/initial_notification_resolver.dart';
+import 'app/push_platform_initializer.dart';
 import 'app/session/session.dart';
 import 'app/startup_trace.dart';
 import 'firebase_options.dart';
@@ -282,9 +283,12 @@ class FirebaseIntegrationEnabled implements FirebaseIntegration {
 
   @override
   Future<void> initPlatform(StartupTrace startupTrace) async {
-    await startupTrace.measure('firebase-core', _initFirebaseApp);
-    await startupTrace.measure('firebase-messaging', _initFirebaseMessaging);
-    await startupTrace.measure('local-notifications', _initLocalPushs);
+    await initializePushPlatform(
+      startupTrace: startupTrace,
+      initializeFirebase: _initFirebaseApp,
+      initializeFirebaseMessaging: _initFirebaseMessaging,
+      initializeLocalNotifications: _initLocalPushs,
+    );
   }
 
   @override
