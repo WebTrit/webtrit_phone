@@ -32,6 +32,7 @@ import 'package:webtrit_phone/features/call/call.dart'
 
 import 'app/app_dependencies.dart';
 import 'app/firebase_integration.dart';
+import 'app/initial_notification_resolver.dart';
 import 'app/session/session.dart';
 import 'app/startup_trace.dart';
 import 'firebase_options.dart';
@@ -430,15 +431,18 @@ Future<void> _initFirebaseMessaging() async {
     final appPush = AppRemotePush.fromFCM(message);
     RemotePushBroker.handleOpenedPush(appPush);
   });
-  final initialMessage = await FirebaseMessaging.instance.getInitialMessage().timeout(
-    const Duration(seconds: 5),
-    onTimeout: () => null,
+  unawaited(
+    resolveInitialNotification<RemoteMessage>(
+      load: FirebaseMessaging.instance.getInitialMessage,
+      deliver: (initialMessage) {
+        logger.info('initialMessage: ${initialMessage.toMap()}');
+        final appPush = AppRemotePush.fromFCM(initialMessage);
+        RemotePushBroker.handleOpenedPush(appPush);
+      },
+      onSlow: (elapsed) => logger.warning('getInitialMessage still pending after ${elapsed.inSeconds}s'),
+      onError: (error, stackTrace) => logger.warning('getInitialMessage failed', error, stackTrace),
+    ),
   );
-  if (initialMessage != null) {
-    logger.info('initialMessage: ${initialMessage.toMap()}');
-    final appPush = AppRemotePush.fromFCM(initialMessage);
-    RemotePushBroker.handleOpenedPush(appPush);
-  }
 
   // actual FirebaseMessaging permission request executed in [PermissionsCubit]
 }
@@ -570,9 +574,18 @@ Future _initLocalPushs() async {
 
   await _initAndroidNotificationChannel();
 
-  final launchDetails = await FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails();
-  final data = launchDetails?.notificationResponse;
-  if (data != null) LocalPushsBroker.handleActionReceived(data);
+  final logger = Logger('LocalNotifications');
+  unawaited(
+    resolveInitialNotification<NotificationAppLaunchDetails>(
+      load: FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails,
+      deliver: (launchDetails) async {
+        final response = launchDetails.notificationResponse;
+        if (response != null) await LocalPushsBroker.handleActionReceived(response);
+      },
+      onSlow: (elapsed) => logger.warning('getNotificationAppLaunchDetails still pending after ${elapsed.inSeconds}s'),
+      onError: (error, stackTrace) => logger.warning('getNotificationAppLaunchDetails failed', error, stackTrace),
+    ),
+  );
 }
 
 /// Creates the high-importance local push channel referenced by FCM's

@@ -34,6 +34,11 @@ local-data, theme, Remote Config, database, logging, connectivity and callkeep
 parts of bootstrap. A failed stage is recorded before its original error is
 re-thrown.
 
+The Firebase and local-notification stages start initial launch-notification
+resolution but do not wait for it. A request still pending after five seconds
+emits a warning and continues in the background; a later result is routed
+through the notification broker and buffered until its consumer is ready.
+
 ## Baseline procedure
 
 Use a profile build; debug timings are not representative and release builds
