@@ -18,10 +18,14 @@ class SipPresenceIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     final badge = LeadingAvatarStyles.of(context).presenceBadge!;
 
-    final anyAvailable = presenceInfo.anyAvailable;
-    final color = anyAvailable ? badge.availableColor : badge.unavailableColor;
+    final presence = ContactPresence.resolve(presenceInfo: presenceInfo, dialogInfo: dialogInfo);
 
-    final activityIcon = _activityIcon(presenceInfo, dialogInfo);
+    // The colour still follows plain reachability, so being on a call keeps
+    // whatever colour the contact already had. Giving that state a colour of
+    // its own is a product decision and belongs to the change that makes it.
+    final color = presenceInfo.anyAvailable ? badge.availableColor : badge.unavailableColor;
+
+    final activityIcon = _activityIcon(presence, presenceInfo);
 
     // The glyph sits inside the mark rather than on top of it: an icon laid
     // over the dot cuts into its outline and the mark reads as smaller and
@@ -45,11 +49,13 @@ class SipPresenceIndicator extends StatelessWidget {
     );
   }
 
-  IconData? _activityIcon(List<PresenceInfo> presenceInfo, List<DialogInfo> dialogInfo) {
-    if (dialogInfo.established != null) {
+  IconData? _activityIcon(ContactPresence presence, List<PresenceInfo> presenceInfo) {
+    if (presence == ContactPresence.onCall) {
       return Icons.phone_in_talk_rounded;
     }
 
+    // The on-the-phone case below is unreachable while the resolver above
+    // answers it - the switch is exhaustive over the activities, so it stays.
     final activity = presenceInfo.primaryActivity;
     if (activity != null) {
       return switch (activity) {
