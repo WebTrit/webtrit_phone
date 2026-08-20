@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 abstract class SecureStorage {
@@ -83,23 +85,34 @@ class SecureStorageImpl implements SecureStorage {
   // Last FCM token that was pushed to the server
   static const _kFCMPushToken = 'fcm-push-token';
 
-  static Future<SecureStorage> init() async {
+  /// Creates the storage facade without waiting for the platform keychain.
+  ///
+  /// The expensive `readAll` is started in the background. Consumers that
+  /// need persisted values before proceeding should await [ready].
+  static Future<SecureStorageImpl> init() {
     const storage = FlutterSecureStorage(iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock));
-    final cache = await storage.readAll();
-
-    // Migration from old version of the app where the user ID wasnt provided to the app
-    // to avoid data inconsistency in the cache, we should clear it if the user ID is not present
-    if (!cache.containsKey(_kUserIdKey)) {
-      cache.clear();
-    }
-
-    return SecureStorageImpl._(storage, cache);
+    return Future<SecureStorageImpl>.value(SecureStorageImpl._(storage));
   }
 
-  SecureStorageImpl._(this._storage, [this._cache = const {}]);
+  SecureStorageImpl._(this._storage) {
+    ready = _loadCache();
+  }
 
   final FlutterSecureStorage _storage;
-  final Map<String, dynamic> _cache;
+  final Map<String, dynamic> _cache = {};
+
+  /// Completes after the initial platform read has populated the cache.
+  late final Future<void> ready;
+
+  Future<void> _loadCache() async {
+    final values = await _storage.readAll();
+    // Migration from old versions without a user ID: discard inconsistent
+    // entries before exposing the cache to readers.
+    if (!values.containsKey(_kUserIdKey)) values.clear();
+    _cache
+      ..clear()
+      ..addAll(values);
+  }
 
   String? _read(String key) {
     return _cache[key];
