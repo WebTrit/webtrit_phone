@@ -20,10 +20,17 @@ class StartupMeasurement {
 class StartupTrace {
   StartupTrace({String timelineName = 'app-startup', void Function(String message)? output})
     : _stopwatch = Stopwatch()..start(),
-      _timeline = developer.TimelineTask(filterKey: 'startup')..start(timelineName),
+      _timeline = _startTimeline(timelineName),
       _output = output ?? _printToConsole;
 
   StartupTrace.disabled() : _stopwatch = null, _timeline = null, _output = null;
+
+  /// Creates the trace selected for the current build mode.
+  ///
+  /// [releaseMode] is injectable so the release gate can be covered by tests.
+  factory StartupTrace.forBuildMode({required bool releaseMode, void Function(String message)? output}) {
+    return releaseMode ? StartupTrace.disabled() : StartupTrace(output: output);
+  }
 
   /// Stable prefix for filtering startup measurements in console output.
   static const logTag = '[Startup]';
@@ -47,7 +54,7 @@ class StartupTrace {
     if (stopwatch == null) return operation();
 
     final startedAt = stopwatch.elapsed;
-    final timeline = developer.TimelineTask(filterKey: 'startup')..start(name);
+    final timeline = _startTimeline(name);
     var succeeded = false;
     try {
       final result = await operation();
@@ -55,9 +62,11 @@ class StartupTrace {
       return result;
     } finally {
       final elapsed = stopwatch.elapsed - startedAt;
-      timeline.finish(arguments: {'duration_ms': _milliseconds(elapsed), 'succeeded': succeeded});
+      _ignoreInstrumentationError(
+        () => timeline?.finish(arguments: {'duration_ms': _milliseconds(elapsed), 'succeeded': succeeded}),
+      );
       _measurements.add(StartupMeasurement(name: name, elapsed: elapsed, succeeded: succeeded));
-      _output?.call('$logTag startup_stage name=$name duration_ms=${_milliseconds(elapsed)} succeeded=$succeeded');
+      _emit('$logTag startup_stage name=$name duration_ms=${_milliseconds(elapsed)} succeeded=$succeeded');
     }
   }
 
@@ -73,19 +82,40 @@ class StartupTrace {
     if (stopwatch == null || _finished) return;
     _finished = true;
     stopwatch.stop();
-    _timeline?.finish(arguments: {'total_ms': _milliseconds(stopwatch.elapsed)});
+    _ignoreInstrumentationError(() => _timeline?.finish(arguments: {'total_ms': _milliseconds(stopwatch.elapsed)}));
 
     final stages = _measurements
         .map((it) => '${it.name}:${_milliseconds(it.elapsed)}:${it.succeeded ? 'ok' : 'error'}')
         .join(',');
-    _output?.call('$logTag startup_complete total_ms=${_milliseconds(stopwatch.elapsed)} stages=[$stages]');
+    _emit('$logTag startup_complete total_ms=${_milliseconds(stopwatch.elapsed)} stages=[$stages]');
+  }
+
+  void _emit(String message) {
+    final output = _output;
+    if (output != null) _ignoreInstrumentationError(() => output(message));
+  }
+
+  static developer.TimelineTask? _startTimeline(String name) {
+    try {
+      return developer.TimelineTask(filterKey: 'startup')..start(name);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static void _ignoreInstrumentationError(void Function() operation) {
+    try {
+      operation();
+    } catch (_) {
+      // Measurement must never alter application startup or mask its failure.
+    }
   }
 
   static String _milliseconds(Duration duration) => (duration.inMicroseconds / 1000).toStringAsFixed(3);
 
   static void _printToConsole(String message) {
     // Startup measurements happen before the application logger is wired and
-    // must remain visible in profile/release console output.
+    // must remain visible in debug/profile console output.
     // ignore: avoid_print
     print(message);
   }

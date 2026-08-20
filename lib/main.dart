@@ -25,8 +25,8 @@ import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
   final logger = Logger('run_app');
-  final startupMeasurementsEnabled = kDebugMode || kProfileMode;
-  final startupTrace = startupMeasurementsEnabled ? StartupTrace() : StartupTrace.disabled();
+  final startupMeasurementsEnabled = !kReleaseMode;
+  final startupTrace = StartupTrace.forBuildMode(releaseMode: kReleaseMode);
 
   runZonedGuarded(
     () async {

@@ -38,6 +38,37 @@ void main() {
     expect(trace.measurements, isEmpty);
   });
 
+  test('build mode factory disables measurements only for release', () async {
+    final nonReleaseOutput = <String>[];
+    final nonReleaseTrace = StartupTrace.forBuildMode(releaseMode: false, output: nonReleaseOutput.add);
+    final releaseOutput = <String>[];
+    final releaseTrace = StartupTrace.forBuildMode(releaseMode: true, output: releaseOutput.add);
+
+    await nonReleaseTrace.measure('stage', () async {});
+    await releaseTrace.measure('stage', () async {});
+
+    expect(nonReleaseTrace.measurements, hasLength(1));
+    expect(nonReleaseOutput, hasLength(1));
+    expect(releaseTrace.measurements, isEmpty);
+    expect(releaseOutput, isEmpty);
+  });
+
+  test('output failure cannot turn a successful operation into a failure', () async {
+    final trace = StartupTrace(output: (_) => throw StateError('output failed'));
+
+    expect(await trace.measure('stage', () => 42), 42);
+    expect(trace.measurements.single.succeeded, isTrue);
+    expect(() => trace.finish(), returnsNormally);
+  });
+
+  test('output failure cannot mask the operation error', () async {
+    final trace = StartupTrace(output: (_) => throw StateError('output failed'));
+    final operationError = ArgumentError('operation failed');
+
+    await expectLater(trace.measure<void>('stage', () => throw operationError), throwsA(same(operationError)));
+    expect(trace.measurements.single.succeeded, isFalse);
+  });
+
   test('finish writes a tagged total and stage summary', () async {
     final output = <String>[];
     final trace = StartupTrace(output: output.add);

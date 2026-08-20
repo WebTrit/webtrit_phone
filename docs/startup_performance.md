@@ -36,7 +36,8 @@ re-thrown.
 
 ## Baseline procedure
 
-Use a profile or release build; debug timings are not representative. Keep the
+Use a profile build; debug timings are not representative and release builds
+intentionally contain no startup instrumentation. Keep the
 application version, device, network conditions and account state fixed while
 comparing runs.
 
