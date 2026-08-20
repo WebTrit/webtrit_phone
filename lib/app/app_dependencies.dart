@@ -32,6 +32,15 @@ typedef AppPresentationConfig = ({
 /// configuration bootstrap uses to initialize services.
 typedef AppPresentationConfigBuilder = AppPresentationConfig Function(AppPresentationConfig defaults);
 
+/// Applies a host's presentation configuration, or keeps the bootstrap
+/// defaults when the app runs standalone.
+AppPresentationConfig resolvePresentationConfig(
+  AppPresentationConfig defaults,
+  AppPresentationConfigBuilder? configure,
+) {
+  return configure?.call(defaults) ?? defaults;
+}
+
 /// Collects the application while it starts.
 ///
 /// Everything long-lived is handed to the builder as it is created, which is

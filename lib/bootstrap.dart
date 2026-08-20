@@ -240,7 +240,7 @@ Future<AppDependencies> bootstrap({
   // already used its own FeatureAccess snapshot for permissions, metadata,
   // logging and call integration, so preview sources cannot reconfigure those
   // services.
-  final presentationConfig = configurePresentation?.call(defaultPresentationConfig) ?? defaultPresentationConfig;
+  final presentationConfig = resolvePresentationConfig(defaultPresentationConfig, configurePresentation);
 
   return deps.build(
     featureAccess: presentationConfig.featureAccess,
