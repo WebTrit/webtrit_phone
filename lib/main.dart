@@ -145,8 +145,16 @@ class RootApp extends StatefulWidget {
 /// widget down. One bootstrap therefore belongs to one [RootApp].
 class _RootAppState extends State<RootApp> {
   @override
+  void didUpdateWidget(covariant RootApp oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.dependencies, widget.dependencies)) {
+      unawaited(oldWidget.dependencies.dispose());
+    }
+  }
+
+  @override
   void dispose() {
-    widget.dependencies.dispose();
+    unawaited(widget.dependencies.dispose());
     super.dispose();
   }
 
