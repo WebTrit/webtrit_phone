@@ -87,10 +87,30 @@ void main() {
 
     test('sharing hands the instance back, so it can be used where it was built', () {
       const instance = _Plain();
-      final builder = AppDependenciesBuilder();
 
-      expect(builder.share<_Plain>(instance), same(instance));
-      expect(builder.keep<_Plain>(instance), same(instance));
+      expect(AppDependenciesBuilder().share<_Plain>(instance), same(instance));
+      expect(AppDependenciesBuilder().keep<_Plain>(instance), same(instance));
+    });
+
+    test('rejects a second shared dependency of the same type', () {
+      final builder = AppDependenciesBuilder()..share<_Plain>(const _Plain());
+
+      expect(() => builder.share<_Plain>(const _Plain()), throwsStateError);
+    });
+
+    test('rejects taking ownership of the same instance twice', () {
+      const instance = _Plain();
+      final builder = AppDependenciesBuilder()..keep(instance);
+
+      expect(() => builder.share(instance), throwsStateError);
+    });
+
+    test('rejects additions and a second build after it is sealed', () {
+      final builder = AppDependenciesBuilder();
+      _sealed(builder);
+
+      expect(() => builder.keep(const _Plain()), throwsStateError);
+      expect(() => _sealed(builder), throwsStateError);
     });
   });
 

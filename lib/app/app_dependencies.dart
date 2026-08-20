@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -34,12 +36,17 @@ typedef ConfigSource<T> = ({T initial, Stream<T> Function() updates});
 /// exists.
 class AppDependenciesBuilder {
   final _owned = <Object>[];
+  final _ownedInstances = HashSet<Object>.identity();
   final _providers = <SingleChildWidget>[];
+  final _sharedTypes = <Type>{};
+
+  var _built = false;
 
   /// Owns [instance] without showing it to the widget tree. For the few things
   /// that exist only so they keep running - and so they can be stopped.
   T keep<T>(T instance) {
-    _owned.add(instance as Object);
+    _ensureCollecting();
+    _own(instance as Object);
     return instance;
   }
 
@@ -49,8 +56,20 @@ class AppDependenciesBuilder {
   /// The tree receives it by value, so no provider can close it: the app owns
   /// it for as long as it runs (see `docs/dependency_ownership.md`).
   T share<T>(T instance) {
+    _ensureCollecting();
+    if (!_sharedTypes.add(T)) {
+      throw StateError('Dependency of type $T is already shared.');
+    }
+
+    try {
+      _own(instance as Object);
+    } catch (_) {
+      _sharedTypes.remove(T);
+      rethrow;
+    }
+
     _providers.add(Provider<T>.value(value: instance));
-    return keep(instance);
+    return instance;
   }
 
   /// Seals the collected dependencies into the started application.
@@ -59,6 +78,9 @@ class AppDependenciesBuilder {
     required ConfigSource<ThemeSettings> themeSettings,
     required SystemInfoRepository systemInfo,
   }) {
+    _ensureCollecting();
+    _built = true;
+
     return AppDependencies._(
       owned: List.unmodifiable(_owned),
       providers: List.unmodifiable(_providers),
@@ -66,6 +88,19 @@ class AppDependenciesBuilder {
       themeSettings: themeSettings,
       systemInfo: systemInfo,
     );
+  }
+
+  void _ensureCollecting() {
+    if (_built) {
+      throw StateError('AppDependenciesBuilder has already been built.');
+    }
+  }
+
+  void _own(Object instance) {
+    if (!_ownedInstances.add(instance)) {
+      throw StateError('${instance.runtimeType} is already owned by this builder.');
+    }
+    _owned.add(instance);
   }
 }
 

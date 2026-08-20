@@ -81,7 +81,7 @@ Two consequences worth spelling out:
 
 ## What keeps it honest
 
-- `test/app/app_instance_test.dart` covers what the tree receives (shared yes,
+- `test/app/app_dependencies_test.dart` covers what the tree receives (shared yes,
   kept no) and the release: reverse order of creation, one run even under a
   concurrent second call, and a failing release not stopping the rest.
 - `test/app/host_theme_mode_provider_test.dart` covers the shape rule for the
