@@ -11,16 +11,14 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-import 'package:webtrit_callkeep/webtrit_callkeep.dart';
-
 import 'package:webtrit_phone/app/app.dart';
+import 'package:webtrit_phone/app/app_dependencies.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -38,7 +36,7 @@ void main() {
       // on every version: the app's own surfaces paint behind the system bars.
       if (!kIsWeb) await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-      final instanceRegistry = await bootstrap();
+      final dependencies = await bootstrap();
 
       if (!kIsWeb && kDebugMode) {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
@@ -59,7 +57,7 @@ void main() {
 
       Logger.root.onRecord.listen(_onRootLogRecord);
 
-      runApp(RootApp.standalone(instanceRegistry));
+      runApp(RootApp(dependencies: dependencies));
     },
     (error, stackTrace) {
       logger.severe('runZonedGuarded', error, stackTrace);
@@ -78,15 +76,6 @@ void _onRootLogRecord(LogRecord record) {
     FirebaseCrashlytics.instance.recordError(record.message, record.stackTrace, reason: 'native callkeep error');
   }
 }
-
-/// A reactive config input: the [initial] value for the first frame plus an
-/// [updates] factory that creates the stream replacing it as it changes.
-///
-/// [updates] is a factory (not a ready stream) so every provider subscription
-/// gets a fresh stream - the bootstrap FeatureAccess stream is single-subscription
-/// and reactive (it follows runtime system-info / remote-config changes), so a
-/// re-created provider must be able to listen again without throwing or going stale.
-typedef ConfigSource<T> = ({T initial, Stream<T> Function() updates});
 
 /// The host theme-mode override, provided as a nullable value so the app can
 /// always read it - null when no host supplies one.
@@ -111,38 +100,24 @@ SingleChildWidget hostThemeModeProvider(ConfigSource<ThemeMode>? source) {
 class RootApp extends StatefulWidget {
   const RootApp({
     super.key,
-    required this.instanceRegistry,
-    required this.featureAccess,
-    required this.themeSettings,
+    required this.dependencies,
+    this.featureAccess,
+    this.themeSettings,
     this.themeMode,
     this.ownsBrowserHistory = true,
   });
 
-  /// Standalone composition: resolves the config sources from the bootstrap
-  /// [instanceRegistry] (the reactive FeatureAccess stream and the first
-  /// bootstrap-built theme, which is static). A host that embeds the app uses
-  /// the default constructor and supplies its own sources instead.
-  factory RootApp.standalone(InstanceRegistry instanceRegistry) => RootApp(
-    instanceRegistry: instanceRegistry,
-    featureAccess: (
-      initial: instanceRegistry.get<FeatureAccess>(),
-      updates: () => instanceRegistry.get<FeatureAccessStreamFactory>().create(),
-    ),
-    themeSettings: (
-      initial: instanceRegistry.get<AppThemes>().values.first.settings,
-      updates: () => const Stream.empty(),
-    ),
-  );
+  /// The started application: what it gives the widget tree, and what gets
+  /// released when this widget goes away.
+  final AppDependencies dependencies;
 
-  final InstanceRegistry instanceRegistry;
-
-  /// Reactive config the app renders, provided down the tree as inherited values.
-  /// The composition root decides the source: standalone (`main`) resolves it
-  /// from the bootstrap registry; a host that embeds this app (the configurator's
-  /// realtime preview) passes its own streams so the preview reflects live edits.
-  /// RootApp itself stays agnostic - it only wires whatever source it is given.
-  final ConfigSource<FeatureAccess> featureAccess;
-  final ConfigSource<ThemeSettings> themeSettings;
+  /// Reactive config the app renders, provided down the tree as inherited
+  /// values. Null in a standalone run, where the app renders the configuration
+  /// its own startup produced; a host that embeds the app (the configurator's
+  /// realtime preview) passes its own streams so the preview reflects live
+  /// edits. RootApp stays agnostic - it wires whatever source it ends up with.
+  final ConfigSource<FeatureAccess>? featureAccess;
+  final ConfigSource<ThemeSettings>? themeSettings;
 
   /// Optional read-only override for the displayed theme mode (the configurator's
   /// light/dark preview toggle). Null in a standalone run, where the mode comes
@@ -170,61 +145,63 @@ class RootApp extends StatefulWidget {
 /// widget down. One bootstrap therefore belongs to one [RootApp].
 class _RootAppState extends State<RootApp> {
   @override
+  void didUpdateWidget(covariant RootApp oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.dependencies, widget.dependencies)) {
+      unawaited(oldWidget.dependencies.dispose());
+    }
+  }
+
+  @override
   void dispose() {
-    widget.instanceRegistry.dispose();
+    unawaited(widget.dependencies.dispose());
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // A host may render its own configuration (the configurator's live preview);
+    // otherwise the app renders the one its startup produced.
+    final featureAccess = widget.featureAccess ?? widget.dependencies.featureAccess;
+    final themeSettings = widget.themeSettings ?? widget.dependencies.themeSettings;
+
     // Providers that only hand out an instance built by the composition root
     // never dispose it: those live as long as the process and are released by
     // the startup teardown. A provider disposes what its own `create` built -
     // see `docs/dependency_ownership.md`.
     return MultiProvider(
       providers: [
-        Provider<AppInfo>(create: (_) => widget.instanceRegistry.get()),
+        // Everything the started application shares: one entry per dependency,
+        // recorded where it was built (see AppDependenciesBuilder). The tree reads
+        // them by value, so no provider here can close what it did not create.
+        ...widget.dependencies.providers,
         // The active theme, provided down the tree as an inherited value so the
         // app consumes it directly (see App.build) instead of holding it in
         // AppState. The source is supplied by the caller (see [themeSettings]).
         StreamProvider<ThemeSettings>(
-          initialData: widget.themeSettings.initial,
-          create: (_) => widget.themeSettings.updates(),
+          initialData: themeSettings.initial,
+          create: (_) => themeSettings.updates(),
           updateShouldNotify: (previous, next) => previous != next,
         ),
         // Optional host theme-mode override (see [themeMode]); always provided as
         // a nullable value so App can read it, null in a standalone run.
         hostThemeModeProvider(widget.themeMode),
-        Provider<PackageInfo>(create: (_) => widget.instanceRegistry.get()),
         // Stateless version-compatibility policy shared by the login gate and the
         // in-app force-update gate; const, so no bootstrap registration needed.
         Provider<AppCompatibilityResolver>(create: (_) => const DefaultAppCompatibilityResolver()),
-        Provider<DeviceInfo>(create: (_) => widget.instanceRegistry.get()),
-        Provider<AppPreferences>(create: (_) => widget.instanceRegistry.get()),
         // Reactive [FeatureAccess]; the source is supplied by the caller (see
         // [featureAccess]). Standalone it is the bootstrap stream synchronized
         // with SystemInfoRepository and RemoteConfigService.
         StreamProvider<FeatureAccess>(
-          initialData: widget.featureAccess.initial,
-          create: (_) => widget.featureAccess.updates(),
+          initialData: featureAccess.initial,
+          create: (_) => featureAccess.updates(),
           updateShouldNotify: (previous, next) => previous != next,
         ),
-        Provider<SecureStorage>(create: (_) => widget.instanceRegistry.get()),
-        Provider<AppPermissions>(create: (_) => widget.instanceRegistry.get()),
-        Provider<AppLogger>(create: (_) => widget.instanceRegistry.get()),
-        Provider<AppTime>(create: (_) => widget.instanceRegistry.get()),
-        Provider<AppPath>(create: (_) => widget.instanceRegistry.get()),
-        Provider<AppCertificates>(create: (_) => widget.instanceRegistry.get()),
-        Provider<AppMetadataProvider>(create: (_) => widget.instanceRegistry.get()),
-        Provider<WebtritApiClientFactory>(create: (_) => widget.instanceRegistry.get()),
-        Provider<PushEnvironment>(create: (_) => widget.instanceRegistry.get()),
         // Platform-backed collaborators of the main shell, so the shell reads
         // them like every other dependency instead of constructing them
         // inline. The substitution seam this opens is for widget tests that
         // pump the shell under their own providers; a host embedding RootApp
         // still gets the production set.
-        Provider<Callkeep>(create: (_) => widget.instanceRegistry.get()),
-        Provider<CallkeepConnections>(create: (_) => widget.instanceRegistry.get()),
         // Const and stateless, so no bootstrap registration needed (the
         // AppCompatibilityResolver precedent above).
         Provider<SignalingServiceFactory>(create: (_) => const SignalingServiceFactory()),
@@ -244,7 +221,6 @@ class _RootAppState extends State<RootApp> {
         // Provides `AppDatabase` by reading it from `AppDatabaseLifecycleHolder`.
         // When this provider is read, it triggers creation of the holder first (provider is lazy).
         Provider<AppDatabase>(create: (context) => context.read<AppDatabaseLifecycleHolder>().db),
-        Provider<ConnectivityService>(create: (_) => widget.instanceRegistry.get()),
       ],
       child: Builder(
         builder: (context) {
@@ -276,23 +252,16 @@ class _RootAppState extends State<RootApp> {
 
           return MultiRepositoryProvider(
             providers: [
-              RepositoryProvider<LogRecordsRepository>(create: (_) => widget.instanceRegistry.get()),
-              RepositoryProvider<NativeLogForwarder>(create: (_) => widget.instanceRegistry.get()),
-              // Built by bootstrap's Firebase integration strategy: the Firebase-backed
-              // repository standalone, a no-op one when Firebase is disabled.
-              RepositoryProvider<AppAnalyticsRepository>(create: (_) => widget.instanceRegistry.get()),
               RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
               RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
               RepositoryProvider<QueuedTerminationRequestsRepository>.value(value: queuedTerminationRequestsRepository),
               RepositoryProvider<ActiveMainTabRepository>.value(value: activeMainTabRepository),
-              RepositoryProvider<SessionRepository>.value(value: widget.instanceRegistry.get<SessionRepository>()),
               RepositoryProvider<UserAgreementStatusRepository>.value(value: userAgreementStatusRepository),
               RepositoryProvider<ActiveRecentsVisibilityFilterRepository>.value(
                 value: activeRecentsVisibilityFilterRepository,
               ),
               RepositoryProvider<ActiveContactSourceTypeRepository>.value(value: activeContactSourceTypeRepository),
               RepositoryProvider<AudioProcessingSettingsRepository>.value(value: audioProcessingSettingsRepository),
-              RepositoryProvider<ContactsAgreementStatusRepository>.value(value: widget.instanceRegistry.get()),
               RepositoryProvider<EncodingPresetRepository>.value(value: encodingPresetRepository),
               RepositoryProvider<IceSettingsRepository>.value(value: iceSettingsRepository),
               RepositoryProvider<IncomingCallTypeRepository>.value(value: incomingCallTypeRepository),
@@ -303,9 +272,6 @@ class _RootAppState extends State<RootApp> {
               RepositoryProvider<LocaleRepository>.value(value: localeRepository),
               RepositoryProvider<ThemeModeRepository>.value(value: themeModeRepository),
               RepositoryProvider<AutocompleteHistoryRepository>.value(value: autocompleteHistoryRepository),
-              RepositoryProvider<SystemInfoRepository>(create: (_) => widget.instanceRegistry.get()),
-              RepositoryProvider<UserLocalDatasource>(create: (_) => widget.instanceRegistry.get()),
-              RepositoryProvider<AuthRepository>(create: (_) => widget.instanceRegistry.get()),
             ],
             child: App(ownsBrowserHistory: widget.ownsBrowserHistory),
           );
@@ -321,7 +287,7 @@ class _RootAppState extends State<RootApp> {
       return AppDatabaseLifecycleHolder(db)..attach();
     }
     // Establish the connection; the IPC handshake to the server isolate starts when this Future is created.
-    final db = AppDatabase(widget.instanceRegistry.get<DatabaseServer>().connect());
+    final db = AppDatabase(context.read<DatabaseServer>().connect());
     return AppDatabaseLifecycleHolder(db)..attach();
   }
 

@@ -23,12 +23,14 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/push_notification/push_notifications.dart';
 import 'package:webtrit_phone/features/system_notifications/services/services.dart';
 
 import 'package:webtrit_phone/features/call/call.dart'
     show onPushNotificationSyncCallback, onSignalingBackgroundCallEvent;
 
+import 'app/app_dependencies.dart';
 import 'app/firebase_integration.dart';
 import 'app/session/session.dart';
 import 'firebase_options.dart';
@@ -38,8 +40,11 @@ import 'services/services.dart';
 // Dart isolates do not share memory -- each background isolate gets its own instance.
 IsolateContext? _isolateContext;
 
-Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const FirebaseIntegrationEnabled()}) async {
-  final registry = InstanceRegistry();
+Future<AppDependencies> bootstrap({FirebaseIntegration firebase = const FirebaseIntegrationEnabled()}) async {
+  // Everything long-lived is handed to the builder where it is created: `share`
+  // for what the screens read, `keep` for what only has to keep running. See
+  // AppDependenciesBuilder and `docs/dependency_ownership.md`.
+  final deps = AppDependenciesBuilder();
 
   // External SDKs (side effects only, don't need registration). The [firebase]
   // strategy decides whether these run: standalone wires Firebase, while an
@@ -51,18 +56,19 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
 
   // App Info & Device Data
 
-  final packageInfo = await PackageInfoFactory.init();
-  final appInfo = await AppInfo.init(firebase.appIdProvider);
-  final deviceInfo = await DeviceInfoFactory.init();
+  final packageInfo = deps.share(await PackageInfoFactory.init());
+  final appInfo = deps.share(await AppInfo.init(firebase.appIdProvider));
+  final deviceInfo = deps.share(await DeviceInfoFactory.init());
 
   // Storages
-  final secureStorage = await SecureStorageImpl.init();
+  final secureStorage = deps.share(await SecureStorageImpl.init());
   // final token = secureStorage.readToken();
   // print('bootstrap: secureStorage token: ${token != null ? '***' : 'null'}');
-  final appPreferences = await AppPreferencesImpl.init();
+  final appPreferences = deps.share(await AppPreferencesImpl.init());
+  deps.share<UserLocalDatasource>(UserLocalDatasourcePrefsImpl(appPreferences));
 
   // Network clients
-  final appCertificates = await AppCertificates.init();
+  final appCertificates = deps.share(await AppCertificates.init());
 
   // Built here rather than taken from AppMetadataProvider, which needs
   // featureAccess and is therefore created later; the format is shared.
@@ -73,40 +79,47 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   // secureStorage and featureAccess). Then the metadata provider can be built
   // here, before the API client factory, and this static call goes away.
   final userAgent = DefaultAppMetadataProvider.buildUserAgent(packageInfo, appInfo, deviceInfo);
-  final apiClientFactory = WebtritApiClientFactory(
-    trustedCertificates: appCertificates.trustedCertificates,
-    userAgent: userAgent,
-    getTenantId: () => secureStorage.readTenantId() ?? '',
-    getCoreUrl: () =>
-        Uri.parse(secureStorage.readCoreUrl() ?? EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL),
+  final apiClientFactory = deps.share(
+    WebtritApiClientFactory(
+      trustedCertificates: appCertificates.trustedCertificates,
+      userAgent: userAgent,
+      getTenantId: () => secureStorage.readTenantId() ?? '',
+      getCoreUrl: () =>
+          Uri.parse(secureStorage.readCoreUrl() ?? EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL),
+    ),
   );
 
   // Background workers (assuming SessionCleanupWorker is still a side-effect init)
   final sessionCleanupWorker = SessionCleanupWorker.init(apiClientFactory);
 
   // Core infrastructure
-  final appThemes = await AppThemes.init();
+  final appThemes = deps.keep(await AppThemes.init());
 
   // Repositories
-  final contactsAgreementStatusRepository = ContactsAgreementStatusRepositoryPrefsImpl(appPreferences);
+  final contactsAgreementStatusRepository = deps.share<ContactsAgreementStatusRepository>(
+    ContactsAgreementStatusRepositoryPrefsImpl(appPreferences),
+  );
   final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
   final systemInfoRemoteDatasource = SystemInfoRemoteDatasource(apiClientFactory);
-  final systemInfoRepository = SystemInfoRepositoryImpl(
-    localDatasource: systemInfoLocalDatasource,
-    remoteDatasource: systemInfoRemoteDatasource,
+  final systemInfoRepository = deps.share<SystemInfoRepository>(
+    SystemInfoRepositoryImpl(localDatasource: systemInfoLocalDatasource, remoteDatasource: systemInfoRemoteDatasource),
   );
 
-  final authRepository = AuthRepositoryImpl(
-    apiClientFactory: apiClientFactory,
-    systemInfoRemoteDatasource: systemInfoRemoteDatasource,
-    appIdentifier: appInfo.identifier,
-    appBundleId: EnvironmentConfig.resolveBundleId(packageInfo.packageName),
+  deps.share<AuthRepository>(
+    AuthRepositoryImpl(
+      apiClientFactory: apiClientFactory,
+      systemInfoRemoteDatasource: systemInfoRemoteDatasource,
+      appIdentifier: appInfo.identifier,
+      appBundleId: EnvironmentConfig.resolveBundleId(packageInfo.packageName),
+    ),
   );
 
-  final sessionRepository = SessionRepositoryImpl(
-    secureStorage: secureStorage,
-    sessionCleanupWorker: sessionCleanupWorker,
-    apiClientFactory: apiClientFactory,
+  deps.share<SessionRepository>(
+    SessionRepositoryImpl(
+      secureStorage: secureStorage,
+      sessionCleanupWorker: sessionCleanupWorker,
+      apiClientFactory: apiClientFactory,
+    ),
   );
 
   // Remote configuration. The Firebase-backed service needs the Firebase app, so
@@ -116,10 +129,12 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
   final cachedRemoteConfigService = await firebase.remoteConfig(remoteCacheConfigService);
 
-  final featureAccessStreamFactory = FeatureAccessStreamFactory(
-    appThemes: appThemes,
-    systemInfoRepository: systemInfoRepository,
-    remoteConfigService: cachedRemoteConfigService,
+  final featureAccessStreamFactory = deps.keep(
+    FeatureAccessStreamFactory(
+      appThemes: appThemes,
+      systemInfoRepository: systemInfoRepository,
+      remoteConfigService: cachedRemoteConfigService,
+    ),
   );
   // Initialize the immutable feature configuration snapshot.
   // This instance serves as the `initialData` for the `StreamProvider`, ensuring the UI
@@ -127,8 +142,8 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   final featureAccess = await featureAccessStreamFactory.getInitialSnapshot();
 
   // Utilities - Capturing instances that were previously just `await Class.init()`
-  final pushEnvironment = await PushEnvironment.init();
-  final appPath = await AppPath.init();
+  deps.share(await PushEnvironment.init());
+  final appPath = deps.share(await AppPath.init());
 
   // Spawn the shared DriftIsolate database server. All isolates (FCM background,
   // WorkManager) connect to this single server via IsolateNameServer, eliminating
@@ -143,29 +158,28 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
     // The server isolate and its name-server mapping are process-wide - the
     // background isolates find the database through that mapping - so the
     // registry owns them and widgets only take client connections.
-    registry.register<DatabaseServer>(DatabaseServer(driftIsolate));
+    deps.share(DatabaseServer(driftIsolate));
   }
 
-  final appPermissions = await _createAppPermissions(featureAccess, contactsAgreementStatusRepository);
-  final appTime = await AppTime.init();
-  final metadataProvider = await DefaultAppMetadataProvider.init(
-    packageInfo,
-    deviceInfo,
-    appInfo,
-    secureStorage,
-    featureAccess,
+  deps.share(await _createAppPermissions(featureAccess, contactsAgreementStatusRepository));
+  deps.share(await AppTime.init());
+  final metadataProvider = deps.share<AppMetadataProvider>(
+    await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess),
   );
 
   // Logger
-  final appLogger = await AppLogger.init(
-    featureAccess.loggingConfig,
-    LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled),
-    () => metadataProvider.logLabels,
+  deps.share(
+    await AppLogger.init(
+      featureAccess.loggingConfig,
+      LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled),
+      () => metadataProvider.logLabels,
+    ),
   );
   // File-based log storage uses dart:io and is unavailable on web; fall back to
   // the in-memory log repository there. TODO(web): persistent web logging.
-  final appLoggerRepository = LogRecordsRepository.create(useFileStorage: !kIsWeb, logFilePath: appPath.logFilePath)
-    ..attachToLogger(Logger.root);
+  deps.share(
+    LogRecordsRepository.create(useFileStorage: !kIsWeb, logFilePath: appPath.logFilePath)..attachToLogger(Logger.root),
+  );
 
   if (kIsWeb && EnvironmentConfig.WEB_BUNDLE_ID == null) {
     Logger('bootstrap').warning(
@@ -174,9 +188,8 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
       'server will likely reject with unconfigured_bundle_id (login/autoprovision fail).',
     );
   }
-  final nativeLogForwarder = NativeLogForwarder(
-    nativeLogFilePath: appPath.nativeLogFilePath,
-    logger: Logger('callkeep'),
+  final nativeLogForwarder = deps.share(
+    NativeLogForwarder(nativeLogFilePath: appPath.nativeLogFilePath, logger: Logger('callkeep')),
   );
   // FileSystemEntity.watch is not supported on iOS: the Dart SDK only implements
   // it for Android/Linux (inotify), Windows, and macOS (FSEvents). Calling it on
@@ -192,7 +205,7 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   // In master mode the instance adds itself as a WidgetsBindingObserver; it is
   // registered below so the registry takes it back off when it is released.
   // Background isolates build their own via initSlave.
-  final appLifecycle = await AppLifecycle.initMaster();
+  deps.keep(await AppLifecycle.initMaster());
 
   // ConnectivityService - owns the `Connectivity()` plugin subscription used by
   // the call subsystem (other features still keep their own direct subscriptions).
@@ -200,65 +213,30 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   // awaited `checkConnectivity()` read before any consumer subscribes. This
   // prevents the listener's first replayed event from being misinterpreted as a
   // real interface change downstream.
-  final connectivityService = await ConnectivityServiceImpl.create(
-    connectivityChecker: _createConnectivityChecker(apiClientFactory),
+  deps.share<ConnectivityService>(
+    await ConnectivityServiceImpl.create(connectivityChecker: _createConnectivityChecker(apiClientFactory)),
   );
 
-  // Register instances into the Registry.
-  //
-  // Registration order matters: the registry releases in reverse, so a
-  // dependency must be registered AFTER whatever it was built from.
+  // Call-integration handles of the authenticated shell, shared here so widgets
+  // receive them from the composition root instead of constructing them inline
+  // (widget tests substitute them by providing their own above the shell). Both
+  // are process-wide singletons behind their factory constructors.
+  deps.share(Callkeep());
+  deps.share(CallkeepConnections());
+  deps.share(firebase.analytics);
 
-  // Configuration & Info
-  registry.register<AppThemes>(appThemes);
-  registry.register<AppInfo>(appInfo);
-  registry.register<PackageInfo>(packageInfo);
-  registry.register<DeviceInfo>(deviceInfo);
-  registry.register<AppPath>(appPath);
-  registry.register<AppTime>(appTime);
-  // TODO: Replace direct injection with a future service that will take on some of the work from PushTokensBloc
-  registry.register<PushEnvironment>(pushEnvironment);
-
-  // Repositories & Storage
-  registry.register<AppPreferences>(appPreferences);
-  registry.register<SecureStorage>(secureStorage);
-  registry.register<RemoteConfigService>(cachedRemoteConfigService);
-  registry.register<SystemInfoRepository>(systemInfoRepository);
-  registry.register<AuthRepository>(authRepository);
-  registry.register<ContactsAgreementStatusRepository>(contactsAgreementStatusRepository);
-  registry.register<SessionCleanupWorker>(sessionCleanupWorker);
-  registry.register<SessionRepository>(sessionRepository);
-  registry.register<UserLocalDatasource>(UserLocalDatasourcePrefsImpl(appPreferences));
-
-  // Logic & Features
-  registry.register<FeatureAccess>(featureAccess);
-  registry.register<FeatureAccessStreamFactory>(featureAccessStreamFactory);
-  registry.register<AppMetadataProvider>(metadataProvider);
-  registry.register<AppPermissions>(appPermissions);
-  registry.register<AppCertificates>(appCertificates);
-  registry.register<AppLogger>(appLogger);
-  registry.register<LogRecordsRepository>(appLoggerRepository);
-  registry.register<NativeLogForwarder>(nativeLogForwarder);
-  registry.register<AppLifecycle>(appLifecycle);
-
-  // Network clients
-  registry.register<WebtritApiClientFactory>(apiClientFactory);
-  registry.register<ConnectivityService>(connectivityService);
-  registry.register<AppAnalyticsRepository>(firebase.analytics);
-
-  // Call-integration handles of the authenticated shell, registered here so
-  // widgets receive them from the composition root instead of constructing
-  // them inline (widget tests substitute them by providing their own above
-  // the shell). Both are process-wide singletons behind their factory
-  // constructors.
-  registry.register<Callkeep>(Callkeep());
-  registry.register<CallkeepConnections>(CallkeepConnections());
-
-  // Final side-effect initializations that rely on registered components
+  // Final side-effect initializations that rely on the components above
   await _initCallkeep(featureAccess);
   await _initWorkManager();
 
-  return registry;
+  return deps.build(
+    // The configuration the app renders with unless a host supplies its own.
+    featureAccess: (initial: featureAccess, updates: featureAccessStreamFactory.create),
+    // The theme is static at startup; a host that edits it live pushes its own
+    // source instead.
+    themeSettings: (initial: appThemes.values.first.settings, updates: () => const Stream<ThemeSettings>.empty()),
+    systemInfo: systemInfoRepository,
+  );
 }
 
 /// Standalone integration: real Firebase platform init, the Firebase id provider,
