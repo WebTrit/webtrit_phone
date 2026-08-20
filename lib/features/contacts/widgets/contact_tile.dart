@@ -65,8 +65,10 @@ class ContactTile extends StatelessWidget {
 
     String? subName;
 
-    if (presenceParams.blfViaSipSupport && (dialogInfo ?? []).isNotEmpty) {
-      final dialog = dialogInfo!.first;
+    final establishedCall = (dialogInfo ?? const <DialogInfo>[]).established;
+
+    if (presenceParams.blfViaSipSupport && establishedCall != null) {
+      final dialog = establishedCall;
 
       String? destination;
       if (dialog.remoteDisplayName != null && dialog.remoteNumber != null) {

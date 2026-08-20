@@ -42,8 +42,17 @@ class DialogInfo extends Equatable {
 
   String? get displayName => remoteDisplayName ?? remoteNumber;
 
+  /// Whether this dialog is a conversation rather than a phone ringing.
+  ///
+  /// A dialog exists from the first ring, and `early` - ringing - is the most
+  /// common state of all in production, so every read site that means "they
+  /// are talking to someone" has to say so through this getter. Answering it
+  /// on its own is how the status mark and the contact list once ended up
+  /// describing the same person differently at the same moment.
+  bool get isEstablished => state == DialogState.confirmed;
+
   bool get pullable {
-    if (state != DialogState.confirmed) return false;
+    if (!isEstablished) return false;
     if (remoteNumber == null || callId == null || localTag == null || remoteTag == null) return false;
     // This getter stays media-agnostic: video calls are pullable as well, and
     // whether a video dialog is offered is decided downstream by the configured
@@ -74,5 +83,18 @@ class DialogInfo extends Equatable {
   @override
   String toString() {
     return 'DialogInfo{id: $id, entityNumber: $entityNumber, state: $state, callId: $callId, direction: $direction, localTag: $localTag, localNumber: $localNumber, localDisplayName: $localDisplayName, remoteTag: $remoteTag, remoteNumber: $remoteNumber, remoteDisplayName: $remoteDisplayName, arrivalVersion: $arrivalVersion, arrivalTime: $arrivalTime, hasVideo: $hasVideo}';
+  }
+}
+
+extension DialogInfoListExtension on Iterable<DialogInfo> {
+  /// The call the contact is actually in, if any.
+  ///
+  /// Callers get the dialog itself and not just an answer to "are they busy",
+  /// because whoever shows the state usually also names the other party.
+  DialogInfo? get established {
+    for (final dialog in this) {
+      if (dialog.isEstablished) return dialog;
+    }
+    return null;
   }
 }
