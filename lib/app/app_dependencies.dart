@@ -1,0 +1,132 @@
+import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
+
+import 'package:webtrit_phone/common/common.dart';
+import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/theme/theme.dart';
+
+final _logger = Logger('AppDependencies');
+
+/// A reactive config input: the [initial] value for the first frame plus an
+/// [updates] factory that creates the stream replacing it as it changes.
+///
+/// [updates] is a factory (not a ready stream) so every provider subscription
+/// gets a fresh stream - the FeatureAccess stream is single-subscription and
+/// reactive (it follows runtime system-info / remote-config changes), so a
+/// re-created provider must be able to listen again without throwing or going
+/// stale.
+typedef ConfigSource<T> = ({T initial, Stream<T> Function() updates});
+
+/// Collects the application while it starts.
+///
+/// Everything long-lived is handed to the builder as it is created, which is
+/// what makes the two decisions - who owns it and who may see it - a property
+/// of the line that creates it rather than of a list somewhere else:
+///
+/// * [keep] - the app owns it and releases it; the widget tree never sees it.
+/// * [share] - the same, and the tree receives it as an inherited value.
+///
+/// Release runs in reverse, so registering after whatever a thing was built
+/// from is enough to release it in the right order - and that ordering now
+/// follows construction by itself, because a thing cannot be shared before it
+/// exists.
+class AppDependenciesBuilder {
+  final _owned = <Object>[];
+  final _providers = <SingleChildWidget>[];
+
+  /// Owns [instance] without showing it to the widget tree. For the few things
+  /// that exist only so they keep running - and so they can be stopped.
+  T keep<T>(T instance) {
+    _owned.add(instance as Object);
+    return instance;
+  }
+
+  /// Owns [instance] and hands it to the widget tree, where screens read it
+  /// with `context.read<T>()`.
+  ///
+  /// The tree receives it by value, so no provider can close it: the app owns
+  /// it for as long as it runs (see `docs/dependency_ownership.md`).
+  T share<T>(T instance) {
+    _providers.add(Provider<T>.value(value: instance));
+    return keep(instance);
+  }
+
+  /// Seals the collected dependencies into the started application.
+  AppDependencies build({
+    required ConfigSource<FeatureAccess> featureAccess,
+    required ConfigSource<ThemeSettings> themeSettings,
+    required SystemInfoRepository systemInfo,
+  }) {
+    return AppDependencies._(
+      owned: List.unmodifiable(_owned),
+      providers: List.unmodifiable(_providers),
+      featureAccess: featureAccess,
+      themeSettings: themeSettings,
+      systemInfo: systemInfo,
+    );
+  }
+}
+
+/// The application, started: what `bootstrap()` hands back.
+///
+/// Two things can be done with it - give the widget tree what it may see
+/// ([providers]) and shut the application down ([dispose]). There is
+/// deliberately no lookup by type: a widget is given its dependencies, it does
+/// not go looking for them, and that rule holds by construction because there
+/// is nothing to call.
+///
+/// Anything needed outside the tree is a named member, so widening that access
+/// is a visible edit with a reason attached, instead of one more lookup lost in
+/// a thousand lines.
+class AppDependencies {
+  AppDependencies._({
+    required List<Object> owned,
+    required List<SingleChildWidget> providers,
+    required this.featureAccess,
+    required this.themeSettings,
+    required this.systemInfo,
+  }) : _owned = owned,
+       providers = providers;
+
+  final List<Object> _owned;
+
+  /// Everything the widget tree may see, ready to be spread into a
+  /// `MultiProvider`.
+  final List<SingleChildWidget> providers;
+
+  /// The configuration the app renders with, as built at startup. A host that
+  /// embeds the app can supply its own sources instead (see `RootApp`).
+  final ConfigSource<FeatureAccess> featureAccess;
+  final ConfigSource<ThemeSettings> themeSettings;
+
+  /// The one member a host needs before the app is mounted: the theme
+  /// configurator asks the real backend what it supports so its preview can
+  /// default to those capabilities.
+  final SystemInfoRepository systemInfo;
+
+  var _released = false;
+
+  /// Whether [dispose] has already run.
+  bool get isReleased => _released;
+
+  /// Releases everything the application owns, in reverse order of creation.
+  ///
+  /// Repeated and concurrent calls do nothing: the first one wins. A failing
+  /// release is logged and does not stop the rest - a half-released app is
+  /// worse than a noisy log, and the caller is usually going away anyway.
+  Future<void> dispose() async {
+    if (_released) return;
+    _released = true;
+
+    for (final instance in _owned.reversed) {
+      if (instance is! Disposable) continue;
+      try {
+        await instance.dispose();
+      } catch (e, s) {
+        _logger.warning('Failed to release ${instance.runtimeType}', e, s);
+      }
+    }
+  }
+}

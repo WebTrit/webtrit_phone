@@ -8,10 +8,11 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/core_support.dart';
+import 'package:webtrit_phone/common/common.dart';
 
 final _logger = Logger('FeatureAccessStreamFactory');
 
-class FeatureAccessStreamFactory {
+class FeatureAccessStreamFactory implements Disposable {
   final AppThemes appThemes;
   final SystemInfoRepository systemInfoRepository;
   final RemoteConfigService remoteConfigService;
@@ -46,5 +47,13 @@ class FeatureAccessStreamFactory {
     final overrides = FeatureOverridesFactory.create(remoteConfig);
 
     return FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources, coreSupport, systemInfo, overrides);
+  }
+
+  /// Releases the remote configuration service this factory was built with:
+  /// nothing else holds it, and its subscription outlives the app otherwise.
+  @override
+  Future<void> dispose() async {
+    final service = remoteConfigService;
+    if (service is Disposable) await (service as Disposable).dispose();
   }
 }

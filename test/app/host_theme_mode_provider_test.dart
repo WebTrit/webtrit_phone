@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:webtrit_phone/app/app_dependencies.dart';
 import 'package:webtrit_phone/main.dart';
 
 /// Counts how many times it was built from scratch, so a test can tell a
