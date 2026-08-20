@@ -26,13 +26,20 @@ Last reviewed: 2026-08-19
   first ring and `early` is the most common state in production, so
   "the contact is talking" is `isEstablished`, never "a dialog exists" -
   every read site goes through it, `pullable` included.
-- `lib/models/presence/contact_presence.dart` - `ContactPresence`
-  (`onCall` / `busy` / `available` / `unavailable`) with
+- `lib/models/presence/contact_presence.dart` - `ContactPresence` with
   `resolve(presenceInfo, dialogInfo)`: the single answer the badge reads for
-  both its fill and its spoken label. `onCall` means a PROVEN call - an
-  established BLF dialog; `busy` means the contact published `busy` or
-  `doNotDisturb`, which outranks reachability (they published something, so
-  they are reachable - the point is to stop the call).
+  its fill, its glyph and its spoken label. Six states, deliberately coarser
+  than the twelve activities a contact can publish - the mark is ~10 dp across
+  and only the simplest silhouette survives there, so the mark speaks in
+  classes while the spoken label still names the exact activity:
+  * `onCall` - a PROVEN call, i.e. an established BLF dialog;
+  * `onCallReported` - the contact publishes `onThePhone` and nothing
+    confirms it (the server sets it from the moment of dialling);
+  * `busy` - published `busy` or `doNotDisturb`; outranks reachability,
+    because the point of the state is to stop the call;
+  * `away` - the whole "elsewhere" family (away, sleeping, permanentAbsence,
+    meal, meeting, appointment, vacation, travel, inTransit);
+  * `available` / `unavailable` - nothing published beyond the flag.
 
 ## Data flow
 
@@ -97,18 +104,26 @@ ring, so half of it on the row background would read as a partial dot.
 
 `SipPresenceIndicator` renders:
 
-- a colored disc - the fill follows `ContactPresence`: `onCall` and `busy`
-  take `busyColor`, `available` takes `availableColor`, `unavailable` takes
-  `unavailableColor`. The division of labour is deliberate: the GLYPH says
-  what is going on, the COLOUR says whether to call now, so a state stays
-  readable for anyone who cannot tell the fills apart (WCAG 1.4.1);
-- an optional activity glyph INSIDE the disc, in `iconColor`. Icon choice:
-  `ContactPresence.resolve` says `onCall` -> `phone_in_talk`, else the icon
-  for `presenceInfo.primaryActivity`. A dialog that is merely ringing does
-  NOT light it (it did until 2026-08-20, which showed contacts as talking
-  from the first ring); the `onThePhone` case of the activity switch is
-  unreachable for the same reason, and stays only because the switch is
-  exhaustive;
+- a coloured disc with a glyph inside. Two axes carry the answer, so neither
+  has to be read alone:
+  * COLOUR - whether to call now: `onCall`/`busy` take `busyColor`,
+    `onCallReported`/`available` take `availableColor`, `away`/`unavailable`
+    take `unavailableColor`;
+  * GLYPH - what is going on, and EVERY state has one: handset (`onCall`,
+    `onCallReported`), dash (`busy`), clock (`away`), tick (`available`),
+    power symbol (`unavailable`). No mark is ever left blank - a circle this size
+    with nothing inside reads as an unfinished element rather than a status -
+    and the glyph is also the second way of telling the states apart for
+    anyone who cannot separate the fills (WCAG 1.4.1);
+  * a note on the two handset states: `onCall` (red) and `onCallReported`
+    (reachable colour) share a glyph and differ only by colour. That is
+    deliberate - the difference is our CONFIDENCE, not something the reader
+    needs to act on, and the reported one keeps exactly the appearance it had
+    before the colour work;
+- that glyph sits INSIDE the disc, in `iconColor`, and comes from the STATE
+  rather than from the activity - so a dialog that is merely ringing draws
+  nothing (it did until 2026-08-20, which showed contacts as talking from the
+  first ring), and the twelve activities collapse into the classes above;
 - the ring around the disc (`Theme.scaffoldBackgroundColor`, which can
   mismatch on surfaces that are not the scaffold background) and the glyph
   are a SHARE of the mark - 0.1 and 0.55 of its side. They have to be:
@@ -122,6 +137,23 @@ append them to the title/subtitle text instead
 dialog swaps the subtitle to remote-party info there - the established one
 specifically, not the first in the list, so a contact who is already talking
 while another call rings in is described by the call they are in.
+
+**One mark, one size, whichever signal it came from.** `AvatarStatusBadge`
+prefers a published status; without one it falls back to SIP registration
+(reachable / not), drawn as the same mark at the same size so a row never
+changes shape depending on which signal arrived. When neither has arrived it
+draws NOTHING. Note that the fallback mark takes the PRESENCE palette
+(`presenceBadge`), not `registeredBadge` - one mark, one palette; the
+`registeredBadge` colours still apply to deployments WITHOUT hybrid presence,
+where the small legacy dot is drawn instead. This is
+not an edge case: measured on the local stand, `GET /api/v1/user/contacts`
+carries no presence at all, the signaling handshake starts with
+`presence_infos: []`, and a relay only follows the publisher's tick (Core's own
+is 10 minutes) - so an empty status is the state of EVERY contact right after
+the app opens. A mark there would say "everyone is offline" on every cold
+start, and would put a same-shaped neighbour next to the marks that do mean
+something, which is what makes those hard to find (search efficiency falls as
+target-distractor similarity rises).
 
 The badge also NAMES its state (`AvatarStatusBadge`): a published activity is
 announced by its own name ("On vacation"), an established call as "On a call",
