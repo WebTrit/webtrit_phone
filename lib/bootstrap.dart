@@ -33,6 +33,7 @@ import 'package:webtrit_phone/features/call/call.dart'
 import 'app/app_dependencies.dart';
 import 'app/firebase_integration.dart';
 import 'app/session/session.dart';
+import 'app/startup_trace.dart';
 import 'firebase_options.dart';
 import 'services/services.dart';
 
@@ -43,35 +44,37 @@ IsolateContext? _isolateContext;
 Future<AppDependencies> bootstrap({
   FirebaseIntegration firebase = const FirebaseIntegrationEnabled(),
   AppPresentationConfigBuilder? configurePresentation,
+  StartupTrace? startupTrace,
 }) async {
   // Everything long-lived is handed to the builder where it is created: `share`
   // for what the screens read, `keep` for what only has to keep running. See
   // AppDependenciesBuilder and `docs/dependency_ownership.md`.
   final deps = AppDependenciesBuilder();
+  final trace = startupTrace ?? StartupTrace.disabled();
 
   // External SDKs (side effects only, don't need registration). The [firebase]
   // strategy decides whether these run: standalone wires Firebase, while an
   // embedder that owns the default Firebase app (e.g. the theme configurator's
   // realtime preview) passes a disabled strategy so the app runs Firebase-free.
-  await firebase.initPlatform();
+  await trace.measure('platform', () => firebase.initPlatform(trace));
 
   // Initialize Components
 
   // App Info & Device Data
 
-  final packageInfo = deps.share(await PackageInfoFactory.init());
-  final appInfo = deps.share(await AppInfo.init(firebase.appIdProvider));
-  final deviceInfo = deps.share(await DeviceInfoFactory.init());
+  final packageInfo = deps.share(await trace.measure('package-info', PackageInfoFactory.init));
+  final appInfo = deps.share(await trace.measure('app-info', () => AppInfo.init(firebase.appIdProvider)));
+  final deviceInfo = deps.share(await trace.measure('device-info', DeviceInfoFactory.init));
 
   // Storages
-  final secureStorage = deps.share(await SecureStorageImpl.init());
+  final secureStorage = deps.share(await trace.measure('secure-storage', SecureStorageImpl.init));
   // final token = secureStorage.readToken();
   // print('bootstrap: secureStorage token: ${token != null ? '***' : 'null'}');
-  final appPreferences = deps.share(await AppPreferencesImpl.init());
+  final appPreferences = deps.share(await trace.measure('app-preferences', AppPreferencesImpl.init));
   deps.share<UserLocalDatasource>(UserLocalDatasourcePrefsImpl(appPreferences));
 
   // Network clients
-  final appCertificates = deps.share(await AppCertificates.init());
+  final appCertificates = deps.share(await trace.measure('app-certificates', AppCertificates.init));
 
   // Built here rather than taken from AppMetadataProvider, which needs
   // featureAccess and is therefore created later; the format is shared.
@@ -96,7 +99,7 @@ Future<AppDependencies> bootstrap({
   final sessionCleanupWorker = SessionCleanupWorker.init(apiClientFactory);
 
   // Core infrastructure
-  final appThemes = deps.keep(await AppThemes.init());
+  final appThemes = deps.keep(await trace.measure('app-themes', AppThemes.init));
 
   // Repositories
   final contactsAgreementStatusRepository = deps.share<ContactsAgreementStatusRepository>(
@@ -129,8 +132,11 @@ Future<AppDependencies> bootstrap({
   // the strategy resolves it (with a local-cache fallback); a disabled strategy
   // just uses the local cache (DefaultRemoteCacheConfigService also implements
   // RemoteConfigService).
-  final remoteCacheConfigService = await DefaultRemoteCacheConfigService.init();
-  final cachedRemoteConfigService = await firebase.remoteConfig(remoteCacheConfigService);
+  final remoteCacheConfigService = await trace.measure('remote-config-cache', DefaultRemoteCacheConfigService.init);
+  final cachedRemoteConfigService = await trace.measure(
+    'remote-config',
+    () => firebase.remoteConfig(remoteCacheConfigService),
+  );
 
   final featureAccessStreamFactory = deps.keep(
     FeatureAccessStreamFactory(
@@ -142,11 +148,11 @@ Future<AppDependencies> bootstrap({
   // Initialize the immutable feature configuration snapshot.
   // This instance serves as the `initialData` for the `StreamProvider`, ensuring the UI
   // has valid feature flags immediately during the first frame.
-  final featureAccess = await featureAccessStreamFactory.getInitialSnapshot();
+  final featureAccess = await trace.measure('feature-access', featureAccessStreamFactory.getInitialSnapshot);
 
   // Utilities - Capturing instances that were previously just `await Class.init()`
-  deps.share(await PushEnvironment.init());
-  final appPath = deps.share(await AppPath.init());
+  deps.share(await trace.measure('push-environment', PushEnvironment.init));
+  final appPath = deps.share(await trace.measure('app-path', AppPath.init));
 
   // Spawn the shared DriftIsolate database server. All isolates (FCM background,
   // WorkManager) connect to this single server via IsolateNameServer, eliminating
@@ -157,25 +163,39 @@ Future<AppDependencies> bootstrap({
     // (see AppDatabaseLifecycleHolder); nothing to register here.
     Logger('bootstrap').warning('DriftIsolate server skipped on web; using lazy WasmDatabase connection');
   } else {
-    final driftIsolate = await IsolateDatabase.spawnServer(directoryPath: appPath.applicationDocumentsPath);
+    final driftIsolate = await trace.measure(
+      'database-isolate',
+      () => IsolateDatabase.spawnServer(directoryPath: appPath.applicationDocumentsPath),
+    );
     // The server isolate and its name-server mapping are process-wide - the
     // background isolates find the database through that mapping - so the
     // registry owns them and widgets only take client connections.
     deps.share(DatabaseServer(driftIsolate));
   }
 
-  deps.share(await _createAppPermissions(featureAccess, contactsAgreementStatusRepository));
-  deps.share(await AppTime.init());
+  deps.share(
+    await trace.measure(
+      'app-permissions',
+      () => _createAppPermissions(featureAccess, contactsAgreementStatusRepository),
+    ),
+  );
+  deps.share(await trace.measure('app-time', AppTime.init));
   final metadataProvider = deps.share<AppMetadataProvider>(
-    await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess),
+    await trace.measure(
+      'app-metadata',
+      () => DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess),
+    ),
   );
 
   // Logger
   deps.share(
-    await AppLogger.init(
-      featureAccess.loggingConfig,
-      LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled),
-      () => metadataProvider.logLabels,
+    await trace.measure(
+      'app-logger',
+      () => AppLogger.init(
+        featureAccess.loggingConfig,
+        LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled),
+        () => metadataProvider.logLabels,
+      ),
     ),
   );
   // File-based log storage uses dart:io and is unavailable on web; fall back to
@@ -208,7 +228,7 @@ Future<AppDependencies> bootstrap({
   // In master mode the instance adds itself as a WidgetsBindingObserver; it is
   // registered below so the registry takes it back off when it is released.
   // Background isolates build their own via initSlave.
-  deps.keep(await AppLifecycle.initMaster());
+  deps.keep(await trace.measure('app-lifecycle', AppLifecycle.initMaster));
 
   // ConnectivityService - owns the `Connectivity()` plugin subscription used by
   // the call subsystem (other features still keep their own direct subscriptions).
@@ -217,7 +237,10 @@ Future<AppDependencies> bootstrap({
   // prevents the listener's first replayed event from being misinterpreted as a
   // real interface change downstream.
   deps.share<ConnectivityService>(
-    await ConnectivityServiceImpl.create(connectivityChecker: _createConnectivityChecker(apiClientFactory)),
+    await trace.measure(
+      'connectivity',
+      () => ConnectivityServiceImpl.create(connectivityChecker: _createConnectivityChecker(apiClientFactory)),
+    ),
   );
 
   // Call-integration handles of the authenticated shell, shared here so widgets
@@ -229,8 +252,8 @@ Future<AppDependencies> bootstrap({
   deps.share(firebase.analytics);
 
   // Final side-effect initializations that rely on the components above
-  await _initCallkeep(featureAccess);
-  await _initWorkManager();
+  await trace.measure('callkeep', () => _initCallkeep(featureAccess));
+  await trace.measure('work-manager', _initWorkManager);
 
   final defaultPresentationConfig = (
     featureAccess: (initial: featureAccess, updates: featureAccessStreamFactory.create),
@@ -257,10 +280,10 @@ class FirebaseIntegrationEnabled implements FirebaseIntegration {
   const FirebaseIntegrationEnabled();
 
   @override
-  Future<void> initPlatform() async {
-    await _initFirebaseApp();
-    await _initFirebaseMessaging();
-    await _initLocalPushs();
+  Future<void> initPlatform(StartupTrace startupTrace) async {
+    await startupTrace.measure('firebase-core', _initFirebaseApp);
+    await startupTrace.measure('firebase-messaging', _initFirebaseMessaging);
+    await startupTrace.measure('local-notifications', _initLocalPushs);
   }
 
   @override

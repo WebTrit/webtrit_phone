@@ -13,6 +13,7 @@ import 'package:provider/single_child_widget.dart';
 
 import 'package:webtrit_phone/app/app.dart';
 import 'package:webtrit_phone/app/app_dependencies.dart';
+import 'package:webtrit_phone/app/startup_trace.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
@@ -24,19 +25,29 @@ import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
   final logger = Logger('run_app');
+  final startupMeasurementsEnabled = !kReleaseMode;
+  final startupTrace = StartupTrace.forBuildMode(releaseMode: kReleaseMode);
 
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      if (startupMeasurementsEnabled) {
+        // The application logger is initialized inside bootstrap, so this
+        // startup contract intentionally writes straight to the console.
+        // ignore: avoid_print
+        print('${StartupTrace.logTag} startup_measurements enabled=true');
+      }
 
       // Android 15+ enforces edge-to-edge, but on older versions the engine leaves the
       // view inset above the navigation bar - the app then paints nothing there and the
       // Android window background (`?android:colorBackground`, a light color) shows
       // through the transparent bar. Requesting the mode explicitly keeps one behavior
       // on every version: the app's own surfaces paint behind the system bars.
-      if (!kIsWeb) await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      if (!kIsWeb) {
+        await startupTrace.measure('system-ui', () => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge));
+      }
 
-      final dependencies = await bootstrap();
+      final dependencies = await startupTrace.measure('bootstrap', () => bootstrap(startupTrace: startupTrace));
 
       if (!kIsWeb && kDebugMode) {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
@@ -57,9 +68,11 @@ void main() {
 
       Logger.root.onRecord.listen(_onRootLogRecord);
 
+      startupTrace.finishAfterFirstFrame();
       runApp(RootApp(dependencies: dependencies));
     },
     (error, stackTrace) {
+      startupTrace.finish();
       logger.severe('runZonedGuarded', error, stackTrace);
       if (!kIsWeb) {
         FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
