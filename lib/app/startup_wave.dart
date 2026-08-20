@@ -6,18 +6,50 @@ import 'package:webtrit_phone/common/common.dart';
 
 final _logger = Logger('StartupWave');
 
+/// An already-started startup operation whose typed result becomes available
+/// after [settleStartupWave] completes successfully.
+class StartupOperation<T extends Object> {
+  StartupOperation(Future<T> future) : _future = future;
+
+  final Future<T> _future;
+
+  late T _value;
+  var _hasValue = false;
+
+  /// The operation result.
+  ///
+  /// Throws if the startup wave has not completed successfully.
+  T get value {
+    if (!_hasValue) {
+      throw StateError('Startup operation has not completed successfully');
+    }
+    return _value;
+  }
+
+  Future<_StartupOutcome> _settle() async {
+    try {
+      final value = await _future;
+      _value = value;
+      _hasValue = true;
+      return _StartupOutcome.value(value);
+    } catch (error, stackTrace) {
+      return _StartupOutcome.error(error, stackTrace);
+    }
+  }
+}
+
 /// Waits for a set of already-started independent startup operations.
 ///
 /// Results retain the declared [operations] order. If any operation fails, all
 /// siblings are allowed to settle first, successful [Disposable] results are
 /// released in reverse declared order, and the first declared error is rethrown
 /// with its original stack trace.
-Future<List<Object>> settleStartupWave(List<Future<Object>> operations) async {
-  final outcomes = await Future.wait(operations.map(_settle), eagerError: false);
+Future<void> settleStartupWave(List<StartupOperation<Object>> operations) async {
+  final outcomes = await Future.wait(operations.map((operation) => operation._settle()), eagerError: false);
   final failed = outcomes.where((outcome) => outcome.error != null).firstOrNull;
 
   if (failed == null) {
-    return [for (final outcome in outcomes) outcome.value!];
+    return;
   }
 
   for (final outcome in outcomes.reversed) {
@@ -32,14 +64,6 @@ Future<List<Object>> settleStartupWave(List<Future<Object>> operations) async {
   }
 
   Error.throwWithStackTrace(failed.error!, failed.stackTrace!);
-}
-
-Future<_StartupOutcome> _settle(Future<Object> operation) async {
-  try {
-    return _StartupOutcome.value(await operation);
-  } catch (error, stackTrace) {
-    return _StartupOutcome.error(error, stackTrace);
-  }
 }
 
 class _StartupOutcome {

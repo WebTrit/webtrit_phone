@@ -23,17 +23,30 @@ void main() {
   test('returns successful values in declared order', () async {
     final first = Completer<Object>();
     final second = Completer<Object>();
-    final result = settleStartupWave([first.future, second.future]);
+    final firstOperation = StartupOperation(first.future);
+    final secondOperation = StartupOperation(second.future);
+    final result = settleStartupWave([firstOperation, secondOperation]);
 
     second.complete('second');
     first.complete('first');
 
-    await expectLater(result, completion(['first', 'second']));
+    await result;
+    expect(firstOperation.value, 'first');
+    expect(secondOperation.value, 'second');
+  });
+
+  test('does not expose a value before the wave succeeds', () {
+    final operation = StartupOperation(Future.value('value'));
+
+    expect(() => operation.value, throwsStateError);
   });
 
   test('waits for every sibling before reporting an error', () async {
     final slow = Completer<Object>();
-    final result = settleStartupWave([Future<Object>.error(StateError('failed')), slow.future]);
+    final result = settleStartupWave([
+      StartupOperation(Future<Object>.error(StateError('failed'))),
+      StartupOperation(slow.future),
+    ]);
     var completed = false;
     result.whenComplete(() => completed = true).ignore();
 
@@ -47,7 +60,7 @@ void main() {
   test('reports the first declared error rather than the first completed error', () async {
     final first = Completer<Object>();
     final second = Completer<Object>();
-    final result = settleStartupWave([first.future, second.future]);
+    final result = settleStartupWave([StartupOperation(first.future), StartupOperation(second.future)]);
 
     second.completeError(ArgumentError('second'));
     first.completeError(StateError('first'));
@@ -60,9 +73,9 @@ void main() {
 
     await expectLater(
       settleStartupWave([
-        Future.value(_Recorded('first', released)),
-        Future<Object>.error(StateError('failed')),
-        Future.value(_Recorded('third', released)),
+        StartupOperation(Future.value(_Recorded('first', released))),
+        StartupOperation(Future<Object>.error(StateError('failed'))),
+        StartupOperation(Future.value(_Recorded('third', released))),
       ]),
       throwsStateError,
     );
@@ -75,9 +88,9 @@ void main() {
 
     await expectLater(
       settleStartupWave([
-        Future.value(_Recorded('first', released)),
-        Future<Object>.error(ArgumentError('startup failed')),
-        Future.value(_Recorded('third', released, fail: true)),
+        StartupOperation(Future.value(_Recorded('first', released))),
+        StartupOperation(Future<Object>.error(ArgumentError('startup failed'))),
+        StartupOperation(Future.value(_Recorded('third', released, fail: true))),
       ]),
       throwsA(isA<ArgumentError>()),
     );

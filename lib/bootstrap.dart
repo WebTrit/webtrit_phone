@@ -301,26 +301,37 @@ typedef _BootstrapRoots = ({
 });
 
 Future<_BootstrapRoots> _initializeRoots({required FirebaseIntegration firebase, required StartupTrace trace}) async {
-  final values = await settleStartupWave([
-    trace.measure('package-info', PackageInfoFactory.init),
-    trace.measure('app-info', () => AppInfo.init(firebase.appIdProvider)),
-    trace.measure('device-info', DeviceInfoFactory.init),
-    trace.measure('secure-storage', SecureStorageImpl.init),
-    trace.measure('app-preferences', AppPreferencesImpl.init),
-    trace.measure('app-certificates', AppCertificates.init),
-    trace.measure('app-themes', AppThemes.init),
+  final packageInfo = StartupOperation(trace.measure('package-info', PackageInfoFactory.init));
+  final appInfo = StartupOperation(trace.measure('app-info', () => AppInfo.init(firebase.appIdProvider)));
+  final deviceInfo = StartupOperation(trace.measure('device-info', DeviceInfoFactory.init));
+  final secureStorage = StartupOperation(trace.measure('secure-storage', SecureStorageImpl.init));
+  final appPreferences = StartupOperation(trace.measure('app-preferences', AppPreferencesImpl.init));
+  final appCertificates = StartupOperation(trace.measure('app-certificates', AppCertificates.init));
+  final appThemes = StartupOperation(trace.measure('app-themes', AppThemes.init));
+  final remoteCacheConfigService = StartupOperation(
     trace.measure('remote-config-cache', DefaultRemoteCacheConfigService.init),
+  );
+
+  await settleStartupWave([
+    packageInfo,
+    appInfo,
+    deviceInfo,
+    secureStorage,
+    appPreferences,
+    appCertificates,
+    appThemes,
+    remoteCacheConfigService,
   ]);
 
   return (
-    packageInfo: values[0] as PackageInfo,
-    appInfo: values[1] as AppInfo,
-    deviceInfo: values[2] as DeviceInfo,
-    secureStorage: values[3] as SecureStorage,
-    appPreferences: values[4] as AppPreferences,
-    appCertificates: values[5] as AppCertificates,
-    appThemes: values[6] as AppThemes,
-    remoteCacheConfigService: values[7] as DefaultRemoteCacheConfigService,
+    packageInfo: packageInfo.value,
+    appInfo: appInfo.value,
+    deviceInfo: deviceInfo.value,
+    secureStorage: secureStorage.value,
+    appPreferences: appPreferences.value,
+    appCertificates: appCertificates.value,
+    appThemes: appThemes.value,
+    remoteCacheConfigService: remoteCacheConfigService.value,
   );
 }
 
