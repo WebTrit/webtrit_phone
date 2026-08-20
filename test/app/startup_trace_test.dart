@@ -7,7 +7,8 @@ import 'package:webtrit_phone/app/startup_trace.dart';
 
 void main() {
   test('measure preserves a successful result and records the stage', () async {
-    final trace = StartupTrace();
+    final output = <String>[];
+    final trace = StartupTrace(output: output.add);
 
     final result = await trace.measure('stage', () => 42);
 
@@ -15,6 +16,7 @@ void main() {
     expect(trace.measurements, hasLength(1));
     expect(trace.measurements.single.name, 'stage');
     expect(trace.measurements.single.succeeded, isTrue);
+    expect(output.single, startsWith('[Startup] startup_stage name=stage duration_ms='));
   });
 
   test('measure preserves an error and records the failed stage', () async {
@@ -34,6 +36,18 @@ void main() {
 
     expect(await trace.measure('stage', () => completer.future), 42);
     expect(trace.measurements, isEmpty);
+  });
+
+  test('finish writes a tagged total and stage summary', () async {
+    final output = <String>[];
+    final trace = StartupTrace(output: output.add);
+
+    await trace.measure('stage', () async {});
+    trace.finish();
+
+    expect(output, hasLength(2));
+    expect(output.last, startsWith('[Startup] startup_complete total_ms='));
+    expect(output.last, contains('stages=[stage:'));
   });
 
   testWidgets('finishes after the first Flutter frame', (tester) async {

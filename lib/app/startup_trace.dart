@@ -18,14 +18,19 @@ class StartupMeasurement {
 /// first frame callback. [measure] preserves the wrapped operation's result and
 /// error semantics; instrumentation must never change startup behavior.
 class StartupTrace {
-  StartupTrace({String timelineName = 'app-startup'})
+  StartupTrace({String timelineName = 'app-startup', void Function(String message)? output})
     : _stopwatch = Stopwatch()..start(),
-      _timeline = developer.TimelineTask(filterKey: 'startup')..start(timelineName);
+      _timeline = developer.TimelineTask(filterKey: 'startup')..start(timelineName),
+      _output = output ?? _printToConsole;
 
-  StartupTrace.disabled() : _stopwatch = null, _timeline = null;
+  StartupTrace.disabled() : _stopwatch = null, _timeline = null, _output = null;
+
+  /// Stable prefix for filtering startup measurements in console output.
+  static const logTag = '[Startup]';
 
   final Stopwatch? _stopwatch;
   final developer.TimelineTask? _timeline;
+  final void Function(String message)? _output;
   final _measurements = <StartupMeasurement>[];
 
   bool _finished = false;
@@ -52,10 +57,7 @@ class StartupTrace {
       final elapsed = stopwatch.elapsed - startedAt;
       timeline.finish(arguments: {'duration_ms': _milliseconds(elapsed), 'succeeded': succeeded});
       _measurements.add(StartupMeasurement(name: name, elapsed: elapsed, succeeded: succeeded));
-      developer.log(
-        'startup_stage name=$name duration_ms=${_milliseconds(elapsed)} succeeded=$succeeded',
-        name: 'Startup',
-      );
+      _output?.call('$logTag startup_stage name=$name duration_ms=${_milliseconds(elapsed)} succeeded=$succeeded');
     }
   }
 
@@ -76,8 +78,15 @@ class StartupTrace {
     final stages = _measurements
         .map((it) => '${it.name}:${_milliseconds(it.elapsed)}:${it.succeeded ? 'ok' : 'error'}')
         .join(',');
-    developer.log('startup_complete total_ms=${_milliseconds(stopwatch.elapsed)} stages=[$stages]', name: 'Startup');
+    _output?.call('$logTag startup_complete total_ms=${_milliseconds(stopwatch.elapsed)} stages=[$stages]');
   }
 
   static String _milliseconds(Duration duration) => (duration.inMicroseconds / 1000).toStringAsFixed(3);
+
+  static void _printToConsole(String message) {
+    // Startup measurements happen before the application logger is wired and
+    // must remain visible in profile/release console output.
+    // ignore: avoid_print
+    print(message);
+  }
 }

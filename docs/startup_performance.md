@@ -11,12 +11,23 @@ the home screen.
 ## Recorded output
 
 Every stage is written to the Dart timeline under the `startup` filter key and
-to the platform log in this stable format:
+to the Flutter console with the stable `[Startup]` prefix:
 
 ```text
-startup_stage name=remote-config duration_ms=842.315 succeeded=true
-startup_complete total_ms=2310.774 stages=[firebase-core:120.301:ok,...]
+[Startup] startup_stage name=remote-config duration_ms=842.315 succeeded=true
+[Startup] startup_complete total_ms=2310.774 stages=[firebase-core:120.301:ok,...]
 ```
+
+Use `[Startup]` as the console filter. On Android the platform tag remains
+`flutter`, so the equivalent command is:
+
+```sh
+adb logcat -s flutter:I | grep '\[Startup\]'
+```
+
+Startup measurements are enabled in debug and profile builds. Release builds
+use a disabled trace: no stopwatch, timeline events, retained measurements or
+console output are created.
 
 The stages separate Firebase core, messaging and local notifications from the
 local-data, theme, Remote Config, database, logging, connectivity and callkeep
