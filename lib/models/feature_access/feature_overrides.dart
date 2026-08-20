@@ -33,6 +33,32 @@ class FeatureOverrides extends Equatable {
   final bool? remoteLoggingEnabled;
   final bool? isLogAnonymizationEnabled;
 
+  FeatureOverrides copyWith({
+    bool? isVideoCallEnabled,
+    bool? isSystemNotificationsEnabled,
+    bool? hybridPresenceSupport,
+    bool? isVoicemailEnabled,
+    bool? isCallHistoryEnabled,
+    CallPullVideoStrategy? callPullVideoStrategy,
+    Duration? monitorCheckInterval,
+    Level? logLevel,
+    bool? remoteLoggingEnabled,
+    bool? isLogAnonymizationEnabled,
+  }) {
+    return FeatureOverrides(
+      isVideoCallEnabled: isVideoCallEnabled ?? this.isVideoCallEnabled,
+      isSystemNotificationsEnabled: isSystemNotificationsEnabled ?? this.isSystemNotificationsEnabled,
+      hybridPresenceSupport: hybridPresenceSupport ?? this.hybridPresenceSupport,
+      isVoicemailEnabled: isVoicemailEnabled ?? this.isVoicemailEnabled,
+      isCallHistoryEnabled: isCallHistoryEnabled ?? this.isCallHistoryEnabled,
+      callPullVideoStrategy: callPullVideoStrategy ?? this.callPullVideoStrategy,
+      monitorCheckInterval: monitorCheckInterval ?? this.monitorCheckInterval,
+      logLevel: logLevel ?? this.logLevel,
+      remoteLoggingEnabled: remoteLoggingEnabled ?? this.remoteLoggingEnabled,
+      isLogAnonymizationEnabled: isLogAnonymizationEnabled ?? this.isLogAnonymizationEnabled,
+    );
+  }
+
   @override
   List<Object?> get props => [
     isVideoCallEnabled,

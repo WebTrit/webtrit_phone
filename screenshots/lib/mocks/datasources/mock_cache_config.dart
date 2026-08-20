@@ -2,6 +2,9 @@ import 'package:webtrit_phone/services/services.dart';
 
 class MockCacheConfigService implements RemoteCacheConfigService {
   @override
+  Map<String, Object?> getAll() => const {};
+
+  @override
   Future<void> cacheBool(String key, bool value) {
     return Future.value();
   }

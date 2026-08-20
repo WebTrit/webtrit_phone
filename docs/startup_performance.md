@@ -59,6 +59,21 @@ theme font preloading has a three-second budget). This affects failed startup
 latency only; the successful path pays the maximum sibling duration rather than
 their sum.
 
+Remote Config uses the SDK's already activated values and the local cache for
+the first frame. Its network configuration and fetch are scheduled after that
+frame, and successful updates continue through the existing live-update stream.
+This keeps the SDK's 30-second fetch timeout off the startup critical path.
+The web background operation remains bounded to five seconds because the web
+SDK does not consistently honor its configured fetch timeout.
+On a fresh install there may be no activated or locally cached value yet. The
+first frame then uses app-config feature defaults and the live provider applies
+the fetched values afterward, which can reshape feature-driven UI. Services
+created once during bootstrap, including remote logging, keep that startup
+configuration until the next launch.
+Privacy-sensitive logging changes are one-way during a running session: a
+refresh may disable remote logging or enable anonymization, but the less
+restrictive direction takes effect only on the next launch.
+
 ## Baseline procedure
 
 Use a profile build; debug timings are not representative and release builds

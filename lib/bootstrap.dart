@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:logging/logging.dart';
@@ -150,10 +150,10 @@ Future<AppDependencies> _bootstrap({
   // just uses the local cache (DefaultRemoteCacheConfigService also implements
   // RemoteConfigService).
   final remoteCacheConfigService = roots.remoteCacheConfigService;
-  final cachedRemoteConfigService = await trace.measure(
-    'remote-config',
-    () => firebase.remoteConfig(remoteCacheConfigService),
+  final cachedRemoteConfigService = deps.share<RemoteConfigService>(
+    await trace.measure('remote-config', () => firebase.remoteConfig(remoteCacheConfigService)),
   );
+  _refreshRemoteConfigAfterFirstFrame(cachedRemoteConfigService);
 
   final featureAccessStreamFactory = deps.keep(
     FeatureAccessStreamFactory(
@@ -253,10 +253,19 @@ Future<AppDependencies> _bootstrap({
   // awaited `checkConnectivity()` read before any consumer subscribes. This
   // prevents the listener's first replayed event from being misinterpreted as a
   // real interface change downstream.
-  deps.share<ConnectivityService>(
+  final connectivityService = deps.share<ConnectivityService>(
     await trace.measure(
       'connectivity',
       () => ConnectivityServiceImpl.create(connectivityChecker: _createConnectivityChecker(apiClientFactory)),
+    ),
+  );
+  // Remote Config refresh is deliberately deferred until after the first frame.
+  // Keep recovery process-wide so an offline launch retries on reconnection even
+  // while the user is still on the login route (before MainShellServices exists).
+  deps.keep(
+    ConnectivityLifecycleService(
+      connectivity: connectivityService,
+      registrations: [ConnectivityRecoveryRegistration.refreshable(cachedRemoteConfigService)],
     ),
   );
 
@@ -287,6 +296,10 @@ Future<AppDependencies> _bootstrap({
     themeSettings: presentationConfig.themeSettings,
     systemInfo: systemInfoRepository,
   );
+}
+
+void _refreshRemoteConfigAfterFirstFrame(RemoteConfigService remoteConfigService) {
+  WidgetsBinding.instance.addPostFrameCallback((_) => unawaited(Future<void>(remoteConfigService.refresh)));
 }
 
 typedef _BootstrapRoots = ({

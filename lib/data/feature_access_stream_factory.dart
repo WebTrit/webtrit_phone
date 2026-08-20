@@ -8,11 +8,10 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/core_support.dart';
-import 'package:webtrit_phone/common/common.dart';
 
 final _logger = Logger('FeatureAccessStreamFactory');
 
-class FeatureAccessStreamFactory implements Disposable {
+class FeatureAccessStreamFactory {
   final AppThemes appThemes;
   final SystemInfoRepository systemInfoRepository;
   final RemoteConfigService remoteConfigService;
@@ -21,7 +20,13 @@ class FeatureAccessStreamFactory implements Disposable {
     required this.appThemes,
     required this.systemInfoRepository,
     required this.remoteConfigService,
-  });
+  }) {
+    _startupOverrides = FeatureOverridesFactory.create(remoteConfigService.startupSnapshot);
+    _startupAnonymizationEnabled = LoggingMapper.map(appThemes.appConfig, _startupOverrides).anonymizationEnabled;
+  }
+
+  late final FeatureOverrides _startupOverrides;
+  late final bool _startupAnonymizationEnabled;
 
   Future<FeatureAccess> getInitialSnapshot() async {
     final systemInfo = await systemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly);
@@ -44,16 +49,22 @@ class FeatureAccessStreamFactory implements Disposable {
 
   FeatureAccess _build(WebtritSystemInfo? systemInfo, RemoteConfigSnapshot remoteConfig) {
     final coreSupport = CoreSupportFactory.create(systemInfo);
-    final overrides = FeatureOverridesFactory.create(remoteConfig);
+    final overrides = _applySessionPrivacyPolicy(FeatureOverridesFactory.create(remoteConfig));
 
     return FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources, coreSupport, systemInfo, overrides);
   }
 
-  /// Releases the remote configuration service this factory was built with:
-  /// nothing else holds it, and its subscription outlives the app otherwise.
-  @override
-  Future<void> dispose() async {
-    final service = remoteConfigService;
-    if (service is Disposable) await (service as Disposable).dispose();
+  FeatureOverrides _applySessionPrivacyPolicy(FeatureOverrides current) {
+    final remoteLoggingEnabled = _startupOverrides.remoteLoggingEnabled == true
+        ? current.remoteLoggingEnabled ?? false
+        : false;
+    final isLogAnonymizationEnabled = _startupAnonymizationEnabled && current.isLogAnonymizationEnabled == false
+        ? true
+        : current.isLogAnonymizationEnabled;
+
+    return current.copyWith(
+      remoteLoggingEnabled: remoteLoggingEnabled,
+      isLogAnonymizationEnabled: isLogAnonymizationEnabled,
+    );
   }
 }

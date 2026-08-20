@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:async/async.dart';
+import 'package:webtrit_appearance_theme/models/models.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -44,6 +45,7 @@ void main() {
     when(() => mockAppThemes.embeddedResources).thenReturn([mockTermsResource]);
 
     when(() => mockRemoteConfigService.snapshot).thenReturn(mockSnapshot);
+    when(() => mockRemoteConfigService.startupSnapshot).thenReturn(mockSnapshot);
     when(() => mockRemoteConfigService.onConfigUpdated).thenAnswer((_) => remoteConfigController.stream);
     when(() => mockSnapshot.getBool(any())).thenReturn(null);
 
@@ -283,7 +285,7 @@ void main() {
     await queue.cancel();
   });
 
-  test('create() propagates remoteLoggingEnabled from RemoteConfig', () async {
+  test('create() does not enable remote logging during a running session', () async {
     final cachedSystemInfo = createMockSystemInfo();
     final newRemoteSnapshot = MockRemoteConfigSnapshot();
 
@@ -303,10 +305,100 @@ void main() {
 
     final secondEmission = await queue.next;
 
-    expect(secondEmission.overrides.remoteLoggingEnabled, isTrue);
-    expect(secondEmission.loggingConfig.remoteLoggingEnabled, isTrue);
+    expect(secondEmission.overrides.remoteLoggingEnabled, isFalse);
+    expect(secondEmission.loggingConfig.remoteLoggingEnabled, isFalse);
 
     await queue.cancel();
+  });
+
+  test('create() can disable remote logging during a running session', () async {
+    final cachedSystemInfo = createMockSystemInfo();
+    final initialSnapshot = MockRemoteConfigSnapshot();
+    final newRemoteSnapshot = MockRemoteConfigSnapshot();
+
+    when(() => initialSnapshot.getBool(any())).thenReturn(null);
+    when(() => initialSnapshot.getBool('firebaseRemoteLogging')).thenReturn(true);
+    when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
+    when(() => newRemoteSnapshot.getBool('firebaseRemoteLogging')).thenReturn(false);
+    when(() => mockRemoteConfigService.snapshot).thenReturn(initialSnapshot);
+    when(() => mockRemoteConfigService.startupSnapshot).thenReturn(initialSnapshot);
+    when(
+      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+    ).thenAnswer((_) async => cachedSystemInfo);
+
+    final sessionFactory = FeatureAccessStreamFactory(
+      appThemes: mockAppThemes,
+      systemInfoRepository: mockSystemInfoRepository,
+      remoteConfigService: mockRemoteConfigService,
+    );
+    final queue = StreamQueue(sessionFactory.create());
+    expect((await queue.next).loggingConfig.remoteLoggingEnabled, isTrue);
+
+    remoteConfigController.add(newRemoteSnapshot);
+
+    expect((await queue.next).loggingConfig.remoteLoggingEnabled, isFalse);
+    await queue.cancel();
+  });
+
+  test('create() does not weaken effective startup anonymization', () async {
+    final cachedSystemInfo = createMockSystemInfo();
+    final newRemoteSnapshot = MockRemoteConfigSnapshot();
+
+    when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
+    when(() => newRemoteSnapshot.getBool('feature_log_anonymization_enabled')).thenReturn(false);
+    when(
+      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+    ).thenAnswer((_) async => cachedSystemInfo);
+
+    final queue = StreamQueue(factory.create());
+    expect((await queue.next).loggingConfig.anonymizationEnabled, isTrue);
+
+    remoteConfigController.add(newRemoteSnapshot);
+
+    expect((await queue.next).loggingConfig.anonymizationEnabled, isTrue);
+    await queue.cancel();
+  });
+
+  test('create() does not disable anonymization enabled at startup', () async {
+    final cachedSystemInfo = createMockSystemInfo();
+    final initialSnapshot = MockRemoteConfigSnapshot();
+    final newRemoteSnapshot = MockRemoteConfigSnapshot();
+    when(() => initialSnapshot.getBool(any())).thenReturn(null);
+    when(() => initialSnapshot.getBool('feature_log_anonymization_enabled')).thenReturn(true);
+    when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
+    when(() => newRemoteSnapshot.getBool('feature_log_anonymization_enabled')).thenReturn(false);
+    when(() => mockRemoteConfigService.snapshot).thenReturn(initialSnapshot);
+    when(() => mockRemoteConfigService.startupSnapshot).thenReturn(initialSnapshot);
+    when(
+      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+    ).thenAnswer((_) async => cachedSystemInfo);
+
+    final sessionFactory = FeatureAccessStreamFactory(
+      appThemes: mockAppThemes,
+      systemInfoRepository: mockSystemInfoRepository,
+      remoteConfigService: mockRemoteConfigService,
+    );
+    final queue = StreamQueue(sessionFactory.create());
+    expect((await queue.next).loggingConfig.anonymizationEnabled, isTrue);
+
+    remoteConfigController.add(newRemoteSnapshot);
+
+    expect((await queue.next).loggingConfig.anonymizationEnabled, isTrue);
+    await queue.cancel();
+  });
+
+  test('missing anonymization override preserves the app-config value', () async {
+    final cachedSystemInfo = createMockSystemInfo();
+    final appConfig = mockAppThemes.appConfig;
+    when(() => appConfig.supported).thenReturn([const SupportedFeature.loggingConfig(anonymizationEnabled: false)]);
+    when(
+      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
+    ).thenAnswer((_) async => cachedSystemInfo);
+
+    final snapshot = await factory.getInitialSnapshot();
+
+    expect(snapshot.overrides.isLogAnonymizationEnabled, isNull);
+    expect(snapshot.loggingConfig.anonymizationEnabled, isFalse);
   });
 
   test('create() defaults remoteLoggingEnabled to false when not set in RemoteConfig', () async {
@@ -328,7 +420,7 @@ void main() {
 
     final secondEmission = await queue.next;
 
-    expect(secondEmission.overrides.remoteLoggingEnabled, isNull);
+    expect(secondEmission.overrides.remoteLoggingEnabled, isFalse);
     expect(secondEmission.loggingConfig.remoteLoggingEnabled, isFalse);
 
     await queue.cancel();
