@@ -9,21 +9,22 @@ import 'presence_info.dart';
 /// published presence and the switch's view of their calls - and each read
 /// site used to combine them for itself, which is how a ringing call ended up
 /// announced as a conversation. Resolve it once here instead.
-///
-/// Only the status mark reads this today, and only to decide whether to show
-/// the in-call sign: the colour deliberately still follows plain reachability
-/// (see `SipPresenceIndicator`), because giving "on a call" a colour of its
-/// own is a product decision that is not taken yet. [available] and
-/// [unavailable] are therefore distinguished by no caller yet - they are here
-/// because the states are what the answer means, not because something reads
-/// them.
 enum ContactPresence {
-  /// Talking right now: the switch reports an established call, or the
-  /// contact publishes the on-the-phone activity (the server adds it while
-  /// they have active calls, so it arrives even without BLF).
+  /// In a call right now, and proven: the switch reports an established
+  /// dialog.
+  ///
+  /// The contact's own `onThePhone` activity deliberately does NOT land here.
+  /// The server publishes it from the moment of dialling, so on that path a
+  /// ringing phone is indistinguishable from a conversation; it still gets
+  /// its glyph, but it must not paint a contact as uncallable over a call
+  /// that may never be answered.
   onCall,
 
-  /// Reachable and not on a call.
+  /// Reachable, but asking not to be called: publishing "busy" or "do not
+  /// disturb".
+  busy,
+
+  /// Reachable, nothing in the way.
   available,
 
   /// Not reachable, or nothing is known about them.
@@ -31,7 +32,15 @@ enum ContactPresence {
 
   static ContactPresence resolve({required List<PresenceInfo> presenceInfo, required List<DialogInfo> dialogInfo}) {
     if (dialogInfo.established != null) return ContactPresence.onCall;
-    if (presenceInfo.primaryActivity == PresenceActivity.onThePhone) return ContactPresence.onCall;
+
+    // Asking not to be called outranks reachability: a contact on "do not
+    // disturb" is reachable by definition - they just published something -
+    // and the point of the state is to stop the call, not to describe the
+    // connection.
+    final activity = presenceInfo.primaryActivity;
+    if (activity == PresenceActivity.doNotDisturb || activity == PresenceActivity.busy) {
+      return ContactPresence.busy;
+    }
 
     return presenceInfo.anyAvailable ? ContactPresence.available : ContactPresence.unavailable;
   }

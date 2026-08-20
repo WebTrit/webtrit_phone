@@ -77,6 +77,7 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
     return PresenceBadgeStyle(
       availableColor: c.availableColor?.toColor(),
       unavailableColor: c.unavailableColor?.toColor(),
+      busyColor: c.busyColor?.toColor(),
       iconColor: c.iconColor?.toColor(),
       sizeFactor: c.sizeFactor,
     );

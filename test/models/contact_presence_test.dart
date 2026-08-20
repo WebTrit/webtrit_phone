@@ -44,7 +44,20 @@ void main() {
       );
     });
 
-    test('when they publish the on-the-phone activity, with no call reported', () {
+    test('even when their published status says they are unreachable', () {
+      expect(
+        ContactPresence.resolve(
+          presenceInfo: [_presence(available: false)],
+          dialogInfo: [_dialog(DialogState.confirmed)],
+        ),
+        ContactPresence.onCall,
+      );
+    });
+
+    test('NOT when the only sign is their own on-the-phone activity', () {
+      // The server publishes that activity from the moment of dialling, so it
+      // cannot tell a ringing phone from a conversation - it must not reach
+      // the state that paints a contact as uncallable.
       expect(
         ContactPresence.resolve(
           presenceInfo: [
@@ -52,7 +65,47 @@ void main() {
           ],
           dialogInfo: const [],
         ),
-        ContactPresence.onCall,
+        ContactPresence.available,
+      );
+    });
+  });
+
+  group('a contact asks not to be called', () {
+    for (final activity in [PresenceActivity.doNotDisturb, PresenceActivity.busy]) {
+      test('${activity.name} makes them busy', () {
+        expect(
+          ContactPresence.resolve(
+            presenceInfo: [
+              _presence(available: true, activities: [activity]),
+            ],
+            dialogInfo: const [],
+          ),
+          ContactPresence.busy,
+        );
+      });
+    }
+
+    test('and stays busy even when they publish themselves as unreachable', () {
+      expect(
+        ContactPresence.resolve(
+          presenceInfo: [
+            _presence(available: false, activities: const [PresenceActivity.doNotDisturb]),
+          ],
+          dialogInfo: const [],
+        ),
+        ContactPresence.busy,
+      );
+    });
+
+    test('while an activity that is merely elsewhere leaves them available', () {
+      expect(
+        ContactPresence.resolve(
+          presenceInfo: [
+            _presence(available: true, activities: const [PresenceActivity.vacation]),
+          ],
+          dialogInfo: const [],
+        ),
+        ContactPresence.available,
       );
     });
   });

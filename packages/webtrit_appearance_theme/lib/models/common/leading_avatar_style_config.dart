@@ -224,8 +224,12 @@ class PresenceBadgeStyleConfig with _$PresenceBadgeStyleConfig {
     /// Color used when presence is "available" (e.g., online, idle).
     this.availableColor,
 
-    /// Color used when presence is "unavailable" (e.g., offline, busy).
+    /// Color used when presence is "unavailable" (e.g., offline).
     this.unavailableColor,
+
+    /// Color used when the contact should not be called right now - in an
+    /// established call, or publishing "busy" / "do not disturb".
+    this.busyColor,
 
     /// Color of the activity glyph drawn inside the badge; it has to read on
     /// top of the badge fill.
@@ -239,9 +243,14 @@ class PresenceBadgeStyleConfig with _$PresenceBadgeStyleConfig {
   @override
   final String? availableColor;
 
-  /// Color used when presence is "unavailable" (e.g., offline, busy).
+  /// Color used when presence is "unavailable" (e.g., offline).
   @override
   final String? unavailableColor;
+
+  /// Color used when the contact should not be called right now - in an
+  /// established call, or publishing "busy" / "do not disturb".
+  @override
+  final String? busyColor;
 
   /// Color of the activity glyph drawn inside the badge; it has to read on
   /// top of the badge fill.

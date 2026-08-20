@@ -1884,6 +1884,15 @@ class AppLocalizationsTh extends AppLocalizations {
   String get presence_activity_vacation_name => 'ลาพักร้อน';
 
   @override
+  String get presence_badge_state_available => 'ว่าง';
+
+  @override
+  String get presence_badge_state_onCall => 'อยู่ในสาย';
+
+  @override
+  String get presence_badge_state_unavailable => 'ไม่ว่าง';
+
+  @override
   String get presence_infoView_activity => 'กิจกรรม:';
 
   @override
