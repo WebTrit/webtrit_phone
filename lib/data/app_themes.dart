@@ -4,16 +4,11 @@ import 'package:flutter/services.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
-final Logger _logger = Logger('AppThemes');
-
 class AppThemes {
-  static const _fontPreloadTimeout = Duration(seconds: 3);
-
   static Future<AppThemes> init() async {
     final themeColorSchemeLightConfigJson = await _getJson(
       Assets.themes.originalColorSchemeLightConfig,
@@ -80,43 +75,12 @@ class AppThemes {
 
     final themes = [AppTheme(settings: settings)];
 
-    await _preloadFonts(themeWidgetLightConfig, themeWidgetDarkConfig);
+    // Fonts are selected and bundled by webtrit_phone_tools during the
+    // white-label build. Runtime fetching would reintroduce startup network
+    // work and hide a broken generated asset, so production builds fail fast.
+    GoogleFonts.config.allowRuntimeFetching = false;
 
     return AppThemes._(themes, appConfig, embeddedResources);
-  }
-
-  // First-party Montserrat variants are bundled under assets/fonts, so this
-  // preload resolves from the asset manifest without a network request. Keep
-  // runtime fetching enabled for customer themes that use a different Google
-  // Font family; those families retain the bounded fallback behavior.
-  static Future<void> _preloadFonts(
-    ThemeWidgetConfig lightConfig,
-    ThemeWidgetConfig darkConfig,
-  ) async {
-    GoogleFonts.config.allowRuntimeFetching = true;
-
-    try {
-      final families = <String>{
-        if (lightConfig.fonts.fontFamily != null) lightConfig.fonts.fontFamily!,
-        if (darkConfig.fonts.fontFamily != null) darkConfig.fonts.fontFamily!,
-      }.toList();
-
-      if (families.isEmpty) return;
-
-      await GoogleFonts.pendingFonts([
-        for (final font in families) GoogleFonts.getFont(font),
-      ]).timeout(
-        _fontPreloadTimeout,
-        onTimeout: () {
-          _logger.warning(
-            'Preloading Google Fonts timed out ($_fontPreloadTimeout)',
-          );
-          return const [];
-        },
-      );
-    } catch (e, st) {
-      _logger.finest('Failed to preload Google Fonts: $e\n$st');
-    }
   }
 
   static Future<dynamic> _getJson(String path) async {

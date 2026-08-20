@@ -204,10 +204,7 @@ flutter:
     - assets/login/
     - assets/ringtones/
     - assets/themes/
-    - assets/fonts/Montserrat/Montserrat-Bold.ttf
-    - assets/fonts/Montserrat/Montserrat-Medium.ttf
-    - assets/fonts/Montserrat/Montserrat-Regular.ttf
-    - assets/fonts/Montserrat/Montserrat-SemiBold.ttf
+    - assets/fonts/
     - assets/certificates/
 
 flutter_gen:
