@@ -14,13 +14,13 @@ class StartupOperation<T extends Object> {
   final Future<T> _future;
 
   late T _value;
-  var _hasValue = false;
+  var _available = false;
 
   /// The operation result.
   ///
   /// Throws if the startup wave has not completed successfully.
   T get value {
-    if (!_hasValue) {
+    if (!_available) {
       throw StateError('Startup operation has not completed successfully');
     }
     return _value;
@@ -30,25 +30,30 @@ class StartupOperation<T extends Object> {
     try {
       final value = await _future;
       _value = value;
-      _hasValue = true;
       return _StartupOutcome.value(value);
     } catch (error, stackTrace) {
       return _StartupOutcome.error(error, stackTrace);
     }
   }
+
+  void _completeWave() => _available = true;
 }
 
 /// Waits for a set of already-started independent startup operations.
 ///
-/// Results retain the declared [operations] order. If any operation fails, all
-/// siblings are allowed to settle first, successful [Disposable] results are
-/// released in reverse declared order, and the first declared error is rethrown
-/// with its original stack trace.
+/// On success, every operation exposes its typed result through
+/// [StartupOperation.value]. If any operation fails, all siblings are allowed
+/// to settle first, successful [Disposable] results are released in reverse
+/// declared order, no results become available, and the first declared error is
+/// rethrown with its original stack trace.
 Future<void> settleStartupWave(List<StartupOperation<Object>> operations) async {
   final outcomes = await Future.wait(operations.map((operation) => operation._settle()), eagerError: false);
   final failed = outcomes.where((outcome) => outcome.error != null).firstOrNull;
 
   if (failed == null) {
+    for (final operation in operations) {
+      operation._completeWave();
+    }
     return;
   }
 

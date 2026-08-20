@@ -41,6 +41,17 @@ void main() {
     expect(() => operation.value, throwsStateError);
   });
 
+  test('does not expose successful sibling values after the wave fails', () async {
+    final successful = StartupOperation(Future.value('value'));
+
+    await expectLater(
+      settleStartupWave([successful, StartupOperation(Future<Object>.error(StateError('failed')))]),
+      throwsStateError,
+    );
+
+    expect(() => successful.value, throwsStateError);
+  });
+
   test('waits for every sibling before reporting an error', () async {
     final slow = Completer<Object>();
     final result = settleStartupWave([

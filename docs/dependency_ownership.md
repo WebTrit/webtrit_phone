@@ -21,6 +21,12 @@ If startup fails before `build()` transfers ownership to `AppDependencies`,
 best-effort release contract to the dependencies collected so far, preventing a
 partially started application from leaking subscriptions, isolates or controllers.
 
+Concurrent startup waves have an earlier ownership boundary: their results are
+not handed to the builder until every sibling succeeds. If one sibling fails, the
+wave waits for the others to settle and releases successful `Disposable` results
+in reverse declared order. Only after a completely successful wave are its values
+registered with the builder and covered by `abort()`.
+
 A shared dependency reaches the tree by value, so no provider can close it. A
 provider never passes `dispose:` for something it did not create, and never
 performs a process-wide teardown - `DriftIsolate.shutdownAll()`,
@@ -70,6 +76,7 @@ Two consequences worth spelling out:
 | `AppLifecycle` | registers itself as a `WidgetsBindingObserver` | - | the application |
 | `Callkeep`, `CallkeepConnections` | native singletons; the shell installs and removes its own listeners | `MainShell` | the shell, for its own listeners |
 | `FeatureAccessStreamFactory` | none itself; each `create()` call opens a stream over system info and remote config | `RootApp` | the `StreamProvider` cancels the subscription |
+| `AppInfo` | app-id change subscription; also releases a disposable app-id provider | metadata, auth and compatibility consumers | the application (or startup wave before registration) |
 | storages, device and package info, themes, certificates, permissions, metadata, api client factory, auth and session repositories | none - plain data or thin wrappers | many | nothing to release |
 
 ## What the tree creates
@@ -89,6 +96,8 @@ Two consequences worth spelling out:
 - `test/app/app_dependencies_test.dart` covers what the tree receives (shared yes,
   kept no), normal release and startup abort: reverse order of creation, one run
   even under a concurrent second call, and a failing release not stopping the rest.
+- `test/app/startup_wave_test.dart` covers wait-all error selection, typed result
+  availability and reverse rollback before dependencies reach the builder.
 - `test/app/host_theme_mode_provider_test.dart` covers the shape rule for the
   optional theme-mode entry, which sits above every other provider: giving or
   taking away the host mode must not remount what is below it.

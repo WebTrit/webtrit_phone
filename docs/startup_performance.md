@@ -50,6 +50,15 @@ start with Firebase core. Bootstrap waits for both branches on success. A
 Firebase failure is reported immediately without waiting for local notification
 setup; that branch remains observed so a later error cannot escape uncaught.
 
+Package info, app info, device info, secure storage, preferences, certificates,
+themes and the local Remote Config cache form another concurrent wave. Bootstrap
+waits for every operation in this wave to settle before reporting a failure so
+that successful, not-yet-registered disposable results can be released safely.
+Consequently, a fast failure can still wait for the slowest sibling (currently
+theme font preloading has a three-second budget). This affects failed startup
+latency only; the successful path pays the maximum sibling duration rather than
+their sum.
+
 ## Baseline procedure
 
 Use a profile build; debug timings are not representative and release builds
