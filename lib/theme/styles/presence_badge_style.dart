@@ -4,10 +4,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class PresenceBadgeStyle with Diagnosticable {
-  const PresenceBadgeStyle({this.availableColor, this.unavailableColor, this.iconColor, this.sizeFactor});
+  const PresenceBadgeStyle({
+    this.availableColor,
+    this.unavailableColor,
+    this.busyColor,
+    this.iconColor,
+    this.sizeFactor,
+  });
 
   final Color? availableColor;
   final Color? unavailableColor;
+
+  /// Fill for a contact who should not be called right now - in an
+  /// established call, or publishing "busy" / "do not disturb".
+  final Color? busyColor;
 
   /// Color of the activity glyph drawn inside the badge.
   final Color? iconColor;
@@ -23,6 +33,7 @@ class PresenceBadgeStyle with Diagnosticable {
     return PresenceBadgeStyle(
       availableColor: override.availableColor ?? base.availableColor,
       unavailableColor: override.unavailableColor ?? base.unavailableColor,
+      busyColor: override.busyColor ?? base.busyColor,
       iconColor: override.iconColor ?? base.iconColor,
       sizeFactor: override.sizeFactor ?? base.sizeFactor,
     );
@@ -35,6 +46,7 @@ class PresenceBadgeStyle with Diagnosticable {
     return PresenceBadgeStyle(
       availableColor: Color.lerp(a?.availableColor, b?.availableColor, t),
       unavailableColor: Color.lerp(a?.unavailableColor, b?.unavailableColor, t),
+      busyColor: Color.lerp(a?.busyColor, b?.busyColor, t),
       iconColor: Color.lerp(a?.iconColor, b?.iconColor, t),
       sizeFactor: lerpDouble(a?.sizeFactor, b?.sizeFactor, t),
     );
@@ -46,6 +58,7 @@ class PresenceBadgeStyle with Diagnosticable {
     properties
       ..add(ColorProperty('availableColor', availableColor))
       ..add(ColorProperty('unavailableColor', unavailableColor))
+      ..add(ColorProperty('busyColor', busyColor))
       ..add(ColorProperty('iconColor', iconColor))
       ..add(DoubleProperty('sizeFactor', sizeFactor));
   }

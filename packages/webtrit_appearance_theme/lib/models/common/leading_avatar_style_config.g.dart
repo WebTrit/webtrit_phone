@@ -135,6 +135,7 @@ PresenceBadgeStyleConfig _$PresenceBadgeStyleConfigFromJson(
 ) => PresenceBadgeStyleConfig(
   availableColor: json['availableColor'] as String?,
   unavailableColor: json['unavailableColor'] as String?,
+  busyColor: json['busyColor'] as String?,
   iconColor: json['iconColor'] as String?,
   sizeFactor: (json['sizeFactor'] as num?)?.toDouble(),
 );
@@ -144,6 +145,7 @@ Map<String, dynamic> _$PresenceBadgeStyleConfigToJson(
 ) => <String, dynamic>{
   'availableColor': instance.availableColor,
   'unavailableColor': instance.unavailableColor,
+  'busyColor': instance.busyColor,
   'iconColor': instance.iconColor,
   'sizeFactor': instance.sizeFactor,
 };

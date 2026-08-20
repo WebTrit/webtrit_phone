@@ -68,6 +68,7 @@ class LeadingAvatarStyle with Diagnosticable {
       presenceBadge: PresenceBadgeStyle(
         availableColor: colors.tertiary,
         unavailableColor: colors.onSurfaceVariant,
+        busyColor: colors.error,
         iconColor: colors.surface,
         sizeFactor: 0.5,
       ),

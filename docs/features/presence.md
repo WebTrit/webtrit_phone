@@ -27,11 +27,12 @@ Last reviewed: 2026-08-19
   "the contact is talking" is `isEstablished`, never "a dialog exists" -
   every read site goes through it, `pullable` included.
 - `lib/models/presence/contact_presence.dart` - `ContactPresence`
-  (`onCall` / `available` / `unavailable`) with `resolve(presenceInfo,
-  dialogInfo)`: the single answer built from BOTH signals - an established
-  dialog, or the `onThePhone` activity that Core publishes even when BLF is
-  off. Only the badge glyph reads it today; the colour still follows plain
-  reachability (see below).
+  (`onCall` / `busy` / `available` / `unavailable`) with
+  `resolve(presenceInfo, dialogInfo)`: the single answer the badge reads for
+  both its fill and its spoken label. `onCall` means a PROVEN call - an
+  established BLF dialog; `busy` means the contact published `busy` or
+  `doNotDisturb`, which outranks reachability (they published something, so
+  they are reachable - the point is to stop the call).
 
 ## Data flow
 
@@ -96,9 +97,11 @@ ring, so half of it on the row background would read as a partial dot.
 
 `SipPresenceIndicator` renders:
 
-- a colored disc - the color is BINARY: `presenceInfo.anyAvailable` picks
-  `availableColor`, otherwise `unavailableColor`. Activities and BLF state
-  do NOT change the color;
+- a colored disc - the fill follows `ContactPresence`: `onCall` and `busy`
+  take `busyColor`, `available` takes `availableColor`, `unavailable` takes
+  `unavailableColor`. The division of labour is deliberate: the GLYPH says
+  what is going on, the COLOUR says whether to call now, so a state stays
+  readable for anyone who cannot tell the fills apart (WCAG 1.4.1);
 - an optional activity glyph INSIDE the disc, in `iconColor`. Icon choice:
   `ContactPresence.resolve` says `onCall` -> `phone_in_talk`, else the icon
   for `presenceInfo.primaryActivity`. A dialog that is merely ringing does
@@ -120,10 +123,29 @@ dialog swaps the subtitle to remote-party info there - the established one
 specifically, not the first in the list, so a contact who is already talking
 while another call rings in is described by the call they are in.
 
-Known gap, server-side: where BLF is off, "on a call" arrives only as the
-`onThePhone` activity, and Core sets it from the moment of DIALLING, with no
-state to filter on - so on that path a ringing contact still reads as
-talking. Tracked outside the client.
+The badge also NAMES its state (`AvatarStatusBadge`): a published activity is
+announced by its own name ("On vacation"), an established call as "On a call",
+and a plain contact as available or not. Without it the state exists only as a
+colour and a glyph, which a screen reader cannot convey at all.
+
+Deliberate asymmetry of the IN-A-CALL state - not a bug. (The other half of
+`busyColor`, a contact publishing `busy` / `doNotDisturb`, needs no call at
+all and is painted wherever presence arrives.)
+
+- `onCall` needs a PROVEN call, i.e. a BLF dialog. Where dialog subscriptions
+  are off (adapter without `sipDialogs`, or the per-contact checkbox
+  unticked), a contact in a call keeps the available fill and shows only the
+  handset glyph, exactly as before.
+- Reason: on the presence path "on a call" arrives as the `onThePhone`
+  activity, and Core sets it from the moment of DIALLING, with no state to
+  filter on - measured on a real dev system, 19 seconds of a call nobody
+  answered. A pale glyph makes that a detail; a red fill would make it the
+  loudest thing in the row, and in production `early` (ringing) is the most
+  common dialog state of all.
+- So in a deployment where both paths are live, the same product state can
+  look different for two contacts: subscribed to dialogs - red, presence only
+  - green with a handset. Once the server marks the activity from the answer
+  instead of the dial, the two collapse into one line in `ContactPresence`.
 
 ## Colors and theming
 
@@ -131,7 +153,7 @@ The presence badge style flows through the standard theme pipeline:
 
 - theme JSONs `assets/themes/original.widget.{light,dark}.config.json` ->
   `presenceBadge` (`sizeFactor`, `availableColor`, `unavailableColor`,
-  `iconColor`) and
+  `busyColor`, `iconColor`) and
   `registeredBadge` (`sizeFactor`, `registeredColor`, `unregisteredColor`);
 - parsed by `PresenceBadgeStyleConfig` in
   `packages/webtrit_appearance_theme/lib/models/common/leading_avatar_style_config.dart`;

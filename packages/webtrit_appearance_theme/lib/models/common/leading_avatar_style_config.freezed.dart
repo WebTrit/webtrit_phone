@@ -960,7 +960,7 @@ case _:
 /// @nodoc
 mixin _$PresenceBadgeStyleConfig {
 
- String? get availableColor; String? get unavailableColor; String? get iconColor; double? get sizeFactor;
+ String? get availableColor; String? get unavailableColor; String? get busyColor; String? get iconColor; double? get sizeFactor;
 /// Create a copy of PresenceBadgeStyleConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -971,16 +971,16 @@ $PresenceBadgeStyleConfigCopyWith<PresenceBadgeStyleConfig> get copyWith => _$Pr
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PresenceBadgeStyleConfig&&(identical(other.availableColor, availableColor) || other.availableColor == availableColor)&&(identical(other.unavailableColor, unavailableColor) || other.unavailableColor == unavailableColor)&&(identical(other.iconColor, iconColor) || other.iconColor == iconColor)&&(identical(other.sizeFactor, sizeFactor) || other.sizeFactor == sizeFactor));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PresenceBadgeStyleConfig&&(identical(other.availableColor, availableColor) || other.availableColor == availableColor)&&(identical(other.unavailableColor, unavailableColor) || other.unavailableColor == unavailableColor)&&(identical(other.busyColor, busyColor) || other.busyColor == busyColor)&&(identical(other.iconColor, iconColor) || other.iconColor == iconColor)&&(identical(other.sizeFactor, sizeFactor) || other.sizeFactor == sizeFactor));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,availableColor,unavailableColor,iconColor,sizeFactor);
+int get hashCode => Object.hash(runtimeType,availableColor,unavailableColor,busyColor,iconColor,sizeFactor);
 
 @override
 String toString() {
-  return 'PresenceBadgeStyleConfig(availableColor: $availableColor, unavailableColor: $unavailableColor, iconColor: $iconColor, sizeFactor: $sizeFactor)';
+  return 'PresenceBadgeStyleConfig(availableColor: $availableColor, unavailableColor: $unavailableColor, busyColor: $busyColor, iconColor: $iconColor, sizeFactor: $sizeFactor)';
 }
 
 
@@ -991,7 +991,7 @@ abstract mixin class $PresenceBadgeStyleConfigCopyWith<$Res>  {
   factory $PresenceBadgeStyleConfigCopyWith(PresenceBadgeStyleConfig value, $Res Function(PresenceBadgeStyleConfig) _then) = _$PresenceBadgeStyleConfigCopyWithImpl;
 @useResult
 $Res call({
- String? availableColor, String? unavailableColor, String? iconColor, double? sizeFactor
+ String? availableColor, String? unavailableColor, String? busyColor, String? iconColor, double? sizeFactor
 });
 
 
@@ -1008,10 +1008,11 @@ class _$PresenceBadgeStyleConfigCopyWithImpl<$Res>
 
 /// Create a copy of PresenceBadgeStyleConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? availableColor = freezed,Object? unavailableColor = freezed,Object? iconColor = freezed,Object? sizeFactor = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? availableColor = freezed,Object? unavailableColor = freezed,Object? busyColor = freezed,Object? iconColor = freezed,Object? sizeFactor = freezed,}) {
   return _then(PresenceBadgeStyleConfig(
 availableColor: freezed == availableColor ? _self.availableColor : availableColor // ignore: cast_nullable_to_non_nullable
 as String?,unavailableColor: freezed == unavailableColor ? _self.unavailableColor : unavailableColor // ignore: cast_nullable_to_non_nullable
+as String?,busyColor: freezed == busyColor ? _self.busyColor : busyColor // ignore: cast_nullable_to_non_nullable
 as String?,iconColor: freezed == iconColor ? _self.iconColor : iconColor // ignore: cast_nullable_to_non_nullable
 as String?,sizeFactor: freezed == sizeFactor ? _self.sizeFactor : sizeFactor // ignore: cast_nullable_to_non_nullable
 as double?,

@@ -20,10 +20,13 @@ class SipPresenceIndicator extends StatelessWidget {
 
     final presence = ContactPresence.resolve(presenceInfo: presenceInfo, dialogInfo: dialogInfo);
 
-    // The colour still follows plain reachability, so being on a call keeps
-    // whatever colour the contact already had. Giving that state a colour of
-    // its own is a product decision and belongs to the change that makes it.
-    final color = presenceInfo.anyAvailable ? badge.availableColor : badge.unavailableColor;
+    // The glyph says what is going on, the colour says whether to call now -
+    // so a state stays readable for anyone who cannot tell the fills apart.
+    final color = switch (presence) {
+      ContactPresence.onCall || ContactPresence.busy => badge.busyColor,
+      ContactPresence.available => badge.availableColor,
+      ContactPresence.unavailable => badge.unavailableColor,
+    };
 
     final activityIcon = _activityIcon(presence, presenceInfo);
 
@@ -54,8 +57,6 @@ class SipPresenceIndicator extends StatelessWidget {
       return Icons.phone_in_talk_rounded;
     }
 
-    // The on-the-phone case below is unreachable while the resolver above
-    // answers it - the switch is exhaustive over the activities, so it stays.
     final activity = presenceInfo.primaryActivity;
     if (activity != null) {
       return switch (activity) {
