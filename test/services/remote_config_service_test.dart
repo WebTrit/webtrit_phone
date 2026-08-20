@@ -58,4 +58,38 @@ void main() {
     await refresh;
     await service.dispose();
   });
+
+  test('refresh retries configuration after a transient failure', () async {
+    var configurationAttempts = 0;
+    when(() => remoteConfig.setConfigSettings(any())).thenAnswer((_) async {
+      configurationAttempts++;
+      if (configurationAttempts == 1) throw StateError('transient failure');
+    });
+    when(remoteConfig.fetchAndActivate).thenAnswer((_) async => false);
+    final service = await CachedRemoteConfigService.init(cache, remoteConfig: remoteConfig);
+
+    await service.refresh();
+    await service.refresh();
+
+    expect(configurationAttempts, 2);
+    verify(remoteConfig.fetchAndActivate).called(1);
+    await service.dispose();
+  });
+
+  test('background refresh is bounded by its timeout', () async {
+    final settings = Completer<void>();
+    when(() => remoteConfig.setConfigSettings(any())).thenAnswer((_) => settings.future);
+    when(remoteConfig.fetchAndActivate).thenAnswer((_) async => false);
+    final service = await CachedRemoteConfigService.init(
+      cache,
+      remoteConfig: remoteConfig,
+      refreshTimeout: const Duration(milliseconds: 10),
+    );
+
+    await service.refresh().timeout(const Duration(seconds: 1));
+
+    verifyNever(remoteConfig.fetchAndActivate);
+    settings.complete();
+    await service.dispose();
+  });
 }

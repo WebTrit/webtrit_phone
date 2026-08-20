@@ -73,7 +73,7 @@ abstract class RemoteCacheConfigService {
 
 /// Implementation of [RemoteConfigService] using Firebase Remote Config.
 class CachedRemoteConfigService implements RemoteConfigService, Disposable {
-  CachedRemoteConfigService(this._cacheService, this._remoteConfig) {
+  CachedRemoteConfigService(this._cacheService, this._remoteConfig, this._refreshTimeout) {
     // Firebase Remote Config realtime updates are not available on web: the
     // stream cannot connect and emits `remoteconfig/stream-error` continuously.
     // Skip the subscription there - values still come from init's fetch and the
@@ -106,6 +106,7 @@ class CachedRemoteConfigService implements RemoteConfigService, Disposable {
 
   final FirebaseRemoteConfig _remoteConfig;
   final RemoteCacheConfigService _cacheService;
+  final Duration? _refreshTimeout;
 
   final _controller = StreamController<RemoteConfigSnapshot>.broadcast();
   StreamSubscription? _onConfigUpdatedSubscription;
@@ -117,18 +118,34 @@ class CachedRemoteConfigService implements RemoteConfigService, Disposable {
   static Future<CachedRemoteConfigService> init(
     RemoteCacheConfigService cache, {
     FirebaseRemoteConfig? remoteConfig,
+    Duration? refreshTimeout,
   }) async {
-    final service = CachedRemoteConfigService(cache, remoteConfig ?? FirebaseRemoteConfig.instance);
+    final service = CachedRemoteConfigService(
+      cache,
+      remoteConfig ?? FirebaseRemoteConfig.instance,
+      refreshTimeout ?? (kIsWeb ? const Duration(seconds: 5) : null),
+    );
     return service;
   }
 
-  Future<void> _configure() {
-    return _configureFuture ??= _remoteConfig.setConfigSettings(
+  Future<void> _configure() async {
+    final pending = _configureFuture;
+    if (pending != null) return pending;
+
+    final operation = _remoteConfig.setConfigSettings(
       RemoteConfigSettings(
         fetchTimeout: const Duration(seconds: 30),
         minimumFetchInterval: kDebugMode ? const Duration(seconds: 10) : const Duration(hours: 12),
       ),
     );
+    _configureFuture = operation;
+
+    try {
+      await operation;
+    } catch (_) {
+      if (identical(_configureFuture, operation)) _configureFuture = null;
+      rethrow;
+    }
   }
 
   @override
@@ -140,16 +157,22 @@ class CachedRemoteConfigService implements RemoteConfigService, Disposable {
   @override
   Future<void> refresh() async {
     try {
-      await _configure();
-      final updated = await _remoteConfig.fetchAndActivate();
-      final snapshot = _createSnapshot();
-      if (updated && !_controller.isClosed) {
-        _controller.add(snapshot);
-      }
-      await _updateCache(snapshot);
+      final operation = _refresh();
+      final timeout = _refreshTimeout;
+      await (timeout == null ? operation : operation.timeout(timeout));
     } catch (e, stackTrace) {
       _logger.warning('Failed to refresh remote config', e, stackTrace);
     }
+  }
+
+  Future<void> _refresh() async {
+    await _configure();
+    final updated = await _remoteConfig.fetchAndActivate();
+    final snapshot = _createSnapshot();
+    if (updated && !_controller.isClosed) {
+      _controller.add(snapshot);
+    }
+    await _updateCache(snapshot);
   }
 
   RemoteConfigSnapshot _createSnapshot() {
