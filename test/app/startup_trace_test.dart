@@ -15,8 +15,10 @@ void main() {
     expect(result, 42);
     expect(trace.measurements, hasLength(1));
     expect(trace.measurements.single.name, 'stage');
+    expect(trace.measurements.single.startedAt, isNot(lessThan(Duration.zero)));
     expect(trace.measurements.single.succeeded, isTrue);
-    expect(output.single, startsWith('[Startup] startup_stage name=stage duration_ms='));
+    expect(output.single, startsWith('[Startup] startup_stage name=stage started_ms='));
+    expect(output.single, contains(' duration_ms='));
   });
 
   test('measure preserves an error and records the failed stage', () async {
@@ -79,6 +81,27 @@ void main() {
     expect(output, hasLength(2));
     expect(output.last, startsWith('[Startup] startup_complete total_ms='));
     expect(output.last, contains('stages=[stage:'));
+  });
+
+  test('records enough timing information to identify overlapping stages', () async {
+    final trace = StartupTrace(output: (_) {});
+    final firstCompleter = Completer<void>();
+    final secondCompleter = Completer<void>();
+
+    final first = trace.measure('first', () => firstCompleter.future);
+    final second = trace.measure('second', () => secondCompleter.future);
+
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+    secondCompleter.complete();
+    await second;
+    firstCompleter.complete();
+    await first;
+
+    final firstMeasurement = trace.measurements.singleWhere((it) => it.name == 'first');
+    final secondMeasurement = trace.measurements.singleWhere((it) => it.name == 'second');
+    final firstFinishedAt = firstMeasurement.startedAt + firstMeasurement.elapsed;
+
+    expect(secondMeasurement.startedAt, lessThan(firstFinishedAt));
   });
 
   testWidgets('finishes after the first Flutter frame', (tester) async {
