@@ -46,8 +46,9 @@ through the notification broker and buffered until its consumer is ready.
 
 Firebase core and Firebase Messaging form one ordered startup branch. Local
 notification plugin and Android channel setup form an independent branch and
-start with Firebase core. Bootstrap waits for both branches; if both fail, the
-Firebase error is reported first so startup failure attribution is stable.
+start with Firebase core. Bootstrap waits for both branches on success. A
+Firebase failure is reported immediately without waiting for local notification
+setup; that branch remains observed so a later error cannot escape uncaught.
 
 ## Baseline procedure
 

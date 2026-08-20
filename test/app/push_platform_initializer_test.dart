@@ -54,24 +54,43 @@ void main() {
     await initialization;
   });
 
-  test('preserves Firebase error priority after both branches settle', () async {
+  test('reports a Firebase error without waiting for local notifications', () async {
     final firebaseError = StateError('firebase failed');
-    final localError = StateError('local notifications failed');
-    var localBranchSettled = false;
+    final localNotifications = Completer<void>();
+    var localNotificationsStarted = false;
 
     final initialization = initializePushPlatform(
       startupTrace: startupTrace,
       initializeFirebase: () => Future<void>.error(firebaseError),
       initializeFirebaseMessaging: () async => fail('messaging must not start'),
-      initializeLocalNotifications: () async {
-        await Future<void>.delayed(Duration.zero);
-        localBranchSettled = true;
-        throw localError;
+      initializeLocalNotifications: () {
+        localNotificationsStarted = true;
+        return localNotifications.future;
       },
     );
 
     await expectLater(initialization, throwsA(same(firebaseError)));
-    expect(localBranchSettled, isTrue);
+    expect(localNotificationsStarted, isTrue);
+
+    localNotifications.complete();
+  });
+
+  test('keeps Firebase error priority when local notifications fail first', () async {
+    final firebaseCore = Completer<void>();
+    final firebaseError = StateError('firebase failed');
+
+    final initialization = initializePushPlatform(
+      startupTrace: startupTrace,
+      initializeFirebase: () async {
+        await firebaseCore.future;
+        throw firebaseError;
+      },
+      initializeFirebaseMessaging: () async => fail('messaging must not start'),
+      initializeLocalNotifications: () => Future<void>.error(StateError('local notifications failed')),
+    );
+
+    firebaseCore.complete();
+    await expectLater(initialization, throwsA(same(firebaseError)));
   });
 
   test('reports a local notification error after Firebase succeeds', () async {
