@@ -234,6 +234,15 @@ void main() {
     await queue.cancel();
   });
 
+  test('create() ignores monitor intervals outside the supported bounds', () {
+    final snapshot = MockRemoteConfigSnapshot();
+    when(() => snapshot.getString('feature_monitor_check_interval_sec')).thenReturn('-1');
+    expect(FeatureOverridesFactory.create(snapshot).monitorCheckInterval, isNull);
+
+    when(() => snapshot.getString('feature_monitor_check_interval_sec')).thenReturn('3601');
+    expect(FeatureOverridesFactory.create(snapshot).monitorCheckInterval, isNull);
+  });
+
   test('create() propagates logLevel from RemoteConfig', () async {
     final cachedSystemInfo = createMockSystemInfo();
     final newRemoteSnapshot = MockRemoteConfigSnapshot();

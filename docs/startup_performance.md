@@ -54,10 +54,11 @@ Package info, app info, device info, secure storage, preferences, certificates,
 themes and the local Remote Config cache form another concurrent wave. Bootstrap
 waits for every operation in this wave to settle before reporting a failure so
 that successful, not-yet-registered disposable results can be released safely.
-Consequently, a fast failure can still wait for the slowest sibling (currently
-theme font preloading has a three-second budget). This affects failed startup
-latency only; the successful path pays the maximum sibling duration rather than
-their sum.
+Consequently, a fast failure can still wait for the slowest sibling. Theme
+fonts are generated into the application assets at build time, so startup no
+longer has a runtime font preload or font-network timeout. This affects failed
+startup latency only; the successful path pays the maximum sibling duration
+rather than their sum.
 
 Remote Config uses the SDK's already activated values and the local cache for
 the first frame. Its network configuration and fetch are scheduled after that
@@ -70,9 +71,14 @@ first frame then uses app-config feature defaults and the live provider applies
 the fetched values afterward, which can reshape feature-driven UI. Services
 created once during bootstrap, including remote logging, keep that startup
 configuration until the next launch.
-Privacy-sensitive logging changes are one-way during a running session: a
-refresh may disable remote logging or enable anonymization, but the less
-restrictive direction takes effect only on the next launch.
+Remote Config contracts are split by lifetime. Feature availability and call
+monitor tuning may update through the live stream; `feature_log_level` is
+captured when `AppLogger` is created, and `firebaseRemoteLogging` remains a
+startup opt-in gate for the logging service. Privacy-sensitive logging changes
+are one-way during a running session: a refresh may disable remote logging or
+enable anonymization, but the less restrictive direction takes effect only on
+the next launch. Monitor intervals from Remote Config are accepted only in the
+inclusive 0..3600 second range; zero disables monitoring.
 
 ## Baseline procedure
 
