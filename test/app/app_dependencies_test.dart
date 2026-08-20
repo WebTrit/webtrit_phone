@@ -59,6 +59,42 @@ class _FakeFeatureAccess extends Mock implements FeatureAccess {}
 class _FakeSystemInfoRepository extends Mock implements SystemInfoRepository {}
 
 void main() {
+  group('presentation configuration', () {
+    final defaultFeatureAccess = _FakeFeatureAccess();
+    final defaultThemeSettings = const ThemeSettings();
+    final defaults = (
+      featureAccess: (initial: defaultFeatureAccess, updates: () => const Stream<FeatureAccess>.empty()),
+      themeSettings: (initial: defaultThemeSettings, updates: () => const Stream<ThemeSettings>.empty()),
+    );
+
+    test('keeps bootstrap defaults when no host configures the presentation', () {
+      final resolved = resolvePresentationConfig(defaults, null);
+
+      expect(resolved.featureAccess, same(defaults.featureAccess));
+      expect(resolved.themeSettings, same(defaults.themeSettings));
+    });
+
+    test('lets a host replace presentation sources from the defaults', () {
+      final hostFeatureAccess = _FakeFeatureAccess();
+      final hostThemeSettings = const ThemeSettings();
+      var calls = 0;
+
+      final resolved = resolvePresentationConfig(defaults, (receivedDefaults) {
+        calls++;
+        expect(receivedDefaults.featureAccess, same(defaults.featureAccess));
+        expect(receivedDefaults.themeSettings, same(defaults.themeSettings));
+        return (
+          featureAccess: (initial: hostFeatureAccess, updates: () => const Stream<FeatureAccess>.empty()),
+          themeSettings: (initial: hostThemeSettings, updates: () => const Stream<ThemeSettings>.empty()),
+        );
+      });
+
+      expect(calls, 1);
+      expect(resolved.featureAccess.initial, same(hostFeatureAccess));
+      expect(resolved.themeSettings.initial, same(hostThemeSettings));
+    });
+  });
+
   group('what the tree receives', () {
     testWidgets('a shared instance reaches the tree', (tester) async {
       final builder = AppDependenciesBuilder()..share<_Plain>(const _Plain());

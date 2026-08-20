@@ -21,6 +21,26 @@ final _logger = Logger('AppDependencies');
 /// stale.
 typedef ConfigSource<T> = ({T initial, Stream<T> Function() updates});
 
+/// The configuration sources rendered by the widget tree after bootstrap has
+/// finished using its operational configuration.
+typedef AppPresentationConfig = ({
+  ConfigSource<FeatureAccess> featureAccess,
+  ConfigSource<ThemeSettings> themeSettings,
+});
+
+/// Lets a host replace only what the widget tree renders, without changing the
+/// configuration bootstrap uses to initialize services.
+typedef AppPresentationConfigBuilder = AppPresentationConfig Function(AppPresentationConfig defaults);
+
+/// Applies a host's presentation configuration, or keeps the bootstrap
+/// defaults when the app runs standalone.
+AppPresentationConfig resolvePresentationConfig(
+  AppPresentationConfig defaults,
+  AppPresentationConfigBuilder? configure,
+) {
+  return configure?.call(defaults) ?? defaults;
+}
+
 /// Collects the application while it starts.
 ///
 /// Everything long-lived is handed to the builder as it is created, which is
@@ -144,8 +164,9 @@ class AppDependencies {
   /// `MultiProvider`.
   final List<SingleChildWidget> providers;
 
-  /// The configuration the app renders with, as built at startup. A host that
-  /// embeds the app can supply its own sources instead (see `RootApp`).
+  /// The configuration the app renders with, as selected during bootstrap.
+  /// An embedding host can replace the defaults through
+  /// `bootstrap(configurePresentation: ...)`.
   final ConfigSource<FeatureAccess> featureAccess;
   final ConfigSource<ThemeSettings> themeSettings;
 

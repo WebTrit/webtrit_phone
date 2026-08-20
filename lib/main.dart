@@ -98,26 +98,11 @@ SingleChildWidget hostThemeModeProvider(ConfigSource<ThemeMode>? source) {
 }
 
 class RootApp extends StatefulWidget {
-  const RootApp({
-    super.key,
-    required this.dependencies,
-    this.featureAccess,
-    this.themeSettings,
-    this.themeMode,
-    this.ownsBrowserHistory = true,
-  });
+  const RootApp({super.key, required this.dependencies, this.themeMode, this.ownsBrowserHistory = true});
 
   /// The started application: what it gives the widget tree, and what gets
   /// released when this widget goes away.
   final AppDependencies dependencies;
-
-  /// Reactive config the app renders, provided down the tree as inherited
-  /// values. Null in a standalone run, where the app renders the configuration
-  /// its own startup produced; a host that embeds the app (the configurator's
-  /// realtime preview) passes its own streams so the preview reflects live
-  /// edits. RootApp stays agnostic - it wires whatever source it ends up with.
-  final ConfigSource<FeatureAccess>? featureAccess;
-  final ConfigSource<ThemeSettings>? themeSettings;
 
   /// Optional read-only override for the displayed theme mode (the configurator's
   /// light/dark preview toggle). Null in a standalone run, where the mode comes
@@ -160,11 +145,6 @@ class _RootAppState extends State<RootApp> {
 
   @override
   Widget build(BuildContext context) {
-    // A host may render its own configuration (the configurator's live preview);
-    // otherwise the app renders the one its startup produced.
-    final featureAccess = widget.featureAccess ?? widget.dependencies.featureAccess;
-    final themeSettings = widget.themeSettings ?? widget.dependencies.themeSettings;
-
     // Providers that only hand out an instance built by the composition root
     // never dispose it: those live as long as the process and are released by
     // the startup teardown. A provider disposes what its own `create` built -
@@ -177,10 +157,10 @@ class _RootAppState extends State<RootApp> {
         ...widget.dependencies.providers,
         // The active theme, provided down the tree as an inherited value so the
         // app consumes it directly (see App.build) instead of holding it in
-        // AppState. The source is supplied by the caller (see [themeSettings]).
+        // AppState. Bootstrap selected the source stored in the dependencies.
         StreamProvider<ThemeSettings>(
-          initialData: themeSettings.initial,
-          create: (_) => themeSettings.updates(),
+          initialData: widget.dependencies.themeSettings.initial,
+          create: (_) => widget.dependencies.themeSettings.updates(),
           updateShouldNotify: (previous, next) => previous != next,
         ),
         // Optional host theme-mode override (see [themeMode]); always provided as
@@ -189,12 +169,11 @@ class _RootAppState extends State<RootApp> {
         // Stateless version-compatibility policy shared by the login gate and the
         // in-app force-update gate; const, so no bootstrap registration needed.
         Provider<AppCompatibilityResolver>(create: (_) => const DefaultAppCompatibilityResolver()),
-        // Reactive [FeatureAccess]; the source is supplied by the caller (see
-        // [featureAccess]). Standalone it is the bootstrap stream synchronized
-        // with SystemInfoRepository and RemoteConfigService.
+        // Reactive [FeatureAccess]. Standalone it is the bootstrap stream
+        // synchronized with SystemInfoRepository and RemoteConfigService.
         StreamProvider<FeatureAccess>(
-          initialData: featureAccess.initial,
-          create: (_) => featureAccess.updates(),
+          initialData: widget.dependencies.featureAccess.initial,
+          create: (_) => widget.dependencies.featureAccess.updates(),
           updateShouldNotify: (previous, next) => previous != next,
         ),
         // Platform-backed collaborators of the main shell, so the shell reads

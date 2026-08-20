@@ -40,7 +40,10 @@ import 'services/services.dart';
 // Dart isolates do not share memory -- each background isolate gets its own instance.
 IsolateContext? _isolateContext;
 
-Future<AppDependencies> bootstrap({FirebaseIntegration firebase = const FirebaseIntegrationEnabled()}) async {
+Future<AppDependencies> bootstrap({
+  FirebaseIntegration firebase = const FirebaseIntegrationEnabled(),
+  AppPresentationConfigBuilder? configurePresentation,
+}) async {
   // Everything long-lived is handed to the builder where it is created: `share`
   // for what the screens read, `keep` for what only has to keep running. See
   // AppDependenciesBuilder and `docs/dependency_ownership.md`.
@@ -229,12 +232,19 @@ Future<AppDependencies> bootstrap({FirebaseIntegration firebase = const Firebase
   await _initCallkeep(featureAccess);
   await _initWorkManager();
 
-  return deps.build(
-    // The configuration the app renders with unless a host supplies its own.
+  final defaultPresentationConfig = (
     featureAccess: (initial: featureAccess, updates: featureAccessStreamFactory.create),
-    // The theme is static at startup; a host that edits it live pushes its own
-    // source instead.
     themeSettings: (initial: appThemes.values.first.settings, updates: () => const Stream<ThemeSettings>.empty()),
+  );
+  // A host may replace only the sources rendered by the tree. Bootstrap has
+  // already used its own FeatureAccess snapshot for permissions, metadata,
+  // logging and call integration, so preview sources cannot reconfigure those
+  // services.
+  final presentationConfig = resolvePresentationConfig(defaultPresentationConfig, configurePresentation);
+
+  return deps.build(
+    featureAccess: presentationConfig.featureAccess,
+    themeSettings: presentationConfig.themeSettings,
     systemInfo: systemInfoRepository,
   );
 }
