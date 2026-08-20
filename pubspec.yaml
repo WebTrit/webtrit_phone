@@ -204,6 +204,7 @@ flutter:
     - assets/login/
     - assets/ringtones/
     - assets/themes/
+    - assets/fonts/
     - assets/certificates/
 
 flutter_gen:
