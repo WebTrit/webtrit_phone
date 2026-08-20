@@ -35,11 +35,24 @@ typedef ConfigSource<T> = ({T initial, Stream<T> Function() updates});
 /// follows construction by itself, because a thing cannot be shared before it
 /// exists.
 class AppDependenciesBuilder {
+  /// Preserves creation order so teardown can release dependants before the
+  /// objects they were built from.
   final _owned = <Object>[];
+
+  /// Guards ownership by identity: two equal value objects may still represent
+  /// distinct resources, while the same resource must never be released twice.
   final _ownedInstances = HashSet<Object>.identity();
+
+  /// Keeps tree visibility separate from ownership: only [share] adds here,
+  /// while both [share] and [keep] add to [_owned].
   final _providers = <SingleChildWidget>[];
+
+  /// Prevents one provider from silently shadowing another provider of the
+  /// same type in `MultiProvider`.
   final _sharedTypes = <Type>{};
 
+  /// Seals the builder after [build], so two application objects cannot claim
+  /// ownership of the same collected dependencies.
   var _built = false;
 
   /// Owns [instance] without showing it to the widget tree. For the few things
