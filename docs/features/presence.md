@@ -20,7 +20,18 @@ Last reviewed: 2026-08-19
   `inTransit`).
 - `lib/models/dialog_info.dart` - BLF dialog state per number:
   `DialogState { trying, proceeding, early, confirmed, terminated, unknown }`,
-  direction, tags, the `pullable` getter used by Call Pull.
+  direction, tags, the `pullable` getter used by Call Pull, and
+  `isEstablished` (`state == confirmed`) with the
+  `DialogInfoListExtension.established` helper. A dialog exists from the
+  first ring and `early` is the most common state in production, so
+  "the contact is talking" is `isEstablished`, never "a dialog exists" -
+  every read site goes through it, `pullable` included.
+- `lib/models/presence/contact_presence.dart` - `ContactPresence`
+  (`onCall` / `available` / `unavailable`) with `resolve(presenceInfo,
+  dialogInfo)`: the single answer built from BOTH signals - an established
+  dialog, or the `onThePhone` activity that Core publishes even when BLF is
+  off. Only the badge glyph reads it today; the colour still follows plain
+  reachability (see below).
 
 ## Data flow
 
@@ -89,10 +100,12 @@ ring, so half of it on the row background would read as a partial dot.
   `availableColor`, otherwise `unavailableColor`. Activities and BLF state
   do NOT change the color;
 - an optional activity glyph INSIDE the disc, in `iconColor`. Icon choice:
-  any `dialogInfo` entry present -> `phone_in_talk` (note: the list is not
-  filtered by `DialogState`, so a ringing dialog lights it too - in
-  production `early` is the most common state), else the icon for
-  `presenceInfo.primaryActivity`;
+  `ContactPresence.resolve` says `onCall` -> `phone_in_talk`, else the icon
+  for `presenceInfo.primaryActivity`. A dialog that is merely ringing does
+  NOT light it (it did until 2026-08-20, which showed contacts as talking
+  from the first ring); the `onThePhone` case of the activity switch is
+  unreachable for the same reason, and stays only because the switch is
+  exhaustive;
 - the ring around the disc (`Theme.scaffoldBackgroundColor`, which can
   mismatch on surfaces that are not the scaffold background) and the glyph
   are a SHARE of the mark - 0.1 and 0.55 of its side. They have to be:
@@ -102,8 +115,15 @@ ring, so half of it on the row background would read as a partial dot.
 
 The emoji `statusIcon` and the `note` never reach the badge - contact tiles
 append them to the title/subtitle text instead
-(`lib/features/contacts/widgets/contact_tile.dart`), and a BLF dialog swaps
-the subtitle to remote-party info there.
+(`lib/features/contacts/widgets/contact_tile.dart`), and an ESTABLISHED BLF
+dialog swaps the subtitle to remote-party info there - the established one
+specifically, not the first in the list, so a contact who is already talking
+while another call rings in is described by the call they are in.
+
+Known gap, server-side: where BLF is off, "on a call" arrives only as the
+`onThePhone` activity, and Core sets it from the moment of DIALLING, with no
+state to filter on - so on that path a ringing contact still reads as
+talking. Tracked outside the client.
 
 ## Colors and theming
 
