@@ -35,10 +35,8 @@ abstract class SessionRepository {
 
 class SessionRepositoryImpl implements SessionRepository, Disposable {
   SessionRepositoryImpl({required this.secureStorage, this.sessionCleanupWorker, required this.apiClientFactory}) {
-    // Storage loading is lazy; the app bloc awaits [ready] before restoring
-    // an existing session so bootstrap does not block on the keychain.
-    _currentSession = const Session();
-    ready = _restoreFromStorage();
+    // Initialize in-memory cache immediately on startup.
+    _currentSession = _loadFromStorage();
   }
 
   final SecureStorage secureStorage;
@@ -47,16 +45,6 @@ class SessionRepositoryImpl implements SessionRepository, Disposable {
 
   /// The single source of truth for the session state in memory.
   Session? _currentSession;
-
-  /// Completes when the persisted session has been loaded into memory.
-  late final Future<void> ready;
-
-  Future<void> _restoreFromStorage() async {
-    if (secureStorage case final SecureStorageImpl storage) {
-      await storage.ready;
-    }
-    _currentSession = _loadFromStorage();
-  }
 
   /// Smart getter that attempts to restore the session from storage
   /// if the in-memory cache is empty (e.g. after a Hot Restart).

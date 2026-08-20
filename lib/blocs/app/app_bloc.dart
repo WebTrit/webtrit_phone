@@ -77,21 +77,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     _systemInfoSubscription = systemInfoRepository.infoStream.listen((systemInfo) {
       add(_AppCompatibilityUpdated(_resolveAppCompatibility(systemInfo)));
     });
-
-    // Secure storage is loaded lazily so it does not block bootstrap. Restore
-    // a persisted session after the first dependency graph has been mounted.
-    if (sessionRepository case final SessionRepositoryImpl repository) {
-      unawaited(_restoreSession(repository));
-    }
-  }
-
-  Future<void> _restoreSession(SessionRepositoryImpl repository) async {
-    await repository.ready;
-    if (isClosed) return;
-    final session = repository.getCurrent();
-    if (session.isLoggedIn && !state.session.isLoggedIn) {
-      add(AppLoggedIn(session: session));
-    }
   }
 
   final UserAgreementStatusRepository userAgreementStatusRepository;
