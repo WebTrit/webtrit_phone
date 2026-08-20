@@ -102,19 +102,13 @@ Future<AppDependencies> _bootstrap({
   // secureStorage and featureAccess). Then the metadata provider can be built
   // here, before the API client factory, and this static call goes away.
   final userAgent = DefaultAppMetadataProvider.buildUserAgent(packageInfo, appInfo, deviceInfo);
-  final secureStorageReady = secureStorage is SecureStorageImpl ? secureStorage.ready : Future<void>.value();
   final apiClientFactory = deps.share(
     WebtritApiClientFactory(
       trustedCertificates: appCertificates.trustedCertificates,
       userAgent: userAgent,
-      getTenantId: () async {
-        await secureStorageReady;
-        return secureStorage.readTenantId() ?? '';
-      },
-      getCoreUrl: () async {
-        await secureStorageReady;
-        return Uri.parse(secureStorage.readCoreUrl() ?? EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL);
-      },
+      getTenantId: () async => secureStorage.readTenantId() ?? '',
+      getCoreUrl: () async =>
+          Uri.parse(secureStorage.readCoreUrl() ?? EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL),
     ),
   );
 
