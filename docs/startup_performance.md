@@ -14,9 +14,14 @@ Every stage is written to the Dart timeline under the `startup` filter key and
 to the Flutter console with the stable `[Startup]` prefix:
 
 ```text
-[Startup] startup_stage name=remote-config duration_ms=842.315 succeeded=true
+[Startup] startup_stage name=remote-config started_ms=415.320 duration_ms=842.315 succeeded=true
 [Startup] startup_complete total_ms=2310.774 stages=[firebase-core:120.301:ok,...]
 ```
+
+`started_ms` is the stage's offset from the beginning of the startup trace.
+Use it together with `duration_ms` to identify overlap. Once startup operations
+run concurrently, stage durations overlap and must not be added together to
+derive the total; `startup_complete total_ms` remains the wall-clock metric.
 
 Use `[Startup]` as the console filter. On Android the platform tag remains
 `flutter`, so the equivalent command is:

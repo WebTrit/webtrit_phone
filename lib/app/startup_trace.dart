@@ -5,9 +5,21 @@ import 'package:flutter/widgets.dart';
 
 /// One completed operation on the application startup path.
 class StartupMeasurement {
-  const StartupMeasurement({required this.name, required this.elapsed, required this.succeeded});
+  const StartupMeasurement({
+    required this.name,
+    required this.startedAt,
+    required this.elapsed,
+    required this.succeeded,
+  });
 
   final String name;
+
+  /// Offset from the beginning of the startup trace at which this stage began.
+  ///
+  /// Together with [elapsed], this makes overlapping stages visible without a
+  /// DevTools timeline recording.
+  final Duration startedAt;
+
   final Duration elapsed;
   final bool succeeded;
 }
@@ -65,8 +77,11 @@ class StartupTrace {
       _ignoreInstrumentationError(
         () => timeline?.finish(arguments: {'duration_ms': _milliseconds(elapsed), 'succeeded': succeeded}),
       );
-      _measurements.add(StartupMeasurement(name: name, elapsed: elapsed, succeeded: succeeded));
-      _emit('$logTag startup_stage name=$name duration_ms=${_milliseconds(elapsed)} succeeded=$succeeded');
+      _measurements.add(StartupMeasurement(name: name, startedAt: startedAt, elapsed: elapsed, succeeded: succeeded));
+      _emit(
+        '$logTag startup_stage name=$name started_ms=${_milliseconds(startedAt)} '
+        'duration_ms=${_milliseconds(elapsed)} succeeded=$succeeded',
+      );
     }
   }
 
