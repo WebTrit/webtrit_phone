@@ -8,11 +8,10 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/core_support.dart';
-import 'package:webtrit_phone/common/common.dart';
 
 final _logger = Logger('FeatureAccessStreamFactory');
 
-class FeatureAccessStreamFactory implements Disposable {
+class FeatureAccessStreamFactory {
   final AppThemes appThemes;
   final SystemInfoRepository systemInfoRepository;
   final RemoteConfigService remoteConfigService;
@@ -21,9 +20,13 @@ class FeatureAccessStreamFactory implements Disposable {
     required this.appThemes,
     required this.systemInfoRepository,
     required this.remoteConfigService,
-  }) : _startupOverrides = FeatureOverridesFactory.create(remoteConfigService.startupSnapshot);
+  }) {
+    _startupOverrides = FeatureOverridesFactory.create(remoteConfigService.startupSnapshot);
+    _startupAnonymizationEnabled = LoggingMapper.map(appThemes.appConfig, _startupOverrides).anonymizationEnabled;
+  }
 
-  final FeatureOverrides _startupOverrides;
+  late final FeatureOverrides _startupOverrides;
+  late final bool _startupAnonymizationEnabled;
 
   Future<FeatureAccess> getInitialSnapshot() async {
     final systemInfo = await systemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly);
@@ -55,29 +58,13 @@ class FeatureAccessStreamFactory implements Disposable {
     final remoteLoggingEnabled = _startupOverrides.remoteLoggingEnabled == true
         ? current.remoteLoggingEnabled ?? false
         : false;
-    final isLogAnonymizationEnabled = _startupOverrides.isLogAnonymizationEnabled == false
-        ? current.isLogAnonymizationEnabled ?? true
-        : true;
+    final isLogAnonymizationEnabled = _startupAnonymizationEnabled && current.isLogAnonymizationEnabled == false
+        ? true
+        : current.isLogAnonymizationEnabled;
 
-    return FeatureOverrides(
-      isVideoCallEnabled: current.isVideoCallEnabled,
-      isSystemNotificationsEnabled: current.isSystemNotificationsEnabled,
-      hybridPresenceSupport: current.hybridPresenceSupport,
-      isVoicemailEnabled: current.isVoicemailEnabled,
-      isCallHistoryEnabled: current.isCallHistoryEnabled,
-      callPullVideoStrategy: current.callPullVideoStrategy,
-      monitorCheckInterval: current.monitorCheckInterval,
-      logLevel: current.logLevel,
+    return current.copyWith(
       remoteLoggingEnabled: remoteLoggingEnabled,
       isLogAnonymizationEnabled: isLogAnonymizationEnabled,
     );
-  }
-
-  /// Releases the remote configuration service this factory was built with:
-  /// nothing else holds it, and its subscription outlives the app otherwise.
-  @override
-  Future<void> dispose() async {
-    final service = remoteConfigService;
-    if (service is Disposable) await (service as Disposable).dispose();
   }
 }

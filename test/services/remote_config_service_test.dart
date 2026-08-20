@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:webtrit_phone/services/services.dart';
 
@@ -22,6 +23,7 @@ void main() {
   setUp(() {
     remoteConfig = _MockFirebaseRemoteConfig();
     cache = _MockRemoteCacheConfigService();
+    when(cache.getAll).thenReturn(const {});
     when(() => remoteConfig.onConfigUpdated).thenAnswer((_) => const Stream.empty());
     when(remoteConfig.getAll).thenReturn(const {});
   });
@@ -91,5 +93,25 @@ void main() {
     verifyNever(remoteConfig.fetchAndActivate);
     settings.complete();
     await service.dispose();
+  });
+
+  test('startup snapshot does not observe later cache writes', () {
+    when(cache.getAll).thenReturn({'feature_video_call_enabled': false});
+    final snapshot = RemoteConfigSnapshot(const {}, cache);
+    when(cache.getAll).thenReturn({'feature_video_call_enabled': true});
+
+    expect(snapshot.getBool('feature_video_call_enabled'), isFalse);
+  });
+
+  test('local cache service keeps one startup snapshot', () async {
+    SharedPreferences.setMockInitialValues({'feature_video_call_enabled': false});
+    final service = await DefaultRemoteCacheConfigService.init();
+    final startupSnapshot = service.startupSnapshot;
+
+    await service.cacheBool('feature_video_call_enabled', true);
+
+    expect(startupSnapshot.getBool('feature_video_call_enabled'), isFalse);
+    expect(service.startupSnapshot.getBool('feature_video_call_enabled'), isFalse);
+    expect(service.snapshot.getBool('feature_video_call_enabled'), isTrue);
   });
 }

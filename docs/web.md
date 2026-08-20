@@ -69,5 +69,6 @@ Login, contacts, and audio+video calls (WebRTC + signaling over `wss`).
   (no `DriftIsolate` server, `dart:isolate` spawning is unsupported on web).
 - Networking: the internal `_web_socket_channel` / `_http_client` / `_tcp_proxy`
   packages select web implementations via conditional imports.
-- Remote Config / Firebase Installations init is time-bounded on web so it cannot
-  hang startup; the realtime Remote Config stream is skipped on web.
+- Remote Config renders from activated and locally cached values, then performs
+  a five-second-bounded refresh after the first frame; its realtime stream is
+  skipped on web. Firebase Installations init remains bounded during startup.

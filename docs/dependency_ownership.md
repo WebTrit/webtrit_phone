@@ -39,9 +39,9 @@ named member of `AppDependencies`, so widening that access is a visible edit.
 
 **Owned by its owner.** A collaborator that belongs to exactly one dependency is
 released by that dependency, not by the application: `SessionRepository` closes
-the cleanup worker it was built with, `FeatureAccessStreamFactory` closes the
-remote configuration service. Anything held by several owners (the API client
-factory, for one) stays with the application, or it would be closed twice.
+the cleanup worker it was built with. Anything held by several owners (the API
+client factory and remote configuration service, for example) stays with the
+application, or it would be closed twice.
 
 **Subtree-long.** Created by a provider (`create:`) and released by the same
 provider (`dispose:`). `lib/app/router/main_shell_services.dart` is the
@@ -70,7 +70,7 @@ Two consequences worth spelling out:
 | `SystemInfoRepository` | broadcast controller | `FeatureAccessStreamFactory` (startup level), `PollingService` | the application |
 | `LogRecordsRepository` | subscription to the root logger; the file-backed one also owns a rotating appender | - | the application |
 | `NativeLogForwarder` | file-watch subscription (Android only) | - | the application |
-| `CachedRemoteConfigService` | remote-config subscription + broadcast controller | `FeatureAccessStreamFactory` | its owner, the stream factory |
+| `CachedRemoteConfigService` | remote-config subscription + broadcast controller | `FeatureAccessStreamFactory`, `ConnectivityLifecycleService` | the application |
 | `SessionCleanupWorker` | connectivity subscription taken in its constructor | `SessionRepository` | its owner, the session repository |
 | `AppLogger` | the remote logging service behind it | - | the application |
 | `AppLifecycle` | registers itself as a `WidgetsBindingObserver` | - | the application |

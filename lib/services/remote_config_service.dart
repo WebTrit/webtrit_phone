@@ -16,9 +16,11 @@ final _logger = Logger('RemoteConfigService');
 /// in any part of the application, including background isolates and tests.
 class RemoteConfigSnapshot {
   final Map<String, String> _values;
-  final RemoteCacheConfigService _localCache;
+  final Map<String, Object?> _fallbackValues;
 
-  RemoteConfigSnapshot(this._values, this._localCache);
+  RemoteConfigSnapshot(Map<String, String> values, RemoteCacheConfigService localCache)
+    : _values = Map.unmodifiable(values),
+      _fallbackValues = Map.unmodifiable(localCache.getAll());
 
   /// Returns the configuration value for the given [key] as a [String].
   ///
@@ -29,7 +31,8 @@ class RemoteConfigSnapshot {
     if (remoteValue != null && remoteValue.isNotEmpty) {
       return remoteValue;
     }
-    return _localCache.getString(key);
+    final fallback = _fallbackValues[key];
+    return fallback is String ? fallback : null;
   }
 
   /// Returns the configuration value for the given [key] as a [bool].
@@ -41,12 +44,14 @@ class RemoteConfigSnapshot {
     if (remoteValue != null) {
       return remoteValue.toBool();
     }
-    return _localCache.getBool(key);
+    final fallback = _fallbackValues[key];
+    if (fallback is bool) return fallback;
+    return fallback is String ? fallback.toBool() : null;
   }
 }
 
 /// Base interface for remote configuration service.
-abstract class RemoteConfigService {
+abstract class RemoteConfigService implements Refreshable {
   /// Returns the snapshot captured before this session's network refresh.
   RemoteConfigSnapshot get startupSnapshot;
 
@@ -57,11 +62,18 @@ abstract class RemoteConfigService {
   Stream<RemoteConfigSnapshot> get onConfigUpdated;
 
   /// Refreshes the configuration by fetching from the remote source.
+  @override
   Future<void> refresh();
+
+  @override
+  bool get isActive => true;
 }
 
 /// Interface for caching remote configuration values locally.
 abstract class RemoteCacheConfigService {
+  /// Returns a point-in-time copy used to keep configuration snapshots immutable.
+  Map<String, Object?> getAll();
+
   String? getString(String key);
 
   bool? getBool(String key);
@@ -72,7 +84,7 @@ abstract class RemoteCacheConfigService {
 }
 
 /// Implementation of [RemoteConfigService] using Firebase Remote Config.
-class CachedRemoteConfigService implements RemoteConfigService, Disposable {
+class CachedRemoteConfigService extends RemoteConfigService implements Disposable {
   CachedRemoteConfigService(this._cacheService, this._remoteConfig, this._refreshTimeout) {
     // Firebase Remote Config realtime updates are not available on web: the
     // stream cannot connect and emits `remoteconfig/stream-error` continuously.
@@ -221,10 +233,11 @@ class CachedRemoteConfigService implements RemoteConfigService, Disposable {
 /// It implements [RemoteConfigService] as well, allowing it to be used
 /// as a standalone configuration source (e.g. in background isolates)
 /// where Firebase might not be available or needed.
-class DefaultRemoteCacheConfigService implements RemoteCacheConfigService, RemoteConfigService {
+class DefaultRemoteCacheConfigService extends RemoteConfigService implements RemoteCacheConfigService {
   DefaultRemoteCacheConfigService(this._sharedPreferences);
 
   final SharedPreferences _sharedPreferences;
+  RemoteConfigSnapshot? _startupSnapshot;
 
   static Future<DefaultRemoteCacheConfigService> init() async {
     final sharedPreferences = await SharedPreferences.getInstance();
@@ -232,7 +245,7 @@ class DefaultRemoteCacheConfigService implements RemoteCacheConfigService, Remot
   }
 
   @override
-  RemoteConfigSnapshot get startupSnapshot => snapshot;
+  RemoteConfigSnapshot get startupSnapshot => _startupSnapshot ??= snapshot;
 
   @override
   RemoteConfigSnapshot get snapshot => RemoteConfigSnapshot(const {}, this);
@@ -242,6 +255,11 @@ class DefaultRemoteCacheConfigService implements RemoteCacheConfigService, Remot
 
   @override
   Future<void> refresh() async {}
+
+  @override
+  Map<String, Object?> getAll() {
+    return Map.unmodifiable({for (final key in _sharedPreferences.getKeys()) key: _sharedPreferences.get(key)});
+  }
 
   @override
   String? getString(String key) {
