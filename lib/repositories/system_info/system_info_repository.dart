@@ -47,7 +47,7 @@ abstract interface class SystemInfoRepository implements Refreshable, Disposable
   // TODO: Consider extracting this into a dedicated provider (e.g. `CoreUrlProvider`)
   // Exposing the core URL from the repository mixes configuration/transport concerns with the repository's data responsibilities.
   /// Returns the current Core URL used by the underlying remote data source.
-  Uri getCoreUrl();
+  Future<Uri> getCoreUrl();
 
   /// Clears the locally cached system information.
   Future<void> clear();
@@ -171,7 +171,7 @@ class SystemInfoRepositoryImpl implements SystemInfoRepository {
   }
 
   @override
-  Uri getCoreUrl() {
+  Future<Uri> getCoreUrl() {
     return remoteDatasource.coreUrl;
   }
 

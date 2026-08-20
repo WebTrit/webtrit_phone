@@ -21,20 +21,24 @@ class WebAboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewContainer(
-      title: Text(context.l10n.settings_ListViewTileTitle_about),
-      initialUri: baseAppAboutUrl.replace(
-        queryParameters: {
-          'appName': packageInfo.appName,
-          'packageName': packageInfo.packageName,
-          'version': packageInfo.version,
-          'buildNumber': packageInfo.buildNumber,
-
-          /// TODO: use session repository
-          'coreUrl': infoRepository.getCoreUrl().toString(),
-        },
-      ),
-      userAgent: userAgent,
+    return FutureBuilder<Uri>(
+      future: infoRepository.getCoreUrl(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+        return WebViewContainer(
+          title: Text(context.l10n.settings_ListViewTileTitle_about),
+          initialUri: baseAppAboutUrl.replace(
+            queryParameters: {
+              'appName': packageInfo.appName,
+              'packageName': packageInfo.packageName,
+              'version': packageInfo.version,
+              'buildNumber': packageInfo.buildNumber,
+              'coreUrl': snapshot.requireData.toString(),
+            },
+          ),
+          userAgent: userAgent,
+        );
+      },
     );
   }
 }

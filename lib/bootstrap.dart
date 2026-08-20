@@ -106,8 +106,8 @@ Future<AppDependencies> _bootstrap({
     WebtritApiClientFactory(
       trustedCertificates: appCertificates.trustedCertificates,
       userAgent: userAgent,
-      getTenantId: () => secureStorage.readTenantId() ?? '',
-      getCoreUrl: () =>
+      getTenantId: () async => secureStorage.readTenantId() ?? '',
+      getCoreUrl: () async =>
           Uri.parse(secureStorage.readCoreUrl() ?? EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL),
     ),
   );

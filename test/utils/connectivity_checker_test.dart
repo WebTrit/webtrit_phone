@@ -28,7 +28,7 @@ void main() {
     // than sticking to the client captured at bootstrap (default URL).
     test('resolves the current client on each probe after a URL switch', () async {
       var current = oldClient;
-      final checker = DefaultConnectivityChecker(createApiClient: () => current);
+      final checker = DefaultConnectivityChecker(createApiClient: () async => current);
 
       expect(await checker.checkConnection(), isTrue);
       verify(() => oldClient.healthCheck()).called(1);
@@ -45,7 +45,7 @@ void main() {
     test('resolves the client lazily on every probe, not once at construction', () async {
       var resolveCount = 0;
       final checker = DefaultConnectivityChecker(
-        createApiClient: () {
+        createApiClient: () async {
           resolveCount++;
           return oldClient;
         },
@@ -62,7 +62,7 @@ void main() {
     // a live connection.
     test('returns false when the health check reports failure', () async {
       when(() => oldClient.healthCheck()).thenAnswer((_) async => false);
-      final checker = DefaultConnectivityChecker(createApiClient: () => oldClient);
+      final checker = DefaultConnectivityChecker(createApiClient: () async => oldClient);
 
       expect(await checker.checkConnection(), isFalse);
     });
@@ -71,7 +71,7 @@ void main() {
     // checker reports no connection instead of propagating the error.
     test('returns false when probing the client throws', () async {
       when(() => oldClient.healthCheck()).thenThrow(Exception('timeout'));
-      final checker = DefaultConnectivityChecker(createApiClient: () => oldClient);
+      final checker = DefaultConnectivityChecker(createApiClient: () async => oldClient);
 
       expect(await checker.checkConnection(), isFalse);
     });

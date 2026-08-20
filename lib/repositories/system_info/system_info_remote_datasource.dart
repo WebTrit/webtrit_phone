@@ -32,7 +32,10 @@ class SystemInfoRemoteDatasource with SystemInfoApiMapper implements Disposable 
   Future<WebtritSystemInfo> getSystemInfo({Uri? overrideCoreUrl, String? overrideTenantId}) async {
     try {
       // Creates a client. If overrides are null, the factory uses the default/current configuration.
-      final client = webtritApiClient.createWebtritApiClient(coreUrl: overrideCoreUrl, tenantId: overrideTenantId);
+      final client = await webtritApiClient.createWebtritApiClient(
+        coreUrl: overrideCoreUrl,
+        tenantId: overrideTenantId,
+      );
 
       final apiSystemInfo = await client.getSystemInfo();
       final newInfo = systemInfoFromApi(apiSystemInfo);
@@ -45,7 +48,7 @@ class SystemInfoRemoteDatasource with SystemInfoApiMapper implements Disposable 
   }
 
   /// Returns the default Core URL currently configured in the API client factory.
-  Uri get coreUrl => webtritApiClient.createWebtritApiClient().tenantUrl;
+  Future<Uri> get coreUrl async => (await webtritApiClient.createWebtritApiClient()).tenantUrl;
 
   @override
   Future<void> dispose() async {

@@ -33,7 +33,10 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
            appIdentifier: appInfo.identifier,
            fcmPushToken: secureStorage.readFCMPushToken(),
            embeddedResources: embeddedConfig.embeddedResources,
-           coreUrl: infoRepository.getCoreUrl(),
+           // The API client is resolved asynchronously on demand. Until the
+           // first refresh completes, keep the URL empty instead of creating
+           // a client synchronously while constructing the screen.
+           coreUrl: Uri(),
            userAgent: appMetadataProvider.userAgent,
            appInfo: appMetadataProvider.appInfo,
            deviceInfo: appMetadataProvider.deviceInfo,
@@ -49,13 +52,15 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
   void _onStarted(AboutStarted event, Emitter<AboutState> emit) async {
     emit(state.copyWith(progress: true));
     try {
-      final systemInfo = await infoRepository.getSystemInfo();
+      final results = await Future.wait<Object?>([infoRepository.getSystemInfo(), infoRepository.getCoreUrl()]);
+      final systemInfo = results[0] as WebtritSystemInfo?;
+      final coreUrl = results[1] as Uri;
       final coreVersion = systemInfo?.core.version;
       final bundleVersion = systemInfo?.bundleVersion;
 
       if (emit.isDone) return;
 
-      emit(state.copyWith(progress: false, coreVersion: coreVersion, bundleVersion: bundleVersion));
+      emit(state.copyWith(progress: false, coreUrl: coreUrl, coreVersion: coreVersion, bundleVersion: bundleVersion));
     } catch (e, stackTrace) {
       _logger.warning('_onStarted', e, stackTrace);
 

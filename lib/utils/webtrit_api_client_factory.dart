@@ -5,8 +5,8 @@ import 'package:ssl_certificates/ssl_certificates.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 import 'package:webtrit_phone/app/constants.dart';
 
-typedef CoreUrlCallback = Uri Function();
-typedef TenantIdCallback = String Function();
+typedef CoreUrlCallback = Future<Uri> Function();
+typedef TenantIdCallback = Future<String> Function();
 
 class WebtritApiClientFactory {
   WebtritApiClientFactory({
@@ -28,9 +28,9 @@ class WebtritApiClientFactory {
   Uri? _lastCoreUrl;
   String? _lastTenantId;
 
-  WebtritApiClient createWebtritApiClient({Uri? coreUrl, String? tenantId}) {
-    final actualCoreUrl = coreUrl ?? getCoreUrl();
-    final actualTenantId = tenantId ?? getTenantId();
+  Future<WebtritApiClient> createWebtritApiClient({Uri? coreUrl, String? tenantId}) async {
+    final actualCoreUrl = coreUrl ?? await getCoreUrl();
+    final actualTenantId = tenantId ?? await getTenantId();
 
     if (_cachedClient != null &&
         _lastCoreUrl.toString() == actualCoreUrl.toString() &&

@@ -19,7 +19,7 @@ class DefaultConnectivityChecker implements ConnectivityChecker {
   /// client at construction) keeps the liveness probe following the active
   /// session after login or a core-URL switch, rather than sticking to the
   /// bootstrap-time default URL.
-  final WebtritApiClient Function() createApiClient;
+  final Future<WebtritApiClient> Function() createApiClient;
 
   @override
   Future<bool> checkConnection() async {
@@ -28,7 +28,7 @@ class DefaultConnectivityChecker implements ConnectivityChecker {
       // healthCheck() swallows transport failures and returns false rather than
       // throwing, so the boolean result must be propagated; returning a hardcoded
       // true would report a live connection even when the probe failed.
-      final isHealthy = await createApiClient().healthCheck();
+      final isHealthy = await (await createApiClient()).healthCheck();
       _logger.finest('API connectivity check result: $isHealthy.');
       return isHealthy;
     } catch (e) {
@@ -39,7 +39,7 @@ class DefaultConnectivityChecker implements ConnectivityChecker {
 
   @override
   Future<void> dispose() async {
-    createApiClient().close();
+    (await createApiClient()).close();
   }
 }
 

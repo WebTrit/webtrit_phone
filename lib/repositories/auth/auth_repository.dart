@@ -102,7 +102,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String userRef,
     required String password,
   }) async {
-    final client = apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: tenantId);
+    final client = await apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: tenantId);
 
     return await client.createSession(
       SessionLoginCredential(
@@ -121,7 +121,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String tenantId,
     required String userRef,
   }) async {
-    final client = apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: tenantId);
+    final client = await apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: tenantId);
 
     return await client.createSessionOtp(
       SessionOtpCredential(
@@ -140,7 +140,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required SessionOtpProvisional sessionOtpProvisional,
     required String code,
   }) async {
-    final client = apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: tenantId);
+    final client = await apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: tenantId);
 
     return await client.verifySessionOtp(sessionOtpProvisional, code);
   }
@@ -152,7 +152,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String? email,
     Map<String, dynamic>? extraPayload,
   }) async {
-    final client = apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: tenantId);
+    final client = await apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(coreUrl), tenantId: tenantId);
 
     return await client.createUser(
       SessionUserCredential(

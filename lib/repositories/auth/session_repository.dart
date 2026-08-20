@@ -113,7 +113,7 @@ class SessionRepositoryImpl implements SessionRepository, Disposable {
   Future<void> revokeSession(Session session) async {
     if (!session.isLoggedIn) return;
 
-    final client = apiClientFactory.createWebtritApiClient(
+    final client = await apiClientFactory.createWebtritApiClient(
       coreUrl: Uri.parse(session.coreUrl!),
       tenantId: session.tenantId,
     );

@@ -71,7 +71,8 @@ class SessionCleanupWorker implements Disposable {
 
     try {
       // Omit the tenantId parameter (pass null) - the tenant ID is already encoded in the `uri`.
-      await apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(uri), tenantId: '').deleteSession(token);
+      final client = await apiClientFactory.createWebtritApiClient(coreUrl: Uri.parse(uri), tenantId: '');
+      await client.deleteSession(token);
       await _requestStorage.removeFailedSession(key);
     } catch (e) {
       _logger.severe('Session retry failed: $e');
