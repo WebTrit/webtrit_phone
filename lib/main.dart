@@ -13,6 +13,7 @@ import 'package:provider/single_child_widget.dart';
 
 import 'package:webtrit_phone/app/app.dart';
 import 'package:webtrit_phone/app/app_dependencies.dart';
+import 'package:webtrit_phone/app/startup_coordinator.dart';
 import 'package:webtrit_phone/app/startup_trace.dart';
 import 'package:webtrit_phone/bootstrap.dart';
 import 'package:webtrit_phone/common/common.dart';
@@ -43,11 +44,15 @@ void main() {
       // Android window background (`?android:colorBackground`, a light color) shows
       // through the transparent bar. Requesting the mode explicitly keeps one behavior
       // on every version: the app's own surfaces paint behind the system bars.
-      if (!kIsWeb) {
-        await startupTrace.measure('system-ui', () => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge));
-      }
-
-      final dependencies = await startupTrace.measure('bootstrap', () => bootstrap(startupTrace: startupTrace));
+      final systemUiFuture = kIsWeb
+          ? Future<void>.value()
+          : startupTrace.measure('system-ui', () => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge));
+      final bootstrapFuture = startupTrace.measure('bootstrap', () => bootstrap(startupTrace: startupTrace));
+      final dependencies = await waitForStartup(
+        systemUi: systemUiFuture,
+        bootstrap: bootstrapFuture,
+        disposeBootstrapResult: (dependencies) => dependencies.dispose(),
+      );
 
       if (!kIsWeb && kDebugMode) {
         FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);

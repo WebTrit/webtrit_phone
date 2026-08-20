@@ -44,6 +44,12 @@ resolution but do not wait for it. A request still pending after five seconds
 emits a warning and continues in the background; a later result is routed
 through the notification broker and buffered until its consumer is ready.
 
+System UI setup and bootstrap are independent and start together. Both must
+finish before `runApp`, so the first rendered frame retains the edge-to-edge
+contract. If system UI setup fails after bootstrap built the application
+dependencies, those dependencies are disposed before the startup error is
+reported.
+
 ## Baseline procedure
 
 Use a profile build; debug timings are not representative and release builds
