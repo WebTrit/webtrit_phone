@@ -27,8 +27,24 @@ class WebtritApiClientFactory {
   WebtritApiClient? _cachedClient;
   Uri? _lastCoreUrl;
   String? _lastTenantId;
+  Future<WebtritApiClient>? _pendingDefaultClient;
 
-  Future<WebtritApiClient> createWebtritApiClient({Uri? coreUrl, String? tenantId}) async {
+  Future<WebtritApiClient> createWebtritApiClient({Uri? coreUrl, String? tenantId}) {
+    // Default clients are requested by several startup services at once. Share
+    // the in-flight creation so async resolution cannot leak duplicate clients.
+    if (coreUrl == null && tenantId == null) {
+      final pending = _pendingDefaultClient;
+      if (pending != null) return pending;
+
+      final future = _createWebtritApiClient();
+      _pendingDefaultClient = future.whenComplete(() => _pendingDefaultClient = null);
+      return future;
+    }
+
+    return _createWebtritApiClient(coreUrl: coreUrl, tenantId: tenantId);
+  }
+
+  Future<WebtritApiClient> _createWebtritApiClient({Uri? coreUrl, String? tenantId}) async {
     final actualCoreUrl = coreUrl ?? await getCoreUrl();
     final actualTenantId = tenantId ?? await getTenantId();
 
