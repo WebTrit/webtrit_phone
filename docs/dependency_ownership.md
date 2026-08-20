@@ -66,9 +66,11 @@ Two consequences worth spelling out:
 | `PrivateGatewayRepository` | `main_shell_repositories.dart` | the same provider |
 | `SessionGuard` | `main_shell.dart` | the shell |
 
-## Known gaps (in progress)
+## What keeps it honest
 
-- The theme-mode provider in `RootApp.build` is conditional and sits above every
-  other provider, so a host that passes it conditionally would remount the whole
-  graph below it - and a remount over an already released registry is exactly
-  what the rule cannot protect against.
+- `test/common/instance_registry_test.dart` covers the release: reverse order,
+  one run even under a concurrent second call, a failing release not stopping
+  the rest, and a released registry refusing to hand instances out.
+- `test/app/host_theme_mode_provider_test.dart` covers the shape rule for the
+  optional theme-mode entry, which sits above every other provider: giving or
+  taking away the host mode must not remount what is below it.

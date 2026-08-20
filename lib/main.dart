@@ -9,6 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
@@ -86,6 +87,26 @@ void _onRootLogRecord(LogRecord record) {
 /// and reactive (it follows runtime system-info / remote-config changes), so a
 /// re-created provider must be able to listen again without throwing or going stale.
 typedef ConfigSource<T> = ({T initial, Stream<T> Function() updates});
+
+/// The host theme-mode override, provided as a nullable value so the app can
+/// always read it - null when no host supplies one.
+///
+/// Deliberately one widget type whether a [source] is given or not. The entry
+/// sits above every other provider, and a list entry that changes type is a new
+/// widget at that position: everything below it would be unmounted and rebuilt,
+/// taking the dependencies of a running app with it.
+///
+/// The [source] is read once, when the entry is first built - as with every
+/// stream provider here. A host that swaps one source for another gets the
+/// first one until it mounts a new app, which is the intended contract: the
+/// config sources belong to the app instance, not to a frame.
+SingleChildWidget hostThemeModeProvider(ConfigSource<ThemeMode>? source) {
+  return StreamProvider<ThemeMode?>(
+    initialData: source?.initial,
+    create: (_) => source?.updates() ?? const Stream<ThemeMode?>.empty(),
+    updateShouldNotify: (previous, next) => previous != next,
+  );
+}
 
 class RootApp extends StatefulWidget {
   const RootApp({
@@ -173,14 +194,7 @@ class _RootAppState extends State<RootApp> {
         ),
         // Optional host theme-mode override (see [themeMode]); always provided as
         // a nullable value so App can read it, null in a standalone run.
-        if (widget.themeMode case final source?)
-          StreamProvider<ThemeMode?>(
-            initialData: source.initial,
-            create: (_) => source.updates(),
-            updateShouldNotify: (previous, next) => previous != next,
-          )
-        else
-          Provider<ThemeMode?>.value(value: null),
+        hostThemeModeProvider(widget.themeMode),
         Provider<PackageInfo>(create: (_) => widget.instanceRegistry.get()),
         // Stateless version-compatibility policy shared by the login gate and the
         // in-app force-update gate; const, so no bootstrap registration needed.
