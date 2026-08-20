@@ -151,6 +151,57 @@ void main() {
   });
 
   group('release', () {
+    test('abort releases a partial build in reverse order', () async {
+      final released = <String>[];
+      final builder = AppDependenciesBuilder()
+        ..keep(_Recorded('first', released))
+        ..share(_Recorded('second', released))
+        ..keep(_Recorded('third', released));
+
+      await builder.abort();
+
+      expect(released, ['third', 'second', 'first']);
+      expect(() => builder.keep(const _Plain()), throwsStateError);
+      expect(() => _sealed(builder), throwsStateError);
+    });
+
+    test('abort keeps releasing after one dependency fails', () async {
+      final released = <String>[];
+      final builder = AppDependenciesBuilder()
+        ..keep(_Recorded('first', released))
+        ..keep(_Failing());
+
+      await expectLater(builder.abort(), completes);
+
+      expect(released, ['first']);
+    });
+
+    test('abort runs once when concurrent calls overlap', () async {
+      final releases = <String>[];
+      final gate = Completer<void>();
+      final builder = AppDependenciesBuilder()..keep(_Slow(gate, releases));
+
+      final first = builder.abort();
+      final second = builder.abort();
+      gate.complete();
+      await Future.wait([first, second]);
+      await builder.abort();
+
+      expect(releases, ['slow']);
+    });
+
+    test('abort after build leaves ownership with the application', () async {
+      final releases = <String>[];
+      final builder = AppDependenciesBuilder()..keep(_Recorded('owned', releases));
+      final app = _sealed(builder);
+
+      await builder.abort();
+      expect(releases, isEmpty);
+
+      await app.dispose();
+      expect(releases, ['owned']);
+    });
+
     test('releases in reverse order of creation, kept and shared alike', () async {
       final released = <String>[];
       final builder = AppDependenciesBuilder()
