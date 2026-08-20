@@ -21,7 +21,9 @@ class FeatureAccessStreamFactory implements Disposable {
     required this.appThemes,
     required this.systemInfoRepository,
     required this.remoteConfigService,
-  });
+  }) : _startupOverrides = FeatureOverridesFactory.create(remoteConfigService.startupSnapshot);
+
+  final FeatureOverrides _startupOverrides;
 
   Future<FeatureAccess> getInitialSnapshot() async {
     final systemInfo = await systemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly);
@@ -44,9 +46,31 @@ class FeatureAccessStreamFactory implements Disposable {
 
   FeatureAccess _build(WebtritSystemInfo? systemInfo, RemoteConfigSnapshot remoteConfig) {
     final coreSupport = CoreSupportFactory.create(systemInfo);
-    final overrides = FeatureOverridesFactory.create(remoteConfig);
+    final overrides = _applySessionPrivacyPolicy(FeatureOverridesFactory.create(remoteConfig));
 
     return FeatureAccess.create(appThemes.appConfig, appThemes.embeddedResources, coreSupport, systemInfo, overrides);
+  }
+
+  FeatureOverrides _applySessionPrivacyPolicy(FeatureOverrides current) {
+    final remoteLoggingEnabled = _startupOverrides.remoteLoggingEnabled == true
+        ? current.remoteLoggingEnabled ?? false
+        : false;
+    final isLogAnonymizationEnabled = _startupOverrides.isLogAnonymizationEnabled == false
+        ? current.isLogAnonymizationEnabled ?? true
+        : true;
+
+    return FeatureOverrides(
+      isVideoCallEnabled: current.isVideoCallEnabled,
+      isSystemNotificationsEnabled: current.isSystemNotificationsEnabled,
+      hybridPresenceSupport: current.hybridPresenceSupport,
+      isVoicemailEnabled: current.isVoicemailEnabled,
+      isCallHistoryEnabled: current.isCallHistoryEnabled,
+      callPullVideoStrategy: current.callPullVideoStrategy,
+      monitorCheckInterval: current.monitorCheckInterval,
+      logLevel: current.logLevel,
+      remoteLoggingEnabled: remoteLoggingEnabled,
+      isLogAnonymizationEnabled: isLogAnonymizationEnabled,
+    );
   }
 
   /// Releases the remote configuration service this factory was built with:

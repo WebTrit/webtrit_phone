@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:logging/logging.dart';
@@ -154,6 +154,7 @@ Future<AppDependencies> _bootstrap({
     'remote-config',
     () => firebase.remoteConfig(remoteCacheConfigService),
   );
+  _refreshRemoteConfigAfterFirstFrame(cachedRemoteConfigService);
 
   final featureAccessStreamFactory = deps.keep(
     FeatureAccessStreamFactory(
@@ -287,6 +288,10 @@ Future<AppDependencies> _bootstrap({
     themeSettings: presentationConfig.themeSettings,
     systemInfo: systemInfoRepository,
   );
+}
+
+void _refreshRemoteConfigAfterFirstFrame(RemoteConfigService remoteConfigService) {
+  WidgetsBinding.instance.addPostFrameCallback((_) => unawaited(Future<void>(remoteConfigService.refresh)));
 }
 
 typedef _BootstrapRoots = ({
