@@ -25,11 +25,18 @@ import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
   final logger = Logger('run_app');
-  final startupTrace = StartupTrace();
+  final startupMeasurementsEnabled = kDebugMode || kProfileMode;
+  final startupTrace = startupMeasurementsEnabled ? StartupTrace() : StartupTrace.disabled();
 
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      if (startupMeasurementsEnabled) {
+        // The application logger is initialized inside bootstrap, so this
+        // startup contract intentionally writes straight to the console.
+        // ignore: avoid_print
+        print('${StartupTrace.logTag} startup_measurements enabled=true');
+      }
 
       // Android 15+ enforces edge-to-edge, but on older versions the engine leaves the
       // view inset above the navigation bar - the app then paints nothing there and the
