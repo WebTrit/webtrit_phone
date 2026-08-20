@@ -75,6 +75,10 @@ class AppDependenciesBuilder {
   /// ownership of the same collected dependencies.
   var _built = false;
 
+  /// Seals the builder as soon as [abort] starts, so concurrent rollback calls
+  /// cannot release the same partially collected dependencies twice.
+  var _aborted = false;
+
   /// Owns [instance] without showing it to the widget tree. For the few things
   /// that exist only so they keep running - and so they can be stopped.
   T keep<T>(T instance) {
@@ -123,9 +127,25 @@ class AppDependenciesBuilder {
     );
   }
 
+  /// Abandons a startup that failed before [build] transferred ownership.
+  ///
+  /// Collected dependencies are released in reverse order, just as they are by
+  /// [AppDependencies.dispose]. Repeated and concurrent calls do nothing, and
+  /// calling this after [build] is also a no-op because ownership has already
+  /// moved to the returned [AppDependencies].
+  Future<void> abort() async {
+    if (_built || _aborted) return;
+    _aborted = true;
+
+    await _release(_owned);
+  }
+
   void _ensureCollecting() {
     if (_built) {
       throw StateError('AppDependenciesBuilder has already been built.');
+    }
+    if (_aborted) {
+      throw StateError('AppDependenciesBuilder has already been aborted.');
     }
   }
 
@@ -189,13 +209,17 @@ class AppDependencies {
     if (_released) return;
     _released = true;
 
-    for (final instance in _owned.reversed) {
-      if (instance is! Disposable) continue;
-      try {
-        await instance.dispose();
-      } catch (e, s) {
-        _logger.warning('Failed to release ${instance.runtimeType}', e, s);
-      }
+    await _release(_owned);
+  }
+}
+
+Future<void> _release(List<Object> owned) async {
+  for (final instance in owned.reversed) {
+    if (instance is! Disposable) continue;
+    try {
+      await instance.dispose();
+    } catch (e, s) {
+      _logger.warning('Failed to release ${instance.runtimeType}', e, s);
     }
   }
 }

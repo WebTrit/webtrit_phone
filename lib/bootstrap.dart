@@ -54,6 +54,20 @@ Future<AppDependencies> bootstrap({
   final deps = AppDependenciesBuilder();
   final trace = startupTrace ?? StartupTrace.disabled();
 
+  try {
+    return await _bootstrap(deps: deps, firebase: firebase, configurePresentation: configurePresentation, trace: trace);
+  } catch (error, stackTrace) {
+    await deps.abort();
+    Error.throwWithStackTrace(error, stackTrace);
+  }
+}
+
+Future<AppDependencies> _bootstrap({
+  required AppDependenciesBuilder deps,
+  required FirebaseIntegration firebase,
+  required AppPresentationConfigBuilder? configurePresentation,
+  required StartupTrace trace,
+}) async {
   // External SDKs (side effects only, don't need registration). The [firebase]
   // strategy decides whether these run: standalone wires Firebase, while an
   // embedder that owns the default Firebase app (e.g. the theme configurator's
@@ -584,7 +598,9 @@ Future _initLocalPushs() async {
       load: FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails,
       deliver: (launchDetails) async {
         final response = launchDetails.notificationResponse;
-        if (response != null) await LocalPushsBroker.handleActionReceived(response);
+        if (response != null) {
+          await LocalPushsBroker.handleActionReceived(response);
+        }
       },
       onSlow: (elapsed) => logger.warning('getNotificationAppLaunchDetails still pending after ${elapsed.inSeconds}s'),
       onError: (error, stackTrace) => logger.warning('getNotificationAppLaunchDetails failed', error, stackTrace),
@@ -630,7 +646,9 @@ void workManagerDispatcher() {
 
     // Skip execution if the app is in the foreground
     final appLifecycle = await AppLifecycle.initSlave();
-    if (appLifecycle.getLifecycleState() == AppLifecycleState.resumed) return true;
+    if (appLifecycle.getLifecycleState() == AppLifecycleState.resumed) {
+      return true;
+    }
 
     try {
       // Init api and remote repository

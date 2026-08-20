@@ -16,6 +16,11 @@ of creation and releases every `Disposable` among them. Because release runs in
 reverse, sharing a dependency after whatever it was built from is all the
 ordering that is needed, and construction gives that for free.
 
+If startup fails before `build()` transfers ownership to `AppDependencies`,
+`bootstrap()` calls `AppDependenciesBuilder.abort()`. It applies the same reverse,
+best-effort release contract to the dependencies collected so far, preventing a
+partially started application from leaking subscriptions, isolates or controllers.
+
 A shared dependency reaches the tree by value, so no provider can close it. A
 provider never passes `dispose:` for something it did not create, and never
 performs a process-wide teardown - `DriftIsolate.shutdownAll()`,
@@ -82,8 +87,8 @@ Two consequences worth spelling out:
 ## What keeps it honest
 
 - `test/app/app_dependencies_test.dart` covers what the tree receives (shared yes,
-  kept no) and the release: reverse order of creation, one run even under a
-  concurrent second call, and a failing release not stopping the rest.
+  kept no), normal release and startup abort: reverse order of creation, one run
+  even under a concurrent second call, and a failing release not stopping the rest.
 - `test/app/host_theme_mode_provider_test.dart` covers the shape rule for the
   optional theme-mode entry, which sits above every other provider: giving or
   taking away the host mode must not remount what is below it.
