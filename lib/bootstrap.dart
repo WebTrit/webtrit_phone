@@ -42,7 +42,7 @@ IsolateContext? _isolateContext;
 
 Future<AppDependencies> bootstrap({
   FirebaseIntegration firebase = const FirebaseIntegrationEnabled(),
-  AppRenderSourcesSelector? selectRenderSources,
+  AppPresentationConfigBuilder? configurePresentation,
 }) async {
   // Everything long-lived is handed to the builder where it is created: `share`
   // for what the screens read, `keep` for what only has to keep running. See
@@ -232,7 +232,7 @@ Future<AppDependencies> bootstrap({
   await _initCallkeep(featureAccess);
   await _initWorkManager();
 
-  final defaultRenderSources = (
+  final defaultPresentationConfig = (
     featureAccess: (initial: featureAccess, updates: featureAccessStreamFactory.create),
     themeSettings: (initial: appThemes.values.first.settings, updates: () => const Stream<ThemeSettings>.empty()),
   );
@@ -240,11 +240,11 @@ Future<AppDependencies> bootstrap({
   // already used its own FeatureAccess snapshot for permissions, metadata,
   // logging and call integration, so preview sources cannot reconfigure those
   // services.
-  final renderSources = selectRenderSources?.call(defaultRenderSources) ?? defaultRenderSources;
+  final presentationConfig = configurePresentation?.call(defaultPresentationConfig) ?? defaultPresentationConfig;
 
   return deps.build(
-    featureAccess: renderSources.featureAccess,
-    themeSettings: renderSources.themeSettings,
+    featureAccess: presentationConfig.featureAccess,
+    themeSettings: presentationConfig.themeSettings,
     systemInfo: systemInfoRepository,
   );
 }

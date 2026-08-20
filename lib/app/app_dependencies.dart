@@ -23,11 +23,14 @@ typedef ConfigSource<T> = ({T initial, Stream<T> Function() updates});
 
 /// The configuration sources rendered by the widget tree after bootstrap has
 /// finished using its operational configuration.
-typedef AppRenderSources = ({ConfigSource<FeatureAccess> featureAccess, ConfigSource<ThemeSettings> themeSettings});
+typedef AppPresentationConfig = ({
+  ConfigSource<FeatureAccess> featureAccess,
+  ConfigSource<ThemeSettings> themeSettings,
+});
 
 /// Lets a host replace only what the widget tree renders, without changing the
 /// configuration bootstrap uses to initialize services.
-typedef AppRenderSourcesSelector = AppRenderSources Function(AppRenderSources defaults);
+typedef AppPresentationConfigBuilder = AppPresentationConfig Function(AppPresentationConfig defaults);
 
 /// Collects the application while it starts.
 ///
@@ -154,7 +157,7 @@ class AppDependencies {
 
   /// The configuration the app renders with, as selected during bootstrap.
   /// An embedding host can replace the defaults through
-  /// `bootstrap(selectRenderSources: ...)`.
+  /// `bootstrap(configurePresentation: ...)`.
   final ConfigSource<FeatureAccess> featureAccess;
   final ConfigSource<ThemeSettings> themeSettings;
 
