@@ -32,8 +32,10 @@ class AvatarStatusBadge extends StatelessWidget {
   /// is shown.
   final List<PresenceInfo>? presenceInfo;
 
-  /// BLF dialog states of the contact; a non-empty list marks the contact as
-  /// on a call via the activity icon of the hybrid indicator.
+  /// BLF dialog states of the contact; an established call among them marks
+  /// the contact as on a call via the activity icon of the hybrid indicator.
+  /// A phone that is merely ringing is not one, so reported calls are not
+  /// counted, they are read - see `DialogInfo.isEstablished`.
   final List<DialogInfo>? dialogInfo;
 
   @override

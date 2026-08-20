@@ -46,7 +46,7 @@ class SipPresenceIndicator extends StatelessWidget {
   }
 
   IconData? _activityIcon(List<PresenceInfo> presenceInfo, List<DialogInfo> dialogInfo) {
-    if (dialogInfo.isNotEmpty) {
+    if (dialogInfo.established != null) {
       return Icons.phone_in_talk_rounded;
     }
 
