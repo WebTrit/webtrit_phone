@@ -34,6 +34,7 @@ void main() {
       ),
       ContactsBottomMenuTab(
         contactSourceTypes: const [],
+        favoritesFilter: false,
         enabled: true,
         initial: false,
         titleL10n: 'c',

@@ -214,6 +214,22 @@ class AppRouter extends RootStackRouter {
                       ],
                       path: '',
                     ),
+                    // The same tab, arranged for a deployment that offers
+                    // favourites as a filter. A sibling rather than a second
+                    // router: everything a contact leads to - the card, the
+                    // call log - is the same from either.
+                    AutoRoute(
+                      page: ContactsFilterScreenPageRoute.page,
+                      guards: [
+                        AutoRouteGuard.redirect(
+                          (resolver) => ContactsFilterScreenPage.getPageRouteInfo(
+                            resolver.route,
+                            () => _bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes ?? [],
+                          ),
+                        ),
+                      ],
+                      path: ContactsBottomMenuTab.filterSegment,
+                    ),
                     AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
                     AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
                     AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
@@ -459,8 +475,10 @@ class AppRouter extends RootStackRouter {
               // Recents tab can be either with CDRs or standard
               RecentsBottomMenuTab(supportsCallHistory: true) => const RecentCdrsRouterPageRoute(),
               RecentsBottomMenuTab() => const RecentsRouterPageRoute(),
-              // Contacts tab
-              ContactsBottomMenuTab() => const ContactsRouterPageRoute(),
+              // Contacts tab, in whichever arrangement it is configured for.
+              // Without naming the screen here the router falls back to its
+              // own default child, which is the other one.
+              final ContactsBottomMenuTab tab => contactsRouteOf(tab),
               // Embedded tab
               EmbeddedBottomMenuTab(id: final id) => EmbeddedTabPageRoute(id: id),
               // Other standard tabs

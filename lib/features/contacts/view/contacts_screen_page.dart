@@ -28,7 +28,7 @@ class ContactsScreenPage extends StatelessWidget {
     final widget = ContactsScreen(
       title: Text(EnvironmentConfig.APP_NAME),
       sourceTypes: sourceTypes,
-      sourceTypeWidgetBuilder: _contactSourceTypeWidgetBuilder,
+      sourceTypeWidgetBuilder: contactSourceTypeWidgetBuilder,
     );
     final provider = BlocProvider(
       create: (context) =>
@@ -37,37 +37,41 @@ class ContactsScreenPage extends StatelessWidget {
     );
     return provider;
   }
+}
 
-  Widget _contactSourceTypeWidgetBuilder(BuildContext context, ContactSourceType sourceType) {
-    switch (sourceType) {
-      case ContactSourceType.local:
-        const widget = ContactsLocalTab();
-        final provider = BlocProvider(
-          create: (context) {
-            final contactsSearchBloc = context.read<ContactsBloc>();
-            return ContactsLocalTabBloc(
-              contactsRepository: context.read<ContactsRepository>(),
-              contactsSearchBloc: contactsSearchBloc,
-              localContactsSyncBloc: context.read<LocalContactsSyncBloc>(),
-            )..add(ContactsLocalTabStarted(search: contactsSearchBloc.state.search));
-          },
-          child: widget,
-        );
-        return provider;
-      case ContactSourceType.external:
-        const widget = ContactsExternalTab();
-        final provider = BlocProvider(
-          create: (context) {
-            final contactsSearchBloc = context.read<ContactsBloc>();
-            return ContactsExternalTabBloc(
-              contactsRepository: context.read<ContactsRepository>(),
-              contactsSearchBloc: contactsSearchBloc,
-              externalContactsSyncBloc: context.read<ExternalContactsSyncBloc>(),
-            )..add(ContactsExternalTabStarted(search: contactsSearchBloc.state.search));
-          },
-          child: widget,
-        );
-        return provider;
-    }
+/// Mounts the list of one contact source with the blocs that feed it.
+///
+/// Shared by both contacts screens: the arrangement around the lists differs
+/// between them, the lists themselves do not.
+Widget contactSourceTypeWidgetBuilder(BuildContext context, ContactSourceType sourceType) {
+  switch (sourceType) {
+    case ContactSourceType.local:
+      const widget = ContactsLocalTab();
+      final provider = BlocProvider(
+        create: (context) {
+          final contactsSearchBloc = context.read<ContactsBloc>();
+          return ContactsLocalTabBloc(
+            contactsRepository: context.read<ContactsRepository>(),
+            contactsSearchBloc: contactsSearchBloc,
+            localContactsSyncBloc: context.read<LocalContactsSyncBloc>(),
+          )..add(ContactsLocalTabStarted(search: contactsSearchBloc.state.search));
+        },
+        child: widget,
+      );
+      return provider;
+    case ContactSourceType.external:
+      const widget = ContactsExternalTab();
+      final provider = BlocProvider(
+        create: (context) {
+          final contactsSearchBloc = context.read<ContactsBloc>();
+          return ContactsExternalTabBloc(
+            contactsRepository: context.read<ContactsRepository>(),
+            contactsSearchBloc: contactsSearchBloc,
+            externalContactsSyncBloc: context.read<ExternalContactsSyncBloc>(),
+          )..add(ContactsExternalTabStarted(search: contactsSearchBloc.state.search));
+        },
+        child: widget,
+      );
+      return provider;
   }
 }

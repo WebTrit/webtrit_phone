@@ -106,8 +106,11 @@ final class RecentsBottomMenuTab extends BottomMenuTab {
 }
 
 final class ContactsBottomMenuTab extends BottomMenuTab {
+  static const filterSegment = 'filter';
+
   ContactsBottomMenuTab({
     required List<ContactSourceType> contactSourceTypes,
+    required this.favoritesFilter,
     required super.enabled,
     required super.initial,
     required super.titleL10n,
@@ -117,11 +120,19 @@ final class ContactsBottomMenuTab extends BottomMenuTab {
 
   final List<ContactSourceType> contactSourceTypes;
 
+  /// Whether this tab offers favourites as a filter inside the list rather
+  /// than as a section of their own. The two are separate screens, so the
+  /// path below keeps them apart across a restart.
+  final bool favoritesFilter;
+
   @override
   MainFlavor get flavor => MainFlavor.contacts;
 
   @override
-  List<Object?> get props => [...super.props, contactSourceTypes];
+  String get routePath => '${super.routePath}${favoritesFilter ? '/$filterSegment' : ''}';
+
+  @override
+  List<Object?> get props => [...super.props, contactSourceTypes, favoritesFilter];
 }
 
 final class EmbeddedBottomMenuTab extends BottomMenuTab {

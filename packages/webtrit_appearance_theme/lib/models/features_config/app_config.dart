@@ -464,6 +464,11 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
     required String titleL10n,
     required String icon,
     @Default(<String>[]) List<String> contactSourceTypes,
+
+    /// Offers favourites as a filter inside the contacts list instead of a
+    /// section of their own. Off by default: a deployment that says nothing
+    /// keeps the contacts screen it already has.
+    @Default(false) bool favoritesFilter,
   }) = ContactsTabScheme;
 
   @JsonSerializable(explicitToJson: true)
