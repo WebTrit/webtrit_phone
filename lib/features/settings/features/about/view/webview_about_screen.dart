@@ -5,7 +5,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-class WebAboutScreen extends StatelessWidget {
+class WebAboutScreen extends StatefulWidget {
   const WebAboutScreen({
     super.key,
     required this.baseAppAboutUrl,
@@ -20,23 +20,41 @@ class WebAboutScreen extends StatelessWidget {
   final SystemInfoRepository infoRepository;
 
   @override
+  State<WebAboutScreen> createState() => _WebAboutScreenState();
+}
+
+class _WebAboutScreenState extends State<WebAboutScreen> {
+  /// Resolved once instead of in `build`: a rebuild would start a second lookup
+  /// and remount the web view on a freshly built URL.
+  ///
+  /// TODO: use session repository
+  late final Future<Uri> _coreUrl = widget.infoRepository.getCoreUrl();
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<Uri>(
-      future: infoRepository.getCoreUrl(),
+      future: _coreUrl,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        // A failed lookup opens the page without the core URL rather than
+        // leaving the screen on a spinner for the rest of the session.
+        final coreUrl = snapshot.data?.toString() ?? '';
+
         return WebViewContainer(
           title: Text(context.l10n.settings_ListViewTileTitle_about),
-          initialUri: baseAppAboutUrl.replace(
+          initialUri: widget.baseAppAboutUrl.replace(
             queryParameters: {
-              'appName': packageInfo.appName,
-              'packageName': packageInfo.packageName,
-              'version': packageInfo.version,
-              'buildNumber': packageInfo.buildNumber,
-              'coreUrl': snapshot.requireData.toString(),
+              'appName': widget.packageInfo.appName,
+              'packageName': widget.packageInfo.packageName,
+              'version': widget.packageInfo.version,
+              'buildNumber': widget.packageInfo.buildNumber,
+              'coreUrl': coreUrl,
             },
           ),
-          userAgent: userAgent,
+          userAgent: widget.userAgent,
         );
       },
     );

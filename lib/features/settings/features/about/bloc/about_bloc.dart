@@ -33,9 +33,8 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
            appIdentifier: appInfo.identifier,
            fcmPushToken: secureStorage.readFCMPushToken(),
            embeddedResources: embeddedConfig.embeddedResources,
-           // The API client is resolved asynchronously on demand. Until the
-           // first refresh completes, keep the URL empty instead of creating
-           // a client synchronously while constructing the screen.
+           // The API client is resolved asynchronously, so the URL arrives with
+           // the first refresh instead of being read while the screen is built.
            coreUrl: Uri(),
            userAgent: appMetadataProvider.userAgent,
            appInfo: appMetadataProvider.appInfo,
@@ -51,16 +50,28 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
 
   void _onStarted(AboutStarted event, Emitter<AboutState> emit) async {
     emit(state.copyWith(progress: true));
+
+    // The Core URL is emitted on its own: this screen exists to answer which
+    // backend the build is talking to, so it has to stay filled in even when
+    // the system info request below fails (no network, unreachable core).
     try {
-      final results = await Future.wait<Object?>([infoRepository.getSystemInfo(), infoRepository.getCoreUrl()]);
-      final systemInfo = results[0] as WebtritSystemInfo?;
-      final coreUrl = results[1] as Uri;
+      final coreUrl = await infoRepository.getCoreUrl();
+
+      if (emit.isDone) return;
+
+      emit(state.copyWith(coreUrl: coreUrl));
+    } catch (e, stackTrace) {
+      _logger.warning('_onStarted: core url', e, stackTrace);
+    }
+
+    try {
+      final systemInfo = await infoRepository.getSystemInfo();
       final coreVersion = systemInfo?.core.version;
       final bundleVersion = systemInfo?.bundleVersion;
 
       if (emit.isDone) return;
 
-      emit(state.copyWith(progress: false, coreUrl: coreUrl, coreVersion: coreVersion, bundleVersion: bundleVersion));
+      emit(state.copyWith(progress: false, coreVersion: coreVersion, bundleVersion: bundleVersion));
     } catch (e, stackTrace) {
       _logger.warning('_onStarted', e, stackTrace);
 
