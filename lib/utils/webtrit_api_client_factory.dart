@@ -36,9 +36,12 @@ class WebtritApiClientFactory {
       final pending = _pendingDefaultClient;
       if (pending != null) return pending;
 
-      final future = _createWebtritApiClient();
-      _pendingDefaultClient = future.whenComplete(() => _pendingDefaultClient = null);
-      return future;
+      // The stored future is the one that is handed out, so a failed creation
+      // is delivered to whoever asked for it instead of being reported as an
+      // unhandled error on a future nobody listens to.
+      final created = _createWebtritApiClient().whenComplete(() => _pendingDefaultClient = null);
+      _pendingDefaultClient = created;
+      return created;
     }
 
     return _createWebtritApiClient(coreUrl: coreUrl, tenantId: tenantId);
