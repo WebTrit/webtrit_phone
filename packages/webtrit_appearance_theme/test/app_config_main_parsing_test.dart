@@ -36,7 +36,9 @@ void main() {
       // Favorites
       tabs[0].when(
         favorites: (enabled, initial, titleL10n, icon) {
-          expect(enabled, isTrue);
+          // Off by default: favourites are reached inside contacts now, and a
+          // section of their own beside it would offer the same list twice.
+          expect(enabled, isFalse);
           expect(initial, isFalse);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_favorites');
           expect(icon, '0xe5fd');
@@ -74,8 +76,9 @@ void main() {
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_contacts');
           expect(icon, '0xee35');
           expect(contactSourceTypes, ['local', 'external']);
-          // A config that says nothing keeps the contacts screen it has.
-          expect(favoritesFilter, isFalse);
+          // On by default, which is what takes the place of the section the
+          // tab above no longer offers.
+          expect(favoritesFilter, isTrue);
         },
         keypad: unexpectedKeypad,
         messaging: unexpectedMessaging,
