@@ -187,6 +187,40 @@ void main() {
     });
   });
 
+  group('the room the header leaves', () {
+    // Numbers, not looks: the header is one short line between the title and
+    // the list, and without room on either side it reads as part of one of
+    // them. Taken from the mockup, where the gaps are a fifth to a third of
+    // the control they surround.
+    testWidgets('keeps the controls clear of the title above them', (tester) async {
+      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+
+      final title = tester.getRect(find.byType(NavigationToolbar));
+      final search = tester.getRect(find.byKey(contactsSearchInputKey));
+
+      expect(search.top - title.bottom, greaterThanOrEqualTo(8));
+    });
+
+    testWidgets('and clear of the list below them', (tester) async {
+      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+
+      final bar = tester.getRect(find.byType(AppBar));
+      final search = tester.getRect(find.byKey(contactsSearchInputKey));
+
+      expect(bar.bottom - search.bottom, greaterThanOrEqualTo(8));
+    });
+
+    testWidgets('and keeps the chooser off the button beside it', (tester) async {
+      // Two controls a hair apart read as one.
+      await pumpScreen(tester, sourceTypes: [ContactSourceType.local, ContactSourceType.external]);
+
+      final picker = tester.getRect(find.byKey(contactsSourcePickerKey));
+      final search = tester.getRect(find.byKey(contactsSearchOpenKey));
+
+      expect(search.left - picker.right, greaterThanOrEqualTo(8));
+    });
+  });
+
   group('the address book picker', () {
     testWidgets('is not drawn when there is only one to pick from', (tester) async {
       // Either way round: a deployment can be configured without the phone
