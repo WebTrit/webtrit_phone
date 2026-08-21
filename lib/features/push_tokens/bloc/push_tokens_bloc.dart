@@ -28,6 +28,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   PushTokensBloc({
     required this.pushTokensRepository,
     required this.secureStorage,
+    required this.appPreferences,
     required this.firebaseMessaging,
     required this.callkeep,
     required this.pushEnvironment,
@@ -44,6 +45,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
 
   final PushTokensRepository pushTokensRepository;
   final SecureStorage secureStorage;
+  final AppPreferences appPreferences;
   final FirebaseMessaging firebaseMessaging;
   final Callkeep callkeep;
   final PushEnvironment pushEnvironment;
@@ -177,7 +179,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
       emit(state.copyWith(pushToken: event.value));
 
       if (event.type == AppPushTokenType.fcm) {
-        secureStorage.writeFCMPushToken(event.value);
+        appPreferences.setFcmPushToken(event.value);
       }
 
       _logger.fine('Push token inserted or updated: ${event.type} ${event.value}');

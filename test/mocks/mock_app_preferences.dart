@@ -6,6 +6,18 @@ class MockAppPreferences implements AppPreferences {
   MockAppPreferences({Map<String, dynamic>? initialData}) : _storage = initialData ?? {};
 
   @override
+  String? getSystemInfo() => getString('system-info');
+
+  @override
+  Future<void> setSystemInfo(String value) => setString('system-info', value);
+
+  @override
+  String? getFcmPushToken() => getString('fcm-push-token');
+
+  @override
+  Future<void> setFcmPushToken(String value) => setString('fcm-push-token', value);
+
+  @override
   String? getString(String key) => _storage[key] as String?;
 
   @override

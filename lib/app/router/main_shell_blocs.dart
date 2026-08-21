@@ -71,6 +71,7 @@ class MainShellBlocs extends StatelessWidget {
             return PushTokensBloc(
               pushTokensRepository: context.read<PushTokensRepository>(),
               secureStorage: context.read<SecureStorage>(),
+              appPreferences: context.read<AppPreferences>(),
               firebaseMessaging: context.read<FirebaseMessaging>(),
               callkeep: callkeep,
               pushEnvironment: context.read<PushEnvironment>(),

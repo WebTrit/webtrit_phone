@@ -96,6 +96,11 @@ class MockSecureStorage implements SecureStorage {
   }
 
   @override
+  Future<void> deleteFCMPushToken() async {
+    _storage.remove(_kFCMPushToken);
+  }
+
+  @override
   String? readExternalPageAccessToken() {
     return _storage[_kExternalPageAccessTokenKey];
   }

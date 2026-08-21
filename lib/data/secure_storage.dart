@@ -34,6 +34,8 @@ abstract class SecureStorage {
 
   Future<void> writeFCMPushToken(String token);
 
+  Future<void> deleteFCMPushToken();
+
   // External Page Token (Composite methods)
   String? readExternalPageAccessToken();
 
@@ -198,6 +200,11 @@ class SecureStorageImpl implements SecureStorage {
   @override
   Future<void> writeFCMPushToken(String token) {
     return _write(_kFCMPushToken, token);
+  }
+
+  @override
+  Future<void> deleteFCMPushToken() {
+    return _delete(_kFCMPushToken);
   }
 
   // EXTERNAL PAGE TOKEN

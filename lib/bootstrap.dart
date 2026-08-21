@@ -88,6 +88,7 @@ Future<AppDependencies> _bootstrap({
   // final token = secureStorage.readToken();
   // print('bootstrap: secureStorage token: ${token != null ? '***' : 'null'}');
   final appPreferences = deps.share(roots.appPreferences);
+  await _migrateNonSecretStorage(secureStorage, appPreferences);
   deps.share<UserLocalDatasource>(UserLocalDatasourcePrefsImpl(appPreferences));
 
   // Network clients
@@ -122,7 +123,7 @@ Future<AppDependencies> _bootstrap({
   final contactsAgreementStatusRepository = deps.share<ContactsAgreementStatusRepository>(
     ContactsAgreementStatusRepositoryPrefsImpl(appPreferences),
   );
-  final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
+  final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
   final systemInfoRemoteDatasource = SystemInfoRemoteDatasource(apiClientFactory);
   final systemInfoRepository = deps.share<SystemInfoRepository>(
     SystemInfoRepositoryImpl(localDatasource: systemInfoLocalDatasource, remoteDatasource: systemInfoRemoteDatasource),
@@ -346,6 +347,29 @@ Future<_BootstrapRoots> _initializeRoots({required FirebaseIntegration firebase,
     appThemes: appThemes.value,
     remoteCacheConfigService: remoteCacheConfigService.value,
   );
+}
+
+/// Moves the two non-secret values written by older versions out of the
+/// keychain. The fallback remains in place for one release so an interrupted
+/// migration can be retried safely on the next launch.
+Future<void> _migrateNonSecretStorage(SecureStorage secureStorage, AppPreferences appPreferences) async {
+  final systemInfo = appPreferences.getSystemInfo();
+  if (systemInfo == null) {
+    final legacySystemInfo = secureStorage.readSystemInfo();
+    if (legacySystemInfo != null) {
+      await appPreferences.setSystemInfo(legacySystemInfo);
+      await secureStorage.deleteSystemInfo();
+    }
+  }
+
+  final fcmToken = appPreferences.getFcmPushToken();
+  if (fcmToken == null) {
+    final legacyFcmToken = secureStorage.readFCMPushToken();
+    if (legacyFcmToken != null) {
+      await appPreferences.setFcmPushToken(legacyFcmToken);
+      await secureStorage.deleteFCMPushToken();
+    }
+  }
 }
 
 /// Standalone integration: real Firebase platform init, the Firebase id provider,

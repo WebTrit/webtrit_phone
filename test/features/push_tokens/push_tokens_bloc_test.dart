@@ -19,10 +19,13 @@ class _MockCallkeep extends Mock implements Callkeep {}
 
 class _MockPushEnvironment extends Mock implements PushEnvironment {}
 
+class _MockAppPreferences extends Mock implements AppPreferences {}
+
 void main() {
   late _MockFirebaseMessaging firebaseMessaging;
   late _MockPushTokensRepository pushTokensRepository;
   late MockSecureStorage secureStorage;
+  late AppPreferences appPreferences;
   late _MockCallkeep callkeep;
   late _MockPushEnvironment pushEnvironment;
 
@@ -30,6 +33,7 @@ void main() {
     firebaseMessaging = _MockFirebaseMessaging();
     pushTokensRepository = _MockPushTokensRepository();
     secureStorage = MockSecureStorage();
+    appPreferences = _MockAppPreferences();
     callkeep = _MockCallkeep();
     pushEnvironment = _MockPushEnvironment();
 
@@ -43,6 +47,7 @@ void main() {
     return PushTokensBloc(
       pushTokensRepository: pushTokensRepository,
       secureStorage: secureStorage,
+      appPreferences: appPreferences,
       firebaseMessaging: firebaseMessaging,
       callkeep: callkeep,
       pushEnvironment: pushEnvironment,
