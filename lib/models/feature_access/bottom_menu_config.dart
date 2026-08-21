@@ -22,6 +22,18 @@ class BottomMenuConfig extends Equatable {
     return tab is T ? tab : null;
   }
 
+  /// Whether a person can get at their favourites at all, in whichever
+  /// arrangement this install is configured for: a section of their own, or a
+  /// filter inside the contacts list.
+  ///
+  /// Asked wherever marking a favourite is offered, because a star that puts
+  /// someone on a list nothing shows is worse than no star at all - and the
+  /// two arrangements are configured separately, so neither of them alone is
+  /// the answer.
+  bool get favoritesReachable =>
+      getTabEnabled<FavoritesBottomMenuTab>() != null ||
+      (getTabEnabled<ContactsBottomMenuTab>()?.favoritesFilter ?? false);
+
   /// Returns the embedded tab with the specified [id].
   EmbeddedBottomMenuTab getEmbeddedTabById(String id) {
     return embeddedTabs.firstWhere((tab) => tab.id == id);
