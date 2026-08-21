@@ -157,6 +157,10 @@ class ContactsRoundButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
+    // Barely a shade off the bar behind it: the circle is there to say where
+    // to press, not to draw a second box beside the one the search field
+    // already is - the icon carries the meaning.
+    //
     // Named from outside the tap target rather than inside it: an identifier
     // put on the icon opens a boundary of its own, and what comes out is one
     // node carrying the name and another carrying the press.
@@ -166,7 +170,7 @@ class ContactsRoundButton extends StatelessWidget {
       child: SizedBox.square(
         dimension: kMainAppBarBottomControlHeight,
         child: Material(
-          color: colors.surfaceContainerHigh,
+          color: colors.surfaceContainer,
           shape: const CircleBorder(),
           child: InkWell(
             key: buttonKey,
