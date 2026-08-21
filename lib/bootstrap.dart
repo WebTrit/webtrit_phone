@@ -122,7 +122,7 @@ Future<AppDependencies> _bootstrap({
   final contactsAgreementStatusRepository = deps.share<ContactsAgreementStatusRepository>(
     ContactsAgreementStatusRepositoryPrefsImpl(appPreferences),
   );
-  final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
+  final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
   final systemInfoRemoteDatasource = SystemInfoRemoteDatasource(apiClientFactory);
   final systemInfoRepository = deps.share<SystemInfoRepository>(
     SystemInfoRepositoryImpl(localDatasource: systemInfoLocalDatasource, remoteDatasource: systemInfoRemoteDatasource),
