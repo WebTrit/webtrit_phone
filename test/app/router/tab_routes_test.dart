@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/features/contacts/contacts.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 ContactsBottomMenuTab _tab({required bool favoritesFilter}) => ContactsBottomMenuTab(
@@ -12,6 +11,14 @@ ContactsBottomMenuTab _tab({required bool favoritesFilter}) => ContactsBottomMen
   initial: true,
   titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
   icon: Icons.contacts,
+);
+
+RecentsBottomMenuTab _recentsTab({required bool supportsCallHistory}) => RecentsBottomMenuTab(
+  supportsCallHistory: supportsCallHistory,
+  enabled: true,
+  initial: true,
+  titleL10n: 'main_BottomNavigationBarItemLabel_recents',
+  icon: Icons.history,
 );
 
 void main() {
@@ -37,6 +44,18 @@ void main() {
 
         expect(route.initialChildren, isNotEmpty, reason: 'favoritesFilter: $favoritesFilter');
       }
+    });
+  });
+
+  group('where a recents tab leads', () {
+    // Asked in two places as well - the tab set and the initial tab - and the
+    // two are the same answer or one of them opens the wrong history.
+    test('a tab without call history lands on the plain recents screen', () {
+      expect(recentsRouteOf(_recentsTab(supportsCallHistory: false)).routeName, RecentsRouterPageRoute.name);
+    });
+
+    test('a tab with call history lands on the one that shows it', () {
+      expect(recentsRouteOf(_recentsTab(supportsCallHistory: true)).routeName, RecentCdrsRouterPageRoute.name);
     });
   });
 }

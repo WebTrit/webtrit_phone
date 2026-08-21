@@ -472,12 +472,11 @@ class AppRouter extends RootStackRouter {
         MainScreenPageRoute(
           children: [
             switch (_mainInitialTab) {
-              // Recents tab can be either with CDRs or standard
-              RecentsBottomMenuTab(supportsCallHistory: true) => const RecentCdrsRouterPageRoute(),
-              RecentsBottomMenuTab() => const RecentsRouterPageRoute(),
-              // Contacts tab, in whichever arrangement it is configured for.
-              // Without naming the screen here the router falls back to its
-              // own default child, which is the other one.
+              // Recents and contacts each come in more than one arrangement,
+              // and which one a tab leads to is answered in one place - see
+              // the helpers below - because it is also asked when the tab set
+              // itself is built.
+              final RecentsBottomMenuTab tab => recentsRouteOf(tab),
               final ContactsBottomMenuTab tab => contactsRouteOf(tab),
               // Embedded tab
               EmbeddedBottomMenuTab(id: final id) => EmbeddedTabPageRoute(id: id),
@@ -551,6 +550,32 @@ class AppRouter extends RootStackRouter {
 
     return DeepLink.defaultPath;
   }
+}
+
+/// Where a configured bottom-menu tab leads.
+///
+/// Stated once per tab because each answer is asked in two places - when the
+/// tab set is built and when the app opens straight onto one of them - and the
+/// two disagreeing is invisible until someone runs the app and lands on the
+/// wrong screen.
+PageRouteInfo<dynamic> contactsRouteOf(ContactsBottomMenuTab tab) {
+  // Naming the screen is what makes the answer an answer: this tab's router
+  // has a default child, so a route built without children silently lands on
+  // it - which is the wrong screen for half the deployments.
+  return ContactsRouterPageRoute(
+    children: [
+      if (tab.favoritesFilter)
+        ContactsFilterScreenPageRoute(sourceTypes: tab.contactSourceTypes)
+      else
+        ContactsScreenPageRoute(sourceTypes: tab.contactSourceTypes),
+    ],
+  );
+}
+
+/// Where a recents tab leads: the two arrangements are routers of their own,
+/// so picking the router is the whole of it.
+PageRouteInfo<dynamic> recentsRouteOf(RecentsBottomMenuTab tab) {
+  return tab.supportsCallHistory ? const RecentCdrsRouterPageRoute() : const RecentsRouterPageRoute();
 }
 
 Object _onNavigationLoggerMessage(String callbackName, NavigationResolver resolver) {

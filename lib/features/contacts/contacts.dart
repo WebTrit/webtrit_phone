@@ -1,5 +1,4 @@
 export 'bloc/contacts_bloc.dart';
-export 'contacts_route.dart';
 export 'features/features.dart';
 export 'view/contacts_filter_screen_page.dart';
 export 'view/contacts_router_page.dart';
