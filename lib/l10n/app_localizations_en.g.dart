@@ -484,6 +484,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get contacts_ContactsScreen_emptyFavorites =>
+      'No favorites among your contacts yet.\nAdd one from a contact card using the star icon';
+
+  @override
+  String get contacts_ContactsScreen_filterAll => 'All';
+
+  @override
+  String get contacts_ContactsScreen_filterFavorites => 'Favorites';
+
+  @override
+  String get contacts_ContactsScreen_sourceSemanticsLabel => 'Contact source';
+
+  @override
   String get contacts_agreement_button_text => 'Continue';
 
   @override

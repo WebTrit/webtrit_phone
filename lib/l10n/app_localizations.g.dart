@@ -880,6 +880,30 @@ abstract class AppLocalizations {
   /// **'Transfer current call to {number}'**
   String contact_SemanticsLabel_transfer(String number);
 
+  /// No description provided for @contacts_ContactsScreen_emptyFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'No favorites among your contacts yet.\nAdd one from a contact card using the star icon'**
+  String get contacts_ContactsScreen_emptyFavorites;
+
+  /// No description provided for @contacts_ContactsScreen_filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get contacts_ContactsScreen_filterAll;
+
+  /// No description provided for @contacts_ContactsScreen_filterFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get contacts_ContactsScreen_filterFavorites;
+
+  /// No description provided for @contacts_ContactsScreen_sourceSemanticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact source'**
+  String get contacts_ContactsScreen_sourceSemanticsLabel;
+
   /// No description provided for @contacts_agreement_button_text.
   ///
   /// In en, this message translates to:

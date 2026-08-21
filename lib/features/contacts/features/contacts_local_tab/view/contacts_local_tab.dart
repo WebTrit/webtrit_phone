@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/extension/elevated_button_styles.dart';
@@ -13,7 +14,12 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../../../contacts.dart';
 
 class ContactsLocalTab extends StatefulWidget {
-  const ContactsLocalTab({super.key});
+  const ContactsLocalTab({super.key, this.favoritesOnly = false});
+
+  /// Narrows the list to the people with a favourite among their numbers.
+  /// False is the whole address book, which is what the contacts screen
+  /// without the filter always shows.
+  final bool favoritesOnly;
 
   @override
   State<ContactsLocalTab> createState() => _ContactsLocalTabState();
@@ -55,6 +61,8 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
 
     return BlocBuilder<ContactsLocalTabBloc, ContactsLocalTabState>(
       builder: (context, state) {
+        final shown = widget.favoritesOnly ? state.contacts.favoritesOnly : state.contacts;
+
         if (state.status == ContactsLocalTabStatus.initial) {
           return const Center(child: CircularProgressIndicator());
         } else if (state.status == ContactsLocalTabStatus.permissionFailure) {
@@ -67,13 +75,15 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
               ),
             ],
           );
-        } else if (state.contacts.isNotEmpty) {
+        } else if (shown.isNotEmpty) {
+          final contacts = shown;
+
           return RefreshIndicator(
             onRefresh: _refreshContacts,
             child: ListView.builder(
-              itemCount: state.contacts.length,
+              itemCount: contacts.length,
               itemBuilder: (context, index) {
-                final contact = state.contacts[index];
+                final contact = contacts[index];
                 return ContactTileAdapter(
                   tileKey: contactsLocalContactTileKey,
                   contact: contact,
@@ -83,6 +93,10 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
               },
             ),
           );
+        } else if (widget.favoritesOnly && state.contacts.isNotEmpty) {
+          // Nothing to show because of the filter is a different answer from
+          // nothing to show at all, and it is not a failure or a slow fetch.
+          return NoDataPlaceholder(content: Text(context.l10n.contacts_ContactsScreen_emptyFavorites));
         } else {
           if (state.status == ContactsLocalTabStatus.failure) {
             return NoDataPlaceholder(content: Text(context.l10n.contacts_LocalTabText_failure));

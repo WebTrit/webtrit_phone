@@ -444,6 +444,14 @@
       }
     }
   },
+  "contacts_ContactsScreen_emptyFavorites": "ยังไม่มีรายการโปรดในรายชื่อของคุณ\nเพิ่มได้จากการ์ดรายชื่อโดยแตะไอคอนดาว",
+  "@contacts_ContactsScreen_emptyFavorites": {},
+  "contacts_ContactsScreen_filterAll": "ทั้งหมด",
+  "@contacts_ContactsScreen_filterAll": {},
+  "contacts_ContactsScreen_filterFavorites": "รายการโปรด",
+  "@contacts_ContactsScreen_filterFavorites": {},
+  "contacts_ContactsScreen_sourceSemanticsLabel": "แหล่งที่มาของรายชื่อ",
+  "@contacts_ContactsScreen_sourceSemanticsLabel": {},
   "contacts_agreement_button_text": "ดำเนินการต่อ",
   "@contacts_agreement_button_text": {},
   "contacts_agreement_checkbox_text": "ฉันยินยอมให้แอปเข้าถึงรายชื่อผู้ติดต่อของฉันเพื่อยกระดับประสบการณ์การใช้งาน",

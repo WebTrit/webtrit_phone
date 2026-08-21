@@ -503,6 +503,19 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get contacts_ContactsScreen_emptyFavorites =>
+      'Серед ваших контактів ще немає улюблених.\nДодайте на картці контакта, натиснувши зірочку';
+
+  @override
+  String get contacts_ContactsScreen_filterAll => 'Усі';
+
+  @override
+  String get contacts_ContactsScreen_filterFavorites => 'Улюблені';
+
+  @override
+  String get contacts_ContactsScreen_sourceSemanticsLabel => 'Джерело контактів';
+
+  @override
   String get contacts_agreement_button_text => 'Продовжити';
 
   @override

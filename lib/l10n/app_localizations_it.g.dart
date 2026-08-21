@@ -488,6 +488,19 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get contacts_ContactsScreen_emptyFavorites =>
+      'Non ci sono ancora preferiti tra i tuoi contatti.\nAggiungine uno dalla scheda del contatto con la stella';
+
+  @override
+  String get contacts_ContactsScreen_filterAll => 'Tutti';
+
+  @override
+  String get contacts_ContactsScreen_filterFavorites => 'Preferiti';
+
+  @override
+  String get contacts_ContactsScreen_sourceSemanticsLabel => 'Origine dei contatti';
+
+  @override
   String get contacts_agreement_button_text => 'Continue';
 
   @override

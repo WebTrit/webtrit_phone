@@ -47,19 +47,15 @@ class FeatureOverrides extends Equatable {
   }) {
     return FeatureOverrides(
       isVideoCallEnabled: isVideoCallEnabled ?? this.isVideoCallEnabled,
-      isSystemNotificationsEnabled:
-          isSystemNotificationsEnabled ?? this.isSystemNotificationsEnabled,
-      hybridPresenceSupport:
-          hybridPresenceSupport ?? this.hybridPresenceSupport,
+      isSystemNotificationsEnabled: isSystemNotificationsEnabled ?? this.isSystemNotificationsEnabled,
+      hybridPresenceSupport: hybridPresenceSupport ?? this.hybridPresenceSupport,
       isVoicemailEnabled: isVoicemailEnabled ?? this.isVoicemailEnabled,
       isCallHistoryEnabled: isCallHistoryEnabled ?? this.isCallHistoryEnabled,
-      callPullVideoStrategy:
-          callPullVideoStrategy ?? this.callPullVideoStrategy,
+      callPullVideoStrategy: callPullVideoStrategy ?? this.callPullVideoStrategy,
       monitorCheckInterval: monitorCheckInterval ?? this.monitorCheckInterval,
       logLevel: logLevel ?? this.logLevel,
       remoteLoggingEnabled: remoteLoggingEnabled ?? this.remoteLoggingEnabled,
-      isLogAnonymizationEnabled:
-          isLogAnonymizationEnabled ?? this.isLogAnonymizationEnabled,
+      isLogAnonymizationEnabled: isLogAnonymizationEnabled ?? this.isLogAnonymizationEnabled,
     );
   }
 
@@ -84,8 +80,7 @@ abstract final class FeatureOverridesFactory {
   static const minMonitorCheckIntervalSeconds = 0;
   static const maxMonitorCheckIntervalSeconds = 3600;
   static const videoCallEnabledKey = 'feature_video_call_enabled';
-  static const systemNotificationsEnabledKey =
-      'feature_system_notifications_enabled';
+  static const systemNotificationsEnabledKey = 'feature_system_notifications_enabled';
   static const hybridPresenceEnabledKey = 'feature_hybrid_presence_enabled';
   static const voicemailEnabledKey = 'feature_voicemail_enabled';
   static const callHistoryEnabledKey = 'feature_call_history_enabled';
@@ -96,9 +91,7 @@ abstract final class FeatureOverridesFactory {
   static const logAnonymizationEnabledKey = 'feature_log_anonymization_enabled';
 
   static FeatureOverrides create(RemoteConfigSnapshot snapshot) {
-    final monitorIntervalSec = int.tryParse(
-      snapshot.getString(monitorCheckIntervalKey) ?? '',
-    );
+    final monitorIntervalSec = int.tryParse(snapshot.getString(monitorCheckIntervalKey) ?? '');
     Duration? monitorCheckInterval;
     if (monitorIntervalSec != null &&
         monitorIntervalSec >= minMonitorCheckIntervalSeconds &&
@@ -107,19 +100,13 @@ abstract final class FeatureOverridesFactory {
     }
 
     final logLevelName = snapshot.getString(logLevelKey);
-    final logLevel = logLevelName != null
-        ? Level.LEVELS.where((l) => l.name == logLevelName).firstOrNull
-        : null;
+    final logLevel = logLevelName != null ? Level.LEVELS.where((l) => l.name == logLevelName).firstOrNull : null;
 
-    final callPullVideoStrategy = CallPullVideoStrategy.tryParse(
-      snapshot.getString(callPullVideoStrategyKey),
-    );
+    final callPullVideoStrategy = CallPullVideoStrategy.tryParse(snapshot.getString(callPullVideoStrategyKey));
 
     return FeatureOverrides(
       isVideoCallEnabled: snapshot.getBool(videoCallEnabledKey),
-      isSystemNotificationsEnabled: snapshot.getBool(
-        systemNotificationsEnabledKey,
-      ),
+      isSystemNotificationsEnabled: snapshot.getBool(systemNotificationsEnabledKey),
       hybridPresenceSupport: snapshot.getBool(hybridPresenceEnabledKey),
       isVoicemailEnabled: snapshot.getBool(voicemailEnabledKey),
       isCallHistoryEnabled: snapshot.getBool(callHistoryEnabledKey),

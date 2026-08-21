@@ -43,10 +43,14 @@ class ContactsScreenPage extends StatelessWidget {
 ///
 /// Shared by both contacts screens: the arrangement around the lists differs
 /// between them, the lists themselves do not.
-Widget contactSourceTypeWidgetBuilder(BuildContext context, ContactSourceType sourceType) {
+Widget contactSourceTypeWidgetBuilder(
+  BuildContext context,
+  ContactSourceType sourceType, {
+  bool favoritesOnly = false,
+}) {
   switch (sourceType) {
     case ContactSourceType.local:
-      const widget = ContactsLocalTab();
+      final widget = ContactsLocalTab(favoritesOnly: favoritesOnly);
       final provider = BlocProvider(
         create: (context) {
           final contactsSearchBloc = context.read<ContactsBloc>();
@@ -60,7 +64,7 @@ Widget contactSourceTypeWidgetBuilder(BuildContext context, ContactSourceType so
       );
       return provider;
     case ContactSourceType.external:
-      const widget = ContactsExternalTab();
+      final widget = ContactsExternalTab(favoritesOnly: favoritesOnly);
       final provider = BlocProvider(
         create: (context) {
           final contactsSearchBloc = context.read<ContactsBloc>();

@@ -16,7 +16,12 @@ import '../contacts.dart';
 /// would drift from this one silently, and the tests would still pass against
 /// whichever copy they happened to find.
 class ContactsSearchRow extends StatelessWidget {
-  const ContactsSearchRow({super.key});
+  const ContactsSearchRow({super.key, this.leading});
+
+  /// Sits on the same line as the box, to the left of it. The row is the only
+  /// full-width thing under the title, so a control that belongs beside the
+  /// box goes here rather than taking a line of its own.
+  final Widget? leading;
 
   /// What this row asks of the app bar, so a caller sizing the bar does not
   /// have to know how the row is built.
@@ -35,7 +40,7 @@ class ContactsSearchRow extends StatelessWidget {
           builder: (context, state) {
             final contactsBloc = context.read<ContactsBloc>();
 
-            return ClearedTextField(
+            final field = ClearedTextField(
               key: contactsSearchInputKey,
               identifier: contactsSearchInputId,
               clearButtonKey: contactsSearchInputClearKey,
@@ -47,6 +52,17 @@ class ContactsSearchRow extends StatelessWidget {
                 width: kMainAppBarBottomControlHeight,
                 height: kMainAppBarBottomControlHeight,
               ),
+            );
+
+            final leading = this.leading;
+            if (leading == null) return field;
+
+            return Row(
+              spacing: kMainAppBarBottomPaddingGap,
+              children: [
+                leading,
+                Expanded(child: field),
+              ],
             );
           },
         ),
