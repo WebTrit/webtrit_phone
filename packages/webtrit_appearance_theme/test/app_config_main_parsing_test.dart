@@ -158,6 +158,22 @@ void main() {
       expect(settingsSection.enabled, isTrue);
       expect(settingsSection.items.any((i) => i.type == 'terms'), isTrue);
     });
+
+    test('the default terms item carries no embedded resource reference', () {
+      // `0` used to stand here for "none". It is not an id: the app looks it up
+      // among the application's embedded resources, finds nothing and falls
+      // back to its built-in terms screen, so it only ever meant absence.
+      // Both routes to the default matter: an absent settings block uses the
+      // constructor default, a present-but-empty one uses the generated one.
+      for (final json in const [
+        <String, dynamic>{},
+        <String, dynamic>{'settingsConfig': <String, dynamic>{}},
+      ]) {
+        final items = AppConfig.fromJson(json).settingsConfig.sections.expand((section) => section.items);
+        final terms = items.firstWhere((item) => item.type == 'terms');
+        expect(terms.embeddedResourceId, isNull, reason: 'json: $json');
+      }
+    });
   });
 
   group('AppConfig.localization parsing', () {
