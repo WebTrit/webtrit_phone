@@ -69,6 +69,20 @@ Future<AppDependencies> _bootstrap({
   required AppPresentationConfigBuilder? configurePresentation,
   required StartupTrace trace,
 }) async {
+  // The keychain read is the longest single startup root, and nothing in
+  // platform init, the root wave, remote config or the database isolate needs
+  // its result. Start it before the first await and settle it further down,
+  // right before the first component that reads the cache. The registry still
+  // receives a fully loaded instance, so no caller - including the push and
+  // WorkManager isolates, which build their own storage - can ever observe a
+  // half-populated cache.
+  final secureStorageLoad = trace.measure('secure-storage', SecureStorageImpl.init);
+  // Several awaits separate the start above from the wave that settles it, so a
+  // keychain failure that arrives in between would be reported to the zone as
+  // an unhandled error on top of being rethrown by the wave.
+  secureStorageLoad.ignore();
+  final secureStorageOperation = StartupOperation(secureStorageLoad);
+
   // External SDKs (side effects only, don't need registration). The [firebase]
   // strategy decides whether these run: standalone wires Firebase, while an
   // embedder that owns the default Firebase app (e.g. the theme configurator's
@@ -84,14 +98,62 @@ Future<AppDependencies> _bootstrap({
   final packageInfo = deps.share(roots.packageInfo);
   final appInfo = deps.share(roots.appInfo);
   final deviceInfo = deps.share(roots.deviceInfo);
-  final secureStorage = deps.share(roots.secureStorage);
-  // final token = secureStorage.readToken();
-  // print('bootstrap: secureStorage token: ${token != null ? '***' : 'null'}');
   final appPreferences = deps.share(roots.appPreferences);
   deps.share<UserLocalDatasource>(UserLocalDatasourcePrefsImpl(appPreferences));
 
   // Network clients
   final appCertificates = deps.share(roots.appCertificates);
+
+  // Core infrastructure
+  final appThemes = deps.keep(roots.appThemes);
+
+  // Repositories that read no persisted credentials
+  final contactsAgreementStatusRepository = deps.share<ContactsAgreementStatusRepository>(
+    ContactsAgreementStatusRepositoryPrefsImpl(appPreferences),
+  );
+
+  // Remote configuration. The Firebase-backed service needs the Firebase app, so
+  // the strategy resolves it (with a local-cache fallback); a disabled strategy
+  // just uses the local cache (DefaultRemoteCacheConfigService also implements
+  // RemoteConfigService).
+  final remoteCacheConfigService = roots.remoteCacheConfigService;
+  final cachedRemoteConfigService = deps.share<RemoteConfigService>(
+    await trace.measure('remote-config', () => firebase.remoteConfig(remoteCacheConfigService)),
+  );
+  _refreshRemoteConfigAfterFirstFrame(cachedRemoteConfigService);
+
+  // Utilities - Capturing instances that were previously just `await Class.init()`.
+  // They depend on neither the keychain nor featureAccess, so they are built here
+  // and overlap with the keychain read started at the top of this function.
+  deps.share(await trace.measure('push-environment', PushEnvironment.init));
+  final appPath = deps.share(await trace.measure('app-path', AppPath.init));
+  deps.share(await trace.measure('app-time', AppTime.init));
+
+  // Spawn the shared DriftIsolate database server. All isolates (FCM background,
+  // WorkManager) connect to this single server via IsolateNameServer, eliminating
+  // write-write SQLite contention.
+  if (kIsWeb) {
+    // TODO(web): dart:isolate is unsupported on web, so there is no DriftIsolate
+    // server. The drift WasmDatabase is opened lazily on first access in main.dart
+    // (see AppDatabaseLifecycleHolder); nothing to register here.
+    Logger('bootstrap').warning('DriftIsolate server skipped on web; using lazy WasmDatabase connection');
+  } else {
+    final driftIsolate = await trace.measure(
+      'database-isolate',
+      () => IsolateDatabase.spawnServer(directoryPath: appPath.applicationDocumentsPath),
+    );
+    // The server isolate and its name-server mapping are process-wide - the
+    // background isolates find the database through that mapping - so the
+    // registry owns them and widgets only take client connections.
+    deps.share(DatabaseServer(driftIsolate));
+  }
+
+  // Everything below this line reads persisted values, so the keychain read is
+  // settled here. `secure-storage` measures the read itself, which now runs
+  // alongside the stages above; `secure-storage-wait` is what the startup path
+  // still pays for it.
+  await trace.measure('secure-storage-wait', () => settleStartupWave([secureStorageOperation]));
+  final secureStorage = deps.share(secureStorageOperation.value);
 
   // Built here rather than taken from AppMetadataProvider, which needs
   // featureAccess and is therefore created later; the format is shared.
@@ -115,13 +177,7 @@ Future<AppDependencies> _bootstrap({
   // Background workers (assuming SessionCleanupWorker is still a side-effect init)
   final sessionCleanupWorker = SessionCleanupWorker.init(apiClientFactory);
 
-  // Core infrastructure
-  final appThemes = deps.keep(roots.appThemes);
-
-  // Repositories
-  final contactsAgreementStatusRepository = deps.share<ContactsAgreementStatusRepository>(
-    ContactsAgreementStatusRepositoryPrefsImpl(appPreferences),
-  );
+  // Repositories backed by the keychain
   final systemInfoLocalDatasource = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
   final systemInfoRemoteDatasource = SystemInfoRemoteDatasource(apiClientFactory);
   final systemInfoRepository = deps.share<SystemInfoRepository>(
@@ -145,16 +201,6 @@ Future<AppDependencies> _bootstrap({
     ),
   );
 
-  // Remote configuration. The Firebase-backed service needs the Firebase app, so
-  // the strategy resolves it (with a local-cache fallback); a disabled strategy
-  // just uses the local cache (DefaultRemoteCacheConfigService also implements
-  // RemoteConfigService).
-  final remoteCacheConfigService = roots.remoteCacheConfigService;
-  final cachedRemoteConfigService = deps.share<RemoteConfigService>(
-    await trace.measure('remote-config', () => firebase.remoteConfig(remoteCacheConfigService)),
-  );
-  _refreshRemoteConfigAfterFirstFrame(cachedRemoteConfigService);
-
   final featureAccessStreamFactory = deps.keep(
     FeatureAccessStreamFactory(
       appThemes: appThemes,
@@ -167,36 +213,12 @@ Future<AppDependencies> _bootstrap({
   // has valid feature flags immediately during the first frame.
   final featureAccess = await trace.measure('feature-access', featureAccessStreamFactory.getInitialSnapshot);
 
-  // Utilities - Capturing instances that were previously just `await Class.init()`
-  deps.share(await trace.measure('push-environment', PushEnvironment.init));
-  final appPath = deps.share(await trace.measure('app-path', AppPath.init));
-
-  // Spawn the shared DriftIsolate database server. All isolates (FCM background,
-  // WorkManager) connect to this single server via IsolateNameServer, eliminating
-  // write-write SQLite contention.
-  if (kIsWeb) {
-    // TODO(web): dart:isolate is unsupported on web, so there is no DriftIsolate
-    // server. The drift WasmDatabase is opened lazily on first access in main.dart
-    // (see AppDatabaseLifecycleHolder); nothing to register here.
-    Logger('bootstrap').warning('DriftIsolate server skipped on web; using lazy WasmDatabase connection');
-  } else {
-    final driftIsolate = await trace.measure(
-      'database-isolate',
-      () => IsolateDatabase.spawnServer(directoryPath: appPath.applicationDocumentsPath),
-    );
-    // The server isolate and its name-server mapping are process-wide - the
-    // background isolates find the database through that mapping - so the
-    // registry owns them and widgets only take client connections.
-    deps.share(DatabaseServer(driftIsolate));
-  }
-
   deps.share(
     await trace.measure(
       'app-permissions',
       () => _createAppPermissions(featureAccess, contactsAgreementStatusRepository),
     ),
   );
-  deps.share(await trace.measure('app-time', AppTime.init));
   final metadataProvider = deps.share<AppMetadataProvider>(
     await trace.measure(
       'app-metadata',
@@ -306,7 +328,6 @@ typedef _BootstrapRoots = ({
   PackageInfo packageInfo,
   AppInfo appInfo,
   DeviceInfo deviceInfo,
-  SecureStorage secureStorage,
   AppPreferences appPreferences,
   AppCertificates appCertificates,
   AppThemes appThemes,
@@ -317,7 +338,6 @@ Future<_BootstrapRoots> _initializeRoots({required FirebaseIntegration firebase,
   final packageInfo = StartupOperation(trace.measure('package-info', PackageInfoFactory.init));
   final appInfo = StartupOperation(trace.measure('app-info', () => AppInfo.init(firebase.appIdProvider)));
   final deviceInfo = StartupOperation(trace.measure('device-info', DeviceInfoFactory.init));
-  final secureStorage = StartupOperation(trace.measure('secure-storage', SecureStorageImpl.init));
   final appPreferences = StartupOperation(trace.measure('app-preferences', AppPreferencesImpl.init));
   final appCertificates = StartupOperation(trace.measure('app-certificates', AppCertificates.init));
   final appThemes = StartupOperation(trace.measure('app-themes', AppThemes.init));
@@ -329,7 +349,6 @@ Future<_BootstrapRoots> _initializeRoots({required FirebaseIntegration firebase,
     packageInfo,
     appInfo,
     deviceInfo,
-    secureStorage,
     appPreferences,
     appCertificates,
     appThemes,
@@ -340,7 +359,6 @@ Future<_BootstrapRoots> _initializeRoots({required FirebaseIntegration firebase,
     packageInfo: packageInfo.value,
     appInfo: appInfo.value,
     deviceInfo: deviceInfo.value,
-    secureStorage: secureStorage.value,
     appPreferences: appPreferences.value,
     appCertificates: appCertificates.value,
     appThemes: appThemes.value,
