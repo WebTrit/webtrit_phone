@@ -47,10 +47,11 @@ Widget contactSourceTypeWidgetBuilder(
   BuildContext context,
   ContactSourceType sourceType, {
   bool favoritesOnly = false,
+  bool markFavorites = false,
 }) {
   switch (sourceType) {
     case ContactSourceType.local:
-      final widget = ContactsLocalTab(favoritesOnly: favoritesOnly);
+      final widget = ContactsLocalTab(favoritesOnly: favoritesOnly, markFavorites: markFavorites);
       final provider = BlocProvider(
         create: (context) {
           final contactsSearchBloc = context.read<ContactsBloc>();
@@ -64,7 +65,7 @@ Widget contactSourceTypeWidgetBuilder(
       );
       return provider;
     case ContactSourceType.external:
-      final widget = ContactsExternalTab(favoritesOnly: favoritesOnly);
+      final widget = ContactsExternalTab(favoritesOnly: favoritesOnly, markFavorites: markFavorites);
       final provider = BlocProvider(
         create: (context) {
           final contactsSearchBloc = context.read<ContactsBloc>();

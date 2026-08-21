@@ -30,6 +30,8 @@ class ContactTile extends StatelessWidget {
     this.onCallLogPressed,
     this.onCallFrom,
     this.copyNumber,
+    this.favorite,
+    this.markFavorite = false,
   });
 
   final String displayName;
@@ -53,6 +55,12 @@ class ContactTile extends StatelessWidget {
   final VoidCallback? onCallLogPressed;
   final void Function(String)? onCallFrom;
   final String? copyNumber;
+
+  /// Whether this contact has a favourite among their numbers.
+  final bool? favorite;
+
+  /// Whether to draw the star for [favorite] at all.
+  final bool markFavorite;
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +99,13 @@ class ContactTile extends StatelessWidget {
     }
 
     return CallTile(
+      // A star beside the name, so a filter that keeps only these people is
+      // understandable from the unfiltered list too. Off on the screen that
+      // keeps favourites in a section of their own, where the star would say
+      // nothing that screen does not already say.
+      nameTrailing: markFavorite && (favorite ?? false)
+          ? Icon(Icons.star, size: 16, color: Theme.of(context).colorScheme.tertiary)
+          : null,
       leading: LeadingAvatar(
         username: displayName,
         thumbnail: thumbnail,

@@ -12,6 +12,7 @@ import 'package:webtrit_phone/features/microphone_status/microphone_status.dart'
 import 'package:webtrit_phone/features/user_info/user_info.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
@@ -59,25 +60,31 @@ void main() {
     when(() => microphoneStatusBloc.state).thenReturn(const MicrophoneStatusState());
   });
 
-  Future<void> pumpScreen(
+  Future<ContactsBloc> pumpScreen(
     WidgetTester tester, {
     required List<ContactSourceType> sourceTypes,
     ContactSourceType remembered = ContactSourceType.external,
   }) async {
+    final contactsBloc = ContactsBloc(activeContactSourceTypeRepository: _RememberedSourceType(remembered));
+    addTearDown(contactsBloc.close);
+
     await tester.pumpWidget(
       ThemeProvider(
         settings: const ThemeSettings(),
         lightDynamic: null,
         darkDynamic: null,
         child: MaterialApp(
+          // The box draws its cross through the search decoration the theme
+          // supplies; without it there is no suffix to press.
+          theme: ThemeData(
+            extensions: const [InputDecorations(search: InputDecoration(), keypad: InputDecoration())],
+          ),
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (context) => ContactsBloc(activeContactSourceTypeRepository: _RememberedSourceType(remembered)),
-              ),
+              BlocProvider<ContactsBloc>.value(value: contactsBloc),
               BlocProvider<CallBloc>.value(value: callBloc),
               BlocProvider<SessionStatusCubit>.value(value: sessionStatusCubit),
               BlocProvider<UserInfoCubit>.value(value: userInfoCubit),
@@ -85,7 +92,7 @@ void main() {
             ],
             child: ContactsFilterScreen(
               sourceTypes: sourceTypes,
-              sourceTypeWidgetBuilder: (context, sourceType, {bool favoritesOnly = false}) {
+              sourceTypeWidgetBuilder: (context, sourceType, {bool favoritesOnly = false, bool markFavorites = false}) {
                 mounted.add((sourceType: sourceType, favoritesOnly: favoritesOnly));
                 return Text('${sourceType.name} ${favoritesOnly ? 'favorites' : 'all'}');
               },
@@ -96,6 +103,8 @@ void main() {
     );
     // The bar keeps a status indicator animating, so this never settles.
     await tester.pump(const Duration(milliseconds: 400));
+
+    return contactsBloc;
   }
 
   group('the filter control', () {
@@ -105,25 +114,54 @@ void main() {
       expect(mounted.last.favoritesOnly, isFalse);
     });
 
-    testWidgets('marks the chosen side with more than a colour', (tester) async {
-      // The two sides are the same shape and differ only in their word, so
-      // colour alone would leave them apart for nobody who cannot see it.
+    testWidgets('is a star that says whether it is on, and not by colour alone', (tester) async {
       await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
 
-      final onAll = find.descendant(of: find.byKey(contactsFilterAllKey), matching: find.byIcon(Icons.check_rounded));
-      final onFavorites = find.descendant(
-        of: find.byKey(contactsFilterFavoritesKey),
-        matching: find.byIcon(Icons.check_rounded),
-      );
+      final button = find.byKey(contactsFilterFavoritesKey);
+      expect(find.descendant(of: button, matching: find.byIcon(Icons.star_border)), findsOneWidget);
 
-      expect(onAll, findsOneWidget);
-      expect(onFavorites, findsNothing);
-
-      await tester.tap(find.byKey(contactsFilterFavoritesKey));
+      await tester.tap(button);
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(onFavorites, findsOneWidget);
-      expect(onAll, findsNothing);
+      // Filled rather than outlined: the shape changes, not only the colour.
+      expect(find.descendant(of: button, matching: find.byIcon(Icons.star)), findsOneWidget);
+      expect(find.descendant(of: button, matching: find.byIcon(Icons.star_border)), findsNothing);
+    });
+
+    testWidgets('takes no line of its own, so the list starts higher', (tester) async {
+      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+
+      // One line under the title, and no strip of its own for the filter.
+      expect(find.byType(ContactsSearchRow), findsOneWidget);
+      expect(find.byType(ExtTabBar), findsNothing);
+    });
+
+    testWidgets('sits with the controls of the screen, not with the list', (tester) async {
+      // What the filter narrows is the whole screen, and the line under the
+      // title is about the list: which address book it draws and how it is
+      // searched. Put there, the filter reads as one more of those.
+      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+
+      final filter = find.byKey(contactsFilterFavoritesKey);
+
+      expect(find.descendant(of: find.byType(NavigationToolbar), matching: filter), findsOneWidget);
+      expect(find.descendant(of: find.byType(ContactsSearchRow), matching: filter), findsNothing);
+    });
+
+    testWidgets('says it is on to a screen reader as well', (tester) async {
+      // The colour and the fill are the whole of it on screen, and neither
+      // reaches someone listening to the screen.
+      final handle = tester.ensureSemantics();
+      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+
+      final filter = find.byKey(contactsFilterFavoritesKey);
+      expect(tester.getSemantics(filter), isSemantics(isSelected: false, isButton: true));
+
+      await tester.tap(filter);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(tester.getSemantics(filter), isSemantics(isSelected: true, isButton: true));
+      handle.dispose();
     });
 
     testWidgets('narrows the list to favourites when picked', (tester) async {
@@ -151,26 +189,61 @@ void main() {
 
   group('the address book picker', () {
     testWidgets('is not drawn when there is only one to pick from', (tester) async {
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+      // Either way round: a deployment can be configured without the phone
+      // book, and one without extensions loses the other entry the same way.
+      for (final only in ContactSourceType.values) {
+        await pumpScreen(tester, sourceTypes: [only]);
 
-      expect(find.byKey(contactsSourcePickerKey), findsNothing);
+        expect(find.byKey(contactsSourcePickerKey), findsNothing, reason: 'only: ${only.name}');
+        // With nothing to pick, the line is the search box and stays that
+        // way: no button to open what is already open, and no cross to close
+        // it into an empty line.
+        expect(find.byKey(contactsSearchInputKey), findsOneWidget, reason: 'only: ${only.name}');
+        expect(find.byKey(contactsSearchOpenKey), findsNothing, reason: 'only: ${only.name}');
+        expect(find.byKey(contactsSearchInputClearKey), findsNothing, reason: 'only: ${only.name}');
+      }
     });
 
-    testWidgets('is drawn beside the search box when there are two', (tester) async {
+    testWidgets('takes the line when there are two, with search on a button', (tester) async {
       await pumpScreen(tester, sourceTypes: [ContactSourceType.local, ContactSourceType.external]);
 
       expect(find.byKey(contactsSourcePickerKey), findsOneWidget);
-      expect(find.byKey(contactsSearchInputKey), findsOneWidget);
+      expect(find.byKey(contactsSearchOpenKey), findsOneWidget);
+      expect(find.byKey(contactsSearchInputKey), findsNothing);
     });
 
-    testWidgets('offers every address book and says which one is showing', (tester) async {
+    testWidgets('gives the line to the search box once it is opened', (tester) async {
       await pumpScreen(tester, sourceTypes: [ContactSourceType.local, ContactSourceType.external]);
 
-      await tester.tap(find.byKey(contactsSourcePickerKey));
+      await tester.tap(find.byKey(contactsSearchOpenKey));
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(find.text('Your phone'), findsWidgets);
-      expect(find.text('Cloud PBX'), findsWidgets);
+      expect(find.byKey(contactsSearchInputKey), findsOneWidget);
+      expect(find.byKey(contactsSourcePickerKey), findsNothing);
+    });
+
+    testWidgets('and the cross in the box is the way back out of it', (tester) async {
+      // One control does both: it empties a search, and on a box that is
+      // already empty it puts the chooser back.
+      final bloc = await pumpScreen(tester, sourceTypes: [ContactSourceType.local, ContactSourceType.external]);
+
+      await tester.tap(find.byKey(contactsSearchOpenKey));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.enterText(find.byKey(contactsSearchInputKey), 'branch');
+      await tester.pump(const Duration(milliseconds: 500));
+
+      await tester.tap(find.byKey(contactsSearchInputClearKey));
+      await tester.pump(const Duration(milliseconds: 500));
+
+      // First press empties it and leaves it open.
+      expect(bloc.state.search, isEmpty);
+      expect(find.byKey(contactsSearchInputKey), findsOneWidget);
+
+      await tester.tap(find.byKey(contactsSearchInputClearKey));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.byKey(contactsSourcePickerKey), findsOneWidget);
+      expect(find.byKey(contactsSearchInputKey), findsNothing);
     });
   });
 

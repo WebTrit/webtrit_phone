@@ -488,10 +488,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'No favorites among your contacts yet.\nAdd one from a contact card using the star icon';
 
   @override
-  String get contacts_ContactsScreen_filterAll => 'All';
+  String get contacts_ContactsScreen_filterFavorites => 'Favorites';
 
   @override
-  String get contacts_ContactsScreen_filterFavorites => 'Favorites';
+  String get contacts_ContactsScreen_searchSemanticsLabel => 'Search contacts';
 
   @override
   String get contacts_ContactsScreen_sourceSemanticsLabel => 'Contact source';

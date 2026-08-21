@@ -507,10 +507,10 @@ class AppLocalizationsUk extends AppLocalizations {
       'Серед ваших контактів ще немає улюблених.\nДодайте на картці контакта, натиснувши зірочку';
 
   @override
-  String get contacts_ContactsScreen_filterAll => 'Усі';
+  String get contacts_ContactsScreen_filterFavorites => 'Улюблені';
 
   @override
-  String get contacts_ContactsScreen_filterFavorites => 'Улюблені';
+  String get contacts_ContactsScreen_searchSemanticsLabel => 'Пошук контактів';
 
   @override
   String get contacts_ContactsScreen_sourceSemanticsLabel => 'Джерело контактів';

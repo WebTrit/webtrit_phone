@@ -886,17 +886,17 @@ abstract class AppLocalizations {
   /// **'No favorites among your contacts yet.\nAdd one from a contact card using the star icon'**
   String get contacts_ContactsScreen_emptyFavorites;
 
-  /// No description provided for @contacts_ContactsScreen_filterAll.
-  ///
-  /// In en, this message translates to:
-  /// **'All'**
-  String get contacts_ContactsScreen_filterAll;
-
   /// No description provided for @contacts_ContactsScreen_filterFavorites.
   ///
   /// In en, this message translates to:
   /// **'Favorites'**
   String get contacts_ContactsScreen_filterFavorites;
+
+  /// No description provided for @contacts_ContactsScreen_searchSemanticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search contacts'**
+  String get contacts_ContactsScreen_searchSemanticsLabel;
 
   /// No description provided for @contacts_ContactsScreen_sourceSemanticsLabel.
   ///

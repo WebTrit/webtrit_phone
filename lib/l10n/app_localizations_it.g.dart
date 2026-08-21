@@ -492,10 +492,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Non ci sono ancora preferiti tra i tuoi contatti.\nAggiungine uno dalla scheda del contatto con la stella';
 
   @override
-  String get contacts_ContactsScreen_filterAll => 'Tutti';
+  String get contacts_ContactsScreen_filterFavorites => 'Preferiti';
 
   @override
-  String get contacts_ContactsScreen_filterFavorites => 'Preferiti';
+  String get contacts_ContactsScreen_searchSemanticsLabel => 'Cerca contatti';
 
   @override
   String get contacts_ContactsScreen_sourceSemanticsLabel => 'Origine dei contatti';

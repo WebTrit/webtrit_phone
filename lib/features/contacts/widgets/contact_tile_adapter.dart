@@ -23,12 +23,16 @@ class ContactTileAdapter extends StatelessWidget {
     required this.expanded,
     required this.onToggleExpanded,
     this.tileKey,
+    this.markFavorite = false,
   });
 
   final Contact contact;
   final bool expanded;
   final VoidCallback onToggleExpanded;
   final Key? tileKey;
+
+  /// Whether a favourite among this contact's numbers is marked in the row.
+  final bool markFavorite;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +72,8 @@ class ContactTileAdapter extends StatelessWidget {
           builder: (context, callRoutingState) {
             return ContactTile(
               key: tileKey,
+              markFavorite: markFavorite,
+              favorite: contact.phones.any((phone) => phone.favorite),
               displayName: contact.displayTitle,
               thumbnail: contact.thumbnail,
               thumbnailUrl: contact.thumbnailUrl,

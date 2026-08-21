@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
-import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -18,9 +17,9 @@ enum ContactsListFilter { all, favorites }
 /// than a section of their own.
 ///
 /// The two choices on this screen are not equals, and the layout says so: the
-/// filter takes the wide control at the top because it is what a person
-/// changes often, while the address book behind the list sits beside the
-/// search box, where a word is enough. Both draw the same lists as the other
+/// filter is a control of the screen and sits with the others on the title
+/// row, while the address book behind the list is stated on the line below,
+/// where the list's own controls are. Both draw the same lists as the other
 /// contacts screen, through the same search box - the rows, their order and
 /// what they show are the other screen's, not this one's.
 class ContactsFilterScreen extends StatefulWidget {
@@ -35,7 +34,7 @@ class ContactsFilterScreen extends StatefulWidget {
   final List<ContactSourceType> sourceTypes;
 
   /// Mounts the list of one address book, narrowed to favourites when asked.
-  final Widget Function(BuildContext context, ContactSourceType sourceType, {bool favoritesOnly})
+  final Widget Function(BuildContext context, ContactSourceType sourceType, {bool favoritesOnly, bool markFavorites})
   sourceTypeWidgetBuilder;
 
   final Widget? title;
@@ -45,28 +44,12 @@ class ContactsFilterScreen extends StatefulWidget {
   State<ContactsFilterScreen> createState() => _ContactsFilterScreenState();
 }
 
-class _ContactsFilterScreenState extends State<ContactsFilterScreen> with SingleTickerProviderStateMixin {
-  late final TabController _filterController = TabController(length: ContactsListFilter.values.length, vsync: this)
-    ..addListener(_filterChanged);
+class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
+  static const _roomAbove = kMainAppBarBottomPaddingGap * 2;
+  static const _roomBelow = kMainAppBarBottomPaddingGap;
 
   ContactsListFilter _filter = ContactsListFilter.all;
-
-  void _filterChanged() {
-    // Follows the index itself rather than waiting for the animation to
-    // finish: there is no page to swipe here, only the control, so the list
-    // should change the moment the choice does.
-    final picked = ContactsListFilter.values[_filterController.index];
-    if (picked == _filter) return;
-    setState(() => _filter = picked);
-  }
-
-  @override
-  void dispose() {
-    _filterController
-      ..removeListener(_filterChanged)
-      ..dispose();
-    super.dispose();
-  }
+  bool _searching = false;
 
   /// The address book actually shown for a remembered choice.
   ///
@@ -77,51 +60,27 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> with Single
   ContactSourceType _shown(ContactSourceType remembered) =>
       widget.sourceTypes.contains(remembered) ? remembered : widget.sourceTypes.first;
 
-  ExtTab _filterTab(BuildContext context, ContactsListFilter filter) {
-    final l10n = context.l10n;
-    final (key, identifier, text) = switch (filter) {
-      ContactsListFilter.all => (contactsFilterAllKey, contactsFilterAllId, l10n.contacts_ContactsScreen_filterAll),
-      ContactsListFilter.favorites => (
-        contactsFilterFavoritesKey,
-        contactsFilterFavoritesId,
-        l10n.contacts_ContactsScreen_filterFavorites,
-      ),
-    };
-
-    // The chosen side carries a tick as well as its colour. Colour alone is
-    // the one thing this control must not rely on - the two sides are the
-    // same shape and the same words apart from it.
-    return ExtTab.child(
-      key: key,
-      identifier: identifier,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        spacing: 6,
-        children: [
-          if (filter == _filter) const ExcludeSemantics(child: Icon(Icons.check_rounded, size: 18)),
-          Flexible(child: Text(text, overflow: TextOverflow.ellipsis)),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final effectiveStyle = widget.style ?? themeData.extension<ContactsScreenStyles>()?.primary;
     final mediaQueryData = MediaQuery.of(context);
 
-    final filterBar = Padding(
-      padding: const EdgeInsets.only(bottom: kMainAppBarBottomPaddingGap),
-      child: ExtTabBar(
-        controller: _filterController,
-        width: mediaQueryData.size.width * 0.75,
-        height: kMainAppBarBottomControlHeight,
-        tabs: [for (final filter in ContactsListFilter.values) _filterTab(context, filter)],
-      ),
-    );
+    // The line lines up with the title above it rather than with the screen
+    // edge, and the figure is taken from the bar itself so the two cannot
+    // drift apart.
+    final titleInset = Theme.of(context).appBarTheme.titleSpacing ?? NavigationToolbar.kMiddleSpacing;
+    final controlsWidth = mediaQueryData.size.width - titleInset * 2;
 
-    final appBarBottomHeight = kMainAppBarBottomTabHeight + ContactsSearchRow.height;
+    // One line under the title, not two: the filter took a strip of its own
+    // here and now sits on the title row, which is what lets the list start
+    // this much sooner.
+    //
+    // That one line is the whole header, though - the title sits right above
+    // it and the list right below - so it is given room on both sides, or it
+    // reads as part of one of them. The row keeps a gap under itself already,
+    // hence the smaller half below.
+    const appBarBottomHeight = _roomAbove + ContactsSearchRow.height + _roomBelow;
 
     return Unfocuser(
       child: ThemedScaffold(
@@ -133,29 +92,41 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> with Single
         appBar: MainAppBar(
           title: widget.title,
           context: context,
+          actions: [
+            ContactsFavoritesAction(
+              selected: _filter == ContactsListFilter.favorites,
+              onTap: () => setState(
+                () => _filter = _filter == ContactsListFilter.favorites
+                    ? ContactsListFilter.all
+                    : ContactsListFilter.favorites,
+              ),
+            ),
+          ],
           flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(appBarBottomHeight),
-            child: Column(
-              children: [
-                filterBar,
-                // With one address book there is nothing to pick, so the
-                // search box takes the whole line, exactly as on the screen
-                // without the filter.
-                ContactsSearchRow(
-                  leading: widget.sourceTypes.length <= 1
-                      ? null
-                      : BlocBuilder<ContactsBloc, ContactsState>(
-                          buildWhen: (previous, current) => previous.sourceType != current.sourceType,
-                          builder: (context, state) => ContactsSourcePicker(
-                            sourceTypes: widget.sourceTypes,
-                            selected: _shown(state.sourceType),
-                            onSelected: (sourceType) =>
-                                context.read<ContactsBloc>().add(ContactsSourceTypeChanged(sourceType)),
-                          ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: _roomAbove, bottom: _roomBelow),
+              child: ContactsSearchRow(
+                width: controlsWidth,
+                searching: _searching,
+                onSearchOpened: () => setState(() => _searching = true),
+                onSearchClosed: () => setState(() => _searching = false),
+                // With one address book there is nothing to pick, so the search
+                // box takes the whole line, exactly as on the screen without the
+                // filter.
+                leading: widget.sourceTypes.length <= 1
+                    ? null
+                    : BlocBuilder<ContactsBloc, ContactsState>(
+                        buildWhen: (previous, current) => previous.sourceType != current.sourceType,
+                        builder: (context, state) => ContactsSourcePicker(
+                          sourceTypes: widget.sourceTypes,
+                          selected: _shown(state.sourceType),
+                          onSelected: (sourceType) =>
+                              context.read<ContactsBloc>().add(ContactsSourceTypeChanged(sourceType)),
                         ),
-                ),
-              ],
+                      ),
+              ),
             ),
           ),
         ),
@@ -181,6 +152,7 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> with Single
                   context,
                   sourceType,
                   favoritesOnly: _filter == ContactsListFilter.favorites,
+                  markFavorites: true,
                 ),
               );
             },

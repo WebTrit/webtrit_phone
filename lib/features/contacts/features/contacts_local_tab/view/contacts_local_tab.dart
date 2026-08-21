@@ -14,12 +14,17 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../../../contacts.dart';
 
 class ContactsLocalTab extends StatefulWidget {
-  const ContactsLocalTab({super.key, this.favoritesOnly = false});
+  const ContactsLocalTab({super.key, this.favoritesOnly = false, this.markFavorites = false});
 
   /// Narrows the list to the people with a favourite among their numbers.
   /// False is the whole address book, which is what the contacts screen
   /// without the filter always shows.
   final bool favoritesOnly;
+
+  /// Whether a star marks the people with a favourite among their numbers.
+  /// It goes with the filter: without the star, a list narrowed to favourites
+  /// gives no clue what it was narrowed by.
+  final bool markFavorites;
 
   @override
   State<ContactsLocalTab> createState() => _ContactsLocalTabState();
@@ -86,6 +91,10 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
                 final contact = contacts[index];
                 return ContactTileAdapter(
                   tileKey: contactsLocalContactTileKey,
+                  // Only where favourites are a filter of this list: a star
+                  // is what makes that filter understandable from the whole
+                  // list too.
+                  markFavorite: widget.markFavorites,
                   contact: contact,
                   expanded: _expandedContactId == contact.id,
                   onToggleExpanded: () => _toggleExpanded(contact.id),

@@ -52,13 +52,11 @@ class ContactsSourcePicker extends StatelessWidget {
               ),
             ),
         ],
-        child: Container(
+        // No pill of its own: the name, its icon and the chevron are the
+        // control. A filled shape here would read as a second search box
+        // beside the real one, and the line already carries enough of them.
+        child: SizedBox(
           height: kMainAppBarBottomControlHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(kMainAppBarBottomControlHeight / 2),
-          ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             spacing: 8,
