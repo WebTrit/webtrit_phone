@@ -96,41 +96,18 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
             ),
           );
 
-    final search = Padding(
-      padding: const EdgeInsets.only(
-        left: kMainAppBarBottomPaddingGap,
-        right: kMainAppBarBottomPaddingGap,
-        bottom: kMainAppBarBottomPaddingGap,
-      ),
-      child: IgnoreUnfocuser(
-        child: BlocBuilder<ContactsBloc, ContactsState>(
-          builder: (context, state) {
-            final contactsSearchBloc = context.read<ContactsBloc>();
-            return ClearedTextField(
-              key: contactsSearchInputKey,
-              identifier: contactsSearchInputId,
-              clearButtonKey: contactsSearchInputClearKey,
-              clearButtonIdentifier: contactsSearchInputClearId,
-              initialValue: state.search,
-              onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
-              onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
-              iconConstraints: const BoxConstraints.expand(
-                width: kMainAppBarBottomControlHeight,
-                height: kMainAppBarBottomControlHeight,
-              ),
-            );
-          },
-        ),
-      ),
-    );
+    const search = ContactsSearchRow();
+
+    // What the bar below the title takes up. Stated once: the bar is built
+    // from it and the body is inset by it, and the two drifting apart is how
+    // a list ends up starting underneath the search field.
+    final appBarBottomHeight = (tabBar != null ? kMainAppBarBottomTabHeight : 0) + ContactsSearchRow.height;
     final appBar = MainAppBar(
       title: widget.title,
       context: context,
       flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
       bottom: PreferredSize(
-        preferredSize: Size.fromHeight(
-          (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
-        ),
+        preferredSize: Size.fromHeight(appBarBottomHeight),
         child: Column(children: [?tabBar, search]),
       ),
     );
@@ -146,11 +123,7 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
         body: MediaQuery(
           data: mediaQueryData.copyWith(
             padding: mediaQueryData.padding.copyWith(
-              top:
-                  mediaQueryData.padding.top +
-                  kToolbarHeight +
-                  (tabBar != null ? kMainAppBarBottomTabHeight : 0) +
-                  kMainAppBarBottomSearchHeight,
+              top: mediaQueryData.padding.top + kToolbarHeight + appBarBottomHeight,
             ),
           ),
           child: TabBarView(
