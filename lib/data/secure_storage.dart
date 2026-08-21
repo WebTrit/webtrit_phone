@@ -93,6 +93,7 @@ class SecureStorageImpl implements SecureStorage {
   // Last FCM token that was pushed to the server
   static const _kFCMPushToken = 'fcm-push-token';
   static const _kNonSecretStorageMigrationDone = 'secure-storage-non-secret-migration-done';
+  static const _kLegacySessionMigrationDone = 'secure-storage-legacy-session-migration-done';
 
   static Future<SecureStorage> init() async {
     const storage = FlutterSecureStorage(iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock));
@@ -124,6 +125,31 @@ class SecureStorageImpl implements SecureStorage {
     }
 
     await appPreferences.setBool(_kNonSecretStorageMigrationDone, true);
+  }
+
+  /// Permanently removes credentials from installations that predate the
+  /// user-id key. Older versions only hid these values in their in-memory
+  /// cache, so the same check ran on every startup.
+  static Future<void> migrateLegacySession(AppPreferences appPreferences) async {
+    if (appPreferences.getBool(_kLegacySessionMigrationDone) == true) return;
+
+    const storage = FlutterSecureStorage(iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock));
+    final keys = <String>[
+      _kCoreUrlKey,
+      _kTenantIdKey,
+      _kTokenKey,
+      _kUserIdKey,
+      _kExternalPageAccessTokenKey,
+      _kExternalPageRefreshTokenKey,
+      _kExternalPageTokenExpiresKey,
+      _kExternalPageAccessTokenSessionAssociated,
+    ];
+    final values = await Future.wait(keys.map((key) => storage.read(key: key)));
+    if (values[3] == null && values.any((value) => value != null)) {
+      await Future.wait(keys.map((key) => storage.delete(key: key)));
+    }
+
+    await appPreferences.setBool(_kLegacySessionMigrationDone, true);
   }
 
   SecureStorageImpl._(this._storage);
@@ -170,7 +196,7 @@ class SecureStorageImpl implements SecureStorage {
   Future<void> prefetchSession() => _prefetch(const [_kCoreUrlKey, _kTenantIdKey, _kTokenKey, _kUserIdKey]);
 
   @override
-  Future<void> prefetchSignaling() => _prefetch(const [_kCoreUrlKey, _kTenantIdKey, _kTokenKey, _kUserIdKey]);
+  Future<void> prefetchSignaling() => _prefetch(const [_kCoreUrlKey, _kTenantIdKey, _kTokenKey]);
 
   Future<void> _write(String key, String value) async {
     await _storage.write(key: key, value: value);

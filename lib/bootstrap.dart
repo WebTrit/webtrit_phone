@@ -87,6 +87,7 @@ Future<AppDependencies> _bootstrap({
   final secureStorage = deps.share(roots.secureStorage);
   final appPreferences = deps.share(roots.appPreferences);
   await SecureStorageImpl.migrateNonSecretStorage(appPreferences);
+  await SecureStorageImpl.migrateLegacySession(appPreferences);
   await trace.measure('secure-storage-prefetch', secureStorage.prefetchSession);
   deps.share<UserLocalDatasource>(UserLocalDatasourcePrefsImpl(appPreferences));
 
@@ -713,6 +714,8 @@ void workManagerDispatcher() {
     try {
       // Init api and remote repository
       final storage = await SecureStorageImpl.init();
+      final preferences = await AppPreferencesImpl.init();
+      await SecureStorageImpl.migrateLegacySession(preferences);
       await storage.prefetchSignaling();
       final coreUrl = storage.readCoreUrl();
       final tenantId = storage.readTenantId();
