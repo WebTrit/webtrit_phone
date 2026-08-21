@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/contacts/contacts.dart';
@@ -187,27 +188,18 @@ void main() {
     });
   });
 
-  group('the room the header leaves', () {
-    // Numbers, not looks: the header is one short line between the title and
-    // the list, and without room on either side it reads as part of one of
-    // them. Taken from the mockup, where the gaps are a fifth to a third of
-    // the control they surround.
-    testWidgets('keeps the controls clear of the title above them', (tester) async {
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
-
-      final title = tester.getRect(find.byType(NavigationToolbar));
-      final search = tester.getRect(find.byKey(contactsSearchInputKey));
-
-      expect(search.top - title.bottom, greaterThanOrEqualTo(8));
-    });
-
-    testWidgets('and clear of the list below them', (tester) async {
+  group('the room the header takes', () {
+    testWidgets('is what a row of tabs takes on every other screen', (tester) async {
+      // A person moving between sections should see the list start in the
+      // same place, not a header that grows and shrinks under them - and the
+      // saving this screen makes comes from dropping a row, not from
+      // squeezing the one it keeps.
       await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
 
       final bar = tester.getRect(find.byType(AppBar));
-      final search = tester.getRect(find.byKey(contactsSearchInputKey));
+      final title = tester.getRect(find.byType(NavigationToolbar));
 
-      expect(bar.bottom - search.bottom, greaterThanOrEqualTo(8));
+      expect(bar.bottom - title.bottom, kMainAppBarBottomTabHeight);
     });
 
     testWidgets('and keeps the chooser off the button beside it', (tester) async {

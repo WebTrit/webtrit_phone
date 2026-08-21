@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -45,9 +44,6 @@ class ContactsFilterScreen extends StatefulWidget {
 }
 
 class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
-  static const _roomAbove = kMainAppBarBottomPaddingGap * 2;
-  static const _roomBelow = kMainAppBarBottomPaddingGap;
-
   ContactsListFilter _filter = ContactsListFilter.all;
   bool _searching = false;
 
@@ -75,11 +71,9 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
     // here and now sits on the title row, which is what lets the list start
     // this much sooner.
     //
-    // That one line is the whole header, though - the title sits right above
-    // it and the list right below - so it is given room on both sides, or it
-    // reads as part of one of them. The row keeps a gap under itself already,
-    // hence the smaller half below.
-    const appBarBottomHeight = _roomAbove + ContactsSearchRow.height + _roomBelow;
+    // The line takes exactly what a row of tabs takes on every other screen,
+    // so a person moving between sections sees the list start in the same
+    // place rather than a header that grows and shrinks under them.
 
     return Unfocuser(
       child: ThemedScaffold(
@@ -103,36 +97,33 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
           ],
           flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(appBarBottomHeight),
-            child: Padding(
-              padding: const EdgeInsets.only(top: _roomAbove, bottom: _roomBelow),
-              child: ContactsSearchRow(
-                inset: titleInset,
-                searching: _searching,
-                onSearchOpened: () => setState(() => _searching = true),
-                onSearchClosed: () => setState(() => _searching = false),
-                // With one address book there is nothing to pick, so the search
-                // box takes the whole line, exactly as on the screen without the
-                // filter.
-                leading: widget.sourceTypes.length <= 1
-                    ? null
-                    : BlocBuilder<ContactsBloc, ContactsState>(
-                        buildWhen: (previous, current) => previous.sourceType != current.sourceType,
-                        builder: (context, state) => ContactsSourcePicker(
-                          sourceTypes: widget.sourceTypes,
-                          selected: _shown(state.sourceType),
-                          onSelected: (sourceType) =>
-                              context.read<ContactsBloc>().add(ContactsSourceTypeChanged(sourceType)),
-                        ),
+            preferredSize: const Size.fromHeight(ContactsSearchRow.height),
+            child: ContactsSearchRow(
+              inset: titleInset,
+              searching: _searching,
+              onSearchOpened: () => setState(() => _searching = true),
+              onSearchClosed: () => setState(() => _searching = false),
+              // With one address book there is nothing to pick, so the search
+              // box takes the whole line, exactly as on the screen without the
+              // filter.
+              leading: widget.sourceTypes.length <= 1
+                  ? null
+                  : BlocBuilder<ContactsBloc, ContactsState>(
+                      buildWhen: (previous, current) => previous.sourceType != current.sourceType,
+                      builder: (context, state) => ContactsSourcePicker(
+                        sourceTypes: widget.sourceTypes,
+                        selected: _shown(state.sourceType),
+                        onSelected: (sourceType) =>
+                            context.read<ContactsBloc>().add(ContactsSourceTypeChanged(sourceType)),
                       ),
-              ),
+                    ),
             ),
           ),
         ),
         body: MediaQuery(
           data: mediaQueryData.copyWith(
             padding: mediaQueryData.padding.copyWith(
-              top: mediaQueryData.padding.top + kToolbarHeight + appBarBottomHeight,
+              top: mediaQueryData.padding.top + kToolbarHeight + ContactsSearchRow.height,
             ),
           ),
           child: BlocBuilder<ContactsBloc, ContactsState>(
