@@ -37,10 +37,6 @@ abstract class SecureStorage {
   /// Loads the credentials required by background signaling isolates.
   Future<void> prefetchSignaling();
 
-  /// Transitional prefetch for synchronous embedded-page readers. These
-  /// readers become asynchronous in the next storage migration step.
-  Future<void> prefetchExternalPage();
-
   // FCM Token
   String? readFCMPushToken();
 
@@ -48,14 +44,14 @@ abstract class SecureStorage {
 
   Future<void> deleteFCMPushToken();
 
-  // External Page Token (Composite methods)
-  String? readExternalPageAccessToken();
+  // External Page Token (on-demand asynchronous reads)
+  Future<String?> readExternalPageAccessToken();
 
-  String? readExternalPageRefreshToken();
+  Future<String?> readExternalPageRefreshToken();
 
-  String? readExternalPageTokenExpires();
+  Future<String?> readExternalPageTokenExpires();
 
-  String? readExternalPageAccessTokenSessionAssociated();
+  Future<String?> readExternalPageAccessTokenSessionAssociated();
 
   Future<void> writeExternalPageTokenData(String accessToken, String refreshToken, String expires, String associate);
 
@@ -176,14 +172,6 @@ class SecureStorageImpl implements SecureStorage {
   @override
   Future<void> prefetchSignaling() => _prefetch(const [_kCoreUrlKey, _kTenantIdKey, _kTokenKey, _kUserIdKey]);
 
-  @override
-  Future<void> prefetchExternalPage() => _prefetch(const [
-    _kExternalPageAccessTokenKey,
-    _kExternalPageRefreshTokenKey,
-    _kExternalPageTokenExpiresKey,
-    _kExternalPageAccessTokenSessionAssociated,
-  ]);
-
   Future<void> _write(String key, String value) async {
     await _storage.write(key: key, value: value);
     _versions[key] = (_versions[key] ?? 0) + 1;
@@ -196,6 +184,20 @@ class SecureStorageImpl implements SecureStorage {
     _versions[key] = (_versions[key] ?? 0) + 1;
     _cache.remove(key);
     _loadedKeys.add(key);
+  }
+
+  Future<String?> _readExternal(String key) async {
+    final version = _versions[key] ?? 0;
+    final value = await _storage.read(key: key);
+    if ((_versions[key] ?? 0) == version) {
+      if (value == null) {
+        _cache.remove(key);
+      } else {
+        _cache[key] = value;
+      }
+      _loadedKeys.add(key);
+    }
+    return value;
   }
 
   @override
@@ -291,23 +293,23 @@ class SecureStorageImpl implements SecureStorage {
   // EXTERNAL PAGE TOKEN
 
   @override
-  String? readExternalPageAccessToken() {
-    return _read(_kExternalPageAccessTokenKey);
+  Future<String?> readExternalPageAccessToken() {
+    return _readExternal(_kExternalPageAccessTokenKey);
   }
 
   @override
-  String? readExternalPageRefreshToken() {
-    return _read(_kExternalPageRefreshTokenKey);
+  Future<String?> readExternalPageRefreshToken() {
+    return _readExternal(_kExternalPageRefreshTokenKey);
   }
 
   @override
-  String? readExternalPageTokenExpires() {
-    return _read(_kExternalPageTokenExpiresKey);
+  Future<String?> readExternalPageTokenExpires() {
+    return _readExternal(_kExternalPageTokenExpiresKey);
   }
 
   @override
-  String? readExternalPageAccessTokenSessionAssociated() {
-    return _read(_kExternalPageAccessTokenSessionAssociated);
+  Future<String?> readExternalPageAccessTokenSessionAssociated() {
+    return _readExternal(_kExternalPageAccessTokenSessionAssociated);
   }
 
   @override

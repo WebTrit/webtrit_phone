@@ -92,9 +92,6 @@ class MockSecureStorage implements SecureStorage {
   Future<void> prefetchSignaling() async {}
 
   @override
-  Future<void> prefetchExternalPage() async {}
-
-  @override
   String? readFCMPushToken() {
     return _storage[_kFCMPushToken];
   }
@@ -110,22 +107,22 @@ class MockSecureStorage implements SecureStorage {
   }
 
   @override
-  String? readExternalPageAccessToken() {
+  Future<String?> readExternalPageAccessToken() async {
     return _storage[_kExternalPageAccessTokenKey];
   }
 
   @override
-  String? readExternalPageAccessTokenSessionAssociated() {
+  Future<String?> readExternalPageAccessTokenSessionAssociated() async {
     return _storage[_kExternalPageAccessTokenSessionAssociated];
   }
 
   @override
-  String? readExternalPageRefreshToken() {
+  Future<String?> readExternalPageRefreshToken() async {
     return _storage[_kExternalPageRefreshTokenKey];
   }
 
   @override
-  String? readExternalPageTokenExpires() {
+  Future<String?> readExternalPageTokenExpires() async {
     return _storage[_kExternalPageTokenExpiresKey];
   }
 

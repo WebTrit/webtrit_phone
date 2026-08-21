@@ -24,8 +24,8 @@ void main() {
 
       await repo.dispose();
 
-      expect(secureStorage.readExternalPageAccessToken(), 'access');
-      expect(secureStorage.readExternalPageRefreshToken(), 'refresh');
+      expect(await secureStorage.readExternalPageAccessToken(), 'access');
+      expect(await secureStorage.readExternalPageRefreshToken(), 'refresh');
     });
 
     test('clears external page token data when user token is missing', () async {
@@ -34,9 +34,9 @@ void main() {
 
       await repo.dispose();
 
-      expect(secureStorage.readExternalPageAccessToken(), isNull);
-      expect(secureStorage.readExternalPageRefreshToken(), isNull);
-      expect(secureStorage.readExternalPageAccessTokenSessionAssociated(), isNull);
+      expect(await secureStorage.readExternalPageAccessToken(), isNull);
+      expect(await secureStorage.readExternalPageRefreshToken(), isNull);
+      expect(await secureStorage.readExternalPageAccessTokenSessionAssociated(), isNull);
     });
 
     test('is idempotent: multiple dispose() calls do not throw and keep behavior', () async {
@@ -46,7 +46,7 @@ void main() {
       await repo.dispose();
       await repo.dispose();
 
-      expect(secureStorage.readExternalPageAccessToken(), isNull);
+      expect(await secureStorage.readExternalPageAccessToken(), isNull);
     });
   });
 }

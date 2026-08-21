@@ -88,9 +88,6 @@ Future<AppDependencies> _bootstrap({
   final appPreferences = deps.share(roots.appPreferences);
   await SecureStorageImpl.migrateNonSecretStorage(appPreferences);
   await trace.measure('secure-storage-prefetch', secureStorage.prefetchSession);
-  // Keep the synchronous embedded payload readers working until they migrate
-  // to asynchronous token access in the following storage PR.
-  await secureStorage.prefetchExternalPage();
   deps.share<UserLocalDatasource>(UserLocalDatasourcePrefsImpl(appPreferences));
 
   // Network clients

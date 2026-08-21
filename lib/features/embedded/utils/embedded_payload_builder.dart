@@ -16,7 +16,7 @@ class EmbeddedPayloadBuilder {
   static const String externalPageTokenKey = 'externalPageToken';
 
   /// Builds a payload Map based on requested fields
-  Map<String, dynamic> build(List<EmbeddedPayloadData> fields) {
+  Future<Map<String, dynamic>> build(List<EmbeddedPayloadData> fields) async {
     final Map<String, dynamic> payload = {};
 
     for (final field in fields) {
@@ -32,7 +32,7 @@ class EmbeddedPayloadBuilder {
           break;
 
         case EmbeddedPayloadData.externalPageToken:
-          payload[externalPageTokenKey] = _buildExternalPageToken();
+          payload[externalPageTokenKey] = await _buildExternalPageToken();
           break;
       }
     }
@@ -40,8 +40,8 @@ class EmbeddedPayloadBuilder {
     return payload;
   }
 
-  Map<String, String> _buildExternalPageToken() {
-    final token = _secureStorage.readExternalPageToken();
+  Future<Map<String, String>> _buildExternalPageToken() async {
+    final token = await _secureStorage.readExternalPageToken();
 
     if (token == null || !token.isValid) {
       throw ExternalPageTokenUnavailableException();

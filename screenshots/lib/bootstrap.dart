@@ -25,7 +25,6 @@ Future<AppContext> bootstrap() async {
   final deviceInfo = await DeviceInfoFactory.init();
   final secureStorage = await SecureStorageImpl.init();
   await secureStorage.prefetchSession();
-  await secureStorage.prefetchExternalPage();
   final appInfo = await AppInfo.init(SharedPreferencesAppIdProvider());
 
   final appPreferences = await AppPreferencesImpl.init();

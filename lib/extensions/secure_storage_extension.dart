@@ -16,11 +16,17 @@ extension SecureStorageExtension on SecureStorage {
     );
   }
 
-  ExternalPageToken? readExternalPageToken() {
-    final accessToken = readExternalPageAccessToken();
-    final refreshToken = readExternalPageRefreshToken();
-    final expires = readExternalPageTokenExpires();
-    final accessTokenSessionAssociated = readExternalPageAccessTokenSessionAssociated();
+  Future<ExternalPageToken?> readExternalPageToken() async {
+    final values = await Future.wait<String?>([
+      readExternalPageAccessToken(),
+      readExternalPageRefreshToken(),
+      readExternalPageTokenExpires(),
+      readExternalPageAccessTokenSessionAssociated(),
+    ]);
+    final accessToken = values[0];
+    final refreshToken = values[1];
+    final expires = values[2];
+    final accessTokenSessionAssociated = values[3];
     final associate = readUserId() ?? readToken() ?? '';
 
     if ([
