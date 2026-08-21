@@ -9,7 +9,7 @@ Never unexpectedMessaging(bool a, bool b, String c, String d) => throw TestFailu
 Never unexpectedRecents(bool a, bool b, String c, String d, bool e) =>
     throw TestFailure('Unexpected recents variant hit');
 
-Never unexpectedContacts(bool a, bool b, String c, String d, List<String> e) =>
+Never unexpectedContacts(bool a, bool b, String c, String d, List<String> e, bool f) =>
     throw TestFailure('Unexpected contacts variant hit');
 
 Never unexpectedEmbedded(bool a, bool b, String c, String d, String e) =>

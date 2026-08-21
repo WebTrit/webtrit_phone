@@ -657,6 +657,7 @@ ContactsTabScheme _$ContactsTabSchemeFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const <String>[],
+      favoritesFilter: json['favoritesFilter'] as bool? ?? false,
       $type: json['type'] as String?,
     );
 
@@ -667,6 +668,7 @@ Map<String, dynamic> _$ContactsTabSchemeToJson(ContactsTabScheme instance) =>
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
       'contactSourceTypes': instance.contactSourceTypes,
+      'favoritesFilter': instance.favoritesFilter,
       'type': instance.$type,
     };
 

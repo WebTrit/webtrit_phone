@@ -401,6 +401,54 @@ class ContactsAgreementScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ContactsFilterScreenPage]
+class ContactsFilterScreenPageRoute
+    extends PageRouteInfo<ContactsFilterScreenPageRouteArgs> {
+  ContactsFilterScreenPageRoute({
+    required List<ContactSourceType> sourceTypes,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ContactsFilterScreenPageRoute.name,
+         args: ContactsFilterScreenPageRouteArgs(sourceTypes: sourceTypes),
+         initialChildren: children,
+       );
+
+  static const String name = 'ContactsFilterScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ContactsFilterScreenPageRouteArgs>();
+      return ContactsFilterScreenPage(sourceTypes: args.sourceTypes);
+    },
+  );
+}
+
+class ContactsFilterScreenPageRouteArgs {
+  const ContactsFilterScreenPageRouteArgs({required this.sourceTypes});
+
+  final List<ContactSourceType> sourceTypes;
+
+  @override
+  String toString() {
+    return 'ContactsFilterScreenPageRouteArgs{sourceTypes: $sourceTypes}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ContactsFilterScreenPageRouteArgs) return false;
+    return const ListEquality<ContactSourceType>().equals(
+      sourceTypes,
+      other.sourceTypes,
+    );
+  }
+
+  @override
+  int get hashCode => const ListEquality<ContactSourceType>().hash(sourceTypes);
+}
+
+/// generated route for
 /// [ContactsRouterPage]
 class ContactsRouterPageRoute extends PageRouteInfo<void> {
   const ContactsRouterPageRoute({List<PageRouteInfo>? children})

@@ -162,6 +162,7 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
         titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
         icon: Icons.people,
         contactSourceTypes: [],
+        favoritesFilter: false,
       ),
       const KeypadBottomMenuTab(
         enabled: true,

@@ -289,11 +289,12 @@ abstract final class BottomMenuMapper {
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      contacts: (enabled, initial, titleL10n, icon, contactSourceTypes) => ContactsBottomMenuTab(
+      contacts: (enabled, initial, titleL10n, icon, contactSourceTypes, favoritesFilter) => ContactsBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
+        favoritesFilter: favoritesFilter,
         contactSourceTypes: contactSourceTypes
             .map((type) => ContactSourceType.values.byName(type))
             .where((type) => type != ContactSourceType.external || coreSupport.supportsExtensions)

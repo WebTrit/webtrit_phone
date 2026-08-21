@@ -141,9 +141,9 @@ class _MainScreenPageState extends State<MainScreenPage> {
         case MessagingBottomMenuTab():
           return const ConversationsScreenPageRoute();
         case RecentsBottomMenuTab():
-          return tab.supportsCallHistory ? const RecentCdrsRouterPageRoute() : const RecentsRouterPageRoute();
+          return recentsRouteOf(tab);
         case ContactsBottomMenuTab():
-          return ContactsRouterPageRoute(children: [ContactsScreenPageRoute(sourceTypes: tab.contactSourceTypes)]);
+          return contactsRouteOf(tab);
         case EmbeddedBottomMenuTab():
           return EmbeddedTabPageRoute(id: tab.id);
       }

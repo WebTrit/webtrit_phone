@@ -68,12 +68,14 @@ void main() {
       tabs[2].when(
         favorites: unexpectedFavorites,
         recents: unexpectedRecents,
-        contacts: (enabled, initial, titleL10n, icon, contactSourceTypes) {
+        contacts: (enabled, initial, titleL10n, icon, contactSourceTypes, favoritesFilter) {
           expect(enabled, isTrue);
           expect(initial, isFalse);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_contacts');
           expect(icon, '0xee35');
           expect(contactSourceTypes, ['local', 'external']);
+          // A config that says nothing keeps the contacts screen it has.
+          expect(favoritesFilter, isFalse);
         },
         keypad: unexpectedKeypad,
         messaging: unexpectedMessaging,
