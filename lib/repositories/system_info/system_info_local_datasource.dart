@@ -33,7 +33,7 @@ class SystemInfoLocalRepositoryPrefsImpl with SystemInfoJsonMapper implements Sy
 
   @override
   Future<void> clear() async {
-    await _appPreferences.remove('system-info');
+    await _appPreferences.removeSystemInfo();
   }
 
   @override

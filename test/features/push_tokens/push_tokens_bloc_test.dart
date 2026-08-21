@@ -9,6 +9,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/push_tokens/bloc/push_tokens_bloc.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
+import '../../mocks/mock_app_preferences.dart';
 import '../../mocks/mock_secure_storage.dart';
 
 class _MockFirebaseMessaging extends Mock implements FirebaseMessaging {}
@@ -19,13 +20,11 @@ class _MockCallkeep extends Mock implements Callkeep {}
 
 class _MockPushEnvironment extends Mock implements PushEnvironment {}
 
-class _MockAppPreferences extends Mock implements AppPreferences {}
-
 void main() {
   late _MockFirebaseMessaging firebaseMessaging;
   late _MockPushTokensRepository pushTokensRepository;
   late MockSecureStorage secureStorage;
-  late AppPreferences appPreferences;
+  late MockAppPreferences appPreferences;
   late _MockCallkeep callkeep;
   late _MockPushEnvironment pushEnvironment;
 
@@ -33,7 +32,7 @@ void main() {
     firebaseMessaging = _MockFirebaseMessaging();
     pushTokensRepository = _MockPushTokensRepository();
     secureStorage = MockSecureStorage();
-    appPreferences = _MockAppPreferences();
+    appPreferences = MockAppPreferences();
     callkeep = _MockCallkeep();
     pushEnvironment = _MockPushEnvironment();
 

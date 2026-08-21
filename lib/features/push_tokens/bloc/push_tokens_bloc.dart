@@ -179,7 +179,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
       emit(state.copyWith(pushToken: event.value));
 
       if (event.type == AppPushTokenType.fcm) {
-        appPreferences.setFcmPushToken(event.value);
+        await appPreferences.setFcmPushToken(event.value);
       }
 
       _logger.fine('Push token inserted or updated: ${event.type} ${event.value}');

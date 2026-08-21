@@ -29,13 +29,6 @@ abstract class SecureStorage {
 
   Future<void> deleteUserId();
 
-  // FCM Token
-  String? readFCMPushToken();
-
-  Future<void> writeFCMPushToken(String token);
-
-  Future<void> deleteFCMPushToken();
-
   // External Page Token (Composite methods)
   String? readExternalPageAccessToken();
 
@@ -48,13 +41,6 @@ abstract class SecureStorage {
   Future<void> writeExternalPageTokenData(String accessToken, String refreshToken, String expires, String associate);
 
   Future<void> deleteExternalPageTokenData();
-
-  // System Info
-  String? readSystemInfo();
-
-  Future<void> writeSystemInfo(String systemInfo);
-
-  Future<void> deleteSystemInfo();
 }
 
 /// The `SecureStorageImpl` class uses a local cache (`_cache`) to store values
@@ -76,14 +62,10 @@ class SecureStorageImpl implements SecureStorage {
   static const _kTenantIdKey = 'tenant-id';
   static const _kTokenKey = 'token';
   static const _kUserIdKey = 'user-id';
-  static const _kSystemInfoKey = 'system-info';
   static const _kExternalPageAccessTokenSessionAssociated = 'external-page-access-token-session-associated';
   static const _kExternalPageAccessTokenKey = 'external-page-access-token';
   static const _kExternalPageRefreshTokenKey = 'external-page-refresh-token';
   static const _kExternalPageTokenExpiresKey = 'external-page-token-expires';
-
-  // Last FCM token that was pushed to the server
-  static const _kFCMPushToken = 'fcm-push-token';
 
   static Future<SecureStorage> init() async {
     const storage = FlutterSecureStorage(iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock));
@@ -192,21 +174,6 @@ class SecureStorageImpl implements SecureStorage {
     return _delete(_kUserIdKey);
   }
 
-  @override
-  String? readFCMPushToken() {
-    return _read(_kFCMPushToken);
-  }
-
-  @override
-  Future<void> writeFCMPushToken(String token) {
-    return _write(_kFCMPushToken, token);
-  }
-
-  @override
-  Future<void> deleteFCMPushToken() {
-    return _delete(_kFCMPushToken);
-  }
-
   // EXTERNAL PAGE TOKEN
 
   @override
@@ -248,22 +215,5 @@ class SecureStorageImpl implements SecureStorage {
     await _delete(_kExternalPageRefreshTokenKey);
     await _delete(_kExternalPageTokenExpiresKey);
     await _delete(_kExternalPageAccessTokenSessionAssociated);
-  }
-
-  // SYSTEM INFO
-
-  @override
-  String? readSystemInfo() {
-    return _read(_kSystemInfoKey);
-  }
-
-  @override
-  Future<void> writeSystemInfo(String systemInfo) {
-    return _write(_kSystemInfoKey, systemInfo);
-  }
-
-  @override
-  Future<void> deleteSystemInfo() {
-    return _delete(_kSystemInfoKey);
   }
 }

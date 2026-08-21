@@ -9,12 +9,10 @@ class MockSecureStorage implements SecureStorage {
   static const _kTenantIdKey = 'tenant-id';
   static const _kTokenKey = 'token';
   static const _kUserIdKey = 'user-id';
-  static const _kSystemInfoKey = 'system-info';
   static const _kExternalPageAccessTokenSessionAssociated = 'external-page-access-token-session-associated';
   static const _kExternalPageAccessTokenKey = 'external-page-access-token';
   static const _kExternalPageRefreshTokenKey = 'external-page-refresh-token';
   static const _kExternalPageTokenExpiresKey = 'external-page-token-expires';
-  static const _kFCMPushToken = 'fcm-push-token';
 
   @override
   String? readCoreUrl() {
@@ -86,21 +84,6 @@ class MockSecureStorage implements SecureStorage {
   }
 
   @override
-  String? readFCMPushToken() {
-    return _storage[_kFCMPushToken];
-  }
-
-  @override
-  Future<void> writeFCMPushToken(String token) async {
-    _storage[_kFCMPushToken] = token;
-  }
-
-  @override
-  Future<void> deleteFCMPushToken() async {
-    _storage.remove(_kFCMPushToken);
-  }
-
-  @override
   String? readExternalPageAccessToken() {
     return _storage[_kExternalPageAccessTokenKey];
   }
@@ -139,20 +122,5 @@ class MockSecureStorage implements SecureStorage {
     _storage.remove(_kExternalPageRefreshTokenKey);
     _storage.remove(_kExternalPageTokenExpiresKey);
     _storage.remove(_kExternalPageAccessTokenSessionAssociated);
-  }
-
-  @override
-  String? readSystemInfo() {
-    return _storage[_kSystemInfoKey];
-  }
-
-  @override
-  Future<void> writeSystemInfo(String systemInfo) async {
-    _storage[_kSystemInfoKey] = systemInfo;
-  }
-
-  @override
-  Future<void> deleteSystemInfo() async {
-    _storage.remove(_kSystemInfoKey);
   }
 }

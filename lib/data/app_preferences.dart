@@ -5,6 +5,8 @@ abstract class AppPreferences {
 
   Future<void> setSystemInfo(String value);
 
+  Future<void> removeSystemInfo();
+
   String? getFcmPushToken();
 
   Future<void> setFcmPushToken(String value);
@@ -42,6 +44,9 @@ class AppPreferencesImpl implements AppPreferences {
 
   @override
   Future<void> setSystemInfo(String value) => setString(_systemInfoKey, value);
+
+  @override
+  Future<void> removeSystemInfo() => remove(_systemInfoKey);
 
   @override
   String? getFcmPushToken() => getString(_fcmPushTokenKey);

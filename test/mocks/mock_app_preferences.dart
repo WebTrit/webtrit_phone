@@ -12,6 +12,9 @@ class MockAppPreferences implements AppPreferences {
   Future<void> setSystemInfo(String value) => setString('system-info', value);
 
   @override
+  Future<void> removeSystemInfo() => remove('system-info');
+
+  @override
   String? getFcmPushToken() => getString('fcm-push-token');
 
   @override
