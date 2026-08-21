@@ -87,7 +87,7 @@ void main() {
 
   Color? markColor(WidgetTester tester) {
     final container = tester.widget<Container>(
-      find.descendant(of: find.byType(SipPresenceIndicator), matching: find.byType(Container)),
+      find.descendant(of: find.byType(PresenceMark), matching: find.byType(Container)),
     );
     return (container.decoration! as BoxDecoration).color;
   }
@@ -105,7 +105,7 @@ void main() {
       final dot = dotOf(tester);
       expect((dot.decoration! as BoxDecoration).color, registeredColor);
       expect(tester.getSize(find.byWidget(dot)), const Size(diameter * 0.2, diameter * 0.2));
-      expect(find.byType(SipPresenceIndicator), findsNothing);
+      expect(find.byType(PresenceMark), findsNothing);
     });
 
     testWidgets('colors the dot by registration state', (tester) async {
@@ -118,7 +118,7 @@ void main() {
       await tester.pumpWidget(wrap(const AvatarStatusBadge(), hybridPresenceSupport: false));
 
       expect(find.descendant(of: find.byType(AvatarStatusBadge), matching: find.byType(Container)), findsNothing);
-      expect(find.byType(SipPresenceIndicator), findsNothing);
+      expect(find.byType(PresenceMark), findsNothing);
     });
   });
 
@@ -140,8 +140,8 @@ void main() {
         wrap(AvatarStatusBadge(presenceInfo: [presence(available: true)]), hybridPresenceSupport: true),
       );
 
-      expect(find.byType(SipPresenceIndicator), findsOneWidget);
-      expect(tester.getSize(find.byType(SipPresenceIndicator)), const Size(diameter * 0.5, diameter * 0.5));
+      expect(find.byType(PresenceMark), findsOneWidget);
+      expect(tester.getSize(find.byType(PresenceMark)), const Size(diameter * 0.5, diameter * 0.5));
     });
 
     testWidgets('sits the mark on the avatar edge with the glyph inside it', (tester) async {
@@ -157,8 +157,8 @@ void main() {
       );
 
       final avatar = tester.getRect(find.byType(AvatarStatusBadge));
-      final dot = tester.getRect(find.byType(SipPresenceIndicator));
-      final icon = tester.getRect(find.descendant(of: find.byType(SipPresenceIndicator), matching: find.byType(Icon)));
+      final dot = tester.getRect(find.byType(PresenceMark));
+      final icon = tester.getRect(find.descendant(of: find.byType(PresenceMark), matching: find.byType(Icon)));
 
       // The mark's centre sits ON the avatar's edge, so half of it hangs
       // outside the silhouette instead of covering the face; the glyph lives
@@ -176,11 +176,194 @@ void main() {
       expect(icon.bottom, lessThanOrEqualTo(dot.bottom));
     });
 
-    testWidgets('ignores registration data', (tester) async {
-      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: true), hybridPresenceSupport: true));
+    testWidgets('lets a published status outrank registration', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(registered: true, presenceInfo: [presence(available: false)]),
+          hybridPresenceSupport: true,
+        ),
+      );
 
-      expect(find.descendant(of: find.byType(AvatarStatusBadge), matching: find.byType(Container)), findsNothing);
-      expect(find.byType(SipPresenceIndicator), findsNothing);
+      // The status mark, at its own size - not the small registration dot.
+      expect(find.byType(PresenceMark), findsOneWidget);
+      expect(tester.getSize(find.byType(PresenceMark)), const Size(diameter * 0.5, diameter * 0.5));
+    });
+  });
+
+  group('with no status published, registration takes over', () {
+    testWidgets('an unregistered contact gets a mark of the same size, not silence', (tester) async {
+      await tester.pumpWidget(
+        wrap(const AvatarStatusBadge(registered: false, presenceInfo: []), hybridPresenceSupport: true),
+      );
+
+      expect(find.byType(PresenceMark), findsOneWidget);
+      expect(tester.getSize(find.byType(PresenceMark)), const Size(diameter * 0.5, diameter * 0.5));
+      expect(markColor(tester), unavailableColor);
+      expect(find.byIcon(Icons.power_settings_new_rounded), findsOneWidget);
+      expect(find.bySemanticsLabel('Unavailable'), findsOneWidget);
+    });
+
+    testWidgets('a registered one gets the reachable mark', (tester) async {
+      await tester.pumpWidget(
+        wrap(const AvatarStatusBadge(registered: true, presenceInfo: []), hybridPresenceSupport: true),
+      );
+
+      expect(tester.getSize(find.byType(PresenceMark)), const Size(diameter * 0.5, diameter * 0.5));
+      expect(markColor(tester), availableColor);
+      expect(find.byIcon(Icons.check_rounded), findsOneWidget);
+      expect(find.bySemanticsLabel('Available'), findsOneWidget);
+    });
+
+    testWidgets('and a published status still wins over registration', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(
+            registered: true,
+            presenceInfo: [
+              presence(available: true, activities: const [PresenceActivity.doNotDisturb]),
+            ],
+          ),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(markColor(tester), busyColor);
+      expect(find.byIcon(Icons.remove_rounded), findsOneWidget);
+    });
+  });
+
+  group('nothing known, nothing drawn', () {
+    testWidgets('a contact nobody published anything about gets no mark', (tester) async {
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(presenceInfo: []), hybridPresenceSupport: true));
+
+      expect(find.byType(PresenceMark), findsNothing);
+    });
+
+    testWidgets('nor does a phone that is merely ringing, with nothing else known', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(presenceInfo: const [], dialogInfo: [dialog(DialogState.early)]),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(find.byType(PresenceMark), findsNothing);
+    });
+
+    testWidgets('but an established call is worth a mark on its own', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(presenceInfo: const [], dialogInfo: [dialog(DialogState.confirmed)]),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(find.byType(PresenceMark), findsOneWidget);
+      expect(find.byIcon(Icons.phone_in_talk_rounded), findsOneWidget);
+    });
+  });
+
+  group('no mark is left blank', () {
+    testWidgets('a contact who says they are not reachable is crossed out, not empty', (tester) async {
+      await tester.pumpWidget(
+        wrap(AvatarStatusBadge(presenceInfo: [presence(available: false)]), hybridPresenceSupport: true),
+      );
+
+      expect(markColor(tester), unavailableColor);
+      expect(find.byIcon(Icons.power_settings_new_rounded), findsOneWidget);
+    });
+
+    testWidgets('and every state the mark can show carries a glyph', (tester) async {
+      final cases = <String, AvatarStatusBadge>{
+        'available': AvatarStatusBadge(presenceInfo: [presence(available: true)]),
+        'unavailable': AvatarStatusBadge(presenceInfo: [presence(available: false)]),
+        'busy': AvatarStatusBadge(
+          presenceInfo: [
+            presence(available: true, activities: const [PresenceActivity.doNotDisturb]),
+          ],
+        ),
+        'away': AvatarStatusBadge(
+          presenceInfo: [
+            presence(available: true, activities: const [PresenceActivity.vacation]),
+          ],
+        ),
+        'on a call': AvatarStatusBadge(
+          presenceInfo: [presence(available: true)],
+          dialogInfo: [dialog(DialogState.confirmed)],
+        ),
+        'from registration alone': const AvatarStatusBadge(registered: false, presenceInfo: []),
+      };
+
+      for (final entry in cases.entries) {
+        await tester.pumpWidget(wrap(entry.value, hybridPresenceSupport: true));
+
+        expect(
+          find.descendant(of: find.byType(PresenceMark), matching: find.byType(Icon)),
+          findsOneWidget,
+          reason: '${entry.key} drew a blank mark',
+        );
+      }
+    });
+  });
+
+  group('the mark draws three classes, not twelve activities', () {
+    testWidgets('being in a call is a handset', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(presenceInfo: [presence(available: true)], dialogInfo: [dialog(DialogState.confirmed)]),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(find.byIcon(Icons.phone_in_talk_rounded), findsOneWidget);
+    });
+
+    testWidgets('asking not to be called is one glyph for both ways of saying it', (tester) async {
+      for (final activity in [PresenceActivity.doNotDisturb, PresenceActivity.busy]) {
+        await tester.pumpWidget(
+          wrap(
+            AvatarStatusBadge(
+              presenceInfo: [
+                presence(available: true, activities: [activity]),
+              ],
+            ),
+            hybridPresenceSupport: true,
+          ),
+        );
+
+        expect(find.byIcon(Icons.remove_rounded), findsOneWidget, reason: '${activity.name} drew something else');
+      }
+    });
+
+    testWidgets('every way of being elsewhere shares one glyph', (tester) async {
+      for (final activity in [
+        PresenceActivity.away,
+        PresenceActivity.vacation,
+        PresenceActivity.meeting,
+        PresenceActivity.sleeping,
+      ]) {
+        await tester.pumpWidget(
+          wrap(
+            AvatarStatusBadge(
+              presenceInfo: [
+                presence(available: true, activities: [activity]),
+              ],
+            ),
+            hybridPresenceSupport: true,
+          ),
+        );
+
+        expect(find.byIcon(Icons.schedule_rounded), findsOneWidget, reason: '${activity.name} drew something else');
+        expect(markColor(tester), unavailableColor, reason: '${activity.name} claimed the reachable colour');
+      }
+    });
+
+    testWidgets('and being reachable is a tick, so no filled mark is left blank', (tester) async {
+      await tester.pumpWidget(
+        wrap(AvatarStatusBadge(presenceInfo: [presence(available: true)]), hybridPresenceSupport: true),
+      );
+
+      expect(find.byIcon(Icons.check_rounded), findsOneWidget);
     });
   });
 
@@ -222,7 +405,7 @@ void main() {
       expect(markColor(tester), busyColor);
     });
 
-    testWidgets('an activity that is merely elsewhere stays available', (tester) async {
+    testWidgets('an activity that is merely elsewhere takes the quiet colour', (tester) async {
       await tester.pumpWidget(
         wrap(
           AvatarStatusBadge(
@@ -234,15 +417,24 @@ void main() {
         ),
       );
 
-      expect(markColor(tester), availableColor);
+      expect(markColor(tester), unavailableColor);
     });
 
-    testWidgets('an unreachable contact stays unavailable', (tester) async {
+    testWidgets('a contact who only says they are on the phone is not painted as certain', (tester) async {
       await tester.pumpWidget(
-        wrap(AvatarStatusBadge(presenceInfo: [presence(available: false)]), hybridPresenceSupport: true),
+        wrap(
+          AvatarStatusBadge(
+            presenceInfo: [
+              presence(available: true, activities: const [PresenceActivity.onThePhone]),
+            ],
+          ),
+          hybridPresenceSupport: true,
+        ),
       );
 
-      expect(markColor(tester), unavailableColor);
+      // Same glyph as a proven call, deliberately not the same colour.
+      expect(find.byIcon(Icons.phone_in_talk_rounded), findsOneWidget);
+      expect(markColor(tester), availableColor);
     });
   });
 

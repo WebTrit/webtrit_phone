@@ -54,10 +54,10 @@ void main() {
       );
     });
 
-    test('NOT when the only sign is their own on-the-phone activity', () {
+    test('only REPORTEDLY when the sign is their own on-the-phone activity', () {
       // The server publishes that activity from the moment of dialling, so it
-      // cannot tell a ringing phone from a conversation - it must not reach
-      // the state that paints a contact as uncallable.
+      // cannot tell a ringing phone from a conversation - it is worth showing,
+      // but it must not reach the state that paints a contact as uncallable.
       expect(
         ContactPresence.resolve(
           presenceInfo: [
@@ -65,7 +65,19 @@ void main() {
           ],
           dialogInfo: const [],
         ),
-        ContactPresence.available,
+        ContactPresence.onCallReported,
+      );
+    });
+
+    test('and a proven call outranks what they published about themselves', () {
+      expect(
+        ContactPresence.resolve(
+          presenceInfo: [
+            _presence(available: true, activities: const [PresenceActivity.vacation]),
+          ],
+          dialogInfo: [_dialog(DialogState.confirmed)],
+        ),
+        ContactPresence.onCall,
       );
     });
   });
@@ -97,7 +109,7 @@ void main() {
       );
     });
 
-    test('while an activity that is merely elsewhere leaves them available', () {
+    test('while an activity that is merely elsewhere is not that', () {
       expect(
         ContactPresence.resolve(
           presenceInfo: [
@@ -105,7 +117,51 @@ void main() {
           ],
           dialogInfo: const [],
         ),
-        ContactPresence.available,
+        ContactPresence.away,
+      );
+    });
+  });
+
+  group('a contact who is simply elsewhere', () {
+    const elsewhere = [
+      PresenceActivity.away,
+      PresenceActivity.sleeping,
+      PresenceActivity.permanentAbsence,
+      PresenceActivity.meal,
+      PresenceActivity.meeting,
+      PresenceActivity.appointment,
+      PresenceActivity.vacation,
+      PresenceActivity.travel,
+      PresenceActivity.inTransit,
+    ];
+
+    for (final activity in elsewhere) {
+      test('${activity.name} lands in one class, whatever the mark can draw', () {
+        expect(
+          ContactPresence.resolve(
+            presenceInfo: [
+              _presence(available: true, activities: [activity]),
+            ],
+            dialogInfo: const [],
+          ),
+          ContactPresence.away,
+        );
+      });
+    }
+
+    test('and says so even while publishing themselves as unreachable', () {
+      // Saying WHY they are absent is more use than the bare fact of it, so
+      // the activity outranks the flag here. Either way the mark stays quiet:
+      // this class takes the same colour as plain unavailable and differs by
+      // its glyph, see the badge.
+      expect(
+        ContactPresence.resolve(
+          presenceInfo: [
+            _presence(available: false, activities: const [PresenceActivity.sleeping]),
+          ],
+          dialogInfo: const [],
+        ),
+        ContactPresence.away,
       );
     });
   });
