@@ -90,6 +90,9 @@ class _CallTileAction extends StatelessWidget {
   }
 }
 
+/// Space between the name and whatever is drawn right after it.
+const _nameTrailingGap = 6.0;
+
 class CallTile extends StatefulWidget {
   const CallTile({
     super.key,
@@ -238,7 +241,7 @@ class _CallTileState extends State<CallTile> {
     final Widget nameText = widget.nameTrailing == null
         ? Text(widget.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: themeData.textTheme.titleMedium)
         : Row(
-            spacing: 6,
+            spacing: _nameTrailingGap,
             children: [
               Flexible(
                 child: Text(

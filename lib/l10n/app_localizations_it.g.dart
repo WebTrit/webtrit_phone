@@ -3561,6 +3561,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contacts_SemanticsLabel_clearSearch => 'Cancella la ricerca';
 
   @override
+  String get contacts_SemanticsLabel_closeSearch => 'Chiudi ricerca';
+
+  @override
   String get messaging_SemanticsLabel_newChat => 'Start a new chat';
 
   @override

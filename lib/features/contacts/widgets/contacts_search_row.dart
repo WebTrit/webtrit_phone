@@ -25,7 +25,7 @@ class ContactsSearchRow extends StatelessWidget {
   const ContactsSearchRow({
     super.key,
     this.leading,
-    this.width,
+    this.inset = kMainAppBarBottomPaddingGap,
     this.searching = true,
     this.onSearchOpened,
     this.onSearchClosed,
@@ -44,10 +44,14 @@ class ContactsSearchRow extends StatelessWidget {
   /// Called by the box's own cross once the box is open and already empty.
   final VoidCallback? onSearchClosed;
 
-  /// How wide the row is, when it has to line up with something above it.
-  /// Null takes the whole line, which is what the screen without the filter
-  /// does.
-  final double? width;
+  /// How far from the screen edges the row sits. Given the inset of the
+  /// title above it, the two line up; left alone, the row keeps the small
+  /// gutter every other app bar row keeps.
+  ///
+  /// An inset rather than a width, so the row is laid out inside the space it
+  /// is actually given: measured from the window instead, it would outgrow
+  /// the bar on a screen whose sides are eaten by a cutout.
+  final double inset;
 
   /// What this row asks of the app bar, so a caller sizing the bar does not
   /// have to know how the row is built.
@@ -55,67 +59,59 @@ class ContactsSearchRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = this.width;
-
     return Padding(
-      padding: EdgeInsets.only(
-        left: width == null ? kMainAppBarBottomPaddingGap : 0,
-        right: width == null ? kMainAppBarBottomPaddingGap : 0,
-        bottom: kMainAppBarBottomPaddingGap,
-      ),
-      // Centred like whatever sits above it, so the two line up on both sides.
+      padding: EdgeInsets.only(left: inset, right: inset, bottom: kMainAppBarBottomPaddingGap),
+      // Shrink-wrapped, so the row is as tall as its controls rather than as
+      // tall as the space the bar reserves.
       child: Align(
         heightFactor: 1,
-        child: SizedBox(
-          width: width,
-          child: IgnoreUnfocuser(
-            child: BlocBuilder<ContactsBloc, ContactsState>(
-              builder: (context, state) {
-                final contactsBloc = context.read<ContactsBloc>();
-                final leading = this.leading;
+        child: IgnoreUnfocuser(
+          child: BlocBuilder<ContactsBloc, ContactsState>(
+            builder: (context, state) {
+              final contactsBloc = context.read<ContactsBloc>();
+              final leading = this.leading;
 
-                // Nothing to share the line with, so nothing to close the box
-                // back into: it takes the line and keeps it, and a button to
-                // open what is already open would only cost a tap.
-                final pinned = leading == null;
+              // Nothing to share the line with, so nothing to close the box
+              // back into: it takes the line and keeps it, and a button to
+              // open what is already open would only cost a tap.
+              final pinned = leading == null;
 
-                final field = ClearedTextField(
-                  key: contactsSearchInputKey,
-                  identifier: contactsSearchInputId,
-                  clearButtonKey: contactsSearchInputClearKey,
-                  clearButtonIdentifier: contactsSearchInputClearId,
-                  initialValue: state.search,
-                  onChanged: (value) => contactsBloc.add(ContactsSearchChanged(value)),
-                  onSubmitted: (value) => contactsBloc.add(ContactsSearchSubmitted(value)),
-                  // Only where the box is something you leave: pinned, a
-                  // cross that took it away would leave the line empty.
-                  onDismissed: pinned ? null : onSearchClosed,
-                  iconConstraints: const BoxConstraints.expand(
-                    width: kMainAppBarBottomControlHeight,
-                    height: kMainAppBarBottomControlHeight,
+              final field = ClearedTextField(
+                key: contactsSearchInputKey,
+                identifier: contactsSearchInputId,
+                clearButtonKey: contactsSearchInputClearKey,
+                clearButtonIdentifier: contactsSearchInputClearId,
+                initialValue: state.search,
+                onChanged: (value) => contactsBloc.add(ContactsSearchChanged(value)),
+                onSubmitted: (value) => contactsBloc.add(ContactsSearchSubmitted(value)),
+                // Only where the box is something you leave: pinned, a
+                // cross that took it away would leave the line empty.
+                onDismissed: pinned ? null : onSearchClosed,
+                iconConstraints: const BoxConstraints.expand(
+                  width: kMainAppBarBottomControlHeight,
+                  height: kMainAppBarBottomControlHeight,
+                ),
+              );
+
+              if (pinned || searching) return field;
+
+              // Closed, the line belongs to the chooser - which is what
+              // leaves it room for a name long enough to read. Opened, the
+              // box takes the whole line, and its own cross is the way back.
+              return Row(
+                spacing: _controlGap,
+                children: [
+                  Expanded(child: leading),
+                  ContactsRoundButton(
+                    buttonKey: contactsSearchOpenKey,
+                    identifier: contactsSearchOpenId,
+                    label: context.l10n.contacts_ContactsScreen_searchSemanticsLabel,
+                    icon: Icons.search,
+                    onTap: onSearchOpened,
                   ),
-                );
-
-                if (pinned || searching) return field;
-
-                // Closed, the line belongs to the chooser - which is what
-                // leaves it room for a name long enough to read. Opened, the
-                // box takes the whole line, and its own cross is the way back.
-                return Row(
-                  spacing: _controlGap,
-                  children: [
-                    Expanded(child: leading),
-                    ContactsRoundButton(
-                      buttonKey: contactsSearchOpenKey,
-                      identifier: contactsSearchOpenId,
-                      label: context.l10n.contacts_ContactsScreen_searchSemanticsLabel,
-                      icon: Icons.search,
-                      onTap: onSearchOpened,
-                    ),
-                  ],
-                );
-              },
-            ),
+                ],
+              );
+            },
           ),
         ),
       ),

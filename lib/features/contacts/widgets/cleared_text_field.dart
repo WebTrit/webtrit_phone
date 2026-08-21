@@ -92,7 +92,13 @@ class ClearedTextFieldState extends State<ClearedTextField> {
           suffixIcon: _isEmpty && widget.onDismissed == null
               ? null
               : SemanticAction(
-                  label: context.l10n.contacts_SemanticsLabel_clearSearch,
+                  // Named for what the press will actually do: on an empty
+                  // box this control no longer empties anything, it leaves
+                  // the search, and announcing it as "clear" would send
+                  // someone listening past the only way out.
+                  label: _isEmpty && widget.onDismissed != null
+                      ? context.l10n.contacts_SemanticsLabel_closeSearch
+                      : context.l10n.contacts_SemanticsLabel_clearSearch,
                   identifier: widget.clearButtonIdentifier,
                   child: IconButton(
                     key: widget.clearButtonKey,

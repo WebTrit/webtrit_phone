@@ -7,6 +7,10 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+/// Size of the star that marks a favourite in a row: smaller than the name it
+/// follows, so it reads as a mark on the name rather than as a control.
+const _favoriteMarkSize = 16.0;
+
 class ContactTile extends StatelessWidget {
   const ContactTile({
     super.key,
@@ -104,7 +108,7 @@ class ContactTile extends StatelessWidget {
       // keeps favourites in a section of their own, where the star would say
       // nothing that screen does not already say.
       nameTrailing: markFavorite && favorite
-          ? Icon(Icons.star, size: 16, color: Theme.of(context).colorScheme.tertiary)
+          ? Icon(Icons.star, size: _favoriteMarkSize, color: Theme.of(context).colorScheme.tertiary)
           : null,
       leading: LeadingAvatar(
         username: displayName,

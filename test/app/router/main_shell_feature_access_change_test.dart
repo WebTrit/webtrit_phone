@@ -8,6 +8,7 @@ import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 
 import 'main_shell_harness.dart';
+import '../../helpers/feature_access_factories.dart';
 
 void main() {
   setUpAll(registerHarnessFallbacks);

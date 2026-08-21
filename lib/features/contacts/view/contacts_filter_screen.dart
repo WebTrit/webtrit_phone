@@ -69,8 +69,7 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
     // The line lines up with the title above it rather than with the screen
     // edge, and the figure is taken from the bar itself so the two cannot
     // drift apart.
-    final titleInset = Theme.of(context).appBarTheme.titleSpacing ?? NavigationToolbar.kMiddleSpacing;
-    final controlsWidth = mediaQueryData.size.width - titleInset * 2;
+    final titleInset = themeData.appBarTheme.titleSpacing ?? NavigationToolbar.kMiddleSpacing;
 
     // One line under the title, not two: the filter took a strip of its own
     // here and now sits on the title row, which is what lets the list start
@@ -108,7 +107,7 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
             child: Padding(
               padding: const EdgeInsets.only(top: _roomAbove, bottom: _roomBelow),
               child: ContactsSearchRow(
-                width: controlsWidth,
+                inset: titleInset,
                 searching: _searching,
                 onSearchOpened: () => setState(() => _searching = true),
                 onSearchClosed: () => setState(() => _searching = false),

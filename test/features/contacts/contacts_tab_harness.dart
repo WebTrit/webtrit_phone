@@ -14,7 +14,6 @@ import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
-import '../../app/router/main_shell_harness.dart';
 import '../../helpers/feature_access_factories.dart';
 
 class MockContactsExternalTabBloc extends MockBloc<ContactsExternalTabEvent, ContactsExternalTabState>

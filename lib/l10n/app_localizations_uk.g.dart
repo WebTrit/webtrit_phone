@@ -3561,6 +3561,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get contacts_SemanticsLabel_clearSearch => 'Очистити пошук';
 
   @override
+  String get contacts_SemanticsLabel_closeSearch => 'Закрити пошук';
+
+  @override
   String get messaging_SemanticsLabel_newChat => 'Start a new chat';
 
   @override

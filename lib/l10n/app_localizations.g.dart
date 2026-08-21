@@ -6463,6 +6463,12 @@ abstract class AppLocalizations {
   /// **'Clear search'**
   String get contacts_SemanticsLabel_clearSearch;
 
+  /// Accessibility name of the same button once the contact search field is empty, where pressing it leaves the search.
+  ///
+  /// In en, this message translates to:
+  /// **'Close search'**
+  String get contacts_SemanticsLabel_closeSearch;
+
   /// Accessibility name of the button that starts a new chat conversation.
   ///
   /// In en, this message translates to:

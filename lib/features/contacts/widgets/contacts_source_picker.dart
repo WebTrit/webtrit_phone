@@ -12,6 +12,13 @@ import 'package:webtrit_phone/models/models.dart';
 /// Compact because it is the rarest thing a person changes on this screen -
 /// seldom, and never twice in a row - so it is given the room a word needs
 /// and no more, which is what leaves the line to the search box.
+/// Size of the icons this control is built from, and the space between them:
+/// a size down from the controls beside it, because it is a line of text with
+/// marks around it rather than a button.
+const _pickerIconSize = 20.0;
+const _pickerGap = 8.0;
+const _pickerMenuGap = 12.0;
+
 class ContactsSourcePicker extends StatelessWidget {
   const ContactsSourcePicker({super.key, required this.sourceTypes, required this.selected, required this.onSelected});
 
@@ -43,11 +50,12 @@ class ContactsSourcePicker extends StatelessWidget {
             PopupMenuItem(
               value: sourceType,
               child: Row(
-                spacing: 12,
+                spacing: _pickerMenuGap,
                 children: [
-                  Icon(_icon(sourceType), size: 20),
+                  Icon(_icon(sourceType), size: _pickerIconSize),
                   Expanded(child: Text(sourceType.l10n(context))),
-                  if (sourceType == selected) Icon(Icons.check, size: 20, color: theme.colorScheme.primary),
+                  if (sourceType == selected)
+                    Icon(Icons.check, size: _pickerIconSize, color: theme.colorScheme.primary),
                 ],
               ),
             ),
@@ -59,11 +67,11 @@ class ContactsSourcePicker extends StatelessWidget {
           height: kMainAppBarBottomControlHeight,
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            spacing: 8,
+            spacing: _pickerGap,
             children: [
-              Icon(_icon(selected), size: 20, color: theme.colorScheme.onSurfaceVariant),
+              Icon(_icon(selected), size: _pickerIconSize, color: theme.colorScheme.onSurfaceVariant),
               Text(selected.l10n(context), style: theme.textTheme.bodyMedium),
-              Icon(Icons.expand_more, size: 20, color: theme.colorScheme.onSurfaceVariant),
+              Icon(Icons.expand_more, size: _pickerIconSize, color: theme.colorScheme.onSurfaceVariant),
             ],
           ),
         ),

@@ -2,7 +2,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:webtrit_appearance_theme/models/models.dart';
 
+import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 
 import '../mocks/feature_access_mocks.dart';
 
@@ -103,4 +105,18 @@ AppConfig createMockAppConfig() {
   when(() => appConfig.supported).thenReturn([]);
 
   return appConfig;
+}
+
+/// Builds a real [FeatureAccess] from the shared mock app config and the
+/// given system info, the same way the production stream factory does.
+FeatureAccess featureAccessFor(WebtritSystemInfo systemInfo) {
+  final snapshot = MockRemoteConfigSnapshot();
+  when(() => snapshot.getBool(any())).thenReturn(null);
+  return FeatureAccess.create(
+    createMockAppConfig(),
+    [createMockTermsResource()],
+    CoreSupportFactory.create(systemInfo),
+    systemInfo,
+    FeatureOverridesFactory.create(snapshot),
+  );
 }

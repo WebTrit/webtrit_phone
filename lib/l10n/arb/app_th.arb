@@ -2867,6 +2867,8 @@
   "@contacts_SemanticsLabel_clearSearch": {
     "description": "Accessibility name of the button that empties the contact search field."
   },
+  "contacts_SemanticsLabel_closeSearch": "ปิดการค้นหา",
+  "@contacts_SemanticsLabel_closeSearch": {},
   "messaging_SemanticsLabel_newChat": "Start a new chat",
   "@messaging_SemanticsLabel_newChat": {
     "description": "Accessibility name of the button that starts a new chat conversation."

@@ -2937,6 +2937,10 @@
   "@contacts_SemanticsLabel_clearSearch": {
     "description": "Accessibility name of the button that empties the contact search field."
   },
+  "contacts_SemanticsLabel_closeSearch": "Close search",
+  "@contacts_SemanticsLabel_closeSearch": {
+    "description": "Accessibility name of the same button once the contact search field is empty, where pressing it leaves the search."
+  },
   "messaging_SemanticsLabel_newChat": "Start a new chat",
   "@messaging_SemanticsLabel_newChat": {
     "description": "Accessibility name of the button that starts a new chat conversation."
