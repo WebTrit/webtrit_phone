@@ -45,12 +45,19 @@ void main() {
     expect(picked, [ContactSourceType.local]);
   });
 
-  testWidgets('names itself for a screen reader', (tester) async {
+  testWidgets('names itself for a screen reader, on the node that opens it', (tester) async {
+    // The name and the press have to be the same node. Split between two -
+    // which is what an identifier put inside the tap target does - a screen
+    // reader announces a nameless control and automation finds a name it
+    // cannot activate, while a test that only looks the identifier up stays
+    // green.
     final handle = tester.ensureSemantics();
 
     await pumpPicker(tester, selected: ContactSourceType.external);
 
-    expect(find.bySemanticsIdentifier(contactsSourcePickerId), findsOneWidget);
+    final named = find.bySemanticsIdentifier(contactsSourcePickerId);
+    expect(named, findsOneWidget);
+    expect(tester.getSemantics(named), isSemantics(hasTapAction: true, isButton: true));
 
     handle.dispose();
   });

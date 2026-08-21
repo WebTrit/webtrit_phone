@@ -19,7 +19,6 @@ import '../contacts.dart';
 /// would be a pile of conditions, and a deployment that keeps the current
 /// screen must not be able to reach the other by accident. The lists, the
 /// search box and the row are the same pieces in both.
-///
 @RoutePage()
 class ContactsFilterScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors

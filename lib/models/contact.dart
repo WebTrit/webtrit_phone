@@ -106,6 +106,14 @@ class Contact extends Equatable {
   /// - `id` as a fallback if all fields are absent
   late final String displayTitle = maybeName ?? extension ?? mobileNumber ?? sourceId ?? id.toString();
 
+  /// Whether this person is a favourite.
+  ///
+  /// A favourite is a NUMBER while this is a person, so one favourite number
+  /// is enough. Stated once: the list narrows by it and the row is marked by
+  /// it, and the two answering differently would star nobody in a list of
+  /// nothing but favourites.
+  bool get isFavorite => phones.any((phone) => phone.favorite);
+
   @override
   List<Object?> get props => [
     id,
@@ -135,9 +143,8 @@ extension ContactListFavorites on List<Contact> {
   /// The people with a favourite among their numbers, in the order the list
   /// already had.
   ///
-  /// A favourite is a NUMBER while this list is of people, so one favourite
-  /// number is enough to keep its owner. The order is the list's own:
-  /// narrowing a list must not also reshuffle it, or the filter reads as a
-  /// different screen rather than the same one with fewer rows.
-  List<Contact> get favoritesOnly => where((contact) => contact.phones.any((phone) => phone.favorite)).toList();
+  /// The order is the list's own: narrowing a list must not also reshuffle
+  /// it, or the filter reads as a different screen rather than the same one
+  /// with fewer rows.
+  List<Contact> get favoritesOnly => where((contact) => contact.isFavorite).toList();
 }

@@ -68,15 +68,15 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
           );
         }
 
-        // No contacts to show yet: keep a loading indicator visible while the
-        // initial remote fetch is still in flight, so an empty list is not
-        // mistaken for "no data".
         // Nothing to show because of the filter is a different answer from
         // nothing to show at all, and it is not a failure or a slow fetch.
         if (widget.favoritesOnly && state.contacts.isNotEmpty) {
           return NoDataPlaceholder(content: Text(context.l10n.contacts_ContactsScreen_emptyFavorites));
         }
 
+        // No contacts to show yet: keep a loading indicator visible while the
+        // initial remote fetch is still in flight, so an empty list is not
+        // mistaken for "no data".
         switch (state.status) {
           case ContactsExternalTabStatus.initial:
           case ContactsExternalTabStatus.inProgress:

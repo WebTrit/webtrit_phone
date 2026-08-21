@@ -67,6 +67,39 @@ void main() {
       expect(bloc.state.search, 'branch');
     });
 
+    testWidgets('names its round button on the node that presses it', (tester) async {
+      // The name and the press have to be the same node. Split between two -
+      // which is what an identifier put inside the tap target does - a screen
+      // reader announces a nameless control and automation finds a name it
+      // cannot activate, while a test that only looks the identifier up stays
+      // green.
+      final handle = tester.ensureSemantics();
+      var pressed = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ContactsRoundButton(
+              buttonKey: const Key('round'),
+              identifier: 'contactsRoundButtonProbe',
+              label: 'Search contacts',
+              icon: Icons.search,
+              onTap: () => pressed = true,
+            ),
+          ),
+        ),
+      );
+
+      final named = find.bySemanticsIdentifier('contactsRoundButtonProbe');
+      expect(named, findsOneWidget);
+      expect(tester.getSemantics(named), isSemantics(hasTapAction: true, isButton: true, label: 'Search contacts'));
+
+      await tester.tap(named);
+      expect(pressed, isTrue);
+
+      handle.dispose();
+    });
+
     testWidgets('asks the app bar for the height the screen reserves', (tester) async {
       await pumpRow(tester);
 

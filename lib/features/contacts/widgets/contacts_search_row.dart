@@ -132,7 +132,6 @@ class ContactsRoundButton extends StatelessWidget {
     required this.identifier,
     required this.label,
     required this.icon,
-    this.selected = false,
     this.onTap,
   });
 
@@ -141,32 +140,28 @@ class ContactsRoundButton extends StatelessWidget {
   final String label;
   final IconData icon;
 
-  /// Filled with the accent colour while on. A button that stays pressed has
-  /// to look different from one that was merely tapped; the state is spoken as
-  /// well, so it does not rest on the colour alone.
-  final bool selected;
-
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return SizedBox.square(
-      dimension: kMainAppBarBottomControlHeight,
-      child: Material(
-        color: selected ? colors.primary : colors.surfaceContainerHigh,
-        shape: const CircleBorder(),
-        child: InkWell(
-          key: buttonKey,
-          customBorder: const CircleBorder(),
-          onTap: onTap,
-          child: Semantics(
-            identifier: identifier,
-            button: true,
-            selected: selected,
-            label: label,
-            child: Icon(icon, color: selected ? colors.onPrimary : colors.onSurfaceVariant),
+    // Named from outside the tap target rather than inside it: an identifier
+    // put on the icon opens a boundary of its own, and what comes out is one
+    // node carrying the name and another carrying the press.
+    return SemanticAction.button(
+      label: label,
+      identifier: identifier,
+      child: SizedBox.square(
+        dimension: kMainAppBarBottomControlHeight,
+        child: Material(
+          color: colors.surfaceContainerHigh,
+          shape: const CircleBorder(),
+          child: InkWell(
+            key: buttonKey,
+            customBorder: const CircleBorder(),
+            onTap: onTap,
+            child: Icon(icon, color: colors.onSurfaceVariant),
           ),
         ),
       ),

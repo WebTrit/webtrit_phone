@@ -7,11 +7,11 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 /// Picks which address book the list is drawn from, as a compact control that
-/// sits beside the search box.
+/// opens the line under the title.
 ///
-/// Compact because it is the rarer of the two choices on this screen: a person
-/// changes address book seldom and filters the list often, so the filter takes
-/// the wide control at the top and this takes the room a word needs.
+/// Compact because it is the rarest thing a person changes on this screen -
+/// seldom, and never twice in a row - so it is given the room a word needs
+/// and no more, which is what leaves the line to the search box.
 class ContactsSourcePicker extends StatelessWidget {
   const ContactsSourcePicker({super.key, required this.sourceTypes, required this.selected, required this.onSelected});
 

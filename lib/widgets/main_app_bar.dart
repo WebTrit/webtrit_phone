@@ -34,6 +34,10 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// A screen whose header is a single short line has nowhere else to put a
   /// control that belongs to the whole screen rather than to what the line
   /// below is about.
+  ///
+  /// Shown while the session is still being established, unlike the bar's own
+  /// controls: those need a session to mean anything, while a screen's control
+  /// works on what is already on screen.
   final List<Widget> actions;
   final Color? backgroundColor;
   final Widget? flexibleSpace;

@@ -81,14 +81,12 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
             ],
           );
         } else if (shown.isNotEmpty) {
-          final contacts = shown;
-
           return RefreshIndicator(
             onRefresh: _refreshContacts,
             child: ListView.builder(
-              itemCount: contacts.length,
+              itemCount: shown.length,
               itemBuilder: (context, index) {
-                final contact = contacts[index];
+                final contact = shown[index];
                 return ContactTileAdapter(
                   tileKey: contactsLocalContactTileKey,
                   // Only where favourites are a filter of this list: a star

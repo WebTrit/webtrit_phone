@@ -73,7 +73,7 @@ class ContactTileAdapter extends StatelessWidget {
             return ContactTile(
               key: tileKey,
               markFavorite: markFavorite,
-              favorite: contact.phones.any((phone) => phone.favorite),
+              favorite: contact.isFavorite,
               displayName: contact.displayTitle,
               thumbnail: contact.thumbnail,
               thumbnailUrl: contact.thumbnailUrl,
