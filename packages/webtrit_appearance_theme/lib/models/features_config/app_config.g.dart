@@ -408,7 +408,6 @@ AppConfigSettings _$AppConfigSettingsFromJson(Map<String, dynamic> json) =>
                   type: 'terms',
                   titleL10n: 'settings_ListViewTileTitle_termsConditions',
                   icon: '0xeedf',
-                  embeddedResourceId: '0',
                 ),
                 AppConfigSettingsItem(
                   enabled: true,
