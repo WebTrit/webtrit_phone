@@ -202,6 +202,17 @@ void main() {
       expect(bar.bottom - title.bottom, kMainAppBarBottomTabHeight);
     });
 
+    testWidgets('without the controls sitting against the title above them', (tester) async {
+      // The height is kept by splitting the row's own gap, not by pressing
+      // the controls into the row above - which is where the avatar is.
+      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+
+      final title = tester.getRect(find.byType(NavigationToolbar));
+      final search = tester.getRect(find.byKey(contactsSearchInputKey));
+
+      expect(search.top - title.bottom, greaterThanOrEqualTo(kMainAppBarBottomPaddingGap / 2));
+    });
+
     testWidgets('and keeps the chooser off the button beside it', (tester) async {
       // Two controls a hair apart read as one.
       await pumpScreen(tester, sourceTypes: [ContactSourceType.local, ContactSourceType.external]);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -100,6 +101,10 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
             preferredSize: const Size.fromHeight(ContactsSearchRow.height),
             child: ContactsSearchRow(
               inset: titleInset,
+              // Half the gap above, half below: the row is the whole header
+              // here, and its controls would otherwise sit against the avatar
+              // in the title row above them.
+              gapAbove: kMainAppBarBottomPaddingGap / 2,
               searching: _searching,
               onSearchOpened: () => setState(() => _searching = true),
               onSearchClosed: () => setState(() => _searching = false),

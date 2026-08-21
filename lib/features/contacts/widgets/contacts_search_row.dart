@@ -26,6 +26,7 @@ class ContactsSearchRow extends StatelessWidget {
     super.key,
     this.leading,
     this.inset = kMainAppBarBottomPaddingGap,
+    this.gapAbove = 0,
     this.searching = true,
     this.onSearchOpened,
     this.onSearchClosed,
@@ -53,6 +54,15 @@ class ContactsSearchRow extends StatelessWidget {
   /// the bar on a screen whose sides are eaten by a cutout.
   final double inset;
 
+  /// How much of the row's gap is left above the controls; the rest is left
+  /// below. The row takes [height] either way.
+  ///
+  /// None of it, by default: a row that sits under another one is already
+  /// given room by the gap that one leaves. A row that is the whole header
+  /// has nothing above it but the title, and controls pressed against the
+  /// title read as part of it.
+  final double gapAbove;
+
   /// What this row asks of the app bar, so a caller sizing the bar does not
   /// have to know how the row is built.
   static const height = kMainAppBarBottomSearchHeight;
@@ -60,7 +70,12 @@ class ContactsSearchRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: inset, right: inset, bottom: kMainAppBarBottomPaddingGap),
+      padding: EdgeInsets.only(
+        left: inset,
+        right: inset,
+        top: gapAbove,
+        bottom: kMainAppBarBottomPaddingGap - gapAbove,
+      ),
       // Shrink-wrapped, so the row is as tall as its controls rather than as
       // tall as the space the bar reserves.
       child: Align(
