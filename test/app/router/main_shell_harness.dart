@@ -190,6 +190,8 @@ class MainShellHarness {
     when(
       () => sessionRepository.getCurrent(),
     ).thenReturn(const Session(coreUrl: 'http://127.0.0.1:1', token: 'test-token', userId: 'test-user'));
+    when(() => sessionRepository.isRestored).thenReturn(true);
+    when(() => sessionRepository.whenRestored).thenAnswer((_) async {});
     when(() => appBloc.state).thenReturn(
       AppState(
         status: AppLifecycleStatus.authenticated,

@@ -42,9 +42,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }) : super(
          AppState(
            session: sessionRepository.getCurrent(),
-           status: (sessionRepository.getCurrent().isLoggedIn)
-               ? AppLifecycleStatus.authenticated
-               : AppLifecycleStatus.unauthenticated,
+           status: _statusFor(sessionRepository),
            themeMode: themeModeRepository.getThemeMode(),
            locale: _resolveInitialLocale(localeRepository.getLocale(), supportedLocales),
            userAgreementStatus: userAgreementStatusRepository.getUserAgreementStatus(),
@@ -58,10 +56,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppLogoutRequested>(_onLogoutRequested, transformer: droppable());
     on<AppCleanupRequested>(_onCleanupRequested, transformer: droppable());
     on<_AppCompatibilityUpdated>(_onAppCompatibilityUpdated);
+    on<_AppSessionRestored>(_onSessionRestored);
+
+    if (!sessionRepository.isRestored) {
+      sessionRepository.whenRestored.then((_) {
+        if (!isClosed) add(const _AppSessionRestored());
+      });
+    }
 
     // This bloc is the single writer of the session/user-settings Crashlytics
     // keys it owns: seed them from the initial state here, refresh them in the
-    // corresponding handlers/transitions below.
+    // corresponding handlers/transitions below. While the session is still
+    // being read there is nothing to seed yet - _onSessionRestored does it.
     crashlyticsContext
       ..logAuthorization(authorized: state.session.isLoggedIn)
       ..logSessionScope(
@@ -136,6 +142,22 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       appVersion: appInfo.version,
       coreVersionConstraint: EnvironmentConfig.CORE_VERSION_CONSTRAINT,
     );
+  }
+
+  static AppLifecycleStatus _statusFor(SessionRepository sessionRepository) {
+    if (!sessionRepository.isRestored) return AppLifecycleStatus.resolving;
+    return sessionRepository.getCurrent().isLoggedIn
+        ? AppLifecycleStatus.authenticated
+        : AppLifecycleStatus.unauthenticated;
+  }
+
+  void _onSessionRestored(_AppSessionRestored event, Emitter<AppState> emit) {
+    // Anything that logged in or out while the read was in flight has already
+    // moved the state on, and its session is the newer one.
+    if (state.status != AppLifecycleStatus.resolving) return;
+
+    // The Crashlytics keys follow from the transition itself, in [onChange].
+    emit(state.copyWith(session: sessionRepository.getCurrent(), status: _statusFor(sessionRepository)));
   }
 
   void _onAppCompatibilityUpdated(_AppCompatibilityUpdated event, Emitter<AppState> emit) {

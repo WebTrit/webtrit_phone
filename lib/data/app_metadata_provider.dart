@@ -1,4 +1,5 @@
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 /// Provides application metadata, including device information,
 /// package details, and configuration labels.
@@ -35,31 +36,32 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
     PackageInfo packageInfo,
     DeviceInfo deviceInfo,
     AppInfo appInfo,
-    SecureStorage secureStorage, [
+    Session Function() currentSession, [
     FeatureAccess? featureAccess,
   ]) async {
-    return DefaultAppMetadataProvider._(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess);
+    return DefaultAppMetadataProvider._(packageInfo, deviceInfo, appInfo, currentSession, featureAccess);
   }
 
   DefaultAppMetadataProvider._(
     this._packageInfo,
     this._deviceInfo,
     this._appInfo,
-    this._secureStorage,
+    this._currentSession,
     this._featureAccess,
   );
 
   final PackageInfo _packageInfo;
   final DeviceInfo _deviceInfo;
   final AppInfo _appInfo;
-  final SecureStorage _secureStorage;
+  final Session Function() _currentSession;
   final FeatureAccess? _featureAccess;
 
   @override
   Map<String, String> get logLabels {
-    final token = _secureStorage.readToken();
-    final coreUrl = _secureStorage.readCoreUrl();
-    final tenantId = _secureStorage.readTenantId();
+    final session = _currentSession();
+    final token = session.token;
+    final coreUrl = session.coreUrl;
+    final tenantId = session.tenantId;
     final urls = _featureAccess?.embeddedConfig.embeddedResources.map((e) => e.uri.toString()).toList();
 
     return <String, String>{
@@ -76,7 +78,7 @@ class DefaultAppMetadataProvider implements AppMetadataProvider {
       'authorization': token != null ? 'authorized' : 'unauthorized',
       if (urls != null && urls.isNotEmpty) 'embeddedUrls': urls.join(', '),
       'coreUrl': ?coreUrl,
-      'tenantId': ?tenantId,
+      if (tenantId.isNotEmpty) 'tenantId': tenantId,
     };
   }
 

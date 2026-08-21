@@ -118,6 +118,15 @@ class AppCleanupRequested extends AppEvent {
   const AppCleanupRequested();
 }
 
+/// Internal: carries the stored session once it has been read, which is what
+/// ends the [AppLifecycleStatus.resolving] window the app starts in.
+class _AppSessionRestored extends AppEvent {
+  const _AppSessionRestored();
+
+  @override
+  List<Object?> get props => [];
+}
+
 /// Internal: carries a freshly resolved [AppCompatibility] from the system-info
 /// stream into the bloc so the force-update gate can be enforced by the router.
 class _AppCompatibilityUpdated extends AppEvent {

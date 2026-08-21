@@ -84,7 +84,7 @@ Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) as
   final supportedLocales = await _resolveSupportedLocales();
   final l10n = lookupAppLocalizations(_effectiveLocale(context.locale, supportedLocales));
   final localPushRepository = context.localPushRepository;
-  _manager = PushNotificationIsolateManager(
+  final manager = PushNotificationIsolateManager(
     callLogsRepository: context.callLogsRepository,
     callkeep: BackgroundPushNotificationService(),
     storage: context.secureStorage,
@@ -100,11 +100,14 @@ Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) as
   );
   // init() constructs WebtritSignalingService and wires up the event subscription.
   // The WebSocket connection starts in connect(), which is called from run().
+  // Published only once it returns: a second push arriving meanwhile must not
+  // pick up a manager that cannot run yet, and tear this one down on its way out.
   _logger.info('_getOrInit: initialising signaling module...');
-  _manager!.init();
+  await manager.init();
+  _manager = manager;
   _logger.info('_getOrInit: init complete');
 
-  return _manager!;
+  return manager;
 }
 
 /// Closes the manager and releases all isolate-level resources.

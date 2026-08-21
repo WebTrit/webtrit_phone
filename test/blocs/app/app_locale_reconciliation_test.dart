@@ -56,6 +56,8 @@ void main() {
     infoStreamController = StreamController<WebtritSystemInfo>.broadcast();
 
     when(() => sessionRepository.getCurrent()).thenReturn(const Session());
+    when(() => sessionRepository.isRestored).thenReturn(true);
+    when(() => sessionRepository.whenRestored).thenAnswer((_) async {});
     when(() => themeModeRepository.getThemeMode()).thenReturn(ThemeMode.system);
     when(() => userAgreementStatusRepository.getUserAgreementStatus()).thenReturn(AgreementStatus.accepted);
     when(() => contactsAgreementStatusRepository.getContactsAgreementStatus()).thenReturn(AgreementStatus.accepted);

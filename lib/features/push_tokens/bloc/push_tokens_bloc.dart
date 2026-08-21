@@ -53,7 +53,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   late StreamSubscription _onTokenRefreshSubscription;
 
   // TODO: Move to repository when repository is ready
-  bool get _isSignedIn => secureStorage.readToken() != null;
+  Future<bool> get _isSignedIn async => await secureStorage.readToken() != null;
 
   // Retry handler with exponential backoff to handle scenarios where Google or Apple services
   // throw exceptions, such as when there is no internet connection, or in cases where
@@ -88,7 +88,7 @@ class PushTokensBloc extends Bloc<PushTokensEvent, PushTokensState> implements P
   }
 
   Future<void> _deleteFcmTokenIfSignedOut() async {
-    if (_isSignedIn) {
+    if (await _isSignedIn) {
       _logger.finest('Skipping FCM token deletion because a user token is still present.');
       return;
     }

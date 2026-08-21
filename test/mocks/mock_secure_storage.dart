@@ -15,7 +15,7 @@ class MockSecureStorage implements SecureStorage {
   static const _kExternalPageTokenExpiresKey = 'external-page-token-expires';
 
   @override
-  String? readCoreUrl() {
+  Future<String?> readCoreUrl() async {
     return _storage[_kCoreUrlKey];
   }
 
@@ -30,12 +30,12 @@ class MockSecureStorage implements SecureStorage {
   }
 
   @override
-  String? readTenantId() {
+  Future<String?> readTenantId() async {
     final tenantId = _storage[_kTenantIdKey];
     if (tenantId != null) {
       return tenantId;
     } else {
-      if (readCoreUrl() != null) {
+      if (await readCoreUrl() != null) {
         return '';
       } else {
         return null;
@@ -54,7 +54,7 @@ class MockSecureStorage implements SecureStorage {
   }
 
   @override
-  String? readToken() {
+  Future<String?> readToken() async {
     return _storage[_kTokenKey];
   }
 
@@ -69,7 +69,7 @@ class MockSecureStorage implements SecureStorage {
   }
 
   @override
-  String? readUserId() {
+  Future<String?> readUserId() async {
     return _storage[_kUserIdKey];
   }
 
@@ -84,22 +84,22 @@ class MockSecureStorage implements SecureStorage {
   }
 
   @override
-  String? readExternalPageAccessToken() {
+  Future<String?> readExternalPageAccessToken() async {
     return _storage[_kExternalPageAccessTokenKey];
   }
 
   @override
-  String? readExternalPageAccessTokenSessionAssociated() {
+  Future<String?> readExternalPageAccessTokenSessionAssociated() async {
     return _storage[_kExternalPageAccessTokenSessionAssociated];
   }
 
   @override
-  String? readExternalPageRefreshToken() {
+  Future<String?> readExternalPageRefreshToken() async {
     return _storage[_kExternalPageRefreshTokenKey];
   }
 
   @override
-  String? readExternalPageTokenExpires() {
+  Future<String?> readExternalPageTokenExpires() async {
     return _storage[_kExternalPageTokenExpiresKey];
   }
 

@@ -1,6 +1,9 @@
 part of 'app_bloc.dart';
 
-enum AppLifecycleStatus { unauthenticated, authenticated, teardown }
+/// [resolving] is the window before the stored session has been read: the app
+/// is already drawing, and whether anybody is signed in is not known yet. It is
+/// deliberately distinct from [unauthenticated], which means nobody is.
+enum AppLifecycleStatus { resolving, unauthenticated, authenticated, teardown }
 
 @freezed
 sealed class AppState with _$AppState {

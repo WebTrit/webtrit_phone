@@ -89,8 +89,8 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   /// Must be called once after construction and before [run]. Constructs
   /// [WebtritSignalingService] and wires up the event subscription.
   /// The WebSocket connection starts when [connect] is called from [run].
-  void init() {
-    _initSignaling();
+  Future<void> init() async {
+    await _initSignaling();
     _initialized = true;
   }
 
@@ -191,13 +191,13 @@ class PushNotificationIsolateManager implements CallkeepBackgroundServiceDelegat
   /// [SignalingServiceMode.pushBound] mode. Each isolate (push and Activity)
   /// opens its own direct WebSocket - no shared FGS hub. [connect] is called
   /// from [run], not here, so the connection starts only when processing begins.
-  void _initSignaling() {
+  Future<void> _initSignaling() async {
     logger.info('_initSignaling: creating WebtritSignalingService (pushBound)');
     _signalingModule = WebtritSignalingService(
       config: SignalingServiceConfig(
-        coreUrl: storage.readCoreUrl() ?? '',
-        tenantId: storage.readTenantId() ?? '',
-        token: storage.readToken() ?? '',
+        coreUrl: await storage.readCoreUrl() ?? '',
+        tenantId: await storage.readTenantId() ?? '',
+        token: await storage.readToken() ?? '',
         trustedCertificates: certificates,
       ),
       mode: SignalingServiceMode.pushBound,

@@ -11,8 +11,16 @@ import 'package:webtrit_phone/utils/utils.dart';
 final _logger = Logger('SessionRepository');
 
 abstract class SessionRepository {
-  /// Returns the current in-memory session snapshot.
+  /// Returns the current in-memory session snapshot. Before [whenRestored]
+  /// completes this is an empty session, which is not the same as being signed
+  /// out - ask [isRestored] when the difference matters.
   Session getCurrent();
+
+  /// Whether the stored session has been read yet.
+  bool get isRestored;
+
+  /// Completes once the stored session has been read.
+  Future<void> get whenRestored;
 
   /// Persists a session.
   ///
@@ -34,9 +42,44 @@ abstract class SessionRepository {
 }
 
 class SessionRepositoryImpl implements SessionRepository, Disposable {
-  SessionRepositoryImpl({required this.secureStorage, this.sessionCleanupWorker, required this.apiClientFactory}) {
-    // Initialize in-memory cache immediately on startup.
-    _currentSession = _loadFromStorage();
+  /// Takes the session that was already read from storage, so every later
+  /// reader is served from memory and nothing on a hot path has to wait for the
+  /// keychain again. Read it with [readStoredSession], early enough to overlap
+  /// with the rest of startup.
+  SessionRepositoryImpl({
+    required this.secureStorage,
+    required this.apiClientFactory,
+    required Future<Session> restoredSession,
+    this.sessionCleanupWorker,
+  }) {
+    _restored = restoredSession.then((session) {
+      // A session saved or cleared while the read was in flight is newer than
+      // what the keychain held, so it wins.
+      _currentSession ??= session;
+      _isRestored = true;
+    });
+  }
+
+  late final Future<void> _restored;
+  var _isRestored = false;
+
+  @override
+  bool get isRestored => _isRestored;
+
+  @override
+  Future<void> get whenRestored => _restored;
+
+  /// Reads the stored session. Asked for as a batch, so the whole session costs
+  /// one round trip rather than one per record.
+  static Future<Session> readStoredSession(SecureStorage secureStorage) async {
+    final records = await Future.wait([
+      secureStorage.readCoreUrl(),
+      secureStorage.readToken(),
+      secureStorage.readTenantId(),
+      secureStorage.readUserId(),
+    ]);
+
+    return Session(coreUrl: records[0], token: records[1], tenantId: records[2] ?? '', userId: records[3] ?? '');
   }
 
   final SecureStorage secureStorage;
@@ -46,26 +89,7 @@ class SessionRepositoryImpl implements SessionRepository, Disposable {
   /// The single source of truth for the session state in memory.
   Session? _currentSession;
 
-  /// Smart getter that attempts to restore the session from storage
-  /// if the in-memory cache is empty (e.g. after a Hot Restart).
-  Session get _effectiveSession {
-    // Capture local reference to prevent race conditions and redundant field access
-    final current = _currentSession;
-
-    if (current != null && current.isLoggedIn) {
-      return current;
-    }
-
-    final fromStorage = _loadFromStorage();
-
-    if (fromStorage.isLoggedIn) {
-      _logger.info('Restored lost session from storage: ${fromStorage.userId}');
-      _currentSession = fromStorage;
-      return fromStorage;
-    }
-
-    return current ?? const Session();
-  }
+  Session get _effectiveSession => _currentSession ?? const Session();
 
   @override
   Session getCurrent() => _effectiveSession;
@@ -163,15 +187,6 @@ class SessionRepositoryImpl implements SessionRepository, Disposable {
       _currentSession = _currentSession?.copyWith(userId: userId) ?? _currentSession;
       _logger.warning('userId patched: $userId');
     }
-  }
-
-  Session _loadFromStorage() {
-    return Session(
-      coreUrl: secureStorage.readCoreUrl(),
-      token: secureStorage.readToken(),
-      tenantId: secureStorage.readTenantId() ?? '',
-      userId: secureStorage.readUserId() ?? '',
-    );
   }
 
   /// Releases the cleanup worker this repository was built with: it is nobody

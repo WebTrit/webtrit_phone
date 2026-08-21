@@ -286,10 +286,19 @@ class AppRouter extends RootStackRouter {
     ),
   ];
 
-  void onLoginScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) {
+  /// The application state once it is no longer waiting for the stored session.
+  Future<AppState> _resolvedAppState() async {
+    final state = _appBloc.state;
+    if (state.status != AppLifecycleStatus.resolving) return state;
+    return _appBloc.stream.firstWhere((state) => state.status != AppLifecycleStatus.resolving);
+  }
+
+  Future<void> onLoginScreenPageRouteGuardNavigation(NavigationResolver resolver, StackRouter router) async {
     _logger.fine(_onNavigationLoggerMessage('onLoginScreenPageRouteGuardNavigation', resolver));
 
-    if (session.isLoggedIn) {
+    final state = await _resolvedAppState();
+
+    if (state.session.isLoggedIn) {
       resolver.next(false);
       router.replaceAll([const MainShellRoute()]);
     } else {
@@ -374,7 +383,10 @@ class AppRouter extends RootStackRouter {
   Future<void> onMainShellRouteGuardNavigation(NavigationResolver resolver, StackRouter router) async {
     _logger.fine(_onNavigationLoggerMessage('onMainShellRouteGuardNavigation', resolver));
 
-    final state = _appBloc.state;
+    // The app draws before the stored session has been read, so the first
+    // navigation is where that read is finally waited for. Deciding without it
+    // would send a signed-in person to the login screen and pull them back.
+    final state = await _resolvedAppState();
 
     // Intercept the navigation if a teardown sequence is active.
     // Replacing the route ensures MainShell is unmounted and its resources are released.
@@ -479,10 +491,10 @@ class AppRouter extends RootStackRouter {
   /// Allows access to the teardown screen only while the app is in the
   /// teardown lifecycle state. Otherwise, redirects to the appropriate
   /// route (e.g. MainShell when authenticated, Login when unauthenticated).
-  void onTeardownScreenGuardNavigation(NavigationResolver resolver, StackRouter router) {
+  Future<void> onTeardownScreenGuardNavigation(NavigationResolver resolver, StackRouter router) async {
     _logger.fine(_onNavigationLoggerMessage('onTeardownScreenGuardNavigation', resolver));
 
-    final state = _appBloc.state;
+    final state = await _resolvedAppState();
 
     if (state.status == AppLifecycleStatus.teardown) {
       // Actively tearing down: allow navigation to the teardown screen.

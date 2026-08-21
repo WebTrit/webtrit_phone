@@ -52,7 +52,7 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
       await _tryFetchExternalPageToken(_customPrivateGatewayRepository!);
     }
     // Fetches the self-config and builds the payload.
-    _updatePayload();
+    await _updatePayload();
   }
 
   Future<void> _tryFetchExternalPageToken(PrivateGatewayRepository customPrivateGatewayRepository) async {
@@ -66,9 +66,9 @@ class EmbeddedCubit extends Cubit<EmbeddedState> {
     }
   }
 
-  void _updatePayload() {
+  Future<void> _updatePayload() async {
     try {
-      final payloadData = embeddedPayloadBuilder.build(payload);
+      final payloadData = await embeddedPayloadBuilder.build(payload);
       emit(state.copyWith(payload: payloadData));
     } on ExternalPageTokenUnavailableException catch (_) {
       _handleExternalPageTokenUnavailable();

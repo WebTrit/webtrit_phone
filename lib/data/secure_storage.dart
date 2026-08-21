@@ -2,50 +2,51 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 abstract class SecureStorage {
   // Core URL
-  String? readCoreUrl();
+  Future<String?> readCoreUrl();
 
   Future<void> writeCoreUrl(String coreUrl);
 
   Future<void> deleteCoreUrl();
 
   // Tenant ID
-  String? readTenantId();
+  Future<String?> readTenantId();
 
   Future<void> writeTenantId(String tenantId);
 
   Future<void> deleteTenantId();
 
   // Token
-  String? readToken();
+  Future<String?> readToken();
 
   Future<void> writeToken(String token);
 
   Future<void> deleteToken();
 
   // User ID
-  String? readUserId();
+  Future<String?> readUserId();
 
   Future<void> writeUserId(String userId);
 
   Future<void> deleteUserId();
 
   // External Page Token (Composite methods)
-  String? readExternalPageAccessToken();
+  Future<String?> readExternalPageAccessToken();
 
-  String? readExternalPageRefreshToken();
+  Future<String?> readExternalPageRefreshToken();
 
-  String? readExternalPageTokenExpires();
+  Future<String?> readExternalPageTokenExpires();
 
-  String? readExternalPageAccessTokenSessionAssociated();
+  Future<String?> readExternalPageAccessTokenSessionAssociated();
 
   Future<void> writeExternalPageTokenData(String accessToken, String refreshToken, String expires, String associate);
 
   Future<void> deleteExternalPageTokenData();
 }
 
-/// The `SecureStorageImpl` class uses a local cache (`_cache`) to store values
-/// read from `FlutterSecureStorage`, reducing the number of expensive read/write
-/// operations and improving performance.
+/// Reads a record the first time it is asked for and remembers it, so every
+/// later read of that record is answered from memory. Nothing has to be loaded
+/// up front, and adding a record needs no list kept in step: it costs one
+/// keychain read the first time somebody wants it.
 ///
 /// Issue:
 /// In multi-isolate scenarios, each isolate creates its own instance of `SecureStorage`
@@ -69,39 +70,77 @@ class SecureStorageImpl implements SecureStorage {
 
   static Future<SecureStorage> init() async {
     const storage = FlutterSecureStorage(iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock));
-    final cache = await storage.readAll();
-
-    // Migration from old version of the app where the user ID wasnt provided to the app
-    // to avoid data inconsistency in the cache, we should clear it if the user ID is not present
-    if (!cache.containsKey(_kUserIdKey)) {
-      cache.clear();
-    }
-
-    return SecureStorageImpl._(storage, cache);
+    return SecureStorageImpl._(storage);
   }
 
-  SecureStorageImpl._(this._storage, [this._cache = const {}]);
+  SecureStorageImpl._(this._storage);
 
   final FlutterSecureStorage _storage;
-  final Map<String, dynamic> _cache;
 
-  String? _read(String key) {
-    return _cache[key];
+  /// Records already known, absent ones included: a key present here with a
+  /// null value means the keychain has nothing under it.
+  final Map<String, String?> _cache = {};
+
+  /// Reads in progress, so simultaneous readers of the same record share one
+  /// keychain round trip instead of racing each other.
+  final Map<String, Future<String?>> _inFlight = {};
+
+  /// Bumped by every write and delete, so a read that started earlier cannot
+  /// put the older value back into the cache when it lands.
+  final Map<String, int> _versions = {};
+
+  Future<String?> _read(String key) {
+    if (_cache.containsKey(key)) return Future.value(_cache[key]);
+
+    final pending = _inFlight[key];
+    if (pending != null) return pending;
+
+    final version = _versions[key] ?? 0;
+    final future = _storage.read(key: key).then((value) {
+      if ((_versions[key] ?? 0) == version) _cache[key] = value;
+      return _cache.containsKey(key) ? _cache[key] : value;
+    });
+    _inFlight[key] = future;
+    return future.whenComplete(() => _inFlight.remove(key));
+  }
+
+  /// The session records are only honoured while a user id is stored with
+  /// them. Installations that predate that key kept a session the app can no
+  /// longer make sense of, and it is treated as no session at all.
+  ///
+  /// The rule applies to what the keychain holds, not to what this app wrote:
+  /// a value written here is authoritative, so writing a token before a user id
+  /// exists cannot make it unreadable. Both reads start together, so honouring
+  /// the rule costs no extra round trip.
+  Future<String?> _readSessionRecord(String key) async {
+    if (_cache.containsKey(key)) return _cache[key];
+
+    final stored = _read(key);
+    if (await _read(_kUserIdKey) == null) {
+      await stored;
+      // Forget it as well, so the stale session cannot resurface once a user
+      // id appears.
+      _cache.remove(key);
+      return null;
+    }
+    return stored;
   }
 
   Future<void> _write(String key, String value) async {
     await _storage.write(key: key, value: value);
+    _versions[key] = (_versions[key] ?? 0) + 1;
     _cache[key] = value;
   }
 
   Future<void> _delete(String key) async {
     await _storage.delete(key: key);
-    _cache.remove(key);
+    _versions[key] = (_versions[key] ?? 0) + 1;
+    _cache[key] = null;
   }
 
   @override
-  String? readCoreUrl() {
-    return _read(_kCoreUrlKey);
+  Future<String?> readCoreUrl() {
+    return _readSessionRecord(_kCoreUrlKey);
   }
 
   @override
@@ -114,24 +153,17 @@ class SecureStorageImpl implements SecureStorage {
     return _delete(_kCoreUrlKey);
   }
 
-  String? _readTenantId() {
-    return _read(_kTenantIdKey);
+  Future<String?> _readTenantId() {
+    return _readSessionRecord(_kTenantIdKey);
   }
 
   // TODO: this can be replaces by _readTenantId once all users have migrated to the new version of the app
   // Backwards compatible functionality that if necessary return empty Tenant ID for not null Core URL
   @override
-  String? readTenantId() {
-    final tenantId = _readTenantId();
-    if (tenantId != null) {
-      return tenantId;
-    } else {
-      if (readCoreUrl() != null) {
-        return '';
-      } else {
-        return null;
-      }
-    }
+  Future<String?> readTenantId() async {
+    final tenantId = await _readTenantId();
+    if (tenantId != null) return tenantId;
+    return await readCoreUrl() != null ? '' : null;
   }
 
   @override
@@ -145,8 +177,8 @@ class SecureStorageImpl implements SecureStorage {
   }
 
   @override
-  String? readToken() {
-    return _read(_kTokenKey);
+  Future<String?> readToken() {
+    return _readSessionRecord(_kTokenKey);
   }
 
   @override
@@ -160,7 +192,7 @@ class SecureStorageImpl implements SecureStorage {
   }
 
   @override
-  String? readUserId() {
+  Future<String?> readUserId() {
     return _read(_kUserIdKey);
   }
 
@@ -177,23 +209,23 @@ class SecureStorageImpl implements SecureStorage {
   // EXTERNAL PAGE TOKEN
 
   @override
-  String? readExternalPageAccessToken() {
+  Future<String?> readExternalPageAccessToken() {
     return _read(_kExternalPageAccessTokenKey);
   }
 
   @override
-  String? readExternalPageRefreshToken() {
+  Future<String?> readExternalPageAccessTokenSessionAssociated() {
+    return _read(_kExternalPageAccessTokenSessionAssociated);
+  }
+
+  @override
+  Future<String?> readExternalPageRefreshToken() {
     return _read(_kExternalPageRefreshTokenKey);
   }
 
   @override
-  String? readExternalPageTokenExpires() {
+  Future<String?> readExternalPageTokenExpires() {
     return _read(_kExternalPageTokenExpiresKey);
-  }
-
-  @override
-  String? readExternalPageAccessTokenSessionAssociated() {
-    return _read(_kExternalPageAccessTokenSessionAssociated);
   }
 
   @override

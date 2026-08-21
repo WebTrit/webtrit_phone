@@ -85,8 +85,6 @@ Future<AppDependencies> _bootstrap({
   final appInfo = deps.share(roots.appInfo);
   final deviceInfo = deps.share(roots.deviceInfo);
   final secureStorage = deps.share(roots.secureStorage);
-  // final token = secureStorage.readToken();
-  // print('bootstrap: secureStorage token: ${token != null ? '***' : 'null'}');
   final appPreferences = deps.share(roots.appPreferences);
   deps.share<UserLocalDatasource>(UserLocalDatasourcePrefsImpl(appPreferences));
 
@@ -102,13 +100,19 @@ Future<AppDependencies> _bootstrap({
   // secureStorage and featureAccess). Then the metadata provider can be built
   // here, before the API client factory, and this static call goes away.
   final userAgent = DefaultAppMetadataProvider.buildUserAgent(packageInfo, appInfo, deviceInfo);
+  // The session is held in memory by the repository built below, which is what
+  // these callbacks read: they run on every request and cannot wait for storage.
+  // Until it exists they answer with the configured defaults rather than
+  // throwing, since the factory is handed out before this point.
+  SessionRepository? sessionRepository;
   final apiClientFactory = deps.share(
     WebtritApiClientFactory(
       trustedCertificates: appCertificates.trustedCertificates,
       userAgent: userAgent,
-      getTenantId: () => secureStorage.readTenantId() ?? '',
-      getCoreUrl: () =>
-          Uri.parse(secureStorage.readCoreUrl() ?? EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL),
+      getTenantId: () => sessionRepository?.getCurrent().tenantId ?? '',
+      getCoreUrl: () => Uri.parse(
+        sessionRepository?.getCurrent().coreUrl ?? EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL,
+      ),
     ),
   );
 
@@ -137,13 +141,15 @@ Future<AppDependencies> _bootstrap({
     ),
   );
 
-  deps.share<SessionRepository>(
+  final restoredSessionRepository = deps.share<SessionRepository>(
     SessionRepositoryImpl(
       secureStorage: secureStorage,
       sessionCleanupWorker: sessionCleanupWorker,
       apiClientFactory: apiClientFactory,
+      restoredSession: roots.storedSession,
     ),
   );
+  sessionRepository = restoredSessionRepository;
 
   // Remote configuration. The Firebase-backed service needs the Firebase app, so
   // the strategy resolves it (with a local-cache fallback); a disabled strategy
@@ -200,7 +206,13 @@ Future<AppDependencies> _bootstrap({
   final metadataProvider = deps.share<AppMetadataProvider>(
     await trace.measure(
       'app-metadata',
-      () => DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage, featureAccess),
+      () => DefaultAppMetadataProvider.init(
+        packageInfo,
+        deviceInfo,
+        appInfo,
+        restoredSessionRepository.getCurrent,
+        featureAccess,
+      ),
     ),
   );
 
@@ -307,6 +319,7 @@ typedef _BootstrapRoots = ({
   AppInfo appInfo,
   DeviceInfo deviceInfo,
   SecureStorage secureStorage,
+  Future<Session> storedSession,
   AppPreferences appPreferences,
   AppCertificates appCertificates,
   AppThemes appThemes,
@@ -317,7 +330,17 @@ Future<_BootstrapRoots> _initializeRoots({required FirebaseIntegration firebase,
   final packageInfo = StartupOperation(trace.measure('package-info', PackageInfoFactory.init));
   final appInfo = StartupOperation(trace.measure('app-info', () => AppInfo.init(firebase.appIdProvider)));
   final deviceInfo = StartupOperation(trace.measure('device-info', DeviceInfoFactory.init));
-  final secureStorage = StartupOperation(trace.measure('secure-storage', SecureStorageImpl.init));
+  final secureStorageFuture = trace.measure('secure-storage', SecureStorageImpl.init);
+  final secureStorage = StartupOperation(secureStorageFuture);
+  // Started with the wave but deliberately not part of it: the first frame does
+  // not need the session, only the first navigation does, and that guard waits
+  // for it. A failure degrades to an empty session rather than sinking startup.
+  final storedSession = trace
+      .measure('session-restore', () async => SessionRepositoryImpl.readStoredSession(await secureStorageFuture))
+      .catchError((Object e, StackTrace s) {
+        Logger('bootstrap').warning('Reading the stored session failed', e, s);
+        return const Session();
+      });
   final appPreferences = StartupOperation(trace.measure('app-preferences', AppPreferencesImpl.init));
   final appCertificates = StartupOperation(trace.measure('app-certificates', AppCertificates.init));
   final appThemes = StartupOperation(trace.measure('app-themes', AppThemes.init));
@@ -341,6 +364,7 @@ Future<_BootstrapRoots> _initializeRoots({required FirebaseIntegration firebase,
     appInfo: appInfo.value,
     deviceInfo: deviceInfo.value,
     secureStorage: secureStorage.value,
+    storedSession: storedSession,
     appPreferences: appPreferences.value,
     appCertificates: appCertificates.value,
     appThemes: appThemes.value,
@@ -713,9 +737,9 @@ void workManagerDispatcher() {
     try {
       // Init api and remote repository
       final storage = await SecureStorageImpl.init();
-      final coreUrl = storage.readCoreUrl();
-      final tenantId = storage.readTenantId();
-      final token = storage.readToken();
+      final coreUrl = await storage.readCoreUrl();
+      final tenantId = await storage.readTenantId();
+      final token = await storage.readToken();
       if (coreUrl == null || tenantId == null || token == null) return true;
 
       final api = WebtritApiClient(Uri.parse(coreUrl), tenantId);

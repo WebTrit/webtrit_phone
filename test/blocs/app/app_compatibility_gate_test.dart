@@ -64,6 +64,8 @@ void main() {
     infoStreamController = StreamController<WebtritSystemInfo>.broadcast();
 
     when(() => sessionRepository.getCurrent()).thenReturn(const Session());
+    when(() => sessionRepository.isRestored).thenReturn(true);
+    when(() => sessionRepository.whenRestored).thenAnswer((_) async {});
     when(() => themeModeRepository.getThemeMode()).thenReturn(ThemeMode.system);
     when(() => localeRepository.getLocale()).thenReturn(const Locale('en'));
     when(() => userAgreementStatusRepository.getUserAgreementStatus()).thenReturn(AgreementStatus.accepted);
@@ -93,6 +95,29 @@ void main() {
       appCompatibilityResolver: const DefaultAppCompatibilityResolver(),
     );
   }
+
+  test('waits for the stored session instead of reporting nobody signed in', () async {
+    // The app now draws before the keychain has answered, and "not read yet"
+    // must not be mistaken for "signed out" - that would bounce a signed-in
+    // person to the login screen and pull them back.
+    final restored = Completer<void>();
+    when(() => sessionRepository.isRestored).thenReturn(false);
+    when(() => sessionRepository.whenRestored).thenAnswer((_) => restored.future);
+
+    when(() => appInfo.identifier).thenReturn('test-session');
+
+    final bloc = buildBloc('1.15.3');
+    expect(bloc.state.status, AppLifecycleStatus.resolving);
+
+    when(() => sessionRepository.isRestored).thenReturn(true);
+    when(
+      () => sessionRepository.getCurrent(),
+    ).thenReturn(const Session(coreUrl: 'https://core', token: 'tok', userId: 'u'));
+    restored.complete();
+
+    await expectLater(bloc.stream, emits(predicate<AppState>((s) => s.status == AppLifecycleStatus.authenticated)));
+    await bloc.close();
+  });
 
   test('starts compatible when no system info is available', () {
     final bloc = buildBloc('1.15.3');

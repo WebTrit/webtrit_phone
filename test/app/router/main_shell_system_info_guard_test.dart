@@ -9,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:logging/logging.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
@@ -88,6 +89,19 @@ void main() {
     );
   });
 
+  AppState signedInState() => AppState(
+    status: AppLifecycleStatus.authenticated,
+    session: const Session(coreUrl: 'http://127.0.0.1:1', token: 'test-token', userId: 'test-user'),
+    themeMode: ThemeMode.system,
+    locale: const Locale('en'),
+    userAgreementStatus: AgreementStatus.accepted,
+    contactsAgreementStatus: AgreementStatus.accepted,
+  );
+
+  AppState signedOutState() => signedInState().copyWith(status: AppLifecycleStatus.unauthenticated);
+
+  AppState resolvingState() => signedInState().copyWith(status: AppLifecycleStatus.resolving, session: const Session());
+
   AppRouter buildRouter() {
     final featureAccess = featureAccessFor(systemInfoWithSupported(const []));
     return AppRouter(
@@ -105,6 +119,31 @@ void main() {
   }
 
   bool wasSentToLogin() => router.replacements.any((routes) => routes.first is LoginRouterPageRoute);
+
+  group('main shell guard while the session is still being read', () {
+    test('waits for it instead of treating the person as signed out', () async {
+      final systemInfo = systemInfoWithSupported(const []);
+      when(
+        () => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')),
+      ).thenAnswer((_) async => systemInfo);
+
+      final resolved = signedInState();
+      whenListen(appBloc, Stream<AppState>.value(resolved), initialState: resolvingState());
+
+      await buildRouter().onMainShellRouteGuardNavigation(resolver, router);
+
+      expect(wasSentToLogin(), isFalse);
+      expect(resolver.overrodeNext, isTrue);
+    });
+
+    test('sends the person to login once the read says nobody is signed in', () async {
+      whenListen(appBloc, Stream<AppState>.value(signedOutState()), initialState: resolvingState());
+
+      await buildRouter().onMainShellRouteGuardNavigation(resolver, router);
+
+      expect(wasSentToLogin(), isTrue);
+    });
+  });
 
   group('main shell guard without cached system info', () {
     test('sends the user back to login when the value cannot be fetched', () async {

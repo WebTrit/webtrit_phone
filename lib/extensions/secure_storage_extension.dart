@@ -6,7 +6,7 @@ final _logger = Logger('SecureStorageExtension');
 
 extension SecureStorageExtension on SecureStorage {
   Future<void> writeExternalPageToken(ExternalPageToken token) async {
-    final associate = readUserId() ?? readToken() ?? '';
+    final associate = await readUserId() ?? await readToken() ?? '';
 
     await writeExternalPageTokenData(
       token.accessToken,
@@ -16,12 +16,12 @@ extension SecureStorageExtension on SecureStorage {
     );
   }
 
-  ExternalPageToken? readExternalPageToken() {
-    final accessToken = readExternalPageAccessToken();
-    final refreshToken = readExternalPageRefreshToken();
-    final expires = readExternalPageTokenExpires();
-    final accessTokenSessionAssociated = readExternalPageAccessTokenSessionAssociated();
-    final associate = readUserId() ?? readToken() ?? '';
+  Future<ExternalPageToken?> readExternalPageToken() async {
+    final accessToken = await readExternalPageAccessToken();
+    final refreshToken = await readExternalPageRefreshToken();
+    final expires = await readExternalPageTokenExpires();
+    final accessTokenSessionAssociated = await readExternalPageAccessTokenSessionAssociated();
+    final associate = await readUserId() ?? await readToken() ?? '';
 
     if ([
       accessToken,

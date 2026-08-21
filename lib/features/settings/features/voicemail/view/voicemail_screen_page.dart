@@ -22,13 +22,12 @@ class VoicemailScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final secureStorage = context.read<SecureStorage>();
     final appTime = context.read<AppTime>();
     final appPath = context.read<AppPath>();
     final callBloc = context.read<CallBloc>();
     final notificationsBloc = context.read<NotificationsBloc>();
 
-    final mediaHeaders = MediaHeadersBuilder(secureStorage: secureStorage).build();
+    final mediaHeaders = MediaHeadersBuilder(sessionRepository: context.read<SessionRepository>()).build();
 
     final screenContext = VoicemailScreenContext(
       mediaCacheBasePath: appPath.mediaCacheBasePath,

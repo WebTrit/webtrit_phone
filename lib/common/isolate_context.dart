@@ -58,6 +58,22 @@ class IsolateContext {
 
   static Future<IsolateContext> init() async {
     final secureStorage = await SecureStorageImpl.init();
+    // This isolate has no session repository to hold the session, and the
+    // metadata labels below are built synchronously, so it is read here - all
+    // records at once, and best-effort like every other init on this path.
+    // Diagnostic labels only: a sign-in that happens while this isolate lives
+    // is not reflected until it is recreated.
+    final session =
+        await _tryInit(() async {
+          final records = await Future.wait([
+            secureStorage.readCoreUrl(),
+            secureStorage.readToken(),
+            secureStorage.readTenantId(),
+            secureStorage.readUserId(),
+          ]);
+          return Session(coreUrl: records[0], token: records[1], tenantId: records[2] ?? '', userId: records[3] ?? '');
+        }, 'Session') ??
+        const Session();
 
     final remoteConfigService = await _tryInit(DefaultRemoteCacheConfigService.init, 'RemoteConfigService');
     final appInfo = await _tryInit(() => AppInfo.init(const SharedPreferencesAppIdProvider()), 'AppInfo');
@@ -65,7 +81,7 @@ class IsolateContext {
     final packageInfo = await _tryInit(PackageInfoFactory.init, 'PackageInfo');
     final appLabelsProvider = packageInfo != null && deviceInfo != null && appInfo != null
         ? await _tryInit(
-            () => DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, secureStorage),
+            () => DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, () => session),
             'AppMetadataProvider',
           )
         : null;

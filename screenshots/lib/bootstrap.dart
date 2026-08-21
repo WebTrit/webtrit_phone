@@ -23,7 +23,6 @@ Future<AppContext> bootstrap() async {
   final appThemes = await AppThemes.init();
   final packageInfo = await PackageInfoFactory.init();
   final deviceInfo = await DeviceInfoFactory.init();
-  final secureStorage = await SecureStorageImpl.init();
   final appInfo = await AppInfo.init(SharedPreferencesAppIdProvider());
 
   final appPreferences = await AppPreferencesImpl.init();
@@ -47,7 +46,7 @@ Future<AppContext> bootstrap() async {
     packageInfo,
     deviceInfo,
     appInfo,
-    secureStorage,
+    () => const Session(),
     featureAccess,
   );
 

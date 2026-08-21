@@ -89,7 +89,7 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper implements Private
 
   @override
   Future<bool> isExternalPageTokenAvailable() async {
-    final token = _secureStorage.readExternalPageToken();
+    final token = await _secureStorage.readExternalPageToken();
     return token != null && token.isValid;
   }
 
@@ -99,7 +99,7 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper implements Private
 
     // Read the last saved external page token from secure storage.
     // If the token is missing or expired/invalid, skip scheduling.
-    final token = _secureStorage.readExternalPageToken();
+    final token = await _secureStorage.readExternalPageToken();
     if (token == null || !token.isValid) return;
 
     _refreshTimer?.cancel();
@@ -124,7 +124,7 @@ class CustomPrivateGatewayRepository with SelfConfigApiMapper implements Private
     _isFetchingExternalPageToken = false;
 
     // Remove external page token data if no user token is stored (Logout scenario).
-    final storedToken = _secureStorage.readToken();
+    final storedToken = await _secureStorage.readToken();
     if (storedToken == null) {
       _logger.finest('No user token found. Clearing external page token data.');
       await _secureStorage.deleteExternalPageTokenData();

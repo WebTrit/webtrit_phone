@@ -4,14 +4,13 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/models/models.dart';
 
 class _MockPackageInfo extends Mock implements PackageInfo {}
 
 class _MockDeviceInfo extends Mock implements DeviceInfo {}
 
 class _MockAppInfo extends Mock implements AppInfo {}
-
-class _MockSecureStorage extends Mock implements SecureStorage {}
 
 void main() {
   late _MockPackageInfo packageInfo;
@@ -38,7 +37,7 @@ void main() {
   });
 
   test('the User-Agent sent to the backend is the string presence uses as the device name', () async {
-    final provider = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, _MockSecureStorage());
+    final provider = await DefaultAppMetadataProvider.init(packageInfo, deviceInfo, appInfo, () => const Session());
 
     expect(provider.userAgent, equals(DefaultAppMetadataProvider.buildUserAgent(packageInfo, appInfo, deviceInfo)));
   });
