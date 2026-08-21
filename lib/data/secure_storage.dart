@@ -1,5 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'app_preferences.dart';
+
 abstract class SecureStorage {
   // Core URL
   String? readCoreUrl();
@@ -28,6 +30,16 @@ abstract class SecureStorage {
   Future<void> writeUserId(String userId);
 
   Future<void> deleteUserId();
+
+  /// Loads the credentials required by the foreground session and router.
+  Future<void> prefetchSession();
+
+  /// Loads the credentials required by background signaling isolates.
+  Future<void> prefetchSignaling();
+
+  /// Transitional prefetch for synchronous embedded-page readers. These
+  /// readers become asynchronous in the next storage migration step.
+  Future<void> prefetchExternalPage();
 
   // FCM Token
   String? readFCMPushToken();
@@ -84,37 +96,106 @@ class SecureStorageImpl implements SecureStorage {
 
   // Last FCM token that was pushed to the server
   static const _kFCMPushToken = 'fcm-push-token';
+  static const _kNonSecretStorageMigrationDone = 'secure-storage-non-secret-migration-done';
 
   static Future<SecureStorage> init() async {
     const storage = FlutterSecureStorage(iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock));
-    final cache = await storage.readAll();
-
-    // Migration from old version of the app where the user ID wasnt provided to the app
-    // to avoid data inconsistency in the cache, we should clear it if the user ID is not present
-    if (!cache.containsKey(_kUserIdKey)) {
-      cache.clear();
-    }
-
-    return SecureStorageImpl._(storage, cache);
+    return SecureStorageImpl._(storage);
   }
 
-  SecureStorageImpl._(this._storage, [this._cache = const {}]);
+  /// Migrates values written by versions that stored non-secret caches in the
+  /// keychain. This is deliberately separate from [init], so initializing the
+  /// secure storage no longer decrypts unrelated records on the startup path.
+  static Future<void> migrateNonSecretStorage(AppPreferences appPreferences) async {
+    if (appPreferences.getBool(_kNonSecretStorageMigrationDone) == true) return;
+
+    const storage = FlutterSecureStorage(iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock));
+
+    if (appPreferences.getSystemInfo() == null) {
+      final systemInfo = await storage.read(key: _kSystemInfoKey);
+      if (systemInfo != null) {
+        await appPreferences.setSystemInfo(systemInfo);
+        await storage.delete(key: _kSystemInfoKey);
+      }
+    }
+
+    if (appPreferences.getFcmPushToken() == null) {
+      final fcmToken = await storage.read(key: _kFCMPushToken);
+      if (fcmToken != null) {
+        await appPreferences.setFcmPushToken(fcmToken);
+        await storage.delete(key: _kFCMPushToken);
+      }
+    }
+
+    await appPreferences.setBool(_kNonSecretStorageMigrationDone, true);
+  }
+
+  SecureStorageImpl._(this._storage);
 
   final FlutterSecureStorage _storage;
-  final Map<String, dynamic> _cache;
+  final Map<String, String> _cache = {};
+  final Set<String> _loadedKeys = {};
+  final Map<String, int> _versions = {};
 
   String? _read(String key) {
+    assert(_loadedKeys.contains(key), 'SecureStorage key "$key" was read before it was prefetched');
     return _cache[key];
   }
 
+  Future<void> _prefetch(Iterable<String> keys) async {
+    final keyList = keys.toList(growable: false);
+    final versions = {for (final key in keyList) key: _versions[key] ?? 0};
+    final values = await Future.wait(keyList.map((key) => _storage.read(key: key)));
+    // Preserve the legacy migration behavior: records from installations that
+    // predate the user-id key are treated as an empty session. The explicit
+    // on-disk migration is handled separately in the next storage step.
+    final userIdIndex = keyList.indexOf(_kUserIdKey);
+    if (userIdIndex != -1 && values[userIdIndex] == null) {
+      for (var i = 0; i < userIdIndex; i++) {
+        values[i] = null;
+      }
+    }
+    var index = 0;
+    for (final key in keyList) {
+      if ((_versions[key] ?? 0) == versions[key]) {
+        final value = values[index];
+        if (value == null) {
+          _cache.remove(key);
+        } else {
+          _cache[key] = value;
+        }
+        _loadedKeys.add(key);
+      }
+      index++;
+    }
+  }
+
+  @override
+  Future<void> prefetchSession() => _prefetch(const [_kCoreUrlKey, _kTenantIdKey, _kTokenKey, _kUserIdKey]);
+
+  @override
+  Future<void> prefetchSignaling() => _prefetch(const [_kCoreUrlKey, _kTenantIdKey, _kTokenKey, _kUserIdKey]);
+
+  @override
+  Future<void> prefetchExternalPage() => _prefetch(const [
+    _kExternalPageAccessTokenKey,
+    _kExternalPageRefreshTokenKey,
+    _kExternalPageTokenExpiresKey,
+    _kExternalPageAccessTokenSessionAssociated,
+  ]);
+
   Future<void> _write(String key, String value) async {
     await _storage.write(key: key, value: value);
+    _versions[key] = (_versions[key] ?? 0) + 1;
     _cache[key] = value;
+    _loadedKeys.add(key);
   }
 
   Future<void> _delete(String key) async {
     await _storage.delete(key: key);
+    _versions[key] = (_versions[key] ?? 0) + 1;
     _cache.remove(key);
+    _loadedKeys.add(key);
   }
 
   @override

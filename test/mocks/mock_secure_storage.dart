@@ -86,6 +86,15 @@ class MockSecureStorage implements SecureStorage {
   }
 
   @override
+  Future<void> prefetchSession() async {}
+
+  @override
+  Future<void> prefetchSignaling() async {}
+
+  @override
+  Future<void> prefetchExternalPage() async {}
+
+  @override
   String? readFCMPushToken() {
     return _storage[_kFCMPushToken];
   }

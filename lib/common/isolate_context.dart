@@ -58,6 +58,7 @@ class IsolateContext {
 
   static Future<IsolateContext> init() async {
     final secureStorage = await SecureStorageImpl.init();
+    await secureStorage.prefetchSignaling();
 
     final remoteConfigService = await _tryInit(DefaultRemoteCacheConfigService.init, 'RemoteConfigService');
     final appInfo = await _tryInit(() => AppInfo.init(const SharedPreferencesAppIdProvider()), 'AppInfo');
