@@ -657,7 +657,14 @@ ContactsTabScheme _$ContactsTabSchemeFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const <String>[],
-      favoritesFilter: json['favoritesFilter'] as bool? ?? false,
+      layout:
+          $enumDecodeNullable(
+            _$ContactsLayoutSchemeEnumMap,
+            json['layout'],
+            unknownValue: ContactsLayoutScheme.tabbed,
+          ) ??
+          ContactsLayoutScheme.tabbed,
+      favorites: json['favorites'] as bool? ?? true,
       $type: json['type'] as String?,
     );
 
@@ -668,9 +675,15 @@ Map<String, dynamic> _$ContactsTabSchemeToJson(ContactsTabScheme instance) =>
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
       'contactSourceTypes': instance.contactSourceTypes,
-      'favoritesFilter': instance.favoritesFilter,
+      'layout': _$ContactsLayoutSchemeEnumMap[instance.layout]!,
+      'favorites': instance.favorites,
       'type': instance.$type,
     };
+
+const _$ContactsLayoutSchemeEnumMap = {
+  ContactsLayoutScheme.tabbed: 'tabbed',
+  ContactsLayoutScheme.unified: 'unified',
+};
 
 KeypadTabScheme _$KeypadTabSchemeFromJson(Map<String, dynamic> json) =>
     KeypadTabScheme(

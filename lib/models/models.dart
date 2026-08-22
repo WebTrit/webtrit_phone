@@ -13,6 +13,7 @@ export 'contact.dart';
 export 'contact_email.dart';
 export 'contact_phone.dart';
 export 'contact_source_type.dart';
+export 'contacts_layout.dart';
 export 'conversations_tab.dart';
 export 'dialog_info.dart';
 export 'embedded/embedded.dart';

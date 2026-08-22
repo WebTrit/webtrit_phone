@@ -32,7 +32,7 @@ class BottomMenuConfig extends Equatable {
   /// the answer.
   bool get favoritesReachable =>
       getTabEnabled<FavoritesBottomMenuTab>() != null ||
-      (getTabEnabled<ContactsBottomMenuTab>()?.favoritesFilter ?? false);
+      (getTabEnabled<ContactsBottomMenuTab>()?.offersFavorites ?? false);
 
   /// Returns the embedded tab with the specified [id].
   EmbeddedBottomMenuTab getEmbeddedTabById(String id) {

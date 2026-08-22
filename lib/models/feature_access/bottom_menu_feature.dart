@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:equatable/equatable.dart';
 
 import '../contact_source_type.dart';
+import '../contacts_layout.dart';
 import '../embedded/embedded.dart';
 import '../main_flavor.dart';
 
@@ -106,11 +107,12 @@ final class RecentsBottomMenuTab extends BottomMenuTab {
 }
 
 final class ContactsBottomMenuTab extends BottomMenuTab {
-  static const filterSegment = 'filter';
+  static const unifiedSegment = 'unified';
 
   ContactsBottomMenuTab({
     required List<ContactSourceType> contactSourceTypes,
-    required this.favoritesFilter,
+    required this.layout,
+    required this.favorites,
     required super.enabled,
     required super.initial,
     required super.titleL10n,
@@ -120,19 +122,26 @@ final class ContactsBottomMenuTab extends BottomMenuTab {
 
   final List<ContactSourceType> contactSourceTypes;
 
-  /// Whether this tab offers favourites as a filter inside the list rather
-  /// than as a section of their own. The two are separate screens, so the
-  /// path below keeps them apart across a restart.
-  final bool favoritesFilter;
+  /// How this tab arranges what it shows. The arrangements are separate
+  /// screens, so the path below keeps them apart across a restart.
+  final ContactsLayout layout;
+
+  /// Whether favourites are offered inside the list. Only the unified
+  /// arrangement has a place for them; the other keeps them in a section of
+  /// their own, which is a tab rather than a setting of this one.
+  final bool favorites;
+
+  /// Whether a person can get at their favourites through this tab.
+  bool get offersFavorites => layout == ContactsLayout.unified && favorites;
 
   @override
   MainFlavor get flavor => MainFlavor.contacts;
 
   @override
-  String get routePath => '${super.routePath}${favoritesFilter ? '/$filterSegment' : ''}';
+  String get routePath => '${super.routePath}${layout == ContactsLayout.unified ? '/$unifiedSegment' : ''}';
 
   @override
-  List<Object?> get props => [...super.props, contactSourceTypes, favoritesFilter];
+  List<Object?> get props => [...super.props, contactSourceTypes, layout, favorites];
 }
 
 final class EmbeddedBottomMenuTab extends BottomMenuTab {

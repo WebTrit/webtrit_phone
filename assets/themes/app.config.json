@@ -71,7 +71,8 @@
           "type": "contacts",
           "titleL10n": "main_BottomNavigationBarItemLabel_contacts",
           "icon": "0xee35",
-          "favoritesFilter": true,
+          "layout": "unified",
+          "favorites": true,
           "contactSourceTypes": [
             "local",
             "external"

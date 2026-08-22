@@ -70,15 +70,16 @@ void main() {
       tabs[2].when(
         favorites: unexpectedFavorites,
         recents: unexpectedRecents,
-        contacts: (enabled, initial, titleL10n, icon, contactSourceTypes, favoritesFilter) {
+        contacts: (enabled, initial, titleL10n, icon, contactSourceTypes, layout, favorites) {
           expect(enabled, isTrue);
           expect(initial, isFalse);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_contacts');
           expect(icon, '0xee35');
           expect(contactSourceTypes, ['local', 'external']);
-          // On by default, which is what takes the place of the section the
-          // tab above no longer offers.
-          expect(favoritesFilter, isTrue);
+          // The arrangement that takes the place of the section the tab above
+          // no longer offers, with favourites inside it.
+          expect(layout, ContactsLayoutScheme.unified);
+          expect(favorites, isTrue);
         },
         keypad: unexpectedKeypad,
         messaging: unexpectedMessaging,

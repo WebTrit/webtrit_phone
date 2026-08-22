@@ -228,7 +228,7 @@ class AppRouter extends RootStackRouter {
                           ),
                         ),
                       ],
-                      path: ContactsBottomMenuTab.filterSegment,
+                      path: ContactsBottomMenuTab.unifiedSegment,
                     ),
                     AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
                     AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
@@ -564,10 +564,10 @@ PageRouteInfo<dynamic> contactsRouteOf(ContactsBottomMenuTab tab) {
   // it - which is the wrong screen for half the deployments.
   return ContactsRouterPageRoute(
     children: [
-      if (tab.favoritesFilter)
-        ContactsFilterScreenPageRoute(sourceTypes: tab.contactSourceTypes)
-      else
-        ContactsScreenPageRoute(sourceTypes: tab.contactSourceTypes),
+      switch (tab.layout) {
+        ContactsLayout.unified => ContactsFilterScreenPageRoute(sourceTypes: tab.contactSourceTypes),
+        ContactsLayout.tabbed => ContactsScreenPageRoute(sourceTypes: tab.contactSourceTypes),
+      },
     ],
   );
 }

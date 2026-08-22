@@ -33,7 +33,8 @@ void main() {
     ),
     ContactsBottomMenuTab(
       contactSourceTypes: const [ContactSourceType.local],
-      favoritesFilter: false,
+      layout: ContactsLayout.tabbed,
+      favorites: false,
       enabled: true,
       initial: false,
       titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
