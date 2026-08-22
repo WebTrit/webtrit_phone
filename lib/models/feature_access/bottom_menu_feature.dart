@@ -112,7 +112,6 @@ final class ContactsBottomMenuTab extends BottomMenuTab {
   ContactsBottomMenuTab({
     required List<ContactSourceType> contactSourceTypes,
     required this.layout,
-    required this.favorites,
     required super.enabled,
     required super.initial,
     required super.titleL10n,
@@ -122,26 +121,25 @@ final class ContactsBottomMenuTab extends BottomMenuTab {
 
   final List<ContactSourceType> contactSourceTypes;
 
-  /// How this tab arranges what it shows. The arrangements are separate
-  /// screens, so the path below keeps them apart across a restart.
+  /// How this tab arranges what it shows, and whatever that arrangement
+  /// carries with it. The arrangements are separate screens, so the path
+  /// below keeps them apart across a restart.
   final ContactsLayout layout;
 
-  /// Whether favourites are offered inside the list. Only the unified
-  /// arrangement has a place for them; the other keeps them in a section of
-  /// their own, which is a tab rather than a setting of this one.
-  final bool favorites;
-
   /// Whether a person can get at their favourites through this tab.
-  bool get offersFavorites => layout == ContactsLayout.unified && favorites;
+  bool get offersFavorites => layout.offersFavorites;
 
   @override
   MainFlavor get flavor => MainFlavor.contacts;
 
   @override
-  String get routePath => '${super.routePath}${layout == ContactsLayout.unified ? '/$unifiedSegment' : ''}';
+  String get routePath => switch (layout) {
+    ContactsUnifiedLayout() => '${super.routePath}/$unifiedSegment',
+    ContactsTabbedLayout() => super.routePath,
+  };
 
   @override
-  List<Object?> get props => [...super.props, contactSourceTypes, layout, favorites];
+  List<Object?> get props => [...super.props, contactSourceTypes, layout];
 }
 
 final class EmbeddedBottomMenuTab extends BottomMenuTab {

@@ -565,8 +565,8 @@ PageRouteInfo<dynamic> contactsRouteOf(ContactsBottomMenuTab tab) {
   return ContactsRouterPageRoute(
     children: [
       switch (tab.layout) {
-        ContactsLayout.unified => ContactsFilterScreenPageRoute(sourceTypes: tab.contactSourceTypes),
-        ContactsLayout.tabbed => ContactsScreenPageRoute(sourceTypes: tab.contactSourceTypes),
+        ContactsUnifiedLayout() => ContactsFilterScreenPageRoute(sourceTypes: tab.contactSourceTypes),
+        ContactsTabbedLayout() => ContactsScreenPageRoute(sourceTypes: tab.contactSourceTypes),
       },
     ],
   );

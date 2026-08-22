@@ -295,10 +295,9 @@ abstract final class BottomMenuMapper {
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
         layout: switch (layout) {
-          ContactsLayoutScheme.tabbed => ContactsLayout.tabbed,
-          ContactsLayoutScheme.unified => ContactsLayout.unified,
+          ContactsLayoutScheme.tabbed => const ContactsTabbedLayout(),
+          ContactsLayoutScheme.unified => ContactsUnifiedLayout(favorites: favorites),
         },
-        favorites: favorites,
         contactSourceTypes: contactSourceTypes
             .map((type) => ContactSourceType.values.byName(type))
             .where((type) => type != ContactSourceType.external || coreSupport.supportsExtensions)

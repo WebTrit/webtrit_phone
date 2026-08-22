@@ -10,16 +10,14 @@ BottomMenuTab _favorites({required bool enabled}) => FavoritesBottomMenuTab(
   icon: Icons.star,
 );
 
-BottomMenuTab _contacts({required ContactsLayout layout, bool favorites = true, bool enabled = true}) =>
-    ContactsBottomMenuTab(
-      contactSourceTypes: const [ContactSourceType.external],
-      layout: layout,
-      favorites: favorites,
-      enabled: enabled,
-      initial: true,
-      titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
-      icon: Icons.contacts,
-    );
+BottomMenuTab _contacts({required ContactsLayout layout, bool enabled = true}) => ContactsBottomMenuTab(
+  contactSourceTypes: const [ContactSourceType.external],
+  layout: layout,
+  enabled: enabled,
+  initial: true,
+  titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
+  icon: Icons.contacts,
+);
 
 /// Whether favourites are reachable decides whether marking one is offered at
 /// all. The two arrangements are configured separately, so this is the one
@@ -30,7 +28,7 @@ void main() {
       final config = BottomMenuConfig(
         tabs: [
           _favorites(enabled: true),
-          _contacts(layout: ContactsLayout.tabbed),
+          _contacts(layout: const ContactsTabbedLayout()),
         ],
       );
 
@@ -44,7 +42,7 @@ void main() {
       final config = BottomMenuConfig(
         tabs: [
           _favorites(enabled: false),
-          _contacts(layout: ContactsLayout.unified),
+          _contacts(layout: const ContactsUnifiedLayout()),
         ],
       );
 
@@ -56,7 +54,7 @@ void main() {
       final config = BottomMenuConfig(
         tabs: [
           _favorites(enabled: false),
-          _contacts(layout: ContactsLayout.unified, favorites: false),
+          _contacts(layout: const ContactsUnifiedLayout(favorites: false)),
         ],
       );
 
@@ -69,7 +67,7 @@ void main() {
       final config = BottomMenuConfig(
         tabs: [
           _favorites(enabled: false),
-          _contacts(layout: ContactsLayout.tabbed),
+          _contacts(layout: const ContactsTabbedLayout()),
         ],
       );
 
@@ -80,7 +78,7 @@ void main() {
       final config = BottomMenuConfig(
         tabs: [
           _favorites(enabled: false),
-          _contacts(layout: ContactsLayout.unified, favorites: true, enabled: false),
+          _contacts(layout: const ContactsUnifiedLayout(), enabled: false),
         ],
       );
 

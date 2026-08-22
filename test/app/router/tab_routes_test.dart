@@ -7,7 +7,6 @@ import 'package:webtrit_phone/models/models.dart';
 ContactsBottomMenuTab _tab({required ContactsLayout layout}) => ContactsBottomMenuTab(
   contactSourceTypes: const [ContactSourceType.external],
   layout: layout,
-  favorites: true,
   enabled: true,
   initial: true,
   titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
@@ -25,13 +24,13 @@ RecentsBottomMenuTab _recentsTab({required bool supportsCallHistory}) => Recents
 void main() {
   group('where a contacts tab leads', () {
     test('a tab that says nothing lands on the screen it always had', () {
-      final route = contactsRouteOf(_tab(layout: ContactsLayout.tabbed));
+      final route = contactsRouteOf(_tab(layout: const ContactsTabbedLayout()));
 
       expect(route.initialChildren?.single.routeName, ContactsScreenPageRoute.name);
     });
 
     test('a tab that offers the favourites filter lands on the other screen', () {
-      final route = contactsRouteOf(_tab(layout: ContactsLayout.unified));
+      final route = contactsRouteOf(_tab(layout: const ContactsUnifiedLayout()));
 
       expect(route.initialChildren?.single.routeName, ContactsFilterScreenPageRoute.name);
     });
@@ -40,10 +39,10 @@ void main() {
       // The contacts router has a default child, so a route built without
       // children silently lands on it - which is the wrong screen for half
       // the deployments and only shows up by running the app.
-      for (final layout in ContactsLayout.values) {
+      for (final layout in const [ContactsTabbedLayout(), ContactsUnifiedLayout()]) {
         final route = contactsRouteOf(_tab(layout: layout));
 
-        expect(route.initialChildren, isNotEmpty, reason: 'layout: ${layout.name}');
+        expect(route.initialChildren, isNotEmpty, reason: 'layout: $layout');
       }
     });
   });

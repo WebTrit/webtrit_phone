@@ -204,6 +204,42 @@ void main() {
     });
   });
 
+  group('ContactsTabScheme.layout parsing', () {
+    ContactsTabScheme contactsTab(Map<String, Object?> extra) {
+      return BottomMenuTabScheme.fromJson({
+            'type': 'contacts',
+            'enabled': true,
+            'titleL10n': 'contacts',
+            'icon': '0xee35',
+            ...extra,
+          })
+          as ContactsTabScheme;
+    }
+
+    test('a configuration that names an arrangement gets it', () {
+      expect(contactsTab({'layout': 'tabbed'}).layout, ContactsLayoutScheme.tabbed);
+      expect(contactsTab({'layout': 'unified'}).layout, ContactsLayoutScheme.unified);
+    });
+
+    test('one that names none keeps the arrangement it has', () {
+      expect(contactsTab(const {}).layout, ContactsLayoutScheme.tabbed);
+      expect(contactsTab(const {}).favorites, isTrue);
+    });
+
+    test('and one written for a newer app still opens', () {
+      // The configurator can offer an arrangement before every installed app
+      // can draw it. Such a build has to fall back to the one it knows, not
+      // fail to read its own settings and take the whole configuration down
+      // with it.
+      expect(contactsTab({'layout': 'something-this-build-never-heard-of'}).layout, ContactsLayoutScheme.tabbed);
+    });
+
+    test('favourites are read as their own answer', () {
+      expect(contactsTab({'layout': 'unified', 'favorites': false}).favorites, isFalse);
+      expect(contactsTab({'layout': 'unified'}).favorites, isTrue);
+    });
+  });
+
   group('RecentsTabScheme.supportsCallHistory parsing & useCdrs migration', () {
     bool recentsSupportsCallHistory(Map<String, Object?> extra) {
       final scheme = BottomMenuTabScheme.fromJson({
