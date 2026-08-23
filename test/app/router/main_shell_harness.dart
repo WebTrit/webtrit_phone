@@ -159,20 +159,6 @@ WebtritSystemInfo systemInfoWithSupported(List<String> supported) {
   return systemInfo;
 }
 
-/// Builds a real [FeatureAccess] from the shared mock app config and the
-/// given system info, the same way the production stream factory does.
-FeatureAccess featureAccessFor(WebtritSystemInfo systemInfo) {
-  final snapshot = MockRemoteConfigSnapshot();
-  when(() => snapshot.getBool(any())).thenReturn(null);
-  return FeatureAccess.create(
-    createMockAppConfig(),
-    [createMockTermsResource()],
-    CoreSupportFactory.create(systemInfo),
-    systemInfo,
-    FeatureOverridesFactory.create(snapshot),
-  );
-}
-
 /// Registers the mocktail fallback values the harness stubs rely on.
 /// Call once from the test file's `setUpAll`.
 void registerHarnessFallbacks() {

@@ -13,6 +13,7 @@ class ClearedTextField extends StatefulWidget {
     this.initialValue,
     this.onChanged,
     this.onSubmitted,
+    this.onDismissed,
     this.iconConstraints,
   });
 
@@ -41,6 +42,14 @@ class ClearedTextField extends StatefulWidget {
   final String? initialValue;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
+
+  /// Called when the cross is pressed on a box that is already empty, for a
+  /// screen where the box is something you leave rather than something that
+  /// is always there.
+  ///
+  /// Supplying it also keeps the cross on screen while the box is empty -
+  /// without that there would be nothing to press, and no way back.
+  final VoidCallback? onDismissed;
   final BoxConstraints? iconConstraints;
 
   @override
@@ -80,15 +89,26 @@ class ClearedTextFieldState extends State<ClearedTextField> {
         decoration: inputDecorations?.search?.copyWith(
           prefixIcon: const Icon(Icons.search),
           prefixIconConstraints: iconConstraints,
-          suffixIcon: _isEmpty
+          suffixIcon: _isEmpty && widget.onDismissed == null
               ? null
               : SemanticAction(
-                  label: context.l10n.contacts_SemanticsLabel_clearSearch,
+                  // Named for what the press will actually do: on an empty
+                  // box this control no longer empties anything, it leaves
+                  // the search, and announcing it as "clear" would send
+                  // someone listening past the only way out.
+                  label: _isEmpty && widget.onDismissed != null
+                      ? context.l10n.contacts_SemanticsLabel_closeSearch
+                      : context.l10n.contacts_SemanticsLabel_clearSearch,
                   identifier: widget.clearButtonIdentifier,
                   child: IconButton(
                     key: widget.clearButtonKey,
                     icon: const Icon(Icons.close),
                     onPressed: () {
+                      // Empties the box on the first press and closes it on
+                      // the next, so one control both undoes a search and
+                      // leaves it - and neither is reached by guessing.
+                      if (_isEmpty) return widget.onDismissed?.call();
+
                       setState(() {
                         _isEmpty = true;
                       });

@@ -444,6 +444,14 @@
       }
     }
   },
+  "contacts_ContactsScreen_emptyFavorites": "Non ci sono ancora preferiti tra i tuoi contatti.\nAggiungine uno dalla scheda del contatto con la stella",
+  "@contacts_ContactsScreen_emptyFavorites": {},
+  "contacts_ContactsScreen_filterFavorites": "Preferiti",
+  "@contacts_ContactsScreen_filterFavorites": {},
+  "contacts_ContactsScreen_searchSemanticsLabel": "Cerca contatti",
+  "@contacts_ContactsScreen_searchSemanticsLabel": {},
+  "contacts_ContactsScreen_sourceSemanticsLabel": "Origine dei contatti",
+  "@contacts_ContactsScreen_sourceSemanticsLabel": {},
   "contacts_agreement_button_text": "Continue",
   "@contacts_agreement_button_text": {},
   "contacts_agreement_checkbox_text": "I agree to allow the app to access my contacts to enhance my user experience.",
@@ -2842,6 +2850,8 @@
   "@contacts_SemanticsLabel_clearSearch": {
     "description": "Accessibility name of the button that empties the contact search field."
   },
+  "contacts_SemanticsLabel_closeSearch": "Chiudi ricerca",
+  "@contacts_SemanticsLabel_closeSearch": {},
   "messaging_SemanticsLabel_newChat": "Start a new chat",
   "@messaging_SemanticsLabel_newChat": {
     "description": "Accessibility name of the button that starts a new chat conversation."

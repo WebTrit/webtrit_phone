@@ -483,6 +483,19 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
+  String get contacts_ContactsScreen_emptyFavorites =>
+      'ยังไม่มีรายการโปรดในรายชื่อของคุณ\nเพิ่มได้จากการ์ดรายชื่อโดยแตะไอคอนดาว';
+
+  @override
+  String get contacts_ContactsScreen_filterFavorites => 'รายการโปรด';
+
+  @override
+  String get contacts_ContactsScreen_searchSemanticsLabel => 'ค้นหารายชื่อ';
+
+  @override
+  String get contacts_ContactsScreen_sourceSemanticsLabel => 'แหล่งที่มาของรายชื่อ';
+
+  @override
   String get contacts_agreement_button_text => 'ดำเนินการต่อ';
 
   @override
@@ -3489,6 +3502,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get contacts_SemanticsLabel_clearSearch => 'ล้างการค้นหา';
+
+  @override
+  String get contacts_SemanticsLabel_closeSearch => 'ปิดการค้นหา';
 
   @override
   String get messaging_SemanticsLabel_newChat => 'Start a new chat';

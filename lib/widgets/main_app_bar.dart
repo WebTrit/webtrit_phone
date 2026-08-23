@@ -18,6 +18,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.title,
     this.bottom,
+    this.actions = const [],
     required this.context,
     this.backgroundColor,
     this.flexibleSpace,
@@ -27,6 +28,17 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext context;
   final Widget? title;
   final PreferredSizeWidget? bottom;
+
+  /// Controls of one screen, shown before the ones every screen carries.
+  ///
+  /// A screen whose header is a single short line has nowhere else to put a
+  /// control that belongs to the whole screen rather than to what the line
+  /// below is about.
+  ///
+  /// Shown while the session is still being established, unlike the bar's own
+  /// controls: those need a session to mean anything, while a screen's control
+  /// works on what is already on screen.
+  final List<Widget> actions;
   final Color? backgroundColor;
   final Widget? flexibleSpace;
   final double? elevation;
@@ -107,6 +119,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             elevation: elevation,
             centerTitle: false,
             actions: [
+              ...actions,
               if (status.isReady) ...[
                 if (AppBarParams.of(context).pullableCallDialogs.isNotEmpty)
                   CallPullBadge(pullableCallDialogs: AppBarParams.of(context).pullableCallDialogs),

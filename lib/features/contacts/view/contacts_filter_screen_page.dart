@@ -19,10 +19,6 @@ import '../contacts.dart';
 /// would be a pile of conditions, and a deployment that keeps the current
 /// screen must not be able to reach the other by accident. The lists, the
 /// search box and the row are the same pieces in both.
-///
-/// It still shows the current layout - the arrangement lands next, so that
-/// the configuration, the route and the remembered tab can be judged on their
-/// own first.
 @RoutePage()
 class ContactsFilterScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
@@ -40,7 +36,7 @@ class ContactsFilterScreenPage extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           ContactsBloc(activeContactSourceTypeRepository: context.read<ActiveContactSourceTypeRepository>()),
-      child: ContactsScreen(
+      child: ContactsFilterScreen(
         title: Text(EnvironmentConfig.APP_NAME),
         sourceTypes: sourceTypes,
         sourceTypeWidgetBuilder: contactSourceTypeWidgetBuilder,

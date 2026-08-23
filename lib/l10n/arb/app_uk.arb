@@ -444,6 +444,14 @@
       }
     }
   },
+  "contacts_ContactsScreen_emptyFavorites": "Серед ваших контактів ще немає улюблених.\nДодайте на картці контакта, натиснувши зірочку",
+  "@contacts_ContactsScreen_emptyFavorites": {},
+  "contacts_ContactsScreen_filterFavorites": "Улюблені",
+  "@contacts_ContactsScreen_filterFavorites": {},
+  "contacts_ContactsScreen_searchSemanticsLabel": "Пошук контактів",
+  "@contacts_ContactsScreen_searchSemanticsLabel": {},
+  "contacts_ContactsScreen_sourceSemanticsLabel": "Джерело контактів",
+  "@contacts_ContactsScreen_sourceSemanticsLabel": {},
   "contacts_agreement_button_text": "Продовжити",
   "@contacts_agreement_button_text": {},
   "contacts_agreement_checkbox_text": "Я погоджуюсь дозволити застосунку доступ до моїх контактів для покращення досвіду користувача.",
@@ -2842,6 +2850,8 @@
   "@contacts_SemanticsLabel_clearSearch": {
     "description": "Accessibility name of the button that empties the contact search field."
   },
+  "contacts_SemanticsLabel_closeSearch": "Закрити пошук",
+  "@contacts_SemanticsLabel_closeSearch": {},
   "messaging_SemanticsLabel_newChat": "Start a new chat",
   "@messaging_SemanticsLabel_newChat": {
     "description": "Accessibility name of the button that starts a new chat conversation."

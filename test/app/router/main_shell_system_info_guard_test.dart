@@ -20,6 +20,7 @@ import 'package:webtrit_phone/resolvers/resolvers.dart';
 
 import '../../mocks/mock_app_preferences.dart';
 import 'main_shell_harness.dart';
+import '../../helpers/feature_access_factories.dart';
 
 class _FakeNavigationResolver extends Fake implements NavigationResolver {
   final resolutions = <bool>[];

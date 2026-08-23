@@ -90,11 +90,15 @@ class _CallTileAction extends StatelessWidget {
   }
 }
 
+/// Space between the name and whatever is drawn right after it.
+const _nameTrailingGap = 6.0;
+
 class CallTile extends StatefulWidget {
   const CallTile({
     super.key,
     required this.leading,
     required this.name,
+    this.nameTrailing,
     this.subName,
     this.subtitleLeading,
     this.timeLabel,
@@ -127,6 +131,11 @@ class CallTile extends StatefulWidget {
 
   final Widget leading;
   final String name;
+
+  /// Drawn right after the name, for a mark that belongs to the person rather
+  /// than to the call - a star on a favourite, say. Null on every screen that
+  /// has nothing to add there, which is all of them but one.
+  final Widget? nameTrailing;
   final String? subName;
   final Widget? subtitleLeading;
   final String? timeLabel;
@@ -229,12 +238,22 @@ class _CallTileState extends State<CallTile> {
         .where((action) => !(widget.expanded && action.icon == suppressedInlineIcon))
         .toList();
 
-    final nameText = Text(
-      widget.name,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: themeData.textTheme.titleMedium,
-    );
+    final Widget nameText = widget.nameTrailing == null
+        ? Text(widget.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: themeData.textTheme.titleMedium)
+        : Row(
+            spacing: _nameTrailingGap,
+            children: [
+              Flexible(
+                child: Text(
+                  widget.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: themeData.textTheme.titleMedium,
+                ),
+              ),
+              widget.nameTrailing!,
+            ],
+          );
 
     final subNameText = widget.subName != null
         ? Text(

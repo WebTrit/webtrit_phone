@@ -503,6 +503,19 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get contacts_ContactsScreen_emptyFavorites =>
+      'Серед ваших контактів ще немає улюблених.\nДодайте на картці контакта, натиснувши зірочку';
+
+  @override
+  String get contacts_ContactsScreen_filterFavorites => 'Улюблені';
+
+  @override
+  String get contacts_ContactsScreen_searchSemanticsLabel => 'Пошук контактів';
+
+  @override
+  String get contacts_ContactsScreen_sourceSemanticsLabel => 'Джерело контактів';
+
+  @override
   String get contacts_agreement_button_text => 'Продовжити';
 
   @override
@@ -3546,6 +3559,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get contacts_SemanticsLabel_clearSearch => 'Очистити пошук';
+
+  @override
+  String get contacts_SemanticsLabel_closeSearch => 'Закрити пошук';
 
   @override
   String get messaging_SemanticsLabel_newChat => 'Start a new chat';

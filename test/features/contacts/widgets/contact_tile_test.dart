@@ -139,6 +139,63 @@ void main() {
     });
   });
 
+  group('ContactTile favourites', () {
+    Finder starOn(Finder tile) => find.descendant(of: tile, matching: find.byIcon(Icons.star));
+
+    testWidgets('marks a favourite with a star beside the name', (tester) async {
+      await tester.pumpWidget(
+        buildTestable(const ContactTile(displayName: 'John Doe', favorite: true, markFavorite: true)),
+      );
+      await tester.pumpAndSettle();
+
+      expect(starOn(find.byType(ContactTile)), findsOneWidget);
+
+      // Beside the name rather than off in the actions: the star has to read
+      // as part of who this is, and it is what makes a list narrowed to
+      // favourites understandable from the unnarrowed one.
+      final name = tester.getRect(find.text('John Doe'));
+      final star = tester.getRect(starOn(find.byType(ContactTile)));
+      expect(star.left, greaterThanOrEqualTo(name.right));
+      expect(star.center.dy, moreOrLessEquals(name.center.dy, epsilon: 2));
+    });
+
+    testWidgets('leaves everyone else unmarked', (tester) async {
+      await tester.pumpWidget(
+        buildTestable(const ContactTile(displayName: 'John Doe', favorite: false, markFavorite: true)),
+      );
+      await tester.pumpAndSettle();
+
+      expect(starOn(find.byType(ContactTile)), findsNothing);
+    });
+
+    testWidgets('draws no star on the screen that keeps favourites apart', (tester) async {
+      // There the section a person is looking at already says they are
+      // favourites, and a star on every row would say it a second time.
+      await tester.pumpWidget(
+        buildTestable(const ContactTile(displayName: 'John Doe', favorite: true, markFavorite: false)),
+      );
+      await tester.pumpAndSettle();
+
+      expect(starOn(find.byType(ContactTile)), findsNothing);
+    });
+
+    testWidgets('keeps the star when the name is too long for the row', (tester) async {
+      // The name gives way, not the mark: a row wide enough to push the star
+      // off the edge is the ordinary case on a phone, and losing it there
+      // would lose it exactly where the list is hardest to read.
+      const name = 'Bartholomew Maximilian Fitzgerald-Wintersgill the Third of Someplace Far';
+
+      await tester.pumpWidget(buildTestable(const ContactTile(displayName: name, favorite: true, markFavorite: true)));
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+
+      final tile = tester.getRect(find.byType(ContactTile));
+      final star = tester.getRect(starOn(find.byType(ContactTile)));
+      expect(star.right, lessThanOrEqualTo(tile.right));
+    });
+  });
+
   group('ContactTile call state', () {
     testWidgets('a ringing call is not described as a conversation', (tester) async {
       await tester.pumpWidget(
