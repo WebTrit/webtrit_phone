@@ -70,15 +70,16 @@ void main() {
       tabs[2].when(
         favorites: unexpectedFavorites,
         recents: unexpectedRecents,
-        contacts: (enabled, initial, titleL10n, icon, contactSourceTypes, favoritesFilter) {
+        contacts: (enabled, initial, titleL10n, icon, contactSourceTypes, layout, favorites) {
           expect(enabled, isTrue);
           expect(initial, isFalse);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_contacts');
           expect(icon, '0xee35');
           expect(contactSourceTypes, ['local', 'external']);
-          // On by default, which is what takes the place of the section the
-          // tab above no longer offers.
-          expect(favoritesFilter, isTrue);
+          // The arrangement that takes the place of the section the tab above
+          // no longer offers, with favourites inside it.
+          expect(layout, ContactsLayoutScheme.unified);
+          expect(favorites, isTrue);
         },
         keypad: unexpectedKeypad,
         messaging: unexpectedMessaging,
@@ -200,6 +201,42 @@ void main() {
     test('defaults to an empty allowlist when the block is absent', () {
       final config = AppConfig.fromJson(const {});
       expect(config.localization.enabledLanguages, isEmpty);
+    });
+  });
+
+  group('ContactsTabScheme.layout parsing', () {
+    ContactsTabScheme contactsTab(Map<String, Object?> extra) {
+      return BottomMenuTabScheme.fromJson({
+            'type': 'contacts',
+            'enabled': true,
+            'titleL10n': 'contacts',
+            'icon': '0xee35',
+            ...extra,
+          })
+          as ContactsTabScheme;
+    }
+
+    test('a configuration that names an arrangement gets it', () {
+      expect(contactsTab({'layout': 'tabbed'}).layout, ContactsLayoutScheme.tabbed);
+      expect(contactsTab({'layout': 'unified'}).layout, ContactsLayoutScheme.unified);
+    });
+
+    test('one that names none keeps the arrangement it has', () {
+      expect(contactsTab(const {}).layout, ContactsLayoutScheme.tabbed);
+      expect(contactsTab(const {}).favorites, isTrue);
+    });
+
+    test('and one written for a newer app still opens', () {
+      // The configurator can offer an arrangement before every installed app
+      // can draw it. Such a build has to fall back to the one it knows, not
+      // fail to read its own settings and take the whole configuration down
+      // with it.
+      expect(contactsTab({'layout': 'something-this-build-never-heard-of'}).layout, ContactsLayoutScheme.tabbed);
+    });
+
+    test('favourites are read as their own answer', () {
+      expect(contactsTab({'layout': 'unified', 'favorites': false}).favorites, isFalse);
+      expect(contactsTab({'layout': 'unified'}).favorites, isTrue);
     });
   });
 

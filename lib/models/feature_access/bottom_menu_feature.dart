@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:equatable/equatable.dart';
 
 import '../contact_source_type.dart';
+import '../contacts_layout.dart';
 import '../embedded/embedded.dart';
 import '../main_flavor.dart';
 
@@ -106,11 +107,11 @@ final class RecentsBottomMenuTab extends BottomMenuTab {
 }
 
 final class ContactsBottomMenuTab extends BottomMenuTab {
-  static const filterSegment = 'filter';
+  static const unifiedSegment = 'unified';
 
   ContactsBottomMenuTab({
     required List<ContactSourceType> contactSourceTypes,
-    required this.favoritesFilter,
+    required this.layout,
     required super.enabled,
     required super.initial,
     required super.titleL10n,
@@ -120,19 +121,25 @@ final class ContactsBottomMenuTab extends BottomMenuTab {
 
   final List<ContactSourceType> contactSourceTypes;
 
-  /// Whether this tab offers favourites as a filter inside the list rather
-  /// than as a section of their own. The two are separate screens, so the
-  /// path below keeps them apart across a restart.
-  final bool favoritesFilter;
+  /// How this tab arranges what it shows, and whatever that arrangement
+  /// carries with it. The arrangements are separate screens, so the path
+  /// below keeps them apart across a restart.
+  final ContactsLayout layout;
+
+  /// Whether a person can get at their favourites through this tab.
+  bool get offersFavorites => layout.offersFavorites;
 
   @override
   MainFlavor get flavor => MainFlavor.contacts;
 
   @override
-  String get routePath => '${super.routePath}${favoritesFilter ? '/$filterSegment' : ''}';
+  String get routePath => switch (layout) {
+    ContactsUnifiedLayout() => '${super.routePath}/$unifiedSegment',
+    ContactsTabbedLayout() => super.routePath,
+  };
 
   @override
-  List<Object?> get props => [...super.props, contactSourceTypes, favoritesFilter];
+  List<Object?> get props => [...super.props, contactSourceTypes, layout];
 }
 
 final class EmbeddedBottomMenuTab extends BottomMenuTab {
