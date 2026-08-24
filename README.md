@@ -38,6 +38,7 @@ The application offers extensive customization options:
  - **Melos Commands**: See the [Melos Commands](docs/make_file.md) for all available build, run, and automation commands.
  - **Development Workflow and Git Hooks**: See the [Development Guide](docs/development.md) for details on commit conventions, hook setup, and workflow tools.
  - **Accessibility**: See the [Accessibility Guide](docs/accessibility.md) for what every interactive control must expose to screen readers and UI automation, and how to verify it.
+ - **Startup time**: See [Where cold start time goes](docs/startup.md) for the measured breakdown of a cold start and the candidates worth optimising next.
 
 # Testing
 
