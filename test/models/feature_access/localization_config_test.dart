@@ -1,40 +1,28 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/data/feature_access.dart';
+import 'package:webtrit_phone/l10n/app_localizations.g.dart';
+import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 
+/// The app offers the languages it was built with.
+///
+/// It used to decide instead: every language the app had ever had was bundled,
+/// and an allowlist in the brand's configuration was intersected with it at
+/// runtime. The build settles it now - a brand's build carries only the
+/// languages its theme enables - so deciding again here could only disagree
+/// with the files that are actually present.
 void main() {
-  const bundled = [Locale('en'), Locale('it'), Locale('th'), Locale('uk')];
+  test('offers what the build carries, whatever the configuration says', () {
+    final narrowed = LocalizationMapper.map(
+      const AppConfig(localization: AppConfigLocalization(enabledLanguages: ['uk'])),
+    );
 
-  List<String> codes(List<Locale> locales) => locales.map((l) => l.languageCode).toList();
+    expect(narrowed.supportedLocales, AppLocalizations.supportedLocales);
+  });
 
-  group('LocalizationConfig.resolve', () {
-    test('empty allowlist keeps all bundled locales', () {
-      expect(LocalizationConfig.resolve(bundled, const []), bundled);
-    });
+  test('offers what the build carries when the configuration says nothing', () {
+    final open = LocalizationMapper.map(const AppConfig());
 
-    test('filters to the requested subset, preserving bundle order', () {
-      expect(codes(LocalizationConfig.resolve(bundled, const ['it', 'en'])), ['en', 'it']);
-    });
-
-    test('single valid code restricts to that language', () {
-      expect(codes(LocalizationConfig.resolve(bundled, const ['en'])), ['en']);
-    });
-
-    test('unknown codes are ignored, valid ones kept', () {
-      expect(codes(LocalizationConfig.resolve(bundled, const ['en', 'fr', 'de'])), ['en']);
-    });
-
-    test('all-unknown allowlist falls back to the full bundled set', () {
-      expect(LocalizationConfig.resolve(bundled, const ['fr', 'de']), bundled);
-    });
-
-    test('codes are matched case-insensitively and trimmed', () {
-      expect(codes(LocalizationConfig.resolve(bundled, const [' EN ', 'IT'])), ['en', 'it']);
-    });
-
-    test('blank/whitespace-only codes are ignored (treated as no restriction)', () {
-      expect(LocalizationConfig.resolve(bundled, const ['   ', '']), bundled);
-    });
+    expect(open.supportedLocales, AppLocalizations.supportedLocales);
   });
 }

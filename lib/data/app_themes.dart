@@ -10,58 +10,30 @@ import 'package:webtrit_phone/theme/theme.dart';
 
 class AppThemes {
   static Future<AppThemes> init() async {
-    final themeColorSchemeLightConfigJson = await _getJson(
-      Assets.themes.originalColorSchemeLightConfig,
-    );
-    final themeColorSchemeDarkConfigJson = await _getJson(
-      Assets.themes.originalColorSchemeDarkConfig,
-    );
+    final themeColorSchemeLightConfigJson = await _getJson(Assets.themes.originalColorSchemeLightConfig);
+    final themeColorSchemeDarkConfigJson = await _getJson(Assets.themes.originalColorSchemeDarkConfig);
 
-    final themeWidgetLightConfigJson = await _getJson(
-      Assets.themes.originalWidgetLightConfig,
-    );
-    final themePageLightConfigJson = await _getJson(
-      Assets.themes.originalPageLightConfig,
-    );
+    final themeWidgetLightConfigJson = await _getJson(Assets.themes.originalWidgetLightConfig);
+    final themePageLightConfigJson = await _getJson(Assets.themes.originalPageLightConfig);
 
-    final themeWidgetDarkConfigJson = await _getJson(
-      Assets.themes.originalWidgetDarkConfig,
-    );
-    final themePageDarkConfigJson = await _getJson(
-      Assets.themes.originalPageDarkConfig,
-    );
+    final themeWidgetDarkConfigJson = await _getJson(Assets.themes.originalWidgetDarkConfig);
+    final themePageDarkConfigJson = await _getJson(Assets.themes.originalPageDarkConfig);
 
     final appConfigJson = await _getJson(Assets.themes.appConfig);
-    final eppEmbeddedConfigJson = await _getJson(
-      Assets.themes.appEmbeddedConfig,
-    );
+    final eppEmbeddedConfigJson = await _getJson(Assets.themes.appEmbeddedConfig);
 
-    final themeColorSchemeLightConfig = ColorSchemeConfig.fromJson(
-      themeColorSchemeLightConfigJson,
-    );
-    final themeColorSchemeDarkConfig = ColorSchemeConfig.fromJson(
-      themeColorSchemeDarkConfigJson,
-    );
+    final themeColorSchemeLightConfig = ColorSchemeConfig.fromJson(themeColorSchemeLightConfigJson);
+    final themeColorSchemeDarkConfig = ColorSchemeConfig.fromJson(themeColorSchemeDarkConfigJson);
 
-    final themeWidgetLightConfig = ThemeWidgetConfig.fromJson(
-      themeWidgetLightConfigJson,
-    );
-    final themePageLightConfig = ThemePageConfig.fromJson(
-      themePageLightConfigJson,
-    );
+    final themeWidgetLightConfig = ThemeWidgetConfig.fromJson(themeWidgetLightConfigJson);
+    final themePageLightConfig = ThemePageConfig.fromJson(themePageLightConfigJson);
 
-    final themeWidgetDarkConfig = ThemeWidgetConfig.fromJson(
-      themeWidgetDarkConfigJson,
-    );
-    final themePageDarkConfig = ThemePageConfig.fromJson(
-      themePageDarkConfigJson,
-    );
+    final themeWidgetDarkConfig = ThemeWidgetConfig.fromJson(themeWidgetDarkConfigJson);
+    final themePageDarkConfig = ThemePageConfig.fromJson(themePageDarkConfigJson);
 
     final appConfig = AppConfig.fromJson(appConfigJson);
     final embeddedResources = (eppEmbeddedConfigJson as List)
-        .map<EmbeddedResource>(
-          (e) => EmbeddedResource.fromJson(Map<String, dynamic>.from(e)),
-        )
+        .map<EmbeddedResource>((e) => EmbeddedResource.fromJson(Map<String, dynamic>.from(e)))
         .toList(growable: false);
 
     final settings = ThemeSettings(
