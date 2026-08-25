@@ -160,6 +160,7 @@ generate-assets: generate-launcher-icons generate-native-splash
 # DEPRECATED: use `melos run l10n:generate`
 gen-l10n:
 	flutter gen-l10n
+	dart format --line-length 120 lib/l10n
 
 ## Clean git files
 # DEPRECATED: use `melos run clean:git`

@@ -528,8 +528,14 @@ melos:
     # ===========================
 
     l10n:generate:
-      description: Generate Flutter localization files from ARB files.
-      run: flutter gen-l10n
+      description: Generate Flutter localization files from ARB files and format them at the project width.
+      # NOTE: `flutter gen-l10n` formats its output at the Dart default of 80 columns
+      # and does not read `formatter.page_width` from analysis_options.yaml. The fmt
+      # scripts above skip generated files, so without this reformat every regeneration
+      # carries thousands of lines of rewrapping noise. `l10n:check` guards the result.
+      run: |
+        flutter gen-l10n
+        dart format --line-length 120 lib/l10n
 
     l10n:check:
       description: Validate ARB files against app_en.arb (key parity, ICU placeholders, empty values, mapper coverage).

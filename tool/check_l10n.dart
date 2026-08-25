@@ -6,6 +6,13 @@
 //   5. every template key is covered by the generated l10n mapper
 //      (lib/l10n/app_localizations.g.mapper.dart) - a missing key means
 //      `dart run build_runner build` was not run after `flutter gen-l10n`.
+//   6. the generated l10n sources are formatted at the project page width.
+//      `flutter gen-l10n` and `build_runner` format their output at the Dart
+//      default of 80 columns and neither reads `formatter.page_width` from
+//      analysis_options.yaml, so a regeneration that skips the reformat lands
+//      as a few thousand lines of rewrapping noise on top of the real change.
+//      The repository's `fmt` scripts deliberately skip generated files, so
+//      nothing else would catch it.
 //
 // Usage: dart tool/check_l10n.dart (or `melos run l10n:check`). Exits 1 on any finding.
 
@@ -15,6 +22,11 @@ import 'dart:io';
 const arbDir = 'lib/l10n/arb';
 const templateFile = 'app_en.arb';
 const mapperFile = 'lib/l10n/app_localizations.g.mapper.dart';
+const generatedDir = 'lib/l10n';
+
+// Keep in step with `formatter.page_width` in analysis_options.yaml and with the
+// `--line-length` the fmt scripts in pubspec.yaml pass.
+const pageWidth = 120;
 
 // White-label placeholders: intentionally empty in every locale, filled
 // per application through the configurator overrides.
@@ -61,6 +73,8 @@ void main() {
     _checkMapperCoverage(template, mapperSource, errors);
   }
 
+  _checkGeneratedFormatting(errors);
+
   for (final file in localeFiles) {
     final arb = _loadArb(file.path, errors);
     if (arb == null) continue;
@@ -77,6 +91,61 @@ void main() {
   }
 
   _report(errors);
+}
+
+/// Verifies that the generated l10n sources are formatted at [pageWidth].
+///
+/// Runs the formatter of the SDK that is running this script, so it agrees with
+/// whatever `dart format` the caller would have used.
+void _checkGeneratedFormatting(List<String> errors) {
+  final generated = Directory(
+    generatedDir,
+  ).listSync().whereType<File>().map((file) => file.path).where((path) => path.endsWith('.g.dart')).toList()..sort();
+
+  if (generated.isEmpty) {
+    errors.add('$generatedDir: no generated l10n sources found - run `flutter gen-l10n`');
+    return;
+  }
+
+  final ProcessResult result;
+  try {
+    result = Process.runSync(Platform.resolvedExecutable, [
+      'format',
+      '--output=none',
+      '--set-exit-if-changed',
+      '--line-length',
+      '$pageWidth',
+      ...generated,
+    ]);
+  } on ProcessException catch (e) {
+    errors.add('$generatedDir: could not run the formatter - ${e.message}');
+    return;
+  }
+
+  if (result.exitCode == 0) return;
+
+  // `--set-exit-if-changed` exits 1 for unformatted input; anything else is the
+  // formatter itself failing, and its own message is more useful than ours.
+  if (result.exitCode != 1) {
+    errors.add('$generatedDir: formatter failed - ${(result.stderr as String).trim()}');
+    return;
+  }
+
+  // `dart format --output=none` names each file it would rewrite as
+  // `Changed <path>`, so only the actual offenders are reported.
+  final changed = (result.stdout as String)
+      .split('\n')
+      .map((line) => line.trim())
+      .where((line) => line.startsWith('Changed '))
+      .map((line) => line.substring('Changed '.length))
+      .toList();
+
+  for (final path in changed.isEmpty ? generated : changed) {
+    errors.add(
+      '$path: not formatted at $pageWidth columns - '
+      'run `dart format --line-length $pageWidth $generatedDir` after regenerating',
+    );
+  }
 }
 
 Map<String, dynamic>? _loadArb(String path, List<String> errors) {
