@@ -33,9 +33,15 @@ Two consumers read these files:
 3. Regenerate — **both steps are required**:
 
    ```sh
-   melos run l10n:generate                                  # flutter gen-l10n
+   melos run l10n:generate                                  # flutter gen-l10n + dart format
    dart run build_runner build --delete-conflicting-outputs # l10n mapper (lookupKey switch)
    ```
+
+   Use `melos run l10n:generate` rather than bare `flutter gen-l10n`: the generator
+   formats its output at the Dart default of 80 columns and does not read
+   `formatter.page_width` from `analysis_options.yaml`, so calling it directly rewraps
+   every generated file and buries the real change under thousands of lines. The melos
+   script reformats at 120 afterwards; `l10n:check` fails if that step was skipped.
 
    `flutter gen-l10n` alone is NOT enough: the git-tracked
    `lib/l10n/app_localizations.g.mapper.dart` powers configurator-driven dynamic strings
@@ -60,7 +66,15 @@ hook, and the `l10n-check` GitHub workflow) runs `tool/check_l10n.dart`, which f
   (plural/select branch sets may differ — uk legitimately uses `few`/`many`);
 - a value is empty and not in the intentionally-empty allow-list;
 - a file is not valid JSON;
-- a template key is missing from the generated l10n mapper (forgotten `build_runner` run).
+- a template key is missing from the generated l10n mapper (forgotten `build_runner` run);
+- a generated `lib/l10n/*.g.dart` file is not formatted at the project page width
+  (bare `flutter gen-l10n` or `build_runner` without the follow-up `dart format`).
+
+Because `dart format` output differs between SDK versions, the last check is only
+meaningful on the SDK the project pins: the `l10n-check` workflow installs the Dart that
+ships with the Flutter version in `.fvmrc` (Flutter 3.44.0 -> Dart 3.12.0) rather than
+`stable`, and both must be bumped together. The failure message names the Dart version it
+ran with, so a mismatch is recognisable as one.
 
 ## AI Translation Prompt
 
