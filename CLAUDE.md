@@ -19,6 +19,7 @@
 ## Gotchas
 
 - **l10n keys**: `<Bloc>_<Widget><Fields>[_<variant>]` — e.g. `lobby_AppBarTitle`, `login_Button_getPasswordBySMS`.
+- **l10n workflow**: translations live in git (no TMS). New/changed keys get uk/it/th translations in the SAME PR, then BOTH `melos run l10n:generate` AND `dart run build_runner build` (the l10n mapper is git-tracked; gen-l10n alone silently breaks `parseL10n`), then `melos run l10n:check`. See `docs/localization.md`.
 - **initState / dispose**: `super.initState()` first; `super.dispose()` last; dispose in reverse creation order.
 - **withValues**: `withValues(alpha: 0.x)` — not deprecated `withOpacity()`.
 - **Card not Container**: elevation/shadow → `Card`, not `Container + BoxShadow`.

@@ -350,18 +350,20 @@ melos:
     # ===========================
 
     check:
-      description: Run formatting check and analysis.
+      description: Run formatting check, analysis, and l10n validation.
       steps:
         - fmt:check
         - analyze
+        - l10n:check
 
     ci:
-      description: Full CI pipeline - get, generate, check format, analyze, test.
+      description: Full CI pipeline - get, generate, check format, analyze, l10n check, test.
       steps:
         - get
         - generate
         - fmt:check
         - analyze
+        - l10n:check
         - test
 
     # ===========================
@@ -522,30 +524,16 @@ melos:
           --keystore-path="$KEYSTORE_APP_PATH"
 
     # ===========================
-    # Localization - melos run l10n:push | l10n:pull | l10n:generate | l10n:fetch
+    # Localization - melos run l10n:generate | l10n:check
     # ===========================
-
-    l10n:push:
-      description: Push localization keys to Localizely (reads LOCALIZELY_TOKEN from .env).
-      run: |
-        token=$(grep -E '^(export[[:space:]]+)?LOCALIZELY_TOKEN=' .env | cut -d '=' -f2)
-        localizely-cli --api-token="$token" push
-
-    l10n:pull:
-      description: Pull localization keys from Localizely (reads LOCALIZELY_TOKEN from .env).
-      run: |
-        token=$(grep -E '^(export[[:space:]]+)?LOCALIZELY_TOKEN=' .env | cut -d '=' -f2)
-        localizely-cli --api-token="$token" pull
 
     l10n:generate:
       description: Generate Flutter localization files from ARB files.
       run: flutter gen-l10n
 
-    l10n:fetch:
-      description: Pull l10n from Localizely and regenerate Flutter localization files.
-      steps:
-        - l10n:pull
-        - l10n:generate
+    l10n:check:
+      description: Validate ARB files against app_en.arb (key parity, ICU placeholders, empty values, mapper coverage).
+      run: dart tool/check_l10n.dart
 
     # ===========================
     # IDE - melos run ide:sync

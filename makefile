@@ -85,30 +85,6 @@ ANDROID_12_SPLASH_IMAGE ?= tool/assets/native_splash/image.png
 # Path to splash screen background image (if used)
 SPLASH_IMAGE ?= tool/assets/native_splash/image.png
 
-# ===========================
-#  Localizely Configuration
-# ===========================
-
-ENV_FILE ?= .env
-
-define ensure_localizely_token
-	$(eval localizely_token := $(shell \
-		if [ -z "$(localizely_token)" ]; then \
-			if [ ! -f "$(ENV_FILE)" ]; then \
-				echo "__ERROR_ENV_NOT_FOUND__"; \
-			else \
-				val=$$(grep '^LOCALIZELY_TOKEN=' $(ENV_FILE) | cut -d '=' -f2); \
-				if [ -z "$$val" ]; then echo "__ERROR_TOKEN_EMPTY__"; else echo "$$val"; fi; \
-			fi; \
-		else echo "$(localizely_token)"; fi \
-	)) \
-	@if [ "$(localizely_token)" = "__ERROR_ENV_NOT_FOUND__" ]; then \
-		echo "Error: Token not provided and $(ENV_FILE) not found."; exit 1; \
-	elif [ "$(localizely_token)" = "__ERROR_TOKEN_EMPTY__" ]; then \
-		echo "Error: LOCALIZELY_TOKEN is empty in $(ENV_FILE)"; exit 1; \
-	fi
-endef
-
 # Rules
 .PHONY: run build configure configure-demo configure-classic build-ios build-apk build-appbundle clean-git generate-package-config rename-package generate-launcher-icons generate-native-splash generate-assets
 
@@ -180,26 +156,10 @@ generate-native-splash:
 # DEPRECATED: use `melos run assets:generate`
 generate-assets: generate-launcher-icons generate-native-splash
 
-## Push localization keys to Localizely
-# DEPRECATED: use `melos run l10n:push`
-push-l10n:
-	$(call ensure_localizely_token)
-	localizely-cli --api-token=$(localizely_token) push
-
-## Pull localization keys from Localizely
-# DEPRECATED: use `melos run l10n:pull`
-pull-l10n:
-	$(call ensure_localizely_token)
-	localizely-cli --api-token=$(localizely_token) pull
-
 ## Generate Flutter localization files
 # DEPRECATED: use `melos run l10n:generate`
 gen-l10n:
 	flutter gen-l10n
-
-## Fetch localization keys from Localizely, pull them and generate localization files
-# DEPRECATED: use `melos run l10n:fetch`
-fetch-l10n: pull-l10n gen-l10n
 
 ## Clean git files
 # DEPRECATED: use `melos run clean:git`

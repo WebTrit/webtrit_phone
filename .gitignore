@@ -46,7 +46,6 @@ app.*.map.json
 /android/app/release
 
 # Configuration files for project environment
-/tool/configs/localizely_token.txt
 makefile.shared
 .env
 

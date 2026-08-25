@@ -19,7 +19,7 @@ Please align your local environment with these versions for consistent behavior 
 - **Build Process**: Learn more about build configurations in the [Build](docs/build.md) documentation.
 - **Application Properties**: Customize properties such as the Bundle ID and App Name in the  [Application Settings](docs/application_properties.md) documentation.
 - **Application Launch Assets**: Configure the application launch assets in the [Launch Assets](docs/launch_assets.md) documentation.
-- **Localization**: For information on localization settings, see [Localizely](docs/localization.md).
+- **Localization**: For information on localization settings, see [Localization](docs/localization.md).
 
 ## Application Configuration
 

@@ -1,83 +1,93 @@
 # Localization
 
+Git is the single source of truth for translations. Last reviewed: 2026-08-20.
+
+The ARB files in `lib/l10n/arb/` (`app_en.arb` is the template; `app_uk.arb`, `app_it.arb`,
+`app_th.arb` are the locales) are edited directly in this repository and reviewed as normal code.
+There is no external translation management system: new keys are translated in the same PR that
+introduces them (AI-assisted, see the prompt below) and reviewed by a native speaker where
+available.
+
+Two consumers read these files:
+
+- `flutter gen-l10n` + the `l10n_mapper_generator` build step produce the Dart localization
+  classes used by the app;
+- the configurator backend fetches the raw ARB files from this repository (branch `main` by
+  default) to compose per-customer translation bundles with overrides applied.
+
 ## Table of Contents
 
-1. [Localization Process](#localization-process)
-    1. [Adding, Updating, or Removing Keys](#adding-updating-or-removing-keys)
-    2. [Refinement](#refinement)
-    3. [Adding a New Locale](#adding-a-new-locale)
-    4. [Full Localization Workflow](#full-localization-workflow)
+1. [Adding or Changing a Key](#adding-or-changing-a-key)
+2. [Validation](#validation)
+3. [AI Translation Prompt](#ai-translation-prompt)
+4. [Adding a New Locale](#adding-a-new-locale)
+5. [Intentionally Empty Keys](#intentionally-empty-keys)
 
-### Preparation
+## Adding or Changing a Key
 
-Before starting, install the [Localizely CLI](https://github.com/localizely/localizely-cli#install).
-
-### Workflow
-
-Follow these structured steps to manage the localization of your application efficiently.
-
-## Localization Process
-
-### Adding, Updating, or Removing Keys
-
-1. Add, update, or remove the necessary key(s) in `lib/l10n/arb/app_en.arb`.
-2. Push the key(s) to [Localizely](https://localizely.com) using the command: `localizely-cli push`.
-3. If necessary, translate the key(s) on the [Localizely](https://localizely.com) platform, ensuring to remove helper
-   tags from the key(s).
-4. Pull the key(s) from [Localizely](https://localizely.com) using the command: `localizely-cli pull`.
-5. Generate the localizations with the command: `flutter gen-l10n`.
-6. Commit the changes.
-
-### Refinement
-
-1. Pull the key(s) from [Localizely](https://localizely.com) using the command: `localizely-cli pull`.
-2. Generate the localizations with the command: `flutter gen-l10n`.
-3. Commit the changes.
-
-### Adding a New Locale
-
-1. Add the new locale to the `download files` list in `localizely.yml`.
-2. Insert `locale_<locale code>` in `lib/l10n/arb/app_en.arb`.
-3. Push the newly added key with the ‘unreviewed’ flag to [Localizely](https://localizely.com) using the command:
-   ```sh
-   localizely-cli --reviewed=false push --api-token=token
-   ```
-4. Translate the added key on the [Localizely](https://localizely.com) platform, remembering to remove helper tags from
-   the key(s).
-5. Pull the newly added key from [Localizely](https://localizely.com) using the command:
-   ```sh
-   localizely-cli pull --api-token=token
-   ```
-6. Generate the localizations with the command: `flutter gen-l10n`.
-7. Commit the changes.
-
-### Full Localization Workflow
-
-To execute the full localization process, use the following sequence of commands:
-
-#### Push localization keys to Localizely
+1. Add or edit the key in `lib/l10n/arb/app_en.arb`, including its `@key` metadata
+   (description and `placeholders` where the value has arguments).
+2. Add the translations to `app_uk.arb`, `app_it.arb`, and `app_th.arb` **in the same PR**
+   (AI-assisted; see the prompt below). Keep the key in the same relative position as in
+   `app_en.arb`.
+3. Regenerate — **both steps are required**:
 
    ```sh
-    push-l10n:
-    localizely-cli --api-token=$(token) push
+   melos run l10n:generate                                  # flutter gen-l10n
+   dart run build_runner build --delete-conflicting-outputs # l10n mapper (lookupKey switch)
    ```
 
-#### Pull localization keys from Localizely
+   `flutter gen-l10n` alone is NOT enough: the git-tracked
+   `lib/l10n/app_localizations.g.mapper.dart` powers configurator-driven dynamic strings
+   (`context.parseL10n` / `AppLocalizations.lookupKey`), and a key missing from it fails
+   silently at runtime.
 
-   ```sh
-    pull-l10n:
-    localizely-cli --api-token=$(token) pull
-   ```
+4. Validate: `melos run l10n:check`.
+5. Commit everything together: the four ARB files and the regenerated
+   `lib/l10n/app_localizations*` files.
 
-#### Generate Flutter localization files
+Review expectations: Ukrainian is reviewed by the team; Italian and Thai are AI-translated and
+spot-checked. Per-customer wording changes do not belong here — they are configurator overrides.
 
-   ```sh
-gen-l10n:
-    flutter gen-l10n
-   ```
+## Validation
 
-## Fetch localization keys from Localizely, pull them and generate localization files
+`melos run l10n:check` (also part of `melos run check`, `melos run ci`, the lefthook `pre-push`
+hook, and the `l10n-check` GitHub workflow) runs `tool/check_l10n.dart`, which fails when:
 
-   ```sh
-fetch-l10n: pull-l10n gen-l10n
-```
+- a locale file is missing a key (or its `@` metadata) present in `app_en.arb`, or carries an
+  extra one;
+- the ICU placeholder arguments of a translated value differ from the template value
+  (plural/select branch sets may differ — uk legitimately uses `few`/`many`);
+- a value is empty and not in the intentionally-empty allow-list;
+- a file is not valid JSON;
+- a template key is missing from the generated l10n mapper (forgotten `build_runner` run).
+
+## AI Translation Prompt
+
+When translating with an AI assistant (Claude, Copilot, etc.), use:
+
+> Translate the following ARB entries from English into Ukrainian, Italian, and Thai for a
+> business VoIP application (WebTrit Phone). Keep every ICU placeholder (`{name}`) and
+> plural/select structure intact; use the locale's own CLDR plural categories (uk needs
+> `few`/`many`). Do not translate technical terms (WiFi, VPN, SIP, Bluetooth, codec names,
+> units). Match the tone of the existing translations in lib/l10n/arb/. Return one JSON
+> fragment per locale, keys in the same order as the input.
+
+Always run `melos run l10n:check` afterwards.
+
+## Adding a New Locale
+
+1. Create `lib/l10n/arb/app_<locale>.arb` (ARB filename spelling: underscore for region
+   subtags, e.g. `app_pt_BR.arb`) and translate all keys from `app_en.arb`.
+2. Add the locale to the configurator backend's `TRANSLATIONS_LOCALES` parameter so
+   white-label bundles include it.
+3. Regenerate (`melos run l10n:generate` + `dart run build_runner build`) and run
+   `melos run l10n:check`.
+
+## Intentionally Empty Keys
+
+Seven `login_Text_*` keys (`otpSigninRequest`/`passwordSignin`/`signupRequest`
+pre/post-description variants) are empty in **all** locales, including English: they are
+white-label placeholders filled per application through configurator overrides. They are
+allow-listed in `tool/check_l10n.dart` (`intentionallyEmptyKeys`); update that list only when a
+key is deliberately designed to work this way.
