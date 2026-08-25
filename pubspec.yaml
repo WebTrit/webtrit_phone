@@ -544,10 +544,9 @@ melos:
     l10n:pull:
       description: Pull the configurator's translation catalog into the ARB files. Reads CONFIGURATOR_TOKEN from .env.
       # The catalog owns the values, so this is how a correction made there comes
-      # back here. It lands in a scratch directory first: the fetch overwrites
-      # rather than merges, and an export from a catalog that has not been synced
-      # since the last keys were added would delete them from every locale at
-      # once. tool/adopt_l10n_export.dart refuses that and says so.
+      # back here. The fetch overwrites rather than merges; it refuses an export
+      # that would delete keys this checkout has, so there is nothing to vet on
+      # this side.
       run: |
         set -eo pipefail
         [ -f .env ] || { echo "ERROR: .env not found. Copy .env.example to .env and fill in your credentials." >&2; exit 1; }
@@ -560,12 +559,9 @@ melos:
           { dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart "$@" 2>&1 1>&3 \
             | sed -e 's/Running build hooks\.\.\.//g' -e '/^[[:space:]]*$/d' >&2; } 3>&1
         }
-        rm -rf .dart_tool/l10n-catalog
         phone_tools \
           configurator-translations-fetch \
-          --output=.dart_tool/l10n-catalog \
           --token="${CONFIGURATOR_TOKEN:?CONFIGURATOR_TOKEN not found in .env}"
-        dart tool/adopt_l10n_export.dart .dart_tool/l10n-catalog
 
     l10n:fetch:
       description: Pull the translation catalog and regenerate the localization classes.

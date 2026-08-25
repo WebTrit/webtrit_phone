@@ -152,34 +152,30 @@ melos run l10n:pull     # pull only
 Both read `CONFIGURATOR_TOKEN` from `.env`. An administrator-minted key of scope
 `translations` works as well as a signed-in bearer token.
 
-### Why it lands in a scratch directory first
+### Why a pull can refuse
 
-`configurator-translations-fetch` **overwrites** each `app_<locale>.arb` with what the
-catalog holds. It does not merge, and that is correct - the catalog is the source of truth
-for values. But it makes the command destructive whenever the catalog has not been synced
-since the last keys were added here: it would not carry them, and overwriting would delete
-them from every locale at once. The app calls those keys, so the damage would surface as
-`undefined_getter` from `flutter analyze` on generated code, a long way from the command
-that caused it.
+`configurator-translations-fetch` **overwrites** each `app_<locale>.arb` with what the catalog
+holds. It does not merge, and that is correct - the catalog is the source of truth for values.
+But it makes the command destructive whenever the catalog has not been synced since the last
+keys were added here: it would not carry them, and overwriting would delete them from every
+locale at once. The app calls those keys, so the damage would surface as `undefined_getter`
+from `flutter analyze` on generated code, a long way from the command that caused it.
 
-So the export lands in `.dart_tool/l10n-catalog` and `tool/adopt_l10n_export.dart` adopts it
-only if it covers every key `app_en.arb` defines. Otherwise nothing is written:
+The CLI checks for that before writing anything, and refuses:
 
 ```
-The catalog export is behind this repository: it carries 965 keys where app_en.arb
-defines 1097, so adopting it would delete 135 of them from every locale.
+The catalog export is behind this checkout: for en it carries 965 keys where app_en.arb
+has 1097, so adopting it would delete 135 of them.
 ```
 
 The fix is to run `npm run translations:sync` in the configurator backend against a ref that
-carries these keys - not to force the files across.
+carries these keys - not to force the files across. It refuses an export missing a locale this
+checkout has, for the same reason.
 
-### Files are compared by content
-
-The ARB files here are not shaped the way the export renders them: some `@key` objects sit on
-one line and some are expanded, and the export orders keys differently. Comparing bytes would
-call every file changed on every pull and bury a one-word correction under three thousand
-lines of reformatting, so a file whose content matches is left exactly as it is. A pull that
-changes nothing leaves the working tree clean.
+A file whose content matches the catalog is left byte-for-byte alone, so a pull that changes
+nothing leaves the working tree clean. The ARB files here are not shaped the way the export
+renders them and the export orders keys differently, so a byte comparison would call every
+file changed on every pull.
 
 ## AI Translation Prompt
 
