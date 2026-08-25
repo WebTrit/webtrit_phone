@@ -99,13 +99,27 @@ void main() {
   }
 
   group('AvatarStatusBadge without hybrid presence', () {
-    testWidgets('shows the registration dot at the legacy size', (tester) async {
+    testWidgets('draws the registration dot at the presence-mark size, ringed', (tester) async {
       await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: true), hybridPresenceSupport: false));
 
       final dot = dotOf(tester);
-      expect((dot.decoration! as BoxDecoration).color, registeredColor);
-      expect(tester.getSize(find.byWidget(dot)), const Size(diameter * 0.2, diameter * 0.2));
+      final decoration = dot.decoration! as BoxDecoration;
+      expect(decoration.color, registeredColor);
+      expect(tester.getSize(find.byWidget(dot)), const Size(diameter * 0.5, diameter * 0.5));
+      // The ring is what lets the dot straddle the avatar edge: without it,
+      // the half hanging over the row background reads as a partial dot.
+      expect(decoration.border!.top.width, diameter * 0.5 * 0.1);
       expect(find.byType(SipPresenceIndicator), findsNothing);
+    });
+
+    testWidgets('sits the registration dot on the avatar edge', (tester) async {
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: true), hybridPresenceSupport: false));
+
+      final dot = tester.getRect(find.byWidget(dotOf(tester)));
+      final avatar = tester.getRect(find.byType(AvatarStatusBadge));
+
+      expect((dot.center - avatar.center).distance, closeTo(avatar.width / 2, 0.01));
+      expect(dot.right, greaterThan(avatar.right));
     });
 
     testWidgets('colors the dot by registration state', (tester) async {

@@ -131,9 +131,11 @@ void main() {
       final avatar = tester.getRect(find.byType(LeadingAvatar));
 
       // The slot hands over the whole avatar square: the dot is sized from it
-      // and placed in its corner, which is only possible if it knows the size.
-      expect(tester.getSize(dot), const Size(8, 8));
-      expect(tester.getRect(dot).bottomRight, avatar.bottomRight);
+      // and placed on its edge, which is only possible if it knows the size.
+      expect(tester.getSize(dot), const Size(20, 20));
+      final reach = (tester.getRect(dot).center - avatar.center).distance;
+      expect(reach, closeTo(avatar.width / 2, 0.01));
+      expect(tester.getRect(dot).right, greaterThan(avatar.right));
     });
   });
 }

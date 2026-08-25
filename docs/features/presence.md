@@ -85,8 +85,14 @@ face or the initials underneath. Consequences worth knowing:
 - on a large avatar the mark scales with it, so leave room below: the chat
   profile screen (`radius: 50`) keeps 16 dp before the name for exactly this.
 
-The legacy registration dot deliberately stays INSIDE the box: it carries no
-ring, so half of it on the row background would read as a partial dot. It
+The legacy registration dot - drawn where the server has no presence support,
+never alongside the presence mark - is laid out IDENTICALLY to it:
+`onCircleEdgeSquare`, `sizeFactor` 0.5, and the same
+`scaffoldBackgroundColor` ring at `side * 0.1`. It used to sit at 0.2 fully
+inside the avatar, which is a QUARTER of the coloured area WT-1779 gave the
+presence mark, so deployments without presence support never got the mark
+the change was about; the ring is the part that makes the overhang work -
+without one, the half over the row background reads as a partial dot. It
 carries a `Semantics` label of its own -
 `presence_badge_state_registered` / `_unregistered` - so the dot is spoken
 as well as drawn; with no registration data the badge renders nothing and

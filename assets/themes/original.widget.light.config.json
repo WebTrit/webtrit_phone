@@ -84,12 +84,12 @@
         "unavailableColor": null,
         "busyColor": null,
         "iconColor": null,
-        "sizeFactor": 0.5
+        "sizeFactor": 0.4
       },
       "_registeredBadge": {
         "registeredColor": null,
         "unregisteredColor": null,
-        "sizeFactor": 0.2
+        "sizeFactor": 0.4
       },
       "_nameColors": {
         "enabled": true,

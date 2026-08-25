@@ -64,7 +64,7 @@ class LeadingAvatarStyle with Diagnosticable {
         sizeFactor: 0.4,
       ),
       // The dot's colors keep coming from RegisteredStatusStyles.
-      registeredBadge: const RegisteredBadgeStyle(sizeFactor: 0.2),
+      registeredBadge: const RegisteredBadgeStyle(sizeFactor: 0.5),
       presenceBadge: PresenceBadgeStyle(
         availableColor: colors.tertiary,
         unavailableColor: colors.onSurfaceVariant,

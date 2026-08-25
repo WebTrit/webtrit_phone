@@ -75,10 +75,12 @@ class AvatarStatusBadge extends StatelessWidget {
         final registered = this.registered;
         if (registered == null) return const SizedBox.shrink();
 
-        // The legacy registration dot stays tucked inside the avatar: unlike the
-        // presence mark it carries no ring, so on the row background half of it
-        // would read as a partial dot.
-        final rect = BadgeLayout.bottomRightSquare(size: size, sizeFactor: style.registeredBadge!.sizeFactor!);
+        // Drawn exactly like the presence mark - same size, same ring, same
+        // place on the avatar edge. It used to sit small and fully inside the
+        // avatar because it had no ring, which left deployments without
+        // presence support with a mark a quarter of the coloured area of the
+        // one WT-1779 enlarged; the ring is what lets it straddle the edge.
+        final rect = BadgeLayout.onCircleEdgeSquare(size: size, sizeFactor: style.registeredBadge!.sizeFactor!);
         return Semantics(
           // Same reason as the presence mark above: a bare coloured dot is
           // silent, so the registration state is named here and read right
@@ -91,7 +93,7 @@ class AvatarStatusBadge extends StatelessWidget {
             children: [
               Positioned.fromRect(
                 rect: rect,
-                child: _RegisteredDot(registered: registered, style: style),
+                child: _RegisteredDot(registered: registered, style: style, side: rect.width),
               ),
             ],
           ),
@@ -120,10 +122,14 @@ class AvatarStatusBadge extends StatelessWidget {
 }
 
 class _RegisteredDot extends StatelessWidget {
-  const _RegisteredDot({required this.registered, required this.style});
+  const _RegisteredDot({required this.registered, required this.style, required this.side});
 
   final bool registered;
   final LeadingAvatarStyle style;
+
+  /// Side of the square the dot is drawn into; the ring is a share of it, so
+  /// the fill keeps its weight at every avatar size.
+  final double side;
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +141,11 @@ class _RegisteredDot extends StatelessWidget {
         : (badge.unregisteredColor ?? rs?.unregistered);
 
     return Container(
-      decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: side * 0.1),
+      ),
     );
   }
 }
