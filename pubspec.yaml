@@ -175,12 +175,12 @@ dev_dependencies:
   freezed: ^3.2.5
   json_serializable: ^6.14.0
   # TODO: temporary fork pin. Switch back to a pub.dev version constraint once
-  # analyzer ^13.0.0 support lands upstream
-  # (SERDUN/l10n_mapper -> kwado-tech/l10n_mapper).
+  # analyzer 8.3-14 compatibility is published upstream
+  # (SERDUN/l10n_mapper#1 -> kwado-tech/l10n_mapper).
   l10n_mapper_generator:
     git:
       url: https://github.com/SERDUN/l10n_mapper.git
-      ref: 8a90364
+      ref: dd2095bfc9a49ac9190dd4821d5bbc6b0f48f055
       path: l10n_mapper_generator
   melos: ^7.8.0
   mocktail: ^1.0.5
