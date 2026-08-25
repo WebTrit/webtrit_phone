@@ -74,9 +74,10 @@ moves it to `main` and somebody runs the sync.
 
 1. [Adding or Changing a Key](#adding-or-changing-a-key)
 2. [Validation](#validation)
-3. [AI Translation Prompt](#ai-translation-prompt)
-4. [Adding a New Locale](#adding-a-new-locale)
-5. [Intentionally Empty Keys](#intentionally-empty-keys)
+3. [Pulling the Catalog Back](#pulling-the-catalog-back)
+4. [AI Translation Prompt](#ai-translation-prompt)
+5. [Adding a New Locale](#adding-a-new-locale)
+6. [Intentionally Empty Keys](#intentionally-empty-keys)
 
 ## Adding or Changing a Key
 
@@ -110,7 +111,8 @@ moves it to `main` and somebody runs the sync.
 **Changing the wording of a key that already exists** is the case to be careful with. The steps
 above are right for the app itself, which compiles these files in. They do not reach white-label
 customers: the catalog already holds a value for that key and the sync will not overwrite it, so
-the old wording keeps shipping until it is changed in the catalog too. Reword in both places.
+the old wording keeps shipping until it is changed in the catalog too. Reword it there, then
+bring it back with `melos run l10n:fetch` - see [Pulling the Catalog Back](#pulling-the-catalog-back).
 
 Review expectations: Ukrainian is reviewed by the team; Italian and Thai are AI-translated and
 spot-checked. Per-customer wording changes do not belong here — they are configurator overrides.
@@ -135,6 +137,49 @@ meaningful on the SDK the project pins: the `l10n-check` workflow installs the D
 ships with the Flutter version in `.fvmrc` (Flutter 3.44.0 -> Dart 3.12.0) rather than
 `stable`, and both must be bumped together. The failure message names the Dart version it
 ran with, so a mismatch is recognisable as one.
+
+## Pulling the Catalog Back
+
+The catalog owns the values, so a wording change made there - by a reviewer in the
+configurator, or in bulk - has to come back here or the two drift apart. Nothing in this
+repository talks to the configurator directly; it goes through `webtrit_phone_tools`:
+
+```sh
+melos run l10n:fetch    # pull the catalog, then regenerate the localization classes
+melos run l10n:pull     # pull only
+```
+
+Both read `CONFIGURATOR_TOKEN` from `.env`. An administrator-minted key of scope
+`translations` works as well as a signed-in bearer token.
+
+### Why it lands in a scratch directory first
+
+`configurator-translations-fetch` **overwrites** each `app_<locale>.arb` with what the
+catalog holds. It does not merge, and that is correct - the catalog is the source of truth
+for values. But it makes the command destructive whenever the catalog has not been synced
+since the last keys were added here: it would not carry them, and overwriting would delete
+them from every locale at once. The app calls those keys, so the damage would surface as
+`undefined_getter` from `flutter analyze` on generated code, a long way from the command
+that caused it.
+
+So the export lands in `.dart_tool/l10n-catalog` and `tool/adopt_l10n_export.dart` adopts it
+only if it covers every key `app_en.arb` defines. Otherwise nothing is written:
+
+```
+The catalog export is behind this repository: it carries 965 keys where app_en.arb
+defines 1097, so adopting it would delete 135 of them from every locale.
+```
+
+The fix is to run `npm run translations:sync` in the configurator backend against a ref that
+carries these keys - not to force the files across.
+
+### Files are compared by content
+
+The ARB files here are not shaped the way the export renders them: some `@key` objects sit on
+one line and some are expanded, and the export orders keys differently. Comparing bytes would
+call every file changed on every pull and bury a one-word correction under three thousand
+lines of reformatting, so a file whose content matches is left exactly as it is. A pull that
+changes nothing leaves the working tree clean.
 
 ## AI Translation Prompt
 
