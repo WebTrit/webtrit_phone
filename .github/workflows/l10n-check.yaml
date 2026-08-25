@@ -1,0 +1,31 @@
+name: l10n-check
+
+# Validates ARB localization files against app_en.arb: key-set parity, ICU
+# placeholder parity, empty values, and l10n mapper coverage. The checker is
+# dependency-free pure Dart (tool/check_l10n.dart), so no pub get is needed.
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pinned, not `stable`: the checker verifies that the generated l10n sources
+      # are formatted at the project page width, and `dart format` output differs
+      # between SDK versions. This must be the Dart that ships with the Flutter
+      # version in .fvmrc (Flutter 3.44.0 -> Dart 3.12.0); the checker names the
+      # version it ran with when the check fails, so drift is self-explaining.
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 3.12.0
+
+      - name: Validate ARB localization files
+        run: dart tool/check_l10n.dart
