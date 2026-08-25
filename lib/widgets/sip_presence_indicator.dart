@@ -19,7 +19,17 @@ class SipPresenceIndicator extends StatelessWidget {
     final badge = LeadingAvatarStyles.of(context).presenceBadge!;
 
     final anyAvailable = presenceInfo.anyAvailable;
-    final color = anyAvailable ? badge.availableColor : badge.unavailableColor;
+
+    // Asking not to be called outranks reachability: a contact on "do not
+    // disturb" is reachable by definition - they just published something -
+    // and the point of the state is to stop the call, not to describe the
+    // connection. Only a published activity gets this colour; a reported call
+    // deliberately does not, because Core publishes one from the moment of
+    // dialling and would paint people as busy over calls nobody answered.
+    final color = switch (presenceInfo.primaryActivity) {
+      PresenceActivity.busy || PresenceActivity.doNotDisturb => badge.busyColor,
+      _ => anyAvailable ? badge.availableColor : badge.unavailableColor,
+    };
 
     final activityIcon = _activityIcon(presenceInfo, dialogInfo);
 

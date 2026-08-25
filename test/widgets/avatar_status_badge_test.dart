@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -9,14 +10,29 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 void main() {
   const registeredColor = Color(0xFF00AA00);
   const unregisteredColor = Color(0xFF888888);
+  const availableColor = Color(0xFF11AA11);
+  const unavailableColor = Color(0xFF999999);
+  const busyColor = Color(0xFFCC2222);
   const diameter = 40.0;
 
   Widget wrap(Widget badge, {required bool hybridPresenceSupport}) {
     return MaterialApp(
+      locale: const Locale('en'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         extensions: [
           RegisteredStatusStyles(
             primary: RegisteredStatusStyle(registered: registeredColor, unregistered: unregisteredColor),
+          ),
+          const LeadingAvatarStyles(
+            primary: LeadingAvatarStyle(
+              presenceBadge: PresenceBadgeStyle(
+                availableColor: availableColor,
+                unavailableColor: unavailableColor,
+                busyColor: busyColor,
+              ),
+            ),
           ),
         ],
       ),
@@ -51,6 +67,29 @@ void main() {
       source: PresenceInfoSource.sip,
       arrivalTime: DateTime(2026),
     );
+  }
+
+  DialogInfo dialog(DialogState state) => DialogInfo(
+    id: 'dlg-${state.name}',
+    entityNumber: 'number',
+    state: state,
+    callId: 'call',
+    direction: DialogDirection.recipient,
+    localTag: 'lt',
+    localNumber: 'number',
+    localDisplayName: null,
+    remoteTag: 'rt',
+    remoteNumber: 'other',
+    remoteDisplayName: null,
+    arrivalVersion: '1',
+    arrivalTime: DateTime(2026),
+  );
+
+  Color? markColor(WidgetTester tester) {
+    final container = tester.widget<Container>(
+      find.descendant(of: find.byType(SipPresenceIndicator), matching: find.byType(Container)),
+    );
+    return (container.decoration! as BoxDecoration).color;
   }
 
   Container dotOf(WidgetTester tester) {
@@ -142,6 +181,193 @@ void main() {
 
       expect(find.descendant(of: find.byType(AvatarStatusBadge), matching: find.byType(Container)), findsNothing);
       expect(find.byType(SipPresenceIndicator), findsNothing);
+    });
+  });
+
+  group('the mark colours whether the contact can be called now', () {
+    testWidgets('do not disturb paints it busy', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(
+            presenceInfo: [
+              presence(available: true, activities: const [PresenceActivity.doNotDisturb]),
+            ],
+          ),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(markColor(tester), busyColor);
+    });
+
+    testWidgets('a published busy paints it busy as well', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(
+            presenceInfo: [
+              presence(available: true, activities: const [PresenceActivity.busy]),
+            ],
+          ),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(markColor(tester), busyColor);
+    });
+
+    testWidgets('an activity that is merely elsewhere stays available', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(
+            presenceInfo: [
+              presence(available: true, activities: const [PresenceActivity.vacation]),
+            ],
+          ),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(markColor(tester), availableColor);
+    });
+
+    testWidgets('a reported call leaves the colour alone, established or ringing', (tester) async {
+      for (final state in [DialogState.confirmed, DialogState.early]) {
+        await tester.pumpWidget(
+          wrap(
+            AvatarStatusBadge(presenceInfo: [presence(available: true)], dialogInfo: [dialog(state)]),
+            hybridPresenceSupport: true,
+          ),
+        );
+
+        expect(markColor(tester), availableColor, reason: 'dialog state ${state.name}');
+      }
+    });
+
+    testWidgets('a contact publishing on-the-phone keeps the reachable colour', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(
+            presenceInfo: [
+              presence(available: true, activities: const [PresenceActivity.onThePhone]),
+            ],
+          ),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(markColor(tester), availableColor);
+    });
+
+    testWidgets('an unreachable contact stays unavailable', (tester) async {
+      await tester.pumpWidget(
+        wrap(AvatarStatusBadge(presenceInfo: [presence(available: false)]), hybridPresenceSupport: true),
+      );
+
+      expect(markColor(tester), unavailableColor);
+    });
+
+    testWidgets('do not disturb outranks being unreachable', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(
+            presenceInfo: [
+              presence(available: false, activities: const [PresenceActivity.doNotDisturb]),
+            ],
+          ),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(markColor(tester), busyColor);
+    });
+  });
+
+  group('the mark says its state out loud', () {
+    testWidgets('an established call is announced as a call', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(presenceInfo: [presence(available: true)], dialogInfo: [dialog(DialogState.confirmed)]),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(find.bySemanticsLabel('On a call'), findsOneWidget);
+    });
+
+    testWidgets('a phone that is only ringing is not announced as a call', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(presenceInfo: [presence(available: true)], dialogInfo: [dialog(DialogState.early)]),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(find.bySemanticsLabel('On a call'), findsNothing);
+      expect(find.bySemanticsLabel('Available'), findsOneWidget);
+    });
+
+    testWidgets('a published activity is announced instead of the plain state', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(
+            presenceInfo: [
+              presence(available: true, activities: const [PresenceActivity.vacation]),
+            ],
+          ),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(find.bySemanticsLabel('On vacation'), findsOneWidget);
+    });
+
+    testWidgets('do not disturb is announced even though it only changes the colour', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          AvatarStatusBadge(
+            presenceInfo: [
+              presence(available: true, activities: const [PresenceActivity.doNotDisturb]),
+            ],
+          ),
+          hybridPresenceSupport: true,
+        ),
+      );
+
+      expect(find.bySemanticsLabel('Do not disturb'), findsOneWidget);
+      expect(find.bySemanticsLabel('Available'), findsNothing);
+    });
+
+    testWidgets('a plain contact is announced as available or not', (tester) async {
+      await tester.pumpWidget(
+        wrap(AvatarStatusBadge(presenceInfo: [presence(available: true)]), hybridPresenceSupport: true),
+      );
+      expect(find.bySemanticsLabel('Available'), findsOneWidget);
+
+      await tester.pumpWidget(
+        wrap(AvatarStatusBadge(presenceInfo: [presence(available: false)]), hybridPresenceSupport: true),
+      );
+      expect(find.bySemanticsLabel('Unavailable'), findsOneWidget);
+    });
+  });
+
+  group('the legacy registration dot says its state out loud', () {
+    testWidgets('a registered contact is announced as registered', (tester) async {
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: true), hybridPresenceSupport: false));
+
+      expect(find.bySemanticsLabel('Registered'), findsOneWidget);
+    });
+
+    testWidgets('an unregistered contact is announced as not registered', (tester) async {
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: false), hybridPresenceSupport: false));
+
+      expect(find.bySemanticsLabel('Not registered'), findsOneWidget);
+    });
+
+    testWidgets('nothing is announced when there is no registration data', (tester) async {
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(), hybridPresenceSupport: false));
+
+      expect(find.bySemanticsLabel('Registered'), findsNothing);
+      expect(find.bySemanticsLabel('Not registered'), findsNothing);
     });
   });
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/avatar_status_badge.dart';
@@ -9,6 +10,11 @@ import 'package:webtrit_phone/widgets/leading_avatar.dart';
 void main() {
   Widget wrap(Widget child, {NameColorsStyle? nameColors}) {
     return MaterialApp(
+      // The status badge names its state from l10n, so the delegates have to
+      // be here as they are in the app.
+      locale: const Locale('en'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         extensions: [
           LeadingAvatarStyles(
@@ -101,6 +107,9 @@ void main() {
     testWidgets('hands the status badge the avatar diameter', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
             body: PresenceViewParams(
               hybridPresenceSupport: false,

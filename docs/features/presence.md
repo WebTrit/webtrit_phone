@@ -3,7 +3,7 @@
 How the app learns other users' presence (available / activities / on a call)
 and where it shows it, most visibly as the status badge on contact avatars.
 
-Last reviewed: 2026-08-19
+Last reviewed: 2026-08-25
 
 ## State model
 
@@ -26,12 +26,6 @@ Last reviewed: 2026-08-19
   first ring and `early` is the most common state in production, so
   "the contact is talking" is `isEstablished`, never "a dialog exists" -
   every read site goes through it, `pullable` included.
-- `lib/models/presence/contact_presence.dart` - `ContactPresence`
-  (`onCall` / `available` / `unavailable`) with `resolve(presenceInfo,
-  dialogInfo)`: the single answer built from BOTH signals - an established
-  dialog, or the `onThePhone` activity that Core publishes even when BLF is
-  off. Only the badge glyph reads it today; the colour still follows plain
-  reachability (see below).
 
 ## Data flow
 
@@ -92,26 +86,42 @@ face or the initials underneath. Consequences worth knowing:
   profile screen (`radius: 50`) keeps 16 dp before the name for exactly this.
 
 The legacy registration dot deliberately stays INSIDE the box: it carries no
-ring, so half of it on the row background would read as a partial dot.
+ring, so half of it on the row background would read as a partial dot. It
+carries a `Semantics` label of its own -
+`presence_badge_state_registered` / `_unregistered` - so the dot is spoken
+as well as drawn; with no registration data the badge renders nothing and
+says nothing.
 
 `SipPresenceIndicator` renders:
 
-- a colored disc - the color is BINARY: `presenceInfo.anyAvailable` picks
-  `availableColor`, otherwise `unavailableColor`. Activities and BLF state
-  do NOT change the color;
+- a colored disc - three colors: a `primaryActivity` of `busy` or
+  `doNotDisturb` picks `busyColor`, otherwise `presenceInfo.anyAvailable`
+  picks `availableColor` and everything else `unavailableColor`. Asking not
+  to be called outranks reachability - a contact on "do not disturb" IS
+  reachable, they just published something, and the point of the state is to
+  stop the call. Only a PUBLISHED activity reaches the color: BLF state does
+  not, nor does the `onThePhone` activity, because Core publishes that one
+  from the moment of dialling and it would paint people as busy over calls
+  nobody answered;
 - an optional activity glyph INSIDE the disc, in `iconColor`. Icon choice:
-  `ContactPresence.resolve` says `onCall` -> `phone_in_talk`, else the icon
-  for `presenceInfo.primaryActivity`. A dialog that is merely ringing does
-  NOT light it (it did until 2026-08-20, which showed contacts as talking
-  from the first ring); the `onThePhone` case of the activity switch is
-  unreachable for the same reason, and stays only because the switch is
-  exhaustive;
+  `dialogInfo.established != null` -> `phone_in_talk`, else the icon for
+  `presenceInfo.primaryActivity`. A dialog that is merely ringing does NOT
+  light it - `early` is the most common state in production, and an
+  unfiltered list showed contacts as talking from the first ring;
 - the ring around the disc (`Theme.scaffoldBackgroundColor`, which can
   mismatch on surfaces that are not the scaffold background) and the glyph
   are a SHARE of the mark - 0.1 and 0.55 of its side. They have to be:
   the same widget is rendered at a fixed 16x16 in the presence pickers
   (`presence_settings_screen.dart`, `presence_info_view.dart`), where a fixed
   ring plus a fixed glyph would leave the availability colour a sliver.
+
+`AvatarStatusBadge` wraps the mark in a `Semantics` label, so the state is
+spoken as well as drawn: an established call -> `presence_badge_state_onCall`,
+else the published `primaryActivity` in words (`PresenceActivity.l10n`),
+else `presence_badge_state_available` / `_unavailable`. The label follows the
+GLYPH, not the colour - an established call is spoken though it leaves the
+colour alone, and `busy` / `doNotDisturb` are spoken as their activity name
+rather than as a "busy" state of their own.
 
 The emoji `statusIcon` and the `note` never reach the badge - contact tiles
 append them to the title/subtitle text instead
@@ -131,7 +141,7 @@ The presence badge style flows through the standard theme pipeline:
 
 - theme JSONs `assets/themes/original.widget.{light,dark}.config.json` ->
   `presenceBadge` (`sizeFactor`, `availableColor`, `unavailableColor`,
-  `iconColor`) and
+  `busyColor`, `iconColor`) and
   `registeredBadge` (`sizeFactor`, `registeredColor`, `unregisteredColor`);
 - parsed by `PresenceBadgeStyleConfig` in
   `packages/webtrit_appearance_theme/lib/models/common/leading_avatar_style_config.dart`;

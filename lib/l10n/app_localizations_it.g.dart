@@ -1927,6 +1927,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get presence_activity_vacation_name => 'In vacanza';
 
   @override
+  String get presence_badge_state_available => 'Disponibile';
+
+  @override
+  String get presence_badge_state_onCall => 'In chiamata';
+
+  @override
+  String get presence_badge_state_registered => 'Registrato';
+
+  @override
+  String get presence_badge_state_unavailable => 'Non disponibile';
+
+  @override
+  String get presence_badge_state_unregistered => 'Non registrato';
+
+  @override
   String get presence_infoView_activity => 'Attività:';
 
   @override
