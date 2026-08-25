@@ -1,6 +1,6 @@
 # Localization
 
-Git is the single source of truth for translations. Last reviewed: 2026-08-20.
+Git is the single source of truth for translations. Last reviewed: 2026-08-25.
 
 The ARB files in `lib/l10n/arb/` (`app_en.arb` is the template; `app_uk.arb`, `app_it.arb`,
 `app_th.arb` are the locales) are edited directly in this repository and reviewed as normal code.
@@ -12,8 +12,28 @@ Two consumers read these files:
 
 - `flutter gen-l10n` + the `l10n_mapper_generator` build step produce the Dart localization
   classes used by the app;
-- the configurator backend fetches the raw ARB files from this repository (branch `main` by
-  default) to compose per-customer translation bundles with overrides applied.
+- the configurator backend fetches the raw ARB files from this repository over
+  `raw.githubusercontent.com` and merges its per-application overrides on top, composing the
+  white-label bundle each customer receives.
+
+### Which ref the backend reads
+
+The backend's defaults live in its own `src/config/environment.ts`, and no deployment overrides
+them:
+
+| Parameter | Default |
+|---|---|
+| `TRANSLATIONS_REPO` | `WebTrit/webtrit_phone` |
+| `TRANSLATIONS_REF` | `main` |
+| `TRANSLATIONS_LOCALES` | `en,uk,it,th` |
+
+**It reads `main`, while work here lands on `develop`.** A translation merged to `develop` is
+therefore not visible to the configurator until a release moves it to `main` - which is the
+intent, since the bundle a customer downloads should match the app version they run, but it
+means a translation fix does not reach anyone by being merged alone. At the time of writing
+`main` sits at release 1.16.3 and its ARB files differ from `develop` by roughly two thousand
+lines. To see a change on the configurator before a release, point `TRANSLATIONS_REF` at the
+branch deliberately; do not expect a `develop` merge to show up on its own.
 
 ## Table of Contents
 
@@ -93,8 +113,11 @@ Always run `melos run l10n:check` afterwards.
 
 1. Create `lib/l10n/arb/app_<locale>.arb` (ARB filename spelling: underscore for region
    subtags, e.g. `app_pt_BR.arb`) and translate all keys from `app_en.arb`.
-2. Add the locale to the configurator backend's `TRANSLATIONS_LOCALES` parameter so
-   white-label bundles include it.
+2. Add the locale to `TRANSLATIONS_LOCALES` in the configurator backend
+   (`src/config/environment.ts`) so white-label bundles include it. That default is a code
+   change in that repository, not a deployment setting, and the fetch is all-or-nothing: a
+   locale listed there whose ARB file is missing from the configured ref fails the whole
+   fetch. Land the ARB file on the ref the backend reads first.
 3. Regenerate (`melos run l10n:generate` + `dart run build_runner build`) and run
    `melos run l10n:check`.
 
