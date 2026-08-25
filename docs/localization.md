@@ -1,39 +1,74 @@
 # Localization
 
-Git is the single source of truth for translations. Last reviewed: 2026-08-25.
+Git is the source of truth for the keys the app can show; the configurator's translation catalog
+owns the text those keys resolve to for customers. Last reviewed: 2026-08-25.
 
 The ARB files in `lib/l10n/arb/` (`app_en.arb` is the template; `app_uk.arb`, `app_it.arb`,
 `app_th.arb` are the locales) are edited directly in this repository and reviewed as normal code.
-There is no external translation management system: new keys are translated in the same PR that
+No third-party translation service is involved: new keys are translated in the same PR that
 introduces them (AI-assisted, see the prompt below) and reviewed by a native speaker where
 available.
+
+What the app itself renders always comes from these files, compiled in. What a white-label
+customer receives is composed by the configurator from its catalog - see
+[How these files reach a customer](#how-these-files-reach-a-customer), because the two diverge
+in ways that surprise people.
 
 Two consumers read these files:
 
 - `flutter gen-l10n` + the `l10n_mapper_generator` build step produce the Dart localization
   classes used by the app;
-- the configurator backend fetches the raw ARB files from this repository over
-  `raw.githubusercontent.com` and merges its per-application overrides on top, composing the
-  white-label bundle each customer receives.
+- the configurator backend imports them into its global translation catalog, which is what
+  customer bundles are composed from.
 
-### Which ref the backend reads
+### How these files reach a customer
 
-The backend's defaults live in its own `src/config/environment.ts`, and no deployment overrides
-them:
+Since the global translation catalog landed in the configurator backend, this repository is no
+longer read when a bundle is composed. `composeArb` builds each bundle from the catalog plus the
+application's own overrides; the `ref` parameter it still accepts is deliberately ignored and
+logs a warning. The ARB files reach the catalog through one command, run by hand in the backend
+repository:
 
-| Parameter | Default |
+```sh
+npm run translations:sync                 # plan and apply
+npm run translations:sync -- --dry-run    # plan only, write nothing
+npm run translations:sync -- --verify     # apply, then prove the round trip
+```
+
+It reads `TRANSLATIONS_REPO` (default `WebTrit/webtrit_phone`) and `TRANSLATIONS_REF` (default
+`main`); `TRANSLATIONS_LOCALES` (default `en,uk,it,th`) picks the locales. All three are code
+defaults in the backend's `src/config/environment.ts`, no deployment overrides them, and nothing
+runs the sync on a schedule or from CI.
+
+Who owns what:
+
+| | Source of truth |
 |---|---|
-| `TRANSLATIONS_REPO` | `WebTrit/webtrit_phone` |
-| `TRANSLATIONS_REF` | `main` |
-| `TRANSLATIONS_LOCALES` | `en,uk,it,th` |
+| Keys and their gen-l10n metadata | the ARB files here |
+| Values, i.e. the translated text | the catalog |
+| Per-application wording | configurator overrides |
 
-**It reads `main`, while work here lands on `develop`.** A translation merged to `develop` is
-therefore not visible to the configurator until a release moves it to `main` - which is the
-intent, since the bundle a customer downloads should match the app version they run, but it
-means a translation fix does not reach anyone by being merged alone. At the time of writing
-`main` sits at release 1.16.3 and its ARB files differ from `develop` by roughly two thousand
-lines. To see a change on the configurator before a release, point `TRANSLATIONS_REF` at the
-branch deliberately; do not expect a `develop` merge to show up on its own.
+Two consequences are worth knowing before editing an ARB file:
+
+- **Changing an existing translation here does not change what customers receive.** Sync only
+  inserts values the catalog has never seen - it never updates or deletes one, so text reviewed
+  in the catalog survives any number of runs. Fix an existing string in the catalog. Fixing it
+  here as well keeps the two in step for the next fresh import, but only the catalog copy ships.
+- **New keys do flow through**, on the next sync run against a ref that carries them. On the
+  very first run into an empty catalog every value arrives `approved`, because those strings had
+  already shipped; after that a value coming from code is `approved` only for `en`, which a
+  developer wrote deliberately, and arrives `needs_review` in every other locale. A locale whose
+  ARB file lacks the key contributes no row at all - an untranslated value is an absent row, not
+  an empty one.
+
+Keys follow the code: a key the ARB files carry is `active`, one they stop carrying is `retired`,
+one created in the catalog before the code knows it is `pending`. Nothing is deleted.
+
+One timing trap: `TRANSLATIONS_REF` defaults to `main`, while work here lands on `develop`. A
+sync run today therefore imports the released set rather than what `develop` carries - at the
+time of writing `main` is at release 1.16.3 and its ARB files are about two thousand lines behind
+`develop`. Merging a translation here does not put it in front of anyone until both a release
+moves it to `main` and somebody runs the sync.
 
 ## Table of Contents
 
@@ -71,6 +106,11 @@ branch deliberately; do not expect a `develop` merge to show up on its own.
 4. Validate: `melos run l10n:check`.
 5. Commit everything together: the four ARB files and the regenerated
    `lib/l10n/app_localizations*` files.
+
+**Changing the wording of a key that already exists** is the case to be careful with. The steps
+above are right for the app itself, which compiles these files in. They do not reach white-label
+customers: the catalog already holds a value for that key and the sync will not overwrite it, so
+the old wording keeps shipping until it is changed in the catalog too. Reword in both places.
 
 Review expectations: Ukrainian is reviewed by the team; Italian and Thai are AI-translated and
 spot-checked. Per-customer wording changes do not belong here — they are configurator overrides.
@@ -114,10 +154,11 @@ Always run `melos run l10n:check` afterwards.
 1. Create `lib/l10n/arb/app_<locale>.arb` (ARB filename spelling: underscore for region
    subtags, e.g. `app_pt_BR.arb`) and translate all keys from `app_en.arb`.
 2. Add the locale to `TRANSLATIONS_LOCALES` in the configurator backend
-   (`src/config/environment.ts`) so white-label bundles include it. That default is a code
-   change in that repository, not a deployment setting, and the fetch is all-or-nothing: a
-   locale listed there whose ARB file is missing from the configured ref fails the whole
-   fetch. Land the ARB file on the ref the backend reads first.
+   (`src/config/environment.ts`) so the sync imports it and bundles include it. That is a code
+   change in that repository, not a deployment setting. The sync's fetch is all-or-nothing
+   (`Promise.all` over every configured locale), so a locale listed there whose ARB file is not
+   yet on the configured ref breaks the fetch for every locale - land the file first, then add
+   the locale, then sync.
 3. Regenerate (`melos run l10n:generate` + `dart run build_runner build`) and run
    `melos run l10n:check`.
 
