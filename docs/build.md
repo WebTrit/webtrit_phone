@@ -250,7 +250,7 @@ truth, read by [`fvm`](https://fvm.app) locally and by the `webtrit_phone_builde
 
 ```json
 {
-  "flutter": "3.44.0"
+  "flutter": "3.47.1"
 }
 ```
 

@@ -62,3 +62,6 @@ integration_test/patrol_test_bundle.dart
 
 # FVM SDK cache (managed by fvm; version pinned via .fvmrc)
 .fvm/
+
+# Kotlin build daemon session data (Kotlin 2.x)
+android/.kotlin/
