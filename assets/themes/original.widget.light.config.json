@@ -79,14 +79,14 @@
     "__leadingAvatarStyle": "Contact avatar and the status marks drawn on it. A key written here pins that value for this theme for good; a key left out follows the app and improves with it. The `_`-prefixed entries inside are disabled examples: they show what can be set and the value the app uses today - drop the underscore to take one over.",
     "leadingAvatarStyle": {
       "_radius": 20.0,
-      "_presenceBadge": {
+      "presenceBadge": {
         "availableColor": null,
         "unavailableColor": null,
         "busyColor": null,
         "iconColor": null,
         "sizeFactor": 0.4
       },
-      "_registeredBadge": {
+      "registeredBadge": {
         "registeredColor": null,
         "unregisteredColor": null,
         "sizeFactor": 0.4
