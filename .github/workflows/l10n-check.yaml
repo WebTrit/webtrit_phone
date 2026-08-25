@@ -18,9 +18,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Pinned, not `stable`: the checker verifies that the generated l10n sources
+      # are formatted at the project page width, and `dart format` output differs
+      # between SDK versions. This must be the Dart that ships with the Flutter
+      # version in .fvmrc (Flutter 3.44.0 -> Dart 3.12.0); the checker names the
+      # version it ran with when the check fails, so drift is self-explaining.
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: stable
+          sdk: 3.12.0
 
       - name: Validate ARB localization files
         run: dart tool/check_l10n.dart

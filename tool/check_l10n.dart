@@ -124,6 +124,8 @@ void _checkGeneratedFormatting(List<String> errors) {
 
   if (result.exitCode == 0) return;
 
+  final dartVersion = Platform.version.split(' ').first;
+
   // `--set-exit-if-changed` exits 1 for unformatted input; anything else is the
   // formatter itself failing, and its own message is more useful than ours.
   if (result.exitCode != 1) {
@@ -142,8 +144,10 @@ void _checkGeneratedFormatting(List<String> errors) {
 
   for (final path in changed.isEmpty ? generated : changed) {
     errors.add(
-      '$path: not formatted at $pageWidth columns - '
-      'run `dart format --line-length $pageWidth $generatedDir` after regenerating',
+      '$path: not formatted at $pageWidth columns by Dart $dartVersion - '
+      'run `dart format --line-length $pageWidth $generatedDir` after regenerating. '
+      'If that reformats files another SDK just formatted, the two SDKs disagree: '
+      'use the Dart that ships with the Flutter version in .fvmrc',
     );
   }
 }
