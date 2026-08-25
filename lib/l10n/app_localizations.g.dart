@@ -3469,24 +3469,6 @@ abstract class AppLocalizations {
   /// **'On vacation'**
   String get presence_activity_vacation_name;
 
-  /// No description provided for @presence_badge_state_available.
-  ///
-  /// In en, this message translates to:
-  /// **'Available'**
-  String get presence_badge_state_available;
-
-  /// No description provided for @presence_badge_state_onCall.
-  ///
-  /// In en, this message translates to:
-  /// **'On a call'**
-  String get presence_badge_state_onCall;
-
-  /// No description provided for @presence_badge_state_unavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Unavailable'**
-  String get presence_badge_state_unavailable;
-
   /// No description provided for @presence_infoView_activity.
   ///
   /// In en, this message translates to:

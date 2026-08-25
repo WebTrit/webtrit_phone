@@ -1935,15 +1935,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get presence_activity_vacation_name => 'У відпустці';
 
   @override
-  String get presence_badge_state_available => 'Доступний';
-
-  @override
-  String get presence_badge_state_onCall => 'У розмові';
-
-  @override
-  String get presence_badge_state_unavailable => 'Недоступний';
-
-  @override
   String get presence_infoView_activity => 'Активність:';
 
   @override
