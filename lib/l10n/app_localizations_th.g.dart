@@ -172,22 +172,22 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get callerId_SemanticsLabel_addMatch => 'Add a dial code match';
+  String get callerId_SemanticsLabel_addMatch => 'เพิ่มการจับคู่รหัสโทรศัพท์';
 
   @override
-  String get callerId_SemanticsLabel_matchNumber => 'Number to show for this dial code';
+  String get callerId_SemanticsLabel_matchNumber => 'หมายเลขที่จะแสดงสำหรับรหัสโทรศัพท์นี้';
 
   @override
-  String get callerId_SemanticsLabel_defaultNumber => 'Number to call from by default';
+  String get callerId_SemanticsLabel_defaultNumber => 'หมายเลขที่ใช้โทรออกโดยค่าเริ่มต้น';
 
   @override
   String callerId_SemanticsLabel_matchPrefix(String country) {
-    return 'Dial code to match, currently $country';
+    return 'รหัสโทรศัพท์ที่จะจับคู่ ปัจจุบันคือ $country';
   }
 
   @override
   String callerId_SemanticsLabel_removeMatch(String dialCode) {
-    return 'Remove the match for $dialCode';
+    return 'ลบการจับคู่สำหรับ $dialCode';
   }
 
   @override
@@ -2290,7 +2290,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'บัญชีของฉัน';
 
   @override
-  String get settings_SemanticsLabel_editAccount => 'Edit account details';
+  String get settings_SemanticsLabel_editAccount => 'แก้ไขรายละเอียดบัญชี';
 
   @override
   String get settings_audioProcessing_Section_AGC_title => 'ปรับระดับเสียงอัตโนมัติ';
@@ -3507,115 +3507,115 @@ class AppLocalizationsTh extends AppLocalizations {
   String get contacts_SemanticsLabel_closeSearch => 'ปิดการค้นหา';
 
   @override
-  String get messaging_SemanticsLabel_newChat => 'Start a new chat';
+  String get messaging_SemanticsLabel_newChat => 'เริ่มแชทใหม่';
 
   @override
-  String get messaging_SemanticsLabel_newSms => 'Write a new message';
+  String get messaging_SemanticsLabel_newSms => 'เขียนข้อความใหม่';
 
   @override
-  String get messaging_SemanticsLabel_call => 'Call';
+  String get messaging_SemanticsLabel_call => 'โทร';
 
   @override
-  String get messaging_SemanticsLabel_videoCall => 'Video call';
+  String get messaging_SemanticsLabel_videoCall => 'วิดีโอคอล';
 
   @override
-  String get messaging_SemanticsLabel_message => 'Message';
+  String get messaging_SemanticsLabel_message => 'ข้อความ';
 
   @override
-  String get messaging_SemanticsLabel_send => 'Send';
+  String get messaging_SemanticsLabel_send => 'ส่ง';
 
   @override
-  String get messaging_SemanticsLabel_conversationDetails => 'Conversation details';
+  String get messaging_SemanticsLabel_conversationDetails => 'รายละเอียดการสนทนา';
 
   @override
-  String get messaging_SemanticsLabel_conversationOptions => 'Conversation options';
+  String get messaging_SemanticsLabel_conversationOptions => 'ตัวเลือกการสนทนา';
 
   @override
-  String get messaging_SemanticsLabel_replying => 'Replying to';
+  String get messaging_SemanticsLabel_replying => 'กำลังตอบกลับ';
 
   @override
-  String get messaging_SemanticsLabel_editing => 'Editing';
+  String get messaging_SemanticsLabel_editing => 'กำลังแก้ไข';
 
   @override
-  String get messaging_SemanticsLabel_forwarding => 'Forwarding';
+  String get messaging_SemanticsLabel_forwarding => 'กำลังส่งต่อ';
 
   @override
-  String get messaging_SemanticsLabel_stopReplying => 'Stop replying';
+  String get messaging_SemanticsLabel_stopReplying => 'ยกเลิกการตอบกลับ';
 
   @override
-  String get messaging_SemanticsLabel_stopEditing => 'Stop editing';
+  String get messaging_SemanticsLabel_stopEditing => 'ยกเลิกการแก้ไข';
 
   @override
-  String get messaging_SemanticsLabel_stopForwarding => 'Stop forwarding';
+  String get messaging_SemanticsLabel_stopForwarding => 'ยกเลิกการส่งต่อ';
 
   @override
-  String get messaging_SemanticsLabel_sendForward => 'Forward the message';
+  String get messaging_SemanticsLabel_sendForward => 'ส่งต่อข้อความ';
 
   @override
   String callPull_SemanticsLabel_badge(String name) {
-    return 'Take over the call with $name';
+    return 'รับช่วงสายกับ $name';
   }
 
   @override
   String callPull_SemanticsLabel_badgeSeveral(int count) {
-    return 'Take over one of $count calls';
+    return 'รับช่วงหนึ่งใน $count สาย';
   }
 
   @override
   String callPull_SemanticsLabel_pickup(String name) {
-    return 'Pick up the call with $name';
+    return 'รับสายกับ $name';
   }
 
   @override
-  String get diagnosticNetworkTest_SemanticsLabel_refresh => 'Run the network test again';
+  String get diagnosticNetworkTest_SemanticsLabel_refresh => 'เรียกใช้การทดสอบเครือข่ายอีกครั้ง';
 
   @override
-  String get presence_settings_statusIcon_searchHint => 'Search icons';
+  String get presence_settings_statusIcon_searchHint => 'ค้นหาไอคอน';
 
   @override
   String presenceSettings_SemanticsLabel_optionInfo(String option) {
-    return 'What $option means';
+    return 'ความหมายของ $option';
   }
 
   @override
-  String get presenceSettings_SemanticsLabel_preset => 'Status preset';
+  String get presenceSettings_SemanticsLabel_preset => 'สถานะสำเร็จรูป';
 
   @override
-  String get presenceSettings_SemanticsLabel_pickStatusIcon => 'Choose a status icon';
+  String get presenceSettings_SemanticsLabel_pickStatusIcon => 'เลือกไอคอนสถานะ';
 
   @override
-  String get presenceSettings_SemanticsLabel_clearStatusIcon => 'Remove the status icon';
+  String get presenceSettings_SemanticsLabel_clearStatusIcon => 'ลบไอคอนสถานะ';
 
   @override
-  String get presenceSettings_SemanticsLabel_searchIcons => 'Search icons';
+  String get presenceSettings_SemanticsLabel_searchIcons => 'ค้นหาไอคอน';
 
   @override
-  String get presenceSettings_SemanticsLabel_stopSearchingIcons => 'Stop searching icons';
+  String get presenceSettings_SemanticsLabel_stopSearchingIcons => 'หยุดค้นหาไอคอน';
 
   @override
-  String get presenceSettings_SemanticsLabel_iconCategoryRecent => 'Recently used';
+  String get presenceSettings_SemanticsLabel_iconCategoryRecent => 'ใช้ล่าสุด';
 
   @override
-  String get presenceSettings_SemanticsLabel_iconCategorySmileys => 'Smileys and people';
+  String get presenceSettings_SemanticsLabel_iconCategorySmileys => 'หน้ายิ้มและผู้คน';
 
   @override
-  String get presenceSettings_SemanticsLabel_iconCategoryAnimals => 'Animals and nature';
+  String get presenceSettings_SemanticsLabel_iconCategoryAnimals => 'สัตว์และธรรมชาติ';
 
   @override
-  String get presenceSettings_SemanticsLabel_iconCategoryFoods => 'Food and drink';
+  String get presenceSettings_SemanticsLabel_iconCategoryFoods => 'อาหารและเครื่องดื่ม';
 
   @override
-  String get presenceSettings_SemanticsLabel_iconCategoryActivities => 'Activities';
+  String get presenceSettings_SemanticsLabel_iconCategoryActivities => 'กิจกรรม';
 
   @override
-  String get presenceSettings_SemanticsLabel_iconCategoryTravel => 'Travel and places';
+  String get presenceSettings_SemanticsLabel_iconCategoryTravel => 'การเดินทางและสถานที่';
 
   @override
-  String get presenceSettings_SemanticsLabel_iconCategoryObjects => 'Objects';
+  String get presenceSettings_SemanticsLabel_iconCategoryObjects => 'สิ่งของ';
 
   @override
-  String get presenceSettings_SemanticsLabel_iconCategorySymbols => 'Symbols';
+  String get presenceSettings_SemanticsLabel_iconCategorySymbols => 'สัญลักษณ์';
 
   @override
-  String get presenceSettings_SemanticsLabel_iconCategoryFlags => 'Flags';
+  String get presenceSettings_SemanticsLabel_iconCategoryFlags => 'ธง';
 }

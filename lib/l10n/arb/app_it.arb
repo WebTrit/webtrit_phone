@@ -133,19 +133,19 @@
       }
     }
   },
-  "callerId_SemanticsLabel_addMatch": "Add a dial code match",
+  "callerId_SemanticsLabel_addMatch": "Aggiungi una corrispondenza di prefisso",
   "@callerId_SemanticsLabel_addMatch": {
     "description": "Accessibility name of the button that opens the form for a new dial code match on the caller ID screen."
   },
-  "callerId_SemanticsLabel_matchNumber": "Number to show for this dial code",
+  "callerId_SemanticsLabel_matchNumber": "Numero da mostrare per questo prefisso",
   "@callerId_SemanticsLabel_matchNumber": {
     "description": "Accessibility name of the number chooser in the form that adds a dial code rule; its hint disappears once a number is picked."
   },
-  "callerId_SemanticsLabel_defaultNumber": "Number to call from by default",
+  "callerId_SemanticsLabel_defaultNumber": "Numero predefinito da cui chiamare",
   "@callerId_SemanticsLabel_defaultNumber": {
     "description": "Accessibility name of the chooser of the number outgoing calls show; the caption beside it is a node of its own."
   },
-  "callerId_SemanticsLabel_matchPrefix": "Dial code to match, currently {country}",
+  "callerId_SemanticsLabel_matchPrefix": "Prefisso da abbinare, attualmente {country}",
   "@callerId_SemanticsLabel_matchPrefix": {
     "description": "Accessibility name of the country chooser in the form that adds a dial code rule; on its own it announces only the dial code, never which country was picked.",
     "placeholders": {
@@ -154,7 +154,7 @@
       }
     }
   },
-  "callerId_SemanticsLabel_removeMatch": "Remove the match for {dialCode}",
+  "callerId_SemanticsLabel_removeMatch": "Rimuovi la corrispondenza per {dialCode}",
   "@callerId_SemanticsLabel_removeMatch": {
     "description": "Accessibility name of the button that deletes one dial code match on the caller ID screen.",
     "placeholders": {
@@ -452,15 +452,15 @@
   "@contacts_ContactsScreen_searchSemanticsLabel": {},
   "contacts_ContactsScreen_sourceSemanticsLabel": "Origine dei contatti",
   "@contacts_ContactsScreen_sourceSemanticsLabel": {},
-  "contacts_agreement_button_text": "Continue",
+  "contacts_agreement_button_text": "Continua",
   "@contacts_agreement_button_text": {},
-  "contacts_agreement_checkbox_text": "I agree to allow the app to access my contacts to enhance my user experience.",
+  "contacts_agreement_checkbox_text": "Accetto di consentire all'app di accedere ai miei contatti per migliorare la mia esperienza d'uso.",
   "@contacts_agreement_checkbox_text": {},
-  "contacts_agreement_description": "This app requires access to your contact list to display your contacts in the app's Contacts tab. \n\nThe contact data is temporarily stored locally on your device to enable features like making calls directly from the app. \n\nThis data is not collected, transmitted, or shared outside the app.",
+  "contacts_agreement_description": "Questa app richiede l'accesso alla tua rubrica per mostrare i tuoi contatti nella scheda Contatti dell'app. \n\nI dati dei contatti vengono memorizzati temporaneamente sul tuo dispositivo per abilitare funzioni come le chiamate direttamente dall'app. \n\nQuesti dati non vengono raccolti, trasmessi né condivisi al di fuori dell'app.",
   "@contacts_agreement_description": {},
-  "contacts_agreement_title": "Data collection",
+  "contacts_agreement_title": "Raccolta dati",
   "@contacts_agreement_title": {},
-  "contacts_ExternalTabButton_refresh": "Refresh",
+  "contacts_ExternalTabButton_refresh": "Aggiorna",
   "@contacts_ExternalTabButton_refresh": {},
   "contacts_ExternalTabText_empty": "Nessun contatto",
   "@contacts_ExternalTabText_empty": {},
@@ -472,9 +472,9 @@
   },
   "contacts_LocalTabButton_contactsAgreement": "Apri Impostazioni",
   "@contacts_LocalTabButton_contactsAgreement": {},
-  "contacts_LocalTabButton_openAppSettings": "Grant access to your phone contacts",
+  "contacts_LocalTabButton_openAppSettings": "Consenti l'accesso ai contatti del telefono",
   "@contacts_LocalTabButton_openAppSettings": {},
-  "contacts_LocalTabButton_refresh": "Refresh",
+  "contacts_LocalTabButton_refresh": "Aggiorna",
   "@contacts_LocalTabButton_refresh": {},
   "contacts_LocalTabText_contactsAgreementFailure": "Per sincronizzare i contatti locali, è necessario accettare l'accordo nelle Impostazioni.",
   "@contacts_LocalTabText_contactsAgreementFailure": {},
@@ -546,7 +546,7 @@
   "@default_ErrorMessage": {
     "description": "Label or heading for displaying a generic error message in dialogs, alerts, or error screens."
   },
-  "default_ErrorPath": "Error path",
+  "default_ErrorPath": "Percorso di errore",
   "@default_ErrorPath": {
     "description": "Label for displaying the path associated with an error in error dialogs or screens."
   },
@@ -1147,7 +1147,7 @@
   },
   "logRecordsConsole_AppBarTitle": "Console dei log",
   "@logRecordsConsole_AppBarTitle": {},
-  "logRecordsConsole_Button_failureRefresh": "Refresh",
+  "logRecordsConsole_Button_failureRefresh": "Aggiorna",
   "@logRecordsConsole_Button_failureRefresh": {},
   "logRecordsConsole_Text_failure": "Si è verificato un errore imprevisto",
   "@logRecordsConsole_Text_failure": {
@@ -1608,17 +1608,17 @@
   "@permission_Button_request": {},
   "permission_fullScreenNotification_Text_optional": "Puoi continuare senza. Le chiamate in arrivo arriveranno come notifica invece di aprirsi a schermo intero e, se il telefono e protetto da PIN, sequenza o impronta, dovrai sbloccarlo per rispondere dalla schermata di blocco.",
   "@permission_fullScreenNotification_Text_optional": {},
-  "permission_manageFullScreenNotificationInstructions_step1": "Go to your phone's Settings.",
+  "permission_manageFullScreenNotificationInstructions_step1": "Vai alle Impostazioni del telefono.",
   "@permission_manageFullScreenNotificationInstructions_step1": {},
-  "permission_manageFullScreenNotificationInstructions_step2": "Navigate to 'Special App Access' under the 'Apps & notifications' section.",
+  "permission_manageFullScreenNotificationInstructions_step2": "Vai ad 'Accesso speciale alle app' nella sezione 'App e notifiche'.",
   "@permission_manageFullScreenNotificationInstructions_step2": {},
-  "permission_manageFullScreenNotificationInstructions_step3": "Find and tap on 'Manage full screen intents'.",
+  "permission_manageFullScreenNotificationInstructions_step3": "Trova e tocca 'Gestisci intent a schermo intero'.",
   "@permission_manageFullScreenNotificationInstructions_step3": {},
-  "permission_manageFullScreenNotificationInstructions_step4": "Select the app for which you want to manage full-screen notifications.",
+  "permission_manageFullScreenNotificationInstructions_step4": "Seleziona l'app per cui vuoi gestire le notifiche a schermo intero.",
   "@permission_manageFullScreenNotificationInstructions_step4": {},
-  "permission_manageFullScreenNotificationInstructions_step5": "Toggle the permission to enable or disable full-screen notifications for that app.",
+  "permission_manageFullScreenNotificationInstructions_step5": "Attiva o disattiva il permesso per le notifiche a schermo intero di quell'app.",
   "@permission_manageFullScreenNotificationInstructions_step5": {},
-  "permission_manageFullScreenNotificationPermissions": "Manage Full-Screen Notification Permissions",
+  "permission_manageFullScreenNotificationPermissions": "Gestisci i permessi delle notifiche a schermo intero",
   "@permission_manageFullScreenNotificationPermissions": {},
   "permission_manufacturer_Button_gotIt": "Capito",
   "@permission_manufacturer_Button_gotIt": {},
@@ -1983,7 +1983,7 @@
   "@settings_AccountDeleteNotSupported_message": {},
   "settings_AppBarTitle_myAccount": "Il mio account",
   "@settings_AppBarTitle_myAccount": {},
-  "settings_SemanticsLabel_editAccount": "Edit account details",
+  "settings_SemanticsLabel_editAccount": "Modifica i dettagli dell'account",
   "@settings_SemanticsLabel_editAccount": {
     "description": "Accessibility name of the pencil button next to the account details on the settings screen."
   },
@@ -2015,21 +2015,21 @@
   "@settings_call_codecs_preferred_video_tip": {},
   "settings_call_codecs_preferred_video_title": "Codec video preferito",
   "@settings_call_codecs_preferred_video_title": {},
-  "settings_callerId_cancel_button": "Cancel",
+  "settings_callerId_cancel_button": "Annulla",
   "@settings_callerId_cancel_button": {},
-  "settings_callerId_defaultTitle": "Default Caller ID",
+  "settings_callerId_defaultTitle": "ID chiamante predefinito",
   "@settings_callerId_defaultTitle": {},
-  "settings_callerId_dialcode": "Dial code:",
+  "settings_callerId_dialcode": "Prefisso:",
   "@settings_callerId_dialcode": {},
-  "settings_callerId_dialCodeMatching_title": "Dial code matching",
+  "settings_callerId_dialCodeMatching_title": "Corrispondenza prefissi",
   "@settings_callerId_dialCodeMatching_title": {},
-  "settings_callerId_duplicate_dialcode_error": "Please choose a different dial code, this one is already in use.",
+  "settings_callerId_duplicate_dialcode_error": "Scegli un prefisso diverso: questo è già in uso.",
   "@settings_callerId_duplicate_dialcode_error": {},
-  "settings_callerId_number": "Number:",
+  "settings_callerId_number": "Numero:",
   "@settings_callerId_number": {},
-  "settings_callerId_number_hint": "Select a number",
+  "settings_callerId_number_hint": "Seleziona un numero",
   "@settings_callerId_number_hint": {},
-  "settings_callerId_save_button": "Save",
+  "settings_callerId_save_button": "Salva",
   "@settings_callerId_save_button": {},
   "settings_connectionSection_title": "Comportamento della connessione e delle chiamate",
   "@settings_connectionSection_title": {},
@@ -2253,7 +2253,7 @@
   "@settings_ListViewTileTitle_termsConditions": {},
   "settings_ListViewTileTitle_themeMode": "Modalità tema",
   "@settings_ListViewTileTitle_themeMode": {},
-  "settings_ListViewTileTitle_toolbox": "TOOLBOX",
+  "settings_ListViewTileTitle_toolbox": "STRUMENTI",
   "@settings_ListViewTileTitle_toolbox": {},
   "settings_ListViewTileTitle_voicemail": "Segreteria telefonica",
   "@settings_ListViewTileTitle_voicemail": {},
@@ -2657,15 +2657,15 @@
   "@voicemail_Title_notSupported": {},
   "voicemail_Widget_screenTitle": "Segreteria telefonica",
   "@voicemail_Widget_screenTitle": {},
-  "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",
+  "webRegistration_ErrorAcknowledgeDialogActions_retry": "Riprova",
   "@webRegistration_ErrorAcknowledgeDialogActions_retry": {
     "description": "Button label shown in the Web Registration error dialog to let the user attempt the registration or loading process again after a failure."
   },
-  "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
+  "webRegistration_ErrorAcknowledgeDialogActions_skip": "Salta",
   "@webRegistration_ErrorAcknowledgeDialogActions_skip": {
     "description": "Button label shown in the Web Registration error dialog to let the user skip the failed step and continue without retrying."
   },
-  "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
+  "webRegistration_ErrorAcknowledgeDialog_title": "Errore risorsa web",
   "@webRegistration_ErrorAcknowledgeDialog_title": {
     "description": "Title of the dialog shown when an error occurs while loading or registering with a required web resource (e.g. invalid link, unreachable server, or failed provisioning)."
   },
@@ -2807,6 +2807,20 @@
   "cdr_disconnectReason_nextNodeIsUnreachable": "Nodo successivo irraggiungibile",
   "cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService": "Modulo fornitore servizio telefonico Holst (HTSPM) fuori servizio",
   "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "Il transito DTL non corrisponde al mio ID nodo",
+  "devTools_AppBarTitle": "Strumenti sviluppatore",
+  "@devTools_AppBarTitle": {},
+  "devTools_signalingService_groupTitle": "Servizio di segnalazione",
+  "@devTools_signalingService_groupTitle": {},
+  "devTools_signalingService_simulateKill_title": "Simula arresto del servizio",
+  "@devTools_signalingService_simulateKill_title": {},
+  "devTools_signalingService_simulateKill_subtitle": "Arresta il servizio in primo piano senza disconnessione controllata",
+  "@devTools_signalingService_simulateKill_subtitle": {},
+  "devTools_signalingService_simulateKill_confirmMessage": "Il servizio di segnalazione verrà arrestato immediatamente. Si riavvierà automaticamente se le credenziali sono valide.",
+  "@devTools_signalingService_simulateKill_confirmMessage": {},
+  "devTools_signalingService_simulateKill_confirm": "Arresta",
+  "@devTools_signalingService_simulateKill_confirm": {},
+  "devTools_signalingService_simulateKill_cancel": "Annulla",
+  "@devTools_signalingService_simulateKill_cancel": {},
   "common_SemanticsLabel_refresh": "Aggiorna",
   "@common_SemanticsLabel_refresh": {
     "description": "Accessibility name of a button that reloads the content of the screen."
@@ -2852,67 +2866,67 @@
   },
   "contacts_SemanticsLabel_closeSearch": "Chiudi ricerca",
   "@contacts_SemanticsLabel_closeSearch": {},
-  "messaging_SemanticsLabel_newChat": "Start a new chat",
+  "messaging_SemanticsLabel_newChat": "Avvia una nuova chat",
   "@messaging_SemanticsLabel_newChat": {
     "description": "Accessibility name of the button that starts a new chat conversation."
   },
-  "messaging_SemanticsLabel_newSms": "Write a new message",
+  "messaging_SemanticsLabel_newSms": "Scrivi un nuovo messaggio",
   "@messaging_SemanticsLabel_newSms": {
     "description": "Accessibility name of the button that starts a new SMS conversation."
   },
-  "messaging_SemanticsLabel_call": "Call",
+  "messaging_SemanticsLabel_call": "Chiama",
   "@messaging_SemanticsLabel_call": {
     "description": "Accessibility name of the button that calls the person the chat is with."
   },
-  "messaging_SemanticsLabel_videoCall": "Video call",
+  "messaging_SemanticsLabel_videoCall": "Videochiamata",
   "@messaging_SemanticsLabel_videoCall": {
     "description": "Accessibility name of the button that starts a video call with the person the chat is with."
   },
-  "messaging_SemanticsLabel_message": "Message",
+  "messaging_SemanticsLabel_message": "Messaggio",
   "@messaging_SemanticsLabel_message": {
     "description": "Accessibility name of the field a message is written in; the hint disappears as soon as something is typed."
   },
-  "messaging_SemanticsLabel_send": "Send",
+  "messaging_SemanticsLabel_send": "Invia",
   "@messaging_SemanticsLabel_send": {
     "description": "Accessibility name of the arrow that sends the written message."
   },
-  "messaging_SemanticsLabel_conversationDetails": "Conversation details",
+  "messaging_SemanticsLabel_conversationDetails": "Dettagli della conversazione",
   "@messaging_SemanticsLabel_conversationDetails": {
     "description": "Accessibility name of the button that opens who the chat is with, or the members of a group."
   },
-  "messaging_SemanticsLabel_conversationOptions": "Conversation options",
+  "messaging_SemanticsLabel_conversationOptions": "Opzioni della conversazione",
   "@messaging_SemanticsLabel_conversationOptions": {
     "description": "Accessibility name of the button that opens what can be done with a text conversation."
   },
-  "messaging_SemanticsLabel_replying": "Replying to",
+  "messaging_SemanticsLabel_replying": "In risposta a",
   "@messaging_SemanticsLabel_replying": {
     "description": "Read before the quoted message in the bar above the field, when a reply is being written."
   },
-  "messaging_SemanticsLabel_editing": "Editing",
+  "messaging_SemanticsLabel_editing": "Modifica in corso",
   "@messaging_SemanticsLabel_editing": {
     "description": "Read before the quoted message in the bar above the field, when a sent message is being changed."
   },
-  "messaging_SemanticsLabel_forwarding": "Forwarding",
+  "messaging_SemanticsLabel_forwarding": "Inoltro in corso",
   "@messaging_SemanticsLabel_forwarding": {
     "description": "Read before the quoted message in the bar above the field, when a message is being passed on to someone else."
   },
-  "messaging_SemanticsLabel_stopReplying": "Stop replying",
+  "messaging_SemanticsLabel_stopReplying": "Annulla la risposta",
   "@messaging_SemanticsLabel_stopReplying": {
     "description": "Accessibility name of the cross that drops the message being replied to."
   },
-  "messaging_SemanticsLabel_stopEditing": "Stop editing",
+  "messaging_SemanticsLabel_stopEditing": "Annulla la modifica",
   "@messaging_SemanticsLabel_stopEditing": {
     "description": "Accessibility name of the cross that leaves a sent message as it was."
   },
-  "messaging_SemanticsLabel_stopForwarding": "Stop forwarding",
+  "messaging_SemanticsLabel_stopForwarding": "Annulla l'inoltro",
   "@messaging_SemanticsLabel_stopForwarding": {
     "description": "Accessibility name of the cross that drops the message being passed on."
   },
-  "messaging_SemanticsLabel_sendForward": "Forward the message",
+  "messaging_SemanticsLabel_sendForward": "Inoltra il messaggio",
   "@messaging_SemanticsLabel_sendForward": {
     "description": "Accessibility name of the tick that passes the message on to this conversation."
   },
-  "callPull_SemanticsLabel_badge": "Take over the call with {name}",
+  "callPull_SemanticsLabel_badge": "Prendi in carico la chiamata con {name}",
   "@callPull_SemanticsLabel_badge": {
     "description": "Accessibility name of the badge in the top bar that opens the list of calls in progress elsewhere, when there is one such call.",
     "placeholders": {
@@ -2921,7 +2935,7 @@
       }
     }
   },
-  "callPull_SemanticsLabel_badgeSeveral": "Take over one of {count} calls",
+  "callPull_SemanticsLabel_badgeSeveral": "Prendi in carico una delle {count} chiamate",
   "@callPull_SemanticsLabel_badgeSeveral": {
     "description": "Accessibility name of the same badge when several calls are in progress elsewhere.",
     "placeholders": {
@@ -2930,7 +2944,7 @@
       }
     }
   },
-  "callPull_SemanticsLabel_pickup": "Pick up the call with {name}",
+  "callPull_SemanticsLabel_pickup": "Rispondi alla chiamata con {name}",
   "@callPull_SemanticsLabel_pickup": {
     "description": "Accessibility name of the button that takes over one call from the list; the name keeps the rows apart.",
     "placeholders": {
@@ -2939,15 +2953,15 @@
       }
     }
   },
-  "diagnosticNetworkTest_SemanticsLabel_refresh": "Run the network test again",
+  "diagnosticNetworkTest_SemanticsLabel_refresh": "Esegui di nuovo il test di rete",
   "@diagnosticNetworkTest_SemanticsLabel_refresh": {
     "description": "Accessibility name of the button that repeats the network check on the diagnostics screen."
   },
-  "presence_settings_statusIcon_searchHint": "Search icons",
+  "presence_settings_statusIcon_searchHint": "Cerca icone",
   "@presence_settings_statusIcon_searchHint": {
     "description": "Hint of the field that searches the icons in the status icon picker."
   },
-  "presenceSettings_SemanticsLabel_optionInfo": "What {option} means",
+  "presenceSettings_SemanticsLabel_optionInfo": "Cosa significa {option}",
   "@presenceSettings_SemanticsLabel_optionInfo": {
     "description": "Accessibility name of the button that explains one option of the presence status.",
     "placeholders": {
@@ -2956,59 +2970,59 @@
       }
     }
   },
-  "presenceSettings_SemanticsLabel_preset": "Status preset",
+  "presenceSettings_SemanticsLabel_preset": "Preimpostazione dello stato",
   "@presenceSettings_SemanticsLabel_preset": {
     "description": "Accessibility name of the control that picks a ready-made presence status."
   },
-  "presenceSettings_SemanticsLabel_pickStatusIcon": "Choose a status icon",
+  "presenceSettings_SemanticsLabel_pickStatusIcon": "Scegli un'icona di stato",
   "@presenceSettings_SemanticsLabel_pickStatusIcon": {
     "description": "Accessibility name of the button that opens the icon picker of the presence status."
   },
-  "presenceSettings_SemanticsLabel_clearStatusIcon": "Remove the status icon",
+  "presenceSettings_SemanticsLabel_clearStatusIcon": "Rimuovi l'icona di stato",
   "@presenceSettings_SemanticsLabel_clearStatusIcon": {
     "description": "Accessibility name of the button that takes the icon off the presence status."
   },
-  "presenceSettings_SemanticsLabel_searchIcons": "Search icons",
+  "presenceSettings_SemanticsLabel_searchIcons": "Cerca icone",
   "@presenceSettings_SemanticsLabel_searchIcons": {
     "description": "Accessibility name of the button that opens the search of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_stopSearchingIcons": "Stop searching icons",
+  "presenceSettings_SemanticsLabel_stopSearchingIcons": "Interrompi la ricerca delle icone",
   "@presenceSettings_SemanticsLabel_stopSearchingIcons": {
     "description": "Accessibility name of the button that leaves the search of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryRecent": "Recently used",
+  "presenceSettings_SemanticsLabel_iconCategoryRecent": "Usate di recente",
   "@presenceSettings_SemanticsLabel_iconCategoryRecent": {
     "description": "Accessibility name of the recently used category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategorySmileys": "Smileys and people",
+  "presenceSettings_SemanticsLabel_iconCategorySmileys": "Faccine e persone",
   "@presenceSettings_SemanticsLabel_iconCategorySmileys": {
     "description": "Accessibility name of the smileys category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryAnimals": "Animals and nature",
+  "presenceSettings_SemanticsLabel_iconCategoryAnimals": "Animali e natura",
   "@presenceSettings_SemanticsLabel_iconCategoryAnimals": {
     "description": "Accessibility name of the animals category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryFoods": "Food and drink",
+  "presenceSettings_SemanticsLabel_iconCategoryFoods": "Cibo e bevande",
   "@presenceSettings_SemanticsLabel_iconCategoryFoods": {
     "description": "Accessibility name of the food category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryActivities": "Activities",
+  "presenceSettings_SemanticsLabel_iconCategoryActivities": "Attività",
   "@presenceSettings_SemanticsLabel_iconCategoryActivities": {
     "description": "Accessibility name of the activities category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryTravel": "Travel and places",
+  "presenceSettings_SemanticsLabel_iconCategoryTravel": "Viaggi e luoghi",
   "@presenceSettings_SemanticsLabel_iconCategoryTravel": {
     "description": "Accessibility name of the travel category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryObjects": "Objects",
+  "presenceSettings_SemanticsLabel_iconCategoryObjects": "Oggetti",
   "@presenceSettings_SemanticsLabel_iconCategoryObjects": {
     "description": "Accessibility name of the objects category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategorySymbols": "Symbols",
+  "presenceSettings_SemanticsLabel_iconCategorySymbols": "Simboli",
   "@presenceSettings_SemanticsLabel_iconCategorySymbols": {
     "description": "Accessibility name of the symbols category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryFlags": "Flags",
+  "presenceSettings_SemanticsLabel_iconCategoryFlags": "Bandiere",
   "@presenceSettings_SemanticsLabel_iconCategoryFlags": {
     "description": "Accessibility name of the flags category of the icon picker."
   }

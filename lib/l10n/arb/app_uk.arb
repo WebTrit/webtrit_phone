@@ -35,7 +35,7 @@
       }
     }
   },
-  "agoTicker_secondsAgo": "{seconds, plural, zero{} one{{seconds} секунду тому} few{{seconds} секунди тому} many{{seconds} секунд тому} other{{seconds} секунд тому}}",
+  "agoTicker_secondsAgo": "{seconds, plural, zero{Щойно} one{{seconds} секунду тому} few{{seconds} секунди тому} many{{seconds} секунд тому} other{{seconds} секунд тому}}",
   "@agoTicker_secondsAgo": {
     "description": "Elapsed time relative to now, shown in seconds.",
     "placeholders": {
@@ -133,19 +133,19 @@
       }
     }
   },
-  "callerId_SemanticsLabel_addMatch": "Add a dial code match",
+  "callerId_SemanticsLabel_addMatch": "Додати відповідність телефонного коду",
   "@callerId_SemanticsLabel_addMatch": {
     "description": "Accessibility name of the button that opens the form for a new dial code match on the caller ID screen."
   },
-  "callerId_SemanticsLabel_matchNumber": "Number to show for this dial code",
+  "callerId_SemanticsLabel_matchNumber": "Номер, який показувати для цього телефонного коду",
   "@callerId_SemanticsLabel_matchNumber": {
     "description": "Accessibility name of the number chooser in the form that adds a dial code rule; its hint disappears once a number is picked."
   },
-  "callerId_SemanticsLabel_defaultNumber": "Number to call from by default",
+  "callerId_SemanticsLabel_defaultNumber": "Номер, з якого телефонувати за замовчуванням",
   "@callerId_SemanticsLabel_defaultNumber": {
     "description": "Accessibility name of the chooser of the number outgoing calls show; the caption beside it is a node of its own."
   },
-  "callerId_SemanticsLabel_matchPrefix": "Dial code to match, currently {country}",
+  "callerId_SemanticsLabel_matchPrefix": "Телефонний код для відповідності, зараз {country}",
   "@callerId_SemanticsLabel_matchPrefix": {
     "description": "Accessibility name of the country chooser in the form that adds a dial code rule; on its own it announces only the dial code, never which country was picked.",
     "placeholders": {
@@ -154,7 +154,7 @@
       }
     }
   },
-  "callerId_SemanticsLabel_removeMatch": "Remove the match for {dialCode}",
+  "callerId_SemanticsLabel_removeMatch": "Видалити відповідність для {dialCode}",
   "@callerId_SemanticsLabel_removeMatch": {
     "description": "Accessibility name of the button that deletes one dial code match on the caller ID screen.",
     "placeholders": {
@@ -1608,7 +1608,7 @@
   "@permission_Button_request": {},
   "permission_fullScreenNotification_Text_optional": "Можна продовжити без цього. Вхідні дзвінки приходитимуть сповіщенням, а не на весь екран, і якщо телефон захищено PIN-кодом, графічним ключем або відбитком, для відповіді з заблокованого екрана його доведеться спершу розблокувати.",
   "@permission_fullScreenNotification_Text_optional": {},
-  "permission_manageFullScreenNotificationInstructions_step1": "Go to your phone's Settings.",
+  "permission_manageFullScreenNotificationInstructions_step1": "Відкрийте налаштування телефону.",
   "@permission_manageFullScreenNotificationInstructions_step1": {},
   "permission_manageFullScreenNotificationInstructions_step2": "Перейдіть у «Спеціальний доступ додатків» у розділі «Додатки та сповіщення».",
   "@permission_manageFullScreenNotificationInstructions_step2": {},
@@ -1618,7 +1618,7 @@
   "@permission_manageFullScreenNotificationInstructions_step4": {},
   "permission_manageFullScreenNotificationInstructions_step5": "Увімкніть або вимкніть дозвіл для повноекранних сповіщень цього застосунку.",
   "@permission_manageFullScreenNotificationInstructions_step5": {},
-  "permission_manageFullScreenNotificationPermissions": "Manage Full-Screen Notification Permissions",
+  "permission_manageFullScreenNotificationPermissions": "Керування дозволами повноекранних сповіщень",
   "@permission_manageFullScreenNotificationPermissions": {},
   "permission_manufacturer_Button_gotIt": "Зрозуміло",
   "@permission_manufacturer_Button_gotIt": {},
@@ -1983,7 +1983,7 @@
   "@settings_AccountDeleteNotSupported_message": {},
   "settings_AppBarTitle_myAccount": "Мій обліковий запис",
   "@settings_AppBarTitle_myAccount": {},
-  "settings_SemanticsLabel_editAccount": "Edit account details",
+  "settings_SemanticsLabel_editAccount": "Редагувати дані облікового запису",
   "@settings_SemanticsLabel_editAccount": {
     "description": "Accessibility name of the pencil button next to the account details on the settings screen."
   },
@@ -2015,21 +2015,21 @@
   "@settings_call_codecs_preferred_video_tip": {},
   "settings_call_codecs_preferred_video_title": "Бажаний відеокодек",
   "@settings_call_codecs_preferred_video_title": {},
-  "settings_callerId_cancel_button": "Cancel",
+  "settings_callerId_cancel_button": "Скасувати",
   "@settings_callerId_cancel_button": {},
-  "settings_callerId_defaultTitle": "Default Caller ID",
+  "settings_callerId_defaultTitle": "Caller ID за замовчуванням",
   "@settings_callerId_defaultTitle": {},
-  "settings_callerId_dialcode": "Dial code:",
+  "settings_callerId_dialcode": "Телефонний код:",
   "@settings_callerId_dialcode": {},
-  "settings_callerId_dialCodeMatching_title": "Dial code matching",
+  "settings_callerId_dialCodeMatching_title": "Відповідність телефонних кодів",
   "@settings_callerId_dialCodeMatching_title": {},
-  "settings_callerId_duplicate_dialcode_error": "Please choose a different dial code, this one is already in use.",
+  "settings_callerId_duplicate_dialcode_error": "Будь ласка, виберіть інший телефонний код — цей уже використовується.",
   "@settings_callerId_duplicate_dialcode_error": {},
-  "settings_callerId_number": "Number:",
+  "settings_callerId_number": "Номер:",
   "@settings_callerId_number": {},
-  "settings_callerId_number_hint": "Select a number",
+  "settings_callerId_number_hint": "Виберіть номер",
   "@settings_callerId_number_hint": {},
-  "settings_callerId_save_button": "Save",
+  "settings_callerId_save_button": "Зберегти",
   "@settings_callerId_save_button": {},
   "settings_connectionSection_title": "Поведінка з’єднання та викликів",
   "@settings_connectionSection_title": {},
@@ -2657,15 +2657,15 @@
   "@voicemail_Title_notSupported": {},
   "voicemail_Widget_screenTitle": "Голосова пошта",
   "@voicemail_Widget_screenTitle": {},
-  "webRegistration_ErrorAcknowledgeDialogActions_retry": "Retry",
+  "webRegistration_ErrorAcknowledgeDialogActions_retry": "Повторити",
   "@webRegistration_ErrorAcknowledgeDialogActions_retry": {
     "description": "Button label shown in the Web Registration error dialog to let the user attempt the registration or loading process again after a failure."
   },
-  "webRegistration_ErrorAcknowledgeDialogActions_skip": "Skip",
+  "webRegistration_ErrorAcknowledgeDialogActions_skip": "Пропустити",
   "@webRegistration_ErrorAcknowledgeDialogActions_skip": {
     "description": "Button label shown in the Web Registration error dialog to let the user skip the failed step and continue without retrying."
   },
-  "webRegistration_ErrorAcknowledgeDialog_title": "Web resource error",
+  "webRegistration_ErrorAcknowledgeDialog_title": "Помилка вебресурсу",
   "@webRegistration_ErrorAcknowledgeDialog_title": {
     "description": "Title of the dialog shown when an error occurs while loading or registering with a required web resource (e.g. invalid link, unreachable server, or failed provisioning)."
   },
@@ -2807,6 +2807,20 @@
   "cdr_disconnectReason_nextNodeIsUnreachable": "Наступний вузол недосяжний",
   "cdr_disconnectReason_holstTelephonyServiceProviderModuleHtspmIsOutOfService": "Модуль постачальника телефонних послуг Holst (HTSPM) поза сервісом",
   "cdr_disconnectReason_dtlTransitIsNotMyNodeId": "DTL-транзит не відповідає моєму ID вузла",
+  "devTools_AppBarTitle": "Інструменти розробника",
+  "@devTools_AppBarTitle": {},
+  "devTools_signalingService_groupTitle": "Сервіс сигналізації",
+  "@devTools_signalingService_groupTitle": {},
+  "devTools_signalingService_simulateKill_title": "Симулювати завершення сервісу",
+  "@devTools_signalingService_simulateKill_title": {},
+  "devTools_signalingService_simulateKill_subtitle": "Зупиняє foreground-сервіс без коректного відключення",
+  "@devTools_signalingService_simulateKill_subtitle": {},
+  "devTools_signalingService_simulateKill_confirmMessage": "Сервіс сигналізації буде зупинено негайно. Він перезапуститься автоматично, якщо облікові дані дійсні.",
+  "@devTools_signalingService_simulateKill_confirmMessage": {},
+  "devTools_signalingService_simulateKill_confirm": "Завершити",
+  "@devTools_signalingService_simulateKill_confirm": {},
+  "devTools_signalingService_simulateKill_cancel": "Скасувати",
+  "@devTools_signalingService_simulateKill_cancel": {},
   "common_SemanticsLabel_refresh": "Оновити",
   "@common_SemanticsLabel_refresh": {
     "description": "Accessibility name of a button that reloads the content of the screen."
@@ -2852,67 +2866,67 @@
   },
   "contacts_SemanticsLabel_closeSearch": "Закрити пошук",
   "@contacts_SemanticsLabel_closeSearch": {},
-  "messaging_SemanticsLabel_newChat": "Start a new chat",
+  "messaging_SemanticsLabel_newChat": "Почати новий чат",
   "@messaging_SemanticsLabel_newChat": {
     "description": "Accessibility name of the button that starts a new chat conversation."
   },
-  "messaging_SemanticsLabel_newSms": "Write a new message",
+  "messaging_SemanticsLabel_newSms": "Написати нове повідомлення",
   "@messaging_SemanticsLabel_newSms": {
     "description": "Accessibility name of the button that starts a new SMS conversation."
   },
-  "messaging_SemanticsLabel_call": "Call",
+  "messaging_SemanticsLabel_call": "Подзвонити",
   "@messaging_SemanticsLabel_call": {
     "description": "Accessibility name of the button that calls the person the chat is with."
   },
-  "messaging_SemanticsLabel_videoCall": "Video call",
+  "messaging_SemanticsLabel_videoCall": "Відеодзвінок",
   "@messaging_SemanticsLabel_videoCall": {
     "description": "Accessibility name of the button that starts a video call with the person the chat is with."
   },
-  "messaging_SemanticsLabel_message": "Message",
+  "messaging_SemanticsLabel_message": "Повідомлення",
   "@messaging_SemanticsLabel_message": {
     "description": "Accessibility name of the field a message is written in; the hint disappears as soon as something is typed."
   },
-  "messaging_SemanticsLabel_send": "Send",
+  "messaging_SemanticsLabel_send": "Надіслати",
   "@messaging_SemanticsLabel_send": {
     "description": "Accessibility name of the arrow that sends the written message."
   },
-  "messaging_SemanticsLabel_conversationDetails": "Conversation details",
+  "messaging_SemanticsLabel_conversationDetails": "Деталі розмови",
   "@messaging_SemanticsLabel_conversationDetails": {
     "description": "Accessibility name of the button that opens who the chat is with, or the members of a group."
   },
-  "messaging_SemanticsLabel_conversationOptions": "Conversation options",
+  "messaging_SemanticsLabel_conversationOptions": "Параметри розмови",
   "@messaging_SemanticsLabel_conversationOptions": {
     "description": "Accessibility name of the button that opens what can be done with a text conversation."
   },
-  "messaging_SemanticsLabel_replying": "Replying to",
+  "messaging_SemanticsLabel_replying": "Відповідь на",
   "@messaging_SemanticsLabel_replying": {
     "description": "Read before the quoted message in the bar above the field, when a reply is being written."
   },
-  "messaging_SemanticsLabel_editing": "Editing",
+  "messaging_SemanticsLabel_editing": "Редагування",
   "@messaging_SemanticsLabel_editing": {
     "description": "Read before the quoted message in the bar above the field, when a sent message is being changed."
   },
-  "messaging_SemanticsLabel_forwarding": "Forwarding",
+  "messaging_SemanticsLabel_forwarding": "Пересилання",
   "@messaging_SemanticsLabel_forwarding": {
     "description": "Read before the quoted message in the bar above the field, when a message is being passed on to someone else."
   },
-  "messaging_SemanticsLabel_stopReplying": "Stop replying",
+  "messaging_SemanticsLabel_stopReplying": "Скасувати відповідь",
   "@messaging_SemanticsLabel_stopReplying": {
     "description": "Accessibility name of the cross that drops the message being replied to."
   },
-  "messaging_SemanticsLabel_stopEditing": "Stop editing",
+  "messaging_SemanticsLabel_stopEditing": "Скасувати редагування",
   "@messaging_SemanticsLabel_stopEditing": {
     "description": "Accessibility name of the cross that leaves a sent message as it was."
   },
-  "messaging_SemanticsLabel_stopForwarding": "Stop forwarding",
+  "messaging_SemanticsLabel_stopForwarding": "Скасувати пересилання",
   "@messaging_SemanticsLabel_stopForwarding": {
     "description": "Accessibility name of the cross that drops the message being passed on."
   },
-  "messaging_SemanticsLabel_sendForward": "Forward the message",
+  "messaging_SemanticsLabel_sendForward": "Переслати повідомлення",
   "@messaging_SemanticsLabel_sendForward": {
     "description": "Accessibility name of the tick that passes the message on to this conversation."
   },
-  "callPull_SemanticsLabel_badge": "Take over the call with {name}",
+  "callPull_SemanticsLabel_badge": "Перехопити дзвінок із {name}",
   "@callPull_SemanticsLabel_badge": {
     "description": "Accessibility name of the badge in the top bar that opens the list of calls in progress elsewhere, when there is one such call.",
     "placeholders": {
@@ -2921,7 +2935,7 @@
       }
     }
   },
-  "callPull_SemanticsLabel_badgeSeveral": "Take over one of {count} calls",
+  "callPull_SemanticsLabel_badgeSeveral": "Перехопити один із {count} дзвінків",
   "@callPull_SemanticsLabel_badgeSeveral": {
     "description": "Accessibility name of the same badge when several calls are in progress elsewhere.",
     "placeholders": {
@@ -2930,7 +2944,7 @@
       }
     }
   },
-  "callPull_SemanticsLabel_pickup": "Pick up the call with {name}",
+  "callPull_SemanticsLabel_pickup": "Прийняти дзвінок із {name}",
   "@callPull_SemanticsLabel_pickup": {
     "description": "Accessibility name of the button that takes over one call from the list; the name keeps the rows apart.",
     "placeholders": {
@@ -2939,15 +2953,15 @@
       }
     }
   },
-  "diagnosticNetworkTest_SemanticsLabel_refresh": "Run the network test again",
+  "diagnosticNetworkTest_SemanticsLabel_refresh": "Запустити тест мережі ще раз",
   "@diagnosticNetworkTest_SemanticsLabel_refresh": {
     "description": "Accessibility name of the button that repeats the network check on the diagnostics screen."
   },
-  "presence_settings_statusIcon_searchHint": "Search icons",
+  "presence_settings_statusIcon_searchHint": "Пошук іконок",
   "@presence_settings_statusIcon_searchHint": {
     "description": "Hint of the field that searches the icons in the status icon picker."
   },
-  "presenceSettings_SemanticsLabel_optionInfo": "What {option} means",
+  "presenceSettings_SemanticsLabel_optionInfo": "Що означає {option}",
   "@presenceSettings_SemanticsLabel_optionInfo": {
     "description": "Accessibility name of the button that explains one option of the presence status.",
     "placeholders": {
@@ -2956,59 +2970,59 @@
       }
     }
   },
-  "presenceSettings_SemanticsLabel_preset": "Status preset",
+  "presenceSettings_SemanticsLabel_preset": "Шаблон статусу",
   "@presenceSettings_SemanticsLabel_preset": {
     "description": "Accessibility name of the control that picks a ready-made presence status."
   },
-  "presenceSettings_SemanticsLabel_pickStatusIcon": "Choose a status icon",
+  "presenceSettings_SemanticsLabel_pickStatusIcon": "Вибрати іконку статусу",
   "@presenceSettings_SemanticsLabel_pickStatusIcon": {
     "description": "Accessibility name of the button that opens the icon picker of the presence status."
   },
-  "presenceSettings_SemanticsLabel_clearStatusIcon": "Remove the status icon",
+  "presenceSettings_SemanticsLabel_clearStatusIcon": "Прибрати іконку статусу",
   "@presenceSettings_SemanticsLabel_clearStatusIcon": {
     "description": "Accessibility name of the button that takes the icon off the presence status."
   },
-  "presenceSettings_SemanticsLabel_searchIcons": "Search icons",
+  "presenceSettings_SemanticsLabel_searchIcons": "Пошук іконок",
   "@presenceSettings_SemanticsLabel_searchIcons": {
     "description": "Accessibility name of the button that opens the search of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_stopSearchingIcons": "Stop searching icons",
+  "presenceSettings_SemanticsLabel_stopSearchingIcons": "Завершити пошук іконок",
   "@presenceSettings_SemanticsLabel_stopSearchingIcons": {
     "description": "Accessibility name of the button that leaves the search of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryRecent": "Recently used",
+  "presenceSettings_SemanticsLabel_iconCategoryRecent": "Нещодавно використані",
   "@presenceSettings_SemanticsLabel_iconCategoryRecent": {
     "description": "Accessibility name of the recently used category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategorySmileys": "Smileys and people",
+  "presenceSettings_SemanticsLabel_iconCategorySmileys": "Смайли та люди",
   "@presenceSettings_SemanticsLabel_iconCategorySmileys": {
     "description": "Accessibility name of the smileys category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryAnimals": "Animals and nature",
+  "presenceSettings_SemanticsLabel_iconCategoryAnimals": "Тварини та природа",
   "@presenceSettings_SemanticsLabel_iconCategoryAnimals": {
     "description": "Accessibility name of the animals category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryFoods": "Food and drink",
+  "presenceSettings_SemanticsLabel_iconCategoryFoods": "Їжа та напої",
   "@presenceSettings_SemanticsLabel_iconCategoryFoods": {
     "description": "Accessibility name of the food category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryActivities": "Activities",
+  "presenceSettings_SemanticsLabel_iconCategoryActivities": "Активності",
   "@presenceSettings_SemanticsLabel_iconCategoryActivities": {
     "description": "Accessibility name of the activities category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryTravel": "Travel and places",
+  "presenceSettings_SemanticsLabel_iconCategoryTravel": "Подорожі та місця",
   "@presenceSettings_SemanticsLabel_iconCategoryTravel": {
     "description": "Accessibility name of the travel category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryObjects": "Objects",
+  "presenceSettings_SemanticsLabel_iconCategoryObjects": "Предмети",
   "@presenceSettings_SemanticsLabel_iconCategoryObjects": {
     "description": "Accessibility name of the objects category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategorySymbols": "Symbols",
+  "presenceSettings_SemanticsLabel_iconCategorySymbols": "Символи",
   "@presenceSettings_SemanticsLabel_iconCategorySymbols": {
     "description": "Accessibility name of the symbols category of the icon picker."
   },
-  "presenceSettings_SemanticsLabel_iconCategoryFlags": "Flags",
+  "presenceSettings_SemanticsLabel_iconCategoryFlags": "Прапори",
   "@presenceSettings_SemanticsLabel_iconCategoryFlags": {
     "description": "Accessibility name of the flags category of the icon picker."
   }
