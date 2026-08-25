@@ -1,3 +1,6 @@
+require 'json'
+require 'tmpdir'
+
 default_platform(:ios)
 
 platform :ios do
@@ -81,4 +84,112 @@ platform :ios do
       # testers_file_path: "testers.csv",
     )
   end
+
+  desc "Mint the iOS signing assets for one customer app"
+  desc "Writes Certificates.p12, Provision.mobileprovision and upload-store-connect-metadata.json into"
+  desc "`output_dir` — the app's folder inside webtrit_phone_keystores. Run once per customer, never on CI."
+  lane :signing_assets do |options|
+    bundle_id = options[:bundle_id] || ENV['IOS_BUNDLE_ID']
+    UI.user_error!("Pass bundle_id:<app bundle id>, or set IOS_BUNDLE_ID") if bundle_id.to_s.empty?
+
+    output_dir = File.expand_path(options[:output_dir] || ENV['IOS_SIGNING_OUTPUT_DIR'] || Dir.pwd)
+    FileUtils.mkdir_p(output_dir)
+
+    key_id = ENV['IOS_APP_STORE_CONNECT_API_KEY_ID']
+    issuer_id = ENV['IOS_APP_STORE_CONNECT_API_KEY_ISSUER_ID']
+
+    api_key = app_store_connect_api_key(
+      key_id: key_id,
+      issuer_id: issuer_id,
+      key_filepath: ENV['IOS_APP_STORE_CONNECT_API_KEY_P8_PATH'],
+    )
+
+    Dir.mktmpdir('webtrit-signing') do |staging|
+      # `cert` names both of its outputs after the certificate id: a DER `.cer`, and a `.p12` that is no
+      # PKCS#12 bundle at all — it holds the bare private key in PEM. The real bundle is assembled below.
+      cert(
+        api_key: api_key,
+        development: false,
+        output_path: staging,
+      )
+
+      certificate_id = ENV['CER_CERTIFICATE_ID']
+      certificate_path = ENV['CER_FILE_PATH']
+      private_key_path = File.join(staging, "#{certificate_id}.p12")
+
+      unless File.exist?(private_key_path)
+        UI.user_error!(
+          "Certificate #{certificate_id} came back from the developer portal without its private key. " \
+          "A private key never leaves the machine that created the certificate: either take Certificates.p12 " \
+          "from the keystore folder that already holds it, or revoke the certificate and run this lane again."
+        )
+      end
+
+      p12_path = File.join(output_dir, 'Certificates.p12')
+      export_pkcs12(
+        certificate_path: certificate_path,
+        private_key_path: private_key_path,
+        output_path: p12_path,
+        staging: staging,
+      )
+
+      profile_path = File.join(output_dir, 'Provision.mobileprovision')
+      sigh(
+        api_key: api_key,
+        app_identifier: bundle_id,
+        cert_id: certificate_id,
+        provisioning_name: 'Provision',
+        output_path: output_dir,
+        filename: File.basename(profile_path),
+        platform: 'ios',
+      )
+
+      metadata = {
+        'bundleId' => bundle_id,
+        'issuer-id' => issuer_id,
+        'key_id' => key_id,
+        'code-signing-identity' => code_signing_identity(certificate_path),
+        'team-id' => team_identifier(profile_path, staging: staging),
+      }
+      File.write(File.join(output_dir, 'upload-store-connect-metadata.json'), JSON.pretty_generate(metadata) + "\n")
+
+      UI.success("Signing assets for #{bundle_id} written to #{output_dir}")
+      UI.message("  code-signing-identity: #{metadata['code-signing-identity']}")
+      UI.message("  team-id: #{metadata['team-id']}")
+    end
+  end
+end
+
+# The rest of the pipeline reads Certificates.p12 with an empty password, and macOS refuses to import a
+# PKCS#12 that OpenSSL wrote with one. Round-tripping through a throwaway keychain yields the same file
+# Keychain Access would have exported by hand, which both `security import` and OpenSSL then accept.
+def export_pkcs12(certificate_path:, private_key_path:, output_path:, staging:)
+  traditional_key_path = File.join(staging, 'key.pem')
+  sh('openssl', 'rsa', '-in', private_key_path, '-traditional', '-out', traditional_key_path)
+
+  keychain_path = File.join(staging, 'signing.keychain')
+  keychain_password = SecureRandom.uuid
+
+  sh('security', 'create-keychain', '-p', keychain_password, keychain_path)
+  begin
+    sh('security', 'unlock-keychain', '-p', keychain_password, keychain_path)
+    sh('security', 'import', traditional_key_path, '-k', keychain_path, '-P', '', '-A')
+    sh('security', 'import', certificate_path, '-k', keychain_path, '-A')
+    sh('security', 'export', '-k', keychain_path, '-t', 'identities', '-f', 'pkcs12', '-P', '', '-o', output_path)
+  ensure
+    sh('security', 'delete-keychain', keychain_path)
+  end
+end
+
+# The 40 characters `security find-identity -v -p codesigning` prints are the certificate's SHA-1
+# fingerprint, so the downloaded certificate answers for itself and no keychain has to be consulted.
+def code_signing_identity(certificate_path)
+  fingerprint = sh('openssl', 'x509', '-inform', 'DER', '-in', certificate_path, '-noout', '-fingerprint', '-sha1', log: false)
+  fingerprint.split('=').last.delete(':').strip
+end
+
+def team_identifier(profile_path, staging:)
+  plist_path = File.join(staging, 'profile.plist')
+  sh('security', 'cms', '-D', '-i', profile_path, '-o', plist_path)
+  sh('/usr/libexec/PlistBuddy', '-c', 'Print :TeamIdentifier:0', plist_path, log: false).strip
 end
