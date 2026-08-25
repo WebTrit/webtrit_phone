@@ -1941,7 +1941,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get presence_badge_state_onCall => 'У розмові';
 
   @override
+  String get presence_badge_state_registered => 'Зареєстровано';
+
+  @override
   String get presence_badge_state_unavailable => 'Недоступний';
+
+  @override
+  String get presence_badge_state_unregistered => 'Не зареєстровано';
 
   @override
   String get presence_infoView_activity => 'Активність:';

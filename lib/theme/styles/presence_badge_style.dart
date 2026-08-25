@@ -15,8 +15,8 @@ class PresenceBadgeStyle with Diagnosticable {
   final Color? availableColor;
   final Color? unavailableColor;
 
-  /// Fill for a contact who should not be called right now - in an
-  /// established call, or publishing "busy" / "do not disturb".
+  /// Fill for a contact who should not be called right now: one publishing
+  /// "busy" or "do not disturb".
   final Color? busyColor;
 
   /// Color of the activity glyph drawn inside the badge.

@@ -14,6 +14,33 @@ import '../cubit/presence_settings_cubit.dart';
 import '../models/presence_settings_preset.dart';
 import '../widgets/widgets.dart';
 
+/// Side of the presence mark shown beside a preset in the chooser.
+///
+/// The glyph inside the mark is a share of it (`side * 0.55`), so at the 16 dp
+/// this used to be it came out at 9 dp against a 14 dp label and read as a
+/// smudge; this keeps the two about the same size.
+const _presetMarkSide = 24.0;
+
+/// Height of one preset row in the open chooser.
+///
+/// The framework's default is 48 dp, which around a 24 dp mark and a 14 dp
+/// label left as much empty space as content. This is deliberately below the
+/// 48 dp Material minimum tap target - the rows are a short list in a menu
+/// that is already open, not standalone controls - so do not copy it onto a
+/// tap target that stands on its own.
+///
+/// Shrinking a menu row takes BOTH this and `tapTargetSize.shrinkWrap` below:
+/// `minimumSize` on its own is overridden by the 48 dp `_InputPadding` that
+/// `ButtonStyleButton` adds for the default `padded` tap target size.
+const _presetEntryHeight = 32.0;
+
+/// The row style shared by both choosers on this screen.
+ButtonStyle _menuEntryStyle() => MenuItemButton.styleFrom(
+  minimumSize: const Size(64, _presetEntryHeight),
+  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+);
+
 class PresenceSettingsScreen extends StatefulWidget {
   const PresenceSettingsScreen({super.key});
 
@@ -91,11 +118,12 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                       (e) => DropdownMenuEntry(
                                         value: e,
                                         label: e.name,
+                                        style: _menuEntryStyle(),
                                         labelWidget: Row(
                                           children: [
                                             SizedBox(
-                                              width: 16,
-                                              height: 16,
+                                              width: _presetMarkSide,
+                                              height: _presetMarkSide,
                                               child: SipPresenceIndicator(
                                                 presenceInfo: [
                                                   PresenceInfo(
@@ -112,7 +140,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                                     arrivalTime: DateTime.now(),
                                                   ),
                                                 ],
-                                                presenceRect: Rect.fromLTWH(0, 0, 16, 16),
+                                                presenceRect: Rect.fromLTWH(0, 0, _presetMarkSide, _presetMarkSide),
                                                 dialogInfo: [],
                                               ),
                                             ),
@@ -145,6 +173,10 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                     : Text(l10n.presence_settings_presets_label_custom),
                                 menuStyle: MenuStyle(
                                   backgroundColor: WidgetStateProperty.all(colorScheme.surfaceBright),
+                                  // The framework pads the popup 8 dp top and
+                                  // bottom, which reads as a gap above the
+                                  // first row and below the last.
+                                  padding: WidgetStateProperty.all(const EdgeInsets.symmetric(vertical: 4)),
                                 ),
                                 inputDecorationTheme: InputDecorationTheme(
                                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
@@ -246,53 +278,68 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                       identifier: presenceSettingsActivityId,
                                       child: DropdownMenu<PresenceActivity?>(
                                         dropdownMenuEntries: [
-                                          DropdownMenuEntry(value: null, label: l10n.presence_activity_none_name),
+                                          DropdownMenuEntry(
+                                            value: null,
+                                            label: l10n.presence_activity_none_name,
+                                            style: _menuEntryStyle(),
+                                          ),
                                           if (state.available == false) ...[
                                             DropdownMenuEntry(
                                               value: PresenceActivity.away,
                                               label: PresenceActivity.away.l10n(l10n),
+                                              style: _menuEntryStyle(),
                                             ),
                                             DropdownMenuEntry(
                                               value: PresenceActivity.busy,
                                               label: PresenceActivity.busy.l10n(l10n),
+                                              style: _menuEntryStyle(),
                                             ),
                                             DropdownMenuEntry(
                                               value: PresenceActivity.doNotDisturb,
                                               label: PresenceActivity.doNotDisturb.l10n(l10n),
+                                              style: _menuEntryStyle(),
                                             ),
                                             DropdownMenuEntry(
                                               value: PresenceActivity.permanentAbsence,
                                               label: PresenceActivity.permanentAbsence.l10n(l10n),
+                                              style: _menuEntryStyle(),
                                             ),
                                             DropdownMenuEntry(
                                               value: PresenceActivity.sleeping,
                                               label: PresenceActivity.sleeping.l10n(l10n),
+                                              style: _menuEntryStyle(),
                                             ),
                                           ],
                                           if (state.available == true) ...[
                                             DropdownMenuEntry(
                                               value: PresenceActivity.appointment,
                                               label: PresenceActivity.appointment.l10n(l10n),
+                                              style: _menuEntryStyle(),
                                             ),
                                             DropdownMenuEntry(
                                               value: PresenceActivity.inTransit,
                                               label: PresenceActivity.inTransit.l10n(l10n),
+                                              style: _menuEntryStyle(),
                                             ),
                                             DropdownMenuEntry(
                                               value: PresenceActivity.meal,
                                               label: PresenceActivity.meal.l10n(l10n),
+                                              style: _menuEntryStyle(),
                                             ),
                                             DropdownMenuEntry(
                                               value: PresenceActivity.meeting,
                                               label: PresenceActivity.meeting.l10n(l10n),
+                                              style: _menuEntryStyle(),
                                             ),
                                             DropdownMenuEntry(
                                               value: PresenceActivity.travel,
                                               label: PresenceActivity.travel.l10n(l10n),
+                                              style: _menuEntryStyle(),
                                             ),
                                             DropdownMenuEntry(
                                               value: PresenceActivity.vacation,
                                               label: PresenceActivity.vacation.l10n(l10n),
+                                              style: _menuEntryStyle(),
                                             ),
                                           ],
                                         ],
@@ -303,6 +350,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                         label: Text(l10n.presence_settings_activity_label),
                                         menuStyle: MenuStyle(
                                           backgroundColor: WidgetStateProperty.all(colorScheme.surfaceBright),
+                                          padding: WidgetStateProperty.all(const EdgeInsets.symmetric(vertical: 4)),
                                         ),
                                         inputDecorationTheme: InputDecorationTheme(
                                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),

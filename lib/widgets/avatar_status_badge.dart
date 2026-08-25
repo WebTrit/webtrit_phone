@@ -29,9 +29,9 @@ class AvatarStatusBadge extends StatelessWidget {
   /// is unknown, and without hybrid presence support no badge is shown.
   final bool? registered;
 
-  /// Presence states feeding the status mark. Empty or `null` means nothing
-  /// has been published about the contact yet - then [registered] is used
-  /// instead, and if that is unknown too, no mark is shown at all.
+  /// Presence states feeding the hybrid indicator; `null` means presence is
+  /// not tracked for this contact, and with hybrid presence support no badge
+  /// is shown.
   final List<PresenceInfo>? presenceInfo;
 
   /// BLF dialog states of the contact; an established call among them marks
@@ -49,41 +49,23 @@ class AvatarStatusBadge extends StatelessWidget {
       builder: (context, constraints) {
         final size = constraints.biggest.shortestSide;
 
-        final presenceInfo = this.presenceInfo ?? const <PresenceInfo>[];
-        final dialogInfo = this.dialogInfo ?? const <DialogInfo>[];
-
         if (presenceParams.hybridPresenceSupport) {
-          // One mark, one size, whichever signal it came from. A published
-          // status is richer, so it is preferred; without one, registration
-          // still answers the only question that matters at a glance - is
-          // their phone reachable at all - and it is drawn the same way, so a
-          // row never changes shape depending on which signal arrived.
-          final registered = this.registered;
-          final ContactPresence? state;
-          if (presenceInfo.isNotEmpty || dialogInfo.established != null) {
-            state = ContactPresence.resolve(presenceInfo: presenceInfo, dialogInfo: dialogInfo);
-          } else if (registered != null) {
-            state = registered ? ContactPresence.available : ContactPresence.unavailable;
-          } else {
-            // Neither signal has arrived. Nothing known, nothing drawn: a mark
-            // here would sit on every row right after the app opens and crowd
-            // out the marks that do mean something.
-            state = null;
-          }
-          if (state == null) return const SizedBox.shrink();
+          final presenceInfo = this.presenceInfo;
+          if (presenceInfo == null) return const SizedBox.shrink();
 
+          final dialogInfo = this.dialogInfo ?? const <DialogInfo>[];
           final rect = BadgeLayout.onCircleEdgeSquare(size: size, sizeFactor: style.presenceBadge!.sizeFactor!);
           return Semantics(
             // A colour and a glyph say nothing out loud, so the state is
             // named here: it merges into the row's label and is read right
             // after the contact's name.
-            label: _presenceLabel(context, presenceInfo, state),
+            label: _presenceLabel(context, presenceInfo, dialogInfo),
             child: Stack(
               clipBehavior: Clip.none,
               children: [
                 Positioned.fromRect(
                   rect: rect,
-                  child: PresenceMark(presence: state, presenceRect: rect),
+                  child: SipPresenceIndicator(presenceInfo: presenceInfo, dialogInfo: dialogInfo, presenceRect: rect),
                 ),
               ],
             ),
@@ -93,21 +75,25 @@ class AvatarStatusBadge extends StatelessWidget {
         final registered = this.registered;
         if (registered == null) return const SizedBox.shrink();
 
-        // The legacy registration dot, for deployments without hybrid
-        // presence. It stays tucked inside the avatar: unlike the status mark
-        // it carries no ring, so on the row background half of it would read
-        // as a partial dot.
-        final rect = BadgeLayout.bottomRightSquare(size: size, sizeFactor: style.registeredBadge!.sizeFactor!);
-        final l10n = context.l10n;
-
+        // Drawn exactly like the presence mark - same size, same ring, same
+        // place on the avatar edge. It used to sit small and fully inside the
+        // avatar because it had no ring, which left deployments without
+        // presence support with a mark a quarter of the coloured area of the
+        // one WT-1779 enlarged; the ring is what lets it straddle the edge.
+        final rect = BadgeLayout.onCircleEdgeSquare(size: size, sizeFactor: style.registeredBadge!.sizeFactor!);
         return Semantics(
-          label: registered ? l10n.presence_badge_state_available : l10n.presence_badge_state_unavailable,
+          // Same reason as the presence mark above: a bare coloured dot is
+          // silent, so the registration state is named here and read right
+          // after the contact's name.
+          label: registered
+              ? context.l10n.presence_badge_state_registered
+              : context.l10n.presence_badge_state_unregistered,
           child: Stack(
             clipBehavior: Clip.none,
             children: [
               Positioned.fromRect(
                 rect: rect,
-                child: _RegisteredDot(registered: registered, style: style),
+                child: _RegisteredDot(registered: registered, style: style, side: rect.width),
               ),
             ],
           ),
@@ -118,30 +104,32 @@ class AvatarStatusBadge extends StatelessWidget {
 
   /// The state in words, for anyone who does not see the mark.
   ///
-  /// Deliberately more precise than the mark: the mark speaks in classes
-  /// because a glyph that small cannot carry twelve activities, while a spoken
-  /// label has no such limit and names what the contact actually published -
-  /// "on vacation" rather than merely "away". A call being reported outranks
-  /// whatever they published earlier.
-  String _presenceLabel(BuildContext context, List<PresenceInfo> presenceInfo, ContactPresence presence) {
+  /// A published activity wins over the plain state - "on vacation" is what
+  /// the contact chose to say, and it is more use than "available" - except
+  /// while they are in a call, which outranks whatever they published earlier.
+  ///
+  /// This follows the GLYPH, not the colour: an established call is spoken
+  /// even though it deliberately leaves the colour alone.
+  String _presenceLabel(BuildContext context, List<PresenceInfo> presenceInfo, List<DialogInfo> dialogInfo) {
     final l10n = context.l10n;
-    if (presence == ContactPresence.onCall) return l10n.presence_badge_state_onCall;
+    if (dialogInfo.established != null) return l10n.presence_badge_state_onCall;
 
     final activity = presenceInfo.primaryActivity;
     if (activity != null) return activity.l10n(l10n);
 
-    return switch (presence) {
-      ContactPresence.available => l10n.presence_badge_state_available,
-      _ => l10n.presence_badge_state_unavailable,
-    };
+    return presenceInfo.anyAvailable ? l10n.presence_badge_state_available : l10n.presence_badge_state_unavailable;
   }
 }
 
 class _RegisteredDot extends StatelessWidget {
-  const _RegisteredDot({required this.registered, required this.style});
+  const _RegisteredDot({required this.registered, required this.style, required this.side});
 
   final bool registered;
   final LeadingAvatarStyle style;
+
+  /// Side of the square the dot is drawn into; the ring is a share of it, so
+  /// the fill keeps its weight at every avatar size.
+  final double side;
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +141,11 @@ class _RegisteredDot extends StatelessWidget {
         : (badge.unregisteredColor ?? rs?.unregistered);
 
     return Container(
-      decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: side * 0.1),
+      ),
     );
   }
 }

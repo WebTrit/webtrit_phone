@@ -24,7 +24,7 @@ void main() {
       expect(style.presenceBadge?.unavailableColor, colors.onSurfaceVariant);
       expect(style.presenceBadge?.busyColor, colors.error);
       expect(style.presenceBadge?.iconColor, colors.surface);
-      expect(style.registeredBadge?.sizeFactor, 0.2);
+      expect(style.registeredBadge?.sizeFactor, 0.5);
       expect(style.smartIndicator?.sizeFactor, 0.4);
       expect(style.nameColors?.enabled, isTrue);
     });
@@ -35,7 +35,7 @@ void main() {
       expect(style.presenceBadge?.sizeFactor, 0.35);
       expect(style.presenceBadge?.availableColor, colors.tertiary);
       expect(style.radius, 20);
-      expect(style.registeredBadge?.sizeFactor, 0.2);
+      expect(style.registeredBadge?.sizeFactor, 0.5);
     });
 
     test('a theme may pin the busy fill on its own', () {

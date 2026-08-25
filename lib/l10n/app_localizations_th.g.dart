@@ -1904,7 +1904,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get presence_badge_state_onCall => 'อยู่ในสาย';
 
   @override
+  String get presence_badge_state_registered => 'ลงทะเบียนแล้ว';
+
+  @override
   String get presence_badge_state_unavailable => 'ไม่ว่าง';
+
+  @override
+  String get presence_badge_state_unregistered => 'ไม่ได้ลงทะเบียน';
 
   @override
   String get presence_infoView_activity => 'กิจกรรม:';

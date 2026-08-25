@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
-
 import 'package:webtrit_phone/theme/styles/styles.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/avatar_status_badge.dart';
@@ -11,6 +10,8 @@ import 'package:webtrit_phone/widgets/leading_avatar.dart';
 void main() {
   Widget wrap(Widget child, {NameColorsStyle? nameColors}) {
     return MaterialApp(
+      // The status badge names its state from l10n, so the delegates have to
+      // be here as they are in the app.
       locale: const Locale('en'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -130,9 +131,11 @@ void main() {
       final avatar = tester.getRect(find.byType(LeadingAvatar));
 
       // The slot hands over the whole avatar square: the dot is sized from it
-      // and placed in its corner, which is only possible if it knows the size.
-      expect(tester.getSize(dot), const Size(8, 8));
-      expect(tester.getRect(dot).bottomRight, avatar.bottomRight);
+      // and placed on its edge, which is only possible if it knows the size.
+      expect(tester.getSize(dot), const Size(20, 20));
+      final reach = (tester.getRect(dot).center - avatar.center).distance;
+      expect(reach, closeTo(avatar.width / 2, 0.01));
+      expect(tester.getRect(dot).right, greaterThan(avatar.right));
     });
   });
 }

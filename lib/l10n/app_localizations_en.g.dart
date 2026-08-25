@@ -1908,7 +1908,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get presence_badge_state_onCall => 'On a call';
 
   @override
+  String get presence_badge_state_registered => 'Registered';
+
+  @override
   String get presence_badge_state_unavailable => 'Unavailable';
+
+  @override
+  String get presence_badge_state_unregistered => 'Not registered';
 
   @override
   String get presence_infoView_activity => 'Activity:';
