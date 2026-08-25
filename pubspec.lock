@@ -1058,8 +1058,8 @@ packages:
     dependency: "direct dev"
     description:
       path: l10n_mapper_generator
-      ref: "8a90364"
-      resolved-ref: "8a90364fe8509688435d3a9f7ad35f7072679d50"
+      ref: dd2095bfc9a49ac9190dd4821d5bbc6b0f48f055
+      resolved-ref: dd2095bfc9a49ac9190dd4821d5bbc6b0f48f055
       url: "https://github.com/SERDUN/l10n_mapper.git"
     source: git
     version: "3.0.0"
