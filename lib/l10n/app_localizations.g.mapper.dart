@@ -185,6 +185,14 @@ extension AppLocalizationsExtension on AppLocalizations {
         common_noInternetConnection_retryButton,
       'common_noInternetConnection_title' => common_noInternetConnection_title,
       'common_problemWithLoadingPage' => common_problemWithLoadingPage,
+      'contacts_ContactsScreen_emptyFavorites' =>
+        contacts_ContactsScreen_emptyFavorites,
+      'contacts_ContactsScreen_filterFavorites' =>
+        contacts_ContactsScreen_filterFavorites,
+      'contacts_ContactsScreen_searchSemanticsLabel' =>
+        contacts_ContactsScreen_searchSemanticsLabel,
+      'contacts_ContactsScreen_sourceSemanticsLabel' =>
+        contacts_ContactsScreen_sourceSemanticsLabel,
       'contacts_agreement_button_text' => contacts_agreement_button_text,
       'contacts_agreement_checkbox_text' => contacts_agreement_checkbox_text,
       'contacts_agreement_description' => contacts_agreement_description,
@@ -1683,6 +1691,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'common_SemanticsLabel_scrollToTop' => common_SemanticsLabel_scrollToTop,
       'contacts_SemanticsLabel_clearSearch' =>
         contacts_SemanticsLabel_clearSearch,
+      'contacts_SemanticsLabel_closeSearch' =>
+        contacts_SemanticsLabel_closeSearch,
       'messaging_SemanticsLabel_newChat' => messaging_SemanticsLabel_newChat,
       'messaging_SemanticsLabel_newSms' => messaging_SemanticsLabel_newSms,
       'messaging_SemanticsLabel_call' => messaging_SemanticsLabel_call,
