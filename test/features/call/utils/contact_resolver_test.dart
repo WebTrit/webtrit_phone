@@ -84,9 +84,8 @@ void main() {
     });
 
     test('own ADDITIONAL number returns null', () async {
-      when(
-        () => userRepository.getLocalInfo(),
-      ).thenReturn(_userInfo(ext: '3', additional: ['777', '888'], alias: 'Dima3'));
+      when(() => userRepository.getLocalInfo())
+          .thenReturn(_userInfo(ext: '3', additional: ['777', '888'], alias: 'Dima3'));
 
       expect(await resolver.resolve('888'), isNull);
     });

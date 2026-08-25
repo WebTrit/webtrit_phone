@@ -77,9 +77,8 @@ void main() {
     });
 
     test('revokeAllOthers revokes every session but the current one', () async {
-      when(
-        () => repository.getSessions(),
-      ).thenAnswer((_) async => [_session('a', current: true), _session('b'), _session('c')]);
+      when(() => repository.getSessions())
+          .thenAnswer((_) async => [_session('a', current: true), _session('b'), _session('c')]);
       when(() => repository.revokeSession(any())).thenAnswer((_) async {});
 
       final cubit = SessionsCubit(repository);
@@ -96,9 +95,8 @@ void main() {
     });
 
     test('revokeAllOthers keeps the sessions it could not revoke', () async {
-      when(
-        () => repository.getSessions(),
-      ).thenAnswer((_) async => [_session('a', current: true), _session('b'), _session('c')]);
+      when(() => repository.getSessions())
+          .thenAnswer((_) async => [_session('a', current: true), _session('b'), _session('c')]);
       when(() => repository.revokeSession('b')).thenAnswer((_) async {});
       when(() => repository.revokeSession('c')).thenThrow(Exception('offline'));
 

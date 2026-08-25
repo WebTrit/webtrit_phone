@@ -8,6 +8,7 @@ import 'user_local_datasource.dart';
 import 'user_remote_datasource.dart';
 
 export 'package:webtrit_phone/models/user_info.dart';
+
 export 'user_local_datasource.dart';
 export 'user_remote_datasource.dart';
 

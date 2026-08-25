@@ -69,9 +69,10 @@ Widget _withStubRouter(Widget child) {
 /// A status that matches none of the presets, which is what makes the screen
 /// open its section of controls straight away.
 PresenceSettings statusOffThePresets({bool available = true, String note = 'Working from home', String? icon}) {
-  return PresenceSettings.blank(
-    device: 'test device',
-  ).copyWithAvailable(available).copyWithNote(note).copyWithStatusIcon(icon);
+  return PresenceSettings.blank(device: 'test device')
+      .copyWithAvailable(available)
+      .copyWithNote(note)
+      .copyWithStatusIcon(icon);
 }
 
 /// Everything the presence settings screen needs around it.

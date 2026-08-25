@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:webtrit_phone/common/common.dart';
 
 /// A flexible mock repository implementing [Suspendable].

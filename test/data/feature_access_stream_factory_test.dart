@@ -67,9 +67,8 @@ void main() {
     test('getInitialSnapshot fetches from cache and uses current remote snapshot', () async {
       final cachedSystemInfo = createMockSystemInfo();
 
-      when(
-        () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-      ).thenAnswer((_) async => cachedSystemInfo);
+      when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+          .thenAnswer((_) async => cachedSystemInfo);
 
       final result = await factory.getInitialSnapshot();
 
@@ -80,9 +79,8 @@ void main() {
     test('create() stream emits initial snapshot first', () async {
       final cachedSystemInfo = createMockSystemInfo();
 
-      when(
-        () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-      ).thenAnswer((_) async => cachedSystemInfo);
+      when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+          .thenAnswer((_) async => cachedSystemInfo);
 
       final stream = factory.create();
       final queue = StreamQueue(stream);
@@ -97,9 +95,8 @@ void main() {
       final cachedSystemInfo = createMockSystemInfo();
       final newSystemInfo = createMockSystemInfo();
 
-      when(
-        () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-      ).thenAnswer((_) async => cachedSystemInfo);
+      when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+          .thenAnswer((_) async => cachedSystemInfo);
 
       final stream = factory.create();
       final queue = StreamQueue(stream);
@@ -119,9 +116,8 @@ void main() {
       final newRemoteSnapshot = MockRemoteConfigSnapshot();
       when(() => newRemoteSnapshot.getBool(any())).thenReturn(true);
 
-      when(
-        () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-      ).thenAnswer((_) async => cachedSystemInfo);
+      when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+          .thenAnswer((_) async => cachedSystemInfo);
 
       final stream = factory.create();
       final queue = StreamQueue(stream);
@@ -138,9 +134,8 @@ void main() {
     });
 
     test('create() handles missing SystemInfo (null cache) gracefully', () async {
-      when(
-        () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-      ).thenAnswer((_) async => null);
+      when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+          .thenAnswer((_) async => null);
       when(() => mockSnapshot.getBool(any())).thenReturn(true);
 
       final stream = factory.create();
@@ -163,9 +158,8 @@ void main() {
     when(() => newRemoteSnapshot.getString('feature_monitor_check_interval_sec')).thenReturn('30');
     when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
 
-    when(
-      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-    ).thenAnswer((_) async => cachedSystemInfo);
+    when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+        .thenAnswer((_) async => cachedSystemInfo);
 
     final stream = factory.create();
     final queue = StreamQueue(stream);
@@ -189,9 +183,8 @@ void main() {
     when(() => newRemoteSnapshot.getString('feature_monitor_check_interval_sec')).thenReturn('0');
     when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
 
-    when(
-      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-    ).thenAnswer((_) async => cachedSystemInfo);
+    when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+        .thenAnswer((_) async => cachedSystemInfo);
 
     final stream = factory.create();
     final queue = StreamQueue(stream);
@@ -215,9 +208,8 @@ void main() {
     when(() => newRemoteSnapshot.getString('feature_monitor_check_interval_sec')).thenReturn('invalid_string');
     when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
 
-    when(
-      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-    ).thenAnswer((_) async => cachedSystemInfo);
+    when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+        .thenAnswer((_) async => cachedSystemInfo);
 
     final stream = factory.create();
     final queue = StreamQueue(stream);
@@ -250,9 +242,8 @@ void main() {
     when(() => newRemoteSnapshot.getString('feature_log_level')).thenReturn('WARNING');
     when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
 
-    when(
-      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-    ).thenAnswer((_) async => cachedSystemInfo);
+    when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+        .thenAnswer((_) async => cachedSystemInfo);
 
     final stream = factory.create();
     final queue = StreamQueue(stream);
@@ -275,9 +266,8 @@ void main() {
 
     when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
 
-    when(
-      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-    ).thenAnswer((_) async => cachedSystemInfo);
+    when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+        .thenAnswer((_) async => cachedSystemInfo);
 
     final stream = factory.create();
     final queue = StreamQueue(stream);
@@ -301,9 +291,8 @@ void main() {
     when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
     when(() => newRemoteSnapshot.getBool('firebaseRemoteLogging')).thenReturn(true);
 
-    when(
-      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-    ).thenAnswer((_) async => cachedSystemInfo);
+    when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+        .thenAnswer((_) async => cachedSystemInfo);
 
     final stream = factory.create();
     final queue = StreamQueue(stream);
@@ -331,9 +320,8 @@ void main() {
     when(() => newRemoteSnapshot.getBool('firebaseRemoteLogging')).thenReturn(false);
     when(() => mockRemoteConfigService.snapshot).thenReturn(initialSnapshot);
     when(() => mockRemoteConfigService.startupSnapshot).thenReturn(initialSnapshot);
-    when(
-      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-    ).thenAnswer((_) async => cachedSystemInfo);
+    when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+        .thenAnswer((_) async => cachedSystemInfo);
 
     final sessionFactory = FeatureAccessStreamFactory(
       appThemes: mockAppThemes,
@@ -355,9 +343,8 @@ void main() {
 
     when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
     when(() => newRemoteSnapshot.getBool('feature_log_anonymization_enabled')).thenReturn(false);
-    when(
-      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-    ).thenAnswer((_) async => cachedSystemInfo);
+    when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+        .thenAnswer((_) async => cachedSystemInfo);
 
     final queue = StreamQueue(factory.create());
     expect((await queue.next).loggingConfig.anonymizationEnabled, isTrue);
@@ -378,9 +365,8 @@ void main() {
     when(() => newRemoteSnapshot.getBool('feature_log_anonymization_enabled')).thenReturn(false);
     when(() => mockRemoteConfigService.snapshot).thenReturn(initialSnapshot);
     when(() => mockRemoteConfigService.startupSnapshot).thenReturn(initialSnapshot);
-    when(
-      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-    ).thenAnswer((_) async => cachedSystemInfo);
+    when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+        .thenAnswer((_) async => cachedSystemInfo);
 
     final sessionFactory = FeatureAccessStreamFactory(
       appThemes: mockAppThemes,
@@ -400,9 +386,8 @@ void main() {
     final cachedSystemInfo = createMockSystemInfo();
     final appConfig = mockAppThemes.appConfig;
     when(() => appConfig.supported).thenReturn([const SupportedFeature.loggingConfig(anonymizationEnabled: false)]);
-    when(
-      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-    ).thenAnswer((_) async => cachedSystemInfo);
+    when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+        .thenAnswer((_) async => cachedSystemInfo);
 
     final snapshot = await factory.getInitialSnapshot();
 
@@ -416,9 +401,8 @@ void main() {
 
     when(() => newRemoteSnapshot.getBool(any())).thenReturn(null);
 
-    when(
-      () => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly),
-    ).thenAnswer((_) async => cachedSystemInfo);
+    when(() => mockSystemInfoRepository.getSystemInfo(fetchPolicy: FetchPolicy.cacheOnly))
+        .thenAnswer((_) async => cachedSystemInfo);
 
     final stream = factory.create();
     final queue = StreamQueue(stream);

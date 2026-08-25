@@ -725,13 +725,14 @@ void workManagerDispatcher() {
       final localPushRepo = LocalPushRepositoryFLNImpl();
 
       var taskSucceeded = false;
-      await DatabaseScope(
-        appPath.applicationDocumentsPath,
-      ).onError((e, s) => logger.severe('System notifications task failed', e, s)).execute((db) async {
-        final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
-        final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
-        taskSucceeded = await worker.execute();
-      }).run();
+      await DatabaseScope(appPath.applicationDocumentsPath)
+          .onError((e, s) => logger.severe('System notifications task failed', e, s))
+          .execute((db) async {
+            final localRepo = SystemNotificationsLocalRepositoryDriftImpl(db);
+            final worker = SystemNotificationBackgroundWorker(localRepo, remoteRepo, localPushRepo);
+            taskSucceeded = await worker.execute();
+          })
+          .run();
 
       logger.info('Task result: $taskSucceeded');
       return taskSucceeded; // false - WorkManager retries

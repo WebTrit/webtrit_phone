@@ -255,11 +255,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     final foregroundColor =
         widget.style?.key?.foregroundColor?.resolve(const <WidgetState>{}) ?? Theme.of(context).colorScheme.surface;
 
-    final keypadTextStyle = DefaultTextStyle.of(context).style.copyWith(
-      fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize,
-      height: 1.0,
-      color: foregroundColor,
-    );
+    final keypadTextStyle = DefaultTextStyle.of(context).style
+        .copyWith(fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize, height: 1.0, color: foregroundColor);
 
     final subKeypadTextStyle = DefaultTextStyle.of(context).style.copyWith(
       fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
