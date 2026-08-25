@@ -1523,9 +1523,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "fix/ufrag-numeric-coercion"
-      resolved-ref: "355ed593f336c937e2dfe18769444d0c490bd010"
-      url: "https://github.com/SERDUN/dart-sdp-transform.git"
+      ref: master
+      resolved-ref: ec68b14bc2386e4e90220699998486c8257150db
+      url: "https://github.com/flutter-webrtc/dart-sdp-transform.git"
     source: git
     version: "0.3.2"
   share_plus:
