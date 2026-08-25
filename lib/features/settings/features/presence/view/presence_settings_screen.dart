@@ -14,6 +14,13 @@ import '../cubit/presence_settings_cubit.dart';
 import '../models/presence_settings_preset.dart';
 import '../widgets/widgets.dart';
 
+/// Side of the presence mark shown beside a preset in the chooser.
+///
+/// The glyph inside the mark is a share of it (`side * 0.55`), so at the 16 dp
+/// this used to be it came out at 9 dp against a 14 dp label and read as a
+/// smudge; this keeps the two about the same size.
+const _presetMarkSide = 24.0;
+
 class PresenceSettingsScreen extends StatefulWidget {
   const PresenceSettingsScreen({super.key});
 
@@ -94,8 +101,8 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                         labelWidget: Row(
                                           children: [
                                             SizedBox(
-                                              width: 16,
-                                              height: 16,
+                                              width: _presetMarkSide,
+                                              height: _presetMarkSide,
                                               child: SipPresenceIndicator(
                                                 presenceInfo: [
                                                   PresenceInfo(
@@ -112,7 +119,7 @@ class _PresenceSettingsScreenState extends State<PresenceSettingsScreen> {
                                                     arrivalTime: DateTime.now(),
                                                   ),
                                                 ],
-                                                presenceRect: Rect.fromLTWH(0, 0, 16, 16),
+                                                presenceRect: Rect.fromLTWH(0, 0, _presetMarkSide, _presetMarkSide),
                                                 dialogInfo: [],
                                               ),
                                             ),
