@@ -25,9 +25,8 @@ void main() {
     searchBloc = MockContactsBloc();
     syncBloc = MockExternalContactsSyncBloc();
 
-    when(
-      () => contactsRepository.watchContacts('', ContactSourceType.external),
-    ).thenAnswer((_) => Stream.value(const <Contact>[]));
+    when(() => contactsRepository.watchContacts('', ContactSourceType.external))
+        .thenAnswer((_) => Stream.value(const <Contact>[]));
     when(() => searchBloc.state).thenReturn(const ContactsState(sourceType: ContactSourceType.external));
   });
 

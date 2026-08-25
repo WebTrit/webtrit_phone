@@ -8,7 +8,7 @@ class RemoteFormatter extends LogRecordFormatter {
   StringBuffer formatToStringBuffer(LogRecord rec, StringBuffer sb) {
     sb.write(rec.message);
 
-    void formatErrorAndStackTrace(final Object? error, StackTrace? stackTrace) {
+    void formatErrorAndStackTrace(Object? error, StackTrace? stackTrace) {
       if (error != null) {
         sb.writeln();
         sb.write('### ${error.runtimeType}: ');

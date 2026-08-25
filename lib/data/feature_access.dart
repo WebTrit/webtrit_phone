@@ -665,16 +665,15 @@ abstract final class ContactsMapper {
 abstract final class SupportedMapper {
   /// Maps a list of [SupportedFeature]s to a [SupportedConfig].
   static SupportedConfig map(List<SupportedFeature> supportedFeatures) {
-    final themeFeature =
-        supportedFeatures.firstWhere((e) => e is SupportedThemeMode, orElse: () => const SupportedFeature.themeMode())
-            as SupportedThemeMode;
+    final themeFeature = supportedFeatures.firstWhere(
+      (e) => e is SupportedThemeMode,
+      orElse: () => const SupportedFeature.themeMode(),
+    ) as SupportedThemeMode;
 
-    final videoCallFeature =
-        supportedFeatures.firstWhere(
-              (e) => e is SupportedVideoCall,
-              orElse: () => const SupportedFeature.videoCall(enabled: false),
-            )
-            as SupportedVideoCall;
+    final videoCallFeature = supportedFeatures.firstWhere(
+      (e) => e is SupportedVideoCall,
+      orElse: () => const SupportedFeature.videoCall(enabled: false),
+    ) as SupportedVideoCall;
 
     final configThemeMode = switch (themeFeature.mode) {
       ThemeModeConfig.system => ThemeMode.system,

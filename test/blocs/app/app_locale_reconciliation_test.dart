@@ -62,9 +62,8 @@ void main() {
     when(() => appInfo.version).thenReturn(Version(1, 0, 0));
 
     when(() => systemInfoRepository.infoStream).thenAnswer((_) => infoStreamController.stream);
-    when(
-      () => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')),
-    ).thenAnswer((_) async => null);
+    when(() => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')))
+        .thenAnswer((_) async => null);
   });
 
   tearDown(() async {

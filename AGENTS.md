@@ -1,7 +1,7 @@
 # AGENTS.md
 
 WebTrit Phone — Flutter VoIP app, Melos monorepo.
-Flutter 3.44.0 (stable), Android SDK 35.0.1.
+Flutter 3.47.1 (stable), Android SDK 35.0.1.
 
 ## Toolchain
 

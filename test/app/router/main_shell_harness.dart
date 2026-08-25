@@ -173,9 +173,8 @@ class MainShellHarness {
     initialFeatureAccess = featureAccessFor(initialSystemInfo);
 
     when(() => notificationsBloc.state).thenReturn(const NotificationsState());
-    when(
-      () => sessionRepository.getCurrent(),
-    ).thenReturn(const Session(coreUrl: 'http://127.0.0.1:1', token: 'test-token', userId: 'test-user'));
+    when(() => sessionRepository.getCurrent())
+        .thenReturn(const Session(coreUrl: 'http://127.0.0.1:1', token: 'test-token', userId: 'test-user'));
     when(() => appBloc.state).thenReturn(
       AppState(
         status: AppLifecycleStatus.authenticated,
@@ -188,9 +187,8 @@ class MainShellHarness {
     );
 
     when(() => systemInfoRepository.getLocalSystemInfo()).thenReturn(initialSystemInfo);
-    when(
-      () => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')),
-    ).thenAnswer((_) async => initialSystemInfo);
+    when(() => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')))
+        .thenAnswer((_) async => initialSystemInfo);
     when(() => systemInfoRepository.infoStream).thenAnswer((_) => systemInfoController.stream);
 
     when(() => appPermissions.isDenied).thenAnswer((_) async => false);

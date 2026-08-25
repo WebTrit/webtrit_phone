@@ -74,9 +74,8 @@ void main() {
       test('updates networks and triggers refresh when online', () {
         fakeAsync((async) {
           final gatherController = StreamController<CandidateInfo>(sync: true);
-          when(
-            () => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')),
-          ).thenAnswer((_) => gatherController.stream);
+          when(() => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')))
+              .thenAnswer((_) => gatherController.stream);
 
           final cubit = buildCubit(initialNetworks: [ConnectivityResult.wifi]);
           async.flushMicrotasks();
@@ -107,9 +106,8 @@ void main() {
       test('accumulates candidates as they arrive from iceChecker', () {
         fakeAsync((async) {
           final gatherController = StreamController<CandidateInfo>(sync: true);
-          when(
-            () => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')),
-          ).thenAnswer((_) => gatherController.stream);
+          when(() => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')))
+              .thenAnswer((_) => gatherController.stream);
 
           final cubit = buildCubit(initialNetworks: [ConnectivityResult.wifi]);
           async.flushMicrotasks();
@@ -130,9 +128,8 @@ void main() {
       test('sets complete when iceChecker stream closes', () {
         fakeAsync((async) {
           final gatherController = StreamController<CandidateInfo>(sync: true);
-          when(
-            () => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')),
-          ).thenAnswer((_) => gatherController.stream);
+          when(() => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')))
+              .thenAnswer((_) => gatherController.stream);
 
           final cubit = buildCubit(initialNetworks: [ConnectivityResult.wifi]);
           async.flushMicrotasks();
@@ -151,9 +148,8 @@ void main() {
       test('sets complete on iceChecker stream error', () {
         fakeAsync((async) {
           final gatherController = StreamController<CandidateInfo>(sync: true);
-          when(
-            () => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')),
-          ).thenAnswer((_) => gatherController.stream);
+          when(() => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')))
+              .thenAnswer((_) => gatherController.stream);
 
           final cubit = buildCubit(initialNetworks: [ConnectivityResult.wifi]);
           async.flushMicrotasks();
@@ -216,9 +212,8 @@ void main() {
       test('updates networks and re-gathers on connectivity change', () {
         fakeAsync((async) {
           final gatherController = StreamController<CandidateInfo>(sync: true);
-          when(
-            () => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')),
-          ).thenAnswer((_) => gatherController.stream);
+          when(() => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')))
+              .thenAnswer((_) => gatherController.stream);
 
           final cubit = buildCubit(initialNetworks: [ConnectivityResult.none]);
           async.flushMicrotasks();
@@ -268,9 +263,8 @@ void main() {
       test('excludes loopback IPv4 candidates', () {
         fakeAsync((async) {
           final gatherController = StreamController<CandidateInfo>(sync: true);
-          when(
-            () => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')),
-          ).thenAnswer((_) => gatherController.stream);
+          when(() => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')))
+              .thenAnswer((_) => gatherController.stream);
 
           final cubit = buildCubit(initialNetworks: [ConnectivityResult.wifi]);
           async.flushMicrotasks();
@@ -291,9 +285,8 @@ void main() {
       test('excludes loopback IPv6 candidates', () {
         fakeAsync((async) {
           final gatherController = StreamController<CandidateInfo>(sync: true);
-          when(
-            () => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')),
-          ).thenAnswer((_) => gatherController.stream);
+          when(() => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')))
+              .thenAnswer((_) => gatherController.stream);
 
           final cubit = buildCubit(initialNetworks: [ConnectivityResult.wifi]);
           async.flushMicrotasks();

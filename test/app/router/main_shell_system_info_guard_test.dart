@@ -109,9 +109,8 @@ void main() {
 
   group('main shell guard without cached system info', () {
     test('sends the user back to login when the value cannot be fetched', () async {
-      when(
-        () => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')),
-      ).thenThrow(Exception('no network'));
+      when(() => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')))
+          .thenThrow(Exception('no network'));
 
       await buildRouter().onMainShellRouteGuardNavigation(resolver, router);
 
@@ -120,9 +119,8 @@ void main() {
     });
 
     test('sends the user back to login when the core answers without it', () async {
-      when(
-        () => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')),
-      ).thenAnswer((_) async => null);
+      when(() => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')))
+          .thenAnswer((_) async => null);
 
       await buildRouter().onMainShellRouteGuardNavigation(resolver, router);
 
@@ -132,9 +130,8 @@ void main() {
 
     test('keeps the user signed in when the value is refetched', () async {
       final systemInfo = systemInfoWithSupported(const []);
-      when(
-        () => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')),
-      ).thenAnswer((_) async => systemInfo);
+      when(() => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')))
+          .thenAnswer((_) async => systemInfo);
 
       await buildRouter().onMainShellRouteGuardNavigation(resolver, router);
 
@@ -144,9 +141,8 @@ void main() {
 
     test('reads the value through the cache-first policy, so one fetch refills the cache', () async {
       final systemInfo = systemInfoWithSupported(const []);
-      when(
-        () => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')),
-      ).thenAnswer((_) async => systemInfo);
+      when(() => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')))
+          .thenAnswer((_) async => systemInfo);
 
       await buildRouter().onMainShellRouteGuardNavigation(resolver, router);
 

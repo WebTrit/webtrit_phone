@@ -134,7 +134,7 @@ hook, and the `l10n-check` GitHub workflow) runs `tool/check_l10n.dart`, which f
 
 Because `dart format` output differs between SDK versions, the last check is only
 meaningful on the SDK the project pins: the `l10n-check` workflow installs the Dart that
-ships with the Flutter version in `.fvmrc` (Flutter 3.44.0 -> Dart 3.12.0) rather than
+ships with the Flutter version in `.fvmrc` (Flutter 3.47.1 -> Dart 3.13.1) rather than
 `stable`, and both must be bumped together. The failure message names the Dart version it
 ran with, so a mismatch is recognisable as one.
 
