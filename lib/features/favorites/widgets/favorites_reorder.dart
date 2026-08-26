@@ -35,8 +35,14 @@ class FavoritesReorderController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Marks a row as being under the finger. Neither of these notifies: nothing
+  /// on screen reads the marker, and a rebuild per drag frame would be a cost
+  /// for nobody.
   void dragStarted(int index) => _draggingIndex = index;
 
+  /// Clears the drag marker. The move itself is sent from the list's
+  /// `onReorder` callback, which fires for a finished drag and for the move
+  /// actions the list offers to a screen reader alike, so both take one path.
   void dragEnded(int index) => _draggingIndex = null;
 
   /// Leaves the mode when the list changed underneath it: a move that landed
