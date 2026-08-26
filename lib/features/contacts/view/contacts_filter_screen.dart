@@ -182,28 +182,28 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
           child: BlocBuilder<ContactsBloc, ContactsState>(
             buildWhen: (previous, current) => previous.sourceType != current.sourceType,
             builder: (context, state) {
-              final sourceType = _shownSource(state.sourceType);
+              // A tab can be configured with nothing to show at all.
+              if (widget.selections.isEmpty) return const SizedBox.shrink();
 
-              // A tab can end up with favourites and no address book at all -
-              // one configured for extensions, on a core that does not carry
-              // them. There is then a single list and no stack to keep, and
-              // naming an address book anyway would watch a phone book nobody
-              // asked for and never see it.
-              if (sourceType == null) {
-                return _offersFavorites ? widget.favoritesWidgetBuilder(context) : const SizedBox.shrink();
-              }
+              final shown = _shown(state.sourceType);
 
+              // A slot per list, not one per kind of list. Sharing a slot
+              // between the address books tears one down and builds the other
+              // from nothing whenever someone changes book: a spinner where a
+              // list already stood, and the place they had in it lost.
               return IndexedStack(
-                index: _favorites && _offersFavorites ? 1 : 0,
+                index: widget.selections.indexOf(shown).clamp(0, widget.selections.length - 1),
                 sizing: StackFit.expand,
                 children: [
-                  // Keyed by the address book. Its list is fetched and watched
-                  // per address book, so a different one is a different list.
-                  KeyedSubtree(
-                    key: ValueKey(sourceType),
-                    child: widget.sourceTypeWidgetBuilder(context, sourceType, markFavorites: true),
-                  ),
-                  if (_offersFavorites) widget.favoritesWidgetBuilder(context),
+                  for (final selection in widget.selections)
+                    switch (selection) {
+                      ContactsSourceSelection(:final sourceType) => widget.sourceTypeWidgetBuilder(
+                        context,
+                        sourceType,
+                        markFavorites: true,
+                      ),
+                      ContactsFavoritesSelection() => widget.favoritesWidgetBuilder(context),
+                    },
                 ],
               );
             },

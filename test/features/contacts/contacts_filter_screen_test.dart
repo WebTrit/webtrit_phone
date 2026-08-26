@@ -210,6 +210,21 @@ void main() {
       expect(find.text('local'), findsOneWidget);
     });
 
+    testWidgets('keeps a list alive across a change of address book', (tester) async {
+      // The two address books used to share one slot, so changing book tore
+      // one down and built the other from scratch: a spinner, and the place
+      // someone had in the list lost.
+      await pumpScreen(tester, selections: const [local, external, favorites]);
+      final book = find.text('local', skipOffstage: false);
+
+      final bookElement = tester.element(book);
+
+      await pick(tester, find.text('Cloud PBX').last);
+      await pick(tester, find.text('Your phone').last);
+
+      expect(tester.element(book), same(bookElement));
+    });
+
     testWidgets('keeps both lists alive rather than building one from nothing on every pick', (tester) async {
       // Each list is watched by a bloc of its own. Swapped in and out, a pick
       // would tear one down and build the other from scratch - a spinner where
