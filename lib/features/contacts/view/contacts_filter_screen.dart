@@ -65,10 +65,8 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
 
   bool _searching = false;
 
-  static const _favoritesSelection = ContactsFavoritesSelection();
-
   /// Whether this deployment carries the favourites entry at all.
-  bool get _offersFavorites => widget.selections.contains(_favoritesSelection);
+  bool get _offersFavorites => widget.selections.any((selection) => selection is ContactsFavoritesSelection);
 
   /// The address book the list is drawn from.
   ///
@@ -90,8 +88,9 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
   }
 
   /// The list actually shown.
-  ContactsListSelection _shown(ContactSourceType remembered) =>
-      _favorites && _offersFavorites ? _favoritesSelection : ContactsSourceSelection(_shownSource(remembered));
+  ContactsListSelection _shown(ContactSourceType remembered) => _favorites && _offersFavorites
+      ? const ContactsFavoritesSelection()
+      : ContactsSourceSelection(_shownSource(remembered));
 
   void _onSelected(ContactsListSelection selection) {
     setState(() {
