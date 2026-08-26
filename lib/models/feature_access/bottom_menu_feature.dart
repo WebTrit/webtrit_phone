@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import '../contact_source_type.dart';
 import '../contacts_layout.dart';
+import '../contacts_list_selection.dart';
 import '../embedded/embedded.dart';
 import '../main_flavor.dart';
 
@@ -128,6 +129,18 @@ final class ContactsBottomMenuTab extends BottomMenuTab {
 
   /// Whether a person can get at their favourites through this tab.
   bool get offersFavorites => layout.offersFavorites;
+
+  /// What the unified arrangement offers to pick between: every configured
+  /// address book, and - where this tab carries them - the favourites.
+  ///
+  /// Built here rather than in the screen so the answer is given once: the
+  /// route that opens the section and the guard that repairs a route without
+  /// arguments both need it, and the two disagreeing is a screen that offers
+  /// favourites down one entry path and not the other.
+  List<ContactsListSelection> get listSelections => [
+    for (final sourceType in contactSourceTypes) ContactsSourceSelection(sourceType),
+    if (offersFavorites) const ContactsFavoritesSelection(),
+  ];
 
   @override
   MainFlavor get flavor => MainFlavor.contacts;

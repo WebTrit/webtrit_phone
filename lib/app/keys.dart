@@ -284,8 +284,8 @@ const contactsTabLocalKey = Key(contactsTabLocalId);
 // The contacts screen of a deployment that offers favourites as a filter.
 // Its own ids: the two screens are addressed separately so a flow cannot pass
 // against whichever of them happens to be on screen.
-const String contactsFilterFavoritesId = 'contactsFilterFavorites';
-const contactsFilterFavoritesKey = Key(contactsFilterFavoritesId);
+const String contactsSourceFavoritesId = 'contactsSourceFavorites';
+const contactsSourceFavoritesKey = Key(contactsSourceFavoritesId);
 const String contactsSourcePickerId = 'contactsSourcePicker';
 const contactsSourcePickerKey = Key(contactsSourcePickerId);
 const String contactsSearchOpenId = 'contactsSearchOpen';

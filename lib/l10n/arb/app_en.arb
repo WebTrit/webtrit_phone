@@ -470,8 +470,6 @@
   },
   "contacts_ContactsScreen_emptyFavorites": "No favorites among your contacts yet.\nAdd one from a contact card using the star icon",
   "@contacts_ContactsScreen_emptyFavorites": {},
-  "contacts_ContactsScreen_filterFavorites": "Favorites",
-  "@contacts_ContactsScreen_filterFavorites": {},
   "contacts_ContactsScreen_searchSemanticsLabel": "Search contacts",
   "@contacts_ContactsScreen_searchSemanticsLabel": {},
   "contacts_ContactsScreen_sourceSemanticsLabel": "Contact source",
@@ -514,6 +512,8 @@
   "@contacts_LocalTabText_permissionFailure": {
     "description": "Shown when the app cannot access local phone contacts because the user has not granted the required permission (e.g. Contacts permission denied in system settings)."
   },
+  "contactsSourceFavorites": "Favorites",
+  "@contactsSourceFavorites": {},
   "contactsSourceExternal": "Cloud PBX",
   "@contactsSourceExternal": {},
   "contactsSourceLocal": "Your phone",

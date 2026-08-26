@@ -187,8 +187,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'common_problemWithLoadingPage' => common_problemWithLoadingPage,
       'contacts_ContactsScreen_emptyFavorites' =>
         contacts_ContactsScreen_emptyFavorites,
-      'contacts_ContactsScreen_filterFavorites' =>
-        contacts_ContactsScreen_filterFavorites,
       'contacts_ContactsScreen_searchSemanticsLabel' =>
         contacts_ContactsScreen_searchSemanticsLabel,
       'contacts_ContactsScreen_sourceSemanticsLabel' =>
@@ -216,6 +214,7 @@ extension AppLocalizationsExtension on AppLocalizations {
       'contacts_LocalTabText_failure' => contacts_LocalTabText_failure,
       'contacts_LocalTabText_permissionFailure' =>
         contacts_LocalTabText_permissionFailure,
+      'contactsSourceFavorites' => contactsSourceFavorites,
       'contactsSourceExternal' => contactsSourceExternal,
       'contactsSourceLocal' => contactsSourceLocal,
       'contacts_Text_blingTransferInitiated' =>

@@ -33,14 +33,17 @@ final class ContactsTabbedLayout extends ContactsLayout {
   List<Object?> get props => const [];
 }
 
-/// One list: the address book behind it is chosen in the header, and
-/// favourites narrow the same list rather than living apart from it.
+/// One list at a time, named by a chooser on the line under the title: each
+/// address book, and - where [favorites] is on - the favourites beside them.
 final class ContactsUnifiedLayout extends ContactsLayout {
   const ContactsUnifiedLayout({this.favorites = true});
 
-  /// Whether the list can be narrowed to favourites. A deployment that picks
-  /// this arrangement is picking the one favourites live in, so they are on
-  /// unless it says otherwise.
+  /// Whether the favourites are one of the lists the chooser offers.
+  ///
+  /// The list behind that entry is the favourites section's own, not this
+  /// section's list narrowed down. A deployment that picks this arrangement is
+  /// picking the one favourites live in, so they are on unless it says
+  /// otherwise.
   final bool favorites;
 
   @override

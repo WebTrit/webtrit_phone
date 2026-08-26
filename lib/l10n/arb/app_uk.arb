@@ -446,8 +446,6 @@
   },
   "contacts_ContactsScreen_emptyFavorites": "Серед ваших контактів ще немає улюблених.\nДодайте на картці контакта, натиснувши зірочку",
   "@contacts_ContactsScreen_emptyFavorites": {},
-  "contacts_ContactsScreen_filterFavorites": "Улюблені",
-  "@contacts_ContactsScreen_filterFavorites": {},
   "contacts_ContactsScreen_searchSemanticsLabel": "Пошук контактів",
   "@contacts_ContactsScreen_searchSemanticsLabel": {},
   "contacts_ContactsScreen_sourceSemanticsLabel": "Джерело контактів",
@@ -490,6 +488,8 @@
   "@contacts_LocalTabText_permissionFailure": {
     "description": "Shown when the app cannot access local phone contacts because the user has not granted the required permission (e.g. Contacts permission denied in system settings)."
   },
+  "contactsSourceFavorites": "Улюблені",
+  "@contactsSourceFavorites": {},
   "contactsSourceExternal": "Хмарний PBX",
   "@contactsSourceExternal": {},
   "contactsSourceLocal": "Ваш телефон",
