@@ -54,15 +54,6 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
   /// was a choice of the moment too.
   bool _favorites = false;
 
-  /// The address book picked here, before [ContactsBloc] has been told.
-  ///
-  /// The bloc debounces what it is told, so a screen that read the answer back
-  /// from it would keep drawing the previous address book for a quarter of a
-  /// second after every pick - and, on the way out of favourites, plainly the
-  /// wrong one. The bloc is still told, because it is what remembers the
-  /// choice across restarts.
-  ContactSourceType? _pickedSource;
-
   bool _searching = false;
 
   /// Whether this deployment carries the favourites entry at all.
@@ -71,12 +62,10 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
   /// The address book the list is drawn from, or null where this deployment
   /// offers none.
   ///
-  /// Neither the pick nor what [ContactsBloc] remembered is always on offer: a
-  /// remembered choice outlives a change of configuration, and it starts out
-  /// as a default nobody made.
+  /// What [ContactsBloc] remembered is not always on offer: the choice
+  /// outlives a change of configuration, and it starts out as a default nobody
+  /// made.
   ContactSourceType? _shownSource(ContactSourceType remembered) {
-    final picked = _pickedSource;
-    if (picked != null && widget.selections.contains(ContactsSourceSelection(picked))) return picked;
     if (widget.selections.contains(ContactsSourceSelection(remembered))) return remembered;
 
     // The first address book rather than the first entry: favourites hold only
@@ -102,10 +91,7 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
   }
 
   void _onSelected(ContactsListSelection selection) {
-    setState(() {
-      _favorites = selection is ContactsFavoritesSelection;
-      if (selection is ContactsSourceSelection) _pickedSource = selection.sourceType;
-    });
+    setState(() => _favorites = selection is ContactsFavoritesSelection);
 
     // Only an address book is worth remembering, and only when one was picked:
     // a hop through favourites and back must land on the book left behind.

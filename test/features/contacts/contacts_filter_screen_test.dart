@@ -210,26 +210,6 @@ void main() {
       expect(find.text('local'), findsOneWidget);
     });
 
-    testWidgets('draws the picked address book at once, not after the bloc catches up', (tester) async {
-      // The bloc debounces what it is told, so a screen reading the answer
-      // back from it would draw the previous address book for a quarter of a
-      // second - and, leaving favourites, plainly the wrong one.
-      await pumpScreen(tester, selections: const [local, external, favorites], remembered: ContactSourceType.external);
-
-      await pick(tester, find.byKey(contactsSourceFavoritesKey));
-
-      await openChooser(tester);
-      await tester.tap(find.text('Your phone').last);
-      // The very next frame, well inside the debounce.
-      await tester.pump();
-
-      expect(find.text('local'), findsOneWidget);
-      expect(find.text('external'), findsNothing);
-
-      // Let the debounce run out, or it outlives the tree and fails teardown.
-      await tester.pump(const Duration(milliseconds: 400));
-    });
-
     testWidgets('keeps both lists alive rather than building one from nothing on every pick', (tester) async {
       // Each list is watched by a bloc of its own. Swapped in and out, a pick
       // would tear one down and build the other from scratch - a spinner where
