@@ -3286,10 +3286,13 @@ class ContactsTabScheme extends BottomMenuTabScheme {
 /// installed app knows how to draw it, and such a build has to fall back
 /// to the one it does know rather than fail to read its own settings.
 @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed) final  ContactsLayoutScheme layout;
-/// Whether favourites are offered inside the list. Read only where the
-/// arrangement has a place for them, which is the unified one; on by
-/// default, because a deployment that picks that arrangement is picking
-/// the one favourites live in.
+/// Whether the favourites are one of the lists the chooser offers.
+///
+/// The list behind that entry is the favourites section's own - the same
+/// rows, in the order a person arranged them - not this section's list
+/// narrowed down. Read only where the arrangement has a chooser, which is
+/// the unified one; on by default, because a deployment picking that
+/// arrangement is picking the one favourites live in.
 @JsonKey() final  bool favorites;
 
 @JsonKey(name: 'type')

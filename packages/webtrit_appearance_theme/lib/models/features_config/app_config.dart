@@ -439,8 +439,9 @@ enum ContactsLayoutScheme {
   @JsonValue('tabbed')
   tabbed,
 
-  /// One list: the address book behind it is chosen in the header, and
-  /// favourites narrow the same list rather than living apart from it.
+  /// One list at a time. A chooser on the line under the title says which:
+  /// each address book, and - where [ContactsTabScheme.favorites] is on - the
+  /// favourites, as one more entry of that same control.
   @JsonValue('unified')
   unified,
 }
@@ -488,10 +489,13 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
     @Default(ContactsLayoutScheme.tabbed)
     ContactsLayoutScheme layout,
 
-    /// Whether favourites are offered inside the list. Read only where the
-    /// arrangement has a place for them, which is the unified one; on by
-    /// default, because a deployment that picks that arrangement is picking
-    /// the one favourites live in.
+    /// Whether the favourites are one of the lists the chooser offers.
+    ///
+    /// The list behind that entry is the favourites section's own - the same
+    /// rows, in the order a person arranged them - not this section's list
+    /// narrowed down. Read only where the arrangement has a chooser, which is
+    /// the unified one; on by default, because a deployment picking that
+    /// arrangement is picking the one favourites live in.
     @Default(true) bool favorites,
   }) = ContactsTabScheme;
 
