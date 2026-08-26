@@ -36,20 +36,12 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  bool isReorderMode = false;
-  int? draggingIndex;
+  final _reorder = FavoritesReorderController();
 
-  void toggleReorderMode() => setState(() => isReorderMode = !isReorderMode);
-
-  void onReorderStart(int index) {
-    draggingIndex = index;
-  }
-
-  /// Clears the drag marker. The move itself is sent from the list's
-  /// `onReorder` callback, which fires for a finished drag and for the move
-  /// actions the list offers to a screen reader alike, so both take one path.
-  void onReorderEnd(int index) {
-    draggingIndex = null;
+  @override
+  void dispose() {
+    _reorder.dispose();
+    super.dispose();
   }
 
   @override
@@ -70,58 +62,17 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         context: context,
         flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
       ),
-      floatingActionButton: BlocBuilder<FavoritesBloc, FavoritesState>(
-        builder: (context, state) {
-          final favorites = state.favorites;
-          if (favorites == null || favorites.length < FavoritesList.reorderMinimum) {
-            return const SizedBox.shrink();
-          }
-          // The padding is what makes the button pressable at all: the tab bar
-          // of the main screen floats over the page, and without it the button
-          // is drawn underneath - invisible, and every tap goes to the bar.
-          return Padding(
-            // Exactly the room the bar takes, whatever the device: the shell
-            // reports it to the page as bottom padding (its own height plus
-            // the system inset underneath). Scaffold does not apply it to the
-            // button, so the page does - adding the bar height on top of it
-            // would push the button a bar's height too high.
-            padding: EdgeInsets.only(bottom: mediaQueryData.padding.bottom),
-            // Only the icon said what this does, and it says two different
-            // things depending on whether rearranging is already under way.
-            child: SemanticAction(
-              label: isReorderMode
-                  ? context.l10n.favorites_SemanticsLabel_reorderDone
-                  : context.l10n.favorites_SemanticsLabel_reorder,
-              identifier: favoritesReorderId,
-              child: FloatingActionButton(
-                shape: const CircleBorder(),
-                onPressed: toggleReorderMode,
-                child: Icon(isReorderMode ? Icons.check : Icons.edit_note_outlined),
-              ),
-            ),
-          );
-        },
+      floatingActionButton: FavoritesReorderButton(
+        controller: _reorder,
+        identifier: favoritesReorderId,
+        bottomPadding: mediaQueryData.padding.bottom,
       ),
-      body: BlocListener<FavoritesBloc, FavoritesState>(
-        listenWhen: (previous, current) => previous.favorites != current.favorites,
-        listener: (context, state) {
-          // Two reasons to leave the rearranging mode, both about a list that
-          // changed underneath: a move that landed while a row was being
-          // dragged, and a list that became too short to rearrange - the
-          // button is the only way out of the mode and it is not offered
-          // below the minimum, so the rows would stay locked.
-          final tooShortToReorder = (state.favorites?.length ?? 0) < FavoritesList.reorderMinimum;
-          if (draggingIndex != null || (isReorderMode && tooShortToReorder)) {
-            setState(() {
-              isReorderMode = false;
-              draggingIndex = null;
-            });
-          }
-        },
-        child: FavoritesList(
-          reorderMode: isReorderMode,
-          onReorderStart: onReorderStart,
-          onReorderEnd: onReorderEnd,
+      body: ListenableBuilder(
+        listenable: _reorder,
+        builder: (context, _) => FavoritesList(
+          reorderMode: _reorder.active,
+          onReorderStart: _reorder.dragStarted,
+          onReorderEnd: _reorder.dragEnded,
           topPadding: topPadding,
           transferEnabled: widget.transferEnabled,
           videoEnabled: widget.videoEnabled,

@@ -64,16 +64,13 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
 
   bool _searching = false;
 
-  /// Whether the favourites rows can be dragged. The screen owns this because
-  /// the button that turns it on is a slot of its scaffold, not part of the
-  /// list.
-  bool _reorderMode = false;
+  final _reorder = FavoritesReorderController();
 
-  /// Set while a row is under the finger, so a list that changes mid-drag can
-  /// drop the mode rather than leave a half-finished move on screen.
-  int? _draggingIndex;
-
-  void _toggleReorderMode() => setState(() => _reorderMode = !_reorderMode);
+  @override
+  void dispose() {
+    _reorder.dispose();
+    super.dispose();
+  }
 
   /// Whether this deployment carries the favourites entry at all.
   bool get _offersFavorites => widget.selections.any((selection) => selection is ContactsFavoritesSelection);
@@ -114,7 +111,7 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
       _favorites = selection is ContactsFavoritesSelection;
       // Rearranging belongs to the favourites list; picking another one ends it
       // rather than leaving a mode on a list that cannot use it.
-      if (!_favorites) _reorderMode = false;
+      if (!_favorites) _reorder.stop();
     });
 
     // Only an address book is worth remembering, and only when one was picked:
@@ -122,62 +119,6 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
     if (selection is ContactsSourceSelection) {
       context.read<ContactsBloc>().add(ContactsSourceTypeChanged(selection.sourceType));
     }
-  }
-
-  /// Leaves the rearranging mode when the list changed underneath it: a move
-  /// that landed while a row was being dragged, and a list that became too
-  /// short to rearrange - the button is the only way out and is not offered
-  /// below the minimum, so the rows would stay locked.
-  void _onFavoritesChanged(BuildContext context, FavoritesState state) {
-    final tooShort = (state.favorites?.length ?? 0) < FavoritesList.reorderMinimum;
-    if (_draggingIndex != null || (_reorderMode && tooShort)) {
-      setState(() {
-        _reorderMode = false;
-        _draggingIndex = null;
-      });
-    }
-  }
-
-  /// The button that turns rearranging on, or nothing where there is too
-  /// little to rearrange.
-  Widget _reorderButton(MediaQueryData mediaQueryData) {
-    return BlocBuilder<FavoritesBloc, FavoritesState>(
-      builder: (context, favoritesState) {
-        final favorites = favoritesState.favorites;
-        if (favorites == null || favorites.length < FavoritesList.reorderMinimum) {
-          return const SizedBox.shrink();
-        }
-
-        return BlocBuilder<CallBloc, CallState>(
-          buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
-          builder: (context, callState) {
-            // A transfer turns every row into a destination to pick, and the
-            // bar announcing it takes the bottom of the screen. Rearranging is
-            // neither wanted nor reachable there.
-            if (callState.isBlingTransferInitiated) return const SizedBox.shrink();
-
-            // The padding is what makes the button pressable at all: the tab
-            // bar of the main screen floats over the page, and without it the
-            // button is drawn underneath - invisible, and every tap goes to
-            // the bar.
-            return Padding(
-              padding: EdgeInsets.only(bottom: mediaQueryData.padding.bottom),
-              child: SemanticAction(
-                label: _reorderMode
-                    ? context.l10n.favorites_SemanticsLabel_reorderDone
-                    : context.l10n.favorites_SemanticsLabel_reorder,
-                identifier: contactsFavoritesReorderId,
-                child: FloatingActionButton(
-                  shape: const CircleBorder(),
-                  onPressed: _toggleReorderMode,
-                  child: Icon(_reorderMode ? Icons.check : Icons.edit_note_outlined),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
   }
 
   @override
@@ -206,7 +147,19 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
         applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
         appBarTheme: effectiveStyle?.appBarTheme,
         extendBodyBehindAppBar: true,
-        floatingActionButton: _favorites && _offersFavorites ? _reorderButton(mediaQueryData) : null,
+        floatingActionButton: _favorites && _offersFavorites
+            ? BlocBuilder<CallBloc, CallState>(
+                buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+                // A transfer turns every row into a destination to pick, and
+                // the bar announcing it takes the bottom of the screen.
+                builder: (context, callState) => FavoritesReorderButton(
+                  controller: _reorder,
+                  identifier: contactsFavoritesReorderId,
+                  bottomPadding: mediaQueryData.padding.bottom,
+                  hidden: callState.isBlingTransferInitiated,
+                ),
+              )
+            : null,
         appBar: MainAppBar(
           title: widget.title,
           context: context,
@@ -260,43 +213,39 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
           // by a bloc of its own: swapped in and out instead, every tap of the
           // control would tear a list down, build the other from nothing and
           // flash a spinner where a list already stood.
-          child: BlocListener<FavoritesBloc, FavoritesState>(
-            listenWhen: (previous, current) => previous.favorites != current.favorites,
-            listener: _onFavoritesChanged,
-            child: BlocBuilder<ContactsBloc, ContactsState>(
-              buildWhen: (previous, current) => previous.sourceType != current.sourceType,
-              builder: (context, state) {
-                // A tab can be configured with nothing to show at all.
-                if (widget.selections.isEmpty) return const SizedBox.shrink();
+          child: BlocBuilder<ContactsBloc, ContactsState>(
+            buildWhen: (previous, current) => previous.sourceType != current.sourceType,
+            builder: (context, state) {
+              // A tab can be configured with nothing to show at all.
+              if (widget.selections.isEmpty) return const SizedBox.shrink();
 
-                final shown = _shown(state.sourceType);
+              final shown = _shown(state.sourceType);
 
-                // A slot per list, not one per kind of list. Sharing a slot
-                // between the address books tears one down and builds the other
-                // from nothing whenever someone changes book: a spinner where a
-                // list already stood, and the place they had in it lost.
-                return IndexedStack(
-                  index: widget.selections.indexOf(shown).clamp(0, widget.selections.length - 1),
-                  sizing: StackFit.expand,
-                  children: [
-                    for (final selection in widget.selections)
-                      switch (selection) {
-                        ContactsSourceSelection(:final sourceType) => widget.sourceTypeWidgetBuilder(
-                          context,
-                          sourceType,
-                          markFavorites: true,
-                        ),
-                        ContactsFavoritesSelection() => widget.favoritesWidgetBuilder(
-                          context,
-                          reorderMode: _reorderMode,
-                          onReorderStart: (index) => _draggingIndex = index,
-                          onReorderEnd: (index) => _draggingIndex = null,
-                        ),
-                      },
-                  ],
-                );
-              },
-            ),
+              // A slot per list, not one per kind of list. Sharing a slot
+              // between the address books tears one down and builds the other
+              // from nothing whenever someone changes book: a spinner where a
+              // list already stood, and the place they had in it lost.
+              return IndexedStack(
+                index: widget.selections.indexOf(shown).clamp(0, widget.selections.length - 1),
+                sizing: StackFit.expand,
+                children: [
+                  for (final selection in widget.selections)
+                    switch (selection) {
+                      ContactsSourceSelection(:final sourceType) => widget.sourceTypeWidgetBuilder(
+                        context,
+                        sourceType,
+                        markFavorites: true,
+                      ),
+                      ContactsFavoritesSelection() => widget.favoritesWidgetBuilder(
+                        context,
+                        reorderMode: _reorder.active,
+                        onReorderStart: _reorder.dragStarted,
+                        onReorderEnd: _reorder.dragEnded,
+                      ),
+                    },
+                ],
+              );
+            },
           ),
         ),
         bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
