@@ -45,38 +45,45 @@ class ContactsFilterScreen extends StatefulWidget {
 }
 
 class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
-  /// Whether favourites are the list being shown.
+  /// What someone picked, once they have picked anything.
   ///
-  /// Kept here rather than in [ContactsBloc]: the bloc remembers the address
-  /// book across restarts, and favourites are not one - the star that used to
-  /// carry this was a choice of the moment too, and making it outlive the
-  /// screen is a separate decision from moving it.
-  bool _favorites = false;
+  /// The screen decides this rather than reading it back from [ContactsBloc]:
+  /// that bloc debounces the address book it is told about, so a screen that
+  /// waited for it would keep drawing the previous list for a quarter of a
+  /// second after every pick - a whole list mounted, watched and thrown away,
+  /// and plainly the wrong one on the way out of favourites. The bloc is still
+  /// told, because it is what remembers the address book across restarts.
+  ///
+  /// Only the address book is remembered that way, though. Favourites are a
+  /// choice of the moment, exactly as the star this replaced was.
+  ContactsListSelection? _picked;
 
   bool _searching = false;
 
-  static const _favoritesSelection = ContactsFavoritesSelection();
-
-  /// Whether this deployment carries the favourites entry at all. It can turn
-  /// them off inside this section, and then [_favorites] must never decide
-  /// what the list shows.
-  bool get _offersFavorites => widget.selections.contains(_favoritesSelection);
-
-  /// The list actually shown for a remembered address book.
+  /// The list actually shown.
   ///
-  /// What was remembered is not always on offer: the choice outlives a change
-  /// of configuration, and it starts out as a default nobody picked. Falling
-  /// back to the first configured entry keeps the list and the control saying
-  /// the same thing.
+  /// [remembered] is what [ContactsBloc] restored, and it decides only until
+  /// someone picks for themselves. Neither is always on offer: a pick is kept
+  /// across a rebuild and the remembered book outlives a change of
+  /// configuration, so both are checked against what this deployment offers.
   ContactsListSelection _shown(ContactSourceType remembered) {
-    if (_favorites && _offersFavorites) return _favoritesSelection;
+    final picked = _picked;
+    if (picked != null && widget.selections.contains(picked)) return picked;
 
     final rememberedSelection = ContactsSourceSelection(remembered);
-    return widget.selections.contains(rememberedSelection) ? rememberedSelection : widget.selections.first;
+    if (widget.selections.contains(rememberedSelection)) return rememberedSelection;
+
+    // The first address book rather than simply the first entry: favourites
+    // hold only the people someone has starred, so opening on them when
+    // nothing was chosen would greet a new account with an empty screen.
+    for (final selection in widget.selections) {
+      if (selection is ContactsSourceSelection) return selection;
+    }
+    return widget.selections.first;
   }
 
   void _onSelected(ContactsListSelection selection) {
-    setState(() => _favorites = selection is ContactsFavoritesSelection);
+    setState(() => _picked = selection);
 
     // The address book is only re-stated when one was picked: a hop through
     // favourites and back must land on the address book left behind, not on

@@ -197,6 +197,30 @@ void main() {
       expect(mounted.last, local);
     });
 
+    testWidgets('leaves favourites for the book that was picked, not the one before it', (tester) async {
+      // The bloc debounces the address book it is told about, so a screen that
+      // read the shown list back from it would draw the book someone was on
+      // BEFORE favourites for a quarter of a second - a whole list mounted,
+      // watched and thrown away, and the wrong one on screen while it lasts.
+      await pumpScreen(tester, selections: const [local, external, favorites], remembered: ContactSourceType.external);
+
+      await tester.tap(find.byKey(contactsSourcePickerKey));
+      await openedMenu(tester);
+      await tester.tap(find.byKey(contactsSourceFavoritesKey));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      await tester.tap(find.byKey(contactsSourcePickerKey));
+      await openedMenu(tester);
+      await tester.tap(find.text('Your phone').last);
+      // The very next frame, which is where the wrong list used to appear.
+      await tester.pump();
+
+      expect(mounted.last, local);
+
+      // Let the debounce run out, or it outlives the tree and fails teardown.
+      await tester.pump(const Duration(milliseconds: 400));
+    });
+
     testWidgets('takes no line of its own, so the list starts higher', (tester) async {
       await pumpScreen(tester, selections: const [external, favorites]);
 
@@ -355,7 +379,7 @@ void main() {
       // must still open on a list of people.
       await pumpScreen(tester, selections: const [favorites, local], remembered: ContactSourceType.external);
 
-      expect(mounted.last, favorites);
+      expect(mounted.last, local);
     });
   });
 }
