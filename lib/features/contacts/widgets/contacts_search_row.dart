@@ -28,6 +28,7 @@ class ContactsSearchRow extends StatelessWidget {
     this.inset = kMainAppBarBottomPaddingGap,
     this.gapAbove = 0,
     this.searching = true,
+    this.searchable = true,
     this.onSearchOpened,
     this.onSearchClosed,
   });
@@ -38,6 +39,13 @@ class ContactsSearchRow extends StatelessWidget {
   /// Whether the box itself is shown. With no [leading] there is nothing else
   /// to put on the line, so the box is always open.
   final bool searching;
+
+  /// Whether this list can be searched at all.
+  ///
+  /// Not every list on a screen answers to the same box: the favourites of the
+  /// favourites section are not searched anywhere in the app, and a box that
+  /// sits there taking text and changing nothing is worse than no box.
+  final bool searchable;
 
   /// Called by the round button that opens the box.
   final VoidCallback? onSearchOpened;
@@ -107,6 +115,13 @@ class ContactsSearchRow extends StatelessWidget {
                   height: kMainAppBarBottomControlHeight,
                 ),
               );
+
+              // Nothing to search: the line is the chooser and only the
+              // chooser, and the row keeps its height either way so the list
+              // below does not move when the choice changes.
+              // A deployment can offer favourites and no address book at all,
+              // and then there is nothing to put on the line either way.
+              if (!searchable) return leading ?? const SizedBox.shrink();
 
               if (pinned || searching) return field;
 

@@ -42,7 +42,7 @@ class _RememberedSourceType implements ActiveContactSourceTypeRepository {
 }
 
 void main() {
-  late List<({ContactSourceType sourceType, bool favoritesOnly})> mounted;
+  late List<String> mounted;
 
   late _MockCallBloc callBloc;
   late _MockSessionStatusCubit sessionStatusCubit;
@@ -93,9 +93,13 @@ void main() {
             ],
             child: ContactsFilterScreen(
               sourceTypes: sourceTypes,
-              sourceTypeWidgetBuilder: (context, sourceType, {bool favoritesOnly = false, bool markFavorites = false}) {
-                mounted.add((sourceType: sourceType, favoritesOnly: favoritesOnly));
-                return Text('${sourceType.name} ${favoritesOnly ? 'favorites' : 'all'}');
+              sourceTypeWidgetBuilder: (context, sourceType, {bool markFavorites = false}) {
+                mounted.add(sourceType.name);
+                return Text(sourceType.name);
+              },
+              favoritesWidgetBuilder: (context) {
+                mounted.add('favorites');
+                return const Text('favorites');
               },
             ),
           ),
@@ -112,7 +116,7 @@ void main() {
     testWidgets('starts on the whole address book', (tester) async {
       await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
 
-      expect(mounted.last.favoritesOnly, isFalse);
+      expect(mounted.last, 'external');
     });
 
     testWidgets('is a star that says whether it is on, and not by colour alone', (tester) async {
@@ -165,26 +169,31 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('narrows the list to favourites when picked', (tester) async {
+    testWidgets('shows the favourites section own list when picked', (tester) async {
+      // Not this screen's list narrowed down: the favourites a person keeps
+      // are one list, kept in one place, and deriving them again from the
+      // contacts table is how two answers to one question drift apart.
       await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
 
       await tester.tap(find.byKey(contactsFilterFavoritesKey));
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(mounted.last.favoritesOnly, isTrue);
+      expect(mounted.last, 'favorites');
     });
 
-    testWidgets('keeps the same list rather than fetching it again', (tester) async {
-      // The list is watched per address book; switching the control decides
-      // how much of it is shown, so tearing it down would refetch and flash a
-      // spinner on every tap.
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
-      final listElement = tester.element(find.text('external all'));
+    testWidgets('and takes the search control away with it', (tester) async {
+      // That list has never been searchable anywhere in the app, and a box
+      // that takes text and changes nothing is worse than no box.
+      await pumpScreen(tester, sourceTypes: [ContactSourceType.local, ContactSourceType.external]);
+
+      expect(find.byKey(contactsSearchOpenKey), findsOneWidget);
 
       await tester.tap(find.byKey(contactsFilterFavoritesKey));
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(tester.element(find.text('external favorites')), same(listElement));
+      expect(find.byKey(contactsSearchOpenKey), findsNothing);
+      expect(find.byKey(contactsSearchInputKey), findsNothing);
+      expect(find.byKey(contactsSourcePickerKey), findsOneWidget);
     });
   });
 
@@ -291,7 +300,7 @@ void main() {
       // offer here.
       await pumpScreen(tester, sourceTypes: [ContactSourceType.local], remembered: ContactSourceType.external);
 
-      expect(mounted.last.sourceType, ContactSourceType.local);
+      expect(mounted.last, 'local');
     });
   });
 }

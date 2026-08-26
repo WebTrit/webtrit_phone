@@ -40,6 +40,7 @@ class ContactsFilterScreenPage extends StatelessWidget {
         title: Text(EnvironmentConfig.APP_NAME),
         sourceTypes: sourceTypes,
         sourceTypeWidgetBuilder: contactSourceTypeWidgetBuilder,
+        favoritesWidgetBuilder: contactsFavoritesWidgetBuilder,
       ),
     );
   }

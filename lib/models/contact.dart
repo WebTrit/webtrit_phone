@@ -138,13 +138,3 @@ class Contact extends Equatable {
   @override
   bool get stringify => true;
 }
-
-extension ContactListFavorites on List<Contact> {
-  /// The people with a favourite among their numbers, in the order the list
-  /// already had.
-  ///
-  /// The order is the list's own: narrowing a list must not also reshuffle
-  /// it, or the filter reads as a different screen rather than the same one
-  /// with fewer rows.
-  List<Contact> get favoritesOnly => where((contact) => contact.isFavorite).toList();
-}

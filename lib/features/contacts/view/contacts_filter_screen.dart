@@ -27,15 +27,19 @@ class ContactsFilterScreen extends StatefulWidget {
     super.key,
     required this.sourceTypes,
     required this.sourceTypeWidgetBuilder,
+    required this.favoritesWidgetBuilder,
     this.title,
     this.style,
   });
 
   final List<ContactSourceType> sourceTypes;
 
-  /// Mounts the list of one address book, narrowed to favourites when asked.
-  final Widget Function(BuildContext context, ContactSourceType sourceType, {bool favoritesOnly, bool markFavorites})
+  /// Mounts the list of one address book.
+  final Widget Function(BuildContext context, ContactSourceType sourceType, {bool markFavorites})
   sourceTypeWidgetBuilder;
+
+  /// Mounts the favourites section's own list.
+  final Widget Function(BuildContext context) favoritesWidgetBuilder;
 
   final Widget? title;
   final ContactsScreenStyle? style;
@@ -106,6 +110,9 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
               // in the title row above them.
               gapAbove: kMainAppBarBottomPaddingGap / 2,
               searching: _searching,
+              // The favourites section has never offered a search, and a box
+              // that takes text and changes nothing is worse than no box.
+              searchable: _filter != ContactsListFilter.favorites,
               onSearchOpened: () => setState(() => _searching = true),
               onSearchClosed: () => setState(() => _searching = false),
               // With one address book there is nothing to pick, so the search
@@ -131,27 +138,26 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
               top: mediaQueryData.padding.top + kToolbarHeight + ContactsSearchRow.height,
             ),
           ),
-          child: BlocBuilder<ContactsBloc, ContactsState>(
-            buildWhen: (previous, current) => previous.sourceType != current.sourceType,
-            // Keyed by the address book alone. Its list is fetched and watched
-            // per address book, so a different one is a different list; the
-            // filter only decides how much of the same list is shown, and
-            // keying on it as well would refetch and flash a spinner on every
-            // tap of the control.
-            builder: (context, state) {
-              final sourceType = _shown(state.sourceType);
+          // Favourites are not this screen's list narrowed down - they are the
+          // favourites section's own list, drawn by the widget that section
+          // draws it with. Deriving them a second time from the contacts table
+          // is what made two answers to one question, and they disagree the
+          // moment either side changes.
+          child: _filter == ContactsListFilter.favorites
+              ? widget.favoritesWidgetBuilder(context)
+              : BlocBuilder<ContactsBloc, ContactsState>(
+                  buildWhen: (previous, current) => previous.sourceType != current.sourceType,
+                  // Keyed by the address book. Its list is fetched and watched
+                  // per address book, so a different one is a different list.
+                  builder: (context, state) {
+                    final sourceType = _shown(state.sourceType);
 
-              return KeyedSubtree(
-                key: ValueKey(sourceType),
-                child: widget.sourceTypeWidgetBuilder(
-                  context,
-                  sourceType,
-                  favoritesOnly: _filter == ContactsListFilter.favorites,
-                  markFavorites: true,
+                    return KeyedSubtree(
+                      key: ValueKey(sourceType),
+                      child: widget.sourceTypeWidgetBuilder(context, sourceType, markFavorites: true),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
         ),
         bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
           buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,

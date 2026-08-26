@@ -3,23 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../contacts.dart';
 
 class ContactsExternalTab extends StatefulWidget {
-  const ContactsExternalTab({super.key, this.favoritesOnly = false, this.markFavorites = false});
-
-  /// Narrows the list to the people with a favourite among their numbers.
-  /// False is the whole address book, which is what the contacts screen
-  /// without the filter always shows.
-  final bool favoritesOnly;
+  const ContactsExternalTab({super.key, this.markFavorites = false});
 
   /// Whether a star marks the people with a favourite among their numbers.
-  /// It goes with the filter: without the star, a list narrowed to favourites
-  /// gives no clue what it was narrowed by.
+  /// Only where favourites are reachable from this screen: a star that leads
+  /// nowhere is worse than no star at all.
   final bool markFavorites;
 
   @override
@@ -43,7 +37,7 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
 
     return BlocBuilder<ContactsExternalTabBloc, ContactsExternalTabState>(
       builder: (context, state) {
-        final contacts = widget.favoritesOnly ? state.contacts.favoritesOnly : state.contacts;
+        final contacts = state.contacts;
 
         if (contacts.isNotEmpty) {
           return RefreshIndicator(
@@ -55,9 +49,6 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
 
                 return ContactTileAdapter(
                   tileKey: contactsExtContactTileKey,
-                  // Only where favourites are a filter of this list: a star
-                  // is what makes that filter understandable from the whole
-                  // list too.
                   markFavorite: widget.markFavorites,
                   contact: contact,
                   expanded: _expandedContactId == contact.id,
@@ -66,12 +57,6 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
               },
             ),
           );
-        }
-
-        // Nothing to show because of the filter is a different answer from
-        // nothing to show at all, and it is not a failure or a slow fetch.
-        if (widget.favoritesOnly && state.contacts.isNotEmpty) {
-          return NoDataPlaceholder(content: Text(context.l10n.contacts_ContactsScreen_emptyFavorites));
         }
 
         // No contacts to show yet: keep a loading indicator visible while the
