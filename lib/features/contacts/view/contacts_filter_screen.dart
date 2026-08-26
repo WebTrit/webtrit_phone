@@ -236,11 +236,18 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
                         sourceType,
                         markFavorites: true,
                       ),
-                      ContactsFavoritesSelection() => widget.favoritesWidgetBuilder(
-                        context,
-                        reorderMode: _reorder.active,
-                        onReorderStart: _reorder.dragStarted,
-                        onReorderEnd: _reorder.dragEnded,
+                      // Listened to here as well as by the button: the two sit
+                      // in different parts of the tree, and a button that
+                      // changes its icon while the rows stay put is the whole
+                      // thing not working.
+                      ContactsFavoritesSelection() => ListenableBuilder(
+                        listenable: _reorder,
+                        builder: (context, _) => widget.favoritesWidgetBuilder(
+                          context,
+                          reorderMode: _reorder.active,
+                          onReorderStart: _reorder.dragStarted,
+                          onReorderEnd: _reorder.dragEnded,
+                        ),
                       ),
                     },
                 ],

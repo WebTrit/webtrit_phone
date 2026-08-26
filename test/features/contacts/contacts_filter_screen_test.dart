@@ -125,7 +125,7 @@ void main() {
                 bool reorderMode = false,
                 void Function(int index)? onReorderStart,
                 void Function(int index)? onReorderEnd,
-              }) => const Text('favorites'),
+              }) => Text(reorderMode ? 'favorites rearranging' : 'favorites'),
             ),
           ),
         ),
@@ -450,6 +450,22 @@ void main() {
       await tester.pump(const Duration(milliseconds: 400));
 
       expect(tester.getSemantics(button), isSemantics(label: 'Finish reordering', isButton: true));
+      handle.dispose();
+    });
+
+    testWidgets('reaches the rows, not only the button', (tester) async {
+      // The button and the list are told by the same controller, but they sit
+      // in different parts of the tree: a button that changes its icon while
+      // the rows stay put is the whole feature not working.
+      final handle = tester.ensureSemantics();
+      await pumpScreen(tester, selections: const [local, favorites], favorites: [aFavorite(1), aFavorite(2)]);
+      await pick(tester, find.byKey(contactsSourceFavoritesKey));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      await tapViaSemantics(tester, find.bySemanticsIdentifier(contactsFavoritesReorderId));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.text('favorites rearranging'), findsOneWidget);
       handle.dispose();
     });
 
