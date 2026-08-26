@@ -388,6 +388,27 @@ void main() {
     });
   });
 
+  group('a tab left with favourites and no address book', () {
+    // Reachable without anyone meaning it: a contacts tab configured for
+    // extensions, on a core that does not carry them, loses its only source.
+    testWidgets('shows the favourites and nothing else', (tester) async {
+      await pumpScreen(tester, selections: const [favorites]);
+
+      expect(find.text('favorites'), findsOneWidget);
+      expect(find.text('local'), findsNothing);
+      expect(find.text('external'), findsNothing);
+    });
+
+    testWidgets('and never names an address book it was not given', (tester) async {
+      // Falling back to some address book here would watch a phone book nobody
+      // asked for and never show it.
+      await pumpScreen(tester, selections: const [favorites], remembered: ContactSourceType.external);
+
+      expect(find.byKey(contactsSourcePickerKey), findsNothing);
+      expect(find.text('favorites'), findsOneWidget);
+    });
+  });
+
   group('a remembered address book this deployment no longer offers', () {
     testWidgets('does not decide what the list shows', (tester) async {
       // The choice outlives a change of configuration, and it starts out as a

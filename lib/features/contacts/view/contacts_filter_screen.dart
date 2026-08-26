@@ -68,12 +68,13 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
   /// Whether this deployment carries the favourites entry at all.
   bool get _offersFavorites => widget.selections.any((selection) => selection is ContactsFavoritesSelection);
 
-  /// The address book the list is drawn from.
+  /// The address book the list is drawn from, or null where this deployment
+  /// offers none.
   ///
   /// Neither the pick nor what [ContactsBloc] remembered is always on offer: a
   /// remembered choice outlives a change of configuration, and it starts out
   /// as a default nobody made.
-  ContactSourceType _shownSource(ContactSourceType remembered) {
+  ContactSourceType? _shownSource(ContactSourceType remembered) {
     final picked = _pickedSource;
     if (picked != null && widget.selections.contains(ContactsSourceSelection(picked))) return picked;
     if (widget.selections.contains(ContactsSourceSelection(remembered))) return remembered;
@@ -84,24 +85,33 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
     for (final selection in widget.selections) {
       if (selection is ContactsSourceSelection) return selection.sourceType;
     }
-    return ContactSourceType.values.first;
+    return null;
   }
 
   /// The list actually shown.
-  ContactsListSelection _shown(ContactSourceType remembered) => _favorites && _offersFavorites
-      ? const ContactsFavoritesSelection()
-      : ContactsSourceSelection(_shownSource(remembered));
+  ContactsListSelection _shown(ContactSourceType remembered) {
+    if (_favorites && _offersFavorites) return const ContactsFavoritesSelection();
+
+    final sourceType = _shownSource(remembered);
+    if (sourceType != null) return ContactsSourceSelection(sourceType);
+
+    // Favourites are all that is left. A tab configured with no lists at all
+    // lands here too and shows an empty screen, exactly as the tabbed
+    // arrangement does with no address books.
+    return const ContactsFavoritesSelection();
+  }
 
   void _onSelected(ContactsListSelection selection) {
     setState(() {
       _favorites = selection is ContactsFavoritesSelection;
-      if (selection.sourceType != null) _pickedSource = selection.sourceType;
+      if (selection is ContactsSourceSelection) _pickedSource = selection.sourceType;
     });
 
     // Only an address book is worth remembering, and only when one was picked:
     // a hop through favourites and back must land on the book left behind.
-    final sourceType = selection.sourceType;
-    if (sourceType != null) context.read<ContactsBloc>().add(ContactsSourceTypeChanged(sourceType));
+    if (selection is ContactsSourceSelection) {
+      context.read<ContactsBloc>().add(ContactsSourceTypeChanged(selection.sourceType));
+    }
   }
 
   @override
@@ -187,6 +197,15 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
             buildWhen: (previous, current) => previous.sourceType != current.sourceType,
             builder: (context, state) {
               final sourceType = _shownSource(state.sourceType);
+
+              // A tab can end up with favourites and no address book at all -
+              // one configured for extensions, on a core that does not carry
+              // them. There is then a single list and no stack to keep, and
+              // naming an address book anyway would watch a phone book nobody
+              // asked for and never see it.
+              if (sourceType == null) {
+                return _offersFavorites ? widget.favoritesWidgetBuilder(context) : const SizedBox.shrink();
+              }
 
               return IndexedStack(
                 index: _favorites && _offersFavorites ? 1 : 0,

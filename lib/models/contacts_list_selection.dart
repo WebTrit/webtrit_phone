@@ -14,10 +14,6 @@ import 'contact_source_type.dart';
 sealed class ContactsListSelection extends Equatable {
   const ContactsListSelection();
 
-  /// The address book behind this selection, or null where the selection is
-  /// not one address book.
-  ContactSourceType? get sourceType;
-
   @override
   bool get stringify => true;
 }
@@ -26,7 +22,6 @@ sealed class ContactsListSelection extends Equatable {
 final class ContactsSourceSelection extends ContactsListSelection {
   const ContactsSourceSelection(this.sourceType);
 
-  @override
   final ContactSourceType sourceType;
 
   @override
@@ -36,9 +31,6 @@ final class ContactsSourceSelection extends ContactsListSelection {
 /// The favourites section's own list.
 final class ContactsFavoritesSelection extends ContactsListSelection {
   const ContactsFavoritesSelection();
-
-  @override
-  ContactSourceType? get sourceType => null;
 
   @override
   List<Object?> get props => const [];
