@@ -488,9 +488,6 @@ class AppLocalizationsTh extends AppLocalizations {
       'ยังไม่มีรายการโปรดในรายชื่อของคุณ\nเพิ่มได้จากการ์ดรายชื่อโดยแตะไอคอนดาว';
 
   @override
-  String get contacts_ContactsScreen_filterFavorites => 'รายการโปรด';
-
-  @override
   String get contacts_ContactsScreen_searchSemanticsLabel => 'ค้นหารายชื่อ';
 
   @override
@@ -523,6 +520,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get contacts_ExternalTabText_failure => 'ไม่สามารถดึงรายชื่อจาก PBX บนคลาวด์ได้';
 
   @override
+  String get contacts_FavoritesTabText_emptyOnSearching => 'ไม่พบรายชื่อ';
+
+  @override
   String get contacts_LocalTabButton_contactsAgreement => 'เปิดการตั้งค่า';
 
   @override
@@ -546,6 +546,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get contacts_LocalTabText_permissionFailure => 'ไม่มีสิทธิ์ในการเข้าถึงรายชื่อติดต่อในโทรศัพท์ของคุณ';
+
+  @override
+  String get contactsSourceFavorites => 'รายการโปรด';
 
   @override
   String get contactsSourceExternal => 'Cloud PBX';

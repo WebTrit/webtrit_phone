@@ -46,12 +46,11 @@ class ContactsScreenPage extends StatelessWidget {
 Widget contactSourceTypeWidgetBuilder(
   BuildContext context,
   ContactSourceType sourceType, {
-  bool favoritesOnly = false,
   bool markFavorites = false,
 }) {
   switch (sourceType) {
     case ContactSourceType.local:
-      final widget = ContactsLocalTab(favoritesOnly: favoritesOnly, markFavorites: markFavorites);
+      final widget = ContactsLocalTab(markFavorites: markFavorites);
       final provider = BlocProvider(
         create: (context) {
           final contactsSearchBloc = context.read<ContactsBloc>();
@@ -65,7 +64,7 @@ Widget contactSourceTypeWidgetBuilder(
       );
       return provider;
     case ContactSourceType.external:
-      final widget = ContactsExternalTab(favoritesOnly: favoritesOnly, markFavorites: markFavorites);
+      final widget = ContactsExternalTab(markFavorites: markFavorites);
       final provider = BlocProvider(
         create: (context) {
           final contactsSearchBloc = context.read<ContactsBloc>();
@@ -78,5 +77,31 @@ Widget contactSourceTypeWidgetBuilder(
         child: widget,
       );
       return provider;
+  }
+}
+
+/// Mounts the list one selection of the unified arrangement stands for.
+///
+/// The address books are the very lists the tabbed screen draws, so they go
+/// through [contactSourceTypeWidgetBuilder]; favourites are a list of their
+/// own, spanning every address book, and have a bloc to match.
+///
+/// Stars on every row here, on none there: this is the arrangement favourites
+/// are reachable from, and a star that leads nowhere is worse than no star.
+Widget contactsListSelectionWidgetBuilder(BuildContext context, ContactsListSelection selection) {
+  switch (selection) {
+    case ContactsSourceSelection(:final sourceType):
+      return contactSourceTypeWidgetBuilder(context, sourceType, markFavorites: true);
+    case ContactsFavoritesSelection():
+      return BlocProvider(
+        create: (context) {
+          final contactsSearchBloc = context.read<ContactsBloc>();
+          return ContactsFavoritesTabBloc(
+            contactsRepository: context.read<ContactsRepository>(),
+            contactsSearchBloc: contactsSearchBloc,
+          )..add(ContactsFavoritesTabStarted(search: contactsSearchBloc.state.search));
+        },
+        child: const ContactsFavoritesTab(),
+      );
   }
 }

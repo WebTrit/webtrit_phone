@@ -493,9 +493,6 @@ class AppLocalizationsIt extends AppLocalizations {
       'Non ci sono ancora preferiti tra i tuoi contatti.\nAggiungine uno dalla scheda del contatto con la stella';
 
   @override
-  String get contacts_ContactsScreen_filterFavorites => 'Preferiti';
-
-  @override
   String get contacts_ContactsScreen_searchSemanticsLabel => 'Cerca contatti';
 
   @override
@@ -528,6 +525,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contacts_ExternalTabText_failure => 'Impossibile ottenere i contatti del centralino cloud';
 
   @override
+  String get contacts_FavoritesTabText_emptyOnSearching => 'Nessun contatto trovato';
+
+  @override
   String get contacts_LocalTabButton_contactsAgreement => 'Apri Impostazioni';
 
   @override
@@ -552,6 +552,9 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get contacts_LocalTabText_permissionFailure =>
       'Non ci sono i permessi per ottenere i tuoi contatti telefonici';
+
+  @override
+  String get contactsSourceFavorites => 'Preferiti';
 
   @override
   String get contactsSourceExternal => 'Centralino cloud';

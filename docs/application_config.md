@@ -245,11 +245,35 @@ Contact list screen.
   "contactSourceTypes": [
     "local",
     "external"
-  ]
+  ],
+  "layout": "unified",
+  "favorites": true
 }
 ```
 
-- `contactSourceTypes`: which contact sources to display (`local`, `external`, etc.).
+| Field                | Type       | Default    | Description                                                                        |
+|----------------------|------------|------------|------------------------------------------------------------------------------------|
+| `contactSourceTypes` | `string[]` | `[]`       | Which address books to offer (`local`, `external`).                                |
+| `layout`             | `string`   | `"tabbed"` | How the section is arranged: `tabbed` or `unified`.                                |
+| `favorites`          | `bool`     | `true`     | Whether favorites are offered inside the list. Read for `unified` only.            |
+
+`layout` picks between two screens, not two styles of one:
+
+- `tabbed` - one tab per address book, and favorites live in a `favorites` tab of the bottom
+  bar. This is the arrangement the app had before `layout` existed, and the one a config that
+  says nothing keeps.
+- `unified` - one list at a time, and a chooser on the line under the title says which:
+  each address book, plus (when `favorites` is on) the favorites of all of them together as a
+  third entry. Rows in this arrangement carry a star, which is how a contact leaves the
+  favorites list again.
+
+An unknown `layout` value falls back to `tabbed`, so a configurator may offer an arrangement
+before an installed app knows how to draw it.
+
+`favorites` is read only for `unified`: with `tabbed` the favorites tab of the bottom bar
+decides that instead, and stating it here would be a value nothing reads. Turning it off drops
+the third entry from the chooser - and if the section also has a single address book, the
+chooser disappears with it and the search box takes the whole line.
 
 ### **KeypadTabScheme**
 

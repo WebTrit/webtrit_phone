@@ -489,9 +489,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'No favorites among your contacts yet.\nAdd one from a contact card using the star icon';
 
   @override
-  String get contacts_ContactsScreen_filterFavorites => 'Favorites';
-
-  @override
   String get contacts_ContactsScreen_searchSemanticsLabel => 'Search contacts';
 
   @override
@@ -524,6 +521,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contacts_ExternalTabText_failure => 'Failed to get cloud PBX contacts';
 
   @override
+  String get contacts_FavoritesTabText_emptyOnSearching => 'No contacts found';
+
+  @override
   String get contacts_LocalTabButton_contactsAgreement => 'Open Settings';
 
   @override
@@ -547,6 +547,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get contacts_LocalTabText_permissionFailure => 'There are no permissions to get your phone contacts';
+
+  @override
+  String get contactsSourceFavorites => 'Favorites';
 
   @override
   String get contactsSourceExternal => 'Cloud PBX';

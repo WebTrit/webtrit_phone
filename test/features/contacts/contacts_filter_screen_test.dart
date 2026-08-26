@@ -42,7 +42,11 @@ class _RememberedSourceType implements ActiveContactSourceTypeRepository {
 }
 
 void main() {
-  late List<({ContactSourceType sourceType, bool favoritesOnly})> mounted;
+  const local = ContactsSourceSelection(ContactSourceType.local);
+  const external = ContactsSourceSelection(ContactSourceType.external);
+  const favorites = ContactsFavoritesSelection();
+
+  late List<ContactsListSelection> mounted;
 
   late _MockCallBloc callBloc;
   late _MockSessionStatusCubit sessionStatusCubit;
@@ -63,7 +67,7 @@ void main() {
 
   Future<ContactsBloc> pumpScreen(
     WidgetTester tester, {
-    required List<ContactSourceType> sourceTypes,
+    required List<ContactsListSelection> selections,
     ContactSourceType remembered = ContactSourceType.external,
   }) async {
     final contactsBloc = ContactsBloc(activeContactSourceTypeRepository: _RememberedSourceType(remembered));
@@ -92,10 +96,10 @@ void main() {
               BlocProvider<MicrophoneStatusBloc>.value(value: microphoneStatusBloc),
             ],
             child: ContactsFilterScreen(
-              sourceTypes: sourceTypes,
-              sourceTypeWidgetBuilder: (context, sourceType, {bool favoritesOnly = false, bool markFavorites = false}) {
-                mounted.add((sourceType: sourceType, favoritesOnly: favoritesOnly));
-                return Text('${sourceType.name} ${favoritesOnly ? 'favorites' : 'all'}');
+              selections: selections,
+              selectionWidgetBuilder: (context, selection) {
+                mounted.add(selection);
+                return Text(_label(selection));
               },
             ),
           ),
@@ -108,83 +112,125 @@ void main() {
     return contactsBloc;
   }
 
-  group('the filter control', () {
-    testWidgets('starts on the whole address book', (tester) async {
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+  /// Waits out the chooser's opening animation.
+  ///
+  /// Two pumps, not one: the first only starts the route's ticker, and a menu
+  /// still at the start of its growth is collapsed - a press lands on nothing
+  /// and the test fails claiming the entry does not work.
+  ///
+  /// Not `pumpAndSettle`: the bar keeps a status indicator animating, so this
+  /// screen never settles.
+  Future<void> openedMenu(WidgetTester tester) async {
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+  }
 
-      expect(mounted.last.favoritesOnly, isFalse);
+  group('the list chooser', () {
+    testWidgets('starts on the remembered address book', (tester) async {
+      await pumpScreen(tester, selections: const [external, favorites]);
+
+      expect(mounted.last, external);
     });
 
-    testWidgets('is a star that says whether it is on, and not by colour alone', (tester) async {
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+    testWidgets('offers favourites as one more entry rather than a control of its own', (tester) async {
+      // What a person is answering is the same question either way - which
+      // list do I want - and two controls asking it invite the combination
+      // nobody meant: the favourites of one address book, the other hidden.
+      await pumpScreen(tester, selections: const [local, external, favorites]);
 
-      final button = find.byKey(contactsFilterFavoritesKey);
-      expect(find.descendant(of: button, matching: find.byIcon(Icons.star_border)), findsOneWidget);
+      expect(find.byKey(contactsSourcePickerKey), findsOneWidget);
 
-      await tester.tap(button);
+      await tester.tap(find.byKey(contactsSourcePickerKey));
+      await openedMenu(tester);
+
+      expect(find.byKey(contactsSourceFavoritesKey), findsOneWidget);
+    });
+
+    testWidgets('mounts the favourites list when that entry is picked', (tester) async {
+      await pumpScreen(tester, selections: const [local, external, favorites]);
+
+      await tester.tap(find.byKey(contactsSourcePickerKey));
+      await openedMenu(tester);
+      await tester.tap(find.byKey(contactsSourceFavoritesKey));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(mounted.last, favorites);
+      expect(find.text('favorites'), findsOneWidget);
+    });
+
+    testWidgets('and says so in the closed control', (tester) async {
+      // The control is the only thing on screen that names the list, so a
+      // header still saying "Cloud PBX" over a list of favourites is the whole
+      // of what a person has to go on being wrong.
+      await pumpScreen(tester, selections: const [local, external, favorites]);
+
+      await tester.tap(find.byKey(contactsSourcePickerKey));
+      await openedMenu(tester);
+      await tester.tap(find.byKey(contactsSourceFavoritesKey));
       await tester.pump(const Duration(milliseconds: 400));
 
-      // Filled rather than outlined: the shape changes, not only the colour.
-      expect(find.descendant(of: button, matching: find.byIcon(Icons.star)), findsOneWidget);
-      expect(find.descendant(of: button, matching: find.byIcon(Icons.star_border)), findsNothing);
+      final closed = find.descendant(of: find.byKey(contactsSourcePickerKey), matching: find.text('Favorites'));
+      expect(closed, findsOneWidget);
+    });
+
+    testWidgets('comes back to the address book that was left behind', (tester) async {
+      // A hop through favourites must not cost someone the address book they
+      // had chosen: picking favourites states no address book, so nothing may
+      // overwrite the remembered one.
+      final bloc = await pumpScreen(
+        tester,
+        selections: const [local, external, favorites],
+        remembered: ContactSourceType.local,
+      );
+
+      await tester.tap(find.byKey(contactsSourcePickerKey));
+      await openedMenu(tester);
+      await tester.tap(find.byKey(contactsSourceFavoritesKey));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(bloc.state.sourceType, ContactSourceType.local);
+
+      await tester.tap(find.byKey(contactsSourcePickerKey));
+      await openedMenu(tester);
+      await tester.tap(find.text('Your phone').last);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(mounted.last, local);
     });
 
     testWidgets('takes no line of its own, so the list starts higher', (tester) async {
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+      await pumpScreen(tester, selections: const [external, favorites]);
 
-      // One line under the title, and no strip of its own for the filter.
+      // One line under the title, and no strip of its own for the chooser.
       expect(find.byType(ContactsSearchRow), findsOneWidget);
       expect(find.byType(ExtTabBar), findsNothing);
     });
 
-    testWidgets('sits with the controls of the screen, not with the list', (tester) async {
-      // What the filter narrows is the whole screen, and the line under the
-      // title is about the list: which address book it draws and how it is
-      // searched. Put there, the filter reads as one more of those.
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+    testWidgets('leaves the title row to the controls of the screen', (tester) async {
+      // Which list is shown is about the list, so it belongs on the line the
+      // list's own controls are on - not beside the avatar.
+      await pumpScreen(tester, selections: const [external, favorites]);
 
-      final filter = find.byKey(contactsFilterFavoritesKey);
+      final picker = find.byKey(contactsSourcePickerKey);
 
-      expect(find.descendant(of: find.byType(NavigationToolbar), matching: filter), findsOneWidget);
-      expect(find.descendant(of: find.byType(ContactsSearchRow), matching: filter), findsNothing);
+      expect(find.descendant(of: find.byType(ContactsSearchRow), matching: picker), findsOneWidget);
+      expect(find.descendant(of: find.byType(NavigationToolbar), matching: picker), findsNothing);
+    });
+  });
+
+  group('a deployment that turns favourites off in this section', () {
+    testWidgets('never offers the entry', (tester) async {
+      await pumpScreen(tester, selections: const [local, external]);
+
+      await tester.tap(find.byKey(contactsSourcePickerKey));
+      await openedMenu(tester);
+
+      expect(find.byKey(contactsSourceFavoritesKey), findsNothing);
     });
 
-    testWidgets('says it is on to a screen reader as well', (tester) async {
-      // The colour and the fill are the whole of it on screen, and neither
-      // reaches someone listening to the screen.
-      final handle = tester.ensureSemantics();
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+    testWidgets('and shows an address book, never the favourites list', (tester) async {
+      await pumpScreen(tester, selections: const [local, external]);
 
-      final filter = find.byKey(contactsFilterFavoritesKey);
-      expect(tester.getSemantics(filter), isSemantics(isSelected: false, isButton: true));
-
-      await tester.tap(filter);
-      await tester.pump(const Duration(milliseconds: 400));
-
-      expect(tester.getSemantics(filter), isSemantics(isSelected: true, isButton: true));
-      handle.dispose();
-    });
-
-    testWidgets('narrows the list to favourites when picked', (tester) async {
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
-
-      await tester.tap(find.byKey(contactsFilterFavoritesKey));
-      await tester.pump(const Duration(milliseconds: 400));
-
-      expect(mounted.last.favoritesOnly, isTrue);
-    });
-
-    testWidgets('keeps the same list rather than fetching it again', (tester) async {
-      // The list is watched per address book; switching the control decides
-      // how much of it is shown, so tearing it down would refetch and flash a
-      // spinner on every tap.
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
-      final listElement = tester.element(find.text('external all'));
-
-      await tester.tap(find.byKey(contactsFilterFavoritesKey));
-      await tester.pump(const Duration(milliseconds: 400));
-
-      expect(tester.element(find.text('external favorites')), same(listElement));
+      expect(mounted.last, isA<ContactsSourceSelection>());
     });
   });
 
@@ -194,7 +240,7 @@ void main() {
       // same place, not a header that grows and shrinks under them - and the
       // saving this screen makes comes from dropping a row, not from
       // squeezing the one it keeps.
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+      await pumpScreen(tester, selections: const [external, favorites]);
 
       final bar = tester.getRect(find.byType(AppBar));
       final title = tester.getRect(find.byType(NavigationToolbar));
@@ -205,7 +251,7 @@ void main() {
     testWidgets('without the controls sitting against the title above them', (tester) async {
       // The height is kept by splitting the row's own gap, not by pressing
       // the controls into the row above - which is where the avatar is.
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+      await pumpScreen(tester, selections: const [external]);
 
       final title = tester.getRect(find.byType(NavigationToolbar));
       final search = tester.getRect(find.byKey(contactsSearchInputKey));
@@ -215,7 +261,7 @@ void main() {
 
     testWidgets('and keeps the chooser off the button beside it', (tester) async {
       // Two controls a hair apart read as one.
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.local, ContactSourceType.external]);
+      await pumpScreen(tester, selections: const [local, external]);
 
       final picker = tester.getRect(find.byKey(contactsSourcePickerKey));
       final search = tester.getRect(find.byKey(contactsSearchOpenKey));
@@ -225,11 +271,11 @@ void main() {
   });
 
   group('the address book picker', () {
-    testWidgets('is not drawn when there is only one to pick from', (tester) async {
+    testWidgets('is not drawn when there is only one list to pick from', (tester) async {
       // Either way round: a deployment can be configured without the phone
       // book, and one without extensions loses the other entry the same way.
       for (final only in ContactSourceType.values) {
-        await pumpScreen(tester, sourceTypes: [only]);
+        await pumpScreen(tester, selections: [ContactsSourceSelection(only)]);
 
         expect(find.byKey(contactsSourcePickerKey), findsNothing, reason: 'only: ${only.name}');
         // With nothing to pick, the line is the search box and stays that
@@ -241,8 +287,17 @@ void main() {
       }
     });
 
+    testWidgets('is drawn for one address book plus favourites, which are two lists', (tester) async {
+      // The rule is about how many lists there are to pick between, not how
+      // many address books: favourites are one of them here.
+      await pumpScreen(tester, selections: const [local, favorites]);
+
+      expect(find.byKey(contactsSourcePickerKey), findsOneWidget);
+      expect(find.byKey(contactsSearchOpenKey), findsOneWidget);
+    });
+
     testWidgets('takes the line when there are two, with search on a button', (tester) async {
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.local, ContactSourceType.external]);
+      await pumpScreen(tester, selections: const [local, external]);
 
       expect(find.byKey(contactsSourcePickerKey), findsOneWidget);
       expect(find.byKey(contactsSearchOpenKey), findsOneWidget);
@@ -250,7 +305,7 @@ void main() {
     });
 
     testWidgets('gives the line to the search box once it is opened', (tester) async {
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.local, ContactSourceType.external]);
+      await pumpScreen(tester, selections: const [local, external]);
 
       await tester.tap(find.byKey(contactsSearchOpenKey));
       await tester.pump(const Duration(milliseconds: 400));
@@ -262,7 +317,7 @@ void main() {
     testWidgets('and the cross in the box is the way back out of it', (tester) async {
       // One control does both: it empties a search, and on a box that is
       // already empty it puts the chooser back.
-      final bloc = await pumpScreen(tester, sourceTypes: [ContactSourceType.local, ContactSourceType.external]);
+      final bloc = await pumpScreen(tester, selections: const [local, external]);
 
       await tester.tap(find.byKey(contactsSearchOpenKey));
       await tester.pump(const Duration(milliseconds: 400));
@@ -289,9 +344,24 @@ void main() {
       // The choice outlives a change of configuration, and it starts out as a
       // default nobody picked - so it can name an address book that is not on
       // offer here.
-      await pumpScreen(tester, sourceTypes: [ContactSourceType.local], remembered: ContactSourceType.external);
+      await pumpScreen(tester, selections: const [local], remembered: ContactSourceType.external);
 
-      expect(mounted.last.sourceType, ContactSourceType.local);
+      expect(mounted.last, local);
+    });
+
+    testWidgets('and never lands on favourites by accident', (tester) async {
+      // Falling back to the first configured entry is only right while that
+      // entry is an address book; a deployment that lists favourites first
+      // must still open on a list of people.
+      await pumpScreen(tester, selections: const [favorites, local], remembered: ContactSourceType.external);
+
+      expect(mounted.last, favorites);
     });
   });
 }
+
+/// What the stub list renders, so a test can say which one is on screen.
+String _label(ContactsListSelection selection) => switch (selection) {
+  ContactsSourceSelection(:final sourceType) => sourceType.name,
+  ContactsFavoritesSelection() => 'favorites',
+};

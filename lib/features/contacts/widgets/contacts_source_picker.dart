@@ -6,8 +6,8 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
-/// Picks which address book the list is drawn from, as a compact control that
-/// opens the line under the title.
+/// Picks which list is drawn, as a compact control that opens the line under
+/// the title: one address book, or the favourites of all of them.
 ///
 /// Compact because it is the rarest thing a person changes on this screen -
 /// seldom, and never twice in a row - so it is given the room a word needs
@@ -20,16 +20,27 @@ const _pickerGap = 8.0;
 const _pickerMenuGap = 12.0;
 
 class ContactsSourcePicker extends StatelessWidget {
-  const ContactsSourcePicker({super.key, required this.sourceTypes, required this.selected, required this.onSelected});
+  const ContactsSourcePicker({super.key, required this.selections, required this.selected, required this.onSelected});
 
-  final List<ContactSourceType> sourceTypes;
-  final ContactSourceType selected;
-  final ValueChanged<ContactSourceType> onSelected;
+  final List<ContactsListSelection> selections;
+  final ContactsListSelection selected;
+  final ValueChanged<ContactsListSelection> onSelected;
 
-  IconData _icon(ContactSourceType sourceType) => switch (sourceType) {
-    ContactSourceType.local => Icons.smartphone_outlined,
-    ContactSourceType.external => Icons.cloud_outlined,
+  IconData _icon(ContactsListSelection selection) => switch (selection) {
+    ContactsSourceSelection(sourceType: ContactSourceType.local) => Icons.smartphone_outlined,
+    ContactsSourceSelection(sourceType: ContactSourceType.external) => Icons.cloud_outlined,
+    // Outlined like the two beside it: the check mark of the open menu says
+    // which entry is on, so a filled star here would be a second answer to
+    // the same question.
+    ContactsFavoritesSelection() => Icons.star_outline,
   };
+
+  /// Anchors automation reaches an entry by. Only the favourites entry carries
+  /// one: it replaced a control of the title row that had an identifier of its
+  /// own, and dropping that anchor without putting it back is what breaks an
+  /// end-to-end run silently.
+  Key? _itemKey(ContactsListSelection selection) =>
+      selection is ContactsFavoritesSelection ? contactsSourceFavoritesKey : null;
 
   @override
   Widget build(BuildContext context) {
@@ -40,22 +51,22 @@ class ContactsSourcePicker extends StatelessWidget {
       label: l10n.contacts_ContactsScreen_sourceSemanticsLabel,
       identifier: contactsSourcePickerId,
       button: true,
-      child: PopupMenuButton<ContactSourceType>(
+      child: PopupMenuButton<ContactsListSelection>(
         key: contactsSourcePickerKey,
         initialValue: selected,
         onSelected: onSelected,
         tooltip: l10n.contacts_ContactsScreen_sourceSemanticsLabel,
         itemBuilder: (context) => [
-          for (final sourceType in sourceTypes)
+          for (final selection in selections)
             PopupMenuItem(
-              value: sourceType,
+              key: _itemKey(selection),
+              value: selection,
               child: Row(
                 spacing: _pickerMenuGap,
                 children: [
-                  Icon(_icon(sourceType), size: _pickerIconSize),
-                  Expanded(child: Text(sourceType.l10n(context))),
-                  if (sourceType == selected)
-                    Icon(Icons.check, size: _pickerIconSize, color: theme.colorScheme.primary),
+                  Icon(_icon(selection), size: _pickerIconSize),
+                  Expanded(child: Text(selection.l10n(context))),
+                  if (selection == selected) Icon(Icons.check, size: _pickerIconSize, color: theme.colorScheme.primary),
                 ],
               ),
             ),

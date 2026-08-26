@@ -22,6 +22,9 @@ class MockContactsExternalTabBloc extends MockBloc<ContactsExternalTabEvent, Con
 class MockContactsLocalTabBloc extends MockBloc<ContactsLocalTabEvent, ContactsLocalTabState>
     implements ContactsLocalTabBloc {}
 
+class MockContactsFavoritesTabBloc extends MockBloc<ContactsFavoritesTabEvent, ContactsFavoritesTabState>
+    implements ContactsFavoritesTabBloc {}
+
 class MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {}
 
 class MockCallRoutingCubit extends MockCubit<CallRoutingState?> implements CallRoutingCubit {}
@@ -54,6 +57,7 @@ class ContactsTabHarness {
 
   final externalBloc = MockContactsExternalTabBloc();
   final localBloc = MockContactsLocalTabBloc();
+  final favoritesBloc = MockContactsFavoritesTabBloc();
   final callBloc = MockCallBloc();
   final callRoutingCubit = MockCallRoutingCubit();
 
@@ -86,7 +90,6 @@ class ContactsTabHarness {
   Future<void> pumpExternal(
     WidgetTester tester, {
     required List<Contact> contacts,
-    bool favoritesOnly = false,
     bool markFavorites = false,
     ContactsExternalTabStatus status = ContactsExternalTabStatus.success,
   }) async {
@@ -100,7 +103,7 @@ class ContactsTabHarness {
       _around(
         BlocProvider<ContactsExternalTabBloc>.value(
           value: externalBloc,
-          child: ContactsExternalTab(favoritesOnly: favoritesOnly, markFavorites: markFavorites),
+          child: ContactsExternalTab(markFavorites: markFavorites),
         ),
       ),
     );
@@ -110,7 +113,6 @@ class ContactsTabHarness {
   Future<void> pumpLocal(
     WidgetTester tester, {
     required List<Contact> contacts,
-    bool favoritesOnly = false,
     bool markFavorites = false,
     ContactsLocalTabStatus status = ContactsLocalTabStatus.success,
   }) async {
@@ -124,9 +126,30 @@ class ContactsTabHarness {
       _around(
         BlocProvider<ContactsLocalTabBloc>.value(
           value: localBloc,
-          child: ContactsLocalTab(favoritesOnly: favoritesOnly, markFavorites: markFavorites),
+          child: ContactsLocalTab(markFavorites: markFavorites),
         ),
       ),
+    );
+    await tester.pump();
+  }
+
+  /// The favourites list, which draws whatever its bloc hands over: the
+  /// narrowing to favourites is the bloc's job, so a widget test that filtered
+  /// here as well would pass against a bloc that had stopped filtering.
+  Future<void> pumpFavorites(
+    WidgetTester tester, {
+    required List<Contact> contacts,
+    bool searching = false,
+    ContactsFavoritesTabStatus status = ContactsFavoritesTabStatus.success,
+  }) async {
+    whenListen(
+      favoritesBloc,
+      const Stream<ContactsFavoritesTabState>.empty(),
+      initialState: ContactsFavoritesTabState(status: status, contacts: contacts, searching: searching),
+    );
+
+    await tester.pumpWidget(
+      _around(BlocProvider<ContactsFavoritesTabBloc>.value(value: favoritesBloc, child: const ContactsFavoritesTab())),
     );
     await tester.pump();
   }

@@ -886,12 +886,6 @@ abstract class AppLocalizations {
   /// **'No favorites among your contacts yet.\nAdd one from a contact card using the star icon'**
   String get contacts_ContactsScreen_emptyFavorites;
 
-  /// No description provided for @contacts_ContactsScreen_filterFavorites.
-  ///
-  /// In en, this message translates to:
-  /// **'Favorites'**
-  String get contacts_ContactsScreen_filterFavorites;
-
   /// No description provided for @contacts_ContactsScreen_searchSemanticsLabel.
   ///
   /// In en, this message translates to:
@@ -952,6 +946,12 @@ abstract class AppLocalizations {
   /// **'Failed to get cloud PBX contacts'**
   String get contacts_ExternalTabText_failure;
 
+  /// No description provided for @contacts_FavoritesTabText_emptyOnSearching.
+  ///
+  /// In en, this message translates to:
+  /// **'No contacts found'**
+  String get contacts_FavoritesTabText_emptyOnSearching;
+
   /// No description provided for @contacts_LocalTabButton_contactsAgreement.
   ///
   /// In en, this message translates to:
@@ -999,6 +999,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'There are no permissions to get your phone contacts'**
   String get contacts_LocalTabText_permissionFailure;
+
+  /// No description provided for @contactsSourceFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get contactsSourceFavorites;
 
   /// No description provided for @contactsSourceExternal.
   ///

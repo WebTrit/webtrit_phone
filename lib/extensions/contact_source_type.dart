@@ -13,3 +13,15 @@ extension ContactSourceTypeL10n on ContactSourceType {
     }
   }
 }
+
+extension ContactsListSelectionL10n on ContactsListSelection {
+  /// What the header calls this list. Favourites are named like an address
+  /// book rather than like a filter, because in this arrangement that is what
+  /// they are: one more entry of the same control.
+  String l10n(BuildContext context) {
+    return switch (this) {
+      ContactsSourceSelection(:final sourceType) => sourceType.l10n(context),
+      ContactsFavoritesSelection() => context.l10n.contactsSourceFavorites,
+    };
+  }
+}

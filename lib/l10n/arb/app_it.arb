@@ -446,8 +446,6 @@
   },
   "contacts_ContactsScreen_emptyFavorites": "Non ci sono ancora preferiti tra i tuoi contatti.\nAggiungine uno dalla scheda del contatto con la stella",
   "@contacts_ContactsScreen_emptyFavorites": {},
-  "contacts_ContactsScreen_filterFavorites": "Preferiti",
-  "@contacts_ContactsScreen_filterFavorites": {},
   "contacts_ContactsScreen_searchSemanticsLabel": "Cerca contatti",
   "@contacts_ContactsScreen_searchSemanticsLabel": {},
   "contacts_ContactsScreen_sourceSemanticsLabel": "Origine dei contatti",
@@ -470,6 +468,8 @@
   "@contacts_ExternalTabText_failure": {
     "description": "Shown when loading cloud PBX contacts fails (e.g. invalid/expired token, no network connection, or other API errors)."
   },
+  "contacts_FavoritesTabText_emptyOnSearching": "Nessun contatto trovato",
+  "@contacts_FavoritesTabText_emptyOnSearching": {},
   "contacts_LocalTabButton_contactsAgreement": "Apri Impostazioni",
   "@contacts_LocalTabButton_contactsAgreement": {},
   "contacts_LocalTabButton_openAppSettings": "Consenti l'accesso ai contatti del telefono",
@@ -490,6 +490,8 @@
   "@contacts_LocalTabText_permissionFailure": {
     "description": "Shown when the app cannot access local phone contacts because the user has not granted the required permission (e.g. Contacts permission denied in system settings)."
   },
+  "contactsSourceFavorites": "Preferiti",
+  "@contactsSourceFavorites": {},
   "contactsSourceExternal": "Centralino cloud",
   "@contactsSourceExternal": {},
   "contactsSourceLocal": "Il tuo telefono",

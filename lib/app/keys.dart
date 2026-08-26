@@ -276,16 +276,21 @@ const String contactsExtContactTileId = 'contactsExtContactTile';
 const contactsExtContactTileKey = Key(contactsExtContactTileId);
 const String contactsLocalContactTileId = 'contactsLocalContactTile';
 const contactsLocalContactTileKey = Key(contactsLocalContactTileId);
+const String contactsFavoriteContactTileId = 'contactsFavoriteContactTile';
+const contactsFavoriteContactTileKey = Key(contactsFavoriteContactTileId);
 
 const String contactsTabExtId = 'contactsTabExt';
 const contactsTabExtKey = Key(contactsTabExtId);
 const String contactsTabLocalId = 'contactsTabLocal';
 const contactsTabLocalKey = Key(contactsTabLocalId);
-// The contacts screen of a deployment that offers favourites as a filter.
+// The contacts screen of a deployment that offers favourites inside the list.
 // Its own ids: the two screens are addressed separately so a flow cannot pass
 // against whichever of them happens to be on screen.
-const String contactsFilterFavoritesId = 'contactsFilterFavorites';
-const contactsFilterFavoritesKey = Key(contactsFilterFavoritesId);
+//
+// The favourites entry of the chooser, which is where favourites are reached
+// now that they are one more list rather than a switch on the title row.
+const String contactsSourceFavoritesId = 'contactsSourceFavorites';
+const contactsSourceFavoritesKey = Key(contactsSourceFavoritesId);
 const String contactsSourcePickerId = 'contactsSourcePicker';
 const contactsSourcePickerKey = Key(contactsSourcePickerId);
 const String contactsSearchOpenId = 'contactsSearchOpen';

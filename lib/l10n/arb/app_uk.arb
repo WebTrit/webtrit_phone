@@ -446,8 +446,6 @@
   },
   "contacts_ContactsScreen_emptyFavorites": "Серед ваших контактів ще немає улюблених.\nДодайте на картці контакта, натиснувши зірочку",
   "@contacts_ContactsScreen_emptyFavorites": {},
-  "contacts_ContactsScreen_filterFavorites": "Улюблені",
-  "@contacts_ContactsScreen_filterFavorites": {},
   "contacts_ContactsScreen_searchSemanticsLabel": "Пошук контактів",
   "@contacts_ContactsScreen_searchSemanticsLabel": {},
   "contacts_ContactsScreen_sourceSemanticsLabel": "Джерело контактів",
@@ -470,6 +468,8 @@
   "@contacts_ExternalTabText_failure": {
     "description": "Shown when loading cloud PBX contacts fails (e.g. invalid/expired token, no network connection, or other API errors)."
   },
+  "contacts_FavoritesTabText_emptyOnSearching": "Контактів не знайдено",
+  "@contacts_FavoritesTabText_emptyOnSearching": {},
   "contacts_LocalTabButton_contactsAgreement": "Відкрити Налаштування",
   "@contacts_LocalTabButton_contactsAgreement": {},
   "contacts_LocalTabButton_openAppSettings": "Надати доступ до контактів вашого телефону",
@@ -490,6 +490,8 @@
   "@contacts_LocalTabText_permissionFailure": {
     "description": "Shown when the app cannot access local phone contacts because the user has not granted the required permission (e.g. Contacts permission denied in system settings)."
   },
+  "contactsSourceFavorites": "Улюблені",
+  "@contactsSourceFavorites": {},
   "contactsSourceExternal": "Хмарний PBX",
   "@contactsSourceExternal": {},
   "contactsSourceLocal": "Ваш телефон",
