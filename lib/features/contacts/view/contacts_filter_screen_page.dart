@@ -22,13 +22,15 @@ import '../contacts.dart';
 @RoutePage()
 class ContactsFilterScreenPage extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const ContactsFilterScreenPage({required this.sourceTypes});
+  const ContactsFilterScreenPage({required this.selections});
 
-  final List<ContactSourceType> sourceTypes;
+  /// What the chooser offers, decided by the tab configuration rather than
+  /// here - see `ContactsBottomMenuTab.listSelections`.
+  final List<ContactsListSelection> selections;
 
-  static PageRouteInfo<dynamic>? getPageRouteInfo(RouteMatch route, List<ContactSourceType> Function() sourceTypes) {
+  static PageRouteInfo<dynamic>? getPageRouteInfo(RouteMatch route, List<ContactsListSelection> Function() selections) {
     final featureRoute = route.findRouteWithRequiredParams(ContactsFilterScreenPageRoute.page);
-    return featureRoute != null ? ContactsFilterScreenPageRoute(sourceTypes: sourceTypes()) : null;
+    return featureRoute != null ? ContactsFilterScreenPageRoute(selections: selections()) : null;
   }
 
   @override
@@ -38,7 +40,7 @@ class ContactsFilterScreenPage extends StatelessWidget {
           ContactsBloc(activeContactSourceTypeRepository: context.read<ActiveContactSourceTypeRepository>()),
       child: ContactsFilterScreen(
         title: Text(EnvironmentConfig.APP_NAME),
-        sourceTypes: sourceTypes,
+        selections: selections,
         sourceTypeWidgetBuilder: contactSourceTypeWidgetBuilder,
         favoritesWidgetBuilder: contactsFavoritesWidgetBuilder,
       ),

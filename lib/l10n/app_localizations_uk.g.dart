@@ -508,9 +508,6 @@ class AppLocalizationsUk extends AppLocalizations {
       'Серед ваших контактів ще немає улюблених.\nДодайте на картці контакта, натиснувши зірочку';
 
   @override
-  String get contacts_ContactsScreen_filterFavorites => 'Улюблені';
-
-  @override
   String get contacts_ContactsScreen_searchSemanticsLabel => 'Пошук контактів';
 
   @override
@@ -566,6 +563,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get contacts_LocalTabText_permissionFailure => 'Відсутні дозволи для доступу до контактів вашого телефону';
+
+  @override
+  String get contactsSourceFavorites => 'Улюблені';
 
   @override
   String get contactsSourceExternal => 'Хмарний PBX';

@@ -446,8 +446,6 @@
   },
   "contacts_ContactsScreen_emptyFavorites": "ยังไม่มีรายการโปรดในรายชื่อของคุณ\nเพิ่มได้จากการ์ดรายชื่อโดยแตะไอคอนดาว",
   "@contacts_ContactsScreen_emptyFavorites": {},
-  "contacts_ContactsScreen_filterFavorites": "รายการโปรด",
-  "@contacts_ContactsScreen_filterFavorites": {},
   "contacts_ContactsScreen_searchSemanticsLabel": "ค้นหารายชื่อ",
   "@contacts_ContactsScreen_searchSemanticsLabel": {},
   "contacts_ContactsScreen_sourceSemanticsLabel": "แหล่งที่มาของรายชื่อ",
@@ -490,6 +488,8 @@
   "@contacts_LocalTabText_permissionFailure": {
     "description": "Shown when the app cannot access local phone contacts because the user has not granted the required permission (e.g. Contacts permission denied in system settings)."
   },
+  "contactsSourceFavorites": "รายการโปรด",
+  "@contactsSourceFavorites": {},
   "contactsSourceExternal": "Cloud PBX",
   "@contactsSourceExternal": {},
   "contactsSourceLocal": "โทรศัพท์ของคุณ",

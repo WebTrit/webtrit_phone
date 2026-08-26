@@ -224,7 +224,7 @@ class AppRouter extends RootStackRouter {
                         AutoRouteGuard.redirect(
                           (resolver) => ContactsFilterScreenPage.getPageRouteInfo(
                             resolver.route,
-                            () => _bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.contactSourceTypes ?? [],
+                            () => _bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.listSelections ?? [],
                           ),
                         ),
                       ],
@@ -565,7 +565,7 @@ PageRouteInfo<dynamic> contactsRouteOf(ContactsBottomMenuTab tab) {
   return ContactsRouterPageRoute(
     children: [
       switch (tab.layout) {
-        ContactsUnifiedLayout() => ContactsFilterScreenPageRoute(sourceTypes: tab.contactSourceTypes),
+        ContactsUnifiedLayout() => ContactsFilterScreenPageRoute(selections: tab.listSelections),
         ContactsTabbedLayout() => ContactsScreenPageRoute(sourceTypes: tab.contactSourceTypes),
       },
     ],

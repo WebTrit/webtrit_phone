@@ -7,8 +7,16 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 void main() {
-  Future<List<ContactSourceType>> pumpPicker(WidgetTester tester, {required ContactSourceType selected}) async {
-    final picked = <ContactSourceType>[];
+  const local = ContactsSourceSelection(ContactSourceType.local);
+  const external = ContactsSourceSelection(ContactSourceType.external);
+  const favorites = ContactsFavoritesSelection();
+
+  Future<List<ContactsListSelection>> pumpPicker(
+    WidgetTester tester, {
+    required ContactsListSelection selected,
+    List<ContactsListSelection> selections = const [local, external, favorites],
+  }) async {
+    final picked = <ContactsListSelection>[];
 
     await tester.pumpWidget(
       MaterialApp(
@@ -16,11 +24,7 @@ void main() {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
-          body: ContactsSourcePicker(
-            sourceTypes: const [ContactSourceType.local, ContactSourceType.external],
-            selected: selected,
-            onSelected: picked.add,
-          ),
+          body: ContactsSourcePicker(selections: selections, selected: selected, onSelected: picked.add),
         ),
       ),
     );
@@ -28,21 +32,53 @@ void main() {
     return picked;
   }
 
-  testWidgets('says which address book is showing without being opened', (tester) async {
-    await pumpPicker(tester, selected: ContactSourceType.external);
+  testWidgets('says which list is showing without being opened', (tester) async {
+    await pumpPicker(tester, selected: external);
 
     expect(find.text('Cloud PBX'), findsOneWidget);
   });
 
-  testWidgets('hands the chosen address book back', (tester) async {
-    final picked = await pumpPicker(tester, selected: ContactSourceType.external);
+  testWidgets('names favourites the same way, because here they are one more list', (tester) async {
+    await pumpPicker(tester, selected: favorites);
+
+    expect(find.text('Favorites'), findsOneWidget);
+  });
+
+  testWidgets('hands the chosen list back', (tester) async {
+    final picked = await pumpPicker(tester, selected: external);
 
     await tester.tap(find.byKey(contactsSourcePickerKey));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Your phone').last);
     await tester.pumpAndSettle();
 
-    expect(picked, [ContactSourceType.local]);
+    expect(picked, [local]);
+  });
+
+  testWidgets('offers favourites by an anchor automation can reach', (tester) async {
+    // The star on the title row this replaced had an identifier of its own, so
+    // dropping the anchor rather than moving it is what breaks an end-to-end
+    // run while every widget test stays green.
+    final picked = await pumpPicker(tester, selected: external);
+
+    await tester.tap(find.byKey(contactsSourcePickerKey));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(contactsSourceFavoritesKey), findsOneWidget);
+
+    await tester.tap(find.byKey(contactsSourceFavoritesKey));
+    await tester.pumpAndSettle();
+
+    expect(picked, [favorites]);
+  });
+
+  testWidgets('leaves favourites out where the deployment does not offer them', (tester) async {
+    await pumpPicker(tester, selected: external, selections: const [local, external]);
+
+    await tester.tap(find.byKey(contactsSourcePickerKey));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(contactsSourceFavoritesKey), findsNothing);
   });
 
   testWidgets('names itself for a screen reader, on the node that opens it', (tester) async {
@@ -53,7 +89,7 @@ void main() {
     // green.
     final handle = tester.ensureSemantics();
 
-    await pumpPicker(tester, selected: ContactSourceType.external);
+    await pumpPicker(tester, selected: external);
 
     final named = find.bySemanticsIdentifier(contactsSourcePickerId);
     expect(named, findsOneWidget);
