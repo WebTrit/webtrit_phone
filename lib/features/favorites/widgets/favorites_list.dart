@@ -37,7 +37,7 @@ class FavoritesList extends StatefulWidget {
     this.reorderMode = false,
     this.onReorderStart,
     this.onReorderEnd,
-    this.topPadding = 0,
+    this.topPadding,
   });
 
   final bool transferEnabled;
@@ -54,7 +54,13 @@ class FavoritesList extends StatefulWidget {
   final void Function(int index)? onReorderEnd;
 
   /// What the list leaves clear at the top for a bar drawn over it.
-  final double topPadding;
+  ///
+  /// Null means take it from [MediaQuery], which is how a screen that draws
+  /// its own bar over the body states the inset. Naming a padding at all
+  /// overrides what a scrolling list would otherwise inherit, so a list that
+  /// hard-coded zero here slid under the bar of any screen but the one it was
+  /// written for.
+  final double? topPadding;
 
   @override
   State<FavoritesList> createState() => _FavoritesListState();
@@ -148,7 +154,7 @@ class _FavoritesListState extends State<FavoritesList> {
                   builder: (context, callRoutingState) {
                     return SizedBox.expand(
                       child: ReorderableListView.builder(
-                        padding: EdgeInsets.only(top: widget.topPadding),
+                        padding: EdgeInsets.only(top: widget.topPadding ?? MediaQuery.of(context).padding.top),
                         itemCount: favorites.length,
                         // TODO: migrate to onReorderItem (deprecated after Flutter 3.41.0-0.0.pre)
                         // ignore: deprecated_member_use

@@ -119,9 +119,16 @@ class ContactsSearchRow extends StatelessWidget {
               // Nothing to search: the line is the chooser and only the
               // chooser, and the row keeps its height either way so the list
               // below does not move when the choice changes.
+              // Still a row with the chooser stretched across it, not the
+              // chooser alone: handed over bare it would be centred by the
+              // align above, and the control would jump from the left edge to
+              // the middle and back as the list changes.
+              //
               // A deployment can offer favourites and no address book at all,
               // and then there is nothing to put on the line either way.
-              if (!searchable) return leading ?? const SizedBox.shrink();
+              if (!searchable) {
+                return Row(children: [Expanded(child: leading ?? const SizedBox.shrink())]);
+              }
 
               if (pinned || searching) return field;
 

@@ -133,6 +133,19 @@ void main() {
       expect(find.descendant(of: button, matching: find.byIcon(Icons.star_border)), findsNothing);
     });
 
+    testWidgets('leaves the chooser where it was, rather than sliding it to the middle', (tester) async {
+      // Taking the search control away must not re-lay the line out: a control
+      // that jumps from the left edge to the middle and back as the list
+      // changes reads as a different screen each time.
+      await pumpScreen(tester, sourceTypes: [ContactSourceType.local, ContactSourceType.external]);
+      final before = tester.getRect(find.byKey(contactsSourcePickerKey));
+
+      await tester.tap(find.byKey(contactsFilterFavoritesKey));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(tester.getRect(find.byKey(contactsSourcePickerKey)).left, before.left);
+    });
+
     testWidgets('takes no line of its own, so the list starts higher', (tester) async {
       await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
 
