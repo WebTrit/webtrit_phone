@@ -86,7 +86,6 @@ class ContactsTabHarness {
   Future<void> pumpExternal(
     WidgetTester tester, {
     required List<Contact> contacts,
-    bool favoritesOnly = false,
     bool markFavorites = false,
     ContactsExternalTabStatus status = ContactsExternalTabStatus.success,
   }) async {
@@ -100,7 +99,7 @@ class ContactsTabHarness {
       _around(
         BlocProvider<ContactsExternalTabBloc>.value(
           value: externalBloc,
-          child: ContactsExternalTab(favoritesOnly: favoritesOnly, markFavorites: markFavorites),
+          child: ContactsExternalTab(markFavorites: markFavorites),
         ),
       ),
     );
@@ -110,7 +109,6 @@ class ContactsTabHarness {
   Future<void> pumpLocal(
     WidgetTester tester, {
     required List<Contact> contacts,
-    bool favoritesOnly = false,
     bool markFavorites = false,
     ContactsLocalTabStatus status = ContactsLocalTabStatus.success,
   }) async {
@@ -124,7 +122,7 @@ class ContactsTabHarness {
       _around(
         BlocProvider<ContactsLocalTabBloc>.value(
           value: localBloc,
-          child: ContactsLocalTab(favoritesOnly: favoritesOnly, markFavorites: markFavorites),
+          child: ContactsLocalTab(markFavorites: markFavorites),
         ),
       ),
     );

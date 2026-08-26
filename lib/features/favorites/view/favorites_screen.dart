@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:webtrit_phone/app/keys.dart';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/app/router/app_router.dart';
-import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call/call.dart';
-import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
-import 'package:webtrit_phone/features/messaging/extensions/contact.dart';
-import 'package:webtrit_phone/features/user_info/cubit/user_info_cubit.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/models/favorite.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../favorites.dart';
@@ -49,65 +42,8 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  late final _callController = CallControllerScope.of(context);
   bool isReorderMode = false;
   int? draggingIndex;
-  String? _expandedFavoriteId;
-
-  void _toggleExpanded(String favoriteId) {
-    setState(() => _expandedFavoriteId = _expandedFavoriteId == favoriteId ? null : favoriteId);
-  }
-
-  void submitTransfer({required String destination}) {
-    _callController.submitTransfer(destination);
-    context.router.maybePop();
-  }
-
-  void openChat(String userId) {
-    final route = ChatConversationScreenPageRoute(participantId: userId);
-    context.router.navigate(route);
-  }
-
-  void sendSms({
-    required List<String> userSmsNumbers,
-    required String contactPhoneNumber,
-    required String? contactSourceId,
-  }) {
-    final route = SmsConversationScreenPageRoute(
-      firstNumber: userSmsNumbers.first,
-      secondNumber: contactPhoneNumber,
-      recipientId: contactSourceId!,
-    );
-    context.router.navigate(route);
-  }
-
-  void openContact({required int contactId}) {
-    context.router.navigate(ContactScreenPageRoute(contactId: contactId));
-  }
-
-  void openCallLog({required String number}) {
-    if (widget.cdrsEnabled) {
-      context.router.navigate(NumberCdrsScreenPageRoute(number: number));
-    } else {
-      context.router.navigate(CallLogScreenPageRoute(number: number));
-    }
-  }
-
-  void delete({required Favorite favorite}) {
-    context.showSnackBar(context.l10n.favorites_SnackBar_deleted(favorite.number));
-    context.read<FavoritesBloc>().add(FavoritesRemoved(favorite: favorite));
-  }
-
-  void reorder({required List<FavoriteWithContact> favorites, required int oldIndex, required int newIndex}) {
-    var targetIndex = newIndex;
-    if (targetIndex > oldIndex) {
-      targetIndex -= 1;
-    }
-    if (targetIndex == oldIndex) {
-      return;
-    }
-    context.read<FavoritesBloc>().add(FavoritesShifted(favorite: favorites[oldIndex].favorite, position: targetIndex));
-  }
 
   void toggleReorderMode() => setState(() => isReorderMode = !isReorderMode);
 
@@ -172,7 +108,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           );
         },
       ),
-      body: BlocConsumer<FavoritesBloc, FavoritesState>(
+      body: BlocListener<FavoritesBloc, FavoritesState>(
         listenWhen: (previous, current) => previous.favorites != current.favorites,
         listener: (context, state) {
           // Two reasons to leave the rearranging mode, both about a list that
@@ -188,139 +124,17 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             });
           }
         },
-        builder: (context, state) {
-          final favorites = state.favorites;
-          if (favorites == null) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            if (favorites.isEmpty) {
-              return NoDataPlaceholder(content: Text(context.l10n.favorites_BodyCenter_empty));
-            } else {
-              return BlocBuilder<UserInfoCubit, UserInfoState>(
-                builder: (context, userInfoState) {
-                  final userSmsNumbers = userInfoState.userInfo?.numbers.sms ?? [];
-
-                  return BlocBuilder<CallBloc, CallState>(
-                    buildWhen: (previous, current) =>
-                        previous.isBlingTransferInitiated != current.isBlingTransferInitiated ||
-                        previous.activeCalls != current.activeCalls,
-                    builder: (context, callState) {
-                      final blingTransferInitiated = callState.isBlingTransferInitiated;
-                      final hasActiveCall = callState.activeCalls.isNotEmpty;
-
-                      return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
-                        builder: (context, callRoutingState) {
-                          return SizedBox.expand(
-                            child: ReorderableListView.builder(
-                              padding: EdgeInsets.only(top: topPadding),
-                              itemCount: favorites.length,
-                              // TODO: migrate to onReorderItem (deprecated after Flutter 3.41.0-0.0.pre)
-                              // ignore: deprecated_member_use
-                              onReorder: (oldIndex, newIndex) =>
-                                  reorder(favorites: favorites, oldIndex: oldIndex, newIndex: newIndex),
-                              onReorderStart: onReorderStart,
-                              onReorderEnd: onReorderEnd,
-                              buildDefaultDragHandles: false,
-                              itemBuilder: (context, index) {
-                                final favorite = favorites[index].favorite;
-                                final contact = favorites[index].contact;
-
-                                final contactSourceId = contact?.sourceId;
-                                final contactSmsNumbers = contact?.smsNumbers ?? [];
-                                final canSendSms = contactSmsNumbers.contains(favorite.number);
-
-                                return ReorderableDragStartListener(
-                                  key: ValueKey('${favorite.number}_${favorite.sourceType.name}_$index'),
-                                  index: index,
-                                  enabled: isReorderMode,
-                                  child: Row(
-                                    children: [
-                                      if (isReorderMode) ...[SizedBox(width: 4), const Icon(Icons.drag_handle)],
-                                      Expanded(
-                                        child: FavoriteTile(
-                                          gesturesEnabled: !isReorderMode,
-                                          favorite: favorite,
-                                          contact: contact,
-                                          callNumbers: callRoutingState?.allNumbers ?? [],
-                                          onTap: blingTransferInitiated
-                                              ? () => submitTransfer(destination: favorite.number)
-                                              : () => _toggleExpanded('${favorite.number}_${favorite.sourceType.name}'),
-                                          expanded:
-                                              !blingTransferInitiated &&
-                                              !isReorderMode &&
-                                              _expandedFavoriteId == '${favorite.number}_${favorite.sourceType.name}',
-                                          onDialPressed: blingTransferInitiated
-                                              ? null
-                                              : () {
-                                                  _callController.createCall(
-                                                    destination: favorite.number,
-                                                    displayName: contact?.maybeName ?? favorite.number,
-                                                  );
-                                                },
-                                          onAudioCallPressed: () {
-                                            _callController.createCall(
-                                              destination: favorite.number,
-                                              displayName: contact?.maybeName ?? favorite.number,
-                                              video: false,
-                                            );
-                                          },
-                                          onVideoCallPressed: widget.videoEnabled
-                                              ? () {
-                                                  _callController.createCall(
-                                                    destination: favorite.number,
-                                                    displayName: contact?.maybeName ?? favorite.number,
-                                                    video: true,
-                                                  );
-                                                }
-                                              : null,
-                                          onTransferPressed: widget.transferEnabled && hasActiveCall
-                                              ? () {
-                                                  submitTransfer(destination: favorite.number);
-                                                }
-                                              : null,
-                                          onChatPressed: widget.chatsEnabled && contact?.canMessage == true
-                                              ? () {
-                                                  openChat(contactSourceId!);
-                                                }
-                                              : null,
-                                          onSendSmsPressed:
-                                              widget.smssEnabled && userSmsNumbers.isNotEmpty && canSendSms
-                                              ? () {
-                                                  sendSms(
-                                                    userSmsNumbers: userSmsNumbers,
-                                                    contactPhoneNumber: favorite.number,
-                                                    contactSourceId: contactSourceId,
-                                                  );
-                                                }
-                                              : null,
-                                          onViewContactPressed: contact != null
-                                              ? () => openContact(contactId: contact.id)
-                                              : null,
-                                          onCallLogPressed: () => openCallLog(number: favorite.number),
-                                          onDelete: () => delete(favorite: favorite),
-                                          onCallFrom: (fromNumber) => _callController.createCall(
-                                            destination: favorite.number,
-                                            displayName: contact?.maybeName ?? favorite.number,
-                                            fromNumber: fromNumber,
-                                            video: false,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
-              );
-            }
-          }
-        },
+        child: FavoritesList(
+          reorderMode: isReorderMode,
+          onReorderStart: onReorderStart,
+          onReorderEnd: onReorderEnd,
+          topPadding: topPadding,
+          transferEnabled: widget.transferEnabled,
+          videoEnabled: widget.videoEnabled,
+          chatsEnabled: widget.chatsEnabled,
+          smssEnabled: widget.smssEnabled,
+          cdrsEnabled: widget.cdrsEnabled,
+        ),
       ),
       bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
         buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,

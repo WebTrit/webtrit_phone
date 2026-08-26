@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/extension/elevated_button_styles.dart';
@@ -14,16 +13,11 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../../../contacts.dart';
 
 class ContactsLocalTab extends StatefulWidget {
-  const ContactsLocalTab({super.key, this.favoritesOnly = false, this.markFavorites = false});
-
-  /// Narrows the list to the people with a favourite among their numbers.
-  /// False is the whole address book, which is what the contacts screen
-  /// without the filter always shows.
-  final bool favoritesOnly;
+  const ContactsLocalTab({super.key, this.markFavorites = false});
 
   /// Whether a star marks the people with a favourite among their numbers.
-  /// It goes with the filter: without the star, a list narrowed to favourites
-  /// gives no clue what it was narrowed by.
+  /// Only where favourites are reachable from this screen: a star that leads
+  /// nowhere is worse than no star at all.
   final bool markFavorites;
 
   @override
@@ -66,7 +60,7 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
 
     return BlocBuilder<ContactsLocalTabBloc, ContactsLocalTabState>(
       builder: (context, state) {
-        final shown = widget.favoritesOnly ? state.contacts.favoritesOnly : state.contacts;
+        final shown = state.contacts;
 
         if (state.status == ContactsLocalTabStatus.initial) {
           return const Center(child: CircularProgressIndicator());
@@ -89,9 +83,6 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
                 final contact = shown[index];
                 return ContactTileAdapter(
                   tileKey: contactsLocalContactTileKey,
-                  // Only where favourites are a filter of this list: a star
-                  // is what makes that filter understandable from the whole
-                  // list too.
                   markFavorite: widget.markFavorites,
                   contact: contact,
                   expanded: _expandedContactId == contact.id,
@@ -100,10 +91,6 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
               },
             ),
           );
-        } else if (widget.favoritesOnly && state.contacts.isNotEmpty) {
-          // Nothing to show because of the filter is a different answer from
-          // nothing to show at all, and it is not a failure or a slow fetch.
-          return NoDataPlaceholder(content: Text(context.l10n.contacts_ContactsScreen_emptyFavorites));
         } else {
           if (state.status == ContactsLocalTabStatus.failure) {
             return NoDataPlaceholder(content: Text(context.l10n.contacts_LocalTabText_failure));
