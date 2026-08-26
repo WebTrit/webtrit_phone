@@ -8,6 +8,7 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/contacts/contacts.dart';
+import 'package:webtrit_phone/features/favorites/favorites.dart';
 import 'package:webtrit_phone/features/session_status/session_status.dart';
 import 'package:webtrit_phone/features/microphone_status/microphone_status.dart';
 import 'package:webtrit_phone/features/user_info/user_info.dart';
@@ -17,7 +18,11 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
+import '../../helpers/semantics.dart';
+
 class _MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {}
+
+class _MockFavoritesBloc extends MockBloc<FavoritesEvent, FavoritesState> implements FavoritesBloc {}
 
 class _MockSessionStatusCubit extends MockCubit<SessionStatusState> implements SessionStatusCubit {}
 
@@ -46,13 +51,28 @@ void main() {
   const external = ContactsSourceSelection(ContactSourceType.external);
   const favorites = ContactsFavoritesSelection();
 
+  /// Enough favourites to be worth rearranging, and one short of it.
+  FavoriteWithContact aFavorite(int position) => (
+    favorite: Favorite(
+      number: '10$position',
+      sourceType: FavoriteSourceType.pbx,
+      sourceId: 'user-$position',
+      label: 'ext',
+      position: position,
+    ),
+    contact: null,
+  );
+
   late _MockCallBloc callBloc;
+  late _MockFavoritesBloc favoritesBloc;
   late _MockSessionStatusCubit sessionStatusCubit;
   late _MockUserInfoCubit userInfoCubit;
   late _MockMicrophoneStatusBloc microphoneStatusBloc;
 
   setUp(() {
     callBloc = _MockCallBloc();
+    favoritesBloc = _MockFavoritesBloc();
+    when(() => favoritesBloc.state).thenReturn(const FavoritesState());
     sessionStatusCubit = _MockSessionStatusCubit();
     when(() => callBloc.state).thenReturn(const CallState());
     when(() => sessionStatusCubit.state).thenReturn(const SessionStatusState());
@@ -66,7 +86,11 @@ void main() {
     WidgetTester tester, {
     required List<ContactsListSelection> selections,
     ContactSourceType remembered = ContactSourceType.external,
+    List<FavoriteWithContact>? favorites,
   }) async {
+    if (favorites != null) {
+      when(() => favoritesBloc.state).thenReturn(FavoritesState(favorites: favorites));
+    }
     final contactsBloc = ContactsBloc(activeContactSourceTypeRepository: _RememberedSourceType(remembered));
     addTearDown(contactsBloc.close);
 
@@ -88,6 +112,7 @@ void main() {
             providers: [
               BlocProvider<ContactsBloc>.value(value: contactsBloc),
               BlocProvider<CallBloc>.value(value: callBloc),
+              BlocProvider<FavoritesBloc>.value(value: favoritesBloc),
               BlocProvider<SessionStatusCubit>.value(value: sessionStatusCubit),
               BlocProvider<UserInfoCubit>.value(value: userInfoCubit),
               BlocProvider<MicrophoneStatusBloc>.value(value: microphoneStatusBloc),
@@ -95,7 +120,12 @@ void main() {
             child: ContactsFilterScreen(
               selections: selections,
               sourceTypeWidgetBuilder: (context, sourceType, {bool markFavorites = false}) => Text(sourceType.name),
-              favoritesWidgetBuilder: (context) => const Text('favorites'),
+              favoritesWidgetBuilder: (
+                context, {
+                bool reorderMode = false,
+                void Function(int index)? onReorderStart,
+                void Function(int index)? onReorderEnd,
+              }) => const Text('favorites'),
             ),
           ),
         ),
@@ -380,6 +410,68 @@ void main() {
 
       expect(find.byKey(contactsSourcePickerKey), findsOneWidget);
       expect(find.byKey(contactsSearchInputKey), findsNothing);
+    });
+  });
+
+  group('rearranging the favourites', () {
+    testWidgets('is offered only while the favourites are the list shown', (tester) async {
+      await pumpScreen(tester, selections: const [local, external, favorites], favorites: [aFavorite(1), aFavorite(2)]);
+
+      expect(find.byType(FloatingActionButton), findsNothing);
+
+      await pick(tester, find.byKey(contactsSourceFavoritesKey));
+
+      expect(find.byType(FloatingActionButton), findsOneWidget);
+    });
+
+    testWidgets('is not offered for a list too short to rearrange', (tester) async {
+      // Swapping a pair is the one case where rearranging IS the whole task,
+      // so one favourite is the floor, not two.
+      await pumpScreen(tester, selections: const [local, favorites], favorites: [aFavorite(1)]);
+
+      await pick(tester, find.byKey(contactsSourceFavoritesKey));
+
+      expect(find.byType(FloatingActionButton), findsNothing);
+    });
+
+    testWidgets('says which of the two things it will do', (tester) async {
+      // The icon alone says two different things depending on whether
+      // rearranging is already under way.
+      final handle = tester.ensureSemantics();
+      await pumpScreen(tester, selections: const [local, favorites], favorites: [aFavorite(1), aFavorite(2)]);
+      await pick(tester, find.byKey(contactsSourceFavoritesKey));
+      // The scaffold animates the button in, and its semantics arrive with it.
+      await tester.pump(const Duration(milliseconds: 400));
+
+      final button = find.bySemanticsIdentifier(contactsFavoritesReorderId);
+      expect(tester.getSemantics(button), isSemantics(label: 'Reorder favorites', isButton: true));
+
+      await tapViaSemantics(tester, button);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(tester.getSemantics(button), isSemantics(label: 'Finish reordering', isButton: true));
+      handle.dispose();
+    });
+
+    testWidgets('ends when another list is picked', (tester) async {
+      // A mode left on a list that cannot use it is a mode nobody can leave.
+      final handle = tester.ensureSemantics();
+      await pumpScreen(tester, selections: const [local, favorites], favorites: [aFavorite(1), aFavorite(2)]);
+      await pick(tester, find.byKey(contactsSourceFavoritesKey));
+      // The scaffold animates the button in, and its semantics arrive with it.
+      await tester.pump(const Duration(milliseconds: 400));
+      await tapViaSemantics(tester, find.bySemanticsIdentifier(contactsFavoritesReorderId));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      await pick(tester, find.text('Your phone').last);
+      await pick(tester, find.byKey(contactsSourceFavoritesKey));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(
+        tester.getSemantics(find.bySemanticsIdentifier(contactsFavoritesReorderId)),
+        isSemantics(label: 'Reorder favorites', isButton: true),
+      );
+      handle.dispose();
     });
   });
 

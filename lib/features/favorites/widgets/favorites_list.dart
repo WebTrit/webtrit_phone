@@ -27,6 +27,11 @@ import '../favorites.dart';
 /// rather than owning it; a screen that never rearranges passes nothing and
 /// the rows simply do not drag.
 class FavoritesList extends StatefulWidget {
+  /// Rearranging is offered from two favourites up. Named here because every
+  /// screen that offers it needs the same figure - the button it puts up, and
+  /// leaving the mode when the list drops below it.
+  static const reorderMinimum = 2;
+
   const FavoritesList({
     super.key,
     required this.transferEnabled,

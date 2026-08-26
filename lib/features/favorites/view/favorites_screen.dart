@@ -11,12 +11,6 @@ import '../favorites.dart';
 import 'favorites_screen_style.dart';
 import 'favorites_screen_styles.dart';
 
-/// Rearranging is offered from two favorites up. The screen used to ask for
-/// three, which locked out the one case where rearranging IS the whole task -
-/// swapping a pair. Named because two places depend on it: the button, and
-/// leaving the mode when the list drops below it.
-const _reorderMinimum = 2;
-
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({
     super.key,
@@ -79,7 +73,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       floatingActionButton: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
           final favorites = state.favorites;
-          if (favorites == null || favorites.length < _reorderMinimum) {
+          if (favorites == null || favorites.length < FavoritesList.reorderMinimum) {
             return const SizedBox.shrink();
           }
           // The padding is what makes the button pressable at all: the tab bar
@@ -116,7 +110,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           // dragged, and a list that became too short to rearrange - the
           // button is the only way out of the mode and it is not offered
           // below the minimum, so the rows would stay locked.
-          final tooShortToReorder = (state.favorites?.length ?? 0) < _reorderMinimum;
+          final tooShortToReorder = (state.favorites?.length ?? 0) < FavoritesList.reorderMinimum;
           if (draggingIndex != null || (isReorderMode && tooShortToReorder)) {
             setState(() {
               isReorderMode = false;

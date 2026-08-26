@@ -6,10 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
+import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-
-import '../contacts.dart';
 
 /// The contacts screen of a deployment that offers favourites as a filter
 /// inside the list rather than as a section of their own.
@@ -35,9 +34,19 @@ class ContactsFilterScreenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          ContactsBloc(activeContactSourceTypeRepository: context.read<ActiveContactSourceTypeRepository>()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              ContactsBloc(activeContactSourceTypeRepository: context.read<ActiveContactSourceTypeRepository>()),
+        ),
+        // Above the screen rather than inside its body: the button that turns
+        // rearranging on lives in the scaffold and reads this list too.
+        BlocProvider(
+          create: (context) =>
+              FavoritesBloc(favoritesRepository: context.read<FavoritesRepository>())..add(const FavoritesStarted()),
+        ),
+      ],
       child: ContactsFilterScreen(
         title: Text(EnvironmentConfig.APP_NAME),
         selections: selections,
