@@ -42,15 +42,12 @@ class _RememberedSourceType implements ActiveContactSourceTypeRepository {
 }
 
 void main() {
-  late List<String> mounted;
-
   late _MockCallBloc callBloc;
   late _MockSessionStatusCubit sessionStatusCubit;
   late _MockUserInfoCubit userInfoCubit;
   late _MockMicrophoneStatusBloc microphoneStatusBloc;
 
   setUp(() {
-    mounted = [];
     callBloc = _MockCallBloc();
     sessionStatusCubit = _MockSessionStatusCubit();
     when(() => callBloc.state).thenReturn(const CallState());
@@ -93,14 +90,8 @@ void main() {
             ],
             child: ContactsFilterScreen(
               sourceTypes: sourceTypes,
-              sourceTypeWidgetBuilder: (context, sourceType, {bool markFavorites = false}) {
-                mounted.add(sourceType.name);
-                return Text(sourceType.name);
-              },
-              favoritesWidgetBuilder: (context) {
-                mounted.add('favorites');
-                return const Text('favorites');
-              },
+              sourceTypeWidgetBuilder: (context, sourceType, {bool markFavorites = false}) => Text(sourceType.name),
+              favoritesWidgetBuilder: (context) => const Text('favorites'),
             ),
           ),
         ),
@@ -116,7 +107,8 @@ void main() {
     testWidgets('starts on the whole address book', (tester) async {
       await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
 
-      expect(mounted.last, 'external');
+      expect(find.text('external'), findsOneWidget);
+      expect(find.text('favorites'), findsNothing);
     });
 
     testWidgets('is a star that says whether it is on, and not by colour alone', (tester) async {
@@ -144,6 +136,32 @@ void main() {
       await tester.pump(const Duration(milliseconds: 400));
 
       expect(tester.getRect(find.byKey(contactsSourcePickerKey)).left, before.left);
+    });
+
+    testWidgets('keeps both lists alive rather than building one from nothing on every tap', (tester) async {
+      // The address book and the favourites list are each watched by a bloc of
+      // their own. Swapped in and out, a tap of the star would tear one down
+      // and build the other from scratch - a spinner where a list already
+      // stood, in both directions.
+      await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+      final star = find.byKey(contactsFilterFavoritesKey);
+      final book = find.text('external', skipOffstage: false);
+      final favourites = find.text('favorites', skipOffstage: false);
+
+      final bookElement = tester.element(book);
+
+      await tester.tap(star);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      final favouritesElement = tester.element(favourites);
+      expect(tester.element(book), same(bookElement), reason: 'the address book was torn down');
+
+      await tester.tap(star);
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(star);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(tester.element(favourites), same(favouritesElement), reason: 'the favourites list was torn down');
     });
 
     testWidgets('takes no line of its own, so the list starts higher', (tester) async {
@@ -191,7 +209,8 @@ void main() {
       await tester.tap(find.byKey(contactsFilterFavoritesKey));
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(mounted.last, 'favorites');
+      expect(find.text('favorites'), findsOneWidget);
+      expect(find.text('external'), findsNothing);
     });
 
     testWidgets('and takes the search control away with it', (tester) async {
@@ -313,7 +332,7 @@ void main() {
       // offer here.
       await pumpScreen(tester, sourceTypes: [ContactSourceType.local], remembered: ContactSourceType.external);
 
-      expect(mounted.last, 'local');
+      expect(find.text('local'), findsOneWidget);
     });
   });
 }

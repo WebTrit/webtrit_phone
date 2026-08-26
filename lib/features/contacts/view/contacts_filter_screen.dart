@@ -143,21 +143,31 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
           // draws it with. Deriving them a second time from the contacts table
           // is what made two answers to one question, and they disagree the
           // moment either side changes.
-          child: _filter == ContactsListFilter.favorites
-              ? widget.favoritesWidgetBuilder(context)
-              : BlocBuilder<ContactsBloc, ContactsState>(
-                  buildWhen: (previous, current) => previous.sourceType != current.sourceType,
-                  // Keyed by the address book. Its list is fetched and watched
-                  // per address book, so a different one is a different list.
-                  builder: (context, state) {
-                    final sourceType = _shown(state.sourceType);
+          //
+          // Both are kept alive and only one is shown, because each is watched
+          // by a bloc of its own: swapped in and out instead, every tap of the
+          // control would tear a list down, build the other from nothing and
+          // flash a spinner where a list already stood.
+          child: IndexedStack(
+            index: _filter == ContactsListFilter.favorites ? 1 : 0,
+            sizing: StackFit.expand,
+            children: [
+              BlocBuilder<ContactsBloc, ContactsState>(
+                buildWhen: (previous, current) => previous.sourceType != current.sourceType,
+                // Keyed by the address book. Its list is fetched and watched
+                // per address book, so a different one is a different list.
+                builder: (context, state) {
+                  final sourceType = _shown(state.sourceType);
 
-                    return KeyedSubtree(
-                      key: ValueKey(sourceType),
-                      child: widget.sourceTypeWidgetBuilder(context, sourceType, markFavorites: true),
-                    );
-                  },
-                ),
+                  return KeyedSubtree(
+                    key: ValueKey(sourceType),
+                    child: widget.sourceTypeWidgetBuilder(context, sourceType, markFavorites: true),
+                  );
+                },
+              ),
+              widget.favoritesWidgetBuilder(context),
+            ],
+          ),
         ),
         bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
           buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
