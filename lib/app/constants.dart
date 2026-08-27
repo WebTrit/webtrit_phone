@@ -61,14 +61,6 @@ const kMainAppBarBottomControlHeight = kMinInteractiveDimension;
 const kMainAppBarBottomTabHeight = kMainAppBarBottomControlHeight + kMainAppBarBottomPaddingGap;
 const kMainAppBarBottomSearchHeight = kMainAppBarBottomControlHeight + kMainAppBarBottomPaddingGap;
 
-/// How solid the surfaces at the bottom of the screen are.
-///
-/// They sit over a backdrop blur, so the fill has to let it through: opaque,
-/// the blur is hidden and the surface reads as a strip pasted on the glass.
-/// Shared because the tab bar and the banner above it are one pane, and two
-/// figures drifting apart would show the seam.
-const kBottomSurfaceAlpha = 200;
-
 /// Standard vertical padding (in logical pixels) used around Material list items.
 ///
 /// Prefer this value when constructing edge insets to keep list spacing consistent

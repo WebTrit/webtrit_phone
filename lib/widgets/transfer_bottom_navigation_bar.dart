@@ -19,7 +19,9 @@ class TransferBottomNavigationBar extends StatelessWidget {
       container: true,
       child: Container(
         padding: const EdgeInsets.all(kMainAppBarBottomPaddingGap),
-        color: themeData.colorScheme.secondary.withAlpha(kBottomSurfaceAlpha),
+        // Translucent so the blur behind it shows: opaque, the banner reads as
+        // a strip pasted on the glass rather than part of it.
+        color: themeData.colorScheme.secondary.withAlpha(200),
         child: Text(data, style: TextStyle(color: themeData.colorScheme.onSecondary)),
       ),
     );

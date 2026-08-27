@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/app/constants.dart';
-
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -38,7 +36,7 @@ class MainBottomNavigationBar extends StatelessWidget {
 
     return BottomNavigationBar(
       elevation: 0,
-      backgroundColor: theme.bottomNavigationBarTheme.backgroundColor?.withAlpha(kBottomSurfaceAlpha),
+      backgroundColor: theme.bottomNavigationBarTheme.backgroundColor?.withAlpha(200),
       useLegacyColorScheme: false,
       enableFeedback: true,
       type: BottomNavigationBarType.fixed,
