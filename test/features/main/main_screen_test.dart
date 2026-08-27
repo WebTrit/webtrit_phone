@@ -97,6 +97,27 @@ void main() {
       expect(banner.width, bar.width);
     });
 
+    testWidgets('is frosted like the bar, not a solid strip pasted over it', (tester) async {
+      await pumpShell(tester, tabs: tabs, currentIndex: 0, transferInProgress: true);
+
+      // Under the same backdrop filter as the bar, so both sample one backdrop
+      // and there is no seam between them.
+      expect(
+        find.ancestor(of: find.byType(TransferBottomNavigationBar), matching: find.byType(BackdropFilter)),
+        findsOneWidget,
+      );
+      expect(
+        find.ancestor(of: find.byType(MainBottomNavigationBar), matching: find.byType(BackdropFilter)),
+        findsOneWidget,
+      );
+
+      // And it lets that blur through rather than covering it.
+      final fill = tester.widget<Container>(
+        find.descendant(of: find.byType(TransferBottomNavigationBar), matching: find.byType(Container)).first,
+      );
+      expect((fill.color ?? (fill.decoration as BoxDecoration).color)!.a, lessThan(1.0));
+    });
+
     testWidgets('is still said where a one-section menu draws no bar', (tester) async {
       await pumpShell(tester, tabs: [tabs.first], currentIndex: 0, transferInProgress: true);
 

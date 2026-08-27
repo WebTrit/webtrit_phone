@@ -62,7 +62,13 @@ class MainScreen extends StatelessWidget {
     // screen. The banner still has to be said, and with no bar of ours to
     // float over it there is nothing to keep it clear of.
     if (tabs.length < 2) {
-      return transferBanner == null ? body : Scaffold(body: body, bottomNavigationBar: transferBanner);
+      if (transferBanner == null) return body;
+      return Scaffold(
+        body: body,
+        bottomNavigationBar: ClipRRect(
+          child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), child: transferBanner),
+        ),
+      );
     }
 
     return Scaffold(
@@ -70,27 +76,31 @@ class MainScreen extends StatelessWidget {
       body: body,
       // Above the bar, not behind it. Both belong to this screen, so they are
       // one bottom-of-the-screen widget and the body is inset by their total.
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        // Both are bars across the screen. Left to itself a Column hands each
-        // child only the width it asks for, and the banner - a box around a
-        // line of text - would sit centred and half as wide as the bar under
-        // it, reading as a label rather than as the state of the screen.
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ?transferBanner,
-          ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-              child: MainBottomNavigationBar(
+      // One pane of glass over both. Blurring them separately would show the
+      // seam - two filters sampling different backdrops - and the banner is
+      // the same kind of surface as the bar, not something floating over it.
+      bottomNavigationBar: ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            // Both are bars across the screen. Left to itself a Column hands
+            // each child only the width it asks for, and the banner - a box
+            // around a line of text - would sit centred and half as wide as
+            // the bar under it, reading as a label rather than as the state of
+            // the screen.
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ?transferBanner,
+              MainBottomNavigationBar(
                 tabs: tabs,
                 currentIndex: currentIndex,
                 onTap: onTabSelected,
                 decorateIcon: decorateTabIcon,
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
