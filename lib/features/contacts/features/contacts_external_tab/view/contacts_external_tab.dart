@@ -41,6 +41,10 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
 
         if (contacts.isNotEmpty) {
           return RefreshIndicator(
+            // See the local tab: the body runs behind the app bar, so the
+            // spinner needs the same inset the list content is given, or it
+            // is drawn underneath the bar.
+            edgeOffset: MediaQuery.of(context).padding.top,
             onRefresh: refreshContacts,
             child: ListView.builder(
               itemCount: contacts.length,
