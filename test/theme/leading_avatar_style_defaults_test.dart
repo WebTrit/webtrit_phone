@@ -19,12 +19,12 @@ void main() {
 
       expect(style.radius, 20);
       expect(style.backgroundColor, colors.secondaryContainer);
-      expect(style.presenceBadge?.sizeFactor, 0.5);
+      expect(style.presenceBadge?.sizeFactor, 0.4);
       expect(style.presenceBadge?.availableColor, colors.tertiary);
       expect(style.presenceBadge?.unavailableColor, colors.onSurfaceVariant);
       expect(style.presenceBadge?.busyColor, colors.error);
       expect(style.presenceBadge?.iconColor, colors.surface);
-      expect(style.registeredBadge?.sizeFactor, 0.5);
+      expect(style.registeredBadge?.sizeFactor, 0.4);
       expect(style.smartIndicator?.sizeFactor, 0.4);
       expect(style.nameColors?.enabled, isTrue);
     });
@@ -35,7 +35,7 @@ void main() {
       expect(style.presenceBadge?.sizeFactor, 0.35);
       expect(style.presenceBadge?.availableColor, colors.tertiary);
       expect(style.radius, 20);
-      expect(style.registeredBadge?.sizeFactor, 0.5);
+      expect(style.registeredBadge?.sizeFactor, 0.4);
     });
 
     test('a theme may pin the busy fill on its own', () {
@@ -45,7 +45,7 @@ void main() {
 
       expect(style.presenceBadge?.busyColor, const Color(0xFFFF3300));
       expect(style.presenceBadge?.availableColor, colors.tertiary);
-      expect(style.presenceBadge?.sizeFactor, 0.5);
+      expect(style.presenceBadge?.sizeFactor, 0.4);
     });
 
     test('a block with only colors leaves the size to the app', () {
@@ -54,7 +54,7 @@ void main() {
       );
 
       expect(style.presenceBadge?.availableColor, const Color(0xFFFF00FF));
-      expect(style.presenceBadge?.sizeFactor, 0.5);
+      expect(style.presenceBadge?.sizeFactor, 0.4);
     });
 
     test('name colors stay on unless the theme turns them off', () {
@@ -83,7 +83,7 @@ void main() {
       );
 
       expect(style.radius, 20);
-      expect(style.presenceBadge?.sizeFactor, 0.5);
+      expect(style.presenceBadge?.sizeFactor, 0.4);
       expect(style.presenceBadge?.availableColor, colors.tertiary);
     });
 

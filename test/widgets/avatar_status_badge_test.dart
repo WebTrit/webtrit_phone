@@ -15,6 +15,11 @@ void main() {
   const busyColor = Color(0xFFCC2222);
   const diameter = 40.0;
 
+  /// The share of the avatar a presence mark takes, as the app sets it in
+  /// `LeadingAvatarStyle`. Named rather than spelled out at each expectation:
+  /// the four copies of it went stale together the last time it changed.
+  const markFactor = 0.4;
+
   Widget wrap(Widget badge, {required bool hybridPresenceSupport}) {
     return MaterialApp(
       locale: const Locale('en'),
@@ -105,10 +110,10 @@ void main() {
       final dot = dotOf(tester);
       final decoration = dot.decoration! as BoxDecoration;
       expect(decoration.color, registeredColor);
-      expect(tester.getSize(find.byWidget(dot)), const Size(diameter * 0.5, diameter * 0.5));
+      expect(tester.getSize(find.byWidget(dot)), const Size(diameter * markFactor, diameter * markFactor));
       // The ring is what lets the dot straddle the avatar edge: without it,
       // the half hanging over the row background reads as a partial dot.
-      expect(decoration.border!.top.width, diameter * 0.5 * 0.1);
+      expect(decoration.border!.top.width, diameter * markFactor * 0.1);
       expect(find.byType(SipPresenceIndicator), findsNothing);
     });
 
@@ -155,7 +160,10 @@ void main() {
       );
 
       expect(find.byType(SipPresenceIndicator), findsOneWidget);
-      expect(tester.getSize(find.byType(SipPresenceIndicator)), const Size(diameter * 0.5, diameter * 0.5));
+      expect(
+        tester.getSize(find.byType(SipPresenceIndicator)),
+        const Size(diameter * markFactor, diameter * markFactor),
+      );
     });
 
     testWidgets('sits the mark on the avatar edge with the glyph inside it', (tester) async {
@@ -182,7 +190,7 @@ void main() {
       final radius = avatar.width / 2;
       final reach = (dot.center - avatarCentre).distance;
       expect(reach, closeTo(radius, 0.01));
-      expect(dot.width, avatar.width * 0.5);
+      expect(dot.width, avatar.width * markFactor);
       expect(dot.right, greaterThan(avatar.right));
       expect(icon.left, greaterThanOrEqualTo(dot.left));
       expect(icon.top, greaterThanOrEqualTo(dot.top));
