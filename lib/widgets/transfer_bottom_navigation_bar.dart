@@ -11,13 +11,17 @@ class TransferBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    return Container(
-      padding: const EdgeInsets.all(kMainAppBarBottomPaddingGap),
-      // Translucent on purpose: it is laid over a backdrop blur, and an opaque
-      // fill would hide it and read as a solid strip pasted on the glass. The
-      // alpha matches the bar it sits above.
-      color: themeData.colorScheme.secondary.withAlpha(200),
-      child: Text(data, style: TextStyle(color: themeData.colorScheme.onSecondary)),
+    // A state that appears and disappears on its own, not something to reach:
+    // read out when it arrives, or someone listening is left picking a
+    // destination with no idea a transfer is under way.
+    return Semantics(
+      liveRegion: true,
+      container: true,
+      child: Container(
+        padding: const EdgeInsets.all(kMainAppBarBottomPaddingGap),
+        color: themeData.colorScheme.secondary.withAlpha(kBottomSurfaceAlpha),
+        child: Text(data, style: TextStyle(color: themeData.colorScheme.onSecondary)),
+      ),
     );
   }
 }

@@ -118,6 +118,20 @@ void main() {
       expect((fill.color ?? (fill.decoration as BoxDecoration).color)!.a, lessThan(1.0));
     });
 
+    testWidgets('is read out when it arrives, not left to the eye', (tester) async {
+      // A pull gesture is out of a screen reader's reach and so is a banner
+      // that simply appears; without this, someone listening picks a
+      // destination with no idea a transfer is under way.
+      final handle = tester.ensureSemantics();
+      await pumpShell(tester, tabs: tabs, currentIndex: 0, transferInProgress: true);
+
+      expect(
+        tester.getSemantics(find.byType(TransferBottomNavigationBar)),
+        matchesSemantics(isLiveRegion: true, label: 'Performing blind transfer'),
+      );
+      handle.dispose();
+    });
+
     testWidgets('is still said where a one-section menu draws no bar', (tester) async {
       await pumpShell(tester, tabs: [tabs.first], currentIndex: 0, transferInProgress: true);
 
