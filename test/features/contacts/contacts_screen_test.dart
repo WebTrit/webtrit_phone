@@ -44,6 +44,13 @@ class _RememberedSourceType implements ActiveContactSourceTypeRepository {
 /// anywhere but the bar itself puts both in the wrong place.
 void main() {
   late double? listTopInset;
+  late double? listBottomInset;
+
+  /// What the shell's floating tab bar takes at the bottom of the screen. The
+  /// shell hands it down as MediaQuery padding, and a screen inside it has to
+  /// let that figure through - a list that loses it runs its last row under
+  /// the bar.
+  const shellBottomInset = 80.0;
 
   late _MockCallBloc callBloc;
   late _MockSessionStatusCubit sessionStatusCubit;
@@ -52,6 +59,7 @@ void main() {
 
   setUp(() {
     listTopInset = null;
+    listBottomInset = null;
     callBloc = _MockCallBloc();
     sessionStatusCubit = _MockSessionStatusCubit();
     when(() => callBloc.state).thenReturn(const CallState());
@@ -78,24 +86,31 @@ void main() {
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: MultiBlocProvider(
-            providers: [
-              BlocProvider<ContactsBloc>.value(value: contactsBloc),
-              BlocProvider<CallBloc>.value(value: callBloc),
-              BlocProvider<SessionStatusCubit>.value(value: sessionStatusCubit),
-              BlocProvider<UserInfoCubit>.value(value: userInfoCubit),
-              BlocProvider<MicrophoneStatusBloc>.value(value: microphoneStatusBloc),
-            ],
-            child: ContactsScreen(
-              sourceTypes: sourceTypes,
-              // Read from a context BELOW the screen's own: this screen hands
-              // the builder its outer context, while a real tab is built
-              // inside the body and sees the inset the body was given.
-              sourceTypeWidgetBuilder: (context, sourceType) => Builder(
-                builder: (context) {
-                  listTopInset = MediaQuery.of(context).padding.top;
-                  return Text(sourceType.name);
-                },
+          home: Builder(
+            builder: (context) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(padding: const EdgeInsets.only(bottom: shellBottomInset)),
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<ContactsBloc>.value(value: contactsBloc),
+                  BlocProvider<CallBloc>.value(value: callBloc),
+                  BlocProvider<SessionStatusCubit>.value(value: sessionStatusCubit),
+                  BlocProvider<UserInfoCubit>.value(value: userInfoCubit),
+                  BlocProvider<MicrophoneStatusBloc>.value(value: microphoneStatusBloc),
+                ],
+                child: ContactsScreen(
+                  sourceTypes: sourceTypes,
+                  // Read from a context BELOW the screen's own: this screen hands
+                  // the builder its outer context, while a real tab is built
+                  // inside the body and sees the inset the body was given.
+                  sourceTypeWidgetBuilder: (context, sourceType) => Builder(
+                    builder: (context) {
+                      final inset = MediaQuery.of(context).padding;
+                      listTopInset = inset.top;
+                      listBottomInset = inset.bottom;
+                      return Text(sourceType.name);
+                    },
+                  ),
+                ),
               ),
             ),
           ),
@@ -105,6 +120,16 @@ void main() {
     // The bar keeps a status indicator animating, so this never settles.
     await tester.pump(const Duration(milliseconds: 400));
   }
+
+  testWidgets('the list keeps the room the shell reserves for its bar', (tester) async {
+    // The bar at the bottom belongs to the shell around this screen and floats
+    // over the page. Scaffold hands the body no bottom inset of its own once it
+    // is given a bottomNavigationBar, so a screen that declares one loses the
+    // shell's figure and runs its last row underneath the bar.
+    await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
+
+    expect(listBottomInset, shellBottomInset);
+  });
 
   testWidgets('the list starts exactly where the bar ends, with one address book', (tester) async {
     await pumpScreen(tester, sourceTypes: [ContactSourceType.external]);
