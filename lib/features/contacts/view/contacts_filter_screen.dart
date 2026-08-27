@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../call/call.dart';
+import '../../favorites/favorites.dart';
 import '../contacts.dart';
 
 /// The contacts screen of a deployment where favourites live inside the
@@ -36,8 +38,14 @@ class ContactsFilterScreen extends StatefulWidget {
   final Widget Function(BuildContext context, ContactSourceType sourceType, {bool markFavorites})
   sourceTypeWidgetBuilder;
 
-  /// Mounts the favourites section's own list.
-  final Widget Function(BuildContext context) favoritesWidgetBuilder;
+  /// Mounts the favourites section's own list, rearrangeable when asked.
+  final Widget Function(
+    BuildContext context, {
+    bool reorderMode,
+    void Function(int index)? onReorderStart,
+    void Function(int index)? onReorderEnd,
+  })
+  favoritesWidgetBuilder;
 
   final Widget? title;
   final ContactsScreenStyle? style;
@@ -55,6 +63,14 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
   bool _favorites = false;
 
   bool _searching = false;
+
+  final _reorder = FavoritesReorderController();
+
+  @override
+  void dispose() {
+    _reorder.dispose();
+    super.dispose();
+  }
 
   /// Whether this deployment carries the favourites entry at all.
   bool get _offersFavorites => widget.selections.any((selection) => selection is ContactsFavoritesSelection);
@@ -91,7 +107,12 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
   }
 
   void _onSelected(ContactsListSelection selection) {
-    setState(() => _favorites = selection is ContactsFavoritesSelection);
+    setState(() {
+      _favorites = selection is ContactsFavoritesSelection;
+      // Rearranging belongs to the favourites list; picking another one ends it
+      // rather than leaving a mode on a list that cannot use it.
+      if (!_favorites) _reorder.stop();
+    });
 
     // Only an address book is worth remembering, and only when one was picked:
     // a hop through favourites and back must land on the book left behind.
@@ -126,6 +147,19 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
         applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
         appBarTheme: effectiveStyle?.appBarTheme,
         extendBodyBehindAppBar: true,
+        floatingActionButton: _favorites && _offersFavorites
+            ? BlocBuilder<CallBloc, CallState>(
+                buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
+                // A transfer turns every row into a destination to pick, and
+                // the bar announcing it takes the bottom of the screen.
+                builder: (context, callState) => FavoritesReorderButton(
+                  controller: _reorder,
+                  identifier: contactsFavoritesReorderId,
+                  bottomPadding: mediaQueryData.padding.bottom,
+                  hidden: callState.isBlingTransferInitiated,
+                ),
+              )
+            : null,
         appBar: MainAppBar(
           title: widget.title,
           context: context,
@@ -202,7 +236,19 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
                         sourceType,
                         markFavorites: true,
                       ),
-                      ContactsFavoritesSelection() => widget.favoritesWidgetBuilder(context),
+                      // Listened to here as well as by the button: the two sit
+                      // in different parts of the tree, and a button that
+                      // changes its icon while the rows stay put is the whole
+                      // thing not working.
+                      ContactsFavoritesSelection() => ListenableBuilder(
+                        listenable: _reorder,
+                        builder: (context, _) => widget.favoritesWidgetBuilder(
+                          context,
+                          reorderMode: _reorder.active,
+                          onReorderStart: _reorder.dragStarted,
+                          onReorderEnd: _reorder.dragEnded,
+                        ),
+                      ),
                     },
                 ],
               );

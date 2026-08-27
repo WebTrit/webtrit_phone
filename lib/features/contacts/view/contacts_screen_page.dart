@@ -81,25 +81,32 @@ Widget contactSourceTypeWidgetBuilder(
   }
 }
 
-/// Mounts the favourites section's own list, without the rearranging that
-/// belongs to the screen with a button for it.
+/// Mounts the favourites section's own list.
 ///
 /// The same bloc, the same rows, the same empty state as the favourites
 /// section: a second list built from the contacts table would be a second
 /// answer to the same question.
-Widget contactsFavoritesWidgetBuilder(BuildContext context) {
+///
+/// The bloc is not provided here. The button that turns rearranging on sits in
+/// the screen's scaffold, above this, and has to read the same list to know
+/// whether rearranging is worth offering at all.
+Widget contactsFavoritesWidgetBuilder(
+  BuildContext context, {
+  bool reorderMode = false,
+  void Function(int index)? onReorderStart,
+  void Function(int index)? onReorderEnd,
+}) {
   final featureAccess = context.read<FeatureAccess>();
   final cdrsEnabled = featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory;
 
-  return BlocProvider(
-    create: (context) =>
-        FavoritesBloc(favoritesRepository: context.read<FavoritesRepository>())..add(const FavoritesStarted()),
-    child: FavoritesList(
-      transferEnabled: featureAccess.callConfig.capabilities.isBlindTransferEnabled,
-      videoEnabled: featureAccess.callConfig.capabilities.isVideoCallEnabled,
-      chatsEnabled: featureAccess.messagingConfig.chatsPresent,
-      smssEnabled: featureAccess.messagingConfig.smsPresent,
-      cdrsEnabled: cdrsEnabled ?? false,
-    ),
+  return FavoritesList(
+    reorderMode: reorderMode,
+    onReorderStart: onReorderStart,
+    onReorderEnd: onReorderEnd,
+    transferEnabled: featureAccess.callConfig.capabilities.isBlindTransferEnabled,
+    videoEnabled: featureAccess.callConfig.capabilities.isVideoCallEnabled,
+    chatsEnabled: featureAccess.messagingConfig.chatsPresent,
+    smssEnabled: featureAccess.messagingConfig.smsPresent,
+    cdrsEnabled: cdrsEnabled ?? false,
   );
 }
