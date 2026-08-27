@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/features/main/extensions/extensions.dart';
@@ -65,41 +63,37 @@ class MainScreen extends StatelessWidget {
       if (transferBanner == null) return body;
       return Scaffold(
         body: body,
-        bottomNavigationBar: ClipRRect(
-          child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), child: transferBanner),
-        ),
+        bottomNavigationBar: BlurredSurface(sigmaX: 10.0, sigmaY: 10.0, child: transferBanner),
       );
     }
 
     return Scaffold(
       extendBody: true,
       body: body,
-      // Above the bar, not behind it. Both belong to this screen, so they are
-      // one bottom-of-the-screen widget and the body is inset by their total.
-      // One pane of glass over both. Blurring them separately would show the
-      // seam - two filters sampling different backdrops - and the banner is
-      // the same kind of surface as the bar, not something floating over it.
-      bottomNavigationBar: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            // Both are bars across the screen. Left to itself a Column hands
-            // each child only the width it asks for, and the banner - a box
-            // around a line of text - would sit centred and half as wide as
-            // the bar under it, reading as a label rather than as the state of
-            // the screen.
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ?transferBanner,
-              MainBottomNavigationBar(
-                tabs: tabs,
-                currentIndex: currentIndex,
-                onTap: onTabSelected,
-                decorateIcon: decorateTabIcon,
-              ),
-            ],
-          ),
+      // Above the bar, not behind it, and under one pane of glass with it:
+      // both belong to this screen, so they are a single bottom-of-the-screen
+      // widget the body is inset by. Blurring them apart would show the seam,
+      // two filters sampling different backdrops.
+      bottomNavigationBar: BlurredSurface(
+        sigmaX: 10.0,
+        sigmaY: 10.0,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          // Both are bars across the screen. Left to itself a Column hands
+          // each child only the width it asks for, and the banner - a box
+          // around a line of text - would sit centred and half as wide as
+          // the bar under it, reading as a label rather than as the state of
+          // the screen.
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ?transferBanner,
+            MainBottomNavigationBar(
+              tabs: tabs,
+              currentIndex: currentIndex,
+              onTap: onTabSelected,
+              decorateIcon: decorateTabIcon,
+            ),
+          ],
         ),
       ),
     );
