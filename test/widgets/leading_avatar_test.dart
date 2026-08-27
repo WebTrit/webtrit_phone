@@ -132,7 +132,7 @@ void main() {
 
       // The slot hands over the whole avatar square: the dot is sized from it
       // and placed on its edge, which is only possible if it knows the size.
-      expect(tester.getSize(dot), const Size(20, 20));
+      expect(tester.getSize(dot), Size(avatar.width * 0.4, avatar.width * 0.4));
       final reach = (tester.getRect(dot).center - avatar.center).distance;
       expect(reach, closeTo(avatar.width / 2, 0.01));
       expect(tester.getRect(dot).right, greaterThan(avatar.right));
