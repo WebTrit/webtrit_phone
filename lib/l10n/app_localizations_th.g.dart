@@ -554,9 +554,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get contactsSourceLocal => 'โทรศัพท์ของคุณ';
 
   @override
-  String get contacts_Text_blingTransferInitiated => 'กำลังโอนสายแบบไม่แจ้ง';
-
-  @override
   String get contacts_DialogsInfoView_title => 'ข้อมูลการโทร (BLF):';
 
   @override
@@ -989,9 +986,6 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get favorites_Text_blingTransferInitiated => 'กำลังโอนสายแบบไม่แจ้ง';
-
-  @override
   String formatPhone(String style, String main, String ext) {
     String _temp0 = intl.Intl.selectLogic(style, {
       'full': '$main (ต่อ: $ext)',
@@ -1300,6 +1294,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get main_BottomNavigationBarItemLabel_chats => 'แชท';
+
+  @override
+  String get main_Text_blindTransferInitiated => 'กำลังโอนสายแบบไม่แจ้ง';
 
   @override
   String get main_BottomNavigationBarItemLabel_contacts => 'รายชื่อ';
@@ -2092,9 +2089,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String recents_snackBar_deleted(String name) {
     return 'ลบ $name แล้ว';
   }
-
-  @override
-  String get recents_Text_blingTransferInitiated => 'กำลังโอนสายแบบไม่รอรับ';
 
   @override
   String get recentsVisibilityFilter_all => 'ทั้งหมด';

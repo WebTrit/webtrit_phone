@@ -560,9 +560,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contactsSourceLocal => 'Il tuo telefono';
 
   @override
-  String get contacts_Text_blingTransferInitiated => 'Trasferimento senza vedere';
-
-  @override
   String get contacts_DialogsInfoView_title => 'Informazioni chiamate (BLF):';
 
   @override
@@ -1003,9 +1000,6 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get favorites_Text_blingTransferInitiated => 'Trasferimento senza vedere';
-
-  @override
   String formatPhone(String style, String main, String ext) {
     String _temp0 = intl.Intl.selectLogic(style, {
       'full': '$main (int.: $ext)',
@@ -1317,6 +1311,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get main_BottomNavigationBarItemLabel_chats => 'Le chat';
+
+  @override
+  String get main_Text_blindTransferInitiated => 'Trasferimento senza vedere';
 
   @override
   String get main_BottomNavigationBarItemLabel_contacts => 'Contatti';
@@ -2121,9 +2118,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String recents_snackBar_deleted(String name) {
     return '$name cancellato';
   }
-
-  @override
-  String get recents_Text_blingTransferInitiated => 'Trasferimento senza vedere';
 
   @override
   String get recentsVisibilityFilter_all => 'Tutto';

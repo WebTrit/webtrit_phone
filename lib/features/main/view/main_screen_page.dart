@@ -72,6 +72,9 @@ class _MainScreenPageState extends State<MainScreenPage> {
         return MainScreen(
           body: child,
           tabs: tabs,
+          // Read here rather than inside the screen: the screen is also built
+          // by the previews, which have no call to be transferring.
+          transferInProgress: context.select<CallBloc, bool>((bloc) => bloc.state.isBlingTransferInitiated),
           // The shell above provides the unread state this reads.
           decorateTabIcon: MessagingFlavorOverlay.forTab,
           // Be aware to use activeIndex from tabsRouter, not from bottomMenuManager

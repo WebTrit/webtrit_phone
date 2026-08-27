@@ -1012,12 +1012,6 @@ abstract class AppLocalizations {
   /// **'Your phone'**
   String get contactsSourceLocal;
 
-  /// No description provided for @contacts_Text_blingTransferInitiated.
-  ///
-  /// In en, this message translates to:
-  /// **'Performing blind transfer'**
-  String get contacts_Text_blingTransferInitiated;
-
   /// No description provided for @contacts_DialogsInfoView_title.
   ///
   /// In en, this message translates to:
@@ -1828,12 +1822,6 @@ abstract class AppLocalizations {
   /// **'{name} deleted'**
   String favorites_SnackBar_deleted(String name);
 
-  /// No description provided for @favorites_Text_blingTransferInitiated.
-  ///
-  /// In en, this message translates to:
-  /// **'Performing blind transfer'**
-  String get favorites_Text_blingTransferInitiated;
-
   /// Formats phone number based on presence of main number and extension, covering four scenarios: both, main only, extension only, and neither.
   ///
   /// In en, this message translates to:
@@ -2367,6 +2355,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chats'**
   String get main_BottomNavigationBarItemLabel_chats;
+
+  /// No description provided for @main_Text_blindTransferInitiated.
+  ///
+  /// In en, this message translates to:
+  /// **'Performing blind transfer'**
+  String get main_Text_blindTransferInitiated;
 
   /// No description provided for @main_BottomNavigationBarItemLabel_contacts.
   ///
@@ -3840,12 +3834,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} deleted'**
   String recents_snackBar_deleted(String name);
-
-  /// No description provided for @recents_Text_blingTransferInitiated.
-  ///
-  /// In en, this message translates to:
-  /// **'Performing blind transfer'**
-  String get recents_Text_blingTransferInitiated;
 
   /// No description provided for @recentsVisibilityFilter_all.
   ///
