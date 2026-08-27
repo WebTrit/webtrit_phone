@@ -63,6 +63,11 @@ void main() {
     contact: null,
   );
 
+  /// The top inset the screen hands the list, read from the list's own
+  /// context - which is the only place the figure is observable, because the
+  /// body runs behind the bar and nothing else moves with it.
+  late double? listTopInset;
+
   late _MockCallBloc callBloc;
   late _MockFavoritesBloc favoritesBloc;
   late _MockSessionStatusCubit sessionStatusCubit;
@@ -70,6 +75,7 @@ void main() {
   late _MockMicrophoneStatusBloc microphoneStatusBloc;
 
   setUp(() {
+    listTopInset = null;
     callBloc = _MockCallBloc();
     favoritesBloc = _MockFavoritesBloc();
     when(() => favoritesBloc.state).thenReturn(const FavoritesState());
@@ -119,7 +125,12 @@ void main() {
             ],
             child: ContactsFilterScreen(
               selections: selections,
-              sourceTypeWidgetBuilder: (context, sourceType, {bool markFavorites = false}) => Text(sourceType.name),
+              sourceTypeWidgetBuilder: (context, sourceType, {bool markFavorites = false}) => Builder(
+                builder: (context) {
+                  listTopInset = MediaQuery.of(context).padding.top;
+                  return Text(sourceType.name);
+                },
+              ),
               favoritesWidgetBuilder: (
                 context, {
                 bool reorderMode = false,
@@ -321,6 +332,16 @@ void main() {
       final title = tester.getRect(find.byType(NavigationToolbar));
 
       expect(bar.bottom - title.bottom, kMainAppBarBottomTabHeight);
+    });
+
+    testWidgets('leaves the list starting exactly where the bar ends', (tester) async {
+      // The list is told where to start by a figure the screen computes, and a
+      // figure taken from anywhere but the bar itself drifts from it - eight
+      // points, in the version this pins down. Everything the body places by
+      // that inset drifts with it, the refresh spinner included.
+      await pumpScreen(tester, selections: const [external]);
+
+      expect(listTopInset, tester.getRect(find.byType(AppBar)).bottom);
     });
 
     testWidgets('without the controls sitting against the title above them', (tester) async {
