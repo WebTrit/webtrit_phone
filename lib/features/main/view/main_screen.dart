@@ -72,6 +72,11 @@ class MainScreen extends StatelessWidget {
       // one bottom-of-the-screen widget and the body is inset by their total.
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
+        // Both are bars across the screen. Left to itself a Column hands each
+        // child only the width it asks for, and the banner - a box around a
+        // line of text - would sit centred and half as wide as the bar under
+        // it, reading as a label rather than as the state of the screen.
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ?transferBanner,
           ClipRRect(

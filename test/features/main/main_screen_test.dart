@@ -85,6 +85,18 @@ void main() {
       expect(banner.bottom, lessThanOrEqualTo(bar.top));
     });
 
+    testWidgets('spans the screen, like the bar under it', (tester) async {
+      // A Column gives a child only the width it asks for, and the banner is a
+      // box around a line of text - left alone it shrinks to the words and
+      // centres, reading as a label rather than as the state of the screen.
+      await pumpShell(tester, tabs: tabs, currentIndex: 0, transferInProgress: true);
+
+      final banner = tester.getRect(find.byType(TransferBottomNavigationBar));
+      final bar = tester.getRect(find.byType(MainBottomNavigationBar));
+
+      expect(banner.width, bar.width);
+    });
+
     testWidgets('is still said where a one-section menu draws no bar', (tester) async {
       await pumpShell(tester, tabs: [tabs.first], currentIndex: 0, transferInProgress: true);
 
