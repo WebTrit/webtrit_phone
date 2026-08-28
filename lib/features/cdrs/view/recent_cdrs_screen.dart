@@ -85,12 +85,13 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
       appBarTheme: effectiveStyle?.appBarTheme,
       extendBodyBehindAppBar: true,
       appBar: appBar,
-      body: MediaQuery(
-        data: mediaQueryData.copyWith(
-          padding: mediaQueryData.padding.copyWith(top: mediaQueryData.padding.top + appBar.preferredSize.height),
-        ),
-        child: TabBarView(controller: _tabController, children: [for (final filter in _filters) _listOf(filter)]),
-      ),
+      // No inset of its own: the body runs behind the bar, and Scaffold
+      // already hands it a MediaQuery whose top padding is the bar plus the
+      // status bar. A list with no padding of its own takes that figure, and
+      // so does the refresh indicator. Computing it here a second time is
+      // what let the two disagree - it read kToolbarHeight where MainAppBar
+      // is built from kMinInteractiveDimension, eight points apart.
+      body: TabBarView(controller: _tabController, children: [for (final filter in _filters) _listOf(filter)]),
     );
   }
 

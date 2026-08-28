@@ -63,6 +63,18 @@ void main() {
     contact: null,
   );
 
+  /// The top inset the screen hands the list, read from the list's own
+  /// context - which is the only place the figure is observable, because the
+  /// body runs behind the bar and nothing else moves with it.
+  late double? listTopInset;
+  late double? listBottomInset;
+
+  /// What the shell's floating tab bar takes at the bottom of the screen. The
+  /// shell hands it down as MediaQuery padding, and a screen inside it has to
+  /// let that figure through - a list that loses it runs its last row under
+  /// the bar.
+  const shellBottomInset = 80.0;
+
   late _MockCallBloc callBloc;
   late _MockFavoritesBloc favoritesBloc;
   late _MockSessionStatusCubit sessionStatusCubit;
@@ -70,6 +82,8 @@ void main() {
   late _MockMicrophoneStatusBloc microphoneStatusBloc;
 
   setUp(() {
+    listTopInset = null;
+    listBottomInset = null;
     callBloc = _MockCallBloc();
     favoritesBloc = _MockFavoritesBloc();
     when(() => favoritesBloc.state).thenReturn(const FavoritesState());
@@ -108,24 +122,36 @@ void main() {
           locale: const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: MultiBlocProvider(
-            providers: [
-              BlocProvider<ContactsBloc>.value(value: contactsBloc),
-              BlocProvider<CallBloc>.value(value: callBloc),
-              BlocProvider<FavoritesBloc>.value(value: favoritesBloc),
-              BlocProvider<SessionStatusCubit>.value(value: sessionStatusCubit),
-              BlocProvider<UserInfoCubit>.value(value: userInfoCubit),
-              BlocProvider<MicrophoneStatusBloc>.value(value: microphoneStatusBloc),
-            ],
-            child: ContactsFilterScreen(
-              selections: selections,
-              sourceTypeWidgetBuilder: (context, sourceType, {bool markFavorites = false}) => Text(sourceType.name),
-              favoritesWidgetBuilder: (
-                context, {
-                bool reorderMode = false,
-                void Function(int index)? onReorderStart,
-                void Function(int index)? onReorderEnd,
-              }) => Text(reorderMode ? 'favorites rearranging' : 'favorites'),
+          home: Builder(
+            builder: (context) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(padding: const EdgeInsets.only(bottom: shellBottomInset)),
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<ContactsBloc>.value(value: contactsBloc),
+                  BlocProvider<CallBloc>.value(value: callBloc),
+                  BlocProvider<FavoritesBloc>.value(value: favoritesBloc),
+                  BlocProvider<SessionStatusCubit>.value(value: sessionStatusCubit),
+                  BlocProvider<UserInfoCubit>.value(value: userInfoCubit),
+                  BlocProvider<MicrophoneStatusBloc>.value(value: microphoneStatusBloc),
+                ],
+                child: ContactsFilterScreen(
+                  selections: selections,
+                  sourceTypeWidgetBuilder: (context, sourceType, {bool markFavorites = false}) => Builder(
+                    builder: (context) {
+                      final inset = MediaQuery.of(context).padding;
+                      listTopInset = inset.top;
+                      listBottomInset = inset.bottom;
+                      return Text(sourceType.name);
+                    },
+                  ),
+                  favoritesWidgetBuilder: (
+                    context, {
+                    bool reorderMode = false,
+                    void Function(int index)? onReorderStart,
+                    void Function(int index)? onReorderEnd,
+                  }) => Text(reorderMode ? 'favorites rearranging' : 'favorites'),
+                ),
+              ),
             ),
           ),
         ),
@@ -321,6 +347,26 @@ void main() {
       final title = tester.getRect(find.byType(NavigationToolbar));
 
       expect(bar.bottom - title.bottom, kMainAppBarBottomTabHeight);
+    });
+
+    testWidgets('keeps the room the shell reserves for its bar', (tester) async {
+      // The bar at the bottom belongs to the shell around this screen and
+      // floats over the page. Scaffold hands the body no bottom inset of its
+      // own once it is given a bottomNavigationBar, so a screen that declares
+      // one loses the shell's figure and runs its last row underneath it.
+      await pumpScreen(tester, selections: const [external]);
+
+      expect(listBottomInset, shellBottomInset);
+    });
+
+    testWidgets('leaves the list starting exactly where the bar ends', (tester) async {
+      // The list is told where to start by a figure the screen computes, and a
+      // figure taken from anywhere but the bar itself drifts from it - eight
+      // points, in the version this pins down. Everything the body places by
+      // that inset drifts with it, the refresh spinner included.
+      await pumpScreen(tester, selections: const [external]);
+
+      expect(listTopInset, tester.getRect(find.byType(AppBar)).bottom);
     });
 
     testWidgets('without the controls sitting against the title above them', (tester) async {

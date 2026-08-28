@@ -196,63 +196,63 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
             ),
           ),
         ),
-        body: MediaQuery(
-          data: mediaQueryData.copyWith(
-            padding: mediaQueryData.padding.copyWith(
-              top: mediaQueryData.padding.top + kToolbarHeight + ContactsSearchRow.height,
-            ),
-          ),
-          // Favourites are not this screen's list narrowed down - they are the
-          // favourites section's own list, drawn by the widget that section
-          // draws it with. Deriving them a second time from the contacts table
-          // is what made two answers to one question, and they disagree the
-          // moment either side changes.
-          //
-          // Both are kept alive and only one is shown, because each is watched
-          // by a bloc of its own: swapped in and out instead, every tap of the
-          // control would tear a list down, build the other from nothing and
-          // flash a spinner where a list already stood.
-          child: BlocBuilder<ContactsBloc, ContactsState>(
-            buildWhen: (previous, current) => previous.sourceType != current.sourceType,
-            builder: (context, state) {
-              // A tab can be configured with nothing to show at all.
-              if (widget.selections.isEmpty) return const SizedBox.shrink();
+        // No inset of its own: the body runs behind the bar, and Scaffold
+        // already hands it a MediaQuery whose top padding is the bar plus the
+        // status bar. A list with no padding of its own takes that figure, and
+        // so does the refresh indicator. Computing it here a second time is
+        // what let the two disagree - it read kToolbarHeight where MainAppBar
+        // is built from kMinInteractiveDimension, eight points apart.
+        //
+        // Favourites are not this screen's list narrowed down - they are the
+        // favourites section's own list, drawn by the widget that section
+        // draws it with. Deriving them a second time from the contacts table
+        // is what made two answers to one question, and they disagree the
+        // moment either side changes.
+        //
+        // Both are kept alive and only one is shown, because each is watched
+        // by a bloc of its own: swapped in and out instead, every tap of the
+        // control would tear a list down, build the other from nothing and
+        // flash a spinner where a list already stood.
+        body: BlocBuilder<ContactsBloc, ContactsState>(
+          buildWhen: (previous, current) => previous.sourceType != current.sourceType,
+          builder: (context, state) {
+            // A tab can be configured with nothing to show at all.
+            if (widget.selections.isEmpty) return const SizedBox.shrink();
 
-              final shown = _shown(state.sourceType);
+            final shown = _shown(state.sourceType);
 
-              // A slot per list, not one per kind of list. Sharing a slot
-              // between the address books tears one down and builds the other
-              // from nothing whenever someone changes book: a spinner where a
-              // list already stood, and the place they had in it lost.
-              return IndexedStack(
-                index: widget.selections.indexOf(shown).clamp(0, widget.selections.length - 1),
-                sizing: StackFit.expand,
-                children: [
-                  for (final selection in widget.selections)
-                    switch (selection) {
-                      ContactsSourceSelection(:final sourceType) => widget.sourceTypeWidgetBuilder(
+            // A slot per list, not one per kind of list. Sharing a slot
+            // between the address books tears one down and builds the other
+            // from nothing whenever someone changes book: a spinner where a
+            // list already stood, and the place they had in it lost.
+            return IndexedStack(
+              index: widget.selections.indexOf(shown).clamp(0, widget.selections.length - 1),
+              sizing: StackFit.expand,
+              children: [
+                for (final selection in widget.selections)
+                  switch (selection) {
+                    ContactsSourceSelection(:final sourceType) => widget.sourceTypeWidgetBuilder(
+                      context,
+                      sourceType,
+                      markFavorites: true,
+                    ),
+                    // Listened to here as well as by the button: the two sit
+                    // in different parts of the tree, and a button that
+                    // changes its icon while the rows stay put is the whole
+                    // thing not working.
+                    ContactsFavoritesSelection() => ListenableBuilder(
+                      listenable: _reorder,
+                      builder: (context, _) => widget.favoritesWidgetBuilder(
                         context,
-                        sourceType,
-                        markFavorites: true,
+                        reorderMode: _reorder.active,
+                        onReorderStart: _reorder.dragStarted,
+                        onReorderEnd: _reorder.dragEnded,
                       ),
-                      // Listened to here as well as by the button: the two sit
-                      // in different parts of the tree, and a button that
-                      // changes its icon while the rows stay put is the whole
-                      // thing not working.
-                      ContactsFavoritesSelection() => ListenableBuilder(
-                        listenable: _reorder,
-                        builder: (context, _) => widget.favoritesWidgetBuilder(
-                          context,
-                          reorderMode: _reorder.active,
-                          onReorderStart: _reorder.dragStarted,
-                          onReorderEnd: _reorder.dragEnded,
-                        ),
-                      ),
-                    },
-                ],
-              );
-            },
-          ),
+                    ),
+                  },
+              ],
+            );
+          },
         ),
       ),
     );
