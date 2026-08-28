@@ -8,9 +8,14 @@ import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/features/voicemail/widgets/voicemail_flavor_overlay.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
+
+/// Every badge the bottom menu can carry, each drawn by the feature it belongs
+/// to and silent where its section is not configured or its state not provided.
+final _decorateTabIcon = composeTabIconDecorators([MessagingFlavorOverlay.forTab, VoicemailFlavorOverlay.forTab]);
 
 @RoutePage()
 class MainScreenPage extends StatefulWidget {
@@ -76,7 +81,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
           // by the previews, which have no call to be transferring.
           transferInProgress: context.select<CallBloc, bool>((bloc) => bloc.state.isBlingTransferInitiated),
           // The shell above provides the unread state this reads.
-          decorateTabIcon: MessagingFlavorOverlay.forTab,
+          decorateTabIcon: _decorateTabIcon,
           // Be aware to use activeIndex from tabsRouter, not from bottomMenuManager
           // to handle navigation changes correctly, especially when the user navigates by url.
           // e.g router.navigate(const MainScreenPageRoute(['favorites']));

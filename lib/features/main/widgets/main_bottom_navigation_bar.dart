@@ -10,6 +10,16 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 /// decoration reads - the bar itself takes no part in that.
 typedef TabIconDecorator = Widget Function(BottomMenuTab tab, Widget icon);
 
+/// One decorator out of several, each wrapping what the ones before it built.
+///
+/// The bar takes a single decorator on purpose - it is not the place that knows
+/// which sections carry a badge. A menu whose sections carry more than one
+/// composes them here, so each badge stays owned by the feature it belongs to
+/// instead of collecting in a decorator that knows about all of them.
+TabIconDecorator composeTabIconDecorators(List<TabIconDecorator> decorators) {
+  return (tab, icon) => decorators.fold(icon, (decorated, decorate) => decorate(tab, decorated));
+}
+
 /// Bottom navigation of the main screen: one entry per configured section.
 class MainBottomNavigationBar extends StatelessWidget {
   const MainBottomNavigationBar({

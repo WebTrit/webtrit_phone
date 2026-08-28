@@ -9,10 +9,15 @@ import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/main/main.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
+import 'package:webtrit_phone/features/voicemail/voicemail.dart';
+import 'package:webtrit_phone/features/voicemail/widgets/voicemail_flavor_overlay.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class _MockUnreadCountCubit extends MockCubit<UnreadCountState> implements UnreadCountCubit {}
+
+class _MockVoicemailUnreadCubit extends MockCubit<int> implements VoicemailUnreadCubit {}
 
 void main() {
   final tabs = <BottomMenuTab>[
@@ -49,6 +54,12 @@ void main() {
       titleL10n: 'main_BottomNavigationBarItemLabel_chats',
       icon: Icons.chat,
     ),
+    const VoicemailBottomMenuTab(
+      enabled: true,
+      initial: false,
+      titleL10n: 'main_BottomNavigationBarItemLabel_voicemail',
+      icon: Icons.voicemail,
+    ),
     // The embedded sections are switched off in the stand's configuration, so
     // this is the only place their entry is exercised at all.
     const EmbeddedBottomMenuTab(
@@ -61,10 +72,13 @@ void main() {
   ];
 
   late _MockUnreadCountCubit unreadCountCubit;
+  late _MockVoicemailUnreadCubit voicemailUnreadCubit;
 
   setUp(() {
     unreadCountCubit = _MockUnreadCountCubit();
     when(() => unreadCountCubit.state).thenReturn(UnreadCountState.initial());
+    voicemailUnreadCubit = _MockVoicemailUnreadCubit();
+    when(() => voicemailUnreadCubit.state).thenReturn(0);
   });
 
   Widget wrap({
@@ -86,7 +100,13 @@ void main() {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: provideUnreadState
-          ? BlocProvider<UnreadCountCubit>.value(value: unreadCountCubit, child: scaffold)
+          ? MultiBlocProvider(
+              providers: [
+                BlocProvider<UnreadCountCubit>.value(value: unreadCountCubit),
+                BlocProvider<VoicemailUnreadCubit>.value(value: voicemailUnreadCubit),
+              ],
+              child: scaffold,
+            )
           : scaffold,
     );
   }
@@ -170,5 +190,49 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.byType(BottomNavigationBar), findsOneWidget);
+  });
+
+  testWidgets('composed decorations each reach their own entry and no other', (tester) async {
+    // The bar takes one decorator, so a menu with more than one badge composes
+    // them. A composition that dropped one, or let one wrap every entry, is
+    // exactly what this catches.
+    when(() => unreadCountCubit.state).thenReturn(UnreadCountState.fromCountPerChat(const {1: 2}, const {}));
+    when(() => voicemailUnreadCubit.state).thenReturn(3);
+
+    await tester.pumpWidget(
+      wrap(
+        onTap: (_) {},
+        decorateIcon: composeTabIconDecorators([MessagingFlavorOverlay.forTab, VoicemailFlavorOverlay.forTab]),
+      ),
+    );
+
+    expect(find.byType(MessagingFlavorOverlay), findsOneWidget);
+    expect(find.byType(VoicemailFlavorOverlay), findsOneWidget);
+    // Both badges really draw; the overlays being present is not the same as
+    // the counts reaching them.
+    expect(find.byType(CountBadge), findsNWidgets(2));
+    expect(find.text('3'), findsOneWidget);
+  });
+
+  testWidgets('a section with nothing unread carries no badge', (tester) async {
+    await tester.pumpWidget(
+      wrap(onTap: (_) {}, decorateIcon: composeTabIconDecorators([VoicemailFlavorOverlay.forTab])),
+    );
+
+    expect(find.byType(CountBadge), findsNothing);
+  });
+
+  testWidgets('the voicemail decoration without its count degrades to a bare icon', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        onTap: (_) {},
+        decorateIcon: composeTabIconDecorators([VoicemailFlavorOverlay.forTab]),
+        provideUnreadState: false,
+      ),
+    );
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(BottomNavigationBar), findsOneWidget);
+    expect(find.byType(CountBadge), findsNothing);
   });
 }
