@@ -1311,6 +1311,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_recents => 'ล่าสุด';
 
   @override
+  String get main_BottomNavigationBarItemLabel_voicemail => 'ข้อความเสียง';
+
+  @override
   String get main_CompatibilityIssueDialogActions_logout => 'ออกจากระบบ';
 
   @override

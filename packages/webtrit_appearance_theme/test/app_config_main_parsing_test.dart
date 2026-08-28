@@ -47,6 +47,7 @@ void main() {
         contacts: unexpectedContacts,
         keypad: unexpectedKeypad,
         messaging: unexpectedMessaging,
+        voicemail: unexpectedVoicemail,
         embedded: unexpectedEmbedded,
       );
 
@@ -63,6 +64,7 @@ void main() {
         contacts: unexpectedContacts,
         keypad: unexpectedKeypad,
         messaging: unexpectedMessaging,
+        voicemail: unexpectedVoicemail,
         embedded: unexpectedEmbedded,
       );
 
@@ -83,6 +85,7 @@ void main() {
         },
         keypad: unexpectedKeypad,
         messaging: unexpectedMessaging,
+        voicemail: unexpectedVoicemail,
         embedded: unexpectedEmbedded,
       );
 
@@ -98,6 +101,7 @@ void main() {
           expect(icon, '0xe1ce');
         },
         messaging: unexpectedMessaging,
+        voicemail: unexpectedVoicemail,
         embedded: unexpectedEmbedded,
       );
 
@@ -113,6 +117,7 @@ void main() {
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_chats');
           expect(icon, '0xe155');
         },
+        voicemail: unexpectedVoicemail,
         embedded: unexpectedEmbedded,
       );
 
@@ -123,6 +128,7 @@ void main() {
         contacts: unexpectedContacts,
         keypad: unexpectedKeypad,
         messaging: unexpectedMessaging,
+        voicemail: unexpectedVoicemail,
         embedded: (enabled, initial, titleL10n, icon, embeddedResourceId) {
           expect(enabled, isFalse);
           expect(initial, isFalse);
@@ -139,6 +145,7 @@ void main() {
         contacts: unexpectedContacts,
         keypad: unexpectedKeypad,
         messaging: unexpectedMessaging,
+        voicemail: unexpectedVoicemail,
         embedded: (enabled, initial, titleL10n, icon, embeddedResourceId) {
           expect(enabled, isFalse);
           expect(initial, isFalse);
@@ -237,6 +244,40 @@ void main() {
     test('favourites are read as their own answer', () {
       expect(contactsTab({'layout': 'unified', 'favorites': false}).favorites, isFalse);
       expect(contactsTab({'layout': 'unified'}).favorites, isTrue);
+    });
+  });
+
+  group('VoicemailTabScheme parsing', () {
+    VoicemailTabScheme voicemailTab(Map<String, Object?> extra) {
+      return BottomMenuTabScheme.fromJson({
+            'type': 'voicemail',
+            'titleL10n': 'main_BottomNavigationBarItemLabel_voicemail',
+            'icon': '0xe0b7',
+            ...extra,
+          })
+          as VoicemailTabScheme;
+    }
+
+    test('reads its own type and fields', () {
+      final tab = voicemailTab({'enabled': true, 'initial': true});
+
+      expect(tab.enabled, isTrue);
+      expect(tab.initial, isTrue);
+      expect(tab.titleL10n, 'main_BottomNavigationBarItemLabel_voicemail');
+      expect(tab.icon, '0xe0b7');
+    });
+
+    test('a tab that says nothing about itself is enabled and not initial', () {
+      final tab = voicemailTab(const {});
+
+      expect(tab.enabled, isTrue);
+      expect(tab.initial, isFalse);
+    });
+
+    test('round-trips through json', () {
+      final tab = voicemailTab({'enabled': false});
+
+      expect(BottomMenuTabScheme.fromJson(tab.toJson()), equals(tab));
     });
   });
 

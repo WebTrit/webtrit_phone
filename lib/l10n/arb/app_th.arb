@@ -1176,6 +1176,8 @@
   "@main_BottomNavigationBarItemLabel_keypad": {},
   "main_BottomNavigationBarItemLabel_recents": "ล่าสุด",
   "@main_BottomNavigationBarItemLabel_recents": {},
+  "main_BottomNavigationBarItemLabel_voicemail": "ข้อความเสียง",
+  "@main_BottomNavigationBarItemLabel_voicemail": {},
   "main_CompatibilityIssueDialogActions_logout": "ออกจากระบบ",
   "@main_CompatibilityIssueDialogActions_logout": {},
   "main_CompatibilityIssueDialogActions_update": "อัปเดต",

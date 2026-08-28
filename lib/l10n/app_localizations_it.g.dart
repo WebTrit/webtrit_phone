@@ -1328,6 +1328,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_recents => 'Recenti';
 
   @override
+  String get main_BottomNavigationBarItemLabel_voicemail => 'Segreteria';
+
+  @override
   String get main_CompatibilityIssueDialogActions_logout => 'Esci';
 
   @override

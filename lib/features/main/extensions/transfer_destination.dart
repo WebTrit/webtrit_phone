@@ -9,6 +9,8 @@ import 'package:webtrit_phone/models/models.dart';
 extension TransferDestinationFlavor on MainFlavor {
   bool get offersTransferDestination => switch (this) {
     MainFlavor.favorites || MainFlavor.recents || MainFlavor.contacts || MainFlavor.keypad => true,
-    MainFlavor.messaging || MainFlavor.embedded => false,
+    // Voicemail is a list of messages, not of people to hand a call to: the
+    // sender of one is a number the recents list already offers.
+    MainFlavor.messaging || MainFlavor.embedded || MainFlavor.voicemail => false,
   };
 }

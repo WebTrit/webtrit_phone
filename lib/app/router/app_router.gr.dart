@@ -1787,3 +1787,19 @@ class VoicemailScreenPageRoute extends PageRouteInfo<void> {
     },
   );
 }
+
+/// generated route for
+/// [VoicemailTabPage]
+class VoicemailTabPageRoute extends PageRouteInfo<void> {
+  const VoicemailTabPageRoute({List<PageRouteInfo>? children})
+    : super(VoicemailTabPageRoute.name, initialChildren: children);
+
+  static const String name = 'VoicemailTabPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return VoicemailTabPage();
+    },
+  );
+}

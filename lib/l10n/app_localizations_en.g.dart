@@ -1314,6 +1314,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_recents => 'Recents';
 
   @override
+  String get main_BottomNavigationBarItemLabel_voicemail => 'Voicemail';
+
+  @override
   String get main_CompatibilityIssueDialogActions_logout => 'Logout';
 
   @override
