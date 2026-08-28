@@ -98,7 +98,7 @@ class _ContactScreenState extends State<ContactScreen> {
 
                     final bool presenceSipSubAvaliable = presenceParams.presenceOverSipEnabled;
                     final bool dialogSipSubAvaliable = presenceParams.dialogsOverSipEnabled;
-                    final bool anySipSubsSupport = isExt && dialogSipSubAvaliable || presenceSipSubAvaliable;
+                    final bool anySipSubsSupport = isExt && (dialogSipSubAvaliable || presenceSipSubAvaliable);
 
                     return Scaffold(
                       appBar: AppBar(
