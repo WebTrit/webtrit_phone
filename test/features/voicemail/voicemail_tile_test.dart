@@ -6,14 +6,14 @@ import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
-import 'package:webtrit_phone/features/settings/features/voicemail/bloc/voicemail_playback_controller.dart';
-import 'package:webtrit_phone/features/settings/features/voicemail/models/voicemail_screen_context.dart';
-import 'package:webtrit_phone/features/settings/features/voicemail/widgets/voicemail_tile.dart';
+import 'package:webtrit_phone/features/voicemail/bloc/voicemail_playback_controller.dart';
+import 'package:webtrit_phone/features/voicemail/models/voicemail_screen_context.dart';
+import 'package:webtrit_phone/features/voicemail/widgets/voicemail_tile.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
-import '../../../../helpers/helpers.dart';
+import '../../helpers/helpers.dart';
 
 class _MockPlaybackController extends Mock implements VoicemailPlaybackController {}
 
