@@ -34,7 +34,7 @@ These configuration files should be located at:
 You can generate both launcher icons and the splash screen at once using:
 
 ```sh
-make generate-assets
+melos run assets:generate
 ```
 
 This command will:
@@ -49,7 +49,7 @@ This command will:
 If you need to generate only the launcher icons, use:
 
 ```sh
-make generate-launcher-icons
+melos run icons:generate
 ```
 
 This command will:
@@ -63,7 +63,7 @@ This command will:
 If you need to generate only the splash screen, use:
 
 ```sh
-make generate-native-splash
+melos run splash:generate
 ```
 
 This command will:
@@ -76,9 +76,9 @@ This command will:
 
 | Command                        | Description                                     |
 |--------------------------------|-------------------------------------------------|
-| `make generate-assets`         | Generates both launcher icons and splash screen |
-| `make generate-launcher-icons` | Generates launcher icons only                   |
-| `make generate-native-splash`  | Generates splash screen only                    |
+| `melos run assets:generate`         | Generates both launcher icons and splash screen |
+| `melos run icons:generate` | Generates launcher icons only                   |
+| `melos run splash:generate`  | Generates splash screen only                    |
 
 These commands automate the configuration process and ensure that assets are generated correctly without requiring
 manual file modifications.
