@@ -498,8 +498,9 @@ melos:
 
     configurator:generate:
       description: >
-        Fetch resources from configurator backend, generate app assets, and run
-        flutterfire configure for all platforms. Reads APP_ID and CONFIGURATOR_TOKEN from .env file.
+        Fetch this brand from the configurator backend, generate the app's icons, splash and
+        identifiers from it, and run flutterfire configure for all platforms.
+        Reads APP_ID and CONFIGURATOR_TOKEN from .env file.
       run: |
         set -eo pipefail
         [ -f .env ] || { echo "ERROR: .env not found. Copy .env.example to .env and fill in your credentials." >&2; exit 1; }
@@ -521,6 +522,12 @@ melos:
           --token="${CONFIGURATOR_TOKEN:?CONFIGURATOR_TOKEN not found in .env}"
         phone_tools \
           configurator-generate
+        # This project's own generators, the same three the build workflow asks
+        # for. The rename goes last: the icons and the splash are written into
+        # the platform folders it then rewrites.
+        dart run melos run icons:generate
+        dart run melos run splash:generate
+        dart run melos run package:rename
         phone_tools \
           configurator-setup \
           --platform ios \
